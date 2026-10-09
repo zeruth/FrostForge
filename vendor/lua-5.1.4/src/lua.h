@@ -215,6 +215,21 @@ LUA_API int  (lua_resume) (lua_State *L, int narg);
 LUA_API int  (lua_status) (lua_State *L);
 
 /*
+** Blizzard additions (lapi.c)
+*/
+LUA_API int   (lua_isingc) (lua_State *L);
+LUA_API void  (lua_getlfield) (lua_State *L, int idx, const char *k, size_t len);
+LUA_API void  (lua_setlfield) (lua_State *L, int idx, const char *k, size_t len);
+LUA_API void  (lua_settaint) (lua_State *L, int idx, const char *taint);
+LUA_API void  (lua_getclosureprofile) (lua_State *L, double *time, double *subtime, int *calls);
+LUA_API void  (lua_pushjmptaint) (lua_State *L, const char *taint, int tracking);
+LUA_API void  (lua_popjmptaint) (lua_State *L);
+LUA_API void  (lua_convertdecimal) (char *s);
+LUA_API int   (lua_getdecimalconversion) (void);
+LUA_API void  (lua_setdecimalconversion) (int on);
+
+
+/*
 ** garbage-collection function and options
 */
 

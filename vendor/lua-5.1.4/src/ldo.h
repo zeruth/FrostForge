@@ -8,6 +8,8 @@
 #define ldo_h
 
 
+#include <setjmp.h>
+
 #include "lobject.h"
 #include "lstate.h"
 #include "lzio.h"
@@ -36,6 +38,16 @@
 
 /* type of protected functions, to be ran by `runprotected' */
 typedef void (*Pfunc) (lua_State *L, void *ud);
+
+/* chain list of long jump buffers */
+struct lua_longjmp {
+  struct lua_longjmp *previous;
+  luai_jmpbuf b;
+  volatile int status;  /* error code */
+  const char *taint;  /* Blizzard: the taint to go back to on an error (+0x118) */
+  int taintdepth;  /* Blizzard: lua_pushjmptaint nesting (+0x120) */
+  int tainttracking;  /* Blizzard: the tracking depth to go back to (+0x124) */
+};
 
 LUAI_FUNC int luaD_protectedparser (lua_State *L, ZIO *z, const char *name);
 LUAI_FUNC void luaD_callhook (lua_State *L, int event, int line);

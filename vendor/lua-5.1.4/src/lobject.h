@@ -14,6 +14,7 @@
 
 #include "llimits.h"
 #include "lua.h"
+#include "lblizzard.h"
 
 
 /* tags for values visible from Lua */
@@ -40,7 +41,8 @@ typedef union GCObject GCObject;
 ** Common Header for all collectable objects (in macro form, to be
 ** included in other objects)
 */
-#define CommonHeader	GCObject *next; lu_byte tt; lu_byte marked
+/* Blizzard: every collectable object records the taint it was made under */
+#define CommonHeader	GCObject *next; const char *taint; lu_byte tt; lu_byte marked
 
 
 /*
@@ -68,11 +70,15 @@ typedef union {
 ** Tagged Values
 */
 
-#define TValuefields	Value value; int tt
+/* Blizzard: every value records the taint that produced it */
+#define TValuefields	Value value; int tt; const char *taint
 
 typedef struct lua_TValue {
   TValuefields;
 } TValue;
+
+/* Blizzard: nil set from C takes the current taint (an expression, like upstream setnilvalue) */
+static __inline void luaO_setnil (TValue *o) { o->tt = LUA_TNIL; o->taint = lua_taint; }
 
 
 /* Macros to test type */
@@ -114,45 +120,46 @@ typedef struct lua_TValue {
 
 
 /* Macros to set values */
-#define setnilvalue(obj) ((obj)->tt=LUA_TNIL)
+/* Blizzard: a value set from C takes the current taint */
+#define setnilvalue(obj) luaO_setnil(obj)
 
 #define setnvalue(obj,x) \
-  { TValue *i_o=(obj); i_o->value.n=(x); i_o->tt=LUA_TNUMBER; }
+  { TValue *i_o=(obj); i_o->value.n=(x); i_o->tt=LUA_TNUMBER; i_o->taint=lua_taint; }
 
 #define setpvalue(obj,x) \
-  { TValue *i_o=(obj); i_o->value.p=(x); i_o->tt=LUA_TLIGHTUSERDATA; }
+  { TValue *i_o=(obj); i_o->value.p=(x); i_o->tt=LUA_TLIGHTUSERDATA; i_o->taint=lua_taint; }
 
 #define setbvalue(obj,x) \
-  { TValue *i_o=(obj); i_o->value.b=(x); i_o->tt=LUA_TBOOLEAN; }
+  { TValue *i_o=(obj); i_o->value.b=(x); i_o->tt=LUA_TBOOLEAN; i_o->taint=lua_taint; }
 
 #define setsvalue(L,obj,x) \
   { TValue *i_o=(obj); \
-    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TSTRING; \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TSTRING; i_o->taint=lua_taint; \
     checkliveness(G(L),i_o); }
 
 #define setuvalue(L,obj,x) \
   { TValue *i_o=(obj); \
-    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TUSERDATA; \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TUSERDATA; i_o->taint=lua_taint; \
     checkliveness(G(L),i_o); }
 
 #define setthvalue(L,obj,x) \
   { TValue *i_o=(obj); \
-    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TTHREAD; \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TTHREAD; i_o->taint=lua_taint; \
     checkliveness(G(L),i_o); }
 
 #define setclvalue(L,obj,x) \
   { TValue *i_o=(obj); \
-    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TFUNCTION; \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TFUNCTION; i_o->taint=lua_taint; \
     checkliveness(G(L),i_o); }
 
 #define sethvalue(L,obj,x) \
   { TValue *i_o=(obj); \
-    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TTABLE; \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TTABLE; i_o->taint=lua_taint; \
     checkliveness(G(L),i_o); }
 
 #define setptvalue(L,obj,x) \
   { TValue *i_o=(obj); \
-    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TPROTO; \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TPROTO; i_o->taint=lua_taint; \
     checkliveness(G(L),i_o); }
 
 
@@ -160,7 +167,7 @@ typedef struct lua_TValue {
 
 #define setobj(L,obj1,obj2) \
   { const TValue *o2=(obj2); TValue *o1=(obj1); \
-    o1->value = o2->value; o1->tt=o2->tt; \
+    o1->value = o2->value; o1->tt=o2->tt; o1->taint=o2->taint; \
     checkliveness(G(L),o1); }
 
 
@@ -288,9 +295,10 @@ typedef struct UpVal {
 ** Closures
 */
 
+/* Blizzard: a profile block (null unless the state profiles scripts) */
 #define ClosureHeader \
 	CommonHeader; lu_byte isC; lu_byte nupvalues; GCObject *gclist; \
-	struct Table *env
+	struct Table *env; struct ClosureProfile *profile
 
 typedef struct CClosure {
   ClosureHeader;

@@ -1,6 +1,7 @@
 add_library(lua STATIC
     src/lapi.c
     src/lauxlib.c
+    src/lblizzard.c
     src/lbaselib.c
     src/lcode.c
     src/ldblib.c

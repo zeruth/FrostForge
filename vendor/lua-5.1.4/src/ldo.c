@@ -41,11 +41,7 @@
 
 
 /* chain list of long jump buffers */
-struct lua_longjmp {
-  struct lua_longjmp *previous;
-  luai_jmpbuf b;
-  volatile int status;  /* error code */
-};
+/* struct lua_longjmp is in ldo.h (Blizzard's API reaches into it) */
 
 
 void luaD_seterrorobj (lua_State *L, int errcode, StkId oldtop) {

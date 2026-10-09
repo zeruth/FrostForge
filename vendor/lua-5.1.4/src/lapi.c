@@ -2,6 +2,10 @@
 ** $Id: lapi.c,v 2.55.1.5 2008/07/04 18:41:18 roberto Exp $
 ** Lua API
 ** See Copyright Notice in lua.h
+**
+** Blizzard: values copied onto the stack carry their taint and taint the reader; values pushed
+** from C take the current taint (BLIZZARD.md). Ported from WowClassic 3.4.3.54261, whose lapi
+** functions are laid out alphabetically from 0x1402b2610.
 */
 
 
@@ -16,6 +20,7 @@
 #include "lua.h"
 
 #include "lapi.h"
+#include "lblizzard.h"
 #include "ldebug.h"
 #include "ldo.h"
 #include "lfunc.h"
@@ -45,7 +50,15 @@ const char lua_ident[] =
 #define api_incr_top(L)   {api_check(L, L->top < L->ci->top); L->top++;}
 
 
+/* Blizzard: a value moved into a slot that is not a fresh stack slot keeps its taint and taints
+** the reader, without taking the current taint when it has none. */
+#define setobj_read(L,obj1,obj2) \
+  { const TValue *o2_=(obj2); TValue *o1_=(obj1); \
+    o1_->value = o2_->value; o1_->tt=o2_->tt; o1_->taint = o2_->taint; \
+    luaT_read(L, o1_->taint); }
 
+
+/* ref: FUN_1402b2530 */
 static TValue *index2adr (lua_State *L, int idx) {
   if (idx > 0) {
     TValue *o = L->base + (idx - 1);
@@ -86,12 +99,14 @@ static Table *getcurrenv (lua_State *L) {
 }
 
 
+/* ref: FUN_1402b2610 */
 void luaA_pushobject (lua_State *L, const TValue *o) {
-  setobj2s(L, L->top, o);
+  setobj2s_read(L, L->top, o);
   api_incr_top(L);
 }
 
 
+/* ref: FUN_1402b2770 */
 LUA_API int lua_checkstack (lua_State *L, int size) {
   int res = 1;
   lua_lock(L);
@@ -107,6 +122,7 @@ LUA_API int lua_checkstack (lua_State *L, int size) {
 }
 
 
+/* ref: FUN_1402b4a80 */
 LUA_API void lua_xmove (lua_State *from, lua_State *to, int n) {
   int i;
   if (from == to) return;
@@ -116,17 +132,19 @@ LUA_API void lua_xmove (lua_State *from, lua_State *to, int n) {
   api_check(from, to->ci->top - to->top >= n);
   from->top -= n;
   for (i = 0; i < n; i++) {
-    setobj2s(to, to->top++, from->top + i);
+    setobj2s_read(to, to->top++, from->top + i);
   }
   lua_unlock(to);
 }
 
 
+/* ref: FUN_1402b4440 */
 LUA_API void lua_setlevel (lua_State *from, lua_State *to) {
   to->nCcalls = from->nCcalls;
 }
 
 
+/* ref: FUN_1402b26c0 */
 LUA_API lua_CFunction lua_atpanic (lua_State *L, lua_CFunction panicf) {
   lua_CFunction old;
   lua_lock(L);
@@ -137,6 +155,7 @@ LUA_API lua_CFunction lua_atpanic (lua_State *L, lua_CFunction panicf) {
 }
 
 
+/* ref: FUN_1402b3560 */
 LUA_API lua_State *lua_newthread (lua_State *L) {
   lua_State *L1;
   lua_lock(L);
@@ -156,11 +175,13 @@ LUA_API lua_State *lua_newthread (lua_State *L) {
 */
 
 
+/* ref: FUN_1402b30b0 */
 LUA_API int lua_gettop (lua_State *L) {
   return cast_int(L->top - L->base);
 }
 
 
+/* ref: FUN_1402b45d0 */
 LUA_API void lua_settop (lua_State *L, int idx) {
   lua_lock(L);
   if (idx >= 0) {
@@ -177,29 +198,32 @@ LUA_API void lua_settop (lua_State *L, int idx) {
 }
 
 
+/* ref: FUN_1402b40b0 */
 LUA_API void lua_remove (lua_State *L, int idx) {
   StkId p;
   lua_lock(L);
   p = index2adr(L, idx);
   api_checkvalidindex(L, p);
-  while (++p < L->top) setobjs2s(L, p-1, p);
+  while (++p < L->top) setobj2s_read(L, p-1, p);
   L->top--;
   lua_unlock(L);
 }
 
 
+/* ref: FUN_1402b3230 */
 LUA_API void lua_insert (lua_State *L, int idx) {
   StkId p;
   StkId q;
   lua_lock(L);
   p = index2adr(L, idx);
   api_checkvalidindex(L, p);
-  for (q = L->top; q>p; q--) setobjs2s(L, q, q-1);
-  setobjs2s(L, p, L->top);
+  for (q = L->top; q>p; q--) setobj2s_read(L, q, q-1);
+  setobj2s_read(L, p, L->top);
   lua_unlock(L);
 }
 
 
+/* ref: FUN_1402b4170 */
 LUA_API void lua_replace (lua_State *L, int idx) {
   StkId o;
   lua_lock(L);
@@ -211,12 +235,12 @@ LUA_API void lua_replace (lua_State *L, int idx) {
   api_checkvalidindex(L, o);
   if (idx == LUA_ENVIRONINDEX) {
     Closure *func = curr_func(L);
-    api_check(L, ttistable(L->top - 1)); 
+    api_check(L, ttistable(L->top - 1));
     func->c.env = hvalue(L->top - 1);
     luaC_barrier(L, func, L->top - 1);
   }
   else {
-    setobj(L, o, L->top - 1);
+    setobj_read(L, o, L->top - 1);
     if (idx < LUA_GLOBALSINDEX)  /* function upvalue? */
       luaC_barrier(L, curr_func(L), L->top - 1);
   }
@@ -225,9 +249,10 @@ LUA_API void lua_replace (lua_State *L, int idx) {
 }
 
 
+/* ref: FUN_1402b3c50 */
 LUA_API void lua_pushvalue (lua_State *L, int idx) {
   lua_lock(L);
-  setobj2s(L, L->top, index2adr(L, idx));
+  setobj2s_read(L, L->top, index2adr(L, idx));
   api_incr_top(L);
   lua_unlock(L);
 }
@@ -239,24 +264,35 @@ LUA_API void lua_pushvalue (lua_State *L, int idx) {
 */
 
 
+/* ref: FUN_1402b4a30 */
 LUA_API int lua_type (lua_State *L, int idx) {
   StkId o = index2adr(L, idx);
   return (o == luaO_nilobject) ? LUA_TNONE : ttype(o);
 }
 
 
+/* ref: FUN_1402b4a60 */
 LUA_API const char *lua_typename (lua_State *L, int t) {
   UNUSED(L);
   return (t == LUA_TNONE) ? "no value" : luaT_typenames[t];
 }
 
 
+/* ref: FUN_1402b3380 */
 LUA_API int lua_iscfunction (lua_State *L, int idx) {
   StkId o = index2adr(L, idx);
   return iscfunction(o);
 }
 
 
+/* Blizzard: whether a __gc metamethod is running on the thread.
+** ref: FUN_1402b33b0 */
+LUA_API int lua_isingc (lua_State *L) {
+  return L->ingc != 0;
+}
+
+
+/* ref: FUN_1402b33c0 */
 LUA_API int lua_isnumber (lua_State *L, int idx) {
   TValue n;
   const TValue *o = index2adr(L, idx);
@@ -264,18 +300,21 @@ LUA_API int lua_isnumber (lua_State *L, int idx) {
 }
 
 
+/* ref: FUN_1402b33f0 */
 LUA_API int lua_isstring (lua_State *L, int idx) {
   int t = lua_type(L, idx);
   return (t == LUA_TSTRING || t == LUA_TNUMBER);
 }
 
 
+/* ref: FUN_1402b3430 */
 LUA_API int lua_isuserdata (lua_State *L, int idx) {
   const TValue *o = index2adr(L, idx);
   return (ttisuserdata(o) || ttislightuserdata(o));
 }
 
 
+/* ref: FUN_1402b3d50 */
 LUA_API int lua_rawequal (lua_State *L, int index1, int index2) {
   StkId o1 = index2adr(L, index1);
   StkId o2 = index2adr(L, index2);
@@ -296,6 +335,7 @@ LUA_API int lua_equal (lua_State *L, int index1, int index2) {
 }
 
 
+/* ref: FUN_1402b3460 */
 LUA_API int lua_lessthan (lua_State *L, int index1, int index2) {
   StkId o1, o2;
   int i;
@@ -310,6 +350,7 @@ LUA_API int lua_lessthan (lua_State *L, int index1, int index2) {
 
 
 
+/* ref: FUN_1402b4920 */
 LUA_API lua_Number lua_tonumber (lua_State *L, int idx) {
   TValue n;
   const TValue *o = index2adr(L, idx);
@@ -320,26 +361,31 @@ LUA_API lua_Number lua_tonumber (lua_State *L, int idx) {
 }
 
 
+/* Blizzard: a number outside the int range is an error rather than undefined.
+** ref: FUN_1402b4800 */
 LUA_API lua_Integer lua_tointeger (lua_State *L, int idx) {
   TValue n;
   const TValue *o = index2adr(L, idx);
   if (tonumber(o, &n)) {
-    lua_Integer res;
     lua_Number num = nvalue(o);
-    lua_number2integer(res, num);
-    return res;
+    if (num <= 2147483647.0 && num >= -2147483648.0)
+      return (lua_Integer)(int)num;
+    luaG_runerror(L, "integer overflow attempting to store %f", num);  /* FUN_1402b5450 */
+    return 0;
   }
   else
     return 0;
 }
 
 
+/* ref: FUN_1402b47d0 */
 LUA_API int lua_toboolean (lua_State *L, int idx) {
   const TValue *o = index2adr(L, idx);
   return !l_isfalse(o);
 }
 
 
+/* ref: FUN_1402b4880 */
 LUA_API const char *lua_tolstring (lua_State *L, int idx, size_t *len) {
   StkId o = index2adr(L, idx);
   if (!ttisstring(o)) {
@@ -358,6 +404,7 @@ LUA_API const char *lua_tolstring (lua_State *L, int idx, size_t *len) {
 }
 
 
+/* ref: FUN_1402b36c0 */
 LUA_API size_t lua_objlen (lua_State *L, int idx) {
   StkId o = index2adr(L, idx);
   switch (ttype(o)) {
@@ -382,6 +429,7 @@ LUA_API lua_CFunction lua_tocfunction (lua_State *L, int idx) {
 }
 
 
+/* ref: FUN_1402b49f0 */
 LUA_API void *lua_touserdata (lua_State *L, int idx) {
   StkId o = index2adr(L, idx);
   switch (ttype(o)) {
@@ -392,12 +440,14 @@ LUA_API void *lua_touserdata (lua_State *L, int idx) {
 }
 
 
+/* ref: FUN_1402b49d0 */
 LUA_API lua_State *lua_tothread (lua_State *L, int idx) {
   StkId o = index2adr(L, idx);
   return (!ttisthread(o)) ? NULL : thvalue(o);
 }
 
 
+/* ref: FUN_1402b4960 */
 LUA_API const void *lua_topointer (lua_State *L, int idx) {
   StkId o = index2adr(L, idx);
   switch (ttype(o)) {
@@ -418,6 +468,7 @@ LUA_API const void *lua_topointer (lua_State *L, int idx) {
 */
 
 
+/* ref: FUN_1402b3b30 */
 LUA_API void lua_pushnil (lua_State *L) {
   lua_lock(L);
   setnilvalue(L->top);
@@ -426,6 +477,7 @@ LUA_API void lua_pushnil (lua_State *L) {
 }
 
 
+/* ref: FUN_1402b3b50 */
 LUA_API void lua_pushnumber (lua_State *L, lua_Number n) {
   lua_lock(L);
   setnvalue(L->top, n);
@@ -434,6 +486,7 @@ LUA_API void lua_pushnumber (lua_State *L, lua_Number n) {
 }
 
 
+/* ref: FUN_1402b3a10 */
 LUA_API void lua_pushinteger (lua_State *L, lua_Integer n) {
   lua_lock(L);
   setnvalue(L->top, cast_num(n));
@@ -442,6 +495,7 @@ LUA_API void lua_pushinteger (lua_State *L, lua_Integer n) {
 }
 
 
+/* ref: FUN_1402b3ab0 */
 LUA_API void lua_pushlstring (lua_State *L, const char *s, size_t len) {
   lua_lock(L);
   luaC_checkGC(L);
@@ -451,6 +505,7 @@ LUA_API void lua_pushlstring (lua_State *L, const char *s, size_t len) {
 }
 
 
+/* ref: FUN_1402b3b70 */
 LUA_API void lua_pushstring (lua_State *L, const char *s) {
   if (s == NULL)
     lua_pushnil(L);
@@ -459,6 +514,7 @@ LUA_API void lua_pushstring (lua_State *L, const char *s) {
 }
 
 
+/* ref: FUN_1402b3d00 */
 LUA_API const char *lua_pushvfstring (lua_State *L, const char *fmt,
                                       va_list argp) {
   const char *ret;
@@ -470,6 +526,7 @@ LUA_API const char *lua_pushvfstring (lua_State *L, const char *fmt,
 }
 
 
+/* ref: FUN_1402b39c0 */
 LUA_API const char *lua_pushfstring (lua_State *L, const char *fmt, ...) {
   const char *ret;
   va_list argp;
@@ -483,6 +540,7 @@ LUA_API const char *lua_pushfstring (lua_State *L, const char *fmt, ...) {
 }
 
 
+/* ref: FUN_1402b3880 */
 LUA_API void lua_pushcclosure (lua_State *L, lua_CFunction fn, int n) {
   Closure *cl;
   lua_lock(L);
@@ -492,7 +550,7 @@ LUA_API void lua_pushcclosure (lua_State *L, lua_CFunction fn, int n) {
   cl->c.f = fn;
   L->top -= n;
   while (n--)
-    setobj2n(L, &cl->c.upvalue[n], L->top+n);
+    setobj_read(L, &cl->c.upvalue[n], L->top+n);
   setclvalue(L, L->top, cl);
   lua_assert(iswhite(obj2gco(cl)));
   api_incr_top(L);
@@ -500,6 +558,7 @@ LUA_API void lua_pushcclosure (lua_State *L, lua_CFunction fn, int n) {
 }
 
 
+/* ref: FUN_1402b3850 */
 LUA_API void lua_pushboolean (lua_State *L, int b) {
   lua_lock(L);
   setbvalue(L->top, (b != 0));  /* ensure that true is 1 */
@@ -508,6 +567,7 @@ LUA_API void lua_pushboolean (lua_State *L, int b) {
 }
 
 
+/* ref: FUN_1402b3a90 */
 LUA_API void lua_pushlightuserdata (lua_State *L, void *p) {
   lua_lock(L);
   setpvalue(L->top, p);
@@ -516,6 +576,7 @@ LUA_API void lua_pushlightuserdata (lua_State *L, void *p) {
 }
 
 
+/* ref: FUN_1402b3c20 */
 LUA_API int lua_pushthread (lua_State *L) {
   lua_lock(L);
   setthvalue(L, L->top, L);
@@ -525,12 +586,41 @@ LUA_API int lua_pushthread (lua_State *L) {
 }
 
 
+/* Blizzard: the taint state an error in the current protected call goes back to. The first push
+** records it; nested pushes only count.
+** ref: FUN_1402b3a40 */
+LUA_API void lua_pushjmptaint (lua_State *L, const char *taint, int tracking) {
+  struct lua_longjmp *lj = L->errorJmp;
+  if (lj == NULL) return;
+  if (lj->taintdepth != 0) {
+    lj->taintdepth++;
+    return;
+  }
+  lj->taint = taint;
+  lj->tainttracking = tracking;
+  lj->taintdepth = 1;
+}
+
+
+/* ref: FUN_1402b3800 */
+LUA_API void lua_popjmptaint (lua_State *L) {
+  struct lua_longjmp *lj = L->errorJmp;
+  if (lj == NULL || lj->taintdepth == 0) return;
+  lj->taintdepth--;
+  if (L->errorJmp->taintdepth == 0) {
+    L->errorJmp->taint = NULL;
+    L->errorJmp->tainttracking = 0;
+  }
+}
+
+
 
 /*
 ** get functions (Lua -> stack)
 */
 
 
+/* ref: FUN_1402b3080 */
 LUA_API void lua_gettable (lua_State *L, int idx) {
   StkId t;
   lua_lock(L);
@@ -541,6 +631,7 @@ LUA_API void lua_gettable (lua_State *L, int idx) {
 }
 
 
+/* ref: FUN_1402b2f20 */
 LUA_API void lua_getfield (lua_State *L, int idx, const char *k) {
   StkId t;
   TValue key;
@@ -554,27 +645,45 @@ LUA_API void lua_getfield (lua_State *L, int idx, const char *k) {
 }
 
 
-LUA_API void lua_rawget (lua_State *L, int idx) {
+/* Blizzard: lua_getfield with a counted key.
+** ref: FUN_1402b2fa0 */
+LUA_API void lua_getlfield (lua_State *L, int idx, const char *k, size_t len) {
   StkId t;
+  TValue key;
   lua_lock(L);
   t = index2adr(L, idx);
-  api_check(L, ttistable(t));
-  setobj2s(L, L->top - 1, luaH_get(hvalue(t), L->top - 1));
-  lua_unlock(L);
-}
-
-
-LUA_API void lua_rawgeti (lua_State *L, int idx, int n) {
-  StkId o;
-  lua_lock(L);
-  o = index2adr(L, idx);
-  api_check(L, ttistable(o));
-  setobj2s(L, L->top, luaH_getnum(hvalue(o), n));
+  api_checkvalidindex(L, t);
+  setsvalue(L, &key, luaS_newlstr(L, k, len));
+  luaV_gettable(L, t, &key, L->top);
   api_incr_top(L);
   lua_unlock(L);
 }
 
 
+/* ref: FUN_1402b3da0 */
+LUA_API void lua_rawget (lua_State *L, int idx) {
+  StkId t;
+  lua_lock(L);
+  t = index2adr(L, idx);
+  api_check(L, ttistable(t));
+  setobj2s_read(L, L->top - 1, luaH_get(hvalue(t), L->top - 1));
+  lua_unlock(L);
+}
+
+
+/* ref: FUN_1402b3e50 */
+LUA_API void lua_rawgeti (lua_State *L, int idx, int n) {
+  StkId o;
+  lua_lock(L);
+  o = index2adr(L, idx);
+  api_check(L, ttistable(o));
+  setobj2s_read(L, L->top, luaH_getnum(hvalue(o), n));
+  api_incr_top(L);
+  lua_unlock(L);
+}
+
+
+/* ref: FUN_1402b2970 */
 LUA_API void lua_createtable (lua_State *L, int narray, int nrec) {
   lua_lock(L);
   luaC_checkGC(L);
@@ -584,6 +693,7 @@ LUA_API void lua_createtable (lua_State *L, int narray, int nrec) {
 }
 
 
+/* ref: FUN_1402b3010 */
 LUA_API int lua_getmetatable (lua_State *L, int objindex) {
   const TValue *obj;
   Table *mt = NULL;
@@ -613,20 +723,33 @@ LUA_API int lua_getmetatable (lua_State *L, int objindex) {
 }
 
 
+/* Blizzard: a Lua function's environment is read under the function's taint, which is then
+** dropped again.
+** ref: FUN_1402b2cd0 */
 LUA_API void lua_getfenv (lua_State *L, int idx) {
   StkId o;
   lua_lock(L);
   o = index2adr(L, idx);
   api_checkvalidindex(L, o);
   switch (ttype(o)) {
-    case LUA_TFUNCTION:
-      sethvalue(L, L->top, clvalue(o)->c.env);
+    case LUA_TFUNCTION: {
+      Closure *cl = clvalue(o);
+      if (!cl->c.isC) {
+        const char *saved = lua_taint;
+        luaT_read(L, cl->c.taint);
+        sethvalue(L, L->top, cl->c.env);
+        if (lua_taintTracking && !lua_taintSuspended)
+          luaT_settaint(L, saved);
+      }
+      else
+        sethvalue(L, L->top, cl->c.env);
       break;
+    }
     case LUA_TUSERDATA:
       sethvalue(L, L->top, uvalue(o)->env);
       break;
     case LUA_TTHREAD:
-      setobj2s(L, L->top,  gt(thvalue(o)));
+      setobj2s_read(L, L->top,  gt(thvalue(o)));
       break;
     default:
       setnilvalue(L->top);
@@ -637,11 +760,32 @@ LUA_API void lua_getfenv (lua_State *L, int idx) {
 }
 
 
+/* Blizzard: a closure's profile counters: its calls, and its time and its callees' time in
+** milliseconds (zero unless the state profiles scripts and the top is a function).
+** ref: FUN_1402b2ba0 */
+LUA_API void lua_getclosureprofile (lua_State *L, double *time, double *subtime, int *calls) {
+  static double tickScale;  /* 0x142e20800 */
+  if (G(L)->profiling && ttisfunction(L->top - 1)) {
+    ClosureProfile *profile = clvalue(L->top - 1)->c.profile;
+    if (tickScale == 0.0)
+      tickScale = 1000.0 / (double)luai_timerfrequency();
+    *time = (double)profile->time * tickScale;
+    *subtime = (double)profile->subtime * tickScale;
+    *calls = profile->calls;
+    return;
+  }
+  *time = 0.0;
+  *subtime = 0.0;
+  *calls = 0;
+}
+
+
 /*
 ** set functions (stack -> Lua)
 */
 
 
+/* ref: FUN_1402b4580 */
 LUA_API void lua_settable (lua_State *L, int idx) {
   StkId t;
   lua_lock(L);
@@ -654,6 +798,7 @@ LUA_API void lua_settable (lua_State *L, int idx) {
 }
 
 
+/* ref: FUN_1402b43c0 */
 LUA_API void lua_setfield (lua_State *L, int idx, const char *k) {
   StkId t;
   TValue key;
@@ -668,32 +813,51 @@ LUA_API void lua_setfield (lua_State *L, int idx, const char *k) {
 }
 
 
+/* Blizzard: lua_setfield with a counted key.
+** ref: FUN_1402b4450 */
+LUA_API void lua_setlfield (lua_State *L, int idx, const char *k, size_t len) {
+  StkId t;
+  TValue key;
+  lua_lock(L);
+  api_checknelems(L, 1);
+  t = index2adr(L, idx);
+  api_checkvalidindex(L, t);
+  setsvalue(L, &key, luaS_newlstr(L, k, len));
+  luaV_settable(L, t, &key, L->top - 1);
+  L->top--;  /* pop value */
+  lua_unlock(L);
+}
+
+
+/* ref: FUN_1402b3f10 */
 LUA_API void lua_rawset (lua_State *L, int idx) {
   StkId t;
   lua_lock(L);
   api_checknelems(L, 2);
   t = index2adr(L, idx);
   api_check(L, ttistable(t));
-  setobj2t(L, luaH_set(L, hvalue(t), L->top-2), L->top-1);
+  setobj_read(L, luaH_set(L, hvalue(t), L->top-2), L->top-1);
   luaC_barriert(L, hvalue(t), L->top-1);
   L->top -= 2;
   lua_unlock(L);
 }
 
 
+/* ref: FUN_1402b3fe0 */
 LUA_API void lua_rawseti (lua_State *L, int idx, int n) {
   StkId o;
   lua_lock(L);
   api_checknelems(L, 1);
   o = index2adr(L, idx);
   api_check(L, ttistable(o));
-  setobj2t(L, luaH_setnum(L, hvalue(o), n), L->top-1);
+  setobj_read(L, luaH_setnum(L, hvalue(o), n), L->top-1);
   luaC_barriert(L, hvalue(o), L->top-1);
   L->top--;
   lua_unlock(L);
 }
 
 
+/* ref: FUN_1402b44c0 */
 LUA_API int lua_setmetatable (lua_State *L, int objindex) {
   TValue *obj;
   Table *mt;
@@ -731,6 +895,9 @@ LUA_API int lua_setmetatable (lua_State *L, int objindex) {
 }
 
 
+/* Blizzard: a Lua function given an environment without a taint of its own takes the current
+** one.
+** ref: FUN_1402b42f0 */
 LUA_API int lua_setfenv (lua_State *L, int idx) {
   StkId o;
   int res = 1;
@@ -742,6 +909,8 @@ LUA_API int lua_setfenv (lua_State *L, int idx) {
   switch (ttype(o)) {
     case LUA_TFUNCTION:
       clvalue(o)->c.env = hvalue(L->top - 1);
+      if (!clvalue(o)->c.isC && clvalue(o)->c.taint == NULL)
+        clvalue(o)->c.taint = lua_taint;
       break;
     case LUA_TUSERDATA:
       uvalue(o)->env = hvalue(L->top - 1);
@@ -760,6 +929,13 @@ LUA_API int lua_setfenv (lua_State *L, int idx) {
 }
 
 
+/* Blizzard: overrides a stack value's taint.
+** ref: FUN_1402b45b0 */
+LUA_API void lua_settaint (lua_State *L, int idx, const char *taint) {
+  index2adr(L, idx)->taint = taint;
+}
+
+
 /*
 ** `load' and `call' functions (run Lua code)
 */
@@ -771,8 +947,9 @@ LUA_API int lua_setfenv (lua_State *L, int idx) {
 
 #define checkresults(L,na,nr) \
      api_check(L, (nr) == LUA_MULTRET || (L->ci->top - L->top >= (nr) - (na)))
-	
 
+
+/* ref: FUN_1402b26e0 */
 LUA_API void lua_call (lua_State *L, int nargs, int nresults) {
   StkId func;
   lua_lock(L);
@@ -795,6 +972,7 @@ struct CallS {  /* data to `f_call' */
 };
 
 
+/* ref: FUN_1402b24e0 */
 static void f_call (lua_State *L, void *ud) {
   struct CallS *c = cast(struct CallS *, ud);
   luaD_call(L, c->func, c->nresults);
@@ -802,6 +980,7 @@ static void f_call (lua_State *L, void *ud) {
 
 
 
+/* ref: FUN_1402b3740 */
 LUA_API int lua_pcall (lua_State *L, int nargs, int nresults, int errfunc) {
   struct CallS c;
   int status;
@@ -859,6 +1038,7 @@ LUA_API int lua_cpcall (lua_State *L, lua_CFunction func, void *ud) {
 }
 
 
+/* ref: FUN_1402b34b0 */
 LUA_API int lua_load (lua_State *L, lua_Reader reader, void *data,
                       const char *chunkname) {
   ZIO z;
@@ -887,6 +1067,7 @@ LUA_API int lua_dump (lua_State *L, lua_Writer writer, void *data) {
 }
 
 
+/* ref: FUN_1402b47c0 */
 LUA_API int  lua_status (lua_State *L) {
   return L->status;
 }
@@ -896,6 +1077,7 @@ LUA_API int  lua_status (lua_State *L) {
 ** Garbage-collection function
 */
 
+/* ref: FUN_1402b2a00 */
 LUA_API int lua_gc (lua_State *L, int what, int data) {
   int res = 0;
   global_State *g;
@@ -961,6 +1143,7 @@ LUA_API int lua_gc (lua_State *L, int what, int data) {
 */
 
 
+/* ref: FUN_1402b29f0 */
 LUA_API int lua_error (lua_State *L) {
   lua_lock(L);
   api_checknelems(L, 1);
@@ -970,6 +1153,7 @@ LUA_API int lua_error (lua_State *L) {
 }
 
 
+/* ref: FUN_1402b3680 */
 LUA_API int lua_next (lua_State *L, int idx) {
   StkId t;
   int more;
@@ -987,6 +1171,7 @@ LUA_API int lua_next (lua_State *L, int idx) {
 }
 
 
+/* ref: FUN_1402b2830 */
 LUA_API void lua_concat (lua_State *L, int n) {
   lua_lock(L);
   api_checknelems(L, n);
@@ -1001,6 +1186,52 @@ LUA_API void lua_concat (lua_State *L, int n) {
   }
   /* else n == 1; nothing to do */
   lua_unlock(L);
+}
+
+
+/* Blizzard: with decimal conversion on, swaps the decimal separator of every number in `s'
+** between '.' and ','.
+** ref: FUN_1402b28f0 */
+LUA_API void lua_convertdecimal (char *s) {
+  char *end;
+  char c;
+  if (!lua_decimalConversion) return;
+  end = s + strlen(s);
+  c = *s;
+  while (c != '\0' && s < end) {
+    c = *s;
+    if ((unsigned char)(c - '0') < 10) {
+      for (;;) {
+        while ((unsigned char)(c - '0') < 10) {
+next:
+          c = *++s;
+        }
+        if (c == '.') {
+          c = s[1];
+          if ((unsigned char)(c - '0') > 9) goto next;
+          *s++ = ',';
+          continue;
+        }
+        if (c != ',') break;
+        c = s[1];
+        if ((unsigned char)(c - '0') > 9) goto next;
+        *s++ = '.';
+      }
+    }
+    c = *++s;
+  }
+}
+
+
+/* ref: FUN_1402b2cc0 */
+LUA_API int lua_getdecimalconversion (void) {
+  return lua_decimalConversion;
+}
+
+
+/* ref: FUN_1402b42e0 */
+LUA_API void lua_setdecimalconversion (int on) {
+  lua_decimalConversion = (on != 0);
 }
 
 
@@ -1022,6 +1253,7 @@ LUA_API void lua_setallocf (lua_State *L, lua_Alloc f, void *ud) {
 }
 
 
+/* ref: FUN_1402b3600 */
 LUA_API void *lua_newuserdata (lua_State *L, size_t size) {
   Udata *u;
   lua_lock(L);
@@ -1054,13 +1286,14 @@ static const char *aux_upvalue (StkId fi, int n, TValue **val) {
 }
 
 
+/* ref: FUN_1402b30e0 */
 LUA_API const char *lua_getupvalue (lua_State *L, int funcindex, int n) {
   const char *name;
   TValue *val;
   lua_lock(L);
   name = aux_upvalue(index2adr(L, funcindex), n, &val);
   if (name) {
-    setobj2s(L, L->top, val);
+    setobj2s_read(L, L->top, val);
     api_incr_top(L);
   }
   lua_unlock(L);
@@ -1068,6 +1301,7 @@ LUA_API const char *lua_getupvalue (lua_State *L, int funcindex, int n) {
 }
 
 
+/* ref: FUN_1402b4650 */
 LUA_API const char *lua_setupvalue (lua_State *L, int funcindex, int n) {
   const char *name;
   TValue *val;
@@ -1078,7 +1312,7 @@ LUA_API const char *lua_setupvalue (lua_State *L, int funcindex, int n) {
   name = aux_upvalue(fi, n, &val);
   if (name) {
     L->top--;
-    setobj(L, val, L->top);
+    setobj_read(L, val, L->top);
     luaC_barrier(L, clvalue(fi), L->top);
   }
   lua_unlock(L);

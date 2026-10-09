@@ -69,6 +69,7 @@ typedef struct global_State {
   stringtable strt;  /* hash table for strings */
   lua_Alloc frealloc;  /* function to reallocate memory */
   void *ud;         /* auxiliary data to `frealloc' */
+  lu_byte profiling;  /* Blizzard: closures carry profile blocks */
   lu_byte currentwhite;
   lu_byte gcstate;  /* state of garbage collector */
   int sweepstrgc;  /* position of sweep in `strt' */
@@ -86,6 +87,8 @@ typedef struct global_State {
   int gcpause;  /* size of pause between successive GCs */
   int gcstepmul;  /* GC `granularity' */
   lua_CFunction panic;  /* to be called in unprotected errors */
+  void *blizzarda0;  /* Blizzard: +0xa0 */
+  void *blizzarda8;  /* Blizzard: +0xa8 */
   TValue l_registry;
   struct lua_State *mainthread;
   UpVal uvhead;  /* head of double-linked list of all open upvalues */
@@ -99,6 +102,7 @@ typedef struct global_State {
 */
 struct lua_State {
   CommonHeader;
+  void *taintshadow;  /* Blizzard: anti-tamper copy of the current taint (not ported) */
   lu_byte status;
   StkId top;  /* first free slot in the stack */
   StkId base;  /* base of current function */
@@ -115,6 +119,7 @@ struct lua_State {
   unsigned short baseCcalls;  /* nested C calls when resuming coroutine */
   lu_byte hookmask;
   lu_byte allowhook;
+  lu_byte ingc;  /* Blizzard: a __gc metamethod is running (lua_isingc) */
   int basehookcount;
   int hookcount;
   lua_Hook hook;
