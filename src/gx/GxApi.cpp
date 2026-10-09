@@ -2502,6 +2502,28 @@ bool GxTexCreate(const void* descHandle, void** tex) {
 
 // Destroys a texture unless it is the shared default; one from an older device is freed
 // without the device.
+// ref: FUN_14228f5d0
+void GxTexUpdate(GxUploadInterface* upload, void* tex, const int32_t* rect, bool shaderResource,
+    GXTEXUPDATEPROC callback, void* param) {
+    if (tex == nullptr || !GxDevExists()) {
+        return;
+    }
+    if (ThreadPoolIsMainThread()) {
+        GxFrameWorkFlush(2);
+    }
+    upload->TexUpdate(tex, rect, shaderResource, callback, param);
+}
+
+// ref: FUN_14228f9a0
+void GxTexUpdateInFrame(GxRenderContext* context, void* tex, const int32_t* rect, bool shaderResource,
+    GXTEXUPDATEPROC callback, void* param) {
+    if (tex == nullptr || !GxDevExists()) {
+        return;
+    }
+    GxFrameWorkFlush(2);
+    context->UpdateTex(static_cast<gxDx12Backend::Tex*>(tex), rect, shaderResource, callback, param);
+}
+
 // ref: FUN_14228c390
 void GxTexDestroy(void** tex) {
     if (*tex == nullptr) {

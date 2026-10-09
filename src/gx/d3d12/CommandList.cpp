@@ -303,7 +303,7 @@ void CopyCommandList::CloseLists() {
 
 // Moves one object to `state` in this list: the first use records the state the list needs
 // it in at the start; later uses add (or fold into) a transition barrier.
-static bool TrackState(CopyCommandList* list, D3d12Object* object, uint32_t state) {
+bool TrackState(CopyCommandList* list, D3d12Object* object, uint32_t state) {
     StateTrackerMap& map = list->m_states[list->m_current];
     bool inserted = false;
     StateTracker* tracker = map.insert(reinterpret_cast<uint64_t>(object), &inserted);
@@ -376,7 +376,7 @@ bool CopyCommandList::TransitionObjects(D3d12Object* objects, uint64_t count, ui
 
 // The next part of the upload ring, or a new 2 MB page.
 // ref: FUN_1422d7a50
-static DataUploadPage* NextUploadPage(CopyCommandList* list) {
+DataUploadPage* NextUploadPage(CopyCommandList* list) {
     PerFrameResources* frame = list->m_frame;
     DataUploadPage* page = nullptr;
     if (frame->m_pages.size() != 0) {
@@ -928,7 +928,7 @@ static void* BufLockUpload(CopyCommandList* list, GxBuf* buf) {
 
 // A static or stream buffer's written range is queued for the copy into its heap.
 // ref: FUN_1422d49b0
-static void BufUnlockUpload(CopyCommandList* list, GxBuf* buf, uint32_t size) {
+void BufUnlockUpload(CopyCommandList* list, GxBuf* buf, uint32_t size) {
     CGxDeviceD3d12* device = GxDeviceD3d12();
     if (device->m_ready == 0) {
         buf->m_flags |= GXBUF_WRITTEN;
@@ -947,7 +947,7 @@ static void BufUnlockUpload(CopyCommandList* list, GxBuf* buf, uint32_t size) {
 }
 
 // ref: FUN_1422cd800
-static void* BufLockList(CopyCommandList* list, GxBuf* buf) {
+void* BufLockList(CopyCommandList* list, GxBuf* buf) {
     if (buf->m_type == GXBUF_STREAM) {
         // A stream buffer moves to a fresh range of its heap; the old range is freed when the
         // frame is done (LAB_1422c7c40).

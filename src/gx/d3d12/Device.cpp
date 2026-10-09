@@ -54,7 +54,7 @@ void ReleaseAndNull(T** object) {
 
 }
 
-CGxDeviceD3d12::SyncInterface* g_gxSyncInterface;
+GxUploadInterface* g_gxUploadInterface;
 
 // Builds the D3D12 device in Gx's state block.
 // ref: FUN_1422a8d70
@@ -267,16 +267,28 @@ void FrameData::ReleaseObjects() {
 
 // ---- the device --------------------------------------------------------------------------
 
-void CGxDeviceD3d12::SyncInterface::Slot00() {
-    FROST_UNIMPLEMENTED();  // FUN_14230a350
+namespace {
+
+CGxDeviceD3d12* InterfaceOwner(CGxDeviceD3d12::SyncInterface* upload) {
+    return reinterpret_cast<CGxDeviceD3d12*>(reinterpret_cast<uint8_t*>(upload) - offsetof(CGxDeviceD3d12, m_syncInterface));
 }
 
-void CGxDeviceD3d12::SyncInterface::Slot08() {
-    FROST_UNIMPLEMENTED();  // FUN_14230a3d0
 }
 
-void CGxDeviceD3d12::SyncInterface::Slot10() {
-    FROST_UNIMPLEMENTED();  // FUN_14230a460
+// ref: FUN_1422cf970
+void CGxDeviceD3d12::SyncInterface::BufUpdate(GxBuf* buf, uint32_t size, GXBUFUPDATEPROC callback, void* param) {
+    InterfaceOwner(this)->BufUpload(buf, size, callback, param);
+}
+
+// ref: FUN_1422cf980
+void CGxDeviceD3d12::SyncInterface::BufWrite(GxBuf* buf, const void* data, uint32_t size) {
+    InterfaceOwner(this)->BufWrite(buf, data, size);
+}
+
+// ref: FUN_1422cf990
+void CGxDeviceD3d12::SyncInterface::TexUpdate(void* tex, const int32_t* rect, bool shaderResource,
+    GXTEXUPDATEPROC callback, void* param) {
+    InterfaceOwner(this)->TexUpload(static_cast<Tex*>(tex), rect, shaderResource, callback, param);
 }
 
 // ref: FUN_1422cacf0
@@ -873,7 +885,7 @@ bool CGxDeviceD3d12::DeviceCreateCore(const GXDEVICEPARAMS* params) {
     if (this->m_ready == 0) {
         return false;
     }
-    g_gxSyncInterface = &this->m_syncInterface;
+    g_gxUploadInterface = &this->m_syncInterface;
     GxShaderServiceStart();
 
     // The mip generation pipeline, which the device cannot work without.
@@ -1052,7 +1064,7 @@ void CGxDeviceD3d12::DeviceDestroy() {
     if (this->m_computePtr != nullptr) {
         this->m_computePtr->~CopyCommandList();
     }
-    g_gxSyncInterface = nullptr;
+    g_gxUploadInterface = nullptr;
     this->ReleaseRegisteredObjects();
     GxShaderServiceStop();
     auto pipeline = static_cast<GENERATEMIPSPIPELINE*>(this->m_generateMips);

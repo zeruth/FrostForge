@@ -215,6 +215,7 @@ struct Queue {
     bool Create();                                  // FUN_1422d0020
     void Flush();                                   // FUN_1422e6450
     void WaitForValue(uint64_t value);              // FUN_1422e64b0
+    uint64_t Signal();                              // FUN_1422ccf40
 };
 static_assert(offsetof(Queue, m_frameFences) == 0x28, "Queue layout");
 static_assert(sizeof(Queue) == 0x58, "Queue is 0x58 bytes");

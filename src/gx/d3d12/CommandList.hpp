@@ -201,6 +201,12 @@ class CopyCommandList {
     bool TransitionObjects(D3d12Object* objects, uint64_t count, uint32_t state);  // FUN_1422e4c40
     void CloseList(uint32_t index);         // FUN_1422de6d0
     void CloseLists();                      // FUN_1422ccce0
+    void AddResidency(uint32_t index, Tex* tex);  // FUN_1422d90c0
+    void UploadSubresource(Tex* tex, const int32_t* rect, uint32_t levels, uint32_t face, uint32_t mip,
+        uint32_t width, uint32_t height, uint32_t depth, const uint8_t* data, uint32_t pitch);  // FUN_1422e33a0
+    void UploadTex(Tex* tex, const int32_t* rect, GXTEXUPDATEPROC callback, void* param);  // FUN_1422e3b90
+    bool UpdateTex(Tex* tex, const int32_t* rect, bool shaderResource, GXTEXUPDATEPROC callback,
+        void* param);                       // FUN_1422e2d50
 
     D3DX12Residency::ResidencySet* ResidencySet() {
         return this->m_residencySets[this->m_current];
@@ -287,7 +293,8 @@ class GxRenderContext {
         int32_t* destOrigin, uint32_t* size, uint32_t slice, int32_t mip);  // 0x198
     virtual void Slot1a0();
     virtual bool ResolveTex(gxDx12Backend::Tex* source, gxDx12Backend::Tex* dest);  // 0x1a8
-    virtual void Slot1b0();
+    virtual bool UpdateTex(gxDx12Backend::Tex* tex, const int32_t* rect, bool shaderResource,
+        GXTEXUPDATEPROC callback, void* param);                // 0x1b0
     virtual void Slot1b8();
     virtual void Slot1c0();
     virtual void Slot1c8();

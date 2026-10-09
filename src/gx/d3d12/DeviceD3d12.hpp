@@ -76,6 +76,8 @@ class RenderContextD3d12 : public GxRenderContext {
     bool CopyTex(Tex* source, Tex* dest, int32_t* sourceOrigin, int32_t* destOrigin, uint32_t* size,
         uint32_t slice, int32_t mip) override;                                  // FUN_1422e1870
     bool ResolveTex(Tex* source, Tex* dest) override;                          // FUN_1422e2d40
+    bool UpdateTex(Tex* tex, const int32_t* rect, bool shaderResource, GXTEXUPDATEPROC callback,
+        void* param) override;                                                  // FUN_1422e3390
     void* BufLock(GxBuf* buf) override;                                        // FUN_1422cd8e0
     bool BufUnlock(GxBuf* buf, uint32_t size) override;                        // FUN_1422cd9f0
     GxBuf* GetUploadBuf(uint8_t type) override;                                // FUN_1422d40c0
@@ -296,6 +298,10 @@ class CGxDeviceD3d12 : public CGxDevice {
     void ReleaseOldSamplers();
     void ReleaseUploadBuffers();
     void* WaitForFrame(void* out);                                        // FUN_1422e62a0
+    void TexUpload(gxDx12Backend::Tex* tex, const int32_t* rect, bool shaderResource, GXTEXUPDATEPROC callback,
+        void* param);                                                     // FUN_14230a460
+    void BufUpload(GxBuf* buf, uint32_t size, GXBUFUPDATEPROC callback, void* param);  // FUN_14230a350
+    void BufWrite(GxBuf* buf, const void* data, uint32_t size);          // FUN_14230a3d0
     void TransitionList(gxDx12Backend::CopyCommandList* list, uint32_t index,
         gxDx12Backend::CopyCommandList* barrierList, uint32_t barrierIndex, uint32_t mask);  // FUN_1422d24d0
 
@@ -373,11 +379,12 @@ class CGxDeviceD3d12 : public CGxDevice {
     uint32_t m_4738;                                       // 0x4738
     uint32_t m_pad473c;
     // The device's queue-sync interface (vtable 0x14291a3a0; DAT_14348b648 points here).
-    class SyncInterface {
+    class SyncInterface : public GxUploadInterface {
         public:
-        virtual void Slot00();      // FUN_1422cf970 -> FUN_14230a350
-        virtual void Slot08();      // FUN_1422cf980 -> FUN_14230a3d0
-        virtual void Slot10();      // FUN_1422cf990 -> FUN_14230a460
+        void BufUpdate(GxBuf* buf, uint32_t size, GXBUFUPDATEPROC callback, void* param) override;  // FUN_1422cf970
+        void BufWrite(GxBuf* buf, const void* data, uint32_t size) override;                         // FUN_1422cf980
+        void TexUpdate(void* tex, const int32_t* rect, bool shaderResource, GXTEXUPDATEPROC callback,
+            void* param) override;                                                                    // FUN_1422cf990
     };
     SyncInterface m_syncInterface;                         // 0x4740
     uint64_t m_computeWaitValue;                           // 0x4748
@@ -407,7 +414,6 @@ static_assert(offsetof(CGxDeviceD3d12, m_syncInterface) == 0x4740, "CGxDeviceD3d
 static_assert(sizeof(CGxDeviceD3d12) == 0x4750, "CGxDeviceD3d12 is 0x4750 bytes");
 
 // DAT_14348b648: the device's sync interface while it is up.
-extern CGxDeviceD3d12::SyncInterface* g_gxSyncInterface;
 
 // DAT_143490b08: cleared after each Present.
 extern uint32_t g_gxPresentSpin;

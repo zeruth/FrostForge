@@ -11,6 +11,9 @@
 
 #include "prism/Instance.hpp"
 
+struct GxBuf;
+class GxRenderContext;
+
 // The APIs Gx can drive (the names at 0x142910f90); GXAPI_COUNT also means "none".
 enum : uint8_t {
     GXAPI_D3D11_LEGACY = 0,
@@ -143,6 +146,30 @@ void GxRequestRestart();
 // (FUN_1422884b0).
 struct GXTEXALLOCINFO;
 bool GxTexCreate(const void* desc, void** tex);
+// What a texture update reads: for each level, its pixels and their row pitch
+// (param, width, height, face or slice, level, pitch out, data out).
+typedef void (*GXTEXUPDATEPROC)(void* param, uint32_t width, uint32_t height, uint32_t slice, uint32_t mip,
+    uint32_t* pitch, const void** data);
+// A buffer update's writer (param, the buffer's memory).
+typedef void (*GXBUFUPDATEPROC)(void* param, void* data);
+
+// The device's upload interface (DAT_14348b648): contents written outside the frame.
+class GxUploadInterface {
+    public:
+    virtual void BufUpdate(GxBuf* buf, uint32_t size, GXBUFUPDATEPROC callback, void* param) = 0;   // 0x00
+    virtual void BufWrite(GxBuf* buf, const void* data, uint32_t size) = 0;                          // 0x08
+    virtual void TexUpdate(void* tex, const int32_t* rect, bool shaderResource, GXTEXUPDATEPROC callback,
+        void* param) = 0;                                                                             // 0x10
+};
+extern GxUploadInterface* g_gxUploadInterface;
+
+// A texture's levels from `callback`, on the upload interface. `rect` is {top, left, bottom,
+// right}; with `shaderResource` the texture is left ready to sample.
+void GxTexUpdate(GxUploadInterface* upload, void* tex, const int32_t* rect, bool shaderResource,
+    GXTEXUPDATEPROC callback, void* param);
+// The same in the frame, on a render context.
+void GxTexUpdateInFrame(GxRenderContext* context, void* tex, const int32_t* rect, bool shaderResource,
+    GXTEXUPDATEPROC callback, void* param);
 void GxTexDestroy(void** tex);
 bool GxTexHeapCreate(const void* desc, void** heap);
 void GxTexHeapDestroy(void* heap);

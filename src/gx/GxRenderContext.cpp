@@ -353,8 +353,9 @@ bool GxRenderContext::ResolveTex(gxDx12Backend::Tex*, gxDx12Backend::Tex*) {
     FROST_UNIMPLEMENTED();
     return false;
 }
-void GxRenderContext::Slot1b0() {
+bool GxRenderContext::UpdateTex(gxDx12Backend::Tex*, const int32_t*, bool, GXTEXUPDATEPROC, void*) {
     FROST_UNIMPLEMENTED();
+    return false;
 }
 void GxRenderContext::Slot1b8() {
     FROST_UNIMPLEMENTED();
