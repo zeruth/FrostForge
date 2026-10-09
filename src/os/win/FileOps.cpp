@@ -3,6 +3,7 @@
 
 #include "os/Os.hpp"
 #include "storm/String.hpp"
+#include "storm/Unicode.hpp"
 #include <cstdarg>
 #include <cstring>
 #include <malloc.h>
@@ -157,6 +158,19 @@ bool OsDirExists(const char* path) {
     auto wide = WidePath(path, static_cast<wchar_t*>(_alloca((std::strlen(path) * 2 + 2 + 0xF) & ~uint64_t(0xF))));
     uint32_t attributes = GetFileAttributesW(wide);
     return attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+}
+
+// ref: FUN_1402149a0
+bool OsFileExists(const char* path) {
+    if (path != nullptr && *path != '\0') {
+        wchar_t wide[0x10c];
+        UnicodeConvertUtf8ToUtf16(wide, 0x104, path, 0x7FFFFFFF, nullptr, nullptr);
+        uint32_t attributes = GetFileAttributesW(wide);
+        if (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // A synchronous read at an offset; the end of the file is not an error.

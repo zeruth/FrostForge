@@ -139,6 +139,8 @@ bool CASFileExists(int32_t fileDataId);
 // Reads a whole file by FileDataID into a new Storm block (FUN_1402cf090).
 bool CASFileLoadById(int32_t fileDataId, uint8_t** data, uint32_t* size, uint64_t flags, int32_t allocFlags);
 bool CASFileLoadByName(const char* name, uint8_t** data, uint32_t* size, uint64_t flags, int32_t allocFlags);
+// Whether a named file can be loaded (flag 1: local overrides count).
+bool CASFileExistsByName(const char* name, uint64_t flags);
 void CASFileFree(void* data);
 // 2 resident, 1 not resident (tact's 7), 0 unknown or failed.
 uint8_t CASFileGetResidency(int32_t fileDataId, uint64_t size, uint32_t a3);

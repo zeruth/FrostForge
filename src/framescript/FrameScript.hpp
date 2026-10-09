@@ -33,6 +33,10 @@ class CScriptStatus : public CLoggedStatus {
     SCRIPTLOCATION m_location = {}; // 0x30
     bool m_warn = false;            // 0x38 echo messages of severity > 0 as Lua warnings
 
+    CScriptStatus() = default;
+    // Logs to `logName` (appending when asked), positioned at line 1 of `file`, with
+    // warnings echoed.
+    CScriptStatus(const char* logName, bool append, const char* file);
     ~CScriptStatus() override;
     // Sets the file messages are prefixed with, at line 1.
     void SetFile(const uint32_t* file) override;
@@ -64,11 +68,21 @@ bool FrameScript_IsInitialized();
 // shared environment table. Errors are reported into `status`.
 bool FrameScript_ExecuteBuffer(const char* source, uint64_t size, const char* name, CStatus* status,
     const char* arg, uint32_t flags);
+// Loads and runs a Lua file (as "@path"), positioned at its first line.
+bool FrameScript_ExecuteFile(const char* path, const char* arg, CScriptStatus* status, uint32_t flags, bool localFiles);
 // Runs a NUL-terminated chunk with `taint` current.
 void FrameScript_Execute(const char* source, const char* name, const char* taint);
 
 struct ARC4STATE;
 
+// The registry reference of the object whose script is running (0 for none), which flag 2
+// of FrameScript_ExecuteBuffer passes; and the flag FrameXML sets when a scoped modifier
+// captured it.
+int32_t FrameScript_GetCurrentObject();
+void FrameScript_SetCurrentObject(int32_t ref);
+void FrameScript_SetCurrentObjectScoped(bool scoped);
+// The position of `line` in a named file (the file id is always 0: no registry is set).
+SCRIPTLOCATION* ScriptLocationFromFile(SCRIPTLOCATION* location, const char* file, int32_t line);
 // Drops a function's registry reference.
 void FrameScript_ReleaseFunction(int32_t ref);
 // The registry reference of FrameScript's own error handler.

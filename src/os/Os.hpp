@@ -100,6 +100,11 @@ uint32_t OsGetCurrentDirectory(char* buffer, uint64_t size);
 void OsPathNormalize(char* dest, uint64_t destSize, const char* source);
 
 void OsPathJoin(char* dest, uint64_t destSize, const char* base, const char* relative);
+// Copies at most `count` characters (stopping at the terminator) and at most
+// destSize - 1 of them; returns how many the source had.
+uint64_t OsStrLCopyN(char* dest, uint64_t destSize, const char* source, uint64_t count);
+// The directory part of a path, without its last separator; empty when there is none.
+void OsPathGetDirectory(char* dest, uint64_t destSize, const char* path);
 
 // Creates a directory, and with `recursive` every missing parent; an OS error code or 0.
 uint32_t OsCreateDirectoryTree(const char* path, bool recursive);
@@ -121,6 +126,8 @@ uint32_t OsDirOpen(OSDIRITER* iter, const char* path);
 bool OsDirNext(OSDIRITER* iter, OSDIRENTRY* entry);
 void OsDirClose(OSDIRITER* iter);
 bool OsDirExists(const char* path);
+// True for an existing file (not a directory).
+bool OsFileExists(const char* path);
 
 const char* OsPathExtension(const char* path);
 void OsPathStripExtension(char* path);

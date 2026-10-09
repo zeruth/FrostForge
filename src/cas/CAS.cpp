@@ -1007,6 +1007,26 @@ bool CASFileLoadByName(const char* name, uint8_t** data, uint32_t* size, uint64_
     return result;
 }
 
+// Whether a named file can be loaded: a local override (flag 1) that is relative or exists on
+// disk, else an entry in the build manifest.
+// ref: FUN_1402ccd80
+bool CASFileExistsByName(const char* name, uint64_t flags) {
+    uint64_t hash = LocalManifestNameHash(name);
+    if ((flags & 1) != 0 && g_localManifest != nullptr) {
+        if (const char* path = g_localManifest->FindPathByName(hash, nullptr)) {
+            if (OsPathRootLength(path) == 0 || OsFileExists(path)) {
+                return true;
+            }
+        }
+    }
+    bool manifestOnly = s_manifestOnly;
+    t_lastError.m_kind = 1;
+    if (manifestOnly) {
+        t_lastError.m_code = 3;
+    }
+    return g_casManifest->FindByName(hash) != nullptr;
+}
+
 // Frees what CASFileLoadById / CASFileLoadByName returned.
 // ref: FUN_1402d0f80
 void CASFileFree(void* data) {

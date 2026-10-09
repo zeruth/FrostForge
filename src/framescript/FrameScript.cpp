@@ -7,6 +7,7 @@
 #include <windows.h>
 
 #include "blz/Random.hpp"
+#include "cas/CAS.hpp"
 #include "framescript/LuaMemPool.hpp"
 #include "os/Timer.hpp"
 #include "storm/ErrorReport.hpp"
@@ -44,6 +45,7 @@ int32_t s_userErrorHandler = -1;    // 0x142cf54fc
 int32_t s_environmentRef = -1;      // 0x142cf5500
 int32_t s_objectTableRef;           // 0x142cf5504
 int32_t s_currentObjectRef;         // 0x142e9a078
+bool s_currentObjectScoped;         // 0x142e9a07c set when a scoped modifier captured the object
 
 // The keystream math.random draws from, keyed from the system's entropy (0x142e9a0a0).
 ARC4STATE s_random;
@@ -158,8 +160,9 @@ const char* GetMethodObjectName(lua_State* L, int32_t level) {
     if (!lua_getstack(L, level, &ar)) {
         return nullptr;
     }
-    lua_getinfo(L, "n", &ar);
-    if (*ar.name != '*' && strcmp(ar.namewhat, "method") != 0) {
+    lua_getinfo(L, "Sln", &ar);
+    // a chunk named "*..." is an object's script; otherwise only a method call qualifies
+    if (*ar.source != '*' && strcmp(ar.namewhat, "method") != 0) {
         return nullptr;
     }
     const char* name = nullptr;
@@ -354,6 +357,29 @@ void CScriptStatus::AddV(int32_t severity, const char* format, va_list args) {
     CStatus::AddV(severity, prefixed.m_data, args);
 }
 
+// A system message: formatted, then dropped (the output is compiled out of this client).
+// ref: FUN_140667590
+static void SysMessageOutput(int32_t type, const char* format, ...) {
+    (void)type;
+    // FUN_141283d60
+    char text[0x100];
+    va_list args;
+    va_start(args, format);
+    SStrVPrintf(text, sizeof(text), format, args);
+    va_end(args);
+}
+
+// ref: FUN_140667240
+CScriptStatus::CScriptStatus(const char* logName, bool append, const char* file) {
+    if (logName != nullptr && *logName != '\0') {
+        if (!SLogCreate(logName, uint32_t(append) << 2, &this->m_log)) {
+            SysMessageOutput(1, "Cannot create WOWClient log file \"%s\"!", logName);
+        }
+    }
+    ScriptLocationFromFile(&this->m_location, file, 1);
+    this->m_warn = true;
+}
+
 // ref: FUN_1406672f0
 CScriptStatus::~CScriptStatus() {
     if (this->m_warn) {
@@ -483,6 +509,72 @@ bool FrameScript_ExecuteBuffer(const char* source, uint64_t size, const char* na
     return false;
 }
 
+// ref: FUN_14063a2a0
+bool FrameScript_ExecuteFile(const char* path, const char* arg, CScriptStatus* status, uint32_t flags, bool localFiles) {
+    char collapsed[0x104];
+    if (strstr(path, "..") != nullptr) {
+        // "dir/../" pairs are collapsed out of the path
+        char* dest = collapsed;
+        uint64_t left = 0x103;
+        while (true) {
+            char c = *path++;
+            *dest++ = c;
+            if (c == '\0') {
+                break;
+            }
+            if (--left == 0) {
+                *dest = '\0';
+                break;
+            }
+        }
+        char* up = strstr(collapsed, "..");
+        while (up != nullptr && (up[-1] == '\\' || up[-1] == '/') && (up[2] == '\\' || up[2] == '/')) {
+            char* start = up - 2;
+            while (collapsed <= start && *start != '\\' && *start != '/') {
+                start--;
+            }
+            const char* from = up + 3;
+            char* to = start + 1;
+            uint64_t room = collapsed + sizeof(collapsed) - to;
+            if (room != 0) {
+                while (true) {
+                    char c = *from++;
+                    *to = c;
+                    if (c == '\0') {
+                        break;
+                    }
+                    to++;
+                    if (--room == 0) {
+                        *to = '\0';
+                        break;
+                    }
+                }
+            }
+            up = strstr(collapsed, "..");
+        }
+        path = collapsed;
+    }
+    char name[0x105];
+    SStrPrintf(name, sizeof(name), "@%s", path);
+    uint8_t* data;
+    uint32_t size;
+    if (!cas::CASFileLoadByName(path, &data, &size, localFiles, 0x20)) {
+        status->Add(2, "Error loading %s", path);
+        return false;
+    }
+    if (size == 0) {
+        status->Add(2, "File %s is empty.", path);
+        return false;
+    }
+    SCRIPTLOCATION saved = status->m_location;
+    SCRIPTLOCATION location;
+    status->m_location = *ScriptLocationFromFile(&location, path, 1);
+    bool result = FrameScript_ExecuteBuffer(reinterpret_cast<const char*>(data), size, name, status, arg, flags);
+    cas::CASFileFree(data);
+    status->m_location = saved;
+    return result;
+}
+
 // ref: FUN_14063c090
 void FrameScript_Execute(const char* source, const char* name, const char* taint) {
     lua_State* L = s_L;
@@ -515,6 +607,34 @@ void FrameScript_Execute(const char* source, const char* name, const char* taint
         lua_taintTracking = 0;
         lua_firstTaint = nullptr;
     }
+}
+
+// ref: FUN_1406466c0
+int32_t FrameScript_GetCurrentObject() {
+    return s_currentObjectRef;
+}
+
+// ref: FUN_140646d10
+void FrameScript_SetCurrentObject(int32_t ref) {
+    s_currentObjectRef = ref;
+}
+
+// ref: FUN_140646d20
+void FrameScript_SetCurrentObjectScoped(bool scoped) {
+    s_currentObjectScoped = scoped;
+}
+
+// ref: FUN_1406606d0
+SCRIPTLOCATION* ScriptLocationFromFile(SCRIPTLOCATION* location, const char* file, int32_t line) {
+    location->m_file = 0;
+    location->m_line = 0;
+    uint32_t id;
+    // The file-name registry (0x142e9a238) is never installed in this client.
+    id = 0;
+    location->m_file = id;
+    location->m_line = static_cast<uint16_t>(line < 1 ? 0 : line);
+    (void)file;
+    return location;
 }
 
 // ref: FUN_14063e170

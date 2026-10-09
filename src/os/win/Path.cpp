@@ -388,6 +388,39 @@ uint32_t OsPathRootLength(const char* path) {
     return 0;
 }
 
+// ref: FUN_140261c60
+uint64_t OsStrLCopyN(char* dest, uint64_t destSize, const char* source, uint64_t count) {
+    for (uint64_t i = 0; i < count; i++) {
+        if (source[i] == '\0') {
+            count = i;
+            break;
+        }
+    }
+    if (destSize != 0) {
+        uint64_t copy = destSize - 1 < count ? destSize - 1 : count;
+        std::memcpy(dest, source, copy);
+        dest[copy] = '\0';
+    }
+    return count;
+}
+
+// ref: FUN_140261fd0
+void OsPathGetDirectory(char* dest, uint64_t destSize, const char* path) {
+    const char* separator = nullptr;
+    for (const char* p = path; *p != '\0'; p++) {
+        if (*p == '/' || *p == '\\') {
+            separator = p;
+        }
+    }
+    if (separator != nullptr) {
+        OsStrLCopyN(dest, destSize, path, static_cast<uint64_t>(separator - path));
+        return;
+    }
+    if (destSize != 0) {
+        *dest = '\0';
+    }
+}
+
 // ref: FUN_1402140d0
 void OsPathTruncateToDirectory(char* path) {
     char* cut = path;

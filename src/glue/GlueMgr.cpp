@@ -400,44 +400,9 @@ void Sub140AFD040(lua_State* L) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_140663430
-void Sub140663430() {
-    FROST_UNIMPLEMENTED();
-}
-
-// The FrameXML log's status, created over Logs\GlueXML.log for the TOC being loaded.
-// ref: FUN_140667240
-void ScriptStatusOpenLog(CScriptStatus* status, const char* log, const char* toc) {
-    (void)status;
-    (void)log;
-    (void)toc;
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_1406635a0
-void Sub1406635A0() {
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_140663520
-void Sub140663520() {
-    FROST_UNIMPLEMENTED();
-}
-
 // ExportInterfaceFiles / GetMouseFocus and the glue's protected functions.
 // ref: FUN_1416a7840
 void Sub1416A7840() {
-    FROST_UNIMPLEMENTED();
-}
-
-// Loads a .toc and every file it lists.
-// ref: FUN_1406630a0
-void FrameXML_LoadToc(const char* toc, void* unknown, CScriptStatus* status, void* unknown2, uint32_t flags) {
-    (void)toc;
-    (void)unknown;
-    (void)status;
-    (void)unknown2;
-    (void)flags;
     FROST_UNIMPLEMENTED();
 }
 
@@ -599,15 +564,14 @@ void CGlueMgr::Initialize() {
     Sub1416A8880();
     Sub141DB1990();
     Sub140AFD040(FrameScript_GetContext());
-    Sub140663430();
+    FrameXML_ClearScopedMask();
     // FUN_1402146d0: a blz string at 0x142617f88 reset
-    CScriptStatus status;
-    ScriptStatusOpenLog(&status, "Logs\\GlueXML.log", "Interface\\GlueXML\\GlueXML_Wrath.toc");
-    Sub1406635A0();
-    Sub140663520();
+    CScriptStatus status("Logs\\GlueXML.log", false, "Interface\\GlueXML\\GlueXML_Wrath.toc");
+    FrameXML_FreeVirtuals();
+    FrameXML_FreeIntrinsics();
     Sub1416A7840();
     // the expansion level as FrameXML's version selector (0x142e99c24)
-    FrameXML_LoadToc("Interface\\GlueXML\\GlueXML_Wrath.toc", nullptr, &status, nullptr, 7);
+    FrameXML_LoadToc("Interface\\GlueXML\\GlueXML_Wrath.toc", nullptr, &status, false, 7);
     SetVisitableUrl(0, FrameScript_GetText("VISITABLE_URL_GENERIC", -1, 0));
     for (uint32_t i = 1; i < 0x3D; i++) {
         char name[0x100];
