@@ -97,7 +97,7 @@ class GraphicsCommandList {
     uint8_t m_fca;                          // 0x0fca
     uint8_t m_queryScope;                   // 0x0fcb
     uint32_t m_fcc;                         // 0x0fcc
-    uint8_t m_staging[0x2a0];               // 0x0fd0: the descriptor staging heap
+    DescriptorStagingHeap m_staging;        // 0x0fd0
     uint64_t m_1270[8];                     // 0x1270
     void* m_views[4][0x40];                 // 0x12b0: bound shader views by stage and slot
     uint64_t m_1ab0[4][8];                  // 0x1ab0
@@ -260,6 +260,11 @@ class CGxDeviceD3d12 : public CGxDevice {
     bool BufCreate(GxBuf* buf) override;                                  // 0x1a0 FUN_1422cd720
     void BufDestroy(GxBuf* buf) override;                                 // 0x1a8 FUN_1422cd8f0
     bool BufAllocate(GxBuf* buf);                                         // FUN_1422d46a0
+    GxPipeline* PipelineCreate(const GXPIPELINEDESC* desc, uint64_t hash, const char* name) override;  // 0x138 FUN_1422dc720
+    void PipelineDestroy(GxPipeline* pipeline) override;                  // 0x140 FUN_1422dc920
+    bool BuildPipeline(const GXPIPELINEDESC* desc, GxPipeline* pipeline);  // FUN_1422d86b0
+    uint16_t* CreateVertexBufferFormat(uint16_t* result, const GXVERTEXBUFFERFORMATDESC* desc,
+        GXVERTEXBUFFERFORMAT** format) override;                         // 0x148 FUN_14229b570
     gxDx12Backend::Tex* DefaultTexD3d12();
     void SubmitBegin();                                                   // FUN_1422db9f0
     void StartFrame();                                                    // FUN_1422de840

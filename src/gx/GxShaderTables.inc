@@ -284,16 +284,16 @@ const int32_t s_computeShaders3[43] = {
 };
 const int32_t* const s_computeShaders[4] = { s_computeShaders0, s_computeShaders1, s_computeShaders2, s_computeShaders3 };  // PTR_DAT_142d43978
 
-const int32_t s_hullShaders0[7] = {
+const int32_t s_geometryShaders0[7] = {
     0, 3094814, 3094815, 3094816, 3094817, 3094818, 2976781,
 };
-const int32_t s_hullShaders1[7] = {
+const int32_t s_geometryShaders1[7] = {
     0, 3094819, 3094820, 3094821, 3094822, 3094823, 2976785,
 };
-const int32_t s_hullShaders2[7] = {
+const int32_t s_geometryShaders2[7] = {
     0, 3094824, 3094825, 3094826, 3094827, 3094828, 2990706,
 };
-const int32_t* const s_hullShaders[4] = { s_hullShaders0, s_hullShaders1, s_hullShaders2, nullptr };  // PTR_DAT_142d43998
+const int32_t* const s_geometryShaders[4] = { s_geometryShaders0, s_geometryShaders1, s_geometryShaders2, nullptr };  // PTR_DAT_142d43998
 
 const int32_t s_extraShaders1[3] = {
     0, 3182442, 3169454,

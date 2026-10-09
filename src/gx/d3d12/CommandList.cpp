@@ -493,7 +493,7 @@ GraphicsCommandList::GraphicsCommandList(uint32_t type, uint8_t vrs) : m_copy(ty
     this->m_fcc = 0;
     this->m_computeVtable = nullptr;  // FROST: the compute context (vtable 0x14291a070) is not ported
     this->m_fc0 = 0;
-    std::memset(this->m_staging, 0, sizeof(this->m_staging));
+    std::memset(&this->m_staging, 0, sizeof(this->m_staging));
     std::memset(this->m_1270, 0, sizeof(this->m_1270));
     std::memset(this->m_views, 0, sizeof(this->m_views));
     std::memset(this->m_1ab0, 0, sizeof(this->m_1ab0));
@@ -504,10 +504,7 @@ GraphicsCommandList::GraphicsCommandList(uint32_t type, uint8_t vrs) : m_copy(ty
     this->m_1d68 = -1;
     this->m_1d70[0] = 0;
     this->m_1d70[1] = 0;
-    // FUN_1422db0e0: the descriptor staging heaps (none: their counts are zero in this build)
-    // and the binding dirty bits.
-    *reinterpret_cast<ID3D12Device**>(&this->m_staging[0]) = GxDeviceD3d12()->m_device;
-    std::memset(&this->m_staging[0x220], 0xff, 0x80);
+    this->m_staging.Initialize(GxDeviceD3d12()->m_device);
     // FUN_142288710 x3: the vertex, index and constant upload GxBufs.
     this->CreateUploadBufs();
     std::memset(this->m_2080, 0, sizeof(this->m_2080));
@@ -554,7 +551,7 @@ void GraphicsCommandList::EndQueryScope() {
 void GraphicsCommandList::ResetBindings() {
     for (uint32_t stage = 0; stage < 4; stage++) {
         for (uint32_t slot : { 1u, 3u }) {
-            *reinterpret_cast<uint64_t*>(&this->m_staging[0x58 + (slot + stage * 4) * 8]) = 0;
+            this->m_staging.m_bound[stage][slot] = 0;
         }
     }
     for (uint32_t stage = 0; stage < 4; stage++) {
@@ -567,9 +564,9 @@ void GraphicsCommandList::ResetBindings() {
 // ref: FUN_1422d4120 (FUN_1422cec20 inline)
 void GraphicsCommandList::BeginFrame() {
     this->m_copy.BeginFrame();
-    std::memset(&this->m_staging[0x58], 0, 0xa0);
-    std::memset(&this->m_staging[0xf8], 0, 0xa0);
-    std::memset(&this->m_staging[0x220], 0xff, 0x80);
+    std::memset(this->m_staging.m_bound, 0, sizeof(this->m_staging.m_bound));
+    std::memset(this->m_staging.m_dirty, 0, sizeof(this->m_staging.m_dirty));
+    std::memset(this->m_staging.m_uploaded, 0xff, sizeof(this->m_staging.m_uploaded));
     std::memset(reinterpret_cast<uint8_t*>(this) + 0xbb8, 0, 0x100);
     std::memset(reinterpret_cast<uint8_t*>(this) + 0xdb8, 0, 0x100);
     std::memset(reinterpret_cast<uint8_t*>(this) + 0xeb8, 0, 0x100);
@@ -668,7 +665,8 @@ void GraphicsCommandList::SetTargets(GXRENDERTARGETS* targets) {
     if (targets->m_count != 0) {
         int32_t size[2];
         GxRenderTargetsSize(targets, size);
-        float viewport[4] = { 0.0f, 0.0f, static_cast<float>(size[0]), static_cast<float>(size[1]) };
+        // The context keeps its target as {x, y, height, width}.
+        float viewport[4] = { 0.0f, 0.0f, static_cast<float>(size[1]), static_cast<float>(size[0]) };
         this->m_context.SetViewport(viewport);
         uint32_t count = 0;
         for (; count < 4; count++) {
@@ -722,32 +720,11 @@ float* GraphicsCommandList::LockConstants(uint8_t stage, uint32_t slot, uint32_t
     return reinterpret_cast<float*>(alloc.m_cpu + alloc.m_offset);
 }
 
-// The staging heap's root constant buffer slot (FUN_1422df440).
-static void StagingSetConstants(uint8_t* staging, uint8_t stage, uint32_t slot, uint64_t address) {
-    // DAT_142919c60: per stage {CBVs, SRVs, UAVs, samplers}; DAT_143491080: the first slot of each
-    // stage in the staging table (never set in this build: all zero).
-    static const uint32_t s_stageCounts[5][4] = { { 6, 0x40, 0, 0x10 } };
-    static const uint32_t s_stageBase[5][4] = {};
-    if (stage >= 5 || slot >= s_stageCounts[stage][0]) {
-        return;
-    }
-    uint64_t bit = 1ull << (slot & 0x3f);
-    auto dirty = reinterpret_cast<uint64_t*>(staging + 0x58 + stage * 0x20);
-    if (address != 0) {
-        auto table = *reinterpret_cast<uint64_t**>(staging + 0x198);
-        table[s_stageBase[stage][0] + slot] = address;
-        *dirty |= bit;
-        *reinterpret_cast<uint64_t*>(staging + 0xf8 + stage * 0x20) |= bit;
-        return;
-    }
-    *dirty &= ~bit;
-}
-
 // ref: FUN_1422e0040
 void GraphicsCommandList::UnlockConstants(uint8_t stage, uint32_t slot) {
     auto binding = reinterpret_cast<UPLOADALLOC*>(reinterpret_cast<uint8_t*>(this) + (slot + 0x1d + stage * 0xe) * 0x20);
     if (GxDeviceD3d12()->m_ready != 0) {
-        StagingSetConstants(this->m_staging, stage, slot, binding->m_gpu + binding->m_offset);
+        this->m_staging.SetConstants(stage, slot, binding->m_gpu + binding->m_offset);
     }
     std::memset(binding, 0, sizeof(UPLOADALLOC));
 }

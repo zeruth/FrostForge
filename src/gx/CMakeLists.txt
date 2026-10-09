@@ -1,13 +1,17 @@
 add_library(gx STATIC
     GxApi.cpp
     GxBuf.cpp
+    GxPipeline.cpp
+    GxVertexFormat.cpp
     GxDevice.cpp
     GxLog.cpp
     GxRenderContext.cpp
     GxShader.cpp
+    d3d12/Binding.cpp
     d3d12/CommandList.cpp
     d3d12/Device.cpp
     d3d12/Frame.cpp
+    d3d12/Pipeline.cpp
     d3d12/Residency.cpp
     d3d12/Tags.cpp
     d3d12/Tex.cpp

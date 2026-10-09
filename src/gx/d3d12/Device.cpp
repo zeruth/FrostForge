@@ -1,6 +1,7 @@
 #include "gx/d3d12/DeviceD3d12.hpp"
 #include "gx/Gx.hpp"
 #include "gx/GxBuf.hpp"
+#include "gx/GxVertexFormat.hpp"
 #include "gx/GxPlatform.hpp"
 #include "gx/GxRenderTargets.hpp"
 #include "gx/GxShader.hpp"
@@ -947,7 +948,7 @@ ID3D12Resource* CGxDeviceD3d12::CreateReadbackBuffer(uint32_t size) {
 // ref: FUN_1422d4d60
 bool CGxDeviceD3d12::CreateGenerateMips(GENERATEMIPSPIPELINE* pipeline) {
     GXSHADERBUFFER buffer;
-    const GXSHADERPERMUTE* permute = GxShaderGetComputePermute(pipeline->m_shader, pipeline->m_permute, &buffer);
+    const GXSHADERPERMUTE* permute = GxShaderGetPermute(pipeline->m_shader, pipeline->m_permute, &buffer);
     if (permute == nullptr) {
         char name[0x100];
         GxDeviceLog("GetComputePermute failed: %s", GxShaderName(pipeline->m_shader, name, sizeof(name)));
@@ -1237,4 +1238,14 @@ bool CGxDeviceD3d12::BufAllocate(GxBuf* buf) {
     }
     buf->m_flags &= ~GXBUF_UNLOCKED;
     return true;
+}
+
+// Device slot 0x148: the layout is kept as a copy; pipelines read it when they are built.
+// ref: FUN_14229b570
+uint16_t* CGxDeviceD3d12::CreateVertexBufferFormat(uint16_t* result, const GXVERTEXBUFFERFORMATDESC* desc,
+    GXVERTEXBUFFERFORMAT** format) {
+    *format = GxVertexBufferFormatCopy(desc);
+    result[0] = 0;
+    *reinterpret_cast<uint32_t*>(result + 2) = 0;
+    return result;
 }

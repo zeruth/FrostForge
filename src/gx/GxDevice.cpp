@@ -1,4 +1,5 @@
 #include "gx/GxDevice.hpp"
+#include "gx/GxVertexFormat.hpp"
 #include "gx/GxPlatform.hpp"
 #include "prism/Instance.hpp"
 #include "storm/Memory.hpp"
@@ -56,9 +57,9 @@ CGxDevice::CGxDevice(uint8_t api) {
     InitializeSRWLock(&Field<SRWLOCK>(0x460));
     Field<float>(0x438) = 0.5f;
     Field<uint32_t>(0x468) = 1;
-    // The global vertex format table (0x2b formats at DAT_142d41d78) is filled here from its
-    // static element lists: each format's slots by attribute and its attribute masks. That
-    // static data is not carried over yet; the formats are not used before models draw.
+    // The global vertex format table (0x2b formats at DAT_142d41d78): each format.s attributes
+    // by semantic and its masks.
+    GxVertexFormatsInitialize();
 }
 
 // ref: FUN_142290b40
@@ -229,14 +230,24 @@ void CGxDevice::SwapChainEnd(void* chain) {
     (void)chain;
     FROST_UNIMPLEMENTED();
 }
-void CGxDevice::Slot138() {
+GxPipeline* CGxDevice::PipelineCreate(const GXPIPELINEDESC* desc, uint64_t hash, const char* name) {
+    (void)desc;
+    (void)hash;
+    (void)name;
+    FROST_UNIMPLEMENTED();
+    return nullptr;
+}
+void CGxDevice::PipelineDestroy(GxPipeline* pipeline) {
+    (void)pipeline;
     FROST_UNIMPLEMENTED();
 }
-void CGxDevice::Slot140() {
+uint16_t* CGxDevice::CreateVertexBufferFormat(uint16_t* result, const GXVERTEXBUFFERFORMATDESC* desc,
+    GXVERTEXBUFFERFORMAT** format) {
+    (void)desc;
     FROST_UNIMPLEMENTED();
-}
-void CGxDevice::Slot148() {
-    FROST_UNIMPLEMENTED();
+    *format = nullptr;
+    *result = 1;
+    return result;
 }
 // ref: FUN_142291090 (slot 0x150 of every device through 0x14229b750)
 void CGxDevice::ObjectFree(void* object) {
@@ -382,7 +393,7 @@ SRWLOCK g_gxRegisteredBufsLock = SRWLOCK_INIT;
 
 // ref: FUN_142290d00
 void CGxDevice::ReregisterObjects() {
-    FROST_UNIMPLEMENTED();  // FUN_142291c90: the 0x2b global vertex formats are not carried over yet
+    this->CreateVertexFormats();
     AcquireSRWLockExclusive(&g_gxRegisteredBufsLock);
     for (GXREGISTRYLINK* link = g_gxRegisteredBufs.m_next; link != &g_gxRegisteredBufs; link = link->m_next) {
         this->BufCreate(reinterpret_cast<GxBuf*>(reinterpret_cast<uint8_t*>(link) - 0x10));
@@ -466,4 +477,84 @@ void GxSwapChainSkip(void* chain) {
 // ref: FUN_14228c120
 void GxSwapChainEnd(void* chain) {
     static_cast<CGxDevice*>(g_gxDevice)->SwapChainEnd(chain);
+}
+
+// ---- vertex formats ------------------------------------------------------------------------
+
+namespace {
+
+// An attribute type as a pm vertex format (DAT_142913520).
+const uint8_t s_attribFormats[8] = { 0x22, 0x1f, 0x17, 0x2d, 0x35, 0x1b, 0x19, 0x38 };
+
+// The HLSL semantic names (0x142913490) and indices (the constructor's table in FUN_142291c90).
+const char* const s_semanticNames[GXVA_COUNT] = {
+    "POSITION", "BLENDWEIGHT", "BLENDINDICES", "NORMAL", "COLOR", "COLOR", "TEXCOORD", "TEXCOORD",
+    "TEXCOORD", "TEXCOORD", "TEXCOORD", "TEXCOORD", "TEXCOORD", "TEXCOORD", "TANGENT", "BINORMAL",
+};
+const uint32_t s_semanticIndices[GXVA_COUNT] = { 0, 0, 0, 0, 0, 1, 0, 1, 2, 3, 4, 5, 6, 7, 0, 0 };
+
+// The format whose stride each stream of a format takes (DAT_142912380); 0x2b is none.
+const uint8_t s_streamStrideFormats[GX_VERTEX_FORMAT_COUNT][2] = {
+    { 43, 43 }, { 1, 43 }, { 2, 43 }, { 3, 43 }, { 4, 43 }, { 5, 43 }, { 6, 43 }, { 7, 43 },
+    { 8, 43 }, { 9, 43 }, { 10, 43 }, { 11, 43 }, { 12, 43 }, { 13, 43 }, { 14, 43 }, { 15, 43 },
+    { 16, 43 }, { 17, 43 }, { 18, 43 }, { 19, 43 }, { 20, 43 }, { 21, 43 }, { 22, 43 }, { 23, 43 },
+    { 24, 43 }, { 25, 43 }, { 26, 43 }, { 27, 43 }, { 43, 28 }, { 43, 29 }, { 43, 30 }, { 18, 28 },
+    { 19, 28 }, { 20, 29 }, { 5, 29 }, { 9, 29 }, { 10, 29 }, { 22, 29 }, { 23, 29 }, { 24, 29 },
+    { 25, 29 }, { 26, 29 }, { 42, 43 },
+};
+
+}
+
+// ref: FUN_142291c90
+void CGxDevice::CreateVertexFormats() {
+    auto layouts = &Field<GXVERTEXBUFFERFORMAT*>(0x168);
+    for (uint32_t i = 0; i < GX_VERTEX_FORMAT_COUNT; i++) {
+        const GXVERTEXFORMATDESC& format = g_gxVertexFormats[i];
+        if (format.m_attribs == nullptr) {
+            continue;
+        }
+        GXVERTEXATTRIBDESC streams[2][16] = {};
+        uint32_t counts[2] = {};
+        for (uint32_t k = 0; k < format.m_count; k++) {
+            const GXVERTEXATTRIB& attrib = format.m_attribs[k];
+            uint8_t stream = static_cast<uint8_t>(attrib.m_stream);
+            GXVERTEXATTRIBDESC& desc = streams[stream][counts[stream]++];
+            desc.m_format = s_attribFormats[static_cast<uint8_t>(attrib.m_type)];
+            desc.m_offset = attrib.m_offset;
+            desc.m_semantic = attrib.m_semantic;
+            desc.m_name = s_semanticNames[attrib.m_semantic];
+            desc.m_index = s_semanticIndices[attrib.m_semantic];
+        }
+        for (uint32_t stream = 0; stream < 2; stream++) {
+            if (counts[stream] == 0) {
+                layouts[i * 2 + stream] = nullptr;
+                continue;
+            }
+            GXVERTEXBUFFERFORMATDESC desc = {};
+            desc.m_stream = stream;
+            desc.m_count = counts[stream];
+            desc.m_attribs = streams[stream];
+            desc.m_instanced = stream != 0;
+            desc.m_stride = g_gxVertexFormats[s_streamStrideFormats[i][stream]].m_stride;
+            GXVERTEXBUFFERFORMAT* created = nullptr;
+            uint16_t result;
+            if (*this->CreateVertexBufferFormat(&result, &desc, &created) != 0) {
+                GxLog("CreateVertexBufferFormat %zu failed", static_cast<size_t>(i));
+                this->m_ready = 0;
+            }
+            layouts[i * 2 + stream] = created;
+        }
+    }
+}
+
+// ref: FUN_142291880
+CGxDevice::VERTEXFORMATREF* CGxDevice::GetVertexFormat(VERTEXFORMATREF* out, uint8_t format) {
+    auto layouts = &Field<GXVERTEXBUFFERFORMAT*>(0x168 + format * 0x10);
+    out->m_layouts = layouts;
+    if (layouts[1] != nullptr) {
+        out->m_state = 2;
+        return out;
+    }
+    out->m_state = layouts[0] != nullptr ? 1 : 0;
+    return out;
 }

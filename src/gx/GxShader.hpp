@@ -40,9 +40,15 @@ void GxShaderSetFamily(const GXSHADERSETTINGS* settings);
 // The FileDataID of one of the engine's compute shaders (FUN_142294110).
 int32_t GxShaderComputeId(int32_t index);
 
-// A compute shader's permutation, loaded when needed and unpacked 16-byte aligned into
-// `buffer`; null when it cannot be (FUN_142293cb0).
-const GXSHADERPERMUTE* GxShaderGetComputePermute(int32_t id, uint16_t permute, GXSHADERBUFFER* buffer);
+// The FileDataIDs of the family's vertex, geometry and pixel shaders by index (FUN_1422941d0,
+// FUN_142294140, FUN_142294170).
+int32_t GxShaderVertexId(int32_t index);
+int32_t GxShaderGeometryId(int32_t index);
+int32_t GxShaderPixelId(int32_t index);
+
+// A shader's permutation, loaded when needed and unpacked 16-byte aligned into `buffer`; null
+// when it cannot be (FUN_142293cb0).
+const GXSHADERPERMUTE* GxShaderGetPermute(int32_t id, uint16_t permute, GXSHADERBUFFER* buffer);
 
 // Formats a shader id for messages (FUN_14230d6e0).
 const char* GxShaderName(int32_t id, char* buffer, uint32_t size);

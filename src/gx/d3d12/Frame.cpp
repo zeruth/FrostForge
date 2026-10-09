@@ -719,7 +719,7 @@ void CGxDeviceD3d12::StartFrame() {
                 this->m_freeUploadPages[i].push_back(page);
             }
             resources->m_uploadPages[i].m_size = 0;
-            resources->m_uploadOffsets[i] = 0;
+            resources->m_currentPages[i] = nullptr;
         }
         for (DescriptorUploadPage& page : resources->m_uploadPages[4]) {
             IUnknown* heap = page.m_heap;

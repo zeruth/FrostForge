@@ -423,6 +423,30 @@ const char* GxShaderName(int32_t id, char* buffer, uint32_t size) {
     return buffer;
 }
 
+// ref: FUN_1422941d0
+int32_t GxShaderVertexId(int32_t index) {
+    if (s_family < 4 && s_vertexShaders[s_family] != nullptr && index < 0xaf) {
+        return s_vertexShaders[s_family][index];
+    }
+    return 0;
+}
+
+// ref: FUN_142294140
+int32_t GxShaderGeometryId(int32_t index) {
+    if (s_family < 4 && s_geometryShaders[s_family] != nullptr && index < 7) {
+        return s_geometryShaders[s_family][index];
+    }
+    return 0;
+}
+
+// ref: FUN_142294170
+int32_t GxShaderPixelId(int32_t index) {
+    if (s_family < 4 && s_pixelShaders[s_family] != nullptr && index < 0x117) {
+        return s_pixelShaders[s_family][index];
+    }
+    return 0;
+}
+
 // ref: FUN_142294110
 int32_t GxShaderComputeId(int32_t index) {
     if (s_family < 4 && s_computeShaders[s_family] != nullptr && index < 0x2a) {
@@ -466,7 +490,7 @@ void GxShaderSetFamily(const GXSHADERSETTINGS* settings) {
         ShaderPreload(s_vertexShaders, 0xae, s_family);
         ShaderPreload(s_pixelShaders, 0x116, s_family);
         ShaderPreload(s_computeShaders, 0x29, s_family);
-        ShaderPreload(s_hullShaders, 6, s_family);
+        ShaderPreload(s_geometryShaders, 6, s_family);
         // FUN_142293790: the two shaders of the extra table.
         if (s_extraShaders[s_family] != nullptr) {
             for (uint32_t i = 1; i <= 2; i++) {
@@ -479,7 +503,7 @@ void GxShaderSetFamily(const GXSHADERSETTINGS* settings) {
 }
 
 // ref: FUN_142293cb0
-const GXSHADERPERMUTE* GxShaderGetComputePermute(int32_t id, uint16_t permute, GXSHADERBUFFER* buffer) {
+const GXSHADERPERMUTE* GxShaderGetPermute(int32_t id, uint16_t permute, GXSHADERBUFFER* buffer) {
     uint8_t* loaded = nullptr;
     uint8_t** slot = nullptr;
     if (s_cacheless == 0) {

@@ -40,9 +40,69 @@ static_assert(sizeof(StateTrackerMap) == 0x28, "StateTrackerMap is 0x28 bytes");
 
 // A page of the descriptor upload ring (0x30 bytes).
 struct DescriptorUploadPage {
-    ID3D12DescriptorHeap* m_heap;   // 0x00 (ComPtr)
-    uint8_t m_08[0x28];
+    ID3D12DescriptorHeap* m_heap;   // 0x00 (ComPtr): shader visible
+    D3D12_CPU_DESCRIPTOR_HANDLE m_cpu;  // 0x08
+    D3D12_GPU_DESCRIPTOR_HANDLE m_gpu;  // 0x10
+    uint32_t m_type;                // 0x18: D3D12_DESCRIPTOR_HEAP_TYPE
+    uint32_t m_increment;           // 0x1c
+    uint32_t m_begin;               // 0x20: the last allocation, in bytes
+    uint32_t m_cursor;              // 0x24
+    uint32_t m_capacity;            // 0x28: in bytes
+    uint32_t m_pad2c;
 };
+static_assert(sizeof(DescriptorUploadPage) == 0x30, "DescriptorUploadPage is 0x30 bytes");
+
+// The binding model's shape. Five shader stages (vertex, geometry, pixel, compute, and one
+// the graphics path never binds) each have constant buffers, shader resources, unordered
+// views and samplers; their descriptors wait in CPU staging heaps at fixed slots and are
+// copied into the shader-visible ring as the root signature's tables when a draw needs them.
+enum : uint32_t {
+    BINDING_CBV = 0,
+    BINDING_SRV = 1,
+    BINDING_UAV = 2,
+    BINDING_SAMPLER = 3,
+    BINDING_STAGES = 5,
+};
+// The slots each stage has of each kind (DAT_142919c60).
+extern const uint32_t s_bindingCounts[BINDING_STAGES][4];
+// The descriptor heap each kind lives in (DAT_142919cb0).
+extern const int32_t s_bindingHeapTypes[4];
+// The kinds each stage binds as tables (DAT_142919f58).
+extern const uint32_t s_bindingTableKinds[BINDING_STAGES];
+// The root parameter each stage's kind goes to (DAT_142919f70); a constant buffer's is
+// that plus its slot.
+extern const uint32_t s_bindingRootParameters[4][4];
+// The staging heaps' sizes by heap type and each stage's first slot of each kind in them,
+// worked out from the counts at start-up (DAT_143491070, DAT_143491080; 0x14020b870).
+extern uint32_t g_stagingCounts[4];
+extern uint32_t g_stagingBases[BINDING_STAGES][4];
+
+// The descriptors bound to each stage, in CPU heaps at fixed slots (0x2a0 bytes).
+struct DescriptorStagingHeap {
+    ID3D12Device* m_device;                             // 0x000
+    ID3D12DescriptorHeap* m_heaps[4];                   // 0x008 (ComPtr) by heap type
+    D3D12_CPU_DESCRIPTOR_HANDLE m_cpu[4];               // 0x028
+    uint32_t m_increments[4];                           // 0x048
+    uint64_t m_bound[BINDING_STAGES][4];                // 0x058: slots with a descriptor
+    uint64_t m_dirty[BINDING_STAGES][4];                // 0x0f8: slots changed since uploaded
+    uint64_t* m_constants;                              // 0x198: constant buffer addresses
+    D3D12_CPU_DESCRIPTOR_HANDLE m_tables[4][4];         // 0x1a0: each table's place in the ring
+    uint64_t m_uploaded[4][4];                          // 0x220: slots the current table holds
+
+    HRESULT Initialize(ID3D12Device* device);           // FUN_1422db0e0
+    void SetView(uint8_t stage, uint32_t kind, uint32_t slot, D3D12_CPU_DESCRIPTOR_HANDLE source,
+        uint64_t address);                              // FUN_1422df5b0
+    void CreateShaderResourceView(uint8_t stage, uint32_t slot, ID3D12Resource* resource,
+        const D3D12_SHADER_RESOURCE_VIEW_DESC* desc);   // FUN_1422dfa10
+    void SetConstants(uint8_t stage, uint32_t slot, uint64_t address);  // FUN_1422df440
+    // Copies what `pipeline` reads and has changed into fresh tables in the ring at `ring`
+    // ({cpu by heap type, gpu by heap type}), every table of a heap type in `fresh`.
+    void UploadTables(ID3D12GraphicsCommandList* list, const void* pipeline, uint64_t* ring,
+        uint32_t fresh);                                // FUN_1422e5340
+};
+static_assert(offsetof(DescriptorStagingHeap, m_constants) == 0x198, "DescriptorStagingHeap layout");
+static_assert(offsetof(DescriptorStagingHeap, m_uploaded) == 0x220, "DescriptorStagingHeap layout");
+static_assert(sizeof(DescriptorStagingHeap) == 0x2a0, "DescriptorStagingHeap is 0x2a0 bytes");
 
 extern const char s_dataUploadPageTag[];    // ".?AUDataUploadPage@gxDx12Backend@@"
 
@@ -71,10 +131,10 @@ struct PerFrameResources {
     blz::embedded_vector<ID3D12CommandAllocator*, 1, s_allocatorTag> m_allocators;  // 0x00
     blz::vector<DataUploadPage, s_dataUploadPageTag> m_pages;      // 0x20: reused each frame
     blz::vector<DataUploadPage, s_dataUploadPageTag> m_largePages; // 0x38: one per large upload
-    uint64_t m_uploadOffsets[4];    // 0x50
+    DescriptorUploadPage* m_currentPages[4];  // 0x50: the descriptor page being filled per heap type
     blz::vector<DescriptorUploadPage, s_uploadPageTag> m_uploadPages[5];  // 0x70
 };
-static_assert(offsetof(PerFrameResources, m_uploadOffsets) == 0x50, "PerFrameResources layout");
+static_assert(offsetof(PerFrameResources, m_currentPages) == 0x50, "PerFrameResources layout");
 static_assert(sizeof(PerFrameResources) == 0xe8, "PerFrameResources is 0xe8 bytes");
 
 // One recorded barrier set's bookkeeping (0x30 bytes: the barriers a list needed before it).

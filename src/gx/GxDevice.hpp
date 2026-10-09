@@ -55,6 +55,10 @@ void* GxSwapChainCreate(const GXSWAPCHAINPARAMS* params);
 void GxSwapChainDestroy(void** chain);
 
 struct GxBuf;
+struct GxPipeline;
+struct GXPIPELINEDESC;
+struct GXVERTEXBUFFERFORMAT;
+struct GXVERTEXBUFFERFORMATDESC;
 
 class CGxDevice {
     public:
@@ -100,9 +104,12 @@ class CGxDevice {
     virtual void SwapChainPresent(void* chain);             // 0x120
     virtual void Slot128(void* chain);                      // 0x128
     virtual void SwapChainEnd(void* chain);                 // 0x130
-    virtual void Slot138();                                 // 0x138
-    virtual void Slot140();                                 // 0x140
-    virtual void Slot148();                                 // 0x148
+    // Builds a pipeline (in the background when the device can); `hash` keys it.
+    virtual GxPipeline* PipelineCreate(const GXPIPELINEDESC* desc, uint64_t hash, const char* name);  // 0x138
+    virtual void PipelineDestroy(GxPipeline* pipeline);    // 0x140
+    // A stream layout for the device; *result is nonzero on failure.
+    virtual uint16_t* CreateVertexBufferFormat(uint16_t* result, const GXVERTEXBUFFERFORMATDESC* desc,
+        GXVERTEXBUFFERFORMAT** format);                     // 0x148
     virtual void ObjectFree(void* object);                  // 0x150: back to Gx's allocator
     virtual void Slot158();                                 // 0x158
     virtual void Slot160();                                 // 0x160
@@ -149,6 +156,15 @@ class CGxDevice {
 
     // Re-creates the vertex formats and the registered shaders on a new device (FUN_142290d00).
     void ReregisterObjects();
+    // The two stream layouts of each of the 0x2b vertex formats (FUN_142291c90).
+    void CreateVertexFormats();
+    // A vertex format's layouts: {&layouts[format], 1 when slot 0 exists, 2 when both}
+    // (FUN_142291880).
+    struct VERTEXFORMATREF {
+        GXVERTEXBUFFERFORMAT** m_layouts;
+        uint32_t m_state;
+    };
+    VERTEXFORMATREF* GetVertexFormat(VERTEXFORMATREF* out, uint8_t format);
 
     // Releases the registered shaders and frees the per-device format objects (FUN_142290f60).
     void ReleaseRegisteredObjects();
