@@ -36,7 +36,7 @@ inline uint64_t chained_bucket(uint64_t key, uint64_t count) {
 template <class Key>
 uint64_t chained_key_bits(Key key) {
     if constexpr (std::is_pointer_v<Key>) {
-        return chained_key_bits(key);
+        return reinterpret_cast<uint64_t>(key);
     } else {
         return static_cast<uint64_t>(key);
     }

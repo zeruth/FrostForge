@@ -151,7 +151,7 @@ void CScriptRegion::LoadXML(XMLOBJECT* node, CStatus* status, const char* intrin
     XMLOBJECT* anchors = XMLObjectFindChild(node, XMLTYPE_ANCHORS);
     if (anchors == nullptr) {
         if ((setAllPoints & 3) == 3) {
-            auto relative = static_cast<CLayoutFrame*>(this->CLayoutFrame::GetLayoutParent());
+            auto relative = static_cast<CLayoutFrame*>(static_cast<CLayoutFrame*>(this)->GetLayoutParent());
             this->CLayoutFrame::SetAllPoints(relative, true);
         }
     } else {
