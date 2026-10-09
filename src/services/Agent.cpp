@@ -1,0 +1,126 @@
+#include "services/Agent.hpp"
+#include "storm/Log.hpp"
+#include "storm/Memory.hpp"
+#include "util/Unimplemented.hpp"
+
+namespace {
+
+void* s_agent;                          // DAT_1430d2468: the communicator
+HSLOG s_agentLog;                       // DAT_1430d24b0: Logs\agent.log
+AGENTINSTALLCONFIG* s_installConfig;    // DAT_1430d24b8
+uint32_t s_programCode;                 // DAT_1430d2538 ('WoW')
+uint32_t s_textLocaleCode;              // DAT_1430d253c
+uint32_t s_audioLocaleCode;             // DAT_1430d2540
+void (*s_callback)(void* param);        // DAT_1430d2548
+
+// Queues a command for the communicator's thread (with an argument for some commands).
+// Offline: only reachable with a communicator.
+// ref: FUN_141564430
+bool AgentSend(void* agent, uint32_t command, uint32_t argument = 0) {
+    (void)agent;
+    (void)command;
+    (void)argument;
+    FROST_UNIMPLEMENTED();
+    return false;
+}
+
+bool AgentNotify(uint32_t command, uint32_t value, uint32_t limit) {
+    if (value < limit && s_agent) {
+        if (*reinterpret_cast<int32_t*>(static_cast<uint8_t*>(s_agent) + 0x290) != 0) {
+            AgentSend(s_agent, 9);
+        }
+        AgentSend(s_agent, command, value);
+        return true;
+    }
+    return false;
+}
+
+}
+
+// Reads the install config (product uid, expansion level, data and update directories) from
+// .agent.db. Offline: not ported (docs/stubs.md), so there is no install config.
+// ref: FUN_1415644d0
+void AgentReadInstallConfig() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141563810
+AGENTINSTALLCONFIG* AgentGetInstallConfig() {
+    return s_installConfig;
+}
+
+// ref: FUN_141563730
+void AgentFreeInstallConfig() {
+    if (AGENTINSTALLCONFIG* config = s_installConfig) {
+        config->~AGENTINSTALLCONFIG();
+        ::operator delete(config, sizeof(AGENTINSTALLCONFIG));
+    }
+    s_installConfig = nullptr;
+}
+
+// Opens Logs\agent.log and starts the communicator for a product uid. Offline: not ported
+// (docs/stubs.md), so there is no communicator.
+// ref: FUN_141563eb0
+void AgentInitialize(const char* uid) {
+    (void)uid;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1415649d0
+bool AgentStart() {
+    if (s_agent) {
+        return AgentSend(s_agent, 0x10);
+    }
+    return false;
+}
+
+// Stops the communicator (waiting up to a second for it to finish) and closes the log.
+// ref: FUN_141565530
+void AgentShutdown() {
+    if (s_agent) {
+        // the stop handshake, connection teardown and delete; unreachable offline
+        FROST_UNIMPLEMENTED();
+    }
+    SLogClose(s_agentLog);
+    s_agentLog = nullptr;
+}
+
+// ref: FUN_141565470
+bool AgentSetTextLocale(uint32_t locale) {
+    return AgentNotify(0xC, locale, 0xC);
+}
+
+// ref: FUN_141565410
+bool AgentSetAudioLocale(uint32_t locale) {
+    return AgentNotify(0xF, locale, 0xC);
+}
+
+// ref: FUN_1415654d0
+bool AgentSetRegion(uint32_t region) {
+    return AgentNotify(0xE, region, 0x100);
+}
+
+// ref: FUN_141563110
+bool AgentSetGameLocale(uint32_t locale) {
+    return AgentNotify(0xA, locale, 0xC);
+}
+
+// ref: FUN_141567a20
+void AgentSetTextLocaleCode(uint32_t code) {
+    s_textLocaleCode = code;
+}
+
+// ref: FUN_1415679f0
+void AgentSetAudioLocaleCode(uint32_t code) {
+    s_audioLocaleCode = code;
+}
+
+// ref: FUN_141567a10
+void AgentSetProgramCode(uint32_t code) {
+    s_programCode = code;
+}
+
+// ref: FUN_141567a00
+void AgentSetCallback(void (*callback)(void* param)) {
+    s_callback = callback;
+}

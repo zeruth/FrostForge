@@ -1,0 +1,21 @@
+[package]
+name = "frostlite-install"
+version = "0.1.0"
+edition = "2024"
+description = "Installs the WoW Classic 3.4.3.54261 (enUS, Windows x64) client from a TACT CDN mirror, using cascette-rs"
+publish = false
+
+[dependencies]
+cascette-formats = { path = "../cascette-rs/crates/cascette-formats" }
+cascette-crypto = { path = "../cascette-rs/crates/cascette-crypto" }
+cascette-client-storage = { path = "../cascette-rs/crates/cascette-client-storage" }
+anyhow = "1"
+hex = "0.4"
+md5 = "0.8"
+reqwest = { version = "0.12", default-features = false, features = ["blocking", "native-tls", "gzip"] }
+rayon = "1"
+parking_lot = "0.12"
+tokio = { version = "1", features = ["rt"] }
+
+[profile.release]
+debug = 1

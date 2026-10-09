@@ -1,0 +1,95 @@
+#include "os/Os.hpp"
+#include <intrin.h>
+#include <process.h>
+#include <windows.h>
+
+// Return addresses of every way a thread or fiber can start, and of main itself, captured
+// once at startup. Each start routine below records the address the OS called it from; the
+// crash reporter stops a stack walk when it reaches one of them.
+
+namespace {
+
+void* s_mainReturnAddress;           // DAT_142ddce20
+void* s_createThreadReturnAddress;   // DAT_142ddce28
+void* s_createFiberReturnAddress;    // DAT_142ddce30
+void* s_createFiberExReturnAddress;  // DAT_142ddce38
+void* s_beginThreadReturnAddress;    // DAT_142ddce40
+void* s_beginThreadExReturnAddress;  // DAT_142ddce48
+
+// ref: 0x140211af0 (not a Ghidra function: reached only as a fiber start routine)
+void CALLBACK CreateFiberProc(void* mainFiber) {
+    s_createFiberReturnAddress = _ReturnAddress();
+    SwitchToFiber(mainFiber);
+}
+
+// ref: 0x140211ad0 (fiber start routine)
+void CALLBACK CreateFiberExProc(void* mainFiber) {
+    s_createFiberExReturnAddress = _ReturnAddress();
+    SwitchToFiber(mainFiber);
+}
+
+// ref: FUN_140211b10
+DWORD WINAPI CreateThreadProc(void*) {
+    s_createThreadReturnAddress = _ReturnAddress();
+
+    void* mainFiber = ConvertThreadToFiber(nullptr);
+    if (!mainFiber) {
+        return 0;
+    }
+
+    void* fiber = CreateFiber(0x10000, &CreateFiberProc, mainFiber);
+    if (fiber) {
+        SwitchToFiber(fiber);
+        DeleteFiber(fiber);
+    }
+
+    fiber = CreateFiberEx(0, 0x10000, 0, &CreateFiberExProc, mainFiber);
+    if (fiber) {
+        SwitchToFiber(fiber);
+        DeleteFiber(fiber);
+    }
+
+    return 0;
+}
+
+// ref: 0x140211ab0 (_beginthread start routine)
+void __cdecl BeginThreadProc(void* param) {
+    s_beginThreadReturnAddress = _ReturnAddress();
+    SetEvent(*static_cast<HANDLE*>(param));
+}
+
+// ref: 0x140211aa0 (_beginthreadex start routine)
+unsigned __stdcall BeginThreadExProc(void*) {
+    s_beginThreadExReturnAddress = _ReturnAddress();
+    return 0;
+}
+
+}
+
+// ref: FUN_140211fd0
+void OsRecordThreadEntryReturnAddresses() {
+    HANDLE thread = CreateThread(nullptr, 0x10000, &CreateThreadProc, nullptr, 0, nullptr);
+    if (thread) {
+        WaitForSingleObject(thread, INFINITE);
+        CloseHandle(thread);
+    }
+
+    HANDLE event = CreateEventW(nullptr, FALSE, FALSE, nullptr);
+    if (event) {
+        if (_beginthread(&BeginThreadProc, 0x10000, &event) != static_cast<uintptr_t>(-1)) {
+            WaitForSingleObject(event, INFINITE);
+        }
+        CloseHandle(event);
+    }
+
+    uintptr_t threadEx = _beginthreadex(nullptr, 0x10000, &BeginThreadExProc, nullptr, 0, nullptr);
+    if (threadEx) {
+        WaitForSingleObject(reinterpret_cast<HANDLE>(threadEx), INFINITE);
+        CloseHandle(reinterpret_cast<HANDLE>(threadEx));
+    }
+}
+
+// ref: FUN_140212eb0
+void OsSetMainReturnAddress(void* returnAddress) {
+    s_mainReturnAddress = returnAddress;
+}

@@ -1,0 +1,15 @@
+{
+ "_comment": "Hand-identified functions, applied by tools/ghidra/ApplyFacts.java. One entry per function: the name, and the evidence. Names follow the 3.3.5 originals where the function is the same one.",
+ "functions": {
+  "0x140255140": {"name": "SMemAlloc", "ns": "Storm", "evidence": "rounds size to 16, writes a block header (size|1), falls back to _malloc_base/_calloc_base; 3,672 call sites pass an RTTI type-name string where 3.3.5 passed __FILE__"},
+  "0x140255210": {"name": "SMemFree", "ns": "Storm", "evidence": "checks the block header and reports Storm's 'Memory corrupted -- %s %d'; 10,013 call sites pass a type-name tag"},
+  "0x142430eb0": {"name": "GetData", "ns": "CDataAllocator", "evidence": "src Engine/Source/Base/CDataAllocator.cpp; pops a block off a free list, refilling it in chunks from SMemAlloc"},
+  "0x140271fe0": {"name": "_CxxThrowException", "evidence": "builds the C++ exception record with magic 0x19930520 and raises it; every call site is dead-ended (noreturn.py)"},
+  "0x1402727cc": {"name": "_invalid_parameter_noinfo_noreturn", "evidence": "_invalid_parameter() then _invoke_watson(0,0,0,0,0), the CRT's exact body"},
+  "0x140272d6c": {"name": "_endthreadex", "evidence": "common_end_thread(retval) then int3, the CRT's exact body"},
+  "0x1402b30b0": {"name": "lua_gettop", "evidence": "C_ field registration (tools/cregister.py form 2): its int result is the table index later passed to lua_setfield"},
+  "0x1402b3880": {"name": "lua_pushcclosure", "evidence": "C_ field registration: (L, lua_CFunction, 0) right before lua_setfield; 35 sites"},
+  "0x1402b43c0": {"name": "lua_setfield", "evidence": "C_ field registration: (L, table index from lua_gettop, field name) after the push; 35 sites"},
+  "0x1402b45d0": {"name": "lua_settop", "evidence": "C_ field registration: (L, -2) right after lua_setfield, i.e. lua_pop(L, 1)"}
+ }
+}

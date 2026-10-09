@@ -1,0 +1,6250 @@
+{
+ "block": [
+  "0x14260d000",
+  "0x14260e3b8"
+ ],
+ "imports": {
+  "0x14260d000": {
+   "value": "0x201434f0434",
+   "target": "0x7ffac42f87b0",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegCloseKey",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegCloseKey"
+  },
+  "0x14260d008": {
+   "value": "0x201434f0035",
+   "target": "0x7ffac43003b0",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegCreateKeyExA",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegCreateKeyExA"
+  },
+  "0x14260d010": {
+   "value": "0x201434f0de2",
+   "target": "0x7ffac42fb090",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegOpenKeyExA",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegOpenKeyExA"
+  },
+  "0x14260d018": {
+   "value": "0x201434f0f73",
+   "target": "0x7ffac42fe120",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegQueryValueExA",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegQueryValueExA"
+  },
+  "0x14260d020": {
+   "value": "0x201434f0fa5",
+   "target": "0x7ffac4301770",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegSetValueExA",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegSetValueExA"
+  },
+  "0x14260d028": {
+   "value": "0x201434f0f40",
+   "target": "0x7ffac4300af0",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegCreateKeyExW",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegCreateKeyExW"
+  },
+  "0x14260d030": {
+   "value": "0x201434f0d81",
+   "target": "0x7ffac430bf40",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegDeleteKeyExA",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegDeleteKeyExA"
+  },
+  "0x14260d038": {
+   "value": "0x201434f0fdf",
+   "target": "0x7ffac4304f70",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegDeleteValueA",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegDeleteValueA"
+  },
+  "0x14260d040": {
+   "value": "0x201434f07a9",
+   "target": "0x7ffac42ff6c0",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegEnumKeyExA",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegEnumKeyExA"
+  },
+  "0x14260d048": {
+   "value": "0x201434f00aa",
+   "target": "0x7ffac42fbed0",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegEnumValueA",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegEnumValueA"
+  },
+  "0x14260d050": {
+   "value": "0x2014350016f",
+   "target": "0x7ffac4309fc0",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegFlushKey",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegFlushKey"
+  },
+  "0x14260d058": {
+   "value": "0x20143500084",
+   "target": "0x7ffac42f7300",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegOpenKeyExW",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegOpenKeyExW"
+  },
+  "0x14260d060": {
+   "value": "0x20143500efd",
+   "target": "0x7ffac43008d0",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegQueryInfoKeyA",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegQueryInfoKeyA"
+  },
+  "0x14260d068": {
+   "value": "0x2014350090d",
+   "target": "0x7ffac42f87d0",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegQueryValueExW",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegQueryValueExW"
+  },
+  "0x14260d070": {
+   "value": "0x20143500f89",
+   "target": "0x7ffac4300530",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegSetValueExW",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegSetValueExW"
+  },
+  "0x14260d078": {
+   "value": "0x20143500378",
+   "target": "0x7ffac42fe140",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegGetValueW",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegGetValueW"
+  },
+  "0x14260d080": {
+   "value": "0x20143500b79",
+   "target": "0x7ffac4300360",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "GetUserNameW",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "GetUserNameW"
+  },
+  "0x14260d088": {
+   "value": "0x2014350010d",
+   "target": "0x7ffac430abb0",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "AllocateLocallyUniqueId",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "AllocateLocallyUniqueId"
+  },
+  "0x14260d090": {
+   "value": "0x2014350025b",
+   "target": "0x7ffac4302400",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegEnumKeyA",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegEnumKeyA"
+  },
+  "0x14260d098": {
+   "value": "0x201435004f4",
+   "target": "0x7ffac43013d0",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "RegOpenKeyA",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "RegOpenKeyA"
+  },
+  "0x14260d0a0": {
+   "value": "0x20143500df2",
+   "target": "0x7ffac43022c0",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "CryptAcquireContextW",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "CryptAcquireContextW"
+  },
+  "0x14260d0a8": {
+   "value": "0x20143510329",
+   "target": "0x7ffac4304220",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "CryptReleaseContext",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "CryptReleaseContext"
+  },
+  "0x14260d0b0": {
+   "value": "0x201435102f8",
+   "target": "0x7ffac43040e0",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "CryptGenRandom",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "CryptGenRandom"
+  },
+  "0x14260d0b8": {
+   "value": "0x201435100b6",
+   "target": "0x7ffac42ec990",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "ConvertStringSecurityDescriptorToSecurityDescriptorW",
+   "called": false,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "ConvertStringSecurityDescriptorToSecurityDescriptorW"
+  },
+  "0x14260d0c0": {
+   "value": "0x20143510b51",
+   "target": "0x7ffac4300b50",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "CryptGetHashParam",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "CryptGetHashParam"
+  },
+  "0x14260d0c8": {
+   "value": "0x2014351045a",
+   "target": "0x7ffac4300c50",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "CryptCreateHash",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "CryptCreateHash"
+  },
+  "0x14260d0d0": {
+   "value": "0x20143510833",
+   "target": "0x7ffac4300340",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "CryptHashData",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "CryptHashData"
+  },
+  "0x14260d0d8": {
+   "value": "0x20143510a3c",
+   "target": "0x7ffac4301440",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "CryptDestroyHash",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "CryptDestroyHash"
+  },
+  "0x14260d0e0": {
+   "value": "0x2014351029a",
+   "target": "0x7ffac4304590",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "CryptDestroyKey",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "CryptDestroyKey"
+  },
+  "0x14260d0e8": {
+   "value": "0x20143510ad7",
+   "target": "0x7ffac4301870",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "CryptImportKey",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "CryptImportKey"
+  },
+  "0x14260d0f0": {
+   "value": "0x20143510cea",
+   "target": "0x7ffac4307670",
+   "via": "jmp rax",
+   "module": "ADVAPI32.dll",
+   "name": "CryptEncrypt",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "CryptEncrypt"
+  },
+  "0x14260d0f8": {
+   "value": "0x20143510281",
+   "target": "0x7ffac5991450",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "EtwEventRegister",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "EventRegister"
+  },
+  "0x14260d100": {
+   "value": "0x20143510f66",
+   "target": "0x7ffac5a17a10",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "EtwEventUnregister",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "EventUnregister"
+  },
+  "0x14260d108": {
+   "value": "0x20143600b51",
+   "target": "0x7ffac598c1a0",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "EtwEventWriteTransfer",
+   "called": true,
+   "dll": "ADVAPI32.dll",
+   "imported_name": "EventWriteTransfer"
+  },
+  "0x14260d118": {
+   "value": "0x20143650c51",
+   "target": "0x7ffaa35da010",
+   "via": "jmp rax",
+   "module": "COMCTL32.dll",
+   "name": "InitCommonControlsEx",
+   "called": true,
+   "dll": "COMCTL32.dll",
+   "imported_name": "InitCommonControlsEx"
+  },
+  "0x14260d128": {
+   "value": "0x20143900f0c",
+   "target": "0x7ffac2c56fc0",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertGetIssuerCertificateFromStore",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertGetIssuerCertificateFromStore"
+  },
+  "0x14260d130": {
+   "value": "0x201439005cc",
+   "target": "0x7ffac2c2d490",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertFreeCertificateChainEngine",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertFreeCertificateChainEngine"
+  },
+  "0x14260d138": {
+   "value": "0x20143900095",
+   "target": "0x7ffac2c62620",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CryptUnprotectData",
+   "called": false,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CryptUnprotectData"
+  },
+  "0x14260d140": {
+   "value": "0x20143900892",
+   "target": "0x7ffac2c160b0",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CryptQueryObject",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CryptQueryObject"
+  },
+  "0x14260d148": {
+   "value": "0x20143900f48",
+   "target": "0x7ffac2bfcb90",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertGetNameStringW",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertGetNameStringW"
+  },
+  "0x14260d150": {
+   "value": "0x201439001b6",
+   "target": "0x7ffac2c7e5e0",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "PFXImportCertStore",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "PFXImportCertStore"
+  },
+  "0x14260d158": {
+   "value": "0x20143900acb",
+   "target": "0x7ffac2c16980",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CryptStringToBinaryW",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CryptStringToBinaryW"
+  },
+  "0x14260d160": {
+   "value": "0x20143900000",
+   "target": "0x7ffac2bfe900",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertEnumCertificatesInStore",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertEnumCertificatesInStore"
+  },
+  "0x14260d168": {
+   "value": "0x20143900f9c",
+   "target": "0x7ffac2c17110",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CryptStringToBinaryA",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CryptStringToBinaryA"
+  },
+  "0x14260d170": {
+   "value": "0x20143900156",
+   "target": "0x7ffac2bf8920",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertVerifyCertificateChainPolicy",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertVerifyCertificateChainPolicy"
+  },
+  "0x14260d178": {
+   "value": "0x20143900d51",
+   "target": "0x7ffac2c27230",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertGetCertificateChain",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertGetCertificateChain"
+  },
+  "0x14260d180": {
+   "value": "0x20143910a29",
+   "target": "0x7ffac2bdf9b0",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CryptMemFree",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CryptMemFree"
+  },
+  "0x14260d188": {
+   "value": "0x20143910838",
+   "target": "0x7ffac2c6ad50",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertGetNameStringA",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertGetNameStringA"
+  },
+  "0x14260d190": {
+   "value": "0x20143910258",
+   "target": "0x7ffac2c6acb0",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertNameToStrA",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertNameToStrA"
+  },
+  "0x14260d198": {
+   "value": "0x20143910050",
+   "target": "0x7ffac2c249c0",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertFindExtension",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertFindExtension"
+  },
+  "0x14260d1a0": {
+   "value": "0x20143910331",
+   "target": "0x7ffac2c572c0",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertVerifyTimeValidity",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertVerifyTimeValidity"
+  },
+  "0x14260d1a8": {
+   "value": "0x2014391099a",
+   "target": "0x7ffac2c4da50",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertAddCRLContextToStore",
+   "called": true,
+   "aliases": [
+    "CertAddCRLContextToStore",
+    "CertAddCTLContextToStore",
+    "CertAddCertificateContextToStore"
+   ],
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertAddCRLContextToStore"
+  },
+  "0x14260d1b0": {
+   "value": "0x20143910d51",
+   "target": "0x7ffac2c004e0",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertGetCertificateContextProperty",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertGetCertificateContextProperty"
+  },
+  "0x14260d1b8": {
+   "value": "0x201439108b1",
+   "target": "0x7ffac2c68440",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertCreateCertificateContext",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertCreateCertificateContext"
+  },
+  "0x14260d1c0": {
+   "value": "0x2014391063b",
+   "target": "0x7ffac2c637c0",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertFindCertificateInStore",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertFindCertificateInStore"
+  },
+  "0x14260d1c8": {
+   "value": "0x20143910ac4",
+   "target": "0x7ffac2c0abc0",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertOpenStore",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertOpenStore"
+  },
+  "0x14260d1d0": {
+   "value": "0x201439106a1",
+   "target": "0x7ffac2c06190",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CryptDecodeObjectEx",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CryptDecodeObjectEx"
+  },
+  "0x14260d1d8": {
+   "value": "0x2014392097f",
+   "target": "0x7ffac2c6e6a0",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertFreeCertificateChain",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertFreeCertificateChain"
+  },
+  "0x14260d1e0": {
+   "value": "0x20143920d4f",
+   "target": "0x7ffac2bde8f0",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertFreeCRLContext",
+   "called": true,
+   "aliases": [
+    "CertFreeCRLContext",
+    "CertFreeCTLContext",
+    "CertFreeCertificateContext"
+   ],
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertFreeCRLContext"
+  },
+  "0x14260d1e8": {
+   "value": "0x20143920367",
+   "target": "0x7ffac2c7ba50",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertCreateCertificateChainEngine",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertCreateCertificateChainEngine"
+  },
+  "0x14260d1f0": {
+   "value": "0x201439205b3",
+   "target": "0x7ffac2c0cdc0",
+   "via": "jmp rax",
+   "module": "CRYPT32.dll",
+   "name": "CertCloseStore",
+   "called": true,
+   "dll": "CRYPT32.dll",
+   "imported_name": "CertCloseStore"
+  },
+  "0x14260d200": {
+   "value": "0x20143930e0e",
+   "target": "0x7ffac3aa2400",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "CreateDCW",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "CreateDCW"
+  },
+  "0x14260d208": {
+   "value": "0x20143930b53",
+   "target": "0x7ffac3aa3a50",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "DeleteDC",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "DeleteDC"
+  },
+  "0x14260d210": {
+   "value": "0x20143930896",
+   "target": "0x7ffac3aacac0",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "GetICMProfileW",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "GetICMProfileW"
+  },
+  "0x14260d218": {
+   "value": "0x201439307bf",
+   "target": "0x7ffac3aac900",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "GetDeviceGammaRamp",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "GetDeviceGammaRamp"
+  },
+  "0x14260d220": {
+   "value": "0x201439309f8",
+   "target": "0x7ffac3aaa530",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "SetDeviceGammaRamp",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "SetDeviceGammaRamp"
+  },
+  "0x14260d228": {
+   "value": "0x201439305b7",
+   "target": "0x7ffac3aa4d60",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "CreateCompatibleDC",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "CreateCompatibleDC"
+  },
+  "0x14260d230": {
+   "value": "0x20143930396",
+   "target": "0x7ffac3aa51a0",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "CreateFontIndirectW",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "CreateFontIndirectW"
+  },
+  "0x14260d238": {
+   "value": "0x201439303f0",
+   "target": "0x7ffac3aa69b0",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "GetTextExtentPoint32A",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "GetTextExtentPoint32A"
+  },
+  "0x14260d240": {
+   "value": "0x20143930b2c",
+   "target": "0x7ffac3aa4150",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "SelectObject",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "SelectObject"
+  },
+  "0x14260d248": {
+   "value": "0x2014393021c",
+   "target": "0x7ffac3aa4f70",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "GetTextMetricsW",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "GetTextMetricsW"
+  },
+  "0x14260d250": {
+   "value": "0x2014393047c",
+   "target": "0x7ffac3aa5970",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "CreateSolidBrush",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "CreateSolidBrush"
+  },
+  "0x14260d258": {
+   "value": "0x20143940709",
+   "target": "0x7ffac3aa5560",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "CreateCompatibleBitmap",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "CreateCompatibleBitmap"
+  },
+  "0x14260d260": {
+   "value": "0x20143940f35",
+   "target": "0x7ffac3aa4e30",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "GetDIBits",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "GetDIBits"
+  },
+  "0x14260d268": {
+   "value": "0x20143940000",
+   "target": "0x7ffac3aa4a50",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "BitBlt",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "BitBlt"
+  },
+  "0x14260d270": {
+   "value": "0x20143940b18",
+   "target": "0x7ffac3aa17f0",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "GetDeviceCaps",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "GetDeviceCaps"
+  },
+  "0x14260d278": {
+   "value": "0x2014394011a",
+   "target": "0x7ffac3aa5360",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "CreateBitmap",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "CreateBitmap"
+  },
+  "0x14260d280": {
+   "value": "0x20143940f89",
+   "target": "0x7ffac3aa2eb0",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "CombineRgn",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "CombineRgn"
+  },
+  "0x14260d288": {
+   "value": "0x20143940b75",
+   "target": "0x7ffac3aa2950",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "CreateRectRgn",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "CreateRectRgn"
+  },
+  "0x14260d290": {
+   "value": "0x201439403fe",
+   "target": "0x7ffac3aa1070",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "DeleteObject",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "DeleteObject"
+  },
+  "0x14260d298": {
+   "value": "0x20143940996",
+   "target": "0x7ffac3aa4c80",
+   "via": "jmp rax",
+   "module": "GDI32.dll",
+   "name": "CreateDIBSection",
+   "called": true,
+   "dll": "GDI32.dll",
+   "imported_name": "CreateDIBSection"
+  },
+  "0x14260d2a8": {
+   "value": "0x2014395033e",
+   "target": "0x7ffac46f1d30",
+   "via": "jmp rax",
+   "module": "IMM32.DLL",
+   "name": "ImmSetCompositionWindow",
+   "called": false,
+   "dll": "IMM32.DLL",
+   "imported_name": "ImmSetCompositionWindow"
+  },
+  "0x14260d2b0": {
+   "value": "0x20143950021",
+   "target": "0x7ffac46fe9c0",
+   "via": "jmp rax",
+   "module": "IMM32.DLL",
+   "name": "ImmSetCompositionStringW",
+   "called": false,
+   "dll": "IMM32.DLL",
+   "imported_name": "ImmSetCompositionStringW"
+  },
+  "0x14260d2b8": {
+   "value": "0x20143950c9e",
+   "target": "0x7ffac47015d0",
+   "via": "jmp rax",
+   "module": "IMM32.DLL",
+   "name": "ImmGetIMEFileNameA",
+   "called": false,
+   "dll": "IMM32.DLL",
+   "imported_name": "ImmGetIMEFileNameA"
+  },
+  "0x14260d2c0": {
+   "value": "0x20143950b82",
+   "target": "0x7ffac46f6140",
+   "via": "jmp rax",
+   "module": "IMM32.DLL",
+   "name": "ImmNotifyIME",
+   "called": false,
+   "dll": "IMM32.DLL",
+   "imported_name": "ImmNotifyIME"
+  },
+  "0x14260d2c8": {
+   "value": "0x20143950896",
+   "target": "0x7ffac46f2540",
+   "via": "jmp rax",
+   "module": "IMM32.DLL",
+   "name": "ImmSetConversionStatus",
+   "called": false,
+   "dll": "IMM32.DLL",
+   "imported_name": "ImmSetConversionStatus"
+  },
+  "0x14260d2d0": {
+   "value": "0x20143950d24",
+   "target": "0x7ffac46f3c20",
+   "via": "jmp rax",
+   "module": "IMM32.DLL",
+   "name": "ImmGetConversionStatus",
+   "called": false,
+   "dll": "IMM32.DLL",
+   "imported_name": "ImmGetConversionStatus"
+  },
+  "0x14260d2d8": {
+   "value": "0x20143950f08",
+   "target": "0x7ffac46fe1c0",
+   "via": "jmp rax",
+   "module": "IMM32.DLL",
+   "name": "ImmGetCandidateListW",
+   "called": false,
+   "dll": "IMM32.DLL",
+   "imported_name": "ImmGetCandidateListW"
+  },
+  "0x14260d2e0": {
+   "value": "0x20143950d6e",
+   "target": "0x7ffac46f5590",
+   "via": "jmp rax",
+   "module": "IMM32.DLL",
+   "name": "ImmGetCompositionStringW",
+   "called": false,
+   "dll": "IMM32.DLL",
+   "imported_name": "ImmGetCompositionStringW"
+  },
+  "0x14260d2e8": {
+   "value": "0x20143950dd3",
+   "target": "0x7ffac46fa190",
+   "via": "jmp rax",
+   "module": "IMM32.DLL",
+   "name": "ImmAssociateContextEx",
+   "called": false,
+   "dll": "IMM32.DLL",
+   "imported_name": "ImmAssociateContextEx"
+  },
+  "0x14260d2f0": {
+   "value": "0x201439507b4",
+   "target": "0x7ffac46f9a30",
+   "via": "jmp rax",
+   "module": "IMM32.DLL",
+   "name": "ImmAssociateContext",
+   "called": false,
+   "dll": "IMM32.DLL",
+   "imported_name": "ImmAssociateContext"
+  },
+  "0x14260d2f8": {
+   "value": "0x20143960e97",
+   "target": "0x7ffac46f97c0",
+   "via": "jmp rax",
+   "module": "IMM32.DLL",
+   "name": "ImmReleaseContext",
+   "called": false,
+   "dll": "IMM32.DLL",
+   "imported_name": "ImmReleaseContext"
+  },
+  "0x14260d300": {
+   "value": "0x2014396011f",
+   "target": "0x7ffac46f4450",
+   "via": "jmp rax",
+   "module": "IMM32.DLL",
+   "name": "ImmGetContext",
+   "called": false,
+   "dll": "IMM32.DLL",
+   "imported_name": "ImmGetContext"
+  },
+  "0x14260d308": {
+   "value": "0x20143960d57",
+   "target": "0x7ffac46f9590",
+   "via": "jmp rax",
+   "module": "IMM32.DLL",
+   "name": "ImmGetIMEFileNameW",
+   "called": false,
+   "dll": "IMM32.DLL",
+   "imported_name": "ImmGetIMEFileNameW"
+  },
+  "0x14260d310": {
+   "value": "0x20143960dea",
+   "target": "0x7ffac46f1f50",
+   "via": "jmp rax",
+   "module": "IMM32.DLL",
+   "name": "ImmSetCandidateWindow",
+   "called": false,
+   "dll": "IMM32.DLL",
+   "imported_name": "ImmSetCandidateWindow"
+  },
+  "0x14260d320": {
+   "value": "0x201439d0f0e",
+   "target": "0x7ffac1218170",
+   "via": "jmp rax",
+   "module": "IPHLPAPI.DLL",
+   "name": "GetAdaptersInfo",
+   "called": true,
+   "dll": "IPHLPAPI.DLL",
+   "imported_name": "GetAdaptersInfo"
+  },
+  "0x14260d330": {
+   "value": "0x20143670a36",
+   "target": "0x7ffac44835e0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "FormatMessageA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "FormatMessageA"
+  },
+  "0x14260d338": {
+   "value": "0x20143670aae",
+   "target": "0x7ffac4497060",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateDirectoryA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateDirectoryA"
+  },
+  "0x14260d340": {
+   "value": "0x20143670846",
+   "target": "0x7ffac59f65c0",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlInitializeCriticalSection",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "InitializeCriticalSection"
+  },
+  "0x14260d348": {
+   "value": "0x201436708e8",
+   "target": "0x7ffac59327f0",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlEnterCriticalSection",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "EnterCriticalSection"
+  },
+  "0x14260d350": {
+   "value": "0x2014367056c",
+   "target": "0x7ffac59328f0",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlLeaveCriticalSection",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "LeaveCriticalSection"
+  },
+  "0x14260d358": {
+   "value": "0x201436709eb",
+   "target": "0x7ffac59cb6a0",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlDeleteCriticalSection",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "DeleteCriticalSection"
+  },
+  "0x14260d360": {
+   "value": "0x201436700b5",
+   "target": "0x7ffac4476fe0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetLocalTime",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetLocalTime"
+  },
+  "0x14260d368": {
+   "value": "0x20143670efc",
+   "target": "0x7ffac4472150",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "VirtualAlloc",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "VirtualAlloc"
+  },
+  "0x14260d370": {
+   "value": "0x20143670212",
+   "target": "0x7ffac4474d90",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "VirtualFree",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "VirtualFree"
+  },
+  "0x14260d378": {
+   "value": "0x201436700f2",
+   "target": "0x7ffac59e0270",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlTryEnterCriticalSection",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "TryEnterCriticalSection"
+  },
+  "0x14260d380": {
+   "value": "0x201436803e2",
+   "target": "0x7ffac4496f90",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "ResetEvent",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "ResetEvent"
+  },
+  "0x14260d388": {
+   "value": "0x20143680b0a",
+   "target": "0x7ffac4496f80",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "ReleaseSemaphore",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "ReleaseSemaphore"
+  },
+  "0x14260d390": {
+   "value": "0x201436805ec",
+   "target": "0x7ffac4496f70",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "ReleaseMutex",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "ReleaseMutex"
+  },
+  "0x14260d398": {
+   "value": "0x20143680896",
+   "target": "0x7ffac4496ec0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateMutexW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateMutexW"
+  },
+  "0x14260d3a0": {
+   "value": "0x20143680b64",
+   "target": "0x7ffac4496f40",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "OpenMutexW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "OpenMutexW"
+  },
+  "0x14260d3a8": {
+   "value": "0x2014368042f",
+   "target": "0x7ffac4496e50",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateEventA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateEventA"
+  },
+  "0x14260d3b0": {
+   "value": "0x201436800a9",
+   "target": "0x7ffac444b710",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateSemaphoreA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateSemaphoreA"
+  },
+  "0x14260d3b8": {
+   "value": "0x20143680d00",
+   "target": "0x7ffac4470480",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "MultiByteToWideChar",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "MultiByteToWideChar"
+  },
+  "0x14260d3c0": {
+   "value": "0x20143680cda",
+   "target": "0x7ffac447db50",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "MoveFileW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "MoveFileW"
+  },
+  "0x14260d3c8": {
+   "value": "0x20143680f66",
+   "target": "0x7ffac5a09040",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlInitializeConditionVariable",
+   "called": true,
+   "aliases": [
+    "RtlInitializeConditionVariable",
+    "RtlInitializeSRWLock",
+    "RtlRunOnceInitialize"
+   ],
+   "dll": "KERNEL32.DLL",
+   "imported_name": [
+    "InitializeConditionVariable",
+    "InitializeSRWLock",
+    "InitOnceInitialize"
+   ],
+   "ambiguous": true
+  },
+  "0x14260d3d0": {
+   "value": "0x20143690b7c",
+   "target": "0x7ffac595a130",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlReleaseSRWLockExclusive",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "ReleaseSRWLockExclusive"
+  },
+  "0x14260d3d8": {
+   "value": "0x20143690562",
+   "target": "0x7ffac59593d0",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlAcquireSRWLockExclusive",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "AcquireSRWLockExclusive"
+  },
+  "0x14260d3e0": {
+   "value": "0x20143690cfb",
+   "target": "0x7ffac59c3810",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlTryAcquireSRWLockExclusive",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "TryAcquireSRWLockExclusive"
+  },
+  "0x14260d3e8": {
+   "value": "0x20143690252",
+   "target": "0x7ffac447f1a0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetStdHandle",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetStdHandle"
+  },
+  "0x14260d3f0": {
+   "value": "0x20143690f54",
+   "target": "0x7ffac4496e30",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetHandleInformation",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetHandleInformation"
+  },
+  "0x14260d3f8": {
+   "value": "0x2014369034c",
+   "target": "0x7ffac4485870",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreatePipe",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreatePipe"
+  },
+  "0x14260d400": {
+   "value": "0x20143690fc1",
+   "target": "0x7ffac4482680",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetNamedPipeHandleState",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetNamedPipeHandleState"
+  },
+  "0x14260d408": {
+   "value": "0x20143690396",
+   "target": "0x7ffac44743c0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetProcessId",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetProcessId"
+  },
+  "0x14260d410": {
+   "value": "0x201436907b7",
+   "target": "0x7ffac4472110",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "OpenProcess",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "OpenProcess"
+  },
+  "0x14260d418": {
+   "value": "0x20143690e8f",
+   "target": "0x7ffac447bb80",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateJobObjectW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateJobObjectW"
+  },
+  "0x14260d420": {
+   "value": "0x20143690000",
+   "target": "0x7ffac447e700",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "AssignProcessToJobObject",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "AssignProcessToJobObject"
+  },
+  "0x14260d428": {
+   "value": "0x20143690734",
+   "target": "0x7ffac4476da0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetInformationJobObject",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetInformationJobObject"
+  },
+  "0x14260d430": {
+   "value": "0x201436a01e1",
+   "target": "0x7ffac446fe40",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "Sleep",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "Sleep"
+  },
+  "0x14260d438": {
+   "value": "0x201436a046f",
+   "target": "0x7ffac4479410",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetThreadId",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetThreadId"
+  },
+  "0x14260d440": {
+   "value": "0x201436a0505",
+   "target": "0x7ffac444dbd0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetProcessAffinityMask",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetProcessAffinityMask"
+  },
+  "0x14260d448": {
+   "value": "0x201436a07ba",
+   "target": "0x7ffac44977e0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "ConvertThreadToFiberEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "ConvertThreadToFiberEx"
+  },
+  "0x14260d450": {
+   "value": "0x201436a0083",
+   "target": "0x7ffac4477450",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "VirtualProtect",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "VirtualProtect"
+  },
+  "0x14260d458": {
+   "value": "0x201436a0854",
+   "target": "0x7ffac447a840",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateFileMappingW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateFileMappingW"
+  },
+  "0x14260d460": {
+   "value": "0x201436a014b",
+   "target": "0x7ffac447f360",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "OpenFileMappingW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "OpenFileMappingW"
+  },
+  "0x14260d468": {
+   "value": "0x201436a095c",
+   "target": "0x7ffac4477a60",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "MapViewOfFile",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "MapViewOfFile"
+  },
+  "0x14260d470": {
+   "value": "0x201436a0b92",
+   "target": "0x7ffac44785a0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "UnmapViewOfFile",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "UnmapViewOfFile"
+  },
+  "0x14260d478": {
+   "value": "0x201436a089a",
+   "target": "0x7ffac4484570",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateActCtxW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateActCtxW"
+  },
+  "0x14260d480": {
+   "value": "0x201436a0bf8",
+   "target": "0x7ffac4476d40",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "ActivateActCtx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "ActivateActCtx"
+  },
+  "0x14260d488": {
+   "value": "0x201436a0547",
+   "target": "0x7ffac447a740",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "DeactivateActCtx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "DeactivateActCtx"
+  },
+  "0x14260d490": {
+   "value": "0x201436b0462",
+   "target": "0x7ffac447cde0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetSystemInfo",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetSystemInfo"
+  },
+  "0x14260d498": {
+   "value": "0x201436b073e",
+   "target": "0x7ffac313a350",
+   "via": "jmp rax",
+   "module": "KERNELBASE.dll",
+   "name": "GetLogicalProcessorInformationEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetLogicalProcessorInformationEx"
+  },
+  "0x14260d4a0": {
+   "value": "0x201436b0d2d",
+   "target": "0x7ffac447f240",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetNativeSystemInfo",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetNativeSystemInfo"
+  },
+  "0x14260d4a8": {
+   "value": "0x201436b0b7c",
+   "target": "0x7ffac4497340",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetFinalPathNameByHandleW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetFinalPathNameByHandleW"
+  },
+  "0x14260d4b0": {
+   "value": "0x201436b0645",
+   "target": "0x7ffac4497530",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetFilePointerEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetFilePointerEx"
+  },
+  "0x14260d4b8": {
+   "value": "0x201436b0316",
+   "target": "0x7ffac44627c0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "QueryPerformanceCounter",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "QueryPerformanceCounter"
+  },
+  "0x14260d4c0": {
+   "value": "0x201436b0194",
+   "target": "0x7ffac44716a0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "QueryPerformanceFrequency",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "QueryPerformanceFrequency"
+  },
+  "0x14260d4c8": {
+   "value": "0x201436b08df",
+   "target": "0x7ffac4477a20",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetProcessTimes",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetProcessTimes"
+  },
+  "0x14260d4d0": {
+   "value": "0x201436b07a8",
+   "target": "0x7ffac446fe60",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetSystemTimeAsFileTime",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetSystemTimeAsFileTime"
+  },
+  "0x14260d4d8": {
+   "value": "0x201436b00bd",
+   "target": "0x7ffac4452b00",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetTickCount64",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetTickCount64"
+  },
+  "0x14260d4e0": {
+   "value": "0x201436b052d",
+   "target": "0x7ffac4481750",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetTimeZoneInformation",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetTimeZoneInformation"
+  },
+  "0x14260d4e8": {
+   "value": "0x201436c0d4a",
+   "target": "0x7ffac447db10",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetEnvironmentVariableW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetEnvironmentVariableW"
+  },
+  "0x14260d4f0": {
+   "value": "0x201436c0116",
+   "target": "0x7ffac4483520",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetEnvironmentVariableW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetEnvironmentVariableW"
+  },
+  "0x14260d4f8": {
+   "value": "0x201436c079d",
+   "target": "0x7ffac447f120",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetVersionExW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetVersionExW"
+  },
+  "0x14260d500": {
+   "value": "0x201436c0f45",
+   "target": "0x7ffac444ce10",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetThreadExecutionState",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetThreadExecutionState"
+  },
+  "0x14260d508": {
+   "value": "0x201436c04c2",
+   "target": "0x7ffac447b5c0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetComputerNameW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetComputerNameW"
+  },
+  "0x14260d510": {
+   "value": "0x201436c0764",
+   "target": "0x7ffac444cc90",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetSystemPowerStatus",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetSystemPowerStatus"
+  },
+  "0x14260d518": {
+   "value": "0x201436c0ace",
+   "target": "0x7ffac447f3c0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "OutputDebugStringW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "OutputDebugStringW"
+  },
+  "0x14260d520": {
+   "value": "0x201436c0e9a",
+   "target": "0x7ffac59c33c0",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlWakeConditionVariable",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "WakeConditionVariable"
+  },
+  "0x14260d528": {
+   "value": "0x201436c0234",
+   "target": "0x7ffac3062a20",
+   "via": "jmp rax",
+   "module": "KERNELBASE.dll",
+   "name": "SleepConditionVariableSRW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SleepConditionVariableSRW"
+  },
+  "0x14260d530": {
+   "value": "0x201436c0f61",
+   "target": "0x7ffac447bd50",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "LoadLibraryExW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "LoadLibraryExW"
+  },
+  "0x14260d538": {
+   "value": "0x201436d0386",
+   "target": "0x7ffac447ed40",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SystemTimeToTzSpecificLocalTime",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SystemTimeToTzSpecificLocalTime"
+  },
+  "0x14260d540": {
+   "value": "0x201436d06d3",
+   "target": "0x7ffac4476d80",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "PeekNamedPipe",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "PeekNamedPipe"
+  },
+  "0x14260d548": {
+   "value": "0x201436d0932",
+   "target": "0x7ffac30ecf60",
+   "via": "jmp rax",
+   "module": "KERNELBASE.dll",
+   "name": "InitOnceComplete",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "InitOnceComplete"
+  },
+  "0x14260d550": {
+   "value": "0x201436d0daa",
+   "target": "0x7ffac3062e00",
+   "via": "jmp rax",
+   "module": "KERNELBASE.dll",
+   "name": "InitOnceBeginInitialize",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "InitOnceBeginInitialize"
+  },
+  "0x14260d558": {
+   "value": "0x201436d032d",
+   "target": "0x7ffac444d9b0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetThreadAffinityMask",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetThreadAffinityMask"
+  },
+  "0x14260d560": {
+   "value": "0x201436d06b3",
+   "target": "0x7ffac4476c30",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "LocalAlloc",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "LocalAlloc"
+  },
+  "0x14260d568": {
+   "value": "0x201436d082d",
+   "target": "0x7ffac5a82c00",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "NtFlushProcessWriteBuffers",
+   "called": true,
+   "aliases": [
+    "NtFlushProcessWriteBuffers",
+    "ZwFlushProcessWriteBuffers"
+   ],
+   "dll": "KERNEL32.DLL",
+   "imported_name": "FlushProcessWriteBuffers"
+  },
+  "0x14260d570": {
+   "value": "0x201436d06eb",
+   "target": "0x7ffac4496ed0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateSemaphoreExW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateSemaphoreExW"
+  },
+  "0x14260d578": {
+   "value": "0x201436d0433",
+   "target": "0x7ffac5944b90",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlAcquireSRWLockShared",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "AcquireSRWLockShared"
+  },
+  "0x14260d580": {
+   "value": "0x201436d05e0",
+   "target": "0x7ffac5944c00",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlReleaseSRWLockShared",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "ReleaseSRWLockShared"
+  },
+  "0x14260d588": {
+   "value": "0x201436d0ca1",
+   "target": "0x7ffac5a09040",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlInitializeConditionVariable",
+   "called": true,
+   "aliases": [
+    "RtlInitializeConditionVariable",
+    "RtlInitializeSRWLock",
+    "RtlRunOnceInitialize"
+   ],
+   "dll": "KERNEL32.DLL",
+   "imported_name": [
+    "InitializeConditionVariable",
+    "InitializeSRWLock",
+    "InitOnceInitialize"
+   ],
+   "ambiguous": true
+  },
+  "0x14260d590": {
+   "value": "0x201436d0000",
+   "target": "0x7ffac444ca80",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateFileMappingA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateFileMappingA"
+  },
+  "0x14260d598": {
+   "value": "0x201436e02ad",
+   "target": "0x7ffac4480a00",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "FlushViewOfFile",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "FlushViewOfFile"
+  },
+  "0x14260d5a0": {
+   "value": "0x201436e0cb9",
+   "target": "0x7ffac4496e90",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateMutexA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateMutexA"
+  },
+  "0x14260d5a8": {
+   "value": "0x201436e0359",
+   "target": "0x7ffac4482130",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetLocaleInfoA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetLocaleInfoA"
+  },
+  "0x14260d5b0": {
+   "value": "0x201436e031f",
+   "target": "0x7ffac4496fc0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SleepEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SleepEx"
+  },
+  "0x14260d5b8": {
+   "value": "0x201436e0a6a",
+   "target": "0x7ffac447fc60",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CancelIoEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CancelIoEx"
+  },
+  "0x14260d5c0": {
+   "value": "0x201436e0276",
+   "target": "0x7ffac4472190",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "PostQueuedCompletionStatus",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "PostQueuedCompletionStatus"
+  },
+  "0x14260d5c8": {
+   "value": "0x201436e015d",
+   "target": "0x7ffac4479550",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetQueuedCompletionStatusEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetQueuedCompletionStatusEx"
+  },
+  "0x14260d5d0": {
+   "value": "0x201436e0b61",
+   "target": "0x7ffac447f1c0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateIoCompletionPort",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateIoCompletionPort"
+  },
+  "0x14260d5d8": {
+   "value": "0x201436e0951",
+   "target": "0x7ffac4497410",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetVolumePathNameW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetVolumePathNameW"
+  },
+  "0x14260d5e0": {
+   "value": "0x201436e0859",
+   "target": "0x7ffac4497290",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetDriveTypeW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetDriveTypeW"
+  },
+  "0x14260d5e8": {
+   "value": "0x201436e08d1",
+   "target": "0x7ffac447aec0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetDllDirectoryW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetDllDirectoryW"
+  },
+  "0x14260d5f0": {
+   "value": "0x201436f01c5",
+   "target": "0x7ffac5a85390",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlGetCurrentProcessorNumberEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetCurrentProcessorNumberEx"
+  },
+  "0x14260d5f8": {
+   "value": "0x201436f04bc",
+   "target": "0x7ffac4480570",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CompareStringA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CompareStringA"
+  },
+  "0x14260d600": {
+   "value": "0x201436f06a0",
+   "target": "0x7ffac447bf60",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GlobalLock",
+   "called": true,
+   "aliases": [
+    "GlobalLock",
+    "GlobalWire"
+   ],
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GlobalLock"
+  },
+  "0x14260d608": {
+   "value": "0x201436f0851",
+   "target": "0x7ffac447d0a0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GlobalUnWire",
+   "called": true,
+   "aliases": [
+    "GlobalUnWire",
+    "GlobalUnlock"
+   ],
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GlobalUnWire"
+  },
+  "0x14260d610": {
+   "value": "0x201436f0940",
+   "target": "0x7ffac4474310",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GlobalAlloc",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GlobalAlloc"
+  },
+  "0x14260d618": {
+   "value": "0x201436f012e",
+   "target": "0x7ffac4496ee0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateSemaphoreW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateSemaphoreW"
+  },
+  "0x14260d620": {
+   "value": "0x201436f006b",
+   "target": "0x7ffac44975c0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "MulDiv",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "MulDiv"
+  },
+  "0x14260d628": {
+   "value": "0x201436f0896",
+   "target": "0x7ffac447f000",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetEnvironmentVariableA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetEnvironmentVariableA"
+  },
+  "0x14260d630": {
+   "value": "0x201436f0523",
+   "target": "0x7ffac447bc50",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetErrorMode",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetErrorMode"
+  },
+  "0x14260d638": {
+   "value": "0x201436f0c8d",
+   "target": "0x7ffac447ee00",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetSystemDirectoryW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetSystemDirectoryW"
+  },
+  "0x14260d640": {
+   "value": "0x201437007b4",
+   "target": "0x7ffac4462750",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GlobalFree",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GlobalFree"
+  },
+  "0x14260d648": {
+   "value": "0x2014370054d",
+   "target": "0x7ffac447f180",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetSystemDefaultLangID",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetSystemDefaultLangID"
+  },
+  "0x14260d650": {
+   "value": "0x20143700dc4",
+   "target": "0x7ffac447aca0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "FlushInstructionCache",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "FlushInstructionCache"
+  },
+  "0x14260d658": {
+   "value": "0x20143700974",
+   "target": "0x7ffac4484cd0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetThreadContext",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetThreadContext"
+  },
+  "0x14260d660": {
+   "value": "0x201437008b1",
+   "target": "0x7ffac4462880",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "Module32Next",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "Module32Next"
+  },
+  "0x14260d668": {
+   "value": "0x2014370086a",
+   "target": "0x7ffac44718c0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "Module32First",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "Module32First"
+  },
+  "0x14260d670": {
+   "value": "0x20143700c1f",
+   "target": "0x7ffac444e3d0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "Thread32Next",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "Thread32Next"
+  },
+  "0x14260d678": {
+   "value": "0x20143700c59",
+   "target": "0x7ffac444dac0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "Thread32First",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "Thread32First"
+  },
+  "0x14260d680": {
+   "value": "0x20143700039",
+   "target": "0x7ffac448ab50",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateToolhelp32Snapshot",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateToolhelp32Snapshot"
+  },
+  "0x14260d688": {
+   "value": "0x20143700d14",
+   "target": "0x7ffac59ccb30",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlExitUserThread",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "ExitThread"
+  },
+  "0x14260d690": {
+   "value": "0x20143700708",
+   "target": "0x7ffac447bd70",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "FreeLibrary",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "FreeLibrary"
+  },
+  "0x14260d698": {
+   "value": "0x20143700183",
+   "target": "0x7ffac447a700",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GlobalMemoryStatusEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GlobalMemoryStatusEx"
+  },
+  "0x14260d6a0": {
+   "value": "0x20143710cad",
+   "target": "0x7ffac447be40",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetThreadContext",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetThreadContext"
+  },
+  "0x14260d6a8": {
+   "value": "0x20143710286",
+   "target": "0x7ffac447bc90",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "ResumeThread",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "ResumeThread"
+  },
+  "0x14260d6b0": {
+   "value": "0x20143710e9a",
+   "target": "0x7ffac447dee0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SuspendThread",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SuspendThread"
+  },
+  "0x14260d6b8": {
+   "value": "0x20143710ae9",
+   "target": "0x7ffac4476c10",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "OpenThread",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "OpenThread"
+  },
+  "0x14260d6c0": {
+   "value": "0x20143710dcb",
+   "target": "0x7ffac4496bc0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "RtlCaptureContext",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "RtlCaptureContext"
+  },
+  "0x14260d6c8": {
+   "value": "0x2014371065b",
+   "target": "0x7ffac449b520",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "IsValidLanguageGroup",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "IsValidLanguageGroup"
+  },
+  "0x14260d6d0": {
+   "value": "0x20143710102",
+   "target": "0x7ffac4458600",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetTickCount",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetTickCount"
+  },
+  "0x14260d6d8": {
+   "value": "0x201437105ef",
+   "target": "0x7ffac4471560",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "WideCharToMultiByte",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "WideCharToMultiByte"
+  },
+  "0x14260d6e0": {
+   "value": "0x20143710a1a",
+   "target": "0x7ffac446c580",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "VerifyVersionInfoW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "VerifyVersionInfoW"
+  },
+  "0x14260d6e8": {
+   "value": "0x20143710e6f",
+   "target": "0x7ffac4483310",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "MoveFileExW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "MoveFileExW"
+  },
+  "0x14260d6f0": {
+   "value": "0x201437100e0",
+   "target": "0x7ffac44977b0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CopyFileW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CopyFileW"
+  },
+  "0x14260d6f8": {
+   "value": "0x201437104d0",
+   "target": "0x7ffac4481f20",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CancelIo",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CancelIo"
+  },
+  "0x14260d700": {
+   "value": "0x2014372081d",
+   "target": "0x7ffac4472170",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetOverlappedResult",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetOverlappedResult"
+  },
+  "0x14260d708": {
+   "value": "0x20143720aee",
+   "target": "0x7ffac4461a50",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "DeviceIoControl",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "DeviceIoControl"
+  },
+  "0x14260d710": {
+   "value": "0x20143720755",
+   "target": "0x7ffac4497580",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "WriteFile",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "WriteFile"
+  },
+  "0x14260d718": {
+   "value": "0x20143720913",
+   "target": "0x7ffac4482010",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "HeapCreate",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "HeapCreate"
+  },
+  "0x14260d720": {
+   "value": "0x20143720f42",
+   "target": "0x7ffac4485950",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "TerminateThread",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "TerminateThread"
+  },
+  "0x14260d728": {
+   "value": "0x2014372039a",
+   "target": "0x7ffac4496fe0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "WaitForMultipleObjectsEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "WaitForMultipleObjectsEx"
+  },
+  "0x14260d730": {
+   "value": "0x20143720943",
+   "target": "0x7ffac4497000",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "WaitForSingleObjectEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "WaitForSingleObjectEx"
+  },
+  "0x14260d738": {
+   "value": "0x201437205c3",
+   "target": "0x7ffac4497590",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "WriteFileEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "WriteFileEx"
+  },
+  "0x14260d740": {
+   "value": "0x20143720470",
+   "target": "0x7ffac4497480",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "ReadFileEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "ReadFileEx"
+  },
+  "0x14260d748": {
+   "value": "0x20143720ac3",
+   "target": "0x7ffac4483500",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "WerRegisterRuntimeExceptionModule",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "WerRegisterRuntimeExceptionModule"
+  },
+  "0x14260d750": {
+   "value": "0x20143720b2f",
+   "target": "0x7ffac44837b0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetUserDefaultUILanguage",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetUserDefaultUILanguage"
+  },
+  "0x14260d758": {
+   "value": "0x201437305a1",
+   "target": "0x7ffac44820d0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetVersionExA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetVersionExA"
+  },
+  "0x14260d760": {
+   "value": "0x201437306be",
+   "target": "0x7ffac4496f10",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "InitializeCriticalSectionEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "InitializeCriticalSectionEx"
+  },
+  "0x14260d768": {
+   "value": "0x20143730389",
+   "target": "0x7ffac4480d60",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "OpenFile",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "OpenFile"
+  },
+  "0x14260d770": {
+   "value": "0x201437302c6",
+   "target": "0x7ffac44835b0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetSystemDirectoryA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetSystemDirectoryA"
+  },
+  "0x14260d778": {
+   "value": "0x20143730128",
+   "target": "0x7ffac4472070",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateWaitableTimerA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateWaitableTimerA"
+  },
+  "0x14260d780": {
+   "value": "0x201437307e7",
+   "target": "0x7ffac4496fb0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetWaitableTimer",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetWaitableTimer"
+  },
+  "0x14260d788": {
+   "value": "0x2014373050f",
+   "target": "0x7ffac4497620",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "FileTimeToSystemTime",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "FileTimeToSystemTime"
+  },
+  "0x14260d790": {
+   "value": "0x2014373019e",
+   "target": "0x7ffac447f1e0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetUserDefaultLocaleName",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetUserDefaultLocaleName"
+  },
+  "0x14260d798": {
+   "value": "0x20143730d65",
+   "target": "0x7ffac4483040",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetUserDefaultLangID",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetUserDefaultLangID"
+  },
+  "0x14260d7a0": {
+   "value": "0x20143730075",
+   "target": "0x7ffac447ce90",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetPriorityClass",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetPriorityClass"
+  },
+  "0x14260d7a8": {
+   "value": "0x20143730ce3",
+   "target": "0x7ffac4481f00",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetPriorityClass",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetPriorityClass"
+  },
+  "0x14260d7b0": {
+   "value": "0x201437300b0",
+   "target": "0x7ffac4458300",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "Process32NextW",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "Process32NextW"
+  },
+  "0x14260d7b8": {
+   "value": "0x201437301cd",
+   "target": "0x7ffac44701b0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "Process32FirstW",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "Process32FirstW"
+  },
+  "0x14260d7c0": {
+   "value": "0x20143740416",
+   "target": "0x7ffac447bf40",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "QueryFullProcessImageNameW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "QueryFullProcessImageNameW"
+  },
+  "0x14260d7c8": {
+   "value": "0x2014374093c",
+   "target": "0x7ffac44973c0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetTempPathA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetTempPathA"
+  },
+  "0x14260d7d0": {
+   "value": "0x201437408c8",
+   "target": "0x7ffac44970f0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "DeleteFileA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "DeleteFileA"
+  },
+  "0x14260d7d8": {
+   "value": "0x20143740902",
+   "target": "0x7ffac44979c0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "WriteConsoleW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "WriteConsoleW"
+  },
+  "0x14260d7e0": {
+   "value": "0x2014374081f",
+   "target": "0x7ffac59b1760",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlSizeHeap",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "HeapSize"
+  },
+  "0x14260d7e8": {
+   "value": "0x20143740d98",
+   "target": "0x7ffac4494dd0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetStdHandle",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetStdHandle"
+  },
+  "0x14260d7f0": {
+   "value": "0x20143740437",
+   "target": "0x7ffac44820f0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "FreeEnvironmentStringsW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "FreeEnvironmentStringsW"
+  },
+  "0x14260d7f8": {
+   "value": "0x20143740311",
+   "target": "0x7ffac44817b0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetEnvironmentStringsW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetEnvironmentStringsW"
+  },
+  "0x14260d800": {
+   "value": "0x20143740398",
+   "target": "0x7ffac4497190",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "FindFirstFileExW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "FindFirstFileExW"
+  },
+  "0x14260d808": {
+   "value": "0x201437407dd",
+   "target": "0x7ffac4484590",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetOEMCP",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetOEMCP"
+  },
+  "0x14260d810": {
+   "value": "0x2014374029d",
+   "target": "0x7ffac447a720",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetACP",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetACP"
+  },
+  "0x14260d818": {
+   "value": "0x2014375066e",
+   "target": "0x7ffac44742f0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "IsValidCodePage",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "IsValidCodePage"
+  },
+  "0x14260d820": {
+   "value": "0x20143750c1e",
+   "target": "0x7ffac4477000",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetStringTypeW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetStringTypeW"
+  },
+  "0x14260d828": {
+   "value": "0x20143750789",
+   "target": "0x7ffac4481450",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetCPInfo",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetCPInfo"
+  },
+  "0x14260d830": {
+   "value": "0x20143750b2d",
+   "target": "0x7ffac4497990",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetConsoleCtrlHandler",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetConsoleCtrlHandler"
+  },
+  "0x14260d838": {
+   "value": "0x201437504a9",
+   "target": "0x7ffac5968380",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlReAllocateHeap",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "HeapReAlloc"
+  },
+  "0x14260d840": {
+   "value": "0x201437507ca",
+   "target": "0x7ffac4497320",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetFileType",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetFileType"
+  },
+  "0x14260d848": {
+   "value": "0x20143750918",
+   "target": "0x7ffac4497520",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetFilePointer",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetFilePointer"
+  },
+  "0x14260d850": {
+   "value": "0x20143750ca6",
+   "target": "0x7ffac4497500",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetFileAttributesW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetFileAttributesW"
+  },
+  "0x14260d858": {
+   "value": "0x201437505ec",
+   "target": "0x7ffac44974e0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetEndOfFile",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetEndOfFile"
+  },
+  "0x14260d860": {
+   "value": "0x201437502d3",
+   "target": "0x7ffac44974d0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "RemoveDirectoryW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "RemoveDirectoryW"
+  },
+  "0x14260d868": {
+   "value": "0x20143760bb1",
+   "target": "0x7ffac4497470",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "ReadFile",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "ReadFile"
+  },
+  "0x14260d870": {
+   "value": "0x20143760552",
+   "target": "0x7ffac4497400",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetVolumeInformationW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetVolumeInformationW"
+  },
+  "0x14260d878": {
+   "value": "0x20143760019",
+   "target": "0x7ffac4497300",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetFileSizeEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetFileSizeEx"
+  },
+  "0x14260d880": {
+   "value": "0x20143760473",
+   "target": "0x7ffac44972f0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetFileSize",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetFileSize"
+  },
+  "0x14260d888": {
+   "value": "0x201437606d7",
+   "target": "0x7ffac44972e0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetFileInformationByHandle",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetFileInformationByHandle"
+  },
+  "0x14260d890": {
+   "value": "0x20143760059",
+   "target": "0x7ffac44972c0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetFileAttributesExW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetFileAttributesExW"
+  },
+  "0x14260d898": {
+   "value": "0x2014376082a",
+   "target": "0x7ffac44972d0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetFileAttributesW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetFileAttributesW"
+  },
+  "0x14260d8a0": {
+   "value": "0x20143760303",
+   "target": "0x7ffac4497260",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetDiskFreeSpaceExW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetDiskFreeSpaceExW"
+  },
+  "0x14260d8a8": {
+   "value": "0x201437604f6",
+   "target": "0x7ffac4497230",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "FlushFileBuffers",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "FlushFileBuffers"
+  },
+  "0x14260d8b0": {
+   "value": "0x2014376064e",
+   "target": "0x7ffac4497200",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "FindNextFileW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "FindNextFileW"
+  },
+  "0x14260d8b8": {
+   "value": "0x20143760d60",
+   "target": "0x7ffac44971b0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "FindFirstFileW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "FindFirstFileW"
+  },
+  "0x14260d8c0": {
+   "value": "0x20143770992",
+   "target": "0x7ffac4497130",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "FindClose",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "FindClose"
+  },
+  "0x14260d8c8": {
+   "value": "0x201437707da",
+   "target": "0x7ffac4497100",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "DeleteFileW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "DeleteFileW"
+  },
+  "0x14260d8d0": {
+   "value": "0x2014377015e",
+   "target": "0x7ffac4497070",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateDirectoryW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateDirectoryW"
+  },
+  "0x14260d8d8": {
+   "value": "0x2014377073c",
+   "target": "0x7ffac447e230",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetCurrentDirectoryW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetCurrentDirectoryW"
+  },
+  "0x14260d8e0": {
+   "value": "0x2014377091f",
+   "target": "0x7ffac44836e0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetCurrentDirectoryW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetCurrentDirectoryW"
+  },
+  "0x14260d8e8": {
+   "value": "0x20143770fb4",
+   "target": "0x7ffac5a08db0",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "VerSetConditionMask",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "VerSetConditionMask"
+  },
+  "0x14260d8f0": {
+   "value": "0x20143770048",
+   "target": "0x7ffac447df40",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "FormatMessageW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "FormatMessageW"
+  },
+  "0x14260d8f8": {
+   "value": "0x201437703ab",
+   "target": "0x7ffac4472f50",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "LocalFree",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "LocalFree"
+  },
+  "0x14260d900": {
+   "value": "0x20143770f62",
+   "target": "0x7ffac4458640",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetLastError",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetLastError"
+  },
+  "0x14260d908": {
+   "value": "0x20143770191",
+   "target": "0x7ffac4467260",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetLastError",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetLastError"
+  },
+  "0x14260d910": {
+   "value": "0x20143780d9a",
+   "target": "0x7ffac4497360",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetFullPathNameW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetFullPathNameW"
+  },
+  "0x14260d918": {
+   "value": "0x201437805d5",
+   "target": "0x7ffac44977d0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "ConvertThreadToFiber",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "ConvertThreadToFiber"
+  },
+  "0x14260d920": {
+   "value": "0x20143780f98",
+   "target": "0x7ffac44977f0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateFiber",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateFiber"
+  },
+  "0x14260d928": {
+   "value": "0x2014378063c",
+   "target": "0x7ffac4497800",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateFiberEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateFiberEx"
+  },
+  "0x14260d930": {
+   "value": "0x20143780a6e",
+   "target": "0x7ffac4497810",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "DeleteFiber",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "DeleteFiber"
+  },
+  "0x14260d938": {
+   "value": "0x201437806dd",
+   "target": "0x7ffac4497820",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SwitchToFiber",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SwitchToFiber"
+  },
+  "0x14260d940": {
+   "value": "0x2014378000b",
+   "target": "0x7ffac447ee30",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "LoadLibraryW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "LoadLibraryW"
+  },
+  "0x14260d948": {
+   "value": "0x2014378025f",
+   "target": "0x7ffac44828f0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "LoadLibraryA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "LoadLibraryA"
+  },
+  "0x14260d950": {
+   "value": "0x201437808dd",
+   "target": "0x7ffac447bd30",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetModuleHandleA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetModuleHandleA"
+  },
+  "0x14260d958": {
+   "value": "0x20143780abc",
+   "target": "0x7ffac447bcd0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetModuleFileNameW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetModuleFileNameW"
+  },
+  "0x14260d960": {
+   "value": "0x2014378047d",
+   "target": "0x7ffac4477a40",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "VirtualQuery",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "VirtualQuery"
+  },
+  "0x14260d968": {
+   "value": "0x20143780fd8",
+   "target": "0x7ffac4458620",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetCurrentThreadId",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetCurrentThreadId"
+  },
+  "0x14260d970": {
+   "value": "0x20143790c14",
+   "target": "0x7ffac44715c0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateThread",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateThread"
+  },
+  "0x14260d978": {
+   "value": "0x20143790145",
+   "target": "0x7ffac4461ef0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetCurrentProcessId",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetCurrentProcessId"
+  },
+  "0x14260d980": {
+   "value": "0x20143790d55",
+   "target": "0x7ffac4462e60",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetCurrentProcess",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetCurrentProcess"
+  },
+  "0x14260d988": {
+   "value": "0x20143790f03",
+   "target": "0x7ffac4496e80",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateEventW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateEventW"
+  },
+  "0x14260d990": {
+   "value": "0x2014379025d",
+   "target": "0x7ffac4496ff0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "WaitForSingleObject",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "WaitForSingleObject"
+  },
+  "0x14260d998": {
+   "value": "0x20143790551",
+   "target": "0x7ffac4496fa0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetEvent",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetEvent"
+  },
+  "0x14260d9a0": {
+   "value": "0x20143790c98",
+   "target": "0x7ffac4496e00",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CloseHandle",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CloseHandle"
+  },
+  "0x14260d9a8": {
+   "value": "0x20143790f4c",
+   "target": "0x7ffac44970b0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateFileW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateFileW"
+  },
+  "0x14260d9b0": {
+   "value": "0x201437904ff",
+   "target": "0x7ffac4467170",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "RtlVirtualUnwind",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "RtlVirtualUnwind"
+  },
+  "0x14260d9b8": {
+   "value": "0x201437908c3",
+   "target": "0x7ffac447bdb0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "RtlLookupFunctionEntry",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "RtlLookupFunctionEntry"
+  },
+  "0x14260d9c0": {
+   "value": "0x20143790b7f",
+   "target": "0x7ffac598db20",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlCaptureStackBackTrace",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "RtlCaptureStackBackTrace"
+  },
+  "0x14260d9c8": {
+   "value": "0x201437901e1",
+   "target": "0x7ffac4480930",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetCommandLineW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetCommandLineW"
+  },
+  "0x14260d9d0": {
+   "value": "0x201437a0217",
+   "target": "0x7ffac4472130",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetProcAddress",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetProcAddress"
+  },
+  "0x14260d9d8": {
+   "value": "0x201437a0aaf",
+   "target": "0x7ffac447aba0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetModuleHandleW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetModuleHandleW"
+  },
+  "0x14260d9e0": {
+   "value": "0x201437a0117",
+   "target": "0x7ffac4497960",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "ReadConsoleW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "ReadConsoleW"
+  },
+  "0x14260d9e8": {
+   "value": "0x201437a0e70",
+   "target": "0x7ffac44978e0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetConsoleMode",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetConsoleMode"
+  },
+  "0x14260d9f0": {
+   "value": "0x201437a0dca",
+   "target": "0x7ffac44627a0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetProcessHeap",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetProcessHeap"
+  },
+  "0x14260d9f8": {
+   "value": "0x201437a0950",
+   "target": "0x7ffac4462e70",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "HeapFree",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "HeapFree"
+  },
+  "0x14260da00": {
+   "value": "0x201437a0876",
+   "target": "0x7ffac5945c50",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlAllocateHeap",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "HeapAlloc"
+  },
+  "0x14260da08": {
+   "value": "0x201437a0047",
+   "target": "0x7ffac4481830",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "OutputDebugStringA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "OutputDebugStringA"
+  },
+  "0x14260da10": {
+   "value": "0x201437a05b3",
+   "target": "0x7ffac44970a0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateFileA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateFileA"
+  },
+  "0x14260da18": {
+   "value": "0x201437a09d5",
+   "target": "0x7ffac4483560",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetProcessAffinityMask",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetProcessAffinityMask"
+  },
+  "0x14260da20": {
+   "value": "0x201437a00a5",
+   "target": "0x7ffac447bdd0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CreateProcessW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CreateProcessW"
+  },
+  "0x14260da28": {
+   "value": "0x201437b0eb5",
+   "target": "0x7ffac4476760",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetThreadPriority",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetThreadPriority"
+  },
+  "0x14260da30": {
+   "value": "0x201437b02dd",
+   "target": "0x7ffac4476720",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "SetThreadPriority",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "SetThreadPriority"
+  },
+  "0x14260da38": {
+   "value": "0x201437b046e",
+   "target": "0x7ffac4461d20",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetCurrentThread",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetCurrentThread"
+  },
+  "0x14260da40": {
+   "value": "0x201437b07e8",
+   "target": "0x7ffac4482110",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "TerminateProcess",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "TerminateProcess"
+  },
+  "0x14260da48": {
+   "value": "0x201437b06a1",
+   "target": "0x7ffac447a860",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "RaiseException",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "RaiseException"
+  },
+  "0x14260da50": {
+   "value": "0x201437b0a43",
+   "target": "0x7ffac4496e10",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "DuplicateHandle",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "DuplicateHandle"
+  },
+  "0x14260da58": {
+   "value": "0x201437b0ef4",
+   "target": "0x7ffac447ce40",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "IsDebuggerPresent",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "IsDebuggerPresent"
+  },
+  "0x14260da60": {
+   "value": "0x201437b04b6",
+   "target": "0x7ffac447f220",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetModuleFileNameA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetModuleFileNameA"
+  },
+  "0x14260da68": {
+   "value": "0x201437b0289",
+   "target": "0x7ffac4479510",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "K32GetProcessMemoryInfo",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "K32GetProcessMemoryInfo"
+  },
+  "0x14260da70": {
+   "value": "0x201437b0574",
+   "target": "0x7ffac5997000",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlWakeAllConditionVariable",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "WakeAllConditionVariable"
+  },
+  "0x14260da78": {
+   "value": "0x201437b023a",
+   "target": "0x7ffac59bf2e0",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "RtlInitializeSListHead",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "InitializeSListHead"
+  },
+  "0x14260da80": {
+   "value": "0x201437c0f4c",
+   "target": "0x7ffac447db30",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetStartupInfoW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetStartupInfoW"
+  },
+  "0x14260da88": {
+   "value": "0x201437c0dfd",
+   "target": "0x7ffac447f160",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "RtlUnwindEx",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "RtlUnwindEx"
+  },
+  "0x14260da90": {
+   "value": "0x201437c0791",
+   "target": "0x7ffac4480910",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "RtlUnwind",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "RtlUnwind"
+  },
+  "0x14260da98": {
+   "value": "0x201437c07df",
+   "target": "0x7ffac4496f00",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "InitializeCriticalSectionAndSpinCount",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "InitializeCriticalSectionAndSpinCount"
+  },
+  "0x14260daa0": {
+   "value": "0x201437c0b87",
+   "target": "0x7ffac447ae50",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "TlsAlloc",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "TlsAlloc"
+  },
+  "0x14260daa8": {
+   "value": "0x201437c0301",
+   "target": "0x7ffac44c49f0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "TlsGetValue",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "TlsGetValue"
+  },
+  "0x14260dab0": {
+   "value": "0x201437c059d",
+   "target": "0x7ffac4468110",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "TlsSetValue",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "TlsSetValue"
+  },
+  "0x14260dab8": {
+   "value": "0x201437c00a5",
+   "target": "0x7ffac447e760",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "TlsFree",
+   "called": false,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "TlsFree"
+  },
+  "0x14260dac0": {
+   "value": "0x201437c0d78",
+   "target": "0x7ffac4476d20",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "RtlPcToFileHeader",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "RtlPcToFileHeader"
+  },
+  "0x14260dac8": {
+   "value": "0x201437c0055",
+   "target": "0x7ffac4481410",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "ExitProcess",
+   "called": true,
+   "aliases": [
+    "ExitProcess",
+    "FatalExit"
+   ],
+   "dll": "KERNEL32.DLL",
+   "imported_name": "ExitProcess"
+  },
+  "0x14260dad0": {
+   "value": "0x201437c013d",
+   "target": "0x7ffac447db80",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetModuleHandleExW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetModuleHandleExW"
+  },
+  "0x14260dad8": {
+   "value": "0x201437d0bf4",
+   "target": "0x7ffac447e740",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "FreeLibraryAndExitThread",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "FreeLibraryAndExitThread"
+  },
+  "0x14260dae0": {
+   "value": "0x201437d0322",
+   "target": "0x7ffac447fcd0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetCommandLineA",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetCommandLineA"
+  },
+  "0x14260dae8": {
+   "value": "0x201437d0dcb",
+   "target": "0x7ffac4484490",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetDateFormatW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetDateFormatW"
+  },
+  "0x14260daf0": {
+   "value": "0x201437d073d",
+   "target": "0x7ffac4483080",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetTimeFormatW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetTimeFormatW"
+  },
+  "0x14260daf8": {
+   "value": "0x201437d0410",
+   "target": "0x7ffac44786d0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "CompareStringW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "CompareStringW"
+  },
+  "0x14260db00": {
+   "value": "0x201437d03a8",
+   "target": "0x7ffac4471580",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "LCMapStringW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "LCMapStringW"
+  },
+  "0x14260db08": {
+   "value": "0x201437d0a4f",
+   "target": "0x7ffac447bee0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetLocaleInfoW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetLocaleInfoW"
+  },
+  "0x14260db10": {
+   "value": "0x201437d0ad4",
+   "target": "0x7ffac44837d0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "IsValidLocale",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "IsValidLocale"
+  },
+  "0x14260db18": {
+   "value": "0x201437d0abe",
+   "target": "0x7ffac4479150",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetUserDefaultLCID",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetUserDefaultLCID"
+  },
+  "0x14260db20": {
+   "value": "0x201437d0220",
+   "target": "0x7ffac449b050",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "EnumSystemLocalesW",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "EnumSystemLocalesW"
+  },
+  "0x14260db28": {
+   "value": "0x201437d0902",
+   "target": "0x7ffac44978f0",
+   "via": "jmp rax",
+   "module": "KERNEL32.DLL",
+   "name": "GetConsoleOutputCP",
+   "called": true,
+   "dll": "KERNEL32.DLL",
+   "imported_name": "GetConsoleOutputCP"
+  },
+  "0x14260db38": {
+   "value": "0x201439701e8",
+   "target": "0x7ffa997a4040",
+   "via": "jmp rax",
+   "module": "MSACM32.dll",
+   "name": "acmStreamOpen",
+   "called": false,
+   "dll": "MSACM32.dll",
+   "imported_name": "acmStreamOpen"
+  },
+  "0x14260db40": {
+   "value": "0x20143970413",
+   "target": "0x7ffa997a50f0",
+   "via": "jmp rax",
+   "module": "MSACM32.dll",
+   "name": "acmStreamSize",
+   "called": false,
+   "dll": "MSACM32.dll",
+   "imported_name": "acmStreamSize"
+  },
+  "0x14260db48": {
+   "value": "0x20143970791",
+   "target": "0x7ffa997a48d0",
+   "via": "jmp rax",
+   "module": "MSACM32.dll",
+   "name": "acmStreamConvert",
+   "called": false,
+   "dll": "MSACM32.dll",
+   "imported_name": "acmStreamConvert"
+  },
+  "0x14260db50": {
+   "value": "0x201439704cc",
+   "target": "0x7ffa997a4d40",
+   "via": "jmp rax",
+   "module": "MSACM32.dll",
+   "name": "acmStreamPrepareHeader",
+   "called": false,
+   "dll": "MSACM32.dll",
+   "imported_name": "acmStreamPrepareHeader"
+  },
+  "0x14260db58": {
+   "value": "0x20143970492",
+   "target": "0x7ffa997a4b40",
+   "via": "jmp rax",
+   "module": "MSACM32.dll",
+   "name": "acmStreamUnprepareHeader",
+   "called": false,
+   "dll": "MSACM32.dll",
+   "imported_name": "acmStreamUnprepareHeader"
+  },
+  "0x14260db60": {
+   "value": "0x20143970e61",
+   "target": "0x7ffa997a3640",
+   "via": "jmp rax",
+   "module": "MSACM32.dll",
+   "name": "acmFormatSuggest",
+   "called": false,
+   "dll": "MSACM32.dll",
+   "imported_name": "acmFormatSuggest"
+  },
+  "0x14260db70": {
+   "value": "0x201439807df",
+   "target": "0x7ffac3adc290",
+   "via": "jmp rax",
+   "module": "SETUPAPI.dll",
+   "name": "SetupDiGetClassDevsA",
+   "called": true,
+   "dll": "SETUPAPI.dll",
+   "imported_name": "SetupDiGetClassDevsA"
+  },
+  "0x14260db78": {
+   "value": "0x2014398089a",
+   "target": "0x7ffac3adc150",
+   "via": "jmp rax",
+   "module": "SETUPAPI.dll",
+   "name": "SetupDiGetDeviceRegistryPropertyA",
+   "called": true,
+   "dll": "SETUPAPI.dll",
+   "imported_name": "SetupDiGetDeviceRegistryPropertyA"
+  },
+  "0x14260db80": {
+   "value": "0x20143980516",
+   "target": "0x7ffac27a6880",
+   "via": "jmp rax",
+   "module": "cfgmgr32.DLL",
+   "name": "CM_Get_Device_IDA",
+   "called": true,
+   "dll": "SETUPAPI.dll",
+   "imported_name": "CM_Get_Device_IDA"
+  },
+  "0x14260db88": {
+   "value": "0x20143980a68",
+   "target": "0x7ffac27c2d80",
+   "via": "jmp rax",
+   "module": "cfgmgr32.DLL",
+   "name": "CM_Locate_DevNodeA",
+   "called": true,
+   "dll": "SETUPAPI.dll",
+   "imported_name": "CM_Locate_DevNodeA"
+  },
+  "0x14260db90": {
+   "value": "0x20143980352",
+   "target": "0x7ffac3ada860",
+   "via": "jmp rax",
+   "module": "SETUPAPI.dll",
+   "name": "SetupDiEnumDeviceInfo",
+   "called": true,
+   "dll": "SETUPAPI.dll",
+   "imported_name": "SetupDiEnumDeviceInfo"
+  },
+  "0x14260db98": {
+   "value": "0x201439801dc",
+   "target": "0x7ffac27a6180",
+   "via": "jmp rax",
+   "module": "cfgmgr32.DLL",
+   "name": "CM_Get_Parent",
+   "called": true,
+   "dll": "SETUPAPI.dll",
+   "imported_name": "CM_Get_Parent"
+  },
+  "0x14260dba0": {
+   "value": "0x2014398052f",
+   "target": "0x7ffac3ad9b50",
+   "via": "jmp rax",
+   "module": "SETUPAPI.dll",
+   "name": "SetupDiGetDeviceInterfaceDetailA",
+   "called": true,
+   "dll": "SETUPAPI.dll",
+   "imported_name": "SetupDiGetDeviceInterfaceDetailA"
+  },
+  "0x14260dba8": {
+   "value": "0x20143980f47",
+   "target": "0x7ffac3ada510",
+   "via": "jmp rax",
+   "module": "SETUPAPI.dll",
+   "name": "SetupDiEnumDeviceInterfaces",
+   "called": true,
+   "dll": "SETUPAPI.dll",
+   "imported_name": "SetupDiEnumDeviceInterfaces"
+  },
+  "0x14260dbb0": {
+   "value": "0x20143980b07",
+   "target": "0x7ffac3ada400",
+   "via": "jmp rax",
+   "module": "SETUPAPI.dll",
+   "name": "SetupDiDestroyDeviceInfoList",
+   "called": true,
+   "dll": "SETUPAPI.dll",
+   "imported_name": "SetupDiDestroyDeviceInfoList"
+  },
+  "0x14260dbc0": {
+   "value": "0x201437f0935",
+   "target": "0x7ffac4bb1410",
+   "via": "jmp rax",
+   "module": "SHELL32.dll",
+   "name": "ShellExecuteW",
+   "called": true,
+   "dll": "SHELL32.dll",
+   "imported_name": "ShellExecuteW"
+  },
+  "0x14260dbc8": {
+   "value": "0x201437f05e1",
+   "target": "0x7ffac4ae89b0",
+   "via": "jmp rax",
+   "module": "SHELL32.dll",
+   "name": "SHGetKnownFolderPath",
+   "called": false,
+   "dll": "SHELL32.dll",
+   "imported_name": "SHGetKnownFolderPath"
+  },
+  "0x14260dbd0": {
+   "value": "0x201437f073f",
+   "target": "0x7ffac4bb13b0",
+   "via": "jmp rax",
+   "module": "SHELL32.dll",
+   "name": "ShellExecuteA",
+   "called": true,
+   "dll": "SHELL32.dll",
+   "imported_name": "ShellExecuteA"
+  },
+  "0x14260dbd8": {
+   "value": "0x201437f05b3",
+   "target": "0x7ffac4bafd30",
+   "via": "jmp rax",
+   "module": "SHELL32.dll",
+   "name": "FindExecutableA",
+   "called": true,
+   "dll": "SHELL32.dll",
+   "imported_name": "FindExecutableA"
+  },
+  "0x14260dbe0": {
+   "value": "0x201437f0f57",
+   "target": "0x7ffac4bafb10",
+   "via": "jmp rax",
+   "module": "SHELL32.dll",
+   "name": "DragAcceptFiles",
+   "called": false,
+   "dll": "SHELL32.dll",
+   "imported_name": "DragAcceptFiles"
+  },
+  "0x14260dbe8": {
+   "value": "0x201437f0bb1",
+   "target": "0x7ffac4bafb90",
+   "via": "jmp rax",
+   "module": "SHELL32.dll",
+   "name": "DragQueryFileW",
+   "called": true,
+   "dll": "SHELL32.dll",
+   "imported_name": "DragQueryFileW"
+  },
+  "0x14260dbf0": {
+   "value": "0x201437f005f",
+   "target": "0x7ffac4bafb30",
+   "via": "jmp rax",
+   "module": "SHELL32.dll",
+   "name": "DragFinish",
+   "called": true,
+   "dll": "SHELL32.dll",
+   "imported_name": "DragFinish"
+  },
+  "0x14260dbf8": {
+   "value": "0x201437f0358",
+   "target": "0x7ffac4bafcd0",
+   "via": "jmp rax",
+   "module": "SHELL32.dll",
+   "name": "ExtractIconExW",
+   "called": true,
+   "dll": "SHELL32.dll",
+   "imported_name": "ExtractIconExW"
+  },
+  "0x14260dc00": {
+   "value": "0x201437f0b4b",
+   "target": "0x7ffac4b076c0",
+   "via": "jmp rax",
+   "module": "SHELL32.dll",
+   "name": "CommandLineToArgvW",
+   "called": true,
+   "dll": "SHELL32.dll",
+   "imported_name": "CommandLineToArgvW"
+  },
+  "0x14260dc08": {
+   "value": "0x201437f09d6",
+   "target": "0x7ffac4afee80",
+   "via": "jmp rax",
+   "module": "SHELL32.dll",
+   "name": "SHGetFolderPathW",
+   "called": true,
+   "dll": "SHELL32.dll",
+   "imported_name": "SHGetFolderPathW"
+  },
+  "0x14260dc18": {
+   "value": "0x2014380080b",
+   "target": "0x7ffac5735aa0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "IsClipboardFormatAvailable",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "IsClipboardFormatAvailable"
+  },
+  "0x14260dc20": {
+   "value": "0x20143800406",
+   "target": "0x7ffac5743b20",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "EmptyClipboard",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "EmptyClipboard"
+  },
+  "0x14260dc28": {
+   "value": "0x20143800eb0",
+   "target": "0x7ffac574db80",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetClipboardData",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetClipboardData"
+  },
+  "0x14260dc30": {
+   "value": "0x20143800fac",
+   "target": "0x7ffac5731490",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetClipboardData",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetClipboardData"
+  },
+  "0x14260dc38": {
+   "value": "0x20143800b47",
+   "target": "0x7ffac5739aa0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetClipboardSequenceNumber",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetClipboardSequenceNumber"
+  },
+  "0x14260dc40": {
+   "value": "0x2014380094a",
+   "target": "0x7ffac573bc00",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "CloseClipboard",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "CloseClipboard"
+  },
+  "0x14260dc48": {
+   "value": "0x2014380069c",
+   "target": "0x7ffac5731930",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "OpenClipboard",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "OpenClipboard"
+  },
+  "0x14260dc50": {
+   "value": "0x2014380001f",
+   "target": "0x7ffac57523e0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "EnumDisplayMonitors",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "EnumDisplayMonitors"
+  },
+  "0x14260dc58": {
+   "value": "0x20143800538",
+   "target": "0x7ffac56ea490",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "MonitorFromPoint",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "MonitorFromPoint"
+  },
+  "0x14260dc60": {
+   "value": "0x2014380019a",
+   "target": "0x7ffac572ba20",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "EnumDisplayDevicesW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "EnumDisplayDevicesW"
+  },
+  "0x14260dc68": {
+   "value": "0x201438100c8",
+   "target": "0x7ffac5728c40",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "EnumDisplaySettingsW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "EnumDisplaySettingsW"
+  },
+  "0x14260dc70": {
+   "value": "0x20143810166",
+   "target": "0x7ffac572b680",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "ChangeDisplaySettingsExW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "ChangeDisplaySettingsExW"
+  },
+  "0x14260dc78": {
+   "value": "0x2014381012a",
+   "target": "0x7ffac57359e0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "LoadIconW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "LoadIconW"
+  },
+  "0x14260dc80": {
+   "value": "0x2014381098b",
+   "target": "0x7ffac56ef940",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "FillRect",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "FillRect"
+  },
+  "0x14260dc88": {
+   "value": "0x201438108c9",
+   "target": "0x7ffac5730550",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetCursor",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetCursor"
+  },
+  "0x14260dc90": {
+   "value": "0x20143810f80",
+   "target": "0x7ffac5712f70",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetPropW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetPropW"
+  },
+  "0x14260dc98": {
+   "value": "0x20143810c6a",
+   "target": "0x7ffac57534c0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "ValidateRect",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "ValidateRect"
+  },
+  "0x14260dca0": {
+   "value": "0x20143810431",
+   "target": "0x7ffac57529e0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "InvalidateRect",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "InvalidateRect"
+  },
+  "0x14260dca8": {
+   "value": "0x20143810d88",
+   "target": "0x7ffac5716cc0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "IntersectRect",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "IntersectRect"
+  },
+  "0x14260dcb0": {
+   "value": "0x201438107a0",
+   "target": "0x7ffac56f09d0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetWindow",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetWindow"
+  },
+  "0x14260dcb8": {
+   "value": "0x20143810e88",
+   "target": "0x7ffac5712390",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "EnumThreadWindows",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "EnumThreadWindows"
+  },
+  "0x14260dcc0": {
+   "value": "0x20143820dbd",
+   "target": "0x7ffac5721580",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "wsprintfA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "wsprintfA"
+  },
+  "0x14260dcc8": {
+   "value": "0x20143820863",
+   "target": "0x7ffac5717900",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "LoadStringA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "LoadStringA"
+  },
+  "0x14260dcd0": {
+   "value": "0x20143820c09",
+   "target": "0x7ffac56f2050",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "IsDialogMessageW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "IsDialogMessageW"
+  },
+  "0x14260dcd8": {
+   "value": "0x20143820750",
+   "target": "0x7ffac57355c0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "LoadImageW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "LoadImageW"
+  },
+  "0x14260dce0": {
+   "value": "0x201438201c1",
+   "target": "0x7ffac5731ac0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "DestroyCursor",
+   "called": true,
+   "aliases": [
+    "DestroyCursor",
+    "DestroyIcon"
+   ],
+   "dll": "USER32.dll",
+   "imported_name": "DestroyCursor"
+  },
+  "0x14260dce8": {
+   "value": "0x20143820107",
+   "target": "0x7ffac56ef890",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetDesktopWindow",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetDesktopWindow"
+  },
+  "0x14260dcf0": {
+   "value": "0x2014382002f",
+   "target": "0x7ffac56fa380",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetWindowLongPtrW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetWindowLongPtrW"
+  },
+  "0x14260dcf8": {
+   "value": "0x20143820d33",
+   "target": "0x7ffac57363d0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "MapVirtualKeyW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "MapVirtualKeyW"
+  },
+  "0x14260dd00": {
+   "value": "0x20143820ab9",
+   "target": "0x7ffac573ed90",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "MessageBoxW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "MessageBoxW"
+  },
+  "0x14260dd08": {
+   "value": "0x20143820bbe",
+   "target": "0x7ffac571cf00",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetWindowRect",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetWindowRect"
+  },
+  "0x14260dd10": {
+   "value": "0x20143820b1a",
+   "target": "0x7ffac573b570",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetClientRect",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetClientRect"
+  },
+  "0x14260dd18": {
+   "value": "0x2014383079a",
+   "target": "0x7ffac5701720",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetWindowTextW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetWindowTextW"
+  },
+  "0x14260dd20": {
+   "value": "0x201438306ed",
+   "target": "0x7ffac572de00",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetWindowTextW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetWindowTextW"
+  },
+  "0x14260dd28": {
+   "value": "0x20143830643",
+   "target": "0x7ffac56f9080",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetSystemMetrics",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetSystemMetrics"
+  },
+  "0x14260dd30": {
+   "value": "0x201438302c8",
+   "target": "0x7ffac573a490",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "EnableWindow",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "EnableWindow"
+  },
+  "0x14260dd38": {
+   "value": "0x20143830700",
+   "target": "0x7ffac57530c0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetFocus",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetFocus"
+  },
+  "0x14260dd40": {
+   "value": "0x20143830373",
+   "target": "0x7ffac5739f80",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetDlgItemTextW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetDlgItemTextW"
+  },
+  "0x14260dd48": {
+   "value": "0x20143830448",
+   "target": "0x7ffac56f5ae0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetDlgItem",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetDlgItem"
+  },
+  "0x14260dd50": {
+   "value": "0x2014383098c",
+   "target": "0x7ffac57019e0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "EndDialog",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "EndDialog"
+  },
+  "0x14260dd58": {
+   "value": "0x20143830d3e",
+   "target": "0x7ffac5746260",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "DialogBoxParamW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "DialogBoxParamW"
+  },
+  "0x14260dd60": {
+   "value": "0x20143830301",
+   "target": "0x7ffac573fd80",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "CreateDialogParamW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "CreateDialogParamW"
+  },
+  "0x14260dd68": {
+   "value": "0x201438308f4",
+   "target": "0x7ffac570fa70",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "IsWindowVisible",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "IsWindowVisible"
+  },
+  "0x14260dd70": {
+   "value": "0x201438404ef",
+   "target": "0x7ffac57532c0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetWindowPos",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetWindowPos"
+  },
+  "0x14260dd78": {
+   "value": "0x2014384072b",
+   "target": "0x7ffac5753380",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "ShowWindow",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "ShowWindow"
+  },
+  "0x14260dd80": {
+   "value": "0x20143840e2d",
+   "target": "0x7ffac57521e0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "DestroyWindow",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "DestroyWindow"
+  },
+  "0x14260dd88": {
+   "value": "0x2014384077f",
+   "target": "0x7ffac56f28a0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "IsWindow",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "IsWindow"
+  },
+  "0x14260dd90": {
+   "value": "0x201438407c7",
+   "target": "0x7ffac573ff80",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "PostQuitMessage",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "PostQuitMessage"
+  },
+  "0x14260dd98": {
+   "value": "0x20143840bff",
+   "target": "0x7ffac57092e0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "PostMessageW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "PostMessageW"
+  },
+  "0x14260dda0": {
+   "value": "0x2014384017c",
+   "target": "0x7ffac56f6700",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SendMessageW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SendMessageW"
+  },
+  "0x14260dda8": {
+   "value": "0x20143840ac8",
+   "target": "0x7ffac56f6640",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SendMessageA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SendMessageA"
+  },
+  "0x14260ddb0": {
+   "value": "0x20143840949",
+   "target": "0x7ffac56f17e0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "PeekMessageW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "PeekMessageW"
+  },
+  "0x14260ddb8": {
+   "value": "0x20143840000",
+   "target": "0x7ffac5726670",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "DispatchMessageW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "DispatchMessageW"
+  },
+  "0x14260ddc0": {
+   "value": "0x201438400b0",
+   "target": "0x7ffac5753040",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetCursorPos",
+   "called": true,
+   "aliases": [
+    "SetCursorPos",
+    "SetPhysicalCursorPos"
+   ],
+   "dll": "USER32.dll",
+   "imported_name": "SetCursorPos"
+  },
+  "0x14260ddc8": {
+   "value": "0x20143850269",
+   "target": "0x7ffac56e6160",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "LoadCursorW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "LoadCursorW"
+  },
+  "0x14260ddd0": {
+   "value": "0x20143850568",
+   "target": "0x7ffac5731db0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "CopyImage",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "CopyImage"
+  },
+  "0x14260ddd8": {
+   "value": "0x201438509c3",
+   "target": "0x7ffac56ec070",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetWindowRgn",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetWindowRgn"
+  },
+  "0x14260dde0": {
+   "value": "0x201438505fd",
+   "target": "0x7ffac5721550",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "IsRectEmpty",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "IsRectEmpty"
+  },
+  "0x14260dde8": {
+   "value": "0x20143850c3a",
+   "target": "0x7ffac56f9160",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetWindowLongW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetWindowLongW"
+  },
+  "0x14260ddf0": {
+   "value": "0x2014385084b",
+   "target": "0x7ffac5726440",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetWindowLongW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetWindowLongW"
+  },
+  "0x14260ddf8": {
+   "value": "0x20143850444",
+   "target": "0x7ffac572dd80",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetUpdateRect",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetUpdateRect"
+  },
+  "0x14260de00": {
+   "value": "0x20143850f2f",
+   "target": "0x7ffac56fbde0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetClassInfoExW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetClassInfoExW"
+  },
+  "0x14260de08": {
+   "value": "0x201438500a1",
+   "target": "0x7ffac572dbc0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetMessageExtraInfo",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetMessageExtraInfo"
+  },
+  "0x14260de10": {
+   "value": "0x201438503a9",
+   "target": "0x7ffac5753410",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "TrackMouseEvent",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "TrackMouseEvent"
+  },
+  "0x14260de18": {
+   "value": "0x20143850a1a",
+   "target": "0x7ffac56ec5c0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SystemParametersInfoW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SystemParametersInfoW"
+  },
+  "0x14260de20": {
+   "value": "0x2014386004e",
+   "target": "0x7ffac5703b20",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "DrawTextW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "DrawTextW"
+  },
+  "0x14260de28": {
+   "value": "0x201438607ff",
+   "target": "0x7ffac5742180",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "DialogBoxIndirectParamW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "DialogBoxIndirectParamW"
+  },
+  "0x14260de30": {
+   "value": "0x2014386069f",
+   "target": "0x7ffac5722210",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "RegisterClipboardFormatA",
+   "called": true,
+   "aliases": [
+    "RegisterClipboardFormatA",
+    "RegisterWindowMessageA"
+   ],
+   "dll": "USER32.dll",
+   "imported_name": "RegisterClipboardFormatA"
+  },
+  "0x14260de38": {
+   "value": "0x20143860b98",
+   "target": "0x7ffac56fbb00",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "CreateWindowExA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "CreateWindowExA"
+  },
+  "0x14260de40": {
+   "value": "0x20143860d2f",
+   "target": "0x7ffac56f94b0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetWindowLongPtrW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetWindowLongPtrW"
+  },
+  "0x14260de48": {
+   "value": "0x20143860917",
+   "target": "0x7ffac572ce40",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetCursorPos",
+   "called": true,
+   "aliases": [
+    "GetCursorPos",
+    "GetPhysicalCursorPos"
+   ],
+   "dll": "USER32.dll",
+   "imported_name": "GetCursorPos"
+  },
+  "0x14260de50": {
+   "value": "0x20143860ac8",
+   "target": "0x7ffac570dfb0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetParent",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetParent"
+  },
+  "0x14260de58": {
+   "value": "0x20143860a4f",
+   "target": "0x7ffac56f23d0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "TranslateMessage",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "TranslateMessage"
+  },
+  "0x14260de60": {
+   "value": "0x201438609ea",
+   "target": "0x7ffac57127f0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetMessageW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetMessageW"
+  },
+  "0x14260de68": {
+   "value": "0x20143860f0b",
+   "target": "0x7ffac572dd00",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "LoadStringW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "LoadStringW"
+  },
+  "0x14260de70": {
+   "value": "0x20143860e06",
+   "target": "0x7ffac5738640",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "ToUnicode",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "ToUnicode"
+  },
+  "0x14260de78": {
+   "value": "0x20143870f2c",
+   "target": "0x7ffac571fea0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "EnumDisplayDevicesA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "EnumDisplayDevicesA"
+  },
+  "0x14260de80": {
+   "value": "0x201438703ed",
+   "target": "0x7ffac5753360",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "ShowCursor",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "ShowCursor"
+  },
+  "0x14260de88": {
+   "value": "0x20143870875",
+   "target": "0x7ffac572a980",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "InflateRect",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "InflateRect"
+  },
+  "0x14260de90": {
+   "value": "0x20143870975",
+   "target": "0x7ffac57365f0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetClassLongPtrW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetClassLongPtrW"
+  },
+  "0x14260de98": {
+   "value": "0x20143870727",
+   "target": "0x7ffac5713e90",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetWindowThreadProcessId",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetWindowThreadProcessId"
+  },
+  "0x14260dea0": {
+   "value": "0x201438701e0",
+   "target": "0x7ffac572d630",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetWindowsHookExW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetWindowsHookExW"
+  },
+  "0x14260dea8": {
+   "value": "0x20143870838",
+   "target": "0x7ffac57565e0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "CreateIconFromResource",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "CreateIconFromResource"
+  },
+  "0x14260deb0": {
+   "value": "0x201438707e2",
+   "target": "0x7ffac57134c0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetMonitorInfoW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetMonitorInfoW"
+  },
+  "0x14260deb8": {
+   "value": "0x20143870e8a",
+   "target": "0x7ffac5735a30",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "LoadCursorA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "LoadCursorA"
+  },
+  "0x14260dec0": {
+   "value": "0x20143870343",
+   "target": "0x7ffac572a0b0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetSysColor",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetSysColor"
+  },
+  "0x14260dec8": {
+   "value": "0x2014387092b",
+   "target": "0x7ffac5701b80",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetActiveWindow",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetActiveWindow"
+  },
+  "0x14260ded0": {
+   "value": "0x20143880fd4",
+   "target": "0x7ffac5752400",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "FlashWindowEx",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "FlashWindowEx"
+  },
+  "0x14260ded8": {
+   "value": "0x20143880413",
+   "target": "0x7ffac5752f50",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetActiveWindow",
+   "called": false,
+   "dll": "USER32.dll",
+   "imported_name": "SetActiveWindow"
+  },
+  "0x14260dee0": {
+   "value": "0x201438806e4",
+   "target": "0x7ffac5780ba0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetForegroundWindow",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetForegroundWindow"
+  },
+  "0x14260dee8": {
+   "value": "0x20143880579",
+   "target": "0x7ffac572a8c0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetDC",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetDC"
+  },
+  "0x14260def0": {
+   "value": "0x20143880675",
+   "target": "0x7ffac56e4780",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "ReleaseDC",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "ReleaseDC"
+  },
+  "0x14260def8": {
+   "value": "0x20143880ae7",
+   "target": "0x7ffac5736350",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "EnumDisplaySettingsA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "EnumDisplaySettingsA"
+  },
+  "0x14260df00": {
+   "value": "0x20143880d8d",
+   "target": "0x7ffac56e9230",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "MonitorFromWindow",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "MonitorFromWindow"
+  },
+  "0x14260df08": {
+   "value": "0x20143880e74",
+   "target": "0x7ffac56ea020",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetMonitorInfoA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetMonitorInfoA"
+  },
+  "0x14260df10": {
+   "value": "0x20143880f62",
+   "target": "0x7ffac5728bd0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetKeyboardLayout",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetKeyboardLayout"
+  },
+  "0x14260df18": {
+   "value": "0x201438805f3",
+   "target": "0x7ffac572ce60",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "RegisterClipboardFormatW",
+   "called": true,
+   "aliases": [
+    "RegisterClipboardFormatW",
+    "RegisterWindowMessageW"
+   ],
+   "dll": "USER32.dll",
+   "imported_name": "RegisterClipboardFormatW"
+  },
+  "0x14260df20": {
+   "value": "0x20143880888",
+   "target": "0x7ffac5a80a70",
+   "via": "jmp rax",
+   "module": "ntdll.dll",
+   "name": "NtdllDefWindowProc_W",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "DefWindowProcW"
+  },
+  "0x14260df28": {
+   "value": "0x20143890018",
+   "target": "0x7ffac5752b70",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "MoveWindow",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "MoveWindow"
+  },
+  "0x14260df30": {
+   "value": "0x20143890675",
+   "target": "0x7ffac5752880",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetWindowPlacement",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetWindowPlacement"
+  },
+  "0x14260df38": {
+   "value": "0x201438905a8",
+   "target": "0x7ffac5713320",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "IsIconic",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "IsIconic"
+  },
+  "0x14260df40": {
+   "value": "0x2014389085f",
+   "target": "0x7ffac571fa60",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "IsZoomed",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "IsZoomed"
+  },
+  "0x14260df48": {
+   "value": "0x2014389005a",
+   "target": "0x7ffac5715080",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetKeyState",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetKeyState"
+  },
+  "0x14260df50": {
+   "value": "0x201438903a4",
+   "target": "0x7ffac574c6d0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetAsyncKeyState",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetAsyncKeyState"
+  },
+  "0x14260df58": {
+   "value": "0x20143890e00",
+   "target": "0x7ffac573e600",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "VkKeyScanA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "VkKeyScanA"
+  },
+  "0x14260df60": {
+   "value": "0x20143890989",
+   "target": "0x7ffac5752f10",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SendInput",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SendInput"
+  },
+  "0x14260df68": {
+   "value": "0x201438905da",
+   "target": "0x7ffac573cf60",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "MapVirtualKeyA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "MapVirtualKeyA"
+  },
+  "0x14260df70": {
+   "value": "0x20143890809",
+   "target": "0x7ffac5752fc0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetCapture",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetCapture"
+  },
+  "0x14260df78": {
+   "value": "0x201438902d3",
+   "target": "0x7ffac5739f60",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "ReleaseCapture",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "ReleaseCapture"
+  },
+  "0x14260df80": {
+   "value": "0x201438a03be",
+   "target": "0x7ffac57247a0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetTimer",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetTimer"
+  },
+  "0x14260df88": {
+   "value": "0x201438a0c03",
+   "target": "0x7ffac5752ac0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "KillTimer",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "KillTimer"
+  },
+  "0x14260df90": {
+   "value": "0x201438a0bbd",
+   "target": "0x7ffac56ec120",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "AdjustWindowRectEx",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "AdjustWindowRectEx"
+  },
+  "0x14260df98": {
+   "value": "0x201438a048d",
+   "target": "0x7ffac5752490",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetClipCursor",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetClipCursor"
+  },
+  "0x14260dfa0": {
+   "value": "0x201438a0b34",
+   "target": "0x7ffac574e5c0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "ClientToScreen",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "ClientToScreen"
+  },
+  "0x14260dfa8": {
+   "value": "0x201438a02b0",
+   "target": "0x7ffac56f9c10",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetWindowLongA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetWindowLongA"
+  },
+  "0x14260dfb0": {
+   "value": "0x201438a0d19",
+   "target": "0x7ffac572d610",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetWindowsHookExA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetWindowsHookExA"
+  },
+  "0x14260dfb8": {
+   "value": "0x201438a0854",
+   "target": "0x7ffac5730a70",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "UnhookWindowsHookEx",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "UnhookWindowsHookEx"
+  },
+  "0x14260dfc0": {
+   "value": "0x201438a0af0",
+   "target": "0x7ffac571eb90",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "CallNextHookEx",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "CallNextHookEx"
+  },
+  "0x14260dfc8": {
+   "value": "0x201438a0616",
+   "target": "0x7ffac56ec250",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SystemParametersInfoA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SystemParametersInfoA"
+  },
+  "0x14260dfd0": {
+   "value": "0x201438a0897",
+   "target": "0x7ffac56e9060",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "MonitorFromRect",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "MonitorFromRect"
+  },
+  "0x14260dfd8": {
+   "value": "0x201438b0f47",
+   "target": "0x7ffac5752760",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetRawInputData",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetRawInputData"
+  },
+  "0x14260dfe0": {
+   "value": "0x201438b0079",
+   "target": "0x7ffac5717550",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetRawInputDeviceInfoA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetRawInputDeviceInfoA"
+  },
+  "0x14260dfe8": {
+   "value": "0x201438b0d29",
+   "target": "0x7ffac5752e50",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "RegisterRawInputDevices",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "RegisterRawInputDevices"
+  },
+  "0x14260dff0": {
+   "value": "0x201438b0cee",
+   "target": "0x7ffac5752770",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetRawInputDeviceList",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetRawInputDeviceList"
+  },
+  "0x14260dff8": {
+   "value": "0x201438b0673",
+   "target": "0x7ffac5735640",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "CharNextW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "CharNextW"
+  },
+  "0x14260e000": {
+   "value": "0x201438b092f",
+   "target": "0x7ffac5736030",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "RegisterPowerSettingNotification",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "RegisterPowerSettingNotification"
+  },
+  "0x14260e008": {
+   "value": "0x201438b05b5",
+   "target": "0x7ffac5739630",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "UnregisterPowerSettingNotification",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "UnregisterPowerSettingNotification"
+  },
+  "0x14260e010": {
+   "value": "0x201438b0796",
+   "target": "0x7ffac56fc0d0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "RegisterClassExW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "RegisterClassExW"
+  },
+  "0x14260e018": {
+   "value": "0x201438b0fcd",
+   "target": "0x7ffac56fc110",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "CreateWindowExW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "CreateWindowExW"
+  },
+  "0x14260e020": {
+   "value": "0x201438b0185",
+   "target": "0x7ffac56f2d10",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetFocus",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetFocus"
+  },
+  "0x14260e028": {
+   "value": "0x201438b0e04",
+   "target": "0x7ffac5751fe0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "BeginPaint",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "BeginPaint"
+  },
+  "0x14260e030": {
+   "value": "0x201438b0ade",
+   "target": "0x7ffac57523c0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "EndPaint",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "EndPaint"
+  },
+  "0x14260e038": {
+   "value": "0x201438c01a9",
+   "target": "0x7ffac574e760",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "ScreenToClient",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "ScreenToClient"
+  },
+  "0x14260e040": {
+   "value": "0x201438c0f04",
+   "target": "0x7ffac5752090",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "ClipCursor",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "ClipCursor"
+  },
+  "0x14260e048": {
+   "value": "0x201438c0828",
+   "target": "0x7ffac57169d0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "PtInRect",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "PtInRect"
+  },
+  "0x14260e050": {
+   "value": "0x201438c0bf1",
+   "target": "0x7ffac573b760",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetWindowLongPtrA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetWindowLongPtrA"
+  },
+  "0x14260e058": {
+   "value": "0x201438c0f91",
+   "target": "0x7ffac5739da0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "LoadImageA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "LoadImageA"
+  },
+  "0x14260e060": {
+   "value": "0x201438c0c3a",
+   "target": "0x7ffac56e48e0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "CreateIconIndirect",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "CreateIconIndirect"
+  },
+  "0x14260e068": {
+   "value": "0x201438c08aa",
+   "target": "0x7ffac57400b0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "CharLowerBuffA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "CharLowerBuffA"
+  },
+  "0x14260e070": {
+   "value": "0x201438c02e9",
+   "target": "0x7ffac56fe140",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "UnregisterClassA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "UnregisterClassA"
+  },
+  "0x14260e078": {
+   "value": "0x201438c0c1f",
+   "target": "0x7ffac570a230",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "PostMessageA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "PostMessageA"
+  },
+  "0x14260e080": {
+   "value": "0x201438c054c",
+   "target": "0x7ffac56f4c20",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "CallWindowProcW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "CallWindowProcW"
+  },
+  "0x14260e088": {
+   "value": "0x201438d0e2b",
+   "target": "0x7ffac5735ac0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "RegisterDeviceNotificationW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "RegisterDeviceNotificationW"
+  },
+  "0x14260e090": {
+   "value": "0x201438d0f8b",
+   "target": "0x7ffac573a1b0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "UnregisterDeviceNotification",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "UnregisterDeviceNotification"
+  },
+  "0x14260e098": {
+   "value": "0x201438d0f09",
+   "target": "0x7ffac572dd30",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "PostThreadMessageW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "PostThreadMessageW"
+  },
+  "0x14260e0a0": {
+   "value": "0x201438d04d9",
+   "target": "0x7ffac56fcf30",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "UnregisterClassW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "UnregisterClassW"
+  },
+  "0x14260e0a8": {
+   "value": "0x201438d0a50",
+   "target": "0x7ffac5751fc0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "AttachThreadInput",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "AttachThreadInput"
+  },
+  "0x14260e0b0": {
+   "value": "0x201438d0d4b",
+   "target": "0x7ffac56fc050",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "RegisterClassW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "RegisterClassW"
+  },
+  "0x14260e0b8": {
+   "value": "0x201438d0dd5",
+   "target": "0x7ffac5753160",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetLayeredWindowAttributes",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetLayeredWindowAttributes"
+  },
+  "0x14260e0c0": {
+   "value": "0x201438d0ac2",
+   "target": "0x7ffac5752600",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetKeyboardState",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetKeyboardState"
+  },
+  "0x14260e0c8": {
+   "value": "0x201438d0c5c",
+   "target": "0x7ffac573a610",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetMenu",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetMenu"
+  },
+  "0x14260e0d0": {
+   "value": "0x201438d0a7b",
+   "target": "0x7ffac573eaa0",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetForegroundWindow",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetForegroundWindow"
+  },
+  "0x14260e0d8": {
+   "value": "0x201438d07f6",
+   "target": "0x7ffac5712c60",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "SetPropW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "SetPropW"
+  },
+  "0x14260e0e0": {
+   "value": "0x201438e02e3",
+   "target": "0x7ffac5728f30",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "RemovePropW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "RemovePropW"
+  },
+  "0x14260e0e8": {
+   "value": "0x201438e005a",
+   "target": "0x7ffac56f5a50",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "GetWindowTextLengthW",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "GetWindowTextLengthW"
+  },
+  "0x14260e0f0": {
+   "value": "0x201438e0201",
+   "target": "0x7ffac5742a00",
+   "via": "jmp rax",
+   "module": "USER32.dll",
+   "name": "RegisterClassExA",
+   "called": true,
+   "dll": "USER32.dll",
+   "imported_name": "RegisterClassExA"
+  },
+  "0x14260e100": {
+   "value": "0x201438f090c",
+   "target": "0x7ffab99a10f0",
+   "via": "jmp rax",
+   "module": "VERSION.dll",
+   "name": "GetFileVersionInfoA",
+   "called": false,
+   "dll": "VERSION.dll",
+   "imported_name": "GetFileVersionInfoA"
+  },
+  "0x14260e108": {
+   "value": "0x201438f082a",
+   "target": "0x7ffab99a10b0",
+   "via": "jmp rax",
+   "module": "VERSION.dll",
+   "name": "GetFileVersionInfoSizeA",
+   "called": false,
+   "dll": "VERSION.dll",
+   "imported_name": "GetFileVersionInfoSizeA"
+  },
+  "0x14260e110": {
+   "value": "0x201438f0d7f",
+   "target": "0x7ffab99a10d0",
+   "via": "jmp rax",
+   "module": "VERSION.dll",
+   "name": "VerQueryValueA",
+   "called": false,
+   "dll": "VERSION.dll",
+   "imported_name": "VerQueryValueA"
+  },
+  "0x14260e120": {
+   "value": "0x201439906f6",
+   "target": "0x7ffabae1d060",
+   "via": "jmp rax",
+   "module": "WINHTTP.dll",
+   "name": "WinHttpOpen",
+   "called": true,
+   "dll": "WINHTTP.dll",
+   "imported_name": "WinHttpOpen"
+  },
+  "0x14260e128": {
+   "value": "0x20143990ad3",
+   "target": "0x7ffabae59d80",
+   "via": "jmp rax",
+   "module": "WINHTTP.dll",
+   "name": "WinHttpGetDefaultProxyConfiguration",
+   "called": true,
+   "dll": "WINHTTP.dll",
+   "imported_name": "WinHttpGetDefaultProxyConfiguration"
+  },
+  "0x14260e130": {
+   "value": "0x201439907f9",
+   "target": "0x7ffabae0c320",
+   "via": "jmp rax",
+   "module": "WINHTTP.dll",
+   "name": "WinHttpCrackUrl",
+   "called": true,
+   "dll": "WINHTTP.dll",
+   "imported_name": "WinHttpCrackUrl"
+  },
+  "0x14260e138": {
+   "value": "0x20143990c70",
+   "target": "0x7ffabae23fd0",
+   "via": "jmp rax",
+   "module": "WINHTTP.dll",
+   "name": "WinHttpGetProxyForUrl",
+   "called": true,
+   "dll": "WINHTTP.dll",
+   "imported_name": "WinHttpGetProxyForUrl"
+  },
+  "0x14260e140": {
+   "value": "0x201439905a2",
+   "target": "0x7ffabae40890",
+   "via": "jmp rax",
+   "module": "WINHTTP.dll",
+   "name": "WinHttpGetIEProxyConfigForCurrentUser",
+   "called": true,
+   "dll": "WINHTTP.dll",
+   "imported_name": "WinHttpGetIEProxyConfigForCurrentUser"
+  },
+  "0x14260e148": {
+   "value": "0x20143990450",
+   "target": "0x7ffabae3d7d0",
+   "via": "jmp rax",
+   "module": "WINHTTP.dll",
+   "name": "WinHttpCloseHandle",
+   "called": true,
+   "dll": "WINHTTP.dll",
+   "imported_name": "WinHttpCloseHandle"
+  },
+  "0x14260e158": {
+   "value": "0x201439a008d",
+   "target": "0x7ffaafff45c0",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "timeBeginPeriod",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "timeBeginPeriod"
+  },
+  "0x14260e160": {
+   "value": "0x201439a07d4",
+   "target": "0x7ffaafff4260",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "timeEndPeriod",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "timeEndPeriod"
+  },
+  "0x14260e168": {
+   "value": "0x201439a0264",
+   "target": "0x7ffab0000a20",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveInReset",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveInReset"
+  },
+  "0x14260e170": {
+   "value": "0x201439a0bc5",
+   "target": "0x7ffab0000a40",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveInStart",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveInStart"
+  },
+  "0x14260e178": {
+   "value": "0x201439a0ed4",
+   "target": "0x7ffaafff9450",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveInAddBuffer",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveInAddBuffer"
+  },
+  "0x14260e180": {
+   "value": "0x201439a068d",
+   "target": "0x7ffaafff9720",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveInUnprepareHeader",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveInUnprepareHeader"
+  },
+  "0x14260e188": {
+   "value": "0x201439a0b26",
+   "target": "0x7ffaafff9780",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveInPrepareHeader",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveInPrepareHeader"
+  },
+  "0x14260e190": {
+   "value": "0x201439a0930",
+   "target": "0x7ffab0000980",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveInClose",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveInClose"
+  },
+  "0x14260e198": {
+   "value": "0x201439a0eb1",
+   "target": "0x7ffaafffbd80",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveInOpen",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveInOpen"
+  },
+  "0x14260e1a0": {
+   "value": "0x201439a04b5",
+   "target": "0x7ffaafffa5f0",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveInGetDevCapsW",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveInGetDevCapsW"
+  },
+  "0x14260e1a8": {
+   "value": "0x201439a0e12",
+   "target": "0x7ffab00009a0",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveInGetDevCapsA",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveInGetDevCapsA"
+  },
+  "0x14260e1b0": {
+   "value": "0x201439a0d45",
+   "target": "0x7ffaafff9690",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveOutGetPosition",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveOutGetPosition"
+  },
+  "0x14260e1b8": {
+   "value": "0x201439b0f43",
+   "target": "0x7ffab0000ba0",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveOutReset",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveOutReset"
+  },
+  "0x14260e1c0": {
+   "value": "0x201439b077f",
+   "target": "0x7ffaafff93e0",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveOutWrite",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveOutWrite"
+  },
+  "0x14260e1c8": {
+   "value": "0x201439b0d74",
+   "target": "0x7ffaafff96b0",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveOutUnprepareHeader",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveOutUnprepareHeader"
+  },
+  "0x14260e1d0": {
+   "value": "0x201439b0e81",
+   "target": "0x7ffaafff9470",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveOutPrepareHeader",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveOutPrepareHeader"
+  },
+  "0x14260e1d8": {
+   "value": "0x201439b0cd9",
+   "target": "0x7ffab0000aa0",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveOutClose",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveOutClose"
+  },
+  "0x14260e1e0": {
+   "value": "0x201439b0677",
+   "target": "0x7ffaafffbd20",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveOutOpen",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveOutOpen"
+  },
+  "0x14260e1e8": {
+   "value": "0x201439b07bb",
+   "target": "0x7ffab0000ac0",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveOutGetDevCapsW",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveOutGetDevCapsW"
+  },
+  "0x14260e1f0": {
+   "value": "0x201439b0dbc",
+   "target": "0x7ffaafffbd60",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveOutGetDevCapsA",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveOutGetDevCapsA"
+  },
+  "0x14260e1f8": {
+   "value": "0x201439b0eea",
+   "target": "0x7ffaafffa0c0",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveInGetNumDevs",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveInGetNumDevs"
+  },
+  "0x14260e200": {
+   "value": "0x201439b0546",
+   "target": "0x7ffaafffa0e0",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "waveOutGetNumDevs",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "waveOutGetNumDevs"
+  },
+  "0x14260e208": {
+   "value": "0x201439b0f78",
+   "target": "0x7ffaafff4240",
+   "via": "jmp rax",
+   "module": "WINMM.dll",
+   "name": "timeGetTime",
+   "called": true,
+   "dll": "WINMM.dll",
+   "imported_name": "timeGetTime"
+  },
+  "0x14260e218": {
+   "value": "0x20143610139",
+   "target": "0x7ffac3877c10",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "socket",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "socket"
+  },
+  "0x14260e220": {
+   "value": "0x20143610512",
+   "target": "0x7ffac3890ce0",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "gethostname",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "gethostname"
+  },
+  "0x14260e228": {
+   "value": "0x20143610251",
+   "target": "0x7ffac389ac10",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "WSASetLastError",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "WSASetLastError"
+  },
+  "0x14260e230": {
+   "value": "0x201436109e8",
+   "target": "0x7ffac389acd0",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "WSADuplicateSocketW",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "WSADuplicateSocketW"
+  },
+  "0x14260e238": {
+   "value": "0x20143610a44",
+   "target": "0x7ffac387fb90",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "WSAIoctl",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "WSAIoctl"
+  },
+  "0x14260e240": {
+   "value": "0x20143610480",
+   "target": "0x7ffac3880c30",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "WSASend",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "WSASend"
+  },
+  "0x14260e248": {
+   "value": "0x20143610ece",
+   "target": "0x7ffac3877d00",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "WSASocketW",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "WSASocketW"
+  },
+  "0x14260e250": {
+   "value": "0x2014361009d",
+   "target": "0x7ffac387d920",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "WSAAddressToStringA",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "WSAAddressToStringA"
+  },
+  "0x14260e258": {
+   "value": "0x20143610000",
+   "target": "0x7ffac3883140",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "setsockopt",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "setsockopt"
+  },
+  "0x14260e260": {
+   "value": "0x2014361005a",
+   "target": "0x7ffac388d8d0",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "FreeAddrInfoW",
+   "called": true,
+   "aliases": [
+    "FreeAddrInfoW",
+    "freeaddrinfo"
+   ],
+   "dll": "WS2_32.dll",
+   "imported_name": "FreeAddrInfoW"
+  },
+  "0x14260e268": {
+   "value": "0x201436106fe",
+   "target": "0x7ffac3893850",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "WSAStartup",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "WSAStartup"
+  },
+  "0x14260e270": {
+   "value": "0x20143620b9b",
+   "target": "0x7ffac3880300",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "send",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "send"
+  },
+  "0x14260e278": {
+   "value": "0x20143620e12",
+   "target": "0x7ffac38817b0",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "select",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "select"
+  },
+  "0x14260e280": {
+   "value": "0x201436208f9",
+   "target": "0x7ffac387f6e0",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "recv",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "recv"
+  },
+  "0x14260e288": {
+   "value": "0x20143620837",
+   "target": "0x7ffac389b550",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "listen",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "listen"
+  },
+  "0x14260e290": {
+   "value": "0x20143620d78",
+   "target": "0x7ffac3882b80",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "getsockopt",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "getsockopt"
+  },
+  "0x14260e298": {
+   "value": "0x20143620734",
+   "target": "0x7ffac3897e90",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "WSAGetLastError",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "WSAGetLastError"
+  },
+  "0x14260e2a0": {
+   "value": "0x20143620ef8",
+   "target": "0x7ffac38827d0",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "getsockname",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "getsockname"
+  },
+  "0x14260e2a8": {
+   "value": "0x2014362017a",
+   "target": "0x7ffac3899cb0",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "getpeername",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "getpeername"
+  },
+  "0x14260e2b0": {
+   "value": "0x20143620489",
+   "target": "0x7ffac387e930",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "ioctlsocket",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "ioctlsocket"
+  },
+  "0x14260e2b8": {
+   "value": "0x20143620f40",
+   "target": "0x7ffac387eed0",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "connect",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "connect"
+  },
+  "0x14260e2c0": {
+   "value": "0x201436206a0",
+   "target": "0x7ffac3880eb0",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "closesocket",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "closesocket"
+  },
+  "0x14260e2c8": {
+   "value": "0x201436201db",
+   "target": "0x7ffac38829e0",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "bind",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "bind"
+  },
+  "0x14260e2d0": {
+   "value": "0x20143630eac",
+   "target": "0x7ffac3895bb0",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "accept",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "accept"
+  },
+  "0x14260e2d8": {
+   "value": "0x201436306b5",
+   "target": "0x7ffac3894810",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "__WSAFDIsSet",
+   "called": false,
+   "dll": "WS2_32.dll",
+   "imported_name": "__WSAFDIsSet"
+  },
+  "0x14260e2e0": {
+   "value": "0x201436307db",
+   "target": "0x7ffac3895750",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "htons",
+   "called": true,
+   "aliases": [
+    "htons",
+    "ntohs"
+   ],
+   "dll": "WS2_32.dll",
+   "imported_name": [
+    "htons",
+    "ntohs"
+   ],
+   "ambiguous": true
+  },
+  "0x14260e2e8": {
+   "value": "0x20143630c72",
+   "target": "0x7ffac3895740",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "htonl",
+   "called": true,
+   "aliases": [
+    "htonl",
+    "ntohl"
+   ],
+   "dll": "WS2_32.dll",
+   "imported_name": [
+    "htonl",
+    "ntohl"
+   ],
+   "ambiguous": true
+  },
+  "0x14260e2f0": {
+   "value": "0x201436301e4",
+   "target": "0x7ffac3895750",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "htons",
+   "called": true,
+   "aliases": [
+    "htons",
+    "ntohs"
+   ],
+   "dll": "WS2_32.dll",
+   "imported_name": [
+    "htons",
+    "ntohs"
+   ],
+   "ambiguous": true
+  },
+  "0x14260e2f8": {
+   "value": "0x2014363020c",
+   "target": "0x7ffac3895740",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "htonl",
+   "called": true,
+   "aliases": [
+    "htonl",
+    "ntohl"
+   ],
+   "dll": "WS2_32.dll",
+   "imported_name": [
+    "htonl",
+    "ntohl"
+   ],
+   "ambiguous": true
+  },
+  "0x14260e300": {
+   "value": "0x20143630d3b",
+   "target": "0x7ffac389a830",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "inet_pton",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "inet_pton"
+  },
+  "0x14260e308": {
+   "value": "0x20143630b4e",
+   "target": "0x7ffac38aca50",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "WSACancelAsyncRequest",
+   "called": false,
+   "dll": "WS2_32.dll",
+   "imported_name": "WSACancelAsyncRequest"
+  },
+  "0x14260e310": {
+   "value": "0x20143630bdd",
+   "target": "0x7ffac38ac580",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "WSAAsyncGetHostByName",
+   "called": false,
+   "dll": "WS2_32.dll",
+   "imported_name": "WSAAsyncGetHostByName"
+  },
+  "0x14260e318": {
+   "value": "0x201436300cf",
+   "target": "0x7ffac38957f0",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "WSACleanup",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "WSACleanup"
+  },
+  "0x14260e320": {
+   "value": "0x201436302f9",
+   "target": "0x7ffac38963d0",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "inet_addr",
+   "called": false,
+   "dll": "WS2_32.dll",
+   "imported_name": "inet_addr"
+  },
+  "0x14260e328": {
+   "value": "0x20143640cc2",
+   "target": "0x7ffac38935b0",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "inet_ntoa",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "inet_ntoa"
+  },
+  "0x14260e330": {
+   "value": "0x2014364035c",
+   "target": "0x7ffac3899c20",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "inet_ntop",
+   "called": false,
+   "dll": "WS2_32.dll",
+   "imported_name": "inet_ntop"
+  },
+  "0x14260e338": {
+   "value": "0x2014364080e",
+   "target": "0x7ffac388c3a0",
+   "via": "jmp rax",
+   "module": "WS2_32.dll",
+   "name": "getaddrinfo",
+   "called": true,
+   "dll": "WS2_32.dll",
+   "imported_name": "getaddrinfo"
+  },
+  "0x14260e348": {
+   "value": "0x201439e0849",
+   "target": "0x7ffac2a18f00",
+   "via": "jmp rax",
+   "module": "bcrypt.dll",
+   "name": "BCryptGenRandom",
+   "called": false,
+   "dll": "bcrypt.dll",
+   "imported_name": "BCryptGenRandom"
+  },
+  "0x14260e358": {
+   "value": "0x201439c056d",
+   "target": "0x7ffabed12180",
+   "via": "jmp rax",
+   "module": "dwmapi.dll",
+   "name": "DwmGetCompositionTimingInfo",
+   "called": true,
+   "dll": "dwmapi.dll",
+   "imported_name": "DwmGetCompositionTimingInfo"
+  },
+  "0x14260e368": {
+   "value": "0x201437e0df9",
+   "target": "0x7ffac52457e0",
+   "via": "jmp rax",
+   "module": "combase.dll",
+   "name": "CoCreateInstance",
+   "called": true,
+   "dll": "combase.dll",
+   "imported_name": "CoCreateInstance"
+  },
+  "0x14260e370": {
+   "value": "0x201437e0860",
+   "target": "0x7ffac51809e0",
+   "via": "jmp rax",
+   "module": "combase.dll",
+   "name": "CoInitializeEx",
+   "called": true,
+   "dll": "combase.dll",
+   "imported_name": "CoInitializeEx"
+  },
+  "0x14260e378": {
+   "value": "0x201437e0118",
+   "target": "0x7ffac51806b0",
+   "via": "jmp rax",
+   "module": "combase.dll",
+   "name": "CoUninitialize",
+   "called": true,
+   "dll": "combase.dll",
+   "imported_name": "CoUninitialize"
+  },
+  "0x14260e380": {
+   "value": "0x201437e08fb",
+   "target": "0x7ffac5182980",
+   "via": "jmp rax",
+   "module": "combase.dll",
+   "name": "CoTaskMemFree",
+   "called": true,
+   "dll": "combase.dll",
+   "imported_name": "CoTaskMemFree"
+  },
+  "0x14260e388": {
+   "value": "0x201437e0acb",
+   "target": "0x7ffac392fec0",
+   "via": "jmp rax",
+   "module": "ole32.dll",
+   "name": "CoInitialize",
+   "called": true,
+   "dll": "combase.dll",
+   "imported_name": "CoInitialize"
+  },
+  "0x14260e390": {
+   "value": "0x201437e01e9",
+   "target": "0x7ffac525ae10",
+   "via": "jmp rax",
+   "module": "combase.dll",
+   "name": "PropVariantClear",
+   "called": true,
+   "dll": "combase.dll",
+   "imported_name": "PropVariantClear"
+  },
+  "0x14260e398": {
+   "value": "0x201437e0414",
+   "target": "0x7ffac5264420",
+   "via": "jmp rax",
+   "module": "combase.dll",
+   "name": "CLSIDFromString",
+   "called": true,
+   "dll": "combase.dll",
+   "imported_name": "CLSIDFromString"
+  },
+  "0x14260e3a0": {
+   "value": "0x201437e0f88",
+   "target": "0x7ffac5197c10",
+   "via": "jmp rax",
+   "module": "combase.dll",
+   "name": "CoTaskMemAlloc",
+   "called": true,
+   "dll": "combase.dll",
+   "imported_name": "CoTaskMemAlloc"
+  },
+  "0x14260e3a8": {
+   "value": "0x201437e0bfd",
+   "target": "0x7ffac51ce880",
+   "via": "jmp rax",
+   "module": "combase.dll",
+   "name": "CoInitializeSecurity",
+   "called": true,
+   "dll": "combase.dll",
+   "imported_name": "CoInitializeSecurity"
+  },
+  "0x14260e3b0": {
+   "value": "0x201437e0cd3",
+   "target": "0x7ffac52324e0",
+   "via": "jmp rax",
+   "module": "combase.dll",
+   "name": "CoSetProxyBlanket",
+   "called": true,
+   "dll": "combase.dll",
+   "imported_name": "CoSetProxyBlanket"
+  }
+ }
+}

@@ -1,0 +1,13 @@
+# the installed client and its working data
+/client/
+/install.log
+# build output
+target/
+target-verify/
+# upstream clone; our changes to it live in patches/
+cascette-rs/
+# tool output (logs, extracted facts, disassembly dumps)
+build/
+__pycache__/
+# IDE settings
+/.idea/

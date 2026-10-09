@@ -1,0 +1,674 @@
+#include "cas/CAS.hpp"
+#include "cas/CASLocalManifest.hpp"
+#include "base/Status.hpp"
+#include "blz/Log.hpp"
+#include "blz/String.hpp"
+#include "blz/Sync.hpp"
+#include "os/Os.hpp"
+#include "storm/Log.hpp"
+#include "storm/Memory.hpp"
+#include "storm/String.hpp"
+#include "tact/AsyncState.hpp"
+#include "tact/ImmediateRead.hpp"
+#include "tact/InstallationInfo.hpp"
+#include "tact/Instance.hpp"
+#include "util/Unimplemented.hpp"
+#include <windows.h>
+#include <cstring>
+
+namespace cas {
+
+CASINSTANCE* g_casInstance;
+CASMANIFEST* g_casManifest;
+LOCALMANIFEST* g_localManifest;
+
+namespace {
+
+const char s_typesFile[] = "Engine/Source/CAS/CASTypes.h";
+const char s_errorNodeTag[] = ".?AU?$list_node@UCASStreamingError@@@blz@@";
+
+thread_local CASERROR t_lastError;
+
+char s_dataPath[0x104];             // DAT_142e25690
+char s_localRoot[0x104];            // DAT_142e25580
+HSLOG s_tactLog;                    // DAT_142e25688
+bool s_tactLogEnabled;              // DAT_142e20882
+volatile bool s_initialized;        // DAT_142e20880
+uint32_t s_mainThread;              // DAT_142e25578
+bool s_manifestOnly;                // DAT_142e20883
+uint32_t s_openA4;                  // DAT_142ccba48
+bool s_patchInstances;              // DAT_142e20881: the patch path's instances are live
+CASKEYCALLBACK s_keyCallback;       // DAT_142e25560
+
+// The last 64 tact/casc errors and warnings (0x98-byte slots, a blz::string first).
+struct LOGSLOT {
+    blz::string m_text;
+    uint8_t m_28[0x70];
+};
+static_assert(sizeof(LOGSLOT) == 0x98, "LOGSLOT is 0x98 bytes");
+LOGSLOT s_errors[64];               // DAT_142e20960
+LOGSLOT s_warnings[64];             // DAT_142e22f60
+int32_t s_errorIndex;               // DAT_142e20958
+int32_t s_warningIndex;             // DAT_142e2095c
+SRWLOCK s_logLock = SRWLOCK_INIT;   // DAT_142e20950
+
+// The streaming errors tact's counters report (blz::list<CASStreamingError>, 0x210-byte nodes).
+struct STREAMINGERROR {
+    STREAMINGERROR* m_next;
+    STREAMINGERROR* m_prev;
+    char m_text[0x200];
+};
+struct ERRORLIST {
+    STREAMINGERROR* m_next;
+    STREAMINGERROR* m_prev;
+    uint64_t m_count;
+};
+ERRORLIST s_streamingErrors = { reinterpret_cast<STREAMINGERROR*>(&s_streamingErrors),
+    reinterpret_cast<STREAMINGERROR*>(&s_streamingErrors), 0 };  // PTR_LOOP_142ccba30
+SRWLOCK s_streamingLock = SRWLOCK_INIT;  // DAT_142e20948
+
+// What the failure counter hook watches (PTR_s_download_requests_failed_142ccba70).
+struct COUNTERHOOK {
+    const char* m_name;
+    volatile long m_count;
+};
+COUNTERHOOK s_downloadFailures = { "download.requests.failed", 0 };
+
+void Remember(LOGSLOT* ring, int32_t* index, const char* text) {
+    LOGSLOT* slot = &ring[(*index)++];
+    slot->m_text.reserve(std::strlen(text));
+    uint64_t length = std::strlen(text);
+    if (length != 0) {
+        std::memmove(slot->m_text.m_data, text, length);
+    }
+    slot->m_text.m_data[length] = '\0';
+    slot->m_text.m_size = length;
+    if (*index > 0x3f) {
+        *index = 0;
+    }
+}
+
+// tact's and casc's log, into Tact.log and the rings.
+// ref: FUN_1402cf670
+void LogSink(const char* category, int32_t level, const char* file, int32_t line, const char* format, va_list args) {
+    (void)file;
+    (void)line;
+    if (std::strcmp(category, "tact") != 0 && std::strcmp(category, "casc") != 0) {
+        return;
+    }
+    char text[0x200];
+    SStrVPrintfCount(text, sizeof(text), format, args);
+    if (s_tactLog != nullptr) {
+        SLogWrite(s_tactLog, text);
+    }
+    AcquireSRWLockExclusive(&s_logLock);
+    if (level < 4) {
+        if (level > 1) {
+            Remember(s_warnings, &s_warningIndex, text);
+        }
+    } else {
+        Remember(s_errors, &s_errorIndex, text);
+    }
+    ReleaseSRWLockExclusive(&s_logLock);
+}
+
+// tact's download statistics.
+// ref: FUN_1402d3000
+void StatsCallback(CASSTATS* stats, void* a2, int32_t started, int32_t finished, int32_t bytes) {
+    (void)a2;
+    int64_t now = OsGetElapsedNanoseconds();
+    if (started != 0 && InterlockedExchangeAdd(&stats->m_active, started) == 0) {
+        stats->m_start = now;
+    }
+    uint32_t sample = stats->m_bytes + static_cast<uint32_t>(bytes);
+    stats->m_bytes = sample;
+    // As the reference has it: the start minus now, so this holds only for a clock step back.
+    if (stats->m_start - now > 1000000000) {
+        int64_t elapsed = now - stats->m_start;
+        if (sample != 0 && elapsed != 0) {
+            stats->m_start = now;
+            stats->m_bytes = 0;
+            stats->m_rate = static_cast<float>(sample) * 1e9f / static_cast<float>(elapsed) * stats->m_smoothing
+                + (1.0f - stats->m_smoothing) * stats->m_rate;
+        }
+    }
+    if (finished != 0 && InterlockedExchangeAdd(&stats->m_active, -finished) == finished) {
+        uint32_t pending = stats->m_bytes;
+        int64_t elapsed = now - stats->m_start;
+        if (pending != 0 && elapsed != 0) {
+            stats->m_start = now;
+            stats->m_bytes = 0;
+            stats->m_rate = static_cast<float>(pending) * 1e9f / static_cast<float>(elapsed) * stats->m_smoothing
+                + (1.0f - stats->m_smoothing) * stats->m_rate;
+        }
+    }
+}
+
+// tact's counter hook: a failed download becomes a streaming error.
+// ref: FUN_1402d1140
+void CounterHook(COUNTERHOOK* hook, void* a2, const char* counter) {
+    (void)a2;
+    if (SStrStrI(counter, hook->m_name) == nullptr) {
+        return;
+    }
+    InterlockedIncrement(&hook->m_count);
+    char text[0x200];
+    SStrPrintf(text, sizeof(text), "Streaming Error: %s", "A download request has failed (no file context is available).");
+    AcquireSRWLockExclusive(&s_streamingLock);
+    auto node = static_cast<STREAMINGERROR*>(
+        SMemAlloc(sizeof(STREAMINGERROR), 0xB, s_errorNodeTag, SStrHashFnv1a(s_errorNodeTag), -6, 0));
+    if (node != nullptr) {
+        std::memcpy(node->m_text, text, sizeof(text));
+    }
+    node->m_next = s_streamingErrors.m_next;
+    node->m_prev = reinterpret_cast<STREAMINGERROR*>(&s_streamingErrors);
+    s_streamingErrors.m_next = node;
+    node->m_next->m_prev = node;
+    s_streamingErrors.m_count++;
+    ReleaseSRWLockExclusive(&s_streamingLock);
+}
+
+// tact's key lookup, through the client's callback.
+// ref: FUN_1402d2690
+bool KeyLookup(CASKEYCALLBACK* holder, uint64_t* keyName, void* key) {
+    if (*holder == nullptr) {
+        return false;
+    }
+    uint64_t name = *keyName;
+    return (*holder)(&name, key, 0x10) != 0;
+}
+
+// The instance's destructor.
+// ref: FUN_1402cc490
+void DestroyInstance(CASINSTANCE* instance, uint32_t flags) {
+    if (!instance->m_noCdn && !instance->m_noStreaming && instance->m_tact != nullptr) {
+        tact::InstanceCancelOp(instance->m_tact, instance->m_ops[0]);
+    }
+    if (!instance->m_noCdn) {
+        if (!instance->m_noStreaming && instance->m_tact != nullptr) {
+            tact::InstanceCancelOp(instance->m_tact, instance->m_ops[1]);
+        }
+        if (!instance->m_noCdn && !instance->m_noStreaming && instance->m_tact != nullptr) {
+            tact::InstanceCancelOp(instance->m_tact, instance->m_ops[2]);
+        }
+    }
+    tact::Instance::Destroy(instance->m_tact);
+    if (instance->m_stats != nullptr) {
+        SMemFree(instance->m_stats, __FILE__, 0x3cd, 0);
+        instance->m_stats = nullptr;
+    }
+    if ((flags & 1) != 0) {
+        operator delete(instance, sizeof(CASINSTANCE));
+    }
+}
+
+// strcpy bounded to `limit` characters and a terminator, as the reference inlines it.
+void CopyBounded(char* dest, const char* source, int64_t limit) {
+    for (int64_t left = limit;;) {
+        char c = *source++;
+        *dest++ = c;
+        if (c == '\0') {
+            return;
+        }
+        if (--left == 0) {
+            *dest = '\0';
+            return;
+        }
+    }
+}
+
+}
+
+CASERROR* CASGetLastError() {
+    return &t_lastError;
+}
+
+// ref: FUN_1402cdc50
+uint32_t CASGetErrorCode(int32_t* kind) {
+    int32_t current = t_lastError.m_kind;
+    *kind = current;
+    if (current == 0) {
+        return t_lastError.m_tactError;
+    }
+    if (current == 2) {
+        return GetLastError();  // FUN_1402144c0
+    }
+    if (current != 1 && current != 3) {
+        return 0;
+    }
+    return t_lastError.m_code;
+}
+
+namespace {
+
+// blz::pair<uint64_t, blz::function<...>> (0x28 bytes).
+struct HANDLERENTRY {
+    uint64_t m_key;
+    blz::function_storage m_function;
+};
+static_assert(sizeof(HANDLERENTRY) == 0x28, "HANDLERENTRY is 0x28 bytes");
+
+// blz::vector: data, size, capacity (bit 63: the storage is not owned).
+struct HANDLERVECTOR {
+    HANDLERENTRY* m_data;
+    uint64_t m_size;
+    uint64_t m_capacity;
+};
+
+const uint64_t NOT_OWNED = 0x8000000000000000ull;
+const char s_hotfixTag[] = ".?AU?$pair@_KV?$function@$$A6AXAEBVCStatus@@@Z@blz@@@blz@@";
+const char s_manifestTag[] = ".?AU?$pair@_KV?$function@$$A6AXPEBD@Z@blz@@@blz@@";
+
+HANDLERVECTOR s_hotfixHandlers;         // DAT_142e208a0
+blz::shared_mutex s_hotfixLock;         // DAT_142e208b8
+HANDLERVECTOR s_manifestHandlers;       // DAT_142e20910
+blz::shared_mutex s_manifestLock;       // DAT_142e20928
+
+// Moves a blz::function: the manager's move, and the source left empty.
+void MoveFunction(blz::function_storage* dest, blz::function_storage* source) {
+    source->m_manager(dest->m_storage, source->m_storage, 2);
+    dest->m_invoke = source->m_invoke;
+    dest->m_manager = source->m_manager;
+    source->m_invoke = nullptr;
+    source->m_manager = &blz::function_empty_manager;
+}
+
+// ref: FUN_1402d4500 (hot-fix), FUN_1402d46e0 (manifest)
+void ReserveHandlers(HANDLERVECTOR* vector, uint64_t count, const char* tag) {
+    uint64_t capacity = vector->m_capacity;
+    if ((capacity & ~NOT_OWNED) >= count) {
+        return;
+    }
+    uint64_t grown = ((capacity >> 1) & 0x3FFFFFFFFFFFFFFFull) + (capacity & ~NOT_OWNED);
+    if (grown < count) {
+        grown = count;
+    }
+    vector->m_capacity = ((capacity ^ grown) & NOT_OWNED) ^ grown;
+    auto data = static_cast<HANDLERENTRY*>(SMemAlloc(grown * sizeof(HANDLERENTRY), 0xB, tag, SStrHashFnv1a(tag), -6, 0));
+    for (uint64_t i = 0; i < vector->m_size; i++) {
+        data[i].m_key = vector->m_data[i].m_key;
+        MoveFunction(&data[i].m_function, &vector->m_data[i].m_function);
+    }
+    for (uint64_t i = 0; i < vector->m_size; i++) {
+        blz::function_storage* function = &vector->m_data[i].m_function;
+        if (function->m_manager != &blz::function_empty_manager) {
+            function->m_manager(function->m_storage, nullptr, 0);
+        }
+    }
+    if ((vector->m_capacity & NOT_OWNED) == 0) {
+        SMemFree(vector->m_data, tag, -6, 0);
+    }
+    vector->m_data = data;
+    vector->m_capacity &= ~NOT_OWNED;
+}
+
+// push_back of a moved-in pair under the lock. (The reference also handles a source inside
+// the vector, which a stack temporary never is.)
+void AddHandler(HANDLERVECTOR* vector, blz::shared_mutex* lock, const char* tag, blz::function_storage* handler,
+    uint64_t key) {
+    lock->lock();
+    HANDLERENTRY entry;
+    entry.m_key = key;
+    MoveFunction(&entry.m_function, handler);
+    if (vector->m_size == (vector->m_capacity & ~NOT_OWNED)) {
+        ReserveHandlers(vector, (vector->m_capacity & ~NOT_OWNED) + 1, tag);
+    }
+    HANDLERENTRY* slot = vector->m_data + vector->m_size;
+    if (slot != nullptr) {
+        slot->m_key = entry.m_key;
+        MoveFunction(&slot->m_function, &entry.m_function);
+    }
+    vector->m_size++;
+    if (entry.m_function.m_manager != &blz::function_empty_manager) {
+        entry.m_function.m_manager(entry.m_function.m_storage, nullptr, 0);
+    }
+    lock->unlock();
+}
+
+}
+
+// ref: FUN_1402cc6a0
+void CASAddHotfixHandler(blz::function_storage* handler, uint64_t key) {
+    AddHandler(&s_hotfixHandlers, &s_hotfixLock, s_hotfixTag, handler, key);
+}
+
+// ref: FUN_1402cc840
+void CASAddManifestHandler(blz::function_storage* handler, uint64_t key) {
+    AddHandler(&s_manifestHandlers, &s_manifestLock, s_manifestTag, handler, key);
+}
+
+// ref: FUN_1402ccd00
+void CASSetLogEnabled(bool enabled) {
+    s_tactLogEnabled = enabled;
+}
+
+// ref: FUN_1402cee30
+void CASSetKeyCallback(CASKEYCALLBACK callback) {
+    s_keyCallback = callback;
+}
+
+// ref: FUN_1402cec40
+bool CASInitialize(const char** dataPath, CStatus* status) {
+    if (g_localManifest != nullptr) {
+        return true;
+    }
+    const char* path = *dataPath;
+    if (path == nullptr || *path == '\0') {
+        path = "../Data";
+        *dataPath = "../Data";  // DAT_142630cf0
+    }
+    CopyBounded(s_dataPath, path, 0x103);
+    if (!OsCreateDirectory(*dataPath, true, false)) {
+        char error[0x400];
+        OsGetLastErrorText(error, sizeof(error));
+        status->Add(3, "CASInitialize() failed to create folder %s: %s\n", *dataPath, error);
+        return false;
+    }
+
+    auto manifest = static_cast<LOCALMANIFEST*>(SMemAlloc(sizeof(LOCALMANIFEST), 10, __FILE__, SStrHashFnv1a(__FILE__), 0x90e, 0));
+    manifest->Construct();
+    g_localManifest = manifest;
+    if (s_tactLogEnabled) {
+        OsCreateDirectory("Logs", false, false);
+        SLogCreate("Logs\\Tact.log", 0, &s_tactLog);
+        SLogWrite(s_tactLog, "Initialze");
+    }
+    blz::log_register(&LogSink);
+    if (!s_initialized) {
+        s_mainThread = OsGetCurrentThreadId();
+        s_initialized = true;
+    }
+    return true;
+}
+
+// ref: FUN_1402d1420
+bool CASCreateInstance(CASINSTANCE* instance, const char* storagePath, tact::BUILDINFOENTRY* entry, CStatus* status,
+    int32_t streaming, void* keyFunction, void* keyContext, CASSTATS* stats) {
+    if (instance->m_tact != nullptr) {
+        status->Add(2, "Tact instance already exists. Aborting.");
+        return false;
+    }
+    if (stats == nullptr) {
+        stats = static_cast<CASSTATS*>(SMemAlloc(sizeof(CASSTATS), 9, __FILE__, SStrHashFnv1a(__FILE__), 800, 0));
+        stats->m_active = 0;
+        stats->m_start = 0;
+        stats->m_bytes = 0;
+        stats->m_smoothing = 0.7f;
+        stats->m_rate = 0.0f;
+    }
+    instance->m_stats = stats;
+
+    tact::INSTANCEPARAMS params = {};
+    params.m_mode = 0;
+    params.m_08 = ~uint64_t(0);
+    params.m_storagePath = storagePath;
+    std::memcpy(params.m_buildKey, entry->m_buildKey, 16);
+    params.m_buildConfigPath = nullptr;
+    std::memcpy(params.m_cdnKey, entry->m_cdnKey, 16);
+    params.m_cdnPath = entry->m_cdnPath;
+    params.m_cdnHosts = entry->m_cdnServers;
+    params.m_cdnHostCount = entry->m_cdnServerCount;
+    params.m_armadilloKey = entry->m_armadillo;
+    params.m_60 = 200;
+    params.m_64 = 1;
+    params.m_65 = 1;
+    params.m_68 = 0x10;
+    params.m_70 = 0x10;
+    params.m_74 = 0x20;
+    params.m_78 = 0x20000;
+    params.m_streaming = streaming;
+    params.m_affinity = ~uint64_t(0);
+    params.m_priority = 4;
+    params.m_threads = 1;
+    params.m_a0 = ~uint64_t(0);
+    params.m_a8 = 4;
+    params.m_b0 = 0.75;  // DAT_142631a40
+    params.m_c8 = 1;
+    params.m_f0 = reinterpret_cast<void*>(&StatsCallback);
+    params.m_f8 = stats;
+    params.m_140 = keyFunction;
+    params.m_148 = keyContext;
+    params.m_150 = reinterpret_cast<void*>(&CounterHook);
+    params.m_158 = &s_downloadFailures;
+    params.m_loadEncodingTable = 1;
+    params.m_1d8 = 1;
+    params.m_1d9 = 0;
+
+    uint8_t error = 0;
+    instance->m_tact = tact::Instance::Create(&params, &error);
+    if (instance->m_tact == nullptr) {
+        status->Add(3, "Tact instance creation failed. Error (%d): %s", error, tact::ErrorString(error));
+        return false;
+    }
+    instance->m_storagePath = storagePath;
+    instance->m_noStreaming = streaming == 1;
+    instance->m_noCdn = entry->m_cdnServers == nullptr;
+    return true;
+}
+
+// ref: FUN_1402d2cd0
+bool CASReadFile(CASINSTANCE* instance, const char* name, uint8_t** data, uint32_t* size, uint32_t flags,
+    int32_t allocFlags) {
+    if ((flags & 8) != 0) {
+        uint8_t resident = tact::InstanceIsResident(instance->m_tact, name);
+        if (resident != 0) {
+            t_lastError.m_kind = 0;
+            t_lastError.m_tactError = resident;
+            return false;
+        }
+    }
+    uint32_t extra = (flags >> 1) & 1;
+    tact::FILESTAT stat = {};
+    uint8_t error = tact::InstanceStatByName(instance->m_tact, name, &stat, 1);
+    t_lastError.m_tactError = error;
+    t_lastError.m_kind = 0;
+    if (error != 0 || stat.m_key.m_csize == 0) {
+        t_lastError.m_tactError = 8;
+        return false;
+    }
+
+    uint32_t csize = stat.m_key.m_csize;
+    *data = static_cast<uint8_t*>(SMemAlloc(uint64_t(csize) + extra, allocFlags, __FILE__, SStrHashFnv1a(__FILE__), 0x3fa, 0));
+    uint32_t read = 0;
+    uint8_t result = 0;
+    if (tact::ImmediateReadByName(instance->m_tact, name, *data, 0, csize, &read, 0) != 0) {
+        uint64_t id = tact::InstanceStartReadByName(instance->m_tact, name, *data, csize, nullptr, nullptr, 1, 0);
+        result = tact::InstanceGetOpResult(instance->m_tact, id, reinterpret_cast<int32_t*>(&read));
+    }
+    t_lastError.m_tactError = result;
+    t_lastError.m_kind = 0;
+    if (result == 0) {
+        std::memset(*data + csize, 0, extra);
+        if (size != nullptr) {
+            *size = read;
+        }
+        return true;
+    }
+    SMemFree(*data, __FILE__, 0x408, 0);
+    *data = nullptr;
+    return false;
+}
+
+// ref: FUN_1402d2c00
+bool CASLoadManifest(const uint8_t* const* data, uint64_t size, const MANIFESTLOCALE* locale, CStatus* status) {
+    auto manifest = static_cast<CASMANIFEST*>(SMemAlloc(sizeof(CASMANIFEST), 10, __FILE__, SStrHashFnv1a(__FILE__), 0x6aa, 0));
+    manifest->Construct();
+    g_casManifest = manifest;
+    bool loaded = manifest->Load(data, size, locale, status);
+    if (!loaded) {
+        status->Add(3, "Unable to read build manifest into memory. \n");
+        CASShutdown();
+    }
+    return loaded;
+}
+
+// ref: FUN_1402ce070
+bool CASOpen(uint32_t patch, const MANIFESTLOCALE* locale, tact::BUILDINFOENTRY* entry, uint32_t a4,
+    bool manifestOnly, CStatus* status) {
+    uint32_t size = 0;
+    uint8_t* root = nullptr;  // a CASTypes.h buffer holder
+    bool opened = false;
+    bool load = manifestOnly;
+    if (!manifestOnly) {
+        auto instance = static_cast<CASINSTANCE*>(SMemAlloc(sizeof(CASINSTANCE), 10, __FILE__, SStrHashFnv1a(__FILE__), 0x931, 0));
+        instance->m_tact = nullptr;
+        instance->m_stats = nullptr;
+        instance->m_28 = 0;
+        instance->m_noStreaming = 0;
+        instance->m_noCdn = 0;
+        instance->m_storagePath = nullptr;
+        InterlockedExchangePointer(reinterpret_cast<void* volatile*>(&g_casInstance), instance);
+        if (CASCreateInstance(instance, s_dataPath, entry, status, 0, reinterpret_cast<void*>(&KeyLookup), &s_keyCallback,
+                nullptr)) {
+            uint8_t* read = nullptr;
+            if (!CASReadFile(instance, ".root", &read, &size, 0, 10)) {
+                for (uint32_t retries = 0;;) {
+                    if (t_lastError.m_tactError != 7 || ++retries > 3) {
+                        if (root != nullptr) {
+                            SMemFree(root, s_typesFile, 0xe9, 0);
+                        }
+                        status->Add(2, "Unable to load manifest for patch %d: %s", patch,
+                            tact::ErrorString(t_lastError.m_tactError));
+                        root = nullptr;
+                        goto fail;
+                    }
+                    OsSleepNanoseconds(500 * 1000000ll);  // FUN_141238570
+                    if (CASReadFile(instance, ".root", &read, &size, 0, 10)) {
+                        break;
+                    }
+                }
+            }
+            uint8_t* old = root;
+            root = read;
+            if (old != nullptr) {
+                SMemFree(old, s_typesFile, 0xe9, 0);
+            }
+            std::memcpy(instance->m_buildKey, entry->m_buildKey, 16);
+            std::memcpy(instance->m_cdnKey, entry->m_cdnKey, 16);
+            s_openA4 = a4;
+            load = true;
+        }
+    }
+    if (load) {
+        if (CASLoadManifest(&root, size, locale, status)) {
+            s_manifestOnly = manifestOnly;
+            opened = true;
+            goto done;
+        }
+    }
+fail:
+    CASShutdown();
+done:
+    if (root != nullptr) {
+        SMemFree(root, s_typesFile, 0xe9, 0);
+    }
+    return opened;
+}
+
+// ref: FUN_1402ce320
+bool CASInitFromBuildInfo(uint32_t patch, const char* version, const MANIFESTLOCALE* locale, const char* dataPath,
+    const char* localRoot, CStatus* status, blz::string* product, bool offline) {
+    tact::INSTALLATIONINFO* info = tact::InstallationInfoRead(".");
+    tact::BUILDINFOENTRY* active = info->m_active;
+    bool initialized = false;
+    if (active == nullptr) {
+        status->Add(2, "Unable to initialize CAS from build info file. No active install info entries.\n");
+    } else {
+        product->assign(active->m_product);
+        bool matches = _stricmp(active->m_version, version) == 0;
+        if (!matches) {
+            char code[0x40];
+            CopyBounded(code, version, 0x3f);
+            char* dot = std::strrchr(code, '.');
+            if (dot != nullptr && dot[1] != '\0') {
+                *dot = '\0';
+                const char* build = dot + 1;
+                static const char* const s_branches[] = { "WOW-%spatch%s_Retail", "WOW-%spatch%s_ClassicRetail",
+                    "WOW-%spatch%s_Beta", "WOW-%spatch%s_ClassicBeta", "WOW-%spatch%s_PTR", "WOW-%spatch%s_ClassicPTR" };
+                for (const char* format : s_branches) {
+                    char name[0x40];
+                    SStrPrintf64(name, format, build, code);
+                    if (_stricmp(active->m_version, name) == 0) {
+                        matches = true;
+                        break;
+                    }
+                }
+            }
+            if (!matches) {
+                status->Add(2, "Unable to initialize CAS from build info file. Code version does not match .build.info.\n");
+            }
+        }
+        if (matches) {
+            tact::BUILDINFOENTRY entry = *active;
+            if (offline) {
+                entry.m_cdnHosts = nullptr;
+                entry.m_cdnHostCount = 0;
+                entry.m_cdnServers = nullptr;
+                entry.m_cdnServerCount = 0;
+            }
+            const char* path = dataPath;
+            if (CASInitialize(&path, status) && CASOpen(patch, locale, &entry, 5, false, status)) {
+                if (localRoot != nullptr && *localRoot != '\0') {
+                    char full[0x104];
+                    OsGetFullPath(localRoot, full, sizeof(full));
+                    CopyBounded(s_localRoot, full, 0x103);
+                    g_localManifest->SetRoot(full);
+                }
+                initialized = true;
+            }
+        }
+    }
+    tact::InstallationInfoFree(info);
+    return initialized;
+}
+
+// ref: FUN_1402d2380
+int32_t CASGetFileDataIdByName(const char* name) {
+    CASMANIFEST* manifest = g_casManifest;
+    if (manifest == nullptr) {
+        return 0;
+    }
+    BuildManifestEntry* entry = manifest->FindByName(LocalManifestNameHash(name));
+    return entry != nullptr ? static_cast<int32_t>(entry->m_fileDataId) : 0;
+}
+
+// ref: FUN_1402d0b80
+void CASShutdown() {
+    if (s_patchInstances) {
+        // The patch path's instances (DAT_142e20868, DAT_142ccba08) are not ported; nothing sets
+        // the flag.
+        FROST_UNIMPLEMENTED();
+    }
+    CASMANIFEST* manifest = g_casManifest;
+    if (manifest != nullptr) {
+        manifest->Destroy();
+        operator delete(manifest, sizeof(CASMANIFEST));
+    }
+    InterlockedExchangePointer(reinterpret_cast<void* volatile*>(&g_casManifest), nullptr);
+    LOCALMANIFEST* local = g_localManifest;
+    if (local != nullptr) {
+        local->Destroy();
+        operator delete(local, sizeof(LOCALMANIFEST));
+    }
+    g_localManifest = nullptr;
+    if (g_casInstance != nullptr) {
+        DestroyInstance(g_casInstance, 1);
+        InterlockedExchangePointer(reinterpret_cast<void* volatile*>(&g_casInstance), nullptr);
+    }
+    STREAMINGERROR* node = s_streamingErrors.m_prev;
+    s_streamingErrors.m_prev = reinterpret_cast<STREAMINGERROR*>(&s_streamingErrors);
+    s_streamingErrors.m_next = reinterpret_cast<STREAMINGERROR*>(&s_streamingErrors);
+    s_streamingErrors.m_count = 0;
+    while (node != reinterpret_cast<STREAMINGERROR*>(&s_streamingErrors)) {
+        STREAMINGERROR* next = node->m_prev;
+        SMemFree(node, s_errorNodeTag, -6, 0);
+        node = next;
+    }
+    if (s_tactLog != nullptr) {
+        SLogWrite(s_tactLog, "Shutdown");
+        SLogClose(s_tactLog);
+        s_tactLog = nullptr;
+    }
+}
+
+}

@@ -1,0 +1,80 @@
+diff --git a/crates/cascette-client-storage/Cargo.toml b/crates/cascette-client-storage/Cargo.toml
+index 52f55f5..d361f5a 100644
+--- a/crates/cascette-client-storage/Cargo.toml
++++ b/crates/cascette-client-storage/Cargo.toml
+@@ -57,6 +57,7 @@ winapi = { version = "0.3", features = [
+   "winnt",
+   "securitybaseapi",
+   "sddl",
++  "winbase",
+ ] }
+ 
+ [target.'cfg(unix)'.dependencies]
+diff --git a/crates/cascette-client-storage/src/index/mod.rs b/crates/cascette-client-storage/src/index/mod.rs
+index 5b66406..f818c81 100644
+--- a/crates/cascette-client-storage/src/index/mod.rs
++++ b/crates/cascette-client-storage/src/index/mod.rs
+@@ -746,7 +746,17 @@ impl IndexManager {
+ 
+         // Compute Jenkins hashes for guarded blocks
+         let header_hash = hashlittle(&header_bytes, 0);
+-        let entry_hash = hashlittle(&entry_data, 0);
++        // The sorted section's hash is accumulated per entry with hashlittle2,
++        // carrying pc/pb across entries (see the kmt module). A single
++        // hashlittle over the whole block is rejected by the client as
++        // "Corruption detected in KMT file. (invalid sorted hash)".
++        let entry_hash = {
++            let (mut pc, mut pb) = (0u32, 0u32);
++            for entry in entry_data.chunks_exact(entry_size) {
++                cascette_crypto::jenkins::hashlittle2(entry, &mut pc, &mut pb);
++            }
++            pc
++        };
+ 
+         let header_block = GuardedBlockHeader {
+             block_size: u32::try_from(header_bytes.len())
+@@ -761,10 +771,11 @@ impl IndexManager {
+         };
+ 
+         // Build update section bytes (only if there are pending updates)
++        // An empty update section is still present on disk: zeroed pages, minimum size.
+         let update_data = if index.update_section.entry_count() > 0 {
+             Some(index.update_section.to_bytes())
+         } else {
+-            None
++            Some(vec![0u8; update::MIN_UPDATE_SECTION_SIZE])
+         };
+ 
+         // Sorted section ends at: 8 (header block) + 16 (header) + 8 (padding) + 8 (entry block) + entry_data.len()
+diff --git a/crates/cascette-client-storage/src/shmem/legacy.rs b/crates/cascette-client-storage/src/shmem/legacy.rs
+index cebcea4..ce3684e 100644
+--- a/crates/cascette-client-storage/src/shmem/legacy.rs
++++ b/crates/cascette-client-storage/src/shmem/legacy.rs
+@@ -1068,13 +1068,13 @@ mod windows {
+     use winapi::ctypes::c_void;
+     use winapi::shared::minwindef::{DWORD, LPVOID};
+     use winapi::um::handleapi::{CloseHandle, INVALID_HANDLE_VALUE};
+-    use winapi::um::memoryapi::{
+-        CreateFileMappingA, FILE_MAP_ALL_ACCESS, MapViewOfFile, UnmapViewOfFile,
++    use winapi::shared::sddl::{
++        ConvertStringSecurityDescriptorToSecurityDescriptorA, SDDL_REVISION_1,
+     };
++    use winapi::um::memoryapi::{FILE_MAP_ALL_ACCESS, MapViewOfFile, UnmapViewOfFile};
+     use winapi::um::minwinbase::SECURITY_ATTRIBUTES;
+-    use winapi::um::sddl::ConvertStringSecurityDescriptorToSecurityDescriptorA;
+-    use winapi::um::securitybaseapi::LocalFree;
+-    use winapi::um::winnt::{HANDLE, PAGE_READWRITE, PSECURITY_DESCRIPTOR, SDDL_REVISION_1};
++    use winapi::um::winbase::{CreateFileMappingA, LocalFree};
++    use winapi::um::winnt::{HANDLE, PAGE_READWRITE, PSECURITY_DESCRIPTOR};
+ 
+     use crate::{Result, StorageError};
+ 
+@@ -1110,7 +1110,7 @@ mod windows {
+             let success = unsafe {
+                 ConvertStringSecurityDescriptorToSecurityDescriptorA(
+                     sddl.as_ptr(),
+-                    SDDL_REVISION_1,
++                    u32::from(SDDL_REVISION_1),
+                     &mut security_descriptor,
+                     ptr::null_mut(),
+                 )

@@ -1,0 +1,127 @@
+#include "blz/Sync.hpp"
+
+namespace blz {
+
+namespace {
+
+// DIVERGED: the reference reports a failed creation through the blz assertion reporter
+// (0x140262570), which is not ported; the process is terminated the way it would be.
+[[noreturn]] void SyncFatal() {
+    if (IsDebuggerPresent()) {
+        __debugbreak();
+    }
+    TerminateProcess(GetCurrentProcess(), 1);
+    for (;;) {
+    }
+}
+
+}
+
+// ref: FUN_142366350
+bool sync_event_init(HANDLE* event, bool manualReset, bool initialState) {
+    *event = CreateEventW(nullptr, manualReset, initialState, nullptr);
+    if (*event) {
+        return true;
+    }
+    SyncFatal();
+}
+
+// ref: FUN_14025cd50
+void sync_event_set(HANDLE* event) {
+    SetEvent(*event);
+}
+
+// ref: FUN_14025cd40
+void sync_event_reset(HANDLE* event) {
+    ResetEvent(*event);
+}
+
+// ref: FUN_1423683c0
+bool sync_semaphore_init(HANDLE* semaphore, int32_t initialCount) {
+    *semaphore = CreateSemaphoreExW(nullptr, initialCount, 0x7FFFFFFF, nullptr, 0, 0x1F0003);
+    if (*semaphore) {
+        return true;
+    }
+    SyncFatal();
+}
+
+// ref: FUN_142368440
+void sync_semaphore_release(HANDLE* semaphore) {
+    ReleaseSemaphore(*semaphore, 1, nullptr);
+}
+
+// ref: FUN_1423663d0
+void sync_wait(HANDLE* handle) {
+    WaitForSingleObject(*handle, INFINITE);
+}
+
+// ref: FUN_1423663c0
+void sync_close(HANDLE* handle) {
+    CloseHandle(*handle);
+}
+
+namespace {
+
+const uint32_t WRITER = 0x80000000;
+const uint32_t READERS = 0x7FFFFFFF;
+
+// ref: FUN_142363b50
+void GateWait(CONDITION_VARIABLE* gate, SRWLOCK* lock) {
+    SleepConditionVariableSRW(gate, lock, INFINITE, 0);
+}
+
+}
+
+// ref: FUN_142362ff0
+void shared_mutex::lock() {
+    AcquireSRWLockExclusive(&this->m_lock);
+    uint32_t state = this->m_state;
+    while ((state & WRITER) != 0) {
+        GateWait(&this->m_gate1, &this->m_lock);
+        state = this->m_state;
+    }
+    this->m_state = state | WRITER;
+    while ((state & READERS) != 0) {
+        GateWait(&this->m_gate2, &this->m_lock);
+        state = this->m_state;
+    }
+    ReleaseSRWLockExclusive(&this->m_lock);
+}
+
+// ref: FUN_142363140
+void shared_mutex::unlock() {
+    AcquireSRWLockExclusive(&this->m_lock);
+    this->m_state = 0;
+    WakeAllConditionVariable(&this->m_gate1);  // FUN_142363ac0
+    ReleaseSRWLockExclusive(&this->m_lock);
+}
+
+// ref: FUN_142363060
+void shared_mutex::lock_shared() {
+    AcquireSRWLockExclusive(&this->m_lock);
+    uint32_t state = this->m_state;
+    while ((state & WRITER) != 0 || (state & READERS) == READERS) {
+        GateWait(&this->m_gate1, &this->m_lock);
+        state = this->m_state;
+    }
+    this->m_state = ((state & READERS) + 1) | (state & WRITER);
+    ReleaseSRWLockExclusive(&this->m_lock);
+}
+
+// ref: FUN_142363170
+void shared_mutex::unlock_shared() {
+    AcquireSRWLockExclusive(&this->m_lock);
+    uint32_t readers = (this->m_state & READERS) - 1;
+    uint32_t state = (this->m_state & WRITER) | readers;
+    this->m_state = state;
+    if ((state & WRITER) != 0) {
+        if (readers == 0) {
+            WakeConditionVariable(&this->m_gate2);  // FUN_142363af0
+        }
+    } else if (readers == READERS - 1) {
+        WakeConditionVariable(&this->m_gate1);
+    }
+    ReleaseSRWLockExclusive(&this->m_lock);
+}
+
+}
