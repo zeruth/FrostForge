@@ -11,6 +11,7 @@
 #include "glue/GlueMgr.hpp"
 #include "ui/FrameXML.hpp"
 #include "cas/CAS.hpp"
+#include "fileservices/AsyncFile.hpp"
 #include "console/Command.hpp"
 #include "console/Var.hpp"
 #include "os/Os.hpp"
@@ -24,28 +25,6 @@
 
 // Stage 5 of CommonMain (FUN_14022a260) and what it calls. The engine subsystems it starts after
 // the window and device are tagged stubs, called in the reference order, until each is ported.
-
-// the async file reader's thread settings
-// ref: FUN_1405da950
-void AsyncReadConfigure(int32_t threadSleep, int32_t handlerTimeout) {
-    (void)threadSleep;
-    (void)handlerTimeout;
-    FROST_UNIMPLEMENTED();
-}
-
-// enableBGDL
-// ref: FUN_1405d7c60
-void AsyncSetBackgroundDownload(int32_t enabled) {
-    (void)enabled;
-    FROST_UNIMPLEMENTED();
-}
-
-// sortDiskReads
-// ref: FUN_1405db9f0
-void AsyncSetSortReads(bool sort) {
-    (void)sort;
-    FROST_UNIMPLEMENTED();
-}
 
 // the async preload queue
 // ref: FUN_141283a80
@@ -82,11 +61,6 @@ void HardwareDetectDefaults() {
 
 // ref: FUN_140352060
 void Sub140352060() {
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_1405da0e0
-void AsyncReadShutdown() {
     FROST_UNIMPLEMENTED();
 }
 
@@ -560,11 +534,6 @@ void Sub14065FD40() {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_1405db0f0
-void AsyncReadPoll() {
-    FROST_UNIMPLEMENTED();
-}
-
 // ref: FUN_14135a290
 void Sub14135A290() {
     FROST_UNIMPLEMENTED();
@@ -572,12 +541,6 @@ void Sub14135A290() {
 
 // ref: FUN_140222a60
 void Sub140222A60() {
-    FROST_UNIMPLEMENTED();
-}
-
-// CAS
-// ref: FUN_1402cf8d0
-void Sub1402CF8D0() {
     FROST_UNIMPLEMENTED();
 }
 
@@ -1034,31 +997,16 @@ bool OnSortDiskReadsChanged(CVar* cvar, const char* oldValue, const char* newVal
     return true;
 }
 
-// The async reader reports a fatal read error (code 10 from the main thread).
+// The async reader's error handler: a full disk (tact's error 10) is fatal.
 // ref: FUN_140229cb0
-bool OnAsyncReadError(int32_t thread, int32_t error) {
-    if (thread == 0 && error == 10) {
+bool OnAsyncReadError(int32_t kind, uint32_t code, const char* text, CAsyncObject* object) {
+    (void)text;
+    (void)object;
+    if (kind == 0 && code == 10) {
         ErrorDisplayCode(0x8510006a, "", LocaleFromSystem(0), false);  // FUN_140217000
         OsTerminateProcess();
     }
     return false;
-}
-
-void (*s_asyncErrorHandler)();      // DAT_142e96e60
-
-// ref: FUN_1405db9c0
-void* AsyncSetErrorHandler(void* handler) {
-    void* previous = reinterpret_cast<void*>(s_asyncErrorHandler);
-    s_asyncErrorHandler = reinterpret_cast<void (*)()>(handler);
-    return previous;
-}
-
-void* s_asyncHooks[2];              // DAT_142e96d38, DAT_142e96dc8
-
-// ref: FUN_1405d8df0
-void AsyncSetHooks(void* a1, void* a2) {
-    s_asyncHooks[0] = a1;
-    s_asyncHooks[1] = a2;
 }
 
 // ref: FUN_140219ae0

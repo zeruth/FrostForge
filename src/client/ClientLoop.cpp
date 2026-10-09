@@ -3,7 +3,9 @@
 #include "gx/GxDevice.hpp"
 #include "gx/d3d12/DeviceD3d12.hpp"
 #include "client/Startup.hpp"
+#include "cas/CAS.hpp"
 #include "console/Command.hpp"
+#include "fileservices/AsyncFile.hpp"
 #include "gx/Gx.hpp"
 #include "os/Os.hpp"
 #include "os/Timer.hpp"
@@ -39,10 +41,8 @@ void Sub14068AAE0();
 void Sub14023D170(GXFRAMESTATS* stats);
 void Sub14065FCE0(uint32_t elapsed, uint32_t now);
 void Sub14065FD40();
-void AsyncReadPoll();
 void Sub14135A290();
 void Sub140222A60();
-void Sub1402CF8D0();
 void Sub14021F090();
 void Sub1415642A0();
 void Sub14230B040();
@@ -330,7 +330,7 @@ bool Sub1402225D0() {
     AsyncReadPoll();
     Sub14135A290();
     Sub140222A60();
-    Sub1402CF8D0();
+    cas::CASPollUpdate();
     Sub14021F090();
     Sub1415642A0();
     Sub14230B040();
