@@ -121,17 +121,4 @@ uint64_t InstanceMakeSpanResident(Instance* instance, const char* path, uint32_t
     return 0;
 }
 
-// ref: FUN_1420d4df0
-uint64_t InstanceCheckResidency(Instance* instance, const char* path, uint32_t offset, uint32_t size) {
-    (void)path;
-    (void)offset;
-    (void)size;
-    if (instance == nullptr || !instance->m_initialized) {
-        blz::log(g_logCategory, 4, s_instanceFile, 0x4e1, "Unable to check file residency. Invalid tact instance.");
-        return 0;
-    }
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 }
