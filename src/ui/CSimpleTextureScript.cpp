@@ -1045,6 +1045,12 @@ const luaL_Reg s_maskMethods[] = {
 
 }
 
+// The Region methods (0x142cf9550) every drawable region has.
+// ref: FUN_140ae5a20
+void CSimpleRegion_FillScriptMethods(lua_State* L) {
+    FrameScript_Object::FillScriptMethodTable(L, s_regionMethods, sizeof(s_regionMethods) / sizeof(s_regionMethods[0]));
+}
+
 // ref: FUN_140ae5a40
 void CSimpleTexture_FillBaseScriptMethods(lua_State* L) {
     CScriptRegion_FillScriptMethods(L);

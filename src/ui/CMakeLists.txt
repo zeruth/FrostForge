@@ -15,6 +15,9 @@ add_library(ui STATIC
     CSimpleTop.cpp
     TextureAtlas.cpp
     CSimpleFont.cpp
+    CSimpleFontScript.cpp
+    CSimpleFontString.cpp
+    CSimpleFontStringScript.cpp
     FrameXML.cpp
     UITypes.cpp
     XMLTree.cpp

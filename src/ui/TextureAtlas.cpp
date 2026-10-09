@@ -71,6 +71,18 @@ int32_t* TextureAtlasFindByElement(int32_t* member, int32_t element, TEXTUREATLA
     return member;
 }
 
+// The member of an atlas member id, through its atlas (FUN_140602ee0).
+// ref: FUN_140602ee0
+int32_t* TextureAtlasFindByMember(int32_t* member, int32_t id, TEXTUREATLASSCALE* scale) {
+    (void)id;
+    if (s_atlasesLoaded != 0) {
+        FROST_UNIMPLEMENTED();  // the member record, its atlas record and the member pick (FUN_140602c80)
+    }
+    *member = 0;
+    scale->m_set = 0;
+    return member;
+}
+
 // ref: FUN_140602aa0
 int32_t TextureAtlasGetElement(const int32_t* member) {
     const UITEXTUREATLASMEMBERREC* record = MemberRecord(*member);

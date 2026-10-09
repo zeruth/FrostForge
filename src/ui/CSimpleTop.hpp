@@ -12,6 +12,7 @@
 #include "blz/ChainedHash.hpp"
 #include "blz/RbTree.hpp"
 #include "blz/Vector.hpp"
+#include "gxu/TextBlock.hpp"
 #include "storm/list/TSList.hpp"
 #include "ui/CLayoutFrame.hpp"
 #include "ui/CRenderBatch.hpp"
@@ -228,7 +229,7 @@ void UiReleaseTexture(CTexture** texture);
 void UiGetCursorPosition(float* x, float* y);
 
 // A font handle whose last user went; it is dropped at the next UI update.
-void UiAddUnneededFontHandle(const std::weak_ptr<void>* handle);
+void UiAddUnneededFontHandle(const HTEXTFONT* handle);
 void UiReleaseUnneededFontHandles();
 
 #endif

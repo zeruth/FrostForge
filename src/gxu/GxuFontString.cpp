@@ -541,17 +541,17 @@ void CGxString::WriteGeometry(const char* text, int32_t length, GXUVECTOR<uint32
                         gap += scale * 2.0f;
                     }
                 }
-                float right = scale * texture->m_height + gap + x;
+                float right = scale * texture->m_width + gap + x;
                 texture->m_rect[1] = gap + x;
                 texture->m_rect[3] = right;
                 if (this->m_justifyV == 0) {
-                    texture->m_rect[2] = texture->m_rect[0] - scale * texture->m_width;
+                    texture->m_rect[2] = texture->m_rect[0] - scale * texture->m_height;
                 } else if (this->m_justifyV == 2) {
-                    texture->m_rect[0] = scale * texture->m_width + texture->m_rect[2];
+                    texture->m_rect[0] = scale * texture->m_height + texture->m_rect[2];
                 } else if (this->m_justifyV == 1) {
-                    float top = (texture->m_width * scale - heightPixels) * 0.5f + texture->m_rect[0];
+                    float top = (texture->m_height * scale - heightPixels) * 0.5f + texture->m_rect[0];
                     texture->m_rect[0] = top;
-                    texture->m_rect[2] = top - texture->m_width * scale;
+                    texture->m_rect[2] = top - texture->m_height * scale;
                 }
                 x = floorf(right + 0.5f);
                 if (link->m_state == 1) {
@@ -574,8 +574,8 @@ void CGxString::WriteGeometry(const char* text, int32_t length, GXUVECTOR<uint32
                 kept.m_rect[1] = texture->m_rect[1] / static_cast<float>(g_gxuScreenWidth);
                 kept.m_rect[2] = texture->m_rect[2] / static_cast<float>(g_gxuScreenHeight);
                 kept.m_rect[3] = texture->m_rect[3] / static_cast<float>(g_gxuScreenWidth);
-                kept.m_width = texture->m_width / static_cast<float>(g_gxuScreenHeight);
-                kept.m_height = texture->m_height / static_cast<float>(g_gxuScreenWidth);
+                kept.m_height = texture->m_height / static_cast<float>(g_gxuScreenHeight);
+                kept.m_width = texture->m_width / static_cast<float>(g_gxuScreenWidth);
                 kept.m_offsetX = texture->m_offsetX / static_cast<float>(g_gxuScreenWidth);
                 kept.m_offsetY = texture->m_offsetY / static_cast<float>(g_gxuScreenHeight);
                 VectorAppend(&this->m_textures, 1, kept, s_textureTag);

@@ -669,6 +669,8 @@ bool XMLDimensionGet(XMLDIMENSION* dimension, float* x, float* y, CStatus* statu
 // An element's own x/y unscaled, unless it has an <Offset> child: then the inverse of
 // XMLDimensionGet on that child (as the reference returns it).
 bool XMLOffsetGet(XMLDIMENSION* dimension, float* x, float* y, CStatus* status);
+// The packed colour of an XML colour, set or not.
+uint32_t XmlColorPack(const XMLCOLOR* color);
 bool XMLGradientGet(XMLGRADIENT* gradient, uint32_t* orientation, uint32_t* minColor, uint32_t* maxColor);
 bool XMLValueGet(XMLVALUE* value, float* result, CStatus* status);
 

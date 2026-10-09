@@ -113,8 +113,8 @@ struct GXUEMBEDDEDTEXTURE {
     const char* m_atlas;        // 0x20
     int32_t m_atlasLength;      // 0x28
     int32_t m_fileDataId;       // 0x2c
-    float m_width;              // 0x30
-    float m_height;             // 0x34
+    float m_height;             // 0x30
+    float m_width;              // 0x34
     float m_offsetX;            // 0x38
     float m_offsetY;            // 0x3c
     float m_texCoords[4];       // 0x40: top, left, bottom, right

@@ -2,6 +2,7 @@
 
 #include <cstdarg>
 #include <cstring>
+#include <string>
 
 #include "base/Status.hpp"
 #include "blz/Murmur.hpp"
@@ -1390,6 +1391,12 @@ int32_t FrameScript_PushString(const char* value) {
     return 1;
 }
 
+// ref: FUN_140644080
+int32_t FrameScript_PushLString(const char* value, uint64_t length) {
+    lua_pushlstring(FrameScript_GetContext(), value, length);
+    return 1;
+}
+
 // ref: FUN_140644050
 int32_t FrameScript_PushRef(int32_t ref) {
     lua_rawgeti(FrameScript_GetContext(), LUA_REGISTRYINDEX, ref);
@@ -1569,4 +1576,101 @@ void FrameXML_LoadKeyValues(FrameScript_Object* object, XMLOBJECT* node, CStatus
         }
         lua_settop(L, top);
     }
+}
+
+uint32_t LocaleGetPluralRule();
+uint32_t FrameXML_GetScopedState();
+
+namespace {
+
+// The last string FrameScript_GetText found (DAT_142e9a068).
+const char* s_globalText = "";
+
+}
+
+// ref: FUN_141650790
+int32_t FrameScript_GetPluralForm(uint32_t rule, int32_t count) {
+    if (rule == 0) {
+        return count != 1;
+    }
+    if (rule == 1) {
+        return 1 < count;
+    }
+    if (rule == 2) {
+        int32_t hundreds = count % 100;
+        if (hundreds != 11 && hundreds != 12 && hundreds != 13 && hundreds != 14) {
+            int32_t tens = count % 10;
+            if (tens == 1) {
+                return 0;
+            }
+            if (tens == 2 || tens == 3 || tens == 4) {
+                return 1;
+            }
+        }
+        return 2;
+    }
+    return 0;
+}
+
+// ref: FUN_14063cc10
+bool FrameScript_GetGlobalString(const char* name, const char** value, bool scoped) {
+    lua_State* L = FrameScript_GetContext();
+    if (scoped && (FrameXML_GetScopedState() & 4) != 0 && FrameScript_GetCurrentObject() != 0) {
+        lua_rawgeti(L, LUA_REGISTRYINDEX, FrameScript_GetCurrentObject());
+        if (name == nullptr) {
+            lua_pushnil(L);
+        } else {
+            lua_pushlstring(L, name, strlen(name));
+        }
+        lua_gettable(L, -2);
+        lua_remove(L, -2);
+    } else {
+        if (name == nullptr) {
+            lua_pushnil(L);
+        } else {
+            lua_pushlstring(L, name, strlen(name));
+        }
+        lua_gettable(L, LUA_GLOBALSINDEX);
+    }
+    bool found = lua_isstring(L, -1) != 0;
+    if (found) {
+        *value = lua_tostring(L, -1);
+    }
+    lua_settop(L, -2);
+    return found;
+}
+
+// ref: FUN_140641860
+const char* FrameScript_GetText(const char* name, int32_t count, int32_t gender, bool scoped) {
+    s_globalText = "";
+    int32_t form = FrameScript_GetPluralForm(LocaleGetPluralRule(), count);
+    char plural[4] = {};
+    if (static_cast<uint32_t>(form - 1) < 9) {
+        plural[0] = '_';
+        plural[1] = 'P';
+        plural[2] = static_cast<char>('0' + form);
+    }
+    const char* female = gender == 3 ? "_FEMALE" : "";
+    std::string buffer;
+    const char* key = nullptr;
+    auto build = [&](const char* first, const char* second) {
+        buffer.assign(name);
+        buffer.append(first);
+        buffer.append(second);
+        key = buffer.c_str();
+    };
+    build(plural, female);
+    if (FrameScript_GetGlobalString(key, &s_globalText, scoped)) {
+        return s_globalText;
+    }
+    build(plural, "");
+    if (FrameScript_GetGlobalString(key, &s_globalText, scoped)) {
+        return s_globalText;
+    }
+    build("", female);
+    if (FrameScript_GetGlobalString(key, &s_globalText, scoped)) {
+        return s_globalText;
+    }
+    FrameScript_GetGlobalString(name, &s_globalText, scoped);
+    return s_globalText;
 }

@@ -21,6 +21,7 @@ class CStatus;
 
 extern const char s_maskedTextureTag[];
 extern const char s_maskTextureTag[];
+extern const char s_textureListTag[];
 
 // TSGrowableArray<CArgb> (0x20 bytes).
 struct ARGBARRAY {

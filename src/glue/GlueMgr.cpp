@@ -10,6 +10,8 @@
 #include "storm/String.hpp"
 #include "storm/Memory.hpp"
 #include "framescript/FrameScriptObject.hpp"
+#include "client/Locale.hpp"
+#include "ui/CSimpleFont.hpp"
 #include "ui/CSimpleFrame.hpp"
 #include "ui/CSimpleTop.hpp"
 #include "ui/FrameXML.hpp"
@@ -278,13 +280,6 @@ void Sub14196FF50(uint32_t value) {
     FROST_UNIMPLEMENTED();
 }
 
-// The account's expansion level as the glue sees it.
-// ref: FUN_1405d5790
-int32_t GetAccountExpansion() {
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // Glue script globals and API tables, in registration order.
 
 // ref: FUN_1416a4070
@@ -418,15 +413,6 @@ void Sub1416A7840() {
     FROST_UNIMPLEMENTED();
 }
 
-// A localized string from the Lua string tables (GlobalStrings), with gender variants.
-// ref: FUN_140641860
-const char* FrameScript_GetText(const char* name, int32_t count, int32_t gender) {
-    (void)count;
-    (void)gender;
-    FROST_UNIMPLEMENTED();
-    return name;
-}
-
 // ref: FUN_141d06200
 void SetVisitableUrl(uint32_t index, const char* url) {
     (void)index;
@@ -554,7 +540,7 @@ void CGlueMgr::Initialize() {
     Sub141C9A070(0);
     FrameScript_Reinitialize(false);
     Sub14196FF50(2);
-    if (GetAccountExpansion() == 4) {
+    if (LocaleGetText() == 4) {
         // the CONVERT_TITLE / CONVERT_DESCRIPTION / CONVERT_LEFTOVER_MINUTES globals
         FROST_UNIMPLEMENTED();
     }
@@ -587,7 +573,23 @@ void CGlueMgr::Initialize() {
     FrameXML_FreeVirtuals();
     FrameXML_FreeIntrinsics();
     Sub1416A7840();
-    // the expansion level as FrameXML's version selector (0x142e99c24)
+    // the alphabet font families take their settings from (0x142e99c24)
+    switch (LocaleGetText()) {
+    case 1:
+        CSimpleFont::s_alphabet = CSimpleFont::ALPHABET_KOREAN;
+        break;
+    case 4:
+        CSimpleFont::s_alphabet = CSimpleFont::ALPHABET_SIMPLIFIED_CHINESE;
+        break;
+    case 5:
+        CSimpleFont::s_alphabet = CSimpleFont::ALPHABET_TRADITIONAL_CHINESE;
+        break;
+    case 8:
+        CSimpleFont::s_alphabet = CSimpleFont::ALPHABET_RUSSIAN;
+        break;
+    default:
+        break;
+    }
     FrameXML_LoadToc("Interface\\GlueXML\\GlueXML_Wrath.toc", nullptr, &status, false, 7);
     SetVisitableUrl(0, FrameScript_GetText("VISITABLE_URL_GENERIC", -1, 0));
     for (uint32_t i = 1; i < 0x3D; i++) {

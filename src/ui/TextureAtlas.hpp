@@ -17,6 +17,7 @@ struct TEXTUREATLASSCALE {
 // when the tables have none.
 int32_t* TextureAtlasFindByName(int32_t* member, const char* name, TEXTUREATLASSCALE* scale);
 int32_t* TextureAtlasFindByElement(int32_t* member, int32_t element, TEXTUREATLASSCALE* scale);
+int32_t* TextureAtlasFindByMember(int32_t* member, int32_t id, TEXTUREATLASSCALE* scale);
 // The member's element (FUN_140602aa0), its atlas file (FUN_140602b20), its size in texels
 // (FUN_140602880), its path when it has one (FUN_140603040) and whether it tiles
 // (FUN_1406035a0, FUN_1406035e0).

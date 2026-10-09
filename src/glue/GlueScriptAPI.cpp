@@ -4,6 +4,8 @@
 
 #include "glue/GlueScriptAPI.hpp"
 
+#include "ui/CSimpleFont.hpp"
+#include "ui/CSimpleFontString.hpp"
 #include "ui/CSimpleFrame.hpp"
 #include "ui/CSimpleTexture.hpp"
 #include "util/Unimplemented.hpp"
@@ -322,17 +324,17 @@ void ScriptClass_EditBox(lua_State* L) {
 }
 
 // the Font metatables.
-// ref: FUN_14062a960
+// ref: FUN_140a51310
 void ScriptClass_Font(lua_State* L) {
     (void)L;
-    FROST_UNIMPLEMENTED();
+    CSimpleFont::CreateScriptMetaTables();
 }
 
 // the FontString metatables.
-// ref: FUN_140623c70
+// ref: FUN_140a51320
 void ScriptClass_FontString(lua_State* L) {
     (void)L;
-    FROST_UNIMPLEMENTED();
+    CSimpleFontString::CreateScriptMetaTables();
 }
 
 // the SimpleHTML metatables.

@@ -355,8 +355,10 @@ class CSimpleFrame : public CScriptRegion, public CAnimatableObject {
     void GetBoundsRectLua(float* left, float* bottom, float* width, float* height);
 
     // ---- hyperlinks ------------------------------------------------------------------------
-    void RunOnHyperlinkClick(const void* link, const void* text, const char* button, CSimpleRegion* region, const CRect* rect);
-    void RunOnHyperlinkEnter(const void* link, const void* text, CSimpleRegion* region, const CRect* rect);
+    void RunOnHyperlinkClick(const FRAMESCRIPT_LSTRING* link, const FRAMESCRIPT_LSTRING* text, const char* button,
+        CSimpleRegion* region, const CRect* rect);
+    void RunOnHyperlinkEnter(const FRAMESCRIPT_LSTRING* link, const FRAMESCRIPT_LSTRING* text, CSimpleRegion* region,
+        const CRect* rect);
     void RunOnHyperlinkLeave();
 
     // ---- XML -------------------------------------------------------------------------------

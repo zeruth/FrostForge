@@ -246,15 +246,6 @@ void MaskTexCoords(float* out, const float* corners, const float* extent) {
     }
 }
 
-// The packed colour of an XML colour, set or not (FUN_140667b40).
-// ref: FUN_140667b40
-uint32_t XmlColorPack(const XMLCOLOR* color) {
-    auto channel = [](float value) {
-        return static_cast<uint32_t>(static_cast<int64_t>(value * 255.0f + 0.5f)) & 0xff;
-    };
-    return channel(color->m_a) << 24 | channel(color->m_r) << 16 | channel(color->m_g) << 8 | channel(color->m_b);
-}
-
 // The Gx flags and create flags a texture's settings make.
 uint64_t TextureGxFlags(uint32_t flags) {
     return ((flags & 0x1c00) | 0x20800000) >> 10 | (flags & 0x3f0);

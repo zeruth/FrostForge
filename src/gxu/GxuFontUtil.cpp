@@ -775,9 +775,9 @@ bool GxuFontParseAtlasCode(const char* text, GXUEMBEDDEDTEXTURE* texture, float 
     }
     CopyField(field, start, fieldEnd);
     float value = SStrToFloat(field) * sizeScale;
-    texture->m_width = value;
+    texture->m_height = value;
     if (0.0f >= value) {
-        texture->m_width = lineHeight;
+        texture->m_height = lineHeight;
     }
     start = fieldEnd + 1;
     fieldEnd = FieldEnd(start, end);
@@ -787,9 +787,9 @@ bool GxuFontParseAtlasCode(const char* text, GXUEMBEDDEDTEXTURE* texture, float 
     CopyField(field, start, fieldEnd);
     float second = SStrToFloat(field);
     if (0.0f < second) {
-        lineHeight = 0.0f < value ? second * sizeScale : second * texture->m_width;
+        lineHeight = 0.0f < value ? second * sizeScale : second * texture->m_height;
     }
-    texture->m_height = lineHeight;
+    texture->m_width = lineHeight;
     start = fieldEnd + 1;
     fieldEnd = FieldEnd(start, end);
     if (end <= start) {
@@ -863,22 +863,22 @@ bool GxuFontParseTextureCode(const char* text, GXUEMBEDDEDTEXTURE* texture, floa
     }
     CopyField(field, start, fieldEnd);
     float value = SStrToFloat(field) * sizeScale;
-    texture->m_width = value;
+    texture->m_height = value;
     if (0.0f >= value) {
-        texture->m_width = lineHeight;
+        texture->m_height = lineHeight;
     }
     start = fieldEnd + 1;
     fieldEnd = FieldEnd(start, end);
     if (end <= start) {
-        texture->m_height = texture->m_width;
+        texture->m_width = texture->m_height;
         return true;
     }
     CopyField(field, start, fieldEnd);
     float second = SStrToFloat(field);
     if (0.0f < second) {
-        lineHeight = 0.0f < value ? second * sizeScale : second * texture->m_width;
+        lineHeight = 0.0f < value ? second * sizeScale : second * texture->m_height;
     }
-    texture->m_height = lineHeight;
+    texture->m_width = lineHeight;
     start = fieldEnd + 1;
     fieldEnd = FieldEnd(start, end);
     if (end <= start) {

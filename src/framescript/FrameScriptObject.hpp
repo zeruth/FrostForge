@@ -47,6 +47,12 @@ int32_t FrameScript_PushFloat(float value);
 int32_t FrameScript_PushRef(int32_t ref);
 int32_t FrameScript_PushNumber(double value);
 int32_t FrameScript_PushString(const char* value);
+// A counted string (a blz::string_view) pushed as a Lua string.
+struct FRAMESCRIPT_LSTRING {
+    const char* m_data;
+    uint64_t m_size;
+};
+int32_t FrameScript_PushLString(const char* value, uint64_t length);
 int32_t FrameScript_PushBoolean(bool value);
 inline int32_t FrameScript_PushArg(int32_t value) {
     return FrameScript_PushInteger(value);
@@ -62,6 +68,9 @@ inline int32_t FrameScript_PushArg(FRAMESCRIPT_REF value) {
 }
 inline int32_t FrameScript_PushArg(const char* value) {
     return FrameScript_PushString(value);
+}
+inline int32_t FrameScript_PushArg(FRAMESCRIPT_LSTRING value) {
+    return FrameScript_PushLString(value.m_data, value.m_size);
 }
 inline int32_t FrameScript_PushArg(bool value) {
     return FrameScript_PushBoolean(value);

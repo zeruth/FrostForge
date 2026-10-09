@@ -11,6 +11,8 @@
 #include "framescript/Taint.hpp"
 #include "ui/CAnimatableObject.hpp"
 #include "ui/CLayoutFrame.hpp"
+#include "ui/CSimpleFont.hpp"
+#include "ui/CSimpleFontString.hpp"
 #include "ui/CSimpleFrame.hpp"
 #include "ui/CSimpleRegion.hpp"
 #include "ui/CSimpleTexture.hpp"
@@ -78,7 +80,7 @@ struct OPTIONALARG {
 
 // ---- the region factories --------------------------------------------------------------
 
-// CSimpleFontString and CSimpleLine are not ported yet.
+// CSimpleLine is not ported yet.
 
 // FUN_1424c9a80
 // The texture-like regions frame:CreateTexture and frame:CreateMaskTexture make: the template
@@ -136,15 +138,53 @@ CSimpleRegion* CreateTextureRegion(CSimpleFrame* frame, const OPTIONALARG<const 
     return CreateTextureLikeRegion<CSimpleTexture>(frame, name, layer, inherits, subLevel);
 }
 
-// FUN_1424c9d50
+// A font string: the template is a font object, or an XML node it loads.
+// ref: FUN_1424c9d50
 CSimpleRegion* CreateFontStringRegion(CSimpleFrame* frame, const OPTIONALARG<const char*>* name, const OPTIONALARG<uint32_t>* layer,
     const OPTIONALARG<const char*>* inherits) {
-    (void)frame;
-    (void)name;
-    (void)layer;
-    (void)inherits;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    char templateName[0x80] = {};
+    XMLOBJECT* node = nullptr;
+    bool busy = false;
+    const char* taint = nullptr;
+    CSimpleFont* font = nullptr;
+    if (inherits->m_set && inherits->m_value != nullptr) {
+        font = CSimpleFont::GetFont(inherits->m_value, false);
+        if (font == nullptr) {
+            busy = true;
+            CopyBounded(templateName, inherits->m_value, sizeof(templateName));
+            node = FrameXML_AcquireVirtual(templateName, &taint, &busy);
+            if (node == nullptr) {
+                FrameScript_ActionError("Couldn't find inherited node \"%s\"", templateName);
+                return nullptr;
+            }
+            if (busy) {
+                FrameScript_ActionError("Recursively inherited node \"%s\"", templateName);
+                return nullptr;
+            }
+        }
+    }
+    auto string = new CSimpleFontString(frame, static_cast<uint8_t>(layer->m_set ? layer->m_value : 2), true);
+    if (font != nullptr) {
+        string->SetFontObject(font);
+    }
+    if (name->m_set && name->m_value != nullptr && *name->m_value != '\0') {
+        string->SetName(name->m_value);
+    }
+    if (font == nullptr && node != nullptr) {
+        CScriptStatus status;
+        string->FrameScript_Object::LoadXML(node, &status, nullptr);
+        string->LoadXML(node, &status, nullptr);
+        string->PostLoadXML(node, &status);
+    }
+    CAnimatableObject* animatable = string;
+    if (animatable->IsPlaying()) {
+        animatable->OnAnimStarted(animatable->IsAnimatingAlpha(), animatable->IsAnimatingTransform(),
+            animatable->IsAnimatingRectOffset());
+    }
+    if (node != nullptr && !busy) {
+        FrameXML_ReleaseVirtual(templateName);
+    }
+    return string;
 }
 
 // FUN_1424c94b0

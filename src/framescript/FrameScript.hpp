@@ -103,5 +103,18 @@ void FrameScript_SetUserErrorHandler(int32_t ref);
 double FrameScript_GetProfileTickMs();
 // The keystream math.random draws from.
 ARC4STATE* FrameScript_GetRandom();
+// A localized string from the Lua string tables (GlobalStrings): the plural form for `count`
+// and the _FEMALE form for gender 3 are tried first; "" when there is none. `scoped` looks in
+// the running object's table first while FrameXML's scoped state asks for it.
+const char* FrameScript_GetText(const char* name, int32_t count, int32_t gender, bool scoped = false);
+// The global string named `name`, or the running object's field while scoped (FUN_14063cc10).
+bool FrameScript_GetGlobalString(const char* name, const char** value, bool scoped);
+// The plural form of `count` under a locale's plural rule: 0 singular, 1 plural, 2 the
+// Slavic genitive plural (FUN_141650790).
+int32_t FrameScript_GetPluralForm(uint32_t rule, int32_t count);
+struct lua_State;
+// string.format over the arguments from `index` (the format) on, into a buffer of `size`
+// bytes; %d, %i and %F numbers get the locale's decimal mark.
+char* FrameScript_FormatString(lua_State* L, int32_t index, char* buffer, uint32_t size);
 
 #endif

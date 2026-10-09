@@ -726,7 +726,7 @@ struct GROUPNODE {
 // A font handle dropped at the next update (0x20): its link and the shared handle.
 struct UNNEEDED_FONTHANDLE {
     TSLink<UNNEEDED_FONTHANDLE> m_link;     // 0x00
-    std::shared_ptr<void> m_handle;         // 0x10
+    HTEXTFONT m_handle;                     // 0x10
 };
 
 // The handles (0x142cce7a0).
@@ -735,11 +735,11 @@ TSList<UNNEEDED_FONTHANDLE, TSGetLink<UNNEEDED_FONTHANDLE>, 8> s_unneededFontHan
 }
 
 // ref: FUN_1405f6260
-void UiAddUnneededFontHandle(const std::weak_ptr<void>* handle) {
+void UiAddUnneededFontHandle(const HTEXTFONT* handle) {
     void* memory = SMemAlloc(sizeof(UNNEEDED_FONTHANDLE), 8, s_fontHandleTag, 0, -2, 8);
     auto node = new (memory) UNNEEDED_FONTHANDLE();
     s_unneededFontHandles.LinkToTail(node);
-    node->m_handle = handle->lock();
+    node->m_handle = *handle;
 }
 
 // ref: FUN_1405f7340

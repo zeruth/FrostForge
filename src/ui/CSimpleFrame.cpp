@@ -1966,6 +1966,62 @@ bool CSimpleFrame::GetHyperlinksPropagated() {
     return (this->m_frameFlags & FRAME_PROPAGATE_HYPERLINKS) && this->m_parent != nullptr && this->m_parent->GetHyperlinksEnabled();
 }
 
+namespace {
+
+// A hyperlink's rect (bottom, left, top, right in UI units of `region`) as the left, bottom,
+// width and height in pixels at 768 high that the handlers get.
+void HyperlinkRectToPixels(const CRect* rect, CScriptRegion* region, float* values) {
+    const COORDINATESPACE& space = g_coordinateSpace;
+    float pixels = space.m_aspectCompensation * 1024.0f;
+    float across = 1.0f / space.m_diagonalWidth;
+    float scale = 1.0f / region->m_layoutScale;
+    values[0] = rect->minX * scale * across * pixels;
+    values[1] = rect->maxY * scale * across * pixels;
+    values[2] = (rect->maxX - rect->minX) * scale * across * pixels;
+    values[3] = (rect->maxY - rect->minY) * scale * across * pixels;
+}
+
+}
+
+// The OnHyperlinkClick handler, or the parent's when this frame passes its links up.
+// ref: FUN_14061a390
+void CSimpleFrame::RunOnHyperlinkClick(const FRAMESCRIPT_LSTRING* link, const FRAMESCRIPT_LSTRING* text,
+    const char* button, CSimpleRegion* region, const CRect* rect) {
+    if ((this->m_frameFlags & FRAME_PROPAGATE_HYPERLINKS) == 0) {
+        float values[4];
+        HyperlinkRectToPixels(rect, region, values);
+        FRAMESCRIPT_REF ref = { region->GetLuaRef() };
+        this->RunScript(0x17, nullptr, *link, *text, button, ref, values[0], values[1], values[2], values[3]);
+    } else if (this->m_parent != nullptr && this->m_parent->GetHyperlinksEnabled()) {
+        this->m_parent->RunOnHyperlinkClick(link, text, button, region, rect);
+    }
+}
+
+// ref: FUN_14061a5c0
+void CSimpleFrame::RunOnHyperlinkEnter(const FRAMESCRIPT_LSTRING* link, const FRAMESCRIPT_LSTRING* text,
+    CSimpleRegion* region, const CRect* rect) {
+    if ((this->m_frameFlags & FRAME_PROPAGATE_HYPERLINKS) == 0) {
+        float values[4];
+        HyperlinkRectToPixels(rect, region, values);
+        FRAMESCRIPT_REF ref = { region->GetLuaRef() };
+        this->RunScript(0x18, nullptr, *link, *text, ref, values[0], values[1], values[2], values[3]);
+    } else if (this->m_parent != nullptr && this->m_parent->GetHyperlinksEnabled()) {
+        this->m_parent->RunOnHyperlinkEnter(link, text, region, rect);
+    }
+}
+
+// ref: FUN_14061a7d0
+void CSimpleFrame::RunOnHyperlinkLeave() {
+    CSimpleFrame* frame = this;
+    while ((frame->m_frameFlags & FRAME_PROPAGATE_HYPERLINKS) != 0) {
+        if (frame->m_parent == nullptr || !frame->m_parent->GetHyperlinksEnabled()) {
+            return;
+        }
+        frame = frame->m_parent;
+    }
+    frame->RunScript(0x19, nullptr);
+}
+
 // ref: FUN_14061b1f0
 void CSimpleFrame::LockHighlight(bool lock) {
     if (((this->m_frameFlags >> 24) & 1) == static_cast<uint32_t>(lock)) {

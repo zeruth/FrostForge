@@ -992,8 +992,8 @@ void GxuFontStringGetPosition(float* position, CGxString* string) {
 }
 
 // ref: FUN_14068ac40
-float* GxuFontStringGetHeightField(CGxString* string) {
-    return string != nullptr ? &string->m_requestedHeight : nullptr;
+const char* GxuFontGetFontName(CGxuFont* font) {
+    return font != nullptr ? font->m_path : nullptr;
 }
 
 // ref: FUN_14068b9c0

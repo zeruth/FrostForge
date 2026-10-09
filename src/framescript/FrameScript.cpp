@@ -736,3 +736,121 @@ double FrameScript_GetProfileTickMs() {
 ARC4STATE* FrameScript_GetRandom() {
     return &s_random;
 }
+
+// ref: FUN_140641c60
+char* FrameScript_FormatString(lua_State* L, int32_t index, char* buffer, uint32_t size) {
+    size_t length = 0;
+    const char* format = luaL_checklstring(L, index, &length);
+    const char* end = format + length;
+    char* out = buffer;
+    int32_t arg = index;
+    if (format >= end) {
+        *buffer = '\0';
+        return buffer;
+    }
+    const char* next = format;
+    do {
+        if (size < 2) {
+            break;
+        }
+        next = format + 1;
+        if (*format != '%') {
+            *out++ = *format;
+            size--;
+            format = next;
+            continue;
+        }
+        char c = *next;
+        if (c == '%') {
+            *out++ = '%';
+            next = format + 2;
+            size--;
+            format = next;
+            continue;
+        }
+        char spec[0x80];
+        spec[0] = '%';
+        if (static_cast<uint8_t>(c - '0') < 10 && format[2] == '$') {
+            arg = c - '1' + index;
+            next = format + 3;
+        }
+        arg++;
+        const char* s = next;
+        while (static_cast<uint8_t>(*s) <= 0x30 && ((0x1280900000000ull >> (static_cast<uint8_t>(*s) & 0x3f)) & 1) != 0) {
+            s++;
+        }
+        while ('/' < *s && *s < ':') {
+            s++;
+        }
+        if (*s == '.') {
+            s++;
+        }
+        if (*s == '-') {
+            s++;
+        }
+        while ('/' < *s && *s < ':') {
+            s++;
+        }
+        size_t width = static_cast<size_t>(s - next);
+        if (0x7d < width) {
+            luaL_error(L, "invalid format (width or precision too long)");
+        }
+        std::memcpy(spec + 1, next, width + 1);
+        spec[width + 2] = '\0';
+        char conversion = *s;
+        next = s + 1;
+        int32_t written = 0;
+        bool decimal = false;
+        switch (conversion) {
+        case 'E':
+        case 'G':
+        case 'e':
+        case 'f':
+        case 'g':
+            written = static_cast<int32_t>(SStrPrintf(out, size, spec, luaL_checknumber(L, arg)));
+            break;
+        case 'F':
+            for (char* p = spec; *p != '\0'; p++) {
+                if (*p == 'F') {
+                    *p = 'f';
+                }
+            }
+            written = static_cast<int32_t>(SStrPrintf(out, size, spec, luaL_checknumber(L, arg)));
+            decimal = true;
+            break;
+        case 'X':
+        case 'o':
+        case 'u':
+        case 'x':
+            written = static_cast<int32_t>(SStrPrintf(out, size, spec, static_cast<int32_t>(luaL_checkinteger(L, arg))));
+            break;
+        case 'c':
+            *out++ = static_cast<char>(luaL_checkinteger(L, arg));
+            size--;
+            break;
+        case 'd':
+        case 'i':
+            written = static_cast<int32_t>(SStrPrintf(out, size, spec, static_cast<int32_t>(luaL_checkinteger(L, arg))));
+            decimal = true;
+            break;
+        case 's': {
+            size_t ignored = 0;
+            written = static_cast<int32_t>(SStrPrintf(out, size, spec, luaL_checklstring(L, arg, &ignored)));
+            break;
+        }
+        default:
+            luaL_error(L, "invalid option in `format'");
+            break;
+        }
+        if (0 < written) {
+            if (decimal) {
+                lua_convertdecimal(out);
+            }
+            out += written;
+            size -= static_cast<uint32_t>(written);
+        }
+        format = next;
+    } while (next < end);
+    *out = '\0';
+    return buffer;
+}

@@ -4,6 +4,7 @@
 #include <cstdarg>
 #include <cstddef>
 #include <cstring>
+#include <new>
 
 #include "cas/CAS.hpp"
 #include "console/Var.hpp"
@@ -17,6 +18,7 @@
 #include "ui/CLayoutFrame.hpp"
 #include "ui/CScriptObject.hpp"
 #include "ui/CSimpleFont.hpp"
+#include "ui/CSimpleFontString.hpp"
 #include "ui/CSimpleFrame.hpp"
 #include "ui/XMLTree.hpp"
 #include "util/Unimplemented.hpp"
@@ -723,10 +725,45 @@ void FrameXML_Walk(const char* path, const char* dir, const char* arg, CScriptSt
                 // Each <Member alphabet="..."> builds the family's font for one of five
                 // alphabets (roman, korean, simplifiedchinese, traditionalchinese, russian);
                 // a missing one is reported, and the family takes the client's alphabet.
-                // Needs CSimpleFont's layout (its five member slots, 0x98..0xb8).
                 CSimpleFont* family = CSimpleFont::GetFont(node->m_name.m_text, true);
-                (void)family;
-                FROST_UNIMPLEMENTED();
+                for (XMLOBJECT* member = node->m_child; member != nullptr; member = member->m_next) {
+                    if ((member->m_attributes & 2) == 0 || (static_cast<XMLFILE*>(member)->m_fileFlags & 1) == 0) {
+                        continue;
+                    }
+                    const char* alphabet = static_cast<XMLFILE*>(member)->m_file.m_text;
+                    int32_t slot;
+                    if (_stricmp("roman", alphabet) == 0) {
+                        slot = 0;
+                    } else if (_stricmp("korean", alphabet) == 0) {
+                        slot = 1;
+                    } else if (_stricmp("simplifiedchinese", alphabet) == 0) {
+                        slot = 2;
+                    } else if (_stricmp("traditionalchinese", alphabet) == 0) {
+                        slot = 3;
+                    } else if (_stricmp("russian", alphabet) == 0) {
+                        slot = 4;
+                    } else {
+                        continue;
+                    }
+                    if (family->m_members[slot] != nullptr) {
+                        status->Add(1, "FontFamily already includes member for alphabet %d");
+                        continue;
+                    }
+                    XMLOBJECT* font = XMLObjectFindChild(member, XMLTYPE_FONT);
+                    if (font != nullptr) {
+                        void* memory = SMemAlloc(sizeof(CSimpleFont), 1,
+                            "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\FrameXML\\FrameXML.cpp", 0, 0x1eb, 0);
+                        family->m_members[slot] = new (memory) CSimpleFont();
+                        family->m_members[slot]->LoadXML(font, status);
+                    }
+                }
+                for (int32_t slot = 0; slot < CSimpleFont::NUM_ALPHABETS; slot++) {
+                    if (family->m_members[slot] == nullptr) {
+                        const char* name = family->GetName();
+                        status->Add(1, "FontFamily %s missing alphabet %d", name != nullptr ? name : "nameless-font", slot);
+                    }
+                }
+                family->CSimpleFontable::SetFontObject(family->m_members[CSimpleFont::s_alphabet]);
             }
         } else {
             uint32_t attributes = node->m_attributes;
@@ -1048,11 +1085,15 @@ CSimpleFrame* FrameXML_CreateFrame(XMLOBJECT* object, CSimpleFrame* parent, CScr
 
 // ref: FUN_1406685c0
 CSimpleRegion* FrameXML_CreateFontString(XMLOBJECT* object, CSimpleFrame* frame, CScriptStatus* status) {
-    (void)object;
-    (void)frame;
-    (void)status;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    auto string = new CSimpleFontString(frame, 2, true);
+    // FUN_140628110
+    if ((object->m_attributes & 0x40) != 0) {
+        string->SetName(object->m_name.m_text);
+    }
+    string->FrameScript_Object::LoadXML(object, status, nullptr);
+    string->LoadXML(object, status, nullptr);
+    string->PostLoadXML(object, status);
+    return string;
 }
 
 // ref: FUN_140668680

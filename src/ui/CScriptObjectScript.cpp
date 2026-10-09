@@ -179,6 +179,12 @@ const luaL_Reg s_scriptObjectMethods[] = {
 
 }
 
+// The object methods alone, for objects that are not script regions (fonts).
+// ref: FUN_140a512b0
+void CScriptObject_FillObjectScriptMethods(lua_State* L) {
+    FrameScript_Object::FillScriptMethodTable(L, s_objectMethods, 5);
+}
+
 // ref: FUN_140a51270
 void CScriptObject_FillScriptMethods(lua_State* L) {
     FrameScript_Object::FillScriptMethodTable(L, s_objectMethods, 5);

@@ -61,6 +61,7 @@ void GxuFontDestroyFont(CGxuFont** font);                   // FUN_14068ab80
 int32_t GxuFontGetFileDataId(CGxuFont* font);               // FUN_14068ac20
 uint32_t GxuFontGetFlags(CGxuFont* font);                   // FUN_14068ac30
 uint32_t GxuFontGetPixelSize(CGxuFont* font);               // FUN_14068b1b0
+const char* GxuFontGetFontName(CGxuFont* font);             // FUN_14068ac40, the path it was made from
 void GxuFontSetFlag40(CGxuFont* font);                      // FUN_14068b750
 float GxuFontGetOneToOneHeight(CGxuFont* font);             // FUN_14068b180
 float GxuFontGetEffectiveHeight(CGxuFont* font, float height, uint32_t flags);  // FUN_14068ac70
@@ -114,7 +115,6 @@ void GxuFontStringSetScale(CGxString* string, float scale);         // FUN_14068
 void GxuFontStringSetRotation(CGxString* string, float rotation);   // FUN_14068b760
 int32_t GxuFontStringSetGradient(CGxString* string, int32_t start, int32_t length);  // FUN_14068ba30
 void GxuFontStringGetPosition(float* position, CGxString* string);  // FUN_14068b1c0
-float* GxuFontStringGetHeightField(CGxString* string);      // FUN_14068ac40
 int32_t GxuFontStringGetHyperlinks(CGxString* string, GXUHYPERLINKINFO** links);   // FUN_14068b9c0
 int32_t GxuFontStringGetTextures(CGxString* string, GXUEMBEDDEDTEXTURE** textures);  // FUN_14068b9b0
 bool GxuFontStringRemoveFromBatch(CGxString* string);       // FUN_14068b650

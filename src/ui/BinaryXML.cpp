@@ -566,6 +566,15 @@ bool XMLGradientGet(XMLGRADIENT* gradient, uint32_t* orientation, uint32_t* minC
     return true;
 }
 
+// The packed colour of an XML colour, set or not (FUN_140667b40).
+// ref: FUN_140667b40
+uint32_t XmlColorPack(const XMLCOLOR* color) {
+    auto channel = [](float value) {
+        return static_cast<uint32_t>(static_cast<int64_t>(value * 255.0f + 0.5f)) & 0xff;
+    };
+    return channel(color->m_a) << 24 | channel(color->m_r) << 16 | channel(color->m_g) << 8 | channel(color->m_b);
+}
+
 // ref: FUN_14066a2b0
 bool XMLOffsetGet(XMLDIMENSION* dimension, float* x, float* y, CStatus* status) {
     for (XMLOBJECT* child = dimension->m_child; child; child = child->m_next) {

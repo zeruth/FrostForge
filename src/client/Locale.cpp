@@ -273,6 +273,11 @@ void LocaleSetFontGroup(uint32_t group) {
     s_fontGroup = group;
 }
 
+// The plural rule GlobalStrings lookups use (DAT_142e9a060).
+uint32_t LocaleGetPluralRule() {
+    return s_fontGroup;
+}
+
 namespace {
 
 // DAT_1426c44f0: each locale's bit in the build manifest's locale flags.
