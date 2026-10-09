@@ -35,50 +35,6 @@ bool Present(lua_State* L, int32_t index) {
     return lua_type(L, index) >= 1;
 }
 
-// FUN_1408a7520: a texture asset argument: nil (none), a FileDataID, a path or atlas name, or
-// a texture object. False when the value is none of those.
-bool AssetValue(lua_State* L, int32_t index, TEXTURESOURCE* source) {
-    int32_t type = lua_type(L, index);
-    if (type == LUA_TNIL) {
-        *source = TEXTURESOURCE::FromTexture(nullptr);
-        return true;
-    }
-    if (type == LUA_TNUMBER) {
-        *source = TEXTURESOURCE::FromFileId(static_cast<int32_t>(lua_tonumber(L, index)));
-        return true;
-    }
-    if (type == LUA_TSTRING) {
-        *source = TEXTURESOURCE::FromString(lua_tolstring(L, index, nullptr));
-        return true;
-    }
-    if (type != LUA_TTABLE) {
-        return false;
-    }
-    const char* error = nullptr;
-    auto texture = static_cast<CSimpleTexture*>(
-        FrameScript_Object::GetObjectFromLua(&error, L, CSimpleTexture::GetObjectType(), index, false, false));
-    if (texture == nullptr) {
-        return false;
-    }
-    *source = TEXTURESOURCE::FromTexture(texture);
-    return true;
-}
-
-// FUN_1407ff990: the asset argument at *index, required.
-TEXTURESOURCE RequiredAsset(lua_State* L, int32_t* index, const char* usage) {
-    TEXTURESOURCE source = TEXTURESOURCE::FromFileId(0);
-    if (!Present(L, *index)) {
-        luaL_error(L, usage);
-        return source;
-    }
-    if (!AssetValue(L, *index, &source)) {
-        luaL_argerror(L, *index, usage);
-        return source;
-    }
-    (*index)++;
-    return source;
-}
-
 // FUN_1407d1140: an atlas name's member (0 for none).
 int32_t AtlasArgument(lua_State* L, int32_t* index) {
     int32_t member = 0;
@@ -458,7 +414,7 @@ int32_t SetStateTextureBody(lua_State* L, void* context, const char* usage, cons
     auto args = static_cast<ASSETARGS*>(context);
     int32_t index = 1;
     args->m_button = ButtonSelf(L, &index, usage);
-    args->m_source = RequiredAsset(L, &index, usage);
+    args->m_source = TextureSourceArgument(L, &index, usage);
     args->m_button->SetStateTexture(State, &args->m_source);
     RaisePendingError(L, args->m_button, method);
     return 0;
@@ -503,7 +459,7 @@ int32_t SetHighlightTextureBody(lua_State* L, void* context) {
     auto args = static_cast<ASSETARGS*>(context);
     int32_t index = 1;
     args->m_button = ButtonSelf(L, &index, usage);
-    args->m_source = RequiredAsset(L, &index, usage);
+    args->m_source = TextureSourceArgument(L, &index, usage);
     OptionalBlendMode(L, &index, usage, args->m_blend);
     args->m_button->SetHighlight(&args->m_source, args->m_blend);
     RaisePendingError(L, args->m_button, "SetHighlightTexture");

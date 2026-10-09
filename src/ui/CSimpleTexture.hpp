@@ -27,6 +27,8 @@ extern const char s_textureListTag[];
 // What a texture can be set from (the variant the Lua asset arguments and the buttons' state
 // textures pass around, 0x10 bytes): 1 or 2 a FileDataID, 3 an atlas member, 4 another texture
 // (whose own source is taken; null clears).
+struct lua_State;
+
 struct TEXTURESOURCE {
     enum : int32_t {
         SOURCE_FILE = 1,
@@ -52,6 +54,12 @@ struct TEXTURESOURCE {
     // FUN_140638960: the FileDataID it stands for (an atlas's file, a texture's file).
     int32_t GetFileDataId() const;
 };
+
+// A texture asset argument (FUN_1408a7520): nil (no texture), a FileDataID, a path or atlas
+// name, or a texture object. False when the value is none of those.
+bool TextureSourceFromLua(lua_State* L, int32_t index, TEXTURESOURCE* source);
+// The asset argument at *index, required (FUN_1407ff990); advances past it.
+TEXTURESOURCE TextureSourceArgument(lua_State* L, int32_t* index, const char* usage);
 
 struct ARGBARRAY {
     uint32_t m_count;               // 0x00

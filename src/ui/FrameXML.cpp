@@ -18,6 +18,7 @@
 #include "ui/CLayoutFrame.hpp"
 #include "ui/CScriptObject.hpp"
 #include "ui/CSimpleButton.hpp"
+#include "ui/CSimpleSlider.hpp"
 #include "ui/CSimpleScrollFrame.hpp"
 #include "ui/CSimpleCheckButton.hpp"
 #include "ui/CSimpleFont.hpp"
@@ -257,9 +258,7 @@ CSimpleFrame* CreateScrollFrame(CSimpleFrame* parent) {
 
 // ref: FUN_140662290
 CSimpleFrame* CreateSlider(CSimpleFrame* parent) {
-    (void)parent;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    return new CSimpleSlider(parent);
 }
 
 // ref: FUN_140662030

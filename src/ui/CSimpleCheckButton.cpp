@@ -320,35 +320,6 @@ int SetChecked(lua_State* L) {
     return 0;
 }
 
-// The asset argument (FUN_1407ff990): nil, a FileDataID, a path or atlas name, or a texture.
-TEXTURESOURCE RequiredAsset(lua_State* L, int32_t* index, const char* usage) {
-    TEXTURESOURCE source = TEXTURESOURCE::FromFileId(0);
-    int32_t type = lua_type(L, *index);
-    if (type < 1) {
-        luaL_error(L, usage);
-        return source;
-    }
-    if (type == LUA_TNIL) {
-        source = TEXTURESOURCE::FromTexture(nullptr);
-    } else if (type == LUA_TNUMBER) {
-        source = TEXTURESOURCE::FromFileId(static_cast<int32_t>(lua_tonumber(L, *index)));
-    } else if (type == LUA_TSTRING) {
-        source = TEXTURESOURCE::FromString(lua_tolstring(L, *index, nullptr));
-    } else {
-        const char* error = nullptr;
-        auto texture = type == LUA_TTABLE
-            ? static_cast<CSimpleTexture*>(FrameScript_Object::GetObjectFromLua(&error, L, CSimpleTexture::GetObjectType(), *index, false, false))
-            : nullptr;
-        if (texture == nullptr) {
-            luaL_argerror(L, *index, usage);
-            return source;
-        }
-        source = TEXTURESOURCE::FromTexture(texture);
-    }
-    (*index)++;
-    return source;
-}
-
 struct ASSETARGS {
     CSimpleCheckButton* m_button;
     TEXTURESOURCE m_source;
@@ -360,7 +331,7 @@ int32_t SetCheckedTextureBody(lua_State* L, void* context) {
     auto args = static_cast<ASSETARGS*>(context);
     int32_t index = 1;
     args->m_button = CheckSelf(L, &index, usage);
-    args->m_source = RequiredAsset(L, &index, usage);
+    args->m_source = TextureSourceArgument(L, &index, usage);
     args->m_button->SetCheckedTexture(&args->m_source);
     RaisePendingError(L, args->m_button, "SetCheckedTexture");
     return 0;
@@ -372,7 +343,7 @@ int32_t SetDisabledCheckedTextureBody(lua_State* L, void* context) {
     auto args = static_cast<ASSETARGS*>(context);
     int32_t index = 1;
     args->m_button = CheckSelf(L, &index, usage);
-    args->m_source = RequiredAsset(L, &index, usage);
+    args->m_source = TextureSourceArgument(L, &index, usage);
     args->m_button->SetDisabledCheckedTexture(&args->m_source);
     RaisePendingError(L, args->m_button, "SetDisabledCheckedTexture");
     return 0;

@@ -723,6 +723,12 @@ bool CLayoutFrame::GetRect(CRect* rect) {
     return false;
 }
 
+// ref: FUN_1405f9300
+bool CLayoutFrame::IsPointInRect(const float* point) {
+    return (this->m_flags & FLAG_RECT_VALID) && this->m_rect.minX <= point[0] && point[0] <= this->m_rect.maxX
+        && this->m_rect.minY <= point[1] && point[1] <= this->m_rect.maxY;
+}
+
 // Each edge from its points, or from the opposite edge and the size; then kept on screen if
 // clamped.
 // ref: FUN_1405f6b70

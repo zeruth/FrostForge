@@ -180,6 +180,8 @@ class CLayoutFrame {
 
     // The rect.
     bool GetRect(CRect* rect);
+    // Whether a point (x, y) lies in the solved rect, edges included.
+    bool IsPointInRect(const float* point);
     bool CalculateRect(CRect* rect);
     float CalculateLeft();
     float CalculateRight();

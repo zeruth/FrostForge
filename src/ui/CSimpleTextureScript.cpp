@@ -1071,3 +1071,46 @@ void CSimpleMaskTexture_FillScriptMethods(lua_State* L) {
     CAnimatableObject_FillScriptMethods(L);
     CSimpleTexture_FillBaseScriptMethods(L);
 }
+
+// ref: FUN_1408a7520
+bool TextureSourceFromLua(lua_State* L, int32_t index, TEXTURESOURCE* source) {
+    int32_t type = lua_type(L, index);
+    if (type == LUA_TNIL) {
+        *source = TEXTURESOURCE::FromTexture(nullptr);
+        return true;
+    }
+    if (type == LUA_TNUMBER) {
+        *source = TEXTURESOURCE::FromFileId(static_cast<int32_t>(lua_tonumber(L, index)));
+        return true;
+    }
+    if (type == LUA_TSTRING) {
+        *source = TEXTURESOURCE::FromString(lua_tolstring(L, index, nullptr));
+        return true;
+    }
+    if (type != LUA_TTABLE) {
+        return false;
+    }
+    const char* error = nullptr;
+    auto texture = static_cast<CSimpleTexture*>(
+        FrameScript_Object::GetObjectFromLua(&error, L, CSimpleTexture::GetObjectType(), index, false, false));
+    if (texture == nullptr) {
+        return false;
+    }
+    *source = TEXTURESOURCE::FromTexture(texture);
+    return true;
+}
+
+// ref: FUN_1407ff990
+TEXTURESOURCE TextureSourceArgument(lua_State* L, int32_t* index, const char* usage) {
+    TEXTURESOURCE source = TEXTURESOURCE::FromFileId(0);
+    if (lua_type(L, *index) < 1) {
+        luaL_error(L, usage);
+        return source;
+    }
+    if (!TextureSourceFromLua(L, *index, &source)) {
+        luaL_argerror(L, *index, usage);
+        return source;
+    }
+    (*index)++;
+    return source;
+}
