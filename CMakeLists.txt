@@ -32,6 +32,8 @@ endif()
 
 # Third-party code the reference links as is (zlib 1.2.11, "inflate 1.2.11 Copyright" in the binary).
 add_subdirectory(vendor/zlib-1.2.11)
+# Lua 5.1.4 ("Lua 5.1.4" in the binary), with Blizzard's changes (taint) ported on top from the binary.
+add_subdirectory(vendor/lua-5.1.4)
 
 add_subdirectory(src)
 
