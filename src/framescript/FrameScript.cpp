@@ -340,18 +340,8 @@ void CScriptStatus::AddV(int32_t severity, const char* format, va_list args) {
         CStatus::AddV(severity, format, args);
         return;
     }
-    // FUN_140660750: the position as "file:line"
-    const char* name = nullptr;
-    if (s_fileNames) {
-        s_fileNames->GetName(this->m_location.m_file, &name);
-    } else {
-        name = "UnknownFile";
-    }
-    if (!name) {
-        name = "UnknownFile";
-    }
     blz::inline_string<0x30C> where;
-    blz::string_format(where.header(), "%s:%d", name, this->m_location.m_line);
+    ScriptLocationToString(&this->m_location, where.header());
     blz::inline_string<0x200> prefixed;
     blz::string_format(prefixed.header(), "%s %s", where.m_data, format);
     CStatus::AddV(severity, prefixed.m_data, args);
@@ -635,6 +625,45 @@ SCRIPTLOCATION* ScriptLocationFromFile(SCRIPTLOCATION* location, const char* fil
     location->m_line = static_cast<uint16_t>(line < 1 ? 0 : line);
     (void)file;
     return location;
+}
+
+// ref: FUN_140660750
+void ScriptLocationToString(const SCRIPTLOCATION* location, blz::string_header* text) {
+    const char* name = nullptr;
+    if (s_fileNames == nullptr) {
+        name = "UnknownFile";
+    } else {
+        s_fileNames->GetName(location->m_file, &name);
+    }
+    blz::string_format(text, "%s:%d", name != nullptr ? name : "UnknownFile", location->m_line);
+}
+
+// Compiles `body` inside `wrapper` (a format with one %s) as `name` and runs it under the
+// error handler; the function it returns is referenced in the registry. -1 on an error, which
+// is reported into `status`.
+// ref: FUN_140638a40
+int32_t FrameScript_CompileFunction(const char* name, const char* wrapper, const char* body, CStatus* status) {
+    lua_State* L = s_L;
+    uint64_t size = strlen(wrapper) - 1 + strlen(body) + 2;
+    char* source = static_cast<char*>(_alloca((size + 0xf) & ~0xfull));
+    SStrPrintf(source, size, wrapper, body);
+    lua_rawgeti(L, LUA_REGISTRYINDEX, s_errorHandlerRef);
+    if (luaL_loadbuffer(L, source, strlen(source), name) != 0) {
+        status->Add(2, "%s", lua_tolstring(L, -1, nullptr));
+        // FUN_14063e310: lua_pcall behind an anti-tamper return-address check
+        if (lua_pcall(L, 1, 0, 0) != 0) {
+            lua_settop(L, -2);
+        }
+        return -1;
+    }
+    if (lua_pcall(L, 0, 1, -2) != 0) {
+        status->Add(2, "%s", lua_tolstring(L, -1, nullptr));
+        lua_settop(L, -3);
+        return -1;
+    }
+    int32_t ref = luaL_ref(L, LUA_REGISTRYINDEX);
+    lua_settop(L, -2);
+    return ref;
 }
 
 // ref: FUN_14063e170

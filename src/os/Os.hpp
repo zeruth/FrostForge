@@ -105,6 +105,8 @@ void OsPathJoin(char* dest, uint64_t destSize, const char* base, const char* rel
 uint64_t OsStrLCopyN(char* dest, uint64_t destSize, const char* source, uint64_t count);
 // The directory part of a path, without its last separator; empty when there is none.
 void OsPathGetDirectory(char* dest, uint64_t destSize, const char* path);
+// The part of a path after its last separator (the whole path when there is none).
+const char* OsPathGetFile(const char* path);
 
 // Creates a directory, and with `recursive` every missing parent; an OS error code or 0.
 uint32_t OsCreateDirectoryTree(const char* path, bool recursive);

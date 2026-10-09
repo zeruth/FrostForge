@@ -421,6 +421,22 @@ void OsPathGetDirectory(char* dest, uint64_t destSize, const char* path) {
     }
 }
 
+// ref: FUN_140262010
+const char* OsPathGetFile(const char* path) {
+    const char* separator = nullptr;
+    if (*path != '\0') {
+        for (const char* p = path; *p != '\0'; p++) {
+            if (*p == '/' || *p == '\\') {
+                separator = p;
+            }
+        }
+        if (separator != nullptr) {
+            return separator + 1;
+        }
+    }
+    return path;
+}
+
 // ref: FUN_1402140d0
 void OsPathTruncateToDirectory(char* path) {
     char* cut = path;

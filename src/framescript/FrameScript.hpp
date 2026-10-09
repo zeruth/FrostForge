@@ -83,6 +83,11 @@ void FrameScript_SetCurrentObject(int32_t ref);
 void FrameScript_SetCurrentObjectScoped(bool scoped);
 // The position of `line` in a named file (the file id is always 0: no registry is set).
 SCRIPTLOCATION* ScriptLocationFromFile(SCRIPTLOCATION* location, const char* file, int32_t line);
+// The position as "file:line" ("UnknownFile" without a file-name registry).
+void ScriptLocationToString(const SCRIPTLOCATION* location, blz::string_header* text);
+// Compiles `body` inside `wrapper` (a format with one %s) as chunk `name` and runs it; the
+// function that returns is referenced in the registry. -1 on an error, reported to `status`.
+int32_t FrameScript_CompileFunction(const char* name, const char* wrapper, const char* body, CStatus* status);
 // Drops a function's registry reference.
 void FrameScript_ReleaseFunction(int32_t ref);
 // The registry reference of FrameScript's own error handler.

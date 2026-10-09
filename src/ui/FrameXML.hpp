@@ -59,6 +59,20 @@ void FrameXML_ClearScopedMask();
 void XMLStatusSetLocation(CScriptStatus* status, XMLOBJECT* object);
 void XMLStatusRestoreLocation(CScriptStatus* status, const SCRIPTLOCATION* location);
 
+// ---- mixins and key values -------------------------------------------------------------
+
+class FrameScript_Object;
+class CStatus;
+struct lua_State;
+
+// Copies each named mixin table's fields into the object's table; a secure mixin's Lua
+// functions are wrapped to run untainted with self as the object.
+void FrameXML_ApplyMixins(FrameScript_Object* object, const char* mixins, CStatus* status, bool secure);
+// Sets each <KeyValue> under a <KeyValues> element as a field of the object's table.
+void FrameXML_LoadKeyValues(FrameScript_Object* object, XMLOBJECT* node, CStatus* status);
+// Pushes `value` as a KeyValue type ("nil", "boolean", "number", "global" or a string).
+void FrameXML_PushTypedValue(lua_State* L, const char* type, const char* value);
+
 // ---- virtuals and intrinsics -----------------------------------------------------------
 
 bool FrameXML_AddDeferredNode(bool intrinsic, XMLOBJECT* object, const char* name, const char* taint, CScriptStatus* status);

@@ -1954,22 +1954,6 @@ void StringAppend(blz::string_header* text, const char* append) {
     text->m_size = size;
 }
 
-// ref: FUN_14023a790
-void StringAppendFormat(blz::string_header* text, const char* format, ...) {
-    va_list args;
-    va_start(args, format);
-    int32_t length = SStrVSnprintf(nullptr, 0, format, args);
-    va_end(args);
-    uint64_t start = text->m_size;
-    uint64_t size = start + length;
-    blz::string_reserve(text, size);
-    va_start(args, format);
-    SStrVSnprintf(text->m_data + start, static_cast<uint64_t>(length) + 1, format, args);
-    va_end(args);
-    text->m_data[size] = '\0';
-    text->m_size = size;
-}
-
 // Records the frame's end on the device and its GPU time from the frame's timer query.
 // ref: FUN_142291390
 void GxFrameEndRecord(GXFRAMEEND* frameEnd) {
@@ -2064,10 +2048,10 @@ void GxGpuStatusReport(blz::string_header* report) {
         status = *static_cast<GPUSTATUS*>(g_gxPrismInstance->Slot80(out, device->m_gpu));
     }
     if (status.m_frequency != 0) {
-        StringAppendFormat(report, "Current Frequency:%.2fGHz ", static_cast<double>(static_cast<float>(status.m_frequency) * 1e-6f));
+        blz::string_append_format(report, "Current Frequency:%.2fGHz ", static_cast<double>(static_cast<float>(status.m_frequency) * 1e-6f));
     }
     if (status.m_temperature != 0) {
-        StringAppendFormat(report, "Temperature:%uC ", status.m_temperature);
+        blz::string_append_format(report, "Temperature:%uC ", status.m_temperature);
     }
     if (status.m_throttled == 0) {
         return;

@@ -9,3 +9,6 @@ target_link_libraries(BinaryXMLTest PRIVATE base ui)
 
 add_executable(ObjectAllocTest base/ObjectAllocTest.cpp)
 target_link_libraries(ObjectAllocTest PRIVATE base)
+
+add_executable(FrameScriptEventsTest ui/FrameScriptEventsTest.cpp)
+target_link_libraries(FrameScriptEventsTest PRIVATE base ui)

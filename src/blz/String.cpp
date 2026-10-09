@@ -87,6 +87,22 @@ void string_format(string_header* text, const char* format, ...) {
     text->m_size = static_cast<uint64_t>(length);
 }
 
+// ref: FUN_14023a790
+void string_append_format(string_header* text, const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    int32_t length = SStrVSnprintf(nullptr, 0, format, args);
+    va_end(args);
+    uint64_t start = text->m_size;
+    uint64_t size = start + length;
+    string_reserve(text, size);
+    va_start(args, format);
+    SStrVSnprintf(text->m_data + start, static_cast<uint64_t>(length) + 1, format, args);
+    va_end(args);
+    text->m_data[size] = '\0';
+    text->m_size = size;
+}
+
 void string::assign(const char* text) {
     uint64_t length = 0;
     if (*text != '\0') {
