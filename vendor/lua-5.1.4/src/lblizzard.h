@@ -89,4 +89,33 @@ LUAI_FUNC void luaT_capturefirsttaint (lua_State *L);
   { const char *e_ = (t); lua_taintSuspended = 0; \
     if (e_ != NULL) { if (lua_taintTracking) luaT_settaint(L, e_); lua_taintSuspended = 1; } }
 
+/* The whole taint state, for code that must run invisible to taint and leave it as it was:
+** save it, clear it (tracking off, no taint, no first taint), and put it back. */
+typedef struct luaT_State {
+  const char *taint;
+  int tracking;
+  const char *first;
+  lua_Debug source;
+} luaT_State;
+
+static __inline void luaT_save (luaT_State *s) {
+  s->taint = lua_taint;
+  s->tracking = lua_taintTracking;
+  s->first = lua_firstTaint;
+  s->source = lua_firstTaintSource;
+}
+
+static __inline void luaT_clear (void) {
+  lua_taintTracking = 0;
+  lua_taint = NULL;
+  lua_firstTaint = NULL;
+}
+
+static __inline void luaT_restore (const luaT_State *s) {
+  lua_taint = s->taint;
+  lua_taintTracking = s->tracking;
+  lua_firstTaint = s->first;
+  lua_firstTaintSource = s->source;
+}
+
 #endif

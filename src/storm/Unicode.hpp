@@ -27,4 +27,8 @@ int32_t UnicodeConvertUtf16ToUtf8(char* dest, uint32_t destSize, const uint16_t*
 // 0xFFFFFFFF at the terminator or for null. *bytes gets the bytes it covered.
 uint32_t SUniSGetUTF8(const uint8_t* string, int32_t* bytes);
 
+// Encodes `ch` as UTF-8 (up to six bytes, the old 31-bit form) at `out` and terminates it;
+// returns the end of the encoding. A value from 0x80000000 up writes only the terminator.
+uint8_t* SUniSPutUTF8(uint32_t ch, uint8_t* out);
+
 #endif

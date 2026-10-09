@@ -23,6 +23,7 @@
 #include "lua.h"
 
 #include "lauxlib.h"
+#include "lblizzard.h"
 
 
 #define FREELIST_REF	0	/* free list of references */
@@ -40,6 +41,7 @@
 */
 
 
+/* ref: FUN_1424248b0 */
 LUALIB_API int luaL_argerror (lua_State *L, int narg, const char *extramsg) {
   lua_Debug ar;
   if (!lua_getstack(L, 0, &ar))  /* no stack frame? */
@@ -65,11 +67,13 @@ LUALIB_API int luaL_typerror (lua_State *L, int narg, const char *tname) {
 }
 
 
+/* ref: FUN_142425aa0 */
 static void tag_error (lua_State *L, int narg, int tag) {
   luaL_typerror(L, narg, lua_typename(L, tag));
 }
 
 
+/* ref: FUN_142425a30 */
 LUALIB_API void luaL_where (lua_State *L, int level) {
   lua_Debug ar;
   if (lua_getstack(L, level, &ar)) {  /* check function at level */
@@ -83,6 +87,7 @@ LUALIB_API void luaL_where (lua_State *L, int level) {
 }
 
 
+/* ref: FUN_142424d80 */
 LUALIB_API int luaL_error (lua_State *L, const char *fmt, ...) {
   va_list argp;
   va_start(argp, fmt);
@@ -96,6 +101,7 @@ LUALIB_API int luaL_error (lua_State *L, const char *fmt, ...) {
 /* }====================================================== */
 
 
+/* ref: FUN_142424c30 */
 LUALIB_API int luaL_checkoption (lua_State *L, int narg, const char *def,
                                  const char *const lst[]) {
   const char *name = (def) ? luaL_optstring(L, narg, def) :
@@ -109,6 +115,7 @@ LUALIB_API int luaL_checkoption (lua_State *L, int narg, const char *def,
 }
 
 
+/* ref: FUN_142425080 */
 LUALIB_API int luaL_newmetatable (lua_State *L, const char *tname) {
   lua_getfield(L, LUA_REGISTRYINDEX, tname);  /* get registry.name */
   if (!lua_isnil(L, -1))  /* name already in use? */
@@ -137,24 +144,28 @@ LUALIB_API void *luaL_checkudata (lua_State *L, int ud, const char *tname) {
 }
 
 
+/* ref: FUN_142424cf0 */
 LUALIB_API void luaL_checkstack (lua_State *L, int space, const char *mes) {
   if (!lua_checkstack(L, space))
     luaL_error(L, "stack overflow (%s)", mes);
 }
 
 
+/* ref: FUN_142424d40 */
 LUALIB_API void luaL_checktype (lua_State *L, int narg, int t) {
   if (lua_type(L, narg) != t)
     tag_error(L, narg, t);
 }
 
 
+/* ref: FUN_142424ab0 */
 LUALIB_API void luaL_checkany (lua_State *L, int narg) {
   if (lua_type(L, narg) == LUA_TNONE)
     luaL_argerror(L, narg, "value expected");
 }
 
 
+/* ref: FUN_142424b40 */
 LUALIB_API const char *luaL_checklstring (lua_State *L, int narg, size_t *len) {
   const char *s = lua_tolstring(L, narg, len);
   if (!s) tag_error(L, narg, LUA_TSTRING);
@@ -162,6 +173,7 @@ LUALIB_API const char *luaL_checklstring (lua_State *L, int narg, size_t *len) {
 }
 
 
+/* ref: FUN_142425330 */
 LUALIB_API const char *luaL_optlstring (lua_State *L, int narg,
                                         const char *def, size_t *len) {
   if (lua_isnoneornil(L, narg)) {
@@ -173,6 +185,7 @@ LUALIB_API const char *luaL_optlstring (lua_State *L, int narg,
 }
 
 
+/* ref: FUN_142424bd0 */
 LUALIB_API lua_Number luaL_checknumber (lua_State *L, int narg) {
   lua_Number d = lua_tonumber(L, narg);
   if (d == 0 && !lua_isnumber(L, narg))  /* avoid extra test when d is not 0 */
@@ -181,11 +194,13 @@ LUALIB_API lua_Number luaL_checknumber (lua_State *L, int narg) {
 }
 
 
+/* ref: FUN_1424253b0 */
 LUALIB_API lua_Number luaL_optnumber (lua_State *L, int narg, lua_Number def) {
   return luaL_opt(L, luaL_checknumber, narg, def);
 }
 
 
+/* ref: FUN_142424af0 */
 LUALIB_API lua_Integer luaL_checkinteger (lua_State *L, int narg) {
   lua_Integer d = lua_tointeger(L, narg);
   if (d == 0 && !lua_isnumber(L, narg))  /* avoid extra test when d is not 0 */
@@ -194,12 +209,14 @@ LUALIB_API lua_Integer luaL_checkinteger (lua_State *L, int narg) {
 }
 
 
+/* ref: FUN_1424252d0 */
 LUALIB_API lua_Integer luaL_optinteger (lua_State *L, int narg,
                                                       lua_Integer def) {
   return luaL_opt(L, luaL_checkinteger, narg, def);
 }
 
 
+/* ref: FUN_142424f80 */
 LUALIB_API int luaL_getmetafield (lua_State *L, int obj, const char *event) {
   if (!lua_getmetatable(L, obj))  /* no metatable? */
     return 0;
@@ -216,6 +233,7 @@ LUALIB_API int luaL_getmetafield (lua_State *L, int obj, const char *event) {
 }
 
 
+/* ref: FUN_1424249c0 */
 LUALIB_API int luaL_callmeta (lua_State *L, int obj, const char *event) {
   obj = abs_index(L, obj);
   if (!luaL_getmetafield(L, obj, event))  /* no metafield? */
@@ -226,6 +244,7 @@ LUALIB_API int luaL_callmeta (lua_State *L, int obj, const char *event) {
 }
 
 
+/* ref: FUN_142425700 */
 LUALIB_API void (luaL_register) (lua_State *L, const char *libname,
                                 const luaL_Reg *l) {
   luaI_openlib(L, libname, l, 0);
@@ -239,6 +258,7 @@ static int libsize (const luaL_Reg *l) {
 }
 
 
+/* ref: FUN_142425130 */
 LUALIB_API void luaI_openlib (lua_State *L, const char *libname,
                               const luaL_Reg *l, int nup) {
   if (libname) {
@@ -354,6 +374,7 @@ LUALIB_API const char *luaL_gsub (lua_State *L, const char *s, const char *p,
 }
 
 
+/* ref: FUN_142424e30 */
 LUALIB_API const char *luaL_findtable (lua_State *L, int idx,
                                        const char *fname, int szhint) {
   const char *e;
@@ -407,6 +428,7 @@ static int emptybuffer (luaL_Buffer *B) {
 }
 
 
+/* ref: FUN_142424680 */
 static void adjuststack (luaL_Buffer *B) {
   if (B->lvl > 1) {
     lua_State *L = B->L;
@@ -426,6 +448,7 @@ static void adjuststack (luaL_Buffer *B) {
 }
 
 
+/* ref: FUN_142425420 */
 LUALIB_API char *luaL_prepbuffer (luaL_Buffer *B) {
   if (emptybuffer(B))
     adjuststack(B);
@@ -433,6 +456,7 @@ LUALIB_API char *luaL_prepbuffer (luaL_Buffer *B) {
 }
 
 
+/* ref: FUN_142424740 */
 LUALIB_API void luaL_addlstring (luaL_Buffer *B, const char *s, size_t l) {
   while (l--)
     luaL_addchar(B, *s++);
@@ -444,6 +468,7 @@ LUALIB_API void luaL_addstring (luaL_Buffer *B, const char *s) {
 }
 
 
+/* ref: FUN_142425470 */
 LUALIB_API void luaL_pushresult (luaL_Buffer *B) {
   emptybuffer(B);
   lua_concat(B->L, B->lvl);
@@ -451,6 +476,7 @@ LUALIB_API void luaL_pushresult (luaL_Buffer *B) {
 }
 
 
+/* ref: FUN_1424247e0 */
 LUALIB_API void luaL_addvalue (luaL_Buffer *B) {
   lua_State *L = B->L;
   size_t vl;
@@ -469,6 +495,7 @@ LUALIB_API void luaL_addvalue (luaL_Buffer *B) {
 }
 
 
+/* ref: FUN_1424249a0 */
 LUALIB_API void luaL_buffinit (lua_State *L, luaL_Buffer *B) {
   B->L = L;
   B->p = B->buffer;
@@ -478,13 +505,18 @@ LUALIB_API void luaL_buffinit (lua_State *L, luaL_Buffer *B) {
 /* }====================================================== */
 
 
+/* Blizzard: references are made invisible to taint.
+** ref: FUN_1424254e0 */
 LUALIB_API int luaL_ref (lua_State *L, int t) {
   int ref;
+  luaT_State saved;
   t = abs_index(L, t);
   if (lua_isnil(L, -1)) {
     lua_pop(L, 1);  /* remove from stack */
     return LUA_REFNIL;  /* `nil' has a unique fixed reference */
   }
+  luaT_save(&saved);
+  luaT_clear();
   lua_rawgeti(L, t, FREELIST_REF);  /* get first free element */
   ref = (int)lua_tointeger(L, -1);  /* ref = t[FREELIST_REF] */
   lua_pop(L, 1);  /* remove it from stack */
@@ -497,18 +529,24 @@ LUALIB_API int luaL_ref (lua_State *L, int t) {
     ref++;  /* create new reference */
   }
   lua_rawseti(L, t, ref);
+  luaT_restore(&saved);
   return ref;
 }
 
 
+/* ref: FUN_142425870 */
 LUALIB_API void luaL_unref (lua_State *L, int t, int ref) {
+  luaT_State saved;
+  luaT_save(&saved);
   if (ref >= 0) {
+    luaT_clear();
     t = abs_index(L, t);
     lua_rawgeti(L, t, FREELIST_REF);
     lua_rawseti(L, t, ref);  /* t[ref] = t[FREELIST_REF] */
     lua_pushinteger(L, ref);
     lua_rawseti(L, t, FREELIST_REF);  /* t[FREELIST_REF] = ref */
   }
+  luaT_restore(&saved);
 }
 
 
@@ -606,9 +644,16 @@ static const char *getS (lua_State *L, void *ud, size_t *size) {
 }
 
 
+/* Blizzard: a UTF-8 byte order mark at the start is skipped.
+** ref: FUN_142425000 */
 LUALIB_API int luaL_loadbuffer (lua_State *L, const char *buff, size_t size,
                                 const char *name) {
   LoadS ls;
+  if (size > 2 && (unsigned char)buff[0] == 0xef && (unsigned char)buff[1] == 0xbb &&
+      (unsigned char)buff[2] == 0xbf) {
+    buff += 3;
+    size -= 3;
+  }
   ls.s = buff;
   ls.size = size;
   return lua_load(L, getS, &ls, name);

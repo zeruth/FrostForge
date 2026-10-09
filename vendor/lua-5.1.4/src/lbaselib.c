@@ -18,6 +18,7 @@
 
 #include "lauxlib.h"
 #include "lualib.h"
+#include "lblizzard.h"
 
 
 
@@ -28,28 +29,7 @@
 ** model but changing `fputs' to put the strings at a proper place
 ** (a console window or a log file, for instance).
 */
-static int luaB_print (lua_State *L) {
-  int n = lua_gettop(L);  /* number of arguments */
-  int i;
-  lua_getglobal(L, "tostring");
-  for (i=1; i<=n; i++) {
-    const char *s;
-    lua_pushvalue(L, -1);  /* function to be called */
-    lua_pushvalue(L, i);   /* value to print */
-    lua_call(L, 1, 1);
-    s = lua_tostring(L, -1);  /* get result */
-    if (s == NULL)
-      return luaL_error(L, LUA_QL("tostring") " must return a string to "
-                           LUA_QL("print"));
-    if (i>1) fputs("\t", stdout);
-    fputs(s, stdout);
-    lua_pop(L, 1);  /* pop result */
-  }
-  fputs("\n", stdout);
-  return 0;
-}
-
-
+/* ref: FUN_142427290 */
 static int luaB_tonumber (lua_State *L) {
   int base = luaL_optint(L, 2, 10);
   if (base == 10) {  /* standard conversion */
@@ -78,6 +58,7 @@ static int luaB_tonumber (lua_State *L) {
 }
 
 
+/* ref: FUN_1424273b0 */
 static int luaB_error (lua_State *L) {
   int level = luaL_optint(L, 2, 1);
   lua_settop(L, 1);
@@ -90,6 +71,7 @@ static int luaB_error (lua_State *L) {
 }
 
 
+/* ref: FUN_142427430 */
 static int luaB_getmetatable (lua_State *L) {
   luaL_checkany(L, 1);
   if (!lua_getmetatable(L, 1)) {
@@ -101,6 +83,7 @@ static int luaB_getmetatable (lua_State *L) {
 }
 
 
+/* ref: FUN_142427490 */
 static int luaB_setmetatable (lua_State *L) {
   int t = lua_type(L, 2);
   luaL_checktype(L, 1, LUA_TTABLE);
@@ -114,6 +97,7 @@ static int luaB_setmetatable (lua_State *L) {
 }
 
 
+/* ref: FUN_1424279c0 */
 static void getfunc (lua_State *L, int opt) {
   if (lua_isfunction(L, 1)) lua_pushvalue(L, 1);
   else {
@@ -130,19 +114,34 @@ static void getfunc (lua_State *L, int opt) {
 }
 
 
+/* Blizzard: nothing during garbage collection, and an environment whose metatable has an
+** __environment field answers with that field instead of itself. */
+/* ref: FUN_142426470 */
 static int luaB_getfenv (lua_State *L) {
+  if (lua_isingc(L))
+    return 0;
   getfunc(L, 1);
   if (lua_iscfunction(L, -1))  /* is a C function? */
     lua_pushvalue(L, LUA_GLOBALSINDEX);  /* return the thread's global env. */
   else
     lua_getfenv(L, -1);
+  luaL_getmetafield(L, -1, "__environment");
   return 1;
 }
 
 
+/* Blizzard: an environment whose metatable has an __environment field is protected, and
+** nothing changes during garbage collection. */
+/* ref: FUN_1424264e0 */
 static int luaB_setfenv (lua_State *L) {
+  if (lua_isingc(L))
+    return luaL_error(L, "cannot set environment during garbage collection");
   luaL_checktype(L, 2, LUA_TTABLE);
   getfunc(L, 0);
+  lua_getfenv(L, -1);
+  if (luaL_getmetafield(L, -1, "__environment"))
+    return luaL_error(L, "cannot change a protected environment");
+  lua_pop(L, 1);
   lua_pushvalue(L, 2);
   if (lua_isnumber(L, 1) && lua_tonumber(L, 1) == 0) {
     /* change environment of current thread */
@@ -158,6 +157,7 @@ static int luaB_setfenv (lua_State *L) {
 }
 
 
+/* ref: FUN_142426600 */
 static int luaB_rawequal (lua_State *L) {
   luaL_checkany(L, 1);
   luaL_checkany(L, 2);
@@ -166,6 +166,7 @@ static int luaB_rawequal (lua_State *L) {
 }
 
 
+/* ref: FUN_142426650 */
 static int luaB_rawget (lua_State *L) {
   luaL_checktype(L, 1, LUA_TTABLE);
   luaL_checkany(L, 2);
@@ -174,6 +175,7 @@ static int luaB_rawget (lua_State *L) {
   return 1;
 }
 
+/* ref: FUN_1424266a0 */
 static int luaB_rawset (lua_State *L) {
   luaL_checktype(L, 1, LUA_TTABLE);
   luaL_checkany(L, 2);
@@ -184,12 +186,14 @@ static int luaB_rawset (lua_State *L) {
 }
 
 
+/* ref: FUN_142426700 */
 static int luaB_gcinfo (lua_State *L) {
   lua_pushinteger(L, lua_getgccount(L));
   return 1;
 }
 
 
+/* ref: FUN_142426730 */
 static int luaB_collectgarbage (lua_State *L) {
   static const char *const opts[] = {"stop", "restart", "collect",
     "count", "step", "setpause", "setstepmul", NULL};
@@ -216,6 +220,7 @@ static int luaB_collectgarbage (lua_State *L) {
 }
 
 
+/* ref: FUN_142426800 */
 static int luaB_type (lua_State *L) {
   luaL_checkany(L, 1);
   lua_pushstring(L, luaL_typename(L, 1));
@@ -223,6 +228,7 @@ static int luaB_type (lua_State *L) {
 }
 
 
+/* ref: FUN_142426840 */
 static int luaB_next (lua_State *L) {
   luaL_checktype(L, 1, LUA_TTABLE);
   lua_settop(L, 2);  /* create a 2nd argument if there isn't one */
@@ -235,6 +241,7 @@ static int luaB_next (lua_State *L) {
 }
 
 
+/* ref: FUN_142427d10 */
 static int luaB_pairs (lua_State *L) {
   luaL_checktype(L, 1, LUA_TTABLE);
   lua_pushvalue(L, lua_upvalueindex(1));  /* return generator, */
@@ -244,6 +251,7 @@ static int luaB_pairs (lua_State *L) {
 }
 
 
+/* ref: FUN_142427aa0 */
 static int ipairsaux (lua_State *L) {
   int i = luaL_checkint(L, 2);
   luaL_checktype(L, 1, LUA_TTABLE);
@@ -254,6 +262,7 @@ static int ipairsaux (lua_State *L) {
 }
 
 
+/* ref: FUN_142427ba0 */
 static int luaB_ipairs (lua_State *L) {
   luaL_checktype(L, 1, LUA_TTABLE);
   lua_pushvalue(L, lua_upvalueindex(1));  /* return generator, */
@@ -274,7 +283,8 @@ static int load_aux (lua_State *L, int status) {
 }
 
 
-static int luaB_loadstring (lua_State *L) {
+/* ref: FUN_1424268a0 */
+static int luaB_loadstring_untainted (lua_State *L) {
   size_t l;
   const char *s = luaL_checklstring(L, 1, &l);
   const char *chunkname = luaL_optstring(L, 2, s);
@@ -282,9 +292,21 @@ static int luaB_loadstring (lua_State *L) {
 }
 
 
-static int luaB_loadfile (lua_State *L) {
-  const char *fname = luaL_optstring(L, 1, NULL);
-  return load_aux(L, luaL_loadfile(L, fname));
+/* What loadstring taints its caller with (0x142ccb9e0). */
+static const char *const forcetaint = "*** ForceTaint_Strong ***";
+
+/* Blizzard: code compiled from a string is never trusted. Loading it taints the caller, so
+** the chunk it returns is made under that taint too. */
+/* ref: FUN_142426e30 */
+static int luaB_loadstring (lua_State *L) {
+  size_t l;
+  const char *s;
+  const char *chunkname;
+  if (lua_taintTracking && !lua_taintSuspended)
+    luaT_settaint(L, forcetaint);
+  s = luaL_checklstring(L, 1, &l);
+  chunkname = luaL_optstring(L, 2, s);
+  return load_aux(L, luaL_loadbuffer(L, s, l, chunkname));
 }
 
 
@@ -294,43 +316,7 @@ static int luaB_loadfile (lua_State *L) {
 ** stack top. Instead, it keeps its resulting string in a
 ** reserved slot inside the stack.
 */
-static const char *generic_reader (lua_State *L, void *ud, size_t *size) {
-  (void)ud;  /* to avoid warnings */
-  luaL_checkstack(L, 2, "too many nested functions");
-  lua_pushvalue(L, 1);  /* get function */
-  lua_call(L, 0, 1);  /* call it */
-  if (lua_isnil(L, -1)) {
-    *size = 0;
-    return NULL;
-  }
-  else if (lua_isstring(L, -1)) {
-    lua_replace(L, 3);  /* save string in a reserved stack slot */
-    return lua_tolstring(L, 3, size);
-  }
-  else luaL_error(L, "reader function must return a string");
-  return NULL;  /* to avoid warnings */
-}
-
-
-static int luaB_load (lua_State *L) {
-  int status;
-  const char *cname = luaL_optstring(L, 2, "=(load)");
-  luaL_checktype(L, 1, LUA_TFUNCTION);
-  lua_settop(L, 3);  /* function, eventual name, plus one reserved slot */
-  status = lua_load(L, generic_reader, NULL, cname);
-  return load_aux(L, status);
-}
-
-
-static int luaB_dofile (lua_State *L) {
-  const char *fname = luaL_optstring(L, 1, NULL);
-  int n = lua_gettop(L);
-  if (luaL_loadfile(L, fname) != 0) lua_error(L);
-  lua_call(L, 0, LUA_MULTRET);
-  return lua_gettop(L) - n;
-}
-
-
+/* ref: FUN_142426950 */
 static int luaB_assert (lua_State *L) {
   luaL_checkany(L, 1);
   if (!lua_toboolean(L, 1))
@@ -339,6 +325,7 @@ static int luaB_assert (lua_State *L) {
 }
 
 
+/* ref: FUN_1424269b0 */
 static int luaB_unpack (lua_State *L) {
   int i, e, n;
   luaL_checktype(L, 1, LUA_TTABLE);
@@ -355,6 +342,7 @@ static int luaB_unpack (lua_State *L) {
 }
 
 
+/* ref: FUN_142426aa0 */
 static int luaB_select (lua_State *L) {
   int n = lua_gettop(L);
   if (lua_type(L, 1) == LUA_TSTRING && *lua_tostring(L, 1) == '#') {
@@ -371,6 +359,7 @@ static int luaB_select (lua_State *L) {
 }
 
 
+/* ref: FUN_142426b50 */
 static int luaB_pcall (lua_State *L) {
   int status;
   luaL_checkany(L, 1);
@@ -381,18 +370,29 @@ static int luaB_pcall (lua_State *L) {
 }
 
 
+/* Blizzard: arguments after the handler are passed to the function. */
+/* ref: FUN_142426bf0 */
 static int luaB_xpcall (lua_State *L) {
   int status;
+  int n;
   luaL_checkany(L, 2);
-  lua_settop(L, 2);
-  lua_insert(L, 1);  /* put error function under function to be called */
-  status = lua_pcall(L, 0, LUA_MULTRET, 1);
+  n = lua_gettop(L);
+  if (n - 2 < 1)
+    lua_insert(L, 1);  /* put error function under function to be called */
+  else {
+    lua_checkstack(L, n + 1);
+    lua_pushvalue(L, 2);
+    lua_insert(L, 1);  /* put error function under function to be called */
+    lua_remove(L, 3);
+  }
+  status = lua_pcall(L, n - 2, LUA_MULTRET, 1);
   lua_pushboolean(L, (status == 0));
   lua_replace(L, 1);
   return lua_gettop(L);  /* return status + all results */
 }
 
 
+/* ref: FUN_142426d00 */
 static int luaB_tostring (lua_State *L) {
   luaL_checkany(L, 1);
   if (luaL_callmeta(L, 1, "__tostring"))  /* is there a metafield? */
@@ -418,6 +418,7 @@ static int luaB_tostring (lua_State *L) {
 }
 
 
+/* ref: FUN_142427bf0 */
 static int luaB_newproxy (lua_State *L) {
   lua_settop(L, 1);
   lua_newuserdata(L, 0);  /* create proxy */
@@ -444,20 +445,18 @@ static int luaB_newproxy (lua_State *L) {
 }
 
 
+/* Blizzard: no print, dofile, loadfile or load; scripts reach no files. */
 static const luaL_Reg base_funcs[] = {
   {"assert", luaB_assert},
   {"collectgarbage", luaB_collectgarbage},
-  {"dofile", luaB_dofile},
   {"error", luaB_error},
   {"gcinfo", luaB_gcinfo},
   {"getfenv", luaB_getfenv},
   {"getmetatable", luaB_getmetatable},
-  {"loadfile", luaB_loadfile},
-  {"load", luaB_load},
   {"loadstring", luaB_loadstring},
+  {"loadstring_untainted", luaB_loadstring_untainted},
   {"next", luaB_next},
   {"pcall", luaB_pcall},
-  {"print", luaB_print},
   {"rawequal", luaB_rawequal},
   {"rawget", luaB_rawget},
   {"rawset", luaB_rawset},
@@ -487,6 +486,7 @@ static const luaL_Reg base_funcs[] = {
 static const char *const statnames[] =
     {"running", "suspended", "normal", "dead"};
 
+/* ref: FUN_142427930 */
 static int costatus (lua_State *L, lua_State *co) {
   if (L == co) return CO_RUN;
   switch (lua_status(co)) {
@@ -507,6 +507,7 @@ static int costatus (lua_State *L, lua_State *co) {
 }
 
 
+/* ref: FUN_142426f70 */
 static int luaB_costatus (lua_State *L) {
   lua_State *co = lua_tothread(L, 1);
   luaL_argcheck(L, co, 1, "coroutine expected");
@@ -515,6 +516,7 @@ static int luaB_costatus (lua_State *L) {
 }
 
 
+/* ref: FUN_142427540 */
 static int auxresume (lua_State *L, lua_State *co, int narg) {
   int status = costatus(L, co);
   if (!lua_checkstack(co, narg))
@@ -540,6 +542,7 @@ static int auxresume (lua_State *L, lua_State *co, int narg) {
 }
 
 
+/* ref: FUN_142426fe0 */
 static int luaB_coresume (lua_State *L) {
   lua_State *co = lua_tothread(L, 1);
   int r;
@@ -558,6 +561,7 @@ static int luaB_coresume (lua_State *L) {
 }
 
 
+/* ref: FUN_142427b10 */
 static int luaB_auxwrap (lua_State *L) {
   lua_State *co = lua_tothread(L, lua_upvalueindex(1));
   int r = auxresume(L, co, lua_gettop(L));
@@ -573,6 +577,7 @@ static int luaB_auxwrap (lua_State *L) {
 }
 
 
+/* ref: FUN_142427080 */
 static int luaB_cocreate (lua_State *L) {
   lua_State *NL = lua_newthread(L);
   luaL_argcheck(L, lua_isfunction(L, 1) && !lua_iscfunction(L, 1), 1,
@@ -583,6 +588,7 @@ static int luaB_cocreate (lua_State *L) {
 }
 
 
+/* ref: FUN_142427130 */
 static int luaB_cowrap (lua_State *L) {
   luaB_cocreate(L);
   lua_pushcclosure(L, luaB_auxwrap, 1);
@@ -590,11 +596,13 @@ static int luaB_cowrap (lua_State *L) {
 }
 
 
+/* ref: FUN_142427240 */
 static int luaB_yield (lua_State *L) {
   return lua_yield(L, lua_gettop(L));
 }
 
 
+/* ref: FUN_142427260 */
 static int luaB_corunning (lua_State *L) {
   if (lua_pushthread(L))
     lua_pushnil(L);  /* main thread is not a coroutine */
@@ -623,6 +631,7 @@ static void auxopen (lua_State *L, const char *name,
 }
 
 
+/* ref: FUN_142427650 */
 static void base_open (lua_State *L) {
   /* set global _G */
   lua_pushvalue(L, LUA_GLOBALSINDEX);
@@ -645,6 +654,7 @@ static void base_open (lua_State *L) {
 }
 
 
+/* ref: FUN_142427d60 */
 LUALIB_API int luaopen_base (lua_State *L) {
   base_open(L);
   luaL_register(L, LUA_COLIBNAME, co_funcs);

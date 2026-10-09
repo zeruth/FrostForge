@@ -186,6 +186,62 @@ int32_t UnicodeConvertUtf8ToUtf16(wchar_t* dest, uint32_t destSize, const char* 
     return result;
 }
 
+// ref: FUN_14024de70
+uint8_t* SUniSPutUTF8(uint32_t ch, uint8_t* out) {
+    if (!out) {
+        return out;
+    }
+    auto byte = static_cast<uint8_t>(ch);
+    if (ch < 0x80) {
+        out[0] = byte;
+        out[1] = 0;
+        return out + 1;
+    }
+    if (ch < 0x800) {
+        out[0] = static_cast<uint8_t>(ch >> 6) | 0xC0;
+        out[1] = (byte & 0x3F) | 0x80;
+        out[2] = 0;
+        return out + 2;
+    }
+    if (ch < 0x10000) {
+        out[0] = static_cast<uint8_t>(ch >> 12) | 0xE0;
+        out[3] = 0;
+        out[1] = (static_cast<uint8_t>(ch >> 6) & 0x3F) | 0x80;
+        out[2] = (byte & 0x3F) | 0x80;
+        return out + 3;
+    }
+    if (ch < 0x200000) {
+        out[0] = static_cast<uint8_t>(ch >> 18) | 0xF0;
+        out[4] = 0;
+        out[1] = (static_cast<uint8_t>(ch >> 12) & 0x3F) | 0x80;
+        out[2] = (static_cast<uint8_t>(ch >> 6) & 0x3F) | 0x80;
+        out[3] = (byte & 0x3F) | 0x80;
+        return out + 4;
+    }
+    auto top = static_cast<uint8_t>(ch >> 24);
+    if (ch < 0x400000) {
+        out[0] = top | 0xF8;
+        out[5] = 0;
+        out[1] = (static_cast<uint8_t>(ch >> 18) & 0x3F) | 0x80;
+        out[2] = (static_cast<uint8_t>(ch >> 12) & 0x3F) | 0x80;
+        out[3] = (static_cast<uint8_t>(ch >> 6) & 0x3F) | 0x80;
+        out[4] = (byte & 0x3F) | 0x80;
+        return out + 5;
+    }
+    if (ch < 0x80000000) {
+        out[0] = (top >> 6) | 0xFC;
+        out[6] = 0;
+        out[1] = (top & 0x3F) | 0x80;
+        out[2] = (static_cast<uint8_t>(ch >> 18) & 0x3F) | 0x80;
+        out[3] = (static_cast<uint8_t>(ch >> 12) & 0x3F) | 0x80;
+        out[4] = (static_cast<uint8_t>(ch >> 6) & 0x3F) | 0x80;
+        out[5] = (byte & 0x3F) | 0x80;
+        return out + 6;
+    }
+    out[0] = 0;
+    return out;
+}
+
 // ref: FUN_14024dbd0
 uint32_t SUniSGetUTF8(const uint8_t* string, int32_t* bytes) {
     if (bytes) {

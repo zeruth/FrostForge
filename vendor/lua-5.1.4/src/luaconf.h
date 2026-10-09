@@ -340,7 +340,7 @@
 ** CHANGE it to undefined as soon as your programs use 'math.fmod' or
 ** the new '%' operator instead of 'math.mod'.
 */
-#define LUA_COMPAT_MOD
+#undef LUA_COMPAT_MOD  /* Blizzard: no math.mod (FUN_1424263c0) */
 
 /*
 @@ LUA_COMPAT_LSTR controls compatibility with old long string nesting
@@ -355,7 +355,7 @@
 ** CHANGE it to undefined as soon as you rename 'string.gfind' to
 ** 'string.gmatch'.
 */
-#define LUA_COMPAT_GFIND
+#undef LUA_COMPAT_GFIND  /* Blizzard: string.gfind is an error (FUN_142428c10) */
 
 /*
 @@ LUA_COMPAT_OPENLIB controls compatibility with old 'luaL_openlib'

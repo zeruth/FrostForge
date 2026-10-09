@@ -19,6 +19,7 @@
 #define aux_getn(L,n)	(luaL_checktype(L, n, LUA_TTABLE), luaL_getn(L, n))
 
 
+/* ref: FUN_142427dc0 */
 static int foreachi (lua_State *L) {
   int i;
   int n = aux_getn(L, 1);
@@ -36,6 +37,7 @@ static int foreachi (lua_State *L) {
 }
 
 
+/* ref: FUN_142427ec0 */
 static int foreach (lua_State *L) {
   luaL_checktype(L, 1, LUA_TTABLE);
   luaL_checktype(L, 2, LUA_TFUNCTION);
@@ -53,6 +55,7 @@ static int foreach (lua_State *L) {
 }
 
 
+/* ref: FUN_142427fc0 */
 static int maxn (lua_State *L) {
   lua_Number max = 0;
   luaL_checktype(L, 1, LUA_TTABLE);
@@ -69,12 +72,14 @@ static int maxn (lua_State *L) {
 }
 
 
+/* ref: FUN_142428060 */
 static int getn (lua_State *L) {
   lua_pushinteger(L, aux_getn(L, 1));
   return 1;
 }
 
 
+/* ref: FUN_1424280a0 */
 static int setn (lua_State *L) {
   luaL_checktype(L, 1, LUA_TTABLE);
 #ifndef luaL_setn
@@ -87,6 +92,7 @@ static int setn (lua_State *L) {
 }
 
 
+/* ref: FUN_1424280e0 */
 static int tinsert (lua_State *L) {
   int e = aux_getn(L, 1) + 1;  /* first empty element */
   int pos;  /* where to insert new element */
@@ -115,6 +121,7 @@ static int tinsert (lua_State *L) {
 }
 
 
+/* ref: FUN_1424281c0 */
 static int tremove (lua_State *L) {
   int e = aux_getn(L, 1);
   int pos = luaL_optint(L, 2, e);
@@ -132,6 +139,32 @@ static int tremove (lua_State *L) {
 }
 
 
+/* Blizzard: removes `count' elements (1 by default) starting at `pos' (the last element by
+** default), closes the gap, and returns them.
+** ref: FUN_1424282a0 */
+static int tremovemulti (lua_State *L) {
+  int e = aux_getn(L, 1);
+  int pos = luaL_optint(L, 2, e);
+  int count = luaL_optint(L, 3, 1);
+  int i;
+  if (e == 0) return 0;  /* table is `empty' */
+  if (pos < 1 || count < 0 || pos > e || pos + count - 1 > e)
+    return luaL_error(L, "parameters out of bounds");
+  lua_checkstack(L, count);
+  for (i = pos; i < pos + count; i++)
+    lua_rawgeti(L, 1, i);  /* results */
+  for (; pos < e; pos++) {
+    lua_rawgeti(L, 1, pos + count);
+    lua_rawseti(L, 1, pos);  /* t[pos] = t[pos+count] */
+  }
+  for (; pos < e + count; pos++) {
+    lua_pushnil(L);
+    lua_rawseti(L, 1, pos);
+  }
+  return count;
+}
+
+
 static void addfield (lua_State *L, luaL_Buffer *b, int i) {
   lua_rawgeti(L, 1, i);
   if (!lua_isstring(L, -1))
@@ -141,6 +174,7 @@ static void addfield (lua_State *L, luaL_Buffer *b, int i) {
 }
 
 
+/* ref: FUN_1424283f0 */
 static int tconcat (lua_State *L) {
   luaL_Buffer b;
   size_t lsep;
@@ -175,6 +209,7 @@ static void set2 (lua_State *L, int i, int j) {
   lua_rawseti(L, 1, j);
 }
 
+/* ref: FUN_142428a80 */
 static int sort_comp (lua_State *L, int a, int b) {
   if (!lua_isnil(L, 2)) {  /* function? */
     int res;
@@ -190,6 +225,7 @@ static int sort_comp (lua_State *L, int a, int b) {
     return lua_lessthan(L, a, b);
 }
 
+/* ref: FUN_1424286b0 */
 static void auxsort (lua_State *L, int l, int u) {
   while (l < u) {  /* for tail recursion */
     int i, j;
@@ -253,6 +289,7 @@ static void auxsort (lua_State *L, int l, int u) {
   }  /* repeat the routine for the larger one */
 }
 
+/* ref: FUN_142428580 */
 static int sort (lua_State *L) {
   int n = aux_getn(L, 1);
   luaL_checkstack(L, 40, "");  /* assume array is smaller than 2^40 */
@@ -266,6 +303,22 @@ static int sort (lua_State *L) {
 /* }====================================================== */
 
 
+/* Blizzard: empties the table in place (its metatable stays) and returns it.
+** ref: FUN_142428610 */
+static int twipe (lua_State *L) {
+  luaL_checktype(L, 1, LUA_TTABLE);
+  luaL_checkstack(L, 3, "");
+  lua_pushnil(L);
+  while (lua_next(L, -2)) {
+    lua_pop(L, 1);  /* the value */
+    lua_pushvalue(L, -1);  /* the key, kept for lua_next */
+    lua_pushnil(L);
+    lua_rawset(L, 1);
+  }
+  return 1;
+}
+
+
 static const luaL_Reg tab_funcs[] = {
   {"concat", tconcat},
   {"foreach", foreach},
@@ -274,12 +327,15 @@ static const luaL_Reg tab_funcs[] = {
   {"maxn", maxn},
   {"insert", tinsert},
   {"remove", tremove},
+  {"removemulti", tremovemulti},
   {"setn", setn},
   {"sort", sort},
+  {"wipe", twipe},
   {NULL, NULL}
 };
 
 
+/* ref: FUN_142428a30 */
 LUALIB_API int luaopen_table (lua_State *L) {
   luaL_register(L, LUA_TABLIBNAME, tab_funcs);
   return 1;

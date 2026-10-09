@@ -2,9 +2,21 @@
 // clocks it profiles and times scripts with, and which script timeout applies.
 
 #include "os/Timer.hpp"
+#include "storm/Unicode.hpp"
 #include "util/Unimplemented.hpp"
 
 extern "C" {
+
+// The UTF-8 character at `s` and the bytes it covers (SUniSGetUTF8, FUN_14024dbd0), for
+// string.lower and string.upper, which inline it.
+unsigned int luai_getutf8(const char* s, int* bytes) {
+    return SUniSGetUTF8(reinterpret_cast<const uint8_t*>(s), bytes);
+}
+
+// Encodes a character as UTF-8 (SUniSPutUTF8, FUN_14024de70).
+char* luai_pututf8(unsigned int ch, char* out) {
+    return reinterpret_cast<char*>(SUniSPutUTF8(ch, reinterpret_cast<uint8_t*>(out)));
+}
 
 // Profile ticks per second (OsTimerGetFrequency, FUN_141237dc0).
 long long luai_timerfrequency(void) {
