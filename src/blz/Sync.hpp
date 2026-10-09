@@ -30,6 +30,7 @@ struct shared_mutex {
     void lock();
     void unlock();
     void lock_shared();
+    bool try_lock_shared();
     void unlock_shared();
 };
 static_assert(sizeof(shared_mutex) == 0x20, "blz::shared_mutex is 0x20 bytes");

@@ -859,3 +859,44 @@ bool RenderContextD3d12::CopyTex(Tex* source, Tex* dest, int32_t* sourceOrigin, 
     uint32_t slice, int32_t mip) {
     return this->Owner()->CopyTex(source, dest, sourceOrigin, destOrigin, size, slice, mip);
 }
+
+// Resolves a multisampled texture into another, putting both back in their states.
+// ref: FUN_1422e2b20
+bool GraphicsCommandList::ResolveTex(Tex* source, Tex* dest) {
+    if (GxDeviceD3d12()->m_ready == 0) {
+        return false;
+    }
+    D3DX12Residency::ManagedObject* residency = TexResidency(source);
+    if (residency != nullptr) {
+        this->m_copy.ResidencySet()->Insert(residency);
+    }
+    residency = TexResidency(dest);
+    if (residency != nullptr) {
+        this->m_copy.ResidencySet()->Insert(residency);
+    }
+    StateTrackerMap& map = this->m_copy.m_states[this->m_copy.m_current];
+    StateTracker* sourceTracker = map.find(reinterpret_cast<uint64_t>(source->m_objects.data()));
+    StateTracker* destTracker = map.find(reinterpret_cast<uint64_t>(dest->m_objects.data()));
+    uint32_t sourceState = sourceTracker == nullptr ? D3D12_RESOURCE_STATE_RESOLVE_SOURCE : sourceTracker->m_current;
+    uint32_t destState = destTracker == nullptr ? D3D12_RESOURCE_STATE_RESOLVE_DEST : destTracker->m_current;
+    bool a = this->m_copy.TransitionObjects(source->m_objects.data(), source->m_objects.size(), D3D12_RESOURCE_STATE_RESOLVE_SOURCE);
+    bool b = this->m_copy.TransitionObjects(dest->m_objects.data(), dest->m_objects.size(), D3D12_RESOURCE_STATE_RESOLVE_DEST);
+    if (a || b) {
+        this->m_copy.FlushBarriers();
+    }
+    this->m_copy.m_empty = 0;
+    this->m_copy.m_list->ResolveSubresource(dest->m_objects[0].m_resource, 0, source->m_objects[0].m_resource, 0,
+        ShaderFormat(source->m_format));
+    if (sourceState != D3D12_RESOURCE_STATE_RESOLVE_SOURCE) {
+        this->m_copy.TransitionObjects(source->m_objects.data(), source->m_objects.size(), sourceState);
+    }
+    if (destState != D3D12_RESOURCE_STATE_RESOLVE_DEST) {
+        this->m_copy.TransitionObjects(dest->m_objects.data(), dest->m_objects.size(), destState);
+    }
+    return true;
+}
+
+// ref: FUN_1422e2d40
+bool RenderContextD3d12::ResolveTex(Tex* source, Tex* dest) {
+    return this->Owner()->ResolveTex(source, dest);
+}

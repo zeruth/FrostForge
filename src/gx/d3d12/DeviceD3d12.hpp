@@ -75,6 +75,7 @@ class RenderContextD3d12 : public GxRenderContext {
     void UnlockConstants(uint8_t stage, uint32_t slot) override;               // FUN_1422e00c0
     bool CopyTex(Tex* source, Tex* dest, int32_t* sourceOrigin, int32_t* destOrigin, uint32_t* size,
         uint32_t slice, int32_t mip) override;                                  // FUN_1422e1870
+    bool ResolveTex(Tex* source, Tex* dest) override;                          // FUN_1422e2d40
 };
 
 class GraphicsCommandList {
@@ -133,6 +134,7 @@ class GraphicsCommandList {
     void UnlockConstants(uint8_t stage, uint32_t slot);  // FUN_1422e0040
     bool CopyTex(Tex* source, Tex* dest, int32_t* sourceOrigin, int32_t* destOrigin, uint32_t* size,
         uint32_t slice, int32_t mip);       // FUN_1422e14e0
+    bool ResolveTex(Tex* source, Tex* dest);  // FUN_1422e2b20
 };
 static_assert(offsetof(GraphicsCommandList, m_copy) == 0x8, "GraphicsCommandList layout");
 static_assert(offsetof(GraphicsCommandList, m_uploadBufs) == 0xba0, "GraphicsCommandList layout");
@@ -239,6 +241,7 @@ class CGxDeviceD3d12 : public CGxDevice {
     void* FrameEnd(void* out, void* query) override;                      // 0x190 FUN_1422d3280
     uint32_t FrameCount() override;                                       // 0x198 FUN_1422a8d50
     bool TexHeapCreate(const void* desc, void** heap) override;           // 0x1e8 FUN_1422e1e60
+    GXTEXALLOCINFO* TexAllocationInfo(GXTEXALLOCINFO* out, const void* desc) override;  // 0x1f8 FUN_1422cde90
     bool TexCreate(const void* desc, void** tex) override;                // 0x200 FUN_1422e1880
     void TexDestroy(void* tex) override;                                  // 0x208 FUN_1422e1b70
     void* DefaultTex() override;                                          // 0x210 FUN_1422e1cd0

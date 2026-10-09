@@ -8,6 +8,7 @@ add_library(client STATIC
     LocalFileHandlers.cpp
     Main.cpp
     Startup.cpp
+    FrameBufferCache.cpp
     RenderSettings.cpp
     StartupClient.cpp
     StartupService.cpp

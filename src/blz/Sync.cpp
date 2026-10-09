@@ -108,6 +108,18 @@ void shared_mutex::lock_shared() {
     ReleaseSRWLockExclusive(&this->m_lock);
 }
 
+// ref: FUN_1423630f0
+bool shared_mutex::try_lock_shared() {
+    AcquireSRWLockExclusive(&this->m_lock);
+    uint32_t state = this->m_state;
+    bool locked = (state & WRITER) == 0 && (state & READERS) != READERS;
+    if (locked) {
+        this->m_state = (state & READERS) + 1;
+    }
+    ReleaseSRWLockExclusive(&this->m_lock);
+    return locked;
+}
+
 // ref: FUN_142363170
 void shared_mutex::unlock_shared() {
     AcquireSRWLockExclusive(&this->m_lock);

@@ -38,6 +38,11 @@ bool GxRenderTargetsUpdate(GXRENDERTARGETS* cached, const GXRENDERTARGETS* targe
 // (FUN_14228ddb0).
 int32_t* GxRenderTargetsSize(const GXRENDERTARGETS* targets, int32_t* size);
 
+// Puts a target into a set, updating the mask (FUN_14228da90), and counts the set's targets
+// from its mask (FUN_14228dd30).
+void GxRenderTargetsAttach(GXRENDERTARGETS* targets, uint8_t index, gxDx12Backend::Tex* tex);
+bool GxRenderTargetsCount(GXRENDERTARGETS* targets);
+
 // Puts one target into a set (FUN_14228de80).
 void GxRenderTargetsSet(GXRENDERTARGETS* targets, uint32_t index, gxDx12Backend::Tex* tex);
 

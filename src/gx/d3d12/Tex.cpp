@@ -695,7 +695,9 @@ bool CGxDeviceD3d12::TexCreate(const TEXDESC* desc, Tex* tex, bool mayFail, ID3D
     if (largeSize <= info.SizeInBytes) {
         committed = true;
     }
-    HeapPage* heap = desc->m_heap;
+    // The description names a GxTexHeap; its page is at +0x10.
+    auto texHeap = static_cast<TEXHEAP*>(desc->m_heap);
+    HeapPage* heap = texHeap != nullptr ? &texHeap->m_page : nullptr;
     if (heap != nullptr) {
         committed = false;
     }
@@ -887,7 +889,7 @@ bool CGxDeviceD3d12::TexCreate(const void* descHandle, void** out) {
         desc.m_usage |= 0x180000;
     }
     if (desc.m_heap != nullptr && this->m_options.ResourceHeapTier == D3D12_RESOURCE_HEAP_TIER_1 &&
-        reinterpret_cast<uint8_t*>(desc.m_heap)[8] != 0) {
+        static_cast<TEXHEAP*>(desc.m_heap)->m_targets != 0) {
         desc.m_usage |= 0x40000;
     }
     void* memory = SMemAlloc(sizeof(Tex), 0xd, s_deviceFile, SStrHashFnv1a(s_deviceFile), 0x1427, 0);
@@ -1000,6 +1002,26 @@ Tex* CGxDeviceD3d12::DefaultTexD3d12() {
         return tex;
     }();
     return s_tex;
+}
+
+// Device slot 0x1f8: the size and alignment the texture a description makes would take.
+// ref: FUN_1422cde90
+GXTEXALLOCINFO* CGxDeviceD3d12::TexAllocationInfo(GXTEXALLOCINFO* out, const void* descHandle) {
+    TEXDESC desc = *static_cast<const TEXDESC*>(descHandle);
+    desc.m_format = s_formatRemap[desc.m_format];
+    if (((desc.m_usage >> 0x1b) & 1) != 0) {
+        desc.m_usage |= 0x180000;
+    }
+    if (desc.m_heap != nullptr && this->m_options.ResourceHeapTier == D3D12_RESOURCE_HEAP_TIER_1 &&
+        static_cast<TEXHEAP*>(desc.m_heap)->m_targets != 0) {
+        desc.m_usage |= 0x40000;
+    }
+    D3D12_RESOURCE_DESC resourceDesc;
+    ResourceDescFromTex(&resourceDesc, &desc);
+    D3D12_RESOURCE_ALLOCATION_INFO info = this->m_device->GetResourceAllocationInfo(0, 1, &resourceDesc);
+    out->m_size = info.SizeInBytes;
+    out->m_alignment = static_cast<uint32_t>(info.Alignment);
+    return out;
 }
 
 // Device slot 0x1e8: a heap textures can be placed in.
@@ -1128,6 +1150,15 @@ namespace gxDx12Backend {
 // A Gx format as a resource format (DAT_142919aa0).
 DXGI_FORMAT ResourceFormat(uint8_t format) {
     return static_cast<DXGI_FORMAT>(s_resourceFormats[format]);
+}
+
+}
+
+namespace gxDx12Backend {
+
+// A Gx format as a shader resource format (DAT_142919b30).
+DXGI_FORMAT ShaderFormat(uint8_t format) {
+    return static_cast<DXGI_FORMAT>(s_shaderFormats[format]);
 }
 
 }

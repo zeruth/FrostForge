@@ -170,7 +170,7 @@ struct TEXDESC {
                                     //       27 placed elsewhere, 28-31 mip count
     uint32_t m_usage2;              // 0x18: bit 0 (the usage's bit 32) no state object
     uint32_t m_pad1c;
-    HeapPage* m_heap;               // 0x20: a heap to place the texture in, or null
+    void* m_heap;                   // 0x20: a TEXHEAP to place the texture in, or null
     uint64_t m_28;                  // 0x28
 };
 static_assert(sizeof(TEXDESC) == 0x30, "TEXDESC is 0x30 bytes");
@@ -245,6 +245,8 @@ static_assert(sizeof(GxCallbackList) == 0x48, "GxCallbackList is 0x48 bytes");
 
 // A Gx format as a resource format (DAT_142919aa0).
 DXGI_FORMAT ResourceFormat(uint8_t format);
+// As a shader resource (DAT_142919b30).
+DXGI_FORMAT ShaderFormat(uint8_t format);
 
 extern const char s_frameDataTag[];         // ".?AUFrameData@Device@gxDx12Backend@@"
 

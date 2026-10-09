@@ -1,4 +1,5 @@
 #include "client/ConsoleDevice.hpp"
+#include "client/FrameBufferCache.hpp"
 #include "client/RenderSettings.hpp"
 #include "threadpool/ThreadPool.hpp"
 #include "client/CommandLine.hpp"
@@ -140,10 +141,6 @@ void Sub1412A2BF0() {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_14129fcb0
-void Sub14129FCB0() {
-    FROST_UNIMPLEMENTED();
-}
 
 // ref: FUN_1412834a0
 void Sub1412834A0(uint32_t a1) {
@@ -385,12 +382,6 @@ void Sub1412E1C00() {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_140216570
-uint64_t Sub140216570() {
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_1412cab50
 void Sub1412CAB50(uint64_t a1) {
     (void)a1;
@@ -437,10 +428,23 @@ void Sub14192FCB0(void* a1) {
     FROST_UNIMPLEMENTED();
 }
 
+namespace {
+
+uint8_t s_flag142cfdb74;            // DAT_142cfdb74
+uint8_t s_compositorEnabled;        // DAT_142de194c
+uint32_t s_compositorMode;          // DAT_142de1970
+uint8_t s_captureFlip;              // DAT_142e96f72
+uint8_t s_captureRead;              // DAT_142e96f50
+uint8_t s_flag142e96e01;            // DAT_142e96e01
+uint8_t s_flag142e96e02;            // DAT_142e96e02
+uint8_t s_flag142e96e03;            // DAT_142e96e03
+uint8_t s_flag14323f218;            // DAT_14323f218
+
+}
+
 // ref: FUN_1413528e0
 void Sub1413528E0(bool a1) {
-    (void)a1;
-    FROST_UNIMPLEMENTED();
+    s_flag142cfdb74 = a1;
 }
 
 // glue
@@ -1008,7 +1012,7 @@ bool Sub14022A260() {
     Sub141280A70();
     Sub1402F9E30();
     Sub1412A2BF0();
-    Sub14129FCB0();
+    FrameBufferCacheInitialize();
     Sub1412834A0(0xbaa0c);
     Sub141297EB0(0xb27ad);
     GXSIZE resolution;
@@ -1065,4 +1069,133 @@ bool Sub14022A260() {
     ConsoleCommandRegister("SetGraphicsQuality", CommandSetGraphicsQuality, 1, nullptr, 0);
     ConsoleCommandRegister("SetGraphicsQualityRAID", CommandSetGraphicsQualityRaid, 1, nullptr, 0);
     return true;
+}
+
+// ---- the frame's callees, ported one by one -------------------------------------------------
+
+// ref: FUN_14134f980
+bool Sub14134F980() {
+    return s_flag142cfdb74 != 0;
+}
+
+// A compositor (stereo) path's flags (DAT_142de194c, DAT_142de1970); neither is set yet.
+// ref: FUN_140239e90
+bool Sub140239E90() {
+    return s_compositorEnabled != 0 && s_compositorMode != 0;
+}
+
+// ref: FUN_140239e10
+uint32_t* Sub140239E10(uint32_t* out, const uint32_t* size) {
+    (void)size;
+    FROST_UNIMPLEMENTED();
+    *out = *size;
+    return out;
+}
+
+// Screenshot / video capture flags (DAT_142e96f72, DAT_142e96f50).
+// ref: FUN_1405dc320
+bool Sub1405DC320() {
+    return s_captureFlip != 0;
+}
+
+// ref: FUN_1405dbde0
+bool Sub1405DBDE0() {
+    return s_captureRead != 0;
+}
+
+// ref: FUN_14026bea0
+bool Sub14026BEA0() {
+    return true;
+}
+
+// ref: FUN_1413544d0
+void Sub1413544D0() {
+    FROST_UNIMPLEMENTED();
+}
+
+// The UI's frame: its time step, then FUN_1417d8ab0, FUN_1417ce430 and FUN_141b1b1b0.
+// ref: FUN_14167ba90
+void Sub14167BA90(uint64_t a1, uint64_t a2) {
+    (void)a1;
+    (void)a2;
+    FROST_UNIMPLEMENTED();
+}
+
+// The UI root's render (slot 0xf8 of DAT_142e979d8).
+void UiRender(void* ui) {
+    (void)ui;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14022ea60
+void Sub14022EA60() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1405f27e0
+void Sub1405F27E0(bool a1) {
+    (void)a1;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_140238d50
+void Sub140238D50() {
+    FROST_UNIMPLEMENTED();
+}
+
+// The loading screen's draw.
+// ref: FUN_14022ee80
+void Sub14022EE80(GxRenderContext* context, GXRENDERTARGETS* targets, bool a3) {
+    (void)context;
+    (void)targets;
+    (void)a3;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14192ffc0
+void Sub14192FFC0(GxRenderContext* context, GXRENDERTARGETS* targets) {
+    (void)context;
+    (void)targets;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141350fc0
+void Sub141350FC0() {
+    if (s_flag142e96e02 == 0 && s_flag142e96e03 != 0) {
+        InterlockedExchange8(reinterpret_cast<volatile char*>(&s_flag142e96e01), 1);
+        s_flag142e96e03 = 0;
+    }
+}
+
+// ref: FUN_141c9cbd0
+bool Sub141C9CBD0() {
+    return s_flag14323f218 != 0;
+}
+
+// ref: FUN_140239ec0
+void Sub140239EC0(FRAMEBUFFER* frame) {
+    (void)frame;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1412c51b0
+void Sub1412C51B0() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14068bc30
+void Sub14068BC30() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14068aae0
+void Sub14068AAE0() {
+    FROST_UNIMPLEMENTED();
+}
+
+// The frame stats' bookkeeping and the dynamic render scale.
+// ref: FUN_14023d170
+void Sub14023D170(GXFRAMESTATS* stats) {
+    (void)stats;
+    FROST_UNIMPLEMENTED();
 }

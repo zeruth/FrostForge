@@ -1,4 +1,7 @@
+#include "client/FrameBufferCache.hpp"
 #include "client/GxWindow.hpp"
+#include "gx/GxDevice.hpp"
+#include "gx/d3d12/DeviceD3d12.hpp"
 #include "client/Startup.hpp"
 #include "console/Command.hpp"
 #include "gx/Gx.hpp"
@@ -12,6 +15,27 @@
 // pumps the OS events into the client and advances the game state; the iteration renders.
 
 // The loop's stubs (StartupClient.cpp).
+bool Sub14134F980();
+bool Sub140239E90();
+uint32_t* Sub140239E10(uint32_t* out, const uint32_t* size);
+bool Sub1405DC320();
+bool Sub1405DBDE0();
+bool Sub14026BEA0();
+void Sub1413544D0();
+void Sub14167BA90(uint64_t a1, uint64_t a2);
+void UiRender(void* ui);
+void Sub14022EA60();
+void Sub1405F27E0(bool a1);
+void Sub140238D50();
+void Sub14022EE80(GxRenderContext* context, GXRENDERTARGETS* targets, bool a3);
+void Sub14192FFC0(GxRenderContext* context, GXRENDERTARGETS* targets);
+void Sub141350FC0();
+bool Sub141C9CBD0();
+void Sub140239EC0(FRAMEBUFFER* frame);
+void Sub1412C51B0();
+void Sub14068BC30();
+void Sub14068AAE0();
+void Sub14023D170(GXFRAMESTATS* stats);
 void Sub14065FCE0(uint32_t elapsed, uint32_t now);
 void Sub14065FD40();
 void AsyncReadPoll();
@@ -22,7 +46,6 @@ void Sub14021F090();
 void Sub1415642A0();
 void Sub14230B040();
 void Sub1412E1C00();
-uint64_t Sub140216570();
 void Sub1412CAB50(uint64_t a1);
 void Sub1412E1FB0();
 void Sub1402F4D00(uint64_t a1);
@@ -76,6 +99,7 @@ namespace {
 uint8_t s_quitRequested;            // DAT_142ddcf48
 uint8_t s_quitHandled;              // DAT_142ddcfac
 uint64_t s_quitArgument;            // DAT_142ddcf58
+uint64_t s_quitArgument2;           // DAT_142ddcf60
 float s_frameSeconds;               // DAT_142ddfa00
 uint32_t s_frameTime;               // DAT_142ddf9f4
 uint8_t s_paused;                   // DAT_142ddfa04
@@ -272,6 +296,16 @@ void ClientRequestQuit() {
     }
 }
 
+// ref: FUN_140216570
+uint64_t Sub140216570() {
+    return s_quitArgument;
+}
+
+// ref: FUN_140216580
+uint64_t Sub140216580() {
+    return s_quitArgument2;
+}
+
 // The main loop's condition: pumps events and advances the game; false to stop.
 // ref: FUN_1402225d0
 bool Sub1402225D0() {
@@ -355,9 +389,132 @@ bool Sub1402225D0() {
     return true;
 }
 
-// One frame: the world and the UI drawn into the window's swap chain.
+namespace {
+
+uint8_t s_inFrame;                  // DAT_142ddfa10
+uint32_t s_skippedFrames;           // DAT_142ddfa0c
+
+// Colour target `index` of the frame buffer takes the texture's format and usage, and the
+// texture itself.
+// ref: FUN_140226150
+void FrameBufferUseTexture(FRAMEBUFFER* buffer, uint32_t index, void* texture) {
+    auto tex = static_cast<const gxDx12Backend::Tex*>(texture);
+    uint32_t usage = tex->m_usage;
+    FRAMEBUFFERTARGET* target = &buffer->m_color[index];
+    std::memset(target, 0, sizeof(*target));
+    target->m_format = tex->m_format;
+    target->m_samples = (usage >> 0x15) & 7;
+    target->m_08 = (usage >> 0x18) & 3;
+    target->m_renderTarget = 1;
+    target->m_unordered = static_cast<uint8_t>((usage >> 0x14) & 1);
+    target->m_shaderResource = static_cast<uint8_t>((usage >> 0x13) & 1);
+    GxRenderTargetsAttach(&buffer->m_targets, static_cast<uint8_t>(index + 1), static_cast<gxDx12Backend::Tex*>(texture));
+}
+
+// The frame end's callback: the end-of-frame upkeep, the frame stats, and the frame-rate cap
+// (60 at the glue screens).
+// ref: FUN_1402261d0
+void OnFrameEnded(GXFRAMESTATS* stats, void* storage) {
+    (void)storage;
+    Sub14068BC30();
+    Sub14068AAE0();
+    Sub14023D170(stats);
+    GxFrameLimit(s_gameState == 0 ? 0x3c : 0);
+}
+
+}
+
+// One frame: the world or the glue screens drawn into the window's frame buffer, which is
+// then copied to the swap chain's back buffer and presented.
 // ref: FUN_140225ab0
 void Sub140225AB0() {
     GxFrameSetPhase(1);
-    FROST_UNIMPLEMENTED();  // the frame (needs the device and its swap chain)
+    s_inFrame = 1;
+    if (!LoadingScreenIsActive() && s_gameState == 6) {
+        s_skippedFrames++;
+        s_inFrame = 0;
+        return;
+    }
+    if (!Sub14134F980() && (LoadingScreenIsActive() || s_gameState != 7)) {
+        Sub1413528E0(true);
+    }
+    GxFrameWorkFlush(2);
+    bool overlapped = GxFrameArm(true) && (s_gameState == 0 || s_gameState == 7);
+    if (!GxFrameBegin()) {
+        Sub1412C51B0();
+        s_inFrame = 0;
+        return;
+    }
+    auto chain = static_cast<GXSWAPCHAIN*>(WindowGetSwapChain());
+    if (GxSwapChainBegin(chain)) {
+        FRAMEBUFFER* frame = WindowGetFrameBuffer();
+        GXRENDERTARGETS* targets = &frame->m_targets;
+        GxRenderTargetsClear(targets);
+        uint32_t size = *reinterpret_cast<const uint32_t*>(&chain->m_width);
+        if (Sub140239E90()) {
+            uint32_t scaled;
+            size = *Sub140239E10(&scaled, &size);
+        }
+        FrameBufferSetup(frame, chain->m_format, size);
+        bool present = true;
+        if (!LoadingScreenIsActive()) {
+            if (s_gameState == 7) {
+                FROST_UNIMPLEMENTED();  // FUN_141472dc0 (the world scene), the UI and FUN_1405f27e0
+                if (s_paused != 0) {
+                    s_paused = 0;
+                    present = false;
+                }
+            } else if (s_gameState == 0) {
+                FrameBufferBind(frame);
+                g_gxRenderContext->Clear(targets->m_count != 0 ? targets : nullptr, 0xf, 0xff000000, 1.0f, 0, 0);
+                Sub1413544D0();
+                Sub14167BA90(Sub140216570(), Sub140216580());
+                UiRender(s_uiInput);
+                Sub14022EA60();
+                Sub1405F27E0(!Sub14026BEA0());
+                if (!Sub1405DC320() && !Sub1405DBDE0() && !Sub140239E90()) {
+                    void* back = GxSwapChainGetBackBuffer(chain);
+                    int32_t sourceOrigin[2] = { 0, 0 };
+                    int32_t destOrigin[2] = { 0, 0 };
+                    g_gxRenderContext->CopyTex(static_cast<gxDx12Backend::Tex*>(targets->m_texs[1]),
+                        static_cast<gxDx12Backend::Tex*>(back), sourceOrigin, destOrigin, reinterpret_cast<uint32_t*>(frame->m_size), 0, 0);
+                    FrameBufferSetColor(frame, 0, back);
+                    g_gxRenderContext->SetRenderTargets(targets->m_count != 0 ? targets : nullptr);
+                }
+            }
+            Sub140238D50();
+        } else {
+            if (!Sub1405DC320() && !Sub1405DBDE0() && !Sub140239E90()) {
+                FrameBufferUseTexture(frame, 0, GxSwapChainGetBackBuffer(chain));
+            }
+            FrameBufferBind(frame);
+            Sub14022EE80(g_gxRenderContext, targets->m_count != 0 ? targets : nullptr, true);
+        }
+        if (frame->m_bound == 0) {
+            FrameBufferUseTexture(frame, 0, GxSwapChainGetBackBuffer(chain));
+            FrameBufferBind(frame);
+            g_gxRenderContext->Clear(targets->m_count != 0 ? targets : nullptr, 1, 0, 1.0f, 0, 0);
+        } else {
+            if (Sub1405DC320() || Sub1405DBDE0()) {
+                FROST_UNIMPLEMENTED();  // FUN_1412a0e30 with FUN_140225960 / FUN_1402259d0 (capture flips)
+            }
+            Sub14192FFC0(g_gxRenderContext, !LoadingScreenIsActive() && targets->m_count != 0 ? targets : nullptr);
+            WindowDrawCursor();
+        }
+        Sub141350FC0();
+        Sub141C9CBD0();
+        Sub140239EC0(frame);
+        if (present) {
+            GxSwapChainPresent(chain);
+        } else {
+            GxSwapChainSkip(chain);
+        }
+        GxSwapChainEnd(chain);
+        FrameBufferRelease(frame);
+    }
+    blz::function_storage callback = { reinterpret_cast<void*>(&OnFrameEnded), blz::function_empty_manager, {} };
+    GxFrameEnd(&callback, overlapped);
+    callback.m_manager(callback.m_storage, nullptr, 0);
+    Sub1412C51B0();
+    s_inFrame = 0;
 }

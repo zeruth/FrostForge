@@ -15,6 +15,13 @@ GXWINDOWPARAMS* WindowGetParams();
 GXSIZE* WindowGetSize(GXSIZE* size);
 GXSIZE* WindowGetResolution(GXSIZE* size);
 void* WindowGetSwapChain();
+
+// The window's frame buffer (DAT_1430d00a0, FUN_1414fce30).
+struct FRAMEBUFFER;
+FRAMEBUFFER* WindowGetFrameBuffer();
+
+// Draws the software cursor (FUN_1414fc400).
+void WindowDrawCursor();
 void WindowSetClipCursor(bool clip);
 void WindowSetTitle(void* window, const char* title);
 

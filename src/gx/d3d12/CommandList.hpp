@@ -209,7 +209,7 @@ class GxRenderContext {
     virtual bool CopyTex(gxDx12Backend::Tex* source, gxDx12Backend::Tex* dest, int32_t* sourceOrigin,
         int32_t* destOrigin, uint32_t* size, uint32_t slice, int32_t mip);  // 0x198
     virtual void Slot1a0();
-    virtual void Slot1a8();
+    virtual bool ResolveTex(gxDx12Backend::Tex* source, gxDx12Backend::Tex* dest);  // 0x1a8
     virtual void Slot1b0();
     virtual void Slot1b8();
     virtual void Slot1c0();

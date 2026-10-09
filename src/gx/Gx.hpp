@@ -138,6 +138,17 @@ void GxFrameLimit(uint32_t fps);
 uint32_t GxDeviceLostCount();
 void GxRequestRestart();
 
+// Textures and texture heaps through the device (FUN_14228c1d0, FUN_14228c390, FUN_14228c490,
+// FUN_14228c4c0), what a description would take (FUN_142289a20) and a texture's description
+// (FUN_1422884b0).
+struct GXTEXALLOCINFO;
+bool GxTexCreate(const void* desc, void** tex);
+void GxTexDestroy(void** tex);
+bool GxTexHeapCreate(const void* desc, void** heap);
+void GxTexHeapDestroy(void* heap);
+GXTEXALLOCINFO* GxTexAllocationInfo(GXTEXALLOCINFO* out, const void* desc);
+void* GxTexGetDesc(const void* tex, void* out);
+
 // Once-a-frame Gx work (FUN_14228c670) and the callbacks it runs (FUN_14228e190, FUN_14228e8f0).
 void GxFrameUpdate();
 void GxAddFrameStartCallback(void (*callback)(void*), void* param);

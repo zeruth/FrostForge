@@ -13,6 +13,13 @@
 #include <cstddef>
 #include <cstdint>
 
+// The size and alignment a texture takes in a heap (device slot 0x1f8).
+struct GXTEXALLOCINFO {
+    uint64_t m_size;
+    uint32_t m_alignment;
+    uint32_t m_pad;
+};
+
 // What the window asks a swap chain for.
 struct GXSWAPCHAINPARAMS {
     HWND m_window;                  // 0x00
@@ -22,6 +29,24 @@ struct GXSWAPCHAINPARAMS {
     uint8_t m_vsync;                // 0x10
     uint8_t m_primary;              // 0x11
 };
+
+// What every backend's swap chain starts with.
+struct GXSWAPCHAIN {
+    void* m_window;                 // 0x00
+    uint16_t m_width;               // 0x08
+    uint16_t m_height;              // 0x0a
+    uint16_t m_requestWidth;        // 0x0c
+    uint16_t m_requestHeight;       // 0x0e
+    uint8_t m_format;               // 0x10
+};
+
+// A swap chain's frame: begin (FUN_14228c090), its back buffer (FUN_1422885f0), present
+// (FUN_14228c140) or skip the present (FUN_14228c100), and end (FUN_14228c120).
+bool GxSwapChainBegin(void* chain);
+void* GxSwapChainGetBackBuffer(void* chain);
+void GxSwapChainPresent(void* chain);
+void GxSwapChainSkip(void* chain);
+void GxSwapChainEnd(void* chain);
 
 // Creates a swap chain on the device (FUN_14228c0b0), and destroys one, clearing the
 // pointer (FUN_14228c0d0).
@@ -95,7 +120,7 @@ class CGxDevice {
     virtual void Slot1e0();                                 // 0x1e0
     virtual bool TexHeapCreate(const void* desc, void** heap);  // 0x1e8
     virtual void TexHeapDestroy(void* heap);                // 0x1f0
-    virtual void Slot1f8();                                 // 0x1f8
+    virtual GXTEXALLOCINFO* TexAllocationInfo(GXTEXALLOCINFO* out, const void* desc);  // 0x1f8
     virtual bool TexCreate(const void* desc, void** tex);   // 0x200
     virtual void TexDestroy(void* tex);                     // 0x208
     virtual void* DefaultTex();                             // 0x210

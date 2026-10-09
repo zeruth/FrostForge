@@ -68,6 +68,45 @@ int32_t* GxRenderTargetsSize(const GXRENDERTARGETS* targets, int32_t* size) {
     return size;
 }
 
+// Puts a target into a set and updates its bit in the mask; depth sets bit 4, and bit 5 too
+// unless its format (0x1d, 0x1e) has no stencil. The count is left for GxRenderTargetsCount.
+// ref: FUN_14228da90
+void GxRenderTargetsAttach(GXRENDERTARGETS* targets, uint8_t index, gxDx12Backend::Tex* tex) {
+    gxDx12Backend::TargetView* view = GxTexTargetView(tex);
+    targets->m_count = 0;
+    targets->m_texs[index] = tex;
+    targets->m_views[index] = view;
+    targets->m_ids[index] = view != nullptr ? view->m_id : 0;
+    if (index == 0) {
+        uint16_t mask = targets->m_mask;
+        if (tex == nullptr) {
+            targets->m_mask = mask & 0xffcf;
+            return;
+        }
+        if (static_cast<uint8_t>(tex->m_format - 0x1d) > 1) {
+            targets->m_mask = (mask & 0xffdf) | 0x10;
+        } else {
+            targets->m_mask = mask | 0x30;
+        }
+        return;
+    }
+    if (tex == nullptr) {
+        targets->m_mask &= static_cast<uint16_t>(~(1u << ((index - 1) & 0x1f)));
+    } else {
+        targets->m_mask |= static_cast<uint16_t>(1u << ((index - 1) & 0x1f));
+    }
+}
+
+// Counts the targets the mask names (depth and stencil as one); true when there are any.
+// ref: FUN_14228dd30
+bool GxRenderTargetsCount(GXRENDERTARGETS* targets) {
+    uint16_t mask = targets->m_mask;
+    uint16_t count = static_cast<uint16_t>(((mask & 0x30) != 0) + ((mask >> 3) & 1) + ((mask >> 2) & 1) + ((mask >> 1) & 1) +
+        (mask & 1));
+    targets->m_count = count;
+    return count != 0;
+}
+
 // ref: FUN_14228de80
 void GxRenderTargetsSet(GXRENDERTARGETS* targets, uint32_t index, gxDx12Backend::Tex* tex) {
     targets->m_texs[index] = tex;
@@ -308,8 +347,9 @@ bool GxRenderContext::CopyTex(gxDx12Backend::Tex*, gxDx12Backend::Tex*, int32_t*
 void GxRenderContext::Slot1a0() {
     FROST_UNIMPLEMENTED();
 }
-void GxRenderContext::Slot1a8() {
+bool GxRenderContext::ResolveTex(gxDx12Backend::Tex*, gxDx12Backend::Tex*) {
     FROST_UNIMPLEMENTED();
+    return false;
 }
 void GxRenderContext::Slot1b0() {
     FROST_UNIMPLEMENTED();

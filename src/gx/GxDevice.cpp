@@ -302,8 +302,11 @@ bool CGxDevice::TexHeapCreate(const void*, void** heap) {
     return false;
 }
 void CGxDevice::TexHeapDestroy(void*) {}
-void CGxDevice::Slot1f8() {
-    FROST_UNIMPLEMENTED();  // FUN_142290cf0
+// ref: FUN_142290cf0
+GXTEXALLOCINFO* CGxDevice::TexAllocationInfo(GXTEXALLOCINFO* out, const void*) {
+    out->m_size = 0;
+    out->m_alignment = 0;
+    return out;
 }
 bool CGxDevice::TexCreate(const void*, void** tex) {
     FROST_UNIMPLEMENTED();
@@ -436,4 +439,29 @@ void GxSwapChainDestroy(void** chain) {
         static_cast<CGxDevice*>(g_gxDevice)->SwapChainDestroy(*chain);
         *chain = nullptr;
     }
+}
+
+// ref: FUN_14228c090
+bool GxSwapChainBegin(void* chain) {
+    return static_cast<CGxDevice*>(g_gxDevice)->SwapChainBegin(chain);
+}
+
+// ref: FUN_1422885f0
+void* GxSwapChainGetBackBuffer(void* chain) {
+    return static_cast<CGxDevice*>(g_gxDevice)->SwapChainGetBackBuffer(chain);
+}
+
+// ref: FUN_14228c140
+void GxSwapChainPresent(void* chain) {
+    static_cast<CGxDevice*>(g_gxDevice)->SwapChainPresent(chain);
+}
+
+// ref: FUN_14228c100
+void GxSwapChainSkip(void* chain) {
+    static_cast<CGxDevice*>(g_gxDevice)->Slot128(chain);
+}
+
+// ref: FUN_14228c120
+void GxSwapChainEnd(void* chain) {
+    static_cast<CGxDevice*>(g_gxDevice)->SwapChainEnd(chain);
 }

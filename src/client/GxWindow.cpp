@@ -1,4 +1,5 @@
 #include "client/GxWindow.hpp"
+#include "client/FrameBufferCache.hpp"
 #include "client/RenderSettings.hpp"
 #include "gx/Gx.hpp"
 #include "gx/GxDevice.hpp"
@@ -787,4 +788,20 @@ void WindowSetTitle(void* window, const char* title) {
     auto wide = static_cast<wchar_t*>(_alloca((static_cast<size_t>(length) * 2 + 0xf) & ~static_cast<size_t>(0xf)));
     UnicodeConvertUtf8ToUtf16(wide, length, title, 0x7fffffff, nullptr, nullptr);
     SetWindowTextW(static_cast<HWND>(window), wide);
+}
+
+namespace {
+
+FRAMEBUFFER s_frameBuffer;          // DAT_1430d00a0
+
+}
+
+// ref: FUN_1414fce30
+FRAMEBUFFER* WindowGetFrameBuffer() {
+    return &s_frameBuffer;
+}
+
+// ref: FUN_1414fc400
+void WindowDrawCursor() {
+    FROST_UNIMPLEMENTED();  // the software cursor's quad (needs its texture and material)
 }

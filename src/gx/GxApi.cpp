@@ -2468,3 +2468,122 @@ uint8_t* GxDeviceCaps() {
 uint32_t GxDeviceFrame() {
     return static_cast<CGxDevice*>(g_gxDevice)->Field<uint32_t>(0x138);
 }
+
+// ---- textures through the device ------------------------------------------------------------
+
+// The texture a description makes. Off the main thread it needs the device lock shared; a
+// texture that fails becomes the default texture. Textures carry the device generation in
+// bits 1-5 of their flags so one from an older device is recognized.
+// ref: FUN_14228c1d0
+bool GxTexCreate(const void* descHandle, void** tex) {
+    *tex = nullptr;
+    // Formats that cannot multisample or take a mip mode (local table in the reference).
+    static const uint8_t s_compressed[0x23] = { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 };
+    auto desc = static_cast<const uint8_t*>(descHandle);
+    if (s_compressed[desc[0x10]] != 0 && ((desc[4] & 3) != 0 || (desc[8] & 3) != 0)) {
+        return false;
+    }
+    bool shared = false;
+    if (*reinterpret_cast<void* const*>(desc + 0x20) == nullptr && OsGetCurrentThreadId() != s_mainThreadId) {
+        shared = s_deviceLock.try_lock_shared();
+        if (!shared) {
+            return false;
+        }
+    }
+    bool created = false;
+    auto device = static_cast<CGxDevice*>(g_gxDevice);
+    if (device != nullptr) {
+        if (device->m_ready != 0) {
+            created = device->TexCreate(descHandle, tex);
+            if (!created || *tex == nullptr) {
+                if (*tex != nullptr) {
+                    device->TexDestroy(*tex);
+                }
+                *tex = device->DefaultTex();
+                created = false;
+            } else {
+                uint32_t& flags = *reinterpret_cast<uint32_t*>(static_cast<uint8_t*>(*tex) + 0x10);
+                flags = ((s_deviceGeneration & 0x1f) << 1) | (flags & 0xffffffc1);
+            }
+        } else {
+            *tex = device->DefaultTex();
+        }
+    }
+    if (shared) {
+        s_deviceLock.unlock_shared();
+    }
+    return created;
+}
+
+// Destroys a texture unless it is the shared default; one from an older device is freed
+// without the device.
+// ref: FUN_14228c390
+void GxTexDestroy(void** tex) {
+    if (*tex == nullptr) {
+        return;
+    }
+    uint32_t flags = *reinterpret_cast<uint32_t*>(static_cast<uint8_t*>(*tex) + 0x10);
+    if ((flags & 0x40) == 0) {
+        bool other = OsGetCurrentThreadId() != s_mainThreadId;
+        if (other) {
+            s_deviceLock.lock_shared();
+        }
+        if (((flags >> 1 ^ s_deviceGeneration) & 0x1f) == 0) {
+            static_cast<CGxDevice*>(g_gxDevice)->TexDestroy(*tex);
+        } else {
+            GxLog("Deleting texture found from previous device instance!");
+            operator delete(*tex, 0x1c);
+        }
+        if (other) {
+            s_deviceLock.unlock_shared();
+        }
+    }
+    *tex = nullptr;
+}
+
+// ref: FUN_14228c490
+bool GxTexHeapCreate(const void* desc, void** heap) {
+    *heap = nullptr;
+    auto device = static_cast<CGxDevice*>(g_gxDevice);
+    if (device->Field<uint8_t>(0x12a) == 0) {
+        return false;
+    }
+    return device->TexHeapCreate(desc, heap);
+}
+
+// ref: FUN_14228c4c0
+void GxTexHeapDestroy(void* heap) {
+    if (heap != nullptr) {
+        static_cast<CGxDevice*>(g_gxDevice)->TexHeapDestroy(heap);
+    }
+}
+
+// ref: FUN_142289a20
+GXTEXALLOCINFO* GxTexAllocationInfo(GXTEXALLOCINFO* out, const void* desc) {
+    if (g_gxDevice != nullptr) {
+        GXTEXALLOCINFO info;
+        *out = *static_cast<CGxDevice*>(g_gxDevice)->TexAllocationInfo(&info, desc);
+        return out;
+    }
+    out->m_size = 0;
+    out->m_alignment = 0;
+    out->m_pad = 0;
+    return out;
+}
+
+// A texture's description back from the texture.
+// ref: FUN_1422884b0
+void* GxTexGetDesc(const void* tex, void* out) {
+    auto bytes = static_cast<const uint8_t*>(tex);
+    auto desc = static_cast<uint8_t*>(out);
+    std::memset(desc, 0, 0x30);
+    desc[0] = bytes[7];
+    *reinterpret_cast<uint32_t*>(desc + 4) = *reinterpret_cast<const uint16_t*>(bytes);
+    *reinterpret_cast<uint32_t*>(desc + 8) = *reinterpret_cast<const uint16_t*>(bytes + 2);
+    *reinterpret_cast<uint32_t*>(desc + 0xc) = *reinterpret_cast<const uint16_t*>(bytes + 4);
+    desc[0x10] = bytes[8];
+    desc[0x11] = bytes[9];
+    *reinterpret_cast<uint64_t*>(desc + 0x14) = *reinterpret_cast<const uint64_t*>(bytes + 0x14);
+    return out;
+}
