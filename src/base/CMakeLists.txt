@@ -1,4 +1,5 @@
 add_library(base STATIC
+    Coordinate.cpp
     DataAllocator.cpp
     RCString.cpp
     Status.cpp

@@ -16,6 +16,13 @@ bool FrameXML_RegisterFactory(const char* type, FRAMEFACTORY factory, bool unkno
 // The factory for a type name, or null.
 FRAMEFACTORY FrameXML_GetFactory(const char* type);
 
+struct XMLOBJECT;
+
+// The compiled intrinsic element of a name, marked in use; *recursive when it already was.
+// Each acquire is paired with FrameXML_ReleaseIntrinsic.
+XMLOBJECT* FrameXML_AcquireIntrinsic(const char* name, const char** taint, bool* recursive);
+void FrameXML_ReleaseIntrinsic(const char* name);
+
 // The engine's frame types: Button, CheckButton, EditBox, Frame, ...
 bool FrameXML_RegisterDefault();
 // The validateFrameXML CVar.

@@ -69,6 +69,8 @@ void FrameScript_Execute(const char* source, const char* name, const char* taint
 
 struct ARC4STATE;
 
+// Drops a function's registry reference.
+void FrameScript_ReleaseFunction(int32_t ref);
 // The registry reference of FrameScript's own error handler.
 int32_t FrameScript_GetErrorHandlerRef();
 // The registry reference of the handler a script set with seterrorhandler, or -1.

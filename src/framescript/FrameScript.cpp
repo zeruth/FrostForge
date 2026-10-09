@@ -517,6 +517,11 @@ void FrameScript_Execute(const char* source, const char* name, const char* taint
     }
 }
 
+// ref: FUN_14063e170
+void FrameScript_ReleaseFunction(int32_t ref) {
+    luaL_unref(s_L, LUA_REGISTRYINDEX, ref);
+}
+
 // ref: FUN_14063cbc0
 int32_t FrameScript_GetErrorHandlerRef() {
     return s_errorHandlerRef;

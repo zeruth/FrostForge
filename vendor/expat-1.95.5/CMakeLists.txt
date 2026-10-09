@@ -4,7 +4,8 @@ add_library(expat STATIC
     lib/xmltok.c
 )
 target_include_directories(expat PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-target_compile_definitions(expat PUBLIC XML_STATIC PRIVATE COMPILED_FROM_DSP)
+# 1.95.5 spells the static-library switch _STATIC (XML_STATIC is the later name)
+target_compile_definitions(expat PUBLIC XML_STATIC _STATIC PRIVATE COMPILED_FROM_DSP)
 if(MSVC)
     target_compile_options(expat PRIVATE /W0)
 endif()

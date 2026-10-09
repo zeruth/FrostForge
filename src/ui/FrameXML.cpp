@@ -7,6 +7,7 @@
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
 #include "storm/hash/TSHashTable.hpp"
+#include "ui/BinaryXML.hpp"
 #include "util/Unimplemented.hpp"
 
 namespace {
@@ -72,6 +73,79 @@ class FrameFactoryTable : public TSHashTable<FrameFactoryNode> {
         return nullptr;
     }
 };
+
+// A virtual or intrinsic element, compiled, by name (HASHKEY_STRI).
+struct HashedNode : TSHashObject<HashedNode> {
+    char* m_str;                // 0x30
+    XMLOBJECT* m_object;        // 0x38
+    const char* m_taint;        // 0x40 the taint it was defined under
+    bool m_busy;                // 0x48 being expanded
+    int32_t m_refs;             // 0x4C expansions in progress
+};
+static_assert(offsetof(HashedNode, m_object) == 0x38, "HashedNode layout");
+static_assert(offsetof(HashedNode, m_refs) == 0x4c, "HashedNode layout");
+static_assert(sizeof(HashedNode) == 0x50, "HashedNode is 0x50 bytes");
+
+const char s_hashedNodeTag[] = ".?AV?$TSList@UHashedNode@@V?$TSGetExplicitLink@UHashedNode@@@@$07@@";
+const char s_hashedTableTag[] = ".?AV?$TSHashTable@UHashedNode@@VHASHKEY_STRI@@$07@@";
+
+// TSHashTable<HashedNode, HASHKEY_STRI, 8> (vtable 0x1426ce4b0).
+class HashedNodeTable : public TSHashTable<HashedNode> {
+    public:
+    // ref: FUN_140661ad0
+    void Delete(HashedNode* node) override {
+        XMLObjectFree(node->m_object, true);
+        // FUN_140613680: out of the table, the name freed, then both links
+        if (node->m_table) {
+            static_cast<HashedNodeTable*>(node->m_table)->Unlink(node);
+        }
+        SMemFree(node->m_str, nullptr, 0, 0);
+        node->m_str = nullptr;
+        node->m_linktofull.Unlink();
+        node->m_linktoslot.Unlink();
+        SMemFree(node, s_hashedTableTag, -2, 0);
+    }
+
+    // ref: FUN_140661b10
+    HashedNode* NewNode(TSExplicitList<HashedNode>* slot, uint32_t extra, uint32_t flags) override {
+        auto node = static_cast<HashedNode*>(
+            SMemAlloc(uint64_t(extra) + sizeof(HashedNode), 8, s_hashedNodeTag, 0, -2, flags | SMEM_FLAG_ZEROMEMORY));
+        node->m_linktoslot.m_prevlink = nullptr;
+        node->m_linktoslot.m_next = nullptr;
+        node->m_linktofull.m_prevlink = nullptr;
+        node->m_linktofull.m_next = nullptr;
+        node->m_table = nullptr;
+        node->m_hashval = 0;
+        node->m_str = nullptr;
+        node->m_object = nullptr;
+        node->m_taint = nullptr;
+        node->m_busy = false;
+        node->m_refs = 0;
+        slot->LinkToHead(node);
+        return node;
+    }
+
+    // ref: FUN_140619e80
+    HashedNode* Find(const char* name) {
+        if (this->m_slotmod == 0xFFFFFFFF) {
+            return nullptr;
+        }
+        uint32_t hash = SStrHashHT(name);
+        TSExplicitList<HashedNode>* slot = &this->m_slots[hash % this->m_slotmod];
+        for (HashedNode* node = slot->Head(); node; ) {
+            if (node->m_hashval == hash && _stricmp(node->m_str, name) == 0) {
+                return node;
+            }
+            HashedNode* next = slot->Link(node)->m_next;
+            uintptr_t raw = reinterpret_cast<uintptr_t>(next);
+            node = (raw & 1) || raw == 0 ? nullptr : next;
+        }
+        return nullptr;
+    }
+};
+
+HashedNodeTable s_virtualNodes;     // 0x142cf57e0
+HashedNodeTable s_intrinsicNodes;   // 0x142cf5830
 
 FrameFactoryTable s_factories;   // 0x142cf5880
 CVar* s_validateFrameXML;        // 0x142e9a280
@@ -199,6 +273,28 @@ bool FrameXML_RegisterFactory(const char* type, FRAMEFACTORY factory, bool unkno
 FRAMEFACTORY FrameXML_GetFactory(const char* type) {
     FrameFactoryNode* node = s_factories.Find(type);
     return node ? node->m_factory : nullptr;
+}
+
+// ref: FUN_140662af0
+XMLOBJECT* FrameXML_AcquireIntrinsic(const char* name, const char** taint, bool* recursive) {
+    HashedNode* node = s_intrinsicNodes.Find(name);
+    if (node) {
+        *taint = node->m_taint;
+        node->m_refs++;
+        node->m_busy = true;
+        XMLOBJECT* object = node->m_object;
+        *recursive = node->m_refs > 1;
+        return object;
+    }
+    *recursive = false;
+    return nullptr;
+}
+
+// ref: FUN_140665110
+void FrameXML_ReleaseIntrinsic(const char* name) {
+    HashedNode* node = s_intrinsicNodes.Find(name);
+    node->m_refs--;
+    node->m_busy = false;
 }
 
 // ref: FUN_140664ea0

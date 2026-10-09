@@ -2,6 +2,7 @@
 
 #include <cstdint>
 
+#include "base/Coordinate.hpp"
 #include "client/GxWindow.hpp"
 #include "framescript/FrameScript.hpp"
 #include "os/Timer.hpp"
@@ -170,13 +171,6 @@ void PreloadGlueModels() {
 }
 
 // ---- CGlueMgr::Initialize's callees -----------------------------------------------------
-
-// The status every glue message reports into (0x142ccb9f0) learns the aspect ratio.
-// ref: FUN_1402c9820
-void Sub1402C9820(float aspect) {
-    (void)aspect;
-    FROST_UNIMPLEMENTED();
-}
 
 // The enableSourceLocationLookup CVar (source file names for script positions).
 // ref: FUN_141b4b720
@@ -560,7 +554,7 @@ void CGlueMgr::Initialize() {
     s_windowWidth = size.m_width;
     s_windowHeight = size.m_height;
     s_aspect = WindowGetAspect();
-    Sub1402C9820(s_aspect);
+    CoordinateSetAspectRatio(&g_coordinateSpace, s_aspect);
     Sub141B4B720();
     Sub141C99C50();
     Sub1406031E0();
