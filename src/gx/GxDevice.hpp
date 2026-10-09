@@ -8,6 +8,7 @@
 // the object is 0x4750 bytes of mostly API-specific state.
 
 #include "blz/Allocator.hpp"
+#include "blz/Function.hpp"
 #include "gx/Gx.hpp"
 #include <windows.h>
 #include <cstddef>
@@ -53,6 +54,8 @@ void GxSwapChainEnd(void* chain);
 void* GxSwapChainCreate(const GXSWAPCHAINPARAMS* params);
 void GxSwapChainDestroy(void** chain);
 
+struct GxBuf;
+
 class CGxDevice {
     public:
     explicit CGxDevice(uint8_t api);
@@ -68,7 +71,8 @@ class CGxDevice {
     virtual bool FormatSupportsMultisample(uint8_t format, uint8_t samples, int32_t quality);  // 0x40
     virtual bool RebindAdapter();                           // 0x48: after the adapter list is rebuilt
     virtual uint8_t Slot050();                              // 0x50
-    virtual void Slot058();                                 // 0x58
+    // Runs `callback` once the GPU is done with the frame being recorded.
+    virtual void DeferCallback(blz::function_storage* callback);  // 0x58
     virtual void Slot060();                                 // 0x60
     virtual void Slot068();                                 // 0x68
     virtual void Slot070();                                 // 0x70
@@ -109,8 +113,8 @@ class CGxDevice {
     virtual void Slot188();                                 // 0x188
     virtual void* FrameEnd(void* out, void* query);         // 0x190: submits; out is the wait
     virtual uint32_t FrameCount();                          // 0x198: frames in flight
-    virtual void Slot1a0(void* shader);                     // 0x1a0: (re)create a registered shader
-    virtual void Slot1a8(void* shader);                     // 0x1a8: release a registered shader
+    virtual bool BufCreate(GxBuf* buf);                     // 0x1a0: the API side of a buffer
+    virtual void BufDestroy(GxBuf* buf);                    // 0x1a8
     virtual void Slot1b0();                                 // 0x1b0
     virtual void Slot1b8();                                 // 0x1b8
     virtual void Slot1c0();                                 // 0x1c0
@@ -175,14 +179,14 @@ static_assert(sizeof(CGxDevice) == 0x470, "CGxDevice is 0x470 bytes");
 // Gx's allocator: the one it hands Prism (FUN_14228a070).
 blz::allocator* GxGetAllocator();
 
-// The shaders registered for re-creation across devices (PTR_LOOP_142d43850): an intrusive
-// ring whose links sit 0x10 bytes into each shader, under DAT_143490a00.
+// The buffers registered for re-creation across devices (PTR_LOOP_142d43850): an intrusive
+// ring whose links sit 0x10 bytes into each GxBuf, under DAT_143490a00.
 struct GXREGISTRYLINK {
     GXREGISTRYLINK* m_next;
     GXREGISTRYLINK* m_prev;
 };
-extern GXREGISTRYLINK g_gxRegisteredShaders;
-extern SRWLOCK g_gxRegisteredShadersLock;
+extern GXREGISTRYLINK g_gxRegisteredBufs;
+extern SRWLOCK g_gxRegisteredBufsLock;
 
 // Builds the D3D12 device in place in `block` (FUN_1422a8d70).
 CGxDevice* GxDeviceD3d12Create(void* block);

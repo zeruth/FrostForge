@@ -76,6 +76,9 @@ class RenderContextD3d12 : public GxRenderContext {
     bool CopyTex(Tex* source, Tex* dest, int32_t* sourceOrigin, int32_t* destOrigin, uint32_t* size,
         uint32_t slice, int32_t mip) override;                                  // FUN_1422e1870
     bool ResolveTex(Tex* source, Tex* dest) override;                          // FUN_1422e2d40
+    void* BufLock(GxBuf* buf) override;                                        // FUN_1422cd8e0
+    bool BufUnlock(GxBuf* buf, uint32_t size) override;                        // FUN_1422cd9f0
+    GxBuf* GetUploadBuf(uint8_t type) override;                                // FUN_1422d40c0
 };
 
 class GraphicsCommandList {
@@ -135,6 +138,7 @@ class GraphicsCommandList {
     bool CopyTex(Tex* source, Tex* dest, int32_t* sourceOrigin, int32_t* destOrigin, uint32_t* size,
         uint32_t slice, int32_t mip);       // FUN_1422e14e0
     bool ResolveTex(Tex* source, Tex* dest);  // FUN_1422e2b20
+    void CreateUploadBufs();                // the end of FUN_1422cb470
 };
 static_assert(offsetof(GraphicsCommandList, m_copy) == 0x8, "GraphicsCommandList layout");
 static_assert(offsetof(GraphicsCommandList, m_uploadBufs) == 0xba0, "GraphicsCommandList layout");
@@ -252,6 +256,10 @@ class CGxDeviceD3d12 : public CGxDevice {
     void QueryDestroy(void* query) override;                              // 0x280 FUN_1422dd830
     bool QueryInfo(void* query, uint8_t what, uint32_t* out) override;    // 0x288 FUN_1422dd930
     bool QueryGetResult(void* query, void* out, uint32_t size) override;  // 0x290 FUN_1422b8750
+    void DeferCallback(blz::function_storage* callback) override;         // 0x058 FUN_1422a8e10
+    bool BufCreate(GxBuf* buf) override;                                  // 0x1a0 FUN_1422cd720
+    void BufDestroy(GxBuf* buf) override;                                 // 0x1a8 FUN_1422cd8f0
+    bool BufAllocate(GxBuf* buf);                                         // FUN_1422d46a0
     gxDx12Backend::Tex* DefaultTexD3d12();
     void SubmitBegin();                                                   // FUN_1422db9f0
     void StartFrame();                                                    // FUN_1422de840

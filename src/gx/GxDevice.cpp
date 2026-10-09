@@ -141,7 +141,8 @@ bool CGxDevice::RebindAdapter() {
 uint8_t CGxDevice::Slot050() {
     return 0;
 }
-void CGxDevice::Slot058() {
+void CGxDevice::DeferCallback(blz::function_storage* callback) {
+    (void)callback;
     FROST_UNIMPLEMENTED();
 }
 void CGxDevice::Slot060() {
@@ -268,12 +269,13 @@ uint32_t CGxDevice::FrameCount() {
     FROST_UNIMPLEMENTED();
     return 0;
 }
-void CGxDevice::Slot1a0(void* shader) {
-    (void)shader;
+bool CGxDevice::BufCreate(GxBuf* buf) {
+    (void)buf;
     FROST_UNIMPLEMENTED();
+    return false;
 }
-void CGxDevice::Slot1a8(void* shader) {
-    (void)shader;
+void CGxDevice::BufDestroy(GxBuf* buf) {
+    (void)buf;
     FROST_UNIMPLEMENTED();
 }
 void CGxDevice::Slot1b0() {
@@ -375,26 +377,26 @@ void CGxDevice::Slot2a0() {
     FROST_UNIMPLEMENTED();
 }
 
-GXREGISTRYLINK g_gxRegisteredShaders = { &g_gxRegisteredShaders, &g_gxRegisteredShaders };
-SRWLOCK g_gxRegisteredShadersLock = SRWLOCK_INIT;
+GXREGISTRYLINK g_gxRegisteredBufs = { &g_gxRegisteredBufs, &g_gxRegisteredBufs };
+SRWLOCK g_gxRegisteredBufsLock = SRWLOCK_INIT;
 
 // ref: FUN_142290d00
 void CGxDevice::ReregisterObjects() {
     FROST_UNIMPLEMENTED();  // FUN_142291c90: the 0x2b global vertex formats are not carried over yet
-    AcquireSRWLockExclusive(&g_gxRegisteredShadersLock);
-    for (GXREGISTRYLINK* link = g_gxRegisteredShaders.m_next; link != &g_gxRegisteredShaders; link = link->m_next) {
-        this->Slot1a0(reinterpret_cast<uint8_t*>(link) - 0x10);
+    AcquireSRWLockExclusive(&g_gxRegisteredBufsLock);
+    for (GXREGISTRYLINK* link = g_gxRegisteredBufs.m_next; link != &g_gxRegisteredBufs; link = link->m_next) {
+        this->BufCreate(reinterpret_cast<GxBuf*>(reinterpret_cast<uint8_t*>(link) - 0x10));
     }
-    ReleaseSRWLockExclusive(&g_gxRegisteredShadersLock);
+    ReleaseSRWLockExclusive(&g_gxRegisteredBufsLock);
 }
 
 // ref: FUN_142290f60
 void CGxDevice::ReleaseRegisteredObjects() {
-    AcquireSRWLockExclusive(&g_gxRegisteredShadersLock);
-    for (GXREGISTRYLINK* link = g_gxRegisteredShaders.m_next; link != &g_gxRegisteredShaders; link = link->m_next) {
-        this->Slot1a8(reinterpret_cast<uint8_t*>(link) - 0x10);
+    AcquireSRWLockExclusive(&g_gxRegisteredBufsLock);
+    for (GXREGISTRYLINK* link = g_gxRegisteredBufs.m_next; link != &g_gxRegisteredBufs; link = link->m_next) {
+        this->BufDestroy(reinterpret_cast<GxBuf*>(reinterpret_cast<uint8_t*>(link) - 0x10));
     }
-    ReleaseSRWLockExclusive(&g_gxRegisteredShadersLock);
+    ReleaseSRWLockExclusive(&g_gxRegisteredBufsLock);
     // The 0x2b vertex formats' two objects each (+0x168).
     auto formats = &Field<void*>(0x168);
     for (uint32_t i = 0; i < 0x2b * 2; i++) {

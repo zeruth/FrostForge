@@ -1,5 +1,6 @@
 #include "gx/d3d12/DeviceD3d12.hpp"
 #include "gx/Gx.hpp"
+#include "gx/GxBuf.hpp"
 #include "gx/GxPlatform.hpp"
 #include "gx/GxRenderTargets.hpp"
 #include "gx/GxShader.hpp"
@@ -1157,4 +1158,83 @@ void CGxDeviceD3d12::ReleaseFrames() {
     }
     this->m_frameIndex = current;
     this->m_frame = &this->m_frames[current];
+}
+
+// ---- buffers and deferred work -------------------------------------------------------------
+
+namespace {
+
+// A deferred function's record: the function runs, then its storage is destroyed
+// (FUN_1422967d0).
+void RunDeferredFunction(void* record) {
+    auto function = static_cast<blz::function_storage*>(record);
+    reinterpret_cast<void (*)(void*)>(function->m_invoke)(function->m_storage);
+    function->m_manager(function->m_storage, nullptr, 0);
+}
+
+}
+
+// Device slot 0x58: the function moves into this frame's callbacks.
+// ref: FUN_1422a8e10
+void CGxDeviceD3d12::DeferCallback(blz::function_storage* callback) {
+    gxDx12Backend::FrameData* frame = this->m_frame;
+    auto lock = static_cast<SCritSect*>(frame->m_callbacks.m_lock);
+    lock->Enter();
+    auto record = static_cast<blz::function_storage*>(frame->m_callbacks.Add(RunDeferredFunction, sizeof(blz::function_storage), 8));
+    lock->Leave();
+    if (record != nullptr) {
+        callback->m_manager(record->m_storage, callback->m_storage, 2);
+        record->m_invoke = callback->m_invoke;
+        record->m_manager = callback->m_manager;
+        callback->m_invoke = nullptr;
+        callback->m_manager = blz::function_empty_manager;
+    }
+    if (callback->m_manager != blz::function_empty_manager) {
+        callback->m_manager(callback->m_storage, nullptr, 0);
+    }
+}
+
+// Device slot 0x1a0: a static buffer takes its range of a heap now.
+// ref: FUN_1422cd720
+bool CGxDeviceD3d12::BufCreate(GxBuf* buf) {
+    buf->m_resource = nullptr;
+    buf->m_offset = 0;
+    buf->m_gpu = 0;
+    buf->m_heap = nullptr;
+    buf->m_heapOffset = 0;
+    buf->m_heapSize = 0;
+    if (buf->m_type == GXBUF_STATIC) {
+        this->BufAllocate(buf);
+    }
+    return buf != nullptr;
+}
+
+// Device slot 0x1a8: a buffer's heap range is freed once the frame is done.
+// ref: FUN_1422cd8f0
+void CGxDeviceD3d12::BufDestroy(GxBuf* buf) {
+    if (buf->m_heap != nullptr && buf->m_type != GXBUF_DYNAMIC) {
+        // The range goes back to its heap through a frame callback (LAB_1422c7c40) with the
+        // heap's allocator, which comes with the buffer heaps.
+        FROST_UNIMPLEMENTED();
+    }
+    buf->m_flags &= ~GXBUF_UNLOCKED;
+}
+
+// A range for a static or stream buffer in one of the buffer heaps (index, vertex or
+// constant), a new heap when none has room.
+// ref: FUN_1422d46a0
+bool CGxDeviceD3d12::BufAllocate(GxBuf* buf) {
+    if (this->m_ready == 0) {
+        return false;
+    }
+    if (buf->m_type == GXBUF_DYNAMIC) {
+        buf->m_heap = nullptr;
+    } else {
+        // The heaps (+0xb20 index, +0xb38 vertex, +0xb50 constant) and their range allocator
+        // (FUN_1422d5a60, FUN_1422c27d0) are not ported yet.
+        FROST_UNIMPLEMENTED();
+        return false;
+    }
+    buf->m_flags &= ~GXBUF_UNLOCKED;
+    return true;
 }

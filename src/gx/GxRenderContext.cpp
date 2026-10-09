@@ -331,11 +331,13 @@ void GxRenderContext::UnlockConstants(uint8_t, uint32_t) {
 void GxRenderContext::Slot178() {
     FROST_UNIMPLEMENTED();
 }
-void GxRenderContext::Slot180() {
+void* GxRenderContext::BufLock(GxBuf*) {
     FROST_UNIMPLEMENTED();
+    return nullptr;
 }
-void GxRenderContext::Slot188() {
+bool GxRenderContext::BufUnlock(GxBuf*, uint32_t) {
     FROST_UNIMPLEMENTED();
+    return false;
 }
 void GxRenderContext::Slot190() {
     FROST_UNIMPLEMENTED();
@@ -366,4 +368,20 @@ void GxRenderContext::Slot1d0() {
 }
 void GxRenderContext::Slot1d8() {
     FROST_UNIMPLEMENTED();
+}
+void GxRenderContext::Slot1e0() {
+    FROST_UNIMPLEMENTED();
+}
+void GxRenderContext::Slot1e8() {
+    FROST_UNIMPLEMENTED();
+}
+void GxRenderContext::Slot1f0() {
+    FROST_UNIMPLEMENTED();
+}
+void GxRenderContext::Slot1f8() {
+    FROST_UNIMPLEMENTED();
+}
+GxBuf* GxRenderContext::GetUploadBuf(uint8_t) {
+    FROST_UNIMPLEMENTED();
+    return nullptr;
 }

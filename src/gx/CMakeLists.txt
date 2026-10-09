@@ -1,5 +1,6 @@
 add_library(gx STATIC
     GxApi.cpp
+    GxBuf.cpp
     GxDevice.cpp
     GxLog.cpp
     GxRenderContext.cpp

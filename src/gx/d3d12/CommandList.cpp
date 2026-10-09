@@ -1,6 +1,7 @@
 #include "gx/d3d12/DeviceD3d12.hpp"
 #include "gx/Gx.hpp"
 #include "gx/GxPlatform.hpp"
+#include "gx/GxBuf.hpp"
 #include "gx/GxRenderTargets.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
@@ -507,8 +508,8 @@ GraphicsCommandList::GraphicsCommandList(uint32_t type, uint8_t vrs) : m_copy(ty
     // and the binding dirty bits.
     *reinterpret_cast<ID3D12Device**>(&this->m_staging[0]) = GxDeviceD3d12()->m_device;
     std::memset(&this->m_staging[0x220], 0xff, 0x80);
-    // FUN_142288710 x3: the constant, vertex and index upload GxBufs (4 MB, 2 MB, 64 KB).
-    FROST_UNIMPLEMENTED();  // GxBufCreate through device slot 0x1a0
+    // FUN_142288710 x3: the vertex, index and constant upload GxBufs.
+    this->CreateUploadBufs();
     std::memset(this->m_2080, 0, sizeof(this->m_2080));
     this->m_2098 = 0x39;
     this->m_targetsDirty = 1;
@@ -532,7 +533,9 @@ GraphicsCommandList::GraphicsCommandList(uint32_t type, uint8_t vrs) : m_copy(ty
 
 // ref: FUN_1422cc000
 GraphicsCommandList::~GraphicsCommandList() {
-    // The upload GxBufs are released through FUN_142288af0 (not ported with GxBuf).
+    for (void*& buf : this->m_uploadBufs) {
+        GxBufDestroy(reinterpret_cast<GxBuf**>(&buf));
+    }
 }
 
 // ref: FUN_1422ce740
@@ -899,4 +902,115 @@ bool GraphicsCommandList::ResolveTex(Tex* source, Tex* dest) {
 // ref: FUN_1422e2d40
 bool RenderContextD3d12::ResolveTex(Tex* source, Tex* dest) {
     return this->Owner()->ResolveTex(source, dest);
+}
+
+// ---- buffers -------------------------------------------------------------------------------
+
+// The greatest common divisor (FUN_1422c9620).
+static uint32_t BufGcd(uint32_t a, uint32_t b) {
+    while (b != 0) {
+        uint32_t t = a % b;
+        a = b;
+        b = t;
+    }
+    return a;
+}
+
+// Space for a buffer's contents in this frame's upload memory, aligned to its elements; the
+// buffer reads from there until the next lock.
+// ref: FUN_1422d4890
+static void* BufLockUpload(CopyCommandList* list, GxBuf* buf) {
+    CGxDeviceD3d12* device = GxDeviceD3d12();
+    if (device->m_ready == 0 || (buf->m_heap == nullptr && buf->m_type != GXBUF_DYNAMIC)) {
+        device->m_ready = 0;
+        return ScratchAllocate(list, buf->m_size, 0x10);
+    }
+    uint32_t alignment = (buf->m_usage & GXBUFUSAGE_CONSTANT) != 0 ? 0x100 : 8;
+    uint32_t element = (buf->m_flags >> GXBUF_ELEMENT_SHIFT) & 0xfff;
+    uint32_t common = BufGcd(alignment, element % alignment);
+    UPLOADALLOC alloc;
+    UploadAllocate(list, &alloc, ((alignment - 1) + (buf->m_size - common) + element) & static_cast<uint32_t>(-static_cast<int32_t>(alignment)),
+        alignment);
+    if (alloc.m_cpu == nullptr) {
+        device->m_ready = 0;
+        return ScratchAllocate(list, buf->m_size, 0x10);
+    }
+    uint32_t offset = alloc.m_offset + element - 1;
+    offset -= offset % element;
+    buf->m_offset = offset;
+    buf->m_resource = alloc.m_resource;
+    buf->m_gpu = alloc.m_gpu + offset;
+    return alloc.m_cpu + offset;
+}
+
+// A static or stream buffer's written range is queued for the copy into its heap.
+// ref: FUN_1422d49b0
+static void BufUnlockUpload(CopyCommandList* list, GxBuf* buf, uint32_t size) {
+    CGxDeviceD3d12* device = GxDeviceD3d12();
+    if (device->m_ready == 0) {
+        buf->m_flags |= GXBUF_WRITTEN;
+        return;
+    }
+    if (buf->m_type == GXBUF_STATIC || buf->m_type == GXBUF_STREAM) {
+        if (size == 0) {
+            size = buf->m_size;
+        }
+        // DAT_14348c0d3 and the heap's +0xa0: a copy is pending.
+        device->m_copiesPending = 1;
+        FROST_UNIMPLEMENTED();  // the heap's own pending flag (+0xa0) comes with the buffer heaps
+        list->m_bufs.push_back(BufPair { buf, size, 0 });
+    }
+    buf->m_flags |= GXBUF_WRITTEN;
+}
+
+// ref: FUN_1422cd800
+static void* BufLockList(CopyCommandList* list, GxBuf* buf) {
+    if (buf->m_type == GXBUF_STREAM) {
+        // A stream buffer moves to a fresh range of its heap; the old range is freed when the
+        // frame is done (LAB_1422c7c40).
+        FROST_UNIMPLEMENTED();
+        buf->m_flags &= ~GXBUF_UNLOCKED;
+        GxDeviceD3d12()->BufAllocate(buf);
+    }
+    return BufLockUpload(list, buf);
+}
+
+// The transient buffers each context writes its dynamic geometry and constants into
+// (vertices 4 MB, indices 2 MB, constants 64 KB).
+void GraphicsCommandList::CreateUploadBufs() {
+    GXBUFDESC desc = {};
+    desc.m_type = GXBUF_DYNAMIC;
+    desc.m_usage = 0x1802;
+    desc.m_size = 0x400000;
+    desc.m_elementSize = 1;
+    this->m_uploadBufs[0] = GxBufCreate(&desc);
+    desc = {};
+    desc.m_type = GXBUF_DYNAMIC;
+    desc.m_usage = 0x1801;
+    desc.m_size = 0x200000;
+    desc.m_elementSize = 1;
+    this->m_uploadBufs[1] = GxBufCreate(&desc);
+    desc = {};
+    desc.m_type = GXBUF_DYNAMIC;
+    desc.m_usage = 0x1804;
+    desc.m_size = 0x10000;
+    desc.m_elementSize = 1;
+    this->m_uploadBufs[2] = GxBufCreate(&desc);
+}
+
+// ref: FUN_1422cd8e0
+void* RenderContextD3d12::BufLock(GxBuf* buf) {
+    return BufLockList(&this->Owner()->m_copy, buf);
+}
+
+// ref: FUN_1422cd9f0
+bool RenderContextD3d12::BufUnlock(GxBuf* buf, uint32_t size) {
+    BufUnlockUpload(&this->Owner()->m_copy, buf, size);
+    buf->m_flags |= GXBUF_UNLOCKED;
+    return true;
+}
+
+// ref: FUN_1422d40c0
+GxBuf* RenderContextD3d12::GetUploadBuf(uint8_t type) {
+    return static_cast<GxBuf*>(this->Owner()->m_uploadBufs[type]);
 }

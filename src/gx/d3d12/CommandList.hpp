@@ -11,6 +11,7 @@
 #include <d3d12.h>
 
 struct GXRENDERTARGETS;
+struct GxBuf;
 
 namespace gxDx12Backend {
 
@@ -79,7 +80,7 @@ static_assert(sizeof(PerFrameResources) == 0xe8, "PerFrameResources is 0xe8 byte
 // One recorded barrier set's bookkeeping (0x30 bytes: the barriers a list needed before it).
 struct BufPair {
     void* m_buf;
-    uint32_t m_offset;
+    uint32_t m_size;    // the bytes written, to copy into its heap
     uint32_t m_pad;
 };
 
@@ -110,7 +111,7 @@ class CopyCommandList {
     PerFrameResources* m_frame;             // 0x388
     DataUploadPage* m_page;                 // 0x390: the page being filled
     uint8_t m_398[0x700];                   // 0x398: the constant bindings (the graphics list's)
-    blz::vector<BufPair, s_bufPairTag> m_bufs;  // 0xa98: GxBuf and offset pairs
+    blz::vector<BufPair, s_bufPairTag> m_bufs;  // 0xa98: buffers written this frame, and how much
     blz::embedded_vector<UintVector5, 1, s_uintVectorTag> m_signals;  // 0xab0: per list
     blz::embedded_vector<uint32_t, 5, s_uintTag> m_af8;  // 0xaf8
     blz::embedded_vector<Array5, 1, s_arrayTag> m_b28;  // 0xb28
@@ -203,8 +204,10 @@ class GxRenderContext {
     virtual float* LockConstants(uint8_t stage, uint32_t slot, uint32_t size);  // 0x168
     virtual void UnlockConstants(uint8_t stage, uint32_t slot);   // 0x170
     virtual void Slot178();
-    virtual void Slot180();
-    virtual void Slot188();
+    // Space to write a buffer's contents into, and its release to the GPU (`size` bytes, all
+    // when 0).
+    virtual void* BufLock(GxBuf* buf);                      // 0x180
+    virtual bool BufUnlock(GxBuf* buf, uint32_t size);      // 0x188
     virtual void Slot190();
     virtual bool CopyTex(gxDx12Backend::Tex* source, gxDx12Backend::Tex* dest, int32_t* sourceOrigin,
         int32_t* destOrigin, uint32_t* size, uint32_t slice, int32_t mip);  // 0x198
@@ -216,6 +219,12 @@ class GxRenderContext {
     virtual void Slot1c8();
     virtual void Slot1d0();
     virtual void Slot1d8();
+    virtual void Slot1e0();
+    virtual void Slot1e8();
+    virtual void Slot1f0();
+    virtual void Slot1f8();
+    // The context's transient buffer for vertices (0), indices (1) or constants (2).
+    virtual GxBuf* GetUploadBuf(uint8_t type);              // 0x200
 
     // A member at its reference offset (the state is 0x2f8 bytes of mostly unported fields:
     // +0x08 the viewport, +0x18 and +0x74 its dirty flags, +0x88 the bound GXRENDERTARGETS).
