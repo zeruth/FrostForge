@@ -292,6 +292,18 @@ void OsCloseFile(void* file);
 uint64_t OsGetFileSize(void* file, uint64_t fallback);
 
 bool OsReadFile(void* file, void* buffer, uint32_t bytes, uint32_t* read);
+
+// A named page-file mapping (0x18 bytes).
+struct OSSHAREDMEMORY {
+    void* m_data;
+    uint64_t m_size;
+    void* m_mapping;
+};
+uint32_t OsSharedMemoryOpen(OSSHAREDMEMORY* memory, const char* name, int32_t mode, uint64_t size, bool* created);
+uint32_t OsSharedMemoryClose(OSSHAREDMEMORY* memory);
+bool OsSharedMemoryOpenNamed(OSSHAREDMEMORY* memory, const char* name, uint32_t id, uint32_t size, int32_t mode);
+// ReadFile at an offset (an OVERLAPPED position on a synchronous handle).
+bool OsReadFileAt(void* file, void* buffer, uint64_t offset, uint32_t bytes, uint32_t* read);
 int64_t OsSetFilePointer(void* file, int64_t offset, uint32_t method);
 bool OsWriteFile(void* file, const void* buffer, uint32_t bytes, uint32_t* written);
 bool OsFlushFile(void* file);

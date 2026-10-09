@@ -37,6 +37,19 @@ HANDLE OsCreateFile(const char* path, uint32_t access, uint32_t share, uint32_t 
     return CreateFileW(wide, access, share, nullptr, disposition, attributes, nullptr);
 }
 
+// ref: FUN_140215190
+bool OsReadFileAt(void* file, void* buffer, uint64_t offset, uint32_t bytes, uint32_t* read) {
+    OVERLAPPED overlapped = {};
+    overlapped.Offset = static_cast<DWORD>(offset);
+    overlapped.OffsetHigh = static_cast<DWORD>(offset >> 32);
+    DWORD done;
+    BOOL ok = ReadFile(file, buffer, bytes, &done, &overlapped);
+    if (read != nullptr) {
+        *read = done;
+    }
+    return ok != FALSE;
+}
+
 // ref: FUN_140214620
 void OsCloseFile(HANDLE file) {
     if (file != INVALID_HANDLE_VALUE) {

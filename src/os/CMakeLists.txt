@@ -6,6 +6,7 @@ add_library(os STATIC
     win/Window.cpp
     win/Path.cpp
     win/PathTree.cpp
+    win/SharedMemory.cpp
     win/SockAddr.cpp
     win/System.cpp
     win/Sync.cpp
