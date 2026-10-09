@@ -68,6 +68,10 @@ struct LOCALMANIFEST {
     // Enters one file (relative to `root`, or as given when root is null); returns its id.
     int32_t Add(int32_t fileDataId, const char* path, const char* root, uint8_t byId,
         blz::function_storage* onExisting);
+    // The loose file entered under an id, or null.
+    LocalManifestEntry* FindById(int32_t fileDataId);
+    // The path of the loose file entered under a name hash (and its id), or null.
+    const char* FindPathByName(uint64_t nameHash, int32_t* fileDataId);
 };
 static_assert(offsetof(LOCALMANIFEST, m_byName) == 0x108, "LOCALMANIFEST layout");
 static_assert(offsetof(LOCALMANIFEST, m_byId) == 0x128, "LOCALMANIFEST layout");

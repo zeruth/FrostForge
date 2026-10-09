@@ -355,3 +355,28 @@ uint64_t OsErrorString(char* buffer, uint64_t size, uint32_t error) {
     }
     return OsErrorStringSystem(buffer, size, error);
 }
+
+// ref: FUN_140215240
+int64_t OsSetFilePointer(void* file, int64_t offset, uint32_t method) {
+    LONG high = static_cast<LONG>(offset >> 32);
+    DWORD low = SetFilePointer(file, static_cast<LONG>(offset), &high, method);
+    if (low == INVALID_SET_FILE_POINTER && GetLastError() != NO_ERROR) {
+        return -1;
+    }
+    return (static_cast<int64_t>(high) << 32) | low;
+}
+
+// ref: FUN_1402152a0
+bool OsWriteFile(void* file, const void* buffer, uint32_t bytes, uint32_t* written) {
+    DWORD count = 0;
+    BOOL ok = WriteFile(file, buffer, bytes, &count, nullptr);
+    if (written != nullptr) {
+        *written = count;
+    }
+    return ok != 0;
+}
+
+// ref: FUN_140214d10
+bool OsFlushFile(void* file) {
+    return FlushFileBuffers(file) != 0;
+}

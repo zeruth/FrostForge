@@ -11,6 +11,7 @@ add_library(tact STATIC
     EncodingTable.cpp
     FileManifest.cpp
     ImmediateRead.cpp
+    FileHandle.cpp
     FileRead.cpp
     Instance.cpp
     InstallationInfo.cpp

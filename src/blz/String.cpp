@@ -1,6 +1,7 @@
 #include "blz/String.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
+#include <cstdarg>
 #include <cstring>
 
 namespace blz {
@@ -12,33 +13,60 @@ const char s_tag[] = ".D";
 }
 
 string::~string() {
-    if (!this->IsInline()) {
-        SMemFree(this->m_data, s_tag, -6, 0);
+    string_free(reinterpret_cast<string_header*>(this));
+}
+
+void string_free(string_header* text) {
+    if ((text->m_capacity & string::INLINE) == 0) {
+        SMemFree(text->m_data, s_tag, -6, 0);
     }
 }
 
 // ref: FUN_1402135c0
-void string::reserve(uint64_t size) {
-    uint64_t capacity = this->m_capacity;
-    if ((capacity & ~INLINE) >= size) {
+void string_reserve(string_header* text, uint64_t size) {
+    uint64_t capacity = text->m_capacity;
+    if ((capacity & ~string::INLINE) >= size) {
         return;
     }
 
-    uint64_t grown = ((capacity >> 1) & 0x3FFFFFFFFFFFFFFFull) + (capacity & ~INLINE);
+    uint64_t grown = ((capacity >> 1) & 0x3FFFFFFFFFFFFFFFull) + (capacity & ~string::INLINE);
     if (grown < size) {
         grown = size;
     }
-    this->m_capacity = ((capacity ^ grown) & INLINE) ^ grown;
+    text->m_capacity = ((capacity ^ grown) & string::INLINE) ^ grown;
 
     auto data = static_cast<char*>(SMemAlloc(grown + 1, 0xB, s_tag, SStrHashFnv1a(s_tag), -6, 0));
-    if (this->m_size + 1 != 0) {
-        std::memcpy(data, this->m_data, this->m_size + 1);
+    if (text->m_size + 1 != 0) {
+        std::memcpy(data, text->m_data, text->m_size + 1);
     }
-    if (!this->IsInline()) {
-        SMemFree(this->m_data, s_tag, -6, 0);
+    if ((capacity & string::INLINE) == 0) {
+        SMemFree(text->m_data, s_tag, -6, 0);
     }
-    this->m_capacity &= ~INLINE;
-    this->m_data = data;
+    text->m_capacity &= ~string::INLINE;
+    text->m_data = data;
+}
+
+void string::reserve(uint64_t size) {
+    string_reserve(reinterpret_cast<string_header*>(this), size);
+}
+
+// ref: FUN_140236510
+void string_format(string_header* text, const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    int32_t length = SStrVSnprintf(nullptr, 0, format, args);
+    va_end(args);
+    if (length < 0) {
+        text->m_data[0] = '\0';
+        text->m_size = 0;
+        return;
+    }
+    string_reserve(text, static_cast<uint64_t>(length));
+    va_start(args, format);
+    SStrVSnprintf(text->m_data, static_cast<uint64_t>(length) + 1, format, args);
+    va_end(args);
+    text->m_data[length] = '\0';
+    text->m_size = static_cast<uint64_t>(length);
 }
 
 void string::assign(const char* text) {

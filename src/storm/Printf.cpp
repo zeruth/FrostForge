@@ -1450,6 +1450,35 @@ void SStrVPrintf(char* dest, uint64_t maxchars, const char* format, va_list args
     SStrVPrintfCount(dest, maxchars, format, args);
 }
 
+// SStrVPrintfCount's twin that reports a bad format: 0xFFFFFFFF, the buffer left as written.
+// ref: FUN_140265ea0
+uint64_t SStrVPrintfChecked(char* dest, uint64_t maxchars, const char* format, va_list args) {
+    if (dest && format && maxchars != 0) {
+        SStrBufferWriter writer;
+        writer.m_start = dest;
+        writer.m_cur = dest;
+        writer.m_size = maxchars;
+        if (SStrFormat(format, args, false, &writer) == 0) {
+            uint64_t written = static_cast<uint64_t>(writer.m_cur - writer.m_start);
+            if (writer.m_size <= written) {
+                writer.m_cur = writer.m_start + (writer.m_size - 1);
+                written = writer.m_size - 1;
+            }
+            *writer.m_cur = '\0';
+            return written;
+        }
+    }
+    return 0xFFFFFFFF;
+}
+
+// ref: FUN_1415293a0
+void SStrPrintf260(char* dest, const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    SStrVPrintfChecked(dest, 0x104, format, args);
+    va_end(args);
+}
+
 namespace {
 
 // vtable 0x142620780: the buffer writer that also counts everything it was handed, for

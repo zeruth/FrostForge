@@ -9,6 +9,7 @@
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
 #include "tact/AsyncState.hpp"
+#include "tact/FileHandle.hpp"
 #include "tact/ImmediateRead.hpp"
 #include "tact/InstallationInfo.hpp"
 #include "tact/Instance.hpp"
@@ -620,6 +621,290 @@ bool CASInitFromBuildInfo(uint32_t patch, const char* version, const MANIFESTLOC
     }
     tact::InstallationInfoFree(info);
     return initialized;
+}
+
+void (*g_casReadHook)(const uint8_t* ckey, uint32_t bytes, void* context);
+namespace {
+uint8_t s_casReadHookContext[0x10];  // DAT_142ccba60
+}
+
+// ref: FUN_1402cb310
+void CASFormatKeyName(char* dest, const uint8_t* ckey, uint32_t fileDataId, uint32_t localeFlags, uint32_t contentFlags) {
+    uint32_t content = contentFlags & 0xe7fe;
+    if (s_openA4 == 2) {
+        fileDataId = 0;
+        localeFlags = 0;
+        content = 0;
+    }
+    // FUN_1402cbec0: SStrPrintf into 0x36 bytes
+    SStrPrintf(dest, 0x36, "%08X%04X:%08X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+        localeFlags, content, fileDataId, ckey[0], ckey[1], ckey[2], ckey[3], ckey[4], ckey[5], ckey[6], ckey[7], ckey[8],
+        ckey[9], ckey[10], ckey[11], ckey[12], ckey[13], ckey[14], ckey[15]);
+}
+
+// ref: FUN_1402d3730
+bool CASFileOpenByKey(CASINSTANCE* instance, const char* name, const uint8_t* ckey, CASFILE** file) {
+    tact::FILESTAT stat = {};
+    uint8_t error = tact::InstanceStatByName(instance->m_tact, name, &stat, 1);
+    t_lastError.m_kind = 0;
+    t_lastError.m_tactError = error;
+    if (error != 0 || stat.m_key.m_csize == 0) {
+        *file = nullptr;
+        t_lastError.m_tactError = 6;
+        return false;
+    }
+    InterlockedIncrement(reinterpret_cast<volatile long*>(&instance->m_28));
+    auto opened = static_cast<CASFILE*>(SMemAlloc(sizeof(CASFILE), 10, __FILE__, SStrHashFnv1a(__FILE__), 0x422, 0));
+    opened->m_handle = nullptr;
+    opened->m_type = 2;
+    CopyBounded(opened->m_name, name, 0x35);
+    opened->m_instance = instance;
+    opened->m_position = 0;
+    std::memcpy(opened->m_ckey, ckey, 16);
+    if (opened->m_handle == nullptr) {
+        opened->m_handle = tact::FileHandleOpen(instance->m_tact, name, nullptr);
+    }
+    *file = opened;
+    t_lastError.m_kind = 0;
+    t_lastError.m_tactError = 0;
+    return true;
+}
+
+// ref: FUN_1402cfd70
+bool CASFileOpenById(int32_t fileDataId, CASFILE** file, uint64_t flags) {
+    *file = nullptr;
+    t_lastError.m_kind = 1;
+    if (fileDataId == 0) {
+        t_lastError.m_code = 2;
+        return false;
+    }
+    BuildManifestEntry* entry = g_casManifest->FindById(static_cast<uint32_t>(fileDataId));
+    t_lastError.m_kind = 1;
+    t_lastError.m_code = entry != nullptr ? 0 : 2;
+    if ((flags & 1) != 0) {
+        // Found by id, a loose file that fails to open fails the open; found by name, the
+        // build's copy is the fallback.
+        const char* path = nullptr;
+        BuildManifestEntry* fallback = nullptr;
+        LocalManifestEntry* local = g_localManifest->FindById(fileDataId);
+        if (local != nullptr) {
+            path = local->m_path;
+        } else if (entry != nullptr) {
+            path = g_localManifest->FindPathByName(entry->m_nameHash, nullptr);
+            fallback = entry;
+        } else {
+            return false;
+        }
+        if (path != nullptr) {
+            t_lastError.m_kind = 2;
+            void* handle = OsCreateFile(path, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, 0);
+            if (handle != INVALID_HANDLE_VALUE) {
+                auto opened = static_cast<CASFILE*>(SMemAlloc(sizeof(CASFILE), 10, __FILE__, SStrHashFnv1a(__FILE__), 0xb89, 0));
+                opened->m_handle = nullptr;
+                opened->m_type = 1;
+                opened->m_file = handle;
+                *file = opened;
+                return true;
+            }
+            entry = fallback;
+        }
+    }
+    if (entry == nullptr) {
+        return false;
+    }
+    t_lastError.m_kind = 0;
+    char name[0x40];
+    CASFormatKeyName(name, entry->m_ckey, entry->m_fileDataId, entry->m_localeFlags, entry->m_contentFlags);
+    return CASFileOpenByKey(g_casInstance, name, entry->m_ckey, file);
+}
+
+// The size tact reports for a build file.
+// ref: FUN_1402d2630
+uint32_t CASFileStatSize(CASINSTANCE* instance, CASFILE* file) {
+    tact::FILESTAT stat = {};
+    uint8_t error = tact::InstanceStatByName(instance->m_tact, file->m_name, &stat, 1);
+    t_lastError.m_kind = 0;
+    t_lastError.m_tactError = error;
+    if (error != 0) {
+        stat.m_key.m_csize = 0;
+    }
+    return stat.m_key.m_csize;
+}
+
+// ref: FUN_1402cdac0
+uint64_t CASFileGetSize(CASFILE* file) {
+    if (file->m_type == 1) {
+        t_lastError.m_kind = 2;
+        return OsGetFileSize(file->m_file, 0);
+    }
+    if (file->m_type != 2) {
+        t_lastError.m_kind = 1;
+        t_lastError.m_code = 4;
+        return 0;
+    }
+    t_lastError.m_kind = 0;
+    return CASFileStatSize(file->m_instance, file);
+}
+
+// ref: FUN_1402d3c90
+bool CASFileReadAt(CASINSTANCE* instance, CASFILE* file, void* dest, uint64_t offset, uint32_t size, uint32_t* read,
+    uint8_t flags, int32_t slot) {
+    if ((flags & 8) != 0) {
+        uint64_t id = tact::InstanceCheckResidency(instance->m_tact, file->m_name, static_cast<uint32_t>(offset), size);
+        uint8_t error = tact::InstanceGetOpResult(instance->m_tact, id, nullptr);
+        if (error != 0) {
+            t_lastError.m_kind = 0;
+            t_lastError.m_tactError = error;
+            return false;
+        }
+    }
+    uint64_t id;
+    if (dest == nullptr) {
+        if (read != nullptr) {
+            *read = size;
+            read = nullptr;
+        }
+        id = tact::InstanceMakeSpanResident(instance->m_tact, file->m_name, static_cast<uint32_t>(offset), size, 0,
+            nullptr, nullptr);
+    } else {
+        uint32_t done = 0;
+        uint8_t error;
+        if (file->m_handle == nullptr) {
+            error = tact::ImmediateReadByName(instance->m_tact, file->m_name, dest, static_cast<uint32_t>(offset), size,
+                &done, 0);
+            if (error == 0) {
+                if (read != nullptr) {
+                    *read = done;
+                }
+                t_lastError.m_kind = 0;
+                t_lastError.m_tactError = 0;
+                return true;
+            }
+            id = tact::InstanceStartSpanReadByName(instance->m_tact, file->m_name, dest, static_cast<uint32_t>(offset),
+                size, nullptr, nullptr, 1, 8);
+        } else {
+            error = tact::ImmediateReadByHandle(file->m_handle, dest, static_cast<uint32_t>(offset), size, &done, 0);
+            if (error == 0) {
+                if (read != nullptr) {
+                    *read = done;
+                }
+                t_lastError.m_kind = 0;
+                t_lastError.m_tactError = 0;
+                return true;
+            }
+            id = tact::InstanceStartSpanReadByHandle(file->m_handle, dest, static_cast<uint32_t>(offset), size, nullptr,
+                nullptr, 1, 8);
+        }
+    }
+    if (id == 0) {
+        t_lastError.m_kind = 0;
+        t_lastError.m_tactError = 3;
+        return false;
+    }
+    if ((flags & 0x10) != 0 && slot != -1) {
+        instance->m_ops[slot] = id;
+    }
+    uint8_t error = tact::InstanceGetOpResult(instance->m_tact, id, reinterpret_cast<int32_t*>(read));
+    t_lastError.m_kind = 0;
+    t_lastError.m_tactError = error;
+    return error == 0 || error == 0xe;
+}
+
+// ref: FUN_1402d0690
+bool CASFileReadEx(CASFILE* file, void* dest, uint32_t size, uint32_t* read, uint32_t flags, int32_t slot) {
+    if (size == 0) {
+        *read = 0;
+        return true;
+    }
+    if (file->m_type == 1) {
+        t_lastError.m_kind = 2;
+        return OsReadFile(file->m_file, dest, size, read);
+    }
+    if (file->m_type != 2) {
+        t_lastError.m_kind = 1;
+        t_lastError.m_code = 4;
+        return false;
+    }
+    CASINSTANCE* instance = file->m_instance;
+    t_lastError.m_kind = 0;
+    bool ok = CASFileReadAt(instance, file, dest, file->m_position, size, read, static_cast<uint8_t>(flags), slot);
+    file->m_position += *read;
+    if (g_casReadHook != nullptr) {
+        g_casReadHook(file->m_ckey, *read, s_casReadHookContext);
+    }
+    return ok;
+}
+
+// ref: FUN_1402d0660
+bool CASFileRead(CASFILE* file, void* dest, uint32_t size) {
+    uint32_t read;
+    return CASFileReadEx(file, dest, size, &read, 0, -1);
+}
+
+// ref: FUN_1402ccc60
+void CASFileClose(CASFILE** file) {
+    CASFILE* closing = *file;
+    if (closing->m_type == 1) {
+        OsCloseFile(closing->m_file);
+    } else if (closing->m_type == 2) {
+        CASINSTANCE* instance = closing->m_instance;
+        long left = InterlockedDecrement(reinterpret_cast<volatile long*>(&instance->m_28));
+        if (left < 0 && instance != g_casInstance && s_patchInstances) {
+            // DAT_142e20878: the patch path's wake-up, not ported with it.
+            FROST_UNIMPLEMENTED();
+        }
+        closing->m_type = 0;
+        tact::FileHandleClose(closing->m_handle);
+        closing->m_handle = nullptr;
+    }
+    operator delete(closing, sizeof(CASFILE));
+    *file = nullptr;
+}
+
+// ref: FUN_1402d2330
+bool CASIdIsKnown(int32_t fileDataId) {
+    BuildManifestEntry* entry = g_casManifest->FindById(static_cast<uint32_t>(fileDataId));
+    t_lastError.m_kind = 1;
+    t_lastError.m_code = entry != nullptr ? 0 : 2;
+    return entry != nullptr;
+}
+
+// ref: FUN_1402ccd10
+bool CASFileExists(int32_t fileDataId) {
+    LOCALMANIFEST* local = g_localManifest;
+    if (fileDataId == 0) {
+        return false;
+    }
+    t_lastError.m_kind = 1;
+    if (local->FindById(fileDataId) != nullptr) {
+        return true;
+    }
+    return CASIdIsKnown(fileDataId);
+}
+
+// ref: FUN_1402cd230
+uint8_t CASFileGetResidency(int32_t fileDataId, uint64_t size, uint32_t a3) {
+    if (fileDataId < 0) {
+        return 2;
+    }
+    BuildManifestEntry* entry = g_casManifest->FindById(static_cast<uint32_t>(fileDataId));
+    if (entry == nullptr) {
+        return 0;
+    }
+    char name[0x40];
+    CASFormatKeyName(name, entry->m_ckey, entry->m_fileDataId, entry->m_localeFlags, entry->m_contentFlags);
+    if (size >= 0x100000000ull) {
+        return 0;
+    }
+    CASINSTANCE* instance = g_casInstance;
+    uint64_t id = tact::InstanceCheckResidency(instance->m_tact, name, static_cast<uint32_t>(size), a3);
+    uint8_t error = tact::InstanceGetOpResult(instance->m_tact, id, nullptr);
+    t_lastError.m_kind = 0;
+    t_lastError.m_tactError = error;
+    if (error == 0) {
+        return 2;
+    }
+    return error == 7;
 }
 
 // ref: FUN_1402d2380

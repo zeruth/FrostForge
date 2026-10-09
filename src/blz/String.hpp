@@ -5,6 +5,24 @@
 
 namespace blz {
 
+// What every blz string starts with, whatever the size of its inline buffer: the reference's
+// reserve (FUN_1402135c0) and printf (FUN_140236510) work on this alone, so one copy of each
+// serves blz::string (16 bytes inline) and inline_string<N>.
+struct string_header {
+    char* m_data;
+    uint64_t m_size;
+    uint64_t m_capacity;            // bit 63: m_data is the inline buffer
+};
+
+// Grows the buffer to hold at least `size` characters plus the terminator (see string::reserve).
+void string_reserve(string_header* text, uint64_t size);
+
+// Replaces the contents with the formatted text; an empty string for a bad format.
+void string_format(string_header* text, const char* format, ...);
+
+// Frees a heap buffer (the strings' destructor).
+void string_free(string_header* text);
+
 // blz::string: data, size, capacity, then a 16-byte inline buffer. Bit 63 of the capacity
 // word says the data is the inline buffer (capacity 15); clear means a heap block tagged ".D".
 class string {
@@ -65,6 +83,34 @@ class string {
 };
 
 static_assert(sizeof(string) == 0x28, "blz::string is 0x28 bytes");
+
+// A blz string with an N-byte inline buffer (capacity N - 1 before it spills to the heap).
+template <uint64_t N>
+class inline_string {
+    public:
+    char* m_data;
+    uint64_t m_size;
+    uint64_t m_capacity;
+    char m_inline[N];
+
+    inline_string() : m_data(m_inline), m_size(0), m_capacity(string::INLINE | (N - 1)) {
+        this->m_inline[0] = '\0';
+    }
+    ~inline_string() {
+        string_free(this->header());
+    }
+
+    inline_string(const inline_string&) = delete;
+    inline_string& operator=(const inline_string&) = delete;
+
+    string_header* header() {
+        return reinterpret_cast<string_header*>(this);
+    }
+
+    bool IsInline() const {
+        return (this->m_capacity & string::INLINE) != 0;
+    }
+};
 
 // blz::vector<blz::string>: data, size, capacity (bit 63 set: the storage is not owned).
 class string_vector {

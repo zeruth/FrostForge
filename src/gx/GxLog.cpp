@@ -1,0 +1,59 @@
+#include "gx/Gx.hpp"
+#include "os/Os.hpp"
+#include "storm/Log.hpp"
+
+namespace {
+
+HSLOG s_gxLog;                      // DAT_1434909f0
+uint32_t s_gxLogSize;               // DAT_1434909f8: bytes written, 0xFFFFFFFF once capped
+
+}
+
+// ref: FUN_1422924c0
+void GxLogOpen() {
+    if (s_gxLog == nullptr) {
+        OsCreateDirectory("Logs", false, false);
+        SLogCreate("Logs\\gx.log", 0, &s_gxLog);
+        if (s_gxLog != nullptr) {
+            SLogWrite(s_gxLog, "LogOpen");
+        }
+        s_gxLogSize = 0;
+    }
+}
+
+// ref: FUN_142292480
+void GxLogClose() {
+    if (s_gxLog != nullptr) {
+        SLogClose(s_gxLog);
+        s_gxLog = nullptr;
+    }
+}
+
+// ref: FUN_1422924b0
+void GxLogFlush() {
+    SLogFlush(s_gxLog);
+}
+
+// ref: FUN_1422929b0
+void GxLogV(const char* format, va_list args) {
+    if (s_gxLog == nullptr) {
+        return;
+    }
+    if (s_gxLogSize < 0x800000) {
+        int32_t written = SLogWriteV(s_gxLog, format, args);
+        if (written > 0) {
+            s_gxLogSize += static_cast<uint32_t>(written);
+        }
+    } else if (s_gxLogSize != 0xFFFFFFFF) {
+        s_gxLogSize = 0xFFFFFFFF;
+        SLogWrite(s_gxLog, "Max log size reached. EOF");
+    }
+}
+
+// ref: FUN_14228acb0
+void GxLog(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    GxLogV(format, args);
+    va_end(args);
+}

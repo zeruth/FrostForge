@@ -27,6 +27,48 @@ bool OsIsFirstInstance();
 
 void OsLogCpuInfo();
 
+// The OS version, read once (0x98 bytes, FUN_140263b70 over FUN_140266d20).
+struct OSVERSION {
+    uint32_t m_platform;            // 0x00: 10 Windows
+    uint32_t m_major;               // 0x04
+    uint32_t m_minor;               // 0x08
+    uint32_t m_servicePack;         // 0x0c
+    uint32_t m_build;               // 0x10
+    uint8_t m_server;               // 0x14: not a workstation edition
+    uint8_t m_wine;                 // 0x15: running under Wine
+    char m_extra[0x82];             // 0x16: the service pack text (UTF-8)
+};
+static_assert(sizeof(OSVERSION) == 0x98, "OSVERSION is 0x98 bytes");
+const OSVERSION* OsGetVersion();
+
+// The version as text into `dest` (bc's formatter, FUN_140263c50).
+void OsFormatVersion(char* dest, uint64_t size, const OSVERSION* version);
+
+// AC power and battery (0x20 bytes, FUN_140266fd0). Each flags byte: 1 queried, 2 known.
+struct OSPOWERSTATUS {
+    uint8_t m_onAc;                 // 0x00
+    uint8_t m_acFlags;              // 0x01
+    uint8_t m_batteryPresent;       // 0x02
+    uint8_t m_batteryFlags;         // 0x03
+    uint32_t m_batteryPercent;      // 0x04
+    uint8_t m_percentFlags;         // 0x08
+    uint8_t m_pad09[7];
+    uint64_t m_batteryLifeNs;       // 0x10
+    uint8_t m_lifeFlags;            // 0x18
+    uint8_t m_pad19[7];
+};
+void OsGetPowerStatus(OSPOWERSTATUS* status);
+
+// The machine's physical memory in bytes (FUN_141236ff0).
+uint64_t OsGetPhysicalMemory();
+
+// Whether the process runs in a Remote Desktop session (FUN_140267270).
+bool OsIsRemoteSession();
+
+// A message box with UTF-8 text: 0 for OK or Yes, 1 for No, 2 otherwise (style: buttons in the
+// low nibble, the icon in 0xf0000).
+uint32_t OsMessageBox(void* owner, uint32_t style, const char* text, const char* caption);
+
 void OsInitializeExceptionHandling();
 
 void OsRecordThreadEntryReturnAddresses();
@@ -88,6 +130,7 @@ void OsSleepNanoseconds(int64_t nanoseconds);
 uint32_t OsGetProcessId();
 // Ends the process at once (exit code 1).
 void OsTerminateProcess();
+void OsSetProcessAffinity(uint32_t mask);
 uint64_t OsGetAllocationGranularity();
 int32_t OsSnprintf(char* dest, uint64_t size, const char* format, ...);
 
@@ -160,10 +203,16 @@ struct OSCPUINFO {
     uint32_t m_packages;
     uint32_t m_cores;
     uint32_t m_logical;   // +8: what the task scheduler sizes its pool by
-    uint8_t m_unknown0C[0x1E];
+    uint32_t m_unknown0C;
+    uint64_t m_maxFrequency;  // +0x10: Hz
+    uint32_t m_unknown18;
+    uint32_t m_architecture;  // +0x1c: 1 x86_32, 2 x86_64, 3 arm32, 4 arm64, 5 WAsm_32
+    uint8_t m_unknown20[0xA];
     uint8_t m_flags2A;
-    uint8_t m_unknown2B[0x95];
+    uint8_t m_unknown2B[0x40];
+    char m_brand[0x55];       // +0x6b: the processor's brand string
 };
+static_assert(sizeof(OSCPUINFO) == 0xC0, "OSCPUINFO is 0xc0 bytes");
 int64_t OsGetNanoseconds();
 // Nanoseconds since the first call (QueryPerformanceCounter scaled through a double).
 int64_t OsGetElapsedNanoseconds();
@@ -229,5 +278,8 @@ void OsCloseFile(void* file);
 uint64_t OsGetFileSize(void* file, uint64_t fallback);
 
 bool OsReadFile(void* file, void* buffer, uint32_t bytes, uint32_t* read);
+int64_t OsSetFilePointer(void* file, int64_t offset, uint32_t method);
+bool OsWriteFile(void* file, const void* buffer, uint32_t bytes, uint32_t* written);
+bool OsFlushFile(void* file);
 
 #endif

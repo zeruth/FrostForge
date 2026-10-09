@@ -1,4 +1,5 @@
 #include "client/CommandLine.hpp"
+#include "os/Os.hpp"
 #include "storm/Command.hpp"
 #include "util/Unimplemented.hpp"
 
@@ -37,15 +38,6 @@ void CommandLineError(CMDERROR* error) {
     FROST_UNIMPLEMENTED();
 }
 
-// Shows a message box; `style` carries MB_* bits (0x10001, 0x40001 here).
-// ref: FUN_141237fb0
-void OsMessageBox(void* owner, uint32_t style, const char* text, const char* caption) {
-    (void)owner;
-    (void)style;
-    (void)text;
-    (void)caption;
-    FROST_UNIMPLEMENTED();
-}
 
 // Registers the client's command-line options, parses the command line against them, and
 // unregisters them again. -help prints the usage, -version the build; both stop startup.

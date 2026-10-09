@@ -3,4 +3,4 @@ add_library(console STATIC
     Var.cpp
 )
 target_include_directories(console PUBLIC ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(console PUBLIC base blz os storm util)
+target_link_libraries(console PUBLIC base blz gx os storm util)

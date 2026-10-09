@@ -30,6 +30,8 @@ struct {
     uint64_t m_capacity;
 } s_initialHotfixListeners;  // DAT_142e8e0f0
 
+}
+
 // Adds a listener for the initial hotfix events (vector push_back).
 // ref: FUN_14056df90
 void HotfixAddInitialListener(void (*listener)(int32_t event)) {
@@ -53,6 +55,8 @@ void HotfixAddInitialListener(void (*listener)(int32_t event)) {
     }
     list.m_data[list.m_size++] = listener;
 }
+
+namespace {
 
 // Initial hotfixes: event 3 clears the pending flag, event 4 sets it.
 // ref: 0x140227750

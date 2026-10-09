@@ -1,4 +1,5 @@
 #include "console/Command.hpp"
+#include "gx/Gx.hpp"
 #include "blz/Function.hpp"
 #include "blz/String.hpp"
 #include "storm/Memory.hpp"
@@ -64,7 +65,6 @@ class CONSOLECOMMANDTABLE : public TSHashTable<CONSOLECOMMAND> {
 CONSOLECOMMANDTABLE s_commands;  // 0x142ccbd90
 
 // DAT_14348b650: console output only runs once this is set. Its owner is not ported yet.
-void* s_outputReady;
 
 // DAT_142e30180 / DAT_142e30188 / DAT_142e30198 / DAT_142e301c8: the output callbacks, their
 // lock, and whether output is enabled.
@@ -114,9 +114,9 @@ void ManageHandler(void* dest, void* src, int32_t op) {
 
 }
 
-// ref: FUN_142289e10
+// Console text goes out only once Gx has a device.
 bool ConsoleOutputReady() {
-    return s_outputReady != nullptr;
+    return GxDevicePresent();
 }
 
 // ref: FUN_140326be0

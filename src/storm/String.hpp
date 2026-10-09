@@ -22,6 +22,12 @@ uint64_t SStrVPrintfCount(char* dest, uint64_t maxchars, const char* format, va_
 // snprintf semantics: the full length the output would have, or -1.
 int32_t SStrVSnprintf(char* dest, uint64_t size, const char* format, va_list args);
 
+// SStrVPrintfCount that returns 0xFFFFFFFF on a bad format.
+uint64_t SStrVPrintfChecked(char* dest, uint64_t maxchars, const char* format, va_list args);
+
+// SStrPrintf into a char[260].
+void SStrPrintf260(char* dest, const char* format, ...);
+
 // SStrPrintf into a char[64] / char[128].
 void SStrPrintf64(char* dest, const char* format, ...);
 void SStrPrintf128(char* dest, const char* format, ...);

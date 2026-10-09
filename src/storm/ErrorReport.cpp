@@ -1,6 +1,11 @@
 #include "storm/ErrorReport.hpp"
+#include "blz/String.hpp"
+#include "storm/Memory.hpp"
+#include "storm/String.hpp"
 #include "util/Unimplemented.hpp"
 #include <windows.h>
+#include <cstring>
+#include <new>
 
 char g_errorReportCommand[0x8000] = "no command - main not yet called";
 char g_errorReportParams[0x8000] = "unknown params - main not yet called";
@@ -93,4 +98,115 @@ void ErrorDisplayFormatted(uint32_t code, const char* a2, int32_t a3, const char
     (void)a3;
     (void)format;
     FROST_UNIMPLEMENTED();
+}
+
+namespace {
+
+// The memory the crash dump is to include besides the stacks (DAT_142ddc620, count at
+// DAT_142ddc614).
+struct MEMORYRANGE {
+    void* m_base;
+    uint64_t m_size;
+};
+MEMORYRANGE s_memoryRanges[0x80];
+uint32_t s_memoryRangeCount;
+
+// The innermost context of this thread (TLS +0x2128).
+thread_local ERRORCONTEXT* t_errorContext;
+
+}
+
+// ref: FUN_140212e70
+bool ErrorReportAddMemoryRange(void* base, uint64_t size) {
+    uint32_t index = s_memoryRangeCount;
+    if (index > 0x7f) {
+        return false;
+    }
+    s_memoryRangeCount = index + 1;
+    s_memoryRanges[index].m_base = base;
+    s_memoryRanges[index].m_size = size;
+    return true;
+}
+
+// ref: FUN_14025ce10
+ERRORCONTEXT* ErrorContextPush(ERRORCONTEXT* context, ERRORCONTEXTCALLBACK describe) {
+    context->m_describe = describe;
+    context->m_previous = t_errorContext;
+    t_errorContext = context;
+    return context;
+}
+
+// ref: FUN_14025ce70
+void ErrorContextPop(ERRORCONTEXT* context) {
+    t_errorContext = context->m_previous;
+}
+
+namespace {
+
+const char s_crashActionTag[] = ".?AUCrashFromModuleAction@@";
+
+// What to do when a crash comes from a module (CrashFromModuleAction, 0x60 bytes): the
+// module's name, and the handler told its name.
+struct CrashFromModuleAction {
+    blz::inline_string<0x40> m_module;  // 0x00
+    void (*m_handler)(const char* module);  // 0x58
+};
+static_assert(sizeof(CrashFromModuleAction) == 0x60, "CrashFromModuleAction is 0x60 bytes");
+
+struct CRASHACTIONLIST {
+    CrashFromModuleAction* m_data;
+    uint64_t m_size;
+    uint64_t m_capacity;            // bit 63: the storage is not owned
+};
+CRASHACTIONLIST s_crashActions;     // DAT_142e1c510
+SRWLOCK s_crashActionLock = SRWLOCK_INIT;  // DAT_142e1c998
+
+void SetName(blz::inline_string<0x40>* string, const char* text, uint64_t length) {
+    blz::string_reserve(string->header(), length);
+    std::memcpy(string->m_data, text, length);
+    string->m_data[length] = '\0';
+    string->m_size = length;
+}
+
+// ref: FUN_140259eb0
+void CrashActionReserve(CRASHACTIONLIST* list, uint64_t count) {
+    uint64_t capacity = list->m_capacity & ~blz::string::INLINE;
+    if (capacity >= count) {
+        return;
+    }
+    uint64_t grown = ((list->m_capacity >> 1) & 0x3FFFFFFFFFFFFFFFull) + capacity;
+    if (grown < count) {
+        grown = count;
+    }
+    list->m_capacity = ((list->m_capacity ^ grown) & blz::string::INLINE) ^ grown;
+    auto data = static_cast<CrashFromModuleAction*>(SMemAlloc(grown * sizeof(CrashFromModuleAction), 0xb,
+        s_crashActionTag, SStrHashFnv1a(s_crashActionTag), -6, 0));
+    for (uint64_t i = 0; i < list->m_size; i++) {
+        new (&data[i].m_module) blz::inline_string<0x40>();
+        SetName(&data[i].m_module, list->m_data[i].m_module.m_data, list->m_data[i].m_module.m_size);  // FUN_1402560d0
+        data[i].m_handler = list->m_data[i].m_handler;
+        blz::string_free(list->m_data[i].m_module.header());
+    }
+    if ((list->m_capacity & blz::string::INLINE) == 0 && list->m_data != nullptr) {
+        SMemFree(list->m_data, s_crashActionTag, -6, 0);
+    }
+    list->m_capacity &= ~blz::string::INLINE;
+    list->m_data = data;
+}
+
+}
+
+// ref: FUN_1402594e0
+void ErrorReportAddModuleCrashHandler(const char* module, void (*handler)(const char* module)) {
+    AcquireSRWLockExclusive(&s_crashActionLock);
+    uint64_t length = *module != '\0' ? std::strlen(module) : 0;
+    if (s_crashActions.m_size == (s_crashActions.m_capacity & ~blz::string::INLINE)) {
+        CrashActionReserve(&s_crashActions, (s_crashActions.m_capacity & ~blz::string::INLINE) + 1);
+    }
+    CrashFromModuleAction* action = &s_crashActions.m_data[s_crashActions.m_size];
+    new (&action->m_module) blz::inline_string<0x40>();
+    SetName(&action->m_module, module, length);  // FUN_140259d60
+    action->m_handler = handler;
+    s_crashActions.m_size++;
+    ReleaseSRWLockExclusive(&s_crashActionLock);
 }

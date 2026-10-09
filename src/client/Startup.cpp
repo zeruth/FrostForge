@@ -9,9 +9,13 @@
 #include "console/Var.hpp"
 #include "services/ClientServices.hpp"
 #include "os/Os.hpp"
+#include "os/Timer.hpp"
+#include "os/Window.hpp"
+#include "util/Fnv.hpp"
 #include "storm/String.hpp"
 #include <algorithm>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include "storm/ErrorReport.hpp"
 #include "storm/Log.hpp"
@@ -93,18 +97,6 @@ void LogOpenDefaultLogs() {
     }
 }
 
-// Stores a callback in DAT_1430a1518, read by 0x141237e40 and 0x141237f70.
-// ref: FUN_141238140
-void Sub141238140(void (*callback)()) {
-    (void)callback;
-    FROST_UNIMPLEMENTED();
-}
-
-// Callback passed to Sub141238140. Signature not yet known.
-// ref: FUN_1414f8d60
-void Sub1414F8D60() {
-    FROST_UNIMPLEMENTED();
-}
 
 // The error reporter's exception callback. Signature not yet known.
 // ref: 0x140215370 (reached only through the pointer)
@@ -262,16 +254,15 @@ bool TimingMethodCallback(CVar* cvar, const char* oldValue, const char* newValue
 int32_t TimingInfoCommand(const char* command, const char* arguments) {
     (void)command;
     (void)arguments;
-    FROST_UNIMPLEMENTED();
+    int32_t desired = CVarLookup(t2util::ConstFnvHashStringI("timingMethod"))->m_intValue;
+    int32_t selected = OsTimerGetMethod();
+    int32_t error = CVarLookup(t2util::ConstFnvHashStringI("timingTestError"))->m_intValue;
+    ConsoleWriteFormat(0, "Timing method desired: %d - %s", desired, OsTimerMethodName(desired));
+    ConsoleWriteFormat(0, "Timing method selected: %d - %s", selected, OsTimerMethodName(selected));
+    ConsoleWriteFormat(0, "Timing test error: %d", error);
     return 1;
 }
 
-// timeBeginPeriod(1), then sets up the game timer with a timing method.
-// ref: FUN_141237d90
-void TimingInitialize(int32_t method) {
-    (void)method;
-    FROST_UNIMPLEMENTED();
-}
 
 // Opens Logs\Movie.log and registers the movie recorder's two handlers.
 // ref: FUN_1405fde10
@@ -381,7 +372,7 @@ void Sub1402265E0() {
     runOnce.destroy();
 
     CVarApplyLatched(timingMethod);
-    TimingInitialize(timingMethod->m_intValue);
+    OsTimerInitialize(timingMethod->m_intValue);
     ConsoleCommandRegister("timingInfo", &TimingInfoCommand, 0, nullptr, 0);
     MovieInitialize();
     g_clientInitFlags |= 2;
@@ -558,39 +549,272 @@ bool Sub1402289B0() {
     return true;
 }
 
+namespace {
+
+// The product's registry key under Blizzard Entertainment (0x142cc84d0, 0x80 bytes), with
+// "\PTR" or "\Beta" appended for those builds. Each call appends again, as in the reference.
+char s_registryProduct[0x80] = "World of Warcraft";
+
+void AppendBounded(char* buffer, uint64_t size, const char* text) {
+    char* end = buffer;
+    uint64_t room = size;
+    while (room != 0 && *end != '\0') {
+        end++;
+        room--;
+    }
+    room = static_cast<uint64_t>(buffer + size - end);
+    if (room != 0) {
+        for (; *text != '\0'; text++) {
+            if (room != 1) {
+                *end++ = *text;
+                room--;
+            }
+        }
+        *end = '\0';
+    }
+}
+
+// ref: FUN_140229450
+const char* RegistryProductKey() {
+    int32_t type = GetBuildType();
+    if (type == 0) {
+        AppendBounded(s_registryProduct, sizeof(s_registryProduct), "\\");
+        AppendBounded(s_registryProduct, sizeof(s_registryProduct), "PTR");
+    } else if (type == 1) {
+        AppendBounded(s_registryProduct, sizeof(s_registryProduct), "\\");
+        AppendBounded(s_registryProduct, sizeof(s_registryProduct), "Beta");
+    }
+    return s_registryProduct;
+}
+
+// The command line the error reporter keeps (its executable path first).
+// ref: FUN_140211580
+void GetCommandLineCopy(char* dest, uint64_t size) {
+    const char* source = g_errorReportCommand;
+    if (size == 0) {
+        return;
+    }
+    for (;;) {
+        if (--size == 0) {
+            *dest = '\0';
+            return;
+        }
+        char c = *source++;
+        *dest++ = c;
+        if (c == '\0') {
+            return;
+        }
+    }
+}
+
+// Two splits of the unit interval (0x142dde820..0x142dde83c): {0.3, 0.6} normally,
+// {0, 0.3} when `low` is set, with the widths between them.
+struct SPLITS {
+    uint32_t m_low;                 // 0x20
+    float m_24;                     // 0x24
+    float m_first;                  // 0x28: 0 (the reference writes it as an int)
+    float m_second;                 // 0x2c
+    float m_start;                  // 0x30
+    float m_middle;                 // 0x34
+    float m_end;                    // 0x38
+    float m_rest;                   // 0x3c
+};
+SPLITS s_splits;
+
+// ref: FUN_140219a60
+void SetSplits(int32_t low) {
+    s_splits.m_first = 0.0f;
+    s_splits.m_start = 0.3f;   // DAT_142618d5c
+    s_splits.m_end = 0.6f;     // DAT_142618d60
+    if (low != 0) {
+        s_splits.m_start = 0.0f;
+        s_splits.m_end = 0.3f;
+    }
+    s_splits.m_second = s_splits.m_start;
+    s_splits.m_low = low != 0;
+    s_splits.m_middle = s_splits.m_end - s_splits.m_start;
+    s_splits.m_rest = 1.0f - s_splits.m_end;  // DAT_142618d64
+}
+
+// The telemetry encryption setup: offline (docs/stubs.md).
+// ref: FUN_140229940
+void TelemetryEncryptionHandler(int32_t a1) {
+    (void)a1;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14135aa50
+void TelemetrySetEncryptionHandler(void (*handler)(int32_t)) {
+    (void)handler;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141359ec0
+void TelemetryOnHotfixApplied() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141359fd0
+void TelemetryOnHotfixFailed() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: 0x140229920
+void TelemetryHotfixListener(int32_t event) {
+    if (event == 3) {
+        TelemetryOnHotfixApplied();
+    } else if (event == 4) {
+        TelemetryOnHotfixFailed();
+    }
+}
+
+// A telemetry stream's enable (vtable slot 0x88 of DAT_142e94e90 / DAT_142e94c80, flag 4 meaning
+// DAT_142ccdf30's default); the streams are offline.
+// ref: FUN_14057d1b0
+void TelemetryStreamEnable(void* stream, uint32_t flags) {
+    (void)stream;
+    (void)flags;
+    FROST_UNIMPLEMENTED();
+}
+uint8_t s_telemetryStreamA;  // DAT_142e94e90
+uint8_t s_telemetryStreamB;  // DAT_142e94c80
+
+// "simd": masks the CPU's SIMD features with the value and installs the math routines for
+// what is left. The feature detection (cpuid) and the dispatch table (FUN_1412be6f0,
+// vtable 0x142728920 over DAT_1430a7cc0) are not ported.
+// ref: FUN_140229860
+bool SimdCallback(CVar* cvar, const char* oldValue, const char* newValue, void* userData) {
+    (void)cvar;
+    (void)oldValue;
+    (void)userData;
+    int32_t radix = 10;
+    if (newValue != nullptr && newValue[0] == '0' && ((newValue[1] - 'X') & 0xDF) == 0) {
+        radix = 16;
+    }
+    (void)std::strtol(newValue, nullptr, radix);
+    FROST_UNIMPLEMENTED();
+    return true;
+}
+
+// ref: FUN_140229800
+bool ProcessAffinityCallback(CVar* cvar, const char* oldValue, const char* newValue, void* userData) {
+    (void)cvar;
+    (void)oldValue;
+    (void)userData;
+    uint32_t limit = 0xFFFFFFFFu >> ((0x20u - OsGetCpuInfo()->m_logical) & 0x1f);
+    uint32_t mask = static_cast<uint32_t>(std::atoi(newValue));
+    if (limit < mask) {
+        ConsoleWriteFormat(0, "Specified mask %08x is greater than the maximum allowable value of %08x", mask, limit);
+        return false;
+    }
+    return true;
+}
+
+// A generator's state seeded from a value: the value, and a mix of its residues.
+// ref: FUN_14133cae0
+struct RANDSEED {
+    uint32_t m_seed;
+    uint32_t m_mix;
+};
+RANDSEED s_seedA;  // DAT_142ddcf50
+RANDSEED s_seedB;  // DAT_142ddcf80
+
+void SeedRandom(RANDSEED* state, uint32_t seed) {
+    state->m_seed = seed;
+    state->m_mix = (seed % 0x3b) * 0x400 | (seed % 0x3d) * 4 | (seed % 0x35) * 0x40000
+        | ((seed / 0x2f) * 0x11 + seed) * 0x4000000;
+}
+
+CVar* s_streamingCameraRadius;          // DAT_1430a55d8
+CVar* s_streamingCameraMaxRadius;       // DAT_1430a55e0
+CVar* s_streamingCameraLookAheadTime;   // DAT_1430a55e8
+
+// ref: FUN_141282bc0
+void StreamingCameraRegisterCVars() {
+    s_streamingCameraRadius = CVarRegister("streamingCameraRadius", "Base radius of the streaming camera.", 1, "100",
+        static_cast<CVARCALLBACK>(nullptr), 1, false, nullptr, false);
+    s_streamingCameraMaxRadius = CVarRegister("streamingCameraMaxRadius", "Max radius of the streaming camera.", 1,
+        "250", static_cast<CVARCALLBACK>(nullptr), 1, false, nullptr, false);
+    s_streamingCameraLookAheadTime = CVarRegister("streamingCameraLookAheadTime", "Look ahead time for streaming.", 1,
+        "2000", static_cast<CVARCALLBACK>(nullptr), 1, false, nullptr, false);
+}
+
+// The Battle.net client: realm-list CVars, the login and account services. Offline until the
+// AzerothCore side serves it (docs/stubs.md).
+// ref: FUN_141487ed0
+void BattleNetInitialize() {
+    FROST_UNIMPLEMENTED();
+}
+
+// DAT_142cc8000: cleared while the system sleeps.
+uint8_t s_systemAwake = 1;
+
+// ref: FUN_140214990
+void SetSystemAwake(uint8_t awake) {
+    s_systemAwake = awake;
+}
+
+// ref: 0x1402297a0
+void OnSuspend() {
+    SetSystemAwake(0);
+}
+
+// On resume the sound device is reset (FUN_14156cf10 / FUN_14156b750, vtable slot 0x58, not
+// ported), then the clients learns of it through OS event 0x1a.
+// ref: FUN_1402297b0
+void OnResume() {
+    FROST_UNIMPLEMENTED();
+    SetSystemAwake(1);
+    OsQueueEvent(0x1a, 0, 0, 0);
+}
+
+}
+
+// Stage 4: process-wide settings (install path, SIMD, CPU affinity), random seeds, the
+// streaming camera, Battle.net, and the power hooks.
 // ref: FUN_1402295b0
 void Sub1402295B0() {
-    FROST_UNIMPLEMENTED();
+    const char* product = RegistryProductKey();
+    char path[0x618];
+    GetCommandLineCopy(path, sizeof(path));
+    if (path[0] != '\0') {
+        char* slash = std::strrchr(path, '\\');
+        if (slash != nullptr) {
+            slash[1] = '\0';
+            // DIVERGED: the reference writes this directory as InstallPath under
+            // HKEY_*\Software\Blizzard Entertainment\<product> (FUN_14025cad0). FrostLite shares
+            // the machine with a real install and leaves the registry alone.
+            (void)product;
+        }
+    }
+    SetSplits(0);
+    TelemetrySetEncryptionHandler(&TelemetryEncryptionHandler);
+    HotfixAddInitialListener(&TelemetryHotfixListener);
+    TelemetryStreamEnable(&s_telemetryStreamA, 4);
+    TelemetryStreamEnable(&s_telemetryStreamB, 4);
+    CVarRegister("simd", "Enable SIMD features (e.g. SSE)", 0, "-1", &SimdCallback, 5, false, nullptr, false);
+    CVar* affinity = CVarRegister("processAffinityMask",
+        "Sets which core(s) WoW may execute on - changes require restart to take effect", 2, "0",
+        &ProcessAffinityCallback, 0, false, nullptr, false);
+    CVar* videoOptionsVersion = CVarLookup(t2util::ConstFnvHashStringI("videoOptionsVersion"));
+    if (videoOptionsVersion == nullptr || videoOptionsVersion->m_intValue < 3) {
+        char value[8];
+        SStrPrintf(value, sizeof(value), "%u", 0);
+        CVarSet(affinity, value, true, false, false, true);
+        CVarApplyLatched(affinity);
+    }
+    if (affinity->m_intValue != 0) {
+        OsSetProcessAffinity(static_cast<uint32_t>(affinity->m_intValue));
+    }
+    SeedRandom(&s_seedA, OsGetAsyncTimeMs());
+    SeedRandom(&s_seedB, OsGetAsyncTimeMs());
+    StreamingCameraRegisterCVars();
+    BattleNetInitialize();
+    g_clientInitFlags |= 0x200;
+    OsAddSuspendHandler(&OnSuspend);
+    OsAddResumeHandler(&OnResume);
 }
 
-// ref: FUN_14123b190
-void Sub14123B190() {
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_14022a260
-void Sub14022A260() {
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_141237bf0
-uint32_t Sub141237BF0() {
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// The main loop's condition: CommonMain runs Sub140225AB0 while this returns true.
-// ref: FUN_1402225d0
-bool Sub1402225D0() {
-    FROST_UNIMPLEMENTED();
-    return false;
-}
-
-// One iteration of the main loop.
-// ref: FUN_140225ab0
-void Sub140225AB0() {
-    FROST_UNIMPLEMENTED();
-}
 
 // Unwinds stage 2 when stage 3 fails.
 // ref: FUN_140227810

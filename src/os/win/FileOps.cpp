@@ -337,3 +337,8 @@ uint32_t OsMappingClose(OSMAPPING* mapping) {
 void OsTerminateProcess() {
     TerminateProcess(GetCurrentProcess(), 1);
 }
+
+// ref: FUN_140255c90
+void OsSetProcessAffinity(uint32_t mask) {
+    SetProcessAffinityMask(GetCurrentProcess(), mask);
+}

@@ -38,5 +38,25 @@ void ErrorDisplayCode(uint32_t code, const char* text, uint32_t locale, bool fla
 // Formats the message (printf-style) and reports it under `code`.
 void ErrorDisplayFormatted(uint32_t code, const char* a2, int32_t a3, const char* format, ...);
 
+// Adds a block of memory for the crash dump to include; false once the 128 slots are used.
+bool ErrorReportAddMemoryRange(void* base, uint64_t size);
+
+// What a thread is doing, for the crash report: a stack of records, innermost first, each
+// able to describe itself into a buffer. Callers put a record on their own stack, extended
+// with whatever its callback reads.
+struct ERRORCONTEXT;
+typedef void (*ERRORCONTEXTCALLBACK)(ERRORCONTEXT* context, uint64_t size, char* buffer);
+struct ERRORCONTEXT {
+    ERRORCONTEXT* m_previous;       // 0x00
+    ERRORCONTEXTCALLBACK m_describe;  // 0x08
+};
+
+ERRORCONTEXT* ErrorContextPush(ERRORCONTEXT* context, ERRORCONTEXTCALLBACK describe);
+
+// Registers what to do when a crash comes from inside a module (e.g. a driver): the handler
+// is told the module's name.
+void ErrorReportAddModuleCrashHandler(const char* module, void (*handler)(const char* module));
+void ErrorContextPop(ERRORCONTEXT* context);
+
 
 #endif

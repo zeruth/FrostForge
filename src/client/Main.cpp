@@ -1,8 +1,11 @@
 #include "client/Main.hpp"
 #include "client/CrashReport.hpp"
 #include "client/Locale.hpp"
+#include "client/GxWindow.hpp"
 #include "client/Startup.hpp"
 #include "os/Os.hpp"
+#include "os/Timer.hpp"
+#include "os/Window.hpp"
 #include "storm/ErrorReport.hpp"
 #include "storm/Memory.hpp"
 #include "util/Unimplemented.hpp"
@@ -61,7 +64,7 @@ void CommonMain() {
         CrashReportAddFile(file);
     }
 
-    Sub141238140(&Sub1414F8D60);
+    OsSetMainWindowGetter(&WindowGetHandle);
     MemoryRegisterExitHandlers();
     MemoryInstallAllocatorHooks();
     OsInitializeExceptionHandling();
@@ -92,9 +95,9 @@ void CommonMain() {
             g_startupFlags |= STARTUP_STAGE_3;
             Sub1402295B0();
             g_startupFlags |= STARTUP_STAGE_4;
-            Sub14123B190();
+            OsWindowSystemInitialize();
             Sub14022A260();
-            g_startupValue = Sub141237BF0();
+            g_startupValue = OsGetAsyncTimeMs();
             g_running = 1;
 
             while (Sub1402225D0()) {
@@ -133,9 +136,3 @@ void ClientMain(int32_t argc, char** argv) {
     ClientRun(argc, argv);
 }
 
-// Asks the client to quit: sets the quit flag and, the first time, tears down the
-// connection and the window message pump.
-// ref: FUN_140216680
-void ClientRequestQuit() {
-    FROST_UNIMPLEMENTED();
-}

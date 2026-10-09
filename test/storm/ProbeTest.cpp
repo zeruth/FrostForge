@@ -7,6 +7,8 @@
 //   ProbeTest tokenize <string>          SStrTokenize (tokens, quoted flags)
 //   ProbeTest float <hex bytes>          SStrToFloat (the float's bits)
 //   ProbeTest fnv <hex bytes>            t2util::FnvHashStringI from the FNV-1a basis
+//   ProbeTest gpus -                     pmCreateInstance, the GPU list and each API's device data
+//   ProbeTest gxinit <force api>         GxInitialize (5: let Gx choose), then the adapter list
 
 #include "base/Status.hpp"
 #include "cas/CAS.hpp"
@@ -14,6 +16,9 @@
 #include "cas/CASManifest.hpp"
 #include "blz/String.hpp"
 #include "os/Os.hpp"
+#include "prism/Instance.hpp"
+#include "gx/Gx.hpp"
+#include "console/Var.hpp"
 #include "storm/Memory.hpp"
 #include "client/Locale.hpp"
 #include "blz/Log.hpp"
@@ -193,6 +198,56 @@ int main(int argc, char** argv) {
             }
         }
         tact::InstallationInfoFree(info);
+    } else if (what == "gxinit") {
+        std::setvbuf(stdout, nullptr, _IONBF, 0);
+        CVarInitialize(false);
+        GxLogOpen();
+        bool ok = GxInitialize(static_cast<uint8_t>(std::strtoul(input, nullptr, 10)));
+        std::printf("GxInitialize %d, %llu adapters\n", ok ? 1 : 0, static_cast<unsigned long long>(g_gxAdapters.m_size));
+        for (uint64_t i = 0; i < g_gxAdapters.m_size; i++) {
+            GxAdapterInfo* info = &g_gxAdapters.m_data[i];
+            std::printf("  '%s' api=%u supported=%u%u%u\n", info->m_name.m_data, info->m_api, info->m_supported[0],
+                info->m_supported[1], info->m_supported[2]);
+        }
+        GxLogClose();
+    } else if (what == "gpus") {
+        // gpus -: create the Prism instance as Gx does, then list each GPU with its monitors and
+        // what the D3D11 and D3D12 backends report for it.
+        std::setvbuf(stdout, nullptr, _IONBF, 0);
+        pm::INSTANCEINFO info = {};
+        info.m_10 = 2;
+        info.m_28 = 0xf;
+        info.m_a4 = 2;
+        info.m_appName = "World of Warcraft";
+        info.m_appVersion = 0x76c3;
+        pm::Instance* instance = nullptr;
+        pm::RESULT result = pm::CreateInstance(&info, &instance);
+        std::printf("create code=%u category=%u hr=%08x os=%u build=%u\n", result.m_code, result.m_category,
+            static_cast<uint32_t>(result.m_hresult), instance != nullptr ? instance->m_osClass : 0,
+            instance != nullptr ? instance->m_osBuild : 0);
+        if (result.m_code != 0) {
+            return 1;
+        }
+        uint32_t count = 0;
+        instance->EnumerateGpus(&result, &count, nullptr, 0x1f);
+        std::vector<pm::GPU*> gpus(count);
+        instance->EnumerateGpus(&result, &count, gpus.data(), 0x1f);
+        for (uint32_t i = 0; i < count; i++) {
+            pm::GPU* gpu = gpus[i];
+            std::printf("gpu %u '%s' vendor=%04x device=%04x subsys=%08x rev=%u type=%s luid=%016llx monitors=%u\n", i,
+                gpu->m_name, gpu->m_vendorId, gpu->m_deviceId, gpu->m_subSysId, gpu->m_revision,
+                pm::GpuTypeName(gpu->m_type), static_cast<unsigned long long>(gpu->m_luid), gpu->m_monitorCount);
+            for (uint32_t m = 0; m < gpu->m_monitorCount; m++) {
+                auto monitor = reinterpret_cast<pm::MONITOR*>(gpu->m_monitors[m]);
+                std::printf("  monitor '%s' %d,%d %dx%d flags=%u modes=%u\n", monitor->m_name, monitor->m_left,
+                    monitor->m_top, monitor->m_width, monitor->m_height, monitor->m_flags, monitor->m_modeCount);
+            }
+            for (uint8_t api : { pm::API_D3D11, pm::API_D3D12 }) {
+                pm::APIDEVICEDATA* data = instance->GetDeviceData(gpu, api);
+                std::printf("  %s ready=%u level=%04x os=%u/%u intel=%u\n", pm::ApiName(api), data->m_ready,
+                    data->m_featureLevel, data->m_osClass, data->m_osBuild, data->m_intelGeneration);
+            }
+        }
     } else if (what == "casinit") {
         // casinit <data dir> [local root]: CASInitFromBuildInfo as stage 3 calls it, but offline
         // (no CDN servers), region US with enUS text and speech.
@@ -231,6 +286,26 @@ int main(int argc, char** argv) {
                 }
             }
             for (int32_t i = 4; i < argc; i++) {
+                if (argv[i][0] == '#') {
+                    // #<fdid>: open, size and read through the CAS file API
+                    int32_t id = std::atoi(argv[i] + 1);
+                    cas::CASFILE* file = nullptr;
+                    bool opened = cas::CASFileOpenById(id, &file, 0);
+                    std::printf("open %d -> %d (kind %d code %u tact %u)\n", id, opened ? 1 : 0,
+                        cas::CASGetLastError()->m_kind, cas::CASGetLastError()->m_code, cas::CASGetLastError()->m_tactError);
+                    if (opened) {
+                        uint64_t size = cas::CASFileGetSize(file);
+                        std::vector<uint8_t> data(size + 1);
+                        bool read = cas::CASFileRead(file, data.data(), static_cast<uint32_t>(size));
+                        std::printf("  name %s size %llu read %d:", file->m_name, static_cast<unsigned long long>(size), read ? 1 : 0);
+                        for (uint64_t b = 0; b < 32 && b < size; b++) {
+                            std::printf(" %02x", data[b]);
+                        }
+                        std::printf("\n");
+                        cas::CASFileClose(&file);
+                    }
+                    continue;
+                }
                 int32_t fdid = cas::CASGetFileDataIdByName(argv[i]);
                 std::printf("%s -> fdid %d\n", argv[i], fdid);
             }

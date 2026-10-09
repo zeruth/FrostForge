@@ -537,6 +537,44 @@ int32_t LOCALMANIFEST::Add(int32_t fileDataId, const char* path, const char* roo
     return entry->m_fileDataId;
 }
 
+// ref: FUN_1402d7dc0
+LocalManifestEntry* LOCALMANIFEST::FindById(int32_t fileDataId) {
+    s_idLock.lock_shared();
+    LocalManifestEntry* entry = nullptr;
+    if (this->m_byId.m_buckets != nullptr) {
+        uint64_t slot = (this->m_byId.m_capacity - 1) & blz::fmix64(static_cast<uint64_t>(static_cast<int64_t>(fileDataId)));
+        LOCALIDNODE** link;
+        LOCALIDNODE* node = ChainedFind(&this->m_byId, &this->m_byId.m_buckets[slot], fileDataId, &link);
+        if (node != nullptr && node->m_value->m_fileDataId == fileDataId) {
+            entry = node->m_value;
+        }
+    }
+    s_idLock.unlock_shared();
+    return entry;
+}
+
+// ref: FUN_1402d7e90
+const char* LOCALMANIFEST::FindPathByName(uint64_t nameHash, int32_t* fileDataId) {
+    s_nameLock.lock_shared();
+    const char* path = nullptr;
+    if (this->m_byName.m_buckets != nullptr) {
+        uint64_t slot = (this->m_byName.m_capacity - 1) & blz::fmix64(nameHash);
+        LOCALNAMENODE** link;
+        LOCALNAMENODE* node = ChainedFind(&this->m_byName, &this->m_byName.m_buckets[slot], nameHash, &link);
+        if (node != nullptr && node->m_value.m_byId != 0) {
+            if (fileDataId != nullptr) {
+                *fileDataId = node->m_value.m_fileDataId;
+            }
+            path = node->m_value.m_path;
+        }
+    }
+    if (path == nullptr && fileDataId != nullptr) {
+        *fileDataId = 0;
+    }
+    s_nameLock.unlock_shared();
+    return path;
+}
+
 // ref: FUN_1402d9440
 void LocalManifestRegisterHandler(LOCALFILEHANDLER handler, const char* extension) {
     char lower[0x110];

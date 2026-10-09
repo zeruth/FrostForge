@@ -20,6 +20,7 @@ class string;
 
 namespace tact {
 class Instance;
+struct FILEHANDLE;
 struct BUILDINFOENTRY;
 }
 
@@ -99,6 +100,42 @@ bool CASReadFile(CASINSTANCE* instance, const char* name, uint8_t** data, uint32
     int32_t allocFlags);
 
 bool CASLoadManifest(const uint8_t* const* data, uint64_t size, const MANIFESTLOCALE* locale, CStatus* status);
+
+// An open game file (0x68 bytes): a loose file on disk, or a file in the build read through tact.
+struct CASFILE {
+    int32_t m_type;                 // 0x00: 1 a loose file, 2 a build file
+    tact::FILEHANDLE* m_handle;     // 0x08
+    union {
+        void* m_file;               // 0x10: type 1, the OS handle
+        CASINSTANCE* m_instance;    // 0x10: type 2
+    };
+    uint8_t m_ckey[16];             // 0x18
+    char m_name[0x36];              // 0x28: the content-key name tact knows it by
+    uint64_t m_position;            // 0x60
+};
+static_assert(sizeof(CASFILE) == 0x68, "CASFILE is 0x68 bytes");
+
+// Called after every build-file read with the bytes read (DAT_142ccba50, its context
+// DAT_142ccba60).
+extern void (*g_casReadHook)(const uint8_t* ckey, uint32_t bytes, void* context);
+
+// The name tact resolves a content key by: "%08X%04X:%08X" (content flags, locale bits,
+// file data id) and the key in hex.
+void CASFormatKeyName(char* dest, const uint8_t* ckey, uint32_t fileDataId, uint32_t localeFlags, uint32_t contentFlags);
+
+// Opens a file by id: with `flags` 1 a loose file entered under that id (or its name) wins.
+bool CASFileOpenById(int32_t fileDataId, CASFILE** file, uint64_t flags);
+bool CASFileOpenByKey(CASINSTANCE* instance, const char* name, const uint8_t* ckey, CASFILE** file);
+uint64_t CASFileGetSize(CASFILE* file);
+bool CASFileRead(CASFILE* file, void* dest, uint32_t size);
+bool CASFileReadEx(CASFILE* file, void* dest, uint32_t size, uint32_t* read, uint32_t flags, int32_t slot);
+bool CASFileReadAt(CASINSTANCE* instance, CASFILE* file, void* dest, uint64_t offset, uint32_t size, uint32_t* read,
+    uint8_t flags, int32_t slot);
+void CASFileClose(CASFILE** file);
+// Whether an id names a file (a loose one, or one the build knows).
+bool CASFileExists(int32_t fileDataId);
+// 2 resident, 1 not resident (tact's 7), 0 unknown or failed.
+uint8_t CASFileGetResidency(int32_t fileDataId, uint64_t size, uint32_t a3);
 
 // The build manifest's file data id for a path, or 0.
 int32_t CASGetFileDataIdByName(const char* name);
