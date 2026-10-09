@@ -12,3 +12,6 @@ target_link_libraries(ObjectAllocTest PRIVATE base)
 
 add_executable(FrameScriptEventsTest ui/FrameScriptEventsTest.cpp)
 target_link_libraries(FrameScriptEventsTest PRIVATE base ui)
+
+add_executable(LayoutFrameTest ui/LayoutFrameTest.cpp)
+target_link_libraries(LayoutFrameTest PRIVATE base ui)

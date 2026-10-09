@@ -37,7 +37,6 @@ extern CVar* g_overrideArchive;  // DAT_142ddfa78: "overrideArchive"
 void HotfixAddInitialListener(void (*listener)(int32_t event));
 
 void StartupErrorCallback(uint32_t code, const char* text);
-void Sub1405F64E0();
 void Sub14165C0E0();
 void Sub1415002E0(int32_t a1, int32_t a2, int32_t a3, int32_t a4, int32_t a5);
 void Sub140226240();

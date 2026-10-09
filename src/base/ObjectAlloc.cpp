@@ -488,7 +488,7 @@ void ObjectAllocUsage() {
 }
 
 // ref: FUN_141240aa0
-TObjectAllocBase::TObjectAllocBase() {
+CObjectAllocLocked::CObjectAllocLocked() {
     this->m_initialized = false;
     this->m_compact = true;
     this->m_objSize = 0;
@@ -497,7 +497,7 @@ TObjectAllocBase::TObjectAllocBase() {
 }
 
 // ref: FUN_141240c70
-void TObjectAllocBase::Init(const char* name, uint32_t objSize, uint32_t alignment, uint32_t objsPerHeap,
+void CObjectAllocLocked::Init(const char* name, uint32_t objSize, uint32_t alignment, uint32_t objsPerHeap,
     int32_t memFlags, bool align16, void* userData) {
     (void)name;
     uint32_t align = alignment > 3 ? alignment : 4;
@@ -530,7 +530,7 @@ void TObjectAllocBase::Init(const char* name, uint32_t objSize, uint32_t alignme
 }
 
 // ref: FUN_141240af0
-void TObjectAllocBase::Destroy() {
+void CObjectAllocLocked::Destroy() {
     if (!this->m_initialized) {
         return;
     }
@@ -548,7 +548,7 @@ void TObjectAllocBase::Destroy() {
 }
 
 // ref: FUN_141240bb0
-void* TObjectAllocBase::Alloc(bool zero) {
+void* CObjectAllocLocked::Alloc(bool zero) {
     OsMutexLock(&this->m_lock);
     uint32_t index;
     void* object = this->m_heapList->Alloc(&index, zero);
@@ -561,7 +561,7 @@ void* TObjectAllocBase::Alloc(bool zero) {
 }
 
 // ref: FUN_141240c20
-void TObjectAllocBase::Free(void* object) {
+void CObjectAllocLocked::Free(void* object) {
     uint32_t index = *reinterpret_cast<uint32_t*>(static_cast<char*>(object) + this->m_objSize - 4);
     OsMutexLock(&this->m_lock);
     this->m_heapList->Free(index, this->m_compact);
@@ -625,4 +625,47 @@ void ObjectAllocUnregister(void* allocator) {
         s_allocators = nullptr;
     }
     OsLazyCritSectLeave(&s_allocatorLock);
+}
+
+// ref: FUN_141240d80 (the base constructor, inlined at each typed allocator's creation)
+TObjectAllocBase::TObjectAllocBase() {
+    ObjectAllocRegister(this);
+}
+
+// ref: FUN_1402deb10
+TObjectAllocBase::~TObjectAllocBase() {
+    ObjectAllocUnregister(this);
+}
+
+TObjectAllocHeap::TObjectAllocHeap(const char* name, uint32_t objSize, uint32_t objsPerHeap, int32_t memFlags) {
+    this->m_name = name;
+    this->m_userData = nullptr;
+    this->m_objSize = objSize;
+    this->m_heapId = static_cast<int32_t>(ObjectAllocAddHeap(objSize, objsPerHeap, name, memFlags, false));
+}
+
+// ref: FUN_1402deab0
+TObjectAllocHeap::~TObjectAllocHeap() {
+    if (this->m_heapId != -1) {
+        ObjectAllocDestroyHeap(static_cast<uint32_t>(this->m_heapId));
+    }
+}
+
+// The allocation the users inline: the index goes in the object's last 4 bytes.
+void* TObjectAllocHeap::Alloc() {
+    uint32_t index;
+    void* object = ObjectAlloc(static_cast<uint32_t>(this->m_heapId), &index, false);
+    if (object == nullptr) {
+        return nullptr;
+    }
+    *reinterpret_cast<uint32_t*>(static_cast<char*>(object) + this->m_objSize - 4) = index;
+    _InterlockedIncrement64(&this->m_live);
+    _InterlockedIncrement64(&this->m_total);
+    return object;
+}
+
+void TObjectAllocHeap::Free(void* object) {
+    _InterlockedDecrement64(&this->m_live);
+    ObjectFree(static_cast<uint32_t>(this->m_heapId),
+        *reinterpret_cast<uint32_t*>(static_cast<char*>(object) + this->m_objSize - 4));
 }

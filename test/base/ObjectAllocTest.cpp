@@ -51,7 +51,7 @@ int main() {
         Check((reinterpret_cast<uintptr_t>(object) & 0xf) == 0, "align16 objects are aligned");
     }
 
-    TObjectAllocBase local;
+    CObjectAllocLocked local;
     local.Init("LOCAL", 0x30, 8, 16, 0x1f, false, nullptr);
     void* a = local.Alloc(true);
     void* b = local.Alloc(true);

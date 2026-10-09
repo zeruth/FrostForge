@@ -4,7 +4,7 @@
 // ObjectAlloc (Engine/Source/ObjectAlloc): fixed-size object heaps. A heap list hands out
 // objects from blocks of `objsPerHeap`, each block with a stack of free slot indices; an
 // object is named by its global index (block * objsPerHeap + slot). Lists live in one global
-// table addressed by heap id, or in a TObjectAllocBase that owns its list and lock.
+// table addressed by heap id, or in a CObjectAllocLocked that owns its list and lock.
 
 #include <cstdint>
 
@@ -75,7 +75,7 @@ void ObjectAllocUsage();
 
 // An allocator with its own heap list and lock. Each object carries its index in its last 4
 // bytes (0x28).
-class TObjectAllocBase {
+class CObjectAllocLocked {
     public:
     uint32_t m_objSize;             // 0x00 the requested size plus the index, aligned
     CObjectHeapList* m_heapList;    // 0x08
@@ -84,17 +84,45 @@ class TObjectAllocBase {
     bool m_compact;                 // 0x19
     void* m_userData;               // 0x20
 
-    TObjectAllocBase();
+    CObjectAllocLocked();
     void Init(const char* name, uint32_t objSize, uint32_t alignment, uint32_t objsPerHeap, int32_t memFlags,
         bool align16, void* userData);
     void Destroy();
     void* Alloc(bool zero);
     void Free(void* object);
 };
-static_assert(sizeof(TObjectAllocBase) == 0x28, "TObjectAllocBase is 0x28 bytes");
+static_assert(sizeof(CObjectAllocLocked) == 0x28, "CObjectAllocLocked is 0x28 bytes");
 
 // The registry of TObjectAlloc instances (for usage dumps).
 void ObjectAllocRegister(void* allocator);
 void ObjectAllocUnregister(void* allocator);
+
+// The base of the typed allocators (vtable 0x142631f88, 0x28): counted, and listed in the
+// registry while it exists.
+class TObjectAllocBase {
+    public:
+    uint32_t m_objSize = 0;         // 0x08 including the index in the last 4 bytes
+    int64_t m_live = 0;             // 0x10
+    int64_t m_total = 0;            // 0x18
+    const char* m_name = nullptr;   // 0x20
+
+    TObjectAllocBase();
+    virtual ~TObjectAllocBase();
+};
+static_assert(sizeof(TObjectAllocBase) == 0x28, "TObjectAllocBase is 0x28 bytes");
+
+// A typed allocator over one global heap (vtable 0x142631f90, 0x38). Each object carries its
+// index in its last 4 bytes.
+class TObjectAllocHeap : public TObjectAllocBase {
+    public:
+    int32_t m_heapId = -1;          // 0x28
+    void* m_userData = nullptr;     // 0x30
+
+    TObjectAllocHeap(const char* name, uint32_t objSize, uint32_t objsPerHeap, int32_t memFlags);
+    ~TObjectAllocHeap() override;
+    void* Alloc();
+    void Free(void* object);
+};
+static_assert(sizeof(TObjectAllocHeap) == 0x38, "TObjectAllocHeap is 0x38 bytes");
 
 #endif

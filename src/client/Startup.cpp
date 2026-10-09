@@ -21,6 +21,7 @@
 #include "storm/Log.hpp"
 #include "storm/Memory.hpp"
 #include "util/Unimplemented.hpp"
+#include "ui/CLayoutFrame.hpp"
 
 uint32_t g_startupFlags;
 uint32_t g_startupValue;
@@ -52,13 +53,6 @@ HSLOG s_defaultLogs[2];               // DAT_1430d2508
 // ref: FUN_1402262b0
 void StartupErrorCallback(uint32_t code, const char* text) {
     ErrorDisplayCode(code, text, LocaleGetText(), true);
-}
-
-// Allocates an object from the frame-layout code (Engine/Source/Frame/CLayoutFrame.cpp)
-// with the name "RESIZE".
-// ref: FUN_1405f64e0
-void Sub1405F64E0() {
-    FROST_UNIMPLEMENTED();
 }
 
 // Installs four allocator hooks into a library's function table (0x142d39c98..0x142d39cb0).
@@ -130,7 +124,7 @@ bool Sub1402262E0() {
         return false;
     }
 
-    Sub1405F64E0();
+    CLayoutFrame::CreateResizeAllocator();
 
     const char* directory = CommandLineGetDataDir();
     char executableDirectory[0x110];
