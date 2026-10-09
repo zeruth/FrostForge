@@ -9,10 +9,12 @@ add_library(gx STATIC
     GxShader.cpp
     d3d12/Binding.cpp
     d3d12/CommandList.cpp
+    d3d12/Draw.cpp
     d3d12/Device.cpp
     d3d12/Frame.cpp
     d3d12/Pipeline.cpp
     d3d12/Residency.cpp
+    d3d12/Samplers.cpp
     d3d12/Tags.cpp
     d3d12/Tex.cpp
     win/GxDeviceW32.cpp

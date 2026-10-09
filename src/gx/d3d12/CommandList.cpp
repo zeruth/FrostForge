@@ -486,15 +486,15 @@ GraphicsCommandList::GraphicsCommandList(uint32_t type, uint8_t vrs) : m_copy(ty
     this->m_uploadBufs[2] = nullptr;
     std::memset(this->m_boundTextures, 0, sizeof(this->m_boundTextures));
     std::memset(this->m_bb8_unused, 0, sizeof(this->m_bb8_unused));
-    this->m_fc8 = 1;
-    this->m_fc9 = 0;
-    this->m_fca = 0;
+    this->m_pipelineDirty = 1;
+    this->m_heapsDirty = 0;
+    this->m_topologyDirty = 0;
     this->m_queryScope = 0;
     this->m_fcc = 0;
     this->m_computeVtable = nullptr;  // FROST: the compute context (vtable 0x14291a070) is not ported
     this->m_fc0 = 0;
     std::memset(&this->m_staging, 0, sizeof(this->m_staging));
-    std::memset(this->m_1270, 0, sizeof(this->m_1270));
+    std::memset(this->m_ringPages, 0, sizeof(this->m_ringPages));
     std::memset(this->m_views, 0, sizeof(this->m_views));
     std::memset(this->m_1ab0, 0, sizeof(this->m_1ab0));
     std::memset(this->m_1bb0, 0, sizeof(this->m_1bb0));
@@ -508,19 +508,23 @@ GraphicsCommandList::GraphicsCommandList(uint32_t type, uint8_t vrs) : m_copy(ty
     // FUN_142288710 x3: the vertex, index and constant upload GxBufs.
     this->CreateUploadBufs();
     std::memset(this->m_2080, 0, sizeof(this->m_2080));
-    this->m_2098 = 0x39;
+    this->m_indexBuf = nullptr;
+    this->m_indexFormat = DXGI_FORMAT_R16_UINT;
     this->m_targetsDirty = 1;
     this->m_rtvCount = 0;
     std::memset(this->m_rtvs, 0, sizeof(this->m_rtvs));
     this->m_20c8 = 0;
     this->m_dsv.ptr = 0;
     this->m_dsvPtr = nullptr;
-    this->m_20e0 = 0;
+    this->m_pipeline = nullptr;
     this->m_vrs = vrs;
-    std::memset(this->m_20e9, 0, sizeof(this->m_20e9));
-    this->m_20f0 = 0xffffffff;
-    this->m_20f4 = 0;
-    this->m_20f8 = 0;
+    std::memset(this->m_combiners, 0, sizeof(this->m_combiners));
+    std::memset(this->m_wantCombiners, 0, sizeof(this->m_wantCombiners));
+    this->m_shadingRate = 0;
+    std::memset(this->m_20ee, 0, sizeof(this->m_20ee));
+    this->m_stencilRef = 0xffffffff;
+    this->m_topology = 0;
+    this->m_boundIndexAddress = 0;
     if (this->m_copy.m_signals.size() == 0) {
         this->m_copy.m_signals.emplace_back();
     } else {
@@ -538,7 +542,7 @@ GraphicsCommandList::~GraphicsCommandList() {
 // ref: FUN_1422ce740
 void GraphicsCommandList::BeginQueryScope() {
     this->m_queryScope = 1;
-    this->m_20e0 = 0;
+    this->m_pipeline = nullptr;
 }
 
 // ref: FUN_1422cea80
@@ -571,22 +575,24 @@ void GraphicsCommandList::BeginFrame() {
     std::memset(reinterpret_cast<uint8_t*>(this) + 0xdb8, 0, 0x100);
     std::memset(reinterpret_cast<uint8_t*>(this) + 0xeb8, 0, 0x100);
     std::memset(this->m_1c50 + 0x00, 0, 0x50);
-    this->m_fc8 = 1;
-    this->m_fc9 = 1;
-    std::memset(this->m_1270, 0, sizeof(this->m_1270));
-    this->m_fca = 1;
+    this->m_pipelineDirty = 1;
+    this->m_heapsDirty = 1;
+    std::memset(this->m_ringPages, 0, sizeof(this->m_ringPages));
+    this->m_topologyDirty = 1;
     this->m_copy.m_af8.m_size = 0;
     this->ResetBindings();
     std::memset(this->m_1ab0, 0, sizeof(this->m_1ab0));
-    std::memset(this->m_20e9 + 2, 0, 4);
-    this->m_20e9[0] = 0;
-    this->m_20e9[1] = 0;
-    this->m_20f8 = 0;
-    this->m_2080[2] = 0;
+    std::memset(this->m_wantCombiners, 0, sizeof(this->m_wantCombiners));
+    this->m_shadingRate = 0;
+    std::memset(this->m_20ee, 0, sizeof(this->m_20ee));
+    this->m_combiners[0] = 0;
+    this->m_combiners[1] = 0;
+    this->m_boundIndexAddress = 0;
+    this->m_indexBuf = nullptr;
     this->m_2080[0] = 0;
     this->m_2080[1] = 0;
-    this->m_20e0 = 0;
-    this->m_20f0 = 0xffffffff;
+    this->m_pipeline = nullptr;
+    this->m_stencilRef = 0xffffffff;
     this->m_targetsDirty = 1;
     this->m_rtvCount = 0;
     this->m_dsvPtr = nullptr;
@@ -699,7 +705,7 @@ void GraphicsCommandList::SetTargets(GXRENDERTARGETS* targets) {
     this->m_targetsDirty = 1;
     this->m_context.Field<uint8_t>(0x18) = 1;
     this->m_context.Field<uint8_t>(0x74) = 1;
-    this->m_20e0 = 0;
+    this->m_pipeline = nullptr;
 }
 
 // Space for `size` bytes of constants for a stage's slot, bound at unlock.

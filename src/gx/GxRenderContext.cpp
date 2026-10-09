@@ -217,7 +217,7 @@ void GxRenderContext::Slot020(uint32_t, void*) {
 void GxRenderContext::Slot028() {
     FROST_UNIMPLEMENTED();
 }
-void GxRenderContext::Slot030(uint8_t, uint32_t, void*) {
+void GxRenderContext::SetTexture(uint8_t, uint32_t, gxDx12Backend::Tex*) {
     FROST_UNIMPLEMENTED();
 }
 void GxRenderContext::Slot038() {
@@ -249,7 +249,7 @@ void GxRenderContext::Slot078() {
 void GxRenderContext::Slot080() {
     FROST_UNIMPLEMENTED();
 }
-void GxRenderContext::Slot088() {
+void GxRenderContext::SetPipeline(GxPipeline*) {
     FROST_UNIMPLEMENTED();
 }
 void GxRenderContext::SetRenderTargets(GXRENDERTARGETS*) {
@@ -299,20 +299,20 @@ void GxRenderContext::Slot110() {
 }
 void GxRenderContext::Slot118() {
 }
-void GxRenderContext::Slot128() {
+void GxRenderContext::SetVertexBuffers(uint32_t, uint32_t, const GXVERTEXSTREAM*) {
     FROST_UNIMPLEMENTED();
 }
-void GxRenderContext::Slot130() {
+void GxRenderContext::SetIndexBuffer(GxBuf*, uint8_t) {
     FROST_UNIMPLEMENTED();
 }
 void GxRenderContext::Slot138() {
 }
 void GxRenderContext::Slot140() {
 }
-void GxRenderContext::Slot148() {
+void GxRenderContext::Draw(uint32_t, uint32_t, uint32_t, uint32_t, uint8_t) {
     FROST_UNIMPLEMENTED();
 }
-void GxRenderContext::Slot150() {
+void GxRenderContext::DrawIndexed(uint32_t, uint32_t, uint32_t, int32_t, uint32_t, uint8_t) {
     FROST_UNIMPLEMENTED();
 }
 void GxRenderContext::Slot158() {

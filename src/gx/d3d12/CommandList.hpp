@@ -12,6 +12,16 @@
 
 struct GXRENDERTARGETS;
 struct GxBuf;
+struct GxPipeline;
+struct GXVERTEXBUFFERFORMAT;
+
+// A vertex stream as the render context binds it (0x18 bytes).
+struct GXVERTEXSTREAM {
+    GxBuf* m_buf;                       // 0x00
+    GXVERTEXBUFFERFORMAT* m_layout;     // 0x08
+    uint32_t m_offset;                  // 0x10
+    uint32_t m_size;                    // 0x14
+};
 
 namespace gxDx12Backend {
 
@@ -221,7 +231,8 @@ class GxRenderContext {
     virtual void Slot018(uint8_t stage, uint32_t first, uint32_t count, void** textures);  // FUN_14228fa20
     virtual void Slot020(uint32_t a2, void* a3);
     virtual void Slot028();
-    virtual void Slot030(uint8_t stage, uint32_t slot, void* a4);
+    // The texture a stage reads at a slot, with the sampler its usage describes.
+    virtual void SetTexture(uint8_t stage, uint32_t slot, gxDx12Backend::Tex* tex);  // 0x030
     virtual void Slot038();                 // FUN_14228fa90
     virtual void Slot040();
     virtual void Slot048();
@@ -232,7 +243,7 @@ class GxRenderContext {
     virtual void Slot070();
     virtual void Slot078();
     virtual void Slot080();
-    virtual void Slot088();
+    virtual void SetPipeline(GxPipeline* pipeline);         // 0x088
     virtual void SetRenderTargets(GXRENDERTARGETS* targets);  // 0x090
     virtual void Slot098();
     virtual void Slot0a0();
@@ -253,12 +264,15 @@ class GxRenderContext {
     virtual void Slot110();
     virtual void Slot118();
     virtual void GetDepthRange(float* a2, float* a3, float* a4, float* a5, float* a6, float* a7);  // 0x120
-    virtual void Slot128();
-    virtual void Slot130();
+    virtual void SetVertexBuffers(uint32_t first, uint32_t count, const GXVERTEXSTREAM* streams);  // 0x128
+    // The index buffer: 16-bit indices when `format` is 1, else 32-bit.
+    virtual void SetIndexBuffer(GxBuf* buf, uint8_t format);  // 0x130
     virtual void Slot138();
     virtual void Slot140();
-    virtual void Slot148();
-    virtual void Slot150();
+    virtual void Draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t startVertex, uint32_t startInstance,
+        uint8_t shadingRate);                               // 0x148
+    virtual void DrawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t startIndex, int32_t baseVertex,
+        uint32_t startInstance, uint8_t shadingRate);       // 0x150
     virtual void Slot158();
     virtual void Slot160();
     virtual float* LockConstants(uint8_t stage, uint32_t slot, uint32_t size);  // 0x168

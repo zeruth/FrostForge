@@ -79,6 +79,14 @@ class RenderContextD3d12 : public GxRenderContext {
     void* BufLock(GxBuf* buf) override;                                        // FUN_1422cd8e0
     bool BufUnlock(GxBuf* buf, uint32_t size) override;                        // FUN_1422cd9f0
     GxBuf* GetUploadBuf(uint8_t type) override;                                // FUN_1422d40c0
+    void SetPipeline(GxPipeline* pipeline) override;                           // FUN_1422dc9e0
+    void SetTexture(uint8_t stage, uint32_t slot, Tex* tex) override;          // FUN_1422e4620
+    void SetVertexBuffers(uint32_t first, uint32_t count, const GXVERTEXSTREAM* streams) override;  // FUN_1422dfe60
+    void SetIndexBuffer(GxBuf* buf, uint8_t format) override;                  // FUN_1422dca20
+    void Draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t startVertex, uint32_t startInstance,
+        uint8_t shadingRate) override;                                         // FUN_1422d1120
+    void DrawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t startIndex, int32_t baseVertex,
+        uint32_t startInstance, uint8_t shadingRate) override;                 // FUN_1422d11f0
 };
 
 class GraphicsCommandList {
@@ -92,13 +100,13 @@ class GraphicsCommandList {
     uint32_t m_bb8_unused[0x40];            // 0x0eb8
     void* m_computeVtable;                  // 0x0fb8: the compute context (vtable 0x14291a070)
     uint64_t m_fc0;                         // 0x0fc0
-    uint8_t m_fc8;                          // 0x0fc8
-    uint8_t m_fc9;                          // 0x0fc9
-    uint8_t m_fca;                          // 0x0fca
+    uint8_t m_pipelineDirty;                // 0x0fc8
+    uint8_t m_heapsDirty;                   // 0x0fc9: the ring pages changed
+    uint8_t m_topologyDirty;                // 0x0fca
     uint8_t m_queryScope;                   // 0x0fcb
     uint32_t m_fcc;                         // 0x0fcc
     DescriptorStagingHeap m_staging;        // 0x0fd0
-    uint64_t m_1270[8];                     // 0x1270
+    DescriptorUploadPage* m_ringPages[8];   // 0x1270: the page last bound per heap type
     void* m_views[4][0x40];                 // 0x12b0: bound shader views by stage and slot
     uint64_t m_1ab0[4][8];                  // 0x1ab0
     uint8_t m_1bb0[0xa0];                   // 0x1bb0
@@ -108,8 +116,9 @@ class GraphicsCommandList {
     int64_t m_1d68;                         // 0x1d68
     uint64_t m_1d70[2];                     // 0x1d70
     RenderContextD3d12 m_context;           // 0x1d80
-    uint64_t m_2080[3];                     // 0x2080
-    uint32_t m_2098;                        // 0x2098: 0x39
+    uint64_t m_2080[2];                     // 0x2080
+    GxBuf* m_indexBuf;                      // 0x2090
+    uint32_t m_indexFormat;                 // 0x2098: DXGI_FORMAT_R16_UINT
     uint8_t m_targetsDirty;                 // 0x209c
     uint8_t m_pad209d[3];
     uint32_t m_rtvCount;                    // 0x20a0
@@ -118,12 +127,15 @@ class GraphicsCommandList {
     uint64_t m_20c8;                        // 0x20c8
     D3D12_CPU_DESCRIPTOR_HANDLE m_dsv;      // 0x20d0
     D3D12_CPU_DESCRIPTOR_HANDLE* m_dsvPtr;  // 0x20d8
-    uint64_t m_20e0;                        // 0x20e0
+    GxPipeline* m_pipeline;                 // 0x20e0
     uint8_t m_vrs;                          // 0x20e8
-    uint8_t m_20e9[7];
-    uint32_t m_20f0;                        // 0x20f0
-    uint32_t m_20f4;                        // 0x20f4
-    uint64_t m_20f8;                        // 0x20f8
+    uint8_t m_combiners[2];                 // 0x20e9: the shading-rate combiners set
+    uint8_t m_wantCombiners[2];             // 0x20eb
+    uint8_t m_shadingRate;                  // 0x20ed
+    uint8_t m_20ee[2];
+    uint32_t m_stencilRef;                  // 0x20f0
+    uint32_t m_topology;                    // 0x20f4: D3D12_PRIMITIVE_TOPOLOGY
+    uint64_t m_boundIndexAddress;           // 0x20f8
 
     GraphicsCommandList(uint32_t type, uint8_t vrs);   // FUN_1422cb470 over FUN_1422c9f00
     ~GraphicsCommandList();                 // FUN_1422cc000
@@ -139,6 +151,16 @@ class GraphicsCommandList {
         uint32_t slice, int32_t mip);       // FUN_1422e14e0
     bool ResolveTex(Tex* source, Tex* dest);  // FUN_1422e2b20
     void CreateUploadBufs();                // the end of FUN_1422cb470
+    // Room for `count` descriptors of a heap type in this frame's ring; a new page when the
+    // current one is full, unless `keep`.
+    DescriptorUploadPage* AllocateDescriptors(int32_t type, uint32_t count, bool keep);  // FUN_1422d9540
+    // What the bound pipeline reads goes to the GPU: tables, heaps, root constants.
+    void CommitBindings();                  // FUN_1422d5460
+    // Everything a draw needs set on the list before it.
+    void CommitState(bool indexed, uint8_t shadingRate);  // FUN_1422d9140
+    // A draw that cannot happen still flushes the pending barriers.
+    void SkipDraw();
+    void SetTexture(uint8_t stage, uint32_t slot, Tex* tex);  // FUN_1422e43f0
 };
 static_assert(offsetof(GraphicsCommandList, m_copy) == 0x8, "GraphicsCommandList layout");
 static_assert(offsetof(GraphicsCommandList, m_uploadBufs) == 0xba0, "GraphicsCommandList layout");
@@ -235,6 +257,8 @@ class CGxDeviceD3d12 : public CGxDevice {
     ID3D12Resource* CreateReadbackBuffer(uint32_t size);                 // FUN_1422d78a0
     bool CreateGenerateMips(GENERATEMIPSPIPELINE* pipeline);              // FUN_1422d4d60
     void ReleaseSamplers();
+    // The sampler descriptor for a sampler key, made the first time (FUN_1422c9640).
+    D3D12_CPU_DESCRIPTOR_HANDLE SamplerFor(uint64_t key);
     void ReportMemory(blz::string_header* report);                        // FUN_1422dbce0
     bool FormatSupportsMultisample(uint8_t format, uint8_t samples, int32_t quality) override;  // 0x040 FUN_1422d1060
     void SetLowLatencyMode(uint8_t mode) override;                        // 0x078 FUN_1422df730

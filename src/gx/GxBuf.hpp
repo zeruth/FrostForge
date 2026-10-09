@@ -68,4 +68,12 @@ static_assert(sizeof(GxBuf) == 0x70, "GxBuf is 0x70 bytes");
 GxBuf* GxBufCreate(const GXBUFDESC* desc);
 void GxBufDestroy(GxBuf** buf);
 
+class GxRenderContext;
+
+// The context's transient buffer of a type, sized for `count` elements of `stride` bytes
+// (FUN_142290c90).
+GxBuf* GxBufTransient(GxRenderContext* context, uint8_t type, uint32_t stride, uint32_t count);
+// Binds a buffer as stream 0 in a vertex format (FUN_14228f830).
+void GxSetVertexStream(GxRenderContext* context, GxBuf* buf, uint8_t format);
+
 #endif

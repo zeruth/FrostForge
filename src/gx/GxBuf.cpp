@@ -3,6 +3,7 @@
 #include <new>
 
 #include "gx/Gx.hpp"
+#include "gx/d3d12/CommandList.hpp"
 
 namespace {
 
@@ -50,6 +51,26 @@ GxBuf* GxBufCreate(const GXBUFDESC* desc) {
     }
     static_cast<CGxDevice*>(g_gxDevice)->BufCreate(buf);
     return buf;
+}
+
+// ref: FUN_142290c90
+GxBuf* GxBufTransient(GxRenderContext* context, uint8_t type, uint32_t stride, uint32_t count) {
+    GxBuf* buf = context->GetUploadBuf(type);
+    buf->m_flags &= ~GXBUF_UNLOCKED;
+    buf->m_size = stride * count;
+    return buf;
+}
+
+// ref: FUN_14228f830
+void GxSetVertexStream(GxRenderContext* context, GxBuf* buf, uint8_t format) {
+    CGxDevice::VERTEXFORMATREF layouts;
+    static_cast<CGxDevice*>(g_gxDevice)->GetVertexFormat(&layouts, format);
+    GXVERTEXSTREAM stream;
+    stream.m_buf = buf;
+    stream.m_layout = layouts.m_layouts[0];
+    stream.m_offset = 0;
+    stream.m_size = buf->m_size;
+    context->SetVertexBuffers(0, 1, &stream);
 }
 
 // ref: FUN_142288af0
