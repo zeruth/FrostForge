@@ -169,6 +169,8 @@ void FrameScript_ClearScripts(const FrameScript_Object* object);
 // The script error an object's method reports: "<name>:<method>(): <message>" into the
 // pending error buffer, which the method's Lua wrapper raises.
 void FrameScript_ObjectError(FrameScript_Object* object, const char* method, const char* format, ...);
+// The name an object goes by in messages: its own, else its type's.
+const char* GetDisplayName(FrameScript_Object* object);
 // A restricted-action failure, with the current taint appended.
 void FrameScript_ActionError(const char* format, ...);
 // Pushes the pending error (named after the object and method) and clears it; false if none.

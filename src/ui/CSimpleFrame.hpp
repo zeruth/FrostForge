@@ -11,6 +11,7 @@
 
 #include "storm/hash/TSHashTable.hpp"
 #include "storm/list/TSLink.hpp"
+#include "blz/Vector.hpp"
 #include "ui/CAnimatableObject.hpp"
 #include "ui/CScriptRegion.hpp"
 
@@ -18,6 +19,12 @@ class CRenderBatch;
 class CSimpleFrame;
 class CSimpleRegion;
 class CScriptStatus;
+
+// The script-visible children and regions of a frame, as GetChildren and GetRegions list them.
+extern const char s_simpleFrameListTag[];
+extern const char s_simpleRegionListTag[];
+typedef blz::embedded_vector<CSimpleFrame*, 32, s_simpleFrameListTag> SIMPLEFRAMELIST;
+typedef blz::embedded_vector<CSimpleRegion*, 32, s_simpleRegionListTag> SIMPLEREGIONLIST;
 
 // A child in a frame's child list (SIMPLEFRAMENODE, 0x18).
 struct SIMPLEFRAMENODE {
@@ -263,6 +270,11 @@ class CSimpleFrame : public CScriptRegion, public CAnimatableObject {
     CScriptObject* FindChildByParentKey(const char* key);
     int32_t GetNumChildren();
     int32_t GetNumRegions();
+    SIMPLEFRAMELIST* GetScriptChildren(SIMPLEFRAMELIST* children);
+    SIMPLEREGIONLIST* GetScriptRegions(SIMPLEREGIONLIST* regions);
+    void DesaturateHierarchy(float desaturation, bool excludeRoot);
+    void DesaturateRegions(float desaturation, uint32_t depth, uint32_t firstDepth);
+    void RotateTextures(float radians, float x, float y);
 
     // ---- strata, level, raising ----------------------------------------------------------
     void SetFrameStrata(uint32_t strata);
@@ -306,6 +318,9 @@ class CSimpleFrame : public CScriptRegion, public CAnimatableObject {
     void EnableKeyboard(bool enable);
     void EnableGamePadButton(bool enable);
     void EnableGamePadStick(bool enable);
+    bool IsKeyboardEnabled();
+    bool IsGamePadButtonEnabled();
+    bool IsGamePadStickEnabled();
     void SetFrameFlag(uint32_t flag, bool set);
     void SetMovable(bool movable);
     void SetResizable(bool resizable);
@@ -318,12 +333,13 @@ class CSimpleFrame : public CScriptRegion, public CAnimatableObject {
     bool WantsUpdateCheck();
     void SetHitRectInsets(float left, float right, float top, float bottom);
     void SetClampRectInsets(float left, float right, float top, float bottom);
+    void GetHitRectInsetsLua(float* left, float* right, float* top, float* bottom);
 
     // ---- dragging ------------------------------------------------------------------------
     void RegisterForDrag(const uint32_t* buttons, uint64_t count);
     void StartMoving(bool alwaysStartFromMouse);
     void StartSizing(int32_t corner, bool alwaysStartFromMouse);
-    void StartSizingChecked(const int32_t* corner);
+    void StartSizingChecked(const int32_t* corner, bool alwaysStartFromMouse);
     void StopMovingOrSizing();
     void CancelDrag();
     void InterceptStartDrag(CSimpleFrame* other);

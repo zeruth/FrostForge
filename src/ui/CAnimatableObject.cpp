@@ -5,6 +5,8 @@
 #include "ui/CSimpleTop.hpp"
 #include "util/Unimplemented.hpp"
 
+extern const char s_animGroupVectorTag[] = ".PEAVCSimpleAnimGroup@@";
+
 namespace {
 
 const char s_source[] = "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Frame\\CAnimatableObject.cpp";
@@ -231,6 +233,25 @@ bool CAnimatableObject::IsPlaying() {
         }
     }
     return false;
+}
+
+// The group the CreateAnimationGroup script method makes.
+// FUN_14062f540
+FrameScript_Object* CAnimatableObject::CreateAnimationGroup(const char* name, const char* inherits) {
+    (void)name;
+    (void)inherits;
+    // Making a group means constructing a CSimpleAnimGroup and loading its template; the
+    // animation classes are not ported yet.
+    FROST_UNIMPLEMENTED();
+    return nullptr;
+}
+
+// FUN_14062f770
+ANIMGROUPLIST* CAnimatableObject::GetScriptAnimationGroups(ANIMGROUPLIST* groups) {
+    // The groups are listed from m_groups->m_groups, those accessible and not hidden; the
+    // group class is not ported yet, so no group can exist to list.
+    FROST_UNIMPLEMENTED();
+    return groups;
 }
 
 // ---- CSimpleAnimGroup (Engine/Source/Frame/CSimpleAnimGroup.cpp, not ported yet) ----------

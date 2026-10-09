@@ -176,22 +176,22 @@ void CScriptRegion::LoadXML(XMLOBJECT* node, CStatus* status, const char* intrin
         FrameXML_AddToParentArray(this, region->m_parentArray.m_text, status);
     }
     if ((flags & 0xc00) == 0xc00) {
-        if (!this->IsMouseClickEnabled()) {
-            this->m_inputFlags |= REGION_MOUSE_CLICK;
-            this->UpdateClickRegistration();
-        }
         if (!this->IsMouseMotionEnabled()) {
             this->m_inputFlags |= REGION_MOUSE_MOTION;
             this->UpdateMotionRegistration();
         }
+        if (!this->IsMouseClickEnabled()) {
+            this->m_inputFlags |= REGION_MOUSE_CLICK;
+            this->UpdateClickRegistration();
+        }
     }
-    if ((flags & 0x3000) == 0x3000 && !this->IsMouseMotionEnabled()) {
-        this->m_inputFlags |= REGION_MOUSE_MOTION;
-        this->UpdateMotionRegistration();
-    }
-    if ((flags & 0xc000) == 0xc000 && !this->IsMouseClickEnabled()) {
+    if ((flags & 0x3000) == 0x3000 && !this->IsMouseClickEnabled()) {
         this->m_inputFlags |= REGION_MOUSE_CLICK;
         this->UpdateClickRegistration();
+    }
+    if ((flags & 0xc000) == 0xc000 && !this->IsMouseMotionEnabled()) {
+        this->m_inputFlags |= REGION_MOUSE_MOTION;
+        this->UpdateMotionRegistration();
     }
     if (flags & 0x20000) {
         blz::vector<uint32_t, s_mouseButtonTag> buttons;
@@ -427,11 +427,11 @@ CScriptRegion* CScriptRegion::GetMouseTarget(int32_t type, MOUSEEVENT* event, bo
 // not pass through (unless forced), and a hit.
 // ref: FUN_14060fad0
 int32_t CScriptRegion::HitTest(int32_t type, MOUSEEVENT* event, bool force) {
-    if (type == INPUT_EVENT_CLICK) {
-        if (!this->IsMouseClickEnabled()) {
+    if (type == INPUT_EVENT_MOTION) {
+        if (!this->IsMouseMotionEnabled()) {
             return 0;
         }
-    } else if (!this->IsMouseMotionEnabled()
+    } else if (!this->IsMouseClickEnabled()
         || (!force && (static_cast<uint32_t>(event->m_button) & this->m_passThroughButtons) != 0)) {
         return 0;
     }
@@ -440,13 +440,13 @@ int32_t CScriptRegion::HitTest(int32_t type, MOUSEEVENT* event, bool force) {
 }
 
 // ref: FUN_14060e5a0
-bool CScriptRegion::IsMouseClickEnabled() {
-    return (this->m_inputFlags & REGION_MOUSE_CLICK) != 0;
+bool CScriptRegion::IsMouseMotionEnabled() {
+    return (this->m_inputFlags & REGION_MOUSE_MOTION) != 0;
 }
 
 // ref: FUN_14060e550
-bool CScriptRegion::IsMouseMotionEnabled() {
-    return (this->m_inputFlags & REGION_MOUSE_MOTION) != 0;
+bool CScriptRegion::IsMouseClickEnabled() {
+    return (this->m_inputFlags & REGION_MOUSE_CLICK) != 0;
 }
 
 // ref: FUN_14060e030
@@ -474,26 +474,26 @@ bool CScriptRegion::IsMouseWheelEnabled() {
 
 // ref: FUN_14060e560
 bool CScriptRegion::IsMouseEnabled() {
-    return this->IsMouseMotionEnabled() && this->IsMouseClickEnabled();
+    return this->IsMouseClickEnabled() && this->IsMouseMotionEnabled();
 }
 
 // ref: FUN_14060df30
 void CScriptRegion::EnableMouse(bool enable) {
-    if (enable != this->IsMouseClickEnabled()) {
-        this->SetInputFlag(REGION_MOUSE_CLICK, enable);
-        this->UpdateClickRegistration();
-    }
     if (enable != this->IsMouseMotionEnabled()) {
         this->SetInputFlag(REGION_MOUSE_MOTION, enable);
         this->UpdateMotionRegistration();
     }
-}
-
-// ref: FUN_14060dfd0
-void CScriptRegion::SetMouseClickEnabled(bool enable) {
     if (enable != this->IsMouseClickEnabled()) {
         this->SetInputFlag(REGION_MOUSE_CLICK, enable);
         this->UpdateClickRegistration();
+    }
+}
+
+// ref: FUN_14060dfd0
+void CScriptRegion::SetMouseMotionEnabled(bool enable) {
+    if (enable != this->IsMouseMotionEnabled()) {
+        this->SetInputFlag(REGION_MOUSE_MOTION, enable);
+        this->UpdateMotionRegistration();
     }
 }
 
@@ -649,23 +649,23 @@ bool CScriptRegion::IsOnScreen() {
 void CScriptRegion::OnScriptHandlerLoaded(XMLOBJECT* handler) {
     uint32_t flags = static_cast<XMLSCRIPTHANDLER*>(handler)->m_handlerFlags;
     if ((flags & 0x40) && (flags & 0x200)) {
-        if (this->IsMouseClickEnabled() != true) {
-            this->m_inputFlags |= REGION_MOUSE_CLICK;
-            this->UpdateClickRegistration();
-        }
         if (this->IsMouseMotionEnabled() != true) {
             this->m_inputFlags |= REGION_MOUSE_MOTION;
             this->UpdateMotionRegistration();
+        }
+        if (this->IsMouseClickEnabled() != true) {
+            this->m_inputFlags |= REGION_MOUSE_CLICK;
+            this->UpdateClickRegistration();
         }
     }
     if ((flags & 0x80) && (flags & 0x200)) {
-        if (this->IsMouseClickEnabled() != true) {
-            this->m_inputFlags |= REGION_MOUSE_CLICK;
-            this->UpdateClickRegistration();
-        }
         if (this->IsMouseMotionEnabled() != true) {
             this->m_inputFlags |= REGION_MOUSE_MOTION;
             this->UpdateMotionRegistration();
+        }
+        if (this->IsMouseClickEnabled() != true) {
+            this->m_inputFlags |= REGION_MOUSE_CLICK;
+            this->UpdateClickRegistration();
         }
     }
     if ((flags & 0x100) && (flags & 0x200) && !(this->m_enabledInput & 0x10)) {
@@ -785,11 +785,21 @@ void CScriptRegion::SetInputEvent(int32_t type, bool enable) {
     }
 }
 
+// The buttons a click passes through on, OR'd from the list SetPassThroughButtons read.
+// ref: FUN_14060f5c0
+void CScriptRegion::SetPassThroughButtons(const uint32_t* buttons, uint64_t count) {
+    uint32_t mask = 0;
+    for (uint64_t i = 0; i < count; i++) {
+        mask |= buttons[i];
+    }
+    this->m_passThroughButtons = mask;
+}
+
 // ref: FUN_14060f500
-void CScriptRegion::SetMouseMotionEnabled(bool enable) {
-    if (enable != this->IsMouseMotionEnabled()) {
-        this->SetInputFlag(REGION_MOUSE_MOTION, enable);
-        this->UpdateMotionRegistration();
+void CScriptRegion::SetMouseClickEnabled(bool enable) {
+    if (enable != this->IsMouseClickEnabled()) {
+        this->SetInputFlag(REGION_MOUSE_CLICK, enable);
+        this->UpdateClickRegistration();
     }
 }
 
@@ -809,31 +819,9 @@ bool CScriptRegion::HasInputFlags(uint8_t flags) {
 
 // Motion input is wanted while motion is enabled or a motion script needs it.
 // ref: FUN_14060f990
-void CScriptRegion::UpdateMotionRegistration() {
-    bool wanted = this->IsMouseMotionEnabled() || this->GetHyperlinksEnabled();
-    bool registered = (this->m_enabledInput & 4) != 0;
-    if (!wanted) {
-        if (!registered) {
-            return;
-        }
-        if (this->m_layoutState & LAYOUT_VISIBLE) {
-            CSimpleTop::s_instance->UnregisterForInput(this, INPUT_EVENT_MOTION, false);
-        }
-        this->m_enabledInput &= ~4;
-        return;
-    }
-    if (!registered) {
-        if (this->m_layoutState & LAYOUT_VISIBLE) {
-            CSimpleTop::s_instance->RegisterForInput(this, INPUT_EVENT_MOTION);
-        }
-        this->m_enabledInput |= 4;
-    }
-}
-
-// ref: FUN_14060fa30
 void CScriptRegion::UpdateClickRegistration() {
     bool wanted = this->IsMouseClickEnabled() || this->GetHyperlinksEnabled();
-    bool registered = (this->m_enabledInput & 8) != 0;
+    bool registered = (this->m_enabledInput & 4) != 0;
     if (!wanted) {
         if (!registered) {
             return;
@@ -841,12 +829,34 @@ void CScriptRegion::UpdateClickRegistration() {
         if (this->m_layoutState & LAYOUT_VISIBLE) {
             CSimpleTop::s_instance->UnregisterForInput(this, INPUT_EVENT_CLICK, false);
         }
-        this->m_enabledInput &= ~8;
+        this->m_enabledInput &= ~4;
         return;
     }
     if (!registered) {
         if (this->m_layoutState & LAYOUT_VISIBLE) {
             CSimpleTop::s_instance->RegisterForInput(this, INPUT_EVENT_CLICK);
+        }
+        this->m_enabledInput |= 4;
+    }
+}
+
+// ref: FUN_14060fa30
+void CScriptRegion::UpdateMotionRegistration() {
+    bool wanted = this->IsMouseMotionEnabled() || this->GetHyperlinksEnabled();
+    bool registered = (this->m_enabledInput & 8) != 0;
+    if (!wanted) {
+        if (!registered) {
+            return;
+        }
+        if (this->m_layoutState & LAYOUT_VISIBLE) {
+            CSimpleTop::s_instance->UnregisterForInput(this, INPUT_EVENT_MOTION, false);
+        }
+        this->m_enabledInput &= ~8;
+        return;
+    }
+    if (!registered) {
+        if (this->m_layoutState & LAYOUT_VISIBLE) {
+            CSimpleTop::s_instance->RegisterForInput(this, INPUT_EVENT_MOTION);
         }
         this->m_enabledInput |= 8;
     }

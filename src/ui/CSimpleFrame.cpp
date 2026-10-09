@@ -13,6 +13,7 @@
 #include "storm/Unicode.hpp"
 #include "ui/BinaryXML.hpp"
 #include "ui/CRenderBatch.hpp"
+#include "ui/CScriptObjectScript.hpp"
 #include "ui/CSimpleRegion.hpp"
 #include "ui/CSimpleTop.hpp"
 #include "ui/FrameXML.hpp"
@@ -24,6 +25,9 @@ extern "C" {
 #include "lblizzard.h"
 #include "lua.h"
 }
+
+extern const char s_simpleFrameListTag[] = ".PEAVCSimpleFrame@@";
+extern const char s_simpleRegionListTag[] = ".PEAVCSimpleRegion@@";
 
 CSimpleFrame* CSimpleFrame::s_loading;
 int64_t CSimpleFrame::s_count;
@@ -256,12 +260,6 @@ void CSimpleFrame::operator delete(void* frame) {
 int32_t CSimpleFrame::GetObjectType() {
     static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
     return s_type;
-}
-
-// The frame methods are filled in by the frame script API (FUN_140a50ff0, not ported yet).
-void CSimpleFrame_FillScriptMethods(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
 }
 
 // ref: FUN_140615200
@@ -662,8 +660,8 @@ void CSimpleFrame::LoadXML(XMLOBJECT* node, CStatus* status, const char* intrins
         if (((this->m_frameFlags & FRAME_PROPAGATE_HYPERLINKS) != 0) != propagate) {
             this->m_frameFlags = propagate ? (this->m_frameFlags | FRAME_PROPAGATE_HYPERLINKS)
                                            : (this->m_frameFlags & ~FRAME_PROPAGATE_HYPERLINKS);
-            this->UpdateMotionRegistration();
             this->UpdateClickRegistration();
+            this->UpdateMotionRegistration();
         }
     }
     if (regionFlags & 0x200) {
@@ -931,8 +929,8 @@ void CSimpleFrame::SetParentArg(PARENTARG* parent) {
     }
     this->UpdateOwnBatch();
     this->MarkBatchDirty();
-    this->UpdateMotionRegistration();
     this->UpdateClickRegistration();
+    this->UpdateMotionRegistration();
     if (this->m_parent != nullptr) {
         this->CLayoutFrame::PropagateProtectionTo(this->m_parent);
         this->m_parent->AddChild(this);
@@ -1058,6 +1056,66 @@ int32_t CSimpleFrame::GetNumRegions() {
         }
     }
     return count;
+}
+
+// The children scripts may see, in list order.
+// ref: FUN_140616110
+SIMPLEFRAMELIST* CSimpleFrame::GetScriptChildren(SIMPLEFRAMELIST* children) {
+    children->reserve(static_cast<uint64_t>(this->GetNumChildren()));
+    for (SIMPLEFRAMENODE* node = this->m_children.Head(); node != nullptr; node = this->m_children.Link(node)->Next()) {
+        uint16_t flags = static_cast<FrameScript_Object*>(node->m_frame)->m_flags;
+        if ((flags & FSOBJ_ACCESSIBLE) && !(flags & FSOBJ_HIDDEN)) {
+            children->push_back(node->m_frame);
+        }
+    }
+    return children;
+}
+
+// The regions scripts may see, in list order.
+// ref: FUN_1406164a0
+SIMPLEREGIONLIST* CSimpleFrame::GetScriptRegions(SIMPLEREGIONLIST* regions) {
+    regions->reserve(static_cast<uint64_t>(this->GetNumRegions()));
+    for (CSimpleRegion* region = this->m_regions.Head(); region != nullptr; region = this->m_regions.Link(region)->Next()) {
+        uint16_t flags = static_cast<FrameScript_Object*>(region)->m_flags;
+        if ((flags & FSOBJ_ACCESSIBLE) && !(flags & FSOBJ_HIDDEN)) {
+            regions->push_back(region);
+        }
+    }
+    return regions;
+}
+
+// ref: FUN_140615380
+void CSimpleFrame::DesaturateHierarchy(float desaturation, bool excludeRoot) {
+    this->DesaturateRegions(desaturation, 0, excludeRoot ? 1 : 0);
+}
+
+// The textures of this frame (when `depth` has reached `firstDepth`) and of every frame below
+// it take `desaturation`.
+// ref: FUN_140615250
+void CSimpleFrame::DesaturateRegions(float desaturation, uint32_t depth, uint32_t firstDepth) {
+    if (firstDepth <= depth) {
+        // Each CSimpleTexture among m_regions takes SetDesaturation (FUN_1406349b0), then the
+        // regions' deferred deletes are flushed; the texture class is not ported yet.
+        FROST_UNIMPLEMENTED();
+        CSimpleRegion::FlushDeferredDeletes();
+    }
+    for (SIMPLEFRAMENODE* node = this->m_children.Head(); node != nullptr; node = this->m_children.Link(node)->Next()) {
+        if (node->m_frame != nullptr) {
+            node->m_frame->DesaturateRegions(desaturation, depth + 1, firstDepth);
+        }
+    }
+}
+
+// Every texture of the frame turns to `radians` about (x, y).
+// ref: FUN_14061a120
+void CSimpleFrame::RotateTextures(float radians, float x, float y) {
+    (void)radians;
+    (void)x;
+    (void)y;
+    // Each CSimpleTexture among m_regions takes SetRotation (FUN_140635340) with the centre;
+    // the texture class is not ported yet.
+    FROST_UNIMPLEMENTED();
+    CSimpleRegion::FlushDeferredDeletes();
 }
 
 // ref: FUN_140616c70
@@ -1834,8 +1892,8 @@ void CSimpleFrame::SetHyperlinksEnabled(bool enabled) {
 
 // ref: FUN_14061c690
 void CSimpleFrame::UpdateHyperlinkRegistration() {
-    this->UpdateMotionRegistration();
     this->UpdateClickRegistration();
+    this->UpdateMotionRegistration();
     ForEachChild(this, [](CSimpleFrame* child) {
         child->UpdateHyperlinkRegistration();
     });
@@ -2287,10 +2345,10 @@ CScriptRegion* CSimpleFrame::GetMouseTarget(int32_t type, MOUSEEVENT* event, boo
         return nullptr;
     }
     bool self;
-    if (type == INPUT_EVENT_CLICK) {
-        self = this->IsMouseClickEnabled();
+    if (type == INPUT_EVENT_MOTION) {
+        self = this->IsMouseMotionEnabled();
     } else {
-        self = this->IsMouseMotionEnabled() && (force || !(static_cast<uint32_t>(event->m_button) & this->m_passThroughButtons));
+        self = this->IsMouseClickEnabled() && (force || !(static_cast<uint32_t>(event->m_button) & this->m_passThroughButtons));
         if (self && (this->m_flags2 & FRAME2_DRAG_PENDING) && !(this->m_flags2 & FRAME2_DRAGGING)) {
             float dx = event->m_x - this->m_dragStartX;
             float dy = event->m_y - this->m_dragStartY;
@@ -2506,16 +2564,40 @@ void CSimpleFrame::StartSizing(int32_t corner, bool alwaysStartFromMouse) {
 }
 
 // ref: FUN_14061bea0
-void CSimpleFrame::StartSizingChecked(const int32_t* corner) {
+void CSimpleFrame::StartSizingChecked(const int32_t* corner, bool alwaysStartFromMouse) {
     if (!(this->m_frameFlags & FRAME_RESIZABLE)) {
         FrameScript_ActionError("Frame is not resizable");
         return;
     }
     if (reinterpret_cast<const uint8_t*>(corner)[4] != 0) {
-        this->StartSizing(*corner, false);
+        this->StartSizing(*corner, alwaysStartFromMouse);
         return;
     }
-    this->StartSizing(8, false);
+    this->StartSizing(8, alwaysStartFromMouse);
+}
+
+// ref: FUN_140617280
+bool CSimpleFrame::IsKeyboardEnabled() {
+    return (this->m_enabledInput & (1 << 1)) != 0 || (this->m_enabledInput & (1 << 0)) != 0;
+}
+
+// ref: FUN_140617210
+bool CSimpleFrame::IsGamePadButtonEnabled() {
+    return (this->m_enabledInput & (1 << 5)) != 0;
+}
+
+// ref: FUN_140617240
+bool CSimpleFrame::IsGamePadStickEnabled() {
+    return (this->m_enabledInput & (1 << 6)) != 0;
+}
+
+// ref: FUN_1406162a0
+void CSimpleFrame::GetHitRectInsetsLua(float* left, float* right, float* top, float* bottom) {
+    const float* insets = this->GetHitRectInsets();
+    *left = insets[1];
+    *right = insets[3];
+    *top = insets[2];
+    *bottom = insets[0];
 }
 
 // ref: FUN_14061bfb0

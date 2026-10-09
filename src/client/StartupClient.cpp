@@ -7,6 +7,7 @@
 #include "client/Locale.hpp"
 #include "client/Startup.hpp"
 #include "framescript/FrameScript.hpp"
+#include "framescript/ScriptMethod.hpp"
 #include "glue/GlueMgr.hpp"
 #include "ui/FrameXML.hpp"
 #include "cas/CAS.hpp"
@@ -316,9 +317,11 @@ void Sub14022E810() {
 // Binds the client's script API into a new Lua state (and releases it with null).
 // ref: FUN_14023da20
 void ClientScriptStateHook(lua_State* L) {
-    (void)L;
-    // FUN_1407d20b0 / FUN_1407e9330: the protected-call dispatcher and its release
-    FROST_UNIMPLEMENTED();
+    if (L != nullptr) {
+        ScriptMethod::CreateTrampoline(L);
+        return;
+    }
+    ScriptMethod::ReleaseTrampoline();
 }
 
 // ref: FUN_14230b600

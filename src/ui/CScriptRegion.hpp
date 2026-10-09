@@ -22,8 +22,8 @@ struct XMLOBJECT;
 enum : int32_t {
     INPUT_EVENT_0 = 0,
     INPUT_EVENT_1 = 1,
-    INPUT_EVENT_MOTION = 2,
-    INPUT_EVENT_CLICK = 3,
+    INPUT_EVENT_CLICK = 2,
+    INPUT_EVENT_MOTION = 3,
     INPUT_EVENT_WHEEL = 4,
     INPUT_EVENT_5 = 5,
     INPUT_EVENT_6 = 6,
@@ -33,8 +33,8 @@ class CScriptRegion : public CScriptObject, public CLayoutFrame {
     public:
     // The input flags (m_inputFlags).
     enum : uint8_t {
-        REGION_MOUSE_CLICK = 0x1,
-        REGION_MOUSE_MOTION = 0x2,
+        REGION_MOUSE_MOTION = 0x1,
+        REGION_MOUSE_CLICK = 0x2,
         REGION_PROPAGATE_MOUSE = 0x4,
         REGION_CLICK_THROUGH = 0x8,
     };
@@ -107,13 +107,13 @@ class CScriptRegion : public CScriptObject, public CLayoutFrame {
     virtual CScriptRegion* GetMouseTarget(int32_t type, MOUSEEVENT* event, bool* handled, bool force);
     // 0 a miss, 1 a hit, 2 a hit on a hyperlink.
     virtual int32_t HitTest(int32_t type, MOUSEEVENT* event, bool force);
-    virtual bool IsMouseClickEnabled();
     virtual bool IsMouseMotionEnabled();
+    virtual bool IsMouseClickEnabled();
     virtual void EnableMouseWheel(bool enable);
     virtual bool IsMouseWheelEnabled();
     virtual bool IsMouseEnabled();
     virtual void EnableMouse(bool enable);
-    virtual void SetMouseClickEnabled(bool enable);
+    virtual void SetMouseMotionEnabled(bool enable);
     // Whether hyperlinks in it are handled by its parent, and whether it handles them.
     virtual bool GetHyperlinksPropagated();
     virtual bool GetHyperlinksEnabled();
@@ -150,11 +150,12 @@ class CScriptRegion : public CScriptObject, public CLayoutFrame {
     bool IsAccessibleToScripts();
     void EnableInputEvent(int32_t type);
     void SetInputEvent(int32_t type, bool enable);
-    void SetMouseMotionEnabled(bool enable);
+    void SetMouseClickEnabled(bool enable);
+    void SetPassThroughButtons(const uint32_t* buttons, uint64_t count);
     void SetInputFlag(uint8_t flag, bool set);
     bool HasInputFlags(uint8_t flags);
-    void UpdateMotionRegistration();
     void UpdateClickRegistration();
+    void UpdateMotionRegistration();
     void RegisterEnabledInput();
     void UnregisterEnabledInput(bool quiet);
     bool IsMouseOverOffset(float top, float bottom, float left, float right);

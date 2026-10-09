@@ -258,7 +258,7 @@ void CSimpleTop::UnregisterForInput(CScriptRegion* region, int32_t type, bool qu
                 focus = nullptr;
             }
         }
-    } else if (type == INPUT_EVENT_MOTION) {
+    } else if (type == INPUT_EVENT_CLICK) {
         ForEachButton(&this->m_buttonFocus, [&](int32_t, blz::vector<CScriptRegion*, s_regionVectorTag>* list) {
             // FUN_1405f4c00
             RemoveRegion(this, region, list);
@@ -274,7 +274,7 @@ void CSimpleTop::UnregisterForInput(CScriptRegion* region, int32_t type, bool qu
                 return;
             }
         }
-    } else if (type == INPUT_EVENT_CLICK) {
+    } else if (type == INPUT_EVENT_MOTION) {
         auto* motion = static_cast<blz::vector<CScriptRegion*, s_regionVectorTag>*>(&this->m_mouseMotion);
         for (uint64_t i = 0; i < motion->size(); i++) {
             if ((*motion)[i] == region) {

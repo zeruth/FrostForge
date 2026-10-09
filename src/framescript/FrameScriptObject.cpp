@@ -240,12 +240,16 @@ int32_t SetScriptRefStorage(const FrameScript_Object* object, uint8_t index, uin
     return 0;
 }
 
+}
+
 // The name an object goes by in messages: its own, else its type's.
 // ref: FUN_140628560
 const char* GetDisplayName(FrameScript_Object* object) {
     const char* name = object->GetName();
     return name != nullptr ? name : object->GetObjectTypeName();
 }
+
+namespace {
 
 // A blz::chained_hash_set<int64> (0x20): the tables WrapTable has visited.
 struct VisitedNode {
@@ -1035,8 +1039,8 @@ int32_t FrameScript_Object::SetScript(lua_State* L) {
                 break;
             case 2:
             case 3:
-                frame->SetMouseMotionEnabled(true);
                 frame->SetMouseClickEnabled(true);
+                frame->SetMouseMotionEnabled(true);
                 break;
         }
     }

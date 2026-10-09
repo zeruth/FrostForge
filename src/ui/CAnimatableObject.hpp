@@ -8,10 +8,16 @@
 
 #include <cstdint>
 
+#include "blz/Vector.hpp"
 #include "storm/hash/TSHashTable.hpp"
 
 class CScriptRegion;
 class CSimpleAnimGroup;
+class FrameScript_Object;
+
+// The groups GetAnimationGroups lists.
+extern const char s_animGroupVectorTag[];
+typedef blz::vector<FrameScript_Object*, s_animGroupVectorTag> ANIMGROUPLIST;
 
 // The two group lists of an object, made on first use (0x10).
 struct ANIMATABLEGROUPS {
@@ -58,6 +64,10 @@ class CAnimatableObject {
     bool IsAnimatingTransform();
     bool IsAnimatingRectOffset();
     bool IsPlaying();
+    // A new group named `name` (or anonymous) from the template `inherits`; nullptr when none.
+    FrameScript_Object* CreateAnimationGroup(const char* name, const char* inherits);
+    // The groups scripts may see.
+    ANIMGROUPLIST* GetScriptAnimationGroups(ANIMGROUPLIST* groups);
 };
 static_assert(sizeof(CAnimatableObject) == 0x10, "CAnimatableObject is 0x10 bytes");
 
