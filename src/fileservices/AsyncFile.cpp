@@ -730,7 +730,7 @@ int32_t OpenList(ASYNCLINK* list) {
         bool ok = true;
         if (object->m_file == nullptr) {
             if (object->m_openProc != nullptr) {
-                ok = object->m_openProc(object) != 0;
+                ok = object->m_openProc(object, &object->m_file);
             } else {
                 if (object->m_fileDataId == 0) {
                     ok = cas::CASFileOpenByName(object->m_name, &object->m_file, (object->m_flags >> 2) & 0x20);
@@ -881,7 +881,7 @@ bool DispatchSorted() {
         bool ok = true;
         if (object->m_file == nullptr) {
             if (object->m_openProc != nullptr) {
-                ok = object->m_openProc(object) != 0;
+                ok = object->m_openProc(object, &object->m_file);
             } else {
                 if (object->m_fileDataId == 0) {
                     ok = cas::CASFileOpenByName(object->m_name, &object->m_file, (object->m_flags >> 2) & 0x20);
@@ -1123,7 +1123,7 @@ CAsyncObject* AsyncFileCreate(uint32_t priority, void* userData, void* a3, ASYNC
         object->m_noRead = 0;
         object->m_wholeFile = size == 0;
         object->m_userData = userData;
-        object->m_openProc = reinterpret_cast<int32_t (*)(CAsyncObject*)>(a3);
+        object->m_openProc = reinterpret_cast<bool (*)(CAsyncObject*, cas::CASFILE**)>(a3);
         if (priority > 2) {
             priority = 3;
         }
@@ -1148,7 +1148,7 @@ CAsyncObject* AsyncFileReadById(int32_t fileDataId, uint32_t priority, void* use
         object->m_offset = 0;
         object->m_size = 0;
         object->m_userData = userData;
-        object->m_openProc = reinterpret_cast<int32_t (*)(CAsyncObject*)>(a4);
+        object->m_openProc = reinterpret_cast<bool (*)(CAsyncObject*, cas::CASFILE**)>(a4);
         object->m_fileDataId = fileDataId;
         if (priority > 2) {
             priority = 3;
@@ -1189,7 +1189,7 @@ CAsyncObject* AsyncFileReadByName(const char* name, uint32_t priority, void* use
         object->m_offset = 0;
         object->m_size = 0;
         object->m_userData = userData;
-        object->m_openProc = reinterpret_cast<int32_t (*)(CAsyncObject*)>(a4);
+        object->m_openProc = reinterpret_cast<bool (*)(CAsyncObject*, cas::CASFILE**)>(a4);
         if (priority > 2) {
             priority = 3;
         }

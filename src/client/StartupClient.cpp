@@ -17,6 +17,7 @@
 #include "os/Os.hpp"
 #include "storm/ErrorReport.hpp"
 #include "storm/Log.hpp"
+#include "texture/Texture.hpp"
 #include "util/Unimplemented.hpp"
 #include <windows.h>
 #include <malloc.h>
@@ -101,11 +102,6 @@ void OnDeviceDestroyedClient(void* param) {
 
 // ref: FUN_14124c270
 void Sub14124C270() {
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_141280a70
-void Sub141280A70() {
     FROST_UNIMPLEMENTED();
 }
 
@@ -1168,7 +1164,7 @@ bool Sub14022A260() {
     s_deviceCallbacksAdded = 1;
     Sub14124C270();
     RenderSettingsInitialize();
-    Sub141280A70();
+    TextureInitialize();
     Sub1402F9E30();
     Sub1412A2BF0();
     FrameBufferCacheInitialize();

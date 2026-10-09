@@ -62,7 +62,7 @@ struct CAsyncObject {
     uint32_t m_errorCode;               // 0x14c
     uint32_t m_flags;                   // 0x150
     void* m_userData;                   // 0x158
-    int32_t (*m_openProc)(CAsyncObject* object);  // 0x160: opens the file itself (nonzero: opened)
+    bool (*m_openProc)(CAsyncObject* object, cas::CASFILE** file);  // 0x160: opens the file itself
     ASYNCBUFFERPROC m_bufferProc;       // 0x168
     ASYNCREADPROC m_readProc;           // 0x170
     ASYNCREADPROC m_doneProc;           // 0x178

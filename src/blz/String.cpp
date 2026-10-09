@@ -50,6 +50,25 @@ void string::reserve(uint64_t size) {
     string_reserve(reinterpret_cast<string_header*>(this), size);
 }
 
+// ref: FUN_140214220
+string_header* string_append(string_header* text, const char* source, uint64_t length) {
+    char* old = text->m_data;
+    uint64_t size = text->m_size + length;
+    string_reserve(text, size);
+    char* data = text->m_data;
+    uint64_t at = text->m_size;
+    if (length != 0) {
+        if (static_cast<uint64_t>(source - old) < at) {
+            std::memcpy(data + at, data + (source - old), length);
+        } else {
+            std::memcpy(data + at, source, length);
+        }
+    }
+    text->m_data[size] = '\0';
+    text->m_size = size;
+    return text;
+}
+
 // A source inside the string's own buffer is found again after the reserve moves it.
 // ref: FUN_1402142b0
 string_header* string_assign(string_header* text, const char* source, uint64_t length) {

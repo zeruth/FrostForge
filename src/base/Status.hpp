@@ -46,6 +46,13 @@ class CStatus {
     // Calls `function` (invoked as (severity, text, storage)) for each entry, oldest first.
     void ForEach(blz::function_storage* function) const;
 
+    // Whether nothing was reported (FUN_1402c9560).
+    bool IsEmpty() const {
+        return this->m_list.m_count == 0;
+    }
+    // The messages of at least `minSeverity`, each followed by `separator`.
+    blz::string* Join(blz::string* out, int32_t minSeverity, const char* separator) const;
+
     // The variadic front of AddV.
     CStatus* Add(int32_t severity, const char* format, ...);
 

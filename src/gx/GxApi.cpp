@@ -2524,6 +2524,24 @@ void GxTexUpdateInFrame(GxRenderContext* context, void* tex, const int32_t* rect
     context->UpdateTex(static_cast<gxDx12Backend::Tex*>(tex), rect, shaderResource, callback, param);
 }
 
+// ref: FUN_142288460
+void GxTexSetFilter(void* tex, uint8_t filter, uint32_t anisotropy) {
+    auto usage = reinterpret_cast<uint32_t*>(static_cast<uint8_t*>(tex) + 0x14);
+    uint32_t value = ((filter ^ *usage) & 7) ^ *usage;
+    *usage = (((anisotropy << 0xd) ^ value) & 0x3e000) ^ value;
+}
+
+// ref: FUN_142289ef0
+void GxDeviceBeginTextureReload() {
+    GxFrameEndWait(&s_frameEnd, 2, 1);
+    static_cast<CGxDevice*>(g_gxDevice)->Slot008();
+}
+
+// ref: FUN_14228b950
+void GxDeviceEndTextureReload() {
+    static_cast<CGxDevice*>(g_gxDevice)->Slot010();
+}
+
 // ref: FUN_14228c390
 void GxTexDestroy(void** tex) {
     if (*tex == nullptr) {

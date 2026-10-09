@@ -1,6 +1,7 @@
 #include "base/Status.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
+#include <cstring>
 #include <new>
 
 namespace {
@@ -120,6 +121,31 @@ void CStatus::Insert(bool append, int32_t severity, const char* format, va_list 
     if (this->m_maxSeverity < severity) {
         this->m_maxSeverity = severity;
     }
+}
+
+// ref: FUN_1402c9140
+blz::string* CStatus::Join(blz::string* out, int32_t minSeverity, const char* separator) const {
+    new (out) blz::string();
+    uint64_t separatorLength = 0;
+    if (separator != nullptr && *separator != '\0') {
+        separatorLength = std::strlen(separator);
+    }
+    auto sentinel = reinterpret_cast<const STATUSENTRY*>(&this->m_list);
+    int32_t total = 0;
+    for (const STATUSENTRY* node = this->m_list.m_next; node != sentinel; node = node->m_next) {
+        if (minSeverity <= node->m_severity) {
+            total += static_cast<int32_t>(node->m_text.m_size) + static_cast<int32_t>(separatorLength);
+        }
+    }
+    auto header = reinterpret_cast<blz::string_header*>(out);
+    blz::string_reserve(header, static_cast<uint64_t>(static_cast<int64_t>(total)));
+    for (const STATUSENTRY* node = this->m_list.m_next; node != sentinel; node = node->m_next) {
+        if (minSeverity <= node->m_severity) {
+            blz::string_append(header, node->m_text.m_data, node->m_text.m_size);
+            blz::string_append(header, separator, *separator == '\0' ? 0 : std::strlen(separator));
+        }
+    }
+    return out;
 }
 
 // ref: FUN_1402c90e0

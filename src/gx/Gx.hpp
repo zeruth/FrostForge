@@ -171,6 +171,12 @@ void GxTexUpdate(GxUploadInterface* upload, void* tex, const int32_t* rect, bool
 void GxTexUpdateInFrame(GxRenderContext* context, void* tex, const int32_t* rect, bool shaderResource,
     GXTEXUPDATEPROC callback, void* param);
 void GxTexDestroy(void** tex);
+// A texture's filter and anisotropy (FUN_142288460).
+void GxTexSetFilter(void* tex, uint8_t filter, uint32_t anisotropy);
+// The device drained before every texture is made again, and refilled after
+// (FUN_142289ef0, FUN_14228b950).
+void GxDeviceBeginTextureReload();
+void GxDeviceEndTextureReload();
 bool GxTexHeapCreate(const void* desc, void** heap);
 void GxTexHeapDestroy(void* heap);
 GXTEXALLOCINFO* GxTexAllocationInfo(GXTEXALLOCINFO* out, const void* desc);
