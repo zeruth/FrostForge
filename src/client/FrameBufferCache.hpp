@@ -78,6 +78,8 @@ void* FrameBufferCacheAcquire(const int32_t* size, const FRAMEBUFFERTARGET* targ
 // Frame buffer setup: one colour target of `format` and no depth at `size` (FUN_1412a04d0,
 // the size packed as two 16-bit halves).
 void FrameBufferSetup(FRAMEBUFFER* buffer, uint8_t format, uint32_t size);
+// The same with the colour and depth formats of a render target kind (FUN_1412a0380).
+void FrameBufferSetupKind(FRAMEBUFFER* buffer, const int32_t* size, uint32_t kind);
 
 // Takes targets from the cache for whatever is not supplied, and builds the target set
 // (FUN_14129fd70).

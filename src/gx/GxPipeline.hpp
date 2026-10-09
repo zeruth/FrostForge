@@ -73,5 +73,7 @@ struct GxPipeline;
 // messages.
 GxPipeline* GxPipelineCreate(const GXPIPELINEKEY* key, const char* name);
 GxPipeline* GxPipelineCreateDesc(const GXPIPELINEDESC* desc, const char* name);
+// Releases a pipeline and clears the pointer (FUN_14228b640).
+void GxPipelineDestroy(GxPipeline** pipeline);
 
 #endif

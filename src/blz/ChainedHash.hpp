@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <cstring>
 #include <new>
+#include <type_traits>
 
 #include "blz/Murmur.hpp"
 #include "storm/Memory.hpp"
@@ -29,6 +30,16 @@ static_assert(sizeof(chained_hash_header) == 0x20, "a chained hash table is 0x20
 
 inline uint64_t chained_bucket(uint64_t key, uint64_t count) {
     return fmix64(key) & (count - 1);
+}
+
+// A key's bits: pointers by address, integers as they are.
+template <class Key>
+uint64_t chained_key_bits(Key key) {
+    if constexpr (std::is_pointer_v<Key>) {
+        return chained_key_bits(key);
+    } else {
+        return static_cast<uint64_t>(key);
+    }
 }
 
 // Resizes to the smallest power of two (8 at least) that holds the table at its load limit
@@ -57,7 +68,7 @@ void chained_rehash(chained_hash_header* table, uint64_t count, const char* buck
             auto node = static_cast<Node*>(table->m_buckets[i]);
             while (node != nullptr) {
                 Node* next = node->m_next;
-                uint64_t index = chained_bucket(reinterpret_cast<uint64_t>(node->m_key), buckets);
+                uint64_t index = chained_bucket(chained_key_bits(node->m_key), buckets);
                 node->m_next = static_cast<Node*>(fresh[index]);
                 fresh[index] = node;
                 node = next;
@@ -74,7 +85,7 @@ Node* chained_find(chained_hash_header* table, Key key) {
     if (table->m_buckets == nullptr) {
         return nullptr;
     }
-    uint64_t index = chained_bucket(reinterpret_cast<uint64_t>(key), table->m_bucketCount);
+    uint64_t index = chained_bucket(chained_key_bits(key), table->m_bucketCount);
     for (auto node = static_cast<Node*>(table->m_buckets[index]); node != nullptr; node = node->m_next) {
         if (node->m_key == key) {
             return node;
@@ -90,7 +101,7 @@ Node* chained_insert(chained_hash_header* table, Key key, bool* inserted, const 
     if (table->m_buckets == nullptr) {
         chained_rehash<Node>(table, table->m_bucketCount, bucketTag);
     }
-    uint64_t index = chained_bucket(reinterpret_cast<uint64_t>(key), table->m_bucketCount);
+    uint64_t index = chained_bucket(chained_key_bits(key), table->m_bucketCount);
     auto link = reinterpret_cast<Node**>(&table->m_buckets[index]);
     while (*link != nullptr) {
         if ((*link)->m_key == key) {
@@ -119,7 +130,7 @@ Node* chained_unlink(chained_hash_header* table, Key key) {
     if (table->m_buckets == nullptr) {
         return nullptr;
     }
-    uint64_t index = chained_bucket(reinterpret_cast<uint64_t>(key), table->m_bucketCount);
+    uint64_t index = chained_bucket(chained_key_bits(key), table->m_bucketCount);
     auto link = reinterpret_cast<Node**>(&table->m_buckets[index]);
     while (*link != nullptr && (*link)->m_key != key) {
         link = &(*link)->m_next;

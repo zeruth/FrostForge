@@ -1163,16 +1163,52 @@ namespace {
 
 uint8_t s_pumping;                  // DAT_1430a15ca
 void (*s_beforePump)();             // DAT_1430a1680
-int32_t s_clientSize[2];            // DAT_1430a1618
-uint32_t s_clientSizeChanged;       // DAT_1430a1610
+RECT s_clientRect;                  // DAT_1430a1610: the main window's client rect, cached
 
 }
 
 // The main window, through the getter the client registered.
+// The main window through the getter the client registered (0), the active window (1) or the
+// foreground one (2).
 // ref: FUN_141237f70
 void* OsGetMainWindow(uint32_t a1) {
-    (void)a1;
-    return s_mainWindowGetter != nullptr ? s_mainWindowGetter() : nullptr;
+    if (a1 == 0) {
+        return s_mainWindowGetter != nullptr ? s_mainWindowGetter() : nullptr;
+    }
+    if (a1 == 1) {
+        return GetActiveWindow();
+    }
+    if (a1 == 2) {
+        return GetForegroundWindow();
+    }
+    return nullptr;
+}
+
+// The main window's client rect as {top, left, bottom, right}, from the cache once it is known.
+// ref: FUN_14123ab20
+bool OsGetClientRect(int32_t* rect) {
+    if (s_clientRect.right == 0 || s_clientRect.bottom == 0) {
+        if (!GetClientRect(static_cast<HWND>(OsGetMainWindow(0)), &s_clientRect)) {
+            return false;
+        }
+    }
+    rect[0] = s_clientRect.top;
+    rect[1] = s_clientRect.left;
+    rect[2] = s_clientRect.bottom;
+    rect[3] = s_clientRect.right;
+    return true;
+}
+
+// The cursor in the main window's client coordinates.
+// ref: FUN_14123b140
+void OsGetCursorPosition(int32_t* x, int32_t* y) {
+    uint64_t position = OsCursorGetClientPosition(OsGetMainWindow(0));
+    if (x != nullptr) {
+        *x = static_cast<int32_t>(position);
+    }
+    if (y != nullptr) {
+        *y = static_cast<int32_t>(position >> 0x20);
+    }
 }
 
 // Pumps the thread's messages, handing every queued event to `handler` (directly, while the
@@ -1214,10 +1250,11 @@ bool OsEventPump(OSEVENTSINK handler, void* context, void* param) {
                 s_lastSize = 0;
                 RECT client;
                 GetClientRect(static_cast<HWND>(OsGetMainWindow(0)), &client);
-                if (client.right - client.left != s_clientSize[0] || client.bottom - client.top != s_clientSize[1]) {
-                    s_clientSizeChanged = 0;
-                    s_clientSize[0] = client.right - client.left;
-                    s_clientSize[1] = client.bottom - client.top;
+                if (client.right - client.left != s_clientRect.right || client.bottom - client.top != s_clientRect.bottom) {
+                    s_clientRect.left = 0;
+                    s_clientRect.top = 0;
+                    s_clientRect.right = client.right - client.left;
+                    s_clientRect.bottom = client.bottom - client.top;
                     OsQueueEvent(3, 0, 0, 0);
                 }
             }

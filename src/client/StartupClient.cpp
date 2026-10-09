@@ -9,6 +9,7 @@
 #include "framescript/FrameScript.hpp"
 #include "framescript/ScriptMethod.hpp"
 #include "glue/GlueMgr.hpp"
+#include "ui/CSimpleTop.hpp"
 #include "ui/FrameXML.hpp"
 #include "cas/CAS.hpp"
 #include "fileservices/AsyncFile.hpp"
@@ -17,6 +18,7 @@
 #include "os/Os.hpp"
 #include "storm/ErrorReport.hpp"
 #include "storm/Log.hpp"
+#include "shadereffect/ShaderEffectManager.hpp"
 #include "texture/Texture.hpp"
 #include "util/Unimplemented.hpp"
 #include <windows.h>
@@ -168,11 +170,6 @@ bool OnM2ForceAdditiveParticleSortChanged(CVar* cvar, const char* oldValue, cons
 
 // ref: FUN_1412a1d50
 void Sub1412A1D50() {
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_1412a3990
-void Sub1412A3990() {
     FROST_UNIMPLEMENTED();
 }
 
@@ -800,12 +797,6 @@ void UiInputGamepadStick(void* input, const void* event) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_14123ab20
-void OsGetClientRect(int32_t* rect) {
-    (void)rect;
-    FROST_UNIMPLEMENTED();
-}
-
 // ref: FUN_14228ac80
 void GxSetMouseCursorActive(uint32_t active) {
     (void)active;
@@ -1193,7 +1184,7 @@ bool Sub14022A260() {
         m2Flags |= 0x100;
     }
     Sub1412A1D50();
-    Sub1412A3990();
+    ShaderEffectManagerInitialize();
     Sub14134ED50(&OnModelHook140229CA0);
     static void* const s_loadingCallbacks[] = { reinterpret_cast<void*>(&LoadingCallback14022DB40),
         reinterpret_cast<void*>(&LoadingCallback14022DEC0), reinterpret_cast<void*>(&LoadingCallback14022F7C0),
@@ -1278,8 +1269,7 @@ void Sub14167BA90(uint64_t a1, uint64_t a2) {
 
 // The UI root's render (slot 0xf8 of DAT_142e979d8).
 void UiRender(void* ui) {
-    (void)ui;
-    FROST_UNIMPLEMENTED();
+    static_cast<CSimpleTop*>(ui)->Render();
 }
 
 // ref: FUN_14022ea60

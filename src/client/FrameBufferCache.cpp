@@ -416,6 +416,23 @@ void FrameBufferSetup(FRAMEBUFFER* buffer, uint8_t format, uint32_t size) {
     GxRenderTargetsClear(&buffer->m_targets);
 }
 
+// ref: FUN_1412a0380
+void FrameBufferSetupKind(FRAMEBUFFER* buffer, const int32_t* size, uint32_t kind) {
+    RENDERTARGETFORMATS formats = RenderTargetFormats(kind);
+    buffer->m_width = size[0];
+    buffer->m_height = size[1];
+    buffer->m_size[0] = size[0];
+    buffer->m_size[1] = size[1];
+    std::memset(&buffer->m_color[0], 0, sizeof(FRAMEBUFFERTARGET));
+    buffer->m_color[0].m_format = formats.m_color;
+    buffer->m_color[0].m_renderTarget = 1;
+    buffer->m_color[0].m_shaderResource = 1;
+    std::memset(&buffer->m_depth, 0, sizeof(FRAMEBUFFERTARGET));
+    buffer->m_depth.m_format = formats.m_depth;
+    buffer->m_depth.m_renderTarget = 1;
+    GxRenderTargetsClear(&buffer->m_targets);
+}
+
 // ref: FUN_14129fd70
 void FrameBufferBind(FRAMEBUFFER* buffer) {
     int32_t limit = *reinterpret_cast<int32_t*>(GxDeviceCaps() + 0x98);

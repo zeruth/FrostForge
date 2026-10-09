@@ -13,6 +13,13 @@
 #include "ui/CRenderBatch.hpp"
 #include "ui/CScriptRegion.hpp"
 #include "ui/CSimpleFrame.hpp"
+#include "client/FrameBufferCache.hpp"
+#include "client/GxWindow.hpp"
+#include "gx/GxRenderTargets.hpp"
+#include "gx/Gx.hpp"
+#include "gx/d3d12/CommandList.hpp"
+#include "os/Window.hpp"
+#include "texture/Texture.hpp"
 #include "util/Unimplemented.hpp"
 
 const char s_regionVectorTag[] = ".PEAVCScriptRegion@@";
@@ -21,6 +28,7 @@ const char s_deferredInputTag[] = ".?AUDeferredInputEventChange@CSimpleTop@@";
 const char s_deferredScriptTag[] = ".?AUBasicDeferredScript@DeferredScriptBuffer@@";
 
 CSimpleTop* CSimpleTop::s_instance;
+uint8_t CSimpleTop::s_drawOnTopOnly;
 
 namespace {
 
@@ -138,6 +146,60 @@ struct ANIMNODE {
 
 }
 
+namespace {
+
+// Every texture finished: the strata batch is rebuilt (0x1405f4b90).
+void OnTexturesLoaded(void* storage) {
+    (void)storage;
+    CSimpleTop::s_instance->m_strataDirty = 1;
+}
+
+// The device is back: every root frame's batches are rebuilt (FUN_1405efe10).
+// ref: FUN_1405efe10
+void OnDeviceCreated(void* param) {
+    (void)param;
+    CSimpleTop* top = CSimpleTop::s_instance;
+    top->m_strataDirty = 1;
+    for (CSimpleFrame* frame = top->m_rootFrames.Head(); frame != nullptr; frame = top->m_rootFrames.Next(frame)) {
+        frame->RefreshBatch();
+    }
+}
+
+// ref: FUN_1405efe80
+void OnDeviceDestroyed(void* param) {
+    (void)param;
+    CSimpleTop* top = CSimpleTop::s_instance;
+    for (CSimpleFrame* frame = top->m_rootFrames.Head(); frame != nullptr; frame = top->m_rootFrames.Next(frame)) {
+        frame->RefreshRegions();
+    }
+}
+
+}
+
+// ref: FUN_140236a40
+void UiGetCursorPosition(float* x, float* y) {
+    int32_t cursorX;
+    int32_t cursorY;
+    OsGetCursorPosition(&cursorX, &cursorY);
+    int32_t rect[4] = { 0, 0, 0, 0 };
+    OsGetClientRect(rect);
+    float height = static_cast<float>(rect[2] - rect[0]);
+    if (height <= 1.0f) {
+        height = 1.0f;
+    }
+    float fromBottom = 1.0f - static_cast<float>(cursorY) / height;
+    if (x != nullptr) {
+        float width = static_cast<float>(rect[3] - rect[1]);
+        if (width <= 1.0f) {
+            width = 1.0f;
+        }
+        *x = (static_cast<float>(cursorX) / width) * 0.8f;
+    }
+    if (y != nullptr) {
+        *y = fromBottom * 0.6f;
+    }
+}
+
 // ref: FUN_1405ebe10
 CSimpleTop::CSimpleTop(void (*preUpdate)()) {
     this->m_dragFrame = nullptr;
@@ -147,8 +209,6 @@ CSimpleTop::CSimpleTop(void (*preUpdate)()) {
     this->m_dragY = 0.0f;
     this->m_raiseCounter = 1;
     this->m_strataDirty = 0;
-    // FUN_14061dce0: the root CRenderBatch (not ported yet)
-    std::memset(this->m_renderBatch, 0, sizeof(this->m_renderBatch));
     this->m_frameBatches = CHAINEDHASH();
     this->m_layoutWaiting = CHAINEDHASH();
     this->m_cursorShown = 0;
@@ -205,11 +265,15 @@ CSimpleTop::CSimpleTop(void (*preUpdate)()) {
     this->m_mouseEvent.m_x = 0.5f;
     this->m_mouseEvent.m_y = 0.5f;
     this->m_mouseEvent.m_flags = 0x100;
-    // FUN_140236a40 (the cursor position in UI units), FUN_1406204d0 (batch statics), the input
-    // handler registration (FUN_1412814f0) and the Gx device callbacks (FUN_14228dfb0 /
-    // FUN_14228e040) follow in the reference.
-    FROST_UNIMPLEMENTED();
+    UiGetCursorPosition(&this->m_mouseEvent.m_x, &this->m_mouseEvent.m_y);
     this->m_lastMouseEvent = this->m_mouseEvent;
+    CRenderBatch::Initialize();
+    blz::function_storage loaded;
+    loaded.m_invoke = reinterpret_cast<void*>(&OnTexturesLoaded);
+    loaded.m_manager = &blz::function_trivial_manager;
+    TextureAddAllLoadedCallback(&loaded, reinterpret_cast<uint64_t>(this));
+    GxAddDeviceCreatedCallback(&OnDeviceCreated, nullptr);
+    GxAddDeviceDestroyedCallback(&OnDeviceDestroyed, nullptr);
     this->m_layoutVersion = 1;
 }
 
@@ -742,6 +806,38 @@ void CSimpleTop::ProcessUpdateChecks() {
         }
     }
     this->m_updateChecks.m_size = 0;
+}
+
+// ref: FUN_1405f09a0
+void CSimpleTop::Render() {
+    float view[16];
+    float projection[16];
+    float offset[2] = { 0.0f, 0.0f };
+    UiComputeMatrices(&this->m_rect, offset, view, projection);
+    std::memcpy(this->m_projection, projection, sizeof(this->m_projection));
+    blz::vector<CSimpleFrame*, s_frameVectorTag> updates;
+    updates.swap(this->m_batchUpdates);
+    for (CSimpleFrame* frame : updates) {
+        frame->RebuildBatchIfDirty();
+    }
+    if (this->m_strataDirty != 0) {
+        this->m_renderBatch.Clear();
+        this->m_strataDirty = 0;
+        this->ProcessShownChanges();
+        int32_t count = this->m_shownRootCount;
+        for (CSimpleFrame* frame = this->m_rootFrames.Head(); frame != nullptr;) {
+            CSimpleFrame* next = this->m_rootFrames.Next(frame);
+            if (count < 1) {
+                break;
+            }
+            frame->AddToParentBatch(&this->m_renderBatch);
+            frame = next;
+            count--;
+        }
+    }
+    FRAMEBUFFER* buffer = WindowGetFrameBuffer();
+    g_gxRenderContext->SetRenderTargets(buffer->m_targets.m_count != 0 ? &buffer->m_targets : nullptr);
+    this->m_renderBatch.Draw(s_drawOnTopOnly != 0, view, projection);
 }
 
 // ref: FUN_1405f0be0

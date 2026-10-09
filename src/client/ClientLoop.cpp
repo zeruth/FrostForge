@@ -84,7 +84,6 @@ uint64_t Sub14152CF90(uint32_t a1);
 void UiInputGamepadDown(void* input, const void* event);
 void UiInputGamepadUp(void* input, const void* event);
 void UiInputGamepadStick(void* input, const void* event);
-void OsGetClientRect(int32_t* rect);
 void GxSetMouseCursorActive(uint32_t active);
 void UiInputMouseDown(void* input, const void* event);
 void UiInputMouseMove(void* input, const void* event, int32_t a3);

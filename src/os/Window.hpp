@@ -39,6 +39,10 @@ intptr_t OsWindowProcNested(void* window, uint32_t message, uintptr_t wparam, in
 void OsSetWindowResizeLock(uint32_t locked);
 void OsSetMainWindowGetter(void* (*getter)());
 void* OsGetMainWindow(uint32_t a1);
+// The main window's client rect as {top, left, bottom, right} (FUN_14123ab20).
+bool OsGetClientRect(int32_t* rect);
+// The cursor in client coordinates (FUN_14123b140).
+void OsGetCursorPosition(int32_t* x, int32_t* y);
 
 // Pumps messages and drains the event queue into `handler` (context, id, params, param).
 bool OsEventPump(OSEVENTSINK handler, void* context, void* param);

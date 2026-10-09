@@ -77,3 +77,11 @@ GxPipeline* GxPipelineCreate(const GXPIPELINEKEY* key, const char* name) {
     desc.m_4e = 0;
     return GxPipelineCreateDesc(&desc, name);
 }
+
+// ref: FUN_14228b640
+void GxPipelineDestroy(GxPipeline** pipeline) {
+    if (*pipeline != nullptr) {
+        static_cast<CGxDevice*>(g_gxDevice)->PipelineDestroy(*pipeline);
+        *pipeline = nullptr;
+    }
+}

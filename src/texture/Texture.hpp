@@ -157,6 +157,7 @@ bool TextureIsReady(HTEXTURE texture);
 bool TextureHasPlaceholder(HTEXTURE texture);
 bool TextureIsOpaque(HTEXTURE texture);
 bool TextureInFileCache(HTEXTURE texture);
+bool TextureHasAtlas(HTEXTURE texture);
 bool TextureGetAtlasCoords(HTEXTURE texture, float* origin, float* scale);
 int32_t TextureLoadState(HTEXTURE texture);
 bool TextureSetPriority(HTEXTURE texture, int32_t priority);

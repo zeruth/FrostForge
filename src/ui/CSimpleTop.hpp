@@ -14,6 +14,7 @@
 #include "blz/Vector.hpp"
 #include "storm/list/TSList.hpp"
 #include "ui/CLayoutFrame.hpp"
+#include "ui/CRenderBatch.hpp"
 
 class CAnimatableObject;
 class CRenderBatch;
@@ -88,6 +89,8 @@ class CSimpleTop : public CLayoutFrame {
     public:
     // The one root (0x142e979d8).
     static CSimpleTop* s_instance;
+    // Only what is drawn on top shows (DAT_142e979d0).
+    static uint8_t s_drawOnTopOnly;
 
     CSimpleFrame* m_dragFrame;                                          // 0x1a8
     int32_t m_dragType;                                                 // 0x1b0
@@ -96,7 +99,7 @@ class CSimpleTop : public CLayoutFrame {
     float m_dragY;                                                      // 0x1bc
     int32_t m_raiseCounter;                                             // 0x1c0 the last raise order handed out
     uint8_t m_strataDirty;                                              // 0x1c4
-    uint8_t m_renderBatch[0x68];                                        // 0x1c8 CRenderBatch
+    CRenderBatch m_renderBatch;                                         // 0x1c8 the root frames' batch
     CHAINEDHASH m_frameBatches;                                         // 0x230 CSimpleFrame* -> CRenderBatch*
     blz::vector<CSimpleFrame*, s_frameVectorTag> m_batchUpdates;        // 0x250
     CHAINEDHASH m_layoutWaiting;                                        // 0x268 CLayoutFrame*
@@ -203,6 +206,9 @@ class CSimpleTop : public CLayoutFrame {
 
     // The UI's frame: animations, layout, OnUpdate scripts and the mouse focus.
     void OnUpdate(float elapsed);
+    // Draws the UI: the dirty batches rebuilt, the root batch rebuilt when the strata changed,
+    // then drawn into the window's frame buffer (FUN_1405f09a0, vtable slot 0xf8).
+    void Render();
     // Frames whose layout was waiting on their objects get it once they are ready.
     void ProcessLayoutWaiting();
     // Roots that were shown move to the front of the root list, hidden ones to the back.
@@ -210,6 +216,9 @@ class CSimpleTop : public CLayoutFrame {
     // Frames join or leave the update list as they come to want OnUpdate or not.
     void ProcessUpdateChecks();
 };
+
+// The cursor in UI units (FUN_140236a40).
+void UiGetCursorPosition(float* x, float* y);
 
 // A font handle whose last user went; it is dropped at the next UI update.
 void UiAddUnneededFontHandle(const std::weak_ptr<void>* handle);
