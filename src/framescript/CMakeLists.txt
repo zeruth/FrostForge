@@ -1,6 +1,7 @@
 add_library(framescript STATIC
     LuaHost.cpp
     LuaMemPool.cpp
+    ScriptAPI.cpp
     FrameScript.cpp
     FrameScriptLibrary.cpp
 )

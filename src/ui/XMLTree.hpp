@@ -50,6 +50,8 @@ class XMLNode {
     void SetAttribute(const char* name, const char* value);
     XMLNode* GetChild(const char* name) const;
     SCRIPTLOCATION* GetLocation();
+    // Frees what the node holds (a node on the stack, not one of the pool).
+    void Destroy();
 };
 static_assert(sizeof(XMLNode) == 0x90, "XMLNode is 0x90 bytes");
 

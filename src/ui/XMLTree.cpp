@@ -408,3 +408,17 @@ void XMLTree_Shutdown() {
         s_nodes.PutData(node);
     }
 }
+
+// A node the caller owns lets its children, text, attributes and name go (FUN_140660a10).
+// ref: FUN_140660a10
+void XMLNode::Destroy() {
+    if (this->m_next != nullptr) {
+        DestroyNode(this->m_next);
+    }
+    if (this->m_child != nullptr) {
+        DestroyNode(this->m_child);
+    }
+    SMemFree(this->m_body, s_file, 0xF5, 0);
+    AttributesFree(this);
+    blz::string_free(this->m_name.header());
+}

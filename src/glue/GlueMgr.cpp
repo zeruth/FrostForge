@@ -1,5 +1,6 @@
 #include "glue/GlueMgr.hpp"
 #include "glue/GlueScriptAPI.hpp"
+#include "glue/ScriptAPIRegistry.hpp"
 
 #include <cstdint>
 
@@ -292,29 +293,6 @@ void Sub14063D240() {
     FROST_UNIMPLEMENTED();
 }
 
-// The LE_* enum constants.
-// ref: FUN_14191c2a0
-void Sub14191C2A0() {
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_141db0f60
-void Sub141DB0F60() {
-    FROST_UNIMPLEMENTED();
-}
-
-// GetText and the other localized-string functions.
-// ref: FUN_1424db660
-void Sub1424DB660() {
-    FROST_UNIMPLEMENTED();
-}
-
-// GetBuildInfo and the other general glue functions.
-// ref: FUN_141d06170
-void Sub141D06170() {
-    FROST_UNIMPLEMENTED();
-}
-
 // The FullUserdataObject metatable.
 // ref: FUN_1424cd500
 void Sub1424CD500() {
@@ -332,47 +310,6 @@ void Sub141CD13C0() {
     FROST_UNIMPLEMENTED();
 }
 
-// GetLocale and the other glue functions.
-// ref: FUN_1416a70b0
-void Sub1416A70B0() {
-    FROST_UNIMPLEMENTED();
-}
-
-// The character-select functions (SetCharSelectModelFrame, ...).
-// ref: FUN_14168ed20
-void Sub14168ED20() {
-    FROST_UNIMPLEMENTED();
-}
-
-// C_CharacterServices.
-// ref: FUN_14169c190
-void Sub14169C190() {
-    FROST_UNIMPLEMENTED();
-}
-
-// C_SharedCharacterServices / C_CharacterServicesPublic.
-// ref: FUN_14169c220
-void Sub14169C220() {
-    FROST_UNIMPLEMENTED();
-}
-
-// PlaySound and the other sound functions.
-// ref: FUN_14130c2e0
-void Sub14130C2E0() {
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_1419f63a0
-void Sub1419F63A0() {
-    FROST_UNIMPLEMENTED();
-}
-
-// C_AuthChallenge.
-// ref: FUN_141b47390
-void Sub141B47390() {
-    FROST_UNIMPLEMENTED();
-}
-
 // ref: FUN_141a49240
 void Sub141A49240() {
     FROST_UNIMPLEMENTED();
@@ -380,30 +317,6 @@ void Sub141A49240() {
 
 // ref: FUN_141a49200
 void Sub141A49200() {
-    FROST_UNIMPLEMENTED();
-}
-
-// C_WowTokenSecure / C_WowTokenPublic / C_WowTokenGlue.
-// ref: FUN_141b65c50
-void Sub141B65C50() {
-    FROST_UNIMPLEMENTED();
-}
-
-// C_Login.
-// ref: FUN_1416a0d20
-void Sub1416A0D20() {
-    FROST_UNIMPLEMENTED();
-}
-
-// C_RealmList.
-// ref: FUN_1416a8880
-void Sub1416A8880() {
-    FROST_UNIMPLEMENTED();
-}
-
-// C_Widget.
-// ref: FUN_141db1990
-void Sub141DB1990() {
     FROST_UNIMPLEMENTED();
 }
 

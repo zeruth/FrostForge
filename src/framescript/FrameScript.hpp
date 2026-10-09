@@ -113,6 +113,14 @@ bool FrameScript_GetGlobalString(const char* name, const char** value, bool scop
 // Slavic genitive plural (FUN_141650790).
 int32_t FrameScript_GetPluralForm(uint32_t rule, int32_t count);
 struct lua_State;
+struct SCRIPTFUNCTION;
+typedef int (*lua_CFunction)(lua_State* L);
+// A global function (FUN_14063daa0).
+void FrameScript_RegisterFunction(const char* name, lua_CFunction function);
+// `count` functions into the global table `space`, made when missing (FUN_14063d2b0).
+void FrameScript_RegisterNamespace(const SCRIPTFUNCTION* functions, uint32_t count, const char* space);
+// A global number (FUN_14063e1b0).
+void FrameScript_SetGlobalNumber(const char* name, int32_t value);
 // string.format over the arguments from `index` (the format) on, into a buffer of `size`
 // bytes; %d, %i and %F numbers get the locale's decimal mark.
 char* FrameScript_FormatString(lua_State* L, int32_t index, char* buffer, uint32_t size);

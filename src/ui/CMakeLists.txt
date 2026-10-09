@@ -18,6 +18,7 @@ add_library(ui STATIC
     CSimpleFontScript.cpp
     CSimpleFontString.cpp
     CSimpleFontStringScript.cpp
+    FrameScriptGlobals.cpp
     FrameXML.cpp
     UITypes.cpp
     XMLTree.cpp

@@ -10,6 +10,7 @@
 #include "blz/Random.hpp"
 #include "cas/CAS.hpp"
 #include "framescript/LuaMemPool.hpp"
+#include "framescript/ScriptAPI.hpp"
 #include "os/Timer.hpp"
 #include "storm/ErrorReport.hpp"
 #include "storm/Memory.hpp"
@@ -853,4 +854,62 @@ char* FrameScript_FormatString(lua_State* L, int32_t index, char* buffer, uint32
     } while (next < end);
     *out = '\0';
     return buffer;
+}
+
+// ref: FUN_14063daa0
+void FrameScript_RegisterFunction(const char* name, lua_CFunction function) {
+    lua_State* L = FrameScript_GetContext();
+    lua_pushcclosure(L, function, 0);
+    if (name == nullptr) {
+        lua_pushnil(L);
+    } else {
+        lua_pushlstring(L, name, strlen(name));
+    }
+    lua_insert(L, -2);
+    lua_settable(L, LUA_GLOBALSINDEX);
+}
+
+// ref: FUN_14063d2b0
+void FrameScript_RegisterNamespace(const SCRIPTFUNCTION* functions, uint32_t count, const char* space) {
+    lua_State* L = FrameScript_GetContext();
+    if (space == nullptr) {
+        lua_pushnil(L);
+    } else {
+        lua_pushlstring(L, space, strlen(space));
+    }
+    lua_gettable(L, LUA_GLOBALSINDEX);
+    if (lua_type(L, -1) != LUA_TTABLE) {
+        lua_settop(L, -2);
+        lua_createtable(L, 0, 0);
+        if (space == nullptr) {
+            lua_pushnil(L);
+        } else {
+            lua_pushlstring(L, space, strlen(space));
+        }
+        lua_pushvalue(L, -2);
+        lua_settable(L, LUA_GLOBALSINDEX);
+    }
+    for (uint32_t i = 0; i < count; i++) {
+        if (functions[i].m_name == nullptr) {
+            lua_pushnil(L);
+        } else {
+            lua_pushlstring(L, functions[i].m_name, strlen(functions[i].m_name));
+        }
+        lua_pushcclosure(L, functions[i].m_function, 0);
+        lua_settable(L, -3);
+    }
+    lua_settop(L, -2);
+}
+
+// ref: FUN_14063e1b0
+void FrameScript_SetGlobalNumber(const char* name, int32_t value) {
+    lua_State* L = FrameScript_GetContext();
+    lua_pushnumber(L, static_cast<double>(value));
+    if (name == nullptr) {
+        lua_pushnil(L);
+    } else {
+        lua_pushlstring(L, name, strlen(name));
+    }
+    lua_insert(L, -2);
+    lua_settable(L, LUA_GLOBALSINDEX);
 }
