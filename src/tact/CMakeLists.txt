@@ -12,6 +12,7 @@ add_library(tact STATIC
     FileManifest.cpp
     ImmediateRead.cpp
     FileHandle.cpp
+    HeaderCache.cpp
     SpanResident.cpp
     FileRead.cpp
     Instance.cpp

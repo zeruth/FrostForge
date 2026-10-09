@@ -1315,3 +1315,299 @@ uint8_t CodecDecodeRaw(void* out, uint32_t outSize, const uint8_t* data, uint32_
 }
 
 }
+
+namespace tact {
+
+namespace {
+
+void SkipSpace(const char** cursor, const char* end) {
+    while (*cursor < end && IsSpace(**cursor)) {
+        (*cursor)++;
+    }
+}
+
+ESPECBLOCK* AllocateBlocks(uint32_t count) {
+    return static_cast<ESPECBLOCK*>(PackageAlloc(GetBufferAllocator(), uint64_t(count) * sizeof(ESPECBLOCK), 8, false, "", 0));
+}
+
+// FUN_1420d7700: doubles the block array.
+uint32_t GrowBlocks(ESPECBLOCK** blocks, uint32_t count) {
+    ESPECBLOCK* grown = AllocateBlocks(count * 2);
+    std::memcpy(grown, *blocks, uint64_t(count) * sizeof(ESPECBLOCK));
+    PackageFree(GetBufferAllocator(), *blocks);
+    *blocks = grown;
+    return count * 2;
+}
+
+}
+
+// ref: FUN_1420d77a0
+bool ESpecBlockToken(const char** cursor, const char* end, int32_t* size, int32_t* count, char* variable) {
+    *size = 0;
+    *count = 0;
+    *variable = 0;
+    SkipSpace(cursor, end);
+    if (end <= *cursor) {
+        return false;
+    }
+    if (static_cast<uint8_t>(**cursor - '0') < 10) {
+        const char* next = nullptr;
+        int32_t value = static_cast<int32_t>(ParseUnsigned(*cursor, &next, 10, nullptr));
+        *size = value;
+        if (value == 0) {
+            blz::log(g_logCategory, 4, s_eSpecFile, 0x9e, "Invalid encoding specifier: block size must not be zero");
+            return false;
+        }
+        *cursor = next;
+        SkipSpace(cursor, end);
+        if (end <= *cursor) {
+            return false;
+        }
+        char c = **cursor;
+        if (c == 'K' || c == 'k' || c == 'M' || c == 'm') {
+            *size = value << 10;
+            if (c == 'M' || c == 'm') {
+                *size = value << 20;
+            }
+            (*cursor)++;
+        }
+    }
+    SkipSpace(cursor, end);
+    if (end <= *cursor) {
+        return false;
+    }
+    if (**cursor == '=') {
+        *count = 1;
+        return true;
+    }
+    if (**cursor != '*') {
+        return false;
+    }
+    (*cursor)++;
+    SkipSpace(cursor, end);
+    if (end <= *cursor) {
+        return false;
+    }
+    if (*size == 0) {
+        if (**cursor != '=') {
+            return false;
+        }
+        *count = 1;
+        *variable = 1;
+        return true;
+    }
+    if (static_cast<uint8_t>(**cursor - '0') < 10) {
+        const char* next = nullptr;
+        *count = static_cast<int32_t>(ParseUnsigned(*cursor, &next, 10, nullptr));
+        if (*count == 0) {
+            blz::log(g_logCategory, 4, s_eSpecFile, 0xd4, "Invalid encoding specifier: block count must not be zero");
+            return false;
+        }
+        *cursor = next;
+    }
+    if (*count == 0) {
+        *variable = 1;
+    }
+    // FUN_1420d7bc0
+    SkipSpace(cursor, end);
+    return *cursor < end && **cursor == '=';
+}
+
+// ref: FUN_1420d7bf0
+void ESpecFreeBlocks(ESPECBLOCK* blocks) {
+    PackageFree(GetBufferAllocator(), blocks);
+}
+
+// ref: FUN_1420d7e30
+uint8_t ESpecParseBlocks(uint32_t csize, const char* spec, const char* end, ESPECBLOCK** blocks, int32_t* count) {
+    *blocks = nullptr;
+    *count = 0;
+    int32_t variableIndex = -1;
+    if (end == nullptr) {
+        end = spec + std::strlen(spec);
+    }
+    bool colon = false;
+    bool braced = false;
+    const char* cursor = spec;
+    while (true) {
+        if (end <= cursor) {
+            return 3;
+        }
+        if (!IsSpace(*cursor)) {
+            break;
+        }
+        cursor++;
+    }
+    char type = *cursor;
+    do {
+        cursor++;
+    } while (cursor < end && IsSpace(*cursor));
+    if (cursor < end) {
+        if (*cursor != ':') {
+            return 3;
+        }
+        colon = true;
+        do {
+            cursor++;
+        } while (cursor < end && IsSpace(*cursor));
+        if (cursor < end && *cursor == '{') {
+            cursor++;
+            braced = true;
+            if (end <= cursor) {
+                return 3;
+            }
+            while (IsSpace(*cursor)) {
+                cursor++;
+                if (end <= cursor) {
+                    return 3;
+                }
+            }
+        }
+    }
+    if (static_cast<uint8_t>(type - 'A') < 26) {
+        type = static_cast<char>(type + 0x20);
+    }
+    if (type != 'b' || !colon) {
+        return 3;
+    }
+    uint32_t capacity = 0x10;
+    *blocks = AllocateBlocks(capacity);
+    uint32_t total = 0;
+    int32_t index = 0;
+    bool failed = false;
+    while (cursor < end) {
+        int32_t size = 0;
+        int32_t blockCount = 0;
+        char variable = 0;
+        if (!ESpecBlockToken(&cursor, end, &size, &blockCount, &variable)) {
+            failed = true;
+            break;
+        }
+        const char* blockSpec = cursor + 1;
+        total += static_cast<uint32_t>(blockCount * size);
+        cursor = blockSpec;
+        if (variable != 0) {
+            if (variableIndex != -1) {
+                blz::log(g_logCategory, 4, s_eSpecFile, 0x2e7,
+                    "Invalid encoding specifier: multiple variable blocks detected in e-spec '%s'", spec);
+                failed = true;
+                break;
+            }
+            variableIndex = index;
+        }
+        int32_t depth = 0;
+        bool closed = false;
+        while (cursor < end) {
+            char c = *cursor;
+            if (c == '{') {
+                depth++;
+            } else if (c == '}') {
+                depth--;
+                if (depth < 1) {
+                    if (depth == 0) {
+                        cursor++;
+                    }
+                    closed = true;
+                    break;
+                }
+            } else if (c == ',' && depth == 0) {
+                closed = true;
+                break;
+            }
+            cursor++;
+        }
+        if (!closed && depth != 0) {
+            failed = true;
+            break;
+        }
+        ESPECBLOCK* block = &(*blocks)[index];
+        block->m_size = static_cast<uint32_t>(size);
+        block->m_count = static_cast<uint32_t>(blockCount);
+        block->m_spec = blockSpec;
+        block->m_specEnd = cursor;
+        index++;
+        if (static_cast<int32_t>(capacity) <= index) {
+            capacity = GrowBlocks(blocks, capacity);
+        }
+        if (variable != 0 && blockCount == 0) {
+            ESPECBLOCK* remainder = &(*blocks)[index];
+            remainder->m_size = 0;
+            remainder->m_count = 0;
+            remainder->m_spec = nullptr;
+            remainder->m_specEnd = nullptr;
+            index++;
+            if (static_cast<int32_t>(capacity) <= index) {
+                capacity = GrowBlocks(blocks, capacity);
+            }
+        }
+        if (*cursor == '}' || cursor == end) {
+            break;
+        }
+        if (*cursor != ',') {
+            failed = true;
+            break;
+        }
+        cursor++;
+    }
+    if (!failed) {
+        bool finish = braced ? *cursor == '}' : *cursor != '}';
+        if (finish) {
+            *count = index;
+            if (variableIndex == -1) {
+                if (csize == total) {
+                    return 0;
+                }
+                blz::log(g_logCategory, 4, s_eSpecFile, 0x321,
+                    "Invalid encoding specifier: block encoding doesn't match raw size for e-spec '%s'", spec);
+            } else if (total <= csize) {
+                uint32_t remaining = csize - total;
+                ESPECBLOCK* block = &(*blocks)[variableIndex];
+                uint32_t size = block->m_size;
+                if (size != 0) {
+                    ESPECBLOCK* next = &(*blocks)[variableIndex + 1];
+                    block->m_count = remaining / size;
+                    next->m_size = remaining % size;
+                    next->m_count = 1;
+                    next->m_spec = block->m_spec;
+                    next->m_specEnd = block->m_specEnd;
+                    return 0;
+                }
+                block->m_size = remaining;
+                return 0;
+            } else {
+                blz::log(g_logCategory, 4, s_eSpecFile, 0x32a,
+                    "Invalid encoding specifier: variable block encoding doesn't match raw size for e-spec '%s'", spec);
+            }
+        }
+    }
+    PackageFree(GetBufferAllocator(), *blocks);
+    *blocks = nullptr;
+    *count = 0;
+    return 3;
+}
+
+// ref: FUN_1420f9950
+uint8_t ESpecEncodingHeaderSize(const char* spec, uint32_t csize, uint32_t* headerSize) {
+    ESPECBLOCK* blocks = nullptr;
+    int32_t count = 0;
+    uint8_t error = ESpecParseBlocks(csize, spec, spec + std::strlen(spec), &blocks, &count);
+    if (error != 0) {
+        return error;
+    }
+    uint32_t total = 0;
+    for (int32_t i = 0; i < count; i++) {
+        if (blocks[i].m_size != 0) {
+            total += blocks[i].m_count;
+        }
+    }
+    if (total > 0xFFFFFF) {
+        error = 3;
+    } else {
+        error = 0;
+        *headerSize = total * 0x18 + 0xc;
+    }
+    ESpecFreeBlocks(blocks);
+    return error;
+}
+
+}

@@ -60,6 +60,25 @@ bool ESpecNumber(const char** cursor, const char* end, bool* present, int32_t* v
 uint8_t ESpecParseZlib(const char* cursor, const char* end, bool braced, ZLIBSPEC* spec);
 uint8_t ESpecParseBcn(const char* spec, const char* end, int32_t* bcn);
 
+// A block of a "b:{...}" e-spec (0x18): the decoded size of each block, how many, and the
+// sub-spec the blocks are encoded with.
+struct ESPECBLOCK {
+    uint32_t m_size;
+    uint32_t m_count;
+    const char* m_spec;
+    const char* m_specEnd;
+};
+
+// FUN_1420d77a0: one "<size>[K|M][*<count>]=" token.
+bool ESpecBlockToken(const char** cursor, const char* end, int32_t* size, int32_t* count, char* variable);
+// FUN_1420d7e30: a block spec's blocks for a file of `csize` decoded bytes (an array from the
+// buffer allocator, freed with ESpecFreeBlocks).
+uint8_t ESpecParseBlocks(uint32_t csize, const char* spec, const char* end, ESPECBLOCK** blocks, int32_t* count);
+// FUN_1420d7bf0
+void ESpecFreeBlocks(ESPECBLOCK* blocks);
+// FUN_1420f9950: the encoding header size a block spec implies.
+uint8_t ESpecEncodingHeaderSize(const char* spec, uint32_t csize, uint32_t* headerSize);
+
 // Whether data starts with an encoding header ("BLTE"); *error on a malformed one.
 bool CodecIsEncoded(const uint8_t* data, uint32_t size, uint8_t* error);
 
