@@ -43,7 +43,7 @@ int main() {
     root.m_flags |= CLayoutFrame::FLAG_RECT_VALID;
 
     CLayoutFrame child;
-    child.m_layoutState |= CLayoutFrame::LAYOUT_SHOWN;
+    child.m_layoutState |= CLayoutFrame::LAYOUT_VISIBLE;
     child.SetSize(0.2f, 0.1f);
     Check(child.SetPoint(FRAMEPOINT_TOPLEFT, &root, FRAMEPOINT_TOPLEFT, 0.1f, -0.1f, true) == 0, "SetPoint");
     Check(child.IsDependentOn(&root), "anchored to the root");
@@ -51,7 +51,7 @@ int main() {
     CheckRect(&child, 0.1f, 0.4f, 0.3f, 0.5f, "one point and a size");
 
     CLayoutFrame grandchild;
-    grandchild.m_layoutState |= CLayoutFrame::LAYOUT_SHOWN;
+    grandchild.m_layoutState |= CLayoutFrame::LAYOUT_VISIBLE;
     grandchild.SetPoint(FRAMEPOINT_TOPLEFT, &child, FRAMEPOINT_BOTTOMLEFT, 0.0f, 0.0f, true);
     grandchild.SetPoint(FRAMEPOINT_BOTTOMRIGHT, &root, FRAMEPOINT_BOTTOMRIGHT, 0.0f, 0.0f, true);
     CLayoutFrame::ResizePending();
@@ -67,7 +67,7 @@ int main() {
     CheckRect(&grandchild, 0.2f, 0.0f, 0.8f, 0.4f, "dependent followed");
 
     CLayoutFrame filler;
-    filler.m_layoutState |= CLayoutFrame::LAYOUT_SHOWN;
+    filler.m_layoutState |= CLayoutFrame::LAYOUT_VISIBLE;
     Check(filler.SetAllPoints(&child, true) == 0, "SetAllPoints");
     CLayoutFrame::ResizePending();
     CheckRect(&filler, 0.2f, 0.4f, 0.4f, 0.5f, "all points");

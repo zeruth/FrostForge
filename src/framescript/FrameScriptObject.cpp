@@ -168,7 +168,8 @@ struct ScriptMap : blz::pointer_map<ScriptVector, s_scriptMapTag> {
 ScriptMap s_scripts;
 
 // The empty type description (0x1426cd550).
-const FRAMESCRIPT_TYPEINFO s_typeInfo = {};
+// 0x1426cd550: sixteen zero bytes
+const SCRIPTLOCATION s_noLocation[2] = {};
 
 // The pending script error an object's method leaves for its Lua wrapper (0x142cf5390).
 blz::string s_scriptError;
@@ -630,7 +631,8 @@ bool FrameScript_Object::GetScriptData(uint8_t index, FRAMESCRIPT_SCRIPTDATA* da
 }
 
 // ref: FUN_1406429a0
-void FrameScript_Object::GetScriptCPUUsage(lua_State* L, double* time, int32_t* calls) {
+void FrameScript_Object::GetScriptCPUUsage(lua_State* L, double* time, int32_t* calls, bool includeChildren) {
+    (void)includeChildren;
     // FUN_140644aa0
     ForEachScript(this, [&](Script* script) {
         lua_rawgeti(L, LUA_REGISTRYINDEX, script->m_ref);
@@ -646,8 +648,8 @@ void FrameScript_Object::GetScriptCPUUsage(lua_State* L, double* time, int32_t* 
 }
 
 // ref: FUN_140642b20
-const FRAMESCRIPT_TYPEINFO* FrameScript_Object::GetTypeInfo() {
-    return &s_typeInfo;
+const SCRIPTLOCATION* FrameScript_Object::GetScriptLocation() {
+    return s_noLocation;
 }
 
 void FrameScript_Object::SetSourceLocation(const SCRIPTLOCATION* location) {

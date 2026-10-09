@@ -11,6 +11,11 @@
 #include "blz/String.hpp"
 #include "framescript/FrameScriptObject.hpp"
 
+class CAnimatableObject;
+
+// Receives the lines DumpHierarchy writes: the text, its length, the caller's context.
+typedef void (*HIERARCHYDUMPFUNC)(const char* text, int32_t length, void* context);
+
 class CScriptObject : public FrameScript_Object {
     public:
     // Where object names are kept (0x142e99c30); cleared when the UI root goes.
@@ -30,9 +35,11 @@ class CScriptObject : public FrameScript_Object {
     virtual CScriptObject* GetParent() = 0;
     // The object a dotted path ("$parent.Child.key") leads to from this one.
     virtual CScriptObject* GetObjectByPath(const char* path);
-    virtual void* Unknown88();
-    virtual void Unknown90();
-    virtual void Unknown98();
+    // The animation host of the object, if it can animate.
+    virtual CAnimatableObject* GetAnimatableObject();
+    // Writes a line for the object (indented by `indent` dots) and each object under it.
+    virtual void DumpHierarchy(uint32_t indent, HIERARCHYDUMPFUNC dump, void* context);
+    virtual void Unknown98(void* argument);
 
     // This class's type id (0x142e97a9c).
     static int32_t GetObjectType();

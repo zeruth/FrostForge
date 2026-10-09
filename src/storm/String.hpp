@@ -12,7 +12,7 @@
 void SStrTokenize(const char** string, char* buffer, uint64_t bufferchars, const char* whitespace, int32_t* quoted);
 
 // printf into a fixed buffer through Storm's own formatter.
-void SStrPrintf(char* dest, uint64_t maxchars, const char* format, ...);
+uint64_t SStrPrintf(char* dest, uint64_t maxchars, const char* format, ...);
 
 void SStrVPrintf(char* dest, uint64_t maxchars, const char* format, va_list args);
 

@@ -8,11 +8,14 @@
 
 #include <cstdint>
 
+#include "blz/ChainedHash.hpp"
 #include "blz/RbTree.hpp"
 #include "blz/Vector.hpp"
 #include "storm/list/TSList.hpp"
 #include "ui/CLayoutFrame.hpp"
 
+class CAnimatableObject;
+class CRenderBatch;
 class CScriptRegion;
 class CSimpleFrame;
 class FrameScript_Object;
@@ -40,13 +43,7 @@ struct DEFERREDINPUTEVENTCHANGE {
 static_assert(sizeof(DEFERREDINPUTEVENTCHANGE) == 0x10, "a deferred input change is 0x10 bytes");
 
 // blz's chained hash table header (count of buckets, buckets, size, load limit).
-struct CHAINEDHASH {
-    uint64_t m_bucketCount = 8;
-    void** m_buckets = nullptr;
-    uint64_t m_size = 0;
-    float m_maxLoad = 1.0f;
-};
-static_assert(sizeof(CHAINEDHASH) == 0x20, "a chained hash table is 0x20 bytes");
+typedef blz::chained_hash_header CHAINEDHASH;
 
 // blz::map's header (0x28): a node whose parent is the root, left the leftmost node and right
 // the rightmost, then the size.
@@ -56,8 +53,35 @@ struct RBTREEHEADER : blz::rb_node_base {
 static_assert(sizeof(RBTREEHEADER) == 0x28, "a blz::map header is 0x28 bytes");
 
 extern const char s_regionVectorTag[];
+extern const char s_deferredScriptTag[];
 extern const char s_frameVectorTag[];
 extern const char s_deferredInputTag[];
+
+// A script queued to run when the current batch of shows and hides is over (0x10).
+struct DEFERREDSCRIPT {
+    FrameScript_Object* m_object;
+    uint8_t m_index;
+};
+
+// DeferredScriptBuffer (0x38): while a scope is open, OnShow and OnHide wait in the queue; when
+// the last scope closes they run, round after round, until no more are queued (twelve
+// rounds at most).
+class DeferredScriptBuffer {
+    public:
+    int32_t m_depth = 0;                                                // 0x00
+    blz::vector<DEFERREDSCRIPT, s_deferredScriptTag> m_running;         // 0x08
+    blz::vector<DEFERREDSCRIPT, s_deferredScriptTag> m_queued;          // 0x20
+
+    // ref: FUN_140317cb0
+    void Begin() {
+        this->m_depth++;
+    }
+    void End();
+    // Runs the script now when no scope is open, otherwise queues it.
+    void Add(FrameScript_Object* object, uint8_t index);
+    void Flush();
+};
+static_assert(sizeof(DeferredScriptBuffer) == 0x38, "DeferredScriptBuffer is 0x38 bytes");
 
 class CSimpleTop : public CLayoutFrame {
     public:
@@ -69,7 +93,7 @@ class CSimpleTop : public CLayoutFrame {
     int32_t m_dragCorner;                                               // 0x1b4
     float m_dragX;                                                      // 0x1b8
     float m_dragY;                                                      // 0x1bc
-    int32_t m_unknown1C0;                                               // 0x1c0
+    int32_t m_raiseCounter;                                             // 0x1c0 the last raise order handed out
     uint8_t m_strataDirty;                                              // 0x1c4
     uint8_t m_renderBatch[0x68];                                        // 0x1c8 CRenderBatch
     CHAINEDHASH m_frameBatches;                                         // 0x230 CSimpleFrame* -> CRenderBatch*
@@ -108,9 +132,10 @@ class CSimpleTop : public CLayoutFrame {
     uint8_t m_inMouseScript;                                            // 0xf62
     uint8_t m_inputSuspended;                                           // 0xf63
     uint8_t m_resizing;                                                 // 0xf64
-    void (*m_frameCreatedHook)(CSimpleFrame* frame);                    // 0xf68
+    // Called with a protected frame that tainted code tried to change.
+    void (*m_actionBlockedHook)(CSimpleFrame* frame);                   // 0xf68
     void (*m_preUpdateHook)();                                          // 0xf70
-    uint8_t m_deferredScripts[0x38];                                    // 0xf78 DeferredScriptBuffer
+    DeferredScriptBuffer m_deferredScripts;                             // 0xf78
     TSList<CSimpleFrame, TSGetLink<CSimpleFrame>, 8> m_rootFrames;      // 0xfb0 linked through +0x200
     TSList<CSimpleFrame, TSGetLink<CSimpleFrame>, 8> m_updateFrames;    // 0xfc8 linked through +0x1f0
     CHAINEDHASH m_animating;                                            // 0xfe0 CAnimatableObject*
@@ -147,6 +172,32 @@ class CSimpleTop : public CLayoutFrame {
     void AddUpdateCheck(CSimpleFrame* frame);
     void AddShownChange(CSimpleFrame* frame);
     void AddPendingBatchUpdate(CSimpleFrame* frame);
+    void AddHiddenChange(CSimpleFrame* frame);
+    // A frame is being destroyed: it leaves the root lists and the drag.
+    void RemoveFrame(CSimpleFrame* frame);
+    void OnFrameSizeChanged(CSimpleFrame* frame);
+
+    // The batches of frames that draw into their own.
+    CRenderBatch* GetFrameBatch(CSimpleFrame* frame);
+    CRenderBatch* FindFrameBatch(CSimpleFrame* frame);
+    void RemoveFrameBatch(CSimpleFrame* frame);
+
+    // The objects with animations playing.
+    void AddAnimating(CAnimatableObject* object);
+    void RemoveAnimating(CAnimatableObject* object);
+
+    // Dragging a frame to move or size it.
+    bool StartDrag(CSimpleFrame* frame, int32_t type, float x, float y, int32_t corner);
+    void StopDrag();
+
+    // The regions the mouse buttons went down on.
+    bool IsInButtonCapture(CScriptRegion* region);
+    bool IsAnyButtonCaptured();
+    bool AddButtonCapture(CScriptRegion* region);
+    bool ReleaseButtonCapture(CScriptRegion* region);
+    // Whether `b` draws above `a`.
+    bool IsRegionAbove(CScriptRegion* a, CScriptRegion* b);
+    void UpdateMouseFocus(MOUSEEVENT* event);
 };
 
 #endif

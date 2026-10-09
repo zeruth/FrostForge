@@ -1555,11 +1555,12 @@ int32_t SStrVSnprintf(char* dest, uint64_t size, const char* format, va_list arg
 }
 
 // ref: FUN_1402534b0
-void SStrPrintf(char* dest, uint64_t maxchars, const char* format, ...) {
+uint64_t SStrPrintf(char* dest, uint64_t maxchars, const char* format, ...) {
     va_list args;
     va_start(args, format);
-    SStrVPrintfCount(dest, maxchars, format, args);
+    uint64_t count = SStrVPrintfCount(dest, maxchars, format, args);
     va_end(args);
+    return count;
 }
 
 // A fixed 64-byte destination; the call site's buffer is a char[64].

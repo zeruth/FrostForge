@@ -1,5 +1,6 @@
 #include "ui/FrameXML.hpp"
 
+#include <cstdarg>
 #include <cstddef>
 #include <cstring>
 
@@ -15,6 +16,7 @@
 #include "ui/CLayoutFrame.hpp"
 #include "ui/CScriptObject.hpp"
 #include "ui/CSimpleFont.hpp"
+#include "ui/CSimpleFrame.hpp"
 #include "ui/XMLTree.hpp"
 #include "util/Unimplemented.hpp"
 
@@ -24,6 +26,15 @@ extern "C" {
 }
 
 namespace {
+
+// The bounded copy the reference inlines: at most size - 1 characters, always terminated.
+void CopyBounded(char* dest, const char* source, uint64_t size) {
+    uint64_t i = 0;
+    for (; i + 1 < size && source[i] != '\0'; i++) {
+        dest[i] = source[i];
+    }
+    dest[i] = '\0';
+}
 
 // HASHKEY_STRI: an owned copy of the name, compared case-insensitively.
 struct FrameFactoryNode : TSHashObject<FrameFactoryNode> {
@@ -220,9 +231,7 @@ CSimpleFrame* CreateEditBox(CSimpleFrame* parent) {
 
 // ref: FUN_140661fe0
 CSimpleFrame* CreateFrame(CSimpleFrame* parent) {
-    (void)parent;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    return new CSimpleFrame(parent);
 }
 
 // ref: FUN_140662080
@@ -372,6 +381,17 @@ bool FrameXML_GetLocalFiles() {
 // ref: FUN_140667570
 void XMLStatusSetLocation(CScriptStatus* status, XMLOBJECT* object) {
     status->m_location = object->m_location;
+}
+
+// ref: FUN_140667500
+void XMLStatusAddAt(CScriptStatus* status, XMLOBJECT* object, int32_t severity, const char* format, ...) {
+    SCRIPTLOCATION saved = status->m_location;
+    status->m_location = object->m_location;
+    va_list args;
+    va_start(args, format);
+    status->AddV(severity, format, args);
+    va_end(args);
+    status->m_location = saved;
 }
 
 // ref: FUN_140667580
@@ -949,14 +969,133 @@ bool FrameXML_LoadToc(const char* toc, const char* arg, CScriptStatus* status, b
 
 // ---- frames -----------------------------------------------------------------------------
 
-// Creates the frame a definition describes, under `parent` (or the parent it names).
+// Creates the frame a definition describes, under `parent` (or the parent it names). An
+// element named after an intrinsic is made by the factory of the type the intrinsic is, and
+// loads the intrinsic first.
 // ref: FUN_140662c30
 CSimpleFrame* FrameXML_CreateFrame(XMLOBJECT* object, CSimpleFrame* parent, CScriptStatus* status) {
+    if (s_debugLevel > 0) {
+        if (!(object->m_attributes & 0x40)) {
+            status->Add(0, "-- Creating unnamed %s", object->m_tag.m_text);
+        } else {
+            status->Add(0, "-- Creating %s named %s", object->m_tag.m_text, object->m_name.m_text);
+        }
+    }
+    const char* intrinsic = nullptr;
+    FrameFactoryNode* factory = s_factories.Find(object->m_tag.m_text);
+    if (factory == nullptr) {
+        char name[0x80];
+        CopyBounded(name, object->m_tag.m_text, sizeof(name));
+        const char* taint = nullptr;
+        bool recursive = false;
+        XMLOBJECT* found = FrameXML_AcquireIntrinsic(name, &taint, &recursive);
+        if (found != nullptr) {
+            if (!recursive) {
+                factory = s_factories.Find(found->m_tag.m_text);
+                intrinsic = object->m_tag.m_text;
+                if (factory != nullptr) {
+                    FrameXML_ReleaseIntrinsic(name);
+                }
+            } else {
+                status->Add(1, "Multiply inherited intrinsic node: %s", object->m_tag.m_text);
+            }
+        }
+        if (factory == nullptr) {
+            status->Add(1, "Unknown frame type: %s", object->m_tag.m_text);
+            if (found != nullptr && !recursive) {
+                FrameXML_ReleaseIntrinsic(name);
+            }
+            return nullptr;
+        }
+    }
+    if (!(object->m_flags & 0x100)) {
+        return nullptr;
+    }
+    const char* parentName = FrameXML_GetInheritedParent(object);
+    if (parentName != nullptr && *parentName != '\0') {
+        bool lockdown = (s_scopedState >> 3) & 1;
+        lua_State* L = FrameScript_GetContext();
+        lua_pushstring(L, parentName);
+        lua_rawget(L, LUA_GLOBALSINDEX);
+        parent = static_cast<CSimpleFrame*>(
+            FrameScript_Object::GetObjectFromLua(nullptr, L, CSimpleFrame::GetObjectType(), -1, false, lockdown));
+        lua_settop(L, -2);
+        if (parent == nullptr) {
+            status->Add(1, "Couldn't find frame parent: %s", parentName);
+        }
+    }
+    CSimpleFrame* frame = factory->m_factory(parent);
+    if (frame == nullptr) {
+        status->Add(1, "Unable to create frame type: %s", object->m_tag.m_text);
+        return nullptr;
+    }
+    if (factory->m_unknown) {
+        // a one-shot factory goes once it has made its frame
+        s_factories.Unlink(factory);
+        s_factories.Delete(factory);
+    }
+    frame->LoadXMLName(object, status);
+    frame->FrameScript_Object::LoadXML(object, status, intrinsic);
+    frame->LoadXML(object, status, intrinsic);
+    frame->PostLoadXML(object, status);
+    return frame;
+}
+
+// ---- regions, animations and references --------------------------------------------------------
+// Their classes (CSimpleFontString, CSimpleTexture, CSimpleMaskTexture, CSimpleLine,
+// CSimpleAnimGroup) are not ported yet.
+
+// ref: FUN_1406685c0
+CSimpleRegion* FrameXML_CreateFontString(XMLOBJECT* object, CSimpleFrame* frame, CScriptStatus* status) {
     (void)object;
-    (void)parent;
+    (void)frame;
     (void)status;
     FROST_UNIMPLEMENTED();
     return nullptr;
+}
+
+// ref: FUN_140668680
+CSimpleRegion* FrameXML_CreateTexture(XMLOBJECT* object, CSimpleFrame* frame, CScriptStatus* status) {
+    (void)object;
+    (void)frame;
+    (void)status;
+    FROST_UNIMPLEMENTED();
+    return nullptr;
+}
+
+// ref: FUN_140667f50
+CSimpleRegion* FrameXML_CreateMaskTexture(XMLOBJECT* object, CSimpleFrame* frame, CScriptStatus* status) {
+    (void)object;
+    (void)frame;
+    (void)status;
+    FROST_UNIMPLEMENTED();
+    return nullptr;
+}
+
+// ref: FUN_140667e90
+CSimpleRegion* FrameXML_CreateLine(XMLOBJECT* object, CSimpleFrame* frame, CScriptStatus* status) {
+    (void)object;
+    (void)frame;
+    (void)status;
+    FROST_UNIMPLEMENTED();
+    return nullptr;
+}
+
+// ref: FUN_140667a30
+void FrameXML_CreateAnimGroup(XMLOBJECT* object, CScriptRegion* owner, CStatus* status) {
+    (void)object;
+    (void)owner;
+    (void)status;
+    FROST_UNIMPLEMENTED();
+}
+
+// The map of secure reference keys (0x142cf58d8) hashes blz strings with a hash not ported
+// yet (FUN_142363ca0).
+// ref: FUN_140667010
+void FrameXML_SetSecureReferenceKey(const char* key, FrameScript_Object* object) {
+    (void)key;
+    (void)object;
+    FROST_UNIMPLEMENTED();
 }
 
 // ref: FUN_140662af0

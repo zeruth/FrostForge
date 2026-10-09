@@ -89,10 +89,11 @@ class CLayoutFrame {
         FLAG_ANCHOR_ROOT = 0x400,
     };
 
-    // m_layoutState: bit 2 shown (set by the frame), then the recursion guards of the edge
-    // calculations.
+    // m_layoutState: 1 shown (the region's own setting), 2 visible (shown with every
+    // ancestor), then the recursion guards of the edge calculations.
     enum : uint32_t {
-        LAYOUT_SHOWN = 0x2,
+        LAYOUT_SHOWN = 0x1,
+        LAYOUT_VISIBLE = 0x2,
         GUARD_LEFT = 0x4,
         GUARD_TOP = 0x8,
         GUARD_RIGHT = 0x10,
@@ -146,8 +147,9 @@ class CLayoutFrame {
     virtual CLayoutFrame* GetRelativeByName(const char* name, CLayoutFrame* self);
     virtual bool IsLayoutReady();
     virtual void OnLayoutReady();
-    virtual void UnknownC0();
-    virtual void UnknownC8();
+    // Makes the region hidden or visible as its shown setting and its parent now allow.
+    virtual void ApplyHide();
+    virtual void ApplyShow();
     virtual void OnLayoutDepthChanged();
     virtual void OnFrameSizeChanged(const CRect* rect, const CRect* previous);
     virtual void ClearAnimTransform();

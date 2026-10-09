@@ -7,6 +7,8 @@
 #include <cstdint>
 
 class CSimpleFrame;
+class CStatus;
+class FrameScript_Object;
 
 // Creates a frame of one type under `parent`.
 typedef CSimpleFrame* (*FRAMEFACTORY)(CSimpleFrame* parent);
@@ -57,7 +59,23 @@ void FrameXML_AddScopedMask(uint32_t mask);
 void FrameXML_ClearScopedMask();
 
 void XMLStatusSetLocation(CScriptStatus* status, XMLOBJECT* object);
+// Adds a message reported against an element's position.
+void XMLStatusAddAt(CScriptStatus* status, XMLOBJECT* object, int32_t severity, const char* format, ...);
 void XMLStatusRestoreLocation(CScriptStatus* status, const SCRIPTLOCATION* location);
+
+// ---- regions, animations and references ----------------------------------------------------
+
+class CSimpleRegion;
+class CScriptRegion;
+// The regions a <Layer> holds, created under `frame` from their elements.
+CSimpleRegion* FrameXML_CreateFontString(XMLOBJECT* object, CSimpleFrame* frame, CScriptStatus* status);
+CSimpleRegion* FrameXML_CreateTexture(XMLOBJECT* object, CSimpleFrame* frame, CScriptStatus* status);
+CSimpleRegion* FrameXML_CreateMaskTexture(XMLOBJECT* object, CSimpleFrame* frame, CScriptStatus* status);
+CSimpleRegion* FrameXML_CreateLine(XMLOBJECT* object, CSimpleFrame* frame, CScriptStatus* status);
+// An <AnimationGroup> created on an object.
+void FrameXML_CreateAnimGroup(XMLOBJECT* object, CScriptRegion* owner, CStatus* status);
+// Records the frame under a secureReferenceKey.
+void FrameXML_SetSecureReferenceKey(const char* key, FrameScript_Object* object);
 
 // ---- mixins and key values -------------------------------------------------------------
 

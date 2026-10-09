@@ -8,6 +8,8 @@
 #include "blz/RbTree.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
+#include "ui/CAnimatableObject.hpp"
+#include "ui/CRenderBatch.hpp"
 #include "ui/CScriptRegion.hpp"
 #include "ui/CSimpleFrame.hpp"
 #include "util/Unimplemented.hpp"
@@ -15,6 +17,7 @@
 const char s_regionVectorTag[] = ".PEAVCScriptRegion@@";
 const char s_frameVectorTag[] = ".PEAVCSimpleFrame@@";
 const char s_deferredInputTag[] = ".?AUDeferredInputEventChange@CSimpleTop@@";
+const char s_deferredScriptTag[] = ".?AUBasicDeferredScript@DeferredScriptBuffer@@";
 
 CSimpleTop* CSimpleTop::s_instance;
 
@@ -114,6 +117,24 @@ struct REGIONINTNODE {
     int32_t m_value;
 };
 
+const char s_batchNodeTag[] = ".?AU?$chained_hash_node@U?$pair@QEAVCSimpleFrame@@PEAVCRenderBatch@@@blz@@@blz@@";
+const char s_batchBucketTag[] = ".PEAU?$chained_hash_node@U?$pair@QEAVCSimpleFrame@@PEAVCRenderBatch@@@blz@@@blz@@";
+const char s_animNodeTag[] = ".?AU?$chained_hash_node@PEAVCAnimatableObject@@@blz@@";
+const char s_animBucketTag[] = ".PEAU?$chained_hash_node@PEAVCAnimatableObject@@@blz@@";
+
+// blz::chained_hash_node<pair<CSimpleFrame* const, CRenderBatch*>> (0x18).
+struct BATCHNODE {
+    BATCHNODE* m_next;
+    CSimpleFrame* m_key;
+    CRenderBatch* m_value;
+};
+
+// blz::chained_hash_node<CAnimatableObject*> (0x10).
+struct ANIMNODE {
+    ANIMNODE* m_next;
+    CAnimatableObject* m_key;
+};
+
 }
 
 // ref: FUN_1405ebe10
@@ -123,7 +144,7 @@ CSimpleTop::CSimpleTop(void (*preUpdate)()) {
     this->m_dragCorner = 0;
     this->m_dragX = 0.0f;
     this->m_dragY = 0.0f;
-    this->m_unknown1C0 = 1;
+    this->m_raiseCounter = 1;
     this->m_strataDirty = 0;
     // FUN_14061dce0: the root CRenderBatch (not ported yet)
     std::memset(this->m_renderBatch, 0, sizeof(this->m_renderBatch));
@@ -159,9 +180,8 @@ CSimpleTop::CSimpleTop(void (*preUpdate)()) {
     this->m_inMouseScript = 0;
     this->m_inputSuspended = 0;
     this->m_resizing = 0;
-    this->m_frameCreatedHook = nullptr;
+    this->m_actionBlockedHook = nullptr;
     this->m_preUpdateHook = preUpdate;
-    std::memset(this->m_deferredScripts, 0, sizeof(this->m_deferredScripts));
     this->m_rootFrames.m_linkoffset = 0x200;
     this->m_updateFrames.m_linkoffset = 0x1f0;
     this->m_animating = CHAINEDHASH();
@@ -300,7 +320,7 @@ void CSimpleTop::ApplyDeferredInputChanges() {
             continue;
         }
         CScriptRegion* region = change.m_region;
-        if (!(region->m_layoutState & CLayoutFrame::LAYOUT_SHOWN)) {
+        if (!(region->m_layoutState & CLayoutFrame::LAYOUT_VISIBLE)) {
             continue;
         }
         int32_t type = change.m_type;
@@ -360,10 +380,7 @@ void CSimpleTop::RemoveRegionInput(CScriptRegion* region, bool quiet) {
 
 // ref: FUN_1405f35e0
 void CSimpleTop::QueueScript(FrameScript_Object* object, int32_t index) {
-    // FUN_140621e70: DeferredScriptBuffer::Add (not ported yet)
-    (void)object;
-    (void)index;
-    FROST_UNIMPLEMENTED();
+    this->m_deferredScripts.Add(object, static_cast<uint8_t>(index));
 }
 
 // ref: FUN_1405ee940
@@ -384,7 +401,7 @@ int32_t CSimpleTop::GetRegionLayoutVersion(CScriptRegion* region) {
 // ref: FUN_1405f3080
 void CSimpleTop::AddRootFrame(CSimpleFrame* frame) {
     TSLink<CSimpleFrame>* link = this->m_rootFrames.Link(frame);
-    if (frame->m_layoutState & CLayoutFrame::LAYOUT_SHOWN) {
+    if (frame->m_layoutState & CLayoutFrame::LAYOUT_VISIBLE) {
         // FUN_1405efaa0
         link->Unlink();
         TSLink<CSimpleFrame>* terminator = &this->m_rootFrames.m_terminator;
@@ -425,4 +442,246 @@ void CSimpleTop::AddShownChange(CSimpleFrame* frame) {
 // ref: FUN_1406143e0
 void CSimpleTop::AddPendingBatchUpdate(CSimpleFrame* frame) {
     this->m_batchUpdates.push_back(frame);
+}
+
+// A frame was hidden: it leaves the drag and its input, and the root list is reordered next
+// update.
+// ref: FUN_1405eee20
+void CSimpleTop::AddHiddenChange(CSimpleFrame* frame) {
+    this->m_shownChanges.push_back(frame);
+    this->m_shownRootCount--;
+    if (this->m_dragFrame == frame) {
+        if (frame != nullptr) {
+            frame->SnapToNearestAnchor(this);
+        }
+        this->m_dragFrame = nullptr;
+        this->m_dragType = 0;
+    }
+    frame->UnregisterEnabledInput(frame->HasInputFlags(CScriptRegion::REGION_PROPAGATE_MOUSE));
+}
+
+// ref: FUN_1405f40c0
+void CSimpleTop::RemoveFrame(CSimpleFrame* frame) {
+    if (frame->m_layoutState & CLayoutFrame::LAYOUT_VISIBLE) {
+        this->m_shownRootCount--;
+        if (this->m_dragFrame == frame) {
+            frame->SnapToNearestAnchor(this);
+            this->m_dragFrame = nullptr;
+            this->m_dragType = 0;
+        }
+    }
+    for (CSimpleFrame*& changed : this->m_shownChanges) {
+        if (changed == frame) {
+            changed = nullptr;
+        }
+    }
+    this->m_rootFrames.Link(frame)->Unlink();
+    if (frame->m_updateLink.IsLinked()) {
+        this->m_updateFrames.Link(frame)->Unlink();
+    }
+}
+
+// The frame being dragged follows a resize: it is raised, and the mouse focus refreshed.
+// ref: FUN_1405efc10
+void CSimpleTop::OnFrameSizeChanged(CSimpleFrame* frame) {
+    (void)frame;
+    if (this->m_dragFrame != nullptr) {
+        this->m_dragFrame->Raise();
+    }
+    this->m_mouseFocusDirty = 1;
+}
+
+// ref: FUN_1405ee830
+CRenderBatch* CSimpleTop::GetFrameBatch(CSimpleFrame* frame) {
+    BATCHNODE* node = blz::chained_find<BATCHNODE>(&this->m_frameBatches, frame);
+    if (node != nullptr) {
+        return node->m_value;
+    }
+    CRenderBatch* batch = new CRenderBatch();
+    bool inserted;
+    // FUN_1405ebb30
+    node = blz::chained_insert<BATCHNODE>(&this->m_frameBatches, frame, &inserted, s_batchNodeTag, s_batchBucketTag);
+    node->m_value = batch;
+    return batch;
+}
+
+// ref: FUN_1405ee9d0
+CRenderBatch* CSimpleTop::FindFrameBatch(CSimpleFrame* frame) {
+    BATCHNODE* node = blz::chained_find<BATCHNODE>(&this->m_frameBatches, frame);
+    return node != nullptr ? node->m_value : nullptr;
+}
+
+// ref: FUN_1405ee300
+void CSimpleTop::RemoveFrameBatch(CSimpleFrame* frame) {
+    BATCHNODE* node = blz::chained_find<BATCHNODE>(&this->m_frameBatches, frame);
+    if (node == nullptr) {
+        return;
+    }
+    CRenderBatch* batch = node->m_value;
+    batch->Clear();
+    if (batch != nullptr) {
+        delete batch;
+    }
+    node = blz::chained_unlink<BATCHNODE>(&this->m_frameBatches, frame);
+    blz::chained_free_node(node, s_batchNodeTag);
+}
+
+// ref: FUN_1405ed9f0
+void CSimpleTop::AddAnimating(CAnimatableObject* object) {
+    bool inserted;
+    // FUN_1405eb740
+    blz::chained_insert<ANIMNODE>(&this->m_animating, object, &inserted, s_animNodeTag, s_animBucketTag);
+}
+
+// ref: FUN_1405f3120
+void CSimpleTop::RemoveAnimating(CAnimatableObject* object) {
+    ANIMNODE* node = blz::chained_unlink<ANIMNODE>(&this->m_animating, object);
+    if (node != nullptr) {
+        blz::chained_free_node(node, s_animNodeTag);
+    }
+}
+
+// The frame takes the drag (it is raised and marked user placed) when it can be sized from
+// where it is.
+// ref: FUN_1405f3b30
+bool CSimpleTop::StartDrag(CSimpleFrame* frame, int32_t type, float x, float y, int32_t corner) {
+    if (!frame->ApplyDragSize(this, 0.0f, 0.0f, 0.0f, 0.0f)) {
+        return false;
+    }
+    frame->Raise();
+    frame->SetUserPlaced(true);
+    this->m_dragY = y;
+    this->m_dragX = x;
+    this->m_dragFrame = frame;
+    this->m_dragType = type;
+    this->m_dragCorner = corner;
+    this->UpdateMouseFocus(&CSimpleTop::s_instance->m_mouseEvent);
+    return true;
+}
+
+// ref: FUN_1405f3bf0
+void CSimpleTop::StopDrag() {
+    if (this->m_dragFrame != nullptr) {
+        this->m_dragFrame->SnapToNearestAnchor(this);
+    }
+    this->m_dragType = 0;
+    this->m_dragFrame = nullptr;
+}
+
+// ref: FUN_1405ef500
+bool CSimpleTop::IsInButtonCapture(CScriptRegion* region) {
+    bool found = false;
+    ForEachButton(&this->m_buttonFocus, [&](int32_t, blz::vector<CScriptRegion*, s_regionVectorTag>* regions) {
+        for (CScriptRegion* captured : *regions) {
+            if (captured == region) {
+                found = true;
+            }
+        }
+    });
+    return found;
+}
+
+// ref: FUN_1405eed90
+bool CSimpleTop::IsAnyButtonCaptured() {
+    bool any = false;
+    ForEachButton(&this->m_buttonFocus, [&](int32_t, blz::vector<CScriptRegion*, s_regionVectorTag>* regions) {
+        if (regions->size() != 0) {
+            any = true;
+        }
+    });
+    return any;
+}
+
+// The region joins every button capture in progress.
+// ref: FUN_1405edbf0
+bool CSimpleTop::AddButtonCapture(CScriptRegion* region) {
+    if (region == nullptr || this->IsInButtonCapture(region) || !this->IsAnyButtonCaptured()) {
+        return false;
+    }
+    ForEachButton(&this->m_buttonFocus, [&](int32_t, blz::vector<CScriptRegion*, s_regionVectorTag>* regions) {
+        if (regions->size() != 0) {
+            regions->push_back(region);
+        }
+    });
+    return true;
+}
+
+// ref: FUN_1405f31f0
+bool CSimpleTop::ReleaseButtonCapture(CScriptRegion* region) {
+    if (region == nullptr || !this->IsInButtonCapture(region)) {
+        return false;
+    }
+    ForEachButton(&this->m_buttonFocus, [&](int32_t, blz::vector<CScriptRegion*, s_regionVectorTag>* regions) {
+        for (uint64_t i = 0; i < regions->size(); i++) {
+            if ((*regions)[i] == region) {
+                regions->erase(i, i + 1);
+                break;
+            }
+        }
+    });
+    return true;
+}
+
+// ref: FUN_1405ef5b0
+bool CSimpleTop::IsRegionAbove(CScriptRegion* a, CScriptRegion* b) {
+    (void)a;
+    (void)b;
+    FROST_UNIMPLEMENTED();
+    return false;
+}
+
+// ref: FUN_1405efb80
+void CSimpleTop::UpdateMouseFocus(MOUSEEVENT* event) {
+    (void)event;
+    FROST_UNIMPLEMENTED();
+}
+
+// ---- DeferredScriptBuffer -------------------------------------------------------------------
+
+// ref: FUN_140621e70
+void DeferredScriptBuffer::Add(FrameScript_Object* object, uint8_t index) {
+    if (this->m_depth < 1) {
+        // FUN_140603620
+        object->RunScript(index, nullptr);
+        return;
+    }
+    DEFERREDSCRIPT script;
+    script.m_object = object;
+    script.m_index = index;
+    this->m_queued.push_back(script);
+}
+
+// ref: FUN_140621e50
+void DeferredScriptBuffer::End() {
+    if (this->m_depth < 1) {
+        return;
+    }
+    this->m_depth--;
+    if (this->m_depth != 0) {
+        return;
+    }
+    this->Flush();
+}
+
+// The queue moves to the running list and runs; scripts it queues run in the next round.
+// ref: FUN_140622020
+void DeferredScriptBuffer::Flush() {
+    if (this->m_running.size() != 0) {
+        return;
+    }
+    uint32_t rounds = 0;
+    do {
+        // FUN_1406221c0: the two vectors are swapped
+        this->m_running.swap(this->m_queued);
+        for (uint64_t i = 0; i < this->m_running.size(); i++) {
+            DEFERREDSCRIPT& script = this->m_running[i];
+            script.m_object->RunScript(script.m_index, nullptr);
+        }
+        rounds++;
+        this->m_running.clear();
+        if (this->m_queued.size() == 0) {
+            return;
+        }
+    } while (rounds < 12);
+    this->m_queued.clear();
 }

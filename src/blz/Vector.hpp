@@ -160,6 +160,20 @@ class vector {
         this->pop_back();
     }
 
+    // Exchanges the contents (both must own heap storage or none, as the reference's
+    // swaps of plain vectors do).
+    void swap(vector& other) {
+        T* data = this->m_data;
+        this->m_data = other.m_data;
+        other.m_data = data;
+        uint64_t size = this->m_size;
+        this->m_size = other.m_size;
+        other.m_size = size;
+        uint64_t capacity = this->m_capacity;
+        this->m_capacity = other.m_capacity;
+        other.m_capacity = capacity;
+    }
+
     protected:
     void release_storage() {
         if ((this->m_capacity & VECTOR_NOT_OWNED) == 0 && this->m_data != nullptr) {

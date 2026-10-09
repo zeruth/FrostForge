@@ -92,7 +92,7 @@ void CScriptRegion::OnProtected() {
     this->CLayoutFrame::ProtectDependents();
     // The reference walks the object list slot 0x88 returns and protects each entry; no
     // region class ported so far returns one.
-    if (this->Unknown88() != nullptr) {
+    if (this->GetAnimatableObject() != nullptr) {
         FROST_UNIMPLEMENTED();
     }
 }
@@ -117,6 +117,11 @@ uint32_t CScriptRegion::GetObjectSize() {
     return 0x1d8;
 }
 
+// ref: FUN_14060e2e0
+const SCRIPTLOCATION* CScriptRegion::GetScriptLocation() {
+    return &this->m_location;
+}
+
 // ref: FUN_14060e2f0
 void CScriptRegion::GetSourceLocation(blz::string_header* text) {
     ScriptLocationToString(&this->m_location, text);
@@ -130,7 +135,8 @@ CScriptObject* CScriptRegion::GetParent() {
 // The region half of an element: size, anchors (or setAllPoints), parentKey, parentArray, the
 // mouse settings, the pass-through buttons and protection.
 // ref: FUN_14060e7c0
-void CScriptRegion::LoadXML(XMLOBJECT* node, CStatus* status) {
+void CScriptRegion::LoadXML(XMLOBJECT* node, CStatus* status, const char* intrinsic) {
+    (void)intrinsic;
     auto region = static_cast<XMLREGION*>(node);
     this->PreLoadXML(node, status);
     XMLOBJECT* size = XMLObjectFindChild(node, XMLTYPE_SIZE);
@@ -233,7 +239,7 @@ void CScriptRegion::PostLoadXML(XMLOBJECT* node, CStatus* status) {
         }
     }
     this->RunOnLoad();
-    if ((this->m_layoutState & LAYOUT_SHOWN) && !(this->FrameScript_Object::m_flags & 0x10) && this->HasScriptAny(12)) {
+    if ((this->m_layoutState & LAYOUT_VISIBLE) && !(this->FrameScript_Object::m_flags & 0x10) && this->HasScriptAny(12)) {
         CSimpleTop::s_instance->QueueScript(this, 12);
     }
 }
@@ -255,13 +261,14 @@ void CScriptRegion::SetParentArg(PARENTARG* parent) {
     parent->m_set = false;
 }
 
-void CScriptRegion::UnknownC0() {
+void CScriptRegion::Hide() {
 }
 
-void CScriptRegion::UnknownC8() {
+void CScriptRegion::Show() {
 }
 
-void CScriptRegion::UnknownD0() {
+void CScriptRegion::SetShown(bool shown) {
+    (void)shown;
 }
 
 // ref: FUN_14060e130
@@ -270,19 +277,20 @@ uint8_t CScriptRegion::GetEffectiveAlpha() {
 }
 
 // ref: FUN_14060e530
-bool CScriptRegion::UnknownF0() {
+bool CScriptRegion::IsDragging() {
     CScriptRegion* parent = static_cast<CScriptRegion*>(this->m_parent);
-    return parent != nullptr && parent->UnknownF0();
+    return parent != nullptr && parent->IsDragging();
 }
 
-bool CScriptRegion::UnknownF8() {
+bool CScriptRegion::OnMouseMove(MOUSEEVENT* event) {
+    (void)event;
     return false;
 }
 
 // ref: FUN_14060e150
-void* CScriptRegion::Unknown100() {
+uint64_t CScriptRegion::GetDrawOrderKey(int32_t layer, int32_t subLevel) {
     CScriptRegion* parent = static_cast<CScriptRegion*>(this->m_parent);
-    return parent != nullptr ? parent->Unknown100() : nullptr;
+    return parent != nullptr ? parent->GetDrawOrderKey(layer, subLevel) : 0;
 }
 
 // ref: FUN_14060e450
@@ -292,12 +300,12 @@ uint64_t CScriptRegion::GetDrawOrder() {
 }
 
 // ref: FUN_14060dc30
-bool CScriptRegion::HasOwnBatch() {
+bool CScriptRegion::IsBatched() {
     CScriptRegion* parent = static_cast<CScriptRegion*>(this->m_parent);
-    return parent != nullptr && parent->HasOwnBatch();
+    return parent != nullptr && parent->IsBatched();
 }
 
-bool CScriptRegion::Unknown118() {
+bool CScriptRegion::HasCharHandler() {
     return false;
 }
 
@@ -305,27 +313,25 @@ bool CScriptRegion::Unknown120() {
     return false;
 }
 
-bool CScriptRegion::Unknown128(void* event) {
+bool CScriptRegion::HasKeyHandler() {
+    return false;
+}
+
+bool CScriptRegion::HasPadButtonHandler(void* event) {
     (void)event;
     return false;
 }
 
-bool CScriptRegion::Unknown130(void* event) {
+bool CScriptRegion::HasPadStickHandler(void* event) {
     (void)event;
     return false;
 }
 
-bool CScriptRegion::Unknown138(void* event) {
-    (void)event;
+bool CScriptRegion::HasWheelHandler() {
     return false;
 }
 
-bool CScriptRegion::Unknown140(void* event) {
-    (void)event;
-    return false;
-}
-
-bool CScriptRegion::Unknown148(int32_t key) {
+bool CScriptRegion::OnChar(int32_t key) {
     (void)key;
     return false;
 }
@@ -335,12 +341,12 @@ bool CScriptRegion::Unknown150(void* event) {
     return false;
 }
 
-bool CScriptRegion::Unknown158(void* event) {
+bool CScriptRegion::OnKeyDown(void* event) {
     (void)event;
     return false;
 }
 
-bool CScriptRegion::Unknown160(void* event) {
+bool CScriptRegion::OnKeyUp(void* event) {
     (void)event;
     return false;
 }
@@ -388,22 +394,22 @@ void CScriptRegion::OnMouseUp(MOUSEEVENT* event, const char* button) {
     top->m_currentButton = previous;
 }
 
-bool CScriptRegion::Unknown180(void* event) {
+bool CScriptRegion::OnMouseWheel(MOUSEEVENT* event) {
     (void)event;
     return false;
 }
 
-bool CScriptRegion::Unknown188(void* event) {
+bool CScriptRegion::OnPadButtonDown(void* event) {
     (void)event;
     return false;
 }
 
-bool CScriptRegion::Unknown190(void* event) {
+bool CScriptRegion::OnPadButtonUp(void* event) {
     (void)event;
     return false;
 }
 
-bool CScriptRegion::Unknown198(void* event) {
+bool CScriptRegion::OnPadStick(void* event) {
     (void)event;
     return false;
 }
@@ -414,23 +420,23 @@ CScriptRegion* CScriptRegion::GetMouseTarget(int32_t type, MOUSEEVENT* event, bo
     if (CSimpleTop::s_instance->m_inputSuspended) {
         return nullptr;
     }
-    return this->HitTest(type, event, force) ? this : nullptr;
+    return this->HitTest(type, event, force) != 0 ? this : nullptr;
 }
 
 // Clicks need the click flag and a hit; the rest need the motion flag, a button that does
 // not pass through (unless forced), and a hit.
 // ref: FUN_14060fad0
-bool CScriptRegion::HitTest(int32_t type, MOUSEEVENT* event, bool force) {
+int32_t CScriptRegion::HitTest(int32_t type, MOUSEEVENT* event, bool force) {
     if (type == INPUT_EVENT_CLICK) {
         if (!this->IsMouseClickEnabled()) {
-            return false;
+            return 0;
         }
     } else if (!this->IsMouseMotionEnabled()
         || (!force && (static_cast<uint32_t>(event->m_button) & this->m_passThroughButtons) != 0)) {
-        return false;
+        return 0;
     }
     float point[2] = {event->m_x, event->m_y};
-    return this->IsMouseOver(point);
+    return this->IsMouseOver(point) ? 1 : 0;
 }
 
 // ref: FUN_14060e5a0
@@ -448,13 +454,13 @@ void CScriptRegion::EnableMouseWheel(bool enable) {
     bool enabled = (this->m_enabledInput & 0x10) != 0;
     if (!enable) {
         if (enabled) {
-            if (this->m_layoutState & LAYOUT_SHOWN) {
+            if (this->m_layoutState & LAYOUT_VISIBLE) {
                 CSimpleTop::s_instance->UnregisterForInput(this, INPUT_EVENT_WHEEL, false);
             }
             this->m_enabledInput &= ~0x10;
         }
     } else if (!enabled) {
-        if (this->m_layoutState & LAYOUT_SHOWN) {
+        if (this->m_layoutState & LAYOUT_VISIBLE) {
             CSimpleTop::s_instance->RegisterForInput(this, INPUT_EVENT_WHEEL);
         }
         this->m_enabledInput |= 0x10;
@@ -491,11 +497,11 @@ void CScriptRegion::SetMouseClickEnabled(bool enable) {
     }
 }
 
-bool CScriptRegion::Unknown1E8() {
+bool CScriptRegion::GetHyperlinksPropagated() {
     return false;
 }
 
-bool CScriptRegion::HasMotionScript() {
+bool CScriptRegion::GetHyperlinksEnabled() {
     return false;
 }
 
@@ -537,14 +543,16 @@ void CScriptRegion::OnMouseFocusLost(bool clear, bool quiet) {
     (void)quiet;
 }
 
-void CScriptRegion::Unknown228() {
-}
-
-void CScriptRegion::Unknown230(void* event) {
+void CScriptRegion::OnDragStart(MOUSEEVENT* event) {
     (void)event;
 }
 
-void CScriptRegion::Unknown238() {
+void CScriptRegion::OnDragStop(MOUSEEVENT* event) {
+    (void)event;
+}
+
+void CScriptRegion::OnReceiveDrag(MOUSEEVENT* event) {
+    (void)event;
 }
 
 void CScriptRegion::OnLayoutVersionChanged() {
@@ -598,9 +606,9 @@ CRect* CScriptRegion::TransformRect(CRect* out, const CRect* rect) {
 }
 
 // ref: FUN_14060e510
-bool CScriptRegion::Unknown260() {
+bool CScriptRegion::IsInScrollFrame() {
     CScriptRegion* parent = static_cast<CScriptRegion*>(this->m_parent);
-    return parent != nullptr && parent->Unknown260();
+    return parent != nullptr && parent->IsInScrollFrame();
 }
 
 // ref: FUN_14060e730
@@ -661,7 +669,7 @@ void CScriptRegion::OnScriptHandlerLoaded(XMLOBJECT* handler) {
         }
     }
     if ((flags & 0x100) && (flags & 0x200) && !(this->m_enabledInput & 0x10)) {
-        if (this->m_layoutState & LAYOUT_SHOWN) {
+        if (this->m_layoutState & LAYOUT_VISIBLE) {
             CSimpleTop::s_instance->RegisterForInput(this, INPUT_EVENT_WHEEL);
         }
         this->m_enabledInput |= 0x10;
@@ -752,7 +760,7 @@ bool CScriptRegion::IsAccessibleToScripts() {
 void CScriptRegion::EnableInputEvent(int32_t type) {
     uint16_t bit = static_cast<uint16_t>(1 << (type & 0x1f));
     if (!(this->m_enabledInput & bit)) {
-        if (this->m_layoutState & LAYOUT_SHOWN) {
+        if (this->m_layoutState & LAYOUT_VISIBLE) {
             CSimpleTop::s_instance->RegisterForInput(this, type);
         }
         this->m_enabledInput |= bit;
@@ -764,13 +772,13 @@ void CScriptRegion::SetInputEvent(int32_t type, bool enable) {
     uint16_t bit = static_cast<uint16_t>(1 << (type & 0x1f));
     if (!enable) {
         if (this->m_enabledInput & bit) {
-            if (this->m_layoutState & LAYOUT_SHOWN) {
+            if (this->m_layoutState & LAYOUT_VISIBLE) {
                 CSimpleTop::s_instance->UnregisterForInput(this, type, false);
             }
             this->m_enabledInput &= ~bit;
         }
     } else if (!(this->m_enabledInput & bit)) {
-        if (this->m_layoutState & LAYOUT_SHOWN) {
+        if (this->m_layoutState & LAYOUT_VISIBLE) {
             CSimpleTop::s_instance->RegisterForInput(this, type);
         }
         this->m_enabledInput |= bit;
@@ -802,20 +810,20 @@ bool CScriptRegion::HasInputFlags(uint8_t flags) {
 // Motion input is wanted while motion is enabled or a motion script needs it.
 // ref: FUN_14060f990
 void CScriptRegion::UpdateMotionRegistration() {
-    bool wanted = this->IsMouseMotionEnabled() || this->HasMotionScript();
+    bool wanted = this->IsMouseMotionEnabled() || this->GetHyperlinksEnabled();
     bool registered = (this->m_enabledInput & 4) != 0;
     if (!wanted) {
         if (!registered) {
             return;
         }
-        if (this->m_layoutState & LAYOUT_SHOWN) {
+        if (this->m_layoutState & LAYOUT_VISIBLE) {
             CSimpleTop::s_instance->UnregisterForInput(this, INPUT_EVENT_MOTION, false);
         }
         this->m_enabledInput &= ~4;
         return;
     }
     if (!registered) {
-        if (this->m_layoutState & LAYOUT_SHOWN) {
+        if (this->m_layoutState & LAYOUT_VISIBLE) {
             CSimpleTop::s_instance->RegisterForInput(this, INPUT_EVENT_MOTION);
         }
         this->m_enabledInput |= 4;
@@ -824,20 +832,20 @@ void CScriptRegion::UpdateMotionRegistration() {
 
 // ref: FUN_14060fa30
 void CScriptRegion::UpdateClickRegistration() {
-    bool wanted = this->IsMouseClickEnabled() || this->HasMotionScript();
+    bool wanted = this->IsMouseClickEnabled() || this->GetHyperlinksEnabled();
     bool registered = (this->m_enabledInput & 8) != 0;
     if (!wanted) {
         if (!registered) {
             return;
         }
-        if (this->m_layoutState & LAYOUT_SHOWN) {
+        if (this->m_layoutState & LAYOUT_VISIBLE) {
             CSimpleTop::s_instance->UnregisterForInput(this, INPUT_EVENT_CLICK, false);
         }
         this->m_enabledInput &= ~8;
         return;
     }
     if (!registered) {
-        if (this->m_layoutState & LAYOUT_SHOWN) {
+        if (this->m_layoutState & LAYOUT_VISIBLE) {
             CSimpleTop::s_instance->RegisterForInput(this, INPUT_EVENT_CLICK);
         }
         this->m_enabledInput |= 8;

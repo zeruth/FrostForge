@@ -1,9 +1,12 @@
 add_library(ui STATIC
     BinaryXML.cpp
     CLayoutFrame.cpp
+    CAnimatableObject.cpp
+    CRenderBatch.cpp
     CScriptObject.cpp
     CScriptRegion.cpp
     CSimpleFrame.cpp
+    CSimpleRegion.cpp
     CSimpleTop.cpp
     CSimpleFont.cpp
     FrameXML.cpp

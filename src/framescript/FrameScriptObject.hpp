@@ -25,33 +25,40 @@ struct FRAMESCRIPT_SCRIPTDATA {
     int32_t m_update;
 };
 
-// The empty description FrameScript_Object returns from slot 6 (0x1426cd550, 16 zero bytes).
-struct FRAMESCRIPT_TYPEINFO {
-    const void* m_data;
-    uint64_t m_count;
-};
-
 // The flags of FrameScript_Object::m_flags.
 enum : uint16_t {
     FSOBJ_FORBIDDEN = 0x1,
     FSOBJ_PROTECTED = 0x2,
     FSOBJ_PROTECTED_METATABLE = 0x4,    // the metatable has been switched to the protected one
     FSOBJ_LOCKDOWN = 0x8,
+    FSOBJ_LOADING = 0x10,               // its XML is being loaded (no OnShow yet)
     FSOBJ_ACCESSIBLE = 0x20,
     FSOBJ_REGISTERED = 0x40,
     FSOBJ_HIDDEN = 0x100,               // never handed to scripts nor given a global name
 };
 
 class FrameScript_Object;
+// A registry reference pushed as the value it refers to.
+struct FRAMESCRIPT_REF {
+    int32_t m_ref;
+};
 int32_t FrameScript_PushInteger(int32_t value);
+int32_t FrameScript_PushFloat(float value);
+int32_t FrameScript_PushRef(int32_t ref);
 int32_t FrameScript_PushNumber(double value);
 int32_t FrameScript_PushString(const char* value);
 int32_t FrameScript_PushBoolean(bool value);
 inline int32_t FrameScript_PushArg(int32_t value) {
     return FrameScript_PushInteger(value);
 }
+inline int32_t FrameScript_PushArg(float value) {
+    return FrameScript_PushFloat(value);
+}
 inline int32_t FrameScript_PushArg(double value) {
     return FrameScript_PushNumber(value);
+}
+inline int32_t FrameScript_PushArg(FRAMESCRIPT_REF value) {
+    return FrameScript_PushRef(value.m_ref);
 }
 inline int32_t FrameScript_PushArg(const char* value) {
     return FrameScript_PushString(value);
@@ -86,8 +93,9 @@ class FrameScript_Object {
     // Whether it accepts the handler, and how.
     virtual bool GetScriptData(uint8_t index, FRAMESCRIPT_SCRIPTDATA* data);
     // Adds the profile times and call counts of its handlers.
-    virtual void GetScriptCPUUsage(lua_State* L, double* time, int32_t* calls);
-    virtual const FRAMESCRIPT_TYPEINFO* GetTypeInfo();
+    virtual void GetScriptCPUUsage(lua_State* L, double* time, int32_t* calls, bool includeChildren);
+    // Where the XML defined the object (an empty location here).
+    virtual const SCRIPTLOCATION* GetScriptLocation();
     // Where the XML defined the object.
     virtual void SetSourceLocation(const SCRIPTLOCATION* location);
     virtual void PreLoadXML(XMLOBJECT* node, CStatus* status);

@@ -481,10 +481,10 @@ bool CLayoutFrame::IsLayoutReady() {
 void CLayoutFrame::OnLayoutReady() {
 }
 
-void CLayoutFrame::UnknownC0() {
+void CLayoutFrame::ApplyHide() {
 }
 
-void CLayoutFrame::UnknownC8() {
+void CLayoutFrame::ApplyShow() {
 }
 
 void CLayoutFrame::OnLayoutDepthChanged() {
@@ -577,7 +577,7 @@ bool CLayoutFrame::CollectResizes(blz::vector<CLayoutFrame*, s_frameTag>* out) {
             any = true;
         }
     }
-    if (!(this->m_layoutState & LAYOUT_SHOWN) || any) {
+    if (!(this->m_layoutState & LAYOUT_VISIBLE) || any) {
         return any;
     }
     out->push_back(this);

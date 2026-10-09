@@ -128,14 +128,18 @@ CScriptObject* CScriptObject::GetObjectByPath(const char* path) {
     }
 }
 
-void* CScriptObject::Unknown88() {
+CAnimatableObject* CScriptObject::GetAnimatableObject() {
     return nullptr;
 }
 
-void CScriptObject::Unknown90() {
+void CScriptObject::DumpHierarchy(uint32_t indent, HIERARCHYDUMPFUNC dump, void* context) {
+    (void)indent;
+    (void)dump;
+    (void)context;
 }
 
-void CScriptObject::Unknown98() {
+void CScriptObject::Unknown98(void* argument) {
+    (void)argument;
 }
 
 // ref: FUN_14062bc50
