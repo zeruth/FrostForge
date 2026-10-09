@@ -971,6 +971,48 @@ bool CASFileLoadById(int32_t fileDataId, uint8_t** data, uint32_t* size, uint64_
     return result;
 }
 
+// Reads a whole file by path into a new Storm block: from the local manifest's loose file
+// when bit 0 of `flags` allows one, else from storage (never while only the manifest is up).
+// ref: FUN_1402cf230
+bool CASFileLoadByName(const char* name, uint8_t** data, uint32_t* size, uint64_t flags, int32_t allocFlags) {
+    uint64_t hash = LocalManifestNameHash(name);
+    t_lastError.m_kind = 2;
+    if ((flags & 1) != 0 && g_localManifest != nullptr) {
+        int32_t fileDataId = 0;
+        if (const char* path = g_localManifest->FindPathByName(hash, &fileDataId)) {
+            return OsFileReadAll(path, data, size, static_cast<int32_t>((flags >> 1) & 1), allocFlags);
+        }
+    }
+    bool manifestOnly = s_manifestOnly;
+    t_lastError.m_kind = 1;
+    if (manifestOnly) {
+        t_lastError.m_code = 3;
+        return false;
+    }
+    BuildManifestEntry* entry = g_casManifest->FindByName(hash);
+    if (entry == nullptr) {
+        t_lastError.m_kind = 1;
+        t_lastError.m_code = 2;
+        return false;
+    }
+    t_lastError.m_kind = 0;
+    uint32_t localSize = 0;
+    uint32_t* sizeOut = size != nullptr ? size : &localSize;
+    char key[0x40];
+    CASFormatKeyName(key, entry->m_ckey, entry->m_fileDataId, entry->m_localeFlags, entry->m_contentFlags);
+    bool result = CASReadFile(g_casInstance, key, data, sizeOut, static_cast<uint32_t>(flags), allocFlags);
+    if (g_casReadHook != nullptr) {
+        g_casReadHook(entry->m_ckey, *sizeOut, s_casReadHookContext);
+    }
+    return result;
+}
+
+// Frees what CASFileLoadById / CASFileLoadByName returned.
+// ref: FUN_1402d0f80
+void CASFileFree(void* data) {
+    SMemFree(data, "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\CAS\\CAS.cpp", 0xD99, 0);
+}
+
 // ref: FUN_1402cd230
 uint8_t CASFileGetResidency(int32_t fileDataId, uint64_t size, uint32_t a3) {
     if (fileDataId < 0) {
