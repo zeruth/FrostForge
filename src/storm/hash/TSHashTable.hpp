@@ -95,7 +95,19 @@ struct HASHKEY_CONSTSTRI {
     const char* m_str;        // 0x30
 };
 
+// The allocator tags a table's bucket arrays are freed and grown with: the reference names
+// each instantiation's TSFixedArray and TSGrowableArray by type. Specialize per node type.
 template <class T>
+struct TSHashTableTags {
+    static constexpr const char* s_fixedArray =
+        ".?AV?$TSFixedArray@V?$TSExplicitList@UCONSOLECOMMAND@@$0?CCCCCCCD@$07@@$07@@";
+    static constexpr const char* s_growableArray =
+        ".?AV?$TSGrowableArray@V?$TSExplicitList@UCONSOLECOMMAND@@$0?CCCCCCCD@$07@@$07@@";
+};
+
+// LinkBase is where the node's TSHashObject starts: 0 for most tables, 0x10 when the node
+// is a handle object (vtable and reference count first).
+template <class T, int32_t LinkBase = 0>
 class TSHashTable {
     public:
     TSExplicitList<T> m_fulllist;  // 0x08
@@ -116,7 +128,7 @@ class TSHashTable {
         this->m_fulllist.m_terminator.m_next =
             reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(&this->m_fulllist.m_terminator) | 1);
         this->m_fulllist.UnlinkAll();
-        this->m_fulllist.InitEmpty(0x10);
+        this->m_fulllist.InitEmpty(LinkBase + 0x10);
     }
 
     // Unlinks every node (without deleting it), then frees the bucket array and empties the
@@ -130,7 +142,7 @@ class TSHashTable {
             this->m_slots[i].m_terminator.Unlink();
         }
         if (this->m_slots) {
-            SMemFree(this->m_slots, ".?AV?$TSFixedArray@V?$TSExplicitList@UCONSOLECOMMAND@@$0?CCCCCCCD@$07@@$07@@", -2, 0);
+            SMemFree(this->m_slots, TSHashTableTags<T>::s_fixedArray, -2, 0);
         }
         this->m_fulllist.UnlinkAll();
         this->m_fulllist.m_terminator.Unlink();
@@ -157,39 +169,24 @@ class TSHashTable {
         return nullptr;
     }
 
+    // The node whose hash is `hashval` and that `match` accepts, or null.
+    template <class Match>
+    T* Find(uint32_t hashval, Match match) const {
+        if (this->m_slotmod == 0xFFFFFFFF) {
+            return nullptr;
+        }
+        TSExplicitList<T>* slot = &this->m_slots[hashval % this->m_slotmod];
+        for (T* node = slot->Head(); node; node = slot->Link(node)->Next()) {
+            if (node->m_hashval == hashval && match(node)) {
+                return node;
+            }
+        }
+        return nullptr;
+    }
+
     // ref: FUN_140324e70
     T* New(uint32_t hashval, uint32_t extra, uint32_t flags) {
-        uint32_t mod = this->m_slotmod;
-        if (mod == 0xFFFFFFFF) {
-            this->m_slotmod = 3;
-            this->ResizeSlots(4);
-            for (uint32_t i = 0; i <= this->m_slotmod; i++) {
-                TSExplicitList<T>* slot = &this->m_slots[i];
-                if (slot->m_linkoffset != 0) {
-                    slot->UnlinkAll();
-                    slot->InitEmpty(0);
-                }
-            }
-            mod = this->m_slotmod;
-        }
-
-        uint32_t index = hashval % mod;
-        if (mod < this->m_count * 2 + 2) {
-            uint32_t target = this->m_slotlimit;
-            if (mod * 2 + 2 <= target) {
-                target = mod * 2 + 1;
-                target |= target >> 1;
-                target |= target >> 2;
-                target |= target >> 4;
-                target |= target >> 8;
-                target = (target | (target >> 16)) + 1;
-            }
-            if (mod + 1 < target) {
-                this->Rehash(target);
-                index = hashval % this->m_slotmod;
-            }
-        }
-
+        uint32_t index = this->PrepareSlot(hashval);
         T* node = this->NewNode(&this->m_slots[index], extra, flags);
         TSLink<T>* full = node ? reinterpret_cast<TSLink<T>*>(reinterpret_cast<uintptr_t>(node) + this->m_fulllist.m_linkoffset)
                                : &this->m_fulllist.m_terminator;
@@ -202,6 +199,25 @@ class TSHashTable {
         node->m_table = this;
         this->m_count++;
         return node;
+    }
+
+    // Links a node the caller allocated: at the tail of its bucket and of the full list
+    // (TSHashTable<FACEDATA, HASHKEY_DWORD, 8>::Insert, FUN_140692fb0).
+    void Insert(T* node, uint32_t hashval) {
+        uint32_t index = this->PrepareSlot(hashval);
+        if (node->m_table != nullptr) {
+            static_cast<TSHashTable*>(node->m_table)->m_count--;
+        }
+        this->m_slots[index].LinkToTail(node);
+        TSLink<T>* full = reinterpret_cast<TSLink<T>*>(reinterpret_cast<uintptr_t>(node) + this->m_fulllist.m_linkoffset);
+        full->Unlink();
+        TSLink<T>* last = this->m_fulllist.m_terminator.m_prevlink;
+        full->m_prevlink = last;
+        full->m_next = last->m_next;
+        last->m_next = node;
+        this->m_fulllist.m_terminator.m_prevlink = full;
+        node->m_table = this;
+        this->m_count++;
     }
 
     // ref: FUN_140325650
@@ -233,6 +249,42 @@ class TSHashTable {
     }
 
     protected:
+    // The bucket a hash goes to, creating the buckets on first use and growing them past
+    // twice the node count (the head of New and Insert).
+    uint32_t PrepareSlot(uint32_t hashval) {
+        uint32_t mod = this->m_slotmod;
+        if (mod == 0xFFFFFFFF) {
+            this->m_slotmod = 3;
+            this->ResizeSlots(4);
+            for (uint32_t i = 0; i <= this->m_slotmod; i++) {
+                TSExplicitList<T>* slot = &this->m_slots[i];
+                if (slot->m_linkoffset != LinkBase) {
+                    slot->UnlinkAll();
+                    slot->InitEmpty(LinkBase);
+                }
+            }
+            mod = this->m_slotmod;
+        }
+
+        uint32_t index = hashval % mod;
+        if (mod < this->m_count * 2 + 2) {
+            uint32_t target = this->m_slotlimit;
+            if (mod * 2 + 2 <= target) {
+                target = mod * 2 + 1;
+                target |= target >> 1;
+                target |= target >> 2;
+                target |= target >> 4;
+                target |= target >> 8;
+                target = (target | (target >> 16)) + 1;
+            }
+            if (mod + 1 < target) {
+                this->Rehash(target);
+                index = hashval % this->m_slotmod;
+            }
+        }
+        return index;
+    }
+
     // TSGrowableArray<TSExplicitList<T, 0xDDDDDDDD, 8>, 8>::SetCount (granularity 10)
     // ref: FUN_1403254c0
     void ResizeSlots(uint32_t count) {
@@ -277,7 +329,7 @@ class TSHashTable {
     // already taken every node out before the array grows.
     // ref: FUN_140325310
     void ReallocSlots(uint32_t capacity) {
-        static const char s_tag[] = ".?AV?$TSGrowableArray@V?$TSExplicitList@UCONSOLECOMMAND@@$0?CCCCCCCD@$07@@$07@@";
+        const char* s_tag = TSHashTableTags<T>::s_growableArray;
         TSExplicitList<T>* old = this->m_slots;
 
         for (uint32_t i = capacity; i < this->m_slotcount; i++) {
@@ -309,7 +361,7 @@ class TSHashTable {
     // ref: FUN_140324a20
     void Rehash(uint32_t count) {
         TSExplicitList<T> moving;
-        moving.InitEmpty(0);
+        moving.InitEmpty(LinkBase);
         for (uint32_t i = 0; i <= this->m_slotmod; i++) {
             TSExplicitList<T>* slot = &this->m_slots[i];
             while (T* node = slot->Head()) {
@@ -321,9 +373,9 @@ class TSHashTable {
         this->ResizeSlots(count);
         for (uint32_t i = 0; i < count; i++) {
             TSExplicitList<T>* slot = &this->m_slots[i];
-            if (slot->m_linkoffset != 0) {
+            if (slot->m_linkoffset != LinkBase) {
                 slot->UnlinkAll();
-                slot->InitEmpty(0);
+                slot->InitEmpty(LinkBase);
             }
         }
         this->m_slotmod = count - 1;

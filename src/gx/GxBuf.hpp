@@ -66,6 +66,9 @@ struct GxBuf {
 static_assert(sizeof(GxBuf) == 0x70, "GxBuf is 0x70 bytes");
 
 GxBuf* GxBufCreate(const GXBUFDESC* desc);
+// A buffer of `count` elements of `stride` bytes: vertices (kind 0), indices (1) or constants
+// (2) (FUN_142288900).
+GxBuf* GxBufCreateSimple(uint8_t kind, uint8_t type, uint32_t stride, uint32_t count);
 void GxBufDestroy(GxBuf** buf);
 
 class GxRenderContext;

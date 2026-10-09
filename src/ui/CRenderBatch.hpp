@@ -15,7 +15,7 @@
 class CSimpleFrame;
 class CTexture;
 struct GxPipeline;
-struct GxuStringBatch;
+class GxuStringBatch;
 class GxRenderContext;
 
 extern const char s_renderableTag[];

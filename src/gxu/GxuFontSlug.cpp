@@ -1,0 +1,140 @@
+// Gxu's Slug text (GPU glyph rendering from curves): its settings, and the per-font Slug data
+// and per-string geometry. Fonts use Slug only when it is on, they are scalable and their
+// Slug data loads; until that data is ported every font draws through its bitmap glyphs.
+
+#include "console/Var.hpp"
+#include "gxu/GxuFontPrivate.hpp"
+#include "util/Unimplemented.hpp"
+
+namespace {
+
+CVar* s_useSlug;            // 0x14309d050
+CVar* s_slugSupersampling;  // 0x14309d058
+CVar* s_slugOpticalWeight;  // 0x14309d060
+CVar* s_forceGenerateSlug;  // 0x14309d068
+bool s_registered;          // 0x14309d070
+
+// The settings, registered the first time one is read.
+// ref: FUN_1406a2440
+void RegisterSlugVars() {
+    if (s_registered) {
+        return;
+    }
+    s_useSlug = CVarRegister("UseSlug", "Render with slug text", 0x400, "1", nullptr, 0, false, nullptr, false);
+    s_slugSupersampling = CVarRegister("SlugSupersampling",
+        "The slug glyph shader performs adaptive supersampling for high-quality rendering at small font sizes",
+        0x400, "1", nullptr, 0, false, nullptr, false);
+    s_slugOpticalWeight = CVarRegister("SlugOpticalWeight",
+        "When rendering, coverage values are remapped to increase the optical weight of the glyphs. This can improve "
+        "the appearance of small text, but usually looks good only for dark text on a light background.",
+        0x400, "0", nullptr, 0, false, nullptr, false);
+    s_forceGenerateSlug = CVarRegister("ForceGenerateSlug",
+        "Generate .slug files for all loaded fonts before they are actually used rather than deferred load.", 0x400,
+        "0", nullptr, 0, false, nullptr, false);
+    s_registered = true;
+}
+
+bool VarOn(CVar* var) {
+    return var != nullptr && var->m_intValue != 0;
+}
+
+}
+
+// ref: FUN_1406a2560
+bool GxuSlugForceGenerate() {
+    RegisterSlugVars();
+    return VarOn(s_forceGenerateSlug);
+}
+
+// ref: FUN_1406a2590
+bool GxuSlugEnabled() {
+    RegisterSlugVars();
+    return VarOn(s_useSlug);
+}
+
+// ref: FUN_1406a25c0
+bool GxuSlugOpticalWeight() {
+    RegisterSlugVars();
+    return VarOn(s_slugOpticalWeight);
+}
+
+// ref: FUN_1406a25f0
+bool GxuSlugSupersampling() {
+    RegisterSlugVars();
+    return VarOn(s_slugSupersampling);
+}
+
+// A font's Slug data from its file, made from the face when no .slug file exists yet.
+// ref: FUN_1406a18f0
+void GxuSlugLoadById(GXUSLUGPTR* out, int32_t fileDataId, uint32_t flags) {
+    (void)fileDataId;
+    (void)flags;
+    out->m_ptr = nullptr;
+    out->m_control = nullptr;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1406a1ca0
+void GxuSlugLoadByName(GXUSLUGPTR* out, const char* path, uint32_t flags) {
+    (void)path;
+    (void)flags;
+    out->m_ptr = nullptr;
+    out->m_control = nullptr;
+    FROST_UNIMPLEMENTED();
+}
+
+// Drops a font's reference to its Slug data (the release in FUN_140697dc0 and FUN_140698500).
+// ref: FUN_1406a1780
+void GxuSlugRelease(GXUSLUGPTR* slug) {
+    if (slug->m_ptr == nullptr) {
+        return;
+    }
+    slug->m_ptr = nullptr;
+    slug->m_control = nullptr;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1406a1cf0
+void GxuSlugGetTextures(void* slug, void** curves, void** bands) {
+    (void)slug;
+    *curves = nullptr;
+    *bands = nullptr;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14069f530
+void GxuSlugCountGeometry(CGxString* string, float* width, int32_t* glyphs) {
+    (void)string;
+    *width = 0.0f;
+    *glyphs = 0;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14069f870
+void GxuSlugWriteGlyph(void* desc, GXUSLUGGEOMETRY* geometry) {
+    (void)desc;
+    (void)geometry;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14069f010
+void GxuSlugFillGeometry(GXUSLUGGEOMETRY* geometry, uint8_t* vertices, uint16_t* indices, const float* transform,
+    int32_t firstVertex, int32_t vertexCount, int32_t firstIndex, int32_t indexCount, int32_t baseVertex) {
+    (void)geometry;
+    (void)vertices;
+    (void)indices;
+    (void)transform;
+    (void)firstVertex;
+    (void)vertexCount;
+    (void)firstIndex;
+    (void)indexCount;
+    (void)baseVertex;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_140696f60
+void GxuSlugMoveGeometry(GXUSLUGGEOMETRY* to, GXUSLUGGEOMETRY* from) {
+    (void)to;
+    (void)from;
+    FROST_UNIMPLEMENTED();
+}

@@ -1,4 +1,7 @@
 add_library(base STATIC
+    CharClass.cpp
+    Handle.cpp
+    Matrix.cpp
     Coordinate.cpp
     ObjectAlloc.cpp
     DataAllocator.cpp

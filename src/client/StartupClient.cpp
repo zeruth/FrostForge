@@ -9,6 +9,7 @@
 #include "framescript/FrameScript.hpp"
 #include "framescript/ScriptMethod.hpp"
 #include "glue/GlueMgr.hpp"
+#include "gxu/GxuFont.hpp"
 #include "ui/CSimpleTop.hpp"
 #include "ui/FrameXML.hpp"
 #include "cas/CAS.hpp"
@@ -74,9 +75,8 @@ void Sub141C994E0(const char* tag) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_14068c520
 void Sub14068C520() {
-    FROST_UNIMPLEMENTED();
+    GxuFontRegisterCallbacks();
 }
 
 // ref: FUN_1412a11c0
@@ -131,10 +131,8 @@ void Sub141297EB0(uint32_t a1) {
 }
 
 // told the window size
-// ref: FUN_14068b4c0
 void Sub14068B4C0(const uint64_t* size) {
-    (void)size;
-    FROST_UNIMPLEMENTED();
+    GxuFontInitialize(reinterpret_cast<const uint32_t*>(size));
 }
 
 // ref: FUN_14126ea20
@@ -1328,14 +1326,12 @@ void Sub1412C51B0() {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_14068bc30
 void Sub14068BC30() {
-    FROST_UNIMPLEMENTED();
+    GxuFontUpdate();
 }
 
-// ref: FUN_14068aae0
 void Sub14068AAE0() {
-    FROST_UNIMPLEMENTED();
+    GxuFontReleaseIdleFonts();
 }
 
 // The frame stats' bookkeeping and the dynamic render scale.

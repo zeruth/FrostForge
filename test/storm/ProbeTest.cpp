@@ -9,6 +9,9 @@
 //   ProbeTest fnv <hex bytes>            t2util::FnvHashStringI from the FNV-1a basis
 //   ProbeTest gpus -                     pmCreateInstance, the GPU list and each API's device data
 //   ProbeTest gxinit <force api>         GxInitialize (5: let Gx choose), then the adapter list
+//   ProbeTest ctrl <hex bytes> <flags>   GxuDetermineControlCode (kind, advance, colour, code)
+//   ProbeTest strip <hex bytes> <mask>   GxuFontStripCodes into 64 bytes (result as hex)
+//   ProbeTest break <prev> <code>        GxuFontCanBreakBetween (decimal code points)
 
 #include "base/Status.hpp"
 #include "cas/CAS.hpp"
@@ -18,6 +21,7 @@
 #include "os/Os.hpp"
 #include "prism/Instance.hpp"
 #include "gx/Gx.hpp"
+#include "gxu/GxuFont.hpp"
 #include "console/Var.hpp"
 #include "storm/Memory.hpp"
 #include "client/Locale.hpp"
@@ -51,6 +55,31 @@ int main(int argc, char** argv) {
         bytes.push_back(static_cast<char>(std::strtoul(hex, nullptr, 16)));
     }
 
+    if (what == "ctrl") {
+        uint32_t flags = argc > 3 ? static_cast<uint32_t>(std::strtoul(argv[3], nullptr, 16)) : 0;
+        int32_t advance = 0;
+        uint32_t color = 0;
+        uint32_t code = 0;
+        int32_t kind = GxuDetermineControlCode(bytes.c_str(), &advance, &color, flags, &code);
+        std::printf("%d %d %08x %08x\n", kind, advance, color, code);
+        return 0;
+    }
+    if (what == "strip") {
+        uint32_t mask = argc > 3 ? static_cast<uint32_t>(std::strtoul(argv[3], nullptr, 16)) : 0;
+        char out[64] = {};
+        GxuFontStripCodes(bytes.c_str(), static_cast<int32_t>(bytes.size()), mask, out, sizeof(out));
+        for (const char* p = out; *p; p++) {
+            std::printf("%02x", static_cast<uint8_t>(*p));
+        }
+        std::printf("\n");
+        return 0;
+    }
+    if (what == "break") {
+        uint32_t previous = static_cast<uint32_t>(std::strtoul(input, nullptr, 10));
+        uint32_t code = argc > 3 ? static_cast<uint32_t>(std::strtoul(argv[3], nullptr, 10)) : 0;
+        std::printf("%d\n", GxuFontCanBreakBetween(previous, code) ? 1 : 0);
+        return 0;
+    }
     if (what == "hash") {
         std::printf("%08x\n", SStrHashHT(bytes.c_str()));
     } else if (what == "float") {

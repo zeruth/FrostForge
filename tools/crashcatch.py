@@ -153,9 +153,21 @@ def main():
     exe = os.path.abspath(args.exe)
     si = STARTUPINFO()
     si.cb = ctypes.sizeof(si)
+    inherit = False
+    log = None
+    if args.log:
+        # The client's stderr (the unimplemented log) goes to the file.
+        log = open(args.log, "wb")
+        import msvcrt
+        handle = msvcrt.get_osfhandle(log.fileno())
+        k32.SetHandleInformation(wt.HANDLE(handle), 1, 1)
+        si.dwFlags = 0x100
+        si.hStdError = handle
+        si.hStdOutput = handle
+        inherit = True
     pi = PROCESS_INFORMATION()
     command = ctypes.create_unicode_buffer('"%s"' % exe)
-    if not k32.CreateProcessW(None, command, None, None, False, DEBUG_ONLY_THIS_PROCESS, None, args.cwd,
+    if not k32.CreateProcessW(None, command, None, None, inherit, DEBUG_ONLY_THIS_PROCESS, None, args.cwd,
                               ctypes.byref(si), ctypes.byref(pi)):
         print("CreateProcess failed", ctypes.get_last_error())
         return 1
