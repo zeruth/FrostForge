@@ -8,6 +8,7 @@
 #include "glue/ScriptAPIRegistry.hpp"
 
 #include "ui/CSimpleButton.hpp"
+#include "ui/CSimpleCheckButton.hpp"
 #include "ui/CSimpleFont.hpp"
 #include "ui/CSimpleFontString.hpp"
 #include "ui/CSimpleFrame.hpp"
@@ -120,13 +121,6 @@ void ScriptClass_LineTranslation(lua_State* L) {
 // the Browser metatables.
 // ref: FUN_1424a79e0
 void ScriptClass_Browser(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the CheckButton metatables.
-// ref: FUN_1424acce0
-void ScriptClass_CheckButton(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
 }
@@ -311,7 +305,7 @@ void GlueRegisterScriptAPI(lua_State* L) {
     ScriptClass_LineTranslation(L);
     ScriptClass_Browser(L);
     CSimpleButton::CreateScriptMetaTables();
-    ScriptClass_CheckButton(L);
+    CSimpleCheckButton::CreateScriptMetaTables();
     ScriptClass_ColorSelect(L);
     ScriptClass_ControlPoint(L);
     ScriptClass_EditBox(L);

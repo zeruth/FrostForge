@@ -9,6 +9,7 @@ add_library(ui STATIC
     CScriptRegionScript.cpp
     CSimpleButton.cpp
     CSimpleButtonScript.cpp
+    CSimpleCheckButton.cpp
     CSimpleFrame.cpp
     CSimpleFrameScript.cpp
     CSimpleRegion.cpp

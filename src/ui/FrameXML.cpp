@@ -18,6 +18,7 @@
 #include "ui/CLayoutFrame.hpp"
 #include "ui/CScriptObject.hpp"
 #include "ui/CSimpleButton.hpp"
+#include "ui/CSimpleCheckButton.hpp"
 #include "ui/CSimpleFont.hpp"
 #include "ui/CSimpleFontString.hpp"
 #include "ui/CSimpleFrame.hpp"
@@ -219,9 +220,7 @@ CSimpleFrame* CreateButton(CSimpleFrame* parent) {
 
 // ref: FUN_140661ef0
 CSimpleFrame* CreateCheckButton(CSimpleFrame* parent) {
-    (void)parent;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    return new CSimpleCheckButton(parent);
 }
 
 // ref: FUN_140661f90
