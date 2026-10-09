@@ -1,4 +1,5 @@
 add_library(base STATIC
+    CDataStore.cpp
     CharClass.cpp
     Handle.cpp
     Matrix.cpp

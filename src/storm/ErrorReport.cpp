@@ -4,6 +4,8 @@
 #include "storm/String.hpp"
 #include "util/Unimplemented.hpp"
 #include <windows.h>
+#include <cstdarg>
+#include <cstdio>
 #include <cstring>
 #include <new>
 
@@ -92,11 +94,17 @@ void ErrorDisplayCode(uint32_t code, const char* text, uint32_t arg, bool flag) 
 }
 
 // ref: FUN_14024d330
+// Diverged: the error dialog and report are not ported; the message goes to stderr so that it
+// is not lost.
 void ErrorDisplayFormatted(uint32_t code, const char* a2, int32_t a3, const char* format, ...) {
-    (void)code;
     (void)a2;
     (void)a3;
-    (void)format;
+    char message[0x800];
+    va_list args;
+    va_start(args, format);
+    vsnprintf(message, sizeof(message), format, args);
+    va_end(args);
+    fprintf(stderr, "error 0x%08X: %s\n", code, message);
     FROST_UNIMPLEMENTED();
 }
 

@@ -14,4 +14,4 @@ add_library(client STATIC
     StartupService.cpp
 )
 target_include_directories(client PUBLIC ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(client PUBLIC base cas console fileservices framescript glue gx os services shadereffect storm texture threadpool ui util)
+target_link_libraries(client PUBLIC base cas console db fileservices framescript glue gx os services shadereffect storm texture threadpool ui util)

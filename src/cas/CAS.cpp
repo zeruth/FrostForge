@@ -843,6 +843,33 @@ uint64_t CASFileGetSize(CASFILE* file) {
     return CASFileStatSize(file->m_instance, file);
 }
 
+// Moves a file's read position (0 from the start, 1 from the current position, 2 from the
+// end) and returns the new one.
+// ref: FUN_1402d0a60
+int64_t CASFileSetPosition(CASFILE* file, int64_t offset, uint32_t method) {
+    if (file->m_type == 1) {
+        t_lastError.m_kind = 2;
+        return OsSetFilePointer(file->m_file, offset, method);
+    }
+    if (file->m_type != 2) {
+        t_lastError.m_kind = 1;
+        t_lastError.m_code = 4;
+        return 0;
+    }
+    t_lastError.m_kind = 0;
+    if (method == 0) {
+        file->m_position = offset;
+    } else if (method == 1) {
+        file->m_position += offset;
+        return file->m_position;
+    } else if (method == 2) {
+        uint32_t size = CASFileStatSize(file->m_instance, file);
+        file->m_position = size + offset;
+        return size + offset;
+    }
+    return file->m_position;
+}
+
 // ref: FUN_1402d3c90
 bool CASFileReadAt(CASINSTANCE* instance, CASFILE* file, void* dest, uint64_t offset, uint32_t size, uint32_t* read,
     uint8_t flags, int32_t slot) {

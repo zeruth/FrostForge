@@ -133,6 +133,7 @@ void CASFormatKeyName(char* dest, const uint8_t* ckey, uint32_t fileDataId, uint
 bool CASFileOpenById(int32_t fileDataId, CASFILE** file, uint64_t flags);
 bool CASFileOpenByKey(CASINSTANCE* instance, const char* name, const uint8_t* ckey, CASFILE** file);
 uint64_t CASFileGetSize(CASFILE* file);
+int64_t CASFileSetPosition(CASFILE* file, int64_t offset, uint32_t method);
 bool CASFileRead(CASFILE* file, void* dest, uint32_t size);
 bool CASFileReadEx(CASFILE* file, void* dest, uint32_t size, uint32_t* read, uint32_t flags, int32_t slot);
 bool CASFileReadAt(CASINSTANCE* instance, CASFILE* file, void* dest, uint64_t offset, uint32_t size, uint32_t* read,

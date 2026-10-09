@@ -3,13 +3,18 @@
 #include <cmath>
 #include <cstring>
 
+#include "db/DB2Tables.hpp"
+#include "db/WowDB2Lookup.hpp"
+#include "ui/CSimpleTop.hpp"
+#include "ui/UITypes.hpp"
 #include "util/Unimplemented.hpp"
 
 namespace {
 
-// UiTextureAtlasMember's record as the client keeps it.
+// UiTextureAtlasMember's record (UiTextureAtlasMember's meta: 26 bytes, unpacked).
 struct UITEXTUREATLASMEMBERREC {
-    uint8_t m_pad00[8];
+    int32_t m_committedName;        // 0x00 a string offset
+    int32_t m_id;                   // 0x04
     uint16_t m_atlas;               // 0x08
     int16_t m_left;                 // 0x0a
     int16_t m_right;                // 0x0c
@@ -19,7 +24,7 @@ struct UITEXTUREATLASMEMBERREC {
     int16_t m_width;                // 0x14 overrides the rect's when positive
     int16_t m_height;               // 0x16
     uint8_t m_flags;                // 0x18 2 tiles vertically, 4 horizontally
-    uint8_t m_scale;                // 0x19
+    uint8_t m_canvas;               // 0x19 0: the atlas's
 };
 
 // UiTextureAtlas's record.
@@ -27,33 +32,113 @@ struct UITEXTUREATLASREC {
     int32_t m_fileDataId;           // 0x00
     uint16_t m_width;               // 0x04
     uint16_t m_height;              // 0x06
-    uint8_t m_scale;                // 0x08
+    uint8_t m_canvas;               // 0x08
 };
 
-// The rows of UiTextureAtlasMember (DAT_142e88c30) and UiTextureAtlas (DAT_142e88e40), through
-// WowClientDB's record lookup (FUN_14057b640).
+// UiTextureAtlasElement's record: its name (a string offset) and id.
+struct UITEXTUREATLASELEMENTREC {
+    int32_t m_name;                 // 0x00
+    int32_t m_id;                   // 0x04
+};
+
 const UITEXTUREATLASMEMBERREC* MemberRecord(int32_t id) {
-    (void)id;
-    FROST_UNIMPLEMENTED();  // the client database (WowClientDB2) is not ported yet
-    return nullptr;
+    bool local;
+    return static_cast<const UITEXTUREATLASMEMBERREC*>(g_uiTextureAtlasMemberDB.GetRecord(static_cast<uint32_t>(id), false, &local));
 }
 
 const UITEXTUREATLASREC* AtlasRecord(uint16_t id) {
-    (void)id;
-    FROST_UNIMPLEMENTED();  // the client database (WowClientDB2) is not ported yet
-    return nullptr;
+    bool local;
+    return static_cast<const UITEXTUREATLASREC*>(g_uiTextureAtlasDB.GetRecord(id, false, &local));
 }
 
-// Whether the atlas lookups are enabled (DAT_142e97a90).
-uint8_t s_atlasesLoaded;
+// A UiCanvas record's dimension (FUN_14022b390 on the table FUN_14051c440 returns).
+int32_t CanvasDimension(int32_t canvas, uint32_t field) {
+    bool local;
+    auto record = static_cast<const uint8_t*>(g_uiCanvasDB.GetRecord(static_cast<uint32_t>(canvas), false, &local));
+    if (record == nullptr) {
+        return 0;
+    }
+    int64_t offset = g_uiCanvasDB.m_meta->m_fieldOffsets[field];
+    return DB2FieldI16(record + offset, field, offset, &g_uiCanvasDB);
+}
+
+// The canvas a member is drawn for: its own, else its atlas's, else 1.
+int32_t MemberCanvas(int32_t id, const UITEXTUREATLASMEMBERREC* member) {
+    if (member->m_canvas != 0) {
+        return member->m_canvas;
+    }
+    const UITEXTUREATLASMEMBERREC* again = MemberRecord(id);
+    if (again != nullptr) {
+        const UITEXTUREATLASREC* atlas = AtlasRecord(again->m_atlas);
+        if (atlas != nullptr) {
+            return atlas->m_canvas;
+        }
+    }
+    return 1;
+}
+
+// ref: FUN_140602c80: the element's member for the canvas: an exact match, else the one whose
+// canvas height is closest from below (taller ones rank by their negated height).
+int32_t* PickMember(int32_t* member, const UITEXTUREATLASELEMENTREC* element, TEXTUREATLASSCALE* scale) {
+    int32_t elementId = element->m_id;
+    int32_t canvas = scale->m_set != 0 ? scale->m_version : CSimpleTop::s_instance->m_layoutVersion;
+    bool local;
+    int32_t wantedHeight = g_uiCanvasDB.GetRecord(static_cast<uint32_t>(canvas), false, &local) != nullptr
+        ? CanvasDimension(canvas, 2)
+        : 1;
+    *member = 0;
+    WowDB2ParentLookup* parents = g_uiTextureAtlasMemberDB.m_parentLookup;
+    if (parents == nullptr) {
+        scale->m_set = 0;
+        return member;
+    }
+    int32_t best = static_cast<int32_t>(0x80000000);
+    DB2PARENTITER it;
+    DB2PARENTITER end;
+    parents->Begin(&it, elementId);
+    parents->End(&end);
+    while (it.m_entry != end.m_entry || it.m_overflow != end.m_overflow || it.m_parent != end.m_parent || it.m_source != end.m_source) {
+        auto candidate = static_cast<const UITEXTUREATLASMEMBERREC*>(parents->Record(&it));
+        int32_t id = candidate->m_id;
+        const UITEXTUREATLASMEMBERREC* record = MemberRecord(id);
+        if (record != nullptr) {
+            int32_t memberCanvas = MemberCanvas(id, record);
+            if (memberCanvas == canvas) {
+                *member = id;
+                scale->m_set = 0;
+                return member;
+            }
+            int32_t height = g_uiCanvasDB.GetRecord(static_cast<uint32_t>(memberCanvas), false, &local) != nullptr
+                ? CanvasDimension(memberCanvas, 2)
+                : 1;
+            int32_t rank = height <= wantedHeight ? height : -height;
+            if (best < rank) {
+                *member = id;
+                best = rank;
+            }
+        }
+        parents->Next(&it);
+    }
+    scale->m_set = 0;
+    return member;
+}
 
 }
 
 // ref: FUN_140602c00
 int32_t* TextureAtlasFindByName(int32_t* member, const char* name, TEXTUREATLASSCALE* scale) {
-    (void)name;
-    if (s_atlasesLoaded != 0) {
-        FROST_UNIMPLEMENTED();  // the element by name (FUN_14051e820) and the member pick (FUN_140602c80)
+    if (g_uiDatabaseReady) {
+        // FUN_14051e820
+        auto element = static_cast<const UITEXTUREATLASELEMENTREC*>(g_uiTextureAtlasElementDB.GetRecordByStringKey(name, 0));
+        if (element != nullptr) {
+            TEXTUREATLASSCALE pick = { 0, scale->m_set };
+            if (scale->m_set != 0) {
+                pick.m_version = scale->m_version;
+            }
+            PickMember(member, element, &pick);
+            scale->m_set = 0;
+            return member;
+        }
     }
     *member = 0;
     scale->m_set = 0;
@@ -62,21 +147,45 @@ int32_t* TextureAtlasFindByName(int32_t* member, const char* name, TEXTUREATLASS
 
 // ref: FUN_140602b70
 int32_t* TextureAtlasFindByElement(int32_t* member, int32_t element, TEXTUREATLASSCALE* scale) {
-    (void)element;
-    if (s_atlasesLoaded != 0) {
-        FROST_UNIMPLEMENTED();  // the element record and the member pick (FUN_140602c80)
+    if (g_uiDatabaseReady) {
+        bool local;
+        auto record = static_cast<const UITEXTUREATLASELEMENTREC*>(g_uiTextureAtlasElementDB.GetRecord(static_cast<uint32_t>(element), false, &local));
+        if (record != nullptr) {
+            TEXTUREATLASSCALE pick = { 0, scale->m_set };
+            if (scale->m_set != 0) {
+                pick.m_version = scale->m_version;
+            }
+            PickMember(member, record, &pick);
+            scale->m_set = 0;
+            return member;
+        }
     }
     *member = 0;
     scale->m_set = 0;
     return member;
 }
 
-// The member of an atlas member id, through its atlas (FUN_140602ee0).
+// The member of an atlas member id, through its element.
 // ref: FUN_140602ee0
 int32_t* TextureAtlasFindByMember(int32_t* member, int32_t id, TEXTUREATLASSCALE* scale) {
-    (void)id;
-    if (s_atlasesLoaded != 0) {
-        FROST_UNIMPLEMENTED();  // the member record, its atlas record and the member pick (FUN_140602c80)
+    const UITEXTUREATLASMEMBERREC* record = g_uiDatabaseReady ? MemberRecord(id) : nullptr;
+    if (record == nullptr) {
+        *member = 0;
+        scale->m_set = 0;
+        return member;
+    }
+    if (g_uiDatabaseReady) {
+        bool local;
+        auto element = static_cast<const UITEXTUREATLASELEMENTREC*>(g_uiTextureAtlasElementDB.GetRecord(record->m_element, false, &local));
+        if (element != nullptr) {
+            TEXTUREATLASSCALE pick = { 0, scale->m_set };
+            if (scale->m_set != 0) {
+                pick.m_version = scale->m_version;
+            }
+            PickMember(member, element, &pick);
+            scale->m_set = 0;
+            return member;
+        }
     }
     *member = 0;
     scale->m_set = 0;
@@ -101,7 +210,8 @@ int32_t TextureAtlasGetFileDataId(const int32_t* member) {
     return 0;
 }
 
-// The size in texels: the record's override or its rect, against the atlas's scale.
+// The size in UI units: the record's override or its rect, scaled from its canvas to
+// 1024x768.
 // ref: FUN_140602880
 void TextureAtlasGetSize(const int32_t* member, float* size) {
     const UITEXTUREATLASMEMBERREC* record = MemberRecord(*member);
@@ -112,9 +222,16 @@ void TextureAtlasGetSize(const int32_t* member, float* size) {
     }
     int32_t width = record->m_width > 0 ? record->m_width : record->m_right - record->m_left;
     int32_t height = record->m_height > 0 ? record->m_height : record->m_bottom - record->m_top;
-    size[0] = static_cast<float>(width);
-    size[1] = static_cast<float>(height);
-    FROST_UNIMPLEMENTED();  // the scale record (DAT_142e86920) and its divisors (FUN_14022b390)
+    float x = static_cast<float>(width);
+    float y = static_cast<float>(height);
+    int32_t canvas = MemberCanvas(*member, record);
+    bool local;
+    if (g_uiCanvasDB.GetRecord(static_cast<uint32_t>(canvas), false, &local) != nullptr) {
+        x = x * 1024.0f / static_cast<float>(CanvasDimension(canvas, 1));
+        y = y * 768.0f / static_cast<float>(CanvasDimension(canvas, 2));
+    }
+    size[0] = x;
+    size[1] = y;
 }
 
 // ref: FUN_140603040
@@ -197,7 +314,11 @@ void TextureAtlasUnmapTexCoords(const int32_t* member, float* out, const float* 
 const char* TextureAtlasGetName(const int32_t* member) {
     const UITEXTUREATLASMEMBERREC* record = MemberRecord(*member);
     if (record != nullptr) {
-        FROST_UNIMPLEMENTED();  // UiTextureAtlasElement's name (DAT_142e88a20)
+        bool local;
+        auto element = static_cast<const int32_t*>(g_uiTextureAtlasElementDB.GetRecord(record->m_element, false, &local));
+        if (element != nullptr && *element != 0) {
+            return reinterpret_cast<const char*>(element) + *element;
+        }
     }
     return "";
 }

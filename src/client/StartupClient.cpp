@@ -5,6 +5,7 @@
 #include "client/CommandLine.hpp"
 #include "client/GxWindow.hpp"
 #include "client/Locale.hpp"
+#include "db/DBClient.hpp"
 #include "client/Startup.hpp"
 #include "framescript/FrameScript.hpp"
 #include "framescript/ScriptMethod.hpp"
@@ -46,11 +47,6 @@ bool PreloadStart(void (*callback)(void*), void* param) {
     return true;
 }
 
-// ref: FUN_140351bf0
-void Sub140351BF0() {
-    FROST_UNIMPLEMENTED();
-}
-
 // DB2 hotfix callbacks
 // ref: FUN_1405705d0
 void Sub1405705D0() {
@@ -60,11 +56,6 @@ void Sub1405705D0() {
 // the hwDetect defaults (DAT_142e303c0 hook)
 // ref: FUN_14022a8e0
 void HardwareDetectDefaults() {
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_140352060
-void Sub140352060() {
     FROST_UNIMPLEMENTED();
 }
 
@@ -1124,7 +1115,7 @@ bool Sub14022A260() {
     DbSetErrorLog(HotfixLog);
     DbSetHotfixLog(HotfixLog);
     DbSetHotfixRecordLog(HotfixLogRecord);
-    Sub140351BF0();
+    ClientDBInitialize();
     HotfixAddInitialListener(&HotfixListener140229B10);
     HotfixAddInitialListener(&HotfixListener140229BF0);
     Sub1405705D0();
@@ -1134,7 +1125,7 @@ bool Sub14022A260() {
     ConsoleDeviceSetHardwareDetectHook(&HardwareDetectDefaults);
     if (!ConsoleDeviceInitialize(title.m_data)) {
         DbCloseHotfixes();
-        Sub140352060();
+        ClientDBShutdown();
         HotfixLog("---- Shutdown ----");
         SLogClose(s_hotfixLog);
         AsyncReadShutdown();
