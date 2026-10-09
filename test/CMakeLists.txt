@@ -18,3 +18,6 @@ target_link_libraries(LayoutFrameTest PRIVATE base ui)
 
 add_executable(SimpleFrameTest ui/SimpleFrameTest.cpp)
 target_link_libraries(SimpleFrameTest PRIVATE base ui)
+
+add_executable(ImagesTest images/ImagesTest.cpp)
+target_link_libraries(ImagesTest PRIVATE images)
