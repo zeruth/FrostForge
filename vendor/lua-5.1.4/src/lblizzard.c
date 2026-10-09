@@ -25,6 +25,10 @@ const char *lua_firstTaint;      /* 0x142e207e8 */
 int lua_captureFirstTaint;       /* 0x142e207f0 */
 int lua_decimalConversion;       /* 0x142e207f8 */
 lua_Debug lua_firstTaintSource;  /* 0x1447cf900 */
+lua_TaintHook lua_taintHook;     /* 0x142e207e0 */
+unsigned int lua_scriptTimeoutFirst;   /* 0x142e20808 */
+unsigned int lua_scriptTimeoutSecond;  /* 0x142e2080c */
+unsigned int lua_scriptTimeoutCheck;   /* 0x142e20810 */
 
 /* The strings lua_firstTaintSource points at, kept past the frame (0x1447cf980..). */
 static char firstTaintName[0x400];
@@ -62,6 +66,26 @@ void luaT_settaint (lua_State *L, const char *t) {
     if (lua_captureFirstTaint)
       luaT_capturefirsttaint(L);
   }
+}
+
+
+/* ref: FUN_1402b7f60 */
+LUA_API void lua_setscripttimeout (unsigned int first, unsigned int second) {
+  lua_scriptTimeoutFirst = first;
+  lua_scriptTimeoutSecond = second;
+  if (first != 0 && second != 0)
+    lua_scriptTimeoutCheck = (first < second) ? first : second;
+  else
+    lua_scriptTimeoutCheck = (first < second) ? second : first;
+}
+
+
+/* ref: FUN_1402b7f40 */
+LUA_API void lua_getscripttimeout (unsigned int *first, unsigned int *second) {
+  if (first != NULL)
+    *first = lua_scriptTimeoutFirst;
+  if (second != NULL)
+    *second = lua_scriptTimeoutSecond;
 }
 
 

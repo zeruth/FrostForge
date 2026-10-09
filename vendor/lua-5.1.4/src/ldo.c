@@ -28,6 +28,7 @@
 #include "ltm.h"
 #include "lundump.h"
 #include "lvm.h"
+#include "lblizzard.h"
 #include "lzio.h"
 
 
@@ -44,6 +45,7 @@
 /* struct lua_longjmp is in ldo.h (Blizzard's API reaches into it) */
 
 
+/* ref: FUN_1402b7190 */
 void luaD_seterrorobj (lua_State *L, int errcode, StkId oldtop) {
   switch (errcode) {
     case LUA_ERRMEM: {
@@ -56,7 +58,7 @@ void luaD_seterrorobj (lua_State *L, int errcode, StkId oldtop) {
     }
     case LUA_ERRSYNTAX:
     case LUA_ERRRUN: {
-      setobjs2s(L, oldtop, L->top - 1);  /* error message on current top */
+      setobj2s_read(L, oldtop, L->top - 1);  /* error message on current top */
       break;
     }
   }
@@ -81,15 +83,28 @@ static void resetstack (lua_State *L, int status) {
   luaD_seterrorobj(L, status, L->base);
   L->nCcalls = L->baseCcalls;
   L->allowhook = 1;
+  L->ingc = 0;  /* Blizzard */
   restore_stack_limit(L);
   L->errfunc = 0;
   L->errorJmp = NULL;
 }
 
 
+/* Blizzard: the taint state lua_pushjmptaint recorded comes back before the jump; with no
+** handler and no panic function the reference returns rather than exiting.
+** ref: FUN_1402b72d0 */
 void luaD_throw (lua_State *L, int errcode) {
   if (L->errorJmp) {
     L->errorJmp->status = errcode;
+    if (L->errorJmp->taintdepth != 0) {
+      if (lua_taintTracking && !lua_taintSuspended)
+        luaT_settaint(L, L->errorJmp->taint);
+      lua_taintTracking -= L->errorJmp->taintdepth;
+      if (L->errorJmp->tainttracking == 0) {
+        lua_taintTracking = 0;
+        lua_firstTaint = NULL;
+      }
+    }
     LUAI_THROW(L, L->errorJmp);
   }
   else {
@@ -99,14 +114,17 @@ void luaD_throw (lua_State *L, int errcode) {
       lua_unlock(L);
       G(L)->panic(L);
     }
-    exit(EXIT_FAILURE);
   }
 }
 
 
+/* The reference checks that `f' lies in the executable's code first (FUN_1412395b0); that
+** anti-tamper check is not ported.
+** ref: FUN_1402b6e30 */
 int luaD_rawrunprotected (lua_State *L, Pfunc f, void *ud) {
   struct lua_longjmp lj;
   lj.status = 0;
+  lj.taintdepth = 0;
   lj.previous = L->errorJmp;  /* chain new error handler */
   L->errorJmp = &lj;
   LUAI_TRY(L, &lj,
@@ -134,6 +152,7 @@ static void correctstack (lua_State *L, TValue *oldstack) {
 }
 
 
+/* ref: FUN_1402b6fc0 */
 void luaD_reallocstack (lua_State *L, int newsize) {
   TValue *oldstack = L->stack;
   int realsize = newsize + 1 + EXTRA_STACK;
@@ -145,6 +164,7 @@ void luaD_reallocstack (lua_State *L, int newsize) {
 }
 
 
+/* ref: FUN_1402b6f00 */
 void luaD_reallocCI (lua_State *L, int newsize) {
   CallInfo *oldci = L->base_ci;
   luaM_reallocvector(L, L->base_ci, L->size_ci, newsize, CallInfo);
@@ -154,6 +174,7 @@ void luaD_reallocCI (lua_State *L, int newsize) {
 }
 
 
+/* ref: FUN_1402b64b0 */
 void luaD_growstack (lua_State *L, int n) {
   if (n <= L->stacksize)  /* double size is enough? */
     luaD_reallocstack(L, 2*L->stacksize);
@@ -162,6 +183,7 @@ void luaD_growstack (lua_State *L, int n) {
 }
 
 
+/* ref: FUN_1402b6230 */
 static CallInfo *growCI (lua_State *L) {
   if (L->size_ci > LUAI_MAXCALLS)  /* overflow while handling overflow? */
     luaD_throw(L, LUA_ERRERR);
@@ -174,6 +196,8 @@ static CallInfo *growCI (lua_State *L) {
 }
 
 
+/* The reference checks the hook lies in the executable's code (FUN_1412395b0, not ported).
+** ref: FUN_1402b6390 */
 void luaD_callhook (lua_State *L, int event, int line) {
   lua_Hook hook = L->hook;
   if (hook && L->allowhook) {
@@ -201,6 +225,7 @@ void luaD_callhook (lua_State *L, int event, int line) {
 }
 
 
+/* ref: FUN_1402b6000 */
 static StkId adjust_varargs (lua_State *L, Proto *p, int actual) {
   int i;
   int nfixargs = p->numparams;
@@ -224,7 +249,7 @@ static StkId adjust_varargs (lua_State *L, Proto *p, int actual) {
   fixed = L->top - actual;  /* first fixed argument */
   base = L->top;  /* final position of first argument */
   for (i=0; i<nfixargs; i++) {
-    setobjs2s(L, L->top++, fixed+i);
+    setobj2s_read(L, L->top++, fixed+i);
     setnilvalue(fixed+i);
   }
   /* add `arg' parameter */
@@ -236,6 +261,7 @@ static StkId adjust_varargs (lua_State *L, Proto *p, int actual) {
 }
 
 
+/* ref: FUN_1402b7720 */
 static StkId tryfuncTM (lua_State *L, StkId func) {
   const TValue *tm = luaT_gettmbyobj(L, func, TM_CALL);
   StkId p;
@@ -243,10 +269,10 @@ static StkId tryfuncTM (lua_State *L, StkId func) {
   if (!ttisfunction(tm))
     luaG_typeerror(L, func, "call");
   /* Open a hole inside the stack at `func' */
-  for (p = L->top; p > func; p--) setobjs2s(L, p, p-1);
+  for (p = L->top; p > func; p--) setobj2s_read(L, p, p-1);
   incr_top(L);
   func = restorestack(L, funcr);  /* previous call may change stack */
-  setobj2s(L, func, tm);  /* tag method is the new function to be called */
+  setobj2s_read(L, func, tm);  /* tag method is the new function to be called */
   return func;
 }
 
@@ -257,6 +283,9 @@ static StkId tryfuncTM (lua_State *L, StkId func) {
    (condhardstacktests(luaD_reallocCI(L, L->size_ci)), ++L->ci))
 
 
+/* The reference checks a C function lies in the executable's code (FUN_1412395b0) and
+** verifies the anti-tamper taint copy (FUN_1402bd150) before calling it; neither is ported.
+** ref: FUN_1402b6800 */
 int luaD_precall (lua_State *L, StkId func, int nresults) {
   LClosure *cl;
   ptrdiff_t funcr;
@@ -324,6 +353,83 @@ int luaD_precall (lua_State *L, StkId func, int nresults) {
 }
 
 
+/* The reference checks a C function lies in the executable's code (FUN_1412395b0) and
+** verifies the anti-tamper taint copy (FUN_1402bd150) before calling it; neither is ported.
+** Blizzard: the profiling twin of luaD_precall. The call is counted; a C function's time goes
+** to its profile, and `*end' gets the tick it finished at.
+** ref: FUN_1402b6aa0 */
+int luaD_precall_profiled (lua_State *L, StkId func, int nresults, long long start,
+                           long long *end) {
+  LClosure *cl;
+  ptrdiff_t funcr;
+  if (!ttisfunction(func)) /* `func' is not a function? */
+    func = tryfuncTM(L, func);  /* check the `function' tag method */
+  funcr = savestack(L, func);
+  cl = &clvalue(func)->l;
+  cl->profile->calls++;
+  L->ci->savedpc = L->savedpc;
+  if (!cl->isC) {  /* Lua function? prepare its call */
+    CallInfo *ci;
+    StkId st, base;
+    Proto *p = cl->p;
+    luaD_checkstack(L, p->maxstacksize);
+    func = restorestack(L, funcr);
+    if (!p->is_vararg) {  /* no varargs? */
+      base = func + 1;
+      if (L->top > base + p->numparams)
+        L->top = base + p->numparams;
+    }
+    else {  /* vararg function */
+      int nargs = cast_int(L->top - func) - 1;
+      base = adjust_varargs(L, p, nargs);
+      func = restorestack(L, funcr);  /* previous call may change the stack */
+    }
+    ci = inc_ci(L);  /* now `enter' new function */
+    ci->func = func;
+    L->base = ci->base = base;
+    ci->top = L->base + p->maxstacksize;
+    lua_assert(ci->top <= L->stack_last);
+    L->savedpc = p->code;  /* starting point */
+    ci->tailcalls = 0;
+    ci->nresults = nresults;
+    for (st = L->top; st < ci->top; st++)
+      setnilvalue(st);
+    L->top = ci->top;
+    if (L->hookmask & LUA_MASKCALL) {
+      L->savedpc++;  /* hooks assume 'pc' is already incremented */
+      luaD_callhook(L, LUA_HOOKCALL, -1);
+      L->savedpc--;  /* correct 'pc' */
+    }
+    return PCRLUA;
+  }
+  else {  /* if is a C function, call it */
+    CallInfo *ci;
+    int n;
+    luaD_checkstack(L, LUA_MINSTACK);  /* ensure minimum stack size */
+    ci = inc_ci(L);  /* now `enter' new function */
+    ci->func = restorestack(L, funcr);
+    L->base = ci->base = ci->func + 1;
+    ci->top = L->top + LUA_MINSTACK;
+    lua_assert(ci->top <= L->stack_last);
+    ci->nresults = nresults;
+    if (L->hookmask & LUA_MASKCALL)
+      luaD_callhook(L, LUA_HOOKCALL, -1);
+    lua_unlock(L);
+    n = (*curr_func(L)->c.f)(L);  /* do the actual call */
+    lua_lock(L);
+    *end = luai_timerticks();
+    cl->profile->time += *end - start;
+    cl->profile->subtime += *end - start;
+    if (n < 0)  /* yielding? */
+      return PCRYIELD;
+    else {
+      luaD_poscall(L, L->top - n);
+      return PCRC;
+    }
+  }
+}
+
+
 static StkId callrethooks (lua_State *L, StkId firstResult) {
   ptrdiff_t fr = savestack(L, firstResult);  /* next call may change stack */
   luaD_callhook(L, LUA_HOOKRET, -1);
@@ -335,6 +441,7 @@ static StkId callrethooks (lua_State *L, StkId firstResult) {
 }
 
 
+/* ref: FUN_1402b6660 */
 int luaD_poscall (lua_State *L, StkId firstResult) {
   StkId res;
   int wanted, i;
@@ -348,7 +455,7 @@ int luaD_poscall (lua_State *L, StkId firstResult) {
   L->savedpc = (ci - 1)->savedpc;  /* restore savedpc */
   /* move results to correct place */
   for (i = wanted; i != 0 && firstResult < L->top; i--)
-    setobjs2s(L, res++, firstResult++);
+    setobj2s_read(L, res++, firstResult++);
   while (i-- > 0)
     setnilvalue(res++);
   L->top = res;
@@ -362,6 +469,7 @@ int luaD_poscall (lua_State *L, StkId firstResult) {
 ** When returns, all the results are on the stack, starting at the original
 ** function position.
 */ 
+/* ref: FUN_1402b62a0 */
 void luaD_call (lua_State *L, StkId func, int nResults) {
   if (++L->nCcalls >= LUAI_MAXCCALLS) {
     if (L->nCcalls == LUAI_MAXCCALLS)
@@ -369,19 +477,34 @@ void luaD_call (lua_State *L, StkId func, int nResults) {
     else if (L->nCcalls >= (LUAI_MAXCCALLS + (LUAI_MAXCCALLS>>3)))
       luaD_throw(L, LUA_ERRERR);  /* error while handing stack error */
   }
-  if (luaD_precall(L, func, nResults) == PCRLUA)  /* is a Lua function? */
-    luaV_execute(L, 1);  /* call it */
+  if (!G(L)->profiling) {
+    if (luaD_precall(L, func, nResults) == PCRLUA)  /* is a Lua function? */
+      luaV_execute(L, 1);  /* call it */
+  }
+  else {  /* Blizzard: the profiling twins */
+    long long end;
+    if (luaD_precall_profiled(L, func, nResults, luai_timerticks(), &end) == PCRLUA)
+      luaV_execute_profiled(L, 1);
+  }
   L->nCcalls--;
   luaC_checkGC(L);
 }
 
 
+/* ref: FUN_1402b7630 */
 static void resume (lua_State *L, void *ud) {
   StkId firstArg = cast(StkId, ud);
   CallInfo *ci = L->ci;
   if (L->status == 0) {  /* start coroutine? */
+    int r;
     lua_assert(ci == L->base_ci && firstArg > L->base);
-    if (luaD_precall(L, firstArg - 1, LUA_MULTRET) != PCRLUA)
+    if (!G(L)->profiling)
+      r = luaD_precall(L, firstArg - 1, LUA_MULTRET);
+    else {
+      long long end;
+      r = luaD_precall_profiled(L, firstArg - 1, LUA_MULTRET, luai_timerticks(), &end);
+    }
+    if (r != PCRLUA)
       return;
   }
   else {  /* resuming from previous yield */
@@ -397,7 +520,10 @@ static void resume (lua_State *L, void *ud) {
     else  /* yielded inside a hook: just continue its execution */
       L->base = L->ci->base;
   }
-  luaV_execute(L, cast_int(L->ci - L->base_ci));
+  if (!G(L)->profiling)
+    luaV_execute(L, cast_int(L->ci - L->base_ci));
+  else
+    luaV_execute_profiled(L, cast_int(L->ci - L->base_ci));
 }
 
 
@@ -410,6 +536,7 @@ static int resume_error (lua_State *L, const char *msg) {
 }
 
 
+/* ref: FUN_1402b7460 */
 LUA_API int lua_resume (lua_State *L, int nargs) {
   int status;
   lua_lock(L);
@@ -436,6 +563,7 @@ LUA_API int lua_resume (lua_State *L, int nargs) {
 }
 
 
+/* ref: FUN_1402b75e0 */
 LUA_API int lua_yield (lua_State *L, int nresults) {
   luai_userstateyield(L, nresults);
   lua_lock(L);
@@ -448,9 +576,13 @@ LUA_API int lua_yield (lua_State *L, int nresults) {
 }
 
 
+/* Blizzard: the in-GC flag is restored too, a profiling state takes the unwound Lua frames
+** off their closures' depth counts, and an error ends taint suspension.
+** ref: FUN_1402b64d0 */
 int luaD_pcall (lua_State *L, Pfunc func, void *u,
                 ptrdiff_t old_top, ptrdiff_t ef) {
   int status;
+  lu_byte old_ingc = L->ingc;
   unsigned short oldnCcalls = L->nCcalls;
   ptrdiff_t old_ci = saveci(L, L->ci);
   lu_byte old_allowhooks = L->allowhook;
@@ -459,14 +591,26 @@ int luaD_pcall (lua_State *L, Pfunc func, void *u,
   status = luaD_rawrunprotected(L, func, u);
   if (status != 0) {  /* an error occurred? */
     StkId oldtop = restorestack(L, old_top);
+    if (G(L)->profiling) {
+      CallInfo *oldci = restoreci(L, old_ci);
+      CallInfo *ci = L->ci;
+      while (oldci + 1 < ci) {
+        StkId f = (ci - 1)->func;
+        ci--;
+        if (ttisfunction(f) && !clvalue(f)->c.isC)
+          clvalue(f)->c.profile->depth--;
+      }
+    }
     luaF_close(L, oldtop);  /* close eventual pending closures */
     luaD_seterrorobj(L, status, oldtop);
     L->nCcalls = oldnCcalls;
     L->ci = restoreci(L, old_ci);
     L->base = L->ci->base;
     L->savedpc = L->ci->savedpc;
+    L->ingc = old_ingc;
     L->allowhook = old_allowhooks;
     restore_stack_limit(L);
+    lua_taintSuspended = 0;
   }
   L->errfunc = old_errfunc;
   return status;
@@ -483,15 +627,15 @@ struct SParser {  /* data to `f_parser' */
   const char *name;
 };
 
+/* Blizzard: source only; precompiled chunks are never undumped.
+** ref: FUN_1402b6140 */
 static void f_parser (lua_State *L, void *ud) {
   int i;
   Proto *tf;
   Closure *cl;
   struct SParser *p = cast(struct SParser *, ud);
-  int c = luaZ_lookahead(p->z);
   luaC_checkGC(L);
-  tf = ((c == LUA_SIGNATURE[0]) ? luaU_undump : luaY_parser)(L, p->z,
-                                                             &p->buff, p->name);
+  tf = luaY_parser(L, p->z, &p->buff, p->name);
   cl = luaF_newLclosure(L, tf->nups, hvalue(gt(L)));
   cl->l.p = tf;
   for (i = 0; i < tf->nups; i++)  /* initialize eventual upvalues */
@@ -501,6 +645,7 @@ static void f_parser (lua_State *L, void *ud) {
 }
 
 
+/* ref: FUN_1402b6d70 */
 int luaD_protectedparser (lua_State *L, ZIO *z, const char *name) {
   struct SParser p;
   int status;

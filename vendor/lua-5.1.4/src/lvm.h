@@ -31,6 +31,7 @@ LUAI_FUNC void luaV_gettable (lua_State *L, const TValue *t, TValue *key,
 LUAI_FUNC void luaV_settable (lua_State *L, const TValue *t, TValue *key,
                                             StkId val);
 LUAI_FUNC void luaV_execute (lua_State *L, int nexeccalls);
+LUAI_FUNC void luaV_execute_profiled (lua_State *L, int nexeccalls);
 LUAI_FUNC void luaV_concat (lua_State *L, int total, int last);
 
 #endif
