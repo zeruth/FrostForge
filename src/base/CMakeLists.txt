@@ -1,8 +1,9 @@
 add_library(base STATIC
     Coordinate.cpp
+    ObjectAlloc.cpp
     DataAllocator.cpp
     RCString.cpp
     Status.cpp
 )
 target_include_directories(base PUBLIC ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(base PUBLIC blz storm)
+target_link_libraries(base PUBLIC blz os storm)

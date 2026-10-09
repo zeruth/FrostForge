@@ -8,6 +8,7 @@ add_library(os STATIC
     win/PathTree.cpp
     win/SockAddr.cpp
     win/System.cpp
+    win/Sync.cpp
     win/Thread.cpp
     win/ThreadEntry.cpp
 )
