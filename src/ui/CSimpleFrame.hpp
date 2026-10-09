@@ -251,7 +251,7 @@ class CSimpleFrame : public CScriptRegion, public CAnimatableObject {
     void Unknown40(void* value) override;
     void Unknown48(void* value) override;
     void Unknown50(void* value) override;
-    void Unknown58(int32_t index, void* value, int32_t extra) override;
+    void Unknown58(int32_t index, void* value, float extra) override;
     void Unknown60(int32_t index, void* first, void* second) override;
     void Unknown68(int32_t index, void* first, void* second) override;
     void SetAnimAlpha(uint8_t alpha) override;

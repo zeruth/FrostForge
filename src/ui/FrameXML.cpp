@@ -1,4 +1,5 @@
 #include "ui/FrameXML.hpp"
+#include "ui/CSimpleTexture.hpp"
 
 #include <cstdarg>
 #include <cstddef>
@@ -1056,11 +1057,14 @@ CSimpleRegion* FrameXML_CreateFontString(XMLOBJECT* object, CSimpleFrame* frame,
 
 // ref: FUN_140668680
 CSimpleRegion* FrameXML_CreateTexture(XMLOBJECT* object, CSimpleFrame* frame, CScriptStatus* status) {
-    (void)object;
-    (void)frame;
-    (void)status;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    auto texture = new CSimpleTexture(frame, 2, 0, true);
+    if ((object->m_attributes & 0x40) != 0) {
+        texture->SetName(object->m_name.m_text);
+    }
+    texture->FrameScript_Object::LoadXML(object, status, nullptr);
+    texture->LoadXML(object, status, nullptr);
+    texture->PostLoadXML(object, status);
+    return texture;
 }
 
 // ref: FUN_140667f50

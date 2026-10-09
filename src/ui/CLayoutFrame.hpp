@@ -228,6 +228,8 @@ class CLayoutFrame {
     // Animation overrides.
     uint8_t GetAnimAlpha();
     float* GetAnimRectOffset();
+    // Joins the UI root's layout-wait list until ready, leaves it when ready (FUN_1405fa3b0).
+    void CheckLayoutReady();
     bool HasAnimAlpha();
     bool HasAnimTransform();
     bool HasAnimRectOffset();

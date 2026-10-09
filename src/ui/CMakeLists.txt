@@ -10,7 +10,10 @@ add_library(ui STATIC
     CSimpleFrame.cpp
     CSimpleFrameScript.cpp
     CSimpleRegion.cpp
+    CSimpleTexture.cpp
+    CSimpleTextureScript.cpp
     CSimpleTop.cpp
+    TextureAtlas.cpp
     CSimpleFont.cpp
     FrameXML.cpp
     UITypes.cpp

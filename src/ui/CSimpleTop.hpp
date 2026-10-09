@@ -168,6 +168,9 @@ class CSimpleTop : public CLayoutFrame {
     // Queues a script to run after the current update (the DeferredScriptBuffer).
     void QueueScript(FrameScript_Object* object, int32_t index);
     int32_t GetRegionLayoutVersion(CScriptRegion* region);
+    // A frame waits for its layout until its objects are ready (FUN_1405edde0, FUN_1405f3390).
+    void AddLayoutWaiting(CLayoutFrame* frame);
+    void RemoveLayoutWaiting(CLayoutFrame* frame);
 
     // Root frames.
     void AddRootFrame(CSimpleFrame* frame);
@@ -216,6 +219,10 @@ class CSimpleTop : public CLayoutFrame {
     // Frames join or leave the update list as they come to want OnUpdate or not.
     void ProcessUpdateChecks();
 };
+
+class CTexture;
+// Lets a UI texture go (FUN_1405f3c30); the reference keeps recently released ones a while.
+void UiReleaseTexture(CTexture** texture);
 
 // The cursor in UI units (FUN_140236a40).
 void UiGetCursorPosition(float* x, float* y);

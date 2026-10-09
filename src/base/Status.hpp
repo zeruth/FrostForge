@@ -61,4 +61,8 @@ class CStatus {
 };
 static_assert(sizeof(CStatus) == 0x28, "CStatus is 0x28 bytes");
 
+// Reports a status as a system message (FUN_141283ba0): the text is built and dropped, the
+// display being compiled out.
+bool SysMessageReportStatus(const CStatus* status);
+
 #endif

@@ -808,6 +808,28 @@ void CSimpleTop::ProcessUpdateChecks() {
     this->m_updateChecks.m_size = 0;
 }
 
+// ref: FUN_1405edde0
+void CSimpleTop::AddLayoutWaiting(CLayoutFrame* frame) {
+    bool inserted;
+    blz::chained_insert<LAYOUTNODE>(&this->m_layoutWaiting, frame, &inserted, s_layoutNodeTag, s_layoutBucketTag);
+}
+
+// ref: FUN_1405f3390
+void CSimpleTop::RemoveLayoutWaiting(CLayoutFrame* frame) {
+    LAYOUTNODE* node = blz::chained_unlink<LAYOUTNODE>(&this->m_layoutWaiting, frame);
+    if (node != nullptr) {
+        blz::chained_free_node(node, s_layoutNodeTag);
+    }
+}
+
+// ref: FUN_1405f3c30
+void UiReleaseTexture(CTexture** texture) {
+    // The reference parks the texture in the unneeded-texture cache (DAT_142cce720, trimmed by
+    // FUN_1405f27e0) before letting it go; the cache is not ported yet.
+    FROST_UNIMPLEMENTED();
+    TextureFree(texture);
+}
+
 // ref: FUN_1405f09a0
 void CSimpleTop::Render() {
     float view[16];

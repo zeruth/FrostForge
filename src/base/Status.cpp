@@ -156,3 +156,14 @@ void CStatus::ForEach(blz::function_storage* function) const {
         reinterpret_cast<INVOKE>(function->m_invoke)(node->m_severity, &node->m_text, function->m_storage);
     }
 }
+
+// ref: FUN_141283ba0
+bool SysMessageReportStatus(const CStatus* status) {
+    if (!status->IsEmpty()) {
+        blz::string text;
+        status->Join(&text, 0, "\n");
+        text.~string();
+        new (&text) blz::string();
+    }
+    return true;
+}

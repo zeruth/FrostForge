@@ -160,10 +160,10 @@ void CAnimatableObject::Unknown50(void* value) {
     (void)value;
 }
 
-void CAnimatableObject::Unknown58(int32_t index, void* value, int32_t extra) {
+void CAnimatableObject::Unknown58(int32_t index, void* value, float radians) {
     (void)index;
     (void)value;
-    (void)extra;
+    (void)radians;
 }
 
 void CAnimatableObject::Unknown60(int32_t index, void* first, void* second) {
@@ -182,7 +182,14 @@ void CAnimatableObject::SetAnimAlpha(uint8_t alpha) {
     (void)alpha;
 }
 
-void CAnimatableObject::Unknown78() {
+void CAnimatableObject::Unknown78(float progress, uint32_t rows, uint32_t columns, uint32_t frames, uint32_t frameWidth,
+    uint32_t frameHeight) {
+    (void)progress;
+    (void)rows;
+    (void)columns;
+    (void)frames;
+    (void)frameWidth;
+    (void)frameHeight;
 }
 
 CAnimatableObject* CAnimatableObject::GetAnimParent() {

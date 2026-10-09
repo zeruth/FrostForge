@@ -142,6 +142,9 @@ void CASFileClose(CASFILE** file);
 bool CASFileExists(int32_t fileDataId);
 // A file's FileDataID by name: a loose override first (flag 1), else the build manifest's.
 int32_t CASFileGetIdByName(const char* name, uint32_t flags);
+// A file's content key by FileDataID (FUN_1402cdfc0) or path (FUN_1402ce000).
+bool CASFileGetContentKeyById(int32_t fileDataId, uint8_t* key);
+bool CASFileGetContentKeyByName(const char* name, uint8_t* key, uint32_t flags);
 // Reads a whole file by FileDataID into a new Storm block (FUN_1402cf090).
 bool CASFileLoadById(int32_t fileDataId, uint8_t** data, uint32_t* size, uint64_t flags, int32_t allocFlags);
 bool CASFileLoadByName(const char* name, uint8_t** data, uint32_t* size, uint64_t flags, int32_t allocFlags);

@@ -1748,6 +1748,15 @@ void CLayoutFrame::ProtectDependents() {
 
 // ---- animation overrides ------------------------------------------------------------------
 
+// ref: FUN_1405fa3b0
+void CLayoutFrame::CheckLayoutReady() {
+    if (this->IsLayoutReady()) {
+        CSimpleTop::s_instance->RemoveLayoutWaiting(this);
+        return;
+    }
+    CSimpleTop::s_instance->AddLayoutWaiting(this);
+}
+
 // ref: FUN_1405f6660
 uint8_t CLayoutFrame::GetAnimAlpha() {
     return this->m_animData != nullptr ? this->m_animData->m_alpha : 0xff;

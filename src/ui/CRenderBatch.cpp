@@ -144,8 +144,8 @@ bool RenderableLess(const CSimpleRenderable& a, const CSimpleRenderable& b) {
         if (a.m_desaturation != b.m_desaturation) {
             return a.m_desaturation < b.m_desaturation;
         }
-        if (a.m_alphaRef != b.m_alphaRef) {
-            return a.m_alphaRef < b.m_alphaRef;
+        if (a.m_snappingBias != b.m_snappingBias) {
+            return a.m_snappingBias < b.m_snappingBias;
         }
         if (a.m_blend != b.m_blend) {
             return a.m_blend < b.m_blend;
@@ -571,7 +571,7 @@ CSimpleRenderable* CRenderBatch::Add(const CSimpleRenderable& renderable) {
 // ref: FUN_140620500
 bool CRenderBatch::AddGeometry(CSimpleFrame* frame, uint64_t drawOrder, CTexture* texture, uint16_t blend,
     uint64_t vertexCount, const float* positions, const float* texCoords, uint16_t colorStep, const uint8_t* colors,
-    uint64_t indexCount, const uint16_t* indices, float desaturation, bool onTop, float alphaRef, bool alphaTest,
+    uint64_t indexCount, const uint16_t* indices, float desaturation, bool onTop, float snappingBias, bool snapToPixelGrid,
     uint32_t extraCount, CTexture* const* extraTextures, const float* const* extraTexCoords) {
     if (indexCount == 0 || vertexCount == 0 || TextureGetGxTex(texture) == nullptr) {
         return false;
@@ -590,10 +590,10 @@ bool CRenderBatch::AddGeometry(CSimpleFrame* frame, uint64_t drawOrder, CTexture
     renderable.m_textures[0] = texture;
     renderable.m_desaturation = desaturation;
     renderable.m_blend = blend;
-    if (alphaRef <= 0.0f) {
-        renderable.m_alphaRef = alphaTest ? -1.0f : 0.0f;
+    if (snappingBias <= 0.0f) {
+        renderable.m_snappingBias = snapToPixelGrid ? -1.0f : 0.0f;
     } else {
-        renderable.m_alphaRef = alphaRef;
+        renderable.m_snappingBias = snappingBias;
     }
     renderable.m_positions = positions;
     renderable.m_texCoords = texCoords;
@@ -689,7 +689,7 @@ void CRenderBatch::BuildRanges() {
         bool merge = false;
         if (head != nullptr && r.m_type == CSimpleRenderable::RENDERABLE_GEOMETRY
             && head->m_type == CSimpleRenderable::RENDERABLE_GEOMETRY && head->m_desaturation == r.m_desaturation
-            && head->m_alphaRef == r.m_alphaRef && r.m_blend == head->m_blend && r.m_extraTextures == head->m_extraTextures) {
+            && head->m_snappingBias == r.m_snappingBias && r.m_blend == head->m_blend && r.m_extraTextures == head->m_extraTextures) {
             merge = true;
             uint32_t textures = TextureCount(r);
             for (uint32_t k = 0; k < textures; k++) {
@@ -774,7 +774,7 @@ void CRenderBatch::Draw(bool onTopOnly, const float* viewIn, const float* projec
         uint8_t lastType = 5;
         uint32_t lastTextures = 0;
         float lastDesaturation = -99.91f;
-        float lastAlphaRef = -99.91f;
+        float lastSnappingBias = -99.91f;
         void* bound[4] = {};
         uint64_t index = 0;
         for (uint64_t i = 0; i < rangeCount; i++) {
@@ -820,23 +820,23 @@ void CRenderBatch::Draw(bool onTopOnly, const float* viewIn, const float* projec
                 }
                 this->UploadRange(range);
                 bool rebind;
-                if (lastType == type && lastDesaturation == r->m_desaturation && r->m_alphaRef == lastAlphaRef) {
+                if (lastType == type && lastDesaturation == r->m_desaturation && r->m_snappingBias == lastSnappingBias) {
                     rebind = lastTextures != textures;
                 } else {
                     float* vertex = context->LockConstants(0, 1, 0x10);
-                    vertex[0] = r->m_alphaRef;
+                    vertex[0] = r->m_snappingBias;
                     vertex[1] = 0.0f;
                     vertex[2] = 0.0f;
                     vertex[3] = 0.0f;
                     context->UnlockConstants(0, 1);
                     float* pixel = context->LockConstants(2, 0, 0x10);
                     pixel[0] = r->m_desaturation;
-                    pixel[1] = r->m_alphaRef;
+                    pixel[1] = r->m_snappingBias;
                     pixel[2] = 0.0f;
                     pixel[3] = 0.0f;
                     context->UnlockConstants(2, 0);
                     lastDesaturation = r->m_desaturation;
-                    lastAlphaRef = r->m_alphaRef;
+                    lastSnappingBias = r->m_snappingBias;
                     rebind = lastType != type || lastTextures != textures;
                 }
                 if (!rebind) {

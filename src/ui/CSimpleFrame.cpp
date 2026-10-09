@@ -2894,7 +2894,7 @@ void CSimpleFrame::Unknown50(void* value) {
 }
 
 // ref: FUN_140613eb0
-void CSimpleFrame::Unknown58(int32_t index, void* value, int32_t extra) {
+void CSimpleFrame::Unknown58(int32_t index, void* value, float extra) {
     ForEachChild(this, [&](CSimpleFrame* child) {
         static_cast<CAnimatableObject*>(child)->Unknown58(index, value, extra);
     });

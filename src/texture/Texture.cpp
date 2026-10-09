@@ -2481,7 +2481,7 @@ MIPBITS* TextureDecodeImage(const uint32_t* format, uint32_t kind, uint8_t* data
 }
 
 // ref: FUN_141281020
-MIPBITS* TextureLoadImageById(int32_t fileDataId, uint32_t* width, uint32_t* height, bool* opaque, uint32_t* format,
+MIPBITS* TextureLoadImageById(int32_t fileDataId, uint32_t* width, uint32_t* height, uint32_t* format, bool* opaque,
     CStatus* status, uint32_t* alphaBits, uint8_t allowLoose) {
     uint8_t* data = nullptr;
     uint32_t size = 0;
@@ -2504,7 +2504,7 @@ MIPBITS* TextureLoadImageById(int32_t fileDataId, uint32_t* width, uint32_t* hei
 }
 
 // ref: FUN_141281140
-MIPBITS* TextureLoadImageByName(const char* name, uint32_t* width, uint32_t* height, bool* opaque, uint32_t* format,
+MIPBITS* TextureLoadImageByName(const char* name, uint32_t* width, uint32_t* height, uint32_t* format, bool* opaque,
     CStatus* status, uint32_t* alphaBits, uint8_t allowLoose) {
     char path[0x110];
     OsPathChangeExtension(path, 0x104, name, ".blp");
@@ -2526,4 +2526,88 @@ MIPBITS* TextureLoadImageByName(const char* name, uint32_t* width, uint32_t* hei
         status->Add(3, "Error loading texture file \"%s\": unsupported image format\n", name);
     }
     return bits;
+}
+
+namespace {
+
+// A texture's source: the texture (0), a path (1) or a FileDataID (2).
+struct TEXTURESOURCE {
+    int32_t m_kind;
+    union {
+        CTexture* m_texture;
+        const char* m_name;
+        int32_t m_fileDataId;
+    };
+};
+
+// The source's content key, when the CAS has one.
+bool SourceContentKey(const TEXTURESOURCE& source, uint8_t* key) {
+    if (source.m_kind == 0) {
+        int32_t fileDataId = source.m_texture->m_fileDataId;
+        if (fileDataId != 0) {
+            return cas::CASFileGetContentKeyById(fileDataId, key);
+        }
+        return cas::CASFileGetContentKeyByName(source.m_texture->m_name.m_data, key, 0);
+    }
+    if (source.m_kind == 1) {
+        return cas::CASFileGetContentKeyByName(source.m_name, key, 0);
+    }
+    if (source.m_kind == 2) {
+        return cas::CASFileGetContentKeyById(source.m_fileDataId, key);
+    }
+    return false;
+}
+
+int32_t SourceFileDataId(const TEXTURESOURCE& source) {
+    if (source.m_kind == 0) {
+        CTexture* texture = source.m_texture;
+        if (texture->m_fileDataId != 0) {
+            return texture->m_fileDataId;
+        }
+        return cas::CASFileGetIdByName(texture->m_name.m_data, (texture->m_flags >> 1) & 1);
+    }
+    if (source.m_kind == 1) {
+        return cas::CASFileGetIdByName(source.m_name, 1);
+    }
+    if (source.m_kind == 2) {
+        return source.m_fileDataId;
+    }
+    return 0;
+}
+
+// ref: FUN_141280c90
+bool TextureSourcesEqual(const TEXTURESOURCE& a, const TEXTURESOURCE& b) {
+    uint8_t keyA[16];
+    uint8_t keyB[16];
+    if (SourceContentKey(a, keyA) && SourceContentKey(b, keyB)) {
+        return std::memcmp(keyA, keyB, sizeof(keyA)) == 0;
+    }
+    return SourceFileDataId(a) == SourceFileDataId(b);
+}
+
+}
+
+// ref: FUN_141280f10
+bool TextureIsSameFile(HTEXTURE texture, int32_t fileDataId) {
+    if ((texture->m_cache & 4) != 0) {
+        return false;
+    }
+    TEXTURESOURCE a;
+    a.m_kind = 0;
+    a.m_texture = texture;
+    TEXTURESOURCE b;
+    b.m_kind = 2;
+    b.m_fileDataId = fileDataId;
+    return TextureSourcesEqual(a, b);
+}
+
+// ref: FUN_141280e60
+bool TextureIsSameFileId(int32_t fileDataId, int32_t other) {
+    TEXTURESOURCE a;
+    a.m_kind = 2;
+    a.m_fileDataId = fileDataId;
+    TEXTURESOURCE b;
+    b.m_kind = 2;
+    b.m_fileDataId = other;
+    return TextureSourcesEqual(a, b);
 }

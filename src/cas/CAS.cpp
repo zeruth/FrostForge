@@ -1090,6 +1090,33 @@ int32_t CASFileGetIdByName(const char* name, uint32_t flags) {
     return 0;
 }
 
+// ref: FUN_1402cdfc0
+bool CASFileGetContentKeyById(int32_t fileDataId, uint8_t* key) {
+    if (g_casManifest == nullptr) {
+        return false;
+    }
+    BuildManifestEntry* entry = g_casManifest->FindById(static_cast<uint32_t>(fileDataId));
+    if (entry == nullptr) {
+        return false;
+    }
+    std::memcpy(key, entry->m_ckey, 16);
+    return true;
+}
+
+// ref: FUN_1402ce000
+bool CASFileGetContentKeyByName(const char* name, uint8_t* key, uint32_t flags) {
+    (void)flags;
+    if (g_casManifest == nullptr) {
+        return false;
+    }
+    BuildManifestEntry* entry = g_casManifest->FindByName(LocalManifestNameHash(name));
+    if (entry == nullptr) {
+        return false;
+    }
+    std::memcpy(key, entry->m_ckey, 16);
+    return true;
+}
+
 // Frees what CASFileLoadById / CASFileLoadByName returned.
 // ref: FUN_1402d0f80
 void CASFileFree(void* data) {

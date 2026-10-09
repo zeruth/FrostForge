@@ -45,12 +45,17 @@ class CAnimatableObject {
     virtual void Unknown40(void* value);
     virtual void Unknown48(void* value);
     virtual void Unknown50(void* value);
-    virtual void Unknown58(int32_t index, void* value, int32_t extra);
+    // A rotation by `radians` about the origin point `index` moved by `value` (the angle
+    // arrives in xmm3 in the reference).
+    virtual void Unknown58(int32_t index, void* value, float radians);
     virtual void Unknown60(int32_t index, void* first, void* second);
     virtual void Unknown68(int32_t index, void* first, void* second);
     // An alpha animation set the object's alpha.
     virtual void SetAnimAlpha(uint8_t alpha);
-    virtual void Unknown78();
+    // A flipbook frame: the progress through `frames` laid out in rows and columns, each
+    // frameWidth by frameHeight texels when given.
+    virtual void Unknown78(float progress, uint32_t rows, uint32_t columns, uint32_t frames, uint32_t frameWidth,
+        uint32_t frameHeight);
     // The object whose animations play on this one too (none by default).
     virtual CAnimatableObject* GetAnimParent();
     virtual void* Unknown88();

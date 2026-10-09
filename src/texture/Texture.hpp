@@ -140,6 +140,7 @@ void* TextureGetGxTexOrDefault(HTEXTURE texture);
 void* TextureGetGxTexOrDefaultRecreate(HTEXTURE texture);
 void* TextureGetGxTexBlocking(HTEXTURE texture);
 void* TextureGetGxTexIfResident(HTEXTURE texture);
+void* TextureGetGxTexWait(HTEXTURE texture);
 void* TextureGetGxTexPreferPlaceholder(HTEXTURE texture);
 void* TextureDefaultGxTex();
 void* TextureBlackGxTex();
@@ -176,10 +177,15 @@ uint8_t TextureGetFilter();
 uint32_t TextureGetAnisotropy();
 
 // A texture file loaded and decoded at once, outside the cache.
-MIPBITS* TextureLoadImageById(int32_t fileDataId, uint32_t* width, uint32_t* height, bool* opaque, uint32_t* format,
+MIPBITS* TextureLoadImageById(int32_t fileDataId, uint32_t* width, uint32_t* height, uint32_t* format, bool* opaque,
     CStatus* status, uint32_t* alphaBits, uint8_t allowLoose);
-MIPBITS* TextureLoadImageByName(const char* name, uint32_t* width, uint32_t* height, bool* opaque, uint32_t* format,
+MIPBITS* TextureLoadImageByName(const char* name, uint32_t* width, uint32_t* height, uint32_t* format, bool* opaque,
     CStatus* status, uint32_t* alphaBits, uint8_t allowLoose);
+
+// Whether a texture is a file (FUN_141280f10), and two files the same (FUN_141280e60): by
+// content key when both have one, else by FileDataID.
+bool TextureIsSameFile(HTEXTURE texture, int32_t fileDataId);
+bool TextureIsSameFileId(int32_t fileDataId, int32_t other);
 
 // The bytes of a Gx texture of a format, filter and size, with its levels.
 int32_t TextureMemorySize(uint8_t format, uint32_t filter, uint32_t width, uint32_t height);

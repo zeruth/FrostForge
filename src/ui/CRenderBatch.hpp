@@ -57,7 +57,7 @@ struct CSimpleRenderable {
     const uint16_t* m_indices;      // 0x30
     const float* m_extraTexCoords[3];   // 0x38 per extra texture
     float m_desaturation;           // 0x50
-    float m_alphaRef;               // 0x54 <0 no alpha test
+    float m_snappingBias;           // 0x54 texel snapping; -1 snaps to the pixel grid
     uint16_t m_blend;               // 0x58 a pipeline blend {mode, mask}
     uint8_t m_extraTextures;        // 0x5a
     uint8_t m_atlas;                // 0x5b the first texture lives on an atlas page
@@ -120,7 +120,7 @@ class CRenderBatch {
     // not drawable.
     bool AddGeometry(CSimpleFrame* frame, uint64_t drawOrder, CTexture* texture, uint16_t blend, uint64_t vertexCount,
         const float* positions, const float* texCoords, uint16_t colorStep, const uint8_t* colors, uint64_t indexCount,
-        const uint16_t* indices, float desaturation, bool onTop, float alphaRef, bool alphaTest, uint32_t extraCount,
+        const uint16_t* indices, float desaturation, bool onTop, float snappingBias, bool snapToPixelGrid, uint32_t extraCount,
         CTexture* const* extraTextures, const float* const* extraTexCoords);
     // Adds a child frame's batch at its draw order, and its blit when it is a frame buffer
     // (FUN_140620790).
@@ -143,6 +143,10 @@ class CRenderBatch {
     void UploadRange(const CSimpleRenderablesSubBatch* range);
 };
 static_assert(sizeof(CRenderBatch) == 0x68, "CRenderBatch is 0x68 bytes");
+
+class CSimpleTexture;
+// Adds a texture region's quad with its masks; `owner` draws it in its place (FUN_140620b00).
+void RenderBatchAddTexture(CRenderBatch* batch, CSimpleTexture* texture, CSimpleTexture* owner);
 
 // The pipeline drawing geometry with `extraTextures` more textures (FUN_1406200f0).
 GxPipeline* RenderBatchGetPipeline(uint8_t extraTextures, uint64_t depthStencil, uint32_t raster, uint16_t blend,
