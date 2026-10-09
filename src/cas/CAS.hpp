@@ -71,6 +71,10 @@ char* CASFormatLastError(char* dest, uint64_t size);
 // keyed by who registered them (blz::vector<blz::pair<uint64_t, blz::function<...>>>).
 void CASAddHotfixHandler(blz::function_storage* handler, uint64_t key);
 void CASAddManifestHandler(blz::function_storage* handler, uint64_t key);
+// Handlers run before a manifest swap (blz::function<void()>).
+void CASAddPreSwapHandler(blz::function_storage* handler, uint64_t key);
+void CASRemoveManifestHandlers(uint64_t key);
+void CASRemovePreSwapHandlers(uint64_t key);
 
 extern CASINSTANCE* g_casInstance;       // DAT_142e25570
 extern CASMANIFEST* g_casManifest;       // DAT_142e25568
@@ -147,8 +151,32 @@ void CASFileFree(void* data);
 // 2 resident, 1 not resident (tact's 7), 0 unknown or failed.
 uint8_t CASFileGetResidency(int32_t fileDataId, uint64_t size, uint32_t a3);
 
+// 2 resident, 1 not, 0 unknown, for a span of a build file (by its content-key name).
+uint8_t CASInstanceGetSpanResidency(CASINSTANCE* instance, const char* name, uint64_t offset, uint64_t size);
+uint8_t CASFileGetSpanResidency(CASFILE* file, uint64_t offset, uint32_t size);
+void CASFileGetResidentBytes(CASFILE* file, uint64_t* resident, uint64_t* total);
+uint8_t CASGetResidencyByName(const char* name, uint64_t offset, uint32_t size, uint64_t flags);
+uint8_t CASGetResidencyByKey(const uint8_t* ckey, uint32_t fileDataId, uint32_t localeFlags, uint32_t contentFlags);
+bool CASFileOpenByCKey(const uint8_t* ckey, uint32_t fileDataId, uint32_t localeFlags, uint32_t contentFlags,
+    CASFILE** file);
+// Opens a file by path: with `flags` 1 a loose file entered under that name wins.
+bool CASFileOpenByName(const char* name, CASFILE** file, uint64_t flags);
+// Reads at an offset; a null destination makes the span resident. `flags` 8: only when
+// resident; 0x10: the read is kept in `slot` so it can be cancelled.
+bool CASFileReadAtOffset(CASFILE* file, void* dest, uint32_t offset, uint32_t size, uint32_t* read, uint32_t flags,
+    int32_t slot);
+void CASCancelSlot(int32_t slot);
+void CASClearSlot(int32_t slot);
+bool CASLastErrorIsNotResident();
+bool CASLastErrorWasCanceled();
+char* CASFormatError(int32_t kind, uint32_t code, char* dest, uint64_t size);
+bool CASFileGetMetaData(CASFILE** files, uint32_t* residency, uint64_t* containers, uint64_t* offsets, uint64_t count);
+
 // The build manifest's file data id for a path, or 0.
 int32_t CASGetFileDataIdByName(const char* name);
+
+// Steps an in-place build update (DAT_142e20868) from the main thread.
+void CASPollUpdate();
 
 void CASShutdown();
 

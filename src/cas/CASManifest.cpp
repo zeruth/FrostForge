@@ -17,6 +17,8 @@ const char s_diffTag[] = ".?AUBuildManifestDiffEntry@@";
 
 // DAT_142e25828
 SRWLOCK s_cursorLock = SRWLOCK_INIT;
+// DAT_142e25808: the walk has started
+volatile uint8_t s_cursorStarted;
 
 const uint32_t TSFM = 0x4d465354;
 const uint32_t CONTENT_NO_NAME_HASH = 0x10000000;
@@ -558,6 +560,35 @@ BuildManifestEntry* CASMANIFEST::FindById(uint32_t fileDataId) const {
         slot = (slot + step) & (table.m_capacity - 1);
     }
     return nullptr;
+}
+
+// ref: FUN_1402d70d0
+void CASMANIFEST::BeginWalk() {
+    if (s_cursorStarted) {
+        return;
+    }
+    AcquireSRWLockExclusive(&s_cursorLock);
+    if (!s_cursorStarted) {
+        InterlockedExchange8(reinterpret_cast<volatile char*>(&s_cursorStarted), 1);
+        BUILDMANIFEST* manifest = this->m_current;
+        g_manifestCursor.m_end = manifest->m_byId.End();
+        g_manifestCursor.m_entry = manifest->m_byId.First();
+        g_manifestCursor.m_manifest = manifest;
+    }
+    ReleaseSRWLockExclusive(&s_cursorLock);
+}
+
+// ref: FUN_1402d7010
+void CASMANIFEST::NextEntry(BuildManifestEntry* out) {
+    AcquireSRWLockExclusive(&s_cursorLock);
+    BuildManifestEntry* entry = g_manifestCursor.m_entry;
+    if (entry == this->m_current->m_byId.End()) {
+        out->m_fileDataId = 0;
+    } else {
+        *out = *entry;
+        g_manifestCursor.m_entry = g_manifestCursor.m_manifest->m_byId.Next(entry);
+    }
+    ReleaseSRWLockExclusive(&s_cursorLock);
 }
 
 // ref: FUN_1402d8440

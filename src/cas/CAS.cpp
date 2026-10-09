@@ -39,6 +39,7 @@ uint32_t s_mainThread;              // DAT_142e25578
 bool s_manifestOnly;                // DAT_142e20883
 uint32_t s_openA4;                  // DAT_142ccba48
 bool s_patchInstances;              // DAT_142e20881: the patch path's instances are live
+void* s_updateInstance;             // DAT_142e20868: an in-place update under way
 CASKEYCALLBACK s_keyCallback;       // DAT_142e25560
 
 // The last 64 tact/casc errors and warnings (0x98-byte slots, a blz::string first).
@@ -311,9 +312,12 @@ struct HANDLERVECTOR {
 const uint64_t NOT_OWNED = 0x8000000000000000ull;
 const char s_hotfixTag[] = ".?AU?$pair@_KV?$function@$$A6AXAEBVCStatus@@@Z@blz@@@blz@@";
 const char s_manifestTag[] = ".?AU?$pair@_KV?$function@$$A6AXPEBD@Z@blz@@@blz@@";
+const char s_preSwapTag[] = ".?AU?$pair@_KV?$function@$$A6AXXZ@blz@@@blz@@";
 
 HANDLERVECTOR s_hotfixHandlers;         // DAT_142e208a0
 blz::shared_mutex s_hotfixLock;         // DAT_142e208b8
+HANDLERVECTOR s_preSwapHandlers;        // DAT_142e208d8
+blz::shared_mutex s_preSwapLock;        // DAT_142e208f0
 HANDLERVECTOR s_manifestHandlers;       // DAT_142e20910
 blz::shared_mutex s_manifestLock;       // DAT_142e20928
 
@@ -326,7 +330,7 @@ void MoveFunction(blz::function_storage* dest, blz::function_storage* source) {
     source->m_manager = &blz::function_empty_manager;
 }
 
-// ref: FUN_1402d4500 (hot-fix), FUN_1402d46e0 (manifest)
+// ref: FUN_1402d4500 (hot-fix), FUN_1402d46e0 (manifest), FUN_1402d48c0 (pre-swap)
 void ReserveHandlers(HANDLERVECTOR* vector, uint64_t count, const char* tag) {
     uint64_t capacity = vector->m_capacity;
     if ((capacity & ~NOT_OWNED) >= count) {
@@ -378,6 +382,32 @@ void AddHandler(HANDLERVECTOR* vector, blz::shared_mutex* lock, const char* tag,
     lock->unlock();
 }
 
+// Removes every handler registered under `key` (std::remove_if, then the tail destroyed).
+// ref: FUN_1402d4120
+void RemoveHandlers(HANDLERVECTOR* vector, blz::shared_mutex* lock, uint64_t key) {
+    lock->lock();
+    HANDLERENTRY* end = vector->m_data + vector->m_size;
+    HANDLERENTRY* write = vector->m_data;
+    while (write != end && write->m_key != key) {
+        write++;
+    }
+    if (write != end) {
+        for (HANDLERENTRY* read = write + 1; read != end; read++) {
+            if (read->m_key != key) {
+                write->m_key = read->m_key;
+                write->m_function.m_manager(write->m_function.m_storage, nullptr, 0);
+                MoveFunction(&write->m_function, &read->m_function);
+                write++;
+            }
+        }
+        for (HANDLERENTRY* dead = write; dead != end; dead++) {
+            dead->m_function.m_manager(dead->m_function.m_storage, nullptr, 0);
+        }
+        vector->m_size = static_cast<uint64_t>(write - vector->m_data);
+    }
+    lock->unlock();
+}
+
 }
 
 // ref: FUN_1402cc6a0
@@ -388,6 +418,21 @@ void CASAddHotfixHandler(blz::function_storage* handler, uint64_t key) {
 // ref: FUN_1402cc840
 void CASAddManifestHandler(blz::function_storage* handler, uint64_t key) {
     AddHandler(&s_manifestHandlers, &s_manifestLock, s_manifestTag, handler, key);
+}
+
+// ref: FUN_1402cc9e0
+void CASAddPreSwapHandler(blz::function_storage* handler, uint64_t key) {
+    AddHandler(&s_preSwapHandlers, &s_preSwapLock, s_preSwapTag, handler, key);
+}
+
+// ref: FUN_1402d0a10
+void CASRemoveManifestHandlers(uint64_t key) {
+    RemoveHandlers(&s_manifestHandlers, &s_manifestLock, key);
+}
+
+// ref: FUN_1402d0a20
+void CASRemovePreSwapHandlers(uint64_t key) {
+    RemoveHandlers(&s_preSwapHandlers, &s_preSwapLock, key);
 }
 
 // ref: FUN_1402ccd00
@@ -1076,6 +1121,275 @@ uint8_t CASFileGetResidency(int32_t fileDataId, uint64_t size, uint32_t a3) {
     return error == 7;
 }
 
+// Whether a span of a build file is in local storage: 2 resident, 1 not (tact's 7), 0 unknown
+// or failed.
+// ref: FUN_1402d23e0
+uint8_t CASInstanceGetSpanResidency(CASINSTANCE* instance, const char* name, uint64_t offset, uint64_t size) {
+    if (offset >= 0x100000000ull || size >= 0x100000000ull) {
+        return 0;
+    }
+    uint64_t id = tact::InstanceCheckResidency(instance->m_tact, name, static_cast<uint32_t>(offset),
+        static_cast<uint32_t>(size));
+    uint8_t error = tact::InstanceGetOpResult(instance->m_tact, id, nullptr);
+    t_lastError.m_kind = 0;
+    t_lastError.m_tactError = error;
+    if (error == 0) {
+        return 2;
+    }
+    if (error == 7) {
+        return 1;
+    }
+    return 0;
+}
+
+// A loose file is always resident.
+// ref: FUN_1402cd330
+uint8_t CASFileGetSpanResidency(CASFILE* file, uint64_t offset, uint32_t size) {
+    int32_t type = file->m_type;
+    if (type != 1) {
+        if (type == 2) {
+            return CASInstanceGetSpanResidency(g_casInstance, file->m_name, offset, size);
+        }
+        if (type != 3) {
+            return 0;
+        }
+    }
+    return 2;
+}
+
+// How much of a file is resident, in fifths (at least 16 KB a step).
+// ref: FUN_1402cd040
+void CASFileGetResidentBytes(CASFILE* file, uint64_t* resident, uint64_t* total) {
+    *total = CASFileGetSize(file);
+    *resident = 0;
+    uint64_t size = *total;
+    uint32_t step = 0x4000;
+    if (size / 5 > 0x3fff) {
+        step = static_cast<uint32_t>(size / 5);
+    }
+    step++;
+    for (uint64_t offset = 0; offset < size; offset += step) {
+        if (size <= step + offset) {
+            step = static_cast<uint32_t>(size) - static_cast<uint32_t>(offset);
+        }
+        int32_t type = file->m_type;
+        if (type == 1 || type == 3
+            || (type == 2 && CASInstanceGetSpanResidency(g_casInstance, file->m_name, offset, step) == 2)) {
+            *resident += step;
+        }
+        size = *total;
+    }
+}
+
+// Whether a named file is resident: a build file through tact; with only the manifest loaded,
+// a loose file present (or a relative path) counts, else whether the build knows the name.
+// ref: FUN_1402cd370
+uint8_t CASGetResidencyByName(const char* name, uint64_t offset, uint32_t size, uint64_t flags) {
+    if (!s_manifestOnly) {
+        uint64_t hash = LocalManifestNameHash(name);
+        BuildManifestEntry* entry = g_casManifest->FindByName(hash);
+        (void)flags;    // bit 5 goes to the manifest lookup, which takes only the hash
+        if (entry == nullptr) {
+            return 0;
+        }
+        char key[0x40];
+        CASFormatKeyName(key, entry->m_ckey, entry->m_fileDataId, entry->m_localeFlags, entry->m_contentFlags);
+        if (offset >= 0x100000000ull) {
+            return 0;
+        }
+        CASINSTANCE* instance = g_casInstance;
+        uint64_t id = tact::InstanceCheckResidency(instance->m_tact, key, static_cast<uint32_t>(offset), size);
+        uint8_t error = tact::InstanceGetOpResult(instance->m_tact, id, nullptr);
+        t_lastError.m_kind = 0;
+        t_lastError.m_tactError = error;
+        if (error == 0) {
+            return 2;
+        }
+        return error == 7;
+    }
+    uint64_t hash = LocalManifestNameHash(name);
+    if (g_localManifest != nullptr) {
+        if (const char* path = g_localManifest->FindPathByName(hash, nullptr)) {
+            // FUN_140213e40: a relative path
+            if (OsPathRootLength(path) == 0 || OsFileExists(path)) {
+                return 2;
+            }
+        }
+    }
+    bool manifestOnly = s_manifestOnly;
+    t_lastError.m_kind = 1;
+    if (manifestOnly) {
+        t_lastError.m_code = 3;
+    }
+    return g_casManifest->FindByName(hash) != nullptr ? 2 : 1;
+}
+
+// The residency of an encoding key's span, for the background download.
+// ref: FUN_1402cd180
+uint8_t CASGetResidencyByKey(const uint8_t* ckey, uint32_t fileDataId, uint32_t localeFlags, uint32_t contentFlags) {
+    t_lastError.m_kind = 0;
+    char name[0x40];
+    CASFormatKeyName(name, ckey, fileDataId, localeFlags, contentFlags);
+    CASINSTANCE* instance = g_casInstance;
+    uint64_t id = tact::InstanceCheckResidency(instance->m_tact, name, 0, 0);
+    uint8_t error = tact::InstanceGetOpResult(instance->m_tact, id, nullptr);
+    t_lastError.m_kind = 0;
+    t_lastError.m_tactError = error;
+    if (error == 0) {
+        return 2;
+    }
+    return error == 7;
+}
+
+// Opens a build file by its content key.
+// ref: FUN_1402cfcf0
+bool CASFileOpenByCKey(const uint8_t* ckey, uint32_t fileDataId, uint32_t localeFlags, uint32_t contentFlags,
+    CASFILE** file) {
+    t_lastError.m_kind = 0;
+    char name[0x40];
+    CASFormatKeyName(name, ckey, fileDataId, localeFlags, contentFlags);
+    uint8_t key[16];
+    std::memcpy(key, ckey, 16);
+    return CASFileOpenByKey(g_casInstance, name, key, file);
+}
+
+// Opens a file by path: with `flags` 1 a loose file entered under that name wins.
+// ref: FUN_1402cffe0
+bool CASFileOpenByName(const char* name, CASFILE** file, uint64_t flags) {
+    *file = nullptr;
+    uint64_t hash = LocalManifestNameHash(name);
+    if ((flags & 1) != 0 && g_localManifest != nullptr) {
+        int32_t fileDataId = 0;
+        if (const char* path = g_localManifest->FindPathByName(hash, &fileDataId)) {
+            t_lastError.m_kind = 2;
+            void* handle = OsCreateFile(path, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, 0);
+            if (handle == INVALID_HANDLE_VALUE) {
+                return false;
+            }
+            auto opened = static_cast<CASFILE*>(SMemAlloc(sizeof(CASFILE), 10, __FILE__, SStrHashFnv1a(__FILE__), 0xaed, 0));
+            opened->m_handle = nullptr;
+            opened->m_type = 1;
+            opened->m_file = handle;
+            *file = opened;
+            return true;
+        }
+    }
+    bool manifestOnly = s_manifestOnly;
+    t_lastError.m_kind = 1;
+    if (manifestOnly) {
+        *file = nullptr;
+        t_lastError.m_code = 3;
+        return false;
+    }
+    BuildManifestEntry* entry = g_casManifest != nullptr ? g_casManifest->FindByName(hash) : nullptr;
+    if (entry == nullptr) {
+        t_lastError.m_kind = 1;
+        *file = nullptr;
+        t_lastError.m_code = 2;
+        return false;
+    }
+    t_lastError.m_kind = 0;
+    char key[0x40];
+    CASFormatKeyName(key, entry->m_ckey, entry->m_fileDataId, entry->m_localeFlags, entry->m_contentFlags);
+    return CASFileOpenByKey(g_casInstance, key, entry->m_ckey, file);
+}
+
+// Reads `size` bytes at `offset` (a null destination makes the span resident instead).
+// ref: FUN_1402d07a0
+bool CASFileReadAtOffset(CASFILE* file, void* dest, uint32_t offset, uint32_t size, uint32_t* read, uint32_t flags,
+    int32_t slot) {
+    if (size == 0) {
+        if (read != nullptr) {
+            *read = 0;
+        }
+        return true;
+    }
+    uint32_t local = 0;
+    uint32_t* done = read != nullptr ? read : &local;
+    if (file->m_type == 1) {
+        t_lastError.m_kind = 2;
+        return OsReadFileAt(file->m_file, dest, offset, size, done);
+    }
+    if (file->m_type != 2) {
+        t_lastError.m_kind = 1;
+        t_lastError.m_code = 4;
+        return false;
+    }
+    t_lastError.m_kind = 0;
+    bool ok = CASFileReadAt(file->m_instance, file, dest, offset, size, done, static_cast<uint8_t>(flags), slot);
+    if (g_casReadHook != nullptr) {
+        g_casReadHook(file->m_ckey, *done, s_casReadHookContext);
+    }
+    return ok;
+}
+
+// Cancels the background read a thread slot holds (while reads are allowed).
+// ref: FUN_1402ccbf0
+void CASCancelSlot(int32_t slot) {
+    CASINSTANCE* instance = g_casInstance;
+    if (instance != nullptr && !instance->m_noCdn && !instance->m_noStreaming && instance->m_tact != nullptr) {
+        tact::InstanceCancelOp(instance->m_tact, instance->m_ops[slot]);
+    }
+}
+
+// ref: FUN_1402d0a30
+void CASClearSlot(int32_t slot) {
+    if (g_casInstance != nullptr) {
+        g_casInstance->m_ops[slot] = 0;
+    }
+}
+
+// Whether the last error was tact's "not available" (not resident).
+// ref: FUN_1402cee50
+bool CASLastErrorIsNotResident() {
+    int32_t kind = t_lastError.m_kind;
+    uint32_t code;
+    if (kind == 0) {
+        code = t_lastError.m_tactError;
+    } else {
+        return false;
+    }
+    return code == 7;
+}
+
+// Whether the last tact error was a cancel.
+// ref: FUN_1402ceec0
+bool CASLastErrorWasCanceled() {
+    return t_lastError.m_tactError == 2;
+}
+
+// An error as text, by its kind and code (CASFormatLastError for a saved error).
+// ref: FUN_1402cde10
+char* CASFormatError(int32_t kind, uint32_t code, char* dest, uint64_t size) {
+    if (kind == 0) {
+        return CopyErrorText(dest, size, tact::ErrorString(static_cast<uint8_t>(code)));
+    }
+    if (kind == 2) {
+        OsGetErrorText(code, dest, static_cast<uint32_t>(size));
+        return dest;
+    }
+    if (kind != 1 && kind != 3) {
+        return CopyErrorText(dest, size, "");
+    }
+    return CopyErrorText(dest, size, code < 0xb ? s_casErrorStrings[code] : "Unknown CAS error");
+}
+
+// Residency and placement of several open files at once, for sorting reads by where they lie
+// on disk.
+// ref: FUN_1402cdf60
+bool CASFileGetMetaData(CASFILE** files, uint32_t* residency, uint64_t* containers, uint64_t* offsets, uint64_t count) {
+    t_lastError.m_kind = 0;
+    // FUN_1402d26d0 asks tact for the files' metadata in one call (FUN_1420d47a0), which is not
+    // ported; only the sortDiskReads path comes here.
+    (void)files;
+    (void)residency;
+    (void)containers;
+    (void)offsets;
+    (void)count;
+    FROST_UNIMPLEMENTED();
+    return false;
+}
+
 // ref: FUN_1402d2380
 int32_t CASGetFileDataIdByName(const char* name) {
     CASMANIFEST* manifest = g_casManifest;
@@ -1084,6 +1398,17 @@ int32_t CASGetFileDataIdByName(const char* name) {
     }
     BuildManifestEntry* entry = manifest->FindByName(LocalManifestNameHash(name));
     return entry != nullptr ? static_cast<int32_t>(entry->m_fileDataId) : 0;
+}
+
+// The in-place update's state machine: a hot-fix instance taking over (state 1), the
+// manifest swap (8), the new instance replacing the old (0xb). Nothing creates the update
+// instance (DAT_142e20868) -- the patch path is not ported -- so there is never a step.
+// ref: FUN_1402cf8d0
+void CASPollUpdate() {
+    if (s_updateInstance == nullptr) {
+        return;
+    }
+    FROST_UNIMPLEMENTED();
 }
 
 // ref: FUN_1402d0b80

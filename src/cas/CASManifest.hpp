@@ -106,6 +106,10 @@ struct CASMANIFEST {
 
     BuildManifestEntry* FindByName(uint64_t nameHash) const;
     BuildManifestEntry* FindById(uint32_t fileDataId) const;
+    // Starts the one process-wide walk over the entries (once), then hands them out in turn;
+    // past the end the entry's file data id is 0.
+    void BeginWalk();
+    void NextEntry(BuildManifestEntry* out);
 };
 static_assert(sizeof(CASMANIFEST) == 0x40, "CASMANIFEST is 0x40 bytes");
 
