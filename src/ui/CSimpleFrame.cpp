@@ -2301,10 +2301,10 @@ bool CSimpleFrame::OnMouseWheel(MOUSEEVENT* event) {
 // A press on a frame not yet dragging: the button is remembered, the frame raised, a drag
 // armed when the button may drag it, then OnMouseDown runs.
 // ref: FUN_140619550
-void CSimpleFrame::OnMouseDown(MOUSEEVENT* event, const char* button) {
+bool CSimpleFrame::OnMouseDown(MOUSEEVENT* event, const char* button) {
     CSimpleTop* top = CSimpleTop::s_instance;
     if (top->m_inputSuspended || (this->m_flags2 & FRAME2_DRAGGING)) {
-        return;
+        return false;
     }
     this->m_buttonsDown |= static_cast<uint32_t>(event->m_button);
     if (!(this->m_frameFlags & FRAME_TOPLEVEL)) {
@@ -2333,19 +2333,20 @@ void CSimpleFrame::OnMouseDown(MOUSEEVENT* event, const char* button) {
     this->RunScript(16, nullptr, button);
     CSimpleTop::s_instance->m_inMouseScript = 0;
     top->m_currentButton = previous;
+    return false;
 }
 
 // A release ends a drag (OnDragStop, then OnReceiveDrag for whatever is under the cursor);
 // otherwise OnMouseUp runs with whether the release was inside.
 // ref: FUN_140619680
-void CSimpleFrame::OnMouseUp(MOUSEEVENT* event, const char* button) {
+bool CSimpleFrame::OnMouseUp(MOUSEEVENT* event, const char* button) {
     if (!(this->m_buttonsDown & static_cast<uint32_t>(event->m_button))) {
-        return;
+        return false;
     }
     this->m_buttonsDown &= ~static_cast<uint32_t>(event->m_button);
     CSimpleTop* top = CSimpleTop::s_instance;
     if (top->m_inputSuspended) {
-        return;
+        return false;
     }
     if (button == nullptr) {
         if (static_cast<uint32_t>(event->m_button) & this->m_dragButtons) {
@@ -2358,7 +2359,7 @@ void CSimpleFrame::OnMouseUp(MOUSEEVENT* event, const char* button) {
                     region->OnReceiveDrag(event);
                 }
                 this->m_flags2 &= ~FRAME2_DRAGGING;
-                return;
+                return false;
             }
         }
         button = MouseButtonToString(event->m_button);
@@ -2372,6 +2373,7 @@ void CSimpleFrame::OnMouseUp(MOUSEEVENT* event, const char* button) {
     this->RunScript(17, nullptr, button, inside);
     CSimpleTop::s_instance->m_inMouseScript = 0;
     top->m_currentButton = previous;
+    return false;
 }
 
 // A cursor that moved far enough from an armed press starts the drag.

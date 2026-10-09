@@ -357,10 +357,10 @@ bool CScriptRegion::Unknown168(void* event) {
 }
 
 // ref: FUN_14060eff0
-void CScriptRegion::OnMouseDown(MOUSEEVENT* event, const char* button) {
+bool CScriptRegion::OnMouseDown(MOUSEEVENT* event, const char* button) {
     CSimpleTop* top = CSimpleTop::s_instance;
     if (top->m_inputSuspended) {
-        return;
+        return false;
     }
     if (button == nullptr) {
         button = MouseButtonToString(event->m_button);
@@ -372,13 +372,14 @@ void CScriptRegion::OnMouseDown(MOUSEEVENT* event, const char* button) {
     this->RunScript(16, nullptr, button);
     CSimpleTop::s_instance->m_inMouseScript = 0;
     top->m_currentButton = previous;
+    return false;
 }
 
 // ref: FUN_14060f080
-void CScriptRegion::OnMouseUp(MOUSEEVENT* event, const char* button) {
+bool CScriptRegion::OnMouseUp(MOUSEEVENT* event, const char* button) {
     CSimpleTop* top = CSimpleTop::s_instance;
     if (top->m_inputSuspended) {
-        return;
+        return false;
     }
     if (button == nullptr) {
         button = MouseButtonToString(event->m_button);
@@ -392,6 +393,7 @@ void CScriptRegion::OnMouseUp(MOUSEEVENT* event, const char* button) {
     this->RunScript(17, nullptr, button, inside);
     CSimpleTop::s_instance->m_inMouseScript = 0;
     top->m_currentButton = previous;
+    return false;
 }
 
 bool CScriptRegion::OnMouseWheel(MOUSEEVENT* event) {

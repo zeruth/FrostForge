@@ -24,6 +24,35 @@ extern const char s_maskTextureTag[];
 extern const char s_textureListTag[];
 
 // TSGrowableArray<CArgb> (0x20 bytes).
+// What a texture can be set from (the variant the Lua asset arguments and the buttons' state
+// textures pass around, 0x10 bytes): 1 or 2 a FileDataID, 3 an atlas member, 4 another texture
+// (whose own source is taken; null clears).
+struct TEXTURESOURCE {
+    enum : int32_t {
+        SOURCE_FILE = 1,
+        SOURCE_FILE_ID = 2,
+        SOURCE_ATLAS = 3,
+        SOURCE_TEXTURE = 4,
+    };
+    int32_t m_type;
+    int32_t m_pad;
+    union {
+        int32_t m_id;
+        CSimpleTexture* m_texture;
+    };
+
+    // FUN_140638820 / FUN_140638810 / FUN_140638850
+    static TEXTURESOURCE FromFileId(int32_t fileDataId);
+    static TEXTURESOURCE FromAtlas(int32_t member);
+    static TEXTURESOURCE FromTexture(CSimpleTexture* texture);
+    // FUN_140638860: a path's file, else an atlas of that name.
+    static TEXTURESOURCE FromString(const char* name);
+    // FUN_1406389c0
+    CSimpleTexture* GetTexture() const;
+    // FUN_140638960: the FileDataID it stands for (an atlas's file, a texture's file).
+    int32_t GetFileDataId() const;
+};
+
 struct ARGBARRAY {
     uint32_t m_count;               // 0x00
     uint32_t m_pad04;
@@ -166,6 +195,8 @@ class CSimpleTexture : public CSimpleRegion {
     bool SetTextureHandle(CTexture* texture, bool keepMasks);
     // An atlas entry (FUN_140634740).
     bool SetAtlas(const int32_t* atlas, uint8_t filter, bool useAtlasSize, uint8_t wrapH, uint8_t wrapV);
+    // Any source, with the texture's own wrap and filter (FUN_140636a20).
+    bool SetTextureSource(const TEXTURESOURCE* source);
     // Pixels the caller has, width by height ARGB (FUN_140635c70).
     bool SetPixels(const uint32_t* pixels, int32_t width, int32_t height);
     // The texture's FileDataID, the one asked for while it loads (FUN_140632e90).

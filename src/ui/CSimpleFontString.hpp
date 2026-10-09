@@ -140,8 +140,8 @@ class CSimpleFontString : public CSimpleRegion, public CSimpleFontable {
     void Unknown98(void* argument) override;
     void LoadXML(XMLOBJECT* node, CStatus* status, const char* intrinsic) override;
     void PostLoadXML(XMLOBJECT* node, CStatus* status) override;
-    void OnMouseDown(MOUSEEVENT* event, const char* button) override;
-    void OnMouseUp(MOUSEEVENT* event, const char* button) override;
+    bool OnMouseDown(MOUSEEVENT* event, const char* button) override;
+    bool OnMouseUp(MOUSEEVENT* event, const char* button) override;
     int32_t HitTest(int32_t type, MOUSEEVENT* event, bool force) override;
     void OnEnter(bool motion) override;
     void OnLeave(bool motion) override;

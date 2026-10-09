@@ -17,6 +17,7 @@
 #include "ui/BinaryXML.hpp"
 #include "ui/CLayoutFrame.hpp"
 #include "ui/CScriptObject.hpp"
+#include "ui/CSimpleButton.hpp"
 #include "ui/CSimpleFont.hpp"
 #include "ui/CSimpleFontString.hpp"
 #include "ui/CSimpleFrame.hpp"
@@ -213,9 +214,7 @@ struct LOCATIONGUARD {
 
 // ref: FUN_140661ea0
 CSimpleFrame* CreateButton(CSimpleFrame* parent) {
-    (void)parent;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    return new CSimpleButton(parent);
 }
 
 // ref: FUN_140661ef0

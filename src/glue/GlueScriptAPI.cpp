@@ -7,6 +7,7 @@
 #include "framescript/ScriptAPI.hpp"
 #include "glue/ScriptAPIRegistry.hpp"
 
+#include "ui/CSimpleButton.hpp"
 #include "ui/CSimpleFont.hpp"
 #include "ui/CSimpleFontString.hpp"
 #include "ui/CSimpleFrame.hpp"
@@ -119,13 +120,6 @@ void ScriptClass_LineTranslation(lua_State* L) {
 // the Browser metatables.
 // ref: FUN_1424a79e0
 void ScriptClass_Browser(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the Button metatables.
-// ref: FUN_1424aafd0
-void ScriptClass_Button(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
 }
@@ -316,7 +310,7 @@ void GlueRegisterScriptAPI(lua_State* L) {
     ScriptClass_TextureCoordTranslation(L);
     ScriptClass_LineTranslation(L);
     ScriptClass_Browser(L);
-    ScriptClass_Button(L);
+    CSimpleButton::CreateScriptMetaTables();
     ScriptClass_CheckButton(L);
     ScriptClass_ColorSelect(L);
     ScriptClass_ControlPoint(L);

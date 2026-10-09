@@ -778,11 +778,11 @@ void CSimpleFontString::PostLoadXML(XMLOBJECT* node, CStatus* status) {
 
 // A press on a hyperlink is remembered for the release.
 // ref: FUN_140627cc0
-void CSimpleFontString::OnMouseDown(MOUSEEVENT* event, const char* button) {
+bool CSimpleFontString::OnMouseDown(MOUSEEVENT* event, const char* button) {
     uint32_t link = (this->m_textFlags >> 4) & 0xffff;
     if (link == 0xffff) {
         this->CScriptRegion::OnMouseDown(event, button);
-        return;
+        return false;
     }
     CSimpleTop* top = CSimpleTop::s_instance;
     if (top->m_unknown318 == nullptr) {
@@ -792,11 +792,12 @@ void CSimpleFontString::OnMouseDown(MOUSEEVENT* event, const char* button) {
             top->m_unknown324 = 1;
         }
     }
+    return false;
 }
 
 // A release over the pressed hyperlink runs the frame's OnHyperlinkClick.
 // ref: FUN_140627d10
-void CSimpleFontString::OnMouseUp(MOUSEEVENT* event, const char* button) {
+bool CSimpleFontString::OnMouseUp(MOUSEEVENT* event, const char* button) {
     float point[2] = { event->m_x, event->m_y };
     uint32_t index = 0;
     CRect rect = {};
@@ -805,7 +806,7 @@ void CSimpleFontString::OnMouseUp(MOUSEEVENT* event, const char* button) {
     if (found) {
         if (top->m_unknown318 != this) {
             this->CScriptRegion::OnMouseUp(event, button);
-            return;
+            return false;
         }
         bool same = top->m_unknown324 == 0 ? !found : index == top->m_unknown320;
         if (same) {
@@ -836,7 +837,7 @@ void CSimpleFontString::OnMouseUp(MOUSEEVENT* event, const char* button) {
                     this->m_parent->RunOnHyperlinkClick(&link, &text, button, this, &rect);
                 }
             }
-            return;
+            return false;
         }
     }
     if (top->m_unknown318 == this) {
@@ -846,6 +847,7 @@ void CSimpleFontString::OnMouseUp(MOUSEEVENT* event, const char* button) {
         }
     }
     this->CScriptRegion::OnMouseUp(event, button);
+    return false;
 }
 
 // Shown font strings answer over their hyperlinks: 1 the one under the mouse, 2 another.

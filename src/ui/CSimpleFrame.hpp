@@ -179,8 +179,8 @@ class CSimpleFrame : public CScriptRegion, public CAnimatableObject {
     bool OnChar(int32_t key) override;
     bool OnKeyDown(void* event) override;
     bool OnKeyUp(void* event) override;
-    void OnMouseDown(MOUSEEVENT* event, const char* button) override;
-    void OnMouseUp(MOUSEEVENT* event, const char* button) override;
+    bool OnMouseDown(MOUSEEVENT* event, const char* button) override;
+    bool OnMouseUp(MOUSEEVENT* event, const char* button) override;
     bool OnMouseWheel(MOUSEEVENT* event) override;
     bool OnPadButtonDown(void* event) override;
     bool OnPadButtonUp(void* event) override;

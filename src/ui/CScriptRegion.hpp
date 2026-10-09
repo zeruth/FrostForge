@@ -98,8 +98,8 @@ class CScriptRegion : public CScriptObject, public CLayoutFrame {
     virtual bool OnKeyDown(void* event);
     virtual bool OnKeyUp(void* event);
     virtual bool Unknown168(void* event);
-    virtual void OnMouseDown(MOUSEEVENT* event, const char* button);
-    virtual void OnMouseUp(MOUSEEVENT* event, const char* button);
+    virtual bool OnMouseDown(MOUSEEVENT* event, const char* button);
+    virtual bool OnMouseUp(MOUSEEVENT* event, const char* button);
     virtual bool OnMouseWheel(MOUSEEVENT* event);
     virtual bool OnPadButtonDown(void* event);
     virtual bool OnPadButtonUp(void* event);

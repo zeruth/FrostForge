@@ -1193,6 +1193,114 @@ bool ApplyFile(CSimpleTexture* texture, int32_t fileDataId, uint32_t wrapH, uint
 
 }
 
+// ---- texture sources -----------------------------------------------------------------------
+
+// ref: FUN_140638820
+TEXTURESOURCE TEXTURESOURCE::FromFileId(int32_t fileDataId) {
+    TEXTURESOURCE source = {};
+    source.m_type = SOURCE_FILE_ID;
+    source.m_id = fileDataId;
+    return source;
+}
+
+// ref: FUN_140638810
+TEXTURESOURCE TEXTURESOURCE::FromAtlas(int32_t member) {
+    TEXTURESOURCE source = {};
+    source.m_type = SOURCE_ATLAS;
+    source.m_id = member;
+    return source;
+}
+
+// ref: FUN_140638850
+TEXTURESOURCE TEXTURESOURCE::FromTexture(CSimpleTexture* texture) {
+    TEXTURESOURCE source = {};
+    source.m_type = SOURCE_TEXTURE;
+    source.m_texture = texture;
+    return source;
+}
+
+// ref: FUN_140638860
+TEXTURESOURCE TEXTURESOURCE::FromString(const char* name) {
+    int32_t id = 0;
+    TextureFileId(&id, name);
+    if (id != 0) {
+        return FromFileId(id);
+    }
+    TEXTURESOURCE source = {};
+    source.m_type = SOURCE_ATLAS;
+    TEXTUREATLASSCALE scale = { 0, 0 };
+    int32_t member = 0;
+    source.m_id = *TextureAtlasFindByName(&member, name, &scale);
+    return source;
+}
+
+// ref: FUN_1406389c0
+CSimpleTexture* TEXTURESOURCE::GetTexture() const {
+    return this->m_type == SOURCE_TEXTURE ? this->m_texture : nullptr;
+}
+
+// ref: FUN_140638960
+int32_t TEXTURESOURCE::GetFileDataId() const {
+    if (this->m_type == SOURCE_FILE || this->m_type == SOURCE_FILE_ID) {
+        return this->m_id;
+    }
+    if (this->m_type == SOURCE_ATLAS) {
+        if (this->m_id != 0) {
+            return TextureAtlasGetFileDataId(&this->m_id);
+        }
+    } else if (this->m_type == SOURCE_TEXTURE && this->m_texture != nullptr) {
+        if (this->m_texture->GetFileDataId() != 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+// ref: FUN_140636a20
+bool CSimpleTexture::SetTextureSource(const TEXTURESOURCE* source) {
+    int32_t type = source->m_type;
+    uint32_t flags = this->m_textureFlags;
+    if (type == TEXTURESOURCE::SOURCE_FILE || type == TEXTURESOURCE::SOURCE_FILE_ID) {
+        return this->SetTextureById(source->GetFileDataId(), (flags >> 4) & 7, (flags >> 7) & 7,
+            static_cast<uint8_t>((flags >> 10) & 7), true, false);
+    }
+    if (type == TEXTURESOURCE::SOURCE_ATLAS) {
+        int32_t member = source->m_id;
+        return this->SetAtlas(&member, static_cast<uint8_t>((flags >> 10) & 7), false, static_cast<uint8_t>((flags >> 4) & 7),
+            static_cast<uint8_t>((flags >> 7) & 7));
+    }
+    if (type != TEXTURESOURCE::SOURCE_TEXTURE) {
+        return false;
+    }
+    CSimpleTexture* other = source->GetTexture();
+    if (other != nullptr) {
+        if (other->m_atlas != 0) {
+            TEXTURESOURCE atlas = TEXTURESOURCE::FromAtlas(other->m_atlas);
+            return this->SetTextureSource(&atlas);
+        }
+        int32_t id = 0;
+        if (other->m_texture != nullptr) {
+            id = TextureGetFileDataId(reinterpret_cast<HTEXTURE>(other->m_texture));
+        } else if ((other->m_layoutState & CLayoutFrame::LAYOUT_VISIBLE) == 0 && other->m_fileDataId != 0) {
+            id = other->m_fileDataId;
+        }
+        TEXTURESOURCE file = TEXTURESOURCE::FromFileId(id);
+        return this->SetTextureSource(&file);
+    }
+    this->ClearAtlas();
+    if (this->m_texture != nullptr) {
+        UiReleaseTexture(&this->m_texture);
+        CSimpleTop::s_instance->RemoveLayoutWaiting(this);
+        this->MarkFrameBatchDirty();
+    }
+    this->m_fileDataId = 0;
+    if (this->m_extension != nullptr) {
+        this->m_extension->m_flags &= ~2u;
+    }
+    this->ReleaseExtensionIfUnused();
+    return false;
+}
+
 // ref: FUN_140635630
 bool CSimpleTexture::SetTextureById(int32_t fileDataId, uint32_t wrapH, uint32_t wrapV, uint8_t filter,
     bool resetTexCoords, bool force) {
