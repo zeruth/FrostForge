@@ -1027,6 +1027,24 @@ bool CASFileExistsByName(const char* name, uint64_t flags) {
     return g_casManifest->FindByName(hash) != nullptr;
 }
 
+// ref: FUN_1402cda40
+int32_t CASFileGetIdByName(const char* name, uint32_t flags) {
+    if ((flags & 1) != 0 && g_localManifest != nullptr) {
+        int32_t fileDataId = g_localManifest->FindIdByName(name);
+        if (fileDataId != 0) {
+            return fileDataId;
+        }
+    }
+    uint64_t hash = LocalManifestNameHash(name);
+    if (g_casManifest != nullptr) {
+        BuildManifestEntry* entry = g_casManifest->FindByName(hash);
+        if (entry != nullptr) {
+            return static_cast<int32_t>(entry->m_fileDataId);
+        }
+    }
+    return 0;
+}
+
 // Frees what CASFileLoadById / CASFileLoadByName returned.
 // ref: FUN_1402d0f80
 void CASFileFree(void* data) {

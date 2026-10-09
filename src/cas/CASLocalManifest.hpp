@@ -72,6 +72,8 @@ struct LOCALMANIFEST {
     LocalManifestEntry* FindById(int32_t fileDataId);
     // The path of the loose file entered under a name hash (and its id), or null.
     const char* FindPathByName(uint64_t nameHash, int32_t* fileDataId);
+    // The id of the loose file a name maps to, or 0.
+    int32_t FindIdByName(const char* path);
 };
 static_assert(offsetof(LOCALMANIFEST, m_byName) == 0x108, "LOCALMANIFEST layout");
 static_assert(offsetof(LOCALMANIFEST, m_byId) == 0x128, "LOCALMANIFEST layout");

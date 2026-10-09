@@ -575,6 +575,28 @@ const char* LOCALMANIFEST::FindPathByName(uint64_t nameHash, int32_t* fileDataId
     return path;
 }
 
+// The id of the loose file a name maps to, or 0.
+// ref: FUN_1402d7f90
+int32_t LOCALMANIFEST::FindIdByName(const char* path) {
+    char name[0x110];
+    if (!LookupName(this, path, name, 0x104)) {
+        CopyBounded(name, path);
+    }
+    uint64_t hash = LocalManifestNameHash(name);
+    int32_t fileDataId = 0;
+    s_nameLock.lock_shared();
+    if (this->m_byName.m_buckets != nullptr) {
+        uint64_t slot = (this->m_byName.m_capacity - 1) & blz::fmix64(hash);
+        LOCALNAMENODE** link;
+        LOCALNAMENODE* node = ChainedFind(&this->m_byName, &this->m_byName.m_buckets[slot], hash, &link);
+        if (node != nullptr && node->m_value.m_byId != 0) {
+            fileDataId = node->m_value.m_fileDataId;
+        }
+    }
+    s_nameLock.unlock_shared();
+    return fileDataId;
+}
+
 // ref: FUN_1402d9440
 void LocalManifestRegisterHandler(LOCALFILEHANDLER handler, const char* extension) {
     char lower[0x110];
