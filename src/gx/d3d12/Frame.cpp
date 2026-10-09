@@ -741,7 +741,6 @@ void CGxDeviceD3d12::StartFrame() {
         graphics->m_copy.m_list->SetComputeRootSignature(this->m_rootSignatures[1]);
     }
     if (this->m_ready != 0) {
-        this->m_copiesPending = 1;
         this->m_copyPtr->BeginFrame();
     }
     this->m_copyPtr->Reset();
@@ -1006,7 +1005,6 @@ void CGxDeviceD3d12::Flush() {
         this->m_graphicsPtr->m_copy.m_list->SetComputeRootSignature(this->m_rootSignatures[1]);
     }
     if (this->m_ready != 0) {
-        this->m_copiesPending = 1;
         this->m_copyPtr->BeginFrame();
     }
     this->m_copyPtr->Reset();

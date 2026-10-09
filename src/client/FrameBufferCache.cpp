@@ -148,7 +148,9 @@ void ComputeHeapSizes(void* param) {
     s_scale = g_renderSettings.m_renderScale;
     std::memset(s_heapSizes, 0, sizeof(s_heapSizes));
     s_screen = g_renderSettings.m_resolution;
-    if (!HeapsEnabled() || (g_renderSettings.m_flags & 0x200) == 0) {
+    // The CVar is read last: this first runs from the device-created registration, before the
+    // CVar exists, and the heap flag is clear then.
+    if (GxDeviceCaps()[0xaa] == 0 || (g_renderSettings.m_flags & 0x200) == 0 || s_forceNoHeaps->m_intValue != 0) {
         return;
     }
     gxDx12Backend::TEXDESC desc = {};

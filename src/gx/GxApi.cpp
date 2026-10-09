@@ -97,7 +97,7 @@ struct GXFRAMEEND {
     uint32_t m_frame;               // 0x8c: the device's frame number at the end
     volatile uint8_t m_pending;     // 0x90: 1 ending, 2 overlapped, 4 ended, 8 stats taken
     uint8_t m_pad91[7];
-    blz::function_storage m_callback;  // 0x98: run with the stats once the end completes
+    blz::function_storage m_callback = { nullptr, blz::function_empty_manager, {} };  // 0x98: run with the stats
     blz::vector<THREADPOOLGROUP*, s_frameGroupTag> m_waits;     // 0xb8: drained every wait
     blz::vector<THREADPOOLGROUP*, s_frameGroupTag> m_lateWaits; // 0xd0: drained on a full wait
 };

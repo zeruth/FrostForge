@@ -343,7 +343,8 @@ CONSOLE_DEVICE_COMMAND_STUB(CommandD3D12, 0x140326f20)
 
 // The blz::function invokers the hooks are stored with: call the function pointer kept in
 // the storage (LAB_1402282e0 with a flag, FUN_14032a520 without).
-void InvokeStoredWithFlag(void* storage, uint8_t flag) {
+// The flag comes first and the storage second (0x1402282e0 is `jmp [rdx]`).
+void InvokeStoredWithFlag(uint8_t flag, void* storage) {
     (*reinterpret_cast<void (**)(uint8_t)>(storage))(flag);
 }
 
