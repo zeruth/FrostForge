@@ -40,6 +40,10 @@ ROOT = Path(__file__).resolve().parent.parent
 OPEN = 0x1407D2E10
 REGISTER = 0x1407D2F20
 ENUM_META = 0x1407D2F10
+# Enum.<Enum>.<Field> = value for enums whose values fit a byte or a short (0x140bb3ea0,
+# 0x140bb3f50): the same as the meta setter, the value in r9b / r9w.
+ENUM_VALUE8 = 0x140BB3EA0
+ENUM_VALUE16 = 0x140BB3F50
 PUSHNUMBER = 0x1402B3B50
 PUSHCCLOSURE = 0x1402B3880
 PUSHUNSIGNED = 0x14065F770
@@ -176,12 +180,12 @@ def scan(b: Binary, start: int) -> dict:
                 regs[reg] = ("str", s) if s is not None else ("addr", target)
             elif m == "mov" and ops[1].type == capstone.x86.X86_OP_IMM:
                 regs[reg] = ("imm", ops[1].imm & 0xFFFFFFFF)
-                if reg in ("edx", "r8d", "r9d", "ecx"):
-                    regs[{"edx": "rdx", "r8d": "r8", "r9d": "r9", "ecx": "rcx"}[reg]] = ("imm", ops[1].imm & 0xFFFFFFFF)
+                if reg in ("edx", "r8d", "r9d", "ecx", "r9b", "r9w"):
+                    regs[{"edx": "rdx", "r8d": "r8", "r9d": "r9", "ecx": "rcx", "r9b": "r9", "r9w": "r9"}[reg]] = ("imm", ops[1].imm & 0xFFFFFFFF)
             elif m == "xor" and ops[1].type == capstone.x86.X86_OP_REG and ops[0].reg == ops[1].reg:
                 regs[reg] = ("imm", 0)
-                if reg in ("edx", "r8d", "r9d", "ecx"):
-                    regs[{"edx": "rdx", "r8d": "r8", "r9d": "r9", "ecx": "rcx"}[reg]] = ("imm", 0)
+                if reg in ("edx", "r8d", "r9d", "ecx", "r9b", "r9w"):
+                    regs[{"edx": "rdx", "r8d": "r8", "r9d": "r9", "ecx": "rcx", "r9b": "r9", "r9w": "r9"}[reg]] = ("imm", 0)
             elif m == "mov" and ops[1].type == capstone.x86.X86_OP_REG:
                 source = regs.get(insn.reg_name(ops[1].reg))
                 if source is not None:
@@ -236,6 +240,10 @@ def scan(b: Binary, start: int) -> dict:
                 pending_handler = None
             elif target == ENUM_META:
                 steps.append(("enum", s("rdx"), s("r8"), float(i("r9") or 0)))
+            elif target == ENUM_VALUE8:
+                steps.append(("enum", s("rdx"), s("r8"), float((i("r9") or 0) & 0xFF)))
+            elif target == ENUM_VALUE16:
+                steps.append(("enum", s("rdx"), s("r8"), float((i("r9") or 0) & 0xFFFF)))
             elif target == REGISTER:
                 steps.append(("function", s("rdx"), s("r8"), a("r9")))
             elif target == REGISTER_GLOBAL:

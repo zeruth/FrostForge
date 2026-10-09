@@ -1609,6 +1609,11 @@ void ScriptEnum_CraftingOrderDuration(lua_State* L) {
         { "OutOfPublicOrderCapacity", 37 },
         { "ServerIsNotAvailable", 38 },
         { "ThrottleViolation", 39 },
+        { "TargetCannotCraft", 40 },
+        { "TargetLocked", 41 },
+        { "Timeout", 42 },
+        { "TooManyItems", 43 },
+        { "WrongVersion", 44 },
     };
     ScriptRegisterEnum(L, "CraftingOrderResult", s_CraftingOrderResult, sizeof(s_CraftingOrderResult) / sizeof(s_CraftingOrderResult[0]));
     static const SCRIPTENUMVALUE s_CraftingOrderResultMeta[] = {
@@ -1642,6 +1647,12 @@ void ScriptEnum_CraftingOrderDuration(lua_State* L) {
         { "MaxValue", 15 },
     };
     ScriptRegisterEnum(L, "CraftingOrderStateMeta", s_CraftingOrderStateMeta, sizeof(s_CraftingOrderStateMeta) / sizeof(s_CraftingOrderStateMeta[0]));
+    static const SCRIPTENUMVALUE s_CraftingOrderType[] = {
+        { "Public", 0 },
+        { "Guild", 1 },
+        { "Personal", 2 },
+    };
+    ScriptRegisterEnum(L, "CraftingOrderType", s_CraftingOrderType, sizeof(s_CraftingOrderType) / sizeof(s_CraftingOrderType[0]));
     static const SCRIPTENUMVALUE s_CraftingOrderTypeMeta[] = {
         { "NumValues", 3 },
         { "MinValue", 0 },
@@ -1737,13 +1748,23 @@ void ScriptEnum_CraftingOrderDuration(lua_State* L) {
         { "MaxValue", 1 },
     };
     ScriptRegisterEnum(L, "ProfessionRatingTypeMeta", s_ProfessionRatingTypeMeta, sizeof(s_ProfessionRatingTypeMeta) / sizeof(s_ProfessionRatingTypeMeta[0]));
+    static const SCRIPTENUMVALUE s_RcoCloseReason[] = {
+        { "RcoCloseFulfill", 0 },
+        { "RcoCloseExpire", 1 },
+        { "RcoCloseCancel", 2 },
+        { "RcoCloseReject", 3 },
+        { "RcoCloseGmCancel", 4 },
+        { "RcoCloseCrafterFulfill", 5 },
+        { "RcoCloseInvalid", 6 },
+    };
+    ScriptRegisterEnum(L, "RcoCloseReason", s_RcoCloseReason, sizeof(s_RcoCloseReason) / sizeof(s_RcoCloseReason[0]));
     static const SCRIPTENUMVALUE s_RcoCloseReasonMeta[] = {
         { "NumValues", 7 },
         { "MinValue", 0 },
         { "MaxValue", 6 },
     };
     ScriptRegisterEnum(L, "RcoCloseReasonMeta", s_RcoCloseReasonMeta, sizeof(s_RcoCloseReasonMeta) / sizeof(s_RcoCloseReasonMeta[0]));
-    // not generated: calls 0x140bb3ea0, 0x140c09480 (callback setters and the like)
+    // not generated: calls 0x140c09480 (callback setters and the like)
 }
 
 // ref: FUN_140affd60
@@ -1924,6 +1945,24 @@ void ScriptEnum_BattlepayBannerType(lua_State* L) {
         { "ArenaTeamCaptain", 20064 },
         { "PendingItemAudit", 20066 },
         { "GuildRankInsufficient", 20069 },
+        { "CharacterWithoutGuild", 20070 },
+        { "GmSeniorityInsufficient", 20072 },
+        { "AuthenticatorInsufficient", 20073 },
+        { "IneligibleMapID", 20076 },
+        { "BattlepayDeliveryPending", 20078 },
+        { "HasWoWToken", 20079 },
+        { "HasHeirloom", 20080 },
+        { "AccountRestricted", 20082 },
+        { "LastSaveTooDistant", 20083 },
+        { "HasCagedBattlePet", 20084 },
+        { "BoostedTooRecently", 20085 },
+        { "NewLeaderInvalid", 20086 },
+        { "PvEToPvPTransferNotAllowed", 20087 },
+        { "NeedsLevelSquish", 20088 },
+        { "NeedsEraChoice", 20090 },
+        { "IsNpeRestricted", 20091 },
+        { "HasCraftingOrders", 20092 },
+        { "InvalidName", 20094 },
     };
     ScriptRegisterEnum(L, "VasError", s_VasError, sizeof(s_VasError) / sizeof(s_VasError[0]));
     static const SCRIPTENUMVALUE s_VasErrorMeta[] = {
@@ -1932,19 +1971,39 @@ void ScriptEnum_BattlepayBannerType(lua_State* L) {
         { "MaxValue", 20094 },
     };
     ScriptRegisterEnum(L, "VasErrorMeta", s_VasErrorMeta, sizeof(s_VasErrorMeta) / sizeof(s_VasErrorMeta[0]));
+    static const SCRIPTENUMVALUE s_VasPurchaseProgress[] = {
+        { "Invalid", 0 },
+        { "PrePurchase", 1 },
+        { "PaymentPending", 2 },
+        { "ApplyingLicense", 3 },
+        { "WaitingOnQueue", 4 },
+        { "Ready", 5 },
+        { "ProcessingFactionChange", 6 },
+        { "Complete", 7 },
+    };
+    ScriptRegisterEnum(L, "VasPurchaseProgress", s_VasPurchaseProgress, sizeof(s_VasPurchaseProgress) / sizeof(s_VasPurchaseProgress[0]));
     static const SCRIPTENUMVALUE s_VasPurchaseProgressMeta[] = {
         { "NumValues", 8 },
         { "MinValue", 0 },
         { "MaxValue", 7 },
     };
     ScriptRegisterEnum(L, "VasPurchaseProgressMeta", s_VasPurchaseProgressMeta, sizeof(s_VasPurchaseProgressMeta) / sizeof(s_VasPurchaseProgressMeta[0]));
+    static const SCRIPTENUMVALUE s_VasServiceType[] = {
+        { "NameChange", 0 },
+        { "FactionChange", 1 },
+        { "AppearanceChange", 2 },
+        { "RaceChange", 3 },
+        { "CharacterTransfer", 4 },
+        { "FactionTransfer", 5 },
+        { "CharacterClone", 10 },
+    };
+    ScriptRegisterEnum(L, "VasServiceType", s_VasServiceType, sizeof(s_VasServiceType) / sizeof(s_VasServiceType[0]));
     static const SCRIPTENUMVALUE s_VasServiceTypeMeta[] = {
         { "NumValues", 7 },
         { "MinValue", 0 },
         { "MaxValue", 10 },
     };
     ScriptRegisterEnum(L, "VasServiceTypeMeta", s_VasServiceTypeMeta, sizeof(s_VasServiceTypeMeta) / sizeof(s_VasServiceTypeMeta[0]));
-    // not generated: calls 0x140bb3ea0, 0x140bb3f50 (callback setters and the like)
 }
 
 // ref: FUN_140d0ad60
@@ -2108,55 +2167,108 @@ void ScriptEnum_NodeOpFailureReason(lua_State* L) {
         { "MaxValue", 4 },
     };
     ScriptRegisterEnum(L, "TraitDefinitionSubTypeMeta", s_TraitDefinitionSubTypeMeta, sizeof(s_TraitDefinitionSubTypeMeta) / sizeof(s_TraitDefinitionSubTypeMeta[0]));
+    static const SCRIPTENUMVALUE s_TraitEdgeType[] = {
+        { "VisualOnly", 0 },
+        { "DeprecatedRankConnection", 1 },
+        { "SufficientForAvailability", 2 },
+        { "RequiredForAvailability", 3 },
+        { "MutuallyExclusive", 4 },
+        { "DeprecatedSelectionOption", 5 },
+    };
+    ScriptRegisterEnum(L, "TraitEdgeType", s_TraitEdgeType, sizeof(s_TraitEdgeType) / sizeof(s_TraitEdgeType[0]));
     static const SCRIPTENUMVALUE s_TraitEdgeTypeMeta[] = {
         { "NumValues", 6 },
         { "MinValue", 0 },
         { "MaxValue", 5 },
     };
     ScriptRegisterEnum(L, "TraitEdgeTypeMeta", s_TraitEdgeTypeMeta, sizeof(s_TraitEdgeTypeMeta) / sizeof(s_TraitEdgeTypeMeta[0]));
+    static const SCRIPTENUMVALUE s_TraitEdgeVisualStyle[] = {
+        { "None", 0 },
+        { "Straight", 1 },
+    };
+    ScriptRegisterEnum(L, "TraitEdgeVisualStyle", s_TraitEdgeVisualStyle, sizeof(s_TraitEdgeVisualStyle) / sizeof(s_TraitEdgeVisualStyle[0]));
     static const SCRIPTENUMVALUE s_TraitEdgeVisualStyleMeta[] = {
         { "NumValues", 2 },
         { "MinValue", 0 },
         { "MaxValue", 1 },
     };
     ScriptRegisterEnum(L, "TraitEdgeVisualStyleMeta", s_TraitEdgeVisualStyleMeta, sizeof(s_TraitEdgeVisualStyleMeta) / sizeof(s_TraitEdgeVisualStyleMeta[0]));
+    static const SCRIPTENUMVALUE s_TraitNodeEntryType[] = {
+        { "SpendHex", 0 },
+        { "SpendSquare", 1 },
+        { "SpendCircle", 2 },
+        { "SpendSmallCircle", 3 },
+        { "DeprecatedSelect", 4 },
+        { "DragAndDrop", 5 },
+        { "SpendDiamond", 6 },
+        { "ProfPath", 7 },
+        { "ProfPerk", 8 },
+        { "ProfPathUnlock", 9 },
+    };
+    ScriptRegisterEnum(L, "TraitNodeEntryType", s_TraitNodeEntryType, sizeof(s_TraitNodeEntryType) / sizeof(s_TraitNodeEntryType[0]));
     static const SCRIPTENUMVALUE s_TraitNodeEntryTypeMeta[] = {
         { "NumValues", 10 },
         { "MinValue", 0 },
         { "MaxValue", 9 },
     };
     ScriptRegisterEnum(L, "TraitNodeEntryTypeMeta", s_TraitNodeEntryTypeMeta, sizeof(s_TraitNodeEntryTypeMeta) / sizeof(s_TraitNodeEntryTypeMeta[0]));
+    static const SCRIPTENUMVALUE s_TraitNodeFlag[] = {
+        { "ShowMultipleIcons", 1 },
+        { "NeverPurchasable", 2 },
+        { "TestPositionLocked", 4 },
+        { "TestGridPositioned", 8 },
+    };
+    ScriptRegisterEnum(L, "TraitNodeFlag", s_TraitNodeFlag, sizeof(s_TraitNodeFlag) / sizeof(s_TraitNodeFlag[0]));
     static const SCRIPTENUMVALUE s_TraitNodeFlagMeta[] = {
         { "NumValues", 4 },
         { "MinValue", 1 },
         { "MaxValue", 8 },
     };
     ScriptRegisterEnum(L, "TraitNodeFlagMeta", s_TraitNodeFlagMeta, sizeof(s_TraitNodeFlagMeta) / sizeof(s_TraitNodeFlagMeta[0]));
+    static const SCRIPTENUMVALUE s_TraitNodeGroupFlag[] = {
+        { "AvailableByDefault", 1 },
+    };
+    ScriptRegisterEnum(L, "TraitNodeGroupFlag", s_TraitNodeGroupFlag, sizeof(s_TraitNodeGroupFlag) / sizeof(s_TraitNodeGroupFlag[0]));
     static const SCRIPTENUMVALUE s_TraitNodeGroupFlagMeta[] = {
         { "NumValues", 1 },
         { "MinValue", 1 },
         { "MaxValue", 1 },
     };
     ScriptRegisterEnum(L, "TraitNodeGroupFlagMeta", s_TraitNodeGroupFlagMeta, sizeof(s_TraitNodeGroupFlagMeta) / sizeof(s_TraitNodeGroupFlagMeta[0]));
+    static const SCRIPTENUMVALUE s_TraitNodeType[] = {
+        { "Single", 0 },
+        { "Tiered", 1 },
+        { "Selection", 2 },
+    };
+    ScriptRegisterEnum(L, "TraitNodeType", s_TraitNodeType, sizeof(s_TraitNodeType) / sizeof(s_TraitNodeType[0]));
     static const SCRIPTENUMVALUE s_TraitNodeTypeMeta[] = {
         { "NumValues", 3 },
         { "MinValue", 0 },
         { "MaxValue", 2 },
     };
     ScriptRegisterEnum(L, "TraitNodeTypeMeta", s_TraitNodeTypeMeta, sizeof(s_TraitNodeTypeMeta) / sizeof(s_TraitNodeTypeMeta[0]));
+    static const SCRIPTENUMVALUE s_TraitSystemFlag[] = {
+        { "AllowMultipleLoadoutsPerTree", 1 },
+        { "ShowSpendConfirmation", 2 },
+    };
+    ScriptRegisterEnum(L, "TraitSystemFlag", s_TraitSystemFlag, sizeof(s_TraitSystemFlag) / sizeof(s_TraitSystemFlag[0]));
     static const SCRIPTENUMVALUE s_TraitSystemFlagMeta[] = {
         { "NumValues", 2 },
         { "MinValue", 1 },
         { "MaxValue", 2 },
     };
     ScriptRegisterEnum(L, "TraitSystemFlagMeta", s_TraitSystemFlagMeta, sizeof(s_TraitSystemFlagMeta) / sizeof(s_TraitSystemFlagMeta[0]));
+    static const SCRIPTENUMVALUE s_TraitTreeFlag[] = {
+        { "CannotRefund", 1 },
+        { "HideSingleRankNumbers", 2 },
+    };
+    ScriptRegisterEnum(L, "TraitTreeFlag", s_TraitTreeFlag, sizeof(s_TraitTreeFlag) / sizeof(s_TraitTreeFlag[0]));
     static const SCRIPTENUMVALUE s_TraitTreeFlagMeta[] = {
         { "NumValues", 2 },
         { "MinValue", 1 },
         { "MaxValue", 2 },
     };
     ScriptRegisterEnum(L, "TraitTreeFlagMeta", s_TraitTreeFlagMeta, sizeof(s_TraitTreeFlagMeta) / sizeof(s_TraitTreeFlagMeta[0]));
-    // not generated: calls 0x140bb3ea0 (callback setters and the like)
 }
 
 // ref: FUN_140b5dfb0
