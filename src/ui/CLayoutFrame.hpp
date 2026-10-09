@@ -142,7 +142,8 @@ class CLayoutFrame {
     virtual bool IsAttachmentOrigin();
     virtual bool CanBeAnchorFor(CLayoutFrame* frame);
     virtual CLayoutFrame* GetAnchorRoot(int32_t excludedPoint);
-    virtual void* Unknown0A8();
+    // The layout frame a relativeTo name means (regions look it up as a global).
+    virtual CLayoutFrame* GetRelativeByName(const char* name, CLayoutFrame* self);
     virtual bool IsLayoutReady();
     virtual void OnLayoutReady();
     virtual void UnknownC0();

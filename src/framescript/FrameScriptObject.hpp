@@ -8,6 +8,7 @@
 #include <cstdint>
 
 struct lua_State;
+struct SCRIPTLOCATION;
 struct XMLOBJECT;
 struct XMLSCRIPTHANDLER;
 class CStatus;
@@ -41,6 +42,25 @@ enum : uint16_t {
     FSOBJ_HIDDEN = 0x100,               // never handed to scripts nor given a global name
 };
 
+class FrameScript_Object;
+int32_t FrameScript_PushInteger(int32_t value);
+int32_t FrameScript_PushNumber(double value);
+int32_t FrameScript_PushString(const char* value);
+int32_t FrameScript_PushBoolean(bool value);
+inline int32_t FrameScript_PushArg(int32_t value) {
+    return FrameScript_PushInteger(value);
+}
+inline int32_t FrameScript_PushArg(double value) {
+    return FrameScript_PushNumber(value);
+}
+inline int32_t FrameScript_PushArg(const char* value) {
+    return FrameScript_PushString(value);
+}
+inline int32_t FrameScript_PushArg(bool value) {
+    return FrameScript_PushBoolean(value);
+}
+void FrameScript_RunScript(int32_t ref, FrameScript_Object* object, int32_t count, const char* taint);
+
 class FrameScript_Object {
     public:
     // One handler set on an object (0x10).
@@ -68,7 +88,8 @@ class FrameScript_Object {
     // Adds the profile times and call counts of its handlers.
     virtual void GetScriptCPUUsage(lua_State* L, double* time, int32_t* calls);
     virtual const FRAMESCRIPT_TYPEINFO* GetTypeInfo();
-    virtual void Unknown38();
+    // Where the XML defined the object.
+    virtual void SetSourceLocation(const SCRIPTLOCATION* location);
     virtual void PreLoadXML(XMLOBJECT* node, CStatus* status);
     virtual void OnProtected();
     virtual bool IsObjectTypeName(const char* name);
@@ -114,6 +135,23 @@ class FrameScript_Object {
     int32_t HookScript(lua_State* L);
     bool RegisterEvent(const char* name);
     bool UnregisterEvent(const char* name);
+
+    // Runs every binding of a handler (pre-call, the object's own, post-call) with `args`
+    // pushed afresh for each, under `taint` or else each script's own (the reference's
+    // RunScript instantiations: FUN_140603620, 0x140603870, 0x1406039a0, 0x14060d7c0, 0x14060d8f0).
+    template <class... Args>
+    void RunScript(uint8_t index, const char* taint, Args... args) {
+        Script scripts[3];
+        this->GetScripts(scripts, index);
+        for (Script& script : scripts) {
+            if (script.m_ref == 0) {
+                continue;
+            }
+            int32_t count = 0;
+            ((count += FrameScript_PushArg(args)), ...);
+            FrameScript_RunScript(script.m_ref, this, count, taint != nullptr ? taint : script.m_taint);
+        }
+    }
 };
 
 // The handler storage: one vector of scripts per object, in a map keyed by the object.

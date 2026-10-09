@@ -1,4 +1,5 @@
 #include "framescript/FrameScript.hpp"
+#include "framescript/FrameScriptObject.hpp"
 
 #include <cstring>
 #include <new>
@@ -636,6 +637,47 @@ void ScriptLocationToString(const SCRIPTLOCATION* location, blz::string_header* 
         s_fileNames->GetName(location->m_file, &name);
     }
     blz::string_format(text, "%s:%d", name != nullptr ? name : "UnknownFile", location->m_line);
+}
+
+// Runs a handler: the function `ref` with `object`'s table as self and the `count` values on
+// top of the stack as arguments, under `taint` and the error handler. The arguments are
+// popped.
+// ref: FUN_14063b820
+void FrameScript_RunScript(int32_t ref, FrameScript_Object* object, int32_t count, const char* taint) {
+    lua_State* L = s_L;
+    int32_t top = lua_gettop(L);
+    const char* previous = lua_taint;
+    lua_pushjmptaint(L, lua_taint, lua_taintTracking);
+    lua_taintTracking++;
+    if (lua_taintTracking && !lua_taintSuspended) {
+        luaT_settaint(L, taint);
+    }
+    lua_checkstack(L, count + 3);
+    lua_rawgeti(L, LUA_REGISTRYINDEX, s_errorHandlerRef);
+    lua_rawgeti(L, LUA_REGISTRYINDEX, ref);
+    int32_t args = count;
+    if (object != nullptr) {
+        lua_rawgeti(L, LUA_REGISTRYINDEX, object->GetLuaRef());
+        args = count + 1;
+    }
+    for (int32_t i = 0; i < count; i++) {
+        lua_pushvalue(L, i + (1 - count) + top);
+    }
+    // FUN_14063e310: lua_pcall behind an anti-tamper return-address check
+    if (lua_pcall(L, args, 0, -2 - args) != 0) {
+        lua_settop(L, -2);
+    }
+    lua_settop(L, -2);
+    if (lua_taintTracking && !lua_taintSuspended) {
+        luaT_settaint(L, previous);
+    }
+    lua_taintTracking--;
+    lua_popjmptaint(L);
+    if (lua_taintTracking < 1) {
+        lua_taintTracking = 0;
+        lua_firstTaint = nullptr;
+    }
+    lua_settop(L, -1 - count);
 }
 
 // Compiles `body` inside `wrapper` (a format with one %s) as `name` and runs it under the

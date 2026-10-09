@@ -13,6 +13,7 @@
 #include "storm/hash/TSHashTable.hpp"
 #include "ui/BinaryXML.hpp"
 #include "ui/CLayoutFrame.hpp"
+#include "ui/CScriptObject.hpp"
 #include "ui/CSimpleFont.hpp"
 #include "ui/XMLTree.hpp"
 #include "util/Unimplemented.hpp"
@@ -1003,4 +1004,37 @@ bool FrameXML_RegisterDefault() {
 void FrameXML_RegisterCVars() {
     s_validateFrameXML = CVarRegister("validateFrameXML", "Display warning when FrameXML detects unparsed elements",
         0, "0", nullptr, 5, false, nullptr, false);
+}
+
+// Appends the object to the array `name` of its parent's table, creating the array.
+// ref: FUN_1406683d0
+void FrameXML_AddToParentArray(CScriptObject* object, const char* name, CStatus* status) {
+    lua_State* L = FrameScript_GetContext();
+    CScriptObject* parent = object->GetParent();
+    if (parent == nullptr) {
+        return;
+    }
+    lua_rawgeti(L, LUA_REGISTRYINDEX, parent->GetLuaRef());
+    lua_pushstring(L, name);
+    lua_rawget(L, -2);
+    if (lua_type(L, -1) != LUA_TTABLE) {
+        lua_settop(L, -2);
+        lua_pushstring(L, name);
+        lua_createtable(L, 0, 0);
+        lua_rawset(L, -3);
+        lua_pushstring(L, name);
+        lua_rawget(L, -2);
+        if (lua_type(L, -1) != LUA_TTABLE) {
+            const char* owner = object->GetName();
+            if (owner == nullptr) {
+                owner = object->GetObjectTypeName();
+            }
+            status->Add(1, "%s: Has bad parentArray: %s", owner, name);
+        }
+    }
+    uint64_t length = lua_objlen(L, -1);
+    lua_pushnumber(L, static_cast<double>(length + 1));
+    lua_rawgeti(L, LUA_REGISTRYINDEX, object->GetLuaRef());
+    lua_rawset(L, -3);
+    lua_settop(L, -3);
 }

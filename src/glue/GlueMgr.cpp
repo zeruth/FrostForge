@@ -17,8 +17,10 @@ uint32_t s_windowWidth;         // 0x14311c510
 uint32_t s_windowHeight;        // 0x14311c514
 float s_aspect;                 // 0x14311c518
 void* s_uiRoot;                 // 0x14311c520 the glue's CSimpleTop
-bool s_unknown51e;              // 0x14311c51e
+bool s_initialized;             // 0x14311c51e
 bool s_initializing;            // 0x14311c51f
+bool s_destroying;              // 0x14311c528 set by CGlueMgr::Destroy (FUN_14167c3c0)
+bool s_reloadPending;           // 0x14311c529 a UI reload asked for after an aspect change
 bool s_unknown52b;              // 0x14311c52b
 bool s_unknown52c;              // 0x14311c52c
 uint32_t s_startTime;           // 0x14311c530
@@ -169,6 +171,23 @@ void Sub1416A7BB0() {
 void PreloadGlueModels() {
     FROST_UNIMPLEMENTED();
 }
+
+}
+
+// The game UI (CGGameUI, 0x1431e7d26 and FUN_141925900) does not exist before the world, so
+// only the glue's state decides.
+// ref: FUN_14196fed0
+bool ClientUI_IsTearingDown() {
+    if (!s_initialized || s_destroying) {
+        return true;
+    }
+    if (!s_reloadPending && s_initialized && !s_destroying && !s_initializing) {
+        return false;
+    }
+    return true;
+}
+
+namespace {
 
 // ---- CGlueMgr::Initialize's callees -----------------------------------------------------
 
@@ -502,7 +521,7 @@ void GlueMgrStartup() {
     Sub14156E300();
     Sub1416A7BB0();
     PreloadGlueModels();
-    s_unknown51e = true;
+    s_initialized = true;
     s_initializing = false;
     s_unknown52b = false;
     CGlueMgr::Initialize();

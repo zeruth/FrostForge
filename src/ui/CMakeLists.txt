@@ -1,6 +1,8 @@
 add_library(ui STATIC
     BinaryXML.cpp
     CLayoutFrame.cpp
+    CScriptObject.cpp
+    CScriptRegion.cpp
     CSimpleFrame.cpp
     CSimpleTop.cpp
     CSimpleFont.cpp
@@ -11,4 +13,4 @@ add_library(ui STATIC
     ${CMAKE_SOURCE_DIR}/src/framescript/FrameScriptObject.cpp
 )
 target_include_directories(ui PUBLIC ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(ui PUBLIC base blz cas console expat framescript gxu os storm util)
+target_link_libraries(ui PUBLIC base blz cas console expat framescript glue gxu os storm util)

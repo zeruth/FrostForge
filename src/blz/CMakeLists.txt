@@ -9,6 +9,7 @@ add_library(blz STATIC
     ObjectPool.cpp
     Parse.cpp
     Random.cpp
+    RbTree.cpp
     String.cpp
     Sync.cpp
 )

@@ -85,6 +85,10 @@ void FrameScript_SetCurrentObjectScoped(bool scoped);
 SCRIPTLOCATION* ScriptLocationFromFile(SCRIPTLOCATION* location, const char* file, int32_t line);
 // The position as "file:line" ("UnknownFile" without a file-name registry).
 void ScriptLocationToString(const SCRIPTLOCATION* location, blz::string_header* text);
+class FrameScript_Object;
+// Runs a handler: `ref` with `object` as self and the `count` values on top of the stack as
+// arguments, under `taint` and the error handler; the arguments are popped.
+void FrameScript_RunScript(int32_t ref, FrameScript_Object* object, int32_t count, const char* taint);
 // Compiles `body` inside `wrapper` (a format with one %s) as chunk `name` and runs it; the
 // function that returns is referenced in the registry. -1 on an error, reported to `status`.
 int32_t FrameScript_CompileFunction(const char* name, const char* wrapper, const char* body, CStatus* status);

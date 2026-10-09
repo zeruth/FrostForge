@@ -650,7 +650,8 @@ const FRAMESCRIPT_TYPEINFO* FrameScript_Object::GetTypeInfo() {
     return &s_typeInfo;
 }
 
-void FrameScript_Object::Unknown38() {
+void FrameScript_Object::SetSourceLocation(const SCRIPTLOCATION* location) {
+    (void)location;
 }
 
 void FrameScript_Object::PreLoadXML(XMLOBJECT* node, CStatus* status) {
@@ -1028,7 +1029,7 @@ int32_t FrameScript_Object::SetScript(lua_State* L) {
             case 4:
             case 5:
             case 6:
-                frame->EnableEvent(data.m_update);
+                frame->EnableInputEvent(data.m_update);
                 break;
             case 2:
             case 3:

@@ -1,16 +1,152 @@
 #ifndef UI_C_SIMPLE_TOP_HPP
 #define UI_C_SIMPLE_TOP_HPP
 
-// CSimpleTop (Engine/Source/Frame/CSimpleTop.cpp): the root of the UI, which owns the frame
-// strata and routes input. Not ported yet.
+// CSimpleTop (Engine/Source/Frame/CSimpleTop.cpp): the root of the UI. It is the layout frame
+// the screen is (0.8 x 0.6), keeps the frames without a parent, dispatches mouse, keyboard and
+// gamepad input to the regions registered for it, queues scripts, and renders the frame
+// batches (0x1070 bytes, vtable 0x1426c7718).
 
-class CSimpleTop {
+#include <cstdint>
+
+#include "blz/RbTree.hpp"
+#include "blz/Vector.hpp"
+#include "storm/list/TSList.hpp"
+#include "ui/CLayoutFrame.hpp"
+
+class CScriptRegion;
+class CSimpleFrame;
+class FrameScript_Object;
+
+// What a mouse event carries (0x24).
+struct MOUSEEVENT {
+    int32_t m_type;                 // 0x00
+    int32_t m_button;               // 0x04 MOUSEBUTTON bit
+    int32_t m_unknown08;            // 0x08
+    int32_t m_unknown0C;            // 0x0C
+    float m_x;                      // 0x10 UI units once received
+    float m_y;                      // 0x14
+    int32_t m_unknown18;            // 0x18
+    int32_t m_time;                 // 0x1C
+    int32_t m_flags;                // 0x20
+};
+static_assert(sizeof(MOUSEEVENT) == 0x24, "MOUSEEVENT is 0x24 bytes");
+
+// A registration change made while input was being dispatched (0x10).
+struct DEFERREDINPUTEVENTCHANGE {
+    CScriptRegion* m_region;
+    int32_t m_type;
+    bool m_register;
+};
+static_assert(sizeof(DEFERREDINPUTEVENTCHANGE) == 0x10, "a deferred input change is 0x10 bytes");
+
+// blz's chained hash table header (count of buckets, buckets, size, load limit).
+struct CHAINEDHASH {
+    uint64_t m_bucketCount = 8;
+    void** m_buckets = nullptr;
+    uint64_t m_size = 0;
+    float m_maxLoad = 1.0f;
+};
+static_assert(sizeof(CHAINEDHASH) == 0x20, "a chained hash table is 0x20 bytes");
+
+// blz::map's header (0x28): a node whose parent is the root, left the leftmost node and right
+// the rightmost, then the size.
+struct RBTREEHEADER : blz::rb_node_base {
+    uint64_t m_size;
+};
+static_assert(sizeof(RBTREEHEADER) == 0x28, "a blz::map header is 0x28 bytes");
+
+extern const char s_regionVectorTag[];
+extern const char s_frameVectorTag[];
+extern const char s_deferredInputTag[];
+
+class CSimpleTop : public CLayoutFrame {
     public:
     // The one root (0x142e979d8).
     static CSimpleTop* s_instance;
 
-    // Whether templates load under their own taint even without a frame being loaded (+0xf60).
+    CSimpleFrame* m_dragFrame;                                          // 0x1a8
+    int32_t m_dragType;                                                 // 0x1b0
+    int32_t m_dragCorner;                                               // 0x1b4
+    float m_dragX;                                                      // 0x1b8
+    float m_dragY;                                                      // 0x1bc
+    int32_t m_unknown1C0;                                               // 0x1c0
+    uint8_t m_strataDirty;                                              // 0x1c4
+    uint8_t m_renderBatch[0x68];                                        // 0x1c8 CRenderBatch
+    CHAINEDHASH m_frameBatches;                                         // 0x230 CSimpleFrame* -> CRenderBatch*
+    blz::vector<CSimpleFrame*, s_frameVectorTag> m_batchUpdates;        // 0x250
+    CHAINEDHASH m_layoutWaiting;                                        // 0x268 CLayoutFrame*
+    uint8_t m_cursorShown;                                              // 0x288
+    blz::embedded_vector<CScriptRegion*, 2, s_regionVectorTag> m_mouseOver;    // 0x290
+    blz::embedded_vector<CScriptRegion*, 2, s_regionVectorTag> m_mouseMotion;  // 0x2b8
+    RBTREEHEADER m_buttonFocus;                                         // 0x2e0 MOUSEBUTTON -> regions
+    CScriptRegion* m_mouseFocus;                                        // 0x308
+    uint8_t m_motionTracking;                                           // 0x310
+    CScriptRegion* m_unknown318;                                        // 0x318
+    uint32_t m_unknown320;                                              // 0x320
+    uint8_t m_unknown324;                                               // 0x324
+    CScriptRegion* m_keyFocus[310];                                     // 0x328 per key
+    CScriptRegion* m_padFocus[32];                                      // 0xcd8 per gamepad button
+    blz::vector<CScriptRegion*, s_regionVectorTag> m_inputRegions[7];   // 0xdd8 per input event type
+    int32_t m_dispatchDepth;                                            // 0xe80
+    blz::vector<DEFERREDINPUTEVENTCHANGE, s_deferredInputTag> m_deferredInput;  // 0xe88
+    blz::vector<CSimpleFrame*, s_frameVectorTag> m_updateChecks;        // 0xea0
+    blz::vector<CSimpleFrame*, s_frameVectorTag> m_shownChanges;        // 0xeb8
+    int32_t m_shownRootCount;                                           // 0xed0
+    uint8_t m_mouseFocusDirty;                                          // 0xed4
+    MOUSEEVENT m_mouseEvent;                                            // 0xed8
+    MOUSEEVENT m_lastMouseEvent;                                        // 0xefc
+    const char* m_currentButton;                                        // 0xf20
+    void* m_mouseDownHook;                                              // 0xf28
+    void* m_mouseMoveHook;                                              // 0xf30
+    void* m_unknownF38;                                                 // 0xf38
+    void* m_keyFilterHook;                                              // 0xf40
+    void* m_keyCaptureHook;                                             // 0xf48
+    void* m_keyDownHook;                                                // 0xf50
+    void* m_padHook;                                                    // 0xf58
+    uint8_t m_secureLoad;                                               // 0xf60
+    uint8_t m_unknownF61;                                               // 0xf61
+    uint8_t m_inMouseScript;                                            // 0xf62
+    uint8_t m_inputSuspended;                                           // 0xf63
+    uint8_t m_resizing;                                                 // 0xf64
+    void (*m_frameCreatedHook)(CSimpleFrame* frame);                    // 0xf68
+    void (*m_preUpdateHook)();                                          // 0xf70
+    uint8_t m_deferredScripts[0x38];                                    // 0xf78 DeferredScriptBuffer
+    TSList<CSimpleFrame, TSGetLink<CSimpleFrame>, 8> m_rootFrames;      // 0xfb0 linked through +0x200
+    TSList<CSimpleFrame, TSGetLink<CSimpleFrame>, 8> m_updateFrames;    // 0xfc8 linked through +0x1f0
+    CHAINEDHASH m_animating;                                            // 0xfe0 CAnimatableObject*
+    CHAINEDHASH m_regionLayoutVersions;                                 // 0x1000 CScriptRegion* -> int
+    int32_t m_layoutVersion;                                            // 0x1020
+    uint8_t m_layoutDirty;                                              // 0x1024
+    float m_projection[16];                                             // 0x1028
+    uint8_t m_inputPhase;                                               // 0x1068 1 key, 2 mouse, 3 gamepad
+
+    // The UI root (FUN_1405ebe10); `preUpdate` runs before each update.
+    explicit CSimpleTop(void (*preUpdate)());
+    ~CSimpleTop() override;
+
+    // Whether templates load under their own taint even without a frame being loaded.
     bool IsSecureLoad();
+
+    // Input registration (types: 0..6; 2 motion, 3 click, 4 wheel).
+    void RegisterForInput(CScriptRegion* region, int32_t type);
+    void UnregisterForInput(CScriptRegion* region, int32_t type, bool quiet);
+    void DeferInputChange(CScriptRegion* region, int32_t type, bool add);
+    void ApplyDeferredInputChanges();
+    // A region is going away: it leaves the mouse lists and the layout-version map.
+    void OnRegionDestroyed(CScriptRegion* region);
+    // A region stops receiving input events.
+    void RemoveRegionInput(CScriptRegion* region, bool quiet);
+    // Queues a script to run after the current update (the DeferredScriptBuffer).
+    void QueueScript(FrameScript_Object* object, int32_t index);
+    int32_t GetRegionLayoutVersion(CScriptRegion* region);
+
+    // Root frames.
+    void AddRootFrame(CSimpleFrame* frame);
+    void MarkStrataDirty();
+    void InvalidateLayout();
+    void AddUpdateCheck(CSimpleFrame* frame);
+    void AddShownChange(CSimpleFrame* frame);
+    void AddPendingBatchUpdate(CSimpleFrame* frame);
 };
 
 #endif

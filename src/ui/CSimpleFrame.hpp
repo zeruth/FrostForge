@@ -8,7 +8,16 @@
 
 #include "ui/CScriptRegion.hpp"
 
-class CSimpleFrame : public CScriptRegion {
+// CAnimatableObject (Engine/Source/Frame/CAnimatableObject.cpp): the animation host every frame
+// is (vtable 0x1426ca820 at CSimpleFrame +0x1d8). Not ported yet.
+class CAnimatableObject {
+    public:
+    void* m_unknown08 = nullptr;
+
+    virtual ~CAnimatableObject() = default;
+};
+
+class CSimpleFrame : public CScriptRegion, public CAnimatableObject {
     public:
     // The frame whose XML is being loaded (0x142e9a070, set by FUN_140614c20).
     static CSimpleFrame* s_loading;
@@ -16,10 +25,9 @@ class CSimpleFrame : public CScriptRegion {
     // This class's type id (0x142e979f4).
     static int32_t GetObjectType();
 
-    // Turns on delivery of one kind of frame event (m_eventsEnabled, +0x1c8).
-    void EnableEvent(int32_t type);
-    void SetMouseMotionEnabled(bool enabled);
-    void SetMouseClickEnabled(bool enabled);
+    uint32_t m_unknown1E8;          // 0x1e8
+    uint32_t m_frameFlags;          // 0x1ec 0x40 clips its children, 0x2000 batch dirty,
+                                    //       0x4000 draws in its own batch
 };
 
 #endif

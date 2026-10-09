@@ -73,6 +73,10 @@ void FrameXML_LoadKeyValues(FrameScript_Object* object, XMLOBJECT* node, CStatus
 // Pushes `value` as a KeyValue type ("nil", "boolean", "number", "global" or a string).
 void FrameXML_PushTypedValue(lua_State* L, const char* type, const char* value);
 
+class CScriptObject;
+// Appends the object to the array `name` of its parent's table, creating the array.
+void FrameXML_AddToParentArray(CScriptObject* object, const char* name, CStatus* status);
+
 // ---- virtuals and intrinsics -----------------------------------------------------------
 
 bool FrameXML_AddDeferredNode(bool intrinsic, XMLOBJECT* object, const char* name, const char* taint, CScriptStatus* status);

@@ -468,7 +468,9 @@ CLayoutFrame* CLayoutFrame::GetAnchorRoot(int32_t excludedPoint) {
     return root;
 }
 
-void* CLayoutFrame::Unknown0A8() {
+CLayoutFrame* CLayoutFrame::GetRelativeByName(const char* name, CLayoutFrame* self) {
+    (void)name;
+    (void)self;
     return nullptr;
 }
 

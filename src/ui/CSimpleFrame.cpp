@@ -10,20 +10,3 @@ int32_t CSimpleFrame::GetObjectType() {
     return s_type;
 }
 
-// FUN_14060dee0
-void CSimpleFrame::EnableEvent(int32_t type) {
-    (void)type;
-    FROST_UNIMPLEMENTED();
-}
-
-// FUN_14060f500
-void CSimpleFrame::SetMouseMotionEnabled(bool enabled) {
-    (void)enabled;
-    FROST_UNIMPLEMENTED();
-}
-
-// FUN_14060dfd0
-void CSimpleFrame::SetMouseClickEnabled(bool enabled) {
-    (void)enabled;
-    FROST_UNIMPLEMENTED();
-}
