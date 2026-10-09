@@ -8,8 +8,8 @@ namespace {
 const char s_nodeTag[] = ".?AU?$list_node@USTATUSENTRY@CStatus@@@blz@@";
 const char s_stringTag[] = ".D";
 
-// DAT_142ddfa84, what slot 4 hands out.
-uint64_t s_unknown20;
+// DAT_142ddfa84, the position slot 4 hands out.
+uint64_t s_location;
 
 }
 
@@ -56,8 +56,8 @@ void CStatus::Add(const CStatus& other) {
 }
 
 // ref: FUN_1402289a0
-void* CStatus::Unknown20() {
-    return &s_unknown20;
+void* CStatus::GetLocation() {
+    return &s_location;
 }
 
 // ref: FUN_1402c90a0

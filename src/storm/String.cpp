@@ -428,3 +428,93 @@ const char* SStrStrI(const char* string, const char* pattern) {
     }
     return nullptr;
 }
+
+// ref: FUN_140253320
+int32_t SStrLenUTF8(const char* string) {
+    int32_t count = 0;
+    for (auto p = reinterpret_cast<const uint8_t*>(string); *p != 0; p++) {
+        if ((*p & 0xC0) != 0x80) {
+            count++;
+        }
+    }
+    return count;
+}
+
+namespace {
+
+// The sequence length of each lead byte (0 for the terminator) and what each length's
+// accumulated value is offset by (0x14261f4d0, 0x14261f4b0).
+const uint8_t s_foldLength[256] = {
+    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6,
+};
+const uint32_t s_foldOffset[7] = { 0, 0, 0x3080, 0xE2080, 0x3C82080, 0xFA082080, 0x82082080 };
+
+// Decodes and folds the character at *cursor and advances past it. A sequence cut short by the
+// terminator folds to 0, with the cursor left on the terminator; the terminator itself folds to
+// 0 without advancing.
+uint32_t FoldNext(const uint8_t** cursor) {
+    const uint8_t* p = *cursor;
+    uint8_t length = s_foldLength[*p];
+    uint32_t value = 0;
+    for (uint8_t i = 0; i < length; i++) {
+        if (i != 0) {
+            if (*p == 0) {
+                *cursor = p;
+                return 0;
+            }
+            value <<= 6;
+        }
+        value += *p++;
+    }
+    *cursor = p;
+    value -= s_foldOffset[length];
+    if (value > 0xFFFF) {
+        value = 0xFFFD;
+    }
+    if (length == 1) {
+        if (value - 0x61 < 0x1A) {
+            value -= 0x20;
+        }
+    } else if (length == 2) {
+        if (value - 0xE0 < 0x1F) {
+            value -= 0x20;
+        } else if (value == 0xFF) {
+            value = 0x178;
+        } else if (value == 0x153) {
+            value = 0x152;
+        } else if (value == 0x401 || value == 0x451) {
+            value = 0x415;
+        } else if (value - 0x410 < 6) {
+            value -= 1;
+        } else if (value - 0x430 < 0x20) {
+            value = (value - (value < 0x436 ? 1 : 0)) - 0x20;
+        }
+    }
+    return value;
+}
+
+}  // namespace
+
+// ref: FUN_140252aa0
+int32_t SStrCmpUTF8Fold(const char* a, const char* b, int64_t maxchars) {
+    auto pa = reinterpret_cast<const uint8_t*>(a);
+    auto pb = reinterpret_cast<const uint8_t*>(b);
+    for (;;) {
+        if ((*pa == 0 && *pb == 0) || maxchars == 0) {
+            return 0;
+        }
+        uint32_t ka = FoldNext(&pa);
+        uint32_t kb = FoldNext(&pb);
+        maxchars--;
+        if (ka != kb) {
+            return static_cast<int32_t>(ka - kb);
+        }
+    }
+}

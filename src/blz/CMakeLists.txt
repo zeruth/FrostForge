@@ -8,8 +8,9 @@ add_library(blz STATIC
     Murmur.cpp
     ObjectPool.cpp
     Parse.cpp
+    Random.cpp
     String.cpp
     Sync.cpp
 )
 target_include_directories(blz PUBLIC ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(blz PUBLIC storm)
+target_link_libraries(blz PUBLIC storm bcrypt)

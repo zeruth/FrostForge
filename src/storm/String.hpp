@@ -48,6 +48,14 @@ uint32_t SStrHashFnv1a(const char* string);
 // code points breaking ties.
 int32_t SStrCmpUTF8I(const char* a, const char* b, uint64_t maxchars);
 
+// The number of UTF-8 characters in `string` (continuation bytes are not counted).
+int32_t SStrLenUTF8(const char* string);
+
+// Case-insensitive compare of two UTF-8 strings over at most `maxchars` characters, by a
+// fold of ASCII, Latin-1 and Cyrillic letters (Cyrillic ordered with YO after YE); the
+// difference of the first unequal folded characters, or 0.
+int32_t SStrCmpUTF8Fold(const char* a, const char* b, int64_t maxchars);
+
 // The first case-insensitive occurrence of `pattern` in `string` (_strnicmp at each position).
 const char* SStrStrI(const char* string, const char* pattern);
 

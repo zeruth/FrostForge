@@ -33,11 +33,13 @@ class CStatus {
 
     CStatus();
     virtual ~CStatus();
-    // Slots 1 and 3 are empty in the base class (_guard_check_icall); their purpose is unknown.
+    // Slot 1 is empty in the base class (_guard_check_icall); its purpose is unknown. Slots 3
+    // and 4 set and return the script file position messages are reported against; the base
+    // class ignores the file and hands out a shared dummy position.
     virtual void Unknown08() {}
     virtual void Add(const CStatus& other);
-    virtual void Unknown18() {}
-    virtual void* Unknown20();
+    virtual void SetFile(const uint32_t* file) {}
+    virtual void* GetLocation();
     virtual void AddV(int32_t severity, const char* format, va_list args);
     virtual void PrependV(int32_t severity, const char* format, va_list args);
 

@@ -205,7 +205,8 @@ static int math_max (lua_State *L) {
 
 
 /* ref: FUN_142426200 */
-static int math_random (lua_State *L) {
+/* Blizzard: also the global fastrandom (FrameScript). */
+LUALIB_API int math_random (lua_State *L) {
   /* the `%' avoids the (rare) case of r==1, and is needed also because on
      some systems (SunOS!) `rand()' may return a value larger than RAND_MAX */
   lua_Number r = (lua_Number)(rand()%RAND_MAX) / (lua_Number)RAND_MAX;

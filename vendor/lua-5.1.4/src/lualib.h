@@ -32,6 +32,7 @@ LUALIB_API int (luaopen_string) (lua_State *L);
 
 #define LUA_MATHLIBNAME	"math"
 LUALIB_API int (luaopen_math) (lua_State *L);
+LUALIB_API int (math_random) (lua_State *L);
 
 #define LUA_BITLIBNAME	"bit"
 LUALIB_API int (luaopen_bit) (lua_State *L);
