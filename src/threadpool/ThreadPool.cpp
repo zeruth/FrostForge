@@ -421,6 +421,11 @@ void ThreadPoolSubmit(uint64_t count, blz::function_storage* tasks, int32_t prio
     WakeAllConditionVariable(&queue->m_work);
 }
 
+// ref: FUN_14235a5d0
+void ThreadPoolReclaim() {
+    ReclaimReturnedNodes();
+}
+
 // ref: FUN_14235a710
 void ThreadPoolFlush(int32_t priority) {
     THREADPOOLQUEUE* queue = &s_queues[priority];

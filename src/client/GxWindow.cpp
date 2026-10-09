@@ -1,4 +1,5 @@
 #include "client/GxWindow.hpp"
+#include "client/RenderSettings.hpp"
 #include "gx/Gx.hpp"
 #include "gx/GxDevice.hpp"
 #include "os/Os.hpp"
@@ -19,7 +20,6 @@ float s_aspect = 1.0f;              // DAT_142d0815c: width / height
 uint32_t s_aspectLocked;            // DAT_1430b0040: gxAspect
 int32_t s_minClient[2] = { 320, 240 };  // DAT_142d08170
 int32_t s_frameExtra[2];            // DAT_1430b0010: the frame's width and height around the client
-GXSIZE s_resolution;                // DAT_142cfbfe8: the back buffer, for whoever asks
 
 HWND s_window;                      // DAT_1430b0030
 ATOM s_class;                       // DAT_1430b0028
@@ -85,7 +85,7 @@ void WindowRunResizeCallbacks() {
     for (uint64_t i = 0; i < s_resizeCallbacks.m_size; i++) {
         reinterpret_cast<void (*)(void*)>(s_resizeCallbacks.m_data[i].m_function)(s_resizeCallbacks.m_data[i].m_param);
     }
-    s_resolution = s_params.m_resolution;
+    g_pendingRenderSettings.m_resolution = s_params.m_resolution;
 }
 
 // ref: FUN_1414f89a0

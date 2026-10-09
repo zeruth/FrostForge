@@ -40,14 +40,14 @@ class CGxDevice {
     virtual bool DeviceCreate(const GXDEVICEPARAMS* params);  // 0x28
     virtual void Slot030();                                 // 0x30
     virtual void DeviceShutdown();                          // 0x38
-    virtual void Slot040();                                 // 0x40
-    virtual void Slot048();                                 // 0x48
+    virtual bool FormatSupportsMultisample(uint8_t format, uint8_t samples, int32_t quality);  // 0x40
+    virtual bool RebindAdapter();                           // 0x48: after the adapter list is rebuilt
     virtual uint8_t Slot050();                              // 0x50
     virtual void Slot058();                                 // 0x58
     virtual void Slot060();                                 // 0x60
     virtual void Slot068();                                 // 0x68
     virtual void Slot070();                                 // 0x70
-    virtual void Slot078();                                 // 0x78
+    virtual void SetLowLatencyMode(uint8_t mode);           // 0x78
     virtual void FrameMarker();                             // 0x80: after the frame's submission
     virtual void LatencyMarker(uint32_t marker, uint32_t frame);  // 0x88
     virtual void Slot090();                                 // 0x90
@@ -79,7 +79,7 @@ class CGxDevice {
     virtual void Slot160();                                 // 0x160
     virtual void Slot168();                                 // 0x168
     virtual void Slot170();                                 // 0x170
-    virtual void Slot178();                                 // 0x178
+    virtual bool ShadingRateSupported(uint32_t rate, int32_t a3, uint8_t a4);  // 0x178
     virtual bool FrameBegin(void* query);                   // 0x180
     virtual void Slot188();                                 // 0x188
     virtual void* FrameEnd(void* out, void* query);         // 0x190: submits; out is the wait

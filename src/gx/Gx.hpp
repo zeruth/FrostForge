@@ -138,6 +138,26 @@ void GxFrameLimit(uint32_t fps);
 uint32_t GxDeviceLostCount();
 void GxRequestRestart();
 
+// Once-a-frame Gx work (FUN_14228c670) and the callbacks it runs (FUN_14228e190, FUN_14228e8f0).
+void GxFrameUpdate();
+void GxAddFrameStartCallback(void (*callback)(void*), void* param);
+void GxRemoveFrameStartCallback(void (*callback)(void*), void* param);
+void GxRemoveEngineDeviceCreatedCallback(void (*callback)(void*), void* param);
+void GxRemoveLowMemoryCallback(void (*callback)(void*), void* param);
+
+// Device queries (GxApi.cpp): the low-latency mode (FUN_14228b810), video memory in MB
+// (FUN_14228aa40), multisampling (FUN_142289e20), variable-rate shading (FUN_14228ac40), the
+// legacy and D3D11 APIs (FUN_142291a50, FUN_1422919f0), the capability block
+// (FUN_14228a0b0) and the frame number (FUN_14228a030).
+void GxSetLowLatencyMode(uint8_t mode);
+void GxDeviceVideoMemory(uint32_t* dedicated, uint32_t* shared);
+bool GxFormatSupportsMultisample(uint8_t format, uint8_t samples, int32_t quality);
+bool GxShadingRateSupported(uint32_t rate, int32_t a2, uint8_t a3);
+bool GxApiIsLegacy();
+bool GxApiIsD3d11();
+uint8_t* GxDeviceCaps();
+uint32_t GxDeviceFrame();
+
 // The console's handlers (blz::function, moved in).
 void GxSetRestartHandler(blz::function_storage* handler);
 void GxSetDisplayChangedHandler(blz::function_storage* handler);

@@ -132,7 +132,7 @@ class Instance : public Object {
     virtual RESULT* CreateDevice(RESULT* out, const void* params, void* device);  // 0x10
     virtual void DestroyDevice(void* device);                                   // 0x18
     virtual RESULT* Rebuild(RESULT* out, uint8_t a2, uint8_t a3);              // 0x20
-    virtual void Slot28();                                                      // 0x28
+    virtual bool IsCurrent();                                                   // 0x28: the GPUs are unchanged
     virtual PLATFORMHANDLES* GetPlatformHandles(PLATFORMHANDLES* out);          // 0x30
     virtual void* GetSlot38(void* out, GPU* gpu);                               // 0x38
     virtual RESULT* EnumerateGpus(RESULT* out, uint32_t* count, GPU** gpus, uint16_t typeMask);  // 0x40

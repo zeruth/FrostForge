@@ -239,6 +239,28 @@ class deque {
         this->m_size = 0;
     }
 
+    // An element by its absolute position (offset included).
+    T& slot(uint64_t position) {
+        return this->m_map[(position / PerBlock) & (this->m_mapSize - 1)][position % PerBlock];
+    }
+
+    // Removes one element, moving whichever side of it is shorter.
+    void erase(uint64_t index) {
+        uint64_t first = this->m_offset + index;
+        uint64_t end = this->m_offset + this->m_size;
+        if (index < end - (first + 1)) {
+            for (uint64_t position = first; position != this->m_offset; position--) {
+                this->slot(position) = this->slot(position - 1);
+            }
+            this->m_offset++;
+        } else {
+            for (uint64_t position = first + 1; position != end; position++) {
+                this->slot(position - 1) = this->slot(position);
+            }
+        }
+        this->m_size--;
+    }
+
     // ref: FUN_141ef4e00 (the uint32 instance): grows the map when the back is at a block
     // boundary and the map is full, then hands out the next slot.
     T* push_back_slot() {

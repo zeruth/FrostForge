@@ -1122,3 +1122,12 @@ void GxCallbackList::SwapPages(GxCallbackList* other) {
     std::swap(this->m_freePages.m_size, other->m_freePages.m_size);
     std::swap(this->m_freePages.m_capacity, other->m_freePages.m_capacity);
 }
+
+namespace gxDx12Backend {
+
+// A Gx format as a resource format (DAT_142919aa0).
+DXGI_FORMAT ResourceFormat(uint8_t format) {
+    return static_cast<DXGI_FORMAT>(s_resourceFormats[format]);
+}
+
+}

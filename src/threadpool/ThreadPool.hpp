@@ -51,6 +51,9 @@ void ThreadPoolGroupWait(THREADPOOLGROUP* group);
 // (FUN_142359cf0 over FUN_1423599f0).
 void ThreadPoolSubmit(uint64_t count, blz::function_storage* tasks, int32_t priority, THREADPOOLGROUP* group);
 
+// Moves finished task nodes back to the free list (FUN_14235a5d0).
+void ThreadPoolReclaim();
+
 // Waits briefly for the priority's queue to drain and its workers to go idle (FUN_14235a710).
 void ThreadPoolFlush(int32_t priority);
 

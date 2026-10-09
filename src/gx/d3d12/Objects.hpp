@@ -243,6 +243,9 @@ struct GxCallbackList {
 };
 static_assert(sizeof(GxCallbackList) == 0x48, "GxCallbackList is 0x48 bytes");
 
+// A Gx format as a resource format (DAT_142919aa0).
+DXGI_FORMAT ResourceFormat(uint8_t format);
+
 extern const char s_frameDataTag[];         // ".?AUFrameData@Device@gxDx12Backend@@"
 
 // One frame in flight (0x90 bytes).

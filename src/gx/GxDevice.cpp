@@ -1,4 +1,6 @@
 #include "gx/GxDevice.hpp"
+#include "gx/GxPlatform.hpp"
+#include "prism/Instance.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
 #include "util/Unimplemented.hpp"
@@ -104,13 +106,37 @@ bool CGxDevice::DeviceCreate(const GXDEVICEPARAMS* params) {
 void CGxDevice::Slot030() {}
 // ref: 0x1422910c0 (jumps to FUN_14228e4d0)
 void CGxDevice::DeviceShutdown() {
-    FROST_UNIMPLEMENTED();  // FUN_14228e4d0: NotifyOnDeviceDestroy
+    GxNotifyOnDeviceDestroy();
 }
-void CGxDevice::Slot040() {
+bool CGxDevice::FormatSupportsMultisample(uint8_t, uint8_t, int32_t) {
     FROST_UNIMPLEMENTED();
+    return false;
 }
-void CGxDevice::Slot048() {
-    FROST_UNIMPLEMENTED();  // FUN_1422928d0: rebind to the adapter list after a rebuild
+// Finds the device's GPU again in the rebuilt adapter list (by LUID, else by vendor and
+// device id) and takes its handle, description and device data.
+// ref: FUN_1422928d0
+bool CGxDevice::RebindAdapter() {
+    GXADAPTERLIST* list = GxGetAdapterList();
+    for (uint64_t i = 0; i < list->m_size; i++) {
+        GxAdapterInfo* info = &list->m_data[i];
+        bool match;
+        if (Field<uint64_t>(0xc0) == 0) {
+            if (info->m_gpu->m_deviceId != Field<uint16_t>(0xa2)) {
+                continue;
+            }
+            match = info->m_gpu->m_vendorId == Field<uint16_t>(0xa0);
+        } else {
+            match = info->m_gpu->m_luid == Field<uint64_t>(0xc0);
+        }
+        if (match) {
+            this->m_gpu = info->m_handle;
+            std::memcpy(&Field<uint8_t>(0x90), info->m_gpu, 0x50);
+            static const uint8_t s_prismApis[GXAPI_COUNT] = { pm::API_D3D11, pm::API_D3D11, pm::API_D3D12, 0, 0 };  // DAT_142910f88
+            this->m_data = g_gxPrismInstance->GetDeviceData(info->m_handle, s_prismApis[this->m_api]);
+            return true;
+        }
+    }
+    return false;
 }
 uint8_t CGxDevice::Slot050() {
     return 0;
@@ -123,7 +149,7 @@ void CGxDevice::Slot060() {
 }
 void CGxDevice::Slot068() {}
 void CGxDevice::Slot070() {}
-void CGxDevice::Slot078() {
+void CGxDevice::SetLowLatencyMode(uint8_t) {
     FROST_UNIMPLEMENTED();
 }
 void CGxDevice::FrameMarker() {
@@ -225,8 +251,9 @@ void CGxDevice::Slot168() {}
 void CGxDevice::Slot170() {
     FROST_UNIMPLEMENTED();  // FUN_1422922c0
 }
-void CGxDevice::Slot178() {
-    FROST_UNIMPLEMENTED();  // FUN_1422922b0
+// ref: FUN_1422922b0
+bool CGxDevice::ShadingRateSupported(uint32_t, int32_t, uint8_t a4) {
+    return a4 == 0;
 }
 bool CGxDevice::FrameBegin(void*) {
     FROST_UNIMPLEMENTED();  // FUN_141370aa0

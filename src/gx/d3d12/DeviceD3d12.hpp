@@ -230,6 +230,9 @@ class CGxDeviceD3d12 : public CGxDevice {
     bool CreateGenerateMips(GENERATEMIPSPIPELINE* pipeline);              // FUN_1422d4d60
     void ReleaseSamplers();
     void ReportMemory(blz::string_header* report);                        // FUN_1422dbce0
+    bool FormatSupportsMultisample(uint8_t format, uint8_t samples, int32_t quality) override;  // 0x040 FUN_1422d1060
+    void SetLowLatencyMode(uint8_t mode) override;                        // 0x078 FUN_1422df730
+    bool ShadingRateSupported(uint32_t rate, int32_t a3, uint8_t a4) override;  // 0x178 FUN_1422db790
     void FrameMarker() override;                                          // 0x080 FUN_1422db7e0
     void LatencyMarker(uint32_t marker, uint32_t frame) override;         // 0x088 FUN_1422df780
     bool FrameBegin(void* query) override;                                // 0x180 FUN_1422d2c20

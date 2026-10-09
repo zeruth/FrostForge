@@ -1,4 +1,5 @@
 #include "client/ConsoleDevice.hpp"
+#include "client/RenderSettings.hpp"
 #include "threadpool/ThreadPool.hpp"
 #include "client/CommandLine.hpp"
 #include "client/GxWindow.hpp"
@@ -18,14 +19,6 @@
 
 // Stage 5 of CommonMain (FUN_14022a260) and what it calls. The engine subsystems it starts after
 // the window and device are tagged stubs, called in the reference order, until each is ported.
-
-// registers a shutdown hook (vector at DAT_1430a5880)
-// ref: FUN_14129d420
-void Sub14129D420(void (*callback)(), void* param) {
-    (void)callback;
-    (void)param;
-    FROST_UNIMPLEMENTED();
-}
 
 // the async file reader's thread settings
 // ref: FUN_1405da950
@@ -129,11 +122,6 @@ void OnDeviceDestroyedClient(void* param) {
 
 // ref: FUN_14124c270
 void Sub14124C270() {
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_14129d9f0
-void Sub14129D9F0() {
     FROST_UNIMPLEMENTED();
 }
 
@@ -428,7 +416,7 @@ void Sub14021C040() {
 // Gx
 // ref: FUN_14228c670
 void Sub14228C670() {
-    FROST_UNIMPLEMENTED();
+    GxFrameUpdate();
 }
 
 // the window
@@ -782,9 +770,14 @@ void GetWindowTitle(blz::string* title) {
     title->assign(text);
 }
 
+// A render settings validator that only runs FUN_140216870 and accepts.
 // ref: FUN_14022a240
-void OnShutdownHook() {
+bool OnRenderSettingsValidate(const RENDERSETTINGS* current, RENDERSETTINGS* pending, void* param) {
+    (void)current;
+    (void)pending;
+    (void)param;
     Sub140216870(0);
+    return true;
 }
 
 // ref: FUN_140229ad0
@@ -954,7 +947,7 @@ bool Sub14022A260() {
     if (CommandLineHasOption(0x40)) {
         GxSetAllowSoftwareGpu(true);
     }
-    Sub14129D420(&OnShutdownHook, nullptr);
+    RenderSettingsAddValidator(OnRenderSettingsValidate, nullptr);
     ThreadPoolInitialize(1);
     s_asyncThreadSleep = CVarRegister("asyncThreadSleep", "Engine option: Async read thread sleep", 1, "0",
         OnAsyncReadOptionChanged, 0, false, nullptr, false);
@@ -1011,7 +1004,7 @@ bool Sub14022A260() {
     GxAddDeviceDestroyedCallback(OnDeviceDestroyedClient, nullptr);
     s_deviceCallbacksAdded = 1;
     Sub14124C270();
-    Sub14129D9F0();
+    RenderSettingsInitialize();
     Sub141280A70();
     Sub1402F9E30();
     Sub1412A2BF0();

@@ -2282,3 +2282,189 @@ uint32_t GxDeviceLostCount() {
 void GxRequestRestart() {
     s_deviceRestartPending = 1;
 }
+
+// ---- the per-frame update ------------------------------------------------------------------
+
+namespace {
+
+CALLBACKDEQUE s_frameStartCallbacks;  // DAT_143490938
+
+// ref: FUN_14228e930
+void GxRunRestartHandler(uint8_t api) {
+    if (s_restartHandler.m_invoke != nullptr) {
+        reinterpret_cast<void (*)(uint8_t, void*)>(s_restartHandler.m_invoke)(api, s_restartHandler.m_storage);
+    }
+}
+
+// ref: FUN_14228e3c0
+void GxRunDisplayChangedHandler() {
+    if (s_displayChangedHandler.m_invoke != nullptr) {
+        reinterpret_cast<void (*)(void*)>(s_displayChangedHandler.m_invoke)(s_displayChangedHandler.m_storage);
+    }
+}
+
+// ref: FUN_14228e3e0
+void GxRunNoGpuHandler() {
+    if (s_noGpuHandler.m_invoke != nullptr) {
+        reinterpret_cast<void (*)(void*)>(s_noGpuHandler.m_invoke)(s_noGpuHandler.m_storage);
+    }
+}
+
+}
+
+// ref: FUN_14228e190
+void GxAddFrameStartCallback(GXDEVICECALLBACK callback, void* param) {
+    PushCallback(&s_frameStartCallbacks, callback, param);
+}
+
+// ref: FUN_14228e8f0
+void GxRemoveFrameStartCallback(GXDEVICECALLBACK callback, void* param) {
+    CallbackRemove(&s_frameStartCallbacks, callback, param);
+}
+
+// ref: FUN_14228e710
+void GxRemoveEngineDeviceCreatedCallback(GXDEVICECALLBACK callback, void* param) {
+    CallbackRemove(&s_engineDeviceCreatedCallbacks, callback, param);
+}
+
+// ref: FUN_14228e910
+void GxRemoveLowMemoryCallback(GXDEVICECALLBACK callback, void* param) {
+    CallbackRemove(&s_lowMemoryCallbacks, callback, param);
+}
+
+// Once a frame: notices a changed GPU set (re-enumerating, and restarting the device when the
+// GPU went away or a better one arrived), completes the last frame's end, runs a pending
+// restart, marks the frame's start and runs the frame-start callbacks.
+// ref: FUN_14228c670
+void GxFrameUpdate() {
+    auto device = static_cast<CGxDevice*>(g_gxDevice);
+    bool current = g_gxPrismInstance->IsCurrent();
+    if (!current || s_deviceRestartPending != 0) {
+        GxFrameEndWait(&s_frameEnd, 2, 1);
+        if (!current) {
+            GxLog("Gpu state has changed. re-enumerating");
+            uint8_t vendor = device->Field<uint8_t>(0xaa);
+            for (int32_t attempt = 0;; attempt++) {
+                pm::RESULT result;
+                g_gxPrismInstance->Rebuild(&result, 2, 3);
+                if (result.m_code != 0) {
+                    GxLog("Failure on Gpu Enumerate call: %s (0x%08X). Retrying 1 second...", pm::ResultCodeName(result.m_code),
+                        result.m_hresult);
+                } else if (!GxBuildAdapterList()) {
+                    GxLog("No GPU found, Retrying in 1 second...");
+                } else {
+                    bool found = vendor == 4 || attempt > 0x19;
+                    for (uint64_t i = 0; !found && i < g_gxAdapters.m_size; i++) {
+                        pm::GPU* gpu = g_gxAdapters.m_data[i].m_gpu;
+                        found = gpu->m_deviceId == device->Field<uint16_t>(0xa2) && gpu->m_vendorId == device->Field<uint16_t>(0xa0);
+                    }
+                    if (found) {
+                        if (s_driverChanged != 0) {
+                            GxLog("Driver Update Detected");
+                        }
+                        GxReleasePlatformHandles();
+                        GxLoadPlatformHandles(false);
+                        if (!device->RebindAdapter()) {
+                            device->m_gpu = nullptr;
+                            device->m_data = nullptr;
+                            GxLog(s_driverChanged != 0 ? "Restarting..." : "Gpu Eject Detected. Restarting...");
+                            s_deviceRestartPending = 1;
+                        } else if (GxSelectGpu(device->m_api, &device->m_params.m_adapterName, false) != device->m_gpu) {
+                            GxLog("More Suitable Gpu Found. Switching to it..");
+                            s_deviceRestartPending = 1;
+                        }
+                        s_driverChanged = 0;
+                        GxLogFlush();
+                        GxRunDisplayChangedHandler();
+                        break;
+                    }
+                    GxLog("Waiting for GPU to come back, Rechecking in 1 second... (0x%hu, 0x%hu)", device->Field<uint16_t>(0xa0),
+                        device->Field<uint16_t>(0xa2));
+                }
+                GxLogFlush();
+                OsSleepNanoseconds(1000000000);
+                if (attempt + 1 > 0x1d) {
+                    GxLog("No Gpu Found. Aborting.");
+                    GxRunNoGpuHandler();
+                    OsTerminateProcess();
+                }
+            }
+        }
+    } else if (!GxFrameEndArm(&s_frameEnd, false)) {
+        GxFrameEndWait(&s_frameEnd, 2, 1);
+    }
+    if (s_deviceRestartPending != 0) {
+        GxRunRestartHandler(device->m_0a);
+        s_deviceRestartPending = 0;
+    }
+    device = static_cast<CGxDevice*>(g_gxDevice);
+    device->LatencyMarker(0, device->Field<uint32_t>(0x138));
+    uint64_t end = s_frameStartCallbacks.m_size + s_frameStartCallbacks.m_offset;
+    for (uint64_t index = s_frameStartCallbacks.m_offset; index != end; index++) {
+        CALLBACKPAIR* pair = CallbackSlot(&s_frameStartCallbacks, index);
+        pair->m_callback(pair->m_param);
+    }
+    ThreadPoolReclaim();
+}
+
+// The device takes the low-latency mode, and logs it.
+// ref: FUN_14228b810
+void GxSetLowLatencyMode(uint8_t mode) {
+    auto device = static_cast<CGxDevice*>(g_gxDevice);
+    device->SetLowLatencyMode(mode);
+    device->Field<uint8_t>(0x14d) = mode;
+    static const char* const s_names[4] = { "None", "BuiltIn", "Reflex", "Reflex+Boost" };
+    GxLog("GxLowLatencyMode: %s", mode < 4 ? s_names[mode] : "Unknown");
+}
+
+// The device's dedicated and shared video memory in MB (FUN_1422918d0).
+// ref: FUN_14228aa40
+void GxDeviceVideoMemory(uint32_t* dedicated, uint32_t* shared) {
+    auto device = static_cast<CGxDevice*>(g_gxDevice);
+    *dedicated = device->Field<uint32_t>(0x15c);
+    *shared = device->Field<uint32_t>(0x160);
+}
+
+// Whether a format multisamples; vendor 3 below 1900 MB of video memory never does.
+// ref: FUN_142289e20
+bool GxFormatSupportsMultisample(uint8_t format, uint8_t samples, int32_t quality) {
+    auto device = static_cast<CGxDevice*>(g_gxDevice);
+    if (device->Field<uint8_t>(0xaa) == 3) {
+        uint32_t dedicated;
+        uint32_t shared;
+        GxDeviceVideoMemory(&dedicated, &shared);
+        if (dedicated < 0x76c) {
+            return false;
+        }
+    }
+    return device->FormatSupportsMultisample(format, samples, quality);
+}
+
+// ref: FUN_14228ac40
+bool GxShadingRateSupported(uint32_t rate, int32_t a2, uint8_t a3) {
+    return static_cast<CGxDevice*>(g_gxDevice)->ShadingRateSupported(rate, a2, a3);
+}
+
+// The D3D11 APIs and legacy Metal (FUN_142291a50: 0 or 3) and the D3D11 ones (FUN_1422919f0).
+// ref: FUN_142291a50
+bool GxApiIsLegacy() {
+    uint8_t api = g_gxDevice != nullptr ? static_cast<CGxDevice*>(g_gxDevice)->m_api : GxGetApi();
+    return api == GXAPI_D3D11_LEGACY || api == GXAPI_MTL_LEGACY;
+}
+
+// ref: FUN_1422919f0
+bool GxApiIsD3d11() {
+    uint8_t api = g_gxDevice != nullptr ? static_cast<CGxDevice*>(g_gxDevice)->m_api : GxGetApi();
+    return api < 2;
+}
+
+// The device's capabilities and caches (FUN_14228a0b0): the block from +0x80.
+// ref: FUN_14228a0b0
+uint8_t* GxDeviceCaps() {
+    return static_cast<uint8_t*>(g_gxDevice) + 0x80;
+}
+
+// ref: FUN_14228a030
+uint32_t GxDeviceFrame() {
+    return static_cast<CGxDevice*>(g_gxDevice)->Field<uint32_t>(0x138);
+}

@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <cstring>
 #include <new>
+#include <dxgi.h>
 
 namespace pm {
 
@@ -407,8 +408,15 @@ RESULT* Instance::Rebuild(RESULT* out, uint8_t a2, uint8_t a3) {
 }
 
 // ref: FUN_14234db90
-void Instance::Slot28() {
-    FROST_UNIMPLEMENTED();  // FUN_142353650 on the DXGI instance
+// ref: FUN_14234db90 (FUN_142353650 on the DXGI instance)
+bool Instance::IsCurrent() {
+    DxgiInstance* dxgi = &this->m_dxgi;
+    if (dxgi->m_initialized == 0) {
+        return false;
+    }
+    bool current = static_cast<IDXGIFactory1*>(dxgi->m_factory1)->IsCurrent() != FALSE;
+    dxgi->m_initialized = current;
+    return current;
 }
 
 // ref: FUN_14234da50

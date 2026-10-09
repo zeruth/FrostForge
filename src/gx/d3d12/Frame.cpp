@@ -1024,3 +1024,41 @@ void CGxDeviceD3d12::ReleaseOldSamplers() {
 void CGxDeviceD3d12::ReleaseUploadBuffers() {
     // Empty until GxBuf is ported.
 }
+
+// Whether a format multisamples at 2^samples with no quality level (the multisample quality
+// levels feature query). An AMD part (+0xaa 2) is held to four samples.
+// ref: FUN_1422d1060
+bool CGxDeviceD3d12::FormatSupportsMultisample(uint8_t format, uint8_t samples, int32_t quality) {
+    if (this->m_ready == 0) {
+        return false;
+    }
+    uint32_t count = 1u << (samples & 0x1f);
+    if (count > 0x20 || (1u << (quality & 0x1f)) > 0x20 || quality != 0 || this->m_device == nullptr ||
+        (Field<uint8_t>(0xaa) == 2 && count > 4)) {
+        return false;
+    }
+    D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS levels = {};
+    levels.Format = gxDx12Backend::ResourceFormat(format);
+    levels.SampleCount = count;
+    if (FAILED(this->m_device->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &levels, sizeof(levels)))) {
+        return false;
+    }
+    return levels.NumQualityLevels != 0;
+}
+
+// The reference hands the mode to NVIDIA Reflex (NvAPI_D3D_SetSleepMode through the latency
+// block at +0x46c8). DIVERGED: NVAPI and Reflex are stubs here, so there is nothing to set.
+// ref: FUN_1422df730
+void CGxDeviceD3d12::SetLowLatencyMode(uint8_t mode) {
+    (void)mode;
+}
+
+// Variable-rate shading: the tier (+0x869) picks a row of supported rates (DAT_14291b220).
+// ref: FUN_1422db790
+bool CGxDeviceD3d12::ShadingRateSupported(uint32_t rate, int32_t a3, uint8_t a4) {
+    static const uint32_t s_rates[2][3] = { { 0x33, 0x33, 0x33 }, { 0x673, 0x73, 0x33 } };
+    if (reinterpret_cast<const uint8_t*>(this->m_data)[0x219] != 0 && rate < 3 && a3 == 0) {
+        return ((s_rates[this->m_vrs][rate] >> (a4 & 0x1f)) & 1) != 0;
+    }
+    return a4 == 0;
+}
