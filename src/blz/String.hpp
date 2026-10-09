@@ -17,6 +17,9 @@ struct string_header {
 // Grows the buffer to hold at least `size` characters plus the terminator (see string::reserve).
 void string_reserve(string_header* text, uint64_t size);
 
+// Replaces the contents with `length` characters of `source` (FUN_1402142b0).
+string_header* string_assign(string_header* text, const char* source, uint64_t length);
+
 // Replaces the contents with the formatted text; an empty string for a bad format.
 void string_format(string_header* text, const char* format, ...);
 

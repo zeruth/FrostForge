@@ -64,6 +64,8 @@ struct CASERROR {
 CASERROR* CASGetLastError();
 // The last error's code and kind.
 uint32_t CASGetErrorCode(int32_t* kind);
+// The last error as text, truncated to `size` (FUN_1402cdca0).
+char* CASFormatLastError(char* dest, uint64_t size);
 
 // Handlers for a hot-fix swap (given its status) and for a manifest change (given a name),
 // keyed by who registered them (blz::vector<blz::pair<uint64_t, blz::function<...>>>).
@@ -134,6 +136,8 @@ bool CASFileReadAt(CASINSTANCE* instance, CASFILE* file, void* dest, uint64_t of
 void CASFileClose(CASFILE** file);
 // Whether an id names a file (a loose one, or one the build knows).
 bool CASFileExists(int32_t fileDataId);
+// Reads a whole file by FileDataID into a new Storm block (FUN_1402cf090).
+bool CASFileLoadById(int32_t fileDataId, uint8_t** data, uint32_t* size, uint64_t flags, int32_t allocFlags);
 // 2 resident, 1 not resident (tact's 7), 0 unknown or failed.
 uint8_t CASFileGetResidency(int32_t fileDataId, uint64_t size, uint32_t a3);
 

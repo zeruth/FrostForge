@@ -39,6 +39,8 @@ bool SMemFree(void* ptr, const char* tag, int32_t line, uint32_t flags);
 // there too. Use as `new (a2, tag, tagHash, line) T(...)`.
 void* operator new(size_t bytes, int32_t a2, const char* tag, uint32_t tagHash, int32_t line);
 void operator delete(void* ptr, int32_t a2, const char* tag, uint32_t tagHash, int32_t line) noexcept;
+void* operator new[](size_t bytes, int32_t a2, const char* tag, uint32_t tagHash, int32_t line);
+void operator delete[](void* ptr, int32_t a2, const char* tag, uint32_t tagHash, int32_t line) noexcept;
 
 void SMemInstallHooks(SMEMALLOCHOOK alloc, SMEMFREEHOOK free, void* hook3, SMEMOWNERHOOK owner,
     void* hook5, void* hook6, void* hook7, void* hook8);

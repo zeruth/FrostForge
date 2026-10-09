@@ -214,6 +214,11 @@ struct OSCPUINFO {
 };
 static_assert(sizeof(OSCPUINFO) == 0xC0, "OSCPUINFO is 0xc0 bytes");
 int64_t OsGetNanoseconds();
+// The raw performance counter (FUN_140266c80) and a tick count in nanoseconds (FUN_140266bf0).
+int64_t OsGetPerformanceCounter();
+int64_t OsTicksToNanoseconds(uint64_t ticks);
+// Sleeps to a millisecond short of `nanoseconds`, then spins out the rest (FUN_140263700).
+void OsSleepPrecise(int64_t nanoseconds);
 // Nanoseconds since the first call (QueryPerformanceCounter scaled through a double).
 int64_t OsGetElapsedNanoseconds();
 bool OsParkWait(const void* address, bool (*predicate)(void* context), void* context, int64_t timeoutNs);

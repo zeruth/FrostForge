@@ -242,6 +242,58 @@ uint32_t CASGetErrorCode(int32_t* kind) {
 
 namespace {
 
+// The text of CAS's own error codes (PTR_s_Success_142630e40).
+const char* const s_casErrorStrings[] = {
+    "Success",
+    "General Failure",
+    "Can't find file in build manifest",
+    "Loose file not found and CAS is in loose file only mode.",
+    "Unknown file type",
+    "Deleted remote file",
+    "Canceled",
+    "Missing TACT Cryptkey",
+    "Container needs repair",
+    "OS File Error",
+    "Code/Data mismatch",
+};
+
+char* CopyErrorText(char* dest, uint64_t size, const char* text) {
+    if (size == 0) {
+        return dest;
+    }
+    char* write = dest;
+    while (--size != 0) {
+        char c = *text++;
+        *write++ = c;
+        if (c == '\0') {
+            return dest;
+        }
+    }
+    *write = '\0';
+    return dest;
+}
+
+}
+
+// The last error as text, by its kind.
+// ref: FUN_1402cdca0
+char* CASFormatLastError(char* dest, uint64_t size) {
+    int32_t kind = t_lastError.m_kind;
+    if (kind == 0) {
+        return CopyErrorText(dest, size, tact::ErrorString(t_lastError.m_tactError));
+    }
+    if (kind == 2) {
+        OsGetLastErrorText(dest, static_cast<uint32_t>(size));
+        return dest;
+    }
+    if (kind != 1 && kind != 3) {
+        return CopyErrorText(dest, size, "");
+    }
+    return CopyErrorText(dest, size, t_lastError.m_code < 0xb ? s_casErrorStrings[t_lastError.m_code] : "Unknown CAS error");
+}
+
+namespace {
+
 // blz::pair<uint64_t, blz::function<...>> (0x28 bytes).
 struct HANDLERENTRY {
     uint64_t m_key;
@@ -880,6 +932,43 @@ bool CASFileExists(int32_t fileDataId) {
         return true;
     }
     return CASIdIsKnown(fileDataId);
+}
+
+// Reads a whole file by FileDataID into a new Storm block: from the local manifest's loose
+// file when bit 0 of `flags` allows one, else from storage.
+// ref: FUN_1402cf090
+bool CASFileLoadById(int32_t fileDataId, uint8_t** data, uint32_t* size, uint64_t flags, int32_t allocFlags) {
+    t_lastError.m_kind = 1;
+    BuildManifestEntry* entry = g_casManifest->FindById(static_cast<uint32_t>(fileDataId));
+    t_lastError.m_kind = 2;
+    t_lastError.m_code = entry != nullptr ? 0 : 2;
+    if ((flags & 1) != 0) {
+        const char* path = nullptr;
+        LocalManifestEntry* local = g_localManifest->FindById(fileDataId);
+        if (local != nullptr) {
+            path = local->m_path;
+        } else if (entry != nullptr) {
+            path = g_localManifest->FindPathByName(entry->m_nameHash, nullptr);
+        }
+        if (path != nullptr) {
+            return OsFileReadAll(path, data, size, static_cast<int32_t>((flags >> 1) & 1), allocFlags);
+        }
+    }
+    if (entry == nullptr) {
+        t_lastError.m_kind = 1;
+        t_lastError.m_code = 2;
+        return false;
+    }
+    uint32_t localSize = 0;
+    t_lastError.m_kind = 0;
+    uint32_t* sizeOut = size != nullptr ? size : &localSize;
+    char name[0x40];
+    CASFormatKeyName(name, entry->m_ckey, entry->m_fileDataId, entry->m_localeFlags, entry->m_contentFlags);
+    bool result = CASReadFile(g_casInstance, name, data, sizeOut, static_cast<uint32_t>(flags), allocFlags);
+    if (g_casReadHook != nullptr) {
+        g_casReadHook(entry->m_ckey, *sizeOut, s_casReadHookContext);
+    }
+    return result;
 }
 
 // ref: FUN_1402cd230

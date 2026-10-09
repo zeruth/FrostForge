@@ -1,5 +1,6 @@
 #include "client/GxWindow.hpp"
 #include "gx/Gx.hpp"
+#include "gx/GxDevice.hpp"
 #include "os/Os.hpp"
 #include "os/Timer.hpp"
 #include "os/Window.hpp"
@@ -338,7 +339,14 @@ void WindowReleaseDeviceObjects() {
 // ref: FUN_1414f8db0
 void WindowOnDeviceCreated(void* param) {
     (void)param;
-    FROST_UNIMPLEMENTED();  // CGxDevice slot 0x100 (FUN_14228c0b0) with {window, resolution, ...}
+    GXSWAPCHAINPARAMS params;
+    params.m_window = s_window;
+    params.m_width = s_params.m_resolution.m_width;
+    params.m_height = s_params.m_resolution.m_height;
+    params.m_vsync = s_params.m_vsync;
+    params.m_format = 0;
+    params.m_primary = 1;
+    s_swapChain = GxSwapChainCreate(&params);
     WindowCreateDeviceObjects();
 }
 
@@ -346,10 +354,7 @@ void WindowOnDeviceCreated(void* param) {
 void WindowOnDeviceDestroyed(void* param) {
     (void)param;
     WindowReleaseDeviceObjects();
-    if (s_swapChain != nullptr) {
-        FROST_UNIMPLEMENTED();  // CGxDevice slot 0x108 (FUN_14228c0d0)
-        s_swapChain = nullptr;
-    }
+    GxSwapChainDestroy(&s_swapChain);
 }
 
 // ref: FUN_1414f9d20
@@ -766,10 +771,7 @@ void WindowDestroy() {
         GxRemoveDeviceCreatedCallback(WindowOnDeviceCreated, nullptr);
         GxRemoveDeviceDestroyedCallback(WindowOnDeviceDestroyed, nullptr);
         WindowReleaseDeviceObjects();
-        if (s_swapChain != nullptr) {
-            FROST_UNIMPLEMENTED();  // CGxDevice slot 0x108 (FUN_14228c0d0)
-            s_swapChain = nullptr;
-        }
+        GxSwapChainDestroy(&s_swapChain);
         WindowRunDestroyCallbacks(s_window);
         WindowDestroyCursor();
         DestroyWindow(s_window);

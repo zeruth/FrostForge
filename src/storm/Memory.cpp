@@ -214,6 +214,17 @@ void operator delete(void* ptr, int32_t, const char*, uint32_t, int32_t) noexcep
     StormDelete(ptr, "delete");
 }
 
+// The array form of the tagged new is the same body (FUN_1402545c0): the compiler puts the
+// element count in front of arrays of destructible types itself.
+void* operator new[](size_t bytes, int32_t a2, const char* tag, uint32_t tagHash, int32_t line) {
+    (void)tagHash;
+    return StormNew(bytes, a2, tag, line);
+}
+
+void operator delete[](void* ptr, int32_t, const char*, uint32_t, int32_t) noexcept {
+    StormDelete(ptr, "delete[]");
+}
+
 // ref: FUN_1402547e0
 void operator delete[](void* ptr) noexcept {
     StormDelete(ptr, "delete[]");

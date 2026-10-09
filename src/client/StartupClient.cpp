@@ -1,4 +1,5 @@
 #include "client/ConsoleDevice.hpp"
+#include "threadpool/ThreadPool.hpp"
 #include "client/CommandLine.hpp"
 #include "client/GxWindow.hpp"
 #include "client/Locale.hpp"
@@ -23,13 +24,6 @@
 void Sub14129D420(void (*callback)(), void* param) {
     (void)callback;
     (void)param;
-    FROST_UNIMPLEMENTED();
-}
-
-// Engine/Source/ThreadPool
-// ref: FUN_142359e10
-void ThreadPoolInitialize(uint32_t a1) {
-    (void)a1;
     FROST_UNIMPLEMENTED();
 }
 
@@ -95,12 +89,6 @@ void Sub140352060() {
 
 // ref: FUN_1405da0e0
 void AsyncReadShutdown() {
-    FROST_UNIMPLEMENTED();
-}
-
-// Engine/Source/ThreadPool
-// ref: FUN_14235a350
-void ThreadPoolShutdown() {
     FROST_UNIMPLEMENTED();
 }
 
@@ -353,34 +341,6 @@ int32_t CommandSetGraphicsQualityRaid(const char* command, const char* arguments
     (void)arguments;
     FROST_UNIMPLEMENTED();
     return 1;
-}
-
-// Gx
-// ref: FUN_14228b8c0
-void GxFrameSetPhase(uint8_t phase) {
-    (void)phase;
-    FROST_UNIMPLEMENTED();
-}
-
-// Gx
-// ref: FUN_14228b3a0
-void GxFrameBegin() {
-    FROST_UNIMPLEMENTED();
-}
-
-// Gx
-// ref: FUN_14228c1a0
-void GxFrameWorkFlush(uint8_t a1) {
-    (void)a1;
-    FROST_UNIMPLEMENTED();
-}
-
-// Gx: the frame-rate limit wait
-// ref: FUN_14228aa60
-bool GxFrameLimit(uint32_t timeout) {
-    (void)timeout;
-    FROST_UNIMPLEMENTED();
-    return false;
 }
 
 // the world clock

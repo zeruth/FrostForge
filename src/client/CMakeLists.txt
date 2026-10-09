@@ -12,4 +12,4 @@ add_library(client STATIC
     StartupService.cpp
 )
 target_include_directories(client PUBLIC ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(client PUBLIC base cas console gx os services storm util)
+target_link_libraries(client PUBLIC base cas console gx os services storm threadpool util)

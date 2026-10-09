@@ -106,6 +106,38 @@ bool GxGetAllowSoftwareGpu();
 void GxSetAllowSoftwareGpu(bool allow);
 void GxLogFlushNow();
 
+// What a frame's end hands its callback (0x50 bytes, nanoseconds).
+struct GXFRAMESTATS {
+    int64_t m_frameTime;            // 0x00: end to end
+    int64_t m_beginWait;            // 0x08: from the latency wait to GxFrameBegin
+    int64_t m_cpuTime;              // 0x10: GxFrameBegin to the end, less the GPU wait
+    uint64_t m_gpuWait;             // 0x18: what the device's FrameEnd waited
+    uint64_t m_gpuTime;             // 0x20: from the frame's timer query
+    uint64_t m_gpuBegin;            // 0x28: the query's timestamps
+    uint64_t m_gpuEnd;              // 0x30
+    int64_t m_presentTime;          // 0x38: the device's (+0x150)
+    int64_t m_waited;               // 0x40: the latency wait's sleep
+    uint32_t m_latencyFrames;       // 0x48: the device's (+0x14e)
+    uint32_t m_pad4c;
+};
+static_assert(sizeof(GXFRAMESTATS) == 0x50, "GXFRAMESTATS is 0x50 bytes");
+
+// The frame (GxApi.cpp): the phase flag (FUN_14228b8c0), the device's begin
+// (FUN_142289f20), the latency wait (FUN_14228b3a0), arming an overlapped end
+// (FUN_14228a950), completing the last end (FUN_14228c1a0), the end with its stats
+// callback (FUN_142289f30), whether a frame cap applies (FUN_14228aa60) and the cap's sleep
+// (FUN_14228c9f0).
+uint8_t GxFrameSetPhase(uint8_t phase);
+bool GxFrameBegin();
+void GxFrameLatencyWait();
+bool GxFrameArm(bool arm);
+void GxFrameWorkFlush(uint8_t mode);
+void GxFrameEnd(blz::function_storage* callback, bool overlapped);
+bool GxFrameLimited(uint32_t fps);
+void GxFrameLimit(uint32_t fps);
+uint32_t GxDeviceLostCount();
+void GxRequestRestart();
+
 // The console's handlers (blz::function, moved in).
 void GxSetRestartHandler(blz::function_storage* handler);
 void GxSetDisplayChangedHandler(blz::function_storage* handler);

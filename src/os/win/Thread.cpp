@@ -99,6 +99,36 @@ int64_t OsGetNanoseconds() {
     return static_cast<int64_t>((ticks % f) * 1000000000 / f + (ticks / f) * 1000000000);
 }
 
+// ref: FUN_140266c80
+int64_t OsGetPerformanceCounter() {
+    LARGE_INTEGER counter;
+    QueryPerformanceCounter(&counter);
+    return counter.QuadPart;
+}
+
+// ref: FUN_140266bf0
+int64_t OsTicksToNanoseconds(uint64_t ticks) {
+    LARGE_INTEGER frequency;
+    QueryPerformanceFrequency(&frequency);  // PTR_FUN_142cc8ad0
+    uint64_t f = static_cast<uint64_t>(frequency.QuadPart);
+    return static_cast<int64_t>((ticks % f) * 1000000000 / f + (ticks / f) * 1000000000);
+}
+
+// ref: FUN_140263700
+void OsSleepPrecise(int64_t nanoseconds) {
+    int64_t start = OsTicksToNanoseconds(OsGetPerformanceCounter());
+    uint64_t milliseconds = static_cast<uint64_t>(nanoseconds / 1000000);
+    if ((milliseconds & 0xffffffffull) != milliseconds) {
+        Sleep(INFINITE);
+        return;
+    }
+    if (static_cast<uint32_t>(milliseconds) > 1) {
+        Sleep(static_cast<uint32_t>(milliseconds) - 1);
+    }
+    while (OsTicksToNanoseconds(OsGetPerformanceCounter()) - start < nanoseconds) {
+    }
+}
+
 // Waits until `predicate(context)` holds, parked on `address` between checks (woken by
 // OsUnpark); it spins 40 checks first. timeoutNs INT64_MAX waits forever. True when the
 // predicate held or the waiter was woken, false on timeout.

@@ -50,6 +50,24 @@ void string::reserve(uint64_t size) {
     string_reserve(reinterpret_cast<string_header*>(this), size);
 }
 
+// A source inside the string's own buffer is found again after the reserve moves it.
+// ref: FUN_1402142b0
+string_header* string_assign(string_header* text, const char* source, uint64_t length) {
+    char* old = text->m_data;
+    string_reserve(text, length);
+    char* data = text->m_data;
+    if (length != 0) {
+        if (static_cast<uint64_t>(source - old) < text->m_size) {
+            std::memmove(data, data + (source - old), length);
+        } else {
+            std::memmove(data, source, length);
+        }
+    }
+    text->m_data[length] = '\0';
+    text->m_size = length;
+    return text;
+}
+
 // ref: FUN_140236510
 void string_format(string_header* text, const char* format, ...) {
     va_list args;

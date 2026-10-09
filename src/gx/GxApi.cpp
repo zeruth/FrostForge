@@ -1,4 +1,12 @@
 #include "gx/Gx.hpp"
+#include "gx/GxDevice.hpp"
+#include "gx/GxPlatform.hpp"
+#include "gx/GxRenderTargets.hpp"
+#include "gx/d3d12/CommandList.hpp"
+#include "storm/String.hpp"
+#include "threadpool/ThreadPool.hpp"
+#include <cstdarg>
+#include <intrin.h>
 #include "blz/Sync.hpp"
 #include "client/ConsoleDevice.hpp"
 #include "console/Command.hpp"
@@ -67,17 +75,45 @@ void* s_d3d12CreateVersionedRootSignatureDeserializer;  // DAT_143490a60
 IDXGIFactory5* s_factory5;          // DAT_143490ad0
 IDXGIFactory6* s_factory6;          // DAT_143490ad8
 
-// The frame-end helper (DAT_142d41b30).
+const char s_frameQueryTag[] = ".?AV?$unique_ptr@UGxQuery@@UGxResourceDelete@@@blz@@";
+const char s_frameGroupTag[] = ".PEAUThreadPoolGroup@@";
+
+// The frame-end helper (DAT_142d41b30): the frame's begin and end, its timings, and the
+// optional overlapped end on a pool thread.
 struct GXFRAMEEND {
-    uint8_t m_00[8];
-    void* m_threadPool;             // 0x08
-    uint8_t m_10[0x79];
+    uint8_t m_began;                // 0x00: between GxFrameBegin and the end's completion
+    uint8_t m_busy;                 // 0x01: inside GxFrameBegin
+    uint8_t m_pad02[6];
+    THREADPOOLGROUP* m_group;       // 0x08: the overlapped end's pool group
+    GXFRAMESTATS m_stats;           // 0x10: handed to the end callback
+    int64_t m_lastEnd;              // 0x60: counter at the last end
+    int64_t m_beginStamp;           // 0x68: counter at GxFrameBegin
+    int64_t m_waitEnd;              // 0x70: counter after the latency wait
+    int64_t m_lastReport;           // 0x78: counter at the last GPU status report
+    int64_t m_waited;               // 0x80: nanoseconds the latency wait slept
+    uint8_t m_overlapActive;        // 0x88: this frame ends on a pool thread
     uint8_t m_overlap;              // 0x89: GxFrameEndMode (always 0: the feature is not available)
-    uint8_t m_8a[6];
-    uint8_t m_pending;              // 0x90
-    uint8_t m_91[0x57];
+    uint8_t m_pad8a[2];
+    uint32_t m_frame;               // 0x8c: the device's frame number at the end
+    volatile uint8_t m_pending;     // 0x90: 1 ending, 2 overlapped, 4 ended, 8 stats taken
+    uint8_t m_pad91[7];
+    blz::function_storage m_callback;  // 0x98: run with the stats once the end completes
+    blz::vector<THREADPOOLGROUP*, s_frameGroupTag> m_waits;     // 0xb8: drained every wait
+    blz::vector<THREADPOOLGROUP*, s_frameGroupTag> m_lateWaits; // 0xd0: drained on a full wait
 };
+static_assert(offsetof(GXFRAMEEND, m_stats) == 0x10, "GXFRAMEEND layout");
+static_assert(offsetof(GXFRAMEEND, m_lastEnd) == 0x60, "GXFRAMEEND layout");
+static_assert(offsetof(GXFRAMEEND, m_frame) == 0x8c, "GXFRAMEEND layout");
+static_assert(offsetof(GXFRAMEEND, m_callback) == 0x98, "GXFRAMEEND layout");
+static_assert(sizeof(GXFRAMEEND) == 0xe8, "GXFRAMEEND is 0xe8 bytes");
 GXFRAMEEND s_frameEnd;
+
+// The timer queries frames begin and end with, one per frame in flight (PTR_DAT_142d43860).
+blz::vector<void*, s_frameQueryTag> s_frameQueries;
+
+void* FrameQuery(CGxDevice* device) {
+    return s_frameQueries.m_data[device->Field<uint32_t>(0x138) % s_frameQueries.m_size];
+}
 
 // blz::deque<blz::pair<void (*)(void*), void*>>: a map of blocks of eight.
 struct CALLBACKPAIR {
@@ -134,7 +170,7 @@ class GxPrismAllocator : public blz::allocator {
         return SMemSize(ptr);
     }
 };
-GxPrismAllocator s_prismAllocator;
+GxPrismAllocator s_prismAllocator;  // PTR_PTR_142d41c68
 
 // Writes Prism's reports to gx.log, with the system's text for an HRESULT.
 // ref: FUN_14228d420
@@ -246,18 +282,11 @@ struct PRISMTASKQUEUESTATIC {
 };
 PRISMTASKQUEUESTATIC s_prismTaskQueue;  // DAT_1434906a0
 
-// ref: FUN_14235a070
-void* ThreadPoolCreate(uint32_t priority) {
-    (void)priority;
-    FROST_UNIMPLEMENTED();  // Engine/Source/ThreadPool is not ported
-    return nullptr;
-}
-
 // ref: FUN_142291c50
 void GxFrameEndInitialize(GXFRAMEEND* frameEnd) {
     InterlockedExchange8(reinterpret_cast<volatile char*>(&frameEnd->m_pending), 0);
-    if (frameEnd->m_threadPool == nullptr) {
-        frameEnd->m_threadPool = ThreadPoolCreate(2);
+    if (frameEnd->m_group == nullptr) {
+        frameEnd->m_group = ThreadPoolGroupCreate(2);
     }
 }
 
@@ -336,16 +365,41 @@ void GxOnPowerSettingChange() {
     }
 }
 
+// One timer query per frame in flight, when the device has them.
 // ref: FUN_1422918f0
 void GxOnDeviceCreated(void* param) {
     (void)param;
-    FROST_UNIMPLEMENTED();  // the device's per-frame objects: needs CGxDevice
+    auto device = static_cast<CGxDevice*>(g_gxDevice);
+    s_frameEnd.m_lastReport = 0;
+    uint32_t count = device->FrameCount();
+    // FUN_1422935a0: blz::vector<unique_ptr<GxQuery>>::resize
+    for (uint64_t i = count; i < s_frameQueries.m_size; i++) {
+        if (s_frameQueries.m_data[i] != nullptr) {
+            device->QueryDestroy(s_frameQueries.m_data[i]);
+        }
+    }
+    s_frameQueries.resize(count);
+    if (device->Field<uint8_t>(0x129) != 0) {
+        for (uint64_t i = 0; i < s_frameQueries.m_size; i++) {
+            void* query = device->QueryCreate(1);
+            void* old = s_frameQueries.m_data[i];
+            s_frameQueries.m_data[i] = query;
+            if (old != nullptr) {
+                device->QueryDestroy(old);
+            }
+        }
+    }
 }
 
 // ref: FUN_142291980
 void GxOnDeviceDestroyed(void* param) {
     (void)param;
-    FROST_UNIMPLEMENTED();  // releases what GxOnDeviceCreated made
+    for (uint64_t i = 0; i < s_frameQueries.m_size; i++) {
+        if (s_frameQueries.m_data[i] != nullptr) {
+            static_cast<CGxDevice*>(g_gxDevice)->QueryDestroy(s_frameQueries.m_data[i]);
+        }
+    }
+    s_frameQueries.m_size = 0;
 }
 
 // A CVar's integer the way the callbacks parse it: "0x" prefixes hex.
@@ -1241,15 +1295,293 @@ void GxSetNoGpuHandler(blz::function_storage* handler) {
     AssignHandler(&s_noGpuHandler, handler);
 }
 
+bool GxDriverOutOfDate(CGxDevice* device);
+
+namespace {
+
+uint8_t s_apiDisabled[GXAPI_COUNT];  // DAT_1434909b8: APIs turned off after a failure
+
+// ref: FUN_14228e3a0
+bool GxApiDisabled(uint8_t api) {
+    if (api < GXAPI_COUNT) {
+        return s_apiDisabled[api] != 0;
+    }
+    return true;
+}
+
+// The GPU to create `api`'s device on: the one named in the device parameters, else by the
+// same preference as GxSelectGpuToUse among the GPUs that run `api`.
+// ref: FUN_14228d100
+pm::GPU* GxSelectGpu(uint8_t api, const blz::inline_string<0x40>* name, bool log) {
+    if (g_gxAdapters.m_size == 0) {
+        GxLog("SelectGpuToUse failed");
+        return nullptr;
+    }
+    GxAdapterInfo* externalWithoutMonitor = nullptr;
+    GxAdapterInfo* withMonitor = nullptr;
+    GxAdapterInfo* external = nullptr;
+    GxAdapterInfo* discrete = nullptr;
+    GxAdapterInfo* integrated = nullptr;
+    for (uint64_t i = 0; i < g_gxAdapters.m_size; i++) {
+        GxAdapterInfo* info = &g_gxAdapters.m_data[i];
+        if (info->m_supported[api] == 0) {
+            continue;
+        }
+        if (name->m_size > 2) {
+            uint64_t length = info->m_name.m_size;
+            uint64_t compared = length < name->m_size ? length : name->m_size;
+            if ((compared == 0 || std::memcmp(info->m_name.m_data, name->m_data, compared) == 0) &&
+                static_cast<int32_t>(length) == static_cast<int32_t>(name->m_size)) {
+                if (log) {
+                    GxLog("Choosing gpu by name: \"%s\"", info->m_name.m_data);
+                }
+                return info->m_handle;
+            }
+        }
+        uint32_t monitorCount = 8;
+        void* monitors[8];
+        pm::RESULT result;
+        g_gxPrismInstance->EnumerateMonitors(&result, info->m_handle, &monitorCount, monitors);
+        bool hasMonitor = result.m_code == 0 && monitorCount != 0;
+        uint8_t type = info->m_gpu->m_type;
+        if (type == pm::GPU_EXTERNAL) {
+            if (!hasMonitor && externalWithoutMonitor == nullptr) {
+                externalWithoutMonitor = info;
+            }
+            if (external == nullptr) {
+                external = info;
+            }
+        }
+        if ((type == pm::GPU_EXTERNAL || type == pm::GPU_DISCRETE) && hasMonitor && withMonitor == nullptr) {
+            withMonitor = info;
+        }
+        if (type == pm::GPU_INTEGRATED) {
+            if (integrated == nullptr) {
+                integrated = info;
+            }
+        } else if (type == pm::GPU_DISCRETE && discrete == nullptr) {
+            discrete = info;
+        }
+    }
+    if (externalWithoutMonitor != nullptr) {
+        if (log) {
+            GxLog("Choosing headless egpu: \"%s\"", externalWithoutMonitor->m_name.m_data);
+        }
+        return externalWithoutMonitor->m_handle;
+    }
+    if (withMonitor != nullptr) {
+        if (log) {
+            GxLog("Choosing gpu with monitor attached: \"%s\"", withMonitor->m_name.m_data);
+        }
+        return withMonitor->m_handle;
+    }
+    if (external != nullptr) {
+        if (log) {
+            GxLog("Choosing egpu: \"%s\"", external->m_name.m_data);
+        }
+        return external->m_handle;
+    }
+    if (discrete != nullptr) {
+        if (log) {
+            GxLog("Choosing high power gpu: \"%s\"", discrete->m_name.m_data);
+        }
+        return discrete->m_handle;
+    }
+    if (integrated != nullptr) {
+        if (log) {
+            GxLog("Choosing low power gpu: \"%s\"", integrated->m_name.m_data);
+        }
+        return integrated->m_handle;
+    }
+    if (log) {
+        GxLog("No suitable device found. Attempting to use default device:");
+    }
+    return g_gxAdapters.m_size != 0 ? g_gxAdapters.m_data[0].m_handle : nullptr;
+}
+
+// The ray tracing tier names (PTR_DAT_142910fe8).
+const char* const s_rayTracingNames[3] = { "None", "1.0", "1.1" };
+
+// The shader family names (FUN_14228b900).
+const char* GxShaderFamilyName(int32_t family) {
+    const char* names[4] = { "dx_4_0", "dx_5_0", "dx_6_0", "mtl_1_1" };
+    if (family < 4) {
+        return names[family];
+    }
+    return "Unknown";
+}
+
+// Builds the device for `api` in Gx's state block and fills in what it knows of the GPU.
+// ref: FUN_14228cc30
+void GxDeviceConstruct(uint8_t api, pm::GPU* gpu) {
+    static const uint8_t s_prismApis[GXAPI_COUNT] = { pm::API_D3D11, pm::API_D3D11, pm::API_D3D12, 0, 0 };  // DAT_142910f88
+    pm::APIDEVICEDATA* data = g_gxPrismInstance->GetDeviceData(gpu, s_prismApis[api]);
+    std::memset(s_gxStateBlock, 0, sizeof(s_gxStateBlock));
+    int32_t prism = s_prismEnabledCVar->m_intValue;
+    int32_t prismMode = 0;
+    CGxDevice* device = nullptr;
+    bool native;
+    if (api == GXAPI_D3D12) {
+        native = prism != 2;
+    } else {
+        native = (prism == 0 || api == GXAPI_D3D11_LEGACY) && static_cast<uint8_t>(api - 3) > 1;
+        prismMode = prism;
+    }
+    if (native) {
+        prismMode = 0;
+        if (api == GXAPI_D3D11_LEGACY || api == GXAPI_D3D11) {
+            FROST_UNIMPLEMENTED();  // FUN_1422a0810: the native D3D11 device
+        } else if (api == GXAPI_D3D12) {
+            device = GxDeviceD3d12Create(s_gxStateBlock);
+        }
+    } else {
+        FROST_UNIMPLEMENTED();  // FUN_1422b7df0: the Prism device
+    }
+    g_gxDevice = device;
+    if (device == nullptr) {
+        return;
+    }
+    auto bytes = reinterpret_cast<uint8_t*>(device);
+    auto dataBytes = reinterpret_cast<const uint8_t*>(data);
+    device->m_gpu = gpu;
+    device->m_data = data;
+    *reinterpret_cast<uint32_t*>(bytes + 0x80) = *reinterpret_cast<const uint32_t*>(dataBytes + 0xbc);
+    bytes[0x84] = dataBytes[0xc9];
+    bytes[0x8c] = dataBytes[0xd9];
+    pm::GPU* info = g_gxPrismInstance->GetGpu(gpu);
+    std::memcpy(bytes + 0x90, info, 0x50);
+    int32_t& model = *reinterpret_cast<int32_t*>(bytes + 0x88);
+    if (static_cast<uint8_t>(api - 3) < 2) {
+        model = 3;
+    } else if (api < 2) {
+        model = dataBytes[0xd9] > 3 ? 1 : 0;
+    } else if (api == GXAPI_D3D12) {
+        if (dataBytes[0x218] < 3) {
+            model = 1;
+        } else {
+            model = 2 - (dataBytes[0xd9] < 0xb ? 1 : 0);
+        }
+    }
+    *reinterpret_cast<uint32_t*>(bytes + 0xe0) = 0x40;
+    *reinterpret_cast<uint32_t*>(bytes + 0xe8) = 0x40;
+    *reinterpret_cast<uint32_t*>(bytes + 0xec) = 0x10;
+    *reinterpret_cast<uint32_t*>(bytes + 0xf0) = 0x10;
+    *reinterpret_cast<uint32_t*>(bytes + 0xf8) = 0x10;
+    *reinterpret_cast<uint32_t*>(bytes + 0xfc) = 0x10;
+    *reinterpret_cast<uint32_t*>(bytes + 0x108) = 0x1000;
+    *reinterpret_cast<uint32_t*>(bytes + 0x100) = 0x1000;
+    *reinterpret_cast<uint32_t*>(bytes + 0x10c) = 0x1000;
+    *reinterpret_cast<uint32_t*>(bytes + 0x110) = 0x4000;
+    *reinterpret_cast<uint32_t*>(bytes + 0x114) = 0x4000;
+    *reinterpret_cast<uint32_t*>(bytes + 0x118) = 0x4000;
+    *reinterpret_cast<uint32_t*>(bytes + 0x11c) = 0x800;
+    *reinterpret_cast<uint32_t*>(bytes + 0x120) = 0x4000;
+    *reinterpret_cast<uint32_t*>(bytes + 0x124) = 0x4000;
+    *reinterpret_cast<uint32_t*>(bytes + 0x128) = 1;
+    *reinterpret_cast<uint16_t*>(bytes + 0x12c) = 0x100;
+    bytes[0x12e] = 0;
+    uint8_t rayTracing = 0;
+    if (model == 2 && prismMode == 0 && dataBytes[0x218] >= 2) {
+        rayTracing = static_cast<uint8_t>((dataBytes[0x218] != 2) + 1);
+    }
+    bytes[0x12f] = rayTracing;
+    const char* rayName = bytes[0x12f] < 3 ? s_rayTracingNames[bytes[0x12f]] : "Unknown";
+    const char* modelNames[4] = { "dx_4_0", "dx_5_0", "dx_6_0", "mtl_1_1" };
+    const char* modelName = model < 4 ? modelNames[model] : "Unknown";
+    auto deviceData = reinterpret_cast<const uint8_t*>(device->m_data);
+    GxLog("GpuInfo: sm:%s, rt:%s, vrt:%u, bary:%d, mesh:%u pull:%u", modelName, rayName, deviceData[0x219],
+        bytes[0x12e] != 0, deviceData[0x21a], (*reinterpret_cast<const uint32_t*>(deviceData + 0x224) >> 5) & 1);
+}
+
+}
+
 // Creates the device for `api` with the console's settings, returning whether it is up.
 // ref: FUN_142289c40
 bool GxDevCreate(uint8_t api, const GXDEVICEPARAMS* params) {
-    (void)api;
-    (void)params;
-    // The CGxDevice and its Prism device and swap chain are the next port. Until then the
-    // device "succeeds" without existing, so the window and main loop can come up.
-    FROST_UNIMPLEMENTED();
-    return true;
+    if (!GxApiDisabled(api)) {
+        pm::GPU* gpu = GxSelectGpu(api, &params->m_adapterName, true);
+        if (gpu == nullptr) {
+            GxLog("No Gpu Found <");
+        } else {
+            GxDeviceConstruct(api, gpu);
+            auto device = static_cast<CGxDevice*>(g_gxDevice);
+            if (device != nullptr && device->DeviceCreate(params)) {
+                bool outdated = GxDriverOutOfDate(device);
+                GxLog("Using shader family %s", GxShaderFamilyName(*reinterpret_cast<int32_t*>(reinterpret_cast<uint8_t*>(device) + 0x88)));
+                GxLog("<IsGPUDriverOutOfDate> %s", outdated ? "true" : "false");
+                GxLogFlush();
+                return true;
+            }
+            if (device != nullptr) {
+                device->~CGxDevice();
+            }
+            g_gxDevice = nullptr;
+        }
+    } else if (api < GXAPI_COUNT) {
+        GxLog("%s was disabled", s_apiNames[api]);
+    } else {
+        GxLog("%s was disabled", "Unknown");
+    }
+    GxLogFlush();
+    return false;
+}
+
+// Whether the driver is older than the vendor's minimum the game supports.
+// ref: FUN_1422920e0
+bool GxDriverOutOfDate(CGxDevice* device) {
+    auto bytes = reinterpret_cast<uint8_t*>(device);
+    if (device->m_ready == 0 || OsGetVersion()->m_wine != 0) {
+        return false;
+    }
+    GXADAPTERLIST* list = GxGetAdapterList();
+    GxAdapterInfo* info = list->m_data;
+    for (uint64_t i = 0; i < list->m_size; i++) {
+        if (list->m_data[i].m_handle == device->m_gpu) {
+            info = &list->m_data[i];
+            break;
+        }
+    }
+    uint8_t api = device->m_api;
+    if (api == GXAPI_MTL_LEGACY || api == GXAPI_MTL) {
+        return reinterpret_cast<uint8_t*>(device->m_data)[0xc9] < 6;
+    }
+    if (api > GXAPI_D3D12) {
+        return false;
+    }
+    if (info->m_supported[3] == 0 || GxApiDisabled(GXAPI_D3D12)) {
+        return false;
+    }
+    pm::APIDEVICEDATA* data = g_gxPrismInstance->GetDeviceData(device->m_gpu, pm::API_D3D12);
+    if (data->m_ready == 0) {
+        return false;
+    }
+    uint16_t vendor = *reinterpret_cast<uint16_t*>(bytes + 0xa0);
+    if (vendor == 0x10de) {
+        // FUN_1401a4fe0 (NvAPI_SYS_GetDriverAndBranchVersion). DIVERGED: NVAPI is not vendored,
+        // so the NVIDIA version is not known here and the check passes.
+        return false;
+    }
+    if (vendor == 0x1002) {
+        if (g_gxPlatform.m_agsContext == nullptr || g_gxPlatform.m_agsGpuInfo == nullptr) {
+            return false;
+        }
+        auto versions = static_cast<const char* const*>(g_gxPlatform.m_agsGpuInfo);
+        if (versions[0] == nullptr) {
+            return false;
+        }
+        return std::atoi(versions[0]) <= 0x13;
+    }
+    if (vendor == 0x8086) {
+        uint32_t version = *reinterpret_cast<uint32_t*>(bytes + 0x98);
+        if ((version & 0xffff0000) > 0x63ffff) {
+            return false;
+        }
+        return static_cast<uint16_t>(version) < 0x12c0;
+    }
+    if (vendor == 0x4351 && *reinterpret_cast<uint16_t*>(bytes + 0xa2) == 0x3430) {
+        return *reinterpret_cast<uint64_t*>(bytes + 0x98) < 0x1a001204e20001ull;
+    }
+    return false;
 }
 
 namespace {
@@ -1346,22 +1678,66 @@ uint32_t s_deviceGeneration;        // DAT_143490878
 
 // ref: FUN_142291650
 void GxFrameEndShutdown(GXFRAMEEND* frameEnd) {
-    (void)frameEnd;
-    FROST_UNIMPLEMENTED();  // waits out and releases the frame-end thread pool work
+    if (frameEnd->m_group != nullptr) {
+        if ((frameEnd->m_pending & 2) != 0) {
+            ThreadPoolGroupWait(frameEnd->m_group);
+        }
+        ThreadPoolGroupRelease(frameEnd->m_group);
+    }
+    frameEnd->m_group = nullptr;
+    _InterlockedAnd8(reinterpret_cast<volatile char*>(&frameEnd->m_pending), static_cast<char>(0xfd));
 }
 
+// Waits on the groups queued against the frame end; the late ones only when `all`.
+// ref: FUN_142292bd0
+void GxFrameEndWaitGroups(GXFRAMEEND* frameEnd, bool all) {
+    for (uint64_t i = 0; i < frameEnd->m_waits.m_size; i++) {
+        ThreadPoolGroupWait(frameEnd->m_waits.m_data[i]);
+    }
+    frameEnd->m_waits.m_size = 0;
+    if (all) {
+        for (uint64_t i = 0; i < frameEnd->m_lateWaits.m_size; i++) {
+            ThreadPoolGroupWait(frameEnd->m_lateWaits.m_data[i]);
+        }
+        frameEnd->m_lateWaits.m_size = 0;
+    }
+}
+
+// Completes an ended frame on the main thread: drains the waits (all of them from mode 2 on),
+// finishes an overlapped end and runs its callback, and unbinds the context's textures.
+// Mode 0 and 1 return early while the stats are not yet taken.
 // ref: FUN_142292a10
-void GxFrameEndWait(GXFRAMEEND* frameEnd, uint32_t a2, uint32_t a3) {
-    (void)frameEnd;
-    (void)a2;
-    (void)a3;
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_14235a710
-void ThreadPoolFlush(uint32_t priority) {
-    (void)priority;
-    FROST_UNIMPLEMENTED();  // Engine/Source/ThreadPool is not ported
+void GxFrameEndWait(GXFRAMEEND* frameEnd, uint32_t mode, uint32_t unused) {
+    (void)unused;
+    if ((frameEnd->m_pending & 4) == 0 || !ThreadPoolIsMainThread()) {
+        return;
+    }
+    if ((frameEnd->m_pending & 8) == 0) {
+        GxFrameEndWaitGroups(frameEnd, mode != 0);
+        if (mode < 2) {
+            return;
+        }
+    } else {
+        GxFrameEndWaitGroups(frameEnd, true);
+    }
+    if ((frameEnd->m_pending & 2) != 0) {
+        ThreadPoolGroupWait(frameEnd->m_group);
+        static_cast<CGxDevice*>(g_gxDevice)->LatencyMarker(3, frameEnd->m_frame);
+        _InterlockedAnd8(reinterpret_cast<volatile char*>(&frameEnd->m_pending), static_cast<char>(0xfd));
+        if (frameEnd->m_callback.m_invoke != nullptr) {
+            GXFRAMESTATS stats = frameEnd->m_stats;
+            reinterpret_cast<void (*)(GXFRAMESTATS*, void*)>(frameEnd->m_callback.m_invoke)(&stats,
+                frameEnd->m_callback.m_storage);
+        }
+        frameEnd->m_callback.m_manager(frameEnd->m_callback.m_storage, nullptr, 0);
+        frameEnd->m_callback.m_invoke = nullptr;
+        frameEnd->m_callback.m_manager = blz::function_empty_manager;
+    }
+    if (GxDevExists()) {
+        g_gxRenderContext->Slot038();
+    }
+    InterlockedExchange8(reinterpret_cast<volatile char*>(&frameEnd->m_pending), 0);
+    frameEnd->m_began = 0;
 }
 
 }
@@ -1377,7 +1753,9 @@ void GxDevDestroy() {
     s_deviceLock.lock();
     s_destroyingDevice = 1;
     if (g_gxDevice != nullptr) {
-        FROST_UNIMPLEMENTED();  // CGxDevice slots 0x38 (shutdown) and 0x18 (destroy)
+        auto device = static_cast<CGxDevice*>(g_gxDevice);
+        device->DeviceShutdown();
+        device->~CGxDevice();
         g_gxDevice = nullptr;
     }
     s_deviceGeneration++;
@@ -1400,4 +1778,507 @@ void GxShutdown() {
     g_gxPrismInstance = nullptr;
     GxLog("GxShutdown");
     GxLogFlush();
+}
+
+// ---- what the device backends take from GxApi ---------------------------------------------
+
+SCritSect g_gxDeviceLock;
+
+namespace {
+
+// ref: FUN_14020b5a0 (the static initializer; the matching atexit is left to the quit path)
+struct GXDEVICELOCKINIT {
+    GXDEVICELOCKINIT() {
+        g_gxDeviceLock.Initialize();
+    }
+} s_deviceLockInit;
+
+volatile LONG s_deviceRemovedCount;            // DAT_143490698
+CALLBACKDEQUE s_engineDeviceCreatedCallbacks;  // DAT_143490978
+CALLBACKDEQUE s_lowMemoryCallbacks;            // DAT_143490998
+
+// FUN_14228f7a0's function-local static (DAT_1434909c0).
+SCritSect* DeviceCallCritSect() {
+    struct LOCK {
+        SCritSect m_lock;
+        LOCK() {
+            this->m_lock.Initialize();
+        }
+    };
+    static LOCK s_lock;
+    return &s_lock.m_lock;
+}
+
+void RunCallbacks(CALLBACKDEQUE* deque) {
+    uint64_t end = deque->m_size + deque->m_offset;
+    for (uint64_t index = deque->m_offset; index != end; index++) {
+        CALLBACKPAIR* pair = CallbackSlot(deque, index);
+        pair->m_callback(pair->m_param);
+    }
+}
+
+void PushCallback(CALLBACKDEQUE* deque, GXDEVICECALLBACK callback, void* param) {
+    if (((deque->m_offset + deque->m_size) & 7) == 0 && deque->m_mapSize <= (deque->m_size + 8) >> 3) {
+        CallbackGrowMap(deque);
+    }
+    uint64_t index = deque->m_offset + deque->m_size;
+    deque->m_size++;
+    CALLBACKPAIR* slot = CallbackSlot(deque, index);
+    if (slot != nullptr) {
+        slot->m_callback = callback;
+        slot->m_param = param;
+    }
+}
+
+}
+
+// ref: FUN_14228f7a0
+GxDeviceCallLock::GxDeviceCallLock() {
+    DeviceCallCritSect()->Enter();
+}
+
+GxDeviceCallLock::~GxDeviceCallLock() {
+    DeviceCallCritSect()->Leave();
+}
+
+// ref: FUN_142295780
+IDXGIFactory1* GxPlatformFactory1() {
+    return static_cast<IDXGIFactory1*>(g_gxPlatform.m_factory);
+}
+
+// ref: FUN_142295790
+IDXGIFactory5* GxPlatformFactory5() {
+    return s_factory5;
+}
+
+// ref: FUN_1422957a0
+IDXGIFactory6* GxPlatformFactory6() {
+    return s_factory6;
+}
+
+// ref: FUN_142295920
+bool GxPlatformHasD3d12() {
+    return g_gxPlatform.m_d3d12Module != nullptr;
+}
+
+// ref: FUN_1422958a0
+bool GxPlatformHasNvapi() {
+    return g_gxPlatform.m_nvapi != 0;
+}
+
+// The entry points DeviceCreateCore reads straight from GxApi's globals.
+PFN_GXD3D12CREATEDEVICE GxPlatformD3d12CreateDevice() {
+    return reinterpret_cast<PFN_GXD3D12CREATEDEVICE>(s_d3d12CreateDevice);
+}
+
+PFN_D3D12_SERIALIZE_ROOT_SIGNATURE GxPlatformSerializeRootSignature() {
+    return reinterpret_cast<PFN_D3D12_SERIALIZE_ROOT_SIGNATURE>(s_d3d12SerializeRootSignature);
+}
+
+PFN_D3D12_SERIALIZE_VERSIONED_ROOT_SIGNATURE GxPlatformSerializeVersionedRootSignature() {
+    return reinterpret_cast<PFN_D3D12_SERIALIZE_VERSIONED_ROOT_SIGNATURE>(s_d3d12SerializeVersionedRootSignature);
+}
+
+// ref: FUN_14228aab0
+void GxCountDeviceRemoved() {
+    InterlockedIncrement(&s_deviceRemovedCount);
+}
+
+// ref: FUN_14228e400
+void GxNotifyOnDeviceCreate() {
+    GxLog("NotifyOnDeviceCreate");
+    RunCallbacks(&s_engineDeviceCreatedCallbacks);
+    RunCallbacks(&g_gxDeviceCreatedCallbacks);
+}
+
+// ref: FUN_14228e4d0
+void GxNotifyOnDeviceDestroy() {
+    GxLog("NotifyOnDeviceDestroy");
+    RunCallbacks(&g_gxDeviceDestroyedCallbacks);
+}
+
+// ref: FUN_14228e650
+void GxNotifyOnLowMemory() {
+    GxLog("GxNotifyOnLowMemory");
+    RunCallbacks(&s_lowMemoryCallbacks);
+}
+
+// ref: FUN_14228e0c0
+void GxAddEngineDeviceCreatedCallback(GXDEVICECALLBACK callback, void* param) {
+    PushCallback(&s_engineDeviceCreatedCallbacks, callback, param);
+    if (GxDevExists()) {
+        callback(param);
+    }
+}
+
+// ref: FUN_14228e220
+void GxAddLowMemoryCallback(GXDEVICECALLBACK callback, void* param) {
+    PushCallback(&s_lowMemoryCallbacks, callback, param);
+}
+
+// ref: FUN_14228a070
+blz::allocator* GxGetAllocator() {
+    return &s_prismAllocator;
+}
+
+// ---- the frame ---------------------------------------------------------------------------
+
+namespace {
+
+uint8_t s_framePhase;               // DAT_14348b640
+uint32_t s_deviceLostCount;         // DAT_143490858
+uint8_t s_deviceRestartPending;     // DAT_14349069e
+uint32_t s_lastMarkedFrame;         // DAT_142d438bc
+// DAT_142d41c18: in .data as 1 and never written, so the foreground limit always applies.
+const uint8_t s_foregroundFps = 1;
+uint32_t s_frameLimitFps;           // DAT_1434908c0
+uint64_t s_frameLimitTicks;         // DAT_1434908c8: counter ticks per frame
+uint64_t s_frameLimitNext;          // DAT_1434908d0: when the next frame may start
+
+// The frame-rate cap in force: maxFPS in the foreground, maxFPSBk behind, at least 8.
+uint32_t FrameRateCap() {
+    uint32_t foreground = s_useMaxFps != 0 ? static_cast<uint32_t>(s_maxFps) : 0xffffffff;
+    uint32_t cap = s_useMaxFpsBk != 0 ? static_cast<uint32_t>(s_maxFpsBk) : 0xffffffff;
+    if (s_foregroundFps != 0) {
+        cap = foreground;
+    }
+    return cap > 7 ? cap : 8;
+}
+
+void StringAppend(blz::string_header* text, const char* append) {
+    uint64_t length = std::strlen(append);
+    uint64_t size = text->m_size + length;
+    blz::string_reserve(text, size);
+    std::memcpy(text->m_data + text->m_size, append, length);
+    text->m_data[size] = '\0';
+    text->m_size = size;
+}
+
+// ref: FUN_14023a790
+void StringAppendFormat(blz::string_header* text, const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    int32_t length = SStrVSnprintf(nullptr, 0, format, args);
+    va_end(args);
+    uint64_t start = text->m_size;
+    uint64_t size = start + length;
+    blz::string_reserve(text, size);
+    va_start(args, format);
+    SStrVSnprintf(text->m_data + start, static_cast<uint64_t>(length) + 1, format, args);
+    va_end(args);
+    text->m_data[size] = '\0';
+    text->m_size = size;
+}
+
+// Records the frame's end on the device and its GPU time from the frame's timer query.
+// ref: FUN_142291390
+void GxFrameEndRecord(GXFRAMEEND* frameEnd) {
+    auto device = static_cast<CGxDevice*>(g_gxDevice);
+    frameEnd->m_stats.m_waited = frameEnd->m_waited;
+    uint64_t wait;
+    frameEnd->m_stats.m_gpuWait = *static_cast<uint64_t*>(device->FrameEnd(&wait, FrameQuery(device)));
+    frameEnd->m_stats.m_presentTime = device->Field<int64_t>(0x150);
+    frameEnd->m_stats.m_latencyFrames = device->Field<uint8_t>(0x14e);
+    frameEnd->m_stats.m_gpuTime = 0;
+    uint64_t stamps[2];
+    void* query = FrameQuery(device);
+    if (query != nullptr && device->QueryGetResult(query, stamps, 0x10) && stamps[0] < stamps[1]) {
+        uint64_t frequency = device->m_ready != 0 ? device->Field<uint64_t>(0x130) : 1;
+        frameEnd->m_stats.m_gpuBegin = stamps[0];
+        frameEnd->m_stats.m_gpuEnd = stamps[1];
+        frameEnd->m_stats.m_gpuTime = (stamps[1] - stamps[0]) * 1000000000 / frequency;
+    }
+}
+
+// ref: FUN_142292750
+void GxFrameEndTimes(GXFRAMEEND* frameEnd) {
+    int64_t now = OsGetPerformanceCounter();
+    frameEnd->m_stats.m_frameTime = OsTicksToNanoseconds(now - frameEnd->m_lastEnd);
+    frameEnd->m_stats.m_beginWait = OsTicksToNanoseconds(frameEnd->m_beginStamp - frameEnd->m_waitEnd);
+    int64_t cpu = OsTicksToNanoseconds(now - frameEnd->m_beginStamp);
+    frameEnd->m_lastEnd = now;
+    frameEnd->m_stats.m_cpuTime = cpu - static_cast<int64_t>(frameEnd->m_stats.m_gpuWait);
+}
+
+// ref: FUN_142292640
+void GxFrameEndMark(GXFRAMEEND* frameEnd) {
+    frameEnd->m_frame = static_cast<CGxDevice*>(g_gxDevice)->Field<uint32_t>(0x138);
+    _InterlockedOr8(reinterpret_cast<volatile char*>(&frameEnd->m_pending), 1);
+}
+
+// Ends the frame on this thread.
+// ref: FUN_142292680
+void GxFrameEndNow(GXFRAMEEND* frameEnd) {
+    frameEnd->m_callback.m_manager(frameEnd->m_callback.m_storage, nullptr, 0);
+    frameEnd->m_callback.m_invoke = nullptr;
+    frameEnd->m_callback.m_manager = blz::function_empty_manager;
+    GxFrameEndRecord(frameEnd);
+    static_cast<CGxDevice*>(g_gxDevice)->LatencyMarker(3, frameEnd->m_frame);
+    GxFrameEndTimes(frameEnd);
+    _InterlockedOr8(reinterpret_cast<volatile char*>(&frameEnd->m_pending), 4);
+}
+
+// The overlapped end's pool task.
+// ref: FUN_142292820
+void GxFrameEndTask(void* storage) {
+    (void)storage;
+    if (g_gxDevice != nullptr) {
+        GxFrameEndRecord(&s_frameEnd);
+        _InterlockedOr8(reinterpret_cast<volatile char*>(&s_frameEnd.m_pending), 8);
+    }
+}
+
+// Ends the frame on a pool thread, keeping `callback` for when it completes.
+// ref: FUN_1422922d0
+void GxFrameEndOverlapped(GXFRAMEEND* frameEnd, blz::function_storage* callback) {
+    frameEnd->m_callback.m_manager(frameEnd->m_callback.m_storage, nullptr, 0);
+    callback->m_manager(frameEnd->m_callback.m_storage, callback->m_storage, 2);
+    frameEnd->m_callback.m_invoke = callback->m_invoke;
+    frameEnd->m_callback.m_manager = callback->m_manager;
+    callback->m_manager = blz::function_empty_manager;
+    callback->m_invoke = nullptr;
+    _InterlockedAnd8(reinterpret_cast<volatile char*>(&frameEnd->m_pending), static_cast<char>(0xf7));
+    _InterlockedOr8(reinterpret_cast<volatile char*>(&frameEnd->m_pending), 2);
+    ThreadPoolGroupSetCount(frameEnd->m_group, 1);
+    // FUN_14032a520 invokes the function pointer held in the storage.
+    blz::function_storage task = { reinterpret_cast<void*>(&GxFrameEndTask), blz::function_trivial_manager, {} };
+    ThreadPoolSubmit(1, &task, 2, frameEnd->m_group);
+    task.m_manager(task.m_storage, nullptr, 0);
+    GxFrameEndTimes(frameEnd);
+    _InterlockedOr8(reinterpret_cast<volatile char*>(&frameEnd->m_pending), 4);
+}
+
+// The GPU's clock, temperature and throttling, for the periodic report.
+// ref: FUN_14228a490
+void GxGpuStatusReport(blz::string_header* report) {
+    struct GPUSTATUS {
+        uint32_t m_frequency;       // kHz
+        uint32_t m_temperature;     // C
+        uint8_t m_throttled;
+        uint8_t m_pad[3];
+        uint32_t m_reasons;         // NV_GPU_PERF_DECREASE_REASON_* bits
+    } status = {};
+    auto device = static_cast<CGxDevice*>(g_gxDevice);
+    if (device != nullptr) {
+        uint8_t out[0x20];
+        status = *static_cast<GPUSTATUS*>(g_gxPrismInstance->Slot80(out, device->m_gpu));
+    }
+    if (status.m_frequency != 0) {
+        StringAppendFormat(report, "Current Frequency:%.2fGHz ", static_cast<double>(static_cast<float>(status.m_frequency) * 1e-6f));
+    }
+    if (status.m_temperature != 0) {
+        StringAppendFormat(report, "Temperature:%uC ", status.m_temperature);
+    }
+    if (status.m_throttled == 0) {
+        return;
+    }
+    StringAppend(report, "GPU is throttled. ");
+    if (!GxPlatformHasNvapi() || device->Field<uint16_t>(0xa0) != 0x10de) {
+        return;
+    }
+    StringAppend(report, "Reason: ");
+    if ((status.m_reasons & 1) != 0) {
+        StringAppend(report, "NV_GPU_PERF_DECREASE_REASON_THERMAL_PROTECTION ");
+    }
+    if ((status.m_reasons & 2) != 0) {
+        StringAppend(report, "NV_GPU_PERF_DECREASE_REASON_POWER_CONTROL ");
+    }
+    if ((status.m_reasons & 4) != 0) {
+        StringAppend(report, "NV_GPU_PERF_DECREASE_REASON_AC_BATT ");
+    }
+    if ((status.m_reasons & 8) != 0) {
+        StringAppend(report, "NV_GPU_PERF_DECREASE_REASON_API_TRIGGERED ");
+    }
+    if ((status.m_reasons & 0x10) != 0) {
+        StringAppend(report, "NV_GPU_PERF_DECREASE_REASON_INSUFFICIENT_POWER ");
+    }
+    if (static_cast<int32_t>(status.m_reasons) < 0) {
+        StringAppend(report, "NV_GPU_PERF_DECREASE_REASON_UNKNOWN ");
+    }
+}
+
+// Starts the frame on the device; a failure is a lost device, which asks for a restart.
+// ref: FUN_1422914a0
+bool GxFrameEndBegin(GXFRAMEEND* frameEnd) {
+    auto device = static_cast<CGxDevice*>(g_gxDevice);
+    device->LatencyMarker(1, device->Field<uint32_t>(0x138));
+    device->LatencyMarker(2, device->Field<uint32_t>(0x138));
+    if (frameEnd->m_busy != 0) {
+        return false;
+    }
+    frameEnd->m_busy = 1;
+    if (frameEnd->m_began == 0) {
+        frameEnd->m_beginStamp = OsGetPerformanceCounter();
+        if (g_gxDevice != nullptr) {
+            if (device->FrameBegin(FrameQuery(device))) {
+                device->Slot188();
+                if (OsTicksToNanoseconds(frameEnd->m_beginStamp - frameEnd->m_lastReport) > 300000000000ll) {
+                    frameEnd->m_lastReport = frameEnd->m_beginStamp;
+                    blz::inline_string<0x100> report;
+                    GxGpuStatusReport(report.header());
+                    if (report.m_size != 0) {
+                        GxLog("Periodic Gpu Status Report: %s", report.m_data);
+                    }
+                }
+                frameEnd->m_began = 1;
+                frameEnd->m_busy = 0;
+                return true;
+            }
+            s_deviceLostCount++;
+            GxLog("Device context was lost. Attempting recovery. Occurrence: %d", s_deviceLostCount);
+            s_deviceRestartPending = 1;
+            GxLogFlushNow();
+        }
+    }
+    frameEnd->m_busy = 0;
+    return false;
+}
+
+// Marks the frame on the device and, under low-latency mode, sleeps so the CPU does not run
+// further ahead of the GPU than the frames in flight allow.
+// ref: FUN_142292520
+void GxFrameEndLatencyWait(GXFRAMEEND* frameEnd) {
+    auto device = static_cast<CGxDevice*>(g_gxDevice);
+    if (device == nullptr) {
+        return;
+    }
+    uint32_t frame = device->Field<uint32_t>(0x138);
+    bool changed = frame != s_lastMarkedFrame;
+    s_lastMarkedFrame = frame;
+    if (!changed) {
+        return;
+    }
+    uint64_t start = OsTicksToNanoseconds(OsGetPerformanceCounter());
+    device->FrameMarker();
+    int64_t busy = frameEnd->m_stats.m_beginWait + frameEnd->m_stats.m_cpuTime;
+    if (device->Field<uint8_t>(0x14d) == 1 && device->Field<uint32_t>(0x138) > 10) {
+        uint32_t latency = frameEnd->m_stats.m_latencyFrames;
+        int64_t gpu = static_cast<int64_t>(frameEnd->m_stats.m_gpuTime);
+        if (latency - 2 < 3 && busy < gpu && static_cast<uint64_t>(gpu - 1000001) < 248999999) {
+            int64_t sleep = gpu - busy;
+            if (latency > 2) {
+                sleep += static_cast<int64_t>(latency - 2) * gpu;
+            }
+            OsSleepPrecise(sleep);
+        }
+    }
+    frameEnd->m_waitEnd = OsGetPerformanceCounter();
+    uint64_t end = OsTicksToNanoseconds(frameEnd->m_waitEnd);
+    frameEnd->m_waited = static_cast<int64_t>(end - start);
+    if (end <= start || static_cast<int64_t>(end - start) < 10000) {
+        frameEnd->m_waited = 0;
+    }
+}
+
+// ref: FUN_1422917d0
+bool GxFrameEndArm(GXFRAMEEND* frameEnd, bool arm) {
+    if (g_gxDevice == nullptr) {
+        GxGetApi();
+    }
+    if (arm) {
+        frameEnd->m_overlapActive = frameEnd->m_overlap;
+    }
+    return false;
+}
+
+}
+
+// ref: FUN_14228b8c0
+uint8_t GxFrameSetPhase(uint8_t phase) {
+    uint8_t previous = s_framePhase;
+    s_framePhase = phase;
+    return previous;
+}
+
+// ref: FUN_142289f20
+bool GxFrameBegin() {
+    return GxFrameEndBegin(&s_frameEnd);
+}
+
+// ref: FUN_14228b3a0
+void GxFrameLatencyWait() {
+    GxFrameEndLatencyWait(&s_frameEnd);
+}
+
+// ref: FUN_14228a950
+bool GxFrameArm(bool arm) {
+    return GxFrameEndArm(&s_frameEnd, arm);
+}
+
+// ref: FUN_14228c1a0
+void GxFrameWorkFlush(uint8_t mode) {
+    GxFrameEndWait(&s_frameEnd, mode, 1);
+}
+
+// Ends the frame: overlapped on a pool thread, or here with `callback` run on the stats.
+// ref: FUN_142289f30
+void GxFrameEnd(blz::function_storage* callback, bool overlapped) {
+    GxFrameEndMark(&s_frameEnd);
+    if (overlapped) {
+        GxFrameEndOverlapped(&s_frameEnd, callback);
+        GxFrameEndWait(&s_frameEnd, 0, 1);
+        return;
+    }
+    GxFrameEndNow(&s_frameEnd);
+    GxFrameEndWait(&s_frameEnd, 2, 0);
+    if (callback->m_invoke != nullptr) {
+        GXFRAMESTATS stats = s_frameEnd.m_stats;
+        reinterpret_cast<void (*)(GXFRAMESTATS*, void*)>(callback->m_invoke)(&stats, callback->m_storage);
+    }
+}
+
+// Whether a frame-rate cap applies (any cap, or `background` asked for).
+// ref: FUN_14228aa60
+bool GxFrameLimited(uint32_t fps) {
+    uint32_t cap = FrameRateCap();
+    return fps != 0 || ((cap + 1) & 0xfffffffe) != 0;
+}
+
+// Sleeps out the rest of the frame under the cap (`fps`, when lower, overrides it).
+// ref: FUN_14228c9f0
+void GxFrameLimit(uint32_t fps) {
+    uint32_t cap = FrameRateCap();
+    uint32_t limit = cap;
+    if (fps != 0) {
+        limit = fps;
+        if (cap != 0 && cap < fps) {
+            limit = cap;
+        }
+    }
+    uint64_t next = s_frameLimitNext;
+    if (limit != s_frameLimitFps) {
+        uint64_t ticks = 0;
+        s_frameLimitFps = limit;
+        if (limit != 0) {
+            LARGE_INTEGER frequency;
+            QueryPerformanceFrequency(&frequency);  // thunk_FUN_140266b90
+            ticks = static_cast<uint64_t>(frequency.QuadPart) / limit;
+        }
+        s_frameLimitTicks = ticks;
+        next = 0;
+        if (s_frameLimitFps != 0) {
+            next = static_cast<uint64_t>(OsGetPerformanceCounter()) + s_frameLimitTicks;
+        }
+    }
+    s_frameLimitNext = next;
+    if (s_frameLimitFps == 0) {
+        return;
+    }
+    uint64_t now = static_cast<uint64_t>(OsGetPerformanceCounter());
+    if (s_frameLimitNext <= now) {
+        s_frameLimitNext = now + s_frameLimitTicks;
+        return;
+    }
+    OsSleepPrecise(OsTicksToNanoseconds(s_frameLimitNext - now));
+    s_frameLimitNext += s_frameLimitTicks;
+}
+
+// ref: FUN_14228a940
+uint32_t GxDeviceLostCount() {
+    return s_deviceLostCount;
+}
+
+// ref: FUN_14228b7a0
+void GxRequestRestart() {
+    s_deviceRestartPending = 1;
 }

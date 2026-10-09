@@ -1,6 +1,7 @@
 #include "client/GxWindow.hpp"
 #include "client/Startup.hpp"
 #include "console/Command.hpp"
+#include "gx/Gx.hpp"
 #include "os/Os.hpp"
 #include "os/Timer.hpp"
 #include "os/Window.hpp"
@@ -11,10 +12,6 @@
 // pumps the OS events into the client and advances the game state; the iteration renders.
 
 // The loop's stubs (StartupClient.cpp).
-void GxFrameSetPhase(uint8_t phase);
-void GxFrameBegin();
-void GxFrameWorkFlush(uint8_t a1);
-bool GxFrameLimit(uint32_t timeout);
 void Sub14065FCE0(uint32_t elapsed, uint32_t now);
 void Sub14065FD40();
 void AsyncReadPoll();
@@ -279,9 +276,9 @@ void ClientRequestQuit() {
 // ref: FUN_1402225d0
 bool Sub1402225D0() {
     GxFrameSetPhase(0);
-    GxFrameBegin();
+    GxFrameLatencyWait();
     GxFrameWorkFlush(1);
-    if (GxFrameLimit(s_gameState == 0 ? 0x3c : 0)) {
+    if (GxFrameLimited(s_gameState == 0 ? 0x3c : 0)) {
         GxFrameWorkFlush(2);
     }
     uint32_t now = OsGetAsyncTimeMs();

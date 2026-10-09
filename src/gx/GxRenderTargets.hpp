@@ -1,0 +1,50 @@
+#ifndef GX_GX_RENDER_TARGETS_HPP
+#define GX_GX_RENDER_TARGETS_HPP
+
+// The set of targets a pass draws into (0x68 bytes): the depth target at index 0, up to four
+// colour targets after it, each as its view and its texture.
+
+#include <cstdint>
+
+namespace gxDx12Backend {
+struct TargetView;
+struct Tex;
+}
+
+class GxRenderContext;
+
+// DAT_14348b658: the device's graphics context while it is up.
+extern GxRenderContext* g_gxRenderContext;
+
+// A texture's render-target view, through the device (FUN_14228c430).
+gxDx12Backend::TargetView* GxTexTargetView(gxDx12Backend::Tex* tex);
+
+struct GXRENDERTARGETS {
+    uint32_t m_ids[5];              // 0x00: what each view is (compared to spot a change)
+    uint16_t m_count;               // 0x14: colour targets
+    uint16_t m_mask;                // 0x16: bits 0-3 the colour targets, 4 depth, 5 stencil
+    gxDx12Backend::TargetView* m_views[5];  // 0x18
+    gxDx12Backend::Tex* m_texs[5];  // 0x40
+};
+static_assert(sizeof(GXRENDERTARGETS) == 0x68, "GXRENDERTARGETS is 0x68 bytes");
+
+// Empties a set (FUN_14228dec0).
+void GxRenderTargetsClear(GXRENDERTARGETS* targets);
+
+// Copies `targets` into `cached`, returning whether nothing changed (FUN_14228dbf0).
+bool GxRenderTargetsUpdate(GXRENDERTARGETS* cached, const GXRENDERTARGETS* targets);
+
+// The size of the first colour target at its view's mip, else the depth target's
+// (FUN_14228ddb0).
+int32_t* GxRenderTargetsSize(const GXRENDERTARGETS* targets, int32_t* size);
+
+// Puts one target into a set (FUN_14228de80).
+void GxRenderTargetsSet(GXRENDERTARGETS* targets, uint32_t index, gxDx12Backend::Tex* tex);
+
+// Writes the target size constants the shaders read: size, then reciprocals (FUN_14228e2d0).
+void GxRenderContextSetTargetConstants(GxRenderContext* context, const GXRENDERTARGETS* targets);
+
+// 0xAARRGGBB to RGBA floats (FUN_141344390).
+float* GxColorToFloat4(float* out, uint32_t color);
+
+#endif
