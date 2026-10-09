@@ -6,6 +6,9 @@
 #include "client/GxWindow.hpp"
 #include "client/Locale.hpp"
 #include "client/Startup.hpp"
+#include "framescript/FrameScript.hpp"
+#include "glue/GlueMgr.hpp"
+#include "ui/FrameXML.hpp"
 #include "cas/CAS.hpp"
 #include "console/Command.hpp"
 #include "console/Var.hpp"
@@ -264,8 +267,221 @@ void Sub14134EC50() {
 }
 
 // ref: FUN_14023dbd0
-void Sub14023DBD0() {
+// ---- Sub14023DBD0's callees ----------------------------------------------------------------
+
+static uint8_t s_flag142de2990;      // DAT_142de2990
+static void* s_unknown142ddcf58;     // DAT_142ddcf58
+static void* s_unknown142ddcf60;     // DAT_142ddcf60
+
+// Four render-state defaults (0x142cfbe80..).
+// ref: FUN_141283c90
+void Sub141283C90() {
     FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_140238bc0
+void Sub140238BC0() {
+    FROST_UNIMPLEMENTED();
+}
+
+// The reloadUI and TakeScreenshot console commands.
+// ref: FUN_14024d040
+void Sub14024D040() {
+    FROST_UNIMPLEMENTED();
+}
+
+// The client's account and UI CVars (accountName, luaErrorExceptions, ...).
+// ref: FUN_14024c220
+void Sub14024C220() {
+    FROST_UNIMPLEMENTED();
+}
+
+// The callback the script error dialog uses (FUN_141672420), kept at 0x142e9cf80.
+// ref: FUN_14068b740
+void Sub14068B740() {
+    FROST_UNIMPLEMENTED();
+}
+
+// Opens Logs/Client.log ("Client Initialize.").
+// ref: FUN_1402165b0
+void Sub1402165B0() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14022e810
+void Sub14022E810() {
+    FROST_UNIMPLEMENTED();
+}
+
+// Binds the client's script API into a new Lua state (and releases it with null).
+// ref: FUN_14023da20
+void ClientScriptStateHook(lua_State* L) {
+    (void)L;
+    // FUN_1407d20b0 / FUN_1407e9330: the protected-call dispatcher and its release
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14230b600
+void Sub14230B600() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1412e59c0
+void Sub1412E59C0(uint32_t value) {
+    (void)value;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14192c8c0
+void Sub14192C8C0() {
+    FROST_UNIMPLEMENTED();
+}
+
+// The ImpactModelCollision* CVars.
+// ref: FUN_141897e90
+void Sub141897E90() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141658730
+void Sub141658730() {
+    FROST_UNIMPLEMENTED();
+}
+
+// The window's activate and size callbacks (FUN_141567f30, FUN_141672070).
+// ref: FUN_1414f8960
+void Sub1414F8960() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1414f8950
+void Sub1414F8950() {
+    FROST_UNIMPLEMENTED();
+}
+
+// The sound device (SI3).
+// ref: FUN_14156b750
+void* Sub14156B750() {
+    FROST_UNIMPLEMENTED();
+    return nullptr;
+}
+
+// ref: FUN_14156d0e0
+void Sub14156D0E0(void* device) {
+    (void)device;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_140330ba0
+void Sub140330BA0() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14033fa30
+void Sub14033FA30() {
+    FROST_UNIMPLEMENTED();
+}
+
+// The UI's frame clock.
+// ref: FUN_14065f9e0
+void Sub14065F9E0() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14165a560
+void Sub14165A560() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14134dd50
+void* Sub14134DD50(uint32_t count) {
+    (void)count;
+    FROST_UNIMPLEMENTED();
+    return nullptr;
+}
+
+// ref: FUN_14134e8a0
+void* Sub14134E8A0(void* owner) {
+    (void)owner;
+    FROST_UNIMPLEMENTED();
+    return nullptr;
+}
+
+// The cursor freelook CVars.
+// ref: FUN_1415242c0
+void Sub1415242C0() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14024a690
+void Sub14024A690() {
+    s_flag142de2990 = 1;
+}
+
+// ref: FUN_141caf660
+void Sub141CAF660() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141745f00
+void Sub141745F00() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141719bf0
+void Sub141719BF0() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141974d80
+void Sub141974D80() {
+    FROST_UNIMPLEMENTED();
+}
+
+// The startup worker thread (blz::thread over FUN_14023deb0, with an auto-reset event).
+void StartWorkerThread() {
+    FROST_UNIMPLEMENTED();
+}
+
+// The end of stage 5: every client subsystem past the device, then the glue.
+// ref: FUN_14023dbd0
+void Sub14023DBD0() {
+    // FUN_14029fae0: anti-tamper (Aegis), not ported
+    Sub141283C90();
+    Sub140238BC0();
+    Sub14024D040();
+    Sub14024C220();
+    Sub14068B740();
+    Sub1402165B0();
+    Sub14022E810();
+    FrameScript_SetStateHook(ClientScriptStateHook);
+    FrameScript_Initialize(false);
+    Sub14230B600();
+    Sub1412E59C0(0);
+    Sub14192C8C0();
+    FrameXML_RegisterDefault();
+    FrameXML_RegisterCVars();
+    Sub141897E90();
+    // three script-function slots (0x14309e1e0, 0x14309e1a0, 0x14309f2e8) get their handlers
+    Sub141658730();
+    Sub1414F8960();
+    Sub1414F8950();
+    Sub14156D0E0(Sub14156B750());
+    Sub140330BA0();
+    Sub14033FA30();
+    Sub14065F9E0();
+    Sub14165A560();
+    s_unknown142ddcf58 = Sub14134DD50(8);
+    s_unknown142ddcf60 = Sub14134E8A0(s_unknown142ddcf58);
+    Sub1415242C0();
+    Sub14024A690();
+    Sub141CAF660();
+    GlueMgrStartup();
+    Sub141745F00();
+    Sub141719BF0();
+    Sub141974D80();
+    // FUN_14026bea0 (Sub14026BEA0) returns true and does nothing else
+    StartWorkerThread();
 }
 
 // ref: FUN_1412a99a0
