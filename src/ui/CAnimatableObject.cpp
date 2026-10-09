@@ -302,3 +302,10 @@ void CSimpleAnimGroup_Delete(CSimpleAnimGroup* group) {
     (void)group;
     FROST_UNIMPLEMENTED();
 }
+
+// FUN_14060ae70
+void CSimpleAnimGroup_OnUpdate(CSimpleAnimGroup* group, float elapsed) {
+    (void)group;
+    (void)elapsed;
+    FROST_UNIMPLEMENTED();
+}

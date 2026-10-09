@@ -53,6 +53,15 @@ class TSList {
         return this->Link(ptr)->Next();
     }
 
+    // Links ptr at the head: right after the terminator (the UI root's list moves inline it).
+    void LinkToHead(T* ptr) {
+        TSLink<T>* link = this->Link(ptr);
+        link->m_prevlink = &this->m_terminator;
+        link->m_next = this->m_terminator.m_next;
+        this->m_terminator.NextLink(this->m_linkoffset)->m_prevlink = link;
+        this->m_terminator.m_next = ptr;
+    }
+
     // Links ptr at the tail: after the terminator's prevlink, as SCmdRegisterArgument does.
     void LinkToTail(T* ptr) {
         TSLink<T>* link = this->Link(ptr);

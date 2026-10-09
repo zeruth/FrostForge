@@ -12,6 +12,7 @@ void WindowUpdate(const GXWINDOWPARAMS* params);
 void WindowApplyParams(const GXWINDOWPARAMS* params, bool reposition);
 void* WindowGetHandle();
 GXWINDOWPARAMS* WindowGetParams();
+float WindowGetAspect();
 GXSIZE* WindowGetSize(GXSIZE* size);
 GXSIZE* WindowGetResolution(GXSIZE* size);
 void* WindowGetSwapChain();

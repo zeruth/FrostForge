@@ -81,5 +81,7 @@ uint8_t CSimpleAnimGroup_GetFlags(CSimpleAnimGroup* group);
 // The alpha the object ends at when the group stops, from the one it has.
 uint8_t CSimpleAnimGroup_GetFinalAlpha(CSimpleAnimGroup* group, CAnimatableObject* object, uint8_t alpha);
 void CSimpleAnimGroup_Delete(CSimpleAnimGroup* group);
+// A playing group advances by `elapsed` seconds.
+void CSimpleAnimGroup_OnUpdate(CSimpleAnimGroup* group, float elapsed);
 
 #endif

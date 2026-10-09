@@ -7,10 +7,21 @@
 #include "framescript/FrameScript.hpp"
 #include "os/Timer.hpp"
 #include "storm/String.hpp"
+#include "storm/Memory.hpp"
+#include "framescript/FrameScriptObject.hpp"
+#include "ui/CSimpleFrame.hpp"
+#include "ui/CSimpleTop.hpp"
 #include "ui/FrameXML.hpp"
+#include "ui/UITypes.hpp"
 #include "util/Unimplemented.hpp"
 
+extern "C" {
+#include "lua.h"
+}
+
 namespace {
+
+const char s_glueFile[] = "D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\CGlueMgr.cpp";
 
 // CGlueMgr's state (0x14311c510..).
 uint32_t s_windowWidth;         // 0x14311c510
@@ -26,41 +37,16 @@ bool s_unknown52c;              // 0x14311c52c
 uint32_t s_startTime;           // 0x14311c530
 uint64_t s_unknown5f0;          // 0x14311c5f0
 
-// The window's aspect ratio from the last size set (0x142d08178 / 0x142d0817a), else 1.
-// ref: FUN_1414fcc60
-float WindowGetAspect() {
-    FROST_UNIMPLEMENTED();
-    return 1.0f;
-}
-
 // The GlueParent frame (the glue's top frame), looked up in the globals.
 // ref: FUN_14167b2c0
-void* GetGlueParent() {
-    FROST_UNIMPLEMENTED();
-    return nullptr;
-}
-
-// CSimpleFrame::SetScale: false (and an error) for a scale <= 0.
-// ref: FUN_14061af60
-bool FrameSetScale(void* frame, float scale, bool force) {
-    (void)frame;
-    (void)scale;
-    (void)force;
-    FROST_UNIMPLEMENTED();
-    return false;
-}
-
-// Marks the UI root's layout dirty (+0x1024).
-// ref: FUN_1405efb60
-void TopInvalidateLayout(void* top) {
-    (void)top;
-    FROST_UNIMPLEMENTED();
-}
-
-// Resolves every pending layout frame.
-// ref: FUN_1405f9890
-void LayoutFlush() {
-    FROST_UNIMPLEMENTED();
+CSimpleFrame* GetGlueParent() {
+    lua_State* L = FrameScript_GetContext();
+    lua_pushstring(L, "GlueParent");
+    lua_rawget(L, LUA_GLOBALSINDEX);
+    auto parent = static_cast<CSimpleFrame*>(
+        FrameScript_Object::GetObjectFromLua(nullptr, L, CSimpleFrame::GetObjectType(), -1, false, false));
+    lua_settop(L, -2);
+    return parent;
 }
 
 // ref: FUN_141174300
@@ -203,17 +189,30 @@ void Sub141C99C50() {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_1406031e0
-void Sub1406031E0() {
+// The timers whose time has come run (C_Timer's queue, 0x1432521a8): the UI root's
+// pre-update hook.
+// ref: FUN_141cf9a60
+void UiTimersRun() {
     FROST_UNIMPLEMENTED();
 }
 
-// CSimpleTop's constructor (0x1070 bytes; CSimpleTop.cpp), with the frame-render callback.
-// ref: FUN_1405ebe10
-void* CSimpleTopConstruct(void* memory) {
-    (void)memory;
+// The glue follows a new window size: the GlueParent rescales (the root's +0xf38 hook).
+// ref: FUN_14167b3a0
+void GlueOnWindowSize() {
     FROST_UNIMPLEMENTED();
-    return nullptr;
+}
+
+// The cursor follows the cursorSizePreferred CVar (the root's +0xf40 hook).
+// ref: FUN_14167b330
+bool GlueOnCursorSize() {
+    FROST_UNIMPLEMENTED();
+    return true;
+}
+
+// A gamepad event reaches the glue's gamepad handling (the root's +0xf58 hook).
+// ref: FUN_14167b4b0
+void GlueOnGamePad() {
+    FROST_UNIMPLEMENTED();
 }
 
 // Whether the cursor textures are loaded, and loading them (Interface\Cursor\*.blp).
@@ -495,11 +494,11 @@ void GlueMgrStartup() {
         s_windowWidth = size.m_width;
         s_windowHeight = size.m_height;
         float aspect = WindowGetAspect();
-        if (void* parent = GetGlueParent()) {
-            if (FrameSetScale(parent, 1.0f, true)) {
-                TopInvalidateLayout(s_uiRoot);
+        if (CSimpleFrame* parent = GetGlueParent()) {
+            if (parent->SetScale(1.0f, true)) {
+                static_cast<CSimpleTop*>(s_uiRoot)->InvalidateLayout();
             }
-            LayoutFlush();
+            CLayoutFrame::ResizePending();
         }
         s_aspect = aspect;
         Sub141174300();
@@ -541,8 +540,13 @@ void CGlueMgr::Initialize() {
     CoordinateSetAspectRatio(&g_coordinateSpace, s_aspect);
     Sub141B4B720();
     Sub141C99C50();
-    Sub1406031E0();
-    s_uiRoot = CSimpleTopConstruct(nullptr);
+    UiSetDatabaseReady();
+    void* memory = SMemAlloc(sizeof(CSimpleTop), 3, s_glueFile, SStrHashFnv1a(s_glueFile), 0x117, 0);
+    CSimpleTop* top = new (memory) CSimpleTop(UiTimersRun);
+    s_uiRoot = top;
+    top->m_unknownF38 = reinterpret_cast<void*>(GlueOnWindowSize);
+    top->m_keyFilterHook = reinterpret_cast<void*>(GlueOnCursorSize);
+    top->m_padHook = reinterpret_cast<void*>(GlueOnGamePad);
     if (!CursorIsLoaded()) {
         CursorLoad();
     }

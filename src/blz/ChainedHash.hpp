@@ -139,6 +139,38 @@ void chained_free_node(Node* node, const char* nodeTag) {
     SMemFree(node, nodeTag, -6, 0);
 }
 
+// Calls `visit` on every node, bucket by bucket; a node may not be removed while visited.
+template <class Node, class Visit>
+void chained_for_each(const chained_hash_header* table, Visit visit) {
+    if (table->m_buckets == nullptr) {
+        return;
+    }
+    for (uint64_t i = 0; i < table->m_bucketCount; i++) {
+        for (auto node = static_cast<Node*>(table->m_buckets[i]); node != nullptr; node = node->m_next) {
+            visit(node);
+        }
+    }
+}
+
+// Frees every node and the buckets: what the table's destructor does.
+template <class Node>
+void chained_destroy(chained_hash_header* table, const char* nodeTag, const char* bucketTag) {
+    if (table->m_buckets == nullptr) {
+        return;
+    }
+    for (uint64_t i = 0; i < table->m_bucketCount; i++) {
+        auto node = static_cast<Node*>(table->m_buckets[i]);
+        while (node != nullptr) {
+            Node* next = node->m_next;
+            chained_free_node(node, nodeTag);
+            node = next;
+        }
+    }
+    SMemFree(table->m_buckets, bucketTag, -6, 0);
+    table->m_buckets = nullptr;
+    table->m_size = 0;
+}
+
 }
 
 #endif

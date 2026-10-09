@@ -635,6 +635,15 @@ GXWINDOWPARAMS* WindowGetParams() {
     return &s_params;
 }
 
+// The aspect ratio of the window as last applied, else 1.
+// ref: FUN_1414fcc60
+float WindowGetAspect() {
+    if (s_params.m_size.m_width != 0 && s_params.m_size.m_height != 0) {
+        return static_cast<float>(s_params.m_size.m_width) / static_cast<float>(s_params.m_size.m_height);
+    }
+    return 1.0f;
+}
+
 // ref: FUN_1414fce90
 GXSIZE* WindowGetSize(GXSIZE* size) {
     *size = s_params.m_size;

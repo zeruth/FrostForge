@@ -64,4 +64,9 @@ bool StringToOrientation(const char* string, uint32_t* orientation);
 const char* OrientationToString(uint32_t orientation);
 bool StringToFillStyle(const char* string, uint8_t* style);
 
+// Whether the UI may look its art and data up in the client databases (atlas members, file
+// data); set once the glue or game UI starts (0x142e97a90).
+extern bool g_uiDatabaseReady;
+void UiSetDatabaseReady();
+
 #endif

@@ -702,14 +702,6 @@ void Sub141691B00() {
     FROST_UNIMPLEMENTED();
 }
 
-// the UI update
-// ref: FUN_1405f0be0
-void Sub1405F0BE0(void* a1, float elapsed) {
-    (void)a1;
-    (void)elapsed;
-    FROST_UNIMPLEMENTED();
-}
-
 // ref: FUN_141525060
 void Sub141525060(void* a1, float elapsed) {
     (void)a1;

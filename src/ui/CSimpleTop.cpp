@@ -1,6 +1,7 @@
 #include "ui/CSimpleTop.hpp"
 
 #include <cstring>
+#include <memory>
 #include <new>
 
 #include "base/Coordinate.hpp"
@@ -634,6 +635,182 @@ bool CSimpleTop::IsRegionAbove(CScriptRegion* a, CScriptRegion* b) {
 void CSimpleTop::UpdateMouseFocus(MOUSEEVENT* event) {
     (void)event;
     FROST_UNIMPLEMENTED();
+}
+
+// ---- the update ------------------------------------------------------------------------------
+
+namespace {
+
+const char s_layoutNodeTag[] = ".?AU?$chained_hash_node@PEAVCLayoutFrame@@@blz@@";
+const char s_layoutBucketTag[] = ".PEAU?$chained_hash_node@PEAVCLayoutFrame@@@blz@@";
+const char s_groupNodeTag[] = ".?AU?$chained_hash_node@PEAVCSimpleAnimGroup@@@blz@@";
+const char s_groupBucketTag[] = ".PEAU?$chained_hash_node@PEAVCSimpleAnimGroup@@@blz@@";
+const char s_fontHandleTag[] = ".?AV?$TSList@UUNNEEDED_FONTHANDLE@@V?$TSGetLink@UUNNEEDED_FONTHANDLE@@@@$07@@";
+
+// blz::chained_hash_node<CLayoutFrame*> (0x10).
+struct LAYOUTNODE {
+    LAYOUTNODE* m_next;
+    CLayoutFrame* m_key;
+};
+
+// blz::chained_hash_node<CSimpleAnimGroup*> (0x10).
+struct GROUPNODE {
+    GROUPNODE* m_next;
+    CSimpleAnimGroup* m_key;
+};
+
+// A font handle dropped at the next update (0x20): its link and the shared handle.
+struct UNNEEDED_FONTHANDLE {
+    TSLink<UNNEEDED_FONTHANDLE> m_link;     // 0x00
+    std::shared_ptr<void> m_handle;         // 0x10
+};
+
+// The handles (0x142cce7a0).
+TSList<UNNEEDED_FONTHANDLE, TSGetLink<UNNEEDED_FONTHANDLE>, 8> s_unneededFontHandles;
+
+}
+
+// ref: FUN_1405f6260
+void UiAddUnneededFontHandle(const std::weak_ptr<void>* handle) {
+    void* memory = SMemAlloc(sizeof(UNNEEDED_FONTHANDLE), 8, s_fontHandleTag, 0, -2, 8);
+    auto node = new (memory) UNNEEDED_FONTHANDLE();
+    s_unneededFontHandles.LinkToTail(node);
+    node->m_handle = handle->lock();
+}
+
+// ref: FUN_1405f7340
+void UiReleaseUnneededFontHandles() {
+    UNNEEDED_FONTHANDLE* node = s_unneededFontHandles.Head();
+    while (node != nullptr) {
+        UNNEEDED_FONTHANDLE* next = s_unneededFontHandles.Next(node);
+        node->m_handle.reset();
+        node->m_link.Unlink();
+        node->~UNNEEDED_FONTHANDLE();
+        SMemFree(node, s_fontHandleTag, -2, 0);
+        node = next;
+    }
+}
+
+// ref: FUN_1405f4200
+void CSimpleTop::ProcessLayoutWaiting() {
+    if (this->m_layoutWaiting.m_size == 0) {
+        return;
+    }
+    CHAINEDHASH waiting = this->m_layoutWaiting;
+    this->m_layoutWaiting = CHAINEDHASH();
+    blz::chained_for_each<LAYOUTNODE>(&waiting, [&](LAYOUTNODE* node) {
+        CLayoutFrame* frame = node->m_key;
+        if (!frame->IsLayoutReady()) {
+            bool inserted;
+            blz::chained_insert<LAYOUTNODE>(&this->m_layoutWaiting, frame, &inserted, s_layoutNodeTag, s_layoutBucketTag);
+        } else {
+            frame->OnLayoutReady();
+        }
+    });
+    blz::chained_destroy<LAYOUTNODE>(&waiting, s_layoutNodeTag, s_layoutBucketTag);
+}
+
+// ref: FUN_1405ee140
+void CSimpleTop::ProcessShownChanges() {
+    for (uint64_t i = 0; i < this->m_shownChanges.m_size; i++) {
+        CSimpleFrame* frame = this->m_shownChanges.m_data[i];
+        if (frame == nullptr) {
+            continue;
+        }
+        this->m_rootFrames.Link(frame)->Unlink();
+        if (static_cast<CLayoutFrame*>(frame)->m_layoutState & CLayoutFrame::LAYOUT_VISIBLE) {
+            this->m_rootFrames.LinkToHead(frame);
+        } else {
+            this->m_rootFrames.LinkToTail(frame);
+        }
+    }
+    this->m_shownChanges.m_size = 0;
+}
+
+// ref: FUN_1405edfc0
+void CSimpleTop::ProcessUpdateChecks() {
+    for (uint64_t i = 0; i < this->m_updateChecks.m_size; i++) {
+        CSimpleFrame* frame = this->m_updateChecks.m_data[i];
+        bool wants = frame->WantsUpdateCheck();
+        TSLink<CSimpleFrame>* link = this->m_updateFrames.Link(frame);
+        if (wants == link->IsLinked()) {
+            continue;
+        }
+        link->Unlink();
+        if (wants) {
+            this->m_updateFrames.LinkToHead(frame);
+        }
+    }
+    this->m_updateChecks.m_size = 0;
+}
+
+// ref: FUN_1405f0be0
+void CSimpleTop::OnUpdate(float elapsed) {
+    if (this->m_preUpdateHook != nullptr) {
+        this->m_preUpdateHook();
+    }
+    CLayoutFrame::ResizePending();
+    blz::chained_for_each<ANIMNODE>(&this->m_animating, [](ANIMNODE* node) {
+        node->m_key->Unknown08();
+    });
+    this->ProcessLayoutWaiting();
+    this->ProcessShownChanges();
+    this->ProcessUpdateChecks();
+    for (CSimpleFrame* frame = this->m_updateFrames.Head(); frame != nullptr;) {
+        CSimpleFrame* next = this->m_updateFrames.Next(frame);
+        frame->RunOnUpdate(elapsed);
+        frame = next;
+    }
+    // Every playing group of every animating object advances once, however many objects
+    // share it.
+    CHAINEDHASH groups = CHAINEDHASH();
+    blz::chained_for_each<ANIMNODE>(&this->m_animating, [&](ANIMNODE* node) {
+        ANIMATABLEGROUPS* lists = node->m_key->m_groups;
+        if (lists == nullptr || lists->m_playing == nullptr) {
+            return;
+        }
+        TSExplicitList<CSimpleAnimGroup>* playing = lists->m_playing;
+        for (CSimpleAnimGroup* group = playing->Head(); group != nullptr; group = playing->Link(group)->Next()) {
+            bool inserted;
+            blz::chained_insert<GROUPNODE>(&groups, group, &inserted, s_groupNodeTag, s_groupBucketTag);
+        }
+    });
+    blz::chained_for_each<GROUPNODE>(&groups, [&](GROUPNODE* node) {
+        CSimpleAnimGroup_OnUpdate(node->m_key, elapsed);
+    });
+    blz::chained_for_each<ANIMNODE>(&this->m_animating, [](ANIMNODE* node) {
+        node->m_key->Unknown10();
+    });
+    UiReleaseUnneededFontHandles();
+    if (this->m_mouseFocusDirty) {
+        this->m_mouseFocusDirty = 0;
+        this->OnMouseMoveEvent(&this->m_mouseEvent, false);
+    }
+    CLayoutFrame::ResizePending();
+    if (this->m_layoutDirty) {
+        int32_t version = this->m_layoutVersion;
+        this->m_layoutDirty = 0;
+        this->m_layoutVersion = 1;
+        if (version != 1) {
+            for (CSimpleFrame* frame = this->m_rootFrames.Head(); frame != nullptr;) {
+                CSimpleFrame* next = this->m_rootFrames.Next(frame);
+                frame->OnLayoutVersionChanged();
+                frame = next;
+            }
+        }
+    }
+    this->m_lastMouseEvent = this->m_mouseEvent;
+    blz::chained_destroy<GROUPNODE>(&groups, s_groupNodeTag, s_groupBucketTag);
+}
+
+// The mouse moved (or the focus must be recomputed with `simulated` set): the drag follows it,
+// or the regions under it get OnEnter and OnLeave. Returns whether the UI took the event.
+// ref: FUN_1405f1530
+bool CSimpleTop::OnMouseMoveEvent(MOUSEEVENT* event, bool simulated) {
+    (void)event;
+    (void)simulated;
+    FROST_UNIMPLEMENTED();
+    return false;
 }
 
 // ---- DeferredScriptBuffer -------------------------------------------------------------------

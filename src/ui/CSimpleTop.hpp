@@ -7,6 +7,7 @@
 // batches (0x1070 bytes, vtable 0x1426c7718).
 
 #include <cstdint>
+#include <memory>
 
 #include "blz/ChainedHash.hpp"
 #include "blz/RbTree.hpp"
@@ -198,6 +199,20 @@ class CSimpleTop : public CLayoutFrame {
     // Whether `b` draws above `a`.
     bool IsRegionAbove(CScriptRegion* a, CScriptRegion* b);
     void UpdateMouseFocus(MOUSEEVENT* event);
+    bool OnMouseMoveEvent(MOUSEEVENT* event, bool simulated);
+
+    // The UI's frame: animations, layout, OnUpdate scripts and the mouse focus.
+    void OnUpdate(float elapsed);
+    // Frames whose layout was waiting on their objects get it once they are ready.
+    void ProcessLayoutWaiting();
+    // Roots that were shown move to the front of the root list, hidden ones to the back.
+    void ProcessShownChanges();
+    // Frames join or leave the update list as they come to want OnUpdate or not.
+    void ProcessUpdateChecks();
 };
+
+// A font handle whose last user went; it is dropped at the next UI update.
+void UiAddUnneededFontHandle(const std::weak_ptr<void>* handle);
+void UiReleaseUnneededFontHandles();
 
 #endif

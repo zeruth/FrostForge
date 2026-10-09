@@ -8,6 +8,7 @@
 #include "os/Os.hpp"
 #include "os/Timer.hpp"
 #include "os/Window.hpp"
+#include "ui/CSimpleTop.hpp"
 #include "util/Unimplemented.hpp"
 #include <cstring>
 
@@ -62,7 +63,6 @@ void Sub1412E8790();
 void Sub14167C520();
 void Sub141687ED0();
 void Sub141691B00();
-void Sub1405F0BE0(void* a1, float elapsed);
 void Sub141525060(void* a1, float elapsed);
 void Sub140234DF0();
 void Sub140234ED0();
@@ -106,7 +106,6 @@ uint8_t s_paused;                   // DAT_142ddfa04
 int32_t s_gameState;                // DAT_142ddfa08: 0 glue, 7 in world
 uint8_t s_pendingReset;             // DAT_142ddf9f1
 uint8_t s_pendingFlush;             // DAT_142ddf9f0
-void* s_uiInput;                    // DAT_142e979d8: the UI's input target
 void* s_eventTarget;                // DAT_142de0e18
 uint8_t s_eventsPaused;             // DAT_142de0e2c
 uint8_t s_swallowChar;              // DAT_142de0e2d
@@ -267,10 +266,10 @@ bool ClientProcessEvents() {
     if (LoadingScreenIsActive()) {
         s_paused = 1;
     }
-    s_eventTarget = s_uiInput;
+    s_eventTarget = CSimpleTop::s_instance;
     s_eventsPaused = s_paused;
-    if (s_uiInput != nullptr) {
-        FROST_UNIMPLEMENTED();  // FUN_1405ede10: the UI input's frame start
+    if (CSimpleTop::s_instance != nullptr) {
+        CSimpleTop::s_instance->ApplyDeferredInputChanges();
     }
     // The deferred event handlers (DAT_142de0e00) run here when the events are not paused;
     // nothing adds to them yet.
@@ -359,7 +358,7 @@ bool Sub1402225D0() {
             Sub14167C520();
             Sub141687ED0();
             Sub141691B00();
-            Sub1405F0BE0(s_uiInput, s_frameSeconds);
+            CSimpleTop::s_instance->OnUpdate(s_frameSeconds);
             Sub141525060(nullptr, s_frameSeconds);  // &DAT_142d082d0
             break;
         case 1:
@@ -469,7 +468,7 @@ void Sub140225AB0() {
                 g_gxRenderContext->Clear(targets->m_count != 0 ? targets : nullptr, 0xf, 0xff000000, 1.0f, 0, 0);
                 Sub1413544D0();
                 Sub14167BA90(Sub140216570(), Sub140216580());
-                UiRender(s_uiInput);
+                UiRender(CSimpleTop::s_instance);
                 Sub14022EA60();
                 Sub1405F27E0(!Sub14026BEA0());
                 if (!Sub1405DC320() && !Sub1405DBDE0() && !Sub140239E90()) {

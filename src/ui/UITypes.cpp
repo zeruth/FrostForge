@@ -334,3 +334,10 @@ bool StringToFillStyle(const char* string, uint8_t* style) {
     }
     return false;
 }
+
+bool g_uiDatabaseReady;
+
+// ref: FUN_1406031e0
+void UiSetDatabaseReady() {
+    g_uiDatabaseReady = true;
+}
