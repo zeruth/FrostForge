@@ -21,6 +21,8 @@ int32_t* TextureAtlasFindByElement(int32_t* member, int32_t element, TEXTUREATLA
 // (FUN_140602880), its path when it has one (FUN_140603040) and whether it tiles
 // (FUN_1406035a0, FUN_1406035e0).
 int32_t TextureAtlasGetElement(const int32_t* member);
+// The member's element's name, empty without one (FUN_140602fe0).
+const char* TextureAtlasGetName(const int32_t* member);
 int32_t TextureAtlasGetFileDataId(const int32_t* member);
 void TextureAtlasGetSize(const int32_t* member, float* size);
 bool TextureAtlasGetPath(const int32_t* member, char* path, uint64_t size);

@@ -1,4 +1,5 @@
 #include "glue/GlueMgr.hpp"
+#include "glue/GlueScriptAPI.hpp"
 
 #include <cstdint>
 
@@ -411,13 +412,6 @@ void Sub141DB1990() {
     FROST_UNIMPLEMENTED();
 }
 
-// C_Seasons and the other generated API namespaces.
-// ref: FUN_140afd040
-void Sub140AFD040(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
 // ExportInterfaceFiles / GetMouseFocus and the glue's protected functions.
 // ref: FUN_1416a7840
 void Sub1416A7840() {
@@ -586,7 +580,7 @@ void CGlueMgr::Initialize() {
     Sub1416A0D20();
     Sub1416A8880();
     Sub141DB1990();
-    Sub140AFD040(FrameScript_GetContext());
+    GlueRegisterScriptAPI(FrameScript_GetContext());
     FrameXML_ClearScopedMask();
     // FUN_1402146d0: a blz string at 0x142617f88 reset
     CScriptStatus status("Logs\\GlueXML.log", false, "Interface\\GlueXML\\GlueXML_Wrath.toc");

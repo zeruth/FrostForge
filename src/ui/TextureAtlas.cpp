@@ -180,3 +180,12 @@ void TextureAtlasUnmapTexCoords(const int32_t* member, float* out, const float* 
         }
     }
 }
+
+// ref: FUN_140602fe0
+const char* TextureAtlasGetName(const int32_t* member) {
+    const UITEXTUREATLASMEMBERREC* record = MemberRecord(*member);
+    if (record != nullptr) {
+        FROST_UNIMPLEMENTED();  // UiTextureAtlasElement's name (DAT_142e88a20)
+    }
+    return "";
+}

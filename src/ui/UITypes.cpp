@@ -242,6 +242,16 @@ bool StringToBlendMode(const char* string, uint8_t* mode) {
     return false;
 }
 
+// ref: FUN_140672360
+const char* BlendModeToString(uint8_t mode) {
+    for (const auto& entry : s_blendModes) {
+        if (entry.m_value == mode) {
+            return entry.m_name;
+        }
+    }
+    return nullptr;
+}
+
 // ref: FUN_140672450
 bool StringToDrawLayer(const char* string, uint32_t* layer) {
     for (const auto& entry : s_drawLayers) {

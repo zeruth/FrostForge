@@ -101,6 +101,8 @@ class CSimpleTexture : public CSimpleRegion {
 
     static void CreateScriptMetaTables();
     static void DestroyScriptMetaTables();
+    // This class's type id (FUN_140616420, 0x142e97b60).
+    static int32_t GetObjectType();
 
     // FrameScript_Object, CScriptObject and CScriptRegion.
     int32_t GetScriptMetaTable() override;
@@ -232,6 +234,37 @@ class CSimpleTexture : public CSimpleRegion {
     bool BuildMaskedTexture(const uint8_t* flag, const uint8_t* pixels, int32_t pitch);
 };
 static_assert(sizeof(CSimpleTexture) == 0x2a0, "CSimpleTexture is 0x2a0 bytes");
+
+// CSimpleMaskTexture ("MaskTexture", 0x2a0; vtable 0x1426cefd8, CLayoutFrame 0x1426cf2d0,
+// CAnimatableObject 0x1426cf3c8): a texture whose alpha masks the textures it is added to.
+class CSimpleMaskTexture : public CSimpleTexture {
+    public:
+    // The metatables (DAT_142cf54d4, DAT_142cf54d8).
+    static int32_t s_metaTable;
+    static int32_t s_restrictedMetaTable;
+
+    CSimpleMaskTexture(CSimpleFrame* frame, uint8_t drawLayer, int8_t subLevel, bool show);
+    // ref: FUN_140667800
+    ~CSimpleMaskTexture() override;
+    // Masks come from their own pool (0x142e99da0).
+    static void* operator new(size_t size);
+    static void operator delete(void* mask);
+
+    // ref: FUN_1406383a0
+    static void CreateScriptMetaTables();
+    // ref: FUN_1406383f0
+    static void DestroyScriptMetaTables();
+    // ref: FUN_140638440
+    static int32_t GetObjectType();
+
+    int32_t GetScriptMetaTable() override;
+    bool IsObjectTypeName(const char* name) override;
+    bool IsObjectType(int32_t type) override;
+    const char* GetObjectTypeName() override;
+    void LoadXML(XMLOBJECT* node, CStatus* status, const char* intrinsic) override;
+    bool IsMaskTexture() override;
+    void OnFrameSizeChanged(const CRect* rect, const CRect* previous) override;
+};
 
 // The vertex-rotation helpers the texture animations use (FUN_140637eb0 ...).
 void TextureAnimOrigin(float* origin, int32_t point, const float* offset, const float* positions);

@@ -13,7 +13,10 @@
 #include "ui/CLayoutFrame.hpp"
 #include "ui/CSimpleFrame.hpp"
 #include "ui/CSimpleRegion.hpp"
+#include "ui/CSimpleTexture.hpp"
 #include "ui/CSimpleTop.hpp"
+#include "ui/FrameXML.hpp"
+#include "framescript/FrameScript.hpp"
 #include "ui/UITypes.hpp"
 #include "util/Unimplemented.hpp"
 
@@ -24,6 +27,15 @@ extern "C" {
 }
 
 namespace {
+
+// The bounded copy the reference inlines.
+void CopyBounded(char* dest, const char* source, uint64_t size) {
+    uint64_t i = 0;
+    for (; i + 1 < size && source[i] != '\0'; i++) {
+        dest[i] = source[i];
+    }
+    dest[i] = '\0';
+}
 
 using namespace ScriptMethod;
 
@@ -66,19 +78,62 @@ struct OPTIONALARG {
 
 // ---- the region factories --------------------------------------------------------------
 
-// The region classes these make (CSimpleTexture, CSimpleFontString, CSimpleLine,
-// CSimpleMaskTexture) are not ported yet.
+// CSimpleFontString and CSimpleLine are not ported yet.
 
 // FUN_1424c9a80
+// The texture-like regions frame:CreateTexture and frame:CreateMaskTexture make: the template
+// looked up first, the region made in its layer and sublevel, named, loaded from the template,
+// and caught up with an animation its frame is playing.
+template <class T>
+CSimpleRegion* CreateTextureLikeRegion(CSimpleFrame* frame, const OPTIONALARG<const char*>* name,
+    const OPTIONALARG<uint32_t>* layer, const OPTIONALARG<const char*>* inherits, const OPTIONALARG<int8_t>* subLevel) {
+    char templateName[0x80] = {};
+    XMLOBJECT* node = nullptr;
+    bool busy = false;
+    const char* taint = nullptr;
+    T* region = nullptr;
+    if (inherits->m_set && inherits->m_value != nullptr) {
+        busy = true;
+        CopyBounded(templateName, inherits->m_value, sizeof(templateName));
+        node = FrameXML_AcquireVirtual(templateName, &taint, &busy);
+        if (node == nullptr) {
+            FrameScript_ActionError("Couldn't find inherited node \"%s\"", templateName);
+            return nullptr;
+        }
+        if (busy) {
+            FrameScript_ActionError("Recursively inherited node \"%s\"", templateName);
+            return nullptr;
+        }
+    }
+    if (subLevel->m_set && static_cast<uint8_t>(subLevel->m_value + 8) >= 0x10) {
+        FrameScript_ActionError("Sublevel must be between %d and %d", -8, 7);
+    } else {
+        region = new T(frame, static_cast<uint8_t>(layer->m_set ? layer->m_value : 2),
+            static_cast<int8_t>(subLevel->m_set ? subLevel->m_value : 0), true);
+        if (name->m_set && name->m_value != nullptr && *name->m_value != '\0') {
+            region->SetName(name->m_value);
+        }
+        if (node != nullptr) {
+            CScriptStatus status;
+            region->FrameScript_Object::LoadXML(node, &status, nullptr);
+            region->LoadXML(node, &status, nullptr);
+            region->PostLoadXML(node, &status);
+        }
+        CAnimatableObject* animatable = region;
+        if (animatable->IsPlaying()) {
+            animatable->OnAnimStarted(animatable->IsAnimatingAlpha(), animatable->IsAnimatingTransform(),
+                animatable->IsAnimatingRectOffset());
+        }
+    }
+    if (node != nullptr && !busy) {
+        FrameXML_ReleaseVirtual(templateName);
+    }
+    return region;
+}
+
 CSimpleRegion* CreateTextureRegion(CSimpleFrame* frame, const OPTIONALARG<const char*>* name, const OPTIONALARG<uint32_t>* layer,
     const OPTIONALARG<const char*>* inherits, const OPTIONALARG<int8_t>* subLevel) {
-    (void)frame;
-    (void)name;
-    (void)layer;
-    (void)inherits;
-    (void)subLevel;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    return CreateTextureLikeRegion<CSimpleTexture>(frame, name, layer, inherits, subLevel);
 }
 
 // FUN_1424c9d50
@@ -107,13 +162,7 @@ CSimpleRegion* CreateLineRegion(CSimpleFrame* frame, const OPTIONALARG<const cha
 // FUN_1424c9780
 CSimpleRegion* CreateMaskTextureRegion(CSimpleFrame* frame, const OPTIONALARG<const char*>* name, const OPTIONALARG<uint32_t>* layer,
     const OPTIONALARG<const char*>* inherits, const OPTIONALARG<int8_t>* subLevel) {
-    (void)frame;
-    (void)name;
-    (void)layer;
-    (void)inherits;
-    (void)subLevel;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    return CreateTextureLikeRegion<CSimpleMaskTexture>(frame, name, layer, inherits, subLevel);
 }
 
 struct CREATEREGIONCONTEXT {

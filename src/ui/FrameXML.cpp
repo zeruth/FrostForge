@@ -1069,11 +1069,14 @@ CSimpleRegion* FrameXML_CreateTexture(XMLOBJECT* object, CSimpleFrame* frame, CS
 
 // ref: FUN_140667f50
 CSimpleRegion* FrameXML_CreateMaskTexture(XMLOBJECT* object, CSimpleFrame* frame, CScriptStatus* status) {
-    (void)object;
-    (void)frame;
-    (void)status;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    auto mask = new CSimpleMaskTexture(frame, 2, 0, true);
+    if ((object->m_attributes & 0x40) != 0) {
+        mask->SetName(object->m_name.m_text);
+    }
+    mask->FrameScript_Object::LoadXML(object, status, nullptr);
+    mask->LoadXML(object, status, nullptr);
+    mask->PostLoadXML(object, status);
+    return mask;
 }
 
 // ref: FUN_140667e90

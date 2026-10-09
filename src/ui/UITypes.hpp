@@ -54,6 +54,7 @@ uint8_t* StringToFontFlags(uint8_t* flags, const char* string);
 const char* FontFlagsToString(uint8_t flags);
 bool IsValidFontFlags(const char* string);
 bool StringToBlendMode(const char* string, uint8_t* mode);
+const char* BlendModeToString(uint8_t mode);
 bool StringToDrawLayer(const char* string, uint32_t* layer);
 const char* DrawLayerToString(uint32_t layer);
 bool StringToFramePoint(const char* string, uint32_t* point);

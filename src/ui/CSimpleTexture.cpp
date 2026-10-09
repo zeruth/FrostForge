@@ -35,6 +35,7 @@ int32_t CSimpleTexture::s_restrictedMetaTable = -2;
 uint8_t CSimpleTexture::s_drawWhileLoading;
 
 void CSimpleTexture_FillScriptMethods(lua_State* L);
+void CSimpleMaskTexture_FillScriptMethods(lua_State* L);
 void CSimpleMaskTexture_AddMasked(CSimpleMaskTexture* mask, CSimpleTexture* texture);
 void CSimpleMaskTexture_RemoveMasked(CSimpleMaskTexture* mask, CSimpleTexture* texture);
 
@@ -417,18 +418,15 @@ bool CSimpleTexture::IsObjectTypeName(const char* name) {
         || _stricmp(name, "FrameScript_Object") == 0;
 }
 
-namespace {
-
-int32_t TextureObjectType() {
+// ref: FUN_140616420
+int32_t CSimpleTexture::GetObjectType() {
     static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
     return s_type;
 }
 
-}
-
 // ref: FUN_140633110
 bool CSimpleTexture::IsObjectType(int32_t type) {
-    return type == TextureObjectType() || type == CScriptRegion::GetObjectType() || this->CScriptObject::IsObjectType(type);
+    return type == CSimpleTexture::GetObjectType() || type == CScriptRegion::GetObjectType() || this->CScriptObject::IsObjectType(type);
 }
 
 // ref: FUN_140632d90
@@ -1999,4 +1997,138 @@ void RenderBatchAddTexture(CRenderBatch* batch, CSimpleTexture* texture, CSimple
         &texture->m_texCoords[0][0], static_cast<uint16_t>(gradient ? 4 : 0), colors, 6, s_quadIndices,
         texture->m_desaturation, onTop, texture->m_snappingBias, ((texture->m_textureFlags >> 0x11) & 1) != 0, extraCount,
         extraTextures, extraTexCoords);
+}
+
+// ---- CSimpleMaskTexture ------------------------------------------------------------------------------
+
+namespace {
+
+CDataAllocator s_maskHeap(0x2a0, 100);
+
+}
+
+int32_t CSimpleMaskTexture::s_metaTable = -2;
+int32_t CSimpleMaskTexture::s_restrictedMetaTable = -2;
+
+CSimpleMaskTexture::CSimpleMaskTexture(CSimpleFrame* frame, uint8_t drawLayer, int8_t subLevel, bool show)
+    : CSimpleTexture(frame, drawLayer, subLevel, show) {
+}
+
+CSimpleMaskTexture::~CSimpleMaskTexture() {
+}
+
+void* CSimpleMaskTexture::operator new(size_t size) {
+    (void)size;
+    return s_maskHeap.GetData(false, ".?AVCSimpleMaskTexture@@", -2, 0x1f);
+}
+
+void CSimpleMaskTexture::operator delete(void* mask) {
+    if (mask != nullptr) {
+        s_maskHeap.PutData(mask);
+    }
+}
+
+void CSimpleMaskTexture::CreateScriptMetaTables() {
+    lua_State* L = FrameScript_GetContext();
+    s_metaTable = FrameScript_Object::CreateScriptMetaTable(L, CSimpleMaskTexture_FillScriptMethods, false);
+    s_restrictedMetaTable = FrameScript_Object::CreateScriptMetaTable(L, CSimpleMaskTexture_FillScriptMethods, true);
+}
+
+void CSimpleMaskTexture::DestroyScriptMetaTables() {
+    lua_State* L = FrameScript_GetContext();
+    luaL_unref(L, LUA_REGISTRYINDEX, s_metaTable);
+    luaL_unref(L, LUA_REGISTRYINDEX, s_restrictedMetaTable);
+    s_metaTable = -2;
+    s_restrictedMetaTable = -2;
+}
+
+int32_t CSimpleMaskTexture::GetObjectType() {
+    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
+    return s_type;
+}
+
+// ref: FUN_140667880
+int32_t CSimpleMaskTexture::GetScriptMetaTable() {
+    if ((this->FrameScript_Object::m_flags & 1) == 0 && (this->FrameScript_Object::m_flags & 4) == 0) {
+        return s_metaTable;
+    }
+    return s_restrictedMetaTable;
+}
+
+// ref: FUN_1406679b0
+bool CSimpleMaskTexture::IsObjectTypeName(const char* name) {
+    return _stricmp(name, "MaskTexture") == 0 || this->CSimpleTexture::IsObjectTypeName(name);
+}
+
+// ref: FUN_1406678b0
+bool CSimpleMaskTexture::IsObjectType(int32_t type) {
+    return type == CSimpleMaskTexture::GetObjectType() || type == CSimpleTexture::GetObjectType()
+        || this->CScriptRegion::IsObjectType(type);
+}
+
+// ref: FUN_140667870
+const char* CSimpleMaskTexture::GetObjectTypeName() {
+    return "MaskTexture";
+}
+
+// The texture's settings, then the textures it masks: by global name (target) or by child key
+// of its frame (childKey).
+// ref: FUN_1406384b0
+void CSimpleMaskTexture::LoadXML(XMLOBJECT* node, CStatus* status, const char* intrinsic) {
+    this->CSimpleTexture::LoadXML(node, status, intrinsic);
+    if ((node->m_flags & 0x200000) == 0) {
+        return;
+    }
+    for (XMLOBJECT* list = node->m_child; list != nullptr; list = list->m_next) {
+        if (list->m_type != XMLTYPE_MASKEDTEXTURES) {
+            continue;
+        }
+        for (XMLOBJECT* child = list->m_child; child != nullptr; child = child->m_next) {
+            if (child->m_type != XMLTYPE_MASKEDTEXTURE) {
+                continue;
+            }
+            auto masked = static_cast<XMLMASKEDTEXTURE*>(child);
+            const char* name = this->GetName();
+            if (name == nullptr) {
+                name = this->GetObjectTypeName();
+            }
+            if ((masked->m_maskFlags & 1) != 0) {
+                lua_State* L = FrameScript_GetContext();
+                bool restricted = !((this->FrameScript_Object::m_flags & 8) == 0 && (this->FrameScript_Object::m_flags & 0x20) != 0);
+                lua_pushstring(L, masked->m_target.m_text);
+                lua_rawget(L, LUA_GLOBALSINDEX);
+                auto target = static_cast<CSimpleTexture*>(
+                    FrameScript_Object::GetObjectFromLua(nullptr, L, CSimpleMaskTexture::GetObjectType(), -1, false, restricted));
+                lua_settop(L, -2);
+                if (target == nullptr) {
+                    status->Add(2, "Texture %s: Can't find texture to be masked %s", name, masked->m_target.m_text);
+                } else {
+                    target->AddMaskTexture(this);
+                }
+            } else if ((masked->m_maskFlags & 2) != 0) {
+                auto frame = static_cast<CScriptObject*>(this->GetParent());
+                CScriptObject* target = frame != nullptr ? frame->GetObjectByPath(masked->m_childKey.m_text) : nullptr;
+                if (target != nullptr && target->IsObjectTypeName("Texture")) {
+                    static_cast<CSimpleTexture*>(target)->AddMaskTexture(this);
+                    continue;
+                }
+                status->Add(2, "Texture %s: Can't find child texture to be masked %s", name, masked->m_childKey.m_text);
+            }
+        }
+    }
+}
+
+bool CSimpleMaskTexture::IsMaskTexture() {
+    return true;
+}
+
+// The masked textures' coordinates follow the mask.
+// ref: FUN_1406386e0
+void CSimpleMaskTexture::OnFrameSizeChanged(const CRect* rect, const CRect* previous) {
+    this->CSimpleTexture::OnFrameSizeChanged(rect, previous);
+    if (this->m_extension != nullptr) {
+        for (CSimpleTexture* masked : this->m_extension->m_masked) {
+            masked->UpdateMaskTexCoords();
+        }
+    }
 }
