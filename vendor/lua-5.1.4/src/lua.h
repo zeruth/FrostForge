@@ -107,7 +107,7 @@ typedef LUA_INTEGER lua_Integer;
 /*
 ** state manipulation
 */
-LUA_API lua_State *(lua_newstate) (lua_Alloc f, void *ud);
+LUA_API lua_State *(lua_newstate) (lua_Alloc f, void *ud, int profiling);
 LUA_API void       (lua_close) (lua_State *L);
 LUA_API lua_State *(lua_newthread) (lua_State *L);
 
@@ -227,6 +227,11 @@ LUA_API void  (lua_popjmptaint) (lua_State *L);
 LUA_API void  (lua_convertdecimal) (char *s);
 LUA_API int   (lua_getdecimalconversion) (void);
 LUA_API void  (lua_setdecimalconversion) (int on);
+LUA_API size_t (lua_gettaintmemory) (lua_State *L, const char *taint);
+LUA_API double (lua_gettaintcpu) (lua_State *L, const char *taint);
+LUA_API void  (lua_resetcpu) (lua_State *L);
+LUA_API void  (lua_updatetaintmemory) (lua_State *L);
+LUA_API void  (lua_updatetaintcpu) (lua_State *L);
 
 
 /*

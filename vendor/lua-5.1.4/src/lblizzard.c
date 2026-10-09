@@ -45,6 +45,7 @@ LAYOUT(state, sizeof(lua_State) == 0xe0 && offsetof(lua_State, status) == 0x20 &
     offsetof(lua_State, top) == 0x28 && offsetof(lua_State, l_gt) == 0x90 &&
     offsetof(lua_State, errfunc) == 0xd8);
 LAYOUT(global, sizeof(global_State) == 0x1d8 && offsetof(global_State, currentwhite) == 0x21 &&
+    offsetof(global_State, taintmemory) == 0x98 && offsetof(global_State, panic) == 0xa8 &&
     offsetof(global_State, l_registry) == 0xb0 && offsetof(global_State, uvhead) == 0xd0 &&
     offsetof(global_State, mt) == 0x108);
 LAYOUT(cclosure, offsetof(CClosure, f) == 0x30 && offsetof(CClosure, upvalue) == 0x38);

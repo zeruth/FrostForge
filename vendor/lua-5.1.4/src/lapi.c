@@ -760,8 +760,8 @@ LUA_API void lua_getfenv (lua_State *L, int idx) {
 }
 
 
-/* Blizzard: a closure's profile counters: its calls, and its time and its callees' time in
-** milliseconds (zero unless the state profiles scripts and the top is a function).
+/* Blizzard: a closure's profile counters: its calls, and its own time and its time with its
+** callees in milliseconds (zero unless the state profiles scripts and the top is a function).
 ** ref: FUN_1402b2ba0 */
 LUA_API void lua_getclosureprofile (lua_State *L, double *time, double *subtime, int *calls) {
   static double tickScale;  /* 0x142e20800 */
@@ -777,6 +777,38 @@ LUA_API void lua_getclosureprofile (lua_State *L, double *time, double *subtime,
   *time = 0.0;
   *subtime = 0.0;
   *calls = 0;
+}
+
+
+/* Blizzard: the accounting by taint (lgc.c). */
+
+/* ref: FUN_1402b2c70 */
+LUA_API size_t lua_gettaintmemory (lua_State *L, const char *taint) {
+  return luaC_gettaintmemory(L, taint);
+}
+
+
+/* ref: FUN_1402b2c80 */
+LUA_API double lua_gettaintcpu (lua_State *L, const char *taint) {
+  return luaC_gettaintcpu(L, taint);
+}
+
+
+/* ref: FUN_1402b2c90 */
+LUA_API void lua_resetcpu (lua_State *L) {
+  luaC_resetcpu(L);
+}
+
+
+/* ref: FUN_1402b2ca0 */
+LUA_API void lua_updatetaintmemory (lua_State *L) {
+  luaC_updatetaintmemory(L);
+}
+
+
+/* ref: FUN_1402b2cb0 */
+LUA_API void lua_updatetaintcpu (lua_State *L) {
+  luaC_updatetaintcpu(L);
 }
 
 

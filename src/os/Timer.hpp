@@ -22,5 +22,7 @@ void OsTimerSetSpeed(float speed);
 void OsTimerInitialize(int32_t method);
 int64_t OsTimerGetFrequency();
 uint64_t OsTimerGetTicks();
+// The raw GetTickCount milliseconds, whatever the timing method.
+uint32_t OsGetTickCount();
 
 #endif

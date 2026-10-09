@@ -65,6 +65,14 @@ typedef struct CallInfo {
 /*
 ** `global state', shared by all threads of this state
 */
+/* Blizzard: what the objects or functions carrying one taint add up to (0x18 bytes). */
+typedef struct TaintUsage {
+  const char *taint;
+  long long amount;  /* bytes, or profile ticks */
+  struct TaintUsage *next;
+} TaintUsage;
+
+
 typedef struct global_State {
   stringtable strt;  /* hash table for strings */
   lua_Alloc frealloc;  /* function to reallocate memory */
@@ -86,9 +94,9 @@ typedef struct global_State {
   lu_mem gcdept;  /* how much GC is `behind schedule' */
   int gcpause;  /* size of pause between successive GCs */
   int gcstepmul;  /* GC `granularity' */
+  TaintUsage *taintmemory;  /* Blizzard: bytes in use per taint (lua_updatetaintmemory) */
+  TaintUsage *taintcpu;  /* Blizzard: own profile ticks per taint (lua_updatetaintcpu) */
   lua_CFunction panic;  /* to be called in unprotected errors */
-  void *blizzarda0;  /* Blizzard: +0xa0 */
-  void *blizzarda8;  /* Blizzard: +0xa8 */
   TValue l_registry;
   struct lua_State *mainthread;
   UpVal uvhead;  /* head of double-linked list of all open upvalues */

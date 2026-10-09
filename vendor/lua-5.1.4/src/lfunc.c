@@ -6,6 +6,7 @@
 
 
 #include <stddef.h>
+#include <string.h>
 
 #define lfunc_c
 #define LUA_CORE
@@ -20,9 +21,21 @@
 
 
 
+/* Blizzard: a profile block, when the state profiles scripts. */
+static ClosureProfile *newprofile (lua_State *L) {
+  ClosureProfile *p;
+  if (!G(L)->profiling) return NULL;
+  p = cast(ClosureProfile *, luaM_malloc(L, sizeof(ClosureProfile)));
+  memset(p, 0, sizeof(ClosureProfile));
+  return p;
+}
+
+
+/* ref: FUN_1402bdff0 */
 Closure *luaF_newCclosure (lua_State *L, int nelems, Table *e) {
   Closure *c = cast(Closure *, luaM_malloc(L, sizeCclosure(nelems)));
   luaC_link(L, obj2gco(c), LUA_TFUNCTION);
+  c->c.profile = newprofile(L);
   c->c.isC = 1;
   c->c.env = e;
   c->c.nupvalues = cast_byte(nelems);
@@ -30,17 +43,23 @@ Closure *luaF_newCclosure (lua_State *L, int nelems, Table *e) {
 }
 
 
+/* Blizzard: a Lua closure made without a taint gets lua_closureTaint.
+** ref: FUN_1402be090 */
 Closure *luaF_newLclosure (lua_State *L, int nelems, Table *e) {
   Closure *c = cast(Closure *, luaM_malloc(L, sizeLclosure(nelems)));
   luaC_link(L, obj2gco(c), LUA_TFUNCTION);
+  c->l.profile = newprofile(L);
   c->l.isC = 0;
   c->l.env = e;
   c->l.nupvalues = cast_byte(nelems);
+  if (c->l.taint == NULL)
+    c->l.taint = lua_closureTaint;
   while (nelems--) c->l.upvals[nelems] = NULL;
   return c;
 }
 
 
+/* ref: FUN_1402be1e0 */
 UpVal *luaF_newupval (lua_State *L) {
   UpVal *uv = luaM_new(L, UpVal);
   luaC_link(L, obj2gco(uv), LUA_TUPVAL);
@@ -50,6 +69,7 @@ UpVal *luaF_newupval (lua_State *L) {
 }
 
 
+/* ref: FUN_1402bdd40 */
 UpVal *luaF_findupval (lua_State *L, StkId level) {
   global_State *g = G(L);
   GCObject **pp = &L->openupval;
@@ -66,6 +86,7 @@ UpVal *luaF_findupval (lua_State *L, StkId level) {
   }
   uv = luaM_new(L, UpVal);  /* not found: create a new one */
   uv->tt = LUA_TUPVAL;
+  uv->taint = luaT_newtaint();
   uv->marked = luaC_white(g);
   uv->v = level;  /* current value lives in the stack */
   uv->next = *pp;  /* chain it in the proper position */
@@ -86,6 +107,7 @@ static void unlinkupval (UpVal *uv) {
 }
 
 
+/* ref: FUN_1402bdf60 */
 void luaF_freeupval (lua_State *L, UpVal *uv) {
   if (uv->v != &uv->u.value)  /* is it open? */
     unlinkupval(uv);  /* remove from open list */
@@ -93,6 +115,7 @@ void luaF_freeupval (lua_State *L, UpVal *uv) {
 }
 
 
+/* ref: FUN_1402bdbf0 */
 void luaF_close (lua_State *L, StkId level) {
   UpVal *uv;
   global_State *g = G(L);
@@ -104,7 +127,7 @@ void luaF_close (lua_State *L, StkId level) {
       luaF_freeupval(L, uv);  /* free upvalue */
     else {
       unlinkupval(uv);
-      setobj(L, &uv->u.value, uv->v);
+      setobj_read(L, &uv->u.value, uv->v);
       uv->v = &uv->u.value;  /* now current value lives here */
       luaC_linkupval(L, uv);  /* link upvalue into `gcroot' list */
     }
@@ -112,6 +135,7 @@ void luaF_close (lua_State *L, StkId level) {
 }
 
 
+/* ref: FUN_1402be170 */
 Proto *luaF_newproto (lua_State *L) {
   Proto *f = luaM_new(L, Proto);
   luaC_link(L, obj2gco(f), LUA_TPROTO);
@@ -138,6 +162,7 @@ Proto *luaF_newproto (lua_State *L) {
 }
 
 
+/* ref: FUN_1402bdea0 */
 void luaF_freeproto (lua_State *L, Proto *f) {
   luaM_freearray(L, f->code, f->sizecode, Instruction);
   luaM_freearray(L, f->p, f->sizep, Proto *);
@@ -149,9 +174,12 @@ void luaF_freeproto (lua_State *L, Proto *f) {
 }
 
 
+/* ref: FUN_1402bde30 */
 void luaF_freeclosure (lua_State *L, Closure *c) {
   int size = (c->c.isC) ? sizeCclosure(c->c.nupvalues) :
                           sizeLclosure(c->l.nupvalues);
+  if (c->c.profile != NULL)
+    luaM_freemem(L, c->c.profile, sizeof(ClosureProfile));
   luaM_freemem(L, c, size);
 }
 
@@ -160,6 +188,7 @@ void luaF_freeclosure (lua_State *L, Closure *c) {
 ** Look for n-th local variable at line `line' in function `func'.
 ** Returns NULL if not found.
 */
+/* ref: FUN_1402bdf90 */
 const char *luaF_getlocalname (const Proto *f, int local_number, int pc) {
   int i;
   for (i = 0; i<f->sizelocvars && f->locvars[i].startpc <= pc; i++) {

@@ -19,6 +19,7 @@
 
 
 
+/* ref: FUN_1402b7bf0 */
 void luaS_resize (lua_State *L, int newsize) {
   GCObject **newhash;
   stringtable *tb;
@@ -47,6 +48,7 @@ void luaS_resize (lua_State *L, int newsize) {
 }
 
 
+/* Blizzard: a new string is stamped with the taint it was made under. */
 static TString *newlstr (lua_State *L, const char *str, size_t l,
                                        unsigned int h) {
   TString *ts;
@@ -58,6 +60,7 @@ static TString *newlstr (lua_State *L, const char *str, size_t l,
   ts->tsv.hash = h;
   ts->tsv.marked = luaC_white(G(L));
   ts->tsv.tt = LUA_TSTRING;
+  ts->tsv.taint = luaT_newtaint();
   ts->tsv.reserved = 0;
   memcpy(ts+1, str, l*sizeof(char));
   ((char *)(ts+1))[l] = '\0';  /* ending 0 */
@@ -72,6 +75,7 @@ static TString *newlstr (lua_State *L, const char *str, size_t l,
 }
 
 
+/* ref: FUN_1402b78d0 */
 TString *luaS_newlstr (lua_State *L, const char *str, size_t l) {
   GCObject *o;
   unsigned int h = cast(unsigned int, l);  /* seed */
@@ -93,6 +97,7 @@ TString *luaS_newlstr (lua_State *L, const char *str, size_t l) {
 }
 
 
+/* ref: FUN_1402b7b40 */
 Udata *luaS_newudata (lua_State *L, size_t s, Table *e) {
   Udata *u;
   if (s > MAX_SIZET - sizeof(Udata))
@@ -100,6 +105,7 @@ Udata *luaS_newudata (lua_State *L, size_t s, Table *e) {
   u = cast(Udata *, luaM_malloc(L, s + sizeof(Udata)));
   u->uv.marked = luaC_white(G(L));  /* is not finalized */
   u->uv.tt = LUA_TUSERDATA;
+  u->uv.taint = luaT_newtaint();
   u->uv.len = s;
   u->uv.metatable = NULL;
   u->uv.env = e;

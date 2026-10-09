@@ -39,6 +39,7 @@ typedef struct LG {
   
 
 
+/* ref: FUN_1402bdb30 */
 static void stack_init (lua_State *L1, lua_State *L) {
   /* initialize CallInfo array */
   L1->base_ci = luaM_newvector(L, BASIC_CI_SIZE, CallInfo);
@@ -67,6 +68,7 @@ static void freestack (lua_State *L, lua_State *L1) {
 /*
 ** open parts that may cause memory-allocation errors
 */
+/* ref: FUN_1402bd550 */
 static void f_luaopen (lua_State *L, void *ud) {
   global_State *g = G(L);
   UNUSED(ud);
@@ -102,6 +104,8 @@ static void preinit_state (lua_State *L, global_State *g) {
 }
 
 
+/* The reference also frees the anti-tamper taint copy (not ported).
+** ref: FUN_1402bd460 */
 static void close_state (lua_State *L) {
   global_State *g = G(L);
   luaF_close(L, L->stack);  /* close all upvalues for this thread */
@@ -116,12 +120,14 @@ static void close_state (lua_State *L) {
 }
 
 
+/* The reference also copies L's anti-tamper taint copy (not ported).
+** ref: FUN_1402bd690 */
 lua_State *luaE_newthread (lua_State *L) {
   lua_State *L1 = tostate(luaM_malloc(L, state_size(lua_State)));
   luaC_link(L, obj2gco(L1), LUA_TTHREAD);
   preinit_state(L1, G(L));
   stack_init(L1, L);  /* init stack */
-  setobj2n(L, gt(L1), gt(L));  /* share table of globals */
+  setobj_read(L, gt(L1), gt(L));  /* share table of globals */
   L1->hookmask = L->hookmask;
   L1->basehookcount = L->basehookcount;
   L1->hook = L->hook;
@@ -131,6 +137,7 @@ lua_State *luaE_newthread (lua_State *L) {
 }
 
 
+/* ref: FUN_1402bd620 */
 void luaE_freethread (lua_State *L, lua_State *L1) {
   luaF_close(L1, L1->stack);  /* close all upvalues for this thread */
   lua_assert(L1->openupval == NULL);
@@ -140,7 +147,11 @@ void luaE_freethread (lua_State *L, lua_State *L1) {
 }
 
 
-LUA_API lua_State *lua_newstate (lua_Alloc f, void *ud) {
+/* Blizzard: `profiling' gives every closure a profile block and has luaD_call run the
+** profiled interpreter. The reference also allocates the anti-tamper taint copy here (not
+** ported).
+** ref: FUN_1402bd8a0 */
+LUA_API lua_State *lua_newstate (lua_Alloc f, void *ud, int profiling) {
   int i;
   lua_State *L;
   global_State *g;
@@ -150,7 +161,9 @@ LUA_API lua_State *lua_newstate (lua_Alloc f, void *ud) {
   g = &((LG *)L)->g;
   L->next = NULL;
   L->tt = LUA_TTHREAD;
+  L->taint = luaT_newtaint();
   g->currentwhite = bit2mask(WHITE0BIT, FIXEDBIT);
+  g->profiling = (profiling != 0);
   L->marked = luaC_white(g);
   set2bits(L->marked, FIXEDBIT, SFIXEDBIT);
   preinit_state(L, g);
@@ -166,6 +179,8 @@ LUA_API lua_State *lua_newstate (lua_Alloc f, void *ud) {
   setnilvalue(registry(L));
   luaZ_initbuffer(L, &g->buff);
   g->panic = NULL;
+  g->taintmemory = NULL;
+  g->taintcpu = NULL;
   g->gcstate = GCSpause;
   g->rootgc = obj2gco(L);
   g->sweepstrgc = 0;
@@ -196,6 +211,7 @@ static void callallgcTM (lua_State *L, void *ud) {
 }
 
 
+/* ref: FUN_1402bd7f0 */
 LUA_API void lua_close (lua_State *L) {
   L = G(L)->mainthread;  /* only the main thread can be closed */
   lua_lock(L);

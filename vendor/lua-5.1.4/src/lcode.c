@@ -226,6 +226,7 @@ static void freeexp (FuncState *fs, expdesc *e) {
 }
 
 
+/* ref: FUN_1402c6850 */
 static int addk (FuncState *fs, TValue *k, TValue *v) {
   lua_State *L = fs->L;
   TValue *idx = luaH_set(L, fs->h, k);
@@ -240,7 +241,7 @@ static int addk (FuncState *fs, TValue *k, TValue *v) {
     luaM_growvector(L, f->k, fs->nk, f->sizek, TValue,
                     MAXARG_Bx, "constant table overflow");
     while (oldsize < f->sizek) setnilvalue(&f->k[oldsize++]);
-    setobj(L, &f->k[fs->nk], v);
+    setobj_read(L, &f->k[fs->nk], v);
     luaC_barrier(L, f, v);
     return fs->nk++;
   }

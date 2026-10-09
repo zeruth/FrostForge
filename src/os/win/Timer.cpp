@@ -248,3 +248,8 @@ int64_t OsTimerGetFrequency() {
 uint64_t OsTimerGetTicks() {
     return ReadTicks(OsTimerGet()->m_method);
 }
+
+// ref: FUN_141237e30
+uint32_t OsGetTickCount() {
+    return GetTickCount();
+}

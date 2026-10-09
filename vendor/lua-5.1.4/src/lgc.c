@@ -125,6 +125,7 @@ static void marktmu (global_State *g) {
 
 
 /* move `dead' udata that need finalization to list `tmudata' */
+/* ref: FUN_1402bedd0 */
 size_t luaC_separateudata (lua_State *L, int all) {
   global_State *g = G(L);
   size_t deadmem = 0;
@@ -404,6 +405,7 @@ static void freeobj (lua_State *L, GCObject *o) {
 #define sweepwholelist(L,p)	sweeplist(L,p,MAX_LUMEM)
 
 
+/* ref: FUN_1402bff40 */
 static GCObject **sweeplist (lua_State *L, GCObject **p, lu_mem count) {
   GCObject *curr;
   global_State *g = G(L);
@@ -442,6 +444,9 @@ static void checkSizes (lua_State *L) {
 }
 
 
+/* Blizzard: the __gc metamethod runs untainted, with taint tracking nested and the taint
+** state saved across errors, and lua_isingc true.
+** ref: FUN_1402be240 */
 static void GCTM (lua_State *L) {
   global_State *g = G(L);
   GCObject *o = g->tmudata->gch.next;  /* get first element */
@@ -458,14 +463,31 @@ static void GCTM (lua_State *L) {
   tm = fasttm(L, udata->uv.metatable, TM_GC);
   if (tm != NULL) {
     lu_byte oldah = L->allowhook;
+    lu_byte oldingc = L->ingc;
     lu_mem oldt = g->GCthreshold;
+    const char *oldtaint;
     L->allowhook = 0;  /* stop debug hooks during GC tag method */
+    L->ingc = 1;
     g->GCthreshold = 2*g->totalbytes;  /* avoid GC steps */
-    setobj2s(L, L->top, tm);
+    oldtaint = lua_taint;
+    lua_pushjmptaint(L, lua_taint, lua_taintTracking);
+    lua_taintTracking++;
+    if (lua_taintTracking && !lua_taintSuspended)
+      lua_taint = NULL;
+    setobj2s_read(L, L->top, tm);
     setuvalue(L, L->top+1, udata);
     L->top += 2;
     luaD_call(L, L->top - 2, 0);
+    if (lua_taintTracking && !lua_taintSuspended)
+      luaT_settaint(L, oldtaint);
+    lua_taintTracking--;
+    lua_popjmptaint(L);
+    if (lua_taintTracking < 1) {
+      lua_taintTracking = 0;
+      lua_firstTaint = NULL;
+    }
     L->allowhook = oldah;  /* restore hooks */
+    L->ingc = oldingc;
     g->GCthreshold = oldt;  /* restore threshold */
   }
 }
@@ -474,12 +496,14 @@ static void GCTM (lua_State *L) {
 /*
 ** Call all GC tag methods
 */
+/* ref: FUN_1402be820 */
 void luaC_callGCTM (lua_State *L) {
   while (G(L)->tmudata)
     GCTM(L);
 }
 
 
+/* ref: FUN_1402bead0 */
 void luaC_freeall (lua_State *L) {
   global_State *g = G(L);
   int i;
@@ -487,6 +511,157 @@ void luaC_freeall (lua_State *L) {
   sweepwholelist(L, &g->rootgc);
   for (i = 0; i < g->strt.size; i++)  /* free all string lists */
     sweepwholelist(L, &g->strt.hash[i]);
+  while (G(L)->taintmemory != NULL) {  /* Blizzard: the usage lists */
+    TaintUsage *u = G(L)->taintmemory;
+    G(L)->taintmemory = u->next;
+    luaM_freemem(L, u, sizeof(TaintUsage));
+  }
+  while (G(L)->taintcpu != NULL) {
+    TaintUsage *u = G(L)->taintcpu;
+    G(L)->taintcpu = u->next;
+    luaM_freemem(L, u, sizeof(TaintUsage));
+  }
+}
+
+
+/*
+** Blizzard: memory and CPU time by taint, which is how the client accounts for each
+** addon (its files run under its name as the taint).
+*/
+
+/* ref: FUN_1402bec60 */
+size_t luaC_gettaintmemory (lua_State *L, const char *taint) {
+  TaintUsage *u;
+  for (u = G(L)->taintmemory; u != NULL; u = u->next)
+    if (u->taint == taint) return (size_t)u->amount;
+  return 0;
+}
+
+
+/* Milliseconds.
+** ref: FUN_1402bec90 */
+double luaC_gettaintcpu (lua_State *L, const char *taint) {
+  static double tickScale;  /* 0x142e20818 */
+  TaintUsage *u;
+  for (u = G(L)->taintcpu; u != NULL; u = u->next) {
+    if (u->taint == taint) {
+      if (tickScale == 0.0)
+        tickScale = 1000.0 / (double)luai_timerfrequency();
+      return (double)u->amount * tickScale;
+    }
+  }
+  return 0.0;
+}
+
+
+static void addusage (lua_State *L, TaintUsage **list, const char *taint, long long n) {
+  TaintUsage *u;
+  for (u = *list; u != NULL; u = u->next) {
+    if (u->taint == taint) {
+      u->amount += n;
+      return;
+    }
+  }
+  u = cast(TaintUsage *, luaM_malloc(L, sizeof(TaintUsage)));
+  u->next = *list;
+  u->taint = taint;
+  u->amount = n;
+  *list = u;
+}
+
+
+/* What one object holds, as the collector's traversals count it (a Lua closure's profile
+** block included, a C closure's not).
+** ref: FUN_1402bfd70 */
+static void addmemory (lua_State *L, GCObject *o) {
+  for (; o != NULL; o = o->gch.next) {
+    const char *taint = o->gch.taint;
+    long long n;
+    if (taint == NULL) continue;
+    switch (o->gch.tt) {
+      case LUA_TSTRING: n = sizestring(gco2ts(o)); break;
+      case LUA_TTABLE: {
+        Table *h = gco2h(o);
+        n = sizeof(Table) + sizeof(TValue) * h->sizearray + sizeof(Node) * sizenode(h);
+        break;
+      }
+      case LUA_TFUNCTION: {
+        Closure *cl = gco2cl(o);
+        if (cl->c.isC)
+          n = sizeCclosure(cl->c.nupvalues);
+        else
+          n = sizeLclosure(cl->l.nupvalues) +
+              (cl->l.profile != NULL ? sizeof(ClosureProfile) : 0);
+        break;
+      }
+      case LUA_TUSERDATA: n = sizeudata(gco2u(o)); break;
+      case LUA_TTHREAD: {
+        lua_State *th = gco2th(o);
+        n = sizeof(lua_State) + sizeof(TValue) * th->stacksize +
+            sizeof(CallInfo) * th->size_ci;
+        break;
+      }
+      case LUA_TPROTO: {
+        Proto *p = gco2p(o);
+        n = sizeof(Proto) + sizeof(Instruction) * p->sizecode +
+            sizeof(Proto *) * p->sizep + sizeof(TValue) * p->sizek +
+            sizeof(int) * p->sizelineinfo + sizeof(LocVar) * p->sizelocvars +
+            sizeof(TString *) * p->sizeupvalues;
+        break;
+      }
+      case LUA_TUPVAL: n = sizeof(UpVal); break;
+      default: n = 0; break;
+    }
+    addusage(L, &G(L)->taintmemory, taint, n);
+  }
+}
+
+
+/* ref: FUN_1402beec0 */
+void luaC_updatetaintmemory (lua_State *L) {
+  global_State *g = G(L);
+  TaintUsage *u;
+  int i;
+  for (u = g->taintmemory; u != NULL; u = u->next)
+    u->amount = 0;
+  addmemory(L, g->rootgc);
+  for (i = 0; i < g->strt.size; i++)
+    addmemory(L, g->strt.hash[i]);
+}
+
+
+/* Each function's own profile time, summed by its taint.
+** ref: FUN_1402bf1b0 */
+void luaC_updatetaintcpu (lua_State *L) {
+  global_State *g = G(L);
+  TaintUsage *u;
+  GCObject *o;
+  if (!g->profiling) return;
+  for (u = g->taintcpu; u != NULL; u = u->next)
+    u->amount = 0;
+  for (o = g->rootgc; o != NULL; o = o->gch.next) {
+    if (o->gch.taint != NULL && o->gch.tt == LUA_TFUNCTION)
+      addusage(L, &G(L)->taintcpu, o->gch.taint, gco2cl(o)->c.profile->time);
+  }
+}
+
+
+/* ref: FUN_1402bf2a0 */
+void luaC_resetcpu (lua_State *L) {
+  global_State *g = G(L);
+  TaintUsage *u;
+  GCObject *o;
+  if (!g->profiling) return;
+  for (u = g->taintcpu; u != NULL; u = u->next)
+    u->amount = 0;
+  for (o = g->rootgc; o != NULL; o = o->gch.next) {
+    if (o->gch.tt == LUA_TFUNCTION) {
+      ClosureProfile *p = gco2cl(o)->c.profile;
+      p->time = 0;
+      p->subtime = 0;
+      p->calls = 0;
+    }
+  }
 }
 
 
@@ -498,6 +673,7 @@ static void markmt (global_State *g) {
 
 
 /* mark root set */
+/* ref: FUN_1402bf430 */
 static void markroot (lua_State *L) {
   global_State *g = G(L);
   g->gray = NULL;
@@ -522,6 +698,7 @@ static void remarkupvals (global_State *g) {
 }
 
 
+/* ref: FUN_1402be4b0 */
 static void atomic (lua_State *L) {
   global_State *g = G(L);
   size_t udsize;  /* total size of userdata to be finalized */
@@ -553,6 +730,7 @@ static void atomic (lua_State *L) {
 }
 
 
+/* ref: FUN_1402bfb80 */
 static l_mem singlestep (lua_State *L) {
   global_State *g = G(L);
   /*lua_checkmemory(L);*/
@@ -607,6 +785,7 @@ static l_mem singlestep (lua_State *L) {
 }
 
 
+/* ref: FUN_1402bef50 */
 void luaC_step (lua_State *L) {
   global_State *g = G(L);
   l_mem lim = (GCSTEPSIZE/100) * g->gcstepmul;
@@ -633,6 +812,7 @@ void luaC_step (lua_State *L) {
 }
 
 
+/* ref: FUN_1402bebb0 */
 void luaC_fullgc (lua_State *L) {
   global_State *g = G(L);
   if (g->gcstate <= GCSpropagate) {
@@ -659,6 +839,7 @@ void luaC_fullgc (lua_State *L) {
 }
 
 
+/* ref: FUN_1402be7f0 */
 void luaC_barrierf (lua_State *L, GCObject *o, GCObject *v) {
   global_State *g = G(L);
   lua_assert(isblack(o) && iswhite(v) && !isdead(g, v) && !isdead(g, o));
@@ -672,6 +853,7 @@ void luaC_barrierf (lua_State *L, GCObject *o, GCObject *v) {
 }
 
 
+/* ref: FUN_1402be7d0 */
 void luaC_barrierback (lua_State *L, Table *t) {
   global_State *g = G(L);
   GCObject *o = obj2gco(t);
@@ -683,15 +865,19 @@ void luaC_barrierback (lua_State *L, Table *t) {
 }
 
 
+/* Blizzard: stamps the object with the taint it was made under.
+** ref: FUN_1402bed10 */
 void luaC_link (lua_State *L, GCObject *o, lu_byte tt) {
   global_State *g = G(L);
   o->gch.next = g->rootgc;
   g->rootgc = o;
   o->gch.marked = luaC_white(g);
   o->gch.tt = tt;
+  o->gch.taint = luaT_newtaint();
 }
 
 
+/* ref: FUN_1402bed50 */
 void luaC_linkupval (lua_State *L, UpVal *uv) {
   global_State *g = G(L);
   GCObject *o = obj2gco(uv);
