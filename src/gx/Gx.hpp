@@ -272,4 +272,10 @@ void GxQueryDestroy(void* query);
 // ref: FUN_14228b6e0
 bool GxQueryInfo(void* query, uint8_t what, uint32_t* out);
 
+// How many frames the device buffers (+0x144), and which of them is being recorded (+0x13c).
+// ref: FUN_142288550
+uint32_t GxDeviceBufferedFrames();
+// ref: FUN_142288530
+uint32_t GxDeviceFrameSlot();
+
 #endif

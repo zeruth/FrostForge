@@ -341,6 +341,8 @@ uint32_t DB2PlainFieldValue(const uint8_t* record, const DBMeta* meta, int32_t f
 // table). File records of packed columns are decoded.
 uint8_t DB2FieldU8(const uint8_t* field, uint32_t index, int64_t offset, WowClientDB2_Base* table);
 uint16_t DB2FieldU16(const uint8_t* field, uint32_t index, int64_t offset, WowClientDB2_Base* table);
+// A float field: the same decodings, the bits taken as the float (not converted).
+float DB2FieldF32(const uint8_t* field, uint32_t index, int64_t offset, WowClientDB2_Base* table);
 uint32_t DB2FieldU32(const uint8_t* field, uint32_t index, int64_t offset, WowClientDB2_Base* table);
 int32_t DB2FieldI32(const uint8_t* field, uint32_t index, int64_t offset, WowClientDB2_Base* table);
 int16_t DB2FieldI16(const uint8_t* field, uint32_t index, int64_t offset, WowClientDB2_Base* table);

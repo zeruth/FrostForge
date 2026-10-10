@@ -2709,3 +2709,13 @@ bool GxQueryInfo(void* query, uint8_t what, uint32_t* out) {
     }
     return static_cast<CGxDevice*>(g_gxDevice)->QueryInfo(query, what, out);
 }
+
+// ref: FUN_142288550
+uint32_t GxDeviceBufferedFrames() {
+    return static_cast<CGxDevice*>(g_gxDevice)->Field<uint32_t>(0x144);
+}
+
+// ref: FUN_142288530
+uint32_t GxDeviceFrameSlot() {
+    return static_cast<CGxDevice*>(g_gxDevice)->Field<uint32_t>(0x13c);
+}

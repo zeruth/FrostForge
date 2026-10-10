@@ -521,6 +521,44 @@ uint16_t DB2FieldU16(const uint8_t* field, uint32_t index, int64_t offset, WowCl
     return TypedField<uint16_t>(field, index, offset, table);
 }
 
+// ref: FUN_1402dc640
+float DB2FieldF32(const uint8_t* field, uint32_t index, int64_t offset, WowClientDB2_Base* table) {
+    const uint8_t* record = field - offset;
+    float value = 0.0f;
+    if (!table->IsFileRecord(record)) {
+        std::memcpy(&value, record + table->m_meta->m_fieldOffsets[index], sizeof(value));
+        return value;
+    }
+    const DB2FIELDINFO* info = &table->m_fieldInfo[static_cast<int32_t>(index)];
+    uint32_t bits = 0;
+    switch (info->m_storage) {
+        case 1:
+            bits = static_cast<uint32_t>(ReadBits(field, info->m_value1, info->m_value2));
+            break;
+        case 2: {
+            uint32_t* common = table->m_commonData[static_cast<int32_t>(index)].Find(
+                static_cast<int32_t>(table->PackedId(field)));
+            bits = common != nullptr ? *common : info->m_value1;
+            break;
+        }
+        case 3: {
+            uint64_t slot = ReadBits(field, info->m_value1, info->m_value2) & 0xFFFFFFFF;
+            std::memcpy(&bits, reinterpret_cast<const uint8_t*>(table->m_pallets[static_cast<int32_t>(index)].m_data) + slot * 4, 4);
+            break;
+        }
+        case 5: {
+            uint32_t raw = static_cast<uint32_t>(ReadBits(field, info->m_value1, info->m_value2));
+            uint32_t sign = 1u << ((info->m_value2 - 1) & 0x1f);
+            bits = (raw ^ sign) - sign;
+            break;
+        }
+        default:
+            return 0.0f;
+    }
+    std::memcpy(&value, &bits, 4);
+    return value;
+}
+
 // ref: FUN_140233370
 uint32_t DB2FieldU32(const uint8_t* field, uint32_t index, int64_t offset, WowClientDB2_Base* table) {
     return TypedField<uint32_t>(field, index, offset, table);

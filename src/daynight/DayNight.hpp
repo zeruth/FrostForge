@@ -56,6 +56,30 @@ inline T& DNField(void* base, size_t offset) {
     return *reinterpret_cast<T*>(static_cast<uint8_t*>(base) + offset);
 }
 
+// ---- the zone lights ----------------------------------------------------------------------
+
+// A ZoneLight row as the scene keeps it (0x48): its Light record and distance once selected,
+// the zone's id and light, its bounds, and the fade it is on.
+struct CZONELIGHT {
+    const void* m_light;            // 0x00 the Light record, once selected
+    float m_distance;               // 0x08 how far inside, once selected
+    int32_t m_id;                   // 0x0c the ZoneLight id
+    uint32_t m_lightId;             // 0x10
+    int32_t m_14;                   // 0x14 the selection's first sort key (not written by the reference)
+    float m_min[3];                 // 0x18
+    float m_max[3];                 // 0x24
+    float m_fadeFrom;               // 0x30
+    float m_fadeTo;                 // 0x34
+    float m_fade;                   // 0x38
+    float m_fadeDuration;           // 0x3c
+    float m_fadeStart;              // 0x40
+    uint32_t m_44;
+};
+static_assert(sizeof(CZONELIGHT) == 0x48, "CZONELIGHT is 0x48 bytes");
+
+extern const char s_dnTagZoneLight[];       // ".?AVCZoneLight@DayNight@@"
+typedef blz::vector<CZONELIGHT, s_dnTagZoneLight> CZONELIGHTVECTOR;
+
 // ---- the light state (0x1600 at the scene's +0) --------------------------------------------
 
 struct DNLIGHT {
@@ -140,6 +164,10 @@ struct DNCLOUDS {
     // The last user's release of the shared pipelines.
     // ref: FUN_142450a00
     void Release();
+    // The textures the colour grid goes into, made the first time, and the grid's next columns
+    // uploaded; a finished pass flips the texture drawn from.
+    // ref: FUN_142452f30
+    void Upload(DNScene* scene);
 };
 static_assert(offsetof(DNCLOUDS, m_textures) == 0x40, "DNCLOUDS layout");
 static_assert(offsetof(DNCLOUDS, m_density) == 0x70, "DNCLOUDS layout");
@@ -273,7 +301,6 @@ struct DNAREALIGHTOVERRIDE {
 };
 
 extern const char s_dnTagAreaOverride[];    // ".?AV?$TSFixedArray@UAreaLightOverride@DayNight@@$07@@"
-extern const char s_dnTagZoneLight[];       // ".?AVCZoneLight@DayNight@@"
 extern const char s_dnTagPairIntFloat[];    // ".?AU?$pair@HM@blz@@"
 
 struct DNScene {
@@ -283,9 +310,7 @@ struct DNScene {
     uint8_t m_1602;                                         // 0x1602 1
     uint8_t m_1603;                                         // 0x1603 1
     uint32_t m_pad1604;
-    uint8_t* m_zoneLights;                                  // 0x1608 blz::vector<CZoneLight>
-    uint64_t m_zoneLightCount;                              // 0x1610
-    uint64_t m_zoneLightCapacity;                           // 0x1618
+    CZONELIGHTVECTOR m_zoneLights;                          // 0x1608 the map's
     DNCLOUDS m_clouds;                                      // 0x1620
     DNSunGlare m_sunGlare;                                  // 0x1728
     DNMoonGlare m_moonGlare;                                // 0x1800
@@ -344,6 +369,21 @@ struct DNScene {
     void SetMap(int32_t mapId);
     // ref: FUN_142443a40
     void UnloadMap();
+    // The map's zone lights from ZoneLight and ZoneLightPoint (when asked), then their fades.
+    // ref: FUN_1424628c0
+    void UpdateZoneLights(float now);
+    // The zone lights the position is inside, nearest first, at most five.
+    // ref: FUN_1424623b0
+    void SelectZoneLights(const float* position);
+    // ref: FUN_142454cf0
+    void AddZoneLight(const void* light, float distance, const CZONELIGHT* zone);
+    // Each frame on the world's animate pass (FUN_142443dc0 through the handle).
+    // ref: FUN_14245e3f0
+    void Update(const float* position);
+    // After the animate pass: the colour grading for a view that asks (flag 0x40), and the
+    // clouds' upload while the light is live.
+    // ref: FUN_14245e340
+    void PrepareFrame(void* env, bool colorGrading);
 };
 static_assert(offsetof(DNScene, m_loaded) == 0x1600, "DNScene layout");
 static_assert(offsetof(DNScene, m_clouds) == 0x1620, "DNScene layout");
@@ -388,6 +428,11 @@ void DayNightSetView(DAYNIGHT* dayNight, CWorldView* view, const float* position
 
 // The light ids of `areaId` (FUN_142453550): the Light rows on that continent with a position,
 // and first the one without (or 1 when there is none).
+// ref: FUN_142443dc0
+void DayNightUpdate(DAYNIGHT* dayNight, const float* position);
+// ref: FUN_142443db0
+void DayNightPrepareFrame(DAYNIGHT* dayNight, void* env, bool colorGrading);
+
 // ref: FUN_142453550
 void DayNightGatherLights(blz::vector<int32_t, s_dnTagInt>* lights, int32_t areaId);
 

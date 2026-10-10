@@ -49,7 +49,7 @@ void (*s_afterHwDetect)();          // DAT_142e303c0
 
 
 // The localized glue strings' DB2 (DAT_142e94e90), and its record lookup.
-// ref: FUN_14057b640
+// (WowClientDB2::GetRecord, FUN_14057b640, on that table)
 const char* GlobalStringsGet(uint32_t id, const char* fallback) {
     (void)id;
     FROST_UNIMPLEMENTED();  // WowClientDB2::GetRecord: the strings table is not loaded this early yet

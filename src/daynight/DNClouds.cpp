@@ -4,6 +4,7 @@
 #include "client/RenderSettings.hpp"
 #include "gx/Gx.hpp"
 #include "gx/GxPipeline.hpp"
+#include "gx/GxRenderTargets.hpp"
 #include "texture/Texture.hpp"
 #include <cmath>
 #include <cstdlib>
@@ -309,4 +310,111 @@ void DNCLOUDS::Release() {
         GxPipelineDestroy(&s_reflectionPipeline);
         TextureFree(&s_texture);
     }
+}
+
+namespace {
+
+// The grid's rows as the upload reads them (the reference's generic reader, LAB_1405e13c0).
+struct ROWSOURCE {
+    uint32_t m_pitch;
+    uint32_t m_pad04;
+    const void* m_data;
+};
+
+// LAB_1405e13c0
+void ReadRows(void* param, uint32_t width, uint32_t height, uint32_t slice, uint32_t mip, uint32_t* pitch,
+    const void** data) {
+    (void)width;
+    (void)height;
+    (void)slice;
+    (void)mip;
+    auto source = static_cast<ROWSOURCE*>(param);
+    *pitch = source->m_pitch;
+    *data = source->m_data;
+}
+
+// A GxTex's size and whether it is ready (its ushorts at +0 and +2, bit 0 of +0x10).
+uint16_t TexWidth(void* tex) {
+    return static_cast<uint16_t*>(tex)[0];
+}
+
+uint16_t TexHeight(void* tex) {
+    return static_cast<uint16_t*>(tex)[1];
+}
+
+bool TexReady(void* tex) {
+    return (static_cast<uint16_t*>(tex)[8] & 1) != 0;
+}
+
+// FUN_1424520f0: the whole grid into one texture.
+// ref: FUN_1424520f0
+void UploadWhole(GxRenderContext* context, void* tex, uint32_t pitch, const void* data) {
+    int32_t rect[4] = {0, 0, TexHeight(tex), TexWidth(tex)};
+    ROWSOURCE source = {pitch, 0, data};
+    GxTexUpdateInFrame(context, tex, rect, false, ReadRows, &source);
+}
+
+}  // namespace
+
+// ref: FUN_142452f30
+void DNCLOUDS::Upload(DNScene* scene) {
+    GxRenderContext* context = g_gxRenderContext;
+    if (this->m_textures.size() == 0) {
+        uint32_t frames = GxDeviceBufferedFrames();
+        this->m_104 = frames;
+        if (frames == 1) {
+            frames = 2;
+        }
+        // FUN_142453320: blz::vector<unique_ptr<GxTex>>::resize.
+        this->m_textures.resize(frames);
+        for (uint64_t i = 0; i < this->m_textures.size(); i++) {
+            void* tex = nullptr;
+            bool created = GxTexCreateParams(0, static_cast<uint32_t>(this->m_gridSize),
+                static_cast<uint32_t>(this->m_gridSize), 1, this->m_24, 2, 0x10082001, nullptr, &tex);
+            void* old = this->m_textures[i];
+            this->m_textures[i] = tex;
+            if (old != nullptr) {
+                GxTexDestroy(&old);
+            }
+            void* current = this->m_textures[i];
+            if (created && TexReady(current)) {
+                ROWSOURCE source = {static_cast<uint32_t>(this->m_gridSize << 2), 0, this->m_colors.data()};
+                int32_t rect[4] = {0, 0, TexHeight(current), TexWidth(current)};
+                GxTexUpdateInFrame(context, current, rect, false, ReadRows, &source);
+            }
+        }
+    } else if (this->m_104 < 2) {
+        void* tex = this->m_textures[static_cast<uint8_t>(this->m_08 - 1) & 1];
+        if (tex != nullptr && TexReady(tex)) {
+            int32_t rect[4] = {0, static_cast<int32_t>(this->m_1c), this->m_gridSize,
+                static_cast<int32_t>(this->m_1c + static_cast<uint32_t>(this->m_cells))};
+            ROWSOURCE source = {static_cast<uint32_t>(this->m_gridSize << 2), 0, this->m_colors.data()};
+            GxTexUpdateInFrame(context, tex, rect, false, ReadRows, &source);
+        }
+    } else {
+        void* tex = this->m_textures[GxDeviceFrameSlot()];
+        if (tex != nullptr && TexReady(tex)) {
+            UploadWhole(context, tex, static_cast<uint32_t>(this->m_gridSize << 2), this->m_colors.data());
+        }
+    }
+    uint32_t column = this->m_20 + this->m_1c;
+    this->m_1c = column;
+    if (column < static_cast<uint32_t>(this->m_gridSize)) {
+        this->m_20 = 0;
+        return;
+    }
+    auto pass = static_cast<int16_t>(static_cast<int32_t>(
+        static_cast<float>(scene->m_light.Field<uint32_t>(0x50)) * this->m_10));
+    if (pass == static_cast<int16_t>(this->m_0a)) {
+        if (this->m_dirty == 0) {
+            this->m_1c = 0;
+            this->m_20 = 0;
+            return;
+        }
+    } else {
+        this->m_0a = static_cast<uint16_t>(pass);
+    }
+    this->m_08 = static_cast<uint8_t>((this->m_08 - 1) & 1);
+    this->m_1c = 0;
+    this->m_20 = 0;
 }

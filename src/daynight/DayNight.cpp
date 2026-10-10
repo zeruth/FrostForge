@@ -153,9 +153,6 @@ DNColorGrading::~DNColorGrading() {
 
 // ref: FUN_1424587b0
 DNScene::DNScene(CWorldScene* worldScene, CWorldView* view) {
-    this->m_zoneLights = nullptr;
-    this->m_zoneLightCount = 0;
-    this->m_zoneLightCapacity = 0;
     this->m_1bf0 = 0;
     std::memset(this->m_1bf9, 0, sizeof(this->m_1bf9));
     this->m_overrideBuckets = 8;
@@ -254,10 +251,7 @@ DNScene::~DNScene() {
         this->m_overrideTable = nullptr;
     }
     // m_sky, the glares, m_clouds and m_light run their destructors.
-    if (static_cast<int64_t>(this->m_zoneLightCapacity) >= 0) {
-        SMemFree(this->m_zoneLights, s_dnTagZoneLight, -6, 0);
-        this->m_zoneLights = nullptr;
-    }
+    // m_zoneLights frees its storage as blz::vector does.
 }
 
 // ref: FUN_142443a40
@@ -444,4 +438,25 @@ void DayNightSetView(DAYNIGHT* dayNight, CWorldView* view, const float* position
     (void)clip;
     (void)viewMatrix;
     FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_142443dc0
+void DayNightUpdate(DAYNIGHT* dayNight, const float* position) {
+    dayNight->m_scene->Update(position);
+}
+
+// ref: FUN_142443db0
+void DayNightPrepareFrame(DAYNIGHT* dayNight, void* env, bool colorGrading) {
+    dayNight->m_scene->PrepareFrame(env, colorGrading);
+}
+
+// ref: FUN_14245e340
+void DNScene::PrepareFrame(void* env, bool colorGrading) {
+    if (colorGrading) {
+        FROST_UNIMPLEMENTED();  // FUN_1424506d0 x2: the colour grading blends (env's +0x5bc picks the pair)
+    }
+    (void)env;
+    if (this->m_light.Field<uint32_t>(0x15f0) != 0) {
+        this->m_clouds.Upload(this);
+    }
 }
