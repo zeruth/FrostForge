@@ -18,6 +18,7 @@
 #include "ui/CLayoutFrame.hpp"
 #include "ui/CScriptObject.hpp"
 #include "ui/CSimpleButton.hpp"
+#include "ui/CSimpleMovieFrame.hpp"
 #include "ui/CSimpleEditBox.hpp"
 #include "ui/CSimpleSlider.hpp"
 #include "ui/CSimpleScrollFrame.hpp"
@@ -283,9 +284,7 @@ CSimpleFrame* CreateColorSelect(CSimpleFrame* parent) {
 
 // ref: FUN_140662120
 CSimpleFrame* CreateMovieFrame(CSimpleFrame* parent) {
-    (void)parent;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    return new CSimpleMovieFrame(parent);
 }
 
 // ref: FUN_140661e50

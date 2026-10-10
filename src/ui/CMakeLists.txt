@@ -18,6 +18,8 @@ add_library(ui STATIC
     CSimpleEditBoxScript.cpp
     CSimpleFontedFrame.cpp
     FrameTime.cpp
+    CSimpleMovieFrame.cpp
+    OldMovie.cpp
     CSimpleFrame.cpp
     CSimpleFrameScript.cpp
     CSimpleRegion.cpp
