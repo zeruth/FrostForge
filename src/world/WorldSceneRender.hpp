@@ -15,6 +15,8 @@ struct WORLDRENDERPARAMS;
 #include <cstdint>
 
 class ShaderEffectContext;
+class GxRenderContext;
+struct GXRENDERTARGETS;
 struct THREADPOOLGROUP;
 
 // The pass state cleared by FUN_1413ce660 (0x108).
@@ -72,6 +74,9 @@ struct WORLDRENDERRESOLVE {
 
     // ref: FUN_1412bc9b0
     void OnDeviceDestroyed();
+    // Its buffers and borrowed target handed back.
+    // ref: FUN_1412b8160
+    void Release();
 };
 static_assert(sizeof(WORLDRENDERRESOLVE) == 0x250, "WORLDRENDERRESOLVE is 0x250 bytes");
 
@@ -138,6 +143,19 @@ class CWorldSceneRender {
     // The frame's passes.
     // ref: FUN_1413cf390
     void Draw();
+    // ref: FUN_1413d6ec0
+    void SetEnvironmentConstants(GxRenderContext* context, ShaderEffectContext* effect, bool farFog);
+    // ref: FUN_1413d6d00
+    void ClearFrame(GXRENDERTARGETS* targets, bool clearDepth);
+    // A pass's deferred command list, or null when the pass draws directly.
+    // ref: FUN_1413cecc0
+    void* GetCommandList(uint32_t slot);
+    // ref: FUN_1413cee80
+    bool UsesCommandLists(uint32_t slot);
+    // ref: FUN_1413d47c0
+    void DrawOpaque(FRAMEBUFFER* buffer);
+    // ref: FUN_1413d07b0
+    void DrawTransparent(GXRENDERTARGETS* targets, GXRENDERTARGETS* targets2);
     // The world scene's ray-traced shadow targets (FUN_1413ceb50) and its ray tracing jobs
     // (FUN_1413d8c80).
     // ref: FUN_1413ceb50

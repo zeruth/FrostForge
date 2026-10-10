@@ -10,6 +10,7 @@
 #include "gx/d3d12/DeviceD3d12.hpp"
 #include "model2/M2Scene.hpp"
 #include "os/Sync.hpp"
+#include "shadereffect/ShaderEffectContext.hpp"
 #include "threadpool/ThreadPool.hpp"
 #include "ui/FrameTime.hpp"
 #include "util/Unimplemented.hpp"
@@ -38,7 +39,7 @@ struct RENDERCALLBACKFRAME {
     CWorldView* m_view;
 };
 
-void RunCallbacks(CRenderCallbackList& callbacks, RENDERCALLBACKFRAME* frame) {
+void RunCallbackList(CRenderCallbackList& callbacks, RENDERCALLBACKFRAME* frame) {
     for (CRenderCallback* callback = callbacks.Head(); callback != nullptr; callback = callbacks.Next(callback)) {
         callback->m_function(callback->m_param, callback->m_data, frame);
     }
@@ -454,7 +455,7 @@ void CWorldScene::PreRender(WORLDRENDERPARAMS* params) {
             m2Scene->m_time += step;
             m2Scene->m_timeStep = step;
         }
-        RunCallbacks(this->m_callbacks[0], &frame);
+        RunCallbackList(this->m_callbacks[0], &frame);
         InterlockedExchange(reinterpret_cast<volatile long*>(&m2Scene->m_particles.m_used), 0);
         WORLDFRUSTUM frustum;
         for (float(&plane)[4] : frustum.m_planes) {
@@ -476,11 +477,11 @@ void CWorldScene::PreRender(WORLDRENDERPARAMS* params) {
             RayTracingUpdate(rayTracing);
         }
         FrameScratchReset();
-        RunCallbacks(this->m_callbacks[1], &frame);
+        RunCallbackList(this->m_callbacks[1], &frame);
         m2Scene->m_030 = this->m_view;
         m2Scene->m_owner = this;
     }
-    RunCallbacks(this->m_callbacks[2], &frame);
+    RunCallbackList(this->m_callbacks[2], &frame);
     view->RunList(0);
     SceneOcclusionWait(&view->m_occlusion, view, 2);
     view->LatchCamera();
@@ -654,4 +655,31 @@ void WorldSceneSetEnvironment(uint8_t (*environment)[0xe0], CWorldScene* scene, 
     (void)color;
     (void)shadowFactor;
     FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1413c2d80
+void CWorldScene::RunCallbacks(uint32_t stage, void* frame) {
+    CRenderCallbackList& callbacks = this->m_callbacks[stage];
+    for (CRenderCallback* callback = callbacks.Head(); callback != nullptr; callback = callbacks.Next(callback)) {
+        callback->m_function(callback->m_param, callback->m_data, frame);
+    }
+}
+
+// ref: FUN_1413c7fa0
+void CWorldScene::BeginShadingRate(GxRenderContext* context) {
+    if (ShaderEffectShadingRateOn() && this->m_19b8 != nullptr) {
+        const uint8_t combiners[2] = {0, 1};
+        context->SetShadingRateCombiners(combiners);
+        context->Slot138();
+        FROST_UNIMPLEMENTED();  // the context's shading rate image (+0x138) set to +0x19b8
+    }
+}
+
+// ref: FUN_1413c8060
+void CWorldScene::EndShadingRate(GxRenderContext* context) {
+    if (GxVariableRateShadingSupported(2)) {
+        const uint8_t combiners[2] = {0, 0};
+        context->SetShadingRateCombiners(combiners);
+        FROST_UNIMPLEMENTED();  // the context's shading rate image (+0x138) cleared
+    }
 }

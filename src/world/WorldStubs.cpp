@@ -244,3 +244,8 @@ const float* MapWeatherColor(void* weather) {
 const float* MapWeatherDirection(void* weather) {
     return reinterpret_cast<const float*>(static_cast<uint8_t*>(weather) + 0x120c);
 }
+
+// ref: FUN_14138c750
+float MapWeatherIntensity(void* weather) {
+    return *reinterpret_cast<float*>(static_cast<uint8_t*>(weather) + 0x1228);
+}

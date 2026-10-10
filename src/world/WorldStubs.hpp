@@ -35,7 +35,8 @@ void MapWeatherDestroy(void* weather);
 // The weather's density, colour and direction (+0x1224, +0x1218, +0x120c).
 float MapWeatherDensity(void* weather);         // FUN_14138c730
 const float* MapWeatherColor(void* weather);    // FUN_14138c740
-const float* MapWeatherDirection(void* weather);    // FUN_14138c760          // FUN_14138b150
+const float* MapWeatherDirection(void* weather);    // FUN_14138c760
+float MapWeatherIntensity(void* weather);       // FUN_14138c750          // FUN_14138b150
 
 // The object fadeouts (TSList<SObjectFadeout>, DAT_142d011b8 / DAT_142d011e0).
 void WorldSceneFreeObjectFadeouts();            // the loop in FUN_1413c3a40

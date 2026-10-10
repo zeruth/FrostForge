@@ -46,6 +46,7 @@ static_assert(sizeof(CRenderCallback) == 0x30, "CRenderCallback is 0x30 bytes");
 typedef TSList<CRenderCallback, TSGetLink<CRenderCallback>, 8> CRenderCallbackList;
 
 struct FRAMEBUFFER;
+class GxRenderContext;
 
 // What the scene draws into and from where (0x88 bytes, built by FUN_1424d0a40 for
 // CWorldScene::Render).
@@ -267,6 +268,15 @@ class CWorldScene {
     void RenderWater(WORLDRENDERPARAMS* params);
     // ref: FUN_1413c9880
     void GatherLights();
+    // The callbacks of a stage run with the frame.
+    // ref: FUN_1413c2d80
+    void RunCallbacks(uint32_t stage, void* frame);
+    // The shading rate image set for the opaque M2s (FUN_1413c7fa0) and cleared after
+    // (FUN_1413c8060).
+    // ref: FUN_1413c7fa0
+    void BeginShadingRate(GxRenderContext* context);
+    // ref: FUN_1413c8060
+    void EndShadingRate(GxRenderContext* context);
     // The view's camera, weather and water into DayNight, its frame computed, and its light
     // direction and colours, water colour and fogs copied into the scene for the models.
     // ref: FUN_1413c8aa0

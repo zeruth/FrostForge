@@ -244,12 +244,6 @@ void CWorldSceneRender::Begin(CWorldScene* scene, CWorldView* view, WORLDRENDERP
     ShaderEffectSetSecondMap(this->m_effectContext, static_cast<uint8_t>(scene->m_680) == 2);
 }
 
-// The frame's passes (FUN_1413cf390): the M2 scene's elements and weather, the shadow and
-// opaque passes, liquids, the transparent passes and the resolve. Not ported yet.
-// ref: FUN_1413cf390
-void CWorldSceneRender::Draw() {
-    FROST_UNIMPLEMENTED();
-}
 
 // Only the world's own scene (type 6) traces shadows; its targets are not ported.
 // ref: FUN_1413ceb50
@@ -270,4 +264,15 @@ void CWorldSceneRender::DispatchRayTracing(bool rayTracing) {
         return;
     }
     FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1412b8160
+void WORLDRENDERRESOLVE::Release() {
+    FrameBufferRelease(&this->m_buffer);
+    if (this->m_temp.m_tex != nullptr) {
+        FrameBufferTempRelease(&this->m_temp);
+    }
+    if (this->m_buffer2.m_targets.m_count != 0) {
+        FrameBufferRelease(&this->m_buffer2);
+    }
 }

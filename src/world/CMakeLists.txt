@@ -7,6 +7,7 @@ add_library(world STATIC
     WorldFade.cpp
     WorldFrame.cpp
     WorldSceneDraw.cpp
+    WorldSceneRenderDraw.cpp
     WorldMap.cpp
     WorldScene.cpp
     WorldSceneCallbacks.cpp
