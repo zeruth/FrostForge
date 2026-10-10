@@ -374,6 +374,8 @@ void M2SequenceLoadsFree(TSList<CM2SequenceLoad, TSGetLink<CM2SequenceLoad>, 8>*
 // The file's destruction back into its pool (FUN_141197460).
 void M2SharedFree(CM2Shared* shared);
 
+// 16-byte aligned memory, its offset kept in the byte before (FUN_1412be640).
+void* M2AlignedAlloc(uint32_t size, const char* file, int32_t line, int32_t flags, uint32_t extra);
 // A file read's memory (FUN_1412be750).
 void M2FreeFileData(void* data);
 // A skin profile's buffers go (FUN_1411a6bf0).

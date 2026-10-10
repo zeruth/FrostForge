@@ -209,11 +209,8 @@ CM2Model::~CM2Model() {
     }
 }
 
-// The physics bones' textures released (FUN_141201d60) and the GPU batches freed
-// (FUN_1411cdb90).
-// ref: FUN_1411cdb90
-void CM2Model::ReleaseGpuBatches() {
-    // FUN_141201d60
+// ref: FUN_141201d60
+void CM2Model::ReleasePhysicsBoneTextures() {
     for (uint32_t i = 0; i < this->m_physicsBoneCount; i++) {
         uint8_t* bone = static_cast<uint8_t*>(this->m_physicsBoneStates) + i * 0xe0;
         for (uint32_t slot = 0; slot < 3; slot++) {
@@ -226,6 +223,12 @@ void CM2Model::ReleaseGpuBatches() {
         bone[0xdc] = 0;
         bone[0xda] = 0;
     }
+}
+
+// The physics bones' textures released and the GPU batches freed (FUN_1411cdb90).
+// ref: FUN_1411cdb90
+void CM2Model::ReleaseGpuBatches() {
+    this->ReleasePhysicsBoneTextures();
     for (uint32_t i = 0; i < this->m_5f0; i++) {
         this->m_5f8[i] = nullptr;
     }
@@ -331,11 +334,225 @@ void M2ModelUnlinkWaiting(CM2Model* model) {
     model->m_waitNext = nullptr;
 }
 
-// ref: FUN_1411c24f0
 bool M2ModelInitializeLoaded(CM2Model* model) {
-    (void)model;
-    FROST_UNIMPLEMENTED();
-    return false;
+    return model->InitializeLoaded();
+}
+
+namespace {
+
+// The files whose models take the modelFlags2 bits 0x8000 and 0x10000 (DAT_142721100,
+// DAT_142721140).
+const int32_t s_flag8000Files[16] = {
+    0x36632b, 0x368244, 0x368245, 0x368246, 0x368248, 0x368249, 0x36824a, 0x36824b,
+    0x36824c, 0x36824d, 0x36824e, 0x36824f, 0x368250, 0x368251, 0x368252, 0x08c7c7,
+};
+const int32_t s_flag10000Files[9] = {
+    0x30f6d0, 0x30f6d1, 0x309f42, 0x37023e, 0x30f6d3, 0x30f6d5, 0x30f6d6, 0x3ae6fd, 0x3d03b6,
+};
+
+// An effect copied from a donor's, its textures referenced again.
+M2ModelEffect* CopyEffect(const M2ModelEffect* from) {
+    M2ModelEffect* effect = M2ModelEffectAlloc();
+    if (effect == nullptr) {
+        return nullptr;
+    }
+    std::memcpy(effect, from, 0xa8);
+    for (void* texture : effect->m_textures) {
+        if (texture != nullptr) {
+            TextureAddRef(static_cast<HTEXTURE>(texture));
+        }
+    }
+    return effect;
+}
+
+}  // namespace
+
+// ref: FUN_1411c1360
+void CM2Model::Initialize(CM2Scene* scene, CM2Shared* shared, CM2Model* donor, uint8_t lod, uint32_t createFlags) {
+    this->AddToScene(scene);
+    this->m_createTime = this->m_scene->m_time;
+    this->m_shared = shared;
+    shared->AddModelRef();
+    this->m_lod = lod;
+    this->m_lodTarget = lod;
+    this->m_lodRequested = lod;
+    this->m_donor = donor;
+    CM2Shared* own = this->m_shared;
+    this->m_fileBounds = own->m_bounds;
+    this->m_createFlags = createFlags;
+    // The file's 0x400 (it has bounds) as bit 29.
+    this->m_flags ^= ((own->m_flags << 19) ^ this->m_flags) & 0x20000000;
+    this->m_callsTail = &this->m_calls;
+    this->m_initTime = this->m_scene->m_time;
+    if (donor != nullptr) {
+        donor->AddRef();
+        this->m_lod = donor->m_lod;
+        this->m_lodTarget = donor->m_lodTarget;
+        this->m_lodRequested = donor->m_lodRequested;
+        CM2Shared* file = this->m_shared;
+        if (file->m_textures != nullptr && donor->m_textures != nullptr) {
+            for (uint32_t i = 0; i < file->m_data->m_textures.Count(); i++) {
+                void* texture = donor->m_textures[i];
+                if (file->m_textures[i] != texture) {
+                    int32_t type = static_cast<int32_t>(file->m_data->m_textures[i].m_type);
+                    this->SetReplaceableTexture(type, static_cast<HTEXTURE>(texture),
+                        type == 1 ? static_cast<HTEXTURE*>(donor->m_4e0) : nullptr);
+                }
+                file = this->m_shared;
+            }
+        }
+        this->m_color = donor->m_color;
+        this->m_colorAdd = donor->m_colorAdd;
+        uint32_t flags = ((this->m_modelFlags ^ donor->m_modelFlags) & 0x20000000) ^ this->m_modelFlags;
+        flags = ((flags ^ donor->m_modelFlags) & 0x4000000) ^ flags;
+        this->m_flags ^= (this->m_flags ^ donor->m_flags) & 0x4000000;
+        this->m_modelFlags = ((flags ^ donor->m_modelFlags) & 0x80000) ^ flags;
+        if (donor->m_extraMatrix != nullptr) {
+            if (this->m_extraMatrix == nullptr) {
+                auto matrix = static_cast<C44Matrix*>(s_matrixPool->Alloc());
+                std::memset(matrix, 0, sizeof(C44Matrix));
+                matrix->m[0] = 1.0f;
+                matrix->m[5] = 1.0f;
+                matrix->m[10] = 1.0f;
+                matrix->m[15] = 1.0f;
+                this->m_extraMatrix = matrix;
+            }
+            *this->m_extraMatrix = *donor->m_extraMatrix;
+        }
+        this->m_flags ^= (this->m_flags ^ donor->m_flags) & BASE_VISIBLE;
+        this->m_local = donor->m_local;
+        this->m_648 = donor->m_648;
+        if (donor->m_effect != nullptr) {
+            this->m_effect = CopyEffect(static_cast<M2ModelEffect*>(donor->m_effect));
+        }
+        if (donor->m_effect2 != nullptr) {
+            this->m_effect2 = CopyEffect(static_cast<M2ModelEffect*>(donor->m_effect2));
+        }
+        this->m_0d = donor->m_0d;
+    }
+    uint32_t flag8000 = 0;
+    for (int32_t id : s_flag8000Files) {
+        if (id == this->m_shared->m_fileDataId) {
+            flag8000 = 0x8000;
+            break;
+        }
+    }
+    uint32_t flags2 = this->m_modelFlags2;
+    this->m_modelFlags2 = (flags2 & 0xffff7fff) | flag8000;
+    uint32_t flag10000 = 0;
+    for (int32_t id : s_flag10000Files) {
+        if (id == this->m_shared->m_fileDataId) {
+            flag10000 = 0x10000;
+            break;
+        }
+    }
+    this->m_modelFlags2 = (flags2 & 0xfffe7fff) | flag8000 | flag10000;
+    M2SharedAttachModel(this->m_shared, this);
+}
+
+// A model made of the file: initialized now if the file and its skin profiles are in, else
+// it waits on the file (FUN_1411a5230).
+// ref: FUN_1411a5230
+bool M2SharedAttachModel(CM2Shared* shared, CM2Model* model) {
+    if ((shared->m_flags & CM2Shared::SHARED_LOADED) == 0 || shared->m_skinProfileLoads.Head() != nullptr) {
+        M2ModelLinkWaiting(model);
+        return true;
+    }
+    void* skeleton = model->m_skeleton;
+    if (shared->m_skeleton != nullptr && (*reinterpret_cast<uint8_t*>(static_cast<uint8_t*>(shared->m_skeleton) + 0x10) & 1) == 0) {
+        FROST_UNIMPLEMENTED();  // FUN_1411f6860: the skeleton file's load
+    }
+    bool skeletonReady = skeleton == nullptr || (*(static_cast<uint8_t*>(skeleton) + 0x28) & 1) != 0;
+    bool initialized = model->InitializeLoaded();
+    return initialized && skeletonReady;
+}
+
+// The texture of every slot of replaceable type `type` replaced, the particles' too; type 1 also
+// takes the five extra textures (FUN_1411c8e40).
+// ref: FUN_1411c8e40
+void CM2Model::SetReplaceableTexture(int32_t type, HTEXTURE texture, HTEXTURE* extra) {
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        M2ModelCall* call = M2ModelCallAlloc();
+        if (call == nullptr) {
+            return;
+        }
+        call->m_type = 0;
+        call->m_next = nullptr;
+        call->m_frame = this->m_scene->m_time;
+        call->m_args[0] = static_cast<uint32_t>(type);
+        if (texture != nullptr) {
+            TextureAddRef(texture);
+        }
+        auto slots = reinterpret_cast<HTEXTURE*>(&call->m_args[2]);
+        slots[0] = texture;
+        for (int32_t i = 0; i < 5; i++) {
+            slots[1 + i] = extra != nullptr ? extra[i] : nullptr;
+            if (extra != nullptr && extra[i] != nullptr) {
+                TextureAddRef(extra[i]);
+            }
+        }
+        *this->m_callsTail = call;
+        this->m_callsTail = &call->m_next;
+        return;
+    }
+    M2Data* data = this->m_shared->m_data;
+    for (uint32_t i = 0; i < data->m_textures.Count(); i++) {
+        if (static_cast<int32_t>(data->m_textures[i].m_type) != type) {
+            continue;
+        }
+        if (texture != nullptr) {
+            TextureAddRef(texture);
+        }
+        auto slot = reinterpret_cast<HTEXTURE*>(&this->m_textures[i]);
+        if (*slot != nullptr) {
+            TextureFree(slot);
+        }
+        this->m_textures[i] = texture;
+        if (texture != nullptr) {
+            if (TextureGetGxTex(texture) == nullptr) {
+                this->m_flags &= ~BASE_TEXTURES_READY;
+            }
+            if (TextureLoadState(texture) != 2) {
+                this->m_flags &= ~0x20u;
+                for (CM2BaseModel* above = this->m_parent; above != nullptr; above = above->m_parent) {
+                    above->m_flags &= ~BASE_READY_CHECKED;
+                }
+            }
+        }
+    }
+    if (type == 1 && extra != nullptr) {
+        auto own = static_cast<HTEXTURE*>(this->m_4e0);
+        for (int32_t i = 0; i < 5; i++) {
+            if (own[i] != nullptr) {
+                TextureFree(&own[i]);
+            }
+            if (extra[i] != nullptr) {
+                own[i] = extra[i];
+                TextureAddRef(own[i]);
+            }
+        }
+    }
+    for (uint32_t i = 0; i < data->m_particles.Count(); i++) {
+        M2Particle& particle = data->m_particles[i];
+        uint16_t slots = particle.m_texture;
+        if ((particle.m_flags & 0x10000000) == 0) {
+            if (static_cast<int32_t>(data->m_textures[slots].m_type) == type) {
+                ParticleEmitterSetTexture(this->m_particles[i], 0, texture);
+            }
+            continue;
+        }
+        if (static_cast<int32_t>(data->m_textures[slots & 0x1f].m_type) == type) {
+            ParticleEmitterSetTexture(this->m_particles[i], 0, texture);
+        }
+        if (static_cast<int32_t>(data->m_textures[slots >> 5 & 0x1f].m_type) == type) {
+            ParticleEmitterSetTexture(this->m_particles[i], 1, texture);
+        }
+        if (static_cast<int32_t>(data->m_textures[slots >> 10 & 0x1f].m_type) == type) {
+            ParticleEmitterSetTexture(this->m_particles[i], 2, texture);
+        }
+    }
+    this->m_modelFlags &= ~2u;
+    this->ReleasePhysicsBoneTextures();
 }
 
 // ref: FUN_1411c5d90
@@ -345,6 +562,20 @@ void M2ModelInitializePools() {
     s_matrixPool = MakePool("M2 Model Matrix Pool", 0x44, 8, 0x1b8);
     s_windPhasePool = MakePool("M2 Model Wind Phase Pool", 0x10, 0x40, 0x1b9);
     s_boneSeqPool = MakePool("M2 Bone Seq Pool", 0x68, 0x400, 0x3d66);
+}
+
+// ref: FUN_141200760
+void M2PhysicsBoneInit(void* state) {
+    auto raw = static_cast<uint8_t*>(state);
+    std::memset(raw, 0, 0xdd);
+    *reinterpret_cast<float*>(raw + 0x58) = 1.0f;
+    *reinterpret_cast<float*>(raw + 0x6c) = 1.0f;
+    *reinterpret_cast<float*>(raw + 0x80) = 1.0f;
+    *reinterpret_cast<float*>(raw + 0x94) = 1.0f;
+}
+
+void* M2ModelWindPhaseAlloc() {
+    return s_windPhasePool->Alloc();
 }
 
 TObjectAllocHeap* M2GetBoneSeqPool() {

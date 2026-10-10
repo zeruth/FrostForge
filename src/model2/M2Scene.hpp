@@ -91,6 +91,9 @@ void RayTracingUpdateInstance(void* rayTracing, const int32_t* entry, const floa
 void RayTracingRemoveInstance(void* rayTracing, const int32_t* entry);
 void RayTracingRemoveModel(void* rayTracing, const int32_t* entry);
 
+// A copy of a model in the scene (FUN_1411dd490): the same file and state, not yet attached.
+CM2BaseModel* M2SceneCloneModel(CM2Scene* scene, CM2BaseModel* model, bool a3);
+
 // ref: FUN_1411ace60
 BaseModelDrawParams* M2SceneAddDrawParams(void* array);
 // A box against a frustum's six planes: 0 when outside, else 3 (FUN_141346830).

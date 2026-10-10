@@ -26,6 +26,21 @@ class CRibbonEmitter {
 static_assert(offsetof(CRibbonEmitter, m_heightAbove) == 0x1cc, "CRibbonEmitter heights at 0x1cc");
 static_assert(sizeof(CRibbonEmitter) == 0x1d8, "CRibbonEmitter is 0x1d8 bytes");
 
+class CTexture;
+
+// A ribbon made in place (FUN_141296530) and set up with its material, colour, textures, blend
+// and texture types (FUN_1412966c0); its edges cleared (FUN_141296cf0); its quality from
+// RibbonQuality (FUN_141296f20, the id kept at 0x1a0); a texture layer (FUN_141297050); on or off
+// (FUN_1412970f0); a colour override (FUN_141296f00).
+CRibbonEmitter* RibbonEmitterConstruct(void* memory);
+void RibbonEmitterInitialize(CRibbonEmitter* ribbon, uint32_t material, const uint32_t* color, CTexture** textures,
+    const uint32_t* blend, const uint32_t* types);
+void RibbonEmitterReset(CRibbonEmitter* ribbon);
+void RibbonEmitterSetQuality(CRibbonEmitter* ribbon, uint32_t quality);
+uint16_t RibbonEmitterGetQuality(const CRibbonEmitter* ribbon);
+void RibbonEmitterSetTexture(CRibbonEmitter* ribbon, uint32_t layer, CTexture* texture);
+void RibbonEmitterSetEnabled(CRibbonEmitter* ribbon, bool enabled);
+void RibbonEmitterSetColorOverride(CRibbonEmitter* ribbon, float r, float g, float b);
 // The matrix the ribbon's edges are kept relative to, null for world space (FUN_1412966b0).
 void RibbonEmitterSetParentMatrix(CRibbonEmitter* ribbon, const C44Matrix* matrix);
 // ref: FUN_141296be0

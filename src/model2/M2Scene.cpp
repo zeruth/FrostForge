@@ -130,3 +130,13 @@ void RayTracingMarkDirty(void* rayTracing, const int32_t* entry) {
         instance[0x80] |= 1;
     }
 }
+
+// Ported with CM2Scene.
+// ref: FUN_1411dd490
+CM2BaseModel* M2SceneCloneModel(CM2Scene* scene, CM2BaseModel* model, bool a3) {
+    (void)scene;
+    (void)model;
+    (void)a3;
+    FROST_UNIMPLEMENTED();
+    return nullptr;
+}

@@ -68,3 +68,64 @@ void RibbonEmitterUpdate(CRibbonEmitter* ribbon, float delta, bool hidden) {
     (void)hidden;
     FROST_UNIMPLEMENTED();
 }
+
+// ref: FUN_141296530
+CRibbonEmitter* RibbonEmitterConstruct(void* memory) {
+    (void)memory;
+    FROST_UNIMPLEMENTED();
+    return nullptr;
+}
+
+// ref: FUN_1412966c0
+void RibbonEmitterInitialize(CRibbonEmitter* ribbon, uint32_t material, const uint32_t* color, CTexture** textures, const uint32_t* blend, const uint32_t* types) {
+    (void)ribbon;
+    (void)material;
+    (void)color;
+    (void)textures;
+    (void)blend;
+    (void)types;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141296cf0
+void RibbonEmitterReset(CRibbonEmitter* ribbon) {
+    (void)ribbon;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141296f20
+void RibbonEmitterSetQuality(CRibbonEmitter* ribbon, uint32_t quality) {
+    (void)ribbon;
+    (void)quality;
+    FROST_UNIMPLEMENTED();
+}
+
+uint16_t RibbonEmitterGetQuality(const CRibbonEmitter* ribbon) {
+    (void)ribbon;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_141297050
+void RibbonEmitterSetTexture(CRibbonEmitter* ribbon, uint32_t layer, CTexture* texture) {
+    (void)ribbon;
+    (void)layer;
+    (void)texture;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1412970f0
+void RibbonEmitterSetEnabled(CRibbonEmitter* ribbon, bool enabled) {
+    (void)ribbon;
+    (void)enabled;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141296f00
+void RibbonEmitterSetColorOverride(CRibbonEmitter* ribbon, float r, float g, float b) {
+    (void)ribbon;
+    (void)r;
+    (void)g;
+    (void)b;
+    FROST_UNIMPLEMENTED();
+}

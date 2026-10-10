@@ -474,6 +474,15 @@ void M2SkeletonSetScene(void* skeleton, CM2Scene* scene) {
     FROST_UNIMPLEMENTED();
 }
 
+// FUN_1411f9c00: a skeleton instance made for a model.
+void* M2SkeletonCreateInstance(void* skeleton, CM2Scene* scene, uint32_t flags) {
+    (void)skeleton;
+    (void)scene;
+    (void)flags;
+    FROST_UNIMPLEMENTED();
+    return nullptr;
+}
+
 // FUN_141204240: a skeleton instance's reference dropped.
 void M2SkeletonInstanceRelease(void* skeleton) {
     (void)skeleton;

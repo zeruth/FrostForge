@@ -26,6 +26,7 @@ class CM2Camera;
 class TObjectAllocHeap;
 class CParticleEmitter2;
 class CRibbonEmitter;
+class CTexture;
 
 struct C44Matrix {
     float m[16];
@@ -100,8 +101,10 @@ static_assert(sizeof(M2ModelCall) == 0xa0, "M2ModelCall is 0xa0 bytes");
 
 // The effect a model draws with (FUN_1411e6cc0).
 void* M2BaseModelGetEffect(CM2BaseModel* model);
-// A call from the pool, its type -1 (FUN_1411e75d0).
+// A call from the pool, its type -1 (FUN_1411e75d0), and one freed with what it holds
+// (FUN_1411e6b40).
 M2ModelCall* M2ModelCallAlloc();
+void M2ModelCallFree(M2ModelCall** call);
 
 // An attachment made later in the cache's update (0x18).
 struct M2PendingAttach {
@@ -866,6 +869,44 @@ class CM2Model : public CM2BaseModel {
     // A file flagged 0x20 registers its physics shape with the scene's ray tracing (FUN_1411c5ad0).
     void RegisterRayTracing();
 
+    // The textures of a replaceable type (FUN_1411c8e40) and the physics bones' textures
+    // released (FUN_141201d60).
+    void SetReplaceableTexture(int32_t type, CTexture* texture, CTexture** extra);
+    void ReleasePhysicsBoneTextures();
+    // InitializeLoaded's parts: the no-particles flag, the anim state's arrays (FUN_1411b7d80),
+    // the queued calls' replay, the donor copy and its LOD masks (FUN_1411b7970).
+    void UpdateNoParticlesFlag();
+    void SetupAnimState();
+    void RunQueuedCalls();
+    void CopyFromDonor(uint32_t* sequence);
+    void CopyLodMasks(CM2Model* other);
+    // The public setters (M2ModelApi.cpp), each queued until the file is in.
+    void SetTextureAt(uint32_t index, CTexture* texture);
+    bool SetGeosets(uint32_t lo, uint32_t hi, uint32_t show);
+    void SetSkinSections(uint32_t lo, uint32_t hi, uint32_t show);
+    void SetBoneFlags(uint32_t keyBone, uint32_t value, uint32_t mask);
+    void SetSequenceTime(uint32_t keyBone, int32_t time);
+    void SetLightEnabled(uint32_t index, uint32_t enabled);
+    void SetParticleColors(uint32_t colorIndex, uint32_t start, uint32_t middle, uint32_t end);
+    void SetParticlesEnabled(int32_t enabled);
+    void SetRibbonsEnabled(uint32_t enabled);
+    void StopParticles();
+    void PrefetchTextures();
+    void SetKeyBoneWeight(uint32_t keyBone, float weight);
+    void SetBoneWeight(uint32_t bone, float weight);
+    void SetBoneFile(int32_t fileDataId);
+    void ShareBonesWithAttached();
+    void SetRibbonQuality(uint32_t quality);
+    void OnChildLoaded(CM2BaseModel* child, uint32_t id);
+    void SetEffect(int32_t type, const void* params);
+    bool ComputeEffectProjection(struct M2ModelEffect* effect);
+    void SetShownSectionCount(int32_t count);
+    int32_t CountShownSections();
+    C3Vector* GetEventPosition(C3Vector* out, int32_t id);
+    void AttachChildAtEvent(CM2BaseModel* child, float scale, int32_t eventId, bool clamp);
+    void CreateGpuBatches();
+    void ShareParentBones();
+
     // Set up from the loaded file (FUN_1411c1360): `donor` lends its textures and state.
     void Initialize(CM2Scene* scene, CM2Shared* shared, CM2Model* donor, uint8_t lod, uint32_t createFlags);
     // ref: FUN_1411c24f0
@@ -938,6 +979,14 @@ TObjectAllocHeap* M2GetBoneSeqPool();
 // The file's waiting list (FUN_1411c62e0 joins at the tail, FUN_1411cdb30 leaves).
 void M2ModelLinkWaiting(CM2Model* model);
 void M2ModelUnlinkWaiting(CM2Model* model);
+// A skeleton instance for a model (FUN_1411f9c00).
+void* M2SkeletonCreateInstance(void* skeleton, CM2Scene* scene, uint32_t flags);
+// A physics bone's state cleared (FUN_141200760).
+void M2PhysicsBoneInit(void* state);
+// A wind phase from its pool (DAT_1430a0f58).
+void* M2ModelWindPhaseAlloc();
+// A new model joins its file: initialized now, or waiting for the file (FUN_1411a5230).
+bool M2SharedAttachModel(CM2Shared* shared, CM2Model* model);
 // The file is in: the model sets itself up from it (FUN_1411c24f0).
 bool M2ModelInitializeLoaded(CM2Model* model);
 // CM2Model's pools (FUN_1411c5d90).

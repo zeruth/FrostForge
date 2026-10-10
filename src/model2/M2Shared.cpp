@@ -57,7 +57,7 @@ void CopyName(char* dest, const char* source) {
 
 // The memory of the files read (FUN_1412be640, FUN_1412be750): 16-byte aligned, the alignment
 // shift kept in the byte before.
-void* AlignedAlloc(uint32_t size, const char* file, int32_t line, int32_t flags, uint32_t extra) {
+void* AlignedAllocImpl(uint32_t size, const char* file, int32_t line, int32_t flags, uint32_t extra) {
     if (flags == 0) {
         flags = 1;
     }
@@ -70,6 +70,11 @@ void* AlignedAlloc(uint32_t size, const char* file, int32_t line, int32_t flags,
     return memory + shift;
 }
 
+}
+
+// ref: FUN_1412be640
+void* M2AlignedAlloc(uint32_t size, const char* file, int32_t line, int32_t flags, uint32_t extra) {
+    return AlignedAllocImpl(size, file, line, flags, extra);
 }
 
 // ref: FUN_1412be750
@@ -85,12 +90,12 @@ namespace {
 // The async reads' buffers (FUN_1411a4f00 for the model, FUN_1411a4f30 for bone files).
 // ref: FUN_1411a4f00
 void* AllocModelBuffer(uint32_t size) {
-    return AlignedAlloc(size, s_sharedFile, 0x489, 0x12, 0);
+    return AlignedAllocImpl(size, s_sharedFile, 0x489, 0x12, 0);
 }
 
 // ref: FUN_1411a4f30
 void* AllocBoneBuffer(uint32_t size) {
-    return AlignedAlloc(size, s_sharedFile, 0x822, 0x12, 0);
+    return AlignedAllocImpl(size, s_sharedFile, 0x822, 0x12, 0);
 }
 
 // The read's error: the reason it failed, taken from the CAS for the next model error
