@@ -425,7 +425,7 @@ void CWorldScene::PreRender(WORLDRENDERPARAMS* params) {
                 }
             }
             DayNightSetWater(this->m_dayNight, underwater == 1, fog, covered != 0, waterDepth);
-            DayNightComputeSunDirection(this->m_dayNight, view->m_matrices[3]);
+            DayNightComputeSunDirection(this->m_dayNight, view->m_matrices[4]);
             if (this->m_dayNight != nullptr) {
                 DayNightPrepareFrame(this->m_dayNight, &this->m_farClip, (view->m_flags & 0x40) != 0);
             }
@@ -447,8 +447,8 @@ void CWorldScene::PreRender(WORLDRENDERPARAMS* params) {
         float maximum[3];
         GxXformGetViewport(&minimum[0], &maximum[0], &minimum[1], &maximum[1], &minimum[2], &maximum[2]);
         m2Scene->SetView(reinterpret_cast<const C3Vector*>(params->m_position),
-            reinterpret_cast<const C44Matrix*>(params->m_view->m_matrices[3]),
-            reinterpret_cast<const C44Matrix*>(params->m_view->m_matrices[4]), minimum, maximum, true);
+            reinterpret_cast<const C44Matrix*>(params->m_view->m_matrices[4]),
+            reinterpret_cast<const C44Matrix*>(params->m_view->m_matrices[5]), minimum, maximum, true);
         m2Scene->FlushLodChanges();
         if (own == view) {
             int32_t step = static_cast<int32_t>(std::nearbyint(params->m_elapsed * 1000.0f));    // DAT_14261b418
