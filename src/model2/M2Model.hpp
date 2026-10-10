@@ -813,6 +813,13 @@ class CM2Model : public CM2BaseModel {
     // or a function called.
     void RunCallback(const M2ModelCallback* callback);
     void RunSequenceCallback(const M2ModelCallback* callback);
+    // A sequence's events over (from, cursor] queued (FUN_1411b8f30), with the key bone they
+    // report and their position through the bone.
+    uint32_t DispatchEvents(M2BoneState* state, M2Array<M2Sequence>* sequences, M2Array<M2CompBone>* bones,
+        uint32_t bone, uint32_t sequence, uint32_t base, uint32_t duration, uint32_t from, uint32_t cursor,
+        uint32_t now, void* callbacks);
+    uint32_t EventKeyBone(M2Array<M2CompBone>* bones, uint32_t bone);
+    void EventPosition(const M2Event* event, float* out);
     // The projected batches' world objects remade through the scene (FUN_1411b6750), each
     // from its batch's projection (FUN_1411be9e0).
     void UpdateProjectedBatches();
@@ -1005,6 +1012,8 @@ bool M2ModelInitializeLoaded(CM2Model* model);
 void M2ModelInitializePools();
 // FUN_1411b7d60
 void M2ModelSetFlag400(bool set);
+// Whether a skeleton plays a sequence for a model's bone (FUN_141203b80).
+bool M2SkeletonHasPlayback(void* skeleton, CM2Model* model, uint16_t bone, bool primary);
 // A model's draw parameters at their defaults (FUN_1411acff0).
 void M2ModelParamsInit(CM2ModelParams* params);
 // The module's own scene (DAT_1430a0ed0, FUN_141196e40(9, ...)).

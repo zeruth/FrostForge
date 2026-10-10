@@ -595,13 +595,6 @@ void CM2Model::CollectEvents(M2SceneDrawList* list, void* callbacks) {
     }
 }
 
-// ref: FUN_1411b8670
-bool CM2Model::QueueEvents(M2SceneDrawList* list, void* callbacks) {
-    (void)list;
-    (void)callbacks;
-    FROST_UNIMPLEMENTED();  // the animation events (FUN_1411b8f30) into M2ModelCallbacks
-    return true;
-}
 
 // ref: FUN_1411bd840
 int32_t CM2Model::GetFileDataId() {

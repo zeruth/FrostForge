@@ -327,6 +327,8 @@ void M2SceneDrawListPostAnimate(M2SceneDrawList* list);
 // A model's animated box on screen, merged into `rect` (FUN_1411d6fc0).
 void M2SceneProjectScreenRect(CM2BaseModel* model, const C44Matrix* view, const C44Matrix* projection,
     const float* viewportMin, const float* viewportMax, float* rect);
+// Appends a callback (FUN_1411cee10).
+void M2ModelCallbacksPush(M2SceneVector<M2ModelCallback>* callbacks, const M2ModelCallback* callback);
 // Resizes a callback vector, zeroing what it adds (FUN_1411e5770).
 void M2ModelCallbacksResize(M2SceneVector<M2ModelCallback>* callbacks, uint64_t count);
 // A box against a frustum's six planes: 0 when outside, else 3 (FUN_141346830).

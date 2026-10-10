@@ -166,14 +166,6 @@ void CM2Model::RunCallback(const M2ModelCallback* callback) {
     }
 }
 
-// Kind 0 is queued only by the event collection (FUN_1411b8670), which is not ported yet, so
-// none reaches here.
-// ref: FUN_1411b5780
-void CM2Model::RunSequenceCallback(const M2ModelCallback* callback) {
-    (void)callback;
-    FROST_UNIMPLEMENTED();
-}
-
 // ref: FUN_1411b6750
 void CM2Model::UpdateProjectedBatches() {
     CM2Scene* scene = this->m_scene;
