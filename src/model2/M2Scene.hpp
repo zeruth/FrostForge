@@ -17,6 +17,8 @@
 
 struct M2CACHE;
 class CM2Lighting;
+class GxRenderContext;
+class ShaderEffectContext;
 
 // The draw parameters a scene collects per pass (BaseModelDrawParams, 0x20): the model and its
 // box (FUN_1411ace60 appends one to a pass's array at scene + 0x328 + pass * 0x18).
@@ -129,7 +131,7 @@ class CM2Scene {
     uint32_t m_viewFrame;                       // 0x00a8 the frame the view was last set in
     uint32_t m_0ac;
     uint32_t m_flags;                           // 0x00b0 0x40 no model lighting, 0x200 ...
-    uint32_t m_pad0b4;
+    float m_0b4;                                // 0x00b4 the object fill's clock
     uint64_t m_0b8;                             // 0x00b8
     CM2Lighting* m_lightings;                   // 0x00c0 linked through +0x90
     uint32_t m_maxLights;                       // 0x00c8 8
@@ -158,18 +160,23 @@ class CM2Scene {
     float m_viewportMax[3];                     // 0xd550
     uint8_t m_d55c[4];
     void* m_frustum;                            // 0xd560
-    float m_d568[4];                            // 0xd568 (0, 0, 0, 1)
-    C44Matrix m_d578;                           // 0xd578
-    C44Matrix m_d5b8;                           // 0xd5b8
-    C44Matrix m_d5f8;                           // 0xd5f8
-    uint8_t m_d638[0xd664 - 0xd638];
+    float m_d568[4];                            // 0xd568 (0, 0, 0, 1) the fog colour the passes start from
+    // The view the passes draw with, latched from the frame's (FUN_1411df600).
+    C44Matrix m_drawView;                       // 0xd578
+    C44Matrix m_drawInverseView;                // 0xd5b8
+    C44Matrix m_drawProjection;                 // 0xd5f8
+    C3Vector m_drawCameraPosition;              // 0xd638
+    float m_d644[4];                            // 0xd644 set by the world scene
+    float m_d654[4];                            // 0xd654
     float m_screenRect[4];                      // 0xd664 its models' on screen
     float m_animateRatio;                       // 0xd674 screen size past which animation is light
     // What draws the projected batches' states, and its parameter (FUN_1411e0780): the world's
     // decals.
     void* m_d678;                               // 0xd678
     void* m_d680;                               // 0xd680
-    uint8_t m_d688[0x10];
+    // Draws a projected batch through the world's decals, and its first argument.
+    void (*m_decalCallback)(void* draw);        // 0xd688
+    void* m_decalParam;                         // 0xd690
     // Traces a segment against the world: the hit point and how far along it is (1 for none).
     void (*m_traceCallback)(void* query, float* hit, float* t);  // 0xd698
     void* m_d6a0;                               // 0xd6a0
@@ -253,6 +260,15 @@ class CM2Scene {
     void RunCallbacks(M2SceneDrawList* list);
     // The view for a frame (FUN_1411e0f30): the camera's position, the view and projection
     // matrices and the viewport's corners; `advance` steps the frame.
+    // A pass's elements drawn (FUN_1411d9460), or one part of `parts` of its plain
+    // (FUN_1411dbf60) or instanced (FUN_1411daef0) elements; `shader` holds the constants the
+    // draws start from.
+    void DrawPass(GxRenderContext* context, ShaderEffectContext* shader, uint8_t pass);
+    void DrawPassPart(GxRenderContext* context, ShaderEffectContext* shader, uint8_t pass, uint8_t parts, uint8_t part);
+    void DrawPassInstancedPart(GxRenderContext* context, ShaderEffectContext* shader, uint8_t pass, uint8_t parts,
+        uint8_t part);
+    // The frame's view becomes the one the passes draw with (FUN_1411df600).
+    void LatchView();
     void SetView(const C3Vector* cameraPosition, const C44Matrix* view, const C44Matrix* projection,
         const float* viewportMin, const float* viewportMax, bool advance);
     // Every model told the render settings changed (FUN_1411df6e0).
@@ -301,6 +317,13 @@ inline void M2SceneSampleWind(CM2Scene* scene, float* direction, float* speed, f
 // pairs) and the stencil references of the outline passes (DAT_1430a1240, DAT_1430a1250), made
 // when the device comes up (FUN_1411d9090).
 extern uint64_t g_m2DepthStencil[8][8];
+// The blend a pass draws a blend mode with (DAT_142721290), the blend words (DAT_142cfb1a8), the
+// blend modes drawn opaque by the lit sphere (DAT_142721268) and a blend mode's effect-pass
+// blend (DAT_142721390).
+extern const int32_t g_m2PassBlend[14][8];
+extern const uint16_t g_m2BlendWords[9];
+extern const int32_t g_m2BlendOpaque[8];
+extern const int32_t g_m2EffectBlend[8];
 extern uint32_t g_m2OutlineStencil[3];
 extern uint32_t g_m2OutlineStencilFill[3];
 void M2SceneStatesInitialize();
@@ -309,6 +332,12 @@ void M2SceneStatesInitialize();
 extern bool g_m2OutlineEnabled;
 void M2SceneSetOutline(bool enabled);
 void M2SceneClearOutline();
+// The passes drawn (DAT_142cfb1a0, all of them) and a Gx byte the custom model draws clear
+// around their call (DAT_14348b641).
+extern uint32_t g_m2DrawPassMask;
+extern uint8_t g_gx8b641;
+// The draws' compiled-out trace (FUN_1411a61b0).
+void M2SceneDebugLog(GxRenderContext* context, const char* format, ...);
 
 // A scene of a kind, made, set up and put on the cache's list (FUN_141196e40). `owner` is what
 // made it; the two after it are kept beside it.

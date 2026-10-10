@@ -342,7 +342,7 @@ void ShaderEffectContext::SetBatch7b4(float a, float b) {
 }
 
 // ref: FUN_1412adf50
-void ShaderEffectContext::SetBlend(const RENDERSETTINGS* settings, uint8_t blend, float a4, uint8_t a5, uint8_t a6) {
+void ShaderEffectContext::SetBlend(const RENDERSETTINGS* settings, uint8_t blend, uint32_t lit, uint8_t a5, uint8_t a6) {
     uint32_t kind;
     if (blend == 0) {
         kind = 1;
@@ -360,7 +360,7 @@ void ShaderEffectContext::SetBlend(const RENDERSETTINGS* settings, uint8_t blend
     this->Field<uint32_t>(0x7c4) = kind;
     this->Field<uint32_t>(0x7cc) = a5;
     this->Field<uint32_t>(0x7d0) = a6;
-    this->Field<float>(0x7c8) = a4;
+    this->Field<uint32_t>(0x7c8) = lit;
     this->Field<uint8_t>(BATCH_DIRTY) = 1;
 }
 
@@ -556,6 +556,20 @@ uint32_t ShaderEffectEnvironmentFogKind(const uint8_t* environment, uint32_t ind
         return *reinterpret_cast<const uint32_t*>(environment + 0x5b8);
     }
     return 1;
+}
+
+// ref: FUN_1412af940
+float* ShaderEffectEnvironmentRect(const uint8_t* environment, float* out) {
+    auto e = reinterpret_cast<const float*>(environment);
+    float right = e[5];
+    float left = e[3];
+    float bottom = e[4];
+    float top = e[2];
+    out[0] = (right - left) * 0.5f;
+    out[1] = (bottom - top) * -0.5f;
+    out[2] = ((left + 1.0f) - (1.0f - right)) * 0.5f;
+    out[3] = (((1.0f - bottom) + 1.0f) - top) * 0.5f;
+    return out;
 }
 
 // ref: FUN_1412aa7b0

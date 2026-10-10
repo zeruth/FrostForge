@@ -47,6 +47,14 @@ void ObjectFillInitialize();
 void ObjectFillShutdown();
 // ref: FUN_1412b66b0
 uint64_t ObjectFillDepthStencil();
+// The fill texture bound to the global context's pixel slot 0, and the fill's parameters: the
+// screen rectangle's with its scale over the depth and the time's fraction added to the last
+// (FUN_1412b65e0).
+float* ObjectFillParams(float* out, const float* position, const float* rect, float time);
+// The fill colours by highlight index (DAT_142cfc440, written by the highlight update
+// FUN_1412afa30; entry 0 is the row FUN_1412affe0 stores there) and one of them (FUN_1412b0b40).
+extern float g_objectFillColors[0x40][4];
+const float* ObjectFillColor(uint8_t index);
 // Whether the GPU pulls its own vertices (its device data's +0x224 bit 5).
 uint32_t ShaderEffectVertexPull();
 // Whether any scene draws outlines (FUN_1412b2120).

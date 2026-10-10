@@ -601,3 +601,38 @@ void MatrixAddTranslation(float* m, const float* move) {
     m[13] = move[1] + m[13];
     m[14] = move[2] + m[14];
 }
+
+// ref: FUN_14134a420
+bool RayPlaneIntersect(const float* ray, const float* plane, float* t, float* hit, float epsilon) {
+    float denominator = plane[0] * ray[3] + plane[1] * ray[4] + plane[2] * ray[5];
+    if (0.0001 <= static_cast<double>(std::fabs(denominator))) {
+        if (t != nullptr || hit != nullptr) {
+            float distance = plane[1] * ray[1] + plane[0] * ray[0] + plane[2] * ray[2] + plane[3];
+            float along = 0.0f;
+            if (epsilon <= std::fabs(distance)) {
+                along = -(distance / denominator);
+            }
+            if (t != nullptr) {
+                *t = along;
+            }
+            if (hit != nullptr) {
+                hit[0] = along * ray[3] + ray[0];
+                hit[1] = ray[4] * along + ray[1];
+                hit[2] = ray[5] * along + ray[2];
+            }
+        }
+        return true;
+    }
+    if (epsilon <= std::fabs(plane[1] * ray[1] + plane[0] * ray[0] + plane[2] * ray[2] + plane[3])) {
+        return false;
+    }
+    if (t != nullptr) {
+        *t = 0.0f;
+    }
+    if (hit != nullptr) {
+        hit[0] = ray[0];
+        hit[1] = ray[1];
+        hit[2] = ray[2];
+    }
+    return true;
+}

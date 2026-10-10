@@ -29,8 +29,21 @@ namespace {
 const char s_elementName[] = ".?AVM2Element@@";  // DAT_142da2180
 const char s_indexName[] = ".?I";                // DAT_142d61348
 
+uint32_t RotateRight(uint32_t value, uint32_t count) {
+    return value >> count | value << (32 - count);
+}
+
+uint32_t HashTriple(const uint8_t* base, uint32_t first, uint32_t second, uint32_t third) {
+    uint32_t a = *reinterpret_cast<const uint32_t*>(base + first);
+    uint32_t b = *reinterpret_cast<const uint32_t*>(base + second);
+    uint32_t c = *reinterpret_cast<const uint32_t*>(base + third);
+    return RotateRight(b, 0x13) ^ RotateRight(c, 9) ^ RotateRight(a, 0x19);
+}
+
+}  // namespace
+
 // The blend a pass draws a blend mode with (DAT_142721290), and the blend words (DAT_142cfb1a8).
-const int32_t s_passBlend[14][8] = {
+const int32_t g_m2PassBlend[14][8] = {
     { 0, 0, 2, 3, 4, 5, 6, 7 },
     { 0, 1, 2, 3, 4, 5, 6, 7 },
     { 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -46,20 +59,11 @@ const int32_t s_passBlend[14][8] = {
     { 2, 2, 2, 3, 4, 5, 6, 7 },
     { 2, 2, 2, 3, 4, 5, 6, 7 },
 };
-const uint16_t s_blendWords[9] = { 0xf000, 0xf001, 0xf002, 0xf00a, 0xf003, 0xf004, 0xf005, 0xf00d, 0x0 };
-
-uint32_t RotateRight(uint32_t value, uint32_t count) {
-    return value >> count | value << (32 - count);
-}
-
-uint32_t HashTriple(const uint8_t* base, uint32_t first, uint32_t second, uint32_t third) {
-    uint32_t a = *reinterpret_cast<const uint32_t*>(base + first);
-    uint32_t b = *reinterpret_cast<const uint32_t*>(base + second);
-    uint32_t c = *reinterpret_cast<const uint32_t*>(base + third);
-    return RotateRight(b, 0x13) ^ RotateRight(c, 9) ^ RotateRight(a, 0x19);
-}
-
-}  // namespace
+const uint16_t g_m2BlendWords[9] = { 0xf000, 0xf001, 0xf002, 0xf00a, 0xf003, 0xf004, 0xf005, 0xf00d, 0x0 };
+// The blend modes the lit sphere draws opaque (DAT_142721268).
+const int32_t g_m2BlendOpaque[8] = { 1, 1, 0, 1, 0, 1, 1, 0 };
+// A blend mode's blend in the effect pass (DAT_142721390).
+const int32_t g_m2EffectBlend[8] = { 2, 2, 2, 3, 4, 5, 6, 7 };
 
 // ref: FUN_1411e55a0
 void M2ElementsReserve(M2SceneVector<M2Element>* elements, uint64_t count) {
@@ -235,20 +239,20 @@ void M2SceneElementState(CM2BaseModel* model, const uint8_t* settings, bool outl
             bytes[2] = static_cast<uint8_t>(state >> 0x10) | 0x10;
         }
     }
-    uint16_t word = s_blendWords[8];
+    uint16_t word = g_m2BlendWords[8];
     if ((flags & 1) == 0) {
-        word = s_blendWords[s_passBlend[pass][blendMode]];
+        word = g_m2BlendWords[g_m2PassBlend[pass][blendMode]];
     }
     *blend = word;
     if (effectKind != 0 && model->m_params.m_effect != nullptr) {
         bool assign = true;
         if (effectKind == 1 || effectKind == 2) {
             *depthStencil = g_m2DepthStencil[(materialFlags & 0x10) != 0 ? 1 : 2][0];
-            word = s_blendWords[4];
+            word = g_m2BlendWords[4];
         } else if (effectKind == 5) {
             if (pass == 0) {
                 *depthStencil = g_m2DepthStencil[5][model->m_0d * 2];
-                word = s_blendWords[0];
+                word = g_m2BlendWords[0];
             } else if ((pass & 0xf8) == 0 && pass != 5) {
                 assign = false;
             } else {
@@ -256,19 +260,19 @@ void M2SceneElementState(CM2BaseModel* model, const uint8_t* settings, bool outl
                 if ((flags & 1) == 0) {
                     if (textureKind == 4) {
                         *depthStencil = g_m2DepthStencil[1][index * 2];
-                        word = s_blendWords[4];
+                        word = g_m2BlendWords[4];
                     } else {
                         *depthStencil = g_m2DepthStencil[3][index * 2];
-                        word = s_blendWords[7];
+                        word = g_m2BlendWords[7];
                     }
                 } else {
                     *depthStencil = g_m2DepthStencil[0][index * 2];
-                    word = s_blendWords[8];
+                    word = g_m2BlendWords[8];
                 }
             }
         } else if (effectKind == 6 && (flags & 1) == 0) {
             *depthStencil = g_m2DepthStencil[(materialFlags & 0x10) != 0 ? 1 : 2][0];
-            word = s_blendWords[7];
+            word = g_m2BlendWords[7];
         } else {
             assign = false;
         }
@@ -277,7 +281,7 @@ void M2SceneElementState(CM2BaseModel* model, const uint8_t* settings, bool outl
         }
     }
     if ((flags >> 4 & 1) != 0) {
-        *blend = s_blendWords[8];
+        *blend = g_m2BlendWords[8];
     }
     uint8_t reference = 0;
     if ((materialFlags & 4) == 0 && kind != 0) {
@@ -530,15 +534,6 @@ void M2SceneElementPrepassPipeline(CM2Scene* scene, M2Element* element, int32_t 
     element->m_effect = static_cast<CShaderEffect*>(scene->m_effectPrepass);
 }
 
-namespace {
-
-// The blend modes the lit sphere draws opaque (DAT_142721268).
-const int32_t s_blendOpaque[8] = { 1, 1, 0, 1, 0, 1, 1, 0 };
-// A blend mode's blend in the effect pass (DAT_142721390).
-const int32_t s_effectBlend[8] = { 2, 2, 2, 3, 4, 5, 6, 7 };
-
-}  // namespace
-
 // What the procedural effect's shaders take from a batch's own: its vertex shader kind among
 // {0, 9, 7, 2, 0xc} and its pixel shader kind among {1, 6, 0x24, 7} (FUN_1411dd9d0).
 // ref: FUN_1411dd9d0
@@ -694,7 +689,7 @@ bool M2SceneEffectElement(CM2Scene* scene, M2SceneDrawList* list, M2Element* ele
     case 1: {
         bool lookParts;
         if (noAlpha == 0) {
-            if (s_blendOpaque[material->m_blendMode] == 0) {
+            if (g_m2BlendOpaque[material->m_blendMode] == 0) {
                 passEffect = static_cast<CShaderEffect*>(scene->m_effectLitTransparent);
                 lookParts = true;
                 instanced = true;
@@ -752,7 +747,7 @@ bool M2SceneEffectElement(CM2Scene* scene, M2SceneDrawList* list, M2Element* ele
         if (scene->m_daf0 == 0 ? !pass20 : false) {
             return true;
         }
-        if (pass20 && s_blendOpaque[material->m_blendMode] == 0) {
+        if (pass20 && g_m2BlendOpaque[material->m_blendMode] == 0) {
             *skip = 1;
             return true;
         }
@@ -818,12 +813,12 @@ bool M2SceneEffectElement(CM2Scene* scene, M2SceneDrawList* list, M2Element* ele
         if (owner->m_type == 0) {
             depthStencil = ((depthStencil & 0x00ffffff00ffffffull) | 0x100002ull | (2ull << 0x38));
         }
-        uint16_t blend = s_effectBlend[material->m_blendMode] < 9 ? s_blendWords[s_effectBlend[material->m_blendMode]] : 0;
+        uint16_t blend = g_m2EffectBlend[material->m_blendMode] < 9 ? g_m2BlendWords[g_m2EffectBlend[material->m_blendMode]] : 0;
         if ((flags & 1) != 0) {
-            blend = s_blendWords[8];
+            blend = g_m2BlendWords[8];
         }
         if ((flags >> 4 & 1) != 0) {
-            blend = s_blendWords[8];
+            blend = g_m2BlendWords[8];
         }
         uint8_t reference = 0;
         if ((materialFlags & 4) == 0 && (element->m_sortKey >> 0x1f & 0xf) != 0) {
@@ -967,7 +962,7 @@ void M2SceneShadowElements(CM2Scene* scene, M2SceneDrawList* list, CM2Model* mod
         }
         uint32_t raster = g_m2OutlineStencil[1 + ((model->m_flags >> 0x1a) & 1)];
         GxPipeline* pipeline = ObjectFillGetPipeline(static_cast<uint8_t>(~(batch[1] >> 1) & 1), bones,
-            ObjectFillDepthStencil(), raster, s_blendWords[0], 0x14, 3, static_cast<uint32_t>(scene->m_db08));
+            ObjectFillDepthStencil(), raster, g_m2BlendWords[0], 0x14, 3, static_cast<uint32_t>(scene->m_db08));
         element->SetPipeline(pipeline);
         M2IndicesPush(&list->m_lists[4], index);
     }
@@ -1105,9 +1100,9 @@ void M2SceneOutlineElements(CM2Scene* scene, M2SceneDrawList* list, CM2Model* mo
             fill = shadowed ? &g_m2OutlineStencilFill[2] : &g_m2OutlineStencilFill[1];
             depthStencil = outlinePass != 0 ? g_m2DepthStencil[4][0] : g_m2DepthStencil[3][0];
         }
-        uint16_t blend = s_blendWords[0];
+        uint16_t blend = g_m2BlendWords[0];
         if (shadow != nullptr) {
-            blend = s_blendWords[~(shadow[1] >> 1) & 1];
+            blend = g_m2BlendWords[~(shadow[1] >> 1) & 1];
         }
         if (static_cast<const uint8_t*>(scene->m_038)[0x5c0] == 1) {
             stencil = fill;

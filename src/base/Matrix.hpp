@@ -47,6 +47,10 @@ void MatrixLookAt(const float* eye, const float* direction, const float* up, flo
 float* MatrixFromAxisAngle(float* m, float radians, const float* axis, bool normalized);
 float* MatrixRotationBetween(float* m, const float* from, const float* to);
 void MatrixAddTranslation(float* m, const float* move);
+// A ray {origin, direction} against a plane {normal, d} (FUN_14134a420): where along the ray and
+// the point it meets the plane; a ray along the plane meets it only when it starts within
+// `epsilon` of it, at its origin.
+bool RayPlaneIntersect(const float* ray, const float* plane, float* t, float* hit, float epsilon);
 // Normalises unless the length is about zero (FUN_1411c9970).
 void VectorNormalize(float* v);
 // The inverse of a rotation and translation: the rotation transposed, the translation turned

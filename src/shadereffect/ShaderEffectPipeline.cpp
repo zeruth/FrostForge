@@ -3,6 +3,8 @@
 #include <cstring>
 
 #include "client/RenderSettings.hpp"
+#include "gx/GxRenderTargets.hpp"
+#include "gx/d3d12/CommandList.hpp"
 #include "gx/Gx.hpp"
 #include "gx/GxPipeline.hpp"
 #include "gx/GxShader.hpp"
@@ -319,4 +321,23 @@ uint16_t ShaderEffectParticlePixelPermute(uint8_t a1, uint16_t a2, uint16_t a3) 
 // ref: FUN_1412acd30
 uint16_t ShaderEffectPrepassPixelPermute(uint8_t a1) {
     return a1;
+}
+
+float g_objectFillColors[0x40][4] = { { 1.0f, 0.0f, 0.0f, 0.0f } };
+
+// ref: FUN_1412b65e0
+float* ObjectFillParams(float* out, const float* position, const float* rect, float time) {
+    g_gxRenderContext->SetTexture(2, 0, static_cast<gxDx12Backend::Tex*>(TextureGetGxTexOrDefaultRecreate(s_fillTexture)));
+    out[0] = rect[0];
+    out[1] = rect[1];
+    out[2] = rect[2];
+    out[3] = rect[3];
+    out[1] = 1.0f / position[2];
+    out[0] = (time - static_cast<float>(static_cast<int32_t>(time))) + rect[3];
+    return out;
+}
+
+// ref: FUN_1412b0b40
+const float* ObjectFillColor(uint8_t index) {
+    return g_objectFillColors[index];
 }

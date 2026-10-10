@@ -312,3 +312,69 @@ void ParticleEmitterSetColors(CParticleEmitter2* emitter, const uint8_t* start, 
     (void)end;
     FROST_UNIMPLEMENTED();
 }
+
+// The particle renderer (FUN_14124cc90 .. FUN_14124f440 and the vertex writers under
+// FUN_14124dc00) is the next port; until then the scene's particle elements draw nothing.
+// ref: FUN_14124cc90
+bool ParticleEmitterTexturesReady(const CParticleEmitter2* emitter) {
+    (void)emitter;
+    FROST_UNIMPLEMENTED();
+    return false;
+}
+
+// ref: FUN_14124f2c0
+void ParticleEmitterSetConstants(CParticleEmitter2* emitter, GxRenderContext* context, ShaderEffectContext* shader,
+    const float* environment) {
+    (void)emitter;
+    (void)context;
+    (void)shader;
+    (void)environment;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14124d0a0
+void ParticleEmitterRender(CParticleEmitter2* emitter, GxRenderContext* context, const C44Matrix* view,
+    const C44Matrix* matrix, uint8_t* vertices, M2ParticlePool* pool) {
+    (void)emitter;
+    (void)context;
+    (void)view;
+    (void)matrix;
+    (void)vertices;
+    (void)pool;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14124ca70
+bool ParticleEmitterBatchable(const CParticleEmitter2* emitter, const CParticleEmitter2* other) {
+    (void)emitter;
+    (void)other;
+    FROST_UNIMPLEMENTED();
+    return false;
+}
+
+// ref: FUN_14124f140
+void ParticleEmitterSetTextureMatrix(const CParticleEmitter2* emitter, ShaderEffectContext* shader) {
+    (void)emitter;
+    (void)shader;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14124f440
+void ParticleEmitterBindOutline(const CParticleEmitter2* emitter, GxRenderContext* context, const uint8_t* outline) {
+    (void)emitter;
+    (void)context;
+    (void)outline;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14124d790
+void ParticleEmitterDrawBatch(const CParticleEmitter2* emitter, GxRenderContext* context, GxBuf* vertices,
+    uint32_t vertexCount, uint32_t indexCount, uint8_t shadingRate) {
+    (void)emitter;
+    (void)context;
+    (void)vertices;
+    (void)vertexCount;
+    (void)indexCount;
+    (void)shadingRate;
+    FROST_UNIMPLEMENTED();
+}

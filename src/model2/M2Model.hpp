@@ -101,6 +101,20 @@ static_assert(sizeof(M2ModelCall) == 0xa0, "M2ModelCall is 0xa0 bytes");
 
 // The effect a model draws with (FUN_1411e6cc0).
 void* M2BaseModelGetEffect(CM2BaseModel* model);
+// Whether either model has an impact (FUN_1411e6640).
+bool M2BaseModelEitherHasImpact(CM2BaseModel* a, CM2BaseModel* b);
+class CM2Model;
+class GxRenderContext;
+// The model's merged GPU batch indices bound, made when missing (FUN_1411cb4c0).
+bool M2ModelBindGpuBatchIndices(CM2Model* model, GxRenderContext* context);
+// The file's AFRA scale, 1 without one (FUN_1411bd8f0).
+float M2ModelAfraScale(CM2Model* model);
+// The axis the model's effect is flattest along (FUN_1411be430).
+uint32_t M2ModelEffectAxis(CM2Model* model);
+// The inverse local matrix of the model carrying the effect (FUN_1411be3b0).
+float* M2ModelEffectInverse(CM2Model* model, float* out);
+// The bottom and height of the playing sequence's bounds (FUN_1411ba260).
+void M2ModelSequenceHeight(CM2Model* model, float* bottom, float* height);
 // A call from the pool, its type -1 (FUN_1411e75d0), and one freed with what it holds
 // (FUN_1411e6b40).
 M2ModelCall* M2ModelCallAlloc();
@@ -615,7 +629,7 @@ class CM2Model : public CM2BaseModel {
     M2AnimState* m_animState;           // 0x630
     void* m_638;                        // 0x638
     void* m_effect;                     // 0x640 the "M2 Model Effect Pool"
-    uint32_t m_648;                     // 0x648
+    float m_648;                        // 0x648 the effect's fade
     uint32_t m_pad64c;
     CM2Model* m_parentModel;            // 0x650
     CM2Model* m_attachedModels;         // 0x658 the models attached below this one

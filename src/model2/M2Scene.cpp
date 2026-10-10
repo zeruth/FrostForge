@@ -308,7 +308,7 @@ CM2Scene::CM2Scene(M2CACHE* cache, int32_t type) {
     this->m_viewFrame = 0;
     this->m_0ac = 0;
     this->m_flags = 0;
-    this->m_pad0b4 = 0;
+    this->m_0b4 = 0.0f;
     this->m_0b8 = 0;
     this->m_lightings = nullptr;
     this->m_maxLights = 8;
@@ -345,15 +345,18 @@ CM2Scene::CM2Scene(M2CACHE* cache, int32_t type) {
     this->m_d568[1] = 0.0f;
     this->m_d568[2] = 1.0f;  // overwritten below with the identity rotation
     this->m_d568[3] = 0.0f;
-    MatrixIdentity(this->m_d578.m);
-    MatrixIdentity(this->m_d5b8.m);
-    MatrixIdentity(this->m_d5f8.m);
-    std::memset(this->m_d638, 0, sizeof(this->m_d638));
+    MatrixIdentity(this->m_drawView.m);
+    MatrixIdentity(this->m_drawInverseView.m);
+    MatrixIdentity(this->m_drawProjection.m);
+    this->m_drawCameraPosition = C3Vector {};
+    std::memset(this->m_d644, 0, sizeof(this->m_d644));
+    std::memset(this->m_d654, 0, sizeof(this->m_d654));
     std::memset(this->m_screenRect, 0, sizeof(this->m_screenRect));
     this->m_animateRatio = 10000.0f;
     this->m_d678 = nullptr;
     this->m_d680 = nullptr;
-    std::memset(this->m_d688, 0, sizeof(this->m_d688));
+    this->m_decalCallback = nullptr;
+    this->m_decalParam = nullptr;
     this->m_traceCallback = nullptr;
     this->m_d6a0 = nullptr;
     this->m_windCallback = nullptr;

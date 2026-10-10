@@ -585,7 +585,6 @@ void M2SceneParticleRuns(CM2Scene* scene, uint32_t pass) {
     uint32_t count = static_cast<uint32_t>(indices->m_size);
     uint32_t run = 0;
     bool inRun = false;
-    static const int32_t s_effectBlend[8] = { 2, 2, 2, 3, 4, 5, 6, 7 };  // DAT_142721390
     for (uint32_t i = 0; i < count; i++) {
         M2Element* element = &elements[indices->m_data[i]];
         uint32_t blend = 0;
@@ -619,7 +618,7 @@ void M2SceneParticleRuns(CM2Scene* scene, uint32_t pass) {
             }
         }
         bool joins;
-        if (static_cast<uint32_t>(s_effectBlend[blend] - 3) < 2) {
+        if (static_cast<uint32_t>(g_m2EffectBlend[blend] - 3) < 2) {
             joins = inRun;
             inRun = true;
         } else {

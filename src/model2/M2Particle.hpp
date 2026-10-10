@@ -47,7 +47,9 @@ class CParticleEmitter2 {
     int32_t m_liveCount;                // 0x40 particles alive (in the list at 0x20)
     uint8_t m_44[0x80 - 0x44];
     uint32_t m_vertexFormat;            // 0x80 the draw's vertex format kind
-    uint8_t m_84[0xa8 - 0x84];
+    uint8_t m_84[0xa0 - 0x84];
+    float m_a0;                         // 0xa0
+    uint32_t m_drawnCount;              // 0xa4 the particles the last render wrote
     uint8_t m_random[8];                // 0xa8 the emitter's random seed
     uint32_t m_childCount;              // 0xb0
     uint32_t m_padb4;
@@ -55,7 +57,9 @@ class CParticleEmitter2 {
     CM2Model* m_model;                  // 0xd8 the geometry particles' model
     CM2Scene* m_scene;                  // 0xe0
     CM2Model* m_recursionModel;         // 0xe8
-    uint8_t m_f0[0x100 - 0xf0];
+    uint32_t m_verticesPerParticle;     // 0xf0
+    uint32_t m_indicesPerParticle;      // 0xf4
+    uint8_t m_f8[0x100 - 0xf8];
     int32_t m_type;                     // 0x100 1 none, 2 quads, 3 the model's, 4 projected
     uint32_t m_pad104;
     float m_baseSpin;                   // 0x108
@@ -109,6 +113,25 @@ static_assert(sizeof(CParticleEmitter2) == 0x2f8, "CParticleEmitter2 is 0x2f8 by
 extern class CShaderEffect* g_particleEffects[6];
 // Two emitters' draw order: blend, render flags, type, then their three textures (FUN_14124f4c0).
 int32_t ParticleEmitterCompare(const CParticleEmitter2* left, const CParticleEmitter2* right);
+class GxRenderContext;
+class ShaderEffectContext;
+struct GxBuf;
+struct M2ParticlePool;
+// The emitter's draw: whether its textures are loaded (FUN_14124cc90); its textures and
+// constants (FUN_14124f2c0); its particles into `vertices`, or drawn on their own into a
+// transient buffer when null (FUN_14124d0a0); whether two emitters can share a draw
+// (FUN_14124ca70); its flipbook's texture matrix (FUN_14124f140); the outline map for model
+// particles (FUN_14124f440); and a merged run's draw (FUN_14124d790).
+bool ParticleEmitterTexturesReady(const CParticleEmitter2* emitter);
+void ParticleEmitterSetConstants(CParticleEmitter2* emitter, GxRenderContext* context, ShaderEffectContext* shader,
+    const float* environment);
+void ParticleEmitterRender(CParticleEmitter2* emitter, GxRenderContext* context, const C44Matrix* view,
+    const C44Matrix* matrix, uint8_t* vertices, M2ParticlePool* pool);
+bool ParticleEmitterBatchable(const CParticleEmitter2* emitter, const CParticleEmitter2* other);
+void ParticleEmitterSetTextureMatrix(const CParticleEmitter2* emitter, ShaderEffectContext* shader);
+void ParticleEmitterBindOutline(const CParticleEmitter2* emitter, GxRenderContext* context, const uint8_t* outline);
+void ParticleEmitterDrawBatch(const CParticleEmitter2* emitter, GxRenderContext* context, GxBuf* vertices,
+    uint32_t vertexCount, uint32_t indexCount, uint8_t shadingRate);
 // The vertex format a particle emitter draws with (FUN_14124bce0).
 uint8_t ParticleEmitterVertexFormat(const CParticleEmitter2* emitter);
 

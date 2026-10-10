@@ -101,7 +101,7 @@ class ShaderEffectContext {
     // ref: FUN_1412ad5e0
     void SetBatch7b4(float a, float b);
     // The batch's blend kind and the three after it (FUN_1412adf50).
-    void SetBlend(const RENDERSETTINGS* settings, uint8_t blend, float a4, uint8_t a5, uint8_t a6);
+    void SetBlend(const RENDERSETTINGS* settings, uint8_t blend, uint32_t lit, uint8_t a5, uint8_t a6);
 
     // The frame block's vectors.
     // ref: FUN_1412ad590
@@ -142,6 +142,8 @@ float* ShaderEffectDefaultFogConstants(float* out);
 const uint8_t* ShaderEffectEnvironmentDefaultFog(const uint8_t* environment);
 const uint8_t* ShaderEffectEnvironmentFog(const uint8_t* environment, uint32_t index);
 uint32_t ShaderEffectEnvironmentFogKind(const uint8_t* environment, uint32_t index);
+// The environment's screen rectangle as a scale and offset (FUN_1412af940).
+float* ShaderEffectEnvironmentRect(const uint8_t* environment, float* out);
 // The scene's texture to stage 2 slot 0x10 (white when none) and its sampler to slot 0xd
 // (FUN_1412aa7b0).
 void ShaderEffectBindSceneTexture(void* tex, GxRenderContext* context);

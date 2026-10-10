@@ -137,3 +137,15 @@ bool RibbonEmitterIsIdle(const CRibbonEmitter* ribbon) {
         && *reinterpret_cast<const int32_t*>(bytes + 0x68) - *reinterpret_cast<const int32_t*>(bytes + 0x70)
             == *reinterpret_cast<const int32_t*>(bytes + 0xcc);
 }
+
+// The strip's vertices (FUN_14129ac40) and its draw come with the ribbon renderer port; until
+// then a ribbon element draws nothing.
+// ref: FUN_141296af0
+void RibbonEmitterDraw(CRibbonEmitter* ribbon, const RIBBONDRAWPARAMS* params, const C44Matrix* view,
+    const C44Matrix* projection) {
+    (void)ribbon;
+    (void)params;
+    (void)view;
+    (void)projection;
+    FROST_UNIMPLEMENTED();
+}

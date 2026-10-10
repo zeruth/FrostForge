@@ -62,5 +62,16 @@ void RibbonEmitterDelete(CRibbonEmitter* ribbon);
 // Whether a ribbon has nothing to draw: emitting and with no edges past its first
 // (FUN_141296840).
 bool RibbonEmitterIsIdle(const CRibbonEmitter* ribbon);
+class GxRenderContext;
+struct C3Vector;
+// What a ribbon's draw is handed: the context, the model's attachment matrix and the camera.
+struct RIBBONDRAWPARAMS {
+    GxRenderContext* m_context;         // 0x00
+    const C44Matrix* m_matrix;          // 0x08
+    const C3Vector* m_camera;           // 0x10
+};
+// The ribbon's strip built and drawn through `view` and `projection` (FUN_141296af0).
+void RibbonEmitterDraw(CRibbonEmitter* ribbon, const RIBBONDRAWPARAMS* params, const C44Matrix* view,
+    const C44Matrix* projection);
 
 #endif
