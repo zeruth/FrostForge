@@ -106,4 +106,13 @@ void CVarInitialize(bool createWtfDirectory);
 // otherwise sets it.
 int32_t CVarConsoleHandler(const char* command, const char* arguments);
 
+// Bitfield CVars: a value marked 2 in its first byte, then one character per six bits on top of
+// 0x40. A value in the older form (marked 1, seven bits a character) is rewritten into it
+// (FUN_140322c70); a bit is read (FUN_140320b40) and set or cleared (FUN_140320bb0), and an index
+// fits while its character stays under 0xff (FUN_140320110).
+void CVarConvertBitfield(CVar* cvar, int32_t marker);
+bool CVarGetBit(CVar* cvar, uint32_t index);
+void CVarSetBit(CVar* cvar, uint32_t index, bool on);
+bool CVarBitIndexValid(uint32_t index);
+
 #endif

@@ -908,3 +908,107 @@ void CVarInitialize(bool createWtfDirectory) {
     ConsoleCommandRegister("cvar_default", &CVarDefaultCommand, 5, "Set the value of a CVar to its coded default value", 0);
     ConsoleCommandRegister("cvarlist", &CVarListCommand, 5, "List CVars", 0);
 }
+
+// ref: FUN_140322c70
+void CVarConvertBitfield(CVar* cvar, int32_t marker) {
+    if (cvar == nullptr || marker != 1) {
+        return;
+    }
+    uint8_t out[0x100 + 8];
+    const uint8_t* source = reinterpret_cast<const uint8_t*>(cvar->m_stringValue.GetString()) + 1;
+    int32_t bit = 0;
+    int32_t used = 0;
+    uint32_t index = 1;
+    out[0] = 2;
+    while (*source != 0 && index < 0xff) {
+        uint8_t* slot = &out[index];
+        if (bit == 0) {
+            *slot = 0;
+        }
+        int32_t shift = bit - used;
+        uint32_t count = static_cast<uint32_t>(shift) & 0x1f;
+        *slot |= count >= 8 ? 0 : static_cast<uint8_t>((*source & 0x7f) << count);
+        *slot = static_cast<uint8_t>((*slot & 0x3f) | 0x40);
+        if (used > bit + 1) {
+            source++;
+            bit = shift + 7;
+            used = 0;
+        } else {
+            index++;
+            if (used < bit + 1) {
+                used += 6 - bit;
+            } else {
+                source++;
+                used = 0;
+            }
+            bit = 0;
+        }
+    }
+    if (bit != 0) {
+        out[index + 1] = 0;
+    } else {
+        out[index] = 0;
+    }
+    CVarSet(cvar, reinterpret_cast<const char*>(out), true, false, false, true);
+}
+
+// ref: FUN_140320b40
+bool CVarGetBit(CVar* cvar, uint32_t index) {
+    if (cvar == nullptr) {
+        return false;
+    }
+    const char* value = cvar->m_stringValue.GetString();
+    if (value == nullptr || *value == '\0') {
+        return false;
+    }
+    uint64_t length = std::strlen(value);
+    if (static_cast<uint64_t>(index) >= length * 6 - 6) {
+        return false;
+    }
+    return ((static_cast<int32_t>(value[index / 6 + 1]) >> (index % 6)) & 1) != 0;
+}
+
+// ref: FUN_140320bb0
+void CVarSetBit(CVar* cvar, uint32_t index, bool on) {
+    if (cvar == nullptr) {
+        return;
+    }
+    const char* value = cvar->m_stringValue.GetString();
+    uint64_t length = std::strlen(value);
+    uint32_t count = static_cast<uint32_t>(length);
+    if (count >= 0x100) {
+        return;
+    }
+    uint8_t buffer[0x108];
+    std::memcpy(buffer, value, length + 1);
+    buffer[length] = 0;
+    buffer[0] = 2;
+    uint32_t slot = index / 6 + 1;
+    if (slot >= 0xff) {
+        return;
+    }
+    if (!on) {
+        if (slot < count) {
+            buffer[slot] = static_cast<uint8_t>(buffer[slot] & ~(1u << (index % 6)));
+            while (--count != 0 && buffer[count] == 0x40) {
+                buffer[count] = 0;
+            }
+            CVarSet(cvar, reinterpret_cast<const char*>(buffer), true, false, false, true);
+        }
+        return;
+    }
+    if (count <= slot) {
+        uint32_t i = count == 0 ? 1 : count;
+        while (i <= slot) {
+            buffer[i++] = 0x40;
+        }
+        buffer[index / 6 + 2] = 0;
+    }
+    buffer[slot] = static_cast<uint8_t>(buffer[slot] | (1u << (index % 6)));
+    CVarSet(cvar, reinterpret_cast<const char*>(buffer), true, false, false, true);
+}
+
+// ref: FUN_140320110
+bool CVarBitIndexValid(uint32_t index) {
+    return index / 6 + 1 < 0xff;
+}

@@ -8,6 +8,7 @@
 #include "blz/String.hpp"
 #include <cstdarg>
 #include <cstdint>
+#include "blz/Vector.hpp"
 
 #include "prism/Instance.hpp"
 
@@ -54,6 +55,17 @@ struct GXSIZE {
     uint16_t m_width;
     uint16_t m_height;
 };
+
+// A display mode a monitor offers (0x10).
+struct GXMONITORMODE {
+    GXSIZE m_size;
+    uint32_t m_bitsPerPixel;
+    uint64_t m_08;
+};
+static_assert(sizeof(GXMONITORMODE) == 0x10, "GxMonitorMode is 0x10 bytes");
+
+extern const char s_gxMonitorModeTag[];    // ".?AUGxMonitorMode@@"
+extern const char s_gxSizeTag[];           // ".?AUGxSize@@"
 
 // What the console hands the device (0x60 bytes): sync, shader residency, the monitor, how far
 // the CPU may run ahead, crash capture, and the GPU by name (empty: let Gx choose).
@@ -220,6 +232,8 @@ void GxShutdown();
 
 // The monitors (GxDeviceW32.cpp): DXGI's outputs, the primary first.
 uint32_t GxMonitorCount();
+// The modes a monitor offers that the client can use, largest first (FUN_142290c30).
+bool GxMonitorGetModes(uint32_t index, blz::vector<GXMONITORMODE, s_gxMonitorModeTag>* modes);
 void* GxMonitorGet(uint32_t index);
 bool GxMonitorGetDesktopSize(uint32_t index, GXSIZE* size, uint32_t* bitsPerPixel);
 // Forgets the monitors, to be enumerated again on next use.

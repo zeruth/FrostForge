@@ -9,6 +9,8 @@
 #include "storm/String.hpp"
 #include "util/Fnv.hpp"
 #include "util/Unimplemented.hpp"
+#include <algorithm>
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -482,15 +484,82 @@ void RegisterDeviceCommands() {
     ConsoleCommandRegister("D3D12", CommandD3D12, 1, nullptr, 0);
 }
 
-// The fullscreen sizes the monitor offers that suit the client (FUN_14032abf0): its modes
-// filtered by aspect and size, sorted, without repeats.
-void GetFullscreenSizes(GXSIZE* sizes, uint32_t* count, uint32_t monitor, bool matchAspect) {
-    (void)sizes;
-    (void)monitor;
-    (void)matchAspect;
-    FROST_UNIMPLEMENTED();  // FUN_14032abf0 over the monitor's modes (FUN_142290c30)
-    *count = 0;
+}  // namespace
+
+// The fullscreen sizes the monitor offers that suit the client: its modes of 16 bits or more,
+// matching the desktop's aspect when asked; landscape ones above 640x480 at the minimum aspect,
+// and on a portrait desktop narrow ones turned on their side; sorted largest first without
+// repeats.
+// ref: FUN_14032abf0
+void GetFullscreenSizes(blz::vector<GXSIZE, s_gxSizeTag>* sizes, uint32_t monitor, bool matchAspect) {
+    sizes->clear();
+    GXSIZE desktop = { 0, 0 };
+    uint32_t bitsPerPixel = 0;
+    // FUN_142290bc0
+    GxMonitorGetDesktopSize(monitor, &desktop, &bitsPerPixel);
+    double desktopAspect = 1.7777777777777777;  // DAT_142637038
+    bool portrait = false;
+    if (desktop.m_height != 0) {
+        desktopAspect = static_cast<double>(desktop.m_width) / static_cast<double>(desktop.m_height);
+        portrait = static_cast<float>(desktop.m_width) / static_cast<float>(desktop.m_height) < 1.0f;
+    }
+    blz::vector<GXMONITORMODE, s_gxMonitorModeTag> modes;
+    modes.reserve(0x12c);
+    GxMonitorGetModes(monitor, &modes);
+    uint32_t maxWidth = 0;
+    for (uint64_t i = 0; i < modes.size(); i++) {
+        uint32_t width = modes[i].m_size.m_width;
+        if (width > maxWidth) {
+            maxWidth = width;
+        }
+    }
+    sizes->reserve(0);
+    const float minimumAspect = 1.248f;      // DAT_142637034
+    const double epsilon = 1.0e-6;            // DAT_14261bf68
+    uint16_t lastWidth = 0;
+    uint16_t lastHeight = 0;
+    for (uint64_t i = 0; i < modes.size(); i++) {
+        GXSIZE size = modes[i].m_size;
+        float aspect = static_cast<float>(size.m_width) / static_cast<float>(size.m_height);
+        if (size.m_width == lastWidth && size.m_height == lastHeight) {
+            continue;
+        }
+        if (modes[i].m_bitsPerPixel < 0x10) {
+            continue;
+        }
+        if (matchAspect
+            && std::fabs(desktopAspect - static_cast<double>(size.m_width) / static_cast<double>(size.m_height))
+                >= epsilon) {
+            continue;
+        }
+        if (aspect >= minimumAspect && size.m_width > 0x280 && size.m_height > 0x1e0) {
+            // FUN_14032a5e0
+            sizes->push_back(size);
+        } else if (portrait && aspect < 1.0f && maxWidth >= size.m_height && size.m_height > 0x280
+            && size.m_width > 0x1e0) {
+            GXSIZE turned = { size.m_height, size.m_width };
+            sizes->push_back(turned);
+        }
+        lastWidth = size.m_width;
+        lastHeight = size.m_height;
+    }
+    // FUN_14032a7b0, FUN_14032a980: stable, taller first, then wider first
+    std::stable_sort(sizes->begin(), sizes->end(),
+        [](const GXSIZE& a, const GXSIZE& b) { return a.m_height > b.m_height; });
+    std::stable_sort(sizes->begin(), sizes->end(),
+        [](const GXSIZE& a, const GXSIZE& b) { return a.m_width > b.m_width; });
+    uint64_t count = 0;
+    for (uint64_t i = 0; i < sizes->size(); i++) {
+        GXSIZE size = (*sizes)[i];
+        if (count != 0 && (*sizes)[count - 1].m_width == size.m_width && (*sizes)[count - 1].m_height == size.m_height) {
+            continue;
+        }
+        (*sizes)[count++] = size;
+    }
+    sizes->resize(count);
 }
+
+namespace {
 
 // The default fullscreen size for the adapter: the desktop, except on parts that run better
 // at 720p or 1080p.
@@ -530,11 +599,10 @@ GXSIZE DefaultFullscreenSize(GxAdapterInfo* adapter, uint32_t monitor) {
         GxMonitorGetDesktopSize(monitor, &desktop, &bitsPerPixel);
         size = desktop;
     } else {
-        GXSIZE sizes[0x40];
-        uint32_t count;
-        GetFullscreenSizes(sizes, &count, monitor, true);
+        blz::vector<GXSIZE, s_gxSizeTag> sizes;
+        GetFullscreenSizes(&sizes, monitor, true);
         uint32_t best = 0xffffffff;
-        for (uint32_t i = 0; i < count; i++) {
+        for (uint32_t i = 0; i < sizes.size(); i++) {
             int32_t difference = static_cast<int32_t>(sizes[i].m_height) - static_cast<int32_t>(height);
             uint32_t distance = static_cast<uint32_t>(difference < 0 ? -difference : difference);
             if (distance < best) {
@@ -649,10 +717,9 @@ void ConsoleDeviceGetParams(GXDEVICEPARAMS* device, GXWINDOWPARAMS* window) {
     } else {
         int32_t parsed = sscanf_s(resolution, "%hux%hu", &size.m_width, &size.m_height);
         if (parsed != 2 || size.m_width < 0x78 || size.m_height < 0x78) {
-            GXSIZE sizes[0x40];
-            uint32_t count;
-            GetFullscreenSizes(sizes, &count, window->m_monitor, window->m_maximize != 0);
-            if (count == 0) {
+            blz::vector<GXSIZE, s_gxSizeTag> sizes;
+            GetFullscreenSizes(&sizes, window->m_monitor, window->m_maximize != 0);
+            if (sizes.size() == 0) {
                 size = { 0x780, 0x438 };
             } else {
                 size = sizes[0];

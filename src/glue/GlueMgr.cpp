@@ -8,6 +8,7 @@
 #include "db/WowDB2Lookup.hpp"
 #include <cctype>
 #include <cstring>
+#include "console/Command.hpp"
 #include "glue/GlueScriptAPI.hpp"
 #include "glue/ScriptAPIRegistry.hpp"
 
@@ -458,10 +459,47 @@ void Sub141A49200() {
     FROST_UNIMPLEMENTED();
 }
 
-// ExportInterfaceFiles / GetMouseFocus and the glue's protected functions.
+namespace {
+
+// The interface files written out of the archives ('art' and/or 'code'). Not ported.
+// ref: FUN_141cf3c70
+bool InterfaceExportFiles(const char* arguments) {
+    (void)arguments;
+    FROST_UNIMPLEMENTED();
+    return false;
+}
+
+// ref: FUN_1416a7810
+int32_t CommandExportInterfaceFiles(const char* command, const char* arguments) {
+    (void)command;
+    if (!InterfaceExportFiles(arguments)) {
+        ConsoleWrite(4, "NO FILES EXPORTED! Need to define either 'art' or 'code'");
+    }
+    return 1;
+}
+
+// The region the mouse is over (the last the motion list holds), or nil.
+// ref: FUN_141b87860
+int Lua_GetMouseFocus(lua_State* L) {
+    CSimpleTop* top = CSimpleTop::s_instance;
+    if (top->m_mouseMotion.size() == 0) {
+        lua_pushnil(L);
+        return 1;
+    }
+    return FrameScript_Object::PushObject(L, top->m_mouseMotion.back());
+}
+
+}  // namespace
+
+// The ExportInterfaceFiles command and the global GetMouseFocus.
 // ref: FUN_1416a7840
 void Sub1416A7840() {
-    FROST_UNIMPLEMENTED();
+    ConsoleCommandRegister("ExportInterfaceFiles", CommandExportInterfaceFiles, 5, nullptr, 0);
+    lua_State* L = FrameScript_GetContext();
+    lua_pushcclosure(L, Lua_GetMouseFocus, 0);
+    lua_pushstring(L, "GetMouseFocus");
+    lua_insert(L, -2);
+    lua_rawset(L, LUA_GLOBALSINDEX);
 }
 
 // ref: FUN_141d06200

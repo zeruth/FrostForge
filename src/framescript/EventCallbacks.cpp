@@ -21,3 +21,9 @@ EVENTSIGNAL EventCallbacks_Get(uint32_t offset) {
 void EventCallbacks_Set(uint32_t offset, EVENTSIGNAL signal) {
     Table()[offset / sizeof(EVENTSIGNAL)] = signal;
 }
+
+// ref: FUN_141174040
+void UiSignalCVarUpdate(const char* name, const char* value) {
+    const char* args[2] = {name, value};
+    EventCallbacks_Fire(0xec0, 0x32b2c96789f77675ull, args);
+}

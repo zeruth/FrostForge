@@ -2,7 +2,9 @@
 // (C_XMLUtil), an atlas member's description (C_Texture) and the game window's size
 // (C_VideoOptions).
 
+#include "client/ConsoleDevice.hpp"
 #include "client/GxWindow.hpp"
+#include "gx/Gx.hpp"
 #include "base/Coordinate.hpp"
 #include "framescript/FrameScript.hpp"
 #include "framescript/ScriptMethod.hpp"
@@ -340,4 +342,119 @@ int Lua_C_VideoOptions_GetCurrentGameWindowSize(lua_State* L) {
     lua_pushnumber(L, static_cast<double>(static_cast<float>(size.m_height)));
     lua_setfield(L, table, "y");
     return 1;
+}
+
+// ref: FUN_1419f4be0
+int Lua_GetMonitorCount(lua_State* L) {
+    lua_pushnumber(L, static_cast<double>(GxMonitorCount()));
+    return 1;
+}
+
+// The name a monitor would have; the reference's lookup (FUN_14196fd00) is the shared empty
+// body, so nothing is returned.
+// ref: FUN_1419f4cb0
+int Lua_GetMonitorName(lua_State* L) {
+    if (!lua_isnumber(L, 1)) {
+        return 0;
+    }
+    uint32_t index = static_cast<uint32_t>(static_cast<int64_t>(lua_tonumber(L, 1))) - 1;
+    if (index > GxMonitorCount()) {
+        return 0;
+    }
+    return 0;
+}
+
+// ref: FUN_1419f4c10
+int Lua_GetMonitorAspectRatio(lua_State* L) {
+    uint32_t index = 0;
+    if (lua_isnumber(L, 1)) {
+        index = static_cast<uint32_t>(static_cast<int64_t>(lua_tonumber(L, 1))) - 1;
+    }
+    GXSIZE size = {};
+    uint32_t bitsPerPixel = 0;
+    // FUN_142290bc0
+    if (!GxMonitorGetDesktopSize(index, &size, &bitsPerPixel)) {
+        return 0;
+    }
+    lua_pushnumber(L, static_cast<double>(static_cast<float>(size.m_width) / static_cast<float>(size.m_height)));
+    return 1;
+}
+
+namespace {
+
+// C2Vector.
+struct WINDOWSIZEVECTOR {
+    float x;
+    float y;
+};
+
+// The sizes GetGameWindowSizes last handed out (DAT_1431f6680).
+blz::vector<GXSIZE, s_gxSizeTag> s_gameWindowSizes;
+
+// The window sizes for a monitor, windowed or fullscreen: its fullscreen sizes, as vectors.
+// ref: FUN_1419f60b0
+std::vector<WINDOWSIZEVECTOR> GameWindowSizes(uint32_t monitor, bool fullscreen) {
+    GetFullscreenSizes(&s_gameWindowSizes, monitor, fullscreen);
+    std::vector<WINDOWSIZEVECTOR> sizes;
+    sizes.reserve(0x1e);
+    for (uint64_t i = 0; i < s_gameWindowSizes.size(); i++) {
+        sizes.push_back({static_cast<float>(s_gameWindowSizes[i].m_width),
+            static_cast<float>(s_gameWindowSizes[i].m_height)});
+    }
+    return sizes;
+}
+
+// ref: FUN_140b4c160
+int32_t GetGameWindowSizesBody(lua_State* L, void*) {
+    const char* usage = "Usage: local sizes = C_VideoOptions.GetGameWindowSizes(monitor, fullscreen)";
+    uint32_t monitor = 0;
+    int32_t index = 1;
+    // FUN_140a54180: an integer in range
+    if (lua_type(L, index) < 1) {
+        luaL_error(L, usage);
+    } else {
+        double value = lua_isnumber(L, index) ? lua_tonumber(L, index) : -1.0;
+        if (!lua_isnumber(L, index) || value != value || value < 0.0 || value > 4294967295.0) {
+            luaL_argerror(L, index, usage);
+        } else if (!lua_checkstack(L, 1)) {
+            luaL_error(L, "stack overflow");
+        } else {
+            monitor = static_cast<uint32_t>(static_cast<int64_t>(value));
+            index++;
+        }
+    }
+    bool fullscreen = false;
+    if (lua_type(L, index) < 1) {
+        luaL_error(L, usage);
+    } else if (!lua_checkstack(L, 1)) {
+        luaL_error(L, "stack overflow");
+    } else {
+        fullscreen = lua_toboolean(L, index) != 0;
+    }
+    std::vector<WINDOWSIZEVECTOR> sizes = GameWindowSizes(monitor, fullscreen);
+    if (!lua_checkstack(L, 1)) {
+        luaL_error(L, "stack overflow");
+        return 1;
+    }
+    // FUN_1407d0e40
+    lua_createtable(L, static_cast<int32_t>(sizes.size()), 0);
+    int32_t table = lua_gettop(L);
+    for (uint64_t i = 0; i < sizes.size(); i++) {
+        lua_pushnumber(L, static_cast<double>(i + 1));
+        ScriptMethod::PushFromMixin(L, "Vector2DMixin");
+        int32_t entry = lua_gettop(L);
+        lua_pushnumber(L, static_cast<double>(sizes[i].x));
+        lua_setfield(L, entry, "x");
+        lua_pushnumber(L, static_cast<double>(sizes[i].y));
+        lua_setfield(L, entry, "y");
+        lua_settable(L, table);
+    }
+    return 1;
+}
+
+}  // namespace
+
+// ref: FUN_140b6e390
+int Lua_C_VideoOptions_GetGameWindowSizes(lua_State* L) {
+    return ScriptMethod::ProtectedCall(L, GetGameWindowSizesBody, nullptr);
 }

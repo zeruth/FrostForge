@@ -21,4 +21,7 @@ inline void EventCallbacks_Fire(uint32_t offset, uint64_t id, void* args) {
     }
 }
 
+// CVAR_UPDATE to the scripts: a script CVar's name and its new value (FUN_141174040).
+void UiSignalCVarUpdate(const char* name, const char* value);
+
 #endif

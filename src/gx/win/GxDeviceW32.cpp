@@ -3,6 +3,7 @@
 #include "storm/String.hpp"
 #include <windows.h>
 #include <dxgi1_6.h>
+#include <algorithm>
 #include <cstring>
 
 namespace {
@@ -145,4 +146,74 @@ bool GxMonitorGetDesktopSize(uint32_t index, GXSIZE* size, uint32_t* bitsPerPixe
     size->m_height = static_cast<uint16_t>(mode.dmPelsHeight);
     *bitsPerPixel = mode.dmBitsPerPel;
     return true;
+}
+
+const char s_gxMonitorModeTag[] = ".?AUGxMonitorMode@@";
+const char s_gxSizeTag[] = ".?AUGxSize@@";
+
+namespace {
+
+// The monitor's modes of at least 640x480 and 16 bits, not shown centred at a fixed size, and no
+// larger than its current mode.
+// ref: FUN_142296150
+void MonitorEnumerateModes(uint32_t index, blz::vector<GXMONITORMODE, s_gxMonitorModeTag>* modes) {
+    modes->clear();
+    auto monitor = static_cast<HMONITOR>(GxMonitorGet(index));
+    if (monitor == nullptr) {
+        return;
+    }
+    uint32_t maxWidth = 0;
+    uint32_t maxHeight = 0;
+    auto current = static_cast<HMONITOR>(GxMonitorGet(index));
+    if (current != nullptr) {
+        MONITORINFOEXA info = {};
+        info.cbSize = sizeof(info);
+        if (GetMonitorInfoA(current, &info)) {
+            DEVMODEA mode = {};
+            mode.dmSize = sizeof(mode);
+            if (EnumDisplaySettingsA(info.szDevice, ENUM_CURRENT_SETTINGS, &mode)) {
+                maxHeight = static_cast<uint16_t>(mode.dmPelsHeight);
+                maxWidth = static_cast<uint16_t>(mode.dmPelsWidth);
+            }
+        }
+    }
+    MONITORINFOEXA info = {};
+    info.cbSize = sizeof(info);
+    if (!GetMonitorInfoA(monitor, &info)) {
+        return;
+    }
+    DEVMODEA mode = {};
+    mode.dmSize = sizeof(mode);
+    for (DWORD i = 0; EnumDisplaySettingsA(info.szDevice, i, &mode); i++) {
+        if (mode.dmPelsWidth >= 0x280 && mode.dmPelsHeight >= 0x1e0 && mode.dmBitsPerPel >= 0x10
+            && ((mode.dmFields & DM_DISPLAYFIXEDOUTPUT) == 0 || mode.dmDisplayFixedOutput != DMDFO_CENTER)
+            && mode.dmPelsWidth <= maxWidth && mode.dmPelsHeight <= maxHeight) {
+            GXMONITORMODE entry = {};
+            entry.m_size.m_width = static_cast<uint16_t>(mode.dmPelsWidth);
+            entry.m_size.m_height = static_cast<uint16_t>(mode.dmPelsHeight);
+            entry.m_bitsPerPixel = mode.dmBitsPerPel;
+            modes->push_back(entry);
+        }
+    }
+}
+
+// Larger first: width, then height, then depth (LAB_142291ae0).
+bool MonitorModeGreater(const GXMONITORMODE& a, const GXMONITORMODE& b) {
+    if (a.m_size.m_width != b.m_size.m_width) {
+        return a.m_size.m_width > b.m_size.m_width;
+    }
+    if (a.m_size.m_height != b.m_size.m_height) {
+        return a.m_size.m_height > b.m_size.m_height;
+    }
+    return a.m_bitsPerPixel > b.m_bitsPerPixel;
+}
+
+}  // namespace
+
+// The modes, sorted (FUN_14228fb80). True when there are none.
+// ref: FUN_142290c30
+bool GxMonitorGetModes(uint32_t index, blz::vector<GXMONITORMODE, s_gxMonitorModeTag>* modes) {
+    MonitorEnumerateModes(index, modes);
+    std::sort(modes->begin(), modes->end(), MonitorModeGreater);
+    return modes->size() == 0;
 }

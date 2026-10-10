@@ -4,6 +4,7 @@
 #include "console/Var.hpp"
 #include "framescript/ScriptMethod.hpp"
 #include "glue/ScriptAPIHandlers.hpp"
+#include "framescript/EventCallbacks.hpp"
 #include "util/Fnv.hpp"
 #include <string>
 
@@ -104,6 +105,198 @@ int32_t GetCVarDefaultBody(lua_State* L, void* context) {
     return 1;
 }
 
+// The script API's view of a CVar by name: whether scripts see it (FUN_141c2cbc0), may change
+// it (FUN_141c2cab0: not read-only, flags 0x104), and are trusted to when it is protected
+// (FUN_141c2cb30: flag 8 needs secure code, action 0x23).
+bool ScriptCVarVisible(const char* name) {
+    CVar* cvar = CVarLookup(name == nullptr ? 0 : t2util::ConstFnvHashStringI(name));
+    return cvar != nullptr && (cvar->m_flags & CVAR_FLAG_SCRIPT_HIDDEN) == 0;
+}
+
+bool ScriptCVarWritable(const char* name) {
+    CVar* cvar = CVarLookup(name == nullptr ? 0 : t2util::ConstFnvHashStringI(name));
+    return cvar != nullptr && (cvar->m_flags & 0x104) == 0;
+}
+
+bool ScriptCVarPermitted(const char* name) {
+    CVar* cvar = CVarLookup(name == nullptr ? 0 : t2util::ConstFnvHashStringI(name));
+    if (cvar == nullptr) {
+        return false;
+    }
+    return (cvar->m_flags >> 3 & 1) == 0 || ScriptMethod::IsActionPermitted(0x23);
+}
+
+// The value set (absent reads as "0"), and CVAR_UPDATE for a script CVar name.
+// ref: FUN_141c2cc90
+bool ScriptCVarSet(const char* name, const char* value, const char* scriptCVar) {
+    CVar* cvar = CVarLookup(name == nullptr ? 0 : t2util::ConstFnvHashStringI(name));
+    const char* text = value != nullptr ? value : "0";
+    bool result = CVarSet(cvar, text, true, false, false, true);
+    if (scriptCVar != nullptr) {
+        UiSignalCVarUpdate(scriptCVar, value != nullptr ? value : "0");
+    }
+    return result;
+}
+
+// A bit of a visible CVar, converting an old-form value first; nothing for an unknown one.
+// ref: FUN_141c2c780
+bool ScriptCVarGetBit(const char* name, uint32_t index, bool* bit) {
+    CVar* cvar = CVarLookup(name == nullptr ? 0 : t2util::ConstFnvHashStringI(name));
+    if (cvar == nullptr || (cvar->m_flags & CVAR_FLAG_SCRIPT_HIDDEN) != 0) {
+        return false;
+    }
+    const char* value = cvar->m_stringValue.GetString();
+    if (value[0] != 2) {
+        CVarConvertBitfield(cvar, value[0]);
+    }
+    *bit = CVarGetBit(cvar, index);
+    return true;
+}
+
+// ref: FUN_141c2cd60
+bool ScriptCVarSetBit(const char* name, uint32_t index, bool on, const char* scriptCVar) {
+    CVar* cvar = CVarLookup(name == nullptr ? 0 : t2util::ConstFnvHashStringI(name));
+    int32_t marker = cvar != nullptr ? cvar->m_stringValue.GetString()[0] : 0;
+    if (cvar == nullptr || marker != 2) {
+        CVarConvertBitfield(cvar, marker);
+    }
+    CVarSetBit(cvar, index, on);
+    if (scriptCVar != nullptr) {
+        UiSignalCVarUpdate(scriptCVar, on ? "1" : "0");
+    }
+    return true;
+}
+
+// One string argument at `index`, optional or not; the generated checks raise the usage.
+const char* StringArgument(lua_State* L, int32_t index, bool optional, const char* usage, bool* present) {
+    *present = false;
+    if (lua_type(L, index) < 1) {
+        if (!optional) {
+            luaL_error(L, usage);
+        }
+        return nullptr;
+    }
+    if (!lua_isstring(L, index)) {
+        luaL_argerror(L, index, usage);
+        return nullptr;
+    }
+    if (!lua_checkstack(L, 1)) {
+        luaL_error(L, "stack overflow");
+        return nullptr;
+    }
+    *present = true;
+    return lua_tolstring(L, index, nullptr);
+}
+
+uint32_t IndexArgument(lua_State* L, int32_t index, const char* usage) {
+    if (lua_type(L, index) < 1) {
+        luaL_error(L, usage);
+        return 0;
+    }
+    if (!lua_isnumber(L, index)) {
+        luaL_argerror(L, index, usage);
+        return 0;
+    }
+    if (!lua_checkstack(L, 1)) {
+        luaL_error(L, "stack overflow");
+        return 0;
+    }
+    return static_cast<uint32_t>(static_cast<int32_t>(lua_tonumber(L, index) - 1.0));  // DAT_14261c978
+}
+
+void PushBool(lua_State* L, bool value) {
+    if (!lua_checkstack(L, 1)) {
+        luaL_error(L, "stack overflow");
+        return;
+    }
+    lua_pushboolean(L, value);
+}
+
+// ref: FUN_140c5e1b0
+int32_t SetCVarBody(lua_State* L, void* context) {
+    (void)context;
+    const char* usage = "Usage: local success = C_CVar.SetCVar(name [, value, scriptCVar])";
+    bool present;
+    const char* name = StringArgument(L, 1, false, usage, &present);
+    int32_t index = present ? 2 : 1;
+    bool hasValue;
+    const char* value = StringArgument(L, index, true, usage, &hasValue);
+    index++;
+    bool hasScript;
+    const char* scriptCVar = StringArgument(L, index, true, usage, &hasScript);
+    if (!ScriptCVarVisible(name) || !ScriptCVarWritable(name) || !ScriptCVarPermitted(name)) {
+        return 0;
+    }
+    bool result = ScriptCVarSet(name, hasValue ? value : nullptr, hasScript ? scriptCVar : nullptr);
+    PushBool(L, result);
+    return 1;
+}
+
+// ref: FUN_140c5c360
+int32_t GetCVarBitfieldBody(lua_State* L, void* context) {
+    (void)context;
+    const char* usage = "Usage: local value = C_CVar.GetCVarBitfield(name, index)";
+    bool present;
+    const char* name = StringArgument(L, 1, false, usage, &present);
+    uint32_t index = IndexArgument(L, present ? 2 : 1, usage);
+    bool bit = false;
+    if (!ScriptCVarGetBit(name, index, &bit)) {
+        if (lua_checkstack(L, 1)) {
+            lua_pushnil(L);
+        }
+        return 1;
+    }
+    PushBool(L, bit);
+    return 1;
+}
+
+// ref: FUN_140c5e9d0
+int32_t SetCVarBitfieldBody(lua_State* L, void* context) {
+    (void)context;
+    const char* usage = "Usage: local success = C_CVar.SetCVarBitfield(name, index, value [, scriptCVar])";
+    bool present;
+    const char* name = StringArgument(L, 1, false, usage, &present);
+    int32_t argument = present ? 2 : 1;
+    uint32_t index = IndexArgument(L, argument, usage);
+    argument++;
+    bool on = false;
+    if (lua_type(L, argument) < 1) {
+        luaL_error(L, usage);
+    } else if (!lua_checkstack(L, 1)) {
+        luaL_error(L, "stack overflow");
+    } else {
+        on = lua_toboolean(L, argument) != 0;
+        argument++;
+    }
+    bool hasScript;
+    const char* scriptCVar = StringArgument(L, argument, true, usage, &hasScript);
+    if (!ScriptCVarVisible(name) || !ScriptCVarWritable(name) || !ScriptCVarPermitted(name)
+        || !CVarBitIndexValid(index)) {
+        return 0;
+    }
+    bool result = ScriptCVarSetBit(name, index, on, hasScript ? scriptCVar : nullptr);
+    PushBool(L, result);
+    return 1;
+}
+
+}
+
+// ref: FUN_140c9aa00
+int Lua_C_CVar_SetCVar(lua_State* L) {
+    return ScriptMethod::ProtectedCall(L, SetCVarBody, nullptr);
+}
+
+// ref: FUN_140c96ee0
+int Lua_C_CVar_GetCVarBitfield(lua_State* L) {
+    return ScriptMethod::ProtectedCall(L, GetCVarBitfieldBody, nullptr);
+}
+
+// ref: FUN_140c9b730
+int Lua_C_CVar_SetCVarBitfield(lua_State* L) {
+    return ScriptMethod::ProtectedCall(L, SetCVarBitfieldBody, nullptr);
+}
+
+namespace {
 }
 
 // ref: FUN_140c96190

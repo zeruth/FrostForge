@@ -4,6 +4,7 @@
 #include "client/ClientCVars.hpp"
 #include "console/Command.hpp"
 #include "console/Var.hpp"
+#include "framescript/EventCallbacks.hpp"
 #include "os/Window.hpp"
 #include "storm/String.hpp"
 #include "util/Unimplemented.hpp"
@@ -180,10 +181,7 @@ void ClientCVarChanged(CVar* cvar, const char* oldValue, const char* newValue) {
     // FUN_140255c60: a debug print compiled out of this build
     // ("CVarChangedHandler: Changed '%s' from '%s' to '%s'\n")
     if (oldValue != nullptr) {
-        // FUN_141174040: the UI's CVAR_UPDATE event (hash 0x32b2c96789f77675) through the
-        // script event dispatcher (FUN_141273d80 + 0xec0), not ported
-        FROST_UNIMPLEMENTED();
-        (void)newValue;
+        UiSignalCVarUpdate(cvar->m_name.m_data, newValue);
     }
 }
 

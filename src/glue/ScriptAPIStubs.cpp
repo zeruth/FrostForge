@@ -91,13 +91,6 @@ int Lua_C_AuthChallenge_Submit(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140c96ee0
-int Lua_C_CVar_GetCVarBitfield(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140c99690
 int Lua_C_CVar_RegisterCVar(lua_State* L) {
     (void)L;
@@ -107,20 +100,6 @@ int Lua_C_CVar_RegisterCVar(lua_State* L) {
 
 // ref: FUN_140c9a3c0
 int Lua_C_CVar_ResetTestCVars(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140c9aa00
-int Lua_C_CVar_SetCVar(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140c9b730
-int Lua_C_CVar_SetCVarBitfield(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -2163,13 +2142,6 @@ int Lua_C_VideoOptions_GetDefaultGameWindowSize(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140b6e390
-int Lua_C_VideoOptions_GetGameWindowSizes(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140b6f0f0
 int Lua_C_VideoOptions_GetGxAdapterInfo(lua_State* L) {
     (void)L;
@@ -3425,27 +3397,6 @@ int Lua_GetMaximumExpansionLevel(lua_State* L) {
 
 // ref: FUN_141085420
 int Lua_GetMinimumExpansionLevel(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1419f4c10
-int Lua_GetMonitorAspectRatio(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1419f4be0
-int Lua_GetMonitorCount(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1419f4cb0
-int Lua_GetMonitorName(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
