@@ -910,7 +910,7 @@ class CM2Model : public CM2BaseModel {
     void ShareParentBones();
 
     // Set up from the loaded file (FUN_1411c1360): `donor` lends its textures and state.
-    void Initialize(CM2Scene* scene, CM2Shared* shared, CM2Model* donor, uint8_t lod, uint32_t createFlags);
+    bool Initialize(CM2Scene* scene, CM2Shared* shared, CM2Model* donor, uint8_t lod, uint32_t createFlags);
     // ref: FUN_1411c24f0
     bool InitializeLoaded();
 };

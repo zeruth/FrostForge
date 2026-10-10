@@ -516,6 +516,49 @@ void CM2Scene::ReleaseDeviceObjects() {
     this->m_pipelineCacheB->Clear();
 }
 
+// ref: FUN_1411d8c80
+CM2Model* CM2Scene::CreateModel(int32_t fileDataId, uint32_t flags, uint8_t priority, uint8_t lod) {
+    this->m_crit0d8.Enter();
+    CM2Shared* shared = M2CacheGetShared(this->m_cache, fileDataId, nullptr, flags, priority);  // FUN_141196280
+    CM2Model* model = nullptr;
+    if (shared != nullptr) {
+        model = M2ModelAlloc(flags);
+        if (((this->m_type - 1) & ~4u) == 0) {
+            flags |= 0x2000;
+        }
+        if (model != nullptr && !model->Initialize(this, shared, nullptr, lod, flags)) {
+            M2ModelFree(model);
+            model = nullptr;
+        }
+        shared->ReleaseModelRef();
+    }
+    this->m_crit0d8.Leave();
+    return model;
+}
+
+// ref: FUN_1411d8d50
+CM2Model* CM2Scene::CreateModel(const char* name, uint32_t flags, uint8_t priority, uint8_t lod) {
+    if (name == nullptr || *name == '\0') {
+        return nullptr;
+    }
+    this->m_crit0d8.Enter();
+    CM2Shared* shared = M2CacheGetSharedByName(this->m_cache, name, flags, priority);
+    CM2Model* model = nullptr;
+    if (shared != nullptr) {
+        model = M2ModelAlloc(flags);
+        if (((this->m_type - 1) & ~4u) == 0) {
+            flags |= 0x2000;
+        }
+        if (!model->Initialize(this, shared, nullptr, lod, flags)) {
+            M2ModelFree(model);
+            model = nullptr;
+        }
+        shared->ReleaseModelRef();
+    }
+    this->m_crit0d8.Leave();
+    return model;
+}
+
 // ref: FUN_1411df6e0
 void CM2Scene::OnRenderSettingsChanged(const RENDERSETTINGS* previous, const RENDERSETTINGS* current) {
     for (CM2BaseModel* model = this->m_models; model != nullptr; model = model->m_sceneNext) {

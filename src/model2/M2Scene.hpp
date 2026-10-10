@@ -197,6 +197,10 @@ class CM2Scene {
     // a device comes up (FUN_1411d8ee0), and all of it released when it goes (FUN_1411d92a0).
     void RecreateDeviceObjects();
     void ReleaseDeviceObjects();
+    // A model of a file by FileDataID (FUN_1411d8c80) or by path (FUN_1411d8d50), initialized
+    // into the scene at `lod`; null when the file or the model cannot be had.
+    CM2Model* CreateModel(int32_t fileDataId, uint32_t flags, uint8_t priority, uint8_t lod);
+    CM2Model* CreateModel(const char* name, uint32_t flags, uint8_t priority, uint8_t lod);
     // Every model told the render settings changed (FUN_1411df6e0).
     void OnRenderSettingsChanged(const struct RENDERSETTINGS* previous, const struct RENDERSETTINGS* current);
 };

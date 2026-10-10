@@ -499,6 +499,23 @@ void M2Initialize(uint32_t flags, int32_t perHeap, uint32_t logFlags) {
     s_initialized = 1;
 }
 
+// A model from the pool its creation flags pick (0x4000), constructed (FUN_141196cf0).
+// ref: FUN_141196cf0
+CM2Model* M2ModelAlloc(uint32_t flags) {
+    void* memory = s_modelPools[(flags >> 0xe) & 1]->Alloc();
+    if (memory == nullptr) {
+        return nullptr;
+    }
+    return new (memory) CM2Model();
+}
+
+// ref: FUN_141197410
+void M2ModelFree(CM2Model* model) {
+    TObjectAllocHeap* pool = s_modelPools[(model->m_createFlags >> 0xe) & 1];
+    model->~CM2Model();
+    pool->Free(model);
+}
+
 TObjectAllocHeap* M2GetModelPool(uint32_t which) {
     return s_modelPools[which & 1];
 }

@@ -368,7 +368,7 @@ M2ModelEffect* CopyEffect(const M2ModelEffect* from) {
 }  // namespace
 
 // ref: FUN_1411c1360
-void CM2Model::Initialize(CM2Scene* scene, CM2Shared* shared, CM2Model* donor, uint8_t lod, uint32_t createFlags) {
+bool CM2Model::Initialize(CM2Scene* scene, CM2Shared* shared, CM2Model* donor, uint8_t lod, uint32_t createFlags) {
     this->AddToScene(scene);
     this->m_createTime = this->m_scene->m_time;
     this->m_shared = shared;
@@ -447,7 +447,7 @@ void CM2Model::Initialize(CM2Scene* scene, CM2Shared* shared, CM2Model* donor, u
         }
     }
     this->m_modelFlags2 = (flags2 & 0xfffe7fff) | flag8000 | flag10000;
-    M2SharedAttachModel(this->m_shared, this);
+    return M2SharedAttachModel(this->m_shared, this);
 }
 
 // A model made of the file: initialized now if the file and its skin profiles are in, else
