@@ -1,4 +1,5 @@
 #include "ui/CSimpleTexture.hpp"
+#include "base/Coordinate.hpp"
 
 #include <cmath>
 #include <cstring>
@@ -55,9 +56,11 @@ blz::vector<CSimpleMaskTexture*, s_maskTextureTag> s_noMasks;
 const uint32_t ERROR_COLOR = 0xff00ff00;
 
 // The texels across the screen at scale 1 (DAT_142ccb9fc * DAT_14261a9c4), against the UI's
-// 0.8 x 0.6 (DAT_142ccb9f4).
-const float TEXELS_PER_SCREEN = 1024.0f;
-const float UI_WIDTH = 0.8f;
+// width (DAT_142ccb9f4).
+float TexelsPerScreen() {
+    return g_coordinateSpace.m_aspectCompensation * 1024.0f;
+}
+const float& UI_WIDTH = g_coordinateSpace.m_diagonalWidth;
 
 const float DEFAULT_TEX_COORDS[8] = { 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f };
 
@@ -724,7 +727,7 @@ void CSimpleTexture::LoadXML(XMLOBJECT* node, CStatus* status, const char* intri
             if ((xmlFlags & 0x8000000) != 0) {
                 float size[2] = {};
                 TextureAtlasGetSize(&this->m_atlas, size);
-                float toUi = 1.0f / TEXELS_PER_SCREEN;
+                float toUi = 1.0f / TexelsPerScreen();
                 this->SetSize(size[0] * toUi * UI_WIDTH, size[1] * toUi * UI_WIDTH);
             }
         }
@@ -856,12 +859,12 @@ void CSimpleTexture::ComputePositions(const CRect* rect, float* positions) {
 // The quad's width in texels at the reference scale.
 // ref: FUN_140632350
 float CSimpleTexture::GetPixelWidth() {
-    return (((this->m_positions[3][0] - this->m_positions[0][0]) * 1.0f * TEXELS_PER_SCREEN) / UI_WIDTH) / this->m_layoutScale;
+    return (((this->m_positions[3][0] - this->m_positions[0][0]) * 1.0f * TexelsPerScreen()) / UI_WIDTH) / this->m_layoutScale;
 }
 
 // ref: FUN_140632310
 float CSimpleTexture::GetPixelHeight() {
-    return (((this->m_positions[0][1] - this->m_positions[1][1]) * 1.0f * TEXELS_PER_SCREEN) / UI_WIDTH) / this->m_layoutScale;
+    return (((this->m_positions[0][1] - this->m_positions[1][1]) * 1.0f * TexelsPerScreen()) / UI_WIDTH) / this->m_layoutScale;
 }
 
 // ---- CLayoutFrame ------------------------------------------------------------------------------------
@@ -895,7 +898,7 @@ float CSimpleTexture::GetWidth() {
     if (width == 0.0f && this->m_texture != nullptr) {
         uint32_t texels = 0;
         if (TextureGetSize(this->m_texture, &texels, nullptr, false)) {
-            return (static_cast<float>(texels) / TEXELS_PER_SCREEN) * UI_WIDTH;
+            return (static_cast<float>(texels) / TexelsPerScreen()) * UI_WIDTH;
         }
     }
     return width;
@@ -907,7 +910,7 @@ float CSimpleTexture::GetHeight() {
     if (height == 0.0f && this->m_texture != nullptr) {
         uint32_t texels = 0;
         if (TextureGetSize(this->m_texture, nullptr, &texels, false)) {
-            return (static_cast<float>(texels) / TEXELS_PER_SCREEN) * UI_WIDTH;
+            return (static_cast<float>(texels) / TexelsPerScreen()) * UI_WIDTH;
         }
     }
     return height;

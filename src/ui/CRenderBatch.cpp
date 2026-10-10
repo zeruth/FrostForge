@@ -1,4 +1,5 @@
 #include "ui/CRenderBatch.hpp"
+#include "base/Coordinate.hpp"
 
 #include "base/Matrix.hpp"
 
@@ -34,8 +35,8 @@ const char s_stringNodeTag[] = ".?AU?$chained_hash_node@U?$pair@$$CB_KPEAUGxuStr
 const char s_stringBucketTag[] = ".PEAU?$chained_hash_node@U?$pair@$$CB_KPEAUGxuStringBatch@@@blz@@@blz@@";
 
 // The screen in UI units (DAT_142ccb9f4, DAT_142ccb9f8).
-const float UI_WIDTH = 0.8f;
-const float UI_HEIGHT = 0.6f;
+const float& UI_WIDTH = g_coordinateSpace.m_diagonalWidth;
+const float& UI_HEIGHT = g_coordinateSpace.m_diagonalHeight;
 
 // The batches' pool (0x142e97ba0, made by the static initializer 0x1401df6e0).
 CDataAllocator s_batchHeap(0x68, 100);

@@ -3,6 +3,7 @@
 // (C_VideoOptions).
 
 #include "client/GxWindow.hpp"
+#include "base/Coordinate.hpp"
 #include "framescript/FrameScript.hpp"
 #include "framescript/ScriptMethod.hpp"
 #include "glue/ScriptAPIHandlers.hpp"
@@ -29,9 +30,9 @@ namespace {
 
 // The screen in UI units (DAT_142ccb9f4, DAT_142ccb9f8), the aspect compensation
 // (DAT_142ccb9fc) and the UI's 1024 units across (DAT_14261a9c4).
-constexpr float UI_WIDTH = 0.8f;
-constexpr float UI_HEIGHT = 0.6f;
-constexpr float UI_ASPECT = 1.0f;
+const float& UI_WIDTH = g_coordinateSpace.m_diagonalWidth;
+const float& UI_HEIGHT = g_coordinateSpace.m_diagonalHeight;
+const float& UI_ASPECT = g_coordinateSpace.m_aspectCompensation;
 constexpr float UI_UNITS = 1024.0f;
 
 // UIParent's scale, 1 without it.

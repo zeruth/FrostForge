@@ -1,5 +1,6 @@
 #include "world/WorldFrame.hpp"
 
+#include "base/Coordinate.hpp"
 #include "base/Matrix.hpp"
 #include "blz/Function.hpp"
 #include "client/GraphicsSettings.hpp"
@@ -766,8 +767,8 @@ void WorldSceneRenderView(CWorldScene* scene, uint32_t* params, const float* cam
         M2CameraGetOrthoMatrices(rect, origin, nullptr, view, projection);
     }
     // To the screen's units: x across, y up.
-    const float unitsX = 0.8f;     // DAT_142ccb9f4
-    const float unitsY = 0.6f;     // DAT_142ccb9f8
+    const float unitsX = g_coordinateSpace.m_diagonalWidth;    // DAT_142ccb9f4
+    const float unitsY = g_coordinateSpace.m_diagonalHeight;   // DAT_142ccb9f8
     rect[1] /= unitsX;
     rect[0] /= unitsY;
     rect[3] /= unitsX;
