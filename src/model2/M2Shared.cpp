@@ -512,6 +512,51 @@ void CM2Shared::AddUse() {
     this->m_useCount++;
 }
 
+// ref: FUN_1411a4df0
+int32_t CM2Shared::AddModelRef() {
+    this->m_useCount++;
+    M2CacheLock();
+    int32_t count = this->m_refCount;
+    if (count == 0 && this->m_cache != nullptr) {
+        if (this->m_cacheLink.IsLinked()) {
+            this->m_cacheLink.Unlink();
+            this->m_cacheLink.m_prevlink = nullptr;
+            this->m_cacheLink.m_next = nullptr;
+            count = this->m_refCount;
+        }
+        this->m_releaseFrame = 0;
+    }
+    this->m_refCount = count + 1;
+    M2CacheUnlock();
+    return this->m_refCount;
+}
+
+// The last model's reference puts the file on the cache's idle list, stamped with the frame,
+// or frees it when it has no cache.
+// ref: FUN_1411abed0
+int32_t CM2Shared::ReleaseModelRef() {
+    this->m_useCount--;
+    M2CacheLock();
+    this->m_refCount--;
+    if (this->m_refCount == 0) {
+        M2CACHE* cache = this->m_cache;
+        if (cache == nullptr) {
+            M2SharedFree(this);
+            M2CacheUnlock();
+            return 0;
+        }
+        this->m_releaseFrame = cache->m_frame;
+        if (this->m_cacheLink.IsLinked()) {
+            this->m_cacheLink.Unlink();
+            this->m_cacheLink.m_prevlink = nullptr;
+            this->m_cacheLink.m_next = nullptr;
+        }
+        cache->m_idleShared.LinkToTail(this);
+    }
+    M2CacheUnlock();
+    return this->m_refCount;
+}
+
 // ---- reading --------------------------------------------------------------------------------
 
 namespace {

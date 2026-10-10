@@ -428,6 +428,14 @@ TObjectAllocHeap* M2GetSharedPool() {
     return s_sharedPool;
 }
 
+TObjectAllocHeap* M2GetCallPool() {
+    return s_callPool;
+}
+
+TObjectAllocHeap* M2GetImpactPool() {
+    return s_impactPool;
+}
+
 // ref: FUN_141197460
 void M2SharedFree(CM2Shared* shared) {
     shared->~CM2Shared();

@@ -194,6 +194,10 @@ struct CM2Shared {
     int32_t AddRef();
     // ref: FUN_1411a4ef0
     void AddUse();
+    // A model's reference: a use and a reference (FUN_1411a4df0), and its release, the last one
+    // putting the file on the cache's idle list (FUN_1411abed0). The count left.
+    int32_t AddModelRef();
+    int32_t ReleaseModelRef();
 
     // Starts the read (FUN_1411aa6f0 by FileDataID, FUN_1411aa7c0 by name).
     void LoadById(int32_t fileDataId, uint32_t flags, uint8_t priority);
@@ -291,6 +295,9 @@ void M2Initialize(uint32_t flags, int32_t perHeap, uint32_t logFlags);
 // The pools (DAT_1430a0e68 by the creation flag 0x4000, DAT_1430a0e78).
 TObjectAllocHeap* M2GetModelPool(uint32_t which);
 TObjectAllocHeap* M2GetSharedPool();
+// BaseModel's pools (DAT_1430a1260 the calls, DAT_1430a1268 the impacts).
+TObjectAllocHeap* M2GetCallPool();
+TObjectAllocHeap* M2GetImpactPool();
 // The file's destruction back into its pool (FUN_141197460).
 void M2SharedFree(CM2Shared* shared);
 

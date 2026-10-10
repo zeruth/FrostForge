@@ -26,6 +26,13 @@ void QuaternionToRotation(const float* q, float* m);                      // FUN
 float* MatrixFromQuaternion(float* m, const float* q);                    // FUN_1413409e0
 // A 0..1 colour as 0xffRRGGBB (FUN_141343fd0).
 uint32_t ColorFromVector(const float* rgb);
+// The determinant (FUN_141341ab0), the adjoint (FUN_141340bf0), the inverse as the adjoint
+// over a determinant already found (FUN_141341ef0), and the in-place inverse of a uniformly
+// scaled rotation and translation (FUN_141341850).
+float MatrixDeterminant(const float* m);
+float* MatrixAdjoint(const float* m, float* out);
+float* MatrixInverse(const float* m, float* out, float determinant);
+void MatrixAffineInverse(float* m, float scale);
 // Normalises unless the length is about zero (FUN_1411c9970).
 void VectorNormalize(float* v);
 

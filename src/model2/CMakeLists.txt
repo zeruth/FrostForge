@@ -1,11 +1,14 @@
 add_library(model2 STATIC
+    BaseModel.cpp
     CM2Lighting.cpp
     M2Api.cpp
     M2Cache.cpp
     M2Init.cpp
     M2Model.cpp
+    M2Scene.cpp
     M2Shaders.cpp
     M2Shared.cpp
+    M2Track.cpp
 )
 target_include_directories(model2 PUBLIC ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(model2 PUBLIC base util cas console fileservices gx shadereffect storm texture)

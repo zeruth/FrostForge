@@ -171,6 +171,119 @@ uint32_t ColorFromVector(const float* rgb) {
     return 0xff000000u | (r << 16) | (g << 8) | b;
 }
 
+// ref: FUN_141341ab0
+float MatrixDeterminant(const float* m) {
+    float a = m[5];
+    float b = m[4];
+    float c = m[9];
+    float d = m[10];
+    float e = m[7];
+    float f = m[11];
+    float g = m[15];
+    float h = m[6];
+    float i = m[8];
+    float j = m[12];
+    float k = m[14];
+    float l = m[13];
+    return ((((((h * f * l + a * d * g + e * c * k) - e * d * l) - h * c * g) - a * f * k) * m[0]
+                - ((((d * b * g + h * f * j + e * i * k) - e * d * j) - h * i * g) - f * b * k) * m[1])
+               + ((((b * c * g + a * f * j + e * i * l) - e * c * j) - i * a * g) - f * b * l) * m[2])
+        - ((((b * c * k + a * d * j + h * i * l) - h * c * j) - i * a * k) - d * b * l) * m[3];
+}
+
+// The cofactors, transposed.
+// ref: FUN_141340bf0
+float* MatrixAdjoint(const float* m, float* out) {
+    float r[16];
+    for (int32_t row = 0; row < 4; row++) {
+        for (int32_t column = 0; column < 4; column++) {
+            // The 3x3 minor without `row` and `column`.
+            float n[9];
+            int32_t k = 0;
+            for (int32_t y = 0; y < 4; y++) {
+                if (y == row) {
+                    continue;
+                }
+                for (int32_t x = 0; x < 4; x++) {
+                    if (x != column) {
+                        n[k++] = m[y * 4 + x];
+                    }
+                }
+            }
+            float minor = n[0] * (n[4] * n[8] - n[5] * n[7]) - n[1] * (n[3] * n[8] - n[5] * n[6])
+                + n[2] * (n[3] * n[7] - n[4] * n[6]);
+            r[column * 4 + row] = ((row + column) & 1) != 0 ? -minor : minor;
+        }
+    }
+    for (int32_t i = 0; i < 16; i++) {
+        out[i] = r[i];
+    }
+    return out;
+}
+
+// The adjoint over `determinant`.
+// ref: FUN_141341ef0
+float* MatrixInverse(const float* m, float* out, float determinant) {
+    float adjoint[16];
+    MatrixAdjoint(m, adjoint);
+    float scale = 1.0f / determinant;
+    for (int32_t i = 0; i < 16; i++) {
+        out[i] = adjoint[i] * scale;
+    }
+    return out;
+}
+
+// In place, for a rotation scaled by `scale` and moved: the rotation transposed (over the
+// scale squared when the scale is not 1) and the translation taken back through it.
+// ref: FUN_141341850
+void MatrixAffineInverse(float* m, float scale) {
+    float m8 = m[8];
+    if (9.536743e-07f <= std::fabs(scale - 1.0f)) {  // DAT_14261a958
+        float m1 = m[1];
+        float m2 = m[2];
+        float m6 = m[6];
+        float m9 = m[9];
+        float m4 = m[4];
+        float s = 1.0f / (scale * scale);
+        float m0 = m[0];
+        float tx = -m[12];
+        m[1] = m4 * s;
+        m[4] = s * m1;
+        float m5 = m[5];
+        float ty = -m[13];
+        m[2] = m8 * s;
+        float tz = -m[14];
+        m[0] = s * m0;
+        float m10 = m[10];
+        m[5] = s * m5;
+        m[6] = m9 * s;
+        m[8] = s * m2;
+        m[9] = s * m6;
+        m[10] = s * m10;
+        m[12] = s * m1 * ty + s * m0 * tx + tz * s * m2;
+        m[13] = m4 * s * tx + s * m5 * ty + tz * s * m6;
+        m[14] = m8 * s * tx + m9 * s * ty + tz * s * m10;
+    } else {
+        float m1 = m[1];
+        float m4 = m[4];
+        float m2 = m[2];
+        float m6 = m[6];
+        float m9 = m[9];
+        m[4] = m1;
+        m[2] = m8;
+        m[1] = m4;
+        m[8] = m2;
+        m[6] = m9;
+        m[9] = m6;
+        float tx = -m[12];
+        float ty = -m[13];
+        float tz = -m[14];
+        m[12] = tx * m[0] + ty * m1 + tz * m2;
+        m[13] = ty * m[5] + m4 * tx + tz * m6;
+        m[14] = m8 * tx + ty * m9 + tz * m[10];
+    }
+}
+
 // ref: FUN_1411c9970
 void VectorNormalize(float* v) {
     float length = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
