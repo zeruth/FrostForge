@@ -1882,3 +1882,133 @@ float CM2Model::GetScaledRadius(C3Vector* center, float* radius) {
     *radius = 0.0f;
     return partial;
 }
+
+namespace {
+
+// The name with its extension replaced (FUN_140214020): the last '.' after the last separator.
+// ref: FUN_140214020
+void ReplaceExtension(char* buffer, size_t size, const char* name, const char* extension) {
+    const char* dot = nullptr;
+    const char* cursor = name;
+    for (char c = *cursor; c != '\0'; c = *++cursor) {
+        if (c == '.') {
+            dot = cursor;
+        } else if (c == '/' || c == '\\') {
+            dot = nullptr;
+        }
+    }
+    const char* end = dot != nullptr ? dot : cursor;
+    size_t length = static_cast<size_t>(end - name);
+    if (size <= length) {
+        *buffer = '\0';
+        return;
+    }
+    if (name != buffer) {
+        std::memcpy(buffer, name, length);
+    }
+    char* out = buffer + length;
+    size_t left = size - length;
+    for (;;) {
+        left--;
+        if (left == 0) {
+            *out = '\0';
+            return;
+        }
+        char c = *extension++;
+        *out++ = c;
+        if (c == '\0') {
+            return;
+        }
+    }
+}
+
+// The shared file's content key, by FileDataID or by name.
+bool SharedContentKey(const CM2Shared* shared, uint8_t* key) {
+    if (shared->m_fileDataId == 0) {
+        return cas::CASFileGetContentKeyByName(shared->m_name, key, (shared->m_flags >> 13) & 0x20);
+    }
+    return cas::CASFileGetContentKeyById(shared->m_fileDataId, key);
+}
+
+}  // namespace
+
+// Whether the other model is a CM2Model of the same file (FUN_1411aa470 compares the keys).
+// ref: FUN_1411c6270
+bool CM2Model::IsSameFile(CM2BaseModel* other) {
+    if (this->m_shared == nullptr || other->m_type != 0) {
+        return false;
+    }
+    CM2Shared* theirs = static_cast<CM2Model*>(other)->m_shared;
+    // FUN_1411aa470
+    uint8_t a[16];
+    uint8_t b[16];
+    if (!SharedContentKey(theirs, a) || !SharedContentKey(this->m_shared, b)) {
+        return false;
+    }
+    return std::memcmp(a, b, sizeof(a)) == 0;
+}
+
+// ref: FUN_1411c62a0
+bool CM2Model::IsFileDataId(int32_t fileDataId) {
+    if (this->m_shared == nullptr) {
+        return false;
+    }
+    uint8_t a[16];
+    uint8_t b[16];
+    if (!cas::CASFileGetContentKeyById(fileDataId, a) || !SharedContentKey(this->m_shared, b)) {
+        return false;
+    }
+    return std::memcmp(a, b, sizeof(a)) == 0;
+}
+
+// ref: FUN_1411c62c0
+bool CM2Model::IsFileName(const char* name) {
+    if (this->m_shared == nullptr) {
+        return false;
+    }
+    char path[0x110];
+    ReplaceExtension(path, 0x104, name, ".m2");  // DAT_14271fc30
+    uint8_t a[16];
+    uint8_t b[16];
+    if (!cas::CASFileGetContentKeyByName(path, a, 0) || !SharedContentKey(this->m_shared, b)) {
+        return false;
+    }
+    return std::memcmp(a, b, sizeof(a)) == 0;
+}
+
+// ref: FUN_1411b9a80
+uint32_t CM2Model::GetAttachmentIndex(uint32_t id) {
+    M2Array<uint16_t>* lookup = this->m_animState->m_attachmentLookup;
+    if (lookup->Count() <= id) {
+        return 0xffff;
+    }
+    return (*lookup)[id];
+}
+
+// Id 0x37 stands in for 0xb on a file without it.
+// ref: FUN_1411bd740
+uint32_t CM2Model::MapAttachmentId(uint32_t id) {
+    if ((this->m_flags & BASE_LOADED) != 0 && id == 0x37) {
+        M2Array<uint16_t>* lookup = this->m_animState->m_attachmentLookup;
+        if (lookup->Count() < 0x38) {
+            return 0xb;
+        }
+        id = 0xb;
+        if ((*lookup)[0x37] < this->m_animState->m_attachments->Count()) {
+            id = 0x37;
+        }
+    }
+    return id;
+}
+
+// ref: FUN_1411c5ad0
+void CM2Model::RegisterRayTracing() {
+    void* rayTracing = M2SceneGetRayTracing(this->m_scene);
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        this->WaitForLoad(0);
+    }
+    if (this->m_shared->m_physics == nullptr || rayTracing == nullptr) {
+        return;
+    }
+    FROST_UNIMPLEMENTED();  // the physics shape's kind (FUN_1412606e0) and its registration
+}

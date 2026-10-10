@@ -8,6 +8,7 @@
 #include "model2/M2Ribbon.hpp"
 #include "model2/M2Scene.hpp"
 #include "model2/M2Shared.hpp"
+#include "os/Sync.hpp"
 
 // Engine/Source/Model2/M2Model.cpp: the per-frame update of a model's animated elements.
 
@@ -862,4 +863,246 @@ void CM2Model::AnimateTextureWeights() {
                 &this->m_textureWeights[i], &one, flags);
         }
     }
+}
+
+// The attachment points' visibility tracks, then each shown child's matrices: from its
+// attachment point (or this model's world matrix), turned to the camera for billboarded
+// children, with a child's extra matrix applied in this model's space (FUN_1411ada40).
+// ref: FUN_1411ada40
+void CM2Model::UpdateChildren(M2AnimateContext* context) {
+    M2AnimState* anim = this->m_animState;
+    M2Array<M2Attachment>* attachments = anim->m_attachments;
+    M2TrackState<uint8_t>* states = anim->m_attachmentStates;
+    M2BoneState* bones = anim->m_boneStates;
+    const uint32_t* globalTimes = anim->m_globalTimes;
+    for (uint32_t i = 0; i < attachments->Count(); i++) {
+        M2Attachment& attachment = (*attachments)[i];
+        if (context->m_f8 != 0 && IsAnimated(attachment.m_animate)) {
+            uint8_t shown = 1;
+            M2TrackSample(globalTimes, Target(&bones[attachment.m_bone]), &attachment.m_animate, &attachment.m_animate,
+                &states[i], &shown, 0);
+        }
+    }
+    float m[16] = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+    for (CM2BaseModel* child = this->m_children; child != nullptr; child = child->m_siblingNext) {
+        uint8_t childShown = child->m_type == 0 ? static_cast<uint8_t>(child->m_flags >> 24 & 1) : 1;
+        uint32_t index = child->m_attachIndex;
+        bool atRoot = index == 0xffff && childShown != 0;
+        if (!((index < attachments->Count() && states[index].m_value != 0) || atRoot)) {
+            continue;
+        }
+        const float* camera = this->m_scene->m_camera.m;
+        if ((child->m_flags >> 14 & 1) == 0) {
+            if (atRoot) {
+                std::memcpy(m, this->m_world.m, sizeof(m));
+            } else {
+                uint16_t bone = (*attachments)[index].m_bone;
+                if (context->m_f8 != 0 && (this->m_boneDone[bone >> 3] & static_cast<uint8_t>(1 << (bone & 7))) == 0) {
+                    this->AnimateBoneTree(bone, context);
+                }
+                this->GetAttachmentMatrix(child->m_attachIndex, reinterpret_cast<C44Matrix*>(m));
+            }
+            if ((child->m_flags >> 16 & 1) == 0) {
+                if ((child->m_flags >> 15 & 1) != 0) {
+                    float scale = std::sqrt(m[1] * m[1] + m[0] * m[0] + m[2] * m[2]);
+                    m[2] = scale * camera[2];
+                    m[1] = scale * camera[1];
+                    m[0] = scale * camera[0];
+                    m[4] = scale * camera[4];
+                    m[5] = scale * camera[5];
+                    m[6] = scale * camera[6];
+                    m[8] = scale * camera[8];
+                    m[9] = scale * camera[9];
+                    m[10] = scale * camera[10];
+                }
+            } else {
+                m[0] = camera[0];
+                m[1] = camera[1];
+                m[2] = camera[2];
+                m[4] = camera[4];
+                m[5] = camera[5];
+                m[6] = camera[6];
+                m[8] = camera[8];
+                m[9] = camera[9];
+                m[10] = camera[10];
+            }
+        } else {
+            std::memcpy(m, camera, sizeof(m));
+        }
+        if (child->m_extraMatrix != nullptr) {
+            if ((this->m_flags & BASE_INVERSE_CURRENT) == 0) {
+                float determinant = MatrixDeterminant(this->m_world.m);
+                if (std::fabs(determinant) < 1.0e-06f) {  // DAT_14261a95c
+                    std::memset(this->m_inverse.m, 0, sizeof(C44Matrix));
+                    this->m_inverse.m[0] = 1.0f;
+                    this->m_inverse.m[5] = 1.0f;
+                    this->m_inverse.m[10] = 1.0f;
+                    this->m_inverse.m[15] = 1.0f;
+                } else {
+                    float inverse[16];
+                    MatrixInverse(this->m_world.m, inverse, determinant);
+                    std::memcpy(this->m_inverse.m, inverse, sizeof(inverse));
+                }
+                this->m_flags |= BASE_INVERSE_CURRENT;
+            }
+            const float* inv = this->m_inverse.m;
+            // P = m * inverse (its last row only partly: the translation comes in below).
+            float p[16];
+            p[0] = m[2] * inv[8] + m[3] * inv[12] + m[0] * inv[0] + m[1] * inv[4];
+            p[1] = m[2] * inv[9] + m[3] * inv[13] + m[0] * inv[1] + m[1] * inv[5];
+            p[2] = m[2] * inv[10] + m[3] * inv[14] + m[0] * inv[2] + m[1] * inv[6];
+            p[3] = m[2] * inv[11] + m[3] * inv[15] + m[0] * inv[3] + m[1] * inv[7];
+            for (int32_t col = 0; col < 4; col++) {
+                p[4 + col] = m[4] * inv[col] + m[5] * inv[4 + col] + m[6] * inv[8 + col] + m[7] * inv[12 + col];
+                p[8 + col] = m[10] * inv[8 + col] + m[11] * inv[12 + col] + m[8] * inv[col] + m[9] * inv[4 + col];
+            }
+            float p15 = m[12] * inv[3] + m[13] * inv[7] + m[14] * inv[11] + m[15] * inv[15];
+            // Q = extra * P with P's last row (0, 0, 0, p15).
+            const float* e = child->m_extraMatrix->m;
+            float q[16];
+            for (int32_t row = 0; row < 4; row++) {
+                const float* er = e + row * 4;
+                for (int32_t col = 0; col < 3; col++) {
+                    q[row * 4 + col] = er[2] * p[8 + col] + er[3] * 0.0f + er[1] * p[4 + col] + er[0] * p[col];
+                }
+                q[row * 4 + 3] = er[2] * p[11] + er[3] * p15 + er[1] * p[7] + er[0] * p[3];
+            }
+            float t0 = m[12] * inv[0] + m[13] * inv[4] + m[14] * inv[8] + m[15] * inv[12] + q[12];
+            float t1 = m[12] * inv[1] + m[13] * inv[5] + m[14] * inv[9] + m[15] * inv[13] + q[13];
+            float t2 = m[12] * inv[2] + m[13] * inv[6] + m[14] * inv[10] + m[15] * inv[14] + q[14];
+            // m = Q * world.
+            const float* w = this->m_world.m;
+            for (int32_t row = 0; row < 3; row++) {
+                const float* qr = q + row * 4;
+                for (int32_t col = 0; col < 4; col++) {
+                    m[row * 4 + col] = qr[0] * w[col] + qr[1] * w[4 + col] + qr[2] * w[8 + col] + qr[3] * w[12 + col];
+                }
+            }
+            for (int32_t col = 0; col < 4; col++) {
+                m[12 + col] = q[15] * w[12 + col] + t2 * w[8 + col] + t0 * w[col] + t1 * w[4 + col];
+            }
+        }
+        child->UpdateMatrices(reinterpret_cast<const C44Matrix*>(m), &this->m_params, context->m_frame,
+            static_cast<uint32_t>(context->m_time), context->m_fc);
+    }
+}
+
+// The animated bounds merged into the accumulated ones, then taken through the inverse render
+// matrix with their centre and radius (FUN_1411b1fe0's tail).
+void CM2Model::UpdateAccumulatedBounds() {
+    float render[16] = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+    this->GetRenderMatrix(reinterpret_cast<C44Matrix*>(render));
+    float inverse[16];
+    MatrixInverse(render, inverse, MatrixDeterminant(render));
+    M2AccumBounds* accum = this->m_accumBounds;
+    float animated[6];
+    float* box = this->GetAnimatedBox(animated, true);
+    float merged[6];
+    // FUN_1411cda20
+    float* a = &accum->m_box.m_min.x;
+    float maxX = box[3] < a[3] ? a[3] : box[3];
+    float maxY = box[4] < a[4] ? a[4] : box[4];
+    float maxZ = box[5] < a[5] ? a[5] : box[5];
+    float minX = box[0] < a[0] ? box[0] : a[0];
+    float minY = box[1] < a[1] ? box[1] : a[1];
+    float minZ = box[2] < a[2] ? box[2] : a[2];
+    a[0] = merged[0] = minX;
+    a[1] = merged[1] = minY;
+    a[2] = merged[2] = minZ;
+    a[3] = merged[3] = maxX;
+    a[4] = merged[4] = maxY;
+    a[5] = merged[5] = maxZ;
+    float local[6];
+    BoxTransform(local, a, inverse);
+    std::memcpy(&accum->m_localBox, local, sizeof(local));
+    const CAaBox& lb = accum->m_localBox;
+    float dx = lb.m_max.x - lb.m_min.x;
+    float dy = lb.m_max.y - lb.m_min.y;
+    float dz = lb.m_max.z - lb.m_min.z;
+    accum->m_center.x = (lb.m_min.x + lb.m_max.x) * 0.5f;
+    accum->m_center.y = (lb.m_min.y + lb.m_max.y) * 0.5f;
+    accum->m_center.z = (lb.m_min.z + lb.m_max.z) * 0.5f;
+    accum->m_radius = std::sqrt(dy * dy + dx * dx + dz * dz) * 0.5f;
+}
+
+// Each bone's offset from the ground below its pivot, found through the scene's trace
+// callback, for the physics bones (FUN_1411b73f0).
+// ref: FUN_1411b73f0
+void CM2Model::InitializePhysicsBones() {
+    static OSMUTEX s_lock;  // DAT_1430a1028
+    static bool s_lockReady = OsMutexInit(&s_lock);
+    (void)s_lockReady;
+    OsMutexLock(&s_lock);
+    const float* v = this->m_view.m;
+    auto offsets = static_cast<float*>(this->m_physicsBones);
+    M2Array<M2CompBone>* bones = this->m_animState->m_bones;
+    C44Matrix* matrices = this->m_animState->m_boneMatrices;
+    // The segment traced: from above the pivot down past it.
+    struct {
+        uint64_t m_00;
+        uint64_t m_08;  // the scene's +0x28
+        float m_position[3];
+        float m_end[3];
+        uint32_t m_28;
+    } query = {};
+    query.m_08 = *reinterpret_cast<const uint64_t*>(reinterpret_cast<const uint8_t*>(this->m_scene) + 0x28);
+    float view[16];
+    std::memcpy(view, v, sizeof(view));
+    float inverse[16];
+    MatrixInverse(view, inverse, MatrixDeterminant(view));
+    for (uint32_t i = 0; i < bones->Count(); i++) {
+        const M2CompBone& bone = (*bones)[i];
+        if ((bone.m_flags & 0x80000) != 0) {
+            this->AnimateBoneFor(i);
+        }
+        const float* b = matrices[i].m;
+        float px = bone.m_pivot.x;
+        float py = bone.m_pivot.y;
+        float pz = bone.m_pivot.z;
+        float wx = py * b[4] + px * b[0] + pz * b[8] + b[12];
+        float wy = py * b[5] + px * b[1] + pz * b[9] + b[13];
+        float wz = py * b[6] + px * b[2] + pz * b[10] + b[14];
+        query.m_position[0] = wx * v[0] + wy * v[4] + wz * v[8] + v[12];
+        query.m_position[1] = wx * v[1] + wy * v[5] + wz * v[9] + v[13];
+        query.m_position[2] = wx * v[2] + wy * v[6] + wz * v[10] + v[14] + 3.5f;  // DAT_142721208
+        query.m_end[0] = query.m_position[0];
+        query.m_end[1] = query.m_position[1];
+        query.m_end[2] = query.m_position[2] - 15.0f;  // DAT_1426d2b04
+        float hit[3] = {0.0f, 0.0f, 0.0f};
+        float t = 1.0f;
+        float hx = 0.0f;
+        float hy = 0.0f;
+        float hz = 0.0f;
+        if (this->m_scene->m_traceCallback != nullptr) {
+            this->m_scene->m_traceCallback(&query, hit, &t);
+            hy = hit[1];
+            hx = hit[0];
+            hz = hit[2];
+        }
+        float lx = hy * inverse[4] + hx * inverse[0] + hz * inverse[8] + inverse[12];
+        float ly = hy * inverse[5] + hx * inverse[1] + hz * inverse[9] + inverse[13];
+        float lz = hy * inverse[6] + hx * inverse[2] + hz * inverse[10] + inverse[14];
+        float ox;
+        float oy;
+        float oz;
+        if (1.0f <= t) {
+            oz = 0.0f;
+            ox = 0.0f;
+            oy = 0.0f;
+        } else {
+            ox = wx - lx;
+            oy = wy - ly;
+            oz = wz - lz;
+        }
+        float reach = std::fabs(oz + oz);
+        if (reach <= this->m_580) {
+            reach = this->m_580;
+        }
+        this->m_580 = reach;
+        offsets[i * 3] = ox;
+        offsets[i * 3 + 1] = oy;
+        offsets[i * 3 + 2] = oz;
+    }
+    this->m_4c0 = 1;
+    OsMutexUnlock(&s_lock);
 }

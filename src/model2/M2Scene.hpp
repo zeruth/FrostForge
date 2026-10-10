@@ -35,7 +35,10 @@ class CM2Scene {
     void* m_frustum;                    // 0xd560
     uint8_t m_d568[0xd674 - 0xd568];
     float m_animateRatio;               // 0xd674 screen size past which animation is light
-    uint8_t m_d678[0xd6a8 - 0xd678];
+    uint8_t m_d678[0xd698 - 0xd678];
+    // Traces a segment against the world: the hit point and how far along it is (1 for none).
+    void (*m_traceCallback)(void* query, float* hit, float* t);  // 0xd698
+    uint8_t m_d6a0[0xd6a8 - 0xd6a0];
     // The wind: direction, speed and gust (the last argument 0).
     void (*m_windCallback)(float* direction, float* speed, float* gust, void* param);  // 0xd6a8
     uint8_t m_d6b0[0xd790 - 0xd6b0];

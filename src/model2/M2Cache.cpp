@@ -467,6 +467,19 @@ void M2SkeletonReleaseModel(void* skeleton) {
     FROST_UNIMPLEMENTED();
 }
 
+// FUN_141203400: the skeleton instance's scene.
+void M2SkeletonSetScene(void* skeleton, CM2Scene* scene) {
+    (void)skeleton;
+    (void)scene;
+    FROST_UNIMPLEMENTED();
+}
+
+// FUN_141204240: a skeleton instance's reference dropped.
+void M2SkeletonInstanceRelease(void* skeleton) {
+    (void)skeleton;
+    FROST_UNIMPLEMENTED();
+}
+
 // FUN_141203470: a skeleton's playbacks for a model dropped.
 void M2SkeletonCancelModelPlaybacks(void* skeleton, CM2Model* model) {
     (void)skeleton;

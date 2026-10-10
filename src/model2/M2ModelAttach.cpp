@@ -183,6 +183,6 @@ void CM2Model::AddToScene(CM2Scene* scene) {
         this->WaitForLoad(0);
     }
     if ((this->m_shared->m_data->m_flags & 0x20) != 0 && this->m_scene != nullptr) {
-        this->CreateDefaultLights();
+        this->RegisterRayTracing();
     }
 }

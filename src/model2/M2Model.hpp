@@ -624,8 +624,11 @@ class CM2Model : public CM2BaseModel {
 
     // ref: FUN_1411ad030
     CM2Model();
-    // ref: FUN_1411ad860
+    // ref: FUN_1411ad380 (FUN_1411ad860 is the deleting form)
     ~CM2Model() override;
+    // The per-instance block freed (FUN_1411b8320) and the GPU batches (FUN_1411cdb90).
+    void FreeInstanceBlock();
+    void ReleaseGpuBatches();
 
     // ref: FUN_1411cecd0
     void WaitForLoad(int32_t a2) override;
@@ -860,8 +863,8 @@ class CM2Model : public CM2BaseModel {
     void SetBoneMatrix(uint32_t bone, const C44Matrix* matrix);
     // The .anim files of a sequence's variations asked for (FUN_1411c6320).
     void PreloadSequence(uint32_t id);
-    // The lights a file flagged 0x20 makes in its scene (FUN_1411c5ad0).
-    void CreateDefaultLights();
+    // A file flagged 0x20 registers its physics shape with the scene's ray tracing (FUN_1411c5ad0).
+    void RegisterRayTracing();
 
     // Set up from the loaded file (FUN_1411c1360): `donor` lends its textures and state.
     void Initialize(CM2Scene* scene, CM2Shared* shared, CM2Model* donor, uint8_t lod, uint32_t createFlags);
@@ -885,6 +888,8 @@ void M2ResolveSequence(uint32_t id, M2SequenceResolve* out, M2AnimState* anim, M
 // A skeleton's per-model data released (FUN_141203770) and its playbacks for a model dropped
 // (FUN_141203470).
 void M2SkeletonReleaseModel(void* skeleton);
+// A skeleton instance's reference dropped (FUN_141204240).
+void M2SkeletonInstanceRelease(void* skeleton);
 void M2SkeletonCancelModelPlaybacks(void* skeleton, CM2Model* model);
 // animFrameSkipLOD's value (DAT_1430a0eb0 + 0x14).
 int32_t M2AnimFrameSkipLod();
