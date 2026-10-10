@@ -21,6 +21,7 @@
 #include "ui/CSimpleModel.hpp"
 #include "ui/CSimpleMovieFrame.hpp"
 #include "ui/CSimpleEditBox.hpp"
+#include "ui/CSimpleHTML.hpp"
 #include "ui/CSimpleSlider.hpp"
 #include "ui/CSimpleStatusBar.hpp"
 #include "ui/CSimpleScrollFrame.hpp"
@@ -263,9 +264,7 @@ CSimpleFrame* CreateSlider(CSimpleFrame* parent) {
 
 // ref: FUN_140662030
 CSimpleFrame* CreateSimpleHTML(CSimpleFrame* parent) {
-    (void)parent;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    return new CSimpleHTML(parent);
 }
 
 // ref: FUN_1406622e0

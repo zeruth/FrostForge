@@ -13,6 +13,7 @@
 #include "ui/CSimpleModelFFX.hpp"
 #include "ui/CSimpleMovieFrame.hpp"
 #include "ui/CSimpleEditBox.hpp"
+#include "ui/CSimpleHTML.hpp"
 #include "ui/CSimpleSlider.hpp"
 #include "ui/CSimpleStatusBar.hpp"
 #include "ui/CSimpleScrollFrame.hpp"
@@ -75,13 +76,6 @@ void ScriptClass_Font(lua_State* L) {
 void ScriptClass_FontString(lua_State* L) {
     (void)L;
     CSimpleFontString::CreateScriptMetaTables();
-}
-
-// the SimpleHTML metatables.
-// ref: FUN_1424b8bd0
-void ScriptClass_SimpleHTML(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
 }
 
 // the Line metatables.
@@ -187,7 +181,7 @@ void GlueRegisterScriptAPI(lua_State* L) {
     ScriptClass_Font(L);
     ScriptClass_FontString(L);
     CSimpleFrame::CreateScriptMetaTables();
-    ScriptClass_SimpleHTML(L);
+    CSimpleHTML::CreateScriptMetaTables();
     ScriptClass_Line(L);
     CSimpleMaskTexture::CreateScriptMetaTables();
     ScriptClass_MessageFrame(L);

@@ -16,6 +16,21 @@ extern "C" {
 
 void CScriptObject_FillObjectScriptMethods(lua_State* L);
 
+// The file, height and flags (FUN_14062baa0).
+// ref: FUN_14062baa0
+bool FontSetFont(CSimpleFont* font, const char* path, float height, const uint8_t* flags) {
+    if (!(0.0f < height)) {
+        FrameScript_ActionError("Invalid fontHeight: %f, height must be > 0", static_cast<double>(height));
+        return false;
+    }
+    if (!font->m_attributes.SetFont(path, height, flags)) {
+        return false;
+    }
+    font->m_fontableFlags &= ~CSimpleFontAttributes::CHANGED_FONT;
+    font->UpdateFontables();
+    return true;
+}
+
 namespace {
 
 using namespace ScriptMethod;
@@ -285,21 +300,6 @@ int SetAlpha(lua_State* L) {
     font->UpdateFontables();
     RaisePendingError(L, font, "SetAlpha");
     return 0;
-}
-
-// The file, height and flags (FUN_14062baa0).
-// ref: FUN_14062baa0
-bool FontSetFont(CSimpleFont* font, const char* path, float height, const uint8_t* flags) {
-    if (!(0.0f < height)) {
-        FrameScript_ActionError("Invalid fontHeight: %f, height must be > 0", static_cast<double>(height));
-        return false;
-    }
-    if (!font->m_attributes.SetFont(path, height, flags)) {
-        return false;
-    }
-    font->m_fontableFlags &= ~CSimpleFontAttributes::CHANGED_FONT;
-    font->UpdateFontables();
-    return true;
 }
 
 // ref: FUN_1409798b0

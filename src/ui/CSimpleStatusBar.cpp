@@ -289,6 +289,11 @@ void CSimpleStatusBar::RunOnUpdate(float elapsed) {
     this->m_barFlags &= ~BAR_DIRTY;
 }
 
+// The bar is placed in the frame's update (slot 0x2a8, FUN_14026bea0).
+bool CSimpleStatusBar::WantsUpdate() {
+    return true;
+}
+
 // ---- the value ---------------------------------------------------------------------------------
 
 // ref: FUN_1424c2e90

@@ -163,5 +163,7 @@ static_assert(sizeof(CSimpleFont) == 0xc0, "CSimpleFont is 0xc0 bytes");
 // (FUN_14062a930).
 float CSimpleFont_ConvertHeight(float height);
 void CSimpleFont_FillScriptMethods(lua_State* L);
+// Sets a font's file, height and flags and tells its fontables (FUN_14062baa0).
+bool FontSetFont(CSimpleFont* font, const char* path, float height, const uint8_t* flags);
 
 #endif

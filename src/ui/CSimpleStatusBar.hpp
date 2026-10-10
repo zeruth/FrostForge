@@ -65,6 +65,7 @@ class CSimpleStatusBar : public CSimpleFrame {
     void LoadXML(XMLOBJECT* node, CStatus* status, const char* intrinsic) override;
     void RemoveRegion(CSimpleRegion* region) override;
     void RunOnUpdate(float elapsed) override;
+    bool WantsUpdate() override;
     void OnFrameSizeChanged(const CRect* rect, const CRect* previous) override;
 
     // The value, clamped to the range (slot 0x318).
