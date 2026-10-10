@@ -45,7 +45,9 @@ class CParticleEmitter2 {
     CParticleGenerator* m_generator;    // 0x18
     uint8_t m_20[0x20];
     int32_t m_liveCount;                // 0x40 particles alive (in the list at 0x20)
-    uint8_t m_44[0xa8 - 0x44];
+    uint8_t m_44[0x80 - 0x44];
+    uint32_t m_vertexFormat;            // 0x80 the draw's vertex format kind
+    uint8_t m_84[0xa8 - 0x84];
     uint8_t m_random[8];                // 0xa8 the emitter's random seed
     uint32_t m_childCount;              // 0xb0
     uint32_t m_padb4;
@@ -53,19 +55,28 @@ class CParticleEmitter2 {
     CM2Model* m_model;                  // 0xd8 the geometry particles' model
     CM2Scene* m_scene;                  // 0xe0
     CM2Model* m_recursionModel;         // 0xe8
-    uint8_t m_f0[0x108 - 0xf0];
+    uint8_t m_f0[0x100 - 0xf0];
+    int32_t m_type;                     // 0x100 1 none, 2 quads, 3 the model's, 4 projected
+    uint32_t m_pad104;
     float m_baseSpin;                   // 0x108
     float m_baseSpinVary;               // 0x10c
     float m_spin;                       // 0x110
     float m_spinVary;                   // 0x114
-    uint8_t m_118[8];
+    uint8_t m_118[4];
+    uint8_t m_blend;                    // 0x11c the M2 blend mode
+    uint8_t m_renderFlags;              // 0x11d 1 unlit, 2 no fog, 4 no depth test, 8 ...
+    uint8_t m_11e[2];
     const M2PartTrack<C3Vector>* m_colorTrack;      // 0x120
     const M2PartTrack<uint16_t>* m_alphaTrack;      // 0x128
     const M2PartTrack<C2Vector>* m_scaleTrack;      // 0x130
     C2Vector m_scaleVary;                           // 0x138
     const M2PartTrack<uint16_t>* m_headCellTrack;   // 0x140
     const M2PartTrack<uint16_t>* m_tailCellTrack;   // 0x148
-    uint8_t m_150[0x1e0 - 0x150];
+    uint8_t m_150[0x1c8 - 0x150];
+    void* m_1c8;                        // 0x1c8
+    uint8_t m_1d0[8];
+    uint32_t m_material;                // 0x1d8 the material key
+    uint32_t m_pad1dc;
     // 1 emitting, 2 enabled, 0x40 burst, 0x8000 driven by the model
     uint32_t m_flags;                   // 0x1e0
     float m_twinkleSpeed;               // 0x1e4
@@ -85,6 +96,10 @@ static_assert(offsetof(CParticleEmitter2, m_random) == 0xa8, "CParticleEmitter2 
 static_assert(offsetof(CParticleEmitter2, m_baseSpin) == 0x108, "CParticleEmitter2 spin at 0x108");
 static_assert(offsetof(CParticleEmitter2, m_colorTrack) == 0x120, "CParticleEmitter2 tracks at 0x120");
 static_assert(offsetof(CParticleEmitter2, m_flags) == 0x1e0, "CParticleEmitter2 flags at 0x1e0");
+static_assert(offsetof(CParticleEmitter2, m_vertexFormat) == 0x80, "CParticleEmitter2 format at 0x80");
+static_assert(offsetof(CParticleEmitter2, m_type) == 0x100, "CParticleEmitter2 type at 0x100");
+static_assert(offsetof(CParticleEmitter2, m_blend) == 0x11c, "CParticleEmitter2 blend at 0x11c");
+static_assert(offsetof(CParticleEmitter2, m_material) == 0x1d8, "CParticleEmitter2 material at 0x1d8");
 static_assert(offsetof(CParticleEmitter2, m_wind) == 0x214, "CParticleEmitter2 wind at 0x214");
 static_assert(offsetof(CParticleEmitter2, m_combiner) == 0x2e0, "CParticleEmitter2 combiner at 0x2e0");
 static_assert(sizeof(CParticleEmitter2) == 0x2f8, "CParticleEmitter2 is 0x2f8 bytes");

@@ -9,6 +9,7 @@
 #include <cstdint>
 
 #include "blz/Sync.hpp"
+#include "model2/M2Element.hpp"
 #include "model2/M2Model.hpp"
 #include "os/Sync.hpp"
 #include "storm/list/TSLink.hpp"
@@ -32,22 +33,6 @@ struct M2SceneVector {
     uint64_t m_size = 0;
     uint64_t m_capacity = 0;
 };
-
-// Model3::PipelineCache (0x50, FUN_1411d0040): the pipelines made for the scene's draws, by key,
-// in a chained hash map whose eight starting buckets are 0x98-byte pairs.
-struct M2PipelineCache {
-    uint64_t m_bucketCount;                     // 0x00 8
-    uint8_t* m_buckets;                         // 0x08
-    uint64_t m_10;                              // 0x10
-    uint64_t m_18;                              // 0x18
-    float m_maxLoad;                            // 0x20 0.5
-    uint32_t m_pad24;
-    uint64_t m_28[4];                           // 0x28
-    OSMUTEX m_lock;                             // 0x48
-
-    M2PipelineCache();
-};
-static_assert(sizeof(M2PipelineCache) == 0x50, "M2PipelineCache is 0x50 bytes");
 
 // The scene's other locked map (0x68): a lock, eight words and a chained hash map.
 struct M2SceneLockedMap {
@@ -77,13 +62,14 @@ void M2ParticlePoolInit(M2ParticlePool* pool, int32_t particles);
 // One of the scene's 65 draw lists (0x2f8, FUN_1411d0130): fourteen vectors of each kind.
 struct M2SceneDrawList {
     uint64_t m_00;                              // 0x000
-    void* m_08;                                 // 0x008
-    void* m_10;                                 // 0x010
-    void* m_18;                                 // 0x018
-    M2SceneVector<void> m_lists[0xe];           // 0x020
-    M2SceneVector<void> m_lists2[0xe];          // 0x170
-    void* m_2c0[5];                             // 0x2c0
-    uint8_t m_2e8[0x10];
+    M2SceneVector<M2Element> m_elements;        // 0x008
+    M2SceneVector<uint32_t> m_lists[0xe];       // 0x020 element indices by pass
+    M2SceneVector<uint32_t> m_lists2[0xe];      // 0x170
+    M2SceneVector<void> m_callbacks;            // 0x2c0 M2ModelCallbacks
+    void* m_2d8;                                // 0x2d8
+    void* m_2e0;                                // 0x2e0
+    int32_t m_elementCount;                     // 0x2e8 elements made
+    uint8_t m_2ec[0xc];
 
     M2SceneDrawList();
 };

@@ -235,33 +235,31 @@ void RayTracingMarkDirty(void* rayTracing, const int32_t* entry) {
 // ref: FUN_1411d0040
 M2PipelineCache::M2PipelineCache() {
     this->m_bucketCount = 8;
-    this->m_10 = 0;
-    this->m_18 = 0;
-    this->m_buckets = static_cast<uint8_t*>(SMemAlloc(0x4c0, 0xb, s_pipelinePairName, SStrHashFnv1a(s_pipelinePairName), -6, 0));
+    this->m_count = 0;
+    this->m_deleted = 0;
+    this->m_buckets = static_cast<M3PIPELINEENTRY*>(SMemAlloc(0x4c0, 0xb, s_pipelinePairName, SStrHashFnv1a(s_pipelinePairName), -6, 0));
     for (uint64_t i = 0; i < this->m_bucketCount; i++) {
-        this->m_buckets[i * 0x98 + 0x27] = 1;  // FUN_141205ae0: the bucket's end marker
+        this->m_buckets[i].m_state = 1;  // FUN_141205ae0: empty
     }
     this->m_maxLoad = 0.75f;
-    this->m_28[0] = 0;
-    this->m_28[1] = 0;
-    this->m_28[2] = 0;
-    this->m_28[3] = 0;
+    this->m_blocks = nullptr;
+    this->m_blockCount = 0;
+    this->m_first = 0;
+    this->m_size = 0;
     OsMutexInit(&this->m_lock);
     this->m_maxLoad = 0.5f;
 }
 
 // ref: FUN_1411d0130
 M2SceneDrawList::M2SceneDrawList() {
-    this->m_08 = nullptr;
-    this->m_10 = nullptr;
-    this->m_18 = nullptr;
+    this->m_elements = {};
     for (uint32_t i = 0; i < 0xe; i++) {
         this->m_lists[i] = {};
         this->m_lists2[i] = {};
     }
-    for (uint32_t i = 0; i < 5; i++) {
-        this->m_2c0[i] = nullptr;
-    }
+    this->m_callbacks = {};
+    this->m_2d8 = nullptr;
+    this->m_2e0 = nullptr;
 }
 
 // ref: FUN_14124c1f0

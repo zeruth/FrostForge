@@ -4,6 +4,7 @@ add_library(model2 STATIC
     M2Api.cpp
     M2Cache.cpp
     M2Camera.cpp
+    M2Element.cpp
     M2Init.cpp
     M2Model.cpp
     M2ModelAnimate.cpp
