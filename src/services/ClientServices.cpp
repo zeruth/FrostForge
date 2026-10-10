@@ -23,6 +23,9 @@ void* s_servicesHelper;     // DAT_1430d2a90: an 8-byte object freed at shutdown
 CVar* s_portal;             // DAT_1430d2a98
 CVar* s_serverAlert;        // DAT_1430d2aa0
 CVar* s_auroraSuffix;       // DAT_1430d2ab8
+uint8_t s_state2589;        // DAT_1430d2589
+uint8_t s_sessionUp;        // DAT_1430d258a
+uint8_t s_state258b;        // DAT_1430d258b
 
 // "logout": ends the session when one is up.
 // ref: FUN_14156b7c0
@@ -357,4 +360,14 @@ uint32_t RegionFromPortalHost(PORTALHOST* host) {
         return DevPortalRegion(&again);
     }
     return 1;
+}
+
+// ref: FUN_141567e20
+bool ClientServicesIsInWorld() {
+    return s_state2589 != 0 && s_state258b != 0;
+}
+
+// ref: FUN_141567e50
+bool ClientServicesIsSessionUp() {
+    return s_sessionUp != 0;
 }

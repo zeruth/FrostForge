@@ -107,6 +107,9 @@ ARC4STATE* FrameScript_GetRandom();
 // and the _FEMALE form for gender 3 are tried first; "" when there is none. `scoped` looks in
 // the running object's table first while FrameXML's scoped state asks for it.
 const char* FrameScript_GetText(const char* name, int32_t count, int32_t gender, bool scoped = false);
+// The same text copied into `dest` (at most size - 1 characters); false when it is empty.
+// ref: FUN_140641ba0
+bool FrameScript_GetTextCopy(const char* name, char* dest, uint64_t size, int32_t count, int32_t gender, bool scoped);
 // The global string named `name`, or the running object's field while scoped (FUN_14063cc10).
 bool FrameScript_GetGlobalString(const char* name, const char** value, bool scoped);
 // The plural form of `count` under a locale's plural rule: 0 singular, 1 plural, 2 the

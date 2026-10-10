@@ -281,6 +281,12 @@ bool ClientProcessEvents() {
 
 }
 
+// The sound engine's device-change slot (SI3's configure installs it at SE3CONFIG+0xd0).
+// ref: LAB_14021f080
+void ClientSetPendingSoundReset() {
+    s_pendingReset = 1;
+}
+
 // ref: FUN_140236bb0
 bool ClientIsShiftKeyDown() {
     return (s_heldModifiers & 3) != 0;

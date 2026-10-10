@@ -314,6 +314,14 @@ uint32_t OsGetCurrentThreadId() {
     return GetCurrentThreadId();
 }
 
+// Deletes a file; the path is UTF-8.
+// ref: FUN_1402148e0
+bool OsDeleteFile(const char* path) {
+    wchar_t wide[0x10c];
+    UnicodeConvertUtf8ToUtf16(wide, 0x104, path, 0x7fffffff, nullptr, nullptr);
+    return DeleteFileW(wide) != 0;
+}
+
 // Creates a directory; with createParents, every missing directory above it first (from the
 // end of the path's root on). An existing directory counts as success unless failIfExists.
 // ref: FUN_1402146d0

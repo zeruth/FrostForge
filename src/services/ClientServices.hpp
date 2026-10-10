@@ -20,6 +20,13 @@ void* ClientServicesGet();
 void ClientServicesSetStatusCallback(void* services, bool (*callback)());
 void ClientServicesShutdown();
 
+// The session state bytes (DAT_1430d2589..8b). The connection that sets them is not ported,
+// so they stay clear and the client behaves as at the glue.
+// ref: FUN_141567e20
+bool ClientServicesIsInWorld();
+// ref: FUN_141567e50
+bool ClientServicesIsSessionUp();
+
 // Sets the portal CVar from `region` (unless REGION_NONE); when the portal is still empty,
 // fills it from the system's region and returns true with that region in *systemRegion.
 // Also registers serverAlert and auroraClientRequestSuffix.

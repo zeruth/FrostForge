@@ -37,6 +37,8 @@ add_subdirectory(vendor/lua-5.1.4)
 add_subdirectory(vendor/expat-1.95.5)
 # FreeType 2.9.1 (FT_New_Library stores version 2.9.1 at 0x141f7be90), the default modules.
 add_subdirectory(vendor/freetype-2.9.1)
+# FMOD Ex 4.44.64 ("fmod/fmod4/src/fmod.cpp", FSB5/CELT codecs): linked as a DLL.
+add_subdirectory(vendor/fmodex-4.44.64)
 
 add_subdirectory(src)
 

@@ -309,6 +309,8 @@ class WowClientDB2_Base {
 
     // FUN_140576930: an int field of a record, decoding packed fields of file records.
     uint32_t FieldValue(const uint8_t* record, uint32_t field, int32_t arrayIndex);
+    // A float column's value (FUN_1402dc640).
+    float FieldFloat(const uint8_t* record, uint32_t field, int32_t arrayIndex);
     // FUN_14057b4c0: a file record's packed id, or 0.
     uint32_t PackedId(const uint8_t* record);
     // Whether `record` is one of the file's records.

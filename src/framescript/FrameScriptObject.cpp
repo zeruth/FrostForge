@@ -1685,3 +1685,24 @@ const char* FrameScript_GetText(const char* name, int32_t count, int32_t gender,
     FrameScript_GetGlobalString(name, &s_globalText, scoped);
     return s_globalText;
 }
+
+// ref: FUN_140641ba0
+bool FrameScript_GetTextCopy(const char* name, char* dest, uint64_t size, int32_t count, int32_t gender, bool scoped) {
+    const char* text = FrameScript_GetText(name, count, gender, scoped);
+    const char* from = text;
+    if (size != 0) {
+        while (true) {
+            size--;
+            if (size == 0) {
+                *dest = '\0';
+                break;
+            }
+            char c = *from++;
+            *dest++ = c;
+            if (c == '\0') {
+                break;
+            }
+        }
+    }
+    return *text != '\0';
+}

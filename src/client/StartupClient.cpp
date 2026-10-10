@@ -24,6 +24,8 @@
 #include "storm/ErrorReport.hpp"
 #include "storm/Log.hpp"
 #include "shadereffect/ShaderEffectManager.hpp"
+#include "sound/SE3.hpp"
+#include "sound/SI3.hpp"
 #include "texture/Texture.hpp"
 #include "ui/FrameTime.hpp"
 #include "util/Unimplemented.hpp"
@@ -275,8 +277,7 @@ void Sub14230B600() {
 
 // ref: FUN_1412e59c0
 void Sub1412E59C0(uint32_t value) {
-    (void)value;
-    FROST_UNIMPLEMENTED();
+    SI3Init(value != 0);
 }
 
 // ref: FUN_14192c8c0
@@ -525,18 +526,18 @@ void Sub14230B040() {
 
 // ref: FUN_1412e1c00
 void Sub1412E1C00() {
-    FROST_UNIMPLEMENTED();
+    SI3CheckPendingReset();
 }
 
 // ref: FUN_1412cab50
 void Sub1412CAB50(uint64_t a1) {
     (void)a1;
-    FROST_UNIMPLEMENTED();
+    SE3Update();
 }
 
 // ref: FUN_1412e1fb0
 void Sub1412E1FB0() {
-    FROST_UNIMPLEMENTED();
+    SI3Update();
 }
 
 // ref: FUN_1402f4d00

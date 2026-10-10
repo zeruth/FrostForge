@@ -4263,55 +4263,6 @@ int Lua_ShowCursor(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_141309ff0
-int Lua_Sound_ChatSystem_GetInputDriverNameByIndex(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_14130add0
-int Lua_Sound_ChatSystem_GetOutputDriverNameByIndex(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141307e00
-int Lua_Sound_GameSystem_GetInputDriverNameByIndex(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1413077a0
-int Lua_Sound_GameSystem_GetNumInputDrivers(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141308ad0
-int Lua_Sound_GameSystem_GetNumOutputDrivers(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141309140
-int Lua_Sound_GameSystem_GetOutputDriverNameByIndex(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_14130bbb0
-int Lua_Sound_GameSystem_RestartSoundSystem(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_14168e5a0
 int Lua_StartCharacterUndelete(lua_State* L) {
     (void)L;

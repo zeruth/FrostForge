@@ -86,6 +86,9 @@ void OsGetParentProcessName(char* buffer);
 uint32_t OsGetCurrentThreadId();
 
 bool OsCreateDirectory(const char* path, bool createParents, bool failIfExists);
+// Deletes a file (UTF-8 path).
+// ref: FUN_1402148e0
+bool OsDeleteFile(const char* path);
 
 uint32_t OsPathRootLength(const char* path);
 

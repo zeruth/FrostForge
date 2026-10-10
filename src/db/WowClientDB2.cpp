@@ -349,7 +349,7 @@ namespace {
 // width and signedness (floats convert to int).
 uint32_t DecodeField(const uint8_t* record, const uint8_t* packed, const DB2FIELDINFO* info,
     TDBCVector<DB2COMMONMAP>* common, TDBCVector<TDBCVector<uint32_t>>* pallets, const uint8_t* palletArray,
-    uint32_t id, const DBMeta* meta, int32_t field, int32_t arrayIndex) {
+    uint32_t id, const DBMeta* meta, int32_t field, int32_t arrayIndex, bool floatBits = false) {
     int32_t type = meta->m_fileFieldTypes[field];
     bool isUnsigned = (meta->m_fileFieldFlags[field] & 4) != 0;
     uint32_t width = type == 4 ? 1 : type == 5 ? 2 : 4;
@@ -401,7 +401,7 @@ uint32_t DecodeField(const uint8_t* record, const uint8_t* packed, const DB2FIEL
     }
     (void)fromStorageValue;
 
-    if (type == 3) {
+    if (type == 3 && !floatBits) {
         float value;
         std::memcpy(&value, &raw, 4);
         return static_cast<uint32_t>(static_cast<int32_t>(value));
@@ -450,6 +450,28 @@ uint32_t WowClientDB2_Base::FieldValue(const uint8_t* record, uint32_t field, in
     }
     return DecodeField(record, record + this->m_packedDataOffset, &this->m_fieldInfo[field], &this->m_commonData,
         &this->m_pallets, palletArray, id, this->m_meta, static_cast<int32_t>(field), arrayIndex);
+}
+
+// A float column (FUN_1402dc640 and the generated float reads): the value's bits, stored
+// plain or decoded from the file's storage, read as a float rather than converted.
+float WowClientDB2_Base::FieldFloat(const uint8_t* record, uint32_t field, int32_t arrayIndex) {
+    float value;
+    if (!this->IsFileRecord(record) || (this->m_meta->m_fileFieldFlags[field] & 2) == 0) {
+        std::memcpy(&value, record + this->m_meta->m_fieldOffsets[field] + arrayIndex * 4, 4);
+        return value;
+    }
+    uint32_t id = 0;
+    if (this->m_fieldInfo[field].m_storage == 2 && (this->m_lookup->m_init.m_idPacked & 1) != 0) {
+        id = static_cast<uint32_t>(ReadBits(record, this->m_lookup->m_init.m_idOffsetBits, this->m_lookup->m_init.m_idSizeBits));
+    }
+    const uint8_t* palletArray = nullptr;
+    if (field < this->m_palletArrays.size()) {
+        palletArray = this->m_palletArrays[field];
+    }
+    uint32_t bits = DecodeField(record, record + this->m_packedDataOffset, &this->m_fieldInfo[field], &this->m_commonData,
+        &this->m_pallets, palletArray, id, this->m_meta, static_cast<int32_t>(field), arrayIndex, true);
+    std::memcpy(&value, &bits, 4);
+    return value;
 }
 
 namespace {
