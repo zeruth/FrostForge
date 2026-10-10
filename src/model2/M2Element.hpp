@@ -12,6 +12,7 @@
 
 class CM2BaseModel;
 class CParticleEmitter2;
+class CShaderEffect;
 struct GxPipeline;
 struct GXVERTEXBUFFERFORMAT;
 struct M2SkinSection;
@@ -39,7 +40,7 @@ struct M2Element {
     const void* m_batch;                // 0x40 the M2Batch or the shadow batch
     const M2SkinSection* m_section;     // 0x48
     GxPipeline* m_pipeline;             // 0x50
-    uint64_t m_vertexFormat;            // 0x58
+    CShaderEffect* m_effect;            // 0x58 the effect the pipeline is of
     int32_t m_60;                       // 0x60 -1
     uint32_t m_64;                      // 0x64
     uint64_t m_68;                      // 0x68

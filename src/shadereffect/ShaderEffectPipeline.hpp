@@ -40,6 +40,8 @@ GxPipeline* ObjectFillGetPipeline(uint8_t kind, uint32_t variant, uint64_t depth
     uint16_t blend, uint8_t vertexFormat, uint8_t topology, uint32_t targetKind);
 GxPipeline* OutlineGetPipeline(uint8_t skinned, uint8_t extra, uint16_t base, uint64_t depthStencil, uint32_t raster,
     uint16_t blend, uint8_t vertexFormat, uint8_t topology, uint32_t targetKind);
+// Whether the GPU pulls its own vertices (its device data's +0x224 bit 5).
+uint32_t ShaderEffectVertexPull();
 // Whether any scene draws outlines (FUN_1412b2120).
 bool ShaderEffectOutlinesOn();
 

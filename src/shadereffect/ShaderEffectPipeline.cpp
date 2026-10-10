@@ -37,12 +37,6 @@ struct FILLSHADER {
 };
 const FILLSHADER s_fillShaders[6] = { { 0, 0, 0 }, { 0, 0, 1 }, { 0, 0, 2 }, { 1, 0, 0 }, { 1, 0, 1 }, { 1, 0, 2 } };
 
-// Whether the GPU pulls vertices itself (its device data's +0x224 bit 5).
-uint32_t VertexPull() {
-    auto data = reinterpret_cast<const uint8_t*>(GxSelectGpuToUse()->m_data);
-    return (*reinterpret_cast<const uint32_t*>(data + 0x224) >> 5) & 1;
-}
-
 // A pipeline from a key under a lock, through a pair of maps (the body FUN_1412b66c0 and
 // FUN_1412b0750 share).
 GxPipeline* GetKeyedPipeline(const PIPELINEHASH& hash, blz::chained_hash_header* cache, blz::chained_hash_header* fresh,
@@ -227,6 +221,11 @@ GxPipeline* OutlineGetPipeline(uint8_t skinned, uint8_t extra, uint16_t base, ui
     return GetKeyedPipeline(hash, &s_outlinePipelines, &s_outlineNewPipelines, &s_outlineLock, key, "OutlineBuffer", 3);
 }
 
+uint32_t ShaderEffectVertexPull() {
+    auto data = reinterpret_cast<const uint8_t*>(GxSelectGpuToUse()->m_data);
+    return (*reinterpret_cast<const uint32_t*>(data + 0x224) >> 5) & 1;
+}
+
 // ref: FUN_1412b2120
 bool ShaderEffectOutlinesOn() {
     return g_renderSettings.m_outlines != 0;
@@ -251,7 +250,7 @@ uint16_t ShaderEffectPrepassVertexPermute(uint8_t a1, uint8_t a2, uint32_t a3, u
 // ref: FUN_1412acc90
 uint16_t ShaderEffectModelPixelPermute(uint8_t a1, uint16_t a2, uint16_t a3, uint8_t a4, uint8_t a5, uint8_t a6,
     uint8_t a7, uint16_t a8) {
-    uint32_t pull = VertexPull();
+    uint32_t pull = ShaderEffectVertexPull();
     uint32_t value = ((((((((pull + 2) * 2 + a8) * 2 + a6) * 2 + a4) * 2 + a5) * 2 + a1) * 2 + a3) * 2 + a2) * 2;
     return static_cast<uint16_t>(value + a7);
 }
@@ -259,7 +258,7 @@ uint16_t ShaderEffectModelPixelPermute(uint8_t a1, uint16_t a2, uint16_t a3, uin
 // ref: FUN_1412ace70
 uint16_t ShaderEffectUnlitPixelPermute(uint8_t a1, uint16_t a2, uint8_t a3, uint16_t a4, uint16_t a5, uint16_t a6,
     uint16_t a7) {
-    uint32_t pull = VertexPull();
+    uint32_t pull = ShaderEffectVertexPull();
     uint32_t value = ((((((pull + 2) * 2 + a7) * 2 + a6) * 2 + a1) * 2 + a2) * 2 + a3) * 2 + a4;
     value *= 2;
     return static_cast<uint16_t>(value + a5);
@@ -267,12 +266,12 @@ uint16_t ShaderEffectUnlitPixelPermute(uint8_t a1, uint16_t a2, uint8_t a3, uint
 
 // ref: FUN_1412ace40
 uint16_t ShaderEffectProjectedPixelPermute(uint16_t a1) {
-    return static_cast<uint16_t>((VertexPull() + 2) * 2 + a1);
+    return static_cast<uint16_t>((ShaderEffectVertexPull() + 2) * 2 + a1);
 }
 
 // ref: FUN_1412acde0
 uint16_t ShaderEffectParticlePixelPermute(uint8_t a1, uint16_t a2, uint16_t a3) {
-    return static_cast<uint16_t>((((VertexPull() + 2) * 2 + a3) * 2 + a1) * 2 + a2);
+    return static_cast<uint16_t>((((ShaderEffectVertexPull() + 2) * 2 + a3) * 2 + a1) * 2 + a2);
 }
 
 // ref: FUN_1412acd30
