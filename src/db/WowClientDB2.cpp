@@ -1890,3 +1890,22 @@ WowClientDB2_Base* WowClientDB2GetByTableHash(uint32_t tableHash) {
 void WowClientDB2SetHotfixRequests(bool enabled) {
     s_hotfixRequests = enabled;
 }
+
+// ref: FUN_14057b590
+int32_t DB2ParentCount(WowClientDB2_Base* table, int32_t parent) {
+    WowDB2ParentLookup* lookup = table->m_parentLookup;
+    if (lookup == nullptr) {
+        return 0;
+    }
+    DB2PARENTITER it;
+    DB2PARENTITER end;
+    lookup->Begin(&it, parent);
+    lookup->End(&end);
+    int32_t count = 0;
+    while (it.m_entry != end.m_entry || it.m_overflow != end.m_overflow || it.m_parent != end.m_parent
+        || it.m_source != end.m_source) {
+        count++;
+        lookup->Next(&it);
+    }
+    return count;
+}

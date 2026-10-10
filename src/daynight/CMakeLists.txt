@@ -2,6 +2,7 @@ add_library(daynight STATIC
     DayNight.cpp
     DNBodies.cpp
     DNClouds.cpp
+    DNCompute.cpp
     DNLight.cpp
     DNSky.cpp
     DNZoneLights.cpp

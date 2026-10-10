@@ -110,6 +110,54 @@ void DNCurrentLightInit(uint8_t* light);
 // ref: FUN_14244f2e0
 void DNLightParamsInit(uint8_t* params);
 
+extern const char s_dnTagHeightFog[];   // ".?AUHeightFogBlendPercent@CurrentLight@DayNight@@"
+extern const char s_dnTagCurrentFog[];  // ".?AUCurrentFog@DayNight@@"
+extern const char s_dnTagLightQE[];     // ".?AVLightQE@World@@"
+
+// DayNight::CurrentLight (0x4f0): the light computed from a LightParams row at a time of day.
+// Its words 0..0x17 are colours (0xAARRGGBB), the rest floats and flags read by the compute
+// (DNCompute.cpp) at their reference offsets; the HeightFogBlendPercent vector ends it.
+struct DNCURRENTLIGHT {
+    uint8_t m_data[0x4d8];
+    blz::vector<uint64_t, s_dnTagHeightFog> m_heightFog;    // 0x4d8
+
+    DNCURRENTLIGHT() {
+        DNCurrentLightInit(reinterpret_cast<uint8_t*>(this));
+    }
+
+    uint32_t& Word(size_t index) {
+        return reinterpret_cast<uint32_t*>(this->m_data)[index];
+    }
+
+    float& Float(size_t index) {
+        return reinterpret_cast<float*>(this->m_data)[index];
+    }
+};
+static_assert(sizeof(DNCURRENTLIGHT) == 0x4f0, "DNCURRENTLIGHT is 0x4f0 bytes");
+
+// DayNight::CurrentFog (0x68): the fog computed with a light; word 0x17's low byte is a flag
+// and word 0x19 the weight it carries into the fog list.
+struct DNCURRENTFOG {
+    float m_values[0x1a];
+
+    DNCURRENTFOG();
+
+    float& operator[](size_t index) {
+        return this->m_values[index];
+    }
+};
+static_assert(sizeof(DNCURRENTFOG) == 0x68, "DNCURRENTFOG is 0x68 bytes");
+
+typedef blz::vector<DNCURRENTFOG, s_dnTagCurrentFog> DNFOGVECTOR;
+
+// World::LightQE: a Light row near the camera and its squared distance.
+struct DNLIGHTQE {
+    float m_distance;
+    uint32_t m_pad04;
+    const void* m_light;
+};
+typedef blz::vector<DNLIGHTQE, s_dnTagLightQE> DNLIGHTQEVECTOR;
+
 // ---- the clouds (0x108 at the scene's +0x1620, DNClouds) -----------------------------------
 
 struct DNCLOUDS {
@@ -276,8 +324,21 @@ struct DNSKY {
     void Build(float radius);
     // ref: FUN_142456d80
     void Release();
+    // The dome's colours for the frame: the zenith, four bands of rings shaded round the
+    // azimuth `azimuth` (radians), the horizon ring and the bottom, each with the fog colour
+    // beside it; `tint` (0..255) pulls them toward `tintColor`.
+    // ref: FUN_142457d40
+    void Compute(DNCURRENTLIGHT* light, DNCURRENTFOG* fog, float time, float azimuth, uint8_t tint,
+        uint32_t tintColor, float underwater, float opacity, float farClip);
 };
 static_assert(sizeof(DNSKY) == 0x70, "DNSKY is 0x70 bytes");
+
+// A day band's value at `t` (0..1): keys of (time, value), interpolated round the day.
+// ref: FUN_14244c4d0
+float DNFloatBand(const float* keys, uint32_t count, float t);
+// Two colours' channels interpolated (truncated), opaque.
+// ref: FUN_14244c440
+uint32_t DNColorLerp(const uint32_t* from, const uint32_t* to, float t);
 
 // ---- the colour grading (0x128, DNInt.cpp:0x40) --------------------------------------------
 
@@ -384,6 +445,15 @@ struct DNScene {
     // clouds' upload while the light is live.
     // ref: FUN_14245e340
     void PrepareFrame(void* env, bool colorGrading);
+    // The frame's two current lights and fogs: from the area's Light rows, the zone lights,
+    // the nearby point lights, the area overrides and the transition, or the defaults when
+    // the area has no lights; then the sky overrides and the water's colour.
+    // ref: FUN_1424597a0
+    void ComputeLights(bool outdoors, bool zoneLightsSingly);
+    // The scene's light colours and fog colours from the two current lights (and their
+    // defaults when the map has no light).
+    // ref: FUN_14245a940
+    void StoreLightColors();
 };
 static_assert(offsetof(DNScene, m_loaded) == 0x1600, "DNScene layout");
 static_assert(offsetof(DNScene, m_clouds) == 0x1620, "DNScene layout");

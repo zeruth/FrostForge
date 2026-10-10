@@ -152,6 +152,31 @@ class vector {
         this->m_data[this->m_size].~T();
     }
 
+    // Copy assignment of trivially copyable elements, as the reference instantiates it
+    // (FUN_142445040, FUN_142459180): within the size or the capacity the elements are copied
+    // over; past the capacity the storage is replaced by exactly `other.size()`.
+    void assign_from(const vector& other) {
+        if (this == &other) {
+            return;
+        }
+        uint64_t count = other.m_size;
+        if (count <= this->m_size) {
+            std::memmove(this->m_data, other.m_data, count * sizeof(T));
+            this->m_size = count;
+            return;
+        }
+        if (this->capacity() < count) {
+            this->release_storage();
+            this->m_data = static_cast<T*>(SMemAlloc(count * sizeof(T), 0xb, Tag, SStrHashFnv1a(Tag), -6, 0));
+            std::memcpy(this->m_data, other.m_data, count * sizeof(T));
+            this->m_capacity = count;
+        } else {
+            std::memmove(this->m_data, other.m_data, this->m_size * sizeof(T));
+            std::memcpy(this->m_data + this->m_size, other.m_data + this->m_size, (count - this->m_size) * sizeof(T));
+        }
+        this->m_size = count;
+    }
+
     // Removes the element at `index` by moving the last one into its place.
     void erase_unordered(uint64_t index) {
         if (index != this->m_size - 1) {

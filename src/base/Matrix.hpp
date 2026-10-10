@@ -30,6 +30,10 @@ void MatrixRotateQuaternion(float* m, const float* q);
 float* MatrixFromQuaternionRotation(float* m, const float* q);
 // A 0..1 colour as 0xffRRGGBB (FUN_141343fd0).
 uint32_t ColorFromVector(const float* rgb);
+// A colour moved toward `target` by alpha/256 per channel (alpha 255 copies it), its own alpha
+// kept; alpha 0 leaves it.
+// ref: FUN_1413da3d0
+void ColorLerpByte(uint32_t* color, uint32_t alpha, uint32_t target);
 // RGB (0..1) to HSV (hue in degrees, saturation, value); out of range gives (-1, 0, 0).
 void ColorRgbToHsv(const float* rgb, float* hsv);
 // HSV back to RGB; a hue of -1 with no saturation is grey.

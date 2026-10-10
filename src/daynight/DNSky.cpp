@@ -158,3 +158,89 @@ void DNSKY::Release() {
         OnDeviceDestroyed(nullptr);
     }
 }
+
+namespace {
+
+// How strongly the dome's bands lean toward the zenith colour over the day (DAT_142d4d700),
+// and the shading round the azimuth: lit toward the sun, darker away (DAT_142d4d730).
+const float s_mixBand[] = {0.125f, 0.0f, 0.27083334f, 1.0f, 0.29166666f, 0.0f, 0.85416669f, 0.0f, 0.89583331f,
+    1.0f, 0.99930555f, 0.0f};
+const float s_azimuthBand[] = {0.125f, 1.0f, 0.375f, 0.0f, 0.5f, -0.5f, 0.625f, -0.7f, 0.75f, -0.5f, 0.875f, 0.0f};
+
+constexpr float TURN = 0.15915494f;         // DAT_142726830, 1 / 2pi
+constexpr float SHADE_TOWARD_ZENITH = 0.7f; // DAT_1426c720c
+
+uint32_t Tinted(uint32_t color, uint8_t tint, uint32_t tintColor, uint8_t alpha) {
+    if (tint != 0) {
+        ColorLerpByte(&color, tint, tintColor);
+    }
+    return (color & 0xffffff) | (static_cast<uint32_t>(alpha) << 24);
+}
+
+}  // namespace
+
+// ref: FUN_14244c440
+uint32_t DNColorLerp(const uint32_t* from, const uint32_t* to, float t) {
+    uint32_t result = 0xff000000;
+    for (uint32_t shift = 0; shift < 24; shift += 8) {
+        auto a = static_cast<float>((*from >> shift) & 0xff);
+        auto b = static_cast<float>((*to >> shift) & 0xff);
+        result |= (static_cast<uint32_t>(static_cast<int32_t>((b - a) * t + a)) & 0xff) << shift;
+    }
+    return result;
+}
+
+// ref: FUN_142457d40
+void DNSKY::Compute(DNCURRENTLIGHT* light, DNCURRENTFOG* fog, float time, float azimuth, uint8_t tint,
+    uint32_t tintColor, float underwater, float opacity, float farClip) {
+    auto alpha = static_cast<uint8_t>(static_cast<int32_t>(opacity * 255.0f));
+    uint32_t* colors = this->m_colors.m_data;
+    uint32_t* fogColors = this->m_colors2.m_data;
+    float fogT = farClip / (*fog)[0x16];
+    fogT = std::min(fogT, 1.0f);
+    fogT = std::max(fogT, 0.0f);
+    int32_t fogAlpha = 0xff;
+    if (underwater <= 0.1f) {               // DAT_14261a97c
+        fogAlpha = static_cast<int32_t>(underwater * 2550.0f);     // DAT_142979b90
+    }
+    uint32_t fogColor = DNColorLerp(&light->Word(0xa), &light->Word(0xb), fogT) & 0xffffff;
+    float mix = DNFloatBand(s_mixBand, 6, time) * light->Float(0x18);
+    uint32_t bands[9];
+    for (uint32_t i = 0; i < 9; i++) {
+        bands[i] = DNColorLerp(&light->Word(6 + i), &light->Word(6), mix);
+    }
+    *colors++ = (light->Word(5) & 0xffffff) | (static_cast<uint32_t>(alpha) << 24);
+    *fogColors++ = fogColor;
+    float step = -1.0f / static_cast<float>(this->m_rings);
+    float turn = azimuth * TURN;
+    for (uint32_t k = 0; k < 4; k++) {
+        float at = turn + 0.25f;            // DAT_1426193c4
+        if (0.75f < turn) {                 // DAT_14261a994
+            at = turn - 0.75f;
+        }
+        for (int32_t j = 0; j < this->m_rings; j++) {
+            if (at < 0.0f) {
+                at += 1.0f;
+            }
+            float shade = DNFloatBand(s_azimuthBand, 6, at);
+            uint32_t color;
+            if (0.0f <= shade) {
+                color = DNColorLerp(&light->Word(6 + k), &bands[k], (1.0f - shade) * mix);
+            } else {
+                uint32_t toward = DNColorLerp(&bands[k], &light->Word(5), mix * SHADE_TOWARD_ZENITH);
+                color = DNColorLerp(&bands[k], &toward, -(shade * mix));
+            }
+            *colors++ = Tinted(color, tint, tintColor, alpha);
+            at += step;
+            *fogColors++ = fogColor;
+        }
+    }
+    fogColor = (fogColor & 0xffffff) | ((static_cast<uint32_t>(fogAlpha) & 0xff) << 24);
+    uint32_t horizon = Tinted(light->Word(0xb), tint, tintColor, alpha);
+    for (int32_t j = 0; j < this->m_rings; j++) {
+        *colors++ = horizon;
+        *fogColors++ = fogColor;
+    }
+    *colors = Tinted(light->Word(0xb), tint, tintColor, alpha);
+    *fogColors = fogColor;
+}

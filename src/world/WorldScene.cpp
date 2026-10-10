@@ -598,3 +598,19 @@ void CWorldScene::CreateMapObjects() {
         this->m_030 = WorldScene030Create(SceneAlloc(0xfa50, 0x2a9), 0.027777778f, 30.0f, 0x2d771);
     }
 }
+
+// ref: FUN_14134e6c0
+float WorldSceneFarClip(CWorldScene* scene) {
+    if (scene != nullptr) {
+        return scene->GetFarClip(scene->m_maps[scene->m_mapIndex]);
+    }
+    return WorldGetFarClipCVar();
+}
+
+// ref: FUN_14134e860
+float WorldSceneFarClip3(CWorldScene* scene) {
+    if (scene != nullptr) {
+        return scene->GetFarClip3(scene->m_maps[scene->m_mapIndex]);
+    }
+    return WorldGetFarClip3CVar();
+}

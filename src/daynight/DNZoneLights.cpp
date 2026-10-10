@@ -77,21 +77,9 @@ WowDB2ParentLookup* ZonePoints(int32_t id, DB2PARENTITER* it, DB2PARENTITER* end
     return points;
 }
 
-// How many points zone `id` has (FUN_14057b590 on ZoneLightPoint).
-// ref: FUN_14057b590
+// How many points zone `id` has.
 int32_t ZonePointCount(int32_t id) {
-    DB2PARENTITER it;
-    DB2PARENTITER end;
-    WowDB2ParentLookup* points = ZonePoints(id, &it, &end);
-    if (points == nullptr) {
-        return 0;
-    }
-    int32_t count = 0;
-    while (!Ended(it, end)) {
-        count++;
-        points->Next(&it);
-    }
-    return count;
+    return DB2ParentCount(&g_zoneLightPointDB, id);
 }
 
 // The zone's point of order `order`, or null: the first point not before it in the zone's

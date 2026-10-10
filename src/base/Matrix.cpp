@@ -972,3 +972,23 @@ bool SmoothDamp4(float* position, float* velocity, const float* target, float om
     velocity[3] = 0.0f;
     return true;
 }
+
+// ref: FUN_1413da3d0
+void ColorLerpByte(uint32_t* color, uint32_t alpha, uint32_t target) {
+    if (alpha == 0) {
+        return;
+    }
+    uint32_t value = *color;
+    if (alpha == 0xff) {
+        *color = value ^ ((value ^ target) & 0xffffff);
+        return;
+    }
+    uint32_t result = value & 0xff000000;
+    for (uint32_t shift = 0; shift < 24; shift += 8) {
+        uint32_t from = (value >> shift) & 0xff;
+        uint32_t to = (target >> shift) & 0xff;
+        auto channel = static_cast<uint8_t>(static_cast<uint8_t>(((to - from) * alpha) >> 8) + from);
+        result |= static_cast<uint32_t>(channel) << shift;
+    }
+    *color = result;
+}

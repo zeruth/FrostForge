@@ -347,6 +347,10 @@ uint32_t DB2FieldU32(const uint8_t* field, uint32_t index, int64_t offset, WowCl
 int32_t DB2FieldI32(const uint8_t* field, uint32_t index, int64_t offset, WowClientDB2_Base* table);
 int16_t DB2FieldI16(const uint8_t* field, uint32_t index, int64_t offset, WowClientDB2_Base* table);
 
+// How many records name `parent` in the table's parent column (0 without one).
+// ref: FUN_14057b590
+int32_t DB2ParentCount(WowClientDB2_Base* table, int32_t parent);
+
 // FUN_14057bc20: every table by its table hash.
 WowClientDB2_Base* WowClientDB2GetByTableHash(uint32_t tableHash);
 

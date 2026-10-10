@@ -250,6 +250,12 @@ static_assert(sizeof(CWorldScene) == 0x1a10, "CWorldScene is 0x1a10 bytes");
 
 // The scene's environment: its clip distances, fogs and light block (+0xc0), what the M2
 // scenes and DayNight write into.
+// The far clip and the third far clip of a scene's current map, or the CVars' without a scene.
+// ref: FUN_14134e6c0
+float WorldSceneFarClip(CWorldScene* scene);
+// ref: FUN_14134e860
+float WorldSceneFarClip3(CWorldScene* scene);
+
 // ref: FUN_141357060
 void* WorldSceneGetEnv(CWorldScene* scene);
 
