@@ -1,8 +1,13 @@
 #include "model2/M2Model.hpp"
 
+#include <cmath>
+#include <cstring>
 #include <new>
 
 #include "base/ObjectAlloc.hpp"
+#include "base/Matrix.hpp"
+#include "model2/M2Particle.hpp"
+#include "model2/M2Scene.hpp"
 #include "model2/M2Shared.hpp"
 #include "storm/Memory.hpp"
 #include "util/Unimplemented.hpp"

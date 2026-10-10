@@ -75,6 +75,10 @@ inline void M2SceneSampleWind(CM2Scene* scene, float* direction, float* speed, f
     scene->m_windCallback(direction, speed, gust, nullptr);
 }
 
+// The scene's ray tracing (FUN_1411ddad0) and a model's entry in it (FUN_141260140).
+void* M2SceneGetRayTracing(CM2Scene* scene);
+void RayTracingRegisterModel(void* rayTracing, void* entry, uint32_t size);
+
 // ref: FUN_1411ace60
 BaseModelDrawParams* M2SceneAddDrawParams(void* array);
 // A box against a frustum's six planes: 0 when outside, else 3 (FUN_141346830).

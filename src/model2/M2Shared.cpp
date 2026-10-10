@@ -3,6 +3,7 @@
 #include <intrin.h>
 
 #include <cstring>
+#include <new>
 
 #include "base/Status.hpp"
 #include "cas/CAS.hpp"
@@ -27,6 +28,9 @@ namespace {
 const char s_sharedFile[] = "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Model2\\M2Shared.cpp";
 const char s_skinProfileLoadTag[] = ".?AV?$TSList@UCM2SkinProfileLoad@@V?$TSGetLink@UCM2SkinProfileLoad@@@@$07@@";
 const char s_boneOffsetLoadTag[] = ".?AV?$TSList@UCM2BoneOffsetLoad@@V?$TSGetLink@UCM2BoneOffsetLoad@@@@$07@@";
+const char s_sequenceLoadTag[] = ".?AV?$TSList@UCM2SequenceLoad@@V?$TSGetLink@UCM2SequenceLoad@@@@$07@@";
+const char s_playbackTag[] = ".?AV?$TSList@UCM2SequencePlayBack@@V?$TSGetLink@UCM2SequencePlayBack@@@@$07@@";
+const char s_keyframeDataTag[] = ".?AV?$TSList@UCM2KeyframeData@@V?$TSGetLink@UCM2KeyframeData@@@@$07@@";
 
 // The bounds a sequence-less model takes (DAT_14261f708, DAT_14261f70c).
 constexpr float BOUNDS_EMPTY_MIN = 3.4028235e38f;
@@ -431,8 +435,8 @@ CM2Shared::CM2Shared(M2CACHE* cache) {
     this->m_558 = nullptr;
     this->m_boneFileCount = 0;
     this->m_boneOffsets = nullptr;
-    this->m_588.m_prevlink = nullptr;
-    this->m_588.m_next = nullptr;
+    this->m_keyframeLink.m_prevlink = nullptr;
+    this->m_keyframeLink.m_next = nullptr;
     this->m_particleData = nullptr;
     std::memset(this->m_tint, 0, sizeof(this->m_tint));
     this->m_name[0] = '\0';
@@ -458,10 +462,10 @@ CM2Shared::~CM2Shared() {
     }
     this->ReleaseTextures();
     this->ReleaseBoneData();
-    while (void* keyframes = this->m_keyframeData.Head()) {
-        FROST_UNIMPLEMENTED();  // CM2KeyframeData (an .anim file's keys) is not made yet
-        (void)keyframes;
-        break;
+    while (CM2KeyframeData* keyframes = this->m_keyframeData.Head()) {
+        M2FreeFileData(keyframes->m_data);
+        keyframes->m_link.Unlink();
+        SMemFree(keyframes, s_keyframeDataTag, -2, 0);
     }
     for (CM2SkinProfileData& skin : this->m_skins) {
         M2SkinProfileRelease(&skin);
@@ -488,7 +492,7 @@ CM2Shared::~CM2Shared() {
         M2SkeletonRelease(this->m_skeleton);
         this->m_skeleton = nullptr;
     }
-    this->m_588.Unlink();
+    this->m_keyframeLink.Unlink();
     this->m_cacheLink.Unlink();
 }
 
@@ -1189,12 +1193,307 @@ void CM2Shared::InitializeParticleData() {
 
 // ---- releasing -------------------------------------------------------------------------------
 
+// ref: FUN_1411a64c0
+void CM2Shared::InitializeParticleSequence(uint32_t particle, uint32_t sequence) {
+    (void)particle;
+    (void)sequence;
+    FROST_UNIMPLEMENTED();  // with InitializeParticleData: the emitters' per-sequence directions
+}
+
+// ---- .anim files ----------------------------------------------------------------------------
+
+namespace {
+
+// ref: FUN_1411ab330
+bool OpenSequenceFile(CAsyncObject* object, cas::CASFILE** file) {
+    if (object->m_fileDataId != 0) {
+        return cas::CASFileOpenById(object->m_fileDataId, file, 0);
+    }
+    return cas::CASFileOpenByName(object->m_name, file, (object->m_flags >> 2) & 0x20);
+}
+
+// The read is in (LAB_1411ab380): the load forgets its object and the file takes the data.
+void OnSequenceFileRead(void* userData, void* buffer, uint32_t size) {
+    auto load = static_cast<CM2SequenceLoad*>(userData);
+    load->m_asyncObject = nullptr;
+    load->m_shared->OnSequenceRead(load, buffer, size);
+}
+
+// A sequence's .anim file could not be read (FUN_1411aadc0): it and its aliases are marked
+// failed, and the load goes.
+// ref: FUN_1411aadc0
+void OnSequenceFileError(void* userData, void* buffer, uint32_t size, const char* error) {
+    (void)size;
+    (void)error;
+    auto load = static_cast<CM2SequenceLoad*>(userData);
+    CM2Shared* shared = load->m_shared;
+    load->m_asyncObject = nullptr;
+    M2Sequence* sequence = &shared->m_data->m_sequences[load->m_sequence];
+    sequence->m_flags = (sequence->m_flags & ~0x10u) | 0x100;
+    for (uint16_t alias = sequence->m_aliasNext; alias != load->m_sequence;) {
+        M2Sequence* other = &shared->m_data->m_sequences[alias];
+        other->m_flags = (other->m_flags & ~0x10u) | 0x100;
+        alias = other->m_aliasNext;
+    }
+    M2SequenceLoadDestroy(load);
+    SMemFree(load, s_sequenceLoadTag, -2, 0);
+    if (buffer != nullptr) {
+        M2FreeFileData(buffer);
+    }
+}
+
+}  // namespace
+
+// ref: FUN_1411aa9f0
+CM2SequenceLoad* M2SharedRequestSequence(CM2Shared* shared, uint16_t sequence) {
+    M2Sequence* requested = &shared->m_data->m_sequences[sequence];
+    auto load = static_cast<CM2SequenceLoad*>(SMemAlloc(sizeof(CM2SequenceLoad), 8, s_sequenceLoadTag, 0, -2, 8));
+    new (load) CM2SequenceLoad();
+    load->m_sequence = 0;
+    shared->m_sequenceLoads.LinkToTail(load);
+    load->m_sequence = sequence;
+    load->m_shared = shared;
+    // An alias reads the file of the sequence it shares data with.
+    M2Sequence* source = requested;
+    while ((source->m_flags & 0x40) != 0) {
+        load->m_sequence = source->m_aliasNext;
+        source = &shared->m_data->m_sequences[source->m_aliasNext];
+    }
+    int16_t id = static_cast<int16_t>(source->m_id);
+    int16_t variation = static_cast<int16_t>(source->m_variationIndex);
+    requested->m_flags |= 0x10;
+    for (uint16_t alias = requested->m_aliasNext; alias != sequence;) {
+        M2Sequence* other = &shared->m_data->m_sequences[alias];
+        other->m_flags |= 0x10;
+        alias = other->m_aliasNext;
+    }
+    for (uint32_t i = 0; i < shared->m_animFileCount; i++) {
+        auto entry = reinterpret_cast<const int16_t*>(&shared->m_animFileIds[i]);
+        if (entry[0] == id && entry[1] == variation) {
+            int32_t fileDataId = *reinterpret_cast<const int32_t*>(entry + 2);
+            if (fileDataId != 0) {
+                load->m_asyncObject = AsyncFileReadById(fileDataId, 2, load, reinterpret_cast<void*>(&OpenSequenceFile),
+                    &AllocModelBuffer, nullptr, &OnSequenceFileRead, &OnSequenceFileError, &OnReadCancelled);
+            }
+            return load;
+        }
+    }
+    return load;
+}
+
+// ref: FUN_1411a4ce0
+void M2SequenceLoadDestroy(CM2SequenceLoad* load) {
+    while (CM2SequencePlayBack* playback = load->m_playbacks.Head()) {
+        playback->m_link.Unlink();
+        SMemFree(playback, s_playbackTag, -2, 0);
+    }
+    load->m_playbacks.~TSList();
+    load->m_link.Unlink();
+}
+
+// ref: FUN_1411a5510
+void M2SequenceLoadsFree(TSList<CM2SequenceLoad, TSGetLink<CM2SequenceLoad>, 8>* loads) {
+    while (CM2SequenceLoad* load = loads->Head()) {
+        M2SequenceLoadDestroy(load);
+        SMemFree(load, s_sequenceLoadTag, -2, 0);
+    }
+}
+
+// The file's keys for one sequence patched in from its .anim data (FUN_1411a88d0): M2InitAll
+// with the sequence in the context.
+// ref: FUN_1411a88d0
+bool CM2Shared::PatchSequence(uint32_t sequence, M2INITCONTEXT* context) {
+    context->m_sequence = sequence;
+    context->m_sequences = &this->m_data->m_sequences;
+    bool ok = M2InitAll(this->m_data, this->m_dataSize, this->m_data, context);
+    M2Sequence* patched = &this->m_data->m_sequences[sequence];
+    if (!ok) {
+        M2SetErrorLocation(s_sharedFile, 0x6cc);
+        M2SetError("Corrupt model sequence data: %s (%d)", this->GetDisplayName(), patched->m_id);
+        return false;
+    }
+    patched->m_flags = (patched->m_flags & ~0x10u) | 0x20;
+    for (uint32_t i = 0; i < this->m_data->m_particles.Count(); i++) {
+        this->InitializeParticleSequence(i, sequence);
+    }
+    return true;
+}
+
+// ref: FUN_1411aae90
+void CM2Shared::OnSequenceRead(CM2SequenceLoad* load, void* buffer, uint32_t size) {
+    auto keyframes = static_cast<CM2KeyframeData*>(SMemAlloc(sizeof(CM2KeyframeData), 8, s_keyframeDataTag, 0, -2, 8));
+    keyframes->m_link.m_prevlink = nullptr;
+    keyframes->m_link.m_next = nullptr;
+    keyframes->m_10 = nullptr;
+    keyframes->m_data = nullptr;
+    keyframes->m_size = 0;
+    keyframes->m_sequence = 0xffff;
+    this->m_keyframeData.LinkToTail(keyframes);
+    keyframes->m_data = buffer;
+    keyframes->m_size = size;
+    keyframes->m_sequence = load->m_sequence;
+    // The file goes to the tail of the cache's list of files with .anim data.
+    this->m_keyframeLink.Unlink();
+    this->m_cache->m_keyframeShared.LinkToTail(this);
+    M2INITCONTEXT context;
+    context.m_sequence = 0xffffffff;
+    context.m_size = size;
+    context.m_base = reinterpret_cast<uint64_t>(buffer);
+    if ((this->m_data->m_flags & 0x200000) != 0) {
+        // Chunked: the keys are in the AF2M chunk.
+        auto chunk = static_cast<uint32_t*>(buffer);
+        auto end = reinterpret_cast<uint32_t*>(static_cast<uint8_t*>(buffer) + size);
+        for (; chunk < end; chunk = reinterpret_cast<uint32_t*>(reinterpret_cast<uint8_t*>(chunk + 2) + chunk[1])) {
+            if (chunk[0] == 0x324d4641) {
+                context.m_size = chunk[1];
+                context.m_base = reinterpret_cast<uint64_t>(chunk + 2);
+            }
+        }
+    }
+    this->m_flags |= SHARED_SEQUENCES_PENDING;
+    uint16_t sequence = keyframes->m_sequence;
+    if (this->PatchSequence(sequence, &context)) {
+        for (uint16_t alias = this->m_data->m_sequences[sequence].m_aliasNext;
+             alias != sequence && this->PatchSequence(alias, &context);
+             alias = this->m_data->m_sequences[alias].m_aliasNext) {
+        }
+    }
+    for (CM2SequencePlayBack* playback = load->m_playbacks.Head(); playback != nullptr;) {
+        CM2SequencePlayBack* next = load->m_playbacks.Next(playback);
+        if ((playback->m_flags & 8) != 0) {
+            playback->m_link.Unlink();
+            SMemFree(playback, s_playbackTag, -2, 0);
+            playback = next;
+            continue;
+        }
+        CM2Model* model = playback->m_model;
+        uint32_t keyBone = static_cast<uint32_t>((*this->GetBones())[playback->m_bone].m_keyBoneId);
+        if (model->AllowSequenceChange(keyBone, playback->m_bone)) {
+            M2BoneState* state = &model->m_animState->m_boneStates[playback->m_bone];
+            float speed = playback->m_speed;
+            M2SequenceTime* slot;
+            if ((playback->m_flags & 2) == 0) {
+                model->StartBlendSequence(load->m_sequence, playback->m_bone, &playback->m_resolve, playback->m_offset,
+                    speed, playback->m_repeats);
+                slot = state->m_blendSequence;
+            } else {
+                M2Array<M2Sequence>* sequences = this->m_skeleton == nullptr
+                    ? &this->m_data->m_sequences
+                    : M2SkeletonSharedSequences(this->m_skeleton);
+                const M2Sequence& played = (*sequences)[load->m_sequence];
+                state->m_5c = played.m_id;
+                state->m_variation = played.m_variationIndex;
+                uint8_t kind = (playback->m_flags & 1) != 0 ? playback->m_kind : 5;
+                float weight;
+                std::memcpy(&weight, &playback->m_weight, sizeof(float));
+                model->StartSequence(load->m_sequence, playback->m_bone, &playback->m_resolve, playback->m_offset, speed,
+                    playback->m_repeats, kind, playback->m_fixedBlend, weight);
+                slot = state->m_sequence;
+            }
+            slot->m_endless = playback->m_flags & 4;
+            playback->m_model = nullptr;
+        }
+        playback = next;
+    }
+    if ((this->m_flags & SHARED_SEQUENCES_FREED) == 0) {
+        M2SequenceLoadDestroy(load);
+        SMemFree(load, s_sequenceLoadTag, -2, 0);
+        this->m_flags &= ~SHARED_SEQUENCES_PENDING;
+        return;
+    }
+    M2SequenceLoadsFree(&this->m_sequenceLoads);
+    this->m_flags &= ~(SHARED_SEQUENCES_PENDING | SHARED_SEQUENCES_FREED);
+}
+
+// A sequence's keys made offsets into its .anim data again, with its aliases' (FUN_1411a7dd0).
+// ref: FUN_1411a7dd0
+void CM2Shared::UnpatchSequence(uint32_t sequence, void* data, uint32_t size) {
+    M2INITCONTEXT context;
+    context.m_base = reinterpret_cast<uint64_t>(data);
+    M2Sequence* current = &this->m_data->m_sequences[sequence];
+    current->m_flags &= ~0x20u;
+    if ((this->m_data->m_flags & 0x200000) != 0) {
+        auto end = reinterpret_cast<uint32_t*>(static_cast<uint8_t*>(data) + size);
+        for (auto chunk = static_cast<uint32_t*>(data); chunk < end;
+             chunk = reinterpret_cast<uint32_t*>(reinterpret_cast<uint8_t*>(chunk + 2) + chunk[1])) {
+            if (chunk[0] == 0x324d4641) {
+                context.m_base = reinterpret_cast<uint64_t>(chunk + 2);
+            }
+        }
+    }
+    context.m_size = 0;
+    context.m_sequence = sequence;
+    M2InitAll(this->m_data, this->m_dataSize, this->m_data, &context);
+    for (uint16_t alias = current->m_aliasNext; alias != sequence; alias = current->m_aliasNext) {
+        current = &this->m_data->m_sequences[alias];
+        current->m_flags &= ~0x20u;
+        context.m_sequence = alias;
+        if ((this->m_data->m_flags & 0x200000) != 0) {
+            auto end = reinterpret_cast<uint32_t*>(static_cast<uint8_t*>(data) + size);
+            for (auto chunk = static_cast<uint32_t*>(data); chunk < end;
+                 chunk = reinterpret_cast<uint32_t*>(reinterpret_cast<uint8_t*>(chunk + 2) + chunk[1])) {
+                if (chunk[0] == 0x324d4641) {
+                    context.m_size = 0;
+                    context.m_base = reinterpret_cast<uint64_t>(chunk + 2);
+                }
+            }
+        }
+        M2InitAll(this->m_data, this->m_dataSize, this->m_data, &context);
+    }
+}
+
+// ref: FUN_1411acb40
+bool CM2Shared::ReleaseUnusedKeyframes() {
+    bool released = false;
+    for (CM2KeyframeData* keyframes = this->m_keyframeData.Head(); keyframes != nullptr;) {
+        CM2KeyframeData* next = this->m_keyframeData.Next(keyframes);
+        // Kept while any variation of the sequence or of an alias of it is referenced.
+        bool used = false;
+        uint16_t alias = keyframes->m_sequence;
+        do {
+            M2Sequence* sequence = &this->m_data->m_sequences[alias];
+            for (uint16_t variation = M2FindSequenceById(sequence->m_id, &this->m_data->m_sequenceIdxHashById,
+                     &this->m_data->m_sequences);
+                 ; variation = static_cast<uint16_t>(this->m_data->m_sequences[variation].m_variationNext)) {
+                if (this->m_sequenceState[variation] != 0) {
+                    used = true;
+                    break;
+                }
+                if (static_cast<uint16_t>(this->m_data->m_sequences[variation].m_variationNext) == 0xffff) {
+                    break;
+                }
+            }
+            if (used) {
+                break;
+            }
+            alias = sequence->m_aliasNext;
+        } while (alias != keyframes->m_sequence);
+        if (!used) {
+            this->UnpatchSequence(keyframes->m_sequence, keyframes->m_data, keyframes->m_size);
+            M2FreeFileData(keyframes->m_data);
+            keyframes->m_link.Unlink();
+            SMemFree(keyframes, s_keyframeDataTag, -2, 0);
+            released = true;
+        }
+        keyframes = next;
+    }
+    if (this->m_keyframeData.Head() == nullptr) {
+        this->m_keyframeLink.Unlink();
+    }
+    return released;
+}
+
 // ref: FUN_1411a5470
 void CM2Shared::CancelSequenceLoads() {
-    if (this->m_sequenceLoads.Head() != nullptr) {
-        FROST_UNIMPLEMENTED();  // CM2SequenceLoad: the .anim reads
+    for (CM2SequenceLoad* load = this->m_sequenceLoads.Head(); load != nullptr;
+         load = this->m_sequenceLoads.Next(load)) {
+        if (load->m_asyncObject != nullptr) {
+            AsyncFileCancel(load->m_asyncObject);
+            load->m_asyncObject = nullptr;
+        }
     }
     if ((this->m_flags & SHARED_SEQUENCES_PENDING) == 0) {
+        M2SequenceLoadsFree(&this->m_sequenceLoads);
         return;
     }
     this->m_flags |= SHARED_SEQUENCES_FREED;
@@ -1468,6 +1767,12 @@ uint32_t M2SharedLodBoneMask(CM2Shared* shared, uint32_t lod) {
         return 0x10000u << (shared->m_lodLevels[lod] & 0x1f);
     }
     return 0x10000u << ((lod - 1) & 0x1f);
+}
+
+// ref: FUN_1411ac0d0
+void M2SharedAddSequenceRef(CM2Shared* shared, uint32_t sequence) {
+    _InterlockedIncrement(
+        reinterpret_cast<volatile long*>(&shared->m_sequenceState[static_cast<uint16_t>(sequence)]));
 }
 
 // ref: FUN_1411ac0b0

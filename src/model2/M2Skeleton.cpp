@@ -32,3 +32,56 @@ void M2SkeletonReleaseSequence(void* source, uint32_t sequence) {
     (void)sequence;
     FROST_UNIMPLEMENTED();
 }
+
+// ref: FUN_141203330
+void M2SkeletonSetFrame(void* skeleton, uint32_t frame, int32_t time) {
+    (void)skeleton;
+    (void)frame;
+    (void)time;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1411f8a40
+void M2SkeletonAddSequenceRef(void* source, uint32_t sequence) {
+    (void)source;
+    (void)sequence;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1412041f0
+void M2SkeletonRequestSequence(void* skeleton, uint32_t sequence, bool parent) {
+    (void)skeleton;
+    (void)sequence;
+    (void)parent;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1412034c0
+void M2SkeletonCancelPlaybacks(void* skeleton, CM2Model* model, uint32_t bone, bool blend) {
+    (void)skeleton;
+    (void)model;
+    (void)bone;
+    (void)blend;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1412045f0
+void M2SkeletonQueuePlayback(void* skeleton, CM2Model* model, uint16_t sequence, M2AnimState* anim, uint16_t bone,
+    uint32_t offset, float speed, const M2SequenceResolve* resolve, int32_t blend, int32_t endless,
+    uint32_t repeats, uint8_t kind, uint16_t fixedBlend, uint32_t weight) {
+    (void)skeleton;
+    (void)model;
+    (void)sequence;
+    (void)anim;
+    (void)bone;
+    (void)offset;
+    (void)speed;
+    (void)resolve;
+    (void)blend;
+    (void)endless;
+    (void)repeats;
+    (void)kind;
+    (void)fixedBlend;
+    (void)weight;
+    FROST_UNIMPLEMENTED();
+}

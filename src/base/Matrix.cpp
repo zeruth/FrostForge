@@ -162,6 +162,20 @@ float* MatrixFromQuaternion(float* m, const float* q) {
     return m;
 }
 
+// ref: FUN_141342190
+void MatrixRotateQuaternion(float* m, const float* q) {
+    float r[16] = {};
+    QuaternionToRotation(q, r);
+    r[3] = 0.0f;
+    r[7] = 0.0f;
+    r[11] = 0.0f;
+    r[12] = 0.0f;
+    r[13] = 0.0f;
+    r[14] = 0.0f;
+    r[15] = 1.0f;
+    MatrixMultiply(m, r, m);
+}
+
 // ref: FUN_141340a20
 float* MatrixFromQuaternionRotation(float* m, const float* q) {
     QuaternionToRotation(q, m);

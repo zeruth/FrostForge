@@ -40,6 +40,8 @@ class CM2Lighting {
     // ref: FUN_141200500 (the unlink the destructor is)
     ~CM2Lighting();
 
+    // The scene, with its frame before this one (FUN_1411fffe0).
+    void SetScene(CM2Scene* scene);
     // ref: FUN_141200300
     void SetEnabled(int32_t enabled);
     // ref: FUN_141200210

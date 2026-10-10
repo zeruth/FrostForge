@@ -5,6 +5,7 @@
 #include "client/RenderSettings.hpp"
 #include "model2/M2Model.hpp"
 #include "model2/M2Particle.hpp"
+#include "model2/M2Ribbon.hpp"
 #include "model2/M2Scene.hpp"
 #include "model2/M2Shared.hpp"
 
@@ -108,7 +109,7 @@ void CM2Model::AnimateLights(M2AnimateContext* context) {
         }
 
         CM2Lighting* lighting = &light->m_lighting;
-        float scale = this->m_modelBounds.m_10 * this->m_modelBounds.m_18;
+        float scale = this->m_params.m_alpha * this->m_params.m_fade;
         float shadows = 1.0f;
         if ((~(RenderSettingsRayTracedShadows() >> 1) & 1) == 0 && (lighting->m_flags & 1) != 0) {
             shadows = lighting->m_7c;
@@ -209,8 +210,7 @@ void CM2Model::UpdateLights() {
             light->m_lighting.m_08 = this->m_scene->m_frame;
         }
     }
-    for (CM2Model* child = static_cast<CM2Model*>(this->m_658); child != nullptr;
-         child = static_cast<CM2Model*>(child->m_668)) {
+    for (CM2Model* child = this->m_attachedModels; child != nullptr; child = child->m_attachedNext) {
         bool hidden;
         if (child->m_attachIndex == 0xffff) {
             hidden = (child->m_flags & BASE_ATTACHED_HIDDEN) == 0;
@@ -223,16 +223,27 @@ void CM2Model::UpdateLights() {
     }
 }
 
+// The model's bone-done bits cleared and its transform brought up (FUN_1411b61c0).
+// ref: FUN_1411b61c0
+void CM2Model::ResetBoneState(const C44Matrix* parent, const CM2ModelParams* params, uint32_t frame, int32_t time) {
+    std::memset(this->m_boneDone, 0, this->m_boneDoneBytes);
+    this->UpdateTransform(parent, params, time);
+    if (this->m_skeleton != nullptr) {
+        M2SkeletonSetFrame(this->m_skeleton, frame, time);
+    }
+    this->m_matrixFrame = frame;
+}
+
 // ref: FUN_1411b1fe0
-void CM2Model::Animate(void* a2, const C44Matrix* parent, uint32_t frame, int32_t time, int32_t throttle) {
-    (void)a2;
+void CM2Model::Animate(const C44Matrix* parentMatrix, const CM2ModelParams* params, uint32_t frame, int32_t time,
+    int32_t throttle) {
     if ((this->m_flags & BASE_LOADED) == 0) {
         return;
     }
     if (this->m_matrixFrame == frame) {
-        this->UpdateMatricesFrom(parent);
+        this->UpdateMatricesFrom(params);
     } else {
-        this->ResetBoneState();
+        this->ResetBoneState(parentMatrix, params, frame, time);
     }
     bool compute = true;
     float ratio = 0.0f;
@@ -460,6 +471,395 @@ void CM2Model::AnimateRibbonTracks(M2AnimateContext* context) {
             float zero = 0.0f;
             M2TrackSample(globalTimes, Target(bone), &def->m_heightBelow, &def->m_heightBelow, &state->m_heightBelow,
                 &zero, flags);
+        }
+    }
+}
+
+// The ribbons' colours, heights, texture transforms and matrices, then their update
+// (FUN_1411b3870).
+// ref: FUN_1411b3870
+void CM2Model::UpdateRibbons(uint32_t time) {
+    M2Data* data = this->m_shared->m_data;
+    C44Matrix* matrices = this->m_animState->m_boneMatrices;
+    for (uint32_t i = 0; i < data->m_ribbons.Count(); i++) {
+        M2Ribbon* def = &data->m_ribbons[i];
+        M2RibbonState* state = &this->m_ribbonStates[i];
+        CRibbonEmitter* ribbon = this->m_ribbons[i];
+        RibbonEmitterSetColor(ribbon, state->m_color.m_value.x, state->m_color.m_value.y, state->m_color.m_value.z);
+        RibbonEmitterSetAlpha(ribbon, state->m_alpha.m_value * this->m_params.m_alpha * this->m_params.m_fade);
+        ribbon->m_heightAbove = state->m_heightAbove.m_value;
+        ribbon->m_heightBelow = state->m_heightBelow.m_value;
+        RibbonEmitterSetVisible(ribbon, state->m_visibility.m_value != 0);
+        if ((data->m_flags & 0x20000) != 0) {
+            uint32_t layers = ribbon->m_texture2 == nullptr ? 1 : 3;
+            C4Quaternion rotation = {0.0f, 0.0f, 0.0f, 1.0f};
+            C3Vector scale = {0.0f, 0.0f, 0.0f};
+            C3Vector translation = {0.0f, 0.0f, 0.0f};
+            for (uint32_t layer = 0; layer < layers; layer++) {
+                uint16_t transform = data->m_textureTransformCombos[def->m_textureTransformLookupIndex + layer];
+                if (transform < data->m_textureTransforms.Count()) {
+                    if ((this->m_flags & BASE_LOADED) != 0) {
+                        M2TextureTransformState* t = &this->m_textureTransforms[transform];
+                        rotation = t->m_rotation.m_value;
+                        scale = t->m_scale.m_value;
+                        translation = t->m_translation.m_value;
+                    }
+                    RibbonEmitterSetTextureTransform(ribbon, layer, &rotation, &scale, &translation);
+                }
+            }
+        }
+        if ((this->m_flags & BASE_VISIBLE) != 0) {
+            const float* bone = matrices[def->m_boneIndex & 0xffff].m;
+            float m[16];
+            if (this->m_parent == nullptr || (this->m_flags >> 14 & 1) != 0) {
+                // Through the local matrix: the bone's rotation rows and its position moved to the
+                // emitter's point.
+                MatrixMultiply(m, bone, this->m_local.m);
+                float px = def->m_position.x;
+                float py = def->m_position.y;
+                float pz = def->m_position.z;
+                float origin[4] = {
+                    bone[12] + py * bone[4] + px * bone[0] + pz * bone[8],
+                    bone[13] + py * bone[5] + px * bone[1] + pz * bone[9],
+                    bone[14] + py * bone[6] + px * bone[2] + pz * bone[10],
+                    bone[15],
+                };
+                const float* l = this->m_local.m;
+                for (int32_t c = 0; c < 4; c++) {
+                    m[12 + c] = origin[0] * l[c] + origin[1] * l[4 + c] + origin[2] * l[8 + c] + origin[3] * l[12 + c];
+                }
+            } else {
+                // Through the world and the camera.
+                float w[16];
+                MatrixMultiply(w, bone, this->m_world.m);
+                float px = def->m_position.x;
+                float py = def->m_position.y;
+                float pz = def->m_position.z;
+                const float* wv = this->m_world.m;
+                float origin[4];
+                for (int32_t c = 0; c < 4; c++) {
+                    origin[c] = bone[15] * wv[12 + c] + bone[14] * wv[8 + c] + bone[12] * wv[c] + bone[13] * wv[4 + c];
+                    if (c < 3) {
+                        origin[c] = origin[c] + py * w[4 + c] + px * w[c] + pz * w[8 + c];
+                    }
+                }
+                std::memcpy(w + 12, origin, sizeof(origin));
+                MatrixMultiply(m, w, this->m_scene->m_viewProjection.m);
+            }
+            RibbonEmitterSetMatrix(ribbon, m, this->m_558);
+            RibbonEmitterUpdate(ribbon, time, state->m_visibility.m_value == 0);
+        }
+    }
+}
+
+// The cameras, ribbons and particles brought up to date, the model listed for drawing and its
+// attachments told (FUN_1411b3fc0).
+// ref: FUN_1411b3fc0
+void CM2Model::UpdateDrawables(int32_t pass, uint32_t time, uint32_t a4) {
+    M2Data* data = this->m_shared->m_data;
+    if (data->m_cameras.Count() != 0) {
+        this->UpdateHeldCameras();
+    }
+    if (data->m_ribbons.Count() != 0) {
+        this->UpdateRibbons(time);
+    }
+    float ratio = 0.0f;
+    float height;
+    if (data->m_bounds.m_max.x < data->m_bounds.m_min.x || data->m_bounds.m_max.y < data->m_bounds.m_min.y
+        || data->m_bounds.m_max.z < data->m_bounds.m_min.z) {
+        height = 0.0f;
+    } else {
+        height = data->m_bounds.m_max.y - data->m_bounds.m_min.y;
+    }
+    if (1.1754944e-35f < std::fabs(height)) {
+        ratio = this->m_screenSize / height;
+    }
+    if (data->m_particles.Count() != 0
+        && ((this->m_modelFlags2 >> 1 & 1) == 0 || ratio <= M2SceneGetAnimateRatio(this->m_scene))) {
+        this->UpdateParticles(time, static_cast<uint32_t>(pass), a4);
+    }
+    bool listed = false;
+    if ((this->m_flags & BASE_SHOWN) != 0 && this->m_scene->m_collectDrawParams) {
+        BaseModelDrawParams* params = M2SceneAddDrawParams(
+            reinterpret_cast<uint8_t*>(this->m_scene) + static_cast<int64_t>(pass) * 0x18 + 0x328);
+        params->m_model = this;
+        float box[6];
+        this->GetLocalBounds(box);
+        std::memcpy(params->m_box, box, sizeof(box));
+        listed = true;
+    }
+    if ((this->m_modelFlags & 8) != 0 && listed) {
+        BaseModelDrawParams* params = M2SceneAddDrawParams(
+            reinterpret_cast<uint8_t*>(this->m_scene) + static_cast<int64_t>(pass) * 0x18 + 0x928);
+        std::memset(params, 0, sizeof(BaseModelDrawParams));
+        params->m_model = this;
+    }
+    for (CM2BaseModel* child = this->m_children; child != nullptr; child = child->m_siblingNext) {
+        bool shown;
+        if (child->m_attachIndex == 0xffff) {
+            shown = (child->m_flags >> 24 & 1) != 0;
+        } else {
+            shown = this->IsAttachmentVisible();
+        }
+        if (shown) {
+            child->PrepareLighting(pass, a4);
+        }
+    }
+}
+
+// The model's matrices from its parent's, the global sequences' clocks, and how big it looks
+// (FUN_1411b41e0).
+// ref: FUN_1411b41e0
+void CM2Model::UpdateTransform(const C44Matrix* parent, const CM2ModelParams* params, int32_t time) {
+    M2Data* data = this->m_shared->m_data;
+    this->UpdateMatricesFrom(params);
+    int32_t paused = static_cast<int32_t>(this->m_pauseRequest);
+    this->m_3b8 = 0;
+    if (paused != 0 && time != 0) {
+        this->m_pauseRequest = static_cast<uint32_t>(time);
+        int32_t delta = time - paused;
+        this->m_3b8 = static_cast<uint32_t>(delta);
+        if ((this->m_modelFlags & 0x20000) != 0) {
+            this->m_initTime = static_cast<uint32_t>(static_cast<int32_t>(this->m_initTime) + delta);
+        }
+    }
+    if (this->m_skeleton == nullptr) {
+        for (uint32_t i = 0; i < data->m_loops.Count(); i++) {
+            uint32_t length = data->m_loops[i].m_timestamp;
+            uint32_t value = 0;
+            if (length != 0) {
+                value = static_cast<uint32_t>(static_cast<int32_t>(
+                            static_cast<float>(time - static_cast<int32_t>(this->m_initTime)) * this->m_404))
+                    % length;
+            }
+            this->m_globalTimes[i] = value;
+        }
+    }
+    this->SetWorldMatrix(parent);
+    CM2Model* above = this->m_parentModel;
+    if ((this->m_modelFlags2 & 4) == 0) {
+        if (above == nullptr || (above->m_createFlags & 1) != 0) {
+            this->m_screenSize = this->m_world.m[12] * this->m_world.m[12] + this->m_world.m[13] * this->m_world.m[13]
+                + this->m_world.m[14] * this->m_world.m[14];
+        } else {
+            this->m_screenSize = above->m_screenSize;
+        }
+    } else {
+        float reach = std::sqrt(this->m_world.m[12] * this->m_world.m[12] + this->m_world.m[13] * this->m_world.m[13]
+                          + this->m_world.m[14] * this->m_world.m[14])
+            + std::sqrt(this->m_local.m[0] * this->m_local.m[0] + this->m_local.m[1] * this->m_local.m[1]
+                  + this->m_local.m[2] * this->m_local.m[2])
+                * data->m_boundsRadius;
+        reach = reach * reach;
+        this->m_screenSize = reach;
+        if (above != nullptr) {
+            float other = above->m_screenSize;
+            this->m_screenSize = other <= reach ? reach : other;
+        }
+    }
+    if (this->m_shared != nullptr && this->m_shared->m_nerf != nullptr) {
+        // The camera's distance to the model's box, negative inside it.
+        float box[6];
+        this->GetBoundingBox(box);
+        bool empty = !(box[0] <= box[3] || box[1] <= box[4] || box[2] <= box[5]);
+        if (empty) {
+            this->m_43c = -10000.0f;
+            return;
+        }
+        float inverse[16];
+        MatrixInverse(this->m_view.m, inverse, MatrixDeterminant(this->m_view.m));
+        const float* camera = this->m_scene->m_viewProjection.m + 12;
+        float cx = camera[1] * inverse[4] + camera[0] * inverse[0] + camera[2] * inverse[8] + inverse[12];
+        float cy = camera[1] * inverse[5] + camera[0] * inverse[1] + camera[2] * inverse[9] + inverse[13];
+        float cz = camera[1] * inverse[6] + camera[0] * inverse[2] + camera[2] * inverse[10] + inverse[14];
+        float dx = std::fabs(cx - (box[0] + box[3]) * 0.5f) - (box[3] - box[0]) * 0.5f;
+        float dy = std::fabs(cy - (box[1] + box[4]) * 0.5f) - (box[4] - box[1]) * 0.5f;
+        float dz = std::fabs(cz - (box[2] + box[5]) * 0.5f) - (box[5] - box[2]) * 0.5f;
+        float distance;
+        if (0.0f <= dx || 0.0f <= dy || 0.0f <= dz) {
+            if (dy <= 0.0f) {
+                dy = 0.0f;
+            }
+            if (dx <= 0.0f) {
+                dx = 0.0f;
+            }
+            if (dz <= 0.0f) {
+                dz = 0.0f;
+            }
+            distance = dy * dy + dx * dx + dz * dz;
+        } else {
+            float inside = dx <= dy ? dx : dy;
+            if (dz <= inside) {
+                inside = dz;
+            }
+            distance = -(inside * inside);
+        }
+        this->m_43c = distance;
+    }
+}
+
+// The model's draw parameters from its parent's (FUN_1411ce630): colour multiplied, colour
+// added, alpha multiplied, the effect inherited unless the model has its own, and the fade by
+// the file's NERF distances.
+// ref: FUN_1411ce630
+void CM2Model::UpdateMatricesFrom(const CM2ModelParams* parent) {
+    CM2Shared* shared = this->m_shared;
+    uint8_t fileFlags = static_cast<uint8_t>(shared->m_data->m_flags);
+    this->m_params.m_color = this->m_color;
+    if ((fileFlags & 4) == 0) {
+        if ((this->m_modelFlags & 0x200000) == 0) {
+            this->m_params.m_color.x = parent->m_color.x * this->m_params.m_color.x;
+            this->m_params.m_color.y = parent->m_color.y * this->m_params.m_color.y;
+            this->m_params.m_color.z = parent->m_color.z * this->m_params.m_color.z;
+        }
+        this->m_params.m_colorAdd = this->m_colorAdd;
+        if ((this->m_modelFlags & 0x100) == 0) {
+            this->m_params.m_colorAdd.x = parent->m_colorAdd.x + this->m_params.m_colorAdd.x;
+            this->m_params.m_colorAdd.y = parent->m_colorAdd.y + this->m_params.m_colorAdd.y;
+            this->m_params.m_colorAdd.z = parent->m_colorAdd.z + this->m_params.m_colorAdd.z;
+            shared = this->m_shared;
+        }
+        float alpha = this->m_alpha;
+        float colorAlpha = alpha * this->m_32c;
+        this->m_params.m_alpha = alpha;
+        this->m_params.m_colorAlpha = colorAlpha;
+        if ((this->m_modelFlags >> 9 & 1) == 0) {
+            this->m_params.m_alpha = alpha * parent->m_alpha;
+            this->m_params.m_colorAlpha = colorAlpha * parent->m_colorAlpha;
+        }
+        this->m_params.m_effect = nullptr;
+        if (this->m_effect2 == nullptr) {
+            if ((this->m_modelFlags >> 22 & 1) == 0 && parent->m_effect != nullptr) {
+                this->m_params.m_effect = parent->m_effect;
+            }
+        } else {
+            this->m_params.m_effect = this->m_effect2;
+        }
+    } else {
+        this->m_params.m_colorAdd = this->m_colorAdd;
+        this->m_params.m_alpha = this->m_alpha;
+        this->m_params.m_effect = this->m_effect2;
+        this->m_params.m_colorAlpha = this->m_alpha * this->m_32c;
+    }
+    float fade = 1.0f;
+    if (shared != nullptr) {
+        const float* nerf = static_cast<const float*>(shared->m_nerf);
+        if (nerf != nullptr) {
+            float distance = this->m_43c;
+            if (nerf[1] < distance) {
+                float limit = nerf[0];
+                if (limit < distance) {
+                    goto done;
+                }
+                float span = limit - nerf[1];
+                if (span <= 1.0f) {
+                    span = 1.0f;
+                }
+                fade = 1.0f - (limit - distance) / span;
+                if (0.0f <= fade) {
+                    if (1.0f <= fade) {
+                        fade = 1.0f;
+                    }
+                    goto done;
+                }
+            }
+            fade = 0.0f;
+        }
+    }
+done:
+    this->m_params.m_matrix = this->m_558;
+    this->m_params.m_fade = this->m_334 * parent->m_fade * fade;
+}
+
+// One texture transform's matrix: rotation and scale about the texture's centre, then the
+// translation (FUN_1411b45e0).
+// ref: FUN_1411b45e0
+void CM2Model::AnimateTextureTransform(uint32_t index, M2BoneState* state) {
+    const uint32_t* globalTimes = this->m_animState->m_globalTimes;
+    M2TextureTransform* def = &this->m_shared->m_data->m_textureTransforms[index];
+    float* m = this->m_textureMatrices[index].m;
+    M2TextureTransformState* transform = &this->m_textureTransforms[index];
+    MatrixIdentity(m);
+    // DAT_142cfb148
+    static const float center[3] = {0.5f, 0.5f, 0.0f};
+    const float back[3] = {-center[0], -center[1], -center[2]};
+    if (def->m_rotation.m_values.Count() != 0) {
+        C4Quaternion identity = {0.0f, 0.0f, 0.0f, 1.0f};
+        M2TrackSample(globalTimes, Target(state), &def->m_rotation, &def->m_rotation, &transform->m_rotation, &identity,
+            0);
+        MatrixTranslate(m, center);
+        MatrixRotateQuaternion(m, &transform->m_rotation.m_value.x);
+        MatrixTranslate(m, back);
+    }
+    if (def->m_scale.m_values.Count() != 0) {
+        C3Vector one = {1.0f, 1.0f, 1.0f};
+        M2TrackSample(globalTimes, Target(state), &def->m_scale, &def->m_scale, &transform->m_scale, &one, 0);
+        MatrixTranslate(m, center);
+        MatrixScale(m, &transform->m_scale.m_value.x);
+        MatrixTranslate(m, back);
+    }
+    if (def->m_translation.m_values.Count() != 0) {
+        C3Vector zero = {0.0f, 0.0f, 0.0f};
+        M2TrackSample(globalTimes, Target(state), &def->m_translation, &def->m_translation, &transform->m_translation,
+            &zero, 0);
+        MatrixTranslate(m, &transform->m_translation.m_value.x);
+    }
+}
+
+// ref: FUN_1411b4830
+void CM2Model::AnimateTextureTransforms(M2AnimateContext* context) {
+    M2BoneState* states = this->m_animState->m_boneStates;
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        this->WaitForLoad(0);
+    }
+    M2Data* data = this->m_shared->m_data;
+    uint16_t count = data->m_textureTransforms.m_count;
+    if ((data->m_flags & 0x800) == 0) {
+        for (uint32_t i = 0; i < count; i++) {
+            this->AnimateTextureTransform(i, states);
+            count = this->m_shared->m_data->m_textureTransforms.m_count;
+        }
+    } else {
+        for (uint32_t i = 0; i < count; i++) {
+            if ((this->m_flags & BASE_LOADED) == 0) {
+                this->WaitForLoad(0);
+            }
+            uint16_t bone = this->m_shared->m_data->m_textureTransformBoneMap[i];
+            if ((this->m_boneDone[bone >> 3] & static_cast<uint8_t>(1 << (bone & 7))) == 0) {
+                this->AnimateBoneTree(bone, context);
+            }
+            this->AnimateTextureTransform(i, &states[bone]);
+            count = this->m_shared->m_data->m_textureTransforms.m_count;
+        }
+    }
+}
+
+// The texture weights, from the parent's blocklist animation data when the file has some
+// (FUN_1411b4980).
+// ref: FUN_1411b4980
+void CM2Model::AnimateTextureWeights() {
+    M2Data* data = this->m_shared->m_data;
+    M2BoneState* root = this->m_animState->m_boneStates;
+    const uint32_t* globalTimes = this->m_animState->m_globalTimes;
+    uint32_t flags = RootSlotFlags(root);
+    const M2Array<M2TextureWeight>* primary = &data->m_textureWeights;
+    const M2Array<M2TextureWeight>* blend = &data->m_textureWeights;
+    auto parentWeights = static_cast<const M2Array<M2TextureWeight>*>(this->m_shared->m_parentAnimData);
+    if (parentWeights != nullptr) {
+        if ((flags & 2) != 0) {
+            primary = parentWeights;
+        }
+        if ((flags & 4) != 0) {
+            blend = parentWeights;
+        }
+        flags = 0;
+    }
+    for (uint32_t i = 0; i < data->m_textureWeights.Count(); i++) {
+        const M2Track<uint16_t>& own = data->m_textureWeights[i].m_weight;
+        if (IsAnimated(own) || this->m_shared->m_parentAnimData != nullptr) {
+            float one = 1.0f;
+            M2TrackSampleFixed16(globalTimes, Target(root), &(*primary)[i].m_weight, &(*blend)[i].m_weight,
+                &this->m_textureWeights[i], &one, flags);
         }
     }
 }

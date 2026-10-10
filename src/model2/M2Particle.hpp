@@ -10,6 +10,8 @@
 #include <cstdint>
 
 class CParticleGenerator;
+class CM2Model;
+class CM2Scene;
 
 class CParticleEmitter2 {
     public:
@@ -21,7 +23,9 @@ class CParticleEmitter2 {
     uint32_t m_childCount;              // 0xb0
     uint32_t m_padb4;
     CParticleEmitter2* m_children[4];   // 0xb8 a recursive model's emitters
-    uint8_t m_d8[0x1e0 - 0xd8];
+    uint8_t m_d8[0xe0 - 0xd8];
+    CM2Scene* m_scene;                  // 0xe0
+    uint8_t m_e8[0x1e0 - 0xe8];
     // 1 emitting, 2 enabled, 0x40 burst, 0x8000 driven by the model
     uint32_t m_flags;                   // 0x1e0
     uint8_t m_1e4[0x2f8 - 0x1e4];
@@ -29,6 +33,9 @@ class CParticleEmitter2 {
 static_assert(offsetof(CParticleEmitter2, m_flags) == 0x1e0, "CParticleEmitter2 flags at 0x1e0");
 static_assert(sizeof(CParticleEmitter2) == 0x2f8, "CParticleEmitter2 is 0x2f8 bytes");
 
+// A bone generator's model (FUN_14125c0d0) and its bones taken from it (FUN_14125b960).
+void ParticleGeneratorSetModel(CParticleGenerator* generator, CM2Model* model);
+void ParticleGeneratorInitializeBones(CParticleGenerator* generator);
 // Whether the emitter or any child has particles alive (FUN_14124bd50).
 bool ParticleEmitterHasParticles(const CParticleEmitter2* emitter);
 

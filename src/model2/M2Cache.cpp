@@ -183,6 +183,7 @@ struct CACHEINIT {
         g_m2Cache.m_particleBucketCount = 0x40;
         g_m2Cache.m_particleMaxLoad = 1.0f;
         g_m2Cache.m_idleShared.m_linkoffset = offsetof(CM2Shared, m_cacheLink);
+        g_m2Cache.m_keyframeShared.m_linkoffset = offsetof(CM2Shared, m_keyframeLink);
     }
 };
 CACHEINIT s_cacheInit;
@@ -454,6 +455,13 @@ void M2SharedProceduralRelease(CM2Shared* shared) {
 void M2SkeletonRelease(void* skeleton) {
     (void)skeleton;
     FROST_UNIMPLEMENTED();
+}
+
+// A skeleton file's sequences: never reached until skeleton files are read.
+M2Array<M2Sequence>* M2SkeletonSharedSequences(void* skeleton) {
+    (void)skeleton;
+    FROST_UNIMPLEMENTED();
+    return nullptr;
 }
 
 // The index of sequence `id` through the id hash (FUN_1411fed70): 0xffff when missing.

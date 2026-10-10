@@ -37,6 +37,16 @@ CM2Lighting::~CM2Lighting() {
     this->Unlink();
 }
 
+// ref: FUN_1411fffe0
+void CM2Lighting::SetScene(CM2Scene* scene) {
+    this->m_scene = scene;
+    if (scene != nullptr) {
+        this->m_08 = scene->m_frame - 1;
+        return;
+    }
+    this->m_08 = 0;
+}
+
 // ref: FUN_141200300
 void CM2Lighting::SetEnabled(int32_t enabled) {
     if ((this->m_enabled == 0) == (enabled == 0)) {

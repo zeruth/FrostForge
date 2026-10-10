@@ -24,6 +24,8 @@ void MatrixIdentity(float* m);
 float* QuaternionFromEuler(float* q, float yaw, float pitch, float roll);  // FUN_141347da0
 void QuaternionToRotation(const float* q, float* m);                      // FUN_1413408b0
 float* MatrixFromQuaternion(float* m, const float* q);                    // FUN_1413409e0
+// Rotates by a quaternion, pre-multiplying (FUN_141342190).
+void MatrixRotateQuaternion(float* m, const float* q);
 // The same keeping nothing of the matrix's translation (FUN_141340a20).
 float* MatrixFromQuaternionRotation(float* m, const float* q);
 // A 0..1 colour as 0xffRRGGBB (FUN_141343fd0).

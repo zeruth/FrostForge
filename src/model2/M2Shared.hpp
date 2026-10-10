@@ -10,6 +10,7 @@
 #include <cstdint>
 
 #include "model2/M2Data.hpp"
+#include "model2/M2Track.hpp"
 #include "os/Sync.hpp"
 #include "storm/list/TSLink.hpp"
 #include "storm/list/TSList.hpp"
@@ -24,6 +25,7 @@ class CM2Scene;
 class CM3Shared;
 struct CM2SequenceLoad;
 struct CM2KeyframeData;
+struct M2INITCONTEXT;
 class TObjectAllocHeap;
 
 // A skin profile being read (0x28).
@@ -56,6 +58,47 @@ struct CM2BoneOffset {
     void* m_data;                       // 0x18 the file
 };
 static_assert(sizeof(CM2BoneOffset) == 0x20, "CM2BoneOffset is 0x20 bytes");
+
+// A model waiting for a sequence's .anim file (0x38): what to start on which bone once it is in.
+struct CM2SequencePlayBack {
+    TSLink<CM2SequencePlayBack> m_link; // 0x00
+    CM2Model* m_model;                  // 0x10
+    uint16_t m_bone;                    // 0x18
+    // 1 blends by kind (not kind 5), 2 the primary sequence, 4 endless, 8 cancelled while read
+    uint8_t m_flags;                    // 0x1a
+    uint8_t m_repeats;                  // 0x1b
+    uint32_t m_offset;                  // 0x1c
+    float m_speed;                      // 0x20
+    M2SequenceResolve m_resolve;        // 0x24
+    uint16_t m_fixedBlend;              // 0x2a
+    uint8_t m_kind;                     // 0x2c
+    uint8_t m_pad2d[3];
+    uint32_t m_weight;                  // 0x30 a float's bits
+    uint32_t m_pad34;
+};
+static_assert(sizeof(CM2SequencePlayBack) == 0x38, "CM2SequencePlayBack is 0x38 bytes");
+
+// A sequence's .anim file being read (0x40), with the models waiting for it.
+struct CM2SequenceLoad {
+    TSLink<CM2SequenceLoad> m_link;     // 0x00
+    CAsyncObject* m_asyncObject;        // 0x10
+    CM2Shared* m_shared;                // 0x18
+    TSList<CM2SequencePlayBack, TSGetLink<CM2SequencePlayBack>, 8> m_playbacks;  // 0x20
+    uint16_t m_sequence;                // 0x38 the sequence whose file it is (an alias's source)
+    uint8_t m_pad3a[6];
+};
+static_assert(sizeof(CM2SequenceLoad) == 0x40, "CM2SequenceLoad is 0x40 bytes");
+
+// A sequence's .anim file in use (0x28): the model's keys point into it.
+struct CM2KeyframeData {
+    TSLink<CM2KeyframeData> m_link;     // 0x00
+    void* m_10;                         // 0x10
+    void* m_data;                       // 0x18
+    uint32_t m_size;                    // 0x20
+    uint16_t m_sequence;                // 0x24 0xffff
+    uint16_t m_pad26;
+};
+static_assert(sizeof(CM2KeyframeData) == 0x28, "CM2KeyframeData is 0x28 bytes");
 
 // A skin profile in use (0x58).
 struct CM2SkinProfileData {
@@ -165,7 +208,7 @@ struct CM2Shared {
     uint32_t m_boneFileCount;           // 0x578
     uint32_t m_pad57c;
     CM2BoneOffset* m_boneOffsets;       // 0x580
-    TSLink<CM2Shared> m_588;            // 0x588
+    TSLink<CM2Shared> m_keyframeLink;   // 0x588 the cache's list of files with .anim data in
     void* m_particleData;               // 0x598 0x14 per particle emitter
     float m_tint[4];                    // 0x5a0
     void* m_skeleton;                   // 0x5b0 CM2SkeletonShared
@@ -221,8 +264,18 @@ struct CM2Shared {
     void OnFullyLoaded();
     // The textures (FUN_1411a5fd0).
     void CreateTextures();
-    // The EXP2 data (FUN_1411a61c0).
+    // The EXP2 data (FUN_1411a61c0), and one sequence's share of it (FUN_1411a64c0).
     void InitializeParticleData();
+    void InitializeParticleSequence(uint32_t particle, uint32_t sequence);
+
+    // A sequence's .anim file is in (FUN_1411aae90): its keys patched in (FUN_1411a88d0) and the
+    // models waiting for it started.
+    void OnSequenceRead(CM2SequenceLoad* load, void* buffer, uint32_t size);
+    bool PatchSequence(uint32_t sequence, M2INITCONTEXT* context);
+    // The .anim files no sequence uses any more given back, their keys made offsets again
+    // (FUN_1411acb40, FUN_1411a7dd0): whether one went.
+    bool ReleaseUnusedKeyframes();
+    void UnpatchSequence(uint32_t sequence, void* data, uint32_t size);
 
     // Releases the file and what came out of it (FUN_1411a5470, FUN_1411a52e0, FUN_1411a6cd0,
     // FUN_1411a7d10, FUN_1411a5640).
@@ -265,7 +318,7 @@ struct M2CACHE {
     uint8_t m_60[0x40];                                 // 0x60
     uint32_t m_frame;                                   // 0xa0 DAT_142cfaf80
     uint32_t m_padA4;
-    TSList<CM2Scene, TSGetLink<CM2Scene>, 8> m_a8;      // 0xa8
+    TSList<CM2Shared, TSGetLink<CM2Shared>, 8> m_keyframeShared;  // 0xa8 files with .anim data in
     TSList<CM2Shared, TSGetLink<CM2Shared>, 8> m_idleShared;  // 0xc0
     TSList<CM3Shared, TSGetLink<CM3Shared>, 8> m_idleM3;  // 0xd8
     TSList<CM3Shared, TSGetLink<CM3Shared>, 8> m_f0;      // 0xf0
@@ -304,8 +357,15 @@ CM2BoneOffset* M2SharedGetBoneOffset(CM2Shared* shared, uint32_t index);
 bool M2BoneOffsetIsLoaded(const CM2BoneOffset* offset);
 // The bone flag a LOD level drops (FUN_1411a86d0): 0 at level 0.
 uint32_t M2SharedLodBoneMask(CM2Shared* shared, uint32_t lod);
-// A sequence's .anim data released (FUN_1411ac0b0).
+// A sequence's .anim data referenced (FUN_1411ac0d0) and released (FUN_1411ac0b0).
+void M2SharedAddSequenceRef(CM2Shared* shared, uint32_t sequence);
 void M2SharedReleaseSequence(CM2Shared* shared, uint32_t sequence);
+// A sequence's .anim file asked for (FUN_1411aa9f0): the new load.
+CM2SequenceLoad* M2SharedRequestSequence(CM2Shared* shared, uint16_t sequence);
+// A load's playbacks freed and the load unlinked (FUN_1411a4ce0), and every load freed
+// (FUN_1411a5510).
+void M2SequenceLoadDestroy(CM2SequenceLoad* load);
+void M2SequenceLoadsFree(TSList<CM2SequenceLoad, TSGetLink<CM2SequenceLoad>, 8>* loads);
 // The file's destruction back into its pool (FUN_141197460).
 void M2SharedFree(CM2Shared* shared);
 
@@ -317,6 +377,8 @@ void M2SkinProfileRelease(CM2SkinProfileData* skin);
 // (FUN_1411f8840).
 void M2SharedProceduralRelease(CM2Shared* shared);
 void M2SkeletonRelease(void* skeleton);
+// A skeleton file's sequences (its shared data's, through +0x1a8).
+M2Array<M2Sequence>* M2SkeletonSharedSequences(void* skeleton);
 // The index of sequence `id` through the id hash, 0xffff when missing (FUN_1411fed70).
 uint16_t M2FindSequenceById(uint32_t id, const M2Array<uint16_t>* hash, const M2Array<M2Sequence>* sequences);
 

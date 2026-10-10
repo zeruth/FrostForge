@@ -14,7 +14,7 @@
 // (0x34; FUN_1412006d0 copies one, FUN_141200740 clears it).
 struct M2SequenceSource {
     M2Array<M2CompBone>* m_bones;           // 0x00
-    void* m_08;                             // 0x08
+    M2Array<uint16_t>* m_keyBoneLookup;     // 0x08 bone index by key bone id
     M2Array<M2Sequence>* m_sequences;       // 0x10
     M2Array<uint16_t>* m_sequenceHash;      // 0x18
     M2Array<M2Attachment>* m_attachments;   // 0x20
@@ -31,11 +31,12 @@ struct M2SequenceTime {
     uint16_t m_sequence;        // 0x04 the sequence's index
     uint16_t m_bone;            // 0x06 the bone that last advanced it
     uint16_t m_nextSequence;    // 0x08 0xffff for none
-    uint16_t m_pad0a;
+    uint8_t m_pending;          // 0x0a ended, or waiting to start
+    uint8_t m_endless;          // 0x0b played until replaced
     int32_t m_startTime;        // 0x0c the clock when it started
     int32_t m_endTime;          // 0x10
     float m_speed;              // 0x14 a global sequence's own clock runs while positive
-    uint32_t m_18;              // 0x18
+    float m_inverseSpeed;       // 0x18 1 / speed, 0 when stopped
     uint32_t m_timeOffset;      // 0x1c
     uint32_t m_repeats;         // 0x20
     uint32_t m_24;              // 0x24
@@ -43,6 +44,18 @@ struct M2SequenceTime {
     uint64_t m_60;              // 0x60
 };
 static_assert(sizeof(M2SequenceTime) == 0x68, "M2SequenceTime is 0x68 bytes");
+
+// A sequence id resolved through the animation DB (FUN_1411ff0e0): the id to play, how it
+// was found (0 itself, 1 reversed, 2.. held), whether the chain asked for a blend, whether it
+// fell back to a default, and whether only the parent skeleton has it.
+struct M2SequenceResolve {
+    uint16_t m_sequence;                    // 0x00
+    uint8_t m_kind;                         // 0x02
+    uint8_t m_blend;                        // 0x03
+    uint8_t m_fallback;                     // 0x04
+    uint8_t m_parentHas;                    // 0x05
+};
+static_assert(sizeof(M2SequenceResolve) == 6, "M2SequenceResolve is 6 bytes");
 
 // What a sampler reads besides the track: the primary and blended-from sequences and the blend
 // weight, at the offsets every animated element keeps them (a bone's state is the full 0x90).

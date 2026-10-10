@@ -165,17 +165,14 @@ CM2BaseModel::CM2BaseModel() {
     this->m_lodTarget = 0;
     this->m_lodRequested = 0;
     // FUN_1411acff0
-    this->m_modelBounds.m_flags &= ~1u;
-    this->m_modelBounds.m_00 = 0;
-    this->m_modelBounds.m_08 = 0;
-    this->m_modelBounds.m_10 = 1.0f;
-    this->m_modelBounds.m_14 = 1.0f;
-    this->m_modelBounds.m_18 = 1.0f;
-    this->m_modelBounds.m_20 = 1.0f;
-    this->m_modelBounds.m_24 = 1.0f;
-    this->m_modelBounds.m_28 = 1.0f;
-    this->m_modelBounds.m_2c = 0;
-    this->m_modelBounds.m_30 = 0;
+    this->m_params.m_flags &= ~1u;
+    this->m_params.m_effect = nullptr;
+    this->m_params.m_matrix = nullptr;
+    this->m_params.m_alpha = 1.0f;
+    this->m_params.m_colorAlpha = 1.0f;
+    this->m_params.m_fade = 1.0f;
+    this->m_params.m_color = C3Vector{1.0f, 1.0f, 1.0f};
+    this->m_params.m_colorAdd = C3Vector{0.0f, 0.0f, 0.0f};
     this->m_createTime = 0;
     this->m_collisionBounds.m_min = C3Vector{BOX_EMPTY_MIN, BOX_EMPTY_MIN, BOX_EMPTY_MIN};
     this->m_collisionBounds.m_max = C3Vector{BOX_EMPTY_MAX, BOX_EMPTY_MAX, BOX_EMPTY_MAX};
@@ -568,15 +565,15 @@ bool CM2BaseModel::GetAttachmentMatrixByIndex(uint32_t index, C44Matrix* out) {
     return false;
 }
 
-// The model's bounds (FUN_1411e6cc0).
+// The effect the model draws with (FUN_1411e6cc0).
 // ref: FUN_1411e6cc0
-CM2ModelBounds* M2BaseModelGetModelBounds(CM2BaseModel* model) {
-    return reinterpret_cast<CM2ModelBounds*>(*reinterpret_cast<void**>(&model->m_modelBounds));
+void* M2BaseModelGetEffect(CM2BaseModel* model) {
+    return model->m_params.m_effect;
 }
 
 // ref: FUN_1411e6cd0
-uint32_t CM2BaseModel::Virtual0f8(uint32_t value) {
-    return value;
+uint32_t CM2BaseModel::MapAttachmentId(uint32_t id) {
+    return id;
 }
 
 // ref: FUN_1411e6ce0
@@ -1159,7 +1156,8 @@ void CM2BaseModel::RunLoadCallbacks() {
 }
 
 // ref: FUN_1411e8210
-void CM2BaseModel::UpdateMatrices(const C44Matrix* parentMatrix, void* a3, uint32_t a4, uint32_t a5, uint32_t a6) {
+void CM2BaseModel::UpdateMatrices(const C44Matrix* parentMatrix, const CM2ModelParams* params, uint32_t a4, uint32_t a5,
+    uint32_t a6) {
     (void)parentMatrix;
     CM2BaseModel* parent = this->m_parent;
     uint32_t flags;
@@ -1259,7 +1257,7 @@ void CM2BaseModel::UpdateMatrices(const C44Matrix* parentMatrix, void* a3, uint3
             moved.m[14] += r[14];
             MatrixMultiply(m.m, moved.m, this->m_world.m);
         }
-        child->UpdateMatrices(&m, a3, a4, a5, a6);
+        child->UpdateMatrices(&m, params, a4, a5, a6);
     }
 }
 

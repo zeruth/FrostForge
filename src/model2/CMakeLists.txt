@@ -7,9 +7,11 @@ add_library(model2 STATIC
     M2Init.cpp
     M2Model.cpp
     M2ModelAnimate.cpp
+    M2ModelAttach.cpp
     M2ModelUpdate.cpp
     M2Particle.cpp
     M2Scene.cpp
+    M2Sequence.cpp
     M2Shaders.cpp
     M2Shared.cpp
     M2Skeleton.cpp
