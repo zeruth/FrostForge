@@ -583,13 +583,238 @@ void CWorldSceneRender::DrawOpaque(FRAMEBUFFER* buffer) {
     }
 }
 
-// The transparent and composite pass (FUN_1413d07b0): the alpha M2s, particles, liquids and
-// the resolve into the scene buffer. Not ported yet.
+namespace {
+
+// The cull's underwater bit (+0x161e8 bit 7).
+// ref: FUN_1413dcb40
+bool WorldViewUnderwater(CWorldView* view) {
+    return (At<uint8_t>(view->m_cull, 0x161e8) >> 7) != 0;
+}
+
+// The world's graphics feature bits (DAT_1430ab9d8 & DAT_1430ab9d4), set by the world's
+// options; zero until those are ported.
+uint32_t s_worldFeatures;
+uint32_t s_worldFeaturesMask;
+
+// ref: FUN_14134e3d0
+uint32_t WorldFeatures() {
+    return s_worldFeatures & s_worldFeaturesMask;
+}
+
+// DAT_1430a1fa0: the targets the alpha M2 passes draw into.
+GXRENDERTARGETS* s_alphaTargets;
+
+}  // namespace
+
+// The pass drawn on top of the scene with its own near projection (pass 11): the viewport's
+// depth range narrowed to [0, 0.99912] and the M2 scene given a vertical-fov projection from
+// the camera, then the viewport put back.
+// ref: FUN_1413d4070
+void CWorldSceneRender::DrawFrontPass(GxRenderContext* context, ShaderEffectContext* effect) {
+    float* viewport = &context->Field<float>(0x1c);
+    float x0 = viewport[0];
+    float x1 = viewport[1];
+    float y0 = viewport[2];
+    float y1 = viewport[3];
+    float z0 = viewport[4];
+    float z1 = viewport[5];
+    float cx0 = x0 > 0.0f ? x0 : 0.0f;
+    float cx1 = x1 < 1.0f ? x1 : 1.0f;
+    float cy0 = y0 > 0.0f ? y0 : 0.0f;
+    float cy1 = y1 < 1.0f ? y1 : 1.0f;
+    const float nearRange = 0.99912107f;    // DAT_142738e50
+    CM2Scene* m2Scene = SceneOf(this)->m_m2Scene;
+    if (x0 != cx0 || x1 != cx1 || y0 != cy0 || y1 != cy1 || z0 != 0.0f || z1 != nearRange) {
+        viewport[0] = cx0;
+        context->Field<uint8_t>(0x18) = 1;
+        viewport[1] = cx1;
+        viewport[2] = cy0;
+        viewport[3] = cy1;
+        viewport[4] = 0.0f;
+        viewport[5] = nearRange;
+    }
+    CWorldView* view = ViewOf(this);
+    float projection[16];
+    MatrixIdentity(projection);
+    MatrixPerspectiveVertical(view->m_camera.m_fov, view->m_camera.m_aspect, view->m_cameraLast.m_nearClip,
+        view->m_cameraLast.m_farClip, projection);
+    float minimum[3] = {x0, y0, 0.0f};
+    float maximum[3] = {x1, y1, nearRange};
+    m2Scene->SetView(reinterpret_cast<const C3Vector*>(view->m_camera.m_position),
+        reinterpret_cast<const C44Matrix*>(view->m_matrices[2]), reinterpret_cast<const C44Matrix*>(projection), minimum,
+        maximum, false);
+    m2Scene->DrawPass(context, effect, 0xb);
+    if (cx0 != viewport[0] || cx1 != viewport[1] || cy0 != viewport[2] || cy1 != viewport[3] || z0 != viewport[4]
+        || z1 != viewport[5]) {
+        viewport[0] = cx0;
+        viewport[1] = cx1;
+        viewport[2] = cy0;
+        viewport[3] = cy1;
+        viewport[4] = z0;
+        viewport[5] = z1;
+        context->Field<uint8_t>(0x18) = 1;
+    }
+}
+
+// The projected texture's two passes over the alpha M2s (the occlusion's result with the
+// cull's occluders; their draws are empty functions in the reference build). Not ported past
+// its gate.
+// ref: FUN_1413d8700
+void CWorldSceneRender::DrawProjectedPass(GxRenderContext* context, ShaderEffectContext* effect, bool second) {
+    (void)effect;
+    (void)second;
+    CWorldView* view = ViewOf(this);
+    uint64_t occlusion = 0;
+    if (SceneOcclusionOn(&view->m_occlusion)) {
+        occlusion = SceneOcclusionResult(&view->m_occlusion);
+    }
+    auto occluders = static_cast<uint32_t*>(CWorldCullOccluders(view->m_cull));
+    if (*occluders == 0 || At<uint64_t>(this, 0x68) == 0 || occlusion == 0 || At<uint64_t>(this, 0xf90) == 0) {
+        return;
+    }
+    ProjectedTextureBind(static_cast<void**>(SceneOf(this)->m_1950), context);
+    FROST_UNIMPLEMENTED();  // the copy of the projected target (+0x198 or +0x1a8)
+}
+
+// The alpha M2 passes: 9, the projected texture's two, 8 and 12.
+// ref: FUN_1413d2380
+void CWorldSceneRender::DrawAlphaM2(GxRenderContext* context, ShaderEffectContext* effect) {
+    CM2Scene* m2Scene = M2SceneOf(this);
+    m2Scene->DrawPass(context, effect, 9);
+    this->DrawProjectedPass(context, effect, false);
+    this->DrawProjectedPass(context, effect, true);
+    m2Scene->DrawPass(context, effect, 8);
+    m2Scene->DrawPass(context, effect, 0xc);
+}
+
+// The particulates' alpha draws (FUN_1413cf2c0's gate; FUN_1413970d0, FUN_141396b70). Only
+// a view that draws them (flags & 0xa == 8) with DayNight and particulates asks.
+// ref: FUN_1413cf2c0
+bool CWorldSceneRender::PrepareParticulates() {
+    CWorldScene* scene = SceneOf(this);
+    if (!ParticulatesOn() || DayNightOf(this) == nullptr || (ViewOf(this)->m_flags & 0xa) != 8
+        || At<uint64_t>(scene->m_particulates, 8) == 0) {
+        return false;
+    }
+    FROST_UNIMPLEMENTED();  // the particulate volumes' draw lists
+    return true;
+}
+
+// The transparent and composite pass: the cascades for alpha, the copy target, and above or
+// under water the alpha M2s, particulates, liquids and sky; then the render callbacks' stage
+// 4. The world's own scene parts are stubs.
 // ref: FUN_1413d07b0
 void CWorldSceneRender::DrawTransparent(GXRENDERTARGETS* targets, GXRENDERTARGETS* targets2) {
     (void)targets;
     (void)targets2;
-    FROST_UNIMPLEMENTED();
+    CWorldScene* scene = SceneOf(this);
+    CWorldView* view = ViewOf(this);
+    ShadowCascadesSetup(&this->m_projections[2], &At<uint8_t>(view, 0x38), &scene->m_farClip, 2);
+    GxRenderContext* context = g_gxRenderContext;
+    ShaderEffectContext* effect = this->m_effectContext;
+    uint32_t flags = view->m_flags;
+    if ((flags >> 0x12 & 1) != 0) {
+        FROST_UNIMPLEMENTED();  // the world's shadow constants (FUN_1412ad7f0, FUN_1412adbf0, FUN_1412b5cf0, FUN_1413ff2d0)
+    }
+    if ((flags >> 0x17 & 1) != 0 && (WorldFeatures() & 0x40) != 0) {
+        FROST_UNIMPLEMENTED();  // FUN_1413d3610
+    }
+    if ((flags >> 0x13 & 1) != 0 && static_cast<int8_t>(WorldFeatures()) < 0) {
+        FROST_UNIMPLEMENTED();  // the liquids (FUN_1413f5d70, FUN_1413f6660)
+    }
+    bool copyTarget = false;
+    auto occluders = static_cast<uint32_t*>(CWorldCullOccluders(view->m_cull));
+    if (*occluders != 0) {
+        FROST_UNIMPLEMENTED();  // the occluders' sort (FUN_1413cb8b0)
+        copyTarget = At<uint64_t>(this, 0x68) != 0;
+    }
+    At<uint64_t>(this, 0xf90) = 0;
+    if (copyTarget) {
+        FROST_UNIMPLEMENTED();  // the "ExecuteCopyDiscard" copy of the shared colour (FUN_14129f180)
+    }
+    FRAMEBUFFER* sceneBuffer = SceneBufferOf(this);
+    if (view->m_690 == 0 && !WorldViewUnderwater(view)) {
+        bool opaqueM2 = (flags & 0x410000) != 0;
+        if ((flags & 0x4010) == 0x4010 && WorldWaterDetail() > 1) {
+            FROST_UNIMPLEMENTED();  // the water surface's sky (FUN_142528480, FUN_1413d28f0)
+        }
+        if (opaqueM2) {
+            if (this->GetCommandList(0x17) == nullptr) {
+                M2SceneOf(this)->DrawPass(context, effect, 10);    // FUN_1413d2560
+            }
+        }
+        if ((flags & 0x4010) == 0x4010) {
+            FROST_UNIMPLEMENTED();  // FUN_142528480
+        }
+        if ((flags & 0x10) != 0 && WorldWaterDetail() >= 3 && view->WantsReflection()) {
+            FROST_UNIMPLEMENTED();  // the reflection's composite (FUN_1425285f0)
+        }
+        if ((flags & 0x40) != 0) {
+            FROST_UNIMPLEMENTED();  // FUN_1405e8500
+        }
+        bool particulates = this->PrepareParticulates();
+        if (particulates) {
+            FROST_UNIMPLEMENTED();  // the particulates (FUN_1413d59b0, 0x11)
+        }
+        if ((flags >> 0xe & 1) != 0) {
+            FROST_UNIMPLEMENTED();  // the sky's alpha (FUN_1413d2830)
+        }
+        if ((flags >> 0x19 & 1) != 0) {
+            FROST_UNIMPLEMENTED();  // FUN_1413d2f00
+        }
+        if ((flags >> 0x1d & 1) != 0) {
+            FROST_UNIMPLEMENTED();  // FUN_1413d2fd0
+        }
+        if (particulates) {
+            FROST_UNIMPLEMENTED();  // the particulates (FUN_1413d59b0, 0x12)
+        }
+        if (opaqueM2) {
+            this->DrawFrontPass(context, effect);
+            s_alphaTargets = TargetsOrNull(sceneBuffer);
+            if (this->GetCommandList(8) == nullptr) {
+                this->DrawAlphaM2(context, effect);
+            }
+            if (copyTarget) {
+                FROST_UNIMPLEMENTED();  // the copy target handed back
+            }
+        }
+        ThreadPoolGroupWait(this->m_group);
+        if ((view->m_flags & 2) == 0 && scene->m_type == 6) {
+            FROST_UNIMPLEMENTED();  // the anima copy (FUN_1413d2a60)
+        }
+        if (particulates) {
+            FROST_UNIMPLEMENTED();  // the particulates (FUN_1413d59b0, 0x13)
+        }
+        if ((flags >> 0x18 & 1) != 0) {
+            context->SetRenderTargets(TargetsOrNull(sceneBuffer));
+            FROST_UNIMPLEMENTED();  // FUN_141390550
+        }
+        if ((flags & 0x40) != 0) {
+            FROST_UNIMPLEMENTED();  // FUN_1413d2f70
+            context->SetRenderTargets(TargetsOrNull(sceneBuffer));
+        }
+    } else {
+        FROST_UNIMPLEMENTED();  // the underwater or occluded order of the same passes
+    }
+    if ((flags >> 0xf & 1) != 0) {
+        struct {
+            uint64_t m_shared;
+            GXRENDERTARGETS* m_targets;
+            CWorldScene* m_scene;
+            CWorldView* m_view;
+        } frame = {At<uint64_t>(this, 0x68), TargetsOrNull(sceneBuffer), scene, view};
+        context->SetRenderTargets(TargetsOrNull(sceneBuffer));
+        scene->RunCallbacks(4, &frame);
+    }
+    if ((flags >> 0x1a & 1) != 0) {
+        if ((WorldFeatures() >> 10 & 1) != 0 && view->m_690 != 0 && this->m_9a8 != 0) {
+            FROST_UNIMPLEMENTED();  // FUN_1414256f0
+        }
+        context->SetRenderTargets(TargetsOrNull(sceneBuffer));
+    }
+    if ((flags >> 0x1b & 1) != 0) {
+        FROST_UNIMPLEMENTED();  // FUN_1413d3840
+    }
 }
 
 // The view's passes: the M2 scene given its clip plane, occlusion, elements and weather; the

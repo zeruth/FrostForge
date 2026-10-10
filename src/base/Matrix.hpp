@@ -59,6 +59,7 @@ void MatrixAffineInverse(float* m, float scale);
 // A reverse-depth perspective from a diagonal field of view (FUN_14068e4b0) and a look-at view
 // (FUN_14068de30).
 void MatrixPerspective(float fieldOfView, float aspect, float zNear, float zFar, float* m);
+void MatrixPerspectiveVertical(float fieldOfView, float aspect, float zNear, float zFar, float* m);
 void MatrixLookAt(const float* eye, const float* direction, const float* up, float* m);
 // A rotation about a unit axis by an angle (FUN_141342710; `normalized` skips normalising the
 // axis), the rotation turning `from` to `to` (FUN_1412b2570), and a translation added

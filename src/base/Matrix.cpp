@@ -334,6 +334,28 @@ void MatrixPerspective(float fieldOfView, float aspect, float zNear, float zFar,
     m[10] = zNear / (zNear - zFar);
 }
 
+// The same reverse-depth perspective from a vertical field of view.
+// ref: FUN_14068e590
+void MatrixPerspectiveVertical(float fieldOfView, float aspect, float zNear, float zFar, float* m) {
+    float t = std::tan(fieldOfView * 0.5f);
+    m[3] = 0.0f;
+    m[4] = 0.0f;
+    m[8] = 0.0f;
+    m[9] = 0.0f;
+    m[12] = 0.0f;
+    m[13] = 0.0f;
+    m[1] = 0.0f;
+    m[2] = 0.0f;
+    m[6] = 0.0f;
+    m[7] = 0.0f;
+    m[11] = 1.0f;
+    m[15] = 0.0f;
+    m[5] = zNear / (t * zNear);
+    m[0] = zNear / (t * zNear * aspect);
+    m[14] = (-zNear * zFar) / (zNear - zFar);
+    m[10] = zNear / (zNear - zFar);
+}
+
 // A view looking from `eye` along `direction` with `up`: the columns are the side, the up and
 // the direction, and the eye taken back through them.
 // ref: FUN_14068de30

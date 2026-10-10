@@ -156,6 +156,14 @@ class CWorldSceneRender {
     void DrawOpaque(FRAMEBUFFER* buffer);
     // ref: FUN_1413d07b0
     void DrawTransparent(GXRENDERTARGETS* targets, GXRENDERTARGETS* targets2);
+    // ref: FUN_1413d4070
+    void DrawFrontPass(GxRenderContext* context, ShaderEffectContext* effect);
+    // ref: FUN_1413d8700
+    void DrawProjectedPass(GxRenderContext* context, ShaderEffectContext* effect, bool second);
+    // ref: FUN_1413d2380
+    void DrawAlphaM2(GxRenderContext* context, ShaderEffectContext* effect);
+    // ref: FUN_1413cf2c0
+    bool PrepareParticulates();
     // The world scene's ray-traced shadow targets (FUN_1413ceb50) and its ray tracing jobs
     // (FUN_1413d8c80).
     // ref: FUN_1413ceb50
