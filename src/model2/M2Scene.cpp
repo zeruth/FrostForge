@@ -260,8 +260,7 @@ M2SceneDrawList::M2SceneDrawList() {
         this->m_lists2[i] = {};
     }
     this->m_callbacks = {};
-    this->m_2d8 = nullptr;
-    this->m_2e0 = nullptr;
+    std::memset(this->m_screenRect, 0, sizeof(this->m_screenRect));
 }
 
 // ref: FUN_14124c1f0
@@ -303,14 +302,14 @@ CM2Scene::CM2Scene(M2CACHE* cache, int32_t type) {
     this->m_088 = nullptr;
     this->m_090 = nullptr;
     this->m_time = 300000;
-    this->m_09c = 0;
+    this->m_timeStep = 0;
     this->m_frame = 0;
     this->m_0a4 = 1;
     this->m_0a8 = 0;
     this->m_flags = 0;
     this->m_pad0b4 = 0;
     this->m_0b8 = 0;
-    this->m_0c0 = 0;
+    this->m_lightings = nullptr;
     this->m_maxLights = 8;
     OsMutexInit(&this->m_lock0d0);
     this->m_crit0d8.Initialize();
@@ -348,13 +347,16 @@ CM2Scene::CM2Scene(M2CACHE* cache, int32_t type) {
     MatrixIdentity(this->m_d578.m);
     MatrixIdentity(this->m_d5b8.m);
     MatrixIdentity(this->m_d5f8.m);
-    std::memset(this->m_d638, 0, 0xd674 - 0xd638);
+    std::memset(this->m_d638, 0, sizeof(this->m_d638));
+    std::memset(this->m_screenRect, 0, sizeof(this->m_screenRect));
     this->m_animateRatio = 10000.0f;
     std::memset(this->m_d678, 0, sizeof(this->m_d678));
     this->m_traceCallback = nullptr;
     this->m_d6a0 = nullptr;
     this->m_windCallback = nullptr;
-    std::memset(this->m_d6b0, 0, sizeof(this->m_d6b0));
+    this->m_d6b0 = 0;
+    this->m_projectCallback = nullptr;
+    this->m_projectCheckCallback = nullptr;
     this->m_hitRecs = {};
     this->m_d6e0 = 0;
     this->m_d6e4 = 0;

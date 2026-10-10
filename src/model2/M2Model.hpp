@@ -129,6 +129,8 @@ struct CM2ModelParams {
 static_assert(sizeof(CM2ModelParams) == 0x38, "CM2ModelParams is 0x38 bytes");
 
 struct RENDERSETTINGS;
+struct M2SceneDrawList;
+struct M2ModelCallback;
 
 class CM2BaseModel {
     public:
@@ -232,7 +234,7 @@ class CM2BaseModel {
     virtual void MarkRayTracingDirty() = 0;                                         // 0x068
     virtual void SetAttachMatrix(C44Matrix* matrix) = 0;                            // 0x070
     virtual void DisableLights() = 0;                                               // 0x078
-    virtual void CollectEvents(CM2Scene* scene, void* callbacks) = 0;               // 0x080
+    virtual void CollectEvents(M2SceneDrawList* list, void* callbacks) = 0;         // 0x080
     virtual int32_t GetFileDataId() = 0;                                            // 0x088
     virtual bool GetContentKey(uint8_t* key) = 0;                                   // 0x090
     virtual bool IsSameFile(CM2BaseModel* other) = 0;                               // 0x098
@@ -666,7 +668,7 @@ class CM2Model : public CM2BaseModel {
     // ref: FUN_1411b77d0
     void DisableLights() override;
     // ref: FUN_1411b8e80
-    void CollectEvents(CM2Scene* scene, void* callbacks) override;
+    void CollectEvents(M2SceneDrawList* list, void* callbacks) override;
     // ref: FUN_1411bd840
     int32_t GetFileDataId() override;
     // ref: FUN_1411bbb60
@@ -781,7 +783,7 @@ class CM2Model : public CM2BaseModel {
     float* GetEffectBox(float* out);
     // The animation events between the last frame and this one, queued as callbacks
     // (FUN_1411b8670).
-    bool QueueEvents(CM2Scene* scene, void* callbacks);
+    bool QueueEvents(M2SceneDrawList* list, void* callbacks);
 
     // Bone animation (M2ModelAnimate.cpp). A slot shifted by this frame's pause.
     void ShiftSlotForPause(M2SequenceTime* slot, const M2AnimateContext* context);
@@ -807,6 +809,14 @@ class CM2Model : public CM2BaseModel {
     // ribbon tracks (FUN_1411b3490).
     void AnimateLights(M2AnimateContext* context);
     void UpdateLights();
+    // Runs a queued callback (FUN_1411b5720): a sequence started on a key bone (FUN_1411b5780)
+    // or a function called.
+    void RunCallback(const M2ModelCallback* callback);
+    void RunSequenceCallback(const M2ModelCallback* callback);
+    // The projected batches' world objects remade through the scene (FUN_1411b6750), each
+    // from its batch's projection (FUN_1411be9e0).
+    void UpdateProjectedBatches();
+    bool BuildBatchProjection(void* query, const void* section);
     // FUN_1411b3870, FUN_1411b3fc0, FUN_1411b41e0, FUN_1411b45e0, FUN_1411b2c90
     void UpdateRibbons(float delta);
     void UpdateDrawables(int32_t pass, float delta, uint32_t a4);
@@ -995,6 +1005,8 @@ bool M2ModelInitializeLoaded(CM2Model* model);
 void M2ModelInitializePools();
 // FUN_1411b7d60
 void M2ModelSetFlag400(bool set);
+// A model's draw parameters at their defaults (FUN_1411acff0).
+void M2ModelParamsInit(CM2ModelParams* params);
 // The module's own scene (DAT_1430a0ed0, FUN_141196e40(9, ...)).
 void M2CreateModuleScene();
 

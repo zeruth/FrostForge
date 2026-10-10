@@ -121,6 +121,8 @@ uint32_t s_memoryRangeCount;
 
 // The innermost context of this thread (TLS +0x2128).
 thread_local ERRORCONTEXT* t_errorContext;
+// The innermost memory context of this thread (TLS +0x2120).
+thread_local ERRORMEMORYCONTEXT* t_errorMemoryContext;
 
 }
 
@@ -147,6 +149,17 @@ ERRORCONTEXT* ErrorContextPush(ERRORCONTEXT* context, ERRORCONTEXTCALLBACK descr
 // ref: FUN_14025ce70
 void ErrorContextPop(ERRORCONTEXT* context) {
     t_errorContext = context->m_previous;
+}
+
+ERRORMEMORYCONTEXT* ErrorMemoryContextPush(ERRORMEMORYCONTEXT* context, ERRORMEMORYCALLBACK describe) {
+    context->m_describe = describe;
+    context->m_previous = t_errorMemoryContext;
+    t_errorMemoryContext = context;
+    return context;
+}
+
+void ErrorMemoryContextPop(ERRORMEMORYCONTEXT* context) {
+    t_errorMemoryContext = context->m_previous;
 }
 
 namespace {

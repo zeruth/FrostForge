@@ -572,11 +572,11 @@ void CM2Model::DisableLights() {
 }
 
 // ref: FUN_1411b8e80
-void CM2Model::CollectEvents(CM2Scene* scene, void* callbacks) {
+void CM2Model::CollectEvents(M2SceneDrawList* list, void* callbacks) {
     if ((this->m_flags & BASE_LOADED) == 0) {
         return;
     }
-    if (this->m_pauseRequest == 0 && (this->m_modelFlags & 0x800) != 0 && !this->QueueEvents(scene, callbacks)) {
+    if (this->m_pauseRequest == 0 && (this->m_modelFlags & 0x800) != 0 && !this->QueueEvents(list, callbacks)) {
         return;
     }
     M2TrackState<uint8_t>* attachments = this->m_animState->m_attachmentStates;
@@ -589,15 +589,15 @@ void CM2Model::CollectEvents(CM2Scene* scene, void* callbacks) {
             shown = attachments[child->m_attachIndex].m_value != 0;
         }
         if (shown) {
-            child->CollectEvents(scene, callbacks);
+            child->CollectEvents(list, callbacks);
         }
         child = next;
     }
 }
 
 // ref: FUN_1411b8670
-bool CM2Model::QueueEvents(CM2Scene* scene, void* callbacks) {
-    (void)scene;
+bool CM2Model::QueueEvents(M2SceneDrawList* list, void* callbacks) {
+    (void)list;
     (void)callbacks;
     FROST_UNIMPLEMENTED();  // the animation events (FUN_1411b8f30) into M2ModelCallbacks
     return true;

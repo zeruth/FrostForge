@@ -22,7 +22,8 @@ struct RENDERSETTINGS {
     uint8_t m_upscaler;             // 0x14: 0..3 (3 needs dx_5_0 or newer)
     uint8_t m_pad15[3];
     float m_sharpness;              // 0x18
-    uint8_t m_1c[2];
+    uint8_t m_modelScreenRects;     // 0x1c: the model scenes track their models' screen rectangle
+    uint8_t m_1d;
     uint8_t m_shadowMode;           // 0x1e: 0..4 (0 blob shadows); ray traced shadows need one
     uint8_t m_ssao;                 // 0x1f: 0..4
     uint8_t m_ssaoType;             // 0x20: 0..2

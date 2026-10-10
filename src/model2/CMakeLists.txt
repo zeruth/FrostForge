@@ -16,6 +16,7 @@ add_library(model2 STATIC
     M2Particle.cpp
     M2Ribbon.cpp
     M2Scene.cpp
+    M2SceneAnimate.cpp
     M2Sequence.cpp
     M2Shaders.cpp
     M2Shared.cpp

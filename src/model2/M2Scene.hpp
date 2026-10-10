@@ -16,6 +16,7 @@
 #include "storm/thread/SCritSect.hpp"
 
 struct M2CACHE;
+class CM2Lighting;
 
 // The draw parameters a scene collects per pass (BaseModelDrawParams, 0x20): the model and its
 // box (FUN_1411ace60 appends one to a pass's array at scene + 0x328 + pass * 0x18).
@@ -59,17 +60,38 @@ static_assert(sizeof(M2ParticlePool) == 0x18, "M2ParticlePool is 0x18 bytes");
 // ref: FUN_14124c1f0
 void M2ParticlePoolInit(M2ParticlePool* pool, int32_t particles);
 
+// A callback a model queued while its events were collected, run once the frame's animation
+// is done (M2ModelCallback, 0x50): kind 0 starts a sequence on a key bone, kind 1 calls
+// `m_function`.
+struct M2ModelCallback {
+    int32_t m_kind;                             // 0x00
+    uint32_t m_pad04;
+    CM2Model* m_model;                          // 0x08
+    uint32_t m_10;                              // 0x10 the key bone, -1 for none
+    uint32_t m_14;                              // 0x14
+    void* m_function;                           // 0x18
+    uint32_t m_20;                              // 0x20 the sequence
+    uint32_t m_24;                              // 0x24
+    uint8_t m_28[0x10];                         // 0x28
+    uint32_t m_38;                              // 0x38 the blend time
+    uint32_t m_3c;                              // 0x3c
+    float m_40[4];                              // 0x40
+};
+static_assert(sizeof(M2ModelCallback) == 0x50, "M2ModelCallback is 0x50 bytes");
+
 // One of the scene's 65 draw lists (0x2f8, FUN_1411d0130): fourteen vectors of each kind.
 struct M2SceneDrawList {
-    uint64_t m_00;                              // 0x000
+    CM2Scene* m_scene;                          // 0x000
     M2SceneVector<M2Element> m_elements;        // 0x008
     M2SceneVector<uint32_t> m_lists[0xe];       // 0x020 element indices by pass
     M2SceneVector<uint32_t> m_lists2[0xe];      // 0x170
-    M2SceneVector<void> m_callbacks;            // 0x2c0 M2ModelCallbacks
-    void* m_2d8;                                // 0x2d8
-    void* m_2e0;                                // 0x2e0
+    M2SceneVector<M2ModelCallback> m_callbacks; // 0x2c0
+    float m_screenRect[4];                      // 0x2d8 x0, y0, x1, y1 of its models on screen
     int32_t m_elementCount;                     // 0x2e8 elements made
-    uint8_t m_2ec[0xc];
+    uint32_t m_index;                           // 0x2ec its bucket
+    // 4 track the screen rectangle, 8 callbacks queued since collected, 0x10 collected again.
+    uint32_t m_flags;                           // 0x2f0
+    int32_t m_2f4;                              // 0x2f4 summed into the scene's 0xdb30
 
     M2SceneDrawList();
 };
@@ -100,7 +122,7 @@ class CM2Scene {
     void* m_088;                                // 0x0088
     void* m_090;                                // 0x0090
     uint32_t m_time;                            // 0x0098 ms, from 300000
-    uint32_t m_09c;                             // 0x009c
+    int32_t m_timeStep;                         // 0x009c the last step added to the time
     uint32_t m_frame;                           // 0x00a0
     uint8_t m_0a4;                              // 0x00a4 1
     uint8_t m_pad0a5[3];
@@ -108,7 +130,7 @@ class CM2Scene {
     uint32_t m_flags;                           // 0x00b0 0x40 no model lighting, 0x200 ...
     uint32_t m_pad0b4;
     uint64_t m_0b8;                             // 0x00b8
-    uint64_t m_0c0;                             // 0x00c0
+    CM2Lighting* m_lightings;                   // 0x00c0 linked through +0x90
     uint32_t m_maxLights;                       // 0x00c8 8
     uint32_t m_pad0cc;
     OSMUTEX m_lock0d0;                          // 0x00d0
@@ -131,13 +153,16 @@ class CM2Scene {
     C44Matrix m_viewProjection;                 // 0xd4b8
     C44Matrix m_d4f8;                           // 0xd4f8
     C3Vector m_windOrigin;                      // 0xd538
-    uint8_t m_d544[0xd560 - 0xd544];
+    float m_viewportMin[3];                     // 0xd544
+    float m_viewportMax[3];                     // 0xd550
+    uint8_t m_d55c[4];
     void* m_frustum;                            // 0xd560
     float m_d568[4];                            // 0xd568 (0, 0, 0, 1)
     C44Matrix m_d578;                           // 0xd578
     C44Matrix m_d5b8;                           // 0xd5b8
     C44Matrix m_d5f8;                           // 0xd5f8
-    uint8_t m_d638[0xd674 - 0xd638];
+    uint8_t m_d638[0xd664 - 0xd638];
+    float m_screenRect[4];                      // 0xd664 its models' on screen
     float m_animateRatio;                       // 0xd674 screen size past which animation is light
     uint8_t m_d678[0xd698 - 0xd678];
     // Traces a segment against the world: the hit point and how far along it is (1 for none).
@@ -145,7 +170,11 @@ class CM2Scene {
     void* m_d6a0;                               // 0xd6a0
     // The wind: direction, speed and gust (the last argument 0).
     void (*m_windCallback)(float* direction, float* speed, float* gust, void* param);  // 0xd6a8
-    uint8_t m_d6b0[0x18];
+    uint64_t m_d6b0;                            // 0xd6b0
+    // What makes a projected batch's world object (FUN_1411e0c60) and what its query is checked
+    // with (FUN_1411e0c70); both are the world scene's.
+    void* (*m_projectCallback)(void* query);    // 0xd6b8
+    void* m_projectCheckCallback;               // 0xd6c0
     M2SceneVector<uint8_t> m_hitRecs;           // 0xd6c8 0x28-byte M2HitRecs
     int32_t m_d6e0;
     uint32_t m_d6e4;
@@ -201,6 +230,13 @@ class CM2Scene {
     // into the scene at `lod`; null when the file or the model cannot be had.
     CM2Model* CreateModel(int32_t fileDataId, uint32_t flags, uint8_t priority, uint8_t lod);
     CM2Model* CreateModel(const char* name, uint32_t flags, uint8_t priority, uint8_t lod);
+    // A frame's animation over the buckets (FUN_1411d2180), with a frustum (FUN_1411d2150).
+    void Animate(bool threaded);
+    void Animate(void* frustum, bool threaded);
+    // The models whose LOD changed told so, and the list emptied (FUN_1411d77a0).
+    void FlushLodChanges();
+    // Runs the callbacks the lists queued: one list's, or all of them for null (FUN_1411d74a0).
+    void RunCallbacks(M2SceneDrawList* list);
     // Every model told the render settings changed (FUN_1411df6e0).
     void OnRenderSettingsChanged(const struct RENDERSETTINGS* previous, const struct RENDERSETTINGS* current);
 };
@@ -217,6 +253,9 @@ static_assert(offsetof(CM2Scene, m_drawLists) == 0x1380, "CM2Scene draw lists at
 static_assert(offsetof(CM2Scene, m_camera) == 0xd478, "CM2Scene camera at 0xd478");
 static_assert(offsetof(CM2Scene, m_frustum) == 0xd560, "CM2Scene frustum at 0xd560");
 static_assert(offsetof(CM2Scene, m_animateRatio) == 0xd674, "CM2Scene ratio at 0xd674");
+static_assert(offsetof(CM2Scene, m_screenRect) == 0xd664, "CM2Scene screen rectangle at 0xd664");
+static_assert(offsetof(CM2Scene, m_projectCallback) == 0xd6b8, "CM2Scene projection at 0xd6b8");
+static_assert(offsetof(M2SceneDrawList, m_flags) == 0x2f0, "a draw list's flags at 0x2f0");
 static_assert(offsetof(CM2Scene, m_hitRecs) == 0xd6c8, "CM2Scene hits at 0xd6c8");
 static_assert(offsetof(CM2Scene, m_rayTracing) == 0xd790, "CM2Scene physics at 0xd790");
 static_assert(offsetof(CM2Scene, m_collectDrawParams) == 0xdae8, "CM2Scene flags at 0xdae8");
@@ -277,6 +316,19 @@ CM2BaseModel* M2SceneCloneModel(CM2Scene* scene, CM2BaseModel* model, bool a3);
 
 // ref: FUN_1411ace60
 BaseModelDrawParams* M2SceneAddDrawParams(void* array);
+// A draw list emptied for a new frame (FUN_1411d75f0), and freed (FUN_1411d0cb0).
+void M2SceneDrawListReset(M2SceneDrawList* list);
+void M2SceneDrawListFree(M2SceneDrawList* list);
+// A list's bucket's models: their callbacks collected (FUN_1411dd760), animated
+// (FUN_1411d3410), and lit and unlinked once animated (FUN_1411de480).
+void M2SceneDrawListCollectCallbacks(M2SceneDrawList* list);
+void M2SceneDrawListAnimate(M2SceneDrawList* list);
+void M2SceneDrawListPostAnimate(M2SceneDrawList* list);
+// A model's animated box on screen, merged into `rect` (FUN_1411d6fc0).
+void M2SceneProjectScreenRect(CM2BaseModel* model, const C44Matrix* view, const C44Matrix* projection,
+    const float* viewportMin, const float* viewportMax, float* rect);
+// Resizes a callback vector, zeroing what it adds (FUN_1411e5770).
+void M2ModelCallbacksResize(M2SceneVector<M2ModelCallback>* callbacks, uint64_t count);
 // A box against a frustum's six planes: 0 when outside, else 3 (FUN_141346830).
 int32_t M2FrustumTestBox(const float* planes, const float* box);
 // The scene's lights into a model's (FUN_1411df990).

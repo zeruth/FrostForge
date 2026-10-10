@@ -58,5 +58,19 @@ ERRORCONTEXT* ErrorContextPush(ERRORCONTEXT* context, ERRORCONTEXTCALLBACK descr
 void ErrorReportAddModuleCrashHandler(const char* module, void (*handler)(const char* module));
 void ErrorContextPop(ERRORCONTEXT* context);
 
+// The objects whose memory a crash report should carry: a thread's stack of records, each
+// reporting its ranges through the function it is handed (TLS +0x2120).
+struct ERRORMEMORYCONTEXT;
+typedef void (*ERRORMEMORYREPORT)(const void* base, uint64_t size);
+typedef void (*ERRORMEMORYCALLBACK)(ERRORMEMORYCONTEXT* context, ERRORMEMORYREPORT report);
+struct ERRORMEMORYCONTEXT {
+    ERRORMEMORYCONTEXT* m_previous;     // 0x00
+    ERRORMEMORYCALLBACK m_describe;     // 0x08
+};
+// ref: FUN_14025cde0
+ERRORMEMORYCONTEXT* ErrorMemoryContextPush(ERRORMEMORYCONTEXT* context, ERRORMEMORYCALLBACK describe);
+// ref: FUN_14025ce40
+void ErrorMemoryContextPop(ERRORMEMORYCONTEXT* context);
+
 
 #endif

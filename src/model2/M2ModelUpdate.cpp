@@ -4,6 +4,7 @@
 #include "base/Matrix.hpp"
 #include "client/RenderSettings.hpp"
 #include "model2/M2Model.hpp"
+#include "util/Unimplemented.hpp"
 #include "model2/M2Particle.hpp"
 #include "model2/M2Ribbon.hpp"
 #include "model2/M2Scene.hpp"
@@ -151,6 +152,78 @@ void CM2Model::AnimateLights(M2AnimateContext* context) {
 
 // Each light's CM2Lighting placed from its bone and enabled when visible; then the same for the
 // models attached to visible points (FUN_1411b1a40).
+// ref: FUN_1411b5720
+void CM2Model::RunCallback(const M2ModelCallback* callback) {
+    if (callback->m_kind == 0) {
+        this->RunSequenceCallback(callback);
+        return;
+    }
+    if (callback->m_kind == 1) {
+        auto function = reinterpret_cast<void (*)(CM2Model* model, uint32_t a2, uint32_t a3, uint32_t a4, uint32_t a5,
+            const void* a6, uint32_t a7, const float* a8)>(callback->m_function);
+        function(callback->m_model, callback->m_10, callback->m_14, callback->m_20, callback->m_24, callback->m_28,
+            callback->m_38, callback->m_40);
+    }
+}
+
+// Kind 0 is queued only by the event collection (FUN_1411b8670), which is not ported yet, so
+// none reaches here.
+// ref: FUN_1411b5780
+void CM2Model::RunSequenceCallback(const M2ModelCallback* callback) {
+    (void)callback;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1411b6750
+void CM2Model::UpdateProjectedBatches() {
+    CM2Scene* scene = this->m_scene;
+    if (scene->m_projectCheckCallback == nullptr || scene->m_projectCallback == nullptr) {
+        return;
+    }
+    const CM2SkinProfileData* skin = &this->m_shared->m_skins[this->m_lod];
+    uint16_t count;
+    if (this->m_600 == nullptr) {
+        count = skin->m_profile->m_batches.m_count;
+    } else {
+        count = *static_cast<const uint16_t*>(this->m_600);
+    }
+    for (uint32_t i = 0; i < count; i++) {
+        this->m_5f8[i] = nullptr;
+        const uint8_t* batch;
+        const void* section;
+        if (this->m_600 == nullptr) {
+            batch = reinterpret_cast<const uint8_t*>(&skin->m_profile->m_batches[i]);
+            uint16_t index = *reinterpret_cast<const uint16_t*>(batch + 4);
+            section = &skin->m_sections[index];
+            if (((1 << (index & 7)) & this->m_lodBoneMasks[this->m_lod][index >> 3]) == 0) {
+                continue;
+            }
+        } else {
+            auto lod = static_cast<const uint8_t*>(this->m_600);
+            batch = *reinterpret_cast<const uint8_t* const*>(lod + 0x10) + i * 0x18;
+            uint16_t index = *reinterpret_cast<const uint16_t*>(batch + 4);
+            section = *reinterpret_cast<const uint8_t* const*>(lod + 0x20) + index * 0x30;
+        }
+        if ((*batch & 4) != 0) {
+            uint64_t query[5] = {};
+            query[0] = reinterpret_cast<uint64_t>(scene->m_owner);
+            query[1] = reinterpret_cast<uint64_t>(scene->m_030);
+            this->BuildBatchProjection(query, section);
+            this->m_5f8[i] = scene->m_projectCallback(query);
+        }
+    }
+}
+
+// The projection's box and matrix through the scene's camera (1954 bytes over FUN_1411bf190);
+// reached only through the world scene's projection callbacks.
+// ref: FUN_1411be9e0
+bool CM2Model::BuildBatchProjection(void* query, const void* section) {
+    (void)query;
+    (void)section;
+    FROST_UNIMPLEMENTED();
+    return false;
+}
+
 // ref: FUN_1411b1a40
 void CM2Model::UpdateLights() {
     M2Data* data = this->m_shared->m_data;
