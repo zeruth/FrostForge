@@ -126,7 +126,8 @@ class CM2Scene {
     uint32_t m_frame;                           // 0x00a0
     uint8_t m_0a4;                              // 0x00a4 1
     uint8_t m_pad0a5[3];
-    uint64_t m_0a8;                             // 0x00a8
+    uint32_t m_viewFrame;                       // 0x00a8 the frame the view was last set in
+    uint32_t m_0ac;
     uint32_t m_flags;                           // 0x00b0 0x40 no model lighting, 0x200 ...
     uint32_t m_pad0b4;
     uint64_t m_0b8;                             // 0x00b8
@@ -149,10 +150,10 @@ class CM2Scene {
     M2SceneVector<uint32_t> m_10e0[0xe];        // 0x10e0
     M2SceneVector<uint32_t> m_1230[0xe];        // 0x1230
     M2SceneDrawList m_drawLists[0x41];          // 0x1380
-    C44Matrix m_camera;                         // 0xd478 the view
-    C44Matrix m_viewProjection;                 // 0xd4b8
-    C44Matrix m_d4f8;                           // 0xd4f8
-    C3Vector m_windOrigin;                      // 0xd538
+    C44Matrix m_camera;                         // 0xd478 the view, moved to the camera
+    C44Matrix m_inverseView;                    // 0xd4b8 the view's inverse
+    C44Matrix m_d4f8;                           // 0xd4f8 the projection
+    C3Vector m_cameraPosition;                  // 0xd538 also where the wind is sampled from
     float m_viewportMin[3];                     // 0xd544
     float m_viewportMax[3];                     // 0xd550
     uint8_t m_d55c[4];
@@ -237,6 +238,10 @@ class CM2Scene {
     void FlushLodChanges();
     // Runs the callbacks the lists queued: one list's, or all of them for null (FUN_1411d74a0).
     void RunCallbacks(M2SceneDrawList* list);
+    // The view for a frame (FUN_1411e0f30): the camera's position, the view and projection
+    // matrices and the viewport's corners; `advance` steps the frame.
+    void SetView(const C3Vector* cameraPosition, const C44Matrix* view, const C44Matrix* projection,
+        const float* viewportMin, const float* viewportMax, bool advance);
     // Every model told the render settings changed (FUN_1411df6e0).
     void OnRenderSettingsChanged(const struct RENDERSETTINGS* previous, const struct RENDERSETTINGS* current);
 };
@@ -272,7 +277,7 @@ inline bool M2SceneHasWind(CM2Scene* scene) {
 }
 
 inline const float* M2SceneGetWindOrigin(CM2Scene* scene) {
-    return &scene->m_windOrigin.x;
+    return &scene->m_cameraPosition.x;
 }
 
 inline void M2SceneSampleWind(CM2Scene* scene, float* direction, float* speed, float* gust) {

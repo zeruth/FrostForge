@@ -1278,7 +1278,7 @@ void CM2BaseModel::SetWorldMatrix(const C44Matrix* parent) {
         return;
     }
     MatrixMultiply(this->m_world.m, this->m_local.m, parent->m);
-    MatrixMultiply(this->m_view.m, this->m_world.m, this->m_scene->m_viewProjection.m);
+    MatrixMultiply(this->m_view.m, this->m_world.m, this->m_scene->m_inverseView.m);
     this->m_flags |= BASE_MATRIX_CURRENT;
     this->m_flags &= ~BASE_INVERSE_CURRENT;
 }

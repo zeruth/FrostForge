@@ -305,7 +305,8 @@ CM2Scene::CM2Scene(M2CACHE* cache, int32_t type) {
     this->m_timeStep = 0;
     this->m_frame = 0;
     this->m_0a4 = 1;
-    this->m_0a8 = 0;
+    this->m_viewFrame = 0;
+    this->m_0ac = 0;
     this->m_flags = 0;
     this->m_pad0b4 = 0;
     this->m_0b8 = 0;
@@ -337,9 +338,9 @@ CM2Scene::CM2Scene(M2CACHE* cache, int32_t type) {
         new (&this->m_drawLists[i]) M2SceneDrawList();
     }
     MatrixIdentity(this->m_camera.m);
-    MatrixIdentity(this->m_viewProjection.m);
+    MatrixIdentity(this->m_inverseView.m);
     MatrixIdentity(this->m_d4f8.m);
-    std::memset(&this->m_windOrigin, 0, 0xd55c - 0xd538);
+    std::memset(&this->m_cameraPosition, 0, 0xd55c - 0xd538);
     this->m_d568[0] = 0.0f;
     this->m_d568[1] = 0.0f;
     this->m_d568[2] = 1.0f;  // overwritten below with the identity rotation
@@ -559,6 +560,26 @@ CM2Model* CM2Scene::CreateModel(const char* name, uint32_t flags, uint8_t priori
     }
     this->m_crit0d8.Leave();
     return model;
+}
+
+// ref: FUN_1411e0f30
+void CM2Scene::SetView(const C3Vector* cameraPosition, const C44Matrix* view, const C44Matrix* projection,
+    const float* viewportMin, const float* viewportMax, bool advance) {
+    if (this->m_0a4 != 0 && advance) {
+        this->m_frame++;
+    }
+    this->m_camera = *view;
+    this->m_d4f8 = *projection;
+    std::memcpy(this->m_viewportMin, viewportMin, sizeof(this->m_viewportMin));
+    std::memcpy(this->m_viewportMax, viewportMax, sizeof(this->m_viewportMax));
+    C3Vector back = { -cameraPosition->x, -cameraPosition->y, -cameraPosition->z };
+    MatrixTranslate(this->m_camera.m, &back.x);
+    float determinant = MatrixDeterminant(this->m_camera.m);
+    C44Matrix inverse;
+    MatrixInverse(this->m_camera.m, inverse.m, determinant);
+    this->m_inverseView = inverse;
+    this->m_cameraPosition = *cameraPosition;
+    this->m_viewFrame = this->m_frame;
 }
 
 // ref: FUN_1411df6e0

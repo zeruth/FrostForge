@@ -355,7 +355,7 @@ void CM2Model::EventPosition(const M2Event* event, float* out) {
         p[c] = (rows[1][c] * y + rows[0][c] * x) + (rows[2][c] * z + rows[3][c]);
     }
     if (attached) {
-        const float* v = this->m_scene->m_viewProjection.m;
+        const float* v = this->m_scene->m_inverseView.m;
         float q[4];
         for (uint32_t c = 0; c < 4; c++) {
             q[c] = (p[3] * v[12 + c] + p[2] * v[8 + c]) + (p[1] * v[4 + c] + p[0] * v[c]);

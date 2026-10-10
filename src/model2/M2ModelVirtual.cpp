@@ -1085,7 +1085,7 @@ void CM2Model::GetAttachmentPointMatrix(const C3Vector* position, uint32_t bone,
             + position->z * r[9];
         float t2 = b[12] * w[2] + b[13] * w[6] + b[14] * w[10] + b[15] * w[14] + position->y * r[6] + position->x * r[2]
             + position->z * r[10];
-        const float* vp = this->m_scene->m_viewProjection.m;
+        const float* vp = this->m_scene->m_inverseView.m;
         for (int32_t col = 0; col < 4; col++) {
             out[col] = r[0] * vp[col] + r[1] * vp[4 + col] + r[3] * vp[12 + col] + r[2] * vp[8 + col];
         }
@@ -1364,7 +1364,7 @@ void CM2Model::SetWorldMatrix(const C44Matrix* world) {
         return;
     }
     BoneTimesWorld(this->m_local.m, world->m, this->m_world.m, false);
-    MultiplyViewOrder(this->m_world.m, this->m_scene->m_viewProjection.m, this->m_view.m);
+    MultiplyViewOrder(this->m_world.m, this->m_scene->m_inverseView.m, this->m_view.m);
     this->m_flags |= BASE_MATRIX_CURRENT;
     this->m_flags &= ~BASE_INVERSE_CURRENT;
 }
@@ -1854,7 +1854,7 @@ float CM2Model::GetScaledRadius(C3Vector* center, float* radius) {
         }
     } else {
         const float* w = this->m_world.m;
-        const float* v = this->m_scene->m_viewProjection.m;
+        const float* v = this->m_scene->m_inverseView.m;
         float r0 = w[2] * v[8] + w[3] * v[12] + w[1] * v[4] + w[0] * v[0];
         float r1 = w[2] * v[9] + w[3] * v[13] + w[1] * v[5] + w[0] * v[1];
         float r2 = w[2] * v[10] + w[3] * v[14] + w[1] * v[6] + w[0] * v[2];

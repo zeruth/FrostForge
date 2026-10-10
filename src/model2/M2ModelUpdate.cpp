@@ -245,7 +245,7 @@ void CM2Model::UpdateLights() {
                     position[2] = w[6] * y + w[2] * x + w[10] * z + w[14];
                     position[3] = w[7] * y + w[3] * x + w[11] * z + w[15];
                     if (!local) {
-                        const float* v = this->m_scene->m_viewProjection.m;
+                        const float* v = this->m_scene->m_inverseView.m;
                         float p[4] = {position[0], position[1], position[2], position[3]};
                         position[0] = p[3] * v[12] + p[2] * v[8] + p[1] * v[4] + p[0] * v[0];
                         position[1] = p[3] * v[13] + p[2] * v[9] + p[1] * v[5] + p[0] * v[1];
@@ -261,7 +261,7 @@ void CM2Model::UpdateLights() {
                         + bone[11] * this->m_world.m[13]);
                     float dz = -(bone[8] * this->m_world.m[2] + bone[9] * this->m_world.m[6] + bone[10] * this->m_world.m[10]
                         + bone[11] * this->m_world.m[14]);
-                    const float* v = this->m_scene->m_viewProjection.m;
+                    const float* v = this->m_scene->m_inverseView.m;
                     float direction[4] = {
                         dy * v[4] + dx * v[0] + dz * v[8],
                         dy * v[5] + dx * v[1] + dz * v[9],
@@ -610,7 +610,7 @@ void CM2Model::UpdateRibbons(float delta) {
                     }
                 }
                 std::memcpy(w + 12, origin, sizeof(origin));
-                MatrixMultiply(m, w, this->m_scene->m_viewProjection.m);
+                MatrixMultiply(m, w, this->m_scene->m_inverseView.m);
             }
             RibbonEmitterSetMatrix(ribbon, m, this->m_558);
             RibbonEmitterUpdate(ribbon, delta, state->m_visibility.m_value == 0);
@@ -734,7 +734,7 @@ void CM2Model::UpdateTransform(const C44Matrix* parent, const CM2ModelParams* pa
         }
         float inverse[16];
         MatrixInverse(this->m_view.m, inverse, MatrixDeterminant(this->m_view.m));
-        const float* camera = this->m_scene->m_viewProjection.m + 12;
+        const float* camera = this->m_scene->m_inverseView.m + 12;
         float cx = camera[1] * inverse[4] + camera[0] * inverse[0] + camera[2] * inverse[8] + inverse[12];
         float cy = camera[1] * inverse[5] + camera[0] * inverse[1] + camera[2] * inverse[9] + inverse[13];
         float cz = camera[1] * inverse[6] + camera[0] * inverse[2] + camera[2] * inverse[10] + inverse[14];
