@@ -1909,3 +1909,21 @@ int32_t DB2ParentCount(WowClientDB2_Base* table, int32_t parent) {
     }
     return count;
 }
+
+uint32_t DB2FieldArrayU32(const uint8_t* field, uint32_t index, int64_t offset, uint32_t element,
+    WowClientDB2_Base* table) {
+    const uint8_t* record = field - offset;
+    if (!table->IsFileRecord(record)) {
+        uint32_t value;
+        std::memcpy(&value, record + table->m_meta->m_fieldOffsets[index] + element * 4, 4);
+        return value;
+    }
+    const DB2FIELDINFO* info = &table->m_fieldInfo[static_cast<int32_t>(index)];
+    if (info->m_storage != 4) {
+        return 0;
+    }
+    uint64_t slot = ReadBits(field, info->m_value1, info->m_value2) & 0xFFFFFFFF;
+    uint32_t value;
+    std::memcpy(&value, table->m_palletArrays[index] + (slot * info->m_value3 + element) * 4, 4);
+    return value;
+}

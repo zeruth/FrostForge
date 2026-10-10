@@ -482,6 +482,21 @@ struct DNScene {
     // The frame's light: the clocks, the area overrides' fades, the clouds' dirt, the camera's
     // heading, the lights and fogs, the bodies, the sun, the clouds and the sky model, the
     // fogs and the colour grading.
+    // The camera the frame is computed for: the view (for the sky models' scene), the camera's
+    // position and heading, the point the lights are measured from, the liquid it is in and
+    // the far clip.
+    // ref: FUN_142459720
+    void SetCamera(CWorldView* view, const float* position, const float* heading, const float* target,
+        int32_t liquid, float liquidDepth, float farClip);
+    // ref: FUN_14245a8f0
+    void SetWater(bool underwater, const void* fog, bool waterFog, float depth);
+    // Raises the sky's loads until every body, glare, sky model and override sky is in.
+    // ref: FUN_14245fb20
+    void BeginFrame();
+    // ref: FUN_14245f870
+    bool SkyLoaded();
+    // ref: FUN_14245fb50
+    void SetSkyPriority(int32_t priority);
     // ref: FUN_14245b520
     void Compute(int32_t timeMs, float elapsed, float timeSeconds, bool alive, void* env, const float* viewMatrix,
         bool colorGrading, bool zoneLightsSingly);
@@ -532,6 +547,42 @@ void DayNightSetView(DAYNIGHT* dayNight, CWorldView* view, const float* position
 // ref: FUN_142443dc0
 void DayNightUpdate(DAYNIGHT* dayNight, const float* position);
 // The frame's light through the handle (DNScene::Compute).
+// ref: FUN_142443370
+void DayNightSetCamera(DAYNIGHT* dayNight, CWorldView* view, const float* position, const float* heading,
+    const float* target, int32_t liquid, float liquidDepth, float farClip);
+// The weather's strength (+0x54 of the scene).
+// ref: FUN_1424438e0
+void DayNightSetWeather(DAYNIGHT* dayNight, float strength);
+// Whether the map is indoors (+4 of the scene).
+// ref: FUN_1424438d0
+void DayNightSetIndoors(DAYNIGHT* dayNight, bool indoors);
+// ref: FUN_142443530
+void DayNightSetWater(DAYNIGHT* dayNight, bool underwater, const void* fog, bool waterFog, float depth);
+// ref: FUN_142443210
+void DayNightBeginFrame(DAYNIGHT* dayNight);
+// The light's direction block (+0x1580, or the second light's +0x15a4 for an env that asks).
+// ref: FUN_142442810
+uint8_t* DayNightLightBlock(DAYNIGHT* dayNight, const void* env);
+// The water colour: the override's, or the current light's (second light for such an env).
+// ref: FUN_142442c30
+uint32_t* DayNightWaterColor(DAYNIGHT* dayNight, uint32_t* out, const void* env);
+// The scene fogs the world copies (FogInfo `index`, or the first / last fixed one past them).
+// ref: FUN_142442740
+MODELFOG* DayNightFog(DAYNIGHT* dayNight, uint32_t index);
+// ref: FUN_142442500
+MODELFOG* DayNightFogF8(DAYNIGHT* dayNight);
+// ref: FUN_142442780
+MODELFOG* DayNightFog1B0(DAYNIGHT* dayNight);
+// ref: FUN_142442790
+MODELFOG* DayNightFog250(DAYNIGHT* dayNight);
+// ref: FUN_1424427f0
+MODELFOG* DayNightFog2F4(DAYNIGHT* dayNight);
+// ref: FUN_142442800
+MODELFOG* DayNightFog394(DAYNIGHT* dayNight);
+// How many fogs the scene draws with: the FogInfo count for an env that blends them, else 1.
+// ref: FUN_142442a50
+uint32_t DayNightFogCount(DAYNIGHT* dayNight, const void* env, bool single);
+
 // ref: FUN_142443d80
 void DayNightCompute(DAYNIGHT* dayNight, int32_t timeMs, float elapsed, float timeSeconds, bool alive, void* env,
     const float* viewMatrix, bool colorGrading, bool zoneLightsSingly);

@@ -1,12 +1,15 @@
 #include "world/WorldScene.hpp"
 
 #include "client/RenderSettings.hpp"
+#include "db/DB2Tables.hpp"
+#include "db/WowClientDB2.hpp"
 #include "daynight/DayNight.hpp"
 #include "gx/Gx.hpp"
 #include "model2/M2Scene.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
 #include "threadpool/ThreadPool.hpp"
+#include "ui/FrameTime.hpp"
 #include "world/ParticulateVolumeManager.hpp"
 #include "world/WorldClip.hpp"
 #include "world/WorldFade.hpp"
@@ -15,6 +18,7 @@
 #include "world/WorldSceneRender.hpp"
 #include "world/WorldStubs.hpp"
 #include "world/WorldView.hpp"
+#include <algorithm>
 #include <cfloat>
 #include <cstring>
 #include <new>
@@ -613,4 +617,137 @@ float WorldSceneFarClip3(CWorldScene* scene) {
         return scene->GetFarClip3(scene->m_maps[scene->m_mapIndex]);
     }
     return WorldGetFarClip3CVar();
+}
+
+namespace {
+
+// The Map row's flags word `index` (Map.Flags[3], FUN_14134cac0).
+// ref: FUN_14134cac0
+uint32_t MapRowFlags(const uint8_t* fields, uint32_t index) {
+    return DB2FieldArrayU32(fields, 0x15, 0x18, index, &g_mapDB);
+}
+
+// The pool job the handle runs the light on (LAB_1413c8a60).
+void UpdateLightJob(void* storage) {
+    auto view = *reinterpret_cast<CWorldView**>(static_cast<uint8_t*>(storage) + 8);
+    CWorldScene* scene = view->m_scene;
+    if (scene->m_dayNight != nullptr) {
+        scene->UpdateLight(view, scene->m_dayNight);
+    }
+}
+
+}  // namespace
+
+// ref: FUN_1413c8990
+void CWorldScene::UpdateDayNight(CWorldView* view) {
+    if (this->m_dayNight == nullptr) {
+        return;
+    }
+    DayNightBeginFrame(this->m_dayNight);
+    if (this->m_dayNight->m_0c != 0) {
+        ThreadPoolGroupSetCount(this->m_groups[1], 1);
+        blz::function_storage task;
+        task.m_invoke = reinterpret_cast<void*>(&UpdateLightJob);
+        task.m_manager = blz::function_trivial_manager;
+        *reinterpret_cast<void**>(task.m_storage) = nullptr;
+        *reinterpret_cast<CWorldView**>(task.m_storage + 8) = view;
+        ThreadPoolSubmit(1, &task, 2, this->m_groups[1]);
+        if (task.m_manager != blz::function_trivial_manager) {
+            task.m_manager(task.m_storage, nullptr, 0);
+        }
+        return;
+    }
+    CWorldScene* scene = view->m_scene;
+    if (scene->m_dayNight != nullptr) {
+        scene->UpdateLight(view, scene->m_dayNight);
+    }
+}
+
+// ref: FUN_1413c8aa0
+void CWorldScene::UpdateLight(CWorldView* view, DAYNIGHT* dayNight) {
+    uint32_t skip = view->m_flags & 0x1004;
+    float liquidDepth = 0.0f;
+    uint32_t liquid = view->GetLiquid(&liquidDepth);
+    CWorldMap* map = this->m_maps[0];
+    float farClip = view->m_cameraSet.m_24;
+    if (map != nullptr) {
+        auto area = static_cast<uint8_t*>(map->Area(0));
+        if (area == nullptr || (*reinterpret_cast<uint32_t*>(area + 0xdc) & 0x100) == 0) {
+            farClip = std::min(farClip, FAR_CLIP3_CAP);
+        }
+    }
+    DayNightSetCamera(dayNight, view, view->m_camera.m_position, reinterpret_cast<float*>(view->m_3f0 + 0x70),
+        view->m_camera.m_target, static_cast<int32_t>(liquid), liquidDepth, farClip);
+    float weather = 0.0f;
+    float weatherScale = 1.0f;
+    if (this->m_038 != nullptr) {
+        weather = *reinterpret_cast<float*>(static_cast<uint8_t*>(this->m_038) + 0x1168);
+        weatherScale = *reinterpret_cast<float*>(static_cast<uint8_t*>(this->m_038) + 0x1184);
+    }
+    DayNightSetWeather(dayNight, weatherScale * weather);
+    uint8_t waterFog[0x30] = {};
+    uint8_t covered = 0;
+    float depth = FLT_MAX;
+    int32_t water = view->QueryWater(waterFog, &covered, &depth);
+    if (skip == 0 && map != nullptr) {
+        bool local = false;
+        auto row = static_cast<const uint8_t*>(g_mapDB.GetRecord(static_cast<uint32_t>(map->MapId()), false, &local));
+        if (row != nullptr) {
+            DayNightSetIndoors(dayNight, ((MapRowFlags(row + 0x18, 2) >> 1) & 1) != 0);
+        }
+    }
+    this->m_a68 = depth;
+    this->m_a64 = depth;
+    if (water != 1) {
+        this->m_a64 = 0.0f;
+        if (depth == FLT_MAX) {
+            this->m_a68 = 0.0f;
+        }
+    }
+    DayNightSetWater(dayNight, water == 1, waterFog, covered != 0, depth);
+    ThreadPoolGroupWait(this->m_groups[0]);
+    if (skip == 0) {
+        bool zoneLightsSingly = true;
+        if (map != nullptr) {
+            bool local = false;
+            auto row = static_cast<const uint8_t*>(g_mapDB.GetRecord(static_cast<uint32_t>(map->MapId()), false, &local));
+            if (row != nullptr) {
+                zoneLightsSingly = ((MapRowFlags(row + 0x18, 1) >> 27) & 1) != 0;
+            }
+        }
+        bool colorGrading = (view->m_flags & 0x40) != 0;
+        bool alive = WorldPlayerAlive();
+        float seconds = FrameTime_GetTimeSeconds();
+        float elapsed = FrameTime_GetElapsedSeconds();
+        auto ms = static_cast<int32_t>(FrameTime_GetTime());
+        DayNightCompute(dayNight, ms, elapsed, seconds, alive, &this->m_farClip, view->m_matrices[4], colorGrading,
+            zoneLightsSingly);
+    }
+    uint8_t* light = DayNightLightBlock(dayNight, &this->m_farClip);
+    this->m_lightA88.SetLightType(CM2Lighting::LIGHT_DIRECTIONAL);
+    this->m_lightA88.SetEnabled(1);
+    this->m_lightA88.SetDirection(reinterpret_cast<float*>(light));
+    constexpr float BYTE = 1.0f / 255.0f;   // DAT_142632528
+    auto color = [](float* out, const uint8_t* bgr) {
+        out[0] = static_cast<float>(bgr[2]) * BYTE;
+        out[1] = static_cast<float>(bgr[1]) * BYTE;
+        out[2] = static_cast<float>(bgr[0]) * BYTE;
+    };
+    color(this->m_lightA88.m_ambient[0], light + 0x10);
+    color(this->m_lightA88.m_ambient[1], light[0x1a] == 0 && light[0x19] == 0 && light[0x18] == 0 ? light + 0x10 : light + 0x18);
+    color(this->m_lightA88.m_ambient[2], light[0x16] == 0 && light[0x15] == 0 && light[0x14] == 0 ? light + 0x10 : light + 0x14);
+    color(this->m_lightA88.m_diffuse, light + 0xc);
+    uint32_t waterColor = 0;
+    color(reinterpret_cast<float*>(this->m_lightA88.m_pad64),
+        reinterpret_cast<const uint8_t*>(DayNightWaterColor(dayNight, &waterColor, &this->m_farClip)));
+    this->m_fogs[0] = *DayNightFog2F4(dayNight);
+    this->m_fogs[1] = *DayNightFog(dayNight, 0);
+    this->m_fogs[2] = *DayNightFog(dayNight, 1);
+    this->m_fogs[3] = *DayNightFog(dayNight, 2);
+    this->m_fogs[4] = *DayNightFog(dayNight, 3);
+    this->m_fogs[5] = *DayNightFog1B0(dayNight);
+    this->m_fogs[6] = *DayNightFog394(dayNight);
+    this->m_fogs[7] = *DayNightFog250(dayNight);
+    this->m_678 = DayNightFogCount(dayNight, &this->m_farClip, false);
+    this->m_fog = *DayNightFogF8(dayNight);
 }

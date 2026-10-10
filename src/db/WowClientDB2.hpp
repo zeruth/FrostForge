@@ -347,6 +347,11 @@ uint32_t DB2FieldU32(const uint8_t* field, uint32_t index, int64_t offset, WowCl
 int32_t DB2FieldI32(const uint8_t* field, uint32_t index, int64_t offset, WowClientDB2_Base* table);
 int16_t DB2FieldI16(const uint8_t* field, uint32_t index, int64_t offset, WowClientDB2_Base* table);
 
+// An element of an array field: plain records hold it at the field's offset, file records
+// through the field's pallet array (the generated readers' array form).
+uint32_t DB2FieldArrayU32(const uint8_t* field, uint32_t index, int64_t offset, uint32_t element,
+    WowClientDB2_Base* table);
+
 // How many records name `parent` in the table's parent column (0 without one).
 // ref: FUN_14057b590
 int32_t DB2ParentCount(WowClientDB2_Base* table, int32_t parent);

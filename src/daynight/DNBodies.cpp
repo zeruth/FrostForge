@@ -198,9 +198,11 @@ uint8_t DNGlare::TextureLoaded() {
 
 // ref: FUN_142454620
 uint64_t DNGlare::SetTexturePriority(int32_t priority) {
-    (void)priority;
-    FROST_UNIMPLEMENTED();  // the texture's async object's priority (+0x40 of the CTexture)
-    return 1;
+    auto texture = static_cast<HTEXTURE>(this->m_texture);
+    if (texture == nullptr) {
+        return 0;
+    }
+    return TextureSetPriority(texture, priority) ? 1 : 0;
 }
 
 // ref: FUN_142453bc0

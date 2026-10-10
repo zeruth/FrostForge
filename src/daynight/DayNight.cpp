@@ -1,5 +1,6 @@
 #include "daynight/DayNight.hpp"
 
+#include "base/Matrix.hpp"
 #include "db/DB2Tables.hpp"
 #include "db/WowDB2Lookup.hpp"
 #include "gx/Gx.hpp"
@@ -464,5 +465,223 @@ void DNScene::PrepareFrame(void* env, bool colorGrading) {
     (void)env;
     if (this->m_light.Field<uint32_t>(0x15f0) != 0) {
         this->m_clouds.Upload(this);
+    }
+}
+
+// ref: FUN_142443370
+void DayNightSetCamera(DAYNIGHT* dayNight, CWorldView* view, const float* position, const float* heading,
+    const float* target, int32_t liquid, float liquidDepth, float farClip) {
+    dayNight->m_scene->SetCamera(view, position, heading, target, liquid, liquidDepth, farClip);
+}
+
+// ref: FUN_1424438e0
+void DayNightSetWeather(DAYNIGHT* dayNight, float strength) {
+    // FUN_141265e50, a folded field store.
+    DNField<float>(dayNight->m_scene, 0x54) = strength;
+}
+
+// ref: FUN_1424438d0
+void DayNightSetIndoors(DAYNIGHT* dayNight, bool indoors) {
+    // FUN_141f39e00, a folded field store.
+    DNField<uint8_t>(dayNight->m_scene, 4) = indoors;
+}
+
+// ref: FUN_142443530
+void DayNightSetWater(DAYNIGHT* dayNight, bool underwater, const void* fog, bool waterFog, float depth) {
+    dayNight->m_scene->SetWater(underwater, fog, waterFog, depth);
+}
+
+// ref: FUN_142443210
+void DayNightBeginFrame(DAYNIGHT* dayNight) {
+    dayNight->m_scene->BeginFrame();
+}
+
+// ref: FUN_142442810
+uint8_t* DayNightLightBlock(DAYNIGHT* dayNight, const void* env) {
+    size_t offset = DNField<uint8_t>(const_cast<void*>(env), 0x5bc) != 0 ? 0x15a4 : 0x1580;
+    return reinterpret_cast<uint8_t*>(dayNight->m_scene) + offset;
+}
+
+// ref: FUN_142442c30
+uint32_t* DayNightWaterColor(DAYNIGHT* dayNight, uint32_t* out, const void* env) {
+    DNScene* scene = dayNight->m_scene;
+    if (scene->m_1ec8 != 0) {
+        *out = DNField<uint32_t>(scene, 0x1ee8);
+        return out;
+    }
+    *out = DNField<uint32_t>(scene, DNField<uint8_t>(const_cast<void*>(env), 0x5bc) != 0 ? 0xf9c : 0xaac);
+    return out;
+}
+
+// ref: FUN_142442740
+MODELFOG* DayNightFog(DAYNIGHT* dayNight, uint32_t index) {
+    DNScene* scene = dayNight->m_scene;
+    if (index < DNField<uint64_t>(scene, 0x1a0)) {
+        return DNField<MODELFOG*>(scene, 0x198) + index;
+    }
+    return &DNField<MODELFOG>(scene, index != 0 ? 0x574 : 0xf8);
+}
+
+// ref: FUN_142442500
+MODELFOG* DayNightFogF8(DAYNIGHT* dayNight) {
+    return &DNField<MODELFOG>(dayNight->m_scene, 0xf8);
+}
+
+// ref: FUN_142442780
+MODELFOG* DayNightFog1B0(DAYNIGHT* dayNight) {
+    return &DNField<MODELFOG>(dayNight->m_scene, 0x1b0);
+}
+
+// ref: FUN_142442790
+MODELFOG* DayNightFog250(DAYNIGHT* dayNight) {
+    return &DNField<MODELFOG>(dayNight->m_scene, 0x250);
+}
+
+// ref: FUN_1424427f0
+MODELFOG* DayNightFog2F4(DAYNIGHT* dayNight) {
+    return &DNField<MODELFOG>(dayNight->m_scene, 0x2f4);
+}
+
+// ref: FUN_142442800
+MODELFOG* DayNightFog394(DAYNIGHT* dayNight) {
+    return &DNField<MODELFOG>(dayNight->m_scene, 0x394);
+}
+
+// ref: FUN_142442a50
+uint32_t DayNightFogCount(DAYNIGHT* dayNight, const void* env, bool single) {
+    auto bytes = static_cast<const uint8_t*>(env);
+    DNScene* scene = dayNight->m_scene;
+    if (bytes[0x5be] != 0 && bytes[0x5bc] == 0 && scene->m_1601 == 0 && !single) {
+        auto count = static_cast<uint32_t>(DNField<uint64_t>(scene, 0x1a0));
+        return count <= 1 ? 1 : count;
+    }
+    return 1;
+}
+
+// ref: FUN_142459720
+void DNScene::SetCamera(CWorldView* view, const float* position, const float* heading, const float* target,
+    int32_t liquid, float liquidDepth, float farClip) {
+    this->m_m2Scene->m_owner = this->m_worldScene;
+    this->m_m2Scene->m_030 = view;
+    std::memcpy(&DNField<float>(this, 0x14), position, 12);
+    std::memcpy(&DNField<float>(this, 0x2c), heading, 12);
+    VectorNormalize(&DNField<float>(this, 0x2c));
+    std::memcpy(&DNField<float>(this, 0x20), target, 12);
+    DNField<int32_t>(this, 0x38) = liquid;
+    DNField<float>(this, 0x3c) = liquidDepth;
+    DNField<float>(this, 0x44) = farClip;
+}
+
+// ref: FUN_14245a8f0
+void DNScene::SetWater(bool underwater, const void* fog, bool waterFog, float depth) {
+    DNField<uint8_t>(this, 0xa30) = underwater;
+    std::memcpy(&DNField<uint8_t>(this, 0xa34), fog, 0x30);
+    DNField<uint8_t>(this, 0xa64) = waterFog;
+    DNField<float>(this, 0xa68) = underwater ? depth : 0.0f;
+}
+
+namespace {
+
+// A planet's texture is in (FUN_142455fd0), and its load priority (FUN_142456b60).
+// ref: FUN_142455fd0
+bool PlanetLoaded(DNPLANET* planet) {
+    auto texture = planet->Field<HTEXTURE>(0x10);
+    if (texture == nullptr) {
+        return true;
+    }
+    return TextureIsReady(texture);
+}
+
+// ref: FUN_142456b60
+void PlanetSetPriority(DNPLANET* planet, int32_t priority) {
+    auto texture = planet->Field<HTEXTURE>(0x10);
+    if (texture != nullptr) {
+        TextureSetPriority(texture, priority);
+    }
+}
+
+// The sky model is loaded and its textures settled (FUN_142458580), and its priority.
+// ref: FUN_142458580
+bool SkyModelLoaded(CM2Model* model) {
+    auto base = reinterpret_cast<CM2BaseModel*>(model);
+    if (base == nullptr) {
+        return false;
+    }
+    return (base->m_flags & 1) != 0 && base->AreTexturesSettled();
+}
+
+// ref: FUN_142458750
+void SkyModelSetPriority(CM2Model* model, int32_t priority) {
+    if (model != nullptr) {
+        // FUN_1411e7a00
+        reinterpret_cast<CM2BaseModel*>(model)->SetPriority(priority, true);
+    }
+}
+
+// An override sky's model is loaded (FUN_142460f00), and its priority (FUN_1424611c0).
+// ref: FUN_142460f00
+bool OverrideSkyLoaded(uint8_t* sky) {
+    auto model = DNField<CM2BaseModel*>(sky, 0x38);
+    return model != nullptr && (model->m_flags & 1) != 0 && model->AreTexturesSettled();
+}
+
+// ref: FUN_1424611c0
+void OverrideSkySetPriority(uint8_t* sky, int32_t priority) {
+    DNField<CM2BaseModel*>(sky, 0x38)->SetPriority(priority, true);
+}
+
+template <class Fn>
+void EachOverrideSky(DNScene* scene, Fn fn) {
+    void** table = scene->m_overrideTable;
+    if (table == nullptr) {
+        return;
+    }
+    for (uint64_t bucket = 0; bucket < scene->m_overrideBuckets; bucket++) {
+        for (auto node = static_cast<uint8_t*>(table[bucket]); node != nullptr; node = DNField<uint8_t*>(node, 0)) {
+            if (!fn(DNField<uint8_t*>(node, 0x30))) {
+                return;
+            }
+        }
+    }
+}
+
+}  // namespace
+
+// ref: FUN_14245f870
+bool DNScene::SkyLoaded() {
+    bool loaded = true;
+    EachOverrideSky(this, [&loaded](uint8_t* sky) {
+        if (!OverrideSkyLoaded(sky)) {
+            loaded = false;
+        }
+        return loaded;
+    });
+    if (!loaded) {
+        return false;
+    }
+    return PlanetLoaded(&this->m_planets[0]) && PlanetLoaded(&this->m_planets[1]) && PlanetLoaded(&this->m_planets[2])
+        && this->m_sunGlare.TextureLoaded() != 0 && this->m_moonGlare.TextureLoaded() != 0
+        && SkyModelLoaded(this->m_skyModel);
+}
+
+// ref: FUN_14245fb50
+void DNScene::SetSkyPriority(int32_t priority) {
+    EachOverrideSky(this, [priority](uint8_t* sky) {
+        OverrideSkySetPriority(sky, priority);
+        return true;
+    });
+    PlanetSetPriority(&this->m_planets[0], priority);
+    PlanetSetPriority(&this->m_planets[1], priority);
+    PlanetSetPriority(&this->m_planets[2], priority);
+    PlanetSetPriority(&this->m_planets[3], priority);
+    this->m_sunGlare.SetTexturePriority(priority);
+    this->m_moonGlare.SetTexturePriority(priority);
+    SkyModelSetPriority(this->m_skyModel, priority);
+}
+
+// ref: FUN_14245fb20
+void DNScene::BeginFrame() {
+    if (!this->SkyLoaded()) {
+        this->SetSkyPriority(0);
     }
 }

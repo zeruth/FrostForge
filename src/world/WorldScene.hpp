@@ -219,6 +219,14 @@ class CWorldScene {
     float GetFarClip3(CWorldMap* map);
     // ref: FUN_1413c2d60
     float GetNearClip();
+    // The frame's DayNight for a view: the sky's loads, then the light computed (on a pool job
+    // when the handle asks) and copied into the scene's environment.
+    // ref: FUN_1413c8990
+    void UpdateDayNight(CWorldView* view);
+    // The view's camera, weather and water into DayNight, its frame computed, and its light
+    // direction and colours, water colour and fogs copied into the scene for the models.
+    // ref: FUN_1413c8aa0
+    void UpdateLight(CWorldView* view, DAYNIGHT* dayNight);
 
     // Empties the callback lists (the constructor's inlined TSList clear).
     void ClearCallbacks();

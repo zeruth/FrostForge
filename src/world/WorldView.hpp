@@ -114,6 +114,13 @@ class CWorldView {
 
     // ref: FUN_1413d9420
     CWorldView(CWorldScene* scene, CWorldView* parent, uint32_t mode);
+    // The liquid the camera is in and its depth (+0x690, +0x694).
+    // ref: FUN_141351b90
+    uint32_t GetLiquid(float* depth);
+    // The water around the camera: its fog block, whether a liquid covers the camera and how
+    // deep; 1 when the camera is under it.
+    // ref: FUN_1413dd190
+    int32_t QueryWater(uint8_t* fog, uint8_t* covered, float* depth);
     // ref: FUN_1413d9ed0
     ~CWorldView();
 };

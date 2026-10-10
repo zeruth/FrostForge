@@ -228,3 +228,27 @@ void WorldViewListDestroy(WORLDVIEWLIST* list) {
     }
     terminator->Unlink();
 }
+
+// ref: FUN_141351b90
+uint32_t CWorldView::GetLiquid(float* depth) {
+    if (depth != nullptr) {
+        std::memcpy(depth, &this->m_694, 4);
+    }
+    return this->m_690;
+}
+
+// ref: FUN_1413dd190
+int32_t CWorldView::QueryWater(uint8_t* fog, uint8_t* covered, float* depth) {
+    (void)fog;
+    (void)covered;
+    (void)depth;
+    auto chunk = static_cast<uint8_t*>(this->m_gathered[0].m_00);
+    if (chunk == nullptr) {
+        return 0;
+    }
+    if (*reinterpret_cast<void**>(chunk + 0x58) == nullptr) {
+        return 0;
+    }
+    FROST_UNIMPLEMENTED();  // the chunk's liquids (FUN_141383ba0, FUN_1413e40f0) and the water fog (FUN_1413dcc80, FUN_1413da900)
+    return 0;
+}
