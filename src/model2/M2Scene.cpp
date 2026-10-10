@@ -676,6 +676,44 @@ void* PhysicsWorldCreate(int32_t kind) {
     return nullptr;
 }
 
+// ref: FUN_1411e0c60
+void M2SceneSetProjectCallback(CM2Scene* scene, void* (*callback)(void* query)) {
+    scene->m_projectCallback = callback;
+}
+
+// ref: FUN_1411e0c70
+void M2SceneSetProjectCheckCallback(CM2Scene* scene, void (*callback)(void* draw)) {
+    scene->m_projectCheckCallback = reinterpret_cast<void*>(callback);
+}
+
+// ref: FUN_1411e0c30
+void M2SceneSetTraceCallback(CM2Scene* scene, void (*callback)(void* query, float* hit, float* t), void* param) {
+    scene->m_traceCallback = callback;
+    scene->m_d6a0 = callback != nullptr ? param : nullptr;
+}
+
+// ref: FUN_1411e0780
+void M2SceneSetPhysicsCallback(CM2Scene* scene, void (*callback)(void* states, void* param), void* param) {
+    scene->m_d678 = reinterpret_cast<void*>(callback);
+    scene->m_d680 = callback != nullptr ? param : nullptr;
+}
+
+// ref: FUN_1411dfa10
+void M2SceneSetWindCallback(CM2Scene* scene, void (*callback)(const float* position, float* direction,
+    float* speed, uint8_t gusts)) {
+    scene->m_windCallback = reinterpret_cast<decltype(scene->m_windCallback)>(callback);
+}
+
+// ref: FUN_1411e0c50
+void M2SceneSetGroundCallback(CM2Scene* scene, bool (*callback)(const float* position, float* height, void* param)) {
+    scene->m_d6b0 = reinterpret_cast<uint64_t>(callback);
+}
+
+// ref: FUN_1411df6d0
+void M2SceneRelease(CM2Scene* scene) {
+    scene->m_refCount--;
+}
+
 // Ported with CM2Scene.
 // ref: FUN_1411dd490
 CM2BaseModel* M2SceneCloneModel(CM2Scene* scene, CM2BaseModel* model, bool a3) {

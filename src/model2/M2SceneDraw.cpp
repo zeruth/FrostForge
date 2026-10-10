@@ -1459,22 +1459,6 @@ class M2ModelCustomDraw {
         const C44Matrix* projection) = 0;
 };
 
-// What a projected batch's draw callbacks are handed (0x50): the projection's world object or
-// the scene's decal parameter, the scene's owner and companion, the context, the constants, the
-// element, the projection's box, the batch's colour and its flags.
-struct M2PROJECTEDDRAW {
-    void* m_object;                     // 0x00
-    void* m_owner;                      // 0x08
-    void* m_030;                        // 0x10
-    GxRenderContext* m_context;         // 0x18
-    ShaderEffectContext* m_shader;      // 0x20
-    M2Element* m_element;               // 0x28
-    uint8_t m_box[0x18];                // 0x30
-    uint32_t m_color;                   // 0x48 0xffRRGGBB
-    uint32_t m_flags;                   // 0x4c 1 lit, 2 blended, 4 two textures, then the projection's
-};
-static_assert(sizeof(M2PROJECTEDDRAW) == 0x50, "a projected draw is 0x50 bytes");
-
 // The projection a batch is built into (FUN_1411be9e0 fills it from +0x10).
 struct M2BATCHPROJECTION {
     void* m_owner;                      // 0x00

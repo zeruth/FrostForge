@@ -48,4 +48,4 @@ add_library(ui STATIC
     ${CMAKE_SOURCE_DIR}/src/framescript/ScriptMethod.cpp
 )
 target_include_directories(ui PUBLIC ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(ui PUBLIC base blz cas client console db expat framescript glue gx gxu model2 os shadereffect storm texture util)
+target_link_libraries(ui PUBLIC base blz cas client console db expat framescript glue gx gxu model2 os shadereffect storm texture util world)

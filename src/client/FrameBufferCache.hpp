@@ -75,6 +75,13 @@ void FrameBufferCacheRemoveFlushCallback(void (*callback)(void*), void* param);
 // A cached texture for `target` at `size`, marking its entry in use (FUN_14129f7c0).
 void* FrameBufferCacheAcquire(const int32_t* size, const FRAMEBUFFERTARGET* target, void* unused, uint8_t* entry);
 
+// A frame buffer with no targets: four colour targets and a depth target with no format,
+// each a render target, no size, no cache entries (FUN_1412a5c10, inlined into the owners of
+// FRAMEBUFFERTEMPs for those).
+void FrameBufferInit(FRAMEBUFFER* buffer);
+// The same for a borrowed target.
+void FrameBufferTempClear(FRAMEBUFFERTEMP* temp);
+
 // Frame buffer setup: one colour target of `format` and no depth at `size` (FUN_1412a04d0,
 // the size packed as two 16-bit halves).
 void FrameBufferSetup(FRAMEBUFFER* buffer, uint8_t format, uint32_t size);

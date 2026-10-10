@@ -552,6 +552,31 @@ void FrameBufferTempAcquire(FRAMEBUFFERTEMP* temp) {
     temp->m_refs++;
 }
 
+// ref: FUN_1412a5c10
+void FrameBufferInit(FRAMEBUFFER* buffer) {
+    std::memset(buffer, 0, sizeof(*buffer));
+    for (FRAMEBUFFERTARGET& target : buffer->m_color) {
+        target.m_renderTarget = 1;
+    }
+    buffer->m_depth.m_renderTarget = 1;
+    for (uint8_t& entry : buffer->m_colorEntries) {
+        entry = 0xff;
+    }
+    buffer->m_depthEntry = 0xff;
+}
+
+void FrameBufferTempClear(FRAMEBUFFERTEMP* temp) {
+    temp->m_width = 0;
+    temp->m_height = 0;
+    std::memset(&temp->m_target, 0, sizeof(temp->m_target));
+    temp->m_target.m_renderTarget = 1;
+    temp->m_size[0] = 0;
+    temp->m_size[1] = 0;
+    temp->m_tex = nullptr;
+    temp->m_entry = 0xff;
+    temp->m_refs = 0;
+}
+
 // ref: FUN_1412a0770
 void FrameBufferTempRelease(FRAMEBUFFERTEMP* temp) {
     temp->m_refs--;

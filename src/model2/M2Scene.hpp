@@ -358,6 +358,33 @@ void RayTracingUpdateInstance(void* rayTracing, const int32_t* entry, const floa
 void RayTracingRemoveInstance(void* rayTracing, const int32_t* entry);
 void RayTracingRemoveModel(void* rayTracing, const int32_t* entry);
 
+// What a projected batch's draw callbacks are handed (0x50): the projection's world object or
+// the scene's decal parameter, the scene's owner and companion, the context, the constants, the
+// element, the projection's box, the batch's colour and its flags.
+struct M2PROJECTEDDRAW {
+    void* m_object;                     // 0x00
+    void* m_owner;                      // 0x08
+    void* m_030;                        // 0x10
+    GxRenderContext* m_context;         // 0x18
+    ShaderEffectContext* m_shader;      // 0x20
+    M2Element* m_element;               // 0x28
+    uint8_t m_box[0x18];                // 0x30
+    uint32_t m_color;                   // 0x48 0xffRRGGBB
+    uint32_t m_flags;                   // 0x4c 1 lit, 2 blended, 4 two textures, then the projection's
+};
+static_assert(sizeof(M2PROJECTEDDRAW) == 0x50, "a projected draw is 0x50 bytes");
+
+// The world scene's hooks into the M2 scene (set by CWorldScene's constructor).
+void M2SceneSetProjectCallback(CM2Scene* scene, void* (*callback)(void* query));
+void M2SceneSetProjectCheckCallback(CM2Scene* scene, void (*callback)(void* draw));
+void M2SceneSetTraceCallback(CM2Scene* scene, void (*callback)(void* query, float* hit, float* t), void* param);
+void M2SceneSetPhysicsCallback(CM2Scene* scene, void (*callback)(void* states, void* param), void* param);
+void M2SceneSetWindCallback(CM2Scene* scene, void (*callback)(const float* position, float* direction,
+    float* speed, uint8_t gusts));
+void M2SceneSetGroundCallback(CM2Scene* scene, bool (*callback)(const float* position, float* height, void* param));
+// Drops the world scene's reference (the cache frees the scene once nothing holds it).
+void M2SceneRelease(CM2Scene* scene);
+
 // A copy of a model in the scene (FUN_1411dd490): the same file and state, not yet attached.
 CM2BaseModel* M2SceneCloneModel(CM2Scene* scene, CM2BaseModel* model, bool a3);
 

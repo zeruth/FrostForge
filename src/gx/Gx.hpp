@@ -248,4 +248,14 @@ typedef void (*GXDISPLAYCALLBACK)(uint32_t monitor, void* param);
 void GxAddDisplayChangeCallback(GXDISPLAYCALLBACK callback, void* param);
 void GxNotifyOnDisplayChange(uint32_t monitor);
 
+// Releases of device objects through three of the device's slots (0x98, 0xe0, 0xf8), what
+// the world renderer holds its streamed buffers and captures in. The holder is passed along
+// with the object; the slots are not ported, so a live object reports itself.
+// ref: FUN_142288440
+void GxDeviceRelease098(void* holder, void* object);
+// ref: FUN_1422883e0
+void GxDeviceRelease0e0(void* holder, void* object);
+// ref: FUN_142288400
+void GxDeviceRelease0f8(void* holder, void* object);
+
 #endif

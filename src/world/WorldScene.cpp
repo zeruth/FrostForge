@@ -1,0 +1,594 @@
+#include "world/WorldScene.hpp"
+
+#include "client/RenderSettings.hpp"
+#include "gx/Gx.hpp"
+#include "model2/M2Scene.hpp"
+#include "storm/Memory.hpp"
+#include "storm/String.hpp"
+#include "threadpool/ThreadPool.hpp"
+#include "world/ParticulateVolumeManager.hpp"
+#include "world/WorldClip.hpp"
+#include "world/WorldFade.hpp"
+#include "world/WorldMap.hpp"
+#include "world/WorldSceneCallbacks.hpp"
+#include "world/WorldSceneRender.hpp"
+#include "world/WorldStubs.hpp"
+#include "world/WorldView.hpp"
+#include <cfloat>
+#include <cstring>
+#include <new>
+
+const char s_worldViewPtrTag[] = ".PEAVCWorldView@@";
+const char s_worldSceneRenderPtrTag[] = ".PEAVCWorldSceneRender@@";
+const char s_intTag[] = ".H";
+
+namespace {
+
+const char s_sceneFile[] = "D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WorldClient2\\WorldScene.cpp";
+const char s_callbackTag[] =
+    ".?AV?$TSList@VCRenderCallback@@V?$TSGetExplicitLink@VCRenderCallback@@@@$07@@";
+const char s_verticesTag[] = ".?AV?$TSFixedArray@UGxVertexPNCT2@@$07@@";
+
+// DAT_1430ad2f8
+CWorldScene* s_currentScene;
+
+// DAT_142d011e8: every scene, linked at the tail as it is made.
+TSList<CWorldScene, TSGetLink<CWorldScene>, 8> s_scenes;
+
+// A map's far clips are held to this while its flag 2 is set (DAT_142738a68).
+constexpr float MAP_FAR_CLIP_CAP = 4400.0f;
+// The third far clip's caps (DAT_142734b10, DAT_142738a64) and how far under the first it
+// is kept (DAT_14273852c).
+constexpr float FAR_CLIP3_CAP = 1300.0f;
+constexpr float FAR_CLIP3_FLAG_CAP = 777.0f;
+constexpr float FAR_CLIP3_MARGIN = 66.666664f;
+
+void* SceneAlloc(size_t size, int32_t line) {
+    return SMemAlloc(size, 0x27, s_sceneFile, SStrHashFnv1a(s_sceneFile), line, 0);
+}
+
+// The world scene's frame-buffer flush (LAB_1413c50c0): hands its borrowed target back.
+void OnFrameBufferFlush(void* param) {
+    auto scene = static_cast<CWorldScene*>(param);
+    if (scene->m_temp.m_refs > 0) {
+        FrameBufferTempRelease(&scene->m_temp);
+    }
+}
+
+// The far clip CVar against a map's limit and scale (the first lines of FUN_1413c2bc0 and
+// its neighbours).
+float MapScaledClip(float clip, CWorldMap* map, float scale) {
+    if (map != nullptr) {
+        if ((map->Flags() & 2) != 0 && MAP_FAR_CLIP_CAP <= clip) {
+            clip = MAP_FAR_CLIP_CAP;
+        }
+        clip = clip * scale;
+    }
+    return clip;
+}
+
+}  // namespace
+
+// ---- the scene's globals -------------------------------------------------------------------
+
+// ref: FUN_1413cb140
+CWorldScene* WorldSceneGetCurrent() {
+    return s_currentScene;
+}
+
+// ref: FUN_1413cb310
+void WorldSceneSetCurrent(CWorldScene* scene) {
+    s_currentScene = scene;
+}
+
+// ---- construction --------------------------------------------------------------------------
+
+// ref: FUN_1413c17f0
+CWorldScene::CWorldScene(uint32_t flags, int32_t type) {
+    this->m_link.m_prevlink = nullptr;
+    this->m_link.m_next = nullptr;
+    for (THREADPOOLGROUP*& group : this->m_groups) {
+        group = nullptr;
+    }
+    this->m_060 = 0;
+    this->m_farClip = 946.0f;
+    this->m_nearClip = 0.2f;
+    std::memset(this->m_0c8, 0, sizeof(this->m_0c8));
+    // m_fogs and m_fog: MODELFOG's constructor (the reference inlines it for the eight).
+    this->m_678 = 0;
+    this->m_67c[0] = 0;
+    this->m_67c[1] = 1;
+    this->m_67c[2] = 1;
+    this->m_67c[3] = 1;
+    this->m_680 = 0;
+    this->m_6a0 = 1;
+    this->m_6a8 = 0;
+    this->m_vertices = nullptr;
+    this->m_6b8 = 0;
+    this->m_6c0 = 0;
+    this->m_6c8 = 0;
+    this->m_6d0 = 0;
+    this->m_6e8 = 0;
+    this->m_6f0 = 0;
+    this->m_position[0] = 0.0f;
+    this->m_position[1] = 0.0f;
+    this->m_position[2] = 0.0f;
+    for (int32_t i = 0; i < 16; i++) {
+        this->m_718[i] = (i % 5) == 0 ? 1.0f : 0.0f;
+        this->m_758[i] = (i % 5) == 0 ? 1.0f : 0.0f;
+    }
+    for (CRenderCallbackList& list : this->m_callbacks) {
+        list.m_linkoffset = offsetof(CRenderCallback, m_link);
+    }
+    for (auto& row : this->m_828) {
+        row[0] = 0.0f;
+        row[1] = 0.0f;
+        row[2] = 1.0f;
+        row[3] = 0.0f;
+    }
+    std::memset(this->m_888, 0, sizeof(this->m_888));
+    this->m_lodPosition[0] = 0.0f;
+    this->m_lodPosition[1] = 0.0f;
+    this->m_lodPosition[2] = 0.0f;
+    this->m_frameTimeIndex = 0;
+    this->m_frameTimeSum = 0;
+    std::memset(this->m_frameTimes, 0, sizeof(this->m_frameTimes));
+    this->m_lodScale = 1.0f;
+    this->m_9f4 = 0;
+    this->m_9f8 = 0;
+    this->m_9fc[0] = FLT_MAX;
+    this->m_9fc[1] = FLT_MAX;
+    this->m_9fc[2] = FLT_MAX;
+    this->m_a08 = -1;
+    std::memset(this->m_a0c, 0, sizeof(this->m_a0c));
+    this->m_a2c[0] = FLT_MAX;
+    this->m_a2c[1] = FLT_MAX;
+    this->m_a2c[2] = FLT_MAX;
+    this->m_a38 = -1;
+    std::memset(this->m_a3c, 0, sizeof(this->m_a3c));
+    this->m_a70 = 0;
+    this->m_a78 = 0;
+    // m_lightA88 and the three below: CM2Lighting's constructor.
+    std::memset(this->m_b20, 0, 0xa0);
+    this->m_c20 = 8;
+    this->m_c28 = 0;
+    this->m_c30 = 1.0f;
+    this->m_c34 = 0;
+    this->m_c50 = 0;
+    this->m_c58 = 0;
+    this->m_c40 = 0;
+    this->m_c48 = 0;
+    this->m_cf8 = static_cast<uint8_t>((this->m_cf8 & 0xfc) | 4);
+    this->m_d10 = 0;
+    this->m_d18 = 0;
+    this->m_d00 = 0;
+    this->m_d08 = 0;
+    this->m_db8 = static_cast<uint8_t>((this->m_db8 & 0xfc) | 4);
+    this->m_dd0 = 0;
+    this->m_dd8 = 0;
+    this->m_dc0 = 0;
+    this->m_dc8 = 0;
+    this->m_e78 = static_cast<uint8_t>((this->m_e78 & 0xfc) | 4);
+    for (auto& entry : this->m_e80) {
+        uint8_t* bytes = entry;
+        auto u64 = [bytes](size_t offset, uint64_t value) { std::memcpy(bytes + offset, &value, 8); };
+        auto u32 = [bytes](size_t offset, uint32_t value) { std::memcpy(bytes + offset, &value, 4); };
+        u64(0x20, 0);
+        u64(0x28, 0x3f800000);
+        u64(0x30, 0);
+        u32(0x38, 0);
+        u64(0x44, 0);
+        u32(0x4c, 0);
+        u64(0x54, 0);
+        u64(0x5c, 0);
+        u64(0x64, 0);
+        u64(0x80, 0);
+        u32(0x88, 0);
+        for (size_t offset = 0x90; offset < 0xc0; offset += 8) {
+            u64(offset, 0);
+        }
+        u64(0xd0, 0);
+        u32(0xd8, 0);
+    }
+    std::memset(this->m_1900, 0, sizeof(this->m_1900));
+    this->m_1940 = 0;
+    this->m_1948 = 0;
+    this->m_screenRect[0] = 0.0f;
+    this->m_screenRect[1] = 0.0f;
+    this->m_screenRect[2] = 0.0f;
+    this->m_screenRect[3] = 0.0f;
+    this->m_196c = 1.0f;
+    std::memset(this->m_1970, 0, 0x20);
+    this->m_busy = 0;
+    this->m_19a4 = 8;
+    this->m_19a8 = nullptr;
+    this->m_19b0 = nullptr;
+    this->m_19b8 = nullptr;
+    this->m_19c0 = nullptr;
+    this->m_19c8 = nullptr;
+    this->m_19d0 = nullptr;
+    FrameBufferTempClear(&this->m_temp);
+
+    this->m_maps[0] = nullptr;
+    this->m_maps[1] = nullptr;
+    this->m_a54 = static_cast<uint8_t>(this->m_a54 & 0xfc);
+    this->m_mapIndex = 0;
+    this->m_028 = nullptr;
+    this->m_030 = nullptr;
+    this->m_038 = nullptr;
+    this->m_040 = nullptr;
+    this->m_particulates = nullptr;
+    this->m_type = type;
+    this->m_a64 = 0.0f;
+    this->m_a68 = 0.0f;
+    this->m_view = nullptr;
+    this->m_view = this->CreateView(flags);
+    if ((flags & 8) != 0 && WorldSceneGetCurrent() == nullptr) {
+        WorldSceneSetCurrent(this);
+    }
+
+    if (type == 6) {
+        this->m_1950 = WorldScene1950Create(SceneAlloc(0x68, 0x130));
+        this->m_6d8 = WorldScene6d8Create(SceneAlloc(0x7878, 0x131));
+        this->m_6e0 = WorldScene6e0Create(SceneAlloc(0x38, 0x132));
+    } else {
+        this->m_1950 = nullptr;
+        this->m_6d8 = nullptr;
+        this->m_6e0 = nullptr;
+    }
+    this->m_700 = nullptr;
+    this->m_a80 = nullptr;
+
+    this->m_m2Scene = M2CacheCreateScene(type, this, this->m_view, &this->m_farClip);
+    M2SceneSetProjectCallback(this->m_m2Scene, WorldSceneProjectModel);
+    M2SceneSetProjectCheckCallback(this->m_m2Scene, WorldSceneProjectCheck);
+    M2SceneSetTraceCallback(this->m_m2Scene, WorldSceneTrace, this);
+    M2SceneSetPhysicsCallback(this->m_m2Scene, WorldScenePhysics, this);
+    M2SceneSetWindCallback(this->m_m2Scene, WorldSceneSampleWind);
+    M2SceneSetGroundCallback(this->m_m2Scene, WorldSceneGroundHeight);
+
+    void* memory = SceneAlloc(sizeof(CParticulateVolumeManager), 0x151);
+    this->m_particulates = new (memory) CParticulateVolumeManager();
+    this->m_groups[0] = ThreadPoolGroupCreate(2);
+    this->m_groups[1] = ThreadPoolGroupCreate(2);
+    this->m_groups[2] = ThreadPoolGroupCreate(2);
+    this->m_groups[3] = ThreadPoolGroupCreate(2);
+    memory = SceneAlloc(sizeof(CWorldFade), 0x160);
+    this->m_058 = new (memory) CWorldFade();
+
+    this->ClearCallbacks();
+    FrameBufferCacheAddFlushCallback(OnFrameBufferFlush, this);
+    GxAddDeviceDestroyedCallback(WorldSceneOnDeviceDestroyed, this);
+    RenderSettingsAddHandler(WorldSceneOnRenderSettings, this);
+
+    this->m_8e8 = 0;
+    this->m_farClips[0] = 705.0f;
+    this->m_farClips[1] = 705.0f;
+    this->m_farClips[2] = 705.0f;
+    this->m_a6c = 400.0f;
+    this->m_frame = 1;
+    this->m_1968 = 0;
+    s_scenes.LinkToTail(this);
+    this->m_refCount = 0;
+}
+
+// The constructor's inlined TSList clear, list by list.
+void CWorldScene::ClearCallbacks() {
+    for (CRenderCallbackList& list : this->m_callbacks) {
+        while (CRenderCallback* callback = list.Head()) {
+            callback->m_link.Unlink();
+            SMemFree(callback, s_callbackTag, -2, 0);
+        }
+    }
+}
+
+// ref: FUN_1413c24e0
+CWorldScene::~CWorldScene() {
+    if (WorldSceneGetCurrent() == this) {
+        WorldSceneSetCurrent(nullptr);
+    }
+    for (uint32_t slot = 0; slot < 2; slot++) {
+        this->UnloadMap(slot);
+    }
+    if (this->m_040 != nullptr) {
+        SkySceneDestroy(this->m_040);
+        operator delete(this->m_040);
+        this->m_040 = nullptr;
+    }
+    if (this->m_m2Scene != nullptr) {
+        M2SceneRelease(this->m_m2Scene);
+        this->m_m2Scene = nullptr;
+    }
+    WorldSceneFreeFadeouts();
+    if (this->m_particulates != nullptr) {
+        delete this->m_particulates;
+        this->m_particulates = nullptr;
+    }
+    if (this->m_6d8 != nullptr) {
+        WorldScene6d8Destroy(this->m_6d8);
+        operator delete(this->m_6d8);
+        this->m_6d8 = nullptr;
+    }
+    if (this->m_6e0 != nullptr) {
+        WorldScene6e0Destroy(this->m_6e0);
+        operator delete(this->m_6e0);
+        this->m_6e0 = nullptr;
+    }
+    for (THREADPOOLGROUP*& group : this->m_groups) {
+        if (group != nullptr) {
+            ThreadPoolGroupRelease(group);
+            group = nullptr;
+        }
+    }
+    if (this->m_058 != nullptr) {
+        delete static_cast<CWorldFade*>(this->m_058);
+        this->m_058 = nullptr;
+    }
+    if (this->m_a80 != nullptr) {
+        WorldSceneDeleteA80(this->m_a80);
+        this->m_a80 = nullptr;
+    }
+    if (this->m_1950 != nullptr) {
+        WorldScene1950Release();
+        WorldScene1950Destroy(this->m_1950);
+        operator delete(this->m_1950);
+    }
+    if (this->m_temp.m_refs > 0) {
+        FrameBufferTempRelease(&this->m_temp);
+    }
+    FrameBufferCacheRemoveFlushCallback(OnFrameBufferFlush, this);
+    GxRemoveDeviceDestroyedCallback(WorldSceneOnDeviceDestroyed, this);
+    if (this->m_19b8 != nullptr) {
+        WorldCaptureDestroy(this->m_19b8);
+        void* buffer = this->m_19c0;
+        this->m_19b8 = nullptr;
+        this->m_19c0 = nullptr;
+        if (buffer != nullptr) {
+            GxDeviceRelease0f8(&this->m_19c0, buffer);
+        }
+        this->m_19c8 = nullptr;
+    }
+    RenderSettingsRemoveHandler(WorldSceneOnRenderSettings, this);
+    if (this->m_view != nullptr) {
+        uint64_t index = 0;
+        while (index < this->m_views.size() && this->m_views[index] != this->m_view) {
+            index++;
+        }
+        this->m_views.erase(index, index + 1);
+        delete this->m_view;
+        this->m_view = nullptr;
+    }
+    if (this->m_19c0 != nullptr) {
+        GxDeviceRelease0f8(&this->m_19c0, this->m_19c0);
+    }
+    if (this->m_19b0 != nullptr) {
+        GxDeviceRelease0e0(&this->m_19b0, this->m_19b0);
+    }
+    if (this->m_19a8 != nullptr) {
+        GxDeviceRelease0e0(&this->m_19a8, this->m_19a8);
+    }
+    // m_lightDE0..m_lightA88 unlink in their destructors; m_callbacks clear in theirs.
+    if (this->m_vertices != nullptr) {
+        SMemFree(this->m_vertices, s_verticesTag, -2, 0);
+    }
+    // m_688, m_renders and m_views free their storage as blz::vector does.
+    this->m_link.Unlink();
+}
+
+// ref: FUN_1413c29d0
+void CWorldScene::AddRef() {
+    this->m_refCount++;
+}
+
+// ref: FUN_1413c5bb0
+int32_t CWorldScene::Release() {
+    int32_t count = --this->m_refCount;
+    if (count == 0) {
+        delete this;
+        return 0;
+    }
+    return count;
+}
+
+// ref: FUN_1413c36c0
+CWorldView* CWorldScene::CreateView(uint32_t flags) {
+    void* memory = SceneAlloc(sizeof(CWorldView), 0x2c7);
+    auto view = new (memory) CWorldView(this, nullptr, (flags & 1) != 0 ? 4 : 1);
+    bool first = this->m_views.size() == 0;
+    this->m_views.push_back(view);
+    uint32_t features = first ? 0x7fffa428 : 0x7fffa028;
+    if ((flags & 1) == 0) {
+        features = first ? 0x7fffe428 : 0x7fffe028;
+    }
+    if ((flags & 2) != 0) {
+        features &= 0xffefffff;
+    }
+    if ((flags & 4) != 0) {
+        features &= 0xf7ffffff;
+    }
+    view->m_flags |= features;
+    return view;
+}
+
+// ref: FUN_1413c35c0
+void CWorldScene::LoadMap(uint32_t slot, int32_t mapId, bool a4, uint8_t a5, int32_t a6, uint8_t a7) {
+    void* memory = SceneAlloc(sizeof(CWorldMap), 0x242);
+    this->m_maps[slot] = new (memory) CWorldMap(this, slot);
+    WorldMapLink(this->m_maps[slot]);
+    this->m_maps[slot]->SetCameraPosition(this->m_position);
+    CWorldMap* map = this->m_maps[slot];
+    if (!a4) {
+        map->LoadNone(mapId, slot != 0);
+    } else {
+        map->Load(mapId, a5, a6, a7);
+    }
+}
+
+// ref: FUN_1413c3a40
+void CWorldScene::UnloadMap(uint32_t slot) {
+    CWorldView* view = this->m_view;
+    if (view != nullptr) {
+        for (WORLDVIEWGATHER& gather : view->m_gathered) {
+            gather.m_00 = nullptr;
+            gather.m_08 = 0;
+            gather.m_1c = 0;
+            gather.m_20 = 0;
+        }
+    }
+    WorldSceneFreeObjectFadeouts();
+    if (this->m_6d8 != nullptr) {
+        WorldScene6d8Unload(this->m_6d8);
+    }
+    if (this->m_6e0 != nullptr) {
+        WorldScene6e0Unload(this->m_6e0);
+    }
+    if (this->m_maps[slot] != nullptr) {
+        this->m_maps[slot]->Unload();
+        delete this->m_maps[slot];
+        this->m_maps[slot] = nullptr;
+    }
+    if (this->m_maps[0] == nullptr && this->m_maps[1] == nullptr) {
+        if (this->m_028 != nullptr) {
+            DayNightDestroy(this->m_028);
+            this->m_028 = nullptr;
+        }
+        if (this->m_030 != nullptr) {
+            WorldScene030Destroy(this->m_030);
+            operator delete(this->m_030);
+            this->m_030 = nullptr;
+        }
+        if (this->m_038 != nullptr) {
+            MapWeatherDestroy(this->m_038);
+            operator delete(this->m_038);
+            this->m_038 = nullptr;
+        }
+    }
+    if (this->m_maps[0] == nullptr && this->m_maps[1] == nullptr) {
+        this->m_farClips[0] = 705.0f;
+        this->m_farClips[1] = 705.0f;
+        this->m_farClips[2] = 705.0f;
+        this->m_a6c = 400.0f;
+    }
+    if (this->m_040 != nullptr) {
+        SkySceneUnload(this->m_040);
+    }
+}
+
+// ref: FUN_1413c88f0
+void CWorldScene::SetCameraPosition(const float* position) {
+    CWorldMap* map = this->m_maps[this->m_mapIndex];
+    float clip = MapScaledClip(WorldGetFarClipCVar(), map, map != nullptr ? map->FarClipScale() : 1.0f);
+    float farClip = this->m_farClips[0];
+    if (this->m_farClips[0] <= clip) {
+        farClip = clip;
+    }
+    if (farClip <= this->m_farClips[1]) {
+        farClip = this->m_farClips[1];
+    }
+    if (farClip <= this->m_farClips[2]) {
+        farClip = this->m_farClips[2];
+    }
+    this->m_farClip = WorldClampFarClip(farClip);
+    WorldGetNearClipCVar();
+    this->m_nearClip = WorldGetNearClip();
+    this->m_position[0] = position[0];
+    this->m_position[1] = position[1];
+    this->m_position[2] = position[2];
+}
+
+// ref: FUN_1413c2bc0
+float CWorldScene::GetFarClip(CWorldMap* map) {
+    float clip = MapScaledClip(WorldGetFarClipCVar(), map, map != nullptr ? map->FarClipScale() : 1.0f);
+    float farClip = this->m_farClips[0];
+    if (this->m_farClips[0] <= clip) {
+        farClip = clip;
+    }
+    if (farClip <= this->m_farClips[1]) {
+        farClip = this->m_farClips[1];
+    }
+    if (farClip <= this->m_farClips[2]) {
+        farClip = this->m_farClips[2];
+    }
+    return WorldClampFarClip(farClip);
+}
+
+// ref: FUN_1413c2c20
+float CWorldScene::GetFarClip2(CWorldMap* map) {
+    float clip = MapScaledClip(WorldGetFarClip2CVar(), map, map != nullptr ? map->FarClip2Scale() : 1.0f);
+    float farClip = this->m_farClips[0];
+    if (this->m_farClips[0] <= clip) {
+        farClip = clip;
+    }
+    if (farClip <= this->m_farClips[1]) {
+        farClip = this->m_farClips[1];
+    }
+    return WorldClampFarClip2(farClip);
+}
+
+// ref: FUN_1413c2c80
+float CWorldScene::GetFarClip3(CWorldMap* map) {
+    float farClip = this->GetFarClip(map);
+    float clip = WorldGetFarClip3CVar();
+    if (map != nullptr) {
+        if ((map->Flags() & 2) == 0) {
+            auto area = static_cast<uint8_t*>(map->Field<void*>(0x28));
+            if ((area == nullptr || (*reinterpret_cast<uint32_t*>(area + 0xdc) & 0x100) == 0)
+                && FAR_CLIP3_CAP <= clip) {
+                clip = FAR_CLIP3_CAP;
+            }
+        } else if (FAR_CLIP3_FLAG_CAP <= clip) {
+            clip = FAR_CLIP3_FLAG_CAP;
+        }
+        clip = clip * map->FarClip2Scale();
+    }
+    float third = this->m_a6c;
+    if (this->m_a6c <= clip) {
+        third = clip;
+    }
+    if (farClip <= third) {
+        third = farClip - FAR_CLIP3_MARGIN;
+    }
+    return WorldClampFarClip3(third);
+}
+
+// ref: FUN_1413c2d60
+float CWorldScene::GetNearClip() {
+    WorldGetNearClipCVar();
+    return WorldGetNearClip();
+}
+
+// ref: FUN_1413c31f0
+void CWorldScene::CreateMapObjects() {
+    if (this->m_028 != nullptr) {
+        DayNightDestroy(this->m_028);
+        this->m_028 = nullptr;
+    }
+    if (this->m_030 != nullptr) {
+        WorldScene030Destroy(this->m_030);
+        operator delete(this->m_030);
+        this->m_030 = nullptr;
+    }
+    if (this->m_038 != nullptr) {
+        MapWeatherDestroy(this->m_038);
+        operator delete(this->m_038);
+        this->m_038 = nullptr;
+    }
+    if (this->m_028 == nullptr) {
+        this->m_028 = DayNightCreate(this, this->m_view);
+        CWorldMap* map = this->m_maps[0];
+        DayNightSetMap(this->m_028, map->MapId());
+        for (int32_t i = 0; i < 0x18; i++) {
+            auto area = static_cast<uint8_t*>(map->Area(i));
+            if (area != nullptr) {
+                DayNightSetArea(this->m_028, *reinterpret_cast<int32_t*>(area + 0xfc), i);
+            }
+        }
+        DayNightSetView(this->m_028, this->m_view, map->Position(), &this->m_farClip, this->m_view->m_matrices[4]);
+    }
+    if (this->m_038 == nullptr) {
+        this->m_038 = MapWeatherCreate(SceneAlloc(0x1378, 0x2a3), this);
+    }
+    if (this->m_030 == nullptr) {
+        this->m_030 = WorldScene030Create(SceneAlloc(0xfa50, 0x2a9), 0.027777778f, 30.0f, 0x2d771);
+    }
+}

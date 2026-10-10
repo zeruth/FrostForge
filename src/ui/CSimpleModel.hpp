@@ -12,29 +12,12 @@
 
 #include "model2/CM2Lighting.hpp"
 #include "ui/CSimpleFrame.hpp"
+#include "world/ModelFog.hpp"
 
 class CWorldScene;
 class CM2Model;
 class CM2Camera;
 struct lua_State;
-
-// The fog a model frame draws with (0xa0, initialised by FUN_1402394a0): the colour at +0, the
-// near and far distances at +4 and +8, the colour again at +0x30..+0x38.
-struct MODELFOG {
-    uint32_t m_words[40];
-
-    // ref: FUN_1402394a0
-    MODELFOG();
-
-    uint32_t GetColor() const {
-        return this->m_words[0];
-    }
-    float Get(int32_t word) const;
-    void Set(int32_t word, float value);
-    // The colour in its four slots (FUN_1424bed40's stores).
-    void SetColor(uint32_t argb);
-};
-static_assert(sizeof(MODELFOG) == 0xa0, "MODELFOG is 0xa0 bytes");
 
 // The Lua light (FUN_140d46a30 pushes it, FUN_140d46ba0 reads it).
 struct SCRIPTLIGHT {

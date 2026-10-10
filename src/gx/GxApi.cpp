@@ -2651,3 +2651,26 @@ void* GxTexGetDesc(const void* tex, void* out) {
     *reinterpret_cast<uint64_t*>(desc + 0x14) = *reinterpret_cast<const uint64_t*>(bytes + 0x14);
     return out;
 }
+
+// ref: FUN_142288440
+void GxDeviceRelease098(void* holder, void* object) {
+    (void)holder;
+    if (object != nullptr) {
+        FROST_UNIMPLEMENTED();  // the device's slot 0x98
+    }
+}
+
+// ref: FUN_1422883e0
+void GxDeviceRelease0e0(void* holder, void* object) {
+    (void)holder;
+    if (object != nullptr) {
+        FROST_UNIMPLEMENTED();  // the device's slot 0xe0
+    }
+}
+
+// ref: FUN_142288400
+void GxDeviceRelease0f8(void* holder, void* object) {
+    (void)holder;
+    (void)object;
+    FROST_UNIMPLEMENTED();  // the device's slot 0xf8
+}
