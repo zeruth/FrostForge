@@ -4,6 +4,7 @@
 
 #include "client/RenderCVars.hpp"
 #include "client/RenderSettings.hpp"
+#include "client/Resample.hpp"
 #include "console/Command.hpp"
 #include "console/Var.hpp"
 #include "gx/Gx.hpp"
@@ -457,8 +458,8 @@ void FrameRateRegisterCVars() {
 
 // ref: FUN_1412a2bf0
 void ResampleRegisterCVars() {
-    // FUN_14228dfb0 / FUN_14228e040 (FUN_1412a2650, FUN_1412a2960): the sharpening pass's
-    // device objects, not ported
+    GxAddDeviceCreatedCallback(ResampleDeviceCreated, nullptr);
+    GxAddDeviceDestroyedCallback(ResampleDeviceDestroyed, nullptr);
     CVarRegister("ResampleSharpness", "FSR sharpness strength [0.0-2.0]. 0 is full strength. -1 to disable.", 1, "0.2", ResampleSharpnessCallback, 1, false, nullptr, false);
     CVarRegister("ResampleAlwaysSharpen", "Run sharpness pass, even if not using AMD FSR Upscale [0,1]", 1, "0", ResampleAlwaysSharpenCallback, 1, false, nullptr, false);
 }

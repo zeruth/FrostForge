@@ -670,3 +670,77 @@ void FrameBufferExecuteReadOrResolveDiscard(GxRenderContext* context, FRAMEBUFFE
     execute(param, context, temp.m_tex, nullptr);
     FrameBufferTempRelease(&temp);
 }
+
+// ref: FUN_1412a0340
+void FrameBufferSetupTargets(FRAMEBUFFER* buffer, const int32_t* size, const FRAMEBUFFERTARGET* color,
+    const FRAMEBUFFERTARGET* depth) {
+    buffer->m_width = size[0];
+    buffer->m_height = size[1];
+    buffer->m_size[0] = size[0];
+    buffer->m_size[1] = size[1];
+    buffer->m_color[0] = *color;
+    buffer->m_depth = *depth;
+    GxRenderTargetsClear(&buffer->m_targets);
+}
+
+// Two colour targets of the default kind's formats; the depth is a target of its own when the
+// scene is multisampled, else the depth texture of `shared` itself.
+// ref: FUN_1412b2130
+void FrameBufferSetupSharedDepth(FRAMEBUFFER* buffer, const int32_t* size, GXRENDERTARGETS* shared) {
+    RENDERTARGETFORMATS formats = RenderTargetFormats(0);
+    buffer->m_width = size[0];
+    buffer->m_height = size[1];
+    FRAMEBUFFERTARGET depth = {};
+    depth.m_renderTarget = 1;
+    if (g_renderSettings.m_msaaSamples != 0) {
+        depth.m_format = formats.m_depth;
+        depth.m_shaderResource = 1;
+        depth.m_10 = 1;
+        buffer->m_depth = depth;
+    } else {
+        gxDx12Backend::Tex* tex = shared->m_texs[0];
+        uint32_t usage = tex->m_usage;
+        depth.m_format = tex->m_format;
+        depth.m_samples = (usage >> 0x15) & 7;
+        depth.m_08 = (usage >> 0x18) & 3;
+        depth.m_unordered = (usage >> 0x14) & 1;
+        depth.m_shaderResource = (usage >> 0x13) & 1;
+        buffer->m_depth = depth;
+        GxRenderTargetsAttach(&buffer->m_targets, 0, tex);
+    }
+    FRAMEBUFFERTARGET color = {};
+    color.m_format = formats.m_color;
+    color.m_renderTarget = 1;
+    color.m_shaderResource = 1;
+    buffer->m_color[0] = color;
+    color.m_format = formats.m_01[0];
+    buffer->m_color[1] = color;
+}
+
+// Takes over `source`'s targets and cache entries; `source` is left holding none.
+// ref: FUN_14129f070
+FRAMEBUFFER* FrameBufferMove(FRAMEBUFFER* dest, FRAMEBUFFER* source) {
+    *dest = *source;
+    for (uint8_t& entry : source->m_colorEntries) {
+        entry = 0xff;
+    }
+    source->m_depthEntry = 0xff;
+    source->m_bound = 0;
+    return dest;
+}
+
+// A single-sampled copy of `source`'s first colour target in `dest` (released from the
+// cache first), then `source` handed back.
+// ref: FUN_1412a1070
+void FrameBufferResolve(GxRenderContext* context, FRAMEBUFFER* source, FRAMEBUFFER* dest) {
+    int32_t size[2] = {source->m_size[0], source->m_size[1]};
+    FRAMEBUFFERTARGET color = source->m_color[0];
+    color.m_samples = 0;
+    color.m_shaderResource = 1;
+    FRAMEBUFFERTARGET depth = {};
+    depth.m_renderTarget = 1;
+    FrameBufferSetupTargets(dest, size, &color, &depth);
+    FrameBufferBind(dest);
+    context->ResolveTex(source->m_targets.m_texs[1], dest->m_targets.m_texs[1]);
+    FrameBufferRelease(source);
+}

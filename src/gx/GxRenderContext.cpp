@@ -1,3 +1,4 @@
+#include "gx/Gx.hpp"
 #include "gx/GxRenderTargets.hpp"
 #include "gx/d3d12/DeviceD3d12.hpp"
 #include "util/Unimplemented.hpp"
@@ -220,8 +221,35 @@ void GxRenderContext::SetSampler(uint8_t, uint32_t, uint64_t) {
 void GxRenderContext::SetTexture(uint8_t, uint32_t, gxDx12Backend::Tex*) {
     FROST_UNIMPLEMENTED();
 }
-void GxRenderContext::Slot038() {
-    FROST_UNIMPLEMENTED();  // FUN_14228fa90: unbinds every stage's textures
+// Each of the three stages: its texture slots, then its remaining unordered view slots, as the
+// device's capabilities count them (+0x70 and +0x60 per stage).
+// ref: FUN_14228fa90
+void GxRenderContext::UnbindTextures() {
+    for (uint32_t stage = 0; stage < 3; stage++) {
+        uint32_t slot = 0;
+        while (slot < *reinterpret_cast<uint32_t*>(GxDeviceCaps() + 0x70 + stage * 4)) {
+            this->SetTexture(static_cast<uint8_t>(stage), slot, nullptr);
+            slot++;
+        }
+        while (slot < *reinterpret_cast<uint32_t*>(GxDeviceCaps() + 0x60 + stage * 4)) {
+            this->BindTexture(static_cast<uint8_t>(stage), slot, nullptr, 0);
+            slot++;
+        }
+    }
+}
+
+// ref: FUN_14228f790
+void GxRenderContext::GetScissor(float* rect) {
+    std::memcpy(rect, &this->Field<float>(0x78), 0x10);
+}
+
+// ref: FUN_14228f960
+void GxRenderContext::SetScissor(const float* rect) {
+    float* current = &this->Field<float>(0x78);
+    if (rect[0] != current[0] || rect[1] != current[1] || rect[2] != current[2] || rect[3] != current[3]) {
+        this->Field<uint8_t>(0x74) = 1;
+        std::memcpy(current, rect, 0x10);
+    }
 }
 void GxRenderContext::Slot040() {
 }

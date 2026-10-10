@@ -45,6 +45,31 @@ static_assert(sizeof(CRenderCallback) == 0x30, "CRenderCallback is 0x30 bytes");
 // TSList<CRenderCallback, TSGetExplicitLink<CRenderCallback>, 8>: the link offset is a field.
 typedef TSList<CRenderCallback, TSGetLink<CRenderCallback>, 8> CRenderCallbackList;
 
+struct FRAMEBUFFER;
+
+// What the scene draws into and from where (0x88 bytes, built by FUN_1424d0a40 for
+// CWorldScene::Render).
+struct WORLDRENDERPARAMS {
+    FRAMEBUFFER* m_scene;               // 0x00 the scene's colour and depth
+    FRAMEBUFFER* m_shared;              // 0x08 the targets sharing its depth
+    uint64_t m_10[2];                   // 0x10
+    uint64_t m_20;                      // 0x20 the render's own buffers, while it runs
+    uint64_t m_28;                      // 0x28
+    uint32_t m_passes;                  // 0x30 6
+    float m_position[3];                // 0x34 the camera
+    float m_elapsed;                    // 0x40
+    int32_t m_size[2];                  // 0x44 the scene buffer's size
+    uint32_t m_pad4c;
+    CWorldView* m_view;                 // 0x50
+    uint64_t m_58;                      // 0x58
+    uint64_t m_60;                      // 0x60
+    uint64_t m_68;                      // 0x68
+    uint64_t m_70[2];                   // 0x70
+    uint8_t m_80[4];                    // 0x80
+    uint32_t m_pad84;
+};
+static_assert(sizeof(WORLDRENDERPARAMS) == 0x88, "WORLDRENDERPARAMS is 0x88 bytes");
+
 class CWorldScene {
     public:
     // The callback lists, by stage. The frame (FUN_1413c5250) runs 0 before the M2 scene
@@ -230,6 +255,9 @@ class CWorldScene {
     void Animate(CWorldView* view, const int32_t* lod, float elapsed, uint32_t flags);
     // ref: FUN_1413c5980
     void LatchView(CWorldView* view);
+    // Draws the latched view into the parameters' buffers.
+    // ref: FUN_1413c5ce0
+    void Render(WORLDRENDERPARAMS* params);
     // The view's camera, weather and water into DayNight, its frame computed, and its light
     // direction and colours, water colour and fogs copied into the scene for the models.
     // ref: FUN_1413c8aa0

@@ -3,15 +3,21 @@
 #include "base/Matrix.hpp"
 #include "blz/Function.hpp"
 #include "client/GraphicsSettings.hpp"
+#include "client/FrameBufferCache.hpp"
+#include "client/GxWindow.hpp"
 #include "client/RenderSettings.hpp"
+#include "client/Resample.hpp"
 #include "console/Var.hpp"
 #include "daynight/DayNight.hpp"
 #include "gx/Gx.hpp"
+#include "gx/GxRenderTargets.hpp"
+#include "gx/d3d12/DeviceD3d12.hpp"
 #include "model2/CM2Lighting.hpp"
 #include "model2/M2Camera.hpp"
 #include "model2/M2Scene.hpp"
 #include "shadereffect/ShaderEffectPipeline.hpp"
 #include "storm/Memory.hpp"
+#include "ui/CSimpleModel.hpp"
 #include "storm/String.hpp"
 #include "threadpool/ThreadPool.hpp"
 #include "ui/FrameTime.hpp"
@@ -670,17 +676,265 @@ void* WorldSceneViewFromCamera(void* out, CM2Camera* camera) {
     return out;
 }
 
+// The camera's view (its rotation, the translation left to the camera position) and its
+// perspective projection at `aspect`.
+// ref: FUN_1424d1db0
+void CameraViewMatrices(const float* camera, float aspect, float* view, float* projection) {
+    view[0] = -camera[4];
+    view[1] = camera[8];
+    view[2] = camera[0];
+    view[3] = 0.0f;
+    view[4] = -camera[5];
+    view[5] = camera[9];
+    view[6] = camera[1];
+    view[7] = 0.0f;
+    view[8] = -camera[6];
+    view[9] = camera[10];
+    view[10] = camera[2];
+    view[11] = 0.0f;
+    view[12] = 0.0f;
+    view[13] = 0.0f;
+    view[14] = 0.0f;
+    view[15] = 1.0f;
+    float perspective[16];
+    MatrixIdentity(perspective);
+    MatrixPerspective(camera[16], aspect, camera[17], camera[18], perspective);
+    std::memcpy(projection, perspective, 0x40);
+}
+
+namespace {
+
+void MatrixMultiply4(const float* a, const float* b, float* out) {
+    for (int32_t row = 0; row < 4; row++) {
+        for (int32_t column = 0; column < 4; column++) {
+            out[row * 4 + column] = a[row * 4 + 3] * b[12 + column] + a[row * 4 + 2] * b[8 + column]
+                + a[row * 4 + 1] * b[4 + column] + a[row * 4] * b[column];
+        }
+    }
+}
+
+}  // namespace
+
+// The view of a frame's rectangle: its insets turned to the window's axes, the camera's (or
+// the orthographic) matrices, the rectangle and insets taken to the screen's units, and a
+// projection that lands the scene on the rectangle inside the current viewport. The scene is
+// then animated and latched with that view, given the camera's clips and the frame's fog, and
+// drawn.
+// ref: FUN_1424d0a40
+void WorldSceneRenderView(CWorldScene* scene, uint32_t* params, const float* camera, MODELFRAMEVIEW* block,
+    FRAMEBUFFER* sceneBuffer, FRAMEBUFFER* sharedBuffer, float elapsed, uint32_t flags) {
+    GxRenderContext* context = g_gxRenderContext;
+    const float epsilon = 1.0e-5f;     // DAT_1426c75c4
+    float viewportZ0 = context->Field<float>(0x2c);
+    float viewportY0 = context->Field<float>(0x24);
+    float viewportZ1 = context->Field<float>(0x30);
+    float viewportY1 = context->Field<float>(0x28);
+    float viewportX0 = context->Field<float>(0x1c);
+    float viewportX1 = context->Field<float>(0x20);
+    if (!(epsilon < std::fabs(viewportX1 - viewportX0)) || !(epsilon < std::fabs(viewportY1 - viewportY0))) {
+        return;
+    }
+    float* rect = block->m_rect;
+    float* insets = block->m_insets;
+    float top = insets[0];
+    insets[0] = insets[2];
+    insets[3] = -insets[3];
+    insets[2] = -top;
+    float view[16];
+    float projection[16];
+    MatrixIdentity(view);
+    MatrixIdentity(projection);
+    float position[3] = {0.0f, 0.0f, 0.0f};
+    if ((block->m_hasTransform & 1) == 0) {
+        float width = (insets[3] + rect[3]) - (rect[1] + insets[1]);
+        float height = (insets[2] + rect[2]) - (insets[0] + rect[0]);
+        if (!(epsilon < width) || !(epsilon < height)) {
+            return;
+        }
+        CameraViewMatrices(camera, width / height, view, projection);
+        float scale = camera[19];
+        position[0] = scale * camera[12];
+        position[1] = scale * camera[13];
+        position[2] = scale * camera[14];
+    } else {
+        float origin[2] = {rect[1], rect[0]};
+        M2CameraGetOrthoMatrices(rect, origin, nullptr, view, projection);
+    }
+    // To the screen's units: x across, y up.
+    const float unitsX = 0.8f;     // DAT_142ccb9f4
+    const float unitsY = 0.6f;     // DAT_142ccb9f8
+    rect[1] /= unitsX;
+    rect[0] /= unitsY;
+    rect[3] /= unitsX;
+    rect[2] /= unitsY;
+    insets[1] /= unitsX;
+    insets[0] /= unitsY;
+    insets[3] /= unitsX;
+    insets[2] /= unitsY;
+    block->m_translation[0] /= unitsX;
+    block->m_translation[1] /= unitsY;
+    float translationX = block->m_translation[0];
+    float translationY = block->m_translation[1];
+    const float* target = &context->Field<float>(8);
+    float scaleY = target[2];
+    float scaleX = target[3];
+    if (!(epsilon < scaleX) || !(epsilon < scaleY)) {
+        return;
+    }
+    // The rectangle in the target's pixels.
+    float left = (insets[1] + rect[1] + translationX) * scaleX;
+    float upper = (insets[2] + rect[2] + translationY) * scaleY;
+    float halfWidth = ((insets[3] + rect[3] + translationX) * scaleX - left) * 0.5f;
+    float halfHeight = (upper - (rect[0] + insets[0] + translationY) * scaleY) * 0.5f;
+    float centerX = halfWidth + left;
+    float centerY = upper - halfHeight;
+    // The viewport's mapping from clip space to pixels, inverted.
+    float viewportMap[16] = {};
+    viewportMap[0] = (scaleX * viewportX1 - scaleX * viewportX0) * 0.5f;
+    viewportMap[5] = (scaleY * viewportY1 - scaleY * viewportY0) * 0.5f;
+    viewportMap[10] = viewportZ1 - viewportZ0;
+    viewportMap[12] = viewportMap[0] + scaleX * viewportX0;
+    viewportMap[13] = scaleY * viewportY1 - viewportMap[5];
+    viewportMap[14] = viewportZ0;
+    viewportMap[15] = 1.0f;
+    float inverse[16];
+    MatrixInverse(viewportMap, inverse, MatrixDeterminant(viewportMap));
+    // The frame's mapping from clip space to its rectangle's pixels.
+    float rectMap[16] = {};
+    rectMap[0] = halfWidth;
+    rectMap[5] = halfHeight;
+    rectMap[10] = viewportZ1 - viewportZ0;
+    rectMap[12] = centerX;
+    rectMap[13] = centerY;
+    rectMap[14] = viewportZ0;
+    rectMap[15] = 1.0f;
+    float placed[16];
+    MatrixMultiply4(projection, rectMap, placed);
+    float final[16];
+    MatrixMultiply4(placed, inverse, final);
+    context->SetScissor(rect);
+    M2SetProjectionConstants(context, final);
+    auto worldView = reinterpret_cast<CWorldView*>(params);
+    std::memcpy(worldView->m_matrices[5], final, 0x40);
+    std::memcpy(worldView->m_matrices[4], view, 0x40);
+    WorldSceneAnimate(scene, params, 0.0f, position, nullptr, flags, false);
+    scene->LatchView(worldView);
+    scene->m_nearClip = camera[17];
+    scene->m_farClip = camera[18];
+    block->m_fog.m_words[39] = 0x3f800000;
+    scene->m_fogs[0] = block->m_fog;
+    CM2Scene* m2Scene = scene->m_m2Scene;
+    m2Scene->m_flags = s_features[1] ? (m2Scene->m_flags | 0x100) : (m2Scene->m_flags & ~0x100u);
+    m2Scene->m_flags = s_features[2] ? (m2Scene->m_flags | 0x400) : (m2Scene->m_flags & ~0x400u);
+    WORLDRENDERPARAMS render;
+    std::memset(&render, 0, sizeof(render));
+    render.m_scene = sceneBuffer;
+    render.m_shared = sharedBuffer;
+    render.m_passes = 6;
+    std::memcpy(render.m_position, position, 12);
+    render.m_elapsed = elapsed;
+    render.m_size[0] = sceneBuffer->m_size[0];
+    render.m_size[1] = sceneBuffer->m_size[1];
+    render.m_view = worldView;
+    scene->Render(&render);
+}
+
+// The frame drawn through a buffer of the window's size: cleared, with a second set of
+// targets sharing its depth when `flags` bit 0 asks, the view drawn into it, then resolved (or
+// moved) and resampled into `target` (the window's frame buffer when null) with the full
+// viewport, and the scissor put back.
 // ref: FUN_1424d1370
 void WorldSceneRenderFrame(CWorldScene* scene, uint32_t* params, void* view, const void* frame, void* target,
     float elapsed, uint32_t flags) {
-    (void)scene;
+    GxRenderContext* context = g_gxRenderContext;
+    context->UnbindTextures();
+    GXSIZE resolution;
+    WindowGetResolution(&resolution);
+    int32_t size[2] = {resolution.m_width, resolution.m_height};
+    uint8_t samples = g_renderSettings.m_msaaSamples;
+    uint8_t quality = g_renderSettings.m_msaaQuality;
+    FRAMEBUFFER sceneBuffer;
+    FrameBufferInit(&sceneBuffer);
+    sceneBuffer.m_width = size[0];
+    sceneBuffer.m_height = size[1];
+    FRAMEBUFFERTARGET& color = sceneBuffer.m_color[0];
+    color.m_format = 2;
+    color.m_samples = samples;
+    color.m_08 = quality;
+    color.m_renderTarget = 1;
+    color.m_shaderResource = samples == 0 ? 1 : 0;
+    FRAMEBUFFERTARGET& depth = sceneBuffer.m_depth;
+    depth.m_format = 0x1e;
+    depth.m_samples = samples;
+    depth.m_08 = quality;
+    depth.m_renderTarget = 1;
+    depth.m_shaderResource = samples == 0 ? 1 : 0;
+    depth.m_10 = samples == 0 ? 1 : 0;
+    FrameBufferBind(&sceneBuffer);
+    context->Clear(sceneBuffer.m_targets.m_count != 0 ? &sceneBuffer.m_targets : nullptr, 0x3f, 0, 0.0f, 0, 0);
+    float scissor[4] = {};
+    context->GetScissor(scissor);
+    FRAMEBUFFER sharedBuffer;
+    FrameBufferInit(&sharedBuffer);
+    GxRenderTargetsClear(&sharedBuffer.m_targets);
+    if (flags & 1) {
+        FrameBufferSetupSharedDepth(&sharedBuffer, size,
+            sceneBuffer.m_targets.m_count != 0 ? &sceneBuffer.m_targets : nullptr);
+        FrameBufferBind(&sharedBuffer);
+    }
+    MODELFRAMEVIEW block;
+    std::memcpy(&block, frame, sizeof(block));
+    WorldSceneRenderView(scene, params, static_cast<const float*>(view), &block, &sceneBuffer, &sharedBuffer, elapsed,
+        flags);
+    FRAMEBUFFER resolved;
+    FrameBufferInit(&resolved);
+    if (samples != 0) {
+        FrameBufferResolve(context, &sceneBuffer, &resolved);
+    } else {
+        FrameBufferMove(&resolved, &sceneBuffer);
+    }
+    auto destination = static_cast<FRAMEBUFFER*>(target);
+    if (destination == nullptr) {
+        destination = WindowGetFrameBuffer();
+    }
+    if (destination->m_bound == 0) {
+        return;
+    }
+    float* viewport = &context->Field<float>(0x1c);
+    if (viewport[0] != 0.0f || viewport[1] != 1.0f || viewport[2] != 0.0f || viewport[3] != 1.0f
+        || viewport[4] != 0.0f || viewport[5] != 1.0f) {
+        viewport[0] = 0.0f;
+        viewport[1] = 1.0f;
+        viewport[2] = 0.0f;
+        viewport[3] = 1.0f;
+        viewport[4] = 0.0f;
+        viewport[5] = 1.0f;
+        context->Field<uint8_t>(0x18) = 1;
+    }
+    float full[4] = {0.0f, 0.0f, 1.0f, 1.0f};      // DAT_1426c8890
+    WorldSceneSetRect(full, scene);
+    RESAMPLEOPTIONS options = {};
+    // The reference reads the destination's colour texture at a null +0x48 when it has none.
+    gxDx12Backend::Tex* destTex = destination->m_targets.m_texs[1];
+    ResampleToTarget(context, WorldSceneGetEnv(scene), resolved.m_targets.m_texs[1], destTex, &options, true);
+    FrameBufferRelease(&resolved);
+    context->SetScissor(scissor);
+    if (sharedBuffer.m_targets.m_count != 0) {
+        FrameBufferRelease(&sharedBuffer);
+    }
+}
+
+// ref: FUN_141352960
+void WorldSceneSetRect(const float* rect, CWorldScene* scene) {
+    std::memcpy(scene->m_0c8, rect, 0x10);
+}
+
+// The scene's draw into the parameters' buffers: the occlusion, the shadow and the deferred
+// passes, the map and the models. Not ported yet.
+// ref: FUN_1413c5ce0
+void CWorldScene::Render(WORLDRENDERPARAMS* params) {
     (void)params;
-    (void)view;
-    (void)frame;
-    (void)target;
-    (void)elapsed;
-    (void)flags;
-    FROST_UNIMPLEMENTED();  // the frame's render targets, FUN_1424d0a40 and the resolve
+    FROST_UNIMPLEMENTED();
 }
 
 // ref: FUN_141357340

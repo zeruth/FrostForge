@@ -109,6 +109,16 @@ void FrameBufferTempInitFormat(FRAMEBUFFERTEMP* temp, const char* name, const in
 void FrameBufferTempAcquire(FRAMEBUFFERTEMP* temp);
 void FrameBufferTempRelease(FRAMEBUFFERTEMP* temp);
 
+// Sets a buffer's size and its first colour and depth targets, with no textures
+// (FUN_1412a0340).
+void FrameBufferSetupTargets(FRAMEBUFFER* buffer, const int32_t* size, const FRAMEBUFFERTARGET* color,
+    const FRAMEBUFFERTARGET* depth);
+// Two colour targets sharing `shared`'s depth texture when not multisampled (FUN_1412b2130).
+void FrameBufferSetupSharedDepth(FRAMEBUFFER* buffer, const int32_t* size, GXRENDERTARGETS* shared);
+// Moves a bound buffer (FUN_14129f070) and resolves one into another (FUN_1412a1070).
+FRAMEBUFFER* FrameBufferMove(FRAMEBUFFER* dest, FRAMEBUFFER* source);
+void FrameBufferResolve(GxRenderContext* context, FRAMEBUFFER* source, FRAMEBUFFER* dest);
+
 // What the frame passes run on the colour target 0 of `buffer` while copying, flipping, or
 // reading and resolving it through a borrowed target (FUN_1412a0cf0, FUN_1412a0e30,
 // FUN_1412a0f80).

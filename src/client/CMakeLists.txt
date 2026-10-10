@@ -12,6 +12,7 @@ add_library(client STATIC
     Main.cpp
     Startup.cpp
     FrameBufferCache.cpp
+    Resample.cpp
     RenderSettings.cpp
     StartupClient.cpp
     StartupService.cpp

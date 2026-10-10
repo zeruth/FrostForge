@@ -1757,7 +1757,7 @@ void GxFrameEndWait(GXFRAMEEND* frameEnd, uint32_t mode, uint32_t unused) {
         frameEnd->m_callback.m_manager = blz::function_empty_manager;
     }
     if (GxDevExists()) {
-        g_gxRenderContext->Slot038();
+        g_gxRenderContext->UnbindTextures();
     }
     InterlockedExchange8(reinterpret_cast<volatile char*>(&frameEnd->m_pending), 0);
     frameEnd->m_began = 0;

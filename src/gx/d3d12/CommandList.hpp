@@ -244,7 +244,8 @@ class GxRenderContext {
     virtual void SetSampler(uint8_t stage, uint32_t slot, uint64_t key);  // 0x028
     // The texture a stage reads at a slot, with the sampler its usage describes.
     virtual void SetTexture(uint8_t stage, uint32_t slot, gxDx12Backend::Tex* tex);  // 0x030
-    virtual void Slot038();                 // FUN_14228fa90
+    // Unbinds every stage's textures and unordered views.
+    virtual void UnbindTextures();          // 0x038
     virtual void Slot040();
     virtual void Slot048();
     virtual void Slot050();
@@ -322,6 +323,10 @@ class GxRenderContext {
 
     // Sets the viewport, flagging it when it changed (FUN_14228f680).
     void SetViewport(const float* viewport);
+    // The scissor rectangle (+0x78), set flagging it when it changed (FUN_14228f790,
+    // FUN_14228f960).
+    void GetScissor(float* rect);
+    void SetScissor(const float* rect);
 
     uint8_t m_state[0x2f8];                 // 0x008
 };

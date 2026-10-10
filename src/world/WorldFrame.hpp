@@ -37,7 +37,8 @@ void WorldSceneAnimateFrame(CWorldScene* scene, CWorldView* view, const float* p
 void WorldSceneUpdate(CWorldScene* scene, uint32_t* params, bool skipDrawParams, const float* position);
 // The view a camera gives (0x50 bytes at `out`: its matrix, field of view, clips and aspect).
 void* WorldSceneViewFromCamera(void* out, CM2Camera* camera);
-// Draws the scene into a frame's rectangle.
+// Draws the scene into a frame's rectangle (`view` from WorldSceneViewFromCamera, `frame` a
+// MODELFRAMEVIEW, `target` a FRAMEBUFFER or null for the window's).
 void WorldSceneRenderFrame(CWorldScene* scene, uint32_t* params, void* view, const void* frame, void* target,
     float elapsed, uint32_t flags);
 
@@ -46,6 +47,9 @@ void WorldSceneRenderFrame(CWorldScene* scene, uint32_t* params, void* view, con
 bool WorldSceneModelReady(CWorldScene* scene, const char* name, uint8_t priority);
 // ref: FUN_1413cb320
 bool WorldScenesModelReady(const char* name, uint8_t priority);
+
+// The scene's screen rectangle (scene + 0xc8).
+void WorldSceneSetRect(const float* rect, CWorldScene* scene);
 
 // DAT_1430ab790: DayNight's zone lights and light run on a pool job.
 extern uint8_t g_dayNightOnJob;
