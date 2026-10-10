@@ -11,12 +11,10 @@
 
 // ---- CM2Model ------------------------------------------------------------------------------
 
-// ref: FUN_1411e6070
 void M2ModelAddRef(CM2Model* model) {
     model->AddRef();
 }
 
-// ref: FUN_1411e7880
 uint32_t M2ModelRelease(CM2Model* model) {
     return model->Release(1);
 }
@@ -31,7 +29,6 @@ bool M2ModelHasExternalTransform(CM2Model* model) {
     return (model->m_flags >> 2 & 1) != 0;
 }
 
-// ref: FUN_1411e74e0
 bool M2ModelIsReady(CM2Model* model) {
     return model->IsReady();
 }
@@ -194,7 +191,6 @@ void M2ModelResetEmitters(CM2Model* model) {
     }
 }
 
-// ref: FUN_1411e7fa0
 void M2ModelSetWorldTransform(CM2Model* model, const float* matrix) {
     model->SetLocalMatrix(matrix);
 }
@@ -246,7 +242,6 @@ void M2ModelSetCallback318(CM2Model* model, void* callback, void* param) {
     model->m_lightingParam = param;
 }
 
-// ref: FUN_1411e7c70
 void M2ModelSetLoadCallback(CM2Model* model, void (*callback)(CM2Model* model, void* param), void* param) {
     model->SetLoadCallback(reinterpret_cast<void (*)(CM2BaseModel*, void*)>(callback), param);
 }

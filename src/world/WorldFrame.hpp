@@ -37,6 +37,12 @@ void WorldSceneAnimateFrame(CWorldScene* scene, CWorldView* view, const float* p
 void WorldSceneUpdate(CWorldScene* scene, uint32_t* params, bool skipDrawParams, const float* position);
 // The view a camera gives (0x50 bytes at `out`: its matrix, field of view, clips and aspect).
 void* WorldSceneViewFromCamera(void* out, CM2Camera* camera);
+struct FRAMEBUFFER;
+struct MODELFRAMEVIEW;
+// The frame's view set up and the scene drawn into `sceneBuffer` (and `sharedBuffer`).
+// ref: FUN_1424d0a40
+void WorldSceneRenderView(CWorldScene* scene, uint32_t* params, const float* camera, MODELFRAMEVIEW* block,
+    FRAMEBUFFER* sceneBuffer, FRAMEBUFFER* sharedBuffer, float elapsed, uint32_t flags);
 // Draws the scene into a frame's rectangle (`view` from WorldSceneViewFromCamera, `frame` a
 // MODELFRAMEVIEW, `target` a FRAMEBUFFER or null for the window's).
 void WorldSceneRenderFrame(CWorldScene* scene, uint32_t* params, void* view, const void* frame, void* target,

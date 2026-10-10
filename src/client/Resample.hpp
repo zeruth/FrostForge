@@ -27,6 +27,9 @@ void ResampleDeviceCreated(void* param);
 void ResampleDeviceDestroyed(void* param);
 void ResampleShutdown();
 
+// ref: FUN_14129d910
+RESAMPLEOPTIONS* RenderSettingsResampleOptions(RESAMPLEOPTIONS* out);
+
 // Draws `source` into `dest` through the environment's rectangle, over what is there when
 // `blend` (FUN_1412a29c0).
 void ResampleToTarget(GxRenderContext* context, const void* environment, gxDx12Backend::Tex* source,

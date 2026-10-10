@@ -240,3 +240,25 @@ void ResampleToTarget(GxRenderContext* context, const void* environment, gxDx12B
         FrameBufferTempRelease(&temp);
     }
 }
+
+// The upscaler and sharpness the settings ask for: a render scale above 1 copies or upscales
+// bilinearly at most; sharpening needs a sharpness and either the always-sharpen flag or FSR at
+// a reduced scale.
+// ref: FUN_14129d910
+RESAMPLEOPTIONS* RenderSettingsResampleOptions(RESAMPLEOPTIONS* out) {
+    uint8_t mode = g_renderSettings.m_upscaler;
+    float scale = g_renderSettings.m_renderScale;
+    float sharpness = g_renderSettings.m_sharpness;
+    out->m_mode = mode;
+    out->m_sharpness = sharpness;
+    if (1.0f < scale && (mode == 0 || mode == 3)) {
+        out->m_mode = 2;
+        mode = 2;
+    }
+    if (0.0f <= sharpness && ((g_renderSettings.m_flags & 0x400) != 0 || (mode == 3 && scale < 1.0f))) {
+        out->m_sharpen = 1;
+        return out;
+    }
+    out->m_sharpen = 0;
+    return out;
+}

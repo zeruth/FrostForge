@@ -25,7 +25,7 @@ extern "C" {
 
 int32_t CSimpleModel::s_metaTable = -2;
 int32_t CSimpleModel::s_restrictedMetaTable = -2;
-bool CSimpleModel::s_drawFlagAll;
+bool CSimpleModel::s_drawFlagAll = true;
 
 namespace {
 
@@ -85,7 +85,7 @@ void RenderModel(void* param, const float* view, const float* projection, void* 
     block.m_fog = frame->m_fog;
     if (!(frame->m_modelFlags & CSimpleModel::MODEL_FOG_COLOR)) {
         block.m_fog.m_words[1] = 0x4b189680;    // 1e7
-        block.m_fog.m_words[3] = 0x4cbebc20;    // 1e8
+        block.m_fog.m_words[2] = 0x4cbebc20;    // 1e8
         block.m_fog.m_words[4] = 0;
     }
     float scale = frame->m_layoutScale;

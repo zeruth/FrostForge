@@ -10,7 +10,17 @@
 #include "model2/M2Api.hpp"
 #include "ui/BinaryXML.hpp"
 #include "ui/CRenderBatch.hpp"
+#include "client/FrameBufferCache.hpp"
+#include "client/GxWindow.hpp"
+#include "client/RenderSettings.hpp"
+#include "client/Resample.hpp"
+#include "gx/Gx.hpp"
+#include "gx/GxRenderTargets.hpp"
+#include "gx/d3d12/DeviceD3d12.hpp"
 #include "util/Unimplemented.hpp"
+#include "world/WorldFrame.hpp"
+#include "world/WorldScene.hpp"
+#include <cmath>
 
 extern "C" {
 #include "lauxlib.h"
@@ -35,17 +45,243 @@ void ModelEvent(void* param, uint32_t event, void* data) {
     }
 }
 
-// The full-screen-effect draw: the glow (FUN_1405dd5d0 with the frame's glow as a byte), the
-// render targets of the global renderer (DAT_14348b658), the scene drawn through the frame's
-// camera (FUN_1424d0a40) when it has a model and a camera, and the effect passes.
+// The full-screen effects (Engine/Source/FFX): their slots (DAT_142e97120), the glow pass
+// (DAT_142e97788), the anti-aliasing mode (DAT_142e97028) and the other passes' switches. The
+// FFX module is not ported, so every switch reads its initial 0.
+uint8_t s_ffxGlow;                  // DAT_142e97788
+uint8_t s_ffxAntiAliasing;          // DAT_142e97028
+uint8_t s_ffxPassSlot;              // DAT_142e96fd0
+void* s_ffxSlots[8];                // DAT_142e97120
+uint8_t s_ffxDeathEffect;           // DAT_1447aec40
+uint8_t s_ffxNetherEffect;          // DAT_142e9769b
+// DAT_142e96fc8: the targets sharing the scene's depth, while an FFX frame draws.
+GXRENDERTARGETS* s_ffxSharedTargets;
+
+// ref: FUN_1405dd5d0
+void FfxEffectBegin(uint8_t slot, uint32_t pass, const uint32_t* config) {
+    (void)pass;
+    (void)config;
+    if (slot != 0) {
+        FROST_UNIMPLEMENTED();  // the slot's effect (vtable +0x28)
+    }
+}
+
+// ref: FUN_1405e7e00
+uint8_t FfxGlowEnabled() {
+    return s_ffxGlow;
+}
+
+// ref: FUN_1405dc960
+bool FfxAntiAliasingEnabled() {
+    return s_ffxAntiAliasing != 0;
+}
+
+// CMAA (and CMAA2) over the buffer's colour. Not ported.
+// ref: FUN_1405dd540
+void FfxAntiAlias(FRAMEBUFFER* buffer) {
+    (void)buffer;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1405dcf00
+bool FfxPassActive() {
+    return s_ffxSlots[s_ffxPassSlot] != nullptr;
+}
+
+// ref: FUN_1424a59d0
+uint8_t FfxDeathEffectEnabled() {
+    return s_ffxDeathEffect;
+}
+
+// ref: FUN_1405e4e70
+uint8_t FfxNetherEffectEnabled() {
+    return s_ffxNetherEffect;
+}
+
+// The passes run on the frame's colour through a borrowed target (FUN_141696f50 the glow,
+// FUN_141696fd0 the slot's pass, FUN_141697050 the death effect, FUN_1413c1110 the nether
+// effect). Their bodies (FUN_1405e8060, FUN_1405dca30, FUN_1424a57e0, FUN_1405e4e80) are not
+// ported.
+// ref: FUN_141696f50
+void FfxGlowPass(void* param, GxRenderContext* context, void* source, void* dest) {
+    (void)param;
+    (void)context;
+    (void)source;
+    (void)dest;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141696fd0
+void FfxSlotPass(void* param, GxRenderContext* context, void* source, void* dest) {
+    (void)param;
+    (void)context;
+    (void)source;
+    (void)dest;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141697050
+void FfxDeathPass(void* param, GxRenderContext* context, void* source, void* dest) {
+    (void)param;
+    (void)context;
+    (void)source;
+    (void)dest;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1413c1110
+void FfxNetherPass(void* param, GxRenderContext* context, void* source, void* dest) {
+    (void)param;
+    (void)context;
+    (void)source;
+    (void)dest;
+    FROST_UNIMPLEMENTED();
+}
+
+// The character screens' camera (UIUtil/CameraManager.cpp, DAT_14323f220) stepped from the
+// frame's camera and made the frame's override camera (DAT_143122530). Not ported: the frame
+// draws through its own camera.
+// ref: FUN_141696200
+void ModelFfxSyncCamera(CSimpleModelFFX* frame) {
+    (void)frame;
+    FROST_UNIMPLEMENTED();
+}
+
+// The scene drawn through a buffer of the scaled window size (cleared to opaque black), with
+// targets sharing its depth for frames that draw their first flag, through the frame's camera
+// into its rectangle; then resolved or moved, given the glow and anti-aliasing, resampled into
+// the target as the settings ask, and given the remaining effect passes.
 // ref: FUN_141697e50
 void RenderModelFFX(void* param, const float* view, const float* projection, void* target) {
     (void)view;
     (void)projection;
-    (void)target;
     auto frame = static_cast<CSimpleModelFFX*>(param);
-    (void)frame;
-    FROST_UNIMPLEMENTED();  // the FFX render path (WorldClient2's renderer)
+    uint32_t glow[3] = {0, static_cast<uint32_t>(std::nearbyint(frame->m_glow * 255.0f)) & 0xff, 0};
+    FfxEffectBegin(1, 3, glow);
+    GXSIZE resolution;
+    WindowGetResolution(&resolution);
+    int32_t windowSize[2] = {resolution.m_width, resolution.m_height};
+    int32_t size[2];
+    RenderSettingsScaledSize(size, windowSize);
+    GxRenderContext* context = g_gxRenderContext;
+    uint8_t samples = g_renderSettings.m_msaaSamples;
+    uint8_t quality = g_renderSettings.m_msaaQuality;
+    FRAMEBUFFER sceneBuffer;
+    FrameBufferInit(&sceneBuffer);
+    sceneBuffer.m_width = size[0];
+    sceneBuffer.m_height = size[1];
+    FRAMEBUFFERTARGET& color = sceneBuffer.m_color[0];
+    color.m_format = 2;
+    color.m_samples = samples;
+    color.m_08 = quality;
+    color.m_renderTarget = 1;
+    color.m_shaderResource = samples == 0 ? 1 : 0;
+    FRAMEBUFFERTARGET& depth = sceneBuffer.m_depth;
+    depth.m_format = 0x1e;
+    depth.m_samples = samples;
+    depth.m_08 = quality;
+    depth.m_renderTarget = 1;
+    depth.m_shaderResource = samples == 0 ? 1 : 0;
+    depth.m_10 = samples == 0 ? 1 : 0;
+    FrameBufferBind(&sceneBuffer);
+    context->Clear(sceneBuffer.m_targets.m_count != 0 ? &sceneBuffer.m_targets : nullptr, 0x3f, 0xff000000, 0.0f, 0, 0);
+    FRAMEBUFFER sharedBuffer;
+    FrameBufferInit(&sharedBuffer);
+    GxRenderTargetsClear(&sharedBuffer.m_targets);
+    if ((frame->GetDrawFlags() & 1) != 0 && CSimpleModel::s_drawFlagAll) {
+        FrameBufferSetupSharedDepth(&sharedBuffer, size,
+            sceneBuffer.m_targets.m_count != 0 ? &sceneBuffer.m_targets : nullptr);
+        FrameBufferBind(&sharedBuffer);
+        s_ffxSharedTargets = sharedBuffer.m_targets.m_count != 0 ? &sharedBuffer.m_targets : nullptr;
+    }
+    if (frame->m_model != nullptr && frame->m_camera != nullptr) {
+        ModelFfxSyncCamera(frame);
+        float scissor[4] = {};
+        context->GetScissor(scissor);
+        frame->UpdateModelTransform();
+        MODELFRAMEVIEW block;
+        std::memset(&block, 0, sizeof(block));
+        block.m_fog = frame->m_fog;
+        if ((frame->m_modelFlags & CSimpleModel::MODEL_FOG_COLOR) == 0) {
+            block.m_fog.m_words[1] = 0x4b189680;    // 1e7
+            block.m_fog.m_words[2] = 0x4cbebc20;    // 1e8
+            block.m_fog.m_words[4] = 0;
+        }
+        std::memcpy(block.m_rect, &frame->m_rect, sizeof(block.m_rect));
+        block.m_hasTransform = (frame->m_modelFlags & CSimpleModel::MODEL_TRANSFORM) != 0 ? 1 : 0;
+        block.m_translation[0] = frame->m_viewTranslation[0];
+        block.m_translation[1] = frame->m_viewTranslation[1];
+        std::memcpy(block.m_insets, frame->m_viewInsets, sizeof(block.m_insets));
+        uint32_t flags = frame->GetDrawFlags();
+        float elapsed = frame->m_elapsed;
+        CM2Camera* camera = frame->m_overrideCamera != nullptr ? frame->m_overrideCamera : frame->m_camera;
+        uint8_t cameraView[0x64];
+        void* cameraBlock = WorldSceneViewFromCamera(cameraView, camera);
+        CWorldScene* scene = frame->GetScene();
+        uint32_t* params = WorldSceneGetParams(scene);
+        WorldSceneRenderView(frame->GetScene(), params, static_cast<const float*>(cameraBlock), &block, &sceneBuffer,
+            &sharedBuffer, elapsed, flags);
+        context->SetScissor(scissor);
+        frame->SetOverrideCamera(nullptr);
+    }
+    FRAMEBUFFER resolved;
+    FrameBufferInit(&resolved);
+    if (samples != 0) {
+        FrameBufferResolve(context, &sceneBuffer, &resolved);
+    } else {
+        FrameBufferMove(&resolved, &sceneBuffer);
+    }
+    if (FfxGlowEnabled()) {
+        FRAMEBUFFERFLIP flip = {context, &resolved, nullptr, 0};
+        FrameBufferExecuteFlipDiscard(&flip, FfxGlowPass, nullptr);
+    }
+    if (FfxAntiAliasingEnabled()) {
+        FfxAntiAlias(&resolved);
+    }
+    float* viewport = &context->Field<float>(0x1c);
+    if (viewport[0] != 0.0f || viewport[1] != 1.0f || viewport[2] != 0.0f || viewport[3] != 1.0f
+        || viewport[4] != 0.0f || viewport[5] != 1.0f) {
+        viewport[0] = 0.0f;
+        viewport[1] = 1.0f;
+        viewport[2] = 0.0f;
+        viewport[3] = 1.0f;
+        viewport[4] = 0.0f;
+        viewport[5] = 1.0f;
+        context->Field<uint8_t>(0x18) = 1;
+    }
+    CWorldScene* scene = frame->GetScene();
+    float full[4] = {0.0f, 0.0f, 1.0f, 1.0f};      // DAT_1426c8890
+    WorldSceneSetRect(full, scene);
+    void* environment = WorldSceneGetEnv(scene);
+    auto destination = static_cast<FRAMEBUFFER*>(target);
+    if (destination == nullptr) {
+        destination = WindowGetFrameBuffer();
+    }
+    if (destination->m_bound == 0) {
+        return;
+    }
+    RESAMPLEOPTIONS options;
+    RenderSettingsResampleOptions(&options);
+    // The reference reads the destination's colour texture at a null +0x48 when it has none.
+    ResampleToTarget(context, environment, resolved.m_targets.m_texs[1], destination->m_targets.m_texs[1], &options,
+        false);
+    FrameBufferRelease(&resolved);
+    if (FfxPassActive()) {
+        FRAMEBUFFERFLIP flip = {context, destination, nullptr, 1};
+        FrameBufferExecuteFlipDiscard(&flip, FfxSlotPass, &environment);
+    }
+    if (FfxDeathEffectEnabled()) {
+        FRAMEBUFFERFLIP flip = {context, destination, nullptr, 1};
+        FrameBufferExecuteFlipDiscard(&flip, FfxDeathPass, &environment);
+    }
+    if (FfxNetherEffectEnabled()) {
+        FRAMEBUFFERFLIP flip = {context, destination, nullptr, 1};
+        FrameBufferExecuteFlipDiscard(&flip, FfxNetherPass, nullptr);
+    }
+    context->SetRenderTargets(destination->m_targets.m_count != 0 ? &destination->m_targets : nullptr);
+    if (sharedBuffer.m_targets.m_count != 0) {
+        FrameBufferRelease(&sharedBuffer);
+    }
 }
 
 void InitBank(MODELFFXLIGHTS* bank, void* owner) {
