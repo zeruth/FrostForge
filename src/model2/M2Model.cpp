@@ -604,7 +604,10 @@ void M2ModelSetFlag400(bool set) {
 }
 
 void M2CreateModuleScene() {
-    FROST_UNIMPLEMENTED();  // FUN_141196e40: CM2Scene
+    static CM2Scene* s_moduleScene;  // DAT_1430a0ed0
+    if (s_moduleScene == nullptr) {
+        s_moduleScene = M2CacheCreateScene(9, nullptr, nullptr, nullptr);
+    }
 }
 
 // ref: FUN_1411ff490

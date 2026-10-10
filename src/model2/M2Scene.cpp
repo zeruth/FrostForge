@@ -2,8 +2,17 @@
 
 #include <cmath>
 #include <cstring>
+#include <new>
 
+#include "base/Matrix.hpp"
+#include "base/Status.hpp"
+#include "gx/Gx.hpp"
+#include "model2/M2Shared.hpp"
+#include "shadereffect/ShaderEffectManager.hpp"
 #include "storm/Memory.hpp"
+#include "storm/String.hpp"
+#include "texture/Texture.hpp"
+#include "threadpool/ThreadPool.hpp"
 #include "util/Unimplemented.hpp"
 
 // Engine/Source/Model2/M2Scene.cpp.
@@ -20,6 +29,98 @@ struct DRAWPARAMSARRAY {
     uint64_t m_count;
     uint64_t m_capacity;
 };
+
+const char* const s_sceneFile = "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Model2\\M2Scene.cpp";
+const char* const s_cacheFile = "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Model2\\M2Cache.cpp";
+const char* const s_particleFile = "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\ParticleSystem\\ParticleSystem2.cpp";
+const char* const s_newFile = "D:\\BuildServer\\A\\work-git\\wow\\Storm\\H\\SMemNew.h";
+// DAT_142da2080, DAT_142da20f8, DAT_142d61348.
+const char* const s_pipelinePairName = ".?AU?$pair@$$CBUKey@PipelineCache@Model3@@V?$unique_ptr@UGxPipeline@@UGxResourceDelete@@@blz@@@blz@@";
+const char* const s_hitRecName = ".?AUM2HitRec@@";
+const char* const s_indexName = ".?I";
+
+// Grows a vector to at least `count`: half again its capacity, or `count` when that is more.
+uint64_t GrowCapacity(uint64_t capacityField, uint64_t count) {
+    uint64_t grown = (capacityField >> 1 & 0x3fffffffffffffffull) + (capacityField & 0x7fffffffffffffffull);
+    return grown < count ? count : grown;
+}
+
+// ref: FUN_1411e53d0
+void M2HitRecsReserve(M2SceneVector<uint8_t>* recs, uint64_t count) {
+    uint64_t field = recs->m_capacity;
+    if ((field & 0x7fffffffffffffffull) >= count) {
+        return;
+    }
+    uint64_t capacity = GrowCapacity(field, count);
+    recs->m_capacity = ((field ^ capacity) & 0x8000000000000000ull) ^ capacity;
+    auto data = static_cast<uint8_t*>(SMemAlloc(capacity * 0x28, 0xb, s_hitRecName, SStrHashFnv1a(s_hitRecName), -6, 0));
+    if (recs->m_size != 0) {
+        std::memcpy(data, recs->m_data, recs->m_size * 0x28);
+    }
+    if (static_cast<int64_t>(recs->m_capacity) >= 0) {
+        SMemFree(recs->m_data, s_hitRecName, -6, 0);
+    }
+    recs->m_capacity &= 0x7fffffffffffffffull;
+    recs->m_data = data;
+}
+
+// The 0x88-byte entries: FUN_1411e4920 allocates, FUN_1411cf470 moves them over.
+// ref: FUN_1411e5510
+void M2SceneEntriesReserve(M2SceneVector<uint8_t>* entries, uint64_t count) {
+    if ((entries->m_capacity & 0x7fffffffffffffffull) >= count) {
+        return;
+    }
+    uint64_t field = entries->m_capacity;
+    uint64_t capacity = GrowCapacity(field, count);
+    entries->m_capacity = ((field ^ capacity) & 0x8000000000000000ull) ^ capacity;
+    auto data = static_cast<uint8_t*>(SMemAlloc(capacity * 0x88, 0x12, s_newFile, SStrHashFnv1a(s_newFile), 0xc6, 0));
+    if (entries->m_size != 0) {
+        std::memcpy(data, entries->m_data, entries->m_size * 0x88);
+    }
+    if (static_cast<int64_t>(entries->m_capacity) >= 0) {
+        SMemFree(entries->m_data, s_newFile, 0xca, 0);
+    }
+    entries->m_capacity &= 0x7fffffffffffffffull;
+    entries->m_data = data;
+}
+
+// FUN_1411e4860 allocates; the caller copies and frees.
+void M2SceneIndicesReserve(M2SceneVector<uint32_t>* indices, uint64_t count) {
+    if ((indices->m_capacity & 0x7fffffffffffffffull) >= count) {
+        return;
+    }
+    uint64_t field = indices->m_capacity;
+    uint64_t capacity = GrowCapacity(field, count);
+    indices->m_capacity = ((field ^ capacity) & 0x8000000000000000ull) ^ capacity;
+    auto data = static_cast<uint32_t*>(SMemAlloc(capacity * 4, 0xb, s_indexName, SStrHashFnv1a(s_indexName), -6, 0));
+    for (uint64_t i = 0; i < indices->m_size; i++) {
+        data[i] = indices->m_data[i];
+    }
+    if (static_cast<int64_t>(indices->m_capacity) >= 0) {
+        SMemFree(indices->m_data, s_indexName, -6, 0);
+    }
+    indices->m_capacity &= 0x7fffffffffffffffull;
+    indices->m_data = data;
+}
+
+// Inlined in FUN_1411ddca0.
+void M2SceneDrawParamsReserve(M2SceneVector<BaseModelDrawParams>* params, uint64_t count) {
+    uint64_t field = params->m_capacity;
+    if ((field & 0x7fffffffffffffffull) >= count) {
+        return;
+    }
+    uint64_t capacity = GrowCapacity(field, count);
+    params->m_capacity = ((field ^ capacity) & 0x8000000000000000ull) ^ capacity;
+    auto data = static_cast<BaseModelDrawParams*>(SMemAlloc(capacity << 5, 0xb, s_drawParamsName, SStrHashFnv1a(s_drawParamsName), -6, 0));
+    for (uint64_t i = 0; i < params->m_size; i++) {
+        data[i] = params->m_data[i];
+    }
+    if (static_cast<int64_t>(params->m_capacity) >= 0) {
+        SMemFree(params->m_data, s_drawParamsName, -6, 0);
+    }
+    params->m_capacity &= 0x7fffffffffffffffull;
+    params->m_data = data;
+}
 
 }  // namespace
 
@@ -129,6 +230,274 @@ void RayTracingMarkDirty(void* rayTracing, const int32_t* entry) {
     if (instance != nullptr) {
         instance[0x80] |= 1;
     }
+}
+
+// ref: FUN_1411d0040
+M2PipelineCache::M2PipelineCache() {
+    this->m_bucketCount = 8;
+    this->m_10 = 0;
+    this->m_18 = 0;
+    this->m_buckets = static_cast<uint8_t*>(SMemAlloc(0x4c0, 0xb, s_pipelinePairName, SStrHashFnv1a(s_pipelinePairName), -6, 0));
+    for (uint64_t i = 0; i < this->m_bucketCount; i++) {
+        this->m_buckets[i * 0x98 + 0x27] = 1;  // FUN_141205ae0: the bucket's end marker
+    }
+    this->m_maxLoad = 0.75f;
+    this->m_28[0] = 0;
+    this->m_28[1] = 0;
+    this->m_28[2] = 0;
+    this->m_28[3] = 0;
+    OsMutexInit(&this->m_lock);
+    this->m_maxLoad = 0.5f;
+}
+
+// ref: FUN_1411d0130
+M2SceneDrawList::M2SceneDrawList() {
+    this->m_08 = nullptr;
+    this->m_10 = nullptr;
+    this->m_18 = nullptr;
+    for (uint32_t i = 0; i < 0xe; i++) {
+        this->m_lists[i] = {};
+        this->m_lists2[i] = {};
+    }
+    for (uint32_t i = 0; i < 5; i++) {
+        this->m_2c0[i] = nullptr;
+    }
+}
+
+// ref: FUN_14124c1f0
+void M2ParticlePoolInit(M2ParticlePool* pool, int32_t particles) {
+    pool->m_bytes = particles * 0x1c0;
+    pool->m_data = static_cast<uint8_t*>(SMemAlloc(static_cast<uint64_t>(particles * 0x1c0), 0x15, s_particleFile,
+        SStrHashFnv1a(s_particleFile), 0xe13, 0));
+    InterlockedExchange(reinterpret_cast<volatile long*>(&pool->m_used), 0);
+}
+
+CM2Scene::CM2Scene(M2CACHE* cache, int32_t type) {
+    this->m_refCount = 1;
+    this->m_cacheLink.m_prevlink = nullptr;
+    this->m_cacheLink.m_next = nullptr;
+    this->m_owner = nullptr;
+    this->m_030 = nullptr;
+    this->m_038 = nullptr;
+    this->m_cache = cache;
+    void* memory = SMemAlloc(sizeof(M2PipelineCache), 1, s_sceneFile, SStrHashFnv1a(s_sceneFile), 0x221, 0);
+    this->m_pipelineCacheA = new (memory) M2PipelineCache();
+    memory = SMemAlloc(sizeof(M2PipelineCache), 1, s_sceneFile, SStrHashFnv1a(s_sceneFile), 0x222, 0);
+    this->m_pipelineCacheB = new (memory) M2PipelineCache();
+    auto map = static_cast<M2SceneLockedMap*>(SMemAlloc(sizeof(M2SceneLockedMap), 1, s_sceneFile, SStrHashFnv1a(s_sceneFile), 0x223, 0));
+    OsMutexInit(&map->m_lock);
+    for (uint32_t i = 0; i < 8; i++) {
+        map->m_08[i] = 0;
+    }
+    map->m_bucketCount = 8;
+    map->m_count = 0;
+    map->m_buckets = nullptr;
+    map->m_maxLoad = 1.0f;
+    this->m_lockedMap = map;
+    this->m_mapBuckets = 8;
+    this->m_mapCount = 0;
+    this->m_mapData = nullptr;
+    this->m_mapLoad = 1.0f;
+    this->m_models = nullptr;
+    this->m_released = nullptr;
+    this->m_088 = nullptr;
+    this->m_090 = nullptr;
+    this->m_time = 300000;
+    this->m_09c = 0;
+    this->m_frame = 0;
+    this->m_0a4 = 1;
+    this->m_0a8 = 0;
+    this->m_flags = 0;
+    this->m_pad0b4 = 0;
+    this->m_0b8 = 0;
+    this->m_0c0 = 0;
+    this->m_maxLights = 8;
+    OsMutexInit(&this->m_lock0d0);
+    this->m_crit0d8.Initialize();
+    for (uint32_t i = 0; i < 5; i++) {
+        OsMutexInit(&this->m_locks100[i]);
+    }
+    for (uint32_t i = 0; i < 0x40; i++) {
+        this->m_drawParams[i] = {};
+        this->m_drawParams2[i] = {};
+    }
+    this->m_particles.m_bytes = 0;
+    this->m_particles.m_data = nullptr;
+    this->m_particles.m_used = 0;
+    new (&this->m_sharedLock) blz::shared_mutex();
+    this->m_f60 = 0;
+    this->m_f68 = 0;
+    this->m_f70 = 0;
+    this->m_f78 = {};
+    for (uint32_t i = 0; i < 0xe; i++) {
+        this->m_f90[i] = {};
+        this->m_10e0[i] = {};
+        this->m_1230[i] = {};
+    }
+    for (uint32_t i = 0; i < 0x41; i++) {
+        new (&this->m_drawLists[i]) M2SceneDrawList();
+    }
+    MatrixIdentity(this->m_camera.m);
+    MatrixIdentity(this->m_viewProjection.m);
+    MatrixIdentity(this->m_d4f8.m);
+    std::memset(&this->m_windOrigin, 0, 0xd55c - 0xd538);
+    this->m_d568[0] = 0.0f;
+    this->m_d568[1] = 0.0f;
+    this->m_d568[2] = 1.0f;  // overwritten below with the identity rotation
+    this->m_d568[3] = 0.0f;
+    MatrixIdentity(this->m_d578.m);
+    MatrixIdentity(this->m_d5b8.m);
+    MatrixIdentity(this->m_d5f8.m);
+    std::memset(this->m_d638, 0, 0xd674 - 0xd638);
+    this->m_animateRatio = 10000.0f;
+    std::memset(this->m_d678, 0, sizeof(this->m_d678));
+    this->m_traceCallback = nullptr;
+    this->m_d6a0 = nullptr;
+    this->m_windCallback = nullptr;
+    std::memset(this->m_d6b0, 0, sizeof(this->m_d6b0));
+    this->m_hitRecs = {};
+    this->m_d6e0 = 0;
+    this->m_d6e4 = 0;
+    this->m_d6e8 = 0;
+    std::memset(this->m_d6f0, 0, 0xd70c - 0xd6f0);
+    this->m_d738 = 0;
+    this->m_d73c = 0;
+    this->m_defaultTexture = nullptr;
+    this->m_effectLitOpaque = nullptr;
+    this->m_effectLitTransparent = nullptr;
+    this->m_effectLitNoAlpha = nullptr;
+    this->m_effectShadowMonk = nullptr;
+    this->m_effectEdgeGlow = nullptr;
+    this->m_effectAvatar = nullptr;
+    this->m_effectProcedural = nullptr;
+    this->m_effectFlipbook = nullptr;
+    this->m_effectPrepass = nullptr;
+    this->m_rayTracing = nullptr;
+    for (uint32_t i = 0; i < 0xe; i++) {
+        this->m_d798[i] = {};
+    }
+    std::memset(this->m_d8e8, 0, sizeof(this->m_d8e8));
+    this->m_threadGroupA = nullptr;
+    this->m_db18 = 0;
+    this->m_bucketCounter = 0;
+    this->m_threadGroupB = nullptr;
+    this->m_collectDrawParams = true;
+    this->m_bucketModels = false;
+    this->m_daf0 = 0;
+    this->m_daf8 = 0;
+    this->m_db00 = 0;
+    this->m_db08 = 6;
+    this->m_db20 = 0;
+    this->m_db28 = 0;
+    this->m_db30 = 0;
+    for (uint32_t i = 0; i < 0x40; i++) {
+        this->m_buckets[i] = nullptr;
+    }
+    M2HitRecsReserve(&this->m_hitRecs, 0x200);
+    this->m_threadGroupB = ThreadPoolGroupCreate(2);
+    this->m_threadGroupA = ThreadPoolGroupCreate(2);
+    M2ParticlePoolInit(&this->m_particles, type != 6 ? 500 : 25000);
+    // DAT_14261aa10: the identity rotation.
+    this->m_d568[0] = 0.0f;
+    this->m_d568[1] = 0.0f;
+    this->m_d568[2] = 0.0f;
+    this->m_d568[3] = 1.0f;
+    this->m_frustum = nullptr;
+}
+
+// ref: FUN_1411df730
+void CM2Scene::Reserve(uint32_t count) {
+    if (count < 2) {
+        count = 2;
+    }
+    M2SceneEntriesReserve(&this->m_f78, count);
+    uint64_t half = count >> 1;
+    for (uint32_t i = 0; i < 0xe; i++) {
+        M2SceneIndicesReserve(&this->m_f90[i], half);
+        M2SceneIndicesReserve(&this->m_1230[i], half);
+    }
+}
+
+// ref: FUN_1411ddca0
+void CM2Scene::Initialize(int32_t type, void* owner, void* a4, void* a5, bool renderer) {
+    this->m_038 = a5;
+    this->m_owner = owner;
+    this->m_030 = a4;
+    this->m_type = type;
+    uint64_t perPass;
+    uint64_t perPass2;
+    if (type == 6) {
+        this->Reserve(20000);
+        perPass = 0x32;
+        this->m_bucketModels = true;
+        perPass2 = 0x19;
+    } else {
+        this->Reserve(0x100);
+        perPass = 10;
+        perPass2 = 5;
+    }
+    for (uint32_t i = 0; i < 0x40; i++) {
+        M2SceneDrawParamsReserve(&this->m_drawParams[i], perPass);
+    }
+    for (uint32_t i = 0; i < 0x40; i++) {
+        M2SceneDrawParamsReserve(&this->m_drawParams2[i], perPass2);
+    }
+    if (renderer) {
+        for (CM2BaseModel* model = this->m_models; model != nullptr; model = model->m_sceneNext) {
+            if (model->m_type == 0) {
+                static_cast<CM2Model*>(model)->m_shared->RefreshBatchEffects();
+            } else if (model->m_type == 3) {
+                FROST_UNIMPLEMENTED();  // FUN_1411ece70: an M3 model's effects (Model3 is not ported)
+            }
+            model->RefreshBatchEffects();
+        }
+        CStatus status;
+        this->m_defaultTexture = TextureCreate(0x6dbd7, 0x82001, &status, 0, 1, 0);
+        this->m_effectLitTransparent = ShaderEffectFind("LitSphere_Additive_Transparent");
+        this->m_effectLitOpaque = ShaderEffectFind("LitSphere_Additive_Opaque");
+        this->m_effectLitNoAlpha = ShaderEffectFind("LitSphere_Additive_Transparent_NoAlpha");
+        this->m_effectAvatar = ShaderEffectFind("Avatar");
+        this->m_effectProcedural = ShaderEffectFind("Procedural");
+        if (this->m_effectProcedural == nullptr) {
+            this->m_effectProcedural = ShaderEffectCreate("Procedural", 0x7c, 0xbf);
+        }
+        this->m_effectFlipbook = ShaderEffectFind("FlipbookImpostor");
+        if (this->m_effectFlipbook == nullptr) {
+            this->m_effectFlipbook = ShaderEffectCreate("FlipbookImpostor", 0x42, 0x75);
+        }
+        this->m_effectShadowMonk = ShaderEffectFind("ShadowMonk");
+        this->m_effectEdgeGlow = ShaderEffectFind("EdgeGlow");
+        this->m_effectPrepass = ShaderEffectFind("Model2PrepassOpaque");
+    }
+    int32_t kind = ((this->m_type - 1) & ~4) == 0 ? 1 : 0;
+    if (this->m_type == 8) {
+        kind = 2;
+    } else if (this->m_type == 6) {
+        kind = 3;
+    }
+    this->m_rayTracing = PhysicsWorldCreate(kind);
+}
+
+// ref: FUN_141196e40
+CM2Scene* M2CacheCreateScene(int32_t type, void* owner, void* a3, void* a4) {
+    void* memory = SMemAlloc(sizeof(CM2Scene), 0x12, s_cacheFile, SStrHashFnv1a(s_cacheFile), 0x735, 0);
+    auto scene = new (memory) CM2Scene(&g_m2Cache, type);
+    bool renderer = GxDevExists() && (g_m2Cache.m_flags & 0x800) == 0;
+    scene->Initialize(type, owner, a3, a4, renderer);
+    g_m2Cache.m_scenes.LinkToHead(scene);
+    return scene;
+}
+
+// The world (Physics.cpp, 0x98 bytes, FUN_14125d7a0) is a slot in the physics engine's own world
+// table (FUN_1424681d0, 0x850-byte worlds at 0x142463ae0 and on), which is not ported. A null
+// world is what the reference returns for kind 0 and on a CPU without SSE2, and every user of
+// the scene's world checks for it.
+// ref: FUN_14125deb0
+void* PhysicsWorldCreate(int32_t kind) {
+    if (kind != 0) {
+        FROST_UNIMPLEMENTED();
+    }
+    return nullptr;
 }
 
 // Ported with CM2Scene.

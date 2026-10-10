@@ -1687,6 +1687,21 @@ GxBuf* CM2Shared::GetVertexBuf(uint32_t slot) {
     return skin->m_vertexBuf;
 }
 
+// Every loaded profile's batch effects looked up again, after the effects were remade.
+// ref: FUN_1411a5aa0
+void CM2Shared::RefreshBatchEffects() {
+    for (uint32_t slot = 0; slot < 8; slot++) {
+        CM2SkinProfileData* skin = &this->m_skins[slot];
+        M2SkinProfile* profile = skin->m_profile;
+        if (profile == nullptr || profile->m_indices.m_count == 0) {
+            continue;
+        }
+        for (uint32_t i = 0; i < profile->m_batches.m_count; i++) {
+            skin->m_effects[i] = this->GetBatchEffect(&profile->m_batches[i]);
+        }
+    }
+}
+
 // The batch's shader effect: the projected ones by texture count, else by its vertex and pixel
 // shaders, else the fallback (FUN_1411a5a40).
 // ref: FUN_1411a8190

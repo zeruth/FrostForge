@@ -299,6 +299,8 @@ struct CM2Shared {
     GxBuf* GetVertexBuf(uint32_t slot);
     // A batch's shader effect (FUN_1411a8190).
     CShaderEffect* GetBatchEffect(const M2Batch* batch);
+    // Every loaded profile's batch effects looked up again (FUN_1411a5aa0).
+    void RefreshBatchEffects();
 };
 static_assert(sizeof(CM2Shared) == 0x620, "CM2Shared is 0x620 bytes");
 
