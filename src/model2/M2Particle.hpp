@@ -104,6 +104,12 @@ static_assert(offsetof(CParticleEmitter2, m_wind) == 0x214, "CParticleEmitter2 w
 static_assert(offsetof(CParticleEmitter2, m_combiner) == 0x2e0, "CParticleEmitter2 combiner at 0x2e0");
 static_assert(sizeof(CParticleEmitter2) == 0x2f8, "CParticleEmitter2 is 0x2f8 bytes");
 
+// The particle effects by vertex format kind (DAT_1430a1ee8: unlit T1, lit T1, 2-colour-texture,
+// two 3-colour-texture forms and refraction), looked up when the device comes up (FUN_14124aa50).
+extern class CShaderEffect* g_particleEffects[6];
+// The vertex format a particle emitter draws with (FUN_14124bce0).
+uint8_t ParticleEmitterVertexFormat(const CParticleEmitter2* emitter);
+
 // An emitter made in place (FUN_1412497e0), and the generators made in place after it: plane
 // (FUN_14125aa10), sphere (FUN_14125ace0), spline (FUN_14125af90), bone (FUN_14125b580, the
 // mirrored one FUN_14125b550) and box (FUN_14125c130). `random` is the emitter's seed; `params`

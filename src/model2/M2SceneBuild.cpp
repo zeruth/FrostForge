@@ -5,6 +5,7 @@
 #include "model2/CM2Lighting.hpp"
 #include "model2/M2Element.hpp"
 #include "model2/M2Model.hpp"
+#include "model2/M2Particle.hpp"
 #include "model2/M2Scene.hpp"
 #include "model2/M2Shaders.hpp"
 #include "model2/M2Shared.hpp"
@@ -12,6 +13,7 @@
 #include "shadereffect/ShaderEffectPipeline.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
+#include "util/Unimplemented.hpp"
 
 // Engine/Source/Model2/M2Scene.cpp: the draw elements a frame's lists are built from -- each
 // element's depth, blend and stencil states and the pipeline it draws with.
@@ -166,6 +168,14 @@ bool CM2Model::BatchInstanced(const uint8_t* batch) {
 }
 
 // A model's bone matrices (FUN_1411ba500) and bone count when loaded (FUN_1411ba430).
+// ref: FUN_1411c02e0
+uint32_t CM2Model::GetShadowBatchCount() {
+    if (this->m_600 != nullptr) {
+        return static_cast<const uint16_t*>(this->m_600)[1];
+    }
+    return this->m_shared->m_skins[this->m_lod].m_profile->m_shadowBatches.Count();
+}
+
 // ref: FUN_1411ba500
 C44Matrix* CM2Model::GetBoneMatrices() {
     return this->m_animState->m_boneMatrices;
@@ -890,4 +900,357 @@ bool M2SceneEffectElement(CM2Scene* scene, M2SceneDrawList* list, M2Element* ele
         }
     }
     return true;
+}
+
+// A model's shadow batches as object-fill elements in pass 4 (FUN_1411d1150).
+// ref: FUN_1411d1150
+void M2SceneShadowElements(CM2Scene* scene, M2SceneDrawList* list, CM2Model* model, float distance) {
+    uint32_t count = model->GetShadowBatchCount();
+    if (count == 0) {
+        return;
+    }
+    const float threshold = 0.0039215689f;  // DAT_142632528
+    float colorAlpha = model->m_params.m_colorAlpha;
+    for (uint32_t i = 0; i < count; i++) {
+        const uint8_t* batch;
+        if (model->m_600 == nullptr) {
+            if ((model->m_flags & CM2BaseModel::BASE_LOADED) == 0) {
+                model->WaitForLoad(0);
+            }
+            const M2SkinProfile* profile = model->m_shared->m_skins[model->m_lod].m_profile;
+            batch = reinterpret_cast<const uint8_t*>(profile->m_shadowBatches.Data()) + i * 0xc;
+            uint16_t section = *reinterpret_cast<const uint16_t*>(batch + 4);
+            if (((1 << (section & 7)) & model->m_lodBoneMasks[model->m_lod][section >> 3]) == 0) {
+                continue;
+            }
+        } else {
+            batch = *reinterpret_cast<const uint8_t* const*>(static_cast<const uint8_t*>(model->m_600) + 0x18) + i * 0xc;
+        }
+        if (batch == nullptr) {
+            continue;
+        }
+        if ((model->m_flags & CM2BaseModel::BASE_LOADED) == 0) {
+            model->WaitForLoad(0);
+        }
+        float alpha = colorAlpha;
+        uint16_t color = *reinterpret_cast<const uint16_t*>(batch + 8);
+        if (color < model->m_shared->m_data->m_colors.Count()) {
+            alpha *= *reinterpret_cast<const float*>(reinterpret_cast<const uint8_t*>(model->m_colors) + color * 0x20 + 0x1c);
+        }
+        if ((*batch & 0x40) == 0) {
+            uint16_t weight = *reinterpret_cast<const uint16_t*>(batch + 10);
+            alpha *= reinterpret_cast<const float*>(reinterpret_cast<const uint8_t*>(model->m_textureWeights) + weight * 0xc)[2];
+        }
+        if (alpha <= threshold) {
+            continue;
+        }
+        uint32_t index;
+        M2Element* element = M2SceneDrawListAddElement(list, &index);
+        const M2SkinSection* sections;
+        if (model->m_600 == nullptr) {
+            sections = model->m_shared->m_skins[model->m_lod].m_sections;
+        } else {
+            sections = *reinterpret_cast<const M2SkinSection* const*>(static_cast<const uint8_t*>(model->m_600) + 0x20);
+        }
+        const M2SkinSection* section = &sections[*reinterpret_cast<const uint16_t*>(batch + 4)];
+        element->Initialize(10, 0, model, section, 0.0f, model->m_screenSize, distance, 0, 0);
+        element->SetShadowBatch(i, batch);
+        uint8_t bones = section->m_boneInfluences;
+        if (2 < bones) {
+            bones = 2;
+        }
+        uint32_t raster = g_m2OutlineStencil[1 + ((model->m_flags >> 0x1a) & 1)];
+        GxPipeline* pipeline = ObjectFillGetPipeline(static_cast<uint8_t>(~(batch[1] >> 1) & 1), bones,
+            ObjectFillDepthStencil(), raster, s_blendWords[0], 0x14, 3, static_cast<uint32_t>(scene->m_db08));
+        element->SetPipeline(pipeline);
+        M2IndicesPush(&list->m_lists[4], index);
+    }
+}
+
+uint32_t M2BlendModeIndex(uint8_t blend);
+int32_t M2SceneOcclusionTest(CM2Scene* scene, const float* box);
+
+// A model's batches (or shadow batches) as outline elements in pass 2 or 3 (FUN_1411d1530).
+// ref: FUN_1411d1530
+void M2SceneOutlineElements(CM2Scene* scene, M2SceneDrawList* list, CM2Model* model, float distance) {
+    uint32_t count = model->GetShadowBatchCount();
+    bool useBatches = false;
+    if (count == 0) {
+        if ((model->m_modelFlags2 & 0x200) == 0) {
+            return;
+        }
+        if (model->m_600 == nullptr) {
+            count = model->m_shared->m_skins[model->m_lod].m_profile->m_batches.Count();
+        } else {
+            count = *static_cast<const uint16_t*>(model->m_600);
+        }
+        useBatches = true;
+    }
+    CM2BaseModel* root = model;
+    while ((root->m_flags >> 0x12 & 1) != 0 && root->m_parent != nullptr) {
+        root = root->m_parent;
+    }
+    float colorAlpha = model->m_params.m_colorAlpha;
+    float fade = model->m_params.m_fade;
+    uint8_t outlinePass = static_cast<uint8_t>((root->m_flags >> 0x19) & 1);
+    const float minimum = 0.001f;  // DAT_142618f58
+    if (colorAlpha < minimum || fade < minimum || count == 0) {
+        return;
+    }
+    M2Data* data = model->m_shared->m_data;
+    for (uint32_t i = 0; i < count; i++) {
+        const uint8_t* shadow = nullptr;
+        const M2Batch* batch = nullptr;
+        if (model->m_600 == nullptr) {
+            if ((model->m_flags & CM2BaseModel::BASE_LOADED) == 0) {
+                model->WaitForLoad(0);
+            }
+            const M2SkinProfile* profile = model->m_shared->m_skins[model->m_lod].m_profile;
+            uint16_t section;
+            if (useBatches) {
+                batch = &profile->m_batches[i];
+                section = batch->m_skinSectionIndex;
+            } else {
+                shadow = reinterpret_cast<const uint8_t*>(profile->m_shadowBatches.Data()) + i * 0xc;
+                section = *reinterpret_cast<const uint16_t*>(shadow + 4);
+            }
+            if (((1 << (section & 7)) & model->m_lodBoneMasks[model->m_lod][section >> 3]) == 0) {
+                continue;
+            }
+        } else if (useBatches) {
+            batch = reinterpret_cast<const M2Batch*>(*reinterpret_cast<const uint8_t* const*>(static_cast<const uint8_t*>(model->m_600) + 0x10) + i * 0x18);
+        } else {
+            shadow = *reinterpret_cast<const uint8_t* const*>(static_cast<const uint8_t*>(model->m_600) + 0x18) + i * 0xc;
+        }
+        const M2Material* material = nullptr;
+        uint16_t color;
+        if (shadow == nullptr) {
+            if (batch == nullptr) {
+                continue;
+            }
+            material = &data->m_materials[batch->m_materialIndex - batch->m_materialLayer];
+            if ((reinterpret_cast<const uint8_t*>(batch)[6] & 8) != 0 || material->m_blendMode != 0) {
+                continue;
+            }
+            color = batch->m_colorIndex;
+        } else {
+            if ((*shadow & 8) != 0) {
+                continue;
+            }
+            color = *reinterpret_cast<const uint16_t*>(shadow + 8);
+        }
+        if ((model->m_flags & CM2BaseModel::BASE_LOADED) == 0) {
+            model->WaitForLoad(0);
+        }
+        data = model->m_shared->m_data;
+        float alpha = colorAlpha;
+        if (color < data->m_colors.Count()) {
+            alpha *= *reinterpret_cast<const float*>(reinterpret_cast<const uint8_t*>(model->m_colors) + color * 0x20 + 0x1c);
+        }
+        uint8_t first = shadow != nullptr ? *shadow : batch->m_flags;
+        if ((first & 0x40) == 0) {
+            uint16_t weight;
+            if (shadow == nullptr) {
+                weight = data->m_textureWeightCombos[batch->m_textureWeightComboIndex];
+            } else {
+                weight = *reinterpret_cast<const uint16_t*>(shadow + 10);
+            }
+            alpha *= reinterpret_cast<const float*>(reinterpret_cast<const uint8_t*>(model->m_textureWeights) + weight * 0xc)[2];
+        }
+        if (alpha <= 0.0039215689f) {  // DAT_142632528
+            continue;
+        }
+        uint32_t index;
+        M2Element* element = M2SceneDrawListAddElement(list, &index);
+        uint16_t sectionIndex = shadow != nullptr ? *reinterpret_cast<const uint16_t*>(shadow + 4) : batch->m_skinSectionIndex;
+        const M2SkinSection* sections;
+        if (model->m_600 == nullptr) {
+            sections = model->m_shared->m_skins[model->m_lod].m_sections;
+        } else {
+            sections = *reinterpret_cast<const M2SkinSection* const*>(static_cast<const uint8_t*>(model->m_600) + 0x20);
+        }
+        const M2SkinSection* section = &sections[sectionIndex];
+        element->Initialize(outlinePass + 8, 0, model, section, 0.0f, model->m_screenSize, distance, 0, 0);
+        if (shadow == nullptr) {
+            element->SetBatch(i, batch, reinterpret_cast<const uint16_t*>(material));
+        } else {
+            element->SetShadowBatch(i, shadow);
+        }
+        if (alpha * fade < 1.0f) {
+            element->SetFaded(true);
+        }
+        uint8_t bones = section->m_boneInfluences;
+        if (2 < bones) {
+            bones = 2;
+        }
+        uint8_t variant;
+        const uint32_t* stencil;
+        const uint32_t* fill;
+        uint64_t depthStencil;
+        bool shadowed = (model->m_flags >> 0x1a & 1) != 0;
+        if (shadow != nullptr && (shadow[1] & 1) != 0 && outlinePass == 0) {
+            variant = static_cast<uint8_t>(~(shadow[1] >> 1) & 1);
+            stencil = &g_m2OutlineStencil[0];
+            fill = &g_m2OutlineStencilFill[0];
+            depthStencil = g_m2DepthStencil[3][0];
+        } else {
+            variant = shadow != nullptr ? static_cast<uint8_t>(~(shadow[1] >> 1) & 1) : 0;
+            stencil = shadowed ? &g_m2OutlineStencil[2] : &g_m2OutlineStencil[1];
+            fill = shadowed ? &g_m2OutlineStencilFill[2] : &g_m2OutlineStencilFill[1];
+            depthStencil = outlinePass != 0 ? g_m2DepthStencil[4][0] : g_m2DepthStencil[3][0];
+        }
+        uint16_t blend = s_blendWords[0];
+        if (shadow != nullptr) {
+            blend = s_blendWords[~(shadow[1] >> 1) & 1];
+        }
+        if (static_cast<const uint8_t*>(scene->m_038)[0x5c0] == 1) {
+            stencil = fill;
+        }
+        GxPipeline* pipeline = OutlineGetPipeline(static_cast<uint8_t>(data->m_flags >> 0x12 & 1), variant, bones,
+            depthStencil, *stencil, blend, 0x14, 3, 8);
+        element->SetPipeline(pipeline);
+        M2IndicesPush(&list->m_lists[outlinePass + 2], index);
+    }
+}
+
+// An emitter's element and its pass (FUN_1411d1c20). `count` counts the additive and
+// alpha-key emitters drawn.
+// ref: FUN_1411d1c20
+void M2SceneParticleElement(CM2Scene* scene, M2SceneDrawList* list, CParticleEmitter2* emitter, CM2Model* model,
+    float distance, float alpha, int32_t front, int32_t back, int32_t* count) {
+    if (!ParticleEmitterHasParticles(emitter)) {
+        return;
+    }
+    if (emitter->m_type == 1) {
+        return;
+    }
+    if (emitter->m_blend == 10 || emitter->m_blend == 3) {
+        (*count)++;
+    }
+    uint32_t index;
+    M2Element* element = M2SceneDrawListAddElement(list, &index);
+    uint32_t extraFlags = 0;
+    uint8_t pass;
+    if (emitter->m_type == 3) {
+        if (static_cast<const uint8_t*>(scene->m_038)[0x5bc] != 0) {
+            return;
+        }
+        if (front == 0) {
+            return;
+        }
+        pass = 1;
+    } else if (1 < emitter->m_blend || alpha < 0.99998999f) {
+        if ((emitter->m_flags & 0x40000) == 0) {
+            if ((model->m_flags2 & 1) == 0) {
+                if (front == 0) {
+                    pass = back != 0 ? 10 : 0xe;
+                } else {
+                    pass = 8;
+                    if (back != 0) {
+                        M2SceneDrawListAddToPass(scene, list, 10, index);
+                        extraFlags = 2;
+                    }
+                }
+            } else {
+                pass = 0xc;
+            }
+        } else {
+            pass = 10;
+        }
+    } else {
+        pass = static_cast<uint8_t>((~(model->m_createFlags >> 3) & 1) | 6);
+    }
+    if ((scene->m_flags & 0x800) != 0 && (model->m_flags2 & 8) != 0) {
+        extraFlags |= 0x8000;
+    }
+    element->Initialize(5, 0, model, nullptr, alpha, model->m_screenSize, distance,
+        *reinterpret_cast<const uint32_t*>(reinterpret_cast<const uint8_t*>(emitter) + 0x14), 0);
+    element->SetEmitter(emitter);
+    element->m_flags |= extraFlags;
+    uint8_t renderFlags = emitter->m_renderFlags;
+    uint16_t materialFlags = static_cast<uint16_t>((~renderFlags & 1) + 4);
+    if ((renderFlags & 2) == 0) {
+        materialFlags |= 2;
+    }
+    if ((renderFlags & 4) == 0) {
+        materialFlags |= 0x10;
+    }
+    if ((renderFlags & 8) != 0) {
+        materialFlags |= 0x1000;
+    }
+    CShaderEffect* effect = g_particleEffects[emitter->m_vertexFormat];
+    uint32_t blendMode = M2BlendModeIndex(emitter->m_blend);
+    uint8_t outline = 0;
+    if (g_m2OutlineEnabled && scene->m_daf0 != 0 && (materialFlags & 0x1000) != 0) {
+        outline = 1;
+        if ((emitter->m_flags & 0x44000) == 0x44000) {
+            outline = 0;
+        }
+    }
+    uint8_t lit = (materialFlags & 1) == 0 && g_m2ProjectedBlendLit[blendMode & 0xffff] != 0 ? 1 : 0;
+    uint16_t vs = ShaderEffectModelVertexPermute(0, extraFlags != 0, lit, 0, 0, 0, 0, 0);
+    uint16_t additive = (static_cast<uint16_t>(blendMode) == 1 && 0.0f < alpha * 0.50196081f) ? 1 : 0;  // DAT_1427219d8
+    int32_t target = pass != 1 ? scene->m_db08 : 0xf;
+    uint16_t ps = ShaderEffectParticlePixelPermute(outline, additive, target == 7);
+    uint64_t depthStencil = 0;
+    uint32_t raster = 0;
+    uint16_t blend = 0;
+    M2SceneElementState(model, static_cast<const uint8_t*>(scene->m_038), (scene->m_flags >> 3 & 1) != 0,
+        static_cast<uint16_t>(blendMode), materialFlags, g_renderSettings.m_msaaSamples,
+        static_cast<uint32_t>(element->m_batchKey >> 0x20) & 0xf, pass, element->m_flags,
+        static_cast<int32_t>(element->m_64), static_cast<uint32_t>(element->m_sortKey >> 0x1f) & 0xf, &depthStencil, &blend,
+        &raster);
+    uint8_t vertexFormat = ParticleEmitterVertexFormat(emitter);
+    GxPipeline* pipeline = ShaderEffectGetPipeline(effect, vs, ps, depthStencil, blend, raster, vertexFormat, 3,
+        static_cast<uint32_t>(target), nullptr);
+    element->SetPipeline(pipeline);
+    element->m_effect = effect;
+    if (scene->m_db28 != 0 && pass == 8 && (model->m_flags >> 2 & 1) != 0 && (model->m_flags & 1) != 0) {
+        float box[6];
+        int32_t visible = M2SceneOcclusionTest(scene, model->GetBounds(box));
+        if (visible == 1) {
+            pass = 9;
+        } else if (visible == 2 || visible == 3) {
+            if (visible == 3) {
+                M2SceneDrawListAddToPass(scene, list, 9, index);
+            }
+            pass = 8;
+        }
+    }
+    M2SceneDrawListAddToPass(scene, list, pass, index);
+}
+
+// A blend mode's index among the eight M2 blends (FUN_1411d81a0).
+// ref: FUN_1411d81a0
+uint32_t M2BlendModeIndex(uint8_t blend) {
+    switch (blend) {
+    case 1:
+        return 1;
+    case 2:
+        return 2;
+    case 3:
+        return 4;
+    case 4:
+        return 5;
+    case 5:
+        return 6;
+    case 10:
+        return 3;
+    case 0xd:
+        return 7;
+    default:
+        return 0;
+    }
+}
+
+// Whether a box is behind the world's occluders: 1 hidden, 2 seen, 3 partly (FUN_1411e44c0).
+// The world scene's occlusion (scene +0xdb28) is not ported; UI scenes have none and never ask.
+// ref: FUN_1411e44c0
+int32_t M2SceneOcclusionTest(CM2Scene* scene, const float* box) {
+    (void)box;
+    if (scene->m_db28 == 0) {
+        return 0;
+    }
+    FROST_UNIMPLEMENTED();
+    return 0;
 }

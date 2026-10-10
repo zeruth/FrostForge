@@ -9,6 +9,8 @@
 #include "os/Sync.hpp"
 #include "shadereffect/PipelineMap.hpp"
 #include "shadereffect/ShaderEffectManager.hpp"
+#include "base/Status.hpp"
+#include "texture/Texture.hpp"
 
 namespace {
 
@@ -20,6 +22,28 @@ OSMUTEX s_fillLock;
 blz::chained_hash_header s_outlinePipelines;
 blz::chained_hash_header s_outlineNewPipelines;
 OSMUTEX s_outlineLock;
+
+// The fill's texture (DAT_1430a79f8, FileDataID 1273707) and depth-stencil state (DAT_1430a7a00).
+HTEXTURE s_fillTexture;
+uint64_t s_fillDepthStencil;
+
+// ref: FUN_1412b6b20
+void ObjectFillOnDeviceCreated(void* param) {
+    (void)param;
+    CStatus status;
+    s_fillTexture = TextureCreate(0x136f6b, 0x82091, &status, 0, 3, 0);
+    s_fillDepthStencil = 0x1f1bull | (6ull << 0x20);
+}
+
+// ref: FUN_1412b6bb0
+void ObjectFillOnDeviceDestroyed(void* param) {
+    (void)param;
+    TextureFree(&s_fillTexture);
+    PipelineMapDestroyPipelines(&s_fillPipelines);
+    PipelineMapClear(&s_fillPipelines);
+    PipelineMapDestroyPipelines(&s_fillNewPipelines);
+    PipelineMapClear(&s_fillNewPipelines);
+}
 
 struct LOCKINIT {
     LOCKINIT() {
@@ -224,6 +248,24 @@ GxPipeline* OutlineGetPipeline(uint8_t skinned, uint8_t extra, uint16_t base, ui
 uint32_t ShaderEffectVertexPull() {
     auto data = reinterpret_cast<const uint8_t*>(GxSelectGpuToUse()->m_data);
     return (*reinterpret_cast<const uint32_t*>(data + 0x224) >> 5) & 1;
+}
+
+// ref: FUN_1412b6af0
+void ObjectFillInitialize() {
+    GxAddDeviceCreatedCallback(ObjectFillOnDeviceCreated, nullptr);
+    GxAddDeviceDestroyedCallback(ObjectFillOnDeviceDestroyed, nullptr);
+}
+
+// ref: FUN_1412b6670
+void ObjectFillShutdown() {
+    TextureFree(&s_fillTexture);
+    GxRemoveDeviceCreatedCallback(ObjectFillOnDeviceCreated, nullptr);
+    GxRemoveDeviceDestroyedCallback(ObjectFillOnDeviceDestroyed, nullptr);
+    ObjectFillOnDeviceDestroyed(nullptr);
+}
+
+uint64_t ObjectFillDepthStencil() {
+    return s_fillDepthStencil;
 }
 
 // ref: FUN_1412b2120

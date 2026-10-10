@@ -817,6 +817,8 @@ class CM2Model : public CM2BaseModel {
     // The bone matrices (FUN_1411ba500) and the bone count once loaded (FUN_1411ba430).
     C44Matrix* GetBoneMatrices();
     uint16_t GetBoneCount();
+    // The shadow batches the model draws: its LOD data's, or the profile's (FUN_1411c02e0).
+    uint32_t GetShadowBatchCount();
     // Runs a queued callback (FUN_1411b5720): a sequence started on a key bone (FUN_1411b5780)
     // or a function called.
     void RunCallback(const M2ModelCallback* callback);

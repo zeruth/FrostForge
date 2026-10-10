@@ -54,6 +54,36 @@ void CM2Model::UpdateParticles(float delta, uint32_t pass, uint32_t a4) {
     FROST_UNIMPLEMENTED();
 }
 
+CShaderEffect* g_particleEffects[6];
+
+// ref: FUN_14124bce0
+uint8_t ParticleEmitterVertexFormat(const CParticleEmitter2* emitter) {
+    int32_t type = emitter->m_type;
+    bool checkCombiner = false;
+    if (type == 2) {
+        checkCombiner = true;
+    } else if (type == 4) {
+        if (emitter->m_1c8 == nullptr) {
+            return static_cast<uint8_t>((~emitter->m_renderFlags & 1) << 2 | 9);
+        }
+        checkCombiner = true;
+    }
+    if (checkCombiner) {
+        const uint8_t* combiner = reinterpret_cast<const uint8_t*>(emitter->m_combiner);
+        if (combiner != nullptr && (combiner[0] != 0 || combiner[1] != 0)) {
+            return 0x10;
+        }
+        if (type == 2 || (type == 4 && emitter->m_1c8 != nullptr)) {
+            return 0xf;
+        }
+        return static_cast<uint8_t>((~emitter->m_renderFlags & 1) << 2 | 9);
+    }
+    if (type != 3) {
+        return static_cast<uint8_t>((~emitter->m_renderFlags & 1) << 2 | 9);
+    }
+    return 0xf;
+}
+
 // ref: FUN_14124bd50
 bool ParticleEmitterHasParticles(const CParticleEmitter2* emitter) {
     if (emitter->m_liveCount != 0) {

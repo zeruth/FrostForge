@@ -40,6 +40,13 @@ GxPipeline* ObjectFillGetPipeline(uint8_t kind, uint32_t variant, uint64_t depth
     uint16_t blend, uint8_t vertexFormat, uint8_t topology, uint32_t targetKind);
 GxPipeline* OutlineGetPipeline(uint8_t skinned, uint8_t extra, uint16_t base, uint64_t depthStencil, uint32_t raster,
     uint16_t blend, uint8_t vertexFormat, uint8_t topology, uint32_t targetKind);
+// The object fill effect's texture and depth-stencil state, made with the device
+// (FUN_1412b6b20) and released with it with the effect's pipelines (FUN_1412b6bb0); the setup
+// registering both (FUN_1412b6af0) and its shutdown (FUN_1412b6670).
+void ObjectFillInitialize();
+void ObjectFillShutdown();
+// ref: FUN_1412b66b0
+uint64_t ObjectFillDepthStencil();
 // Whether the GPU pulls its own vertices (its device data's +0x224 bit 5).
 uint32_t ShaderEffectVertexPull();
 // Whether any scene draws outlines (FUN_1412b2120).
