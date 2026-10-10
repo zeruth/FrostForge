@@ -35,7 +35,7 @@ struct RENDERSETTINGS {
     uint8_t m_27[6];
     uint8_t m_filterMode;           // 0x2d: below 6; 5 allows up to 16 of m_filterLevel
     uint8_t m_filterLevel;          // 0x2e
-    uint8_t m_2f;                   // 0x2f
+    uint8_t m_outlines;             // 0x2f: how many scenes draw outlines
     uint8_t m_lowLatencyMode;       // 0x30: GxLowLatencyMode
     uint8_t m_pad31[3];
     uint32_t m_flags;               // 0x34: 0x18 ray traced shadows, 0x20 needs the device's +0x12d,
@@ -68,6 +68,10 @@ void RenderSettingsRemoveValidator(RENDERSETTINGSVALIDATOR validator, void* para
 // them down again (FUN_14129d780).
 void RenderSettingsInitialize();
 void RenderSettingsShutdown();
+
+// A scene starting (FUN_1412b2110) and stopping (FUN_1412b2250) its outline passes.
+void RenderSettingsAddOutline();
+void RenderSettingsRemoveOutline();
 
 // Makes the pending settings current when they differ (FUN_14129da80).
 void RenderSettingsApply();

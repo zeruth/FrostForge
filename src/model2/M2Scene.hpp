@@ -193,6 +193,12 @@ class CM2Scene {
     // Room for `count` entries in the 0x88-byte list and half as many in each per-pass index
     // list (FUN_1411df730).
     void Reserve(uint32_t count);
+    // The models' batch effects looked up again and the scene's textures and effects made, when
+    // a device comes up (FUN_1411d8ee0), and all of it released when it goes (FUN_1411d92a0).
+    void RecreateDeviceObjects();
+    void ReleaseDeviceObjects();
+    // Every model told the render settings changed (FUN_1411df6e0).
+    void OnRenderSettingsChanged(const struct RENDERSETTINGS* previous, const struct RENDERSETTINGS* current);
 };
 static_assert(offsetof(CM2Scene, m_time) == 0x98, "CM2Scene time at 0x98");
 static_assert(offsetof(CM2Scene, m_lock0d0) == 0xd0, "CM2Scene locks at 0xd0");
@@ -229,6 +235,19 @@ inline const float* M2SceneGetWindOrigin(CM2Scene* scene) {
 inline void M2SceneSampleWind(CM2Scene* scene, float* direction, float* speed, float* gust) {
     scene->m_windCallback(direction, speed, gust, nullptr);
 }
+
+// The depth-stencil states the scene's passes draw with (DAT_1430a1040, eight passes of four
+// pairs) and the stencil references of the outline passes (DAT_1430a1240, DAT_1430a1250), made
+// when the device comes up (FUN_1411d9090).
+extern uint64_t g_m2DepthStencil[8][8];
+extern uint32_t g_m2OutlineStencil[3];
+extern uint32_t g_m2OutlineStencilFill[3];
+void M2SceneStatesInitialize();
+// Whether the outline passes are on (DAT_1430a125c): turned on or off (FUN_1411dd600), and off
+// (FUN_1411d9280).
+extern bool g_m2OutlineEnabled;
+void M2SceneSetOutline(bool enabled);
+void M2SceneClearOutline();
 
 // A scene of a kind, made, set up and put on the cache's list (FUN_141196e40). `owner` is what
 // made it; the two after it are kept beside it.

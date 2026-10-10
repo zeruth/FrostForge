@@ -6,6 +6,8 @@
 
 #include "base/Matrix.hpp"
 #include "base/Status.hpp"
+#include "client/RenderSettings.hpp"
+#include "gx/GxPipeline.hpp"
 #include "gx/Gx.hpp"
 #include "model2/M2Shared.hpp"
 #include "shadereffect/ShaderEffectManager.hpp"
@@ -416,6 +418,133 @@ void CM2Scene::Reserve(uint32_t count) {
     }
 }
 
+uint64_t g_m2DepthStencil[8][8];
+uint32_t g_m2OutlineStencil[3];
+uint32_t g_m2OutlineStencilFill[3];
+bool g_m2OutlineEnabled;
+
+// ref: FUN_1411d9090
+void M2SceneStatesInitialize() {
+    // The depth flags of each pass (the first word of each pair on the stack).
+    static const uint8_t s_passFlags[8] = { 0x15, 0x11, 0xd, 9, 0x38, 0x15, 0x19, 5 };
+    static const uint8_t s_stencilMasks[4] = { 4, 0, 0, 1 };  // DAT_142cfc378
+    for (uint32_t pass = 0; pass < 8; pass++) {
+        uint8_t flags = s_passFlags[pass] & 0xfd;
+        for (uint32_t i = 0; i < 4; i++) {
+            uint64_t mask = s_stencilMasks[i];
+            uint64_t first = pass == 5 ? 2 : 0;
+            g_m2DepthStencil[pass][i * 2] = 0x0200000700000000ull | mask << 0x18 | 0xff0000ull | (flags | first);
+            uint64_t second = (pass == 5 || pass != 1) ? 2 : 0;
+            g_m2DepthStencil[pass][i * 2 + 1] = 0x0200000700000000ull | mask << 0x18 | 0xff0000ull | (flags | second);
+        }
+    }
+    for (uint32_t i = 0; i < 3; i++) {
+        g_m2OutlineStencil[i] = 0x10000 | i;
+        g_m2OutlineStencilFill[i] = 0x30000 | i;
+    }
+    // DAT_142cfb1c0, cleared here.
+}
+
+// ref: FUN_1411dd600
+void M2SceneSetOutline(bool enabled) {
+    if (g_m2OutlineEnabled != enabled) {
+        if (enabled) {
+            RenderSettingsAddOutline();
+            g_m2OutlineEnabled = true;
+            return;
+        }
+        RenderSettingsRemoveOutline();
+        g_m2OutlineEnabled = false;
+    }
+}
+
+// ref: FUN_1411d9280
+void M2SceneClearOutline() {
+    if (g_m2OutlineEnabled) {
+        RenderSettingsRemoveOutline();
+        g_m2OutlineEnabled = false;
+    }
+}
+
+// ref: FUN_1411d8ee0
+void CM2Scene::RecreateDeviceObjects() {
+    for (CM2BaseModel* model = this->m_models; model != nullptr; model = model->m_sceneNext) {
+        if (model->m_type == 0) {
+            static_cast<CM2Model*>(model)->m_shared->RefreshBatchEffects();
+        } else if (model->m_type == 3) {
+            FROST_UNIMPLEMENTED();  // FUN_1411ece70: an M3 model's effects (Model3 is not ported)
+        }
+        model->RefreshBatchEffects();
+    }
+    CStatus status;
+    this->m_defaultTexture = TextureCreate(0x6dbd7, 0x82001, &status, 0, 1, 0);
+    this->m_effectLitTransparent = ShaderEffectFind("LitSphere_Additive_Transparent");
+    this->m_effectLitOpaque = ShaderEffectFind("LitSphere_Additive_Opaque");
+    this->m_effectLitNoAlpha = ShaderEffectFind("LitSphere_Additive_Transparent_NoAlpha");
+    this->m_effectAvatar = ShaderEffectFind("Avatar");
+    this->m_effectProcedural = ShaderEffectFind("Procedural");
+    if (this->m_effectProcedural == nullptr) {
+        this->m_effectProcedural = ShaderEffectCreate("Procedural", 0x7c, 0xbf);
+    }
+    this->m_effectFlipbook = ShaderEffectFind("FlipbookImpostor");
+    if (this->m_effectFlipbook == nullptr) {
+        this->m_effectFlipbook = ShaderEffectCreate("FlipbookImpostor", 0x42, 0x75);
+    }
+    this->m_effectShadowMonk = ShaderEffectFind("ShadowMonk");
+    this->m_effectEdgeGlow = ShaderEffectFind("EdgeGlow");
+    this->m_effectPrepass = ShaderEffectFind("Model2PrepassOpaque");
+}
+
+// ref: FUN_1411d92a0
+void CM2Scene::ReleaseDeviceObjects() {
+    for (CM2BaseModel* model = this->m_models; model != nullptr; model = model->m_sceneNext) {
+        if (model->m_type == 0) {
+            static_cast<CM2Model*>(model)->m_shared->ReleaseGpuBuffers();
+        } else if (model->m_type == 3) {
+            FROST_UNIMPLEMENTED();  // FUN_1411ece80
+        }
+        model->ReleaseGpuData();
+    }
+    for (CM2BaseModel* model = this->m_released; model != nullptr; model = model->m_sceneNext) {
+        if (model->m_type == 0) {
+            static_cast<CM2Model*>(model)->m_shared->ReleaseGpuBuffers();
+        }
+        model->ReleaseGpuData();
+    }
+    TextureFree(reinterpret_cast<HTEXTURE*>(&this->m_defaultTexture));
+    this->m_pipelineCacheA->Clear();
+    this->m_pipelineCacheB->Clear();
+}
+
+// ref: FUN_1411df6e0
+void CM2Scene::OnRenderSettingsChanged(const RENDERSETTINGS* previous, const RENDERSETTINGS* current) {
+    for (CM2BaseModel* model = this->m_models; model != nullptr; model = model->m_sceneNext) {
+        model->OnRenderSettingsChanged(previous, current);
+    }
+}
+
+// ref: FUN_1411d9360
+void M2PipelineCache::Clear() {
+    for (uint64_t at = this->m_first; at != this->m_first + this->m_size; at++) {
+        GxPipeline* pipeline = this->m_blocks[(at >> 3) & (this->m_blockCount - 1)][at & 7].m_pipeline;
+        if (pipeline != nullptr) {
+            GxPipelineDestroy(&pipeline);
+        }
+    }
+    this->m_first = 0;
+    this->m_size = 0;
+    for (uint64_t i = 0; i < this->m_bucketCount; i++) {
+        M3PIPELINEENTRY* entry = &this->m_buckets[i];
+        if (entry->m_state != 1 && entry->m_state != 2 && entry->m_pipeline != nullptr) {
+            GxPipeline* pipeline = entry->m_pipeline;
+            GxPipelineDestroy(&pipeline);
+        }
+        entry->m_state = 1;
+    }
+    this->m_deleted = 0;
+    this->m_count = 0;
+}
+
 // ref: FUN_1411ddca0
 void CM2Scene::Initialize(int32_t type, void* owner, void* a4, void* a5, bool renderer) {
     this->m_038 = a5;
@@ -441,31 +570,7 @@ void CM2Scene::Initialize(int32_t type, void* owner, void* a4, void* a5, bool re
         M2SceneDrawParamsReserve(&this->m_drawParams2[i], perPass2);
     }
     if (renderer) {
-        for (CM2BaseModel* model = this->m_models; model != nullptr; model = model->m_sceneNext) {
-            if (model->m_type == 0) {
-                static_cast<CM2Model*>(model)->m_shared->RefreshBatchEffects();
-            } else if (model->m_type == 3) {
-                FROST_UNIMPLEMENTED();  // FUN_1411ece70: an M3 model's effects (Model3 is not ported)
-            }
-            model->RefreshBatchEffects();
-        }
-        CStatus status;
-        this->m_defaultTexture = TextureCreate(0x6dbd7, 0x82001, &status, 0, 1, 0);
-        this->m_effectLitTransparent = ShaderEffectFind("LitSphere_Additive_Transparent");
-        this->m_effectLitOpaque = ShaderEffectFind("LitSphere_Additive_Opaque");
-        this->m_effectLitNoAlpha = ShaderEffectFind("LitSphere_Additive_Transparent_NoAlpha");
-        this->m_effectAvatar = ShaderEffectFind("Avatar");
-        this->m_effectProcedural = ShaderEffectFind("Procedural");
-        if (this->m_effectProcedural == nullptr) {
-            this->m_effectProcedural = ShaderEffectCreate("Procedural", 0x7c, 0xbf);
-        }
-        this->m_effectFlipbook = ShaderEffectFind("FlipbookImpostor");
-        if (this->m_effectFlipbook == nullptr) {
-            this->m_effectFlipbook = ShaderEffectCreate("FlipbookImpostor", 0x42, 0x75);
-        }
-        this->m_effectShadowMonk = ShaderEffectFind("ShadowMonk");
-        this->m_effectEdgeGlow = ShaderEffectFind("EdgeGlow");
-        this->m_effectPrepass = ShaderEffectFind("Model2PrepassOpaque");
+        this->RecreateDeviceObjects();  // inlined here in the reference
     }
     int32_t kind = ((this->m_type - 1) & ~4) == 0 ? 1 : 0;
     if (this->m_type == 8) {

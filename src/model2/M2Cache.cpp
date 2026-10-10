@@ -10,7 +10,11 @@
 #include "console/Var.hpp"
 #include "model2/M2Init.hpp"
 #include "model2/M2Log.hpp"
+#include "client/RenderSettings.hpp"
+#include "gx/Gx.hpp"
+#include "model2/M2Element.hpp"
 #include "model2/M2Model.hpp"
+#include "model2/M2Scene.hpp"
 #include "model2/M2Shared.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
@@ -27,6 +31,7 @@ const char s_sharedNodeTag[] = ".?AU?$chained_hash_node@U?$pair@$$CBHPEAVCM2Shar
 
 // The pools (DAT_1430a0e68.. DAT_1430a0ea0).
 TObjectAllocHeap* s_modelPools[2];
+uint32_t s_1430a0ed8;  // DAT_1430a0ed8, cleared when the device goes
 TObjectAllocHeap* s_sharedPool;
 TObjectAllocHeap* s_model3Pools[2];
 TObjectAllocHeap* s_m3SharedPool;
@@ -182,6 +187,7 @@ struct CACHEINIT {
         g_m2Cache.m_sharedMaxLoad = 1.0f;
         g_m2Cache.m_particleBucketCount = 0x40;
         g_m2Cache.m_particleMaxLoad = 1.0f;
+        g_m2Cache.m_scenes.m_linkoffset = offsetof(CM2Scene, m_cacheLink);
         g_m2Cache.m_idleShared.m_linkoffset = offsetof(CM2Shared, m_cacheLink);
         g_m2Cache.m_keyframeShared.m_linkoffset = offsetof(CM2Shared, m_keyframeLink);
     }
@@ -341,15 +347,87 @@ TObjectAllocHeap* MakePool(const char* name, uint32_t size, uint32_t perHeap, in
 
 }
 
+// The ray-traced shadow pass's compute shaders (DAT_1430a1280, four skinning permutations, and
+// DAT_1430a12a0), made when the device can trace rays (FUN_1411f0610) and released with it
+// (FUN_1411f0690). The compute shader entry points (device slots 0x298 and 0x2a0) are not
+// ported, so a device that can trace rays reports it.
+// ref: FUN_1411f0610
+void M2ShadowRtCreate() {
+    if (GxDeviceCaps()[0xaf] != 0) {
+        FROST_UNIMPLEMENTED();  // FUN_142289bb0 "M2ShadowRt Skin" x4, "M2 TC Explode"
+    }
+}
+
+// ref: FUN_1411f0690
+void M2ShadowRtRelease() {
+}
+
+// Every scene's and file's device objects remade, the shared states rebuilt (FUN_1411960c0).
+// ref: FUN_1411960c0
+void M2CacheOnDeviceCreated(void* param) {
+    (void)param;
+    for (CM2Scene* scene = g_m2Cache.m_scenes.Head(); scene != nullptr; scene = g_m2Cache.m_scenes.Next(scene)) {
+        scene->RecreateDeviceObjects();
+    }
+    for (CM2Shared* shared = g_m2Cache.m_idleShared.Head(); shared != nullptr; shared = g_m2Cache.m_idleShared.Next(shared)) {
+        shared->RefreshBatchEffects();
+    }
+    if (g_m2Cache.m_idleM3.Head() != nullptr) {
+        FROST_UNIMPLEMENTED();  // FUN_1411ece70: Model3 is not ported, so no M3 file is ever idle
+    }
+    M2SceneStatesInitialize();
+    if (g_m2Cache.m_sharedBuckets != nullptr) {
+        for (uint64_t i = 0; i < g_m2Cache.m_sharedBucketCount; i++) {
+            for (auto node = static_cast<SHAREDNODE*>(g_m2Cache.m_sharedBuckets[i]); node != nullptr; node = node->m_next) {
+                node->m_value->RefreshBatchEffects();
+            }
+        }
+    }
+    M2ShadowRtCreate();
+    M2ElementDeviceCreated();
+}
+
+// Every scene's and file's device objects released (FUN_141196800).
+// ref: FUN_141196800
+void M2CacheOnDeviceDestroyed(void* param) {
+    (void)param;
+    for (CM2Scene* scene = g_m2Cache.m_scenes.Head(); scene != nullptr; scene = g_m2Cache.m_scenes.Next(scene)) {
+        scene->ReleaseDeviceObjects();
+    }
+    for (CM2Shared* shared = g_m2Cache.m_keyframeShared.Head(); shared != nullptr; shared = g_m2Cache.m_keyframeShared.Next(shared)) {
+        shared->ReleaseGpuBuffers();
+    }
+    for (CM2Shared* shared = g_m2Cache.m_idleShared.Head(); shared != nullptr; shared = g_m2Cache.m_idleShared.Next(shared)) {
+        shared->ReleaseGpuBuffers();
+    }
+    if (g_m2Cache.m_idleM3.Head() != nullptr) {
+        FROST_UNIMPLEMENTED();  // FUN_1411ece80
+    }
+    s_1430a0ed8 = 0;
+    M2ShadowRtRelease();
+    M2ElementDeviceLost();
+}
+
+// The render settings changed: every scene's models told (FUN_141198c30).
+// ref: FUN_141198c30
+void M2CacheOnRenderSettingsChanged(const RENDERSETTINGS* previous, const RENDERSETTINGS* current, void* param) {
+    (void)param;
+    for (CM2Scene* scene = g_m2Cache.m_scenes.Head(); scene != nullptr;) {
+        CM2Scene* next = g_m2Cache.m_scenes.Next(scene);
+        scene->OnRenderSettingsChanged(previous, current);
+        scene = next;
+    }
+}
+
 // The pools, the cache's flags and its device callbacks (FUN_141197720).
 // ref: FUN_141197720
 void M2CacheInitialize(uint32_t flags, int32_t perHeap) {
     if (g_m2Cache.m_initialized == 0) {
         g_m2Cache.m_flags |= flags & 0x1bd7;
         if (((g_m2Cache.m_flags >> 0xb) & 1) == 0) {
-            // FUN_1411960c0 / FUN_141196800 / FUN_141198c30: the device and render setting
-            // callbacks that remake the scenes' and files' buffers.
-            FROST_UNIMPLEMENTED();
+            GxAddDeviceCreatedCallback(M2CacheOnDeviceCreated, nullptr);
+            GxAddDeviceDestroyedCallback(M2CacheOnDeviceDestroyed, nullptr);
+            RenderSettingsAddHandler(M2CacheOnRenderSettingsChanged, nullptr);
         }
         // FUN_141198ca0 / FUN_141197f90: the CAS hot-fix and manifest handlers that reload
         // models whose files changed.

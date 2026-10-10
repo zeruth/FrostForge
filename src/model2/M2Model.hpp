@@ -128,6 +128,8 @@ struct CM2ModelParams {
 };
 static_assert(sizeof(CM2ModelParams) == 0x38, "CM2ModelParams is 0x38 bytes");
 
+struct RENDERSETTINGS;
+
 class CM2BaseModel {
     public:
     // m_flags.
@@ -284,7 +286,7 @@ class CM2BaseModel {
     virtual void SetWorldMatrix(const C44Matrix* world);                            // 0x178
     virtual void ReleaseGpuData();                                                  // 0x180
     virtual void RefreshBatchEffects();                                             // 0x188
-    virtual void Virtual190();                                                      // 0x190
+    virtual void OnRenderSettingsChanged(const RENDERSETTINGS* previous, const RENDERSETTINGS* current);  // 0x190
     virtual void OnMatricesUpdated();                                               // 0x198
     virtual bool AreTexturesSettled();                                              // 0x1a0
     virtual void SetTimeScale(float scale);                                         // 0x1a8

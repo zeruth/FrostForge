@@ -1331,7 +1331,9 @@ void CM2BaseModel::ReleaseGpuData() {
 void CM2BaseModel::RefreshBatchEffects() {
 }
 
-void CM2BaseModel::Virtual190() {
+void CM2BaseModel::OnRenderSettingsChanged(const RENDERSETTINGS* previous, const RENDERSETTINGS* current) {
+    (void)previous;
+    (void)current;
 }
 
 void CM2BaseModel::OnMatricesUpdated() {

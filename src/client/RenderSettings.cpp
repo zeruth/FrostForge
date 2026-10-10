@@ -253,6 +253,16 @@ void RenderSettingsShutdown() {
     RenderSettingsRemoveValidator(ValidateSettings, nullptr);
 }
 
+// ref: FUN_1412b2110
+void RenderSettingsAddOutline() {
+    g_pendingRenderSettings.m_outlines++;
+}
+
+// ref: FUN_1412b2250
+void RenderSettingsRemoveOutline() {
+    g_pendingRenderSettings.m_outlines--;
+}
+
 // ref: FUN_14129da80
 void RenderSettingsApply() {
     for (int32_t pass = 2; pass > 0; pass--) {

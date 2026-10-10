@@ -126,6 +126,8 @@ struct M2PipelineCache {
     GxPipeline* Get(const M3PIPELINEREQUEST* request);
     // A new entry at the deque's end (FUN_141205b10).
     M3PIPELINEENTRY* PushBack();
+    // Every pipeline destroyed and both containers emptied (FUN_1411d9360).
+    void Clear();
 };
 static_assert(sizeof(M2PipelineCache) == 0x50, "M2PipelineCache is 0x50 bytes");
 

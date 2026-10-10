@@ -1687,6 +1687,13 @@ GxBuf* CM2Shared::GetVertexBuf(uint32_t slot) {
     return skin->m_vertexBuf;
 }
 
+// ref: FUN_1411a6af0
+void CM2Shared::ReleaseGpuBuffers() {
+    for (uint32_t slot = 0; slot < 8; slot++) {
+        M2SkinProfileRelease(&this->m_skins[slot]);
+    }
+}
+
 // Every loaded profile's batch effects looked up again, after the effects were remade.
 // ref: FUN_1411a5aa0
 void CM2Shared::RefreshBatchEffects() {

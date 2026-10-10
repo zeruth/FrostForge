@@ -301,6 +301,8 @@ struct CM2Shared {
     CShaderEffect* GetBatchEffect(const M2Batch* batch);
     // Every loaded profile's batch effects looked up again (FUN_1411a5aa0).
     void RefreshBatchEffects();
+    // Every profile's buffers released (FUN_1411a6af0, the body FUN_1411a6bf0 has per slot).
+    void ReleaseGpuBuffers();
 };
 static_assert(sizeof(CM2Shared) == 0x620, "CM2Shared is 0x620 bytes");
 
