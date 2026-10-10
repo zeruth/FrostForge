@@ -351,7 +351,9 @@ CM2Scene::CM2Scene(M2CACHE* cache, int32_t type) {
     std::memset(this->m_d638, 0, sizeof(this->m_d638));
     std::memset(this->m_screenRect, 0, sizeof(this->m_screenRect));
     this->m_animateRatio = 10000.0f;
-    std::memset(this->m_d678, 0, sizeof(this->m_d678));
+    this->m_d678 = nullptr;
+    this->m_d680 = nullptr;
+    std::memset(this->m_d688, 0, sizeof(this->m_d688));
     this->m_traceCallback = nullptr;
     this->m_d6a0 = nullptr;
     this->m_windCallback = nullptr;

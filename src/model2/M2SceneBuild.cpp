@@ -7,6 +7,8 @@
 #include "model2/M2Model.hpp"
 #include "model2/M2Particle.hpp"
 #include "model2/M2Scene.hpp"
+#include "os/Sync.hpp"
+#include "model2/M2Ribbon.hpp"
 #include "model2/M2Shaders.hpp"
 #include "model2/M2Shared.hpp"
 #include "shadereffect/ShaderEffectManager.hpp"
@@ -1253,4 +1255,560 @@ int32_t M2SceneOcclusionTest(CM2Scene* scene, const float* box) {
     }
     FROST_UNIMPLEMENTED();
     return 0;
+}
+
+// The projected batches' per-frame state is drawn by the world scene's decal callback
+// (scene +0xd678); these four fill it and are not ported yet. A model only has such states when
+// a batch carries the projected geoset bit (InitializeLoaded's physics count).
+// ref: FUN_141201bd0
+void CM2Model::ProjectedBatchTextures(void* context, uint8_t* state) {
+    (void)context;
+    (void)state;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141201a80
+void CM2Model::ProjectedBatchWeights(void* context, uint8_t* state) {
+    (void)context;
+    (void)state;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1412018d0
+bool CM2Model::ProjectedBatchColor(void* context, uint8_t* state) {
+    (void)context;
+    (void)state;
+    FROST_UNIMPLEMENTED();
+    return false;
+}
+
+// ref: FUN_141200fc0
+bool CM2Model::ProjectedBatchBounds(void* context, uint8_t* state) {
+    (void)context;
+    (void)state;
+    FROST_UNIMPLEMENTED();
+    return false;
+}
+
+namespace {
+
+// The blend modes whose batches fade out below an alpha (DAT_142721288).
+const uint8_t s_blendFades[8] = { 1, 1, 1, 1, 1, 1, 1, 0 };
+// The passes whose opaque batches may draw instanced (DAT_142721490).
+const uint8_t s_passInstanced[14] = { 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
+
+// A point through a bone and the model's world matrix, squared distance to the eye (the sum
+// FUN_1411d3ba0 writes out three times).
+float BoneCenterDistance(const float* b, const float* w, const float* c) {
+    float x = (b[4] * w[0] + b[5] * w[4] + b[6] * w[8] + b[7] * w[12]) * c[1]
+        + (b[2] * w[8] + b[3] * w[12] + b[1] * w[4] + b[0] * w[0]) * c[0]
+        + (b[8] * w[0] + b[9] * w[4] + b[10] * w[8] + b[11] * w[12]) * c[2]
+        + b[12] * w[0] + b[13] * w[4] + b[14] * w[8] + b[15] * w[12];
+    float y = (b[4] * w[1] + b[5] * w[5] + b[6] * w[9] + b[7] * w[13]) * c[1]
+        + (b[2] * w[9] + b[3] * w[13] + b[1] * w[5] + b[0] * w[1]) * c[0]
+        + (b[8] * w[1] + b[9] * w[5] + b[10] * w[9] + b[11] * w[13]) * c[2]
+        + b[12] * w[1] + b[13] * w[5] + b[14] * w[9] + b[15] * w[13];
+    float z = (b[4] * w[2] + b[5] * w[6] + b[6] * w[10] + b[7] * w[14]) * c[1]
+        + (b[2] * w[10] + b[3] * w[14] + b[1] * w[6] + b[0] * w[2]) * c[0]
+        + (b[8] * w[2] + b[9] * w[6] + b[10] * w[10] + b[11] * w[14]) * c[2]
+        + b[12] * w[2] + b[13] * w[6] + b[14] * w[10] + b[15] * w[14];
+    return y * y + x * x + z * z;
+}
+
+void PushIndex(M2SceneDrawList* list, uint32_t pass, uint32_t index) {
+    M2IndicesPush(&list->m_lists[pass], index);
+}
+
+}  // namespace
+
+// The elements of a model's batches for one draw-params entry, with its effect passes, depth
+// prepass copies, ribbons, outline, shadow and decal elements (FUN_1411d3ba0). Returns false
+// when an effect element fails.
+// ref: FUN_1411d3ba0
+bool M2SceneModelElements(CM2Scene* scene, M2SceneDrawList* list, BaseModelDrawParams* params) {
+    auto model = static_cast<CM2Model*>(params->m_model);
+    uint32_t listFlags = list->m_flags;
+    model->m_flags &= 0xfffffff7;
+    uint32_t secondPass = listFlags & 1;
+    if (!model->IsShownInTree() || (model->m_flags >> 0x16 & 1) != 0 || model->m_shared->m_waterfallData != nullptr) {
+        return true;
+    }
+    M2Data* data = model->m_shared->m_data;
+    CM2ModelLighting* lighting = model->m_lightingUsed;
+    C44Matrix* bones = model->GetBoneMatrices();
+    const float threshold = 0.99998999f;      // DAT_1427211fc
+    const float effectMinimum = 0.00001f;     // DAT_1426c75c4
+    const float fadeMinimum = 0.0001f;        // DAT_1426c6f80
+    uint16_t lightFlags = lighting->m_flags;
+    uint32_t front = lightFlags & 0x20;
+    uint32_t back = lightFlags & 0x40;
+    const float* w = model->m_world.m;
+    if (front != 0 && back != 0) {
+        float cx = (data->m_bounds.m_max.x + data->m_bounds.m_min.x) * 0.5f;
+        float cy = (data->m_bounds.m_max.y + data->m_bounds.m_min.y) * 0.5f;
+        float cz = (data->m_bounds.m_max.z + data->m_bounds.m_min.z) * 0.5f;
+        float radius = std::sqrt(w[0] * w[0] + w[1] * w[1] + w[2] * w[2]) * data->m_boundsRadius;
+        float d = (cy * w[5] + cx * w[1] + cz * w[9] + w[13]) * lighting->m_plane[1]
+            + (cy * w[4] + cx * w[0] + cz * w[8] + w[12]) * lighting->m_plane[0]
+            + (cy * w[6] + cx * w[2] + cz * w[10] + w[14]) * lighting->m_plane[2] + lighting->m_plane[3];
+        front = -radius <= d ? 1 : 0;
+        back = d <= radius ? 1 : 0;
+        if ((scene->m_cache->m_flags & 2) == 0 && front != 0 && back != 0) {
+            uint8_t side = static_cast<const uint8_t*>(scene->m_038)[0x5bc];
+            front = side == 0 ? 1 : 0;
+            back = side != 0 ? 1 : 0;
+        }
+    }
+    const uint16_t* lodData = static_cast<const uint16_t*>(model->m_600);
+    const CM2SkinProfileData* skin = &model->m_shared->m_skins[model->m_lod];
+    bool instancing = (scene->m_cache->m_flags & 1) != 0 && (model->m_createFlags & 1) == 0 && (model->m_modelFlags & 4) != 0;
+    uint32_t count = lodData != nullptr ? lodData[0] : skin->m_profile->m_batches.Count();
+    uint32_t projectedIndex = 0;
+    float fade = model->m_params.m_fade;
+    for (uint32_t i = 0; i < count; i++) {
+        uint32_t elementFlags = 0;
+        const M2Batch* batch;
+        const M2SkinSection* section;
+        if (lodData == nullptr) {
+            batch = &skin->m_profile->m_batches[i];
+            section = &skin->m_sections[batch->m_skinSectionIndex];
+            uint16_t sectionIndex = batch->m_skinSectionIndex;
+            if (((1 << (sectionIndex & 7)) & model->m_lodBoneMasks[model->m_lod][sectionIndex >> 3]) == 0) {
+                continue;
+            }
+        } else {
+            auto lod = reinterpret_cast<const uint8_t*>(lodData);
+            batch = reinterpret_cast<const M2Batch*>(*reinterpret_cast<const uint8_t* const*>(lod + 0x10) + i * 0x18);
+            section = reinterpret_cast<const M2SkinSection*>(*reinterpret_cast<const uint8_t* const*>(lod + 0x20)
+                + batch->m_skinSectionIndex * 0x30);
+        }
+        float alpha = model->m_params.m_colorAlpha;
+        float effectStrength = model->GetEffectStrength();
+        int32_t effectType = model->GetEffectType();
+        if (batch->m_colorIndex < data->m_colors.Count()) {
+            alpha *= *reinterpret_cast<const float*>(reinterpret_cast<const uint8_t*>(model->m_colors) + batch->m_colorIndex * 0x20 + 0x1c);
+        }
+        if (batch->m_textureCount != 0 && (batch->m_flags & 0x40) == 0) {
+            uint16_t weight = data->m_textureWeightCombos[batch->m_textureWeightComboIndex];
+            alpha *= reinterpret_cast<const float*>(reinterpret_cast<const uint8_t*>(model->m_textureWeights) + weight * 0xc)[2];
+        }
+        auto geoset = reinterpret_cast<const uint8_t*>(batch)[6];
+        if (secondPass != 0 && (geoset & 2) != 0) {
+            if (projectedIndex < model->m_physicsBoneCount) {
+                uint8_t* state = static_cast<uint8_t*>(model->m_physicsBoneStates) + projectedIndex * 0xe0;
+                const void* context[5] = { model, batch, section, data, scene };
+                if (state[0xda] == 0) {
+                    model->ProjectedBatchTextures(context, state);
+                    model->ProjectedBatchWeights(context, state);
+                    state[0xda] = 1;
+                }
+                if (model->ProjectedBatchColor(context, state) && !model->ProjectedBatchBounds(context, state)) {
+                    state[0xd7] = 0;
+                }
+            }
+            projectedIndex++;
+            continue;
+        }
+        if (0.0f < effectStrength && effectType != 4) {
+            if (batch->m_materialLayer != 0) {
+                continue;
+            }
+            uint32_t indices = static_cast<uint32_t>(section->m_indexCountHigh) << 16
+                | *reinterpret_cast<const uint16_t*>(reinterpret_cast<const uint8_t*>(section) + 10);
+            if (indices <= 6) {
+                continue;
+            }
+        }
+        const M2Material* material = &data->m_materials[batch->m_materialIndex];
+        bool projected = (batch->m_flags & 4) != 0 || (geoset & 2) != 0;
+        uint32_t alphaTest = material->m_flags & 0x800;
+        const M2Material* baseMaterial = material;
+        if (batch->m_materialLayer != 0) {
+            baseMaterial = &data->m_materials[batch->m_materialIndex - batch->m_materialLayer];
+        }
+        if (s_blendFades[baseMaterial->m_blendMode] != 0 && alpha < fadeMinimum) {
+            continue;
+        }
+        uint8_t pass;
+        if (1 < baseMaterial->m_blendMode || alpha < threshold || (effectMinimum < effectStrength && !M2EffectTypeOpaque(effectType))) {
+            pass = 8;
+        } else {
+            pass = static_cast<uint8_t>((~(model->m_createFlags >> 3) & 1) | 6);
+        }
+        CShaderEffect* effect;
+        auto extra = static_cast<const uint8_t*>(model->m_4e0);
+        if (lodData == nullptr) {
+            effect = skin->m_effects[i];
+        } else if ((batch->m_geosetIndex & 1) == 0) {
+            auto lodEffects = *reinterpret_cast<CShaderEffect* const* const*>(reinterpret_cast<const uint8_t*>(lodData) + 0x40);
+            if ((batch->m_geosetIndex & 4) == 0 || *reinterpret_cast<void* const*>(extra + 0x20) == nullptr) {
+                effect = lodEffects[i];
+            } else {
+                if (M2GetPixelShaderKind(batch->m_textureCount, batch->m_shaderId) == 0) {
+                    effect = M2CacheDefaultEffect();
+                } else {
+                    effect = lodEffects[i];
+                }
+                elementFlags = 0x1000;
+                float lodFade = *reinterpret_cast<const float*>(&model->m_648);
+                if (model->m_effect != nullptr && 0.0f < lodFade && lodFade < 1.0f) {
+                    elementFlags = 0x3000;
+                }
+            }
+        } else {
+            effect = M2CacheDefaultEffect();
+            elementFlags = 0x400;
+            if (*reinterpret_cast<void* const*>(extra + 8) != nullptr && (scene->m_flags & 0x400) != 0
+                && (model->m_modelFlags >> 0x1d & 1) != 0) {
+                elementFlags = 0xc00;
+            }
+            float lodFade = *reinterpret_cast<const float*>(&model->m_648);
+            if (model->m_effect != nullptr && 0.0f < lodFade && lodFade < 1.0f && *reinterpret_cast<void* const*>(extra + 0x18) != nullptr) {
+                elementFlags |= 0x2000;
+            }
+        }
+        if (effect == nullptr) {
+            continue;
+        }
+        uint32_t index;
+        M2Element* element = M2SceneDrawListAddElement(list, &index);
+        uint32_t kind;
+        if (projected) {
+            kind = 0;
+            if (effectType != 4) {
+                effectStrength = 0.0f;
+            }
+        } else if (s_passInstanced[pass] != 0 && (effectType & ~8) == 0 && model->BatchInstanced(&batch->m_flags)) {
+            kind = 3;
+        } else {
+            kind = 2;
+        }
+        if (secondPass != 0
+            && (((threshold <= alpha && (effectStrength <= effectMinimum || effectType == 4)) || effectType == 5 || effectType == 8))
+            && !projected) {
+            elementFlags |= 0x20;
+        }
+        if (pass == 8 && front != 0 && back != 0 && !projected) {
+            elementFlags |= 2;
+        }
+        if (lodData != nullptr) {
+            elementFlags |= 4;
+        }
+        if ((scene->m_flags & 0x800) != 0 && (model->m_flags2 & 8) != 0) {
+            elementFlags |= 0x8000;
+        }
+        float elementAlpha = 7 < pass ? alpha * fade : alpha;
+        element->Initialize(kind, batch->m_materialLayer, model, section, elementAlpha, 0.0f, 0.0f, static_cast<uint32_t>(batch->m_priorityPlane),
+            elementFlags);
+        element->SetBatch(i, batch, reinterpret_cast<const uint16_t*>(baseMaterial));
+        element->SetFaded(7 < pass);
+        float screen;
+        bool computeDistance = false;
+        if ((model->m_createFlags & 0x10) == 0) {
+            if (7 < pass) {
+                computeDistance = true;
+            } else {
+                element->m_distance = model->m_screenSize;
+                screen = model->m_screenSize;
+            }
+        } else {
+            pass = 0xb;
+            computeDistance = true;
+        }
+        if (computeDistance) {
+            uint16_t centerBone = section->m_centerBoneIndex;
+            uint16_t boneCount = model->GetBoneCount();
+            uint32_t boneIndex = centerBone < boneCount ? centerBone : 0;
+            const float* b = bones[boneIndex].m;
+            const float* center = &section->m_sortCenterPosition.x;
+            screen = model->m_screenSize;
+            if ((data->m_flags & 0x10) == 0) {
+                float distance;
+                if ((batch->m_flags & 3) == 0) {
+                    distance = BoneCenterDistance(b, w, center);
+                } else {
+                    float px = center[1] * b[4] + center[0] * b[0] + center[2] * b[8] + b[12];
+                    float py = center[1] * b[5] + center[0] * b[1] + center[2] * b[9] + b[13];
+                    float pz = center[1] * b[6] + center[0] * b[2] + center[2] * b[10] + b[14];
+                    float x = py * w[4] + px * w[0] + pz * w[8] + w[12];
+                    float y = py * w[5] + px * w[1] + pz * w[9] + w[13];
+                    float z = py * w[6] + px * w[2] + pz * w[10] + w[14];
+                    float length = x * x + y * y + z * z;
+                    float dx = x;
+                    float dy = y;
+                    float dz = z;
+                    if (0.000099999997f < length) {  // DAT_14261a954
+                        length = std::sqrt(length);
+                        dx = x / length;
+                        dy = y / length;
+                        dz = z / length;
+                    }
+                    float reach = std::sqrt(b[0] * b[0] + b[1] * b[1] + b[2] * b[2]) * section->m_sortRadius;
+                    if ((batch->m_flags & 1) == 0) {
+                        y = dy * reach + y;
+                        x = x + dx * reach;
+                        z = z + dz * reach;
+                    } else {
+                        x = x - dx * reach;
+                        y = y - dy * reach;
+                        z = z - dz * reach;
+                    }
+                    distance = x * x + y * y + z * z;
+                    if (z < 0.0f) {
+                        distance = -distance;
+                    }
+                }
+                element->m_distance = distance;
+                if ((!instancing || projected || (material->m_flags & 0x10) != 0) && (model->m_modelFlags2 & 4) == 0) {
+                    screen = distance;
+                }
+            } else {
+                element->m_distance = BoneCenterDistance(b, w, center);
+            }
+        }
+        element->m_screenSize = screen;
+        uint32_t vertexPermute = 0;
+        uint32_t pixelPermute = 0;
+        if (projected) {
+            uint8_t lit = (material->m_flags & 1) == 0 && g_m2ProjectedBlendLit[material->m_blendMode] != 0 ? 1 : 0;
+            uint16_t vs = ShaderEffectPrepassPixelPermute(lit);
+            uint16_t additive = material->m_blendMode == 1 && 0.0f < alpha * 0.50196081f ? 1 : 0;
+            uint16_t ps = ShaderEffectProjectedPixelPermute(additive);
+            pixelPermute = ps;
+            vertexPermute = vs;
+            uint64_t depthStencil = 0;
+            uint16_t blend = 0;
+            uint32_t raster = 0;
+            M2SceneElementState(model, static_cast<const uint8_t*>(scene->m_038), (scene->m_flags >> 3 & 1) != 0,
+                material->m_blendMode, material->m_flags, g_renderSettings.m_msaaSamples,
+                static_cast<uint32_t>(element->m_batchKey >> 0x20) & 0xf, pass, element->m_flags,
+                static_cast<int32_t>(element->m_64), static_cast<uint32_t>(element->m_sortKey >> 0x1f) & 0xf, &depthStencil,
+                &blend, &raster);
+            GxPipeline* pipeline = ShaderEffectGetPipeline(effect, vs, ps, depthStencil, blend, raster, 0x14, 3,
+                static_cast<uint32_t>(scene->m_db08), nullptr);
+            element->SetPipeline(pipeline);
+            element->m_effect = effect;
+        } else {
+            M2SceneElementPipeline(scene, element, 0, fade < 1.0f, effect, pass, &vertexPermute, &pixelPermute);
+        }
+        bool hasEffect = 0.0f < effectStrength && effectType != 0;
+        if (scene->m_db28 != 0 && pass == 8 && (model->m_flags & 5) == 5) {
+            if ((model->m_modelFlags2 >> 0xf & 1) == 0 && (data->m_flags >> 0x19 & 1) == 0) {
+                if ((model->m_modelFlags2 >> 0x10 & 1) == 0 && (data->m_flags >> 0x1a & 1) == 0) {
+                    int32_t visible = M2SceneOcclusionTest(scene, params->m_box);
+                    if (visible == 1) {
+                        pass = 9;
+                    } else if (visible == 2) {
+                        pass = 8;
+                    } else if (visible == 3) {
+                        if (kind == 3) {
+                            M2IndicesPush(&list->m_lists2[9], index);
+                        } else {
+                            PushIndex(list, 9, index);
+                        }
+                    }
+                } else {
+                    pass = 9;
+                }
+            } else {
+                pass = 8;
+            }
+        }
+        if ((static_cast<uint32_t>(element->m_sortKey >> 0x1f) & 0xf) == 3) {
+            M2IndicesPush(&list->m_lists2[pass], index);
+            M2SceneElementLightKey(scene, &list->m_elements.m_data[index]);
+        } else if (static_cast<uint8_t>(pass - 8) < 2) {
+            if (projected) {
+                if (back == 0) {
+                    M2Element* placed = &list->m_elements.m_data[index];
+                    SHADEREFFECTREQUEST request;
+                    ShaderEffectFindRequest(placed->m_effect, placed->m_pipeline, &request);
+                    PushIndex(list, pass, index);
+                } else {
+                    PushIndex(list, 10, index);
+                }
+            } else if ((model->m_flags2 & 1) != 0) {
+                PushIndex(list, 12, index);
+            } else {
+                if (front != 0) {
+                    PushIndex(list, pass, index);
+                }
+                if (back != 0) {
+                    PushIndex(list, 10, index);
+                }
+            }
+        } else {
+            PushIndex(list, pass, index);
+        }
+        bool procedural = false;
+        int32_t parts[4] = { 0, 0, 0, 0 };
+        if (hasEffect) {
+            uint8_t skip = 0;
+            if (!M2SceneEffectElement(scene, list, &list->m_elements.m_data[index], &index, effectStrength, effectType,
+                    static_cast<int32_t>(front), static_cast<int32_t>(back), static_cast<int32_t>(alphaTest), pass, effect,
+                    vertexPermute, static_cast<int32_t>(pixelPermute), parts, &skip)) {
+                return false;
+            }
+            procedural = skip == 0 && effectType == 5 && material->m_blendMode != 4;
+        }
+        if ((instancing && !projected && (static_cast<uint8_t>(pass - 8) & 0xfd) == 0 && ((material->m_flags & 0x4010) != 0x10 || procedural))
+            || (g_renderSettings.m_msaaSamples != 0 && procedural)) {
+            list->m_elements.m_data[index].m_distance = 3.40282347e+38f;
+            uint8_t passes[2];
+            uint32_t passCount;
+            if ((static_cast<uint8_t>(pass - 8) & 0xfd) == 0) {
+                passCount = 0;
+                if (front != 0) {
+                    passes[0] = static_cast<uint8_t>(((model->m_flags2 & 1) | 2) << 2);
+                    passCount = 1;
+                }
+                if (back != 0) {
+                    passes[passCount] = 10;
+                    passCount++;
+                }
+            } else {
+                passes[0] = 5;
+                passCount = 1;
+            }
+            for (uint32_t k = 0; k < passCount; k++) {
+                uint32_t copyIndex;
+                M2Element* copy = M2SceneDrawListAddElement(list, &copyIndex);
+                *copy = list->m_elements.m_data[index];
+                copy->m_pipeline = nullptr;
+                copy->m_flags |= 1;
+                copy->m_64 = effectType == 6 ? 6 : 0;
+                M2SceneElementPipeline(scene, copy, 0, fade < 1.0f, effect, pass, nullptr, nullptr);
+                const uint8_t* modelEffect = static_cast<const uint8_t*>(model->m_params.m_effect);
+                if (scene->m_effectProcedural != nullptr && effectType == 5 && modelEffect != nullptr
+                    && (*reinterpret_cast<const uint32_t*>(modelEffect + 0x7c) & 0x10) != 0 && ShaderEffectOutlinesOn()) {
+                    copy->m_flags &= 0xffffffdf;
+                    copy->m_pipeline = nullptr;
+                    copy->m_64 = 5;
+                    M2SceneElementProceduralPipeline(scene, copy, material, passes[k], 1, fade < 1.0f, parts);
+                }
+                PushIndex(list, passes[k], copyIndex);
+            }
+        }
+        if (secondPass != 0 && !projected && static_cast<uint8_t>(pass - 6) < 2
+            && ((material->m_flags & 0x10) == 0 || effectType == 5) && batch->m_materialLayer == 0) {
+            uint32_t copyIndex;
+            M2Element* copy = M2SceneDrawListAddElement(list, &copyIndex);
+            *copy = list->m_elements.m_data[index];
+            copy->m_64 = 0;
+            copy->m_pipeline = nullptr;
+            bool faded = fade < 1.0f;
+            copy->m_flags |= (listFlags & 2) << 3;
+            auto proceduralOn = [&]() {
+                const uint8_t* effectBlock = static_cast<const uint8_t*>(copy->m_model->m_params.m_effect);
+                return effectBlock != nullptr && (*reinterpret_cast<const uint32_t*>(effectBlock + 0x7c) & 0x10) != 0
+                    && ShaderEffectOutlinesOn() && scene->m_effectProcedural != nullptr;
+            };
+            bool done = false;
+            if (material->m_blendMode == 0) {
+                if (effectType == 5 && proceduralOn()) {
+                    if (proceduralOn() && effectMinimum < effectStrength) {
+                        copy->m_64 = 5;
+                        M2SceneElementProceduralPipeline(scene, copy, material, 0, 1, faded, parts);
+                        done = true;
+                    }
+                } else {
+                    M2SceneElementPrepassPipeline(scene, copy, faded, 0);
+                    done = true;
+                }
+            } else if (effectType == 8) {
+                M2SceneElementFlipbookPipeline(scene, copy, material, 0);
+                done = true;
+            } else if (effectType == 5 && proceduralOn() && effectMinimum < effectStrength) {
+                copy->m_64 = 5;
+                M2SceneElementProceduralPipeline(scene, copy, material, 0, 1, faded, parts);
+                done = true;
+            }
+            if (!done) {
+                M2SceneElementPipeline(scene, copy, 1, faded, effect, 0, nullptr, nullptr);
+            }
+            if ((static_cast<uint32_t>(copy->m_sortKey >> 0x1f) & 0xf) == 3) {
+                M2IndicesPush(&list->m_lists2[0], copyIndex);
+                M2SceneElementLightKey(scene, &list->m_elements.m_data[index]);
+            } else {
+                PushIndex(list, 0, copyIndex);
+            }
+        }
+    }
+    if (model->m_physicsBoneCount != 0 && scene->m_d678 != nullptr) {
+        OsMutexLock(&scene->m_locks100[2]);
+        reinterpret_cast<void (*)(void* states, void* param)>(scene->m_d678)(&model->m_physicsBoneCount, scene->m_d680);
+        OsMutexUnlock(&scene->m_locks100[2]);
+    }
+    for (uint32_t r = 0; r < data->m_ribbons.Count(); r++) {
+        if (RibbonEmitterIsIdle(model->m_ribbons[r])) {
+            continue;
+        }
+        float alpha = model->m_params.m_alpha;
+        const M2Ribbon* ribbon = &data->m_ribbons[r];
+        if (*reinterpret_cast<const int16_t*>(reinterpret_cast<const uint8_t*>(ribbon) + 0x3c) != 0) {
+            alpha *= *reinterpret_cast<const float*>(reinterpret_cast<const uint8_t*>(model->m_ribbonStates) + 0x1c + r * 0x50);
+        }
+        float ribbonFade = model->m_params.m_fade;
+        if (alpha * ribbonFade < fadeMinimum) {
+            continue;
+        }
+        uint32_t index;
+        M2Element* element = M2SceneDrawListAddElement(list, &index);
+        element->Initialize(4, 0, model, nullptr, alpha * ribbonFade, model->m_screenSize, model->m_screenSize,
+            static_cast<uint32_t>(static_cast<int32_t>(*reinterpret_cast<const int16_t*>(reinterpret_cast<const uint8_t*>(ribbon) + 0xac))), 0);
+        element->SetRibbon(r);
+        if (front == 0) {
+            PushIndex(list, 10, index);
+        } else if (scene->m_db28 == 0) {
+            PushIndex(list, 8, index);
+        } else {
+            float box[6];
+            int32_t visible = M2SceneOcclusionTest(scene, model->GetBounds(box));
+            if (visible == 1) {
+                PushIndex(list, 9, index);
+            } else if (visible == 2) {
+                PushIndex(list, 8, index);
+            } else if (visible == 3) {
+                PushIndex(list, 9, index);
+                PushIndex(list, 8, index);
+            }
+        }
+    }
+    if (g_renderSettings.m_modelScreenRects != 0
+        && ((model->m_flags >> 0x11 & 1) != 0 || ((model->m_flags >> 0x12 & 1) != 0 && model->m_parent != nullptr))) {
+        M2SceneOutlineElements(scene, list, model, model->m_screenSize);
+    }
+    if ((model->m_modelFlags & 0x100000) != 0 || ((model->m_modelFlags2 & 0x10) != 0 && model->m_parent != nullptr)) {
+        M2SceneShadowElements(scene, list, model, model->m_screenSize);
+    }
+    auto decal = static_cast<void**>(model->m_590);
+    if (decal != nullptr) {
+        uint32_t index;
+        M2Element* element = M2SceneDrawListAddElement(list, &index);
+        element->Initialize(7, 0, model, nullptr, 1.0f, model->m_screenSize, model->m_screenSize, 0, 0);
+        uint8_t pass;
+        if ((model->m_flags2 & 1) == 0) {
+            pass = reinterpret_cast<uint8_t (*)(void*)>(static_cast<void**>(*decal)[0])(decal);
+        } else {
+            pass = 0xc;
+        }
+        if (pass != 6 && pass != 0xb && pass != 0xc && pass != 0xd) {
+            if (front == 0) {
+                pass = 10;
+            } else {
+                pass = 8;
+                if (scene->m_db28 != 0) {
+                    float box[6];
+                    int32_t visible = M2SceneOcclusionTest(scene, model->GetBounds(box));
+                    if (visible == 1) {
+                        pass = 9;
+                    } else if (visible == 3) {
+                        M2SceneDrawListAddToPass(scene, list, 9, index);
+                    }
+                }
+            }
+        }
+        M2SceneDrawListAddToPass(scene, list, pass, index);
+    }
+    return true;
 }

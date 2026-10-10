@@ -129,3 +129,11 @@ void RibbonEmitterSetColorOverride(CRibbonEmitter* ribbon, float r, float g, flo
     (void)b;
     FROST_UNIMPLEMENTED();
 }
+
+// ref: FUN_141296840
+bool RibbonEmitterIsIdle(const CRibbonEmitter* ribbon) {
+    auto bytes = reinterpret_cast<const uint8_t*>(ribbon);
+    return (bytes[0x1a2] & 4) != 0
+        && *reinterpret_cast<const int32_t*>(bytes + 0x68) - *reinterpret_cast<const int32_t*>(bytes + 0x70)
+            == *reinterpret_cast<const int32_t*>(bytes + 0xcc);
+}

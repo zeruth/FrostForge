@@ -819,6 +819,13 @@ class CM2Model : public CM2BaseModel {
     uint16_t GetBoneCount();
     // The shadow batches the model draws: its LOD data's, or the profile's (FUN_1411c02e0).
     uint32_t GetShadowBatchCount();
+    // A projected batch's state (0xe0) for the second pass: its textures (FUN_141201bd0), its
+    // texture weights (FUN_141201a80), its colour (FUN_1412018d0) and its box and projection
+    // (FUN_141200fc0). `context` is {model, batch, section, data, scene}.
+    void ProjectedBatchTextures(void* context, uint8_t* state);
+    void ProjectedBatchWeights(void* context, uint8_t* state);
+    bool ProjectedBatchColor(void* context, uint8_t* state);
+    bool ProjectedBatchBounds(void* context, uint8_t* state);
     // Runs a queued callback (FUN_1411b5720): a sequence started on a key bone (FUN_1411b5780)
     // or a function called.
     void RunCallback(const M2ModelCallback* callback);

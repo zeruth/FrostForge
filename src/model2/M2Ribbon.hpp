@@ -59,4 +59,8 @@ void RibbonEmitterUpdate(CRibbonEmitter* ribbon, float delta, bool hidden);
 // ref: FUN_141296640
 void RibbonEmitterDelete(CRibbonEmitter* ribbon);
 
+// Whether a ribbon has nothing to draw: emitting and with no edges past its first
+// (FUN_141296840).
+bool RibbonEmitterIsIdle(const CRibbonEmitter* ribbon);
+
 #endif

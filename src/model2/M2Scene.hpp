@@ -165,7 +165,11 @@ class CM2Scene {
     uint8_t m_d638[0xd664 - 0xd638];
     float m_screenRect[4];                      // 0xd664 its models' on screen
     float m_animateRatio;                       // 0xd674 screen size past which animation is light
-    uint8_t m_d678[0xd698 - 0xd678];
+    // What draws the projected batches' states, and its parameter (FUN_1411e0780): the world's
+    // decals.
+    void* m_d678;                               // 0xd678
+    void* m_d680;                               // 0xd680
+    uint8_t m_d688[0x10];
     // Traces a segment against the world: the hit point and how far along it is (1 for none).
     void (*m_traceCallback)(void* query, float* hit, float* t);  // 0xd698
     void* m_d6a0;                               // 0xd6a0
