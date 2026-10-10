@@ -29,6 +29,11 @@ from wowbin import Binary
 
 ROOT = Path(__file__).resolve().parent.parent
 CTOR = 0x1405780A0
+# The sparse tables (WowClientSparseDB2.cpp): ConversationLine, ItemSparse, SceneScriptText and
+# Spell. Their initializers call this base constructor instead, then make an ObjectAlloc heap
+# for their records (FUN_1412401e0: the record size, 0x200 a heap, the record name).
+SPARSE_CTOR = 0x1405A2CC0
+POOL_CREATE = 0x1412401E0
 GROUPS = 0x142CCDC70
 GROUP_COUNT = 6
 
@@ -68,9 +73,29 @@ def rip_target(insn) -> int | None:
     return None
 
 
+def sparse_pool(site: int) -> tuple[str, int]:
+    """The record name and size a sparse table's initializer gives its record heap."""
+    name = None
+    size = None
+    for insn in insns(site):
+        if insn.mnemonic == "lea" and insn.op_str.startswith("r8, [rip"):
+            name = b.cstr(rip_target(insn))
+        elif insn.mnemonic == "mov" and (mm := re.fullmatch(r"dword ptr \[r\w+ \+ 8\], (0x[0-9a-f]+|\d+)", insn.op_str)):
+            size = int(mm.group(1), 0)
+        elif insn.mnemonic == "call" and insn.op_str.startswith("0x") and int(insn.op_str, 16) == POOL_CREATE:
+            break
+    if name is None or size is None:
+        raise SystemExit(f"sparse table at {site:#x}: no record heap found")
+    return name, size
+
+
+SPARSE = {}
+
+
 def find_tables() -> list[tuple[int, int]]:
     tables = []
-    for site, kind in b.callers(CTOR):
+    sites = [(site, False) for site, _ in b.callers(CTOR)] + [(site, True) for site, _ in b.callers(SPARSE_CTOR)]
+    for site, sparse in sites:
         meta = db = None
         for back in range(1, 40):
             a = site - back
@@ -82,6 +107,10 @@ def find_tables() -> list[tuple[int, int]]:
             if meta and db:
                 break
         if meta is None or db is None or not b.section_of(b.u64(meta)):
+            continue
+        if sparse:
+            SPARSE[db] = sparse_pool(site)
+        elif db in SPARSE:
             continue
         tables.append((db, meta))
     tables.sort(key=lambda t: t[0])
@@ -258,8 +287,13 @@ def main() -> None:
             f"{order_refs[0]}, {order_refs[1]}, {u8(meta + 0xA8)}, {u8(meta + 0xA9)}, {{}} }};")
         body.append("")
         instances.append(f"// 0x{db:x}")
-        instances.append(f"WowClientDB2 {names[db]}(&s_{n}Meta);")
-        decl.append(f"extern WowClientDB2 {names[db]};  // 0x{db:x} {name}")
+        if db in SPARSE:
+            record_name, record_size = SPARSE[db]
+            instances.append(f"WowClientSparseDB2Table {names[db]}(&s_{n}Meta, {c_string(record_name)}, 0x{record_size:x});")
+            decl.append(f"extern WowClientSparseDB2Table {names[db]};  // 0x{db:x} {name}")
+        else:
+            instances.append(f"WowClientDB2 {names[db]}(&s_{n}Meta);")
+            decl.append(f"extern WowClientDB2 {names[db]};  // 0x{db:x} {name}")
 
     groups = []
     group_names = []
@@ -309,6 +343,7 @@ def main() -> None:
            "#define DB_DB2_TABLES_HPP",
            "",
            '#include "db/WowClientDB2.hpp"',
+           '#include "db/WowClientSparseDB2.hpp"',
            "",
            "struct DB2LOADGROUP {",
            "    WowClientDB2_Base** m_tables;",

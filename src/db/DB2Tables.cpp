@@ -1743,6 +1743,15 @@ const int32_t s_ContributionStyleFileTypes[] = { 2, 2, 0, 0, 0, 0, 0 };
 const int32_t s_ContributionStyleFileFlags[] = { 8, 8, 2, 6, 2, 2, 2 };
 const DBMeta s_ContributionStyleMeta = { "ContributionStyle", 2143633, 7, 28, 7, -1, 0, {}, s_ContributionStyleOffsets, s_ContributionStyleSizes, s_ContributionStyleTypes, s_ContributionStyleFlags, s_ContributionStyleFileSizes, s_ContributionStyleFileTypes, s_ContributionStyleFileFlags, 0, 3084806990u, 0, 2000840u, 2, 0, 0, 0, nullptr, nullptr, 0, {}, -1, -1, 0, nullptr, nullptr, 0, 0, {} };
 
+const int32_t s_ConversationLineOffsets[] = { 0, 4, 8, 12, 14, 16, 17, 18 };
+const int32_t s_ConversationLineSizes[] = { 1, 1, 1, 1, 1, 1, 1, 1 };
+const int32_t s_ConversationLineTypes[] = { 0, 0, 0, 5, 5, 4, 4, 4 };
+const int32_t s_ConversationLineFlags[] = { 4, 4, 0, 4, 4, 4, 4, 4 };
+const int32_t s_ConversationLineFileSizes[] = { 1, 1, 1, 1, 1, 1, 1, 1 };
+const int32_t s_ConversationLineFileTypes[] = { 0, 0, 0, 5, 5, 4, 4, 4 };
+const int32_t s_ConversationLineFileFlags[] = { 4, 4, 0, 4, 4, 4, 4, 4 };
+const DBMeta s_ConversationLineMeta = { "ConversationLine", 1260801, 8, 19, 8, -1, 1, {}, s_ConversationLineOffsets, s_ConversationLineSizes, s_ConversationLineTypes, s_ConversationLineFlags, s_ConversationLineFileSizes, s_ConversationLineFileTypes, s_ConversationLineFileFlags, 0, 3348406326u, 0, 2665905179u, 0, 0, 0, 0, nullptr, nullptr, 0, {}, -1, -1, 0, nullptr, nullptr, 0, 0, {} };
+
 const int32_t s_CreatureDifficultyOffsets[] = { 0, 1, 2, 3, 5, 9, 41 };
 const int32_t s_CreatureDifficultySizes[] = { 1, 1, 1, 1, 1, 8, 1 };
 const int32_t s_CreatureDifficultyTypes[] = { 4, 4, 4, 5, 0, 0, 0 };
@@ -3458,6 +3467,15 @@ const int32_t s_ItemSetSpellFileTypes[] = { 5, 0, 4 };
 const int32_t s_ItemSetSpellFileFlags[] = { 6, 6, 6 };
 const DBMeta s_ItemSetSpellMeta = { "ItemSetSpell", 1314689, 3, 11, 4, -1, 0, {}, s_ItemSetSpellOffsets, s_ItemSetSpellSizes, s_ItemSetSpellTypes, s_ItemSetSpellFlags, s_ItemSetSpellFileSizes, s_ItemSetSpellFileTypes, s_ItemSetSpellFileFlags, 0, 2252716921u, 0, 3214064454u, 0, 0, 0, 0, nullptr, nullptr, 1, {}, -1, 3, 0, ItemSetSpellOrder, ItemSetSpellOrderPtr, 0, 0, {} };
 
+const int32_t s_ItemSparseOffsets[] = { 0, 8, 24, 40, 56, 72, 88, 92, 96, 100, 104, 108, 112, 152, 192, 196, 200, 204, 208, 212, 216, 220, 224, 228, 244, 248, 252, 256, 260, 264, 266, 268, 270, 272, 274, 276, 278, 280, 284, 286, 288, 290, 292, 294, 296, 298, 300, 302, 304, 306, 316, 326, 340, 342, 362, 363, 364, 365, 366, 369, 370, 371, 372, 373, 374, 375, 385, 386, 387, 388, 389, 390, 391 };
+const int32_t s_ItemSparseSizes[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 10, 10, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 7, 1, 10, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 10, 1, 1, 1, 1, 1, 1, 1 };
+const int32_t s_ItemSparseTypes[] = { 1, 2, 2, 2, 2, 2, 3, 0, 3, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 };
+const int32_t s_ItemSparseFlags[] = { 0, 8, 8, 8, 8, 8, 0, 4, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 0, 4, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 0, 0, 4, 0 };
+const int32_t s_ItemSparseFileSizes[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 10, 10, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 7, 1, 10, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 10, 1, 1, 1, 1, 1, 1, 1 };
+const int32_t s_ItemSparseFileTypes[] = { 1, 2, 2, 2, 2, 2, 3, 0, 3, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 };
+const int32_t s_ItemSparseFileFlags[] = { 0, 8, 8, 8, 8, 8, 0, 4, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 0, 4, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 0, 0, 4, 0 };
+const DBMeta s_ItemSparseMeta = { "ItemSparse", 1572924, 73, 332, 73, -1, 1, {}, s_ItemSparseOffsets, s_ItemSparseSizes, s_ItemSparseTypes, s_ItemSparseFlags, s_ItemSparseFileSizes, s_ItemSparseFileTypes, s_ItemSparseFileFlags, 0, 2442913102u, 0, 3576862525u, 5, 0, 0, 0, nullptr, nullptr, 0, {}, -1, -1, 0, nullptr, nullptr, 0, 0, {} };
+
 const int32_t s_ItemSpecOverrideOffsets[] = { 0, 2 };
 const int32_t s_ItemSpecOverrideSizes[] = { 1, 1 };
 const int32_t s_ItemSpecOverrideTypes[] = { 5, 0 };
@@ -4891,6 +4909,15 @@ const int32_t s_SceneScriptFileTypes[] = { 5, 5, 0 };
 const int32_t s_SceneScriptFileFlags[] = { 6, 6, 2 };
 const DBMeta s_SceneScriptMeta = { "SceneScript", 801754, 3, 8, 3, -1, 0, {}, s_SceneScriptOffsets, s_SceneScriptSizes, s_SceneScriptTypes, s_SceneScriptFlags, s_SceneScriptFileSizes, s_SceneScriptFileTypes, s_SceneScriptFileFlags, 0, 3568395212u, 0, 4065155818u, 0, 0, 0, 0, nullptr, nullptr, 0, {}, -1, -1, 0, nullptr, nullptr, 0, 0, {} };
 
+const int32_t s_SceneScriptTextOffsets[] = { 0, 16 };
+const int32_t s_SceneScriptTextSizes[] = { 1, 1 };
+const int32_t s_SceneScriptTextTypes[] = { 2, 2 };
+const int32_t s_SceneScriptTextFlags[] = { 0, 0 };
+const int32_t s_SceneScriptTextFileSizes[] = { 1, 1 };
+const int32_t s_SceneScriptTextFileTypes[] = { 2, 2 };
+const int32_t s_SceneScriptTextFileFlags[] = { 0, 0 };
+const DBMeta s_SceneScriptTextMeta = { "SceneScriptText", 1758037, 2, 8, 2, -1, 1, {}, s_SceneScriptTextOffsets, s_SceneScriptTextSizes, s_SceneScriptTextTypes, s_SceneScriptTextFlags, s_SceneScriptTextFileSizes, s_SceneScriptTextFileTypes, s_SceneScriptTextFileFlags, 0, 537670055u, 0, 2184835021u, 2, 0, 0, 0, nullptr, nullptr, 0, {}, -1, -1, 0, nullptr, nullptr, 0, 0, {} };
+
 const int32_t s_ScheduledIntervalOffsets[] = { 0, 4, 8, 12, 16 };
 const int32_t s_ScheduledIntervalSizes[] = { 1, 1, 1, 1, 1 };
 const int32_t s_ScheduledIntervalTypes[] = { 0, 0, 0, 0, 0 };
@@ -5509,6 +5536,15 @@ const int32_t s_SpellReagentsFileTypes[] = { 0, 0, 5 };
 const int32_t s_SpellReagentsFileFlags[] = { 2, 2, 2 };
 const DBMETAINTKEY s_SpellReagentsIntKeys[] = { { 0, 0, {}, -1, 0 } };
 const DBMeta s_SpellReagentsMeta = { "SpellReagents", 841946, 3, 52, 3, -1, 0, {}, s_SpellReagentsOffsets, s_SpellReagentsSizes, s_SpellReagentsTypes, s_SpellReagentsFlags, s_SpellReagentsFileSizes, s_SpellReagentsFileTypes, s_SpellReagentsFileFlags, 0, 2875640223u, 0, 4041574019u, 0, 1, 0, 0, s_SpellReagentsIntKeys, nullptr, 0, {}, -1, -1, 0, nullptr, nullptr, 0, 0, {} };
+
+const int32_t s_SpellOffsets[] = { 0, 16, 32 };
+const int32_t s_SpellSizes[] = { 1, 1, 1 };
+const int32_t s_SpellTypes[] = { 2, 2, 2 };
+const int32_t s_SpellFlags[] = { 8, 8, 8 };
+const int32_t s_SpellFileSizes[] = { 1, 1, 1 };
+const int32_t s_SpellFileTypes[] = { 2, 2, 2 };
+const int32_t s_SpellFileFlags[] = { 8, 8, 8 };
+const DBMeta s_SpellMeta = { "Spell", 1140089, 3, 12, 3, -1, 1, {}, s_SpellOffsets, s_SpellSizes, s_SpellTypes, s_SpellFlags, s_SpellFileSizes, s_SpellFileTypes, s_SpellFileFlags, 0, 3776013982u, 0, 3795407976u, 3, 0, 0, 0, nullptr, nullptr, 0, {}, -1, -1, 0, nullptr, nullptr, 0, 0, {} };
 
 const int32_t s_SpellScalingOffsets[] = { 0, 4, 8, 12, 16 };
 const int32_t s_SpellScalingSizes[] = { 1, 1, 1, 1, 1 };
@@ -7662,6 +7698,8 @@ WowClientDB2 g_contributionDB(&s_ContributionMeta);
 WowClientDB2 g_contributionStyleContainerDB(&s_ContributionStyleContainerMeta);
 // 0x142e46190
 WowClientDB2 g_contributionStyleDB(&s_ContributionStyleMeta);
+// 0x142e463a0
+WowClientSparseDB2Table g_conversationLineDB(&s_ConversationLineMeta, "ConversationLineRec_C", 0x1c);
 // 0x142e46750
 WowClientDB2 g_creatureDifficultyDB(&s_CreatureDifficultyMeta);
 // 0x142e46960
@@ -8040,6 +8078,8 @@ WowClientDB2 g_itemSearchNameDB(&s_ItemSearchNameMeta);
 WowClientDB2 g_itemSetDB(&s_ItemSetMeta);
 // 0x142e5eb10
 WowClientDB2 g_itemSetSpellDB(&s_ItemSetSpellMeta);
+// 0x142e5ed20
+WowClientSparseDB2Table g_itemSparseDB(&s_ItemSparseMeta, "ItemSparseRec_C", 0x198);
 // 0x142e5f0d0
 WowClientDB2 g_itemSpecOverrideDB(&s_ItemSpecOverrideMeta);
 // 0x142e5f2e0
@@ -8356,6 +8396,8 @@ WowClientDB2 g_sceneScriptPackageMemberDB(&s_SceneScriptPackageMemberMeta);
 WowClientDB2 g_sceneScriptPackageDB(&s_SceneScriptPackageMeta);
 // 0x142e734a0
 WowClientDB2 g_sceneScriptDB(&s_SceneScriptMeta);
+// 0x142e736b0
+WowClientSparseDB2Table g_sceneScriptTextDB(&s_SceneScriptTextMeta, "SceneScriptTextRec_C", 0x28);
 // 0x142e73a60
 WowClientDB2 g_scheduledIntervalDB(&s_ScheduledIntervalMeta);
 // 0x142e73c70
@@ -8492,6 +8534,8 @@ WowClientDB2 g_spellRangeDB(&s_SpellRangeMeta);
 WowClientDB2 g_spellReagentsCurrencyDB(&s_SpellReagentsCurrencyMeta);
 // 0x142e7c490
 WowClientDB2 g_spellReagentsDB(&s_SpellReagentsMeta);
+// 0x142e7c6a0
+WowClientSparseDB2Table g_spellDB(&s_SpellMeta, "SpellRec_C", 0x38);
 // 0x142e7ca50
 WowClientDB2 g_spellScalingDB(&s_SpellScalingMeta);
 // 0x142e7cc60
@@ -10187,7 +10231,7 @@ WowClientDB2_Base* s_group2[] = {
     &g_itemDisplayInfoModelMatResDB,
     &g_itemModifiedAppearanceDB,
     &g_itemModifiedAppearanceExtraDB,
-    nullptr /* 0x142e5ed20 not a WowClientDB2 */,
+    &g_itemSparseDB,
     &g_itemSubClassDB,
     &g_itemVisualsDB,
     &g_itemVisualsXEffectDB,
@@ -10375,7 +10419,7 @@ WowClientDB2_Base* s_group5[] = {
     &g_contributionDB,
     &g_contributionStyleDB,
     &g_contributionStyleContainerDB,
-    nullptr /* 0x142e463a0 not a WowClientDB2 */,
+    &g_conversationLineDB,
     &g_creatureDB,
     &g_creatureDisplayInfoEvtDB,
     &g_creatureDisplayInfoTrnDB,
@@ -10639,7 +10683,7 @@ WowClientDB2_Base* s_group5[] = {
     &g_sceneScriptPackageDB,
     &g_sceneScriptPackageMemberDB,
     &g_sceneScriptDB,
-    nullptr /* 0x142e736b0 not a WowClientDB2 */,
+    &g_sceneScriptTextDB,
     &g_sceneScriptGlobalTextDB,
     &g_scheduledIntervalDB,
     &g_screenEffectDB,
@@ -10660,7 +10704,7 @@ WowClientDB2_Base* s_group5[] = {
     &g_specializationSpellsDB,
     &g_specializationSpellsDisplayDB,
     &g_specSetMemberDB,
-    nullptr /* 0x142e7c6a0 not a WowClientDB2 */,
+    &g_spellDB,
     &g_spellActionBarPrefDB,
     &g_spellActivationOverlayDB,
     &g_spellAuraOptionsDB,

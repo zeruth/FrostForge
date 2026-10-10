@@ -256,7 +256,7 @@ class WowClientDB2_Base {
     int32_t m_minId;                                // 0x1d0
     uint32_t m_stride;                              // 0x1d4
     uint64_t m_1d8;                                 // 0x1d8
-    uint64_t m_1e0;                                 // 0x1e0
+    uint32_t m_1e0;                                 // 0x1e0 (the constructor's qword store clears it and the flags)
     uint8_t m_deleted;                              // 0x1e4 its address marks a deleted record
     uint8_t m_loaded;                               // 0x1e5
     uint8_t m_indexedValid;                         // 0x1e6
@@ -314,6 +314,8 @@ class WowClientDB2_Base {
     // Whether `record` is one of the file's records.
     bool IsFileRecord(const uint8_t* record);
 };
+
+static_assert(sizeof(WowClientDB2_Base) == 0x1f0, "WowClientDB2_Base is 0x1f0 bytes");
 
 // The typed tables: the record-callback map follows the base (0x1f0, 0x20 bytes).
 class WowClientDB2 : public WowClientDB2_Base {

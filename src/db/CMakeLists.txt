@@ -3,6 +3,7 @@ add_library(db STATIC
     DBClient.cpp
     DynamicLifeTimeDB.cpp
     TactKeys.cpp
+    WowClientSparseDB2.cpp
     WowClientDB2.cpp
     WowDB2Lookup.cpp
 )

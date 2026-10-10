@@ -149,6 +149,7 @@ def main():
     ap.add_argument("--cwd", default=os.path.join(ROOT, "client", "_classic_"))
     ap.add_argument("--timeout", type=float, default=120.0)
     ap.add_argument("--log", default=None)
+    ap.add_argument("--args", default="", help="the command line after the exe, as one string")
     args = ap.parse_args()
     exe = os.path.abspath(args.exe)
     si = STARTUPINFO()
@@ -166,7 +167,7 @@ def main():
         si.hStdOutput = handle
         inherit = True
     pi = PROCESS_INFORMATION()
-    command = ctypes.create_unicode_buffer('"%s"' % exe)
+    command = ctypes.create_unicode_buffer('"%s"' % exe + (" " + args.args if args.args else ""))
     if not k32.CreateProcessW(None, command, None, None, inherit, DEBUG_ONLY_THIS_PROCESS, None, args.cwd,
                               ctypes.byref(si), ctypes.byref(pi)):
         print("CreateProcess failed", ctypes.get_last_error())

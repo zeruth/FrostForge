@@ -4,6 +4,7 @@
 #define DB_DB2_TABLES_HPP
 
 #include "db/WowClientDB2.hpp"
+#include "db/WowClientSparseDB2.hpp"
 
 struct DB2LOADGROUP {
     WowClientDB2_Base** m_tables;
@@ -183,6 +184,7 @@ extern WowClientDB2 g_contentTuningDB;  // 0x142e45b60 ContentTuning
 extern WowClientDB2 g_contributionDB;  // 0x142e45d70 Contribution
 extern WowClientDB2 g_contributionStyleContainerDB;  // 0x142e45f80 ContributionStyleContainer
 extern WowClientDB2 g_contributionStyleDB;  // 0x142e46190 ContributionStyle
+extern WowClientSparseDB2Table g_conversationLineDB;  // 0x142e463a0 ConversationLine
 extern WowClientDB2 g_creatureDifficultyDB;  // 0x142e46750 CreatureDifficulty
 extern WowClientDB2 g_creatureDispXUiCameraDB;  // 0x142e46960 CreatureDispXUiCamera
 extern WowClientDB2 g_creatureDisplayInfoCondDB;  // 0x142e46b70 CreatureDisplayInfoCond
@@ -372,6 +374,7 @@ extern WowClientDB2 g_itemDB;  // 0x142e5e4e0 Item
 extern WowClientDB2 g_itemSearchNameDB;  // 0x142e5e6f0 ItemSearchName
 extern WowClientDB2 g_itemSetDB;  // 0x142e5e900 ItemSet
 extern WowClientDB2 g_itemSetSpellDB;  // 0x142e5eb10 ItemSetSpell
+extern WowClientSparseDB2Table g_itemSparseDB;  // 0x142e5ed20 ItemSparse
 extern WowClientDB2 g_itemSpecOverrideDB;  // 0x142e5f0d0 ItemSpecOverride
 extern WowClientDB2 g_itemSpecDB;  // 0x142e5f2e0 ItemSpec
 extern WowClientDB2 g_itemSubClassMaskDB;  // 0x142e5f4f0 ItemSubClassMask
@@ -530,6 +533,7 @@ extern WowClientDB2 g_sceneScriptGlobalTextDB;  // 0x142e72e70 SceneScriptGlobal
 extern WowClientDB2 g_sceneScriptPackageMemberDB;  // 0x142e73080 SceneScriptPackageMember
 extern WowClientDB2 g_sceneScriptPackageDB;  // 0x142e73290 SceneScriptPackage
 extern WowClientDB2 g_sceneScriptDB;  // 0x142e734a0 SceneScript
+extern WowClientSparseDB2Table g_sceneScriptTextDB;  // 0x142e736b0 SceneScriptText
 extern WowClientDB2 g_scheduledIntervalDB;  // 0x142e73a60 ScheduledInterval
 extern WowClientDB2 g_screenEffectDB;  // 0x142e73c70 ScreenEffect
 extern WowClientDB2 g_screenEffectTypeDB;  // 0x142e73e80 ScreenEffectType
@@ -598,6 +602,7 @@ extern WowClientDB2 g_spellRadiusDB;  // 0x142e7be60 SpellRadius
 extern WowClientDB2 g_spellRangeDB;  // 0x142e7c070 SpellRange
 extern WowClientDB2 g_spellReagentsCurrencyDB;  // 0x142e7c280 SpellReagentsCurrency
 extern WowClientDB2 g_spellReagentsDB;  // 0x142e7c490 SpellReagents
+extern WowClientSparseDB2Table g_spellDB;  // 0x142e7c6a0 Spell
 extern WowClientDB2 g_spellScalingDB;  // 0x142e7ca50 SpellScaling
 extern WowClientDB2 g_spellShapeshiftFormDB;  // 0x142e7cc60 SpellShapeshiftForm
 extern WowClientDB2 g_spellShapeshiftDB;  // 0x142e7ce70 SpellShapeshift

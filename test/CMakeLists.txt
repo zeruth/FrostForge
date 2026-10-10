@@ -4,6 +4,9 @@ target_link_libraries(PrintfTest PRIVATE storm)
 add_executable(CasExtract tools/CasExtract.cpp)
 target_link_libraries(CasExtract PRIVATE base blz cas client db storm)
 
+add_executable(DB2Check tools/DB2Check.cpp)
+target_link_libraries(DB2Check PRIVATE base blz cas client db storm)
+
 add_executable(ProbeTest storm/ProbeTest.cpp)
 target_link_libraries(ProbeTest PRIVATE base cas client console gx gxu os prism storm tact)
 
