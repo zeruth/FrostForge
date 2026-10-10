@@ -90,48 +90,6 @@ void WorldScene030Destroy(void* object) {
     FROST_UNIMPLEMENTED();
 }
 
-// ---- DayNight ------------------------------------------------------------------------------
-
-// ref: FUN_142442100
-void* DayNightCreate(CWorldScene* scene, CWorldView* view) {
-    (void)scene;
-    (void)view;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
-}
-
-// ref: FUN_142442370
-void DayNightDestroy(void* dayNight) {
-    (void)dayNight;
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_142442fe0
-void DayNightSetMap(void* dayNight, int32_t mapId) {
-    (void)dayNight;
-    (void)mapId;
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_142443100
-void DayNightSetArea(void* dayNight, int32_t lightId, int32_t index) {
-    (void)dayNight;
-    (void)lightId;
-    (void)index;
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_142443200
-void DayNightSetView(void* dayNight, CWorldView* view, const float* position, const float* clip,
-    const float* viewMatrix) {
-    (void)dayNight;
-    (void)view;
-    (void)position;
-    (void)clip;
-    (void)viewMatrix;
-    FROST_UNIMPLEMENTED();
-}
-
 // ---- MapWeather ----------------------------------------------------------------------------
 
 // ref: FUN_14138a820

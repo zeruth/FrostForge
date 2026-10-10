@@ -258,4 +258,18 @@ void GxDeviceRelease0e0(void* holder, void* object);
 // ref: FUN_142288400
 void GxDeviceRelease0f8(void* holder, void* object);
 
+// A texture from its parameters (the description FUN_14228c330 builds on the stack): kind,
+// size, format and mip count, creation flags. The name is for the debugger and is dropped.
+// ref: FUN_14228c330
+bool GxTexCreateParams(uint8_t kind, uint32_t width, uint32_t height, uint32_t depth, uint8_t format,
+    uint8_t mips, uint64_t flags, const char* name, void** tex);
+
+// The device's queries (slots 0x278..0x288).
+// ref: FUN_14228b670
+void* GxQueryCreate(uint8_t type);
+// ref: FUN_14228b690
+void GxQueryDestroy(void* query);
+// ref: FUN_14228b6e0
+bool GxQueryInfo(void* query, uint8_t what, uint32_t* out);
+
 #endif

@@ -2674,3 +2674,38 @@ void GxDeviceRelease0f8(void* holder, void* object) {
     (void)object;
     FROST_UNIMPLEMENTED();  // the device's slot 0xf8
 }
+
+// ref: FUN_14228c330
+bool GxTexCreateParams(uint8_t kind, uint32_t width, uint32_t height, uint32_t depth, uint8_t format,
+    uint8_t mips, uint64_t flags, const char* name, void** tex) {
+    (void)name;
+    uint8_t desc[0x30] = {};
+    desc[0] = kind;
+    std::memcpy(desc + 4, &width, 4);
+    std::memcpy(desc + 8, &height, 4);
+    std::memcpy(desc + 0xc, &depth, 4);
+    desc[0x10] = format;
+    desc[0x11] = mips;
+    std::memcpy(desc + 0x14, &flags, 8);
+    return GxTexCreate(desc, tex);
+}
+
+// ref: FUN_14228b670
+void* GxQueryCreate(uint8_t type) {
+    return static_cast<CGxDevice*>(g_gxDevice)->QueryCreate(type);
+}
+
+// ref: FUN_14228b690
+void GxQueryDestroy(void* query) {
+    if (query != nullptr) {
+        static_cast<CGxDevice*>(g_gxDevice)->QueryDestroy(query);
+    }
+}
+
+// ref: FUN_14228b6e0
+bool GxQueryInfo(void* query, uint8_t what, uint32_t* out) {
+    if (query == nullptr) {
+        return false;
+    }
+    return static_cast<CGxDevice*>(g_gxDevice)->QueryInfo(query, what, out);
+}

@@ -1,6 +1,7 @@
 #include "world/WorldScene.hpp"
 
 #include "client/RenderSettings.hpp"
+#include "daynight/DayNight.hpp"
 #include "gx/Gx.hpp"
 #include "model2/M2Scene.hpp"
 #include "storm/Memory.hpp"
@@ -70,6 +71,11 @@ float MapScaledClip(float clip, CWorldMap* map, float scale) {
 }  // namespace
 
 // ---- the scene's globals -------------------------------------------------------------------
+
+// ref: FUN_141357060
+void* WorldSceneGetEnv(CWorldScene* scene) {
+    return &scene->m_farClip;
+}
 
 // ref: FUN_1413cb140
 CWorldScene* WorldSceneGetCurrent() {
@@ -213,7 +219,7 @@ CWorldScene::CWorldScene(uint32_t flags, int32_t type) {
     this->m_maps[1] = nullptr;
     this->m_a54 = static_cast<uint8_t>(this->m_a54 & 0xfc);
     this->m_mapIndex = 0;
-    this->m_028 = nullptr;
+    this->m_dayNight = nullptr;
     this->m_030 = nullptr;
     this->m_038 = nullptr;
     this->m_040 = nullptr;
@@ -448,9 +454,9 @@ void CWorldScene::UnloadMap(uint32_t slot) {
         this->m_maps[slot] = nullptr;
     }
     if (this->m_maps[0] == nullptr && this->m_maps[1] == nullptr) {
-        if (this->m_028 != nullptr) {
-            DayNightDestroy(this->m_028);
-            this->m_028 = nullptr;
+        if (this->m_dayNight != nullptr) {
+            DayNightDestroy(this->m_dayNight);
+            this->m_dayNight = nullptr;
         }
         if (this->m_030 != nullptr) {
             WorldScene030Destroy(this->m_030);
@@ -559,9 +565,9 @@ float CWorldScene::GetNearClip() {
 
 // ref: FUN_1413c31f0
 void CWorldScene::CreateMapObjects() {
-    if (this->m_028 != nullptr) {
-        DayNightDestroy(this->m_028);
-        this->m_028 = nullptr;
+    if (this->m_dayNight != nullptr) {
+        DayNightDestroy(this->m_dayNight);
+        this->m_dayNight = nullptr;
     }
     if (this->m_030 != nullptr) {
         WorldScene030Destroy(this->m_030);
@@ -573,17 +579,17 @@ void CWorldScene::CreateMapObjects() {
         operator delete(this->m_038);
         this->m_038 = nullptr;
     }
-    if (this->m_028 == nullptr) {
-        this->m_028 = DayNightCreate(this, this->m_view);
+    if (this->m_dayNight == nullptr) {
+        this->m_dayNight = DayNightCreate(this, this->m_view);
         CWorldMap* map = this->m_maps[0];
-        DayNightSetMap(this->m_028, map->MapId());
+        DayNightSetMap(this->m_dayNight, map->MapId());
         for (int32_t i = 0; i < 0x18; i++) {
             auto area = static_cast<uint8_t*>(map->Area(i));
             if (area != nullptr) {
-                DayNightSetArea(this->m_028, *reinterpret_cast<int32_t*>(area + 0xfc), i);
+                DayNightSetArea(this->m_dayNight, *reinterpret_cast<int32_t*>(area + 0xfc), i);
             }
         }
-        DayNightSetView(this->m_028, this->m_view, map->Position(), &this->m_farClip, this->m_view->m_matrices[4]);
+        DayNightSetView(this->m_dayNight, this->m_view, map->Position(), &this->m_farClip, this->m_view->m_matrices[4]);
     }
     if (this->m_038 == nullptr) {
         this->m_038 = MapWeatherCreate(SceneAlloc(0x1378, 0x2a3), this);

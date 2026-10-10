@@ -29,14 +29,6 @@ void SkySceneUnload(void* sky);                 // FUN_14143cad0
 void* WorldScene030Create(void* memory, float a2, float a3, uint32_t a4);  // FUN_141423ae0
 void WorldScene030Destroy(void* object);        // FUN_141423c00
 
-// Engine/Source/DayNight (DayNight.cpp): the handle at the scene's +0x28.
-void* DayNightCreate(CWorldScene* scene, CWorldView* view);     // FUN_142442100
-void DayNightDestroy(void* dayNight);           // FUN_142442370
-void DayNightSetMap(void* dayNight, int32_t mapId);             // FUN_142442fe0
-void DayNightSetArea(void* dayNight, int32_t lightId, int32_t index);  // FUN_142443100
-void DayNightSetView(void* dayNight, CWorldView* view, const float* position, const float* clip,
-    const float* viewMatrix);                   // FUN_142443200
-
 // WoW/Source/WorldClient2/MapWeather.cpp (0x1378 bytes) at the scene's +0x38.
 void* MapWeatherCreate(void* memory, CWorldScene* scene);       // FUN_14138a820
 void MapWeatherDestroy(void* weather);          // FUN_14138b150

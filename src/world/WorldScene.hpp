@@ -24,6 +24,7 @@ class CWorldMap;
 class CWorldView;
 class CWorldSceneRender;
 class CParticulateVolumeManager;
+struct DAYNIGHT;
 struct THREADPOOLGROUP;
 
 extern const char s_worldViewPtrTag[];          // ".PEAVCWorldView@@"
@@ -56,7 +57,7 @@ class CWorldScene {
     CWorldMap* m_maps[2];                           // 0x010
     uint32_t m_mapIndex;                            // 0x020 the map m_maps holds the current one at
     uint32_t m_pad024;
-    void* m_028;                                    // 0x028 made by FUN_142442100 for the map
+    DAYNIGHT* m_dayNight;                           // 0x028 the map's sky and light (FUN_142442100)
     void* m_030;                                    // 0x030 0xfa50 bytes (FUN_141423ae0)
     void* m_038;                                    // 0x038 0x1378 bytes (FUN_14138a820): the lights
     void* m_040;                                    // 0x040 0x20 bytes (FUN_14143bcc0 frees it)
@@ -246,6 +247,11 @@ static_assert(offsetof(CWorldScene, m_frame) == 0x1994, "CWorldScene layout");
 static_assert(offsetof(CWorldScene, m_type) == 0x19a0, "CWorldScene layout");
 static_assert(offsetof(CWorldScene, m_temp) == 0x19d8, "CWorldScene layout");
 static_assert(sizeof(CWorldScene) == 0x1a10, "CWorldScene is 0x1a10 bytes");
+
+// The scene's environment: its clip distances, fogs and light block (+0xc0), what the M2
+// scenes and DayNight write into.
+// ref: FUN_141357060
+void* WorldSceneGetEnv(CWorldScene* scene);
 
 // The scene being drawn into, when one is (DAT_1430ad2f8).
 // ref: FUN_1413cb140
