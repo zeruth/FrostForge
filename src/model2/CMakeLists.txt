@@ -14,6 +14,7 @@ add_library(model2 STATIC
     M2ModelEvents.cpp
     M2ModelInit.cpp
     M2ModelVirtual.cpp
+    GpuStripEmitter.cpp
     M2Particle.cpp
     M2ParticleGenerator.cpp
     M2ParticleRender.cpp

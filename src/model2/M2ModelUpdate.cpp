@@ -557,7 +557,7 @@ void CM2Model::UpdateRibbons(float delta) {
         ribbon->m_heightBelow = state->m_heightBelow.m_value;
         RibbonEmitterSetVisible(ribbon, state->m_visibility.m_value != 0);
         if ((data->m_flags & 0x20000) != 0) {
-            uint32_t layers = ribbon->m_texture2 == nullptr ? 1 : 3;
+            uint32_t layers = ribbon->m_textures[1] == nullptr ? 1 : 3;
             C4Quaternion rotation = {0.0f, 0.0f, 0.0f, 1.0f};
             C3Vector scale = {0.0f, 0.0f, 0.0f};
             C3Vector translation = {0.0f, 0.0f, 0.0f};

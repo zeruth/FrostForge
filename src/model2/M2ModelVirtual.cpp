@@ -352,7 +352,7 @@ float* CM2Model::GetEffectBox(float* out) {
         BoxUnion(out, merged, box);
     }
     for (uint32_t i = 0; i < this->m_shared->m_data->m_ribbons.Count(); i++) {
-        const float* ribbon = &this->m_ribbons[i]->m_bounds.m_min.x;
+        const float* ribbon = this->m_ribbons[i]->m_strip.m_drawBounds;
         float maxX = ribbon[3] < out[3] ? out[3] : ribbon[3];
         float maxY = ribbon[4] < out[4] ? out[4] : ribbon[4];
         float maxZ = ribbon[5] < out[5] ? out[5] : ribbon[5];
@@ -390,7 +390,7 @@ float* CM2Model::GetEffectSphere(float* out) {
     float box[6];
     SetEmptyBox(box);
     for (uint32_t i = 0; i < data->m_ribbons.Count(); i++) {
-        const float* ribbon = &this->m_ribbons[i]->m_bounds.m_min.x;
+        const float* ribbon = this->m_ribbons[i]->m_strip.m_drawBounds;
         if (box[3] <= ribbon[3]) {
             box[3] = ribbon[3];
         }

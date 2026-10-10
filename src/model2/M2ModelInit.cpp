@@ -483,8 +483,8 @@ bool CM2Model::InitializeLoaded() {
             uint16_t material = def.m_materialIndices[0];
             uint32_t blend = this->m_shared->m_data->m_materials[material].m_blendMode;
             uint32_t color = 0xffffffff;
-            RibbonEmitterInitialize(ribbon, material, &color, textures, &blend, types);
-            RibbonEmitterReset(ribbon);
+            RibbonEmitterInitialize(ribbon, def.m_edgeLifetime, &color, textures, &blend, types);
+            RibbonEmitterSetGravity(ribbon, def.m_gravity);
             RibbonEmitterSetVisible(ribbon, false);
             uint8_t quality = RibbonQualityFor(this->GetFileDataId());
             RibbonEmitterSetQuality(ribbon, quality);
