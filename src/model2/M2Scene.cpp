@@ -392,7 +392,9 @@ CM2Scene::CM2Scene(M2CACHE* cache, int32_t type) {
     this->m_daf8 = 0;
     this->m_db00 = 0;
     this->m_db08 = 6;
-    this->m_db20 = 0;
+    this->m_db0c = 0;
+    this->m_threadedBuild = 0;
+    this->m_db21 = 0;
     this->m_db28 = 0;
     this->m_db30 = 0;
     for (uint32_t i = 0; i < 0x40; i++) {
@@ -415,7 +417,7 @@ void CM2Scene::Reserve(uint32_t count) {
     if (count < 2) {
         count = 2;
     }
-    M2SceneEntriesReserve(&this->m_f78, count);
+    M2SceneEntriesReserve(reinterpret_cast<M2SceneVector<uint8_t>*>(&this->m_f78), count);
     uint64_t half = count >> 1;
     for (uint32_t i = 0; i < 0xe; i++) {
         M2SceneIndicesReserve(&this->m_f90[i], half);

@@ -2,6 +2,10 @@
 #include <cstring>
 
 #include "client/RenderSettings.hpp"
+#include "threadpool/ThreadPool.hpp"
+#include "storm/ErrorReport.hpp"
+#include "gx/Gx.hpp"
+#include "blz/Function.hpp"
 #include "model2/CM2Lighting.hpp"
 #include "model2/M2Element.hpp"
 #include "model2/M2Model.hpp"
@@ -1330,7 +1334,7 @@ bool M2SceneModelElements(CM2Scene* scene, M2SceneDrawList* list, BaseModelDrawP
     uint32_t listFlags = list->m_flags;
     model->m_flags &= 0xfffffff7;
     uint32_t secondPass = listFlags & 1;
-    if (!model->IsShownInTree() || (model->m_flags >> 0x16 & 1) != 0 || model->m_shared->m_waterfallData != nullptr) {
+    if (!M2BaseModelIsLoadedAndReady(model) || (model->m_flags >> 0x16 & 1) != 0 || model->m_shared->m_waterfallData != nullptr) {
         return true;
     }
     M2Data* data = model->m_shared->m_data;
@@ -1809,6 +1813,246 @@ bool M2SceneModelElements(CM2Scene* scene, M2SceneDrawList* list, BaseModelDrawP
             }
         }
         M2SceneDrawListAddToPass(scene, list, pass, index);
+    }
+    return true;
+}
+
+// The other model kinds' elements: kind 1's single pipeline (FUN_1411d6440), the particle
+// system models (FUN_1411d60e0) and Model3 (FUN_1411d5950). Only CM2Model (kind 0) is made yet,
+// so none of these is reached.
+// ref: FUN_1411d6440
+void M2ScenePipelineModelElements(CM2Scene* scene, M2SceneDrawList* list, CM2BaseModel* model, uint32_t pass) {
+    (void)scene;
+    (void)list;
+    (void)model;
+    (void)pass;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1411d60e0
+void M2SceneParticleModelElements(CM2Scene* scene, M2SceneDrawList* list, CM2BaseModel* model, uint32_t pass) {
+    (void)scene;
+    (void)list;
+    (void)model;
+    (void)pass;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1411d5950
+void M2SceneM3Elements(CM2Scene* scene, M2SceneDrawList* list, CM2BaseModel* model, uint32_t pass) {
+    (void)scene;
+    (void)list;
+    (void)model;
+    (void)pass;
+    FROST_UNIMPLEMENTED();
+}
+
+namespace {
+
+// The error-report record of a build step (LAB_1411cf3c0, as the animate passes use).
+struct BUILDCONTEXT {
+    ERRORCONTEXT m_base;
+    const char* m_format;
+    int32_t m_fileDataId;
+};
+
+void DescribeBuild(ERRORCONTEXT* base, uint64_t size, char* buffer) {
+    auto context = reinterpret_cast<BUILDCONTEXT*>(base);
+    SStrPrintf(buffer, static_cast<uint32_t>(size), context->m_format, context->m_fileDataId);
+}
+
+struct BUILDMEMORY {
+    ERRORMEMORYCONTEXT m_base;
+    CM2BaseModel* m_model;
+};
+
+void ReportBuildMemory(ERRORMEMORYCONTEXT* base, ERRORMEMORYREPORT report) {
+    report(reinterpret_cast<BUILDMEMORY*>(base)->m_model, 0x688);
+}
+
+}  // namespace
+
+// A pass's elements: the models whose draw params the culling collected into the pass, then
+// their particle emitters (FUN_1411d6860). With the build on the pool, the last list done sorts.
+// ref: FUN_1411d6860
+void M2SceneDrawListBuildPass(M2SceneDrawList* list) {
+    CM2Scene* scene = list->m_scene;
+    uint32_t pass = list->m_index;
+    M2SceneVector<BaseModelDrawParams>* params = &scene->m_drawParams[pass];
+    for (uint64_t k = 0; k < params->m_size; k++) {
+        CM2BaseModel* model = params->m_data[k].m_model;
+        BUILDCONTEXT context;
+        context.m_fileDataId = model->GetFileDataId();
+        ErrorContextPush(&context.m_base, DescribeBuild);
+        context.m_format = "M2 BeginDrawThread: model=%d";
+        switch (model->m_type) {
+        case 0: {
+            BUILDMEMORY memory;
+            ErrorMemoryContextPush(&memory.m_base, ReportBuildMemory);
+            memory.m_model = model;
+            M2SceneModelElements(scene, list, &params->m_data[k]);
+            ErrorMemoryContextPop(&memory.m_base);
+            break;
+        }
+        case 1:
+            M2ScenePipelineModelElements(scene, list, model, pass);
+            break;
+        case 2:
+            M2SceneParticleModelElements(scene, list, model, pass);
+            break;
+        case 3:
+            M2SceneM3Elements(scene, list, model, pass);
+            break;
+        default:
+            model->SetShown(false);
+            model->FreeCalls();
+            break;
+        }
+        ErrorContextPop(&context.m_base);
+    }
+    params->m_size = 0;
+    const float fadeMinimum = 0.0001f;  // DAT_1426c6f80
+    M2SceneVector<BaseModelDrawParams>* emitters = &scene->m_drawParams2[pass];
+    for (uint64_t k = 0; k < emitters->m_size; k++) {
+        CM2Model* model = nullptr;
+        if (emitters->m_data[k].m_model->m_type == 0) {
+            model = static_cast<CM2Model*>(emitters->m_data[k].m_model);
+        }
+        C44Matrix* bones = model->GetBoneMatrices();
+        if (!M2BaseModelIsLoadedAndReady(model) || (model->m_flags >> 0x16 & 1) != 0) {
+            continue;
+        }
+        M2Data* data = model->m_shared->m_data;
+        uint16_t lightFlags = model->m_lightingUsed->m_flags;
+        uint32_t front = lightFlags & 0x20;
+        uint32_t back = lightFlags & 0x40;
+        if ((scene->m_cache->m_flags & 2) == 0 && front != 0 && back != 0) {
+            uint8_t side = static_cast<const uint8_t*>(scene->m_038)[0x5bc];
+            front = side == 0 ? 1 : 0;
+            back = side != 0 ? 1 : 0;
+        }
+        const float* w = model->m_world.m;
+        for (uint32_t e = 0; e < data->m_particles.Count(); e++) {
+            CParticleEmitter2* emitter = model->m_particles[e];
+            reinterpret_cast<uint8_t*>(emitter)[0x2dc] = static_cast<uint8_t>(model->m_flags >> 0x1e & 1);
+            if (((model->m_flags & CM2BaseModel::BASE_CULLED) != 0 && (emitter->m_flags & 0x200) != 0)
+                || (emitter->m_flags & 0x2000000) != 0) {
+                continue;
+            }
+            const M2ParticleState* state = &model->m_particleStates[e];
+            if (state->m_8d == 0) {
+                continue;
+            }
+            if (model->GetEffectType() == 1 && 0.0f < model->GetEffectStrength()) {
+                continue;
+            }
+            float alpha = model->m_params.m_fade * model->m_params.m_alpha;
+            if ((model->m_shared->m_flags & 0x10000) != 0) {
+                alpha = alpha * reinterpret_cast<const float*>(state)[0x13] * 0.0039215689f;
+            }
+            if (alpha < fadeMinimum) {
+                continue;
+            }
+            const uint8_t* particle = reinterpret_cast<const uint8_t*>(&data->m_particles[e]);
+            uint16_t bone = *reinterpret_cast<const uint16_t*>(particle + 0x14);
+            const float* b = bones[bone].m;
+            const float* p = reinterpret_cast<const float*>(particle + 8);
+            float x = p[0] + b[12];
+            float y = p[1] + b[13];
+            float z = p[2] + b[14];
+            float wx = y * w[4] + x * w[0] + z * w[8] + w[12];
+            float wy = y * w[5] + x * w[1] + z * w[9] + w[13];
+            float wz = y * w[6] + x * w[2] + z * w[10] + w[14];
+            float distance = wy * wy + wx * wx + wz * wz;
+            M2SceneParticleElement(scene, list, emitter, model, distance, alpha, static_cast<int32_t>(front),
+                static_cast<int32_t>(back), &scene->m_db0c);
+            for (uint32_t c = 0; c < emitter->m_childCount; c++) {
+                M2SceneParticleElement(scene, list, emitter->m_children[c], model, distance, alpha,
+                    static_cast<int32_t>(front), static_cast<int32_t>(back), &scene->m_db0c);
+            }
+        }
+    }
+    emitters->m_size = 0;
+    if (scene->m_threadedBuild != 0) {
+        int32_t left = static_cast<int32_t>(InterlockedDecrement(reinterpret_cast<volatile long*>(&scene->m_db18))) + 1;
+        uint32_t which;
+        if (scene->m_db21 == 0) {
+            if (left != 1) {
+                return;
+            }
+            which = 0;
+        } else if (left == 1) {
+            which = 1;
+        } else {
+            if (left != 2) {
+                return;
+            }
+            which = 2;
+        }
+        scene->FinishElements(1, 0x40, which);
+    }
+}
+
+namespace {
+
+struct PASSTASK {
+    void (*m_function)(M2SceneDrawList* list);
+    M2SceneDrawList* m_list;
+};
+
+void InvokePassTask(void* storage) {
+    auto task = static_cast<PASSTASK*>(storage);
+    task->m_function(task->m_list);
+}
+
+}  // namespace
+
+// ref: FUN_1411d3940
+bool CM2Scene::BuildElements(uint32_t first, int32_t second) {
+    if (GxCurrentApi() == 0 || !this->m_bucketModels || (g_renderSettings.m_flags & 0x18000) != 0x18000) {
+        this->m_threadedBuild = 0;
+    } else {
+        this->m_threadedBuild = 1;
+        ThreadPoolGroupSetCount(static_cast<THREADPOOLGROUP*>(this->m_threadGroupA), 0x40);
+        InterlockedExchange(reinterpret_cast<volatile long*>(&this->m_db18), 0x40);
+        this->m_db21 = 1;
+    }
+    M2SceneDrawList* single = &this->m_drawLists[0x40];
+    M2SceneDrawListReset(single);
+    single->m_scene = this;
+    uint32_t flags = ((single->m_flags ^ first) & 1) ^ single->m_flags;
+    single->m_flags = ((static_cast<uint32_t>(second) * 2 ^ flags) & 2) ^ flags;
+    blz::function_storage tasks[0x40];
+    for (uint32_t i = 0; i < 0x40; i++) {
+        tasks[i].m_invoke = nullptr;
+        tasks[i].m_manager = blz::function_empty_manager;
+    }
+    for (uint32_t i = 0; i < 0x40; i++) {
+        if (this->m_threadedBuild == 0) {
+            single->m_index = i;
+            M2SceneDrawListBuildPass(single);
+        } else {
+            M2SceneDrawList* list = &this->m_drawLists[i];
+            M2SceneDrawListReset(list);
+            list->m_scene = this;
+            uint32_t listFlags = ((list->m_flags ^ first) & 1) ^ list->m_flags;
+            list->m_index = i;
+            list->m_flags = ((static_cast<uint32_t>(second) * 2 ^ listFlags) & 2) ^ listFlags;
+            tasks[i].m_manager(tasks[i].m_storage, nullptr, 0);
+            tasks[i].m_invoke = reinterpret_cast<void*>(&InvokePassTask);
+            tasks[i].m_manager = blz::function_trivial_manager;
+            auto task = reinterpret_cast<PASSTASK*>(tasks[i].m_storage);
+            task->m_list = list;
+            task->m_function = M2SceneDrawListBuildPass;
+        }
+    }
+    if (this->m_threadedBuild == 0) {
+        this->FinishElements(0, 0x40, 0);
+    } else {
+        ThreadPoolSubmit(0x40, tasks, 2, static_cast<THREADPOOLGROUP*>(this->m_threadGroupA));
+    }
+    for (uint32_t i = 0x40; i != 0; i--) {
+        tasks[i - 1].m_manager(tasks[i - 1].m_storage, nullptr, 0);
     }
     return true;
 }

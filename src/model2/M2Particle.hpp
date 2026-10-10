@@ -107,6 +107,8 @@ static_assert(sizeof(CParticleEmitter2) == 0x2f8, "CParticleEmitter2 is 0x2f8 by
 // The particle effects by vertex format kind (DAT_1430a1ee8: unlit T1, lit T1, 2-colour-texture,
 // two 3-colour-texture forms and refraction), looked up when the device comes up (FUN_14124aa50).
 extern class CShaderEffect* g_particleEffects[6];
+// Two emitters' draw order: blend, render flags, type, then their three textures (FUN_14124f4c0).
+int32_t ParticleEmitterCompare(const CParticleEmitter2* left, const CParticleEmitter2* right);
 // The vertex format a particle emitter draws with (FUN_14124bce0).
 uint8_t ParticleEmitterVertexFormat(const CParticleEmitter2* emitter);
 

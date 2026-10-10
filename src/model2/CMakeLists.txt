@@ -19,6 +19,7 @@ add_library(model2 STATIC
     M2Scene.cpp
     M2SceneAnimate.cpp
     M2SceneBuild.cpp
+    M2SceneSort.cpp
     M2Sequence.cpp
     M2Shaders.cpp
     M2Shared.cpp

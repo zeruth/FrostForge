@@ -145,10 +145,10 @@ class CM2Scene {
     uint64_t m_f60;                             // 0x0f60
     uint64_t m_f68;                             // 0x0f68
     uint64_t m_f70;                             // 0x0f70
-    M2SceneVector<uint8_t> m_f78;               // 0x0f78 0x88-byte entries
-    M2SceneVector<uint32_t> m_f90[0xe];         // 0x0f90
-    M2SceneVector<uint32_t> m_10e0[0xe];        // 0x10e0
-    M2SceneVector<uint32_t> m_1230[0xe];        // 0x1230
+    M2SceneVector<M2Element> m_f78;             // 0x0f78 the frame's elements
+    M2SceneVector<uint32_t> m_f90[0xe];         // 0x0f90 each pass's elements, in draw order
+    M2SceneVector<uint32_t> m_10e0[0xe];        // 0x10e0 each pass's instanced elements
+    M2SceneVector<uint32_t> m_1230[0xe];        // 0x1230 the instance run lengths
     M2SceneDrawList m_drawLists[0x41];          // 0x1380
     C44Matrix m_camera;                         // 0xd478 the view, moved to the camera
     C44Matrix m_inverseView;                    // 0xd4b8 the view's inverse
@@ -200,19 +200,21 @@ class CM2Scene {
     void* m_effectFlipbook;                     // 0xd780 FlipbookImpostor
     void* m_effectPrepass;                      // 0xd788 Model2PrepassOpaque
     void* m_rayTracing;                         // 0xd790 the physics scene (FUN_14125deb0)
-    M2SceneVector<void> m_d798[0xe];            // 0xd798
-    uint8_t m_d8e8[0x200];                      // 0xd8e8
+    M2SceneVector<uint32_t> m_d798[0xe];        // 0xd798 the instance grouping tables
+    uint64_t m_d8e8[0x40];                      // 0xd8e8 each list's first element once merged
     bool m_collectDrawParams;                   // 0xdae8 1
     bool m_bucketModels;                        // 0xdae9
     uint8_t m_daea[6];
     uint64_t m_daf0;
     uint64_t m_daf8;
     uint64_t m_db00;
-    uint64_t m_db08;                            // 0xdb08 6
+    int32_t m_db08;                             // 0xdb08 6, the target kind the passes draw into
+    int32_t m_db0c;                             // 0xdb0c additive and alpha-key emitters drawn
     void* m_threadGroupA;                       // 0xdb10
     uint32_t m_db18;
     uint32_t m_bucketCounter;                   // 0xdb1c
-    uint16_t m_db20;
+    uint8_t m_threadedBuild;                    // 0xdb20 the passes built on the pool
+    uint8_t m_db21;
     uint8_t m_db22[6];
     uint64_t m_db28;
     int32_t m_db30;
@@ -240,6 +242,13 @@ class CM2Scene {
     void Animate(void* frustum, bool threaded);
     // The models whose LOD changed told so, and the list emptied (FUN_1411d77a0).
     void FlushLodChanges();
+    // The frame's draw elements from the passes' draw params (FUN_1411d3940); `first` and
+    // `second` set the lists' two flags.
+    bool BuildElements(uint32_t first, int32_t second);
+    // The built lists merged into the scene's elements and pass lists, the instanced elements
+    // grouped, and the passes sorted (FUN_1411de670, FUN_1411e3890).
+    void FinishElements(uint32_t threaded, uint32_t lists, uint32_t which);
+    void SortPasses(uint32_t half);
     // Runs the callbacks the lists queued: one list's, or all of them for null (FUN_1411d74a0).
     void RunCallbacks(M2SceneDrawList* list);
     // The view for a frame (FUN_1411e0f30): the camera's position, the view and projection
@@ -338,6 +347,12 @@ void M2SceneProjectScreenRect(CM2BaseModel* model, const C44Matrix* view, const 
     const float* viewportMin, const float* viewportMax, float* rect);
 // Appends a callback (FUN_1411cee10).
 void M2ModelCallbacksPush(M2SceneVector<M2ModelCallback>* callbacks, const M2ModelCallback* callback);
+// Sorts element indices by a three-way compare over the elements (FUN_141205120, the introsort
+// FUN_141204aa0).
+void M2SortIndices(int32_t (*compare)(uint32_t a, uint32_t b, const M2Element* elements), uint32_t* indices,
+    uint64_t count, const M2Element* elements);
+// A blend mode's index among the eight M2 blends (FUN_1411d81a0).
+uint32_t M2BlendModeIndex(uint8_t blend);
 // Resizes a callback vector, zeroing what it adds (FUN_1411e5770).
 void M2ModelCallbacksResize(M2SceneVector<M2ModelCallback>* callbacks, uint64_t count);
 // A box against a frustum's six planes: 0 when outside, else 3 (FUN_141346830).

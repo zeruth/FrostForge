@@ -1031,6 +1031,8 @@ void M2ModelInitializePools();
 void M2ModelSetFlag400(bool set);
 // Whether a skeleton plays a sequence for a model's bone (FUN_141203b80).
 bool M2SkeletonHasPlayback(void* skeleton, CM2Model* model, uint16_t bone, bool primary);
+// Whether a model is loaded and its textures settled (FUN_1411e74c0).
+bool M2BaseModelIsLoadedAndReady(CM2BaseModel* model);
 // A model's draw parameters at their defaults (FUN_1411acff0).
 void M2ModelParamsInit(CM2ModelParams* params);
 // The module's own scene (DAT_1430a0ed0, FUN_141196e40(9, ...)).

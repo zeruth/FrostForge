@@ -56,6 +56,37 @@ void CM2Model::UpdateParticles(float delta, uint32_t pass, uint32_t a4) {
 
 CShaderEffect* g_particleEffects[6];
 
+// ref: FUN_14124f4c0
+int32_t ParticleEmitterCompare(const CParticleEmitter2* left, const CParticleEmitter2* right) {
+    if (right->m_blend <= left->m_blend) {
+        if (left->m_blend != right->m_blend) {
+            return 1;
+        }
+        if (right->m_renderFlags <= left->m_renderFlags) {
+            if (left->m_renderFlags != right->m_renderFlags) {
+                return 1;
+            }
+            if (right->m_type <= left->m_type) {
+                if (right->m_type < left->m_type) {
+                    return 1;
+                }
+                auto leftTextures = reinterpret_cast<const uint64_t*>(reinterpret_cast<const uint8_t*>(left) + 0x1c0);
+                auto rightTextures = reinterpret_cast<const uint64_t*>(reinterpret_cast<const uint8_t*>(right) + 0x1c0);
+                for (uint32_t i = 0; i < 3; i++) {
+                    if (leftTextures[i] < rightTextures[i]) {
+                        return -1;
+                    }
+                    if (leftTextures[i] != rightTextures[i]) {
+                        return 1;
+                    }
+                }
+                return 0;
+            }
+        }
+    }
+    return -1;
+}
+
 // ref: FUN_14124bce0
 uint8_t ParticleEmitterVertexFormat(const CParticleEmitter2* emitter) {
     int32_t type = emitter->m_type;
