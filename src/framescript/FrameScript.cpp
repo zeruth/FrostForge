@@ -15,6 +15,7 @@
 #include "storm/ErrorReport.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
+#include "util/FrostLog.hpp"
 #include "util/Unimplemented.hpp"
 
 extern "C" {
@@ -194,7 +195,15 @@ int ErrorHandler(lua_State* L) {
         lua_insert(L, -1);
     }
     const char* message = lua_tolstring(L, -1, nullptr);
-    // FUN_140255c60, a debug print compiled out of this build ("FrameScript_HandleError: %s\n")
+    // FUN_140255c60, a debug print compiled out of this build ("FrameScript_HandleError: %s\n").
+    // FROST: the error and its Lua stack go to FrostLite.log instead.
+    FrostLog("lua", "%s", message);
+    lua_Debug frame;
+    for (int level = 1; level < 24 && lua_getstack(L, level, &frame); level++) {
+        lua_getinfo(L, "Sln", &frame);
+        FrostLog("lua", "    at %s:%d %s", frame.short_src, frame.currentline,
+            frame.name != nullptr ? frame.name : (frame.what != nullptr ? frame.what : "?"));
+    }
     const char* star = strstr(message, "*:");
     const char* object = GetMethodObjectName(L, 1);
     if (star && object) {
@@ -337,6 +346,21 @@ void* CScriptStatus::GetLocation() {
 void CScriptStatus::AddV(int32_t severity, const char* format, va_list args) {
     if (!this->m_warn) {
         return;
+    }
+    // FROST: warnings and errors are copied to FrostLite.log as they happen.
+    if (severity > 0) {
+        char text[2048];
+        va_list copy;
+        va_copy(copy, args);
+        vsnprintf(text, sizeof(text), format, copy);
+        va_end(copy);
+        if (this->m_location.m_file != 0 && this->m_location.m_line != 0) {
+            blz::inline_string<0x30C> where;
+            ScriptLocationToString(&this->m_location, where.header());
+            FrostLog("script", "%s %s", where.m_data, text);
+        } else {
+            FrostLog("script", "%s", text);
+        }
     }
     if (this->m_location.m_file == 0 || this->m_location.m_line == 0) {
         CStatus::AddV(severity, format, args);
