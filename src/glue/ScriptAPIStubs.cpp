@@ -3297,13 +3297,6 @@ int Lua_GetDefaultVideoQualityOption(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_141082560
-int Lua_GetExpansionDisplayInfo(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_1410832c0
 int Lua_GetExpansionLevel(lua_State* L) {
     (void)L;

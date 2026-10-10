@@ -8,6 +8,9 @@
 #include "client/GxWindow.hpp"
 #include "client/RenderSettings.hpp"
 #include "console/Var.hpp"
+#include "db/DB2Tables.hpp"
+#include "db/WowClientDB2.hpp"
+#include "db/WowDB2Lookup.hpp"
 #include "framescript/FrameScript.hpp"
 #include "framescript/FrameScriptEvents.hpp"
 #include "framescript/FrameScriptObject.hpp"
@@ -392,4 +395,94 @@ int Lua_GetLoginScreenBackground(lua_State* L) {
     }
     lua_pushstring(L, background);
     return 1;
+}
+
+namespace {
+
+// What GetExpansionDisplayInfo returns: the logo and banner files and the feature list (none
+// are filled by the lookup).
+struct EXPANSIONDISPLAYINFO {
+    int32_t m_logo;
+    int32_t m_banner;
+};
+
+// The UIExpansionDisplayInfo row of an expansion and release type: its logo (field 0).
+// ref: FUN_141c28d00
+bool ExpansionDisplayInfo(EXPANSIONDISPLAYINFO* info, int32_t expansion, int32_t releaseType) {
+    WowDB2Lookup* lookup = g_uIExpansionDisplayInfoDB.m_lookup;
+    if (lookup == nullptr) {
+        return false;
+    }
+    DB2LOOKUPITER it;
+    WowDB2LookupBegin(lookup, &it);
+    while (it.m_index != -2) {
+        auto record = static_cast<const uint8_t*>(it.m_record);
+        // FUN_14051c400
+        if (static_cast<int32_t>(DB2FieldU32(record, 2, 0, &g_uIExpansionDisplayInfoDB)) == expansion
+            && static_cast<int32_t>(DB2FieldU32(record, 3, 0, &g_uIExpansionDisplayInfoDB)) == releaseType) {
+            info->m_logo = DB2FieldI32(record, 0, 0, &g_uIExpansionDisplayInfoDB);
+            info->m_banner = 0;
+            return true;
+        }
+        lookup->Next(&it);
+    }
+    return false;
+}
+
+// A file id, or nil for none (FUN_140aefd80).
+void PushOptionalFile(lua_State* L, int32_t file) {
+    if (!lua_checkstack(L, 1)) {
+        luaL_error(L, "stack overflow");
+    }
+    if (file != 0) {
+        lua_pushnumber(L, static_cast<double>(file));
+    } else {
+        lua_pushnil(L);
+    }
+}
+
+// ref: FUN_140fcb9a0
+int32_t GetExpansionDisplayInfoBody(lua_State* L, void*) {
+    const char* usage = "Usage: local info = GetExpansionDisplayInfo(expansionLevel, desiredReleaseType)";
+    int32_t args[2] = {0, 0};
+    int32_t index = 1;
+    for (int32_t i = 0; i < 2; i++) {
+        if (lua_type(L, index) < 1) {
+            luaL_error(L, usage);
+        } else if (!lua_isnumber(L, index)) {
+            luaL_argerror(L, index, usage);
+        } else if (!lua_checkstack(L, 1)) {
+            luaL_error(L, "stack overflow");
+        } else {
+            args[i] = static_cast<int32_t>(static_cast<int64_t>(lua_tonumber(L, index)));
+            index++;
+        }
+    }
+    EXPANSIONDISPLAYINFO info = {};
+    if (!ExpansionDisplayInfo(&info, args[0], args[1])) {
+        if (!lua_checkstack(L, 1)) {
+            luaL_error(L, "stack overflow");
+            return 0;
+        }
+        lua_pushnil(L);
+        return 1;
+    }
+    // FUN_1407d0e40
+    lua_createtable(L, 0, 3);
+    int32_t table = lua_gettop(L);
+    PushOptionalFile(L, info.m_logo);
+    lua_setfield(L, table, "logo");
+    PushOptionalFile(L, info.m_banner);
+    lua_setfield(L, table, "banner");
+    // FUN_140fb6bf0: the features, none
+    lua_createtable(L, 0, 0);
+    lua_setfield(L, table, "features");
+    return 1;
+}
+
+}  // namespace
+
+// ref: FUN_141082560
+int Lua_GetExpansionDisplayInfo(lua_State* L) {
+    return ScriptMethod::ProtectedCall(L, GetExpansionDisplayInfoBody, nullptr);
 }
