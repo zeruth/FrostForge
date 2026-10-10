@@ -30,6 +30,17 @@ void MatrixRotateQuaternion(float* m, const float* q);
 float* MatrixFromQuaternionRotation(float* m, const float* q);
 // A 0..1 colour as 0xffRRGGBB (FUN_141343fd0).
 uint32_t ColorFromVector(const float* rgb);
+// RGB (0..1) to HSV (hue in degrees, saturation, value); out of range gives (-1, 0, 0).
+void ColorRgbToHsv(const float* rgb, float* hsv);
+// HSV back to RGB; a hue of -1 with no saturation is grey.
+void ColorHsvToRgb(const float* hsv, float* rgb);
+// The index of the largest and the smallest of three magnitudes, and the largest of four.
+uint32_t MaxAbsIndex3(const float* v);
+uint32_t MinAbsIndex3(const float* v);
+uint32_t MaxAbsIndex4(const float* v);
+// A critically damped spring of four lanes toward target: omega the stiffness, dt the step.
+// True when it settled (snapped to the target, velocity zeroed).
+bool SmoothDamp4(float* position, float* velocity, const float* target, float omega, float dt, float epsilon);
 // The determinant (FUN_141341ab0), the adjoint (FUN_141340bf0), the inverse as the adjoint
 // over a determinant already found (FUN_141341ef0), and the in-place inverse of a uniformly
 // scaled rotation and translation (FUN_141341850).

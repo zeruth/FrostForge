@@ -797,3 +797,178 @@ float FastSin(float radians) {
 float FastCos(float radians) {
     return FastHalfTurn(radians * 0.31830987f);
 }
+
+// ref: FUN_1413489d0
+uint32_t MaxAbsIndex3(const float* v) {
+    if (std::fabs(v[0]) <= std::fabs(v[1])) {
+        return (std::fabs(v[1]) <= std::fabs(v[2]) ? 1u : 0u) + 1;
+    }
+    if (std::fabs(v[2]) < std::fabs(v[0])) {
+        return 0;
+    }
+    return 2;
+}
+
+// ref: FUN_141348a10
+uint32_t MinAbsIndex3(const float* v) {
+    if (std::fabs(v[1]) <= std::fabs(v[0])) {
+        return (std::fabs(v[2]) < std::fabs(v[1]) ? 1u : 0u) + 1;
+    }
+    if (std::fabs(v[0]) < std::fabs(v[2])) {
+        return 0;
+    }
+    return 2;
+}
+
+// ref: FUN_1413443f0
+uint32_t MaxAbsIndex4(const float* v) {
+    uint32_t best = 0;
+    float largest = std::fabs(v[0]);
+    for (uint32_t i = 1; i < 4; i++) {
+        float value = std::fabs(v[i]);
+        if (largest < value) {
+            largest = value;
+            best = i;
+        }
+    }
+    return best;
+}
+
+// ref: FUN_141344220
+void ColorRgbToHsv(const float* rgb, float* hsv) {
+    if (rgb[0] < 0.0f || 1.0f < rgb[0] || rgb[1] < 0.0f || 1.0f < rgb[1] || rgb[2] < 0.0f || 1.0f < rgb[2]) {
+        hsv[0] = -1.0f;
+        hsv[1] = 0.0f;
+        hsv[2] = 0.0f;
+        return;
+    }
+    uint32_t largest = MaxAbsIndex3(rgb);
+    uint32_t smallest = MinAbsIndex3(rgb);
+    float value = rgb[largest];
+    hsv[2] = value;
+    if (value == 0.0f) {
+        hsv[1] = 0.0f;
+        hsv[0] = -1.0f;
+        return;
+    }
+    float saturation = (rgb[largest] - rgb[smallest]) / rgb[largest];
+    hsv[1] = saturation;
+    if (saturation == 0.0f) {
+        hsv[0] = -1.0f;
+        return;
+    }
+    float range = rgb[largest] - rgb[smallest];
+    if (largest == 0) {
+        hsv[0] = (rgb[1] - rgb[2]) / range;
+    } else if (largest == 1) {
+        hsv[0] = (rgb[2] - rgb[0]) / range + 2.0f;
+    } else if (largest == 2) {
+        hsv[0] = (rgb[0] - rgb[1]) / range + 4.0f;
+    }
+    float hue = hsv[0] * 60.0f;
+    hsv[0] = hue;
+    if (hue < 0.0f) {
+        hsv[0] = hue + 360.0f;
+    }
+}
+
+// ref: FUN_141344060
+void ColorHsvToRgb(const float* hsv, float* rgb) {
+    float hue = hsv[0];
+    if (hue < 0.0f) {
+        if (hue == -1.0f && hsv[1] == 0.0f) {
+            rgb[0] = hsv[2];
+            rgb[1] = hsv[2];
+            rgb[2] = hsv[2];
+            return;
+        }
+    } else if (hue <= 360.0f && 0.0f <= hsv[1] && hsv[1] <= 1.0f && 0.0f <= hsv[2] && hsv[2] <= 1.0f) {
+        float saturation = hsv[1];
+        if (saturation == 0.0f) {
+            rgb[0] = hsv[2];
+            rgb[1] = hsv[2];
+            rgb[2] = hsv[2];
+            return;
+        }
+        float value = hsv[2];
+        int32_t sector = static_cast<int32_t>(hue * 0.016666668f);
+        float p = (1.0f - saturation) * value;
+        if (5 < sector) {
+            sector = 5;
+        }
+        float f = hue * 0.016666668f - static_cast<float>(sector);
+        float q = (1.0f - saturation * f) * value;
+        float t = (1.0f - (1.0f - f) * saturation) * value;
+        switch (sector) {
+            case 0:
+                rgb[0] = value;
+                rgb[1] = t;
+                rgb[2] = p;
+                return;
+            case 1:
+                rgb[0] = q;
+                rgb[1] = value;
+                rgb[2] = p;
+                return;
+            case 2:
+                rgb[0] = p;
+                rgb[1] = value;
+                rgb[2] = t;
+                return;
+            case 3:
+                rgb[0] = p;
+                rgb[1] = q;
+                rgb[2] = value;
+                return;
+            case 4:
+                rgb[0] = t;
+                rgb[1] = p;
+                rgb[2] = value;
+                return;
+            case 5:
+                rgb[0] = value;
+                rgb[1] = p;
+                rgb[2] = q;
+                return;
+        }
+        return;
+    }
+    rgb[0] = 0.0f;
+    rgb[1] = 0.0f;
+    rgb[2] = 0.0f;
+}
+
+// ref: FUN_141343190
+bool SmoothDamp4(float* position, float* velocity, const float* target, float omega, float dt, float epsilon) {
+    float delta[4] = {position[0] - target[0], position[1] - target[1], position[2] - target[2], position[3] - target[3]};
+    uint32_t largest = MaxAbsIndex4(delta);
+    if (epsilon <= 1e-05f) {      // DAT_1426c75c4
+        epsilon = 1e-05f;
+    }
+    if (epsilon < std::fabs(delta[largest])) {
+        float x = omega * dt;
+        float temp[4];
+        for (int32_t i = 0; i < 4; i++) {
+            temp[i] = (delta[i] * omega + velocity[i]) * dt;
+        }
+        float k = 1.0f / (x * x * 0.235f * x + 1.0f + x * x * 0.48f + x);  // DAT_1427348c0, DAT_1427348c8
+        for (int32_t i = 0; i < 4; i++) {
+            position[i] = (temp[i] + delta[i]) * k + target[i];
+            velocity[i] = (velocity[i] - temp[i] * omega) * k;
+        }
+        float overshoot = (position[2] - target[2]) * delta[2] + (position[3] - target[3]) * delta[3]
+            + (position[0] - target[0]) * delta[0] + (position[1] - target[1]) * delta[1];
+        if (0.0f < overshoot) {
+            return false;
+        }
+    }
+    position[0] = target[0];
+    position[1] = target[1];
+    position[2] = target[2];
+    position[3] = target[3];
+    velocity[0] = 0.0f;
+    velocity[1] = 0.0f;
+    velocity[2] = 0.0f;
+    velocity[3] = 0.0f;
+    return true;
+}
