@@ -92,6 +92,7 @@ static void preinit_state (lua_State *L, global_State *g) {
   L->hookmask = 0;
   L->basehookcount = 0;
   L->allowhook = 1;
+  L->ingc = 0;  /* Blizzard: the reference clears it with the state (FUN_1402bd8a0) */
   resethookcount(L);
   L->openupval = NULL;
   L->size_ci = 0;
