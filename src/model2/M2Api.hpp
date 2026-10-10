@@ -25,9 +25,9 @@ bool M2ModelIsReady(CM2Model* model);                   // FUN_1411e74e0
 void M2ModelSetAlpha(CM2Model* model, float alpha);     // FUN_1413566c0
 float M2ModelGetAlpha(CM2Model* model);                 // +0x328
 int32_t M2ModelGetFileDataId(CM2Model* model);          // its slot 0x88
-const float* M2ModelGetWorldScale(CM2Model* model);     // FUN_141356140
-void M2ModelSub1411E7970(CM2Model* model, bool a2);     // FUN_1413566f0
-void M2ModelSub141356E60(CM2Model* model);              // FUN_141356e60: its slot 0x100
+const float* M2ModelGetLocalMatrix(CM2Model* model);    // FUN_141356140
+void M2ModelSetBucketed(CM2Model* model, bool bucketed);  // FUN_1413566f0
+void M2ModelSetShown(CM2Model* model, bool shown);      // FUN_141356e60: its slot 0x100
 void M2ModelSetSceneFlagDAE8(CM2Model* model, bool a2); // FUN_141356e70
 bool M2ModelIsAnimationPaused(CM2Model* model);         // FUN_141355d70 (+0x3a8 bit 17)
 bool M2ModelHasPauseRequest(CM2Model* model);           // FUN_141355fc0 (+0x3b4)
@@ -45,10 +45,11 @@ CM2Camera* M2ModelGetCameraById(CM2Model* model, uint32_t id);        // FUN_141
 bool M2ModelHasAttachments(CM2Model* model);            // FUN_1411be870
 int32_t M2ModelGetEffectType(CM2Model* model);          // FUN_1411be3a0
 float M2ModelGetEffectStrength(CM2Model* model);        // FUN_141355e60
-void M2ModelClearEffect(CM2Model* model);               // FUN_1411b6240
-void M2ModelSetEffect(CM2Model* model, int32_t type);   // FUN_1411cb800
-void M2ModelSetEffectStrength(CM2Model* model, float strength);       // FUN_1411cbd00
-void M2ModelInvalidateBones(CM2Model* model);           // FUN_1411b7870
+void M2ModelClearEffect(CM2Model* model);               // FUN_141355730
+void M2ModelSetEffect(CM2Model* model, int32_t type);   // FUN_141356cd0
+void M2ModelSetEffectStrength(CM2Model* model, float strength);       // FUN_141356ce0
+// Every particle emitter flagged to restart (FUN_1411b7870).
+void M2ModelResetEmitters(CM2Model* model);
 void M2ModelSetWorldTransform(CM2Model* model, const float* matrix);  // FUN_1411e7fa0
 void M2ModelReplaceTexture(CM2Model* model, int32_t slot, void* texture);  // FUN_1411c8e30
 // FUN_1413567b0 (FUN_1411ca300): plays a sequence.

@@ -949,6 +949,23 @@ class CM2Model : public CM2BaseModel {
     void SetRibbonQuality(uint32_t quality);
     void OnChildLoaded(CM2BaseModel* child, uint32_t id);
     void SetEffect(int32_t type, const void* params);
+    // The effect's strength: a projected (type 5) effect fades the model and hides its emitters
+    // while weak; an outline effect fades the field at +0x330.
+    // ref: FUN_1411cbd00
+    void SetEffectStrength(float strength);
+    // ref: FUN_1411c64c0
+    void SetEmittersHidden(int32_t hidden);
+    // The animation paused for a frame request (the scene's time it was asked at).
+    // ref: FUN_1411cbf40
+    void SetPauseRequest(int32_t paused);
+    // ref: FUN_1411cb430
+    void SetAnimationPaused(int32_t paused);
+    // A sequence's bounds for a key bone (the whole box FLT_MAX..-FLT_MAX when there is none)
+    // and their centre.
+    // ref: FUN_1411bfd30
+    float* GetSequenceBounds(float* out, uint32_t keyBone, uint32_t id);
+    // ref: FUN_1411bfef0
+    float* GetSequenceCenter(float* out, uint32_t keyBone, uint32_t id);
     bool ComputeEffectProjection(struct M2ModelEffect* effect);
     void SetShownSectionCount(int32_t count);
     int32_t CountShownSections();

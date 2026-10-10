@@ -351,8 +351,8 @@ void CSimpleModel::LoadXML(XMLOBJECT* node, CStatus* status, const char* intrins
 void CSimpleModel::RunOnUpdate(float elapsed) {
     this->CSimpleFrame::RunOnUpdate(elapsed);
     if (this->m_model != nullptr && (this->m_layoutState & LAYOUT_VISIBLE) && this->m_pendingCameraId == -1) {
-        M2ModelSub1411E7970(this->m_model, true);
-        M2ModelSub141356E60(this->m_model);
+        M2ModelSetBucketed(this->m_model, true);
+        M2ModelSetShown(this->m_model, true);
     }
     this->m_elapsed = elapsed;
     uint32_t flags = this->GetDrawFlags();
@@ -566,8 +566,8 @@ void CSimpleModel::OnModelLoaded(CM2Model* model) {
     if (!M2ModelHasExternalTransform(this->m_model)) {
         this->UpdateModelTransform();
     }
-    M2ModelInvalidateBones(this->m_model);
-    M2ModelSub1411E7970(model, true);
+    M2ModelResetEmitters(this->m_model);
+    M2ModelSetBucketed(model, true);
     M2ModelSetSceneFlagDAE8(model, false);
     CWorldScene* scene = this->GetScene();
     WorldSceneUpdate(scene, WorldSceneGetParams(scene), 1, 0);
@@ -919,7 +919,7 @@ void CSimpleModel::SetParticlesEnabled(bool enabled) {
 
 // ref: FUN_1424bda00
 float CSimpleModel::GetWorldScale() {
-    return this->m_model == nullptr ? 1.0f : *M2ModelGetWorldScale(this->m_model);
+    return this->m_model == nullptr ? 1.0f : *M2ModelGetLocalMatrix(this->m_model);
 }
 
 // ref: FUN_1424bda30

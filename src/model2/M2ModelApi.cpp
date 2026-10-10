@@ -9,6 +9,7 @@
 #include "model2/M2Ribbon.hpp"
 #include "model2/M2Scene.hpp"
 #include "model2/M2Shared.hpp"
+#include "shadereffect/ShaderEffectPipeline.hpp"
 #include "os/Sync.hpp"
 #include "texture/Texture.hpp"
 #include "util/Unimplemented.hpp"
@@ -701,4 +702,168 @@ void CM2Model::CreateGpuBatches() {
 // ref: FUN_1411c8550
 void CM2Model::ShareParentBones() {
     FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1411c64c0
+void CM2Model::SetEmittersHidden(int32_t hidden) {
+    if ((this->m_flags & BASE_LOADED) == 0 || this->m_shared == nullptr || this->m_params.m_effect == nullptr
+        || *static_cast<int32_t*>(this->m_params.m_effect) != 5 || (this->m_modelFlags & 0x400000) != 0
+        || (this->m_shared->m_data->m_flags & 4) != 0) {
+        return;
+    }
+    for (uint32_t i = 0;; i++) {
+        if ((this->m_flags & BASE_LOADED) == 0) {
+            this->WaitForLoad(0);
+        }
+        if (static_cast<uint16_t>(this->m_shared->m_data->m_particles.Count()) <= i) {
+            break;
+        }
+        CParticleEmitter2* emitter = this->m_particles[i];
+        if (hidden != 0) {
+            emitter->m_flags |= 2;
+        } else {
+            emitter->m_flags &= ~2u;
+        }
+    }
+    for (CM2Model* child = this->m_attachedModels; child != nullptr; child = child->m_attachedNext) {
+        child->SetEmittersHidden(hidden);
+    }
+}
+
+// ref: FUN_1411cbd00
+void CM2Model::SetEffectStrength(float strength) {
+    auto effect = static_cast<uint8_t*>(this->m_effect2);
+    if (effect == nullptr) {
+        return;
+    }
+    float& current = *reinterpret_cast<float*>(effect + 4);
+    bool rising = current < strength || 0.99f < strength;      // DAT_14263252c
+    current = strength;
+    if (*reinterpret_cast<int32_t*>(effect) == 5 && (effect[0x7c] & 0x20) == 0) {
+        if (!ShaderEffectOutlinesOn()) {
+            this->m_alpha = 1.0f - strength;
+        }
+        if ((this->m_flags & BASE_LOADED) != 0) {
+            int32_t hidden = (!rising || strength <= 0.6f) ? 1 : 0;     // DAT_142618d60
+            for (uint32_t i = 0;; i++) {
+                if ((this->m_flags & BASE_LOADED) == 0) {
+                    this->WaitForLoad(0);
+                }
+                if (static_cast<uint16_t>(this->m_shared->m_data->m_particles.Count()) <= i) {
+                    break;
+                }
+                CParticleEmitter2* emitter = this->m_particles[i];
+                if (hidden != 0) {
+                    emitter->m_flags |= 2;
+                } else {
+                    emitter->m_flags &= ~2u;
+                }
+            }
+            for (CM2Model* child = this->m_attachedModels; child != nullptr; child = child->m_attachedNext) {
+                child->SetEmittersHidden(hidden);
+            }
+        }
+    }
+    effect = static_cast<uint8_t*>(this->m_effect2);
+    int32_t type = *reinterpret_cast<int32_t*>(effect);
+    bool outline = type == 5 && (effect[0x7c] & 0x20) == 0 && (effect[0x7c] & 0x40) != 0;
+    if (!outline && !(type == 7 && (effect[0x40] & 1) != 0)) {
+        return;
+    }
+    this->m_flags |= 0x10000000;
+    float fade = 0.45f - strength;      // DAT_1427211e8
+    if (fade <= 0.0f) {
+        fade = 0.0f;
+    }
+    this->SetField330(fade * 2.2222223f);   // DAT_142721204
+    for (CM2Model* child = this->m_attachedModels; child != nullptr; child = child->m_attachedNext) {
+        child->m_flags |= 0x10000000;
+    }
+}
+
+// ref: FUN_1411cbf40
+void CM2Model::SetPauseRequest(int32_t paused) {
+    uint32_t time = 0;
+    if (paused != 0) {
+        time = this->m_scene->m_time != 0 ? this->m_scene->m_time : 1;
+    }
+    this->m_pauseRequest = time;
+    auto skeleton = static_cast<uint8_t*>(this->m_skeleton);
+    if (skeleton != nullptr) {
+        if (paused != 0) {
+            uint32_t skeletonTime = *reinterpret_cast<uint32_t*>(*reinterpret_cast<uint8_t**>(skeleton + 0x30) + 0x98);
+            *reinterpret_cast<uint32_t*>(skeleton + 0x60) = skeletonTime != 0 ? skeletonTime : 1;
+            return;
+        }
+        *reinterpret_cast<uint32_t*>(skeleton + 0x60) = 0;
+    }
+}
+
+// ref: FUN_1411cb430
+void CM2Model::SetAnimationPaused(int32_t paused) {
+    this->m_modelFlags ^= (static_cast<uint32_t>(paused) << 0x11 ^ this->m_modelFlags) & 0x20000;
+    auto skeleton = static_cast<uint8_t*>(this->m_skeleton);
+    if (skeleton != nullptr) {
+        uint32_t& flags = *reinterpret_cast<uint32_t*>(skeleton + 0x28);
+        flags ^= (static_cast<uint32_t>(paused) << 5 ^ flags) & 0x20;
+    }
+    ParticleSetPrebuild();
+}
+
+// ref: FUN_1411bfd30
+float* CM2Model::GetSequenceBounds(float* out, uint32_t keyBone, uint32_t id) {
+    const float empty = 3.4028235e+38f;
+    if ((this->m_flags & BASE_LOADED) != 0) {
+        M2AnimState* anim = this->m_animState;
+        M2Array<M2Sequence>* sequences = anim->m_sequences;
+        M2Array<uint16_t>* hash = anim->m_sequenceHash;
+        uint16_t bone = 0;
+        if (keyBone != 0xffffffff) {
+            bone = keyBone < anim->m_keyBoneLookup->Count() ? (*anim->m_keyBoneLookup)[keyBone] : 0xffff;
+        }
+        if (bone < static_cast<uint16_t>(anim->m_bones->Count())) {
+            uint16_t count = static_cast<uint16_t>(sequences->Count());
+            M2SequenceResolve resolve;
+            M2ResolveSequence(id, &resolve, anim, sequences, hash,
+                static_cast<M2Array<uint16_t>*>(this->m_shared->m_blocklistAnimData));
+            if (resolve.m_parentHas == 1) {
+                sequences = anim->m_parentSequences;
+                hash = anim->m_parentHash;
+                count = static_cast<uint16_t>(sequences->Count());
+            }
+            uint16_t index = M2FindSequenceById(resolve.m_sequence, hash, sequences);
+            if (index < count) {
+                const void* source = &(*sequences)[index].m_bounds;
+                auto parentBounds = static_cast<M2Array<uint8_t>*>(this->m_shared->m_parentSequenceBounds);
+                if (resolve.m_parentHas == 1 && parentBounds != nullptr) {
+                    source = &(*parentBounds)[0] + index * 0x1c;
+                }
+                std::memcpy(out, source, 0x18);
+                return out;
+            }
+        }
+    }
+    out[0] = empty;
+    out[1] = empty;
+    out[2] = empty;
+    out[3] = -empty;
+    out[4] = -empty;
+    out[5] = -empty;
+    return out;
+}
+
+// ref: FUN_1411bfef0
+float* CM2Model::GetSequenceCenter(float* out, uint32_t keyBone, uint32_t id) {
+    float box[6];
+    this->GetSequenceBounds(box, keyBone, id);
+    if (box[3] < box[0] && box[4] < box[1] && box[5] < box[2]) {
+        out[0] = 3.4028235e+38f;
+        out[1] = 3.4028235e+38f;
+        out[2] = 3.4028235e+38f;
+        return out;
+    }
+    out[0] = (box[0] + box[3]) * 0.5f;
+    out[1] = (box[1] + box[4]) * 0.5f;
+    out[2] = (box[2] + box[5]) * 0.5f;
+    return out;
 }
