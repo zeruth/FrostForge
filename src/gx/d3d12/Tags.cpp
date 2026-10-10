@@ -37,6 +37,8 @@ const char s_enqueuePairTag[] = ".?AUEnqueuePair@Device@gxDx12Backend@@";
 const char s_commandListPtrTag[] = ".PEAUID3D12CommandList@@";
 const char s_copyListPtrTag[] = ".PEAUCopyCommandList@gxDx12Backend@@";
 const char s_heapPageTag[] = ".?AV?$unique_ptr@UHeapPage@gxDx12Backend@@U?$smem_del_deleter@UHeapPage@gxDx12Backend@@@@@blz@@";
+const char s_bufferPageTag[] =
+    ".?AV?$unique_ptr@UBufferPage@gxDx12Backend@@U?$smem_del_deleter@UBufferPage@gxDx12Backend@@@@@blz@@";
 const char s_samplerMapTag[] =
     ".?AU?$pair@$$CB_KV?$unique_ptr@Usampler@Device@gxDx12Backend@@Usampler_delete@23@@blz@@@blz@@";
 const char s_stateMapTag[] = ".?AU?$pair@QEBUD3d12Object@gxDx12Backend@@W4D3D12_RESOURCE_STATES@@@blz@@";

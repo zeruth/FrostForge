@@ -271,10 +271,9 @@ void GraphicsCommandList::CommitState(bool indexed, uint8_t shadingRate) {
         view.Format = static_cast<DXGI_FORMAT>(this->m_indexFormat);
         list->IASetIndexBuffer(&view);
         this->m_boundIndexAddress = indices->m_gpu;
-        if (indices->m_heap != nullptr) {
-            // A static buffer's heap joins the residency set (FUN_1422db640); the buffer
-            // heaps are not ported.
-            FROST_UNIMPLEMENTED();
+        auto page = static_cast<BufferPage*>(indices->m_heap);
+        if (page != nullptr && page->m_residency.m_underlying != nullptr) {
+            this->m_copy.ResidencySet()->Insert(&page->m_residency);
         }
     }
     this->CommitBindings();
@@ -327,10 +326,9 @@ void RenderContextD3d12::SetVertexBuffers(uint32_t first, uint32_t count, const 
     D3D12_VERTEX_BUFFER_VIEW views[16];
     for (uint32_t i = 0; i < count && i < 16; i++) {
         const GXVERTEXSTREAM& stream = streams[i];
-        if (stream.m_buf->m_heap != nullptr) {
-            // A static buffer's heap joins the residency set (FUN_1422db640); the buffer heaps
-            // are not ported.
-            FROST_UNIMPLEMENTED();
+        auto page = static_cast<BufferPage*>(stream.m_buf->m_heap);
+        if (page != nullptr && page->m_residency.m_underlying != nullptr) {
+            this->Owner()->m_copy.ResidencySet()->Insert(&page->m_residency);
         }
         views[i].BufferLocation = stream.m_buf->m_gpu + stream.m_offset;
         views[i].SizeInBytes = stream.m_size;

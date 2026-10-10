@@ -938,9 +938,8 @@ void BufUnlockUpload(CopyCommandList* list, GxBuf* buf, uint32_t size) {
         if (size == 0) {
             size = buf->m_size;
         }
-        // DAT_14348c0d3 and the heap's +0xa0: a copy is pending.
         device->m_copiesPending = 1;
-        FROST_UNIMPLEMENTED();  // the heap's own pending flag (+0xa0) comes with the buffer heaps
+        static_cast<BufferPage*>(buf->m_heap)->m_copyPending = 1;
         list->m_bufs.push_back(BufPair { buf, size, 0 });
     }
     buf->m_flags |= GXBUF_WRITTEN;
@@ -949,11 +948,17 @@ void BufUnlockUpload(CopyCommandList* list, GxBuf* buf, uint32_t size) {
 // ref: FUN_1422cd800
 void* BufLockList(CopyCommandList* list, GxBuf* buf) {
     if (buf->m_type == GXBUF_STREAM) {
-        // A stream buffer moves to a fresh range of its heap; the old range is freed when the
-        // frame is done (LAB_1422c7c40).
-        FROST_UNIMPLEMENTED();
+        // A stream buffer moves to a fresh range of its page; the old range is freed when the
+        // frame is done.
+        g_gxDeviceLock.Enter();
+        CGxDeviceD3d12* device = GxDeviceD3d12();
+        auto page = static_cast<BufferPage*>(buf->m_heap);
+        if (page != nullptr && buf->m_type != GXBUF_DYNAMIC) {
+            BufFreeLater(device->m_frame, page, buf->m_heapOffset, buf->m_heapSize);
+        }
         buf->m_flags &= ~GXBUF_UNLOCKED;
-        GxDeviceD3d12()->BufAllocate(buf);
+        device->BufAllocate(buf);
+        g_gxDeviceLock.Leave();
     }
     return BufLockUpload(list, buf);
 }

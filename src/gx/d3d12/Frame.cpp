@@ -1,10 +1,12 @@
 #include "gx/d3d12/DeviceD3d12.hpp"
 #include "gx/Gx.hpp"
+#include "gx/GxBuf.hpp"
 #include "gx/GxPlatform.hpp"
 #include "os/Os.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
 #include "util/Unimplemented.hpp"
+#include <algorithm>
 #include <cstring>
 #include <new>
 
@@ -579,6 +581,85 @@ bool CGxDeviceD3d12::FrameBegin(void* query) {
     return QueryBegin(this->m_graphicsPtr, static_cast<QUERY*>(query));
 }
 
+namespace {
+
+// The pages fullest first, so a range comes from the fullest page with room (FUN_1422c7e80
+// for buffer pages, FUN_1422c8290 for texture heap pages: introsorts by free bytes).
+template <class Page, const char* Tag>
+void SortByFree(blz::vector<Page*, Tag>& pages) {
+    std::sort(pages.begin(), pages.end(), [](const Page* a, const Page* b) {
+        return a->m_allocations.m_freeSize < b->m_allocations.m_freeSize;
+    });
+}
+
+// The empty pages at the end of a sorted list go; returns the bytes they held.
+// ref: FUN_1422c7690
+uint64_t TrimBufferPages(blz::vector<BufferPage*, s_bufferPageTag>& pages) {
+    uint64_t freed = 0;
+    while (pages.size() != 0) {
+        BufferPage* page = pages[pages.size() - 1];
+        if (page->m_allocations.m_freeSize != page->m_allocations.m_maxSize) {
+            break;
+        }
+        freed += page->m_allocations.m_maxSize;
+        pages.m_size--;
+        page->~BufferPage();
+        operator delete(page, sizeof(BufferPage));
+    }
+    return freed;
+}
+
+// ref: FUN_1422c76f0
+uint64_t TrimHeapPages(blz::vector<HeapPage*, s_heapPageTag>& pages) {
+    uint64_t freed = 0;
+    while (pages.size() != 0) {
+        HeapPage* page = pages[pages.size() - 1];
+        if (page->m_allocations.m_freeSize != page->m_allocations.m_maxSize) {
+            break;
+        }
+        freed += page->m_allocations.m_maxSize;
+        pages.m_size--;
+        page->~HeapPage();
+        operator delete(page, 0xb8);
+    }
+    return freed;
+}
+
+}
+
+// The buffer pages and texture heap pages in allocation order (inline in FUN_1422db9f0,
+// FUN_1422d2a30 and FUN_1422e00d0).
+void CGxDeviceD3d12::SortPages() {
+    SortByFree(this->m_vertexPages);
+    SortByFree(this->m_indexPages);
+    SortByFree(this->m_otherPages);
+    SortByFree(this->m_heapPages);
+}
+
+// The empty pages are released (inline in FUN_1422db9f0 and FUN_1422e00d0).
+uint32_t CGxDeviceD3d12::TrimPages() {
+    TrimBufferPages(this->m_vertexPages);
+    TrimBufferPages(this->m_indexPages);
+    TrimBufferPages(this->m_otherPages);
+    uint32_t freed = static_cast<uint32_t>(TrimHeapPages(this->m_heapPages));
+    this->m_placedBytes -= freed;
+    return freed;
+}
+
+// Device slot 0x10: after a texture reload the pages are sorted and the empty ones released.
+// The texture heap defragmenter that follows (FUN_1422d0150) is not ported.
+// ref: FUN_1422e00d0
+void CGxDeviceD3d12::Slot010() {
+    if (this->m_ready == 0) {
+        return;
+    }
+    g_gxDeviceLock.Enter();
+    GxDeviceCallLock lock;
+    this->SortPages();
+    this->TrimPages();
+    g_gxDeviceLock.Leave();
+}
+
 // Takes the video memory reading and trims the transient pools when the budget allows.
 // ref: FUN_1422db9f0
 void CGxDeviceD3d12::SubmitBegin() {
@@ -587,8 +668,10 @@ void CGxDeviceD3d12::SubmitBegin() {
     this->QueryVideoMemory();
     if ((this->Field<uint8_t>(0x86b) == 0 && this->m_localMemory.CurrentUsage <= this->m_localMemory.Budget) ||
         this->Field<uint32_t>(0x138) <= static_cast<uint32_t>(this->m_548) + 10000u) {
-        // FUN_1422c7e80 / FUN_1422c8290 / FUN_1422c7690 / FUN_1422c76f0: sorting and trimming the
-        // buffer and texture heap pages. Nothing allocates those pages until GxBuf is ported.
+        this->SortPages();
+        if (this->Field<uint32_t>(0x138) % 300 == 0) {
+            this->TrimPages();
+        }
     } else {
         if (this->Field<uint8_t>(0x86b) != 0) {
             GxLog("Low Render Target threshold reached");
@@ -596,6 +679,14 @@ void CGxDeviceD3d12::SubmitBegin() {
         this->m_548 = this->Field<uint32_t>(0x138);
         GxNotifyOnLowMemory();
         this->Flush();
+        if (this->m_ready != 0) {
+            g_gxDeviceLock.Enter();
+            GxDeviceCallLock flushLock;
+            this->SortPages();
+            this->TrimPages();
+            // The texture heap defragmenter (FUN_1422d0150) is not ported.
+            g_gxDeviceLock.Leave();
+        }
         this->Field<uint8_t>(0x86b) = 0;
     }
     g_gxDeviceLock.Leave();
@@ -966,9 +1057,71 @@ bool CGxDeviceD3d12::FlushCopies() {
         return false;
     }
     this->m_copiesPending = 0;
-    // FROST: the transitions of the GxBuf upload pages (+0xb20/+0xb38/+0xb50) and their
-    // renaming; those lists stay empty until GxBuf is ported.
     CopyCommandList* upload = this->m_copyPtr;
+    upload->Reset();
+    struct {
+        blz::vector<BufferPage*, s_bufferPageTag>* m_pages;
+        uint32_t m_state;
+    } lists[3] = {
+        { &this->m_vertexPages, 0xc1 },
+        { &this->m_indexPages, 0xc2 },
+        { &this->m_otherPages, 0xc0 },
+    };
+    // The pages written to go to COPY_DEST...
+    for (auto& entry : lists) {
+        for (BufferPage* page : *entry.m_pages) {
+            if (page->m_copyPending == 0) {
+                continue;
+            }
+            D3D12_RESOURCE_BARRIER& barrier = upload->m_barriers.emplace_back();
+            barrier = {};
+            barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+            barrier.Transition.pResource = page->m_resource;
+            barrier.Transition.Subresource = 0;
+            barrier.Transition.StateBefore = static_cast<D3D12_RESOURCE_STATES>(entry.m_state);
+            barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_COPY_DEST;
+            if (page->m_residency.m_underlying != nullptr) {
+                upload->ResidencySet()->Insert(&page->m_residency);
+            }
+        }
+    }
+    upload->FlushBarriers();
+    // ...each buffer written this frame is copied from its upload memory into its range, and
+    // reads from there now...
+    for (CopyCommandList* list : this->m_activeLists) {
+        for (BufPair& pair : list->m_bufs) {
+            auto buf = static_cast<GxBuf*>(pair.m_buf);
+            ID3D12Resource* dest = static_cast<BufferPage*>(buf->m_heap)->m_resource;
+            uint32_t element = (buf->m_flags >> GXBUF_ELEMENT_SHIFT) & 0xfff;
+            uint32_t offset = buf->m_heapOffset + element - 1;
+            offset -= offset % element;
+            upload->m_list->CopyBufferRegion(dest, offset, static_cast<ID3D12Resource*>(buf->m_resource), buf->m_offset,
+                pair.m_size);
+            buf->m_resource = dest;
+            buf->m_offset = offset;
+            buf->m_gpu = dest->GetGPUVirtualAddress() + offset;
+        }
+        list->m_bufs.m_size = 0;
+    }
+    // ...and the pages go back to being read.
+    for (auto& entry : lists) {
+        for (BufferPage* page : *entry.m_pages) {
+            if (page->m_copyPending == 0) {
+                continue;
+            }
+            page->m_copyPending = 0;
+            D3D12_RESOURCE_BARRIER& barrier = upload->m_barriers.emplace_back();
+            barrier = {};
+            barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+            barrier.Transition.pResource = page->m_resource;
+            barrier.Transition.Subresource = 0;
+            barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+            barrier.Transition.StateAfter = static_cast<D3D12_RESOURCE_STATES>(entry.m_state);
+            if (page->m_residency.m_underlying != nullptr) {
+                upload->ResidencySet()->Insert(&page->m_residency);
+            }
+        }
+    }
     upload->FlushBarriers();
     if (upload->m_lists[0] != nullptr) {
         HRESULT hr = upload->m_lists[0]->Close();
@@ -1010,6 +1163,7 @@ void CGxDeviceD3d12::Flush() {
     this->m_copyPtr->Reset();
     this->m_computePtr->BeginFrame();
     this->ReleaseFrames();
+    this->SortPages();
     g_gxDeviceLock.Leave();
 }
 

@@ -112,6 +112,19 @@ struct HeapPage {
     ~HeapPage();                        // FUN_1422cc560
 };
 
+// A 32 MB committed buffer that static and stream GxBufs are carved from (BufferAllocator,
+// 0xa8 bytes in the reference). Each usage has its own list of pages, in the state that usage
+// is read in.
+struct BufferPage {
+    ID3D12Resource* m_resource;     // 0x00 (ComPtr)
+    VariableSizeAllocationsManager m_allocations;  // 0x08
+    D3DX12Residency::ManagedObject m_residency;    // 0x60
+    uint8_t m_copyPending;          // 0xa0: a buffer in it was written this frame
+
+    explicit BufferPage(uint32_t size);     // inline in FUN_1422d5a60
+    ~BufferPage();                          // inline in FUN_1422d5a60 and FUN_1422c7e80
+};
+
 // A texture or render target (0x260 bytes).
 struct Tex {
     uint16_t m_width;               // 0x000

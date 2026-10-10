@@ -10,6 +10,7 @@
 #include "storm/String.hpp"
 #include "util/Unimplemented.hpp"
 #include <cstring>
+#include <initializer_list>
 #include <new>
 
 using namespace gxDx12Backend;
@@ -1091,9 +1092,15 @@ void CGxDeviceD3d12::DeviceDestroy() {
         }
     }
     this->m_heapPages.m_size = 0;
-    this->m_uploadsC1.m_size = 0;
-    this->m_uploadsC2.m_size = 0;
-    this->m_uploadsC0.m_size = 0;
+    for (auto pages : { &this->m_vertexPages, &this->m_indexPages, &this->m_otherPages }) {
+        for (BufferPage* page : *pages) {
+            if (page != nullptr) {
+                page->~BufferPage();
+                operator delete(page, sizeof(BufferPage));
+            }
+        }
+        pages->m_size = 0;
+    }
     for (auto& pages : this->m_freeUploadPages) {
         for (DescriptorUploadPage& page : pages) {
             ReleaseAndNull(&page.m_heap);
@@ -1225,16 +1232,130 @@ bool CGxDeviceD3d12::BufCreate(GxBuf* buf) {
 // Device slot 0x1a8: a buffer's heap range is freed once the frame is done.
 // ref: FUN_1422cd8f0
 void CGxDeviceD3d12::BufDestroy(GxBuf* buf) {
-    if (buf->m_heap != nullptr && buf->m_type != GXBUF_DYNAMIC) {
-        // The range goes back to its heap through a frame callback (LAB_1422c7c40) with the
-        // heap's allocator, which comes with the buffer heaps.
-        FROST_UNIMPLEMENTED();
+    auto page = static_cast<BufferPage*>(buf->m_heap);
+    if (page != nullptr && buf->m_type != GXBUF_DYNAMIC) {
+        BufFreeLater(this->m_frame, page, buf->m_heapOffset, buf->m_heapSize);
     }
     buf->m_flags &= ~GXBUF_UNLOCKED;
 }
 
-// A range for a static or stream buffer in one of the buffer heaps (index, vertex or
-// constant), a new heap when none has room.
+namespace {
+
+struct BUFFREE {
+    VariableSizeAllocationsManager* m_allocations;
+    uint32_t m_offset;
+    uint32_t m_size;
+};
+
+// ref: LAB_1422c7c40
+void BufFreeRange(void* record) {
+    auto range = static_cast<BUFFREE*>(record);
+    range->m_allocations->Free(range->m_offset, range->m_size);
+}
+
+}
+
+void gxDx12Backend::BufFreeLater(FrameData* frame, BufferPage* page, uint32_t offset, uint32_t size) {
+    auto lock = static_cast<SCritSect*>(frame->m_callbacks.m_lock);
+    lock->Enter();
+    auto range = static_cast<BUFFREE*>(frame->m_callbacks.Add(BufFreeRange, sizeof(BUFFREE), 8));
+    lock->Leave();
+    if (range != nullptr) {
+        range->m_allocations = &page->m_allocations;
+        range->m_offset = offset;
+        range->m_size = size;
+    }
+}
+
+// ref: inline in FUN_1422d5a60
+BufferPage::BufferPage(uint32_t size) {
+    this->m_resource = nullptr;
+    this->m_allocations.m_maxSize = size;
+    this->m_allocations.m_freeSize = size;
+    this->m_allocations.AddNewBlock(0, size);
+    std::memset(&this->m_residency, 0, sizeof(this->m_residency));
+    this->m_copyPending = 0;
+}
+
+BufferPage::~BufferPage() {
+    if (this->m_residency.m_underlying != nullptr) {
+        GxDeviceD3d12()->m_residency.EndTrackingObject(&this->m_residency);
+    }
+    ReleaseAndNull(&this->m_resource);
+}
+
+namespace {
+
+// The page list a buffer usage's ranges come from.
+blz::vector<BufferPage*, s_bufferPageTag>* BufPages(CGxDeviceD3d12* device, uint32_t usage) {
+    if ((usage & GXBUFUSAGE_INDEX) != 0) {
+        return &device->m_indexPages;
+    }
+    if ((usage & (GXBUFUSAGE_VERTEX | GXBUFUSAGE_CONSTANT)) != 0) {
+        return &device->m_vertexPages;
+    }
+    return &device->m_otherPages;
+}
+
+// The greatest common divisor (FUN_1422c9620).
+uint32_t BufAlignGcd(uint32_t a, uint32_t b) {
+    while (b != 0) {
+        uint32_t t = a % b;
+        a = b;
+        b = t;
+    }
+    return a;
+}
+
+}
+
+// A 32 MB committed buffer in the state its usage is read in, tracked for residency.
+// ref: FUN_1422d5a60
+BufferPage* CGxDeviceD3d12::CreateBufferPage(uint32_t usage) {
+    blz::vector<BufferPage*, s_bufferPageTag>* pages = BufPages(this, usage);
+    auto page = new (SMemAlloc(sizeof(BufferPage), 0xd, s_deviceFile, SStrHashFnv1a(s_deviceFile), 0x1275, 0))
+        BufferPage(0x2000000);
+    D3D12_HEAP_PROPERTIES heap = {};
+    heap.Type = D3D12_HEAP_TYPE_DEFAULT;
+    heap.CreationNodeMask = 1;
+    heap.VisibleNodeMask = 1;
+    D3D12_RESOURCE_DESC desc = {};
+    desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+    desc.Width = 0x2000000;
+    desc.Height = 1;
+    desc.DepthOrArraySize = 1;
+    desc.MipLevels = 1;
+    desc.SampleDesc.Count = 1;
+    desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+    uint32_t state;
+    if ((usage & GXBUFUSAGE_INDEX) != 0) {
+        state = 0xc2;
+    } else if ((usage & (GXBUFUSAGE_VERTEX | GXBUFUSAGE_CONSTANT)) != 0) {
+        state = 0xc1;
+    } else {
+        state = 0xc0;
+    }
+    ID3D12Resource* resource = nullptr;
+    HRESULT hr = this->m_device->CreateCommittedResource(&heap, D3D12_HEAP_FLAG_NONE, &desc,
+        static_cast<D3D12_RESOURCE_STATES>(state), nullptr, __uuidof(ID3D12Resource), reinterpret_cast<void**>(&resource));
+    if (FAILED(hr) || resource == nullptr) {
+        this->Fail(hr, "ICreateBufferPage Create Failed");
+        ReleaseAndNull(&resource);
+        page->~BufferPage();
+        operator delete(page, sizeof(BufferPage));
+        return nullptr;
+    }
+    page->m_residency.m_underlying = resource;
+    page->m_residency.m_size = 0x2000000;
+    page->m_residency.m_lastGpuSyncPoint = 0;
+    page->m_resource = resource;
+    this->m_residency.BeginTrackingObject(&page->m_residency);
+    this->m_bufferBytes += 0x2000000;
+    pages->push_back(page);
+    return page;
+}
+
+// A range for a static or stream buffer in its usage's pages, a new page when none has room.
 // ref: FUN_1422d46a0
 bool CGxDeviceD3d12::BufAllocate(GxBuf* buf) {
     if (this->m_ready == 0) {
@@ -1242,11 +1363,36 @@ bool CGxDeviceD3d12::BufAllocate(GxBuf* buf) {
     }
     if (buf->m_type == GXBUF_DYNAMIC) {
         buf->m_heap = nullptr;
+        buf->m_heapOffset = 0;
+        buf->m_heapSize = 0;
     } else {
-        // The heaps (+0xb20 index, +0xb38 vertex, +0xb50 constant) and their range allocator
-        // (FUN_1422d5a60, FUN_1422c27d0) are not ported yet.
-        FROST_UNIMPLEMENTED();
-        return false;
+        uint32_t alignment = (buf->m_usage & GXBUFUSAGE_CONSTANT) != 0 ? 0x100 : 8;
+        uint32_t element = (buf->m_flags >> GXBUF_ELEMENT_SHIFT) & 0xfff;
+        uint32_t common = BufAlignGcd(alignment, element % alignment);
+        uint32_t size = ((alignment - 1) + (buf->m_size - common) + element) & static_cast<uint32_t>(-static_cast<int32_t>(alignment));
+        g_gxDeviceLock.Enter();
+        blz::vector<BufferPage*, s_bufferPageTag>* pages = BufPages(this, buf->m_usage);
+        BufferPage* found = nullptr;
+        uint32_t offset = 0xffffffff;
+        for (BufferPage* page : *pages) {
+            offset = page->m_allocations.Allocate(size);
+            if (offset != 0xffffffff) {
+                found = page;
+                break;
+            }
+        }
+        if (found == nullptr) {
+            found = this->CreateBufferPage(buf->m_usage);
+            if (found == nullptr) {
+                g_gxDeviceLock.Leave();
+                return false;
+            }
+            offset = found->m_allocations.Allocate(size);
+        }
+        buf->m_heap = found;
+        buf->m_heapOffset = offset;
+        buf->m_heapSize = size;
+        g_gxDeviceLock.Leave();
     }
     buf->m_flags &= ~GXBUF_UNLOCKED;
     return true;

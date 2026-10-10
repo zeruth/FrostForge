@@ -21,6 +21,7 @@ extern const char s_enqueuePairTag[];       // ".?AUEnqueuePair@Device@gxDx12Bac
 extern const char s_commandListPtrTag[];    // ".PEAUID3D12CommandList@@"
 extern const char s_copyListPtrTag[];       // ".PEAUCopyCommandList@gxDx12Backend@@"
 extern const char s_heapPageTag[];          // ".?AV?$unique_ptr@UHeapPage@gxDx12Backend@@..."
+extern const char s_bufferPageTag[];        // ".?AV?$unique_ptr@UBufferPage@gxDx12Backend@@..."
 extern const char s_samplerMapTag[];        // ".?AU?$pair@$$CB_KV?$unique_ptr@Usampler@Device@gxDx12Backend@@..."
 extern const char s_stateMapTag[];          // ".?AU?$pair@QEBUD3d12Object@gxDx12Backend@@W4D3D12_RESOURCE_STATES@@@blz@@"
 
@@ -286,6 +287,10 @@ class CGxDeviceD3d12 : public CGxDevice {
     bool BufCreate(GxBuf* buf) override;                                  // 0x1a0 FUN_1422cd720
     void BufDestroy(GxBuf* buf) override;                                 // 0x1a8 FUN_1422cd8f0
     bool BufAllocate(GxBuf* buf);                                         // FUN_1422d46a0
+    gxDx12Backend::BufferPage* CreateBufferPage(uint32_t usage);          // FUN_1422d5a60
+    void Slot010() override;                                              // 0x010 FUN_1422e00d0
+    void SortPages();                                                     // inline in FUN_1422db9f0
+    uint32_t TrimPages();                                                 // inline in FUN_1422db9f0
     GxPipeline* PipelineCreate(const GXPIPELINEDESC* desc, uint64_t hash, const char* name) override;  // 0x138 FUN_1422dc720
     void PipelineDestroy(GxPipeline* pipeline) override;                  // 0x140 FUN_1422dc920
     bool BuildPipeline(const GXPIPELINEDESC* desc, GxPipeline* pipeline);  // FUN_1422d86b0
@@ -348,9 +353,11 @@ class CGxDeviceD3d12 : public CGxDevice {
     uint32_t m_padae4;
     blz::embedded_vector<gxDx12Backend::SwapChain*, 1, gxDx12Backend::s_swapChainPtrTag> m_presents;  // 0x0ae8
     blz::vector<gxDx12Backend::HeapPage*, gxDx12Backend::s_heapPageTag> m_heapPages;  // 0x0b08
-    blz::vector<void*, gxDx12Backend::s_d3d12ObjectPtrTag> m_uploadsC2;  // 0x0b20
-    blz::vector<void*, gxDx12Backend::s_d3d12ObjectPtrTag> m_uploadsC1;  // 0x0b38
-    blz::vector<void*, gxDx12Backend::s_d3d12ObjectPtrTag> m_uploadsC0;  // 0x0b50
+    // The buffer pages: index buffers (read as 0xc2), vertex and constant buffers (0xc1), and
+    // the rest (0xc0), each sorted fullest first.
+    blz::vector<gxDx12Backend::BufferPage*, gxDx12Backend::s_bufferPageTag> m_indexPages;   // 0x0b20
+    blz::vector<gxDx12Backend::BufferPage*, gxDx12Backend::s_bufferPageTag> m_vertexPages;  // 0x0b38
+    blz::vector<gxDx12Backend::BufferPage*, gxDx12Backend::s_bufferPageTag> m_otherPages;   // 0x0b50
     blz::vector<gxDx12Backend::DescriptorUploadPage, gxDx12Backend::s_uploadPageTag> m_freeUploadPages[4];  // 0x0b68
     gxDx12Backend::DescriptorHeap m_rtvHeap;               // 0x0bc8
     gxDx12Backend::DescriptorHeap m_dsvHeap;               // 0x0c50
@@ -373,7 +380,8 @@ class CGxDeviceD3d12 : public CGxDevice {
     uint32_t m_committedBytes;                             // 0x4718
     uint32_t m_471c[2];
     uint32_t m_placedBytes;                                // 0x4724
-    uint32_t m_4728[2];
+    uint32_t m_bufferBytes;                                // 0x4728: in buffer pages
+    uint32_t m_472c;
     uint32_t m_committedCount;                             // 0x4730
     uint32_t m_placedCount;                                // 0x4734
     uint32_t m_4738;                                       // 0x4738
@@ -417,5 +425,13 @@ static_assert(sizeof(CGxDeviceD3d12) == 0x4750, "CGxDeviceD3d12 is 0x4750 bytes"
 
 // DAT_143490b08: cleared after each Present.
 extern uint32_t g_gxPresentSpin;
+
+namespace gxDx12Backend {
+
+// A buffer page range goes back to its page once the frame is done (a LAB_1422c7c40 callback
+// on the frame, inline in FUN_1422cd8f0 and FUN_1422cd800).
+void BufFreeLater(FrameData* frame, BufferPage* page, uint32_t offset, uint32_t size);
+
+}
 
 #endif
