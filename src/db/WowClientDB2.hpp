@@ -271,6 +271,11 @@ class WowClientDB2_Base {
     void* GetRecord(uint32_t id, bool request, bool* local);
     // FUN_140581790
     bool HasRecord(int32_t id);
+    // FUN_140579030: called with 0 after the table loads, 1 after it unloads.
+    void AddLoadCallback(void (*callback)(int32_t event));
+    // FUN_1405791e0 / FUN_14057ae20: a watcher of patched records.
+    void AddPatchCallback(void (*callback)(uint32_t, uint32_t, uint32_t, void*, void*), void* context);
+    void RemovePatchCallback(void (*callback)(uint32_t, uint32_t, uint32_t, void*, void*));
     // FUN_14057b830: the record whose unique int key `key` is `value`.
     void* GetRecordByIntKey(int32_t value, int32_t key);
     // FUN_14057b920
@@ -321,6 +326,9 @@ class WowClientDB2 : public WowClientDB2_Base {
     // FUN_140442370
     void RecordCallback() override;
 };
+
+// Whether a missing record can be asked of the server as a hotfix (DAT_142e8e258).
+bool DB2HotfixRequestsAvailable();
 
 // FUN_140576870: a field as the client lays the record out (no decoding).
 uint32_t DB2PlainFieldValue(const uint8_t* record, const DBMeta* meta, int32_t field, int32_t arrayIndex);

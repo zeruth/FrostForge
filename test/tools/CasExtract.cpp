@@ -3,9 +3,16 @@
 //
 //   CasExtract <install _classic_ dir> <out dir> <file name>...
 //   CasExtract <install _classic_ dir> <out dir> @<list file>
+//   ... [--keys <key list>]...
 //
 // An entry #<fileDataId> loads by id and is written to <out>/<fileDataId>; in a list file,
 // #<fileDataId> <name> writes it to <out>/<name> instead.
+//
+// Encrypted blocks are decrypted with the keys the client knows: TactKey and TactKeyLookup are
+// loaded and the client's key store (TactKeysSetup) answers CASC's key callback. The install
+// ships only some keys; the rest reach the client as TactKey hotfixes from the server. Pass
+// them with --keys (a TACTKeys-format list) and they are stored as such a hotfix would be. A
+// file that still needs an unknown key fails, with the CAS error.
 
 #include <cstdio>
 #include <cstdlib>
@@ -20,46 +27,40 @@
 #include "cas/CAS.hpp"
 #include "cas/CASManifest.hpp"
 #include "client/Locale.hpp"
+#include "db/DB2Tables.hpp"
+#include "db/DBClient.hpp"
+#include "db/TactKeys.hpp"
+#include "db/WowClientDB2.hpp"
 
 namespace {
 
-// The client has no TactKey manager yet (FUN_141359ff0 is not ported), so no key getter is
-// installed and a file with any encrypted block fails as a whole. The client's DB2 loader reads
-// by section and skips the encrypted ones; here the file is read in spans instead, and a span
-// that will not decrypt is written as zeros (narrowed to 0x40 bytes) so the rest survives.
-bool LoadByIdZeroFilling(int32_t fileDataId, uint8_t** data, uint32_t* size, uint32_t* zeroed) {
-    cas::CASFILE* file = nullptr;
-    if (!cas::CASFileOpenById(fileDataId, &file, 0)) {
-        return false;
+// A key list in the TACTKeys format: "<key name, 16 hex digits> <key, 32 hex digits>", anything
+// after that ignored, lines that do not parse skipped. Returns the keys read, or -1 when the
+// file will not open.
+int32_t ProvideKeys(const char* path) {
+    std::ifstream list(path);
+    if (!list) {
+        return -1;
     }
-    uint32_t total = static_cast<uint32_t>(cas::CASFileGetSize(file));
-    auto buffer = static_cast<uint8_t*>(std::calloc(total != 0 ? total : 1, 1));
-    constexpr uint32_t SPAN = 0x1000;
-    constexpr uint32_t FINE = 0x40;
-    uint32_t bad = 0;
-    for (uint32_t offset = 0; offset < total; offset += SPAN) {
-        uint32_t length = total - offset < SPAN ? total - offset : SPAN;
-        uint32_t read = 0;
-        if (cas::CASFileReadAtOffset(file, buffer + offset, offset, length, &read, 0, -1) && read == length) {
+    int32_t count = 0;
+    std::string line;
+    while (std::getline(list, line)) {
+        char nameText[17] = {};
+        char keyText[33] = {};
+        if (std::sscanf(line.c_str(), "%16[0-9A-Fa-f] %32[0-9A-Fa-f]", nameText, keyText) != 2
+            || std::strlen(nameText) != 16 || std::strlen(keyText) != 32) {
             continue;
         }
-        for (uint32_t fine = offset; fine < offset + length; fine += FINE) {
-            uint32_t piece = offset + length - fine < FINE ? offset + length - fine : FINE;
-            if (!cas::CASFileReadAtOffset(file, buffer + fine, fine, piece, &read, 0, -1) || read != piece) {
-                std::memset(buffer + fine, 0, piece);
-                bad += piece;
-            }
+        uint64_t name = std::strtoull(nameText, nullptr, 16);
+        uint8_t key[16];
+        for (int i = 0; i < 16; i++) {
+            char byte[3] = { keyText[i * 2], keyText[i * 2 + 1], '\0' };
+            key[i] = static_cast<uint8_t>(std::strtoul(byte, nullptr, 16));
         }
+        TactKeysProvide(name, key);
+        count++;
     }
-    cas::CASFileClose(&file);
-    if (bad == total && total != 0) {
-        std::free(buffer);
-        return false;
-    }
-    *data = buffer;
-    *size = total;
-    *zeroed = bad;
-    return true;
+    return count;
 }
 
 }
@@ -69,10 +70,18 @@ int main(int argc, char** argv) {
         std::fprintf(stderr, "usage: CasExtract <install dir> <out dir> <name>... | @<list>\n");
         return 2;
     }
+    std::vector<std::string> keyFiles;
+    for (int i = 3; i + 1 < argc; i++) {
+        if (std::strcmp(argv[i], "--keys") == 0) {
+            keyFiles.push_back(std::filesystem::absolute(argv[i + 1]).string());
+        }
+    }
     std::filesystem::current_path(argv[1]);
     std::vector<std::string> names;
     for (int i = 3; i < argc; i++) {
-        if (argv[i][0] == '@') {
+        if (std::strcmp(argv[i], "--keys") == 0) {
+            i++;
+        } else if (argv[i][0] == '@') {
             std::ifstream list(argv[i] + 1);
             std::string line;
             while (std::getline(list, line)) {
@@ -100,13 +109,27 @@ int main(int argc, char** argv) {
         std::fprintf(stderr, "CAS initialization failed\n");
         return 1;
     }
+
+    // The keys, as the client has them at startup.
+    TactKeysSetup(nullptr);
+    if (!WowClientDB2LoadWithFlags(&g_tactKeyDB, 4) || !WowClientDB2LoadWithFlags(&g_tactKeyLookupDB, 4)) {
+        std::fprintf(stderr, "TactKey / TactKeyLookup failed to load; encrypted blocks will fail\n");
+    }
+    for (const std::string& keyFile : keyFiles) {
+        int32_t count = ProvideKeys(keyFile.c_str());
+        if (count < 0) {
+            std::fprintf(stderr, "cannot open key file %s\n", keyFile.c_str());
+            return 2;
+        }
+        std::printf("%d keys from %s\n", count, keyFile.c_str());
+    }
+
     int failed = 0;
     for (const std::string& entry : names) {
         uint8_t* data = nullptr;
         uint32_t size = 0;
         std::string name = entry;
-        bool loaded;
-        bool zeroFilled = false;
+        bool loaded = false;
         if (entry[0] == '#') {
             // #<fileDataId> [name]: by id, written to <out>/<name> or <out>/<fileDataId>
             size_t space = entry.find_first_of(" \t");
@@ -122,15 +145,6 @@ int main(int argc, char** argv) {
             long fileDataId = std::strtol(id.c_str(), &end, 10);
             loaded = !id.empty() && *end == '\0'
                 && cas::CASFileLoadById(static_cast<int32_t>(fileDataId), &data, &size, 0, 0);
-            if (!loaded && !id.empty() && *end == '\0') {
-                uint32_t zeroed = 0;
-                loaded = LoadByIdZeroFilling(static_cast<int32_t>(fileDataId), &data, &size, &zeroed);
-                zeroFilled = loaded;
-                if (loaded && zeroed != 0) {
-                    std::fprintf(stderr, "partial: %s (%u bytes would not decrypt, written as zeros)\n",
-                        entry.c_str(), zeroed);
-                }
-            }
         } else {
             loaded = cas::CASFileLoadByName(name.c_str(), &data, &size, 0, 0);
         }
@@ -150,11 +164,7 @@ int main(int argc, char** argv) {
         std::filesystem::create_directories(out.parent_path());
         std::ofstream file(out, std::ios::binary);
         file.write(reinterpret_cast<const char*>(data), size);
-        if (zeroFilled) {
-            std::free(data);
-        } else {
-            cas::CASFileFree(data);
-        }
+        cas::CASFileFree(data);
         std::printf("%s (%u bytes)\n", name.c_str(), size);
     }
     return failed != 0 ? 1 : 0;

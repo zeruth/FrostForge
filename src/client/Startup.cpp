@@ -21,6 +21,7 @@
 #include "storm/Log.hpp"
 #include "storm/Memory.hpp"
 #include "util/Unimplemented.hpp"
+#include "db/TactKeys.hpp"
 #include "ui/CLayoutFrame.hpp"
 
 uint32_t g_startupFlags;
@@ -637,12 +638,6 @@ void TelemetryEncryptionHandler(int32_t a1) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_14135aa50
-void TelemetrySetEncryptionHandler(void (*handler)(int32_t)) {
-    (void)handler;
-    FROST_UNIMPLEMENTED();
-}
-
 // ref: FUN_141359ec0
 void TelemetryOnHotfixApplied() {
     FROST_UNIMPLEMENTED();
@@ -782,7 +777,7 @@ void Sub1402295B0() {
         }
     }
     SetSplits(0);
-    TelemetrySetEncryptionHandler(&TelemetryEncryptionHandler);
+    TactKeysSetup(&TelemetryEncryptionHandler);
     HotfixAddInitialListener(&TelemetryHotfixListener);
     TelemetryStreamEnable(&s_telemetryStreamA, 4);
     TelemetryStreamEnable(&s_telemetryStreamB, 4);

@@ -1733,6 +1733,45 @@ void* WowClientDB2_Base::GetRecord(uint32_t id, bool request, bool* local) {
     return nullptr;
 }
 
+// The hotfix requests object exists and can ask the server (DAT_142e8e258, its slot 8).
+bool DB2HotfixRequestsAvailable() {
+    return s_hotfixRequests && HotfixRequestsAvailable();
+}
+
+// ref: FUN_140579030
+void WowClientDB2_Base::AddLoadCallback(void (*callback)(int32_t event)) {
+    this->m_loadCallbacks.push_back(callback);
+}
+
+// The reference stores the context as a 32-bit value beside the callback.
+// ref: FUN_1405791e0
+void WowClientDB2_Base::AddPatchCallback(void (*callback)(uint32_t, uint32_t, uint32_t, void*, void*), void* context) {
+    DB2PATCHCALLBACK entry = { callback, context };
+    this->m_patchCallbacks.push_back(entry);
+}
+
+// Every watcher with this callback goes; the last entries are moved into the gaps.
+// ref: FUN_14057ae20
+void WowClientDB2_Base::RemovePatchCallback(void (*callback)(uint32_t, uint32_t, uint32_t, void*, void*)) {
+    uint64_t count = this->m_patchCallbacks.size();
+    uint64_t i = 0;
+    while (i < count) {
+        if (this->m_patchCallbacks[i].m_callback != callback) {
+            i++;
+            continue;
+        }
+        while (count > i && this->m_patchCallbacks[count - 1].m_callback == callback) {
+            count--;
+        }
+        if (count > i) {
+            this->m_patchCallbacks[i] = this->m_patchCallbacks[count - 1];
+            count--;
+            i++;
+        }
+    }
+    this->m_patchCallbacks.resize(count);
+}
+
 // ref: FUN_140581790
 bool WowClientDB2_Base::HasRecord(int32_t id) {
     if (this->m_minId <= id && id <= this->m_maxId && this->m_lookup != nullptr) {
