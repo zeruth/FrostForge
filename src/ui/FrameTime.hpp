@@ -11,5 +11,9 @@ void FrameTime_Initialize();
 uint32_t FrameTime_GetTime();
 // The last frame's length in milliseconds (FUN_14065f9b0).
 uint32_t FrameTime_GetElapsed();
+float FrameTime_GetTimeSeconds();
+int32_t FrameTime_GetFrames();
+float FrameTime_GetElapsedSeconds();
+void FrameTime_Update(float seconds, uint32_t now);
 
 #endif

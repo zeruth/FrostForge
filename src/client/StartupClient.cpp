@@ -477,14 +477,6 @@ int32_t CommandSetGraphicsQualityRaid(const char* command, const char* arguments
     return 1;
 }
 
-// the world clock
-// ref: FUN_14065fce0
-void Sub14065FCE0(uint32_t elapsed, uint32_t now) {
-    (void)elapsed;
-    (void)now;
-    FROST_UNIMPLEMENTED();
-}
-
 // ref: FUN_14065fd40
 void Sub14065FD40() {
     FROST_UNIMPLEMENTED();

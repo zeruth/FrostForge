@@ -1,3 +1,4 @@
+#include "ui/FrameTime.hpp"
 #include "client/ClientInput.hpp"
 #include "client/FrameBufferCache.hpp"
 #include "client/GxWindow.hpp"
@@ -40,7 +41,6 @@ void Sub1412C51B0();
 void Sub14068BC30();
 void Sub14068AAE0();
 void Sub14023D170(GXFRAMESTATS* stats);
-void Sub14065FCE0(uint32_t elapsed, uint32_t now);
 void Sub14065FD40();
 void Sub14135A290();
 void Sub140222A60();
@@ -348,7 +348,7 @@ bool Sub1402225D0() {
     uint32_t elapsed = now - g_startupValue;
     s_frameSeconds = static_cast<float>(elapsed) * 0.001f;  // DAT_142618f58
     g_startupValue = now;
-    Sub14065FCE0(elapsed, now);
+    FrameTime_Update(s_frameSeconds, now);
     s_frameTime = now;
     if (!ClientProcessEvents()) {
         return false;
