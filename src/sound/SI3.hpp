@@ -76,4 +76,35 @@ void SI3StopMusic();
 // The device-change slot (LAB_14021f080): the main loop's pending reset (ClientLoop.cpp).
 void ClientSetPendingSoundReset();
 
+// Playing (SI3Sound.cpp).
+// ref: FUN_141311c90
+int8_t SI3GlueBus(int32_t which);
+// ref: FUN_141311cd0
+int8_t SI3CategoryBus(int32_t category);
+// ref: FUN_14130c210
+int32_t SI3CategoryFromName(const char* name);
+// ref: FUN_1412e6120
+uint32_t SI3PlayUISound(int32_t kitId, int32_t category, bool noDuplicates, int32_t* handle, const int32_t* priority,
+    bool hasPriority);
+// ref: FUN_1412cdfa0
+uint32_t SI3PlaySoundFile(int32_t fileDataId, int32_t* handle, int8_t bus, int32_t mode);
+// ref: FUN_1412f2140
+void SI3PlayGlueMusic(int32_t kitId);
+// ref: FUN_1412f20e0
+void SI3PlayGlueAmbience(int32_t kitId, int32_t fadeMs);
+// ref: FUN_1412f2300
+void SI3StopGlueAmbience();
+// ref: FUN_1412f22e0
+void SI3StopCreditsMusic();
+// ref: FUN_1412f2320
+void SI3StopGlueMusic(int32_t fadeType);
+// ref: FUN_1412f1f00
+bool SI3SetCreditsExpansion(uint32_t expansion);
+// ref: FUN_1412f1f20
+void SI3PlayCreditsMusic(uint32_t track);
+// ref: FUN_1412f97f0
+void SI3PlayMusicFile(int32_t fileDataId);
+// ref: FUN_1412fcc70
+void SI3StopMusicFile();
+
 #endif

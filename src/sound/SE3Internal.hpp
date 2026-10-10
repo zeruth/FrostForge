@@ -56,7 +56,7 @@ void SE3CacheReleaseIdle();
 // ref: FUN_1412db320
 void SE3ProcessDoneLoading();
 
-// The sound kit instances (SE3SoundKit.cpp).
+// The sound kit instances.
 // ref: FUN_1412cfb10
 void SE3ReleaseFinishedInstances();
 // ref: FUN_1412cf720
@@ -65,24 +65,19 @@ void SE3UpdateCombinedKits();
 // gone, every 2 s the positional instances' range.
 void SE3ReleaseUnusedKitGroups();
 void SE3UpdateRange();
-// ref: FUN_1412cfbd0
-void SE3StartPendingInstances();
 // ref: FUN_1412d0300
 void SE3StartLoadedInstances();
 // ref: FUN_1412d01b0
 void SE3UpdateFades(int32_t elapsed);
 // ref: FUN_1412d1bb0
 void SE3ProcessSoundEnded();
-// FUN_1412cab50's tail: each instance's update, the bus mutes, the stop timers.
+// FUN_1412cab50's tail: each instance's update, its volume and lowpass, and the timers.
 void SE3UpdateInstances(int32_t elapsed);
-// Stops every instance of a group (0xfe: all).
+// Stops every instance of a bus (0xfe: all).
 // ref: FUN_1412d4870
-void SE3StopGroup(uint8_t group, bool immediate);
-// FUN_1412d41d0's middle: the caches, the kit definitions, the message lists.
+void SE3StopGroup(uint8_t bus, bool immediate);
+// FUN_1412d41d0's middle: the instances, the handles, the message lists.
 void SE3FreeEngineLists();
-// The kit definitions.
-// ref: FUN_1412c91a0
-void SE3ReleaseKitDefs();
 
 // SE3Bus.cpp
 // ref: FUN_1412d9110

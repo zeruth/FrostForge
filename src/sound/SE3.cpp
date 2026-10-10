@@ -4,6 +4,7 @@
 #include "sound/SE3.hpp"
 
 #include "sound/SE3Internal.hpp"
+#include "sound/SE3Kit.hpp"
 
 #include <cfloat>
 #include <cstring>
@@ -39,14 +40,13 @@ int32_t s_errorCount;               // DAT_1430a971c
 char s_driverName[0x40];            // DAT_1430a9480 the configured default driver's name
 char s_activeDriverName[0x104];     // DAT_1430a9580 the driver in use
 uint8_t s_initialized;              // DAT_142cfca08
+float s_globalVolume = 1.0f;        // DAT_142cfca04
 int32_t s_1430a9720;                // DAT_1430a9720
-int32_t s_period;                   // DAT_142cfca34
 CVar* s_variationCap;               // DAT_1430a94c8
 CVar* s_positionalLowPass;          // DAT_1430a94d0
 uint32_t s_lastUpdateTime;          // DAT_1430a9684
 int32_t s_cleanupTimer;             // DAT_1430a968c
 int32_t s_rangeTimer;               // DAT_1430a9690
-int32_t s_gameTime;                 // DAT_1430a94dc
 
 // The inline bounded copy: at most size - 1 characters, always terminated.
 void CopyString(char* dest, const char* source, uint64_t size) {
@@ -369,6 +369,24 @@ void SE3SetReverbProperties(const void* properties) {
     g_fmodSystem->setReverbProperties(static_cast<const FMOD_REVERB_PROPERTIES*>(properties));
 }
 
+// ref: DAT_142cfca08
+bool SE3IsInitialized() {
+    return s_initialized != 0;
+}
+
+// ref: FUN_1412ca150
+float SE3GlobalVolume() {
+    return s_globalVolume;
+}
+
+int32_t SE3VariationCap() {
+    return s_variationCap != nullptr ? s_variationCap->m_intValue : 0x20;
+}
+
+bool SE3PositionalLowPassEnabled() {
+    return s_positionalLowPass != nullptr && s_positionalLowPass->m_intValue != 0;
+}
+
 // ---- start --------------------------------------------------------------------------------
 
 namespace {
@@ -379,7 +397,7 @@ void InitSystems(bool restart) {
     (void)restart;
     s_initialized = 1;
     s_1430a9720 = 0;
-    s_period = g_se3Config.m_2c;
+    g_se3Period = g_se3Config.m_2c;
     if (s_variationCap == nullptr) {
         // FUN_1412d4780: 1 to 64
         s_variationCap = CVarRegister("SoundPerf_VariationCap",
@@ -813,12 +831,12 @@ void SE3Update() {
     }
     SE3EmitterUpdate(elapsed);
     SE3ProcessDoneLoading();
-    SE3StartPendingInstances();
+    SE3UpdateWaitingInstances();
     SE3StartLoadedInstances();
     SE3UpdateFades(elapsed);
     SE3ProcessSoundEnded();
     if (g_se3Config.m_getGameTime.m_invoke != nullptr) {
-        s_gameTime = CallTime(&g_se3Config.m_getGameTime);
+        g_se3GameTime = CallTime(&g_se3Config.m_getGameTime);
     }
     SE3SuppressorsUpdate(elapsed);
     SE3UpdateInstances(elapsed);

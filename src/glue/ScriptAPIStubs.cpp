@@ -3584,13 +3584,6 @@ int Lua_GetSoMNotificationEnabled(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_141302890
-int Lua_GetSoundEntryCount(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_141d93d30
 int Lua_GetTickTime(lua_State* L) {
     (void)L;
@@ -4004,55 +3997,6 @@ int Lua_LogAuroraClient(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_141304a90
-int Lua_MuteSoundFile(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1416a4420
-int Lua_PlayCreditsMusic(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1416a4370
-int Lua_PlayGlueAmbience(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1416a4320
-int Lua_PlayGlueMusic(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141303660
-int Lua_PlayMusic(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141300e60
-int Lua_PlaySound(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141303d20
-int Lua_PlaySoundFile(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_141d01af0
 int Lua_PreloadMovie(lua_State* L) {
     (void)L;
@@ -4277,34 +4221,6 @@ int Lua_StopAllSFX(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_1416a4410
-int Lua_StopGlueAmbience(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1416a4480
-int Lua_StopGlueMusic(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141306450
-int Lua_StopMusic(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141306a90
-int Lua_StopSound(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_1424d5250
 int Lua_StoreSecureReference(lua_State* L) {
     (void)L;
@@ -4328,13 +4244,6 @@ int Lua_SupportsClipCursor(lua_State* L) {
 
 // ref: FUN_14168e5d0
 int Lua_UndeleteCharacter(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141305770
-int Lua_UnmuteSoundFile(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;

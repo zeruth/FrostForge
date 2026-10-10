@@ -41,7 +41,7 @@ static_assert(sizeof(ASYNCTHREAD) == 0x28, "ASYNCTHREAD is 0x28 bytes");
 // A read queue (0x98 bytes): its threads' wake events and what each is reading, and its
 // requests by priority.
 struct CAsyncQueue {
-    int32_t m_state;                    // 0x00
+    float m_readTime;                   // 0x00 read back as a float (FUN_1405da830)
     uint32_t m_index;                   // 0x04: 0 disk, 1 network
     uint32_t m_threadCount;             // 0x08
     SEvent m_wake[3];                   // 0x10
@@ -1539,7 +1539,7 @@ void AsyncReadConfigure(int32_t threadSleep, uint32_t pollBudget) {
         queue->m_link.m_prev = nullptr;
         queue->m_index = 2;
         queue->m_threadCount = 0;
-        queue->m_state = 0;
+        queue->m_readTime = 0.0f;
         for (int32_t i = 0; i < 3; i++) {
             queue->m_current[i] = nullptr;
             queue->m_wake[i].Reset();
@@ -1826,9 +1826,10 @@ void AsyncSetCriticalFailure(CAsyncObject* object, const char* text) {
     FormatFailure(buffer, "CRITICAL async streaming failure: %s - Async fail result: %s\n", name, text);
 }
 
+// The disk queue's read time (0 until something measures it; nothing here does).
 // ref: FUN_1405da830
-int32_t AsyncGetDiskState() {
-    return s_queues[0] != nullptr ? s_queues[0]->m_state : 0;
+float AsyncGetDiskReadTime() {
+    return s_queues[0] != nullptr ? s_queues[0]->m_readTime : 0.0f;
 }
 
 // The read counters, and optionally reset.

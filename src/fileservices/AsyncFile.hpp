@@ -142,4 +142,7 @@ int32_t AsyncPriorityFor(int32_t kind, void* a2, void* a3, float distance, int32
 float AsyncPriorityMaxDistance();
 int32_t AsyncPriorityForQueue(int32_t queue, float distance);
 
+// The disk queue's read time (FUN_1405da830).
+float AsyncGetDiskReadTime();
+
 #endif

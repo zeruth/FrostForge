@@ -287,6 +287,11 @@ void ClientSetPendingSoundReset() {
     s_pendingReset = 1;
 }
 
+// Whether the loading screen holds the game (LoadingScreenIsActive for the other modules).
+bool ClientIsLoadingScreenActive() {
+    return LoadingScreenIsActive();
+}
+
 // ref: FUN_140236bb0
 bool ClientIsShiftKeyDown() {
     return (s_heldModifiers & 3) != 0;

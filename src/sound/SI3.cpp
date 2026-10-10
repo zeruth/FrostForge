@@ -62,14 +62,16 @@ void Slot110() {
     FROST_UNIMPLEMENTED();  // FUN_1412f8360
 }
 
+// The engine asks it with the kit's definition.
 // ref: FUN_1405dce80
-float One() {
+float One(void* def) {
+    (void)def;
     return 1.0f;
 }
 
 // ref: FUN_1412e6500
-void Slot170(void* unused) {
-    (void)unused;
+void Slot170(int32_t handle) {
+    (void)handle;
     FROST_UNIMPLEMENTED();  // FUN_1412f9e20, FUN_1412fcd00, FUN_1412fcbe0: the zone music and ambience
 }
 
@@ -98,9 +100,10 @@ bool FilterKit(void* kit) {
     return false;
 }
 
-// FUN_14026bea0
-bool Accept(void* unused) {
-    (void)unused;
+// FUN_14026bea0: the engine asks it with the kit's definition and the play's parameters.
+bool Accept(void* def, void* params) {
+    (void)def;
+    (void)params;
     return true;
 }
 
@@ -291,9 +294,4 @@ void SI3SetReverbEnabled(bool enabled) {
 // ref: FUN_141312590
 void SI3UpdateReverb() {
     FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_1412e6c50
-void SI3StopMusic() {
-    FROST_UNIMPLEMENTED();  // FUN_1412fcd00, FUN_1412fcc70, FUN_1412fcbe0
 }

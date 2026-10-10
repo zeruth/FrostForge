@@ -14,6 +14,7 @@
 #include "fmod.hpp"
 #include "sound/SE3Bus.hpp"
 #include "sound/SE3Internal.hpp"
+#include "sound/SE3Kit.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
 
@@ -420,3 +421,153 @@ int8_t SE3BusFromRecord(int32_t id) {
     }
     return SE3BUS_COUNT;
 }
+
+namespace {
+
+bool InRange(int8_t bus) {
+    return static_cast<uint32_t>(static_cast<int32_t>(bus)) < g_se3Buses.m_count;
+}
+
+}
+
+// Whether a bus is `ancestor` or under it (-2: any).
+// ref: FUN_1412d8ba0
+bool SE3BusIsUnder(int8_t bus, int8_t ancestor) {
+    if (ancestor == -2) {
+        return true;
+    }
+    if (!InRange(bus)) {
+        return false;
+    }
+    while (bus != ancestor) {
+        bus = g_se3Buses.m_data[bus].m_parent;
+        if (bus == -1) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Puts a channel in its bus's channel group.
+// ref: FUN_1412d7cf0
+bool SE3BusAttach(int8_t bus, FMOD::Channel* channel) {
+    if (!InRange(bus)) {
+        return false;
+    }
+    return channel->setChannelGroup(g_se3Buses.m_data[bus].m_group) == FMOD_OK;
+}
+
+// ref: FUN_1412d7ea0
+uint8_t SE3BusGetPriority(int8_t bus) {
+    return InRange(bus) ? g_se3Buses.m_data[bus].m_29 : 0x80;
+}
+
+// ref: FUN_1412d7ed0
+uint8_t SE3BusGetPriorityRange(int8_t bus) {
+    return InRange(bus) ? g_se3Buses.m_data[bus].m_2b : 0;
+}
+
+// An instance joins its bus's list.
+// ref: FUN_1412d81d0
+void SE3BusLinkObject(SE3SoundKitObject* object) {
+    int8_t bus = object->m_params.m_bus;
+    if (!InRange(bus)) {
+        return;
+    }
+    SE3SoundBus* entry = &g_se3Buses.m_data[bus];
+    object->m_bus.Unlink();
+    entry->m_kits.LinkToTail(object);
+}
+
+// ref: FUN_1412d7d80
+void SE3BusUnlinkObject(SE3SoundKitObject* object) {
+    if (InRange(object->m_params.m_bus)) {
+        object->m_bus.Unlink();
+    }
+}
+
+// Whether a bus and every bus above it are enabled.
+// ref: FUN_1412d8be0
+bool SE3BusIsEnabled(int8_t bus) {
+    if (InRange(bus)) {
+        do {
+            if (g_se3Buses.m_data[bus].m_enabled == 0) {
+                return false;
+            }
+            bus = g_se3Buses.m_data[bus].m_parent;
+        } while (bus != -1);
+    }
+    return true;
+}
+
+// Whether a bus holds its most instances (SoundBus field 5); a bus that counts only audible
+// ones skips the inaudible.
+// ref: FUN_1412d8c20
+bool SE3BusIsFull(int8_t bus) {
+    if (!InRange(bus)) {
+        return false;
+    }
+    SE3SoundBus* entry = &g_se3Buses.m_data[bus];
+    int32_t count = 0;
+    for (SE3SoundKitObject* object = entry->m_kits.Head(); object != nullptr; object = entry->m_kits.Next(object)) {
+        if (entry->m_09 == 0 || !SE3IsInaudible(object)) {
+            count++;
+        }
+    }
+    return static_cast<int32_t>(entry->m_1d) <= count;
+}
+
+// Every bus but 'a' sends to the reverb.
+// ref: FUN_1412d8d70
+bool SE3BusAllowsReverb(int8_t bus) {
+    return bus != 'a';
+}
+
+// A bus's volume: its own and every parent's (0 when muted or disabled), times the volumes the
+// game set.
+// ref: FUN_1412d80b0
+float SE3BusGetChainVolume(int8_t bus) {
+    if (!SE3IsInitialized()) {
+        return 0.0f;
+    }
+    float volume = 1.0f;
+    if (InRange(bus)) {
+        int8_t each = bus;
+        do {
+            SE3SoundBus* entry = &g_se3Buses.m_data[each];
+            volume *= entry->m_muted == 0 && entry->m_enabled != 0 ? entry->m_targetVolume : 0.0f;
+            if (VOLUMENODE* node = blz::chained_find<VOLUMENODE>(&s_volumes, each)) {
+                volume *= node->m_value;
+            }
+            each = entry->m_parent;
+        } while (static_cast<uint8_t>(each) != 0xff);
+    }
+    return volume;
+}
+
+// An instance's bus volume, ducked by the suppressors of the category its bus is under.
+// ref: FUN_1412d7f00
+float SE3BusGetObjectVolume(int8_t bus, uint32_t handle) {
+    float duck = 1.0f;
+    bool ownKitDucks = false;
+    SE3SoundKitObject* object = SE3GetObject(handle);
+    if (object != nullptr && object->m_def != nullptr) {
+        ownKitDucks = SE3KitIgnoresSuppressors(object->m_def);
+    }
+    if (SE3SuppressorsAny() && !ownKitDucks) {
+        float targets[7];
+        SE3SuppressorGetTargets(handle, targets);
+        if (targets[4] < 1.0f) {
+            return SE3BusGetChainVolume(bus);
+        }
+        for (int8_t category : {static_cast<int8_t>(3), static_cast<int8_t>(0), static_cast<int8_t>(1),
+                 static_cast<int8_t>(2), static_cast<int8_t>('A'), static_cast<int8_t>('B')}) {
+            if (SE3BusIsUnder(bus, category)) {
+                duck = SE3SuppressorFactor(category, handle);
+                break;
+            }
+        }
+    }
+    return SE3GlobalVolume() * SE3BusGetChainVolume(bus) * duck;
+}
+
