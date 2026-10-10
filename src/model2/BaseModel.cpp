@@ -852,7 +852,7 @@ void CM2BaseModel::PrepareLighting(int32_t pass, uint32_t propagate) {
         if (child->m_attachIndex == 0xffff) {
             hidden = (child->m_flags & BASE_ATTACHED_HIDDEN) == 0;
         } else {
-            hidden = !child->IsAttachmentVisible();
+            hidden = !this->IsAttachmentVisible(child->m_attachIndex);
         }
         if (!hidden) {
             child->PrepareLighting(pass, propagate);
@@ -1300,7 +1300,8 @@ void M2BaseModelEnsureTreeLoaded(CM2BaseModel* model) {
 }
 
 // ref: FUN_14026bea0
-bool CM2BaseModel::IsAttachmentVisible() {
+bool CM2BaseModel::IsAttachmentVisible(uint32_t index) {
+    (void)index;
     return true;
 }
 
@@ -1320,10 +1321,10 @@ uint8_t CM2BaseModel::Virtual1f0() {
 void CM2BaseModel::OnRemove() {
 }
 
-void CM2BaseModel::Virtual180() {
+void CM2BaseModel::ReleaseGpuData() {
 }
 
-void CM2BaseModel::Virtual188() {
+void CM2BaseModel::RefreshBatchEffects() {
 }
 
 void CM2BaseModel::Virtual190() {

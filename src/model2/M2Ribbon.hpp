@@ -40,6 +40,8 @@ void RibbonEmitterSetTextureTransform(CRibbonEmitter* ribbon, uint32_t layer, co
 // ref: FUN_141296df0
 void RibbonEmitterSetMatrix(CRibbonEmitter* ribbon, const float* matrix, const void* a3);
 // ref: FUN_141297490
-void RibbonEmitterUpdate(CRibbonEmitter* ribbon, uint32_t time, bool hidden);
+void RibbonEmitterUpdate(CRibbonEmitter* ribbon, float delta, bool hidden);
+// ref: FUN_141296640
+void RibbonEmitterDelete(CRibbonEmitter* ribbon);
 
 #endif

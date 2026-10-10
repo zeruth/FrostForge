@@ -39,6 +39,10 @@ void ParticleGeneratorSetModel(CParticleGenerator* generator, CM2Model* model);
 void ParticleGeneratorInitializeBones(CParticleGenerator* generator);
 // The matrix the emitter's particles are kept relative to, null for world space (FUN_141249ed0).
 void ParticleEmitterSetParentMatrix(CParticleEmitter2* emitter, const C44Matrix* matrix);
+// The emitter destroyed and freed (FUN_141249af0), and a generator's destructor (its vtable's
+// first slot, called with 0).
+void ParticleEmitterDelete(CParticleEmitter2* emitter);
+void ParticleGeneratorDestroy(CParticleGenerator* generator);
 // Whether the emitter or any child has particles alive (FUN_14124bd50).
 bool ParticleEmitterHasParticles(const CParticleEmitter2* emitter);
 

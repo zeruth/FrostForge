@@ -3,11 +3,13 @@
 
 #include "base/Matrix.hpp"
 #include "cas/CAS.hpp"
+#include "model2/M2Camera.hpp"
 #include "model2/M2Model.hpp"
 #include "model2/M2Particle.hpp"
 #include "model2/M2Ribbon.hpp"
 #include "model2/M2Scene.hpp"
 #include "model2/M2Shared.hpp"
+#include "storm/Memory.hpp"
 #include "texture/Texture.hpp"
 #include "util/Unimplemented.hpp"
 
@@ -743,4 +745,665 @@ void CM2Model::GetAttachmentMatrix(uint32_t index, C44Matrix* out) {
 // ref: FUN_1411c0480
 CM2Shared* CM2Model::GetShared() {
     return this->m_shared;
+}
+
+namespace {
+
+// `a * b` with every row summed as r2, r3, r1, r0 (FUN_1411ce880's view matrix).
+void MultiplyViewOrder(const float* a, const float* b, float* out) {
+    for (int32_t row = 0; row < 4; row++) {
+        const float* r = a + row * 4;
+        for (int32_t col = 0; col < 4; col++) {
+            out[row * 4 + col] = r[2] * b[8 + col] + r[3] * b[12 + col] + r[1] * b[4 + col] + r[0] * b[col];
+        }
+    }
+}
+
+}  // namespace
+
+// ref: FUN_1411b70d0
+void CM2Model::Detach(bool notify) {
+    CM2BaseModel* notified = nullptr;
+    if ((this->m_flags & BASE_LOADED) != 0) {
+        M2Data* data = this->m_shared->m_data;
+        if ((data->m_flags & 0x100) != 0) {
+            for (uint32_t i = 0; i < this->m_shared->m_data->m_particles.Count(); i++) {
+                if (this->m_shared->m_data->m_particles[i].m_emitterType == 4) {
+                    ParticleGeneratorSetModel(this->m_particles[i]->m_generator, nullptr);
+                }
+            }
+        }
+    }
+    if (this->m_siblingLink != nullptr) {
+        *this->m_siblingLink = this->m_siblingNext;
+    }
+    if (this->m_siblingNext != nullptr) {
+        this->m_siblingNext->m_siblingLink = this->m_siblingLink;
+    }
+    if (this->m_attachedLink != nullptr) {
+        *this->m_attachedLink = this->m_attachedNext;
+    }
+    if (this->m_attachedNext != nullptr) {
+        this->m_attachedNext->m_attachedLink = this->m_attachedLink;
+    }
+    this->m_lightingUsed = &this->m_lighting;
+    C3Vector position;
+    this->GetRenderPosition(&position);
+    float origin[4] = {position.x, position.y, position.z, 0.0f};
+    M2ModelLightingBegin(&this->m_lighting, this->m_scene, origin);
+    if (notify && !this->AreChildrenLoaded()) {
+        notified = this->m_parent;
+    }
+    this->m_siblingLink = nullptr;
+    this->m_siblingNext = nullptr;
+    if (this->m_params.m_effect == M2BaseModelGetEffect(this->m_parent)) {
+        this->m_params.m_effect = this->m_effect2;
+    }
+    this->m_flags &= ~0x1000000u;
+    this->m_parent = nullptr;
+    this->m_parentModel = nullptr;
+    this->m_attachId = -1;
+    this->SetAttachMatrix(nullptr);
+    this->m_flags &= ~BASE_VISIBLE;
+    if (notified != nullptr) {
+        notified->RunLoadCallbacks();
+    }
+    this->Release(1);
+}
+
+// The model takes the nearest CM2Model above it as the one it is attached under.
+// ref: FUN_1411c77b0
+void CM2Model::OnChildrenChanged() {
+    if (this->m_parentModel != nullptr) {
+        if (this->m_params.m_effect == M2BaseModelGetEffect(this->m_parent)) {
+            this->m_params.m_effect = this->m_effect2;
+        }
+        CM2BaseModel* above = this->m_parent;
+        while (above != nullptr && above->m_type != 0) {
+            above = above->m_parent;
+        }
+        CM2Model* model = above != nullptr && above->m_type == 0 ? static_cast<CM2Model*>(above) : nullptr;
+        if (model == nullptr) {
+            if (this->m_parentModel != nullptr) {
+                if (this->m_attachedLink != nullptr) {
+                    *this->m_attachedLink = this->m_attachedNext;
+                }
+                if (this->m_attachedNext != nullptr) {
+                    this->m_attachedNext->m_attachedLink = this->m_attachedLink;
+                }
+                this->m_parentModel = nullptr;
+            }
+        } else if (model != this->m_parentModel) {
+            if (this->m_attachedLink != nullptr) {
+                *this->m_attachedLink = this->m_attachedNext;
+            }
+            if (this->m_attachedNext != nullptr) {
+                this->m_attachedNext->m_attachedLink = this->m_attachedLink;
+            }
+            this->m_parentModel = model;
+            this->m_attachedLink = &model->m_attachedModels;
+            this->m_attachedNext = model->m_attachedModels;
+        }
+    }
+    for (CM2BaseModel* child = this->m_children; child != nullptr; child = child->m_siblingNext) {
+        child->OnChildrenChanged();
+    }
+}
+
+// The frame's matrices: visibility from the parent, a sequence copied from the model this one
+// mirrors, then the animation (or only the root and texture animation for a static model).
+// ref: FUN_1411ce300
+void CM2Model::UpdateMatrices(const C44Matrix* parent, const CM2ModelParams* params, uint32_t a4, uint32_t a5,
+    uint32_t a6) {
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        return;
+    }
+    // FUN_14025cde0/FUN_14025ce40 push and pop this model on a thread-local list for crash reports.
+    if (this->m_parent == nullptr) {
+        this->m_flags &= ~0x140000u;
+    } else {
+        bool shown = this->IsShownInTree();
+        uint32_t flags = this->m_flags;
+        uint32_t visible = shown && (flags & BASE_ATTACH_SHOWN) != 0 ? BASE_SHOWN : 0;
+        CM2BaseModel* above = this->m_parent;
+        this->m_flags = (flags & ~BASE_SHOWN) | visible;
+        uint32_t inherit40000 = (above->m_flags & 0x60000) != 0 ? 0x40000 : 0;
+        this->m_flags = inherit40000 | (flags & 0xfffbfff7) | visible;
+        this->m_flags = ((above->m_flags & 0x180000) != 0 ? 0x100000 : 0) | inherit40000 | (flags & 0xffebfff7) | visible;
+        if ((above->m_flags & BASE_LOADED) != 0) {
+            this->m_558 = params->m_matrix;
+            if ((this->m_modelFlags2 >> 6 & 1) != 0 && this->m_parentModel != nullptr) {
+                M2SequenceInfo info = {};
+                info.m_override.m[0] = 1.0f;
+                info.m_override.m[5] = 1.0f;
+                info.m_override.m[10] = 1.0f;
+                info.m_override.m[15] = 1.0f;
+                info.m_blendMax = 1.0f;
+                if (this->m_parentModel->GetSequenceInfo(0xffffffff, &info)) {
+                    this->SetSequence(0xffffffff, info.m_id, info.m_variation, info.m_time, info.m_speed, 1, 0, 1, 0, 0,
+                        1.0f);
+                }
+            }
+        }
+    }
+    if ((this->m_modelFlags & 0x40000000) == 0) {
+        this->Animate(parent, params, a4, static_cast<int32_t>(a5), static_cast<int32_t>(a6));
+        return;
+    }
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        return;
+    }
+    uint32_t frame = this->m_scene->m_frame;
+    if (this->m_matrixFrame != frame) {
+        this->ResetBoneState(parent, params, frame, static_cast<int32_t>(this->m_scene->m_time));
+    }
+    M2Data* data = this->m_shared->m_data;
+    if ((this->m_boneDone[0] & 1) == 0 && (this->m_modelFlags2 & 0x800) == 0) {
+        this->AnimateRootOnly(this->m_animState->m_boneStates);
+    }
+    if (data->m_textureWeights.Count() != 0) {
+        this->AnimateTextureWeights();
+    }
+    M2AnimateContext context;
+    M2AnimateContextInit(&context, this->m_scene->m_time, this->m_scene->m_frame, 1,
+        static_cast<uint32_t>(M2AnimFrameSkipLod()), 0, 0);
+    if (data->m_textureTransforms.Count() != 0) {
+        this->AnimateTextureTransforms(&context);
+    }
+    this->m_modelFlags &= ~8u;
+    if (this->m_animState->m_attachmentStates != nullptr || this->m_children != nullptr) {
+        this->UpdateChildren(&context);
+    }
+}
+
+// The lighting this model uses (its own, or the parent's unless the parent was made to light
+// its children separately) and the drawables for the pass.
+// ref: FUN_1411c7a90
+void CM2Model::PrepareLighting(int32_t pass, uint32_t propagate) {
+    uint32_t flags = this->m_flags;
+    if ((flags & BASE_LOADED) == 0 || (flags >> 23 & 1) != 0 || ((flags & BASE_SHOWN) == 0 && (flags >> 21 & 1) != 0)) {
+        return;
+    }
+    CM2BaseModel* parent = this->m_parent;
+    CM2ModelLighting* lighting;
+    if (parent == nullptr) {
+        lighting = &this->m_lighting;
+    } else {
+        this->m_flags = ((flags ^ parent->m_flags) & BASE_VISIBLE) ^ flags;
+        lighting = (parent->m_createFlags & 1) != 0 ? &this->m_lighting : parent->m_lightingUsed;
+    }
+    this->m_lightingUsed = lighting;
+    if (lighting == nullptr) {
+        this->m_lightingUsed = &this->m_lighting;
+    }
+    int32_t now = static_cast<int32_t>(this->m_scene->m_time);
+    int32_t last = static_cast<int32_t>(this->m_createTime);
+    this->m_createTime = static_cast<uint32_t>(now);
+    propagate |= this->m_flags2 >> 1 & 1;
+    this->UpdateDrawables(pass, static_cast<float>(static_cast<uint32_t>(now - last)) * 0.001f, propagate);  // DAT_142618f58
+    if (propagate != 0) {
+        this->UpdateCulling();
+    }
+}
+
+// Culled (0x800) when the bounds are outside the scene's frustum.
+// ref: FUN_1411b6990
+void CM2Model::UpdateCulling() {
+    void* frustum = this->m_scene->m_frustum;
+    uint32_t flags = this->m_flags;
+    if (frustum == nullptr || (flags & 0x1001) != 0x1001 || (flags >> 13 & 1) != 0 || (flags & BASE_VISIBLE) == 0) {
+        this->m_flags &= ~BASE_CULLED;
+        return;
+    }
+    float storage[6];
+    const float* box;
+    if ((this->m_flags2 & 2) == 0) {
+        box = this->GetBounds(storage);
+    } else {
+        box = this->GetKeyBoneBounds(storage, static_cast<uint16_t>(this->m_3b0));
+    }
+    float bounds[6];
+    std::memcpy(bounds, box, sizeof(bounds));
+    bool valid = !(bounds[3] < bounds[0] || bounds[4] < bounds[1] || bounds[5] < bounds[2]);
+    flags = this->m_flags;
+    if ((flags & BASE_LOADED) != 0 && this->m_shared->m_data->m_ribbons.Count() != 0) {
+        if (!valid) {
+            this->m_flags = flags & ~BASE_CULLED;
+            return;
+        }
+    } else if (!valid) {
+        this->m_flags = flags | BASE_CULLED;
+        return;
+    }
+    uint32_t culled = M2FrustumTestBox(static_cast<const float*>(frustum), bounds) == 0 ? BASE_CULLED : 0;
+    this->m_flags = culled | (this->m_flags & ~BASE_CULLED);
+}
+
+// ref: FUN_1411bdef0
+float* CM2Model::GetBox(float* out) {
+    if ((this->m_shared->m_flags & CM2Shared::SHARED_LOADED) == 0) {
+        this->WaitForLoad(0);
+    }
+    if ((this->m_modelFlags & 0x800000) == 0) {
+        std::memcpy(out, &this->m_shared->m_data->m_bounds, sizeof(CAaBox));
+    } else {
+        std::memcpy(out, &this->m_accumBounds->m_localBox, sizeof(CAaBox));
+    }
+    return out;
+}
+
+// ref: FUN_1411bdfe0
+float* CM2Model::GetSphere(float* out) {
+    if ((this->m_shared->m_flags & CM2Shared::SHARED_LOADED) == 0) {
+        this->WaitForLoad(0);
+    }
+    if ((this->m_modelFlags & 0x800000) != 0) {
+        std::memcpy(out, &this->m_accumBounds->m_center, sizeof(float) * 4);
+        return out;
+    }
+    const CAaBox& bounds = this->m_shared->m_data->m_bounds;
+    out[3] = this->m_shared->m_data->m_boundsRadius;
+    out[0] = (bounds.m_min.x + bounds.m_max.x) * 0.5f;
+    out[1] = (bounds.m_max.y + bounds.m_min.y) * 0.5f;
+    out[2] = (bounds.m_max.z + bounds.m_min.z) * 0.5f;
+    return out;
+}
+
+// ref: FUN_1411bdf70
+float* CM2Model::GetBox2(float* out) {
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        std::memset(out, 0, sizeof(CAaBox));
+        return out;
+    }
+    if ((this->m_modelFlags & 0x800000) != 0) {
+        std::memcpy(out, &this->m_accumBounds->m_localBox, sizeof(CAaBox));
+        return out;
+    }
+    std::memcpy(out, &this->m_shared->m_data->m_bounds, sizeof(CAaBox));
+    return out;
+}
+
+// ref: FUN_1411be0a0
+float* CM2Model::GetSphere2(float* out) {
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        std::memset(out, 0, sizeof(float) * 4);
+        return out;
+    }
+    if ((this->m_modelFlags & 0x800000) != 0) {
+        std::memcpy(out, &this->m_accumBounds->m_center, sizeof(float) * 4);
+        return out;
+    }
+    const CAaBox& bounds = this->m_shared->m_data->m_bounds;
+    out[3] = this->m_shared->m_data->m_boundsRadius;
+    out[0] = (bounds.m_min.x + bounds.m_max.x) * 0.5f;
+    out[1] = (bounds.m_max.y + bounds.m_min.y) * 0.5f;
+    out[2] = (bounds.m_max.z + bounds.m_min.z) * 0.5f;
+    return out;
+}
+
+// The matrix of the attachment point with id `index`, its bone animated now; the root's when
+// the model has none (id 0x13 still counts as found).
+// ref: FUN_1411b9f10
+bool CM2Model::GetAttachmentMatrixByIndex(uint32_t index, C44Matrix* out) {
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        this->WaitForLoad(0);
+    }
+    M2Array<M2Attachment>* attachments = this->m_animState->m_attachments;
+    M2Array<uint16_t>* lookup = this->m_animState->m_attachmentLookup;
+    uint16_t found = 0xffff;
+    if ((this->m_flags & BASE_LOADED) != 0 && index == 0x37) {
+        if (0x37 < lookup->Count()) {
+            found = (*lookup)[0x37];
+        }
+        if (attachments->Count() <= found) {
+            index = 0xb;
+        }
+    }
+    if (index < lookup->Count() && (found = (*lookup)[index]) != 0xffff) {
+        M2Attachment& attachment = (*attachments)[found];
+        this->AnimateBoneFor(attachment.m_bone);
+        this->GetAttachmentPointMatrix(&attachment.m_position, attachment.m_bone, out->m);
+        return true;
+    }
+    this->GetRootMatrix(out->m);
+    return index == 0x13;
+}
+
+// ref: FUN_1411c0860
+void CM2Model::GetAttachmentPointMatrix(const C3Vector* position, uint32_t bone, float* out) {
+    const float* b = this->m_animState->m_boneMatrices[bone].m;
+    if (this->m_parent != nullptr && (this->m_flags >> 14 & 1) == 0) {
+        const float* w = this->m_world.m;
+        float r[16];
+        for (int32_t col = 0; col < 4; col++) {
+            r[col] = b[2] * w[8 + col] + b[3] * w[12 + col] + b[1] * w[4 + col] + b[0] * w[col];
+        }
+        for (int32_t row = 1; row < 3; row++) {
+            const float* br = b + row * 4;
+            for (int32_t col = 0; col < 4; col++) {
+                r[row * 4 + col] = br[0] * w[col] + br[1] * w[4 + col] + br[2] * w[8 + col] + br[3] * w[12 + col];
+            }
+        }
+        float r15 = b[12] * w[3] + b[13] * w[7] + b[14] * w[11] + b[15] * w[15];
+        float t0 = b[12] * w[0] + b[13] * w[4] + b[14] * w[8] + b[15] * w[12] + position->y * r[4] + position->x * r[0]
+            + position->z * r[8];
+        float t1 = b[12] * w[1] + b[13] * w[5] + b[14] * w[9] + b[15] * w[13] + position->y * r[5] + position->x * r[1]
+            + position->z * r[9];
+        float t2 = b[12] * w[2] + b[13] * w[6] + b[14] * w[10] + b[15] * w[14] + position->y * r[6] + position->x * r[2]
+            + position->z * r[10];
+        const float* vp = this->m_scene->m_viewProjection.m;
+        for (int32_t col = 0; col < 4; col++) {
+            out[col] = r[0] * vp[col] + r[1] * vp[4 + col] + r[3] * vp[12 + col] + r[2] * vp[8 + col];
+        }
+        for (int32_t row = 1; row < 3; row++) {
+            const float* rr = r + row * 4;
+            for (int32_t col = 0; col < 4; col++) {
+                out[row * 4 + col] = rr[3] * vp[12 + col] + rr[2] * vp[8 + col] + rr[0] * vp[col] + rr[1] * vp[4 + col];
+            }
+        }
+        for (int32_t col = 0; col < 4; col++) {
+            out[12 + col] = t0 * vp[col] + t1 * vp[4 + col] + t2 * vp[8 + col] + r15 * vp[12 + col];
+        }
+        return;
+    }
+    const float* l = this->m_local.m;
+    for (int32_t col = 0; col < 4; col++) {
+        out[col] = b[2] * l[8 + col] + b[3] * l[12 + col] + b[1] * l[4 + col] + b[0] * l[col];
+    }
+    for (int32_t row = 1; row < 4; row++) {
+        const float* br = b + row * 4;
+        for (int32_t col = 0; col < 4; col++) {
+            out[row * 4 + col] = br[0] * l[col] + br[1] * l[4 + col] + br[2] * l[8 + col] + br[3] * l[12 + col];
+        }
+    }
+    if (std::fabs(out[0] * out[0] + out[1] * out[1] + out[3] * out[3] + out[2] * out[2]) < 2.3841858e-07f) {
+        std::memcpy(out, l, sizeof(float) * 12);
+    }
+    float px = position->x;
+    float py = position->y;
+    float pz = position->z;
+    out[12] = py * out[4] + px * out[0] + pz * out[8] + out[12];
+    out[13] = py * out[5] + px * out[1] + pz * out[9] + out[13];
+    out[14] = py * out[6] + px * out[2] + pz * out[10] + out[14];
+}
+
+// ref: FUN_1411c0d80
+void CM2Model::GetRootMatrix(float* out) {
+    this->AnimateBoneFor(0);
+    if (this->m_parent != nullptr && (this->m_flags >> 14 & 1) == 0) {
+        std::memcpy(out, this->m_view.m, sizeof(C44Matrix));
+        return;
+    }
+    std::memcpy(out, this->m_local.m, sizeof(C44Matrix));
+}
+
+// The box of what a key bone plays, the placed bounds of its own sequence and the root's merged,
+// with the effects'; the model's bounds when the bone keeps no sequence of its own.
+// ref: FUN_1411c0490
+float* CM2Model::GetKeyBoneBounds(float* out, uint16_t keyBone) {
+    if (keyBone == 0xffff) {
+        this->GetBounds(out);
+        return out;
+    }
+    if ((this->m_flags & (BASE_LOADED | BASE_VISIBLE)) != (BASE_LOADED | BASE_VISIBLE)) {
+        SetEmptyBox(out);
+        return out;
+    }
+    M2BoneState* states = this->m_animState->m_boneStates;
+    M2Array<M2Sequence>* rootSequences = states[0].m_sequence->m_source.m_sequences;
+    M2Array<uint16_t>* lookup = this->m_animState->m_keyBoneLookup;
+    if (1 < rootSequences->Count() && this->m_shared->m_data->m_particles.Count() == 0 && keyBone < lookup->Count()) {
+        uint16_t bone = (*lookup)[keyBone];
+        uint16_t rootIndex = states[0].m_sequence->m_nextSequence;
+        M2SequenceTime* slot = bone != 0 && bone != 0xffff ? states[bone].m_sequence : nullptr;
+        if (slot != nullptr && rootIndex != 0xffff) {
+            auto parentBounds = static_cast<M2Array<uint8_t>*>(this->m_shared->m_parentSequenceBounds);
+            float rootBox[6];
+            std::memcpy(rootBox, &(*rootSequences)[rootIndex].m_bounds.m_extent, sizeof(rootBox));
+            if (parentBounds != nullptr && (states[0].m_sequence->m_source.m_flags & 1) != 0) {
+                std::memcpy(rootBox, &(*parentBounds)[0] + rootIndex * 0x1c, sizeof(rootBox));
+            }
+            float boneBox[6];
+            std::memcpy(boneBox, &(*slot->m_source.m_sequences)[slot->m_nextSequence].m_bounds.m_extent, sizeof(boneBox));
+            if (parentBounds != nullptr && (states[bone].m_sequence->m_source.m_flags & 1) != 0) {
+                std::memcpy(boneBox, &(*parentBounds)[0] + slot->m_nextSequence * 0x1c, sizeof(boneBox));
+            }
+            float merged[6];
+            merged[0] = boneBox[0] <= rootBox[0] ? boneBox[0] : rootBox[0];
+            merged[5] = boneBox[5] <= rootBox[5] ? rootBox[5] : boneBox[5];
+            merged[4] = boneBox[4] <= rootBox[4] ? rootBox[4] : boneBox[4];
+            merged[1] = boneBox[1] <= rootBox[1] ? boneBox[1] : rootBox[1];
+            merged[3] = boneBox[3] <= rootBox[3] ? rootBox[3] : boneBox[3];
+            merged[2] = boneBox[2] <= rootBox[2] ? boneBox[2] : rootBox[2];
+            float box[6];
+            std::memcpy(box, merged, sizeof(box));
+            if (merged[0] < merged[3] && merged[1] < merged[4] && merged[2] < merged[5]) {
+                float placed[6];
+                BoxTransform(placed, merged, PlacementMatrix(this));
+                std::memcpy(box, placed, sizeof(box));
+            }
+            float effects[6];
+            this->GetEffectBox(effects);
+            float scratch[6];
+            BoxUnion(box, scratch, effects);
+            std::memcpy(out, box, sizeof(box));
+            return out;
+        }
+    }
+    this->GetBounds(out);
+    return out;
+}
+
+// ref: FUN_1411bac00
+bool CM2Model::GetSequenceInfo(uint32_t keyBone, M2SequenceInfo* out) {
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        this->WaitForLoad(0);
+    }
+    M2AnimState* anim = this->m_animState;
+    uint16_t bone = 0;
+    if (keyBone != 0xffffffff) {
+        bone = keyBone < anim->m_keyBoneLookup->Count() ? (*anim->m_keyBoneLookup)[keyBone] : 0xffff;
+    }
+    if (anim->m_bones->Count() <= bone) {
+        return false;
+    }
+    M2BoneState* state = &anim->m_boneStates[bone];
+    out->m_id = (state->m_flags & 0x2000) != 0 ? state->m_5c : 0xffffffff;
+    out->m_flag80 = (state->m_flags >> 7 & 1) != 0;
+    out->m_blendKind = state->m_blendKind;
+    out->m_fixedBlend = state->m_fixedBlend;
+    out->m_blendMax = state->m_blendMax;
+    out->m_variation = state->m_variation;
+    out->m_sequence = 0xffff;
+    out->m_flags = 0;
+    M2SequenceTime* slot = state->m_sequence;
+    if (slot == nullptr) {
+        return true;
+    }
+    int32_t length = static_cast<int32_t>(slot->m_timeOffset);
+    int32_t time;
+    if (slot->m_speed == 1.0f) {
+        time = (length - slot->m_startTime) + static_cast<int32_t>(this->m_scene->m_time);
+    } else {
+        time = static_cast<int32_t>(static_cast<float>(static_cast<int32_t>(this->m_scene->m_time) - slot->m_startTime)
+                   * slot->m_speed)
+            + length;
+    }
+    if (length != 0) {
+        while (time < 0) {
+            time += length;
+        }
+    }
+    int32_t clamped = time < 0 ? 0 : time;
+    out->m_time = clamped;
+    out->m_slotTime = slot->m_time;
+    out->m_speed = slot->m_speed;
+    uint32_t start = static_cast<uint32_t>(slot->m_startTime);
+    out->m_startTime = slot->m_startTime;
+    out->m_endTime = slot->m_endTime;
+    out->m_pending = slot->m_pending != 0;
+    uint16_t index = slot->m_nextSequence;
+    out->m_ended = index != 0xffff && (*slot->m_source.m_sequences)[index].m_duration <= static_cast<uint32_t>(clamped);
+    out->m_sequence = slot->m_nextSequence;
+    if (slot->m_nextSequence != 0xffff) {
+        out->m_flags = (*slot->m_source.m_sequences)[slot->m_nextSequence].m_flags;
+    }
+    out->m_blendLeft = 0;
+    if (start < static_cast<uint32_t>(state->m_blendEnd)) {
+        out->m_blendLeft = static_cast<uint16_t>(static_cast<uint32_t>(state->m_blendEnd) - start);
+    }
+    out->m_repeats = slot->m_repeats;
+    if (state->m_override != nullptr) {
+        out->m_override = *state->m_override;
+    }
+    return true;
+}
+
+// ref: FUN_1411b9cf0
+bool CM2Model::IsAttachmentVisible(uint32_t index) {
+    if ((this->m_flags & BASE_LOADED) != 0 && index < this->m_animState->m_attachments->Count()) {
+        return this->m_animState->m_attachmentStates[index].m_value != 0;
+    }
+    return false;
+}
+
+// ref: FUN_1411c7b80
+void CM2Model::ClearLoaded() {
+    this->ReleaseInstanceData();
+    if ((this->m_flags & BASE_LOADED) != 0) {
+        this->m_flags &= ~BASE_LOADED;
+    }
+}
+
+// ref: FUN_1411b80b0
+void CM2Model::ReleaseInstanceData() {
+    if ((this->m_flags & BASE_LOADED) == 0 || this->m_shared == nullptr) {
+        return;
+    }
+    M2Data* data = this->m_shared->m_data;
+    if (this->m_boneStates != nullptr && (this->m_modelFlags2 & 0x1000) == 0) {
+        for (uint32_t i = 0; i < data->m_bones.Count(); i++) {
+            M2FreeFileData(this->m_boneStates[i].m_override);
+            this->m_boneStates[i].m_override = nullptr;
+        }
+    }
+    if (this->m_textures != nullptr) {
+        for (uint32_t i = 0; i < data->m_textures.Count(); i++) {
+            auto texture = reinterpret_cast<HTEXTURE*>(&this->m_textures[i]);
+            if (*texture != nullptr) {
+                TextureFree(texture);
+                this->m_textures[i] = nullptr;
+            }
+        }
+    }
+    if (this->m_lights != nullptr) {
+        for (uint32_t i = 0; i < data->m_lights.Count(); i++) {
+            this->m_lights[i].m_lighting.SetEnabled(0);
+        }
+    }
+    if (this->m_cameras != nullptr) {
+        for (uint32_t i = 0; i < data->m_cameras.Count(); i++) {
+            if (this->m_cameras[i].m_camera != nullptr) {
+                M2CameraRelease(&this->m_cameras[i].m_camera);
+                this->m_cameras[i].m_camera = nullptr;
+            }
+        }
+    }
+    for (uint32_t i = 0; i < data->m_ribbons.Count(); i++) {
+        if (this->m_ribbons[i] != nullptr) {
+            RibbonEmitterDelete(this->m_ribbons[i]);
+            this->m_ribbons[i] = nullptr;
+        }
+    }
+    for (uint32_t i = 0; i < data->m_particles.Count(); i++) {
+        CParticleEmitter2* emitter = this->m_particles[i];
+        if (emitter != nullptr) {
+            if (emitter->m_generator != nullptr) {
+                ParticleGeneratorDestroy(emitter->m_generator);
+                this->m_particles[i]->m_generator = nullptr;
+            }
+            ParticleEmitterDelete(this->m_particles[i]);
+            this->m_particles[i] = nullptr;
+        }
+    }
+    if (this->m_skeleton != nullptr) {
+        M2SkeletonReleaseModel(this->m_skeleton);
+    }
+}
+
+// ref: FUN_1411b6b50
+void CM2Model::OnRemove() {
+    this->CancelAllPlaybacks();
+    M2ModelUnlinkWaiting(this);
+}
+
+// ref: FUN_1411b5cb0
+void CM2Model::CancelAllPlaybacks() {
+    if (this->m_skeleton != nullptr) {
+        M2SkeletonCancelModelPlaybacks(this->m_skeleton, this);
+    }
+    CM2Shared* shared = this->m_shared;
+    bool reading = (shared->m_flags & CM2Shared::SHARED_SEQUENCES_PENDING) != 0;
+    for (CM2SequenceLoad* load = shared->m_sequenceLoads.Head(); load != nullptr;) {
+        CM2SequenceLoad* nextLoad = shared->m_sequenceLoads.Next(load);
+        for (CM2SequencePlayBack* playback = load->m_playbacks.Head(); playback != nullptr;) {
+            CM2SequencePlayBack* next = load->m_playbacks.Next(playback);
+            if (playback->m_model == this) {
+                if (reading) {
+                    playback->m_flags |= 8;
+                } else {
+                    playback->m_link.Unlink();
+                    SMemFree(playback, ".?AV?$TSList@UCM2SequencePlayBack@@V?$TSGetLink@UCM2SequencePlayBack@@@@$07@@",
+                        -2, 0);
+                }
+            }
+            playback = next;
+        }
+        load = nextLoad;
+    }
+}
+
+// The world matrix as the local one through `world`, and the view matrix from it.
+// ref: FUN_1411ce880
+void CM2Model::SetWorldMatrix(const C44Matrix* world) {
+    if ((this->m_flags & BASE_MATRIX_CURRENT) != 0 && this->m_matrixFrame == this->m_scene->m_frame) {
+        return;
+    }
+    BoneTimesWorld(this->m_local.m, world->m, this->m_world.m, false);
+    MultiplyViewOrder(this->m_world.m, this->m_scene->m_viewProjection.m, this->m_view.m);
+    this->m_flags |= BASE_MATRIX_CURRENT;
+    this->m_flags &= ~BASE_INVERSE_CURRENT;
+}
+
+// The GPU data a model keeps for compute skinning and ray tracing (+0x600, +0x670, +0x678); none
+// of it is made yet, so each release is reached only once its creation is ported.
+// ref: FUN_1411b6f80
+void CM2Model::ReleaseGpuData() {
+    if (this->m_lock670 != nullptr) {
+        FROST_UNIMPLEMENTED();  // FUN_14228b740: the RW buffer
+    }
+    if (this->m_600 != nullptr) {
+        FROST_UNIMPLEMENTED();  // the compute batches' RW buffer, texture and GxBuf
+    }
+    if (this->m_handle != -1) {
+        FROST_UNIMPLEMENTED();  // FUN_142295360: the handle's release
+        this->m_handle = -1;
+        *reinterpret_cast<uint16_t*>(reinterpret_cast<uint8_t*>(this) + 0x685) = 0x1ff;
+    }
+    this->m_680 = 0;
+}
+
+// ref: FUN_1411b6910
+void CM2Model::RefreshBatchEffects() {
+    auto batches = static_cast<uint8_t*>(this->m_600);
+    if (batches == nullptr) {
+        return;
+    }
+    for (uint32_t i = 0; i < *reinterpret_cast<uint16_t*>(batches); i++) {
+        auto batch = *reinterpret_cast<M2Batch**>(batches + 0x10);
+        CShaderEffect* effect = this->m_shared->GetBatchEffect(reinterpret_cast<M2Batch*>(
+            reinterpret_cast<uint8_t*>(batch) + i * 0x18));
+        (*reinterpret_cast<CShaderEffect***>(static_cast<uint8_t*>(this->m_600) + 0x40))[i] = effect;
+        batches = static_cast<uint8_t*>(this->m_600);
+    }
 }

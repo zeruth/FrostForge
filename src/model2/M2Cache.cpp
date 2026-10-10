@@ -457,6 +457,23 @@ void M2SkeletonRelease(void* skeleton) {
     FROST_UNIMPLEMENTED();
 }
 
+int32_t M2AnimFrameSkipLod() {
+    return s_animFrameSkipLod->m_intValue;
+}
+
+// FUN_141203770: a skeleton's per-model data released.
+void M2SkeletonReleaseModel(void* skeleton) {
+    (void)skeleton;
+    FROST_UNIMPLEMENTED();
+}
+
+// FUN_141203470: a skeleton's playbacks for a model dropped.
+void M2SkeletonCancelModelPlaybacks(void* skeleton, CM2Model* model) {
+    (void)skeleton;
+    (void)model;
+    FROST_UNIMPLEMENTED();
+}
+
 // FUN_1411f9040: a skeleton file's reads waited on.
 bool M2SkeletonWaitForLoad(void* skeleton) {
     (void)skeleton;

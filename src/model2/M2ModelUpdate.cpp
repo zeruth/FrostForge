@@ -478,7 +478,7 @@ void CM2Model::AnimateRibbonTracks(M2AnimateContext* context) {
 // The ribbons' colours, heights, texture transforms and matrices, then their update
 // (FUN_1411b3870).
 // ref: FUN_1411b3870
-void CM2Model::UpdateRibbons(uint32_t time) {
+void CM2Model::UpdateRibbons(float delta) {
     M2Data* data = this->m_shared->m_data;
     C44Matrix* matrices = this->m_animState->m_boneMatrices;
     for (uint32_t i = 0; i < data->m_ribbons.Count(); i++) {
@@ -547,7 +547,7 @@ void CM2Model::UpdateRibbons(uint32_t time) {
                 MatrixMultiply(m, w, this->m_scene->m_viewProjection.m);
             }
             RibbonEmitterSetMatrix(ribbon, m, this->m_558);
-            RibbonEmitterUpdate(ribbon, time, state->m_visibility.m_value == 0);
+            RibbonEmitterUpdate(ribbon, delta, state->m_visibility.m_value == 0);
         }
     }
 }
@@ -555,13 +555,13 @@ void CM2Model::UpdateRibbons(uint32_t time) {
 // The cameras, ribbons and particles brought up to date, the model listed for drawing and its
 // attachments told (FUN_1411b3fc0).
 // ref: FUN_1411b3fc0
-void CM2Model::UpdateDrawables(int32_t pass, uint32_t time, uint32_t a4) {
+void CM2Model::UpdateDrawables(int32_t pass, float delta, uint32_t a4) {
     M2Data* data = this->m_shared->m_data;
     if (data->m_cameras.Count() != 0) {
         this->UpdateHeldCameras();
     }
     if (data->m_ribbons.Count() != 0) {
-        this->UpdateRibbons(time);
+        this->UpdateRibbons(delta);
     }
     float ratio = 0.0f;
     float height;
@@ -576,7 +576,7 @@ void CM2Model::UpdateDrawables(int32_t pass, uint32_t time, uint32_t a4) {
     }
     if (data->m_particles.Count() != 0
         && ((this->m_modelFlags2 >> 1 & 1) == 0 || ratio <= M2SceneGetAnimateRatio(this->m_scene))) {
-        this->UpdateParticles(time, static_cast<uint32_t>(pass), a4);
+        this->UpdateParticles(delta, static_cast<uint32_t>(pass), a4);
     }
     bool listed = false;
     if ((this->m_flags & BASE_SHOWN) != 0 && this->m_scene->m_collectDrawParams) {
@@ -599,7 +599,7 @@ void CM2Model::UpdateDrawables(int32_t pass, uint32_t time, uint32_t a4) {
         if (child->m_attachIndex == 0xffff) {
             shown = (child->m_flags >> 24 & 1) != 0;
         } else {
-            shown = this->IsAttachmentVisible();
+            shown = this->IsAttachmentVisible(child->m_attachIndex);
         }
         if (shown) {
             child->PrepareLighting(pass, a4);

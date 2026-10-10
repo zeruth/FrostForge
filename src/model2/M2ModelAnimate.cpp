@@ -597,6 +597,25 @@ void CM2Model::AnimateBoneWind(uint32_t index, M2AnimateContext* context) {
     CopyMatrix(this->m_animState->m_boneMatrices[index].m, local);
 }
 
+// ref: FUN_1412005a0
+void M2AnimateContextInit(M2AnimateContext* context, uint32_t time, uint32_t frame, uint32_t compute,
+    uint32_t throttle, uint32_t limit, uint32_t a7) {
+    float* m = context->m_root.m;
+    for (int32_t i = 0; i < 16; i++) {
+        m[i] = 0.0f;
+    }
+    m[0] = 1.0f;
+    m[5] = 1.0f;
+    m[10] = 1.0f;
+    m[15] = 1.0f;
+    context->m_fc = throttle;
+    context->m_100 = limit;
+    context->m_104 = a7;
+    context->m_time = static_cast<int32_t>(time);
+    context->m_frame = frame;
+    context->m_f8 = compute;
+}
+
 // The bone's parent first, then the bone (FUN_1411b0a30).
 // ref: FUN_1411b0a30
 void CM2Model::AnimateBoneTree(uint32_t index, M2AnimateContext* context) {

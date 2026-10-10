@@ -31,6 +31,31 @@ struct C44Matrix {
     float m[16];
 };
 
+// What a bone plays, as FUN_1411bac00 reports it (0x74).
+struct M2SequenceInfo {
+    uint32_t m_id;                      // 0x00 -1 when the bone keeps no sequence of its own
+    uint32_t m_variation;               // 0x04
+    int32_t m_time;                     // 0x08 ms into the sequence
+    uint32_t m_slotTime;                // 0x0c
+    float m_speed;                      // 0x10
+    int32_t m_startTime;                // 0x14
+    int32_t m_endTime;                  // 0x18
+    uint16_t m_blendLeft;               // 0x1c ms of blending left
+    uint16_t m_sequence;                // 0x1e the index, 0xffff
+    uint32_t m_flags;                   // 0x20 the sequence's
+    bool m_pending;                     // 0x24
+    bool m_ended;                       // 0x25
+    bool m_flag80;                      // 0x26 the bone's flag 0x80
+    uint8_t m_27;
+    uint32_t m_repeats;                 // 0x28
+    C44Matrix m_override;               // 0x2c identity unless the bone has one
+    uint8_t m_blendKind;                // 0x6c
+    uint8_t m_6d;
+    uint16_t m_fixedBlend;              // 0x6e
+    float m_blendMax;                   // 0x70
+};
+static_assert(sizeof(M2SequenceInfo) == 0x74, "M2SequenceInfo is 0x74 bytes");
+
 // The bounds a model collects over its animation (0x44, "M2 Accum Bounds Pool").
 struct M2AccumBounds {
     CAaBox m_box;                       // 0x00 the animated boxes so far
@@ -57,6 +82,8 @@ struct M2ModelCall {
 };
 static_assert(sizeof(M2ModelCall) == 0xa0, "M2ModelCall is 0xa0 bytes");
 
+// The effect a model draws with (FUN_1411e6cc0).
+void* M2BaseModelGetEffect(CM2BaseModel* model);
 // A call from the pool, its type -1 (FUN_1411e75d0).
 M2ModelCall* M2ModelCallAlloc();
 
@@ -230,14 +257,14 @@ class CM2BaseModel {
     // ref: FUN_1411e6c20
     virtual bool GetAttachmentMatrixByIndex(uint32_t index, C44Matrix* out);        // 0x158
     // ref: FUN_14026bea0
-    virtual bool IsAttachmentVisible();                                             // 0x160
+    virtual bool IsAttachmentVisible(uint32_t index);                               // 0x160
     // ref: FUN_1411e77d0
     virtual void ClearLoaded();                                                     // 0x168
     virtual void OnRemove();                                                        // 0x170
     // ref: FUN_1411e8c80
     virtual void SetWorldMatrix(const C44Matrix* world);                            // 0x178
-    virtual void Virtual180();                                                      // 0x180
-    virtual void Virtual188();                                                      // 0x188
+    virtual void ReleaseGpuData();                                                  // 0x180
+    virtual void RefreshBatchEffects();                                             // 0x188
     virtual void Virtual190();                                                      // 0x190
     virtual void OnMatricesUpdated();                                               // 0x198
     virtual bool Virtual1a0();                                                      // 0x1a0
@@ -638,6 +665,52 @@ class CM2Model : public CM2BaseModel {
     void GetAttachmentMatrix(uint32_t index, C44Matrix* out) override;
     // ref: FUN_1411c0480
     CM2Shared* GetShared() override;
+    // ref: FUN_1411b70d0
+    void Detach(bool notify) override;
+    // ref: FUN_1411c77b0
+    void OnChildrenChanged() override;
+    // ref: FUN_1411ce300
+    void UpdateMatrices(const C44Matrix* parent, const CM2ModelParams* params, uint32_t a4, uint32_t a5,
+        uint32_t a6) override;
+    // ref: FUN_1411c7a90
+    void PrepareLighting(int32_t pass, uint32_t propagate) override;
+    // ref: FUN_1411b6990
+    void UpdateCulling() override;
+    // ref: FUN_1411bdef0
+    float* GetBox(float* out) override;
+    // ref: FUN_1411bdfe0
+    float* GetSphere(float* out) override;
+    // ref: FUN_1411bdf70
+    float* GetBox2(float* out) override;
+    // ref: FUN_1411be0a0
+    float* GetSphere2(float* out) override;
+    // ref: FUN_1411b9f10
+    bool GetAttachmentMatrixByIndex(uint32_t index, C44Matrix* out) override;
+    // ref: FUN_1411b9cf0
+    bool IsAttachmentVisible(uint32_t index) override;
+    // ref: FUN_1411c7b80
+    void ClearLoaded() override;
+    // ref: FUN_1411b6b50
+    void OnRemove() override;
+    // ref: FUN_1411ce880
+    void SetWorldMatrix(const C44Matrix* world) override;
+    // ref: FUN_1411b6f80
+    void ReleaseGpuData() override;
+    // ref: FUN_1411b6910
+    void RefreshBatchEffects() override;
+    // The per-instance data released: override matrices, textures, lights, cameras, ribbons,
+    // particle emitters and the skeleton's (FUN_1411b80b0).
+    void ReleaseInstanceData();
+    // Every playback this model waits on dropped or marked dead (FUN_1411b5cb0).
+    void CancelAllPlaybacks();
+    // An attachment point's matrix in view space when attached, else in local space
+    // (FUN_1411c0860), and the root's (FUN_1411c0d80).
+    void GetAttachmentPointMatrix(const C3Vector* position, uint32_t bone, float* out);
+    void GetRootMatrix(float* out);
+    // The box of the sequence a key bone plays, with the effects' (FUN_1411c0490).
+    float* GetKeyBoneBounds(float* out, uint16_t keyBone);
+    // What a key bone plays (FUN_1411bac00): false when the model has no such bone.
+    bool GetSequenceInfo(uint32_t keyBone, struct M2SequenceInfo* out);
     // One bone animated now for something attached to it (FUN_1411ae3a0), and the transform for a
     // new frame without clearing the bone-done bits (FUN_1411ce120).
     bool AnimateBoneFor(uint32_t bone);
@@ -677,11 +750,11 @@ class CM2Model : public CM2BaseModel {
     void AnimateLights(M2AnimateContext* context);
     void UpdateLights();
     // FUN_1411b3870, FUN_1411b3fc0, FUN_1411b41e0, FUN_1411b45e0, FUN_1411b2c90
-    void UpdateRibbons(uint32_t time);
-    void UpdateDrawables(int32_t pass, uint32_t time, uint32_t a4);
+    void UpdateRibbons(float delta);
+    void UpdateDrawables(int32_t pass, float delta, uint32_t a4);
     void UpdateTransform(const C44Matrix* parent, const CM2ModelParams* params, int32_t time);
     void AnimateTextureTransform(uint32_t index, M2BoneState* state);
-    void UpdateParticles(uint32_t time, uint32_t pass, uint32_t a4);
+    void UpdateParticles(float delta, uint32_t pass, uint32_t a4);
     void Animate(const C44Matrix* parentMatrix, const CM2ModelParams* params, uint32_t frame, int32_t time,
         int32_t throttle);
     void AnimateParticleTracks(M2AnimateContext* context);
@@ -759,6 +832,12 @@ void* M2SkeletonGetSource(void* skeleton, bool second);
 void M2SkeletonReleaseSequence(void* source, uint32_t sequence);
 void M2ResolveSequence(uint32_t id, M2SequenceResolve* out, M2AnimState* anim, M2Array<M2Sequence>* sequences,
     M2Array<uint16_t>* hash, M2Array<uint16_t>* blocked);
+// A skeleton's per-model data released (FUN_141203770) and its playbacks for a model dropped
+// (FUN_141203470).
+void M2SkeletonReleaseModel(void* skeleton);
+void M2SkeletonCancelModelPlaybacks(void* skeleton, CM2Model* model);
+// animFrameSkipLOD's value (DAT_1430a0eb0 + 0x14).
+int32_t M2AnimFrameSkipLod();
 // The skeleton's scene (FUN_141203400).
 void M2SkeletonSetScene(void* skeleton, CM2Scene* scene);
 // The skeleton's side of a sequence: its clock (FUN_141203330), a reference (FUN_1411f8a40),
