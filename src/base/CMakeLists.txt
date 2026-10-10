@@ -7,6 +7,7 @@ add_library(base STATIC
     ObjectAlloc.cpp
     DataAllocator.cpp
     RCString.cpp
+    RndSeed.cpp
     Status.cpp
     StringAllocator.cpp
 )

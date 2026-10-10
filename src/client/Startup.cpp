@@ -1,3 +1,4 @@
+#include "base/RndSeed.hpp"
 #include "client/Startup.hpp"
 #include "client/CommandLine.hpp"
 #include "client/Locale.hpp"
@@ -699,20 +700,8 @@ bool ProcessAffinityCallback(CVar* cvar, const char* oldValue, const char* newVa
     return true;
 }
 
-// A generator's state seeded from a value: the value, and a mix of its residues.
-// ref: FUN_14133cae0
-struct RANDSEED {
-    uint32_t m_seed;
-    uint32_t m_mix;
-};
-RANDSEED s_seedA;  // DAT_142ddcf50
-RANDSEED s_seedB;  // DAT_142ddcf80
-
-void SeedRandom(RANDSEED* state, uint32_t seed) {
-    state->m_seed = seed;
-    state->m_mix = (seed % 0x3b) * 0x400 | (seed % 0x3d) * 4 | (seed % 0x35) * 0x40000
-        | ((seed / 0x2f) * 0x11 + seed) * 0x4000000;
-}
+CRndSeed s_seedA;  // DAT_142ddcf50
+CRndSeed s_seedB;  // DAT_142ddcf80
 
 CVar* s_streamingCameraRadius;          // DAT_1430a55d8
 CVar* s_streamingCameraMaxRadius;       // DAT_1430a55e0
@@ -795,8 +784,8 @@ void Sub1402295B0() {
     if (affinity->m_intValue != 0) {
         OsSetProcessAffinity(static_cast<uint32_t>(affinity->m_intValue));
     }
-    SeedRandom(&s_seedA, OsGetAsyncTimeMs());
-    SeedRandom(&s_seedB, OsGetAsyncTimeMs());
+    RndSeedInit(&s_seedA, OsGetAsyncTimeMs());
+    RndSeedInit(&s_seedB, OsGetAsyncTimeMs());
     StreamingCameraRegisterCVars();
     BattleNetInitialize();
     g_clientInitFlags |= 0x200;
