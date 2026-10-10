@@ -32,6 +32,7 @@ float OptionalFinite(lua_State* L, int32_t* index, const char* usage, float fall
 // An integer within the type's range ("outside of expected range ...").
 int32_t RequiredInt32(lua_State* L, int32_t* index, const char* usage);
 uint16_t RequiredUInt16(lua_State* L, int32_t* index, const char* usage);
+uint32_t RequiredUInt32(lua_State* L, int32_t* index, const char* usage);
 uint32_t OptionalIndex(lua_State* L, int32_t* index, const char* usage);
 int8_t OptionalSubLevel(lua_State* L, int32_t* index, const char* usage, bool* present);
 // Named values; an unknown name is the usage error, a missing optional one the default.

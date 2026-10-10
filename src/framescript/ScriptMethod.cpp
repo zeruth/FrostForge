@@ -304,6 +304,17 @@ uint16_t RequiredUInt16(lua_State* L, int32_t* index, const char* usage) {
     return static_cast<uint16_t>(static_cast<int32_t>(value));
 }
 
+// FUN_1407d22e0, its error FUN_1407cbaa0.
+uint32_t RequiredUInt32(lua_State* L, int32_t* index, const char* usage) {
+    if (!Present(L, *index)) {
+        luaL_error(L, usage);
+    }
+    double value;
+    RangedNumber<uint32_t>(L, *index, usage, 0.0, 4294967295.0, "outside of expected range %u to %u", 0u, 0xffffffffu, &value);
+    (*index)++;
+    return static_cast<uint32_t>(static_cast<int64_t>(value));
+}
+
 // A 1-based index, as 0-based.
 uint32_t OptionalIndex(lua_State* L, int32_t* index, const char* usage) {
     if (!Present(L, *index)) {

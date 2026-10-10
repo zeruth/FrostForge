@@ -64,5 +64,7 @@ static_assert(sizeof(CScriptObject) == 0x18, "CScriptObject is 0x18 bytes");
 // leave their globals alone as they are destroyed.
 // ref: FUN_14196fed0
 bool ClientUI_IsTearingDown();
+// Whether the UI up is the glue's (FUN_14196fe80).
+bool ClientUI_IsGlue();
 
 #endif

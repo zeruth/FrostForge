@@ -8,6 +8,8 @@
 #include "glue/ScriptAPIRegistry.hpp"
 
 #include "ui/CSimpleButton.hpp"
+#include "ui/CSimpleModel.hpp"
+#include "ui/CSimpleModelFFX.hpp"
 #include "ui/CSimpleMovieFrame.hpp"
 #include "ui/CSimpleEditBox.hpp"
 #include "ui/CSimpleSlider.hpp"
@@ -178,20 +180,6 @@ void ScriptClass_MessageFrame(lua_State* L) {
     FROST_UNIMPLEMENTED();
 }
 
-// the Model metatables.
-// ref: FUN_1424bd400
-void ScriptClass_Model(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the PlayerModelBase metatables.
-// ref: FUN_141697780
-void ScriptClass_PlayerModelBase(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
 // the OffScreenFrame metatables.
 // ref: FUN_1424bfe70
 void ScriptClass_OffScreenFrame(lua_State* L) {
@@ -292,8 +280,8 @@ void GlueRegisterScriptAPI(lua_State* L) {
     ScriptClass_Line(L);
     CSimpleMaskTexture::CreateScriptMetaTables();
     ScriptClass_MessageFrame(L);
-    ScriptClass_Model(L);
-    ScriptClass_PlayerModelBase(L);
+    CSimpleModel::CreateScriptMetaTables();
+    CSimpleModelFFX::CreateScriptMetaTables();
     CSimpleMovieFrame::CreateScriptMetaTables();
     ScriptClass_OffScreenFrame(L);
     CSimpleScrollFrame::CreateScriptMetaTables();

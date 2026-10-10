@@ -18,6 +18,7 @@
 #include "ui/CLayoutFrame.hpp"
 #include "ui/CScriptObject.hpp"
 #include "ui/CSimpleButton.hpp"
+#include "ui/CSimpleModel.hpp"
 #include "ui/CSimpleMovieFrame.hpp"
 #include "ui/CSimpleEditBox.hpp"
 #include "ui/CSimpleSlider.hpp"
@@ -246,9 +247,7 @@ CSimpleFrame* CreateMessageFrame(CSimpleFrame* parent) {
 
 // ref: FUN_1406620d0
 CSimpleFrame* CreateModel(CSimpleFrame* parent) {
-    (void)parent;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    return new CSimpleModel(parent);
 }
 
 // ref: FUN_140662240

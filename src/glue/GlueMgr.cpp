@@ -1,4 +1,5 @@
 #include "glue/GlueMgr.hpp"
+#include "ui/CSimpleModelFFX.hpp"
 #include "framescript/EventCallbacks.hpp"
 #include "db/DB2Tables.hpp"
 #include "db/DBClient.hpp"
@@ -76,9 +77,10 @@ void TopReleaseUnneededTextures() {
 
 // ref: FUN_141697530
 CSimpleFrame* CreateModelFFX(CSimpleFrame* parent) {
-    (void)parent;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    if (!ClientUI_IsGlue()) {
+        return nullptr;
+    }
+    return new CSimpleModelFFX(parent);
 }
 
 // ref: FUN_14167b1d0
@@ -170,6 +172,16 @@ void PreloadGlueModels() {
     FROST_UNIMPLEMENTED();
 }
 
+}
+
+// Whether the UI up is the glue's: it is initialized and not going away, or (with no game
+// UI, whose test FUN_141925900 is) still initializing.
+// ref: FUN_14196fe80
+bool ClientUI_IsGlue() {
+    if (s_initialized && !s_destroying) {
+        return true;
+    }
+    return s_initializing;
 }
 
 // The game UI (CGGameUI, 0x1431e7d26 and FUN_141925900) does not exist before the world, so
