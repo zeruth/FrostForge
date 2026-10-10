@@ -71,6 +71,11 @@ void CVarUpdate(CVar* cvar, const char* value, bool setValue, bool setReset, boo
 // Finds a CVar by the case-insensitive FNV-1a hash of its name.
 CVar* CVarLookup(uint64_t nameHash);
 
+// CVarSet with a number written as text ("%d" / "%f"), and a new coded default.
+void CVarSetInt(CVar* cvar, int32_t value, bool setValue, bool setReset, bool setDefault, bool markDirty);
+void CVarSetFloat(CVar* cvar, float value, bool setValue, bool setReset, bool setDefault, bool markDirty);
+void CVarSetDefaultInt(CVar* cvar, int64_t value);
+
 // The hook every value change is reported to.
 void CVarSetChangedHandler(void (*handler)(CVar* cvar, const char* oldValue, const char* newValue));
 

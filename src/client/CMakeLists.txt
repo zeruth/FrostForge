@@ -1,5 +1,6 @@
 add_library(client STATIC
     ClientCVars.cpp
+    GraphicsSettings.cpp
     ClientLoop.cpp
     CommandLine.cpp
     ConsoleDevice.cpp

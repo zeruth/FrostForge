@@ -15,19 +15,23 @@ struct RENDERSETTINGS {
     uint8_t m_msaaSamples;          // 0x0c: log2 of the sample count
     uint8_t m_msaaQuality;          // 0x0d
     uint8_t m_0e;                   // 0x0e
-    uint8_t m_0f;                   // 0x0f
-    uint8_t m_10;                   // 0x10
-    uint8_t m_11;                   // 0x11
+    uint8_t m_sunshafts;            // 0x0f: 0..2
+    uint16_t m_shadowTextureSize;   // 0x10: 0x200, 0x400 or 0x800
     uint8_t m_deviceResets;         // 0x12: counts device losses so a lost device re-applies
-    uint8_t m_13;                   // 0x13
+    uint8_t m_spellClutter;         // 0x13: 0..100
     uint8_t m_upscaler;             // 0x14: 0..3 (3 needs dx_5_0 or newer)
     uint8_t m_pad15[3];
     float m_sharpness;              // 0x18
     uint8_t m_1c[2];
-    uint8_t m_1e;                   // 0x1e: ray traced shadows allowed
-    uint8_t m_1f[6];
-    uint8_t m_25;                   // 0x25: a shading rate, checked against the MSAA mode
-    uint8_t m_26;                   // 0x26: another
+    uint8_t m_shadowMode;           // 0x1e: 0..4 (0 blob shadows); ray traced shadows need one
+    uint8_t m_ssao;                 // 0x1f: 0..4
+    uint8_t m_ssaoType;             // 0x20: 0..2
+    uint8_t m_waterDetail;          // 0x21: 0..3
+    uint8_t m_rippleDetail;         // 0x22: 0..2
+    uint8_t m_reflectionMode;       // 0x23: 0..3
+    uint8_t m_reflectionDownscale;  // 0x24: 0..4
+    uint8_t m_25;                   // 0x25: a shading rate (vrsWorldGeo), checked against the MSAA mode
+    uint8_t m_26;                   // 0x26: another (vrsParticles)
     uint8_t m_27[6];
     uint8_t m_filterMode;           // 0x2d: below 6; 5 allows up to 16 of m_filterLevel
     uint8_t m_filterLevel;          // 0x2e

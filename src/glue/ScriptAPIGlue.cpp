@@ -3,6 +3,8 @@
 
 #include "client/ClientCVars.hpp"
 #include "client/CommandLine.hpp"
+#include "client/ConsoleDevice.hpp"
+#include "client/GraphicsSettings.hpp"
 #include "client/GxWindow.hpp"
 #include "client/RenderSettings.hpp"
 #include "console/Var.hpp"
@@ -239,6 +241,47 @@ int Lua_C_Login_IsLauncherLogin(lua_State* L) {
     // FUN_14148ba60
     lua_pushboolean(L, CommandLineHasOption(0x20) && g_launcherLoginUsed == 0);
     return 1;
+}
+
+// For each of a quality group's settings, why this machine cannot take it (0 when it can).
+// ref: FUN_1419f55b0
+int Lua_GetCVarSettingValidity(lua_State* L) {
+    if (!lua_isstring(L, 1) || !lua_isnumber(L, 2)) {
+        luaL_error(L, "Usage: GetCVarSettingValidity(cvar, settingsCount [, isRaid])");
+        return 0;
+    }
+    const char* name = lua_tolstring(L, 1, nullptr);
+    double count = lua_tonumber(L, 2);
+    bool raid = lua_toboolean(L, 3) != 0;
+    uint32_t settings = static_cast<uint32_t>(static_cast<int32_t>(static_cast<int64_t>(count)));
+    uint32_t setting = 0;
+    do {
+        lua_pushnumber(L, static_cast<double>(GraphicsSettingValidity(name, static_cast<int32_t>(setting), raid)));
+        setting++;
+    } while (setting <= settings - 1);
+    return static_cast<int>(settings);
+}
+
+// The CVar values of the quality level the machine was detected at: the lowest of its CPU,
+// GPU and memory tiers.
+// ref: FUN_1419f5820
+int Lua_GetDefaultVideoOptions(lua_State* L) {
+    bool raid = lua_toboolean(L, 1) != 0;
+    const int8_t* tiers = &ConsoleGetDetected()->m_cpu;
+    if (tiers[1] < tiers[0]) {
+        tiers = tiers + (tiers[2] < tiers[1] ? 1 : 0) + 1;
+    } else if (tiers[2] < tiers[0]) {
+        tiers = tiers + 2;
+    }
+    const GRAPHICSLEVELVALUE* entry = GraphicsLevelValues(static_cast<uint32_t>(*tiers), raid);
+    lua_checkstack(L, 0x46);
+    int count = 0;
+    for (; entry->m_name != nullptr; entry++) {
+        lua_pushstring(L, entry->m_name);
+        lua_pushnumber(L, static_cast<double>(entry->m_value));
+        count += 2;
+    }
+    return count;
 }
 
 // The default UI scale: 768 / the window height for a landscape window taller than 768

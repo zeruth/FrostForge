@@ -114,7 +114,7 @@ class CGxDevice {
     virtual void Slot158();                                 // 0x158
     virtual void Slot160();                                 // 0x160
     virtual void Slot168();                                 // 0x168
-    virtual void Slot170();                                 // 0x170
+    virtual bool VariableRateShadingSupported(uint8_t tier);  // 0x170
     virtual bool ShadingRateSupported(uint32_t rate, int32_t a3, uint8_t a4);  // 0x178
     virtual bool FrameBegin(void* query);                   // 0x180
     virtual void Slot188();                                 // 0x188

@@ -83,13 +83,6 @@ long ParseInt(const char* value) {
     return std::strtol(value, nullptr, radix);
 }
 
-// ref: FUN_140322110
-void CVarSetInt(CVar* cvar, int32_t value, bool setValue, bool setReset, bool setDefault, bool markDirty) {
-    char text[0x20];
-    SStrPrintf(text, sizeof(text), "%d", value);
-    CVarSet(cvar, text, setValue, setReset, setDefault, markDirty);
-}
-
 // ref: FUN_1402282f0
 void FormatCVarDefault(char* dest, const char* format, ...) {
     va_list args;
@@ -811,4 +804,9 @@ bool ConsoleDeviceInitialize(const char* title) {
     CVarSet(s_videoOptionsVersionCVar, version, true, false, false, true);
     GxAddDisplayChangeCallback(OnDisplayChange, nullptr);
     return true;
+}
+
+// ref: FUN_140328750
+CONSOLEDETECTED* ConsoleGetDetected() {
+    return &s_detected;
 }

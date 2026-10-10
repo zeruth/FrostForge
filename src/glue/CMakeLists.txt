@@ -4,6 +4,7 @@ add_library(glue STATIC
     GlueScriptAPI.cpp
     ScriptAPICVar.cpp
     ScriptAPIGlue.cpp
+    ScriptAPIUI.cpp
     EventSignals.cpp
     ScriptAPIRegistry.cpp
     ScriptAPIStubs.cpp

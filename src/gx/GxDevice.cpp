@@ -260,8 +260,9 @@ void CGxDevice::Slot160() {
     FROST_UNIMPLEMENTED();
 }
 void CGxDevice::Slot168() {}
-void CGxDevice::Slot170() {
-    FROST_UNIMPLEMENTED();  // FUN_1422922c0
+// ref: FUN_1422922c0
+bool CGxDevice::VariableRateShadingSupported(uint8_t tier) {
+    return tier == 0;
 }
 // ref: FUN_1422922b0
 bool CGxDevice::ShadingRateSupported(uint32_t, int32_t, uint8_t a4) {

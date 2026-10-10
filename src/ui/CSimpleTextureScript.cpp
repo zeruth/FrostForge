@@ -223,21 +223,6 @@ bool OptionalPoint(lua_State* L, int32_t* index, const char* usage, float* point
     return true;
 }
 
-// A table made from a named mixin: the global's fields copied in (FUN_1407d0a90).
-void PushFromMixin(lua_State* L, const char* mixin) {
-    lua_createtable(L, 0, 2);
-    lua_getfield(L, LUA_GLOBALSINDEX, mixin);
-    if (lua_type(L, -1) == LUA_TTABLE) {
-        lua_pushnil(L);
-        while (lua_next(L, -2) != 0) {
-            lua_pushvalue(L, -2);
-            lua_insert(L, -2);
-            lua_settable(L, -5);
-        }
-    }
-    lua_settop(L, -2);
-}
-
 // A filter mode name (FUN_1424df470).
 bool StringToFilterMode(const char* string, uint8_t* mode) {
     static const struct {
@@ -503,7 +488,7 @@ int GetRotation(lua_State* L) {
     float y = texture->m_rotationCenter[1];
     RaisePendingError(L, texture, "GetRotation");
     PushFloat(L, radians);
-    PushFromMixin(L, "Vector2DMixin");
+    ScriptMethod::PushFromMixin(L, "Vector2DMixin");
     lua_pushnumber(L, x);
     lua_setfield(L, -2, "x");
     lua_pushnumber(L, y);
@@ -646,7 +631,7 @@ int SetAtlas(lua_State* L) {
     if (texture == nullptr) {
         return 0;
     }
-    if (lua_type(L, 2) == LUA_TNONE) {
+    if (lua_type(L, 2) == LUA_TNIL) {
         texture->SetTextureByName(nullptr, 0, 0, 1, true, false);
         return 0;
     }

@@ -199,6 +199,8 @@ bool GxFormatSupportsMultisample(uint8_t format, uint8_t samples, int32_t qualit
 bool GxShadingRateSupported(uint32_t rate, int32_t a2, uint8_t a3);
 bool GxApiIsLegacy();
 bool GxApiIsD3d11();
+bool GxVariableRateShadingSupported(uint8_t tier);
+uint8_t GxCurrentApi();
 uint8_t* GxDeviceCaps();
 uint32_t GxDeviceFrame();
 

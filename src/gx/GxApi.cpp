@@ -2436,6 +2436,17 @@ bool GxApiIsLegacy() {
     return api == GXAPI_D3D11_LEGACY || api == GXAPI_MTL_LEGACY;
 }
 
+// ref: FUN_14228ac60
+bool GxVariableRateShadingSupported(uint8_t tier) {
+    return static_cast<CGxDevice*>(g_gxDevice)->VariableRateShadingSupported(tier);
+}
+
+// The device's API, or the one that would be chosen before there is a device.
+// ref: FUN_1422919d0
+uint8_t GxCurrentApi() {
+    return g_gxDevice != nullptr ? static_cast<CGxDevice*>(g_gxDevice)->m_api : GxGetApi();
+}
+
 // ref: FUN_1422919f0
 bool GxApiIsD3d11() {
     uint8_t api = g_gxDevice != nullptr ? static_cast<CGxDevice*>(g_gxDevice)->m_api : GxGetApi();

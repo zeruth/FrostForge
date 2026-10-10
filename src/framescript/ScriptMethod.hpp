@@ -72,6 +72,9 @@ bool CanChangeProtected(CScriptRegion* region);
 // blocked action. Untainted code may always. (FUN_1419985c0)
 bool IsActionPermitted(uint32_t action);
 
+// A table made from a named mixin: the global's fields copied in.
+void PushFromMixin(lua_State* L, const char* mixin);
+
 // Runs `body` as a protected Lua call with the arguments on the stack (FUN_1407d0960): an
 // error is copied out, the body's locals unwound, and the error raised again. Returns the
 // results left on the stack.

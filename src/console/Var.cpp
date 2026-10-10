@@ -844,6 +844,31 @@ bool CVarApplyLatched(CVar* cvar) {
     return true;
 }
 
+// ref: FUN_140322110
+void CVarSetInt(CVar* cvar, int32_t value, bool setValue, bool setReset, bool setDefault, bool markDirty) {
+    char text[0x20];
+    SStrPrintf(text, sizeof(text), "%d", value);
+    CVarSet(cvar, text, setValue, setReset, setDefault, markDirty);
+}
+
+// ref: FUN_140322540
+void CVarSetFloat(CVar* cvar, float value, bool setValue, bool setReset, bool setDefault, bool markDirty) {
+    char text[0x20];
+    SStrPrintf(text, sizeof(text), "%f", static_cast<double>(value));
+    CVarSet(cvar, text, setValue, setReset, setDefault, markDirty);
+}
+
+// The coded default, unless the variable keeps its own (flag 4).
+// ref: FUN_1403224f0
+void CVarSetDefaultInt(CVar* cvar, int64_t value) {
+    if ((cvar->m_flags & 4) != 0) {
+        return;
+    }
+    char text[0x20];
+    SStrPrintf(text, sizeof(text), "%lli", value);
+    cvar->m_defaultValue.Intern(text);
+}
+
 // ref: FUN_140322640
 void CVarSetChangedHandler(void (*handler)(CVar* cvar, const char* oldValue, const char* newValue)) {
     s_cvarChanged = handler;

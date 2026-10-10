@@ -83,18 +83,23 @@ def main() -> None:
         text = rec["c"]
         print(f"// ---- FUN_{a}")
         callbacks = []
+        named = {}
         for m in CALL.finditer(text):
             args, _ = split_args(text, m.end())
             name = cxx_string(args[0], binary).strip('"')
             store = f"s_{name[0].lower() + name[1:]}CVar = " if m.group(1) else ""
             callback = "nullptr"
             if args[4] != "0":
-                callback = callback_name(name)
-                callbacks.append((callback, args[4]))
+                # a callback several variables share keeps the first one's name
+                if args[4] not in named:
+                    named[args[4]] = callback_name(name)
+                    callbacks.append((named[args[4]], args[4]))
+                callback = named[args[4]]
             flags = args[2]
             print(f'    {store}CVarRegister("{name}", {cxx_string(args[1], binary)}, {flags}, '
                   f"{cxx_string(args[3], binary)}, {callback}, {args[5]}, {('true' if args[6] != '0' else 'false')}, "
-                  f"nullptr, {('true' if args[8] != '0' else 'false')});")
+                  f"{('nullptr' if args[7] == '0' else f'reinterpret_cast<void*>({args[7]})')}, "
+                  f"{('true' if args[8] != '0' else 'false')});")
         for callback, ref in callbacks:
             print(f"// callback {callback}: {ref.lstrip('&')}")
 

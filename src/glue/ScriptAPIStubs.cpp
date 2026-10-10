@@ -2079,13 +2079,6 @@ int Lua_C_Texture_ClearTitleIconTexture(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140ea7200
-int Lua_C_Texture_GetAtlasInfo(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140ea80a0
 int Lua_C_Texture_GetFilenameFromFileDataID(lua_State* L) {
     (void)L;
@@ -2172,13 +2165,6 @@ int Lua_C_UserFeedback_SubmitBug(lua_State* L) {
 
 // ref: FUN_140b6ce20
 int Lua_C_UserFeedback_SubmitSuggestion(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140b6d590
-int Lua_C_VideoOptions_GetCurrentGameWindowSize(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -2975,13 +2961,6 @@ int Lua_C_WowTokenSecure_WillKickFromWorld(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_14115c120
-int Lua_C_XMLUtil_GetTemplateInfo(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_14115ce90
 int Lua_C_XMLUtil_GetTemplates(lua_State* L) {
     (void)L;
@@ -3220,13 +3199,6 @@ int Lua_GetCVarInfo(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_1419f55b0
-int Lua_GetCVarSettingValidity(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140cea040
 int Lua_GetCharacterInfo(lua_State* L) {
     (void)L;
@@ -3362,13 +3334,6 @@ int Lua_GetDefaultGraphicsQuality(lua_State* L) {
 
 // ref: FUN_1419f58e0
 int Lua_GetDefaultVideoOption(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1419f5820
-int Lua_GetDefaultVideoOptions(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -3591,22 +3556,8 @@ int Lua_GetScreenDPIScale(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_141d05420
-int Lua_GetScreenHeight(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_1419f4d40
 int Lua_GetScreenResolutions(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141d053c0
-int Lua_GetScreenWidth(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;

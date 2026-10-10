@@ -1,4 +1,5 @@
 #include "client/ClientCVars.hpp"
+#include "client/GraphicsSettings.hpp"
 #include "client/ConsoleDevice.hpp"
 #include "client/FrameBufferCache.hpp"
 #include "client/RenderSettings.hpp"
@@ -164,9 +165,13 @@ void Sub1412A1D50() {
     FROST_UNIMPLEMENTED();
 }
 
+// The world's startup: its CVars, then its subsystems.
 // ref: FUN_14134ed50
 void Sub14134ED50(void (*callback)()) {
     (void)callback;
+    GraphicsRegisterCVars();
+    // FUN_1413b9e40 (the world's callbacks), the world option defaults (DAT_1430ab9c0..), and
+    // the subsystems after them (liquids, particles, shadows, the sky, ...) are not ported.
     FROST_UNIMPLEMENTED();
 }
 

@@ -1205,6 +1205,12 @@ void CGxDeviceD3d12::SetLowLatencyMode(uint8_t mode) {
     (void)mode;
 }
 
+// Whether the device's variable-rate shading tier (+0x219 of its data) reaches `tier`.
+// ref: FUN_1422b7600
+bool CGxDeviceD3d12::VariableRateShadingSupported(uint8_t tier) {
+    return tier <= reinterpret_cast<const uint8_t*>(this->m_data)[0x219];
+}
+
 // Variable-rate shading: the tier (+0x869) picks a row of supported rates (DAT_14291b220).
 // ref: FUN_1422db790
 bool CGxDeviceD3d12::ShadingRateSupported(uint32_t rate, int32_t a3, uint8_t a4) {

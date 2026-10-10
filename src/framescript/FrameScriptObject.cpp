@@ -14,6 +14,7 @@
 #include "os/Os.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
+#include "util/FrostLog.hpp"
 #include "ui/BinaryXML.hpp"
 #include "ui/CSimpleFrame.hpp"
 #include "ui/CSimpleTop.hpp"
@@ -553,6 +554,16 @@ void FrameScript_ObjectError(FrameScript_Object* object, const char* method, con
         blz::string_assign(error, message.m_data, size);
     } else {
         blz::string_format(error, "%s:%s(): %s", GetDisplayName(object), method, message.m_data);
+    }
+    // FROST: the error is raised later, by whichever method runs next; record where it really
+    // happened.
+    FrostLog("lua", "pending: %s", s_scriptError.m_data);
+    lua_State* L = FrameScript_GetContext();
+    lua_Debug frame;
+    for (int level = 0; L != nullptr && level < 12 && lua_getstack(L, level, &frame); level++) {
+        lua_getinfo(L, "Sln", &frame);
+        FrostLog("lua", "    at %s:%d %s", frame.short_src, frame.currentline,
+            frame.name != nullptr ? frame.name : (frame.what != nullptr ? frame.what : "?"));
     }
 }
 

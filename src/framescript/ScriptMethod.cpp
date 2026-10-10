@@ -586,6 +586,21 @@ bool CanChangeProtected(CScriptRegion* region) {
     return false;
 }
 
+// ref: FUN_1407d0a90
+void PushFromMixin(lua_State* L, const char* mixin) {
+    lua_createtable(L, 0, 2);
+    lua_getfield(L, LUA_GLOBALSINDEX, mixin);
+    if (lua_type(L, -1) == LUA_TTABLE) {
+        lua_pushnil(L);
+        while (lua_next(L, -2) != 0) {
+            lua_pushvalue(L, -2);
+            lua_insert(L, -2);
+            lua_settable(L, -5);
+        }
+    }
+    lua_settop(L, -2);
+}
+
 // FUN_1407d0960, with its callers' error handling
 int32_t ProtectedCall(lua_State* L, BODY body, void* context) {
     int32_t count = lua_gettop(L);

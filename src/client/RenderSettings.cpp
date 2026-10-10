@@ -97,7 +97,7 @@ bool ValidateSettings(const RENDERSETTINGS* current, RENDERSETTINGS* pending, vo
         rate26Ok = false;
     }
     bool rtOk = true;
-    if ((pending->m_flags & 0x18) != 0 && (caps[0xaf] < 2 || pending->m_1e == 0)) {
+    if ((pending->m_flags & 0x18) != 0 && (caps[0xaf] < 2 || pending->m_shadowMode == 0)) {
         pending->m_flags &= ~0x18u;
         rtOk = false;
     }

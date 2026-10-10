@@ -24,6 +24,9 @@ struct CONSOLEDETECTED {
 // `title`) and the device. False when the machine cannot run the game.
 bool ConsoleDeviceInitialize(const char* title);
 
+// The detected defaults (FUN_140328750).
+CONSOLEDETECTED* ConsoleGetDetected();
+
 // The parameters the CVars ask for.
 void ConsoleDeviceGetParams(GXDEVICEPARAMS* device, GXWINDOWPARAMS* window);
 
