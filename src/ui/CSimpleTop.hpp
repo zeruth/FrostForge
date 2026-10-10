@@ -208,8 +208,17 @@ class CSimpleTop : public CLayoutFrame {
     bool ReleaseButtonCapture(CScriptRegion* region);
     // Whether `b` draws above `a`.
     bool IsRegionAbove(CScriptRegion* a, CScriptRegion* b);
+    // The dragged frame follows the mouse.
     void UpdateMouseFocus(MOUSEEVENT* event);
-    bool OnMouseMoveEvent(MOUSEEVENT* event, bool simulated);
+    // The regions registered for `type` under the mouse, topmost first.
+    void FindBestMouseFoci(blz::embedded_vector<CScriptRegion*, 2, s_regionVectorTag>* out, int32_t type,
+        MOUSEEVENT* event, bool force, blz::embedded_vector<CScriptRegion*, 2, s_regionVectorTag>* entered);
+    // The mouse events from the client (positions 0..1 of the window, y up).
+    bool OnMouseMoveEvent(MOUSEEVENT* event, bool real);
+    void OnMouseDownEvent(MOUSEEVENT* event);
+    void OnMouseUpEvent(MOUSEEVENT* event);
+    bool OnMouseWheelEvent(MOUSEEVENT* event);
+    bool OnMouseDeltaEvent(MOUSEEVENT* event);
 
     // The UI's frame: animations, layout, OnUpdate scripts and the mouse focus.
     void OnUpdate(float elapsed);
@@ -234,5 +243,9 @@ void UiGetCursorPosition(float* x, float* y);
 // A font handle whose last user went; it is dropped at the next UI update.
 void UiAddUnneededFontHandle(const HTEXTFONT* handle);
 void UiReleaseUnneededFontHandles();
+
+// GLOBAL_MOUSE_DOWN / GLOBAL_MOUSE_UP to the scripts (FUN_141174d40, FUN_141174d80).
+void UiSignalGlobalMouseDown(const char* button);
+void UiSignalGlobalMouseUp(const char* button);
 
 #endif

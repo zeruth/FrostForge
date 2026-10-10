@@ -19,11 +19,54 @@ uint64_t OsCursorTrackMessage(void* window, uint32_t message, uint64_t wparam, u
     return 0;
 }
 
-// The cursor's position in screen coordinates as the engine sees it.
+namespace {
+
+// The cursor's state (DAT_142d5e90c): 1 a remote session, 2 held in place, 0x40 the window
+// inactive, 0x80 minimized.
+uint32_t s_cursorState;
+// Where a held cursor stays (DAT_1447ceae0).
+uint64_t s_heldPosition;
+// The positions the window's messages reported (DAT_142d5e920..): TrackMessage fills them, and
+// until it is ported there are none.
+uint32_t s_sampleCount;             // DAT_142d5e940
+// The window whose middle stands in when the system cannot say (DAT_1447ceac8).
+HWND s_cursorWindow;
+
+// The system's cursor position, or the middle of the window (the desktop when there is none)
+// when it cannot be had.
+// ref: FUN_14254c350
+uint64_t CursorSystemPosition() {
+    POINT point;
+    if (!GetCursorPos(&point)) {
+        HWND window = s_cursorWindow != nullptr ? s_cursorWindow : GetDesktopWindow();
+        RECT rect;
+        GetWindowRect(window, &rect);
+        point.x = (rect.right + rect.left) / 2;
+        point.y = (rect.bottom + rect.top) / 2;
+    }
+    return static_cast<uint32_t>(point.x) | static_cast<uint64_t>(static_cast<uint32_t>(point.y)) << 32;
+}
+
+// The newest reported position (FUN_14254c760).
+// ref: FUN_14254c760
+uint64_t CursorLatestSample() {
+    FROST_UNIMPLEMENTED();
+    return CursorSystemPosition();
+}
+
+}  // namespace
+
+// The cursor's position in screen coordinates as the engine sees it: where it is held, the
+// last position the messages reported, or the system's.
 // ref: FUN_14254c400
 uint64_t OsCursorGetPosition() {
-    FROST_UNIMPLEMENTED();
-    return 0;
+    if ((s_cursorState & 2) != 0 && (s_cursorState & 0xc0) == 0) {
+        return s_heldPosition;
+    }
+    if (s_sampleCount != 0) {
+        return CursorLatestSample();
+    }
+    return CursorSystemPosition();
 }
 
 // ref: FUN_14254c3d0

@@ -15,6 +15,7 @@
 #include "ui/CSimpleTop.hpp"
 #include "util/Unimplemented.hpp"
 #include <cstring>
+#include <vector>
 
 // The main loop: CommonMain runs Sub140225AB0 while Sub1402225D0 returns true. The condition
 // pumps the OS events into the client and advances the game state; the iteration renders.
@@ -85,11 +86,6 @@ void UiInputGamepadDown(void* input, const void* event);
 void UiInputGamepadUp(void* input, const void* event);
 void UiInputGamepadStick(void* input, const void* event);
 void GxSetMouseCursorActive(uint32_t active);
-void UiInputMouseDown(void* input, const void* event);
-void UiInputMouseMove(void* input, const void* event, int32_t a3);
-void UiInputMouseWheel(void* input, const void* event);
-void UiInputMouseDelta(void* input, const void* event);
-void ClientOnMouseUp(uint32_t button, uint32_t x, uint32_t y, uint32_t a4, uint32_t time, bool a6);
 void UiInputDisplayChanged();
 void Sub14065FB00();
 
@@ -112,6 +108,10 @@ uint32_t s_heldModifiers;           // DAT_142de0e24
 uint32_t s_heldButtons;             // DAT_142de0e20
 uint32_t s_pressedButtons;          // DAT_142de0e30
 uint32_t s_mouseMode;               // DAT_142de0e34
+uint32_t s_mouseCaptureButtons;     // DAT_142de0e28: the buttons a held cursor waits on
+// The mouse-ups that came while the events were paused (DAT_142de0e00), replayed into the UI
+// when they resume (LAB_1402384e0).
+std::vector<MOUSEEVENT> s_deferredMouseUps;
 int32_t* s_loadingScreen;           // DAT_142de0bf8
 
 // What the loading screen is doing: true while it holds the game.
@@ -125,6 +125,57 @@ bool LoadingScreenIsActive() {
     }
     FROST_UNIMPLEMENTED();  // the player's transport check (FUN_14170ff20 and on)
     return false;
+}
+
+// A mouse event at a window position: the position as a fraction of the client rect, y up,
+// with the held buttons and the input mode's flags.
+MOUSEEVENT MouseEventAt(bool alternate, uint32_t button, uint32_t x, uint32_t y, uint32_t time, int32_t wheel) {
+    MOUSEEVENT event = {};
+    event.m_type = static_cast<int32_t>(s_mouseMode);
+    event.m_button = static_cast<int32_t>(button);
+    event.m_unknown08 = static_cast<int32_t>(s_heldButtons);
+    event.m_unknown0C = (s_mouseMode == 1 ? 2 : 0) | (alternate ? 4 : 0);
+    event.m_unknown18 = wheel;
+    event.m_time = static_cast<int32_t>(time);
+    event.m_flags = 0x100;
+    int32_t rect[4] = {};
+    OsGetClientRect(rect);
+    float width = static_cast<float>(rect[3] - rect[1]);
+    event.m_x = static_cast<float>(static_cast<int32_t>(x)) / (width <= 1.0f ? 1.0f : width);
+    float height = static_cast<float>(rect[2] - rect[0]);
+    event.m_y = 1.0f - static_cast<float>(static_cast<int32_t>(y)) / (height <= 1.0f ? 1.0f : height);
+    return event;
+}
+
+// A held cursor lets go when one of its buttons comes up.
+// ref: FUN_14123b3c0
+void OsSetMouseMode(uint32_t mode) {
+    (void)mode;
+    FROST_UNIMPLEMENTED();  // the cursor clipped and hidden (FUN_14254b980) or freed (FUN_14254b8c0)
+}
+
+// A mouse button came up: the held buttons drop it, and the UI gets the event (or keeps it
+// for when the events resume); a held cursor waiting on the button is let go.
+// ref: FUN_140237c80
+void ClientOnMouseUp(uint32_t button, uint32_t x, uint32_t y, uint32_t flags, uint32_t time, bool alternate) {
+    s_heldButtons &= ~button;
+    MOUSEEVENT event = MouseEventAt(alternate, button, x, y, time, 0);
+    event.m_unknown0C |= static_cast<int32_t>(flags);
+    s_pressedButtons &= ~button;
+    if (s_eventsPaused == 0) {
+        if (s_eventTarget != nullptr) {
+            static_cast<CSimpleTop*>(s_eventTarget)->OnMouseUpEvent(&event);
+        }
+    } else {
+        s_deferredMouseUps.push_back(event);
+    }
+    if (s_mouseCaptureButtons != 0 && s_mouseCaptureButtons != (s_mouseCaptureButtons & s_heldButtons)) {
+        s_mouseCaptureButtons = 0;
+        if (s_mouseMode != 0) {
+            OsSetMouseMode(0);
+            s_mouseMode = 0;
+        }
+    }
 }
 
 // An OS event into the client: input goes to the UI's target, and close and quit stop the
@@ -223,18 +274,47 @@ void ClientHandleEvent(void* context, uint32_t id, uint32_t* params, void* param
         case 0x12:
             if (id == 0xb || id == 0x10) {
                 s_heldButtons |= params[0];
+                MOUSEEVENT event = MouseEventAt(id == 0x10, params[0], params[1], params[2], time, 0);
                 s_pressedButtons |= params[0];
-            }
-            if (s_eventsPaused == 0) {
-                if ((id == 0xb || id == 0x10) && params[0] == 1) {
-                    GxSetMouseCursorActive(1);
+                if (s_eventsPaused == 0) {
+                    if (params[0] == 1) {
+                        GxSetMouseCursorActive(1);
+                    }
+                    if (s_eventTarget != nullptr) {
+                        static_cast<CSimpleTop*>(s_eventTarget)->OnMouseDownEvent(&event);
+                    }
                 }
-                FROST_UNIMPLEMENTED();  // mouse events to the UI (normalized by the client rect, FUN_14123ab20)
+            } else if (s_eventsPaused == 0) {
+                bool wheel = id == 0xd || id == 0x12;
+                MOUSEEVENT event = MouseEventAt(id == 0x11 || id == 0x12, 0, params[1], params[2], time,
+                    wheel ? static_cast<int32_t>(params[0]) : 0);
+                if (s_eventTarget != nullptr) {
+                    if (wheel) {
+                        static_cast<CSimpleTop*>(s_eventTarget)->OnMouseWheelEvent(&event);
+                    } else {
+                        static_cast<CSimpleTop*>(s_eventTarget)->OnMouseMoveEvent(&event, true);
+                    }
+                }
             }
             break;
         case 0xe:
-            if (s_eventsPaused == 0 && s_eventTarget != nullptr) {
-                FROST_UNIMPLEMENTED();  // relative mouse motion to the UI (FUN_1405f1860)
+            if (s_eventsPaused == 0) {
+                MOUSEEVENT event = {};
+                event.m_type = static_cast<int32_t>(s_mouseMode);
+                event.m_unknown08 = static_cast<int32_t>(s_heldButtons);
+                event.m_unknown0C = s_mouseMode == 1 ? 2 : 0;
+                if (params[0] != 0) {
+                    std::memcpy(&event.m_x, &params[1], 4);
+                    std::memcpy(&event.m_y, &params[2], 4);
+                } else {
+                    event.m_x = static_cast<float>(static_cast<int32_t>(params[1]));
+                    event.m_y = static_cast<float>(static_cast<int32_t>(params[2]));
+                }
+                event.m_time = static_cast<int32_t>(time);
+                event.m_flags = 0x100;
+                if (s_eventTarget != nullptr) {
+                    static_cast<CSimpleTop*>(s_eventTarget)->OnMouseDeltaEvent(&event);
+                }
             }
             break;
         case 0xf:
@@ -270,8 +350,12 @@ bool ClientProcessEvents() {
     if (CSimpleTop::s_instance != nullptr) {
         CSimpleTop::s_instance->ApplyDeferredInputChanges();
     }
-    // The deferred event handlers (DAT_142de0e00) run here when the events are not paused;
-    // nothing adds to them yet.
+    if (s_eventsPaused == 0 && !s_deferredMouseUps.empty()) {
+        for (MOUSEEVENT& event : s_deferredMouseUps) {
+            static_cast<CSimpleTop*>(s_eventTarget)->OnMouseUpEvent(&event);
+        }
+        s_deferredMouseUps.clear();
+    }
     uint8_t quit = 0;
     OsEventPump(ClientHandleEvent, nullptr, &quit);
     s_eventTarget = nullptr;

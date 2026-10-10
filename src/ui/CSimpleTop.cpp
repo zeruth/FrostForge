@@ -11,7 +11,9 @@
 #include "storm/String.hpp"
 #include "ui/CAnimatableObject.hpp"
 #include "ui/CRenderBatch.hpp"
+#include "framescript/EventCallbacks.hpp"
 #include "ui/CScriptRegion.hpp"
+#include "ui/CSimpleRegion.hpp"
 #include "ui/CSimpleFrame.hpp"
 #include "client/FrameBufferCache.hpp"
 #include "client/GxWindow.hpp"
@@ -687,18 +689,404 @@ bool CSimpleTop::ReleaseButtonCapture(CScriptRegion* region) {
     return true;
 }
 
+// The script events a mouse button going down and up fire, with the button's name.
+// ref: FUN_141174d40
+void UiSignalGlobalMouseDown(const char* button) {
+    const char* args[1] = {button};
+    EventCallbacks_Fire(0x1148, 0xcc7252048b03ae1bull, args);
+}
+
+// ref: FUN_141174d80
+void UiSignalGlobalMouseUp(const char* button) {
+    const char* args[1] = {button};
+    EventCallbacks_Fire(0x1150, 0x74755d73e90641b7ull, args);
+}
+
+// ---- the mouse ------------------------------------------------------------------------------
+
+namespace {
+
+// The clock of the last mouse input (DAT_142e979e0).
+int32_t s_lastMouseTime;
+
+const char s_fociCandidateTag[] = ".?AUFociCandidate@?1??FindBestMouseFoci@CSimpleTop@@AEBA?AV?$embedded_vector@"
+    "PEAVCScriptRegion@@$01V?$allocator@PEAVCScriptRegion@@@blz@@@blz@@W4CSimpleEventType@@AEBUMouseInfo@"
+    "WowClient@@_NPEAV34@@Z@";
+
+// A region the mouse may go to (0x10): whether it lets the regions under it have the mouse
+// too, and whether it was hit on a hyperlink.
+struct FOCICANDIDATE {
+    CScriptRegion* m_region;
+    uint8_t m_propagates;
+    uint8_t m_hyperlink;
+};
+
+// The frame a region draws in: a frame itself, or a texture's or font string's parent.
+bool IsFrame(CScriptRegion* region) {
+    return region->IsObjectType(CSimpleFrame::GetObjectType());
+}
+
+// The nearest ancestor that draws its own batch (FRAME_OWN_BATCH) or into a frame buffer.
+CSimpleFrame* BatchParent(CSimpleFrame* frame) {
+    CSimpleFrame* parent = frame->m_parent;
+    while (parent != nullptr && (parent->m_frameFlags & CSimpleFrame::FRAME_OWN_BATCH) == 0
+        && (parent->m_flags2 >> 0xd & 1) == 0) {
+        parent = parent->m_parent;
+    }
+    return parent;
+}
+
+// How many batch parents are above a frame.
+// ref: FUN_1405ee730
+int32_t BatchDepth(CSimpleFrame* frame) {
+    int32_t depth = 0;
+    for (CSimpleFrame* parent = BatchParent(frame); parent != nullptr; parent = BatchParent(parent)) {
+        depth++;
+    }
+    return depth;
+}
+
+// The first ancestor of a batched frame that is not batched itself.
+CSimpleFrame* UnbatchedAncestor(CSimpleFrame* frame) {
+    CSimpleFrame* parent = frame->m_parent;
+    while (parent != nullptr && parent->IsBatched()) {
+        parent = parent->m_parent;
+    }
+    return parent;
+}
+
+uint64_t RegionKey(CScriptRegion* region) {
+    return static_cast<CSimpleRegion*>(region)->GetOwnDrawOrderKey();
+}
+
+// Two batched frames (and the regions in them, when the region is not the frame) ordered by
+// the batches they share: the deeper one climbs to the other's depth, then both climb to a
+// common batch parent. When one batch holds the other, the regions' own keys decide; otherwise
+// the two batches' frames do. Whether b draws above a.
+// ref: FUN_1405ef2d0
+bool IsBatchedRegionAbove(CSimpleFrame* aFrame, CScriptRegion* aRegion, CSimpleFrame* bFrame, CScriptRegion* bRegion) {
+    int32_t aDepth = BatchDepth(aFrame);
+    int32_t bDepth = BatchDepth(bFrame);
+    CSimpleFrame* a = aFrame;
+    CSimpleFrame* b = bFrame;
+    while (aDepth != bDepth) {
+        if (aDepth <= bDepth) {
+            b = BatchParent(b);
+            bDepth--;
+        } else {
+            a = BatchParent(a);
+            aDepth--;
+        }
+    }
+    CSimpleFrame* aParent = BatchParent(a);
+    CSimpleFrame* bParent = BatchParent(b);
+    while (aParent != bParent) {
+        a = aParent;
+        b = bParent;
+        aParent = BatchParent(a);
+        bParent = BatchParent(b);
+    }
+    if (a == bFrame || b == aFrame) {
+        uint64_t bKey = bRegion == nullptr ? bFrame->GetDrawOrder() : RegionKey(bRegion);
+        uint64_t aKey = aRegion == nullptr ? aFrame->GetDrawOrder() : RegionKey(aRegion);
+        return aKey < bKey;
+    }
+    uint64_t aOrder = a->GetDrawOrder();
+    uint64_t bOrder = b->GetDrawOrder();
+    return aOrder < bOrder;
+}
+
+}  // namespace
+
+// Each side is taken at its frame. Two batched frames are ordered by their batches; when only
+// one is batched it stands at its first unbatched ancestor; otherwise the draw orders (a
+// texture's or font string's own key) decide.
 // ref: FUN_1405ef5b0
 bool CSimpleTop::IsRegionAbove(CScriptRegion* a, CScriptRegion* b) {
-    (void)a;
-    (void)b;
+    bool aIsFrame = IsFrame(a);
+    bool bIsFrame = IsFrame(b);
+    CSimpleFrame* aFrame = aIsFrame ? static_cast<CSimpleFrame*>(a) : a->m_parent;
+    CSimpleFrame* bFrame = bIsFrame ? static_cast<CSimpleFrame*>(b) : b->m_parent;
+    if (aFrame->IsBatched() && bFrame->IsBatched()) {
+        return IsBatchedRegionAbove(aFrame, aIsFrame ? nullptr : a, bFrame, bIsFrame ? nullptr : b);
+    }
+    if (aFrame->IsBatched()) {
+        CSimpleFrame* ancestor = UnbatchedAncestor(aFrame);
+        if (ancestor != nullptr && ancestor != bFrame) {
+            uint64_t bOrder = bFrame->GetDrawOrder();
+            return ancestor->GetDrawOrder() < bOrder;
+        }
+    } else if (bFrame->IsBatched()) {
+        CSimpleFrame* ancestor = UnbatchedAncestor(bFrame);
+        if (ancestor != nullptr && ancestor != aFrame) {
+            uint64_t bOrder = ancestor->GetDrawOrder();
+            return aFrame->GetDrawOrder() < bOrder;
+        }
+    }
+    uint64_t bKey = bIsFrame ? b->GetDrawOrder() : RegionKey(b);
+    uint64_t aKey = aIsFrame ? a->GetDrawOrder() : RegionKey(a);
+    return aKey < bKey;
+}
+
+// The dragged frame follows the mouse by what it moved since the last step.
+// ref: FUN_1405efb80
+void CSimpleTop::UpdateMouseFocus(MOUSEEVENT* event) {
+    float dy = event->m_y - this->m_dragY;
+    float dx = event->m_x - this->m_dragX;
+    if (dx != 0.0f || dy != 0.0f) {
+        // FUN_1406155a0
+        this->m_dragFrame->SizeByDrag(this, dx, dy, this->m_dragCorner);
+        this->m_dragX = dx + this->m_dragX;
+        this->m_dragY = dy + this->m_dragY;
+    }
+}
+
+// The regions registered for `type` under the mouse, topmost first: each offers its target
+// (a child of a scroll frame, a hyperlink), which goes in above the first candidate it draws
+// above, dropping those below unless it lets the mouse through; one under a candidate that
+// keeps the mouse is left out. `entered` gets the ones hit on a hyperlink.
+// ref: FUN_1405ee440
+void CSimpleTop::FindBestMouseFoci(blz::embedded_vector<CScriptRegion*, 2, s_regionVectorTag>* out, int32_t type,
+    MOUSEEVENT* event, bool force, blz::embedded_vector<CScriptRegion*, 2, s_regionVectorTag>* entered) {
+    if (entered != nullptr) {
+        entered->clear();
+    }
+    blz::embedded_vector<FOCICANDIDATE, 2, s_fociCandidateTag> candidates;
+    MOUSEEVENT copy = *event;
+    this->m_dispatchDepth++;
+    blz::vector<CScriptRegion*, s_regionVectorTag>& regions = this->m_inputRegions[type];
+    for (uint64_t i = 0; i < regions.size(); i++) {
+        CScriptRegion* region = regions[i];
+        if (region == nullptr) {
+            continue;
+        }
+        // FUN_1405ed030
+        bool hyperlink = false;
+        CScriptRegion* target = region->GetMouseTarget(type, &copy, &hyperlink, force);
+        if (target == nullptr) {
+            continue;
+        }
+        FOCICANDIDATE candidate;
+        candidate.m_region = target;
+        candidate.m_propagates = (static_cast<FrameScript_Object*>(target)->m_flags & 0x100) != 0;
+        candidate.m_hyperlink = hyperlink;
+        if (candidates.size() == 0) {
+            candidates.push_back(candidate);
+            continue;
+        }
+        bool placed = false;
+        for (uint64_t j = 0; j < candidates.size(); j++) {
+            if (!this->IsRegionAbove(candidates[j].m_region, target)) {
+                continue;
+            }
+            if (!candidate.m_propagates) {
+                candidates.resize(j);
+            }
+            // FUN_1405f49b0: inserted before the one it draws above
+            candidates.push_back(candidate);
+            for (uint64_t k = candidates.size() - 1; k > j; k--) {
+                candidates[k] = candidates[k - 1];
+            }
+            candidates[j] = candidate;
+            placed = true;
+            break;
+        }
+        if (placed || !candidates.back().m_propagates) {
+            continue;
+        }
+        candidates.push_back(candidate);
+    }
+    this->m_dispatchDepth--;
+    out->clear();
+    for (uint64_t i = 0; i < candidates.size(); i++) {
+        out->push_back(candidates[i].m_region);
+        if (entered != nullptr && candidates[i].m_hyperlink) {
+            entered->push_back(candidates[i].m_region);
+        }
+    }
+}
+
+namespace {
+
+// The regions under the mouse for `type` replace `list`: those no longer under it leave, the
+// ones that came under it (or were hit on a hyperlink again) enter.
+// ref: FUN_1405ed600
+template <class Leave, class Enter>
+void UpdateMouseRegions(CSimpleTop* top, MOUSEEVENT* event, int32_t type,
+    blz::embedded_vector<CScriptRegion*, 2, s_regionVectorTag>* list, Leave leave, Enter enter) {
+    // FUN_1405ebd60
+    blz::embedded_vector<CScriptRegion*, 2, s_regionVectorTag> previous;
+    previous.assign_from(*list);
+    blz::embedded_vector<CScriptRegion*, 2, s_regionVectorTag> entered;
+    blz::embedded_vector<CScriptRegion*, 2, s_regionVectorTag> found;
+    top->FindBestMouseFoci(&found, type, event, true, &entered);
+    // FUN_1405ecca0
+    list->assign_from(found);
+    auto contains = [](blz::vector<CScriptRegion*, s_regionVectorTag>& regions, CScriptRegion* region) {
+        for (uint64_t i = 0; i < regions.size(); i++) {
+            if (regions[i] == region) {
+                return true;
+            }
+        }
+        return false;
+    };
+    for (uint64_t i = 0; i < previous.size(); i++) {
+        if (!contains(*list, previous[i])) {
+            leave(previous[i]);
+        }
+    }
+    for (uint64_t i = 0; i < entered.size(); i++) {
+        leave(entered[i]);
+    }
+    for (uint64_t i = 0; i < list->size(); i++) {
+        CScriptRegion* region = (*list)[i];
+        if (contains(entered, region) || !contains(previous, region)) {
+            enter(region);
+        }
+    }
+}
+
+// Whether the gamepad drives the cursor (FUN_141524780 on DAT_142d082d0). The gamepad is not
+// ported, so it never does.
+// ref: FUN_141524780
+bool GamePadCursorActive() {
     FROST_UNIMPLEMENTED();
     return false;
 }
 
-// ref: FUN_1405efb80
-void CSimpleTop::UpdateMouseFocus(MOUSEEVENT* event) {
-    (void)event;
-    FROST_UNIMPLEMENTED();
+}  // namespace
+
+// A mouse button went down: the regions the button already holds get it, or else those under
+// the mouse that take the button (found afresh when one of them keeps the mouse), each through
+// OnMouseDown.
+// ref: FUN_1405f12f0
+void CSimpleTop::OnMouseDownEvent(MOUSEEVENT* event) {
+    uint8_t phase = this->m_inputPhase;
+    this->m_inputPhase = 2;
+    auto hook = reinterpret_cast<bool (*)(MOUSEEVENT*, bool)>(this->m_mouseDownHook);
+    this->m_mouseEvent = *event;
+    this->m_mouseEvent.m_x = g_coordinateSpace.m_diagonalWidth * event->m_x;
+    this->m_mouseEvent.m_y = event->m_y * g_coordinateSpace.m_diagonalHeight;
+    s_lastMouseTime = this->m_mouseEvent.m_time;
+    UiSignalGlobalMouseDown(MouseButtonToString(event->m_button));
+    blz::vector<CScriptRegion*, s_regionVectorTag>* regions = ButtonRegions(&this->m_buttonFocus, event->m_button);
+    if (hook != nullptr && regions->size() == 0 && hook(&this->m_mouseEvent, true)) {
+        this->m_inputPhase = phase;
+        return;
+    }
+    if (regions->size() == 0) {
+        bool keeps = false;
+        for (uint64_t i = 0; i < this->m_mouseOver.size(); i++) {
+            CScriptRegion* region = this->m_mouseOver[i];
+            if ((region->m_passThroughButtons & event->m_button) != 0 && (static_cast<FrameScript_Object*>(region)->m_flags & 0x100) == 0) {
+                keeps = true;
+                break;
+            }
+        }
+        if (keeps) {
+            blz::embedded_vector<CScriptRegion*, 2, s_regionVectorTag> found;
+            this->FindBestMouseFoci(&found, INPUT_EVENT_CLICK, &this->m_mouseEvent, false, nullptr);
+            // FUN_1405f4590
+            regions->assign_from(found);
+        } else {
+            regions->assign_from(this->m_mouseOver);
+        }
+    }
+    for (uint64_t i = 0; i < regions->size(); i++) {
+        CScriptRegion* region = (*regions)[i];
+        if ((region->m_passThroughButtons & event->m_button) != 0) {
+            continue;
+        }
+        this->m_inMouseScript = 1;
+        region->OnMouseDown(&this->m_mouseEvent, nullptr);
+        this->m_inMouseScript = 0;
+    }
+    this->m_inputPhase = phase;
+}
+
+// A mouse button came up: a move or size drag ends; the regions the button went down on get
+// OnMouseUp, and the button lets them go.
+// ref: FUN_1405f1910
+void CSimpleTop::OnMouseUpEvent(MOUSEEVENT* event) {
+    uint8_t phase = this->m_inputPhase;
+    this->m_inputPhase = 2;
+    MOUSEEVENT copy = *event;
+    auto hook = reinterpret_cast<bool (*)(MOUSEEVENT*, bool)>(this->m_mouseDownHook);
+    copy.m_x = g_coordinateSpace.m_diagonalWidth * event->m_x;
+    copy.m_y = event->m_y * g_coordinateSpace.m_diagonalHeight;
+    s_lastMouseTime = copy.m_time;
+    if (static_cast<uint32_t>(this->m_dragType - 1) < 2) {
+        if (this->m_dragFrame != nullptr) {
+            this->m_dragFrame->SnapToNearestAnchor(this);
+        }
+        this->m_dragFrame = nullptr;
+        this->m_dragType = 0;
+        this->m_inputPhase = phase;
+    }
+    blz::vector<CScriptRegion*, s_regionVectorTag>* regions = ButtonRegions(&this->m_buttonFocus, event->m_button);
+    if (hook != nullptr && regions->size() == 0 && hook(&copy, false)) {
+        this->m_inputPhase = phase;
+        return;
+    }
+    for (uint64_t i = 0; i < regions->size(); i++) {
+        CScriptRegion* region = (*regions)[i];
+        this->m_inMouseScript = 1;
+        region->OnMouseUp(&copy, nullptr);
+        this->m_inMouseScript = 0;
+    }
+    regions->clear();
+    UiSignalGlobalMouseUp(MouseButtonToString(event->m_button));
+    this->m_inputPhase = phase;
+}
+
+// The wheel turned: the topmost region with a wheel handler under the mouse gets it. Returns
+// the handler's answer, or true when no region took it.
+// ref: FUN_1405f1ab0
+bool CSimpleTop::OnMouseWheelEvent(MOUSEEVENT* event) {
+    uint8_t phase = this->m_inputPhase;
+    this->m_inputPhase = 2;
+    MOUSEEVENT copy = *event;
+    copy.m_x = g_coordinateSpace.m_diagonalWidth * event->m_x;
+    copy.m_y = event->m_y * g_coordinateSpace.m_diagonalHeight;
+    s_lastMouseTime = copy.m_time;
+    float point[2] = {this->m_mouseEvent.m_x, this->m_mouseEvent.m_y};
+    CScriptRegion* best = nullptr;
+    this->m_dispatchDepth++;
+    blz::vector<CScriptRegion*, s_regionVectorTag>& regions = this->m_inputRegions[INPUT_EVENT_WHEEL];
+    for (uint64_t i = 0; i < regions.size(); i++) {
+        CScriptRegion* region = regions[i];
+        if (region->HasWheelHandler() && region->IsMouseOver(point)
+            && (best == nullptr || this->IsRegionAbove(best, region))) {
+            best = region;
+        }
+    }
+    this->m_dispatchDepth--;
+    if (best == nullptr) {
+        this->m_inputPhase = phase;
+        return true;
+    }
+    bool result = best->OnMouseWheel(&copy);
+    this->m_inputPhase = phase;
+    return result;
+}
+
+// Relative mouse motion (the cursor held): only the move hook sees it. False when the hook
+// took it.
+// ref: FUN_1405f1860
+bool CSimpleTop::OnMouseDeltaEvent(MOUSEEVENT* event) {
+    uint8_t phase = this->m_inputPhase;
+    this->m_inputPhase = 2;
+    MOUSEEVENT copy = *event;
+    auto hook = reinterpret_cast<bool (*)(MOUSEEVENT*, bool)>(this->m_mouseMoveHook);
+    copy.m_x = g_coordinateSpace.m_diagonalWidth * event->m_x;
+    copy.m_y = event->m_y * g_coordinateSpace.m_diagonalHeight;
+    s_lastMouseTime = copy.m_time;
+    if (hook != nullptr && hook(&copy, true)) {
+        this->m_inputPhase = phase;
+        return false;
+    }
+    this->m_inputPhase = phase;
+    return true;
 }
 
 // ---- the update ------------------------------------------------------------------------------
@@ -921,14 +1309,69 @@ void CSimpleTop::OnUpdate(float elapsed) {
     blz::chained_destroy<GROUPNODE>(&groups, s_groupNodeTag, s_groupBucketTag);
 }
 
-// The mouse moved (or the focus must be recomputed with `simulated` set): the drag follows it,
-// or the regions under it get OnEnter and OnLeave. Returns whether the UI took the event.
+// The mouse moved (`real`; or the focus must be recomputed): a drag follows it; otherwise the
+// regions holding a button and those under the mouse get OnMouseMove, and the regions under
+// it get their enters and leaves. True when nothing of the UI is under the mouse.
 // ref: FUN_1405f1530
-bool CSimpleTop::OnMouseMoveEvent(MOUSEEVENT* event, bool simulated) {
-    (void)event;
-    (void)simulated;
-    FROST_UNIMPLEMENTED();
-    return false;
+bool CSimpleTop::OnMouseMoveEvent(MOUSEEVENT* event, bool real) {
+    uint8_t phase = this->m_inputPhase;
+    this->m_inputPhase = 2;
+    auto hook = reinterpret_cast<bool (*)(MOUSEEVENT*, bool)>(this->m_mouseMoveHook);
+    MOUSEEVENT copy = *event;
+    copy.m_flags = (copy.m_flags & ~0xff00) | (real ? 0x100 : 0);
+    if (real) {
+        copy.m_x = g_coordinateSpace.m_diagonalWidth * event->m_x;
+        copy.m_y = event->m_y * g_coordinateSpace.m_diagonalHeight;
+        if (copy.m_x == this->m_mouseEvent.m_x && copy.m_y == this->m_mouseEvent.m_y) {
+            this->m_inputPhase = phase;
+            return false;
+        }
+        s_lastMouseTime = copy.m_time;
+    } else if (GamePadCursorActive()) {
+        // FUN_141523cf0: the gamepad's cursor position, not reached while GamePadCursorActive
+        // is false
+    }
+    this->m_mouseEvent = copy;
+    if (this->m_dragFrame != nullptr) {
+        this->UpdateMouseFocus(&copy);
+        this->m_inputPhase = phase;
+        return false;
+    }
+    if (hook != nullptr && hook(&copy, false)) {
+        this->m_inputPhase = phase;
+        return false;
+    }
+    // LAB_1405f4ba0
+    ForEachButton(&this->m_buttonFocus, [&](int32_t, blz::vector<CScriptRegion*, s_regionVectorTag>* regions) {
+        for (uint64_t i = 0; i < regions->size(); i++) {
+            (*regions)[i]->OnMouseMove(&copy);
+        }
+    });
+    if (this->m_mouseFocus != nullptr) {
+        this->m_inputPhase = phase;
+        return true;
+    }
+    // LAB_1405f4ca0, LAB_1405f4cb0
+    UpdateMouseRegions(this, &copy, INPUT_EVENT_CLICK, &this->m_mouseOver,
+        [real](CScriptRegion* region) { region->OnMouseFocusLost(real, false); },
+        [real](CScriptRegion* region) { region->OnMouseOverChanged(real); });
+    if (this->m_motionTracking != 0) {
+        this->m_mouseMotion.clear();
+    } else {
+        // LAB_1405f4cc0, LAB_1405f4cd0
+        UpdateMouseRegions(this, &copy, INPUT_EVENT_MOTION, &this->m_mouseMotion,
+            [real](CScriptRegion* region) { region->OnLeave(real); },
+            [real](CScriptRegion* region) { region->OnEnter(real); });
+    }
+    for (uint64_t i = 0; i < this->m_mouseMotion.size(); i++) {
+        CScriptRegion* region = this->m_mouseMotion[i];
+        if (!this->IsInButtonCapture(region)) {
+            region->OnMouseMove(&copy);
+        }
+    }
+    bool result = this->m_mouseOver.size() == 0 && this->m_mouseMotion.size() == 0;
+    this->m_inputPhase = phase;
+    return result;
 }
 
 // ---- DeferredScriptBuffer -------------------------------------------------------------------

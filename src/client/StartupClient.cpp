@@ -739,46 +739,6 @@ void GxSetMouseCursorActive(uint32_t active) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_1405f12f0
-void UiInputMouseDown(void* input, const void* event) {
-    (void)input;
-    (void)event;
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_1405f1530
-void UiInputMouseMove(void* input, const void* event, int32_t a3) {
-    (void)input;
-    (void)event;
-    (void)a3;
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_1405f1ab0
-void UiInputMouseWheel(void* input, const void* event) {
-    (void)input;
-    (void)event;
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_1405f1860
-void UiInputMouseDelta(void* input, const void* event) {
-    (void)input;
-    (void)event;
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_140237c80
-void ClientOnMouseUp(uint32_t button, uint32_t x, uint32_t y, uint32_t a4, uint32_t time, bool a6) {
-    (void)button;
-    (void)x;
-    (void)y;
-    (void)a4;
-    (void)time;
-    (void)a6;
-    FROST_UNIMPLEMENTED();
-}
-
 // ref: FUN_1405eff80
 void UiInputDisplayChanged() {
     FROST_UNIMPLEMENTED();
