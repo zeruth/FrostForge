@@ -109,3 +109,15 @@ float WorldClampFarClip3(float farClip) {
 float WorldGetNearClip() {
     return NEAR_CLIP;
 }
+
+namespace {
+
+// DAT_142d00c2c, set with the player's state (FUN_141354ff0).
+bool s_playerAlive = true;
+
+}  // namespace
+
+// ref: FUN_1413659f0
+bool WorldPlayerAlive() {
+    return s_playerAlive;
+}

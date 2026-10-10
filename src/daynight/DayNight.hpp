@@ -216,6 +216,13 @@ struct DNCLOUDS {
     // uploaded; a finished pass flips the texture drawn from.
     // ref: FUN_142452f30
     void Upload(DNScene* scene);
+    // The next rows of the cloud grid: four octaves of value noise per cell, its density
+    // through the falloff and its colour lit from the sun (or moon) side; a full pass when the
+    // grid is marked.
+    // ref: FUN_142452140
+    void Generate(DNScene* scene);
+    // ref: FUN_142451e20
+    void MarkDirty();
 };
 static_assert(offsetof(DNCLOUDS, m_textures) == 0x40, "DNCLOUDS layout");
 static_assert(offsetof(DNCLOUDS, m_density) == 0x70, "DNCLOUDS layout");
@@ -352,6 +359,9 @@ struct DNColorGrading {
 
     // ref: FUN_14244fdb0
     void CreateTargets();
+    // A light's grading blocks rendered into the grading target `index` (0 or 1).
+    // ref: FUN_142450110
+    void Blend(void* target, uint8_t* block, int32_t index);
 };
 static_assert(sizeof(DNColorGrading) == 0x128, "DNColorGrading is 0x128 bytes");
 
@@ -454,6 +464,27 @@ struct DNScene {
     // defaults when the map has no light).
     // ref: FUN_14245a940
     void StoreLightColors();
+    // The fogs the scene draws with: one per CurrentFog in the list and the eight fixed ones,
+    // eased toward the far clip, blended toward the water's while surfacing, and scaled.
+    // ref: FUN_14245b980
+    void BuildFogs();
+    // The sun and moon positions round the camera, their glare strengths, the moon's phase and
+    // the twilight factor, from the time of day.
+    // ref: FUN_14245aca0
+    void ComputeBodies();
+    // The sun's direction (and the light state's copy), and the sun in view space at +0xa0.
+    // ref: FUN_14245a6a0
+    void ComputeSunDirection(const float* viewMatrix);
+    // The grading blocks faded by the water (+0xa68) and blended with the override's (+0x618),
+    // then rendered when asked.
+    // ref: FUN_14245b7f0
+    void ApplyColorGrading(void* env, bool fade, bool render);
+    // The frame's light: the clocks, the area overrides' fades, the clouds' dirt, the camera's
+    // heading, the lights and fogs, the bodies, the sun, the clouds and the sky model, the
+    // fogs and the colour grading.
+    // ref: FUN_14245b520
+    void Compute(int32_t timeMs, float elapsed, float timeSeconds, bool alive, void* env, const float* viewMatrix,
+        bool colorGrading, bool zoneLightsSingly);
 };
 static_assert(offsetof(DNScene, m_loaded) == 0x1600, "DNScene layout");
 static_assert(offsetof(DNScene, m_clouds) == 0x1620, "DNScene layout");
@@ -500,6 +531,10 @@ void DayNightSetView(DAYNIGHT* dayNight, CWorldView* view, const float* position
 // and first the one without (or 1 when there is none).
 // ref: FUN_142443dc0
 void DayNightUpdate(DAYNIGHT* dayNight, const float* position);
+// The frame's light through the handle (DNScene::Compute).
+// ref: FUN_142443d80
+void DayNightCompute(DAYNIGHT* dayNight, int32_t timeMs, float elapsed, float timeSeconds, bool alive, void* env,
+    const float* viewMatrix, bool colorGrading, bool zoneLightsSingly);
 // ref: FUN_142443db0
 void DayNightPrepareFrame(DAYNIGHT* dayNight, void* env, bool colorGrading);
 

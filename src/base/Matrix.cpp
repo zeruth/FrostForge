@@ -992,3 +992,24 @@ void ColorLerpByte(uint32_t* color, uint32_t alpha, uint32_t target) {
     }
     *color = result;
 }
+
+// ref: FUN_141343dd0
+bool QuadraticRoots(float a, float b, float c, float* low, float* high) {
+    float discriminant = a * 4.0f * c;      // DAT_1426c975c
+    if (b * b <= discriminant) {
+        return false;
+    }
+    float root = std::sqrt(b * b - discriminant);
+    float q = 0.0f < b ? root + b : b - root;
+    float scale = 1.0f / (q * -0.5f * a);   // DAT_1426c715c
+    float first = a * c * scale;
+    float second = q * q * (scale * 0.25f);
+    if (second < first) {
+        *low = second;
+        *high = first;
+    } else {
+        *high = second;
+        *low = first;
+    }
+    return true;
+}

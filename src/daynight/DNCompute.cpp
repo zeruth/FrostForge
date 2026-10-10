@@ -6,7 +6,9 @@
 #include "db/WowDB2Lookup.hpp"
 #include "model2/M2Scene.hpp"
 #include "storm/Memory.hpp"
+#include "ui/FrameTime.hpp"
 #include "util/Unimplemented.hpp"
+#include "world/WorldClip.hpp"
 #include "world/WorldScene.hpp"
 #include <algorithm>
 #include <cmath>
@@ -1282,46 +1284,45 @@ void AddSkybox(DNScene* scene, uint32_t id, uint32_t* slots, float* clear, float
 void ApplyTransition(DNScene* scene, DNCURRENTLIGHT* light, DNCURRENTFOG* fog, DNFOGVECTOR* fogs,
     DNCURRENTLIGHT* lightB, DNCURRENTFOG* fogB) {
     int32_t target = DNField<int32_t>(scene, 0x70);
+    int32_t current = DNField<int32_t>(scene, 0x74);
     DNField<uint64_t>(scene, 0x80) = 0;
     DNField<uint64_t>(scene, 0x88) = 0;
     DNField<uint8_t>(scene, 0x79) = 0;
-    int32_t elapsed = DNField<int32_t>(scene, 0x6c);
     int32_t id = target;
-    float blend;
-    bool reset = true;
-    if (target == 0) {
-        int32_t fadeOut = DNField<int32_t>(scene, 0x64);
-        if (fadeOut <= elapsed
-            || (blend = 1.0f - static_cast<float>(elapsed) / static_cast<float>(fadeOut),
-                id = DNField<int32_t>(scene, 0x74), blend <= 0.0f)) {
-            DNField<int32_t>(scene, 0x74) = 0;
-            id = 0;
-            blend = 0.0f;
-        } else {
-            reset = false;
-        }
-    } else {
-        int32_t fadeIn = DNField<int32_t>(scene, 0x60);
-        blend = 1.0f;
-        bool done = true;
-        if (elapsed < fadeIn) {
-            blend = static_cast<float>(elapsed) / static_cast<float>(fadeIn);
-            if (blend < 1.0f) {
-                done = false;
-                reset = false;
+    float blend = 1.0f;
+    if (current != target) {
+        int32_t elapsed = DNField<int32_t>(scene, 0x6c);
+        bool settled = true;
+        if (target == 0) {
+            int32_t fadeOut = DNField<int32_t>(scene, 0x64);
+            if (elapsed < fadeOut) {
+                id = current;
+                blend = 1.0f - static_cast<float>(elapsed) / static_cast<float>(fadeOut);
+                settled = blend <= 0.0f;
+            }
+            if (settled) {
+                blend = 0.0f;
+                DNField<int32_t>(scene, 0x74) = 0;
+                id = 0;
             }
         } else {
-            DNField<uint8_t>(scene, 0x90) = DNField<uint8_t>(scene, 0x91);
+            int32_t fadeIn = DNField<int32_t>(scene, 0x60);
+            if (elapsed < fadeIn) {
+                blend = static_cast<float>(elapsed) / static_cast<float>(fadeIn);
+                settled = 1.0f <= blend;
+            } else {
+                DNField<uint8_t>(scene, 0x90) = DNField<uint8_t>(scene, 0x91);
+            }
+            if (settled) {
+                blend = 1.0f;
+                DNField<int32_t>(scene, 0x74) = target;
+            }
         }
-        if (done) {
-            DNField<int32_t>(scene, 0x74) = target;
-            blend = 1.0f;
+        if (settled) {
+            DNField<int32_t>(scene, 0x6c) = 0;
         }
+        DNField<float>(scene, 0x68) = blend;
     }
-    if (reset) {
-        DNField<int32_t>(scene, 0x6c) = 0;
-    }
-    DNField<float>(scene, 0x68) = blend;
     if (id == 0) {
         return;
     }
@@ -1715,6 +1716,371 @@ void DNScene::StoreLightColors() {
     }
 }
 
+namespace {
+
+const char s_fogInfoTag[] = ".?AUFogInfo@@";
+typedef blz::vector<MODELFOG, s_fogInfoTag> FOGINFOVECTOR;
+
+constexpr float FOG_FAR_FLOOR = 277.5f;     // DAT_142979c24
+constexpr float FOG_NEAR_MAX = 3000.0f;     // DAT_1427f9054
+constexpr float FOG_DENSITY_SCALE = 0.0005f;    // DAT_142722fec, DAT_142979c30
+constexpr float WATER_FOG_MINIMUM = 30.0f;  // DAT_142724e98
+
+// A scene fog's word as a float or a colour.
+float& FogF(DNScene* scene, size_t fog, int32_t word) {
+    return DNField<float>(scene, fog + word * 4);
+}
+
+uint32_t& FogW(DNScene* scene, size_t fog, int32_t word) {
+    return DNField<uint32_t>(scene, fog + word * 4);
+}
+
+// A scene fog from a CurrentFog and the light's fog colours (its words 0xa..0xe and 0x2d).
+void FogFromCurrent(DNScene* scene, uint32_t* fog, const DNCURRENTFOG* current, const DNCURRENTLIGHT* light,
+    float fogFar, float nearLimit) {
+    auto f = reinterpret_cast<float*>(fog);
+    auto c = current->m_values;
+    auto words = reinterpret_cast<const uint32_t*>(light->m_data);
+    f[2] = std::min(c[0], fogFar);
+    f[1] = std::min(c[0], nearLimit) * c[1];
+    f[4] = c[2];
+    f[0x26] = c[3];
+    fog[0] = words[0xa];
+    fog[0xc] = words[0xb];
+    fog[0xe] = words[0xd];
+    fog[0xd] = words[0xc];
+    fog[0x25] = words[0xe];
+    std::memcpy(&f[5], &c[4], 6 * 4);
+    std::memcpy(&f[0x17], &c[10], 12 * 4);
+    f[0x12] = c[0x18];
+    fog[0xb] = words[0x2d];
+    f[0xf] = c[0x16];
+    std::memcpy(&f[0x13], &DNField<float>(scene, 0xa0), 12);
+    f[0x27] = c[0x19];
+}
+
+// A scene fog from the water's fog parameters (end, near scale, colour).
+// ref: FUN_1424593a0
+void FogFromWater(DNScene* scene, uint32_t* fog, const float* water) {
+    auto f = reinterpret_cast<float*>(fog);
+    float end = std::min(DNField<float>(scene, 0x44), water[0]);
+    float start = end * water[1];
+    f[2] = end;
+    f[1] = start;
+    uint32_t color;
+    std::memcpy(&color, &water[2], 4);
+    fog[0] = color;
+    f[4] = 1.0f;
+    fog[0xe] = color;
+    fog[0xc] = color;
+    fog[0xd] = color;
+    fog[0x25] = color;
+    if (end < WATER_FOG_MINIMUM) {
+        f[2] = WATER_FOG_MINIMUM;
+        end = WATER_FOG_MINIMUM;
+    }
+    float density = 1.0f;
+    if (DNField<uint8_t>(scene, 4) == 0) {
+        density = FogDensity(scene, start, end);
+        f[4] = density;
+        f[2] = DNField<float>(scene, 0x44);
+        if (f[1] < 0.0f) {
+            f[1] = 0.0f;
+        }
+    }
+    f[7] = density;
+    f[0x26] = 0.0f;
+    f[6] = 1.0f;
+    f[8] = 0.0f;
+    f[5] = -10000.0f;
+    f[0x12] = 1.0f;
+    f[0xf] = 10000.0f;
+}
+
+}  // namespace
+
+// ref: FUN_14245b980
+void DNScene::BuildFogs() {
+    float farClip = DNField<float>(this, 0x44);
+    float smooth = std::min(farClip, this->m_1c3c);
+    float target = std::min(farClip, this->m_1c40);
+    this->m_1c3c = smooth;
+    this->m_1c40 = target;
+    if (smooth != target) {
+        float dt = FrameTime_GetElapsedSeconds();
+        target = this->m_1c40;
+        smooth = this->m_1c3c;
+        if (target < smooth) {
+            smooth -= dt * 2000.0f;                 // DAT_142738438
+            this->m_1c3c = smooth;
+            if (smooth < target) {
+                this->m_1c3c = target;
+                smooth = target;
+            }
+        } else {
+            smooth = dt * 1000.0f + smooth;         // DAT_14261b418
+            this->m_1c3c = smooth;
+            if (target < smooth) {
+                this->m_1c3c = target;
+                smooth = target;
+            }
+        }
+    }
+    farClip = DNField<float>(this, 0x44);
+    float nearLimit = std::min(farClip, FOG_NEAR_MAX);
+    this->m_1c40 = farClip;
+    float fogFar = std::min(std::max(smooth, FOG_FAR_FLOOR), farClip);
+    auto infos = reinterpret_cast<FOGINFOVECTOR*>(this->m_light.m_data + 0x198);
+    auto currents = reinterpret_cast<DNFOGVECTOR*>(this->m_light.m_data + 0x1450);
+    auto count = static_cast<uint32_t>(currents->m_size);
+    infos->resize(count);
+    float glare = DNField<float>(this, 0x17e8) * DNField<float>(this, 0xb20) * DNField<float>(this, 0xb28);
+    DNField<float>(this, 0x138) = glare;
+    for (uint32_t i = 0; i < count; i++) {
+        infos->m_data[i].Set(0x10, DNField<float>(this, 0x17e8) * DNField<float>(this, 0xb20) * DNField<float>(this, 0xb28));
+    }
+    auto lightA = reinterpret_cast<DNCURRENTLIGHT*>(this->m_light.m_data + 0xa70);
+    auto lightB = reinterpret_cast<DNCURRENTLIGHT*>(this->m_light.m_data + 0xf60);
+    auto fogA = reinterpret_cast<DNCURRENTFOG*>(this->m_light.m_data + 0x1468);
+    auto fogB = reinterpret_cast<DNCURRENTFOG*>(this->m_light.m_data + 0x14d0);
+    if (this->m_1bf8 == 0) {
+        for (uint32_t i = 0; i < count; i++) {
+            FogFromCurrent(this, infos->m_data[i].m_words, &currents->m_data[i], lightA, fogFar, nearLimit);
+            infos->m_data[i].m_words[0x16] = i + 1;
+        }
+        FogFromCurrent(this, &FogW(this, 0xf8, 0), fogA, lightA, fogFar, nearLimit);
+        FogFromCurrent(this, &FogW(this, 0x250, 0), fogB, lightB, fogFar, nearLimit);
+    } else {
+        // The world's fog override (+0x1bfc..+0x1c38).
+        FogF(this, 0xf8, 1) = DNField<float>(this, 0x1bfc);
+        float end = DNField<float>(this, 0x1c00);
+        float density = DNField<float>(this, 0x1c08);
+        FogF(this, 0xf8, 2) = std::min(end, fogFar);
+        FogW(this, 0xf8, 5) = DNField<uint32_t>(this, 0x1c14);
+        FogW(this, 0xf8, 6) = DNField<uint32_t>(this, 0x1c18);
+        FogW(this, 0xf8, 8) = DNField<uint32_t>(this, 0x1484);
+        FogW(this, 0xf8, 9) = DNField<uint32_t>(this, 0x1488);
+        FogW(this, 0xf8, 10) = DNField<uint32_t>(this, 0x148c);
+        uint32_t color = DNField<uint32_t>(this, 0x1c0c);
+        uint32_t secondary = DNField<uint32_t>(this, 0x1c10);
+        FogW(this, 0xf8, 0xc) = (secondary & 0xffffff) != 0 ? secondary : color;
+        FogF(this, 0xf8, 4) = density;
+        FogW(this, 0xf8, 0x26) = 0;
+        FogW(this, 0xf8, 0) = color;
+        std::memcpy(&FogW(this, 0xf8, 0x17), &DNField<uint32_t>(this, 0x1c1c), 0x10);
+        uint32_t third = DNField<uint32_t>(this, 0x1c38);
+        if ((third & 0xffffff) == 0) {
+            third = DNField<uint32_t>(this, 0xaa0);
+        }
+        FogW(this, 0xf8, 0xd) = third;
+        std::memcpy(&FogW(this, 0xf8, 0x13), &DNField<uint32_t>(this, 0xa0), 12);
+        FogW(this, 0xf8, 0xb) = DNField<uint32_t>(this, 0xb24);
+        if (DNField<uint8_t>(this, 0x1c2c) != 0) {
+            density = DNField<float>(this, 0x1c30);
+            color = DNField<uint32_t>(this, 0x1c34);
+        }
+        FogW(this, 0xf8, 0xe) = color;
+        FogF(this, 0xf8, 7) = density;
+        if (DNField<float>(this, 0x1c04) != 0.0f) {
+            end = DNField<float>(this, 0x1c04);
+        }
+        FogF(this, 0xf8, 0xf) = end;
+        uint32_t index = FogW(this, 0x250, 0x16);
+        std::memcpy(&FogW(this, 0x250, 0), &FogW(this, 0xf8, 0), 0xa0);
+        FogW(this, 0x250, 0x16) = index;
+    }
+
+    // Under water: the water's fog (+0xa4c, +0xa58), unless the liquid opts out.
+    const uint8_t* liquid = nullptr;
+    bool water = false;
+    if (DNField<uint8_t>(this, 0xa30) != 0) {
+        bool useWater = false;
+        int32_t liquidId = DNField<int32_t>(this, 0x38);
+        if (liquidId == 0) {
+            useWater = true;
+        } else {
+            bool local = false;
+            liquid = static_cast<const uint8_t*>(g_liquidTypeDB.GetRecord(static_cast<uint32_t>(liquidId), false, &local));
+            if (liquid != nullptr) {
+                water = true;
+                uint16_t flags = DB2FieldU16(liquid + 0x1c, 2, 0x1c, &g_liquidTypeDB);
+                if ((flags & 0x20) != 0 && (DNField<uint32_t>(this, 0xa34) & 0x100) == 0) {
+                    water = false;
+                }
+                flags = DB2FieldU16(liquid + 0x1c, 2, 0x1c, &g_liquidTypeDB);
+                if (((flags & 0x100) == 0 || (DNField<uint8_t>(this, 0xa34) & 0x10) != 0) && water) {
+                    useWater = true;
+                }
+            }
+        }
+        if (useWater) {
+            FogFromWater(this, &FogW(this, 0x434, 0), &DNField<float>(this, 0xa4c));
+            FogFromWater(this, &FogW(this, 0x4d4, 0), &DNField<float>(this, water ? 0xa58 : 0xa4c));
+            if (DNField<int32_t>(this, 0) == 0x673) {
+                float end = std::min(DNField<float>(this, 0xa4c), 5554.0f);    // DAT_142979c28
+                if (FOG_DENSITY_BASE == FogF(this, 0x434, 4) && 500.0f < end) {   // DAT_14261a9bc
+                    FogF(this, 0x434, 4) = FOG_DENSITY_BASE - (end - 500.0f) * 0.00029673590f;   // DAT_142979c0c
+                }
+            }
+            if (water && liquid != nullptr
+                && (DB2FieldU16(liquid + 0x1c, 2, 0x1c, &g_liquidTypeDB) & 0x40) != 0) {
+                FogW(this, 0x250, 2) = FogW(this, 0x4d4, 2);
+                FogW(this, 0x250, 1) = FogW(this, 0x4d4, 1);
+                FogW(this, 0x250, 4) = FogW(this, 0x4d4, 4);
+                FogW(this, 0x250, 0) = FogW(this, 0x4d4, 0);
+                FogW(this, 0x250, 0x26) = 0;
+            }
+        } else {
+            std::memcpy(&FogW(this, 0x434, 0), &FogW(this, 0xf8, 0), 0xa0);
+            FogW(this, 0x434, 0x16) = 0;
+            std::memcpy(&FogW(this, 0x4d4, 0), &FogW(this, 0x250, 0), 0xa0);
+            FogW(this, 0x4d4, 0x16) = 6;
+        }
+    }
+
+    // The blend toward the water fog while surfacing (+0xa68).
+    float w = DNField<float>(this, 0xa68) * 0.04f;          // DAT_1426d3078
+    float blend = 0.0f;
+    if (0.0f <= w) {
+        blend = std::min(w, 1.0f);
+    }
+    if (DNField<uint8_t>(this, 0x90) != 0 || DNField<uint8_t>(this, 0x91) != 0) {
+        blend *= 1.0f - DNField<float>(this, 0x68);
+    }
+    DNField<float>(this, 0x2f0) = blend;
+    float waterScale = 0.001f;                              // DAT_142618f58
+    if (DNField<uint8_t>(this, 0xa30) != 0 && DNField<uint8_t>(this, 0xa64) != 0) {
+        waterScale = (blend + 1.0f) * FOG_DENSITY_SCALE;
+        auto alpha = static_cast<uint32_t>(static_cast<uint8_t>(static_cast<int32_t>(std::nearbyint(blend * 255.0f))));
+        auto lerpF = [&](size_t dst, size_t a, size_t b, int32_t word) {
+            FogF(this, dst, word) = Lerp(FogF(this, a, word), FogF(this, b, word), blend);
+        };
+        auto lerpC = [&](size_t dst, size_t a, size_t b, int32_t word) {
+            uint32_t color = FogW(this, a, word);
+            ColorLerpByte(&color, alpha, FogW(this, b, word));
+            FogW(this, dst, word) = color;
+        };
+        // 0x2f4 between the surface fog (0xf8) and the water's (0x434).
+        FogW(this, 0x2f4, 0x26) = FogW(this, 0xf8, 0x26);
+        FogW(this, 0x2f4, 9) = FogW(this, 0xf8, 9);
+        FogW(this, 0x2f4, 10) = FogW(this, 0xf8, 10);
+        lerpF(0x2f4, 0xf8, 0x434, 2);
+        lerpF(0x2f4, 0xf8, 0x434, 1);
+        lerpF(0x2f4, 0xf8, 0x434, 4);
+        std::memcpy(&FogW(this, 0x2f4, 0x1b), &FogW(this, 0xf8, 0x1b), 0x20);
+        lerpF(0x2f4, 0xf8, 0x434, 3);
+        lerpC(0x2f4, 0xf8, 0x434, 0);
+        if (-9999.0f <= FogF(this, 0x434, 5)) {                 // DAT_142979c2c
+            FogF(this, 0x2f4, 5) = blend * blend * blend * (FogF(this, 0x434, 5) - FogF(this, 0xf8, 5))
+                + FogF(this, 0xf8, 5);
+            lerpF(0x2f4, 0xf8, 0x434, 7);
+            lerpF(0x2f4, 0xf8, 0x434, 6);
+            lerpF(0x2f4, 0xf8, 0x434, 8);
+            for (int32_t word = 0x17; word <= 0x1a; word++) {
+                lerpF(0x2f4, 0xf8, 0x434, word);
+            }
+        } else {
+            FogF(this, 0x2f4, 5) = FogF(this, 0xf8, 5);
+            FogF(this, 0x2f4, 6) = FogF(this, 0xf8, 6);
+            FogF(this, 0x2f4, 8) = (1.0f - blend) * FogF(this, 0xf8, 8);
+            FogF(this, 0x2f4, 7) = Lerp(FogF(this, 0xf8, 7), FogF(this, 0x434, 4), blend);
+            std::memcpy(&FogW(this, 0x2f4, 0x17), &FogW(this, 0xf8, 0x17), 0x10);
+        }
+        lerpF(0x2f4, 0xf8, 0x434, 0xb);
+        lerpC(0x2f4, 0xf8, 0x434, 0xc);
+        lerpC(0x2f4, 0xf8, 0x434, 0xd);
+        lerpC(0x2f4, 0xf8, 0x434, 0xe);
+        lerpF(0x2f4, 0xf8, 0x434, 0xf);
+        lerpF(0x2f4, 0xf8, 0x434, 0x10);
+        std::memcpy(&FogW(this, 0x2f4, 0x13), &DNField<uint32_t>(this, 0xa0), 12);
+        FogF(this, 0x2f4, 0x12) = Lerp(FogF(this, 0xf8, 0x12), 1.0f, blend);
+        // 0x394 between the second fog (0x250) and the water's (0x4d4).
+        lerpF(0x394, 0x250, 0x4d4, 2);
+        lerpF(0x394, 0x250, 0x4d4, 1);
+        lerpF(0x394, 0x250, 0x4d4, 4);
+        lerpF(0x394, 0x250, 0x4d4, 3);
+        FogW(this, 0x394, 0x26) = FogW(this, 0x250, 0x26);
+        FogW(this, 0x394, 9) = FogW(this, 0x250, 9);
+        FogW(this, 0x394, 10) = FogW(this, 0x250, 10);
+        std::memcpy(&FogW(this, 0x394, 0x1b), &FogW(this, 0x250, 0x1b), 0x20);
+        lerpC(0x394, 0x250, 0x4d4, 0);
+        for (int32_t word = 5; word <= 8; word++) {
+            lerpF(0x394, 0x250, 0x4d4, word);
+        }
+        for (int32_t word = 0x17; word <= 0x1a; word++) {
+            lerpF(0x394, 0x250, 0x4d4, word);
+        }
+        lerpF(0x394, 0x250, 0x4d4, 0xb);
+        lerpC(0x394, 0x250, 0x4d4, 0xc);
+        lerpC(0x394, 0x250, 0x4d4, 0xd);
+        lerpC(0x394, 0x250, 0x4d4, 0xe);
+        lerpF(0x394, 0x250, 0x4d4, 0xf);
+        lerpF(0x394, 0x250, 0x4d4, 0x10);
+        std::memcpy(&FogW(this, 0x394, 0x13), &DNField<uint32_t>(this, 0xa0), 12);
+        FogF(this, 0x394, 0x12) = Lerp(FogF(this, 0x250, 0x12), 1.0f, blend);
+        // The blends back into the fogs the scene draws with.
+        static const int32_t s_backA[] = {2, 1, 4, 0x26, 9, 10, 5, 6, 0x17, 0x18, 0x19, 0x1a, 7, 8, 0x1b, 0x1c, 0x1d,
+            0x1e, 0x1f, 0x20, 0x21, 0x22, 0xb, 0x10, 0x12};
+        for (int32_t word : s_backA) {
+            FogW(this, 0xf8, word) = FogW(this, 0x2f4, word);
+        }
+        std::memcpy(&FogW(this, 0xf8, 0x13), &DNField<uint32_t>(this, 0xa0), 12);
+        FogW(this, 0x250, 2) = FogW(this, 0x394, 2);
+        FogW(this, 0x250, 1) = FogW(this, 0x394, 1);
+        FogW(this, 0x250, 4) = FogW(this, 0x394, 4);
+        FogW(this, 0x250, 0x26) = FogW(this, 0x394, 0x26);
+        std::memcpy(&FogW(this, 0x250, 0x13), &DNField<uint32_t>(this, 0xa0), 12);
+    } else {
+        if (DNField<uint8_t>(this, 0xa64) != 0) {
+            waterScale = (blend + 1.0f) * FOG_DENSITY_SCALE;
+        }
+        std::memcpy(&FogW(this, 0x2f4, 0), &FogW(this, 0xf8, 0), 0xa0);
+        FogW(this, 0x2f4, 0x16) = 0;
+        std::memcpy(&FogW(this, 0x394, 0), &FogW(this, 0x250, 0), 0xa0);
+        FogW(this, 0x394, 0x16) = 6;
+    }
+
+    // Densities at least a half, the second fogs' doubled when the light is live, their
+    // starts set to it, and all of them scaled to the draw's units.
+    for (uint32_t i = 0; i < count; i++) {
+        infos->m_data[i].Set(4, std::max(infos->m_data[i].Get(4), 0.5f));   // DAT_14261a988
+    }
+    static const size_t s_floored[] = {0x250, 0xf8, 0x2f4, 0x394, 0x434, 0x4d4};
+    for (size_t fog : s_floored) {
+        FogF(this, fog, 4) = std::max(FogF(this, fog, 4), 0.5f);
+    }
+    if (DNField<uint8_t>(this, 4) == 0) {
+        FogF(this, 0x250, 4) += FogF(this, 0x250, 4);
+        FogF(this, 0x394, 4) += FogF(this, 0x394, 4);
+    }
+    FogF(this, 0xf8, 3) = FogF(this, 0xf8, 4);
+    FogF(this, 0x250, 3) = FogF(this, 0x250, 4);
+    FogF(this, 0x2f4, 3) = FogF(this, 0x2f4, 4);
+    FogF(this, 0x394, 3) = FogF(this, 0x394, 4);
+    for (uint32_t i = 0; i < count; i++) {
+        infos->m_data[i].Set(4, infos->m_data[i].Get(4) * FOG_DENSITY_SCALE);
+        infos->m_data[i].Set(7, infos->m_data[i].Get(7) * FOG_DENSITY_SCALE);
+    }
+    FogF(this, 0xf8, 4) *= FOG_DENSITY_SCALE;
+    FogF(this, 0x250, 4) *= FOG_DENSITY_SCALE;
+    FogF(this, 0xf8, 7) *= FOG_DENSITY_SCALE;
+    FogF(this, 0x250, 7) *= FOG_DENSITY_SCALE;
+    static const size_t s_waterScaled[] = {0x2f4, 0x394, 0x434, 0x4d4};
+    for (size_t fog : s_waterScaled) {
+        FogF(this, fog, 4) *= waterScale;
+    }
+    for (size_t fog : s_waterScaled) {
+        FogF(this, fog, 7) *= waterScale;
+    }
+    std::memcpy(&FogW(this, 0x1b0, 0), &FogW(this, 0xf8, 0), 0xa0);
+    FogF(this, 0x1b0, 0x10) = 1.0f;
+    FogW(this, 0x1b0, 0x16) = 5;
+    static const size_t s_weighted[] = {0xf8, 0x1b0, 0x250, 0x2f4, 0x394, 0x434, 0x4d4};
+    for (size_t fog : s_weighted) {
+        FogF(this, fog, 0x27) = 1.0f;
+    }
+}
+
 // The reference builds it inline wherever a CurrentFog is made.
 DNCURRENTFOG::DNCURRENTFOG() {
     std::memcpy(this->m_values, s_fogDefaults, sizeof(s_fogDefaults));
@@ -1726,4 +2092,363 @@ DNCURRENTFOG::DNCURRENTFOG() {
     Bytes(this)[0x5c] = 1;
     this->m_values[0x18] = 1.0f;
     this->m_values[0x19] = 1.0f;
+}
+
+namespace {
+
+// The day bands the bodies follow (time, value), DAT_142d4d760..DAT_142d4d910.
+const float s_skyModelBand[] = {0.125f, 1.0f, 0.1875f, 0.0f, 0.9375f, 0.0f, 1.0f, 1.0f};
+const float s_sunPhiBand[] = {0.0f, 2.2165682f, 0.25f, 1.9198622f, 0.5f, 2.2165682f, 0.75f, 1.9198622f};
+const float s_sunThetaBand[] = {0.0f, 3.9269907f, 0.25f, 3.9269907f, 0.5f, 3.9269907f, 0.75f, 3.9269907f};
+const float s_bodySunPhiBand[] = {0.22916667f, 1.7453293f, 0.49652779f, 0.087266460f, 0.5f, 0.087266460f,
+    0.50347221f, 0.087266460f, 0.89583331f, 1.7453293f};
+const float s_sunGlareBand[] = {0.21875f, 0.0f, 0.22916667f, 1.0f, 0.89583331f, 1.0f, 0.90625f, 0.0f};
+const float s_sunStrengthBand[] = {0.25f, 0.0f, 0.27083334f, 1.0f, 0.85416669f, 1.0f, 0.875f, 0.0f};
+const float s_bodySunThetaBand[] = {0.22916667f, 0.78539819f, 0.5f, 0.78539819f, 0.89583331f, 0.78539819f};
+const float s_moonPhiBand[] = {0.0f, 0.61086524f, 0.0034722222f, 0.61086524f, 0.16666667f, 1.7453293f,
+    0.91666669f, 1.7453293f, 0.99652779f, 0.61086524f};
+const float s_moonThetaBand[] = {0.0f, 0.78539819f, 0.16666667f, 0.78539819f, 0.91666669f, 0.78539819f};
+const float s_phasePhiBand[] = {0.0f, 0.61086524f, 0.0034722222f, 0.61086524f, 0.16666667f, 1.7453293f,
+    0.91666669f, 1.7453293f, 0.99652779f, 0.61086524f};
+const float s_phaseThetaBand[] = {0.0f, 2.3561945f, 0.16666667f, 2.6179938f, 0.91666669f, 2.8797932f};
+const float s_sunSizeBand[] = {0.25f, 2.0f, 0.28125f, 1.0f, 0.84375f, 1.0f, 0.875f, 2.0f};
+const float s_moonSizeBand[] = {0.041666668f, 1.0f, 0.16666667f, 1.5f, 0.91666669f, 1.5f, 0.99930555f, 1.0f};
+
+constexpr float BODY_DISTANCE = 12.0f;      // DAT_142737e48
+constexpr float DEGREES = 0.017453292f;     // DAT_14263a04c
+constexpr float DAY_START = 0.22916667f;    // DAT_142979c10
+constexpr float DAY_END = 0.91666669f;      // DAT_142979c18
+
+// A direction from its polar angle and its azimuth.
+void Polar(float phi, float theta, float* out) {
+    float s = FastSin(phi);
+    out[2] = FastCos(phi);
+    out[1] = FastSin(theta) * s;
+    out[0] = FastCos(theta) * s;
+}
+
+// The sky model's alpha over the day.
+// ref: FUN_142458770
+void SkyModelAlpha(DNScene* scene) {
+    float value = DNFloatBand(s_skyModelBand, 4, DNField<float>(scene, 0xc));
+    DNField<uint8_t>(scene, 0x1bf3) = static_cast<uint8_t>(static_cast<int32_t>(value * 254.0f + 1.0f));
+}
+
+// Every override sky's light ids are spent for the frame.
+// ref: FUN_14245ff30
+void ResetOverrideSkies(DNScene* scene) {
+    void** table = scene->m_overrideTable;
+    if (table == nullptr) {
+        return;
+    }
+    for (uint64_t bucket = 0; bucket < scene->m_overrideBuckets; bucket++) {
+        for (auto node = static_cast<uint8_t*>(table[bucket]); node != nullptr; node = DNField<uint8_t*>(node, 0)) {
+            DNField<uint64_t>(DNField<uint8_t*>(node, 0x30), 0x60) = 0;
+        }
+    }
+}
+
+// A grading block faded toward the default grading as the camera goes under water.
+// ref: FUN_14244fab0
+void GradingFade(LIGHTPARAMSBLOCK* block, float depth) {
+    if (depth <= 0.0f) {
+        return;
+    }
+    LIGHTPARAMSBLOCK fallback = {};
+    fallback.m_entries[0].m_id = DEFAULT_COLOR_GRADING;
+    fallback.m_entries[0].m_weight = 1.0f;
+    fallback.m_count = 1;
+    float t = depth * 0.04f;                    // DAT_1426d3078
+    if (1.0f <= t) {
+        t = 1.0f;
+    }
+    BlendLightParams(block, &fallback, t);
+}
+
+// A grading block rendered when the blocks blend at all and the caller asks.
+// ref: FUN_1424506d0
+void GradingRender(DNColorGrading* grading, uint8_t* block, bool render, void* target, int32_t index) {
+    if (s_blendParams && render) {
+        grading->Blend(target, block, index);
+    }
+}
+
+// The renderer's grading target (DAT_14348b658).
+void* s_gradingTarget;
+
+}  // namespace
+
+// ref: FUN_142450110
+void DNColorGrading::Blend(void* target, uint8_t* block, int32_t index) {
+    (void)target;
+    (void)block;
+    (void)index;
+    FROST_UNIMPLEMENTED();  // the grading LUTs blended into a render target
+}
+
+// ref: FUN_14245b7f0
+void DNScene::ApplyColorGrading(void* env, bool fade, bool render) {
+    auto lightA = reinterpret_cast<DNCURRENTLIGHT*>(this->m_light.m_data + 0xa70);
+    auto lightB = reinterpret_cast<DNCURRENTLIGHT*>(this->m_light.m_data + 0xf60);
+    if (fade) {
+        bool alternate = DNField<uint8_t>(env, 0x5bc) != 0;
+        DNCURRENTLIGHT* light = alternate ? lightB : lightA;
+        GradingFade(ParamsBlock(light, 0x20c), DNField<float>(this, 0xa68));
+        GradingFade(ParamsBlock(light, 0x310), DNField<float>(this, 0xa68));
+        if (DNField<uint8_t>(this, 0x71c) != 0) {
+            auto overrideBlock = reinterpret_cast<LIGHTPARAMSBLOCK*>(this->m_light.m_data + 0x618);
+            float t = DNField<float>(this, 0x720);
+            BlendLightParams(ParamsBlock(lightA, 0x20c), overrideBlock, t);
+            BlendLightParams(ParamsBlock(lightB, 0x20c), overrideBlock, t);
+            BlendLightParams(ParamsBlock(lightA, 0x310), overrideBlock, t);
+            BlendLightParams(ParamsBlock(lightB, 0x310), overrideBlock, t);
+        }
+    }
+    void* target = render ? s_gradingTarget : nullptr;
+    bool alternate = DNField<uint8_t>(env, 0x5bc) != 0;
+    DNCURRENTLIGHT* light = alternate ? lightB : lightA;
+    GradingRender(this->m_colorGrading, light->m_data + 0x20c, render, target, 0);
+    GradingRender(this->m_colorGrading, light->m_data + 0x310, render, target, 1);
+}
+
+// ref: FUN_14245a6a0
+void DNScene::ComputeSunDirection(const float* viewMatrix) {
+    float time = DNField<float>(this, 0xc);
+    float phi = DNFloatBand(s_sunPhiBand, 4, time);
+    float theta = DNFloatBand(s_sunThetaBand, 4, time);
+    if (DNField<uint8_t>(this, 0xb48) != 0) {
+        float weight = DNField<float>(this, 0xb4c);
+        theta = (DNField<float>(this, 0xb50) * DEGREES + 3.1415927f) * weight + (1.0f - weight) * theta;
+    }
+    float s = FastSin(phi);
+    float x = FastCos(theta) * s;
+    float y = FastSin(theta) * s;
+    float z = FastCos(phi);
+    DNField<float>(this, 0x1580) = x;
+    DNField<float>(this, 0x1584) = y;
+    DNField<float>(this, 0x1588) = z;
+    DNField<float>(this, 0x15a4) = x;
+    DNField<float>(this, 0x15a8) = y;
+    DNField<float>(this, 0x15ac) = z;
+    float m[9];
+    Matrix3FromMatrix(m, viewMatrix);
+    float dx = DNField<float>(this, 0x18d8) - DNField<float>(this, 0x14);
+    float dy = DNField<float>(this, 0x18dc) - DNField<float>(this, 0x18);
+    float dz = DNField<float>(this, 0x18e0) - DNField<float>(this, 0x1c);
+    float scale = 1.0f / std::sqrt(dx * dx + dy * dy + dz * dz);
+    dy *= scale;
+    dx *= scale;
+    dz *= scale;
+    DNField<float>(this, 0xa0) = dy * m[3] + dx * m[0] + dz * m[6];
+    DNField<float>(this, 0xa4) = dx * m[1] + dy * m[4] + dz * m[7];
+    DNField<float>(this, 0xa8) = dy * m[5] + dx * m[2] + dz * m[8];
+}
+
+// ref: FUN_14245aca0
+void DNScene::ComputeBodies() {
+    float time = DNField<float>(this, 0xc);
+    DNField<float>(this, 0x94) = DNFloatBand(s_sunGlareBand, 4, time);
+    DNField<float>(this, 0xb20) = DNFloatBand(s_sunStrengthBand, 4, DNField<float>(this, 0xc)) * DNField<float>(this, 0xb20);
+    float phi = DNFloatBand(s_bodySunPhiBand, 5, DNField<float>(this, 0xc));
+    float theta = DNFloatBand(s_bodySunThetaBand, 3, DNField<float>(this, 0xc));
+    if (DNField<uint8_t>(this, 0xb48) != 0) {
+        float weight = DNField<float>(this, 0xb4c);
+        theta = DNField<float>(this, 0xb50) * DEGREES * weight + (1.0f - weight) * theta;
+    }
+    auto sun = &DNField<float>(this, 0x18d8);
+    float local[3];
+    Polar(phi, theta, local);
+    float t = DNField<float>(this, 0xc);
+    if ((DNField<uint8_t>(this, 0xb38) & 8) != 0 && DAY_START <= t && t <= DAY_END) {
+        auto from = &DNField<float>(this, 0xb2c);
+        float blend = DNField<float>(this, 0xb40);
+        for (int32_t i = 0; i < 3; i++) {
+            sun[i] = (local[i] - from[i]) * blend + from[i];
+        }
+    } else {
+        sun[0] = local[0];
+        sun[1] = local[1];
+        sun[2] = local[2];
+    }
+    float x = sun[0];
+    float y = sun[1];
+    float z = sun[2];
+    float length = x * x + y * y + z * z;
+    if (1e-05f < length) {                          // DAT_1426c75c4
+        float scale = BODY_DISTANCE / std::sqrt(length);
+        x *= scale;
+        y *= scale;
+        z *= scale;
+        sun[0] = x;
+        sun[1] = y;
+        sun[2] = z;
+    }
+    sun[0] = x + DNField<float>(this, 0x14);
+    sun[1] = y + DNField<float>(this, 0x18);
+    sun[2] = z + DNField<float>(this, 0x1c);
+    DNField<float>(this, 0x1930) = DNFloatBand(s_sunSizeBand, 4, DNField<float>(this, 0xc)) * DNField<float>(this, 0x1934);
+    std::memcpy(&DNField<float>(this, 0x1740), sun, 12);
+
+    // The moon.
+    float moonPhi = DNFloatBand(s_moonPhiBand, 5, DNField<float>(this, 0xc));
+    float moonTheta = DNFloatBand(s_moonThetaBand, 3, DNField<float>(this, 0xc));
+    auto moon = &DNField<float>(this, 0x1980);
+    Polar(moonPhi, moonTheta, local);
+    moon[1] = local[1];
+    moon[2] = local[2];
+    moon[0] = local[0];
+    Polar(moonPhi, moonTheta, local);
+    t = DNField<float>(this, 0xc);
+    if ((DNField<uint8_t>(this, 0xb38) & 8) != 0 && (t < DAY_START || DAY_END < t)) {
+        auto from = &DNField<float>(this, 0xb2c);
+        float blend = DNField<float>(this, 0xb40);
+        for (int32_t i = 0; i < 3; i++) {
+            moon[i] = (local[i] - from[i]) * blend + from[i];
+        }
+    } else {
+        moon[1] = local[1];
+        moon[2] = local[2];
+        moon[0] = local[0];
+    }
+    float scale = BODY_DISTANCE / std::sqrt(moon[0] * moon[0] + moon[1] * moon[1] + moon[2] * moon[2]);
+    moon[1] *= scale;
+    moon[2] *= scale;
+    moon[0] = moon[0] * scale + DNField<float>(this, 0x14);
+    moon[1] += DNField<float>(this, 0x18);
+    moon[2] += DNField<float>(this, 0x1c);
+    float moonSize = DNFloatBand(s_moonSizeBand, 4, DNField<float>(this, 0xc)) * DNField<float>(this, 0x19dc);
+    DNField<float>(this, 0x19d8) = moonSize;
+    std::memcpy(&DNField<float>(this, 0x1818), moon, 12);
+    DNField<float>(this, 0x18a8) = moonSize;
+    DNField<float>(this, 0x18ac) = moonSize;
+
+    // The far body and the moon's phase over its cycle (+0x1a88 days).
+    std::memcpy(&DNField<float>(this, 0x1ad0), &DNField<float>(this, 0x1b64), 12);
+    DNField<float>(this, 0x1ad0) = DNField<float>(this, 0x14) + DNField<float>(this, 0x1ad0);
+    DNField<float>(this, 0x1ad4) += DNField<float>(this, 0x18);
+    DNField<uint32_t>(this, 0x1b28) = DNField<uint32_t>(this, 0x1b2c);
+    DNField<float>(this, 0x1ad8) += DNField<float>(this, 0x1c);
+    float day = DNField<float>(this, 0x10);
+    float cycle = DNField<float>(this, 0x1a88);
+    t = DNField<float>(this, 0xc);
+    auto now = static_cast<uint32_t>(static_cast<int32_t>(day * 65536.0f) - static_cast<int32_t>(t * -65536.0f));
+    float inverse = 1.0f / cycle;
+    float cycles = (t + day) * inverse;
+    auto whole = static_cast<int32_t>(cycles);
+    if (whole != static_cast<int32_t>(0x80000000) && static_cast<float>(whole) != cycles) {
+        cycles = static_cast<float>(whole - (cycles < 0.0f ? 1 : 0));
+    }
+    auto start = static_cast<uint32_t>(static_cast<int32_t>(cycles * cycle * 65536.0f));
+    uint32_t elapsed = now - (start < now ? start : now);
+    float phase = static_cast<float>(static_cast<uint64_t>(elapsed)) * 1.5258789e-05f * inverse;
+    float bodyPhi = DNFloatBand(s_phasePhiBand, 5, phase);
+    float bodyTheta = DNFloatBand(s_phaseThetaBand, 3, phase);
+    float s = FastSin(bodyPhi);
+    float bx;
+    float by;
+    float bz;
+    if ((DNField<uint8_t>(this, 0xb38) & 8) == 0) {
+        bz = FastCos(bodyPhi);
+        by = FastSin(bodyTheta) * s;
+        bx = FastCos(bodyTheta) * s;
+    } else {
+        bz = -1.0f;
+        by = 0.0f;
+        bx = 0.0f;
+    }
+    DNField<float>(this, 0x1a28) = bx;
+    float bodyScale = BODY_DISTANCE / std::sqrt(bx * bx + by * by + bz * bz);
+    DNField<float>(this, 0x1a30) = bz * bodyScale;
+    DNField<float>(this, 0x1a2c) = bodyScale * by;
+    DNField<float>(this, 0x1a28) = bx * bodyScale + DNField<float>(this, 0x14);
+    DNField<float>(this, 0x1a2c) += DNField<float>(this, 0x18);
+    DNField<float>(this, 0x1a30) += DNField<float>(this, 0x1c);
+    DNField<float>(this, 0x1a80) = DNFloatBand(s_moonSizeBand, 4, phase) * DNField<float>(this, 0x1a84);
+
+    // Twilight: rising through the morning, falling through the evening, and the night's.
+    t = DNField<float>(this, 0xc);
+    float twilight = 0.0f;
+    if (DAY_START <= t && t < 0.5f) {
+        twilight = (t - DAY_START) * 3.6923075f;                    // DAT_142979c20
+    } else if (0.5f <= t && t < 0.89583331f) {                       // DAT_142979c14
+        twilight = 1.0f - (t - 0.5f) * 2.5263157f;                  // DAT_142979c1c
+    } else if (DAY_END <= t) {
+        twilight = t < 1.0f ? (t - DAY_END) * BODY_DISTANCE : 0.0f;
+    } else if (0.0f <= t && t < 0.16666667f) {                      // DAT_142723008
+        twilight = 1.0f - t * 6.0f;                                 // DAT_1426c8878
+    }
+    DNField<float>(this, 0x724) = twilight;
+}
+
+// ref: FUN_14245b520
+void DNScene::Compute(int32_t timeMs, float elapsed, float timeSeconds, bool alive, void* env,
+    const float* viewMatrix, bool colorGrading, bool zoneLightsSingly) {
+    DNField<uint32_t>(this, 0xac) = DNField<uint32_t>(this, 0xb20);
+    DNField<float>(this, 0x4c) = elapsed;
+    DNField<uint32_t>(this, 0xb0) = DNField<uint32_t>(this, 0x138);
+    DNField<float>(this, 0x48) = timeSeconds;
+    DNField<int32_t>(this, 0x50) = timeMs;
+    DNField<int32_t>(this, 0x6c) += static_cast<int32_t>(static_cast<int64_t>(elapsed * 1000.0f));
+    ResetOverrideSkies(this);
+    for (uint32_t i = 0; i < this->m_areaOverrides.m_count; i++) {
+        AREAOVERRIDE* entry = &Overrides(this)[i];
+        uint32_t step = static_cast<uint32_t>(DNField<int32_t>(this, 0x50) - entry->m_time);
+        entry->m_time = DNField<int32_t>(this, 0x50);
+        if (entry->m_state == 1) {
+            float weight = static_cast<float>(static_cast<uint64_t>(step)) / static_cast<float>(static_cast<uint64_t>(entry->m_duration))
+                + entry->m_weight;
+            if (1.0f < weight) {
+                weight = 1.0f;
+            }
+            entry->m_weight = weight;
+        } else if (entry->m_state == 2) {
+            float weight = entry->m_weight
+                - static_cast<float>(static_cast<uint64_t>(step)) / static_cast<float>(static_cast<uint64_t>(entry->m_duration));
+            if (weight < 0.0f) {
+                weight = 0.0f;
+            }
+            entry->m_weight = weight;
+        }
+    }
+    if (this->m_1602 != 0) {
+        this->m_clouds.MarkDirty();
+    }
+    float heading = DNField<float>(this, 0x30);
+    float x = DNField<float>(this, 0x2c);
+    if (static_cast<double>(heading * heading + x * x) <= 0.0001) {
+        heading = DNField<float>(this, 0x34);
+    }
+    float angle = std::atan2(heading, x);
+    DNField<float>(this, 0x40) = angle;
+    if (angle < 0.0f) {
+        DNField<float>(this, 0x40) = angle + 6.2831855f;
+    }
+    float weather = 0.0f;
+    if (alive) {
+        weather = DNField<float>(this, 0x54) * 4.0f;
+        if (1.0f < weather) {
+            weather = 1.0f;
+        }
+    }
+    DNField<float>(this, 0xe8) = weather;
+    this->ComputeLights(alive, zoneLightsSingly);
+    this->ComputeBodies();
+    this->ComputeSunDirection(viewMatrix);
+    if (this->m_1ec8 != 0) {
+        std::memcpy(&DNField<float>(this, 0x1580), &DNField<float>(this, 0x1ecc), 12);
+        DNField<uint32_t>(this, 0x158c) = DNField<uint32_t>(this, 0x1ee4);
+        DNField<uint32_t>(this, 0x1590) = DNField<uint32_t>(this, 0x1ed8);
+        DNField<uint32_t>(this, 0x1594) = DNField<uint32_t>(this, 0x1ee0);
+        DNField<uint32_t>(this, 0x1598) = DNField<uint32_t>(this, 0x1edc);
+        std::memmove(&DNField<uint8_t>(this, 0x15a4), &DNField<uint8_t>(this, 0x1580), 0x24);
+    }
+    if (this->m_light.Field<uint32_t>(0x15f0) != 0) {
+        this->m_clouds.Generate(this);
+        SkyModelAlpha(this);
+    }
+    this->BuildFogs();
+    if (colorGrading) {
+        this->ApplyColorGrading(env, true, false);
+    }
+    this->m_1602 = 0;
 }

@@ -14,6 +14,9 @@ float WorldGetFarClip2CVar();
 float WorldGetFarClip3CVar();
 // ref: FUN_141365030
 float WorldGetNearClipCVar();
+// Whether the world's player is alive (DAT_142d00c2c, 1 until the player state says otherwise).
+// ref: FUN_1413659f0
+bool WorldPlayerAlive();
 
 // ref: FUN_141365b60
 void WorldSetFarClipCVar(float value);

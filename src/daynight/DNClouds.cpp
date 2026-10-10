@@ -1,10 +1,12 @@
 #include "daynight/DayNight.hpp"
 
+#include "base/Matrix.hpp"
 #include "base/Status.hpp"
 #include "client/RenderSettings.hpp"
 #include "gx/Gx.hpp"
 #include "gx/GxPipeline.hpp"
 #include "gx/GxRenderTargets.hpp"
+#include "model2/M2Model.hpp"
 #include "texture/Texture.hpp"
 #include <cmath>
 #include <cstdlib>
@@ -417,4 +419,337 @@ void DNCLOUDS::Upload(DNScene* scene) {
     this->m_08 = static_cast<uint8_t>((this->m_08 - 1) & 1);
     this->m_1c = 0;
     this->m_20 = 0;
+}
+
+namespace {
+
+// The noise permutation (DAT_142d4d4b0).
+const uint8_t s_permutation[0x100] = {225, 155, 210, 108, 175, 199, 221, 144, 203, 116, 70, 213, 69, 158, 33, 252,
+    5, 82, 173, 133, 222, 139, 174, 27, 9, 71, 90, 246, 75, 130, 91, 191, 169, 138, 2, 151, 194, 235, 81, 7, 25,
+    113, 228, 159, 205, 253, 134, 142, 248, 65, 224, 217, 22, 121, 229, 63, 89, 103, 96, 104, 156, 17, 201, 129,
+    36, 8, 165, 110, 237, 117, 231, 56, 132, 211, 152, 20, 181, 111, 239, 218, 170, 163, 51, 172, 157, 47, 80,
+    212, 176, 250, 87, 49, 99, 242, 136, 189, 162, 115, 44, 43, 124, 94, 150, 16, 141, 247, 32, 10, 198, 223,
+    255, 72, 53, 131, 84, 57, 220, 197, 58, 50, 208, 11, 241, 28, 3, 192, 62, 202, 18, 215, 153, 24, 76, 41, 15,
+    179, 39, 46, 55, 6, 128, 167, 23, 188, 106, 34, 187, 140, 164, 73, 112, 182, 244, 195, 227, 13, 35, 77, 196,
+    185, 26, 200, 226, 119, 31, 123, 168, 125, 249, 68, 183, 230, 177, 135, 160, 180, 12, 1, 243, 148, 102, 166,
+    38, 238, 251, 37, 240, 126, 64, 74, 161, 40, 184, 149, 171, 178, 101, 66, 29, 59, 146, 61, 254, 107, 42, 86,
+    154, 4, 236, 232, 120, 21, 233, 209, 45, 98, 193, 114, 78, 19, 206, 14, 118, 127, 48, 79, 147, 85, 30, 207,
+    219, 54, 88, 234, 190, 122, 95, 67, 143, 109, 137, 214, 145, 93, 92, 100, 245, 0, 216, 186, 60, 83, 105, 97,
+    204, 52};
+
+// The octaves' steps across the grid by quality (five per quality, the stack table the
+// generator builds).
+const uint16_t s_octaveSteps[25] = {0x10, 0x20, 0x40, 0x80, 0x100, 0x08, 0x10, 0x20, 0x40, 0x80, 0x04, 0x08, 0x10,
+    0x20, 0x40, 0x02, 0x04, 0x08, 0x10, 0x20, 0x01, 0x02, 0x04, 0x08, 0x04};
+
+// How much the sun lights the clouds over the day (DAT_142d4d470).
+const float s_lightBand[16] = {0.16666667f, 1.0f, 0.19444445f, 1.0f, 0.20138890f, 1.0f, 0.22916667f, 1.0f,
+    0.89583331f, 1.0f, 0.92361110f, 1.0f, 0.88888890f, 1.0f, 0.91666669f, 1.0f};
+
+// One octave's walk over the grid (0x54 bytes on the reference's stack): the 8.8 coordinates
+// across the row, down the rows and through time, the hashed corners of the current cell and
+// its noise values (cached until the column's cell changes).
+struct OCTAVE {
+    uint16_t m_x;           // 0x00
+    uint16_t m_y;           // 0x02
+    uint16_t m_z;           // 0x04
+    uint16_t m_xStep;       // 0x06
+    uint16_t m_yStep;       // 0x08
+    uint16_t m_0a;
+    uint16_t m_zInt;        // 0x0c
+    uint16_t m_yInt;        // 0x0e
+    uint16_t m_zInt2;       // 0x10
+    uint16_t m_12;          // 0x12
+    uint16_t m_yNext;       // 0x14
+    uint16_t m_zNext;       // 0x16
+    float m_amplitude;      // 0x18
+    uint32_t m_corners[4];  // 0x1c
+    float m_noise[8];       // 0x2c base and slope for each corner pair
+    uint32_t m_xInt;        // 0x4c
+    uint32_t m_cachedX;     // 0x50
+};
+static_assert(sizeof(OCTAVE) == 0x54, "an octave is 0x54 bytes");
+
+// The fast inverse square root the generator inlines.
+float FastInverseSqrt(float value) {
+    uint32_t bits;
+    std::memcpy(&bits, &value, 4);
+    bits = 0x5f3997bb - ((bits >> 1) & 0x3fffffff);
+    float result;
+    std::memcpy(&result, &bits, 4);
+    return result;
+}
+
+// Where the line from the camera toward the light body crosses the cloud sky, as grid
+// coordinates (FUN_1424531e0).
+// ref: FUN_1424531e0
+void CloudGridPoint(DNCLOUDS* clouds, const float* camera, const float* point, float* out) {
+    float dx = point[0] - camera[0];
+    float dy = point[1] - camera[1];
+    float dz = point[2] - camera[2] - -0.70710677f;     // DAT_1427fe368
+    float planar = dy * dy + dx * dx;
+    float angle = std::acos(dz / (std::sqrt(dz * dz + planar) * std::sqrt(1.0f)));
+    angle = std::min(angle, 0.78539819f);               // DAT_1427e0340
+    angle *= 0.63661975f;                               // DAT_1427fb798
+    float length = std::sqrt(planar);
+    if (static_cast<double>(length) > 1e-05) {          // DAT_1428b46a0
+        float scale = 1.0f / length;
+        dx *= scale;
+        dy *= scale;
+    } else {
+        dx = 0.0f;
+        dy = 0.0f;
+    }
+    out[0] = (dx * angle + 0.5f) * static_cast<float>(static_cast<uint32_t>(clouds->m_gridSize));
+    out[1] = (dy * angle + 0.5f) * static_cast<float>(static_cast<uint32_t>(clouds->m_gridSize));
+}
+
+// The colours the generator lights the clouds with: the light body's position on the grid
+// (and its height), the sky's three cloud colours, and the light's strength over the day.
+// ref: FUN_142451e30
+void CloudLighting(DNCLOUDS* clouds, DNScene* scene, float* lit, float* direct, float* shadow, float* sun,
+    float* strength) {
+    float time = DNField<float>(scene, 0xc);
+    const float* body = time < 0.20138890f || 0.92361110f < time   // DAT_142979a08, DAT_142979a0c
+        ? &DNField<float>(scene, 0x1980)
+        : &DNField<float>(scene, 0x18d8);
+    const float* camera = &DNField<float>(scene, 0x14);
+    float dx = body[0] - camera[0];
+    float dy = body[1] - camera[1];
+    float dz = body[2] - camera[2];
+    float near = 0.0f;
+    float far = 0.0f;
+    QuadraticRoots(dy * dy + dx * dx + dz * dz, dz * 1.4142135f, -0.5f, &near, &far);
+    float point[3] = {dx * far + camera[0], dy * far + camera[1], dz * far + camera[2]};
+    float grid[2] = {0.0f, 0.0f};
+    CloudGridPoint(clouds, camera, point, grid);
+    sun[0] = grid[0];
+    sun[1] = grid[1];
+    sun[2] = 64.0f;
+    auto bytes = reinterpret_cast<const uint8_t*>(scene);
+    lit[0] = static_cast<float>(bytes[0xab6]) * (1.0f / 255.0f);
+    lit[1] = static_cast<float>(bytes[0xab5]) * (1.0f / 255.0f);
+    lit[2] = static_cast<float>(bytes[0xab4]) * (1.0f / 255.0f);
+    direct[0] = static_cast<float>(bytes[0xab2]) * (1.0f / 255.0f);
+    direct[1] = static_cast<float>(bytes[0xab1]) * (1.0f / 255.0f);
+    direct[2] = static_cast<float>(bytes[0xab0]) * (1.0f / 255.0f);
+    shadow[0] = static_cast<float>(bytes[0xaba]) * (1.0f / 255.0f);
+    shadow[1] = static_cast<float>(bytes[0xab9]) * (1.0f / 255.0f);
+    shadow[2] = static_cast<float>(bytes[0xab8]) * (1.0f / 255.0f);
+    *strength = DNFloatBand(s_lightBand, 8, time) * *strength;
+    sun[2] = DNField<float>(scene, 0xe8) * 192.0f + sun[2];        // DAT_142979a10
+    *strength = (1.0f - DNField<float>(scene, 0xe8) * 0.75f) * *strength;
+}
+
+// Whether the clouds show: not under a sky override that hides them (the transition's first,
+// then the three override skies).
+// ref: FUN_14245f7b0
+bool CloudsVisible(DNScene* scene, uint8_t* covered) {
+    constexpr float SHOWN = 0.99f;                       // DAT_14263252c
+    auto transition = DNField<uint8_t*>(scene, 0x80);
+    if (transition == nullptr) {
+        if (DNField<uint8_t>(scene, 0x79) != 0) {
+            return true;
+        }
+    } else if (M2BaseModelIsLoadedAndReady(DNField<CM2BaseModel*>(transition, 0x38))
+        && SHOWN < DNField<float>(transition, 0x4c)) {
+        return DNField<uint8_t>(transition, 0x50) != 0;
+    }
+    for (int32_t i = 0; i < 3; i++) {
+        auto sky = DNField<uint8_t*>(scene, 0xb8 + i * 8);
+        if (sky != nullptr && M2BaseModelIsLoadedAndReady(DNField<CM2BaseModel*>(sky, 0x38))
+            && SHOWN < DNField<float>(sky, 0x4c) && DNField<uint8_t>(sky, 0x50) == 0) {
+            *covered = 1;
+            return false;
+        }
+    }
+    return true;
+}
+
+}  // namespace
+
+// ref: FUN_142451e20
+void DNCLOUDS::MarkDirty() {
+    this->m_dirty = 1;
+}
+
+// ref: FUN_142452140
+void DNCLOUDS::Generate(DNScene* scene) {
+    float density = DNField<float>(scene, 0xadc);
+    if (s_densityOverride != 0.0f) {
+        density = s_densityOverride;
+    }
+    float clear = 1.0f - density;
+    clear = clear < 0.0f ? 0.0f : std::min(clear, 1.0f);
+    auto falloff = static_cast<uint8_t>(static_cast<int32_t>(clear * 255.0f));
+    bool proceed;
+    if (falloff != this->m_falloff && falloff == 0xff) {
+        this->m_05 = 100;
+        this->m_falloff = falloff;
+        proceed = this->m_05 != 0;
+    } else {
+        this->m_falloff = falloff;
+        proceed = falloff != 0xff || this->m_05 != 0;
+    }
+    if (!proceed) {
+        return;
+    }
+    uint8_t covered = 0;
+    if (this->m_enabled == 0 || !CloudsVisible(scene, &covered)) {
+        this->m_dirty = 0;
+        return;
+    }
+    this->m_18 = this->m_cells;
+    if (this->m_dirty != 0) {
+        this->m_cells = this->m_gridSize;
+        this->m_1c = 0;
+    }
+    uint16_t z = this->m_0a;
+    uint32_t octaves = static_cast<uint32_t>(this->m_34);
+    uint32_t zHash0 = s_permutation[z >> 8];
+    uint32_t zHash1 = s_permutation[static_cast<uint8_t>((z >> 8) + 1)];
+    OCTAVE walk[5];
+    const uint16_t* steps = &s_octaveSteps[this->m_quality * 5];
+    for (uint32_t i = 0; i < octaves; i++) {
+        uint16_t step = steps[i];
+        uint16_t zInt = static_cast<uint16_t>(z >> 8);
+        walk[i].m_yStep = step;
+        walk[i].m_xStep = step;
+        walk[i].m_zInt = zInt;
+        walk[i].m_zInt2 = zInt;
+        walk[i].m_y = static_cast<uint16_t>(static_cast<uint16_t>(this->m_1c) * step);
+        walk[i].m_zNext = static_cast<uint16_t>(zInt + 1);
+        walk[i].m_z = z;
+        walk[i].m_12 = static_cast<uint16_t>(
+            (static_cast<int32_t>(static_cast<uint32_t>(step) << (this->m_gridLog2 & 0x1f)) >> 8) + 2 + zInt);
+        walk[i].m_amplitude = 1.0f / static_cast<float>(1 << i);
+    }
+    float lit[3] = {0.0f, 0.0f, 0.0f};
+    float direct[3] = {0.0f, 0.0f, 0.0f};
+    float shadow[3] = {0.0f, 0.0f, 0.0f};
+    float sun[3] = {0.0f, 0.0f, 0.0f};
+    float strength = 1.0f;
+    CloudLighting(this, scene, lit, direct, shadow, sun, &strength);
+    if (this->m_05 != 0) {
+        this->m_05--;
+    }
+    float slopeX = 0.0f;
+    float slopeY = 0.0f;
+    for (uint32_t row = 0; row < static_cast<uint32_t>(this->m_cells); row++) {
+        uint64_t offset = static_cast<uint64_t>(this->m_1c + row) << (this->m_gridLog2 & 0x3f);
+        uint8_t* densities = this->m_density.m_data + offset;
+        uint32_t* colors = this->m_colors.data() + offset;
+        for (uint32_t i = 0; i < octaves; i++) {
+            uint32_t y = walk[i].m_y >> 8;
+            walk[i].m_yInt = static_cast<uint16_t>(y);
+            walk[i].m_cachedX = 0xffffffff;
+            walk[i].m_x = this->m_0a;
+            uint32_t yNext = (y + 1) & 0xff;
+            walk[i].m_yNext = static_cast<uint16_t>(yNext);
+            walk[i].m_corners[0] = s_permutation[static_cast<uint8_t>(y + zHash0)];
+            walk[i].m_corners[1] = s_permutation[static_cast<uint8_t>(yNext + zHash0)];
+            walk[i].m_corners[2] = s_permutation[static_cast<uint8_t>(y + zHash1)];
+            walk[i].m_corners[3] = s_permutation[static_cast<uint8_t>(yNext + zHash1)];
+        }
+        float rowF = static_cast<float>(static_cast<uint64_t>(static_cast<uint32_t>(this->m_1c + row)));
+        float previous = 0.0f;
+        for (uint32_t column = 0; column < static_cast<uint32_t>(this->m_gridSize); column++) {
+            float sum = 0.0f;
+            for (uint32_t i = 0; i < octaves; i++) {
+                OCTAVE& o = walk[i];
+                uint32_t x = o.m_x;
+                uint32_t xInt = x >> 8;
+                uint32_t xFrac = x & 0xff;
+                o.m_xInt = xInt;
+                if (xInt != o.m_cachedX) {
+                    o.m_cachedX = xInt;
+                    for (int32_t corner = 0; corner < 4; corner++) {
+                        uint32_t at = o.m_corners[corner] + xInt;
+                        float base = s_noise[s_permutation[at & 0xff]];
+                        o.m_noise[corner * 2] = base;
+                        o.m_noise[corner * 2 + 1] = s_noise[s_permutation[static_cast<uint8_t>(at + 1)]] - base;
+                    }
+                }
+                float fx = s_cosine[xFrac];
+                o.m_x = static_cast<uint16_t>(o.m_x + o.m_xStep);
+                float a = fx * o.m_noise[1] + o.m_noise[0];
+                float c = fx * o.m_noise[5] + o.m_noise[4];
+                float b = fx * o.m_noise[3] + o.m_noise[2];
+                float d = fx * o.m_noise[7] + o.m_noise[6];
+                float fy = s_cosine[o.m_y & 0xff];
+                float e1 = (b - a) * fy + a;
+                float e2 = (d - c) * fy + c;
+                float value = ((e2 - e1) * s_cosine[o.m_z & 0xff] + e1) * o.m_amplitude;
+                sum += value;
+                if (i == 2) {
+                    float scale = static_cast<float>(1 << ((this->m_gridLog2 - 7) & 0x1f));
+                    slopeX = previous - sum;
+                    previous = sum;
+                    float above = this->m_88.m_data[column];
+                    this->m_88.m_data[column] = sum;
+                    slopeX *= scale;
+                    slopeY = (above - sum) * scale;
+                }
+            }
+            if (densities[column] != 0) {
+                this->m_05 = 100;
+            }
+            uint8_t cell = 0;
+            uint32_t level = static_cast<uint32_t>(static_cast<int32_t>(std::nearbyint(sum * 64.0f + 128.0f))) & 0xff;  // DAT_14263a048, DAT_1426c707c
+            if (0 <= static_cast<int32_t>(level - this->m_falloff)) {
+                cell = s_falloff[level - this->m_falloff];
+            }
+            densities[column] = cell;
+            if (cell == 0) {
+                if (column != 0) {
+                    colors[column] = colors[column - 1];
+                    reinterpret_cast<uint8_t*>(&colors[column])[3] = 0;
+                }
+                continue;
+            }
+            float toSunX = sun[0] - static_cast<float>(column);
+            float toSunY = sun[1] - rowF;
+            auto shade = static_cast<uint8_t>((static_cast<uint8_t>(~cell) >> 1) + 0x40);
+            float k = static_cast<float>(shade) * (1.0f / 255.0f);
+            float r = lit[0] * k + shadow[0];
+            float g = lit[1] * k + shadow[1];
+            float bl = lit[2] * k + shadow[2];
+            float facing = (slopeY * toSunY + slopeX * toSunX + sun[2])
+                * (FastInverseSqrt(slopeY * slopeY + slopeX * slopeX + 1.0f)
+                    * FastInverseSqrt(toSunY * toSunY + toSunX * toSunX + sun[2] * sun[2]));
+            if (0.0f < facing) {
+                facing *= strength;
+                r = direct[0] * facing + r;
+                g = direct[1] * facing + g;
+                bl = direct[2] * facing + bl;
+            }
+            r = std::min(r, 1.0f);
+            g = std::min(g, 1.0f);
+            bl = std::min(bl, 1.0f);
+            auto out = reinterpret_cast<uint8_t*>(&colors[column]);
+            out[2] = static_cast<uint8_t>(static_cast<int32_t>(std::nearbyint(r * 255.0f)));
+            out[1] = static_cast<uint8_t>(static_cast<int32_t>(std::nearbyint(g * 255.0f)));
+            out[0] = static_cast<uint8_t>(static_cast<int32_t>(std::nearbyint(bl * 255.0f)));
+            out[3] = densities[column];
+        }
+        for (uint32_t i = 0; i < octaves; i++) {
+            walk[i].m_y = static_cast<uint16_t>(walk[i].m_y + walk[i].m_yStep);
+        }
+    }
+    if (this->m_104 != GxDeviceBufferedFrames()) {
+        for (void*& tex : this->m_textures) {
+            if (tex != nullptr) {
+                void* destroyed = tex;
+                GxTexDestroy(&destroyed);
+            }
+        }
+        this->m_textures.m_size = 0;
+    }
+    this->m_20 = static_cast<uint32_t>(this->m_cells);
+    if (this->m_dirty != 0) {
+        if (this->m_18 != -1) {
+            this->m_cells = this->m_18;
+        }
+        this->m_dirty = 0;
+    }
 }

@@ -34,6 +34,10 @@ uint32_t ColorFromVector(const float* rgb);
 // kept; alpha 0 leaves it.
 // ref: FUN_1413da3d0
 void ColorLerpByte(uint32_t* color, uint32_t alpha, uint32_t target);
+// The real roots of a·t² + b·t + c, smaller first (the numerically stable form); false when
+// there are none.
+// ref: FUN_141343dd0
+bool QuadraticRoots(float a, float b, float c, float* low, float* high);
 // RGB (0..1) to HSV (hue in degrees, saturation, value); out of range gives (-1, 0, 0).
 void ColorRgbToHsv(const float* rgb, float* hsv);
 // HSV back to RGB; a hue of -1 with no saturation is grey.

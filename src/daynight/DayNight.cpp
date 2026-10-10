@@ -445,6 +445,12 @@ void DayNightUpdate(DAYNIGHT* dayNight, const float* position) {
     dayNight->m_scene->Update(position);
 }
 
+// ref: FUN_142443d80
+void DayNightCompute(DAYNIGHT* dayNight, int32_t timeMs, float elapsed, float timeSeconds, bool alive, void* env,
+    const float* viewMatrix, bool colorGrading, bool zoneLightsSingly) {
+    dayNight->m_scene->Compute(timeMs, elapsed, timeSeconds, alive, env, viewMatrix, colorGrading, zoneLightsSingly);
+}
+
 // ref: FUN_142443db0
 void DayNightPrepareFrame(DAYNIGHT* dayNight, void* env, bool colorGrading) {
     dayNight->m_scene->PrepareFrame(env, colorGrading);
