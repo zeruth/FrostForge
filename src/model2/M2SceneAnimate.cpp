@@ -458,7 +458,7 @@ void CM2Scene::Animate(void* frustum, bool threaded) {
 // ref: FUN_1411d2180
 void CM2Scene::Animate(bool threaded) {
     bool bucketModels = this->m_bucketModels;
-    for (CM2Lighting* lighting = this->m_lightings; lighting != nullptr;) {
+    for (CM2Lighting* lighting = this->m_pointLights; lighting != nullptr;) {
         CM2Lighting* next = lighting->m_next;
         if (lighting->m_scene != nullptr && lighting->m_08 != this->m_frame) {
             lighting->SetEnabled(0);

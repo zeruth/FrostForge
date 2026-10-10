@@ -58,6 +58,8 @@ class CM2Lighting {
     // Into the scene's point or directional list (FUN_141200090).
     // ref: FUN_141200090
     void Link();
+    // Takes another light's description, without its scene or links (FUN_1411ffbb0).
+    void Assign(const CM2Lighting* other);
 };
 
 static_assert(sizeof(CM2Lighting) == 0x98, "CM2Lighting is 0x98 bytes");
@@ -101,6 +103,8 @@ void M2ModelLightingAddDirectional(CM2ModelLighting* lighting, const float* colo
 // m_maxLights of them), a directional one added in.
 // ref: FUN_1411ff860
 void M2ModelLightingAdd(CM2ModelLighting* lighting, CM2Lighting* light);
+// The sphere around the point lights: their centre, and the farthest reach (FUN_1411ffa40).
+void M2ModelLightingBound(CM2ModelLighting* lighting);
 // Done: the plane into camera space when asked (FUN_1411ffb70).
 void M2ModelLightingEnd(CM2ModelLighting* lighting);
 // A plane through a matrix (FUN_14134ba00).

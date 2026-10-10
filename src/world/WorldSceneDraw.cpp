@@ -3,7 +3,9 @@
 // (FUN_1413c5ce0), with the pieces of the view, the culling and the occlusion they run.
 
 #include "world/WorldScene.hpp"
+#include "base/Matrix.hpp"
 #include "client/FrameBufferCache.hpp"
+#include "client/RenderSettings.hpp"
 #include "daynight/DayNight.hpp"
 #include "gx/Gx.hpp"
 #include "gx/GxRenderTargets.hpp"
@@ -11,6 +13,7 @@
 #include "model2/M2Scene.hpp"
 #include "os/Sync.hpp"
 #include "shadereffect/ShaderEffectContext.hpp"
+#include "shadereffect/ShaderEffectShadow.hpp"
 #include "threadpool/ThreadPool.hpp"
 #include "ui/FrameTime.hpp"
 #include "util/Unimplemented.hpp"
@@ -633,28 +636,174 @@ void CWorldScene::RenderWater(WORLDRENDERPARAMS* params) {
     FROST_UNIMPLEMENTED();
 }
 
-// The scene's lights for its models (FUN_1413c9880): the map's point lights gathered around
-// the camera into the scene's lighting. Not ported.
+// The scene's lights for its models: the M2 scene's point lights nearest the camera, each
+// held in one of three slots that fade a light in over a third of a second when it appears and
+// out when it goes; one new light takes the last free slot a frame. The slots' lights go into
+// the scene's lighting, and its sphere is taken around them.
 // ref: FUN_1413c9880
 void CWorldScene::GatherLights() {
-    FROST_UNIMPLEMENTED();
+    CWorldMap* current = this->m_maps[this->m_mapIndex];
+    float center[4] = {0.0f, 0.0f, 0.0f, 32.0f};
+    if (current != nullptr) {
+        std::memcpy(center, current->Position(), 12);
+    }
+    CM2ModelLighting nearest;
+    M2ModelLightingBegin(&nearest, nullptr, center);
+    M2SceneGatherLights(this->m_m2Scene, &nearest);
+    uint32_t count = nearest.m_pointCount;
+    float step = FrameTime_GetElapsedSeconds() * 3.0f;  // DAT_14262f25c
+    int32_t free = -1;
+    for (int32_t i = 0; i < 3; i++) {
+        WORLDSCENELIGHT& slot = this->m_lights[i];
+        if ((slot.m_flags & 4) != 0) {
+            free = i;
+            continue;
+        }
+        int32_t found = -1;
+        if (slot.m_source != nullptr) {
+            for (uint32_t j = 0; j < count; j++) {
+                if (nearest.m_points[j] == slot.m_source) {
+                    found = static_cast<int32_t>(j);
+                    slot.m_light.Assign(nearest.m_points[j]);
+                    float color[3];
+                    std::memcpy(slot.m_color, slot.m_light.GetDiffuse(color), sizeof(slot.m_color));
+                    nearest.m_points[j] = nullptr;
+                    break;
+                }
+            }
+        }
+        uint8_t flags = found == -1 ? static_cast<uint8_t>((slot.m_flags & 0xfd) | 1)
+                                    : static_cast<uint8_t>((slot.m_flags & 0xfe) | 2);
+        slot.m_flags = flags;
+        if ((flags & 1) != 0) {
+            slot.m_fade = slot.m_fade - step;
+            if (slot.m_fade < 0.0f) {
+                slot.m_fade = 0.0f;
+                slot.m_flags = static_cast<uint8_t>((flags & 0xfe) | 4);
+                free = i;
+            }
+        } else if ((flags & 2) != 0) {
+            slot.m_fade = step + slot.m_fade;
+            if (1.0f < slot.m_fade) {
+                slot.m_fade = 1.0f;
+                slot.m_flags = flags & 0xfd;
+            }
+        }
+    }
+    if (free != -1) {
+        for (uint32_t j = 0; j < count; j++) {
+            if (nearest.m_points[j] == nullptr) {
+                continue;
+            }
+            WORLDSCENELIGHT& slot = this->m_lights[free];
+            slot.m_source = nearest.m_points[j];
+            slot.m_fade = 0.0f;
+            slot.m_flags = static_cast<uint8_t>((slot.m_flags & 0xfb) | 2);
+            slot.m_light.Assign(nearest.m_points[j]);
+            float color[3];
+            std::memcpy(slot.m_color, slot.m_light.GetDiffuse(color), sizeof(slot.m_color));
+            break;
+        }
+    }
+    for (WORLDSCENELIGHT& slot : this->m_lights) {
+        if ((slot.m_flags & 4) != 0) {
+            continue;
+        }
+        slot.m_light.m_diffuse[0] = slot.m_fade * slot.m_color[0];
+        slot.m_light.m_diffuse[1] = slot.m_color[1] * slot.m_fade;
+        slot.m_light.m_diffuse[2] = slot.m_color[2] * slot.m_fade;
+        M2ModelLightingAdd(&this->m_lighting, &slot.m_light);
+    }
+    M2ModelLightingBound(&this->m_lighting);
 }
 
-// The environment the frame's shaders read (FUN_141353210): the camera, the view, the target
-// scale, the weather's direction and colour and the shadow factor into the scene's twelve
-// environment blocks. Not ported.
+// ref: FUN_1413c4740
+void CWorldScene::GetLightConstants(const float* view, uint8_t* out) {
+    float scale = 1.0f;  // DAT_142618d64
+    float value = 0.0f;
+    float offset[2] = {0.0f, 0.0f};
+    if (g_renderSettings.m_shadowMode > 1 && this->m_dayNight != nullptr) {
+        DayNightGetLightTransform(this->m_dayNight, &value, &scale, offset);
+    }
+    float transform[16];
+    MatrixIdentity(transform);  // DAT_14261a9d0
+    MatrixScaleUniform(transform, scale);
+    const float move[3] = {offset[0], offset[1], 0.0f};
+    MatrixTranslate(transform, move);
+    float inverse[16];
+    MatrixInverse(view, inverse, MatrixDeterminant(view));
+    // The view's inverse times the transform, its first three columns as rows.
+    auto constants = reinterpret_cast<float*>(out + 0xb0);
+    for (int32_t column = 0; column < 3; column++) {
+        for (int32_t row = 0; row < 4; row++) {
+            constants[column * 4 + row] = inverse[row * 4 + 0] * transform[0 * 4 + column]
+                + inverse[row * 4 + 1] * transform[1 * 4 + column] + inverse[row * 4 + 3] * transform[3 * 4 + column]
+                + inverse[row * 4 + 2] * transform[2 * 4 + column];
+        }
+    }
+    constants[0xc] = value;
+    constants[0xd] = 1.0f;
+    constants[0xe] = 0.0f;
+    constants[0xf] = 0.0f;
+}
+
+// The environment the frame's shaders read: the shadow band and light constants to pixel
+// buffer 9; the scene's eight fogs and four default ones (the last three with their colours
+// cleared, set white and set grey); the target scale, the shadow factor, the view's forward
+// axis and the day/night and run times, all to pixel buffer 5; the weather's colour and
+// direction to pixel buffer 7.
 // ref: FUN_141353210
 void WorldSceneSetEnvironment(uint8_t (*environment)[0xe0], CWorldScene* scene, const float* position,
     const float* view, const float* targetScale, const float* direction, const float* color, float shadowFactor) {
-    (void)environment;
-    (void)scene;
-    (void)position;
-    (void)view;
-    (void)targetScale;
-    (void)direction;
-    (void)color;
-    (void)shadowFactor;
-    FROST_UNIMPLEMENTED();
+    auto bytes = reinterpret_cast<uint8_t*>(environment);
+    std::memcpy(bytes + 0xa80, targetScale, 0x10);
+    std::memcpy(bytes + 0xa90, targetScale, 0x10);
+    uint8_t lights[0xf0] = {};
+    ShaderEffectShadowBandConstants(reinterpret_cast<float*>(lights));
+    ShaderEffectShadowBandScale(reinterpret_cast<float*>(lights + 0x60));
+    scene->GetLightConstants(view, lights);
+    GxRenderContext* context = g_gxRenderContext;
+    std::memcpy(context->LockConstants(2, 9, 0xf0), lights, 0xf0);
+    context->UnlockConstants(2, 9);
+    auto fogs = reinterpret_cast<const uint8_t*>(&scene->m_farClip);
+    float block[0xe0 / 4];
+    for (uint32_t i = 0; i < 8; i++) {
+        std::memcpy(environment[i], ShaderEffectFogConstants(block, ShaderEffectEnvironmentFog(fogs, i), 0.0f,
+            position, view), 0xe0);
+    }
+    for (uint32_t i = 8; i < 12; i++) {
+        std::memcpy(environment[i], ShaderEffectDefaultFogConstants(block), 0xe0);
+        if (i == 8) {
+            continue;
+        }
+        // Three floats at 0x30, three at 0x44 and six at 0x54.
+        const float fill = i == 9 ? 0.0f : i == 10 ? 1.0f : 0.5f;
+        auto words = reinterpret_cast<float*>(environment[i]);
+        for (uint32_t word : {0xcu, 0xdu, 0xeu, 0x11u, 0x12u, 0x13u, 0x15u, 0x16u, 0x17u, 0x18u, 0x19u, 0x1au}) {
+            words[word] = fill;
+        }
+    }
+    *reinterpret_cast<float*>(bytes + 0xab0) = shadowFactor;
+    // The view's third row, normalised.
+    auto forward = reinterpret_cast<float*>(bytes + 0xac0);
+    float inverseLength = 1.0f / std::sqrt(view[9] * view[9] + view[8] * view[8] + view[10] * view[10]);
+    forward[0] = view[8] * inverseLength;
+    forward[1] = view[9] * inverseLength;
+    forward[2] = view[10] * inverseLength;
+    auto times = reinterpret_cast<float*>(bytes + 0xaa0);
+    float time = static_cast<float>(DayNightGetTime(scene->m_dayNight));
+    float noon = 720.0f;  // DAT_142734b0c
+    float fromNoon = noon < time ? noon - (time - noon) : time;
+    times[0] = time;
+    times[1] = time * 0.00069444446f;      // DAT_142734af0
+    times[2] = fromNoon * 0.0013888889f;   // DAT_142722ff4
+    times[3] = static_cast<float>(FrameTime_GetRunTime()) * 0.001f;  // DAT_142618f58
+    std::memcpy(context->LockConstants(2, 5, 0xad0), bytes, 0xad0);
+    context->UnlockConstants(2, 5);
+    auto weather = reinterpret_cast<uint8_t*>(context->LockConstants(2, 7, 0x20));
+    std::memcpy(weather, color, 0x10);
+    std::memcpy(weather + 0x10, direction, 0x10);
+    context->UnlockConstants(2, 7);
 }
 
 // ref: FUN_1413c2d80

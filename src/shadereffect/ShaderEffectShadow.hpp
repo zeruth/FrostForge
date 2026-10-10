@@ -25,6 +25,14 @@ extern SHADOWCASCADE g_shadowCascades[2][4];
 extern void* g_shadowDefaultTex;
 extern float g_shadowConstants[12];
 extern void* g_shadowMapTex;
+// The shadow band's constants (DAT_1430a7960, 0x60 bytes) and its scale over the band's texture
+// size (DAT_1430a79c0, 0x20), both filled by the shadow renderer.
+extern float g_shadowBandConstants[24];
+extern float g_shadowBandScale[8];
+
+// Copies of them (FUN_1412b3f60, FUN_1412b3fb0).
+void ShaderEffectShadowBandConstants(float* out);
+void ShaderEffectShadowBandScale(float* out);
 
 // The shadow textures to stage 2 (FUN_1412b5c40): white at slot 0xc when off, else each
 // cascade from slot 6 with the default and its sampler.

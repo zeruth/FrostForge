@@ -72,6 +72,21 @@ struct WORLDRENDERPARAMS {
 };
 static_assert(sizeof(WORLDRENDERPARAMS) == 0x88, "WORLDRENDERPARAMS is 0x88 bytes");
 
+// A point light the scene fades in and out (0xc0): the scene light it copies, how far in it
+// is, its own colour, and the copy the frame's lighting takes, its colour scaled by the fade.
+// m_flags: 1 fading out, 2 fading in, 4 free.
+struct WORLDSCENELIGHT {
+    CM2Lighting* m_source;          // 0x00
+    uint32_t m_08;
+    float m_fade;                   // 0x0c 0..1
+    float m_color[3];               // 0x10
+    uint32_t m_pad1c;
+    CM2Lighting m_light;            // 0x20
+    uint8_t m_flags;                // 0xb8
+    uint8_t m_padb9[7];
+};
+static_assert(sizeof(WORLDSCENELIGHT) == 0xc0, "WORLDSCENELIGHT is 0xc0 bytes");
+
 class CWorldScene {
     public:
     // The callback lists, by stage. The frame (FUN_1413c5250) runs 0 before the M2 scene
@@ -156,36 +171,8 @@ class CWorldScene {
     uint32_t m_pada7c;
     void* m_a80;                                    // 0xa80 deleted through its vtable's +8
     CM2Lighting m_lightA88;                         // 0xa88
-    uint8_t m_b20[0x100];                           // 0xb20 the lights gathered (FUN_141200000)
-    uint64_t m_c20;                                 // 0xc20 8; 0xc24 1 or 7
-    uint64_t m_c28;                                 // 0xc28
-    float m_c30;                                    // 0xc30 1
-    uint32_t m_c34;
-    uint64_t m_c38;
-    uint64_t m_c40;                                 // 0xc40
-    uint64_t m_c48;                                 // 0xc48
-    uint64_t m_c50;                                 // 0xc50
-    uint32_t m_c58;                                 // 0xc58
-    uint32_t m_padc5c;
-    CM2Lighting m_lightC60;                         // 0xc60
-    uint8_t m_cf8;                                  // 0xcf8 bits 0-1 cleared, bit 2 set
-    uint8_t m_padcf9[7];
-    uint64_t m_d00;                                 // 0xd00
-    uint64_t m_d08;                                 // 0xd08
-    uint64_t m_d10;                                 // 0xd10
-    uint32_t m_d18;                                 // 0xd18
-    uint32_t m_padd1c;
-    CM2Lighting m_lightD20;                         // 0xd20
-    uint8_t m_db8;                                  // 0xdb8
-    uint8_t m_paddb9[7];
-    uint64_t m_dc0;                                 // 0xdc0
-    uint64_t m_dc8;                                 // 0xdc8
-    uint64_t m_dd0;                                 // 0xdd0
-    uint32_t m_dd8;                                 // 0xdd8
-    uint32_t m_paddc;
-    CM2Lighting m_lightDE0;                         // 0xde0
-    uint8_t m_e78;                                  // 0xe78
-    uint8_t m_pade79[7];
+    CM2ModelLighting m_lighting;                    // 0xb20 the lights gathered around the camera
+    WORLDSCENELIGHT m_lights[3];                    // 0xc40 the point lights fading in and out
     uint8_t m_e80[12][0xe0];                        // 0xe80 (FUN_141353210)
     uint64_t m_1900[6];                             // 0x1900
     uint64_t m_1930[2];
@@ -268,6 +255,10 @@ class CWorldScene {
     void RenderWater(WORLDRENDERPARAMS* params);
     // ref: FUN_1413c9880
     void GatherLights();
+    // The light constants (0xf0) the frame's pixel shaders read through `view`: the shadow
+    // band's, then the day/night light transform taken back to world space and its value.
+    // ref: FUN_1413c4740
+    void GetLightConstants(const float* view, uint8_t* out);
     // The callbacks of a stage run with the frame.
     // ref: FUN_1413c2d80
     void RunCallbacks(uint32_t stage, void* frame);
@@ -299,10 +290,8 @@ static_assert(offsetof(CWorldScene, m_8e8) == 0x8e8, "CWorldScene layout");
 static_assert(offsetof(CWorldScene, m_lodScale) == 0x9f0, "CWorldScene layout");
 static_assert(offsetof(CWorldScene, m_farClips) == 0xa58, "CWorldScene layout");
 static_assert(offsetof(CWorldScene, m_lightA88) == 0xa88, "CWorldScene layout");
-static_assert(offsetof(CWorldScene, m_c20) == 0xc20, "CWorldScene layout");
-static_assert(offsetof(CWorldScene, m_lightC60) == 0xc60, "CWorldScene layout");
-static_assert(offsetof(CWorldScene, m_lightD20) == 0xd20, "CWorldScene layout");
-static_assert(offsetof(CWorldScene, m_lightDE0) == 0xde0, "CWorldScene layout");
+static_assert(offsetof(CWorldScene, m_lighting) == 0xb20, "CWorldScene layout");
+static_assert(offsetof(CWorldScene, m_lights) == 0xc40, "CWorldScene layout");
 static_assert(offsetof(CWorldScene, m_e80) == 0xe80, "CWorldScene layout");
 static_assert(offsetof(CWorldScene, m_1950) == 0x1950, "CWorldScene layout");
 static_assert(offsetof(CWorldScene, m_frame) == 0x1994, "CWorldScene layout");

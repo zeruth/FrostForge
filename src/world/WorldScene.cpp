@@ -159,26 +159,20 @@ CWorldScene::CWorldScene(uint32_t flags, int32_t type) {
     this->m_a70 = 0;
     this->m_a78 = 0;
     // m_lightA88 and the three below: CM2Lighting's constructor.
-    std::memset(this->m_b20, 0, 0xa0);
-    this->m_c20 = 8;
-    this->m_c28 = 0;
-    this->m_c30 = 1.0f;
-    this->m_c34 = 0;
-    this->m_c50 = 0;
-    this->m_c58 = 0;
-    this->m_c40 = 0;
-    this->m_c48 = 0;
-    this->m_cf8 = static_cast<uint8_t>((this->m_cf8 & 0xfc) | 4);
-    this->m_d10 = 0;
-    this->m_d18 = 0;
-    this->m_d00 = 0;
-    this->m_d08 = 0;
-    this->m_db8 = static_cast<uint8_t>((this->m_db8 & 0xfc) | 4);
-    this->m_dd0 = 0;
-    this->m_dd8 = 0;
-    this->m_dc0 = 0;
-    this->m_dc8 = 0;
-    this->m_e78 = static_cast<uint8_t>((this->m_e78 & 0xfc) | 4);
+    std::memset(&this->m_lighting, 0, 0xa0);
+    this->m_lighting.m_maxLights = 8;
+    this->m_lighting.m_fogIndex = 0;
+    this->m_lighting.m_plane[0] = 0.0f;
+    this->m_lighting.m_plane[1] = 0.0f;
+    this->m_lighting.m_plane[2] = 1.0f;
+    this->m_lighting.m_plane[3] = 0.0f;
+    for (WORLDSCENELIGHT& light : this->m_lights) {
+        std::memset(light.m_color, 0, sizeof(light.m_color));
+        light.m_source = nullptr;
+        light.m_08 = 0;
+        light.m_fade = 0.0f;
+        light.m_flags = static_cast<uint8_t>((light.m_flags & 0xfc) | 4);
+    }
     for (auto& entry : this->m_e80) {
         uint8_t* bytes = entry;
         auto u64 = [bytes](size_t offset, uint64_t value) { std::memcpy(bytes + offset, &value, 8); };

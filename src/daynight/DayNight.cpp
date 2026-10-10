@@ -496,6 +496,22 @@ void DayNightBeginFrame(DAYNIGHT* dayNight) {
     dayNight->m_scene->BeginFrame();
 }
 
+// ref: FUN_142442cd0
+uint32_t DayNightGetTime(DAYNIGHT* dayNight) {
+    return DNField<uint32_t>(dayNight->m_scene, 8);
+}
+
+// The reference's body is the shared empty one (FUN_1402ca290): it writes nothing, so the
+// caller keeps its defaults.
+// ref: FUN_142442e70
+bool DayNightGetLightTransform(DAYNIGHT* dayNight, float* value, float* scale, float* offset) {
+    (void)dayNight;
+    (void)value;
+    (void)scale;
+    (void)offset;
+    return false;
+}
+
 // ref: FUN_142442810
 uint8_t* DayNightLightBlock(DAYNIGHT* dayNight, const void* env) {
     size_t offset = DNField<uint8_t>(const_cast<void*>(env), 0x5bc) != 0 ? 0x15a4 : 0x1580;

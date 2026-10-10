@@ -132,8 +132,8 @@ class CM2Scene {
     uint32_t m_0ac;
     uint32_t m_flags;                           // 0x00b0 0x40 no model lighting, 0x200 ...
     float m_0b4;                                // 0x00b4 the object fill's clock
-    uint64_t m_0b8;                             // 0x00b8
-    CM2Lighting* m_lightings;                   // 0x00c0 linked through +0x90
+    CM2Lighting* m_directionalLights;           // 0x00b8 linked through +0x90
+    CM2Lighting* m_pointLights;                 // 0x00c0 linked through +0x90
     uint32_t m_maxLights;                       // 0x00c8 8
     uint32_t m_pad0cc;
     OSMUTEX m_lock0d0;                          // 0x00d0

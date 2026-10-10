@@ -276,9 +276,14 @@ int32_t M2FrustumTestBox(const float* planes, const float* box) {
 
 // ref: FUN_1411df990
 void M2SceneGatherLights(CM2Scene* scene, CM2ModelLighting* lighting) {
-    (void)scene;
-    (void)lighting;
-    FROST_UNIMPLEMENTED();
+    for (CM2Lighting* light = scene->m_directionalLights; light != nullptr; light = light->m_next) {
+        M2ModelLightingAdd(lighting, light);
+    }
+    for (CM2Lighting* light = scene->m_pointLights; light != nullptr;) {
+        CM2Lighting* next = light->m_next;
+        M2ModelLightingAdd(lighting, light);
+        light = next;
+    }
 }
 
 // ref: FUN_1411ddad0
@@ -406,8 +411,8 @@ CM2Scene::CM2Scene(M2CACHE* cache, int32_t type) {
     this->m_0ac = 0;
     this->m_flags = 0;
     this->m_0b4 = 0.0f;
-    this->m_0b8 = 0;
-    this->m_lightings = nullptr;
+    this->m_directionalLights = nullptr;
+    this->m_pointLights = nullptr;
     this->m_maxLights = 8;
     OsMutexInit(&this->m_lock0d0);
     this->m_crit0d8.Initialize();

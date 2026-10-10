@@ -563,6 +563,10 @@ void DayNightBeginFrame(DAYNIGHT* dayNight);
 // The light's direction block (+0x1580, or the second light's +0x15a4 for an env that asks).
 // ref: FUN_142442810
 uint8_t* DayNightLightBlock(DAYNIGHT* dayNight, const void* env);
+// The light state's time of day (FUN_142442cd0).
+uint32_t DayNightGetTime(DAYNIGHT* dayNight);
+// A value, scale and offset for the scene's light transform (FUN_142442e70); writes nothing.
+bool DayNightGetLightTransform(DAYNIGHT* dayNight, float* value, float* scale, float* offset);
 // The water colour: the override's, or the current light's (second light for such an env).
 // ref: FUN_142442c30
 uint32_t* DayNightWaterColor(DAYNIGHT* dayNight, uint32_t* out, const void* env);

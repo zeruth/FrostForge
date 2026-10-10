@@ -81,8 +81,13 @@ void CM2Lighting::SetPosition(const float* position) {
     this->m_position[1] = position[1];
     this->m_position[2] = position[2];
     if (this->m_scene != nullptr) {
-        // the position through the scene's view matrix (scene +0xd478) into m_worldPosition
-        FROST_UNIMPLEMENTED();
+        const float* m = this->m_scene->m_camera.m;
+        float x = this->m_position[0];
+        float y = this->m_position[1];
+        float z = this->m_position[2];
+        this->m_worldPosition[0] = y * m[4] + x * m[0] + z * m[8] + m[12];
+        this->m_worldPosition[1] = y * m[5] + x * m[1] + z * m[9] + m[13];
+        this->m_worldPosition[2] = y * m[6] + x * m[2] + z * m[10] + m[14];
     }
     if (this->m_enabled != 0 && this->m_scene != nullptr && this->m_type == LIGHT_POINT) {
         this->Unlink();
@@ -112,10 +117,8 @@ void CM2Lighting::Unlink() {
     if (this->m_link == nullptr && this->m_next == nullptr) {
         return;
     }
-    // under the scene's light lock (scene +0xd0)
-    if (this->m_scene != nullptr) {
-        FROST_UNIMPLEMENTED();
-    }
+    CM2Scene* scene = this->m_scene;
+    OsMutexLock(&scene->m_lock0d0);
     if (this->m_link != nullptr) {
         *this->m_link = this->m_next;
     }
@@ -124,6 +127,7 @@ void CM2Lighting::Unlink() {
     }
     this->m_link = nullptr;
     this->m_next = nullptr;
+    OsMutexUnlock(&scene->m_lock0d0);
 }
 
 // ref: FUN_141200090
@@ -131,8 +135,53 @@ void CM2Lighting::Link() {
     if (this->m_enabled == 0 || this->m_scene == nullptr) {
         return;
     }
-    // the scene's point (+0xc0) or directional (+0xb8) list, under its light lock
-    FROST_UNIMPLEMENTED();
+    OSMUTEX* lock = &this->m_scene->m_lock0d0;
+    OsMutexLock(lock);
+    CM2Scene* scene = this->m_scene;
+    if (this->m_type == LIGHT_POINT) {
+        this->m_link = &scene->m_pointLights;
+        this->m_next = scene->m_pointLights;
+        scene->m_pointLights = this;
+        if (this->m_next != nullptr) {
+            this->m_next->m_link = &this->m_next;
+        }
+    } else if ((~scene->m_flags & 1) != 0) {
+        this->m_link = &scene->m_directionalLights;
+        this->m_next = scene->m_directionalLights;
+        // An ambient colour left black takes the first one's (DAT_14261a954).
+        const float epsilon = 2.3841858e-07f;
+        for (int32_t i = 1; i < 3; i++) {
+            const float* c = this->m_ambient[i];
+            if (std::fabs(c[0] * c[0] + c[1] * c[1] + c[2] * c[2]) < epsilon) {
+                std::memcpy(this->m_ambient[i], this->m_ambient[0], sizeof(float) * 3);
+            }
+        }
+        scene->m_directionalLights = this;
+        if (this->m_next != nullptr) {
+            this->m_next->m_link = &this->m_next;
+        }
+    }
+    OsMutexUnlock(lock);
+}
+
+// ref: FUN_1411ffbb0
+void CM2Lighting::Assign(const CM2Lighting* other) {
+    this->m_scene = nullptr;
+    this->m_08 = 0;
+    this->m_type = other->m_type;
+    std::memcpy(this->m_position, other->m_position, sizeof(this->m_position));
+    std::memcpy(this->m_worldPosition, other->m_worldPosition, sizeof(this->m_worldPosition));
+    std::memcpy(this->m_direction, other->m_direction, sizeof(this->m_direction));
+    std::memcpy(this->m_ambient, other->m_ambient, sizeof(this->m_ambient));
+    std::memcpy(this->m_diffuse, other->m_diffuse, sizeof(this->m_diffuse));
+    std::memcpy(this->m_pad64, other->m_pad64, sizeof(this->m_pad64));
+    this->m_range = other->m_range;
+    this->m_enabled = other->m_enabled;
+    this->m_78 = other->m_78;
+    this->m_7c = other->m_7c;
+    this->m_flags = static_cast<uint16_t>((this->m_flags & ~7u) | (other->m_flags & 7u));
+    this->m_link = nullptr;
+    this->m_next = nullptr;
 }
 
 // ref: FUN_141200000
@@ -257,6 +306,41 @@ void M2ModelLightingFinish(CM2ModelLighting* lighting, void* param) {
     lighting->m_ambient[0] = ax + lighting->m_ambient[0];
     lighting->m_ambient[1] = (lighting->m_directionColor[1] - b) * quarter + lighting->m_ambient[1];
     lighting->m_ambient[2] = (lighting->m_directionColor[2] - c) * quarter + lighting->m_ambient[2];
+}
+
+// ref: FUN_1411ffa40
+void M2ModelLightingBound(CM2ModelLighting* lighting) {
+    lighting->m_position[0] = 0.0f;
+    lighting->m_position[1] = 0.0f;
+    lighting->m_position[2] = 0.0f;
+    uint32_t count = lighting->m_pointCount;
+    if (count == 0) {
+        lighting->m_position[3] = 0.0f;
+        return;
+    }
+    for (uint32_t i = 0; i < count; i++) {
+        const CM2Lighting* light = lighting->m_points[i];
+        lighting->m_position[0] = light->m_position[0] + lighting->m_position[0];
+        lighting->m_position[1] = light->m_position[1] + lighting->m_position[1];
+        lighting->m_position[2] = light->m_position[2] + lighting->m_position[2];
+    }
+    float inverse = 1.0f / static_cast<float>(count);
+    lighting->m_position[1] = lighting->m_position[1] * inverse;
+    lighting->m_position[0] = inverse * lighting->m_position[0];
+    lighting->m_position[2] = lighting->m_position[2] * inverse;
+    lighting->m_position[3] = 0.0f;
+    float radius = 0.0f;
+    for (uint32_t i = 0; i < count; i++) {
+        const CM2Lighting* light = lighting->m_points[i];
+        float dz = light->m_position[2] - lighting->m_position[2];
+        float dy = light->m_position[1] - lighting->m_position[1];
+        float dx = light->m_position[0] - lighting->m_position[0];
+        float reach = std::sqrt(dy * dy + dx * dx + dz * dz) + light->m_range;
+        if (radius < reach) {
+            radius = reach;
+        }
+        lighting->m_position[3] = radius;
+    }
 }
 
 // ref: FUN_1411ffb70

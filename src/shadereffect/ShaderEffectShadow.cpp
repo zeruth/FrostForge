@@ -11,6 +11,8 @@ SHADOWCASCADE g_shadowCascades[2][4];
 void* g_shadowDefaultTex;
 float g_shadowConstants[12];
 void* g_shadowMapTex;
+float g_shadowBandConstants[24];
+float g_shadowBandScale[8];
 
 namespace {
 
@@ -103,4 +105,14 @@ void ShaderEffectBindShadowMap(GxRenderContext* context, void* tex) {
         tex = TextureGetGxTex(static_cast<HTEXTURE>(g_shadowMapTex));
     }
     context->SetTexture(2, 0xb, AsTex(tex));
+}
+
+// ref: FUN_1412b3f60
+void ShaderEffectShadowBandConstants(float* out) {
+    std::memcpy(out, g_shadowBandConstants, sizeof(g_shadowBandConstants));
+}
+
+// ref: FUN_1412b3fb0
+void ShaderEffectShadowBandScale(float* out) {
+    std::memcpy(out, g_shadowBandScale, sizeof(g_shadowBandScale));
 }

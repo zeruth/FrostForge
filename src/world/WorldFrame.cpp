@@ -474,14 +474,14 @@ void CWorldScene::Animate(CWorldView* view, const int32_t* lod, float elapsed, u
     if (current != nullptr) {
         std::memcpy(center, current->Position(), 12);
     }
-    auto lighting = reinterpret_cast<CM2ModelLighting*>(this->m_b20);
+    CM2ModelLighting* lighting = &this->m_lighting;
     M2ModelLightingBegin(lighting, nullptr, center);
     M2ModelLightingAdd(lighting, &this->m_lightA88);
     uint32_t lights = 1;
     if (this->m_67c[0] != 0 || (current != nullptr && (current->Flags() & 1) != 0)) {
         lights = 7;
     }
-    reinterpret_cast<uint32_t*>(&this->m_c20)[1] = lights;
+    this->m_lighting.m_fogIndex = lights;
     if (m2Scene != nullptr) {
         if ((view->m_flags & 0x1000) == 0) {
             m2Scene->m_flags |= 0x41;

@@ -32,6 +32,11 @@ uint32_t FrameTime_GetTime() {
     return s_time;
 }
 
+// ref: FUN_14065f9a0
+uint32_t FrameTime_GetRunTime() {
+    return s_time - static_cast<uint32_t>(s_startTime);
+}
+
 // ref: FUN_14065f9b0
 uint32_t FrameTime_GetElapsed() {
     return s_elapsed;
