@@ -162,6 +162,19 @@ float* MatrixFromQuaternion(float* m, const float* q) {
     return m;
 }
 
+// ref: FUN_141340a20
+float* MatrixFromQuaternionRotation(float* m, const float* q) {
+    QuaternionToRotation(q, m);
+    m[15] = 1.0f;
+    m[3] = 0.0f;
+    m[7] = 0.0f;
+    m[11] = 0.0f;
+    m[12] = 0.0f;
+    m[13] = 0.0f;
+    m[14] = 0.0f;
+    return m;
+}
+
 // A colour vector (0..1) as 0xffRRGGBB, rounded.
 // ref: FUN_141343fd0
 uint32_t ColorFromVector(const float* rgb) {
@@ -282,6 +295,79 @@ void MatrixAffineInverse(float* m, float scale) {
         m[13] = ty * m[5] + m4 * tx + tz * m6;
         m[14] = m8 * tx + ty * m9 + tz * m[10];
     }
+}
+
+// A reverse-depth perspective from a diagonal field of view: near maps to 1, far to 0.
+// ref: FUN_14068e4b0
+void MatrixPerspective(float fieldOfView, float aspect, float zNear, float zFar, float* m) {
+    float half = (1.0f / std::sqrt(aspect * aspect + 1.0f)) * fieldOfView * 0.5f;
+    float t = std::tan(half);
+    m[3] = 0.0f;
+    m[4] = 0.0f;
+    m[8] = 0.0f;
+    m[9] = 0.0f;
+    m[12] = 0.0f;
+    m[13] = 0.0f;
+    m[1] = 0.0f;
+    m[2] = 0.0f;
+    m[6] = 0.0f;
+    m[7] = 0.0f;
+    m[11] = 1.0f;
+    m[15] = 0.0f;
+    m[5] = zNear / (t * zNear);
+    m[0] = zNear / (t * zNear * aspect);
+    m[14] = (-zNear * zFar) / (zNear - zFar);
+    m[10] = zNear / (zNear - zFar);
+}
+
+// A view looking from `eye` along `direction` with `up`: the columns are the side, the up and
+// the direction, and the eye taken back through them.
+// ref: FUN_14068de30
+void MatrixLookAt(const float* eye, const float* direction, const float* up, float* m) {
+    MatrixIdentity(m);
+    float dz = direction[2] - eye[2];
+    float dx = direction[0] - eye[0];
+    float dy = direction[1] - eye[1];
+    // DAT_142636334
+    if (dx * dx + dy * dy + dz * dz < 0.01f || up[0] * up[0] + up[1] * up[1] + up[2] * up[2] < 0.01f) {
+        return;
+    }
+    float inv = 1.0f / std::sqrt(dx * dx + dy * dy + dz * dz);
+    dz = dz * inv;
+    dx = dx * inv;
+    dy = dy * inv;
+    float sx;
+    float sy;
+    float sz;
+    // DAT_1426c6f7c * DAT_142632534
+    if (1.1920929e-07f * 2.0f <= std::fabs(std::fabs(dz) - 1.0f)) {
+        sz = up[1] * dx - up[0] * dy;
+        sy = up[0] * dz - up[2] * dx;
+        sx = up[2] * dy - up[1] * dz;
+        float s = 1.0f / std::sqrt(sy * sy + sx * sx + sz * sz);
+        sy = sy * s;
+        sx = s * sx;
+        sz = sz * s;
+    } else {
+        sy = 0.0f;
+        sz = 0.0f;
+        sx = 1.0f;
+    }
+    float uz = sx * dy - dx * sy;
+    float uy = dx * sz - sx * dz;
+    float ux = sy * dz - sz * dy;
+    float u = 1.0f / std::sqrt(uy * uy + ux * ux + uz * uz);
+    m[0] = sx;
+    m[1] = ux * u;
+    m[2] = dx;
+    m[4] = sy;
+    m[5] = uy * u;
+    m[6] = dy;
+    m[8] = sz;
+    m[9] = uz * u;
+    m[10] = dz;
+    float move[3] = {-eye[0], -eye[1], -eye[2]};
+    MatrixTranslate(m, move);
 }
 
 // ref: FUN_1411c9970

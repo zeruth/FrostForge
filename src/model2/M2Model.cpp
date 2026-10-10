@@ -1,7 +1,34 @@
 #include "model2/M2Model.hpp"
 
+#include <new>
+
+#include "base/ObjectAlloc.hpp"
 #include "model2/M2Shared.hpp"
+#include "storm/Memory.hpp"
 #include "util/Unimplemented.hpp"
+
+// Engine/Source/Model2/M2Model.cpp.
+
+namespace {
+
+const char* const s_modelFile = "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Model2\\M2Model.cpp";
+
+// The pools (FUN_1411c5d90).
+TObjectAllocHeap* s_accumBoundsPool;    // DAT_1430a0f40 (0x44)
+TObjectAllocHeap* s_effectPool;         // DAT_1430a0f48 (0xb0)
+TObjectAllocHeap* s_matrixPool;         // DAT_1430a0f50 (0x44)
+TObjectAllocHeap* s_windPhasePool;      // DAT_1430a0f58 (0x10)
+TObjectAllocHeap* s_boneSeqPool;        // DAT_1430a0f60 (0x68)
+
+// DAT_142cfb0f0
+uint32_t s_flag400;
+
+TObjectAllocHeap* MakePool(const char* name, uint32_t size, uint32_t perHeap, int32_t line) {
+    void* memory = SMemAlloc(sizeof(TObjectAllocHeap), 0x12, s_modelFile, 0, line, 0);
+    return new (memory) TObjectAllocHeap(name, size, perHeap, 0x12);
+}
+
+}  // namespace
 
 // ref: FUN_1411c62e0
 void M2ModelLinkWaiting(CM2Model* model) {
@@ -36,15 +63,55 @@ bool M2ModelInitializeLoaded(CM2Model* model) {
 
 // ref: FUN_1411c5d90
 void M2ModelInitializePools() {
-    FROST_UNIMPLEMENTED();
+    s_accumBoundsPool = MakePool("M2 Accum Bounds Pool", 0x44, 0x10, 0x1b6);
+    s_effectPool = MakePool("M2 Model Effect Pool", 0xb0, 0x40, 0x1b7);
+    s_matrixPool = MakePool("M2 Model Matrix Pool", 0x44, 8, 0x1b8);
+    s_windPhasePool = MakePool("M2 Model Wind Phase Pool", 0x10, 0x40, 0x1b9);
+    s_boneSeqPool = MakePool("M2 Bone Seq Pool", 0x68, 0x400, 0x3d66);
+}
+
+TObjectAllocHeap* M2GetBoneSeqPool() {
+    return s_boneSeqPool;
 }
 
 // ref: FUN_1411b7d60
 void M2ModelSetFlag400(bool set) {
-    (void)set;
-    FROST_UNIMPLEMENTED();
+    s_flag400 = set;
 }
 
 void M2CreateModuleScene() {
     FROST_UNIMPLEMENTED();  // FUN_141196e40: CM2Scene
+}
+
+// ref: FUN_1411ff490
+void M2BoneStatesPropagateSlots(M2BoneState* states, const M2Array<M2CompBone>* bones) {
+    uint32_t count = bones->Count();
+    if (count == 0) {
+        return;
+    }
+    uint32_t i = 0;
+    do {
+        const M2CompBone& bone = (*bones)[i];
+        M2BoneState* state = &states[i];
+        if (state->m_sequence == nullptr || (state->m_flags & 0x2000) == 0) {
+            uint16_t parent = static_cast<uint16_t>(bone.m_parentBone);
+            if (parent < count) {
+                state->m_sequence = states[parent].m_sequence;
+                state->m_5c = states[parent].m_5c;
+            } else if (i != 0) {
+                state->m_sequence = states[0].m_sequence;
+                state->m_5c = states[0].m_5c;
+            }
+        }
+        if (state->m_blendSequence == nullptr || (state->m_flags & 0x4000) == 0) {
+            uint16_t parent = static_cast<uint16_t>(bone.m_parentBone);
+            if (parent < bones->Count()) {
+                state->m_blendSequence = states[parent].m_blendSequence;
+            } else if (i != 0) {
+                state->m_blendSequence = states[0].m_blendSequence;
+            }
+        }
+        count = bones->Count();
+        i++;
+    } while (i < count);
 }

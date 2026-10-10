@@ -9,9 +9,10 @@
 
 #include <cstdint>
 
+#include "model2/M2Camera.hpp"
+
 class CWorldScene;
 class CM2Model;
-class CM2Camera;
 
 // ---- the world scene ------------------------------------------------------------------------
 
@@ -87,16 +88,6 @@ void M2ModelSetLoadCallback(CM2Model* model, void (*callback)(CM2Model* model, v
 // FUN_1411caf50: the model's animation events (`event` a four-character code such as '$DSO').
 void M2ModelSetEventCallback(CM2Model* model, void (*callback)(void* param, uint32_t event, void* data), void* const* closure);
 
-// ---- CM2Camera -----------------------------------------------------------------------------
-
-// Vector 7 is the position, 8 the target; float 3 the field of view, 5 the roll.
-void M2CameraGetVector(CM2Camera* camera, int32_t which, float* out);   // FUN_141295d20
-float M2CameraGetFloat(CM2Camera* camera, int32_t which);               // FUN_141295da0
-void M2CameraSetVector(CM2Camera* camera, int32_t which, const float* value);  // FUN_141296020
-void M2CameraSetFloat(CM2Camera* camera, int32_t which, float value);   // FUN_141296160
-void M2CameraAddRef(CM2Camera* camera);                                 // FUN_140317cb0 on it
-void M2CameraRelease(CM2Camera** camera);                               // FUN_141295ff0
-CM2Camera* M2CameraCreateDefault();                                     // FUN_141295830
-CM2Camera* M2CameraClone(CM2Camera* camera);                            // FUN_141295980
+// The CM2Camera functions are in M2Camera.hpp.
 
 #endif

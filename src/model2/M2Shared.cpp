@@ -1,5 +1,7 @@
 #include "model2/M2Shared.hpp"
 
+#include <intrin.h>
+
 #include <cstring>
 
 #include "base/Status.hpp"
@@ -1442,4 +1444,34 @@ void M2SkinProfileRelease(CM2SkinProfileData* skin) {
         skin->m_rtTexcoords = nullptr;
         skin->m_rtObject = nullptr;
     }
+}
+
+// ref: FUN_1411a8070
+CM2BoneOffset* M2SharedGetBoneOffset(CM2Shared* shared, uint32_t index) {
+    if (index < shared->m_boneFileCount) {
+        return &shared->m_boneOffsets[index];
+    }
+    return nullptr;
+}
+
+// ref: FUN_1411a6190
+bool M2BoneOffsetIsLoaded(const CM2BoneOffset* offset) {
+    return offset->m_boneIndices != nullptr && offset->m_offsets != nullptr;
+}
+
+// ref: FUN_1411a86d0
+uint32_t M2SharedLodBoneMask(CM2Shared* shared, uint32_t lod) {
+    if (lod == 0) {
+        return 0;
+    }
+    if (shared->m_lodFlags < 0) {
+        return 0x10000u << (shared->m_lodLevels[lod] & 0x1f);
+    }
+    return 0x10000u << ((lod - 1) & 0x1f);
+}
+
+// ref: FUN_1411ac0b0
+void M2SharedReleaseSequence(CM2Shared* shared, uint32_t sequence) {
+    _InterlockedDecrement(
+        reinterpret_cast<volatile long*>(&shared->m_sequenceState[static_cast<uint16_t>(sequence)]));
 }

@@ -26,7 +26,7 @@ class CM2Lighting {
     float m_ambient[3][3];          // 0x34 the same colour three times
     float m_diffuse[3];             // 0x58
     uint8_t m_pad64[0xc];
-    uint32_t m_70;                  // 0x70
+    float m_range;                  // 0x70 from the diffuse colour's strength
     int32_t m_enabled;              // 0x74
     float m_78;                     // 0x78 0.5
     float m_7c;                     // 0x7c 1.0

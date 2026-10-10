@@ -298,6 +298,14 @@ TObjectAllocHeap* M2GetSharedPool();
 // BaseModel's pools (DAT_1430a1260 the calls, DAT_1430a1268 the impacts).
 TObjectAllocHeap* M2GetCallPool();
 TObjectAllocHeap* M2GetImpactPool();
+// A bone file's remap by index, or null past the count (FUN_1411a8070), and whether it is in
+// (FUN_1411a6190).
+CM2BoneOffset* M2SharedGetBoneOffset(CM2Shared* shared, uint32_t index);
+bool M2BoneOffsetIsLoaded(const CM2BoneOffset* offset);
+// The bone flag a LOD level drops (FUN_1411a86d0): 0 at level 0.
+uint32_t M2SharedLodBoneMask(CM2Shared* shared, uint32_t lod);
+// A sequence's .anim data released (FUN_1411ac0b0).
+void M2SharedReleaseSequence(CM2Shared* shared, uint32_t sequence);
 // The file's destruction back into its pool (FUN_141197460).
 void M2SharedFree(CM2Shared* shared);
 

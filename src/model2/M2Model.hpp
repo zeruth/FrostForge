@@ -23,6 +23,8 @@ class CM2BaseModel;
 class CM2Scene;
 class CM2Model;
 class CM2Camera;
+class TObjectAllocHeap;
+class CParticleEmitter2;
 
 struct C44Matrix {
     float m[16];
@@ -319,18 +321,19 @@ struct M2BoneState {
     M2TrackState<C3Vector> m_scale;         // 0x2c
     M2SequenceTime* m_sequence;             // 0x40
     M2SequenceTime* m_blendSequence;        // 0x48
-    uint64_t m_50;                          // 0x50
+    C44Matrix* m_override;                  // 0x50 a matrix set from outside
     // the bone's flags (low half), 0x2000 own sequence, 0x4000 own blend
     uint32_t m_flags;                       // 0x58
     uint32_t m_5c;                          // 0x5c -1
     uint32_t m_60;                          // 0x60 0xffff0000
     uint32_t m_64;
     uint64_t m_68;                          // 0x68
-    uint64_t m_70;                          // 0x70
-    float m_78;                             // 0x78 1
+    int32_t m_blendEnd;                     // 0x70 the clock the blend ends at
+    float m_blendRate;                      // 0x74 per ms
+    float m_blendMax;                       // 0x78 1
     float m_blendWeight;                    // 0x7c
-    float m_80;                             // 0x80 1
-    float m_84;                             // 0x84 1
+    float m_weight;                         // 0x80 1
+    float m_inheritedWeight;                // 0x84 1, times the parent's
     uint8_t m_88;                           // 0x88 5
     uint8_t m_89;
     uint16_t m_8a;                          // 0x8a
@@ -355,24 +358,107 @@ struct M2TextureTransformState {
 };
 static_assert(sizeof(M2TextureTransformState) == 0x40, "M2TextureTransformState is 0x40 bytes");
 
+// A camera's state (0x48).
+struct M2CameraState {
+    M2TrackState<C3Vector> m_position;      // 0x00
+    M2TrackState<C3Vector> m_target;        // 0x14
+    M2TrackState<float> m_roll;             // 0x28
+    M2TrackState<float> m_fieldOfView;      // 0x34
+    CM2Camera* m_camera;                    // 0x40
+};
+static_assert(sizeof(M2CameraState) == 0x48, "M2CameraState is 0x48 bytes");
+
+// A light's state (0x100): its tracks and the CM2Lighting it drives.
+struct M2LightState {
+    M2TrackState<C3Vector> m_ambientColor;      // 0x00
+    M2TrackState<float> m_ambientIntensity;     // 0x14
+    M2TrackState<C3Vector> m_diffuseColor;      // 0x20
+    M2TrackState<float> m_diffuseIntensity;     // 0x34
+    M2TrackState<float> m_attenuationStart;     // 0x40
+    M2TrackState<float> m_attenuationEnd;       // 0x4c
+    M2TrackState<uint8_t> m_visibility;         // 0x58
+    uint32_t m_64;                              // 0x64 1
+    CM2Lighting m_lighting;                     // 0x68
+};
+static_assert(sizeof(M2LightState) == 0x100, "M2LightState is 0x100 bytes");
+
+// A ribbon emitter's state (0x50).
+struct M2RibbonState {
+    M2TrackState<C3Vector> m_color;             // 0x00
+    M2TrackState<float> m_alpha;                // 0x14 fixed 16
+    M2TrackState<float> m_heightAbove;          // 0x20
+    M2TrackState<float> m_heightBelow;          // 0x2c
+    M2TrackState<uint16_t> m_textureSlot;       // 0x38
+    M2TrackState<uint8_t> m_visibility;         // 0x44
+};
+static_assert(sizeof(M2RibbonState) == 0x50, "M2RibbonState is 0x50 bytes");
+
+// A particle emitter's state (0x90).
+struct M2ParticleState {
+    M2TrackState<float> m_emissionSpeed;        // 0x00
+    M2TrackState<float> m_speedVariation;       // 0x0c
+    M2TrackState<C3Vector> m_18;                // 0x18 from the shared extra data
+    M2TrackState<float> m_lifespan;             // 0x2c
+    M2TrackState<float> m_emissionRate;         // 0x38
+    M2TrackState<float> m_zSource;              // 0x44
+    M2TrackState<uint8_t> m_enabled;            // 0x50
+    M2TrackState<float> m_emissionAreaLength;   // 0x5c
+    M2TrackState<float> m_emissionAreaWidth;    // 0x68
+    M2TrackState<float> m_verticalRange;        // 0x74
+    M2TrackState<float> m_horizontalRange;      // 0x80
+    uint8_t m_8c;                               // 0x8c 1
+    uint8_t m_8d;                               // 0x8d 1
+    uint8_t m_8e;                               // 0x8e
+    uint8_t m_8f;
+};
+static_assert(sizeof(M2ParticleState) == 0x90, "M2ParticleState is 0x90 bytes");
+
 // The model's animation (0x98, FUN_141200610): the file's arrays it animates from.
 struct M2AnimState {
-    M2Array<M2Loop>* m_loops;               // 0x00
+    // The model's own source (the first six fields of an M2SequenceSource).
+    M2Array<M2CompBone>* m_bones;           // 0x00
     void* m_08;                             // 0x08
     M2Array<M2Sequence>* m_sequences;       // 0x10
     M2Array<uint16_t>* m_sequenceHash;      // 0x18
     M2Array<M2Attachment>* m_attachments;   // 0x20
-    M2Array<uint16_t>* m_keyBoneLookup;     // 0x28 attachment index by id
-    M2BoneState* m_bones;                   // 0x30
+    M2Array<uint16_t>* m_attachmentLookup;  // 0x28 attachment index by id
+    M2BoneState* m_boneStates;              // 0x30
     uint32_t* m_globalTimes;                // 0x38
-    void* m_attachmentStates;               // 0x40
-    uint8_t m_48[0x20];                     // 0x48
+    M2TrackState<uint8_t>* m_attachmentStates;  // 0x40
+    void* m_48;                             // 0x48
+    C44Matrix* m_boneMatrices;              // 0x50
+    // A parent skeleton's source.
+    M2Array<M2CompBone>* m_parentBones;     // 0x58
+    void* m_60;                             // 0x60
     M2Array<M2Sequence>* m_parentSequences; // 0x68
     M2Array<uint16_t>* m_parentHash;        // 0x70
-    uint8_t m_78[0x18];                     // 0x78
+    M2Array<M2Attachment>* m_parentAttachments;  // 0x78
+    M2Array<uint16_t>* m_parentAttachmentLookup; // 0x80
+    void* m_88;                             // 0x88
     uint32_t m_flags;                       // 0x90 1 has a parent skeleton
     uint32_t m_pad94;
 };
+
+// What one pass of bone animation carries (0x108, FUN_1412005a0 starts one): the matrix the
+// root bones hang from, scratch matrices and vectors, and the clock.
+struct M2AnimateContext {
+    C44Matrix m_root;                       // 0x00
+    C44Matrix m_parent;                     // 0x40 the parent bone's, adjusted for billboards
+    C44Matrix m_local;                      // 0x80 the bone's own
+    C3Vector m_pivot;                       // 0xc0
+    float m_cc;
+    C3Vector m_worldPivot;                  // 0xd0
+    float m_dc;
+    C3Vector m_scale;                       // 0xe0
+    float m_ec;
+    int32_t m_time;                         // 0xf0 the scene's
+    uint32_t m_frame;                       // 0xf4
+    uint32_t m_f8;                          // 0xf8
+    uint32_t m_fc;                          // 0xfc
+    uint32_t m_100;                         // 0x100
+    uint32_t m_104;                         // 0x104
+};
+static_assert(sizeof(M2AnimateContext) == 0x108, "M2AnimateContext is 0x108 bytes");
 static_assert(sizeof(M2AnimState) == 0x98, "M2AnimState is 0x98 bytes");
 
 class CM2Model : public CM2BaseModel {
@@ -401,9 +487,9 @@ class CM2Model : public CM2BaseModel {
     void* m_418;                        // 0x418
     void* m_callback420;                // 0x420
     void* m_callback420Closure[2];      // 0x428
-    uint32_t m_438;                     // 0x438
+    float m_screenSize;                 // 0x438 the model's size on screen, for throttling
     float m_43c;                        // 0x43c -10000
-    uint32_t m_440;                     // 0x440
+    uint32_t m_lastAnimateTime;         // 0x440
     uint32_t m_pad444;
     void* m_block;                      // 0x448 the per-instance arrays
     C44Matrix* m_matrixBlock;           // 0x450 aligned: bone matrices then texture matrices
@@ -435,12 +521,12 @@ class CM2Model : public CM2BaseModel {
     void* m_events;                     // 0x598
     void* m_5a0;                        // 0x5a0
     void* m_5a8;                        // 0x5a8
-    void* m_lights;                     // 0x5b0 (0x100 each)
-    void* m_cameras;                    // 0x5b8 (0x48 each)
-    void* m_ribbonStates;               // 0x5c0 (0x50 each)
+    M2LightState* m_lights;             // 0x5b0
+    M2CameraState* m_cameras;           // 0x5b8
+    M2RibbonState* m_ribbonStates;      // 0x5c0
     void** m_ribbons;                   // 0x5c8 CRibbonEmitter*
-    void* m_particleStates;             // 0x5d0 (0x90 each)
-    void** m_particles;                 // 0x5d8 CParticleEmitter2*
+    M2ParticleState* m_particleStates;  // 0x5d0
+    CParticleEmitter2** m_particles;    // 0x5d8
     uint32_t m_physicsBoneCount;        // 0x5e0
     uint32_t m_pad5e4;
     void* m_physicsBoneStates;          // 0x5e8 (0xe0 each)
@@ -512,6 +598,43 @@ class CM2Model : public CM2BaseModel {
     void GetAttachmentMatrix(uint32_t index, C44Matrix* out) override;
     void Virtual0d8() override;
 
+    // Bone animation (M2ModelAnimate.cpp). A slot shifted by this frame's pause.
+    void ShiftSlotForPause(M2SequenceTime* slot, const M2AnimateContext* context);
+    // One bone's matrix from its tracks and its parent's (FUN_1411ae6a0).
+    void AnimateBone(const M2CompBone* bone, M2BoneState* state, uint32_t index, M2AnimateContext* context);
+    // The scene's wind on a bone of a tinted file (FUN_1411ae6a0's tail).
+    void AnimateBoneWind(uint32_t index, M2AnimateContext* context);
+    // A bone after its parents (FUN_1411b0a30).
+    void AnimateBoneTree(uint32_t index, M2AnimateContext* context);
+    // The root slot only (FUN_1411b0af0).
+    void AnimateRootOnly(M2BoneState* state);
+    // The blended-from sequence released (FUN_1411b6cf0).
+    void DropBlend(M2BoneState* state);
+    // A camera's vectors from its state (FUN_1411b0d10).
+    void UpdateCamera(uint32_t index);
+    // The cameras' tracks (FUN_1411b0f00).
+    void AnimateCameras();
+    // The cameras held elsewhere (FUN_1411b1140).
+    void UpdateHeldCameras();
+
+    // The per-frame update (M2ModelUpdate.cpp): lights (FUN_1411b13a0), light placement
+    // (FUN_1411b1a40), the whole pass (FUN_1411b1fe0), particle tracks (FUN_1411b2640) and
+    // ribbon tracks (FUN_1411b3490).
+    void AnimateLights(M2AnimateContext* context);
+    void UpdateLights();
+    void Animate(void* a2, const C44Matrix* parent, uint32_t frame, int32_t time, int32_t throttle);
+    void AnimateParticleTracks(M2AnimateContext* context);
+    void AnimateRibbonTracks(M2AnimateContext* context);
+    // FUN_1411ce630, FUN_1411b61c0, FUN_1411b73f0, FUN_1411b4980, FUN_1411b4830, FUN_1411ada40
+    void UpdateMatricesFrom(const C44Matrix* parent);
+    void ResetBoneState();
+    void InitializePhysicsBones();
+    void AnimateTextureWeights();
+    void AnimateTextureTransforms(M2AnimateContext* context);
+    void UpdateChildren(M2AnimateContext* context);
+    // The bounds through the render matrix into the accumulated bounds (FUN_1411b1fe0's tail).
+    void UpdateAccumulatedBounds();
+
     // Set up from the loaded file (FUN_1411c1360): `donor` lends its textures and state.
     void Initialize(CM2Scene* scene, CM2Shared* shared, CM2Model* donor, uint8_t lod, uint32_t createFlags);
     // ref: FUN_1411c24f0
@@ -520,6 +643,20 @@ class CM2Model : public CM2BaseModel {
 static_assert(offsetof(CM2Model, m_waitPrev) == 0x3c8, "CM2Model waiting link at 0x3c8");
 static_assert(offsetof(CM2Model, m_animState) == 0x630, "CM2Model anim state at 0x630");
 static_assert(sizeof(CM2Model) == 0x690, "CM2Model fills its 0x690 slot");
+
+// Each bone's slots from its parent's where it keeps none of its own (FUN_1411ff490).
+void M2BoneStatesPropagateSlots(M2BoneState* states, const M2Array<M2CompBone>* bones);
+// A skeleton file's bone (FUN_141201f40), its sequence source by kind (+0x38 or +0x40) and a
+// sequence it holds released (FUN_1411f8a30).
+void M2SkeletonAnimateBone(void* skeleton, const M2CompBone* bone, M2BoneState* state, uint32_t index,
+    M2AnimateContext* context, M2AnimState* anim);
+void* M2SkeletonGetSource(void* skeleton, bool second);
+void M2SkeletonReleaseSequence(void* source, uint32_t sequence);
+// A context started (FUN_1412005a0): the root identity, the clock and the pass's switches.
+void M2AnimateContextInit(M2AnimateContext* context, uint32_t time, uint32_t frame, uint32_t compute,
+    uint32_t throttle, uint32_t far, uint32_t a7);
+// The "M2 Bone Seq Pool" (DAT_1430a0f60).
+TObjectAllocHeap* M2GetBoneSeqPool();
 
 // The file's waiting list (FUN_1411c62e0 joins at the tail, FUN_1411cdb30 leaves).
 void M2ModelLinkWaiting(CM2Model* model);

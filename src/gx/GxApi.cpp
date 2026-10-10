@@ -2189,6 +2189,12 @@ void GxFrameLatencyWait() {
     GxFrameEndLatencyWait(&s_frameEnd);
 }
 
+// Whether a frame has begun and not yet ended.
+// ref: FUN_14228a040
+bool GxFrameBegan() {
+    return s_frameEnd.m_began != 0;
+}
+
 // ref: FUN_14228a950
 bool GxFrameArm(bool arm) {
     return GxFrameEndArm(&s_frameEnd, arm);

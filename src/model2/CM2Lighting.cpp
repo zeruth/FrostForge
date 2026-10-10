@@ -23,7 +23,7 @@ CM2Lighting::CM2Lighting() {
     std::memset(this->m_pad64, 0, sizeof(this->m_pad64));
     this->m_scene = nullptr;
     this->m_08 = 0;
-    this->m_70 = 0;
+    this->m_range = 0.0f;
     this->m_enabled = 0;
     this->m_link = nullptr;
     this->m_next = nullptr;

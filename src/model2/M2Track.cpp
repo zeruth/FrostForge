@@ -277,11 +277,15 @@ void M2TrackSample(const uint32_t* globalTimes, const M2AnimTarget* target,
         float t;
         SequenceKeys(globalTimes, track, seq, &state->m_key, k0, k1, t);
         const M2Array<M2SplineKey<C3Vector>>& values = track->m_values[index];
-        if (track->m_interpolation == 0) {
+        uint16_t interpolation = track->m_interpolation;
+        if (interpolation == 0) {
             state->m_value = values[k0].m_value;
             return;
         }
-        state->m_value = SplineValue(track->m_interpolation, values[k0], values[k1], t);
+        // Another kind leaves the value as it was.
+        if (interpolation <= 3) {
+            state->m_value = SplineValue(interpolation, values[k0], values[k1], t);
+        }
     }
 
     if (target->m_blendWeight == 0.0f || globalSequence != 0xffff) {
@@ -315,6 +319,81 @@ void M2TrackSample(const uint32_t* globalTimes, const M2AnimTarget* target,
     state->m_value.x = (from.x - state->m_value.x) * w + state->m_value.x;
     state->m_value.y = (from.y - state->m_value.y) * w + state->m_value.y;
     state->m_value.z = (from.z - state->m_value.z) * w + state->m_value.z;
+}
+
+namespace {
+
+float SplineValue(uint16_t interpolation, const M2SplineKey<float>& a, const M2SplineKey<float>& b, float t) {
+    float t2 = t * t;
+    float t3 = t2 * t;
+    if (interpolation == 2) {
+        return ((t3 * kThree - t2 * kSix) + t * kThree) * a.m_outTan + (((t2 * kThree - t3) - t * kThree) + 1.0f) * a.m_value
+            + (t2 * kThree - t3 * kThree) * b.m_inTan + t3 * b.m_value;
+    }
+    return ((t3 - (t2 + t2)) + t) * a.m_outTan + (((t3 + t3) - t2 * kThree) + 1.0f) * a.m_value + (t3 - t2) * b.m_inTan
+        + (t2 * kThree - (t3 + t3)) * b.m_value;
+}
+
+}  // namespace
+
+// ref: FUN_1411fb790
+void M2TrackSample(const uint32_t* globalTimes, const M2AnimTarget* target,
+    const M2Track<M2SplineKey<float>>* track, const M2Track<M2SplineKey<float>>* blendTrack,
+    M2TrackState<float>* state, const float* def, uint32_t flags) {
+    const M2SequenceTime* seq = target->m_sequence;
+    uint32_t index = ValuesIndex(track, seq);
+    uint16_t globalSequence = static_cast<uint16_t>(track->m_globalSequence);
+    if (track->m_values[index].Count() == 0 || (flags & M2TRACK_SKIP_PRIMARY) != 0) {
+        state->m_value = *def;
+        if (track->m_interpolation == 0) {
+            return;
+        }
+    } else {
+        uint32_t k0;
+        uint32_t k1;
+        float t;
+        SequenceKeys(globalTimes, track, seq, &state->m_key, k0, k1, t);
+        const M2Array<M2SplineKey<float>>& values = track->m_values[index];
+        uint16_t interpolation = track->m_interpolation;
+        if (interpolation == 0) {
+            state->m_value = values[k0].m_value;
+            return;
+        }
+        if (interpolation == 1) {
+            state->m_value = (values[k1].m_value - values[k0].m_value) * t + values[k0].m_value;
+        } else if (interpolation == 2 || interpolation == 3) {
+            state->m_value = SplineValue(interpolation, values[k0], values[k1], t);
+        }
+    }
+
+    if (target->m_blendWeight == 0.0f || globalSequence != 0xffff) {
+        return;
+    }
+    const M2SequenceTime* blendSeq = target->m_blendSequence;
+    if (blendSeq == nullptr) {
+        return;
+    }
+    float from;
+    uint32_t blendIndex = blendSeq->m_sequence;
+    if (blendTrack->m_values.Count() <= blendIndex) {
+        blendIndex = 0;
+    }
+    if (blendTrack->m_values[blendIndex].Count() == 0 || (flags & M2TRACK_SKIP_BLEND) != 0) {
+        from = *def;
+    } else {
+        uint32_t k0;
+        uint32_t k1;
+        float t;
+        SequenceKeys(globalTimes, blendTrack, blendSeq, &state->m_blendKey, k0, k1, t);
+        const M2Array<M2SplineKey<float>>& values = blendTrack->m_values[blendIndex];
+        uint16_t interpolation = blendTrack->m_interpolation;
+        if (interpolation == 2 || interpolation == 3) {
+            from = SplineValue(interpolation, values[k0], values[k1], t);
+        } else {
+            from = (values[k1].m_value - values[k0].m_value) * t + values[k0].m_value;
+        }
+    }
+    state->m_value = (from - state->m_value) * target->m_blendWeight + state->m_value;
 }
 
 // ref: FUN_1411fc8e0

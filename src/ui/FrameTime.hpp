@@ -9,5 +9,7 @@
 void FrameTime_Initialize();
 // The clock in milliseconds (FUN_14065f960).
 uint32_t FrameTime_GetTime();
+// The last frame's length in milliseconds (FUN_14065f9b0).
+uint32_t FrameTime_GetElapsed();
 
 #endif

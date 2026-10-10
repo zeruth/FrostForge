@@ -10,16 +10,39 @@
 
 #include "model2/M2Data.hpp"
 
-// The time an animation is at (one of a model's sequence slots).
+// Where a sequence's bones and sequences come from: the model's own file or a parent skeleton
+// (0x34; FUN_1412006d0 copies one, FUN_141200740 clears it).
+struct M2SequenceSource {
+    M2Array<M2CompBone>* m_bones;           // 0x00
+    void* m_08;                             // 0x08
+    M2Array<M2Sequence>* m_sequences;       // 0x10
+    M2Array<uint16_t>* m_sequenceHash;      // 0x18
+    M2Array<M2Attachment>* m_attachments;   // 0x20
+    M2Array<uint16_t>* m_attachmentLookup;  // 0x28
+    uint32_t m_flags;                       // 0x30 1 the parent's
+    uint32_t m_34;                          // 0x34
+};
+static_assert(sizeof(M2SequenceSource) == 0x38, "M2SequenceSource is 0x38 bytes with its tail");
+
+// One animation playing on a model's bones ("M2 Bone Seq Pool", 0x68): the time it is at and
+// how that time advances.
 struct M2SequenceTime {
     uint32_t m_time;            // 0x00 ms into the sequence
     uint16_t m_sequence;        // 0x04 the sequence's index
-    uint16_t m_pad06;
-    uint32_t m_08;              // 0x08
-    uint32_t m_0c;              // 0x0c
-    uint32_t m_10;              // 0x10
+    uint16_t m_bone;            // 0x06 the bone that last advanced it
+    uint16_t m_nextSequence;    // 0x08 0xffff for none
+    uint16_t m_pad0a;
+    int32_t m_startTime;        // 0x0c the clock when it started
+    int32_t m_endTime;          // 0x10
     float m_speed;              // 0x14 a global sequence's own clock runs while positive
+    uint32_t m_18;              // 0x18
+    uint32_t m_timeOffset;      // 0x1c
+    uint32_t m_repeats;         // 0x20
+    uint32_t m_24;              // 0x24
+    M2SequenceSource m_source;  // 0x28 (its flags at 0x58)
+    uint64_t m_60;              // 0x60
 };
+static_assert(sizeof(M2SequenceTime) == 0x68, "M2SequenceTime is 0x68 bytes");
 
 // What a sampler reads besides the track: the primary and blended-from sequences and the blend
 // weight, at the offsets every animated element keeps them (a bone's state is the full 0x90).
@@ -62,6 +85,10 @@ void M2TrackInitFixed16(const M2Track<uint16_t>* track, M2TrackState<float>* sta
 void M2TrackSample(const uint32_t* globalTimes, const M2AnimTarget* target,
     const M2Track<M2SplineKey<C3Vector>>* track, const M2Track<M2SplineKey<C3Vector>>* blendTrack,
     M2TrackState<C3Vector>* state, const C3Vector* def, uint32_t flags);
+// FUN_1411fb790: a spline float (camera roll and field of view).
+void M2TrackSample(const uint32_t* globalTimes, const M2AnimTarget* target,
+    const M2Track<M2SplineKey<float>>* track, const M2Track<M2SplineKey<float>>* blendTrack,
+    M2TrackState<float>* state, const float* def, uint32_t flags);
 // FUN_1411fc8e0: a byte, stepped; the blended-from key is tracked but not blended.
 void M2TrackSample(const uint32_t* globalTimes, const M2AnimTarget* target, const M2Track<uint8_t>* track,
     const M2Track<uint8_t>* blendTrack, M2TrackState<uint8_t>* state, const uint8_t* def, uint32_t flags);

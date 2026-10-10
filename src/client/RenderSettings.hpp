@@ -72,6 +72,9 @@ void RenderSettingsShutdown();
 // Makes the pending settings current when they differ (FUN_14129da80).
 void RenderSettingsApply();
 
+// The ray traced shadow kind from the current flags (FUN_14129d9a0): 0 none, bit 1 lights cast.
+uint32_t RenderSettingsRayTracedShadows();
+
 // The largest render scale the GPU allows: 2 with 3.5 GB of video memory, else 1 (FUN_14129d7e0).
 float RenderSettingsMaxScale();
 

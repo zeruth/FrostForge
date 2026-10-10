@@ -3,11 +3,16 @@ add_library(model2 STATIC
     CM2Lighting.cpp
     M2Api.cpp
     M2Cache.cpp
+    M2Camera.cpp
     M2Init.cpp
     M2Model.cpp
+    M2ModelAnimate.cpp
+    M2ModelUpdate.cpp
+    M2Particle.cpp
     M2Scene.cpp
     M2Shaders.cpp
     M2Shared.cpp
+    M2Skeleton.cpp
     M2Track.cpp
 )
 target_include_directories(model2 PUBLIC ${CMAKE_SOURCE_DIR}/src)

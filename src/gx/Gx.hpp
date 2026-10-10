@@ -133,6 +133,8 @@ static_assert(sizeof(GXFRAMESTATS) == 0x50, "GXFRAMESTATS is 0x50 bytes");
 // (FUN_14228c9f0).
 uint8_t GxFrameSetPhase(uint8_t phase);
 bool GxFrameBegin();
+// Whether a frame has begun and not yet ended (FUN_14228a040).
+bool GxFrameBegan();
 void GxFrameLatencyWait();
 bool GxFrameArm(bool arm);
 void GxFrameWorkFlush(uint8_t mode);

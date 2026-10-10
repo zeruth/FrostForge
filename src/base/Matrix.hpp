@@ -24,6 +24,8 @@ void MatrixIdentity(float* m);
 float* QuaternionFromEuler(float* q, float yaw, float pitch, float roll);  // FUN_141347da0
 void QuaternionToRotation(const float* q, float* m);                      // FUN_1413408b0
 float* MatrixFromQuaternion(float* m, const float* q);                    // FUN_1413409e0
+// The same keeping nothing of the matrix's translation (FUN_141340a20).
+float* MatrixFromQuaternionRotation(float* m, const float* q);
 // A 0..1 colour as 0xffRRGGBB (FUN_141343fd0).
 uint32_t ColorFromVector(const float* rgb);
 // The determinant (FUN_141341ab0), the adjoint (FUN_141340bf0), the inverse as the adjoint
@@ -33,6 +35,10 @@ float MatrixDeterminant(const float* m);
 float* MatrixAdjoint(const float* m, float* out);
 float* MatrixInverse(const float* m, float* out, float determinant);
 void MatrixAffineInverse(float* m, float scale);
+// A reverse-depth perspective from a diagonal field of view (FUN_14068e4b0) and a look-at view
+// (FUN_14068de30).
+void MatrixPerspective(float fieldOfView, float aspect, float zNear, float zFar, float* m);
+void MatrixLookAt(const float* eye, const float* direction, const float* up, float* m);
 // Normalises unless the length is about zero (FUN_1411c9970).
 void VectorNormalize(float* v);
 

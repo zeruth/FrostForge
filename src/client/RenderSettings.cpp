@@ -300,6 +300,21 @@ void RenderSettingsApply() {
     }
 }
 
+// The ray traced shadow kind from the flags: 0 none, else bit 0 set and bit 2 below the top
+// setting.
+// ref: FUN_14129d9a0
+uint32_t RenderSettingsRayTracedShadows() {
+    uint32_t mode = g_renderSettings.m_flags >> 3 & 3;
+    if (mode == 0) {
+        return 0;
+    }
+    uint32_t kind = mode < 2 ? 1u : 3u;
+    if (mode < 3) {
+        return kind | 4;
+    }
+    return kind;
+}
+
 // ref: FUN_14129d7e0
 float RenderSettingsMaxScale() {
     uint32_t dedicated;

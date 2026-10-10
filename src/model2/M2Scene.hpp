@@ -29,9 +29,16 @@ class CM2Scene {
     uint8_t m_328[0xd478 - 0x328];
     C44Matrix m_camera;                 // 0xd478 the view
     C44Matrix m_viewProjection;         // 0xd4b8
-    uint8_t m_d4f8[0xd560 - 0xd4f8];
+    uint8_t m_d4f8[0xd538 - 0xd4f8];
+    C3Vector m_windOrigin;              // 0xd538
+    uint8_t m_d544[0xd560 - 0xd544];
     void* m_frustum;                    // 0xd560
-    uint8_t m_d568[0xdae8 - 0xd568];
+    uint8_t m_d568[0xd674 - 0xd568];
+    float m_animateRatio;               // 0xd674 screen size past which animation is light
+    uint8_t m_d678[0xd6a8 - 0xd678];
+    // The wind: direction, speed and gust (the last argument 0).
+    void (*m_windCallback)(float* direction, float* speed, float* gust, void* param);  // 0xd6a8
+    uint8_t m_d6b0[0xdae8 - 0xd6b0];
     bool m_collectDrawParams;           // 0xdae8
     bool m_bucketModels;                // 0xdae9
     uint8_t m_daea[0xdb1c - 0xdaea];
@@ -51,6 +58,22 @@ struct BaseModelDrawParams {
     float m_box[6];                     // 0x08
 };
 static_assert(sizeof(BaseModelDrawParams) == 0x20, "BaseModelDrawParams is 0x20 bytes");
+
+inline float M2SceneGetAnimateRatio(CM2Scene* scene) {
+    return scene->m_animateRatio;
+}
+
+inline bool M2SceneHasWind(CM2Scene* scene) {
+    return scene->m_windCallback != nullptr;
+}
+
+inline const float* M2SceneGetWindOrigin(CM2Scene* scene) {
+    return &scene->m_windOrigin.x;
+}
+
+inline void M2SceneSampleWind(CM2Scene* scene, float* direction, float* speed, float* gust) {
+    scene->m_windCallback(direction, speed, gust, nullptr);
+}
 
 // ref: FUN_1411ace60
 BaseModelDrawParams* M2SceneAddDrawParams(void* array);
