@@ -62,5 +62,24 @@ float* MatrixRigidInverse(const float* m, float* out);
 float* BoxTransform(float* out, const float* box, const float* m);
 float* BoxFromSpheres(float* out, const float* spheres, uint32_t count);
 float* SphereFromSpheres(float* out, const float* spheres, uint32_t count);
+// The inverse, or the identity when the determinant is about zero (FUN_141342930).
+void MatrixInverseOrIdentity(const float* m, float* out);
+
+// 3x3 matrices (NTempest's C33Matrix), row vectors, 9 floats: a times b (FUN_141344b20), from a
+// quaternion (FUN_1413449e0), a rotation about an axis (FUN_141345dd0, `normalized` skips
+// normalising it), a 4x4's 3x3 part (FUN_1413449a0) and every entry scaled (FUN_141345fc0).
+float* Matrix3Multiply(float* out, const float* a, const float* b);
+float* Matrix3FromQuaternion(float* out, const float* q);
+float* Matrix3FromAxisAngle(float* out, float radians, const float* axis, bool normalized);
+float* Matrix3FromMatrix(float* out, const float* m);
+void Matrix3Scale(float* m, float scale);
+// A quaternion from a 3x3 given column-major (FUN_141348170), and from a row-major one, which is
+// transposed first (FUN_141347f30).
+void QuaternionFromRotation(float* q, const float* m);
+void QuaternionFromMatrix3(float* q, const float* m);
+// The engine's quick sine and cosine: a parabola through each half turn (FUN_141343a90,
+// FUN_1413437b0).
+float FastSin(float radians);
+float FastCos(float radians);
 
 #endif

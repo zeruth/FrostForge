@@ -112,6 +112,25 @@ GxBuf* GxBufCreateSimple(uint8_t kind, uint8_t type, uint32_t stride, uint32_t c
     return GxBufCreate(&desc);
 }
 
+// ref: FUN_142288a00
+GxBuf* GxBufCreateSized(uint8_t kind, uint8_t type, uint64_t size, const char* name) {
+    (void)name;
+    GXBUFDESC desc = {};
+    desc.m_type = type;
+    desc.m_size = size;
+    desc.m_format = 0;
+    desc.m_elementSize = 1;
+    if (kind == 0) {
+        desc.m_usage = 0x1802;
+    } else if (kind == 1) {
+        desc.m_usage = 0x1801;
+    } else {
+        desc.m_usage = 0x1804;
+        desc.m_elementSize = 0x10;
+    }
+    return GxBufCreate(&desc);
+}
+
 // ref: FUN_142290c90
 GxBuf* GxBufTransient(GxRenderContext* context, uint8_t type, uint32_t stride, uint32_t count) {
     GxBuf* buf = context->GetUploadBuf(type);

@@ -1772,7 +1772,7 @@ uint32_t DrawParticleRun(M2SceneDrawContext* ctx, uint32_t first, const M2Elemen
     CM2ModelLighting* leadLighting = leadModel->m_lightingUsed;
     const float* plane = (leadFlags & 2) == 0 ? ctx->m_scene->m_d568 : leadLighting->m_plane;
     auto emitterCounts = [](const CParticleEmitter2* emitter, uint32_t* vertices, uint32_t* indices) {
-        uint32_t live = static_cast<uint32_t>(emitter->m_liveCount);
+        uint32_t live = static_cast<uint32_t>(emitter->m_list.m_live.m_size);
         uint32_t perVertex = emitter->m_verticesPerParticle;
         uint32_t fit = static_cast<uint32_t>(0x4000 / static_cast<uint64_t>(perVertex));
         uint32_t count = live <= fit ? live : fit;

@@ -547,7 +547,7 @@ bool CM2Model::InitializeLoaded() {
                     if ((def.m_flags & 0x1000000) == 0) {
                         generator = ParticleGeneratorCreateBone(memory, random, params);
                     } else {
-                        generator = ParticleGeneratorCreateBoneMirrored(memory);
+                        generator = ParticleGeneratorCreateBoneMirrored(memory, random, params);
                     }
                     memory += 0xa8;
                     CM2BaseModel* parent = this->m_parent;

@@ -84,6 +84,8 @@ GxBuf* GxBufCreateFromInfo(const GXBUFINFO* info);
 // A buffer of `count` elements of `stride` bytes: vertices (kind 0), indices (1) or constants
 // (2) (FUN_142288900).
 GxBuf* GxBufCreateSimple(uint8_t kind, uint8_t type, uint32_t stride, uint32_t count);
+// The same by its size in bytes, with a name the release build drops (FUN_142288a00).
+GxBuf* GxBufCreateSized(uint8_t kind, uint8_t type, uint64_t size, const char* name);
 void GxBufDestroy(GxBuf** buf);
 
 class GxRenderContext;

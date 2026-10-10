@@ -321,6 +321,16 @@ void ShaderEffectContext::SetBatch724(const float* vector) {
     Copy(&this->Field<float>(0x724), vector, 0x10);
 }
 
+// A texture layer's transform, 0x20 apart from 0x6e4. A second vector lands on the first, as
+// the reference stores both at the same place; the dirty flag is left alone.
+// ref: FUN_1412ae840
+void ShaderEffectContext::SetLayerTransform(const float* vectors, uint32_t layer, uint32_t count) {
+    Copy(&this->Field<float>(0x6e4 + layer * 0x20), vectors, 0x10);
+    if (1 < count) {
+        Copy(&this->Field<float>(0x6e4 + layer * 0x20), vectors + 4, 0x10);
+    }
+}
+
 // ref: FUN_1412adb00
 void ShaderEffectContext::SetBatch734(const float* a, const float* b) {
     Copy(&this->Field<float>(0x744), b, 0x10);

@@ -15,6 +15,8 @@ add_library(model2 STATIC
     M2ModelInit.cpp
     M2ModelVirtual.cpp
     M2Particle.cpp
+    M2ParticleGenerator.cpp
+    M2ParticleRender.cpp
     M2Ribbon.cpp
     M2Scene.cpp
     M2SceneAnimate.cpp

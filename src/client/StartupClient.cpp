@@ -1,3 +1,4 @@
+#include "model2/M2Particle.hpp"
 #include "client/ClientCVars.hpp"
 #include "client/GraphicsSettings.hpp"
 #include "client/RenderCVars.hpp"
@@ -96,11 +97,6 @@ void OnDeviceDestroyedClient(void* param) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_14124c270
-void Sub14124C270() {
-    FROST_UNIMPLEMENTED();
-}
-
 // ref: FUN_1402f9e30
 void Sub1402F9E30() {
     FROST_UNIMPLEMENTED();
@@ -167,8 +163,9 @@ void Sub14134ED50(void (*callback)()) {
     GraphicsRegisterCVars();
     AmbientOcclusionRegisterCVars();
     // FUN_1413b9e40 (the world's callbacks), the world option defaults (DAT_1430ab9c0..), and
-    // the subsystems after them (liquids, particles, shadows, the sky, ...) are not ported.
+    // the subsystems around the particles' (liquids, shadows, the sky, ...) are not ported.
     FROST_UNIMPLEMENTED();
+    ParticleSystemInitialize();
 }
 
 // the world's loading callbacks
@@ -1119,7 +1116,7 @@ bool Sub14022A260() {
     GxAddDeviceCreatedCallback(OnDeviceCreatedClient, nullptr);
     GxAddDeviceDestroyedCallback(OnDeviceDestroyedClient, nullptr);
     s_deviceCallbacksAdded = 1;
-    Sub14124C270();
+    ParticleSystemCreatePools();
     RenderSettingsInitialize();
     TextureInitialize();
     Sub1402F9E30();

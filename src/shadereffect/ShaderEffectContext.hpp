@@ -94,6 +94,8 @@ class ShaderEffectContext {
     void SetBatchColors(const float* a, const float* b, const float* c);
     // ref: FUN_1412ae820
     void SetBatch724(const float* vector);
+    // A texture layer's transform at 0x6e4 + 0x20 per layer (FUN_1412ae840).
+    void SetLayerTransform(const float* vectors, uint32_t layer, uint32_t count);
     // ref: FUN_1412adb00
     void SetBatch734(const float* a, const float* b);
     // ref: FUN_1412ad5b0

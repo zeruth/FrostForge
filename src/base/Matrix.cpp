@@ -636,3 +636,164 @@ bool RayPlaneIntersect(const float* ray, const float* plane, float* t, float* hi
     }
     return true;
 }
+
+// ref: FUN_141342930
+void MatrixInverseOrIdentity(const float* m, float* out) {
+    float determinant = MatrixDeterminant(m);
+    if (std::fabs(determinant) < 1e-6f) {  // DAT_14261a95c
+        MatrixIdentity(out);
+        return;
+    }
+    MatrixInverse(m, out, determinant);
+}
+
+// ref: FUN_141344b20
+float* Matrix3Multiply(float* out, const float* a, const float* b) {
+    float r[9];
+    for (int32_t row = 0; row < 3; row++) {
+        for (int32_t column = 0; column < 3; column++) {
+            r[row * 3 + column] =
+                b[column] * a[row * 3] + b[3 + column] * a[row * 3 + 1] + b[6 + column] * a[row * 3 + 2];
+        }
+    }
+    for (int32_t i = 0; i < 9; i++) {
+        out[i] = r[i];
+    }
+    return out;
+}
+
+// ref: FUN_1413449e0
+float* Matrix3FromQuaternion(float* out, const float* q) {
+    float x = q[0];
+    float y = q[1];
+    float z = q[2];
+    float w = q[3];
+    float z2 = z + z;
+    float y2 = y + y;
+    float wx = w * (x + x);
+    float xx = x * (x + x);
+    out[0] = 1.0f - (z * z2 + y * y2);
+    out[1] = x * y2 + w * z2;
+    out[3] = x * y2 - w * z2;
+    out[2] = x * z2 - w * y2;
+    out[6] = x * z2 + w * y2;
+    out[7] = y * z2 - wx;
+    out[4] = 1.0f - (z * z2 + xx);
+    out[5] = y * z2 + wx;
+    out[8] = 1.0f - (y * y2 + xx);
+    return out;
+}
+
+// ref: FUN_141345dd0
+float* Matrix3FromAxisAngle(float* out, float radians, const float* axis, bool normalized) {
+    float x = axis[0];
+    float y = axis[1];
+    float z = axis[2];
+    if (!normalized) {
+        float scale = 1.0f / std::sqrt(y * y + x * x + z * z);
+        x *= scale;
+        y *= scale;
+        z *= scale;
+    }
+    // FUN_14240ad20
+    float s = std::sin(radians);
+    float c = std::cos(radians);
+    float t = 1.0f - c;
+    float xy = y * x * t;
+    float xz = z * x * t;
+    out[0] = x * x * t + c;
+    out[1] = xy + z * s;
+    out[3] = xy - z * s;
+    out[2] = xz - y * s;
+    float yz = z * y * t;
+    out[6] = xz + y * s;
+    out[4] = y * y * t + c;
+    out[8] = z * z * t + c;
+    out[5] = yz + x * s;
+    out[7] = yz - x * s;
+    return out;
+}
+
+// ref: FUN_1413449a0
+float* Matrix3FromMatrix(float* out, const float* m) {
+    out[0] = m[0];
+    out[1] = m[1];
+    out[2] = m[2];
+    out[3] = m[4];
+    out[4] = m[5];
+    out[5] = m[6];
+    out[6] = m[8];
+    out[7] = m[9];
+    out[8] = m[10];
+    return out;
+}
+
+// ref: FUN_141345fc0
+void Matrix3Scale(float* m, float scale) {
+    for (int32_t i = 0; i < 9; i++) {
+        m[i] = scale * m[i];
+    }
+}
+
+// ref: FUN_141348170
+void QuaternionFromRotation(float* q, const float* m) {
+    static const int32_t s_next[3] = {1, 2, 0};  // DAT_142734918
+    float trace = m[0] + m[4] + m[8];
+    if (0.0f < trace) {
+        float root = std::sqrt(trace + 1.0f);
+        float half = 0.5f / root;
+        q[3] = root * 0.5f;
+        q[0] = (m[7] - m[5]) * half;
+        q[1] = (m[2] - m[6]) * half;
+        q[2] = (m[3] - m[1]) * half;
+        return;
+    }
+    uint32_t i = m[0] < m[4] ? 1 : 0;
+    if (m[i * 3 + i] < m[8]) {
+        i = 2;
+    }
+    int32_t j = s_next[i];
+    int32_t k = s_next[j];
+    float root = std::sqrt((m[i * 3 + i] - m[j * 3 + j]) - m[k * 3 + k] + 1.0f);
+    float half = 0.5f / root;
+    q[i] = root * 0.5f;
+    q[3] = (m[k * 3 + j] - m[j * 3 + k]) * half;
+    q[j] = (m[j * 3 + i] + m[i * 3 + j]) * half;
+    q[k] = (m[k * 3 + i] + m[i * 3 + k]) * half;
+}
+
+// ref: FUN_141347f30
+void QuaternionFromMatrix3(float* q, const float* m) {
+    float transposed[9] = {m[0], m[3], m[6], m[1], m[4], m[7], m[2], m[5], m[8]};
+    QuaternionFromRotation(q, transposed);
+}
+
+namespace {
+
+// The quick sine's parabola over the turn `t` (in half turns, as reals).
+float FastHalfTurn(float t) {
+    int32_t n;
+    if (0.0f < t) {
+        n = static_cast<int32_t>(static_cast<int64_t>(t));
+    } else {
+        n = -1 - static_cast<int32_t>(static_cast<int64_t>(-t));
+    }
+    float f = t - static_cast<float>(n);
+    float p = (6.0f - f * 4.0f) * (f * f);
+    if ((n & 1) != 0) {
+        return p - 1.0f;
+    }
+    return 1.0f - p;
+}
+
+}  // namespace
+
+// ref: FUN_141343a90
+float FastSin(float radians) {
+    return FastHalfTurn(radians * 0.31830987f - 0.5f);  // DAT_1427348c4, DAT_14261a988
+}
+
+// ref: FUN_1413437b0
+float FastCos(float radians) {
+    return FastHalfTurn(radians * 0.31830987f);
+}
