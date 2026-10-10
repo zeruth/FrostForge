@@ -79,6 +79,22 @@ TObjectAllocHeap* M2GetBoneSeqPool() {
     return s_boneSeqPool;
 }
 
+// ref: FUN_1411c69e0
+M2ModelEffect* M2ModelEffectAlloc() {
+    auto effect = static_cast<M2ModelEffect*>(s_effectPool->Alloc());
+    std::memset(effect, 0, 0xa8);
+    effect->m_textures[1] = nullptr;
+    effect->m_textures[2] = nullptr;
+    *reinterpret_cast<void**>(effect->m_98) = nullptr;
+    effect->m_a0 = 1.0f;
+    effect->m_a4 = 1.0f;
+    return effect;
+}
+
+void M2ModelEffectFree(M2ModelEffect* effect) {
+    s_effectPool->Free(effect);
+}
+
 // ref: FUN_1411b7d60
 void M2ModelSetFlag400(bool set) {
     s_flag400 = set;

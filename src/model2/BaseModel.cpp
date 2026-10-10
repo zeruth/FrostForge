@@ -581,11 +581,15 @@ const char* CM2BaseModel::GetName() {
     return "BaseModel";
 }
 
-const char* CM2BaseModel::GetName2() {
+const char* CM2BaseModel::GetName2(char* buffer, size_t size) {
+    (void)buffer;
+    (void)size;
     return "BaseModel";
 }
 
-const char* CM2BaseModel::GetName3() {
+const char* CM2BaseModel::GetName3(char* buffer, size_t size) {
+    (void)buffer;
+    (void)size;
     return "BaseModel";
 }
 
@@ -1310,12 +1314,12 @@ uint8_t CM2BaseModel::GetMaxLod() {
     return 0;
 }
 
-bool CM2BaseModel::Virtual1e8() {
-    return false;
+const void* CM2BaseModel::GetLodData() {
+    return nullptr;
 }
 
-uint8_t CM2BaseModel::Virtual1f0() {
-    return 0;
+bool CM2BaseModel::HasGpuBatches() {
+    return false;
 }
 
 void CM2BaseModel::OnRemove() {
@@ -1334,15 +1338,19 @@ void CM2BaseModel::OnMatricesUpdated() {
 }
 
 // FUN_14026bea0
-bool CM2BaseModel::Virtual1a0() {
+bool CM2BaseModel::AreTexturesSettled() {
     return true;
 }
 
-void CM2BaseModel::Virtual1a8() {
+void CM2BaseModel::SetTimeScale(float scale) {
+    (void)scale;
 }
 
-void CM2BaseModel::Virtual1b0() {
+void CM2BaseModel::GetFacets(const float* box, const float* matrix, void* facets) {
+    (void)box;
+    (void)matrix;
+    (void)facets;
 }
 
-void CM2BaseModel::Virtual200() {
+void CM2BaseModel::UpdateLodEffect() {
 }

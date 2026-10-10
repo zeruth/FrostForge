@@ -82,6 +82,11 @@ void* M2SceneGetRayTracing(CM2Scene* scene);
 void RayTracingRegisterModel(void* rayTracing, void* entry, uint32_t size);
 // A registered model's instance marked for an update (FUN_14125ff50): `entry` is {index, state}.
 void RayTracingMarkDirty(void* rayTracing, const int32_t* entry);
+// An instance's matrix (FUN_14125fb10), and an instance's (FUN_14125fab0) and a model's
+// (FUN_14125ffb0) removal.
+void RayTracingUpdateInstance(void* rayTracing, const int32_t* entry, const float* matrix);
+void RayTracingRemoveInstance(void* rayTracing, const int32_t* entry);
+void RayTracingRemoveModel(void* rayTracing, const int32_t* entry);
 
 // ref: FUN_1411ace60
 BaseModelDrawParams* M2SceneAddDrawParams(void* array);

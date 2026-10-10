@@ -95,6 +95,29 @@ void RayTracingRegisterModel(void* rayTracing, void* entry, uint32_t size) {
     FROST_UNIMPLEMENTED();
 }
 
+// The ray tracing object is never made yet, so these are not reached.
+// ref: FUN_14125fb10
+void RayTracingUpdateInstance(void* rayTracing, const int32_t* entry, const float* matrix) {
+    (void)rayTracing;
+    (void)entry;
+    (void)matrix;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14125fab0
+void RayTracingRemoveInstance(void* rayTracing, const int32_t* entry) {
+    (void)rayTracing;
+    (void)entry;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14125ffb0
+void RayTracingRemoveModel(void* rayTracing, const int32_t* entry) {
+    (void)rayTracing;
+    (void)entry;
+    FROST_UNIMPLEMENTED();
+}
+
 // ref: FUN_14125ff50
 void RayTracingMarkDirty(void* rayTracing, const int32_t* entry) {
     int32_t index = entry[0];

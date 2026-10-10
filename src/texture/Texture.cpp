@@ -1733,6 +1733,18 @@ HTEXTURE TextureCreateUnique(uint8_t type, uint32_t width, uint32_t height, uint
     return texture;
 }
 
+// The shared opaque white texture, made on first use (FUN_1412a1ba0, DAT_1430a5ac8).
+// ref: FUN_1412a1ba0
+HTEXTURE TextureGetWhite() {
+    static HTEXTURE s_white;
+    if (s_white == nullptr) {
+        uint32_t color = 0xffffffff;
+        // FUN_14127f980
+        s_white = TextureCreateSolid(&color, nullptr, "", 0);
+    }
+    return s_white;
+}
+
 // ref: FUN_14127f9a0
 HTEXTURE TextureCreateSolid(const uint32_t* color, const uint32_t* color2, const char* name, uint8_t kind) {
     (void)name;

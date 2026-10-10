@@ -31,6 +31,22 @@ struct C44Matrix {
     float m[16];
 };
 
+// A model's draw effect (0xb0, the "M2 Model Effect Pool"): its kind, strength and textures.
+struct M2ModelEffect {
+    int32_t m_type;                     // 0x00 5, 8 (the LOD fade)
+    float m_strength;                   // 0x04
+    uint8_t m_08[0x80 - 0x08];
+    void* m_textures[3];                // 0x80 HTEXTUREs
+    uint8_t m_98[8];
+    float m_a0;                         // 0xa0 1
+    float m_a4;                         // 0xa4 1
+    uint8_t m_a8[8];
+};
+static_assert(sizeof(M2ModelEffect) == 0xb0, "M2ModelEffect is 0xb0 bytes");
+// A cleared effect from the pool (FUN_1411c69e0).
+M2ModelEffect* M2ModelEffectAlloc();
+void M2ModelEffectFree(M2ModelEffect* effect);
+
 // What a bone plays, as FUN_1411bac00 reports it (0x74).
 struct M2SequenceInfo {
     uint32_t m_id;                      // 0x00 -1 when the bone keeps no sequence of its own
@@ -267,24 +283,24 @@ class CM2BaseModel {
     virtual void RefreshBatchEffects();                                             // 0x188
     virtual void Virtual190();                                                      // 0x190
     virtual void OnMatricesUpdated();                                               // 0x198
-    virtual bool Virtual1a0();                                                      // 0x1a0
-    virtual void Virtual1a8();                                                      // 0x1a8
-    virtual void Virtual1b0();                                                      // 0x1b0
+    virtual bool AreTexturesSettled();                                              // 0x1a0
+    virtual void SetTimeScale(float scale);                                         // 0x1a8
+    virtual void GetFacets(const float* box, const float* matrix, void* facets);    // 0x1b0
     // ref: FUN_1411e6ce0
     virtual const char* GetName();                                                  // 0x1b8
-    virtual const char* GetName2();                                                 // 0x1c0
-    virtual const char* GetName3();                                                 // 0x1c8
+    virtual const char* GetName2(char* buffer, size_t size);                        // 0x1c0
+    virtual const char* GetName3(char* buffer, size_t size);                        // 0x1c8
     // ref: FUN_1411e6a10
     virtual void RemoveFromScene();                                                 // 0x1d0
     // ref: FUN_1411e6430
     virtual void AddToScene(CM2Scene* scene);                                       // 0x1d8
     // ref: FUN_1402ca290
     virtual uint8_t GetMaxLod();                                                    // 0x1e0
-    virtual bool Virtual1e8();                                                      // 0x1e8
-    virtual uint8_t Virtual1f0();                                                   // 0x1f0
+    virtual const void* GetLodData();                                               // 0x1e8
+    virtual bool HasGpuBatches();                                                   // 0x1f0
     // ref: FUN_1411e6600
     virtual void OnLodChanged();                                                    // 0x1f8
-    virtual void Virtual200();                                                      // 0x200
+    virtual void UpdateLodEffect();                                                 // 0x200
     // ref: FUN_1411e6cf0
     virtual float GetScaledRadius(C3Vector* center, float* radius);                 // 0x208
 
@@ -698,6 +714,40 @@ class CM2Model : public CM2BaseModel {
     void ReleaseGpuData() override;
     // ref: FUN_1411b6910
     void RefreshBatchEffects() override;
+    // ref: FUN_1411c6a80
+    void OnMatricesUpdated() override;
+    // ref: FUN_1411cd550
+    bool AreTexturesSettled() override;
+    // ref: FUN_1411c99e0
+    void SetTimeScale(float scale) override;
+    // ref: FUN_1411bb3d0
+    void GetFacets(const float* box, const float* matrix, void* facets) override;
+    // ref: FUN_1411be860
+    const char* GetName() override;
+    // ref: FUN_1411bd850
+    const char* GetName2(char* buffer, size_t size) override;
+    // ref: FUN_1411bd8a0
+    const char* GetName3(char* buffer, size_t size) override;
+    // ref: FUN_1411b72b0
+    void RemoveFromScene() override;
+    // ref: FUN_1411be680
+    uint8_t GetMaxLod() override;
+    // ref: FUN_1411be670
+    const void* GetLodData() override;
+    // ref: FUN_1411c0d60
+    bool HasGpuBatches() override;
+    // ref: FUN_1411b6520
+    void OnLodChanged() override;
+    // ref: FUN_1411ce170
+    void UpdateLodEffect() override;
+    // ref: FUN_1411bdad0
+    float GetScaledRadius(C3Vector* center, float* radius) override;
+    // A key bone's sequence speed changed in place, its clock kept (FUN_1411cab20).
+    void SetSequenceSpeed(uint32_t keyBone, float speed);
+    // The model effect dropped, here and on the models attached below (FUN_1411b6240,
+    // FUN_1411b6380).
+    void ClearEffect();
+    void ClearEffectFrom(void* effect);
     // The per-instance data released: override matrices, textures, lights, cameras, ribbons,
     // particle emitters and the skeleton's (FUN_1411b80b0).
     void ReleaseInstanceData();

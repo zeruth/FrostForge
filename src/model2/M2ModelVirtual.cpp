@@ -3,6 +3,7 @@
 
 #include "base/Matrix.hpp"
 #include "cas/CAS.hpp"
+#include "gx/GxShader.hpp"
 #include "model2/M2Camera.hpp"
 #include "model2/M2Model.hpp"
 #include "model2/M2Particle.hpp"
@@ -1406,4 +1407,478 @@ void CM2Model::RefreshBatchEffects() {
         (*reinterpret_cast<CShaderEffect***>(static_cast<uint8_t*>(this->m_600) + 0x40))[i] = effect;
         batches = static_cast<uint8_t*>(this->m_600);
     }
+}
+
+namespace {
+
+// Copies at most size - 1 characters and terminates (the reference's inlined copy).
+const char* CopyLimited(char* buffer, const char* source, size_t size) {
+    char* out = buffer;
+    if (size == 0) {
+        return buffer;
+    }
+    for (;;) {
+        size--;
+        if (size == 0) {
+            *out = '\0';
+            return buffer;
+        }
+        char c = *source++;
+        *out++ = c;
+        if (c == '\0') {
+            return buffer;
+        }
+    }
+}
+
+// A texture slot of an effect released, the shared white texture only forgotten.
+void ReleaseEffectTexture(void** slot) {
+    if (*slot == nullptr) {
+        return;
+    }
+    if (*slot == TextureGetWhite()) {
+        *slot = nullptr;
+    } else {
+        TextureFree(reinterpret_cast<HTEXTURE*>(slot));
+    }
+}
+
+}  // namespace
+
+// A mirrored model's local matrix flipped, the ray tracing instance moved, and the bone-done
+// bits of this model and its attached CM2Models cleared for the new matrices.
+// ref: FUN_1411c6a80
+void CM2Model::OnMatricesUpdated() {
+    auto flip = [](float& value) {
+        uint32_t bits;
+        std::memcpy(&bits, &value, sizeof(bits));
+        bits ^= 0x80000000;  // DAT_14261aa30
+        std::memcpy(&value, &bits, sizeof(bits));
+    };
+    if ((this->m_modelFlags >> 26 & 1) != 0) {
+        flip(this->m_local.m[4]);
+        flip(this->m_local.m[5]);
+        flip(this->m_local.m[6]);
+    }
+    if ((this->m_modelFlags >> 19 & 1) != 0) {
+        flip(this->m_local.m[4]);
+        flip(this->m_local.m[5]);
+        flip(this->m_local.m[6]);
+        flip(this->m_local.m[8]);
+        flip(this->m_local.m[9]);
+        flip(this->m_local.m[10]);
+    }
+    if (this->m_rtEntry[0] != -1 && this->m_rtEntry[1] == 8 && M2SceneGetRayTracing(this->m_scene) != nullptr) {
+        RayTracingUpdateInstance(M2SceneGetRayTracing(this->m_scene), this->m_rtEntry, this->m_local.m);
+    }
+    if ((this->m_flags & BASE_LOADED) != 0 && (this->m_boneDone[0] & 1) != 0) {
+        std::memset(this->m_boneDone, 0, this->m_boneDoneBytes);
+        for (CM2BaseModel* child = this->m_children; child != nullptr; child = child->m_siblingNext) {
+            if ((child->m_flags & BASE_LOADED) != 0 && child->m_type == 0) {
+                auto model = static_cast<CM2Model*>(child);
+                std::memset(model->m_boneDone, 0, model->m_boneDoneBytes);
+            }
+        }
+    }
+}
+
+// False while any texture is still being read.
+// ref: FUN_1411cd550
+bool CM2Model::AreTexturesSettled() {
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        this->WaitForLoad(0);
+    }
+    for (uint32_t i = 0; i < this->m_shared->m_data->m_textures.Count(); i++) {
+        if (this->m_textures[i] != nullptr && TextureIsLoading(ModelTexture(this, i))) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// The root sequence's speed and the model's own clock rescaled, keeping where they are.
+// ref: FUN_1411c99e0
+void CM2Model::SetTimeScale(float scale) {
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        M2ModelCall* call = M2ModelCallAlloc();
+        if (call != nullptr) {
+            call->m_type = 0x12;
+            call->m_next = nullptr;
+            call->m_frame = this->m_scene->m_time;
+            std::memcpy(&call->m_args[0], &scale, sizeof(float));
+            *this->m_callsTail = call;
+            this->m_callsTail = &call->m_next;
+        }
+        return;
+    }
+    this->SetSequenceSpeed(0xffffffff, scale);
+    if (this->m_skeleton != nullptr) {
+        FROST_UNIMPLEMENTED();  // the skeleton's clock (+0x70, +0x74)
+        return;
+    }
+    int32_t now = static_cast<int32_t>(this->m_scene->m_time);
+    float old = this->m_404;
+    this->m_404 = scale;
+    float inverse = std::fabs(scale) <= 1.0e-05f ? 0.0f : 1.0f / scale;  // DAT_1426c75c4
+    this->m_initTime = static_cast<uint32_t>(
+        now
+        - static_cast<int32_t>(std::fabs(inverse)
+            * static_cast<float>(static_cast<int32_t>(
+                static_cast<float>(static_cast<uint32_t>(now - static_cast<int32_t>(this->m_initTime))) * old))));
+}
+
+// ref: FUN_1411cab20
+void CM2Model::SetSequenceSpeed(uint32_t keyBone, float speed) {
+    float clamped = 1.0f;
+    if (speed <= 10000.0f) {  // DAT_1426c6510
+        clamped = speed;
+        if (speed < -10000.0f) {  // DAT_1426cc58c
+            clamped = -1.0f;  // DAT_14261a9c8
+        }
+    }
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        M2ModelCall* call = M2ModelCallAlloc();
+        if (call == nullptr) {
+            return;
+        }
+        call->m_type = 9;
+        call->m_next = nullptr;
+        call->m_frame = this->m_scene->m_time;
+        std::memcpy(&call->m_args[1], &clamped, sizeof(float));
+        call->m_args[0] = keyBone;
+        *this->m_callsTail = call;
+        this->m_callsTail = &call->m_next;
+        return;
+    }
+    M2AnimState* anim = this->m_animState;
+    uint16_t bone = 0;
+    if (keyBone != 0xffffffff) {
+        bone = keyBone < anim->m_keyBoneLookup->Count() ? (*anim->m_keyBoneLookup)[keyBone] : 0xffff;
+    }
+    if (anim->m_bones->Count() <= bone) {
+        return;
+    }
+    M2SequenceTime* slot = anim->m_boneStates[bone].m_sequence;
+    if (slot == nullptr || slot->m_nextSequence == 0xffff) {
+        return;
+    }
+    int32_t length = static_cast<int32_t>(slot->m_timeOffset);
+    int32_t now = static_cast<int32_t>(this->m_scene->m_time);
+    int32_t time;
+    if (slot->m_speed == 1.0f) {
+        time = (length - slot->m_startTime) + now;
+    } else {
+        time = static_cast<int32_t>(static_cast<float>(now - slot->m_startTime) * slot->m_speed) + length;
+    }
+    if (length != 0) {
+        while (time < 0) {
+            time += length;
+        }
+    }
+    if (time < 0) {
+        time = 0;
+    }
+    uint32_t duration = (*slot->m_source.m_sequences)[slot->m_nextSequence].m_duration;
+    float inverse = std::fabs(clamped) <= 1.0e-05f ? 0.0f : 1.0f / clamped;
+    float rate = std::fabs(inverse);
+    slot->m_speed = clamped;
+    slot->m_inverseSpeed = inverse;
+    int32_t start = now - static_cast<int32_t>(static_cast<float>(time) * rate);
+    slot->m_startTime = start;
+    slot->m_endTime = static_cast<int32_t>(static_cast<int64_t>(static_cast<float>(slot->m_repeats * duration) * rate))
+        + start;
+}
+
+// The collision facets inside a box (world collision only, not reached by the glue screens).
+// ref: FUN_1411bb3d0
+void CM2Model::GetFacets(const float* box, const float* matrix, void* facets) {
+    (void)box;
+    (void)matrix;
+    (void)facets;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1411be860
+const char* CM2Model::GetName() {
+    return this->m_shared->GetDisplayName();
+}
+
+// ref: FUN_1411bd850
+const char* CM2Model::GetName2(char* buffer, size_t size) {
+    CM2Shared* shared = this->m_shared;
+    if (shared == nullptr) {
+        return CopyLimited(buffer, "NA", size);
+    }
+    // FUN_1411a8310
+    if (shared->m_name[0] == '\0') {
+        return GxShaderName(shared->m_fileDataId, buffer, static_cast<uint32_t>(size));
+    }
+    return CopyLimited(buffer, shared->m_name, size);
+}
+
+// ref: FUN_1411bd8a0
+const char* CM2Model::GetName3(char* buffer, size_t size) {
+    CM2Shared* shared = this->m_shared;
+    if (shared == nullptr) {
+        return CopyLimited(buffer, "NA", size);
+    }
+    if (shared->m_name[0] == '\0') {
+        return GxShaderName(shared->m_fileDataId, buffer, static_cast<uint32_t>(size));
+    }
+    return CopyLimited(buffer, shared->m_name, size);
+}
+
+// Out of the scene: the ray tracing entry dropped, the queued calls' times made relative, and
+// the lights unlinked from the scene's.
+// ref: FUN_1411b72b0
+void CM2Model::RemoveFromScene() {
+    if (this->m_scene != nullptr) {
+        void* rayTracing = M2SceneGetRayTracing(this->m_scene);
+        if (rayTracing != nullptr) {
+            if (this->m_rtEntry[1] == 8) {
+                RayTracingRemoveInstance(rayTracing, this->m_rtEntry);
+                this->m_rtEntry[0] = -1;
+                this->m_rtEntry[1] = 0;
+            }
+            if (this->m_rtEntry[1] == 2) {
+                RayTracingRemoveModel(rayTracing, this->m_rtEntry);
+                this->m_rtEntry[0] = -1;
+                this->m_rtEntry[1] = 0;
+            }
+        }
+    }
+    if (this->m_sceneLink != nullptr) {
+        *this->m_sceneLink = this->m_sceneNext;
+    }
+    if (this->m_sceneNext != nullptr) {
+        this->m_sceneNext->m_sceneLink = this->m_sceneLink;
+    }
+    this->m_sceneLink = nullptr;
+    this->m_sceneNext = nullptr;
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        if (this->m_scene != nullptr) {
+            for (M2ModelCall* call = this->m_calls; call != nullptr; call = call->m_next) {
+                call->m_frame -= this->m_scene->m_time;
+            }
+        }
+        this->m_scene = nullptr;
+        return;
+    }
+    for (uint32_t i = 0; i < this->m_shared->m_data->m_lights.Count(); i++) {
+        M2LightState* light = &this->m_lights[i];
+        light->m_lighting.Unlink();
+        light->m_lighting.m_scene = nullptr;
+    }
+    this->m_scene = nullptr;
+}
+
+// ref: FUN_1411be680
+uint8_t CM2Model::GetMaxLod() {
+    if ((this->m_flags & BASE_LOADED) != 0) {
+        return this->m_shared->m_lodMax;
+    }
+    return 0;
+}
+
+// ref: FUN_1411be670
+const void* CM2Model::GetLodData() {
+    return &this->m_shared->m_lodFlags;
+}
+
+// ref: FUN_1411c0d60
+bool CM2Model::HasGpuBatches() {
+    if ((this->m_modelFlags2 & 0x20000) == 0) {
+        return this->m_600 != nullptr;
+    }
+    return true;
+}
+
+// ref: FUN_1411b6520
+void CM2Model::OnLodChanged() {
+    if (this->m_lodTarget != this->m_lod) {
+        if (this->m_600 == nullptr) {
+            this->m_lod = this->m_lodTarget;
+        } else {
+            FROST_UNIMPLEMENTED();  // FUN_1411cdb90, FUN_1411c6d30: the GPU batches for the new LOD
+            this->m_lod = this->m_lodTarget;
+        }
+    }
+    for (CM2BaseModel* child = this->m_children; child != nullptr; child = child->m_siblingNext) {
+        child->OnLodChanged();
+    }
+}
+
+// A file flagged 0x10000000 fades past its last LOD: the LOD effect (type 8) is made when the
+// model is at it, and dropped when it is not.
+// ref: FUN_1411ce170
+void CM2Model::UpdateLodEffect() {
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        this->WaitForLoad(0);
+    }
+    if (this->m_shared->m_data == nullptr) {
+        return;
+    }
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        this->WaitForLoad(0);
+    }
+    if ((this->m_shared->m_data->m_flags & 0x10000000) == 0) {
+        return;
+    }
+    uint8_t maxLod = this->GetMaxLod();
+    auto effect = static_cast<M2ModelEffect*>(this->m_params.m_effect);
+    if (this->m_lod < maxLod) {
+        if (effect != nullptr && effect->m_type == 8) {
+            this->ClearEffect();
+        }
+        return;
+    }
+    if (effect != nullptr && effect->m_type == 8) {
+        return;
+    }
+    if ((this->m_flags & BASE_LOADED) == 0) {
+        M2ModelCall* call = M2ModelCallAlloc();
+        if (call != nullptr) {
+            call->m_type = 0x1a;
+            call->m_next = nullptr;
+            call->m_frame = this->m_scene->m_time;
+            call->m_args[0] = 8;
+            *this->m_callsTail = call;
+            this->m_callsTail = &call->m_next;
+        }
+        return;
+    }
+    auto own = static_cast<M2ModelEffect*>(this->m_effect2);
+    if (own == nullptr) {
+        own = M2ModelEffectAlloc();
+        this->m_effect2 = own;
+        if (own == nullptr) {
+            return;
+        }
+    }
+    own->m_type = 8;
+    static_cast<M2ModelEffect*>(this->m_effect2)->m_strength = 1.0f;
+    own = static_cast<M2ModelEffect*>(this->m_effect2);
+    if (own != nullptr) {
+        for (void*& texture : own->m_textures) {
+            ReleaseEffectTexture(&texture);
+        }
+    }
+}
+
+// ref: FUN_1411b6240
+void CM2Model::ClearEffect() {
+    auto effect = static_cast<M2ModelEffect*>(this->m_effect2);
+    if (effect == nullptr) {
+        return;
+    }
+    for (void*& texture : effect->m_textures) {
+        ReleaseEffectTexture(&texture);
+    }
+    uint32_t flags = this->m_flags;
+    this->m_flags = flags & ~0x10000000u;
+    if ((flags & BASE_LOADED) != 0 && this->m_shared != nullptr) {
+        for (uint32_t i = 0;; i++) {
+            if ((this->m_flags & BASE_LOADED) == 0) {
+                this->WaitForLoad(0);
+            }
+            if (this->m_shared->m_data->m_particles.Count() <= i) {
+                break;
+            }
+            this->m_particles[i]->m_flags |= 2;
+        }
+    }
+    for (CM2Model* model = this->m_attachedModels; model != nullptr && (model->m_flags & BASE_LOADED) != 0;
+         model = model->m_attachedNext) {
+        model->ClearEffectFrom(this->m_effect2);
+    }
+    if (this->m_params.m_effect == this->m_effect2) {
+        this->m_params.m_effect = nullptr;
+    }
+    M2ModelEffectFree(static_cast<M2ModelEffect*>(this->m_effect2));
+    this->m_effect2 = nullptr;
+}
+
+// ref: FUN_1411b6380
+void CM2Model::ClearEffectFrom(void* effect) {
+    if ((this->m_flags & BASE_LOADED) == 0 || this->m_shared == nullptr) {
+        return;
+    }
+    this->m_flags &= ~0x10000000u;
+    auto current = static_cast<M2ModelEffect*>(this->m_params.m_effect);
+    if (current != nullptr && current->m_type == 5 && (this->m_modelFlags & 0x400000) == 0
+        && (this->m_shared->m_data->m_flags & 4) == 0) {
+        for (uint32_t i = 0;; i++) {
+            if ((this->m_flags & BASE_LOADED) == 0) {
+                this->WaitForLoad(0);
+            }
+            if (this->m_shared->m_data->m_particles.Count() <= i) {
+                break;
+            }
+            this->m_particles[i]->m_flags |= 2;
+        }
+    }
+    if (this->m_params.m_effect == effect) {
+        this->m_params.m_effect = this->m_effect2;
+    }
+    for (CM2Model* model = this->m_attachedModels; model != nullptr && (model->m_flags & BASE_LOADED) != 0;
+         model = model->m_attachedNext) {
+        model->ClearEffectFrom(effect);
+    }
+}
+
+// The centre of the bounds (the file's, or the root sequence's for a model flagged 0x80000)
+// placed, and the placement's scale; returns the squared scale.
+// ref: FUN_1411bdad0
+float CM2Model::GetScaledRadius(C3Vector* center, float* radius) {
+    float cx;
+    float cy;
+    float cz;
+    if ((this->m_modelFlags2 & 0x80000) == 0) {
+        cx = this->m_shared->m_center.x;
+        cy = this->m_shared->m_center.y;
+        cz = this->m_shared->m_center.z;
+    } else if ((this->m_flags & (BASE_LOADED | BASE_VISIBLE)) == (BASE_LOADED | BASE_VISIBLE)) {
+        const float* bounds = RootSequenceBounds(this);
+        cz = (bounds[5] + bounds[2]) * 0.5f;
+        cy = (bounds[4] + bounds[1]) * 0.5f;
+        cx = (bounds[0] + bounds[3]) * 0.5f;
+    } else {
+        cx = 0.0f;
+        cy = 0.0f;
+        cz = 0.0f;
+    }
+    float partial;
+    if (this->m_parent == nullptr || (this->m_flags >> 14 & 1) != 0) {
+        const float* l = this->m_local.m;
+        center->x = cy * l[4] + cx * l[0] + cz * l[8] + l[12];
+        center->y = cy * l[5] + cx * l[1] + cz * l[9] + l[13];
+        center->z = cy * l[6] + cx * l[2] + cz * l[10] + l[14];
+        partial = l[1] * l[1];
+        float scale = l[0] * l[0] + partial + l[2] * l[2];
+        if (2.3841858e-07f < scale) {
+            *radius = std::sqrt(scale);
+            return scale;
+        }
+    } else {
+        const float* w = this->m_world.m;
+        const float* v = this->m_scene->m_viewProjection.m;
+        float r0 = w[2] * v[8] + w[3] * v[12] + w[1] * v[4] + w[0] * v[0];
+        float r1 = w[2] * v[9] + w[3] * v[13] + w[1] * v[5] + w[0] * v[1];
+        float r2 = w[2] * v[10] + w[3] * v[14] + w[1] * v[6] + w[0] * v[2];
+        float r3 = w[2] * v[11] + w[3] * v[15] + w[1] * v[7] + w[0] * v[3];
+        center->y = (w[8] * v[1] + w[9] * v[5] + w[10] * v[9] + w[11] * v[13]) * cz + w[12] * v[1] + w[13] * v[5]
+            + w[14] * v[9] + w[15] * v[13] + (w[4] * v[1] + w[5] * v[5] + w[6] * v[9] + w[7] * v[13]) * cy + cx * r1;
+        center->x = (w[8] * v[0] + w[9] * v[4] + w[10] * v[8] + w[11] * v[12]) * cz + w[12] * v[0] + w[13] * v[4]
+            + w[14] * v[8] + w[15] * v[12] + (w[4] * v[0] + w[5] * v[4] + w[6] * v[8] + w[7] * v[12]) * cy + cx * r0;
+        center->z = (w[8] * v[2] + w[9] * v[6] + w[10] * v[10] + w[11] * v[14]) * cz + w[12] * v[2] + w[13] * v[6]
+            + w[14] * v[10] + w[15] * v[14] + (w[4] * v[2] + w[5] * v[6] + w[6] * v[10] + w[7] * v[14]) * cy + cx * r2;
+        partial = r0 * r0 + r1 * r1;
+        float scale = r3 * r3 + r2 * r2 + partial;
+        if (2.3841858e-07f < scale) {
+            *radius = std::sqrt(scale);
+            return scale;
+        }
+    }
+    *radius = 0.0f;
+    return partial;
 }
