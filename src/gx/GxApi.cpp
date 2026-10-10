@@ -717,6 +717,24 @@ bool GxDevicePresent() {
     return g_gxDevice != nullptr;
 }
 
+// ref: FUN_14228a980
+uint32_t GxVertexFormatLayouts(uint8_t format, GXVERTEXBUFFERFORMAT*** layouts) {
+    CGxDevice::VERTEXFORMATREF ref;
+    static_cast<CGxDevice*>(g_gxDevice)->GetVertexFormat(&ref, format);
+    *layouts = ref.m_layouts;
+    return ref.m_state;
+}
+
+// ref: FUN_14228c060
+bool GxDeviceSupports(uint32_t featureLevel, uint8_t shaderModel) {
+    auto device = static_cast<uint8_t*>(g_gxDevice);
+    if ((featureLevel == 0 || *reinterpret_cast<uint32_t*>(device + 0x80) < featureLevel)
+        && (shaderModel == 0 || device[0x84] < shaderModel)) {
+        return false;
+    }
+    return true;
+}
+
 // ref: FUN_142289a70
 bool GxDevExists() {
     if (g_gxDevice == nullptr) {

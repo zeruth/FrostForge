@@ -227,6 +227,12 @@ void GxMonitorsReset();
 
 // Whether a device exists and is set up (FUN_142289a70).
 bool GxDevExists();
+// A vertex format's layouts and how many there are, 0 to 2 (FUN_14228a980).
+struct GXVERTEXBUFFERFORMAT;
+uint32_t GxVertexFormatLayouts(uint8_t format, GXVERTEXBUFFERFORMAT*** layouts);
+// Whether the device reaches a feature level (its +0x80) or shader model (+0x84); 0 asks
+// nothing (FUN_14228c060).
+bool GxDeviceSupports(uint32_t featureLevel, uint8_t shaderModel);
 // Whether there is a device at all (FUN_142289e10).
 bool GxDevicePresent();
 
