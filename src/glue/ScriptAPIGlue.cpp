@@ -16,6 +16,7 @@
 #include "gx/Gx.hpp"
 #include "gx/GxDevice.hpp"
 #include "ui/CScriptObject.hpp"
+#include "ui/CSimpleModelFFX.hpp"
 #include <cstring>
 #include <string>
 
@@ -34,6 +35,10 @@ uint8_t g_liveRegionCharacterCopy;
 uint8_t g_liveRegionAccountCopy;
 // Set when the launcher's login has been used up (DAT_1430af424).
 uint8_t g_launcherLoginUsed;
+// Whether the realm connection can be resumed without a password (DAT_1430af4c8).
+uint8_t g_reconnectLoginPossible;
+// The character select screen's model frame (DAT_143122460).
+CSimpleModelFFX* g_charSelectModelFrame;
 
 namespace {
 
@@ -241,6 +246,84 @@ int Lua_C_Login_IsLauncherLogin(lua_State* L) {
     // FUN_14148ba60
     lua_pushboolean(L, CommandLineHasOption(0x20) && g_launcherLoginUsed == 0);
     return 1;
+}
+
+// The APIs this machine can run, by name.
+// ref: FUN_1419f5bc0
+int Lua_GetGraphicsAPIs(lua_State* L) {
+    int count = 0;
+    for (uint8_t api = 0; api < 5; api++) {
+        if (GxApiAvailable(api)) {
+            lua_pushstring(L, GxApiName(api));
+            count++;
+        }
+    }
+    return count;
+}
+
+// ref: FUN_1419f5c10
+int Lua_GetCurrentGraphicsAPI(lua_State* L) {
+    lua_pushstring(L, GxApiName(GxGetApi()));
+    return 1;
+}
+
+// No display has a notch on this platform (FUN_1402ca290 answers false).
+// ref: FUN_140d42c80
+int Lua_C_UI_DoesAnyDisplayHaveNotch(lua_State* L) {
+    if (!lua_checkstack(L, 1)) {
+        luaL_error(L, "stack overflow");
+        return 0;
+    }
+    lua_pushboolean(L, 0);
+    return 1;
+}
+
+// The ModelFFX frame the character select screen draws the characters in.
+// ref: FUN_14168dd10
+int Lua_SetCharSelectModelFrame(lua_State* L) {
+    if (!lua_isstring(L, 1)) {
+        luaL_error(L, "Usage: SetCharSelectModelFrame(\"frameName\")");
+        return 0;
+    }
+    const char* name = lua_tolstring(L, 1, nullptr);
+    lua_State* context = FrameScript_GetContext();
+    lua_pushstring(context, name);
+    lua_rawget(context, LUA_GLOBALSINDEX);
+    FrameScript_Object* frame =
+        FrameScript_Object::GetObjectFromLua(nullptr, context, CSimpleModelFFX::GetObjectType(), -1, false, false);
+    lua_settop(context, -2);
+    if (frame != nullptr) {
+        g_charSelectModelFrame = static_cast<CSimpleModelFFX*>(frame);
+    }
+    return 0;
+}
+
+// ref: FUN_14169d380
+int Lua_C_Login_IsReconnectLoginPossible(lua_State* L) {
+    // FUN_14148ba50
+    lua_pushboolean(L, g_reconnectLoginPossible);
+    return 1;
+}
+
+// For each sample count and quality the device takes: "<samples>,<quality>" and the colour
+// and coverage sample counts.
+// ref: FUN_1419f5cc0
+int Lua_MultiSampleAntiAliasingSupported(lua_State* L) {
+    if (!lua_checkstack(L, 0x2d)) {
+        return 0;
+    }
+    int count = 0;
+    for (uint32_t samples = 1; samples < 6; samples++) {
+        for (uint32_t quality = 0; quality < 4; quality++) {
+            if (RenderSettingsCheckMsaa(static_cast<uint8_t>(samples), static_cast<uint8_t>(quality)) == 0) {
+                lua_pushfstring(L, "%d,%d", samples, quality);
+                lua_pushnumber(L, static_cast<double>(1ull << (samples & 0x3f)));
+                lua_pushnumber(L, static_cast<double>(1ull << ((quality + samples) & 0x3f)));
+                count++;
+            }
+        }
+    }
+    return count * 3;
 }
 
 // For each of a quality group's settings, why this machine cannot take it (0 when it can).

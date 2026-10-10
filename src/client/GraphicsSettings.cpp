@@ -2523,6 +2523,11 @@ CVar* s_teleportMaxNoLoadDistCVar;
 
 }
 
+// The SSAO type check, for the ambient occlusion CVars.
+uint32_t GraphicsCheckSsaoType(int32_t type) {
+    return CheckSsaoType(type);
+}
+
 // ref: FUN_14134e340
 int32_t GraphicsSettingsMode() {
     return g_worldGraphicsMode;

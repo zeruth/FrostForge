@@ -1124,6 +1124,11 @@ bool GxApiSupported(uint8_t api) {
     return s_apiSupported[api] != 0;
 }
 
+// ref: FUN_1422886b0
+bool GxApiAvailable(uint8_t api) {
+    return s_apiAvailable[api] != 0;
+}
+
 // ref: FUN_142288690
 const char* GxApiName(uint8_t api) {
     return api < GXAPI_COUNT ? s_apiNames[api] : "Unknown";

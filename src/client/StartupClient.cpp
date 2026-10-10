@@ -1,5 +1,6 @@
 #include "client/ClientCVars.hpp"
 #include "client/GraphicsSettings.hpp"
+#include "client/RenderCVars.hpp"
 #include "client/ConsoleDevice.hpp"
 #include "client/FrameBufferCache.hpp"
 #include "client/RenderSettings.hpp"
@@ -78,11 +79,6 @@ void Sub1412A11C0() {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_14023caf0
-void Sub14023CAF0() {
-    FROST_UNIMPLEMENTED();
-}
-
 // client objects made with the device
 // ref: FUN_14022a020
 void OnDeviceCreatedClient(void* param) {
@@ -103,11 +99,6 @@ void Sub14124C270() {
 
 // ref: FUN_1402f9e30
 void Sub1402F9E30() {
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_1412a2bf0
-void Sub1412A2BF0() {
     FROST_UNIMPLEMENTED();
 }
 
@@ -170,6 +161,7 @@ void Sub1412A1D50() {
 void Sub14134ED50(void (*callback)()) {
     (void)callback;
     GraphicsRegisterCVars();
+    AmbientOcclusionRegisterCVars();
     // FUN_1413b9e40 (the world's callbacks), the world option defaults (DAT_1430ab9c0..), and
     // the subsystems after them (liquids, particles, shadows, the sky, ...) are not ported.
     FROST_UNIMPLEMENTED();
@@ -217,11 +209,6 @@ void Sub1411974E0(uint32_t flags, int32_t a2, int32_t a3) {
 
 // ref: FUN_14125f550
 void Sub14125F550() {
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_1405dcf20
-void Sub1405DCF20() {
     FROST_UNIMPLEMENTED();
 }
 
@@ -1133,7 +1120,7 @@ bool Sub14022A260() {
     Sub141C994E0("WOTLKC");
     Sub14068C520();
     Sub1412A11C0();
-    Sub14023CAF0();
+    FrameRateRegisterCVars();
     GxAddDeviceCreatedCallback(OnDeviceCreatedClient, nullptr);
     GxAddDeviceDestroyedCallback(OnDeviceDestroyedClient, nullptr);
     s_deviceCallbacksAdded = 1;
@@ -1141,7 +1128,7 @@ bool Sub14022A260() {
     RenderSettingsInitialize();
     TextureInitialize();
     Sub1402F9E30();
-    Sub1412A2BF0();
+    ResampleRegisterCVars();
     FrameBufferCacheInitialize();
     Sub1412834A0(0xbaa0c);
     Sub141297EB0(0xb27ad);
@@ -1183,7 +1170,7 @@ bool Sub14022A260() {
     }
     Sub1411974E0(m2Flags | 0x53, 0, 0);
     Sub14125F550();
-    Sub1405DCF20();
+    FullScreenEffectsRegisterCVars();
     Sub14134EC50();
     Sub14023DBD0();
     g_clientInitFlags |= 0x1000;

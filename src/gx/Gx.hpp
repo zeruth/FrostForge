@@ -101,6 +101,7 @@ uint8_t GxGetApi();
 void GxSetApi(uint8_t api);
 bool GxApiSupported(uint8_t api);
 const char* GxApiName(uint8_t api);
+bool GxApiAvailable(uint8_t api);
 uint8_t GxGetBestApi();
 GXADAPTERLIST* GxGetAdapterList();
 GxAdapterInfo* GxSelectGpuToUse();

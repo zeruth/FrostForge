@@ -14,7 +14,7 @@ struct RENDERSETTINGS {
     GXSIZE m_resolution;            // 0x08: the back buffer
     uint8_t m_msaaSamples;          // 0x0c: log2 of the sample count
     uint8_t m_msaaQuality;          // 0x0d
-    uint8_t m_0e;                   // 0x0e
+    uint8_t m_antiAliasing;         // 0x0e: ffxAntiAliasingMode, 0..4
     uint8_t m_sunshafts;            // 0x0f: 0..2
     uint16_t m_shadowTextureSize;   // 0x10: 0x200, 0x400 or 0x800
     uint8_t m_deviceResets;         // 0x12: counts device losses so a lost device re-applies
