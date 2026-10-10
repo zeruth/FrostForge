@@ -117,11 +117,11 @@ void ModelLoading(void* model, void* param) {
 
 // The frame's light onto the model, when it has one (FUN_1411ff860).
 // ref: LAB_1424bdb90
-void ModelLighting(void* model, void* param) {
+void ModelLighting(void* model, CM2ModelLighting* lighting, void* param) {
     (void)model;
     auto frame = static_cast<CSimpleModel*>(param);
     if (frame->m_lighting.m_enabled != 0) {
-        FROST_UNIMPLEMENTED();  // FUN_1411ff860: the light applied to the model (CM2Model)
+        M2ModelLightingAdd(lighting, &frame->m_lighting);
     }
 }
 

@@ -5,6 +5,8 @@
 #include <cstring>
 
 #include "console/Var.hpp"
+#include "db/DB2Tables.hpp"
+#include "db/WowClientDB2.hpp"
 #include "framescript/FrameScript.hpp"
 #include "os/Os.hpp"
 #include "services/ClientServices.hpp"
@@ -24,6 +26,10 @@ uint8_t s_restartPending;   // DAT_1430a9892
 int32_t s_restartCount;     // DAT_1430a9900
 uint8_t s_1430a99fc;        // DAT_1430a99fc
 uint32_t s_updateTime;      // DAT_1430a9904
+// Two game states the sound kits can be kept out of (set by FUN_1412fae00 and its sibling;
+// both clear at the glue screens).
+uint8_t s_kitState0;        // DAT_1430a99e0
+uint8_t s_kitState2;        // DAT_1430a99e2
 
 // A failed start retries with the most compatible settings: software channels, stereo, 256
 // channels, 32 software ones, 44.1 kHz.
@@ -96,7 +102,23 @@ bool FilterKit(void* kit) {
     if (kit == nullptr) {
         return false;
     }
-    FROST_UNIMPLEMENTED();  // the SoundKit flags 0x100 / 0x8000 / 0x400 against DAT_1430a99e2 / DAT_1430a99e0
+    bool local;
+    auto record = static_cast<const uint8_t*>(
+        g_soundKitDB.GetRecord(*reinterpret_cast<const uint32_t*>(static_cast<uint8_t*>(kit) + 0x2c), false, &local));
+    if (record == nullptr) {
+        return false;
+    }
+    if (s_kitState2 != 0) {
+        if ((DB2FieldU16(record, 3, 0, &g_soundKitDB) & 0x100) != 0) {
+            return true;
+        }
+    } else if ((DB2FieldU16(record, 3, 0, &g_soundKitDB) & 0x8000) != 0) {
+        return true;
+    }
+    if (s_kitState0 != 0) {
+        return (DB2FieldU16(record, 3, 0, &g_soundKitDB) & 0x400) != 0;
+    }
+    DB2FieldU16(record, 3, 0, &g_soundKitDB);
     return false;
 }
 
