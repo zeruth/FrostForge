@@ -685,3 +685,14 @@ void DNScene::BeginFrame() {
         this->SetSkyPriority(0);
     }
 }
+
+// ref: FUN_142442fb0
+bool DayNightIsDaytime(DAYNIGHT* dayNight) {
+    float time = DNField<float>(dayNight->m_scene, 0xc);
+    return 0.22083335f <= time && time < 0.875f;     // DAT_1429798d4, DAT_1429798d8
+}
+
+// ref: FUN_142443520
+void DayNightSetOverride(DAYNIGHT* dayNight, bool set) {
+    dayNight->m_scene->m_1601 = set;
+}

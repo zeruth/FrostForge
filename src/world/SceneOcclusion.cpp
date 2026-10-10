@@ -130,3 +130,21 @@ void SceneOcclusionDestroy(SceneOcclusion** holder) {
     }
     *holder = nullptr;
 }
+
+// ref: FUN_14254fef0
+void SceneOcclusionSetEnabled(SceneOcclusion** holder, bool enabled) {
+    (*holder)->Field<uint32_t>(0x80) = static_cast<uint32_t>(enabled) << 4;
+}
+
+// ref: FUN_14254ff40
+void SceneOcclusionStage(SceneOcclusion** holder, CWorldView* view, uint32_t stage) {
+    SceneOcclusionRunStage(*holder, view, stage);
+}
+
+// ref: FUN_142553540
+void SceneOcclusionRunStage(SceneOcclusion* occlusion, CWorldView* view, uint32_t stage) {
+    (void)occlusion;
+    (void)view;
+    (void)stage;
+    FROST_UNIMPLEMENTED();
+}

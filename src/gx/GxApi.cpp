@@ -1949,6 +1949,7 @@ blz::allocator* GxGetAllocator() {
 namespace {
 
 uint8_t s_framePhase;               // DAT_14348b640
+uint8_t s_frameSceneOpen;           // DAT_14348b641: a scene draw is under way (FUN_1413c5250)
 uint32_t s_deviceLostCount;         // DAT_143490858
 uint8_t s_deviceRestartPending;     // DAT_14349069e
 uint32_t s_lastMarkedFrame;         // DAT_142d438bc
@@ -2718,4 +2719,55 @@ uint32_t GxDeviceBufferedFrames() {
 // ref: FUN_142288530
 uint32_t GxDeviceFrameSlot() {
     return static_cast<CGxDevice*>(g_gxDevice)->Field<uint32_t>(0x13c);
+}
+
+namespace {
+
+// The viewport (DAT_142d41c20..DAT_142d41c34): x, then y, then z, each from and to.
+float s_viewport[6] = {0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f};
+
+}  // namespace
+
+// ref: FUN_14228aa10
+bool GxFramePhaseOpen() {
+    return s_framePhase != 0 || s_frameSceneOpen == 0;
+}
+
+// ref: FUN_14228a9b0
+uint32_t GxDeviceFrameTime() {
+    if (g_gxDevice == nullptr) {
+        return 0;
+    }
+    return static_cast<CGxDevice*>(g_gxDevice)->Field<uint32_t>(0x158);
+}
+
+// ref: FUN_14228cbd0
+void GxXformGetViewport(float* minX, float* maxX, float* minY, float* maxY, float* minZ, float* maxZ) {
+    *minY = s_viewport[2];
+    *maxY = s_viewport[3];
+    *minX = s_viewport[0];
+    *maxX = s_viewport[1];
+    *minZ = s_viewport[4];
+    *maxZ = s_viewport[5];
+}
+
+// ref: FUN_14228cb00
+void GxXformApplyViewport() {
+    float minY = s_viewport[2] <= 0.0f ? 0.0f : s_viewport[2];
+    float maxX = 1.0f <= s_viewport[1] ? 1.0f : s_viewport[1];
+    float maxY = 1.0f <= s_viewport[3] ? 1.0f : s_viewport[3];
+    float minX = s_viewport[0] <= 0.0f ? 0.0f : s_viewport[0];
+    GxRenderContext* context = g_gxRenderContext;
+    if (minX != context->Field<float>(0x1c) || maxX != context->Field<float>(0x20)
+        || minY != context->Field<float>(0x24) || maxY != context->Field<float>(0x28)
+        || s_viewport[4] != context->Field<float>(0x2c) || s_viewport[5] != context->Field<float>(0x30)) {
+        context->Field<float>(0x1c) = minX;
+        context->Field<float>(0x20) = maxX;
+        context->Field<float>(0x24) = minY;
+        context->Field<float>(0x28) = maxY;
+        context->Field<float>(0x2c) = s_viewport[4];
+        context->Field<float>(0x30) = s_viewport[5];
+        context->Field<uint8_t>(0x18) = 1;
+    }
+    s_framePhase = 0;
 }

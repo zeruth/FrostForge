@@ -54,6 +54,11 @@ class CWorldMap {
     // Map `mapId` without terrain (what a model frame's scene loads).
     // ref: FUN_1413ad010
     void LoadNone(int32_t mapId, bool second);
+    // ref: FUN_14142a610
+    void LoadStaticObjects(bool also, int32_t alsoMapId);
+    // The map's load state (0x28, +0x1e0).
+    // ref: FUN_1413b0e40
+    void CreateLoadState();
     // ref: FUN_1413b0980
     void Load(int32_t mapId, uint8_t a3, int32_t a4, uint8_t a5);
     // ref: FUN_1413b1f60

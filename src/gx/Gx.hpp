@@ -278,4 +278,18 @@ uint32_t GxDeviceBufferedFrames();
 // ref: FUN_142288530
 uint32_t GxDeviceFrameSlot();
 
+// Whether the frame's phase leaves the frame open (false only between a frame's start and the
+// scene's draw).
+// ref: FUN_14228aa10
+bool GxFramePhaseOpen();
+// The device's last frame time (+0x158), 0 without a device.
+// ref: FUN_14228a9b0
+uint32_t GxDeviceFrameTime();
+// The viewport the scene draws in, as fractions of the target (0..1 each by default).
+// ref: FUN_14228cbd0
+void GxXformGetViewport(float* minX, float* maxX, float* minY, float* maxY, float* minZ, float* maxZ);
+// The viewport into the render context (clamped to the target), and the frame's phase reset.
+// ref: FUN_14228cb00
+void GxXformApplyViewport();
+
 #endif

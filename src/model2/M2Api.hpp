@@ -10,34 +10,10 @@
 #include <cstdint>
 
 #include "model2/M2Camera.hpp"
+#include "world/WorldFrame.hpp"
 
 class CWorldScene;
 class CM2Model;
-
-// ---- the world scene ------------------------------------------------------------------------
-
-// FUN_14134dd50: a scene of `type` (the model frames make type 5, with `light` set).
-CWorldScene* WorldSceneCreate(uint32_t flags, int32_t type, bool light);
-// FUN_1413c5bb0: drops a reference; the last frees the scene. The remaining count.
-int32_t WorldSceneRelease(CWorldScene* scene);
-// FUN_14134e8a0: the scene's render parameters (+0x68); their first word is a flag set.
-uint32_t* WorldSceneGetParams(CWorldScene* scene);
-// FUN_1413571e0
-void WorldSceneParamsSetFlags(uint32_t* params, uint32_t mask, bool set);
-// FUN_1413c3460 / FUN_1413c3450: a model of the scene's CM2Scene, with a reference for the
-// caller, or null.
-CM2Model* WorldSceneCreateModelByName(CWorldScene* scene, const char* name, uint32_t flags, int32_t a4, int32_t a5);
-CM2Model* WorldSceneCreateModelById(CWorldScene* scene, int32_t fileDataId, uint32_t flags, int32_t a4, int32_t a5);
-// FUN_1413574e0: advances the scene's models by `elapsed` seconds.
-void WorldSceneAnimate(CWorldScene* scene, uint32_t* params, float elapsed, int32_t a4, int32_t a5, uint32_t flags,
-    int32_t a7);
-// FUN_1413573b0
-void WorldSceneUpdate(CWorldScene* scene, uint32_t* params, int32_t a3, int32_t a4);
-// FUN_1424d1a00: the view a camera gives (0x64 bytes at `out`).
-void* WorldSceneViewFromCamera(void* out, CM2Camera* camera);
-// FUN_1424d1370: draws the scene into a frame's rectangle.
-void WorldSceneRenderFrame(CWorldScene* scene, uint32_t* params, void* view, const void* frame, void* target,
-    float elapsed, uint32_t flags);
 
 // ---- CM2Model ------------------------------------------------------------------------------
 

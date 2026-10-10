@@ -1,5 +1,7 @@
 #include "world/WorldStubs.hpp"
 
+#include <cstring>
+
 #include "storm/list/TSList.hpp"
 #include "util/Unimplemented.hpp"
 #include "world/WorldQueries.hpp"
@@ -75,11 +77,14 @@ void SkySceneUnload(void* sky) {
 
 // ---- the scene's 0xfa50 object -------------------------------------------------------------
 
+// Its 0x3e8 (count, a quad) cells and fields zeroed as the reference zeroes them; its texture
+// (FUN_14127e630 on `a4`) and the cell setup (FUN_1414242d0, FUN_1414240f0) are not ported.
 // ref: FUN_141423ae0
 void* WorldScene030Create(void* memory, float a2, float a3, uint32_t a4) {
     (void)a2;
     (void)a3;
     (void)a4;
+    std::memset(memory, 0, 0xfa50);
     FROST_UNIMPLEMENTED();
     return memory;
 }
@@ -92,10 +97,32 @@ void WorldScene030Destroy(void* object) {
 
 // ---- MapWeather ----------------------------------------------------------------------------
 
+// The weather's own fields as the constructor stores them; its particle base (FUN_14138a320),
+// its sound block (+0x1230, FUN_141389fc0) and its 5x5 precipitation grid (+0x1200, 0xe0
+// bytes from FUN_141389d40) are not ported, so the grid stays null.
 // ref: FUN_14138a820
 void* MapWeatherCreate(void* memory, CWorldScene* scene) {
-    (void)scene;
+    auto bytes = static_cast<uint8_t*>(memory);
+    std::memset(bytes, 0, 0x1378);
     FROST_UNIMPLEMENTED();
+    auto store32 = [bytes](size_t offset, uint32_t value) {
+        std::memcpy(bytes + offset, &value, 4);
+    };
+    auto store64 = [bytes](size_t offset, uint64_t value) {
+        std::memcpy(bytes + offset, &value, 8);
+    };
+    std::memcpy(bytes + 0x1148, &scene, 8);
+    store32(0x1190, 0xffffffff);
+    store64(0x1174, 0xffffffffffffffffull);
+    store32(0x1184, 0x3f800000);
+    store32(0x1188, 0x3f800000);
+    store32(0x118c, 0x3f800000);
+    store32(0x1198, 0x40a00000);
+    store32(0x119c, 0x41200000);
+    store32(0x1334, 0x7f7fffff);
+    store32(0x1338, 0x7f7fffff);
+    store64(0x133c, 0x7f7fffff);
+    store32(0x1370, 1);
     return memory;
 }
 

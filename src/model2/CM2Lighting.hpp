@@ -94,6 +94,13 @@ static_assert(sizeof(CM2ModelLighting) == 0x120, "CM2ModelLighting is 0x120 byte
 void M2ModelLightingBegin(CM2ModelLighting* lighting, CM2Scene* scene, const float* position);
 // Works out the directional terms (FUN_141200330).
 void M2ModelLightingFinish(CM2ModelLighting* lighting, void* param);
+// A directional light's colour along `direction` (scene space) into the lighting's axes.
+// ref: FUN_1411ff680
+void M2ModelLightingAddDirectional(CM2ModelLighting* lighting, const float* color, const float* direction);
+// An enabled light into the lighting: a point light among the nearest (by squared distance,
+// m_maxLights of them), a directional one added in.
+// ref: FUN_1411ff860
+void M2ModelLightingAdd(CM2ModelLighting* lighting, CM2Lighting* light);
 // Done: the plane into camera space when asked (FUN_1411ffb70).
 void M2ModelLightingEnd(CM2ModelLighting* lighting);
 // A plane through a matrix (FUN_14134ba00).

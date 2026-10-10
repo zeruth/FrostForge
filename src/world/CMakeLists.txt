@@ -5,6 +5,7 @@ add_library(world STATIC
     SceneOcclusion.cpp
     WorldClip.cpp
     WorldFade.cpp
+    WorldFrame.cpp
     WorldMap.cpp
     WorldScene.cpp
     WorldSceneCallbacks.cpp

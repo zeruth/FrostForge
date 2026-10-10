@@ -1,5 +1,6 @@
 #include "model2/M2Particle.hpp"
 #include "client/ClientCVars.hpp"
+#include "world/WorldFrame.hpp"
 #include "client/GraphicsSettings.hpp"
 #include "client/RenderCVars.hpp"
 #include "client/ConsoleDevice.hpp"
@@ -214,8 +215,8 @@ void Sub14134EC50() {
 // ---- Sub14023DBD0's callees ----------------------------------------------------------------
 
 static uint8_t s_flag142de2990;      // DAT_142de2990
-static void* s_unknown142ddcf58;     // DAT_142ddcf58
-static void* s_unknown142ddcf60;     // DAT_142ddcf60
+static CWorldScene* s_worldScene;   // DAT_142ddcf58: the world's scene
+static uint32_t* s_worldParams;      // DAT_142ddcf60: its view's flags
 
 // Four render-state defaults (0x142cfbe80..).
 // ref: FUN_141283c90
@@ -326,20 +327,6 @@ void Sub14165A560() {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_14134dd50
-void* Sub14134DD50(uint32_t count) {
-    (void)count;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
-}
-
-// ref: FUN_14134e8a0
-void* Sub14134E8A0(void* owner) {
-    (void)owner;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
-}
-
 // The cursor freelook CVars.
 // ref: FUN_1415242c0
 void Sub1415242C0() {
@@ -404,8 +391,8 @@ void Sub14023DBD0() {
     Sub14033FA30();
     FrameTime_Initialize();
     Sub14165A560();
-    s_unknown142ddcf58 = Sub14134DD50(8);
-    s_unknown142ddcf60 = Sub14134E8A0(s_unknown142ddcf58);
+    s_worldScene = WorldSceneCreate(8, 6, false);
+    s_worldParams = WorldSceneGetParams(s_worldScene);
     Sub1415242C0();
     Sub14024A690();
     Sub141CAF660();
@@ -646,12 +633,6 @@ void Sub140234080() {
 
 // ref: FUN_140570630
 void Sub140570630() {
-    FROST_UNIMPLEMENTED();
-}
-
-// Gx
-// ref: FUN_14228cb00
-void Sub14228CB00() {
     FROST_UNIMPLEMENTED();
 }
 

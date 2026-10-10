@@ -114,6 +114,28 @@ class CWorldView {
 
     // ref: FUN_1413d9420
     CWorldView(CWorldScene* scene, CWorldView* parent, uint32_t mode);
+    // The occluder object (+0x238) made or dropped as occlusion culling is switched.
+    // ref: FUN_1413da870
+    void SetOcclusionCulling(bool enabled);
+    // The camera block from the set one, its matrices and the LOD distances.
+    // ref: FUN_1413dddd0
+    void UpdateCamera(const int32_t* lod);
+    // ref: FUN_1413de3a0
+    void BuildFrustum();
+    // ref: FUN_1413de760
+    void Cull();
+    // ref: FUN_1413da610
+    void UpdateOccluders(bool occluders);
+    // ref: FUN_1413dddb0
+    void SetOcclusion(bool enabled);
+    // ref: FUN_1413dea50
+    bool CullsSkipped();
+    // The camera the caller sets: position, target, the clips from the scene, the lens.
+    // ref: FUN_1413de160
+    void SetCamera(const float* position, const float* target, float fov, float aspect);
+    // This frame's matrices and camera kept as last frame's.
+    // ref: FUN_1413c59b0
+    void LatchCamera();
     // The liquid the camera is in and its depth (+0x690, +0x694).
     // ref: FUN_141351b90
     uint32_t GetLiquid(float* depth);

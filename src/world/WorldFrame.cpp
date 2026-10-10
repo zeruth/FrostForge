@@ -1,0 +1,684 @@
+#include "world/WorldFrame.hpp"
+
+#include "base/Matrix.hpp"
+#include "blz/Function.hpp"
+#include "client/GraphicsSettings.hpp"
+#include "client/RenderSettings.hpp"
+#include "console/Var.hpp"
+#include "daynight/DayNight.hpp"
+#include "gx/Gx.hpp"
+#include "model2/CM2Lighting.hpp"
+#include "model2/M2Camera.hpp"
+#include "model2/M2Scene.hpp"
+#include "shadereffect/ShaderEffectPipeline.hpp"
+#include "storm/Memory.hpp"
+#include "storm/String.hpp"
+#include "threadpool/ThreadPool.hpp"
+#include "ui/FrameTime.hpp"
+#include "util/Fnv.hpp"
+#include "util/Unimplemented.hpp"
+#include "world/SceneOcclusion.hpp"
+#include "world/WorldClip.hpp"
+#include "world/WorldMap.hpp"
+#include "world/WorldScene.hpp"
+#include "world/WorldView.hpp"
+#include <cmath>
+#include <cstring>
+#include <new>
+
+// WoW/Source/WorldClient2: a scene's frame. World.cpp's entry points the model frames call
+// (create, animate, update, the camera view), the scene's animate pass (WorldScene.cpp) and
+// the view's camera latch (WorldView.cpp).
+
+bool Sub14134F980();
+
+namespace {
+
+const char s_worldFile[] = "D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WorldClient2\\World.cpp";
+
+// DAT_1430aba60: cleared when a scene loads its map here and by the world's startup.
+uint32_t s_1430aba60;
+
+// The world's player position (DAT_1430abb28), what the particulates follow.
+float s_playerPosition[3];
+
+// The world's graphics quality and the raid one (DAT_142cfdb6c, DAT_142cfdb70), 6 until the
+// world's startup reads the CVars (FUN_141354f80).
+uint32_t s_graphicsQuality = 6;
+uint32_t s_raidGraphicsQuality = 6;
+
+// The frame-time budget by graphics quality, in microseconds (DAT_142d00bf8).
+const uint32_t s_frameBudget[10] = {1700000, 2000000, 2600000, 3100000, 4100000, 5000000, 5500000, 6000000, 7700000,
+    11000000};
+
+// The world's LOD scale (DAT_142d011b4).
+float s_lodScale = 1.0f;
+
+// The renderer's feature switches (DAT_142ccbc00): set by the client's option setup.
+uint8_t s_features[8] = {1, 1, 1, 0, 0, 0, 0, 0};
+
+}  // namespace
+
+// DAT_1430ab790: DayNight's zone lights and light run on a pool job.
+uint8_t g_dayNightOnJob;
+
+// ---- small world state ---------------------------------------------------------------------
+
+// ref: FUN_141354f80
+void WorldReadGraphicsQuality() {
+    CVar* quality = CVarLookup(t2util::ConstFnvHashStringI("graphicsQuality"));
+    if (quality != nullptr) {
+        s_graphicsQuality = static_cast<uint32_t>(quality->m_intValue);
+    }
+    CVar* raid = CVarLookup(t2util::ConstFnvHashStringI("RAIDgraphicsQuality"));
+    if (raid != nullptr) {
+        s_raidGraphicsQuality = static_cast<uint32_t>(raid->m_intValue);
+    }
+}
+
+// ref: FUN_14134e7e0
+uint32_t WorldGraphicsQuality() {
+    return GraphicsSettingsMode() == 1 ? s_raidGraphicsQuality : s_graphicsQuality;
+}
+
+// ref: FUN_14135cf20
+uint32_t WorldFrameBudget() {
+    uint32_t quality = WorldGraphicsQuality();
+    return s_frameBudget[quality < 9 ? quality : 9];
+}
+
+// ref: FUN_14134e950
+float* WorldPlayerPosition() {
+    return s_playerPosition;
+}
+
+// ref: FUN_1413c0930
+float WorldLodScaleMinimum() {
+    return 0.5f;    // DAT_14261a988
+}
+
+// ref: FUN_1413c1020
+void WorldSetLodScale(float scale) {
+    if (scale < 0.5f) {             // DAT_14261a988
+        s_lodScale = 0.5f;
+        return;
+    }
+    if (2.0f <= scale) {            // DAT_142632534
+        scale = 2.0f;
+    }
+    s_lodScale = scale;
+}
+
+// ref: FUN_140309ec0
+bool RenderFeatureEnabled(int32_t feature) {
+    return s_features[feature] != 0;
+}
+
+// The water detail setting (FUN_142526ee0).
+// ref: FUN_142526ee0
+uint8_t WorldWaterDetail() {
+    return g_renderSettings.m_waterDetail;
+}
+
+// ---- the stubs the animate pass reaches ----------------------------------------------------
+
+// The global jobs a view that asks for them waits on (DAT_1447ce6a8), and their count.
+// ref: FUN_14252ce30
+void WorldWaitGlobalJobs() {
+    FROST_UNIMPLEMENTED();  // FUN_14235a5e0 on DAT_1447ce6a8, then DAT_142d5e7fc += 3
+}
+
+// The frame's screen rectangle reset (DAT_1430aba78, DAT_1430aba80).
+// ref: FUN_141365b20
+void WorldResetFrameRect() {
+    FROST_UNIMPLEMENTED();  // DAT_1430aba78 = 0, DAT_1430aba80 = 0x7fff00007fff without a device
+}
+
+// ref: FUN_1413c9380
+void WorldSceneUpdateFadeouts(CWorldScene* scene) {
+    (void)scene;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1413c9f40
+void WorldSceneUpdateDoodadFades(CWorldScene* scene) {
+    (void)scene;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1414291f0
+void WorldMapSetPosition(CWorldMap* map, const float* position) {
+    (void)map;
+    (void)position;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14142a270
+void WorldMapUpdateAreas(CWorldMap* map) {
+    (void)map;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141428f70
+void WorldMapUpdateChunks(CWorldMap* map) {
+    (void)map;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1413b2b30
+void WorldMapAnimate(CWorldMap* map, void* weather) {
+    (void)map;
+    (void)weather;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141425d80
+void WorldScene030Update(void* object, CWorldView* view) {
+    (void)object;
+    (void)view;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_141392ff0
+void MapWeatherUpdate(void* weather, CWorldScene* scene, const void* camera, bool outdoors, bool flag) {
+    (void)weather;
+    (void)scene;
+    (void)camera;
+    (void)outdoors;
+    (void)flag;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1413975e0
+void ParticulateVolumesUpdate(void* particulates, const void* camera, const float* player, bool daytime, float depth) {
+    (void)particulates;
+    (void)camera;
+    (void)player;
+    (void)daytime;
+    (void)depth;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14139b480
+void WorldUpdateLiquidSounds() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_142527370
+void WorldRunFrameCallbacks() {
+    FROST_UNIMPLEMENTED();  // DAT_1447ce201: the two callback lists at DAT_1447ce218, DAT_1447ce238
+}
+
+// ref: FUN_141370460
+void WorldFadeUpdate(void* fade, float elapsed, const void* camera) {
+    (void)fade;
+    (void)elapsed;
+    (void)camera;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1413793d0
+void WorldUpdateObjectFades(CWorldScene* scene) {
+    (void)scene;
+    FROST_UNIMPLEMENTED();  // FUN_141379400, then FUN_1413cad10 while DAT_1430abef8
+}
+
+// ref: FUN_1413ca0b0
+void WorldSceneUpdateFog(CWorldScene* scene, CWorldView* view) {
+    (void)scene;
+    (void)view;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1413c9760
+void WorldSceneFinishFrame(CWorldScene* scene) {
+    (void)scene;
+    FROST_UNIMPLEMENTED();
+}
+
+// ---- the view -------------------------------------------------------------------------------
+
+// ref: FUN_1413da870
+void CWorldView::SetOcclusionCulling(bool enabled) {
+    (void)enabled;
+    FROST_UNIMPLEMENTED();  // the view's 0x308 occluder object (FUN_1413a6a40) at +0x238
+}
+
+// ref: FUN_1413dddd0
+void CWorldView::UpdateCamera(const int32_t* lod) {
+    (void)lod;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1413de3a0
+void CWorldView::BuildFrustum() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1413de760
+void CWorldView::Cull() {
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1413da610
+void CWorldView::UpdateOccluders(bool occluders) {
+    (void)occluders;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_1413dddb0
+void CWorldView::SetOcclusion(bool enabled) {
+    SceneOcclusionSetEnabled(&this->m_occlusion, enabled);
+}
+
+// ref: FUN_1413dea50
+bool CWorldView::CullsSkipped() {
+    return ((reinterpret_cast<uint8_t*>(this->m_cull)[0x161e8] >> 5) & 1) != 0;
+}
+
+// ref: FUN_1413de160
+void CWorldView::SetCamera(const float* position, const float* target, float fov, float aspect) {
+    CWorldScene* scene = this->m_scene;
+    CWorldMap* map = scene->m_maps[scene->m_mapIndex];
+    this->m_cameraSet.m_nearClip = scene->GetNearClip();
+    this->m_cameraSet.m_farClip = scene->GetFarClip(map);
+    this->m_cameraSet.m_24 = scene->GetFarClip3(map);
+    float farClip2 = scene->GetFarClip2(map);
+    this->m_cameraSet.m_fov = fov;
+    this->m_cameraSet.m_aspect = aspect;
+    this->m_cameraSet.m_farClip2 = farClip2;
+    std::memcpy(this->m_cameraSet.m_position, position, 12);
+    std::memcpy(this->m_cameraSet.m_target, target, 12);
+}
+
+// ref: FUN_1413c59b0
+void CWorldView::LatchCamera() {
+    float view[16];
+    std::memcpy(view, this->m_matrices[4], sizeof(view));
+    float move[3] = {-this->m_camera.m_position[0], -this->m_camera.m_position[1], -this->m_camera.m_position[2]};
+    MatrixTranslate(view, move);
+    std::memcpy(this->m_matrices[1], view, sizeof(view));
+    std::memcpy(this->m_matrices[2], this->m_matrices[4], sizeof(view));
+    std::memcpy(this->m_matrices[3], this->m_matrices[5], sizeof(view));
+    this->m_cameraLast = this->m_cameraSet;
+}
+
+// ---- the scene ------------------------------------------------------------------------------
+
+namespace {
+
+// The pool job the handle runs DayNight's zone lights on (LAB_1413c8a80).
+void UpdateZoneLightsJob(void* storage) {
+    auto view = *reinterpret_cast<CWorldView**>(static_cast<uint8_t*>(storage) + 8);
+    DayNightUpdate(view->m_scene->m_dayNight, view->m_camera.m_position);
+}
+
+}  // namespace
+
+// ref: FUN_1413c80a0
+void CWorldScene::Animate(CWorldView* view, const int32_t* lod, float elapsed, uint32_t flags) {
+    CM2Scene* m2Scene = this->m_m2Scene;
+    if ((view->m_flags & 0x4000) != 0) {
+        WorldWaitGlobalJobs();
+    }
+    WorldResetFrameRect();
+    uint32_t viewFlags = view->m_flags | 0x10;
+    viewFlags = (flags & 2) != 0 ? viewFlags | 0x40 : viewFlags & ~0x40u;
+    view->m_flags = viewFlags;
+    if (ShaderEffectOutlinesOn() && (flags & 1) != 0) {
+        view->m_flags |= 0x200;
+    } else {
+        view->m_flags &= ~0x200u;
+    }
+    uint32_t frameFlags = view->m_flags;
+    bool shadowed = ((frameFlags >> 9) & 1) != 0 && 0 < g_renderSettings.m_shadowMode;
+    view->SetOcclusionCulling(shadowed);
+    view->UpdateCamera(lod);
+    if (Sub14134F980()) {
+        SceneOcclusionSetEnabled(&view->m_occlusion, false);
+    } else {
+        view->SetOcclusion(this->m_type == 6);
+    }
+    SceneOcclusionStage(&view->m_occlusion, view, 0);
+    SceneOcclusionStage(&view->m_occlusion, view, 1);
+    WorldSceneUpdateFadeouts(this);
+    WorldSceneUpdateDoodadFades(this);
+    for (CWorldMap* map : {this->m_maps[0], this->m_maps[1]}) {
+        if (map != nullptr) {
+            WorldMapSetPosition(map, this->m_position);
+            WorldMapUpdateAreas(map);
+        }
+    }
+    SceneOcclusionStage(&view->m_occlusion, view, 2);
+    if (this->m_dayNight != nullptr) {
+        this->m_dayNight->m_0c = g_dayNightOnJob;
+        if (this->m_dayNight->m_0c == 0) {
+            DayNightUpdate(view->m_scene->m_dayNight, view->m_camera.m_position);
+        } else {
+            ThreadPoolGroupSetCount(this->m_groups[0], 1);
+            blz::function_storage task;
+            task.m_invoke = reinterpret_cast<void*>(&UpdateZoneLightsJob);
+            task.m_manager = blz::function_trivial_manager;
+            *reinterpret_cast<void**>(task.m_storage) = nullptr;
+            *reinterpret_cast<CWorldView**>(task.m_storage + 8) = view;
+            ThreadPoolSubmit(1, &task, 2, this->m_groups[0]);
+            if (task.m_manager != blz::function_trivial_manager) {
+                task.m_manager(task.m_storage, nullptr, 0);
+            }
+        }
+    }
+    view->m_flags &= ~0x100u;
+    view->BuildFrustum();
+    view->Cull();
+    this->m_67c[0] = view->m_690 != 0;
+    if (view->m_gathered[0].m_00 == nullptr && view->m_gathered[1].m_00 == nullptr) {
+        view->m_flags |= 0x100;
+    }
+    this->m_a70 = view->m_300;
+    this->m_a78 = view->m_308;
+    this->UpdateDayNight(view);
+    struct {
+        uint64_t m_zero[2];
+        CWorldScene* m_scene;
+        CWorldView* m_view;
+    } frame = {{0, 0}, this, view};
+    CRenderCallbackList& callbacks = this->m_callbacks[5];
+    for (CRenderCallback* callback = callbacks.Head(); callback != nullptr; callback = callbacks.Next(callback)) {
+        callback->m_function(callback->m_param, callback->m_data, &frame);
+    }
+    view->UpdateOccluders(this->m_67c[0] != 0);
+    SceneOcclusionStage(&view->m_occlusion, view, 3);
+    for (CWorldMap* map : {this->m_maps[0], this->m_maps[1]}) {
+        if (map != nullptr) {
+            WorldMapUpdateChunks(map);
+            WorldMapAnimate(map, this->m_038);
+        }
+    }
+    SceneOcclusionStage(&view->m_occlusion, view, 4);
+    if (this->m_030 != nullptr && view->m_690 != 0) {
+        WorldScene030Update(this->m_030, view);
+    }
+    if (this->m_038 != nullptr) {
+        bool skipped = view->CullsSkipped();
+        bool outdoors = view->m_gathered[0].m_00 == nullptr && view->m_gathered[1].m_00 == nullptr;
+        MapWeatherUpdate(this->m_038, this, &view->m_camera, outdoors, skipped);
+    }
+    if (this->m_particulates != nullptr) {
+        bool daytime = this->m_dayNight == nullptr ? true : DayNightIsDaytime(this->m_dayNight);
+        ParticulateVolumesUpdate(this->m_particulates, &view->m_camera, WorldPlayerPosition(), daytime, this->m_a68);
+    }
+    WorldUpdateLiquidSounds();
+    WorldRunFrameCallbacks();
+    m2Scene->m_d738 = WorldWaterDetail() != 0;
+    uint32_t frameTime = GxDeviceFrameTime();
+    this->m_frameTimeSum -= this->m_frameTimes[this->m_frameTimeIndex];
+    this->m_frameTimes[this->m_frameTimeIndex] = frameTime;
+    this->m_frameTimeSum += frameTime;
+    this->m_frameTimeIndex++;
+    if (this->m_frameTimeIndex == 0x3c) {
+        this->m_frameTimeIndex = 0;
+    }
+    CVar* dynamicLod = CVarLookup(t2util::ConstFnvHashStringI("DynamicLod"));
+    if (dynamicLod != nullptr && dynamicLod->m_intValue == 0) {
+        this->m_lodScale = 1.0f;
+        std::memcpy(this->m_lodPosition, this->m_position, 12);
+    } else {
+        float budget = static_cast<float>(static_cast<uint64_t>(WorldFrameBudget())) * 1e-04f;       // DAT_1426c6f80
+        float average = static_cast<float>(static_cast<uint64_t>(this->m_frameTimeSum / 0x3c)) * 1e-04f;
+        float minimum = WorldLodScaleMinimum();
+        float dy = this->m_position[1] - this->m_lodPosition[1];
+        float dx = this->m_position[0] - this->m_lodPosition[0];
+        float dz = this->m_position[2] - this->m_lodPosition[2];
+        if (1e-06f < dy * dy + dx * dx + dz * dz) {                 // DAT_14261a95c
+            float step = FrameTime_GetElapsedSeconds();
+            float scale;
+            if (budget < average) {
+                scale = this->m_lodScale - step * 0.05f;           // DAT_14261a974
+            } else {
+                scale = step * 0.05f + this->m_lodScale;
+            }
+            if (minimum <= scale) {
+                minimum = scale < 1.0f ? scale : 1.0f;
+            }
+            this->m_lodScale = minimum;
+            std::memcpy(this->m_lodPosition, this->m_position, 12);
+        }
+    }
+    WorldSetLodScale(this->m_lodScale);
+    if (this->m_058 != nullptr && static_cast<uint8_t*>(this->m_058)[0x170] != 0) {
+        WorldFadeUpdate(this->m_058, elapsed, &view->m_camera);
+    }
+    WorldUpdateObjectFades(this);
+    if (this->m_dayNight != nullptr) {
+        ThreadPoolGroupWait(this->m_groups[1]);
+        DayNightPrepareFrame(this->m_dayNight, &this->m_farClip, (view->m_flags & 0x40) != 0);
+        if (this->m_maps[0] != nullptr) {
+            DayNightSetOverride(this->m_dayNight, (this->m_maps[0]->Flags() & 1) != 0);
+        }
+    }
+    WorldSceneUpdateFog(this, view);
+    CWorldMap* current = this->m_maps[this->m_mapIndex];
+    float center[4] = {0.0f, 0.0f, 0.0f, 32.0f};
+    if (current != nullptr) {
+        std::memcpy(center, current->Position(), 12);
+    }
+    auto lighting = reinterpret_cast<CM2ModelLighting*>(this->m_b20);
+    M2ModelLightingBegin(lighting, nullptr, center);
+    M2ModelLightingAdd(lighting, &this->m_lightA88);
+    uint32_t lights = 1;
+    if (this->m_67c[0] != 0 || (current != nullptr && (current->Flags() & 1) != 0)) {
+        lights = 7;
+    }
+    reinterpret_cast<uint32_t*>(&this->m_c20)[1] = lights;
+    if (m2Scene != nullptr) {
+        if ((view->m_flags & 0x1000) == 0) {
+            m2Scene->m_flags |= 0x41;
+        }
+        m2Scene->m_flags = shadowed ? m2Scene->m_flags | 0x10 : m2Scene->m_flags & ~0x10u;
+        m2Scene->m_flags = RenderFeatureEnabled(1) ? m2Scene->m_flags | 0x100 : m2Scene->m_flags & ~0x100u;
+        m2Scene->m_flags = RenderFeatureEnabled(2) ? m2Scene->m_flags | 0x400 : m2Scene->m_flags & ~0x400u;
+        if (((frameFlags >> 9) & 1) != 0) {
+            view->m_flags |= 0x800;
+            m2Scene->m_flags = (m2Scene->m_flags | 0x20) & ~0x200u;
+        } else {
+            view->m_flags &= ~0x800u;
+            m2Scene->m_flags = (m2Scene->m_flags & ~0x20u) | 0x200;
+        }
+    }
+    WorldSceneFinishFrame(this);
+}
+
+// ref: FUN_1413c5980
+void CWorldScene::LatchView(CWorldView* view) {
+    view->LatchCamera();
+    if (this->m_m2Scene != nullptr) {
+        this->m_m2Scene->LatchView();
+    }
+}
+
+// ---- World.cpp's entry points --------------------------------------------------------------
+
+// ref: FUN_14134dd50
+CWorldScene* WorldSceneCreate(uint32_t flags, int32_t type, bool light) {
+    void* memory = SMemAlloc(sizeof(CWorldScene), 0x27, s_worldFile, SStrHashFnv1a(s_worldFile), 0x1c2, 0);
+    auto scene = new (memory) CWorldScene(flags, type);
+    scene->AddRef();
+    if (light) {
+        float origin[3] = {0.0f, 0.0f, 0.0f};
+        s_1430aba60 = 0;
+        uint8_t phase = GxFrameSetPhase(0);
+        scene->SetCameraPosition(origin);
+        scene->LoadMap(0, -1, false, 0, -1, 1);
+        GxFrameSetPhase(phase);
+    }
+    return scene;
+}
+
+int32_t WorldSceneRelease(CWorldScene* scene) {
+    return scene->Release();
+}
+
+// ref: FUN_14134e8a0
+uint32_t* WorldSceneGetParams(CWorldScene* scene) {
+    return &scene->m_view->m_flags;
+}
+
+// ref: FUN_1413571e0
+void WorldSceneParamsSetFlags(uint32_t* params, uint32_t mask, bool set) {
+    if (params == nullptr) {
+        return;
+    }
+    if (set) {
+        *params |= mask;
+        return;
+    }
+    *params &= ~mask;
+}
+
+// ref: FUN_1413c3460
+CM2Model* WorldSceneCreateModelByName(CWorldScene* scene, const char* name, uint32_t flags, int32_t priority,
+    int32_t lod) {
+    return scene->m_m2Scene->CreateModel(name, flags, static_cast<uint8_t>(priority), static_cast<uint8_t>(lod));
+}
+
+// ref: FUN_1413c3450
+CM2Model* WorldSceneCreateModelById(CWorldScene* scene, int32_t fileDataId, uint32_t flags, int32_t priority,
+    int32_t lod) {
+    return scene->m_m2Scene->CreateModel(fileDataId, flags, static_cast<uint8_t>(priority), static_cast<uint8_t>(lod));
+}
+
+// The scene's frame: the GPU work flushed, the camera placed, the scene animated, and with
+// `latch` the viewport applied and the view latched for the draw.
+// ref: FUN_141352ea0
+void WorldSceneAnimateFrame(CWorldScene* scene, CWorldView* view, const float* position, const float* target,
+    const int32_t* lod, float elapsed, uint32_t flags, bool latch) {
+    GxFrameWorkFlush(2);
+    uint8_t phase = GxFramePhaseOpen() ? 1 : 0;
+    GxFrameSetPhase(0);
+    scene->SetCameraPosition(position);
+    view->SetCamera(position, target, 0.9424778f, 1.7777778f);     // DAT_142734af8, DAT_14261a9b4
+    scene->Animate(view, lod, elapsed, flags);
+    if (latch) {
+        GxXformApplyViewport();
+        scene->LatchView(view);
+    }
+    GxFrameSetPhase(phase);
+}
+
+// ref: FUN_1413574e0
+void WorldSceneAnimate(CWorldScene* scene, uint32_t* params, float elapsed, const float* position,
+    const float* target, uint32_t flags, bool latch) {
+    float camera[3] = {0.0f, 0.0f, 0.0f};
+    float look[3] = {0.0f, 0.0f, 0.0f};
+    if (position != nullptr) {
+        std::memcpy(camera, position, 12);
+    }
+    if (target != nullptr) {
+        std::memcpy(look, target, 12);
+    }
+    const int32_t lod[2] = {4, 4};
+    auto view = reinterpret_cast<CWorldView*>(params);
+    WorldSceneAnimateFrame(scene, view, camera, look, lod, elapsed, flags, latch);
+}
+
+// ref: FUN_1413573b0
+void WorldSceneUpdate(CWorldScene* scene, uint32_t* params, bool skipDrawParams, const float* position) {
+    auto view = reinterpret_cast<CWorldView*>(params);
+    float camera[3] = {0.0f, 0.0f, 0.0f};
+    if (position != nullptr) {
+        std::memcpy(camera, position, 12);
+    }
+    CM2Scene* m2Scene = scene->m_m2Scene;
+    bool collect = m2Scene->m_collectDrawParams;
+    if (skipDrawParams) {
+        m2Scene->m_collectDrawParams = false;
+    }
+    float minimum[3];
+    float maximum[3];
+    GxXformGetViewport(&minimum[0], &maximum[0], &minimum[1], &maximum[1], &minimum[2], &maximum[2]);
+    m2Scene->SetView(reinterpret_cast<const C3Vector*>(camera), reinterpret_cast<const C44Matrix*>(view->m_matrices[4]),
+        reinterpret_cast<const C44Matrix*>(view->m_matrices[5]), minimum, maximum, true);
+    m2Scene->Animate(false);
+    m2Scene->m_collectDrawParams = collect;
+}
+
+// ref: FUN_1424d1a00
+void* WorldSceneViewFromCamera(void* out, CM2Camera* camera) {
+    auto m = static_cast<float*>(out);
+    MatrixIdentity(m);
+    m[16] = 0.9424778f;     // 0x3f71463b
+    m[17] = 0.2f;
+    m[18] = 100.0f;
+    m[19] = 1.0f;
+    float position[3] = {0.0f, 0.0f, 0.0f};
+    float target[3] = {0.0f, 0.0f, 0.0f};
+    M2CameraGetVector(camera, CM2Camera::VECTOR_POSITION, position);
+    M2CameraGetVector(camera, CM2Camera::VECTOR_TARGET, target);
+    float roll = M2CameraGetFloat(camera, CM2Camera::FLOAT_ROLL);
+    float f[3] = {target[0] - position[0], target[1] - position[1], target[2] - position[2]};
+    float length = f[0] * f[0] + f[1] * f[1] + f[2] * f[2];
+    if (2.3841858e-07f < length) {          // DAT_14261a954
+        float scale = 1.0f / std::sqrt(length);
+        f[0] *= scale;
+        f[1] *= scale;
+        f[2] *= scale;
+    }
+    // FUN_14240ad20
+    float s = std::sin(roll);
+    float c = std::cos(roll);
+    float uy = s;
+    float uz = c;
+    if (std::fabs(std::fabs((f[1] + f[0]) * s + f[2] * c) - 1.0f) < 1.1920929e-07f) {  // DAT_1426c6f7c
+        uy = c;
+        uz = s;
+    }
+    float ux = s;
+    // The side from the up candidate, the up from the side, each normalised.
+    float r[3] = {f[2] * uy - f[1] * uz, f[0] * uz - f[2] * ux, f[1] * ux - f[0] * uy};
+    float v[3] = {f[1] * r[2] - f[2] * r[1], f[2] * r[0] - f[0] * r[2], f[0] * r[1] - f[1] * r[0]};
+    length = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
+    if (2.3841858e-07f < length) {
+        float scale = 1.0f / std::sqrt(length);
+        v[0] *= scale;
+        v[1] *= scale;
+        v[2] *= scale;
+    }
+    float w[3] = {f[2] * v[1] - f[1] * v[2], f[0] * v[2] - f[2] * v[0], f[1] * v[0] - f[0] * v[1]};
+    length = w[0] * w[0] + w[1] * w[1] + w[2] * w[2];
+    if (2.3841858e-07f < length) {
+        float scale = 1.0f / std::sqrt(length);
+        w[0] *= scale;
+        w[1] *= scale;
+        w[2] *= scale;
+    }
+    m[0] = f[0];
+    m[1] = f[1];
+    m[2] = f[2];
+    m[4] = w[0];
+    m[5] = w[1];
+    m[6] = w[2];
+    m[8] = v[0];
+    m[9] = v[1];
+    m[10] = v[2];
+    m[12] = position[0];
+    m[13] = position[1];
+    m[14] = position[2];
+    float fov = M2CameraGetFloat(camera, CM2Camera::FLOAT_FIELD_OF_VIEW);
+    m[16] = fov < 0.0f ? 0.0f : std::min(fov, 6.2831855f);
+    m[17] = std::max(M2CameraGetFloat(camera, CM2Camera::FLOAT_NEAR_CLIP), 0.0f);
+    m[18] = std::max(M2CameraGetFloat(camera, CM2Camera::FLOAT_FAR_CLIP), 0.0f);
+    return out;
+}
+
+// ref: FUN_1424d1370
+void WorldSceneRenderFrame(CWorldScene* scene, uint32_t* params, void* view, const void* frame, void* target,
+    float elapsed, uint32_t flags) {
+    (void)scene;
+    (void)params;
+    (void)view;
+    (void)frame;
+    (void)target;
+    (void)elapsed;
+    (void)flags;
+    FROST_UNIMPLEMENTED();  // the frame's render targets, FUN_1424d0a40 and the resolve
+}

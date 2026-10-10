@@ -223,6 +223,13 @@ class CWorldScene {
     // when the handle asks) and copied into the scene's environment.
     // ref: FUN_1413c8990
     void UpdateDayNight(CWorldView* view);
+    // The scene's frame for a view: occlusion stages, map and fades, DayNight, culling, the
+    // render callbacks, weather and particulates, the dynamic LOD, the scene light and the
+    // model scene's flags.
+    // ref: FUN_1413c80a0
+    void Animate(CWorldView* view, const int32_t* lod, float elapsed, uint32_t flags);
+    // ref: FUN_1413c5980
+    void LatchView(CWorldView* view);
     // The view's camera, weather and water into DayNight, its frame computed, and its light
     // direction and colours, water colour and fogs copied into the scene for the models.
     // ref: FUN_1413c8aa0

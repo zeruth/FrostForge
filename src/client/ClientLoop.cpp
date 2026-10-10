@@ -70,7 +70,6 @@ void Sub140234ED0();
 void Sub140235040();
 void Sub140234080();
 void Sub140570630();
-void Sub14228CB00();
 void ClientOnMouseCapture(uint32_t x, uint32_t y);
 void UiInputChar(void* input, uint32_t character);
 void UiInputIme(void* input, const void* event);
@@ -405,7 +404,7 @@ bool Sub1402225D0() {
             break;
         case 7:
             FROST_UNIMPLEMENTED();  // the world's update (FUN_1418e6b00 and on)
-            Sub14228CB00();
+            GxXformApplyViewport();
             break;
     }
     if (s_pendingFlush != 0) {

@@ -46,6 +46,15 @@ void SceneOcclusionCreate(SceneOcclusion** holder);
 void SceneOcclusionDestroy(SceneOcclusion** holder);
 // ref: FUN_142551ab0
 void SceneOcclusionShutdown(SceneOcclusion* occlusion);
+// Switches occlusion on (its +0x80).
+// ref: FUN_14254fef0
+void SceneOcclusionSetEnabled(SceneOcclusion** holder, bool enabled);
+// The view's frame reached `stage` (0..5): the occluders gathered and rasterised on its jobs.
+// ref: FUN_14254ff40
+void SceneOcclusionStage(SceneOcclusion** holder, class CWorldView* view, uint32_t stage);
+// ref: FUN_142553540
+void SceneOcclusionRunStage(SceneOcclusion* occlusion, class CWorldView* view, uint32_t stage);
+
 // The stage the occlusion is in: 0 idle, 5 done.
 // ref: FUN_14254fe20
 uint32_t SceneOcclusionGetState(SceneOcclusion** holder);

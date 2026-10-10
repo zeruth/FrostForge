@@ -22,7 +22,7 @@ class CM2Model;
 class CM2Scene;
 class CWorldScene;
 class CWorldView;
-class GxPipeline;
+struct GxPipeline;
 struct DNScene;
 
 extern const char s_dnTagU8[];          // ".?AV?$TSFixedArray@E$07@@"
@@ -582,6 +582,13 @@ MODELFOG* DayNightFog394(DAYNIGHT* dayNight);
 // How many fogs the scene draws with: the FogInfo count for an env that blends them, else 1.
 // ref: FUN_142442a50
 uint32_t DayNightFogCount(DAYNIGHT* dayNight, const void* env, bool single);
+
+// Whether the time of day is in the day band (0.2208..0.875).
+// ref: FUN_142442fb0
+bool DayNightIsDaytime(DAYNIGHT* dayNight);
+// The map's flag that holds the light state (+0x1601 of the scene).
+// ref: FUN_142443520
+void DayNightSetOverride(DAYNIGHT* dayNight, bool set);
 
 // ref: FUN_142443d80
 void DayNightCompute(DAYNIGHT* dayNight, int32_t timeMs, float elapsed, float timeSeconds, bool alive, void* env,
