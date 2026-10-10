@@ -76,7 +76,7 @@ class CAnimatableObject {
 };
 static_assert(sizeof(CAnimatableObject) == 0x10, "CAnimatableObject is 0x10 bytes");
 
-// What the animation groups report about themselves (CSimpleAnimGroup, not ported yet).
+// What the animation groups report about themselves (bridges into CSimpleAnimGroup).
 bool CSimpleAnimGroup_AnimatesAlpha(CSimpleAnimGroup* group);
 bool CSimpleAnimGroup_AnimatesTransform(CSimpleAnimGroup* group);
 bool CSimpleAnimGroup_AnimatesRectOffset(CSimpleAnimGroup* group);

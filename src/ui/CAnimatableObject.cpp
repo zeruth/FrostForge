@@ -1,9 +1,14 @@
 #include "ui/CAnimatableObject.hpp"
 
+#include <new>
+
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
 #include "ui/CSimpleTop.hpp"
-#include "util/Unimplemented.hpp"
+#include "framescript/FrameScript.hpp"
+#include "framescript/FrameScriptObject.hpp"
+#include "ui/CSimpleAnim.hpp"
+#include "ui/FrameXML.hpp"
 
 extern const char s_animGroupVectorTag[] = ".PEAVCSimpleAnimGroup@@";
 
@@ -242,77 +247,100 @@ bool CAnimatableObject::IsPlaying() {
     return false;
 }
 
-// The group the CreateAnimationGroup script method makes.
-// FUN_14062f540
+// A group made by the CreateAnimationGroup script method, from the template `inherits`
+// when given; nullptr when the template is missing or already being loaded.
+// ref: FUN_14062f540
 FrameScript_Object* CAnimatableObject::CreateAnimationGroup(const char* name, const char* inherits) {
-    (void)name;
-    (void)inherits;
-    // Making a group means constructing a CSimpleAnimGroup and loading its template; the
-    // animation classes are not ported yet.
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    char inheritsName[0x80] = {};
+    XMLOBJECT* inherited = nullptr;
+    const char* taint = nullptr;
+    bool busy = false;
+    if (inherits != nullptr) {
+        busy = true;
+        uint32_t i = 0;
+        for (; i < 0x7f && inherits[i] != '\0'; i++) {
+            inheritsName[i] = inherits[i];
+        }
+        inheritsName[i] = '\0';
+        inherited = FrameXML_AcquireVirtual(inheritsName, &taint, &busy);
+        if (inherited == nullptr) {
+            FrameScript_ActionError("Couldn't find inherited node \"%s\"", inheritsName);
+            return nullptr;
+        }
+        if (busy) {
+            FrameScript_ActionError("Recursively inherited node \"%s\"", inheritsName);
+            return nullptr;
+        }
+    }
+    void* memory = SMemAlloc(0x90, 0x1f, s_source, SStrHashFnv1a(s_source), 0xb5, 0);
+    auto group = new (memory) CSimpleAnimGroup(this);
+    if (name != nullptr && *name != '\0') {
+        group->SetName(name);
+    }
+    if (inherited != nullptr) {
+        CScriptStatus status;
+        status.m_warn = true;
+        group->LoadXML(inherited, &status);
+        group->PostLoadXML(inherited, &status);
+    }
+    if (inherited != nullptr && !busy) {
+        FrameXML_ReleaseVirtual(inheritsName);
+    }
+    return group;
 }
 
-// FUN_14062f770
+// The groups scripts may see: accessible and not hidden, in creation order.
+// ref: FUN_14062f770
 ANIMGROUPLIST* CAnimatableObject::GetScriptAnimationGroups(ANIMGROUPLIST* groups) {
-    // The groups are listed from m_groups->m_groups, those accessible and not hidden; the
-    // group class is not ported yet, so no group can exist to list.
-    FROST_UNIMPLEMENTED();
+    if (this->m_groups == nullptr || this->m_groups->m_groups == nullptr) {
+        return groups;
+    }
+    TSExplicitList<CSimpleAnimGroup>* list = this->m_groups->m_groups;
+    for (CSimpleAnimGroup* group = list->Head(); group != nullptr; group = list->Link(group)->Next()) {
+        if ((group->m_flags & FSOBJ_ACCESSIBLE) && !(group->m_flags & FSOBJ_HIDDEN)) {
+            groups->push_back(group);
+        }
+    }
     return groups;
 }
 
-// ---- CSimpleAnimGroup (Engine/Source/Frame/CSimpleAnimGroup.cpp, not ported yet) ----------
+// ---- what the groups report (CSimpleAnimGroup) -------------------------------------------
 
 // ref: FUN_140607cb0
 bool CSimpleAnimGroup_AnimatesAlpha(CSimpleAnimGroup* group) {
-    (void)group;
-    FROST_UNIMPLEMENTED();
-    return false;
+    return group->AnimatesAlpha();
 }
 
 // ref: FUN_140607d70
 bool CSimpleAnimGroup_AnimatesTransform(CSimpleAnimGroup* group) {
-    (void)group;
-    FROST_UNIMPLEMENTED();
-    return false;
+    return group->AnimatesTransform();
 }
 
+// The third kind is the texture coordinates (TextureCoordTranslation animations).
 // ref: FUN_140607ee0
 bool CSimpleAnimGroup_AnimatesRectOffset(CSimpleAnimGroup* group) {
-    (void)group;
-    FROST_UNIMPLEMENTED();
-    return false;
+    return group->AnimatesTexCoord();
 }
 
 // ref: FUN_14060c230
 void CSimpleAnimGroup_Stop(CSimpleAnimGroup* group, bool reset) {
-    (void)group;
-    (void)reset;
-    FROST_UNIMPLEMENTED();
+    group->Stop(reset);
 }
 
 uint8_t CSimpleAnimGroup_GetFlags(CSimpleAnimGroup* group) {
-    (void)group;
-    FROST_UNIMPLEMENTED();
-    return 0;
+    return group->m_groupFlags;
 }
 
 // ref: FUN_1406055d0
 uint8_t CSimpleAnimGroup_GetFinalAlpha(CSimpleAnimGroup* group, CAnimatableObject* object, uint8_t alpha) {
-    (void)group;
-    (void)object;
-    FROST_UNIMPLEMENTED();
-    return alpha;
+    return group->GetFinalAlpha(object, alpha);
 }
 
 void CSimpleAnimGroup_Delete(CSimpleAnimGroup* group) {
-    (void)group;
-    FROST_UNIMPLEMENTED();
+    delete group;
 }
 
-// FUN_14060ae70
+// ref: FUN_14060ae70
 void CSimpleAnimGroup_OnUpdate(CSimpleAnimGroup* group, float elapsed) {
-    (void)group;
-    (void)elapsed;
-    FROST_UNIMPLEMENTED();
+    group->OnUpdate(elapsed);
 }

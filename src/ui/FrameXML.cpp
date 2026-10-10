@@ -1122,14 +1122,6 @@ CSimpleRegion* FrameXML_CreateLine(XMLOBJECT* object, CSimpleFrame* frame, CScri
     return nullptr;
 }
 
-// ref: FUN_140667a30
-void FrameXML_CreateAnimGroup(XMLOBJECT* object, CScriptRegion* owner, CStatus* status) {
-    (void)object;
-    (void)owner;
-    (void)status;
-    FROST_UNIMPLEMENTED();
-}
-
 // The map of secure reference keys (0x142cf58d8) hashes blz strings with a hash not ported
 // yet (FUN_142363ca0).
 // ref: FUN_140667010

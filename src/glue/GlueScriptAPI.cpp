@@ -7,6 +7,7 @@
 #include "framescript/ScriptAPI.hpp"
 #include "glue/ScriptAPIRegistry.hpp"
 
+#include "ui/CSimpleAnim.hpp"
 #include "ui/CSimpleButton.hpp"
 #include "ui/CSimpleModel.hpp"
 #include "ui/CSimpleModelFFX.hpp"
@@ -47,83 +48,6 @@ void ScriptSetCVarCallbacks_141168cf0() {
     FROST_UNIMPLEMENTED();
 }
 
-// the Animation metatables.
-// ref: FUN_140606530
-void ScriptClass_Animation(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the Alpha metatables.
-// ref: FUN_1406064e0
-void ScriptClass_Alpha(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the FlipBook metatables.
-// ref: FUN_140606620
-void ScriptClass_FlipBook(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the AnimationGroup metatables.
-// ref: FUN_140606580
-void ScriptClass_AnimationGroup(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the Path metatables.
-// ref: FUN_140606710
-void ScriptClass_Path(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the Rotation metatables.
-// ref: FUN_140606760
-void ScriptClass_Rotation(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the Scale metatables.
-// ref: FUN_1406067b0
-void ScriptClass_Scale(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the LineScale metatables.
-// ref: FUN_140606670
-void ScriptClass_LineScale(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the Translation metatables.
-// ref: FUN_140606800
-void ScriptClass_Translation(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the TextureCoordTranslation metatables.
-// ref: FUN_140606850
-void ScriptClass_TextureCoordTranslation(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the LineTranslation metatables.
-// ref: FUN_1406066c0
-void ScriptClass_LineTranslation(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
 // the Browser metatables.
 // ref: FUN_1424a79e0
 void ScriptClass_Browser(lua_State* L) {
@@ -134,13 +58,6 @@ void ScriptClass_Browser(lua_State* L) {
 // the ColorSelect metatables.
 // ref: FUN_1424ada10
 void ScriptClass_ColorSelect(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the ControlPoint metatables.
-// ref: FUN_1406065d0
-void ScriptClass_ControlPoint(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
 }
@@ -256,22 +173,22 @@ void GlueRegisterScriptAPI(lua_State* L) {
     ScriptEnum_ClientPlatformType(L);
     ScriptAPI_C_ReportSystem(L);
     ScriptSetCVarCallbacks_141168cf0();
-    ScriptClass_Animation(L);
-    ScriptClass_Alpha(L);
-    ScriptClass_FlipBook(L);
-    ScriptClass_AnimationGroup(L);
-    ScriptClass_Path(L);
-    ScriptClass_Rotation(L);
-    ScriptClass_Scale(L);
-    ScriptClass_LineScale(L);
-    ScriptClass_Translation(L);
-    ScriptClass_TextureCoordTranslation(L);
-    ScriptClass_LineTranslation(L);
+    CSimpleAnim::CreateScriptMetaTables();
+    CSimpleAlphaAnim::CreateScriptMetaTables();
+    CSimpleFlipBookAnim::CreateScriptMetaTables();
+    CSimpleAnimGroup::CreateScriptMetaTables();
+    CSimpleAnimPath::CreateScriptMetaTables();
+    CSimpleRotationAnim::CreateScriptMetaTables();
+    CSimpleScaleAnim::CreateScriptMetaTables();
+    CSimpleLineScaleAnim::CreateScriptMetaTables();
+    CSimpleTexCoordTranslationAnim::CreateScriptMetaTables();
+    CSimpleTranslationAnim::CreateScriptMetaTables();
+    CSimpleLineTranslationAnim::CreateScriptMetaTables();
     ScriptClass_Browser(L);
     CSimpleButton::CreateScriptMetaTables();
     CSimpleCheckButton::CreateScriptMetaTables();
     ScriptClass_ColorSelect(L);
-    ScriptClass_ControlPoint(L);
+    CSimpleControlPoint::CreateScriptMetaTables();
     CSimpleEditBox::CreateScriptMetaTables();
     ScriptClass_Font(L);
     ScriptClass_FontString(L);

@@ -72,8 +72,9 @@ CSimpleRegion* FrameXML_CreateFontString(XMLOBJECT* object, CSimpleFrame* frame,
 CSimpleRegion* FrameXML_CreateTexture(XMLOBJECT* object, CSimpleFrame* frame, CScriptStatus* status);
 CSimpleRegion* FrameXML_CreateMaskTexture(XMLOBJECT* object, CSimpleFrame* frame, CScriptStatus* status);
 CSimpleRegion* FrameXML_CreateLine(XMLOBJECT* object, CSimpleFrame* frame, CScriptStatus* status);
-// An <AnimationGroup> created on an object.
-void FrameXML_CreateAnimGroup(XMLOBJECT* object, CScriptRegion* owner, CStatus* status);
+// An <AnimationGroup> created on an object (CSimpleAnimGroup.cpp).
+class CSimpleAnimGroup;
+CSimpleAnimGroup* FrameXML_CreateAnimGroup(XMLOBJECT* object, CScriptRegion* owner, CStatus* status);
 // Records the frame under a secureReferenceKey.
 void FrameXML_SetSecureReferenceKey(const char* key, FrameScript_Object* object);
 
