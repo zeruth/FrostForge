@@ -29,6 +29,7 @@
 #include "sound/SI3.hpp"
 #include "texture/Texture.hpp"
 #include "ui/FrameTime.hpp"
+#include "model2/M2Shared.hpp"
 #include "util/Unimplemented.hpp"
 #include <windows.h>
 #include <malloc.h>
@@ -201,14 +202,6 @@ bool Sub140329220() {
     return false;
 }
 
-// M2 setup
-// ref: FUN_1411974e0
-void Sub1411974E0(uint32_t flags, int32_t a2, int32_t a3) {
-    (void)flags;
-    (void)a2;
-    (void)a3;
-    FROST_UNIMPLEMENTED();
-}
 
 // ref: FUN_14125f550
 void Sub14125F550() {
@@ -1170,7 +1163,7 @@ bool Sub14022A260() {
             Sub14022AD90(i);
         }
     }
-    Sub1411974E0(m2Flags | 0x53, 0, 0);
+    M2Initialize(m2Flags | 0x53, 0, 0);
     Sub14125F550();
     FullScreenEffectsRegisterCVars();
     Sub14134EC50();

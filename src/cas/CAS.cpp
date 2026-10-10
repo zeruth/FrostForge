@@ -9,6 +9,7 @@
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
 #include "tact/AsyncState.hpp"
+#include "tact/Codec.hpp"
 #include "tact/FileHandle.hpp"
 #include "tact/ImmediateRead.hpp"
 #include "tact/InstallationInfo.hpp"
@@ -1097,6 +1098,94 @@ bool CASFileExistsByName(const char* name, uint64_t flags) {
         t_lastError.m_code = 3;
     }
     return g_casManifest->FindByName(hash) != nullptr;
+}
+
+// Whether the keys the file named `name` is encrypted with are known, over [offset, offset +
+// size): 1 when they are (or none are needed), 0 when one is missing, 0x2100 when the file
+// cannot be looked at. `check` decides each key when set, else the key callback.
+// ref: FUN_1402d2460
+uint64_t CASInstanceCheckKeys(CASINSTANCE* instance, const char* name, blz::function_storage* check, uint32_t offset,
+    uint32_t size) {
+    if (instance->m_tact == nullptr) {
+        t_lastError.m_kind = 0;
+        t_lastError.m_tactError = 1;
+        return 0x2100;
+    }
+    tact::FILESTAT stat = {};
+    uint8_t error = tact::InstanceStatByName(instance->m_tact, name, &stat, 1);
+    if (error != 0) {
+        t_lastError.m_kind = 0;
+        t_lastError.m_tactError = error;
+        return 0x2100;
+    }
+    uint64_t* keys = nullptr;
+    uint32_t count = 0;
+    error = tact::ESpecGetKeyNames(stat.m_key.m_eSpec, stat.m_key.m_csize, &keys, &count, offset, size);
+    uint64_t result;
+    if (error != 0) {
+        result = 0;
+        t_lastError.m_kind = 0;
+        t_lastError.m_tactError = error;
+    } else {
+        result = 1;
+        for (uint32_t i = 0; i < count; i++) {
+            bool known;
+            if (check->m_invoke == nullptr) {
+                if (s_keyCallback == nullptr) {
+                    known = false;
+                } else {
+                    uint64_t keyName = keys[i];
+                    uint8_t key[0x10];
+                    known = s_keyCallback(&keyName, key, 0x10) != 0;
+                }
+            } else {
+                uint64_t keyName = keys[i];
+                known = reinterpret_cast<bool (*)(uint64_t*, void*)>(check->m_invoke)(&keyName, check->m_storage);
+            }
+            if (!known) {
+                result = 0;
+                t_lastError.m_kind = 0;
+                t_lastError.m_tactError = 0xd;
+                break;
+            }
+        }
+    }
+    // FUN_1420d7bf0
+    tact::ESpecFreeBlocks(reinterpret_cast<tact::ESPECBLOCK*>(keys));
+    return result;
+}
+
+// ref: FUN_1402cd520
+uint64_t CASFileCheckKeysById(int32_t fileDataId, blz::function_storage* check, uint32_t offset, uint32_t size) {
+    if (fileDataId < 0) {
+        return 1;
+    }
+    BuildManifestEntry* entry = g_casManifest->FindById(static_cast<uint32_t>(fileDataId));
+    if (entry == nullptr) {
+        t_lastError.m_kind = 1;
+        t_lastError.m_code = 2;
+        return 0;
+    }
+    t_lastError.m_kind = 0;
+    char name[0x40];
+    CASFormatKeyName(name, entry->m_ckey, entry->m_fileDataId, entry->m_localeFlags, entry->m_contentFlags);
+    return CASInstanceCheckKeys(g_casInstance, name, check, offset, size);
+}
+
+// ref: FUN_1402cd660
+uint64_t CASFileCheckKeysByName(const char* path, blz::function_storage* check, uint32_t offset, uint32_t size,
+    uint32_t flags) {
+    (void)flags;  // passed on to the name lookup as (flags >> 5) & 1
+    BuildManifestEntry* entry = g_casManifest->FindByName(LocalManifestNameHash(path));
+    if (entry == nullptr) {
+        t_lastError.m_kind = 1;
+        t_lastError.m_code = 2;
+        return 0x2100;
+    }
+    t_lastError.m_kind = 0;
+    char name[0x40];
+    CASFormatKeyName(name, entry->m_ckey, entry->m_fileDataId, entry->m_localeFlags, entry->m_contentFlags);
+    return CASInstanceCheckKeys(g_casInstance, name, check, offset, size);
 }
 
 // ref: FUN_1402cda40

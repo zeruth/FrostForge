@@ -1610,4 +1610,255 @@ uint8_t ESpecEncodingHeaderSize(const char* spec, uint32_t csize, uint32_t* head
     return error;
 }
 
+namespace {
+
+bool IsESpecSpace(char c) {
+    return c == ' ' || static_cast<uint8_t>(c - 9) < 5;
+}
+
+}
+
+// A hex argument of an e-spec at *cursor, up to `size` bytes: false when something other than
+// ',' or '}' follows it.
+// ref: FUN_1420d79e0
+bool ESpecHexArgument(const char** cursor, const char* end, uint8_t* out, uint32_t size, uint32_t* decoded) {
+    while (*cursor < end && IsESpecSpace(**cursor)) {
+        (*cursor)++;
+    }
+    if (*cursor < end) {
+        // FUN_1423660f0
+        uint32_t count = static_cast<uint32_t>(blz::hex_decode(out, size, *cursor, ~0ull));
+        *decoded = count;
+        *cursor += count * 2;
+        while (*cursor < end) {
+            if (!IsESpecSpace(**cursor)) {
+                break;
+            }
+            (*cursor)++;
+        }
+        if (*cursor < end && **cursor != ',') {
+            return **cursor == '}';
+        }
+    }
+    return true;
+}
+
+// "e:{key name,IV,nested e-spec}": the key's name, the IV (zero padded to 8 bytes) and its
+// length, and the nested e-spec's extent.
+// ref: FUN_1420d84d0
+uint8_t ESpecParseEncryption(const char* spec, const char* end, uint8_t* keyName, uint8_t* iv, uint32_t* ivSize,
+    const char** nested, const char** nestedEnd) {
+    if (end == nullptr) {
+        end = spec + std::strlen(spec);
+    }
+    int32_t length = static_cast<int32_t>(end - spec);
+    bool colon = false;
+    bool braced = false;
+    const char* cursor = spec;
+    while (cursor < end && IsESpecSpace(*cursor)) {
+        cursor++;
+    }
+    if (end <= cursor) {
+        return 3;
+    }
+    char type = *cursor++;
+    if (cursor < end) {
+        while (cursor < end && IsESpecSpace(*cursor)) {
+            cursor++;
+        }
+        if (cursor < end) {
+            if (*cursor != ':') {
+                return 3;
+            }
+            cursor++;
+            colon = true;
+            if (cursor < end) {
+                while (cursor < end && IsESpecSpace(*cursor)) {
+                    cursor++;
+                }
+                if (cursor < end && *cursor == '{') {
+                    cursor++;
+                    braced = true;
+                    if (end <= cursor) {
+                        return 3;
+                    }
+                    while (cursor < end && IsESpecSpace(*cursor)) {
+                        cursor++;
+                    }
+                    if (end <= cursor) {
+                        return 3;
+                    }
+                }
+            }
+        }
+    }
+    int32_t lower = static_cast<uint8_t>(type - 'A') <= 0x19 ? type + 0x20 : type;
+    if (lower != 'e') {
+        return 3;
+    }
+    if (!colon) {
+        blz::log(g_logCategory, 4, s_eSpecFile, 0x261,
+            "Invalid encoding specifier: encryption requires key ID, IV, and nested eSpec arguments");
+        return 3;
+    }
+    const char* message;
+    int32_t line;
+    uint32_t decoded = 0;
+    if (!ESpecHexArgument(&cursor, end, keyName, 8, &decoded)) {
+        message = "Invalid encoding specifier: invalid encryption key ID in '%.*s'. Expected hex encoded bytes";
+        line = 0x26a;
+    } else if (decoded != 8) {
+        blz::log(g_logCategory, 4, s_eSpecFile, 0x272,
+            "Invalid encoding specifier: truncated encryption key ID in '%.*s'. Expected %zu bytes, but got %u", length,
+            spec, static_cast<size_t>(8), decoded);
+        return 3;
+    } else if (cursor == end || *cursor != ',') {
+        message = "Invalid encoding specifier: missing encryption IV and nested eSpec in '%.*s'";
+        line = 0x278;
+    } else {
+        cursor++;
+        decoded = 0;
+        if (!ESpecHexArgument(&cursor, end, iv, 8, &decoded)) {
+            message = "Invalid encoding specifier: invalid encryption IV in '%.*s'. Expected hex encoded bytes";
+            line = 0x282;
+        } else {
+            *ivSize = decoded;
+            std::memset(iv + decoded, 0, 8 - decoded);
+            if (cursor == end || *cursor != ',') {
+                message = "Invalid encoding specifier: missing nested eSpec for encryption in '%.*s'";
+                line = 0x28d;
+            } else {
+                const char* inner = cursor + 1;
+                *nested = inner;
+                int32_t depth = 0;
+                bool unbalanced = false;
+                while (inner < end) {
+                    char c = *inner;
+                    if (c == '{') {
+                        depth++;
+                    } else if (c == '}') {
+                        depth--;
+                        if (depth < 1) {
+                            if (depth == 0) {
+                                inner++;
+                            }
+                            break;
+                        }
+                    } else if (c == ',' && depth == 0) {
+                        break;
+                    }
+                    inner++;
+                    if (end <= inner && depth != 0) {
+                        unbalanced = true;
+                    }
+                }
+                if (unbalanced) {
+                    message = "Invalid encoding specifier: invalid encryption sub e-spec in '%.*s'";
+                    line = 0x295;
+                } else {
+                    *nestedEnd = inner;
+                    if (braced) {
+                        if (inner == end || *inner != '}') {
+                            return 3;
+                        }
+                        inner++;
+                    }
+                    while (inner < end && IsESpecSpace(*inner)) {
+                        inner++;
+                    }
+                    return inner < end ? 3 : 0;
+                }
+            }
+        }
+    }
+    blz::log(g_logCategory, 4, s_eSpecFile, line, message, length, spec);
+    return 3;
+}
+
+// The encryption keys the blocks of [offset, offset + size) are encrypted with (size 0 to the
+// end): their 8-byte names, in an array from the package allocator, or none.
+// ref: FUN_1420d8a00
+uint8_t ESpecGetKeyNames(const char* spec, uint32_t csize, uint64_t** keys, uint32_t* count, uint32_t offset,
+    uint32_t size) {
+    *keys = nullptr;
+    *count = 0;
+    if (csize <= offset) {
+        return 3;
+    }
+    if (size == 0 || csize < offset + size) {
+        size = csize - offset;
+    }
+    blz::allocator* allocator = GetBufferAllocator();
+    auto array = static_cast<uint64_t*>(PackageAlloc(allocator, 0x20, 1, false, "", 0));
+    if (*keys != nullptr) {
+        std::memcpy(array, *keys, static_cast<uint64_t>(*count) << 3);
+        PackageFree(allocator, *keys);
+    }
+    *keys = array;
+    uint32_t capacity = 4;
+    ESPECBLOCK* blocks = nullptr;
+    int32_t blockCount = 0;
+    uint8_t error = ESpecParseBlocks(csize, spec, spec + std::strlen(spec), &blocks, &blockCount);
+    if (error == 0) {
+        *count = 0;
+        uint32_t position = 0;
+        for (int32_t i = 0; i < blockCount; i++) {
+            const ESPECBLOCK* block = &blocks[i];
+            uint32_t next = block->m_count * block->m_size + position;
+            if (offset < next) {
+                if (offset + size <= position) {
+                    break;
+                }
+                if (ESpecType(block->m_spec, block->m_specEnd) == 5) {
+                    if (capacity <= *count) {
+                        capacity *= 2;
+                        auto grown = static_cast<uint64_t*>(PackageAlloc(GetBufferAllocator(), static_cast<uint64_t>(capacity) << 3, 1, false, "", 0));
+                        if (*keys != nullptr) {
+                            std::memcpy(grown, *keys, static_cast<uint64_t>(*count) << 3);
+                            PackageFree(GetBufferAllocator(), *keys);
+                        }
+                        *keys = grown;
+                    }
+                    uint64_t name = 0;
+                    uint8_t iv[16];
+                    uint32_t ivSize;
+                    const char* nested;
+                    const char* nestedEnd;
+                    error = ESpecParseEncryption(block->m_spec, block->m_specEnd, reinterpret_cast<uint8_t*>(&name), iv,
+                        &ivSize, &nested, &nestedEnd);
+                    if (error != 0) {
+                        PackageFree(GetBufferAllocator(), blocks);
+                        PackageFree(GetBufferAllocator(), *keys);
+                        *keys = nullptr;
+                        *count = 0;
+                        return error;
+                    }
+                    bool known = false;
+                    for (uint32_t k = 0; k < *count; k++) {
+                        if ((*keys)[k] == name) {
+                            known = true;
+                            break;
+                        }
+                    }
+                    if (!known) {
+                        (*keys)[*count] = name;
+                        (*count)++;
+                    }
+                }
+            }
+            position = next;
+        }
+        bool none = *count == 0;
+        PackageFree(GetBufferAllocator(), blocks);
+        if (!none) {
+            return 0;
+        }
+        error = 0;
+    }
+    PackageFree(GetBufferAllocator(), *keys);
+    *keys = nullptr;
+    *count = 0;
+    return error;
+}
+
 }

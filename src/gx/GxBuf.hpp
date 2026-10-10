@@ -66,6 +66,21 @@ struct GxBuf {
 static_assert(sizeof(GxBuf) == 0x70, "GxBuf is 0x70 bytes");
 
 GxBuf* GxBufCreate(const GXBUFDESC* desc);
+
+// What GxBufCreateFromInfo is asked for (0x20): the kind binds it as vertices (0), indices (1)
+// or constants; the format is a vertex format, or the index size (1: 16-bit), 0xff for none.
+struct GXBUFINFO {
+    uint8_t m_type;         // 0x00 GXBUFTYPE
+    uint8_t m_pad01[7];
+    uint64_t m_size;        // 0x08
+    uint64_t m_10;          // 0x10
+    uint8_t m_bind;         // 0x18
+    uint8_t m_format;       // 0x19
+    uint8_t m_pad1a[6];
+};
+static_assert(sizeof(GXBUFINFO) == 0x20, "GXBUFINFO is 0x20 bytes");
+// ref: FUN_1422887c0
+GxBuf* GxBufCreateFromInfo(const GXBUFINFO* info);
 // A buffer of `count` elements of `stride` bytes: vertices (kind 0), indices (1) or constants
 // (2) (FUN_142288900).
 GxBuf* GxBufCreateSimple(uint8_t kind, uint8_t type, uint32_t stride, uint32_t count);

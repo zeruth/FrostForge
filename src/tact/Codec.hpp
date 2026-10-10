@@ -78,6 +78,15 @@ uint8_t ESpecParseBlocks(uint32_t csize, const char* spec, const char* end, ESPE
 void ESpecFreeBlocks(ESPECBLOCK* blocks);
 // FUN_1420f9950: the encoding header size a block spec implies.
 uint8_t ESpecEncodingHeaderSize(const char* spec, uint32_t csize, uint32_t* headerSize);
+// FUN_1420d79e0: a hex argument at *cursor, up to `size` bytes.
+bool ESpecHexArgument(const char** cursor, const char* end, uint8_t* out, uint32_t size, uint32_t* decoded);
+// FUN_1420d84d0: "e:{key name,IV,nested}".
+uint8_t ESpecParseEncryption(const char* spec, const char* end, uint8_t* keyName, uint8_t* iv, uint32_t* ivSize,
+    const char** nested, const char** nestedEnd);
+// FUN_1420d8a00: the encryption key names over a byte range; the array is freed with
+// ESpecFreeBlocks.
+uint8_t ESpecGetKeyNames(const char* spec, uint32_t csize, uint64_t** keys, uint32_t* count, uint32_t offset,
+    uint32_t size);
 
 // Whether data starts with an encoding header ("BLTE"); *error on a malformed one.
 bool CodecIsEncoded(const uint8_t* data, uint32_t size, uint8_t* error);

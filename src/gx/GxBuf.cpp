@@ -3,6 +3,7 @@
 #include <new>
 
 #include "gx/Gx.hpp"
+#include "gx/GxVertexFormat.hpp"
 #include "gx/d3d12/CommandList.hpp"
 
 namespace {
@@ -41,6 +42,46 @@ GxBuf* GxBufCreate(const GXBUFDESC* desc) {
     void* memory = GxGetAllocator()->allocate(sizeof(GxBuf), 0x10);
     GxBuf* buf = memory != nullptr ? new (memory) GxBuf(desc) : nullptr;
     if (desc->m_type != GXBUF_DYNAMIC) {
+        AcquireSRWLockExclusive(&g_gxRegisteredBufsLock);
+        GXREGISTRYLINK* link = &buf->m_link;
+        link->m_prev = g_gxRegisteredBufs.m_prev;
+        link->m_next = &g_gxRegisteredBufs;
+        g_gxRegisteredBufs.m_prev = link;
+        link->m_prev->m_next = link;
+        ReleaseSRWLockExclusive(&g_gxRegisteredBufsLock);
+    }
+    static_cast<CGxDevice*>(g_gxDevice)->BufCreate(buf);
+    return buf;
+}
+
+// ref: FUN_1422887c0
+GxBuf* GxBufCreateFromInfo(const GXBUFINFO* info) {
+    GXBUFDESC desc = {};
+    desc.m_type = info->m_type;
+    desc.m_size = info->m_size;
+    desc.m_10 = info->m_10;
+    desc.m_format = 0;
+    desc.m_elementSize = 1;
+    if (info->m_bind == 0) {
+        desc.m_usage = 0x1802;
+        if (info->m_format != 0xff) {
+            desc.m_usage = 0x1a22;
+            desc.m_format = g_gxVertexFormats[info->m_format].m_stride;
+            desc.m_elementSize = desc.m_format;
+        }
+    } else if (info->m_bind == 1) {
+        desc.m_usage = 0x1801;
+        if (info->m_format != 0xff) {
+            desc.m_usage = 0x1a41;
+            desc.m_elementSize = info->m_format == 1 ? 2 : 4;
+        }
+    } else {
+        desc.m_usage = 0x1804;
+        desc.m_elementSize = 0x10;
+    }
+    void* memory = GxGetAllocator()->allocate(sizeof(GxBuf), 0x10);
+    GxBuf* buf = memory != nullptr ? new (memory) GxBuf(&desc) : nullptr;
+    if (desc.m_type != GXBUF_DYNAMIC) {
         AcquireSRWLockExclusive(&g_gxRegisteredBufsLock);
         GXREGISTRYLINK* link = &buf->m_link;
         link->m_prev = g_gxRegisteredBufs.m_prev;

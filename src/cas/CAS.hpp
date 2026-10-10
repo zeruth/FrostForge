@@ -131,6 +131,13 @@ void CASFormatKeyName(char* dest, const uint8_t* ckey, uint32_t fileDataId, uint
 
 // Opens a file by id: with `flags` 1 a loose file entered under that id (or its name) wins.
 bool CASFileOpenById(int32_t fileDataId, CASFILE** file, uint64_t flags);
+// Whether the keys a file is encrypted with are known (FUN_1402d2460, by FileDataID
+// FUN_1402cd520, by path FUN_1402cd660): 1 yes, 0 a key is missing, 0x2100 no such file.
+uint64_t CASInstanceCheckKeys(CASINSTANCE* instance, const char* name, blz::function_storage* check, uint32_t offset,
+    uint32_t size);
+uint64_t CASFileCheckKeysById(int32_t fileDataId, blz::function_storage* check, uint32_t offset, uint32_t size);
+uint64_t CASFileCheckKeysByName(const char* path, blz::function_storage* check, uint32_t offset, uint32_t size,
+    uint32_t flags);
 bool CASFileOpenByKey(CASINSTANCE* instance, const char* name, const uint8_t* ckey, CASFILE** file);
 uint64_t CASFileGetSize(CASFILE* file);
 int64_t CASFileSetPosition(CASFILE* file, int64_t offset, uint32_t method);
