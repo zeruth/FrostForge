@@ -338,6 +338,9 @@ class CM2BaseModel {
     void SetBucketed(int32_t bucketed);
     // ref: FUN_1411e71a0
     bool IsShownInTree();
+    // The draw effect's kind (FUN_1411bc6e0) and strength (FUN_1411bc6f0), 0 without one.
+    int32_t GetEffectType();
+    float GetEffectStrength();
     // ref: FUN_1411e7ce0
     bool SetLodTree(uint32_t lod);
     // ref: FUN_1411e7c90
@@ -809,6 +812,11 @@ class CM2Model : public CM2BaseModel {
     // ribbon tracks (FUN_1411b3490).
     void AnimateLights(M2AnimateContext* context);
     void UpdateLights();
+    // Whether a batch draws through the instanced path (FUN_1411c6170).
+    bool BatchInstanced(const uint8_t* batch);
+    // The bone matrices (FUN_1411ba500) and the bone count once loaded (FUN_1411ba430).
+    C44Matrix* GetBoneMatrices();
+    uint16_t GetBoneCount();
     // Runs a queued callback (FUN_1411b5720): a sequence started on a key bone (FUN_1411b5780)
     // or a function called.
     void RunCallback(const M2ModelCallback* callback);

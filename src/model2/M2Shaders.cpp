@@ -39,6 +39,46 @@ const M2EFFECT* Effect(uint16_t shaderId) {
 
 }
 
+// The pixel shader kind a shader id draws with (FUN_1411fb3f0).
+// ref: FUN_1411fb3f0
+uint32_t M2GetPixelShaderKind(int32_t textureCount, uint16_t shaderId) {
+    if (static_cast<int16_t>(shaderId) < 0) {
+        return static_cast<uint32_t>(Effect(shaderId)->m_pixel);
+    }
+    if (textureCount == 1) {
+        return (shaderId & 0x70) != 0 ? 1 : 0;
+    }
+    if ((shaderId & 0x70) == 0) {
+        switch (shaderId & 7) {
+        case 0:
+            return 5;
+        case 3:
+        case 7:
+            return 0xd;
+        case 4:
+            return 3;
+        case 6:
+            return 4;
+        default:
+            return 2;
+        }
+    }
+    switch (shaderId & 7) {
+    case 0:
+        return 0xb;
+    case 3:
+        return 8;
+    case 4:
+        return 7;
+    case 6:
+        return 9;
+    case 7:
+        return 10;
+    default:
+        return 6;
+    }
+}
+
 const char* const g_m2ProjectedEffects[10] = {
     "Projected_Unlit_Opaque_Single_Texture",
     "Projected_Lit_Opaque_Single_Texture",

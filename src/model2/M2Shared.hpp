@@ -355,6 +355,8 @@ void M2CacheInitialize(uint32_t flags, int32_t perHeap);
 // The module's setup: the log, the CVars, the pools and the module scene (FUN_1411974e0).
 void M2Initialize(uint32_t flags, int32_t perHeap, uint32_t logFlags);
 // The pools (DAT_1430a0e68 by the creation flag 0x4000, DAT_1430a0e78).
+// The default model effect (FUN_141196ca0).
+CShaderEffect* M2CacheDefaultEffect();
 // A model made from its pool (FUN_141196cf0) and returned to it (FUN_141197410).
 CM2Model* M2ModelAlloc(uint32_t flags);
 void M2ModelFree(CM2Model* model);

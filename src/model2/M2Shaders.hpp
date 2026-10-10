@@ -11,6 +11,7 @@ class CShaderEffect;
 
 // ref: FUN_1411fb770
 uint32_t M2GetVertexShaderId(uint16_t textureCount, uint16_t shaderId);
+uint32_t M2GetPixelShaderKind(int32_t textureCount, uint16_t shaderId);
 // ref: FUN_1411fb4e0
 uint32_t M2GetPixelShaderId(uint16_t textureCount, uint16_t shaderId);
 // The vertex shader kind of a shader id and how many texture coordinates it reads

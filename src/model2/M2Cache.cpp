@@ -16,6 +16,7 @@
 #include "model2/M2Model.hpp"
 #include "model2/M2Scene.hpp"
 #include "model2/M2Shared.hpp"
+#include "shadereffect/ShaderEffectManager.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
 #include "os/Sync.hpp"
@@ -31,7 +32,7 @@ const char s_sharedNodeTag[] = ".?AU?$chained_hash_node@U?$pair@$$CBHPEAVCM2Shar
 
 // The pools (DAT_1430a0e68.. DAT_1430a0ea0).
 TObjectAllocHeap* s_modelPools[2];
-uint32_t s_1430a0ed8;  // DAT_1430a0ed8, cleared when the device goes
+CShaderEffect* s_1430a0ed8;  // DAT_1430a0ed8, the default effect
 TObjectAllocHeap* s_sharedPool;
 TObjectAllocHeap* s_model3Pools[2];
 TObjectAllocHeap* s_m3SharedPool;
@@ -403,7 +404,7 @@ void M2CacheOnDeviceDestroyed(void* param) {
     if (g_m2Cache.m_idleM3.Head() != nullptr) {
         FROST_UNIMPLEMENTED();  // FUN_1411ece80
     }
-    s_1430a0ed8 = 0;
+    s_1430a0ed8 = nullptr;
     M2ShadowRtRelease();
     M2ElementDeviceLost();
 }
@@ -514,6 +515,20 @@ void M2ModelFree(CM2Model* model) {
     TObjectAllocHeap* pool = s_modelPools[(model->m_createFlags >> 0xe) & 1];
     model->~CM2Model();
     pool->Free(model);
+}
+
+// "Skin", made with shaders 0x2f and 0xdc when missing, kept until the device goes. The
+// reference clears only its low half on device loss (a dword store); the pointer is cleared
+// whole here.
+// ref: FUN_141196ca0
+CShaderEffect* M2CacheDefaultEffect() {
+    if (s_1430a0ed8 == nullptr) {
+        s_1430a0ed8 = ShaderEffectFind("Skin");
+        if (s_1430a0ed8 == nullptr) {
+            s_1430a0ed8 = ShaderEffectCreate("Skin", 0x2f, 0xdc);
+        }
+    }
+    return s_1430a0ed8;
 }
 
 TObjectAllocHeap* M2GetModelPool(uint32_t which) {
