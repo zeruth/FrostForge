@@ -17,6 +17,7 @@
 #include "ui/CSimpleTop.hpp"
 #include "ui/FrameXML.hpp"
 #include "cas/CAS.hpp"
+#include "db/ParameterCurve.hpp"
 #include "fileservices/AsyncFile.hpp"
 #include "console/Command.hpp"
 #include "console/Var.hpp"
@@ -272,7 +273,7 @@ void ClientScriptStateHook(lua_State* L) {
 
 // ref: FUN_14230b600
 void Sub14230B600() {
-    FROST_UNIMPLEMENTED();
+    ParameterCurveInitialize();
 }
 
 // ref: FUN_1412e59c0
@@ -521,7 +522,7 @@ void Sub1415642A0() {
 
 // ref: FUN_14230b040
 void Sub14230B040() {
-    FROST_UNIMPLEMENTED();
+    ParameterCurveUpdate();
 }
 
 // ref: FUN_1412e1c00
