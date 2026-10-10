@@ -4,6 +4,7 @@
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
 #include "threadpool/ThreadPool.hpp"
+#include "ui/FrameTime.hpp"
 #include "util/Unimplemented.hpp"
 #include "world/WorldScene.hpp"
 #include <windows.h>
@@ -157,5 +158,55 @@ void CWorldMap::Unload() {
 // ref: FUN_1413cac10
 void WorldMapLink(CWorldMap* map) {
     (void)map;
+    FROST_UNIMPLEMENTED();
+}
+
+// Whether the map's definition asks for a water clip plane (its +0x104 bit 6).
+// ref: FUN_1413b7140
+bool WorldMapHasWaterPlane(CWorldMap* map) {
+    auto definition = map->Field<uint8_t*>(0x28);
+    if (definition != nullptr) {
+        return (definition[0x104] >> 6 & 1) != 0;
+    }
+    return false;
+}
+
+// The map's fading objects (the list at +0x2a0): each fades in (flag 0x20, up to 1) or out by
+// the frame's time, and one faded out is dropped.
+// ref: FUN_14142a3f0
+void WorldMapUpdateFades(CWorldMap* map) {
+    float elapsed = FrameTime_GetElapsedSeconds();
+    int32_t linkOffset = map->Field<int32_t>(0x2a8);
+    uintptr_t node = map->Field<uintptr_t>(0x2b8);
+    while ((node & 1) == 0 && node != 0) {
+        uintptr_t next = *reinterpret_cast<uintptr_t*>(node + linkOffset + 8);
+        auto bytes = reinterpret_cast<uint8_t*>(node);
+        uint16_t flags = *reinterpret_cast<uint16_t*>(bytes + 0x4a);
+        float fade;
+        if ((flags & 0x20) == 0) {
+            flags &= 0xffbf;
+            fade = *reinterpret_cast<float*>(bytes + 0x40) - elapsed;
+        } else {
+            fade = *reinterpret_cast<float*>(bytes + 0x40) + elapsed;
+            flags |= 0x40;
+            if (1.0f <= fade) {
+                fade = 1.0f;
+            }
+        }
+        *reinterpret_cast<float*>(bytes + 0x40) = fade;
+        *reinterpret_cast<uint16_t*>(bytes + 0x4a) = static_cast<uint16_t>(flags & 0xffdf);
+        if (fade <= 0.0f) {
+            WorldMapRemoveFaded(map, bytes);
+        }
+        node = next;
+    }
+}
+
+// Drops a faded object: its texture, its hash table entry, the object (FUN_141281690,
+// FUN_140325650, FUN_1413e7630). Not ported.
+// ref: FUN_1413ae680
+void WorldMapRemoveFaded(CWorldMap* map, void* object) {
+    (void)map;
+    (void)object;
     FROST_UNIMPLEMENTED();
 }

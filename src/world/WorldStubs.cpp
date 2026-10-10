@@ -229,3 +229,18 @@ void WorldViewDrawProjected(CWorldView* view, GxRenderContext* context, ShaderEf
     (void)object;
     FROST_UNIMPLEMENTED();
 }
+
+// ref: FUN_14138c730
+float MapWeatherDensity(void* weather) {
+    return *reinterpret_cast<float*>(static_cast<uint8_t*>(weather) + 0x1224);
+}
+
+// ref: FUN_14138c740
+const float* MapWeatherColor(void* weather) {
+    return reinterpret_cast<const float*>(static_cast<uint8_t*>(weather) + 0x1218);
+}
+
+// ref: FUN_14138c760
+const float* MapWeatherDirection(void* weather) {
+    return reinterpret_cast<const float*>(static_cast<uint8_t*>(weather) + 0x120c);
+}

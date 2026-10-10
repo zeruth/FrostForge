@@ -8,6 +8,10 @@
 
 #include "client/FrameBufferCache.hpp"
 #include <cstddef>
+
+class CWorldScene;
+class CWorldView;
+struct WORLDRENDERPARAMS;
 #include <cstdint>
 
 class ShaderEffectContext;
@@ -128,6 +132,18 @@ class CWorldSceneRender {
     // The streamed buffers and their contexts, released (FUN_1413cea70).
     // ref: FUN_1413cea70
     void ReleaseBuffers();
+    // The frame's scene, view, map, M2 scene, buffers and flags, and its camera matrix.
+    // ref: FUN_1413d8ac0
+    void Begin(CWorldScene* scene, CWorldView* view, WORLDRENDERPARAMS* params);
+    // The frame's passes.
+    // ref: FUN_1413cf390
+    void Draw();
+    // The world scene's ray-traced shadow targets (FUN_1413ceb50) and its ray tracing jobs
+    // (FUN_1413d8c80).
+    // ref: FUN_1413ceb50
+    void SetupRayTracing(bool rayTracing, FRAMEBUFFERTEMP* temp, void** objects);
+    // ref: FUN_1413d8c80
+    void DispatchRayTracing(bool rayTracing);
 };
 static_assert(offsetof(CWorldSceneRender, m_buffer070) == 0x70, "CWorldSceneRender layout");
 static_assert(offsetof(CWorldSceneRender, m_temp2b0) == 0x2b0, "CWorldSceneRender layout");

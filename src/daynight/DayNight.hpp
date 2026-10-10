@@ -593,6 +593,8 @@ void DayNightSetOverride(DAYNIGHT* dayNight, bool set);
 // ref: FUN_142443d80
 void DayNightCompute(DAYNIGHT* dayNight, int32_t timeMs, float elapsed, float timeSeconds, bool alive, void* env,
     const float* viewMatrix, bool colorGrading, bool zoneLightsSingly);
+// ref: FUN_1424434f0
+void DayNightComputeSunDirection(DAYNIGHT* dayNight, const float* viewMatrix);
 // ref: FUN_142443db0
 void DayNightPrepareFrame(DAYNIGHT* dayNight, void* env, bool colorGrading);
 

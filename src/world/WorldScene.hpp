@@ -53,19 +53,20 @@ struct WORLDRENDERPARAMS {
     FRAMEBUFFER* m_scene;               // 0x00 the scene's colour and depth
     FRAMEBUFFER* m_shared;              // 0x08 the targets sharing its depth
     uint64_t m_10[2];                   // 0x10
-    uint64_t m_20;                      // 0x20 the render's own buffers, while it runs
-    uint64_t m_28;                      // 0x28
+    FRAMEBUFFER* m_reflection;          // 0x20 the render's water buffers, while it runs
+    FRAMEBUFFER* m_refraction;          // 0x28
     uint32_t m_passes;                  // 0x30 6
     float m_position[3];                // 0x34 the camera
     float m_elapsed;                    // 0x40
     int32_t m_size[2];                  // 0x44 the scene buffer's size
     uint32_t m_pad4c;
     CWorldView* m_view;                 // 0x50
-    uint64_t m_58;                      // 0x58
-    uint64_t m_60;                      // 0x60
-    uint64_t m_68;                      // 0x68
+    CWorldView* m_childView;            // 0x58 a water pass's reflection or refraction view
+    uint32_t m_reflectionMode;          // 0x60
+    float m_waterHeight;                // 0x64
+    CM2Scene* m_m2Scene;                // 0x68
     uint64_t m_70[2];                   // 0x70
-    uint8_t m_80[4];                    // 0x80
+    uint8_t m_80[4];                    // 0x80 shadows, cascades, ray tracing, and handed back
     uint32_t m_pad84;
 };
 static_assert(sizeof(WORLDRENDERPARAMS) == 0x88, "WORLDRENDERPARAMS is 0x88 bytes");
@@ -258,6 +259,14 @@ class CWorldScene {
     // Draws the latched view into the parameters' buffers.
     // ref: FUN_1413c5ce0
     void Render(WORLDRENDERPARAMS* params);
+    // ref: FUN_1413c5250
+    void PreRender(WORLDRENDERPARAMS* params);
+    // ref: FUN_1413ca340
+    void BeginView(CWorldView* view);
+    // ref: FUN_1413c7570
+    void RenderWater(WORLDRENDERPARAMS* params);
+    // ref: FUN_1413c9880
+    void GatherLights();
     // The view's camera, weather and water into DayNight, its frame computed, and its light
     // direction and colours, water colour and fogs copied into the scene for the models.
     // ref: FUN_1413c8aa0

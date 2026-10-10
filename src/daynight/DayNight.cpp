@@ -696,3 +696,8 @@ bool DayNightIsDaytime(DAYNIGHT* dayNight) {
 void DayNightSetOverride(DAYNIGHT* dayNight, bool set) {
     dayNight->m_scene->m_1601 = set;
 }
+
+// ref: FUN_1424434f0
+void DayNightComputeSunDirection(DAYNIGHT* dayNight, const float* viewMatrix) {
+    dayNight->m_scene->ComputeSunDirection(viewMatrix);
+}

@@ -122,6 +122,11 @@ bool RenderFeatureEnabled(int32_t feature) {
 
 // The water detail setting (FUN_142526ee0).
 // ref: FUN_142526ee0
+uint8_t WorldReflectionMode() {
+    return g_renderSettings.m_reflectionMode;
+}
+
+// ref: FUN_142526ee0
 uint8_t WorldWaterDetail() {
     return g_renderSettings.m_waterDetail;
 }
@@ -929,13 +934,6 @@ void WorldSceneSetRect(const float* rect, CWorldScene* scene) {
     std::memcpy(scene->m_0c8, rect, 0x10);
 }
 
-// The scene's draw into the parameters' buffers: the occlusion, the shadow and the deferred
-// passes, the map and the models. Not ported yet.
-// ref: FUN_1413c5ce0
-void CWorldScene::Render(WORLDRENDERPARAMS* params) {
-    (void)params;
-    FROST_UNIMPLEMENTED();
-}
 
 // ref: FUN_141357340
 bool WorldSceneModelReady(CWorldScene* scene, const char* name, uint8_t priority) {

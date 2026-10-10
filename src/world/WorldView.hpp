@@ -136,6 +136,23 @@ class CWorldView {
     // This frame's matrices and camera kept as last frame's.
     // ref: FUN_1413c59b0
     void LatchCamera();
+    // ref: FUN_1413de240
+    void UpdateDetailTarget();
+    // ref: FUN_1413da730
+    void CullFinish();
+    // The view's list `index` run as pool jobs.
+    // ref: FUN_1413dd130
+    void RunList(uint32_t index);
+    // ref: FUN_1413da5b0
+    void ClearLists();
+    // ref: FUN_1413db650
+    CWorldView* GetChild(uint32_t index);
+    // ref: FUN_1413dcc10
+    bool WantsReflection();
+    // ref: FUN_1413dcc30
+    bool WantsRefraction();
+    // ref: FUN_1413db0c0
+    float WaterHeight();
     // The liquid the camera is in and its depth (+0x690, +0x694).
     // ref: FUN_141351b90
     uint32_t GetLiquid(float* depth);

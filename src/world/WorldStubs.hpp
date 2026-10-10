@@ -31,7 +31,11 @@ void WorldScene030Destroy(void* object);        // FUN_141423c00
 
 // WoW/Source/WorldClient2/MapWeather.cpp (0x1378 bytes) at the scene's +0x38.
 void* MapWeatherCreate(void* memory, CWorldScene* scene);       // FUN_14138a820
-void MapWeatherDestroy(void* weather);          // FUN_14138b150
+void MapWeatherDestroy(void* weather);
+// The weather's density, colour and direction (+0x1224, +0x1218, +0x120c).
+float MapWeatherDensity(void* weather);         // FUN_14138c730
+const float* MapWeatherColor(void* weather);    // FUN_14138c740
+const float* MapWeatherDirection(void* weather);    // FUN_14138c760          // FUN_14138b150
 
 // The object fadeouts (TSList<SObjectFadeout>, DAT_142d011b8 / DAT_142d011e0).
 void WorldSceneFreeObjectFadeouts();            // the loop in FUN_1413c3a40

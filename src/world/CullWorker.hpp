@@ -243,4 +243,10 @@ static_assert(offsetof(CWorldCull, m_seed) == 0x1630c, "CWorldCull layout");
 static_assert(offsetof(CWorldCull, m_groups) == 0x16550, "CWorldCull layout");
 static_assert(sizeof(CWorldCull) == 0x16578, "CWorldCull is 0x16578 bytes");
 
+// The cull's occluder list (FUN_141446590), its frame finished (FUN_141445630) and the water
+// height it found (FUN_141446290).
+void* CWorldCullOccluders(CWorldCull* cull);
+void CWorldCullUpdate(CWorldCull* cull);
+float CWorldCullWaterHeight(CWorldCull* cull);
+
 #endif

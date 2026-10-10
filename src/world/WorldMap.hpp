@@ -70,4 +70,11 @@ static_assert(sizeof(CWorldMap) == 0x520, "CWorldMap is 0x520 bytes");
 // ref: FUN_1413cac10
 void WorldMapLink(CWorldMap* map);
 
+// ref: FUN_1413b7140
+bool WorldMapHasWaterPlane(CWorldMap* map);
+// ref: FUN_14142a3f0
+void WorldMapUpdateFades(CWorldMap* map);
+// ref: FUN_1413ae680
+void WorldMapRemoveFaded(CWorldMap* map, void* object);
+
 #endif

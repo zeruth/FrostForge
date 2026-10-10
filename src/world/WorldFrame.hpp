@@ -70,5 +70,13 @@ void WorldSetLodScale(float scale);
 bool RenderFeatureEnabled(int32_t feature);
 // ref: FUN_142526ee0
 uint8_t WorldWaterDetail();
+// ref: FUN_142526ec0
+uint8_t WorldReflectionMode();
+// ref: FUN_14252ce30
+void WorldWaitGlobalJobs();
+// The environment the frame's shaders read.
+// ref: FUN_141353210
+void WorldSceneSetEnvironment(uint8_t (*environment)[0xe0], CWorldScene* scene, const float* position,
+    const float* view, const float* targetScale, const float* direction, const float* color, float shadowFactor);
 
 #endif
