@@ -41,6 +41,12 @@ void* WorldSceneViewFromCamera(void* out, CM2Camera* camera);
 void WorldSceneRenderFrame(CWorldScene* scene, uint32_t* params, void* view, const void* frame, void* target,
     float elapsed, uint32_t flags);
 
+// Whether a model file is ready in `scene` (in any scene for null); what is missing is asked
+// for.
+bool WorldSceneModelReady(CWorldScene* scene, const char* name, uint8_t priority);
+// ref: FUN_1413cb320
+bool WorldScenesModelReady(const char* name, uint8_t priority);
+
 // DAT_1430ab790: DayNight's zone lights and light run on a pool job.
 extern uint8_t g_dayNightOnJob;
 

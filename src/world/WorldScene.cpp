@@ -751,3 +751,14 @@ void CWorldScene::UpdateLight(CWorldView* view, DAYNIGHT* dayNight) {
     this->m_678 = DayNightFogCount(dayNight, &this->m_farClip, false);
     this->m_fog = *DayNightFogF8(dayNight);
 }
+
+// Whether any scene has the model file ready.
+// ref: FUN_1413cb320
+bool WorldScenesModelReady(const char* name, uint8_t priority) {
+    for (CWorldScene* scene = s_scenes.Head(); scene != nullptr; scene = s_scenes.Next(scene)) {
+        if (scene->m_m2Scene->ModelFileReady(name, priority)) {
+            return true;
+        }
+    }
+    return false;
+}

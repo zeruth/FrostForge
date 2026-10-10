@@ -1876,8 +1876,6 @@ float CM2Model::GetScaledRadius(C3Vector* center, float* radius) {
     return partial;
 }
 
-namespace {
-
 // The name with its extension replaced (FUN_140214020): the last '.' after the last separator.
 // ref: FUN_140214020
 void ReplaceExtension(char* buffer, size_t size, const char* name, const char* extension) {
@@ -1914,6 +1912,8 @@ void ReplaceExtension(char* buffer, size_t size, const char* name, const char* e
         }
     }
 }
+
+namespace {
 
 // The shared file's content key, by FileDataID or by name.
 bool SharedContentKey(const CM2Shared* shared, uint8_t* key) {

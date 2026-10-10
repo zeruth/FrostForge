@@ -682,3 +682,11 @@ void WorldSceneRenderFrame(CWorldScene* scene, uint32_t* params, void* view, con
     (void)flags;
     FROST_UNIMPLEMENTED();  // the frame's render targets, FUN_1424d0a40 and the resolve
 }
+
+// ref: FUN_141357340
+bool WorldSceneModelReady(CWorldScene* scene, const char* name, uint8_t priority) {
+    if (scene == nullptr) {
+        return WorldScenesModelReady(name, priority);
+    }
+    return scene->m_m2Scene->ModelFileReady(name, priority);
+}

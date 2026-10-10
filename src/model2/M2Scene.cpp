@@ -5,6 +5,9 @@
 #include <new>
 
 #include "base/Matrix.hpp"
+#include "cas/CAS.hpp"
+#include "fileservices/AsyncFile.hpp"
+#include "model2/M2Init.hpp"
 #include "base/Status.hpp"
 #include "client/RenderSettings.hpp"
 #include "gx/GxPipeline.hpp"
@@ -122,6 +125,100 @@ void M2SceneDrawParamsReserve(M2SceneVector<BaseModelDrawParams>* params, uint64
     }
     params->m_capacity &= 0x7fffffffffffffffull;
     params->m_data = data;
+}
+
+const uint32_t s_chunkMd20 = 0x3032444d;  // 'MD20'
+const uint32_t s_chunkMd21 = 0x3132444d;  // 'MD21'
+const uint32_t s_chunkTxid = 0x44495854;  // 'TXID'
+
+// A chunk's header: its tag and its size.
+struct M2FILECHUNK {
+    uint32_t m_tag;
+    uint32_t m_size;
+};
+
+// Whether an open model file's textures are all on disk: the model's data (the whole file
+// for a bare MD20, the MD21 chunk otherwise) and the TXID chunk after it, each texture's
+// residency checked and the partly resident ones fetched. A texture that is not known at all
+// fails at once (and, as in the reference, leaves the TXID copy unfreed).
+// ref: FUN_1411e41d0
+bool ModelFileResident(cas::CASFILE* file) {
+    void* data = nullptr;
+    uint32_t size = 0;
+    M2FILECHUNK chunk;
+    uint32_t read = 0;
+    while (cas::CASFileReadEx(file, &chunk, 8, &read, 0, -1)) {
+        size = chunk.m_size;
+        void* buffer = data;
+        if (chunk.m_tag == s_chunkMd20 || chunk.m_tag == s_chunkMd21) {
+            if (chunk.m_tag == s_chunkMd20) {
+                cas::CASFileSetPosition(file, 0, 0);
+                size = static_cast<uint32_t>(cas::CASFileGetSize(file));
+            }
+            buffer = M2AlignedAlloc(size, s_sceneFile, 0x6bf, 0x12, 0);
+            if (data != nullptr) {
+                M2FreeFileData(data);
+            }
+            if (!cas::CASFileReadEx(file, buffer, size, &read, 0, -1)) {
+                if (buffer != nullptr) {
+                    M2FreeFileData(buffer);
+                }
+                data = nullptr;
+                break;
+            }
+        } else {
+            cas::CASFileSetPosition(file, size, 1);
+        }
+        data = buffer;
+        if (buffer != nullptr) {
+            break;
+        }
+    }
+    int32_t* textureIds = nullptr;
+    read = 1;
+    for (;;) {
+        if (read == 0 || !cas::CASFileReadEx(file, &chunk, 8, &read, 0, -1)) {
+            break;
+        }
+        if (chunk.m_tag == s_chunkTxid) {
+            auto ids = static_cast<int32_t*>(
+                SMemAlloc(chunk.m_size, 0x12, s_sceneFile, SStrHashFnv1a(s_sceneFile), 0x6df, 0));
+            if (!cas::CASFileReadEx(file, ids, chunk.m_size, &read, 0, -1)) {
+                break;
+            }
+            textureIds = ids;
+            break;
+        }
+        cas::CASFileSetPosition(file, chunk.m_size, 1);
+    }
+    cas::CASFileClose(&file);
+    M2INITCONTEXT context;
+    bool resident = false;
+    if (M2InitAll(data, size, static_cast<M2Data*>(data), &context)) {
+        resident = true;
+        uint16_t count = *reinterpret_cast<uint16_t*>(static_cast<uint8_t*>(data) + 0x50);
+        for (uint32_t i = 0; i < count; i++) {
+            if (textureIds == nullptr) {
+                continue;
+            }
+            uint8_t residency = cas::CASFileGetResidency(textureIds[i], 0, 0);
+            if (residency == 0) {
+                M2FreeFileData(data);
+                return false;
+            }
+            if (residency != 2) {
+                AsyncFilePrefetchById(textureIds[i]);
+                resident = false;
+            }
+        }
+        if (textureIds != nullptr) {
+            SMemFree(textureIds, s_sceneFile, 0x74a, 0);
+        }
+    }
+    if (data != nullptr) {
+        M2FreeFileData(data);
+    }
+    return resident;
 }
 
 }  // namespace
@@ -722,4 +819,42 @@ CM2BaseModel* M2SceneCloneModel(CM2Scene* scene, CM2BaseModel* model, bool a3) {
     (void)a3;
     FROST_UNIMPLEMENTED();
     return nullptr;
+}
+
+// A file on disk is checked with its textures; one that is not is looked for in the cache and
+// otherwise read ahead.
+// ref: FUN_1411e40e0
+bool CM2Scene::ModelFileReady(const char* name, uint8_t priority) {
+    uint8_t residency = cas::CASGetResidencyByName(name, 0, 0, 0);
+    if (residency == 0) {
+        return false;
+    }
+    cas::CASFILE* file = nullptr;
+    if (residency == 2 && cas::CASFileOpenByName(name, &file, 0)) {
+        return ModelFileResident(file);
+    }
+    if (name == nullptr) {
+        return false;
+    }
+    CM2Shared* shared = M2CacheGetSharedByName(this->m_cache, name, 0x20, priority);
+    if (shared == nullptr) {
+        char path[0x104];
+        ReplaceExtension(path, sizeof(path), name, ".m2");
+        this->PreloadModel(cas::CASFileGetIdByName(path, 0), priority, nullptr);
+        return false;
+    }
+    shared->ReleaseModelRef();
+    return false;
+}
+
+// The scene's preload table (+0x58, keyed by content key) and its async reads
+// (FUN_1405db600 with FUN_1411df380 / FUN_1411d3610) are not ported; a model file that is not
+// on disk is not read ahead.
+// ref: FUN_1411cf210
+bool CM2Scene::PreloadModel(int32_t fileDataId, uint8_t priority, void* waiter) {
+    (void)fileDataId;
+    (void)priority;
+    (void)waiter;
+    FROST_UNIMPLEMENTED();
+    return false;
 }

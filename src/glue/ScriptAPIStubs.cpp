@@ -3409,13 +3409,6 @@ int Lua_GetLocale(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_1416a4df0
-int Lua_GetLoginScreenBackground(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_141084680
 int Lua_GetMaxLevelForExpansionLevel(lua_State* L) {
     (void)L;

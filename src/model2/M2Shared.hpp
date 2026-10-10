@@ -384,6 +384,8 @@ void M2SequenceLoadsFree(TSList<CM2SequenceLoad, TSGetLink<CM2SequenceLoad>, 8>*
 void M2SharedFree(CM2Shared* shared);
 
 // 16-byte aligned memory, its offset kept in the byte before (FUN_1412be640).
+// `name` with its extension replaced by `extension` (FUN_140214020).
+void ReplaceExtension(char* buffer, size_t size, const char* name, const char* extension);
 void* M2AlignedAlloc(uint32_t size, const char* file, int32_t line, int32_t flags, uint32_t extra);
 // A file read's memory (FUN_1412be750).
 void M2FreeFileData(void* data);

@@ -17,6 +17,7 @@
 #include "gx/GxDevice.hpp"
 #include "ui/CScriptObject.hpp"
 #include "ui/CSimpleModelFFX.hpp"
+#include "world/WorldFrame.hpp"
 #include <cstring>
 #include <string>
 
@@ -372,5 +373,23 @@ int Lua_GetDefaultVideoOptions(lua_State* L) {
 // ref: FUN_141d05500
 int Lua_GetDefaultScale(lua_State* L) {
     lua_pushnumber(L, static_cast<double>(WindowGetDefaultUiScale()));
+    return 1;
+}
+
+// The high resolution background when its model is ready, the low one otherwise.
+// ref: FUN_1416a4df0
+int Lua_GetLoginScreenBackground(lua_State* L) {
+    if (!lua_isstring(L, 1) || !lua_isstring(L, 2)) {
+        luaL_error(L, "Usage: GetLoginScreenBackground(\"highresbg\", \"lowresbg\")");
+        return 0;
+    }
+    const char* high = lua_tolstring(L, 1, nullptr);
+    const char* low = lua_tolstring(L, 2, nullptr);
+    const char* background = WorldSceneModelReady(nullptr, high, 3) ? high : low;
+    if (background == nullptr) {
+        lua_pushnil(L);
+        return 1;
+    }
+    lua_pushstring(L, background);
     return 1;
 }

@@ -243,6 +243,12 @@ class CM2Scene {
     // A model of a file by FileDataID (FUN_1411d8c80) or by path (FUN_1411d8d50), initialized
     // into the scene at `lod`; null when the file or the model cannot be had.
     CM2Model* CreateModel(int32_t fileDataId, uint32_t flags, uint8_t priority, uint8_t lod);
+    // Whether a model file and its textures are on disk; what is missing is asked for.
+    // ref: FUN_1411e40e0
+    bool ModelFileReady(const char* name, uint8_t priority);
+    // Reads a model file ahead, for `waiter` when given.
+    // ref: FUN_1411cf210
+    bool PreloadModel(int32_t fileDataId, uint8_t priority, void* waiter);
     CM2Model* CreateModel(const char* name, uint32_t flags, uint8_t priority, uint8_t lod);
     // A frame's animation over the buckets (FUN_1411d2180), with a frustum (FUN_1411d2150).
     void Animate(bool threaded);
