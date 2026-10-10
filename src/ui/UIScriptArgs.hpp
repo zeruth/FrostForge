@@ -10,6 +10,8 @@ struct lua_State;
 
 // Three numbers 0..1 as 0xffRRGGBB (FUN_140a50ab0).
 uint32_t RequiredRGB(lua_State* L, int32_t* index, const char* usage);
+// A number clamped to 0..1 (FUN_140a54b40).
+float RequiredUnit(lua_State* L, int32_t* index, const char* usage);
 // An optional alpha 0..1 into {value, present}.
 void OptionalAlphaByte(lua_State* L, int32_t* index, const char* usage, uint8_t* alpha);
 // A justification name (FUN_1408c6380).

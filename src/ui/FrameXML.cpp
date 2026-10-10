@@ -22,6 +22,7 @@
 #include "ui/CSimpleMovieFrame.hpp"
 #include "ui/CSimpleEditBox.hpp"
 #include "ui/CSimpleSlider.hpp"
+#include "ui/CSimpleStatusBar.hpp"
 #include "ui/CSimpleScrollFrame.hpp"
 #include "ui/CSimpleCheckButton.hpp"
 #include "ui/CSimpleFont.hpp"
@@ -269,9 +270,7 @@ CSimpleFrame* CreateSimpleHTML(CSimpleFrame* parent) {
 
 // ref: FUN_1406622e0
 CSimpleFrame* CreateStatusBar(CSimpleFrame* parent) {
-    (void)parent;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    return new CSimpleStatusBar(parent);
 }
 
 // ref: FUN_140661f40

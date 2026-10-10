@@ -14,6 +14,7 @@
 #include "ui/CSimpleMovieFrame.hpp"
 #include "ui/CSimpleEditBox.hpp"
 #include "ui/CSimpleSlider.hpp"
+#include "ui/CSimpleStatusBar.hpp"
 #include "ui/CSimpleScrollFrame.hpp"
 #include "ui/CSimpleCheckButton.hpp"
 #include "ui/CSimpleFont.hpp"
@@ -100,13 +101,6 @@ void ScriptClass_MessageFrame(lua_State* L) {
 // the OffScreenFrame metatables.
 // ref: FUN_1424bfe70
 void ScriptClass_OffScreenFrame(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the StatusBar metatables.
-// ref: FUN_1424c2df0
-void ScriptClass_StatusBar(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
 }
@@ -203,7 +197,7 @@ void GlueRegisterScriptAPI(lua_State* L) {
     ScriptClass_OffScreenFrame(L);
     CSimpleScrollFrame::CreateScriptMetaTables();
     CSimpleSlider::CreateScriptMetaTables();
-    ScriptClass_StatusBar(L);
+    CSimpleStatusBar::CreateScriptMetaTables();
     CSimpleTexture::CreateScriptMetaTables();
     ScriptAPI_C_SocialContractGlue(L);
     ScriptAPI_C_Sound(L);

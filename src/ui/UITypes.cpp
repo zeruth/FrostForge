@@ -345,6 +345,16 @@ bool StringToFillStyle(const char* string, uint8_t* style) {
     return false;
 }
 
+// ref: FUN_1406726a0
+const char* FillStyleToString(uint8_t style) {
+    for (const auto& entry : s_fillStyles) {
+        if (entry.m_value == style) {
+            return entry.m_name;
+        }
+    }
+    return "UNKNOWN";
+}
+
 bool g_uiDatabaseReady;
 
 // ref: FUN_1406031e0

@@ -24,6 +24,9 @@ extern "C" {
 void CScriptRegion_FillScriptMethods(lua_State* L);
 void CAnimatableObject_FillScriptMethods(lua_State* L);
 
+// A number clamped to 0..1 (FUN_140a54b40; ui/CSimpleFontStringScript.cpp).
+float RequiredUnit(lua_State* L, int32_t* index, const char* usage);
+
 namespace {
 
 using namespace ScriptMethod;
@@ -107,26 +110,6 @@ void OptionalAlphaByte(lua_State* L, int32_t* index, const char* usage, uint8_t*
     if (alpha[1] == 0) {
         alpha[1] = 1;
     }
-}
-
-// A number clamped to 0..1 (FUN_140a54b40).
-float RequiredUnit(lua_State* L, int32_t* index, const char* usage) {
-    if (lua_type(L, *index) < 1) {
-        luaL_error(L, usage);
-        return 0.0f;
-    }
-    if (lua_type(L, *index) != LUA_TNUMBER) {
-        luaL_argerror(L, *index, usage);
-        return 0.0f;
-    }
-    float value = static_cast<float>(lua_tonumber(L, *index));
-    if (value < 0.0f) {
-        value = 0.0f;
-    } else if (1.0f < value) {
-        value = 1.0f;
-    }
-    (*index)++;
-    return value;
 }
 
 // A vertex index, 1-based in Lua (FUN_1408c5f10).
