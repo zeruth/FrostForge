@@ -32,6 +32,16 @@ void OsInputInitialize();
 // The mouse speed, the DPI entry points, and the input setup.
 void OsWindowSystemInitialize();
 
+// The mouse settings the client's CVars drive.
+float OsGetMouseSpeed();                            // the custom sensitivity, 0.1 .. 2.0
+void OsSetMouseSpeed(float speed);
+void OsSetUseSystemMouseSpeed(bool useSystem);
+void OsSetRawMouse(bool enable);
+void OsSetRawMouseAcceleration(bool enable);
+void OsSetRawMouseRate(uint32_t rate);
+void OsSetRawMouseResolution(uint32_t resolution);
+void OsSetMouseNoRepositioning(bool disable);
+
 // The window procedure the engine's windows hand their messages to (input to events, the
 // frame dragged by hand, power hooks), and its nesting entry.
 intptr_t OsWindowProc(void* window, uint32_t message, uintptr_t wparam, intptr_t lparam);
@@ -56,6 +66,7 @@ uint64_t OsCursorGetPosition();
 uint64_t OsCursorGetClientPosition(void* window);
 void OsCursorSet(void* window, void* cursor, uint32_t time);
 void OsCursorEnable(void* window, uint32_t time);
+void OsCursorDisable(void* window, uint32_t time);
 void OsCursorFrameBegin(uint32_t time);
 void OsCursorFrameEnd(uint32_t time);
 

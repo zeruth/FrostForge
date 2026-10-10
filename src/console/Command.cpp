@@ -532,3 +532,18 @@ void ConsoleCommandUnregister(const char* command) {
         }
     }
 }
+
+namespace {
+
+int32_t s_consoleHotKey;  // DAT_142ccbed0
+
+}
+
+// ref: FUN_140326b30
+void ConsoleSetHotKey(int32_t key) {
+    s_consoleHotKey = key;
+}
+
+int32_t ConsoleGetHotKey() {
+    return s_consoleHotKey;
+}

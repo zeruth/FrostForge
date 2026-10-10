@@ -50,6 +50,14 @@ void OsCursorEnable(void* window, uint32_t time) {
     FROST_UNIMPLEMENTED();
 }
 
+// Leaves the engine's hardware-cursor state (clears 0x20 in the state).
+// ref: FUN_14254d110
+void OsCursorDisable(void* window, uint32_t time) {
+    (void)window;
+    (void)time;
+    FROST_UNIMPLEMENTED();
+}
+
 // The cursor module's per-pump bookkeeping, before and after the messages.
 // ref: FUN_14254d160
 void OsCursorFrameBegin(uint32_t time) {

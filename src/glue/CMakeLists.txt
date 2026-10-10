@@ -2,6 +2,8 @@ add_library(glue STATIC
     GlueMgr.cpp
     GlobalColor.cpp
     GlueScriptAPI.cpp
+    ScriptAPICVar.cpp
+    ScriptAPIGlue.cpp
     EventSignals.cpp
     ScriptAPIRegistry.cpp
     ScriptAPIStubs.cpp

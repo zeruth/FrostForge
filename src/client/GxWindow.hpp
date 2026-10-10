@@ -11,6 +11,11 @@ void WindowDestroy();
 void WindowUpdate(const GXWINDOWPARAMS* params);
 void WindowApplyParams(const GXWINDOWPARAMS* params, bool reposition);
 void* WindowGetHandle();
+
+// The UI scale the window suggests (FUN_1414fcd40), and a scale held to 0.64 .. 1.15 and to
+// the minimum aspect (FUN_1414fd040).
+float WindowGetDefaultUiScale();
+float WindowClampUiScale(float scale);
 GXWINDOWPARAMS* WindowGetParams();
 float WindowGetAspect();
 GXSIZE* WindowGetSize(GXSIZE* size);

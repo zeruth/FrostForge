@@ -1449,3 +1449,80 @@ void OsImeSetNative(bool native) {
     conversion = native ? (conversion | IME_CMODE_NATIVE) : (conversion & ~static_cast<DWORD>(IME_CMODE_NATIVE));
     ImmSetConversionStatus(context, conversion, sentence);
 }
+
+// ---- the mouse settings the client's CVars drive -------------------------------------------
+
+namespace {
+
+uint8_t s_mouseNoRepositioning;     // DAT_1430a15c8
+
+}
+
+// ref: FUN_14123b180
+float OsGetMouseSpeed() {
+    return s_mouseSpeedScale;
+}
+
+// The custom sensitivity, clamped to 0.1 .. 2.0; it reaches the system speed while the game
+// is active and not using the system's own.
+// ref: FUN_14123b4a0
+void OsSetMouseSpeed(float speed) {
+    s_mouseSpeedScale = 0.1f;
+    if (0.1f <= speed) {
+        s_mouseSpeedScale = speed;
+        if (2.0f <= speed) {
+            s_mouseSpeedScale = 2.0f;
+        }
+    }
+    s_mouseSpeedCopy = static_cast<UINT>(static_cast<int32_t>(s_mouseSpeedScale * 10.0f));
+    if (s_appActive != 0 && s_restoreMouseSpeed == 0) {
+        SystemParametersInfoA(SPI_SETMOUSESPEED, 0, reinterpret_cast<void*>(static_cast<intptr_t>(static_cast<int32_t>(s_mouseSpeedCopy))), 0);
+    }
+}
+
+// ref: FUN_14123b520
+void OsSetUseSystemMouseSpeed(bool useSystem) {
+    uint32_t value = useSystem ? 1 : 0;
+    if (value == s_restoreMouseSpeed) {
+        return;
+    }
+    int32_t speed = useSystem ? static_cast<int32_t>(s_mouseSpeed) : static_cast<int32_t>(s_mouseSpeedCopy);
+    s_restoreMouseSpeed = value;
+    SystemParametersInfoA(SPI_SETMOUSESPEED, 0, reinterpret_cast<void*>(static_cast<intptr_t>(speed)), 0);
+}
+
+// Raw input on or off; the mouse is registered again (RIDEV_NOLEGACY off) while it is up.
+// ref: FUN_14123b300
+void OsSetRawMouse(bool enable) {
+    s_rawRegistered = enable;
+    if (s_rawMouse != 0) {
+        s_rawSkip = s_rawSkipReset;
+        s_haveRawPosition = 0;
+        RAWINPUTDEVICE device = {};
+        device.usUsagePage = 1;
+        device.usUsage = 2;
+        device.dwFlags = static_cast<DWORD>(enable ? 0 : 1);
+        device.hwndTarget = nullptr;
+        RegisterRawInputDevices(&device, 1, sizeof(device));
+    }
+}
+
+// ref: FUN_14123b360
+void OsSetRawMouseAcceleration(bool enable) {
+    s_mouseAccelerate = enable;
+}
+
+// ref: FUN_14123b390
+void OsSetRawMouseRate(uint32_t rate) {
+    s_mouseAccelScale = static_cast<float>(rate);
+}
+
+// ref: FUN_14123b370
+void OsSetRawMouseResolution(uint32_t resolution) {
+    s_mouseAccelBase = static_cast<float>(resolution);
+}
+
+// ref: FUN_14123b2f0
+void OsSetMouseNoRepositioning(bool disable) {
+    s_mouseNoRepositioning = disable;
+}

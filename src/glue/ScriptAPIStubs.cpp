@@ -7,13 +7,6 @@
 
 #include "util/Unimplemented.hpp"
 
-// ref: FUN_1419f5c90
-int Lua_AntiAliasingSupported(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_1419f5e70
 int Lua_AutoChooseCurrentGraphicsSetting(lua_State* L) {
     (void)L;
@@ -98,29 +91,8 @@ int Lua_C_AuthChallenge_Submit(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140c96190
-int Lua_C_CVar_GetCVar(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140c96ee0
 int Lua_C_CVar_GetCVarBitfield(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140c97c10
-int Lua_C_CVar_GetCVarBool(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140c98940
-int Lua_C_CVar_GetCVarDefault(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -700,27 +672,6 @@ int Lua_C_CharacterServices_IsBoostEnabled(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_141698de0
-int Lua_C_CharacterServices_IsLiveRegionAccountCopyEnabled(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141698dc0
-int Lua_C_CharacterServices_IsLiveRegionCharacterCopyEnabled(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141698da0
-int Lua_C_CharacterServices_IsLiveRegionCharacterListEnabled(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_141698d70
 int Lua_C_CharacterServices_IsTrialBoostEnabled(lua_State* L) {
     (void)L;
@@ -1015,13 +966,6 @@ int Lua_C_Debug_GetMapDebugObjects(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140fa2560
-int Lua_C_Debug_PrintToDebugWindow(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140fa2c30
 int Lua_C_Debug_TeleportToMapDebugObject(lua_State* L) {
     (void)L;
@@ -1038,13 +982,6 @@ int Lua_C_Debug_TeleportToMapLocation(lua_State* L) {
 
 // ref: FUN_140fa3a00
 int Lua_C_Debug_ViewInDebugWindow(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_14107f0a0
-int Lua_C_EventUtils_IsEventValid(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -1339,13 +1276,6 @@ int Lua_C_Login_GetState(lua_State* L) {
 
 // ref: FUN_14169e060
 int Lua_C_Login_GetWaitQueueInfo(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_14169df70
-int Lua_C_Login_IsLauncherLogin(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -3108,13 +3038,6 @@ int Lua_ClearAccountCharacters(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_1416a4280
-int Lua_ClearSavedAccountList(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_141d039c0
 int Lua_ConsoleAddMessage(lua_State* L) {
     (void)L;
@@ -3290,13 +3213,6 @@ int Lua_GetBillingTimeRested(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_141d05b40
-int Lua_GetBuildInfo(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_141d03650
 int Lua_GetCVarInfo(lua_State* L) {
     (void)L;
@@ -3355,13 +3271,6 @@ int Lua_GetCharacterSelection(lua_State* L) {
 
 // ref: FUN_14168e630
 int Lua_GetCharacterUndeleteStatus(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141081ed0
-int Lua_GetClientDisplayExpansionLevel(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -3451,13 +3360,6 @@ int Lua_GetDefaultGraphicsQuality(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_141d05500
-int Lua_GetDefaultScale(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_1419f58e0
 int Lua_GetDefaultVideoOption(lua_State* L) {
     (void)L;
@@ -3535,13 +3437,6 @@ int Lua_GetGraphicsCVarOffsetForCVar(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_1419f5fa0
-int Lua_GetGraphicsCVarOffsetForUI(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_1419f5390
 int Lua_GetGraphicsCVarValueForQualityLevel(lua_State* L) {
     (void)L;
@@ -3591,22 +3486,8 @@ int Lua_GetMaxLevelForExpansionLevel(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_1419f5ec0
-int Lua_GetMaxRenderScale(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_141084d90
 int Lua_GetMaximumExpansionLevel(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1419f5ef0
-int Lua_GetMinRenderScale(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -3675,13 +3556,6 @@ int Lua_GetNumAddOns(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140cec430
-int Lua_GetNumCharacters(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_1416a4af0
 int Lua_GetNumDeclensionSets(lua_State* L) {
     (void)L;
@@ -3705,20 +3579,6 @@ int Lua_GetOSLocale(lua_State* L) {
 
 // ref: FUN_141d05480
 int Lua_GetPhysicalScreenSize(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1416a4230
-int Lua_GetSavedAccountList(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1416a40f0
-int Lua_GetSavedAccountName(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -4032,13 +3892,6 @@ int Lua_IsLeftShiftKeyDown(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_14168ea50
-int Lua_IsMacClient(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_141d05530
 int Lua_IsModifierKeyDown(lua_State* L) {
     (void)L;
@@ -4069,13 +3922,6 @@ int Lua_IsMoviePlayable(lua_State* L) {
 
 // ref: FUN_140cee0e0
 int Lua_IsNameReservationOnly(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141d01f00
-int Lua_IsOnGlueScreen(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -4459,13 +4305,6 @@ int Lua_SetPortraitToTexture(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_1416a4140
-int Lua_SetSavedAccountName(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_1419f4fe0
 int Lua_SetScreenResolution(lua_State* L) {
     (void)L;
@@ -4657,13 +4496,6 @@ int Lua_UpdateWindow(lua_State* L) {
 
 // ref: FUN_1416a64b0
 int Lua_VisitPromotionURL(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1416a65b0
-int Lua_WasScreenFirstDisplayed(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;

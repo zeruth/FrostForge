@@ -1,4 +1,5 @@
 #include "client/GxWindow.hpp"
+#include "client/ClientCVars.hpp"
 #include "client/FrameBufferCache.hpp"
 #include "client/RenderSettings.hpp"
 #include "gx/Gx.hpp"
@@ -42,6 +43,7 @@ uint32_t s_cursorSizeIndex;         // DAT_1430d0060
 uint32_t s_cursorPixels[0x4000];    // DAT_1430b0060
 uint32_t s_cursorShown[0x4000];     // DAT_1430c0060
 HCURSOR s_cursor;                   // DAT_1430d0268
+uint8_t s_cursorWasDisabled;        // DAT_142d08258
 uint8_t s_cursorEnable = 1;         // DAT_142d08259
 uint8_t s_cursorPending = 1;        // DAT_142d08288
 
@@ -607,6 +609,86 @@ LRESULT CALLBACK WindowProc(HWND window, UINT message, WPARAM wparam, LPARAM lpa
 // ref: FUN_1414f8d60
 void* WindowGetHandle() {
     return s_window;
+}
+
+namespace {
+
+float s_uiScaleTarget = 768.0f;     // DAT_142d08284: the height the UI is laid out for
+float s_minUiAspect;                // DAT_1430d0198
+
+float WindowAspect() {
+    if (s_params.m_size.m_width == 0 || s_params.m_size.m_height == 0) {
+        return 1.0f;
+    }
+    return static_cast<float>(s_params.m_size.m_width) / static_cast<float>(s_params.m_size.m_height);
+}
+
+}
+
+// ref: FUN_1414fd040
+float WindowClampUiScale(float scale) {
+    float aspect = WindowAspect();
+    if (s_minUiAspect > aspect) {
+        float limit = aspect / s_minUiAspect;
+        if (scale > limit) {
+            scale = limit;
+        }
+    }
+    if (0.64f > scale) {
+        return 0.64f;
+    }
+    if (scale > 1.15f) {
+        return 1.15f;
+    }
+    return scale;
+}
+
+// ref: FUN_1414fcd40
+float WindowGetDefaultUiScale() {
+    uint16_t width = s_params.m_size.m_width;
+    uint16_t height = s_params.m_size.m_height;
+    if (height == 0 || width == 0) {
+        return WindowClampUiScale(1.0f);
+    }
+    float aspect = static_cast<float>(width) / static_cast<float>(height);
+    if (aspect < 1.0f) {
+        return 1.0f;
+    }
+    if (static_cast<float>(height) > s_uiScaleTarget) {
+        return WindowClampUiScale(s_uiScaleTarget / static_cast<float>(height));
+    }
+    return 1.0f;
+}
+
+// ref: FUN_1414fd580
+void WindowSetCursorDisabled(bool disabled) {
+    if (static_cast<uint8_t>(disabled) == s_cursorPending) {
+        return;
+    }
+    void* window = WindowGetHandle();
+    uint32_t time = OsGetAsyncTimeMs();
+    if (disabled) {
+        OsCursorDisable(window, time);
+        s_cursorPending = 1;
+        return;
+    }
+    OsCursorEnable(window, time);
+    s_cursorPending = 0;
+}
+
+// The HardwareCursor CVar: a software cursor drops the hardware one; going back restores
+// what the cursor was before (DAT_142d08258).
+// ref: FUN_1414fca60
+void ClientSetHardwareCursor(bool software) {
+    if (s_cursorEnable == static_cast<uint8_t>(software)) {
+        return;
+    }
+    s_cursorEnable = software;
+    if (software) {
+        WindowSetCursorDisabled(false);
+        return;
+    }
+    WindowSetCursorDisabled(s_cursorWasDisabled != 0);
 }
 
 // ref: FUN_1414f8d70

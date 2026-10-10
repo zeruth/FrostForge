@@ -24,11 +24,22 @@ def main() -> None:
     insns = list(md.disasm(code, FUNC))
     regs = {}
     ids = set()
+    at = {insn.address: n for n, insn in enumerate(insns)}
     for n, insn in enumerate(insns):
         ops = insn.operands
         if insn.mnemonic in ("movabs", "mov") and len(ops) == 2 and ops[0].type == capstone.x86.X86_OP_REG \
                 and ops[1].type == capstone.x86.X86_OP_IMM:
             regs[ops[0].reg] = ops[1].imm & 0xFFFFFFFFFFFFFFFF
+            # An id loaded just before a jump into a shared `cmp rcx, <reg>; sete` tail is
+            # tested there, not here.
+            following = insns[n + 1] if n + 1 < len(insns) else None
+            if following is not None and following.mnemonic == "jmp" and following.operands[0].type == capstone.x86.X86_OP_IMM:
+                target = at.get(following.operands[0].imm)
+                if target is not None and target + 1 < len(insns):
+                    tail = insns[target]
+                    if tail.mnemonic == "cmp" and tail.op_str == f"rcx, {insn.reg_name(ops[0].reg)}" \
+                            and insns[target + 1].mnemonic in ("je", "sete"):
+                        ids.add(ops[1].imm & 0xFFFFFFFFFFFFFFFF)
             continue
         if insn.mnemonic != "cmp" or len(ops) != 2:
             continue

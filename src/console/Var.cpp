@@ -178,8 +178,8 @@ static_assert(offsetof(CVarMap, m_maxLoad) == 0x20, "CVarMap layout");
 
 CVarMap s_cvars;  // 0x142ccbd68
 
-// DAT_142e260a8: called after a value changes, with the old and new value. Nothing in the
-// reference writes it through a direct reference.
+// DAT_142e260a8: called after a value changes, with the old and new value. The client sets it
+// (CVarSetChangedHandler) when it registers its own variables.
 void (*s_cvarChanged)(CVar* cvar, const char* oldValue, const char* newValue);
 
 uint8_t s_cvarsDirty;       // DAT_142e260b0: something to write back to Config.wtf
@@ -842,6 +842,11 @@ bool CVarApplyLatched(CVar* cvar) {
     }
     cvar->m_latchedValue.m_str = nullptr;
     return true;
+}
+
+// ref: FUN_140322640
+void CVarSetChangedHandler(void (*handler)(CVar* cvar, const char* oldValue, const char* newValue)) {
+    s_cvarChanged = handler;
 }
 
 // Sets up the CVar system: the lock, optionally the directories down to <cwd>\WTF (each

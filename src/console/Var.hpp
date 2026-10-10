@@ -71,6 +71,9 @@ void CVarUpdate(CVar* cvar, const char* value, bool setValue, bool setReset, boo
 // Finds a CVar by the case-insensitive FNV-1a hash of its name.
 CVar* CVarLookup(uint64_t nameHash);
 
+// The hook every value change is reported to.
+void CVarSetChangedHandler(void (*handler)(CVar* cvar, const char* oldValue, const char* newValue));
+
 // True when the CVar has a default and holds it.
 bool CVarIsDefault(CVar* cvar);
 

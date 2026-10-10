@@ -36,4 +36,8 @@ bool ConsoleCommandExecute(const char* text, int32_t addToHistory);
 
 void ConsoleWriteFormat(uint32_t color, const char* format, ...);
 
+// The key that toggles the console (the ConsoleKey CVar), and its getter.
+void ConsoleSetHotKey(int32_t key);
+int32_t ConsoleGetHotKey();
+
 #endif

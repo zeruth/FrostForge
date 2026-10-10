@@ -1,3 +1,4 @@
+#include "client/ClientCVars.hpp"
 #include "client/ConsoleDevice.hpp"
 #include "client/FrameBufferCache.hpp"
 #include "client/RenderSettings.hpp"
@@ -248,12 +249,6 @@ void Sub14024D040() {
     FROST_UNIMPLEMENTED();
 }
 
-// The client's account and UI CVars (accountName, luaErrorExceptions, ...).
-// ref: FUN_14024c220
-void Sub14024C220() {
-    FROST_UNIMPLEMENTED();
-}
-
 // The callback the script error dialog uses (FUN_141672420), kept at 0x142e9cf80.
 // ref: FUN_14068b740
 void Sub14068B740() {
@@ -404,7 +399,7 @@ void Sub14023DBD0() {
     Sub141283C90();
     Sub140238BC0();
     Sub14024D040();
-    Sub14024C220();
+    ClientRegisterCVars();
     Sub14068B740();
     Sub1402165B0();
     Sub14022E810();
@@ -591,7 +586,7 @@ namespace {
 
 uint8_t s_flag142cfdb74;            // DAT_142cfdb74
 uint8_t s_compositorEnabled;        // DAT_142de194c
-uint32_t s_compositorMode;          // DAT_142de1970
+uint32_t s_compositorMode;          // DAT_142de1970: the screenshot size override, {u16 w, u16 h}
 uint8_t s_captureFlip;              // DAT_142e96f72
 uint8_t s_captureRead;              // DAT_142e96f50
 uint8_t s_flag142e96e01;            // DAT_142e96e01
@@ -1202,6 +1197,18 @@ bool Sub14022A260() {
 }
 
 // ---- the frame's callees, ported one by one -------------------------------------------------
+
+// 1 .. 0x4000 each, or 0 for the window's size.
+// ref: FUN_14023a3f0
+void ClientSetScreenshotSize(const uint16_t* size) {
+    if (size[0] == 0 || size[1] == 0) {
+        s_compositorMode = 0;
+        return;
+    }
+    uint32_t width = size[0] > 0x4000 ? 0x4000 : size[0];
+    uint32_t height = size[1] > 0x4000 ? 0x4000 : size[1];
+    s_compositorMode = (height << 16) | width;
+}
 
 // ref: FUN_14134f980
 bool Sub14134F980() {
