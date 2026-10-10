@@ -457,6 +457,13 @@ void M2SkeletonRelease(void* skeleton) {
     FROST_UNIMPLEMENTED();
 }
 
+// FUN_1411f9040: a skeleton file's reads waited on.
+bool M2SkeletonWaitForLoad(void* skeleton) {
+    (void)skeleton;
+    FROST_UNIMPLEMENTED();
+    return false;
+}
+
 // A skeleton file's sequences: never reached until skeleton files are read.
 M2Array<M2Sequence>* M2SkeletonSharedSequences(void* skeleton) {
     (void)skeleton;

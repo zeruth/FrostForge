@@ -38,7 +38,9 @@ class CM2Scene {
     uint8_t m_d678[0xd6a8 - 0xd678];
     // The wind: direction, speed and gust (the last argument 0).
     void (*m_windCallback)(float* direction, float* speed, float* gust, void* param);  // 0xd6a8
-    uint8_t m_d6b0[0xdae8 - 0xd6b0];
+    uint8_t m_d6b0[0xd790 - 0xd6b0];
+    void* m_rayTracing;                 // 0xd790
+    uint8_t m_d798[0xdae8 - 0xd798];
     bool m_collectDrawParams;           // 0xdae8
     bool m_bucketModels;                // 0xdae9
     uint8_t m_daea[0xdb1c - 0xdaea];
@@ -78,6 +80,8 @@ inline void M2SceneSampleWind(CM2Scene* scene, float* direction, float* speed, f
 // The scene's ray tracing (FUN_1411ddad0) and a model's entry in it (FUN_141260140).
 void* M2SceneGetRayTracing(CM2Scene* scene);
 void RayTracingRegisterModel(void* rayTracing, void* entry, uint32_t size);
+// A registered model's instance marked for an update (FUN_14125ff50): `entry` is {index, state}.
+void RayTracingMarkDirty(void* rayTracing, const int32_t* entry);
 
 // ref: FUN_1411ace60
 BaseModelDrawParams* M2SceneAddDrawParams(void* array);

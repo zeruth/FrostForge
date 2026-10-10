@@ -43,5 +43,14 @@ void MatrixPerspective(float fieldOfView, float aspect, float zNear, float zFar,
 void MatrixLookAt(const float* eye, const float* direction, const float* up, float* m);
 // Normalises unless the length is about zero (FUN_1411c9970).
 void VectorNormalize(float* v);
+// The inverse of a rotation and translation: the rotation transposed, the translation turned
+// back through it (FUN_1413416d0).
+float* MatrixRigidInverse(const float* m, float* out);
+// Boxes are {min, max}; spheres {center, radius}. A box through a matrix, as the box around the
+// transformed corners (FUN_141348d40); the box around spheres (FUN_141349220); the sphere around
+// spheres, centred on that box (FUN_141348eb0).
+float* BoxTransform(float* out, const float* box, const float* m);
+float* BoxFromSpheres(float* out, const float* spheres, uint32_t count);
+float* SphereFromSpheres(float* out, const float* spheres, uint32_t count);
 
 #endif

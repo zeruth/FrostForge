@@ -362,7 +362,7 @@ void CM2Model::AnimateBone(const M2CompBone* bone, M2BoneState* state, uint32_t 
                 context->m_pivot.z = translation.z + context->m_pivot.z;
             }
             // A bone file's offset for this bone.
-            if (static_cast<int32_t>(this->m_618) != -1) {
+            if (this->m_618 != -1) {
                 CM2BoneOffset* offsets = M2SharedGetBoneOffset(this->m_shared, static_cast<uint32_t>(this->m_618));
                 if (offsets != nullptr && M2BoneOffsetIsLoaded(offsets)) {
                     uint16_t remap = offsets->m_boneIndices[index];

@@ -12,6 +12,7 @@
 class CParticleGenerator;
 class CM2Model;
 class CM2Scene;
+struct C44Matrix;
 
 class CParticleEmitter2 {
     public:
@@ -36,6 +37,8 @@ static_assert(sizeof(CParticleEmitter2) == 0x2f8, "CParticleEmitter2 is 0x2f8 by
 // A bone generator's model (FUN_14125c0d0) and its bones taken from it (FUN_14125b960).
 void ParticleGeneratorSetModel(CParticleGenerator* generator, CM2Model* model);
 void ParticleGeneratorInitializeBones(CParticleGenerator* generator);
+// The matrix the emitter's particles are kept relative to, null for world space (FUN_141249ed0).
+void ParticleEmitterSetParentMatrix(CParticleEmitter2* emitter, const C44Matrix* matrix);
 // Whether the emitter or any child has particles alive (FUN_14124bd50).
 bool ParticleEmitterHasParticles(const CParticleEmitter2* emitter);
 

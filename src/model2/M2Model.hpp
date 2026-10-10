@@ -31,6 +31,16 @@ struct C44Matrix {
     float m[16];
 };
 
+// The bounds a model collects over its animation (0x44, "M2 Accum Bounds Pool").
+struct M2AccumBounds {
+    CAaBox m_box;                       // 0x00 the animated boxes so far
+    CAaBox m_localBox;                  // 0x18 the same through the inverse render matrix
+    C3Vector m_center;                  // 0x30
+    float m_radius;                     // 0x3c
+    uint32_t m_40;
+};
+static_assert(sizeof(M2AccumBounds) == 0x44, "M2AccumBounds is 0x44 bytes");
+
 // The engine's interlocked reference counts (FUN_1402c8fb0 up, FUN_1402c8fc0 down): the new count.
 int32_t M2RefIncrement(int32_t* count);
 int32_t M2RefDecrement(int32_t* count);
@@ -160,33 +170,33 @@ class CM2BaseModel {
     // ref: FUN_1411e5f20
     virtual ~CM2BaseModel();
     virtual void WaitForLoad(int32_t a2) = 0;                                       // 0x008
-    virtual float* GetLocalBounds(float* out) = 0;                                  // 0x010
+    virtual float* GetBounds(float* out) = 0;                                       // 0x010 a box
     virtual bool AreTexturesReady() = 0;                                            // 0x018
     virtual int32_t GetLoadState() = 0;                                             // 0x020 2 ready
-    virtual void Virtual028() = 0;                                                  // 0x028
-    virtual void Virtual030() = 0;                                                  // 0x030
-    virtual void Virtual038() = 0;                                                  // 0x038
-    virtual void Virtual040() = 0;                                                  // 0x040
-    virtual void Virtual048() = 0;                                                  // 0x048
+    virtual void WaitForAll() = 0;                                                  // 0x028
+    virtual void WaitForTextures() = 0;                                             // 0x030
+    virtual bool SetPriority(int32_t priority, bool textures) = 0;                  // 0x038
+    virtual float* GetAnimatedSphere(float* out) = 0;                               // 0x040
+    virtual float* GetAnimatedBox(float* out, bool effects) = 0;                    // 0x048
     virtual float* GetBoundingBox(float* out) = 0;                                  // 0x050
-    virtual void Virtual058() = 0;                                                  // 0x058
-    virtual void Virtual060() = 0;                                                  // 0x060
-    virtual void Virtual068() = 0;                                                  // 0x068
-    virtual void SetAttachMatrix(const C44Matrix* matrix) = 0;                      // 0x070
-    virtual void Virtual078() = 0;                                                  // 0x078
-    virtual void Virtual080() = 0;                                                  // 0x080
+    virtual float GetBoundsRadius() = 0;                                            // 0x058
+    virtual void DetachChildrenAt(int32_t id) = 0;                                  // 0x060
+    virtual void MarkRayTracingDirty() = 0;                                         // 0x068
+    virtual void SetAttachMatrix(C44Matrix* matrix) = 0;                            // 0x070
+    virtual void DisableLights() = 0;                                               // 0x078
+    virtual void CollectEvents(CM2Scene* scene, void* callbacks) = 0;               // 0x080
     virtual int32_t GetFileDataId() = 0;                                            // 0x088
-    virtual void Virtual090() = 0;                                                  // 0x090
+    virtual bool GetContentKey(uint8_t* key) = 0;                                   // 0x090
     virtual bool IsSameFile(CM2BaseModel* other) = 0;                               // 0x098
     virtual bool IsFileDataId(int32_t fileDataId) = 0;                              // 0x0a0
     virtual bool IsFileName(const char* name) = 0;                                  // 0x0a8
-    virtual void Virtual0b0() = 0;                                                  // 0x0b0
+    virtual void CountFiles(int64_t* loaded, int64_t* total) = 0;                   // 0x0b0
     virtual bool AnimateAttachment(int32_t index, bool none) = 0;                   // 0x0b8
     virtual void GetAttachmentWorld(int32_t index, bool none, C44Matrix* out) = 0;  // 0x0c0
     // The attachment point with an id, 0xffff for none.
     virtual uint32_t GetAttachmentIndex(uint32_t id) = 0;                           // 0x0c8
     virtual void GetAttachmentMatrix(uint32_t index, C44Matrix* out) = 0;           // 0x0d0
-    virtual void Virtual0d8() = 0;                                                  // 0x0d8
+    virtual CM2Shared* GetShared() = 0;                                             // 0x0d8
     // ref: FUN_1411e68e0
     virtual void Detach(bool notify);                                               // 0x0e0
     // ref: FUN_1411e7630
@@ -515,11 +525,11 @@ class CM2Model : public CM2BaseModel {
     M2TrackState<float>* m_textureWeights;  // 0x4e8 (0xc each)
     M2TextureTransformState* m_textureTransforms;  // 0x4f0
     C44Matrix* m_textureMatrices;       // 0x4f8
-    void* m_500;                        // 0x500
-    void* m_508;                        // 0x508
+    void (*m_effectMatrixCallback)(const C44Matrix* matrix, void* param);  // 0x500
+    void* m_effectMatrixParam;          // 0x508
     void* m_510;                        // 0x510
     C44Matrix m_attachWorld;            // 0x518
-    C44Matrix* m_558;                   // 0x558
+    C44Matrix* m_558;                   // 0x558 the attachment matrix set from outside
     void* m_effect2;                    // 0x560 the "M2 Model Effect Pool"
     C3Vector m_color;                   // 0x568
     C3Vector m_colorAdd;                // 0x574
@@ -544,9 +554,9 @@ class CM2Model : public CM2BaseModel {
     void* m_600;                        // 0x600
     uint32_t m_608;                     // 0x608
     uint32_t m_pad60c;
-    void* m_610;                        // 0x610
-    uint64_t m_618;                     // 0x618 -1
-    uint32_t m_620;                     // 0x620
+    M2AccumBounds* m_accumBounds;       // 0x610 the "M2 Accum Bounds Pool", with model flag 0x800000
+    int32_t m_618;                      // 0x618 the bone file index, -1
+    int32_t m_rtEntry[2];               // 0x61c the ray tracing entry: its index and state (2 registered)
     uint32_t m_pad624;
     void* m_skeleton;                   // 0x628 FUN_1411f9c00
     M2AnimState* m_animState;           // 0x630
@@ -574,39 +584,73 @@ class CM2Model : public CM2BaseModel {
     // ref: FUN_1411ad860
     ~CM2Model() override;
 
+    // ref: FUN_1411cecd0
     void WaitForLoad(int32_t a2) override;
-    float* GetLocalBounds(float* out) override;
+    // ref: FUN_1411b9730
+    float* GetBounds(float* out) override;
     // ref: FUN_1411c61f0
     bool AreTexturesReady() override;
+    // ref: FUN_1411b9820
     int32_t GetLoadState() override;
-    void Virtual028() override;
-    void Virtual030() override;
-    void Virtual038() override;
-    void Virtual040() override;
-    void Virtual048() override;
+    // ref: FUN_1411ced60
+    void WaitForAll() override;
+    // ref: FUN_1411cece0
+    void WaitForTextures() override;
+    // ref: FUN_1411c9b60
+    bool SetPriority(int32_t priority, bool textures) override;
+    // ref: FUN_1411bbf90
+    float* GetAnimatedSphere(float* out) override;
+    // ref: FUN_1411bbb80
+    float* GetAnimatedBox(float* out, bool effects) override;
     // ref: FUN_1411bbdf0
     float* GetBoundingBox(float* out) override;
-    void Virtual058() override;
-    void Virtual060() override;
-    void Virtual068() override;
-    void SetAttachMatrix(const C44Matrix* matrix) override;
-    void Virtual078() override;
-    void Virtual080() override;
+    // ref: FUN_1411c0320
+    float GetBoundsRadius() override;
+    // ref: FUN_1411b7040
+    void DetachChildrenAt(int32_t id) override;
+    // ref: FUN_1411c7bb0
+    void MarkRayTracingDirty() override;
+    // ref: FUN_1411b60b0
+    void SetAttachMatrix(C44Matrix* matrix) override;
+    // ref: FUN_1411b77d0
+    void DisableLights() override;
+    // ref: FUN_1411b8e80
+    void CollectEvents(CM2Scene* scene, void* callbacks) override;
+    // ref: FUN_1411bd840
     int32_t GetFileDataId() override;
-    void Virtual090() override;
+    // ref: FUN_1411bbb60
+    bool GetContentKey(uint8_t* key) override;
     // ref: FUN_1411c6270
     bool IsSameFile(CM2BaseModel* other) override;
     // ref: FUN_1411c62a0
     bool IsFileDataId(int32_t fileDataId) override;
     // ref: FUN_1411c62c0
     bool IsFileName(const char* name) override;
-    void Virtual0b0() override;
+    // ref: FUN_1411b6590
+    void CountFiles(int64_t* loaded, int64_t* total) override;
+    // ref: FUN_1411ce0d0
     bool AnimateAttachment(int32_t index, bool none) override;
+    // ref: FUN_1411b98e0
     void GetAttachmentWorld(int32_t index, bool none, C44Matrix* out) override;
     // ref: FUN_1411b9a80
     uint32_t GetAttachmentIndex(uint32_t id) override;
+    // ref: FUN_1411ba010
     void GetAttachmentMatrix(uint32_t index, C44Matrix* out) override;
-    void Virtual0d8() override;
+    // ref: FUN_1411c0480
+    CM2Shared* GetShared() override;
+    // One bone animated now for something attached to it (FUN_1411ae3a0), and the transform for a
+    // new frame without clearing the bone-done bits (FUN_1411ce120).
+    bool AnimateBoneFor(uint32_t bone);
+    void UpdateFrameTransform(const C44Matrix* parent, const CM2ModelParams* params, uint32_t frame, int32_t time);
+    // The particle emitters and ribbons follow a new attachment matrix (FUN_1411b5fe0).
+    void SetEffectMatrix(const C44Matrix* matrix);
+    // The particle emitters' and ribbons' spheres around the model's (FUN_1411bc940) and their
+    // boxes (FUN_1411bc710).
+    float* GetEffectSphere(float* out);
+    float* GetEffectBox(float* out);
+    // The animation events between the last frame and this one, queued as callbacks
+    // (FUN_1411b8670).
+    bool QueueEvents(CM2Scene* scene, void* callbacks);
 
     // Bone animation (M2ModelAnimate.cpp). A slot shifted by this frame's pause.
     void ShiftSlotForPause(M2SequenceTime* slot, const M2AnimateContext* context);

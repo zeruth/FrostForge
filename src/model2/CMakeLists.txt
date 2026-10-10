@@ -9,6 +9,7 @@ add_library(model2 STATIC
     M2ModelAnimate.cpp
     M2ModelAttach.cpp
     M2ModelUpdate.cpp
+    M2ModelVirtual.cpp
     M2Particle.cpp
     M2Scene.cpp
     M2Sequence.cpp

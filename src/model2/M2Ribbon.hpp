@@ -10,9 +10,13 @@
 
 #include "model2/M2Data.hpp"
 
+struct C44Matrix;
+
 class CRibbonEmitter {
     public:
-    uint8_t m_00[0x120];
+    uint8_t m_00[0xb4];
+    CAaBox m_bounds;                    // 0xb4 around the edges
+    uint8_t m_cc[0x120 - 0xcc];
     void* m_texture2;                   // 0x120 a second texture: three layers instead of one
     uint8_t m_128[0x1cc - 0x128];
     float m_heightAbove;                // 0x1cc
@@ -22,6 +26,8 @@ class CRibbonEmitter {
 static_assert(offsetof(CRibbonEmitter, m_heightAbove) == 0x1cc, "CRibbonEmitter heights at 0x1cc");
 static_assert(sizeof(CRibbonEmitter) == 0x1d8, "CRibbonEmitter is 0x1d8 bytes");
 
+// The matrix the ribbon's edges are kept relative to, null for world space (FUN_1412966b0).
+void RibbonEmitterSetParentMatrix(CRibbonEmitter* ribbon, const C44Matrix* matrix);
 // ref: FUN_141296be0
 void RibbonEmitterSetColor(CRibbonEmitter* ribbon, float r, float g, float b);
 // ref: FUN_141296bc0

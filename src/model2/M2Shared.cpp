@@ -1769,6 +1769,64 @@ uint32_t M2SharedLodBoneMask(CM2Shared* shared, uint32_t lod) {
     return 0x10000u << ((lod - 1) & 0x1f);
 }
 
+// ref: FUN_1411acd30
+bool CM2Shared::WaitForLoad() {
+    bool waited = this->m_asyncObject != nullptr;
+    if (waited) {
+        AsyncFileWait(this->m_asyncObject);
+    }
+    if (this->m_skeleton != nullptr) {
+        waited = M2SkeletonWaitForLoad(this->m_skeleton);
+    }
+    for (CM2SkinProfileLoad* load = this->m_skinProfileLoads.Head(); load != nullptr;) {
+        CM2SkinProfileLoad* next = this->m_skinProfileLoads.Next(load);
+        AsyncFileWait(load->m_asyncObject);
+        waited = true;
+        load = next;
+        if ((this->m_flags & SHARED_ERROR) != 0) {
+            break;
+        }
+    }
+    for (CM2BoneOffsetLoad* load = this->m_boneOffsetLoads.Head(); load != nullptr;) {
+        CM2BoneOffsetLoad* next = this->m_boneOffsetLoads.Next(load);
+        AsyncFileWait(load->m_asyncObject);
+        waited = true;
+        if ((this->m_flags & SHARED_ERROR) != 0) {
+            return true;
+        }
+        load = next;
+    }
+    return waited;
+}
+
+// ref: FUN_1411ac0e0
+bool CM2Shared::SetPriority(int32_t priority, bool textures) {
+    if (this->m_asyncObject != nullptr && !AsyncFileSetSortKey(this->m_asyncObject, priority)) {
+        return false;
+    }
+    if (textures && (this->m_flags & SHARED_LOADED) != 0) {
+        for (uint32_t i = 0; i < this->m_data->m_textures.Count(); i++) {
+            auto texture = static_cast<HTEXTURE>(this->m_textures[i]);
+            if (texture != nullptr && !TextureSetPriority(texture, priority)) {
+                return false;
+            }
+        }
+    }
+    for (CM2SkinProfileLoad* load = this->m_skinProfileLoads.Head(); load != nullptr;
+         load = this->m_skinProfileLoads.Next(load)) {
+        if (load->m_asyncObject != nullptr && !AsyncFileSetSortKey(load->m_asyncObject, priority)) {
+            return false;
+        }
+    }
+    for (CM2BoneOffsetLoad* load = this->m_boneOffsetLoads.Head(); load != nullptr;
+         load = this->m_boneOffsetLoads.Next(load)) {
+        if (load->m_asyncObject != nullptr && !AsyncFileSetSortKey(load->m_asyncObject, priority)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 // ref: FUN_1411ac0d0
 void M2SharedAddSequenceRef(CM2Shared* shared, uint32_t sequence) {
     _InterlockedIncrement(

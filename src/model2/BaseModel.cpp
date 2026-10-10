@@ -391,7 +391,7 @@ void CM2BaseModel::UpdateCulling() {
     uint32_t flags = this->m_flags;
     if (frustum != nullptr && (flags & 0x1001) == 0x1001 && (flags >> 13 & 1) == 0 && (flags & BASE_VISIBLE) != 0) {
         float box[6];
-        this->GetLocalBounds(box);
+        this->GetBounds(box);
         if (box[0] <= box[3] && box[1] <= box[4] && box[2] <= box[5]) {
             int32_t inside = M2FrustumTestBox(static_cast<const float*>(frustum), box);
             this->m_flags = (inside == 0 ? BASE_CULLED : 0u) | (this->m_flags & ~BASE_CULLED);
@@ -497,7 +497,7 @@ void CM2BaseModel::RemoveFromScene() {
 // ref: FUN_1411e6a90
 void M2BaseModelNotifyTree(CM2BaseModel* model) {
     for (CM2BaseModel* child = model->m_children; child != nullptr; child = child->m_siblingNext) {
-        child->Virtual078();
+        child->DisableLights();
         M2BaseModelNotifyTree(child);
     }
 }
@@ -841,7 +841,7 @@ void CM2BaseModel::PrepareLighting(int32_t pass, uint32_t propagate) {
             reinterpret_cast<uint8_t*>(this->m_scene) + (static_cast<int64_t>(pass) * 3 + 0x65) * 8);
         params->m_model = this;
         float box[6];
-        this->GetLocalBounds(box);
+        this->GetBounds(box);
         for (int32_t i = 0; i < 6; i++) {
             params->m_box[i] = box[i];
         }

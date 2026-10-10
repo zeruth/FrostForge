@@ -584,7 +584,7 @@ void CM2Model::UpdateDrawables(int32_t pass, uint32_t time, uint32_t a4) {
             reinterpret_cast<uint8_t*>(this->m_scene) + static_cast<int64_t>(pass) * 0x18 + 0x328);
         params->m_model = this;
         float box[6];
-        this->GetLocalBounds(box);
+        this->GetBounds(box);
         std::memcpy(params->m_box, box, sizeof(box));
         listed = true;
     }

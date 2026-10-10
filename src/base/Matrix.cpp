@@ -384,6 +384,150 @@ void MatrixLookAt(const float* eye, const float* direction, const float* up, flo
     MatrixTranslate(m, move);
 }
 
+// ref: FUN_1413416d0
+float* MatrixRigidInverse(const float* m, float* out) {
+    // FUN_1413449a0: the 3x3 part
+    float r[9] = {m[0], m[1], m[2], m[4], m[5], m[6], m[8], m[9], m[10]};
+    float tx = -m[12];
+    float ty = -m[13];
+    float tz = -m[14];
+    out[3] = 0.0f;
+    out[4] = r[1];
+    out[7] = 0.0f;
+    out[8] = r[2];
+    out[11] = 0.0f;
+    out[15] = 1.0f;
+    out[1] = r[3];
+    out[2] = r[6];
+    out[5] = r[4];
+    out[6] = r[7];
+    out[9] = r[5];
+    out[14] = ty * r[7] + tx * r[6] + tz * r[8];
+    out[10] = r[8];
+    out[13] = ty * r[4] + tx * r[3] + tz * r[5];
+    out[0] = r[0];
+    out[12] = ty * r[1] + tx * r[0] + tz * r[2];
+    return out;
+}
+
+// ref: FUN_141348d40
+float* BoxTransform(float* out, const float* box, const float* m) {
+    out[0] = m[12];
+    out[1] = m[13];
+    out[2] = m[14];
+    out[3] = m[12];
+    out[4] = m[13];
+    out[5] = m[14];
+    for (int32_t i = 0; i < 3; i++) {
+        for (int32_t row = 0; row < 3; row++) {
+            float a = m[row * 4 + i] * box[row];
+            float b = m[row * 4 + i] * box[row + 3];
+            float low = a;
+            float high = b;
+            if (a < b) {
+                low = a;
+                high = b;
+            } else {
+                low = b;
+                high = a;
+            }
+            out[i] += low;
+            out[i + 3] += high;
+        }
+    }
+    return out;
+}
+
+// ref: FUN_141349220
+float* BoxFromSpheres(float* out, const float* spheres, uint32_t count) {
+    if (count == 0) {
+        for (int32_t i = 0; i < 6; i++) {
+            out[i] = 0.0f;
+        }
+        return out;
+    }
+    float r = spheres[3];
+    float minX = spheres[0] - r;
+    float minY = spheres[1] - r;
+    float minZ = spheres[2] - r;
+    float maxX = spheres[0] + r;
+    float maxY = spheres[1] + r;
+    float maxZ = spheres[2] + r;
+    for (uint32_t i = 1; i < count; i++) {
+        const float* s = spheres + i * 4;
+        float sr = s[3];
+        if (maxX < s[0] + sr) {
+            maxX = s[0] + sr;
+        }
+        if (s[0] - sr < minX) {
+            minX = s[0] - sr;
+        }
+        if (maxY < s[1] + sr) {
+            maxY = s[1] + sr;
+        }
+        if (s[2] - sr < minZ) {
+            minZ = s[2] - sr;
+        }
+        if (s[1] - sr < minY) {
+            minY = s[1] - sr;
+        }
+        if (maxZ < s[2] + sr) {
+            maxZ = s[2] + sr;
+        }
+    }
+    out[0] = minX;
+    out[1] = minY;
+    out[2] = minZ;
+    out[3] = maxX;
+    out[4] = maxY;
+    out[5] = maxZ;
+    return out;
+}
+
+// ref: FUN_141348eb0
+float* SphereFromSpheres(float* out, const float* spheres, uint32_t count) {
+    if (count == 0) {
+        out[0] = 0.0f;
+        out[1] = 0.0f;
+        out[2] = 0.0f;
+        out[3] = 0.0f;
+        return out;
+    }
+    if (count == 1) {
+        out[0] = spheres[0];
+        out[1] = spheres[1];
+        out[2] = spheres[2];
+        out[3] = spheres[3];
+        return out;
+    }
+    float box[6];
+    BoxFromSpheres(box, spheres, count);
+    if (box[3] <= box[0] || box[4] <= box[1] || box[5] <= box[2]) {
+        out[0] = box[0];
+        out[1] = box[1];
+        out[2] = box[2];
+        out[3] = 0.0f;
+        return out;
+    }
+    float cx = (box[3] + box[0]) * 0.5f;  // DAT_14261a988
+    float cy = (box[4] + box[1]) * 0.5f;
+    float cz = (box[5] + box[2]) * 0.5f;
+    float radius = 0.0f;
+    for (uint32_t i = 0; i < count; i++) {
+        const float* s = spheres + i * 4;
+        float d2 = (s[1] - cy) * (s[1] - cy) + (s[0] - cx) * (s[0] - cx) + (s[2] - cz) * (s[2] - cz);
+        float gap = radius - s[3];
+        if (gap < 0.0f || gap * gap < d2) {
+            radius = std::sqrt(d2) + s[3];
+        }
+    }
+    out[0] = cx;
+    out[1] = cy;
+    out[2] = cz;
+    out[3] = radius;
+    return out;
+}
+
 // ref: FUN_1411c9970
 void VectorNormalize(float* v) {
     float length = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];

@@ -80,3 +80,30 @@ void M2SceneGatherLights(CM2Scene* scene, CM2ModelLighting* lighting) {
     (void)lighting;
     FROST_UNIMPLEMENTED();
 }
+
+// ref: FUN_1411ddad0
+void* M2SceneGetRayTracing(CM2Scene* scene) {
+    return scene->m_rayTracing;
+}
+
+// The ray tracing is never made yet: with it null, nothing registers.
+// ref: FUN_141260140
+void RayTracingRegisterModel(void* rayTracing, void* entry, uint32_t size) {
+    (void)rayTracing;
+    (void)entry;
+    (void)size;
+    FROST_UNIMPLEMENTED();
+}
+
+// ref: FUN_14125ff50
+void RayTracingMarkDirty(void* rayTracing, const int32_t* entry) {
+    int32_t index = entry[0];
+    auto base = static_cast<uint8_t*>(rayTracing);
+    if (index == -1 || entry[1] != 2 || *reinterpret_cast<int32_t*>(base + 0x68) <= index) {
+        return;
+    }
+    uint8_t* instance = (*reinterpret_cast<uint8_t***>(base + 0x60))[index];
+    if (instance != nullptr) {
+        instance[0x80] |= 1;
+    }
+}

@@ -285,6 +285,11 @@ struct CM2Shared {
     void ReleaseBoneData();
     void ClearChunkData();
 
+    // Waits for the file's reads: the model, its skeleton, skin profiles and bone files
+    // (FUN_1411acd30); whether any was waited on.
+    bool WaitForLoad();
+    // The reads' priority, and the textures' when asked (FUN_1411ac0e0); false when one refused.
+    bool SetPriority(int32_t priority, bool textures);
     // The name or "Model not loaded" (FUN_1411a85d0).
     const char* GetDisplayName();
     // The bones (the skeleton's when there is one, FUN_1411a86a0).
@@ -377,6 +382,8 @@ void M2SkinProfileRelease(CM2SkinProfileData* skin);
 // (FUN_1411f8840).
 void M2SharedProceduralRelease(CM2Shared* shared);
 void M2SkeletonRelease(void* skeleton);
+// Waits for a skeleton file's reads (FUN_1411f9040).
+bool M2SkeletonWaitForLoad(void* skeleton);
 // A skeleton file's sequences (its shared data's, through +0x1a8).
 M2Array<M2Sequence>* M2SkeletonSharedSequences(void* skeleton);
 // The index of sequence `id` through the id hash, 0xffff when missing (FUN_1411fed70).
