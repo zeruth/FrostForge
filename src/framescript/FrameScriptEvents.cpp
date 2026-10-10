@@ -195,6 +195,32 @@ blz::vector<FrameScript_Object*, s_objectTag>* EventListenerList::Collect(blz::v
     return out;
 }
 
+EventListenerList* FindEventList(uint64_t id) {
+    if (s_events.m_buckets == nullptr) {
+        return nullptr;
+    }
+    for (EventNode* node = s_events.m_buckets[Bucket(id, s_events.m_bucketCount)]; node != nullptr; node = node->m_next) {
+        if (node->m_key == id) {
+            return &node->m_list;
+        }
+    }
+    return nullptr;
+}
+
+// ref: FUN_140648490
+bool ShouldDeliver(EventListenerList* list, EventListener* listener) {
+    DeferredList* deferred = list->m_deferred;
+    for (DeferredRegistration& entry : *deferred) {
+        if (entry.m_object == listener->m_object) {
+            if (entry.m_op == 1) {
+                return false;
+            }
+            break;
+        }
+    }
+    return listener->m_object->HasScriptAny(0x1a);
+}
+
 // ref: FUN_140647480
 DispatchScope::DispatchScope(EventListenerList* list) : m_list(list) {
     if (list->m_deferred == nullptr) {

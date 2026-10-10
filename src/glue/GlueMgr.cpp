@@ -1,4 +1,12 @@
 #include "glue/GlueMgr.hpp"
+#include "framescript/EventCallbacks.hpp"
+#include "db/DB2Tables.hpp"
+#include "db/DBClient.hpp"
+#include "db/DynamicLifeTimeDB.hpp"
+#include "db/WowClientDB2.hpp"
+#include "db/WowDB2Lookup.hpp"
+#include <cctype>
+#include <cstring>
 #include "glue/GlueScriptAPI.hpp"
 #include "glue/ScriptAPIRegistry.hpp"
 
@@ -275,11 +283,129 @@ void Sub141C9A070(uint32_t value) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_14196ff50
-void Sub14196FF50(uint32_t value) {
-    (void)value;
-    FROST_UNIMPLEMENTED();
+DynamicLifeTimeDB s_globalStrings(&g_globalStringsDB);  // DAT_1431e9ee8
+
+// The C-style escapes a global string's text carries: \n (and a backslash before a line break)
+// is a newline, \a \b \f \r \t \v their controls, up to three decimal digits a byte, and any
+// other character itself. False, with `out` emptied, when the text does not fit or a byte
+// is 0xff or above.
+// ref: FUN_141d06830
+bool GlobalStringUnescape(char* out, uint32_t size, const char* text) {
+    uint32_t length = static_cast<uint32_t>(std::strlen(text));
+    if (length >= size) {
+        out[0] = '\0';
+        return false;
+    }
+    int32_t written = 0;
+    uint32_t i = 0;
+    while (i < length) {
+        uint32_t c = static_cast<uint8_t>(text[i]);
+        if (c == 0xff) {
+            out[0] = '\0';
+            return false;
+        }
+        if (c != '\n' && c != '\r' && c == '\\') {
+            i++;
+            uint8_t next = static_cast<uint8_t>(text[i]);
+            switch (next) {
+            case '\n':
+            case '\r':
+            case 'n':
+                c = '\n';
+                break;
+            case 'a':
+                c = 7;
+                break;
+            case 'b':
+                c = 8;
+                break;
+            case 'f':
+                c = 0xc;
+                break;
+            case 'r':
+                c = 0xd;
+                break;
+            case 't':
+                c = 9;
+                break;
+            case 'v':
+                c = 0xb;
+                break;
+            default:
+                if (!std::isdigit(next)) {
+                    c = next;
+                } else {
+                    // The reference leaves `i` on the character after the digits, which the step
+                    // below then skips.
+                    int32_t digits = 0;
+                    c = 0;
+                    do {
+                        c = c * 10 + (static_cast<uint8_t>(text[i]) - '0');
+                        i++;
+                        digits++;
+                    } while (digits <= 2 && std::isdigit(static_cast<uint8_t>(text[i])));
+                    if (static_cast<int32_t>(c) > 0xff) {
+                        out[0] = '\0';
+                        return false;
+                    }
+                }
+                break;
+            }
+        }
+        out[written] = static_cast<char>(c);
+        written++;
+        i++;
+    }
+    out[written] = '\0';
+    return true;
 }
+
+}
+
+void Sub141970330();
+
+// Sets every GlobalStrings row whose flags include all of `flags` as a script global, its tag
+// the name and its unescaped text the value. Loads the table first when its file is on disk,
+// and asks for the file when it is not.
+// ref: FUN_14196ff50
+void Sub14196FF50(uint32_t flags) {
+    s_globalStrings.AcquireIfUnloaded();
+
+    lua_State* L = FrameScript_GetContext();
+    WowDB2Lookup* lookup = g_globalStringsDB.m_lookup;
+    if (lookup != nullptr) {
+        static char s_text[4000];  // the reference's is on its stack
+        DB2LOOKUPITER it;
+        WowDB2LookupBegin(lookup, &it);
+        while (it.m_index != -2) {
+            auto record = static_cast<const int32_t*>(it.m_record);
+            uint8_t rowFlags = DB2FieldU8(reinterpret_cast<const uint8_t*>(record + 2), 2, 8, &g_globalStringsDB);
+            if ((rowFlags & flags) == flags) {
+                const char* text = record[1] != 0
+                    ? reinterpret_cast<const char*>(record) + record[1] + 4 : "";
+                if (GlobalStringUnescape(s_text, sizeof(s_text), text)) {
+                    lua_pushstring(L, s_text);
+                    const char* tag = record[0] != 0
+                        ? reinterpret_cast<const char*>(record) + record[0] : "";
+                    lua_pushstring(L, tag);
+                    lua_insert(L, -2);
+                    lua_rawset(L, LUA_GLOBALSINDEX);
+                }
+            }
+            lookup->Next(&it);
+        }
+    }
+
+    Sub141970330();
+}
+
+// Drops this caller's hold on the GlobalStrings table, unloading it after the last.
+// ref: FUN_141970330
+void Sub141970330() {
+    s_globalStrings.ReleaseIfLoaded();
+}
+
+namespace {
 
 // Glue script globals and API tables, in registration order.
 
@@ -333,9 +459,11 @@ void SetVisitableUrl(uint32_t index, const char* url) {
     FROST_UNIMPLEMENTED();
 }
 
+// The glue's frames have loaded: FRAMES_LOADED.
 // ref: FUN_1411749f0
 void Sub1411749F0() {
-    FROST_UNIMPLEMENTED();
+    uint8_t args[0x20];
+    EventCallbacks_Fire(0x10e8, 0x295344b1926539ccull, args);
 }
 
 // ref: FUN_14148c1d0

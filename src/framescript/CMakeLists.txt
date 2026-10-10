@@ -1,4 +1,5 @@
 add_library(framescript STATIC
+    EventCallbacks.cpp
     LuaHost.cpp
     LuaMemPool.cpp
     ScriptAPI.cpp

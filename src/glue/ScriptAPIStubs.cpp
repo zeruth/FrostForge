@@ -2205,13 +2205,6 @@ int Lua_C_Timer_NewTimer(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140d302e0
-int Lua_C_UIColor_GetColors(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140d42c80
 int Lua_C_UI_DoesAnyDisplayHaveNotch(lua_State* L) {
     (void)L;

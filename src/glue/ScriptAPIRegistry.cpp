@@ -5,8 +5,10 @@
 
 #include "glue/ScriptAPIRegistry.hpp"
 
+#include "framescript/EventCallbacks.hpp"
 #include "framescript/FrameScript.hpp"
 #include "framescript/ScriptAPI.hpp"
+#include "glue/EventSignals.hpp"
 #include "glue/ScriptAPIHandlers.hpp"
 
 extern "C" {
@@ -20,20 +22,23 @@ void ScriptAPI_C_AccountServices(lua_State* L) {
     ScriptRegisterFunction(L, "C_AccountServices", "IsAccountSaveEnabled", Lua_C_AccountServices_IsAccountSaveEnabled);
     ScriptRegisterFunction(L, "C_AccountServices", "IsAccountSaveInProgress", Lua_C_AccountServices_IsAccountSaveInProgress);
     ScriptRegisterFunction(L, "C_AccountServices", "SaveAccountData", Lua_C_AccountServices_SaveAccountData);
-    // not generated: calls 0x141163990, 0x1411639b0 (callback setters and the like)
+    // not generated: FUN_141163990 installs FUN_1407c6a60, not decoded
+    // not generated: FUN_1411639b0 installs FUN_1407c6b40, not decoded
 }
 
 // ref: FUN_1407d60e0
 void ScriptAPI_C_AddOns(lua_State* L) {
     (void)L;
     ScriptRegisterFunction(L, "C_AddOns", "GetAddOnMetadata", Lua_C_AddOns_GetAddOnMetadata);
-    // not generated: calls 0x141162d30, 0x141162d50 (callback setters and the like)
+    // not generated: FUN_141162d30 installs FUN_1407c7780, not decoded
+    // not generated: FUN_141162d50 installs FUN_1407c7860, not decoded
 }
 
 // ref: FUN_140bca380
 void ScriptRegister_140bca380(lua_State* L) {
     (void)L;
-    // not generated: calls 0x141163930, 0x141163950 (callback setters and the like)
+    // not generated: FUN_141163930 installs FUN_140bb3430, not decoded
+    EventCallbacks_Set(0x2318, EventSignal_SIMPLE_BROWSER_WEB_PROXY_FAILED);  // FUN_141163950
 }
 
 // ref: FUN_140c846d0
@@ -157,7 +162,17 @@ void ScriptEnum_CharacterCreateRaceMode(lua_State* L) {
     ScriptRegisterFunction(L, "C_CharacterCreation", "SetSelectedSex", Lua_C_CharacterCreation_SetSelectedSex);
     ScriptRegisterFunction(L, "C_CharacterCreation", "SetViewingAlteredForm", Lua_C_CharacterCreation_SetViewingAlteredForm);
     ScriptRegisterFunction(L, "C_CharacterCreation", "UpdateCustomizationScene", Lua_C_CharacterCreation_UpdateCustomizationScene);
-    // not generated: calls 0x141163bf0, 0x141163c10, 0x141163c30, 0x141163c50, 0x141163c70, 0x141163c90, 0x141163cb0, 0x141163cd0, 0x141163cf0, 0x141163d10, 0x141163d30 (callback setters and the like)
+    EventCallbacks_Set(0x770, EventSignal_CHAR_RENAME_IN_PROGRESS);  // FUN_141163bf0
+    // not generated: FUN_141163c10 installs FUN_140c51c70, not decoded
+    EventCallbacks_Set(0x790, EventSignal_CHARACTER_DECLINE_IN_PROGRESS);  // FUN_141163c30
+    // not generated: FUN_141163c50 installs FUN_140c51ff0, not decoded
+    EventCallbacks_Set(0x7c0, EventSignal_CHARACTER_LIST_RETRIEVING);  // FUN_141163c70
+    // not generated: FUN_141163c90 installs FUN_140c56c10, not decoded
+    EventCallbacks_Set(0xeb8, EventSignal_CUSTOMIZE_CHARACTER_STARTED);  // FUN_141163cb0
+    EventCallbacks_Set(0xf58, EventSignal_DELETED_CHARACTER_LIST_RETRIEVING);  // FUN_141163cd0
+    // not generated: FUN_141163cf0 installs FUN_140c57a10, not decoded
+    // not generated: FUN_141163d10 installs FUN_140c57af0, not decoded
+    // not generated: FUN_141163d30 installs FUN_140c57e70, not decoded
 }
 
 // ref: FUN_140c869e0
@@ -175,7 +190,33 @@ void ScriptGlobals_CanCreateCharacter(lua_State* L) {
     FrameScript_RegisterFunction("IsCharacterVASRestricted", Lua_IsCharacterVASRestricted);
     FrameScript_RegisterFunction("IsNameReservationOnly", Lua_IsNameReservationOnly);
     FrameScript_RegisterFunction("IsVASEnabledOnRealm", Lua_IsVASEnabledOnRealm);
-    // not generated: calls 0x141163d50, 0x141163d70, 0x141163d90, 0x141163db0, 0x141163dd0, 0x141163df0, 0x141163e10, 0x141163e30, 0x141163e50, 0x141163e70, 0x141163e90, 0x141163eb0, 0x141163ed0, 0x141163ef0, 0x141163f10, 0x141163f30, 0x141163f50, 0x141163f70, 0x141163f90, 0x141163fb0, 0x141163fd0, 0x141163ff0, 0x141164010, 0x141164030, 0x141164050, 0x141164070, 0x141164090 (callback setters and the like)
+    // not generated: FUN_141163d50 installs FUN_140c504d0, not decoded
+    EventCallbacks_Set(0x8, EventSignal_ACCOUNT_DATA_INITIALIZED);  // FUN_141163d70
+    // not generated: FUN_141163d90 installs FUN_140c50690, not decoded
+    EventCallbacks_Set(0x780, EventSignal_CHARACTER_COPY_STATUS_CHANGED);  // FUN_141163db0
+    // not generated: FUN_141163dd0 installs FUN_140c51e30, not decoded
+    // not generated: FUN_141163df0 installs FUN_140c520d0, not decoded
+    // not generated: FUN_141163e10 installs FUN_140c521b0, not decoded
+    // not generated: FUN_141163e30 installs FUN_140c52290, not decoded
+    // not generated: FUN_141163e50 installs FUN_140c52450, not decoded
+    // not generated: FUN_141163e70 installs FUN_140c52530, not decoded
+    EventCallbacks_Set(0x7e0, EventSignal_CHARACTER_UNDELETE_STATUS_CHANGED);  // FUN_141163e90
+    // not generated: FUN_141163eb0 installs FUN_140c526f0, not decoded
+    // not generated: FUN_141163ed0 installs FUN_140c567b0, not decoded
+    EventCallbacks_Set(0xa68, EventSignal_CLIENT_FEATURE_STATUS_CHANGED);  // FUN_141163ef0
+    // not generated: FUN_141163f10 installs FUN_140c56dd0, not decoded
+    EventCallbacks_Set(0x1068, EventSignal_EVENT_CLASS_TRIAL_TIMER_START);  // FUN_141163f30
+    EventCallbacks_Set(0x10d8, EventSignal_FORCE_DECLINE_CHARACTER);  // FUN_141163f50
+    // not generated: FUN_141163f70 installs FUN_140c57150, not decoded
+    EventCallbacks_Set(0x10e8, EventSignal_FRAMES_LOADED);  // FUN_141163f90
+    EventCallbacks_Set(0x1168, EventSignal_GLUE_SCREENSHOT_SUCCEEDED);  // FUN_141163fb0
+    // not generated: FUN_141163fd0 installs FUN_140c57690, not decoded
+    // not generated: FUN_141163ff0 installs FUN_140c57f50, not decoded
+    EventCallbacks_Set(0x2210, EventSignal_SCREEN_FIRST_DISPLAYED);  // FUN_141164010
+    // not generated: FUN_141164030 installs FUN_140c58110, not decoded
+    EventCallbacks_Set(0x29b0, EventSignal_TRIAL_STATUS_UPDATE);  // FUN_141164050
+    EventCallbacks_Set(0x2fa8, EventSignal_UPDATE_NAME_RESERVATION);  // FUN_141164070
+    // not generated: FUN_141164090 installs FUN_140c588f0, not decoded
 }
 
 // ref: FUN_140c86c60
@@ -209,7 +250,9 @@ void ScriptEnum_CharacterServiceInfoFlag(lua_State* L) {
     ScriptRegisterFunction(L, "C_CharacterServices", "HasRequiredBoostForUnrevoke", Lua_C_CharacterServices_HasRequiredBoostForUnrevoke);
     ScriptRegisterFunction(L, "C_CharacterServices", "SetAutomaticBoost", Lua_C_CharacterServices_SetAutomaticBoost);
     ScriptRegisterFunction(L, "C_CharacterServices", "SetAutomaticBoostCharacter", Lua_C_CharacterServices_SetAutomaticBoostCharacter);
-    // not generated: calls 0x1411639f0, 0x141163a10, 0x141163a30 (callback setters and the like)
+    // not generated: FUN_1411639f0 installs FUN_140c50850, not decoded
+    // not generated: FUN_141163a10 installs FUN_140c57850, not decoded
+    // not generated: FUN_141163a30 installs FUN_140c58650, not decoded
 }
 
 // ref: FUN_140c88ac0
@@ -236,13 +279,106 @@ void ScriptAPI_C_ChatInfo(lua_State* L) {
     ScriptRegisterFunction(L, "C_ChatInfo", "SendAddonMessageLogged", Lua_C_ChatInfo_SendAddonMessageLogged);
     ScriptRegisterFunction(L, "C_ChatInfo", "SwapChatChannelsByChannelIndex", Lua_C_ChatInfo_SwapChatChannelsByChannelIndex);
     ScriptRegisterFunction(L, "C_ChatInfo", "UncensorChatLine", Lua_C_ChatInfo_UncensorChatLine);
-    // not generated: calls 0x1411640b0, 0x1411640d0, 0x1411640f0, 0x141164110, 0x141164130, 0x141164150, 0x141164170, 0x141164190, 0x1411641b0, 0x1411641d0, 0x1411641f0, 0x141164210, 0x141164230, 0x141164250, 0x141164270, 0x141164290, 0x1411642b0, 0x1411642d0, 0x1411642f0, 0x141164310, 0x141164330, 0x141164350, 0x141164370, 0x141164390, 0x1411643b0, 0x1411643d0, 0x1411643f0, 0x141164410, 0x141164430, 0x141164450, 0x141164470, 0x141164490, 0x1411644b0, 0x1411644d0, 0x1411644f0, 0x141164510, 0x141164530, 0x141164550, 0x141164570, 0x141164590, 0x1411645b0, 0x1411645d0, 0x1411645f0, 0x141164610, 0x141164630, 0x141164650, 0x141164670, 0x141164690, 0x1411646b0, 0x1411646d0, 0x1411646f0, 0x141164710, 0x141164730, 0x141164750, 0x141164770, 0x141164790, 0x1411647b0, 0x1411647d0, 0x1411647f0, 0x141164810, 0x141164830, 0x141164850, 0x141164870, 0x141164890, 0x1411648b0, 0x1411648d0, 0x1411648f0, 0x141164910, 0x141164930, 0x141164950, 0x141164970, 0x141164990, 0x1411649b0, 0x1411649d0, 0x1411649f0, 0x141164a10, 0x141164a30, 0x141164a50, 0x141164a70, 0x141164a90, 0x141164ab0, 0x141164ad0, 0x141164af0, 0x141164b10, 0x141164b30, 0x141164b50, 0x141164b70, 0x141164b90, 0x141164bb0, 0x141164bd0, 0x141164bf0 (callback setters and the like)
+    EventCallbacks_Set(0x288, EventSignal_ALTERNATIVE_DEFAULT_LANGUAGE_CHANGED);  // FUN_1411640b0
+    // not generated: FUN_1411640d0 installs FUN_140c50930, not decoded
+    // not generated: FUN_1411640f0 installs FUN_140c51570, not decoded
+    // not generated: FUN_141164110 installs FUN_140c51650, not decoded
+    // not generated: FUN_141164130 installs FUN_140c51730, not decoded
+    // not generated: FUN_141164150 installs FUN_140c51810, not decoded
+    // not generated: FUN_141164170 installs FUN_140c518f0, not decoded
+    // not generated: FUN_141164190 installs FUN_140c519d0, not decoded
+    EventCallbacks_Set(0x768, EventSignal_CHANNEL_UI_UPDATE);  // FUN_1411641b0
+    // not generated: FUN_1411641d0 installs FUN_140c527d0, not decoded
+    // not generated: FUN_1411641f0 installs FUN_140c528b0, not decoded
+    // not generated: FUN_141164210 installs FUN_140c52990, not decoded
+    // not generated: FUN_141164230 installs FUN_140c52a70, not decoded
+    // not generated: FUN_141164250 installs FUN_140c52b50, not decoded
+    // not generated: FUN_141164270 installs FUN_140c52c30, not decoded
+    // not generated: FUN_141164290 installs FUN_140c52d10, not decoded
+    // not generated: FUN_1411642b0 installs FUN_140c52df0, not decoded
+    // not generated: FUN_1411642d0 installs FUN_140c52ed0, not decoded
+    // not generated: FUN_1411642f0 installs FUN_140c52fb0, not decoded
+    // not generated: FUN_141164310 installs FUN_140c53090, not decoded
+    // not generated: FUN_141164330 installs FUN_140c53170, not decoded
+    // not generated: FUN_141164350 installs FUN_140c53250, not decoded
+    // not generated: FUN_141164370 installs FUN_140c53330, not decoded
+    // not generated: FUN_141164390 installs FUN_140c53410, not decoded
+    // not generated: FUN_1411643b0 installs FUN_140c534f0, not decoded
+    // not generated: FUN_1411643d0 installs FUN_140c535d0, not decoded
+    // not generated: FUN_1411643f0 installs FUN_140c536b0, not decoded
+    // not generated: FUN_141164410 installs FUN_140c53790, not decoded
+    // not generated: FUN_141164430 installs FUN_140c53870, not decoded
+    // not generated: FUN_141164450 installs FUN_140c53950, not decoded
+    // not generated: FUN_141164470 installs FUN_140c53a30, not decoded
+    // not generated: FUN_141164490 installs FUN_140c53b10, not decoded
+    // not generated: FUN_1411644b0 installs FUN_140c53bf0, not decoded
+    // not generated: FUN_1411644d0 installs FUN_140c53cd0, not decoded
+    // not generated: FUN_1411644f0 installs FUN_140c53db0, not decoded
+    // not generated: FUN_141164510 installs FUN_140c53e90, not decoded
+    // not generated: FUN_141164530 installs FUN_140c53f70, not decoded
+    // not generated: FUN_141164550 installs FUN_140c54050, not decoded
+    // not generated: FUN_141164570 installs FUN_140c54130, not decoded
+    // not generated: FUN_141164590 installs FUN_140c54210, not decoded
+    // not generated: FUN_1411645d0 installs FUN_140c544b0, not decoded
+    // not generated: FUN_1411645b0 installs FUN_140c542f0, not decoded
+    // not generated: FUN_1411645f0 installs FUN_140c543d0, not decoded
+    // not generated: FUN_141164610 installs FUN_140c54590, not decoded
+    // not generated: FUN_141164630 installs FUN_140c54670, not decoded
+    // not generated: FUN_141164650 installs FUN_140c54750, not decoded
+    // not generated: FUN_141164670 installs FUN_140c54830, not decoded
+    // not generated: FUN_141164690 installs FUN_140c54910, not decoded
+    // not generated: FUN_1411646b0 installs FUN_140c549f0, not decoded
+    // not generated: FUN_1411646d0 installs FUN_140c54ad0, not decoded
+    // not generated: FUN_1411646f0 installs FUN_140c54bb0, not decoded
+    // not generated: FUN_141164710 installs FUN_140c54c90, not decoded
+    // not generated: FUN_141164730 installs FUN_140c54d70, not decoded
+    // not generated: FUN_141164750 installs FUN_140c54e50, not decoded
+    // not generated: FUN_141164770 installs FUN_140c54f30, not decoded
+    // not generated: FUN_141164790 installs FUN_140c55010, not decoded
+    // not generated: FUN_1411647b0 installs FUN_140c550f0, not decoded
+    // not generated: FUN_1411647d0 installs FUN_140c551d0, not decoded
+    // not generated: FUN_1411647f0 installs FUN_140c552b0, not decoded
+    // not generated: FUN_141164810 installs FUN_140c55390, not decoded
+    // not generated: FUN_141164830 installs FUN_140c55470, not decoded
+    // not generated: FUN_141164850 installs FUN_140c55550, not decoded
+    // not generated: FUN_1411648b0 installs FUN_140c557f0, not decoded
+    // not generated: FUN_141164870 installs FUN_140c55630, not decoded
+    // not generated: FUN_141164890 installs FUN_140c55710, not decoded
+    // not generated: FUN_1411648d0 installs FUN_140c558d0, not decoded
+    // not generated: FUN_1411648f0 installs FUN_140c559b0, not decoded
+    // not generated: FUN_141164910 installs FUN_140c55a90, not decoded
+    // not generated: FUN_141164930 installs FUN_140c55b70, not decoded
+    // not generated: FUN_141164950 installs FUN_140c55c50, not decoded
+    // not generated: FUN_141164970 installs FUN_140c55d30, not decoded
+    // not generated: FUN_141164990 installs FUN_140c55e10, not decoded
+    // not generated: FUN_1411649b0 installs FUN_140c55ef0, not decoded
+    // not generated: FUN_1411649d0 installs FUN_140c55fd0, not decoded
+    // not generated: FUN_1411649f0 installs FUN_140c560b0, not decoded
+    // not generated: FUN_141164a10 installs FUN_140c56190, not decoded
+    // not generated: FUN_141164a30 installs FUN_140c56270, not decoded
+    // not generated: FUN_141164a50 installs FUN_140c56350, not decoded
+    // not generated: FUN_141164a70 installs FUN_140c56430, not decoded
+    EventCallbacks_Set(0xa30, EventSignal_CHAT_SERVER_RECONNECTED);  // FUN_141164a90
+    EventCallbacks_Set(0xa60, EventSignal_CLEAR_BOSS_EMOTES);  // FUN_141164ab0
+    EventCallbacks_Set(0x1490, EventSignal_LANGUAGE_LIST_CHANGED);  // FUN_141164ad0
+    EventCallbacks_Set(0x1918, EventSignal_NOTIFY_CHAT_SUPPRESSED);  // FUN_141164af0
+    // not generated: FUN_141164b10 installs FUN_140c57930, not decoded
+    // not generated: FUN_141164b30 installs FUN_140c57bd0, not decoded
+    // not generated: FUN_141164b50 installs FUN_140c57cb0, not decoded
+    // not generated: FUN_141164b70 installs FUN_140c57d90, not decoded
+    // not generated: FUN_141164b90 installs FUN_140c583b0, not decoded
+    // not generated: FUN_141164bb0 installs FUN_140c58490, not decoded
+    EventCallbacks_Set(0x2f08, EventSignal_UPDATE_CHAT_WINDOWS);  // FUN_141164bd0
+    EventCallbacks_Set(0x2f28, EventSignal_UPDATE_FLOATING_CHAT_WINDOWS);  // FUN_141164bf0
 }
 
 // ref: FUN_140c891a0
 void ScriptRegister_140c891a0(lua_State* L) {
     (void)L;
-    // not generated: calls 0x141164c10, 0x141164c30, 0x141164c50, 0x141164c70 (callback setters and the like)
+    // not generated: FUN_141164c10 installs FUN_140c565f0, not decoded
+    EventCallbacks_Set(0xa40, EventSignal_CINEMATIC_STOP);  // FUN_141164c30
+    EventCallbacks_Set(0x1320, EventSignal_HIDE_SUBTITLE);  // FUN_141164c50
+    // not generated: FUN_141164c70 installs FUN_140c57770, not decoded
 }
 
 // ref: FUN_140d959d0
@@ -333,7 +469,14 @@ void ScriptEnum_ConsoleCategory(lua_State* L) {
     ScriptRegisterFunction(L, "C_Console", "GetFontHeight", Lua_C_Console_GetFontHeight);
     ScriptRegisterFunction(L, "C_Console", "PrintAllMatchingCommands", Lua_C_Console_PrintAllMatchingCommands);
     ScriptRegisterFunction(L, "C_Console", "SetFontHeight", Lua_C_Console_SetFontHeight);
-    // not generated: calls 0x141165270, 0x141165290, 0x1411652b0, 0x1411652d0, 0x1411652f0, 0x141165310, 0x141165330, 0x141165350 (callback setters and the like)
+    EventCallbacks_Set(0xd28, EventSignal_CONSOLE_CLEAR);  // FUN_141165270
+    EventCallbacks_Set(0xd60, EventSignal_CONSOLE_COLORS_CHANGED);  // FUN_141165290
+    EventCallbacks_Set(0xd98, EventSignal_CONSOLE_FONT_SIZE_CHANGED);  // FUN_1411652b0
+    // not generated: FUN_1411652d0 installs FUN_140d569b0, not decoded
+    // not generated: FUN_1411652f0 installs FUN_140d56a90, not decoded
+    // not generated: FUN_141165310 installs FUN_140d56e10, not decoded
+    // not generated: FUN_141165330 installs FUN_140d57190, not decoded
+    // not generated: FUN_141165350 installs FUN_140d577b0, not decoded
 }
 
 // ref: FUN_140d95ef0
@@ -392,7 +535,9 @@ void ScriptEnum_UICursorType(lua_State* L) {
     };
     ScriptRegisterEnum(L, "WorldCursorAnchorTypeMeta", s_WorldCursorAnchorTypeMeta, sizeof(s_WorldCursorAnchorTypeMeta) / sizeof(s_WorldCursorAnchorTypeMeta[0]));
     ScriptRegisterFunction(L, "C_Cursor", "GetCursorItem", Lua_C_Cursor_GetCursorItem);
-    // not generated: calls 0x141165630, 0x141165650, 0x141165670 (callback setters and the like)
+    EventCallbacks_Set(0x548, EventSignal_BATTLE_PET_CURSOR_CLEAR);  // FUN_141165630
+    // not generated: FUN_141165650 installs FUN_140f7b490, not decoded
+    EventCallbacks_Set(0x18a8, EventSignal_MOUNT_CURSOR_CLEAR);  // FUN_141165670
 }
 
 // ref: FUN_140f922a0
@@ -417,7 +562,36 @@ void ScriptEnum_ManipulatorEventType(lua_State* L) {
     ScriptRegisterFunction(L, "C_Debug", "TeleportToMapDebugObject", Lua_C_Debug_TeleportToMapDebugObject);
     ScriptRegisterFunction(L, "C_Debug", "TeleportToMapLocation", Lua_C_Debug_TeleportToMapLocation);
     ScriptRegisterFunction(L, "C_Debug", "ViewInDebugWindow", Lua_C_Debug_ViewInDebugWindow);
-    // not generated: calls 0x141165870, 0x141165890, 0x1411658b0, 0x1411658d0, 0x1411658f0, 0x141165910, 0x141165930, 0x141165950, 0x141165970, 0x141165990, 0x1411659b0, 0x1411659d0, 0x1411659f0, 0x141165a10, 0x141165a30, 0x141165a50, 0x141165a70, 0x141165a90, 0x141165ab0, 0x141165ad0, 0x141165af0, 0x141165b10, 0x141165b30, 0x141165b50, 0x141165b70, 0x141165b90, 0x141165bb0, 0x141165bd0, 0x141165bf0, 0x141165c10 (callback setters and the like)
+    // not generated: FUN_141165870 installs FUN_140f7ae70, not decoded
+    EventCallbacks_Set(0xea8, EventSignal_CUSTOM_ANIM);  // FUN_141165890
+    EventCallbacks_Set(0xec8, EventSignal_DB_RECORD_UPDATE);  // FUN_1411658b0
+    // not generated: FUN_1411658d0 installs FUN_140f7b810, not decoded
+    EventCallbacks_Set(0xed8, EventSignal_DB_RESULT_COMPLETE);  // FUN_1411658f0
+    // not generated: FUN_141165910 installs FUN_140f7b8f0, not decoded
+    // not generated: FUN_141165930 installs FUN_140f7b9d0, not decoded
+    EventCallbacks_Set(0xef0, EventSignal_DEBUG_MAP_OBJECTS_UPDATED);  // FUN_141165950
+    EventCallbacks_Set(0xef8, EventSignal_DEBUG_MENU_TOGGLED);  // FUN_141165970
+    EventCallbacks_Set(0xf30, EventSignal_DEBUG_PORT_LOCS_UPDATED);  // FUN_141165990
+    // not generated: FUN_1411659b0 installs FUN_140f7bd50, not decoded
+    // not generated: FUN_1411659d0 installs FUN_140f7be30, not decoded
+    // not generated: FUN_1411659f0 installs FUN_140f7c990, not decoded
+    EventCallbacks_Set(0x1080, EventSignal_EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED);  // FUN_141165a10
+    EventCallbacks_Set(0x10f0, EventSignal_FRAMESTACK_VISIBILITY_UPDATED);  // FUN_141165a30
+    // not generated: FUN_141165a50 installs FUN_140f7ced0, not decoded
+    // not generated: FUN_141165a70 installs FUN_140f7cfb0, not decoded
+    // not generated: FUN_141165a90 installs FUN_140f7d170, not decoded
+    // not generated: FUN_141165ab0 installs FUN_140f7da30, not decoded
+    // not generated: FUN_141165ad0 installs FUN_140f7db10, not decoded
+    // not generated: FUN_141165af0 installs FUN_140f7dcd0, not decoded
+    // not generated: FUN_141165b10 installs FUN_140f7ddb0, not decoded
+    // not generated: FUN_141165b30 installs FUN_140f7de90, not decoded
+    // not generated: FUN_141165b50 installs FUN_140f7df70, not decoded
+    // not generated: FUN_141165b70 installs FUN_140f7e050, not decoded
+    // not generated: FUN_141165b90 installs FUN_140f7e210, not decoded
+    // not generated: FUN_141165bb0 installs FUN_140f7e670, not decoded
+    // not generated: FUN_141165bd0 installs FUN_140f7e2f0, not decoded
+    // not generated: FUN_141165bf0 installs FUN_140f7e4b0, not decoded
+    // not generated: FUN_141165c10 installs FUN_140f7e590, not decoded
 }
 
 // ref: FUN_14107ea90
@@ -425,7 +599,7 @@ void ScriptAPI_C_EventUtils(lua_State* L) {
     (void)L;
     ScriptRegisterFunction(L, "C_EventUtils", "IsEventValid", Lua_C_EventUtils_IsEventValid);
     ScriptRegisterFunction(L, "C_EventUtils", "NotifySettingsLoaded", Lua_C_EventUtils_NotifySettingsLoaded);
-    // not generated: calls 0x141165eb0 (callback setters and the like)
+    EventCallbacks_Set(0x2280, EventSignal_SETTINGS_LOADED);  // FUN_141165eb0
 }
 
 // ref: FUN_14107eb00
@@ -452,7 +626,8 @@ void ScriptGlobals_CanUpgradeExpansion(lua_State* L) {
     FrameScript_RegisterFunction("IsExpansionTrial", Lua_IsExpansionTrial);
     FrameScript_RegisterFunction("IsTrialAccount", Lua_IsTrialAccount);
     FrameScript_RegisterFunction("IsVeteranTrialAccount", Lua_IsVeteranTrialAccount);
-    // not generated: calls 0x141165ed0, 0x141165ef0 (callback setters and the like)
+    EventCallbacks_Set(0x17d0, EventSignal_MAX_EXPANSION_LEVEL_UPDATED);  // FUN_141165ed0
+    EventCallbacks_Set(0x1808, EventSignal_MIN_EXPANSION_LEVEL_UPDATED);  // FUN_141165ef0
 }
 
 // ref: FUN_140f2cb90
@@ -481,7 +656,11 @@ void ScriptAPI_C_GamePad(lua_State* L) {
     ScriptRegisterFunction(L, "C_GamePad", "SetVibration", Lua_C_GamePad_SetVibration);
     ScriptRegisterFunction(L, "C_GamePad", "StickIndexToConfigName", Lua_C_GamePad_StickIndexToConfigName);
     ScriptRegisterFunction(L, "C_GamePad", "StopVibration", Lua_C_GamePad_StopVibration);
-    // not generated: calls 0x1411662b0, 0x1411662d0, 0x1411662f0, 0x141166310, 0x141166330 (callback setters and the like)
+    // not generated: FUN_1411662b0 installs FUN_140efd8b0, not decoded
+    EventCallbacks_Set(0x1108, EventSignal_GAME_PAD_CONFIGS_CHANGED);  // FUN_1411662d0
+    EventCallbacks_Set(0x1110, EventSignal_GAME_PAD_CONNECTED);  // FUN_1411662f0
+    EventCallbacks_Set(0x1118, EventSignal_GAME_PAD_DISCONNECTED);  // FUN_141166310
+    // not generated: FUN_141166330 installs FUN_140efdc30, not decoded
 }
 
 // ref: FUN_140f2cea0
@@ -524,7 +703,8 @@ void ScriptEnum_BindingSet(lua_State* L) {
     ScriptRegisterEnum(L, "CustomBindingTypeMeta", s_CustomBindingTypeMeta, sizeof(s_CustomBindingTypeMeta) / sizeof(s_CustomBindingTypeMeta[0]));
     ScriptRegisterFunction(L, "C_KeyBindings", "GetBindingIndex", Lua_C_KeyBindings_GetBindingIndex);
     ScriptRegisterFunction(L, "C_KeyBindings", "GetCustomBindingType", Lua_C_KeyBindings_GetCustomBindingType);
-    // not generated: calls 0x141166d70, 0x141166d90 (callback setters and the like)
+    // not generated: FUN_141166d70 installs FUN_140c087b0, not decoded
+    EventCallbacks_Set(0x2eb8, EventSignal_UPDATE_BINDINGS);  // FUN_141166d90
 }
 
 // ref: FUN_140c1a2e0
@@ -534,26 +714,39 @@ void ScriptAPI_Kiosk(lua_State* L) {
     ScriptRegisterFunction(L, "Kiosk", "IsEnabled", Lua_Kiosk_IsEnabled);
     ScriptRegisterFunction(L, "Kiosk", "ShutdownSession", Lua_Kiosk_ShutdownSession);
     ScriptRegisterFunction(L, "Kiosk", "StartSession", Lua_Kiosk_StartSession);
-    // not generated: calls 0x141166db0, 0x141166dd0, 0x141166df0, 0x141166e10 (callback setters and the like)
+    // not generated: FUN_141166db0 installs FUN_140c07c50, not decoded
+    // not generated: FUN_141166dd0 installs FUN_140c07d30, not decoded
+    EventCallbacks_Set(0x1440, EventSignal_KIOSK_SESSION_EXPIRED);  // FUN_141166df0
+    EventCallbacks_Set(0x1448, EventSignal_KIOSK_SESSION_SHUTDOWN);  // FUN_141166e10
 }
 
 // ref: FUN_140c1a3b0
 void ScriptRegister_140c1a3b0(lua_State* L) {
     (void)L;
-    // not generated: calls 0x141166e30, 0x141166e50, 0x141166e70, 0x141166e90, 0x141166eb0, 0x141166ed0, 0x141166ef0 (callback setters and the like)
+    EventCallbacks_Set(0x1450, EventSignal_KNOWLEDGE_BASE_ARTICLE_LOAD_FAILURE);  // FUN_141166e30
+    EventCallbacks_Set(0x1458, EventSignal_KNOWLEDGE_BASE_ARTICLE_LOAD_SUCCESS);  // FUN_141166e50
+    EventCallbacks_Set(0x1460, EventSignal_KNOWLEDGE_BASE_QUERY_LOAD_FAILURE);  // FUN_141166e70
+    EventCallbacks_Set(0x1468, EventSignal_KNOWLEDGE_BASE_QUERY_LOAD_SUCCESS);  // FUN_141166e90
+    EventCallbacks_Set(0x1470, EventSignal_KNOWLEDGE_BASE_SERVER_MESSAGE);  // FUN_141166eb0
+    EventCallbacks_Set(0x1478, EventSignal_KNOWLEDGE_BASE_SETUP_LOAD_FAILURE);  // FUN_141166ed0
+    EventCallbacks_Set(0x1480, EventSignal_KNOWLEDGE_BASE_SETUP_LOAD_SUCCESS);  // FUN_141166ef0
 }
 
 // ref: FUN_141117760
 void ScriptRegister_141117760(lua_State* L) {
     (void)L;
-    // not generated: calls 0x141167490 (callback setters and the like)
+    EventCallbacks_Set(0x15e8, EventSignal_LOADING_SCREEN_DISABLED);  // FUN_141167490
 }
 
 // ref: FUN_141117780
 void ScriptAPI_C_LoginUI(lua_State* L) {
     (void)L;
     ScriptRegisterFunction(L, "C_LoginUI", "ReconnectToRealmList", Lua_C_LoginUI_ReconnectToRealmList);
-    // not generated: calls 0x141166370, 0x141166390, 0x1411663b0, 0x1411663d0, 0x1411663f0 (callback setters and the like)
+    EventCallbacks_Set(0x1498, EventSignal_LAUNCHER_LOGIN_STATUS_CHANGED);  // FUN_141166370
+    EventCallbacks_Set(0x1608, EventSignal_LOGIN_STATE_CHANGED);  // FUN_141166390
+    // not generated: FUN_1411663b0 installs FUN_1410e6850, not decoded
+    EventCallbacks_Set(0x2190, EventSignal_REALM_LIST_UPDATED);  // FUN_1411663d0
+    EventCallbacks_Set(0x22b8, EventSignal_SHOULD_RECONNECT_TO_REALM_LIST);  // FUN_1411663f0
 }
 
 // ref: FUN_1410a7e00
@@ -594,7 +787,7 @@ void ScriptAPI_C_ReportSystem(lua_State* L) {
     ScriptRegisterFunction(L, "C_ReportSystem", "ReportServerLag", Lua_C_ReportSystem_ReportServerLag);
     ScriptRegisterFunction(L, "C_ReportSystem", "ReportStuckInCombat", Lua_C_LoginUI_ReconnectToRealmList);
     ScriptRegisterFunction(L, "C_ReportSystem", "SendReport", Lua_C_ReportSystem_SendReport);
-    // not generated: calls 0x141168c50 (callback setters and the like)
+    // not generated: FUN_141168c50 installs FUN_140aef970, not decoded
 }
 
 // ref: FUN_140ae5d90
@@ -602,7 +795,7 @@ void ScriptAPI_C_SocialContractGlue(lua_State* L) {
     (void)L;
     ScriptRegisterFunction(L, "C_SocialContractGlue", "GetShouldShowSocialContract", Lua_C_SocialContractGlue_GetShouldShowSocialContract);
     ScriptRegisterFunction(L, "C_SocialContractGlue", "TryUpdateSocialContract", Lua_C_SocialContractGlue_TryUpdateSocialContract);
-    // not generated: calls 0x141168f30 (callback setters and the like)
+    // not generated: FUN_141168f30 installs FUN_140a53820, not decoded
 }
 
 // ref: FUN_140ae6420
@@ -611,7 +804,8 @@ void ScriptAPI_C_Sound(lua_State* L) {
     ScriptRegisterFunction(L, "C_Sound", "GetSoundScaledVolume", Lua_C_Sound_GetSoundScaledVolume);
     ScriptRegisterFunction(L, "C_Sound", "IsPlaying", Lua_C_Sound_IsPlaying);
     ScriptRegisterFunction(L, "C_Sound", "PlayItemSound", Lua_C_Sound_PlayItemSound);
-    // not generated: calls 0x141168fb0, 0x141168fd0 (callback setters and the like)
+    EventCallbacks_Set(0x2368, EventSignal_SOUND_DEVICE_UPDATE);  // FUN_141168fb0
+    // not generated: FUN_141168fd0 installs FUN_140a539e0, not decoded
 }
 
 // ref: FUN_140e6b6e0
@@ -764,7 +958,35 @@ void ScriptEnum_BattlepayDisplayFlag(lua_State* L) {
     ScriptRegisterFunction(L, "C_StoreSecure", "SetDisconnectOnLogout", Lua_C_StoreSecure_SetDisconnectOnLogout);
     ScriptRegisterFunction(L, "C_StoreSecure", "SetVASProductReady", Lua_C_StoreSecure_SetVASProductReady);
     ScriptRegisterFunction(L, "C_StoreSecure", "ValidateBnetTransfer", Lua_C_StoreSecure_ValidateBnetTransfer);
-    // not generated: calls 0x141169390, 0x1411693b0, 0x1411693d0, 0x1411693f0, 0x141169410, 0x141169430, 0x141169450, 0x141169470, 0x141169490, 0x1411694b0, 0x1411694d0, 0x1411694f0, 0x141169510, 0x141169530, 0x141169550, 0x141169570, 0x141169590, 0x1411695b0, 0x1411695d0, 0x1411695f0, 0x141169610, 0x141169630, 0x141169650, 0x141169670, 0x141169690, 0x1411696b0, 0x1411696d0, 0x1411696f0, 0x141169710 (callback setters and the like)
+    EventCallbacks_Set(0x390, EventSignal_AUTH_CHALLENGE_FINISHED);  // FUN_141169390
+    EventCallbacks_Set(0x398, EventSignal_AUTH_CHALLENGE_UI_INVALID);  // FUN_1411693b0
+    // not generated: FUN_1411693d0 installs FUN_140e4e4f0, not decoded
+    // not generated: FUN_1411693f0 installs FUN_140e4e950, not decoded
+    EventCallbacks_Set(0x1330, EventSignal_IGR_BILLING_NAG_DIALOG);  // FUN_141169410
+    EventCallbacks_Set(0x1e30, EventSignal_PLAYTIME_CHANGED);  // FUN_141169430
+    EventCallbacks_Set(0x1e80, EventSignal_PRODUCT_ASSIGN_TO_TARGET_FAILED);  // FUN_141169450
+    EventCallbacks_Set(0x1e88, EventSignal_PRODUCT_CHOICE_UPDATE);  // FUN_141169470
+    // not generated: FUN_141169490 installs FUN_140e500f0, not decoded
+    EventCallbacks_Set(0x2510, EventSignal_STORE_BOOST_AUTO_CONSUMED);  // FUN_1411694b0
+    EventCallbacks_Set(0x2518, EventSignal_STORE_CHARACTER_LIST_RECEIVED);  // FUN_1411694d0
+    EventCallbacks_Set(0x2520, EventSignal_STORE_CONFIRM_PURCHASE);  // FUN_1411694f0
+    // not generated: FUN_141169510 installs FUN_140e50fd0, not decoded
+    // not generated: FUN_141169530 installs FUN_140e510b0, not decoded
+    // not generated: FUN_141169550 installs FUN_140e51190, not decoded
+    // not generated: FUN_141169570 installs FUN_140e51270, not decoded
+    EventCallbacks_Set(0x2548, EventSignal_STORE_PRODUCTS_UPDATED);  // FUN_141169590
+    EventCallbacks_Set(0x2550, EventSignal_STORE_PURCHASE_ERROR);  // FUN_1411695b0
+    EventCallbacks_Set(0x2588, EventSignal_STORE_PURCHASE_LIST_UPDATED);  // FUN_1411695d0
+    EventCallbacks_Set(0x2590, EventSignal_STORE_REFRESH);  // FUN_1411695f0
+    EventCallbacks_Set(0x2598, EventSignal_STORE_STATUS_CHANGED);  // FUN_141169610
+    EventCallbacks_Set(0x25a0, EventSignal_STORE_VAS_PURCHASE_COMPLETE);  // FUN_141169630
+    EventCallbacks_Set(0x25a8, EventSignal_STORE_VAS_PURCHASE_ERROR);  // FUN_141169650
+    EventCallbacks_Set(0x25f0, EventSignal_SUBSCRIPTION_CHANGED_KICK_IMMINENT);  // FUN_141169670
+    EventCallbacks_Set(0x29a0, EventSignal_TRIAL_CAP_REACHED_LEVEL);  // FUN_141169690
+    // not generated: FUN_1411696b0 installs FUN_140e52690, not decoded
+    EventCallbacks_Set(0x3148, EventSignal_VAS_CHARACTER_STATE_CHANGED);  // FUN_1411696d0
+    EventCallbacks_Set(0x3150, EventSignal_VAS_QUEUE_STATUS_UPDATE);  // FUN_1411696f0
+    // not generated: FUN_141169710 installs FUN_140e52930, not decoded
 }
 
 // ref: FUN_140e6f870
@@ -810,7 +1032,8 @@ void ScriptGlobals_DoesAnyDisplayHaveNotch(lua_State* L) {
     ScriptRegisterFunction(L, "C_UI", "GetTopRightNotchSafeRegion", Lua_C_UI_GetTopLeftNotchSafeRegion);
     ScriptRegisterFunction(L, "C_UI", "Reload", Lua_C_UI_Reload);
     ScriptRegisterFunction(L, "C_UI", "ShouldUIParentAvoidNotch", Lua_C_UI_ShouldUIParentAvoidNotch);
-    // not generated: calls 0x141169ed0, 0x141169ef0 (callback setters and the like)
+    EventCallbacks_Set(0x1910, EventSignal_NOTCHED_DISPLAY_MODE_CHANGED);  // FUN_141169ed0
+    EventCallbacks_Set(0x2a08, EventSignal_UI_SCALE_CHANGED);  // FUN_141169ef0
 }
 
 // ref: FUN_140d278a0
@@ -872,7 +1095,7 @@ void ScriptEnum_ModelSceneSetting(lua_State* L) {
     ScriptRegisterFunction(L, "C_ModelInfo", "GetModelSceneActorInfoByID", Lua_C_ModelInfo_GetModelSceneActorInfoByID);
     ScriptRegisterFunction(L, "C_ModelInfo", "GetModelSceneCameraInfoByID", Lua_C_ModelInfo_GetModelSceneCameraInfoByID);
     ScriptRegisterFunction(L, "C_ModelInfo", "GetModelSceneInfoByID", Lua_C_ModelInfo_GetModelSceneInfoByID);
-    // not generated: calls 0x141167bd0 (callback setters and the like)
+    EventCallbacks_Set(0x2a00, EventSignal_UI_MODEL_SCENE_INFO_UPDATED);  // FUN_141167bd0
 }
 
 // ref: FUN_140d286f0
@@ -949,7 +1172,13 @@ void ScriptEnum_GraphicsValidationResult(lua_State* L) {
     ScriptRegisterFunction(L, "C_VideoOptions", "GetGameWindowSizes", Lua_C_VideoOptions_GetGameWindowSizes);
     ScriptRegisterFunction(L, "C_VideoOptions", "GetGxAdapterInfo", Lua_C_VideoOptions_GetGxAdapterInfo);
     ScriptRegisterFunction(L, "C_VideoOptions", "SetGameWindowSize", Lua_C_VideoOptions_SetGameWindowSize);
-    // not generated: calls 0x14116afb0, 0x14116afd0, 0x14116aff0, 0x14116b010, 0x14116b030, 0x14116b050, 0x14116b070 (callback setters and the like)
+    EventCallbacks_Set(0x140, EventSignal_ADAPTER_LIST_CHANGED);  // FUN_14116afb0
+    EventCallbacks_Set(0xf88, EventSignal_DISPLAY_SIZE_CHANGED);  // FUN_14116afd0
+    EventCallbacks_Set(0x1160, EventSignal_GLUE_SCREENSHOT_FAILED);  // FUN_14116aff0
+    EventCallbacks_Set(0x12c0, EventSignal_GX_RESTARTED);  // FUN_14116b010
+    EventCallbacks_Set(0x2218, EventSignal_SCREENSHOT_FAILED);  // FUN_14116b030
+    EventCallbacks_Set(0x2220, EventSignal_SCREENSHOT_STARTED);  // FUN_14116b050
+    EventCallbacks_Set(0x2228, EventSignal_SCREENSHOT_SUCCEEDED);  // FUN_14116b070
 }
 
 // ref: FUN_140b623c0
@@ -1115,13 +1344,70 @@ void ScriptEnum_CommunicationMode(lua_State* L) {
     ScriptRegisterFunction(L, "C_VoiceChat", "ToggleDeafened", Lua_C_VoiceChat_ToggleDeafened);
     ScriptRegisterFunction(L, "C_VoiceChat", "ToggleMemberMuted", Lua_C_VoiceChat_ToggleMemberMuted);
     ScriptRegisterFunction(L, "C_VoiceChat", "ToggleMuted", Lua_C_VoiceChat_ToggleMuted);
-    // not generated: calls 0x14116b090, 0x14116b0b0, 0x14116b0d0, 0x14116b0f0, 0x14116b110, 0x14116b130, 0x14116b150, 0x14116b170, 0x14116b190, 0x14116b1b0, 0x14116b1d0, 0x14116b1f0, 0x14116b210, 0x14116b230, 0x14116b250, 0x14116b270, 0x14116b290, 0x14116b2b0, 0x14116b2d0, 0x14116b2f0, 0x14116b310, 0x14116b330, 0x14116b350, 0x14116b370, 0x14116b390, 0x14116b3b0, 0x14116b3d0, 0x14116b3f0, 0x14116b410, 0x14116b430, 0x14116b450, 0x14116b470, 0x14116b490, 0x14116b4b0, 0x14116b4d0, 0x14116b4f0, 0x14116b510, 0x14116b530, 0x14116b550, 0x14116b570, 0x14116b590, 0x14116b5b0, 0x14116b5d0, 0x14116b5f0, 0x14116b610, 0x14116b630 (callback setters and the like)
+    EventCallbacks_Set(0x3188, EventSignal_VOICE_CHAT_ACTIVE_INPUT_DEVICE_UPDATED);  // FUN_14116b090
+    EventCallbacks_Set(0x3190, EventSignal_VOICE_CHAT_ACTIVE_OUTPUT_DEVICE_UPDATED);  // FUN_14116b0b0
+    // not generated: FUN_14116b0d0 installs FUN_140b3fb50, not decoded
+    EventCallbacks_Set(0x31a0, EventSignal_VOICE_CHAT_AUDIO_CAPTURE_STARTED);  // FUN_14116b0f0
+    EventCallbacks_Set(0x31a8, EventSignal_VOICE_CHAT_AUDIO_CAPTURE_STOPPED);  // FUN_14116b110
+    // not generated: FUN_14116b130 installs FUN_140b3fdf0, not decoded
+    // not generated: FUN_14116b150 installs FUN_140b3fed0, not decoded
+    // not generated: FUN_14116b170 installs FUN_140b3ffb0, not decoded
+    // not generated: FUN_14116b190 installs FUN_140b40090, not decoded
+    // not generated: FUN_14116b1b0 installs FUN_140b40170, not decoded
+    // not generated: FUN_14116b1d0 installs FUN_140b40250, not decoded
+    // not generated: FUN_14116b1f0 installs FUN_140b40330, not decoded
+    // not generated: FUN_14116b210 installs FUN_140b40410, not decoded
+    // not generated: FUN_14116b230 installs FUN_140b404f0, not decoded
+    // not generated: FUN_14116b250 installs FUN_140b405d0, not decoded
+    // not generated: FUN_14116b270 installs FUN_140b406b0, not decoded
+    // not generated: FUN_14116b290 installs FUN_140b40790, not decoded
+    // not generated: FUN_14116b2b0 installs FUN_140b40870, not decoded
+    // not generated: FUN_14116b2d0 installs FUN_140b40950, not decoded
+    // not generated: FUN_14116b2f0 installs FUN_140b40a30, not decoded
+    // not generated: FUN_14116b310 installs FUN_140b40b10, not decoded
+    // not generated: FUN_14116b330 installs FUN_140b40bf0, not decoded
+    // not generated: FUN_14116b350 installs FUN_140b40cd0, not decoded
+    // not generated: FUN_14116b370 installs FUN_140b40db0, not decoded
+    // not generated: FUN_14116b390 installs FUN_140b40e90, not decoded
+    // not generated: FUN_14116b3b0 installs FUN_140b40f70, not decoded
+    // not generated: FUN_14116b3d0 installs FUN_140b41050, not decoded
+    EventCallbacks_Set(0x3260, EventSignal_VOICE_CHAT_CONNECTION_SUCCESS);  // FUN_14116b3f0
+    // not generated: FUN_14116b410 installs FUN_140b41210, not decoded
+    // not generated: FUN_14116b430 installs FUN_140b412f0, not decoded
+    EventCallbacks_Set(0x3278, EventSignal_VOICE_CHAT_INPUT_DEVICES_UPDATED);  // FUN_14116b450
+    // not generated: FUN_14116b470 installs FUN_140b414b0, not decoded
+    // not generated: FUN_14116b490 installs FUN_140b41590, not decoded
+    // not generated: FUN_14116b4b0 installs FUN_140b41670, not decoded
+    EventCallbacks_Set(0x3298, EventSignal_VOICE_CHAT_OUTPUT_DEVICES_UPDATED);  // FUN_14116b4d0
+    // not generated: FUN_14116b4f0 installs FUN_140b41830, not decoded
+    // not generated: FUN_14116b510 installs FUN_140b41910, not decoded
+    // not generated: FUN_14116b530 installs FUN_140b419f0, not decoded
+    EventCallbacks_Set(0x32b8, EventSignal_VOICE_CHAT_SPEAK_FOR_ME_ACTIVE_STATUS_UPDATED);  // FUN_14116b550
+    EventCallbacks_Set(0x32c0, EventSignal_VOICE_CHAT_SPEAK_FOR_ME_FEATURE_STATUS_UPDATED);  // FUN_14116b570
+    // not generated: FUN_14116b590 installs FUN_140b41c90, not decoded
+    // not generated: FUN_14116b5b0 installs FUN_140b41d70, not decoded
+    // not generated: FUN_14116b5d0 installs FUN_140b41e50, not decoded
+    // not generated: FUN_14116b5f0 installs FUN_140b41f30, not decoded
+    EventCallbacks_Set(0x32e8, EventSignal_VOICE_CHAT_TTS_VOICES_UPDATE);  // FUN_14116b610
+    EventCallbacks_Set(0x32f0, EventSignal_VOICE_CHAT_VAD_SETTINGS_UPDATED);  // FUN_14116b630
 }
 
 // ref: FUN_14115c010
 void ScriptRegister_14115c010(lua_State* L) {
     (void)L;
-    // not generated: calls 0x14116b7d0, 0x14116b7f0, 0x14116b810, 0x14116b830, 0x14116b850, 0x14116b870, 0x14116b890, 0x14116b8b0, 0x14116b8d0, 0x14116b8f0, 0x14116b910, 0x14116b930, 0x14116b950 (callback setters and the like)
+    EventCallbacks_Set(0x2690, EventSignal_TOKEN_AUCTION_SOLD);  // FUN_14116b7d0
+    EventCallbacks_Set(0x2698, EventSignal_TOKEN_BUY_CONFIRM_REQUIRED);  // FUN_14116b7f0
+    // not generated: FUN_14116b810 installs FUN_141159520, not decoded
+    // not generated: FUN_14116b830 installs FUN_141159600, not decoded
+    // not generated: FUN_14116b850 installs FUN_1411596e0, not decoded
+    // not generated: FUN_14116b870 installs FUN_1411597c0, not decoded
+    EventCallbacks_Set(0x26c0, EventSignal_TOKEN_REDEEM_BALANCE_UPDATED);  // FUN_14116b890
+    // not generated: FUN_14116b8b0 installs FUN_141159980, not decoded
+    EventCallbacks_Set(0x26d0, EventSignal_TOKEN_REDEEM_FRAME_SHOW);  // FUN_14116b8d0
+    EventCallbacks_Set(0x26d8, EventSignal_TOKEN_REDEEM_GAME_TIME_UPDATED);  // FUN_14116b8f0
+    // not generated: FUN_14116b910 installs FUN_141159c20, not decoded
+    EventCallbacks_Set(0x26e8, EventSignal_TOKEN_SELL_CONFIRM_REQUIRED);  // FUN_14116b930
+    // not generated: FUN_14116b950 installs FUN_141159de0, not decoded
 }
 
 // ref: FUN_14115c0c0
@@ -1148,7 +1434,31 @@ void ScriptAPI_C_CVar(lua_State* L) {
 void ScriptAPI_C_System(lua_State* L) {
     (void)L;
     ScriptRegisterFunction(L, "C_System", "GetFrameStack", Lua_C_System_GetFrameStack);
-    // not generated: calls 0x141169730, 0x141169750, 0x141169770, 0x141169790, 0x1411697b0, 0x1411697d0, 0x1411697f0, 0x141169810, 0x141169830, 0x141169850, 0x141169870, 0x141169890, 0x1411698b0, 0x1411698d0, 0x1411698f0, 0x141169910, 0x141169930, 0x141169950, 0x141169970, 0x141169990, 0x1411699b0, 0x1411699d0, 0x1411699f0, 0x141169a10, 0x141169a30 (callback setters and the like)
+    EventCallbacks_Set(0x720, EventSignal_CAPTUREFRAMES_FAILED);  // FUN_141169730
+    EventCallbacks_Set(0x728, EventSignal_CAPTUREFRAMES_SUCCEEDED);  // FUN_141169750
+    EventCallbacks_Set(0xf70, EventSignal_DISABLE_TAXI_BENCHMARK);  // FUN_141169770
+    EventCallbacks_Set(0x1000, EventSignal_ENABLE_TAXI_BENCHMARK);  // FUN_141169790
+    EventCallbacks_Set(0x10b8, EventSignal_FIRST_FRAME_RENDERED);  // FUN_1411697b0
+    // not generated: FUN_1411697d0 installs FUN_140e4ebf0, not decoded
+    // not generated: FUN_1411697f0 installs FUN_140e4ecd0, not decoded
+    // not generated: FUN_141169810 installs FUN_140e4edb0, not decoded
+    EventCallbacks_Set(0x1348, EventSignal_INITIAL_HOTFIXES_APPLIED);  // FUN_141169830
+    // not generated: FUN_141169850 installs FUN_140e4f130, not decoded
+    EventCallbacks_Set(0x1610, EventSignal_LOGOUT_CANCEL);  // FUN_141169870
+    EventCallbacks_Set(0x1bc8, EventSignal_PLAYER_CAMPING);  // FUN_141169890
+    // not generated: FUN_1411698b0 installs FUN_140e4f830, not decoded
+    EventCallbacks_Set(0x1c68, EventSignal_PLAYER_LEAVING_WORLD);  // FUN_1411698d0
+    EventCallbacks_Set(0x1c80, EventSignal_PLAYER_LOGIN);  // FUN_1411698f0
+    EventCallbacks_Set(0x1c88, EventSignal_PLAYER_LOGOUT);  // FUN_141169910
+    EventCallbacks_Set(0x1cc0, EventSignal_PLAYER_QUITING);  // FUN_141169930
+    EventCallbacks_Set(0x2230, EventSignal_SEARCH_DB_LOADED);  // FUN_141169950
+    // not generated: FUN_141169970 installs FUN_140e51970, not decoded
+    // not generated: FUN_141169990 installs FUN_140e51b30, not decoded
+    // not generated: FUN_1411699b0 installs FUN_140e51dd0, not decoded
+    // not generated: FUN_1411699d0 installs FUN_140e51f90, not decoded
+    // not generated: FUN_1411699f0 installs FUN_140e52070, not decoded
+    EventCallbacks_Set(0x3138, EventSignal_VARIABLES_LOADED);  // FUN_141169a10
+    EventCallbacks_Set(0x3360, EventSignal_WOW_MOUSE_NOT_FOUND);  // FUN_141169a30
 }
 
 // ref: FUN_1407d3000

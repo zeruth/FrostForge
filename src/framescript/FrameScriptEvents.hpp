@@ -9,8 +9,7 @@
 #include <cstdint>
 
 #include "blz/Vector.hpp"
-
-class FrameScript_Object;
+#include "framescript/FrameScriptObject.hpp"
 
 namespace FrameScriptEvents {
 
@@ -85,6 +84,44 @@ EventListenerList* GetEventList(uint64_t id);
 EventListenerList* GetAllEventsList();
 // Drops every registration.
 void Clear();
+
+// The list of an event, or null when nothing ever registered for it.
+EventListenerList* FindEventList(uint64_t id);
+// Whether a listener hears a dispatch: not removed during it, and with an OnEvent handler
+// (FUN_140648490).
+bool ShouldDeliver(EventListenerList* list, EventListener* listener);
+
+// OnEvent(self, event, ...) for every listener of a list that should hear it (the body each
+// generated event signaller carries, e.g. FUN_140c4b590 for FRAMES_LOADED).
+template <class... Args>
+void SignalList(EventListenerList* list, const char* name, Args... args) {
+    DispatchScope scope(list);
+    EventListener* first = list->m_listeners.m_data;
+    EventListener* last = first + list->m_listeners.m_size;
+    for (EventListener* listener = first; listener != last; listener++) {
+        if (!ShouldDeliver(list, listener)) {
+            continue;
+        }
+        // FUN_140648330 pushes the handler, self and the name; FUN_140647940 calls it.
+        listener->m_object->RunScript(0x1a, nullptr, name, args...);
+    }
+}
+
+// An event to its own listeners, then to those of every event (each generated dispatcher, e.g.
+// FUN_140c57230 for FRAMES_LOADED).
+template <class... Args>
+void Signal(uint64_t id, const char* name, Args... args) {
+    EventListenerList* list = FindEventList(id);
+    EventListenerList* all = GetAllEventsList();
+    if (list == nullptr) {
+        if (all->m_listeners.m_size == 0 && all->m_deferred == nullptr) {
+            return;
+        }
+    } else {
+        SignalList(list, name, args...);
+    }
+    SignalList(all, name, args...);
+}
 
 }
 

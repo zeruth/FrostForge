@@ -156,6 +156,72 @@ def function_extent(b: Binary, start: int) -> int:
     return 0x4000
 
 
+EVENT_TABLE = 0x141273D80          # the event signaller table (FUN_141273d80)
+EVENT_PROFILE_ENTER = 0x14063EA00  # the dispatchers' profiling scope
+EVENT_PROFILE_LEAVE = 0x14063EBD0
+EVENT_CALL = 0x140647940           # a signaller's call of OnEvent: (L, nargs, base)
+_setter_slots: dict[int, int | None] = {}
+_corpus: dict[int, str] | None = None
+
+
+def event_setter_slot(b: Binary, setter: int) -> int | None:
+    """The table slot a setter stores its argument into: `call FUN_141273d80; mov [rax+disp], reg`."""
+    if setter in _setter_slots:
+        return _setter_slots[setter]
+    md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
+    md.detail = True
+    slot = None
+    seen_table = False
+    for insn in md.disasm(b.image[b.off(setter):b.off(setter) + 0x40], setter):
+        ops = insn.operands
+        if insn.mnemonic == "call" and ops and ops[0].type == capstone.x86.X86_OP_IMM:
+            seen_table = ops[0].imm == EVENT_TABLE
+            if not seen_table:
+                break
+        elif seen_table and insn.mnemonic == "mov" and len(ops) == 2 and ops[0].type == capstone.x86.X86_OP_MEM \
+                and ops[0].mem.base == capstone.x86.X86_REG_RAX and ops[1].type == capstone.x86.X86_OP_REG:
+            slot = ops[0].mem.disp
+            break
+        elif insn.mnemonic == "ret":
+            break
+    _setter_slots[setter] = slot
+    return slot
+
+
+def corpus_code(addr: int) -> str:
+    global _corpus
+    if _corpus is None:
+        _corpus = {}
+        with (ROOT / "build" / "corpus.jsonl").open(encoding="utf-8", errors="replace") as f:
+            for line in f:
+                rec = json.loads(line)
+                _corpus[int(rec["addr"], 16)] = rec.get("c", "")
+    return _corpus.get(addr, "")
+
+
+def event_signal_info(b: Binary, dispatcher: int) -> dict:
+    """A dispatcher's inner signaller, the event's name, and how many arguments it pushes."""
+    md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
+    md.detail = True
+    inner = None
+    for insn in md.disasm(b.image[b.off(dispatcher):b.off(dispatcher) + 0x100], dispatcher):
+        ops = insn.operands
+        if insn.mnemonic == "call" and ops and ops[0].type == capstone.x86.X86_OP_IMM:
+            if ops[0].imm not in (EVENT_PROFILE_ENTER, EVENT_PROFILE_LEAVE):
+                inner = ops[0].imm
+                break
+        if insn.mnemonic == "ret":
+            break
+    code = corpus_code(inner) if inner else ""
+    name = re.search(r'= "([A-Za-z0-9_]+)";', code)
+    nargs = re.search(r"FUN_140647940\(\w+,(0x[0-9a-fA-F]+|\d+),", code)
+    return {
+        "inner": inner,
+        "name": name.group(1) if name else None,
+        "nargs": int(nargs.group(1), 0) if nargs else None,
+    }
+
+
 def scan(b: Binary, start: int) -> dict:
     md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
     md.detail = True
@@ -255,6 +321,8 @@ def scan(b: Binary, start: int) -> dict:
                 steps.append(("number", None, s("rcx"), value))
             elif target in QUIET:
                 pass
+            elif a("rcx") is not None and event_setter_slot(b, target) is not None:
+                steps.append(("event", target, event_setter_slot(b, target), a("rcx")))
             else:
                 other.append(hex(target))
             # a call keeps only the callee-saved registers
@@ -317,6 +385,7 @@ def emit() -> None:
         return cname
 
     registry = []
+    signals: dict[str, tuple[int, int, str]] = {}   # C++ name -> (dispatcher, signaller, event)
     for addr, name in GLUE_SCRIPT_API:
         info = scan(b, addr)
         body = []
@@ -332,6 +401,8 @@ def emit() -> None:
                 order.append(("function", (space, field, handler(space, field, value))))
             elif kind == "number":
                 order.append(("number", (field, value)))
+            elif kind == "event":
+                order.append(("event", (space, field, value)))
         seen_enum = set()
         for kind, item in order:
             if kind == "enum":
@@ -353,6 +424,20 @@ def emit() -> None:
             elif kind == "number":
                 field, value = item
                 body.append(f"    FrameScript_SetGlobalNumber(\"{field}\", {value});")
+            elif kind == "event":
+                setter, slot, dispatcher = item
+                sig = event_signal_info(b, dispatcher)
+                if sig["name"] is None or sig["nargs"] is None:
+                    body.append(f"    // not generated: FUN_{setter:x} installs FUN_{dispatcher:x}, not decoded")
+                elif sig["nargs"] != 0:
+                    body.append(f"    // not generated: FUN_{setter:x} installs the {sig['name']} signaller "
+                                f"(FUN_{dispatcher:x}, {sig['nargs']} arguments)")
+                else:
+                    cname = f"EventSignal_{sig['name']}"
+                    if cname in signals and signals[cname][0] != dispatcher:
+                        cname = f"{cname}_{dispatcher:x}"
+                    signals[cname] = (dispatcher, sig["inner"], sig["name"])
+                    body.append(f"    EventCallbacks_Set(0x{slot:x}, {cname});  // FUN_{setter:x}")
         registry.append((addr, name, "lua_State* L", body, info["other"]))
 
     for addr, name, tables in GLUE_TABLES:
@@ -388,8 +473,10 @@ def emit() -> None:
              "",
              "#include \"glue/ScriptAPIRegistry.hpp\"",
              "",
+             "#include \"framescript/EventCallbacks.hpp\"",
              "#include \"framescript/FrameScript.hpp\"",
              "#include \"framescript/ScriptAPI.hpp\"",
+             "#include \"glue/EventSignals.hpp\"",
              "#include \"glue/ScriptAPIHandlers.hpp\"",
              "",
              "extern \"C\" {",
@@ -429,6 +516,33 @@ def emit() -> None:
         decl.append(f"int {cname}(lua_State* L);  // FUN_{addr:x}")
     decl += ["", "#endif", ""]
     (ROOT / "src/glue/ScriptAPIHandlers.hpp").write_text("\n".join(decl), newline="\n")
+
+    sig_header = [header,
+                  "#ifndef GLUE_EVENT_SIGNALS_HPP",
+                  "#define GLUE_EVENT_SIGNALS_HPP",
+                  "",
+                  "// The script events' signallers the glue's registrations install (see",
+                  "// framescript/EventCallbacks.hpp): each sends its event to the listeners.",
+                  "",
+                  "#include <cstdint>",
+                  ""]
+    sig_source = [header,
+                  "#include \"glue/EventSignals.hpp\"",
+                  "",
+                  "#include \"framescript/FrameScriptEvents.hpp\"",
+                  ""]
+    for cname, (dispatcher, inner, event) in sorted(signals.items()):
+        sig_header.append(f"void {cname}(uint64_t id, void* args);")
+        sig_source += [f"// ref: FUN_{dispatcher:x}",
+                       f"// ref: FUN_{inner:x}",
+                       f"void {cname}(uint64_t id, void* args) {{",
+                       "    (void)args;",
+                       f"    FrameScriptEvents::Signal(id, \"{event}\");",
+                       "}",
+                       ""]
+    sig_header += ["", "#endif", ""]
+    (ROOT / "src/glue/EventSignals.hpp").write_text("\n".join(sig_header), newline="\n")
+    (ROOT / "src/glue/EventSignals.cpp").write_text("\n".join(sig_source), newline="\n")
 
     ported = ported_handlers()
     stubs = [header,
