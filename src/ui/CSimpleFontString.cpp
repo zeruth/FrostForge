@@ -86,6 +86,8 @@ float Abs(float value) {
     return value < 0.0f ? -value : value;
 }
 
+}
+
 // A height in UI units rounded up to whole pixels of the screen (FUN_1405f3460). The
 // reference reads the first half of the resolution here.
 float SnapToPixels(float height) {
@@ -105,6 +107,8 @@ float SnapToPixels(float height) {
     }
     return (static_cast<float>(-static_cast<int32_t>(static_cast<int64_t>(-scaled))) / pixels) * diagonal;
 }
+
+namespace {
 
 // Copies at most `size` - 1 characters and terminates.
 void CopyBounded(char* dest, const char* source, uint32_t size) {

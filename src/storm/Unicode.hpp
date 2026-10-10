@@ -31,4 +31,8 @@ uint32_t SUniSGetUTF8(const uint8_t* string, int32_t* bytes);
 // returns the end of the encoding. A value from 0x80000000 up writes only the terminator.
 uint8_t* SUniSPutUTF8(uint32_t ch, uint8_t* out);
 
+// The code point at `string`, like SUniSGetUTF8 but 0x80000000 for a malformed, overlong,
+// surrogate or out-of-range sequence; 0xffffffff at the end (FUN_14024dcf0).
+uint32_t SUniSGetUTF8Strict(const uint8_t* string, int32_t* bytes);
+
 #endif

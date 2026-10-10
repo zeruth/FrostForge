@@ -50,6 +50,7 @@ int32_t SStrCmpUTF8I(const char* a, const char* b, uint64_t maxchars);
 
 // The number of UTF-8 characters in `string` (continuation bytes are not counted).
 int32_t SStrLenUTF8(const char* string);
+int32_t SStrLenUTF8N(const char* string, int64_t bytes);
 
 // Case-insensitive compare of two UTF-8 strings over at most `maxchars` characters, by a
 // fold of ASCII, Latin-1 and Cyrillic letters (Cyrillic ordered with YO after YE); the

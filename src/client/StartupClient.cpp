@@ -22,6 +22,7 @@
 #include "storm/Log.hpp"
 #include "shadereffect/ShaderEffectManager.hpp"
 #include "texture/Texture.hpp"
+#include "ui/FrameTime.hpp"
 #include "util/Unimplemented.hpp"
 #include <windows.h>
 #include <malloc.h>
@@ -341,12 +342,6 @@ void Sub14033FA30() {
     FROST_UNIMPLEMENTED();
 }
 
-// The UI's frame clock.
-// ref: FUN_14065f9e0
-void Sub14065F9E0() {
-    FROST_UNIMPLEMENTED();
-}
-
 // ref: FUN_14165a560
 void Sub14165A560() {
     FROST_UNIMPLEMENTED();
@@ -428,7 +423,7 @@ void Sub14023DBD0() {
     Sub14156D0E0(Sub14156B750());
     Sub140330BA0();
     Sub14033FA30();
-    Sub14065F9E0();
+    FrameTime_Initialize();
     Sub14165A560();
     s_unknown142ddcf58 = Sub14134DD50(8);
     s_unknown142ddcf60 = Sub14134E8A0(s_unknown142ddcf58);

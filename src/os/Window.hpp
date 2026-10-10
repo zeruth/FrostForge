@@ -59,4 +59,20 @@ void OsCursorEnable(void* window, uint32_t time);
 void OsCursorFrameBegin(uint32_t time);
 void OsCursorFrameEnd(uint32_t time);
 
+// The IME (os/win/Window.cpp): on while an edit box has the focus (FUN_14123e5f0); the
+// composition's target clause and cursor (FUN_14123e7e0); its result and composition strings
+// (FUN_14123e9e0, FUN_14123e9f0); the native input language, 0 roman (FUN_14123ea00); native
+// conversion on or off (FUN_14123ecd0).
+void OsImeEnable(bool enable);
+bool OsImeGetCompositionRange(int32_t* start, int32_t* end, int32_t* cursor);
+bool OsImeGetResultString(char* buffer, int32_t size);
+bool OsImeGetCompositionString(char* buffer, int32_t size);
+int32_t OsImeGetLanguage();
+void OsImeSetNative(bool native);
+
+// The clipboard's text as UTF-8, freed with OsClipboardFree (os/win/Clipboard.cpp).
+char* OsClipboardGetString();
+bool OsClipboardPutString(const char* text);
+void OsClipboardFree(char* text);
+
 #endif

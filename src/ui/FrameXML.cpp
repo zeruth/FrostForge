@@ -18,6 +18,7 @@
 #include "ui/CLayoutFrame.hpp"
 #include "ui/CScriptObject.hpp"
 #include "ui/CSimpleButton.hpp"
+#include "ui/CSimpleEditBox.hpp"
 #include "ui/CSimpleSlider.hpp"
 #include "ui/CSimpleScrollFrame.hpp"
 #include "ui/CSimpleCheckButton.hpp"
@@ -227,9 +228,7 @@ CSimpleFrame* CreateCheckButton(CSimpleFrame* parent) {
 
 // ref: FUN_140661f90
 CSimpleFrame* CreateEditBox(CSimpleFrame* parent) {
-    (void)parent;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    return new CSimpleEditBox(parent);
 }
 
 // ref: FUN_140661fe0

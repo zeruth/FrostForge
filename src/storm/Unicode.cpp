@@ -340,3 +340,66 @@ int32_t UnicodeCountUtf8ToUtf16(const char* source, uint32_t sourceBytes, int32_
     }
     return count;
 }
+
+// ref: FUN_14024dcf0
+uint32_t SUniSGetUTF8Strict(const uint8_t* string, int32_t* bytes) {
+    int32_t local = 0;
+    int32_t* count = bytes != nullptr ? bytes : &local;
+    *count = 0;
+    if (string == nullptr) {
+        return 0xffffffff;
+    }
+    uint8_t first = *string++;
+    if (first == 0) {
+        return 0xffffffff;
+    }
+    (*count)++;
+    uint32_t code = first;
+    int32_t extra = 0;
+    if ((first & 0xfe) == 0xfc) {
+        code = first & 1;
+        extra = 5;
+    } else if ((first & 0xfc) == 0xf8) {
+        code = first & 3;
+        extra = 4;
+    } else if ((first & 0xf8) == 0xf0) {
+        code = first & 7;
+        extra = 3;
+    } else if ((first & 0xf0) == 0xe0) {
+        code = first & 0xf;
+        extra = 2;
+    } else if ((first & 0xe0) == 0xc0) {
+        code = first & 0x1f;
+        extra = 1;
+    } else if (first & 0x80) {
+        return 0x80000000;
+    }
+    for (int32_t i = 0; i < extra; i++) {
+        uint8_t next = *string++;
+        if ((next & 0xc0) != 0x80) {
+            return 0x80000000;
+        }
+        (*count)++;
+        code = (next & 0x3f) | (code << 6);
+    }
+    if (code == 0x80000000 || code == 0xffffffff) {
+        return code;
+    }
+    if (code < 0x110000 && *count < 5 && 0x7ff < code - 0xd800) {
+        int32_t needed = 1;
+        if (0x7f < code) {
+            if (code < 0x800) {
+                needed = 2;
+            } else {
+                if (0xffff < code) {
+                    return code;
+                }
+                needed = 3;
+            }
+        }
+        if (*count <= needed) {
+            return code;
+        }
+    }
+    return 0x80000000;
+}

@@ -89,7 +89,7 @@ class CScriptRegion : public CScriptObject, public CLayoutFrame {
     virtual bool IsBatched();
     virtual bool HasCharHandler();
     virtual bool Unknown120();
-    virtual bool HasKeyHandler();
+    virtual bool HasKeyHandler(const void* event);
     virtual bool HasPadButtonHandler(void* event);
     virtual bool HasPadStickHandler(void* event);
     virtual bool HasWheelHandler();

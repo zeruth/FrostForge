@@ -1,3 +1,4 @@
+#include "client/ClientInput.hpp"
 #include "client/FrameBufferCache.hpp"
 #include "client/GxWindow.hpp"
 #include "gx/GxDevice.hpp"
@@ -279,6 +280,22 @@ bool ClientProcessEvents() {
 }
 
 }
+
+// ref: FUN_140236bb0
+bool ClientIsShiftKeyDown() {
+    return (s_heldModifiers & 3) != 0;
+}
+
+// ref: FUN_140236b30
+bool ClientIsControlKeyDown() {
+    return (s_heldModifiers & 0xc) != 0;
+}
+
+// ref: FUN_140236b00
+bool ClientIsAltKeyDown() {
+    return (s_heldModifiers & 0x30) != 0;
+}
+
 
 // Asks the client to quit: sets the flag ClientProcessEvents stops on and, the first time,
 // lets the window and the connection go and drains the pump once more.

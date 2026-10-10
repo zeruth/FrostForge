@@ -8,6 +8,7 @@
 #include "glue/ScriptAPIRegistry.hpp"
 
 #include "ui/CSimpleButton.hpp"
+#include "ui/CSimpleEditBox.hpp"
 #include "ui/CSimpleSlider.hpp"
 #include "ui/CSimpleScrollFrame.hpp"
 #include "ui/CSimpleCheckButton.hpp"
@@ -137,13 +138,6 @@ void ScriptClass_ColorSelect(lua_State* L) {
 // the ControlPoint metatables.
 // ref: FUN_1406065d0
 void ScriptClass_ControlPoint(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-}
-
-// the EditBox metatables.
-// ref: FUN_1424b0730
-void ScriptClass_EditBox(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
 }
@@ -296,7 +290,7 @@ void GlueRegisterScriptAPI(lua_State* L) {
     CSimpleCheckButton::CreateScriptMetaTables();
     ScriptClass_ColorSelect(L);
     ScriptClass_ControlPoint(L);
-    ScriptClass_EditBox(L);
+    CSimpleEditBox::CreateScriptMetaTables();
     ScriptClass_Font(L);
     ScriptClass_FontString(L);
     CSimpleFrame::CreateScriptMetaTables();

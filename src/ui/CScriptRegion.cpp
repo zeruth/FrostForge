@@ -313,7 +313,8 @@ bool CScriptRegion::Unknown120() {
     return false;
 }
 
-bool CScriptRegion::HasKeyHandler() {
+bool CScriptRegion::HasKeyHandler(const void* event) {
+    (void)event;
     return false;
 }
 

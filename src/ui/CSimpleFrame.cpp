@@ -2169,7 +2169,8 @@ bool CSimpleFrame::HasCharHandler() {
 }
 
 // ref: FUN_14061ca20
-bool CSimpleFrame::HasKeyHandler() {
+bool CSimpleFrame::HasKeyHandler(const void* event) {
+    (void)event;
     return this->HasScriptAny(0x1b) || this->HasScriptAny(0x1c);
 }
 
@@ -2573,7 +2574,10 @@ void CSimpleFrame::Unknown2C8() {
     });
 }
 
-void CSimpleFrame::Unknown2E0() {
+void CSimpleFrame::OnEditFocusChanged(bool focused, bool runScripts, bool userInput) {
+    (void)focused;
+    (void)runScripts;
+    (void)userInput;
 }
 
 // ---- dragging ------------------------------------------------------------------------------

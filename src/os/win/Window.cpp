@@ -2,8 +2,11 @@
 #include "os/Timer.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
+#include "storm/Unicode.hpp"
 #include "util/Unimplemented.hpp"
 #include <windows.h>
+#include <imm.h>
+#include <malloc.h>
 #include <cmath>
 #include <cstring>
 
@@ -1277,4 +1280,172 @@ bool OsEventPump(OSEVENTSINK handler, void* context, void* param) {
     s_eventSinkParam = nullptr;
     s_pumping = 0;
     return s_eventSinkUsed != 0;
+}
+
+// ---- the IME ---------------------------------------------------------------------------------
+
+namespace {
+
+HIMC s_imeContext;                  // DAT_1430a1be8: the window's input context while the IME is off
+void* s_tsfThreadManager;           // DAT_1430a1ab8: the TSF thread manager (made by FUN_14123f100)
+
+// A composition string of the current IME context, as UTF-8 (FUN_14123d2c0).
+bool ImeGetString(uint32_t index, char* buffer, int32_t size) {
+    *buffer = '\0';
+    HWND window = static_cast<HWND>(OsGetMainWindow(0));
+    HIMC context = ImmGetContext(window);
+    if (context != nullptr) {
+        uint16_t wide[0x200];
+        LONG bytes = ImmGetCompositionStringW(context, index, wide, 0x3fe);
+        wide[(bytes & ~1) / 2] = 0;
+        int32_t written = 0;
+        UnicodeConvertUtf16ToUtf8(buffer, static_cast<uint32_t>(size - 1), wide, 0x200, &written, nullptr);
+        buffer[written] = '\0';
+        ImmReleaseContext(window, context);
+    }
+    return context != nullptr;
+}
+
+}
+
+// The IME follows the edit focus: the first enable gives the window its input context back,
+// the last disable cancels the composition and takes it away.
+// ref: FUN_14123e5f0
+void OsImeEnable(bool enable) {
+    HWND window = static_cast<HWND>(OsGetMainWindow(0));
+    if (!enable) {
+        s_imeComposing--;
+        if (s_imeComposing != 0) {
+            return;
+        }
+        ImmNotifyIME(s_imeContext, NI_COMPOSITIONSTR, CPS_CANCEL, 0);
+        ImmAssociateContext(window, nullptr);
+    } else {
+        s_imeComposing++;
+        if (s_imeComposing != 1) {
+            return;
+        }
+        ImmAssociateContext(window, s_imeContext);
+    }
+    if (s_imeDisabled == 0 || s_tsfThreadManager == nullptr) {
+        return;
+    }
+    // The TSF input processor profile sink, advised while the IME is on.
+    FROST_UNIMPLEMENTED();
+}
+
+// The composition's target clause and cursor, in characters; false without a composition.
+// ref: FUN_14123e7e0
+bool OsImeGetCompositionRange(int32_t* start, int32_t* end, int32_t* cursor) {
+    HWND window = static_cast<HWND>(OsGetMainWindow(0));
+    HIMC context = ImmGetContext(window);
+    if (context == nullptr) {
+        return false;
+    }
+    uint32_t cursorPos = static_cast<uint16_t>(ImmGetCompositionStringW(context, GCS_CURSORPOS, nullptr, 0));
+    uint32_t clauseBytes = static_cast<uint32_t>(ImmGetCompositionStringW(context, GCS_COMPCLAUSE, nullptr, 0));
+    if (clauseBytes < 5) {
+        ImmReleaseContext(window, context);
+        return false;
+    }
+    uint32_t* clauses = static_cast<uint32_t*>(_alloca((clauseBytes + 0xf) & ~0xfull));
+    std::memset(clauses, 0, clauseBytes);
+    uint32_t read = static_cast<uint32_t>(ImmGetCompositionStringW(context, GCS_COMPCLAUSE, clauses, clauseBytes));
+    if (0xfffffffd < read) {
+        ImmReleaseContext(window, context);
+        return false;
+    }
+    uint32_t count = read >> 2;
+    clauses[0] = 0;
+    uint8_t attributes[0x200];
+    uint32_t target = 0;
+    if (count < 3) {
+        ImmGetCompositionStringW(context, GCS_COMPATTR, attributes, 0x200);
+        if (count == 1) {
+            goto done;
+        }
+    } else {
+        uint32_t current = 0;
+        for (uint32_t i = 0; i < count - 1; i++) {
+            if (clauses[i] <= cursorPos && cursorPos < clauses[i + 1]) {
+                current = i;
+            }
+            target = current;
+        }
+        ImmGetCompositionStringW(context, GCS_COMPATTR, attributes, 0x200);
+    }
+    for (uint32_t i = 0; i < count - 1; i++) {
+        if (attributes[clauses[i]] != 0) {
+            target = i;
+        }
+    }
+done:
+    uint16_t composition[0x200] = {};
+    ImmGetCompositionStringW(context, GCS_COMPSTR, composition, 0x3fe);
+    ImmReleaseContext(window, context);
+    *start = static_cast<int32_t>(clauses[target]);
+    *end = static_cast<int32_t>(clauses[target + 1]);
+    *cursor = static_cast<int32_t>(cursorPos);
+    return true;
+}
+
+// ref: FUN_14123e9e0
+bool OsImeGetResultString(char* buffer, int32_t size) {
+    return ImeGetString(GCS_RESULTSTR, buffer, size);
+}
+
+// ref: FUN_14123e9f0
+bool OsImeGetCompositionString(char* buffer, int32_t size) {
+    return ImeGetString(GCS_COMPSTR, buffer, size);
+}
+
+// The input language while the IME converts natively: 1 Japanese, 2 Korean, 3 Chinese,
+// otherwise 0 (roman).
+// ref: FUN_14123ea00
+int32_t OsImeGetLanguage() {
+    bool native = false;
+    if (s_imeDisabled == 0) {
+        HWND window = static_cast<HWND>(OsGetMainWindow(0));
+        HIMC context = ImmGetContext(window);
+        if (context == nullptr) {
+            return 0;
+        }
+        DWORD conversion = 0;
+        DWORD sentence = 0;
+        ImmGetConversionStatus(context, &conversion, &sentence);
+        ImmReleaseContext(window, context);
+        native = (conversion & IME_CMODE_NATIVE) != 0;
+    } else if (s_tsfThreadManager != nullptr) {
+        // The TSF compartments (keyboard open and input mode conversion).
+        FROST_UNIMPLEMENTED();
+    }
+    if (!native) {
+        return 0;
+    }
+    uint8_t language = static_cast<uint8_t>(reinterpret_cast<uintptr_t>(GetKeyboardLayout(0)));
+    if (language == LANG_CHINESE) {
+        return 3;
+    }
+    if (language == LANG_JAPANESE) {
+        return 1;
+    }
+    if (language == LANG_KOREAN) {
+        return 2;
+    }
+    return 0;
+}
+
+// Native conversion on or off.
+// ref: FUN_14123ecd0
+void OsImeSetNative(bool native) {
+    HWND window = static_cast<HWND>(OsGetMainWindow(0));
+    HIMC context = ImmGetContext(window);
+    if (context == nullptr) {
+        return;
+    }
+    DWORD conversion = 0;
+    DWORD sentence = 0;
+    ImmGetConversionStatus(context, &conversion, &sentence);
+    conversion = native ? (conversion | IME_CMODE_NATIVE) : (conversion & ~static_cast<DWORD>(IME_CMODE_NATIVE));
+    ImmSetConversionStatus(context, conversion, sentence);
 }

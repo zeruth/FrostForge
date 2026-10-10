@@ -1,8 +1,11 @@
 #include "base/CharClass.hpp"
 
+#include "storm/Unicode.hpp"
+
 namespace {
 
 #include "base/CharSpaceTables.inc"
+#include "base/CharHangulTable.inc"
 
 }
 
@@ -60,4 +63,54 @@ bool CharIsSpace(uint32_t code) {
     }
     uint8_t row = s_spaceRows[s_spaceBlocks[code >> 8] * 0x10 + ((code & 0xff) >> 4)];
     return s_spaceFlags[row * 0x10 + (code & 0xf)] != 0;
+}
+
+// ref: FUN_142431340
+bool CharIsAsciiLetter(uint32_t code) {
+    uint16_t c = static_cast<uint16_t>(code);
+    return static_cast<uint16_t>(c - 0x41) <= 0x19 || static_cast<uint16_t>(c - 0x61) <= 0x19;
+}
+
+// ref: FUN_142431410
+bool CharIsRussian(uint32_t code) {
+    uint16_t c = static_cast<uint16_t>(code);
+    return static_cast<uint16_t>(c - 0x410) <= 0x3f || c == 0x401 || c == 0x451;
+}
+
+// ref: FUN_142431360
+bool CharIsHangulLetter(uint32_t code) {
+    if (static_cast<uint16_t>(code + 0x5400) >= 0x2ba4) {
+        return false;
+    }
+    uint32_t index = (code & 0xffff) - 0xac00;
+    return ((s_hangulLetters[index >> 6] >> (index & 0x3f)) & 1) != 0;
+}
+
+// ref: FUN_141650900
+bool CharIsAlphabetic(uint32_t code) {
+    return CharIsLatin(code) || CharIsAsciiLetter(code) || CharIsRussian(code) || CharIsHangulLetter(code)
+        || CharIsChinese(code);
+}
+
+// ref: FUN_141650f10
+bool TextIsValid(const char* text) {
+    int32_t bytes = 0;
+    uint32_t code = SUniSGetUTF8Strict(reinterpret_cast<const uint8_t*>(text), &bytes);
+    for (;;) {
+        if (code == 0xffffffff) {
+            return true;
+        }
+        if (code == 0x80000000) {
+            return false;
+        }
+        if (code < 0x20) {
+            if (code != 9 && code != 10 && code != 13) {
+                return false;
+            }
+        } else if (code - 0xd800 < 0x800 || code - 0xfffe < 2) {
+            return false;
+        }
+        text += bytes;
+        code = SUniSGetUTF8Strict(reinterpret_cast<const uint8_t*>(text), &bytes);
+    }
 }

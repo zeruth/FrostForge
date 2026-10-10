@@ -2,6 +2,7 @@
 // they share with textures.
 
 #include "ui/CSimpleFontString.hpp"
+#include "ui/UIScriptArgs.hpp"
 
 #include <cstring>
 
@@ -45,6 +46,8 @@ CSimpleFontString* StringFromLua(lua_State* L) {
         FrameScript_ActionError(error);
     }
     return string;
+}
+
 }
 
 // Three numbers 0..1 as 0xffRRGGBB (FUN_140a50ab0).
@@ -154,8 +157,10 @@ int32_t PushColor(lua_State* L, uint32_t argb) {
 
 // A justification as its name (FUN_1408c6e70).
 int32_t PushJustify(lua_State* L, uint32_t justify) {
-    return PushStringOrNil(L, JustifyToString(justify));
+    return ScriptMethod::PushStringOrNil(L, JustifyToString(justify));
 }
+
+namespace {
 
 // Sets a string flag the font object no longer decides.
 void SetOwnFlag(CSimpleFontString* string, uint32_t flag, bool on) {

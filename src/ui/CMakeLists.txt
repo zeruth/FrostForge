@@ -12,6 +12,12 @@ add_library(ui STATIC
     CSimpleCheckButton.cpp
     CSimpleScrollFrame.cpp
     CSimpleSlider.cpp
+    CSimpleEditBox.cpp
+    CSimpleEditBoxInput.cpp
+    CSimpleEditBoxLayout.cpp
+    CSimpleEditBoxScript.cpp
+    CSimpleFontedFrame.cpp
+    FrameTime.cpp
     CSimpleFrame.cpp
     CSimpleFrameScript.cpp
     CSimpleRegion.cpp

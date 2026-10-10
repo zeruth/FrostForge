@@ -104,7 +104,7 @@ class CSimpleTop : public CLayoutFrame {
     CHAINEDHASH m_frameBatches;                                         // 0x230 CSimpleFrame* -> CRenderBatch*
     blz::vector<CSimpleFrame*, s_frameVectorTag> m_batchUpdates;        // 0x250
     CHAINEDHASH m_layoutWaiting;                                        // 0x268 CLayoutFrame*
-    uint8_t m_cursorShown;                                              // 0x288
+    uint8_t m_imeEnabled;                                               // 0x288 an edit box has the focus
     blz::embedded_vector<CScriptRegion*, 2, s_regionVectorTag> m_mouseOver;    // 0x290
     blz::embedded_vector<CScriptRegion*, 2, s_regionVectorTag> m_mouseMotion;  // 0x2b8
     RBTREEHEADER m_buttonFocus;                                         // 0x2e0 MOUSEBUTTON -> regions
@@ -156,6 +156,9 @@ class CSimpleTop : public CLayoutFrame {
 
     // Whether templates load under their own taint even without a frame being loaded.
     bool IsSecureLoad();
+
+    // The IME on or off, as the edit focus comes and goes (FUN_1405ee420).
+    void EnableIme(bool enable);
 
     // Input registration (types: 0..6; 2 motion, 3 click, 4 wheel).
     void RegisterForInput(CScriptRegion* region, int32_t type);

@@ -440,6 +440,18 @@ int32_t SStrLenUTF8(const char* string) {
     return count;
 }
 
+// The characters in at most `bytes` bytes of a UTF-8 string.
+// ref: FUN_140253350
+int32_t SStrLenUTF8N(const char* string, int64_t bytes) {
+    int32_t count = 0;
+    for (auto p = reinterpret_cast<const uint8_t*>(string); *p != 0 && bytes != 0; p++, bytes--) {
+        if ((*p & 0xC0) != 0x80) {
+            count++;
+        }
+    }
+    return count;
+}
+
 namespace {
 
 // The sequence length of each lead byte (0 for the terminator) and what each length's

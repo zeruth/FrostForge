@@ -172,7 +172,7 @@ class CSimpleFrame : public CScriptRegion, public CAnimatableObject {
     uint64_t GetDrawOrder() override;
     bool IsBatched() override;
     bool HasCharHandler() override;
-    bool HasKeyHandler() override;
+    bool HasKeyHandler(const void* event) override;
     bool HasPadButtonHandler(void* event) override;
     bool HasPadStickHandler(void* event) override;
     bool HasWheelHandler() override;
@@ -219,7 +219,8 @@ class CSimpleFrame : public CScriptRegion, public CAnimatableObject {
     virtual void Unknown2C8();
     virtual void OnSizeChanged(float width, float height);
     virtual void LockHighlight(bool lock);
-    virtual void Unknown2E0();
+    // The keyboard edit focus came or went (CSimpleEditBox runs OnEditFocusGained/Lost).
+    virtual void OnEditFocusChanged(bool focused, bool runScripts, bool userInput);
     // Recomputes the layout scale from the frame's scale and its parent's.
     virtual bool UpdateScale(bool force);
     virtual void UpdateEffectiveAlpha();

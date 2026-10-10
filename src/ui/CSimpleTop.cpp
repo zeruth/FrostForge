@@ -211,7 +211,7 @@ CSimpleTop::CSimpleTop(void (*preUpdate)()) {
     this->m_strataDirty = 0;
     this->m_frameBatches = CHAINEDHASH();
     this->m_layoutWaiting = CHAINEDHASH();
-    this->m_cursorShown = 0;
+    this->m_imeEnabled = 0;
     this->m_buttonFocus.m_parent = nullptr;
     this->m_buttonFocus.m_left = &this->m_buttonFocus;
     this->m_buttonFocus.m_right = &this->m_buttonFocus;
@@ -979,4 +979,12 @@ void DeferredScriptBuffer::Flush() {
         }
     } while (rounds < 12);
     this->m_queued.clear();
+}
+
+// ref: FUN_1405ee420
+void CSimpleTop::EnableIme(bool enable) {
+    if (enable != (this->m_imeEnabled != 0)) {
+        this->m_imeEnabled = enable;
+        OsImeEnable(enable);
+    }
 }
