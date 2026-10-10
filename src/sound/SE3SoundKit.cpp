@@ -38,7 +38,7 @@ SE3KITLIST g_se3Release;
 SE3KITLIST g_se3Fading;
 SE3KITLIST g_se3Timed;
 SE3KITLIST g_se3Waiting;
-TSList<SE3SoundKitDef, TSGetLink<SE3SoundKitDef>, 8> g_se3DefTimers;
+TSList<SE3SoundKitDef, TSGetLink<SE3SoundKitDef>, 8> g_se3DefTimers(offsetof(SE3SoundKitDef, m_timerLink));
 
 namespace {
 

@@ -32,6 +32,12 @@ class TSList {
         this->m_terminator.m_next = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(&this->m_terminator) | 1);
     }
 
+    // A list whose link is not the node's first field (the reference stores the offset as
+    // static data beside the terminator).
+    explicit TSList(ptrdiff_t linkoffset) : TSList() {
+        this->m_linkoffset = linkoffset;
+    }
+
     // ref: FUN_14025cfe0
     ~TSList() {
         while (T* node = this->Head()) {

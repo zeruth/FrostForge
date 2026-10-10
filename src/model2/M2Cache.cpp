@@ -93,24 +93,44 @@ struct SHAREDNODE {
     CM2Shared* m_value;
 };
 
-// Grows the shared map to `count` buckets (FUN_141198ef0).
+const char s_sharedBucketTag[] = ".PEAU?$chained_hash_node@U?$pair@$$CBHPEAVCM2Shared@@@blz@@@blz@@";
+
+// Rehashes the shared map into at least `minimum` buckets, and as many as its entries need at
+// its load limit, rounded up to a power of two from 8 (blz::chained_hash rehash). Nothing
+// changes when that is the current count and the buckets exist.
 // ref: FUN_141198ef0
-void ResizeSharedMap(M2CACHE* cache, uint64_t count) {
-    auto buckets = static_cast<void**>(SMemAlloc(count * 8, 0xb, ".?AU?$chained_hash_node", 0, -6, 0));
+void ResizeSharedMap(M2CACHE* cache, uint64_t minimum) {
+    float load = static_cast<float>(cache->m_sharedCount) / cache->m_sharedMaxLoad;
+    uint64_t needed = static_cast<uint64_t>(load);
+    if (static_cast<float>(needed) * cache->m_sharedMaxLoad < static_cast<float>(cache->m_sharedCount)) {
+        needed++;
+    }
+    if (needed < minimum) {
+        needed = minimum;
+    }
+    uint64_t count = 8;
+    while (count < needed) {
+        count *= 2;
+    }
+    if (count == cache->m_sharedBucketCount && cache->m_sharedBuckets != nullptr) {
+        return;
+    }
+    auto buckets = static_cast<void**>(
+        SMemAlloc(count * 8, 0xb, s_sharedBucketTag, SStrHashFnv1a(s_sharedBucketTag), -6, 0));
     std::memset(buckets, 0, count * 8);
-    for (uint64_t i = 0; i < cache->m_sharedBucketCount; i++) {
-        auto node = static_cast<SHAREDNODE*>(cache->m_sharedBuckets[i]);
-        while (node != nullptr) {
-            SHAREDNODE* next = node->m_next;
-            uint64_t slot = HashInt(node->m_key) & (count - 1);
-            node->m_next = static_cast<SHAREDNODE*>(buckets[slot]);
-            buckets[slot] = node;
-            node = next;
+    if (cache->m_sharedBuckets != nullptr) {
+        for (uint64_t i = 0; i < cache->m_sharedBucketCount; i++) {
+            auto node = static_cast<SHAREDNODE*>(cache->m_sharedBuckets[i]);
+            while (node != nullptr) {
+                SHAREDNODE* next = node->m_next;
+                uint64_t slot = HashInt(node->m_key) & (count - 1);
+                node->m_next = static_cast<SHAREDNODE*>(buckets[slot]);
+                buckets[slot] = node;
+                node = next;
+            }
         }
     }
-    if (cache->m_sharedBuckets != nullptr) {
-        SMemFree(cache->m_sharedBuckets, nullptr, -6, 0);
-    }
+    SMemFree(cache->m_sharedBuckets, s_sharedBucketTag, -6, 0);
     cache->m_sharedBuckets = buckets;
     cache->m_sharedBucketCount = count;
 }

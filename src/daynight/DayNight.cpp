@@ -42,7 +42,7 @@ const char s_overrideTableTag[] =
 const char s_stringTag[] = ".D";
 
 // DAT_142d4ca20: every handle, linked at the tail.
-TSList<DAYNIGHT, TSGetLink<DAYNIGHT>, 8> s_handles;
+TSList<DAYNIGHT, TSGetLink<DAYNIGHT>, 8> s_handles(offsetof(DAYNIGHT, m_link));
 
 // DAT_1447aada8: the CelestialBody patch callback is registered.
 bool s_celestialRegistered;
