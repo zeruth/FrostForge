@@ -27,9 +27,9 @@ struct M2Element {
     CM2BaseModel* m_model;              // 0x10
     uint32_t m_18;                      // 0x18
     uint32_t m_flags;                   // 0x1c 0x80 faded, 0x4000 a shadow batch, 0x8000 ...
-    float m_depth;                      // 0x20
+    float m_alpha;                      // 0x20
     float m_screenSize;                 // 0x24 the model's
-    uint32_t m_pass;                    // 0x28
+    float m_distance;                   // 0x28 squared, for the sort
     uint32_t m_2c;                      // 0x2c
     union {
         uint32_t m_batchIndex;          // 0x30
@@ -50,8 +50,8 @@ struct M2Element {
     uint8_t m_78[0x10];                 // 0x78
 
     // ref: FUN_141205160
-    void Initialize(uint32_t kind, uint64_t a3, CM2BaseModel* model, const M2SkinSection* section, float depth,
-        float screenSize, uint32_t pass, uint32_t a9, uint32_t flags);
+    void Initialize(uint32_t kind, uint64_t a3, CM2BaseModel* model, const M2SkinSection* section, float alpha,
+        float screenSize, float distance, uint32_t a9, uint32_t flags);
     // The emitter drawn (FUN_1412052c0).
     void SetEmitter(CParticleEmitter2* emitter);
     // The pipeline drawn with (FUN_141205340).

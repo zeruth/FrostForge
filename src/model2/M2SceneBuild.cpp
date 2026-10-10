@@ -513,3 +513,381 @@ void M2SceneElementPrepassPipeline(CM2Scene* scene, M2Element* element, int32_t 
     element->SetPipeline(pipeline);
     element->m_effect = static_cast<CShaderEffect*>(scene->m_effectPrepass);
 }
+
+namespace {
+
+// The blend modes the lit sphere draws opaque (DAT_142721268).
+const int32_t s_blendOpaque[8] = { 1, 1, 0, 1, 0, 1, 1, 0 };
+// A blend mode's blend in the effect pass (DAT_142721390).
+const int32_t s_effectBlend[8] = { 2, 2, 2, 3, 4, 5, 6, 7 };
+
+}  // namespace
+
+// What the procedural effect's shaders take from a batch's own: its vertex shader kind among
+// {0, 9, 7, 2, 0xc} and its pixel shader kind among {1, 6, 0x24, 7} (FUN_1411dd9d0).
+// ref: FUN_1411dd9d0
+int32_t* M2SceneEffectShaderParts(CM2Scene* scene, int32_t* out, const M2Batch* batch) {
+    (void)scene;
+    static const int32_t s_vertexKinds[5] = { 0, 9, 7, 2, 0xc };  // DAT_142721a10
+    static const int32_t s_vertexParts[5] = { 0, 0, 0, 1, 1 };
+    static const int32_t s_pixelKinds[4] = { 1, 6, 0x24, 7 };     // DAT_142721a20
+    static const int32_t s_pixelParts[4] = { 0, 1, 1, 2 };
+    out[0] = 0;
+    out[1] = 0;
+    uint16_t texCoords;
+    int32_t vertexKind = static_cast<int32_t>(M2GetVertexShaderKind(batch->m_textureCount, batch->m_shaderId, &texCoords));
+    for (uint32_t i = 0; i < 5; i++) {
+        if (vertexKind == s_vertexKinds[i]) {
+            out[0] = s_vertexParts[i];
+            break;
+        }
+    }
+    int32_t pixelKind = static_cast<int32_t>(M2GetPixelShaderKind(batch->m_textureCount, batch->m_shaderId));
+    for (uint32_t i = 0; i < 4; i++) {
+        if (pixelKind == s_pixelKinds[i]) {
+            out[1] = s_pixelParts[i];
+            return out;
+        }
+    }
+    return out;
+}
+
+// A flipbook impostor batch's pipeline (FUN_1411e07a0).
+// ref: FUN_1411e07a0
+void M2SceneElementFlipbookPipeline(CM2Scene* scene, M2Element* element, const M2Material* material, uint8_t pass) {
+    uint32_t write = 1;
+    if (static_cast<int8_t>(element->m_flags) >= 0 && (scene->m_flags & 0x20) != 0) {
+        element->m_flags |= 0x100;
+        write = 0;
+    }
+    uint8_t unlit = material->m_flags & 1;
+    uint32_t shadow = 0;
+    uint32_t shadowWrite = 0;
+    uint32_t lit = 0;
+    bool first = pass != 0 && unlit == 0 && (lit = 1, g_m2ProjectedBlendLit[material->m_blendMode] != 0);
+    if (!first) {
+        lit = 0;
+    }
+    if ((first || pass != 0)
+        && (~((element->m_model->m_lightingUsed->m_flags >> 4) & (scene->m_flags >> 4)) & 1) == 0
+        && (material->m_flags & 0x100) == 0 && unlit == 0) {
+        element->m_flags |= 0x40;
+        shadow = 2;
+        element->m_pipeline = nullptr;
+        if (write == 1) {
+            shadowWrite = shadow;
+        }
+    }
+    uint32_t kind = static_cast<uint32_t>(element->m_sortKey >> 0x1f) & 0xf;
+    uint32_t external = 0;
+    if (kind == 3) {
+        external = scene->m_cache->m_flags >> 8 & 1;
+    }
+    uint64_t depthStencil = 0;
+    uint32_t raster = 0;
+    uint16_t blend = 0;
+    M2SceneElementState(element->m_model, static_cast<const uint8_t*>(scene->m_038), (scene->m_flags >> 3 & 1) != 0,
+        material->m_blendMode, material->m_flags, g_renderSettings.m_msaaSamples,
+        static_cast<uint32_t>(element->m_batchKey >> 0x20) & 0xf, pass, element->m_flags,
+        static_cast<int32_t>(element->m_64), kind, &depthStencil, &blend, &raster);
+    uint32_t faded = element->m_model->m_params.m_fade < 1.0f ? 2 : 0;
+    uint32_t noPass = pass == 0 ? 1 : 0;
+    auto effect = static_cast<CShaderEffect*>(scene->m_effectFlipbook);
+    GxPipeline* pipeline = ShaderEffectGetPipeline(effect, static_cast<uint16_t>(shadowWrite + (noPass + external * 2) * 4 + lit),
+        static_cast<uint16_t>(shadow + (faded + noPass) * 4 + write), depthStencil, blend, raster, 0x14, 3,
+        static_cast<uint32_t>(scene->m_db08), nullptr);
+    element->SetPipeline(pipeline);
+    element->m_effect = effect;
+}
+
+// A procedural effect batch's pipeline, from the parts its batch's shaders give
+// (FUN_1411e09e0).
+// ref: FUN_1411e09e0
+void M2SceneElementProceduralPipeline(CM2Scene* scene, M2Element* element, const M2Material* material, uint8_t pass,
+    uint8_t variant, int32_t faded, const int32_t* parts) {
+    uint32_t bones = element->m_section->m_boneInfluences;
+    uint32_t external = 0;
+    if ((static_cast<uint32_t>(element->m_sortKey >> 0x1f) & 0xf) == 3) {
+        if (bones == 0) {
+            bones = 1;
+        }
+        external = scene->m_cache->m_flags >> 8 & 1;
+    }
+    uint32_t flags = element->m_flags;
+    if (2 < bones) {
+        bones = 2;
+    }
+    uint32_t vs = ((flags & 0x8002) != 0 ? 2 : 0) + external + (bones + (parts[1] * 2 + variant) * 3) * 4;
+    uint32_t write = 1;
+    if (static_cast<int8_t>(flags) >= 0 && (scene->m_flags & 0x20) != 0) {
+        write = 0;
+        element->m_flags = flags | 0x100;
+    }
+    uint32_t pull = ShaderEffectVertexPull();
+    int32_t target = pass != 0 ? scene->m_db08 : 0;
+    int32_t extra = (target == 7 ? 2 : 0) + faded;
+    uint64_t depthStencil = 0;
+    uint32_t raster = 0;
+    uint16_t blend = 0;
+    M2SceneElementState(element->m_model, static_cast<const uint8_t*>(scene->m_038), (scene->m_flags >> 3 & 1) != 0,
+        material->m_blendMode, material->m_flags, g_renderSettings.m_msaaSamples,
+        static_cast<uint32_t>(element->m_batchKey >> 0x20) & 0xf, pass, element->m_flags,
+        static_cast<int32_t>(element->m_64), static_cast<uint32_t>(element->m_sortKey >> 0x1f) & 0xf, &depthStencil, &blend,
+        &raster);
+    uint32_t ps = write
+        + ((((pass != 0 ? 4 : 0) + extra + (parts[3] + ((pull * 3 + parts[0]) * 3 + parts[2]) * 2) * 8) * 2 + variant) * 2);
+    auto effect = static_cast<CShaderEffect*>(scene->m_effectProcedural);
+    GxPipeline* pipeline = ShaderEffectGetPipeline(effect, static_cast<uint16_t>(vs), static_cast<uint16_t>(ps), depthStencil,
+        blend, raster, 0x14, 3, static_cast<uint32_t>(target), nullptr);
+    element->SetPipeline(pipeline);
+    element->m_effect = effect;
+}
+
+// A model effect's element for a batch: the effect pass replacing or added to the batch's own
+// (FUN_1411d8240). `parts` comes back with the procedural effect's shader parts; `skip` is set
+// when the batch is left to the procedural pass.
+// ref: FUN_1411d8240
+bool M2SceneEffectElement(CM2Scene* scene, M2SceneDrawList* list, M2Element* element, const uint32_t* elementIndex,
+    float strength, int32_t effectType, int32_t front, int32_t back, int32_t noAlpha, uint8_t pass, CShaderEffect* effect,
+    uint32_t vertexPermute, int32_t pixelPermute, int32_t* parts, uint8_t* skip) {
+    const float threshold = 0.99998999f;  // DAT_1427211fc
+    bool extra = false;
+    bool scaleOriginal = true;
+    bool translucent = strength < threshold;
+    bool markKind = true;
+    bool scaleExtra = true;
+    bool edge = false;
+    bool instanced = false;
+    CShaderEffect* passEffect = nullptr;
+    int32_t effectParts[2] = { 0, 0 };
+    CM2Model* model = nullptr;
+    if (element->m_model->m_type == 0) {
+        model = static_cast<CM2Model*>(element->m_model);
+    }
+    float fade = model->m_params.m_fade;
+    const M2Material* material = &model->m_shared->m_data->m_materials[static_cast<const M2Batch*>(element->m_batch)->m_materialIndex];
+    parts[0] = 0;
+    parts[1] = 0;
+    parts[2] = 0;
+    parts[3] = 0;
+    int32_t fadedArg = fade < 1.0f ? 1 : 0;
+    *skip = 0;
+    bool doExtra;
+    bool scaleOriginalNow;
+    switch (effectType) {
+    case 1: {
+        bool lookParts;
+        if (noAlpha == 0) {
+            if (s_blendOpaque[material->m_blendMode] == 0) {
+                passEffect = static_cast<CShaderEffect*>(scene->m_effectLitTransparent);
+                lookParts = true;
+                instanced = true;
+            } else {
+                passEffect = static_cast<CShaderEffect*>(scene->m_effectLitOpaque);
+                lookParts = false;
+            }
+        } else {
+            passEffect = static_cast<CShaderEffect*>(scene->m_effectLitNoAlpha);
+            lookParts = false;
+        }
+        extra = scene->m_defaultTexture != nullptr;
+        markKind = extra;
+        doExtra = false;
+        scaleOriginalNow = true;
+        if (lookParts) {
+            M2SceneEffectShaderParts(scene, effectParts, static_cast<const M2Batch*>(element->m_batch));
+            markKind = extra;
+            doExtra = edge;
+            scaleOriginalNow = scaleOriginal;
+        }
+        break;
+    }
+    case 2:
+        passEffect = static_cast<CShaderEffect*>(scene->m_effectShadowMonk);
+        extra = true;
+        instanced = true;
+        M2SceneEffectShaderParts(scene, effectParts, static_cast<const M2Batch*>(element->m_batch));
+        markKind = extra;
+        doExtra = edge;
+        scaleOriginalNow = scaleOriginal;
+        break;
+    case 3:
+        passEffect = static_cast<CShaderEffect*>(scene->m_effectAvatar);
+        extra = true;
+        instanced = true;
+        scaleOriginal = element->m_alpha < threshold;
+        if (!translucent) {
+            element->m_pipeline = nullptr;
+        }
+        M2SceneEffectShaderParts(scene, effectParts, static_cast<const M2Batch*>(element->m_batch));
+        markKind = extra;
+        doExtra = edge;
+        scaleOriginalNow = scaleOriginal;
+        break;
+    case 5: {
+        const uint8_t* modelEffect = static_cast<const uint8_t*>(element->m_model->m_params.m_effect);
+        doExtra = false;
+        scaleOriginalNow = true;
+        if (modelEffect == nullptr) {
+            break;
+        }
+        uint32_t effectFlags = *reinterpret_cast<const uint32_t*>(modelEffect + 0x7c);
+        bool pass20 = (effectFlags & 0x20) != 0;
+        if (scene->m_daf0 == 0 ? !pass20 : false) {
+            return true;
+        }
+        if (pass20 && s_blendOpaque[material->m_blendMode] == 0) {
+            *skip = 1;
+            return true;
+        }
+        extra = material->m_blendMode != 4;
+        passEffect = static_cast<CShaderEffect*>(scene->m_effectProcedural);
+        doExtra = true;
+        element->m_pipeline = nullptr;
+        scaleOriginalNow = false;
+        uint64_t depthStencil = 0;
+        uint32_t raster = 0;
+        uint16_t blend = 0;
+        uint32_t flags = (scene->m_daf0 != 0 ? 0x20u : 0u) | element->m_flags | 0x200;
+        element->m_flags = flags;
+        M2SceneElementState(element->m_model, static_cast<const uint8_t*>(scene->m_038), (scene->m_flags >> 3 & 1) != 0,
+            material->m_blendMode, material->m_flags, g_renderSettings.m_msaaSamples,
+            static_cast<uint32_t>(element->m_batchKey >> 0x20) & 0xf, pass, flags, static_cast<int32_t>(element->m_64),
+            static_cast<uint32_t>(element->m_sortKey >> 0x1f) & 0xf, &depthStencil, &blend, &raster);
+        GxPipeline* pipeline = ShaderEffectGetPipeline(effect, static_cast<uint16_t>(vertexPermute),
+            static_cast<uint16_t>(pixelPermute), depthStencil, blend, raster, 0x14, 3, static_cast<uint32_t>(scene->m_db08), nullptr);
+        element->SetPipeline(pipeline);
+        element->m_effect = effect;
+        parts[0] = material->m_blendMode == 0 ? 0 : (material->m_blendMode != 4) + 1;
+        int32_t shaderParts[2];
+        M2SceneEffectShaderParts(scene, shaderParts, static_cast<const M2Batch*>(element->m_batch));
+        parts[1] = shaderParts[0];
+        parts[2] = shaderParts[1];
+        parts[3] = static_cast<int32_t>(effectFlags >> 5 & 1);
+        scaleExtra = false;
+        break;
+    }
+    case 6:
+        passEffect = static_cast<CShaderEffect*>(scene->m_effectEdgeGlow);
+        extra = true;
+        edge = true;
+        scaleOriginal = false;
+        instanced = true;
+        M2SceneEffectShaderParts(scene, effectParts, static_cast<const M2Batch*>(element->m_batch));
+        markKind = extra;
+        doExtra = edge;
+        scaleOriginalNow = scaleOriginal;
+        break;
+    case 7: {
+        if (pass == 0) {
+            return true;
+        }
+        uint32_t flags = element->m_flags;
+        CM2BaseModel* owner = element->m_model;
+        element->m_pipeline = nullptr;
+        uint16_t materialFlags = material->m_flags;
+        uint32_t row = 0;
+        if ((materialFlags & 0x10) == 0 || (flags & 0x200) != 0) {
+            if ((materialFlags >> 0xe & 1) == 0 && ((flags & 1) == 0 || owner->m_0d == 0)) {
+                if ((flags & 0x20) != 0 && (g_renderSettings.m_msaaSamples == 0 || (flags & 0x200) != 0)) {
+                    row = 3;
+                }
+            } else {
+                row = 5;
+            }
+        } else {
+            row = 1;
+        }
+        uint64_t depthStencil = g_m2DepthStencil[row][owner->m_0d * 2 + (g_renderSettings.m_msaaSamples != 0 ? 1 : 0)];
+        if (owner->m_type == 0) {
+            depthStencil = ((depthStencil & 0x00ffffff00ffffffull) | 0x100002ull | (2ull << 0x38));
+        }
+        uint16_t blend = s_effectBlend[material->m_blendMode] < 9 ? s_blendWords[s_effectBlend[material->m_blendMode]] : 0;
+        if ((flags & 1) != 0) {
+            blend = s_blendWords[8];
+        }
+        if ((flags >> 4 & 1) != 0) {
+            blend = s_blendWords[8];
+        }
+        uint8_t reference = 0;
+        if ((materialFlags & 4) == 0 && (element->m_sortKey >> 0x1f & 0xf) != 0) {
+            reference = static_cast<uint8_t>((scene->m_flags >> 3 & 1) + 1);
+            if ((owner->m_flags >> 0x1a & 1) != 0) {
+                reference = static_cast<uint8_t>((reference != 2) + 1);
+            }
+        }
+        const uint32_t* table = static_cast<const uint8_t*>(scene->m_038)[0x5c0] == 1 ? g_m2OutlineStencilFill : g_m2OutlineStencil;
+        uint32_t raster = table[reference];
+        uint16_t first;
+        uint16_t zero;
+        if (effect == M2CacheDefaultEffect()) {
+            first = ShaderEffectUnlitPixelPermute(0, 0, 0, 0, 0, 1, 0);
+            zero = ShaderEffectUnlitPixelPermute(0, 0, 0, 0, 0, 0, 0);
+        } else {
+            first = ShaderEffectModelPixelPermute(0, 0, 0, 0, 0, 1, 0, 0);
+            zero = ShaderEffectModelPixelPermute(0, 0, 0, 0, 0, 0, 0, 0);
+        }
+        GxPipeline* pipeline = ShaderEffectGetPipeline(effect, static_cast<uint16_t>(vertexPermute),
+            static_cast<uint16_t>(pixelPermute + (first - zero)), depthStencil, blend, raster, 0x14, 3,
+            static_cast<uint32_t>(scene->m_db08), nullptr);
+        element->SetPipeline(pipeline);
+        element->m_64 = static_cast<uint32_t>(effectType);
+        return true;
+    }
+    case 8:
+        element->m_pipeline = nullptr;
+        element->m_64 = static_cast<uint32_t>(effectType);
+        M2SceneElementFlipbookPipeline(scene, element, material, pass);
+        return true;
+    default:
+        element->m_64 = static_cast<uint32_t>(effectType);
+        return true;
+    }
+    if (extra && (translucent || doExtra)) {
+        float alpha = element->m_alpha;
+        uint8_t extraPass = static_cast<uint8_t>(((element->m_model->m_flags2 & 1) | 2) << 2);
+        if (scaleOriginalNow) {
+            element->m_alpha = (1.0f - strength) * alpha;
+        }
+        uint32_t index;
+        M2Element* added = M2SceneDrawListAddElement(list, &index);
+        *added = list->m_elements.m_data[*elementIndex];
+        if ((static_cast<uint32_t>(added->m_sortKey >> 0x1f) & 0xf) == 3) {
+            added->m_sortKey = (added->m_sortKey & 0xfffffff97fffffffull) | 0x100000000ull;
+        }
+        float distance = added->m_distance - 0.0099999998f;  // DAT_142636334
+        added->m_flags &= 0xfffffcfe;
+        added->m_pipeline = nullptr;
+        added->m_distance = distance;
+        if (!scaleExtra) {
+            strength = 1.0f;
+        }
+        added->m_alpha = strength * alpha;
+        added->SetFaded(true);
+        if (front != 0) {
+            M2SceneDrawListAddToPass(scene, list, extraPass, index);
+            pass = extraPass;
+        }
+        if (back != 0) {
+            M2SceneDrawListAddToPass(scene, list, 10, index);
+            pass = 10;
+        }
+        element = added;
+    }
+    if (markKind) {
+        fadedArg = 0;
+        element->m_64 = static_cast<uint32_t>(effectType);
+    }
+    if (passEffect != nullptr) {
+        if (scene->m_effectProcedural == nullptr || effectType != 5) {
+            if (instanced) {
+                M2SceneElementPipelineInstanced(scene, element, fadedArg, passEffect, pass, effectParts);
+            } else {
+                M2SceneElementPipeline(scene, element, 0, fadedArg, passEffect, pass, nullptr, nullptr);
+            }
+        } else {
+            M2SceneElementProceduralPipeline(scene, element, material, pass, 0, fadedArg, parts);
+        }
+    }
+    return true;
+}

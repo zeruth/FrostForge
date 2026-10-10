@@ -40,8 +40,8 @@ uint64_t SetBits(uint64_t word, uint64_t value, uint64_t keepMask) {
 }  // namespace
 
 // ref: FUN_141205160
-void M2Element::Initialize(uint32_t kind, uint64_t a3, CM2BaseModel* model, const M2SkinSection* section, float depth,
-    float screenSize, uint32_t pass, uint32_t a9, uint32_t flags) {
+void M2Element::Initialize(uint32_t kind, uint64_t a3, CM2BaseModel* model, const M2SkinSection* section, float alpha,
+    float screenSize, float distance, uint32_t a9, uint32_t flags) {
     this->m_batchKey = (reinterpret_cast<uint64_t>(model) & 0xfffffffffffffff0ull) << 0x24;
     this->m_sortKey = 0;
     uint64_t file = reinterpret_cast<uint64_t>(model->GetShared()) >> 1;
@@ -59,12 +59,12 @@ void M2Element::Initialize(uint32_t kind, uint64_t a3, CM2BaseModel* model, cons
     if (2 < model->m_lod) {
         lod = 3;
     }
-    this->m_depth = depth;
+    this->m_alpha = alpha;
     this->m_model = model;
     this->m_sortKey = ((key ^ lod) & 0xfffffffffffffffcull) ^ lod;
     this->m_3c = a9;
     this->m_screenSize = screenSize;
-    this->m_pass = pass;
+    this->m_distance = distance;
     this->m_flags = flags;
     this->m_batchIndex = 0;
     this->m_38 = 0;
