@@ -191,7 +191,7 @@ void GxRenderContext::SetViewport(const float* viewport) {
 // ref: FUN_14228fa20
 void GxRenderContext::Slot018(uint8_t stage, uint32_t first, uint32_t count, void** textures) {
     for (uint32_t i = 0; i < count; i++) {
-        this->Slot010(stage, i + first, textures[i], 0);
+        this->BindTexture(stage, i + first, static_cast<gxDx12Backend::Tex*>(textures[i]), 0);
     }
 }
 
@@ -209,12 +209,12 @@ void GxRenderContext::GetDepthRange(float* a2, float* a3, float* a4, float* a5, 
 void GxRenderContext::Slot008() {
     FROST_UNIMPLEMENTED();
 }
-void GxRenderContext::Slot010(uint8_t, uint32_t, void*, uint8_t) {
+void GxRenderContext::BindTexture(uint8_t, uint32_t, gxDx12Backend::Tex*, uint8_t) {
     FROST_UNIMPLEMENTED();  // FUN_1422e3fd0 -> FUN_1422e3d20: binds a texture to a stage
 }
 void GxRenderContext::Slot020(uint32_t, void*) {
 }
-void GxRenderContext::Slot028() {
+void GxRenderContext::SetSampler(uint8_t, uint32_t, uint64_t) {
     FROST_UNIMPLEMENTED();
 }
 void GxRenderContext::SetTexture(uint8_t, uint32_t, gxDx12Backend::Tex*) {
@@ -307,7 +307,7 @@ void GxRenderContext::SetIndexBuffer(GxBuf*, uint8_t) {
 }
 void GxRenderContext::Slot138() {
 }
-void GxRenderContext::Slot140() {
+void GxRenderContext::SetShadingRateCombiners(const uint8_t*) {
 }
 void GxRenderContext::Draw(uint32_t, uint32_t, uint32_t, uint32_t, uint8_t) {
     FROST_UNIMPLEMENTED();

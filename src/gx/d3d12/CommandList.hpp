@@ -102,6 +102,8 @@ struct DescriptorStagingHeap {
     HRESULT Initialize(ID3D12Device* device);           // FUN_1422db0e0
     void SetView(uint8_t stage, uint32_t kind, uint32_t slot, D3D12_CPU_DESCRIPTOR_HANDLE source,
         uint64_t address);                              // FUN_1422df5b0
+    void CreateUnorderedAccessView(uint8_t stage, uint32_t slot, ID3D12Resource* resource, ID3D12Resource* counter,
+        const D3D12_UNORDERED_ACCESS_VIEW_DESC* desc);  // FUN_1422dfda0
     void CreateShaderResourceView(uint8_t stage, uint32_t slot, ID3D12Resource* resource,
         const D3D12_SHADER_RESOURCE_VIEW_DESC* desc);   // FUN_1422dfa10
     void SetConstants(uint8_t stage, uint32_t slot, uint64_t address);  // FUN_1422df440
@@ -233,10 +235,13 @@ class GxRenderContext {
     GxRenderContext();                      // FUN_14228f2a0
     virtual ~GxRenderContext();             // 0x000 (FUN_14228f3e0)
     virtual void Slot008();
-    virtual void Slot010(uint8_t stage, uint32_t slot, void* texture, uint8_t a5);
+    // A texture a stage reads at a slot, its unordered view when `unordered`; the sampler is
+    // set apart (SetSampler).
+    virtual void BindTexture(uint8_t stage, uint32_t slot, gxDx12Backend::Tex* tex, uint8_t unordered);  // 0x010
     virtual void Slot018(uint8_t stage, uint32_t first, uint32_t count, void** textures);  // FUN_14228fa20
     virtual void Slot020(uint32_t a2, void* a3);
-    virtual void Slot028();
+    // The sampler a packed sampler key describes, for a stage's slot.
+    virtual void SetSampler(uint8_t stage, uint32_t slot, uint64_t key);  // 0x028
     // The texture a stage reads at a slot, with the sampler its usage describes.
     virtual void SetTexture(uint8_t stage, uint32_t slot, gxDx12Backend::Tex* tex);  // 0x030
     virtual void Slot038();                 // FUN_14228fa90
@@ -274,7 +279,8 @@ class GxRenderContext {
     // The index buffer: 16-bit indices when `format` is 1, else 32-bit.
     virtual void SetIndexBuffer(GxBuf* buf, uint8_t format);  // 0x130
     virtual void Slot138();
-    virtual void Slot140();
+    // The two shading-rate combiners the next draws use.
+    virtual void SetShadingRateCombiners(const uint8_t* combiners);  // 0x140
     virtual void Draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t startVertex, uint32_t startInstance,
         uint8_t shadingRate);                               // 0x148
     virtual void DrawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t startIndex, int32_t baseVertex,

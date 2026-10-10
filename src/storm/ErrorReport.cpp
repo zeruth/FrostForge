@@ -108,6 +108,18 @@ void ErrorDisplayFormatted(uint32_t code, const char* a2, int32_t a3, const char
     FROST_UNIMPLEMENTED();
 }
 
+// ref: FUN_14024d210
+// Diverged: the report is not ported; the message goes to stderr so that it is not lost.
+void ErrorReportNonFatal(uint32_t code, const char* file, int32_t line, const char* format, ...) {
+    char message[0x800];
+    va_list args;
+    va_start(args, format);
+    vsnprintf(message, sizeof(message), format, args);
+    va_end(args);
+    fprintf(stderr, "error 0x%08X (%s:%d): %s\n", code, file, line, message);
+    FROST_UNIMPLEMENTED();
+}
+
 namespace {
 
 // The memory the crash dump is to include besides the stacks (DAT_142ddc620, count at

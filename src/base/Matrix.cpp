@@ -538,3 +538,66 @@ void VectorNormalize(float* v) {
         v[2] *= scale;
     }
 }
+
+// ref: FUN_141342710
+float* MatrixFromAxisAngle(float* m, float radians, const float* axis, bool normalized) {
+    float x = axis[0];
+    float y = axis[1];
+    float z = axis[2];
+    if (!normalized) {
+        float scale = 1.0f / std::sqrt(y * y + x * x + z * z);
+        x *= scale;
+        y *= scale;
+        z *= scale;
+    }
+    // FUN_14240ad20
+    float s = std::sin(radians);
+    float c = std::cos(radians);
+    float t = 1.0f - c;
+    m[15] = 1.0f;
+    m[3] = 0.0f;
+    m[7] = 0.0f;
+    m[11] = 0.0f;
+    m[12] = 0.0f;
+    m[13] = 0.0f;
+    m[14] = 0.0f;
+    float xy = y * x * t;
+    float xz = z * x * t;
+    m[0] = x * x * t + c;
+    m[1] = xy + z * s;
+    m[4] = xy - z * s;
+    m[2] = xz - y * s;
+    float yz = z * y * t;
+    m[8] = xz + y * s;
+    m[5] = y * y * t + c;
+    m[10] = z * z * t + c;
+    m[6] = yz + x * s;
+    m[9] = yz - x * s;
+    return m;
+}
+
+// The axis is to x from; about z when the two are parallel.
+// ref: FUN_1412b2570
+float* MatrixRotationBetween(float* m, const float* from, const float* to) {
+    float axis[3] = {
+        to[2] * from[1] - to[1] * from[2],
+        to[0] * from[2] - from[0] * to[2],
+        from[0] * to[1] - to[0] * from[1],
+    };
+    float length = std::sqrt(axis[1] * axis[1] + axis[0] * axis[0] + axis[2] * axis[2]);
+    if (std::fabs(length) < 9.5367432e-07f) {
+        axis[0] = 0.0f;
+        axis[1] = 0.0f;
+        axis[2] = 1.0f;
+    }
+    // FUN_142412a68
+    float angle = std::atan2(length, from[0] * to[0] + to[1] * from[1] + from[2] * to[2]);
+    return MatrixFromAxisAngle(m, angle, axis, false);
+}
+
+// ref: FUN_141342ee0
+void MatrixAddTranslation(float* m, const float* move) {
+    m[12] = move[0] + m[12];
+    m[13] = move[1] + m[13];
+    m[14] = move[2] + m[14];
+}

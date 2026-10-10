@@ -199,6 +199,22 @@ void DescriptorStagingHeap::CreateShaderResourceView(uint8_t stage, uint32_t slo
     this->m_dirty[stage][BINDING_SRV] |= bit;
 }
 
+// An unordered access view made straight into a stage's slot.
+// ref: FUN_1422dfda0
+void DescriptorStagingHeap::CreateUnorderedAccessView(uint8_t stage, uint32_t slot, ID3D12Resource* resource,
+    ID3D12Resource* counter, const D3D12_UNORDERED_ACCESS_VIEW_DESC* desc) {
+    if (stage >= BINDING_STAGES || slot >= s_bindingCounts[stage][BINDING_UAV]) {
+        return;
+    }
+    uint32_t index = g_stagingBases[stage][BINDING_UAV] + slot;
+    uint64_t bit = 1ull << (slot & 0x3f);
+    D3D12_CPU_DESCRIPTOR_HANDLE dest = { this->m_cpu[0].ptr + static_cast<uint64_t>(index * this->m_increments[0]) };
+    this->m_device->CreateUnorderedAccessView(resource, counter, desc, dest);
+    this->m_constants[index] = 0;
+    this->m_bound[stage][BINDING_UAV] |= bit;
+    this->m_dirty[stage][BINDING_UAV] |= bit;
+}
+
 // A constant buffer's address for a stage's slot (0 unbinds it).
 // ref: FUN_1422df440
 void DescriptorStagingHeap::SetConstants(uint8_t stage, uint32_t slot, uint64_t address) {

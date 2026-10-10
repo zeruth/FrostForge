@@ -147,7 +147,7 @@ CM2BaseModel::CM2BaseModel() {
     this->m_collisionSphereRadius = 0.0f;
     std::memset(&this->m_lighting, 0, 0xa0);
     this->m_lighting.m_maxLights = 8;
-    this->m_lighting.m_pad104 = 0;
+    this->m_lighting.m_fogIndex = 0;
     this->m_lighting.m_plane[0] = 0.0f;
     this->m_lighting.m_plane[1] = 0.0f;
     this->m_lighting.m_plane[2] = 1.0f;

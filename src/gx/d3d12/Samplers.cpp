@@ -137,3 +137,84 @@ void GraphicsCommandList::SetTexture(uint8_t stage, uint32_t slot, Tex* tex) {
 void gxDx12Backend::RenderContextD3d12::SetTexture(uint8_t stage, uint32_t slot, Tex* tex) {
     this->Owner()->SetTexture(stage, slot, tex);
 }
+
+namespace gxDx12Backend {
+
+// SetTexture without the sampler, and with the unordered view when asked: the texture's
+// residency is noted, its objects move to the view's state, and the view lands in the slot.
+// ref: FUN_1422e3d20
+void GraphicsCommandList::BindTexture(uint8_t stage, uint32_t slot, Tex* tex, uint8_t unordered) {
+    if (GxDeviceD3d12()->m_ready == 0) {
+        return;
+    }
+    uint32_t id = tex != nullptr ? tex->m_id : 0;
+    if (this->m_boundTextures[stage][slot] == id) {
+        return;
+    }
+    this->m_boundTextures[stage][slot] = id;
+    if (tex == nullptr) {
+        this->m_views[stage][slot] = nullptr;
+        if (slot < 8) {
+            this->m_1ab0[stage][slot] = 0;
+        }
+        this->m_staging.SetView(stage, BINDING_SRV, slot, D3D12_CPU_DESCRIPTOR_HANDLE {}, 0);
+        this->m_staging.SetView(stage, BINDING_UAV, slot, D3D12_CPU_DESCRIPTOR_HANDLE {}, 0);
+        return;
+    }
+    D3DX12Residency::ManagedObject* residency = TexResidency(tex);
+    if (residency != nullptr) {
+        this->m_copy.ResidencySet()->Insert(residency);
+    }
+    if (unordered == 0) {
+        this->m_views[stage][slot] = &tex->m_srv;
+        if (slot < 8) {
+            this->m_1ab0[stage][slot] = 0;
+        }
+        if (tex->m_srv.m_handle.ptr == 0) {
+            this->m_staging.CreateShaderResourceView(stage, slot, tex->m_objects[0].m_resource,
+                reinterpret_cast<const D3D12_SHADER_RESOURCE_VIEW_DESC*>(tex->m_srv.m_desc));
+        } else {
+            this->m_staging.SetView(stage, BINDING_SRV, slot, tex->m_srv.m_handle, 0);
+        }
+        uint32_t state = stage == 3 ? D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE : tex->m_srv.m_state;
+        this->m_copy.TransitionObjects(tex->m_objects.data(), tex->m_objects.size(), state);
+    } else {
+        this->m_views[stage][slot] = nullptr;
+        this->m_1ab0[stage][slot] = reinterpret_cast<uint64_t>(&tex->m_uav);
+        if (tex->m_uav.m_handle.ptr == 0) {
+            this->m_staging.CreateUnorderedAccessView(stage, slot, tex->m_objects[0].m_resource, nullptr,
+                reinterpret_cast<const D3D12_UNORDERED_ACCESS_VIEW_DESC*>(tex->m_uav.m_desc));
+        } else {
+            this->m_staging.SetView(stage, BINDING_UAV, slot, tex->m_uav.m_handle, 0);
+        }
+        this->m_copy.TransitionObjects(tex->m_objects.data(), tex->m_objects.size(), tex->m_uav.m_state);
+    }
+}
+
+// ref: FUN_1422defa0
+void GraphicsCommandList::SetSampler(uint8_t stage, uint32_t slot, uint64_t key) {
+    if (GxDeviceD3d12()->m_ready == 0) {
+        return;
+    }
+    this->m_staging.SetView(stage, BINDING_SAMPLER, slot, GxDeviceD3d12()->SamplerFor(key), 0);
+}
+
+}
+
+// ref: FUN_1422e3fd0
+void gxDx12Backend::RenderContextD3d12::BindTexture(uint8_t stage, uint32_t slot, Tex* tex, uint8_t unordered) {
+    this->Owner()->BindTexture(stage, slot, tex, unordered);
+}
+
+// ref: FUN_1422df040
+void gxDx12Backend::RenderContextD3d12::SetSampler(uint8_t stage, uint32_t slot, uint64_t key) {
+    this->Owner()->SetSampler(stage, slot, key);
+}
+
+// ref: FUN_1422dfbf0
+void gxDx12Backend::RenderContextD3d12::SetShadingRateCombiners(const uint8_t* combiners) {
+    if (combiners != nullptr) {
+        this->Owner()->m_wantCombiners[0] = combiners[0];
+        this->Owner()->m_wantCombiners[1] = combiners[1];
+    }
+}

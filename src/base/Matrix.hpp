@@ -41,6 +41,12 @@ void MatrixAffineInverse(float* m, float scale);
 // (FUN_14068de30).
 void MatrixPerspective(float fieldOfView, float aspect, float zNear, float zFar, float* m);
 void MatrixLookAt(const float* eye, const float* direction, const float* up, float* m);
+// A rotation about a unit axis by an angle (FUN_141342710; `normalized` skips normalising the
+// axis), the rotation turning `from` to `to` (FUN_1412b2570), and a translation added
+// (FUN_141342ee0).
+float* MatrixFromAxisAngle(float* m, float radians, const float* axis, bool normalized);
+float* MatrixRotationBetween(float* m, const float* from, const float* to);
+void MatrixAddTranslation(float* m, const float* move);
 // Normalises unless the length is about zero (FUN_1411c9970).
 void VectorNormalize(float* v);
 // The inverse of a rotation and translation: the rotation transposed, the translation turned

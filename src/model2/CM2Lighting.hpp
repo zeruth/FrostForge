@@ -83,9 +83,10 @@ struct CM2ModelLighting {
     CM2Lighting* m_points[8];           // 0x0a0 nearest first
     float m_pointDistances[8];          // 0x0e0 squared
     uint32_t m_maxLights;               // 0x100
-    uint32_t m_pad104;
+    uint32_t m_fogIndex;                // 0x104 the environment fog drawn with, 1 the default
     float m_plane[4];                   // 0x108
-    uint8_t m_118[8];
+    float m_118;                        // 0x118 with flag 8
+    uint32_t m_pad11c;
 };
 static_assert(sizeof(CM2ModelLighting) == 0x120, "CM2ModelLighting is 0x120 bytes");
 

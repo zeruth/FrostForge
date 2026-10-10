@@ -84,6 +84,9 @@ class RenderContextD3d12 : public GxRenderContext {
     GxBuf* GetUploadBuf(uint8_t type) override;                                // FUN_1422d40c0
     void SetPipeline(GxPipeline* pipeline) override;                           // FUN_1422dc9e0
     void SetTexture(uint8_t stage, uint32_t slot, Tex* tex) override;          // FUN_1422e4620
+    void BindTexture(uint8_t stage, uint32_t slot, Tex* tex, uint8_t unordered) override;  // FUN_1422e3fd0
+    void SetSampler(uint8_t stage, uint32_t slot, uint64_t key) override;      // FUN_1422df040
+    void SetShadingRateCombiners(const uint8_t* combiners) override;          // FUN_1422dfbf0
     void SetVertexBuffers(uint32_t first, uint32_t count, const GXVERTEXSTREAM* streams) override;  // FUN_1422dfe60
     void SetIndexBuffer(GxBuf* buf, uint8_t format) override;                  // FUN_1422dca20
     void Draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t startVertex, uint32_t startInstance,
@@ -164,6 +167,8 @@ class GraphicsCommandList {
     // A draw that cannot happen still flushes the pending barriers.
     void SkipDraw();
     void SetTexture(uint8_t stage, uint32_t slot, Tex* tex);  // FUN_1422e43f0
+    void BindTexture(uint8_t stage, uint32_t slot, Tex* tex, uint8_t unordered);  // FUN_1422e3d20
+    void SetSampler(uint8_t stage, uint32_t slot, uint64_t key);  // FUN_1422defa0
 };
 static_assert(offsetof(GraphicsCommandList, m_copy) == 0x8, "GraphicsCommandList layout");
 static_assert(offsetof(GraphicsCommandList, m_uploadBufs) == 0xba0, "GraphicsCommandList layout");

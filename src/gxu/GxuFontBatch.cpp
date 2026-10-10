@@ -486,8 +486,8 @@ void GxuStringBatch::Render(GxRenderContext* context, const float* view, const f
         }
         context->UnlockConstants(0, 1);
         if (params->m_mask != nullptr) {
-            context->Slot010(2, 1, params->m_mask, 0);
-            FROST_UNIMPLEMENTED();
+            context->BindTexture(2, 1, static_cast<gxDx12Backend::Tex*>(params->m_mask), 0);
+            context->SetSampler(2, 1, 0x800200000001ull);
         }
         for (BATCHEDRENDERFONTDESC* desc = this->m_fulllist.Head(); desc != nullptr;) {
             BATCHEDRENDERFONTDESC* next = this->m_fulllist.Link(desc)->Next();
