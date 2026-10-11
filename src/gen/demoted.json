@@ -1,0 +1,5 @@
+{
+ "141c52880": "C2065 'DAT_00000004': undeclared identifier [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcxproj]",
+ "1420317d0": "C2168 'memset': too few actual parameters for intrinsic function [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\g",
+ "142442600": "C2100 you cannot dereference an operand of type 'undefined8' [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\g"
+}

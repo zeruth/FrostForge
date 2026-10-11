@@ -2,6 +2,18 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4100 4047 4024 4716)
 
+/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+undefined8 FUN_140211780() {
+    GenUnimplemented(0x140211780ULL);
+    return (undefined8)0;
+}
+
+/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+undefined8 FUN_1402282f0() {
+    GenUnimplemented(0x1402282f0ULL);
+    return (undefined8)0;
+}
+
 /* register the decompiler lost track of */
 undefined8 FUN_140233d30() {
     GenUnimplemented(0x140233d30ULL);
@@ -26,19 +38,7 @@ undefined8 FUN_14023a490() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_14023ad30() {
-    GenUnimplemented(0x14023ad30ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-longlong * FUN_14023d9b0() {
-    GenUnimplemented(0x14023d9b0ULL);
-    return (longlong *)0;
-}
-
-/* beyond the translation depth */
+/* SIMD union */
 undefined8 FUN_14024a0c0() {
     GenUnimplemented(0x14024a0c0ULL);
     return (undefined8)0;
@@ -51,9 +51,27 @@ undefined8 FUN_14024a6b0() {
 }
 
 /* a port that cannot be called from C (stub, internal or aggregate ABI) */
+ulonglong * FUN_1402545c0() {
+    GenUnimplemented(0x1402545c0ULL);
+    return (ulonglong *)0;
+}
+
+/* a port that cannot be called from C (stub, internal or aggregate ABI) */
 undefined8 FUN_140254670() {
     GenUnimplemented(0x140254670ULL);
     return (undefined8)0;
+}
+
+/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+undefined8 FUN_1402547e0() {
+    GenUnimplemented(0x1402547e0ULL);
+    return (undefined8)0;
+}
+
+/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+ulonglong FUN_140260060() {
+    GenUnimplemented(0x140260060ULL);
+    return (ulonglong)0;
 }
 
 /* a port that cannot be called from C (stub, internal or aggregate ABI) */
@@ -62,85 +80,121 @@ undefined1 FUN_14026bea0() {
     return (undefined1)0;
 }
 
-/* beyond the translation depth */
+/* register the decompiler lost track of */
 char * FUN_14026c578() {
     GenUnimplemented(0x14026c578ULL);
     return (char *)0;
 }
 
-/* beyond the translation depth */
+/* register the decompiler lost track of */
+undefined8 FUN_14026c730() {
+    GenUnimplemented(0x14026c730ULL);
+    return (undefined8)0;
+}
+
+/* SIMD union */
 ulonglong FUN_1402cce50() {
     GenUnimplemented(0x1402cce50ULL);
     return (ulonglong)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_1402db190() {
-    GenUnimplemented(0x1402db190ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_1402db330() {
-    GenUnimplemented(0x1402db330ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_1402dbf60() {
-    GenUnimplemented(0x1402dbf60ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
+/* register the decompiler lost track of */
 undefined8 FUN_1402e0270() {
     GenUnimplemented(0x1402e0270ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* SIMD union */
 undefined8 FUN_1402e3f60() {
     GenUnimplemented(0x1402e3f60ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* reaches the port's s_casReadHookContext (src/cas/CAS.cpp), which has internal linkage */
+undefined8 FUN_1402e5b10() {
+    GenUnimplemented(0x1402e5b10ULL);
+    return (undefined8)0;
+}
+
+/* reaches the port's s_casReadHookContext (src/cas/CAS.cpp), which has internal linkage */
+undefined8 FUN_1402e5d20() {
+    GenUnimplemented(0x1402e5d20ULL);
+    return (undefined8)0;
+}
+
+/* register the decompiler lost track of */
 undefined8 FUN_1402e6770() {
     GenUnimplemented(0x1402e6770ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_1402e85e0() {
-    GenUnimplemented(0x1402e85e0ULL);
+/* SIMD union */
+longlong FUN_1402e6ee0() {
+    GenUnimplemented(0x1402e6ee0ULL);
+    return (longlong)0;
+}
+
+/* SIMD union */
+undefined8 FUN_1402e87e0() {
+    GenUnimplemented(0x1402e87e0ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* thread-local storage */
+undefined * FUN_1402ebe60() {
+    GenUnimplemented(0x1402ebe60ULL);
+    return (undefined *)0;
+}
+
+/* SIMD union */
+undefined8 FUN_1402ec2d0() {
+    GenUnimplemented(0x1402ec2d0ULL);
+    return (undefined8)0;
+}
+
+/* register the decompiler lost track of */
+undefined8 FUN_1402ee3d0() {
+    GenUnimplemented(0x1402ee3d0ULL);
+    return (undefined8)0;
+}
+
+/* reaches the port's s_casReadHookContext (src/cas/CAS.cpp), which has internal linkage */
 undefined8 FUN_1402ee7b0() {
     GenUnimplemented(0x1402ee7b0ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_1402eea10() {
-    GenUnimplemented(0x1402eea10ULL);
+/* SIMD union */
+undefined8 FUN_1402eea70() {
+    GenUnimplemented(0x1402eea70ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_1402f0280() {
-    GenUnimplemented(0x1402f0280ULL);
+/* reaches the port's s_casReadHookContext (src/cas/CAS.cpp), which has internal linkage */
+undefined1 FUN_1402f0f20() {
+    GenUnimplemented(0x1402f0f20ULL);
+    return (undefined1)0;
+}
+
+/* reaches the port's s_casReadHookContext (src/cas/CAS.cpp), which has internal linkage */
+undefined8 FUN_1402f3890() {
+    GenUnimplemented(0x1402f3890ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_1402f1730() {
-    GenUnimplemented(0x1402f1730ULL);
+/* reaches the port's s_casReadHookContext (src/cas/CAS.cpp), which has internal linkage */
+undefined8 FUN_1402f39e0() {
+    GenUnimplemented(0x1402f39e0ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* SIMD union */
+undefined8 FUN_1402f3bd0() {
+    GenUnimplemented(0x1402f3bd0ULL);
+    return (undefined8)0;
+}
+
+/* register the decompiler lost track of */
 undefined8 FUN_1402f41b0() {
     GenUnimplemented(0x1402f41b0ULL);
     return (undefined8)0;
@@ -152,33 +206,87 @@ undefined8 FUN_1402f4550() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-char * FUN_1402f47a0() {
-    GenUnimplemented(0x1402f47a0ULL);
-    return (char *)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_1402f8290() {
-    GenUnimplemented(0x1402f8290ULL);
+/* register the decompiler lost track of */
+undefined8 FUN_1402f71c0() {
+    GenUnimplemented(0x1402f71c0ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined4 * FUN_1402fad40() {
-    GenUnimplemented(0x1402fad40ULL);
-    return (undefined4 *)0;
+/* an interlocked operation */
+undefined8 FUN_1402f7490() {
+    GenUnimplemented(0x1402f7490ULL);
+    return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* a type C does not know (cVa) */
+undefined8 FUN_1402f7c00() {
+    GenUnimplemented(0x1402f7c00ULL);
+    return (undefined8)0;
+}
+
+/* a type C does not know (cVa) */
+undefined8 FUN_1402f7d40() {
+    GenUnimplemented(0x1402f7d40ULL);
+    return (undefined8)0;
+}
+
+/* a type C does not know (cVa) */
+undefined8 FUN_1402f7e70() {
+    GenUnimplemented(0x1402f7e70ULL);
+    return (undefined8)0;
+}
+
+/* a type C does not know (cVa) */
+undefined8 FUN_1402f7f70() {
+    GenUnimplemented(0x1402f7f70ULL);
+    return (undefined8)0;
+}
+
+/* a type C does not know (cVa) */
+undefined8 FUN_1402f8090() {
+    GenUnimplemented(0x1402f8090ULL);
+    return (undefined8)0;
+}
+
+/* a type C does not know (cVa) */
+undefined8 FUN_1402f8190() {
+    GenUnimplemented(0x1402f8190ULL);
+    return (undefined8)0;
+}
+
+/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+undefined8 FUN_1402f9a70() {
+    GenUnimplemented(0x1402f9a70ULL);
+    return (undefined8)0;
+}
+
+/* register the decompiler lost track of */
+undefined8 FUN_1402fb770() {
+    GenUnimplemented(0x1402fb770ULL);
+    return (undefined8)0;
+}
+
+/* register the decompiler lost track of */
+ulonglong FUN_1402fc340() {
+    GenUnimplemented(0x1402fc340ULL);
+    return (ulonglong)0;
+}
+
+/* SIMD union */
 longlong FUN_1402fc460() {
     GenUnimplemented(0x1402fc460ULL);
     return (longlong)0;
 }
 
-/* beyond the translation depth */
+/* SIMD union */
 undefined8 FUN_1402fc890() {
     GenUnimplemented(0x1402fc890ULL);
+    return (undefined8)0;
+}
+
+/* SIMD union */
+undefined8 FUN_1402fd520() {
+    GenUnimplemented(0x1402fd520ULL);
     return (undefined8)0;
 }
 
@@ -188,13 +296,13 @@ longlong FUN_1402fea40() {
     return (longlong)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_1402ffbe0() {
-    GenUnimplemented(0x1402ffbe0ULL);
+/* SIMD union */
+undefined8 FUN_1402ff1e0() {
+    GenUnimplemented(0x1402ff1e0ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* an interlocked operation */
 undefined8 FUN_1403079b0() {
     GenUnimplemented(0x1403079b0ULL);
     return (undefined8)0;
@@ -209,6 +317,12 @@ ulonglong FUN_140320a30() {
 /* register the decompiler lost track of */
 undefined8 FUN_140323a30() {
     GenUnimplemented(0x140323a30ULL);
+    return (undefined8)0;
+}
+
+/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+undefined8 FUN_140324d50() {
+    GenUnimplemented(0x140324d50ULL);
     return (undefined8)0;
 }
 
@@ -260,106 +374,16 @@ undefined8 FUN_14032b0a0() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined * FUN_14051b270() {
-    GenUnimplemented(0x14051b270ULL);
-    return (undefined *)0;
+/* SIMD union */
+undefined8 FUN_14051dff0() {
+    GenUnimplemented(0x14051dff0ULL);
+    return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined * FUN_14051b290() {
-    GenUnimplemented(0x14051b290ULL);
-    return (undefined *)0;
-}
-
-/* beyond the translation depth */
-undefined * FUN_14051b950() {
-    GenUnimplemented(0x14051b950ULL);
-    return (undefined *)0;
-}
-
-/* beyond the translation depth */
-undefined * FUN_14051b960() {
-    GenUnimplemented(0x14051b960ULL);
-    return (undefined *)0;
-}
-
-/* beyond the translation depth */
-bool FUN_140521110() {
-    GenUnimplemented(0x140521110ULL);
-    return (bool)0;
-}
-
-/* beyond the translation depth */
-longlong * FUN_14062d370() {
-    GenUnimplemented(0x14062d370ULL);
-    return (longlong *)0;
-}
-
-/* beyond the translation depth */
+/* SIMD union */
 ulonglong FUN_14062d670() {
     GenUnimplemented(0x14062d670ULL);
     return (ulonglong)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_14062dfe0() {
-    GenUnimplemented(0x14062dfe0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 * FUN_1406d3ea0() {
-    GenUnimplemented(0x1406d3ea0ULL);
-    return (undefined8 *)0;
-}
-
-/* beyond the translation depth */
-undefined8 * FUN_1406d82f0() {
-    GenUnimplemented(0x1406d82f0ULL);
-    return (undefined8 *)0;
-}
-
-/* beyond the translation depth */
-undefined8 * FUN_1406d8660() {
-    GenUnimplemented(0x1406d8660ULL);
-    return (undefined8 *)0;
-}
-
-/* beyond the translation depth */
-longlong FUN_1407ca180() {
-    GenUnimplemented(0x1407ca180ULL);
-    return (longlong)0;
-}
-
-/* beyond the translation depth */
-longlong FUN_1407ca1f0() {
-    GenUnimplemented(0x1407ca1f0ULL);
-    return (longlong)0;
-}
-
-/* beyond the translation depth */
-undefined1 FUN_1407cac50() {
-    GenUnimplemented(0x1407cac50ULL);
-    return (undefined1)0;
-}
-
-/* beyond the translation depth */
-undefined1 FUN_1407cacd0() {
-    GenUnimplemented(0x1407cacd0ULL);
-    return (undefined1)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_1407cadd0() {
-    GenUnimplemented(0x1407cadd0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-bool FUN_1407cae40() {
-    GenUnimplemented(0x1407cae40ULL);
-    return (bool)0;
 }
 
 /* a port that cannot be called from C (stub, internal or aggregate ABI) */
@@ -668,12 +692,6 @@ undefined8 FUN_140e24f80() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 * FUN_140e543a0() {
-    GenUnimplemented(0x140e543a0ULL);
-    return (undefined8 *)0;
-}
-
 /* the decompiler lost calls (2 shown, the reference makes 6) */
 undefined8 FUN_140e74520() {
     GenUnimplemented(0x140e74520ULL);
@@ -695,24 +713,6 @@ undefined8 FUN_140e917b0() {
 /* the stack frame addressed directly */
 undefined8 FUN_140e93b20() {
     GenUnimplemented(0x140e93b20ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_140f03360() {
-    GenUnimplemented(0x140f03360ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_140f03610() {
-    GenUnimplemented(0x140f03610ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_140f03730() {
-    GenUnimplemented(0x140f03730ULL);
     return (undefined8)0;
 }
 
@@ -752,79 +752,19 @@ undefined8 FUN_14107f7b0() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_14117b2f0() {
-    GenUnimplemented(0x14117b2f0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_14117d8c0() {
-    GenUnimplemented(0x14117d8c0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_14117d910() {
-    GenUnimplemented(0x14117d910ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141196fe0() {
-    GenUnimplemented(0x141196fe0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-bool FUN_1411aa630() {
-    GenUnimplemented(0x1411aa630ULL);
-    return (bool)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_1411abc60() {
-    GenUnimplemented(0x1411abc60ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_1411aca90() {
-    GenUnimplemented(0x1411aca90ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_1411ace10() {
-    GenUnimplemented(0x1411ace10ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_1411ad8a0() {
-    GenUnimplemented(0x1411ad8a0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
+/* thread-local storage */
 undefined8 FUN_141208270() {
     GenUnimplemented(0x141208270ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_14122db40() {
-    GenUnimplemented(0x14122db40ULL);
-    return (undefined8)0;
+/* SIMD union */
+float * FUN_141208340() {
+    GenUnimplemented(0x141208340ULL);
+    return (float *)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_14122ddf0() {
-    GenUnimplemented(0x14122ddf0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
+/* SIMD union */
 bool FUN_14122e300() {
     GenUnimplemented(0x14122e300ULL);
     return (bool)0;
@@ -848,18 +788,6 @@ undefined8 FUN_141237be0() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_1412ce0f0() {
-    GenUnimplemented(0x1412ce0f0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_1412e7130() {
-    GenUnimplemented(0x1412e7130ULL);
-    return (undefined8)0;
-}
-
 /* a port that cannot be called from C (stub, internal or aggregate ABI) */
 undefined4 FUN_14134cac0() {
     GenUnimplemented(0x14134cac0ULL);
@@ -869,42 +797,6 @@ undefined4 FUN_14134cac0() {
 /* SIMD union */
 undefined8 FUN_141352210() {
     GenUnimplemented(0x141352210ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141355600() {
-    GenUnimplemented(0x141355600ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141355780() {
-    GenUnimplemented(0x141355780ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141355d20() {
-    GenUnimplemented(0x141355d20ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141356810() {
-    GenUnimplemented(0x141356810ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141356880() {
-    GenUnimplemented(0x141356880ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141357080() {
-    GenUnimplemented(0x141357080ULL);
     return (undefined8)0;
 }
 
@@ -932,13 +824,31 @@ undefined8 FUN_14147f390() {
     return (undefined8)0;
 }
 
+/* a global used as a pointer the data export does not type */
+undefined8 FUN_14147fd70() {
+    GenUnimplemented(0x14147fd70ULL);
+    return (undefined8)0;
+}
+
+/* a global used as a pointer the data export does not type */
+undefined8 FUN_14147fd80() {
+    GenUnimplemented(0x14147fd80ULL);
+    return (undefined8)0;
+}
+
 /* register the decompiler lost track of */
 undefined8 FUN_141480c00() {
     GenUnimplemented(0x141480c00ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* a global used as a pointer the data export does not type */
+undefined8 FUN_141482160() {
+    GenUnimplemented(0x141482160ULL);
+    return (undefined8)0;
+}
+
+/* a global used as a pointer the data export does not type */
 undefined8 FUN_1414830f0() {
     GenUnimplemented(0x1414830f0ULL);
     return (undefined8)0;
@@ -950,99 +860,45 @@ undefined8 FUN_141485f70() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_141488640() {
-    GenUnimplemented(0x141488640ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_14148a020() {
-    GenUnimplemented(0x14148a020ULL);
-    return (undefined8)0;
-}
-
 /* a port that cannot be called from C (stub, internal or aggregate ABI) */
 undefined8 FUN_14148ba20() {
     GenUnimplemented(0x14148ba20ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_14148d590() {
-    GenUnimplemented(0x14148d590ULL);
+/* SIMD union */
+undefined8 FUN_141491f50() {
+    GenUnimplemented(0x141491f50ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-longlong * FUN_14148f440() {
-    GenUnimplemented(0x14148f440ULL);
-    return (longlong *)0;
-}
-
-/* beyond the translation depth */
-ulonglong FUN_1414937e0() {
-    GenUnimplemented(0x1414937e0ULL);
-    return (ulonglong)0;
-}
-
-/* beyond the translation depth */
+/* register the decompiler lost track of */
 undefined8 FUN_141496cc0() {
     GenUnimplemented(0x141496cc0ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* register the decompiler lost track of */
 undefined8 FUN_1414982e0() {
     GenUnimplemented(0x1414982e0ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-longlong * FUN_14149ae80() {
-    GenUnimplemented(0x14149ae80ULL);
-    return (longlong *)0;
+/* SIMD union */
+undefined8 FUN_1414a97c0() {
+    GenUnimplemented(0x1414a97c0ULL);
+    return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined4 * FUN_1414aade0() {
-    GenUnimplemented(0x1414aade0ULL);
-    return (undefined4 *)0;
-}
-
-/* beyond the translation depth */
+/* SIMD union */
 bool FUN_1414b3890() {
     GenUnimplemented(0x1414b3890ULL);
     return (bool)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_1414b5ef0() {
-    GenUnimplemented(0x1414b5ef0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_1414e52f0() {
-    GenUnimplemented(0x1414e52f0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-longlong * FUN_1414ea440() {
-    GenUnimplemented(0x1414ea440ULL);
-    return (longlong *)0;
-}
-
-/* beyond the translation depth */
-longlong FUN_1414f7690() {
-    GenUnimplemented(0x1414f7690ULL);
-    return (longlong)0;
-}
-
-/* beyond the translation depth */
-ulonglong FUN_1414f8240() {
-    GenUnimplemented(0x1414f8240ULL);
+/* register the decompiler lost track of */
+ulonglong FUN_1414cb4e0() {
+    GenUnimplemented(0x1414cb4e0ULL);
     return (ulonglong)0;
 }
 
@@ -1076,33 +932,9 @@ undefined8 FUN_14152d120() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_141541eb0() {
-    GenUnimplemented(0x141541eb0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141546db0() {
-    GenUnimplemented(0x141546db0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-longlong * FUN_141546e70() {
-    GenUnimplemented(0x141546e70ULL);
-    return (longlong *)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_14154ebf0() {
-    GenUnimplemented(0x14154ebf0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_14154ed60() {
-    GenUnimplemented(0x14154ed60ULL);
+/* SIMD union */
+undefined8 FUN_14154cee0() {
+    GenUnimplemented(0x14154cee0ULL);
     return (undefined8)0;
 }
 
@@ -1118,18 +950,6 @@ undefined8 FUN_141567f50() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_141568180() {
-    GenUnimplemented(0x141568180ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_14156b7a0() {
-    GenUnimplemented(0x14156b7a0ULL);
-    return (undefined8)0;
-}
-
 /* reaches the port's s_clientServices (src/services/ClientServices.cpp), which has internal linkage */
 undefined8 FUN_14156b900() {
     GenUnimplemented(0x14156b900ULL);
@@ -1142,27 +962,15 @@ undefined8 FUN_14156dc60() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_141651f70() {
-    GenUnimplemented(0x141651f70ULL);
-    return (undefined8)0;
+/* SIMD union */
+bool FUN_141653be0() {
+    GenUnimplemented(0x141653be0ULL);
+    return (bool)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_141653d50() {
-    GenUnimplemented(0x141653d50ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141653fb0() {
-    GenUnimplemented(0x141653fb0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-ulonglong FUN_14165c1a0() {
-    GenUnimplemented(0x14165c1a0ULL);
+/* register the decompiler lost track of */
+ulonglong FUN_14165b010() {
+    GenUnimplemented(0x14165b010ULL);
     return (ulonglong)0;
 }
 
@@ -1190,30 +998,6 @@ undefined8 FUN_1416817a0() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_141681a50() {
-    GenUnimplemented(0x141681a50ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141681a90() {
-    GenUnimplemented(0x141681a90ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141681ba0() {
-    GenUnimplemented(0x141681ba0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-longlong * FUN_141683650() {
-    GenUnimplemented(0x141683650ULL);
-    return (longlong *)0;
-}
-
 /* reaches the port's s_seedB (src/client/Startup.cpp), which has internal linkage */
 int FUN_141683e80() {
     GenUnimplemented(0x141683e80ULL);
@@ -1232,19 +1016,7 @@ undefined8 FUN_141684730() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined1 FUN_141684fc0() {
-    GenUnimplemented(0x141684fc0ULL);
-    return (undefined1)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_1416850d0() {
-    GenUnimplemented(0x1416850d0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
+/* register the decompiler lost track of */
 undefined8 FUN_1416851c0() {
     GenUnimplemented(0x1416851c0ULL);
     return (undefined8)0;
@@ -1292,18 +1064,6 @@ undefined8 FUN_1416876e0() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_141687d60() {
-    GenUnimplemented(0x141687d60ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-ulonglong FUN_14168daf0() {
-    GenUnimplemented(0x14168daf0ULL);
-    return (ulonglong)0;
-}
-
 /* reaches the port's s_lastCharacterGuidCVar (src/client/ClientCVars.cpp), which has internal linkage */
 undefined8 FUN_14168deb0() {
     GenUnimplemented(0x14168deb0ULL);
@@ -1338,24 +1098,6 @@ undefined8 FUN_14168e8d0() {
 undefined8 FUN_14168ebf0() {
     GenUnimplemented(0x14168ebf0ULL);
     return (undefined8)0;
-}
-
-/* beyond the translation depth */
-int FUN_14168ece0() {
-    GenUnimplemented(0x14168ece0ULL);
-    return (int)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_14168f2d0() {
-    GenUnimplemented(0x14168f2d0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-longlong FUN_14168f630() {
-    GenUnimplemented(0x14168f630ULL);
-    return (longlong)0;
 }
 
 /* register the decompiler lost track of */
@@ -1484,13 +1226,7 @@ undefined8 FUN_1416a71d0() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_1416a8f60() {
-    GenUnimplemented(0x1416a8f60ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
+/* register the decompiler lost track of */
 undefined * FUN_14170fc40() {
     GenUnimplemented(0x14170fc40ULL);
     return (undefined *)0;
@@ -1502,31 +1238,25 @@ ulonglong FUN_14170ff20() {
     return (ulonglong)0;
 }
 
-/* beyond the translation depth */
-undefined8 * FUN_1417121d0() {
-    GenUnimplemented(0x1417121d0ULL);
-    return (undefined8 *)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141794590() {
-    GenUnimplemented(0x141794590ULL);
+/* register the decompiler lost track of */
+undefined8 FUN_1417d63a0() {
+    GenUnimplemented(0x1417d63a0ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_1417ce3d0() {
-    GenUnimplemented(0x1417ce3d0ULL);
+/* register the decompiler lost track of */
+undefined8 FUN_1417d6420() {
+    GenUnimplemented(0x1417d6420ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_1417d48e0() {
-    GenUnimplemented(0x1417d48e0ULL);
+/* register the decompiler lost track of */
+undefined8 FUN_1417d65a0() {
+    GenUnimplemented(0x1417d65a0ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* register the decompiler lost track of */
 undefined8 FUN_1417d74a0() {
     GenUnimplemented(0x1417d74a0ULL);
     return (undefined8)0;
@@ -1538,27 +1268,15 @@ undefined8 FUN_1417d7b50() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* register the decompiler lost track of */
 undefined8 FUN_141903630() {
     GenUnimplemented(0x141903630ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_14190a320() {
-    GenUnimplemented(0x14190a320ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
+/* register the decompiler lost track of */
 undefined8 FUN_141914600() {
     GenUnimplemented(0x141914600ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141916380() {
-    GenUnimplemented(0x141916380ULL);
     return (undefined8)0;
 }
 
@@ -1568,16 +1286,10 @@ undefined8 FUN_14191e7a0() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* SIMD union */
 undefined8 FUN_14195cc60() {
     GenUnimplemented(0x14195cc60ULL);
     return (undefined8)0;
-}
-
-/* beyond the translation depth */
-int FUN_14195ec80() {
-    GenUnimplemented(0x14195ec80ULL);
-    return (int)0;
 }
 
 /* reaches the port's s_initialized (src/glue/GlueMgr.cpp), which has internal linkage */
@@ -1613,12 +1325,6 @@ undefined8 FUN_1419f7f00() {
 /* an interlocked operation */
 undefined8 FUN_1419f8560() {
     GenUnimplemented(0x1419f8560ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_1419f87d0() {
-    GenUnimplemented(0x1419f87d0ULL);
     return (undefined8)0;
 }
 
@@ -1664,13 +1370,7 @@ undefined8 FUN_141a3cdc0() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_141a43e70() {
-    GenUnimplemented(0x141a43e70ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
+/* SIMD union */
 undefined8 FUN_141a45040() {
     GenUnimplemented(0x141a45040ULL);
     return (undefined8)0;
@@ -1694,7 +1394,7 @@ ulonglong FUN_141a490e0() {
     return (ulonglong)0;
 }
 
-/* beyond the translation depth */
+/* thread-local storage */
 undefined8 FUN_141b3ca10() {
     GenUnimplemented(0x141b3ca10ULL);
     return (undefined8)0;
@@ -1856,30 +1556,6 @@ undefined8 FUN_141b63ee0() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-longlong FUN_141bfd0d0() {
-    GenUnimplemented(0x141bfd0d0ULL);
-    return (longlong)0;
-}
-
-/* beyond the translation depth */
-undefined4 * FUN_141bfd6b0() {
-    GenUnimplemented(0x141bfd6b0ULL);
-    return (undefined4 *)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141bfdf40() {
-    GenUnimplemented(0x141bfdf40ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141bffd10() {
-    GenUnimplemented(0x141bffd10ULL);
-    return (undefined8)0;
-}
-
 /* SIMD union */
 undefined8 FUN_141bffe50() {
     GenUnimplemented(0x141bffe50ULL);
@@ -1892,7 +1568,7 @@ undefined8 FUN_141c00970() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* an interlocked operation */
 undefined8 FUN_141c01b80() {
     GenUnimplemented(0x141c01b80ULL);
     return (undefined8)0;
@@ -1904,136 +1580,70 @@ undefined8 FUN_141c01f30() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* an interlocked operation */
 undefined8 FUN_141c02270() {
     GenUnimplemented(0x141c02270ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* an interlocked operation */
 undefined8 FUN_141c02300() {
     GenUnimplemented(0x141c02300ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* an interlocked operation */
 undefined8 FUN_141c02510() {
     GenUnimplemented(0x141c02510ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* an interlocked operation */
 undefined8 FUN_141c027a0() {
     GenUnimplemented(0x141c027a0ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-longlong * FUN_141c03ff0() {
-    GenUnimplemented(0x141c03ff0ULL);
-    return (longlong *)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141c09310() {
-    GenUnimplemented(0x141c09310ULL);
+/* SIMD union */
+undefined8 FUN_141c044f0() {
+    GenUnimplemented(0x141c044f0ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_141c096f0() {
-    GenUnimplemented(0x141c096f0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
+/* the stack frame addressed directly */
 undefined4 * FUN_141c29010() {
     GenUnimplemented(0x141c29010ULL);
     return (undefined4 *)0;
 }
 
-/* beyond the translation depth */
-undefined8 * FUN_141c290c0() {
-    GenUnimplemented(0x141c290c0ULL);
-    return (undefined8 *)0;
+/* register the decompiler lost track of */
+ulonglong FUN_141c4c2e0() {
+    GenUnimplemented(0x141c4c2e0ULL);
+    return (ulonglong)0;
 }
 
-/* beyond the translation depth */
-int * FUN_141c290e0() {
-    GenUnimplemented(0x141c290e0ULL);
-    return (int *)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141c29570() {
-    GenUnimplemented(0x141c29570ULL);
+/* register the decompiler lost track of */
+undefined8 FUN_141c4e8a0() {
+    GenUnimplemented(0x141c4e8a0ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_141c295b0() {
-    GenUnimplemented(0x141c295b0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141c29600() {
-    GenUnimplemented(0x141c29600ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141c29660() {
-    GenUnimplemented(0x141c29660ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141c29690() {
-    GenUnimplemented(0x141c29690ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141c29810() {
-    GenUnimplemented(0x141c29810ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141c29850() {
-    GenUnimplemented(0x141c29850ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141c298c0() {
-    GenUnimplemented(0x141c298c0ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-ulonglong * FUN_141c4fab0() {
-    GenUnimplemented(0x141c4fab0ULL);
+/* register the decompiler lost track of */
+ulonglong * FUN_141c4f2a0() {
+    GenUnimplemented(0x141c4f2a0ULL);
     return (ulonglong *)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_141c5ccc0() {
-    GenUnimplemented(0x141c5ccc0ULL);
-    return (undefined8)0;
+/* did not compile: C2065 'DAT_00000004': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
+undefined1 * FUN_141c52880() {
+    GenUnimplemented(0x141c52880ULL);
+    return (undefined1 *)0;
 }
 
 /* thread-local storage */
 undefined * FUN_141c64fc0() {
     GenUnimplemented(0x141c64fc0ULL);
     return (undefined *)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141c95b10() {
-    GenUnimplemented(0x141c95b10ULL);
-    return (undefined8)0;
 }
 
 /* reaches the port's s_checkAddonVersionCVar (src/client/ClientCVars.cpp), which has internal linkage */
@@ -2084,28 +1694,16 @@ undefined8 FUN_141c99fc0() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* register the decompiler lost track of */
 undefined8 FUN_141c9a080() {
     GenUnimplemented(0x141c9a080ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 * FUN_141c9c580() {
-    GenUnimplemented(0x141c9c580ULL);
-    return (undefined8 *)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141c9d400() {
-    GenUnimplemented(0x141c9d400ULL);
+/* SIMD union */
+undefined8 FUN_141cee510() {
+    GenUnimplemented(0x141cee510ULL);
     return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 * FUN_141cee4d0() {
-    GenUnimplemented(0x141cee4d0ULL);
-    return (undefined8 *)0;
 }
 
 /* register the decompiler lost track of */
@@ -2168,81 +1766,105 @@ undefined8 FUN_141db18f0() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 * FUN_141db1a80() {
-    GenUnimplemented(0x141db1a80ULL);
-    return (undefined8 *)0;
+/* register the decompiler lost track of */
+undefined4 * FUN_141db69b0() {
+    GenUnimplemented(0x141db69b0ULL);
+    return (undefined4 *)0;
 }
 
-/* beyond the translation depth */
-undefined8 * FUN_141dc0730() {
-    GenUnimplemented(0x141dc0730ULL);
-    return (undefined8 *)0;
-}
-
-/* beyond the translation depth */
-undefined8 * FUN_141dcb4c0() {
-    GenUnimplemented(0x141dcb4c0ULL);
-    return (undefined8 *)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_141dcb8a0() {
-    GenUnimplemented(0x141dcb8a0ULL);
+/* SIMD union */
+undefined8 FUN_14202a040() {
+    GenUnimplemented(0x14202a040ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-ulonglong FUN_141def5c0() {
-    GenUnimplemented(0x141def5c0ULL);
+/* register the decompiler lost track of */
+undefined8 FUN_14202e640() {
+    GenUnimplemented(0x14202e640ULL);
+    return (undefined8)0;
+}
+
+/* a global used as a pointer the data export does not type */
+ulonglong FUN_14202f610() {
+    GenUnimplemented(0x14202f610ULL);
     return (ulonglong)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_141e1ec60() {
-    GenUnimplemented(0x141e1ec60ULL);
+/* did not compile: C2168 'memset': too few actual parameters for intrinsic function [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\g */
+ulonglong FUN_1420317d0() {
+    GenUnimplemented(0x1420317d0ULL);
+    return (ulonglong)0;
+}
+
+/* an interlocked operation */
+int FUN_14203b860() {
+    GenUnimplemented(0x14203b860ULL);
+    return (int)0;
+}
+
+/* an interlocked operation */
+undefined8 FUN_14203b880() {
+    GenUnimplemented(0x14203b880ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_141ea3a30() {
-    GenUnimplemented(0x141ea3a30ULL);
+/* SIMD union */
+undefined8 FUN_14203f4e0() {
+    GenUnimplemented(0x14203f4e0ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_1420269f0() {
-    GenUnimplemented(0x1420269f0ULL);
+/* an interlocked operation */
+undefined8 FUN_1420438d0() {
+    GenUnimplemented(0x1420438d0ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_142222310() {
-    GenUnimplemented(0x142222310ULL);
+/* a global used as a pointer the data export does not type */
+undefined8 FUN_142203bc0() {
+    GenUnimplemented(0x142203bc0ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_1422236e0() {
-    GenUnimplemented(0x1422236e0ULL);
+/* a global used as a pointer the data export does not type */
+undefined8 FUN_142203c10() {
+    GenUnimplemented(0x142203c10ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_142362340() {
-    GenUnimplemented(0x142362340ULL);
+/* a global used as a pointer the data export does not type */
+undefined8 FUN_142203e20() {
+    GenUnimplemented(0x142203e20ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_142431700() {
-    GenUnimplemented(0x142431700ULL);
+/* a global used as a pointer the data export does not type */
+undefined8 FUN_142204040() {
+    GenUnimplemented(0x142204040ULL);
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
-undefined8 FUN_142431740() {
-    GenUnimplemented(0x142431740ULL);
+/* a global used as a pointer the data export does not type */
+undefined8 FUN_142204170() {
+    GenUnimplemented(0x142204170ULL);
+    return (undefined8)0;
+}
+
+/* a global used as a pointer the data export does not type */
+undefined8 FUN_1422042e0() {
+    GenUnimplemented(0x1422042e0ULL);
+    return (undefined8)0;
+}
+
+/* an interlocked operation */
+longlong FUN_142260930() {
+    GenUnimplemented(0x142260930ULL);
+    return (longlong)0;
+}
+
+/* did not compile: C2100 you cannot dereference an operand of type 'undefined8' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\g */
+undefined8 FUN_142442600() {
+    GenUnimplemented(0x142442600ULL);
     return (undefined8)0;
 }
 
@@ -2252,20 +1874,20 @@ undefined8 FUN_1424d5250() {
     return (undefined8)0;
 }
 
-/* beyond the translation depth */
+/* thread-local storage */
 undefined8 FUN_1425617a0() {
     GenUnimplemented(0x1425617a0ULL);
     return (undefined8)0;
 }
 
+/* SIMD union */
+undefined1 FUN_142587350() {
+    GenUnimplemented(0x142587350ULL);
+    return (undefined1)0;
+}
+
 /* register the decompiler lost track of */
 undefined8 FUN_14258e540() {
     GenUnimplemented(0x14258e540ULL);
-    return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined8 FUN_1425b4720() {
-    GenUnimplemented(0x1425b4720ULL);
     return (undefined8)0;
 }

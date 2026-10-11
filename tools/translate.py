@@ -514,8 +514,10 @@ class Translator:
                     return CRT_BY_ADDR[target] + "("
                 uses.add(target)
                 return f"CALLF({self.decl(target)[0]}, @FUN_{target:x})("
-            if name.lstrip("_") in CRT:
-                return name.lstrip("_") + "("
+            # FID names a runtime routine it matched more than once `FID_conflict_<name>`
+            plain = name.removeprefix("FID_conflict_").lstrip("_")
+            if plain in CRT:
+                return plain + "("
             return m.group(0)
 
         body = CALL.sub(call, body)

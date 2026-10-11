@@ -118,6 +118,8 @@ typedef unsigned long long code();
 #define SBORROW8(a, b) ((((int64_t)(a) ^ (int64_t)(b)) & ((int64_t)(a) ^ (int64_t)((uint64_t)(a) - (uint64_t)(b)))) < 0)
 #define POPCOUNT(x) ((int)__popcnt64((uint64_t)(x)))
 #define NAN_FLOAT(x) ((x) != (x))
+#undef NAN
+#define NAN(x) ((x) != (x))
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 #define SQRT(x) sqrt(x)
 
