@@ -6,20 +6,20 @@ namespace {
 // containers FUN_14126ed10 also makes; the signaller slots follow.
 constexpr uint32_t TABLE_SIZE = 0x3398;
 
-EVENTSIGNAL* Table() {
-    // ref: FUN_141273d80
+}
+
+// ref: FUN_141273d80
+EVENTSIGNAL* EventCallbacks_Table() {
     static EVENTSIGNAL s_table[TABLE_SIZE / sizeof(EVENTSIGNAL)] = {};
     return s_table;
 }
 
-}
-
 EVENTSIGNAL EventCallbacks_Get(uint32_t offset) {
-    return Table()[offset / sizeof(EVENTSIGNAL)];
+    return EventCallbacks_Table()[offset / sizeof(EVENTSIGNAL)];
 }
 
 void EventCallbacks_Set(uint32_t offset, EVENTSIGNAL signal) {
-    Table()[offset / sizeof(EVENTSIGNAL)] = signal;
+    EventCallbacks_Table()[offset / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141174040

@@ -871,3 +871,623 @@ void EventSignal_WOW_MOUSE_NOT_FOUND(uint64_t id, void* args) {
     (void)args;
     FrameScriptEvents::Signal(id, "WOW_MOUSE_NOT_FOUND");
 }
+
+// ref: FUN_141163d70
+void EventCallbacks_Set8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116afb0
+void EventCallbacks_Set140(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x140 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411640b0
+void EventCallbacks_Set288(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x288 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169390
+void EventCallbacks_Set390(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x390 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411693b0
+void EventCallbacks_Set398(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x398 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165630
+void EventCallbacks_Set548(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x548 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169730
+void EventCallbacks_Set720(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x720 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169750
+void EventCallbacks_Set728(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x728 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411641b0
+void EventCallbacks_Set768(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x768 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163bf0
+void EventCallbacks_Set770(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x770 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163db0
+void EventCallbacks_Set780(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x780 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163c30
+void EventCallbacks_Set790(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x790 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163c70
+void EventCallbacks_Set7C0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x7c0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163e90
+void EventCallbacks_Set7E0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x7e0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164a90
+void EventCallbacks_SetA30(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xa30 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164c30
+void EventCallbacks_SetA40(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xa40 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164ab0
+void EventCallbacks_SetA60(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xa60 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163ef0
+void EventCallbacks_SetA68(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xa68 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165270
+void EventCallbacks_SetD28(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xd28 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165290
+void EventCallbacks_SetD60(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xd60 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411652b0
+void EventCallbacks_SetD98(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xd98 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165890
+void EventCallbacks_SetEA8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xea8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163cb0
+void EventCallbacks_SetEB8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xeb8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411658b0
+void EventCallbacks_SetEC8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xec8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411658f0
+void EventCallbacks_SetED8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xed8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165950
+void EventCallbacks_SetEF0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xef0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165970
+void EventCallbacks_SetEF8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xef8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165990
+void EventCallbacks_SetF30(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xf30 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163cd0
+void EventCallbacks_SetF58(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xf58 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169770
+void EventCallbacks_SetF70(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xf70 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116afd0
+void EventCallbacks_SetF88(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xf88 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169790
+void EventCallbacks_Set1000(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1000 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163f30
+void EventCallbacks_Set1068(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1068 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165a10
+void EventCallbacks_Set1080(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1080 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411697b0
+void EventCallbacks_Set10B8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x10b8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163f50
+void EventCallbacks_Set10D8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x10d8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163f90
+void EventCallbacks_Set10E8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x10e8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165a30
+void EventCallbacks_Set10F0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x10f0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411662d0
+void EventCallbacks_Set1108(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1108 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411662f0
+void EventCallbacks_Set1110(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1110 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166310
+void EventCallbacks_Set1118(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1118 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116aff0
+void EventCallbacks_Set1160(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1160 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163fb0
+void EventCallbacks_Set1168(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1168 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b010
+void EventCallbacks_Set12C0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x12c0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164c50
+void EventCallbacks_Set1320(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1320 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169410
+void EventCallbacks_Set1330(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1330 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169830
+void EventCallbacks_Set1348(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1348 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166df0
+void EventCallbacks_Set1440(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1440 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166e10
+void EventCallbacks_Set1448(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1448 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166e30
+void EventCallbacks_Set1450(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1450 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166e50
+void EventCallbacks_Set1458(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1458 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166e70
+void EventCallbacks_Set1460(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1460 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166e90
+void EventCallbacks_Set1468(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1468 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166eb0
+void EventCallbacks_Set1470(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1470 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166ed0
+void EventCallbacks_Set1478(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1478 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166ef0
+void EventCallbacks_Set1480(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1480 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164ad0
+void EventCallbacks_Set1490(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1490 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166370
+void EventCallbacks_Set1498(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1498 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141167490
+void EventCallbacks_Set15E8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x15e8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166390
+void EventCallbacks_Set1608(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1608 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169870
+void EventCallbacks_Set1610(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1610 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165ed0
+void EventCallbacks_Set17D0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x17d0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165ef0
+void EventCallbacks_Set1808(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1808 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165670
+void EventCallbacks_Set18A8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x18a8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169ed0
+void EventCallbacks_Set1910(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1910 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164af0
+void EventCallbacks_Set1918(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1918 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169890
+void EventCallbacks_Set1BC8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1bc8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411698d0
+void EventCallbacks_Set1C68(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1c68 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411698f0
+void EventCallbacks_Set1C80(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1c80 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169910
+void EventCallbacks_Set1C88(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1c88 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169930
+void EventCallbacks_Set1CC0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1cc0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169430
+void EventCallbacks_Set1E30(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1e30 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169450
+void EventCallbacks_Set1E80(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1e80 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169470
+void EventCallbacks_Set1E88(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1e88 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411663d0
+void EventCallbacks_Set2190(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2190 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164010
+void EventCallbacks_Set2210(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2210 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b030
+void EventCallbacks_Set2218(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2218 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b050
+void EventCallbacks_Set2220(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2220 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b070
+void EventCallbacks_Set2228(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2228 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169950
+void EventCallbacks_Set2230(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2230 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165eb0
+void EventCallbacks_Set2280(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2280 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411663f0
+void EventCallbacks_Set22B8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x22b8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163950
+void EventCallbacks_Set2318(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2318 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141168fb0
+void EventCallbacks_Set2368(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2368 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411694b0
+void EventCallbacks_Set2510(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2510 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411694d0
+void EventCallbacks_Set2518(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2518 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411694f0
+void EventCallbacks_Set2520(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2520 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169590
+void EventCallbacks_Set2548(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2548 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411695b0
+void EventCallbacks_Set2550(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2550 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411695d0
+void EventCallbacks_Set2588(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2588 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411695f0
+void EventCallbacks_Set2590(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2590 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169610
+void EventCallbacks_Set2598(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2598 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169630
+void EventCallbacks_Set25A0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x25a0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169650
+void EventCallbacks_Set25A8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x25a8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169670
+void EventCallbacks_Set25F0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x25f0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b7d0
+void EventCallbacks_Set2690(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2690 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b7f0
+void EventCallbacks_Set2698(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2698 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b890
+void EventCallbacks_Set26C0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x26c0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b8d0
+void EventCallbacks_Set26D0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x26d0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b8f0
+void EventCallbacks_Set26D8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x26d8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b930
+void EventCallbacks_Set26E8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x26e8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169690
+void EventCallbacks_Set29A0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x29a0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164050
+void EventCallbacks_Set29B0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x29b0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141167bd0
+void EventCallbacks_Set2A00(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2a00 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169ef0
+void EventCallbacks_Set2A08(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2a08 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166d90
+void EventCallbacks_Set2EB8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2eb8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164bd0
+void EventCallbacks_Set2F08(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2f08 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164bf0
+void EventCallbacks_Set2F28(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2f28 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164070
+void EventCallbacks_Set2FA8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2fa8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169a10
+void EventCallbacks_Set3138(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3138 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411696d0
+void EventCallbacks_Set3148(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3148 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411696f0
+void EventCallbacks_Set3150(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3150 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b090
+void EventCallbacks_Set3188(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3188 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b0b0
+void EventCallbacks_Set3190(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3190 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b0f0
+void EventCallbacks_Set31A0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x31a0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b110
+void EventCallbacks_Set31A8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x31a8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b3f0
+void EventCallbacks_Set3260(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3260 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b450
+void EventCallbacks_Set3278(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3278 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b4d0
+void EventCallbacks_Set3298(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3298 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b550
+void EventCallbacks_Set32B8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x32b8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b570
+void EventCallbacks_Set32C0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x32c0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b610
+void EventCallbacks_Set32E8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x32e8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b630
+void EventCallbacks_Set32F0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x32f0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169a30
+void EventCallbacks_Set3360(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3360 / sizeof(EVENTSIGNAL)] = signal;
+}

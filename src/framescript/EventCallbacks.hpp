@@ -10,6 +10,8 @@
 
 typedef void (*EVENTSIGNAL)(uint64_t id, void* args);
 
+// The table itself, made on first use (FUN_141273d80).
+EVENTSIGNAL* EventCallbacks_Table();
 // The slot at a byte offset into the table.
 EVENTSIGNAL EventCallbacks_Get(uint32_t offset);
 void EventCallbacks_Set(uint32_t offset, EVENTSIGNAL signal);

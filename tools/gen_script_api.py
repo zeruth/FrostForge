@@ -44,6 +44,17 @@ ENUM_META = 0x1407D2F10
 # 0x140bb3f50): the same as the meta setter, the value in r9b / r9w.
 ENUM_VALUE8 = 0x140BB3EA0
 ENUM_VALUE16 = 0x140BB3F50
+# Enum.<Enum>.<Field> = value through a setter, by the setter: its port and how r9 is read
+ENUM_SETTERS = {
+    0x1407CB7E0: ("ScriptSetEnumValue", "i32"),     # also reached through the thunk ENUM_META
+    ENUM_META: ("ScriptSetEnumValue", "i32"),
+    0x1407CB890: ("ScriptSetEnumValueU32", "u32"),
+    0x1407CB940: ("ScriptSetEnumValueU64", "u64"),
+    ENUM_VALUE8: ("ScriptSetEnumValue8", "u8"),
+    ENUM_VALUE16: ("ScriptSetEnumValue16", "u16"),
+}
+# <table>.<name>[field] = value, the field in the fifth (stack) argument
+TABLE_SETTER = 0x140C09480
 PUSHNUMBER = 0x1402B3B50
 PUSHCCLOSURE = 0x1402B3880
 PUSHUNSIGNED = 0x14065F770
@@ -244,8 +255,9 @@ def scan(b: Binary, start: int) -> dict:
                 target = insn.address + insn.size + ops[1].mem.disp
                 s = b.cstr(target, 200) if b.section_of(target) and not b.is_code(target) else None
                 regs[reg] = ("str", s) if s is not None else ("addr", target)
-            elif m == "mov" and ops[1].type == capstone.x86.X86_OP_IMM:
-                regs[reg] = ("imm", ops[1].imm & 0xFFFFFFFF)
+            elif m in ("mov", "movabs") and ops[1].type == capstone.x86.X86_OP_IMM:
+                wide = reg.startswith("r") and not reg.endswith(("d", "w", "b"))
+                regs[reg] = ("imm", ops[1].imm & (0xFFFFFFFFFFFFFFFF if wide else 0xFFFFFFFF))
                 if reg in ("edx", "r8d", "r9d", "ecx", "r9b", "r9w"):
                     regs[{"edx": "rdx", "r8d": "r8", "r9d": "r9", "ecx": "rcx", "r9b": "r9", "r9w": "r9"}[reg]] = ("imm", ops[1].imm & 0xFFFFFFFF)
             elif m == "xor" and ops[1].type == capstone.x86.X86_OP_REG and ops[0].reg == ops[1].reg:
@@ -258,6 +270,12 @@ def scan(b: Binary, start: int) -> dict:
                     regs[reg] = source
                 else:
                     regs.pop(reg, None)
+        if m == "mov" and len(ops) == 2 and ops[0].type == capstone.x86.X86_OP_MEM \
+                and ops[0].mem.base == capstone.x86.X86_REG_RSP and ops[0].mem.disp == 0x20:
+            if ops[1].type == capstone.x86.X86_OP_REG:
+                regs["stack20"] = regs.get(insn.reg_name(ops[1].reg))
+            elif ops[1].type == capstone.x86.X86_OP_IMM:
+                regs["stack20"] = ("imm", ops[1].imm & 0xFFFFFFFF)
         if m == "xorps" and len(ops) == 2 and ops[0].type == capstone.x86.X86_OP_REG and ops[0].reg == ops[1].reg:
             xmm[insn.reg_name(ops[0].reg)] = 0.0
         elif m in ("movsd", "movss") and len(ops) == 2 and ops[0].type == capstone.x86.X86_OP_REG and ops[1].type == capstone.x86.X86_OP_MEM and ops[1].mem.base == capstone.x86.X86_REG_RIP:
@@ -291,9 +309,9 @@ def scan(b: Binary, start: int) -> dict:
                     enum = None
                     namespace = name
             elif target == PUSHNUMBER:
-                pending_value = xmm.get("xmm1")
+                pending_value = ("number", xmm.get("xmm1"))
             elif target == PUSHUNSIGNED:
-                pending_value = float(i("rdx") or 0)
+                pending_value = ("u64", i("rdx") or 0)
             elif target == PUSHCCLOSURE:
                 pending_handler = a("rdx")
             elif target == SETFIELD:
@@ -304,12 +322,20 @@ def scan(b: Binary, start: int) -> dict:
                     steps.append(("function", namespace, field, pending_handler))
                 pending_value = None
                 pending_handler = None
-            elif target == ENUM_META:
-                steps.append(("enum", s("rdx"), s("r8"), float(i("r9") or 0)))
-            elif target == ENUM_VALUE8:
-                steps.append(("enum", s("rdx"), s("r8"), float((i("r9") or 0) & 0xFF)))
-            elif target == ENUM_VALUE16:
-                steps.append(("enum", s("rdx"), s("r8"), float((i("r9") or 0) & 0xFFFF)))
+            elif target in ENUM_SETTERS:
+                setter, width = ENUM_SETTERS[target]
+                value = i("r9") or 0
+                value = {"i32": value - (1 << 32) if value & 0x80000000 and value <= 0xFFFFFFFF else value,
+                         "u32": value & 0xFFFFFFFF, "u64": value, "u8": value & 0xFF,
+                         "u16": value & 0xFFFF}[width]
+                steps.append(("set", s("rdx"), s("r8"), (setter, width, value)))
+            elif target == TABLE_SETTER:
+                field = regs.get("stack20")
+                field = field[1] if field and field[0] == "str" else None
+                value = i("r9") or 0
+                if value & 0x80000000 and value <= 0xFFFFFFFF:
+                    value -= 1 << 32
+                steps.append(("settable", s("rdx"), s("r8"), (value, field)))
             elif target == REGISTER:
                 steps.append(("function", s("rdx"), s("r8"), a("r9")))
             elif target == REGISTER_GLOBAL:
@@ -327,6 +353,8 @@ def scan(b: Binary, start: int) -> dict:
                 other.append(hex(target))
             # a call keeps only the callee-saved registers
             regs = {k: v for k, v in regs.items() if k in CALLEE_SAVED}
+            if target not in QUIET:
+                regs.pop("stack20", None)
     return {"steps": steps, "other": sorted(set(other))}
 
 
@@ -361,6 +389,12 @@ def ported_handlers() -> set[int]:
     return tags
 
 
+def cpp_double(v) -> str:
+    if v is None:
+        return "0.0"
+    return repr(float(v))
+
+
 def cpp_number(v) -> str:
     if v is None:
         return "0"
@@ -386,35 +420,40 @@ def emit() -> None:
 
     registry = []
     signals: dict[str, tuple[int, int, str]] = {}   # C++ name -> (dispatcher, signaller, event)
+    setters: dict[int, int] = {}                     # slot setter -> its slot
     for addr, name in GLUE_SCRIPT_API:
         info = scan(b, addr)
         body = []
-        enums: dict[str, list] = {}
-        order: list[str] = []
+        order = []
         for kind, space, field, value in info["steps"]:
-            if kind == "enum":
-                if space not in enums:
-                    enums[space] = []
-                    order.append(("enum", space))
-                enums[space].append((field, value))
-            elif kind == "function":
+            if kind == "function":
                 order.append(("function", (space, field, handler(space, field, value))))
             elif kind == "number":
                 order.append(("number", (field, value)))
             elif kind == "event":
                 order.append(("event", (space, field, value)))
-        seen_enum = set()
+            else:
+                order.append((kind, (space, field, value)))
         for kind, item in order:
             if kind == "enum":
-                if item in seen_enum:
-                    continue
-                seen_enum.add(item)
-                values = enums[item]
-                body.append(f"    static const SCRIPTENUMVALUE s_{ident(item)}[] = {{")
-                for field, value in values:
-                    body.append(f"        {{ \"{field}\", {cpp_number(value)} }},")
-                body.append("    };")
-                body.append(f"    ScriptRegisterEnum(L, \"{item}\", s_{ident(item)}, sizeof(s_{ident(item)}) / sizeof(s_{ident(item)}[0]));")
+                # what the reference inlines for a value it writes itself (FUN_1407cb7e0's body)
+                space, field, pushed = item
+                how, value = pushed if pushed else ("number", None)
+                body.append("    ScriptOpenTable(L, \"Enum\", LUA_GLOBALSINDEX);")
+                body.append(f"    ScriptOpenTable(L, \"{space}\", lua_gettop(L));")
+                if how == "u64":
+                    body.append(f"    ScriptPushEnumUInt64(L, 0x{value:x}ull);")
+                else:
+                    body.append(f"    ScriptPushEnumNumber(L, {cpp_double(value)});")
+                body.append(f"    lua_setfield(L, -2, \"{field}\");")
+                body.append("    lua_settop(L, -3);")
+            elif kind == "set":
+                space, field, (setter, width, value) = item
+                literal = f"0x{value:x}ull" if width == "u64" else str(value)
+                body.append(f"    {setter}(L, \"{space}\", \"{field}\", {literal});")
+            elif kind == "settable":
+                table, space, (value, field) = item
+                body.append(f"    ScriptSetTableValue(L, \"{table}\", \"{space}\", {value}, \"{field}\");")
             elif kind == "function":
                 space, field, cname = item
                 if space is None:
@@ -437,7 +476,8 @@ def emit() -> None:
                     if cname in signals and signals[cname][0] != dispatcher:
                         cname = f"{cname}_{dispatcher:x}"
                     signals[cname] = (dispatcher, sig["inner"], sig["name"])
-                    body.append(f"    EventCallbacks_Set(0x{slot:x}, {cname});  // FUN_{setter:x}")
+                    setters[setter] = slot
+                    body.append(f"    EventCallbacks_Set{slot:X}({cname});")
         registry.append((addr, name, "lua_State* L", body, info["other"]))
 
     for addr, name, tables in GLUE_TABLES:
@@ -525,7 +565,12 @@ def emit() -> None:
                   "// framescript/EventCallbacks.hpp): each sends its event to the listeners.",
                   "",
                   "#include <cstdint>",
+                  "",
+                  "#include \"framescript/EventCallbacks.hpp\"",
                   ""]
+    for setter, slot in sorted(setters.items(), key=lambda kv: kv[1]):
+        sig_header.append(f"void EventCallbacks_Set{slot:X}(EVENTSIGNAL signal);  // FUN_{setter:x}")
+    sig_header.append("")
     sig_source = [header,
                   "#include \"glue/EventSignals.hpp\"",
                   "",
@@ -538,6 +583,12 @@ def emit() -> None:
                        f"void {cname}(uint64_t id, void* args) {{",
                        "    (void)args;",
                        f"    FrameScriptEvents::Signal(id, \"{event}\");",
+                       "}",
+                       ""]
+    for setter, slot in sorted(setters.items(), key=lambda kv: kv[1]):
+        sig_source += [f"// ref: FUN_{setter:x}",
+                       f"void EventCallbacks_Set{slot:X}(EVENTSIGNAL signal) {{",
+                       f"    EventCallbacks_Table()[0x{slot:x} / sizeof(EVENTSIGNAL)] = signal;",
                        "}",
                        ""]
     sig_header += ["", "#endif", ""]

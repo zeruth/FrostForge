@@ -38,7 +38,7 @@ void ScriptAPI_C_AddOns(lua_State* L) {
 void ScriptRegister_140bca380(lua_State* L) {
     (void)L;
     // not generated: FUN_141163930 installs FUN_140bb3430, not decoded
-    EventCallbacks_Set(0x2318, EventSignal_SIMPLE_BROWSER_WEB_PROXY_FAILED);  // FUN_141163950
+    EventCallbacks_Set2318(EventSignal_SIMPLE_BROWSER_WEB_PROXY_FAILED);
 }
 
 // ref: FUN_140c846d0
@@ -50,68 +50,106 @@ void ScriptAPI_C_CameraDefaults(lua_State* L) {
 // ref: FUN_140c84910
 void ScriptEnum_CharacterCreateRaceMode(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_CharacterCreateRaceMode[] = {
-        { "Normal", 0 },
-        { "AlliedRace", 1 },
-    };
-    ScriptRegisterEnum(L, "CharacterCreateRaceMode", s_CharacterCreateRaceMode, sizeof(s_CharacterCreateRaceMode) / sizeof(s_CharacterCreateRaceMode[0]));
-    static const SCRIPTENUMVALUE s_CharacterCreateRaceModeMeta[] = {
-        { "NumValues", 2 },
-        { "MinValue", 0 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "CharacterCreateRaceModeMeta", s_CharacterCreateRaceModeMeta, sizeof(s_CharacterCreateRaceModeMeta) / sizeof(s_CharacterCreateRaceModeMeta[0]));
-    static const SCRIPTENUMVALUE s_CharacterCreateType[] = {
-        { "Normal", 0 },
-        { "Boost", 1 },
-        { "TrialBoost", 2 },
-    };
-    ScriptRegisterEnum(L, "CharacterCreateType", s_CharacterCreateType, sizeof(s_CharacterCreateType) / sizeof(s_CharacterCreateType[0]));
-    static const SCRIPTENUMVALUE s_CharacterCreateTypeMeta[] = {
-        { "NumValues", 3 },
-        { "MinValue", 0 },
-        { "MaxValue", 2 },
-    };
-    ScriptRegisterEnum(L, "CharacterCreateTypeMeta", s_CharacterCreateTypeMeta, sizeof(s_CharacterCreateTypeMeta) / sizeof(s_CharacterCreateTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_CreationClassDisabledReason[] = {
-        { "HaveDemonHunter", 0 },
-        { "NeedLevel70", 1 },
-        { "DoesNotHaveExpansion", 2 },
-        { "InvalidForSelectedRace", 3 },
-        { "Other", 8 },
-    };
-    ScriptRegisterEnum(L, "CreationClassDisabledReason", s_CreationClassDisabledReason, sizeof(s_CreationClassDisabledReason) / sizeof(s_CreationClassDisabledReason[0]));
-    static const SCRIPTENUMVALUE s_CreationClassDisabledReasonMeta[] = {
-        { "NumValues", 5 },
-        { "MinValue", 0 },
-        { "MaxValue", 8 },
-    };
-    ScriptRegisterEnum(L, "CreationClassDisabledReasonMeta", s_CreationClassDisabledReasonMeta, sizeof(s_CreationClassDisabledReasonMeta) / sizeof(s_CreationClassDisabledReasonMeta[0]));
-    static const SCRIPTENUMVALUE s_CreationRaceDisabledReason[] = {
-        { "DoesNotHaveExpansion", 0 },
-        { "DoesNotHaveAchievement", 1 },
-        { "RaceLimitServer", 2 },
-        { "RaceLimitLevel", 3 },
-        { "Other", 4 },
-    };
-    ScriptRegisterEnum(L, "CreationRaceDisabledReason", s_CreationRaceDisabledReason, sizeof(s_CreationRaceDisabledReason) / sizeof(s_CreationRaceDisabledReason[0]));
-    static const SCRIPTENUMVALUE s_CreationRaceDisabledReasonMeta[] = {
-        { "NumValues", 5 },
-        { "MinValue", 0 },
-        { "MaxValue", 4 },
-    };
-    ScriptRegisterEnum(L, "CreationRaceDisabledReasonMeta", s_CreationRaceDisabledReasonMeta, sizeof(s_CreationRaceDisabledReasonMeta) / sizeof(s_CreationRaceDisabledReasonMeta[0]));
-    static const SCRIPTENUMVALUE s_PreviewGearType[] = {
-        { "Starting", 0 },
-        { "Awesome", 1 },
-    };
-    ScriptRegisterEnum(L, "PreviewGearType", s_PreviewGearType, sizeof(s_PreviewGearType) / sizeof(s_PreviewGearType[0]));
-    static const SCRIPTENUMVALUE s_PreviewGearTypeMeta[] = {
-        { "NumValues", 2 },
-        { "MinValue", 0 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "PreviewGearTypeMeta", s_PreviewGearTypeMeta, sizeof(s_PreviewGearTypeMeta) / sizeof(s_PreviewGearTypeMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharacterCreateRaceMode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Normal");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharacterCreateRaceMode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "AlliedRace");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CharacterCreateRaceModeMeta", "NumValues", 2);
+    ScriptSetEnumValue(L, "CharacterCreateRaceModeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CharacterCreateRaceModeMeta", "MaxValue", 1);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharacterCreateType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Normal");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharacterCreateType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Boost");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharacterCreateType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "TrialBoost");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CharacterCreateTypeMeta", "NumValues", 3);
+    ScriptSetEnumValue(L, "CharacterCreateTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CharacterCreateTypeMeta", "MaxValue", 2);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CreationClassDisabledReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "HaveDemonHunter");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CreationClassDisabledReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "NeedLevel70");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CreationClassDisabledReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "DoesNotHaveExpansion");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CreationClassDisabledReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "InvalidForSelectedRace");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CreationClassDisabledReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "Other");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CreationClassDisabledReasonMeta", "NumValues", 5);
+    ScriptSetEnumValue(L, "CreationClassDisabledReasonMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CreationClassDisabledReasonMeta", "MaxValue", 8);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CreationRaceDisabledReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "DoesNotHaveExpansion");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CreationRaceDisabledReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "DoesNotHaveAchievement");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CreationRaceDisabledReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "RaceLimitServer");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CreationRaceDisabledReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "RaceLimitLevel");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CreationRaceDisabledReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "Other");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CreationRaceDisabledReasonMeta", "NumValues", 5);
+    ScriptSetEnumValue(L, "CreationRaceDisabledReasonMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CreationRaceDisabledReasonMeta", "MaxValue", 4);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "PreviewGearType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Starting");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "PreviewGearType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Awesome");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "PreviewGearTypeMeta", "NumValues", 2);
+    ScriptSetEnumValue(L, "PreviewGearTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "PreviewGearTypeMeta", "MaxValue", 1);
     ScriptRegisterFunction(L, "C_CharacterCreation", "CanCreateDemonHunter", Lua_C_CharacterCreation_CanCreateDemonHunter);
     ScriptRegisterFunction(L, "C_CharacterCreation", "ClearCharacterTemplate", Lua_C_CharacterCreation_ClearCharacterTemplate);
     ScriptRegisterFunction(L, "C_CharacterCreation", "CreateCharacter", Lua_C_CharacterCreation_CreateCharacter);
@@ -162,14 +200,14 @@ void ScriptEnum_CharacterCreateRaceMode(lua_State* L) {
     ScriptRegisterFunction(L, "C_CharacterCreation", "SetSelectedSex", Lua_C_CharacterCreation_SetSelectedSex);
     ScriptRegisterFunction(L, "C_CharacterCreation", "SetViewingAlteredForm", Lua_C_CharacterCreation_SetViewingAlteredForm);
     ScriptRegisterFunction(L, "C_CharacterCreation", "UpdateCustomizationScene", Lua_C_CharacterCreation_UpdateCustomizationScene);
-    EventCallbacks_Set(0x770, EventSignal_CHAR_RENAME_IN_PROGRESS);  // FUN_141163bf0
+    EventCallbacks_Set770(EventSignal_CHAR_RENAME_IN_PROGRESS);
     // not generated: FUN_141163c10 installs FUN_140c51c70, not decoded
-    EventCallbacks_Set(0x790, EventSignal_CHARACTER_DECLINE_IN_PROGRESS);  // FUN_141163c30
+    EventCallbacks_Set790(EventSignal_CHARACTER_DECLINE_IN_PROGRESS);
     // not generated: FUN_141163c50 installs FUN_140c51ff0, not decoded
-    EventCallbacks_Set(0x7c0, EventSignal_CHARACTER_LIST_RETRIEVING);  // FUN_141163c70
+    EventCallbacks_Set7C0(EventSignal_CHARACTER_LIST_RETRIEVING);
     // not generated: FUN_141163c90 installs FUN_140c56c10, not decoded
-    EventCallbacks_Set(0xeb8, EventSignal_CUSTOMIZE_CHARACTER_STARTED);  // FUN_141163cb0
-    EventCallbacks_Set(0xf58, EventSignal_DELETED_CHARACTER_LIST_RETRIEVING);  // FUN_141163cd0
+    EventCallbacks_SetEB8(EventSignal_CUSTOMIZE_CHARACTER_STARTED);
+    EventCallbacks_SetF58(EventSignal_DELETED_CHARACTER_LIST_RETRIEVING);
     // not generated: FUN_141163cf0 installs FUN_140c57a10, not decoded
     // not generated: FUN_141163d10 installs FUN_140c57af0, not decoded
     // not generated: FUN_141163d30 installs FUN_140c57e70, not decoded
@@ -191,47 +229,45 @@ void ScriptGlobals_CanCreateCharacter(lua_State* L) {
     FrameScript_RegisterFunction("IsNameReservationOnly", Lua_IsNameReservationOnly);
     FrameScript_RegisterFunction("IsVASEnabledOnRealm", Lua_IsVASEnabledOnRealm);
     // not generated: FUN_141163d50 installs FUN_140c504d0, not decoded
-    EventCallbacks_Set(0x8, EventSignal_ACCOUNT_DATA_INITIALIZED);  // FUN_141163d70
+    EventCallbacks_Set8(EventSignal_ACCOUNT_DATA_INITIALIZED);
     // not generated: FUN_141163d90 installs FUN_140c50690, not decoded
-    EventCallbacks_Set(0x780, EventSignal_CHARACTER_COPY_STATUS_CHANGED);  // FUN_141163db0
+    EventCallbacks_Set780(EventSignal_CHARACTER_COPY_STATUS_CHANGED);
     // not generated: FUN_141163dd0 installs FUN_140c51e30, not decoded
     // not generated: FUN_141163df0 installs FUN_140c520d0, not decoded
     // not generated: FUN_141163e10 installs FUN_140c521b0, not decoded
     // not generated: FUN_141163e30 installs FUN_140c52290, not decoded
     // not generated: FUN_141163e50 installs FUN_140c52450, not decoded
     // not generated: FUN_141163e70 installs FUN_140c52530, not decoded
-    EventCallbacks_Set(0x7e0, EventSignal_CHARACTER_UNDELETE_STATUS_CHANGED);  // FUN_141163e90
+    EventCallbacks_Set7E0(EventSignal_CHARACTER_UNDELETE_STATUS_CHANGED);
     // not generated: FUN_141163eb0 installs FUN_140c526f0, not decoded
     // not generated: FUN_141163ed0 installs FUN_140c567b0, not decoded
-    EventCallbacks_Set(0xa68, EventSignal_CLIENT_FEATURE_STATUS_CHANGED);  // FUN_141163ef0
+    EventCallbacks_SetA68(EventSignal_CLIENT_FEATURE_STATUS_CHANGED);
     // not generated: FUN_141163f10 installs FUN_140c56dd0, not decoded
-    EventCallbacks_Set(0x1068, EventSignal_EVENT_CLASS_TRIAL_TIMER_START);  // FUN_141163f30
-    EventCallbacks_Set(0x10d8, EventSignal_FORCE_DECLINE_CHARACTER);  // FUN_141163f50
+    EventCallbacks_Set1068(EventSignal_EVENT_CLASS_TRIAL_TIMER_START);
+    EventCallbacks_Set10D8(EventSignal_FORCE_DECLINE_CHARACTER);
     // not generated: FUN_141163f70 installs FUN_140c57150, not decoded
-    EventCallbacks_Set(0x10e8, EventSignal_FRAMES_LOADED);  // FUN_141163f90
-    EventCallbacks_Set(0x1168, EventSignal_GLUE_SCREENSHOT_SUCCEEDED);  // FUN_141163fb0
+    EventCallbacks_Set10E8(EventSignal_FRAMES_LOADED);
+    EventCallbacks_Set1168(EventSignal_GLUE_SCREENSHOT_SUCCEEDED);
     // not generated: FUN_141163fd0 installs FUN_140c57690, not decoded
     // not generated: FUN_141163ff0 installs FUN_140c57f50, not decoded
-    EventCallbacks_Set(0x2210, EventSignal_SCREEN_FIRST_DISPLAYED);  // FUN_141164010
+    EventCallbacks_Set2210(EventSignal_SCREEN_FIRST_DISPLAYED);
     // not generated: FUN_141164030 installs FUN_140c58110, not decoded
-    EventCallbacks_Set(0x29b0, EventSignal_TRIAL_STATUS_UPDATE);  // FUN_141164050
-    EventCallbacks_Set(0x2fa8, EventSignal_UPDATE_NAME_RESERVATION);  // FUN_141164070
+    EventCallbacks_Set29B0(EventSignal_TRIAL_STATUS_UPDATE);
+    EventCallbacks_Set2FA8(EventSignal_UPDATE_NAME_RESERVATION);
     // not generated: FUN_141164090 installs FUN_140c588f0, not decoded
 }
 
 // ref: FUN_140c86c60
 void ScriptEnum_CharacterServiceInfoFlag(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_CharacterServiceInfoFlag[] = {
-        { "RestrictToRecommendedSpecs", 1 },
-    };
-    ScriptRegisterEnum(L, "CharacterServiceInfoFlag", s_CharacterServiceInfoFlag, sizeof(s_CharacterServiceInfoFlag) / sizeof(s_CharacterServiceInfoFlag[0]));
-    static const SCRIPTENUMVALUE s_CharacterServiceInfoFlagMeta[] = {
-        { "NumValues", 1 },
-        { "MinValue", 1 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "CharacterServiceInfoFlagMeta", s_CharacterServiceInfoFlagMeta, sizeof(s_CharacterServiceInfoFlagMeta) / sizeof(s_CharacterServiceInfoFlagMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharacterServiceInfoFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "RestrictToRecommendedSpecs");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CharacterServiceInfoFlagMeta", "NumValues", 1);
+    ScriptSetEnumValue(L, "CharacterServiceInfoFlagMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "CharacterServiceInfoFlagMeta", "MaxValue", 1);
     ScriptRegisterFunction(L, "C_CharacterServices", "AssignNameChangeDistribution", Lua_C_CharacterServices_AssignNameChangeDistribution);
     ScriptRegisterFunction(L, "C_CharacterServices", "AssignPCTDistribution", Lua_C_CharacterServices_AssignPCTDistribution);
     ScriptRegisterFunction(L, "C_CharacterServices", "AssignRaceOrFactionChangeDistribution", Lua_C_CharacterServices_AssignRaceOrFactionChangeDistribution);
@@ -279,7 +315,7 @@ void ScriptAPI_C_ChatInfo(lua_State* L) {
     ScriptRegisterFunction(L, "C_ChatInfo", "SendAddonMessageLogged", Lua_C_ChatInfo_SendAddonMessageLogged);
     ScriptRegisterFunction(L, "C_ChatInfo", "SwapChatChannelsByChannelIndex", Lua_C_ChatInfo_SwapChatChannelsByChannelIndex);
     ScriptRegisterFunction(L, "C_ChatInfo", "UncensorChatLine", Lua_C_ChatInfo_UncensorChatLine);
-    EventCallbacks_Set(0x288, EventSignal_ALTERNATIVE_DEFAULT_LANGUAGE_CHANGED);  // FUN_1411640b0
+    EventCallbacks_Set288(EventSignal_ALTERNATIVE_DEFAULT_LANGUAGE_CHANGED);
     // not generated: FUN_1411640d0 installs FUN_140c50930, not decoded
     // not generated: FUN_1411640f0 installs FUN_140c51570, not decoded
     // not generated: FUN_141164110 installs FUN_140c51650, not decoded
@@ -287,7 +323,7 @@ void ScriptAPI_C_ChatInfo(lua_State* L) {
     // not generated: FUN_141164150 installs FUN_140c51810, not decoded
     // not generated: FUN_141164170 installs FUN_140c518f0, not decoded
     // not generated: FUN_141164190 installs FUN_140c519d0, not decoded
-    EventCallbacks_Set(0x768, EventSignal_CHANNEL_UI_UPDATE);  // FUN_1411641b0
+    EventCallbacks_Set768(EventSignal_CHANNEL_UI_UPDATE);
     // not generated: FUN_1411641d0 installs FUN_140c527d0, not decoded
     // not generated: FUN_1411641f0 installs FUN_140c528b0, not decoded
     // not generated: FUN_141164210 installs FUN_140c52990, not decoded
@@ -358,49 +394,75 @@ void ScriptAPI_C_ChatInfo(lua_State* L) {
     // not generated: FUN_141164a30 installs FUN_140c56270, not decoded
     // not generated: FUN_141164a50 installs FUN_140c56350, not decoded
     // not generated: FUN_141164a70 installs FUN_140c56430, not decoded
-    EventCallbacks_Set(0xa30, EventSignal_CHAT_SERVER_RECONNECTED);  // FUN_141164a90
-    EventCallbacks_Set(0xa60, EventSignal_CLEAR_BOSS_EMOTES);  // FUN_141164ab0
-    EventCallbacks_Set(0x1490, EventSignal_LANGUAGE_LIST_CHANGED);  // FUN_141164ad0
-    EventCallbacks_Set(0x1918, EventSignal_NOTIFY_CHAT_SUPPRESSED);  // FUN_141164af0
+    EventCallbacks_SetA30(EventSignal_CHAT_SERVER_RECONNECTED);
+    EventCallbacks_SetA60(EventSignal_CLEAR_BOSS_EMOTES);
+    EventCallbacks_Set1490(EventSignal_LANGUAGE_LIST_CHANGED);
+    EventCallbacks_Set1918(EventSignal_NOTIFY_CHAT_SUPPRESSED);
     // not generated: FUN_141164b10 installs FUN_140c57930, not decoded
     // not generated: FUN_141164b30 installs FUN_140c57bd0, not decoded
     // not generated: FUN_141164b50 installs FUN_140c57cb0, not decoded
     // not generated: FUN_141164b70 installs FUN_140c57d90, not decoded
     // not generated: FUN_141164b90 installs FUN_140c583b0, not decoded
     // not generated: FUN_141164bb0 installs FUN_140c58490, not decoded
-    EventCallbacks_Set(0x2f08, EventSignal_UPDATE_CHAT_WINDOWS);  // FUN_141164bd0
-    EventCallbacks_Set(0x2f28, EventSignal_UPDATE_FLOATING_CHAT_WINDOWS);  // FUN_141164bf0
+    EventCallbacks_Set2F08(EventSignal_UPDATE_CHAT_WINDOWS);
+    EventCallbacks_Set2F28(EventSignal_UPDATE_FLOATING_CHAT_WINDOWS);
 }
 
 // ref: FUN_140c891a0
 void ScriptRegister_140c891a0(lua_State* L) {
     (void)L;
     // not generated: FUN_141164c10 installs FUN_140c565f0, not decoded
-    EventCallbacks_Set(0xa40, EventSignal_CINEMATIC_STOP);  // FUN_141164c30
-    EventCallbacks_Set(0x1320, EventSignal_HIDE_SUBTITLE);  // FUN_141164c50
+    EventCallbacks_SetA40(EventSignal_CINEMATIC_STOP);
+    EventCallbacks_Set1320(EventSignal_HIDE_SUBTITLE);
     // not generated: FUN_141164c70 installs FUN_140c57770, not decoded
 }
 
 // ref: FUN_140d959d0
 void ScriptEnum_ConfigurationWarning(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_ConfigurationWarning[] = {
-        { "ShaderModelWillBeOutdated", 0 },
-        { "ShaderModelIsOutdated", 1 },
-        { "ConsoleDeviceSseOutdated", 2 },
-        { "DriverBlocklisted", 3 },
-        { "DriverOutOfDate", 4 },
-        { "DeviceBlocklisted", 5 },
-        { "GraphicsApiWillBeOutdated", 6 },
-        { "OsBitsWillBeOutdated", 7 },
-    };
-    ScriptRegisterEnum(L, "ConfigurationWarning", s_ConfigurationWarning, sizeof(s_ConfigurationWarning) / sizeof(s_ConfigurationWarning[0]));
-    static const SCRIPTENUMVALUE s_ConfigurationWarningMeta[] = {
-        { "NumValues", 8 },
-        { "MinValue", 0 },
-        { "MaxValue", 7 },
-    };
-    ScriptRegisterEnum(L, "ConfigurationWarningMeta", s_ConfigurationWarningMeta, sizeof(s_ConfigurationWarningMeta) / sizeof(s_ConfigurationWarningMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConfigurationWarning", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "ShaderModelWillBeOutdated");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConfigurationWarning", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "ShaderModelIsOutdated");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConfigurationWarning", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "ConsoleDeviceSseOutdated");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConfigurationWarning", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "DriverBlocklisted");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConfigurationWarning", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "DriverOutOfDate");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConfigurationWarning", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "DeviceBlocklisted");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConfigurationWarning", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "GraphicsApiWillBeOutdated");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConfigurationWarning", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "OsBitsWillBeOutdated");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ConfigurationWarningMeta", "NumValues", 8);
+    ScriptSetEnumValue(L, "ConfigurationWarningMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ConfigurationWarningMeta", "MaxValue", 7);
     ScriptRegisterFunction(L, "C_ConfigurationWarnings", "GetConfigurationWarningSeen", Lua_C_ConfigurationWarnings_GetConfigurationWarningSeen);
     ScriptRegisterFunction(L, "C_ConfigurationWarnings", "GetConfigurationWarningString", Lua_C_ConfigurationWarnings_GetConfigurationWarningString);
     ScriptRegisterFunction(L, "C_ConfigurationWarnings", "GetConfigurationWarnings", Lua_C_ConfigurationWarnings_GetConfigurationWarnings);
@@ -410,68 +472,158 @@ void ScriptEnum_ConfigurationWarning(lua_State* L) {
 // ref: FUN_140d95f90
 void ScriptEnum_ConsoleCategory(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_ConsoleCategory[] = {
-        { "Debug", 0 },
-        { "Graphics", 1 },
-        { "Console", 2 },
-        { "Combat", 3 },
-        { "Game", 4 },
-        { "Default", 5 },
-        { "Net", 6 },
-        { "Sound", 7 },
-        { "Gm", 8 },
-        { "Reveal", 9 },
-        { "None", 10 },
-    };
-    ScriptRegisterEnum(L, "ConsoleCategory", s_ConsoleCategory, sizeof(s_ConsoleCategory) / sizeof(s_ConsoleCategory[0]));
-    static const SCRIPTENUMVALUE s_ConsoleCategoryMeta[] = {
-        { "NumValues", 11 },
-        { "MinValue", 0 },
-        { "MaxValue", 10 },
-    };
-    ScriptRegisterEnum(L, "ConsoleCategoryMeta", s_ConsoleCategoryMeta, sizeof(s_ConsoleCategoryMeta) / sizeof(s_ConsoleCategoryMeta[0]));
-    static const SCRIPTENUMVALUE s_ConsoleColorType[] = {
-        { "DefaultColor", 0 },
-        { "InputColor", 1 },
-        { "EchoColor", 2 },
-        { "ErrorColor", 3 },
-        { "WarningColor", 4 },
-        { "GlobalColor", 5 },
-        { "AdminColor", 6 },
-        { "HighlightColor", 7 },
-        { "BackgroundColor", 8 },
-        { "ClickbufferColor", 9 },
-        { "PrivateColor", 10 },
-        { "DefaultGreen", 11 },
-    };
-    ScriptRegisterEnum(L, "ConsoleColorType", s_ConsoleColorType, sizeof(s_ConsoleColorType) / sizeof(s_ConsoleColorType[0]));
-    static const SCRIPTENUMVALUE s_ConsoleColorTypeMeta[] = {
-        { "NumValues", 12 },
-        { "MinValue", 0 },
-        { "MaxValue", 11 },
-    };
-    ScriptRegisterEnum(L, "ConsoleColorTypeMeta", s_ConsoleColorTypeMeta, sizeof(s_ConsoleColorTypeMeta) / sizeof(s_ConsoleColorTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_ConsoleCommandType[] = {
-        { "Cvar", 0 },
-        { "Command", 1 },
-        { "Macro", 2 },
-        { "Script", 3 },
-    };
-    ScriptRegisterEnum(L, "ConsoleCommandType", s_ConsoleCommandType, sizeof(s_ConsoleCommandType) / sizeof(s_ConsoleCommandType[0]));
-    static const SCRIPTENUMVALUE s_ConsoleCommandTypeMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "ConsoleCommandTypeMeta", s_ConsoleCommandTypeMeta, sizeof(s_ConsoleCommandTypeMeta) / sizeof(s_ConsoleCommandTypeMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Debug");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Graphics");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Console");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Combat");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "Game");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "Default");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "Net");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "Sound");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "Gm");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "Reveal");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "None");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ConsoleCategoryMeta", "NumValues", 11);
+    ScriptSetEnumValue(L, "ConsoleCategoryMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ConsoleCategoryMeta", "MaxValue", 10);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleColorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "DefaultColor");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleColorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "InputColor");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleColorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "EchoColor");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleColorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "ErrorColor");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleColorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "WarningColor");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleColorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "GlobalColor");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleColorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "AdminColor");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleColorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "HighlightColor");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleColorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "BackgroundColor");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleColorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "ClickbufferColor");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleColorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "PrivateColor");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleColorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "DefaultGreen");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ConsoleColorTypeMeta", "NumValues", 12);
+    ScriptSetEnumValue(L, "ConsoleColorTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ConsoleColorTypeMeta", "MaxValue", 11);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleCommandType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Cvar");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleCommandType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Command");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleCommandType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Macro");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ConsoleCommandType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Script");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ConsoleCommandTypeMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "ConsoleCommandTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ConsoleCommandTypeMeta", "MaxValue", 3);
     ScriptRegisterFunction(L, "C_Console", "GetAllCommands", Lua_C_Console_GetAllCommands);
     ScriptRegisterFunction(L, "C_Console", "GetColorFromType", Lua_C_Console_GetColorFromType);
     ScriptRegisterFunction(L, "C_Console", "GetFontHeight", Lua_C_Console_GetFontHeight);
     ScriptRegisterFunction(L, "C_Console", "PrintAllMatchingCommands", Lua_C_Console_PrintAllMatchingCommands);
     ScriptRegisterFunction(L, "C_Console", "SetFontHeight", Lua_C_Console_SetFontHeight);
-    EventCallbacks_Set(0xd28, EventSignal_CONSOLE_CLEAR);  // FUN_141165270
-    EventCallbacks_Set(0xd60, EventSignal_CONSOLE_COLORS_CHANGED);  // FUN_141165290
-    EventCallbacks_Set(0xd98, EventSignal_CONSOLE_FONT_SIZE_CHANGED);  // FUN_1411652b0
+    EventCallbacks_SetD28(EventSignal_CONSOLE_CLEAR);
+    EventCallbacks_SetD60(EventSignal_CONSOLE_COLORS_CHANGED);
+    EventCallbacks_SetD98(EventSignal_CONSOLE_FONT_SIZE_CHANGED);
     // not generated: FUN_1411652d0 installs FUN_140d569b0, not decoded
     // not generated: FUN_1411652f0 installs FUN_140d56a90, not decoded
     // not generated: FUN_141165310 installs FUN_140d56e10, not decoded
@@ -491,71 +643,169 @@ void ScriptAPI_C_ConsoleScriptCollection(lua_State* L) {
 // ref: FUN_140f8f150
 void ScriptEnum_UICursorType(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_UICursorType[] = {
-        { "Default", 0 },
-        { "Item", 1 },
-        { "Money", 2 },
-        { "Spell", 3 },
-        { "PetAction", 4 },
-        { "Merchant", 5 },
-        { "ActionBar", 6 },
-        { "Macro", 7 },
-        { "Ammo", 8 },
-        { "Pet", 10 },
-        { "GuildBank", 11 },
-        { "GuildBankMoney", 12 },
-        { "EquipmentSet", 13 },
-        { "Currency", 14 },
-        { "Flyout", 15 },
-        { "VoidItem", 16 },
-        { "BattlePet", 17 },
-        { "Mount", 18 },
-        { "Toy", 19 },
-        { "ConduitCollectionItem", 20 },
-        { "PerksProgramVendorItem", 21 },
-    };
-    ScriptRegisterEnum(L, "UICursorType", s_UICursorType, sizeof(s_UICursorType) / sizeof(s_UICursorType[0]));
-    static const SCRIPTENUMVALUE s_UICursorTypeMeta[] = {
-        { "NumValues", 21 },
-        { "MinValue", 0 },
-        { "MaxValue", 21 },
-    };
-    ScriptRegisterEnum(L, "UICursorTypeMeta", s_UICursorTypeMeta, sizeof(s_UICursorTypeMeta) / sizeof(s_UICursorTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_WorldCursorAnchorType[] = {
-        { "None", 0 },
-        { "Default", 1 },
-        { "Cursor", 2 },
-        { "Nameplate", 3 },
-    };
-    ScriptRegisterEnum(L, "WorldCursorAnchorType", s_WorldCursorAnchorType, sizeof(s_WorldCursorAnchorType) / sizeof(s_WorldCursorAnchorType[0]));
-    static const SCRIPTENUMVALUE s_WorldCursorAnchorTypeMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "WorldCursorAnchorTypeMeta", s_WorldCursorAnchorTypeMeta, sizeof(s_WorldCursorAnchorTypeMeta) / sizeof(s_WorldCursorAnchorTypeMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Default");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Item");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Money");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Spell");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "PetAction");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "Merchant");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "ActionBar");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "Macro");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "Ammo");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "Pet");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "GuildBank");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 12.0);
+    lua_setfield(L, -2, "GuildBankMoney");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 13.0);
+    lua_setfield(L, -2, "EquipmentSet");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 14.0);
+    lua_setfield(L, -2, "Currency");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 15.0);
+    lua_setfield(L, -2, "Flyout");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 16.0);
+    lua_setfield(L, -2, "VoidItem");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 17.0);
+    lua_setfield(L, -2, "BattlePet");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 18.0);
+    lua_setfield(L, -2, "Mount");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 19.0);
+    lua_setfield(L, -2, "Toy");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20.0);
+    lua_setfield(L, -2, "ConduitCollectionItem");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UICursorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 21.0);
+    lua_setfield(L, -2, "PerksProgramVendorItem");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "UICursorTypeMeta", "NumValues", 21);
+    ScriptSetEnumValue(L, "UICursorTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "UICursorTypeMeta", "MaxValue", 21);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "WorldCursorAnchorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "None");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "WorldCursorAnchorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Default");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "WorldCursorAnchorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Cursor");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "WorldCursorAnchorType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Nameplate");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "WorldCursorAnchorTypeMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "WorldCursorAnchorTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "WorldCursorAnchorTypeMeta", "MaxValue", 3);
     ScriptRegisterFunction(L, "C_Cursor", "GetCursorItem", Lua_C_Cursor_GetCursorItem);
-    EventCallbacks_Set(0x548, EventSignal_BATTLE_PET_CURSOR_CLEAR);  // FUN_141165630
+    EventCallbacks_Set548(EventSignal_BATTLE_PET_CURSOR_CLEAR);
     // not generated: FUN_141165650 installs FUN_140f7b490, not decoded
-    EventCallbacks_Set(0x18a8, EventSignal_MOUNT_CURSOR_CLEAR);  // FUN_141165670
+    EventCallbacks_Set18A8(EventSignal_MOUNT_CURSOR_CLEAR);
 }
 
 // ref: FUN_140f922a0
 void ScriptEnum_ManipulatorEventType(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_ManipulatorEventType[] = {
-        { "Start", 0 },
-        { "Move", 1 },
-        { "Complete", 2 },
-        { "Delete", 3 },
-    };
-    ScriptRegisterEnum(L, "ManipulatorEventType", s_ManipulatorEventType, sizeof(s_ManipulatorEventType) / sizeof(s_ManipulatorEventType[0]));
-    static const SCRIPTENUMVALUE s_ManipulatorEventTypeMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "ManipulatorEventTypeMeta", s_ManipulatorEventTypeMeta, sizeof(s_ManipulatorEventTypeMeta) / sizeof(s_ManipulatorEventTypeMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ManipulatorEventType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Start");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ManipulatorEventType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Move");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ManipulatorEventType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Complete");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ManipulatorEventType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Delete");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ManipulatorEventTypeMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "ManipulatorEventTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ManipulatorEventTypeMeta", "MaxValue", 3);
     ScriptRegisterFunction(L, "C_Debug", "GetAllPortLocsForMap", Lua_C_Debug_GetAllPortLocsForMap);
     ScriptRegisterFunction(L, "C_Debug", "GetMapDebugObjects", Lua_C_Debug_GetMapDebugObjects);
     ScriptRegisterFunction(L, "C_Debug", "PrintToDebugWindow", Lua_C_Debug_PrintToDebugWindow);
@@ -563,20 +813,20 @@ void ScriptEnum_ManipulatorEventType(lua_State* L) {
     ScriptRegisterFunction(L, "C_Debug", "TeleportToMapLocation", Lua_C_Debug_TeleportToMapLocation);
     ScriptRegisterFunction(L, "C_Debug", "ViewInDebugWindow", Lua_C_Debug_ViewInDebugWindow);
     // not generated: FUN_141165870 installs FUN_140f7ae70, not decoded
-    EventCallbacks_Set(0xea8, EventSignal_CUSTOM_ANIM);  // FUN_141165890
-    EventCallbacks_Set(0xec8, EventSignal_DB_RECORD_UPDATE);  // FUN_1411658b0
+    EventCallbacks_SetEA8(EventSignal_CUSTOM_ANIM);
+    EventCallbacks_SetEC8(EventSignal_DB_RECORD_UPDATE);
     // not generated: FUN_1411658d0 installs FUN_140f7b810, not decoded
-    EventCallbacks_Set(0xed8, EventSignal_DB_RESULT_COMPLETE);  // FUN_1411658f0
+    EventCallbacks_SetED8(EventSignal_DB_RESULT_COMPLETE);
     // not generated: FUN_141165910 installs FUN_140f7b8f0, not decoded
     // not generated: FUN_141165930 installs FUN_140f7b9d0, not decoded
-    EventCallbacks_Set(0xef0, EventSignal_DEBUG_MAP_OBJECTS_UPDATED);  // FUN_141165950
-    EventCallbacks_Set(0xef8, EventSignal_DEBUG_MENU_TOGGLED);  // FUN_141165970
-    EventCallbacks_Set(0xf30, EventSignal_DEBUG_PORT_LOCS_UPDATED);  // FUN_141165990
+    EventCallbacks_SetEF0(EventSignal_DEBUG_MAP_OBJECTS_UPDATED);
+    EventCallbacks_SetEF8(EventSignal_DEBUG_MENU_TOGGLED);
+    EventCallbacks_SetF30(EventSignal_DEBUG_PORT_LOCS_UPDATED);
     // not generated: FUN_1411659b0 installs FUN_140f7bd50, not decoded
     // not generated: FUN_1411659d0 installs FUN_140f7be30, not decoded
     // not generated: FUN_1411659f0 installs FUN_140f7c990, not decoded
-    EventCallbacks_Set(0x1080, EventSignal_EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED);  // FUN_141165a10
-    EventCallbacks_Set(0x10f0, EventSignal_FRAMESTACK_VISIBILITY_UPDATED);  // FUN_141165a30
+    EventCallbacks_Set1080(EventSignal_EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED);
+    EventCallbacks_Set10F0(EventSignal_FRAMESTACK_VISIBILITY_UPDATED);
     // not generated: FUN_141165a50 installs FUN_140f7ced0, not decoded
     // not generated: FUN_141165a70 installs FUN_140f7cfb0, not decoded
     // not generated: FUN_141165a90 installs FUN_140f7d170, not decoded
@@ -599,7 +849,7 @@ void ScriptAPI_C_EventUtils(lua_State* L) {
     (void)L;
     ScriptRegisterFunction(L, "C_EventUtils", "IsEventValid", Lua_C_EventUtils_IsEventValid);
     ScriptRegisterFunction(L, "C_EventUtils", "NotifySettingsLoaded", Lua_C_EventUtils_NotifySettingsLoaded);
-    EventCallbacks_Set(0x2280, EventSignal_SETTINGS_LOADED);  // FUN_141165eb0
+    EventCallbacks_Set2280(EventSignal_SETTINGS_LOADED);
 }
 
 // ref: FUN_14107eb00
@@ -626,8 +876,8 @@ void ScriptGlobals_CanUpgradeExpansion(lua_State* L) {
     FrameScript_RegisterFunction("IsExpansionTrial", Lua_IsExpansionTrial);
     FrameScript_RegisterFunction("IsTrialAccount", Lua_IsTrialAccount);
     FrameScript_RegisterFunction("IsVeteranTrialAccount", Lua_IsVeteranTrialAccount);
-    EventCallbacks_Set(0x17d0, EventSignal_MAX_EXPANSION_LEVEL_UPDATED);  // FUN_141165ed0
-    EventCallbacks_Set(0x1808, EventSignal_MIN_EXPANSION_LEVEL_UPDATED);  // FUN_141165ef0
+    EventCallbacks_Set17D0(EventSignal_MAX_EXPANSION_LEVEL_UPDATED);
+    EventCallbacks_Set1808(EventSignal_MIN_EXPANSION_LEVEL_UPDATED);
 }
 
 // ref: FUN_140f2cb90
@@ -657,9 +907,9 @@ void ScriptAPI_C_GamePad(lua_State* L) {
     ScriptRegisterFunction(L, "C_GamePad", "StickIndexToConfigName", Lua_C_GamePad_StickIndexToConfigName);
     ScriptRegisterFunction(L, "C_GamePad", "StopVibration", Lua_C_GamePad_StopVibration);
     // not generated: FUN_1411662b0 installs FUN_140efd8b0, not decoded
-    EventCallbacks_Set(0x1108, EventSignal_GAME_PAD_CONFIGS_CHANGED);  // FUN_1411662d0
-    EventCallbacks_Set(0x1110, EventSignal_GAME_PAD_CONNECTED);  // FUN_1411662f0
-    EventCallbacks_Set(0x1118, EventSignal_GAME_PAD_DISCONNECTED);  // FUN_141166310
+    EventCallbacks_Set1108(EventSignal_GAME_PAD_CONFIGS_CHANGED);
+    EventCallbacks_Set1110(EventSignal_GAME_PAD_CONNECTED);
+    EventCallbacks_Set1118(EventSignal_GAME_PAD_DISCONNECTED);
     // not generated: FUN_141166330 installs FUN_140efdc30, not decoded
 }
 
@@ -678,33 +928,41 @@ void ScriptAPI_C_InterfaceFileManifest(lua_State* L) {
 // ref: FUN_140c19f30
 void ScriptEnum_BindingSet(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_BindingSet[] = {
-        { "Default", 0 },
-        { "Account", 1 },
-        { "Character", 2 },
-        { "Current", 3 },
-    };
-    ScriptRegisterEnum(L, "BindingSet", s_BindingSet, sizeof(s_BindingSet) / sizeof(s_BindingSet[0]));
-    static const SCRIPTENUMVALUE s_BindingSetMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "BindingSetMeta", s_BindingSetMeta, sizeof(s_BindingSetMeta) / sizeof(s_BindingSetMeta[0]));
-    static const SCRIPTENUMVALUE s_CustomBindingType[] = {
-        { "VoicePushToTalk", 0 },
-    };
-    ScriptRegisterEnum(L, "CustomBindingType", s_CustomBindingType, sizeof(s_CustomBindingType) / sizeof(s_CustomBindingType[0]));
-    static const SCRIPTENUMVALUE s_CustomBindingTypeMeta[] = {
-        { "NumValues", 1 },
-        { "MinValue", 0 },
-        { "MaxValue", 0 },
-    };
-    ScriptRegisterEnum(L, "CustomBindingTypeMeta", s_CustomBindingTypeMeta, sizeof(s_CustomBindingTypeMeta) / sizeof(s_CustomBindingTypeMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BindingSet", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Default");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BindingSet", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Account");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BindingSet", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Character");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BindingSet", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Current");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "BindingSetMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "BindingSetMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "BindingSetMeta", "MaxValue", 3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CustomBindingType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "VoicePushToTalk");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CustomBindingTypeMeta", "NumValues", 1);
+    ScriptSetEnumValue(L, "CustomBindingTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CustomBindingTypeMeta", "MaxValue", 0);
     ScriptRegisterFunction(L, "C_KeyBindings", "GetBindingIndex", Lua_C_KeyBindings_GetBindingIndex);
     ScriptRegisterFunction(L, "C_KeyBindings", "GetCustomBindingType", Lua_C_KeyBindings_GetCustomBindingType);
     // not generated: FUN_141166d70 installs FUN_140c087b0, not decoded
-    EventCallbacks_Set(0x2eb8, EventSignal_UPDATE_BINDINGS);  // FUN_141166d90
+    EventCallbacks_Set2EB8(EventSignal_UPDATE_BINDINGS);
 }
 
 // ref: FUN_140c1a2e0
@@ -716,37 +974,37 @@ void ScriptAPI_Kiosk(lua_State* L) {
     ScriptRegisterFunction(L, "Kiosk", "StartSession", Lua_Kiosk_StartSession);
     // not generated: FUN_141166db0 installs FUN_140c07c50, not decoded
     // not generated: FUN_141166dd0 installs FUN_140c07d30, not decoded
-    EventCallbacks_Set(0x1440, EventSignal_KIOSK_SESSION_EXPIRED);  // FUN_141166df0
-    EventCallbacks_Set(0x1448, EventSignal_KIOSK_SESSION_SHUTDOWN);  // FUN_141166e10
+    EventCallbacks_Set1440(EventSignal_KIOSK_SESSION_EXPIRED);
+    EventCallbacks_Set1448(EventSignal_KIOSK_SESSION_SHUTDOWN);
 }
 
 // ref: FUN_140c1a3b0
 void ScriptRegister_140c1a3b0(lua_State* L) {
     (void)L;
-    EventCallbacks_Set(0x1450, EventSignal_KNOWLEDGE_BASE_ARTICLE_LOAD_FAILURE);  // FUN_141166e30
-    EventCallbacks_Set(0x1458, EventSignal_KNOWLEDGE_BASE_ARTICLE_LOAD_SUCCESS);  // FUN_141166e50
-    EventCallbacks_Set(0x1460, EventSignal_KNOWLEDGE_BASE_QUERY_LOAD_FAILURE);  // FUN_141166e70
-    EventCallbacks_Set(0x1468, EventSignal_KNOWLEDGE_BASE_QUERY_LOAD_SUCCESS);  // FUN_141166e90
-    EventCallbacks_Set(0x1470, EventSignal_KNOWLEDGE_BASE_SERVER_MESSAGE);  // FUN_141166eb0
-    EventCallbacks_Set(0x1478, EventSignal_KNOWLEDGE_BASE_SETUP_LOAD_FAILURE);  // FUN_141166ed0
-    EventCallbacks_Set(0x1480, EventSignal_KNOWLEDGE_BASE_SETUP_LOAD_SUCCESS);  // FUN_141166ef0
+    EventCallbacks_Set1450(EventSignal_KNOWLEDGE_BASE_ARTICLE_LOAD_FAILURE);
+    EventCallbacks_Set1458(EventSignal_KNOWLEDGE_BASE_ARTICLE_LOAD_SUCCESS);
+    EventCallbacks_Set1460(EventSignal_KNOWLEDGE_BASE_QUERY_LOAD_FAILURE);
+    EventCallbacks_Set1468(EventSignal_KNOWLEDGE_BASE_QUERY_LOAD_SUCCESS);
+    EventCallbacks_Set1470(EventSignal_KNOWLEDGE_BASE_SERVER_MESSAGE);
+    EventCallbacks_Set1478(EventSignal_KNOWLEDGE_BASE_SETUP_LOAD_FAILURE);
+    EventCallbacks_Set1480(EventSignal_KNOWLEDGE_BASE_SETUP_LOAD_SUCCESS);
 }
 
 // ref: FUN_141117760
 void ScriptRegister_141117760(lua_State* L) {
     (void)L;
-    EventCallbacks_Set(0x15e8, EventSignal_LOADING_SCREEN_DISABLED);  // FUN_141167490
+    EventCallbacks_Set15E8(EventSignal_LOADING_SCREEN_DISABLED);
 }
 
 // ref: FUN_141117780
 void ScriptAPI_C_LoginUI(lua_State* L) {
     (void)L;
     ScriptRegisterFunction(L, "C_LoginUI", "ReconnectToRealmList", Lua_C_LoginUI_ReconnectToRealmList);
-    EventCallbacks_Set(0x1498, EventSignal_LAUNCHER_LOGIN_STATUS_CHANGED);  // FUN_141166370
-    EventCallbacks_Set(0x1608, EventSignal_LOGIN_STATE_CHANGED);  // FUN_141166390
+    EventCallbacks_Set1498(EventSignal_LAUNCHER_LOGIN_STATUS_CHANGED);
+    EventCallbacks_Set1608(EventSignal_LOGIN_STATE_CHANGED);
     // not generated: FUN_1411663b0 installs FUN_1410e6850, not decoded
-    EventCallbacks_Set(0x2190, EventSignal_REALM_LIST_UPDATED);  // FUN_1411663d0
-    EventCallbacks_Set(0x22b8, EventSignal_SHOULD_RECONNECT_TO_REALM_LIST);  // FUN_1411663f0
+    EventCallbacks_Set2190(EventSignal_REALM_LIST_UPDATED);
+    EventCallbacks_Set22B8(EventSignal_SHOULD_RECONNECT_TO_REALM_LIST);
 }
 
 // ref: FUN_1410a7e00
@@ -762,17 +1020,19 @@ void ScriptAPI_C_PaidServices(lua_State* L) {
 // ref: FUN_140ec54a0
 void ScriptEnum_ClientPlatformType(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_ClientPlatformType[] = {
-        { "Windows", 0 },
-        { "Macintosh", 1 },
-    };
-    ScriptRegisterEnum(L, "ClientPlatformType", s_ClientPlatformType, sizeof(s_ClientPlatformType) / sizeof(s_ClientPlatformType[0]));
-    static const SCRIPTENUMVALUE s_ClientPlatformTypeMeta[] = {
-        { "NumValues", 2 },
-        { "MinValue", 0 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "ClientPlatformTypeMeta", s_ClientPlatformTypeMeta, sizeof(s_ClientPlatformTypeMeta) / sizeof(s_ClientPlatformTypeMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ClientPlatformType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Windows");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ClientPlatformType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Macintosh");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ClientPlatformTypeMeta", "NumValues", 2);
+    ScriptSetEnumValue(L, "ClientPlatformTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ClientPlatformTypeMeta", "MaxValue", 1);
 }
 
 // ref: FUN_140b012b0
@@ -804,34 +1064,76 @@ void ScriptAPI_C_Sound(lua_State* L) {
     ScriptRegisterFunction(L, "C_Sound", "GetSoundScaledVolume", Lua_C_Sound_GetSoundScaledVolume);
     ScriptRegisterFunction(L, "C_Sound", "IsPlaying", Lua_C_Sound_IsPlaying);
     ScriptRegisterFunction(L, "C_Sound", "PlayItemSound", Lua_C_Sound_PlayItemSound);
-    EventCallbacks_Set(0x2368, EventSignal_SOUND_DEVICE_UPDATE);  // FUN_141168fb0
+    EventCallbacks_Set2368(EventSignal_SOUND_DEVICE_UPDATE);
     // not generated: FUN_141168fd0 installs FUN_140a539e0, not decoded
 }
 
 // ref: FUN_140e6b6e0
 void ScriptEnum_VasQueueStatus(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_VasQueueStatus[] = {
-        { "UnderAnHour", 0 },
-        { "OneToThreeHours", 1 },
-        { "ThreeToSixHours", 2 },
-        { "SixToTwelveHours", 3 },
-        { "OverTwelveHours", 4 },
-        { "Over_1_Days", 5 },
-        { "Over_2_Days", 6 },
-        { "Over_3_Days", 7 },
-        { "Over_4_Days", 8 },
-        { "Over_5_Days", 9 },
-        { "Over_6_Days", 10 },
-        { "Over_7_Days", 11 },
-    };
-    ScriptRegisterEnum(L, "VasQueueStatus", s_VasQueueStatus, sizeof(s_VasQueueStatus) / sizeof(s_VasQueueStatus[0]));
-    static const SCRIPTENUMVALUE s_VasQueueStatusMeta[] = {
-        { "NumValues", 12 },
-        { "MinValue", 0 },
-        { "MaxValue", 11 },
-    };
-    ScriptRegisterEnum(L, "VasQueueStatusMeta", s_VasQueueStatusMeta, sizeof(s_VasQueueStatusMeta) / sizeof(s_VasQueueStatusMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasQueueStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "UnderAnHour");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasQueueStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "OneToThreeHours");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasQueueStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "ThreeToSixHours");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasQueueStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "SixToTwelveHours");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasQueueStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "OverTwelveHours");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasQueueStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "Over_1_Days");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasQueueStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "Over_2_Days");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasQueueStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "Over_3_Days");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasQueueStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "Over_4_Days");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasQueueStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "Over_5_Days");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasQueueStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "Over_6_Days");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasQueueStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "Over_7_Days");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "VasQueueStatusMeta", "NumValues", 12);
+    ScriptSetEnumValue(L, "VasQueueStatusMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "VasQueueStatusMeta", "MaxValue", 11);
     ScriptRegisterFunction(L, "C_StoreGlue", "ChangeRealmByCharacterGUID", Lua_C_StoreGlue_ChangeRealmByCharacterGUID);
     ScriptRegisterFunction(L, "C_StoreGlue", "ClearVASProductReady", Lua_C_StoreGlue_ClearVASProductReady);
     ScriptRegisterFunction(L, "C_StoreGlue", "GetDisconnectOnLogout", Lua_C_StoreGlue_GetDisconnectOnLogout);
@@ -857,66 +1159,138 @@ void ScriptAPI_C_StorePublic(lua_State* L) {
 // ref: FUN_140e6e450
 void ScriptEnum_BattlepayDisplayFlag(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_BattlepayDisplayFlag[] = {
-        { "Expansion", 1 },
-        { "CardDoesNotShowModel", 2 },
-        { "CardAlwaysShowsTexture", 4 },
-        { "HiddenPrice", 8 },
-        { "UseHorizontalLayoutForFullCard", 16 },
-        { "Deprecated1", 32 },
-        { "Deprecated2", 64 },
-        { "UseSquareIconBorder", 128 },
-        { "HideWhenOwned", 256 },
-        { "RafReward", 512 },
-        { "ShowFancyToast", 1024 },
-    };
-    ScriptRegisterEnum(L, "BattlepayDisplayFlag", s_BattlepayDisplayFlag, sizeof(s_BattlepayDisplayFlag) / sizeof(s_BattlepayDisplayFlag[0]));
-    static const SCRIPTENUMVALUE s_BattlepayDisplayFlagMeta[] = {
-        { "NumValues", 11 },
-        { "MinValue", 1 },
-        { "MaxValue", 1024 },
-    };
-    ScriptRegisterEnum(L, "BattlepayDisplayFlagMeta", s_BattlepayDisplayFlagMeta, sizeof(s_BattlepayDisplayFlagMeta) / sizeof(s_BattlepayDisplayFlagMeta[0]));
-    static const SCRIPTENUMVALUE s_BattlepayGroupDisplayType[] = {
-        { "Default", 0 },
-        { "Splash", 1 },
-        { "DoubleWide", 2 },
-    };
-    ScriptRegisterEnum(L, "BattlepayGroupDisplayType", s_BattlepayGroupDisplayType, sizeof(s_BattlepayGroupDisplayType) / sizeof(s_BattlepayGroupDisplayType[0]));
-    static const SCRIPTENUMVALUE s_BattlepayGroupDisplayTypeMeta[] = {
-        { "NumValues", 3 },
-        { "MinValue", 0 },
-        { "MaxValue", 2 },
-    };
-    ScriptRegisterEnum(L, "BattlepayGroupDisplayTypeMeta", s_BattlepayGroupDisplayTypeMeta, sizeof(s_BattlepayGroupDisplayTypeMeta) / sizeof(s_BattlepayGroupDisplayTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_BattlepayProductGroupFlag[] = {
-        { "HideOwnedProducts", 1 },
-        { "EnabledForTrial", 2 },
-        { "DisableOwnedProducts", 4 },
-        { "EnabledForVeteran", 8 },
-    };
-    ScriptRegisterEnum(L, "BattlepayProductGroupFlag", s_BattlepayProductGroupFlag, sizeof(s_BattlepayProductGroupFlag) / sizeof(s_BattlepayProductGroupFlag[0]));
-    static const SCRIPTENUMVALUE s_BattlepayProductGroupFlagMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 1 },
-        { "MaxValue", 8 },
-    };
-    ScriptRegisterEnum(L, "BattlepayProductGroupFlagMeta", s_BattlepayProductGroupFlagMeta, sizeof(s_BattlepayProductGroupFlagMeta) / sizeof(s_BattlepayProductGroupFlagMeta[0]));
-    static const SCRIPTENUMVALUE s_PurchaseEligibility[] = {
-        { "Ok", 0 },
-        { "PartiallyOwned", 1 },
-        { "Owned", 2 },
-        { "ExpansionTooLow", 3 },
-        { "ExpansionTooHigh", 4 },
-        { "MissingRequiredDeliverable", 5 },
-    };
-    ScriptRegisterEnum(L, "PurchaseEligibility", s_PurchaseEligibility, sizeof(s_PurchaseEligibility) / sizeof(s_PurchaseEligibility[0]));
-    static const SCRIPTENUMVALUE s_PurchaseEligibilityMeta[] = {
-        { "NumValues", 6 },
-        { "MinValue", 0 },
-        { "MaxValue", 5 },
-    };
-    ScriptRegisterEnum(L, "PurchaseEligibilityMeta", s_PurchaseEligibilityMeta, sizeof(s_PurchaseEligibilityMeta) / sizeof(s_PurchaseEligibilityMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayDisplayFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Expansion");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayDisplayFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "CardDoesNotShowModel");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayDisplayFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "CardAlwaysShowsTexture");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayDisplayFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "HiddenPrice");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayDisplayFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 16.0);
+    lua_setfield(L, -2, "UseHorizontalLayoutForFullCard");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayDisplayFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 32.0);
+    lua_setfield(L, -2, "Deprecated1");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayDisplayFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 64.0);
+    lua_setfield(L, -2, "Deprecated2");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayDisplayFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 128.0);
+    lua_setfield(L, -2, "UseSquareIconBorder");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayDisplayFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 256.0);
+    lua_setfield(L, -2, "HideWhenOwned");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayDisplayFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 512.0);
+    lua_setfield(L, -2, "RafReward");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayDisplayFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1024.0);
+    lua_setfield(L, -2, "ShowFancyToast");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "BattlepayDisplayFlagMeta", "NumValues", 11);
+    ScriptSetEnumValue(L, "BattlepayDisplayFlagMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "BattlepayDisplayFlagMeta", "MaxValue", 1024);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayGroupDisplayType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Default");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayGroupDisplayType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Splash");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayGroupDisplayType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "DoubleWide");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "BattlepayGroupDisplayTypeMeta", "NumValues", 3);
+    ScriptSetEnumValue(L, "BattlepayGroupDisplayTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "BattlepayGroupDisplayTypeMeta", "MaxValue", 2);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayProductGroupFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "HideOwnedProducts");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayProductGroupFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "EnabledForTrial");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayProductGroupFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "DisableOwnedProducts");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayProductGroupFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "EnabledForVeteran");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "BattlepayProductGroupFlagMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "BattlepayProductGroupFlagMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "BattlepayProductGroupFlagMeta", "MaxValue", 8);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "PurchaseEligibility", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Ok");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "PurchaseEligibility", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "PartiallyOwned");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "PurchaseEligibility", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Owned");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "PurchaseEligibility", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "ExpansionTooLow");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "PurchaseEligibility", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "ExpansionTooHigh");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "PurchaseEligibility", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "MissingRequiredDeliverable");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "PurchaseEligibilityMeta", "NumValues", 6);
+    ScriptSetEnumValue(L, "PurchaseEligibilityMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "PurchaseEligibilityMeta", "MaxValue", 5);
     ScriptRegisterFunction(L, "C_StoreSecure", "AckFailure", Lua_C_StoreSecure_AckFailure);
     ScriptRegisterFunction(L, "C_StoreSecure", "GetBnetTransferInfo", Lua_C_StoreSecure_GetBnetTransferInfo);
     ScriptRegisterFunction(L, "C_StoreSecure", "GetCharacterInfoByGUID", Lua_C_StoreSecure_GetCharacterInfoByGUID);
@@ -958,34 +1332,34 @@ void ScriptEnum_BattlepayDisplayFlag(lua_State* L) {
     ScriptRegisterFunction(L, "C_StoreSecure", "SetDisconnectOnLogout", Lua_C_StoreSecure_SetDisconnectOnLogout);
     ScriptRegisterFunction(L, "C_StoreSecure", "SetVASProductReady", Lua_C_StoreSecure_SetVASProductReady);
     ScriptRegisterFunction(L, "C_StoreSecure", "ValidateBnetTransfer", Lua_C_StoreSecure_ValidateBnetTransfer);
-    EventCallbacks_Set(0x390, EventSignal_AUTH_CHALLENGE_FINISHED);  // FUN_141169390
-    EventCallbacks_Set(0x398, EventSignal_AUTH_CHALLENGE_UI_INVALID);  // FUN_1411693b0
+    EventCallbacks_Set390(EventSignal_AUTH_CHALLENGE_FINISHED);
+    EventCallbacks_Set398(EventSignal_AUTH_CHALLENGE_UI_INVALID);
     // not generated: FUN_1411693d0 installs FUN_140e4e4f0, not decoded
     // not generated: FUN_1411693f0 installs FUN_140e4e950, not decoded
-    EventCallbacks_Set(0x1330, EventSignal_IGR_BILLING_NAG_DIALOG);  // FUN_141169410
-    EventCallbacks_Set(0x1e30, EventSignal_PLAYTIME_CHANGED);  // FUN_141169430
-    EventCallbacks_Set(0x1e80, EventSignal_PRODUCT_ASSIGN_TO_TARGET_FAILED);  // FUN_141169450
-    EventCallbacks_Set(0x1e88, EventSignal_PRODUCT_CHOICE_UPDATE);  // FUN_141169470
+    EventCallbacks_Set1330(EventSignal_IGR_BILLING_NAG_DIALOG);
+    EventCallbacks_Set1E30(EventSignal_PLAYTIME_CHANGED);
+    EventCallbacks_Set1E80(EventSignal_PRODUCT_ASSIGN_TO_TARGET_FAILED);
+    EventCallbacks_Set1E88(EventSignal_PRODUCT_CHOICE_UPDATE);
     // not generated: FUN_141169490 installs FUN_140e500f0, not decoded
-    EventCallbacks_Set(0x2510, EventSignal_STORE_BOOST_AUTO_CONSUMED);  // FUN_1411694b0
-    EventCallbacks_Set(0x2518, EventSignal_STORE_CHARACTER_LIST_RECEIVED);  // FUN_1411694d0
-    EventCallbacks_Set(0x2520, EventSignal_STORE_CONFIRM_PURCHASE);  // FUN_1411694f0
+    EventCallbacks_Set2510(EventSignal_STORE_BOOST_AUTO_CONSUMED);
+    EventCallbacks_Set2518(EventSignal_STORE_CHARACTER_LIST_RECEIVED);
+    EventCallbacks_Set2520(EventSignal_STORE_CONFIRM_PURCHASE);
     // not generated: FUN_141169510 installs FUN_140e50fd0, not decoded
     // not generated: FUN_141169530 installs FUN_140e510b0, not decoded
     // not generated: FUN_141169550 installs FUN_140e51190, not decoded
     // not generated: FUN_141169570 installs FUN_140e51270, not decoded
-    EventCallbacks_Set(0x2548, EventSignal_STORE_PRODUCTS_UPDATED);  // FUN_141169590
-    EventCallbacks_Set(0x2550, EventSignal_STORE_PURCHASE_ERROR);  // FUN_1411695b0
-    EventCallbacks_Set(0x2588, EventSignal_STORE_PURCHASE_LIST_UPDATED);  // FUN_1411695d0
-    EventCallbacks_Set(0x2590, EventSignal_STORE_REFRESH);  // FUN_1411695f0
-    EventCallbacks_Set(0x2598, EventSignal_STORE_STATUS_CHANGED);  // FUN_141169610
-    EventCallbacks_Set(0x25a0, EventSignal_STORE_VAS_PURCHASE_COMPLETE);  // FUN_141169630
-    EventCallbacks_Set(0x25a8, EventSignal_STORE_VAS_PURCHASE_ERROR);  // FUN_141169650
-    EventCallbacks_Set(0x25f0, EventSignal_SUBSCRIPTION_CHANGED_KICK_IMMINENT);  // FUN_141169670
-    EventCallbacks_Set(0x29a0, EventSignal_TRIAL_CAP_REACHED_LEVEL);  // FUN_141169690
+    EventCallbacks_Set2548(EventSignal_STORE_PRODUCTS_UPDATED);
+    EventCallbacks_Set2550(EventSignal_STORE_PURCHASE_ERROR);
+    EventCallbacks_Set2588(EventSignal_STORE_PURCHASE_LIST_UPDATED);
+    EventCallbacks_Set2590(EventSignal_STORE_REFRESH);
+    EventCallbacks_Set2598(EventSignal_STORE_STATUS_CHANGED);
+    EventCallbacks_Set25A0(EventSignal_STORE_VAS_PURCHASE_COMPLETE);
+    EventCallbacks_Set25A8(EventSignal_STORE_VAS_PURCHASE_ERROR);
+    EventCallbacks_Set25F0(EventSignal_SUBSCRIPTION_CHANGED_KICK_IMMINENT);
+    EventCallbacks_Set29A0(EventSignal_TRIAL_CAP_REACHED_LEVEL);
     // not generated: FUN_1411696b0 installs FUN_140e52690, not decoded
-    EventCallbacks_Set(0x3148, EventSignal_VAS_CHARACTER_STATE_CHANGED);  // FUN_1411696d0
-    EventCallbacks_Set(0x3150, EventSignal_VAS_QUEUE_STATUS_UPDATE);  // FUN_1411696f0
+    EventCallbacks_Set3148(EventSignal_VAS_CHARACTER_STATE_CHANGED);
+    EventCallbacks_Set3150(EventSignal_VAS_QUEUE_STATUS_UPDATE);
     // not generated: FUN_141169710 installs FUN_140e52930, not decoded
 }
 
@@ -998,18 +1372,24 @@ void ScriptGlobals_StripHyperlinks(lua_State* L) {
 // ref: FUN_140e701d0
 void ScriptEnum_TitleIconVersion(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_TitleIconVersion[] = {
-        { "Small", 0 },
-        { "Medium", 1 },
-        { "Large", 2 },
-    };
-    ScriptRegisterEnum(L, "TitleIconVersion", s_TitleIconVersion, sizeof(s_TitleIconVersion) / sizeof(s_TitleIconVersion[0]));
-    static const SCRIPTENUMVALUE s_TitleIconVersionMeta[] = {
-        { "NumValues", 3 },
-        { "MinValue", 0 },
-        { "MaxValue", 2 },
-    };
-    ScriptRegisterEnum(L, "TitleIconVersionMeta", s_TitleIconVersionMeta, sizeof(s_TitleIconVersionMeta) / sizeof(s_TitleIconVersionMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TitleIconVersion", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Small");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TitleIconVersion", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Medium");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TitleIconVersion", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Large");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "TitleIconVersionMeta", "NumValues", 3);
+    ScriptSetEnumValue(L, "TitleIconVersionMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "TitleIconVersionMeta", "MaxValue", 2);
     ScriptRegisterFunction(L, "C_Texture", "ClearTitleIconTexture", Lua_C_Texture_ClearTitleIconTexture);
     ScriptRegisterFunction(L, "C_Texture", "GetAtlasInfo", Lua_C_Texture_GetAtlasInfo);
     ScriptRegisterFunction(L, "C_Texture", "GetFilenameFromFileDataID", Lua_C_Texture_GetFilenameFromFileDataID);
@@ -1032,61 +1412,127 @@ void ScriptGlobals_DoesAnyDisplayHaveNotch(lua_State* L) {
     ScriptRegisterFunction(L, "C_UI", "GetTopRightNotchSafeRegion", Lua_C_UI_GetTopLeftNotchSafeRegion);
     ScriptRegisterFunction(L, "C_UI", "Reload", Lua_C_UI_Reload);
     ScriptRegisterFunction(L, "C_UI", "ShouldUIParentAvoidNotch", Lua_C_UI_ShouldUIParentAvoidNotch);
-    EventCallbacks_Set(0x1910, EventSignal_NOTCHED_DISPLAY_MODE_CHANGED);  // FUN_141169ed0
-    EventCallbacks_Set(0x2a08, EventSignal_UI_SCALE_CHANGED);  // FUN_141169ef0
+    EventCallbacks_Set1910(EventSignal_NOTCHED_DISPLAY_MODE_CHANGED);
+    EventCallbacks_Set2A08(EventSignal_UI_SCALE_CHANGED);
 }
 
 // ref: FUN_140d278a0
 void ScriptEnum_ModelSceneSetting(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_ModelSceneSetting[] = {
-        { "AlignLightToOrbitDelta", 1 },
-    };
-    ScriptRegisterEnum(L, "ModelSceneSetting", s_ModelSceneSetting, sizeof(s_ModelSceneSetting) / sizeof(s_ModelSceneSetting[0]));
-    static const SCRIPTENUMVALUE s_ModelSceneSettingMeta[] = {
-        { "NumValues", 1 },
-        { "MinValue", 1 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "ModelSceneSettingMeta", s_ModelSceneSettingMeta, sizeof(s_ModelSceneSettingMeta) / sizeof(s_ModelSceneSettingMeta[0]));
-    static const SCRIPTENUMVALUE s_ModelSceneType[] = {
-        { "MountJournal", 0 },
-        { "PetJournalCard", 1 },
-        { "ShopCard", 2 },
-        { "EncounterJournal", 3 },
-        { "PetJournalLoadout", 4 },
-        { "ArtifactTier2", 5 },
-        { "ArtifactTier2ForgingScene", 6 },
-        { "ArtifactTier2SlamEffect", 7 },
-        { "CommentatorVictoryFanfare", 8 },
-        { "ArtifactRelicTalentEffect", 9 },
-        { "PvPWarModeOrb", 10 },
-        { "PvPWarModeFire", 11 },
-        { "PartyPose", 12 },
-        { "AzeriteItemLevelUpToast", 13 },
-        { "AzeritePowers", 14 },
-        { "AzeriteRewardGlow", 15 },
-    };
-    ScriptRegisterEnum(L, "ModelSceneType", s_ModelSceneType, sizeof(s_ModelSceneType) / sizeof(s_ModelSceneType[0]));
-    static const SCRIPTENUMVALUE s_ModelSceneTypeMeta[] = {
-        { "NumValues", 16 },
-        { "MinValue", 0 },
-        { "MaxValue", 15 },
-    };
-    ScriptRegisterEnum(L, "ModelSceneTypeMeta", s_ModelSceneTypeMeta, sizeof(s_ModelSceneTypeMeta) / sizeof(s_ModelSceneTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_UIModelSceneActorFlag[] = {
-        { "Deprecated1", 1 },
-        { "UseCenterForOriginX", 2 },
-        { "UseCenterForOriginY", 4 },
-        { "UseCenterForOriginZ", 8 },
-    };
-    ScriptRegisterEnum(L, "UIModelSceneActorFlag", s_UIModelSceneActorFlag, sizeof(s_UIModelSceneActorFlag) / sizeof(s_UIModelSceneActorFlag[0]));
-    static const SCRIPTENUMVALUE s_UIModelSceneActorFlagMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 1 },
-        { "MaxValue", 8 },
-    };
-    ScriptRegisterEnum(L, "UIModelSceneActorFlagMeta", s_UIModelSceneActorFlagMeta, sizeof(s_UIModelSceneActorFlagMeta) / sizeof(s_UIModelSceneActorFlagMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneSetting", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "AlignLightToOrbitDelta");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ModelSceneSettingMeta", "NumValues", 1);
+    ScriptSetEnumValue(L, "ModelSceneSettingMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "ModelSceneSettingMeta", "MaxValue", 1);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "MountJournal");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "PetJournalCard");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "ShopCard");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "EncounterJournal");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "PetJournalLoadout");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "ArtifactTier2");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "ArtifactTier2ForgingScene");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "ArtifactTier2SlamEffect");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "CommentatorVictoryFanfare");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "ArtifactRelicTalentEffect");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "PvPWarModeOrb");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "PvPWarModeFire");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 12.0);
+    lua_setfield(L, -2, "PartyPose");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 13.0);
+    lua_setfield(L, -2, "AzeriteItemLevelUpToast");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 14.0);
+    lua_setfield(L, -2, "AzeritePowers");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelSceneType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 15.0);
+    lua_setfield(L, -2, "AzeriteRewardGlow");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ModelSceneTypeMeta", "NumValues", 16);
+    ScriptSetEnumValue(L, "ModelSceneTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ModelSceneTypeMeta", "MaxValue", 15);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UIModelSceneActorFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Deprecated1");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UIModelSceneActorFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "UseCenterForOriginX");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UIModelSceneActorFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "UseCenterForOriginY");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UIModelSceneActorFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "UseCenterForOriginZ");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "UIModelSceneActorFlagMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "UIModelSceneActorFlagMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "UIModelSceneActorFlagMeta", "MaxValue", 8);
     ScriptRegisterFunction(L, "C_ModelInfo", "AddActiveModelScene", Lua_C_ModelInfo_AddActiveModelScene);
     ScriptRegisterFunction(L, "C_ModelInfo", "AddActiveModelSceneActor", Lua_C_ModelInfo_AddActiveModelSceneActor);
     ScriptRegisterFunction(L, "C_ModelInfo", "ClearActiveModelScene", Lua_C_ModelInfo_ClearActiveModelScene);
@@ -1095,7 +1541,7 @@ void ScriptEnum_ModelSceneSetting(lua_State* L) {
     ScriptRegisterFunction(L, "C_ModelInfo", "GetModelSceneActorInfoByID", Lua_C_ModelInfo_GetModelSceneActorInfoByID);
     ScriptRegisterFunction(L, "C_ModelInfo", "GetModelSceneCameraInfoByID", Lua_C_ModelInfo_GetModelSceneCameraInfoByID);
     ScriptRegisterFunction(L, "C_ModelInfo", "GetModelSceneInfoByID", Lua_C_ModelInfo_GetModelSceneInfoByID);
-    EventCallbacks_Set(0x2a00, EventSignal_UI_MODEL_SCENE_INFO_UPDATED);  // FUN_141167bd0
+    EventCallbacks_Set2A00(EventSignal_UI_MODEL_SCENE_INFO_UPDATED);
 }
 
 // ref: FUN_140d286f0
@@ -1116,158 +1562,488 @@ void ScriptAPI_C_UserFeedback(lua_State* L) {
 // ref: FUN_140b60950
 void ScriptEnum_GraphicsValidationResult(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_GraphicsValidationResult[] = {
-        { "Supported", 0 },
-        { "Illegal", 1 },
-        { "Unsupported", 2 },
-        { "Graphics", 3 },
-        { "DualCore", 4 },
-        { "QuadCore", 5 },
-        { "CpuMem_2", 6 },
-        { "CpuMem_4", 7 },
-        { "CpuMem_8", 8 },
-        { "Needs_5_0", 9 },
-        { "Needs_6_0", 10 },
-        { "NeedsRt", 11 },
-        { "NeedsDx12", 12 },
-        { "NeedsDx12Vrs2", 13 },
-        { "NeedsAppleGpu", 14 },
-        { "NeedsAmdGpu", 15 },
-        { "NeedsIntelGpu", 16 },
-        { "NeedsNvidiaGpu", 17 },
-        { "NeedsQualcommGpu", 18 },
-        { "NeedsMacOs_10_13", 19 },
-        { "NeedsMacOs_10_14", 20 },
-        { "NeedsMacOs_10_15", 21 },
-        { "NeedsMacOs_11_0", 22 },
-        { "NeedsMacOs_12_0", 23 },
-        { "NeedsMacOs_13_0", 24 },
-        { "NeedsWindows_10", 25 },
-        { "NeedsWindows_11", 26 },
-        { "MacOsUnsupported", 27 },
-        { "WindowsUnsupported", 28 },
-        { "LegacyUnsupported", 29 },
-        { "Dx11Unsupported", 30 },
-        { "Dx12Win7Unsupported", 31 },
-        { "RemoteDesktopUnsupported", 32 },
-        { "WineUnsupported", 33 },
-        { "NvapiWineUnsupported", 34 },
-        { "AppleGpuUnsupported", 35 },
-        { "AmdGpuUnsupported", 36 },
-        { "IntelGpuUnsupported", 37 },
-        { "NvidiaGpuUnsupported", 38 },
-        { "QualcommGpuUnsupported", 39 },
-        { "GpuDriver", 40 },
-        { "Unknown", 41 },
-    };
-    ScriptRegisterEnum(L, "GraphicsValidationResult", s_GraphicsValidationResult, sizeof(s_GraphicsValidationResult) / sizeof(s_GraphicsValidationResult[0]));
-    static const SCRIPTENUMVALUE s_GraphicsValidationResultMeta[] = {
-        { "NumValues", 42 },
-        { "MinValue", 0 },
-        { "MaxValue", 41 },
-    };
-    ScriptRegisterEnum(L, "GraphicsValidationResultMeta", s_GraphicsValidationResultMeta, sizeof(s_GraphicsValidationResultMeta) / sizeof(s_GraphicsValidationResultMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Supported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Illegal");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Unsupported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Graphics");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "DualCore");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "QuadCore");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "CpuMem_2");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "CpuMem_4");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "CpuMem_8");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "Needs_5_0");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "Needs_6_0");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "NeedsRt");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 12.0);
+    lua_setfield(L, -2, "NeedsDx12");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 13.0);
+    lua_setfield(L, -2, "NeedsDx12Vrs2");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 14.0);
+    lua_setfield(L, -2, "NeedsAppleGpu");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 15.0);
+    lua_setfield(L, -2, "NeedsAmdGpu");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 16.0);
+    lua_setfield(L, -2, "NeedsIntelGpu");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 17.0);
+    lua_setfield(L, -2, "NeedsNvidiaGpu");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 18.0);
+    lua_setfield(L, -2, "NeedsQualcommGpu");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 19.0);
+    lua_setfield(L, -2, "NeedsMacOs_10_13");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20.0);
+    lua_setfield(L, -2, "NeedsMacOs_10_14");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 21.0);
+    lua_setfield(L, -2, "NeedsMacOs_10_15");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 22.0);
+    lua_setfield(L, -2, "NeedsMacOs_11_0");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 23.0);
+    lua_setfield(L, -2, "NeedsMacOs_12_0");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 24.0);
+    lua_setfield(L, -2, "NeedsMacOs_13_0");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 25.0);
+    lua_setfield(L, -2, "NeedsWindows_10");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 26.0);
+    lua_setfield(L, -2, "NeedsWindows_11");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 27.0);
+    lua_setfield(L, -2, "MacOsUnsupported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 28.0);
+    lua_setfield(L, -2, "WindowsUnsupported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 29.0);
+    lua_setfield(L, -2, "LegacyUnsupported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 30.0);
+    lua_setfield(L, -2, "Dx11Unsupported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 31.0);
+    lua_setfield(L, -2, "Dx12Win7Unsupported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 32.0);
+    lua_setfield(L, -2, "RemoteDesktopUnsupported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 33.0);
+    lua_setfield(L, -2, "WineUnsupported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 34.0);
+    lua_setfield(L, -2, "NvapiWineUnsupported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 35.0);
+    lua_setfield(L, -2, "AppleGpuUnsupported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 36.0);
+    lua_setfield(L, -2, "AmdGpuUnsupported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 37.0);
+    lua_setfield(L, -2, "IntelGpuUnsupported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 38.0);
+    lua_setfield(L, -2, "NvidiaGpuUnsupported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 39.0);
+    lua_setfield(L, -2, "QualcommGpuUnsupported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 40.0);
+    lua_setfield(L, -2, "GpuDriver");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "GraphicsValidationResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 41.0);
+    lua_setfield(L, -2, "Unknown");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "GraphicsValidationResultMeta", "NumValues", 42);
+    ScriptSetEnumValue(L, "GraphicsValidationResultMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "GraphicsValidationResultMeta", "MaxValue", 41);
     ScriptRegisterFunction(L, "C_VideoOptions", "GetCurrentGameWindowSize", Lua_C_VideoOptions_GetCurrentGameWindowSize);
     ScriptRegisterFunction(L, "C_VideoOptions", "GetDefaultGameWindowSize", Lua_C_VideoOptions_GetDefaultGameWindowSize);
     ScriptRegisterFunction(L, "C_VideoOptions", "GetGameWindowSizes", Lua_C_VideoOptions_GetGameWindowSizes);
     ScriptRegisterFunction(L, "C_VideoOptions", "GetGxAdapterInfo", Lua_C_VideoOptions_GetGxAdapterInfo);
     ScriptRegisterFunction(L, "C_VideoOptions", "SetGameWindowSize", Lua_C_VideoOptions_SetGameWindowSize);
-    EventCallbacks_Set(0x140, EventSignal_ADAPTER_LIST_CHANGED);  // FUN_14116afb0
-    EventCallbacks_Set(0xf88, EventSignal_DISPLAY_SIZE_CHANGED);  // FUN_14116afd0
-    EventCallbacks_Set(0x1160, EventSignal_GLUE_SCREENSHOT_FAILED);  // FUN_14116aff0
-    EventCallbacks_Set(0x12c0, EventSignal_GX_RESTARTED);  // FUN_14116b010
-    EventCallbacks_Set(0x2218, EventSignal_SCREENSHOT_FAILED);  // FUN_14116b030
-    EventCallbacks_Set(0x2220, EventSignal_SCREENSHOT_STARTED);  // FUN_14116b050
-    EventCallbacks_Set(0x2228, EventSignal_SCREENSHOT_SUCCEEDED);  // FUN_14116b070
+    EventCallbacks_Set140(EventSignal_ADAPTER_LIST_CHANGED);
+    EventCallbacks_SetF88(EventSignal_DISPLAY_SIZE_CHANGED);
+    EventCallbacks_Set1160(EventSignal_GLUE_SCREENSHOT_FAILED);
+    EventCallbacks_Set12C0(EventSignal_GX_RESTARTED);
+    EventCallbacks_Set2218(EventSignal_SCREENSHOT_FAILED);
+    EventCallbacks_Set2220(EventSignal_SCREENSHOT_STARTED);
+    EventCallbacks_Set2228(EventSignal_SCREENSHOT_SUCCEEDED);
 }
 
 // ref: FUN_140b623c0
 void ScriptEnum_CommunicationMode(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_CommunicationMode[] = {
-        { "PushToTalk", 0 },
-        { "OpenMic", 1 },
-    };
-    ScriptRegisterEnum(L, "CommunicationMode", s_CommunicationMode, sizeof(s_CommunicationMode) / sizeof(s_CommunicationMode[0]));
-    static const SCRIPTENUMVALUE s_CommunicationModeMeta[] = {
-        { "NumValues", 2 },
-        { "MinValue", 0 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "CommunicationModeMeta", s_CommunicationModeMeta, sizeof(s_CommunicationModeMeta) / sizeof(s_CommunicationModeMeta[0]));
-    static const SCRIPTENUMVALUE s_VoiceChatStatusCode[] = {
-        { "Success", 0 },
-        { "OperationPending", 1 },
-        { "TooManyRequests", 2 },
-        { "LoginProhibited", 3 },
-        { "ClientNotInitialized", 4 },
-        { "ClientNotLoggedIn", 5 },
-        { "ClientAlreadyLoggedIn", 6 },
-        { "ChannelNameTooShort", 7 },
-        { "ChannelNameTooLong", 8 },
-        { "ChannelAlreadyExists", 9 },
-        { "AlreadyInChannel", 10 },
-        { "TargetNotFound", 11 },
-        { "Failure", 12 },
-        { "ServiceLost", 13 },
-        { "UnableToLaunchProxy", 14 },
-        { "ProxyConnectionTimeOut", 15 },
-        { "ProxyConnectionUnableToConnect", 16 },
-        { "ProxyConnectionUnexpectedDisconnect", 17 },
-        { "Disabled", 18 },
-        { "UnsupportedChatChannelType", 19 },
-        { "InvalidCommunityStream", 20 },
-        { "PlayerSilenced", 21 },
-        { "PlayerVoiceChatParentalDisabled", 22 },
-        { "InvalidInputDevice", 23 },
-        { "InvalidOutputDevice", 24 },
-    };
-    ScriptRegisterEnum(L, "VoiceChatStatusCode", s_VoiceChatStatusCode, sizeof(s_VoiceChatStatusCode) / sizeof(s_VoiceChatStatusCode[0]));
-    static const SCRIPTENUMVALUE s_VoiceChatStatusCodeMeta[] = {
-        { "NumValues", 25 },
-        { "MinValue", 0 },
-        { "MaxValue", 24 },
-    };
-    ScriptRegisterEnum(L, "VoiceChatStatusCodeMeta", s_VoiceChatStatusCodeMeta, sizeof(s_VoiceChatStatusCodeMeta) / sizeof(s_VoiceChatStatusCodeMeta[0]));
-    static const SCRIPTENUMVALUE s_VoiceTtsDestination[] = {
-        { "RemoteTransmission", 0 },
-        { "LocalPlayback", 1 },
-        { "RemoteTransmissionWithLocalPlayback", 2 },
-        { "QueuedRemoteTransmission", 3 },
-        { "QueuedLocalPlayback", 4 },
-        { "QueuedRemoteTransmissionWithLocalPlayback", 5 },
-        { "ScreenReader", 6 },
-    };
-    ScriptRegisterEnum(L, "VoiceTtsDestination", s_VoiceTtsDestination, sizeof(s_VoiceTtsDestination) / sizeof(s_VoiceTtsDestination[0]));
-    static const SCRIPTENUMVALUE s_VoiceTtsDestinationMeta[] = {
-        { "NumValues", 7 },
-        { "MinValue", 0 },
-        { "MaxValue", 6 },
-    };
-    ScriptRegisterEnum(L, "VoiceTtsDestinationMeta", s_VoiceTtsDestinationMeta, sizeof(s_VoiceTtsDestinationMeta) / sizeof(s_VoiceTtsDestinationMeta[0]));
-    static const SCRIPTENUMVALUE s_VoiceTtsStatusCode[] = {
-        { "Success", 0 },
-        { "InvalidEngineType", 1 },
-        { "EngineAllocationFailed", 2 },
-        { "NotSupported", 3 },
-        { "MaxCharactersExceeded", 4 },
-        { "UtteranceBelowMinimumDuration", 5 },
-        { "InputTextEnqueued", 6 },
-        { "SdkNotInitialized", 7 },
-        { "DestinationQueueFull", 8 },
-        { "EnqueueNotNecessary", 9 },
-        { "UtteranceNotFound", 10 },
-        { "ManagerNotFound", 11 },
-        { "InvalidArgument", 12 },
-        { "InternalError", 13 },
-    };
-    ScriptRegisterEnum(L, "VoiceTtsStatusCode", s_VoiceTtsStatusCode, sizeof(s_VoiceTtsStatusCode) / sizeof(s_VoiceTtsStatusCode[0]));
-    static const SCRIPTENUMVALUE s_VoiceTtsStatusCodeMeta[] = {
-        { "NumValues", 14 },
-        { "MinValue", 0 },
-        { "MaxValue", 13 },
-    };
-    ScriptRegisterEnum(L, "VoiceTtsStatusCodeMeta", s_VoiceTtsStatusCodeMeta, sizeof(s_VoiceTtsStatusCodeMeta) / sizeof(s_VoiceTtsStatusCodeMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CommunicationMode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "PushToTalk");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CommunicationMode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "OpenMic");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CommunicationModeMeta", "NumValues", 2);
+    ScriptSetEnumValue(L, "CommunicationModeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CommunicationModeMeta", "MaxValue", 1);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Success");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "OperationPending");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "TooManyRequests");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "LoginProhibited");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "ClientNotInitialized");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "ClientNotLoggedIn");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "ClientAlreadyLoggedIn");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "ChannelNameTooShort");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "ChannelNameTooLong");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "ChannelAlreadyExists");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "AlreadyInChannel");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "TargetNotFound");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 12.0);
+    lua_setfield(L, -2, "Failure");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 13.0);
+    lua_setfield(L, -2, "ServiceLost");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 14.0);
+    lua_setfield(L, -2, "UnableToLaunchProxy");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 15.0);
+    lua_setfield(L, -2, "ProxyConnectionTimeOut");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 16.0);
+    lua_setfield(L, -2, "ProxyConnectionUnableToConnect");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 17.0);
+    lua_setfield(L, -2, "ProxyConnectionUnexpectedDisconnect");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 18.0);
+    lua_setfield(L, -2, "Disabled");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 19.0);
+    lua_setfield(L, -2, "UnsupportedChatChannelType");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20.0);
+    lua_setfield(L, -2, "InvalidCommunityStream");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 21.0);
+    lua_setfield(L, -2, "PlayerSilenced");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 22.0);
+    lua_setfield(L, -2, "PlayerVoiceChatParentalDisabled");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 23.0);
+    lua_setfield(L, -2, "InvalidInputDevice");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceChatStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 24.0);
+    lua_setfield(L, -2, "InvalidOutputDevice");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "VoiceChatStatusCodeMeta", "NumValues", 25);
+    ScriptSetEnumValue(L, "VoiceChatStatusCodeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "VoiceChatStatusCodeMeta", "MaxValue", 24);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsDestination", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "RemoteTransmission");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsDestination", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "LocalPlayback");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsDestination", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "RemoteTransmissionWithLocalPlayback");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsDestination", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "QueuedRemoteTransmission");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsDestination", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "QueuedLocalPlayback");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsDestination", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "QueuedRemoteTransmissionWithLocalPlayback");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsDestination", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "ScreenReader");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "VoiceTtsDestinationMeta", "NumValues", 7);
+    ScriptSetEnumValue(L, "VoiceTtsDestinationMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "VoiceTtsDestinationMeta", "MaxValue", 6);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Success");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "InvalidEngineType");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "EngineAllocationFailed");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "NotSupported");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "MaxCharactersExceeded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "UtteranceBelowMinimumDuration");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "InputTextEnqueued");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "SdkNotInitialized");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "DestinationQueueFull");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "EnqueueNotNecessary");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "UtteranceNotFound");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "ManagerNotFound");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 12.0);
+    lua_setfield(L, -2, "InvalidArgument");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VoiceTtsStatusCode", lua_gettop(L));
+    ScriptPushEnumNumber(L, 13.0);
+    lua_setfield(L, -2, "InternalError");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "VoiceTtsStatusCodeMeta", "NumValues", 14);
+    ScriptSetEnumValue(L, "VoiceTtsStatusCodeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "VoiceTtsStatusCodeMeta", "MaxValue", 13);
     ScriptRegisterFunction(L, "C_VoiceChat", "ActivateChannel", Lua_C_VoiceChat_ActivateChannel);
     ScriptRegisterFunction(L, "C_VoiceChat", "ActivateChannelTranscription", Lua_C_VoiceChat_ActivateChannelTranscription);
     ScriptRegisterFunction(L, "C_VoiceChat", "BeginLocalCapture", Lua_C_VoiceChat_BeginLocalCapture);
@@ -1344,11 +2120,11 @@ void ScriptEnum_CommunicationMode(lua_State* L) {
     ScriptRegisterFunction(L, "C_VoiceChat", "ToggleDeafened", Lua_C_VoiceChat_ToggleDeafened);
     ScriptRegisterFunction(L, "C_VoiceChat", "ToggleMemberMuted", Lua_C_VoiceChat_ToggleMemberMuted);
     ScriptRegisterFunction(L, "C_VoiceChat", "ToggleMuted", Lua_C_VoiceChat_ToggleMuted);
-    EventCallbacks_Set(0x3188, EventSignal_VOICE_CHAT_ACTIVE_INPUT_DEVICE_UPDATED);  // FUN_14116b090
-    EventCallbacks_Set(0x3190, EventSignal_VOICE_CHAT_ACTIVE_OUTPUT_DEVICE_UPDATED);  // FUN_14116b0b0
+    EventCallbacks_Set3188(EventSignal_VOICE_CHAT_ACTIVE_INPUT_DEVICE_UPDATED);
+    EventCallbacks_Set3190(EventSignal_VOICE_CHAT_ACTIVE_OUTPUT_DEVICE_UPDATED);
     // not generated: FUN_14116b0d0 installs FUN_140b3fb50, not decoded
-    EventCallbacks_Set(0x31a0, EventSignal_VOICE_CHAT_AUDIO_CAPTURE_STARTED);  // FUN_14116b0f0
-    EventCallbacks_Set(0x31a8, EventSignal_VOICE_CHAT_AUDIO_CAPTURE_STOPPED);  // FUN_14116b110
+    EventCallbacks_Set31A0(EventSignal_VOICE_CHAT_AUDIO_CAPTURE_STARTED);
+    EventCallbacks_Set31A8(EventSignal_VOICE_CHAT_AUDIO_CAPTURE_STOPPED);
     // not generated: FUN_14116b130 installs FUN_140b3fdf0, not decoded
     // not generated: FUN_14116b150 installs FUN_140b3fed0, not decoded
     // not generated: FUN_14116b170 installs FUN_140b3ffb0, not decoded
@@ -1371,42 +2147,42 @@ void ScriptEnum_CommunicationMode(lua_State* L) {
     // not generated: FUN_14116b390 installs FUN_140b40e90, not decoded
     // not generated: FUN_14116b3b0 installs FUN_140b40f70, not decoded
     // not generated: FUN_14116b3d0 installs FUN_140b41050, not decoded
-    EventCallbacks_Set(0x3260, EventSignal_VOICE_CHAT_CONNECTION_SUCCESS);  // FUN_14116b3f0
+    EventCallbacks_Set3260(EventSignal_VOICE_CHAT_CONNECTION_SUCCESS);
     // not generated: FUN_14116b410 installs FUN_140b41210, not decoded
     // not generated: FUN_14116b430 installs FUN_140b412f0, not decoded
-    EventCallbacks_Set(0x3278, EventSignal_VOICE_CHAT_INPUT_DEVICES_UPDATED);  // FUN_14116b450
+    EventCallbacks_Set3278(EventSignal_VOICE_CHAT_INPUT_DEVICES_UPDATED);
     // not generated: FUN_14116b470 installs FUN_140b414b0, not decoded
     // not generated: FUN_14116b490 installs FUN_140b41590, not decoded
     // not generated: FUN_14116b4b0 installs FUN_140b41670, not decoded
-    EventCallbacks_Set(0x3298, EventSignal_VOICE_CHAT_OUTPUT_DEVICES_UPDATED);  // FUN_14116b4d0
+    EventCallbacks_Set3298(EventSignal_VOICE_CHAT_OUTPUT_DEVICES_UPDATED);
     // not generated: FUN_14116b4f0 installs FUN_140b41830, not decoded
     // not generated: FUN_14116b510 installs FUN_140b41910, not decoded
     // not generated: FUN_14116b530 installs FUN_140b419f0, not decoded
-    EventCallbacks_Set(0x32b8, EventSignal_VOICE_CHAT_SPEAK_FOR_ME_ACTIVE_STATUS_UPDATED);  // FUN_14116b550
-    EventCallbacks_Set(0x32c0, EventSignal_VOICE_CHAT_SPEAK_FOR_ME_FEATURE_STATUS_UPDATED);  // FUN_14116b570
+    EventCallbacks_Set32B8(EventSignal_VOICE_CHAT_SPEAK_FOR_ME_ACTIVE_STATUS_UPDATED);
+    EventCallbacks_Set32C0(EventSignal_VOICE_CHAT_SPEAK_FOR_ME_FEATURE_STATUS_UPDATED);
     // not generated: FUN_14116b590 installs FUN_140b41c90, not decoded
     // not generated: FUN_14116b5b0 installs FUN_140b41d70, not decoded
     // not generated: FUN_14116b5d0 installs FUN_140b41e50, not decoded
     // not generated: FUN_14116b5f0 installs FUN_140b41f30, not decoded
-    EventCallbacks_Set(0x32e8, EventSignal_VOICE_CHAT_TTS_VOICES_UPDATE);  // FUN_14116b610
-    EventCallbacks_Set(0x32f0, EventSignal_VOICE_CHAT_VAD_SETTINGS_UPDATED);  // FUN_14116b630
+    EventCallbacks_Set32E8(EventSignal_VOICE_CHAT_TTS_VOICES_UPDATE);
+    EventCallbacks_Set32F0(EventSignal_VOICE_CHAT_VAD_SETTINGS_UPDATED);
 }
 
 // ref: FUN_14115c010
 void ScriptRegister_14115c010(lua_State* L) {
     (void)L;
-    EventCallbacks_Set(0x2690, EventSignal_TOKEN_AUCTION_SOLD);  // FUN_14116b7d0
-    EventCallbacks_Set(0x2698, EventSignal_TOKEN_BUY_CONFIRM_REQUIRED);  // FUN_14116b7f0
+    EventCallbacks_Set2690(EventSignal_TOKEN_AUCTION_SOLD);
+    EventCallbacks_Set2698(EventSignal_TOKEN_BUY_CONFIRM_REQUIRED);
     // not generated: FUN_14116b810 installs FUN_141159520, not decoded
     // not generated: FUN_14116b830 installs FUN_141159600, not decoded
     // not generated: FUN_14116b850 installs FUN_1411596e0, not decoded
     // not generated: FUN_14116b870 installs FUN_1411597c0, not decoded
-    EventCallbacks_Set(0x26c0, EventSignal_TOKEN_REDEEM_BALANCE_UPDATED);  // FUN_14116b890
+    EventCallbacks_Set26C0(EventSignal_TOKEN_REDEEM_BALANCE_UPDATED);
     // not generated: FUN_14116b8b0 installs FUN_141159980, not decoded
-    EventCallbacks_Set(0x26d0, EventSignal_TOKEN_REDEEM_FRAME_SHOW);  // FUN_14116b8d0
-    EventCallbacks_Set(0x26d8, EventSignal_TOKEN_REDEEM_GAME_TIME_UPDATED);  // FUN_14116b8f0
+    EventCallbacks_Set26D0(EventSignal_TOKEN_REDEEM_FRAME_SHOW);
+    EventCallbacks_Set26D8(EventSignal_TOKEN_REDEEM_GAME_TIME_UPDATED);
     // not generated: FUN_14116b910 installs FUN_141159c20, not decoded
-    EventCallbacks_Set(0x26e8, EventSignal_TOKEN_SELL_CONFIRM_REQUIRED);  // FUN_14116b930
+    EventCallbacks_Set26E8(EventSignal_TOKEN_SELL_CONFIRM_REQUIRED);
     // not generated: FUN_14116b950 installs FUN_141159de0, not decoded
 }
 
@@ -1434,1207 +2210,2525 @@ void ScriptAPI_C_CVar(lua_State* L) {
 void ScriptAPI_C_System(lua_State* L) {
     (void)L;
     ScriptRegisterFunction(L, "C_System", "GetFrameStack", Lua_C_System_GetFrameStack);
-    EventCallbacks_Set(0x720, EventSignal_CAPTUREFRAMES_FAILED);  // FUN_141169730
-    EventCallbacks_Set(0x728, EventSignal_CAPTUREFRAMES_SUCCEEDED);  // FUN_141169750
-    EventCallbacks_Set(0xf70, EventSignal_DISABLE_TAXI_BENCHMARK);  // FUN_141169770
-    EventCallbacks_Set(0x1000, EventSignal_ENABLE_TAXI_BENCHMARK);  // FUN_141169790
-    EventCallbacks_Set(0x10b8, EventSignal_FIRST_FRAME_RENDERED);  // FUN_1411697b0
+    EventCallbacks_Set720(EventSignal_CAPTUREFRAMES_FAILED);
+    EventCallbacks_Set728(EventSignal_CAPTUREFRAMES_SUCCEEDED);
+    EventCallbacks_SetF70(EventSignal_DISABLE_TAXI_BENCHMARK);
+    EventCallbacks_Set1000(EventSignal_ENABLE_TAXI_BENCHMARK);
+    EventCallbacks_Set10B8(EventSignal_FIRST_FRAME_RENDERED);
     // not generated: FUN_1411697d0 installs FUN_140e4ebf0, not decoded
     // not generated: FUN_1411697f0 installs FUN_140e4ecd0, not decoded
     // not generated: FUN_141169810 installs FUN_140e4edb0, not decoded
-    EventCallbacks_Set(0x1348, EventSignal_INITIAL_HOTFIXES_APPLIED);  // FUN_141169830
+    EventCallbacks_Set1348(EventSignal_INITIAL_HOTFIXES_APPLIED);
     // not generated: FUN_141169850 installs FUN_140e4f130, not decoded
-    EventCallbacks_Set(0x1610, EventSignal_LOGOUT_CANCEL);  // FUN_141169870
-    EventCallbacks_Set(0x1bc8, EventSignal_PLAYER_CAMPING);  // FUN_141169890
+    EventCallbacks_Set1610(EventSignal_LOGOUT_CANCEL);
+    EventCallbacks_Set1BC8(EventSignal_PLAYER_CAMPING);
     // not generated: FUN_1411698b0 installs FUN_140e4f830, not decoded
-    EventCallbacks_Set(0x1c68, EventSignal_PLAYER_LEAVING_WORLD);  // FUN_1411698d0
-    EventCallbacks_Set(0x1c80, EventSignal_PLAYER_LOGIN);  // FUN_1411698f0
-    EventCallbacks_Set(0x1c88, EventSignal_PLAYER_LOGOUT);  // FUN_141169910
-    EventCallbacks_Set(0x1cc0, EventSignal_PLAYER_QUITING);  // FUN_141169930
-    EventCallbacks_Set(0x2230, EventSignal_SEARCH_DB_LOADED);  // FUN_141169950
+    EventCallbacks_Set1C68(EventSignal_PLAYER_LEAVING_WORLD);
+    EventCallbacks_Set1C80(EventSignal_PLAYER_LOGIN);
+    EventCallbacks_Set1C88(EventSignal_PLAYER_LOGOUT);
+    EventCallbacks_Set1CC0(EventSignal_PLAYER_QUITING);
+    EventCallbacks_Set2230(EventSignal_SEARCH_DB_LOADED);
     // not generated: FUN_141169970 installs FUN_140e51970, not decoded
     // not generated: FUN_141169990 installs FUN_140e51b30, not decoded
     // not generated: FUN_1411699b0 installs FUN_140e51dd0, not decoded
     // not generated: FUN_1411699d0 installs FUN_140e51f90, not decoded
     // not generated: FUN_1411699f0 installs FUN_140e52070, not decoded
-    EventCallbacks_Set(0x3138, EventSignal_VARIABLES_LOADED);  // FUN_141169a10
-    EventCallbacks_Set(0x3360, EventSignal_WOW_MOUSE_NOT_FOUND);  // FUN_141169a30
+    EventCallbacks_Set3138(EventSignal_VARIABLES_LOADED);
+    EventCallbacks_Set3360(EventSignal_WOW_MOUSE_NOT_FOUND);
 }
 
 // ref: FUN_1407d3000
 void ScriptEnum_AccountData(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_AccountData[] = {
-        { "Config", 0 },
-        { "Config2", 1 },
-        { "Bindings", 2 },
-        { "Bindings2", 3 },
-        { "Macros", 4 },
-        { "Macros2", 5 },
-        { "UILayout", 6 },
-        { "ChatSettings", 7 },
-        { "TtsSettings", 8 },
-        { "TtsSettings2", 9 },
-        { "FlaggedIDs", 10 },
-        { "FlaggedIDs2", 11 },
-        { "ClickBindings", 12 },
-        { "UIEditModeAccount", 13 },
-        { "UIEditModeChar", 14 },
-    };
-    ScriptRegisterEnum(L, "AccountData", s_AccountData, sizeof(s_AccountData) / sizeof(s_AccountData[0]));
-    static const SCRIPTENUMVALUE s_AccountDataMeta[] = {
-        { "NumValues", 15 },
-        { "MinValue", 0 },
-        { "MaxValue", 14 },
-    };
-    ScriptRegisterEnum(L, "AccountDataMeta", s_AccountDataMeta, sizeof(s_AccountDataMeta) / sizeof(s_AccountDataMeta[0]));
-    static const SCRIPTENUMVALUE s_AccountDataUpdateStatus[] = {
-        { "AccountDataUpdateSuccess", 0 },
-        { "AccountDataUpdateFailed", 1 },
-        { "AccountDataUpdateCorrupt", 2 },
-        { "AccountDataUpdateToobig", 3 },
-    };
-    ScriptRegisterEnum(L, "AccountDataUpdateStatus", s_AccountDataUpdateStatus, sizeof(s_AccountDataUpdateStatus) / sizeof(s_AccountDataUpdateStatus[0]));
-    static const SCRIPTENUMVALUE s_AccountDataUpdateStatusMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "AccountDataUpdateStatusMeta", s_AccountDataUpdateStatusMeta, sizeof(s_AccountDataUpdateStatusMeta) / sizeof(s_AccountDataUpdateStatusMeta[0]));
-    static const SCRIPTENUMVALUE s_AccountExportResult[] = {
-        { "Success", 0 },
-        { "UnknownError", 1 },
-        { "Cancelled", 2 },
-        { "ShuttingDown", 3 },
-        { "TimedOut", 4 },
-        { "NoAccountFound", 5 },
-        { "RequestedInvalidCharacter", 6 },
-        { "RpcError", 7 },
-        { "FileInvalid", 8 },
-        { "FileWriteFailed", 9 },
-        { "Unavailable", 10 },
-        { "AlreadyInProgress", 11 },
-        { "FailedToLockAccount", 12 },
-        { "FailedToGenerateFile", 13 },
-    };
-    ScriptRegisterEnum(L, "AccountExportResult", s_AccountExportResult, sizeof(s_AccountExportResult) / sizeof(s_AccountExportResult[0]));
-    static const SCRIPTENUMVALUE s_AccountExportResultMeta[] = {
-        { "NumValues", 14 },
-        { "MinValue", 0 },
-        { "MaxValue", 13 },
-    };
-    ScriptRegisterEnum(L, "AccountExportResultMeta", s_AccountExportResultMeta, sizeof(s_AccountExportResultMeta) / sizeof(s_AccountExportResultMeta[0]));
-    static const SCRIPTENUMVALUE s_AccountStateFlags[] = {
-        { "None", 0 },
-        { "AchievementsLoaded", 1 },
-        { "CriteriaLoaded", 2 },
-        { "MountsLoaded", 4 },
-        { "PetjournalInitialized", 8 },
-        { "CurrencyCapsLoaded", 16 },
-        { "LoadFailed", 32 },
-        { "QuestLogLoaded", 64 },
-        { "InPetCombat", 128 },
-        { "CharactersLoaded", 256 },
-        { "PurchasesLoaded", 512 },
-        { "BpayDistributionObjectsLoaded", 1024 },
-        { "ArchivedPurchasesLoaded", 2048 },
-        { "SettingsLoaded", 4096 },
-        { "BpayAddLicenseObjectsLoaded", 8192 },
-        { "ItemCollectionsLoaded", 16384 },
-        { "AuctionableTokensLoaded", 32768 },
-        { "ConsumableTokensLoaded", 65536 },
-        { "PerkTablesLoaded", 131072 },
-        { "VasTransactionsLoaded", 262144 },
-    };
-    ScriptRegisterEnum(L, "AccountStateFlags", s_AccountStateFlags, sizeof(s_AccountStateFlags) / sizeof(s_AccountStateFlags[0]));
-    // not generated: calls 0x1407cb7e0, 0x1407cb890, 0x1407cb940 (callback setters and the like)
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountData", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Config");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountData", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Config2");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountData", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Bindings");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountData", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Bindings2");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountData", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "Macros");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountData", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "Macros2");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountData", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "UILayout");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountData", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "ChatSettings");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountData", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "TtsSettings");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountData", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "TtsSettings2");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountData", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "FlaggedIDs");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountData", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "FlaggedIDs2");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountData", lua_gettop(L));
+    ScriptPushEnumNumber(L, 12.0);
+    lua_setfield(L, -2, "ClickBindings");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountData", lua_gettop(L));
+    ScriptPushEnumNumber(L, 13.0);
+    lua_setfield(L, -2, "UIEditModeAccount");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountData", lua_gettop(L));
+    ScriptPushEnumNumber(L, 14.0);
+    lua_setfield(L, -2, "UIEditModeChar");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountDataMeta", lua_gettop(L));
+    ScriptPushEnumNumber(L, 15.0);
+    lua_setfield(L, -2, "NumValues");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountDataMeta", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "MinValue");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountDataMeta", lua_gettop(L));
+    ScriptPushEnumNumber(L, 14.0);
+    lua_setfield(L, -2, "MaxValue");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountDataUpdateStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "AccountDataUpdateSuccess");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountDataUpdateStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "AccountDataUpdateFailed");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountDataUpdateStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "AccountDataUpdateCorrupt");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountDataUpdateStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "AccountDataUpdateToobig");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountDataUpdateStatusMeta", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "NumValues");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountDataUpdateStatusMeta", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "MinValue");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountDataUpdateStatusMeta", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "MaxValue");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Success");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "UnknownError");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Cancelled");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "ShuttingDown");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "TimedOut");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "NoAccountFound");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "RequestedInvalidCharacter");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "RpcError");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "FileInvalid");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "FileWriteFailed");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "Unavailable");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "AlreadyInProgress");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 12.0);
+    lua_setfield(L, -2, "FailedToLockAccount");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 13.0);
+    lua_setfield(L, -2, "FailedToGenerateFile");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResultMeta", lua_gettop(L));
+    ScriptPushEnumNumber(L, 14.0);
+    lua_setfield(L, -2, "NumValues");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResultMeta", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "MinValue");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountExportResultMeta", lua_gettop(L));
+    ScriptPushEnumNumber(L, 13.0);
+    lua_setfield(L, -2, "MaxValue");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x0ull);
+    lua_setfield(L, -2, "None");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x1ull);
+    lua_setfield(L, -2, "AchievementsLoaded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x2ull);
+    lua_setfield(L, -2, "CriteriaLoaded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x4ull);
+    lua_setfield(L, -2, "MountsLoaded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x8ull);
+    lua_setfield(L, -2, "PetjournalInitialized");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x10ull);
+    lua_setfield(L, -2, "CurrencyCapsLoaded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x20ull);
+    lua_setfield(L, -2, "LoadFailed");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x40ull);
+    lua_setfield(L, -2, "QuestLogLoaded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x80ull);
+    lua_setfield(L, -2, "InPetCombat");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x100ull);
+    lua_setfield(L, -2, "CharactersLoaded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x200ull);
+    lua_setfield(L, -2, "PurchasesLoaded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x400ull);
+    lua_setfield(L, -2, "BpayDistributionObjectsLoaded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x800ull);
+    lua_setfield(L, -2, "ArchivedPurchasesLoaded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x1000ull);
+    lua_setfield(L, -2, "SettingsLoaded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x2000ull);
+    lua_setfield(L, -2, "BpayAddLicenseObjectsLoaded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x4000ull);
+    lua_setfield(L, -2, "ItemCollectionsLoaded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x8000ull);
+    lua_setfield(L, -2, "AuctionableTokensLoaded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x10000ull);
+    lua_setfield(L, -2, "ConsumableTokensLoaded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x20000ull);
+    lua_setfield(L, -2, "PerkTablesLoaded");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "AccountStateFlags", lua_gettop(L));
+    ScriptPushEnumUInt64(L, 0x40000ull);
+    lua_setfield(L, -2, "VasTransactionsLoaded");
+    lua_settop(L, -3);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "BpayProductitemObjectsLoaded", 0x80000ull);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "TrialBoostHistoryLoaded", 0x100000ull);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "QuestCriteriaLoaded", 0x200000ull);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "BattleNetAccountLoaded", 0x400000ull);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "AccountCurrenciesLoaded", 0x800000ull);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "RafBalanceLoaded", 0x1000000ull);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "RafRewardsLoaded", 0x2000000ull);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "DynamicCriteriaLoaded", 0x4000000ull);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "RafActivityLoaded", 0x8000000ull);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "RafFriendMonthsLoaded", 0x10000000ull);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "RevokedRafRewardsLoaded", 0x20000000ull);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "AccountNotificationsLoaded", 0x40000000ull);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "PerksPendingPurchaseLoaded", 0x80000000ull);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "AccountWowlabsLoaded", 0x100000000ull);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "AccountUpgradeComplete", 0x200000000ull);
+    ScriptSetEnumValueU64(L, "AccountStateFlags", "WoWTokenPurchaseLoaded", 0x1000000000ull);
+    ScriptSetEnumValue(L, "AccountStateFlagsMeta", "NumValues", 36);
+    ScriptSetEnumValue(L, "AccountStateFlagsMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "AccountStateFlagsMeta", "MaxValue", -2147483648);
+    ScriptSetEnumValueU32(L, "DisableAccountProfilesFlags", "None", 0);
+    ScriptSetEnumValueU32(L, "DisableAccountProfilesFlags", "Document", 1);
+    ScriptSetEnumValueU32(L, "DisableAccountProfilesFlags", "SharedCollections", 2);
+    ScriptSetEnumValueU32(L, "DisableAccountProfilesFlags", "MountsCollections", 4);
+    ScriptSetEnumValueU32(L, "DisableAccountProfilesFlags", "PetsCollections", 8);
+    ScriptSetEnumValueU32(L, "DisableAccountProfilesFlags", "ItemsCollections", 16);
+    ScriptSetEnumValue(L, "DisableAccountProfilesFlagsMeta", "NumValues", 6);
+    ScriptSetEnumValue(L, "DisableAccountProfilesFlagsMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "DisableAccountProfilesFlagsMeta", "MaxValue", 16);
 }
 
 // ref: FUN_140c84440
 void ScriptEnum_CameraModeAspectRatio(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_CameraModeAspectRatio[] = {
-        { "Default", 0 },
-        { "LegacyLetterbox", 1 },
-        { "HighDefinition_16_X_9", 2 },
-        { "Cinemascope_2_Dot_4_X_1", 3 },
-    };
-    ScriptRegisterEnum(L, "CameraModeAspectRatio", s_CameraModeAspectRatio, sizeof(s_CameraModeAspectRatio) / sizeof(s_CameraModeAspectRatio[0]));
-    static const SCRIPTENUMVALUE s_CameraModeAspectRatioMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "CameraModeAspectRatioMeta", s_CameraModeAspectRatioMeta, sizeof(s_CameraModeAspectRatioMeta) / sizeof(s_CameraModeAspectRatioMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CameraModeAspectRatio", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Default");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CameraModeAspectRatio", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "LegacyLetterbox");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CameraModeAspectRatio", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "HighDefinition_16_X_9");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CameraModeAspectRatio", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Cinemascope_2_Dot_4_X_1");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CameraModeAspectRatioMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "CameraModeAspectRatioMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CameraModeAspectRatioMeta", "MaxValue", 3);
 }
 
 // ref: FUN_140c84710
 void ScriptEnum_ChrRacesAllianceType(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_ChrRacesAllianceType[] = {
-        { "Alliance", 0 },
-        { "Horde", 1 },
-        { "NeutralOrNpc", 2 },
-    };
-    ScriptRegisterEnum(L, "ChrRacesAllianceType", s_ChrRacesAllianceType, sizeof(s_ChrRacesAllianceType) / sizeof(s_ChrRacesAllianceType[0]));
-    static const SCRIPTENUMVALUE s_ChrRacesAllianceTypeMeta[] = {
-        { "NumValues", 3 },
-        { "MinValue", 0 },
-        { "MaxValue", 2 },
-    };
-    ScriptRegisterEnum(L, "ChrRacesAllianceTypeMeta", s_ChrRacesAllianceTypeMeta, sizeof(s_ChrRacesAllianceTypeMeta) / sizeof(s_ChrRacesAllianceTypeMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChrRacesAllianceType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Alliance");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChrRacesAllianceType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Horde");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChrRacesAllianceType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "NeutralOrNpc");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ChrRacesAllianceTypeMeta", "NumValues", 3);
+    ScriptSetEnumValue(L, "ChrRacesAllianceTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ChrRacesAllianceTypeMeta", "MaxValue", 2);
 }
 
 // ref: FUN_140c85a00
 void ScriptEnum_CharCustomizationType(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_CharCustomizationType[] = {
-        { "Skin", 0 },
-        { "Face", 1 },
-        { "Hair", 2 },
-        { "HairColor", 3 },
-        { "FacialHair", 4 },
-        { "CustomOptionTattoo", 5 },
-        { "CustomOptionHorn", 6 },
-        { "CustomOptionFacewear", 7 },
-        { "CustomOptionTattooColor", 8 },
-        { "Outfit", 9 },
-        { "Facepaint", 10 },
-        { "FacepaintColor", 11 },
-    };
-    ScriptRegisterEnum(L, "CharCustomizationType", s_CharCustomizationType, sizeof(s_CharCustomizationType) / sizeof(s_CharCustomizationType[0]));
-    static const SCRIPTENUMVALUE s_CharCustomizationTypeMeta[] = {
-        { "NumValues", 12 },
-        { "MinValue", 0 },
-        { "MaxValue", 11 },
-    };
-    ScriptRegisterEnum(L, "CharCustomizationTypeMeta", s_CharCustomizationTypeMeta, sizeof(s_CharCustomizationTypeMeta) / sizeof(s_CharCustomizationTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_ChrModelFeatureFlags[] = {
-        { "Summons", 1 },
-        { "Forms", 2 },
-        { "Identity", 4 },
-        { "DragonCompanions", 8 },
-        { "Mounts", 16 },
-        { "HunterPets", 32 },
-    };
-    ScriptRegisterEnum(L, "ChrModelFeatureFlags", s_ChrModelFeatureFlags, sizeof(s_ChrModelFeatureFlags) / sizeof(s_ChrModelFeatureFlags[0]));
-    static const SCRIPTENUMVALUE s_ChrModelFeatureFlagsMeta[] = {
-        { "NumValues", 6 },
-        { "MinValue", 1 },
-        { "MaxValue", 32 },
-    };
-    ScriptRegisterEnum(L, "ChrModelFeatureFlagsMeta", s_ChrModelFeatureFlagsMeta, sizeof(s_ChrModelFeatureFlagsMeta) / sizeof(s_ChrModelFeatureFlagsMeta[0]));
-    static const SCRIPTENUMVALUE s_CustomizationScope[] = {
-        { "Player", 0 },
-        { "DragonCompanion", 1 },
-    };
-    ScriptRegisterEnum(L, "CustomizationScope", s_CustomizationScope, sizeof(s_CustomizationScope) / sizeof(s_CustomizationScope[0]));
-    static const SCRIPTENUMVALUE s_CustomizationScopeMeta[] = {
-        { "NumValues", 2 },
-        { "MinValue", 0 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "CustomizationScopeMeta", s_CustomizationScopeMeta, sizeof(s_CustomizationScopeMeta) / sizeof(s_CustomizationScopeMeta[0]));
-    static const SCRIPTENUMVALUE s_ChrCustomizationOptionType[] = {
-        { "SelectionPopout", 0 },
-        { "Checkbox", 1 },
-        { "Slider", 2 },
-    };
-    ScriptRegisterEnum(L, "ChrCustomizationOptionType", s_ChrCustomizationOptionType, sizeof(s_ChrCustomizationOptionType) / sizeof(s_ChrCustomizationOptionType[0]));
-    static const SCRIPTENUMVALUE s_ChrCustomizationOptionTypeMeta[] = {
-        { "NumValues", 3 },
-        { "MinValue", 0 },
-        { "MaxValue", 2 },
-    };
-    ScriptRegisterEnum(L, "ChrCustomizationOptionTypeMeta", s_ChrCustomizationOptionTypeMeta, sizeof(s_ChrCustomizationOptionTypeMeta) / sizeof(s_ChrCustomizationOptionTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_ChrCustomizationCategoryFlag[] = {
-        { "UndressModel", 1 },
-    };
-    ScriptRegisterEnum(L, "ChrCustomizationCategoryFlag", s_ChrCustomizationCategoryFlag, sizeof(s_ChrCustomizationCategoryFlag) / sizeof(s_ChrCustomizationCategoryFlag[0]));
-    static const SCRIPTENUMVALUE s_ChrCustomizationCategoryFlagMeta[] = {
-        { "NumValues", 1 },
-        { "MinValue", 1 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "ChrCustomizationCategoryFlagMeta", s_ChrCustomizationCategoryFlagMeta, sizeof(s_ChrCustomizationCategoryFlagMeta) / sizeof(s_ChrCustomizationCategoryFlagMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharCustomizationType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Skin");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharCustomizationType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Face");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharCustomizationType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Hair");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharCustomizationType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "HairColor");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharCustomizationType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "FacialHair");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharCustomizationType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "CustomOptionTattoo");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharCustomizationType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "CustomOptionHorn");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharCustomizationType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "CustomOptionFacewear");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharCustomizationType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "CustomOptionTattooColor");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharCustomizationType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "Outfit");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharCustomizationType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "Facepaint");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CharCustomizationType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "FacepaintColor");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CharCustomizationTypeMeta", "NumValues", 12);
+    ScriptSetEnumValue(L, "CharCustomizationTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CharCustomizationTypeMeta", "MaxValue", 11);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChrModelFeatureFlags", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Summons");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChrModelFeatureFlags", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Forms");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChrModelFeatureFlags", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "Identity");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChrModelFeatureFlags", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "DragonCompanions");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChrModelFeatureFlags", lua_gettop(L));
+    ScriptPushEnumNumber(L, 16.0);
+    lua_setfield(L, -2, "Mounts");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChrModelFeatureFlags", lua_gettop(L));
+    ScriptPushEnumNumber(L, 32.0);
+    lua_setfield(L, -2, "HunterPets");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ChrModelFeatureFlagsMeta", "NumValues", 6);
+    ScriptSetEnumValue(L, "ChrModelFeatureFlagsMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "ChrModelFeatureFlagsMeta", "MaxValue", 32);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CustomizationScope", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Player");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CustomizationScope", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "DragonCompanion");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CustomizationScopeMeta", "NumValues", 2);
+    ScriptSetEnumValue(L, "CustomizationScopeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CustomizationScopeMeta", "MaxValue", 1);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChrCustomizationOptionType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "SelectionPopout");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChrCustomizationOptionType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Checkbox");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChrCustomizationOptionType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Slider");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ChrCustomizationOptionTypeMeta", "NumValues", 3);
+    ScriptSetEnumValue(L, "ChrCustomizationOptionTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ChrCustomizationOptionTypeMeta", "MaxValue", 2);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChrCustomizationCategoryFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "UndressModel");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ChrCustomizationCategoryFlagMeta", "NumValues", 1);
+    ScriptSetEnumValue(L, "ChrCustomizationCategoryFlagMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "ChrCustomizationCategoryFlagMeta", "MaxValue", 1);
 }
 
 // ref: FUN_140c86fe0
 void ScriptEnum_PermanentChatChannelType(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_PermanentChatChannelType[] = {
-        { "None", 0 },
-        { "Zone", 1 },
-        { "Communities", 2 },
-        { "Custom", 3 },
-    };
-    ScriptRegisterEnum(L, "PermanentChatChannelType", s_PermanentChatChannelType, sizeof(s_PermanentChatChannelType) / sizeof(s_PermanentChatChannelType[0]));
-    static const SCRIPTENUMVALUE s_PermanentChatChannelTypeMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "PermanentChatChannelTypeMeta", s_PermanentChatChannelTypeMeta, sizeof(s_PermanentChatChannelTypeMeta) / sizeof(s_PermanentChatChannelTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_ChatChannelRuleset[] = {
-        { "None", 0 },
-        { "Mentor", 1 },
-        { "Disabled", 2 },
-        { "ChromieTimeCataclysm", 3 },
-        { "ChromieTimeBuringCrusade", 4 },
-        { "ChromieTimeWrath", 5 },
-        { "ChromieTimeMists", 6 },
-        { "ChromieTimeWoD", 7 },
-        { "ChromieTimeLegion", 8 },
-    };
-    ScriptRegisterEnum(L, "ChatChannelRuleset", s_ChatChannelRuleset, sizeof(s_ChatChannelRuleset) / sizeof(s_ChatChannelRuleset[0]));
-    static const SCRIPTENUMVALUE s_ChatChannelRulesetMeta[] = {
-        { "NumValues", 9 },
-        { "MinValue", 0 },
-        { "MaxValue", 8 },
-    };
-    ScriptRegisterEnum(L, "ChatChannelRulesetMeta", s_ChatChannelRulesetMeta, sizeof(s_ChatChannelRulesetMeta) / sizeof(s_ChatChannelRulesetMeta[0]));
-    static const SCRIPTENUMVALUE s_ChatChannelType[] = {
-        { "None", 0 },
-        { "Custom", 1 },
-        { "PrivateParty", 2 },
-        { "PublicParty", 3 },
-        { "Communities", 4 },
-    };
-    ScriptRegisterEnum(L, "ChatChannelType", s_ChatChannelType, sizeof(s_ChatChannelType) / sizeof(s_ChatChannelType[0]));
-    static const SCRIPTENUMVALUE s_ChatChannelTypeMeta[] = {
-        { "NumValues", 5 },
-        { "MinValue", 0 },
-        { "MaxValue", 4 },
-    };
-    ScriptRegisterEnum(L, "ChatChannelTypeMeta", s_ChatChannelTypeMeta, sizeof(s_ChatChannelTypeMeta) / sizeof(s_ChatChannelTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_ChatToxityFilterOptOut[] = {
-        { "FilterAll", 0 },
-        { "ExcludeFilterFriend", 1 },
-        { "ExcludeFilterGuild", 2 },
-        { "ExcludeFilterAll", 4294967295 },
-    };
-    ScriptRegisterEnum(L, "ChatToxityFilterOptOut", s_ChatToxityFilterOptOut, sizeof(s_ChatToxityFilterOptOut) / sizeof(s_ChatToxityFilterOptOut[0]));
-    static const SCRIPTENUMVALUE s_ChatToxityFilterOptOutMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 4294967295 },
-    };
-    ScriptRegisterEnum(L, "ChatToxityFilterOptOutMeta", s_ChatToxityFilterOptOutMeta, sizeof(s_ChatToxityFilterOptOutMeta) / sizeof(s_ChatToxityFilterOptOutMeta[0]));
-    static const SCRIPTENUMVALUE s_ChatWhisperTargetStatus[] = {
-        { "CanWhisper", 0 },
-        { "CanWhisperGuild", 1 },
-        { "Offline", 2 },
-        { "WrongFaction", 3 },
-    };
-    ScriptRegisterEnum(L, "ChatWhisperTargetStatus", s_ChatWhisperTargetStatus, sizeof(s_ChatWhisperTargetStatus) / sizeof(s_ChatWhisperTargetStatus[0]));
-    static const SCRIPTENUMVALUE s_ChatWhisperTargetStatusMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "ChatWhisperTargetStatusMeta", s_ChatWhisperTargetStatusMeta, sizeof(s_ChatWhisperTargetStatusMeta) / sizeof(s_ChatWhisperTargetStatusMeta[0]));
-    static const SCRIPTENUMVALUE s_ExcludedCensorSources[] = {
-        { "None", 0 },
-        { "Friends", 1 },
-        { "Guild", 2 },
-        { "Reserve1", 4 },
-        { "Reserve2", 8 },
-        { "Reserve3", 16 },
-        { "Reserve4", 32 },
-        { "Reserve5", 64 },
-        { "Reserve6", 128 },
-        { "All", 255 },
-    };
-    ScriptRegisterEnum(L, "ExcludedCensorSources", s_ExcludedCensorSources, sizeof(s_ExcludedCensorSources) / sizeof(s_ExcludedCensorSources[0]));
-    static const SCRIPTENUMVALUE s_ExcludedCensorSourcesMeta[] = {
-        { "NumValues", 10 },
-        { "MinValue", 0 },
-        { "MaxValue", 255 },
-    };
-    ScriptRegisterEnum(L, "ExcludedCensorSourcesMeta", s_ExcludedCensorSourcesMeta, sizeof(s_ExcludedCensorSourcesMeta) / sizeof(s_ExcludedCensorSourcesMeta[0]));
-    static const SCRIPTENUMVALUE s_LanguageFlag[] = {
-        { "IsExotic", 1 },
-        { "HiddenFromPlayer", 2 },
-        { "HideLanguageNameInChat", 4 },
-    };
-    ScriptRegisterEnum(L, "LanguageFlag", s_LanguageFlag, sizeof(s_LanguageFlag) / sizeof(s_LanguageFlag[0]));
-    static const SCRIPTENUMVALUE s_LanguageFlagMeta[] = {
-        { "NumValues", 3 },
-        { "MinValue", 1 },
-        { "MaxValue", 4 },
-    };
-    ScriptRegisterEnum(L, "LanguageFlagMeta", s_LanguageFlagMeta, sizeof(s_LanguageFlagMeta) / sizeof(s_LanguageFlagMeta[0]));
-    static const SCRIPTENUMVALUE s_TtsBoolSetting[] = {
-        { "PlaySoundSeparatingChatLineBreaks", 0 },
-        { "AddCharacterNameToSpeech", 1 },
-        { "PlayActivitySoundWhenNotFocused", 2 },
-        { "AlternateSystemVoice", 3 },
-        { "NarrateMyMessages", 4 },
-    };
-    ScriptRegisterEnum(L, "TtsBoolSetting", s_TtsBoolSetting, sizeof(s_TtsBoolSetting) / sizeof(s_TtsBoolSetting[0]));
-    static const SCRIPTENUMVALUE s_TtsBoolSettingMeta[] = {
-        { "NumValues", 5 },
-        { "MinValue", 0 },
-        { "MaxValue", 4 },
-    };
-    ScriptRegisterEnum(L, "TtsBoolSettingMeta", s_TtsBoolSettingMeta, sizeof(s_TtsBoolSettingMeta) / sizeof(s_TtsBoolSettingMeta[0]));
-    static const SCRIPTENUMVALUE s_TtsVoiceType[] = {
-        { "Standard", 0 },
-        { "Alternate", 1 },
-    };
-    ScriptRegisterEnum(L, "TtsVoiceType", s_TtsVoiceType, sizeof(s_TtsVoiceType) / sizeof(s_TtsVoiceType[0]));
-    static const SCRIPTENUMVALUE s_TtsVoiceTypeMeta[] = {
-        { "NumValues", 2 },
-        { "MinValue", 0 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "TtsVoiceTypeMeta", s_TtsVoiceTypeMeta, sizeof(s_TtsVoiceTypeMeta) / sizeof(s_TtsVoiceTypeMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "PermanentChatChannelType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "None");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "PermanentChatChannelType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Zone");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "PermanentChatChannelType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Communities");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "PermanentChatChannelType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Custom");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "PermanentChatChannelTypeMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "PermanentChatChannelTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "PermanentChatChannelTypeMeta", "MaxValue", 3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatChannelRuleset", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "None");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatChannelRuleset", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Mentor");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatChannelRuleset", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Disabled");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatChannelRuleset", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "ChromieTimeCataclysm");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatChannelRuleset", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "ChromieTimeBuringCrusade");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatChannelRuleset", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "ChromieTimeWrath");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatChannelRuleset", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "ChromieTimeMists");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatChannelRuleset", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "ChromieTimeWoD");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatChannelRuleset", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "ChromieTimeLegion");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ChatChannelRulesetMeta", "NumValues", 9);
+    ScriptSetEnumValue(L, "ChatChannelRulesetMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ChatChannelRulesetMeta", "MaxValue", 8);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatChannelType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "None");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatChannelType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Custom");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatChannelType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "PrivateParty");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatChannelType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "PublicParty");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatChannelType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "Communities");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ChatChannelTypeMeta", "NumValues", 5);
+    ScriptSetEnumValue(L, "ChatChannelTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ChatChannelTypeMeta", "MaxValue", 4);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatToxityFilterOptOut", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "FilterAll");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatToxityFilterOptOut", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "ExcludeFilterFriend");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatToxityFilterOptOut", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "ExcludeFilterGuild");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatToxityFilterOptOut", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4294967295.0);
+    lua_setfield(L, -2, "ExcludeFilterAll");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ChatToxityFilterOptOutMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "ChatToxityFilterOptOutMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ChatToxityFilterOptOutMeta", "MaxValue", -1);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatWhisperTargetStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "CanWhisper");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatWhisperTargetStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "CanWhisperGuild");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatWhisperTargetStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Offline");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ChatWhisperTargetStatus", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "WrongFaction");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ChatWhisperTargetStatusMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "ChatWhisperTargetStatusMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ChatWhisperTargetStatusMeta", "MaxValue", 3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ExcludedCensorSources", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "None");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ExcludedCensorSources", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Friends");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ExcludedCensorSources", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Guild");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ExcludedCensorSources", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "Reserve1");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ExcludedCensorSources", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "Reserve2");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ExcludedCensorSources", lua_gettop(L));
+    ScriptPushEnumNumber(L, 16.0);
+    lua_setfield(L, -2, "Reserve3");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ExcludedCensorSources", lua_gettop(L));
+    ScriptPushEnumNumber(L, 32.0);
+    lua_setfield(L, -2, "Reserve4");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ExcludedCensorSources", lua_gettop(L));
+    ScriptPushEnumNumber(L, 64.0);
+    lua_setfield(L, -2, "Reserve5");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ExcludedCensorSources", lua_gettop(L));
+    ScriptPushEnumNumber(L, 128.0);
+    lua_setfield(L, -2, "Reserve6");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ExcludedCensorSources", lua_gettop(L));
+    ScriptPushEnumNumber(L, 255.0);
+    lua_setfield(L, -2, "All");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ExcludedCensorSourcesMeta", "NumValues", 10);
+    ScriptSetEnumValue(L, "ExcludedCensorSourcesMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ExcludedCensorSourcesMeta", "MaxValue", 255);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "LanguageFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "IsExotic");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "LanguageFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "HiddenFromPlayer");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "LanguageFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "HideLanguageNameInChat");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "LanguageFlagMeta", "NumValues", 3);
+    ScriptSetEnumValue(L, "LanguageFlagMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "LanguageFlagMeta", "MaxValue", 4);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TtsBoolSetting", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "PlaySoundSeparatingChatLineBreaks");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TtsBoolSetting", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "AddCharacterNameToSpeech");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TtsBoolSetting", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "PlayActivitySoundWhenNotFocused");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TtsBoolSetting", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "AlternateSystemVoice");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TtsBoolSetting", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "NarrateMyMessages");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "TtsBoolSettingMeta", "NumValues", 5);
+    ScriptSetEnumValue(L, "TtsBoolSettingMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "TtsBoolSettingMeta", "MaxValue", 4);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TtsVoiceType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Standard");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TtsVoiceType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Alternate");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "TtsVoiceTypeMeta", "NumValues", 2);
+    ScriptSetEnumValue(L, "TtsVoiceTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "TtsVoiceTypeMeta", "MaxValue", 1);
 }
 
 // ref: FUN_14107eee0
 void ScriptEnum_ModelLightType(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_ModelLightType[] = {
-        { "Directional", 0 },
-        { "Point", 1 },
-    };
-    ScriptRegisterEnum(L, "ModelLightType", s_ModelLightType, sizeof(s_ModelLightType) / sizeof(s_ModelLightType[0]));
-    static const SCRIPTENUMVALUE s_ModelLightTypeMeta[] = {
-        { "NumValues", 2 },
-        { "MinValue", 0 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "ModelLightTypeMeta", s_ModelLightTypeMeta, sizeof(s_ModelLightTypeMeta) / sizeof(s_ModelLightTypeMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelLightType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Directional");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelLightType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Point");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ModelLightTypeMeta", "NumValues", 2);
+    ScriptSetEnumValue(L, "ModelLightTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ModelLightTypeMeta", "MaxValue", 1);
 }
 
 // ref: FUN_1410a73a0
 void ScriptEnum_ModelBlendOperation(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_ModelBlendOperation[] = {
-        { "None", 0 },
-        { "Anim", 1 },
-    };
-    ScriptRegisterEnum(L, "ModelBlendOperation", s_ModelBlendOperation, sizeof(s_ModelBlendOperation) / sizeof(s_ModelBlendOperation[0]));
-    static const SCRIPTENUMVALUE s_ModelBlendOperationMeta[] = {
-        { "NumValues", 2 },
-        { "MinValue", 0 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "ModelBlendOperationMeta", s_ModelBlendOperationMeta, sizeof(s_ModelBlendOperationMeta) / sizeof(s_ModelBlendOperationMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelBlendOperation", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "None");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ModelBlendOperation", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Anim");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ModelBlendOperationMeta", "NumValues", 2);
+    ScriptSetEnumValue(L, "ModelBlendOperationMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ModelBlendOperationMeta", "MaxValue", 1);
 }
 
 // ref: FUN_140ec7fc0
 void ScriptEnum_CraftingOrderDuration(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_CraftingOrderDuration[] = {
-        { "Short", 0 },
-        { "Medium", 1 },
-        { "Long", 2 },
-    };
-    ScriptRegisterEnum(L, "CraftingOrderDuration", s_CraftingOrderDuration, sizeof(s_CraftingOrderDuration) / sizeof(s_CraftingOrderDuration[0]));
-    static const SCRIPTENUMVALUE s_CraftingOrderDurationMeta[] = {
-        { "NumValues", 3 },
-        { "MinValue", 0 },
-        { "MaxValue", 2 },
-    };
-    ScriptRegisterEnum(L, "CraftingOrderDurationMeta", s_CraftingOrderDurationMeta, sizeof(s_CraftingOrderDurationMeta) / sizeof(s_CraftingOrderDurationMeta[0]));
-    static const SCRIPTENUMVALUE s_CraftingOrderFlags[] = {
-        { "IsRecraft", 1 },
-        { "HasNoneReagents", 2 },
-        { "HasSomeReagents", 4 },
-        { "HasAllReagents", 8 },
-        { "IsFulfillable", 16 },
-    };
-    ScriptRegisterEnum(L, "CraftingOrderFlags", s_CraftingOrderFlags, sizeof(s_CraftingOrderFlags) / sizeof(s_CraftingOrderFlags[0]));
-    static const SCRIPTENUMVALUE s_CraftingOrderFlagsMeta[] = {
-        { "NumValues", 5 },
-        { "MinValue", 1 },
-        { "MaxValue", 16 },
-    };
-    ScriptRegisterEnum(L, "CraftingOrderFlagsMeta", s_CraftingOrderFlagsMeta, sizeof(s_CraftingOrderFlagsMeta) / sizeof(s_CraftingOrderFlagsMeta[0]));
-    static const SCRIPTENUMVALUE s_CraftingOrderItemType[] = {
-        { "Reagent", 0 },
-        { "Recraft", 1 },
-        { "CraftedResult", 2 },
-        { "RemoveReagent", 3 },
-    };
-    ScriptRegisterEnum(L, "CraftingOrderItemType", s_CraftingOrderItemType, sizeof(s_CraftingOrderItemType) / sizeof(s_CraftingOrderItemType[0]));
-    static const SCRIPTENUMVALUE s_CraftingOrderItemTypeMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "CraftingOrderItemTypeMeta", s_CraftingOrderItemTypeMeta, sizeof(s_CraftingOrderItemTypeMeta) / sizeof(s_CraftingOrderItemTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_CraftingOrderReagentSource[] = {
-        { "Any", 0 },
-        { "Customer", 1 },
-        { "Crafter", 2 },
-        { "None", 3 },
-    };
-    ScriptRegisterEnum(L, "CraftingOrderReagentSource", s_CraftingOrderReagentSource, sizeof(s_CraftingOrderReagentSource) / sizeof(s_CraftingOrderReagentSource[0]));
-    static const SCRIPTENUMVALUE s_CraftingOrderReagentSourceMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "CraftingOrderReagentSourceMeta", s_CraftingOrderReagentSourceMeta, sizeof(s_CraftingOrderReagentSourceMeta) / sizeof(s_CraftingOrderReagentSourceMeta[0]));
-    static const SCRIPTENUMVALUE s_CraftingOrderResult[] = {
-        { "Ok", 0 },
-        { "Aborted", 1 },
-        { "AlreadyClaimed", 2 },
-        { "AlreadyCrafted", 3 },
-        { "CannotBeOrdered", 4 },
-        { "CannotCancel", 5 },
-        { "CannotClaim", 6 },
-        { "CannotClaimOwnOrder", 7 },
-        { "CannotCraft", 8 },
-        { "CannotCreate", 9 },
-        { "CannotFulfill", 10 },
-        { "CannotRecraft", 11 },
-        { "CannotReject", 12 },
-        { "CannotRelease", 13 },
-        { "CrafterIsIgnored", 14 },
-        { "DatabaseError", 15 },
-        { "Expired", 16 },
-        { "Locked", 17 },
-        { "InvalidDuration", 18 },
-        { "InvalidMinQuality", 19 },
-        { "InvalidNotes", 20 },
-        { "InvalidReagent", 21 },
-        { "InvalidRealm", 22 },
-        { "InvalidRecipe", 23 },
-        { "InvalidSort", 24 },
-        { "InvalidTarget", 25 },
-        { "InvalidType", 26 },
-        { "MaxOrdersReached", 27 },
-        { "MissingCraftingTable", 28 },
-        { "MissingItem", 29 },
-        { "MissingNpc", 30 },
-        { "MissingOrder", 31 },
-        { "MissingRecraftItem", 32 },
-        { "NotClaimed", 33 },
-        { "NotCrafted", 34 },
-        { "NotInGuild", 35 },
-        { "NotYetImplemented", 36 },
-        { "OutOfPublicOrderCapacity", 37 },
-        { "ServerIsNotAvailable", 38 },
-        { "ThrottleViolation", 39 },
-        { "TargetCannotCraft", 40 },
-        { "TargetLocked", 41 },
-        { "Timeout", 42 },
-        { "TooManyItems", 43 },
-        { "WrongVersion", 44 },
-    };
-    ScriptRegisterEnum(L, "CraftingOrderResult", s_CraftingOrderResult, sizeof(s_CraftingOrderResult) / sizeof(s_CraftingOrderResult[0]));
-    static const SCRIPTENUMVALUE s_CraftingOrderResultMeta[] = {
-        { "NumValues", 45 },
-        { "MinValue", 0 },
-        { "MaxValue", 44 },
-    };
-    ScriptRegisterEnum(L, "CraftingOrderResultMeta", s_CraftingOrderResultMeta, sizeof(s_CraftingOrderResultMeta) / sizeof(s_CraftingOrderResultMeta[0]));
-    static const SCRIPTENUMVALUE s_CraftingOrderState[] = {
-        { "None", 0 },
-        { "Creating", 1 },
-        { "Created", 2 },
-        { "Claiming", 3 },
-        { "Claimed", 4 },
-        { "Rejecting", 5 },
-        { "Rejected", 6 },
-        { "Releasing", 7 },
-        { "Crafting", 8 },
-        { "Recrafting", 9 },
-        { "Fulfilling", 10 },
-        { "Fulfilled", 11 },
-        { "Canceling", 12 },
-        { "Canceled", 13 },
-        { "Expiring", 14 },
-        { "Expired", 15 },
-    };
-    ScriptRegisterEnum(L, "CraftingOrderState", s_CraftingOrderState, sizeof(s_CraftingOrderState) / sizeof(s_CraftingOrderState[0]));
-    static const SCRIPTENUMVALUE s_CraftingOrderStateMeta[] = {
-        { "NumValues", 16 },
-        { "MinValue", 0 },
-        { "MaxValue", 15 },
-    };
-    ScriptRegisterEnum(L, "CraftingOrderStateMeta", s_CraftingOrderStateMeta, sizeof(s_CraftingOrderStateMeta) / sizeof(s_CraftingOrderStateMeta[0]));
-    static const SCRIPTENUMVALUE s_CraftingOrderType[] = {
-        { "Public", 0 },
-        { "Guild", 1 },
-        { "Personal", 2 },
-    };
-    ScriptRegisterEnum(L, "CraftingOrderType", s_CraftingOrderType, sizeof(s_CraftingOrderType) / sizeof(s_CraftingOrderType[0]));
-    static const SCRIPTENUMVALUE s_CraftingOrderTypeMeta[] = {
-        { "NumValues", 3 },
-        { "MinValue", 0 },
-        { "MaxValue", 2 },
-    };
-    ScriptRegisterEnum(L, "CraftingOrderTypeMeta", s_CraftingOrderTypeMeta, sizeof(s_CraftingOrderTypeMeta) / sizeof(s_CraftingOrderTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_CraftingReagentType[] = {
-        { "Modifying", 0 },
-        { "Basic", 1 },
-        { "Finishing", 2 },
-        { "Automatic", 3 },
-    };
-    ScriptRegisterEnum(L, "CraftingReagentType", s_CraftingReagentType, sizeof(s_CraftingReagentType) / sizeof(s_CraftingReagentType[0]));
-    static const SCRIPTENUMVALUE s_CraftingReagentTypeMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "CraftingReagentTypeMeta", s_CraftingReagentTypeMeta, sizeof(s_CraftingReagentTypeMeta) / sizeof(s_CraftingReagentTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_ItemRecraftFlags[] = {
-        { "ItemRecraftFlagInvalid", 1 },
-    };
-    ScriptRegisterEnum(L, "ItemRecraftFlags", s_ItemRecraftFlags, sizeof(s_ItemRecraftFlags) / sizeof(s_ItemRecraftFlags[0]));
-    static const SCRIPTENUMVALUE s_ItemRecraftFlagsMeta[] = {
-        { "NumValues", 1 },
-        { "MinValue", 1 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "ItemRecraftFlagsMeta", s_ItemRecraftFlagsMeta, sizeof(s_ItemRecraftFlagsMeta) / sizeof(s_ItemRecraftFlagsMeta[0]));
-    static const SCRIPTENUMVALUE s_Profession[] = {
-        { "FirstAid", 0 },
-        { "Blacksmithing", 1 },
-        { "Leatherworking", 2 },
-        { "Alchemy", 3 },
-        { "Herbalism", 4 },
-        { "Cooking", 5 },
-        { "Mining", 6 },
-        { "Tailoring", 7 },
-        { "Engineering", 8 },
-        { "Enchanting", 9 },
-        { "Fishing", 10 },
-        { "Skinning", 11 },
-        { "Jewelcrafting", 12 },
-        { "Inscription", 13 },
-        { "Archaeology", 14 },
-    };
-    ScriptRegisterEnum(L, "Profession", s_Profession, sizeof(s_Profession) / sizeof(s_Profession[0]));
-    static const SCRIPTENUMVALUE s_ProfessionMeta[] = {
-        { "NumValues", 15 },
-        { "MinValue", 0 },
-        { "MaxValue", 14 },
-    };
-    ScriptRegisterEnum(L, "ProfessionMeta", s_ProfessionMeta, sizeof(s_ProfessionMeta) / sizeof(s_ProfessionMeta[0]));
-    static const SCRIPTENUMVALUE s_ProfessionActionType[] = {
-        { "Craft", 0 },
-        { "Gather", 1 },
-    };
-    ScriptRegisterEnum(L, "ProfessionActionType", s_ProfessionActionType, sizeof(s_ProfessionActionType) / sizeof(s_ProfessionActionType[0]));
-    static const SCRIPTENUMVALUE s_ProfessionActionTypeMeta[] = {
-        { "NumValues", 2 },
-        { "MinValue", 0 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "ProfessionActionTypeMeta", s_ProfessionActionTypeMeta, sizeof(s_ProfessionActionTypeMeta) / sizeof(s_ProfessionActionTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_ProfessionEffect[] = {
-        { "Skill", 0 },
-        { "StatInspiration", 1 },
-        { "StatResourcefulness", 2 },
-        { "StatFinesse", 3 },
-        { "StatDeftness", 4 },
-        { "StatPerception", 5 },
-        { "StatCraftingSpeed", 6 },
-        { "StatMulticraft", 7 },
-        { "UnlockReagentSlot", 8 },
-        { "ModInspiration", 9 },
-    };
-    ScriptRegisterEnum(L, "ProfessionEffect", s_ProfessionEffect, sizeof(s_ProfessionEffect) / sizeof(s_ProfessionEffect[0]));
-    static const SCRIPTENUMVALUE s_ProfessionEffectMeta[] = {
-        { "NumValues", 26 },
-        { "MinValue", 0 },
-        { "MaxValue", 25 },
-    };
-    ScriptRegisterEnum(L, "ProfessionEffectMeta", s_ProfessionEffectMeta, sizeof(s_ProfessionEffectMeta) / sizeof(s_ProfessionEffectMeta[0]));
-    static const SCRIPTENUMVALUE s_ProfessionRatingMeta[] = {
-        { "NumValues", 9 },
-        { "MinValue", 0 },
-        { "MaxValue", 8 },
-    };
-    ScriptRegisterEnum(L, "ProfessionRatingMeta", s_ProfessionRatingMeta, sizeof(s_ProfessionRatingMeta) / sizeof(s_ProfessionRatingMeta[0]));
-    static const SCRIPTENUMVALUE s_ProfessionRatingTypeMeta[] = {
-        { "NumValues", 2 },
-        { "MinValue", 0 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "ProfessionRatingTypeMeta", s_ProfessionRatingTypeMeta, sizeof(s_ProfessionRatingTypeMeta) / sizeof(s_ProfessionRatingTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_RcoCloseReason[] = {
-        { "RcoCloseFulfill", 0 },
-        { "RcoCloseExpire", 1 },
-        { "RcoCloseCancel", 2 },
-        { "RcoCloseReject", 3 },
-        { "RcoCloseGmCancel", 4 },
-        { "RcoCloseCrafterFulfill", 5 },
-        { "RcoCloseInvalid", 6 },
-    };
-    ScriptRegisterEnum(L, "RcoCloseReason", s_RcoCloseReason, sizeof(s_RcoCloseReason) / sizeof(s_RcoCloseReason[0]));
-    static const SCRIPTENUMVALUE s_RcoCloseReasonMeta[] = {
-        { "NumValues", 7 },
-        { "MinValue", 0 },
-        { "MaxValue", 6 },
-    };
-    ScriptRegisterEnum(L, "RcoCloseReasonMeta", s_RcoCloseReasonMeta, sizeof(s_RcoCloseReasonMeta) / sizeof(s_RcoCloseReasonMeta[0]));
-    // not generated: calls 0x140c09480 (callback setters and the like)
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderDuration", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Short");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderDuration", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Medium");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderDuration", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Long");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CraftingOrderDurationMeta", "NumValues", 3);
+    ScriptSetEnumValue(L, "CraftingOrderDurationMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CraftingOrderDurationMeta", "MaxValue", 2);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderFlags", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "IsRecraft");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderFlags", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "HasNoneReagents");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderFlags", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "HasSomeReagents");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderFlags", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "HasAllReagents");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderFlags", lua_gettop(L));
+    ScriptPushEnumNumber(L, 16.0);
+    lua_setfield(L, -2, "IsFulfillable");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CraftingOrderFlagsMeta", "NumValues", 5);
+    ScriptSetEnumValue(L, "CraftingOrderFlagsMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "CraftingOrderFlagsMeta", "MaxValue", 16);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderItemType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Reagent");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderItemType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Recraft");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderItemType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "CraftedResult");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderItemType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "RemoveReagent");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CraftingOrderItemTypeMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "CraftingOrderItemTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CraftingOrderItemTypeMeta", "MaxValue", 3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderReagentSource", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Any");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderReagentSource", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Customer");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderReagentSource", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Crafter");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderReagentSource", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "None");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CraftingOrderReagentSourceMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "CraftingOrderReagentSourceMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CraftingOrderReagentSourceMeta", "MaxValue", 3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Ok");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Aborted");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "AlreadyClaimed");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "AlreadyCrafted");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "CannotBeOrdered");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "CannotCancel");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "CannotClaim");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "CannotClaimOwnOrder");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "CannotCraft");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "CannotCreate");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "CannotFulfill");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "CannotRecraft");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 12.0);
+    lua_setfield(L, -2, "CannotReject");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 13.0);
+    lua_setfield(L, -2, "CannotRelease");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 14.0);
+    lua_setfield(L, -2, "CrafterIsIgnored");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 15.0);
+    lua_setfield(L, -2, "DatabaseError");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 16.0);
+    lua_setfield(L, -2, "Expired");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 17.0);
+    lua_setfield(L, -2, "Locked");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 18.0);
+    lua_setfield(L, -2, "InvalidDuration");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 19.0);
+    lua_setfield(L, -2, "InvalidMinQuality");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20.0);
+    lua_setfield(L, -2, "InvalidNotes");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 21.0);
+    lua_setfield(L, -2, "InvalidReagent");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 22.0);
+    lua_setfield(L, -2, "InvalidRealm");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 23.0);
+    lua_setfield(L, -2, "InvalidRecipe");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 24.0);
+    lua_setfield(L, -2, "InvalidSort");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 25.0);
+    lua_setfield(L, -2, "InvalidTarget");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 26.0);
+    lua_setfield(L, -2, "InvalidType");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 27.0);
+    lua_setfield(L, -2, "MaxOrdersReached");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 28.0);
+    lua_setfield(L, -2, "MissingCraftingTable");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 29.0);
+    lua_setfield(L, -2, "MissingItem");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 30.0);
+    lua_setfield(L, -2, "MissingNpc");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 31.0);
+    lua_setfield(L, -2, "MissingOrder");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 32.0);
+    lua_setfield(L, -2, "MissingRecraftItem");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 33.0);
+    lua_setfield(L, -2, "NotClaimed");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 34.0);
+    lua_setfield(L, -2, "NotCrafted");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 35.0);
+    lua_setfield(L, -2, "NotInGuild");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 36.0);
+    lua_setfield(L, -2, "NotYetImplemented");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 37.0);
+    lua_setfield(L, -2, "OutOfPublicOrderCapacity");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 38.0);
+    lua_setfield(L, -2, "ServerIsNotAvailable");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderResult", lua_gettop(L));
+    ScriptPushEnumNumber(L, 39.0);
+    lua_setfield(L, -2, "ThrottleViolation");
+    lua_settop(L, -3);
+    ScriptSetEnumValue8(L, "CraftingOrderResult", "TargetCannotCraft", 40);
+    ScriptSetEnumValue8(L, "CraftingOrderResult", "TargetLocked", 41);
+    ScriptSetEnumValue8(L, "CraftingOrderResult", "Timeout", 42);
+    ScriptSetEnumValue8(L, "CraftingOrderResult", "TooManyItems", 43);
+    ScriptSetEnumValue8(L, "CraftingOrderResult", "WrongVersion", 44);
+    ScriptSetEnumValue(L, "CraftingOrderResultMeta", "NumValues", 45);
+    ScriptSetEnumValue(L, "CraftingOrderResultMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CraftingOrderResultMeta", "MaxValue", 44);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "None");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Creating");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Created");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Claiming");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "Claimed");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "Rejecting");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "Rejected");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "Releasing");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "Crafting");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "Recrafting");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "Fulfilling");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "Fulfilled");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 12.0);
+    lua_setfield(L, -2, "Canceling");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 13.0);
+    lua_setfield(L, -2, "Canceled");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 14.0);
+    lua_setfield(L, -2, "Expiring");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingOrderState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 15.0);
+    lua_setfield(L, -2, "Expired");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CraftingOrderStateMeta", "NumValues", 16);
+    ScriptSetEnumValue(L, "CraftingOrderStateMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CraftingOrderStateMeta", "MaxValue", 15);
+    ScriptSetEnumValue8(L, "CraftingOrderType", "Public", 0);
+    ScriptSetEnumValue8(L, "CraftingOrderType", "Guild", 1);
+    ScriptSetEnumValue8(L, "CraftingOrderType", "Personal", 2);
+    ScriptSetEnumValue(L, "CraftingOrderTypeMeta", "NumValues", 3);
+    ScriptSetEnumValue(L, "CraftingOrderTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CraftingOrderTypeMeta", "MaxValue", 2);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingReagentType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Modifying");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingReagentType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Basic");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingReagentType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Finishing");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "CraftingReagentType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Automatic");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "CraftingReagentTypeMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "CraftingReagentTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "CraftingReagentTypeMeta", "MaxValue", 3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ItemRecraftFlags", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "ItemRecraftFlagInvalid");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ItemRecraftFlagsMeta", "NumValues", 1);
+    ScriptSetEnumValue(L, "ItemRecraftFlagsMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "ItemRecraftFlagsMeta", "MaxValue", 1);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "Profession", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "FirstAid");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "Profession", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Blacksmithing");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "Profession", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Leatherworking");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "Profession", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Alchemy");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "Profession", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "Herbalism");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "Profession", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "Cooking");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "Profession", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "Mining");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "Profession", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "Tailoring");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "Profession", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "Engineering");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "Profession", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "Enchanting");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "Profession", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "Fishing");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "Profession", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "Skinning");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "Profession", lua_gettop(L));
+    ScriptPushEnumNumber(L, 12.0);
+    lua_setfield(L, -2, "Jewelcrafting");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "Profession", lua_gettop(L));
+    ScriptPushEnumNumber(L, 13.0);
+    lua_setfield(L, -2, "Inscription");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "Profession", lua_gettop(L));
+    ScriptPushEnumNumber(L, 14.0);
+    lua_setfield(L, -2, "Archaeology");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ProfessionMeta", "NumValues", 15);
+    ScriptSetEnumValue(L, "ProfessionMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ProfessionMeta", "MaxValue", 14);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ProfessionActionType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Craft");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ProfessionActionType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Gather");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ProfessionActionTypeMeta", "NumValues", 2);
+    ScriptSetEnumValue(L, "ProfessionActionTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ProfessionActionTypeMeta", "MaxValue", 1);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ProfessionEffect", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Skill");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ProfessionEffect", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "StatInspiration");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ProfessionEffect", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "StatResourcefulness");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ProfessionEffect", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "StatFinesse");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ProfessionEffect", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "StatDeftness");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ProfessionEffect", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "StatPerception");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ProfessionEffect", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "StatCraftingSpeed");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ProfessionEffect", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "StatMulticraft");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ProfessionEffect", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "UnlockReagentSlot");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ProfessionEffect", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "ModInspiration");
+    lua_settop(L, -3);
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 10, "ModResourcefulness");
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 11, "ModFinesse");
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 12, "ModDeftness");
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 13, "ModPerception");
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 14, "ModCraftingSpeed");
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 15, "ModMulticraft");
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 16, "ModUnused_1");
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 17, "ModUnused_2");
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 18, "ModCraftExtraQuantity");
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 19, "ModGatherExtraQuantity");
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 20, "ModCraftCritSize");
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 21, "ModCraftReductionQuantity");
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 22, "DecreaseDifficulty");
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 23, "IncreaseDifficulty");
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 24, "ModSkillGain");
+    ScriptSetTableValue(L, "Enum", "ProfessionEffect", 25, "AccumulateRanksByLabel");
+    ScriptSetEnumValue(L, "ProfessionEffectMeta", "NumValues", 26);
+    ScriptSetEnumValue(L, "ProfessionEffectMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ProfessionEffectMeta", "MaxValue", 25);
+    ScriptSetTableValue(L, "Enum", "ProfessionRating", 0, "Inspiration");
+    ScriptSetTableValue(L, "Enum", "ProfessionRating", 1, "Resourcefulness");
+    ScriptSetTableValue(L, "Enum", "ProfessionRating", 2, "Finesse");
+    ScriptSetTableValue(L, "Enum", "ProfessionRating", 3, "Deftness");
+    ScriptSetTableValue(L, "Enum", "ProfessionRating", 4, "Perception");
+    ScriptSetTableValue(L, "Enum", "ProfessionRating", 5, "CraftingSpeed");
+    ScriptSetTableValue(L, "Enum", "ProfessionRating", 6, "Multicraft");
+    ScriptSetTableValue(L, "Enum", "ProfessionRating", 7, "Unused_1");
+    ScriptSetTableValue(L, "Enum", "ProfessionRating", 8, "Unused_2");
+    ScriptSetEnumValue(L, "ProfessionRatingMeta", "NumValues", 9);
+    ScriptSetEnumValue(L, "ProfessionRatingMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ProfessionRatingMeta", "MaxValue", 8);
+    ScriptSetTableValue(L, "Enum", "ProfessionRatingType", 0, "Craft");
+    ScriptSetTableValue(L, "Enum", "ProfessionRatingType", 1, "Gather");
+    ScriptSetEnumValue(L, "ProfessionRatingTypeMeta", "NumValues", 2);
+    ScriptSetEnumValue(L, "ProfessionRatingTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ProfessionRatingTypeMeta", "MaxValue", 1);
+    ScriptSetEnumValue8(L, "RcoCloseReason", "RcoCloseFulfill", 0);
+    ScriptSetEnumValue8(L, "RcoCloseReason", "RcoCloseExpire", 1);
+    ScriptSetEnumValue8(L, "RcoCloseReason", "RcoCloseCancel", 2);
+    ScriptSetEnumValue8(L, "RcoCloseReason", "RcoCloseReject", 3);
+    ScriptSetEnumValue8(L, "RcoCloseReason", "RcoCloseGmCancel", 4);
+    ScriptSetEnumValue8(L, "RcoCloseReason", "RcoCloseCrafterFulfill", 5);
+    ScriptSetEnumValue8(L, "RcoCloseReason", "RcoCloseInvalid", 6);
+    ScriptSetEnumValue(L, "RcoCloseReasonMeta", "NumValues", 7);
+    ScriptSetEnumValue(L, "RcoCloseReasonMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "RcoCloseReasonMeta", "MaxValue", 6);
+    ScriptSetTableValue(L, "Constants", "ProfessionConsts", 2, "NUM_PRIMARY_PROFESSIONS");
+    ScriptSetTableValue(L, "Constants", "ProfessionConsts", 4, "CLASSIC_PROFESSION_PARENT_TIER_INDEX");
+    ScriptSetTableValue(L, "Constants", "ProfessionConsts", 960, "RUNEFORGING_SKILL_LINE_ID");
+    ScriptSetTableValue(L, "Constants", "ProfessionConsts", 210, "RUNEFORGING_ROOT_CATEGORY_ID");
+    ScriptSetTableValue(L, "Constants", "ProfessionConsts", 12, "MAX_CRAFTING_REAGENT_SLOTS");
+    ScriptSetTableValue(L, "Constants", "ProfessionConsts", 1800, "CRAFTING_ORDER_CLAIM_DURATION");
+    ScriptSetTableValue(L, "Constants", "ProfessionConsts", 14400, "PUBLIC_CRAFTING_ORDER_STALE_THRESHOLD");
+    ScriptSetTableValue(L, "Constants", "ProfessionConsts", 30, "CRAFTING_ORDER_ITEM_RETENTION");
 }
 
 // ref: FUN_140affd60
 void ScriptEnum_ReportType(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_ReportType[] = {
-        { "Chat", 0 },
-        { "InWorld", 1 },
-        { "ClubFinderPosting", 2 },
-        { "ClubFinderApplicant", 3 },
-        { "GroupFinderPosting", 4 },
-        { "GroupFinderApplicant", 5 },
-        { "ClubMember", 6 },
-        { "GroupMember", 7 },
-        { "Friend", 8 },
-        { "Pet", 9 },
-        { "BattlePet", 10 },
-        { "Calendar", 11 },
-        { "Mail", 12 },
-        { "PvP", 13 },
-        { "PvPScoreboard", 14 },
-        { "PvPGroupMember", 15 },
-        { "CraftingOrder", 16 },
-    };
-    ScriptRegisterEnum(L, "ReportType", s_ReportType, sizeof(s_ReportType) / sizeof(s_ReportType[0]));
-    static const SCRIPTENUMVALUE s_ReportTypeMeta[] = {
-        { "NumValues", 17 },
-        { "MinValue", 0 },
-        { "MaxValue", 16 },
-    };
-    ScriptRegisterEnum(L, "ReportTypeMeta", s_ReportTypeMeta, sizeof(s_ReportTypeMeta) / sizeof(s_ReportTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_ReportMajorCategory[] = {
-        { "InappropriateCommunication", 0 },
-        { "GameplaySabotage", 1 },
-        { "Cheating", 2 },
-        { "InappropriateName", 3 },
-    };
-    ScriptRegisterEnum(L, "ReportMajorCategory", s_ReportMajorCategory, sizeof(s_ReportMajorCategory) / sizeof(s_ReportMajorCategory[0]));
-    static const SCRIPTENUMVALUE s_ReportMajorCategoryMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "ReportMajorCategoryMeta", s_ReportMajorCategoryMeta, sizeof(s_ReportMajorCategoryMeta) / sizeof(s_ReportMajorCategoryMeta[0]));
-    static const SCRIPTENUMVALUE s_ReportMinorCategory[] = {
-        { "TextChat", 1 },
-        { "Boosting", 2 },
-        { "Spam", 4 },
-        { "Afk", 8 },
-        { "IntentionallyFeeding", 16 },
-        { "BlockingProgress", 32 },
-        { "Hacking", 64 },
-        { "Botting", 128 },
-        { "Advertisement", 256 },
-        { "BTag", 512 },
-        { "GroupName", 1024 },
-        { "CharacterName", 2048 },
-        { "GuildName", 4096 },
-        { "Description", 8192 },
-        { "Name", 16384 },
-    };
-    ScriptRegisterEnum(L, "ReportMinorCategory", s_ReportMinorCategory, sizeof(s_ReportMinorCategory) / sizeof(s_ReportMinorCategory[0]));
-    static const SCRIPTENUMVALUE s_ReportMinorCategoryMeta[] = {
-        { "NumValues", 15 },
-        { "MinValue", 1 },
-        { "MaxValue", 16384 },
-    };
-    ScriptRegisterEnum(L, "ReportMinorCategoryMeta", s_ReportMinorCategoryMeta, sizeof(s_ReportMinorCategoryMeta) / sizeof(s_ReportMinorCategoryMeta[0]));
-    static const SCRIPTENUMVALUE s_ReportSubComplaintTypes[] = {
-        { "Inappropriate", 0 },
-        { "Advertising", 1 },
-    };
-    ScriptRegisterEnum(L, "ReportSubComplaintTypes", s_ReportSubComplaintTypes, sizeof(s_ReportSubComplaintTypes) / sizeof(s_ReportSubComplaintTypes[0]));
-    static const SCRIPTENUMVALUE s_ReportSubComplaintTypesMeta[] = {
-        { "NumValues", 2 },
-        { "MinValue", 0 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "ReportSubComplaintTypesMeta", s_ReportSubComplaintTypesMeta, sizeof(s_ReportSubComplaintTypesMeta) / sizeof(s_ReportSubComplaintTypesMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Chat");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "InWorld");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "ClubFinderPosting");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "ClubFinderApplicant");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "GroupFinderPosting");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "GroupFinderApplicant");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "ClubMember");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "GroupMember");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "Friend");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "Pet");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "BattlePet");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "Calendar");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 12.0);
+    lua_setfield(L, -2, "Mail");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 13.0);
+    lua_setfield(L, -2, "PvP");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 14.0);
+    lua_setfield(L, -2, "PvPScoreboard");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 15.0);
+    lua_setfield(L, -2, "PvPGroupMember");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 16.0);
+    lua_setfield(L, -2, "CraftingOrder");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ReportTypeMeta", "NumValues", 17);
+    ScriptSetEnumValue(L, "ReportTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ReportTypeMeta", "MaxValue", 16);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMajorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "InappropriateCommunication");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMajorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "GameplaySabotage");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMajorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Cheating");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMajorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "InappropriateName");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ReportMajorCategoryMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "ReportMajorCategoryMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ReportMajorCategoryMeta", "MaxValue", 3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMinorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "TextChat");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMinorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Boosting");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMinorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "Spam");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMinorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "Afk");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMinorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 16.0);
+    lua_setfield(L, -2, "IntentionallyFeeding");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMinorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 32.0);
+    lua_setfield(L, -2, "BlockingProgress");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMinorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 64.0);
+    lua_setfield(L, -2, "Hacking");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMinorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 128.0);
+    lua_setfield(L, -2, "Botting");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMinorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 256.0);
+    lua_setfield(L, -2, "Advertisement");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMinorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 512.0);
+    lua_setfield(L, -2, "BTag");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMinorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1024.0);
+    lua_setfield(L, -2, "GroupName");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMinorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2048.0);
+    lua_setfield(L, -2, "CharacterName");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMinorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4096.0);
+    lua_setfield(L, -2, "GuildName");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMinorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8192.0);
+    lua_setfield(L, -2, "Description");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportMinorCategory", lua_gettop(L));
+    ScriptPushEnumNumber(L, 16384.0);
+    lua_setfield(L, -2, "Name");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ReportMinorCategoryMeta", "NumValues", 15);
+    ScriptSetEnumValue(L, "ReportMinorCategoryMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "ReportMinorCategoryMeta", "MaxValue", 16384);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportSubComplaintTypes", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Inappropriate");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ReportSubComplaintTypes", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Advertising");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ReportSubComplaintTypesMeta", "NumValues", 2);
+    ScriptSetEnumValue(L, "ReportSubComplaintTypesMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ReportSubComplaintTypesMeta", "MaxValue", 1);
 }
 
 // ref: FUN_140e6bf80
 void ScriptEnum_BattlepayBannerType(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_BattlepayBannerType[] = {
-        { "None", 0 },
-        { "Discount", 1 },
-        { "Featured", 2 },
-        { "New", 3 },
-    };
-    ScriptRegisterEnum(L, "BattlepayBannerType", s_BattlepayBannerType, sizeof(s_BattlepayBannerType) / sizeof(s_BattlepayBannerType[0]));
-    static const SCRIPTENUMVALUE s_BattlepayBannerTypeMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "BattlepayBannerTypeMeta", s_BattlepayBannerTypeMeta, sizeof(s_BattlepayBannerTypeMeta) / sizeof(s_BattlepayBannerTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_BattlepayProductDecorator[] = {
-        { "Boost", 0 },
-        { "Expansion", 1 },
-        { "WoWToken", 2 },
-        { "VasService", 3 },
-    };
-    ScriptRegisterEnum(L, "BattlepayProductDecorator", s_BattlepayProductDecorator, sizeof(s_BattlepayProductDecorator) / sizeof(s_BattlepayProductDecorator[0]));
-    static const SCRIPTENUMVALUE s_BattlepayProductDecoratorMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "BattlepayProductDecoratorMeta", s_BattlepayProductDecoratorMeta, sizeof(s_BattlepayProductDecoratorMeta) / sizeof(s_BattlepayProductDecoratorMeta[0]));
-    static const SCRIPTENUMVALUE s_StoreDeliveryType[] = {
-        { "Item", 0 },
-        { "Mount", 1 },
-        { "Battlepet", 2 },
-        { "Collection", 3 },
-    };
-    ScriptRegisterEnum(L, "StoreDeliveryType", s_StoreDeliveryType, sizeof(s_StoreDeliveryType) / sizeof(s_StoreDeliveryType[0]));
-    static const SCRIPTENUMVALUE s_StoreDeliveryTypeMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "StoreDeliveryTypeMeta", s_StoreDeliveryTypeMeta, sizeof(s_StoreDeliveryTypeMeta) / sizeof(s_StoreDeliveryTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_StoreError[] = {
-        { "Success", 0 },
-        { "InvalidPaymentMethod", 1 },
-        { "PaymentFailed", 2 },
-        { "WrongCurrency", 3 },
-        { "BattlepayDisabled", 4 },
-        { "InsufficientBalance", 5 },
-        { "Other", 6 },
-        { "AlreadyOwned", 7 },
-        { "ParentalControlsNoPurchase", 8 },
-        { "PurchaseDenied", 9 },
-        { "ConsumableTokenOwned", 10 },
-        { "TooManyTokens", 11 },
-        { "ItemUnavailable", 12 },
-        { "ClientRestricted", 13 },
-    };
-    ScriptRegisterEnum(L, "StoreError", s_StoreError, sizeof(s_StoreError) / sizeof(s_StoreError[0]));
-    static const SCRIPTENUMVALUE s_StoreErrorMeta[] = {
-        { "NumValues", 14 },
-        { "MinValue", 0 },
-        { "MaxValue", 13 },
-    };
-    ScriptRegisterEnum(L, "StoreErrorMeta", s_StoreErrorMeta, sizeof(s_StoreErrorMeta) / sizeof(s_StoreErrorMeta[0]));
-    static const SCRIPTENUMVALUE s_VasError[] = {
-        { "CharacterHasVasPending", 4 },
-        { "InvalidDestinationAccount", 6 },
-        { "InvalidSourceAccount", 7 },
-        { "DisallowedSourceAccount", 8 },
-        { "DisallowedDestinationAccount", 9 },
-        { "LowerBoxLevel", 11 },
-        { "OperationAlreadyInProgress", 33 },
-        { "LockedForVas", 40 },
-        { "RealmNotEligible", 20011 },
-        { "CannotMoveGuildMaster", 20012 },
-        { "MaxCharactersOnServer", 20013 },
-        { "NoMixedAlliance", 20014 },
-        { "DuplicateCharacterName", 20015 },
-        { "HasMail", 20016 },
-        { "MoveInProgress", 20018 },
-        { "UnderMinLevelReq", 20021 },
-        { "IneligibleTargetRealm", 20022 },
-        { "CharacterTransferTooSoon", 20023 },
-        { "CharLocked", 20026 },
-        { "AllianceNotEligible", 20027 },
-        { "TooMuchMoneyForLevel", 20032 },
-        { "HasAuctions", 20033 },
-        { "LastSaveTooRecent", 20034 },
-        { "NameNotAvailable", 20051 },
-        { "LastRenameTooRecent", 20052 },
-        { "AlreadyRenameFlagged", 20055 },
-        { "CustomizeAlreadyRequested", 20057 },
-        { "LastCustomizeTooRecent", 20058 },
-        { "FactionChangeTooSoon", 20061 },
-        { "RaceClassComboIneligible", 20062 },
-        { "ArenaTeamCaptain", 20064 },
-        { "PendingItemAudit", 20066 },
-        { "GuildRankInsufficient", 20069 },
-        { "CharacterWithoutGuild", 20070 },
-        { "GmSeniorityInsufficient", 20072 },
-        { "AuthenticatorInsufficient", 20073 },
-        { "IneligibleMapID", 20076 },
-        { "BattlepayDeliveryPending", 20078 },
-        { "HasWoWToken", 20079 },
-        { "HasHeirloom", 20080 },
-        { "AccountRestricted", 20082 },
-        { "LastSaveTooDistant", 20083 },
-        { "HasCagedBattlePet", 20084 },
-        { "BoostedTooRecently", 20085 },
-        { "NewLeaderInvalid", 20086 },
-        { "PvEToPvPTransferNotAllowed", 20087 },
-        { "NeedsLevelSquish", 20088 },
-        { "NeedsEraChoice", 20090 },
-        { "IsNpeRestricted", 20091 },
-        { "HasCraftingOrders", 20092 },
-        { "InvalidName", 20094 },
-    };
-    ScriptRegisterEnum(L, "VasError", s_VasError, sizeof(s_VasError) / sizeof(s_VasError[0]));
-    static const SCRIPTENUMVALUE s_VasErrorMeta[] = {
-        { "NumValues", 51 },
-        { "MinValue", 4 },
-        { "MaxValue", 20094 },
-    };
-    ScriptRegisterEnum(L, "VasErrorMeta", s_VasErrorMeta, sizeof(s_VasErrorMeta) / sizeof(s_VasErrorMeta[0]));
-    static const SCRIPTENUMVALUE s_VasPurchaseProgress[] = {
-        { "Invalid", 0 },
-        { "PrePurchase", 1 },
-        { "PaymentPending", 2 },
-        { "ApplyingLicense", 3 },
-        { "WaitingOnQueue", 4 },
-        { "Ready", 5 },
-        { "ProcessingFactionChange", 6 },
-        { "Complete", 7 },
-    };
-    ScriptRegisterEnum(L, "VasPurchaseProgress", s_VasPurchaseProgress, sizeof(s_VasPurchaseProgress) / sizeof(s_VasPurchaseProgress[0]));
-    static const SCRIPTENUMVALUE s_VasPurchaseProgressMeta[] = {
-        { "NumValues", 8 },
-        { "MinValue", 0 },
-        { "MaxValue", 7 },
-    };
-    ScriptRegisterEnum(L, "VasPurchaseProgressMeta", s_VasPurchaseProgressMeta, sizeof(s_VasPurchaseProgressMeta) / sizeof(s_VasPurchaseProgressMeta[0]));
-    static const SCRIPTENUMVALUE s_VasServiceType[] = {
-        { "NameChange", 0 },
-        { "FactionChange", 1 },
-        { "AppearanceChange", 2 },
-        { "RaceChange", 3 },
-        { "CharacterTransfer", 4 },
-        { "FactionTransfer", 5 },
-        { "CharacterClone", 10 },
-    };
-    ScriptRegisterEnum(L, "VasServiceType", s_VasServiceType, sizeof(s_VasServiceType) / sizeof(s_VasServiceType[0]));
-    static const SCRIPTENUMVALUE s_VasServiceTypeMeta[] = {
-        { "NumValues", 7 },
-        { "MinValue", 0 },
-        { "MaxValue", 10 },
-    };
-    ScriptRegisterEnum(L, "VasServiceTypeMeta", s_VasServiceTypeMeta, sizeof(s_VasServiceTypeMeta) / sizeof(s_VasServiceTypeMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayBannerType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "None");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayBannerType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Discount");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayBannerType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Featured");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayBannerType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "New");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "BattlepayBannerTypeMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "BattlepayBannerTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "BattlepayBannerTypeMeta", "MaxValue", 3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayProductDecorator", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Boost");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayProductDecorator", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Expansion");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayProductDecorator", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "WoWToken");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "BattlepayProductDecorator", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "VasService");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "BattlepayProductDecoratorMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "BattlepayProductDecoratorMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "BattlepayProductDecoratorMeta", "MaxValue", 3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreDeliveryType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Item");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreDeliveryType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Mount");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreDeliveryType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Battlepet");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreDeliveryType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Collection");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "StoreDeliveryTypeMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "StoreDeliveryTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "StoreDeliveryTypeMeta", "MaxValue", 3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Success");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "InvalidPaymentMethod");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "PaymentFailed");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "WrongCurrency");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "BattlepayDisabled");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "InsufficientBalance");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "Other");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "AlreadyOwned");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "ParentalControlsNoPurchase");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "PurchaseDenied");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "ConsumableTokenOwned");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "TooManyTokens");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 12.0);
+    lua_setfield(L, -2, "ItemUnavailable");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "StoreError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 13.0);
+    lua_setfield(L, -2, "ClientRestricted");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "StoreErrorMeta", "NumValues", 14);
+    ScriptSetEnumValue(L, "StoreErrorMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "StoreErrorMeta", "MaxValue", 13);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "CharacterHasVasPending");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "InvalidDestinationAccount");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "InvalidSourceAccount");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "DisallowedSourceAccount");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "DisallowedDestinationAccount");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "LowerBoxLevel");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 33.0);
+    lua_setfield(L, -2, "OperationAlreadyInProgress");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 40.0);
+    lua_setfield(L, -2, "LockedForVas");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20011.0);
+    lua_setfield(L, -2, "RealmNotEligible");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20012.0);
+    lua_setfield(L, -2, "CannotMoveGuildMaster");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20013.0);
+    lua_setfield(L, -2, "MaxCharactersOnServer");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20014.0);
+    lua_setfield(L, -2, "NoMixedAlliance");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20015.0);
+    lua_setfield(L, -2, "DuplicateCharacterName");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20016.0);
+    lua_setfield(L, -2, "HasMail");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20018.0);
+    lua_setfield(L, -2, "MoveInProgress");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20021.0);
+    lua_setfield(L, -2, "UnderMinLevelReq");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20022.0);
+    lua_setfield(L, -2, "IneligibleTargetRealm");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20023.0);
+    lua_setfield(L, -2, "CharacterTransferTooSoon");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20026.0);
+    lua_setfield(L, -2, "CharLocked");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20027.0);
+    lua_setfield(L, -2, "AllianceNotEligible");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20032.0);
+    lua_setfield(L, -2, "TooMuchMoneyForLevel");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20033.0);
+    lua_setfield(L, -2, "HasAuctions");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20034.0);
+    lua_setfield(L, -2, "LastSaveTooRecent");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20051.0);
+    lua_setfield(L, -2, "NameNotAvailable");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20052.0);
+    lua_setfield(L, -2, "LastRenameTooRecent");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20055.0);
+    lua_setfield(L, -2, "AlreadyRenameFlagged");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20057.0);
+    lua_setfield(L, -2, "CustomizeAlreadyRequested");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20058.0);
+    lua_setfield(L, -2, "LastCustomizeTooRecent");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20061.0);
+    lua_setfield(L, -2, "FactionChangeTooSoon");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20062.0);
+    lua_setfield(L, -2, "RaceClassComboIneligible");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20064.0);
+    lua_setfield(L, -2, "ArenaTeamCaptain");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20066.0);
+    lua_setfield(L, -2, "PendingItemAudit");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "VasError", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20069.0);
+    lua_setfield(L, -2, "GuildRankInsufficient");
+    lua_settop(L, -3);
+    ScriptSetEnumValue16(L, "VasError", "CharacterWithoutGuild", 20070);
+    ScriptSetEnumValue16(L, "VasError", "GmSeniorityInsufficient", 20072);
+    ScriptSetEnumValue16(L, "VasError", "AuthenticatorInsufficient", 20073);
+    ScriptSetEnumValue16(L, "VasError", "IneligibleMapID", 20076);
+    ScriptSetEnumValue16(L, "VasError", "BattlepayDeliveryPending", 20078);
+    ScriptSetEnumValue16(L, "VasError", "HasWoWToken", 20079);
+    ScriptSetEnumValue16(L, "VasError", "HasHeirloom", 20080);
+    ScriptSetEnumValue16(L, "VasError", "AccountRestricted", 20082);
+    ScriptSetEnumValue16(L, "VasError", "LastSaveTooDistant", 20083);
+    ScriptSetEnumValue16(L, "VasError", "HasCagedBattlePet", 20084);
+    ScriptSetEnumValue16(L, "VasError", "BoostedTooRecently", 20085);
+    ScriptSetEnumValue16(L, "VasError", "NewLeaderInvalid", 20086);
+    ScriptSetEnumValue16(L, "VasError", "PvEToPvPTransferNotAllowed", 20087);
+    ScriptSetEnumValue16(L, "VasError", "NeedsLevelSquish", 20088);
+    ScriptSetEnumValue16(L, "VasError", "NeedsEraChoice", 20090);
+    ScriptSetEnumValue16(L, "VasError", "IsNpeRestricted", 20091);
+    ScriptSetEnumValue16(L, "VasError", "HasCraftingOrders", 20092);
+    ScriptSetEnumValue16(L, "VasError", "InvalidName", 20094);
+    ScriptSetEnumValue(L, "VasErrorMeta", "NumValues", 51);
+    ScriptSetEnumValue(L, "VasErrorMeta", "MinValue", 4);
+    ScriptSetEnumValue(L, "VasErrorMeta", "MaxValue", 20094);
+    ScriptSetEnumValue8(L, "VasPurchaseProgress", "Invalid", 0);
+    ScriptSetEnumValue8(L, "VasPurchaseProgress", "PrePurchase", 1);
+    ScriptSetEnumValue8(L, "VasPurchaseProgress", "PaymentPending", 2);
+    ScriptSetEnumValue8(L, "VasPurchaseProgress", "ApplyingLicense", 3);
+    ScriptSetEnumValue8(L, "VasPurchaseProgress", "WaitingOnQueue", 4);
+    ScriptSetEnumValue8(L, "VasPurchaseProgress", "Ready", 5);
+    ScriptSetEnumValue8(L, "VasPurchaseProgress", "ProcessingFactionChange", 6);
+    ScriptSetEnumValue8(L, "VasPurchaseProgress", "Complete", 7);
+    ScriptSetEnumValue(L, "VasPurchaseProgressMeta", "NumValues", 8);
+    ScriptSetEnumValue(L, "VasPurchaseProgressMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "VasPurchaseProgressMeta", "MaxValue", 7);
+    ScriptSetEnumValue8(L, "VasServiceType", "NameChange", 0);
+    ScriptSetEnumValue8(L, "VasServiceType", "FactionChange", 1);
+    ScriptSetEnumValue8(L, "VasServiceType", "AppearanceChange", 2);
+    ScriptSetEnumValue8(L, "VasServiceType", "RaceChange", 3);
+    ScriptSetEnumValue8(L, "VasServiceType", "CharacterTransfer", 4);
+    ScriptSetEnumValue8(L, "VasServiceType", "FactionTransfer", 5);
+    ScriptSetEnumValue8(L, "VasServiceType", "CharacterClone", 10);
+    ScriptSetEnumValue(L, "VasServiceTypeMeta", "NumValues", 7);
+    ScriptSetEnumValue(L, "VasServiceTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "VasServiceTypeMeta", "MaxValue", 10);
 }
 
 // ref: FUN_140d0ad60
 void ScriptEnum_NodeOpFailureReason(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_NodeOpFailureReason[] = {
-        { "None", 0 },
-        { "MissingEdgeConnection", 1 },
-        { "RequiredForEdge", 2 },
-        { "MissingRequiredEdge", 3 },
-        { "HasMutuallyExclusiveEdge", 4 },
-        { "NotEnoughSourcedCurrencySpent", 5 },
-        { "NotEnoughCurrencySpent", 6 },
-        { "NotEnoughGoldSpent", 7 },
-        { "MissingAchievement", 8 },
-        { "MissingQuest", 9 },
-        { "WrongSpec", 10 },
-        { "WrongSelection", 11 },
-        { "MaxRank", 12 },
-        { "DataError", 13 },
-        { "NotEnoughSourcedCurrency", 14 },
-        { "NotEnoughCurrency", 15 },
-        { "NotEnoughGold", 16 },
-        { "SameSelection", 17 },
-        { "NodeNotFound", 18 },
-        { "EntryNotFound", 19 },
-        { "RequiredForCondition", 20 },
-        { "WrongTreeID", 21 },
-        { "LevelTooLow", 22 },
-        { "TreeFlaggedNoRefund", 23 },
-        { "NodeNeverPurchasable", 24 },
-    };
-    ScriptRegisterEnum(L, "NodeOpFailureReason", s_NodeOpFailureReason, sizeof(s_NodeOpFailureReason) / sizeof(s_NodeOpFailureReason[0]));
-    static const SCRIPTENUMVALUE s_NodeOpFailureReasonMeta[] = {
-        { "NumValues", 25 },
-        { "MinValue", 0 },
-        { "MaxValue", 24 },
-    };
-    ScriptRegisterEnum(L, "NodeOpFailureReasonMeta", s_NodeOpFailureReasonMeta, sizeof(s_NodeOpFailureReasonMeta) / sizeof(s_NodeOpFailureReasonMeta[0]));
-    static const SCRIPTENUMVALUE s_SharedStringFlag[] = {
-        { "InternalOnly", 1 },
-    };
-    ScriptRegisterEnum(L, "SharedStringFlag", s_SharedStringFlag, sizeof(s_SharedStringFlag) / sizeof(s_SharedStringFlag[0]));
-    static const SCRIPTENUMVALUE s_SharedStringFlagMeta[] = {
-        { "NumValues", 1 },
-        { "MinValue", 1 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "SharedStringFlagMeta", s_SharedStringFlagMeta, sizeof(s_SharedStringFlagMeta) / sizeof(s_SharedStringFlagMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitConditionType[] = {
-        { "Available", 0 },
-        { "Visible", 1 },
-        { "Granted", 2 },
-        { "Increased", 3 },
-    };
-    ScriptRegisterEnum(L, "TraitConditionType", s_TraitConditionType, sizeof(s_TraitConditionType) / sizeof(s_TraitConditionType[0]));
-    static const SCRIPTENUMVALUE s_TraitConditionTypeMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "TraitConditionTypeMeta", s_TraitConditionTypeMeta, sizeof(s_TraitConditionTypeMeta) / sizeof(s_TraitConditionTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitConfigDbState[] = {
-        { "Ready", 0 },
-        { "Created", 1 },
-        { "Removed", 2 },
-        { "Deleted", 3 },
-    };
-    ScriptRegisterEnum(L, "TraitConfigDbState", s_TraitConfigDbState, sizeof(s_TraitConfigDbState) / sizeof(s_TraitConfigDbState[0]));
-    static const SCRIPTENUMVALUE s_TraitConfigDbStateMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "TraitConfigDbStateMeta", s_TraitConfigDbStateMeta, sizeof(s_TraitConfigDbStateMeta) / sizeof(s_TraitConfigDbStateMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitConfigType[] = {
-        { "Invalid", 0 },
-        { "Combat", 1 },
-        { "Profession", 2 },
-        { "Generic", 3 },
-    };
-    ScriptRegisterEnum(L, "TraitConfigType", s_TraitConfigType, sizeof(s_TraitConfigType) / sizeof(s_TraitConfigType[0]));
-    static const SCRIPTENUMVALUE s_TraitConfigTypeMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "TraitConfigTypeMeta", s_TraitConfigTypeMeta, sizeof(s_TraitConfigTypeMeta) / sizeof(s_TraitConfigTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitCurrencyType[] = {
-        { "Gold", 0 },
-        { "CurrencyTypesBased", 1 },
-        { "TraitSourced", 2 },
-    };
-    ScriptRegisterEnum(L, "TraitCurrencyType", s_TraitCurrencyType, sizeof(s_TraitCurrencyType) / sizeof(s_TraitCurrencyType[0]));
-    static const SCRIPTENUMVALUE s_TraitCurrencyTypeMeta[] = {
-        { "NumValues", 3 },
-        { "MinValue", 0 },
-        { "MaxValue", 2 },
-    };
-    ScriptRegisterEnum(L, "TraitCurrencyTypeMeta", s_TraitCurrencyTypeMeta, sizeof(s_TraitCurrencyTypeMeta) / sizeof(s_TraitCurrencyTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitPointsOperationType[] = {
-        { "None", -1 },
-        { "Set", 0 },
-        { "Multiply", 1 },
-    };
-    ScriptRegisterEnum(L, "TraitPointsOperationType", s_TraitPointsOperationType, sizeof(s_TraitPointsOperationType) / sizeof(s_TraitPointsOperationType[0]));
-    static const SCRIPTENUMVALUE s_TraitPointsOperationTypeMeta[] = {
-        { "NumValues", 3 },
-        { "MinValue", 4294967295 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "TraitPointsOperationTypeMeta", s_TraitPointsOperationTypeMeta, sizeof(s_TraitPointsOperationTypeMeta) / sizeof(s_TraitPointsOperationTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitCombatConfigFlags[] = {
-        { "ActiveForSpec", 1 },
-        { "StarterBuild", 2 },
-        { "SharedActionBars", 4 },
-    };
-    ScriptRegisterEnum(L, "TraitCombatConfigFlags", s_TraitCombatConfigFlags, sizeof(s_TraitCombatConfigFlags) / sizeof(s_TraitCombatConfigFlags[0]));
-    static const SCRIPTENUMVALUE s_TraitCombatConfigFlagsMeta[] = {
-        { "NumValues", 3 },
-        { "MinValue", 1 },
-        { "MaxValue", 4 },
-    };
-    ScriptRegisterEnum(L, "TraitCombatConfigFlagsMeta", s_TraitCombatConfigFlagsMeta, sizeof(s_TraitCombatConfigFlagsMeta) / sizeof(s_TraitCombatConfigFlagsMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitCondFlag[] = {
-        { "IsGate", 1 },
-        { "IsAlwaysMet", 2 },
-        { "IsSufficient", 4 },
-    };
-    ScriptRegisterEnum(L, "TraitCondFlag", s_TraitCondFlag, sizeof(s_TraitCondFlag) / sizeof(s_TraitCondFlag[0]));
-    static const SCRIPTENUMVALUE s_TraitCondFlagMeta[] = {
-        { "NumValues", 3 },
-        { "MinValue", 1 },
-        { "MaxValue", 4 },
-    };
-    ScriptRegisterEnum(L, "TraitCondFlagMeta", s_TraitCondFlagMeta, sizeof(s_TraitCondFlagMeta) / sizeof(s_TraitCondFlagMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitCurrencyFlag[] = {
-        { "ShowQuantityAsSpent", 1 },
-        { "TraitSourcedShowMax", 2 },
-        { "UseClassIcon", 4 },
-        { "UseSpecIcon", 8 },
-    };
-    ScriptRegisterEnum(L, "TraitCurrencyFlag", s_TraitCurrencyFlag, sizeof(s_TraitCurrencyFlag) / sizeof(s_TraitCurrencyFlag[0]));
-    static const SCRIPTENUMVALUE s_TraitCurrencyFlagMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 1 },
-        { "MaxValue", 8 },
-    };
-    ScriptRegisterEnum(L, "TraitCurrencyFlagMeta", s_TraitCurrencyFlagMeta, sizeof(s_TraitCurrencyFlagMeta) / sizeof(s_TraitCurrencyFlagMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitDefinitionSubType[] = {
-        { "DragonflightRed", 0 },
-        { "DragonflightBlue", 1 },
-        { "DragonflightGreen", 2 },
-        { "DragonflightBronze", 3 },
-        { "DragonflightBlack", 4 },
-    };
-    ScriptRegisterEnum(L, "TraitDefinitionSubType", s_TraitDefinitionSubType, sizeof(s_TraitDefinitionSubType) / sizeof(s_TraitDefinitionSubType[0]));
-    static const SCRIPTENUMVALUE s_TraitDefinitionSubTypeMeta[] = {
-        { "NumValues", 5 },
-        { "MinValue", 0 },
-        { "MaxValue", 4 },
-    };
-    ScriptRegisterEnum(L, "TraitDefinitionSubTypeMeta", s_TraitDefinitionSubTypeMeta, sizeof(s_TraitDefinitionSubTypeMeta) / sizeof(s_TraitDefinitionSubTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitEdgeType[] = {
-        { "VisualOnly", 0 },
-        { "DeprecatedRankConnection", 1 },
-        { "SufficientForAvailability", 2 },
-        { "RequiredForAvailability", 3 },
-        { "MutuallyExclusive", 4 },
-        { "DeprecatedSelectionOption", 5 },
-    };
-    ScriptRegisterEnum(L, "TraitEdgeType", s_TraitEdgeType, sizeof(s_TraitEdgeType) / sizeof(s_TraitEdgeType[0]));
-    static const SCRIPTENUMVALUE s_TraitEdgeTypeMeta[] = {
-        { "NumValues", 6 },
-        { "MinValue", 0 },
-        { "MaxValue", 5 },
-    };
-    ScriptRegisterEnum(L, "TraitEdgeTypeMeta", s_TraitEdgeTypeMeta, sizeof(s_TraitEdgeTypeMeta) / sizeof(s_TraitEdgeTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitEdgeVisualStyle[] = {
-        { "None", 0 },
-        { "Straight", 1 },
-    };
-    ScriptRegisterEnum(L, "TraitEdgeVisualStyle", s_TraitEdgeVisualStyle, sizeof(s_TraitEdgeVisualStyle) / sizeof(s_TraitEdgeVisualStyle[0]));
-    static const SCRIPTENUMVALUE s_TraitEdgeVisualStyleMeta[] = {
-        { "NumValues", 2 },
-        { "MinValue", 0 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "TraitEdgeVisualStyleMeta", s_TraitEdgeVisualStyleMeta, sizeof(s_TraitEdgeVisualStyleMeta) / sizeof(s_TraitEdgeVisualStyleMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitNodeEntryType[] = {
-        { "SpendHex", 0 },
-        { "SpendSquare", 1 },
-        { "SpendCircle", 2 },
-        { "SpendSmallCircle", 3 },
-        { "DeprecatedSelect", 4 },
-        { "DragAndDrop", 5 },
-        { "SpendDiamond", 6 },
-        { "ProfPath", 7 },
-        { "ProfPerk", 8 },
-        { "ProfPathUnlock", 9 },
-    };
-    ScriptRegisterEnum(L, "TraitNodeEntryType", s_TraitNodeEntryType, sizeof(s_TraitNodeEntryType) / sizeof(s_TraitNodeEntryType[0]));
-    static const SCRIPTENUMVALUE s_TraitNodeEntryTypeMeta[] = {
-        { "NumValues", 10 },
-        { "MinValue", 0 },
-        { "MaxValue", 9 },
-    };
-    ScriptRegisterEnum(L, "TraitNodeEntryTypeMeta", s_TraitNodeEntryTypeMeta, sizeof(s_TraitNodeEntryTypeMeta) / sizeof(s_TraitNodeEntryTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitNodeFlag[] = {
-        { "ShowMultipleIcons", 1 },
-        { "NeverPurchasable", 2 },
-        { "TestPositionLocked", 4 },
-        { "TestGridPositioned", 8 },
-    };
-    ScriptRegisterEnum(L, "TraitNodeFlag", s_TraitNodeFlag, sizeof(s_TraitNodeFlag) / sizeof(s_TraitNodeFlag[0]));
-    static const SCRIPTENUMVALUE s_TraitNodeFlagMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 1 },
-        { "MaxValue", 8 },
-    };
-    ScriptRegisterEnum(L, "TraitNodeFlagMeta", s_TraitNodeFlagMeta, sizeof(s_TraitNodeFlagMeta) / sizeof(s_TraitNodeFlagMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitNodeGroupFlag[] = {
-        { "AvailableByDefault", 1 },
-    };
-    ScriptRegisterEnum(L, "TraitNodeGroupFlag", s_TraitNodeGroupFlag, sizeof(s_TraitNodeGroupFlag) / sizeof(s_TraitNodeGroupFlag[0]));
-    static const SCRIPTENUMVALUE s_TraitNodeGroupFlagMeta[] = {
-        { "NumValues", 1 },
-        { "MinValue", 1 },
-        { "MaxValue", 1 },
-    };
-    ScriptRegisterEnum(L, "TraitNodeGroupFlagMeta", s_TraitNodeGroupFlagMeta, sizeof(s_TraitNodeGroupFlagMeta) / sizeof(s_TraitNodeGroupFlagMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitNodeType[] = {
-        { "Single", 0 },
-        { "Tiered", 1 },
-        { "Selection", 2 },
-    };
-    ScriptRegisterEnum(L, "TraitNodeType", s_TraitNodeType, sizeof(s_TraitNodeType) / sizeof(s_TraitNodeType[0]));
-    static const SCRIPTENUMVALUE s_TraitNodeTypeMeta[] = {
-        { "NumValues", 3 },
-        { "MinValue", 0 },
-        { "MaxValue", 2 },
-    };
-    ScriptRegisterEnum(L, "TraitNodeTypeMeta", s_TraitNodeTypeMeta, sizeof(s_TraitNodeTypeMeta) / sizeof(s_TraitNodeTypeMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitSystemFlag[] = {
-        { "AllowMultipleLoadoutsPerTree", 1 },
-        { "ShowSpendConfirmation", 2 },
-    };
-    ScriptRegisterEnum(L, "TraitSystemFlag", s_TraitSystemFlag, sizeof(s_TraitSystemFlag) / sizeof(s_TraitSystemFlag[0]));
-    static const SCRIPTENUMVALUE s_TraitSystemFlagMeta[] = {
-        { "NumValues", 2 },
-        { "MinValue", 1 },
-        { "MaxValue", 2 },
-    };
-    ScriptRegisterEnum(L, "TraitSystemFlagMeta", s_TraitSystemFlagMeta, sizeof(s_TraitSystemFlagMeta) / sizeof(s_TraitSystemFlagMeta[0]));
-    static const SCRIPTENUMVALUE s_TraitTreeFlag[] = {
-        { "CannotRefund", 1 },
-        { "HideSingleRankNumbers", 2 },
-    };
-    ScriptRegisterEnum(L, "TraitTreeFlag", s_TraitTreeFlag, sizeof(s_TraitTreeFlag) / sizeof(s_TraitTreeFlag[0]));
-    static const SCRIPTENUMVALUE s_TraitTreeFlagMeta[] = {
-        { "NumValues", 2 },
-        { "MinValue", 1 },
-        { "MaxValue", 2 },
-    };
-    ScriptRegisterEnum(L, "TraitTreeFlagMeta", s_TraitTreeFlagMeta, sizeof(s_TraitTreeFlagMeta) / sizeof(s_TraitTreeFlagMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "None");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "MissingEdgeConnection");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "RequiredForEdge");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "MissingRequiredEdge");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "HasMutuallyExclusiveEdge");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 5.0);
+    lua_setfield(L, -2, "NotEnoughSourcedCurrencySpent");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 6.0);
+    lua_setfield(L, -2, "NotEnoughCurrencySpent");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 7.0);
+    lua_setfield(L, -2, "NotEnoughGoldSpent");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "MissingAchievement");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 9.0);
+    lua_setfield(L, -2, "MissingQuest");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 10.0);
+    lua_setfield(L, -2, "WrongSpec");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 11.0);
+    lua_setfield(L, -2, "WrongSelection");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 12.0);
+    lua_setfield(L, -2, "MaxRank");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 13.0);
+    lua_setfield(L, -2, "DataError");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 14.0);
+    lua_setfield(L, -2, "NotEnoughSourcedCurrency");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 15.0);
+    lua_setfield(L, -2, "NotEnoughCurrency");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 16.0);
+    lua_setfield(L, -2, "NotEnoughGold");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 17.0);
+    lua_setfield(L, -2, "SameSelection");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 18.0);
+    lua_setfield(L, -2, "NodeNotFound");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 19.0);
+    lua_setfield(L, -2, "EntryNotFound");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 20.0);
+    lua_setfield(L, -2, "RequiredForCondition");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 21.0);
+    lua_setfield(L, -2, "WrongTreeID");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 22.0);
+    lua_setfield(L, -2, "LevelTooLow");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 23.0);
+    lua_setfield(L, -2, "TreeFlaggedNoRefund");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "NodeOpFailureReason", lua_gettop(L));
+    ScriptPushEnumNumber(L, 24.0);
+    lua_setfield(L, -2, "NodeNeverPurchasable");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "NodeOpFailureReasonMeta", "NumValues", 25);
+    ScriptSetEnumValue(L, "NodeOpFailureReasonMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "NodeOpFailureReasonMeta", "MaxValue", 24);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "SharedStringFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "InternalOnly");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "SharedStringFlagMeta", "NumValues", 1);
+    ScriptSetEnumValue(L, "SharedStringFlagMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "SharedStringFlagMeta", "MaxValue", 1);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitConditionType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Available");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitConditionType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Visible");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitConditionType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Granted");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitConditionType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Increased");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "TraitConditionTypeMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "TraitConditionTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "TraitConditionTypeMeta", "MaxValue", 3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitConfigDbState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Ready");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitConfigDbState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Created");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitConfigDbState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Removed");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitConfigDbState", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Deleted");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "TraitConfigDbStateMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "TraitConfigDbStateMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "TraitConfigDbStateMeta", "MaxValue", 3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitConfigType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Invalid");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitConfigType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Combat");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitConfigType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Profession");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitConfigType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Generic");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "TraitConfigTypeMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "TraitConfigTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "TraitConfigTypeMeta", "MaxValue", 3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitCurrencyType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Gold");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitCurrencyType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "CurrencyTypesBased");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitCurrencyType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "TraitSourced");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "TraitCurrencyTypeMeta", "NumValues", 3);
+    ScriptSetEnumValue(L, "TraitCurrencyTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "TraitCurrencyTypeMeta", "MaxValue", 2);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitPointsOperationType", lua_gettop(L));
+    ScriptPushEnumNumber(L, -1.0);
+    lua_setfield(L, -2, "None");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitPointsOperationType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Set");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitPointsOperationType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Multiply");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "TraitPointsOperationTypeMeta", "NumValues", 3);
+    ScriptSetEnumValue(L, "TraitPointsOperationTypeMeta", "MinValue", -1);
+    ScriptSetEnumValue(L, "TraitPointsOperationTypeMeta", "MaxValue", 1);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitCombatConfigFlags", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "ActiveForSpec");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitCombatConfigFlags", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "StarterBuild");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitCombatConfigFlags", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "SharedActionBars");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "TraitCombatConfigFlagsMeta", "NumValues", 3);
+    ScriptSetEnumValue(L, "TraitCombatConfigFlagsMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "TraitCombatConfigFlagsMeta", "MaxValue", 4);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitCondFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "IsGate");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitCondFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "IsAlwaysMet");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitCondFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "IsSufficient");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "TraitCondFlagMeta", "NumValues", 3);
+    ScriptSetEnumValue(L, "TraitCondFlagMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "TraitCondFlagMeta", "MaxValue", 4);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitCurrencyFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "ShowQuantityAsSpent");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitCurrencyFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "TraitSourcedShowMax");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitCurrencyFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "UseClassIcon");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitCurrencyFlag", lua_gettop(L));
+    ScriptPushEnumNumber(L, 8.0);
+    lua_setfield(L, -2, "UseSpecIcon");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "TraitCurrencyFlagMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "TraitCurrencyFlagMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "TraitCurrencyFlagMeta", "MaxValue", 8);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitDefinitionSubType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "DragonflightRed");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitDefinitionSubType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "DragonflightBlue");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitDefinitionSubType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "DragonflightGreen");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitDefinitionSubType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "DragonflightBronze");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "TraitDefinitionSubType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "DragonflightBlack");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "TraitDefinitionSubTypeMeta", "NumValues", 5);
+    ScriptSetEnumValue(L, "TraitDefinitionSubTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "TraitDefinitionSubTypeMeta", "MaxValue", 4);
+    ScriptSetEnumValue8(L, "TraitEdgeType", "VisualOnly", 0);
+    ScriptSetEnumValue8(L, "TraitEdgeType", "DeprecatedRankConnection", 1);
+    ScriptSetEnumValue8(L, "TraitEdgeType", "SufficientForAvailability", 2);
+    ScriptSetEnumValue8(L, "TraitEdgeType", "RequiredForAvailability", 3);
+    ScriptSetEnumValue8(L, "TraitEdgeType", "MutuallyExclusive", 4);
+    ScriptSetEnumValue8(L, "TraitEdgeType", "DeprecatedSelectionOption", 5);
+    ScriptSetEnumValue(L, "TraitEdgeTypeMeta", "NumValues", 6);
+    ScriptSetEnumValue(L, "TraitEdgeTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "TraitEdgeTypeMeta", "MaxValue", 5);
+    ScriptSetEnumValue8(L, "TraitEdgeVisualStyle", "None", 0);
+    ScriptSetEnumValue8(L, "TraitEdgeVisualStyle", "Straight", 1);
+    ScriptSetEnumValue(L, "TraitEdgeVisualStyleMeta", "NumValues", 2);
+    ScriptSetEnumValue(L, "TraitEdgeVisualStyleMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "TraitEdgeVisualStyleMeta", "MaxValue", 1);
+    ScriptSetEnumValue8(L, "TraitNodeEntryType", "SpendHex", 0);
+    ScriptSetEnumValue8(L, "TraitNodeEntryType", "SpendSquare", 1);
+    ScriptSetEnumValue8(L, "TraitNodeEntryType", "SpendCircle", 2);
+    ScriptSetEnumValue8(L, "TraitNodeEntryType", "SpendSmallCircle", 3);
+    ScriptSetEnumValue8(L, "TraitNodeEntryType", "DeprecatedSelect", 4);
+    ScriptSetEnumValue8(L, "TraitNodeEntryType", "DragAndDrop", 5);
+    ScriptSetEnumValue8(L, "TraitNodeEntryType", "SpendDiamond", 6);
+    ScriptSetEnumValue8(L, "TraitNodeEntryType", "ProfPath", 7);
+    ScriptSetEnumValue8(L, "TraitNodeEntryType", "ProfPerk", 8);
+    ScriptSetEnumValue8(L, "TraitNodeEntryType", "ProfPathUnlock", 9);
+    ScriptSetEnumValue(L, "TraitNodeEntryTypeMeta", "NumValues", 10);
+    ScriptSetEnumValue(L, "TraitNodeEntryTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "TraitNodeEntryTypeMeta", "MaxValue", 9);
+    ScriptSetEnumValue8(L, "TraitNodeFlag", "ShowMultipleIcons", 1);
+    ScriptSetEnumValue8(L, "TraitNodeFlag", "NeverPurchasable", 2);
+    ScriptSetEnumValue8(L, "TraitNodeFlag", "TestPositionLocked", 4);
+    ScriptSetEnumValue8(L, "TraitNodeFlag", "TestGridPositioned", 8);
+    ScriptSetEnumValue(L, "TraitNodeFlagMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "TraitNodeFlagMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "TraitNodeFlagMeta", "MaxValue", 8);
+    ScriptSetEnumValue8(L, "TraitNodeGroupFlag", "AvailableByDefault", 1);
+    ScriptSetEnumValue(L, "TraitNodeGroupFlagMeta", "NumValues", 1);
+    ScriptSetEnumValue(L, "TraitNodeGroupFlagMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "TraitNodeGroupFlagMeta", "MaxValue", 1);
+    ScriptSetEnumValue8(L, "TraitNodeType", "Single", 0);
+    ScriptSetEnumValue8(L, "TraitNodeType", "Tiered", 1);
+    ScriptSetEnumValue8(L, "TraitNodeType", "Selection", 2);
+    ScriptSetEnumValue(L, "TraitNodeTypeMeta", "NumValues", 3);
+    ScriptSetEnumValue(L, "TraitNodeTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "TraitNodeTypeMeta", "MaxValue", 2);
+    ScriptSetEnumValue8(L, "TraitSystemFlag", "AllowMultipleLoadoutsPerTree", 1);
+    ScriptSetEnumValue8(L, "TraitSystemFlag", "ShowSpendConfirmation", 2);
+    ScriptSetEnumValue(L, "TraitSystemFlagMeta", "NumValues", 2);
+    ScriptSetEnumValue(L, "TraitSystemFlagMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "TraitSystemFlagMeta", "MaxValue", 2);
+    ScriptSetEnumValue8(L, "TraitTreeFlag", "CannotRefund", 1);
+    ScriptSetEnumValue8(L, "TraitTreeFlag", "HideSingleRankNumbers", 2);
+    ScriptSetEnumValue(L, "TraitTreeFlagMeta", "NumValues", 2);
+    ScriptSetEnumValue(L, "TraitTreeFlagMeta", "MinValue", 1);
+    ScriptSetEnumValue(L, "TraitTreeFlagMeta", "MaxValue", 2);
 }
 
 // ref: FUN_140b5dfb0
 void ScriptEnum_UnitSex(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_UnitSex[] = {
-        { "Male", 0 },
-        { "Female", 1 },
-        { "None", 2 },
-        { "Both", 3 },
-        { "Neutral", 4 },
-    };
-    ScriptRegisterEnum(L, "UnitSex", s_UnitSex, sizeof(s_UnitSex) / sizeof(s_UnitSex[0]));
-    static const SCRIPTENUMVALUE s_UnitSexMeta[] = {
-        { "NumValues", 5 },
-        { "MinValue", 0 },
-        { "MaxValue", 4 },
-    };
-    ScriptRegisterEnum(L, "UnitSexMeta", s_UnitSexMeta, sizeof(s_UnitSexMeta) / sizeof(s_UnitSexMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UnitSex", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Male");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UnitSex", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "Female");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UnitSex", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "None");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UnitSex", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Both");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "UnitSex", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "Neutral");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "UnitSexMeta", "NumValues", 5);
+    ScriptSetEnumValue(L, "UnitSexMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "UnitSexMeta", "MaxValue", 4);
 }
 
 // ref: FUN_140b605c0
 void ScriptEnum_ValueAddedServiceType(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_ValueAddedServiceType[] = {
-        { "Invalid", 0 },
-        { "PaidCharacterTransfer", 1 },
-        { "PaidFactionChange", 2 },
-        { "PaidRaceChange", 3 },
-        { "PaidNameChange", 4 },
-    };
-    ScriptRegisterEnum(L, "ValueAddedServiceType", s_ValueAddedServiceType, sizeof(s_ValueAddedServiceType) / sizeof(s_ValueAddedServiceType[0]));
-    static const SCRIPTENUMVALUE s_ValueAddedServiceTypeMeta[] = {
-        { "NumValues", 5 },
-        { "MinValue", 0 },
-        { "MaxValue", 4 },
-    };
-    ScriptRegisterEnum(L, "ValueAddedServiceTypeMeta", s_ValueAddedServiceTypeMeta, sizeof(s_ValueAddedServiceTypeMeta) / sizeof(s_ValueAddedServiceTypeMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ValueAddedServiceType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "Invalid");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ValueAddedServiceType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "PaidCharacterTransfer");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ValueAddedServiceType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "PaidFactionChange");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ValueAddedServiceType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "PaidRaceChange");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "ValueAddedServiceType", lua_gettop(L));
+    ScriptPushEnumNumber(L, 4.0);
+    lua_setfield(L, -2, "PaidNameChange");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "ValueAddedServiceTypeMeta", "NumValues", 5);
+    ScriptSetEnumValue(L, "ValueAddedServiceTypeMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "ValueAddedServiceTypeMeta", "MaxValue", 4);
 }
 
 // ref: FUN_141088c70
 void ScriptEnum_SeasonID(lua_State* L) {
     (void)L;
-    static const SCRIPTENUMVALUE s_SeasonID[] = {
-        { "NoSeason", 0 },
-        { "SeasonOfMastery", 1 },
-        { "Placeholder", 2 },
-        { "Hardcore", 3 },
-    };
-    ScriptRegisterEnum(L, "SeasonID", s_SeasonID, sizeof(s_SeasonID) / sizeof(s_SeasonID[0]));
-    static const SCRIPTENUMVALUE s_SeasonIDMeta[] = {
-        { "NumValues", 4 },
-        { "MinValue", 0 },
-        { "MaxValue", 3 },
-    };
-    ScriptRegisterEnum(L, "SeasonIDMeta", s_SeasonIDMeta, sizeof(s_SeasonIDMeta) / sizeof(s_SeasonIDMeta[0]));
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "SeasonID", lua_gettop(L));
+    ScriptPushEnumNumber(L, 0.0);
+    lua_setfield(L, -2, "NoSeason");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "SeasonID", lua_gettop(L));
+    ScriptPushEnumNumber(L, 1.0);
+    lua_setfield(L, -2, "SeasonOfMastery");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "SeasonID", lua_gettop(L));
+    ScriptPushEnumNumber(L, 2.0);
+    lua_setfield(L, -2, "Placeholder");
+    lua_settop(L, -3);
+    ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
+    ScriptOpenTable(L, "SeasonID", lua_gettop(L));
+    ScriptPushEnumNumber(L, 3.0);
+    lua_setfield(L, -2, "Hardcore");
+    lua_settop(L, -3);
+    ScriptSetEnumValue(L, "SeasonIDMeta", "NumValues", 4);
+    ScriptSetEnumValue(L, "SeasonIDMeta", "MinValue", 0);
+    ScriptSetEnumValue(L, "SeasonIDMeta", "MaxValue", 3);
 }
 
 // ref: FUN_141db0f60
