@@ -163,6 +163,7 @@ void ErrorContextPop(ERRORCONTEXT* context) {
     t_errorContext = context->m_previous;
 }
 
+// ref: FUN_14025cde0
 ERRORMEMORYCONTEXT* ErrorMemoryContextPush(ERRORMEMORYCONTEXT* context, ERRORMEMORYCALLBACK describe) {
     context->m_describe = describe;
     context->m_previous = t_errorMemoryContext;
@@ -170,6 +171,7 @@ ERRORMEMORYCONTEXT* ErrorMemoryContextPush(ERRORMEMORYCONTEXT* context, ERRORMEM
     return context;
 }
 
+// ref: FUN_14025ce40
 void ErrorMemoryContextPop(ERRORMEMORYCONTEXT* context) {
     t_errorMemoryContext = context->m_previous;
 }

@@ -1,62 +1,189 @@
-"""Call-sequence fidelity of the `// ref:` ports, binary against binary.
+"""Fidelity of the `// ref:` ports, binary against binary, and where the stubs are.
 
-For every tagged frostlite function this compares the direct calls its compiled body makes
-(FrostLite.exe + FrostLite.pdb) with the direct calls the reference function makes
-(WowClassic-clean.exe), in order. A frostlite callee counts as the reference callee its own
-`// ref:` tag names; an untagged callee cannot be matched. The score is the longest common
-subsequence over the reference sequence, so a port that skips a call, calls the wrong
-function or calls them in another order loses fidelity; the report lists what is missing.
+Every tagged frostlite function is compared with the reference function it claims to be, using
+the compiled port (FrostLite.exe + FrostLite.pdb) and the reference (WowClassic-clean.exe).
+Four signals, each scored against what the reference has, then blended:
 
-Both sides are optimized builds, so a small callee inlined on one side and not the other shows
-as missing or extra: read the body before trusting a low score.
+  calls   the direct calls, in order, as a weighted longest common subsequence. A port callee
+          counts as the reference function its own tag names. Compiler noise is taken out first:
+          library calls (CRT, std, Blizzard's FID-named runtime) are dropped on both sides; the
+          port's inlined tagged functions are put back where the PDB says they were inlined;
+          untagged port helpers are flattened into their caller, because the reference usually
+          inlined the code a port split out; and a reference callee that is a tiny leaf (it
+          makes no calls of its own) weighs a quarter, because the port's compiler often
+          inlines exactly those.
+  fields  the displacements the code reads and writes through a pointer ([reg+0x1c]): struct
+          layouts are ported to match, so these should agree even where codegen does not.
+  consts  the strings, float/double constants and non-trivial integer immediates it uses.
+  shape   mnemonic trigram overlap, a weak signal that the control flow has the same form.
 
-    python tools/fidelity.py                          # every port, worst first
+A port whose instructions match the reference's with addresses masked is reported as `same`.
+
+    python tools/fidelity.py                          # every scored port, worst first
     python tools/fidelity.py --file model2/           # ports under src/model2
-    python tools/fidelity.py --addr 1411ae6a0 --show  # one port, both sequences side by side
-    python tools/fidelity.py --below 0.8 --min-calls 3
+    python tools/fidelity.py --addr 1411ae6a0 --show  # one port in full: both call sequences,
+                                                      # the fields and constants it misses
+    python tools/fidelity.py --below 0.6 --min-calls 3
+    python tools/fidelity.py --stubs                  # live stubs first: stubs that ported
+                                                      # code calls, by reference size
+    python tools/fidelity.py --stubs --all            # every stub, dead ones too
+    python tools/fidelity.py --summary --record       # totals, appended to docs/fidelity.md
+
+Every run writes build/fidelity.json (one record per tagged function) for other tools.
+Both sides are optimized builds: read the body before trusting a low score.
 """
 from __future__ import annotations
 
 import argparse
 import bisect
+import datetime
+import json
 import re
 import subprocess
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import capstone
+import numpy as np
 
 import tags as tagscan
+from corpus import load_corpus
 from wowbin import Binary
 
 ROOT = Path(__file__).resolve().parent.parent
 PORT_EXE = ROOT / "build/cmake/bin/Release/FrostLite.exe"
 PORT_PDB = ROOT / "build/cmake/bin/Release/FrostLite.pdb"
 LLVM = Path("C:/Program Files/LLVM/bin")
+OUT_JSON = ROOT / "build/fidelity.json"
+PREV_JSON = ROOT / "build/fidelity.prev.json"
+REF_CACHE = ROOT / "build/fidelity-ref-cache.json"
+HISTORY = ROOT / "docs/fidelity.md"
 
+WEIGHTS = {"calls": 0.45, "fields": 0.25, "consts": 0.2, "shape": 0.1}
+LEAF_WEIGHT = 0.25          # a reference callee that calls nothing and is this small or less
+LEAF_SIZE = 0x40
+FLATTEN_DEPTH = 3           # how deep untagged port helpers are flattened
+FLATTEN_SIZE = 0x800        # and how big one may be
+
+# ---- the port's PDB --------------------------------------------------------------------------
+
+REC = re.compile(r"^\s*(\d+) \| (S_\w+)")
 PROC = re.compile(r"S_[GL]PROC32 \[size = \d+\] `(.*)`$")
 ADDR = re.compile(r"addr = ([0-9A-Fa-f]{4}):(\d+), code size = (\d+)")
+PARENT = re.compile(r"parent = (\d+)")
+INLINEE = re.compile(r"inlinee = 0x([0-9A-F]+) ")
+CODE = re.compile(r"code 0x([0-9A-F]+) ")
+ID_REC = re.compile(r"^\s*0x([0-9A-F]+) \| (LF_M?FUNC_ID)")
+ID_NAME = re.compile(r"name = (.*), type = 0x[0-9A-F]+, (?:class type = 0x([0-9A-F]+)|parent scope = )")
+TYPE_REC = re.compile(r"^\s*0x([0-9A-F]+) \| LF_(?:CLASS|STRUCTURE|UNION) \[size = \d+\] `(.*)`$")
 
 
-def pdb_procs(binary: Binary) -> list[tuple[int, int, str]]:
-    """(va, size, name) of every compiled function in the PDB."""
-    out = subprocess.run([str(LLVM / "llvm-pdbutil.exe"), "dump", "-symbols", str(PORT_PDB)],
-                         capture_output=True, text=True, errors="replace").stdout
-    procs = []
-    name = None
-    for line in out.splitlines():
-        m = PROC.search(line)
+def pdbutil(*args: str) -> str:
+    return subprocess.run([str(LLVM / "llvm-pdbutil.exe"), "dump", *args, str(PORT_PDB)], capture_output=True,
+                          text=True, errors="replace").stdout
+
+
+def strip_name(name: str) -> str:
+    """A PDB name without templates or the anonymous namespace, for matching."""
+    name = name.replace("`anonymous namespace'::", "")
+    out, depth = [], 0
+    for ch in name:
+        if ch == "<":
+            depth += 1
+        elif ch == ">":
+            depth = max(0, depth - 1)
+        elif depth == 0:
+            out.append(ch)
+    return "".join(out)
+
+
+def short_name(name: str) -> str:
+    return strip_name(name).split("::")[-1]
+
+
+def last_two(name: str) -> str:
+    return "::".join(strip_name(name).split("::")[-2:])
+
+
+def load_pdb(binary: Binary):
+    """The procs (va, size, name) and, per proc, its inline sites as (va, inlinee name)."""
+    classes = {}
+    for line in pdbutil("-types").splitlines():
+        m = TYPE_REC.match(line)
         if m:
-            name = m.group(1)
+            classes[int(m.group(1), 16)] = m.group(2)
+    ids = {}
+    current = None
+    for line in pdbutil("-ids").splitlines():
+        m = ID_REC.match(line)
+        if m:
+            current = int(m.group(1), 16)
             continue
-        if name is not None:
-            m = ADDR.search(line)
+        if current is not None:
+            m = ID_NAME.search(line)
             if m:
-                section = binary.sections[int(m.group(1), 16) - 1]
-                procs.append((section.start + int(m.group(2)), int(m.group(3)), name))
-                name = None
-    return sorted(set(procs))
+                name = m.group(1)
+                if m.group(2):
+                    owner = classes.get(int(m.group(2), 16))
+                    if owner:
+                        name = f"{owner}::{name}"
+                ids[current] = name
+            current = None
+
+    procs = []
+    inlines = defaultdict(list)
+    proc_of_rec = {}
+    parent_of_rec = {}
+    pending = None          # (kind, record offset)
+    for line in pdbutil("-symbols").splitlines():
+        if line.startswith("Mod ") or line.lstrip().startswith("Mod "):
+            proc_of_rec.clear()
+            parent_of_rec.clear()
+            pending = None
+            continue
+        m = REC.match(line)
+        if m:
+            rec, kind = int(m.group(1)), m.group(2)
+            pending = None
+            if kind in ("S_GPROC32", "S_LPROC32"):
+                pm = PROC.search(line)
+                pending = ("proc", rec, pm.group(1) if pm else "?")
+            elif kind == "S_INLINESITE":
+                pending = ("inline", rec, None)
+            continue
+        if pending is None:
+            continue
+        kind, rec, name = pending
+        if kind == "proc":
+            am = ADDR.search(line)
+            if am:
+                section = binary.sections[int(am.group(1), 16) - 1]
+                va = section.start + int(am.group(2))
+                procs.append((va, int(am.group(3)), name))
+                proc_of_rec[rec] = va
+                pending = None
+        elif kind == "inline":
+            pm = PARENT.search(line)
+            im = INLINEE.search(line)
+            if pm and im:
+                parent_of_rec[rec] = int(pm.group(1))
+                root = rec
+                for _ in range(64):
+                    if root in proc_of_rec:
+                        break
+                    root = parent_of_rec.get(root)
+                    if root is None:
+                        break
+                pending = ("inline-code", rec, (proc_of_rec.get(root), ids.get(int(im.group(1), 16))))
+        elif kind == "inline-code":
+            cm = CODE.search(line)
+            if cm:
+                proc_va, inlinee = name
+                if proc_va is not None and inlinee:
+                    inlines[proc_va].append((proc_va + int(cm.group(1), 16), inlinee))
+                pending = None
+    return sorted(set(procs)), inlines
 
 
 def symbolize(addrs: list[int], base: int) -> dict[int, tuple[str, int]]:
@@ -65,45 +192,127 @@ def symbolize(addrs: list[int], base: int) -> dict[int, tuple[str, int]]:
     out = subprocess.run([str(LLVM / "llvm-symbolizer.exe"), f"--obj={PORT_EXE}", "--relative-address",
                           "--no-inlines", "--functions=none"], input=text, capture_output=True, text=True,
                          errors="replace").stdout
-    lines = [l for l in out.splitlines()]
-    result = {}
-    # one location line per address, blank-line separated
     blocks, cur = [], []
-    for l in lines:
-        if l.strip() == "":
+    for line in out.splitlines():
+        if line.strip() == "":
             if cur:
                 blocks.append(cur)
                 cur = []
         else:
-            cur.append(l)
+            cur.append(line)
     if cur:
         blocks.append(cur)
+    result = {}
     for a, block in zip(addrs, blocks):
-        loc = block[-1]
-        m = re.match(r"(.*):(\d+):\d+$", loc)
+        m = re.match(r"(.*):(\d+):\d+$", block[-1])
         if m:
             result[a] = (m.group(1).replace("\\", "/").lower(), int(m.group(2)))
     return result
 
 
-def short_name(name: str) -> str:
-    name = re.sub(r"<.*>", "", name)
-    return name.split("::")[-1]
+# ---- library calls ---------------------------------------------------------------------------
+
+PORT_LIB = re.compile(r"^(std::|`|__|_[A-Z_a-z]|operator (new|delete)|mem(cpy|set|move|cmp|chr)\b|str\w*$|wcs\w*$|"
+                      r"(sqrt|sin|cos|tan|atan2?|floor|ceil|pow|exp|log|fmod|abs|fabs)f?$|rand$|atexit$|\w*(printf|scanf)\w*$|"
+                      r"blz::(allocator|default_alloc)|Concurrency::|Microsoft::)")
+REF_KEEP = ("FUN_", "thunk_FUN", "Lua::", "Storm::", "CDataAllocator::")
 
 
-def call_targets(binary: Binary, va: int, size: int, md, extent=None) -> list[int]:
-    """Direct call/jmp targets in [va, va+size) that leave the function, in address order."""
-    code = binary.image[binary.off(va):binary.off(va) + size]
-    targets = []
-    for insn in md.disasm(code, va):
-        if insn.mnemonic in ("call", "jmp") and insn.operands and insn.operands[0].type == capstone.x86.X86_OP_IMM:
-            target = insn.operands[0].imm
-            if insn.mnemonic == "jmp" and va <= target < va + size:
+def ref_is_lib(cor: dict, a: int) -> bool:
+    entry = cor.get(a)
+    if entry is None:
+        return False
+    name = entry["name"]
+    return not name.startswith(REF_KEEP) and "::" not in name
+
+
+# ---- disassembly -----------------------------------------------------------------------------
+
+JCC = re.compile(r"^(j(?!mp)\w+|cmov\w+|set\w+)$")
+SSE_SCALAR = {"ss": 4, "sd": 8}
+
+
+class Features:
+    """What one function's instructions use, in a form both binaries can be compared on."""
+
+    def __init__(self):
+        self.calls: list[int] = []          # direct call/jmp targets leaving the function
+        self.call_sites: list[int] = []     # their instruction addresses
+        self.fields: Counter = Counter()
+        self.consts: Counter = Counter()
+        self.mnemonics: list[str] = []
+        self.shape: list[str] = []          # mnemonic + operands with addresses masked
+
+    def to_json(self) -> dict:
+        return {"calls": self.calls, "fields": dict(self.fields), "consts": dict(self.consts),
+                "mnemonics": self.mnemonics, "shape": self.shape}
+
+    @staticmethod
+    def from_json(d: dict) -> "Features":
+        f = Features()
+        f.calls = d["calls"]
+        f.fields = Counter({int(k): v for k, v in d["fields"].items()})
+        f.consts = Counter(d["consts"])
+        f.mnemonics = d["mnemonics"]
+        f.shape = d["shape"]
+        return f
+
+
+def float_text(raw: bytes) -> str:
+    if len(raw) == 4:
+        v = float(np.frombuffer(raw, dtype="<f4")[0])
+    else:
+        v = float(np.frombuffer(raw, dtype="<f8")[0])
+    if v != v:
+        return "f:nan"
+    if len(raw) == 4 or abs(v) < 3.4e38:
+        v = float(np.float32(v))
+    return f"f:{v:.6g}"
+
+
+def features(binary: Binary, md, ranges: list[tuple[int, int]], inside) -> Features:
+    f = Features()
+    for begin, end in ranges:
+        code = binary.image[binary.off(begin):binary.off(begin) + (end - begin)]
+        for insn in md.disasm(bytes(code), begin):
+            mn = insn.mnemonic
+            norm = "jcc" if JCC.match(mn) and mn.startswith("j") else ("cmov" if mn.startswith("cmov") else mn)
+            f.mnemonics.append(norm)
+            ops = insn.operands
+            text = insn.op_str
+            branch = mn.startswith(("call", "j")) and ops and ops[0].type == capstone.x86.X86_OP_IMM
+            # a conditional branch out of the function is a tail call too
+            if branch and (mn in ("call", "jmp") or not inside(ops[0].imm)):
+                target = ops[0].imm
+                if not inside(target):
+                    f.calls.append(target)
+                    f.call_sites.append(insn.address)
+                f.shape.append(f"{norm} X")
                 continue
-            if extent is not None and extent(target):
+            if mn.startswith("j") or mn in ("int3", "nop") or mn.startswith("nop"):
+                f.shape.append(norm)
                 continue
-            targets.append(target)
-    return targets
+            for op in ops:
+                if op.type == capstone.x86.X86_OP_MEM:
+                    base = insn.reg_name(op.mem.base) if op.mem.base else ""
+                    if base == "rip":
+                        target = insn.address + insn.size + op.mem.disp
+                        s = binary.cstr(target, 256) if binary.section_of(target) is not None else None
+                        if s is not None and len(s) >= 3 and s.isprintable() and mn == "lea":
+                            f.consts["s:" + s] += 1
+                        elif mn.endswith(("ss", "sd")) and mn[-2:] in SSE_SCALAR and binary.section_of(target):
+                            size = SSE_SCALAR[mn[-2:]]
+                            off = binary.off(target)
+                            f.consts[float_text(bytes(binary.image[off:off + size]))] += 1
+                    elif base not in ("rsp", "rbp", "esp") and op.mem.disp > 0 and mn != "lea":
+                        f.fields[op.mem.disp] += 1
+                elif op.type == capstone.x86.X86_OP_IMM:
+                    v = op.imm & 0xffffffff
+                    if 0x10 <= v <= 0xfffffff0 and not ("rsp" in text and mn in ("add", "sub")):
+                        f.consts[f"i:{v:x}"] += 1
+            masked = re.sub(r"0x[0-9a-f]{6,}", "X", text)
+            f.shape.append(f"{norm} {masked}")
+    return f
 
 
 def resolve_thunk(binary: Binary, md, target: int, depth: int = 0) -> int:
@@ -111,76 +320,175 @@ def resolve_thunk(binary: Binary, md, target: int, depth: int = 0) -> int:
     if depth > 4 or binary.section_of(target) is None:
         return target
     code = binary.image[binary.off(target):binary.off(target) + 16]
-    for insn in md.disasm(code, target):
+    for insn in md.disasm(bytes(code), target):
         if insn.mnemonic == "jmp" and insn.operands and insn.operands[0].type == capstone.x86.X86_OP_IMM:
             return resolve_thunk(binary, md, insn.operands[0].imm, depth + 1)
         break
     return target
 
 
-def ref_calls(ref: Binary, md, addr: int) -> list[int]:
-    """The reference function's callees, its chained pieces included, in address order."""
-    index = getattr(ref, "_pieces_by_root", None)
-    if index is None:
-        index = defaultdict(list)
-        for i in range(len(ref.piece_starts)):
-            index[ref.piece_root[i]].append((ref.piece_starts[i], ref.piece_ends[i]))
-        ref._pieces_by_root = index
-    pieces = index.get(addr, [])
-    if not pieces:
+# ---- scoring ---------------------------------------------------------------------------------
+
+def weighted_lcs(ref: list, weights: list[float], port: list) -> tuple[float, list[bool]]:
+    """The heaviest common subsequence: its weight and which reference entries it kept."""
+    n, m = len(ref), len(port)
+    if n == 0 or m == 0:
+        return 0.0, [False] * n
+    if n * m > 1_000_000:   # too big to align: credit by multiset instead
+        have = Counter(port)
+        kept = []
+        for x in ref:
+            kept.append(have[x] > 0)
+            have[x] -= 1
+        return sum(w for w, k in zip(weights, kept) if k), kept
+    table = [[0.0] * (m + 1)]
+    for i in range(1, n + 1):
+        x, w = ref[i - 1], weights[i - 1]
+        prev = table[i - 1]
+        cur = [0.0] * (m + 1)
+        for j in range(1, m + 1):
+            if port[j - 1] == x:
+                cur[j] = prev[j - 1] + w
+            else:
+                a, b = prev[j], cur[j - 1]
+                cur[j] = a if a > b else b
+        table.append(cur)
+    kept = [False] * n
+    i, j = n, m
+    while i > 0 and j > 0:
+        if ref[i - 1] == port[j - 1] and abs(table[i][j] - table[i - 1][j - 1] - weights[i - 1]) < 1e-9:
+            kept[i - 1] = True
+            i -= 1
+            j -= 1
+        elif table[i - 1][j] >= table[i][j - 1]:
+            i -= 1
+        else:
+            j -= 1
+    return table[n][m], kept
+
+
+def lcs_pairs(a: list, b: list) -> list[tuple[int, int]]:
+    """The matched index pairs of a longest common subsequence."""
+    n, m = len(a), len(b)
+    if n == 0 or m == 0 or n * m > 1_000_000:
         return []
+    table = [[0] * (m + 1)]
+    for i in range(1, n + 1):
+        prev, cur, x = table[i - 1], [0] * (m + 1), a[i - 1]
+        for j in range(1, m + 1):
+            cur[j] = prev[j - 1] + 1 if b[j - 1] == x else (prev[j] if prev[j] > cur[j - 1] else cur[j - 1])
+        table.append(cur)
+    pairs = []
+    i, j = n, m
+    while i > 0 and j > 0:
+        if a[i - 1] == b[j - 1]:
+            pairs.append((i - 1, j - 1))
+            i -= 1
+            j -= 1
+        elif table[i - 1][j] >= table[i][j - 1]:
+            i -= 1
+        else:
+            j -= 1
+    return pairs[::-1]
 
-    def inside(t):
-        i = bisect.bisect_right(ref.piece_starts, t) - 1
-        return i >= 0 and t < ref.piece_ends[i] and ref.piece_root[i] == addr
 
-    out = []
-    for begin, end in sorted(pieces):
-        for t in call_targets(ref, begin, end - begin, md, inside):
-            t = resolve_thunk(ref, md, t)
-            i = bisect.bisect_right(ref.piece_starts, t) - 1
-            out.append(ref.piece_root[i] if i >= 0 and t < ref.piece_ends[i] else t)
-    return out
+def overlap(ref: Counter, port: Counter) -> float | None:
+    total = sum(ref.values())
+    if total == 0:
+        return None
+    return sum(min(v, port.get(k, 0)) for k, v in ref.items()) / total
 
 
-def lcs(a: list, b: list) -> int:
-    if not a or not b:
-        return 0
-    prev = [0] * (len(b) + 1)
-    for x in a:
-        cur = [0]
-        for j, y in enumerate(b):
-            cur.append(prev[j] + 1 if x == y else max(prev[j + 1], cur[j]))
-        prev = cur
-    return prev[-1]
+def trigram_score(a: list[str], b: list[str]) -> float | None:
+    if len(a) < 3 or len(b) < 3:
+        return None
+    ta = Counter(zip(a, a[1:], a[2:]))
+    tb = Counter(zip(b, b[1:], b[2:]))
+    inter = sum((ta & tb).values())
+    union = sum((ta | tb).values())
+    return inter / union if union else None
 
+
+# ---- callers in the port, for stub liveness --------------------------------------------------
+
+def port_references(binary: Binary, starts: np.ndarray) -> dict[int, list[int]]:
+    """function start -> addresses that call, jump to, take the address of, or table it."""
+    text = binary.text
+    data = np.frombuffer(bytes(binary.image[binary.off(text.start):binary.off(text.start) + (text.end - text.start)]),
+                         dtype=np.uint8)
+    refs = defaultdict(list)
+    start_set = starts
+
+    def add(sites: np.ndarray, targets: np.ndarray):
+        hit = np.isin(targets, start_set)
+        for s, t in zip(sites[hit].tolist(), targets[hit].tolist()):
+            refs[t].append(s)
+
+    n = len(data) - 7
+    for opcode in (0xE8, 0xE9):
+        pos = np.nonzero(data[:n] == opcode)[0]
+        disp = (data[pos + 1].astype(np.int64) | (data[pos + 2].astype(np.int64) << 8)
+                | (data[pos + 3].astype(np.int64) << 16) | (data[pos + 4].astype(np.int64) << 24))
+        disp = np.where(disp >= 1 << 31, disp - (1 << 32), disp)
+        add(pos + text.start, pos + text.start + 5 + disp)
+    # lea r64, [rip+disp32]: REX.W 8D modrm(00 reg 101)
+    pos = np.nonzero((data[:n] & 0xF8 == 0x48) & (data[1:n + 1] == 0x8D) & ((data[2:n + 2] & 0xC7) == 0x05))[0]
+    disp = (data[pos + 3].astype(np.int64) | (data[pos + 4].astype(np.int64) << 8)
+            | (data[pos + 5].astype(np.int64) << 16) | (data[pos + 6].astype(np.int64) << 24))
+    disp = np.where(disp >= 1 << 31, disp - (1 << 32), disp)
+    add(pos + text.start, pos + text.start + 7 + disp)
+    # pointer tables (vtables, callback arrays) in the data sections
+    for section in binary.sections:
+        if section is text or section.end - section.start < 8:
+            continue
+        raw = bytes(binary.image[binary.off(section.start):binary.off(section.start) + ((section.end - section.start) & ~7)])
+        words = np.frombuffer(raw, dtype="<u8").astype(np.int64)
+        idx = np.arange(len(words), dtype=np.int64) * 8 + section.start
+        add(idx, words)
+    return refs
+
+
+# ---- main ------------------------------------------------------------------------------------
 
 def main() -> None:
-    ap = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--file", help="only ports whose source path contains this")
     ap.add_argument("--addr", nargs="*", help="only these reference addresses")
     ap.add_argument("--below", type=float, default=1.01, help="only scores below this")
-    ap.add_argument("--min-calls", type=int, default=1, help="only references making this many calls")
-    ap.add_argument("--show", action="store_true", help="print both sequences")
+    ap.add_argument("--min-calls", type=int, default=0, help="only references making this many calls")
+    ap.add_argument("--by", choices=["score", "calls", "fields", "consts", "shape"], default="score",
+                    help="the column to sort and filter by")
+    ap.add_argument("--show", action="store_true", help="print each port in full")
+    ap.add_argument("--stubs", action="store_true", help="list the stubs, live ones first")
+    ap.add_argument("--all", action="store_true", help="with --stubs: dead stubs too")
+    ap.add_argument("--summary", action="store_true", help="only the totals")
+    ap.add_argument("--suggest", action="store_true",
+                    help="untagged port functions that sit where an untagged reference call does")
+    ap.add_argument("--record", action="store_true", help="append the totals to docs/fidelity.md")
+    ap.add_argument("--limit", type=int, default=0, help="print at most this many rows")
+    ap.add_argument("--delta", action="store_true",
+                    help="what moved since the previous run: regressions first, then gains")
     args = ap.parse_args()
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     ref = Binary()
     port = Binary(PORT_EXE)
     md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
     md.detail = True
+    cor = load_corpus()
 
-    procs = pdb_procs(port)
+    procs, inline_sites = load_pdb(port)
     proc_at = {va: (size, name) for va, size, name in procs}
+    proc_starts = [va for va, _, _ in procs]
     by_short = defaultdict(list)
     for va, size, name in procs:
         by_short[short_name(name)].append(va)
 
+    # ---- tie each tag to its compiled function -------------------------------------------
     tags = [t for t in tagscan.scan() if t["name"] and not t.get("label")]
     wanted = {short_name(t["name"]) for t in tags}
     candidates = sorted({va for s in wanted for va in by_short.get(s, [])})
     where = symbolize(candidates, port.base)
-
-    # tag -> compiled function: same file, same short name, first body line after the tag
     port_of_ref: dict[int, int] = {}
     ref_of_port: dict[int, int] = {}
     tag_of_ref: dict[int, dict] = {}
@@ -189,64 +497,404 @@ def main() -> None:
         best = None
         for va in by_short.get(short_name(t["name"]), []):
             loc = where.get(va)
-            if loc is None or not loc[0].endswith(tfile):
-                continue
-            if loc[1] <= t["line"]:
+            if loc is None or not loc[0].endswith(tfile) or loc[1] <= t["line"]:
                 continue
             if best is None or loc[1] < where[best][1]:
                 best = va
-        if best is not None and (t["addr"] not in port_of_ref):
+        if best is not None and t["addr"] not in port_of_ref:
             port_of_ref[t["addr"]] = best
             ref_of_port.setdefault(best, t["addr"])
             tag_of_ref[t["addr"]] = t
-    name_of_ref = {a: proc_at[v][1] for a, v in port_of_ref.items()}
+    untied = [t for t in tags if t["addr"] not in port_of_ref]
 
-    def port_name(r):
-        return name_of_ref.get(r, f"FUN_{r:x} (unlinked)")
+    # names an inline site can carry, for the tagged functions
+    ref_by_inline_name: dict[str, int] = {}
+    ambiguous = set()
+    by_short_tagged = defaultdict(set)
+    for r, va in port_of_ref.items():
+        name = proc_at[va][1]
+        ref_by_inline_name[last_two(name)] = r
+        by_short_tagged[short_name(name)].add(r)
+    for s, rs in by_short_tagged.items():
+        if len(rs) == 1 and s not in ref_by_inline_name:
+            ref_by_inline_name[s] = next(iter(rs))
+        elif len(rs) > 1:
+            ambiguous.add(s)
 
-    rows = []
-    for r, pva in port_of_ref.items():
+    def inline_ref(name: str) -> int | None:
+        r = ref_by_inline_name.get(last_two(name))
+        if r is None and short_name(name) not in ambiguous:
+            r = ref_by_inline_name.get(short_name(name))
+        return r
+
+    unimplemented = [va for va, _, name in procs if short_name(name) == "FrostUnimplemented"]
+    unimplemented_va = unimplemented[0] if unimplemented else None
+
+    # ---- features ------------------------------------------------------------------------
+    piece_index = defaultdict(list)
+    for i in range(len(ref.piece_starts)):
+        piece_index[ref.piece_root[i]].append((ref.piece_starts[i], ref.piece_ends[i]))
+
+    def ref_root(t: int) -> int:
+        i = bisect.bisect_right(ref.piece_starts, t) - 1
+        return ref.piece_root[i] if i >= 0 and t < ref.piece_ends[i] else t
+
+    cache = {}
+    ref_mtime = str(Path(ref.path).stat().st_mtime)
+    if REF_CACHE.exists():
+        loaded = json.loads(REF_CACHE.read_text())
+        if loaded.get("mtime") == ref_mtime and loaded.get("version") == 4:
+            cache = loaded["functions"]
+    cache_dirty = False
+
+    def ref_features(a: int) -> Features:
+        nonlocal cache_dirty
+        key = f"{a:x}"
+        if key in cache:
+            return Features.from_json(cache[key])
+        pieces = sorted(piece_index.get(a, []))
+
+        def inside(t):
+            return ref_root(t) == a and any(b <= t < e for b, e in pieces)
+
+        f = features(ref, md, pieces, inside)
+        f.calls = [ref_root(resolve_thunk(ref, md, t)) for t in f.calls]
+        cache[key] = f.to_json()
+        cache_dirty = True
+        return f
+
+    port_cache: dict[int, Features] = {}
+
+    def port_features(va: int) -> Features:
+        if va not in port_cache:
+            size = proc_at[va][0] if va in proc_at else 0
+            f = features(port, md, [(va, va + size)], lambda t: va <= t < va + size)
+            f.calls = [resolve_thunk(port, md, t) for t in f.calls]
+            port_cache[va] = f
+        return port_cache[va]
+
+    def ref_callee_weight(a: int) -> float:
+        entry = cor.get(a)
+        if entry is not None and entry.get("size", 0) <= LEAF_SIZE:
+            if not ref_features(a).calls:
+                return LEAF_WEIGHT
+        return 1.0
+
+    def port_sequence(va: int, depth: int, seen: set, stub_sites: list, merged: list, flatten: bool = True) -> list:
+        """The port's calls as reference addresses (or ("port", va)), untagged helpers flattened
+        into it when `flatten` (and listed in `merged`)."""
+        f = port_features(va)
+        events = [(site, "call", t) for site, t in zip(f.call_sites, f.calls)]
+        events += [(site, "inline", name) for site, name in inline_sites.get(va, [])]
+        events.sort(key=lambda e: (e[0], e[1] != "inline"))
+        out = []
+        for _, kind, x in events:
+            if kind == "inline":
+                r = inline_ref(x)
+                if r is not None:
+                    out.append(r)
+                continue
+            if x == unimplemented_va:
+                stub_sites.append(va)
+                continue
+            if x in ref_of_port:
+                out.append(ref_of_port[x])
+                continue
+            info = proc_at.get(x)
+            if info is None or PORT_LIB.match(strip_name(info[1])):
+                continue
+            if flatten and depth < FLATTEN_DEPTH and info[0] <= FLATTEN_SIZE and x not in seen:
+                merged.append(x)
+                out.extend(port_sequence(x, depth + 1, seen | {x}, stub_sites, merged))
+            else:
+                out.append(("port", x))
+        return out
+
+    def merged_features(pva: int, helpers: list[int]) -> tuple[Counter, Counter]:
+        """The port's fields and constants with those of the code it keeps out of line where
+        the reference did not."""
+        own = port_features(pva)
+        fields, consts = Counter(own.fields), Counter(own.consts)
+        for h in dict.fromkeys(helpers):
+            if h in proc_at and proc_at[h][0] <= 2 * FLATTEN_SIZE:
+                hf = port_features(h)
+                fields.update(hf.fields)
+                consts.update(hf.consts)
+        return fields, consts
+
+    # ---- score every tied port -----------------------------------------------------------
+    records = {}
+    votes: Counter = Counter()
+    for r, pva in sorted(port_of_ref.items()):
         t = tag_of_ref[r]
-        if args.file and args.file.replace("\\", "/") not in t["file"].replace("\\", "/"):
-            continue
-        if args.addr and f"{r:x}" not in {a.lower().removeprefix("0x").removeprefix("fun_") for a in args.addr}:
-            continue
-        if t["stub"]:
-            continue
-        rseq = ref_calls(ref, md, r)
-        if len(rseq) < args.min_calls:
-            continue
-        size = proc_at[pva][0]
-        praw = [resolve_thunk(port, md, x) for x in call_targets(port, pva, size, md)]
-        pseq = [ref_of_port.get(x, ("port", x)) for x in praw]
-        common = lcs(rseq, pseq)
-        score = common / len(rseq) if rseq else 1.0
-        if score >= args.below:
-            continue
-        pset = set(pseq)
-        missing = [x for x in rseq if x not in pset]
-        rows.append((score, r, t, rseq, pseq, praw, missing))
+        rf = ref_features(r)
+        stub_sites: list = []
+        helpers: list = []
+        pseq = port_sequence(pva, 0, {pva}, stub_sites, helpers)
+        rseq = [x for x in rf.calls if not ref_is_lib(cor, x)]
+        weights = [ref_callee_weight(x) for x in rseq]
+        total = sum(weights)
+        got, kept = weighted_lcs(rseq, weights, pseq)
+        # calls the port makes and the reference does not: code the reference inlined
+        rset = set(rseq)
+        for x in pseq:
+            if x in rset:
+                continue
+            helpers.append(x[1] if isinstance(x, tuple) else port_of_ref.get(x, 0))
+        fields, consts = merged_features(pva, helpers)
+        pf = port_features(pva)
+        parts = {
+            "calls": got / total if total else None,
+            "fields": overlap(rf.fields, fields),
+            "consts": overlap(rf.consts, consts),
+            "shape": trigram_score(rf.mnemonics, pf.mnemonics),
+        }
+        avail = {k: v for k, v in parts.items() if v is not None}
+        score = (sum(WEIGHTS[k] * v for k, v in avail.items()) / sum(WEIGHTS[k] for k in avail)) if avail else 1.0
+        same = rf.shape == pf.shape and len(rf.shape) > 0
+        if t["stub"] and not t["partial"]:
+            kind = "stub"
+        elif t["stub"]:
+            kind = "partial"
+        else:
+            kind = "ported"
+        missing = [x for x, k in zip(rseq, kept) if not k]
+        # tag suggestions: a gap where the reference calls something untagged and the port
+        # calls an untagged function of its own, one for one
+        raw = port_sequence(pva, 0, {pva}, [], [], flatten=False)
+        pairs = lcs_pairs(rseq, raw)
+        bounds = [(-1, -1)] + pairs + [(len(rseq), len(raw))]
+        for (i0, j0), (i1, j1) in zip(bounds, bounds[1:]):
+            rgap = [x for x in rseq[i0 + 1:i1] if x not in port_of_ref]
+            pgap = [x for x in raw[j0 + 1:j1] if isinstance(x, tuple)]
+            if rgap and len(rgap) == len(pgap) and len(rgap) <= 3:
+                for x, y in zip(rgap, pgap):
+                    votes[(x, y[1])] += 1
+        records[r] = {
+            "addr": f"{r:x}", "name": proc_at[pva][1], "file": t["file"], "line": t["line"], "kind": kind,
+            "score": round(score, 4), **{k: (round(v, 4) if v is not None else None) for k, v in parts.items()},
+            "same": same, "reaches_stub": bool(stub_sites), "ref_calls": len(rseq), "port_calls": len(pseq),
+            "ref_size": cor.get(r, {}).get("size", 0), "port_size": proc_at[pva][0],
+            "missing": [f"{x:x}" for x in dict.fromkeys(missing)], "sites": t.get("sites", []),
+            "_r": rseq, "_p": pseq, "_kept": kept, "_rf": rf, "_pf": pf, "_fields": fields, "_consts": consts,
+        }
 
-    rows.sort(key=lambda x: (x[0], -len(x[3])))
-    for score, r, t, rseq, pseq, praw, missing in rows:
-        print(f"{score:5.2f}  FUN_{r:x}  {port_name(r)}  ({t['file']}:{t['line']})  ref {len(rseq)} calls, "
-              f"port {len(pseq)}")
-        if missing and not args.show:
-            seen = set()
-            for x in missing:
-                if x in seen:
-                    continue
-                seen.add(x)
-                print(f"         missing FUN_{x:x}  {port_name(x)}")
-        if args.show:
-            print("   reference:")
-            for x in rseq:
-                print(f"      FUN_{x:x}  {port_name(x)}")
-            print("   port:")
-            for x, raw in zip(pseq, praw):
-                label = f"FUN_{x:x}" if isinstance(x, int) else "untagged"
-                print(f"      {label:16} {proc_at.get(raw, (0, hex(raw)))[1]}")
-    print(f"{len(rows)} ports listed; {len(port_of_ref)} tags tied to compiled functions", file=sys.stderr)
+    if cache_dirty:
+        REF_CACHE.write_text(json.dumps({"mtime": ref_mtime, "version": 4, "functions": cache}))
+
+    # ---- stub liveness ---------------------------------------------------------------------
+    stub_ports = {pva: r for r, pva in port_of_ref.items() if records[r]["kind"] == "stub"}
+    refs = port_references(port, np.array(proc_starts, dtype=np.int64))
+
+    def proc_containing(a: int) -> int | None:
+        i = bisect.bisect_right(proc_starts, a) - 1
+        if i >= 0 and a < proc_starts[i] + proc_at[proc_starts[i]][0]:
+            return proc_starts[i]
+        return None
+
+    # what runs: everything reachable from the entry points and the data tables (vtables,
+    # initializer lists, callbacks) through code that is not itself a stub
+    edges = defaultdict(set)
+    roots = {va for va, _, name in procs if short_name(name) in ("WinMain", "wWinMain", "mainCRTStartup",
+                                                                  "wWinMainCRTStartup", "WinMainCRTStartup")}
+    table_refs = Counter()
+    for target, sites in refs.items():
+        for site in sites:
+            owner = proc_containing(site)
+            if owner is None:
+                roots.add(target)
+                table_refs[target] += 1
+            elif owner != target:
+                edges[owner].add(target)
+    reached = set()
+    queue = list(roots)
+    while queue:
+        va = queue.pop()
+        if va in reached:
+            continue
+        reached.add(va)
+        if va in stub_ports:
+            continue
+        queue.extend(edges.get(va, ()))
+    callers_of = defaultdict(set)
+    for owner, targets in edges.items():
+        for target in targets:
+            callers_of[target].add(owner)
+
+    for pva, r in stub_ports.items():
+        callers = {c for c in callers_of.get(pva, ()) if c not in stub_ports and c in reached}
+        rec = records[r]
+        rec["callers"] = [f"{('FUN_%x' % ref_of_port[c]) if c in ref_of_port else 'untagged'} {proc_at[c][1]}"
+                         for c in sorted(callers)]
+        rec["stub_callers"] = sum(1 for c in callers_of.get(pva, ()) if c in stub_ports)
+        rec["tables"] = table_refs.get(pva, 0)
+        rec["live"] = pva in reached and (bool(callers) or rec["tables"] > 0 or pva in roots)
+
+    # ---- output ----------------------------------------------------------------------------
+    def name_of(x) -> str:
+        if isinstance(x, tuple):
+            return f"untagged {proc_at.get(x[1], (0, hex(x[1])))[1]}"
+        pva = port_of_ref.get(x)
+        return f"FUN_{x:x} {proc_at[pva][1] if pva else '(no port)'}"
+
+    previous = {}
+    if OUT_JSON.exists():
+        previous = {d["addr"]: d for d in json.loads(OUT_JSON.read_text())}
+        OUT_JSON.replace(PREV_JSON)
+    elif PREV_JSON.exists():
+        previous = {d["addr"]: d for d in json.loads(PREV_JSON.read_text())}
+    OUT_JSON.write_text(json.dumps([{k: v for k, v in rec.items() if not k.startswith("_")}
+                                    for rec in records.values()], indent=1))
+
+    if args.delta:
+        moved = []
+        for rec in records.values():
+            old = previous.get(rec["addr"])
+            if old is None:
+                moved.append((1.0, rec, "new"))
+            elif old["kind"] != rec["kind"]:
+                moved.append((-1.0 if rec["kind"] == "stub" else 1.0, rec, f"{old['kind']} -> {rec['kind']}"))
+            elif abs(rec["score"] - old["score"]) >= 0.02:
+                moved.append((rec["score"] - old["score"], rec, f"{old['score']:.2f} -> {rec['score']:.2f}"))
+        gone = [a for a in previous if int(a, 16) not in records]
+        moved.sort(key=lambda m: m[0])
+        for d, rec, what in moved[:args.limit or None]:
+            print(f"{'-' if d < 0 else '+'} {what:18} FUN_{rec['addr']}  {rec['name']}  ({rec['file']}:{rec['line']})")
+        for a in gone:
+            print(f"- gone               FUN_{a}  {previous[a]['name']}")
+        print(f"{sum(1 for m in moved if m[0] < 0) + len(gone)} regressions, {sum(1 for m in moved if m[0] > 0)} gains",
+              file=sys.stderr)
+
+    scored = [rec for rec in records.values() if rec["kind"] != "stub"]
+    stubs = [rec for rec in records.values() if rec["kind"] == "stub"]
+    live = [rec for rec in stubs if rec.get("live")]
+    mean = sum(rec["score"] for rec in scored) / len(scored) if scored else 0.0
+    weighted = (sum(rec["score"] * rec["ref_size"] for rec in scored) / sum(rec["ref_size"] for rec in scored)
+                if scored else 0.0)
+    summary = {
+        "tags": len(tags), "tied": len(port_of_ref), "untied": len(untied),
+        "ported": sum(rec["kind"] == "ported" for rec in records.values()),
+        "partial": sum(rec["kind"] == "partial" for rec in records.values()),
+        "stubs": len(stubs), "live_stubs": len(live), "same": sum(rec["same"] for rec in scored),
+        "live_virtual": sum(1 for rec in live if not rec["callers"]),
+        "mean": round(mean, 4), "size_weighted": round(weighted, 4),
+        "above_0.9": sum(rec["score"] >= 0.9 for rec in scored),
+        "below_0.5": sum(rec["score"] < 0.5 for rec in scored),
+    }
+
+    def matches(rec) -> bool:
+        if args.file and args.file.replace("\\", "/") not in rec["file"].replace("\\", "/"):
+            return False
+        if args.addr and rec["addr"] not in {a.lower().removeprefix("0x").removeprefix("fun_") for a in args.addr}:
+            return False
+        return True
+
+    if args.delta:
+        pass
+    elif args.stubs:
+        rows = [rec for rec in stubs if matches(rec) and (args.all or rec.get("live"))]
+        rows.sort(key=lambda rec: (not rec.get("live"), -rec["ref_size"]))
+        if args.limit:
+            rows = rows[:args.limit]
+        for rec in rows:
+            state = ("LIVE" if rec["callers"] else "virt") if rec.get("live") else "dead"
+            print(f"{state}  FUN_{rec['addr']}  {rec['name']}  ({rec['file']}:{rec['line']})  ref {rec['ref_size']} bytes, "
+                  f"{len(rec['callers'])} callers, {rec['stub_callers']} stub callers, {rec['tables']} table refs")
+            for c in rec["callers"][:4]:
+                print(f"        called by {c}")
+        partial = [rec for rec in records.values() if rec["kind"] == "partial" and matches(rec)]
+        if partial:
+            print(f"\npartial ports ({len(partial)}), their unported arms:")
+            for rec in sorted(partial, key=lambda rec: -rec["ref_size"])[:args.limit or None]:
+                print(f"  FUN_{rec['addr']}  {rec['name']}  ({rec['file']}:{rec['line']})")
+                for s in rec["sites"]:
+                    print(f"        :{s['line']}  {s['note'] or '(no note)'}")
+        print(f"{len(rows)} stubs listed; {len(live)} live of {len(stubs)}", file=sys.stderr)
+    elif args.suggest:
+        best = {}
+        for (x, va), n in votes.items():
+            if x not in best or n > best[x][1]:
+                best[x] = (va, n)
+        claimed = Counter(va for va, _ in best.values())
+        rows = sorted(best.items(), key=lambda kv: -kv[1][1])
+        if args.limit:
+            rows = rows[:args.limit]
+        print("votes  reference      port function")
+        for x, (va, n) in rows:
+            others = sum(1 for (y, v), m in votes.items() if y == x and v != va)
+            note = ""
+            if others:
+                note += f"  ({others} other candidates)"
+            if claimed[va] > 1:
+                note += f"  (also voted for {claimed[va] - 1} other reference functions)"
+            print(f"{n:5}  FUN_{x:x}  {proc_at[va][1]}{note}")
+        print(f"{len(rows)} suggestions", file=sys.stderr)
+    elif not args.summary:
+        key = args.by
+        rows = [rec for rec in scored if matches(rec) and rec["ref_calls"] >= args.min_calls]
+        rows = [rec for rec in rows if (rec[key] if rec[key] is not None else 1.0) < args.below]
+        rows.sort(key=lambda rec: ((rec[key] if rec[key] is not None else 1.0), -rec["ref_size"]))
+        if args.limit:
+            rows = rows[:args.limit]
+
+        def fmt(v):
+            return "  -  " if v is None else f"{v:5.2f}"
+
+        print(" score calls field const shape  function")
+        for rec in rows:
+            flag = " same" if rec["same"] else (" PARTIAL" if rec["kind"] == "partial" else "")
+            if rec["reaches_stub"] and rec["kind"] != "partial":
+                flag += " reaches-stub"
+            print(f"{rec['score']:5.2f} {fmt(rec['calls'])} {fmt(rec['fields'])} {fmt(rec['consts'])} {fmt(rec['shape'])}  "
+                  f"FUN_{rec['addr']}  {rec['name']}  ({rec['file']}:{rec['line']})  "
+                  f"ref {rec['ref_calls']} calls/{rec['ref_size']}b{flag}")
+            if args.show:
+                print("    reference calls (- missing):")
+                for x, k in zip(rec["_r"], rec["_kept"]):
+                    print(f"      {' ' if k else '-'} {name_of(x)}")
+                print("    port calls:")
+                for x in rec["_p"]:
+                    print(f"        {name_of(x)}")
+                rf, fields, consts = rec["_rf"], rec["_fields"], rec["_consts"]
+                lost_fields = sorted(k for k in rf.fields if k not in fields)
+                extra_fields = sorted(k for k in fields if k not in rf.fields)
+                if lost_fields:
+                    print("    fields the reference uses and the port does not: "
+                          + " ".join(f"{k:#x}" if k >= 0 else f"-{-k:#x}" for k in lost_fields))
+                if extra_fields:
+                    print("    fields only the port uses: "
+                          + " ".join(f"{k:#x}" if k >= 0 else f"-{-k:#x}" for k in extra_fields))
+                lost = [k for k in rf.consts if k not in consts]
+                if lost:
+                    print("    constants the port lacks: " + "  ".join(repr(k) for k in lost[:24]))
+                for s in rec["sites"]:
+                    print(f"    unported arm :{s['line']}  {s['note'] or '(no note)'}")
+            elif rec["missing"]:
+                for a in rec["missing"][:8]:
+                    print(f"         missing {name_of(int(a, 16))}")
+        print(f"{len(rows)} ports listed", file=sys.stderr)
+
+    print(f"{summary['tied']} of {summary['tags']} tags tied to compiled functions; {summary['ported']} ported, "
+          f"{summary['partial']} partial, {summary['stubs']} stubs ({summary['live_stubs']} live, "
+          f"{summary['live_virtual']} of them only through tables); "
+          f"fidelity mean {summary['mean']:.3f}, size-weighted {summary['size_weighted']:.3f}; "
+          f"{summary['above_0.9']} at 0.9 or better, {summary['below_0.5']} below 0.5, {summary['same']} same",
+          file=sys.stderr)
+    if args.record:
+        stamp = datetime.date.today().isoformat()
+        commit = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--short", "HEAD"], capture_output=True,
+                                text=True).stdout.strip()
+        if not HISTORY.exists():
+            HISTORY.write_text("# Fidelity history\n\nOne row per `python tools/fidelity.py --record` "
+                               "(see tools/fidelity.py for what the columns mean).\n\n"
+                               "| date | commit | tied | ported | partial | stubs | live stubs | mean | size-weighted "
+                               "| >= 0.9 | < 0.5 | same |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n",
+                               encoding="utf-8", newline="\n")
+        with HISTORY.open("a", encoding="utf-8", newline="\n") as f:
+            f.write(f"| {stamp} | {commit} | {summary['tied']} | {summary['ported']} | {summary['partial']} | "
+                    f"{summary['stubs']} | {summary['live_stubs']} | {summary['mean']:.3f} | "
+                    f"{summary['size_weighted']:.3f} | {summary['above_0.9']} | {summary['below_0.5']} | "
+                    f"{summary['same']} |\n")
 
 
 if __name__ == "__main__":
