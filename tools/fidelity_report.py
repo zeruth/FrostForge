@@ -83,13 +83,15 @@ def main() -> None:
         cards.append(f"""
 <section class="card" style="--accent:{color}">
   <header><h2>{html.escape(b)}</h2><span class="count">{s['total']:,} functions</span></header>
-  <div class="ring" style="--p:{s['weighted'] * 100:.1f}"><div><b>{s['weighted'] * 100:.0f}</b><small>size-weighted</small></div></div>
+  <div class="top">
   <dl>
     <div><dt>Mean</dt><dd>{s['mean']:.2f}</dd></div>
     <div><dt>0.9+</dt><dd>{s['high']:,}</dd></div>
     <div><dt>Partial</dt><dd>{s['partial']:,}</dd></div>
     <div><dt>Stubs</dt><dd>{s['stub']:,} <em>{s['live']} live</em></dd></div>
   </dl>
+  <div class="ring" style="--p:{s['weighted'] * 100:.1f}"><div><b>{s['weighted'] * 100:.0f}</b><small>size-weighted</small></div></div>
+  </div>
   <div class="bar">{bar(s)}</div>
   <div class="hist">{hist(s, color)}</div>
   <div class="axis"><span>0</span><span>score</span><span>1</span></div>
@@ -116,16 +118,17 @@ h1 {{ font-size:28px; margin:0 0 4px; letter-spacing:-.02em }}
 .stat b {{ display:block; font-size:26px; letter-spacing:-.02em }} .stat span {{ color:var(--muted); font-size:13px }}
 .legend {{ display:flex; flex-wrap:wrap; gap:16px; color:var(--muted); font-size:13px; margin:16px 0 20px }}
 .legend i {{ display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:-1px }}
-.grid {{ display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:16px }}
-.card {{ background:var(--card); border:1px solid var(--line); border-top:4px solid var(--accent); border-radius:16px; padding:18px; position:relative }}
+.grid {{ display:grid; grid-template-columns:repeat(auto-fill,minmax(min(340px,100%),1fr)); gap:16px }}
+.card {{ background:var(--card); border:1px solid var(--line); border-top:4px solid var(--accent); border-radius:16px; padding:18px; min-width:0 }}
+.top {{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin:14px 0 }}
 .card header {{ display:flex; justify-content:space-between; align-items:baseline; gap:8px }}
 .card h2 {{ font-size:18px; margin:0 }} .count {{ color:var(--muted); font-size:13px }}
-.ring {{ --p:0; width:96px; height:96px; border-radius:50%; position:absolute; right:18px; top:52px;
+.ring {{ --p:0; flex:none; width:96px; height:96px; border-radius:50%; position:relative;
   background:conic-gradient(var(--accent) calc(var(--p)*1%), var(--line) 0) }}
 .ring div {{ position:absolute; inset:9px; border-radius:50%; background:var(--card); display:flex; flex-direction:column;
   align-items:center; justify-content:center }}
 .ring b {{ font-size:24px; line-height:1 }} .ring small {{ font-size:10px; color:var(--muted) }}
-dl {{ display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; margin:16px 0; max-width:calc(100% - 120px) }}
+dl {{ display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; margin:0; flex:1 }}
 dt {{ color:var(--muted); font-size:12px }} dd {{ margin:0; font-weight:600 }} dd em {{ font-weight:400; color:var(--stub); font-style:normal; font-size:12px }}
 .bar {{ display:flex; height:12px; border-radius:6px; overflow:hidden; background:var(--line) }}
 .seg-high {{ background:var(--high) }} .seg-mid {{ background:var(--mid) }} .seg-partial {{ background:var(--partial) }} .seg-stub {{ background:var(--stub) }}
@@ -137,7 +140,7 @@ ol {{ margin:0; padding:0; list-style:none; font-size:13px }} ol li {{ padding:3
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis }}
 .score {{ display:inline-block; min-width:38px; color:var(--stub); font-variant-numeric:tabular-nums }}
 .folders {{ color:var(--muted); font-size:12px; margin:12px 0 0 }}
-@media (max-width:420px) {{ .grid {{ grid-template-columns:1fr }} .ring {{ position:static; margin-top:12px }} dl {{ max-width:none }} }}
+@media (max-width:420px) {{ .grid {{ grid-template-columns:1fr }} }}
 </style></head><body><main>
 <h1>FrostLite fidelity</h1>
 <p class="sub">Ported functions compared against the reference 3.4.3 client, by subsystem · generated {datetime.date.today().isoformat()}</p>
