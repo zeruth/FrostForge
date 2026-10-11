@@ -42,6 +42,7 @@ python tools/iat_dump.py              # imports (needs a running client, see bel
 | `callers.py` | every direct call/jmp to a function, with the caller and its source file | E8/E9 rel32 scan, instruction-boundary checked |
 | `calltree.py` | what a function calls, to a given depth, with sizes and source files | callees read from the corpus text (direct calls only) |
 | `tags.py` | checks every `// ref:` tag in `src/` against the corpus; ported vs stubbed | |
+| `fidelity.py` | call-sequence fidelity of each `// ref:` port: the direct calls of the compiled port (FrostLite.exe + PDB, callees mapped back through their own tags) against the reference function's, scored by longest common subsequence, with the missing calls listed; `--show` prints both sequences | capstone over both binaries, `llvm-pdbutil` for the port's functions, `llvm-symbolizer` to tie each tag to its compiled body. Both sides are optimized, so inlining shows as missing or extra calls: read the body before trusting a low score |
 | `junkscan.py` | functions whose code still decodes as junk after stripping (77) | the decompiler's own markers: `halt_baddata()`, calls into the middle of code |
 
 ### The corpus (2026-10-08)
