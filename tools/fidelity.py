@@ -15,7 +15,9 @@ Four signals, each scored against what the reference has, then blended:
   fields  the displacements the code reads and writes through a pointer ([reg+0x1c]): struct
           layouts are ported to match, so these should agree even where codegen does not.
   consts  the strings, float/double constants and non-trivial integer immediates it uses.
-  shape   mnemonic trigram overlap, a weak signal that the control flow has the same form.
+  shape   mnemonic trigram overlap. Reported, not blended: on ports that match the reference in
+          calls, fields and constants its median is 0.56 and it spans the whole range, so it
+          measures register allocation and scheduling (two compilers), not the port.
 
 A port whose instructions match the reference's with addresses masked is reported as `same`.
 
@@ -60,7 +62,7 @@ PREV_JSON = ROOT / "build/fidelity.prev.json"
 REF_CACHE = ROOT / "build/fidelity-ref-cache.json"
 HISTORY = ROOT / "docs/fidelity.md"
 
-WEIGHTS = {"calls": 0.45, "fields": 0.25, "consts": 0.2, "shape": 0.1}
+WEIGHTS = {"calls": 0.5, "fields": 0.28, "consts": 0.22, "shape": 0.0}
 LEAF_WEIGHT = 0.25          # a reference callee that calls nothing and is this small or less
 LEAF_SIZE = 0x40
 FLATTEN_DEPTH = 3           # how deep untagged port helpers are flattened
@@ -212,9 +214,11 @@ def symbolize(addrs: list[int], base: int) -> dict[int, tuple[str, int]]:
 
 # ---- library calls ---------------------------------------------------------------------------
 
-PORT_LIB = re.compile(r"^(std::|`|__|_[A-Z_a-z]|operator (new|delete)|mem(cpy|set|move|cmp|chr)\b|str\w*$|wcs\w*$|"
+PORT_LIB = re.compile(r"^(std::|`|__|_[A-Z_a-z]|mem(cpy|set|move|cmp|chr)\b|str\w*$|wcs\w*$|"
                       r"(sqrt|sin|cos|tan|atan2?|floor|ceil|pow|exp|log|fmod|abs|fabs)f?$|rand$|atexit$|\w*(printf|scanf)\w*$|"
-                      r"blz::(allocator|default_alloc)|Concurrency::|Microsoft::)")
+                      r"Concurrency::|Microsoft::)")
+# Storm's operator new/delete and the blz allocators are Blizzard code, flattened like any helper:
+# the reference inlines them down to SMemAlloc/SMemFree
 REF_KEEP = ("FUN_", "thunk_FUN", "Lua::", "Storm::", "CDataAllocator::")
 
 
@@ -464,6 +468,10 @@ def main() -> None:
     ap.add_argument("--summary", action="store_true", help="only the totals")
     ap.add_argument("--suggest", action="store_true",
                     help="untagged port functions that sit where an untagged reference call does")
+    ap.add_argument("--match", type=float, default=0.75,
+                    help="with --suggest: the match score a pairing needs to be marked (and applied)")
+    ap.add_argument("--apply", action="store_true",
+                    help="with --suggest: write the marked pairings' tags into the sources")
     ap.add_argument("--record", action="store_true", help="append the totals to docs/fidelity.md")
     ap.add_argument("--limit", type=int, default=0, help="print at most this many rows")
     ap.add_argument("--delta", action="store_true",
@@ -622,11 +630,8 @@ def main() -> None:
                 consts.update(hf.consts)
         return fields, consts
 
-    # ---- score every tied port -----------------------------------------------------------
-    records = {}
-    votes: Counter = Counter()
-    for r, pva in sorted(port_of_ref.items()):
-        t = tag_of_ref[r]
+    def score_pair(r: int, pva: int) -> dict:
+        """How closely the compiled port function at `pva` matches reference function `r`."""
         rf = ref_features(r)
         stub_sites: list = []
         helpers: list = []
@@ -634,6 +639,18 @@ def main() -> None:
         rseq = [x for x in rf.calls if not ref_is_lib(cor, x)]
         weights = [ref_callee_weight(x) for x in rseq]
         total = sum(weights)
+        # a tagged callee the reference never calls was inlined there: its own calls stand in
+        # for it (one level, and only for helpers of a size a compiler inlines)
+        rset = set(rseq)
+        expanded = []
+        for x in pseq:
+            pva_x = port_of_ref.get(x) if not isinstance(x, tuple) else None
+            if pva_x is not None and x not in rset and proc_at[pva_x][0] <= FLATTEN_SIZE:
+                helpers.append(pva_x)
+                expanded.extend(port_sequence(pva_x, 1, {pva, pva_x}, [], helpers))
+            else:
+                expanded.append(x)
+        pseq = expanded
         got, kept = weighted_lcs(rseq, weights, pseq)
         # calls the port makes and the reference does not: code the reference inlined
         rset = set(rseq)
@@ -649,8 +666,19 @@ def main() -> None:
             "consts": overlap(rf.consts, consts),
             "shape": trigram_score(rf.mnemonics, pf.mnemonics),
         }
-        avail = {k: v for k, v in parts.items() if v is not None}
+        avail = {k: v for k, v in parts.items() if v is not None and WEIGHTS[k] > 0}
         score = (sum(WEIGHTS[k] * v for k, v in avail.items()) / sum(WEIGHTS[k] for k in avail)) if avail else 1.0
+        return {"score": score, "parts": parts, "rf": rf, "pf": pf, "rseq": rseq, "pseq": pseq, "kept": kept,
+                "fields": fields, "consts": consts, "stub_sites": stub_sites}
+
+    # ---- score every tied port -----------------------------------------------------------
+    records = {}
+    votes: Counter = Counter()
+    for r, pva in sorted(port_of_ref.items()):
+        t = tag_of_ref[r]
+        m = score_pair(r, pva)
+        rf, pf, rseq, pseq, kept = m["rf"], m["pf"], m["rseq"], m["pseq"], m["kept"]
+        fields, consts, stub_sites, parts, score = m["fields"], m["consts"], m["stub_sites"], m["parts"], m["score"]
         same = rf.shape == pf.shape and len(rf.shape) > 0
         if t["stub"] and not t["partial"]:
             kind = "stub"
@@ -811,24 +839,70 @@ def main() -> None:
                     print(f"        :{s['line']}  {s['note'] or '(no note)'}")
         print(f"{len(rows)} stubs listed; {len(live)} live of {len(stubs)}", file=sys.stderr)
     elif args.suggest:
-        best = {}
+        pending = defaultdict(list)     # file -> [(line index, text)]
+
+        def apply_tag(x: int, va: int) -> bool:
+            """Queue `// ref: FUN_x` above the definition of the port function at `va`."""
+            loc = symbolize([va], port.base).get(va)
+            if loc is None:
+                return False
+            path = Path(loc[0])
+            if not path.is_absolute():
+                path = ROOT / path
+            rel = path.resolve().relative_to(ROOT.resolve()).as_posix() if path.exists() else ""
+            if not rel.startswith(tagscan.TAG_ROOTS) or path.suffix not in (".cpp", ".c"):
+                return False
+            lines = path.read_text(encoding="utf-8").splitlines()
+            name = short_name(proc_at[va][1])
+            pat = re.compile(r"(^|[\s:*&~])" + re.escape(name) + r"\s*\(")
+            for i in range(min(loc[1] - 1, len(lines) - 1), max(-1, loc[1] - 60), -1):
+                if pat.search(lines[i]) and not lines[i].rstrip().endswith(";"):
+                    # already tagged, or a note naming the address on purpose without a tag
+                    # (a port that is more than the reference function, say)
+                    if i > 0 and ("ref:" in lines[i - 1] or f"{x:x}" in lines[i - 1].lower()):
+                        return False
+                    indent = re.match(r"\s*", lines[i]).group(0)
+                    text = f"{indent}/* ref: FUN_{x:x} */" if path.suffix == ".c" else f"{indent}// ref: FUN_{x:x}"
+                    pending[path].append((i, text))
+                    return True
+            return False
+
+        # every candidate scored as if it were tagged; the best match wins, votes break ties
+        candidates = defaultdict(list)
         for (x, va), n in votes.items():
-            if x not in best or n > best[x][1]:
-                best[x] = (va, n)
-        claimed = Counter(va for va, _ in best.values())
-        rows = sorted(best.items(), key=lambda kv: -kv[1][1])
+            if x in cor and va in proc_at:
+                candidates[x].append((va, n))
+        best = {}
+        for x, cands in candidates.items():
+            scored_cands = []
+            for va, n in cands:
+                ratio = proc_at[va][0] / max(1, cor[x].get("size", 1))
+                pm = score_pair(x, va)
+                # a match with nothing to compare (no calls, fields or constants) proves nothing
+                evidence = any(pm["parts"][k] is not None for k in ("calls", "fields", "consts"))
+                scored_cands.append((pm["score"] if evidence else 0.0, n, va, ratio))
+            scored_cands.sort(key=lambda c: (-c[0], -c[1]))
+            best[x] = scored_cands[0] + (len(cands) - 1,)
+        claimed = Counter(c[2] for c in best.values())
+        rows = sorted(best.items(), key=lambda kv: (-(kv[1][0] >= args.match), -kv[1][1], -kv[1][0]))
         if args.limit:
             rows = rows[:args.limit]
-        print("votes  reference      port function")
-        for x, (va, n) in rows:
-            others = sum(1 for (y, v), m in votes.items() if y == x and v != va)
-            note = ""
-            if others:
-                note += f"  ({others} other candidates)"
+        print("votes match  size  reference      port function")
+        applied = 0
+        for x, (match, n, va, ratio, others) in rows:
+            note = f"  ({others} other candidates)" if others else ""
             if claimed[va] > 1:
-                note += f"  (also voted for {claimed[va] - 1} other reference functions)"
-            print(f"{n:5}  FUN_{x:x}  {proc_at[va][1]}{note}")
-        print(f"{len(rows)} suggestions", file=sys.stderr)
+                note += f"  (best for {claimed[va] - 1} other reference functions too)"
+            good = match >= args.match and 0.25 <= ratio <= 4.0 and claimed[va] == 1
+            print(f"{n:5}  {match:4.2f} {ratio:5.2f}  FUN_{x:x}  {proc_at[va][1]}{note}{'  <-' if good else ''}")
+            if good and args.apply and apply_tag(x, va):
+                applied += 1
+        for path, inserts in pending.items():
+            lines = path.read_text(encoding="utf-8").splitlines()
+            for i, text in sorted(inserts, reverse=True):
+                lines.insert(i, text)
+            path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+        print(f"{len(rows)} suggestions" + (f"; {applied} tags written" if args.apply else ""), file=sys.stderr)
     elif not args.summary:
         key = args.by
         rows = [rec for rec in scored if matches(rec) and rec["ref_calls"] >= args.min_calls]

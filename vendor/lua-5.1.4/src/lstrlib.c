@@ -318,6 +318,7 @@ static const char *matchbalance (MatchState *ms, const char *s,
 }
 
 
+/* ref: FUN_14242a960 */
 static const char *max_expand (MatchState *ms, const char *s,
                                  const char *p, const char *ep) {
   ptrdiff_t i = 0;  /* counts maximum expand for item */

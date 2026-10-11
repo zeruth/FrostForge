@@ -213,6 +213,7 @@ void CSimpleFontable::SetFontObject(CSimpleFont* font) {
 
 // ---- CSimpleFont -----------------------------------------------------------------------------
 
+// ref: FUN_14062a010
 CSimpleFont::CSimpleFont() {
     this->m_attributes.m_stringFlags |= 0x212;
     this->m_fontables.InitEmpty(0x20);

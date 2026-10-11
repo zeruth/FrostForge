@@ -61,6 +61,7 @@ static void save (LexState *ls, int c) {
 }
 
 
+/* ref: FUN_1402c5860 */
 void luaX_init (lua_State *L) {
   int i;
   for (i=0; i<NUM_RESERVED; i++) {

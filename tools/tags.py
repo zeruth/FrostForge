@@ -21,9 +21,11 @@ from corpus import load_corpus
 from wowbin import Binary
 
 ROOT = Path(__file__).resolve().parent.parent
-TAG = re.compile(r"//\s*ref:\s*(?:FUN_|0x)([0-9a-fA-F]{9,})")
+TAG = re.compile(r"(?://|/\*|^\s*\*+)\s*ref:\s*(?:FUN_|0x)([0-9a-fA-F]{9,})")
+# the trees tags live in: frostlite's own, and the vendored code ported from the client
+TAG_ROOTS = ("src", "vendor/lua-5.1.4/src")
 # a line opening a function definition (indented ones too, for in-class members)
-DEF = re.compile(r"^\s*(?!//|#|return\b|if\b|while\b|for\b|else\b|do\b)[^;]*\b([A-Za-z_][\w:]*)\s*\([^;]*$")
+DEF = re.compile(r"^\s*(?!//|/\*|\*|#|return\b|if\b|while\b|for\b|else\b|do\b)[^;]*\b([A-Za-z_][\w:]*)\s*\([^;]*$")
 
 
 # a whole declaration on one line: `DNLIGHT();`, `void F(int a) const override;`
@@ -41,7 +43,7 @@ def IS_REAL(line: str) -> bool:
 
 def scan() -> list[dict]:
     tags = []
-    for p in sorted((ROOT / "src").rglob("*")):
+    for p in sorted(q for root in TAG_ROOTS for q in (ROOT / root).rglob("*")):
         if p.suffix not in (".cpp", ".hpp", ".h", ".c"):
             continue
         lines = p.read_text(encoding="utf-8").splitlines()
@@ -57,7 +59,8 @@ def scan() -> list[dict]:
                 if DEF.match(lines[j]):
                     # the first identifier followed by '(' is the function's own name, also
                     # when a parameter is a function pointer: `void F(void (*cb)())`
-                    name = re.search(r"\b([A-Za-z_][\w:]*)\s*\(", lines[j]).group(1)
+                    # destructors keep their `~`: `CScriptStatus::~CScriptStatus(`
+                    name = re.search(r"((?:\b[A-Za-z_]\w*::)*~?\b[A-Za-z_]\w*)\s*\(", lines[j]).group(1)
                     body_start = j
                     break
             stub = False

@@ -117,6 +117,7 @@ bool IsVector3D(lua_State* L, int32_t index) {
         && HasNumberField(L, index, "z");
 }
 
+// ref: FUN_140a509c0
 void ReadVector3D(lua_State* L, int32_t index, float* out) {
     out[0] = NumberField(L, index, "x");
     out[1] = NumberField(L, index, "y");

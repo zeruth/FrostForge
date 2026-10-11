@@ -90,6 +90,7 @@ float Abs(float value) {
 
 // A height in UI units rounded up to whole pixels of the screen (FUN_1405f3460). The
 // reference reads the first half of the resolution here.
+// ref: FUN_1405f3460
 float SnapToPixels(float height) {
     if (Abs(height) < EPSILON) {
         return height;
@@ -419,6 +420,7 @@ const char* FontStringProcessGrammar(const char* text) {
 
 // ---- lifetime ----------------------------------------------------------------------------------
 
+// ref: FUN_1406228b0
 CSimpleFontString::CSimpleFontString(CSimpleFrame* frame, uint8_t drawLayer, bool show)
     : CSimpleRegion(frame, drawLayer, 0, show) {
     this->m_embeddedTextures.InitEmpty(8);

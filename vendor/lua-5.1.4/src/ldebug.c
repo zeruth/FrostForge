@@ -564,6 +564,7 @@ static int isinstack (CallInfo *ci, const TValue *o) {
 }
 
 
+/* ref: FUN_1402b56a0 */
 void luaG_typeerror (lua_State *L, const TValue *o, const char *op) {
   const char *name = NULL;
   const char *t = luaT_typenames[ttype(o)];
@@ -593,6 +594,7 @@ void luaG_aritherror (lua_State *L, const TValue *p1, const TValue *p2) {
 }
 
 
+/* ref: FUN_1402b5400 */
 int luaG_ordererror (lua_State *L, const TValue *p1, const TValue *p2) {
   const char *t1 = luaT_typenames[ttype(p1)];
   const char *t2 = luaT_typenames[ttype(p2)];

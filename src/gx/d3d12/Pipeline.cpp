@@ -76,6 +76,7 @@ D3D12_SHADER_BYTECODE Bytecode(const GXSHADERPERMUTE* permute, PIPELINESTAGE* st
 }
 
 // The pipeline is freed and its PSO released once the frame is done (FUN_1422d7bc0).
+// ref: FUN_1422c9290
 void PipelineRelease(CGxDeviceD3d12* device, GxPipeline* pipeline) {
     IUnknown* pso = pipeline->m_pso;
     g_gxDeviceLock.Enter();

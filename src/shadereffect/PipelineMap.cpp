@@ -119,6 +119,7 @@ PIPELINENODE* PipelineMapFind(blz::chained_hash_header* map, const PIPELINEHASH&
     return nullptr;
 }
 
+// ref: FUN_1412aee70
 PIPELINENODE* PipelineMapInsert(blz::chained_hash_header* map, const PIPELINEHASH& key) {
     if (map->m_buckets == nullptr) {
         PipelineMapRehash(map, map->m_bucketCount);

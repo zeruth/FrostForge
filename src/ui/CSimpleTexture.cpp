@@ -1848,6 +1848,7 @@ void CSimpleTexture::ReleaseExtensionIfUnused() {
     this->MarkFrameBatchDirty();
 }
 
+// ref: FUN_140631f20
 void CSimpleTexture::AddMaskTexture(CSimpleMaskTexture* mask) {
     this->EnsureExtension();
     CTextureExtension* extension = this->m_extension;
@@ -2130,6 +2131,7 @@ void CSimpleMaskTexture::operator delete(void* mask) {
     }
 }
 
+// ref: FUN_1406383a0
 void CSimpleMaskTexture::CreateScriptMetaTables() {
     lua_State* L = FrameScript_GetContext();
     s_metaTable = FrameScript_Object::CreateScriptMetaTable(L, CSimpleMaskTexture_FillScriptMethods, false);

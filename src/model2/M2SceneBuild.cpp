@@ -110,6 +110,7 @@ void M2IndicesReserve(M2SceneVector<uint32_t>* indices, uint64_t count) {
     indices->m_data = data;
 }
 
+// ref: FUN_1403095b0
 void M2IndicesPush(M2SceneVector<uint32_t>* indices, uint32_t value) {
     uint64_t capacity = indices->m_capacity & 0x7fffffffffffffffull;
     if (indices->m_size == capacity) {

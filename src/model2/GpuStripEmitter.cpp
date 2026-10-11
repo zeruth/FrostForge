@@ -156,6 +156,7 @@ GpuStripEmitter::GpuStripEmitter() {
     this->m_fadeTime = 0.0f;
 }
 
+// ref: FUN_141298440
 GpuStripEmitter::~GpuStripEmitter() {
     this->m_enabled = 0;
     this->m_lifetime = 0.0f;
@@ -267,6 +268,7 @@ void GpuStripEmitter::SetGravity(float gravity) {
     this->m_gravity = gravity;
 }
 
+// ref: FUN_14129c750
 void GpuStripEmitter::SetEnabled(bool enabled) {
     uint8_t on = enabled ? 1 : 0;
     if (this->m_enabled == on) {
