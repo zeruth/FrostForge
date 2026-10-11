@@ -13,6 +13,9 @@
 #include "sound/SE3.hpp"
 #include "ui/FrameTime.hpp"
 #include "util/Unimplemented.hpp"
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 bool CommandLineHasOption(uint32_t option);
 
@@ -307,10 +310,13 @@ void SI3CheckPendingReset() {
     }
 }
 
-// ref: FUN_141312260
+extern "C" unsigned long long FUN_141312260(unsigned long long);
+// translated: FUN_141312260
 void SI3SetReverbEnabled(bool enabled) {
-    (void)enabled;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141312260((unsigned long long)enabled);
+    } __except (GenFault(0x141312260ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_141312590

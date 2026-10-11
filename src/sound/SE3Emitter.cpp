@@ -6,6 +6,9 @@
 #include "sound/SE3Internal.hpp"
 
 #include "util/Unimplemented.hpp"
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 // ref: FUN_1412dd330
 void SE3EmitterManagerInit(blz::function_storage* gridCell, int32_t param88, int32_t param8c) {
@@ -15,10 +18,13 @@ void SE3EmitterManagerInit(blz::function_storage* gridCell, int32_t param88, int
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_1412dcfb0
+extern "C" unsigned long long FUN_1412dcfb0(unsigned long long);
+// translated: FUN_1412dcfb0
 void SE3EmitterUpdate(int32_t elapsed) {
-    (void)elapsed;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1412dcfb0((unsigned long long)elapsed);
+    } __except (GenFault(0x1412dcfb0ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_1412deac0

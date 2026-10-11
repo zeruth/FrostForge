@@ -16,6 +16,9 @@
 #include "gxu/GxuFontPrivate.hpp"
 #include "storm/Memory.hpp"
 #include "util/Unimplemented.hpp"
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 namespace {
 
@@ -141,9 +144,13 @@ void GxuFontCreatePipelines() {
 }
 
 // The Slug pipelines (FUN_140689380).
-// ref: FUN_140689380
+extern "C" unsigned long long FUN_140689380();
+// translated: FUN_140689380
 void GxuFontCreateSlugPipelines() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_140689380();
+    } __except (GenFault(0x140689380ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_140689970

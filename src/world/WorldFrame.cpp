@@ -32,6 +32,9 @@
 #include <cmath>
 #include <cstring>
 #include <new>
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 // WoW/Source/WorldClient2: a scene's frame. World.cpp's entry points the model frames call
 // (create, animate, update, the camera view), the scene's animate pass (WorldScene.cpp) and
@@ -211,9 +214,13 @@ void ParticulateVolumesUpdate(void* particulates, const void* camera, const floa
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_14139b480
+extern "C" unsigned long long FUN_14139b480();
+// translated: FUN_14139b480
 void WorldUpdateLiquidSounds() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14139b480();
+    } __except (GenFault(0x14139b480ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_142527370

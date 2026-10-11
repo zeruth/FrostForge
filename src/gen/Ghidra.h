@@ -170,6 +170,22 @@ static __inline unsigned int *gen_cpuid(int leaf) {
 #define cpuid_brand_part2_info(x) gen_cpuid((int)0x80000003)
 #define cpuid_brand_part3_info(x) gen_cpuid((int)0x80000004)
 
+/* MSVC's array construction helpers, as Ghidra names them: each element in turn (destruction in
+   reverse), the element function called with its address */
+static __inline unsigned long long gen_vector_iterate(void *p, unsigned long long size, unsigned long long count,
+                                                      code *each, int reverse) {
+    unsigned long long i;
+    for (i = 0; i < count; i++) {
+        unsigned long long k = reverse ? count - 1 - i : i;
+        ((unsigned long long (*)(void *))each)((char *)p + k * size);
+    }
+    return 0;
+}
+#define _vector_constructor_iterator_(p, size, count, each, ...) gen_vector_iterate((void *)(p), (size), (count), (code *)(each), 0)
+#define _eh_vector_constructor_iterator_(p, size, count, each, ...) gen_vector_iterate((void *)(p), (size), (count), (code *)(each), 0)
+#define _vector_destructor_iterator_(p, size, count, each, ...) gen_vector_iterate((void *)(p), (size), (count), (code *)(each), 1)
+#define _eh_vector_destructor_iterator_(p, size, count, each, ...) gen_vector_iterate((void *)(p), (size), (count), (code *)(each), 1)
+
 /* what a translated function reaches that is not translated: logged once by its address */
 void GenUnimplemented(uint64_t address);
 

@@ -1,0 +1,8 @@
+{
+ "_doc": "Corrections to the decompilation, applied before translation (tools/translate.py). Each is a decompiler error proven against the instructions: 'from' must occur exactly once in the function's corpus text, and 'why' gives the instruction evidence.",
+ "1420bdde0": [
+  {"from": "FUN_1420cd5a0(0,uVar3 & 0xffffffff);",
+   "to": "FUN_1420cd5a0(param_1,uVar3 & 0xffffffff);",
+   "why": "mp_init_size(a, n): rcx is param_1 from entry to the call at 0x1420bde48 (copied to rbx at 0x1420bde22, never changed); Ghidra printed the argument as 0"}
+ ]
+}

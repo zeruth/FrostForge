@@ -7,6 +7,13 @@
 
 #include "util/Unimplemented.hpp"
 
+// ref: FUN_141d02d70
+int Lua_BreakUpLargeNumbers(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_141b433a0
 int Lua_C_AuthChallenge_Cancel(lua_State* L) {
     (void)L;
@@ -49,6 +56,13 @@ int Lua_C_CharacterCreation_ClearCharacterTemplate(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_140ccfcc0
+int Lua_C_CharacterCreation_CustomizeExistingCharacter(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140cd03a0
 int Lua_C_CharacterCreation_CycleCharCustomization(lua_State* L) {
     (void)L;
@@ -70,6 +84,13 @@ int Lua_C_CharacterCreation_GetCharacterTemplateInfo(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_140cd7d80
+int Lua_C_CharacterCreation_GetCustomizationDetails(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140cd84c0
 int Lua_C_CharacterCreation_GetFactionForRace(lua_State* L) {
     (void)L;
@@ -79,6 +100,20 @@ int Lua_C_CharacterCreation_GetFactionForRace(lua_State* L) {
 
 // ref: FUN_140cd9280
 int Lua_C_CharacterCreation_GetNameForRace(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140cdb440
+int Lua_C_CharacterCreation_GetRaceIDFromName(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140cdf6c0
+int Lua_C_CharacterCreation_IsAdvancedClass(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -98,8 +133,50 @@ int Lua_C_CharacterCreation_RequestRandomName(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_140ce4750
+int Lua_C_CharacterCreation_SetCharCustomizeFrame(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140ce4e20
 int Lua_C_CharacterCreation_SetCharacterCreateFacing(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140ce62e0
+int Lua_C_CharacterCreation_SetPaidService(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140ce7060
+int Lua_C_CharacterCreation_SetSelectedPreviewGearType(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140ce77b0
+int Lua_C_CharacterCreation_SetSelectedRace(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140ce7e80
+int Lua_C_CharacterCreation_SetSelectedSex(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140ce8550
+int Lua_C_CharacterCreation_SetViewingAlteredForm(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -133,6 +210,55 @@ int Lua_C_CharacterServices_AssignUpgradeDistribution(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_140c8d7d0
+int Lua_C_CharacterServices_GetAutomaticBoost(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140c8f1f0
+int Lua_C_CharacterServices_GetCharacterServiceDisplayData(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140c90120
+int Lua_C_CharacterServices_GetCharacterServiceDisplayDataByVASType(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_141698860
+int Lua_C_CharacterServices_GetFactionGroupByIndex(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140cefc60
+int Lua_C_ChatInfo_CanReportPlayer(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140cf1ed0
+int Lua_C_ChatInfo_GetChannelShortcut(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140cf25c0
+int Lua_C_ChatInfo_GetChannelShortcutForChannelID(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140cf2cb0
 int Lua_C_ChatInfo_GetChatLineSenderGUID(lua_State* L) {
     (void)L;
@@ -140,8 +266,57 @@ int Lua_C_ChatInfo_GetChatLineSenderGUID(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_140cf6f20
+int Lua_C_ChatInfo_IsAddonMessagePrefixRegistered(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140cf7630
+int Lua_C_ChatInfo_IsChatLineCensored(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140cf7d40
+int Lua_C_ChatInfo_IsPartyChannelType(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140cf9200
+int Lua_C_ChatInfo_RegisterAddonMessagePrefix(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140cf9910
 int Lua_C_ChatInfo_ReportServerLag(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140cfc140
+int Lua_C_ChatInfo_UncensorChatLine(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140e1d3a0
+int Lua_C_ConfigurationWarnings_GetConfigurationWarningSeen(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140e1f5f0
+int Lua_C_ConfigurationWarnings_SetConfigurationWarningSeen(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -156,6 +331,34 @@ int Lua_C_ConsoleScriptCollection_GetScriptData(lua_State* L) {
 
 // ref: FUN_140e24f80
 int Lua_C_Console_SetFontHeight(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140f989d0
+int Lua_C_Cursor_GetCursorItem(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140fa0ae0
+int Lua_C_Debug_GetAllPortLocsForMap(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140fa1820
+int Lua_C_Debug_GetMapDebugObjects(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140fa2c30
+int Lua_C_Debug_TeleportToMapDebugObject(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -182,8 +385,36 @@ int Lua_C_GamePad_ClearLedColor(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_140f4afe0
+int Lua_C_GamePad_GetConfig(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140f4be40
+int Lua_C_GamePad_GetDeviceMappedState(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140f4cca0
+int Lua_C_GamePad_GetDeviceRawState(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140f4db00
 int Lua_C_GamePad_GetLedColor(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140f4f530
+int Lua_C_GamePad_SetConfig(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -196,8 +427,22 @@ int Lua_C_GamePad_SetLedColor(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_140f50a80
+int Lua_C_GamePad_SetVibration(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140f51f10
 int Lua_C_GamePad_StopVibration(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140c1a420
+int Lua_C_InterfaceFileManifest_GetInterfaceArtFiles(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -245,6 +490,20 @@ int Lua_C_ModelInfo_AddActiveModelSceneActor(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_140d2be10
+int Lua_C_ModelInfo_ClearActiveModelScene(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140d2c570
+int Lua_C_ModelInfo_ClearActiveModelSceneActor(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140d2e7c0
 int Lua_C_ModelInfo_GetModelSceneCameraInfoByID(lua_State* L) {
     (void)L;
@@ -252,8 +511,71 @@ int Lua_C_ModelInfo_GetModelSceneCameraInfoByID(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_1410c2cb0
+int Lua_C_PaidServices_GetCurrentFaction(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_1416a82d0
+int Lua_C_RealmList_GetAvailableCategories(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_1416a8020
+int Lua_C_RealmList_GetRealmInfo(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_1416a7e50
+int Lua_C_RealmList_GetRealmsInCategory(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b10c30
+int Lua_C_ReportSystem_CanReportPlayer(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b11410
+int Lua_C_ReportSystem_CanReportPlayerForLanguage(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b12950
+int Lua_C_ReportSystem_GetMajorCategoryString(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b13df0
+int Lua_C_ReportSystem_GetMinorCategoryString(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140b14530
 int Lua_C_ReportSystem_ReportServerLag(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b151b0
+int Lua_C_ReportSystem_SendReport(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -280,6 +602,13 @@ int Lua_C_Sound_PlayItemSound(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_140e73df0
+int Lua_C_StoreGlue_ChangeRealmByCharacterGUID(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140e74520
 int Lua_C_StoreGlue_ClearVASProductReady(lua_State* L) {
     (void)L;
@@ -287,8 +616,85 @@ int Lua_C_StoreGlue_ClearVASProductReady(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_140e77340
+int Lua_C_StoreGlue_RequestCharacterQueueTime(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140e78070
+int Lua_C_StoreGlue_RequestStoreCharacterListForVasType(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140e78e00
+int Lua_C_StorePublic_DoesGroupHavePurchaseableProducts(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140e7b030
+int Lua_C_StoreSecure_GetBnetTransferInfo(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140e7cc60
+int Lua_C_StoreSecure_GetCharactersForRealm(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140e81e50
+int Lua_C_StoreSecure_GetEntryInfo(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140e85690
+int Lua_C_StoreSecure_GetProductInfo(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140e87fb0
+int Lua_C_StoreSecure_GetRealmList(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140e88d30
+int Lua_C_StoreSecure_GetUnrevokedBoostInfo(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140e8b800
+int Lua_C_StoreSecure_GetVASRealmList(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140e8ee10
 int Lua_C_StoreSecure_HasProductType(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140e91040
+int Lua_C_StoreSecure_IsVASEligibleCharacterGUID(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -308,8 +714,85 @@ int Lua_C_StoreSecure_RequestPriceInfo(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_140e94210
+int Lua_C_StoreSecure_SetDisconnectOnLogout(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140e948d0
+int Lua_C_StoreSecure_SetVASProductReady(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140ea6aa0
+int Lua_C_Texture_ClearTitleIconTexture(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140ea8e00
+int Lua_C_Texture_GetTitleIconTexture(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b6ce20
+int Lua_C_UserFeedback_SubmitSuggestion(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140b6dc00
 int Lua_C_VideoOptions_GetDefaultGameWindowSize(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b6f0f0
+int Lua_C_VideoOptions_GetGxAdapterInfo(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b70790
+int Lua_C_VoiceChat_ActivateChannel(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b70f20
+int Lua_C_VoiceChat_ActivateChannelTranscription(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b716b0
+int Lua_C_VoiceChat_BeginLocalCapture(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b72b60
+int Lua_C_VoiceChat_DeactivateChannel(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b732f0
+int Lua_C_VoiceChat_DeactivateChannelTranscription(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -329,6 +812,34 @@ int Lua_C_VoiceChat_GetMemberGUID(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_140b84340
+int Lua_C_VoiceChat_GetProcesses(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b85080
+int Lua_C_VoiceChat_GetPushToTalkBinding(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b85dc0
+int Lua_C_VoiceChat_GetRemoteTtsVoices(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b86b00
+int Lua_C_VoiceChat_GetTtsVoices(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140b8acf0
 int Lua_C_VoiceChat_IsMemberLocalPlayer(lua_State* L) {
     (void)L;
@@ -336,8 +847,71 @@ int Lua_C_VoiceChat_IsMemberLocalPlayer(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_140b8f890
+int Lua_C_VoiceChat_IsPlayerUsingVoice(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b92760
+int Lua_C_VoiceChat_LeaveChannel(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140b93c10
 int Lua_C_VoiceChat_MarkChannelsDiscovered(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b94250
+int Lua_C_VoiceChat_RequestJoinAndActivateCommunityStreamChannel(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b95750
+int Lua_C_VoiceChat_SetCommunicationMode(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b95ea0
+int Lua_C_VoiceChat_SetDeafened(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b972b0
+int Lua_C_VoiceChat_SetInputVolume(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b97940
+int Lua_C_VoiceChat_SetMasterVolumeScale(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b98770
+int Lua_C_VoiceChat_SetMemberVolume(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b98ee0
+int Lua_C_VoiceChat_SetMuted(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -352,6 +926,13 @@ int Lua_C_VoiceChat_SetOutputVolume(lua_State* L) {
 
 // ref: FUN_140b9a980
 int Lua_C_VoiceChat_SetPortraitTexture(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b9b2f0
+int Lua_C_VoiceChat_SetPushToTalkBinding(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -373,6 +954,13 @@ int Lua_C_VoiceChat_SpeakText(lua_State* L) {
 
 // ref: FUN_140b9e410
 int Lua_C_VoiceChat_StopSpeakingText(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140b9f090
+int Lua_C_VoiceChat_ToggleMemberMuted(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -490,6 +1078,13 @@ int Lua_C_WowTokenPublic_UpdateMarketPrice(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_141b4ba30
+int Lua_C_WowTokenPublic_UpdateTokenCount(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_141b565b0
 int Lua_C_WowTokenSecure_CanRedeemForBalance(lua_State* L) {
     (void)L;
@@ -560,8 +1155,71 @@ int Lua_CharacterHasAlternativeRaceOptions(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_141d95d80
+int Lua_ConsoleExec(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_141d03a20
 int Lua_CopyToClipboard(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_1416a4bb0
+int Lua_DeclineName(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_1416a6740
+int Lua_GetAccountCharacterInfo(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_141d02ae0
+int Lua_GetAddOnDependencies(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_1416a48e0
+int Lua_GetBillingPlan(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_141d03650
+int Lua_GetCVarInfo(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140cea040
+int Lua_GetCharacterInfo(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140ceaef0
+int Lua_GetCharacterInfoByGUID(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_1416a49a0
+int Lua_GetCreditsText(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -576,6 +1234,34 @@ int Lua_GetCurrentResolution(lua_State* L) {
 
 // ref: FUN_141d02f30
 int Lua_GetFontInfo(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_141d02e20
+int Lua_GetFonts(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_141084680
+int Lua_GetMaxLevelForExpansionLevel(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_141d05a40
+int Lua_GetMouseButtonClicked(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_1416a44f0
+int Lua_GetServerName(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -602,10 +1288,31 @@ int Lua_GetTime(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_141d05a90
+int Lua_GetUITextureKitInfo(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // Returns nothing.
 // ref: FUN_14022c3f0
 int Lua_HandleAtlasMemberCommand(lua_State* L) {
     (void)L;
+    return 0;
+}
+
+// ref: FUN_140cecac0
+int Lua_IsCharacterInTutorialMap(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140ced1e0
+int Lua_IsCharacterVASLocked(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
     return 0;
 }
 
@@ -618,6 +1325,13 @@ int Lua_IsCharacterVASRestricted(lua_State* L) {
 
 // ref: FUN_141d936d0
 int Lua_IsUsingFixedTimeStep(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140cee770
+int Lua_IsVASEnabledOnRealm(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -644,8 +1358,29 @@ int Lua_SaveCharacterOrder(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_14168de20
+int Lua_SetCharSelectBackground(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_1419f56b0
+int Lua_SetDefaultVideoOptions(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_141d01f30
 int Lua_SetPortraitToTexture(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_1416a65f0
+int Lua_SetWorldFrameStrata(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -660,6 +1395,13 @@ int Lua_SetupFullscreenScale(lua_State* L) {
 
 // ref: FUN_1424d5250
 int Lua_StoreSecureReference(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_1416a64b0
+int Lua_VisitPromotionURL(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;

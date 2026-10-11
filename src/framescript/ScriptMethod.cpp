@@ -23,8 +23,8 @@ namespace ScriptMethod {
 
 namespace {
 
-// The registry reference of the trampoline closure (0x142cf70b4).
-int32_t s_trampolineRef = LUA_NOREF;
+// The registry reference of the trampoline closure.
+int32_t s_trampolineRef = LUA_NOREF;  // 0x142cf70b4
 
 const double FLOAT_MAX = 3.4028234663852886e+38;
 

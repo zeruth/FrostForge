@@ -33,7 +33,9 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+import callargs
 import fidelity as F
+import lift
 from corpus import load_corpus, strip_retcheck
 from wowbin import Binary
 
@@ -61,6 +63,8 @@ HARD = [
     ("thread-local storage", re.compile(r"ThreadLocalStoragePointer|_tls_index")),
     ("bad data or a trap", re.compile(r"halt_baddata|\bswi\(|software_interrupt|halt_unimplemented")),
     ("struct member access", re.compile(r"->")),
+    # the control-flow-guard check alone: the indirect call it guarded is gone from the body
+    ("an indirect call the decompiler lost", re.compile(r"^\s*_guard_check_icall\(\);", re.M)),
 ]
 CRT = {"memcpy", "memmove", "memset", "memcmp", "strlen", "strcmp", "strncmp", "strchr", "strrchr", "strstr",
        "strcpy", "strncpy", "strcat", "abs", "labs", "fabs", "sqrt", "sqrtf", "floor", "floorf", "ceil", "ceilf",
@@ -242,7 +246,7 @@ def global_expr(ghidra: str, size: int, addr: int) -> str:
     return f"REFG({c_type_of(ghidra, size)}, 0x{addr:x})"
 
 
-PORT_GLOBAL = re.compile(r"^([A-Za-z_][\w:<>,\s\*&]*?[\s\*&])(\w+)(\[[^\]]*\])?(?:\s*(?:=|\{)[^;]*)?;\s*"
+PORT_GLOBAL = re.compile(r"^(?!(?:struct|class|union|enum|typedef|using)\b)([A-Za-z_][\w:<>,\t \*&]*?[\t \*&])(\w+)(\[[^\]\n]*\])?(?:[\t ]*(?:=|\{)[^;\n]*)?;[\t ]*"
                          r"//\s*(?:ref:\s*)?(?:DAT_|0x)(14[0-9a-f]{7})\b", re.M)
 SCALAR = re.compile(r"^(?:static\s+|extern\s+|thread_local\s+)*(?:const\s+)?(?:u?int\d+_t|bool|float|double|char|"
                     r"int|unsigned|DWORD|size_t|uintptr_t|HANDLE|HWND|\w+\s*\*+)$")
@@ -291,6 +295,37 @@ def stack_frame(body: str) -> str:
         else:
             body = re.sub(rf"\b{n}\b", f"(*({ctype(m)} *)(gen_frame + 0x{at:x}))", body)
     return body
+
+
+STRLEN_LOOP = re.compile(r"(\w+) = -1;\s*do \{\s*\1 = \1 \+ 1;\s*\} while \(\*\(char \*\)\((\w+) \+ \1\) != '\\0'\);")
+
+
+def split_args(args: str) -> list[str]:
+    """A call's arguments, split at the top-level commas."""
+    out, depth, cur = [], 0, ""
+    for ch in args:
+        if ch in "([":
+            depth += 1
+        elif ch in ")]":
+            depth -= 1
+        if ch == "," and depth == 0:
+            out.append(cur.strip())
+            cur = ""
+        else:
+            cur += ch
+    if cur.strip():
+        out.append(cur.strip())
+    return out
+
+
+def call_sites(text: str):
+    """Each `FUN_x(args)` call: (match start, end of the argument list, address, arguments)."""
+    for m in re.finditer(r"\bFUN_([0-9a-f]{9})\(", text):
+        depth, i = 1, m.end()
+        while i < len(text) and depth:
+            depth += {"(": 1, ")": -1}.get(text[i], 0)
+            i += 1
+        yield m.start(), i - 1, int(m.group(1), 16), split_args(text[m.end():i - 1])
 
 
 def upper_half_only(text: str) -> list[str]:
@@ -526,6 +561,10 @@ class Translator:
             self.by_name[e["name"]].append(a)
         self.refdata = load_refdata()
         self.ref = Binary()
+        self._lifted: dict[int, str | None] = {}
+        self._arity: dict[int, int | None] = {}
+        self.callargs = callargs.CallArgs(self.ref)
+        self.patches = json.loads((ROOT / "tools/translate_patches.json").read_text(encoding="utf-8"))
         fid = json.loads(F.OUT_JSON.read_text())
         # hand ports only: the translator's own output is measured too, and is not a port
         self.tied = {int(r["addr"], 16): r for r in fid
@@ -584,18 +623,116 @@ class Translator:
         ret, args, this = sig
         if ret == "complex" or any(c == "complex" for c in args):
             return None
+        # a port that takes fewer arguments than the reference (and is not variadic, `...`
+        # mangling as a trailing ZZ) is not that function with that signature: the reference's
+        # callers would hand it their arguments in the wrong places (ProtectedCall drops nargs)
+        ref = self.signature(a)
+        if ref is not None and len(args) + (1 if this else 0) < len(ref[2]) and mangled.startswith("?") \
+                and not mangled.endswith("ZZ"):
+            return None
         return va, mangled, sig
 
     def body(self, a: int) -> str | None:
         e = self.cor.get(a)
         if not e or "c" not in e:
-            return None
-        return wide_multiply(strip_retcheck(e["c"].replace("\r\n", "\n"))[0])
+            return self.lifted(a)
+        text = e["c"].replace("\r\n", "\n")
+        for patch in self.patches.get(f"{a:x}", []):
+            if text.count(patch["from"]) != 1:
+                raise SystemExit(f"tools/translate_patches.json: FUN_{a:x}'s patch no longer matches once")
+            text = text.replace(patch["from"], patch["to"])
+        return self.recover_arguments(a, self.restore_lengths(wide_multiply(strip_retcheck(text)[0])))
+
+    def arity(self, b: int) -> int | None:
+        """How many arguments `b` reads: the highest `param_N` its decompiled body uses (capped
+        by the port's own count when it is adapted), or None when that is not known."""
+        if b in self._arity:
+            return self._arity[b]
+        need = None
+        e = self.cor.get(b)
+        if e and "c" in e:
+            head, _, rest = e["c"].partition("{")
+            if "..." not in head:
+                used = [int(n) for n in re.findall(r"\bparam_(\d+)\b", rest)]
+                need = max(used, default=0)
+        elif self.lifted(b) is not None:
+            used = [int(n) for n in re.findall(r"\ba(\d)\b", self.lifted(b).partition("{")[2])]
+            need = max(used, default=-1) + 1
+        if need is not None and b in self.tied:
+            pt = self.port_target(b)
+            if pt is not None:
+                _, mangled, (ret, args, this) = pt
+                if mangled.endswith("ZZ"):
+                    need = None
+                else:
+                    need = min(need, len(args) + (1 if this else 0))
+        self._arity[b] = need
+        return need
+
+    def restore_lengths(self, text: str) -> str:
+        """A length the decompiler computed and then dropped: a call one argument short whose
+        last argument an inlined strlen just measured gets that length back."""
+        out, last = [], 0
+        for start, end, b, args in list(call_sites(text)):
+            need = self.arity(b)
+            if need is None or len(args) != need - 1 or not args:
+                continue
+            loops = [m for m in STRLEN_LOOP.finditer(text, 0, start) if m.group(2) == args[-1]]
+            if loops:
+                out.append((end, f",{loops[-1].group(1)}"))
+        for pos, extra in reversed(out):
+            text = text[:pos] + extra + text[pos:]
+        return text
+
+    def recover_arguments(self, a: int, text: str) -> str:
+        """Constant arguments the decompiler dropped from a call, read back from the
+        instructions (tools/callargs.py) when every call to that callee agrees on them."""
+        e = self.cor.get(a)
+        if not e:
+            return text
+        fixes = []
+        for start, end, b, args in list(call_sites(text)):
+            need = self.arity(b)
+            if need is None or len(args) >= need:
+                continue
+            sig = self.signature(b)
+            positions = list(range(len(args), need))
+            if sig is not None and any(p < len(sig[2]) and re.match(r"(float|double)\b", sig[2][p])
+                                       for p in positions):
+                continue
+            values = self.callargs.recover(a, e["size"], b, positions)
+            if values is not None:
+                spelled = [v if isinstance(v, str) else f"{v:#x}" for v in values]
+                fixes.append((end, ("," if args else "") + ",".join(spelled)))
+        for pos, extra in reversed(fixes):
+            text = text[:pos] + extra + text[pos:]
+        return text
+
+    def lost_arguments(self, text: str) -> str | None:
+        for _, _, b, args in call_sites(text):
+            need = self.arity(b)
+            if need is not None and len(args) < need:
+                return f"the decompiler lost a call's arguments (FUN_{b:x} reads {need}, the call passes {len(args)})"
+        return None
+
+    def lifted(self, a: int) -> str | None:
+        """Code with no decompiled function, lifted from its instructions (tools/lift.py): only
+        an entry point of its own, not a label inside some function."""
+        if a not in self._lifted:
+            root = self.ref.func_containing(a)
+            inside = root is not None and root != a and root in self.cor
+            self._lifted[a] = None if inside or not self.ref.is_code(a) else lift.lift(self.ref, a)
+        return self._lifted[a]
 
     def callees(self, text: str) -> set[int]:
         out = set()
         for m in FUNREF.finditer(text):
             out.add(int(m.group(1), 16))
+        # code whose address is taken (callbacks, vtable thunks) runs when it is called back
+        for m in re.finditer(r"&LAB_(1[0-9a-f]{8})\b", text):
+            a = int(m.group(1), 16)
+            if a in self.cor or self.lifted(a) is not None:
+                out.add(a)
         for name in CALL.findall(text):
             if "::" in name and not name.startswith("Import::"):
                 cands = self.by_name.get(name, [])
@@ -605,7 +742,10 @@ class Translator:
 
     def signature(self, a: int) -> tuple[str, str, list[str]] | None:
         """(return type, name, [parameter declarations]) from the decompiled header."""
-        text = self.body(a)
+        # the header as decompiled (the body's corrections never touch it, and reading the
+        # corrected body here would recurse through the callers' arities)
+        e = self.cor.get(a)
+        text = e["c"].replace("\r\n", "\n") if e and "c" in e else self.lifted(a)
         if text is None:
             return None
         head = re.sub(r"(?s)/\*.*?\*/", "", text.split("{", 1)[0]).strip()
@@ -711,6 +851,9 @@ class Translator:
         sig = self.signature(a)
         if sig is None:
             return "no readable signature"
+        lost = self.lost_arguments(text)
+        if lost:
+            return lost
         # the reference's own call list (tools/fidelity.py's cache, once the function has been
         # measured): a body that shows under half of it is one the decompiler lost
         ref = self.refcache.get(f"{a:x}")
@@ -1029,6 +1172,8 @@ def stub_handlers() -> dict[int, str]:
 
 
 def build_errors() -> list[tuple[str, int, str]]:
+    # the generated files are globbed: reconfigure, or a changed count builds the old list
+    subprocess.run(["cmake", str(ROOT / "build/cmake")], capture_output=True)
     out = subprocess.run(["cmake", "--build", str(ROOT / "build/cmake"), "--config", "Release", "--target", "gen"],
                          capture_output=True, text=True, errors="replace").stdout
     errors = []
@@ -1036,6 +1181,13 @@ def build_errors() -> list[tuple[str, int, str]]:
         m = re.search(r"([\w.]+\.c)\((\d+),?\d*\): (?:fatal )?error (C\d+): (.*)$", line)
         if m:
             errors.append((m.group(1), int(m.group(2)), f"{m.group(3)} {m.group(4).strip()[:120]}"))
+    if errors:
+        return errors
+    # it compiles: then link, and name the translated functions whose symbols do not resolve
+    out = subprocess.run(["cmake", "--build", str(ROOT / "build/cmake"), "--config", "Release", "--target", "FrostLite"],
+                         capture_output=True, text=True, errors="replace").stdout
+    for m in re.finditer(r"unresolved external symbol (\S+) referenced in function FUN_([0-9a-f]{9})", out):
+        errors.append(("LINK", int(m.group(2), 16), f"LNK2019 unresolved {m.group(1)}"))
     return errors
 
 
@@ -1139,6 +1291,11 @@ def main() -> None:
             by_file[info["file"]].append((info["lines"][0], info["lines"][1], a))
         hit = 0
         for file, line, message in errors:
+            if file == "LINK":
+                if f"{line:x}" not in demoted:
+                    demoted[f"{line:x}"] = message
+                    hit += 1
+                continue
             for start, end, a in by_file.get(file, []):
                 if start <= line <= end and a not in demoted:
                     demoted[a] = message

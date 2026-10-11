@@ -16,6 +16,9 @@
 #include "sound/SE3Internal.hpp"
 #include "storm/Memory.hpp"
 #include "util/Unimplemented.hpp"
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 float g_se3ListenerPosition[3];         // DAT_1430a9698
 
@@ -536,7 +539,11 @@ void SE3UpdateRange() {
 }
 
 // The combinable positions' kits (world sounds sharing one instance).
-// ref: FUN_1412cf720
+extern "C" unsigned long long FUN_1412cf720();
+// translated: FUN_1412cf720
 void SE3UpdateCombinedKits() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1412cf720();
+    } __except (GenFault(0x1412cf720ull, GetExceptionInformation())) {
+    }
 }

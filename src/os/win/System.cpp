@@ -4,6 +4,9 @@
 #include <cstring>
 #include <windows.h>
 #include <malloc.h>
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 namespace {
 
@@ -64,9 +67,13 @@ bool OsIsFirstInstance() {
 }
 
 // Detects the CPU's features and writes them to Logs\cpu.log.
-// ref: FUN_141237360
+extern "C" unsigned long long FUN_141237360();
+// translated: FUN_141237360
 void OsLogCpuInfo() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141237360();
+    } __except (GenFault(0x141237360ull, GetExceptionInformation())) {
+    }
 }
 
 // Installs the unhandled-exception filter (0x1402113a0) and clears the process's

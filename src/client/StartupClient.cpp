@@ -39,15 +39,21 @@
 #include <malloc.h>
 #include <cstdarg>
 #include <cstdlib>
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 // Stage 5 of CommonMain (FUN_14022a260) and what it calls. The engine subsystems it starts after
 // the window and device are tagged stubs, called in the reference order, until each is ported.
 
 // the async preload queue
-// ref: FUN_141283a80
+extern "C" unsigned long long FUN_141283a80(unsigned long long);
+// translated: FUN_141283a80
 void PreloadQueueFile(uint32_t fileDataId) {
-    (void)fileDataId;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141283a80((unsigned long long)fileDataId);
+    } __except (GenFault(0x141283a80ull, GetExceptionInformation())) {
+    }
 }
 
 // starts the preload; true when it is under way
@@ -60,15 +66,23 @@ bool PreloadStart(void (*callback)(void*), void* param) {
 }
 
 // DB2 hotfix callbacks
-// ref: FUN_1405705d0
+extern "C" unsigned long long FUN_1405705d0();
+// translated: FUN_1405705d0
 void Sub1405705D0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1405705d0();
+    } __except (GenFault(0x1405705d0ull, GetExceptionInformation())) {
+    }
 }
 
 // the hwDetect defaults (DAT_142e303c0 hook)
-// ref: FUN_14022a8e0
+extern "C" unsigned long long FUN_14022a8e0();
+// translated: FUN_14022a8e0
 void HardwareDetectDefaults() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14022a8e0();
+    } __except (GenFault(0x14022a8e0ull, GetExceptionInformation())) {
+    }
 }
 
 // registers a product tag
@@ -82,9 +96,13 @@ void Sub14068C520() {
     GxuFontRegisterCallbacks();
 }
 
-// ref: FUN_1412a11c0
+extern "C" unsigned long long FUN_1412a11c0();
+// translated: FUN_1412a11c0
 void Sub1412A11C0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1412a11c0();
+    } __except (GenFault(0x1412a11c0ull, GetExceptionInformation())) {
+    }
 }
 
 // client objects made with the device
@@ -100,22 +118,32 @@ void OnDeviceDestroyedClient(void* param) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_1402f9e30
+extern "C" unsigned long long FUN_1402f9e30();
+// translated: FUN_1402f9e30
 void Sub1402F9E30() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1402f9e30();
+    } __except (GenFault(0x1402f9e30ull, GetExceptionInformation())) {
+    }
 }
 
 
-// ref: FUN_1412834a0
+extern "C" unsigned long long FUN_1412834a0(unsigned long long);
+// translated: FUN_1412834a0
 void Sub1412834A0(uint32_t a1) {
-    (void)a1;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1412834a0((unsigned long long)a1);
+    } __except (GenFault(0x1412834a0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141297eb0
+extern "C" unsigned long long FUN_141297eb0(unsigned long long);
+// translated: FUN_141297eb0
 void Sub141297EB0(uint32_t a1) {
-    (void)a1;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141297eb0((unsigned long long)a1);
+    } __except (GenFault(0x141297eb0ull, GetExceptionInformation())) {
+    }
 }
 
 // told the window size
@@ -123,19 +151,31 @@ void Sub14068B4C0(const uint64_t* size) {
     GxuFontInitialize(reinterpret_cast<const uint32_t*>(size));
 }
 
-// ref: FUN_14126ea20
+extern "C" unsigned long long FUN_14126ea20();
+// translated: FUN_14126ea20
 void Sub14126EA20() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14126ea20();
+    } __except (GenFault(0x14126ea20ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_140326a30
+extern "C" unsigned long long FUN_140326a30();
+// translated: FUN_140326a30
 void Sub140326A30() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_140326a30();
+    } __except (GenFault(0x140326a30ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141930f00
+extern "C" unsigned long long FUN_141930f00();
+// translated: FUN_141930f00
 void Sub141930F00() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141930f00();
+    } __except (GenFault(0x141930f00ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_140229b60
@@ -148,9 +188,13 @@ bool OnM2ForceAdditiveParticleSortChanged(CVar* cvar, const char* oldValue, cons
     return true;
 }
 
-// ref: FUN_1412a1d50
+extern "C" unsigned long long FUN_1412a1d50();
+// translated: FUN_1412a1d50
 void Sub1412A1D50() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1412a1d50();
+    } __except (GenFault(0x1412a1d50ull, GetExceptionInformation())) {
+    }
 }
 
 // The world's startup: its CVars, then its subsystems.
@@ -184,27 +228,43 @@ void Sub14022AD90(uint32_t a1) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_140328760
+extern "C" unsigned long long FUN_140328760();
+// translated: FUN_140328760
 bool Sub140328760() {
-    FROST_UNIMPLEMENTED();
-    return false;
+    __try {
+        return (FUN_140328760() & 0xff) != 0;
+    } __except (GenFault(0x140328760ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 
-// ref: FUN_140329220
+extern "C" unsigned long long FUN_140329220();
+// translated: FUN_140329220
 bool Sub140329220() {
-    FROST_UNIMPLEMENTED();
-    return false;
+    __try {
+        return (FUN_140329220() & 0xff) != 0;
+    } __except (GenFault(0x140329220ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 
 
-// ref: FUN_14125f550
+extern "C" unsigned long long FUN_14125f550();
+// translated: FUN_14125f550
 void Sub14125F550() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14125f550();
+    } __except (GenFault(0x14125f550ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_14134ec50
+extern "C" unsigned long long FUN_14134ec50();
+// translated: FUN_14134ec50
 void Sub14134EC50() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14134ec50();
+    } __except (GenFault(0x14134ec50ull, GetExceptionInformation())) {
+    }
 }
 
 // ---- Sub14023DBD0's callees ----------------------------------------------------------------
@@ -214,31 +274,51 @@ static CWorldScene* s_worldScene;   // DAT_142ddcf58: the world's scene
 static uint32_t* s_worldParams;      // DAT_142ddcf60: its view's flags
 
 // Four render-state defaults (0x142cfbe80..).
-// ref: FUN_141283c90
+extern "C" unsigned long long FUN_141283c90();
+// translated: FUN_141283c90
 void Sub141283C90() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141283c90();
+    } __except (GenFault(0x141283c90ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_140238bc0
+extern "C" unsigned long long FUN_140238bc0();
+// translated: FUN_140238bc0
 void Sub140238BC0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_140238bc0();
+    } __except (GenFault(0x140238bc0ull, GetExceptionInformation())) {
+    }
 }
 
 // The reloadUI and TakeScreenshot console commands.
-// ref: FUN_14024d040
+extern "C" unsigned long long FUN_14024d040();
+// translated: FUN_14024d040
 void Sub14024D040() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14024d040();
+    } __except (GenFault(0x14024d040ull, GetExceptionInformation())) {
+    }
 }
 
 // Opens Logs/Client.log ("Client Initialize.").
-// ref: FUN_1402165b0
+extern "C" unsigned long long FUN_1402165b0();
+// translated: FUN_1402165b0
 void Sub1402165B0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1402165b0();
+    } __except (GenFault(0x1402165b0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_14022e810
+extern "C" unsigned long long FUN_14022e810();
+// translated: FUN_14022e810
 void Sub14022E810() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14022e810();
+    } __except (GenFault(0x14022e810ull, GetExceptionInformation())) {
+    }
 }
 
 // Binds the client's script API into a new Lua state (and releases it with null).
@@ -261,31 +341,51 @@ void Sub1412E59C0(uint32_t value) {
     SI3Init(value != 0);
 }
 
-// ref: FUN_14192c8c0
+extern "C" unsigned long long FUN_14192c8c0();
+// translated: FUN_14192c8c0
 void Sub14192C8C0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14192c8c0();
+    } __except (GenFault(0x14192c8c0ull, GetExceptionInformation())) {
+    }
 }
 
 // The ImpactModelCollision* CVars.
-// ref: FUN_141897e90
+extern "C" unsigned long long FUN_141897e90();
+// translated: FUN_141897e90
 void Sub141897E90() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141897e90();
+    } __except (GenFault(0x141897e90ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141658730
+extern "C" unsigned long long FUN_141658730();
+// translated: FUN_141658730
 void Sub141658730() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141658730();
+    } __except (GenFault(0x141658730ull, GetExceptionInformation())) {
+    }
 }
 
 // The window's activate and size callbacks (FUN_141567f30, FUN_141672070).
-// ref: FUN_1414f8960
+extern "C" unsigned long long FUN_1414f8960();
+// translated: FUN_1414f8960
 void Sub1414F8960() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1414f8960();
+    } __except (GenFault(0x1414f8960ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1414f8950
+extern "C" unsigned long long FUN_1414f8950();
+// translated: FUN_1414f8950
 void Sub1414F8950() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1414f8950();
+    } __except (GenFault(0x1414f8950ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_14156d0e0
@@ -294,25 +394,41 @@ void Sub14156D0E0(void* services) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_140330ba0
+extern "C" unsigned long long FUN_140330ba0();
+// translated: FUN_140330ba0
 void Sub140330BA0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_140330ba0();
+    } __except (GenFault(0x140330ba0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_14033fa30
+extern "C" unsigned long long FUN_14033fa30();
+// translated: FUN_14033fa30
 void Sub14033FA30() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14033fa30();
+    } __except (GenFault(0x14033fa30ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_14165a560
+extern "C" unsigned long long FUN_14165a560();
+// translated: FUN_14165a560
 void Sub14165A560() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14165a560();
+    } __except (GenFault(0x14165a560ull, GetExceptionInformation())) {
+    }
 }
 
 // The cursor freelook CVars.
-// ref: FUN_1415242c0
+extern "C" unsigned long long FUN_1415242c0();
+// translated: FUN_1415242c0
 void Sub1415242C0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1415242c0();
+    } __except (GenFault(0x1415242c0ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_14024a690
@@ -320,24 +436,40 @@ void Sub14024A690() {
     s_flag142de2990 = 1;
 }
 
-// ref: FUN_141caf660
+extern "C" unsigned long long FUN_141caf660();
+// translated: FUN_141caf660
 void Sub141CAF660() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141caf660();
+    } __except (GenFault(0x141caf660ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141745f00
+extern "C" unsigned long long FUN_141745f00();
+// translated: FUN_141745f00
 void Sub141745F00() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141745f00();
+    } __except (GenFault(0x141745f00ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141719bf0
+extern "C" unsigned long long FUN_141719bf0();
+// translated: FUN_141719bf0
 void Sub141719BF0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141719bf0();
+    } __except (GenFault(0x141719bf0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141974d80
+extern "C" unsigned long long FUN_141974d80();
+// translated: FUN_141974d80
 void Sub141974D80() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141974d80();
+    } __except (GenFault(0x141974d80ull, GetExceptionInformation())) {
+    }
 }
 
 // The startup worker thread (blz::thread over FUN_14023deb0, with an auto-reset event).
@@ -386,9 +518,13 @@ void Sub14023DBD0() {
     StartWorkerThread();
 }
 
-// ref: FUN_1412a99a0
+extern "C" unsigned long long FUN_1412a99a0();
+// translated: FUN_1412a99a0
 void Sub1412A99A0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1412a99a0();
+    } __except (GenFault(0x1412a99a0ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_1402d0b60
@@ -397,16 +533,24 @@ void Sub1402D0B60(void (*callback)()) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_1402d0f60
+extern "C" unsigned long long FUN_1402d0f60();
+// translated: FUN_1402d0f60
 void Sub1402D0F60() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1402d0f60();
+    } __except (GenFault(0x1402d0f60ull, GetExceptionInformation())) {
+    }
 }
 
 // whether the console is enabled
-// ref: FUN_140326070
+extern "C" unsigned long long FUN_140326070();
+// translated: FUN_140326070
 bool Sub140326070() {
-    FROST_UNIMPLEMENTED();
-    return false;
+    __try {
+        return (FUN_140326070() & 0xff) != 0;
+    } __except (GenFault(0x140326070ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 
 // ref: FUN_14192fa70
@@ -446,29 +590,49 @@ int32_t CommandSetGraphicsQualityRaid(const char* command, const char* arguments
     return 1;
 }
 
-// ref: FUN_14065fd40
+extern "C" unsigned long long FUN_14065fd40();
+// translated: FUN_14065fd40
 void Sub14065FD40() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14065fd40();
+    } __except (GenFault(0x14065fd40ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_14135a290
+extern "C" unsigned long long FUN_14135a290();
+// translated: FUN_14135a290
 void Sub14135A290() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14135a290();
+    } __except (GenFault(0x14135a290ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_140222a60
+extern "C" unsigned long long FUN_140222a60();
+// translated: FUN_140222a60
 void Sub140222A60() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_140222a60();
+    } __except (GenFault(0x140222a60ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_14021f090
+extern "C" unsigned long long FUN_14021f090();
+// translated: FUN_14021f090
 void Sub14021F090() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14021f090();
+    } __except (GenFault(0x14021f090ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1415642a0
+extern "C" unsigned long long FUN_1415642a0();
+// translated: FUN_1415642a0
 void Sub1415642A0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1415642a0();
+    } __except (GenFault(0x1415642a0ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_14230b040
@@ -492,15 +656,22 @@ void Sub1412E1FB0() {
     SI3Update();
 }
 
-// ref: FUN_1402f4d00
+extern "C" unsigned long long FUN_1402f4d00(unsigned long long);
+// translated: FUN_1402f4d00
 void Sub1402F4D00(uint64_t a1) {
-    (void)a1;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1402f4d00((unsigned long long)a1);
+    } __except (GenFault(0x1402f4d00ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_14021c040
+extern "C" unsigned long long FUN_14021c040();
+// translated: FUN_14021c040
 void Sub14021C040() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14021c040();
+    } __except (GenFault(0x14021c040ull, GetExceptionInformation())) {
+    }
 }
 
 // Gx
@@ -510,15 +681,22 @@ void Sub14228C670() {
 }
 
 // the window
-// ref: FUN_1414f8e20
+extern "C" unsigned long long FUN_1414f8e20();
+// translated: FUN_1414f8e20
 void Sub1414F8E20() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1414f8e20();
+    } __except (GenFault(0x1414f8e20ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141350fd0
+extern "C" unsigned long long FUN_141350fd0(unsigned long long);
+// translated: FUN_141350fd0
 void Sub141350FD0(bool a1) {
-    (void)a1;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141350fd0((unsigned long long)a1);
+    } __except (GenFault(0x141350fd0ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_14192fcb0
@@ -547,39 +725,63 @@ void Sub1413528E0(bool a1) {
 }
 
 // glue
-// ref: FUN_1412ee600
+extern "C" unsigned long long FUN_1412ee600();
+// translated: FUN_1412ee600
 void Sub1412EE600() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1412ee600();
+    } __except (GenFault(0x1412ee600ull, GetExceptionInformation())) {
+    }
 }
 
 // glue
-// ref: FUN_1412ea4a0
+extern "C" unsigned long long FUN_1412ea4a0();
+// translated: FUN_1412ea4a0
 void Sub1412EA4A0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1412ea4a0();
+    } __except (GenFault(0x1412ea4a0ull, GetExceptionInformation())) {
+    }
 }
 
 // glue
-// ref: FUN_1412e8790
+extern "C" unsigned long long FUN_1412e8790();
+// translated: FUN_1412e8790
 void Sub1412E8790() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1412e8790();
+    } __except (GenFault(0x1412e8790ull, GetExceptionInformation())) {
+    }
 }
 
 // glue
-// ref: FUN_14167c520
+extern "C" unsigned long long FUN_14167c520();
+// translated: FUN_14167c520
 void Sub14167C520() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14167c520();
+    } __except (GenFault(0x14167c520ull, GetExceptionInformation())) {
+    }
 }
 
 // glue
-// ref: FUN_141687ed0
+extern "C" unsigned long long FUN_141687ed0();
+// translated: FUN_141687ed0
 void Sub141687ED0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141687ed0();
+    } __except (GenFault(0x141687ed0ull, GetExceptionInformation())) {
+    }
 }
 
 // glue
-// ref: FUN_141691b00
+extern "C" unsigned long long FUN_141691b00();
+// translated: FUN_141691b00
 void Sub141691B00() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141691b00();
+    } __except (GenFault(0x141691b00ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_141525060
@@ -715,10 +917,13 @@ void UiInputGamepadStick(void* input, const void* event) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_14228ac80
+extern "C" unsigned long long FUN_14228ac80(unsigned long long);
+// translated: FUN_14228ac80
 void GxSetMouseCursorActive(uint32_t active) {
-    (void)active;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14228ac80((unsigned long long)active);
+    } __except (GenFault(0x14228ac80ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_1405eff80
@@ -1144,17 +1349,23 @@ bool Sub14026BEA0() {
     return true;
 }
 
-// ref: FUN_1413544d0
+extern "C" unsigned long long FUN_1413544d0();
+// translated: FUN_1413544d0
 void Sub1413544D0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413544d0();
+    } __except (GenFault(0x1413544d0ull, GetExceptionInformation())) {
+    }
 }
 
 // The UI's frame: its time step, then FUN_1417d8ab0, FUN_1417ce430 and FUN_141b1b1b0.
-// ref: FUN_14167ba90
+extern "C" unsigned long long FUN_14167ba90(unsigned long long, unsigned long long);
+// translated: FUN_14167ba90
 void Sub14167BA90(uint64_t a1, uint64_t a2) {
-    (void)a1;
-    (void)a2;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14167ba90((unsigned long long)a1, (unsigned long long)a2);
+    } __except (GenFault(0x14167ba90ull, GetExceptionInformation())) {
+    }
 }
 
 // The UI root's render (slot 0xf8 of DAT_142e979d8).
@@ -1162,20 +1373,31 @@ void UiRender(void* ui) {
     static_cast<CSimpleTop*>(ui)->Render();
 }
 
-// ref: FUN_14022ea60
+extern "C" unsigned long long FUN_14022ea60();
+// translated: FUN_14022ea60
 void Sub14022EA60() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14022ea60();
+    } __except (GenFault(0x14022ea60ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1405f27e0
+extern "C" unsigned long long FUN_1405f27e0(unsigned long long);
+// translated: FUN_1405f27e0
 void Sub1405F27E0(bool a1) {
-    (void)a1;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1405f27e0((unsigned long long)a1);
+    } __except (GenFault(0x1405f27e0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_140238d50
+extern "C" unsigned long long FUN_140238d50();
+// translated: FUN_140238d50
 void Sub140238D50() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_140238d50();
+    } __except (GenFault(0x140238d50ull, GetExceptionInformation())) {
+    }
 }
 
 // The loading screen's draw.
@@ -1213,9 +1435,13 @@ void Sub140239EC0(FRAMEBUFFER* frame) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_1412c51b0
+extern "C" unsigned long long FUN_1412c51b0();
+// translated: FUN_1412c51b0
 void Sub1412C51B0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1412c51b0();
+    } __except (GenFault(0x1412c51b0ull, GetExceptionInformation())) {
+    }
 }
 
 void Sub14068BC30() {
@@ -1235,4 +1461,6 @@ void Sub14023D170(GXFRAMESTATS* stats) {
 
 // ---- GENERATED by tools/translate.py: the port globals translated code reaches ----
 extern "C" void* const gen_p_142de194c = (void*)&s_compositorEnabled;
+extern "C" void* const gen_p_142e301b4 = (void*)&s_consoleEnabledFromCommandLine;
+extern "C" void* const gen_p_142e8e0e9 = (void*)&s_hotfixesClosed;
 // ---- end of generated globals ----
