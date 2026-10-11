@@ -226,10 +226,14 @@ def event_signal_info(b: Binary, dispatcher: int) -> dict:
     code = corpus_code(inner) if inner else ""
     name = re.search(r'= "([A-Za-z0-9_]+)";', code)
     nargs = re.search(r"FUN_140647940\(\w+,(0x[0-9a-fA-F]+|\d+),", code)
+    # the event's id, as the fire function hands it to the handler's profiling scope
+    hashed = re.search(r"FUN_14063e980\(\w+,(-?0x[0-9a-fA-F]+|-?\d+),", code)
+    event_id = int(hashed.group(1), 0) & 0xFFFFFFFFFFFFFFFF if hashed else None
     return {
         "inner": inner,
         "name": name.group(1) if name else None,
         "nargs": int(nargs.group(1), 0) if nargs else None,
+        "id": event_id,
     }
 
 
@@ -475,7 +479,7 @@ def emit() -> None:
                     cname = f"EventSignal_{sig['name']}"
                     if cname in signals and signals[cname][0] != dispatcher:
                         cname = f"{cname}_{dispatcher:x}"
-                    signals[cname] = (dispatcher, sig["inner"], sig["name"])
+                    signals[cname] = (dispatcher, sig["inner"], sig["name"], sig["id"])
                     setters[setter] = slot
                     body.append(f"    EventCallbacks_Set{slot:X}({cname});")
         registry.append((addr, name, "lua_State* L", body, info["other"]))
@@ -567,6 +571,7 @@ def emit() -> None:
                   "#include <cstdint>",
                   "",
                   "#include \"framescript/EventCallbacks.hpp\"",
+                  "#include \"framescript/FrameScriptEvents.hpp\"",
                   ""]
     for setter, slot in sorted(setters.items(), key=lambda kv: kv[1]):
         sig_header.append(f"void EventCallbacks_Set{slot:X}(EVENTSIGNAL signal);  // FUN_{setter:x}")
@@ -576,13 +581,20 @@ def emit() -> None:
                   "",
                   "#include \"framescript/FrameScriptEvents.hpp\"",
                   ""]
-    for cname, (dispatcher, inner, event) in sorted(signals.items()):
+    for cname, (dispatcher, inner, event, event_id) in sorted(signals.items()):
+        fire = "EventFire_" + cname[len("EventSignal_"):]
         sig_header.append(f"void {cname}(uint64_t id, void* args);")
-        sig_source += [f"// ref: FUN_{dispatcher:x}",
-                       f"// ref: FUN_{inner:x}",
-                       f"void {cname}(uint64_t id, void* args) {{",
+        sig_header.append(f"void {fire}(FrameScriptEvents::EventListenerList* list, void* args);")
+        sig_source += [f"// ref: FUN_{inner:x}",
+                       f"void {fire}(FrameScriptEvents::EventListenerList* list, void* args) {{",
                        "    (void)args;",
-                       f"    FrameScriptEvents::Signal(id, \"{event}\");",
+                       f"    FrameScriptEvents::FireList(list, \"{event}\", {len(event)}, 0x{event_id:x}ull,",
+                       "        [](lua_State*) { return 0; });",
+                       "}",
+                       "",
+                       f"// ref: FUN_{dispatcher:x}",
+                       f"void {cname}(uint64_t id, void* args) {{",
+                       f"    FrameScriptEvents::Dispatch(id, args, {fire});",
                        "}",
                        ""]
     for setter, slot in sorted(setters.items(), key=lambda kv: kv[1]):

@@ -96,6 +96,27 @@ int32_t FrameScript_CompileFunction(const char* name, const char* wrapper, const
 void FrameScript_ReleaseFunction(int32_t ref);
 // The registry reference of FrameScript's own error handler.
 int32_t FrameScript_GetErrorHandlerRef();
+
+// Script profiling of events (only while profiling, s_profileStack): an event's scope, which
+// takes a frame of the profiler's ring and becomes the innermost (FUN_14063ea00, left by
+// FUN_14063ebd0), and a handler's scope inside it, timing one object's OnEvent
+// (FUN_14063e980, left by FUN_14063eae0).
+struct PROFILEEVENTSCOPE {
+    uint64_t m_id;                      // 0x00
+    PROFILEEVENTSCOPE* m_previous;      // 0x08
+    uint32_t m_frame;                   // 0x10
+    uint32_t m_pad14;
+};
+struct PROFILEHANDLERSCOPE {
+    uint64_t m_start;                   // 0x00 ticks
+    uint64_t m_id;                      // 0x08
+    FrameScript_Object* m_object;       // 0x10
+    PROFILEEVENTSCOPE* m_event;         // 0x18
+};
+PROFILEEVENTSCOPE* ProfileEventEnter(PROFILEEVENTSCOPE* scope, uint64_t id);
+void ProfileEventLeave(PROFILEEVENTSCOPE* scope);
+PROFILEHANDLERSCOPE* ProfileHandlerEnter(PROFILEHANDLERSCOPE* scope, uint64_t id, FrameScript_Object* object);
+void ProfileHandlerLeave(PROFILEHANDLERSCOPE* scope);
 // The registry reference of the handler a script set with seterrorhandler, or -1.
 int32_t FrameScript_GetUserErrorHandler();
 void FrameScript_SetUserErrorHandler(int32_t ref);

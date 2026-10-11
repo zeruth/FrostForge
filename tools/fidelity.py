@@ -221,6 +221,11 @@ PORT_LIB = re.compile(r"^(std::|`|__|_[A-Z_a-z]|mem(cpy|set|move|cmp|chr)\b|str\
 # the reference inlines them down to SMemAlloc/SMemFree
 REF_KEEP = ("FUN_", "thunk_FUN", "Lua::", "Storm::", "CDataAllocator::")
 
+# deliberate divergences, each with its reason (tools/fidelity_exceptions.json)
+_EXCEPTIONS = json.loads((Path(__file__).with_name("fidelity_exceptions.json")).read_text(encoding="utf-8"))
+REF_SKIP = {int(a, 16) for a in _EXCEPTIONS["skip"]}
+REF_ALIAS = {int(a, 16): int(v["to"], 16) for a, v in _EXCEPTIONS["alias"].items()}
+
 
 def ref_is_lib(cor: dict, a: int) -> bool:
     entry = cor.get(a)
@@ -636,7 +641,7 @@ def main() -> None:
         stub_sites: list = []
         helpers: list = []
         pseq = port_sequence(pva, 0, {pva}, stub_sites, helpers)
-        rseq = [x for x in rf.calls if not ref_is_lib(cor, x)]
+        rseq = [REF_ALIAS.get(x, x) for x in rf.calls if not ref_is_lib(cor, x) and x not in REF_SKIP]
         weights = [ref_callee_weight(x) for x in rseq]
         total = sum(weights)
         # a tagged callee the reference never calls was inlined there: its own calls stand in

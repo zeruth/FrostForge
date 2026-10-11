@@ -59,20 +59,23 @@ uint8_t s_tabSlots[8][16];
 
 // Script profiling: the tick scale, and a 1000-entry call stack of 0x20 bytes each plus
 // bookkeeping (0x7d20 bytes) when profiling.
+// One frame's event time (as FUN_14063eae0 fills it): the total, the handler calls, and the
+// slowest handler's object name and time.
 struct PROFILEFRAME {
-    void* m_function;
-    int32_t m_depth;
+    double m_total;                 // 0x00 ms
+    int32_t m_calls;                // 0x08
     int32_t m_pad;
-    uint64_t m_start;
-    uint64_t m_child;
+    const char* m_slowest;          // 0x10 the slowest object's GetName()
+    double m_max;                   // 0x18 ms
 };
 struct PROFILESTACK {
-    PROFILEFRAME m_frames[1000];    // 0x0000
-    void* m_unk7d00;                // 0x7d00
-    void* m_unk7d08;                // 0x7d08
-    int32_t m_unk7d10;              // 0x7d10
+    PROFILEFRAME m_frames[1000];    // 0x0000 a ring, by event scope
+    uint32_t m_frame;               // 0x7d00 the newest scope's frame
+    uint32_t m_frameCount;          // 0x7d04 frames used, up to 1000
+    double m_totalMs;               // 0x7d08
+    int32_t m_calls;                // 0x7d10
     int32_t m_depth;                // 0x7d14
-    void* m_top;                    // 0x7d18
+    PROFILEEVENTSCOPE* m_top;       // 0x7d18 the innermost event scope
 };
 static_assert(sizeof(PROFILESTACK) == 0x7d20, "PROFILESTACK is 0x7d20 bytes");
 uint64_t s_profileTicks;            // 0x142e99f40
@@ -259,14 +262,15 @@ void ProfileInitialize(bool profiling) {
         memset(stack, 0, 32000);
         stack->m_depth = 0;
         for (auto& frame : stack->m_frames) {
-            frame.m_function = nullptr;
-            frame.m_depth = 0;
-            frame.m_start = 0;
-            frame.m_child = 0;
+            frame.m_total = 0.0;
+            frame.m_calls = 0;
+            frame.m_slowest = nullptr;
+            frame.m_max = 0.0;
         }
-        stack->m_unk7d00 = nullptr;
-        stack->m_unk7d08 = nullptr;
-        stack->m_unk7d10 = 0;
+        stack->m_frame = 0;
+        stack->m_frameCount = 0;
+        stack->m_totalMs = 0.0;
+        stack->m_calls = 0;
         stack->m_top = nullptr;
     }
     PROFILESTACK* old = s_profileStack;
@@ -329,6 +333,80 @@ void ClearEventListeners() {
 }
 
 }  // namespace
+
+// An event's profiling scope (FUN_14063ea00): when profiling, it becomes the innermost scope and
+// takes the next frame of the ring, clearing it once the ring is full.
+// ref: FUN_14063ea00
+PROFILEEVENTSCOPE* ProfileEventEnter(PROFILEEVENTSCOPE* scope, uint64_t id) {
+    scope->m_id = id;
+    PROFILESTACK* stack = s_profileStack;
+    if (stack == nullptr) {
+        scope->m_previous = nullptr;
+        return scope;
+    }
+    uint32_t count = stack->m_frameCount;
+    PROFILEEVENTSCOPE* previous = stack->m_top;
+    stack->m_top = scope;
+    if (999 < count) {
+        uint32_t frame = stack->m_frame + 1;
+        stack->m_frame = frame;
+        stack->m_frames[frame % 1000] = PROFILEFRAME{};
+        scope->m_frame = stack->m_frame;
+        scope->m_previous = previous;
+        return scope;
+    }
+    stack->m_frame = count;
+    stack->m_frameCount = count + 1;
+    scope->m_frame = stack->m_frame;
+    scope->m_previous = previous;
+    return scope;
+}
+
+// ref: FUN_14063ebd0
+void ProfileEventLeave(PROFILEEVENTSCOPE* scope) {
+    if (s_profileStack != nullptr && scope == s_profileStack->m_top) {
+        s_profileStack->m_top = scope->m_previous;
+    }
+}
+
+// A handler's profiling scope within an event (FUN_14063e980): its start, the event and the
+// object it runs for.
+// ref: FUN_14063e980
+PROFILEHANDLERSCOPE* ProfileHandlerEnter(PROFILEHANDLERSCOPE* scope, uint64_t id, FrameScript_Object* object) {
+    scope->m_start = s_profileStack == nullptr ? 0 : OsTimerGetTicks();
+    scope->m_id = id;
+    scope->m_object = object;
+    if (s_profileStack != nullptr && s_profileStack->m_top != nullptr) {
+        scope->m_event = s_profileStack->m_top;
+    }
+    return scope;
+}
+
+// The handler's time into the totals and into its event's frame, keeping the slowest handler
+// (FUN_14063eae0).
+// ref: FUN_14063eae0
+void ProfileHandlerLeave(PROFILEHANDLERSCOPE* scope) {
+    PROFILESTACK* stack = s_profileStack;
+    if (stack == nullptr || stack->m_top == nullptr) {
+        return;
+    }
+    uint64_t start = scope->m_start;
+    uint64_t now = OsTimerGetTicks();
+    stack->m_calls++;
+    s_profileTicks += now - start;
+    double ms = static_cast<double>(now - start) * s_profileTickMs;
+    stack->m_totalMs = ms + stack->m_totalMs;
+    uint32_t frame = scope->m_event->m_frame;
+    if (frame <= stack->m_frame && (stack->m_frameCount < 1000 || stack->m_frame - 1000 <= frame)) {
+        PROFILEFRAME* entry = &stack->m_frames[frame % 1000];
+        if (entry->m_max < ms) {
+            entry->m_slowest = scope->m_object->GetName();
+            entry->m_max = ms;
+        }
+        entry->m_calls++;
+        entry->m_total = ms + entry->m_total;
+    }
+}
 
 // ref: FUN_14060b970
 void CScriptStatus::SetFile(const uint32_t* file) {

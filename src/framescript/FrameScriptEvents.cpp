@@ -207,6 +207,36 @@ EventListenerList* FindEventList(uint64_t id) {
     return nullptr;
 }
 
+// ref: FUN_140648330
+int32_t PushHandler(lua_State* L, const EVENTSTRING* name, int32_t ref, FrameScript_Object* object) {
+    lua_checkstack(L, 4);
+    lua_rawgeti(L, LUA_REGISTRYINDEX, FrameScript_GetErrorHandlerRef());
+    int32_t errorHandler = lua_gettop(L);
+    lua_rawgeti(L, LUA_REGISTRYINDEX, ref);
+    lua_rawgeti(L, LUA_REGISTRYINDEX, object->GetLuaRef());
+    PushEventString(L, name);
+    return errorHandler;
+}
+
+// FUN_14063e310 is lua_pcall behind an anti-tamper return check (see
+// tools/fidelity_exceptions.json).
+// ref: FUN_140647940
+void CallHandler(lua_State* L, int32_t count, int32_t errorHandler) {
+    if (lua_pcall(L, count + 2, 0, errorHandler) != 0) {
+        lua_settop(L, -2);
+    }
+    lua_settop(L, -2);
+}
+
+// ref: FUN_14065f750
+void PushEventString(lua_State* L, const EVENTSTRING* text) {
+    if (text->m_data != nullptr) {
+        lua_pushlstring(L, text->m_data, text->m_length);
+        return;
+    }
+    lua_pushnil(L);
+}
+
 // ref: FUN_140648490
 bool ShouldDeliver(EventListenerList* list, EventListener* listener) {
     DeferredList* deferred = list->m_deferred;

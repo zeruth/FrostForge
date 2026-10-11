@@ -4,872 +4,1492 @@
 
 #include "framescript/FrameScriptEvents.hpp"
 
-// ref: FUN_140c505b0
 // ref: FUN_140c371e0
-void EventSignal_ACCOUNT_DATA_INITIALIZED(uint64_t id, void* args) {
+void EventFire_ACCOUNT_DATA_INITIALIZED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "ACCOUNT_DATA_INITIALIZED");
+    FrameScriptEvents::FireList(list, "ACCOUNT_DATA_INITIALIZED", 24, 0x33f1b9f8e6d6c430ull,
+        [](lua_State*) { return 0; });
+}
+
+// ref: FUN_140c505b0
+void EventSignal_ACCOUNT_DATA_INITIALIZED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_ACCOUNT_DATA_INITIALIZED);
+}
+
+// ref: FUN_140b1c900
+void EventFire_ADAPTER_LIST_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    (void)args;
+    FrameScriptEvents::FireList(list, "ADAPTER_LIST_CHANGED", 20, 0x1105d6abf63fd94eull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b3c7b0
-// ref: FUN_140b1c900
 void EventSignal_ADAPTER_LIST_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_ADAPTER_LIST_CHANGED);
+}
+
+// ref: FUN_140c37750
+void EventFire_ALTERNATIVE_DEFAULT_LANGUAGE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "ADAPTER_LIST_CHANGED");
+    FrameScriptEvents::FireList(list, "ALTERNATIVE_DEFAULT_LANGUAGE_CHANGED", 36, 0x8ca9e2e1b754e99ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c50770
-// ref: FUN_140c37750
 void EventSignal_ALTERNATIVE_DEFAULT_LANGUAGE_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_ALTERNATIVE_DEFAULT_LANGUAGE_CHANGED);
+}
+
+// ref: FUN_140e40ca0
+void EventFire_AUTH_CHALLENGE_FINISHED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "ALTERNATIVE_DEFAULT_LANGUAGE_CHANGED");
+    FrameScriptEvents::FireList(list, "AUTH_CHALLENGE_FINISHED", 23, 0xa4f28c1bb1637e99ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4e330
-// ref: FUN_140e40ca0
 void EventSignal_AUTH_CHALLENGE_FINISHED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_AUTH_CHALLENGE_FINISHED);
+}
+
+// ref: FUN_140e40f10
+void EventFire_AUTH_CHALLENGE_UI_INVALID(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "AUTH_CHALLENGE_FINISHED");
+    FrameScriptEvents::FireList(list, "AUTH_CHALLENGE_UI_INVALID", 25, 0x648b44c3e01f6badull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4e410
-// ref: FUN_140e40f10
 void EventSignal_AUTH_CHALLENGE_UI_INVALID(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_AUTH_CHALLENGE_UI_INVALID);
+}
+
+// ref: FUN_140f6f360
+void EventFire_BATTLE_PET_CURSOR_CLEAR(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "AUTH_CHALLENGE_UI_INVALID");
+    FrameScriptEvents::FireList(list, "BATTLE_PET_CURSOR_CLEAR", 23, 0xa15c57046433c285ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140f7abd0
-// ref: FUN_140f6f360
 void EventSignal_BATTLE_PET_CURSOR_CLEAR(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_BATTLE_PET_CURSOR_CLEAR);
+}
+
+// ref: FUN_140e41430
+void EventFire_CAPTUREFRAMES_FAILED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "BATTLE_PET_CURSOR_CLEAR");
+    FrameScriptEvents::FireList(list, "CAPTUREFRAMES_FAILED", 20, 0xd897295b75b8363dull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4e5d0
-// ref: FUN_140e41430
 void EventSignal_CAPTUREFRAMES_FAILED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CAPTUREFRAMES_FAILED);
+}
+
+// ref: FUN_140e416a0
+void EventFire_CAPTUREFRAMES_SUCCEEDED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CAPTUREFRAMES_FAILED");
+    FrameScriptEvents::FireList(list, "CAPTUREFRAMES_SUCCEEDED", 23, 0xd40ad4cbda5f5e1cull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4e6b0
-// ref: FUN_140e416a0
 void EventSignal_CAPTUREFRAMES_SUCCEEDED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CAPTUREFRAMES_SUCCEEDED);
+}
+
+// ref: FUN_140c3b670
+void EventFire_CHANNEL_UI_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CAPTUREFRAMES_SUCCEEDED");
+    FrameScriptEvents::FireList(list, "CHANNEL_UI_UPDATE", 17, 0x251f64c3c2f16e34ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c51ab0
-// ref: FUN_140c3b670
 void EventSignal_CHANNEL_UI_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHANNEL_UI_UPDATE);
+}
+
+// ref: FUN_140c3be50
+void EventFire_CHARACTER_COPY_STATUS_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CHANNEL_UI_UPDATE");
+    FrameScriptEvents::FireList(list, "CHARACTER_COPY_STATUS_CHANGED", 29, 0xfdcbe1a43a36af28ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c51d50
-// ref: FUN_140c3be50
 void EventSignal_CHARACTER_COPY_STATUS_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_COPY_STATUS_CHANGED);
+}
+
+// ref: FUN_140c3c450
+void EventFire_CHARACTER_DECLINE_IN_PROGRESS(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CHARACTER_COPY_STATUS_CHANGED");
+    FrameScriptEvents::FireList(list, "CHARACTER_DECLINE_IN_PROGRESS", 29, 0x8ce6fe7336f851aeull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c51f10
-// ref: FUN_140c3c450
 void EventSignal_CHARACTER_DECLINE_IN_PROGRESS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_DECLINE_IN_PROGRESS);
+}
+
+// ref: FUN_140c3d260
+void EventFire_CHARACTER_LIST_RETRIEVING(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CHARACTER_DECLINE_IN_PROGRESS");
+    FrameScriptEvents::FireList(list, "CHARACTER_LIST_RETRIEVING", 25, 0x35b06d824863ec86ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c52370
-// ref: FUN_140c3d260
 void EventSignal_CHARACTER_LIST_RETRIEVING(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_LIST_RETRIEVING);
+}
+
+// ref: FUN_140c3da70
+void EventFire_CHARACTER_UNDELETE_STATUS_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CHARACTER_LIST_RETRIEVING");
+    FrameScriptEvents::FireList(list, "CHARACTER_UNDELETE_STATUS_CHANGED", 33, 0x63030374b46719dbull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c52610
-// ref: FUN_140c3da70
 void EventSignal_CHARACTER_UNDELETE_STATUS_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_UNDELETE_STATUS_CHANGED);
+}
+
+// ref: FUN_140c3b8e0
+void EventFire_CHAR_RENAME_IN_PROGRESS(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CHARACTER_UNDELETE_STATUS_CHANGED");
+    FrameScriptEvents::FireList(list, "CHAR_RENAME_IN_PROGRESS", 23, 0x79fc34abf370e184ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c51b90
-// ref: FUN_140c3b8e0
 void EventSignal_CHAR_RENAME_IN_PROGRESS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAR_RENAME_IN_PROGRESS);
+}
+
+// ref: FUN_140c48eb0
+void EventFire_CHAT_SERVER_RECONNECTED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CHAR_RENAME_IN_PROGRESS");
+    FrameScriptEvents::FireList(list, "CHAT_SERVER_RECONNECTED", 23, 0x18c858b74806b5aeull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c56510
-// ref: FUN_140c48eb0
 void EventSignal_CHAT_SERVER_RECONNECTED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_SERVER_RECONNECTED);
+}
+
+// ref: FUN_140c49420
+void EventFire_CINEMATIC_STOP(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CHAT_SERVER_RECONNECTED");
+    FrameScriptEvents::FireList(list, "CINEMATIC_STOP", 14, 0xfb15bc2ce9503e9aull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c566d0
-// ref: FUN_140c49420
 void EventSignal_CINEMATIC_STOP(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CINEMATIC_STOP);
+}
+
+// ref: FUN_140c49e20
+void EventFire_CLEAR_BOSS_EMOTES(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CINEMATIC_STOP");
+    FrameScriptEvents::FireList(list, "CLEAR_BOSS_EMOTES", 17, 0x89d6e75a1682727aull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c56a50
-// ref: FUN_140c49e20
 void EventSignal_CLEAR_BOSS_EMOTES(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CLEAR_BOSS_EMOTES);
+}
+
+// ref: FUN_140c4a090
+void EventFire_CLIENT_FEATURE_STATUS_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CLEAR_BOSS_EMOTES");
+    FrameScriptEvents::FireList(list, "CLIENT_FEATURE_STATUS_CHANGED", 29, 0x971b502540b96c2ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c56b30
-// ref: FUN_140c4a090
 void EventSignal_CLIENT_FEATURE_STATUS_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CLIENT_FEATURE_STATUS_CHANGED);
+}
+
+// ref: FUN_140d50130
+void EventFire_CONSOLE_CLEAR(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CLIENT_FEATURE_STATUS_CHANGED");
+    FrameScriptEvents::FireList(list, "CONSOLE_CLEAR", 13, 0x91ccf647822a629aull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140d56710
-// ref: FUN_140d50130
 void EventSignal_CONSOLE_CLEAR(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CONSOLE_CLEAR);
+}
+
+// ref: FUN_140d503a0
+void EventFire_CONSOLE_COLORS_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CONSOLE_CLEAR");
+    FrameScriptEvents::FireList(list, "CONSOLE_COLORS_CHANGED", 22, 0xde9bbca7b228ddcdull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140d567f0
-// ref: FUN_140d503a0
 void EventSignal_CONSOLE_COLORS_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CONSOLE_COLORS_CHANGED);
+}
+
+// ref: FUN_140d50610
+void EventFire_CONSOLE_FONT_SIZE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CONSOLE_COLORS_CHANGED");
+    FrameScriptEvents::FireList(list, "CONSOLE_FONT_SIZE_CHANGED", 25, 0x6bf0d5edccdfa96full,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140d568d0
-// ref: FUN_140d50610
 void EventSignal_CONSOLE_FONT_SIZE_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CONSOLE_FONT_SIZE_CHANGED);
+}
+
+// ref: FUN_140c4a650
+void EventFire_CUSTOMIZE_CHARACTER_STARTED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CONSOLE_FONT_SIZE_CHANGED");
+    FrameScriptEvents::FireList(list, "CUSTOMIZE_CHARACTER_STARTED", 27, 0xe632cdf69254006bull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c56cf0
-// ref: FUN_140c4a650
 void EventSignal_CUSTOMIZE_CHARACTER_STARTED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CUSTOMIZE_CHARACTER_STARTED);
+}
+
+// ref: FUN_140f71130
+void EventFire_CUSTOM_ANIM(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CUSTOMIZE_CHARACTER_STARTED");
+    FrameScriptEvents::FireList(list, "CUSTOM_ANIM", 11, 0x70d427c31df43d21ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140f7b570
-// ref: FUN_140f71130
 void EventSignal_CUSTOM_ANIM(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CUSTOM_ANIM);
+}
+
+// ref: FUN_140f713a0
+void EventFire_DB_RECORD_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "CUSTOM_ANIM");
+    FrameScriptEvents::FireList(list, "DB_RECORD_UPDATE", 16, 0x693f52b07cf95c1cull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140f7b650
-// ref: FUN_140f713a0
 void EventSignal_DB_RECORD_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_DB_RECORD_UPDATE);
+}
+
+// ref: FUN_140f71610
+void EventFire_DB_RESULT_COMPLETE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "DB_RECORD_UPDATE");
+    FrameScriptEvents::FireList(list, "DB_RESULT_COMPLETE", 18, 0x97ab494e23318c45ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140f7b730
-// ref: FUN_140f71610
 void EventSignal_DB_RESULT_COMPLETE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_DB_RESULT_COMPLETE);
+}
+
+// ref: FUN_140f720a0
+void EventFire_DEBUG_MAP_OBJECTS_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "DB_RESULT_COMPLETE");
+    FrameScriptEvents::FireList(list, "DEBUG_MAP_OBJECTS_UPDATED", 25, 0x4d70e4728a6010dfull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140f7bab0
-// ref: FUN_140f720a0
 void EventSignal_DEBUG_MAP_OBJECTS_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_DEBUG_MAP_OBJECTS_UPDATED);
+}
+
+// ref: FUN_140f72310
+void EventFire_DEBUG_MENU_TOGGLED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "DEBUG_MAP_OBJECTS_UPDATED");
+    FrameScriptEvents::FireList(list, "DEBUG_MENU_TOGGLED", 18, 0x7cb33da6de881b34ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140f7bb90
-// ref: FUN_140f72310
 void EventSignal_DEBUG_MENU_TOGGLED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_DEBUG_MENU_TOGGLED);
+}
+
+// ref: FUN_140f72580
+void EventFire_DEBUG_PORT_LOCS_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "DEBUG_MENU_TOGGLED");
+    FrameScriptEvents::FireList(list, "DEBUG_PORT_LOCS_UPDATED", 23, 0x7389d4415479c470ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140f7bc70
-// ref: FUN_140f72580
 void EventSignal_DEBUG_PORT_LOCS_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_DEBUG_PORT_LOCS_UPDATED);
+}
+
+// ref: FUN_140c4ab70
+void EventFire_DELETED_CHARACTER_LIST_RETRIEVING(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "DEBUG_PORT_LOCS_UPDATED");
+    FrameScriptEvents::FireList(list, "DELETED_CHARACTER_LIST_RETRIEVING", 33, 0x78ef1f9ed59a1b95ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c56eb0
-// ref: FUN_140c4ab70
 void EventSignal_DELETED_CHARACTER_LIST_RETRIEVING(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_DELETED_CHARACTER_LIST_RETRIEVING);
+}
+
+// ref: FUN_140e41bc0
+void EventFire_DISABLE_TAXI_BENCHMARK(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "DELETED_CHARACTER_LIST_RETRIEVING");
+    FrameScriptEvents::FireList(list, "DISABLE_TAXI_BENCHMARK", 22, 0xabf3cfa61f187c31ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4e870
-// ref: FUN_140e41bc0
 void EventSignal_DISABLE_TAXI_BENCHMARK(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_DISABLE_TAXI_BENCHMARK);
+}
+
+// ref: FUN_140b1deb0
+void EventFire_DISPLAY_SIZE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "DISABLE_TAXI_BENCHMARK");
+    FrameScriptEvents::FireList(list, "DISPLAY_SIZE_CHANGED", 20, 0xee8e443fbafdcb2cull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b3ccf0
-// ref: FUN_140b1deb0
 void EventSignal_DISPLAY_SIZE_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_DISPLAY_SIZE_CHANGED);
+}
+
+// ref: FUN_140e42170
+void EventFire_ENABLE_TAXI_BENCHMARK(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "DISPLAY_SIZE_CHANGED");
+    FrameScriptEvents::FireList(list, "ENABLE_TAXI_BENCHMARK", 21, 0x4f8ef4afba2f51f1ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4ea30
-// ref: FUN_140e42170
 void EventSignal_ENABLE_TAXI_BENCHMARK(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_ENABLE_TAXI_BENCHMARK);
+}
+
+// ref: FUN_140c4ade0
+void EventFire_EVENT_CLASS_TRIAL_TIMER_START(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "ENABLE_TAXI_BENCHMARK");
+    FrameScriptEvents::FireList(list, "EVENT_CLASS_TRIAL_TIMER_START", 29, 0x40996c2ad2263025ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c56f90
-// ref: FUN_140c4ade0
 void EventSignal_EVENT_CLASS_TRIAL_TIMER_START(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_EVENT_CLASS_TRIAL_TIMER_START);
+}
+
+// ref: FUN_140f751f0
+void EventFire_EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "EVENT_CLASS_TRIAL_TIMER_START");
+    FrameScriptEvents::FireList(list, "EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED", 37, 0x5c0292b912d1b84eull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140f7ca70
-// ref: FUN_140f751f0
 void EventSignal_EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED);
+}
+
+// ref: FUN_140e423e0
+void EventFire_FIRST_FRAME_RENDERED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED");
+    FrameScriptEvents::FireList(list, "FIRST_FRAME_RENDERED", 20, 0x2e528a50c85ff8baull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4eb10
-// ref: FUN_140e423e0
 void EventSignal_FIRST_FRAME_RENDERED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_FIRST_FRAME_RENDERED);
+}
+
+// ref: FUN_140c4b050
+void EventFire_FORCE_DECLINE_CHARACTER(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "FIRST_FRAME_RENDERED");
+    FrameScriptEvents::FireList(list, "FORCE_DECLINE_CHARACTER", 23, 0xac614466bde76110ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c57070
-// ref: FUN_140c4b050
 void EventSignal_FORCE_DECLINE_CHARACTER(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_FORCE_DECLINE_CHARACTER);
+}
+
+// ref: FUN_140f75460
+void EventFire_FRAMESTACK_VISIBILITY_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "FORCE_DECLINE_CHARACTER");
+    FrameScriptEvents::FireList(list, "FRAMESTACK_VISIBILITY_UPDATED", 29, 0x921d61f0f85d834dull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140f7cb50
-// ref: FUN_140f75460
 void EventSignal_FRAMESTACK_VISIBILITY_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_FRAMESTACK_VISIBILITY_UPDATED);
+}
+
+// ref: FUN_140c4b590
+void EventFire_FRAMES_LOADED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "FRAMESTACK_VISIBILITY_UPDATED");
+    FrameScriptEvents::FireList(list, "FRAMES_LOADED", 13, 0x295344b1926539ccull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c57230
-// ref: FUN_140c4b590
 void EventSignal_FRAMES_LOADED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_FRAMES_LOADED);
+}
+
+// ref: FUN_140ef3950
+void EventFire_GAME_PAD_CONFIGS_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "FRAMES_LOADED");
+    FrameScriptEvents::FireList(list, "GAME_PAD_CONFIGS_CHANGED", 24, 0x600510fad68ba89aull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140efd990
-// ref: FUN_140ef3950
 void EventSignal_GAME_PAD_CONFIGS_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_GAME_PAD_CONFIGS_CHANGED);
+}
+
+// ref: FUN_140ef3bc0
+void EventFire_GAME_PAD_CONNECTED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "GAME_PAD_CONFIGS_CHANGED");
+    FrameScriptEvents::FireList(list, "GAME_PAD_CONNECTED", 18, 0xe19d55e69901424aull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140efda70
-// ref: FUN_140ef3bc0
 void EventSignal_GAME_PAD_CONNECTED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_GAME_PAD_CONNECTED);
+}
+
+// ref: FUN_140ef3e30
+void EventFire_GAME_PAD_DISCONNECTED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "GAME_PAD_CONNECTED");
+    FrameScriptEvents::FireList(list, "GAME_PAD_DISCONNECTED", 21, 0x7c8e98262a29b9f0ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140efdb50
-// ref: FUN_140ef3e30
 void EventSignal_GAME_PAD_DISCONNECTED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_GAME_PAD_DISCONNECTED);
+}
+
+// ref: FUN_140b1e120
+void EventFire_GLUE_SCREENSHOT_FAILED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "GAME_PAD_DISCONNECTED");
+    FrameScriptEvents::FireList(list, "GLUE_SCREENSHOT_FAILED", 22, 0x2560f2e0b6e58f9aull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b3cdd0
-// ref: FUN_140b1e120
 void EventSignal_GLUE_SCREENSHOT_FAILED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_GLUE_SCREENSHOT_FAILED);
+}
+
+// ref: FUN_140c4b800
+void EventFire_GLUE_SCREENSHOT_SUCCEEDED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "GLUE_SCREENSHOT_FAILED");
+    FrameScriptEvents::FireList(list, "GLUE_SCREENSHOT_SUCCEEDED", 25, 0xf0fde4f2df789efcull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c57310
-// ref: FUN_140c4b800
 void EventSignal_GLUE_SCREENSHOT_SUCCEEDED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_GLUE_SCREENSHOT_SUCCEEDED);
+}
+
+// ref: FUN_140b1e390
+void EventFire_GX_RESTARTED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "GLUE_SCREENSHOT_SUCCEEDED");
+    FrameScriptEvents::FireList(list, "GX_RESTARTED", 12, 0x222ed7eec56f463dull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b3ceb0
-// ref: FUN_140b1e390
 void EventSignal_GX_RESTARTED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_GX_RESTARTED);
+}
+
+// ref: FUN_140c4ba70
+void EventFire_HIDE_SUBTITLE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "GX_RESTARTED");
+    FrameScriptEvents::FireList(list, "HIDE_SUBTITLE", 13, 0xbfb1f71cbde32a65ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c573f0
-// ref: FUN_140c4ba70
 void EventSignal_HIDE_SUBTITLE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_HIDE_SUBTITLE);
+}
+
+// ref: FUN_140e42ec0
+void EventFire_IGR_BILLING_NAG_DIALOG(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "HIDE_SUBTITLE");
+    FrameScriptEvents::FireList(list, "IGR_BILLING_NAG_DIALOG", 22, 0x3f690f5b5ebf3a43ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4ee90
-// ref: FUN_140e42ec0
 void EventSignal_IGR_BILLING_NAG_DIALOG(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_IGR_BILLING_NAG_DIALOG);
+}
+
+// ref: FUN_140e43130
+void EventFire_INITIAL_HOTFIXES_APPLIED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "IGR_BILLING_NAG_DIALOG");
+    FrameScriptEvents::FireList(list, "INITIAL_HOTFIXES_APPLIED", 24, 0xbafdbe84e649c7d7ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4ef70
-// ref: FUN_140e43130
 void EventSignal_INITIAL_HOTFIXES_APPLIED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_INITIAL_HOTFIXES_APPLIED);
+}
+
+// ref: FUN_140c02db0
+void EventFire_KIOSK_SESSION_EXPIRED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "INITIAL_HOTFIXES_APPLIED");
+    FrameScriptEvents::FireList(list, "KIOSK_SESSION_EXPIRED", 21, 0x110ab0d628009da3ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c07e10
-// ref: FUN_140c02db0
 void EventSignal_KIOSK_SESSION_EXPIRED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_KIOSK_SESSION_EXPIRED);
+}
+
+// ref: FUN_140c03020
+void EventFire_KIOSK_SESSION_SHUTDOWN(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "KIOSK_SESSION_EXPIRED");
+    FrameScriptEvents::FireList(list, "KIOSK_SESSION_SHUTDOWN", 22, 0x2d8fe388d7772e10ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c07ef0
-// ref: FUN_140c03020
 void EventSignal_KIOSK_SESSION_SHUTDOWN(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_KIOSK_SESSION_SHUTDOWN);
+}
+
+// ref: FUN_140c03290
+void EventFire_KNOWLEDGE_BASE_ARTICLE_LOAD_FAILURE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "KIOSK_SESSION_SHUTDOWN");
+    FrameScriptEvents::FireList(list, "KNOWLEDGE_BASE_ARTICLE_LOAD_FAILURE", 35, 0xecc39a29737e6bdcull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c07fd0
-// ref: FUN_140c03290
 void EventSignal_KNOWLEDGE_BASE_ARTICLE_LOAD_FAILURE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_KNOWLEDGE_BASE_ARTICLE_LOAD_FAILURE);
+}
+
+// ref: FUN_140c03500
+void EventFire_KNOWLEDGE_BASE_ARTICLE_LOAD_SUCCESS(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "KNOWLEDGE_BASE_ARTICLE_LOAD_FAILURE");
+    FrameScriptEvents::FireList(list, "KNOWLEDGE_BASE_ARTICLE_LOAD_SUCCESS", 35, 0x3e8986372cb2e1dcull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c080b0
-// ref: FUN_140c03500
 void EventSignal_KNOWLEDGE_BASE_ARTICLE_LOAD_SUCCESS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_KNOWLEDGE_BASE_ARTICLE_LOAD_SUCCESS);
+}
+
+// ref: FUN_140c03770
+void EventFire_KNOWLEDGE_BASE_QUERY_LOAD_FAILURE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "KNOWLEDGE_BASE_ARTICLE_LOAD_SUCCESS");
+    FrameScriptEvents::FireList(list, "KNOWLEDGE_BASE_QUERY_LOAD_FAILURE", 33, 0xe2f30758174d29dull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c08190
-// ref: FUN_140c03770
 void EventSignal_KNOWLEDGE_BASE_QUERY_LOAD_FAILURE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_KNOWLEDGE_BASE_QUERY_LOAD_FAILURE);
+}
+
+// ref: FUN_140c039e0
+void EventFire_KNOWLEDGE_BASE_QUERY_LOAD_SUCCESS(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "KNOWLEDGE_BASE_QUERY_LOAD_FAILURE");
+    FrameScriptEvents::FireList(list, "KNOWLEDGE_BASE_QUERY_LOAD_SUCCESS", 33, 0xfc8afa194106171bull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c08270
-// ref: FUN_140c039e0
 void EventSignal_KNOWLEDGE_BASE_QUERY_LOAD_SUCCESS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_KNOWLEDGE_BASE_QUERY_LOAD_SUCCESS);
+}
+
+// ref: FUN_140c03c50
+void EventFire_KNOWLEDGE_BASE_SERVER_MESSAGE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "KNOWLEDGE_BASE_QUERY_LOAD_SUCCESS");
+    FrameScriptEvents::FireList(list, "KNOWLEDGE_BASE_SERVER_MESSAGE", 29, 0xdfca57c0748269a6ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c08350
-// ref: FUN_140c03c50
 void EventSignal_KNOWLEDGE_BASE_SERVER_MESSAGE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_KNOWLEDGE_BASE_SERVER_MESSAGE);
+}
+
+// ref: FUN_140c03ec0
+void EventFire_KNOWLEDGE_BASE_SETUP_LOAD_FAILURE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "KNOWLEDGE_BASE_SERVER_MESSAGE");
+    FrameScriptEvents::FireList(list, "KNOWLEDGE_BASE_SETUP_LOAD_FAILURE", 33, 0x99719d470238f673ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c08430
-// ref: FUN_140c03ec0
 void EventSignal_KNOWLEDGE_BASE_SETUP_LOAD_FAILURE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_KNOWLEDGE_BASE_SETUP_LOAD_FAILURE);
+}
+
+// ref: FUN_140c04130
+void EventFire_KNOWLEDGE_BASE_SETUP_LOAD_SUCCESS(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "KNOWLEDGE_BASE_SETUP_LOAD_FAILURE");
+    FrameScriptEvents::FireList(list, "KNOWLEDGE_BASE_SETUP_LOAD_SUCCESS", 33, 0x9a6425c1df93671aull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c08510
-// ref: FUN_140c04130
 void EventSignal_KNOWLEDGE_BASE_SETUP_LOAD_SUCCESS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_KNOWLEDGE_BASE_SETUP_LOAD_SUCCESS);
+}
+
+// ref: FUN_140c4bce0
+void EventFire_LANGUAGE_LIST_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "KNOWLEDGE_BASE_SETUP_LOAD_SUCCESS");
+    FrameScriptEvents::FireList(list, "LANGUAGE_LIST_CHANGED", 21, 0x7f2cbca4e0d8aef1ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c574d0
-// ref: FUN_140c4bce0
 void EventSignal_LANGUAGE_LIST_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_LANGUAGE_LIST_CHANGED);
+}
+
+// ref: FUN_1410d17e0
+void EventFire_LAUNCHER_LOGIN_STATUS_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "LANGUAGE_LIST_CHANGED");
+    FrameScriptEvents::FireList(list, "LAUNCHER_LOGIN_STATUS_CHANGED", 29, 0x83009c340a8ef9eull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_1410e2410
-// ref: FUN_1410d17e0
 void EventSignal_LAUNCHER_LOGIN_STATUS_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_LAUNCHER_LOGIN_STATUS_CHANGED);
+}
+
+// ref: FUN_1410d81e0
+void EventFire_LOADING_SCREEN_DISABLED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "LAUNCHER_LOGIN_STATUS_CHANGED");
+    FrameScriptEvents::FireList(list, "LOADING_SCREEN_DISABLED", 23, 0xa1a574b451e74f80ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_1410e4710
-// ref: FUN_1410d81e0
 void EventSignal_LOADING_SCREEN_DISABLED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_LOADING_SCREEN_DISABLED);
+}
+
+// ref: FUN_1410d86c0
+void EventFire_LOGIN_STATE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "LOADING_SCREEN_DISABLED");
+    FrameScriptEvents::FireList(list, "LOGIN_STATE_CHANGED", 19, 0x1d47d3a7df7bbdf8ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_1410e48d0
-// ref: FUN_1410d86c0
 void EventSignal_LOGIN_STATE_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_LOGIN_STATE_CHANGED);
+}
+
+// ref: FUN_140e439b0
+void EventFire_LOGOUT_CANCEL(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "LOGIN_STATE_CHANGED");
+    FrameScriptEvents::FireList(list, "LOGOUT_CANCEL", 13, 0x698e66b8defc51c0ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4f210
-// ref: FUN_140e439b0
 void EventSignal_LOGOUT_CANCEL(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_LOGOUT_CANCEL);
+}
+
+// ref: FUN_140fb4ee0
+void EventFire_MAX_EXPANSION_LEVEL_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "LOGOUT_CANCEL");
+    FrameScriptEvents::FireList(list, "MAX_EXPANSION_LEVEL_UPDATED", 27, 0xa6762fd2dd623870ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140fb5630
-// ref: FUN_140fb4ee0
 void EventSignal_MAX_EXPANSION_LEVEL_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_MAX_EXPANSION_LEVEL_UPDATED);
+}
+
+// ref: FUN_140fb5150
+void EventFire_MIN_EXPANSION_LEVEL_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "MAX_EXPANSION_LEVEL_UPDATED");
+    FrameScriptEvents::FireList(list, "MIN_EXPANSION_LEVEL_UPDATED", 27, 0xe91b80f03e4fb878ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140fb5710
-// ref: FUN_140fb5150
 void EventSignal_MIN_EXPANSION_LEVEL_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_MIN_EXPANSION_LEVEL_UPDATED);
+}
+
+// ref: FUN_140f763f0
+void EventFire_MOUNT_CURSOR_CLEAR(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "MIN_EXPANSION_LEVEL_UPDATED");
+    FrameScriptEvents::FireList(list, "MOUNT_CURSOR_CLEAR", 18, 0xac345e797bd26d9eull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140f7d090
-// ref: FUN_140f763f0
 void EventSignal_MOUNT_CURSOR_CLEAR(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_MOUNT_CURSOR_CLEAR);
+}
+
+// ref: FUN_140d102f0
+void EventFire_NOTCHED_DISPLAY_MODE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "MOUNT_CURSOR_CLEAR");
+    FrameScriptEvents::FireList(list, "NOTCHED_DISPLAY_MODE_CHANGED", 28, 0xcbd49ecc8365765dull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140d11810
-// ref: FUN_140d102f0
 void EventSignal_NOTCHED_DISPLAY_MODE_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_NOTCHED_DISPLAY_MODE_CHANGED);
+}
+
+// ref: FUN_140c4bf50
+void EventFire_NOTIFY_CHAT_SUPPRESSED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "NOTCHED_DISPLAY_MODE_CHANGED");
+    FrameScriptEvents::FireList(list, "NOTIFY_CHAT_SUPPRESSED", 22, 0xd1821f852b521c9aull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c575b0
-// ref: FUN_140c4bf50
 void EventSignal_NOTIFY_CHAT_SUPPRESSED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_NOTIFY_CHAT_SUPPRESSED);
+}
+
+// ref: FUN_140e44890
+void EventFire_PLAYER_CAMPING(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "NOTIFY_CHAT_SUPPRESSED");
+    FrameScriptEvents::FireList(list, "PLAYER_CAMPING", 14, 0x37895da17deef6c8ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4f750
-// ref: FUN_140e44890
 void EventSignal_PLAYER_CAMPING(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_PLAYER_CAMPING);
+}
+
+// ref: FUN_140e44e00
+void EventFire_PLAYER_LEAVING_WORLD(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "PLAYER_CAMPING");
+    FrameScriptEvents::FireList(list, "PLAYER_LEAVING_WORLD", 20, 0x1183a2d0fd85d6a7ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4f910
-// ref: FUN_140e44e00
 void EventSignal_PLAYER_LEAVING_WORLD(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_PLAYER_LEAVING_WORLD);
+}
+
+// ref: FUN_140e45070
+void EventFire_PLAYER_LOGIN(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "PLAYER_LEAVING_WORLD");
+    FrameScriptEvents::FireList(list, "PLAYER_LOGIN", 12, 0x7d15ffc08fe0ebbeull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4f9f0
-// ref: FUN_140e45070
 void EventSignal_PLAYER_LOGIN(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_PLAYER_LOGIN);
+}
+
+// ref: FUN_140e452e0
+void EventFire_PLAYER_LOGOUT(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "PLAYER_LOGIN");
+    FrameScriptEvents::FireList(list, "PLAYER_LOGOUT", 13, 0xe145ea471f454b75ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4fad0
-// ref: FUN_140e452e0
 void EventSignal_PLAYER_LOGOUT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_PLAYER_LOGOUT);
+}
+
+// ref: FUN_140e45550
+void EventFire_PLAYER_QUITING(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "PLAYER_LOGOUT");
+    FrameScriptEvents::FireList(list, "PLAYER_QUITING", 14, 0xeccc87c457d24752ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4fbb0
-// ref: FUN_140e45550
 void EventSignal_PLAYER_QUITING(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_PLAYER_QUITING);
+}
+
+// ref: FUN_140e45a70
+void EventFire_PLAYTIME_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "PLAYER_QUITING");
+    FrameScriptEvents::FireList(list, "PLAYTIME_CHANGED", 16, 0x94b83ca08f26b28aull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4fd70
-// ref: FUN_140e45a70
 void EventSignal_PLAYTIME_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_PLAYTIME_CHANGED);
+}
+
+// ref: FUN_140e45ce0
+void EventFire_PRODUCT_ASSIGN_TO_TARGET_FAILED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "PLAYTIME_CHANGED");
+    FrameScriptEvents::FireList(list, "PRODUCT_ASSIGN_TO_TARGET_FAILED", 31, 0xddd7ce77105c463eull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4fe50
-// ref: FUN_140e45ce0
 void EventSignal_PRODUCT_ASSIGN_TO_TARGET_FAILED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_PRODUCT_ASSIGN_TO_TARGET_FAILED);
+}
+
+// ref: FUN_140e45f50
+void EventFire_PRODUCT_CHOICE_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "PRODUCT_ASSIGN_TO_TARGET_FAILED");
+    FrameScriptEvents::FireList(list, "PRODUCT_CHOICE_UPDATE", 21, 0xcb453a392133b51aull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e4ff30
-// ref: FUN_140e45f50
 void EventSignal_PRODUCT_CHOICE_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_PRODUCT_CHOICE_UPDATE);
+}
+
+// ref: FUN_1410df0f0
+void EventFire_REALM_LIST_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "PRODUCT_CHOICE_UPDATE");
+    FrameScriptEvents::FireList(list, "REALM_LIST_UPDATED", 18, 0x37339923f9393f57ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_1410e6930
-// ref: FUN_1410df0f0
 void EventSignal_REALM_LIST_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_REALM_LIST_UPDATED);
+}
+
+// ref: FUN_140b25f20
+void EventFire_SCREENSHOT_FAILED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "REALM_LIST_UPDATED");
+    FrameScriptEvents::FireList(list, "SCREENSHOT_FAILED", 17, 0x5585e7167a532c7dull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b3ed50
-// ref: FUN_140b25f20
 void EventSignal_SCREENSHOT_FAILED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SCREENSHOT_FAILED);
+}
+
+// ref: FUN_140b26190
+void EventFire_SCREENSHOT_STARTED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "SCREENSHOT_FAILED");
+    FrameScriptEvents::FireList(list, "SCREENSHOT_STARTED", 18, 0xce776de659cc0983ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b3ee30
-// ref: FUN_140b26190
 void EventSignal_SCREENSHOT_STARTED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SCREENSHOT_STARTED);
+}
+
+// ref: FUN_140b26400
+void EventFire_SCREENSHOT_SUCCEEDED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "SCREENSHOT_STARTED");
+    FrameScriptEvents::FireList(list, "SCREENSHOT_SUCCEEDED", 20, 0x4d8713e5e2f727a6ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b3ef10
-// ref: FUN_140b26400
 void EventSignal_SCREENSHOT_SUCCEEDED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SCREENSHOT_SUCCEEDED);
+}
+
+// ref: FUN_140c4e5b0
+void EventFire_SCREEN_FIRST_DISPLAYED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "SCREENSHOT_SUCCEEDED");
+    FrameScriptEvents::FireList(list, "SCREEN_FIRST_DISPLAYED", 22, 0x8315539eebb92449ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c58030
-// ref: FUN_140c4e5b0
 void EventSignal_SCREEN_FIRST_DISPLAYED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SCREEN_FIRST_DISPLAYED);
+}
+
+// ref: FUN_140e461c0
+void EventFire_SEARCH_DB_LOADED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "SCREEN_FIRST_DISPLAYED");
+    FrameScriptEvents::FireList(list, "SEARCH_DB_LOADED", 16, 0x8770fc5ff23b7c22ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e50010
-// ref: FUN_140e461c0
 void EventSignal_SEARCH_DB_LOADED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SEARCH_DB_LOADED);
+}
+
+// ref: FUN_140fb53c0
+void EventFire_SETTINGS_LOADED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "SEARCH_DB_LOADED");
+    FrameScriptEvents::FireList(list, "SETTINGS_LOADED", 15, 0x604a5fc93be13a83ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140fb57f0
-// ref: FUN_140fb53c0
 void EventSignal_SETTINGS_LOADED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SETTINGS_LOADED);
+}
+
+// ref: FUN_1410df840
+void EventFire_SHOULD_RECONNECT_TO_REALM_LIST(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "SETTINGS_LOADED");
+    FrameScriptEvents::FireList(list, "SHOULD_RECONNECT_TO_REALM_LIST", 30, 0xcd893c71d3326d91ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_1410e6bd0
-// ref: FUN_1410df840
 void EventSignal_SHOULD_RECONNECT_TO_REALM_LIST(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SHOULD_RECONNECT_TO_REALM_LIST);
+}
+
+// ref: FUN_140bafad0
+void EventFire_SIMPLE_BROWSER_WEB_PROXY_FAILED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "SHOULD_RECONNECT_TO_REALM_LIST");
+    FrameScriptEvents::FireList(list, "SIMPLE_BROWSER_WEB_PROXY_FAILED", 31, 0x73daa120e06d3c0cull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140bb3510
-// ref: FUN_140bafad0
 void EventSignal_SIMPLE_BROWSER_WEB_PROXY_FAILED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SIMPLE_BROWSER_WEB_PROXY_FAILED);
+}
+
+// ref: FUN_140a52b10
+void EventFire_SOUND_DEVICE_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "SIMPLE_BROWSER_WEB_PROXY_FAILED");
+    FrameScriptEvents::FireList(list, "SOUND_DEVICE_UPDATE", 19, 0x1986d7a257b52fe6ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140a53900
-// ref: FUN_140a52b10
 void EventSignal_SOUND_DEVICE_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SOUND_DEVICE_UPDATE);
+}
+
+// ref: FUN_140e48820
+void EventFire_STORE_BOOST_AUTO_CONSUMED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "SOUND_DEVICE_UPDATE");
+    FrameScriptEvents::FireList(list, "STORE_BOOST_AUTO_CONSUMED", 25, 0xcb75033456aa9bbeull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e50d30
-// ref: FUN_140e48820
 void EventSignal_STORE_BOOST_AUTO_CONSUMED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_STORE_BOOST_AUTO_CONSUMED);
+}
+
+// ref: FUN_140e48a90
+void EventFire_STORE_CHARACTER_LIST_RECEIVED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "STORE_BOOST_AUTO_CONSUMED");
+    FrameScriptEvents::FireList(list, "STORE_CHARACTER_LIST_RECEIVED", 29, 0xa6d35bdfc747b1bull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e50e10
-// ref: FUN_140e48a90
 void EventSignal_STORE_CHARACTER_LIST_RECEIVED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_STORE_CHARACTER_LIST_RECEIVED);
+}
+
+// ref: FUN_140e48d00
+void EventFire_STORE_CONFIRM_PURCHASE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "STORE_CHARACTER_LIST_RECEIVED");
+    FrameScriptEvents::FireList(list, "STORE_CONFIRM_PURCHASE", 22, 0xde7231cd6bacf0a4ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e50ef0
-// ref: FUN_140e48d00
 void EventSignal_STORE_CONFIRM_PURCHASE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_STORE_CONFIRM_PURCHASE);
+}
+
+// ref: FUN_140e49bc0
+void EventFire_STORE_PRODUCTS_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "STORE_CONFIRM_PURCHASE");
+    FrameScriptEvents::FireList(list, "STORE_PRODUCTS_UPDATED", 22, 0xd781a79d6526a889ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e51350
-// ref: FUN_140e49bc0
 void EventSignal_STORE_PRODUCTS_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_STORE_PRODUCTS_UPDATED);
+}
+
+// ref: FUN_140e49e30
+void EventFire_STORE_PURCHASE_ERROR(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "STORE_PRODUCTS_UPDATED");
+    FrameScriptEvents::FireList(list, "STORE_PURCHASE_ERROR", 20, 0xe9f57db6a4b1f667ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e51430
-// ref: FUN_140e49e30
 void EventSignal_STORE_PURCHASE_ERROR(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_STORE_PURCHASE_ERROR);
+}
+
+// ref: FUN_140e4a0a0
+void EventFire_STORE_PURCHASE_LIST_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "STORE_PURCHASE_ERROR");
+    FrameScriptEvents::FireList(list, "STORE_PURCHASE_LIST_UPDATED", 27, 0x3ee8d5e34d94f317ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e51510
-// ref: FUN_140e4a0a0
 void EventSignal_STORE_PURCHASE_LIST_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_STORE_PURCHASE_LIST_UPDATED);
+}
+
+// ref: FUN_140e4a310
+void EventFire_STORE_REFRESH(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "STORE_PURCHASE_LIST_UPDATED");
+    FrameScriptEvents::FireList(list, "STORE_REFRESH", 13, 0xf8eb3d280e974224ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e515f0
-// ref: FUN_140e4a310
 void EventSignal_STORE_REFRESH(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_STORE_REFRESH);
+}
+
+// ref: FUN_140e4a580
+void EventFire_STORE_STATUS_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "STORE_REFRESH");
+    FrameScriptEvents::FireList(list, "STORE_STATUS_CHANGED", 20, 0xa89660c97440c861ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e516d0
-// ref: FUN_140e4a580
 void EventSignal_STORE_STATUS_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_STORE_STATUS_CHANGED);
+}
+
+// ref: FUN_140e4a7f0
+void EventFire_STORE_VAS_PURCHASE_COMPLETE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "STORE_STATUS_CHANGED");
+    FrameScriptEvents::FireList(list, "STORE_VAS_PURCHASE_COMPLETE", 27, 0xdd1099f8724d8a4ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e517b0
-// ref: FUN_140e4a7f0
 void EventSignal_STORE_VAS_PURCHASE_COMPLETE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_STORE_VAS_PURCHASE_COMPLETE);
+}
+
+// ref: FUN_140e4aa60
+void EventFire_STORE_VAS_PURCHASE_ERROR(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "STORE_VAS_PURCHASE_COMPLETE");
+    FrameScriptEvents::FireList(list, "STORE_VAS_PURCHASE_ERROR", 24, 0xd3a0bc3a5740486bull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e51890
-// ref: FUN_140e4aa60
 void EventSignal_STORE_VAS_PURCHASE_ERROR(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_STORE_VAS_PURCHASE_ERROR);
+}
+
+// ref: FUN_140e4af80
+void EventFire_SUBSCRIPTION_CHANGED_KICK_IMMINENT(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "STORE_VAS_PURCHASE_ERROR");
+    FrameScriptEvents::FireList(list, "SUBSCRIPTION_CHANGED_KICK_IMMINENT", 34, 0xce75e5efa5e39d8bull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e51a50
-// ref: FUN_140e4af80
 void EventSignal_SUBSCRIPTION_CHANGED_KICK_IMMINENT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SUBSCRIPTION_CHANGED_KICK_IMMINENT);
+}
+
+// ref: FUN_141156650
+void EventFire_TOKEN_AUCTION_SOLD(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "SUBSCRIPTION_CHANGED_KICK_IMMINENT");
+    FrameScriptEvents::FireList(list, "TOKEN_AUCTION_SOLD", 18, 0x7cefd6940f47e338ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_141159360
-// ref: FUN_141156650
 void EventSignal_TOKEN_AUCTION_SOLD(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_AUCTION_SOLD);
+}
+
+// ref: FUN_1411568c0
+void EventFire_TOKEN_BUY_CONFIRM_REQUIRED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "TOKEN_AUCTION_SOLD");
+    FrameScriptEvents::FireList(list, "TOKEN_BUY_CONFIRM_REQUIRED", 26, 0x9a83ccc17be17a1dull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_141159440
-// ref: FUN_1411568c0
 void EventSignal_TOKEN_BUY_CONFIRM_REQUIRED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_BUY_CONFIRM_REQUIRED);
+}
+
+// ref: FUN_1411575f0
+void EventFire_TOKEN_REDEEM_BALANCE_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "TOKEN_BUY_CONFIRM_REQUIRED");
+    FrameScriptEvents::FireList(list, "TOKEN_REDEEM_BALANCE_UPDATED", 28, 0x80f6e91eb5941017ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_1411598a0
-// ref: FUN_1411575f0
 void EventSignal_TOKEN_REDEEM_BALANCE_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_REDEEM_BALANCE_UPDATED);
+}
+
+// ref: FUN_141157b10
+void EventFire_TOKEN_REDEEM_FRAME_SHOW(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "TOKEN_REDEEM_BALANCE_UPDATED");
+    FrameScriptEvents::FireList(list, "TOKEN_REDEEM_FRAME_SHOW", 23, 0x81ae49fcb1c2df1ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_141159a60
-// ref: FUN_141157b10
 void EventSignal_TOKEN_REDEEM_FRAME_SHOW(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_REDEEM_FRAME_SHOW);
+}
+
+// ref: FUN_141157d80
+void EventFire_TOKEN_REDEEM_GAME_TIME_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "TOKEN_REDEEM_FRAME_SHOW");
+    FrameScriptEvents::FireList(list, "TOKEN_REDEEM_GAME_TIME_UPDATED", 30, 0xe7d52e1ade599ae2ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_141159b40
-// ref: FUN_141157d80
 void EventSignal_TOKEN_REDEEM_GAME_TIME_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_REDEEM_GAME_TIME_UPDATED);
+}
+
+// ref: FUN_1411582f0
+void EventFire_TOKEN_SELL_CONFIRM_REQUIRED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "TOKEN_REDEEM_GAME_TIME_UPDATED");
+    FrameScriptEvents::FireList(list, "TOKEN_SELL_CONFIRM_REQUIRED", 27, 0x471c39633127bc7dull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_141159d00
-// ref: FUN_1411582f0
 void EventSignal_TOKEN_SELL_CONFIRM_REQUIRED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_SELL_CONFIRM_REQUIRED);
+}
+
+// ref: FUN_140e4bdb0
+void EventFire_TRIAL_CAP_REACHED_LEVEL(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "TOKEN_SELL_CONFIRM_REQUIRED");
+    FrameScriptEvents::FireList(list, "TRIAL_CAP_REACHED_LEVEL", 23, 0xa79cd580c96188b3ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e51eb0
-// ref: FUN_140e4bdb0
 void EventSignal_TRIAL_CAP_REACHED_LEVEL(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TRIAL_CAP_REACHED_LEVEL);
+}
+
+// ref: FUN_140c4ee00
+void EventFire_TRIAL_STATUS_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "TRIAL_CAP_REACHED_LEVEL");
+    FrameScriptEvents::FireList(list, "TRIAL_STATUS_UPDATE", 19, 0xb42908a4f4b4c83cull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c582d0
-// ref: FUN_140c4ee00
 void EventSignal_TRIAL_STATUS_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TRIAL_STATUS_UPDATE);
+}
+
+// ref: FUN_140d10ad0
+void EventFire_UI_MODEL_SCENE_INFO_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "TRIAL_STATUS_UPDATE");
+    FrameScriptEvents::FireList(list, "UI_MODEL_SCENE_INFO_UPDATED", 27, 0xdc6034133369d96bull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140d11ab0
-// ref: FUN_140d10ad0
 void EventSignal_UI_MODEL_SCENE_INFO_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_UI_MODEL_SCENE_INFO_UPDATED);
+}
+
+// ref: FUN_140d10d40
+void EventFire_UI_SCALE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "UI_MODEL_SCENE_INFO_UPDATED");
+    FrameScriptEvents::FireList(list, "UI_SCALE_CHANGED", 16, 0x6d07ad748b4bdc43ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140d11b90
-// ref: FUN_140d10d40
 void EventSignal_UI_SCALE_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_UI_SCALE_CHANGED);
+}
+
+// ref: FUN_140c06460
+void EventFire_UPDATE_BINDINGS(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "UI_SCALE_CHANGED");
+    FrameScriptEvents::FireList(list, "UPDATE_BINDINGS", 15, 0x22f31dde0b90e6ffull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c09070
-// ref: FUN_140c06460
 void EventSignal_UPDATE_BINDINGS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_UPDATE_BINDINGS);
+}
+
+// ref: FUN_140c4f720
+void EventFire_UPDATE_CHAT_WINDOWS(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "UPDATE_BINDINGS");
+    FrameScriptEvents::FireList(list, "UPDATE_CHAT_WINDOWS", 19, 0x81a720cbc589b2a8ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c58570
-// ref: FUN_140c4f720
 void EventSignal_UPDATE_CHAT_WINDOWS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_UPDATE_CHAT_WINDOWS);
+}
+
+// ref: FUN_140c4fd40
+void EventFire_UPDATE_FLOATING_CHAT_WINDOWS(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "UPDATE_CHAT_WINDOWS");
+    FrameScriptEvents::FireList(list, "UPDATE_FLOATING_CHAT_WINDOWS", 28, 0xa3d5a34fa3d75cf3ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c58730
-// ref: FUN_140c4fd40
 void EventSignal_UPDATE_FLOATING_CHAT_WINDOWS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_UPDATE_FLOATING_CHAT_WINDOWS);
+}
+
+// ref: FUN_140c4ffb0
+void EventFire_UPDATE_NAME_RESERVATION(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "UPDATE_FLOATING_CHAT_WINDOWS");
+    FrameScriptEvents::FireList(list, "UPDATE_NAME_RESERVATION", 23, 0x2a383b76a7c2171dull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140c58810
-// ref: FUN_140c4ffb0
 void EventSignal_UPDATE_NAME_RESERVATION(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_UPDATE_NAME_RESERVATION);
+}
+
+// ref: FUN_140e4d3d0
+void EventFire_VARIABLES_LOADED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "UPDATE_NAME_RESERVATION");
+    FrameScriptEvents::FireList(list, "VARIABLES_LOADED", 16, 0x4088c9af10fdb838ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e525b0
-// ref: FUN_140e4d3d0
 void EventSignal_VARIABLES_LOADED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VARIABLES_LOADED);
+}
+
+// ref: FUN_140e4d940
+void EventFire_VAS_CHARACTER_STATE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "VARIABLES_LOADED");
+    FrameScriptEvents::FireList(list, "VAS_CHARACTER_STATE_CHANGED", 27, 0x40965715c6cdab4bull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e52770
-// ref: FUN_140e4d940
 void EventSignal_VAS_CHARACTER_STATE_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VAS_CHARACTER_STATE_CHANGED);
+}
+
+// ref: FUN_140e4dbb0
+void EventFire_VAS_QUEUE_STATUS_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "VAS_CHARACTER_STATE_CHANGED");
+    FrameScriptEvents::FireList(list, "VAS_QUEUE_STATUS_UPDATE", 23, 0xbbc2a8f26cf1bd68ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e52850
-// ref: FUN_140e4dbb0
 void EventSignal_VAS_QUEUE_STATUS_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VAS_QUEUE_STATUS_UPDATE);
+}
+
+// ref: FUN_140b32a10
+void EventFire_VOICE_CHAT_ACTIVE_INPUT_DEVICE_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "VAS_QUEUE_STATUS_UPDATE");
+    FrameScriptEvents::FireList(list, "VOICE_CHAT_ACTIVE_INPUT_DEVICE_UPDATED", 38, 0x8e677924602870aeull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b3f990
-// ref: FUN_140b32a10
 void EventSignal_VOICE_CHAT_ACTIVE_INPUT_DEVICE_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_ACTIVE_INPUT_DEVICE_UPDATED);
+}
+
+// ref: FUN_140b32c80
+void EventFire_VOICE_CHAT_ACTIVE_OUTPUT_DEVICE_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "VOICE_CHAT_ACTIVE_INPUT_DEVICE_UPDATED");
+    FrameScriptEvents::FireList(list, "VOICE_CHAT_ACTIVE_OUTPUT_DEVICE_UPDATED", 39, 0x5a6ab3f818982424ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b3fa70
-// ref: FUN_140b32c80
 void EventSignal_VOICE_CHAT_ACTIVE_OUTPUT_DEVICE_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_ACTIVE_OUTPUT_DEVICE_UPDATED);
+}
+
+// ref: FUN_140b331f0
+void EventFire_VOICE_CHAT_AUDIO_CAPTURE_STARTED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "VOICE_CHAT_ACTIVE_OUTPUT_DEVICE_UPDATED");
+    FrameScriptEvents::FireList(list, "VOICE_CHAT_AUDIO_CAPTURE_STARTED", 32, 0x8826f66154c9ae25ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b3fc30
-// ref: FUN_140b331f0
 void EventSignal_VOICE_CHAT_AUDIO_CAPTURE_STARTED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_AUDIO_CAPTURE_STARTED);
+}
+
+// ref: FUN_140b33460
+void EventFire_VOICE_CHAT_AUDIO_CAPTURE_STOPPED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "VOICE_CHAT_AUDIO_CAPTURE_STARTED");
+    FrameScriptEvents::FireList(list, "VOICE_CHAT_AUDIO_CAPTURE_STOPPED", 32, 0xded5da72ec668ff9ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b3fd10
-// ref: FUN_140b33460
 void EventSignal_VOICE_CHAT_AUDIO_CAPTURE_STOPPED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_AUDIO_CAPTURE_STOPPED);
+}
+
+// ref: FUN_140b37b40
+void EventFire_VOICE_CHAT_CONNECTION_SUCCESS(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "VOICE_CHAT_AUDIO_CAPTURE_STOPPED");
+    FrameScriptEvents::FireList(list, "VOICE_CHAT_CONNECTION_SUCCESS", 29, 0x769fab3efd65be13ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b41130
-// ref: FUN_140b37b40
 void EventSignal_VOICE_CHAT_CONNECTION_SUCCESS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CONNECTION_SUCCESS);
+}
+
+// ref: FUN_140b38360
+void EventFire_VOICE_CHAT_INPUT_DEVICES_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "VOICE_CHAT_CONNECTION_SUCCESS");
+    FrameScriptEvents::FireList(list, "VOICE_CHAT_INPUT_DEVICES_UPDATED", 32, 0xf32418b526bb9f1eull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b413d0
-// ref: FUN_140b38360
 void EventSignal_VOICE_CHAT_INPUT_DEVICES_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_INPUT_DEVICES_UPDATED);
+}
+
+// ref: FUN_140b38de0
+void EventFire_VOICE_CHAT_OUTPUT_DEVICES_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "VOICE_CHAT_INPUT_DEVICES_UPDATED");
+    FrameScriptEvents::FireList(list, "VOICE_CHAT_OUTPUT_DEVICES_UPDATED", 33, 0xdb749d040c12e6b8ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b41750
-// ref: FUN_140b38de0
 void EventSignal_VOICE_CHAT_OUTPUT_DEVICES_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_OUTPUT_DEVICES_UPDATED);
+}
+
+// ref: FUN_140b39970
+void EventFire_VOICE_CHAT_SPEAK_FOR_ME_ACTIVE_STATUS_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "VOICE_CHAT_OUTPUT_DEVICES_UPDATED");
+    FrameScriptEvents::FireList(list, "VOICE_CHAT_SPEAK_FOR_ME_ACTIVE_STATUS_UPDATED", 45, 0x3abcc45dca574e9dull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b41ad0
-// ref: FUN_140b39970
 void EventSignal_VOICE_CHAT_SPEAK_FOR_ME_ACTIVE_STATUS_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_SPEAK_FOR_ME_ACTIVE_STATUS_UPDATED);
+}
+
+// ref: FUN_140b39be0
+void EventFire_VOICE_CHAT_SPEAK_FOR_ME_FEATURE_STATUS_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "VOICE_CHAT_SPEAK_FOR_ME_ACTIVE_STATUS_UPDATED");
+    FrameScriptEvents::FireList(list, "VOICE_CHAT_SPEAK_FOR_ME_FEATURE_STATUS_UPDATED", 46, 0x32b109939639f195ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b41bb0
-// ref: FUN_140b39be0
 void EventSignal_VOICE_CHAT_SPEAK_FOR_ME_FEATURE_STATUS_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_SPEAK_FOR_ME_FEATURE_STATUS_UPDATED);
+}
+
+// ref: FUN_140b3ab40
+void EventFire_VOICE_CHAT_TTS_VOICES_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "VOICE_CHAT_SPEAK_FOR_ME_FEATURE_STATUS_UPDATED");
+    FrameScriptEvents::FireList(list, "VOICE_CHAT_TTS_VOICES_UPDATE", 28, 0xc71b3264bb34c81bull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b42010
-// ref: FUN_140b3ab40
 void EventSignal_VOICE_CHAT_TTS_VOICES_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_TTS_VOICES_UPDATE);
+}
+
+// ref: FUN_140b3adb0
+void EventFire_VOICE_CHAT_VAD_SETTINGS_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "VOICE_CHAT_TTS_VOICES_UPDATE");
+    FrameScriptEvents::FireList(list, "VOICE_CHAT_VAD_SETTINGS_UPDATED", 31, 0x34af2ea25e6e75f9ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140b420f0
-// ref: FUN_140b3adb0
 void EventSignal_VOICE_CHAT_VAD_SETTINGS_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_VAD_SETTINGS_UPDATED);
+}
+
+// ref: FUN_140e4e0c0
+void EventFire_WOW_MOUSE_NOT_FOUND(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
-    FrameScriptEvents::Signal(id, "VOICE_CHAT_VAD_SETTINGS_UPDATED");
+    FrameScriptEvents::FireList(list, "WOW_MOUSE_NOT_FOUND", 19, 0x841bb2aec5bdf310ull,
+        [](lua_State*) { return 0; });
 }
 
 // ref: FUN_140e52a10
-// ref: FUN_140e4e0c0
 void EventSignal_WOW_MOUSE_NOT_FOUND(uint64_t id, void* args) {
-    (void)args;
-    FrameScriptEvents::Signal(id, "WOW_MOUSE_NOT_FOUND");
+    FrameScriptEvents::Dispatch(id, args, EventFire_WOW_MOUSE_NOT_FOUND);
 }
 
 // ref: FUN_141163d70

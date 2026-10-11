@@ -1,0 +1,12 @@
+{
+  "_comment": "Deliberate divergences tools/fidelity.py honours when it reads a reference function's calls. skip: calls the port leaves out on purpose (each with why). alias: a reference wrapper the port reaches through what it wraps (scored as that callee). Add an entry only with a reason a reader can check.",
+  "skip": {
+    "1402bd260": "Aegis: the obfuscated per-thread copy of the current taint (lua_State +0x18) that anti-tamper checks compare with lua_taint; not ported, see vendor/lua-5.1.4/src/lblizzard.c"
+  },
+  "alias": {
+    "14063e310": {
+      "to": "1402b3740",
+      "why": "lua_pcall behind an anti-tamper return-address check; the port calls lua_pcall (FrameScript.cpp, FrameScript_RunScript)"
+    }
+  }
+}

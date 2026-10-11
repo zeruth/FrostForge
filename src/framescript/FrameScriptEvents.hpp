@@ -9,7 +9,13 @@
 #include <cstdint>
 
 #include "blz/Vector.hpp"
+#include "framescript/FrameScript.hpp"
 #include "framescript/FrameScriptObject.hpp"
+
+extern "C" {
+#include "lblizzard.h"
+#include "lua.h"
+}
 
 namespace FrameScriptEvents {
 
@@ -91,36 +97,82 @@ EventListenerList* FindEventList(uint64_t id);
 // (FUN_140648490).
 bool ShouldDeliver(EventListenerList* list, EventListener* listener);
 
-// OnEvent(self, event, ...) for every listener of a list that should hear it (the body each
-// generated event signaller carries, e.g. FUN_140c4b590 for FRAMES_LOADED).
-template <class... Args>
-void SignalList(EventListenerList* list, const char* name, Args... args) {
+// A string by pointer and length, as the event code passes its name (null for nil).
+struct EVENTSTRING {
+    const char* m_data;
+    uint64_t m_length;
+};
+
+// Pushes the error handler, the handler at `ref`, the object and the event's name, returning
+// the error handler's index (FUN_140648330); calls it with `count` arguments of its own and pops
+// the error handler (FUN_140647940).
+int32_t PushHandler(lua_State* L, const EVENTSTRING* name, int32_t ref, FrameScript_Object* object);
+void CallHandler(lua_State* L, int32_t count, int32_t errorHandler);
+// A string pushed by pointer and length, nil when there is none (FUN_14065f750).
+void PushEventString(lua_State* L, const EVENTSTRING* text);
+
+// OnEvent(self, event, ...) for every listener of a list that should hear it, as each generated
+// event's fire function has it inlined (FUN_140b1e390 for GX_RESTARTED): the list deferred, each
+// listener's OnEvent bindings, each run under its own taint with the event's arguments pushed
+// by `push` (which returns how many it pushed), timed while profiling.
+template <class Push>
+void FireList(EventListenerList* list, const char* name, uint64_t length, uint64_t id, Push push) {
     DispatchScope scope(list);
-    EventListener* first = list->m_listeners.m_data;
-    EventListener* last = first + list->m_listeners.m_size;
-    for (EventListener* listener = first; listener != last; listener++) {
+    EventListener* listener = list->m_listeners.m_data;
+    EventListener* last = listener + list->m_listeners.m_size;
+    for (; listener != last; listener++) {
         if (!ShouldDeliver(list, listener)) {
             continue;
         }
-        // FUN_140648330 pushes the handler, self and the name; FUN_140647940 calls it.
-        listener->m_object->RunScript(0x1a, nullptr, name, args...);
+        lua_State* L = FrameScript_GetContext();
+        FrameScript_Object::Script scripts[3];
+        listener->m_object->GetScripts(scripts, 0x1a);
+        PROFILEHANDLERSCOPE profile;
+        ProfileHandlerEnter(&profile, id, listener->m_object);
+        for (FrameScript_Object::Script& script : scripts) {
+            if (script.m_ref == 0) {
+                continue;
+            }
+            const char* previous = lua_taint;
+            lua_pushjmptaint(L, lua_taint, lua_taintTracking);
+            lua_taintTracking++;
+            if (lua_taintTracking != 0 && lua_taintSuspended == 0) {
+                luaT_settaint(L, script.m_taint);
+            }
+            EVENTSTRING event = {name, length};
+            int32_t errorHandler = PushHandler(L, &event, script.m_ref, listener->m_object);
+            int32_t count = push(L);
+            CallHandler(L, count, errorHandler);
+            if (lua_taintTracking != 0 && lua_taintSuspended == 0) {
+                luaT_settaint(L, previous);
+            }
+            lua_taintTracking--;
+            lua_popjmptaint(L);
+            if (lua_taintTracking < 1) {
+                lua_taintTracking = 0;
+                lua_firstTaint = nullptr;
+            }
+        }
+        ProfileHandlerLeave(&profile);
     }
 }
 
-// An event to its own listeners, then to those of every event (each generated dispatcher, e.g.
-// FUN_140c57230 for FRAMES_LOADED).
-template <class... Args>
-void Signal(uint64_t id, const char* name, Args... args) {
+// An event to its own listeners, then to those of every event, inside the event's profiling
+// scope (each generated dispatcher, e.g. FUN_140b3ceb0 for GX_RESTARTED, with the event's own
+// fire function).
+typedef void (*EVENTFIRE)(EventListenerList* list, void* args);
+inline void Dispatch(uint64_t id, void* args, EVENTFIRE fire) {
+    PROFILEEVENTSCOPE scope;
+    ProfileEventEnter(&scope, id);
     EventListenerList* list = FindEventList(id);
     EventListenerList* all = GetAllEventsList();
-    if (list == nullptr) {
-        if (all->m_listeners.m_size == 0 && all->m_deferred == nullptr) {
-            return;
-        }
-    } else {
-        SignalList(list, name, args...);
+    if (list != nullptr) {
+        fire(list, args);
+        fire(all, args);
+    } else if (all->m_listeners.m_size != 0 || all->m_deferred != nullptr) {
+        fire(all, args);
     }
-    SignalList(all, name, args...);
+    ProfileEventLeave(&scope);
 }
 
 }
