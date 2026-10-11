@@ -1115,7 +1115,13 @@ def main() -> None:
     handlers = {}
     if args.handlers:
         handlers = stub_handlers()
-    roots = sorted(set(handlers) | {int(a.lower().removeprefix("fun_"), 16) for a in args.addr})
+    # hand-written forwarders (`// translated: FUN_x` outside src/gen) call the translation
+    forwarded = set()
+    for path in (ROOT / "src").rglob("*.cpp"):
+        if not path.relative_to(ROOT).as_posix().startswith("src/gen/"):
+            forwarded |= {int(a, 16) for a in re.findall(r"^// translated: FUN_([0-9a-f]{9})$",
+                                                         path.read_text(errors="replace"), re.M)}
+    roots = sorted(set(handlers) | forwarded | {int(a.lower().removeprefix("fun_"), 16) for a in args.addr})
     for round_ in range(1, 30 if args.fix else 2):
         t = Translator(args.depth)
         manifest = t.emit(roots, handlers)
