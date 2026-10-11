@@ -247,6 +247,7 @@ GxPipeline* OutlineGetPipeline(uint8_t skinned, uint8_t extra, uint16_t base, ui
     return GetKeyedPipeline(hash, &s_outlinePipelines, &s_outlineNewPipelines, &s_outlineLock, key, "OutlineBuffer", 3);
 }
 
+// ref: FUN_1412acef0
 uint32_t ShaderEffectVertexPull() {
     auto data = reinterpret_cast<const uint8_t*>(GxSelectGpuToUse()->m_data);
     return (*reinterpret_cast<const uint32_t*>(data + 0x224) >> 5) & 1;

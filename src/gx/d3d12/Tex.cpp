@@ -379,6 +379,7 @@ bool CGxDeviceD3d12::CreatePlaced(const D3D12_RESOURCE_DESC* desc, uint32_t stat
 
 // The view's objects: the texture's single object, or each subresource the range covers.
 template <class View>
+// ref: FUN_1422e8f00
 static void ViewAddObjects(View* view, Tex* tex) {
     if ((tex->m_flags & 0x40) != 0) {
         return;

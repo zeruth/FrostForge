@@ -467,6 +467,7 @@ ANIMLIST* CSimpleAnimGroup::GetScriptAnimations(ANIMLIST* anims) {
     return anims;
 }
 
+// ref: FUN_140603620
 void CSimpleAnimGroup::PlayCurrentOrder() {
     ANIMLIST& anims = this->m_orders[this->m_currentOrder];
     for (CSimpleAnim** it = anims.begin(), **end = anims.end(); it != end; it++) {

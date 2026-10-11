@@ -623,6 +623,7 @@ static const luaL_Reg co_funcs[] = {
 /* }====================================================== */
 
 
+/* ref: FUN_1407e92b0 */
 static void auxopen (lua_State *L, const char *name,
                      lua_CFunction f, lua_CFunction u) {
   lua_pushcfunction(L, u);

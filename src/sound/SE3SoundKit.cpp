@@ -782,6 +782,7 @@ void DefDestroy(SE3SoundKitDef* def) {
     def->m_link.Unlink();
 }
 
+// ref: FUN_1412d75e0
 void DefFreeNodes(blz::rb_node_base* node) {
     while (node != nullptr) {
         DefFreeNodes(node->m_right);
@@ -829,6 +830,7 @@ void SE3ReleaseKitDefs() {
 
 // The shutdown's frees: every instance left, the instance heap, the combined handles, and the
 // messages (FUN_1412d41d0's middle).
+// ref: FUN_140323620
 void SE3FreeEngineLists() {
     TSExplicitList<SE3HANDLENODE>& handles = g_se3Handles.m_fulllist;
     while (SE3HANDLENODE* node = handles.Head()) {

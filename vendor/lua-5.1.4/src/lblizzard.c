@@ -60,6 +60,7 @@ LAYOUT(profile, sizeof(ClosureProfile) == 0x20);
 ** (lua_State +0x18, FUN_1402bd260) that anti-tamper checks compare with lua_taint. That copy is
 ** not ported (Aegis).
 */
+/* ref: FUN_1402ca8b0 */
 void luaT_settaint (lua_State *L, const char *t) {
   lua_taint = t;
   if (t != NULL && lua_firstTaint == NULL) {

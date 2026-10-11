@@ -84,6 +84,7 @@ bool WowClientSparseDB2::Load(bool errors) {
 }
 
 // The AutoCode initializer's tail: a pool of 0x200 records a heap, Storm category 0x24.
+// ref: FUN_1405a5650
 WowClientSparseDB2Table::WowClientSparseDB2Table(const DBMeta* meta, const char* recordName, uint32_t recordSize)
     : WowClientSparseDB2(meta) {
     void* memory = SMemAlloc(sizeof(TObjectAllocHeap), 0x24, __FILE__, SStrHashFnv1a(__FILE__), __LINE__, 0);

@@ -954,6 +954,7 @@ bool XMLParseViewInsets(XMLINSET* object, XMLBUILDER* builder) {
 
 // <Color> under a font's <Shadow>, or the shadow's <Offset>.
 // LAB_14066cea0
+// ref: FUN_14066a4c0
 bool XMLParseShadowChild(XMLOBJECT* object, XMLBUILDER* builder, const char* name) {
     if (strcmp(name, "color") == 0) {
         object->m_type = XMLTYPE_COLOR;

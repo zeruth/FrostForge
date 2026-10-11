@@ -499,6 +499,7 @@ struct ADDLIGHTARGS {
 };
 
 // [index], light: FUN_1408c5ad0 reads the optional index.
+// ref: FUN_1407d22e0
 void ReadAddLight(lua_State* L, const char* usage, ADDLIGHTARGS* args) {
     int32_t index = 1;
     args->m_frame = FfxSelf(L, &index, usage);

@@ -551,6 +551,7 @@ TValue *luaH_setnum (lua_State *L, Table *t, int key) {
 }
 
 
+/* ref: FUN_1402c0c80 */
 TValue *luaH_setstr (lua_State *L, Table *t, TString *key) {
   const TValue *p = luaH_getstr(t, key);
   if (p != luaO_nilobject)

@@ -49,6 +49,7 @@ CSimpleFont* FontAt(lua_State* L, int32_t index) {
 }
 
 // Self for the Font methods: the font, or the usage error.
+// ref: FUN_1408c6090
 CSimpleFont* FontSelf(lua_State* L, int32_t* index, const char* usage) {
     if (lua_type(L, *index) < 1) {
         luaL_error(L, usage);
@@ -139,6 +140,7 @@ uint32_t RequiredJustify(lua_State* L, int32_t* index, const char* usage) {
     return justify;
 }
 
+// ref: FUN_1408c6c60
 int32_t PushColor(lua_State* L, uint32_t argb) {
     if (!lua_checkstack(L, 4)) {
         luaL_error(L, "stack overflow");

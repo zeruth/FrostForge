@@ -75,6 +75,9 @@ int32_t PushPair(lua_State* L, const float* pair) {
 
 // The generic handler methods: self of the class's type, then the object's own method.
 template <int32_t (*Type)(), int32_t (FrameScript_Object::*Method)(lua_State*)>
+// ref: FUN_1424c5360
+// ref: FUN_1424c5440
+// ref: FUN_1424c5520
 int ScriptBody(lua_State* L) {
     const char* error = nullptr;
     FrameScript_Object* object = FrameScript_Object::GetObjectFromLua(&error, L, Type(), 1, false, false);

@@ -230,6 +230,7 @@ void Queue::WaitForValue(uint64_t value) {
     GxDeviceD3d12()->Fail(E_FAIL, "WaitForSingleObjectEx Other");
 }
 
+// ref: FUN_1422a8bb0
 Queue::~Queue() {
     ReleaseAndNull(&this->m_queue);
     ReleaseAndNull(&this->m_fence);

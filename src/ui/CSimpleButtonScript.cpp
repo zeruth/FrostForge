@@ -47,6 +47,7 @@ int32_t AtlasArgument(lua_State* L, int32_t* index) {
 }
 
 // The atlas argument the Set*Atlas methods read: required, a string (or a number).
+// ref: FUN_1407d1140
 int32_t RequiredAtlas(lua_State* L, int32_t* index, const char* usage) {
     if (!Present(L, *index)) {
         luaL_error(L, usage);
@@ -493,6 +494,8 @@ int SetHighlightAtlas(lua_State* L) {
 }
 
 template <int32_t State>
+// ref: FUN_1407ff840
+// ref: FUN_1424ac710
 int SetStateAtlas(lua_State* L, const char* usage, const char* method) {
     int32_t index = 1;
     CSimpleButton* button = ButtonSelf(L, &index, usage);
@@ -596,6 +599,7 @@ int SetFormattedText(lua_State* L) {
 }
 
 // The font object argument: a font's name or a font object.
+// ref: FUN_141a8db80
 CSimpleFont* FontArgument(lua_State* L) {
     int32_t type = lua_type(L, 2);
     if (type == LUA_TSTRING) {
@@ -609,6 +613,7 @@ CSimpleFont* FontArgument(lua_State* L) {
 }
 
 // FUN_1424c90d0 and its siblings.
+// ref: FUN_141a974c0
 int SetFontObjectFor(lua_State* L, CSimpleFont* CSimpleButton::*field, const char* method) {
     CSimpleButton* button = SharedSelf(L);
     if (button == nullptr) {

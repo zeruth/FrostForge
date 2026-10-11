@@ -304,6 +304,7 @@ CALLBACKPAIR* CallbackSlot(CALLBACKDEQUE* deque, uint64_t index, const char* blo
     return &(*block)[index & 7];
 }
 
+// ref: FUN_14228ede0
 void CallbackGrowMap(CALLBACKDEQUE* deque, const char* mapTag = s_callbackMapTag) {
     uint64_t size = deque->m_mapSize;
     if (size == 0) {
@@ -669,6 +670,7 @@ void GxAdapterReserve(GXADAPTERLIST* list, uint64_t count) {
     list->m_data = data;
 }
 
+// ref: FUN_14228d660
 GxAdapterInfo* GxAdapterPush(pm::GPU* gpu, pm::APIDEVICEDATA* data, pm::GPU* handle) {
     if (g_gxAdapters.m_size == (g_gxAdapters.m_capacity & ~blz::string::INLINE)) {
         GxAdapterReserve(&g_gxAdapters, (g_gxAdapters.m_capacity & ~blz::string::INLINE) + 1);
@@ -1840,6 +1842,7 @@ void RunCallbacks(CALLBACKDEQUE* deque) {
     }
 }
 
+// ref: FUN_14228ed20
 void PushCallback(CALLBACKDEQUE* deque, GXDEVICECALLBACK callback, void* param) {
     if (((deque->m_offset + deque->m_size) & 7) == 0 && deque->m_mapSize <= (deque->m_size + 8) >> 3) {
         CallbackGrowMap(deque);

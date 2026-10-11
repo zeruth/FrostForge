@@ -45,6 +45,7 @@ CScriptRegion* GetRegionFromLua(lua_State* L) {
 }
 
 // The same lookup without the queryable check, for the script-handler methods.
+// ref: FUN_1424ca3b0
 CScriptRegion* GetScriptRegionFromLua(lua_State* L) {
     const char* error = nullptr;
     auto region = static_cast<CScriptRegion*>(FrameScript_Object::GetObjectFromLua(&error, L, CScriptRegion::GetObjectType(), 1, false, false));
@@ -619,6 +620,7 @@ int GetNumPoints(lua_State* L) {
     return PushUInt(L, static_cast<uint32_t>(count));
 }
 
+// ref: FUN_140d25650
 int32_t PushPointInfo(lua_State* L, const CLayoutFrame::POINTINFO* info) {
     int32_t results = PushFramePoint(L, static_cast<uint32_t>(info->m_point));
     results += PushObject(L, info->m_relativeTo);

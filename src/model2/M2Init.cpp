@@ -309,6 +309,7 @@ bool InitParticles(void* base, uint32_t size, M2Data* data, M2Array<M2Particle>*
 
 }
 
+// ref: FUN_14156b760
 void M2InitLog(const char* format, ...) {
     if (g_m2Log == nullptr) {
         return;

@@ -269,6 +269,7 @@ void CopyCommandList::Reset() {
 }
 
 // Records the pending barriers before the next command.
+// ref: FUN_1422ceea0
 void CopyCommandList::FlushBarriers() {
     if (this->m_barriers.size() != 0) {
         this->m_empty = 0;
@@ -303,6 +304,7 @@ void CopyCommandList::CloseLists() {
 
 // Moves one object to `state` in this list: the first use records the state the list needs
 // it in at the start; later uses add (or fold into) a transition barrier.
+// ref: FUN_1422c9040
 bool TrackState(CopyCommandList* list, D3d12Object* object, uint32_t state) {
     StateTrackerMap& map = list->m_states[list->m_current];
     bool inserted = false;

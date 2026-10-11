@@ -94,6 +94,7 @@ bool CanTakeKeyboardFocus(FrameScript_Object* frame) {
 
 // Turns what the clipboard or the IME gave into text the edit box takes (the filter the
 // paste and the IME result share).
+// ref: FUN_141650f90
 void InsertFiltered(CSimpleEditBox* box, const char* text) {
     for (const char* p = text; *p != '\0';) {
         int32_t bytes = 0;

@@ -987,6 +987,7 @@ class WowDB2Lookup_Sorted : public Base {
 
     // ref: FUN_14058df90 (Null), FUN_14058e670 (IX8): every live record through the base's
     // own iteration, then sorted by the meta's order (FUN_1405973b0).
+    // ref: FUN_14059ef80
     void Rebuild() override {
         this->m_sorted.clear();
         this->m_sorted.reserve(Base::Count());

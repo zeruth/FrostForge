@@ -637,6 +637,7 @@ void CGxDeviceD3d12::SortPages() {
 }
 
 // The empty pages are released (inline in FUN_1422db9f0 and FUN_1422e00d0).
+// ref: FUN_1422c7e50
 uint32_t CGxDeviceD3d12::TrimPages() {
     TrimBufferPages(this->m_vertexPages);
     TrimBufferPages(this->m_indexPages);
@@ -1143,6 +1144,7 @@ bool CGxDeviceD3d12::FlushCopies() {
 }
 
 // Waits for the GPU and starts over (FUN_1422d2a30), when memory runs low.
+// ref: FUN_1422ce6a0
 void CGxDeviceD3d12::Flush() {
     if (this->m_ready == 0) {
         return;

@@ -87,6 +87,7 @@ static TString* LoadString(LoadState* S)
  }
 }
 
+/* ref: FUN_1402bd3e0 */
 static void LoadCode(LoadState* S, Proto* f)
 {
  int n=LoadInt(S);
@@ -158,6 +159,7 @@ static void LoadDebug(LoadState* S, Proto* f)
  for (i=0; i<n; i++) f->upvalues[i]=LoadString(S);
 }
 
+/* ref: FUN_1402c3b90 */
 static Proto* LoadFunction(LoadState* S, TString* p)
 {
  Proto* f;

@@ -285,6 +285,7 @@ void SharedSetIndexBuffer(CM2Shared* shared, GxRenderContext* context, uint32_t 
     context->SetIndexBuffer(shared->GetIndexBuf(lod), 1);
 }
 
+// ref: FUN_1411ac3e0
 void SharedSetVertexBuffer(CM2Shared* shared, GxRenderContext* context, uint32_t lod) {
     GxSetVertexStream(context, shared->GetVertexBuf(lod), 0x14);
 }

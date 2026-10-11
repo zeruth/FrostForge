@@ -294,6 +294,7 @@ bool RemoveById(LOCALIDTABLE* table, int32_t key) {
     return true;
 }
 
+// ref: FUN_1402d9bc0
 void EnterById(LOCALMANIFEST* manifest, int32_t fileDataId, LocalManifestEntry* entry) {
     LOCALIDNODE proto;
     proto.m_next = nullptr;
@@ -368,6 +369,7 @@ bool VisitFile(OSFILEINFO* info, void* param) {
 }
 
 template <class NODE>
+// ref: FUN_1402da190
 void LOCALTABLE<NODE>::Rehash(uint64_t minimum) {
     uint64_t capacity = ChainedCapacity(this->m_count, this->m_maxLoad, minimum);
     if (capacity == this->m_capacity && this->m_buckets != nullptr) {

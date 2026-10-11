@@ -473,6 +473,7 @@ CRenderBatch::CRenderBatch() {
     this->m_clipped = 0;
 }
 
+// ref: FUN_1405ec770
 CRenderBatch::~CRenderBatch() {
     this->Clear();
     this->m_clipped = 0;
@@ -704,6 +705,7 @@ void CRenderBatch::UploadRange(const CSimpleRenderablesSubBatch* range) {
     context->SetIndexBuffer(indices, 1);
 }
 
+// ref: FUN_1406200f0
 void CRenderBatch::Draw(bool onTopOnly, const float* viewIn, const float* projectionIn) {
     float view[16];
     float projection[16];

@@ -1446,6 +1446,7 @@ uint64_t SStrVPrintfCount(char* dest, uint64_t maxchars, const char* format, va_
     return written;
 }
 
+// ref: FUN_140261040
 void SStrVPrintf(char* dest, uint64_t maxchars, const char* format, va_list args) {
     SStrVPrintfCount(dest, maxchars, format, args);
 }

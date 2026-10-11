@@ -189,6 +189,9 @@ template struct PATCHMAP<0x58>;
 namespace {
 
 template <uint32_t SIZE>
+// ref: FUN_1420eb490
+// ref: FUN_1420eb580
+// ref: FUN_1421159e0
 void Insert(PATCHMAP<SIZE>* map, const uint8_t* record) {
     uint32_t slot = blz::murmur3_32(record, 9, 0) & (map->m_bucketCount - 1);
     if (map->Find(record, slot)) {

@@ -465,6 +465,7 @@ void CSimpleHTML::AddContentHeight(float height) {
     }
 }
 
+// ref: FUN_1424bab90
 void CSimpleHTML::PushElement(int32_t type, CSimpleRegion* region, const uint8_t* textType, const uint32_t* justify) {
     VisibleElement element = {};
     element.m_type = type;

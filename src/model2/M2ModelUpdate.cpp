@@ -1054,6 +1054,7 @@ void CM2Model::UpdateChildren(M2AnimateContext* context) {
 
 // The animated bounds merged into the accumulated ones, then taken through the inverse render
 // matrix with their centre and radius (FUN_1411b1fe0's tail).
+// ref: FUN_1414087a0
 void CM2Model::UpdateAccumulatedBounds() {
     float render[16] = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
     this->GetRenderMatrix(reinterpret_cast<C44Matrix*>(render));

@@ -15,6 +15,7 @@ void M2ModelAddRef(CM2Model* model) {
     model->AddRef();
 }
 
+// ref: FUN_142458520
 uint32_t M2ModelRelease(CM2Model* model) {
     return model->Release(1);
 }

@@ -335,6 +335,9 @@ SOLIDNODE* SolidInsert(CHAINEDHASH* hash, const SOLIDKEY& key, bool* inserted) {
 }
 
 template <class Node, class Visit>
+// ref: FUN_140318a50
+// ref: FUN_1411f9040
+// ref: FUN_142559f60
 void ForEachNode(CHAINEDHASH* hash, Visit visit) {
     if (hash->m_buckets == nullptr) {
         return;
@@ -439,6 +442,7 @@ void MoveFunction(blz::function_storage* dest, blz::function_storage* source) {
     source->m_manager = &blz::function_empty_manager;
 }
 
+// ref: FUN_1402db6e0
 void AddCallback(CALLBACKLIST* list, blz::shared_mutex* lock, const char* tag, blz::function_storage* function,
     uint64_t key) {
     lock->lock();

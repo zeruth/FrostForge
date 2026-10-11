@@ -362,6 +362,7 @@ void ReserveHandlers(HANDLERVECTOR* vector, uint64_t count, const char* tag) {
 
 // push_back of a moved-in pair under the lock. (The reference also handles a source inside
 // the vector, which a stack temporary never is.)
+// ref: FUN_1402d48c0
 void AddHandler(HANDLERVECTOR* vector, blz::shared_mutex* lock, const char* tag, blz::function_storage* handler,
     uint64_t key) {
     lock->lock();

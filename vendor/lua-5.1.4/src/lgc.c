@@ -66,6 +66,7 @@ static void removeentry (Node *n) {
 }
 
 
+/* ref: FUN_1402bfa60 */
 static void reallymarkobject (global_State *g, GCObject *o) {
   lua_assert(iswhite(o) && !isdead(g, o));
   white2gray(o);
@@ -156,6 +157,7 @@ size_t luaC_separateudata (lua_State *L, int all) {
 }
 
 
+/* ref: FUN_1402c0240 */
 static int traversetable (global_State *g, Table *h) {
   int i;
   int weakkey = 0;
@@ -222,6 +224,7 @@ static void traverseproto (global_State *g, Proto *f) {
 
 
 
+/* ref: FUN_1402bf300 */
 static void traverseclosure (global_State *g, Closure *cl) {
   markobject(g, cl->c.env);
   if (cl->c.isC) {
@@ -254,6 +257,7 @@ static void checkstacksizes (lua_State *L, StkId max) {
 }
 
 
+/* ref: FUN_1402c00d0 */
 static void traversestack (global_State *g, lua_State *l) {
   StkId o, lim;
   CallInfo *ci;

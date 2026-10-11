@@ -88,6 +88,7 @@ uint8_t SpanResidentState::GetType() {
 }
 
 // The common ending: done, the scratch block back, and the result.
+// ref: FUN_142107f60
 void SpanResidentState::Finish(uint8_t result) {
     this->m_stage = STAGE_DONE;
     if (this->m_scratch != nullptr) {

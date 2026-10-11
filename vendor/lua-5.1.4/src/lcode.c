@@ -248,6 +248,7 @@ static int addk (FuncState *fs, TValue *k, TValue *v) {
 }
 
 
+/* ref: FUN_1402c7d30 */
 int luaK_stringK (FuncState *fs, TString *s) {
   TValue o;
   setsvalue(fs->L, &o, s);
@@ -269,6 +270,7 @@ static int boolK (FuncState *fs, int b) {
 }
 
 
+/* ref: FUN_1402c8ce0 */
 static int nilK (FuncState *fs) {
   TValue k, v;
   setnilvalue(&v);
@@ -795,6 +797,7 @@ void luaK_fixline (FuncState *fs, int line) {
 }
 
 
+/* ref: FUN_1402c71f0 */
 static int luaK_code (FuncState *fs, Instruction i, int line) {
   Proto *f = fs->f;
   dischargejpc(fs);  /* `pc' will change */

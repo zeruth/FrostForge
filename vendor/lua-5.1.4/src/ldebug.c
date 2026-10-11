@@ -109,6 +109,7 @@ static Proto *getluaproto (CallInfo *ci) {
 }
 
 
+/* ref: FUN_1402b4f20 */
 static const char *findlocal (lua_State *L, CallInfo *ci, int n) {
   const char *name;
   Proto *fp = getluaproto(ci);
@@ -494,6 +495,7 @@ static const char *kname (Proto *p, int c) {
 }
 
 
+/* ref: FUN_1402b4fe0 */
 static const char *getobjname (lua_State *L, CallInfo *ci, int stackpos,
                                const char **name) {
   if (isLua(ci)) {  /* a Lua function? */
@@ -586,6 +588,7 @@ void luaG_concaterror (lua_State *L, StkId p1, StkId p2) {
 }
 
 
+/* ref: FUN_1402b51e0 */
 void luaG_aritherror (lua_State *L, const TValue *p1, const TValue *p2) {
   TValue temp;
   if (luaV_tonumber(p1, &temp) == NULL)

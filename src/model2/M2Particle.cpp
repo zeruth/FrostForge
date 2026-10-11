@@ -1355,6 +1355,7 @@ static void ParticleInitQuad(CParticleEmitter2* emitter, CParticle2_Quad* partic
 }
 
 // A particle of the emitter's kind made from the list and started.
+// ref: FUN_141407dc0
 static void ParticleSpawnOne(CParticleEmitter2* emitter, float delta, const float* m) {
     int32_t type = emitter->m_type;
     if (type == 0) {

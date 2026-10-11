@@ -179,6 +179,7 @@ blz::string s_scriptError;
 // Calls `visit` with each of the object's scripts until it returns false.
 // ref: FUN_14065e9a0
 template <class Visit>
+// ref: FUN_140644aa0
 void ForEachScript(const FrameScript_Object* object, Visit visit) {
     ScriptVector* scripts = s_scripts.find(reinterpret_cast<uint64_t>(object));
     if (scripts == nullptr) {

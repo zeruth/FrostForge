@@ -347,6 +347,7 @@ CSimpleTexture::CSimpleTexture(CSimpleFrame* frame, uint8_t drawLayer, int8_t su
     }
 }
 
+// ref: FUN_140631c70
 CSimpleTexture::~CSimpleTexture() {
     if (this->m_texture != nullptr) {
         UiReleaseTexture(&this->m_texture);
@@ -1149,6 +1150,7 @@ static void ReplaceTexture(CTexture** slot, CSimpleTexture* owner, CTexture* tex
 namespace {
 
 // What SetTextureById and SetTextureByName share once the file is known.
+// ref: FUN_14166e680
 bool ApplyFile(CSimpleTexture* texture, int32_t fileDataId, uint32_t wrapH, uint32_t wrapV, uint8_t filter) {
     if (texture->m_texture != nullptr) {
         UiReleaseTexture(&texture->m_texture);
@@ -1680,6 +1682,7 @@ void CSimpleTexture::ClearAtlas() {
     this->StoreTexCoords(texCoords);
 }
 
+// ref: FUN_140636960
 void CSimpleTexture::SetVertexOffset(uint32_t corner, const float* x, const float* y) {
     if (corner >= 4) {
         return;
@@ -2113,6 +2116,7 @@ CDataAllocator s_maskHeap(0x2a0, 100);
 int32_t CSimpleMaskTexture::s_metaTable = -2;
 int32_t CSimpleMaskTexture::s_restrictedMetaTable = -2;
 
+// ref: FUN_140631b10
 CSimpleMaskTexture::CSimpleMaskTexture(CSimpleFrame* frame, uint8_t drawLayer, int8_t subLevel, bool show)
     : CSimpleTexture(frame, drawLayer, subLevel, show) {
 }
@@ -2138,6 +2142,7 @@ void CSimpleMaskTexture::CreateScriptMetaTables() {
     s_restrictedMetaTable = FrameScript_Object::CreateScriptMetaTable(L, CSimpleMaskTexture_FillScriptMethods, true);
 }
 
+// ref: FUN_1424c4260
 void CSimpleMaskTexture::DestroyScriptMetaTables() {
     lua_State* L = FrameScript_GetContext();
     luaL_unref(L, LUA_REGISTRYINDEX, s_metaTable);

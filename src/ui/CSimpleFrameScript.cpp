@@ -87,6 +87,7 @@ struct OPTIONALARG {
 // looked up first, the region made in its layer and sublevel, named, loaded from the template,
 // and caught up with an animation its frame is playing.
 template <class T>
+// ref: FUN_1424c9a80
 CSimpleRegion* CreateTextureLikeRegion(CSimpleFrame* frame, const OPTIONALARG<const char*>* name,
     const OPTIONALARG<uint32_t>* layer, const OPTIONALARG<const char*>* inherits, const OPTIONALARG<int8_t>* subLevel) {
     char templateName[0x80] = {};
@@ -1214,6 +1215,7 @@ int SetClipsChildren(lua_State* L) {
 }
 
 // A frame-flag setter: the required bool into the flag.
+// ref: FUN_1424db5e0
 int SetFrameFlagMethod(lua_State* L, const char* usage, const char* method, uint32_t flag) {
     int32_t index = 1;
     CSimpleFrame* frame = FrameSelf(L, &index, usage);

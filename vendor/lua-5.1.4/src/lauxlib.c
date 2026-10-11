@@ -128,6 +128,7 @@ LUALIB_API int luaL_newmetatable (lua_State *L, const char *tname) {
 }
 
 
+/* ref: FUN_1418a6f70 */
 LUALIB_API void *luaL_checkudata (lua_State *L, int ud, const char *tname) {
   void *p = lua_touserdata(L, ud);
   if (p != NULL) {  /* value is a userdata? */

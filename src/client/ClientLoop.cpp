@@ -129,6 +129,7 @@ bool LoadingScreenIsActive() {
 
 // A mouse event at a window position: the position as a fraction of the client rect, y up,
 // with the held buttons and the input mode's flags.
+// ref: FUN_1402369a0
 MOUSEEVENT MouseEventAt(bool alternate, uint32_t button, uint32_t x, uint32_t y, uint32_t time, int32_t wheel) {
     MOUSEEVENT event = {};
     event.m_type = static_cast<int32_t>(s_mouseMode);

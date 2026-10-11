@@ -373,6 +373,7 @@ namespace {
 
 // A head quad's half axes in view space: screen-facing, turned by the spin or laid along the
 // velocity, or in the world's orientation (the shared first half of the head writers).
+// ref: FUN_141345190
 void ParticleQuadAxes(CParticleEmitter2* emitter, const CParticle2* particle, ParticleDrawState* state,
     const ParticleSpace* space, float* r, float* u) {
     float base;
@@ -622,6 +623,7 @@ void ParticleWriteQuad(const CParticleEmitter2* emitter, const CParticle2* parti
     }
 }
 
+// ref: FUN_141295690
 void ParticleWriteHead(CParticleEmitter2* emitter, uint8_t* vertices, const CParticle2* particle,
     ParticleDrawState* state, const ParticleSpace* space, ParticleFormat format) {
     float r[3];
@@ -875,6 +877,7 @@ void ParticleSystemOnDeviceCreated(void* param) {
 }
 
 // LAB_14124ac20
+// ref: FUN_1425e6e90
 void ParticleSystemOnDeviceDestroyed(void* param) {
     (void)param;
     GxBufDestroy(&g_particleIndices);

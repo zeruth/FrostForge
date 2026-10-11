@@ -227,6 +227,7 @@ void CSimpleMovieFrame::StartMovieByName(const char* name, bool looping, int32_t
     *returnCode = 0;
 }
 
+// ref: FUN_1406022d0
 void CSimpleMovieFrame::QueueFinished() {
     QueuedScript& script = this->m_queuedScripts.emplace_back();
     script.m_type = QueuedScript::FINISHED;

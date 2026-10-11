@@ -162,6 +162,7 @@ bool IsActionPermitted(uint32_t action) {
     return true;
 }
 
+// ref: FUN_140800cc0
 FrameScript_Object* Self(lua_State* L, int32_t type, int32_t* index, const char* usage) {
     if (!Present(L, *index)) {
         luaL_error(L, usage);
@@ -255,6 +256,7 @@ float OptionalUIUnits(lua_State* L, int32_t* index, const char* usage, bool* pre
     return value;
 }
 
+// ref: FUN_1408a77d0
 float RequiredFinite(lua_State* L, int32_t* index, const char* usage) {
     if (!Present(L, *index)) {
         luaL_error(L, usage);
@@ -283,6 +285,7 @@ float OptionalFinite(lua_State* L, int32_t* index, const char* usage, float fall
 }
 
 // FUN_1408c5050
+// ref: FUN_1407d2350
 int32_t RequiredInt32(lua_State* L, int32_t* index, const char* usage) {
     if (!Present(L, *index)) {
         luaL_error(L, usage);
@@ -463,6 +466,7 @@ int32_t PushBool(lua_State* L, bool value) {
 }
 
 // FUN_1407cb130
+// ref: FUN_140800bf0
 int32_t PushStringOrNil(lua_State* L, const char* value) {
     if (!lua_checkstack(L, 1)) {
         luaL_error(L, "stack overflow");
@@ -538,6 +542,7 @@ int32_t PushUInt(lua_State* L, uint32_t value) {
 }
 
 // FUN_1408008a0
+// ref: FUN_140800ae0
 int32_t PushObject(lua_State* L, FrameScript_Object* object) {
     if (!lua_checkstack(L, 1)) {
         luaL_error(L, "stack overflow");

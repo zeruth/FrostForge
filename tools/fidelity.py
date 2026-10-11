@@ -58,6 +58,8 @@ PORT_EXE = ROOT / "build/cmake/bin/Release/FrostLite.exe"
 PORT_PDB = ROOT / "build/cmake/bin/Release/FrostLite.pdb"
 LLVM = Path("C:/Program Files/LLVM/bin")
 OUT_JSON = ROOT / "build/fidelity.json"
+# links a source tag cannot express: a template instance or header code, by its PDB name
+LINKS = Path(__file__).with_name("links.json")
 PREV_JSON = ROOT / "build/fidelity.prev.json"
 REF_CACHE = ROOT / "build/fidelity-ref-cache.json"
 HISTORY = ROOT / "docs/fidelity.md"
@@ -457,6 +459,169 @@ def port_references(binary: Binary, starts: np.ndarray) -> dict[int, list[int]]:
     return refs
 
 
+# ---- bulk linking ------------------------------------------------------------------------------
+
+def code_callers(binary: Binary, starts: list[int], owner) -> dict[int, set]:
+    """function start -> the functions that call, jump to or take the address of it."""
+    callers = defaultdict(set)
+    for target, sites in port_references(binary, np.array(starts, dtype=np.int64)).items():
+        for site in sites:
+            o = owner(site)
+            if o is not None and o != target:
+                callers[target].add(o)
+    return callers
+
+
+def string_owners(binary: Binary, owner) -> dict[str, set]:
+    """string -> the functions that take its address (`lea r64, [rip+disp]` onto a C string of
+    six characters or more)."""
+    text = binary.text
+    data = np.frombuffer(bytes(binary.image[binary.off(text.start):binary.off(text.start) + (text.end - text.start)]),
+                         dtype=np.uint8)
+    n = len(data) - 7
+    pos = np.nonzero(((data[:n] & 0xF8) == 0x48) & (data[1:n + 1] == 0x8D) & ((data[2:n + 2] & 0xC7) == 0x05))[0]
+    disp = (data[pos + 3].astype(np.int64) | (data[pos + 4].astype(np.int64) << 8)
+            | (data[pos + 5].astype(np.int64) << 16) | (data[pos + 6].astype(np.int64) << 24))
+    disp = np.where(disp >= 1 << 31, disp - (1 << 32), disp)
+    targets = pos + text.start + 7 + disp
+    out = defaultdict(set)
+    seen: dict[int, str | None] = {}
+    for site, target in zip((pos + text.start).tolist(), targets.tolist()):
+        if target not in seen:
+            s = binary.cstr(target, 200) if binary.section_of(target) is not None and not binary.is_code(target) else None
+            seen[target] = s if s is not None and len(s) >= 6 and s.isprintable() else None
+        s = seen[target]
+        if s is None:
+            continue
+        o = owner(site)
+        if o is not None:
+            out[s].add(o)
+    return out
+
+
+def link(ref, port, md, cor, procs, proc_at, proc_starts, port_of_ref, ref_of_port, ref_features, port_sequence,
+         score_pair, ref_crt, apply_tag, flush_tags, args) -> None:
+    """Propagates links out from the tied functions until nothing new verifies.
+
+    Every linked pair proposes candidates twice: the untagged calls on each side that fall into
+    the same gap of the two aligned call sequences, and the untagged callers of each side. A
+    candidate is accepted only when it scores as a port of the reference function (the same four
+    signals as the report, with something to compare: calls, fields or constants), its size is
+    plausible, and it is the best match both ways. Accepted pairs are anchors for the next round.
+    Plain functions get a source tag above their definition; template instances and header code,
+    which one tag cannot name, go into tools/links.json by PDB name.
+    """
+    def ref_owner(site):
+        i = bisect.bisect_right(ref.piece_starts, site) - 1
+        return ref.piece_root[i] if i >= 0 and site < ref.piece_ends[i] else None
+
+    def port_owner(site):
+        i = bisect.bisect_right(proc_starts, site) - 1
+        if i >= 0 and site < proc_starts[i] + proc_at[proc_starts[i]][0]:
+            return proc_starts[i]
+        return None
+
+    print("indexing callers...", file=sys.stderr)
+    ref_callers = code_callers(ref, sorted(set(ref.piece_root)), ref_owner)
+    port_callers = code_callers(port, proc_starts, port_owner)
+
+    def ref_ok(x) -> bool:
+        return (x in cor and x not in port_of_ref and not ref_is_lib(cor, x) and x not in REF_SKIP
+                and cor[x].get("size", 0) >= 8 and ref_crt(x) is None)
+
+    def port_ok(va) -> bool:
+        if va not in proc_at or va in ref_of_port or proc_at[va][0] < 8:
+            return False
+        stripped = strip_name(proc_at[va][1])
+        return not PORT_LIB.match(stripped) and not stripped.startswith("FrostUnimplemented")
+
+    # strings each side takes the address of: one used by a single function on both sides pins
+    # the pair
+    print("indexing strings...", file=sys.stderr)
+    ref_strings = string_owners(ref, ref_owner)
+    port_strings = string_owners(port, port_owner)
+    string_pairs = []
+    for s, owners in ref_strings.items():
+        mine = port_strings.get(s)
+        if mine and len(owners) == 1 and len(mine) == 1:
+            string_pairs.append((next(iter(owners)), next(iter(mine))))
+    print(f"{len(string_pairs)} strings unique on both sides", file=sys.stderr)
+
+    accepted = []
+    seen_pairs = set()
+    for round_ in range(1, 13):
+        cand = defaultdict(set)
+        for x, va in string_pairs:
+            if ref_ok(x) and port_ok(va):
+                cand[x].add(va)
+        for r, p in list(port_of_ref.items()):
+            rseq = [REF_ALIAS.get(x, x) for x in ref_features(r).calls if not ref_is_lib(cor, x)]
+            pseq = port_sequence(p, 0, {p}, [], [], flatten=False)
+            pairs = lcs_pairs(rseq, pseq)
+            bounds = [(-1, -1)] + pairs + [(len(rseq), len(pseq))]
+            for (i0, j0), (i1, j1) in zip(bounds, bounds[1:]):
+                rgap = [x for x in rseq[i0 + 1:i1] if ref_ok(x)]
+                pgap = [x[1] for x in pseq[j0 + 1:j1] if isinstance(x, tuple) and port_ok(x[1])]
+                if rgap and pgap and len(rgap) * len(pgap) <= 64:
+                    for x in rgap:
+                        cand[x].update(pgap)
+            rc = [x for x in ref_callers.get(r, ()) if ref_ok(x)]
+            pc = [va for va in port_callers.get(p, ()) if port_ok(va)]
+            if rc and pc and len(rc) * len(pc) <= 64:
+                for x in rc:
+                    cand[x].update(pc)
+        scored = []
+        for x, vas in cand.items():
+            for va in vas:
+                if (x, va) in seen_pairs:
+                    continue
+                seen_pairs.add((x, va))
+                ratio = proc_at[va][0] / max(1, cor[x].get("size", 1))
+                if not 0.25 <= ratio <= 4.0:
+                    continue
+                m = score_pair(x, va)
+                if not any(m["parts"][k] is not None for k in ("calls", "fields", "consts")):
+                    continue
+                need = args.match if cor[x].get("size", 0) >= 0x40 else max(args.match, 0.9)
+                if m["score"] >= need:
+                    scored.append((m["score"], x, va))
+        # the best match both ways
+        scored.sort(reverse=True)
+        best_for_port = {}
+        for score, x, va in scored:
+            best_for_port.setdefault(va, (score, x))
+        new = 0
+        for score, x, va in scored:
+            if x in port_of_ref or va in ref_of_port or best_for_port[va][1] != x:
+                continue
+            port_of_ref[x] = va
+            ref_of_port[va] = x
+            accepted.append((score, x, va))
+            new += 1
+        print(f"round {round_}: {len(cand)} reference candidates, {len(scored)} verified, {new} linked", file=sys.stderr)
+        if new == 0:
+            break
+
+    print(f"{len(accepted)} new links", file=sys.stderr)
+    if args.dry_run:
+        for score, x, va in sorted(accepted)[:args.limit or 40]:
+            print(f"{score:4.2f}  FUN_{x:x}  {proc_at[va][1]}")
+        return
+    links = json.loads(LINKS.read_text(encoding="utf-8")) if LINKS.exists() else {}
+    tagged = 0
+    for score, x, va in accepted:
+        if apply_tag(x, va):
+            tagged += 1
+        else:
+            links[proc_at[va][1]] = f"FUN_{x:x}"
+    flush_tags()
+    LINKS.write_text(json.dumps(dict(sorted(links.items())), indent=1) + "\n", encoding="utf-8", newline="\n")
+    print(f"{tagged} source tags written, {len(links)} links in {LINKS.name}", file=sys.stderr)
+    if tagged:
+        print("rebuild before measuring: tags tie through the build's line table, and the new tag lines "
+              "moved the definitions under them", file=sys.stderr)
+
+
 # ---- main ------------------------------------------------------------------------------------
 
 def main() -> None:
@@ -475,6 +640,9 @@ def main() -> None:
                     help="untagged port functions that sit where an untagged reference call does")
     ap.add_argument("--match", type=float, default=0.75,
                     help="with --suggest: the match score a pairing needs to be marked (and applied)")
+    ap.add_argument("--link", action="store_true",
+                    help="link untagged port functions to the reference in bulk, to a fixpoint (see link())")
+    ap.add_argument("--dry-run", action="store_true", help="with --link: report, write nothing")
     ap.add_argument("--apply", action="store_true",
                     help="with --suggest: write the marked pairings' tags into the sources")
     ap.add_argument("--record", action="store_true", help="append the totals to docs/fidelity.md")
@@ -519,6 +687,18 @@ def main() -> None:
             port_of_ref[t["addr"]] = best
             ref_of_port.setdefault(best, t["addr"])
             tag_of_ref[t["addr"]] = t
+    links = json.loads(LINKS.read_text(encoding="utf-8")) if LINKS.exists() else {}
+    va_by_name = defaultdict(list)
+    for va, size, name in procs:
+        va_by_name[name].append(va)
+    for name, addr in links.items():
+        r = int(addr.removeprefix("FUN_"), 16)
+        vas = va_by_name.get(name, [])
+        if len(vas) == 1 and r not in port_of_ref and vas[0] not in ref_of_port:
+            port_of_ref[r] = vas[0]
+            ref_of_port[vas[0]] = r
+            tag_of_ref[r] = {"addr": r, "file": "tools/links.json", "line": 0, "name": name, "stub": False,
+                             "partial": False, "sites": []}
     untied = [t for t in tags if t["addr"] not in port_of_ref]
 
     # names an inline site can carry, for the tagged functions
@@ -716,6 +896,50 @@ def main() -> None:
         return {"score": score, "parts": parts, "rf": rf, "pf": pf, "rseq": rseq, "pseq": pseq, "kept": kept,
                 "fields": fields, "consts": consts, "stub_sites": stub_sites}
 
+    pending = defaultdict(list)     # file -> [(line index, text)]
+
+    def apply_tag(x: int, va: int) -> bool:
+        """Queue `// ref: FUN_x` above the definition of the port function at `va`."""
+        loc = symbolize([va], port.base).get(va)
+        if loc is None:
+            return False
+        path = Path(loc[0])
+        if not path.is_absolute():
+            path = ROOT / path
+        rel = path.resolve().relative_to(ROOT.resolve()).as_posix() if path.exists() else ""
+        if not rel.startswith(tagscan.TAG_ROOTS) or path.suffix not in (".cpp", ".c"):
+            return False
+        lines = path.read_text(encoding="utf-8").splitlines()
+        name = short_name(proc_at[va][1])
+        pat = re.compile(r"(^|[\s:*&~])" + re.escape(name) + r"\s*\(")
+        for i in range(min(loc[1] - 1, len(lines) - 1), max(-1, loc[1] - 60), -1):
+            if pat.search(lines[i]) and not lines[i].rstrip().endswith(";"):
+                # already tagged, or a note naming the address on purpose without a tag
+                # (a port that is more than the reference function, say)
+                if i > 0 and ("ref:" in lines[i - 1] or f"{x:x}" in lines[i - 1].lower()):
+                    return False
+                indent = re.match(r"\s*", lines[i]).group(0)
+                text = f"{indent}/* ref: FUN_{x:x} */" if path.suffix == ".c" else f"{indent}// ref: FUN_{x:x}"
+                pending[path].append((i, text))
+                return True
+        return False
+
+    def flush_tags() -> int:
+        written = 0
+        for path, inserts in pending.items():
+            lines = path.read_text(encoding="utf-8").splitlines()
+            for i, text in sorted(inserts, reverse=True):
+                lines.insert(i, text)
+                written += 1
+            path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+        pending.clear()
+        return written
+
+    if args.link:
+        link(ref, port, md, cor, procs, proc_at, proc_starts, port_of_ref, ref_of_port, ref_features, port_sequence,
+             score_pair, ref_crt, apply_tag, flush_tags, args)
+        return
+
     # ---- score every tied port -----------------------------------------------------------
     records = {}
     votes: Counter = Counter()
@@ -889,34 +1113,6 @@ def main() -> None:
                     print(f"        :{s['line']}  {s['note'] or '(no note)'}")
         print(f"{len(rows)} stubs listed; {len(live)} live of {len(stubs)}", file=sys.stderr)
     elif args.suggest:
-        pending = defaultdict(list)     # file -> [(line index, text)]
-
-        def apply_tag(x: int, va: int) -> bool:
-            """Queue `// ref: FUN_x` above the definition of the port function at `va`."""
-            loc = symbolize([va], port.base).get(va)
-            if loc is None:
-                return False
-            path = Path(loc[0])
-            if not path.is_absolute():
-                path = ROOT / path
-            rel = path.resolve().relative_to(ROOT.resolve()).as_posix() if path.exists() else ""
-            if not rel.startswith(tagscan.TAG_ROOTS) or path.suffix not in (".cpp", ".c"):
-                return False
-            lines = path.read_text(encoding="utf-8").splitlines()
-            name = short_name(proc_at[va][1])
-            pat = re.compile(r"(^|[\s:*&~])" + re.escape(name) + r"\s*\(")
-            for i in range(min(loc[1] - 1, len(lines) - 1), max(-1, loc[1] - 60), -1):
-                if pat.search(lines[i]) and not lines[i].rstrip().endswith(";"):
-                    # already tagged, or a note naming the address on purpose without a tag
-                    # (a port that is more than the reference function, say)
-                    if i > 0 and ("ref:" in lines[i - 1] or f"{x:x}" in lines[i - 1].lower()):
-                        return False
-                    indent = re.match(r"\s*", lines[i]).group(0)
-                    text = f"{indent}/* ref: FUN_{x:x} */" if path.suffix == ".c" else f"{indent}// ref: FUN_{x:x}"
-                    pending[path].append((i, text))
-                    return True
-            return False
-
         # every candidate scored as if it were tagged; the best match wins, votes break ties
         candidates = defaultdict(list)
         for (x, va), n in votes.items():
@@ -947,11 +1143,7 @@ def main() -> None:
             print(f"{n:5}  {match:4.2f} {ratio:5.2f}  FUN_{x:x}  {proc_at[va][1]}{note}{'  <-' if good else ''}")
             if good and args.apply and apply_tag(x, va):
                 applied += 1
-        for path, inserts in pending.items():
-            lines = path.read_text(encoding="utf-8").splitlines()
-            for i, text in sorted(inserts, reverse=True):
-                lines.insert(i, text)
-            path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+        flush_tags()
         print(f"{len(rows)} suggestions" + (f"; {applied} tags written" if args.apply else ""), file=sys.stderr)
     elif not args.summary:
         key = args.by

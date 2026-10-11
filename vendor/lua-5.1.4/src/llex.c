@@ -206,6 +206,7 @@ static void read_numeral (LexState *ls, SemInfo *seminfo) {
 }
 
 
+/* ref: FUN_1402c65b0 */
 static int skip_sep (LexState *ls) {
   int count = 0;
   int s = ls->current;

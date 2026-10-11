@@ -206,6 +206,7 @@ void CVar::Deleter::operator()(CVar* cvar) const {
 namespace {
 
 // unique_ptr<CVar, CVar::Deleter>::reset
+// ref: FUN_140322d90
 void CVarReset(CVar** slot, CVar* cvar) {
     CVar* old = *slot;
     *slot = cvar;

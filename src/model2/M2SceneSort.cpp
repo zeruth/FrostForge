@@ -679,6 +679,7 @@ void AppendIndices(M2SceneVector<uint32_t>* indices, const uint32_t* source, uin
 }
 
 // Appends elements (FUN_1411cf4f0 and FUN_1411e4db0).
+// ref: FUN_1411dd570
 void AppendElements(M2SceneVector<M2Element>* elements, const M2Element* source, uint64_t count) {
     uint64_t size = elements->m_size;
     if ((elements->m_capacity & 0x7fffffffffffffffull) < size + count) {

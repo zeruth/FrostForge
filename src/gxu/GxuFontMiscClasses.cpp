@@ -593,6 +593,7 @@ void TextureCacheUpload(TEXTURECACHE* cache) {
 }
 
 // The texture, rows and glyphs of a page go (the per-page block of FUN_140697f10).
+// ref: FUN_1406885d0
 void TextureCacheClear(TEXTURECACHE* cache) {
     void* texture = cache->m_texture;
     cache->m_texture = nullptr;

@@ -56,6 +56,7 @@ void UnlinkFont(FONTHASHOBJ* node) {
     node->m_linktofull.Unlink();
 }
 
+// ref: FUN_141283d90
 void FONTTABLE::Delete(FONTHASHOBJ* node) {
     if (node->m_font != nullptr) {
         GxuFontDestroyFont(&node->m_font);

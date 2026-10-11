@@ -118,6 +118,7 @@ bool ScriptCVarWritable(const char* name) {
     return cvar != nullptr && (cvar->m_flags & 0x104) == 0;
 }
 
+// ref: FUN_141c2cb30
 bool ScriptCVarPermitted(const char* name) {
     CVar* cvar = CVarLookup(name == nullptr ? 0 : t2util::ConstFnvHashStringI(name));
     if (cvar == nullptr) {

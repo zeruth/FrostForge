@@ -46,6 +46,7 @@ void WowClientDB2ReloadWithHotfixes(WowClientDB2_Base* table) {
     WowClientDB2LoadWithFlags(table, 4);
 }
 
+// ref: FUN_1413a5670
 void DynamicLifeTimeDB::Load() {
     int32_t fileDataId = this->m_table->m_meta->m_fileDataId;
     if (cas::CASFileGetResidency(fileDataId, 0, 0) == 2) {
@@ -84,6 +85,7 @@ void DynamicLifeTimeDB::Wait() {
     }
 }
 
+// ref: FUN_1416819e0
 void DynamicLifeTimeDB::ReleaseIfLoaded() {
     if (!this->m_table->m_loaded) {
         return;

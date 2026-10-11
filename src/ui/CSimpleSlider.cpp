@@ -70,6 +70,7 @@ struct EVENTTHROTTLE {
 EVENTTHROTTLE s_dragThrottle = { 1, 10, 1, 0 };
 
 // A new thumb's image from a source that is not a texture object.
+// ref: FUN_1425b3600
 bool ApplyTextureSource(CSimpleTexture* texture, const TEXTURESOURCE* source) {
     int32_t type = source->m_type;
     if (type == TEXTURESOURCE::SOURCE_FILE || type == TEXTURESOURCE::SOURCE_FILE_ID) {
@@ -466,6 +467,7 @@ CSimpleSlider* SliderSelf(lua_State* L, int32_t* index, const char* usage) {
     return static_cast<CSimpleSlider*>(Self(L, CSimpleSlider::GetObjectType(), index, usage));
 }
 
+// ref: FUN_14060d7c0
 void SetSliderEnabled(CSimpleSlider* slider, bool enabled) {
     slider->SetFrameFlag(FRAME_DISABLED, !enabled);
     if (!(slider->FrameScript_Object::m_flags & FSOBJ_LOADING)) {

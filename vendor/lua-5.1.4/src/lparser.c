@@ -353,6 +353,7 @@ static void open_func (LexState *ls, FuncState *fs) {
 }
 
 
+/* ref: FUN_1402c24b0 */
 static void close_func (LexState *ls) {
   lua_State *L = ls->L;
   FuncState *fs = ls->fs;
@@ -380,6 +381,7 @@ static void close_func (LexState *ls) {
 }
 
 
+/* ref: FUN_1402b1e30 */
 Proto *luaY_parser (lua_State *L, ZIO *z, Mbuffer *buff, const char *name) {
   struct LexState lexstate;
   struct FuncState funcstate;

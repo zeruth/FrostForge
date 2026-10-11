@@ -49,6 +49,7 @@ void EffectsRemove(uint64_t key) {
     }
 }
 
+// ref: FUN_1412ab6a0
 void DeleteEffect(CShaderEffect* effect) {
     if (effect != nullptr) {
         effect->~CShaderEffect();
@@ -78,6 +79,7 @@ void OnRenderSettingsChanged(const RENDERSETTINGS* previous, const RENDERSETTING
     s_effectsLock.unlock();
 }
 
+// ref: FUN_1412a3440
 void OnDeviceCreated(void* param) {
     (void)param;
     ShaderEffectCreate("EdgeGlow", 0x8f, 0x53);

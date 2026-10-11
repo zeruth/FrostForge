@@ -365,6 +365,7 @@ void DynamicInitState::OnCancel() {
     }
 }
 
+// ref: FUN_1420f6560
 AsyncState* DynamicInitCreate(Instance* instance, uint64_t opId, OPCALLBACK callback, void* context) {
     void* memory = PackageAlloc(GetBufferAllocator(), sizeof(DynamicInitState), 8, false, s_noTag, 0);
     if (!memory) {

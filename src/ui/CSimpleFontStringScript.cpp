@@ -176,6 +176,7 @@ int32_t PushColor(lua_State* L, uint32_t argb) {
 }
 
 // A justification as its name (FUN_1408c6e70).
+// ref: FUN_1407cb130
 int32_t PushJustify(lua_State* L, uint32_t justify) {
     return ScriptMethod::PushStringOrNil(L, JustifyToString(justify));
 }

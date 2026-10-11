@@ -85,6 +85,7 @@ uint32_t RequiredRGB(lua_State* L, int32_t* index, const char* usage) {
 }
 
 // An optional alpha 0..1 into {value, present} (the template's inline reader).
+// ref: FUN_1407cbb50
 void OptionalAlphaByte(lua_State* L, int32_t* index, const char* usage, uint8_t* alpha) {
     if (lua_type(L, *index) < 1) {
         (*index)++;
