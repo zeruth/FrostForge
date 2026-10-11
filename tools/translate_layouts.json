@@ -1,0 +1,6 @@
+{
+ "_doc": "Port objects translated code reads (tools/translate.py --risks) whose layout has been checked against the reference. Key: a regex matched against the origin line. 'offsets' lists the offsets checked (omitted: every offset, for a table indexed by the reference's own offsets); an origin read at any other offset is reported unchecked again.",
+ "^EventCallbacks_Table \\(": {"note": "a flat table the port indexes by the reference's own byte offsets (src/framescript/EventCallbacks.cpp)"},
+ "^g_\\w+DB \\(src/db/DB2Tables\\.hpp\\) itself$": {"offsets": ["0x0", "0x140"], "note": "WowClientDB2_Base: static_assert 0x1f0, vtable at 0, m_lookup at 0x140; WowDB2Lookup's vtable slots 0x00-0x88 in the reference's order (Next is 0x50)"},
+ "^CVarLookup \\(": {"offsets": ["0x14", "0x374"], "note": "CVar::m_intValue at 0x14 (src/console/Var.hpp); 0x374 is a misattribution, the variable was reassigned from ClientServicesGet"}
+}

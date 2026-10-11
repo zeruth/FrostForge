@@ -15,6 +15,7 @@
 #include "framescript/FrameScript.hpp"
 #include "framescript/ScriptMethod.hpp"
 #include "glue/GlueMgr.hpp"
+#include "services/ClientServices.hpp"
 #include "gxu/GxuFont.hpp"
 #include "ui/CSimpleTop.hpp"
 #include "ui/FrameXML.hpp"
@@ -299,16 +300,9 @@ void Sub1414F8950() {
     FROST_UNIMPLEMENTED();
 }
 
-// The sound device (SI3).
-// ref: FUN_14156b750
-void* Sub14156B750() {
-    FROST_UNIMPLEMENTED();
-    return nullptr;
-}
-
 // ref: FUN_14156d0e0
-void Sub14156D0E0(void* device) {
-    (void)device;
+void Sub14156D0E0(void* services) {
+    (void)services;
     FROST_UNIMPLEMENTED();
 }
 
@@ -386,7 +380,7 @@ void Sub14023DBD0() {
     Sub141658730();
     Sub1414F8960();
     Sub1414F8950();
-    Sub14156D0E0(Sub14156B750());
+    Sub14156D0E0(ClientServicesGet());
     Sub140330BA0();
     Sub14033FA30();
     FrameTime_Initialize();

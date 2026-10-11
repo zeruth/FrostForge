@@ -737,7 +737,7 @@ void OnSuspend() {
     SetSystemAwake(0);
 }
 
-// On resume the sound device is reset (FUN_14156cf10 / FUN_14156b750, vtable slot 0x58, not
+// On resume ClientServices is told (FUN_14156cf10 on ClientServicesGet(), vtable slot 0x58, not
 // ported), then the clients learns of it through OS event 0x1a.
 // ref: FUN_1402297b0
 void OnResume() {

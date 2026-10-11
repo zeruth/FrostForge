@@ -249,6 +249,51 @@ SCALAR = re.compile(r"^(?:static\s+|extern\s+|thread_local\s+)*(?:const\s+)?(?:u
                     r"int|unsigned|DWORD|size_t|uintptr_t|HANDLE|HWND|\w+\s*\*+)$")
 
 
+STACK_DECL = re.compile(r"^(\s*)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local_|[a-z]{1,4}Stack_)(res)?([0-9a-f]+))"
+                        r"\s*(?:\[\s*(\w+)\s*\])?\s*;[^\n]*\n", re.M)
+
+
+def stack_frame(body: str) -> str:
+    """Locals at their offsets in the reference's frame, when one's address escapes.
+
+    Ghidra splits a stack struct into one local per field (`local_28`, `iStack_24`, `uStack_20`)
+    and passes `&local_28` to a callee that reads the rest at +4 and +8; the compiler is free to
+    place separate locals anywhere, so the callee would read garbage. A local named `local_N` sits
+    N bytes below the stack pointer at entry (`local_resN` N above it); keeping them all in one
+    buffer at those offsets, aligned as the reference's stack was, keeps the struct whole."""
+    # the declarations are the block before Ghidra's first blank line
+    end = re.search(r"\n[ \t]*\n", body)
+    decls = [m for m in STACK_DECL.finditer(body, 0, end.end() if end else 0)
+             if m.group(2).split()[0] not in ("return", "goto", "else", "case")]
+    if not decls:
+        return body
+    names = [m.group(4) for m in decls]
+    arrays = {m.group(4) for m in decls if m.group(7)}
+    if not arrays and not any(re.search(rf"&\s*{n}\b", body) for n in names):
+        return body
+    offs = {m.group(4): (int(m.group(6), 16) if m.group(5) else -int(m.group(6), 16)) for m in decls}
+    lo = min(offs.values())
+    pad = (8 + lo) % 16          # the entry stack pointer is 8 past a 16-byte boundary
+    top = max(decls, key=lambda m: offs[m.group(4)])
+    ctype = lambda m: f"{m.group(2).strip()} {m.group(3)}".strip()
+    size_of = lambda m: f"sizeof({ctype(m)}[{m.group(7)}])" if m.group(7) else f"sizeof({ctype(m)})"
+    frame = (f"{decls[0].group(1)}__declspec(align(16)) unsigned char gen_frame"
+             f"[0x{pad + offs[top.group(4)] - lo:x} + {size_of(top)}];\n")
+    for m in reversed(decls):
+        body = body[:m.start()] + body[m.end():]
+    first = re.search(r"\{\n", body).end()
+    body = body[:first] + frame + body[first:]
+    for m in decls:
+        n, at = m.group(4), pad + offs[m.group(4)] - lo
+        if m.group(7):
+            ptr = f"(({ctype(m)} *)(gen_frame + 0x{at:x}))"
+            body = re.sub(rf"&\s*\b{n}\b", ptr, body)
+            body = re.sub(rf"\b{n}\b", ptr, body)
+        else:
+            body = re.sub(rf"\b{n}\b", f"(*({ctype(m)} *)(gen_frame + 0x{at:x}))", body)
+    return body
+
+
 def scalar_size(decl: str) -> int:
     """The bytes a scalar global's declared type occupies (a pointer or handle is 8)."""
     t = re.sub(r"\b(?:static|extern|const|volatile|thread_local|unsigned|signed)\b", "", decl).strip()
@@ -326,6 +371,17 @@ def write_exports(exported: dict[int, dict]):
             p.write_text(kept, encoding="utf-8", newline="\n")
 
 
+def load_data_sizes() -> dict[str, int]:
+    """Each port global's size, by its unqualified name (the smallest, when the name repeats)."""
+    out = subprocess.run([str(F.LLVM / "llvm-pdbutil.exe"), "pretty", "-globals", str(F.PORT_PDB)],
+                         capture_output=True, text=True, errors="replace").stdout
+    sizes = {}
+    for m in re.finditer(r"^\s*data \[0x[0-9a-f]+, sizeof=(\d+)\] .*?(\w+)(?:\[\d*\])*\s*$", out, re.M):
+        name, size = m.group(2), int(m.group(1))
+        sizes[name] = min(size, sizes.get(name, size))
+    return sizes
+
+
 def load_data_publics() -> list[str]:
     out = subprocess.run([str(F.LLVM / "llvm-pdbutil.exe"), "dump", "-publics", str(F.PORT_PDB)],
                          capture_output=True, text=True, errors="replace").stdout
@@ -359,7 +415,8 @@ class Translator:
             cache = {"procs": [[va, size, name] for va, size, name in procs],
                      "publics": {str(k): v for k, v in load_publics().items()},
                      "signatures": {str(k): v for k, v in load_signatures().items()},
-                     "data_publics": load_data_publics()}
+                     "data_publics": load_data_publics(),
+                     "data_sizes": load_data_sizes()}
             PORT_CACHE.write_text(json.dumps(cache), encoding="utf-8")
         cache = json.loads(PORT_CACHE.read_text(encoding="utf-8"))
         self.port_va_by_name = defaultdict(list)
@@ -371,7 +428,12 @@ class Translator:
         self.held = port_globals()
         self.held_sorted = sorted(self.held)
         data_publics = cache.get("data_publics", [])
+        if "data_sizes" not in cache:
+            cache["data_sizes"] = load_data_sizes()
+            PORT_CACHE.write_text(json.dumps(cache), encoding="utf-8")
         for addr, g in self.held.items():
+            # the compiler's own size for it: a span past it would land in other port memory
+            g["size"] = cache["data_sizes"].get(g["name"])
             hits = [n for n in data_publics if re.match(rf"\?{re.escape(g['name'])}@(?:\w+@)*@3", n)]
             g["mangled"] = hits[0] if len(hits) == 1 else None
         self.global_aliases: dict[int, str] = {}
@@ -385,7 +447,8 @@ class Translator:
     def port_target(self, a: int):
         """(va, mangled, signature) when the port has a callable counterpart of `a`."""
         rec = self.tied.get(a)
-        if rec is None:
+        # a port stub returns nothing: the reference's body, translated, does better
+        if rec is None or rec["kind"] == "stub":
             return None
         vas = self.port_va_by_name.get(rec["name"], [])
         if len(vas) != 1:
@@ -444,7 +507,12 @@ class Translator:
         base = self.held_sorted[i]
         g = self.held[base]
         nxt = self.held_sorted[i + 1] if i + 1 < len(self.held_sorted) else base + 0x400
-        span = min(scalar_size(g["decl"]), nxt - base) if g["scalar"] else min(nxt - base, 0x400)
+        if g.get("size"):
+            span = g["size"]
+        elif g["scalar"]:
+            span = min(scalar_size(g["decl"]), nxt - base)
+        else:
+            span = min(nxt - base, 0x400)
         return (base, g) if addr < base + span else None
 
     def decl(self, a: int) -> tuple[str, list[str] | None]:
@@ -485,8 +553,8 @@ class Translator:
                     if self.port_target(b) is not None and b not in roots:
                         adapt[b] = True
                         seen.add(b)
-                    elif b in self.tied:
-                        stub[b] = "a port that cannot be called from C (stub, internal or aggregate ABI)"
+                    elif b in self.tied and self.tied[b]["kind"] != "stub":
+                        stub[b] = "a port that cannot be called from C (internal or aggregate ABI)"
                         seen.add(b)
                     elif d + 1 <= self.depth:
                         frontier.append((b, d + 1))
@@ -539,7 +607,7 @@ class Translator:
         head, rest = text.split("{", 1)
         sig = self.signature(a)
         ret, _, params = sig
-        body = "{" + rest
+        body = stack_frame("{" + rest)
         # switch cases are labels Ghidra qualifies with `::`
         body = re.sub(r"\b(switchD_\w+)::(\w+)", r"\1__\2", body)
         # a function's address taken, `&FUN_x`: the reference address, which the jumps dispatch
@@ -639,6 +707,40 @@ class Translator:
         self.global_aliases.update(aliases)
         self.exported.update(exported)
         return f"{ret} FUN_{a:x}({', '.join(decls) or 'void'})\n{body.rstrip()}\n"
+
+    def port_reads(self, body: str, adapted) -> dict[str, dict]:
+        """What a translated body reads out of the port's objects, by where the object came from.
+
+        An object comes from an adapted port function (its result) or a port global (its value,
+        or the global itself when it is an aggregate). Offsets are the reference's; a vtable slot
+        is a call through `*obj + slot`. Tracking is by variable name, so it is a review list,
+        not a proof."""
+        origins = {}
+        for m in re.finditer(r"\b(\w+) = (?:\([^()]*\))?CALLF\([^,]+, FUN_([0-9a-f]{9})\)\(", body):
+            a = int(m.group(2), 16)
+            # strings, fresh memory and hashes are bytes, not a port layout
+            if a in adapted and not re.match(r"(lua_|luaL_|SMem|SStr)", self.tied[a]["name"]):
+                origins[m.group(1)] = f"{self.tied[a]['name']} (FUN_{a:x}) result"
+        for m in re.finditer(r"\b(\w+) = [^;]*?gen_g_([0-9a-f]{9})\b[^;]*;", body):
+            g = self.held.get(int(m.group(2), 16))
+            if g is not None:
+                origins[m.group(1)] = f"{g['name']} ({g['file']}) value"
+        out = defaultdict(lambda: {"offsets": set(), "vtable": set()})
+        for var, origin in origins.items():
+            for m in re.finditer(rf"\*\s*{var}\s*\+\s*(0x[0-9a-f]+|\d+)\)\)", body):
+                out[origin]["vtable"].add(int(m.group(1), 0))
+            for m in re.finditer(rf"\*\s*\([\w ]+\*+\s*\)\s*\(\s*{var}\s*\+\s*(0x[0-9a-f]+|\d+)\s*\)", body):
+                out[origin]["offsets"].add(int(m.group(1), 0))
+            if re.search(rf"\*\([\w ]+\*\)\s*{var}\b", body):
+                out[origin]["offsets"].add(0)
+        # an aggregate global read in place
+        for m in re.finditer(r"&gen_g_([0-9a-f]{9}) \+ 0x([0-9a-f]+)\)", body):
+            g = self.held.get(int(m.group(1), 16))
+            if g is not None and not g["scalar"]:
+                out[f"{g['name']} ({g['file']}) itself"]["offsets"].add(int(m.group(2), 16))
+        return {k: {"offsets": [f"0x{o:x}" for o in sorted(v["offsets"])],
+                    "vtable": [f"0x{o:x}" for o in sorted(v["vtable"])]}
+                for k, v in out.items() if v["offsets"] or v["vtable"]}
 
     # ---- emission -------------------------------------------------------------------------
     def emit(self, roots: list[int], handlers: dict[int, str]) -> dict:
@@ -763,9 +865,13 @@ class Translator:
                         "        return 0;", "    }", "}", ""]
         (GEN / "handlers.cpp").write_text("\n".join(fwd), encoding="utf-8", newline="\n")
 
+        port_reads = {f"{a:x}": r for a in sorted(bodies) if (r := self.port_reads(bodies[a], plan["adapt"]))}
         manifest = {
             "translated": {f"{a:x}": {"depth": d, "file": lines_of[a][0], "lines": lines_of[a][1:]}
                            for a, d in sorted(plan["translate"].items())},
+            # where translated code reads a port object at the reference's offsets: each is right
+            # only if the port's layout matches there (tools/translate.py --risks)
+            "port_reads": port_reads,
             "adapted": sorted(f"{a:x}" for a in plan["adapt"]),
             "stubbed": {f"{a:x}": why for a, why in sorted(plan["stub"].items())},
             "handlers": {f"{a:x}": cname for a, cname in sorted(handlers.items()) if a in plan["translate"]},
@@ -802,14 +908,78 @@ def build_errors() -> list[tuple[str, int, str]]:
     return errors
 
 
+def report_risks() -> None:
+    """The port objects translated code reads, by origin: the layouts to check first."""
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    by_origin = defaultdict(lambda: {"offsets": set(), "vtable": set(), "functions": set()})
+    for a, reads in manifest.get("port_reads", {}).items():
+        for origin, r in reads.items():
+            by_origin[origin]["offsets"] |= set(r["offsets"])
+            by_origin[origin]["vtable"] |= set(r["vtable"])
+            by_origin[origin]["functions"].add(a)
+    checked = json.loads((ROOT / "tools/translate_layouts.json").read_text(encoding="utf-8"))
+    def note_of(origin):
+        # checked only when every offset it is read at was checked
+        for k, v in checked.items():
+            if not k.startswith("_") and re.search(k, origin):
+                if "offsets" not in v or by_origin[origin]["offsets"] <= set(v["offsets"]):
+                    return v["note"]
+        return None
+
+    unchecked = {o for o in by_origin if note_of(o) is None}
+    print(f"{len(manifest.get('port_reads', {}))} translated functions read port objects at the reference's "
+          f"offsets, through {len(by_origin)} origins; {len(unchecked)} unchecked "
+          f"(tools/translate_layouts.json records the checked ones)")
+    for origin, r in sorted(by_origin.items(), key=lambda kv: (kv[0] not in unchecked, -len(kv[1]["functions"]))):
+        if origin not in unchecked:
+            print(f"  {len(r['functions']):4} fns  checked  {origin}: {note_of(origin)}")
+            continue
+        key = lambda o: int(o, 16)
+        line = f"  {len(r['functions']):4} fns  {origin}: offsets {' '.join(sorted(r['offsets'], key=key)) or '-'}"
+        if r["vtable"]:
+            line += f"; vtable slots {' '.join(sorted(r['vtable'], key=key))}"
+        print(line)
+
+
+def report_faults(log: Path) -> None:
+    """The faults a run's log recorded in translated code, each at its translated source line."""
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    rx = re.compile(r"\[translated\] FUN_([0-9a-f]+) faulted \((\w+) at ([0-9A-Fa-f]+), touching ([0-9a-f]+)\)")
+    faults = [m.groups() for m in rx.finditer(log.read_text(encoding="utf-8", errors="replace"))]
+    print(f"{len(faults)} faults in translated code")
+    for handler, code, at, touching in faults:
+        sym = subprocess.run([str(F.LLVM / "llvm-symbolizer.exe"), f"--obj={F.PORT_EXE}", f"0x{at}"],
+                             capture_output=True, text=True, errors="replace").stdout.split("\n")
+        where = sym[1].strip() if len(sym) > 1 else "?"
+        func = sym[0].strip()
+        src = ""
+        m = re.match(r"(.*):(\d+):\d+$", where)
+        if m and Path(m.group(1)).exists():
+            src = Path(m.group(1)).read_text(encoding="utf-8").splitlines()[int(m.group(2)) - 1].strip()
+        t = int(touching, 16)
+        kind = f"a null object (+0x{t:x})" if t < 0x10000 else f"a wild pointer 0x{t:x}"
+        suspects = [o for o, r in manifest.get("port_reads", {}).get(func.removeprefix("FUN_"), {}).items()
+                    if f"0x{t:x}" in r["offsets"]]
+        print(f"  {manifest['handlers'].get(handler, 'FUN_' + handler)}: {code} in {func} reading {kind}")
+        print(f"      {Path(where).name}: {src}")
+        if suspects:
+            print(f"      the object is likely: {', '.join(suspects)}")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--risks", action="store_true", help="list the port objects translated code reads, and stop")
+    ap.add_argument("--faults", metavar="LOG", help="map a run log's translated faults to source, and stop")
     ap.add_argument("--handlers", action="store_true", help="the stubbed Lua API handlers as roots")
     ap.add_argument("--addr", nargs="*", default=[], help="more roots")
     ap.add_argument("--depth", type=int, default=2)
     ap.add_argument("--fix", action="store_true", help="build, demote what fails to compile, repeat")
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    if args.risks:
+        return report_risks()
+    if args.faults:
+        return report_faults(Path(args.faults))
 
     handlers = {}
     if args.handlers:

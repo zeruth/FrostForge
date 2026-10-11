@@ -95,6 +95,8 @@ const GENJUMP g_genJumps[] = {
     { 0x1402cd370ULL, (void*)&FUN_1402cd370 },
     { 0x1402cda40ULL, (void*)&FUN_1402cda40 },
     { 0x1402cdac0ULL, (void*)&FUN_1402cdac0 },
+    { 0x1402cdfc0ULL, (void*)&FUN_1402cdfc0 },
+    { 0x1402ce000ULL, (void*)&FUN_1402ce000 },
     { 0x1402cf230ULL, (void*)&FUN_1402cf230 },
     { 0x1402cfd70ULL, (void*)&FUN_1402cfd70 },
     { 0x1402d0690ULL, (void*)&FUN_1402d0690 },
@@ -699,7 +701,6 @@ const GENJUMP g_genJumps[] = {
     { 0x1411bff90ULL, (void*)&FUN_1411bff90 },
     { 0x1411c0070ULL, (void*)&FUN_1411c0070 },
     { 0x1411c0e20ULL, (void*)&FUN_1411c0e20 },
-    { 0x1411c6d30ULL, (void*)&FUN_1411c6d30 },
     { 0x1411c78e0ULL, (void*)&FUN_1411c78e0 },
     { 0x1411c79d0ULL, (void*)&FUN_1411c79d0 },
     { 0x1411c8c70ULL, (void*)&FUN_1411c8c70 },
@@ -715,7 +716,16 @@ const GENJUMP g_genJumps[] = {
     { 0x1411cdc50ULL, (void*)&FUN_1411cdc50 },
     { 0x1411cf030ULL, (void*)&FUN_1411cf030 },
     { 0x1411cf210ULL, (void*)&FUN_1411cf210 },
+    { 0x1411d0da0ULL, (void*)&FUN_1411d0da0 },
+    { 0x1411d0ff0ULL, (void*)&FUN_1411d0ff0 },
+    { 0x1411d3540ULL, (void*)&FUN_1411d3540 },
+    { 0x1411d3610ULL, (void*)&FUN_1411d3610 },
+    { 0x1411df380ULL, (void*)&FUN_1411df380 },
+    { 0x1411df3b0ULL, (void*)&FUN_1411df3b0 },
     { 0x1411df470ULL, (void*)&FUN_1411df470 },
+    { 0x1411e49c0ULL, (void*)&FUN_1411e49c0 },
+    { 0x1411e4a70ULL, (void*)&FUN_1411e4a70 },
+    { 0x1411e4fb0ULL, (void*)&FUN_1411e4fb0 },
     { 0x1411e6070ULL, (void*)&FUN_1411e6070 },
     { 0x1411e7250ULL, (void*)&FUN_1411e7250 },
     { 0x1411e74e0ULL, (void*)&FUN_1411e74e0 },
@@ -755,6 +765,8 @@ const GENJUMP g_genJumps[] = {
     { 0x141281690ULL, (void*)&FUN_141281690 },
     { 0x14129d890ULL, (void*)&FUN_14129d890 },
     { 0x1412b1720ULL, (void*)&FUN_1412b1720 },
+    { 0x1412be640ULL, (void*)&FUN_1412be640 },
+    { 0x1412be750ULL, (void*)&FUN_1412be750 },
     { 0x1412c9780ULL, (void*)&FUN_1412c9780 },
     { 0x1412c9d80ULL, (void*)&FUN_1412c9d80 },
     { 0x1412c9f10ULL, (void*)&FUN_1412c9f10 },
@@ -1679,4 +1691,4 @@ const GENJUMP g_genJumps[] = {
     { 0x1425b4720ULL, (void*)&FUN_1425b4720 },
     { 0, 0 }
 };
-const size_t g_genJumpCount = 1674;
+const size_t g_genJumpCount = 1686;

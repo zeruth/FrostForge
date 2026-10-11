@@ -147,15 +147,9 @@ extern char gen_g_142e914d0;
 /* s_screenshotQuality (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142cc87b0;
 #define gen_g_142cc87b0 (*(char *)gen_p_142cc87b0)
-/* s_casReadHookContext (src/cas/CAS.cpp), internal: through its pointer */
-extern void *const gen_p_142ccba60;
-#define gen_g_142ccba60 (*(char *)gen_p_142ccba60)
 /* s_cvars (src/console/Var.cpp), internal: through its pointer */
 extern void *const gen_p_142ccbd68;
 #define gen_g_142ccbd68 (*(char *)gen_p_142ccbd68)
-/* s_commands (src/console/Command.cpp), internal: through its pointer */
-extern void *const gen_p_142ccbd90;
-#define gen_g_142ccbd90 (*(char *)gen_p_142ccbd90)
 /* s_seedB (src/client/Startup.cpp), internal: through its pointer */
 extern void *const gen_p_142ddcf80;
 #define gen_g_142ddcf80 (*(char *)gen_p_142ddcf80)
@@ -195,9 +189,6 @@ extern void *const gen_p_142e30248;
 /* s_notchedDisplayCVar (src/client/ConsoleDevice.cpp), internal: through its pointer */
 extern void *const gen_p_142e302a8;
 #define gen_g_142e302a8 (*(char *)gen_p_142e302a8)
-/* s_cursor (src/client/GxWindow.cpp), internal: through its pointer */
-extern void *const gen_p_1430d0268;
-#define gen_g_1430d0268 (*(char *)gen_p_1430d0268)
 /* s_sessionUp (src/services/ClientServices.cpp), internal: through its pointer */
 extern void *const gen_p_1430d258a;
 #define gen_g_1430d258a (*(char *)gen_p_1430d258a)
@@ -326,6 +317,8 @@ undefined1 FUN_1402cd230();
 char FUN_1402cd370();
 ulonglong FUN_1402cda40();
 ulonglong FUN_1402cdac0();
+undefined1 FUN_1402cdfc0();
+undefined1 FUN_1402ce000();
 bool FUN_1402cf230();
 bool FUN_1402cfd70();
 undefined1 FUN_1402d0690();
@@ -1043,7 +1036,17 @@ undefined8 FUN_1411cca30();
 undefined8 FUN_1411cdc50();
 undefined8 FUN_1411cf030();
 undefined8 FUN_1411cf210();
+longlong * FUN_1411d0da0();
+int FUN_1411d0ff0();
+undefined8 FUN_1411d3540();
+undefined8 FUN_1411d3610();
+undefined8 FUN_1411de3e0();
+undefined8 FUN_1411df380();
+undefined8 FUN_1411df3b0();
 undefined8 FUN_1411df470();
+undefined8 FUN_1411e49c0();
+longlong * FUN_1411e4a70();
+undefined8 FUN_1411e4fb0();
 undefined8 FUN_1411e6070();
 undefined8 * FUN_1411e7250();
 undefined8 FUN_1411e74e0();
@@ -1089,6 +1092,8 @@ longlong FUN_14127e660();
 undefined8 FUN_141281690();
 undefined8 * FUN_14129d890();
 bool FUN_1412b1720();
+longlong FUN_1412be640();
+undefined8 FUN_1412be750();
 float FUN_1412c9780();
 longlong FUN_1412c9d80();
 undefined8 FUN_1412c9f10();

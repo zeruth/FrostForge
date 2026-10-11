@@ -2,13 +2,13 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4100 4047 4024 4716)
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* a port that cannot be called from C (internal or aggregate ABI) */
 undefined8 FUN_140211780() {
     GenUnimplemented(0x140211780ULL);
     return (undefined8)0;
 }
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* a port that cannot be called from C (internal or aggregate ABI) */
 undefined8 FUN_1402282f0() {
     GenUnimplemented(0x1402282f0ULL);
     return (undefined8)0;
@@ -26,31 +26,31 @@ undefined8 FUN_14024a0c0() {
     return (undefined8)0;
 }
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* a port that cannot be called from C (internal or aggregate ABI) */
 ulonglong * FUN_1402545c0() {
     GenUnimplemented(0x1402545c0ULL);
     return (ulonglong *)0;
 }
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* a port that cannot be called from C (internal or aggregate ABI) */
 undefined8 FUN_140254670() {
     GenUnimplemented(0x140254670ULL);
     return (undefined8)0;
 }
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* a port that cannot be called from C (internal or aggregate ABI) */
 undefined8 FUN_1402547e0() {
     GenUnimplemented(0x1402547e0ULL);
     return (undefined8)0;
 }
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* a port that cannot be called from C (internal or aggregate ABI) */
 ulonglong FUN_140260060() {
     GenUnimplemented(0x140260060ULL);
     return (ulonglong)0;
 }
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* a port that cannot be called from C (internal or aggregate ABI) */
 undefined1 FUN_14026bea0() {
     GenUnimplemented(0x14026bea0ULL);
     return (undefined1)0;
@@ -188,7 +188,7 @@ undefined8 FUN_1402f8190() {
     return (undefined8)0;
 }
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* a port that cannot be called from C (internal or aggregate ABI) */
 undefined8 FUN_1402f9a70() {
     GenUnimplemented(0x1402f9a70ULL);
     return (undefined8)0;
@@ -248,13 +248,13 @@ undefined8 FUN_140323a30() {
     return (undefined8)0;
 }
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* a port that cannot be called from C (internal or aggregate ABI) */
 undefined8 FUN_140324d50() {
     GenUnimplemented(0x140324d50ULL);
     return (undefined8)0;
 }
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* a port that cannot be called from C (internal or aggregate ABI) */
 undefined8 FUN_140325700() {
     GenUnimplemented(0x140325700ULL);
     return (undefined8)0;
@@ -266,13 +266,13 @@ undefined8 FUN_140328c10() {
     return (undefined8)0;
 }
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* a port that cannot be called from C (internal or aggregate ABI) */
 undefined8 FUN_14032a380() {
     GenUnimplemented(0x14032a380ULL);
     return (undefined8)0;
 }
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* register the decompiler lost track of */
 undefined8 FUN_14032b0a0() {
     GenUnimplemented(0x14032b0a0ULL);
     return (undefined8)0;
@@ -290,13 +290,13 @@ ulonglong FUN_14062d670() {
     return (ulonglong)0;
 }
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* a port that cannot be called from C (internal or aggregate ABI) */
 undefined8 FUN_1407cbb50() {
     GenUnimplemented(0x1407cbb50ULL);
     return (undefined8)0;
 }
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* a port that cannot be called from C (internal or aggregate ABI) */
 ulonglong FUN_1407d22e0() {
     GenUnimplemented(0x1407d22e0ULL);
     return (ulonglong)0;
@@ -656,6 +656,18 @@ undefined8 FUN_14107f7b0() {
     return (undefined8)0;
 }
 
+/* SIMD union */
+undefined8 FUN_1411c6d30() {
+    GenUnimplemented(0x1411c6d30ULL);
+    return (undefined8)0;
+}
+
+/* register the decompiler lost track of */
+undefined8 FUN_1411de3e0() {
+    GenUnimplemented(0x1411de3e0ULL);
+    return (undefined8)0;
+}
+
 /* thread-local storage */
 undefined8 FUN_141208270() {
     GenUnimplemented(0x141208270ULL);
@@ -692,7 +704,7 @@ undefined8 FUN_141237be0() {
     return (undefined8)0;
 }
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* a port that cannot be called from C (internal or aggregate ABI) */
 undefined4 FUN_14134cac0() {
     GenUnimplemented(0x14134cac0ULL);
     return (undefined4)0;
@@ -764,7 +776,7 @@ undefined8 FUN_141485f70() {
     return (undefined8)0;
 }
 
-/* a port that cannot be called from C (stub, internal or aggregate ABI) */
+/* a port that cannot be called from C (internal or aggregate ABI) */
 undefined8 FUN_14148ba20() {
     GenUnimplemented(0x14148ba20ULL);
     return (undefined8)0;
