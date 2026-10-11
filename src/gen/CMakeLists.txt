@@ -1,0 +1,17 @@
+# The reference functions tools/translate.py translates from the decompilation (C), the runtime
+# they run against (RefImage.cpp), and the C++ forwarders the port registers them through.
+file(GLOB GEN_TRANSLATED CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/translated_*.c)
+add_library(gen STATIC
+    RefImage.cpp
+    handlers.cpp
+    adapters.c
+    stubs.c
+    jumps.c
+    ${GEN_TRANSLATED}
+)
+target_include_directories(gen PUBLIC ${CMAKE_SOURCE_DIR}/src)
+target_link_libraries(gen PRIVATE util lua)
+if(MSVC)
+    # decompiled C: its implicit conversions are expected; keep the build output for real errors
+    target_compile_options(gen PRIVATE $<$<COMPILE_LANGUAGE:C>:/W1 /wd4047 /wd4024 /wd4133 /wd4312 /wd4311 /wd4302>)
+endif()

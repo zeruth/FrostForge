@@ -687,6 +687,12 @@ def main() -> None:
             port_of_ref[t["addr"]] = best
             ref_of_port.setdefault(best, t["addr"])
             tag_of_ref[t["addr"]] = t
+    # src/gen (tools/translate.py): an adapter or stub is the reference function its name gives,
+    # so a call to it counts as that call rather than being flattened into what it does
+    for va, size, name in procs:
+        m = re.fullmatch(r"FUN_(14[0-9a-f]{7})", name)
+        if m:
+            ref_of_port.setdefault(va, int(m.group(1), 16))
     links = json.loads(LINKS.read_text(encoding="utf-8")) if LINKS.exists() else {}
     va_by_name = defaultdict(list)
     for va, size, name in procs:
@@ -1062,7 +1068,12 @@ def main() -> None:
         print(f"{sum(1 for m in moved if m[0] < 0) + len(gone)} regressions, {sum(1 for m in moved if m[0] > 0)} gains",
               file=sys.stderr)
 
-    scored = [rec for rec in records.values() if rec["kind"] != "stub"]
+    # code tools/translate.py generated is measured apart: the headline numbers are the hand ports
+    def generated(rec) -> bool:
+        return rec["file"].replace("\\", "/").startswith("src/gen/")
+
+    translated = [rec for rec in records.values() if generated(rec) and rec["kind"] != "stub"]
+    scored = [rec for rec in records.values() if rec["kind"] != "stub" and not generated(rec)]
     stubs = [rec for rec in records.values() if rec["kind"] == "stub"]
     live = [rec for rec in stubs if rec.get("live")]
     mean = sum(rec["score"] for rec in scored) / len(scored) if scored else 0.0
@@ -1077,6 +1088,11 @@ def main() -> None:
         "mean": round(mean, 4), "size_weighted": round(weighted, 4),
         "above_0.9": sum(rec["score"] >= 0.9 for rec in scored),
         "below_0.5": sum(rec["score"] < 0.5 for rec in scored),
+        "translated": len(translated),
+        "translated_mean": round(sum(r["score"] for r in translated) / len(translated), 4) if translated else 0.0,
+        "translated_weighted": round(sum(r["score"] * r["ref_size"] for r in translated)
+                                     / sum(r["ref_size"] for r in translated), 4) if translated else 0.0,
+        "translated_above_0.9": sum(r["score"] >= 0.9 for r in translated),
     }
 
     def matches(rec) -> bool:
@@ -1196,6 +1212,10 @@ def main() -> None:
           f"fidelity mean {summary['mean']:.3f}, size-weighted {summary['size_weighted']:.3f}; "
           f"{summary['above_0.9']} at 0.9 or better, {summary['below_0.5']} below 0.5, {summary['same']} same",
           file=sys.stderr)
+    if summary["translated"]:
+        print(f"translated (src/gen, apart from the above): {summary['translated']} functions, "
+              f"fidelity mean {summary['translated_mean']:.3f}, size-weighted {summary['translated_weighted']:.3f}, "
+              f"{summary['translated_above_0.9']} at 0.9 or better", file=sys.stderr)
     if args.record:
         stamp = datetime.date.today().isoformat()
         commit = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--short", "HEAD"], capture_output=True,

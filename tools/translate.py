@@ -1,0 +1,772 @@
+"""Reference functions translated to C from the decompilation corpus, in bulk.
+
+The hand ports cover what has been ported by hand; this covers the rest mechanically, so the port
+runs the reference's own logic where nobody has written it yet. Each translated function is the
+Ghidra output of build/corpus.jsonl rewritten to compile as C (src/gen/Ghidra.h), tagged
+`/* ref: FUN_<addr> */`, and run against the reference's data sections mapped at their original
+addresses (src/gen/RefImage.cpp), so its globals are its addresses.
+
+What a translated function calls:
+  - a function the port already has: an adapter that calls the port function through its mangled
+    name (/alternatename) with the ABI the PDB gives it (integers and pointers in 64 bits, floats
+    and doubles apart), so no headers are needed;
+  - an unported function within --depth: translated too;
+  - anything else: a stub that logs the address once (GenUnimplemented) and returns 0.
+Bodies the translator cannot take yet (registers Ghidra lost track of, SIMD unions, TLS, types
+Ghidra applied that C does not know) become such stubs, and the reason is kept in the manifest.
+
+    python tools/translate.py --handlers --depth 2      # the stubbed Lua API handlers
+    python tools/translate.py --addr 14169d420 --depth 1
+    python tools/translate.py --handlers --depth 2 --fix   # build, demote what fails, repeat
+
+Outputs src/gen/translated_*.c, adapters.c, stubs.c, jumps.c, handlers.cpp, and
+src/gen/manifest.json (what was translated, what was stubbed and why).
+"""
+from __future__ import annotations
+
+import argparse
+import bisect
+import json
+import re
+import subprocess
+import sys
+from collections import defaultdict
+from pathlib import Path
+
+import fidelity as F
+from corpus import load_corpus, strip_retcheck
+from wowbin import Binary
+
+ROOT = Path(__file__).resolve().parent.parent
+GEN = ROOT / "src/gen"
+MANIFEST = GEN / "manifest.json"
+REFDATA = ROOT / "build/refdata.jsonl"
+DEMOTED = GEN / "demoted.json"       # functions the compile loop found the translator cannot take
+PORT_CACHE = ROOT / "build/translate-port.json"  # the port's functions, from its last good link
+PER_FILE = 150
+
+PRIMITIVE = {
+    "void", "undefined", "undefined1", "undefined2", "undefined3", "undefined4", "undefined5", "undefined6",
+    "undefined7", "undefined8", "byte", "uchar", "uint1", "ushort", "word", "wchar16", "uint", "uint3", "dword",
+    "ulong", "longlong", "ulonglong", "qword", "uint8", "uint4", "uint2", "int4", "int8", "int2", "sbyte",
+    "float4", "float8", "float10", "pointer", "pointer64", "code", "char", "short", "int", "long", "float", "double",
+    "bool", "wchar_t", "HANDLE", "size_t", "unsigned", "signed", "uint5", "uint6", "uint7", "int3", "int5",
+    "int6", "int7", "int1",
+}
+HARD = [
+    ("register the decompiler lost track of", re.compile(r"\b(in_|unaff_|extraout_)\w+")),
+    ("SIMD union", re.compile(r"\._\d+_\d+_")),
+    # `lock`-prefixed read-modify-writes; a no-op would lose the atomicity
+    ("an interlocked operation", re.compile(r"\bLOCK\(\);")),
+    ("the stack frame addressed directly", re.compile(r"\b(_local_res\w*|stack0x\w+|\w*StackX_\w+)")),
+    ("thread-local storage", re.compile(r"ThreadLocalStoragePointer|_tls_index")),
+    ("bad data or a trap", re.compile(r"halt_baddata|\bswi\(|software_interrupt|halt_unimplemented")),
+    ("struct member access", re.compile(r"->")),
+]
+CRT = {"memcpy", "memmove", "memset", "memcmp", "strlen", "strcmp", "strncmp", "strchr", "strrchr", "strstr",
+       "strcpy", "strncpy", "strcat", "abs", "labs", "fabs", "sqrt", "sqrtf", "floor", "floorf", "ceil", "ceilf",
+       "sin", "cos", "tan", "sinf", "cosf", "tanf", "atan2", "atan2f", "pow", "powf", "fmod", "fmodf", "exp", "log",
+       "tolower", "toupper", "isdigit", "isalpha", "isspace", "atoi", "atof", "strtol", "strtoul", "free", "malloc"}
+# reference runtime routines FID left unnamed (tools/fidelity_exceptions.json)
+CRT_BY_ADDR = {0x1425bf3b0: "memmove", 0x1425bfa50: "memset"}
+
+CALL = re.compile(r"(?<![\w:])((?:[A-Za-z_]\w*::)+[~A-Za-z_]\w*|[A-Za-z_]\w*)\s*\(")
+SYMBOL = re.compile(r"\b((?:PTR_)*(?:DAT|_DAT|UNK|_UNK|s|u|ws|LAB|vtable|switchD|PTR|[a-zA-Z]+Ram)_\w*?_?([0-9a-f]{9}))\b")
+RAM = re.compile(r"\b([a-z]+)Ram0*(1[0-9a-f]{8})\b")
+FUNREF = re.compile(r"\b(?:thunk_)?FUN_([0-9a-f]{9})\b")
+IMPORT = re.compile(r"\bImport::(\w+)::(\w+)\b")
+# the types a body names: in casts, and in declarations of its locals
+TYPE_WORD = re.compile(r"\(\s*(?:const\s+)?([A-Za-z_]\w*)\s*\*+\s*\)|"
+                       r"^\s+(?!(?:return|goto|break|continue|case|else|do|delete|new)\b)"
+                       r"(?:const\s+)?([A-Za-z_]\w*)\s*\**\s*[A-Za-z_]\w*\s*(?:\[[^\]]*\])?\s*;", re.M)
+
+
+# ---- the port's functions, as the PDB has them ----------------------------------------------
+
+def load_publics() -> dict[int, str]:
+    """va -> mangled name of the port's functions."""
+    out = subprocess.run([str(F.LLVM / "llvm-pdbutil.exe"), "dump", "-publics", str(F.PORT_PDB)],
+                         capture_output=True, text=True, errors="replace").stdout
+    port = Binary(F.PORT_EXE)
+    names = {}
+    pending = None
+    for line in out.splitlines():
+        m = re.search(r"S_PUB32 \[size = \d+\] `(.*)`$", line)
+        if m:
+            pending = m.group(1)
+            continue
+        if pending is not None:
+            m = re.search(r"flags = (\w+).*addr = ([0-9A-Fa-f]{4}):(\d+)", line)
+            if m:
+                # an adapter's alias is listed at its target's address too
+                if m.group(1) == "function" and not pending.startswith("gen_alias_"):
+                    section = port.sections[int(m.group(2), 16) - 1]
+                    names.setdefault(section.start + int(m.group(3)), pending)
+                pending = None
+    return names
+
+
+def load_signatures() -> dict[int, tuple]:
+    """va -> (return class, [argument classes], this) for the port's functions.
+
+    A class is 'int' (integers, pointers, references, enums, bools), 'float', 'double', 'void',
+    or 'complex' (an aggregate by value, or variadic): an adapter only takes the simple ones."""
+    types = subprocess.run([str(F.LLVM / "llvm-pdbutil.exe"), "dump", "-types", str(F.PORT_PDB)],
+                           capture_output=True, text=True, errors="replace").stdout.splitlines()
+    kind_of: dict[int, str] = {}
+    proc_of: dict[int, tuple] = {}
+    args_of: dict[int, list] = {}
+    current = None
+    for line in types:
+        m = re.match(r"\s*0x([0-9A-F]+) \| (LF_\w+)", line)
+        if m:
+            current = (int(m.group(1), 16), m.group(2))
+            kind_of[current[0]] = current[1]
+            if current[1] == "LF_ARGLIST":
+                args_of[current[0]] = []
+            continue
+        if current is None:
+            continue
+        idx, kind = current
+        if kind in ("LF_PROCEDURE", "LF_MFUNCTION"):
+            m = re.search(r"return type = 0x([0-9A-F]+)(?: \(([^)]*)\))?, # args = (\d+), param list = 0x([0-9A-F]+)", line)
+            if m:
+                proc_of[idx] = [int(m.group(1), 16), m.group(2), int(m.group(4), 16), kind == "LF_MFUNCTION"]
+        elif kind == "LF_ARGLIST":
+            m = re.search(r"0x[0-9A-F]+(?: \([^)]*\))?: `(.*)`$", line)
+            if m:
+                args_of[idx].append(m.group(1))
+
+    def classify_text(text: str) -> str:
+        t = text.replace("const ", "").replace("volatile ", "").strip()
+        if t.endswith(("*", "&")) or "(*)" in t or "*" in t:
+            return "int"
+        if t == "float":
+            return "float"
+        if t == "double":
+            return "double"
+        if t == "void":
+            return "void"
+        if t == "...":
+            return "complex"
+        simple = ("bool", "char", "signed char", "unsigned char", "short", "unsigned short", "int", "unsigned",
+                  "long", "unsigned long", "__int64", "unsigned __int64", "wchar_t", "char16_t", "char32_t",
+                  "unsigned int", "long long", "unsigned long long", "__int8", "unsigned __int8", "__int16",
+                  "unsigned __int16", "__int32", "unsigned __int32", "HRESULT", "std::nullptr_t")
+        if t in simple:
+            return "int"
+        return "enum?" + t
+
+    def classify_index(index: int, text: str | None) -> str:
+        if text is not None:
+            return classify_text(text)
+        kind = kind_of.get(index, "")
+        if kind in ("LF_POINTER", "LF_ENUM"):
+            return "int"
+        if kind == "LF_MODIFIER":
+            return "complex"
+        return "complex"
+
+    syms = subprocess.run([str(F.LLVM / "llvm-pdbutil.exe"), "dump", "-symbols", str(F.PORT_PDB)],
+                          capture_output=True, text=True, errors="replace").stdout.splitlines()
+    port = Binary(F.PORT_EXE)
+    enum_names = set()
+    for line in types:
+        m = re.match(r"\s*0x[0-9A-F]+ \| LF_ENUM \[size = \d+\] `(.*)`", line)
+        if m:
+            enum_names.add(m.group(1))
+    out = {}
+    va = None
+    for line in syms:
+        m = re.search(r"addr = ([0-9A-Fa-f]{4}):(\d+), code size = \d+", line)
+        if m:
+            section = port.sections[int(m.group(1), 16) - 1]
+            va = section.start + int(m.group(2))
+            continue
+        m = re.search(r"type = `0x([0-9A-F]+) ", line)
+        if m and va is not None:
+            proc = proc_of.get(int(m.group(1), 16))
+            if proc:
+                ret = classify_index(proc[0], proc[1])
+                args = []
+                for text in args_of.get(proc[2], []):
+                    c = classify_text(text)
+                    if c.startswith("enum?"):
+                        c = "int" if c[5:] in enum_names else "complex"
+                    args.append(c)
+                if ret.startswith("enum?"):
+                    ret = "int" if ret[5:] in enum_names else "complex"
+                out[va] = (ret, args, proc[3])
+            va = None
+    return out
+
+
+# ---- the reference's globals ------------------------------------------------------------------
+
+def load_refdata() -> dict[int, tuple[int, str]]:
+    out = {}
+    with REFDATA.open(encoding="utf-8") as f:
+        for line in f:
+            d = json.loads(line)
+            out[int(d["addr"], 16)] = (d["len"], d["type"])
+    return out
+
+
+def c_type_of(ghidra: str, size: int) -> str:
+    """The C type a scalar global is declared with, from Ghidra's data type."""
+    t = ghidra.strip()
+    if t in PRIMITIVE and t not in ("void", "code", "pointer", "pointer64"):
+        return t
+    if t.endswith("*"):
+        # Ghidra writes `*DAT_x` and `(*DAT_x)(...)` through the pointer's own type
+        base = t[:-1].strip()
+        if base == "code":
+            return "code *"
+        if base in PRIMITIVE and base not in ("pointer", "pointer64"):
+            return f"{base} *"
+        if base.endswith("*"):
+            return "undefined8 *"
+        return "undefined8 *"
+    if t in ("pointer", "pointer64", "addr", "ImageBaseOffset32"):
+        return "undefined8"
+    return {1: "undefined1", 2: "undefined2", 4: "undefined4", 8: "undefined8"}.get(size, "undefined1")
+
+
+def global_expr(ghidra: str, size: int, addr: int) -> str:
+    """A reference global as an lvalue at its address: arrays stay arrays, so `x[i]` and `&x` work."""
+    m = re.match(r"^(.*?)((?:\[\d+\])+)$", ghidra.strip())
+    if m:
+        element = c_type_of(m.group(1), 0)
+        if element == "undefined1" and m.group(1).strip() not in PRIMITIVE:
+            element = "undefined1"
+        return f"(*({element} (*){m.group(2)})(uintptr_t)0x{addr:x}ULL)"
+    return f"REFG({c_type_of(ghidra, size)}, 0x{addr:x})"
+
+
+PORT_GLOBAL = re.compile(r"^([A-Za-z_][\w:<>,\s\*&]*?[\s\*&])(\w+)(\[[^\]]*\])?(?:\s*(?:=|\{)[^;]*)?;\s*"
+                         r"//\s*(?:ref:\s*)?(?:DAT_|0x)(14[0-9a-f]{7})\b", re.M)
+SCALAR = re.compile(r"^(?:static\s+|extern\s+|thread_local\s+)*(?:const\s+)?(?:u?int\d+_t|bool|float|double|char|"
+                    r"int|unsigned|DWORD|size_t|uintptr_t|HANDLE|HWND|\w+\s*\*+)$")
+
+
+def port_globals() -> dict[int, dict]:
+    """The reference globals the port holds, by the address comment on their declaration."""
+    out = {}
+    for p in (ROOT / "src").rglob("*.[ch]pp"):
+        if "gen" in p.relative_to(ROOT).parts:
+            continue
+        text = p.read_text(encoding="utf-8", errors="replace")
+        for m in PORT_GLOBAL.finditer(text):
+            decl = m.group(1).strip()
+            out[int(m.group(4), 16)] = {
+                "name": m.group(2), "file": p.relative_to(ROOT).as_posix(), "decl": decl,
+                "const": bool(re.match(r"(?:static\s+)?(?:const|constexpr)\b", decl)) and "*" not in decl,
+                "scalar": bool(SCALAR.match(decl)) and not m.group(3),
+            }
+    return out
+
+
+def load_data_publics() -> list[str]:
+    out = subprocess.run([str(F.LLVM / "llvm-pdbutil.exe"), "dump", "-publics", str(F.PORT_PDB)],
+                         capture_output=True, text=True, errors="replace").stdout
+    return re.findall(r"S_PUB32 \[size = \d+\] `(\?[^`]*@3[^`]*)`\n\s+flags = none", out)
+
+
+# ---- translation --------------------------------------------------------------------------------
+
+class Untranslatable(Exception):
+    """A body the rewrite finds it cannot take: the function is stubbed with the reason."""
+
+
+class Translator:
+    def __init__(self, depth: int):
+        self.depth = depth
+        self.cor = load_corpus()
+        self.by_name: dict[str, list[int]] = defaultdict(list)
+        for a, e in self.cor.items():
+            self.by_name[e["name"]].append(a)
+        self.refdata = load_refdata()
+        self.ref = Binary()
+        fid = json.loads(F.OUT_JSON.read_text())
+        # hand ports only: the translator's own output is measured too, and is not a port
+        self.tied = {int(r["addr"], 16): r for r in fid
+                     if not r["file"].replace("\\", "/").startswith(("src/gen/", "src\\gen\\"))}
+        # the port side, cached: a link that fails leaves no executable to read, and the
+        # translator is what fixes it
+        if F.PORT_EXE.exists() and (not PORT_CACHE.exists()
+                                    or PORT_CACHE.stat().st_mtime < F.PORT_EXE.stat().st_mtime):
+            procs, _ = F.load_pdb(Binary(F.PORT_EXE))
+            cache = {"procs": [[va, size, name] for va, size, name in procs],
+                     "publics": {str(k): v for k, v in load_publics().items()},
+                     "signatures": {str(k): v for k, v in load_signatures().items()},
+                     "data_publics": load_data_publics()}
+            PORT_CACHE.write_text(json.dumps(cache), encoding="utf-8")
+        cache = json.loads(PORT_CACHE.read_text(encoding="utf-8"))
+        self.port_va_by_name = defaultdict(list)
+        for va, size, name in cache["procs"]:
+            self.port_va_by_name[name].append(va)
+        self.publics = {int(k): v for k, v in cache["publics"].items()}
+        self.signatures = {int(k): tuple(v) for k, v in cache["signatures"].items()}
+        # the port's own globals: translated code must read the port's state, not the image's
+        self.held = port_globals()
+        self.held_sorted = sorted(self.held)
+        data_publics = cache.get("data_publics", [])
+        for addr, g in self.held.items():
+            hits = [n for n in data_publics if re.match(rf"\?{re.escape(g['name'])}@(?:\w+@)*@3", n)]
+            g["mangled"] = hits[0] if len(hits) == 1 else None
+        self.global_aliases: dict[int, str] = {}
+        cache_path = ROOT / "build/fidelity-ref-cache.json"
+        self.refcache = json.loads(cache_path.read_text())["functions"] if cache_path.exists() else {}
+        self.demoted = json.loads(DEMOTED.read_text()) if DEMOTED.exists() else {}
+        self.exceptions = json.loads((ROOT / "tools/fidelity_exceptions.json").read_text(encoding="utf-8"))
+
+    # ---- classification -------------------------------------------------------------------
+    def port_target(self, a: int):
+        """(va, mangled, signature) when the port has a callable counterpart of `a`."""
+        rec = self.tied.get(a)
+        if rec is None:
+            return None
+        vas = self.port_va_by_name.get(rec["name"], [])
+        if len(vas) != 1:
+            return None
+        va = vas[0]
+        mangled = self.publics.get(va)
+        sig = self.signatures.get(va)
+        if mangled is None or sig is None:
+            return None
+        ret, args, this = sig
+        if ret == "complex" or any(c == "complex" for c in args):
+            return None
+        return va, mangled, sig
+
+    def body(self, a: int) -> str | None:
+        e = self.cor.get(a)
+        if not e or "c" not in e:
+            return None
+        return strip_retcheck(e["c"].replace("\r\n", "\n"))[0]
+
+    def callees(self, text: str) -> set[int]:
+        out = set()
+        for m in FUNREF.finditer(text):
+            out.add(int(m.group(1), 16))
+        for name in CALL.findall(text):
+            if "::" in name and not name.startswith("Import::"):
+                cands = self.by_name.get(name, [])
+                if len(cands) == 1:
+                    out.add(cands[0])
+        return out
+
+    def signature(self, a: int) -> tuple[str, str, list[str]] | None:
+        """(return type, name, [parameter declarations]) from the decompiled header."""
+        text = self.body(a)
+        if text is None:
+            return None
+        head = re.sub(r"(?s)/\*.*?\*/", "", text.split("{", 1)[0]).strip()
+        m = re.match(r"(?s)(.*?)\b([\w:~<>]+)\s*\((.*)\)\s*$", head)
+        if not m:
+            return None
+        ret = re.sub(r"\b__\w+\b", "", m.group(1)).strip() or "void"
+        # Ghidra's return types disagree between a function and its callers (one decompiles it
+        # void, another uses rax), so every function hands back a register's worth
+        if ret == "void":
+            ret = "undefined8"
+        params = [p.strip() for p in m.group(3).split(",") if p.strip() and p.strip() != "void"]
+        return ret, m.group(2), params
+
+    def held_global(self, addr: int):
+        """(base, port global) when `addr` lies in a global the port holds, else None.
+
+        A scalar spans 8 bytes; an aggregate runs to the next held global, at most 0x400."""
+        i = bisect.bisect_right(self.held_sorted, addr) - 1
+        if i < 0:
+            return None
+        base = self.held_sorted[i]
+        g = self.held[base]
+        nxt = self.held_sorted[i + 1] if i + 1 < len(self.held_sorted) else base + 0x400
+        span = 8 if g["scalar"] else min(nxt - base, 0x400)
+        return (base, g) if addr < base + span else None
+
+    def decl(self, a: int) -> tuple[str, list[str] | None]:
+        """(return type, parameters) as C can declare them; parameters None when Ghidra's use a
+        type C does not know, so the definition takes none and reads nothing."""
+        sig = self.signature(a)
+        if sig is None:
+            return "undefined8", None
+        ret, _, params = sig
+
+        def known(t: str) -> bool:
+            words = t.replace("*", " ").split()
+            return all(w in PRIMITIVE or w.startswith("undefined") or w in ("const", "unsigned", "signed")
+                       for w in words)
+
+        if not known(ret):
+            ret = "undefined8"
+        if not all(known(" ".join(p.split()[:-1]) + " " + ("*" * p.split()[-1].count("*"))) for p in params):
+            return ret, None
+        return ret, params
+
+    # ---- the work set ---------------------------------------------------------------------
+    def plan(self, roots: list[int]) -> dict:
+        translate, stub, adapt = {}, {}, {}
+        frontier = [(a, 0) for a in roots]
+        seen = set()
+        while frontier:
+            a, d = frontier.pop()
+            if a in seen:
+                continue
+            seen.add(a)
+            reason = self.why_not(a, root=d == 0)
+            if reason is None:
+                translate[a] = d
+                for b in self.callees(self.body(a)):
+                    if b in seen or b in CRT_BY_ADDR or self.is_lib(b):
+                        continue
+                    if self.port_target(b) is not None and b not in roots:
+                        adapt[b] = True
+                        seen.add(b)
+                    elif b in self.tied:
+                        stub[b] = "a port that cannot be called from C (stub, internal or aggregate ABI)"
+                        seen.add(b)
+                    elif d + 1 <= self.depth:
+                        frontier.append((b, d + 1))
+                    else:
+                        stub[b] = "beyond the translation depth"
+                        seen.add(b)
+            else:
+                stub[a] = reason
+        return {"translate": translate, "stub": stub, "adapt": adapt}
+
+    def is_lib(self, a: int) -> bool:
+        e = self.cor.get(a)
+        if e is None:
+            return False
+        name = e["name"]
+        return a in {int(k, 16) for k in self.exceptions.get("lib", {})} or (
+            not name.startswith(F.REF_KEEP) and "::" not in name and name.lstrip("_") in CRT)
+
+    def why_not(self, a: int, root: bool) -> str | None:
+        if f"{a:x}" in self.demoted:
+            return "did not compile: " + self.demoted[f"{a:x}"]
+        text = self.body(a)
+        if text is None:
+            return "not in the corpus"
+        for reason, rx in HARD:
+            if rx.search(text):
+                return reason
+        if any(g in text for g in ("DAT_14261a0b0", "DAT_14261a0b8")):
+            return "an anti-tamper check the corpus could not strip"
+        sig = self.signature(a)
+        if sig is None:
+            return "no readable signature"
+        # the reference's own call list (tools/fidelity.py's cache, once the function has been
+        # measured): a body that shows under half of it is one the decompiler lost
+        ref = self.refcache.get(f"{a:x}")
+        if ref is not None and len(ref["calls"]) >= 2:
+            shown = len(FUNREF.findall(text)) + sum(1 for n in CALL.findall(text) if "::" in n)
+            if shown * 2 < len(ref["calls"]):
+                return f"the decompiler lost calls ({shown} shown, the reference makes {len(ref['calls'])})"
+        words = [x or y for x, y in TYPE_WORD.findall(text.split("{", 1)[1])]
+        for word in words + [w for p in sig[2] for w in p.split()[:-1]]:
+            w = word.strip("*")
+            if w and w not in PRIMITIVE and not w.startswith(("undefined", "unsigned", "const")):
+                return f"a type C does not know ({w})"
+        return None
+
+    # ---- rewriting ------------------------------------------------------------------------
+    def rewrite(self, a: int, text: str, uses: set) -> str:
+        """The decompiled function as C: callees by address, globals at their addresses."""
+        head, rest = text.split("{", 1)
+        sig = self.signature(a)
+        ret, _, params = sig
+        body = "{" + rest
+        # switch cases are labels Ghidra qualifies with `::`
+        body = re.sub(r"\b(switchD_\w+)::(\w+)", r"\1__\2", body)
+        # a function's address taken, `&FUN_x`: the reference address, which the jumps dispatch
+        body = re.sub(r"&\s*\b(?:thunk_)?FUN_([0-9a-f]{9})\b(?!\s*\()", r"((code *)REFP(0x\1))", body)
+        body = re.sub(r"&\s*\bLAB_([0-9a-f]{9})\b", r"((code *)REFP(0x\1))", body)
+        body = re.sub(r"\breturn\s*;", "return 0;", body)
+
+        def bare(m):
+            # a named reference function used as a value (`_guard_check_icall`)
+            cands = self.by_name.get(m.group(1), [])
+            return f"((code *)REFP(0x{cands[0]:x}))" if len(cands) == 1 else m.group(0)
+
+        body = re.sub(r"(?<![\w.>])(_[A-Za-z]\w+)\b(?!\s*\()", bare, body)
+
+        def call(m):
+            name = m.group(1)
+            if name in ("if", "while", "for", "switch", "return", "sizeof", "do", "else"):
+                return m.group(0)
+            if name.startswith("Import::"):
+                return m.group(0)
+            if "::" in name:
+                cands = self.by_name.get(name, [])
+                if len(cands) == 1:
+                    target = cands[0]
+                    if target in CRT_BY_ADDR:
+                        return CRT_BY_ADDR[target] + "("
+                    uses.add(target)
+                    return f"CALLF({self.decl(target)[0]}, @FUN_{target:x})("
+                return m.group(0)
+            if name.startswith(("FUN_", "thunk_FUN_")):
+                target = int(name[-9:], 16)
+                if target in CRT_BY_ADDR:
+                    return CRT_BY_ADDR[target] + "("
+                uses.add(target)
+                return f"CALLF({self.decl(target)[0]}, @FUN_{target:x})("
+            if name.lstrip("_") in CRT:
+                return name.lstrip("_") + "("
+            return m.group(0)
+
+        body = CALL.sub(call, body)
+
+        def funref(m):
+            # a function used as a value: its reference address, which the jump stubs dispatch
+            return f"((code *)REFP(0x{m.group(1)}))"
+
+        # (calls were marked `@FUN_x` above so this leaves them alone)
+        body = re.sub(r"(?<!@)\b(?:thunk_)?FUN_([0-9a-f]{9})\b(?!\s*\()", funref, body).replace("@FUN_", "FUN_")
+
+        def global_(m):
+            whole, addr = m.group(1), int(m.group(2), 16)
+            if whole.startswith(("s_", "u_", "ws_", "PTR_s_", "PTR_u_")) and not whole.startswith("PTR_"):
+                return f"((char *)REFP(0x{addr:x}))"
+            if whole.startswith(("LAB_", "switchD_")):
+                # labels stay labels
+                return whole
+            size, gtype = self.refdata.get(addr, (8, "undefined8"))
+            expr = global_expr(gtype, size, addr)
+            held = self.held_global(addr)
+            if held is None or held[1]["const"]:
+                # the reference's own, or a constant the image holds with the same value
+                return expr
+            base, g = held
+            if g["mangled"] is None:
+                raise Untranslatable(f"reaches the port's {g['name']} ({g['file']}), which has internal linkage")
+            self.global_aliases[base] = g["mangled"]
+            # the same lvalue, at the port's global instead of the image's
+            return expr.replace(f"(uintptr_t)0x{addr:x}ULL", f"((char *)&gen_g_{base:x} + 0x{addr - base:x})") \
+                       .replace(f"REFG({c_type_of(gtype, size)}, 0x{addr:x})",
+                                f"(*({c_type_of(gtype, size)} *)((char *)&gen_g_{base:x} + 0x{addr - base:x}))")
+
+        body = SYMBOL.sub(global_, body)
+        body = RAM.sub(lambda m: f"REFG(undefined{ {'u': 4, 'l': 8, 'c': 1, 's': 2}.get(m.group(1)[0], 8)}, 0x{m.group(2)})", body)
+        body = IMPORT.sub(lambda m: f"(*(code *)&{m.group(2)})", body)
+        # a global called through: a code pointer, whatever the export typed it
+        body = re.sub(r"\(\*REFG\(undefined\d?, (0x[0-9a-f]+)\)\)\s*\(", r"(*REFG(code *, \1))(", body)
+        if re.search(r"\*REFG\(undefined\d?,|REFG\(undefined\d?, 0x[0-9a-f]+\)\s*\[", body):
+            raise Untranslatable("a global used as a pointer the data export does not type")
+        # callers are unprototyped, so a float argument arrives promoted to double
+        decls, narrow = [], []
+        for p in params:
+            m = re.match(r"^(?:float|float4)\s+(\w+)$", p)
+            if m:
+                decls.append(f"double {m.group(1)}_promoted")
+                narrow.append(f"  float {m.group(1)} = (float){m.group(1)}_promoted;")
+            else:
+                decls.append(p)
+        if narrow:
+            body = "{\n" + "\n".join(narrow) + body[1:]
+        return f"{ret} FUN_{a:x}({', '.join(decls) or 'void'})\n{body.rstrip()}\n"
+
+    # ---- emission -------------------------------------------------------------------------
+    def emit(self, roots: list[int], handlers: dict[int, str]) -> dict:
+        plan = self.plan(roots)
+        GEN.mkdir(exist_ok=True)
+        for old in GEN.glob("translated_*.c"):
+            old.unlink()
+        uses: set[int] = set()
+        bodies = {}
+        imports = set()
+        for a in sorted(plan["translate"]):
+            text = self.body(a)
+            mine: set[int] = set()
+            try:
+                bodies[a] = self.rewrite(a, text, mine)
+            except Untranslatable as e:
+                del plan["translate"][a]
+                plan["stub"][a] = str(e)
+                continue
+            uses |= mine
+            imports.update(m.group(2) for m in IMPORT.finditer(text))
+        # whatever is called and neither translated nor adapted is stubbed
+        for b in uses:
+            if b not in plan["translate"] and b not in plan["adapt"] and b not in plan["stub"]:
+                plan["stub"][b] = "called, not in the work set"
+        # declared without parameters: Ghidra's argument counts disagree between a function and
+        # its callers, and an unprototyped declaration takes them all
+        prototypes = [f"{self.decl(a)[0]} FUN_{a:x}();"
+                      for a in sorted(set(plan["translate"]) | set(plan["adapt"]) | set(plan["stub"]))]
+        header = ["/* GENERATED by tools/translate.py; do not edit by hand. */",
+                  "#ifndef GEN_TRANSLATED_H", "#define GEN_TRANSLATED_H", "", "#include \"gen/Ghidra.h\"", ""]
+        header += [f"__declspec(dllimport) unsigned long long {name}();" for name in sorted(imports)]
+        # the port's own globals, where the translated code would read the image's
+        for base, mangled in sorted(self.global_aliases.items()):
+            header += [f"/* {self.held[base]['name']} ({self.held[base]['file']}) */",
+                       f"#pragma comment(linker, \"/alternatename:gen_g_{base:x}={mangled}\")",
+                       f"extern char gen_g_{base:x};"]
+        header += prototypes + ["", "#endif", ""]
+        (GEN / "translated.h").write_text("\n".join(header), encoding="utf-8", newline="\n")
+
+        # the translated bodies, a few hundred to a file, each with its line range kept
+        lines_of = {}
+        chunk = sorted(bodies)
+        for n in range(0, len(chunk), PER_FILE):
+            path = GEN / f"translated_{n // PER_FILE:03}.c"
+            out = ["/* GENERATED by tools/translate.py from build/corpus.jsonl; do not edit by hand. */",
+                   "#include \"gen/translated.h\"", "#pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 "
+                   "4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 "
+                   "4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)", ""]
+            for a in chunk[n:n + PER_FILE]:
+                start = len(out) + 1
+                out.append(f"/* ref: FUN_{a:x} */")
+                out.extend(bodies[a].splitlines())
+                lines_of[a] = (path.name, start, len(out))
+                out.append("")
+            path.write_text("\n".join(out) + "\n", encoding="utf-8", newline="\n")
+
+        # adapters to the port's own functions
+        adapters = ["/* GENERATED by tools/translate.py; do not edit by hand. */", "#include \"gen/translated.h\"",
+                    "#pragma warning(disable: 4047 4024 4312 4311 4302 4244 4305 4022 4113 4133 4142 4028)", ""]
+        abi = {"int": "unsigned long long", "float": "float", "double": "double", "void": "void"}
+        # an adapter takes the port function's own arguments (the callers are unprototyped, so a
+        # float arrives promoted to double) and passes them on with the port's ABI
+        promoted = {"int": "unsigned long long", "float": "double", "double": "double"}
+        for a in sorted(plan["adapt"]):
+            va, mangled, (ret, args, this) = self.port_target(a)
+            gret = self.decl(a)[0]
+            classes = (["int"] if this else []) + list(args)
+            alias = f"gen_alias_{a:x}"
+            params = [f"{promoted[c]} a{i}" for i, c in enumerate(classes)]
+            pass_args = [f"({abi[c]})a{i}" for i, c in enumerate(classes)]
+            fptr = f"{abi[ret]} (*)({', '.join(abi[c] for c in classes) or 'void'})"
+            call = f"(({fptr})&{alias})({', '.join(pass_args)})"
+            proto = f"{gret} FUN_{a:x}({', '.join(params) or 'void'})"
+            if ret == "void":
+                inner = f"    {call};\n    return 0;"
+            elif ret == "int" and ("float" in gret or "double" in gret):
+                inner = f"    return ({gret})(long long){call};"
+            else:
+                inner = f"    return ({gret}){call};"
+            adapters += [f"#pragma comment(linker, \"/alternatename:{alias}={mangled}\")",
+                         f"extern char {alias};", f"{proto} {{", inner, "}", ""]
+        (GEN / "adapters.c").write_text("\n".join(adapters), encoding="utf-8", newline="\n")
+
+        # stubs
+        stubs = ["/* GENERATED by tools/translate.py; do not edit by hand. */", "#include \"gen/translated.h\"",
+                 "#pragma warning(disable: 4100 4047 4024 4716)", ""]
+        for a, why in sorted(plan["stub"].items()):
+            ret = self.decl(a)[0]
+            stubs += [f"/* {why} */", f"{ret} FUN_{a:x}() {{", f"    GenUnimplemented(0x{a:x}ULL);",
+                      f"    return ({ret})0;", "}", ""]
+        (GEN / "stubs.c").write_text("\n".join(stubs), encoding="utf-8", newline="\n")
+
+        # the jumps the reference image dispatches through: translated and adapted functions
+        jumps = ["/* GENERATED by tools/translate.py; do not edit by hand. */", "#include \"gen/translated.h\"", "",
+                 "typedef struct { unsigned long long m_address; void* m_target; } GENJUMP;",
+                 "const GENJUMP g_genJumps[] = {"]
+        reachable = sorted(set(plan["translate"]) | set(plan["adapt"]))
+        jumps += [f"    {{ 0x{a:x}ULL, (void*)&FUN_{a:x} }}," for a in reachable]
+        jumps += ["    { 0, 0 }", "};", f"const size_t g_genJumpCount = {len(reachable)};", ""]
+        (GEN / "jumps.c").write_text("\n".join(jumps), encoding="utf-8", newline="\n")
+
+        # the Lua handlers: the port registers them by their C++ names
+        fwd = ["// GENERATED by tools/translate.py; do not edit by hand.", "// The Lua API handlers translated from the reference (src/gen/translated_*.c).", "",
+               "#include \"glue/ScriptAPIHandlers.hpp\"", "", "#include <windows.h>", "",
+               "extern \"C\" {", "int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);"]
+        fwd += [f"unsigned long long FUN_{a:x}(unsigned long long param_1);" for a in sorted(handlers) if a in plan["translate"]]
+        fwd += ["}", ""]
+        for a, cname in sorted(handlers.items(), key=lambda kv: kv[1]):
+            if a in plan["translate"]:
+                # a fault in translated code (state the port does not have yet) costs the call,
+                # not the client; Lua's own errors pass through the filter
+                fwd += [f"// translated: FUN_{a:x}", f"int {cname}(lua_State* L) {{",
+                        "    __try {",
+                        f"        return static_cast<int>(FUN_{a:x}(reinterpret_cast<unsigned long long>(L)));",
+                        f"    }} __except (GenFault(0x{a:x}ull, GetExceptionInformation())) {{",
+                        "        return 0;", "    }", "}", ""]
+        (GEN / "handlers.cpp").write_text("\n".join(fwd), encoding="utf-8", newline="\n")
+
+        manifest = {
+            "translated": {f"{a:x}": {"depth": d, "file": lines_of[a][0], "lines": lines_of[a][1:]}
+                           for a, d in sorted(plan["translate"].items())},
+            "adapted": sorted(f"{a:x}" for a in plan["adapt"]),
+            "stubbed": {f"{a:x}": why for a, why in sorted(plan["stub"].items())},
+            "handlers": {f"{a:x}": cname for a, cname in sorted(handlers.items()) if a in plan["translate"]},
+        }
+        MANIFEST.write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8", newline="\n")
+        return manifest
+
+
+def stub_handlers() -> dict[int, str]:
+    """The Lua API handlers no hand port covers (tools/gen_script_api.py lists them all; run
+    its --emit first)."""
+    every = {int(a, 16): n for a, n in json.loads((ROOT / "build/script-handlers.json").read_text()).items()}
+    covered = set()
+    for path in (ROOT / "src").rglob("*.cpp"):
+        rel = path.relative_to(ROOT).as_posix()
+        if rel.startswith("src/gen/") or path.name in ("ScriptAPIRegistry.cpp", "ScriptAPIStubs.cpp"):
+            continue
+        covered |= {int(a, 16) for a in re.findall(r"// ref: FUN_([0-9a-fA-F]+)\n(?:static )?int Lua_",
+                                                   path.read_text(errors="replace"))}
+    # `xor eax, eax; ret` handlers are ported whole by the generator
+    stubs = (ROOT / "src/glue/ScriptAPIStubs.cpp").read_text(encoding="utf-8")
+    covered |= {int(a, 16) for a in re.findall(r"// Returns nothing\.\n// ref: FUN_([0-9a-f]+)", stubs)}
+    return {a: n for a, n in every.items() if a not in covered}
+
+
+def build_errors() -> list[tuple[str, int, str]]:
+    out = subprocess.run(["cmake", "--build", str(ROOT / "build/cmake"), "--config", "Release", "--target", "gen"],
+                         capture_output=True, text=True, errors="replace").stdout
+    errors = []
+    for line in out.splitlines():
+        m = re.search(r"([\w.]+\.c)\((\d+),?\d*\): (?:fatal )?error (C\d+): (.*)$", line)
+        if m:
+            errors.append((m.group(1), int(m.group(2)), f"{m.group(3)} {m.group(4).strip()[:120]}"))
+    return errors
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--handlers", action="store_true", help="the stubbed Lua API handlers as roots")
+    ap.add_argument("--addr", nargs="*", default=[], help="more roots")
+    ap.add_argument("--depth", type=int, default=2)
+    ap.add_argument("--fix", action="store_true", help="build, demote what fails to compile, repeat")
+    args = ap.parse_args()
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+    handlers = {}
+    if args.handlers:
+        handlers = stub_handlers()
+    roots = sorted(set(handlers) | {int(a.lower().removeprefix("fun_"), 16) for a in args.addr})
+    for round_ in range(1, 30 if args.fix else 2):
+        t = Translator(args.depth)
+        manifest = t.emit(roots, handlers)
+        print(f"translated {len(manifest['translated'])}, adapted {len(manifest['adapted'])}, "
+              f"stubbed {len(manifest['stubbed'])} ({len(manifest['handlers'])} handlers)", file=sys.stderr)
+        if not args.fix:
+            break
+        errors = build_errors()
+        if not errors:
+            print("builds clean", file=sys.stderr)
+            break
+        demoted = json.loads(DEMOTED.read_text()) if DEMOTED.exists() else {}
+        by_file = defaultdict(list)
+        for a, info in manifest["translated"].items():
+            by_file[info["file"]].append((info["lines"][0], info["lines"][1], a))
+        hit = 0
+        for file, line, message in errors:
+            for start, end, a in by_file.get(file, []):
+                if start <= line <= end and a not in demoted:
+                    demoted[a] = message
+                    hit += 1
+                    break
+        DEMOTED.write_text(json.dumps(demoted, indent=1, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
+        print(f"round {round_}: {len(errors)} errors, {hit} functions demoted", file=sys.stderr)
+        if hit == 0:
+            print("errors outside translated bodies:", errors[:5], file=sys.stderr)
+            break
+
+
+if __name__ == "__main__":
+    main()

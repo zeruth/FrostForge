@@ -388,7 +388,9 @@ def ported_handlers() -> set[int]:
             continue
         # only a Lua handler counts: the same address can be a different function folded with it
         # (identical code folding), which does not make the handler exist
-        for m in re.finditer(r"// ref: FUN_([0-9a-fA-F]+)\n(?:static )?int Lua_", path.read_text(errors="replace")):
+        # (or translated from the reference by tools/translate.py: src/gen/handlers.cpp)
+        for m in re.finditer(r"// (?:ref|translated): FUN_([0-9a-fA-F]+)\n(?:static )?int Lua_",
+                             path.read_text(errors="replace")):
             tags.add(int(m.group(1), 16))
     return tags
 
@@ -608,6 +610,9 @@ def emit() -> None:
     (ROOT / "src/glue/EventSignals.cpp").write_text("\n".join(sig_source), newline="\n")
 
     ported = ported_handlers()
+    # every handler, for tools/translate.py: its roots are the ones no hand port covers
+    (ROOT / "build/script-handlers.json").write_text(
+        json.dumps({f"{a:x}": n for a, n in sorted(handlers.items())}, indent=0) + "\n", newline="\n")
     stubs = [header,
              "// Handlers not ported yet. Each one is replaced by a port elsewhere (with its ref tag),",
              "// after which regeneration drops the stub.",
