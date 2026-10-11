@@ -108,6 +108,9 @@ extern char gen_g_142e43010;
 /* g_chrRacesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e43430=?g_chrRacesDB@@3VWowClientDB2@@A")
 extern char gen_g_142e43430;
+/* g_creatureModelDataDB (src/db/DB2Tables.hpp) */
+#pragma comment(linker, "/alternatename:gen_g_142e48010=?g_creatureModelDataDB@@3VWowClientDB2@@A")
+extern char gen_g_142e48010;
 /* g_factionGroupDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4c840=?g_factionGroupDB@@3VWowClientDB2@@A")
 extern char gen_g_142e4c840;
@@ -141,6 +144,84 @@ extern char gen_g_142e89050;
 /* g_mapDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e914d0=?g_mapDB@@3VWowClientDB2@@A")
 extern char gen_g_142e914d0;
+/* s_screenshotQuality (src/client/ClientCVars.cpp), internal: through its pointer */
+extern void *const gen_p_142cc87b0;
+#define gen_g_142cc87b0 (*(char *)gen_p_142cc87b0)
+/* s_casReadHookContext (src/cas/CAS.cpp), internal: through its pointer */
+extern void *const gen_p_142ccba60;
+#define gen_g_142ccba60 (*(char *)gen_p_142ccba60)
+/* s_cvars (src/console/Var.cpp), internal: through its pointer */
+extern void *const gen_p_142ccbd68;
+#define gen_g_142ccbd68 (*(char *)gen_p_142ccbd68)
+/* s_commands (src/console/Command.cpp), internal: through its pointer */
+extern void *const gen_p_142ccbd90;
+#define gen_g_142ccbd90 (*(char *)gen_p_142ccbd90)
+/* s_seedB (src/client/Startup.cpp), internal: through its pointer */
+extern void *const gen_p_142ddcf80;
+#define gen_g_142ddcf80 (*(char *)gen_p_142ddcf80)
+/* s_pressedButtons (src/client/ClientLoop.cpp), internal: through its pointer */
+extern void *const gen_p_142de0e30;
+#define gen_g_142de0e30 (*(char *)gen_p_142de0e30)
+/* s_compositorEnabled (src/client/StartupClient.cpp), internal: through its pointer */
+extern void *const gen_p_142de194c;
+#define gen_g_142de194c (*(char *)gen_p_142de194c)
+/* s_accountUsesTokenCVar (src/client/ClientCVars.cpp), internal: through its pointer */
+extern void *const gen_p_142de29b8;
+#define gen_g_142de29b8 (*(char *)gen_p_142de29b8)
+/* s_checkAddonVersionCVar (src/client/ClientCVars.cpp), internal: through its pointer */
+extern void *const gen_p_142de29c0;
+#define gen_g_142de29c0 (*(char *)gen_p_142de29c0)
+/* s_lastAddonVersionCVar (src/client/ClientCVars.cpp), internal: through its pointer */
+extern void *const gen_p_142de29c8;
+#define gen_g_142de29c8 (*(char *)gen_p_142de29c8)
+/* s_lastCharacterIndexCVar (src/client/ClientCVars.cpp), internal: through its pointer */
+extern void *const gen_p_142de29d0;
+#define gen_g_142de29d0 (*(char *)gen_p_142de29d0)
+/* s_lastCharacterGuidCVar (src/client/ClientCVars.cpp), internal: through its pointer */
+extern void *const gen_p_142de29d8;
+#define gen_g_142de29d8 (*(char *)gen_p_142de29d8)
+/* s_seenCharacterUpgradePopupCVar (src/client/ClientCVars.cpp), internal: through its pointer */
+extern void *const gen_p_142de29e0;
+#define gen_g_142de29e0 (*(char *)gen_p_142de29e0)
+/* s_seenExpansionTrialPopupCVar (src/client/ClientCVars.cpp), internal: through its pointer */
+extern void *const gen_p_142de29e8;
+#define gen_g_142de29e8 (*(char *)gen_p_142de29e8)
+/* s_seenConfigurationWarningsCVar (src/client/ClientCVars.cpp), internal: through its pointer */
+extern void *const gen_p_142de29f8;
+#define gen_g_142de29f8 (*(char *)gen_p_142de29f8)
+/* s_monitorCVar (src/client/ConsoleDevice.cpp), internal: through its pointer */
+extern void *const gen_p_142e30248;
+#define gen_g_142e30248 (*(char *)gen_p_142e30248)
+/* s_notchedDisplayCVar (src/client/ConsoleDevice.cpp), internal: through its pointer */
+extern void *const gen_p_142e302a8;
+#define gen_g_142e302a8 (*(char *)gen_p_142e302a8)
+/* s_cursor (src/client/GxWindow.cpp), internal: through its pointer */
+extern void *const gen_p_1430d0268;
+#define gen_g_1430d0268 (*(char *)gen_p_1430d0268)
+/* s_sessionUp (src/services/ClientServices.cpp), internal: through its pointer */
+extern void *const gen_p_1430d258a;
+#define gen_g_1430d258a (*(char *)gen_p_1430d258a)
+/* s_state258b (src/services/ClientServices.cpp), internal: through its pointer */
+extern void *const gen_p_1430d258b;
+#define gen_g_1430d258b (*(char *)gen_p_1430d258b)
+/* s_clientServices (src/services/ClientServices.cpp), internal: through its pointer */
+extern void *const gen_p_1430d2b38;
+#define gen_g_1430d2b38 (*(char *)gen_p_1430d2b38)
+/* s_initialized (src/glue/GlueMgr.cpp), internal: through its pointer */
+extern void *const gen_p_14311c51e;
+#define gen_g_14311c51e (*(char *)gen_p_14311c51e)
+/* s_destroying (src/glue/GlueMgr.cpp), internal: through its pointer */
+extern void *const gen_p_14311c528;
+#define gen_g_14311c528 (*(char *)gen_p_14311c528)
+/* s_reloadPending (src/glue/GlueMgr.cpp), internal: through its pointer */
+extern void *const gen_p_14311c529;
+#define gen_g_14311c529 (*(char *)gen_p_14311c529)
+/* s_unknown52b (src/glue/GlueMgr.cpp), internal: through its pointer */
+extern void *const gen_p_14311c52b;
+#define gen_g_14311c52b (*(char *)gen_p_14311c52b)
+/* s_unknown5f0 (src/glue/GlueMgr.cpp), internal: through its pointer */
+extern void *const gen_p_14311c5f0;
+#define gen_g_14311c5f0 (*(char *)gen_p_14311c5f0)
 undefined8 FUN_140211780();
 undefined8 FUN_1402135c0();
 char * FUN_140213b70();

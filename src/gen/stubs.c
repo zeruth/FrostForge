@@ -20,33 +20,9 @@ undefined8 FUN_140233d30() {
     return (undefined8)0;
 }
 
-/* reaches the port's s_pressedButtons (src/client/ClientLoop.cpp), which has internal linkage */
-bool FUN_140236b10() {
-    GenUnimplemented(0x140236b10ULL);
-    return (bool)0;
-}
-
-/* reaches the port's s_pressedButtons (src/client/ClientLoop.cpp), which has internal linkage */
-bool FUN_140236b20() {
-    GenUnimplemented(0x140236b20ULL);
-    return (bool)0;
-}
-
-/* reaches the port's s_compositorEnabled (src/client/StartupClient.cpp), which has internal linkage */
-undefined8 FUN_14023a490() {
-    GenUnimplemented(0x14023a490ULL);
-    return (undefined8)0;
-}
-
 /* SIMD union */
 undefined8 FUN_14024a0c0() {
     GenUnimplemented(0x14024a0c0ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_flag142de2990 (src/client/StartupClient.cpp), which has internal linkage */
-undefined8 FUN_14024a6b0() {
-    GenUnimplemented(0x14024a6b0ULL);
     return (undefined8)0;
 }
 
@@ -110,18 +86,6 @@ undefined8 FUN_1402e3f60() {
     return (undefined8)0;
 }
 
-/* reaches the port's s_casReadHookContext (src/cas/CAS.cpp), which has internal linkage */
-undefined8 FUN_1402e5b10() {
-    GenUnimplemented(0x1402e5b10ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_casReadHookContext (src/cas/CAS.cpp), which has internal linkage */
-undefined8 FUN_1402e5d20() {
-    GenUnimplemented(0x1402e5d20ULL);
-    return (undefined8)0;
-}
-
 /* register the decompiler lost track of */
 undefined8 FUN_1402e6770() {
     GenUnimplemented(0x1402e6770ULL);
@@ -158,33 +122,9 @@ undefined8 FUN_1402ee3d0() {
     return (undefined8)0;
 }
 
-/* reaches the port's s_casReadHookContext (src/cas/CAS.cpp), which has internal linkage */
-undefined8 FUN_1402ee7b0() {
-    GenUnimplemented(0x1402ee7b0ULL);
-    return (undefined8)0;
-}
-
 /* SIMD union */
 undefined8 FUN_1402eea70() {
     GenUnimplemented(0x1402eea70ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_casReadHookContext (src/cas/CAS.cpp), which has internal linkage */
-undefined1 FUN_1402f0f20() {
-    GenUnimplemented(0x1402f0f20ULL);
-    return (undefined1)0;
-}
-
-/* reaches the port's s_casReadHookContext (src/cas/CAS.cpp), which has internal linkage */
-undefined8 FUN_1402f3890() {
-    GenUnimplemented(0x1402f3890ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_casReadHookContext (src/cas/CAS.cpp), which has internal linkage */
-undefined8 FUN_1402f39e0() {
-    GenUnimplemented(0x1402f39e0ULL);
     return (undefined8)0;
 }
 
@@ -197,12 +137,6 @@ undefined8 FUN_1402f3bd0() {
 /* register the decompiler lost track of */
 undefined8 FUN_1402f41b0() {
     GenUnimplemented(0x1402f41b0ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_casReadHookContext (src/cas/CAS.cpp), which has internal linkage */
-undefined8 FUN_1402f4550() {
-    GenUnimplemented(0x1402f4550ULL);
     return (undefined8)0;
 }
 
@@ -308,12 +242,6 @@ undefined8 FUN_1403079b0() {
     return (undefined8)0;
 }
 
-/* reaches the port's s_cvars (src/console/Var.cpp), which has internal linkage */
-ulonglong FUN_140320a30() {
-    GenUnimplemented(0x140320a30ULL);
-    return (ulonglong)0;
-}
-
 /* register the decompiler lost track of */
 undefined8 FUN_140323a30() {
     GenUnimplemented(0x140323a30ULL);
@@ -332,34 +260,10 @@ undefined8 FUN_140325700() {
     return (undefined8)0;
 }
 
-/* reaches the port's s_consoleHotKey (src/console/Command.cpp), which has internal linkage */
-undefined4 * FUN_140326890() {
-    GenUnimplemented(0x140326890ULL);
-    return (undefined4 *)0;
-}
-
-/* reaches the port's s_commands (src/console/Command.cpp), which has internal linkage */
-undefined4 FUN_1403268a0() {
-    GenUnimplemented(0x1403268a0ULL);
-    return (undefined4)0;
-}
-
-/* reaches the port's s_monitorCVar (src/client/ConsoleDevice.cpp), which has internal linkage */
-undefined8 FUN_140328610() {
-    GenUnimplemented(0x140328610ULL);
-    return (undefined8)0;
-}
-
 /* SIMD union */
 undefined8 FUN_140328c10() {
     GenUnimplemented(0x140328c10ULL);
     return (undefined8)0;
-}
-
-/* reaches the port's s_notchedDisplayCVar (src/client/ConsoleDevice.cpp), which has internal linkage */
-undefined1 FUN_1403293f0() {
-    GenUnimplemented(0x1403293f0ULL);
-    return (undefined1)0;
 }
 
 /* a port that cannot be called from C (stub, internal or aggregate ABI) */
@@ -908,27 +812,9 @@ float FUN_1414fcdc0() {
     return (float)0;
 }
 
-/* reaches the port's s_cursor (src/client/GxWindow.cpp), which has internal linkage */
-longlong FUN_1415241f0() {
-    GenUnimplemented(0x1415241f0ULL);
-    return (longlong)0;
-}
-
 /* SIMD union */
 undefined8 FUN_1415263a0() {
     GenUnimplemented(0x1415263a0ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_cursor (src/client/GxWindow.cpp), which has internal linkage */
-longlong FUN_141529ce0() {
-    GenUnimplemented(0x141529ce0ULL);
-    return (longlong)0;
-}
-
-/* reaches the port's s_cursor (src/client/GxWindow.cpp), which has internal linkage */
-undefined8 FUN_14152d120() {
-    GenUnimplemented(0x14152d120ULL);
     return (undefined8)0;
 }
 
@@ -938,27 +824,9 @@ undefined8 FUN_14154cee0() {
     return (undefined8)0;
 }
 
-/* reaches the port's s_sessionUp (src/services/ClientServices.cpp), which has internal linkage */
-undefined8 FUN_141567d00() {
-    GenUnimplemented(0x141567d00ULL);
-    return (undefined8)0;
-}
-
 /* a type C does not know (vtable_14261b9) */
 undefined8 FUN_141567f50() {
     GenUnimplemented(0x141567f50ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_clientServices (src/services/ClientServices.cpp), which has internal linkage */
-undefined8 FUN_14156b900() {
-    GenUnimplemented(0x14156b900ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_clientServices (src/services/ClientServices.cpp), which has internal linkage */
-undefined8 FUN_14156dc60() {
-    GenUnimplemented(0x14156dc60ULL);
     return (undefined8)0;
 }
 
@@ -974,39 +842,9 @@ ulonglong FUN_14165b010() {
     return (ulonglong)0;
 }
 
-/* reaches the port's s_unknown5f0 (src/glue/GlueMgr.cpp), which has internal linkage */
-undefined8 FUN_14167af30() {
-    GenUnimplemented(0x14167af30ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_unknown5f0 (src/glue/GlueMgr.cpp), which has internal linkage */
-longlong FUN_14167b2a0() {
-    GenUnimplemented(0x14167b2a0ULL);
-    return (longlong)0;
-}
-
-/* reaches the port's s_aspect (src/glue/GlueMgr.cpp), which has internal linkage */
-undefined8 FUN_14167b540() {
-    GenUnimplemented(0x14167b540ULL);
-    return (undefined8)0;
-}
-
 /* register the decompiler lost track of */
 undefined8 FUN_1416817a0() {
     GenUnimplemented(0x1416817a0ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_seedB (src/client/Startup.cpp), which has internal linkage */
-int FUN_141683e80() {
-    GenUnimplemented(0x141683e80ULL);
-    return (int)0;
-}
-
-/* reaches the port's s_seedB (src/client/Startup.cpp), which has internal linkage */
-undefined8 FUN_141684150() {
-    GenUnimplemented(0x141684150ULL);
     return (undefined8)0;
 }
 
@@ -1064,30 +902,6 @@ undefined8 FUN_1416876e0() {
     return (undefined8)0;
 }
 
-/* reaches the port's s_lastCharacterGuidCVar (src/client/ClientCVars.cpp), which has internal linkage */
-undefined8 FUN_14168deb0() {
-    GenUnimplemented(0x14168deb0ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_lastCharacterIndexCVar (src/client/ClientCVars.cpp), which has internal linkage */
-undefined8 FUN_14168e160() {
-    GenUnimplemented(0x14168e160ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_lastCharacterIndexCVar (src/client/ClientCVars.cpp), which has internal linkage */
-undefined8 FUN_14168e230() {
-    GenUnimplemented(0x14168e230ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_lastCharacterIndexCVar (src/client/ClientCVars.cpp), which has internal linkage */
-undefined8 FUN_14168e2f0() {
-    GenUnimplemented(0x14168e2f0ULL);
-    return (undefined8)0;
-}
-
 /* the stack frame addressed directly */
 undefined8 FUN_14168e8d0() {
     GenUnimplemented(0x14168e8d0ULL);
@@ -1115,30 +929,6 @@ ulonglong FUN_14168ffa0() {
 /* register the decompiler lost track of */
 undefined8 FUN_141691100() {
     GenUnimplemented(0x141691100ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_seenCharacterUpgradePopupCVar (src/client/ClientCVars.cpp), which has internal linkage */
-undefined8 FUN_141699170() {
-    GenUnimplemented(0x141699170ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_seenExpansionTrialPopupCVar (src/client/ClientCVars.cpp), which has internal linkage */
-undefined8 FUN_1416991a0() {
-    GenUnimplemented(0x1416991a0ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_seenCharacterUpgradePopupCVar (src/client/ClientCVars.cpp), which has internal linkage */
-undefined8 FUN_141699200() {
-    GenUnimplemented(0x141699200ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_seenExpansionTrialPopupCVar (src/client/ClientCVars.cpp), which has internal linkage */
-undefined8 FUN_141699260() {
-    GenUnimplemented(0x141699260ULL);
     return (undefined8)0;
 }
 
@@ -1184,39 +974,9 @@ undefined8 FUN_1416a0db0() {
     return (undefined8)0;
 }
 
-/* reaches the port's s_accountUsesTokenCVar (src/client/ClientCVars.cpp), which has internal linkage */
-undefined8 FUN_1416a41b0() {
-    GenUnimplemented(0x1416a41b0ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_accountUsesTokenCVar (src/client/ClientCVars.cpp), which has internal linkage */
-undefined8 FUN_1416a41d0() {
-    GenUnimplemented(0x1416a41d0ULL);
-    return (undefined8)0;
-}
-
 /* thread-local storage */
 undefined8 FUN_1416a5610() {
     GenUnimplemented(0x1416a5610ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_unknown5f0 (src/glue/GlueMgr.cpp), which has internal linkage */
-undefined8 FUN_1416a6720() {
-    GenUnimplemented(0x1416a6720ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_unknown52b (src/glue/GlueMgr.cpp), which has internal linkage */
-undefined8 FUN_1416a6b50() {
-    GenUnimplemented(0x1416a6b50ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_unknown52b (src/glue/GlueMgr.cpp), which has internal linkage */
-undefined8 FUN_1416a6b70() {
-    GenUnimplemented(0x1416a6b70ULL);
     return (undefined8)0;
 }
 
@@ -1292,12 +1052,6 @@ undefined8 FUN_14195cc60() {
     return (undefined8)0;
 }
 
-/* reaches the port's s_initialized (src/glue/GlueMgr.cpp), which has internal linkage */
-undefined8 FUN_1419701d0() {
-    GenUnimplemented(0x1419701d0ULL);
-    return (undefined8)0;
-}
-
 /* SIMD union */
 undefined8 FUN_1419f4e60() {
     GenUnimplemented(0x1419f4e60ULL);
@@ -1355,18 +1109,6 @@ undefined8 FUN_1419fbd50() {
 /* SIMD union */
 undefined8 FUN_1419fc420() {
     GenUnimplemented(0x1419fc420ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_seenConfigurationWarningsCVar (src/client/ClientCVars.cpp), which has internal linkage */
-undefined8 FUN_141a3cb20() {
-    GenUnimplemented(0x141a3cb20ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_seenConfigurationWarningsCVar (src/client/ClientCVars.cpp), which has internal linkage */
-undefined8 FUN_141a3cdc0() {
-    GenUnimplemented(0x141a3cdc0ULL);
     return (undefined8)0;
 }
 
@@ -1646,12 +1388,6 @@ undefined * FUN_141c64fc0() {
     return (undefined *)0;
 }
 
-/* reaches the port's s_checkAddonVersionCVar (src/client/ClientCVars.cpp), which has internal linkage */
-undefined8 FUN_141c96dc0() {
-    GenUnimplemented(0x141c96dc0ULL);
-    return (undefined8)0;
-}
-
 /* register the decompiler lost track of */
 ulonglong FUN_141c971c0() {
     GenUnimplemented(0x141c971c0ULL);
@@ -1670,12 +1406,6 @@ ulonglong FUN_141c97320() {
     return (ulonglong)0;
 }
 
-/* reaches the port's s_checkAddonVersionCVar (src/client/ClientCVars.cpp), which has internal linkage */
-longlong FUN_141c973d0() {
-    GenUnimplemented(0x141c973d0ULL);
-    return (longlong)0;
-}
-
 /* register the decompiler lost track of */
 undefined8 FUN_141c97dd0() {
     GenUnimplemented(0x141c97dd0ULL);
@@ -1685,12 +1415,6 @@ undefined8 FUN_141c97dd0() {
 /* SIMD union */
 undefined8 FUN_141c995f0() {
     GenUnimplemented(0x141c995f0ULL);
-    return (undefined8)0;
-}
-
-/* reaches the port's s_checkAddonVersionCVar (src/client/ClientCVars.cpp), which has internal linkage */
-undefined8 FUN_141c99fc0() {
-    GenUnimplemented(0x141c99fc0ULL);
     return (undefined8)0;
 }
 
@@ -1770,6 +1494,12 @@ undefined8 FUN_141db18f0() {
 undefined4 * FUN_141db69b0() {
     GenUnimplemented(0x141db69b0ULL);
     return (undefined4 *)0;
+}
+
+/* the decompiler lost calls (7 shown, the reference makes 16) */
+undefined8 FUN_142026ec0() {
+    GenUnimplemented(0x142026ec0ULL);
+    return (undefined8)0;
 }
 
 /* SIMD union */

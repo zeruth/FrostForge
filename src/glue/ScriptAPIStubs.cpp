@@ -259,34 +259,6 @@ int Lua_C_ReportSystem_ReportServerLag(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_141699170
-int Lua_C_SharedCharacterServices_GetLastSeenCharacterUpgradePopup(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1416991a0
-int Lua_C_SharedCharacterServices_GetLastSeenExpansionTrialPopup(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141699200
-int Lua_C_SharedCharacterServices_SetCharacterUpgradePopupSeen(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141699260
-int Lua_C_SharedCharacterServices_SetExpansionTrialPopupSeen(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140ae64e0
 int Lua_C_SocialContractGlue_GetShouldShowSocialContract(lua_State* L) {
     (void)L;
@@ -616,13 +588,6 @@ int Lua_CopyToClipboard(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_14168e230
-int Lua_DeleteCharacter(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_1419f4e60
 int Lua_GetCurrentResolution(lua_State* L) {
     (void)L;
@@ -632,13 +597,6 @@ int Lua_GetCurrentResolution(lua_State* L) {
 
 // ref: FUN_141d02f30
 int Lua_GetFontInfo(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1416a6720
-int Lua_GetNumAccountCharacters(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -665,24 +623,10 @@ int Lua_GetTime(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_1416a41b0
-int Lua_GetUsesToken(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // Returns nothing.
 // ref: FUN_14022c3f0
 int Lua_HandleAtlasMemberCommand(lua_State* L) {
     (void)L;
-    return 0;
-}
-
-// ref: FUN_1416a6b50
-int Lua_HasCheckedSystemRequirements(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
     return 0;
 }
 
@@ -695,13 +639,6 @@ int Lua_IsCharacterVASRestricted(lua_State* L) {
 
 // ref: FUN_141d936d0
 int Lua_IsUsingFixedTimeStep(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_14168e2f0
-int Lua_KioskDeleteAllCharacters(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -728,36 +665,8 @@ int Lua_SaveCharacterOrder(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_14168e160
-int Lua_SelectCharacter(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1416a6b70
-int Lua_SetCheckedSystemRequirements(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_14168deb0
-int Lua_SetLastCharacterGuid(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_141d01f30
 int Lua_SetPortraitToTexture(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1416a41d0
-int Lua_SetUsesToken(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
