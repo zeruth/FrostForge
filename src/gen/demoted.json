@@ -1,5 +1,13 @@
 {
+ "140279d94": "C2198 'void _free_base(void *)': too few arguments for call [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\ge",
+ "1415606c0": "C2065 '_local_218': undeclared identifier [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcxproj]",
+ "141560ca0": "C2065 '_local_1d8': undeclared identifier [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcxproj]",
  "141c52880": "C2065 'DAT_00000004': undeclared identifier [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcxproj]",
+ "14202e640": "C2440 'type cast': cannot convert from 'double' to 'char *' [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\ge",
  "1420317d0": "C2168 'memset': too few actual parameters for intrinsic function [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\g",
+ "1420cd4a0": "C2198 'void *_calloc_base(size_t,size_t)': too few arguments for call [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\",
+ "1420cd4e0": "C2168 'memset': too few actual parameters for intrinsic function [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\g",
+ "1420d10d0": "C2065 'register0x00000020': undeclared identifier [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcxproj]",
+ "142289bb0": "C2100 you cannot dereference an operand of type 'undefined8' [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\g",
  "142442600": "C2100 you cannot dereference an operand of type 'undefined8' [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\g"
 }

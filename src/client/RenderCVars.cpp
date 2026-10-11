@@ -359,11 +359,6 @@ bool ResampleAlwaysSharpenCallback(CVar*, const char*, const char* value, void*)
     return true;
 }
 
-// ref: FUN_1412a2650
-void ResampleCreateDeviceObjects() {
-    FROST_UNIMPLEMENTED();
-}
-
 // ---- ambient occlusion ----------------------------------------------------------------------
 
 // Normals stay on where the device has no compute.

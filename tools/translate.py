@@ -56,8 +56,7 @@ PRIMITIVE = {
 HARD = [
     ("register the decompiler lost track of", re.compile(r"\b(in_|unaff_|extraout_)\w+")),
     ("SIMD union", re.compile(r"\._\d+_\d+_")),
-    # `lock`-prefixed read-modify-writes; a no-op would lose the atomicity
-    ("an interlocked operation", re.compile(r"\bLOCK\(\);")),
+    # (`LOCK(); ... UNLOCK();` blocks are mapped onto Interlocked operations by atomics())
     ("the stack frame addressed directly", re.compile(r"\b(_local_res\w*|stack0x\w+|\w*StackX_\w+)")),
     ("thread-local storage", re.compile(r"ThreadLocalStoragePointer|_tls_index")),
     ("bad data or a trap", re.compile(r"halt_baddata|\bswi\(|software_interrupt|halt_unimplemented")),
@@ -294,6 +293,130 @@ def stack_frame(body: str) -> str:
     return body
 
 
+def upper_half_only(text: str) -> list[str]:
+    """`in_stack_` slots read only for their upper 32 bits.
+
+    A 32-bit argument passed on the stack is a 64-bit slot whose upper half the callee never
+    reads; Ghidra carries that half through as `CONCAT44((int)(in_stack_x >> 0x20), arg)`. Such a
+    slot can be anything, so zero is as faithful as the caller's leftovers."""
+    out = []
+    for name in set(re.findall(r"\bin_stack_\w+", text)):
+        uses = [m for m in re.finditer(rf"\b{name}\b", text)]
+        decl = re.search(rf"^\s*[\w ]+ {name};$", text, re.M)
+        rest = [m for m in uses if not (decl and decl.start() <= m.start() < decl.end())]
+        if rest and all(re.match(r"\s*>>\s*0x20\b", text[m.end():]) for m in rest):
+            out.append(name)
+    return out
+
+
+def wide_multiply(text: str) -> str:
+    """Ghidra's 128-bit products (`mul` with the high half kept) as 64-bit intrinsics.
+
+    A divide by a constant or an overflow check builds a 16-byte union from one 64-bit value
+    (`v._8_8_ = 0; v._0_8_ = x;`) and keeps one half of `ZEXT816(k) * v`. When the union is
+    used no other way, it is that 64-bit value, and the halves are __umulh and a plain product."""
+    for name in set(re.findall(r"\b(\w+)\._0_8_ = ", text)):
+        v = re.escape(name)
+        lo = f"{name}_lo"
+        operand = rf"(?:ZEXT816\(([^()]+)\)|{v})"
+        new = re.sub(rf"\b{v}\._8_8_ = 0;\n", "", text)
+        new = re.sub(rf"\b{v}\._0_8_ = ", f"{lo} = ", new)
+
+        def product(m):
+            a = m.group(1) if m.group(1) is not None else lo
+            b = m.group(2) if m.group(2) is not None else lo
+            if m.group(3) == "8":
+                return f"__umulh((ulonglong)({a}), (ulonglong)({b}))"
+            return f"((ulonglong)({a}) * (ulonglong)({b}))"
+
+        new = re.sub(rf"SUB168\({operand} \* {operand},([08])\)", product, new)
+        new = re.sub(rf"(undefined1?|undefined) {v} \[16\];", f"ulonglong {lo};", new)
+        if not re.search(rf"\b{v}\b(?!_lo)", new):
+            text = new
+    return text
+
+
+LOCK_BLOCK = re.compile(r"([ \t]*)LOCK\(\);\n(.*?)\n[ \t]*UNLOCK\(\);", re.S)
+RMW_OPS = {"+": "ADD", "&": "AND", "|": "OR", "^": "XOR"}
+
+
+def _bare(expr: str) -> str:
+    """An lvalue or operand without its casts and spaces, to compare two spellings of one place."""
+    expr = re.sub(r"\((?:\w+ )*\w+ ?\**\)", "", expr)
+    expr = re.sub(r"\s+", "", expr)
+    expr = re.sub(r"\b(\w+)\[(\w+)\]", r"*(\1+\2)", expr)      # p[1] is *(p + 1)
+    expr = re.sub(r"^\*\((\w+)\+0\)$", r"*\1", expr)
+    return expr.strip("()")
+
+
+def _local_set(line: str) -> bool:
+    """`x = <expr>;` with a plain local on the left: an instruction of its own around the locked
+    one (the address it works on, or a register copy of its result)."""
+    return re.fullmatch(r"\w+ = [^;]+;", line) is not None
+
+
+def _rmw(lhs: str, rhs: str) -> tuple[str, str] | None:
+    """(op, operand) when `lhs = rhs` is `lv = lv OP k`."""
+    m = re.fullmatch(r"(.+?) ([+&|^]) (-?\w+|\(.+\))", rhs.strip())
+    if m and _bare(m.group(1)) == _bare(lhs):
+        return RMW_OPS[m.group(2)], m.group(3)
+    return None
+
+
+def atomics(body: str) -> str:
+    """Each `LOCK(); ... UNLOCK();` as the Interlocked operation the locked instruction is.
+
+    Ghidra spells one `lock`-prefixed instruction as a few statements between the markers: a
+    read-modify-write (`lock add/and/or/xor`), the same with the old value kept (`lock xadd`),
+    an exchange (`xchg`), or a compare-exchange (`lock cmpxchg`), sometimes after the register
+    arithmetic that forms the address. Anything else is a shape this does not know."""
+    def core(lines):
+        out = None
+        assigns = [re.fullmatch(r"(.+?) = (.+);", l) for l in lines]
+        if len(lines) == 1 and assigns[0]:
+            lhs, rhs = assigns[0].groups()
+            op = _rmw(lhs, rhs)
+            out = [f"GEN_ATOMIC_{op[0]}({lhs}, {op[1]});" if op else f"GEN_ATOMIC_XCHG({lhs}, {rhs});"]
+        elif len(lines) == 2 and all(assigns) and re.fullmatch(r"\w+", assigns[0].group(1)) \
+                and _bare(assigns[0].group(2)) == _bare(assigns[1].group(1)):
+            old, (lhs, rhs) = assigns[0].group(1), assigns[1].groups()
+            op = _rmw(lhs, rhs)
+            out = [f"{old} = GEN_ATOMIC_{op[0]}({lhs}, {op[1]});" if op else f"{old} = GEN_ATOMIC_XCHG({lhs}, {rhs});"]
+        else:
+            # [old = lv;] flag = a == b; if (flag) { lv = new; [x = y;] }
+            text = " ".join(lines)
+            c = re.fullmatch(r"(?:(\w+) = ([^;]+); )?(\w+) = ([^;]+?) == ([^;]+?); if \(\3\) \{ ([^;]+?) = ([^;]+); "
+                             r"((?:\w+ = [^;]+; )?)\}", text)
+            if c:
+                old, loaded, flag, a, b, lv, new, extra = c.groups()
+                if old is not None and _bare(loaded) == _bare(lv) and old in (a, b):
+                    cmp = b if a == old else a
+                    out = [f"{old} = GEN_ATOMIC_CAS({lv}, {new}, {cmp});", f"{flag} = {old} == {cmp};"]
+                elif old is None and _bare(lv) in (_bare(a), _bare(b)):
+                    cmp = b if _bare(a) == _bare(lv) else a
+                    out = [f"{flag} = GEN_ATOMIC_CAS({lv}, {new}, {cmp}) == {cmp};"]
+                if out is not None and extra.strip():
+                    out.append(f"if ({flag}) {{ {extra.strip()} }}")
+        return out
+
+    def one(m):
+        indent, lines = m.group(1), [l.strip() for l in m.group(2).splitlines() if l.strip()]
+        # the fewest statements around the locked instruction that leave a shape it can be
+        for k in range(len(lines)):
+            if not all(_local_set(l) for l in lines[:k]):
+                break
+            for n in range(len(lines) - k):
+                tail = lines[len(lines) - n:] if n else []
+                if not all(_local_set(l) for l in tail):
+                    break
+                out = core(lines[k:len(lines) - n])
+                if out is not None:
+                    return "\n".join(indent + l for l in lines[:k] + out + tail)
+        raise Untranslatable("an interlocked operation of a shape the translator does not map")
+
+    return LOCK_BLOCK.sub(one, body)
+
+
 def scalar_size(decl: str) -> int:
     """The bytes a scalar global's declared type occupies (a pointer or handle is 8)."""
     t = re.sub(r"\b(?:static|extern|const|volatile|thread_local|unsigned|signed)\b", "", decl).strip()
@@ -467,7 +590,7 @@ class Translator:
         e = self.cor.get(a)
         if not e or "c" not in e:
             return None
-        return strip_retcheck(e["c"].replace("\r\n", "\n"))[0]
+        return wide_multiply(strip_retcheck(e["c"].replace("\r\n", "\n"))[0])
 
     def callees(self, text: str) -> set[int]:
         out = set()
@@ -580,7 +703,8 @@ class Translator:
         if text is None:
             return "not in the corpus"
         for reason, rx in HARD:
-            if rx.search(text):
+            hits = {m.group(0) for m in rx.finditer(text)} - set(upper_half_only(text))
+            if hits:
                 return reason
         if any(g in text for g in ("DAT_14261a0b0", "DAT_14261a0b8")):
             return "an anti-tamper check the corpus could not strip"
@@ -607,7 +731,9 @@ class Translator:
         head, rest = text.split("{", 1)
         sig = self.signature(a)
         ret, _, params = sig
-        body = stack_frame("{" + rest)
+        body = stack_frame(atomics("{" + rest))
+        for name in upper_half_only(body):
+            body = re.sub(rf"^(\s*[\w ]+ {name});$", r"\1 = 0;", body, count=1, flags=re.M)
         # switch cases are labels Ghidra qualifies with `::`
         body = re.sub(r"\b(switchD_\w+)::(\w+)", r"\1__\2", body)
         # a function's address taken, `&FUN_x`: the reference address, which the jumps dispatch
@@ -750,7 +876,7 @@ class Translator:
             old.unlink()
         uses: set[int] = set()
         bodies = {}
-        imports = set()
+        imports, dlls = set(), set()
         for a in sorted(plan["translate"]):
             text = self.body(a)
             mine: set[int] = set()
@@ -762,6 +888,7 @@ class Translator:
                 continue
             uses |= mine
             imports.update(m.group(2) for m in IMPORT.finditer(text))
+            dlls.update(m.group(1) for m in IMPORT.finditer(text))
         # whatever is called and neither translated nor adapted is stubbed
         for b in uses:
             if b not in plan["translate"] and b not in plan["adapt"] and b not in plan["stub"]:
@@ -772,6 +899,10 @@ class Translator:
                       for a in sorted(set(plan["translate"]) | set(plan["adapt"]) | set(plan["stub"]))]
         header = ["/* GENERATED by tools/translate.py; do not edit by hand. */",
                   "#ifndef GEN_TRANSLATED_H", "#define GEN_TRANSLATED_H", "", "#include \"gen/Ghidra.h\"", ""]
+        # the import libraries of the DLLs the reference's imports come from (combase's exports
+        # are in ole32.lib)
+        header += [f"#pragma comment(lib, \"{'ole32' if d == 'COMBASE_DLL' else d.removesuffix('_DLL').lower()}.lib\")"
+                   for d in sorted(dlls)]
         header += [f"__declspec(dllimport) unsigned long long {name}();" for name in sorted(imports)]
         # the port's own globals, where the translated code would read the image's
         for base, mangled in sorted(self.global_aliases.items()):

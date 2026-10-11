@@ -16,6 +16,7 @@
 #include "framescript/ScriptMethod.hpp"
 #include "glue/GlueMgr.hpp"
 #include "services/ClientServices.hpp"
+#include "db/GlobalColor.hpp"
 #include "gxu/GxuFont.hpp"
 #include "ui/CSimpleTop.hpp"
 #include "ui/FrameXML.hpp"
@@ -137,12 +138,6 @@ void Sub141930F00() {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_141280060
-void Sub141280060(int32_t a1) {
-    (void)a1;
-    FROST_UNIMPLEMENTED();
-}
-
 // ref: FUN_140229b60
 bool OnM2ForceAdditiveParticleSortChanged(CVar* cvar, const char* oldValue, const char* newValue, void* userData) {
     (void)cvar;
@@ -212,7 +207,6 @@ void Sub14134EC50() {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_14023dbd0
 // ---- Sub14023DBD0's callees ----------------------------------------------------------------
 
 static uint8_t s_flag142de2990;      // DAT_142de2990
@@ -233,12 +227,6 @@ void Sub140238BC0() {
 // The reloadUI and TakeScreenshot console commands.
 // ref: FUN_14024d040
 void Sub14024D040() {
-    FROST_UNIMPLEMENTED();
-}
-
-// The callback the script error dialog uses (FUN_141672420), kept at 0x142e9cf80.
-// ref: FUN_14068b740
-void Sub14068B740() {
     FROST_UNIMPLEMENTED();
 }
 
@@ -365,7 +353,7 @@ void Sub14023DBD0() {
     Sub140238BC0();
     Sub14024D040();
     ClientRegisterCVars();
-    Sub14068B740();
+    GxuFontSetColorNameLookup(GlobalColorLookup);
     Sub1402165B0();
     Sub14022E810();
     FrameScript_SetStateHook(ClientScriptStateHook);
@@ -1058,7 +1046,7 @@ bool Sub14022A260() {
     Sub14126EA20();
     Sub140326A30();
     Sub141930F00();
-    Sub141280060(1);
+    TextureSetAtlasEnabled(true);
     s_m2UseThreads = CVarRegister("M2UseThreads", "multithread model animations", 0, "1",
         static_cast<CVARCALLBACK>(nullptr), 1, false, nullptr, false);
     s_m2ForceAdditiveParticleSort = CVarRegister("M2ForceAdditiveParticleSort",

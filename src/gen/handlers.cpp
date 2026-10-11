@@ -187,6 +187,9 @@ unsigned long long FUN_140d2c570(unsigned long long param_1);
 unsigned long long FUN_140d2cce0(unsigned long long param_1);
 unsigned long long FUN_140d2da20(unsigned long long param_1);
 unsigned long long FUN_140d2f520(unsigned long long param_1);
+unsigned long long FUN_140d32cc0(unsigned long long param_1);
+unsigned long long FUN_140d33a70(unsigned long long param_1);
+unsigned long long FUN_140d34960(unsigned long long param_1);
 unsigned long long FUN_140d43310(unsigned long long param_1);
 unsigned long long FUN_140d43a80(unsigned long long param_1);
 unsigned long long FUN_140d440c0(unsigned long long param_1);
@@ -2785,6 +2788,33 @@ int Lua_C_Texture_SetTitleIconTexture(lua_State* L) {
     __try {
         return static_cast<int>(FUN_140eaa900(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x140eaa900ull, GetExceptionInformation())) {
+        return 0;
+    }
+}
+
+// translated: FUN_140d32cc0
+int Lua_C_Timer_After(lua_State* L) {
+    __try {
+        return static_cast<int>(FUN_140d32cc0(reinterpret_cast<unsigned long long>(L)));
+    } __except (GenFault(0x140d32cc0ull, GetExceptionInformation())) {
+        return 0;
+    }
+}
+
+// translated: FUN_140d33a70
+int Lua_C_Timer_NewTicker(lua_State* L) {
+    __try {
+        return static_cast<int>(FUN_140d33a70(reinterpret_cast<unsigned long long>(L)));
+    } __except (GenFault(0x140d33a70ull, GetExceptionInformation())) {
+        return 0;
+    }
+}
+
+// translated: FUN_140d34960
+int Lua_C_Timer_NewTimer(lua_State* L) {
+    __try {
+        return static_cast<int>(FUN_140d34960(reinterpret_cast<unsigned long long>(L)));
+    } __except (GenFault(0x140d34960ull, GetExceptionInformation())) {
         return 0;
     }
 }

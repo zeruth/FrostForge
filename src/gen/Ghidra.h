@@ -94,8 +94,6 @@ typedef unsigned long long code();
 #define SUB82(x, n) ((uint16_t)((uint64_t)(x) >> ((n) * 8)))
 #define SUB84(x, n) ((uint32_t)((uint64_t)(x) >> ((n) * 8)))
 #define SUB21(x, n) ((uint8_t)((uint16_t)(x) >> ((n) * 8)))
-#define SUB161(x, n) ((uint8_t)0)
-#define SUB168(x, n) ((uint64_t)0)
 #define ZEXT14(x) ((uint32_t)(uint8_t)(x))
 #define ZEXT18(x) ((uint64_t)(uint8_t)(x))
 #define ZEXT24(x) ((uint32_t)(uint16_t)(x))
@@ -122,6 +120,55 @@ typedef unsigned long long code();
 #define NAN(x) ((x) != (x))
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 #define SQRT(x) sqrt(x)
+
+/* a `lock`-prefixed instruction (Ghidra's LOCK(); ... UNLOCK();), by the size of the lvalue it
+   works on; each yields the value before the operation, as the instruction leaves it */
+#include <intrin.h>
+#define GEN_ATOMIC_(op, lv, v) \
+    (sizeof(lv) == 8 ? (long long)_Interlocked##op##64((volatile long long *)&(lv), (long long)(v)) \
+     : sizeof(lv) == 4 ? (long long)_Interlocked##op((volatile long *)&(lv), (long)(v)) \
+     : sizeof(lv) == 2 ? (long long)_Interlocked##op##16((volatile short *)&(lv), (short)(v)) \
+     : (long long)_Interlocked##op##8((volatile char *)&(lv), (char)(v)))
+#define GEN_ATOMIC_ADD(lv, v) GEN_ATOMIC_(ExchangeAdd, lv, v)
+#define GEN_ATOMIC_AND(lv, v) GEN_ATOMIC_(And, lv, v)
+#define GEN_ATOMIC_OR(lv, v) GEN_ATOMIC_(Or, lv, v)
+#define GEN_ATOMIC_XOR(lv, v) GEN_ATOMIC_(Xor, lv, v)
+#define GEN_ATOMIC_XCHG(lv, v) GEN_ATOMIC_(Exchange, lv, v)
+/* cmpxchg: stores `v` when the lvalue holds `cmp`; the value it held either way */
+#define GEN_ATOMIC_CAS(lv, v, cmp) \
+    (sizeof(lv) == 8 ? (long long)_InterlockedCompareExchange64((volatile long long *)&(lv), (long long)(v), (long long)(cmp)) \
+     : sizeof(lv) == 4 ? (long long)_InterlockedCompareExchange((volatile long *)&(lv), (long)(v), (long)(cmp)) \
+     : sizeof(lv) == 2 ? (long long)_InterlockedCompareExchange16((volatile short *)&(lv), (short)(v), (short)(cmp)) \
+     : (long long)_InterlockedCompareExchange8((volatile char *)&(lv), (char)(v), (char)(cmp)))
+
+/* Ghidra's `cpuid` pseudo-functions: the leaf's registers as Ghidra's x86 spec reads them back,
+   EAX, EBX, EDX, ECX (per thread, as the instruction's registers are) */
+static __inline unsigned int *gen_cpuid(int leaf) {
+    static __declspec(thread) int regs[4];
+    int r[4];
+    __cpuidex(r, leaf, 0);
+    regs[0] = r[0];
+    regs[1] = r[1];
+    regs[2] = r[3];
+    regs[3] = r[2];
+    return (unsigned int *)regs;
+}
+#define cpuid_basic_info(x) gen_cpuid(0)
+#define cpuid_Version_info(x) gen_cpuid(1)
+#define cpuid_cache_tlb_info(x) gen_cpuid(2)
+#define cpuid_serial_info(x) gen_cpuid(3)
+#define cpuid_Deterministic_Cache_Parameters_info(x) gen_cpuid(4)
+#define cpuid_MONITOR_MWAIT_Features_info(x) gen_cpuid(5)
+#define cpuid_Thermal_Power_Management_info(x) gen_cpuid(6)
+#define cpuid_Extended_Feature_Enumeration_info(x) gen_cpuid(7)
+#define cpuid_Direct_Cache_Access_info(x) gen_cpuid(9)
+#define cpuid_Architectural_Performance_Monitoring_info(x) gen_cpuid(10)
+#define cpuid_Extended_Topology_info(x) gen_cpuid(11)
+#define cpuid_Processor_Extended_States_info(x) gen_cpuid(13)
+#define cpuid_Quality_of_Service_info(x) gen_cpuid(15)
+#define cpuid_brand_part1_info(x) gen_cpuid((int)0x80000002)
+#define cpuid_brand_part2_info(x) gen_cpuid((int)0x80000003)
+#define cpuid_brand_part3_info(x) gen_cpuid((int)0x80000004)
 
 /* what a translated function reaches that is not translated: logged once by its address */
 void GenUnimplemented(uint64_t address);

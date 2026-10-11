@@ -1,4 +1,5 @@
 #include "framescript/FrameScript.hpp"
+#include "framescript/FrameScriptEvents.hpp"
 #include "framescript/FrameScriptObject.hpp"
 
 #include <cstring>
@@ -326,11 +327,6 @@ void RegisterLibraries(lua_State* L) {
     FrameScript_Execute(s_compatLua, "compat.lua", nullptr);
 }
 
-// Drops every registered event listener (FrameScriptEvents).
-// ref: FUN_140647840
-void ClearEventListeners() {
-    FROST_UNIMPLEMENTED();
-}
 
 }  // namespace
 
@@ -551,7 +547,7 @@ void FrameScript_Reinitialize(bool profiling) {
     s_profiling = false;
     LuaMemPoolDestroy(s_pool);
     s_pool = nullptr;
-    ClearEventListeners();
+    FrameScriptEvents::Clear();
     ProfileShutdown();
     if (s_stateHook) {
         s_stateHook(nullptr);

@@ -11,6 +11,13 @@
 #include <cstring>
 #include <malloc.h>
 #include <new>
+#include <windows.h>
+
+extern "C" {
+// src/gen: the reference's constructor, translated (tools/translate.py --addr FUN_141569c00)
+unsigned long long FUN_141569c00(unsigned long long memory, unsigned long long vtable);
+int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+}
 
 namespace {
 
@@ -39,14 +46,18 @@ int32_t LogoutCommand(const char* command, const char* arguments) {
 }
 
 // The ClientServices constructor: the NetClient / RealmConnection base (0x1414f7080, which
-// also installs the realm packet handlers), Logs/Connection.log, and a handler list. Not
-// ported (docs/stubs.md): returns null, so the instance stays null.
-// ref: FUN_141569c00
+// also installs the realm packet handlers), Logs/Connection.log, and a handler list.
+// translated: FUN_141569c00
 void* ClientServicesConstruct(void* memory, const void* vtable) {
-    (void)memory;
-    (void)vtable;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    // The reference's constructor, translated (src/gen): RealmConnection and NetClient under it,
+    // the connection object, the realm packet handlers, Logs/Connection.log. Nothing connects
+    // here; a fault in it leaves the instance null as before.
+    __try {
+        return reinterpret_cast<void*>(FUN_141569c00(reinterpret_cast<unsigned long long>(memory),
+            reinterpret_cast<unsigned long long>(vtable)));
+    } __except (GenFault(0x141569c00ull, GetExceptionInformation())) {
+        return nullptr;
+    }
 }
 
 // Whether a portal name is one of the development portals.

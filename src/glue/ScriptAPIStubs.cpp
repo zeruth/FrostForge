@@ -308,27 +308,6 @@ int Lua_C_StoreSecure_RequestPriceInfo(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140d32cc0
-int Lua_C_Timer_After(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140d33a70
-int Lua_C_Timer_NewTicker(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140d34960
-int Lua_C_Timer_NewTimer(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140b6dc00
 int Lua_C_VideoOptions_GetDefaultGameWindowSize(lua_State* L) {
     (void)L;

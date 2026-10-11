@@ -2,6 +2,7 @@ add_library(db STATIC
     DB2Tables.cpp
     DBClient.cpp
     DynamicLifeTimeDB.cpp
+    GlobalColor.cpp
     ParameterCurve.cpp
     TactKeys.cpp
     WowClientSparseDB2.cpp
