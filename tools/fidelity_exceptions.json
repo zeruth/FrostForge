@@ -1,5 +1,5 @@
 {
-  "_comment": "Deliberate divergences tools/fidelity.py honours when it reads a reference function's calls. skip: calls the port leaves out on purpose (each with why). alias: a reference wrapper the port reaches through what it wraps (scored as that callee). Add an entry only with a reason a reader can check.",
+  "_comment": "Deliberate divergences and runtime routines tools/fidelity.py honours when it reads a reference function's calls. skip: calls the port leaves out on purpose. lib: C runtime routines FID left unnamed (the port's copies are assembly with no PDB procedure to match), dropped like any library call. alias: a reference wrapper the port reaches through what it wraps. Every entry says why.",
   "skip": {
     "1402bd260": "Aegis: the obfuscated per-thread copy of the current taint (lua_State +0x18) that anti-tamper checks compare with lua_taint; not ported, see vendor/lua-5.1.4/src/lblizzard.c"
   },
@@ -8,5 +8,10 @@
       "to": "1402b3740",
       "why": "lua_pcall behind an anti-tamper return-address check; the port calls lua_pcall (FrameScript.cpp, FrameScript_RunScript)"
     }
+  },
+  "lib": {
+    "1425bf3b0": "memmove/memcpy (vcruntime): switch on the size for 0..n bytes, then 32-byte block copies",
+    "1425bfa50": "memset (vcruntime): the byte times 0x0101010101010101, switch on the size, then block stores",
+    "14026bca8": "_Init_thread_header (vcruntime): the function-local static guard over an SRW lock and condition variable"
   }
 }

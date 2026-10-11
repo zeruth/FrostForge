@@ -25,7 +25,8 @@ TAG = re.compile(r"(?://|/\*|^\s*\*+)\s*ref:\s*(?:FUN_|0x)([0-9a-fA-F]{9,})")
 # the trees tags live in: frostlite's own, and the vendored code ported from the client
 TAG_ROOTS = ("src", "vendor/lua-5.1.4/src")
 # a line opening a function definition (indented ones too, for in-class members)
-DEF = re.compile(r"^\s*(?!//|/\*|\*|#|return\b|if\b|while\b|for\b|else\b|do\b)[^;]*\b([A-Za-z_][\w:]*)\s*\([^;]*$")
+DEF = re.compile(r"^\s*(?!//|/\*|\*|#|return\b|if\b|while\b|for\b|else\b|do\b)[^;]*"
+                 r"(?:\b([A-Za-z_][\w:]*)|\boperator\s*(?:\[\]|\(\)|[^\w\s(]+|(?:new|delete)(?:\s*\[\])?))\s*\([^;]*$")
 
 
 # a whole declaration on one line: `DNLIGHT();`, `void F(int a) const override;`
@@ -60,7 +61,12 @@ def scan() -> list[dict]:
                     # the first identifier followed by '(' is the function's own name, also
                     # when a parameter is a function pointer: `void F(void (*cb)())`
                     # destructors keep their `~`: `CScriptStatus::~CScriptStatus(`
-                    name = re.search(r"((?:\b[A-Za-z_]\w*::)*~?\b[A-Za-z_]\w*)\s*\(", lines[j]).group(1)
+                    # and operators keep theirs: `operator delete[](`, `CFoo::operator=(`
+                    op = re.search(r"((?:\b[A-Za-z_]\w*::)*operator\s*(?:new|delete)(?:\s*\[\])?|"
+                                   r"(?:\b[A-Za-z_]\w*::)*operator\s*\(\)|"
+                                   r"(?:\b[A-Za-z_]\w*::)*operator\s*[^\w\s(]+)\s*\(", lines[j])
+                    name = (re.sub(r"\s+", " ", op.group(1)).replace(" [", "[") if op else
+                            re.search(r"((?:\b[A-Za-z_]\w*::)*~?\b[A-Za-z_]\w*)\s*\(", lines[j]).group(1))
                     body_start = j
                     break
             stub = False

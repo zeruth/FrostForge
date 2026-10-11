@@ -215,7 +215,7 @@ def symbolize(addrs: list[int], base: int) -> dict[int, tuple[str, int]]:
 # ---- library calls ---------------------------------------------------------------------------
 
 PORT_LIB = re.compile(r"^(std::|`|__|_[A-Z_a-z]|mem(cpy|set|move|cmp|chr)\b|str\w*$|wcs\w*$|"
-                      r"(sqrt|sin|cos|tan|atan2?|floor|ceil|pow|exp|log|fmod|abs|fabs)f?$|rand$|atexit$|\w*(printf|scanf)\w*$|"
+                      r"(sqrt|sin|cos|tan|atan2?|floor|ceil|pow|exp|log|fmod|abs|fabs)f?$|rand$|atexit$|[a-z_]*(printf|scanf)[a-z_]*$|"
                       r"Concurrency::|Microsoft::)")
 # Storm's operator new/delete and the blz allocators are Blizzard code, flattened like any helper:
 # the reference inlines them down to SMemAlloc/SMemFree
@@ -223,7 +223,7 @@ REF_KEEP = ("FUN_", "thunk_FUN", "Lua::", "Storm::", "CDataAllocator::")
 
 # deliberate divergences, each with its reason (tools/fidelity_exceptions.json)
 _EXCEPTIONS = json.loads((Path(__file__).with_name("fidelity_exceptions.json")).read_text(encoding="utf-8"))
-REF_SKIP = {int(a, 16) for a in _EXCEPTIONS["skip"]}
+REF_SKIP = {int(a, 16) for a in _EXCEPTIONS["skip"]} | {int(a, 16) for a in _EXCEPTIONS.get("lib", {})}
 REF_ALIAS = {int(a, 16): int(v["to"], 16) for a, v in _EXCEPTIONS["alias"].items()}
 
 
@@ -479,6 +479,7 @@ def main() -> None:
                     help="with --suggest: write the marked pairings' tags into the sources")
     ap.add_argument("--record", action="store_true", help="append the totals to docs/fidelity.md")
     ap.add_argument("--limit", type=int, default=0, help="print at most this many rows")
+    ap.add_argument("--crt", action="store_true", help="list the reference functions identified as C runtime")
     ap.add_argument("--delta", action="store_true",
                     help="what moved since the previous run: regressions first, then gains")
     args = ap.parse_args()
@@ -556,7 +557,7 @@ def main() -> None:
     ref_mtime = str(Path(ref.path).stat().st_mtime)
     if REF_CACHE.exists():
         loaded = json.loads(REF_CACHE.read_text())
-        if loaded.get("mtime") == ref_mtime and loaded.get("version") == 4:
+        if loaded.get("mtime") == ref_mtime and loaded.get("version") == 5:
             cache = loaded["functions"]
     cache_dirty = False
 
@@ -585,6 +586,44 @@ def main() -> None:
             f.calls = [resolve_thunk(port, md, t) for t in f.calls]
             port_cache[va] = f
         return port_cache[va]
+
+    # The C runtime routines FID left unnamed in the reference (memmove, memset,
+    # _Init_thread_header, ...): a reference callee whose instructions match one of the port's
+    # own PDB-named runtime functions of a similar size is that routine, and drops out like any
+    # library call. The port links the same MSVC runtime, so the bodies agree closely.
+    crt_bodies = []
+    for va, size, name in procs:
+        stripped = strip_name(name)
+        # C runtime names only: lowercase C identifiers, not the port's own helpers
+        if size >= 0x30 and re.fullmatch(r"_*[a-z][a-z0-9_]*", stripped) and PORT_LIB.match(stripped):
+            crt_bodies.append((size, va, stripped))
+    crt_bodies.sort()
+    crt_sizes = [c[0] for c in crt_bodies]
+    crt_known: dict[int, str | None] = {int(k, 16): v for k, v in cache.get("_crt", {}).items()}
+
+    def ref_crt(a: int) -> str | None:
+        """The runtime routine a reference function is, or None."""
+        nonlocal cache_dirty
+        if a in crt_known:
+            return crt_known[a]
+        result = None
+        entry = cor.get(a)
+        size = entry.get("size", 0) if entry else 0
+        if a not in port_of_ref and 0x30 <= size <= 0x2000 and entry and entry["name"].startswith("FUN_"):
+            mnemonics = ref_features(a).mnemonics
+            lo = bisect.bisect_left(crt_sizes, int(size * 0.6))
+            hi = bisect.bisect_right(crt_sizes, int(size * 1.6) + 1)
+            best = 0.0
+            for _, va, name in crt_bodies[lo:hi]:
+                score = trigram_score(mnemonics, port_features(va).mnemonics) or 0.0
+                if score > best:
+                    best, result = score, name
+            if best < 0.8:
+                result = None
+        crt_known[a] = result
+        cache.setdefault("_crt", {})[f"{a:x}"] = result
+        cache_dirty = True
+        return result
 
     def ref_callee_weight(a: int) -> float:
         entry = cor.get(a)
@@ -641,7 +680,8 @@ def main() -> None:
         stub_sites: list = []
         helpers: list = []
         pseq = port_sequence(pva, 0, {pva}, stub_sites, helpers)
-        rseq = [REF_ALIAS.get(x, x) for x in rf.calls if not ref_is_lib(cor, x) and x not in REF_SKIP]
+        rseq = [REF_ALIAS.get(x, x) for x in rf.calls
+                if not ref_is_lib(cor, x) and x not in REF_SKIP and ref_crt(x) is None]
         weights = [ref_callee_weight(x) for x in rseq]
         total = sum(weights)
         # a tagged callee the reference never calls was inlined there: its own calls stand in
@@ -713,7 +753,7 @@ def main() -> None:
         }
 
     if cache_dirty:
-        REF_CACHE.write_text(json.dumps({"mtime": ref_mtime, "version": 4, "functions": cache}))
+        REF_CACHE.write_text(json.dumps({"mtime": ref_mtime, "version": 5, "functions": cache}))
 
     # ---- stub liveness ---------------------------------------------------------------------
     stub_ports = {pva: r for r, pva in port_of_ref.items() if records[r]["kind"] == "stub"}
@@ -822,7 +862,12 @@ def main() -> None:
             return False
         return True
 
-    if args.delta:
+    if args.crt:
+        found = sorted((a, n) for a, n in crt_known.items() if n)
+        for a, n in found:
+            print(f"FUN_{a:x}  {n}")
+        print(f"{len(found)} reference functions identified as C runtime", file=sys.stderr)
+    elif args.delta:
         pass
     elif args.stubs:
         rows = [rec for rec in stubs if matches(rec) and (args.all or rec.get("live"))]

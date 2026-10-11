@@ -205,8 +205,9 @@ void operator delete(void* ptr) noexcept {
     StormDelete(ptr, "delete");
 }
 
+// The reference's sized form is a jump to the unsized one (0x14026bd4c).
 void operator delete(void* ptr, size_t) noexcept {
-    StormDelete(ptr, "delete");
+    ::operator delete(ptr);
 }
 
 // Matches the tagged new, for a constructor that throws.
