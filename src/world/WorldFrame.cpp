@@ -256,10 +256,82 @@ void CWorldView::SetOcclusionCulling(bool enabled) {
     FROST_UNIMPLEMENTED();  // the view's 0x308 occluder object (FUN_1413a6a40) at +0x238
 }
 
+namespace {
+
+// The LOD factor of a field of view (FUN_1413c08e0): the reciprocal of the view's width at
+// unit distance, kept within [0.01, 4].
+// ref: FUN_1413c08e0
+float WorldViewFovLodFactor(float fov) {
+    if (fov <= 0.001f) {  // DAT_142618f58
+        fov = 0.001f;
+    }
+    float half = std::tan(fov * 0.5f);  // FUN_1424154b0
+    float width = half + half;
+    if (half + half <= 0.01f) {  // DAT_142636334
+        width = 0.01f;
+    }
+    if (4.0f <= width) {  // DAT_1426c975c
+        width = 4.0f;
+    }
+    return 1.0f / width;
+}
+
+// The LOD factor of a target size (FUN_1413c0bc0): its scaled height over 1080, kept within
+// [1, 2].
+// ref: FUN_1413c0bc0
+float WorldViewSizeLodFactor(const int32_t* size) {
+    int32_t scaled[2];
+    RenderSettingsScaledSize(scaled, size);
+    float factor = static_cast<float>(scaled[1]) * 0.00092592591f;  // DAT_142727208
+    if (factor <= 1.0f) {
+        factor = 1.0f;
+    }
+    if (2.0f <= factor) {  // DAT_142632534
+        factor = 2.0f;
+    }
+    return factor;
+}
+
+}  // namespace
+
+// The frame's camera from the one the caller set: the lists emptied, the camera block, the
+// scene's camera position, the view direction, the target size, the frame index, how the
+// frame is drawn (+0x6b4: 0 forward, 1 with a depth prepass, 2 the same multisampled) and the
+// LOD factors.
 // ref: FUN_1413dddd0
 void CWorldView::UpdateCamera(const int32_t* lod) {
-    (void)lod;
+    FROST_UNIMPLEMENTED();  // the cull's per-frame reset (FUN_141444be0)
+    WorldViewListClear(&this->m_lists[0]);
+    WorldViewListClear(&this->m_lists[1]);
+    this->m_camera = this->m_cameraSet;
+    std::memcpy(this->m_3f0 + 0x64, this->m_scene->m_position, 12);
+    float* direction = reinterpret_cast<float*>(this->m_3f0 + 0x70);
+    float dx = this->m_camera.m_target[0] - this->m_camera.m_position[0];
+    float dy = this->m_camera.m_target[1] - this->m_camera.m_position[1];
+    float dz = this->m_camera.m_target[2] - this->m_camera.m_position[2];
+    float scale = 1.0f / std::sqrt(dx * dx + dy * dy + dz * dz);
+    direction[0] = dx * scale;
+    direction[1] = dy * scale;
+    direction[2] = dz * scale;
+    this->m_targetSize[0] = lod[0];
+    this->m_targetSize[1] = lod[1];
+    // The frustum's corners from the view and projection (FUN_1413c4440 over FUN_14068cef0), and
+    // from them the bounds (+0x31c), the chunk range (+0x30c), the planes (FUN_1413463d0) and
+    // the depth ratio (+0x47c).
     FROST_UNIMPLEMENTED();
+    CWorldView* main = this->m_scene->m_view;
+    if (main == this) {
+        this->m_index += static_cast<uint32_t>(this->m_scene->m_renders.size());
+    } else {
+        this->m_index = main->m_index + this->m_renderIndex;
+    }
+    if ((this->m_flags & 2) == 0 && (this->m_flags >> 9 & 1) != 0) {
+        this->m_6b4 = (g_renderSettings.m_msaaSamples != 0) + 1;  // DAT_142cfbfb4
+    } else {
+        this->m_6b4 = 0;
+    }
+    this->m_scale[0] = WorldViewFovLodFactor(this->m_camera.m_fov);
+    this->m_scale[1] = WorldViewSizeLodFactor(this->m_targetSize);
 }
 
 // ref: FUN_1413de3a0

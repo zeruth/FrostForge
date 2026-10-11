@@ -95,9 +95,9 @@ class CWorldView {
     uint32_t m_308;                         // 0x308
     uint8_t m_30c[0x84];                    // 0x30c
     float m_planes[6][4];                   // 0x390 (0, 0, 0, 1) each
-    uint8_t m_3f0[0x80];                    // 0x3f0
-    uint32_t m_470;                         // 0x470
-    float m_scale[3];                       // 0x474 1 each
+    uint8_t m_3f0[0x7c];                    // 0x3f0 +0x64 the scene's camera position, +0x70 the view direction
+    int32_t m_targetSize[2];                // 0x46c the target the frame is drawn at
+    float m_scale[3];                       // 0x474 the LOD factors: field of view, target size, depth (1 each)
     WORLDVIEWCAMERA m_cameraSet;            // 0x480 as the caller set it (FUN_1413de160)
     WORLDVIEWCAMERA m_cameraLast;           // 0x4b0 last frame's (FUN_1413c59b0)
     WORLDVIEWCAMERA m_camera;               // 0x4e0 this frame's
@@ -109,7 +109,7 @@ class CWorldView {
     uint32_t m_69c;                         // 0x69c
     uint32_t m_6a0;                         // 0x6a0
     float m_clipPlane[4];                   // 0x6a4 (0, 0, 1, 0)
-    int32_t m_6b4;                          // 0x6b4 4
+    int32_t m_6b4;                          // 0x6b4 how the frame draws: 0 forward, 1 depth prepass, 2 multisampled
     WORLDVIEWLIST m_lists[2];               // 0x6b8
 
     // ref: FUN_1413d9420

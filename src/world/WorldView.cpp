@@ -67,7 +67,8 @@ CWorldView::CWorldView(CWorldScene* scene, CWorldView* parent, uint32_t mode) {
         plane[3] = 1.0f;
     }
     std::memset(this->m_3f0, 0, sizeof(this->m_3f0));
-    this->m_470 = 0;
+    this->m_targetSize[0] = 0;
+    this->m_targetSize[1] = 0;
     InitCamera(&this->m_cameraSet);
     InitCamera(&this->m_cameraLast);
     InitCamera(&this->m_camera);
