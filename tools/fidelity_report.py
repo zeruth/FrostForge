@@ -29,6 +29,15 @@ COLORS = {"Rendering": "#7c6cf2", "UI & Lua": "#2fa8d8", "Data & files": "#3cb17
 BUCKET_OF = {d: b for b, ds in BUCKETS.items() for d in ds}
 
 
+def reference_counts() -> tuple[int, int]:
+    """Every function in the reference, and those that are not FID-named library code."""
+    from corpus import load_corpus
+    from fidelity import REF_KEEP
+    cor = load_corpus()
+    lib = sum(1 for e in cor.values() if not e["name"].startswith(REF_KEEP) and "::" not in e["name"])
+    return len(cor), len(cor) - lib
+
+
 def folder(path: str) -> str:
     parts = path.replace("\\", "/").split("/")
     return parts[1] if len(parts) > 2 and parts[0] == "src" else "other"
@@ -60,6 +69,8 @@ def main() -> None:
         }
 
     overall = stats(rows)
+    ref_total, ref_game = reference_counts()
+    tagged = len(rows)
     order = sorted(groups, key=lambda b: -len(groups[b]))
 
     def bar(s):
@@ -116,6 +127,9 @@ h1 {{ font-size:28px; margin:0 0 4px; letter-spacing:-.02em }}
 .hero {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:16px }}
 .stat {{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px }}
 .stat b {{ display:block; font-size:26px; letter-spacing:-.02em }} .stat span {{ color:var(--muted); font-size:13px }}
+.cover {{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin-bottom:8px }}
+.cover span {{ color:var(--muted) }} .cover .note {{ color:var(--muted); font-size:13px; margin-top:8px }}
+.bar.thin {{ height:10px; margin-top:10px }}
 .legend {{ display:flex; flex-wrap:wrap; gap:16px; color:var(--muted); font-size:13px; margin:16px 0 20px }}
 .legend i {{ display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:-1px }}
 .grid {{ display:grid; grid-template-columns:repeat(auto-fill,minmax(min(340px,100%),1fr)); gap:16px }}
@@ -145,13 +159,19 @@ ol {{ margin:0; padding:0; list-style:none; font-size:13px }} ol li {{ padding:3
 <h1>FrostLite fidelity</h1>
 <p class="sub">Ported functions compared against the reference 3.4.3 client, by subsystem · generated {datetime.date.today().isoformat()}</p>
 <div class="hero">
-  <div class="stat"><b>{o['total']:,}</b><span>tagged functions</span></div>
+  <div class="stat"><b>{o['total']:,}</b><span>tagged · {100 * o['total'] / ref_game:.1f}% of {ref_game:,}</span></div>
   <div class="stat"><b>{o['mean']:.2f}</b><span>mean fidelity</span></div>
   <div class="stat"><b>{o['weighted']:.2f}</b><span>size-weighted fidelity</span></div>
   <div class="stat"><b>{o['high']:,}</b><span>at 0.9 or better</span></div>
   <div class="stat"><b>{o['same']:,}</b><span>instruction-identical</span></div>
   <div class="stat"><b>{o['stub']:,}</b><span>stubs · {o['live']} live</span></div>
 </div>
+<div class="cover">
+  <div><b>{tagged:,}</b> of <b>{ref_game:,}</b> game functions tagged <span>({100 * tagged / ref_game:.1f}%)</span></div>
+  <div class="bar thin"><span class="seg-high" style="width:{100 * (o['high'] + o['mid']) / ref_game:.2f}%" title="ported"></span><span class="seg-partial" style="width:{100 * o['partial'] / ref_game:.2f}%" title="partial"></span><span class="seg-stub" style="width:{100 * o['stub'] / ref_game:.2f}%" title="stub"></span></div>
+  <div class="note">{ref_total:,} functions in the reference; {ref_total - ref_game:,} are library code (CRT, std) and left out. Ported {100 * (o['high'] + o['mid']) / ref_game:.1f}% · partial {100 * o['partial'] / ref_game:.1f}% · stub {100 * o['stub'] / ref_game:.1f}%</div>
+</div>
+<h3>Fidelity of what is tagged</h3>
 <div class="bar" style="height:16px">{bar(o)}</div>
 <div class="legend"><span><i style="background:var(--high)"></i>ported, 0.9+</span><span><i style="background:var(--mid)"></i>ported, below 0.9</span>
 <span><i style="background:var(--partial)"></i>partial</span><span><i style="background:var(--stub)"></i>stub</span></div>
