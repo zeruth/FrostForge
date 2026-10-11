@@ -283,7 +283,7 @@ void GxRenderContext::SetPipeline(GxPipeline*) {
 void GxRenderContext::SetRenderTargets(GXRENDERTARGETS*) {
     FROST_UNIMPLEMENTED();
 }
-void GxRenderContext::Slot098() {
+void GxRenderContext::ClearAndSetTargets(const GXRENDERTARGETSCLEAR*) {
     FROST_UNIMPLEMENTED();
 }
 void GxRenderContext::Slot0a0() {

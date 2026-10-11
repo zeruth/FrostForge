@@ -28,6 +28,18 @@ struct GXRENDERTARGETS {
 };
 static_assert(sizeof(GXRENDERTARGETS) == 0x68, "GXRENDERTARGETS is 0x68 bytes");
 
+// A set to bind after clearing what `m_mask` asks of it (0x58 bytes): bits 0-3 the colour
+// targets, each to its own colour, bits 4-5 the depth plane and stencil.
+struct GXRENDERTARGETSCLEAR {
+    GXRENDERTARGETS* m_targets;     // 0x00
+    uint32_t m_mask;                // 0x08: masked again by the set's own
+    float m_colors[4][4];           // 0x0c
+    float m_depth;                  // 0x4c
+    uint8_t m_stencil;              // 0x50
+    uint8_t m_pad51[7];
+};
+static_assert(sizeof(GXRENDERTARGETSCLEAR) == 0x58, "GXRENDERTARGETSCLEAR is 0x58 bytes");
+
 // Empties a set (FUN_14228dec0).
 void GxRenderTargetsClear(GXRENDERTARGETS* targets);
 

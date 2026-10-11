@@ -11,6 +11,7 @@
 #include <d3d12.h>
 
 struct GXRENDERTARGETS;
+struct GXRENDERTARGETSCLEAR;
 struct GxBuf;
 struct GxPipeline;
 struct GXVERTEXBUFFERFORMAT;
@@ -257,7 +258,9 @@ class GxRenderContext {
     virtual void Slot080();
     virtual void SetPipeline(GxPipeline* pipeline);         // 0x088
     virtual void SetRenderTargets(GXRENDERTARGETS* targets);  // 0x090
-    virtual void Slot098();
+    // Clears what the description asks of its set, each colour target to its own colour, then
+    // binds the set.
+    virtual void ClearAndSetTargets(const GXRENDERTARGETSCLEAR* clear);  // 0x098
     virtual void Slot0a0();
     virtual void Clear(GXRENDERTARGETS* targets, uint16_t mask, uint32_t color, float depth, uint32_t stencil,
         uint8_t a7);                        // 0x0a8

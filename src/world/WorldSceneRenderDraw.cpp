@@ -211,15 +211,23 @@ void WorldLodBudget(int32_t budget) {
     FROST_UNIMPLEMENTED();
 }
 
-// The depth prepass for one or two cascades (FUN_1413d6bd0 through FUN_1413d6700) and the
-// three-cascade one (FUN_1413d69d0). Not ported.
+// What the depth prepass draws (FUN_1413d6bd0): the world's shadow constants, the map, the
+// occluders, and the models' pass 0 when the view draws models.
 // ref: FUN_1413d6bd0
-void PrepassDraw(CWorldSceneRender* render, GxRenderContext* context, ShaderEffectContext* effect, bool deferred) {
-    (void)render;
-    (void)context;
-    (void)effect;
-    (void)deferred;
-    FROST_UNIMPLEMENTED();
+void PrepassBody(CWorldSceneRender* render, GxRenderContext* context, ShaderEffectContext* effect) {
+    uint32_t flags = ViewOf(render)->m_flags;
+    if ((flags >> 0x12 & 1) != 0) {
+        FROST_UNIMPLEMENTED();  // the world's shadow constants (FUN_1413ff2d0)
+    }
+    if ((flags >> 0x11 & 1) != 0) {
+        FROST_UNIMPLEMENTED();  // the map's prepass (FUN_14137c9f0, FUN_1413db040, FUN_14137d840)
+    }
+    if ((flags >> 0x15 & 1) != 0) {
+        FROST_UNIMPLEMENTED();  // the occluders (FUN_1413db080, FUN_1413da5f0, FUN_1413dc5b0, FUN_141440e20)
+    }
+    if ((flags & 0x410000) != 0) {
+        M2SceneOf(render)->DrawPass(context, effect, 0);
+    }
 }
 
 // ref: FUN_1413d69d0
@@ -227,6 +235,36 @@ void PrepassDrawThree(CWorldSceneRender* render, GxRenderContext* context) {
     (void)render;
     (void)context;
     FROST_UNIMPLEMENTED();
+}
+
+// The depth prepass (FUN_1413d6700): in the view's prepass modes (1, 2), the prepass targets
+// cleared (the linear depth to 100000, the normals to their rest value, depth to 0) and bound
+// around the prepass; in mode 3, that mode's form; forward (0) has none. `deferred` leaves the
+// textures bound.
+// ref: FUN_1413d6700
+void PrepassDraw(CWorldSceneRender* render, GxRenderContext* context, ShaderEffectContext* effect, bool deferred) {
+    int32_t mode = static_cast<int32_t>(ViewOf(render)->m_6b4);
+    if (mode == 1 || mode == 2) {
+        if (!deferred) {
+            context->UnbindTextures();
+        }
+        GXRENDERTARGETSCLEAR clear = {};
+        clear.m_targets = At<GXRENDERTARGETS*>(render, 0x68);
+        clear.m_mask = 0x33;
+        clear.m_colors[0][0] = 100000.0f;
+        clear.m_colors[1][0] = 0.5f;  // DAT_142738e78, DAT_142738e60, DAT_142738e68
+        clear.m_colors[1][1] = 0.5f;
+        clear.m_colors[1][3] = 1.0f;
+        clear.m_depth = 0.0f;
+        clear.m_stencil = static_cast<uint8_t>(~(ViewOf(render)->m_flags >> 0xc) & 1);
+        context->ClearAndSetTargets(&clear);
+        PrepassBody(render, context, effect);
+        if (!deferred) {
+            context->UnbindTextures();
+        }
+    } else if (mode == 3) {
+        PrepassDrawThree(render, context);
+    }
 }
 
 // The water view's render state (FUN_1413d3a00, view flag 0x800). Not ported.
@@ -911,12 +949,7 @@ void CWorldSceneRender::Draw() {
         ResolveTargetsBegin(&this->m_resolve, shared, &this->m_tempsB20[0]);
         WorldLodBudget((1 - static_cast<int32_t>(s_lodDistance * -0.24f)) * 8);    // DAT_142738e54
         if (this->GetCommandList(0) == nullptr) {
-            int32_t mode = static_cast<int32_t>(view->m_6b4);
-            if (mode == 1 || mode == 2) {
-                PrepassDraw(this, context, this->m_effectContext, false);
-            } else if (mode == 3) {
-                PrepassDrawThree(this, context);
-            }
+            PrepassDraw(this, context, this->m_effectContext, false);
             if (this->m_9d4 != 0) {
                 FROST_UNIMPLEMENTED();  // SSAO (FUN_142558160)
             }

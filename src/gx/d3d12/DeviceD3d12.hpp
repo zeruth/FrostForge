@@ -70,6 +70,7 @@ class RenderContextD3d12 : public GxRenderContext {
     GraphicsCommandList* Owner();
 
     void SetRenderTargets(GXRENDERTARGETS* targets) override;                  // FUN_1422d3270
+    void ClearAndSetTargets(const GXRENDERTARGETSCLEAR* clear) override;       // FUN_1422d2fb0
     void Clear(GXRENDERTARGETS* targets, uint16_t mask, uint32_t color, float depth, uint32_t stencil,
         uint8_t a7) override;                                                   // FUN_1422d3010
     float* LockConstants(uint8_t stage, uint32_t slot, uint32_t size) override;  // FUN_1422e0030
@@ -151,6 +152,7 @@ class GraphicsCommandList {
     void FlushBarriers();                   // FUN_1422ce780
     void ClearTargets(GXRENDERTARGETS* targets, uint32_t mask, const float* color, float depth, uint8_t stencil);  // FUN_1422d81c0
     void SetTargets(GXRENDERTARGETS* targets);  // FUN_1422d3090
+    void ClearAndSetTargets(const GXRENDERTARGETSCLEAR* clear);  // FUN_1422d2c70
     float* LockConstants(uint8_t stage, uint32_t slot, uint32_t size);  // FUN_1422dff60
     void UnlockConstants(uint8_t stage, uint32_t slot);  // FUN_1422e0040
     bool CopyTex(Tex* source, Tex* dest, int32_t* sourceOrigin, int32_t* destOrigin, uint32_t* size,

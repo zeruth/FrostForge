@@ -708,6 +708,49 @@ void GraphicsCommandList::SetTargets(GXRENDERTARGETS* targets) {
     this->m_pipeline = nullptr;
 }
 
+// Clears the masked targets of a set, each colour target to its own colour and the depth target
+// as bits 4 and 5 ask, then binds the set.
+// ref: FUN_1422d2c70
+void GraphicsCommandList::ClearAndSetTargets(const GXRENDERTARGETSCLEAR* clear) {
+    GXRENDERTARGETS* targets = clear->m_targets;
+    uint32_t mask = targets->m_mask & clear->m_mask;
+    if (GxDeviceD3d12()->m_ready == 0) {
+        return;
+    }
+    for (uint32_t i = 0; i < 4; i++) {
+        if ((mask & (1u << i)) == 0) {
+            continue;
+        }
+        Tex* tex = targets->m_texs[i + 1];
+        D3DX12Residency::ManagedObject* residency = TexResidency(tex);
+        if (residency != nullptr) {
+            this->m_copy.ResidencySet()->Insert(residency);
+        }
+        this->m_copy.TransitionObjects(tex->m_objects.data(), tex->m_objects.size(), D3D12_RESOURCE_STATE_RENDER_TARGET);
+    }
+    if ((mask & 0x30) != 0) {
+        Tex* tex = targets->m_texs[0];
+        D3DX12Residency::ManagedObject* residency = TexResidency(tex);
+        if (residency != nullptr) {
+            this->m_copy.ResidencySet()->Insert(residency);
+        }
+        this->m_copy.TransitionObjects(tex->m_objects.data(), tex->m_objects.size(), D3D12_RESOURCE_STATE_DEPTH_WRITE);
+    }
+    this->m_copy.FlushBarriers();
+    ID3D12GraphicsCommandList* list = this->m_copy.m_list;
+    this->m_copy.m_empty = 0;
+    for (uint32_t i = 0; i < 4; i++) {
+        if ((mask & (1u << i)) != 0) {
+            list->ClearRenderTargetView(targets->m_texs[i + 1]->m_rtv.m_handle, clear->m_colors[i], 0, nullptr);
+        }
+    }
+    if ((mask & 0x30) != 0) {
+        list->ClearDepthStencilView(targets->m_texs[0]->m_rtv.m_handle, static_cast<D3D12_CLEAR_FLAGS>((mask >> 4) & 3),
+            clear->m_depth, clear->m_stencil, 0, nullptr);
+    }
+    this->SetTargets(targets);
+}
+
 // Space for `size` bytes of constants for a stage's slot, bound at unlock.
 // ref: FUN_1422dff60
 float* GraphicsCommandList::LockConstants(uint8_t stage, uint32_t slot, uint32_t size) {
@@ -817,6 +860,11 @@ GraphicsCommandList* RenderContextD3d12::Owner() {
 // ref: FUN_1422d3270
 void RenderContextD3d12::SetRenderTargets(GXRENDERTARGETS* targets) {
     this->Owner()->SetTargets(targets);
+}
+
+// ref: FUN_1422d2fb0
+void RenderContextD3d12::ClearAndSetTargets(const GXRENDERTARGETSCLEAR* clear) {
+    this->Owner()->ClearAndSetTargets(clear);
 }
 
 // The colour arrives as 0xAARRGGBB.
