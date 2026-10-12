@@ -10,6 +10,9 @@
 #include "storm/String.hpp"
 #include "texture/Texture.hpp"
 #include "gx/GxRenderTargets.hpp"
+#include "gx/GxPipeline.hpp"
+#include "client/RenderSettings.hpp"
+#include <cstring>
 #include "ui/FrameTime.hpp"
 #include "util/Unimplemented.hpp"
 #include "world/WorldScene.hpp"
@@ -91,10 +94,56 @@ namespace {
 const char s_colorGradingPtrTag[] = ".PEAVDNColorGrading@DayNight@@";
 const char s_texturePtrTag[] = ".PEAVCTexture@@";
 
-// DAT_1447aa370: every colour grading.
-blz::vector<DNColorGrading*, s_colorGradingPtrTag> s_colorGradings;
+// Every colour grading.
+blz::vector<DNColorGrading*, s_colorGradingPtrTag> s_colorGradings;  // DAT_1447aa370
+
+// The grading blend, one pipeline per pixel shader permutation.
+GxPipeline* s_blendPipelines[15];  // DAT_1447aa390
 
 }  // namespace
+
+// The device came (back): the blend pipelines, and every grading's targets again.
+// ref: FUN_14244f8b0
+void DNColorGradingOnDeviceCreated(void* param) {
+    (void)param;
+    GXPIPELINEKEY key;
+    std::memset(&key, 0, sizeof(key));
+    key.m_topology = 4;
+    key.m_raster[2] = 1;
+    key.m_depthStencil[0] = 0x20;
+    key.m_depthStencil[4] = 7;
+    RENDERTARGETFORMATS formats = RenderTargetFormats(5);
+    std::memcpy(key.m_targetFormats, &formats, 4);
+    key.m_depthFormat = reinterpret_cast<const uint8_t*>(&formats)[4];
+    key.m_vertexShader = 0x47;
+    key.m_pixelShader = 0x1a;
+    key.m_blend = 0xf000;
+    for (uint16_t i = 0; i < 15; i++) {
+        key.m_psPermute = i;
+        s_blendPipelines[i] = GxPipelineCreate(&key, "BlendTextures");
+    }
+    for (uint64_t i = 0; i < s_colorGradings.size(); i++) {
+        s_colorGradings[i]->CreateTargets();
+    }
+}
+
+// The device is going: the blend pipelines, and every grading's targets.
+// ref: FUN_14244f9f0
+void DNColorGradingOnDeviceDestroyed(void* param) {
+    (void)param;
+    for (int32_t i = 0; i < 15; i++) {
+        GxPipelineDestroy(&s_blendPipelines[i]);
+    }
+    for (uint64_t i = 0; i < s_colorGradings.size(); i++) {
+        auto textures = reinterpret_cast<void**>(s_colorGradings[i]->m_data);
+        GxTexDestroy(&textures[0]);
+        textures[0] = nullptr;
+        GxRenderTargetsClear(reinterpret_cast<GXRENDERTARGETS*>(s_colorGradings[i]->m_data + 0x10));
+        GxTexDestroy(&textures[1]);
+        textures[1] = nullptr;
+        GxRenderTargetsClear(reinterpret_cast<GXRENDERTARGETS*>(s_colorGradings[i]->m_data + 0x78));
+    }
+}
 
 // ref: FUN_14244f3b0
 DNColorGrading::DNColorGrading() {

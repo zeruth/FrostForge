@@ -48,6 +48,7 @@ bool s_initialized;             // 0x14311c51e
 bool s_initializing;            // 0x14311c51f
 bool s_destroying;              // 0x14311c528 set by CGlueMgr::Destroy (FUN_14167c3c0)
 bool s_reloadPending;           // 0x14311c529 a UI reload asked for after an aspect change
+bool s_gxRestarted;             // 0x14311c52a the device came back from a restart
 bool s_unknown52b;              // 0x14311c52b
 bool s_unknown52c;              // 0x14311c52c
 uint32_t s_startTime;           // 0x14311c530
@@ -548,6 +549,10 @@ void Sub1412D3440(const float* position, const float* look, const float* up, uin
 }
 
 }  // namespace
+
+void GlueMgrNoteGxRestart() {
+    s_gxRestarted = true;
+}
 
 // ref: FUN_14167c1c0
 void GlueMgrStartup() {

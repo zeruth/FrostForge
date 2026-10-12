@@ -26,4 +26,10 @@ inline void EventCallbacks_Fire(uint32_t offset, uint64_t id, void* args) {
 // CVAR_UPDATE to the scripts: a script CVar's name and its new value (FUN_141174040).
 void UiSignalCVarUpdate(const char* name, const char* value);
 
+// GX_RESTARTED, after the device came back (FUN_1411756b0).
+void UiSignalGxRestarted();
+
+// NOTCHED_DISPLAY_MODE_CHANGED, after the window was updated (FUN_1411779b0).
+void UiSignalNotchedDisplayModeChanged();
+
 #endif

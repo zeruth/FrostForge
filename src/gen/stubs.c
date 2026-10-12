@@ -1251,12 +1251,6 @@ undefined8 FUN_140b5cdc0() {
 }
 
 /* a decompilation Ghidra marked as damaged */
-undefined8 FUN_140b6fe30() {
-    GenUnimplemented(0x140b6fe30ULL);
-    return (undefined8)0;
-}
-
-/* a decompilation Ghidra marked as damaged */
 undefined8 FUN_140b70790() {
     GenUnimplemented(0x140b70790ULL);
     return (undefined8)0;
@@ -6618,12 +6612,6 @@ undefined8 FUN_142440320() {
 int FUN_142440990() {
     GenUnimplemented(0x142440990ULL);
     return (int)0;
-}
-
-/* the stack frame addressed directly */
-undefined8 FUN_14244f8b0() {
-    GenUnimplemented(0x14244f8b0ULL);
-    return (undefined8)0;
 }
 
 /* did not compile: C2106 '=': left operand must be l-value [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */

@@ -39,6 +39,9 @@ void ConsoleDeviceSetHardwareDetectHook(void (*hook)());
 // The CVar callback that only says a GxRestart is pending (FUN_140328120).
 bool ConsoleDeviceRequestRestart(CVar* cvar, const char* oldValue, const char* newValue, void* userData);
 
+// The window brought to the current CVars, no restart (FUN_140328c10; UpdateWindow).
+void ConsoleDeviceUpdateWindow();
+
 // The fullscreen sizes a monitor offers that suit the client (FUN_14032abf0).
 void GetFullscreenSizes(blz::vector<GXSIZE, s_gxSizeTag>* sizes, uint32_t monitor, bool matchAspect);
 

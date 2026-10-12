@@ -27,3 +27,15 @@ void UiSignalCVarUpdate(const char* name, const char* value) {
     const char* args[2] = {name, value};
     EventCallbacks_Fire(0xec0, 0x32b2c96789f77675ull, args);
 }
+
+// ref: FUN_1411756b0
+void UiSignalGxRestarted() {
+    uint8_t args[0x20];
+    EventCallbacks_Fire(0x12c0, 0x222ed7eec56f463dull, args);
+}
+
+// ref: FUN_1411779b0
+void UiSignalNotchedDisplayModeChanged() {
+    uint8_t args[0x20];
+    EventCallbacks_Fire(0x1910, 0xcbd49ecc8365765dull, args);
+}

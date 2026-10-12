@@ -1,8 +1,12 @@
 #include "client/ConsoleDevice.hpp"
 #include "client/CommandLine.hpp"
 #include "client/GxWindow.hpp"
+#include "client/Startup.hpp"
 #include "console/Command.hpp"
 #include "console/Var.hpp"
+#include "framescript/EventCallbacks.hpp"
+#include "glue/GlueMgr.hpp"
+#include "gx/GxDevice.hpp"
 #include "os/Os.hpp"
 #include "os/Window.hpp"
 #include "storm/ErrorReport.hpp"
@@ -277,9 +281,51 @@ bool OnApiChanged(CVar* cvar, const char* oldValue, const char* newValue, void* 
 // GxRestart: tear the device down and bring it back with the current CVars, recreating the
 // window when asked or when the API changes into D3D12 on Windows 10+.
 // ref: FUN_140329450
-void ConsoleDeviceRestart(void* storage) {
-    (void)storage;
-    FROST_UNIMPLEMENTED();  // needs the device teardown (GxDevDestroy 0x142289d70) first
+void ConsoleDeviceRestart(uint8_t recreateWindow) {
+    s_restartCount++;
+    s_restarting = 1;
+    GxLog("GxRestart");
+    uint8_t current = static_cast<CGxDevice*>(g_gxDevice)->m_api;  // FUN_142289c30
+    if (s_apiCVar != nullptr) {
+        const char* wanted = s_apiCVar->m_stringValue.GetString();
+        uint8_t api = current;
+        if (StringEqualI(wanted, "auto")) {
+            api = GxGetBestApi();
+        } else {
+            for (uint8_t i = 0; i < GXAPI_COUNT; i++) {
+                if (GxApiSupported(i) && _stricmp(wanted, GxApiName(i)) == 0) {
+                    api = i;
+                    break;
+                }
+            }
+        }
+        if (api != current) {
+            // out of D3D12 on Windows 10 and later the window goes with it
+            if (current == GXAPI_D3D12 && OsGetVersion()->m_major > 9) {
+                recreateWindow = 1;
+            }
+            GxSetApi(api);
+        }
+    }
+    GxDevDestroy();
+    GXDEVICEPARAMS device = { 1, 0, 0, 3, 0, { 0, 0, 0 }, {} };
+    GXWINDOWPARAMS window = { { 0, 0 }, { 0, 0 }, 0, 1, 1, 1, 1, 1, { 0, 0, 0 }, 0 };
+    ConsoleDeviceGetParams(&device, &window);
+    if (recreateWindow == 0) {
+        WindowUpdate(&window);
+    } else {
+        GxLog("Recreating Window");
+        WindowDestroy();
+        WindowCreate(&window);
+    }
+    if (!ConsoleDeviceCreate(&device, &window)) {
+        ReportDeviceCreationFailure();
+        OsTerminateProcess();  // FUN_1402651b0
+    }
+    WindowSetTitle(WindowGetHandle(), s_windowTitle);
+    GlueMgrNoteGxRestart();  // DAT_14311c52a
+    s_restarting = 0;
+    UiSignalGxRestarted();
 }
 
 // The display-changed hook: the UI is told (FrameScript event 0x1105d6abf63fd94e).
@@ -289,11 +335,43 @@ void OnDisplaySizeChanged(void* storage) {
     FROST_UNIMPLEMENTED();  // the UI is not up yet
 }
 
-// The console commands (FUN_140327c50 and the rest): registered, their bodies to come.
-int32_t CommandGxRestart(const char* command, const char* arguments) {  // FUN_140327c50
+// The window brought to the current CVars without a restart: size, mode, monitor; the UI is
+// told (NOTCHED_DISPLAY_MODE_CHANGED). What UpdateWindow (console and Lua) runs.
+// ref: FUN_140328c10
+void ConsoleDeviceUpdateWindow() {
+    GXDEVICEPARAMS device = { 1, 0, 0, 3, 0, { 0, 0, 0 }, {} };
+    GXWINDOWPARAMS window = { { 0, 0 }, { 0, 0 }, 0, 1, 1, 1, 1, 1, { 0, 0, 0 }, 0 };
+    ConsoleDeviceGetParams(&device, &window);
+    WindowUpdate(&window);
+    UiSignalNotchedDisplayModeChanged();
+}
+
+// ref: FUN_140327c50
+int32_t CommandGxRestart(const char* command, const char* arguments) {
     (void)command;
     (void)arguments;
-    FROST_UNIMPLEMENTED();
+    GxRequestRestart();
+    return 1;
+}
+
+// ref: FUN_140327cc0
+int32_t CommandUpdateWindow(const char* command, const char* arguments) {
+    (void)command;
+    (void)arguments;
+    ConsoleDeviceUpdateWindow();
+    return 1;
+}
+
+// Windowed <-> fullscreen window, not while a loading screen is up.
+// ref: FUN_140327c70
+int32_t CommandToggleWindowMode(const char* command, const char* arguments) {
+    (void)command;
+    (void)arguments;
+    if (!LoadingScreenIsActive()) {
+        SaveWindowedResolution();
+        CVarSetInt(s_maximizeCVar, s_maximizeCVar->m_intValue == 0, true, false, false, true);
+        ConsoleDeviceUpdateWindow();
+    }
     return 1;
 }
 
@@ -305,10 +383,6 @@ int32_t CommandGxRestart(const char* command, const char* arguments) {  // FUN_1
         return 1;                                                      \
     }
 
-// ref: FUN_140327cc0
-CONSOLE_DEVICE_COMMAND_STUB(CommandUpdateWindow, 0x140327cc0)
-// ref: FUN_140327c70
-CONSOLE_DEVICE_COMMAND_STUB(CommandToggleWindowMode, 0x140327c70)
 // ref: FUN_140327b60
 CONSOLE_DEVICE_COMMAND_STUB(CommandGxGetVideoMemory, 0x140327b60)
 // ref: FUN_140327bd0

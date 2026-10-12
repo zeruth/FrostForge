@@ -114,6 +114,8 @@ uint32_t s_mouseCaptureButtons;     // DAT_142de0e28: the buttons a held cursor 
 std::vector<MOUSEEVENT> s_deferredMouseUps;
 int32_t* s_loadingScreen;           // DAT_142de0bf8
 
+}
+
 // What the loading screen is doing: true while it holds the game.
 // ref: FUN_14022c010
 bool LoadingScreenIsActive() {
@@ -126,6 +128,8 @@ bool LoadingScreenIsActive() {
     FROST_UNIMPLEMENTED();  // the player's transport check (FUN_14170ff20 and on)
     return false;
 }
+
+namespace {
 
 // A mouse event at a window position: the position as a fraction of the client rect, y up,
 // with the held buttons and the input mode's flags.

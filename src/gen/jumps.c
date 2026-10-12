@@ -18737,13 +18737,6 @@ static undefined8 gen_entry_1411776f0(void) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1411779b0(void) {
-    __try {
-        return CALLF(undefined8, FUN_1411779b0)();
-    } __except (GenFault(0x1411779b0ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
 static undefined8 gen_entry_141179f70(undefined4 param_1) {
     __try {
         return CALLF(undefined8, FUN_141179f70)(param_1);
@@ -45596,13 +45589,6 @@ static undefined8 gen_entry_142443190(void) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14244f9f0(void) {
-    __try {
-        return CALLF(undefined8, FUN_14244f9f0)();
-    } __except (GenFault(0x14244f9f0ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
 static undefined8 gen_entry_14244fd20(void) {
     __try {
         return CALLF(undefined8, FUN_14244fd20)();
@@ -54821,7 +54807,7 @@ const GENJUMP g_genJumps[] = {
     { 0x141175fc0ULL, (void*)&gen_entry_141175fc0 },
     { 0x141176a70ULL, (void*)&gen_entry_141176a70 },
     { 0x1411776f0ULL, (void*)&gen_entry_1411776f0 },
-    { 0x1411779b0ULL, (void*)&gen_entry_1411779b0 },
+    { 0x1411779b0ULL, (void*)&FUN_1411779b0 },
     { 0x141179f70ULL, (void*)&gen_entry_141179f70 },
     { 0x14117a900ULL, (void*)&gen_entry_14117a900 },
     { 0x14117a930ULL, (void*)&gen_entry_14117a930 },
@@ -58827,7 +58813,8 @@ const GENJUMP g_genJumps[] = {
     { 0x142442460ULL, (void*)&gen_entry_142442460 },
     { 0x142442f50ULL, (void*)&gen_entry_142442f50 },
     { 0x142443190ULL, (void*)&gen_entry_142443190 },
-    { 0x14244f9f0ULL, (void*)&gen_entry_14244f9f0 },
+    { 0x14244f8b0ULL, (void*)&FUN_14244f8b0 },
+    { 0x14244f9f0ULL, (void*)&FUN_14244f9f0 },
     { 0x14244fd20ULL, (void*)&gen_entry_14244fd20 },
     { 0x142450020ULL, (void*)&gen_entry_142450020 },
     { 0x142458e70ULL, (void*)&FUN_142458e70 },
@@ -59550,4 +59537,4 @@ const GENJUMP g_genJumps[] = {
     { 0x14260c200ULL, (void*)&gen_entry_14260c200 },
     { 0, 0 }
 };
-const size_t g_genJumpCount = 7684;
+const size_t g_genJumpCount = 7685;

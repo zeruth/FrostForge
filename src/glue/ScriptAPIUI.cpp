@@ -9,7 +9,9 @@
 #include "framescript/FrameScript.hpp"
 #include "framescript/ScriptMethod.hpp"
 #include "glue/ScriptAPIHandlers.hpp"
+#include "console/Var.hpp"
 #include "storm/String.hpp"
+#include "util/Fnv.hpp"
 #include "ui/BinaryXML.hpp"
 #include "ui/CLayoutFrame.hpp"
 #include "ui/CSimpleFrame.hpp"
@@ -46,6 +48,45 @@ float UiParentScale() {
         return static_cast<CLayoutFrame*>(g_uiParent)->m_layoutScale;
     }
     return 1.0f;
+}
+
+// The size UpdateWindow (or the next restart) takes up: gxNewResolution as "<x>x<y>", "auto"
+// when either is 0; under 120 either way it is left alone.
+// ref: FUN_1419f6420
+void SetGameWindowSize(uint32_t x, uint32_t y) {
+    CVar* pending = CVarLookup(t2util::FnvHashStringI("xNewResolution", 0xaf63da4c8601e926ull));  // "gxNewResolution"
+    if (pending == nullptr) {
+        return;
+    }
+    char text[0x70];
+    const char* value = "auto";
+    if (x != 0 && y != 0) {
+        if (x < 0x78 || y < 0x78) {
+            return;
+        }
+        SStrPrintf(text, sizeof(text), "%ux%u", x, y);  // FUN_1419f5fe0
+        value = text;
+    }
+    CVarSet(pending, value, true, false, false, true);
+}
+
+// An unsigned 32-bit argument (FUN_140a54180's checks).
+bool VideoOptionsUInt(lua_State* L, int32_t index, const char* usage, uint32_t* out) {
+    if (lua_type(L, index) < 1) {
+        luaL_error(L, usage);
+        return false;
+    }
+    double value = lua_isnumber(L, index) ? lua_tonumber(L, index) : -1.0;
+    if (!lua_isnumber(L, index) || value != value || value < 0.0 || value > 4294967295.0) {
+        luaL_argerror(L, index, usage);
+        return false;
+    }
+    if (!lua_checkstack(L, 1)) {
+        luaL_error(L, "stack overflow");
+        return false;
+    }
+    *out = static_cast<uint32_t>(static_cast<int64_t>(value));
+    return true;
 }
 
 struct XMLTEMPLATEKEYVALUE {
@@ -312,6 +353,22 @@ int Lua_GetCursorPosition(lua_State* L) {
     lua_pushnumber(L, static_cast<double>((UI_ASPECT * UI_UNITS * x) / UI_WIDTH));
     lua_pushnumber(L, static_cast<double>((UI_ASPECT * UI_UNITS * y) / UI_WIDTH));
     return 2;
+}
+
+// The Settings panel's resolution commit; its UpdateWindow follows. (The reference's body is
+// damaged in the decompilation past this point: the rest is the Aegis return-address check.)
+// ref: FUN_140b6fe30
+int Lua_C_VideoOptions_SetGameWindowSize(lua_State* L) {
+    const char* usage = "Usage: C_VideoOptions.SetGameWindowSize(x, y)";
+    uint32_t x = 0;
+    uint32_t y = 0;
+    int32_t index = 1;
+    if (VideoOptionsUInt(L, index, usage, &x)) {
+        index++;
+    }
+    VideoOptionsUInt(L, index, usage, &y);
+    SetGameWindowSize(x, y);
+    return 0;
 }
 
 // ref: FUN_141d053c0

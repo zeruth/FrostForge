@@ -50,6 +50,8 @@ bool Sub1402289B0();
 void Sub1402295B0();
 bool Sub14022A260();  // StartupClient.cpp
 bool Sub1402225D0();
+// A loading screen is up (FUN_14022c010, ClientLoop.cpp).
+bool LoadingScreenIsActive();
 void Sub140225AB0();
 void Sub140227810();
 void Sub140226550();

@@ -1809,6 +1809,13 @@ undefined8 FUN_140b4a4b0(unsigned long long a0, unsigned long long a1) {
     return 0;
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_1411779b0=?UiSignalNotchedDisplayModeChanged@@YAXXZ")
+extern char gen_alias_1411779b0;
+undefined8 FUN_1411779b0(void) {
+    ((void (*)(void))&gen_alias_1411779b0)();
+    return 0;
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_1411a6af0=?ReleaseGpuBuffers@CM2Shared@@QEAAXXZ")
 extern char gen_alias_1411a6af0;
 undefined8 FUN_1411a6af0(unsigned long long a0) {
@@ -2896,6 +2903,20 @@ undefined8 FUN_1424313a0(unsigned long long a0) {
 extern char gen_alias_142431410;
 undefined8 FUN_142431410(unsigned long long a0) {
     return (undefined8)((unsigned long long (*)(unsigned long long))&gen_alias_142431410)((unsigned long long)a0);
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_14244f8b0=?DNColorGradingOnDeviceCreated@@YAXPEAX@Z")
+extern char gen_alias_14244f8b0;
+undefined8 FUN_14244f8b0(unsigned long long a0) {
+    ((void (*)(unsigned long long))&gen_alias_14244f8b0)((unsigned long long)a0);
+    return 0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_14244f9f0=?DNColorGradingOnDeviceDestroyed@@YAXPEAX@Z")
+extern char gen_alias_14244f9f0;
+undefined8 FUN_14244f9f0(unsigned long long a0) {
+    ((void (*)(unsigned long long))&gen_alias_14244f9f0)((unsigned long long)a0);
+    return 0;
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_142458e70=?CreateDeviceObjects@DNScene@@QEAAXXZ")

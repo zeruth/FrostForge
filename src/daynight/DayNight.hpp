@@ -365,6 +365,10 @@ struct DNColorGrading {
 };
 static_assert(sizeof(DNColorGrading) == 0x128, "DNColorGrading is 0x128 bytes");
 
+// The gradings' device callbacks, registered by FUN_14244fd20 (FUN_14244f8b0, FUN_14244f9f0).
+void DNColorGradingOnDeviceCreated(void* param);
+void DNColorGradingOnDeviceDestroyed(void* param);
+
 // ---- the scene (0x2068) --------------------------------------------------------------------
 
 struct DNAREALIGHTOVERRIDE {

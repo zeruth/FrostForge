@@ -644,13 +644,6 @@ int Lua_C_UI_Reload(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140b6fe30
-int Lua_C_VideoOptions_SetGameWindowSize(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140b70790
 int Lua_C_VoiceChat_ActivateChannel(lua_State* L) {
     (void)L;
