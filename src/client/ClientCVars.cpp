@@ -611,6 +611,5 @@ extern "C" void* const gen_p_142de29d0 = (void*)&s_lastCharacterIndexCVar;
 extern "C" void* const gen_p_142de29d8 = (void*)&s_lastCharacterGuidCVar;
 extern "C" void* const gen_p_142de29e0 = (void*)&s_seenCharacterUpgradePopupCVar;
 extern "C" void* const gen_p_142de29e8 = (void*)&s_seenExpansionTrialPopupCVar;
-extern "C" void* const gen_p_142de29f8 = (void*)&s_seenConfigurationWarningsCVar;
 extern "C" void* const gen_p_1430a5600 = (void*)&s_messageLevelMin;
 // ---- end of generated globals ----

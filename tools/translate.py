@@ -53,7 +53,7 @@ PRIMITIVE = {
     "ulong", "longlong", "ulonglong", "qword", "uint8", "uint4", "uint2", "int4", "int8", "int2", "sbyte",
     "float4", "float8", "float10", "pointer", "pointer64", "code", "char", "short", "int", "long", "float", "double",
     "bool", "wchar_t", "HANDLE", "size_t", "unsigned", "signed", "uint5", "uint6", "uint7", "int3", "int5",
-    "int6", "int7", "int1",
+    "int6", "int7", "int1", "__time64_t",
 }
 HARD = [
     ("register the decompiler lost track of", re.compile(r"\b(in_|unaff_|extraout_)\w+")),
@@ -71,7 +71,9 @@ CRT = {"memcpy", "memmove", "memset", "memcmp", "strlen", "strcmp", "strncmp", "
        "sin", "cos", "tan", "sinf", "cosf", "tanf", "atan2", "atan2f", "pow", "powf", "fmod", "fmodf", "exp", "log",
        "tolower", "toupper", "isdigit", "isalpha", "isspace", "atoi", "atof", "strtol", "strtoul", "free", "malloc"}
 # reference runtime routines FID left unnamed (tools/fidelity_exceptions.json)
-CRT_BY_ADDR = {0x1425bf3b0: "memmove", 0x1425bfa50: "memset"}
+CRT_BY_ADDR = {0x1425bf3b0: "memmove", 0x1425bfa50: "memset",
+               # the thread-safe static guard's header (its footer is named in the corpus)
+               0x14026bca8: "_Init_thread_header"}
 
 CALL = re.compile(r"(?<![\w:])((?:[A-Za-z_]\w*::)+[~A-Za-z_]\w*|[A-Za-z_]\w*)\s*\(")
 SYMBOL = re.compile(r"\b((?:PTR_)*(?:DAT|_DAT|UNK|_UNK|s|u|ws|LAB|vtable|switchD|PTR|[a-zA-Z]+Ram)_\w*?_?([0-9a-f]{9}))\b")
@@ -297,6 +299,8 @@ def stack_frame(body: str) -> str:
     return body
 
 
+INIT_EPOCH = re.compile(r"\*\(int \*\)\(\*\(longlong \*\)\(\(longlong\)ThreadLocalStoragePointer \+ "
+                        r"\(ulonglong\)_tls_index \* 8\) \+\s*0x2140\)")
 STRLEN_LOOP = re.compile(r"(\w+) = -1;\s*do \{\s*\1 = \1 \+ 1;\s*\} while \(\*\(char \*\)\((\w+) \+ \1\) != '\\0'\);")
 
 
@@ -613,6 +617,12 @@ class Translator:
         if rec is None or rec["kind"] == "stub":
             return None
         vas = self.port_va_by_name.get(rec["name"], [])
+        if len(vas) > 1:
+            # overloads: the one taking as many arguments as the reference, when only one does
+            ref = self.signature(a)
+            if ref is not None:
+                vas = [v for v in vas if v in self.signatures
+                       and len(self.signatures[v][1]) + (1 if self.signatures[v][2] else 0) == len(ref[2])]
         if len(vas) != 1:
             return None
         va = vas[0]
@@ -641,7 +651,37 @@ class Translator:
             if text.count(patch["from"]) != 1:
                 raise SystemExit(f"tools/translate_patches.json: FUN_{a:x}'s patch no longer matches once")
             text = text.replace(patch["from"], patch["to"])
-        return self.recover_arguments(a, self.restore_lengths(wide_multiply(strip_retcheck(text)[0])))
+        text = wide_multiply(strip_retcheck(text)[0])
+        # a function-local static's guard: MSVC's per-thread epoch (TLS slot 0x2140) compared with
+        # the guard, then _Init_thread_header / _footer. All three are the port's own runtime's,
+        # so the protocol stays one runtime's.
+        text = INIT_EPOCH.sub("_Init_thread_epoch", text)
+        # Ghidra's function-pointer types (`_func_5014 *`) are code
+        text = re.sub(r"\b_func_\w+\b", "code", text)
+        return self.recover_arguments(a, self.restore_lengths(text))
+
+    # the image's C++ static initializers: the table FUN_14026b874 hands _initterm
+    # (`_initterm(&DAT_14260e3f8,&DAT_142617540)`)
+    INIT_TABLE = (0x14260e3f8, 0x142617540)
+
+    def static_initializers(self) -> list[int]:
+        """The image's static initializers that may run at startup, in table order: decompiled,
+        and touching no global the port holds (the port has built those itself; a translated
+        initializer, redirected onto them, would build them a second time)."""
+        if hasattr(self, "_inits"):
+            return self._inits
+        out = []
+        for slot in range(self.INIT_TABLE[0], self.INIT_TABLE[1], 8):
+            p = self.ref.u64(slot)
+            e = self.cor.get(p)
+            if not p or e is None or "c" not in e:
+                continue
+            touched = [int(m.group(2), 16) for m in SYMBOL.finditer(e["c"])]
+            if any(self.held_global(x) for x in touched):
+                continue
+            out.append(p)
+        self._inits = out
+        return out
 
     def arity(self, b: int) -> int | None:
         """How many arguments `b` reads: the highest `param_N` its decompiled body uses (capped
@@ -652,9 +692,17 @@ class Translator:
         e = self.cor.get(b)
         if e and "c" in e:
             head, _, rest = e["c"].partition("{")
-            if "..." not in head:
-                used = [int(n) for n in re.findall(r"\bparam_(\d+)\b", rest)]
-                need = max(used, default=0)
+            sig = self.signature(b)
+            if "..." not in head and sig is not None:
+                # the last parameter the body reads, by the header's own names (`this`, `L`,
+                # `param_3` alike)
+                names = []
+                for p in sig[2]:
+                    m = (re.search(r"\b(this|param_\d+)\b", p)
+                         or re.search(r"([A-Za-z_]\w*)\s*(?:\[[^\]]*\])?\s*$", p))
+                    names.append(m.group(1) if m else "")
+                names = [n for n in names]
+                need = max((k + 1 for k, n in enumerate(names) if n and re.search(rf"\b{n}\b", rest)), default=0)
         elif self.lifted(b) is not None:
             used = [int(n) for n in re.findall(r"\ba(\d)\b", self.lifted(b).partition("{")[2])]
             need = max(used, default=-1) + 1
@@ -662,10 +710,16 @@ class Translator:
             pt = self.port_target(b)
             if pt is not None:
                 _, mangled, (ret, args, this) = pt
+                port_need = len(args) + (1 if this else 0)
                 if mangled.endswith("ZZ"):
                     need = None
+                elif need == 0:
+                    # Ghidra saw no parameters (a body that hands its registers straight on, as
+                    # SCritSect::Initialize does to InitializeCriticalSection): the port's own
+                    # signature says what it reads
+                    need = port_need
                 else:
-                    need = min(need, len(args) + (1 if this else 0))
+                    need = min(need, port_need)
         self._arity[b] = need
         return need
 
@@ -1135,6 +1189,11 @@ class Translator:
                       f"    }} __except (GenFault(0x{a:x}ULL, GetExceptionInformation())) {{",
                       f"        return ({ret})0;",
                       "    }", "}"]
+        # the image's static initializers that translated, in the table's order (RefImage.cpp
+        # runs them once the image is mapped)
+        inits = [p for p in self.static_initializers() if p in plan["translate"]]
+        jumps += ["", "const unsigned long long g_genInits[] = {"]
+        jumps += [f"    0x{p:x}ULL," for p in inits] + ["    0", "};", f"const size_t g_genInitCount = {len(inits)};"]
         jumps += ["", "typedef struct { unsigned long long m_address; void* m_target; } GENJUMP;",
                   "const GENJUMP g_genJumps[] = {"]
         reachable = sorted(set(plan["translate"]) | set(plan["adapt"]))
@@ -1301,7 +1360,7 @@ def main() -> None:
     roots = sorted(set(handlers) | forwarded | {int(a.lower().removeprefix("fun_"), 16) for a in args.addr})
     for round_ in range(1, 30 if args.fix else 2):
         t = Translator(args.depth)
-        manifest = t.emit(roots, handlers)
+        manifest = t.emit(sorted(set(roots) | set(t.static_initializers())), handlers)
         print(f"translated {len(manifest['translated'])}, adapted {len(manifest['adapted'])}, "
               f"stubbed {len(manifest['stubbed'])} ({len(manifest['handlers'])} handlers)", file=sys.stderr)
         if not args.fix:

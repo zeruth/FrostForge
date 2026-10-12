@@ -25,8 +25,31 @@ struct GENJUMP {
 };
 extern const GENJUMP g_genJumps[];
 extern const size_t g_genJumpCount;
+extern const uint64_t g_genInits[];
+extern const size_t g_genInitCount;
 
 void GenUnimplemented(uint64_t address);
+int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+}
+
+// The runtime's thread-safe-statics epoch, for translated function-local statics (Ghidra.h).
+extern "C" __declspec(thread) int _Init_thread_epoch;
+extern "C" int GenInitThreadEpoch() {
+    return _Init_thread_epoch;
+}
+
+namespace {
+
+// One static initializer, at its reference address (the jump to its translation).
+bool RunInitializer(uint64_t address) {
+    __try {
+        reinterpret_cast<void (*)()>(address)();
+        return true;
+    } __except (GenFault(address, GetExceptionInformation())) {
+        return false;
+    }
+}
+
 }
 
 namespace {
@@ -180,6 +203,15 @@ bool RefImageInitialize(const char* path) {
     AddVectoredExceptionHandler(1, TrapHandler);
     s_mapped = true;
     FrostLog("refimage", "reference image mapped; %zu functions reachable through it", g_genJumpCount);
+
+    // the image's own static initializers (its CRT table), the ones translated: they construct
+    // the reference's globals (locks, lists, tables) as its startup would have, so translated
+    // code finds them built rather than zeroed. Each goes through its guarded entry.
+    size_t ran = 0;
+    for (size_t i = 0; i < g_genInitCount; i++) {
+        ran += RunInitializer(g_genInits[i]);
+    }
+    FrostLog("refimage", "%zu of the image's static initializers run", ran);
     return true;
 }
 

@@ -82,7 +82,9 @@ class _Function:
             return self.pinned[reg][1]
         for j in range(k - 1, floor - 1, -1):
             i = self.ins[j]
-            if i.group(capstone.CS_GRP_JUMP) or i.group(capstone.CS_GRP_CALL) or i.group(capstone.CS_GRP_RET):
+            # a conditional branch falls through into this run (any other way in is a jump
+            # target, refused below); an unconditional one, a return or a call ends it
+            if i.mnemonic == "jmp" or i.group(capstone.CS_GRP_CALL) or i.group(capstone.CS_GRP_RET):
                 return None
             # a jump into the run between here and the call: another path reaches the call
             if any(i.address < t <= self.ins[k].address for t in self.targets):
@@ -114,6 +116,14 @@ class _Function:
             if isinstance(src, str):
                 return src if width == 8 else None
             return None if src is None else src & MASK[width]
+        if mn in ("add", "sub") and ops[1].type == x86.X86_OP_IMM:
+            before = self.value(j, reg, floor, depth + 1)
+            delta = ops[1].imm if mn == "add" else -ops[1].imm
+            if isinstance(before, int):
+                return (before + delta) & MASK[width]
+            if isinstance(before, str) and width == 8:
+                return f"(undefined8)((char *)({before}) + {delta:#x})"
+            return None
         if mn == "or" and ops[1].type == x86.X86_OP_IMM and ops[1].imm == -1:
             return MASK[width]
         if mn == "lea" and ops[1].type == x86.X86_OP_MEM:
@@ -125,6 +135,10 @@ class _Function:
                 # translator places it (the port's copy when the port holds it)
                 return f"&DAT_{(i.address + i.size + mem.disp) & MASK[8]:x}" if width == 8 else None
             base = self.value(j, FAMILY.get(i.reg_name(mem.base), ""), floor, depth + 1)
+            if isinstance(base, str) and width == 8:
+                # an address formed from a symbolic one (a parameter + a field offset): in bytes,
+                # whatever C type the parameter has
+                return f"(undefined8)((char *)({base}) + {mem.disp:#x})" if mem.disp else base
             return None if not isinstance(base, int) else (base + mem.disp) & MASK[width]
         return None
 

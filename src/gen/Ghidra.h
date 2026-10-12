@@ -186,6 +186,17 @@ static __inline unsigned long long gen_vector_iterate(void *p, unsigned long lon
 #define _vector_destructor_iterator_(p, size, count, each, ...) gen_vector_iterate((void *)(p), (size), (count), (code *)(each), 1)
 #define _eh_vector_destructor_iterator_(p, size, count, each, ...) gen_vector_iterate((void *)(p), (size), (count), (code *)(each), 1)
 
+/* function-local statics: the port runtime's guard protocol (vcruntime's thread_safe_statics) */
+/* (read through RefImage.cpp: the C compiler crashes on the thread-local itself) */
+int GenInitThreadEpoch(void);
+#define _Init_thread_epoch GenInitThreadEpoch()
+void __cdecl _Init_thread_header(int *guard);
+void __cdecl _Init_thread_footer(int *guard);
+
+/* the image's destructors are never registered: the quit path leaves without running static
+   destructors, the port's as the reference's */
+#define atexit(f) ((void)(f), 0)
+
 /* what a translated function reaches that is not translated: logged once by its address */
 void GenUnimplemented(uint64_t address);
 

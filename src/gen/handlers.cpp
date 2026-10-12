@@ -84,7 +84,6 @@ unsigned long long FUN_140c946b0(unsigned long long param_1);
 unsigned long long FUN_140c95420(unsigned long long param_1);
 unsigned long long FUN_140c99690(unsigned long long param_1);
 unsigned long long FUN_140ccdb50(unsigned long long param_1);
-unsigned long long FUN_140cce280(unsigned long long param_1);
 unsigned long long FUN_140ccef50(unsigned long long param_1);
 unsigned long long FUN_140cd0b00(unsigned long long param_1);
 unsigned long long FUN_140cd1fc0(unsigned long long param_1);
@@ -223,6 +222,7 @@ unsigned long long FUN_1410c3a00(unsigned long long param_1);
 unsigned long long FUN_1410c4730(unsigned long long param_1);
 unsigned long long FUN_1410c5460(unsigned long long param_1);
 unsigned long long FUN_14115ce90(unsigned long long param_1);
+unsigned long long FUN_14168de20(unsigned long long param_1);
 unsigned long long FUN_14168deb0(unsigned long long param_1);
 unsigned long long FUN_14168df20(unsigned long long param_1);
 unsigned long long FUN_14168dfb0(unsigned long long param_1);
@@ -371,14 +371,9 @@ unsigned long long FUN_141d01dc0(unsigned long long param_1);
 unsigned long long FUN_141d01e20(unsigned long long param_1);
 unsigned long long FUN_141d01e50(unsigned long long param_1);
 unsigned long long FUN_141d01eb0(unsigned long long param_1);
-unsigned long long FUN_141d02430(unsigned long long param_1);
 unsigned long long FUN_141d02520(unsigned long long param_1);
 unsigned long long FUN_141d025a0(unsigned long long param_1);
-unsigned long long FUN_141d02620(unsigned long long param_1);
-unsigned long long FUN_141d02760(unsigned long long param_1);
 unsigned long long FUN_141d02890(unsigned long long param_1);
-unsigned long long FUN_141d028c0(unsigned long long param_1);
-unsigned long long FUN_141d02bf0(unsigned long long param_1);
 unsigned long long FUN_141d02cf0(unsigned long long param_1);
 unsigned long long FUN_141d02d00(unsigned long long param_1);
 unsigned long long FUN_141d02d20(unsigned long long param_1);
@@ -407,6 +402,7 @@ unsigned long long FUN_141d94a10(unsigned long long param_1);
 unsigned long long FUN_141d95090(unsigned long long param_1);
 unsigned long long FUN_141d95710(unsigned long long param_1);
 unsigned long long FUN_141db18a0(unsigned long long param_1);
+unsigned long long FUN_141db18f0(unsigned long long param_1);
 }
 
 // translated: FUN_1419f5e70
@@ -486,15 +482,6 @@ int Lua_C_CameraDefaults_GetCameraFOVDefaults(lua_State* L) {
     __try {
         return static_cast<int>(FUN_140ccdb50(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x140ccdb50ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_140cce280
-int Lua_C_CharacterCreation_CanCreateDemonHunter(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140cce280(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140cce280ull, GetExceptionInformation())) {
         return 0;
     }
 }
@@ -2614,6 +2601,15 @@ int Lua_C_VoiceChat_ToggleDeafened(lua_State* L) {
     }
 }
 
+// translated: FUN_141db18f0
+int Lua_C_Widget_IsFrameWidget(lua_State* L) {
+    __try {
+        return static_cast<int>(FUN_141db18f0(reinterpret_cast<unsigned long long>(L)));
+    } __except (GenFault(0x141db18f0ull, GetExceptionInformation())) {
+        return 0;
+    }
+}
+
 // translated: FUN_141db18a0
 int Lua_C_Widget_IsWidget(lua_State* L) {
     __try {
@@ -2803,15 +2799,6 @@ int Lua_DeleteCharacter(lua_State* L) {
     }
 }
 
-// translated: FUN_141d02760
-int Lua_DisableAddOn(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_141d02760(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x141d02760ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
 // translated: FUN_141d025a0
 int Lua_DisableAllAddOns(lua_State* L) {
     __try {
@@ -2826,15 +2813,6 @@ int Lua_DoesCurrentLocaleSellExpansionLevels(lua_State* L) {
     __try {
         return static_cast<int>(FUN_1410811b0(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x1410811b0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_141d02620
-int Lua_EnableAddOn(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_141d02620(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x141d02620ull, GetExceptionInformation())) {
         return 0;
     }
 }
@@ -2871,24 +2849,6 @@ int Lua_GetAccountExpansionLevel(lua_State* L) {
     __try {
         return static_cast<int>(FUN_141081840(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x141081840ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_141d02bf0
-int Lua_GetAddOnEnableState(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_141d02bf0(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x141d02bf0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_141d028c0
-int Lua_GetAddOnInfo(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_141d028c0(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x141d028c0ull, GetExceptionInformation())) {
         return 0;
     }
 }
@@ -3379,15 +3339,6 @@ int Lua_InitializeCharacterScreenData(lua_State* L) {
     }
 }
 
-// translated: FUN_141d02430
-int Lua_IsAddOnLoaded(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_141d02430(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x141d02430ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
 // translated: FUN_141d02d20
 int Lua_IsAddonVersionCheckEnabled(lua_State* L) {
     __try {
@@ -3834,6 +3785,15 @@ int Lua_SetAddonVersionCheck(lua_State* L) {
     __try {
         return static_cast<int>(FUN_141d02d50(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x141d02d50ull, GetExceptionInformation())) {
+        return 0;
+    }
+}
+
+// translated: FUN_14168de20
+int Lua_SetCharSelectBackground(lua_State* L) {
+    __try {
+        return static_cast<int>(FUN_14168de20(reinterpret_cast<unsigned long long>(L)));
+    } __except (GenFault(0x14168de20ull, GetExceptionInformation())) {
         return 0;
     }
 }

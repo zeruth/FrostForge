@@ -49,6 +49,13 @@ int Lua_C_CVar_ResetTestCVars(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_140cce280
+int Lua_C_CharacterCreation_CanCreateDemonHunter(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140cce910
 int Lua_C_CharacterCreation_ClearCharacterTemplate(lua_State* L) {
     (void)L;
@@ -973,13 +980,6 @@ int Lua_C_VoiceChat_ToggleMuted(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_141db18f0
-int Lua_C_Widget_IsFrameWidget(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_141b5f840
 int Lua_C_WowTokenGlue_CanVeteranBuy(lua_State* L) {
     (void)L;
@@ -1176,6 +1176,20 @@ int Lua_DeclineName(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_141d02760
+int Lua_DisableAddOn(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_141d02620
+int Lua_EnableAddOn(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_1416a6740
 int Lua_GetAccountCharacterInfo(lua_State* L) {
     (void)L;
@@ -1185,6 +1199,20 @@ int Lua_GetAccountCharacterInfo(lua_State* L) {
 
 // ref: FUN_141d02ae0
 int Lua_GetAddOnDependencies(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_141d02bf0
+int Lua_GetAddOnEnableState(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_141d028c0
+int Lua_GetAddOnInfo(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -1302,6 +1330,13 @@ int Lua_HandleAtlasMemberCommand(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_141d02430
+int Lua_IsAddOnLoaded(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_140cecac0
 int Lua_IsCharacterInTutorialMap(lua_State* L) {
     (void)L;
@@ -1353,13 +1388,6 @@ int Lua_LoadURLIndex(lua_State* L) {
 
 // ref: FUN_14168e8d0
 int Lua_SaveCharacterOrder(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_14168de20
-int Lua_SetCharSelectBackground(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
