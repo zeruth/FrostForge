@@ -656,7 +656,7 @@ undefined8 FUN_140246580() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_140249ea0 reads 3, the call passes 2) */
+/* a global used as a pointer the data export does not type */
 undefined8 FUN_14024a0c0() {
     GenUnimplemented(0x14024a0c0ULL);
     return (undefined8)0;
@@ -674,7 +674,7 @@ int FUN_14024a4f0() {
     return (int)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_140261040 reads 4, the call passes 0) */
+/* did not compile: C2065 'local_res20': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
 undefined8 FUN_1402533a0() {
     GenUnimplemented(0x1402533a0ULL);
     return (undefined8)0;
@@ -848,7 +848,7 @@ undefined8 FUN_1402ec1f0() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_14057b640 reads 4, the call passes 3) */
+/* the decompiler lost a call's arguments (FUN_14022b1b0 reads 4, the call passes 2) */
 undefined8 FUN_1402ec2d0() {
     GenUnimplemented(0x1402ec2d0ULL);
     return (undefined8)0;
@@ -860,7 +860,7 @@ undefined8 FUN_1402ee3d0() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_1402ef340 reads 1, the call passes 0) */
+/* did not compile: C2100 you cannot dereference an operand of type 'undefined8' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\g */
 undefined8 FUN_1402ef430() {
     GenUnimplemented(0x1402ef430ULL);
     return (undefined8)0;
@@ -1208,12 +1208,6 @@ undefined8 FUN_140688840() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_14228b3b0 reads 2, the call passes 0) */
-undefined8 FUN_140689380() {
-    GenUnimplemented(0x140689380ULL);
-    return (undefined8)0;
-}
-
 /* a port that cannot be called from C (internal or aggregate ABI) */
 undefined2 * FUN_14068c4c0() {
     GenUnimplemented(0x14068c4c0ULL);
@@ -1241,6 +1235,12 @@ undefined8 FUN_140697410() {
 /* register the decompiler lost track of */
 undefined8 FUN_1406a0a20() {
     GenUnimplemented(0x1406a0a20ULL);
+    return (undefined8)0;
+}
+
+/* a port that cannot be called from C (internal or aggregate ABI) */
+undefined8 FUN_1406a2020() {
+    GenUnimplemented(0x1406a2020ULL);
     return (undefined8)0;
 }
 
@@ -1358,15 +1358,9 @@ undefined8 FUN_140aea8a0() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_1419054f0 reads 1, the call passes 0) */
-undefined8 FUN_140b10c30() {
-    GenUnimplemented(0x140b10c30ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_141c2a9c0 reads 1, the call passes 0) */
-undefined8 FUN_140b11410() {
-    GenUnimplemented(0x140b11410ULL);
+/* a decompilation Ghidra marked as damaged */
+undefined8 FUN_140af5f70() {
+    GenUnimplemented(0x140af5f70ULL);
     return (undefined8)0;
 }
 
@@ -1394,12 +1388,6 @@ undefined8 FUN_140b14b70() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_1407cbd50 reads 1, the call passes 0) */
-undefined8 FUN_140b151b0() {
-    GenUnimplemented(0x140b151b0ULL);
-    return (undefined8)0;
-}
-
 /* the decompiler lost a call's arguments (FUN_140b4a950 reads 2, the call passes 1) */
 undefined8 * FUN_140b4aab0() {
     GenUnimplemented(0x140b4aab0ULL);
@@ -1412,12 +1400,6 @@ longlong * FUN_140b4acb0() {
     return (longlong *)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_140b4a650 reads 2, the call passes 1) */
-longlong * FUN_140b4ae70() {
-    GenUnimplemented(0x140b4ae70ULL);
-    return (longlong *)0;
-}
-
 /* the decompiler lost a call's arguments (FUN_14065f870 reads 2, the call passes 0) */
 undefined8 FUN_140b4fe70() {
     GenUnimplemented(0x140b4fe70ULL);
@@ -1427,6 +1409,18 @@ undefined8 FUN_140b4fe70() {
 /* a decompilation Ghidra marked as damaged */
 undefined8 FUN_140b52a40() {
     GenUnimplemented(0x140b52a40ULL);
+    return (undefined8)0;
+}
+
+/* a decompilation Ghidra marked as damaged */
+undefined8 FUN_140b56af0() {
+    GenUnimplemented(0x140b56af0ULL);
+    return (undefined8)0;
+}
+
+/* a decompilation Ghidra marked as damaged */
+undefined8 FUN_140b57220() {
+    GenUnimplemented(0x140b57220ULL);
     return (undefined8)0;
 }
 
@@ -1455,14 +1449,14 @@ undefined8 FUN_140b5c0c0() {
 }
 
 /* a decompilation Ghidra marked as damaged */
-undefined8 FUN_140b5cdc0() {
-    GenUnimplemented(0x140b5cdc0ULL);
+undefined8 FUN_140b5c740() {
+    GenUnimplemented(0x140b5c740ULL);
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_140ba20c0 reads 1, the call passes 0) */
-undefined8 FUN_140b6f0f0() {
-    GenUnimplemented(0x140b6f0f0ULL);
+/* a decompilation Ghidra marked as damaged */
+undefined8 FUN_140b5cdc0() {
+    GenUnimplemented(0x140b5cdc0ULL);
     return (undefined8)0;
 }
 
@@ -1506,36 +1500,6 @@ undefined8 FUN_140b732f0() {
 undefined8 FUN_140b73a80() {
     GenUnimplemented(0x140b73a80ULL);
     return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140b4a9d0 reads 1, the call passes 0) */
-undefined8 FUN_140b84340() {
-    GenUnimplemented(0x140b84340ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140216200 reads 1, the call passes 0) */
-undefined8 FUN_140b85080() {
-    GenUnimplemented(0x140b85080ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140ba2150 reads 1, the call passes 0) */
-undefined8 FUN_140b85dc0() {
-    GenUnimplemented(0x140b85dc0ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140ba2150 reads 1, the call passes 0) */
-undefined8 FUN_140b86b00() {
-    GenUnimplemented(0x140b86b00ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_1419f9700 reads 1, the call passes 0) */
-bool FUN_140b8f890() {
-    GenUnimplemented(0x140b8f890ULL);
-    return (bool)0;
 }
 
 /* a decompilation Ghidra marked as damaged */
@@ -1610,12 +1574,6 @@ undefined8 FUN_140b9a980() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_140216200 reads 1, the call passes 0) */
-undefined8 FUN_140b9b2f0() {
-    GenUnimplemented(0x140b9b2f0ULL);
-    return (undefined8)0;
-}
-
 /* a decompilation Ghidra marked as damaged */
 undefined8 FUN_140b9c030() {
     GenUnimplemented(0x140b9c030ULL);
@@ -1649,12 +1607,6 @@ undefined8 FUN_140b9f090() {
 /* a decompilation Ghidra marked as damaged */
 undefined8 FUN_140b9f7c0() {
     GenUnimplemented(0x140b9f7c0ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140216200 reads 1, the call passes 0) */
-undefined8 FUN_140c1a420() {
-    GenUnimplemented(0x140c1a420ULL);
     return (undefined8)0;
 }
 
@@ -1718,15 +1670,9 @@ undefined8 FUN_140c761f0() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_141909cb0 reads 1, the call passes 0) */
+/* the decompiler lost a call's arguments (FUN_1402b3ab0 reads 3, the call passes 1) */
 undefined8 FUN_140c76950() {
     GenUnimplemented(0x140c76950ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_14190cc50 reads 1, the call passes 0) */
-undefined8 FUN_140c771d0() {
-    GenUnimplemented(0x140c771d0ULL);
     return (undefined8)0;
 }
 
@@ -1734,6 +1680,12 @@ undefined8 FUN_140c771d0() {
 char FUN_140c786b0() {
     GenUnimplemented(0x140c786b0ULL);
     return (char)0;
+}
+
+/* a decompilation Ghidra marked as damaged */
+undefined8 FUN_140c79f90() {
+    GenUnimplemented(0x140c79f90ULL);
+    return (undefined8)0;
 }
 
 /* a decompilation Ghidra marked as damaged */
@@ -1760,6 +1712,12 @@ undefined8 FUN_140c7cd30() {
     return (undefined8)0;
 }
 
+/* the decompiler lost a call's arguments (FUN_1407cb130 reads 2, the call passes 0) */
+int FUN_140c7ddf0() {
+    GenUnimplemented(0x140c7ddf0ULL);
+    return (int)0;
+}
+
 /* register the decompiler lost track of */
 undefined8 FUN_140c8b320() {
     GenUnimplemented(0x140c8b320ULL);
@@ -1772,13 +1730,7 @@ undefined8 FUN_140c8d7d0() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_140c5b380 reads 1, the call passes 0) */
-undefined8 FUN_140c8f1f0() {
-    GenUnimplemented(0x140c8f1f0ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140c5b380 reads 1, the call passes 0) */
+/* did not compile: C2065 'local_140': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
 undefined8 FUN_140c90120() {
     GenUnimplemented(0x140c90120ULL);
     return (undefined8)0;
@@ -1940,40 +1892,10 @@ char FUN_140ce98d0() {
     return (char)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_140216200 reads 1, the call passes 0) */
-undefined8 FUN_140cea040() {
-    GenUnimplemented(0x140cea040ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140216200 reads 1, the call passes 0) */
-undefined8 FUN_140ceaef0() {
-    GenUnimplemented(0x140ceaef0ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_14168fe50 reads 1, the call passes 0) */
-undefined8 FUN_140cecac0() {
-    GenUnimplemented(0x140cecac0ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_14168ffa0 reads 1, the call passes 0) */
-undefined8 FUN_140ced1e0() {
-    GenUnimplemented(0x140ced1e0ULL);
-    return (undefined8)0;
-}
-
 /* the decompiler lost a call's arguments (FUN_1416900e0 reads 1, the call passes 0) */
 undefined8 FUN_140cee770() {
     GenUnimplemented(0x140cee770ULL);
     return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_1419054f0 reads 1, the call passes 0) */
-bool FUN_140cefc60() {
-    GenUnimplemented(0x140cefc60ULL);
-    return (bool)0;
 }
 
 /* a decompilation Ghidra marked as damaged */
@@ -2132,9 +2054,15 @@ int FUN_140e56100() {
     return (int)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_141cd4b50 reads 1, the call passes 0) */
+/* the decompiler lost a call's arguments (FUN_1406426c0 reads 1, the call passes 0) */
 undefined8 FUN_140e58010() {
     GenUnimplemented(0x140e58010ULL);
+    return (undefined8)0;
+}
+
+/* a decompilation Ghidra marked as damaged */
+undefined8 FUN_140e5c3e0() {
+    GenUnimplemented(0x140e5c3e0ULL);
     return (undefined8)0;
 }
 
@@ -2142,6 +2070,12 @@ undefined8 FUN_140e58010() {
 undefined8 FUN_140e5d200() {
     GenUnimplemented(0x140e5d200ULL);
     return (undefined8)0;
+}
+
+/* register the decompiler lost track of */
+ulonglong FUN_140e5d900() {
+    GenUnimplemented(0x140e5d900ULL);
+    return (ulonglong)0;
 }
 
 /* the decompiler lost a call's arguments (FUN_140e6ab90 reads 2, the call passes 1) */
@@ -2175,6 +2109,12 @@ undefined8 FUN_140e63ab0() {
 }
 
 /* a decompilation Ghidra marked as damaged */
+undefined8 FUN_140e641b0() {
+    GenUnimplemented(0x140e641b0ULL);
+    return (undefined8)0;
+}
+
+/* a decompilation Ghidra marked as damaged */
 undefined8 FUN_140e663e0() {
     GenUnimplemented(0x140e663e0ULL);
     return (undefined8)0;
@@ -2189,12 +2129,6 @@ undefined8 FUN_140e681a0() {
 /* a decompilation Ghidra marked as damaged */
 undefined8 FUN_140e694c0() {
     GenUnimplemented(0x140e694c0ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_141a44d10 reads 1, the call passes 0) */
-undefined8 FUN_140e73df0() {
-    GenUnimplemented(0x140e73df0ULL);
     return (undefined8)0;
 }
 
@@ -2240,57 +2174,21 @@ undefined8 FUN_140e78e00() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_140216200 reads 1, the call passes 0) */
-undefined8 FUN_140e7b030() {
-    GenUnimplemented(0x140e7b030ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140ead9f0 reads 1, the call passes 0) */
-undefined8 FUN_140e7cc60() {
-    GenUnimplemented(0x140e7cc60ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140e546f0 reads 1, the call passes 0) */
+/* did not compile: C2065 'local_140': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
 undefined8 FUN_140e81e50() {
     GenUnimplemented(0x140e81e50ULL);
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_140e546f0 reads 1, the call passes 0) */
+/* did not compile: C2065 'local_138': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
 undefined8 FUN_140e85690() {
     GenUnimplemented(0x140e85690ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140216200 reads 1, the call passes 0) */
-undefined8 FUN_140e87fb0() {
-    GenUnimplemented(0x140e87fb0ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140d5ba80 reads 1, the call passes 0) */
-undefined8 FUN_140e88d30() {
-    GenUnimplemented(0x140e88d30ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140eada70 reads 1, the call passes 0) */
-undefined8 FUN_140e8b800() {
-    GenUnimplemented(0x140e8b800ULL);
     return (undefined8)0;
 }
 
 /* the stack frame addressed directly */
 undefined8 FUN_140e8ee10() {
     GenUnimplemented(0x140e8ee10ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_141a493e0 reads 1, the call passes 0) */
-undefined8 FUN_140e91040() {
-    GenUnimplemented(0x140e91040ULL);
     return (undefined8)0;
 }
 
@@ -2324,15 +2222,15 @@ undefined8 FUN_140ea6aa0() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_140e54680 reads 1, the call passes 0) */
-undefined8 FUN_140ea8e00() {
-    GenUnimplemented(0x140ea8e00ULL);
+/* a decompilation Ghidra marked as damaged */
+undefined8 FUN_140f1a6f0() {
+    GenUnimplemented(0x140f1a6f0ULL);
     return (undefined8)0;
 }
 
 /* a decompilation Ghidra marked as damaged */
-undefined8 FUN_140f1a6f0() {
-    GenUnimplemented(0x140f1a6f0ULL);
+undefined8 FUN_140f1ad70() {
+    GenUnimplemented(0x140f1ad70ULL);
     return (undefined8)0;
 }
 
@@ -2342,19 +2240,19 @@ undefined8 FUN_140f47420() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_140f03430 reads 1, the call passes 0) */
+/* did not compile: C2065 'local_1f8': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
 undefined8 FUN_140f4afe0() {
     GenUnimplemented(0x140f4afe0ULL);
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_140f03540 reads 1, the call passes 0) */
+/* did not compile: C2065 'local_1a0': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
 undefined8 FUN_140f4be40() {
     GenUnimplemented(0x140f4be40ULL);
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_140f036b0 reads 1, the call passes 0) */
+/* did not compile: C2065 'local_160': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
 undefined8 FUN_140f4cca0() {
     GenUnimplemented(0x140f4cca0ULL);
     return (undefined8)0;
@@ -2363,12 +2261,6 @@ undefined8 FUN_140f4cca0() {
 /* a decompilation Ghidra marked as damaged */
 undefined8 FUN_140f4db00() {
     GenUnimplemented(0x140f4db00ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140f03430 reads 1, the call passes 0) */
-undefined8 FUN_140f4f530() {
-    GenUnimplemented(0x140f4f530ULL);
     return (undefined8)0;
 }
 
@@ -2390,27 +2282,15 @@ undefined8 FUN_140f51f10() {
     return (undefined8)0;
 }
 
+/* the decompiler lost a call's arguments (FUN_1402ca290 reads 6, the call passes 2) */
+undefined8 FUN_140f842d0() {
+    GenUnimplemented(0x140f842d0ULL);
+    return (undefined8)0;
+}
+
 /* a decompilation Ghidra marked as damaged */
 undefined8 FUN_140f85df0() {
     GenUnimplemented(0x140f85df0ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_14191e7a0 reads 1, the call passes 0) */
-undefined8 FUN_140f989d0() {
-    GenUnimplemented(0x140f989d0ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140f7f510 reads 1, the call passes 0) */
-undefined8 FUN_140fa0ae0() {
-    GenUnimplemented(0x140fa0ae0ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140f7f490 reads 1, the call passes 0) */
-undefined8 FUN_140fa1820() {
-    GenUnimplemented(0x140fa1820ULL);
     return (undefined8)0;
 }
 
@@ -2501,12 +2381,6 @@ undefined8 FUN_14107f7b0() {
 /* the decompiler lost a call's arguments (FUN_141c28ea0 reads 1, the call passes 0) */
 undefined8 FUN_141084680() {
     GenUnimplemented(0x141084680ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_14169ca60 reads 1, the call passes 0) */
-undefined8 FUN_1410a2780() {
-    GenUnimplemented(0x1410a2780ULL);
     return (undefined8)0;
 }
 
@@ -3218,7 +3092,7 @@ undefined8 FUN_1414841b0() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_1414e0f60 reads 4, the call passes 3) */
+/* did not compile: C2066 cast to function type is illegal [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
 undefined8 FUN_1414845e0() {
     GenUnimplemented(0x1414845e0ULL);
     return (undefined8)0;
@@ -3404,16 +3278,16 @@ undefined8 FUN_141561ca0() {
     return (undefined8)0;
 }
 
+/* the decompiler lost a call's arguments (FUN_1402142b0 reads 3, the call passes 0) */
+undefined8 FUN_141562f90() {
+    GenUnimplemented(0x141562f90ULL);
+    return (undefined8)0;
+}
+
 /* the stack frame addressed directly */
 undefined8 FUN_141563630() {
     GenUnimplemented(0x141563630ULL);
     return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_142525db0 reads 1, the call passes 0) */
-ulonglong FUN_141563820() {
-    GenUnimplemented(0x141563820ULL);
-    return (ulonglong)0;
 }
 
 /* the decompiler lost a call's arguments (FUN_14257dea0 reads 4, the call passes 2) */
@@ -3632,6 +3506,30 @@ undefined8 FUN_14168e8d0() {
     return (undefined8)0;
 }
 
+/* the decompiler lost a call's arguments (FUN_14168f650 reads 2, the call passes 0) */
+undefined8 FUN_14168faa0() {
+    GenUnimplemented(0x14168faa0ULL);
+    return (undefined8)0;
+}
+
+/* the decompiler lost a call's arguments (FUN_14168f650 reads 2, the call passes 0) */
+undefined8 FUN_14168fae0() {
+    GenUnimplemented(0x14168fae0ULL);
+    return (undefined8)0;
+}
+
+/* register the decompiler lost track of */
+ulonglong FUN_14168fe50() {
+    GenUnimplemented(0x14168fe50ULL);
+    return (ulonglong)0;
+}
+
+/* register the decompiler lost track of */
+ulonglong FUN_14168ffa0() {
+    GenUnimplemented(0x14168ffa0ULL);
+    return (ulonglong)0;
+}
+
 /* register the decompiler lost track of */
 ulonglong FUN_141690000() {
     GenUnimplemented(0x141690000ULL);
@@ -3678,12 +3576,6 @@ undefined8 FUN_14169a520() {
 ulonglong FUN_14169bfc0() {
     GenUnimplemented(0x14169bfc0ULL);
     return (ulonglong)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_142424d80 reads 2, the call passes 1) */
-undefined8 FUN_14169ca90() {
-    GenUnimplemented(0x14169ca90ULL);
-    return (undefined8)0;
 }
 
 /* did not compile: C2100 you cannot dereference an operand of type 'undefined8' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\g */
@@ -3794,10 +3686,10 @@ uint FUN_1416cdc20() {
     return (uint)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_14243b410 reads 3, the call passes 2) */
-bool FUN_1416d5c50() {
-    GenUnimplemented(0x1416d5c50ULL);
-    return (bool)0;
+/* the decompiler lost a call's arguments (FUN_140233370 reads 4, the call passes 2) */
+ulonglong FUN_1416d0be0() {
+    GenUnimplemented(0x1416d0be0ULL);
+    return (ulonglong)0;
 }
 
 /* register the decompiler lost track of */
@@ -5828,6 +5720,12 @@ ulonglong FUN_141908ec0() {
     return (ulonglong)0;
 }
 
+/* register the decompiler lost track of */
+ulonglong FUN_14190cc50() {
+    GenUnimplemented(0x14190cc50ULL);
+    return (ulonglong)0;
+}
+
 /* the decompiler lost a call's arguments (FUN_140252fc0 reads 1, the call passes 0) */
 undefined8 FUN_141911a50() {
     GenUnimplemented(0x141911a50ULL);
@@ -5928,12 +5826,6 @@ undefined8 FUN_141978370() {
 undefined8 FUN_1419784f0() {
     GenUnimplemented(0x1419784f0ULL);
     return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_141bd89e0 reads 1, the call passes 0) */
-undefined8 * FUN_141984cd0() {
-    GenUnimplemented(0x141984cd0ULL);
-    return (undefined8 *)0;
 }
 
 /* the decompiler lost a call's arguments (FUN_14188b490 reads 1, the call passes 0) */
@@ -6050,6 +5942,12 @@ undefined8 FUN_141a45040() {
     return (undefined8)0;
 }
 
+/* did not compile: C2168 'memmove': too few actual parameters for intrinsic function [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\ */
+longlong * FUN_141a48790() {
+    GenUnimplemented(0x141a48790ULL);
+    return (longlong *)0;
+}
+
 /* the decompiler lost a call's arguments (FUN_141a44ea0 reads 2, the call passes 0) */
 longlong FUN_141a48be0() {
     GenUnimplemented(0x141a48be0ULL);
@@ -6060,12 +5958,6 @@ longlong FUN_141a48be0() {
 ulonglong FUN_141a490e0() {
     GenUnimplemented(0x141a490e0ULL);
     return (ulonglong)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_1406d7d90 reads 1, the call passes 0) */
-undefined8 FUN_141a4b990() {
-    GenUnimplemented(0x141a4b990ULL);
-    return (undefined8)0;
 }
 
 /* register the decompiler lost track of */
@@ -6188,7 +6080,7 @@ int FUN_141b01da0() {
     return (int)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_141a54a60 reads 2, the call passes 1) */
+/* did not compile: C2065 'local_res8': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
 undefined8 FUN_141b025e0() {
     GenUnimplemented(0x141b025e0ULL);
     return (undefined8)0;
@@ -6500,6 +6392,12 @@ undefined8 FUN_141c17720() {
     return (undefined8)0;
 }
 
+/* the stack frame addressed directly */
+undefined4 * FUN_141c29010() {
+    GenUnimplemented(0x141c29010ULL);
+    return (undefined4 *)0;
+}
+
 /* a decompilation Ghidra marked as damaged */
 undefined8 FUN_141c44d50() {
     GenUnimplemented(0x141c44d50ULL);
@@ -6687,26 +6585,8 @@ undefined8 FUN_141cb55d0() {
 }
 
 /* the decompiler lost a call's arguments (FUN_142424d80 reads 2, the call passes 1) */
-undefined8 FUN_141cb75b0() {
-    GenUnimplemented(0x141cb75b0ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_142424d80 reads 2, the call passes 1) */
-undefined8 FUN_141cb7b40() {
-    GenUnimplemented(0x141cb7b40ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_142424d80 reads 2, the call passes 1) */
 undefined8 FUN_141cb7f90() {
     GenUnimplemented(0x141cb7f90ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_142424d80 reads 2, the call passes 1) */
-undefined8 FUN_141cb8620() {
-    GenUnimplemented(0x141cb8620ULL);
     return (undefined8)0;
 }
 
@@ -6728,13 +6608,7 @@ undefined8 FUN_141cb98f0() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_142424d80 reads 2, the call passes 1) */
-int FUN_141cba2f0() {
-    GenUnimplemented(0x141cba2f0ULL);
-    return (int)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_142424d80 reads 2, the call passes 1) */
+/* the decompiler lost a call's arguments (FUN_140349a90 reads 2, the call passes 0) */
 int FUN_141cba580() {
     GenUnimplemented(0x141cba580ULL);
     return (int)0;
@@ -6746,7 +6620,7 @@ int FUN_141cbaa60() {
     return (int)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_142424d80 reads 2, the call passes 1) */
+/* the decompiler lost a call's arguments (FUN_140349a90 reads 2, the call passes 0) */
 int FUN_141cbacc0() {
     GenUnimplemented(0x141cbacc0ULL);
     return (int)0;
@@ -6758,25 +6632,13 @@ undefined8 FUN_141cbb300() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_142424d80 reads 2, the call passes 1) */
-undefined8 FUN_141cbba40() {
-    GenUnimplemented(0x141cbba40ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_142424d80 reads 2, the call passes 1) */
-undefined8 FUN_141cbbce0() {
-    GenUnimplemented(0x141cbbce0ULL);
-    return (undefined8)0;
-}
-
 /* the decompiler lost a call's arguments (FUN_1402b3ab0 reads 3, the call passes 2) */
 undefined8 FUN_141cbc280() {
     GenUnimplemented(0x141cbc280ULL);
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_142424d80 reads 2, the call passes 1) */
+/* the decompiler lost a call's arguments (FUN_1402b3ab0 reads 3, the call passes 2) */
 undefined8 FUN_141cbc430() {
     GenUnimplemented(0x141cbc430ULL);
     return (undefined8)0;
@@ -6791,12 +6653,6 @@ undefined8 FUN_141cbc700() {
 /* did not compile: C2106 '=': left operand must be l-value [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
 undefined8 FUN_141cbcd40() {
     GenUnimplemented(0x141cbcd40ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_142424d80 reads 2, the call passes 1) */
-undefined8 FUN_141cbd470() {
-    GenUnimplemented(0x141cbd470ULL);
     return (undefined8)0;
 }
 
@@ -6948,12 +6804,6 @@ bool FUN_141ceff10() {
 undefined1 * FUN_141cf1670() {
     GenUnimplemented(0x141cf1670ULL);
     return (undefined1 *)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_141cf94b0 reads 4, the call passes 0) */
-longlong FUN_141cf9730() {
-    GenUnimplemented(0x141cf9730ULL);
-    return (longlong)0;
 }
 
 /* a global used as a pointer the data export does not type */
@@ -7124,15 +6974,21 @@ undefined8 FUN_141debec0() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_142203dc0 reads 1, the call passes 0) */
-undefined8 FUN_141deebb0() {
-    GenUnimplemented(0x141deebb0ULL);
+/* the decompiler lost a call's arguments (FUN_14023d9b0 reads 3, the call passes 1) */
+longlong * FUN_141dfa180() {
+    GenUnimplemented(0x141dfa180ULL);
+    return (longlong *)0;
+}
+
+/* the decompiler lost a call's arguments (FUN_141f184f0 reads 2, the call passes 0) */
+undefined8 FUN_141dfa7c0() {
+    GenUnimplemented(0x141dfa7c0ULL);
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_142203dc0 reads 1, the call passes 0) */
-undefined8 FUN_141deec20() {
-    GenUnimplemented(0x141deec20ULL);
+/* did not compile: LNK2019 unresolved cpuid */
+undefined8 FUN_141dfa970() {
+    GenUnimplemented(0x141dfa970ULL);
     return (undefined8)0;
 }
 
@@ -7145,30 +7001,6 @@ undefined8 FUN_141dfb1c0() {
 /* the decompiler lost a call's arguments (FUN_141f19450 reads 1, the call passes 0) */
 undefined8 FUN_141dfb5d0() {
     GenUnimplemented(0x141dfb5d0ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_142203dc0 reads 1, the call passes 0) */
-undefined8 FUN_141e13060() {
-    GenUnimplemented(0x141e13060ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_142203dc0 reads 1, the call passes 0) */
-undefined8 * FUN_141e1f840() {
-    GenUnimplemented(0x141e1f840ULL);
-    return (undefined8 *)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_142203dc0 reads 1, the call passes 0) */
-undefined8 FUN_141e2b680() {
-    GenUnimplemented(0x141e2b680ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_142203dc0 reads 1, the call passes 0) */
-undefined8 FUN_141ee6130() {
-    GenUnimplemented(0x141ee6130ULL);
     return (undefined8)0;
 }
 
@@ -7388,6 +7220,12 @@ undefined8 FUN_14228ac80() {
     return (undefined8)0;
 }
 
+/* the decompiler lost a call's arguments (FUN_142292410 reads 4, the call passes 1) */
+ulonglong * FUN_1422901d0() {
+    GenUnimplemented(0x1422901d0ULL);
+    return (ulonglong *)0;
+}
+
 /* did not compile: C2065 'Import': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
 undefined1 FUN_142363ad0() {
     GenUnimplemented(0x142363ad0ULL);
@@ -7524,6 +7362,18 @@ undefined4 FUN_1424d4420() {
 undefined8 FUN_1424d5250() {
     GenUnimplemented(0x1424d5250ULL);
     return (undefined8)0;
+}
+
+/* the decompiler lost a call's arguments (FUN_142524ca0 reads 3, the call passes 2) */
+undefined8 FUN_142524ca0() {
+    GenUnimplemented(0x142524ca0ULL);
+    return (undefined8)0;
+}
+
+/* register the decompiler lost track of */
+ulonglong FUN_1425259a0() {
+    GenUnimplemented(0x1425259a0ULL);
+    return (ulonglong)0;
 }
 
 /* a port that cannot be called from C (internal or aggregate ABI) */
@@ -7766,9 +7616,9 @@ undefined8 FUN_142575f90() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_14257cb10 reads 3, the call passes 0) */
-undefined8 FUN_14257c690() {
-    GenUnimplemented(0x14257c690ULL);
+/* the decompiler lost a call's arguments (FUN_14257e100 reads 2, the call passes 0) */
+undefined8 FUN_14257cb10() {
+    GenUnimplemented(0x14257cb10ULL);
     return (undefined8)0;
 }
 

@@ -17,6 +17,7 @@
 #include "ui/TextureAtlas.hpp"
 #include <cstring>
 #include <optional>
+#include <windows.h>
 #include <string>
 #include <vector>
 
@@ -453,6 +454,43 @@ int32_t GetGameWindowSizesBody(lua_State* L, void*) {
 }
 
 }  // namespace
+
+extern "C" {
+int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+// translated: FUN_140b1c450
+unsigned long long FUN_140b1c450(unsigned long long L, unsigned long long details);
+// translated: FUN_140ba20c0
+unsigned long long FUN_140ba20c0(unsigned long long details);
+}
+
+namespace {
+
+// The body GetGxAdapterInfo runs protected: the reference's own (FUN_140b4caf0 through its
+// thunk), translated, filling the adapter details it is handed.
+int32_t GetGxAdapterInfoBody(lua_State* L, void* details) {
+    __try {
+        return static_cast<int32_t>(FUN_140b1c450(reinterpret_cast<unsigned long long>(L),
+                                                  reinterpret_cast<unsigned long long>(details)));
+    } __except (GenFault(0x140b4caf0ull, GetExceptionInformation())) {
+        return 0;
+    }
+}
+
+}  // namespace
+
+// The graphics adapters, for the settings' adapter list: the body run protected with a
+// GxAdapterInfoDetails vector (0x18 bytes) it fills, which is freed after. (Ported from the
+// instructions: the decompilation of this handler is damaged by its anti-tamper check.)
+// ref: FUN_140b6f0f0
+int Lua_C_VideoOptions_GetGxAdapterInfo(lua_State* L) {
+    alignas(8) uint64_t details[3] = {};
+    int results = ScriptMethod::ProtectedCall(L, GetGxAdapterInfoBody, details);
+    __try {
+        FUN_140ba20c0(reinterpret_cast<unsigned long long>(details));
+    } __except (GenFault(0x140ba20c0ull, GetExceptionInformation())) {
+    }
+    return results;
+}
 
 // The default window size for a monitor, as a Vector2D: its default fullscreen size
 // (FUN_1419f6050), pushed as FUN_1407caed0 pushes a C2Vector. (Ported from the instructions:

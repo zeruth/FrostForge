@@ -42,6 +42,7 @@ class _Function:
                 self.targets.add(i.operands[0].imm)
                 self.sources.setdefault(i.operands[0].imm, []).append(k)
         self.pinned = self._pinned()
+        self.rbp_delta = None   # how far below the entry rsp the prologue points rbp
         self.frame, self.body_start = self._frame()
 
     def _frame(self) -> tuple[int | None, int]:
@@ -61,7 +62,12 @@ class _Function:
                 pass        # saving a register in the home space
             elif i.mnemonic in ("mov", "lea") and len(ops) == 2 and ops[0].type == x86.X86_OP_REG \
                     and i.reg_name(ops[0].reg) == "rbp":
-                pass        # a frame pointer set up beside rsp; rsp itself does not move
+                # a frame pointer set up beside rsp (rsp itself does not move): where it points
+                if i.mnemonic == "mov" and ops[1].type == x86.X86_OP_REG and i.reg_name(ops[1].reg) == "rsp":
+                    self.rbp_delta = delta
+                elif i.mnemonic == "lea" and ops[1].type == x86.X86_OP_MEM and i.reg_name(ops[1].mem.base) == "rsp" \
+                        and ops[1].mem.index == 0:
+                    self.rbp_delta = delta - ops[1].mem.disp
             else:
                 return delta, k
         return None, 0
@@ -135,6 +141,19 @@ class _Function:
             if writes == 1:
                 out[reg] = (k, value)
         return out
+
+    def stack_slot(self, base: str, disp: int, j: int) -> str | None:
+        """The local at [base + disp] in the body, by Ghidra's naming: local_N is N bytes below
+        the entry stack pointer, local_resN N above it (the caller's home space)."""
+        if j < self.body_start:
+            return None
+        if base == "rsp" and self.frame is not None:
+            o = disp - self.frame
+        elif base == "rbp" and self.rbp_delta is not None:
+            o = disp - self.rbp_delta
+        else:
+            return None
+        return f"local_res{o:x}" if o > 0 else f"local_{-o:x}"
 
     def predecessors(self, p: int) -> list[int]:
         """The instructions that can run just before instruction p."""
@@ -234,11 +253,10 @@ class _Function:
             ctype = {1: "byte", 2: "ushort", 4: "uint", 8: "ulonglong"}[size]
             if i.reg_name(mem.base) == "rip":
                 return f"(*({ctype} *)&DAT_{(i.address + i.size + mem.disp) & MASK[8]:x})"
-            if i.reg_name(mem.base) == "rsp" and self.frame is not None and size == 8 and j >= self.body_start:
+            slot = self.stack_slot(i.reg_name(mem.base), mem.disp, j)
+            if slot is not None and size == 8:
                 # a stack slot: the local Ghidra names by its offset from the entry stack pointer
-                # (local_N below it, local_resN in the caller's home space above it)
-                o = mem.disp - self.frame
-                return f"local_res{o:x}" if o > 0 else f"local_{-o:x}"
+                return slot
             base = self.value(j, FAMILY.get(i.reg_name(mem.base), ""), floor, depth + 1)
             if isinstance(base, str):
                 return f"(*({ctype} *)((char *)({base}) + {mem.disp:#x}))"
@@ -253,6 +271,10 @@ class _Function:
                 # an address in the image: named as the decompilation names a global, so the
                 # translator places it (the port's copy when the port holds it)
                 return f"&DAT_{(i.address + i.size + mem.disp) & MASK[8]:x}" if width == 8 else None
+            slot = self.stack_slot(i.reg_name(mem.base), mem.disp, j)
+            if slot is not None and width == 8:
+                # the address of a local (a struct or buffer the callee fills)
+                return f"&{slot}"
             base = self.value(j, FAMILY.get(i.reg_name(mem.base), ""), floor, depth + 1)
             if isinstance(base, str) and width == 8:
                 # an address formed from a symbolic one (a parameter + a field offset): in bytes,
