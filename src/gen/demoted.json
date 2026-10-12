@@ -33,6 +33,7 @@
  "141341f90": "C2297 '^': not valid as right operand has type 'float' [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcx",
  "141347cd0": "C2297 '&': not valid as right operand has type 'float' [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcx",
  "1413544d0": "C2065 'unique0x100024bc': undeclared identifier [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcxproj]",
+ "141367ed0": "C2100 you cannot dereference an operand of type 'undefined8' [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\g",
  "14147ea50": "C2296 '+': not valid as left operand has type 'code (__cdecl *)' [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\g",
  "1414845e0": "C2066 cast to function type is illegal [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcxproj]",
  "141491f50": "C2296 '+': not valid as left operand has type 'code (__cdecl *)' [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\g",

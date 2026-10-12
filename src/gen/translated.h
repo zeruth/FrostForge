@@ -562,6 +562,9 @@ extern char gen_g_1430ad358;
 /* g_gxDevice (src/gx/Gx.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_14348b650=?g_gxDevice@@3PEAXEA")
 extern char gen_g_14348b650;
+/* g_gxRenderContext (src/gx/GxRenderContext.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_14348b658=?g_gxRenderContext@@3PEAVGxRenderContext@@EA")
+extern char gen_g_14348b658;
 /* s_screenshotQuality (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142cc87b0;
 #define gen_g_142cc87b0 (*(char *)gen_p_142cc87b0)
@@ -8718,7 +8721,6 @@ longlong FUN_142260930();
 undefined4 FUN_142261300();
 undefined4 FUN_142261a50();
 undefined8 FUN_142288420();
-longlong FUN_142288900();
 undefined8 FUN_142288af0();
 undefined1 FUN_142289a70();
 undefined8 FUN_142289bb0();
