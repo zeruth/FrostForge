@@ -2251,7 +2251,7 @@ undefined8 FUN_14184be10(longlong param_1, longlong param_2)
       if (puVar3 != (undefined8 *)0x0) {
         puVar3[1] = CONCAT44(fVar1,uVar2);
         *puVar3 = ((code *)REFP(0x1418468d0));
-        *(undefined4 *)(puVar3 + 2) = (*(uint *)((char *)((undefined8 * *)(gen_frame + 0x10))[0] + 0));
+        *(undefined4 *)(puVar3 + 2) = (*(uint *)((char *)&((undefined8 * *)(gen_frame + 0x10))[0] + 0));
       }
     }
     ((undefined8 * *)(gen_frame + 0x10))[0] = puVar3;

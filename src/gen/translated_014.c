@@ -1740,7 +1740,7 @@ undefined8 FUN_140e22570(undefined8 param_1)
       }
       else {
         dVar15 = (double)CALLF(double, FUN_1402b4920)((*(undefined8 *)(gen_frame + 0x0)),1);
-        ((ulonglong *)(gen_frame + 0x50))[0] = CONCAT44((*(uint *)((char *)((ulonglong *)(gen_frame + 0x50))[0] + 4)),(int)dVar15);
+        ((ulonglong *)(gen_frame + 0x50))[0] = CONCAT44((*(uint *)((char *)&((ulonglong *)(gen_frame + 0x50))[0] + 4)),(int)dVar15);
       }
     }
   }

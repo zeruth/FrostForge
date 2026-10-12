@@ -3874,7 +3874,7 @@ undefined8 FUN_141438530(void)
   (*(undefined8 *)(gen_frame + 0x18)) = 0;
   (*(undefined4 *)(gen_frame + 0x20)) = 0;
   REFG(undefined8, 0x1430adeb0) = CALLF(longlong, FUN_14127e660)(0x53fe8,0x82001,&(*(undefined ** *)(gen_frame + 0x0)),0,1,0);
-  ((ulonglong *)(gen_frame + 0x78))[0] = CONCAT44((*(uint *)((char *)((ulonglong *)(gen_frame + 0x78))[0] + 4)),0x82091);
+  ((ulonglong *)(gen_frame + 0x78))[0] = CONCAT44((*(uint *)((char *)&((ulonglong *)(gen_frame + 0x78))[0] + 4)),0x82091);
   REFG(undefined8, 0x1430adeb8) = CALLF(longlong, FUN_14127e660)(0x53fe7,((ulonglong *)(gen_frame + 0x78))[0],&(*(undefined ** *)(gen_frame + 0x0)),0,1,0);
   (*(undefined4 *)(gen_frame + 0x40)) = 0;
   (*(undefined1 *)(gen_frame + 0x44)) = 0;

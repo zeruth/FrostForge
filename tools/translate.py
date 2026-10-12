@@ -291,7 +291,8 @@ def stack_frame(body: str) -> str:
         n, at = m.group(4), pad + offs[m.group(4)] - lo
         if m.group(7):
             ptr = f"(({ctype(m)} *)(gen_frame + 0x{at:x}))"
-            body = re.sub(rf"&\s*\b{n}\b", ptr, body)
+            # `&arr` is the array's address; `&arr[i]` stays an element's address
+            body = re.sub(rf"&\s*\b{n}\b(?!\s*\[)", ptr, body)
             body = re.sub(rf"\b{n}\b", ptr, body)
         else:
             body = re.sub(rf"\b{n}\b", f"(*({ctype(m)} *)(gen_frame + 0x{at:x}))", body)
