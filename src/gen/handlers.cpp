@@ -323,7 +323,6 @@ unsigned long long FUN_1416a44f0(unsigned long long param_1);
 unsigned long long FUN_1416a4680(unsigned long long param_1);
 unsigned long long FUN_1416a46b0(unsigned long long param_1);
 unsigned long long FUN_1416a46e0(unsigned long long param_1);
-unsigned long long FUN_1416a4730(unsigned long long param_1);
 unsigned long long FUN_1416a47b0(unsigned long long param_1);
 unsigned long long FUN_1416a4860(unsigned long long param_1);
 unsigned long long FUN_1416a4880(unsigned long long param_1);
@@ -3288,15 +3287,6 @@ int Lua_GetCursorDelta(lua_State* L) {
     __try {
         return static_cast<int>(FUN_1416a47b0(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x1416a47b0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_1416a4730
-int Lua_GetCursorPosition(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_1416a4730(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x1416a4730ull, GetExceptionInformation())) {
         return 0;
     }
 }

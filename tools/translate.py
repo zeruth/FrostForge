@@ -1268,6 +1268,23 @@ class Translator:
         body = re.sub(r"&\s*(_?DAT_([0-9a-f]{9}))(?=\s*[+-][^+-=>])",
                       lambda m: m.group(0) if int(m.group(2), 16) in self.refdata else f"(undefined1 *)&{m.group(1)}",
                       body)
+        # `p != &DAT_x` that ends a walk over the reference's own array just below x is the
+        # array's bound, not the port global that happens to follow it: FUN_1413cf260 walked
+        # 0x1430ad328.. until the address of g_wmoPortalInteriorFade, ran off and faulted (the
+        # crash applying MSAA, 2026-10-12)
+        used = {int(a, 16) for a in re.findall(r"\b_?DAT_([0-9a-f]{9})\b", body)}
+
+        def bound(m):
+            x = int(m.group(2), 16)
+            held = self.held_global(x)
+            if held is None or held[0] != x:
+                return m.group(0)
+            below = [y for y in used if x - 0x1000 <= y < x and self.held_global(y) is None]
+            if not below:
+                return m.group(0)
+            return f"{m.group(1)}((undefined1 *)REFP(0x{x:x}))"
+
+        body = re.sub(r"((?:[!=]=|[<>]=?)\s*)&\s*_?DAT_([0-9a-f]{9})\b(?!\s*[\[.+-])", bound, body)
         body = SYMBOL.sub(global_, body)
         body = RAM.sub(lambda m: f"REFG(undefined{ {'u': 4, 'l': 8, 'c': 1, 's': 2}.get(m.group(1)[0], 8)}, 0x{m.group(2)})", body)
         body = IMPORT.sub(lambda m: f"(*(code *)&{m.group(2)})", body)

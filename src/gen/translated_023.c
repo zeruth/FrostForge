@@ -2,93 +2,6 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 
-/* ref: FUN_141653a80 */
-undefined4 FUN_141653a80(uint *param_1)
-{
-  uint uVar1;
-  uint uVar2;
-  
-  uVar1 = CALLF(undefined8, FUN_141237bf0)();
-  uVar2 = param_1[2];
-  if ((*param_1 <= uVar2) && (param_1[1] <= uVar1 - param_1[3])) {
-    param_1[3] = uVar1;
-    uVar2 = 0;
-  }
-  uVar2 = uVar2 + 1;
-  param_1[2] = uVar2;
-  return CONCAT31((int3)(uVar2 >> 8),uVar2 <= *param_1);
-}
-
-/* ref: FUN_141653af0 */
-int FUN_141653af0(undefined8 param_1, undefined1 param_2)
-{
-  __declspec(align(16)) unsigned char gen_frame[0x808 + sizeof(undefined8)];
-  int iVar1;
-  int *piVar2;
-  int iVar3;
-  
-  (*(undefined8 *)(gen_frame + 0x0)) = 0x23;
-  iVar3 = 0;
-  (*(undefined2 *)(gen_frame + 0x8)) = 0;
-  (*(undefined8 *)(gen_frame + 0x808)) = 0;
-  CALLF(undefined8, FUN_141653fb0)(&(*(undefined8 *)(gen_frame + 0x0)),param_1,param_2);
-  piVar2 = (int *)((undefined1 *)&REFG(undefined8, 0x142d18758) + (longlong)(int)(*(undefined8 *)(gen_frame + 0x0)) * 0x74);
-  if (piVar2 == (int *)((undefined1 *)&REFG(undefined8, 0x142d18764) + (longlong)(int)(*(undefined8 *)(gen_frame + 0x0)) * 0x74)) {
-    return 0;
-  }
-  do {
-    iVar1 = iVar3 + 1;
-    if (*piVar2 == 0x47) {
-      iVar1 = iVar3;
-    }
-    iVar3 = iVar1;
-    piVar2 = piVar2 + 1;
-  } while (piVar2 != (int *)((undefined1 *)&REFG(undefined8, 0x142d18764) + (longlong)(int)(*(undefined8 *)(gen_frame + 0x0)) * 0x74));
-  return iVar3;
-}
-
-/* ref: FUN_141654e50 */
-undefined8 FUN_141654e50(void)
-{
-  REFG(undefined4, 0x142d19ffc) = 0xffffffff;
-  REFG(undefined4, 0x143119660) = 0;
-  REFG(undefined4, 0x143119664) = 0;
-  REFG(undefined4, 0x143119668) = 0;
-  REFG(undefined4, 0x142d1a000) = 0xffffffff;
-  REFG(undefined4, 0x142d1a004) = 0xffffffff;
-  REFG(undefined4, 0x142d1a008) = 0xffffffff;
-  REFG(undefined4, 0x142d1a00c) = 0xffffffff;
-  REFG(undefined4, 0x142d1a010) = 0xffffffff;
-  REFG(undefined4, 0x142d1a014) = 0xffffffff;
-  REFG(undefined4, 0x142d1a018) = 0xffffffff;
-  return 0;
-}
-
-/* ref: FUN_141655010 */
-undefined8 * FUN_141655010(undefined8 *param_1)
-{
-  undefined8 *puVar1;
-  
-  puVar1 = param_1 + 2;
-  *(undefined4 *)(param_1 + 1) = 0xdddddddd;
-  *puVar1 = puVar1;
-  *param_1 = (*(undefined8 (*)[4])(uintptr_t)0x14272c9f8ULL);
-  param_1[3] = 0;
-  param_1[3] = (ulonglong)puVar1 | 1;
-  *(undefined4 *)(param_1 + 5) = 0;
-  param_1[6] = 0;
-  *(undefined4 *)(param_1 + 7) = 0;
-  *(undefined4 *)(param_1 + 8) = 0;
-  *(undefined4 *)(param_1 + 4) = 0;
-  CALLF(undefined8, FUN_140325700)(param_1 + 1);
-  *puVar1 = puVar1;
-  param_1[3] = (ulonglong)puVar1 | 1;
-  *(undefined4 *)(param_1 + 1) = 0x10;
-  *(undefined4 *)(param_1 + 9) = 0xffffffff;
-  *(undefined4 *)((longlong)param_1 + 0x4c) = 0x80000000;
-  return param_1;
-}
-
 /* ref: FUN_141658730 */
 undefined8 FUN_141658730(void)
 {
@@ -4882,6 +4795,43 @@ undefined8 FUN_141699020(undefined8 param_1)
     }
   }
   CALLF(undefined8, FUN_142424d80)(param_1,"Usage: TrialBoostCharacter(guid, faction, spec)");
+  return 0;
+}
+
+/* ref: FUN_141699170 */
+undefined8 FUN_141699170(undefined8 param_1)
+{
+  CALLF(undefined8, FUN_1402b3b50)(param_1,(double)*(int *)((*(undefined8 *)((char *)&gen_g_142de29e0 + 0x0)) + 0x14));
+  return 1;
+}
+
+/* ref: FUN_1416991a0 */
+undefined8 FUN_1416991a0(undefined8 param_1)
+{
+  CALLF(undefined8, FUN_1402b3b50)(param_1,(double)*(int *)((*(undefined8 *)((char *)&gen_g_142de29e8 + 0x0)) + 0x14));
+  return 1;
+}
+
+/* ref: FUN_1416991d0 */
+undefined8 FUN_1416991d0(undefined8 param_1)
+{
+  CALLF(undefined8, FUN_1402b3850)(param_1,*(int *)(REFG(undefined8, 0x1431e9608) + 0x14) != 0);
+  return 1;
+}
+
+/* ref: FUN_141699200 */
+undefined8 FUN_141699200(undefined8 param_1)
+{
+  int iVar1;
+  undefined4 uVar2;
+  
+  iVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
+  if (iVar1 == 0) {
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetCharacterUpgradePopupSeen(expansion_id)");
+    return 0;
+  }
+  uVar2 = CALLF(int, FUN_1402b4800)(param_1,1);
+  CALLF(undefined8, FUN_140322110)((*(undefined8 *)((char *)&gen_g_142de29e0 + 0x0)),uVar2,1,0,0,1);
   return 0;
 }
 

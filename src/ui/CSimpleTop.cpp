@@ -29,7 +29,7 @@ const char s_frameVectorTag[] = ".PEAVCSimpleFrame@@";
 const char s_deferredInputTag[] = ".?AUDeferredInputEventChange@CSimpleTop@@";
 const char s_deferredScriptTag[] = ".?AUBasicDeferredScript@DeferredScriptBuffer@@";
 
-CSimpleTop* CSimpleTop::s_instance;
+CSimpleTop* CSimpleTop::s_instance;  // DAT_142e979d8
 uint8_t CSimpleTop::s_drawOnTopOnly;
 
 namespace {

@@ -45,7 +45,6 @@ __declspec(dllimport) unsigned long long GetTimeZoneInformation();
 __declspec(dllimport) unsigned long long GetUserDefaultLangID();
 __declspec(dllimport) unsigned long long GetUserNameW();
 __declspec(dllimport) unsigned long long GlobalMemoryStatusEx();
-__declspec(dllimport) unsigned long long HeapAlloc();
 __declspec(dllimport) unsigned long long InflateRect();
 __declspec(dllimport) unsigned long long InitializeCriticalSection();
 __declspec(dllimport) unsigned long long IsIconic();
@@ -526,6 +525,9 @@ extern char gen_g_142e95af0;
 /* g_wMOAreaTableDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e95d00=?g_wMOAreaTableDB@@3VWowClientDB2@@A")
 extern char gen_g_142e95d00;
+/* s_instance (src/ui/CSimpleTop.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_142e979d8=?s_instance@CSimpleTop@@2PEAV1@EA")
+extern char gen_g_142e979d8;
 /* s_objectTypeCount (src/framescript/FrameScriptObject.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e979f0=?s_objectTypeCount@FrameScript_Object@@2HA")
 extern char gen_g_142e979f0;
@@ -556,9 +558,6 @@ extern char gen_g_1430abef8;
 /* g_wmoLodDist (src/client/GraphicsSettings.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430ad2f0=?g_wmoLodDist@@3MA")
 extern char gen_g_1430ad2f0;
-/* g_wmoPortalInteriorFade (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_1430ad358=?g_wmoPortalInteriorFade@@3EA")
-extern char gen_g_1430ad358;
 /* g_gxDevice (src/gx/Gx.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_14348b650=?g_gxDevice@@3PEAXEA")
 extern char gen_g_14348b650;
@@ -2308,7 +2307,6 @@ ulonglong FUN_140279b50();
 undefined8 FUN_140279d94();
 undefined8 FUN_140279da8();
 undefined8 FUN_140282cb0();
-undefined4 FUN_1402849cc();
 uint FUN_1402849d4();
 longlong FUN_140286974();
 longlong FUN_140289938();
@@ -5382,7 +5380,6 @@ undefined8 FUN_1416a44f0();
 undefined8 FUN_1416a4680();
 undefined8 FUN_1416a46b0();
 undefined8 FUN_1416a46e0();
-undefined8 FUN_1416a4730();
 undefined8 FUN_1416a47b0();
 undefined8 FUN_1416a4860();
 undefined8 FUN_1416a4880();
@@ -9085,9 +9082,7 @@ undefined8 FUN_14257cea0();
 undefined8 FUN_14257cfa0();
 bool FUN_14257d220();
 undefined1 FUN_14257d230();
-undefined8 FUN_14257d480();
 bool FUN_14257d570();
-bool FUN_14257dce0();
 ulonglong FUN_14257de30();
 undefined8 FUN_14257e100();
 undefined8 FUN_14257e3b0();

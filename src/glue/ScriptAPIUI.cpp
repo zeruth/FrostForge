@@ -13,6 +13,7 @@
 #include "ui/BinaryXML.hpp"
 #include "ui/CLayoutFrame.hpp"
 #include "ui/CSimpleFrame.hpp"
+#include "ui/CSimpleTop.hpp"
 #include "ui/FrameXML.hpp"
 #include "ui/TextureAtlas.hpp"
 #include <cstring>
@@ -300,6 +301,17 @@ int32_t GetAtlasInfoBody(lua_State* L, void*) {
     return 1;
 }
 
+}
+
+// The cursor in UI units, from the root's last mouse event.
+// ref: FUN_1416a4730
+int Lua_GetCursorPosition(lua_State* L) {
+    const MOUSEEVENT& event = CSimpleTop::s_instance->m_mouseEvent;
+    float x = event.m_x;
+    float y = event.m_y;
+    lua_pushnumber(L, static_cast<double>((UI_ASPECT * UI_UNITS * x) / UI_WIDTH));
+    lua_pushnumber(L, static_cast<double>((UI_ASPECT * UI_UNITS * y) / UI_WIDTH));
+    return 2;
 }
 
 // ref: FUN_141d053c0

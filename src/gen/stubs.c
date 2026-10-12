@@ -500,6 +500,18 @@ undefined8 FUN_14020ba54() {
     return (undefined8)0;
 }
 
+/* the decompiler lost calls (1 shown, the reference makes 4) */
+undefined8 FUN_14020f7f0() {
+    GenUnimplemented(0x14020f7f0ULL);
+    return (undefined8)0;
+}
+
+/* the decompiler lost calls (1 shown, the reference makes 4) */
+undefined8 FUN_14020fb30() {
+    GenUnimplemented(0x14020fb30ULL);
+    return (undefined8)0;
+}
+
 /* a global used as a pointer the data export does not type */
 undefined8 FUN_140210b90() {
     GenUnimplemented(0x140210b90ULL);
@@ -684,6 +696,12 @@ undefined8 FUN_140279d94() {
 uint FUN_1402849d4() {
     GenUnimplemented(0x1402849d4ULL);
     return (uint)0;
+}
+
+/* the decompiler lost calls (1 shown, the reference makes 3) */
+longlong FUN_140286974() {
+    GenUnimplemented(0x140286974ULL);
+    return (longlong)0;
 }
 
 /* did not compile: C2198 'void _free_base(void *)': too few arguments for call [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\ge */
@@ -6194,6 +6212,12 @@ ulonglong FUN_141ce74b0() {
     return (ulonglong)0;
 }
 
+/* the decompiler lost calls (1 shown, the reference makes 13) */
+undefined4 FUN_141ce9990() {
+    GenUnimplemented(0x141ce9990ULL);
+    return (undefined4)0;
+}
+
 /* the decompiler lost a call's arguments (FUN_141ce5f80 reads 3, the call passes 2) */
 undefined8 FUN_141ceb180() {
     GenUnimplemented(0x141ceb180ULL);
@@ -6878,6 +6902,12 @@ undefined8 FUN_14257cb10() {
     return (undefined8)0;
 }
 
+/* the decompiler lost calls (3 shown, the reference makes 12) */
+bool FUN_14257d570() {
+    GenUnimplemented(0x14257d570ULL);
+    return (bool)0;
+}
+
 /* a global used as a pointer the data export does not type */
 undefined8 FUN_14257e3b0() {
     GenUnimplemented(0x14257e3b0ULL);
@@ -6941,6 +6971,12 @@ undefined8 FUN_1425da9d0() {
 /* a global used as a pointer the data export does not type */
 undefined8 FUN_1425e74e0() {
     GenUnimplemented(0x1425e74e0ULL);
+    return (undefined8)0;
+}
+
+/* the decompiler lost calls (1 shown, the reference makes 4) */
+undefined8 FUN_1425eb420() {
+    GenUnimplemented(0x1425eb420ULL);
     return (undefined8)0;
 }
 
