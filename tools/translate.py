@@ -307,6 +307,39 @@ STRLEN_LOOP = re.compile(r"(\w+) = -1;\s*do \{\s*\1 = \1 \+ 1;\s*\} while \(\*\(
 VCALL = re.compile(r"\(\*\*\(code \*\*\)(?:\(\*(?:\((?:\w+ )*\w+ ?\*+\))?|\*(?:\((?:\w+ )*\w+ ?\*+\))?)")
 
 
+PIECE_TYPE = {1: "byte", 2: "ushort", 4: "uint", 8: "ulonglong"}
+
+
+def global_pieces(text: str) -> str:
+    """`s_must_be_a_finite_number_1426e2d68._12_4_`: N bytes at an offset of a global, in
+    Ghidra's union notation (an inlined copy of a string constant, a field of a data block).
+    For a global that is plain arithmetic on its address; a string symbol already is one."""
+    def piece(m):
+        sym, off, size = m.group(1), int(m.group(2)), int(m.group(3))
+        if size not in PIECE_TYPE:
+            return m.group(0)
+        base = sym if re.match(r"(?:s|u|ws)_", sym) else f"&{sym}"
+        return f"(*({PIECE_TYPE[size]} *)((char *){base} + {off}))"
+
+    text = re.sub(r"\b((?:PTR_)*(?:_?DAT|s|u|ws|PTR)_\w*?_?[0-9a-f]{9})\._(\d+)_(\d+)_", piece, text)
+
+    # the same notation on a local or a parameter (`local_res18[0]._1_3_`, a register's upper
+    # bytes): a typed access at its address, or, for an odd width only read, a shift and a mask
+    vectors = set(re.findall(r"\b(\w+) \[16\];", text))     # a real 16-byte value stays refused
+
+    def local_piece(m):
+        var, off, size = m.group(1), int(m.group(2)), int(m.group(3))
+        if var.split("[")[0] in vectors or off + size > 8:
+            return m.group(0)
+        if size in PIECE_TYPE:
+            return f"(*({PIECE_TYPE[size]} *)((char *)&{var} + {off}))"
+        if re.match(r"\s*=[^=]", text[m.end():m.end() + 3]):
+            return m.group(0)      # an odd-width piece written: no C lvalue for it
+        return f"(((ulonglong)({var}) >> {8 * off}) & {(1 << (8 * size)) - 1:#x})"
+
+    return re.sub(r"(?<![\w.])([A-Za-z_]\w*(?:\[[^\]\[]+\])?)\._(\d+)_(\d+)_", local_piece, text)
+
+
 def virtual_this(text: str) -> str:
     """A virtual call shown with no arguments gets the object it reads the vtable of.
 
@@ -610,6 +643,7 @@ class Translator:
         self._lifted: dict[int, str | None] = {}
         self._arity: dict[int, int | None] = {}
         self._extra_params: dict[int, dict[int, str]] = {}
+        self.mismatched: set[int] = set()   # ports whose signature is not the reference's
         self.callargs = callargs.CallArgs(self.ref)
         self.patches = json.loads((ROOT / "tools/translate_patches.json").read_text(encoding="utf-8"))
         fid = json.loads(F.OUT_JSON.read_text())
@@ -682,6 +716,7 @@ class Translator:
         ref = self.signature(a)
         if ref is not None and len(args) + (1 if this else 0) < len(ref[2]) and mangled.startswith("?") \
                 and not mangled.endswith("ZZ"):
+            self.mismatched.add(a)
             return None
         return va, mangled, sig
 
@@ -702,6 +737,8 @@ class Translator:
         # Ghidra's function-pointer types (`_func_5014 *`) are code
         text = re.sub(r"\b_func_\w+\b", "code", text)
         text = virtual_this(text)
+        text = self.xmm_results(text)
+        text = global_pieces(text)
         return self.recover_arguments(a, self.restore_lengths(text))
 
     # the image's C++ static initializers: the table FUN_14026b874 hands _initterm
@@ -816,6 +853,37 @@ class Translator:
             text = text[:pos] + extra + text[pos:]
         return text
 
+    def xmm_results(self, text: str) -> str:
+        """`extraout_XMM0_*`: part of the floating-point result a call left in xmm0, which Ghidra
+        did not tie to the call (`FUN_x(L,i), (extraout_XMM0_Db >> 0x14 & 0x7ff) == 0x7ff` is an
+        isfinite test on lua_tonumber's double). When the call just before each use returns a
+        double or float, its result is kept and the part read from it."""
+        decls = [m.span() for m in re.finditer(r"^\s*[\w ]+ extraout_XMM0_\w+;$", text, re.M)]
+        uses = [u for u in re.finditer(r"\bextraout_XMM0_(Da|Db|Dc|Dd|Qa|Qb)\b", text)
+                if not any(s <= u.start() < e for s, e in decls)]
+        if not uses:
+            return text
+        sites = list(call_sites(text))
+        wrap = {}
+        for u in uses:
+            before = [s for s in sites if s[1] < u.start()]
+            if not before:
+                return text
+            start, end, b, _ = before[-1]
+            ret = self.decl(b)[0]
+            if ret not in ("double", "float"):
+                return text
+            wrap[start] = (end, ret)
+        for start, (end, ret) in sorted(wrap.items(), reverse=True):
+            member = "d" if ret == "double" else "f"
+            text = text[:start] + f"(gen_xmm0.{member} = " + text[start:end + 1] + ")" + text[end + 1:]
+        part = {"Da": "u32[0]", "Db": "u32[1]", "Dc": "u32[2]", "Dd": "u32[3]", "Qa": "u64[0]", "Qb": "u64[1]"}
+        text = re.sub(r"\bextraout_XMM0_(Da|Db|Dc|Dd|Qa|Qb)\b", lambda m: f"gen_xmm0.{part[m.group(1)]}", text)
+        text = re.sub(r"^\s*[\w ]+ gen_xmm0\.\w+(?:\[\d\])?;\n", "", text, flags=re.M)   # its declaration
+        first = text.index("{\n") + 2
+        return (text[:first] + "  union { double d; float f; unsigned int u32[4]; unsigned long long u64[2]; } gen_xmm0;\n"
+                + text[first:])
+
     def lost_arguments(self, text: str) -> str | None:
         for _, _, b, args in call_sites(text):
             need = self.arity(b)
@@ -907,6 +975,12 @@ class Translator:
 
         if not known(ret):
             ret = "undefined8"
+        if ret.startswith("undefined") and a in self.tied:
+            # Ghidra did not know the result is floating point (lua_tonumber): the port's own
+            # signature does, and a double comes back in xmm0, not rax
+            pt = self.port_target(a)
+            if pt is not None and pt[2][0] in ("double", "float"):
+                ret = pt[2][0]
         if not all(known(" ".join(p.split()[:-1]) + " " + ("*" * p.split()[-1].count("*"))) for p in params):
             return ret, None
         return ret, params
@@ -930,7 +1004,8 @@ class Translator:
                     if self.port_target(b) is not None and b not in roots:
                         adapt[b] = True
                         seen.add(b)
-                    elif b in self.tied and self.tied[b]["kind"] != "stub":
+                    elif b in self.tied and self.tied[b]["kind"] != "stub" and b not in self.mismatched:
+                        # (a port whose signature is not the reference's is translated instead)
                         stub[b] = "a port that cannot be called from C (internal or aggregate ABI)"
                         seen.add(b)
                     elif d + 1 <= self.depth:

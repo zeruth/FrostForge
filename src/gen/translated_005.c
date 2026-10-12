@@ -2,6 +2,26 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 
+/* ref: FUN_1401f9650 */
+undefined8 FUN_1401f9650(void)
+{
+  undefined8 uVar1;
+  
+  uVar1 = CALLF(undefined *, FUN_1418d0960)();
+  CALLF(undefined8 *, FUN_1418a5fb0)(&REFG(undefined8, 0x143158cd0),"animKitID",uVar1,((code *)REFP(0x1418d5b00)),((code *)REFP(0x1418463f0)),((code *)REFP(0x1418c97d0)));
+  return 0;
+}
+
+/* ref: FUN_1401f96a0 */
+undefined8 FUN_1401f96a0(void)
+{
+  undefined8 uVar1;
+  
+  uVar1 = CALLF(undefined *, FUN_1418d0960)();
+  CALLF(undefined8 *, FUN_1418a5fb0)(&REFG(undefined8, 0x143158d50),"animOverride",uVar1,((code *)REFP(0x1418d5b40)),((code *)REFP(0x1418d1a40)),((code *)REFP(0x1418c9900)));
+  return 0;
+}
+
 /* ref: FUN_1401f96f0 */
 undefined8 FUN_1401f96f0(void)
 {
@@ -1536,43 +1556,6 @@ undefined8 FUN_1401fc740(void)
   REFG(undefined8, 0x142d2a658) = 0xffffffff;
   REFG(undefined8, 0x142d2a65c) = 0x80000000;
   atexit(((code *)REFP(0x1425f5200)));
-  return 0;
-}
-
-/* ref: FUN_1401fc7f0 */
-undefined8 FUN_1401fc7f0(void)
-{
-  CALLF(byte *, FUN_14031e970)(&REFG(undefined8, 0x1431e8ec8),3,0x49,0x7b);
-  atexit(((code *)REFP(0x1425f5320)));
-  return 0;
-}
-
-/* ref: FUN_1401fc860 */
-undefined8 FUN_1401fc860(void)
-{
-  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e92b0));
-  REFG(undefined8, 0x1431e92fc) = 0;
-  REFG(undefined4, 0x1431e9304) = 0;
-  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e92e8));
-  REFG(undefined8, 0x1431e9334) = 0;
-  REFG(undefined8, 0x1431e933c) = 0;
-  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e9320));
-  REFG(undefined8, 0x1431e936c) = 0;
-  REFG(undefined8, 0x1431e9374) = 0;
-  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e9358));
-  REFG(undefined8, 0x1431e93a4) = 0;
-  REFG(undefined8, 0x1431e93ac) = 0;
-  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e9390));
-  REFG(undefined8, 0x1431e93dc) = 0;
-  REFG(undefined8, 0x1431e93e4) = 0;
-  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e93c8));
-  REFG(undefined8, 0x1431e9414) = 0;
-  REFG(undefined8, 0x1431e941c) = 0;
-  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e9400));
-  REFG(undefined8, 0x1431e944c) = 0;
-  REFG(undefined8, 0x1431e9454) = 0;
-  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e9438));
-  atexit(((code *)REFP(0x1425f54d0)));
   return 0;
 }
 

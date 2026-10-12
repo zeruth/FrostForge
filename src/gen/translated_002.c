@@ -509,6 +509,20 @@ undefined8 FUN_1401f28e0(void)
   return 0;
 }
 
+/* ref: FUN_1401f2920 */
+undefined8 FUN_1401f2920(void)
+{
+  REFG(undefined8, 0x142d20c68) = 0x142d20c61;
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d20c58));
+  REFG(undefined8, 0x142d20c58) = 0x10;
+  REFG(undefined8, 0x142d20c60) = (undefined *)&REFG(undefined8, 0x142d20c60);
+  REFG(undefined8, 0x142d20c68) = 0x142d20c61;
+  (*(uint *)((char *)&REFG(undefined8, 0x142d20c98) + 0)) = 0xffffffff;
+  (*(uint *)((char *)&REFG(undefined8, 0x142d20c98) + 4)) = 0x80000000;
+  atexit((code *)((code *)REFP(0x1425f1b90)));
+  return 0;
+}
+
 /* ref: FUN_1401f2990 */
 undefined8 FUN_1401f2990(void)
 {
@@ -546,6 +560,20 @@ undefined8 FUN_1401f2a80(void)
   REFG(undefined8, 0x142d20d88) = 0xa75d2250;
   REFG(undefined8, 0x142d20d8c) = 0x95;
   atexit((code *)((code *)REFP(0x1425f1bd0)));
+  return 0;
+}
+
+/* ref: FUN_1401f2ad0 */
+undefined8 FUN_1401f2ad0(void)
+{
+  REFG(undefined8, 0x142d20c18) = 0x142d20c11;
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d20c08));
+  REFG(undefined8, 0x142d20c08) = 0x10;
+  REFG(undefined8, 0x142d20c10) = (undefined *)&REFG(undefined8, 0x142d20c10);
+  REFG(undefined8, 0x142d20c18) = 0x142d20c11;
+  (*(uint *)((char *)&REFG(undefined8, 0x142d20c48) + 0)) = 0xffffffff;
+  (*(uint *)((char *)&REFG(undefined8, 0x142d20c48) + 4)) = 0x80000000;
+  atexit((code *)((code *)REFP(0x1425f1be0)));
   return 0;
 }
 
@@ -1498,26 +1526,6 @@ undefined8 FUN_1401f45b0(void)
   
   uVar1 = CALLF(undefined *, FUN_141845b00)();
   CALLF(undefined8 *, FUN_1418a5ed0)(&REFG(undefined8, 0x143144130),"SetCameraEx",uVar1,((code *)REFP(0x1418398a0)),((code *)REFP(0x141840250)));
-  return 0;
-}
-
-/* ref: FUN_1401f45f0 */
-undefined8 FUN_1401f45f0(void)
-{
-  undefined8 uVar1;
-  
-  uVar1 = CALLF(undefined *, FUN_141845b00)();
-  CALLF(undefined8 *, FUN_1418a5ed0)(&REFG(undefined8, 0x143144018),"SetRelativeCoords",uVar1,((code *)REFP(0x141839950)),((code *)REFP(0x1418404c0)));
-  return 0;
-}
-
-/* ref: FUN_1401f4630 */
-undefined8 FUN_1401f4630(void)
-{
-  undefined8 uVar1;
-  
-  uVar1 = CALLF(undefined *, FUN_141845b00)();
-  CALLF(undefined8 *, FUN_1418a5ed0)(&REFG(undefined8, 0x143143bb8),"ShouldWaitForSmoothPhase",uVar1,((code *)REFP(0x141839970)),((code *)REFP(0x1418405d0)));
   return 0;
 }
 

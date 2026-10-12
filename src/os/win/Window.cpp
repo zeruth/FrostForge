@@ -1536,5 +1536,7 @@ extern "C" void* const gen_p_1430a1594 = (void*)&s_rawSkip;
 extern "C" void* const gen_p_1430a1628 = (void*)&s_mouseSpeed;
 extern "C" void* const gen_p_1430a162c = (void*)&s_mouseSpeedCopy;
 extern "C" void* const gen_p_1430a1634 = (void*)&s_restoreMouseSpeed;
+extern "C" void* const gen_p_1430a1640 = (void*)&s_mouseWindow;
+extern "C" void* const gen_p_1430a1648 = (void*)&s_mouseMode;
 extern "C" void* const gen_p_1430a164c = (void*)&s_numLockAtStartup;
 // ---- end of generated globals ----

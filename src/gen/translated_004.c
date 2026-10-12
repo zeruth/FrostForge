@@ -2,6 +2,26 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 
+/* ref: FUN_1401f70c0 */
+undefined8 FUN_1401f70c0(void)
+{
+  undefined8 uVar1;
+  
+  uVar1 = CALLF(undefined *, FUN_1418d0760)();
+  CALLF(undefined8 *, FUN_1418a5ed0)(&REFG(undefined8, 0x14315a038),"GetMaxHealth",uVar1,((code *)REFP(0x1418b41b0)),((code *)REFP(0x1418bd790)));
+  return 0;
+}
+
+/* ref: FUN_1401f7100 */
+undefined8 FUN_1401f7100(void)
+{
+  undefined8 uVar1;
+  
+  uVar1 = CALLF(undefined *, FUN_1418d0b60)();
+  CALLF(undefined8 *, FUN_1418a5ed0)(&REFG(undefined8, 0x143159d30),"GetMaxPower",uVar1,((code *)REFP(0x1418b41d0)),((code *)REFP(0x1418bd8a0)));
+  return 0;
+}
+
 /* ref: FUN_1401f7140 */
 undefined8 FUN_1401f7140(void)
 {
@@ -1482,26 +1502,6 @@ undefined8 FUN_1401f9600(void)
   
   uVar1 = CALLF(undefined *, FUN_1418d0860)();
   CALLF(undefined8 *, FUN_1418a5fb0)(&REFG(undefined8, 0x143158a90),"animKitID",uVar1,((code *)REFP(0x1418d5ac0)),((code *)REFP(0x141846500)),((code *)REFP(0x1418c9640)));
-  return 0;
-}
-
-/* ref: FUN_1401f9650 */
-undefined8 FUN_1401f9650(void)
-{
-  undefined8 uVar1;
-  
-  uVar1 = CALLF(undefined *, FUN_1418d0960)();
-  CALLF(undefined8 *, FUN_1418a5fb0)(&REFG(undefined8, 0x143158cd0),"animKitID",uVar1,((code *)REFP(0x1418d5b00)),((code *)REFP(0x1418463f0)),((code *)REFP(0x1418c97d0)));
-  return 0;
-}
-
-/* ref: FUN_1401f96a0 */
-undefined8 FUN_1401f96a0(void)
-{
-  undefined8 uVar1;
-  
-  uVar1 = CALLF(undefined *, FUN_1418d0960)();
-  CALLF(undefined8 *, FUN_1418a5fb0)(&REFG(undefined8, 0x143158d50),"animOverride",uVar1,((code *)REFP(0x1418d5b40)),((code *)REFP(0x1418d1a40)),((code *)REFP(0x1418c9900)));
   return 0;
 }
 

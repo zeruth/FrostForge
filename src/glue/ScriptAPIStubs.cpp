@@ -70,20 +70,6 @@ int Lua_C_CharacterCreation_CustomizeExistingCharacter(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140cd03a0
-int Lua_C_CharacterCreation_CycleCharCustomization(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140cd1860
-int Lua_C_CharacterCreation_GetAlliedRaceCreationRequirements(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140cd47b0
 int Lua_C_CharacterCreation_GetCharacterTemplateInfo(lua_State* L) {
     (void)L;
@@ -121,13 +107,6 @@ int Lua_C_CharacterCreation_GetRaceIDFromName(lua_State* L) {
 
 // ref: FUN_140cdf6c0
 int Lua_C_CharacterCreation_IsAdvancedClass(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140ce11d0
-int Lua_C_CharacterCreation_IsRaceClassValid(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -196,20 +175,6 @@ int Lua_C_CharacterCreation_UpdateCustomizationScene(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140c89210
-int Lua_C_CharacterServices_AssignNameChangeDistribution(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140c8a9d0
-int Lua_C_CharacterServices_AssignRaceOrFactionChangeDistribution(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140c8b320
 int Lua_C_CharacterServices_AssignUpgradeDistribution(lua_State* L) {
     (void)L;
@@ -266,13 +231,6 @@ int Lua_C_ChatInfo_GetChannelShortcutForChannelID(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140cf2cb0
-int Lua_C_ChatInfo_GetChatLineSenderGUID(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140cf6f20
 int Lua_C_ChatInfo_IsAddonMessagePrefixRegistered(lua_State* L) {
     (void)L;
@@ -324,13 +282,6 @@ int Lua_C_ConfigurationWarnings_GetConfigurationWarningSeen(lua_State* L) {
 
 // ref: FUN_140e1f5f0
 int Lua_C_ConfigurationWarnings_SetConfigurationWarningSeen(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140e22570
-int Lua_C_ConsoleScriptCollection_GetScriptData(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -455,13 +406,6 @@ int Lua_C_LoginUI_ReconnectToRealmList(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_14169dbb0
-int Lua_C_Login_GetAgreementLink(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_14169ca90
 int Lua_C_Login_Login(lua_State* L) {
     (void)L;
@@ -499,13 +443,6 @@ int Lua_C_ModelInfo_ClearActiveModelScene(lua_State* L) {
 
 // ref: FUN_140d2c570
 int Lua_C_ModelInfo_ClearActiveModelSceneActor(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140d2e7c0
-int Lua_C_ModelInfo_GetModelSceneCameraInfoByID(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -590,13 +527,6 @@ int Lua_C_SocialContractGlue_GetShouldShowSocialContract(lua_State* L) {
 
 // ref: FUN_140ae6b20
 int Lua_C_SocialContractGlue_TryUpdateSocialContract(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140aea8a0
-int Lua_C_Sound_PlayItemSound(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -749,13 +679,6 @@ int Lua_C_UserFeedback_SubmitSuggestion(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140b6dc00
-int Lua_C_VideoOptions_GetDefaultGameWindowSize(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140b6f0f0
 int Lua_C_VideoOptions_GetGxAdapterInfo(lua_State* L) {
     (void)L;
@@ -805,13 +728,6 @@ int Lua_C_VoiceChat_EndLocalCapture(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140b7ea40
-int Lua_C_VoiceChat_GetMemberGUID(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140b84340
 int Lua_C_VoiceChat_GetProcesses(lua_State* L) {
     (void)L;
@@ -835,13 +751,6 @@ int Lua_C_VoiceChat_GetRemoteTtsVoices(lua_State* L) {
 
 // ref: FUN_140b86b00
 int Lua_C_VoiceChat_GetTtsVoices(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140b8acf0
-int Lua_C_VoiceChat_IsMemberLocalPlayer(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -1141,13 +1050,6 @@ int Lua_CalculateStringEditDistance(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140ce98d0
-int Lua_CharacterHasAlternativeRaceOptions(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_141d95d80
 int Lua_ConsoleExec(lua_State* L) {
     (void)L;
@@ -1169,20 +1071,6 @@ int Lua_DeclineName(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_141d02760
-int Lua_DisableAddOn(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141d02620
-int Lua_EnableAddOn(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_1416a6740
 int Lua_GetAccountCharacterInfo(lua_State* L) {
     (void)L;
@@ -1192,20 +1080,6 @@ int Lua_GetAccountCharacterInfo(lua_State* L) {
 
 // ref: FUN_141d02ae0
 int Lua_GetAddOnDependencies(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141d02bf0
-int Lua_GetAddOnEnableState(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141d028c0
-int Lua_GetAddOnInfo(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -1241,13 +1115,6 @@ int Lua_GetCharacterInfoByGUID(lua_State* L) {
 
 // ref: FUN_1416a49a0
 int Lua_GetCreditsText(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1419f4e60
-int Lua_GetCurrentResolution(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -1323,13 +1190,6 @@ int Lua_HandleAtlasMemberCommand(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_141d02430
-int Lua_IsAddOnLoaded(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140cecac0
 int Lua_IsCharacterInTutorialMap(lua_State* L) {
     (void)L;
@@ -1339,13 +1199,6 @@ int Lua_IsCharacterInTutorialMap(lua_State* L) {
 
 // ref: FUN_140ced1e0
 int Lua_IsCharacterVASLocked(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140ced900
-int Lua_IsCharacterVASRestricted(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;

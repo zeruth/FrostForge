@@ -36,10 +36,34 @@ class _Function:
         self.ins = list(_md.disasm(bytes(binary.image[o:o + size]), start))
         self.index = {i.address: k for k, i in enumerate(self.ins)}
         self.targets = set()
-        for i in self.ins:
+        self.sources: dict[int, list[int]] = {}
+        for k, i in enumerate(self.ins):
             if i.group(capstone.CS_GRP_JUMP) and i.operands and i.operands[0].type == x86.X86_OP_IMM:
                 self.targets.add(i.operands[0].imm)
+                self.sources.setdefault(i.operands[0].imm, []).append(k)
         self.pinned = self._pinned()
+
+    def path(self, k: int):
+        """The instructions executed just before instruction k, latest first, while there is
+        only one way they can have run: through a fall-through, or back through the single jump
+        into a block nothing falls into. Ends with "entry" at the function's start, or "split"
+        where more than one way in meets."""
+        p = k
+        for _ in range(96):
+            here = self.ins[p].address
+            jumps = [s for s in self.sources.get(here, []) if s != p]
+            prev = self.ins[p - 1] if p > 0 else None
+            falls = prev is not None and prev.mnemonic != "jmp" and not prev.group(capstone.CS_GRP_RET)
+            if p == 0:
+                yield "entry" if not jumps else "split"
+                return
+            ways = len(jumps) + (1 if falls else 0)
+            if ways != 1:
+                yield "split"
+                return
+            p = p - 1 if falls else jumps[0]
+            yield p
+        yield "split"
 
     def _pinned(self) -> dict[str, tuple[int, str]]:
         """Callee-saved registers that hold an entry argument for the whole function: set once,
@@ -62,11 +86,26 @@ class _Function:
             for r in written:
                 family = FAMILY.get(i.reg_name(r))
                 live.pop(family, None)
+        def restore(k: int) -> bool:
+            # the epilogue putting a saved register back (mov rbx, [rsp + 0x30] before the ret)
+            i = self.ins[k]
+            ops = i.operands
+            if i.mnemonic != "mov" or len(ops) != 2 or ops[1].type != x86.X86_OP_MEM:
+                return False
+            if i.reg_name(ops[1].mem.base) not in ("rsp", "rbp", "r11"):
+                return False
+            for nxt in self.ins[k + 1:k + 8]:
+                if nxt.group(capstone.CS_GRP_RET) or nxt.mnemonic == "jmp":
+                    return True
+                if nxt.group(capstone.CS_GRP_CALL):
+                    return False
+            return False
+
         out = {}
         for reg, (k, value) in found.items():
             writes = 0
-            for i in self.ins:
-                if i.mnemonic in ("pop", "push"):
+            for n, i in enumerate(self.ins):
+                if i.mnemonic in ("pop", "push") or restore(n):
                     continue
                 _, written = i.regs_access()
                 writes += any(FAMILY.get(i.reg_name(r)) == reg for r in written)
@@ -74,32 +113,71 @@ class _Function:
                 out[reg] = (k, value)
         return out
 
-    def value(self, k: int, reg: str, floor: int, depth: int = 0) -> int | None:
-        """The constant in `reg` (a 64-bit family name) just before instruction k, or None."""
+    def predecessors(self, p: int) -> list[int]:
+        """The instructions that can run just before instruction p."""
+        out = [q for q in self.sources.get(self.ins[p].address, []) if q != p]
+        prev = self.ins[p - 1] if p > 0 else None
+        if prev is not None and prev.mnemonic != "jmp" and not prev.group(capstone.CS_GRP_RET):
+            out.append(p - 1)
+        return out
+
+    def value(self, k: int, reg: str, floor: int, depth: int = 0) -> int | str | None:
+        """What `reg` (a 64-bit family name) holds just before instruction k: a constant, or a C
+        expression over the function's parameters and globals; None when that is not certain.
+        Every way into k is followed back; where ways meet, they must all give the same value."""
         if depth > 4:
             return None
         if reg in self.pinned and self.pinned[reg][0] < k:
             return self.pinned[reg][1]
-        for j in range(k - 1, floor - 1, -1):
-            i = self.ins[j]
-            # a conditional branch falls through into this run (any other way in is a jump
-            # target, refused below); an unconditional one, a return or a call ends it
-            if i.mnemonic == "jmp" or i.group(capstone.CS_GRP_CALL) or i.group(capstone.CS_GRP_RET):
-                return None
-            # a jump into the run between here and the call: another path reaches the call
-            if any(i.address < t <= self.ins[k].address for t in self.targets):
-                return None
-            _, written = i.regs_access()
-            names = {i.reg_name(r) for r in written}
-            if not any(FAMILY.get(n) == reg for n in names):
-                continue
-            return self._evaluate(j, i, reg, floor, depth)
-        if floor == 0 and reg in ARG_REGS:
-            # back to the entry untouched: the argument the function itself was given
-            return f"param_{ARG_REGS.index(reg) + 1}"
-        return None
+        memo: dict[tuple[int, bool], object] = {}
+        UNSET = object()
 
-    def _evaluate(self, j: int, i, reg: str, floor: int, depth: int) -> int | None:
+        def before(p: int, clean: bool, visiting: frozenset, budget: list) -> object:
+            """The value just before instruction p (None: unknown)."""
+            key = (p, clean)
+            if key in memo:
+                return memo[key]
+            if p in visiting or budget[0] <= 0:
+                return None             # a loop, or too far
+            budget[0] -= 1
+            if p == 0 and not self.sources.get(self.ins[0].address):
+                result = f"param_{ARG_REGS.index(reg) + 1}" if reg in ARG_REGS else None
+                memo[key] = result
+                return result
+            preds = self.predecessors(p)
+            if not preds:
+                return None
+            results = []
+            for q in preds:
+                r = at(q, clean, visiting | {p}, budget)
+                if r is None:
+                    memo[key] = None
+                    return None
+                results.append(r)
+            result = results[0] if all(r == results[0] for r in results) else None
+            memo[key] = result
+            return result
+
+        def at(q: int, clean: bool, visiting: frozenset, budget: list) -> object:
+            """The value just after instruction q has run."""
+            i = self.ins[q]
+            if i.group(capstone.CS_GRP_CALL):
+                if reg not in CALLEE_SAVED:
+                    return None         # a call clobbers the volatile registers
+                return before(q, False, visiting, budget)
+            if not i.group(capstone.CS_GRP_JUMP):
+                writes_memory = any(op.type == x86.X86_OP_MEM and op.access & capstone.CS_AC_WRITE
+                                    for op in i.operands)
+                _, written = i.regs_access()
+                if any(FAMILY.get(i.reg_name(r)) == reg for r in written):
+                    return self._evaluate(q, i, reg, floor, depth, clean)
+                if writes_memory:
+                    clean = False
+            return before(q, clean, visiting, budget)
+
+        return before(k, True, frozenset(), [400])
+
+    def _evaluate(self, j: int, i, reg: str, floor: int, depth: int, clean: bool = False) -> int | str | None:
         ops = i.operands
         if not ops or ops[0].type != x86.X86_OP_REG or FAMILY.get(i.reg_name(ops[0].reg)) != reg:
             return None
@@ -123,6 +201,19 @@ class _Function:
                 return (before + delta) & MASK[width]
             if isinstance(before, str) and width == 8:
                 return f"(undefined8)((char *)({before}) + {delta:#x})"
+            return None
+        if mn in ("mov", "movzx") and ops[1].type == x86.X86_OP_MEM and clean:
+            # a load nothing has written over since: the same read, in C
+            mem = ops[1].mem
+            size = ops[1].size
+            if mem.index != 0 or mem.base == 0 or size not in (1, 2, 4, 8):
+                return None
+            ctype = {1: "byte", 2: "ushort", 4: "uint", 8: "ulonglong"}[size]
+            if i.reg_name(mem.base) == "rip":
+                return f"(*({ctype} *)&DAT_{(i.address + i.size + mem.disp) & MASK[8]:x})"
+            base = self.value(j, FAMILY.get(i.reg_name(mem.base), ""), floor, depth + 1)
+            if isinstance(base, str):
+                return f"(*({ctype} *)((char *)({base}) + {mem.disp:#x}))"
             return None
         if mn == "or" and ops[1].type == x86.X86_OP_IMM and ops[1].imm == -1:
             return MASK[width]

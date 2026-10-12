@@ -2,6 +2,43 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 
+/* ref: FUN_1401fc7f0 */
+undefined8 FUN_1401fc7f0(void)
+{
+  CALLF(byte *, FUN_14031e970)(&REFG(undefined8, 0x1431e8ec8),3,0x49,0x7b);
+  atexit(((code *)REFP(0x1425f5320)));
+  return 0;
+}
+
+/* ref: FUN_1401fc860 */
+undefined8 FUN_1401fc860(void)
+{
+  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e92b0));
+  REFG(undefined8, 0x1431e92fc) = 0;
+  REFG(undefined4, 0x1431e9304) = 0;
+  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e92e8));
+  REFG(undefined8, 0x1431e9334) = 0;
+  REFG(undefined8, 0x1431e933c) = 0;
+  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e9320));
+  REFG(undefined8, 0x1431e936c) = 0;
+  REFG(undefined8, 0x1431e9374) = 0;
+  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e9358));
+  REFG(undefined8, 0x1431e93a4) = 0;
+  REFG(undefined8, 0x1431e93ac) = 0;
+  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e9390));
+  REFG(undefined8, 0x1431e93dc) = 0;
+  REFG(undefined8, 0x1431e93e4) = 0;
+  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e93c8));
+  REFG(undefined8, 0x1431e9414) = 0;
+  REFG(undefined8, 0x1431e941c) = 0;
+  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e9400));
+  REFG(undefined8, 0x1431e944c) = 0;
+  REFG(undefined8, 0x1431e9454) = 0;
+  CALLF(undefined8, FUN_141958ac0)(&REFG(float, 0x1431e9438));
+  atexit(((code *)REFP(0x1425f54d0)));
+  return 0;
+}
+
 /* ref: FUN_1401fca30 */
 undefined8 FUN_1401fca30(void)
 {
@@ -1138,6 +1175,48 @@ undefined8 FUN_1401ffea0(void)
   return 0;
 }
 
+/* ref: FUN_1401fff80 */
+undefined8 FUN_1401fff80(void)
+{
+  CALLF(undefined4 *, FUN_1406d0480)(&REFG(undefined8, 0x143218238));
+  REFG(undefined8, 0x1432182d0) = 0;
+  REFG(undefined8, 0x1432182d8) = 0;
+  REFG(undefined8, 0x1432182e0) = 0;
+  REFG(undefined8, 0x143218308) = 0;
+  CALLF(undefined4 *, FUN_1406d0480)(&REFG(undefined8, 0x143218318));
+  REFG(undefined8, 0x1432183b0) = 0;
+  REFG(undefined8, 0x1432183b8) = 0;
+  REFG(undefined8, 0x1432183c0) = 0;
+  REFG(undefined1, 0x1432183e8) = 0;
+  CALLF(undefined4 *, FUN_1406d0480)(&REFG(undefined8, 0x1432183f8));
+  REFG(undefined8, 0x143218490) = 0;
+  REFG(undefined8, 0x143218498) = 0;
+  REFG(undefined8, 0x1432184a0) = 0;
+  REFG(undefined8, 0x1432184c8) = 0;
+  CALLF(undefined4 *, FUN_1406d0480)(&REFG(undefined8, 0x1432184d8));
+  REFG(undefined8, 0x143218570) = 0;
+  REFG(undefined8, 0x143218578) = 0;
+  REFG(undefined8, 0x143218580) = 0;
+  REFG(undefined8, 0x1432185a8) = 0;
+  CALLF(undefined4 *, FUN_1406d0480)(&REFG(undefined8, 0x1432185b8));
+  REFG(undefined8, 0x143218650) = 0;
+  REFG(undefined8, 0x143218658) = 0;
+  REFG(undefined8, 0x143218660) = 0;
+  REFG(undefined8, 0x143218688) = 0;
+  CALLF(undefined4 *, FUN_1406d0480)(&REFG(undefined8, 0x143218698));
+  REFG(undefined8, 0x143218730) = 0;
+  REFG(undefined8, 0x143218738) = 0;
+  REFG(undefined8, 0x143218740) = 0;
+  REFG(undefined8, 0x143218768) = 0;
+  CALLF(undefined4 *, FUN_1406d0480)(&REFG(undefined4, 0x143218778));
+  REFG(undefined8, 0x143218810) = 0;
+  REFG(undefined8, 0x143218818) = 0;
+  REFG(undefined8, 0x143218820) = 0;
+  (*(byte *)((char *)&REFG(undefined8, 0x143218848) + 0)) = 0;
+  atexit(((code *)REFP(0x1425fb6f0)));
+  return 0;
+}
+
 /* ref: FUN_1402000e0 */
 undefined8 FUN_1402000e0(void)
 {
@@ -2082,33 +2161,6 @@ undefined8 FUN_140201f20(void)
     _guard_check_icall();
   }
   atexit((code *)((code *)REFP(0x1425fdf10)));
-  return 0;
-}
-
-/* ref: FUN_140201f50 */
-undefined8 FUN_140201f50(void)
-{
-  CALLF(undefined8 *, FUN_141566900)(&REFG(undefined8, 0x14323cb70),"BufferOnly",0);
-  atexit((code *)&REFG(undefined8, 0x1425fdf20));
-  return 0;
-}
-
-/* ref: FUN_140201f80 */
-undefined8 FUN_140201f80(void)
-{
-  CALLF(undefined8 *, FUN_141566900)(&REFG(undefined8, 0x14323cba8),"BufferOnly",0);
-  atexit((code *)&REFG(undefined8, 0x1425fdf30));
-  return 0;
-}
-
-/* ref: FUN_140201fc0 */
-undefined8 FUN_140201fc0(void)
-{
-  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
-  if (REFG(undefined4, 0x1430d0280) == 1) {
-    _guard_check_icall();
-  }
-  atexit((code *)((code *)REFP(0x1425fdf90)));
   return 0;
 }
 
