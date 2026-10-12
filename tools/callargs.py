@@ -27,6 +27,7 @@ for full, names in {
     for name in names:
         FAMILY[name] = full
 MASK = {8: (1 << 64) - 1, 4: (1 << 32) - 1}
+CALLEE_SAVED = {"rbx", "rbp", "rsi", "rdi", "r12", "r13", "r14", "r15"}
 
 
 class _Function:
@@ -38,11 +39,47 @@ class _Function:
         for i in self.ins:
             if i.group(capstone.CS_GRP_JUMP) and i.operands and i.operands[0].type == x86.X86_OP_IMM:
                 self.targets.add(i.operands[0].imm)
+        self.pinned = self._pinned()
+
+    def _pinned(self) -> dict[str, tuple[int, str]]:
+        """Callee-saved registers that hold an entry argument for the whole function: set once,
+        in the entry run (before any branch or call), from an argument register still holding
+        its entry value, and written nowhere else (the epilogue's pop aside)."""
+        live = {r: f"param_{n + 1}" for n, r in enumerate(ARG_REGS)}
+        found = {}
+        for k, i in enumerate(self.ins):
+            if i.group(capstone.CS_GRP_JUMP) or i.group(capstone.CS_GRP_CALL) or i.group(capstone.CS_GRP_RET):
+                break
+            if k > 0 and i.address in self.targets:
+                break
+            ops = i.operands
+            if (i.mnemonic == "mov" and len(ops) == 2 and ops[0].type == x86.X86_OP_REG and ops[0].size == 8
+                    and ops[1].type == x86.X86_OP_REG):
+                dst, src = FAMILY.get(i.reg_name(ops[0].reg)), FAMILY.get(i.reg_name(ops[1].reg))
+                if dst in CALLEE_SAVED and src in live:
+                    found[dst] = (k, live[src])
+            _, written = i.regs_access()
+            for r in written:
+                family = FAMILY.get(i.reg_name(r))
+                live.pop(family, None)
+        out = {}
+        for reg, (k, value) in found.items():
+            writes = 0
+            for i in self.ins:
+                if i.mnemonic in ("pop", "push"):
+                    continue
+                _, written = i.regs_access()
+                writes += any(FAMILY.get(i.reg_name(r)) == reg for r in written)
+            if writes == 1:
+                out[reg] = (k, value)
+        return out
 
     def value(self, k: int, reg: str, floor: int, depth: int = 0) -> int | None:
         """The constant in `reg` (a 64-bit family name) just before instruction k, or None."""
         if depth > 4:
             return None
+        if reg in self.pinned and self.pinned[reg][0] < k:
+            return self.pinned[reg][1]
         for j in range(k - 1, floor - 1, -1):
             i = self.ins[j]
             if i.group(capstone.CS_GRP_JUMP) or i.group(capstone.CS_GRP_CALL) or i.group(capstone.CS_GRP_RET):
@@ -55,6 +92,9 @@ class _Function:
             if not any(FAMILY.get(n) == reg for n in names):
                 continue
             return self._evaluate(j, i, reg, floor, depth)
+        if floor == 0 and reg in ARG_REGS:
+            # back to the entry untouched: the argument the function itself was given
+            return f"param_{ARG_REGS.index(reg) + 1}"
         return None
 
     def _evaluate(self, j: int, i, reg: str, floor: int, depth: int) -> int | None:
@@ -71,7 +111,9 @@ class _Function:
             return ops[1].imm & MASK[width]
         if mn == "mov" and ops[1].type == x86.X86_OP_REG:
             src = self.value(j, FAMILY.get(i.reg_name(ops[1].reg), ""), floor, depth + 1)
-            return src if not isinstance(src, int) else src & MASK[width]
+            if isinstance(src, str):
+                return src if width == 8 else None
+            return None if src is None else src & MASK[width]
         if mn == "or" and ops[1].type == x86.X86_OP_IMM and ops[1].imm == -1:
             return MASK[width]
         if mn == "lea" and ops[1].type == x86.X86_OP_MEM:
@@ -108,7 +150,7 @@ class CallArgs:
                 continue
             if i.operands[0].imm != target:
                 continue
-            values = [f.value(k, ARG_REGS[p], max(0, k - 24)) for p in positions]
+            values = [f.value(k, ARG_REGS[p], 0) for p in positions]
             if any(v is None for v in values):
                 return None
             if found is not None and values != found:

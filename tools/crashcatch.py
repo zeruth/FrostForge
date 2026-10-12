@@ -149,6 +149,8 @@ def main():
     ap.add_argument("--cwd", default=os.path.join(ROOT, "client", "_classic_"))
     ap.add_argument("--timeout", type=float, default=120.0)
     ap.add_argument("--log", default=None)
+    ap.add_argument("--second-chance", action="store_true",
+                    help="report only an exception nothing handled (guarded faults pass through)")
     ap.add_argument("--args", default="", help="the command line after the exe, as one string")
     args = ap.parse_args()
     exe = os.path.abspath(args.exe)
@@ -175,6 +177,7 @@ def main():
     base = None
     event = DEBUG_EVENT()
     deadline = time.time() + args.timeout
+    loader_break_seen = False
     threads = {pi.dwThreadId: pi.hThread}
     while time.time() < deadline:
         if not k32.WaitForDebugEvent(ctypes.byref(event), 1000):
@@ -189,8 +192,17 @@ def main():
         elif code == EXCEPTION_DEBUG_EVENT:
             record = event.u.Exception.ExceptionRecord
             ecode = record.ExceptionCode
-            if ecode in IGNORED or (ecode & 0xF0000000) == 0x40000000:
+            if ecode == 0x80000003 and loader_break_seen:
+                # an int3 in the mapped reference image is the program's own (src/gen/RefImage.cpp
+                # turns it into "log and return 0"): its handler must see it
+                status = DBG_EXCEPTION_NOT_HANDLED
+            elif ecode in IGNORED or (ecode & 0xF0000000) == 0x40000000:
+                if ecode == 0x80000003:
+                    loader_break_seen = True
                 status = DBG_EXCEPTION_NOT_HANDLED if ecode not in (0x80000003, 0x4000001F) else DBG_CONTINUE
+            elif args.second_chance and event.u.Exception.dwFirstChance:
+                # let the program's own handlers (GenFault's guards) have it first
+                status = DBG_EXCEPTION_NOT_HANDLED
             else:
                 thread = k32.OpenThread(0x1FFFFF, False, event.dwThreadId)
                 context = CONTEXT()
