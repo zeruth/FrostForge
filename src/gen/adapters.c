@@ -1944,6 +1944,13 @@ undefined8 FUN_1411e7c70(unsigned long long a0, unsigned long long a1, unsigned 
     return 0;
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_1411e7d90=?SetLodMin@CM2BaseModel@@QEAAXE@Z")
+extern char gen_alias_1411e7d90;
+undefined8 FUN_1411e7d90(unsigned long long a0, unsigned long long a1) {
+    ((void (*)(unsigned long long, unsigned long long))&gen_alias_1411e7d90)((unsigned long long)a0, (unsigned long long)a1);
+    return 0;
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_1411e7db0=?SetFlag400000@CM2BaseModel@@QEAAX_N@Z")
 extern char gen_alias_1411e7db0;
 undefined8 FUN_1411e7db0(unsigned long long a0, unsigned long long a1) {
@@ -2944,6 +2951,13 @@ undefined8 FUN_1424ad160(unsigned long long a0, unsigned long long a1, unsigned 
 extern char gen_alias_1424afee0;
 undefined8 FUN_1424afee0(unsigned long long a0) {
     ((void (*)(unsigned long long))&gen_alias_1424afee0)((unsigned long long)a0);
+    return 0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_1424c3bd0=?SetMinMaxValues@CSimpleStatusBar@@QEAAXMM@Z")
+extern char gen_alias_1424c3bd0;
+undefined8 FUN_1424c3bd0(unsigned long long a0, double a1, double a2) {
+    ((void (*)(unsigned long long, float, float))&gen_alias_1424c3bd0)((unsigned long long)a0, (float)a1, (float)a2);
     return 0;
 }
 

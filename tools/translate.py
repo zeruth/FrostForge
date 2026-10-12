@@ -1041,6 +1041,54 @@ class Translator:
             span = min(nxt - base, 0x400)
         return (base, g) if addr < base + span else None
 
+    FLOAT_TYPE = re.compile(r"^(?:float|double|float4|float8|float10)$")
+
+    def float_arguments(self, body: str, params: list[str]) -> str:
+        """A floating point parameter handed an argument C types as an integer gets its bits.
+
+        CALLF calls unprototyped, so an argument goes by its own type: Ghidra's `*param_3` (an
+        undefined8 that holds a double) would travel in a general register while the callee
+        reads xmm - garbage there (C_Timer's seconds came out out of range and the timer's result
+        was never built, 2026-10-12). An argument with a floating point type in it is left
+        alone; the rest are reinterpreted, a float's four bytes promoted to double."""
+        floats = {m.group(2) for m in re.finditer(r"^\s*(float|double|float4|float8|float10)\s+\**(\w+)(?:\[[^\]]*\])?;",
+                                                  body, re.M)}
+        floats |= {p.split()[-1] for p in params if len(p.split()) == 2 and self.FLOAT_TYPE.match(p.split()[0])
+                   and re.fullmatch(r"\w+", p.split()[-1])}
+        floaty = re.compile(r"\b(?:" + "|".join(sorted(floats) or ["(?!)"]) + r")\b|\((?:float|double)\)|"
+                            r"\*\s*\((?:float|double)\s*\*\)|REFG\((?:float|double)\b|CALLF\((?:float|double)\b|"
+                            r"\b\d+\.\d*(?:e[+-]?\d+)?\b|\b\d+e[+-]?\d+\b|extraout_XMM|gen_xmm0\.[df]|"
+                            r"\b(?:SQRT|ABS|FLOAT_|GEN_AS_)\w*\(")
+        out, pos = [], 0
+        for m in re.finditer(r"CALLF\(([^,()]+(?:\s*\*)*), FUN_([0-9a-f]{9})\)\(", body):
+            if m.start() < pos:
+                continue
+            sig = self.signature(int(m.group(2), 16))
+            # a float parameter, not a pointer to one (`float *param_7`)
+            def scalar_float(p: str) -> bool:
+                return bool(p.split()) and "*" not in p and bool(self.FLOAT_TYPE.match(p.split()[0]))
+
+            if sig is None or not any(scalar_float(p) for p in sig[2]):
+                continue
+            # the argument list, to its matching parenthesis
+            depth, i = 1, m.end()
+            while i < len(body) and depth:
+                depth += {"(": 1, ")": -1}.get(body[i], 0)
+                i += 1
+            args = split_args(body[m.end():i - 1])
+            changed = False
+            for k, arg in enumerate(args):
+                if k >= len(sig[2]) or not scalar_float(sig[2][k]) or floaty.search(arg):
+                    continue
+                ptype = sig[2][k].split()[0]
+                helper = "GEN_AS_FLOAT" if ptype in ("float", "float4") else "GEN_AS_DOUBLE"
+                args[k] = f"{helper}((unsigned long long)({arg}))"
+                changed = True
+            if changed:
+                out.append(body[pos:m.end()] + ",".join(args) + ")")
+                pos = i
+        return "".join(out) + body[pos:]
+
     def decl(self, a: int) -> tuple[str, list[str] | None]:
         """(return type, parameters) as C can declare them; parameters None when Ghidra's use a
         type C does not know, so the definition takes none and reads nothing."""
@@ -1292,6 +1340,7 @@ class Translator:
         body = re.sub(r"\(\*REFG\(undefined\d?, (0x[0-9a-f]+)\)\)\s*\(", r"(*REFG(code *, \1))(", body)
         if re.search(r"\*REFG\(undefined\d?,|REFG\(undefined\d?, 0x[0-9a-f]+\)\s*\[", body):
             raise Untranslatable("a global used as a pointer the data export does not type")
+        body = self.float_arguments(body, params)
         # callers are unprototyped, so a float argument arrives promoted to double
         decls, narrow = [], []
         for p in params:

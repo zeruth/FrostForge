@@ -1004,6 +1004,12 @@ undefined8 FUN_14057ab40() {
     return (undefined8)0;
 }
 
+/* bad data or a trap */
+undefined8 FUN_1405a3230() {
+    GenUnimplemented(0x1405a3230ULL);
+    return (undefined8)0;
+}
+
 /* the decompiler lost a call's arguments (FUN_1405a50a0 reads 2, the call passes 1) */
 undefined8 FUN_1405a4c00() {
     GenUnimplemented(0x1405a4c00ULL);
@@ -4199,6 +4205,12 @@ undefined8 FUN_14187f460() {
 /* did not compile: C2100 you cannot dereference an operand of type 'undefined8' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\g */
 undefined8 FUN_1418815f0() {
     GenUnimplemented(0x1418815f0ULL);
+    return (undefined8)0;
+}
+
+/* the decompiler lost a call's arguments (FUN_14185de50 reads 1, the call passes 0) */
+undefined8 FUN_141881f10() {
+    GenUnimplemented(0x141881f10ULL);
     return (undefined8)0;
 }
 

@@ -9,6 +9,7 @@
 #include "os/Os.hpp"
 #include "shadereffect/ShaderEffectContext.hpp"
 #include "util/Unimplemented.hpp"
+#include <cmath>
 #include <cstring>
 
 namespace {
@@ -63,22 +64,105 @@ void TempSet(FRAMEBUFFERTEMP* temp, const char* name, const int32_t* size, const
     temp->m_target = *target;
 }
 
-// The FSR passes: EASU to upscale into `dest` (FUN_1412a2380), RCAS to sharpen it
-// (FUN_1412a21c0).
-// ref: FUN_1412a2380
-void ResampleEasu() {
-    FROST_UNIMPLEMENTED();
+// A float as IEEE half, rounded to nearest (FUN_1423643b0).
+uint16_t FloatToHalf(float value) {
+    uint32_t bits;
+    std::memcpy(&bits, &value, 4);
+    uint32_t sign = (bits >> 16) & 0x8000;
+    int32_t exponent = static_cast<int32_t>((bits >> 23) & 0xff) - 127 + 15;
+    uint32_t mantissa = bits & 0x7fffff;
+    if (((bits >> 23) & 0xff) == 0xff) {
+        return static_cast<uint16_t>(sign | 0x7c00 | (mantissa != 0 ? 0x200 : 0));
+    }
+    if (exponent >= 0x1f) {
+        return static_cast<uint16_t>(sign | 0x7c00);
+    }
+    if (exponent <= 0) {
+        if (exponent < -10) {
+            return static_cast<uint16_t>(sign);
+        }
+        mantissa |= 0x800000;
+        uint32_t shift = static_cast<uint32_t>(14 - exponent);
+        uint32_t half = mantissa >> shift;
+        if (((mantissa >> (shift - 1)) & 1) != 0) {
+            half++;
+        }
+        return static_cast<uint16_t>(sign | half);
+    }
+    uint32_t half = sign | (static_cast<uint32_t>(exponent) << 10) | (mantissa >> 13);
+    if ((mantissa & 0x1000) != 0) {
+        half++;
+    }
+    return static_cast<uint16_t>(half);
 }
 
+// The FSR passes: EASU to upscale `source` into `dest` (its FsrEasuCon constants: the input
+// to output scale and offset, then the input texel steps), RCAS to sharpen it.
+// ref: FUN_1412a2380
+void ResampleEasu(GxRenderContext* context, const float* rect, gxDx12Backend::Tex* source, gxDx12Backend::Tex* dest,
+    uint8_t blend) {
+    GXRENDERTARGETS targets;
+    std::memset(&targets, 0, sizeof(targets));
+    GxRenderTargetsAttach(&targets, 1, dest);
+    GxRenderTargetsCount(&targets);
+    context->Clear(&targets, static_cast<uint16_t>(blend ^ 1), 0, 1.0f, 0, 0);
+    float outWidth = static_cast<float>(dest->m_width);
+    float outHeight = static_cast<float>(dest->m_height);
+    float inWidth = static_cast<float>(source->m_width);
+    float inHeight = static_cast<float>(source->m_height);
+    float* c = context->LockConstants(2, 0, 0x50);
+    c[0] = (1.0f / outWidth) * inWidth;
+    c[1] = (1.0f / outHeight) * inHeight;
+    c[2] = inWidth * 0.5f * (1.0f / outWidth) - 0.5f;   // DAT_14261a988
+    c[3] = inHeight * 0.5f * (1.0f / outHeight) - 0.5f;
+    c[4] = 1.0f / inWidth;
+    c[5] = 1.0f / inHeight;
+    c[6] = 1.0f / inWidth;
+    c[7] = -(1.0f / inHeight);
+    c[8] = -(1.0f / inWidth);
+    c[9] = (1.0f / inHeight) + (1.0f / inHeight);
+    c[10] = 1.0f / inWidth;
+    c[11] = (1.0f / inHeight) + (1.0f / inHeight);
+    c[12] = 0.0f;
+    c[13] = (1.0f / inHeight) * 4.0f;                    // DAT_1426c975c
+    for (int32_t i = 14; i < 20; i++) {
+        c[i] = 0.0f;
+    }
+    context->UnlockConstants(2, 0);
+    uint32_t kind = dest->m_format == 2 ? 2 : 0;
+    context->SetPipeline(s_pipelines[8 + (kind + blend) * 2]);
+    context->BindTexture(2, 1, source, 0);
+    context->SetSampler(2, 0, s_copySampler);
+    float* vertex = context->LockConstants(0, 1, 0x10);
+    std::memcpy(vertex, rect, 0x10);
+    context->UnlockConstants(0, 1);
+    context->Draw(3, 1, 0, 0, 0);
+}
+
+// RCAS over `source` into `dest`: FsrRcasCon's exp2(-sharpness), as a float and as two halves.
 // ref: FUN_1412a21c0
 void ResampleRcas(GxRenderContext* context, const float* rect, gxDx12Backend::Tex* source, gxDx12Backend::Tex* dest,
     float sharpness) {
-    (void)context;
-    (void)rect;
-    (void)source;
-    (void)dest;
-    (void)sharpness;
-    FROST_UNIMPLEMENTED();
+    GXRENDERTARGETS targets;
+    std::memset(&targets, 0, sizeof(targets));
+    GxRenderTargetsAttach(&targets, 1, dest);
+    GxRenderTargetsCount(&targets);
+    context->Clear(&targets, 1, 0, 1.0f, 0, 0);
+    float* c = context->LockConstants(2, 0, 0x50);
+    float scale = exp2f(-sharpness);                     // FUN_142416098
+    uint16_t half = FloatToHalf(scale);
+    uint32_t packed = static_cast<uint32_t>(half) | (static_cast<uint32_t>(half) << 16);
+    std::memset(c, 0, 0x50);
+    c[0] = scale;
+    std::memcpy(&c[1], &packed, 4);
+    context->UnlockConstants(2, 0);
+    context->SetPipeline(s_pipelines[9 + (dest->m_format == 2 ? 4 : 0)]);
+    float* vertex = context->LockConstants(0, 1, 0x10);
+    std::memcpy(vertex, rect, 0x10);
+    context->UnlockConstants(0, 1);
+    context->BindTexture(2, 1, source, 0);
+    context->SetSampler(2, 0, s_copySampler);
+    context->Draw(3, 1, 0, 0, 0);
 }
 
 // One full-screen triangle from `source` into `dest`: cleared first unless blending, the
@@ -224,7 +308,7 @@ void ResampleToTarget(GxRenderContext* context, const void* environment, gxDx12B
         }
         if (!sameSize || !sharpen) {
             if (mode == 3) {
-                ResampleEasu();
+                ResampleEasu(context, rect, source, target, blend ? 1 : 0);
             } else {
                 ResampleBlit(context, rect, source, target, blitMode, blend ? 1 : 0);
             }
@@ -233,6 +317,9 @@ void ResampleToTarget(GxRenderContext* context, const void* environment, gxDx12B
         if (sharpen) {
             ResampleRcas(context, rect, source, dest, options->m_sharpness);
         }
+    } else if (mode == 3) {
+        // the same size, no sharpening: EASU still, as the reference does
+        ResampleEasu(context, rect, source, target, blend ? 1 : 0);
     } else {
         ResampleBlit(context, rect, source, target, blitMode, blend ? 1 : 0);
     }

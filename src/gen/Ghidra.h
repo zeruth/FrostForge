@@ -66,6 +66,19 @@ typedef unsigned long long code();
    function and its callers, and a definition earlier in the same file would otherwise impose its
    own (floats are promoted to double; the definitions take them that way) */
 #define CALLF(type, f) ((type (*)())(f))
+/* a floating point argument Ghidra spelled through an integer (`*param_3` of an undefined8 *):
+   its bits, not its value - an unprototyped call would pass the integer in a general register
+   while the callee reads xmm */
+static __inline double GEN_AS_DOUBLE(unsigned long long bits) {
+    union { unsigned long long u; double d; } v;
+    v.u = bits;
+    return v.d;
+}
+static __inline double GEN_AS_FLOAT(unsigned long long bits) {
+    union { unsigned int u; float f; } v;
+    v.u = (unsigned int)bits;
+    return (double)v.f;
+}
 
 /* Ghidra's piecewise helpers */
 #define CONCAT11(a, b) ((uint16_t)(((uint16_t)(uint8_t)(a) << 8) | (uint8_t)(b)))
