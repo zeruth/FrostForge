@@ -203,6 +203,7 @@ unsigned long long FUN_140f4e170(unsigned long long param_1);
 unsigned long long FUN_140f4eea0(unsigned long long param_1);
 unsigned long long FUN_140f511e0(unsigned long long param_1);
 unsigned long long FUN_140f52550(unsigned long long param_1);
+unsigned long long FUN_140fa2c30(unsigned long long param_1);
 unsigned long long FUN_140fa3a00(unsigned long long param_1);
 unsigned long long FUN_14107fdf0(unsigned long long param_1);
 unsigned long long FUN_141080b20(unsigned long long param_1);
@@ -1148,6 +1149,15 @@ int Lua_C_Console_PrintAllMatchingCommands(lua_State* L) {
     __try {
         return static_cast<int>(FUN_140e248b0(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x140e248b0ull, GetExceptionInformation())) {
+        return 0;
+    }
+}
+
+// translated: FUN_140fa2c30
+int Lua_C_Debug_TeleportToMapDebugObject(lua_State* L) {
+    __try {
+        return static_cast<int>(FUN_140fa2c30(reinterpret_cast<unsigned long long>(L)));
+    } __except (GenFault(0x140fa2c30ull, GetExceptionInformation())) {
         return 0;
     }
 }

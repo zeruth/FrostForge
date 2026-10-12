@@ -35,6 +35,7 @@ from pathlib import Path
 
 import callargs
 import fidelity as F
+import floatdata
 import lift
 from corpus import load_corpus, strip_retcheck
 from wowbin import Binary
@@ -63,8 +64,6 @@ HARD = [
     ("thread-local storage", re.compile(r"ThreadLocalStoragePointer|_tls_index")),
     ("bad data or a trap", re.compile(r"halt_baddata|\bswi\(|software_interrupt|halt_unimplemented")),
     ("struct member access", re.compile(r"->")),
-    # the control-flow-guard check alone: the indirect call it guarded is gone from the body
-    ("an indirect call the decompiler lost", re.compile(r"^\s*_guard_check_icall\(\);", re.M)),
 ]
 CRT = {"memcpy", "memmove", "memset", "memcmp", "strlen", "strcmp", "strncmp", "strchr", "strrchr", "strstr",
        "strcpy", "strncpy", "strcat", "abs", "labs", "fabs", "sqrt", "sqrtf", "floor", "floorf", "ceil", "ceilf",
@@ -564,9 +563,15 @@ class Translator:
         for a, e in self.cor.items():
             self.by_name[e["name"]].append(a)
         self.refdata = load_refdata()
+        # globals the instructions use as floating point, where the export only gave a size
+        for addr, kind in floatdata.load().items():
+            size, gtype = self.refdata.get(addr, (0, "undefined"))
+            if gtype.startswith("undefined") and size in (0, 4 if kind == "float" else 8):
+                self.refdata[addr] = (4 if kind == "float" else 8, kind)
         self.ref = Binary()
         self._lifted: dict[int, str | None] = {}
         self._arity: dict[int, int | None] = {}
+        self._extra_params: dict[int, dict[int, str]] = {}
         self.callargs = callargs.CallArgs(self.ref)
         self.patches = json.loads((ROOT / "tools/translate_patches.json").read_text(encoding="utf-8"))
         fid = json.loads(F.OUT_JSON.read_text())
@@ -751,11 +756,21 @@ class Translator:
                 continue
             sig = self.signature(b)
             positions = list(range(len(args), need))
-            if sig is not None and any(p < len(sig[2]) and re.match(r"(float|double)\b", sig[2][p])
-                                       for p in positions):
-                continue
             values = self.callargs.recover(a, e["size"], b, positions)
             if values is not None:
+                # a float travels in an xmm register: only an argument this function was itself
+                # handed in the same place (a wrapper passing it on) carries it unchanged
+                if sig is not None and any(p < len(sig[2]) and re.match(r"(float|double)\b", sig[2][p])
+                                           and values[k] != f"param_{p + 1}"
+                                           for k, p in enumerate(positions)):
+                    continue
+                own = len(self.signature(a)[2]) if self.signature(a) else 0
+                for k, p in enumerate(positions):
+                    m = re.fullmatch(r"param_(\d+)", str(values[k]))
+                    if m and int(m.group(1)) > own:
+                        # a parameter the header never declared (the function only hands it on)
+                        ptype = sig[2][p].rsplit(None, 1)[0] if sig and p < len(sig[2]) else "undefined8"
+                        self._extra_params.setdefault(a, {})[int(m.group(1))] = ptype
                 spelled = [v if isinstance(v, str) else f"{v:#x}" for v in values]
                 fixes.append((end, ("," if args else "") + ",".join(spelled)))
         for pos, extra in reversed(fixes):
@@ -812,6 +827,12 @@ class Translator:
         if ret == "void":
             ret = "undefined8"
         params = [p.strip() for p in m.group(3).split(",") if p.strip() and p.strip() != "void"]
+        extra = self._extra_params.get(a, {}) if hasattr(self, "_extra_params") else {}
+        if extra and len(params) < max(extra):
+            # parameters found passed on at a call (recover_arguments); any between them that
+            # nothing names are registers all the same
+            for n in range(len(params) + 1, max(extra) + 1):
+                params.append(f"{extra.get(n, 'undefined8')} param_{n}")
         return ret, m.group(2), params
 
     def held_global(self, addr: int):
@@ -908,6 +929,12 @@ class Translator:
         lost = self.lost_arguments(text)
         if lost:
             return lost
+        # a control-flow-guard check standing alone may be all that is left of an indirect call
+        # (or a plain call to the guard routine, which guards nothing): the instructions say which
+        if re.search(r"^\s*_guard_check_icall\([^;]*\);", text, re.M) and a in self.cor:
+            shown = len(re.findall(r"\(\*+\s*\([^;]*?\)\s*\(|\(\*\w+\)\s*\(", text))
+            if self.callargs.indirect_calls(a, self.cor[a]["size"]) > shown:
+                return "an indirect call the decompiler lost"
         # the reference's own call list (tools/fidelity.py's cache, once the function has been
         # measured): a body that shows under half of it is one the decompiler lost
         ref = self.refcache.get(f"{a:x}")

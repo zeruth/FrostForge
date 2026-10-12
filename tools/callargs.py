@@ -150,6 +150,14 @@ class CallArgs:
         self.binary = binary
         self._functions: dict[int, _Function] = {}
 
+    def indirect_calls(self, function: int, size: int) -> int:
+        """How many calls the function makes through a register or memory (imports included)."""
+        f = self._functions.get(function)
+        if f is None:
+            f = self._functions[function] = _Function(self.binary, function, size)
+        return sum(1 for i in f.ins if i.mnemonic == "call" and i.operands
+                   and i.operands[0].type != x86.X86_OP_IMM)
+
     def recover(self, function: int, size: int, target: int, positions: list[int]) -> list[int] | None:
         """The constants every call from `function` to `target` passes in the argument
         `positions` (0-3), when all calls agree; None when any is unknown or they differ."""

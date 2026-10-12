@@ -364,13 +364,6 @@ int Lua_C_Debug_GetMapDebugObjects(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140fa2c30
-int Lua_C_Debug_TeleportToMapDebugObject(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140fa32c0
 int Lua_C_Debug_TeleportToMapLocation(lua_State* L) {
     (void)L;

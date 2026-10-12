@@ -2,6 +2,824 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 
+/* ref: FUN_1401fca30 */
+undefined8 FUN_1401fca30(void)
+{
+  REFG(undefined8, 0x142d2aed8) = 0x142d2aed1;
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2aec8));
+  REFG(undefined8, 0x142d2aec8) = 0x10;
+  REFG(undefined8, 0x142d2aed0) = (undefined *)&REFG(undefined8, 0x142d2aed0);
+  REFG(undefined8, 0x142d2aed8) = 0x142d2aed1;
+  REFG(undefined4, 0x142d2af08) = 0xffffffff;
+  REFG(undefined8, 0x142d2af0c) = 0x80000000;
+  atexit(((code *)REFP(0x1425f5690)));
+  return 0;
+}
+
+/* ref: FUN_1401fcb30 */
+undefined8 FUN_1401fcb30(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425f5780)));
+  return 0;
+}
+
+/* ref: FUN_1401fcb70 */
+undefined8 FUN_1401fcb70(void)
+{
+  REFG(undefined8, 0x142d2b008) = 0x142d2b001;
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2aff8));
+  REFG(undefined8, 0x142d2aff8) = 0x10;
+  REFG(undefined8, 0x142d2b000) = &REFG(undefined8, 0x142d2b000);
+  REFG(undefined8, 0x142d2b008) = 0x142d2b001;
+  REFG(undefined4, 0x142d2b038) = 0xffffffff;
+  REFG(undefined8, 0x142d2b03c) = 0x80000000;
+  atexit(((code *)REFP(0x1425f57b0)));
+  return 0;
+}
+
+/* ref: FUN_1401fcbe0 */
+undefined8 FUN_1401fcbe0(void)
+{
+  REFG(undefined8, 0x142d2afb8) = 0x142d2afb1;
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2afa8));
+  REFG(undefined8, 0x142d2afa8) = 0x10;
+  REFG(undefined8, 0x142d2afb0) = (undefined *)&REFG(undefined8, 0x142d2afb0);
+  REFG(undefined8, 0x142d2afb8) = 0x142d2afb1;
+  REFG(undefined4, 0x142d2afe8) = 0xffffffff;
+  REFG(undefined8, 0x142d2afec) = 0x80000000;
+  atexit(((code *)REFP(0x1425f5850)));
+  return 0;
+}
+
+/* ref: FUN_1401fcc70 */
+undefined8 FUN_1401fcc70(void)
+{
+  CALLF(undefined8 *, FUN_141566900)(&REFG(undefined8, 0x1431e9570),"BufferOnly",0);
+  atexit((code *)&REFG(undefined8, 0x1425f59c0));
+  return 0;
+}
+
+/* ref: FUN_1401fcca0 */
+undefined8 FUN_1401fcca0(void)
+{
+  REFG(undefined8, 0x1431e9b80) = CALLF(ulonglong, FUN_140216fc0)("fgSelectedRoles",0xaf63e14c8601f50b);
+  REFG(undefined8, 0x1431e9b90) = 0x10;
+  REFG(undefined8, 0x1431e9b88) = "lfgSelectedRoles";
+  REFG(undefined8, 0x1431e9ba0) = 0x20000120;
+  REFG(undefined8, 0x1431e9b98) = "Stores what roles the player is willing to take on.";
+  REFG(undefined8, 0x1431e9ba4) = 4;
+  REFG(undefined8, 0x1431e9ba8) = &REFG(undefined8, 0x1431e9bc0);
+  REFG(undefined8, 0x1431e9bb0) = 0;
+  REFG(undefined8, 0x1431e9bb8) = 0x8000000000000010;
+  REFG(undefined8, 0x1431e9bc0) = 0;
+  REFG(undefined8, 0x1431e9bd8) = 0;
+  REFG(undefined4, 0x1431e9be0) = 0;
+  REFG(undefined8, 0x1431e9be8) = 0;
+  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1431e9ba8),&REFG(undefined8, 0x142815450),0);
+  REFG(undefined8, 0x1431e9bf0) = 0;
+  REFG(undefined8, 0x1431e9bf8) = &REFG(undefined8, 0x1431e9c10);
+  REFG(undefined8, 0x1431e9c00) = 0;
+  REFG(undefined8, 0x1431e9c08) = 0x800000000000000f;
+  REFG(undefined8, 0x1431e9c10) = 0;
+  REFG(undefined1, 0x1431e9c20) = 0;
+  atexit(((code *)REFP(0x1425f59d0)));
+  return 0;
+}
+
+/* ref: FUN_1401fcdb0 */
+undefined8 FUN_1401fcdb0(void)
+{
+  REFG(undefined8, 0x1431e9ac8) = CALLF(ulonglong, FUN_140216fc0)("otifiedOfNewMail",0xaf63e34c8601f871);
+  REFG(undefined8, 0x1431e9ad8) = 0x11;
+  REFG(undefined8, 0x1431e9ad0) = "notifiedOfNewMail";
+  REFG(undefined8, 0x1431e9ae8) = 0x20000060;
+  REFG(undefined8, 0x1431e9ae0) =
+       "Stores whether the player has been previously notified of new mail. Only set to false once everything in their Inbox has been marked as read."
+  ;
+  REFG(undefined8, 0x1431e9aec) = 4;
+  REFG(undefined8, 0x1431e9af0) = &REFG(undefined8, 0x1431e9b08);
+  REFG(undefined8, 0x1431e9af8) = 0;
+  REFG(undefined8, 0x1431e9b00) = 0x8000000000000010;
+  REFG(undefined8, 0x1431e9b08) = 0;
+  REFG(undefined8, 0x1431e9b20) = 0;
+  REFG(undefined4, 0x1431e9b28) = 0;
+  REFG(undefined8, 0x1431e9b30) = 0;
+  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1431e9af0),&REFG(undefined8, 0x14261aa48),0);
+  REFG(undefined8, 0x1431e9b38) = 0;
+  REFG(undefined8, 0x1431e9b40) = &REFG(undefined8, 0x1431e9b58);
+  REFG(undefined8, 0x1431e9b48) = 0;
+  REFG(undefined8, 0x1431e9b50) = 0x800000000000000f;
+  REFG(undefined8, 0x1431e9b58) = 0;
+  REFG(undefined8, 0x1431e9b68) = 0;
+  atexit(((code *)REFP(0x1425f5a30)));
+  return 0;
+}
+
+/* ref: FUN_1401fcec0 */
+undefined8 FUN_1401fcec0(void)
+{
+  REFG(undefined8, 0x1431e9c38) = CALLF(ulonglong, FUN_140216fc0)("vpSelectedRoles",0xaf63ed4c8602096f);
+  REFG(undefined8, 0x1431e9c48) = 0x10;
+  REFG(undefined8, 0x1431e9c40) = "pvpSelectedRoles";
+  REFG(undefined8, 0x1431e9c58) = 0x20000120;
+  REFG(undefined8, 0x1431e9c50) = "Stores what roles the player will fulfill in a BG.";
+  REFG(undefined8, 0x1431e9c5c) = 4;
+  REFG(undefined8, 0x1431e9c60) = &REFG(undefined8, 0x1431e9c78);
+  REFG(undefined8, 0x1431e9c68) = 0;
+  REFG(undefined8, 0x1431e9c70) = 0x8000000000000010;
+  REFG(undefined8, 0x1431e9c78) = 0;
+  REFG(undefined8, 0x1431e9c90) = 0;
+  REFG(undefined4, 0x1431e9c98) = 0;
+  REFG(undefined8, 0x1431e9ca0) = 0;
+  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1431e9c60),&REFG(undefined8, 0x142815450),0);
+  REFG(undefined8, 0x1431e9ca8) = 0;
+  REFG(undefined8, 0x1431e9cb0) = &REFG(undefined8, 0x1431e9cc8);
+  REFG(undefined8, 0x1431e9cb8) = 0;
+  REFG(undefined8, 0x1431e9cc0) = 0x800000000000000f;
+  REFG(undefined8, 0x1431e9cc8) = 0;
+  REFG(undefined1, 0x1431e9cd8) = 0;
+  atexit(((code *)REFP(0x1425f5a90)));
+  return 0;
+}
+
+/* ref: FUN_1401fcfd0 */
+undefined8 FUN_1401fcfd0(void)
+{
+  REFG(undefined8, 0x1431e9d08) = CALLF(ulonglong, FUN_140216fc0)("estrictCalendarInvites",0xaf63ef4c86020cd5);
+  REFG(undefined8, 0x1431e9d18) = 0x17;
+  REFG(undefined8, 0x1431e9d28) = 0x20000010;
+  REFG(undefined8, 0x1431e9d10) = "restrictCalendarInvites";
+  REFG(undefined8, 0x1431e9d2c) = 5;
+  REFG(undefined8, 0x1431e9d20) = "Whether to restrict calendar invites to friends and guilds only.";
+  REFG(undefined8, 0x1431e9d38) = 0;
+  REFG(undefined8, 0x1431e9d30) = &REFG(undefined8, 0x1431e9d48);
+  REFG(undefined8, 0x1431e9d48) = 0;
+  REFG(undefined8, 0x1431e9d40) = 0x8000000000000010;
+  REFG(undefined8, 0x1431e9d60) = ((code *)REFP(0x14196ee40));
+  REFG(undefined8, 0x1431e9d68) = 0;
+  REFG(undefined8, 0x1431e9d70) = 0;
+  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1431e9d30),&REFG(undefined8, 0x14261aa48),1);
+  REFG(undefined8, 0x1431e9d78) = 0;
+  REFG(undefined8, 0x1431e9d80) = &REFG(undefined8, 0x1431e9d98);
+  REFG(undefined8, 0x1431e9d88) = 0;
+  REFG(undefined8, 0x1431e9d90) = 0x800000000000000f;
+  REFG(undefined8, 0x1431e9d98) = 0;
+  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x1431e9ce0),&REFG(undefined8, 0x1431e9cf8));
+  REFG(undefined1, 0x1431e9da8) = 1;
+  atexit(((code *)REFP(0x1425f5af0)));
+  return 0;
+}
+
+/* ref: FUN_1401fd190 */
+undefined8 FUN_1401fd190(void)
+{
+  CALLF(undefined8, FUN_1419784f0)(&REFG(undefined8, 0x142d2b158));
+  atexit(((code *)REFP(0x1425f5c10)));
+  return 0;
+}
+
+/* ref: FUN_1401fd1c0 */
+undefined8 FUN_1401fd1c0(void)
+{
+  CALLF(undefined8, FUN_141972ee0)(&REFG(undefined8, 0x142d2b210),0);
+  atexit(((code *)REFP(0x1425f5cc0)));
+  return 0;
+}
+
+/* ref: FUN_1401fd200 */
+undefined8 FUN_1401fd200(void)
+{
+  CALLF(undefined8 *, FUN_141566900)(&REFG(undefined8, 0x1431e9fe0),"BufferOnly",0);
+  atexit((code *)&REFG(undefined8, 0x1425f5db0));
+  return 0;
+}
+
+/* ref: FUN_1401fd280 */
+undefined8 FUN_1401fd280(void)
+{
+  REFG(undefined8, 0x142d2bcc8) = 0x142d2bcc1;
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2bcb8));
+  REFG(undefined8, 0x142d2bcb8) = 0x10;
+  REFG(undefined8, 0x142d2bcc0) = (undefined *)&REFG(undefined8, 0x142d2bcc0);
+  REFG(undefined8, 0x142d2bcc8) = 0x142d2bcc1;
+  REFG(undefined8, 0x142d2bcf8) = 0xffffffff;
+  REFG(undefined8, 0x142d2bcfc) = 0x80000000;
+  atexit(((code *)REFP(0x1425f5ef0)));
+  return 0;
+}
+
+/* ref: FUN_1401fd2f0 */
+undefined8 FUN_1401fd2f0(void)
+{
+  REFG(undefined8, 0x142d2bd28) = 0x142d2bd21;
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2bd18));
+  REFG(undefined4, 0x142d2bd18) = 0x10;
+  REFG(undefined8, 0x142d2bd20) = (undefined *)&REFG(undefined8, 0x142d2bd20);
+  REFG(undefined8, 0x142d2bd28) = 0x142d2bd21;
+  REFG(undefined4, 0x142d2bd58) = 0xffffffff;
+  REFG(undefined8, 0x142d2bd5c) = 0x80000000;
+  atexit(((code *)REFP(0x1425f6040)));
+  return 0;
+}
+
+/* ref: FUN_1401fd370 */
+undefined8 FUN_1401fd370(void)
+{
+  REFG(undefined8, 0x142d2bd78) = 0x142d2bd71;
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2bd68));
+  REFG(undefined4, 0x142d2bd68) = 0x10;
+  REFG(undefined8, 0x142d2bd70) = (undefined *)&REFG(undefined8, 0x142d2bd70);
+  REFG(undefined8, 0x142d2bd78) = 0x142d2bd71;
+  REFG(undefined4, 0x142d2bda8) = 0xffffffff;
+  REFG(undefined8, 0x142d2bdac) = 0x80000000;
+  atexit(((code *)REFP(0x1425f6100)));
+  return 0;
+}
+
+/* ref: FUN_1401fd610 */
+undefined8 FUN_1401fd610(void)
+{
+  CALLF(undefined8 *, FUN_141566900)(&REFG(undefined8, 0x1431ecf28),"BufferOnly",0);
+  atexit((code *)&REFG(undefined8, 0x1425f6650));
+  return 0;
+}
+
+/* ref: FUN_1401fd640 */
+undefined8 FUN_1401fd640(void)
+{
+  __declspec(align(16)) unsigned char gen_frame[0x18 + sizeof(undefined1[16])];
+  
+  (*(undefined4 *)(gen_frame + 0x10)) = 0x2929;
+  (*(undefined4 *)(gen_frame + 0x14)) = 0x354f;
+  (*(undefined8 *)(gen_frame + 0x0)) = REFG(undefined8, 0x14281f390);
+  (*(undefined8 *)(gen_frame + 0x8)) = REFG(undefined8, 0x14281f398);
+  CALLF(undefined8, FUN_1419ad790)(&REFG(undefined8, 0x142d2c038),&(*(undefined8 *)(gen_frame + 0x0)),((undefined1 *)(gen_frame + 0x18)));
+  atexit(((code *)REFP(0x1425f6660)));
+  return 0;
+}
+
+/* ref: FUN_1401fd690 */
+undefined8 FUN_1401fd690(void)
+{
+  REFG(undefined8, 0x142d2c958) = 0x142d2c951;
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2c948));
+  REFG(undefined8, 0x142d2c948) = 0x10;
+  REFG(undefined8, 0x142d2c950) = (undefined *)&REFG(undefined8, 0x142d2c950);
+  REFG(undefined8, 0x142d2c958) = 0x142d2c951;
+  REFG(undefined4, 0x142d2c988) = 0xffffffff;
+  REFG(undefined8, 0x142d2c98c) = 0x80000000;
+  atexit(((code *)REFP(0x1425f66c0)));
+  return 0;
+}
+
+/* ref: FUN_1401fd700 */
+undefined8 FUN_1401fd700(void)
+{
+  undefined8 *puVar1;
+  longlong lVar2;
+  
+  lVar2 = 0xfc;
+  puVar1 = &REFG(undefined8, 0x1431ed210);
+  do {
+    puVar1[-2] = (*(undefined8 (*)[4])(uintptr_t)0x14281fd08ULL);
+    *(undefined4 *)(puVar1 + -1) = 0xdddddddd;
+    puVar1[1] = (ulonglong)puVar1 | 1;
+    *puVar1 = puVar1;
+    *(undefined4 *)(puVar1 + 3) = 0;
+    puVar1[4] = 0;
+    *(undefined4 *)(puVar1 + 5) = 0;
+    *(undefined4 *)(puVar1 + 6) = 0;
+    *(undefined4 *)(puVar1 + 2) = 0;
+    CALLF(undefined8, FUN_140325700)(puVar1 + -1);
+    *(undefined4 *)(puVar1 + -1) = 0x10;
+    *puVar1 = puVar1;
+    puVar1[1] = (ulonglong)puVar1 | 1;
+    *(undefined4 *)(puVar1 + 7) = 0xffffffff;
+    *(undefined4 *)((longlong)puVar1 + 0x3c) = 0x80000000;
+    puVar1 = puVar1 + 10;
+    lVar2 = lVar2 + -1;
+  } while (lVar2 != 0);
+  atexit(((code *)REFP(0x1425f6760)));
+  return 0;
+}
+
+/* ref: FUN_1401fd7b0 */
+undefined8 FUN_1401fd7b0(void)
+{
+  REFG(undefined8, 0x142d2c8b8) = 0x142d2c8b1;
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2c8a8));
+  REFG(undefined4, 0x142d2c8a8) = 0x10;
+  REFG(undefined8, 0x142d2c8b0) = (undefined *)&REFG(undefined8, 0x142d2c8b0);
+  REFG(undefined8, 0x142d2c8b8) = 0x142d2c8b1;
+  REFG(undefined4, 0x142d2c8e8) = 0xffffffff;
+  REFG(undefined8, 0x142d2c8ec) = 0x80000000;
+  atexit(((code *)REFP(0x1425f6830)));
+  return 0;
+}
+
+/* ref: FUN_1401fd820 */
+undefined8 FUN_1401fd820(void)
+{
+  CALLF(undefined8, FUN_1419cb870)(&REFG(undefined8, 0x142d2cac8));
+  atexit(((code *)REFP(0x1425f68d0)));
+  return 0;
+}
+
+/* ref: FUN_1401fd880 */
+undefined8 FUN_1401fd880(void)
+{
+  REFG(undefined8, 0x142d2c908) = 0x142d2c901;
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2c8f8));
+  REFG(undefined8, 0x142d2c8f8) = 0x10;
+  REFG(undefined8, 0x142d2c900) = (undefined *)&REFG(undefined8, 0x142d2c900);
+  REFG(undefined8, 0x142d2c908) = 0x142d2c901;
+  REFG(undefined4, 0x142d2c938) = 0xffffffff;
+  REFG(undefined8, 0x142d2c93c) = 0x80000000;
+  atexit(((code *)REFP(0x1425f6950)));
+  return 0;
+}
+
+/* ref: FUN_1401fd8f0 */
+undefined8 FUN_1401fd8f0(void)
+{
+  CALLF(undefined8, FUN_1419bc310)(&REFG(undefined8, 0x142d2c990),0);
+  atexit(((code *)REFP(0x1425f69f0)));
+  return 0;
+}
+
+/* ref: FUN_1401fda50 */
+undefined8 FUN_1401fda50(void)
+{
+  longlong lVar1;
+  undefined4 *puVar2;
+  
+  puVar2 = &REFG(undefined4, 0x1431f29e0);
+  lVar1 = 0xe4;
+  do {
+    CALLF(undefined4 *, FUN_1402c8f90)(puVar2);
+    puVar2 = puVar2 + 1;
+    lVar1 = lVar1 + -1;
+  } while (lVar1 != 0);
+  return 0;
+}
+
+/* ref: FUN_1401fdab0 */
+undefined8 FUN_1401fdab0(void)
+{
+  CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined8, 0x1431f42d8));
+  REFG(undefined8, 0x1431f42e0) = 1;
+  REFG(undefined8, 0x1431f42d8) = 1;
+  REFG(undefined8, 0x1431f42dc) = 500;
+  return 0;
+}
+
+/* ref: FUN_1401fddc0 */
+undefined8 FUN_1401fddc0(void)
+{
+  CALLF(undefined8 *, FUN_141566900)(&REFG(undefined8, 0x1431f66a8),"BufferOnly",0);
+  atexit((code *)&REFG(undefined8, 0x1425f7070));
+  return 0;
+}
+
+/* ref: FUN_1401fde90 */
+undefined8 FUN_1401fde90(void)
+{
+  CALLF(undefined8 *, FUN_141c07230)(&REFG(undefined8, 0x1431f6738),&REFG(undefined8, 0x1431f6768));
+  atexit((code *)((code *)REFP(0x1425f72d0)));
+  return 0;
+}
+
+/* ref: FUN_1401fdec0 */
+undefined8 FUN_1401fdec0(void)
+{
+  CALLF(undefined8 *, FUN_141c09e60)(&REFG(undefined8, 0x1431f6758));
+  atexit((code *)((code *)REFP(0x1425f72e0)));
+  return 0;
+}
+
+/* ref: FUN_1401fdf40 */
+undefined8 FUN_1401fdf40(void)
+{
+  CALLF(undefined4 *, FUN_1402fad40)(&REFG(undefined8, 0x1431f6810));
+  atexit(((code *)REFP(0x1425f74d0)));
+  return 0;
+}
+
+/* ref: FUN_1401fdfb0 */
+undefined8 FUN_1401fdfb0(void)
+{
+  CALLF(byte *, FUN_14031e970)(&REFG(undefined8, 0x1431f67b0),3,0x49,0x7b);
+  atexit(((code *)REFP(0x1425f7680)));
+  return 0;
+}
+
+/* ref: FUN_1401fdfe0 */
+undefined8 FUN_1401fdfe0(void)
+{
+  CALLF(undefined4 *, FUN_1402fad40)(&REFG(undefined4, 0x1431f6860));
+  atexit(((code *)REFP(0x1425f76c0)));
+  return 0;
+}
+
+/* ref: FUN_1401fe010 */
+undefined8 FUN_1401fe010(void)
+{
+  undefined4 uVar1;
+  
+  uVar1 = CALLF(undefined8, FUN_141237bf0)();
+  CALLF(undefined8, FUN_14133cae0)(&REFG(undefined8, 0x1431f6858),uVar1);
+  return 0;
+}
+
+/* ref: FUN_1401fe030 */
+undefined8 FUN_1401fe030(void)
+{
+  CALLF(undefined4 *, FUN_1402fad40)(&REFG(undefined4, 0x1431f6900));
+  atexit(((code *)REFP(0x1425f7750)));
+  return 0;
+}
+
+/* ref: FUN_1401fe050 */
+undefined8 FUN_1401fe050(void)
+{
+  CALLF(undefined4 *, FUN_1402fad40)(&REFG(undefined4, 0x1431f68b0));
+  atexit(((code *)REFP(0x1425f7790)));
+  return 0;
+}
+
+/* ref: FUN_1401fe070 */
+undefined8 FUN_1401fe070(void)
+{
+  CALLF(undefined8 *, FUN_141566900)(&REFG(undefined8, 0x1431f69c8),"BufferOnly",0);
+  atexit((code *)&REFG(undefined8, 0x1425f77d0));
+  return 0;
+}
+
+/* ref: FUN_1401fe0b0 */
+undefined8 FUN_1401fe0b0(void)
+{
+  REFG(undefined8, 0x142d2dca8) = 0x142d2dca1;
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2dc98));
+  REFG(undefined4, 0x142d2dc98) = 0x10;
+  REFG(undefined8, 0x142d2dca0) = (undefined *)&REFG(undefined8, 0x142d2dca0);
+  REFG(undefined8, 0x142d2dca8) = 0x142d2dca1;
+  REFG(undefined4, 0x142d2dcd8) = 0xffffffff;
+  REFG(undefined8, 0x142d2dcdc) = 0x80000000;
+  atexit((code *)((code *)REFP(0x1425f78d0)));
+  return 0;
+}
+
+/* ref: FUN_1401fe120 */
+undefined8 FUN_1401fe120(void)
+{
+  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x1431f6b58),0x378,10);
+  atexit((code *)((code *)REFP(0x1425f78e0)));
+  return 0;
+}
+
+/* ref: FUN_1401fe1b0 */
+undefined8 FUN_1401fe1b0(void)
+{
+  CALLF(undefined8 *, FUN_141a13f40)(&REFG(undefined8, 0x1431f6bc0));
+  atexit(((code *)REFP(0x1425f7920)));
+  return 0;
+}
+
+/* ref: FUN_1401fe210 */
+undefined8 FUN_1401fe210(void)
+{
+  REFG(undefined8, 0x142d2df18) = 0x142d2df11;
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2df08));
+  REFG(undefined4, 0x142d2df08) = 0x10;
+  REFG(undefined8, 0x142d2df10) = (undefined *)&REFG(undefined8, 0x142d2df10);
+  REFG(undefined8, 0x142d2df18) = 0x142d2df11;
+  REFG(undefined4, 0x142d2df48) = 0xffffffff;
+  REFG(undefined8, 0x142d2df4c) = 0x80000000;
+  atexit(((code *)REFP(0x1425f7a50)));
+  return 0;
+}
+
+/* ref: FUN_1401fe2f0 */
+undefined8 FUN_1401fe2f0(void)
+{
+  CALLF(longlong, FUN_141a2f130)(&REFG(float, 0x1431f7260));
+  atexit(((code *)REFP(0x1425f7c40)));
+  return 0;
+}
+
+/* ref: FUN_1401fe3f0 */
+undefined8 FUN_1401fe3f0(void)
+{
+  CALLF(undefined8 *, FUN_1425acb20)(&REFG(undefined8, 0x1431f78d0));
+  atexit((code *)((code *)REFP(0x1425f80e0)));
+  return 0;
+}
+
+/* ref: FUN_1401fe430 */
+undefined8 FUN_1401fe430(void)
+{
+  REFG(undefined8, 0x142d2e4f8) = 0x142d2e4f1;
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2e4e8));
+  REFG(undefined4, 0x142d2e4e8) = 0x10;
+  REFG(undefined8, 0x142d2e4f0) = (undefined *)&REFG(undefined8, 0x142d2e4f0);
+  REFG(undefined8, 0x142d2e4f8) = 0x142d2e4f1;
+  REFG(undefined4, 0x142d2e528) = 0xffffffff;
+  REFG(undefined8, 0x142d2e52c) = 0x80000000;
+  atexit(((code *)REFP(0x1425f8170)));
+  return 0;
+}
+
+/* ref: FUN_1401fe5b0 */
+undefined8 FUN_1401fe5b0(void)
+{
+  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143208120),0x580,1);
+  atexit((code *)((code *)REFP(0x1425f8280)));
+  return 0;
+}
+
+/* ref: FUN_1401fe5e0 */
+undefined8 FUN_1401fe5e0(void)
+{
+  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143208198),0x3e0,2);
+  atexit((code *)((code *)REFP(0x1425f82d0)));
+  return 0;
+}
+
+/* ref: FUN_1401fe700 */
+undefined8 FUN_1401fe700(void)
+{
+  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x1432082d8),0xce8,5);
+  atexit((code *)((code *)REFP(0x1425f87a0)));
+  return 0;
+}
+
+/* ref: FUN_1401fe730 */
+undefined8 FUN_1401fe730(void)
+{
+  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143208300),0x568,5);
+  atexit((code *)((code *)REFP(0x1425f87b0)));
+  return 0;
+}
+
+/* ref: FUN_1401fe760 */
+undefined8 FUN_1401fe760(void)
+{
+  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143208328),0x5f0,5);
+  atexit((code *)((code *)REFP(0x1425f87c0)));
+  return 0;
+}
+
+/* ref: FUN_1401fe790 */
+undefined8 FUN_1401fe790(void)
+{
+  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143208350),0x490,100);
+  atexit((code *)((code *)REFP(0x1425f87d0)));
+  return 0;
+}
+
+/* ref: FUN_1401fe7c0 */
+undefined8 FUN_1401fe7c0(void)
+{
+  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143208470),0x668,0x14);
+  atexit((code *)((code *)REFP(0x1425f87e0)));
+  return 0;
+}
+
+/* ref: FUN_1401fe7f0 */
+undefined8 FUN_1401fe7f0(void)
+{
+  CALLF(undefined4 *, FUN_1406d0480)(&REFG(undefined8, 0x143208380));
+  CALLF(undefined4 *, FUN_1406d0480)(&REFG(undefined8, 0x1432083f8));
+  atexit(((code *)REFP(0x1425f87f0)));
+  return 0;
+}
+
+/* ref: FUN_1401fe820 */
+undefined8 FUN_1401fe820(void)
+{
+  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143208498),0x328,2);
+  atexit((code *)((code *)REFP(0x1425f8900)));
+  return 0;
+}
+
+/* ref: FUN_1401fe850 */
+undefined8 FUN_1401fe850(void)
+{
+  CALLF(byte *, FUN_14031e970)(&REFG(undefined8, 0x1432084c0),3,0x49,0x7b);
+  atexit(((code *)REFP(0x1425f8910)));
+  return 0;
+}
+
+/* ref: FUN_1401fe880 */
+undefined8 FUN_1401fe880(void)
+{
+  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x1432084e0),0xe8,0x14);
+  atexit((code *)((code *)REFP(0x1425f8950)));
+  return 0;
+}
+
+/* ref: FUN_1401fe8b0 */
+undefined8 FUN_1401fe8b0(void)
+{
+  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143208508),0x4d0,10);
+  atexit((code *)((code *)REFP(0x1425f8960)));
+  return 0;
+}
+
+/* ref: FUN_1401fe8e0 */
+undefined8 FUN_1401fe8e0(void)
+{
+  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143208530),0xce8,5);
+  atexit((code *)((code *)REFP(0x1425f8970)));
+  return 0;
+}
+
+/* ref: FUN_1401fe910 */
+undefined8 FUN_1401fe910(void)
+{
+  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143208570),0xbd0,1);
+  atexit((code *)((code *)REFP(0x1425f8980)));
+  return 0;
+}
+
+/* ref: FUN_1401fe950 */
+undefined8 FUN_1401fe950(void)
+{
+  CALLF(byte *, FUN_14031e970)(&REFG(undefined1, 0x1432085c8),3,0x49,0x7b);
+  atexit(((code *)REFP(0x1425f8a30)));
+  return 0;
+}
+
+/* ref: FUN_1401fea10 */
+undefined8 FUN_1401fea10(void)
+{
+  CALLF(undefined8, FUN_141aa0a70)(&REFG(undefined8, 0x142d2f5d8));
+  atexit(((code *)REFP(0x1425f8dd0)));
+  return 0;
+}
+
+/* ref: FUN_1401fea40 */
+undefined8 FUN_1401fea40(void)
+{
+  CALLF(undefined8, FUN_141a9a680)(&REFG(undefined8, 0x142d2f6d0),0);
+  atexit(((code *)REFP(0x1425f8e80)));
+  return 0;
+}
+
+/* ref: FUN_1401fea80 */
+undefined8 FUN_1401fea80(void)
+{
+  CALLF(undefined1 *, FUN_1406d0b70)(&REFG(undefined8, 0x1432086f0));
+  CALLF(undefined1 *, FUN_1406d0b70)(&REFG(undefined8, 0x14320873c));
+  CALLF(undefined1 *, FUN_1406d0b70)(&REFG(undefined8, 0x143208788));
+  CALLF(undefined1 *, FUN_1406d0b70)(&REFG(undefined8, 0x1432087d4));
+  CALLF(undefined1 *, FUN_1406d0b70)(&REFG(undefined8, 0x143208820));
+  CALLF(undefined1 *, FUN_1406d0b70)(&REFG(undefined8, 0x14320886c));
+  CALLF(undefined1 *, FUN_1406d0b70)(&REFG(undefined8, 0x1432088b8));
+  return 0;
+}
+
+/* ref: FUN_1401feaf0 */
+undefined8 FUN_1401feaf0(void)
+{
+  CALLF(undefined8 *, FUN_141ab6df0)(&REFG(undefined8, 0x143208e70));
+  atexit((code *)((code *)REFP(0x1425f8ff0)));
+  return 0;
+}
+
+/* ref: FUN_1401feb40 */
+undefined8 FUN_1401feb40(void)
+{
+  CALLF(undefined8 *, FUN_141ab6df0)(&REFG(undefined4, 0x143208f70));
+  atexit((code *)((code *)REFP(0x1425f90c0)));
+  return 0;
+}
+
+/* ref: FUN_1401feba0 */
+undefined8 FUN_1401feba0(void)
+{
+  REFG(undefined8, 0x142d2fb78) = 0x142d2fb71;
+  CALLF(undefined8, FUN_141ab7f50)(&REFG(undefined8, 0x142d2fb68));
+  REFG(undefined8, 0x142d2fb98) = &REFG(undefined8, 0x142d2fb98);
+  REFG(undefined8, 0x142d2fb80) = 0;
+  REFG(undefined8, 0x142d2fba0) = 0x142d2fb99;
+  REFG(undefined8, 0x142d2fb90) = 0;
+  REFG(undefined4, 0x142d2fb88) = 0;
+  REFG(undefined2, 0x142d2fb8c) = 0;
+  CALLF(undefined8, FUN_141ab7f50)(&REFG(undefined8, 0x142d2fb90));
+  REFG(undefined4, 0x142d2fba8) = 0;
+  REFG(undefined8, 0x142d2fbc0) = &REFG(undefined8, 0x142d2fbc0);
+  REFG(undefined8, 0x142d2fbb8) = 0;
+  REFG(undefined8, 0x142d2fbc8) = 0x142d2fbc1;
+  REFG(undefined4, 0x142d2fbb0) = 0;
+  REFG(undefined2, 0x142d2fbb4) = 0;
+  CALLF(undefined8, FUN_141ab7f50)(&REFG(undefined8, 0x142d2fbb8));
+  REFG(undefined4, 0x142d2fbd0) = 0;
+  REFG(undefined8, 0x142d2fbe8) = &REFG(undefined8, 0x142d2fbe8);
+  REFG(undefined8, 0x142d2fbe0) = 0;
+  REFG(undefined8, 0x142d2fbf0) = 0x142d2fbe9;
+  REFG(undefined4, 0x142d2fbd8) = 0;
+  REFG(undefined2, 0x142d2fbdc) = 0;
+  CALLF(undefined8, FUN_141ab7f50)(&REFG(undefined8, 0x142d2fbe0));
+  REFG(undefined4, 0x142d2fbf8) = 0;
+  REFG(undefined8, 0x142d2fc10) = &REFG(undefined8, 0x142d2fc10);
+  REFG(undefined8, 0x142d2fc08) = 0;
+  REFG(undefined8, 0x142d2fc18) = 0x142d2fc11;
+  REFG(undefined4, 0x142d2fc00) = 0;
+  REFG(undefined2, 0x142d2fc04) = 0;
+  CALLF(undefined8, FUN_141ab7f50)(&REFG(undefined8, 0x142d2fc08));
+  REFG(undefined4, 0x142d2fc20) = 0;
+  REFG(undefined8, 0x142d2fc38) = &REFG(undefined8, 0x142d2fc38);
+  REFG(undefined8, 0x142d2fc30) = 0;
+  REFG(undefined8, 0x142d2fc40) = 0x142d2fc39;
+  REFG(undefined4, 0x142d2fc28) = 0;
+  REFG(undefined2, 0x142d2fc2c) = 0;
+  CALLF(undefined8, FUN_141ab7f50)(&REFG(undefined8, 0x142d2fc30));
+  REFG(undefined4, 0x142d2fc48) = 0;
+  REFG(undefined8, 0x142d2fc60) = &REFG(undefined8, 0x142d2fc60);
+  REFG(undefined8, 0x142d2fc58) = 0;
+  REFG(undefined8, 0x142d2fc68) = 0x142d2fc61;
+  REFG(undefined4, 0x142d2fc50) = 0;
+  REFG(undefined2, 0x142d2fc54) = 0;
+  CALLF(undefined8, FUN_141ab7f50)(&REFG(undefined8, 0x142d2fc58));
+  REFG(undefined4, 0x142d2fc70) = 0;
+  atexit(((code *)REFP(0x1425f9130)));
+  return 0;
+}
+
+/* ref: FUN_1401fed60 */
+undefined8 FUN_1401fed60(void)
+{
+  longlong lVar1;
+  
+  REFG(undefined8, 0x142d2fce8) = 0x142d2fce1;
+  lVar1 = CALLF(ulonglong, FUN_140255610)(&REFG(undefined8, 0x142d2fcd8));
+  while (lVar1 != 0) {
+    CALLF(undefined8, FUN_141ab7400)(lVar1);
+    CALLF(undefined8, FUN_140255210)(lVar1,((char *)REFP(0x142dc8050)),0xfffffffe);
+    lVar1 = CALLF(ulonglong, FUN_140255610)(&REFG(undefined8, 0x142d2fcd8));
+  }
+  atexit(((code *)REFP(0x1425f9270)));
+  return 0;
+}
+
+/* ref: FUN_1401fede0 */
+undefined8 FUN_1401fede0(void)
+{
+  REFG(undefined8, 0x142d2fcc8) = 0x142d2fcc1;
+  REFG(float, 0x142d2fca8) = 0;
+  REFG(undefined4, 0x142d2fcac) = 0;
+  REFG(undefined4, 0x142d2fcb0) = 0;
+  REFG(undefined4, 0x142d2fcb4) = 0;
+  CALLF(undefined8, FUN_141ab7f50)(&REFG(undefined8, 0x142d2fcb8));
+  atexit(((code *)REFP(0x1425f92e0)));
+  return 0;
+}
+
+/* ref: FUN_1401fee60 */
+undefined8 FUN_1401fee60(void)
+{
+  CALLF(longlong, FUN_1406cfd30)(&REFG(float, 0x143208b30));
+  REFG(undefined4, 0x143208b80) = 0;
+  REFG(undefined8, 0x143208b88) = 0;
+  REFG(undefined8, 0x143208b90) = 0;
+  REFG(undefined8, 0x143208b98) = 0;
+  atexit((code *)((code *)REFP(0x1425f9410)));
+  return 0;
+}
+
+/* ref: FUN_1401fef10 */
+undefined8 FUN_1401fef10(void)
+{
+  CALLF(undefined8 *, FUN_141566900)(&REFG(undefined8, 0x143209148),"BufferOnly",0);
+  atexit((code *)&REFG(undefined8, 0x1425f95f0));
+  return 0;
+}
+
+/* ref: FUN_1401fefd0 */
+undefined8 FUN_1401fefd0(void)
+{
+  undefined1 *puVar1;
+  longlong lVar2;
+  
+  lVar2 = 0x10;
+  puVar1 = &REFG(undefined1, 0x143209220);
+  do {
+    *puVar1 = 0;
+    *(undefined8 *)(puVar1 + -0x20) = 0;
+    *(undefined8 *)(puVar1 + -0x18) = 0;
+    *(undefined8 *)(puVar1 + -0x10) = 0;
+    *(undefined8 *)(puVar1 + -8) = 0;
+    puVar1 = puVar1 + 0x28;
+    lVar2 = lVar2 + -1;
+  } while (lVar2 != 0);
+  return 0;
+}
+
 /* ref: FUN_1401ff050 */
 undefined8 FUN_1401ff050(void)
 {
@@ -102,14 +920,14 @@ undefined8 FUN_1401ff480(void)
 /* ref: FUN_1401ff550 */
 undefined8 FUN_1401ff550(void)
 {
-  REFG(undefined8, 0x143217574) = CALLF(float, FUN_140254020)(&REFG(undefined8, 0x142736a50));
+  REFG(float, 0x143217574) = CALLF(float, FUN_140254020)(&REFG(undefined8, 0x142736a50));
   return 0;
 }
 
 /* ref: FUN_1401ff570 */
 undefined8 FUN_1401ff570(void)
 {
-  REFG(undefined8, 0x143217570) = CALLF(float, FUN_140254020)(&REFG(undefined8, 0x142736f38));
+  REFG(float, 0x143217570) = CALLF(float, FUN_140254020)(&REFG(undefined8, 0x142736f38));
   return 0;
 }
 
@@ -124,9 +942,9 @@ undefined8 FUN_1401ff620(void)
 /* ref: FUN_1401ff680 */
 undefined8 FUN_1401ff680(void)
 {
-  REFG(undefined8, 0x142d31808) = 0;
+  REFG(float, 0x142d31808) = 0;
   REFG(undefined4, 0x142d31810) = 0;
-  REFG(undefined8, 0x142d31818) = 0;
+  REFG(float, 0x142d31818) = 0;
   REFG(undefined4, 0x142d31820) = 0;
   atexit(((code *)REFP(0x1425fa4f0)));
   return 0;
@@ -279,22 +1097,22 @@ undefined8 FUN_1401ffc00(void)
   return 0;
 }
 
+/* ref: FUN_1401ffd60 */
+undefined8 FUN_1401ffd60(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425faef0)));
+  return 0;
+}
+
 /* ref: FUN_1401ffe10 */
 undefined8 FUN_1401ffe10(void)
 {
   CALLF(undefined8, FUN_141ba2f50)(&REFG(undefined8, 0x142d33b08));
   atexit(((code *)REFP(0x1425fb190)));
-  return 0;
-}
-
-/* ref: FUN_1401ffe30 */
-undefined8 FUN_1401ffe30(void)
-{
-  undefined8 uStack_10;
-  
-  REFG(undefined8, 0x142d33be0) = ((code *)REFP(0x141ba1b20));
-  REFG(undefined4, 0x142d33be8) = uStack_10;
-  atexit(((code *)REFP(0x1425fb1e0)));
   return 0;
 }
 
@@ -323,9 +1141,9 @@ undefined8 FUN_1401ffea0(void)
 /* ref: FUN_1402000e0 */
 undefined8 FUN_1402000e0(void)
 {
-  REFG(undefined8, 0x143218a40) = 0;
+  REFG(float, 0x143218a40) = 0;
   REFG(undefined4, 0x143218a48) = 0;
-  REFG(undefined8, 0x143218a50) = 0;
+  REFG(float, 0x143218a50) = 0;
   REFG(undefined4, 0x143218a58) = 0;
   return 0;
 }
@@ -580,6 +1398,17 @@ undefined8 FUN_140200b70(void)
   return 0;
 }
 
+/* ref: FUN_140200c30 */
+undefined8 FUN_140200c30(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fc3b0)));
+  return 0;
+}
+
 /* ref: FUN_140200ca0 */
 undefined8 FUN_140200ca0(void)
 {
@@ -638,6 +1467,17 @@ undefined8 FUN_140200f20(void)
   return 0;
 }
 
+/* ref: FUN_140200fe0 */
+undefined8 FUN_140200fe0(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fcd20)));
+  return 0;
+}
+
 /* ref: FUN_140201010 */
 undefined8 FUN_140201010(void)
 {
@@ -659,6 +1499,17 @@ undefined8 FUN_140201010(void)
   REFG(undefined8, 0x143238480) = 0;
   REFG(undefined8, 0x143238488) = 0;
   atexit(((code *)REFP(0x1425fcd30)));
+  return 0;
+}
+
+/* ref: FUN_140201120 */
+undefined8 FUN_140201120(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fcdf0)));
   return 0;
 }
 
@@ -687,6 +1538,105 @@ undefined8 FUN_140201200(void)
   REFG(undefined4, 0x142d36058) = 0xffffffff;
   REFG(undefined8, 0x142d3605c) = 0x80000000;
   atexit(((code *)REFP(0x1425fcf00)));
+  return 0;
+}
+
+/* ref: FUN_1402012a0 */
+undefined8 FUN_1402012a0(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fd0c0)));
+  return 0;
+}
+
+/* ref: FUN_1402012e0 */
+undefined8 FUN_1402012e0(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fd120)));
+  return 0;
+}
+
+/* ref: FUN_140201320 */
+undefined8 FUN_140201320(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fd180)));
+  return 0;
+}
+
+/* ref: FUN_140201360 */
+undefined8 FUN_140201360(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fd1e0)));
+  return 0;
+}
+
+/* ref: FUN_1402013a0 */
+undefined8 FUN_1402013a0(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fd240)));
+  return 0;
+}
+
+/* ref: FUN_1402013e0 */
+undefined8 FUN_1402013e0(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fd2a0)));
+  return 0;
+}
+
+/* ref: FUN_140201420 */
+undefined8 FUN_140201420(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fd300)));
+  return 0;
+}
+
+/* ref: FUN_140201460 */
+undefined8 FUN_140201460(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fd360)));
+  return 0;
+}
+
+/* ref: FUN_1402014a0 */
+undefined8 FUN_1402014a0(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fd3c0)));
   return 0;
 }
 
@@ -720,11 +1670,33 @@ undefined8 FUN_1402014d0(void)
   return 0;
 }
 
+/* ref: FUN_140201590 */
+undefined8 FUN_140201590(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fd470)));
+  return 0;
+}
+
 /* ref: FUN_1402015c0 */
 undefined8 FUN_1402015c0(void)
 {
   CALLF(undefined8 *, FUN_141566900)(&REFG(undefined8, 0x14323b188),"BufferOnly",0);
   atexit((code *)&REFG(undefined8, 0x1425fd480));
+  return 0;
+}
+
+/* ref: FUN_140201600 */
+undefined8 FUN_140201600(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fd4e0)));
   return 0;
 }
 
@@ -758,6 +1730,17 @@ undefined8 FUN_140201630(void)
   memmove(REFG(undefined8, 0x14323b1c0),&(*(char * *)(gen_frame + 0x0)),0x30);
   REFG(undefined8, 0x14323b1c8) = 3;
   atexit(((code *)REFP(0x1425fd4f0)));
+  return 0;
+}
+
+/* ref: FUN_140201770 */
+undefined8 FUN_140201770(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fd5c0)));
   return 0;
 }
 
@@ -816,6 +1799,17 @@ undefined8 FUN_1402018f0(void)
   REFG(undefined8, 0x14323b258) = 10;
   REFG(undefined8, 0x14323b250) = 10;
   REFG(undefined8, 0x14323b254) = 10000;
+  return 0;
+}
+
+/* ref: FUN_140201940 */
+undefined8 FUN_140201940(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fd790)));
   return 0;
 }
 
@@ -968,11 +1962,66 @@ undefined8 FUN_140201ba0(void)
   return 0;
 }
 
+/* ref: FUN_140201c30 */
+undefined8 FUN_140201c30(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fd920)));
+  return 0;
+}
+
 /* ref: FUN_140201c70 */
 undefined8 FUN_140201c70(void)
 {
   CALLF(byte *, FUN_14031e970)(&REFG(undefined8, 0x14323b2f0),3,0x49,0x7b);
   atexit(((code *)REFP(0x1425fd9e0)));
+  return 0;
+}
+
+/* ref: FUN_140201cb0 */
+undefined8 FUN_140201cb0(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fda70)));
+  return 0;
+}
+
+/* ref: FUN_140201cf0 */
+undefined8 FUN_140201cf0(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fdb10)));
+  return 0;
+}
+
+/* ref: FUN_140201d70 */
+undefined8 FUN_140201d70(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fdcb0)));
+  return 0;
+}
+
+/* ref: FUN_140201db0 */
+undefined8 FUN_140201db0(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fdd10)));
   return 0;
 }
 
@@ -984,11 +2033,55 @@ undefined8 FUN_140201de0(void)
   return 0;
 }
 
+/* ref: FUN_140201e20 */
+undefined8 FUN_140201e20(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fddb0)));
+  return 0;
+}
+
+/* ref: FUN_140201e60 */
+undefined8 FUN_140201e60(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fde10)));
+  return 0;
+}
+
 /* ref: FUN_140201e90 */
 undefined8 FUN_140201e90(void)
 {
   CALLF(undefined8 *, FUN_141566900)(&REFG(undefined8, 0x14323cb08),"BufferOnly",0);
   atexit((code *)&REFG(undefined8, 0x1425fde20));
+  return 0;
+}
+
+/* ref: FUN_140201ee0 */
+undefined8 FUN_140201ee0(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fdeb0)));
+  return 0;
+}
+
+/* ref: FUN_140201f20 */
+undefined8 FUN_140201f20(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fdf10)));
   return 0;
 }
 
@@ -1008,2013 +2101,14 @@ undefined8 FUN_140201f80(void)
   return 0;
 }
 
-/* ref: FUN_140201ff0 */
-undefined8 FUN_140201ff0(void)
-{
-  CALLF(undefined8 *, FUN_141566900)(&REFG(undefined8, 0x14323cbc0),"BufferOnly",0);
-  atexit((code *)&REFG(undefined8, 0x1425fdfa0));
-  return 0;
-}
-
-/* ref: FUN_140202160 */
-undefined8 FUN_140202160(void)
-{
-  REFG(undefined8, 0x142d36898) = 0x142d36891;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d36888));
-  REFG(undefined4, 0x142d36888) = 0x10;
-  REFG(undefined8, 0x142d36890) = (undefined *)&REFG(undefined8, 0x142d36890);
-  REFG(undefined8, 0x142d36898) = 0x142d36891;
-  REFG(undefined4, 0x142d368c8) = 0xffffffff;
-  REFG(undefined8, 0x142d368cc) = 0x80000000;
-  atexit(((code *)REFP(0x1425fe270)));
-  return 0;
-}
-
-/* ref: FUN_1402021f0 */
-undefined8 FUN_1402021f0(void)
-{
-  CALLF(undefined8 *, FUN_141c9ba90)(&REFG(undefined8, 0x14323f220));
-  atexit(((code *)REFP(0x1425fe490)));
-  return 0;
-}
-
-/* ref: FUN_140202210 */
-undefined8 FUN_140202210(void)
-{
-  REFG(undefined8, 0x142d37968) = 0x142d37961;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d37958));
-  REFG(undefined8, 0x142d37958) = 0x10;
-  REFG(undefined8, 0x142d37960) = (undefined *)&REFG(undefined8, 0x142d37960);
-  REFG(undefined8, 0x142d37968) = 0x142d37961;
-  REFG(undefined4, 0x142d37998) = 0xffffffff;
-  REFG(undefined8, 0x142d3799c) = 0x80000000;
-  atexit(((code *)REFP(0x1425fe520)));
-  return 0;
-}
-
-/* ref: FUN_140202290 */
-undefined8 FUN_140202290(void)
-{
-  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x14323f1f0),0x10,0x20);
-  atexit(((code *)REFP(0x1425fe690)));
-  return 0;
-}
-
-/* ref: FUN_1402022c0 */
-undefined8 FUN_1402022c0(void)
-{
-  REFG(undefined8, 0x143240138) = CALLF(ulonglong, FUN_140216fc0)("est_cameraDynamicPitch",0xaf63e94c860202a3);
-  REFG(undefined8, 0x143240148) = 0x17;
-  REFG(undefined8, 0x143240140) = "test_cameraDynamicPitch";
-  REFG(undefined8, 0x143240158) = 0x20000000;
-  REFG(undefined8, 0x143240150) = "Adjust camera pitch according to zoom distance for a more cinematic view";
-  REFG(undefined8, 0x14324015c) = 5;
-  REFG(undefined8, 0x143240160) = &REFG(undefined8, 0x143240178);
-  REFG(undefined8, 0x143240168) = 0;
-  REFG(undefined8, 0x143240170) = 0x8000000000000010;
-  REFG(undefined8, 0x143240178) = 0;
-  REFG(undefined8, 0x143240190) = 0;
-  REFG(undefined4, 0x143240198) = 0;
-  REFG(undefined8, 0x1432401a0) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143240160),&REFG(undefined8, 0x142635a08),0);
-  REFG(undefined8, 0x1432401a8) = 0;
-  REFG(undefined8, 0x1432401b0) = &REFG(undefined8, 0x1432401c8);
-  REFG(undefined8, 0x1432401b8) = 0;
-  REFG(undefined8, 0x1432401c0) = 0x800000000000000f;
-  REFG(undefined8, 0x1432401c8) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x143240128));
-  REFG(undefined4, 0x1432401d8) = 0;
-  atexit(((code *)REFP(0x1425fe6d0)));
-  return 0;
-}
-
-/* ref: FUN_1402023f0 */
-undefined8 FUN_1402023f0(void)
-{
-  REFG(undefined8, 0x14323fb78) = CALLF(ulonglong, FUN_140216fc0)("est_cameraHeadMovementStrength",0xaf63e94c860202a3);
-  REFG(undefined8, 0x14323fb98) = 0x20000000;
-  REFG(undefined8, 0x14323fb80) = "test_cameraHeadMovementStrength";
-  REFG(undefined8, 0x14323fb9c) = 5;
-  REFG(undefined8, 0x14323fba0) = &REFG(undefined8, 0x14323fbb8);
-  REFG(undefined8, 0x14323fb88) = REFG(undefined8, 0x1427fcbd0);
-  REFG(undefined4, 0x14323fb90) = REFG(undefined8, 0x1427fcbd8);
-  REFG(undefined8, 0x14323fba8) = 0;
-  REFG(undefined8, 0x14323fbb0) = 0x8000000000000010;
-  REFG(undefined8, 0x14323fbb8) = 0;
-  REFG(undefined8, 0x14323fbd0) = 0;
-  REFG(undefined4, 0x14323fbd8) = 0;
-  REFG(undefined8, 0x14323fbe0) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14323fba0),&REFG(undefined8, 0x142635a08),0);
-  REFG(undefined8, 0x14323fbe8) = 0;
-  REFG(undefined8, 0x14323fbf0) = &REFG(undefined8, 0x14323fc08);
-  REFG(undefined8, 0x14323fbf8) = 0;
-  REFG(undefined8, 0x14323fc00) = 0x800000000000000f;
-  REFG(undefined8, 0x14323fc08) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x14323fb68));
-  REFG(undefined4, 0x14323fc18) = 0;
-  atexit(((code *)REFP(0x1425fe730)));
-  return 0;
-}
-
-/* ref: FUN_140202510 */
-undefined8 FUN_140202510(void)
-{
-  REFG(undefined8, 0x14323f5b8) = CALLF(ulonglong, FUN_140216fc0)("ameraKeepCharacterCentered",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14323f5c8) = 0x1b;
-  REFG(undefined8, 0x14323f5c0) = "CameraKeepCharacterCentered";
-  REFG(undefined8, 0x14323f5d8) = 0x20000000;
-  REFG(undefined8, 0x14323f5d0) =
-       "Motion sickness control to keep character\'s head at center of screen to act as motion reference point. Can override other cvar settings."
-  ;
-  REFG(undefined8, 0x14323f5dc) = 5;
-  REFG(undefined8, 0x14323f5e0) = &REFG(undefined8, 0x14323f5f8);
-  REFG(undefined8, 0x14323f5e8) = 0;
-  REFG(undefined8, 0x14323f5f0) = 0x8000000000000010;
-  REFG(undefined8, 0x14323f5f8) = 0;
-  REFG(undefined8, 0x14323f610) = 0;
-  REFG(undefined4, 0x14323f618) = 0;
-  REFG(undefined8, 0x14323f620) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14323f5e0),&REFG(undefined8, 0x14261aa48),1);
-  REFG(undefined8, 0x14323f628) = 0;
-  REFG(undefined8, 0x14323f630) = &REFG(undefined8, 0x14323f648);
-  REFG(undefined8, 0x14323f638) = 0;
-  REFG(undefined8, 0x14323f640) = 0x800000000000000f;
-  REFG(undefined8, 0x14323f648) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14323f5a8));
-  REFG(undefined1, 0x14323f658) = 1;
-  atexit(((code *)REFP(0x1425fe790)));
-  return 0;
-}
-
-/* ref: FUN_140202760 */
-undefined8 FUN_140202760(void)
-{
-  REFG(undefined8, 0x14323f670) = CALLF(ulonglong, FUN_140216fc0)("ameraReduceUnexpectedMovement",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14323f680) = 0x1e;
-  REFG(undefined8, 0x14323f678) = "CameraReduceUnexpectedMovement";
-  REFG(undefined8, 0x14323f690) = 0x20000000;
-  REFG(undefined8, 0x14323f688) =
-       "Motion sickness control to reduce camera movement without player input. Can override other cvar settings."
-  ;
-  REFG(undefined8, 0x14323f694) = 5;
-  REFG(undefined8, 0x14323f698) = &REFG(undefined8, 0x14323f6b0);
-  REFG(undefined8, 0x14323f6a0) = 0;
-  REFG(undefined8, 0x14323f6a8) = 0x8000000000000010;
-  REFG(undefined8, 0x14323f6b0) = 0;
-  REFG(undefined8, 0x14323f6c8) = 0;
-  REFG(undefined4, 0x14323f6d0) = 0;
-  REFG(undefined8, 0x14323f6d8) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14323f698),&REFG(undefined8, 0x14261aa48),0);
-  REFG(undefined8, 0x14323f6e0) = 0;
-  REFG(undefined8, 0x14323f6e8) = &REFG(undefined8, 0x14323f700);
-  REFG(undefined8, 0x14323f6f0) = 0;
-  REFG(undefined8, 0x14323f6f8) = 0x800000000000000f;
-  REFG(undefined8, 0x14323f700) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14323f660));
-  REFG(undefined1, 0x14323f710) = 0;
-  atexit(((code *)REFP(0x1425fe850)));
-  return 0;
-}
-
-/* ref: FUN_140202880 */
-undefined8 FUN_140202880(void)
-{
-  REFG(undefined8, 0x143240588) = CALLF(ulonglong, FUN_140216fc0)("est_cameraTargetFocusEnemyEnable",0xaf63e94c860202a3);
-  REFG(undefined8, 0x1432405a8) = 0x20000000;
-  REFG(undefined8, 0x143240590) = "test_cameraTargetFocusEnemyEnable";
-  REFG(undefined8, 0x1432405ac) = 5;
-  REFG(undefined8, 0x1432405b0) = &REFG(undefined8, 0x1432405c8);
-  REFG(undefined8, 0x143240598) = REFG(undefined8, 0x142842a60);
-  REFG(undefined4, 0x1432405a0) = REFG(undefined8, 0x142842a68);
-  REFG(undefined8, 0x1432405b8) = 0;
-  REFG(undefined8, 0x1432405c0) = 0x8000000000000010;
-  REFG(undefined8, 0x1432405c8) = 0;
-  REFG(undefined8, 0x1432405e0) = 0;
-  REFG(undefined4, 0x1432405e8) = 0;
-  REFG(undefined8, 0x1432405f0) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1432405b0),&REFG(undefined8, 0x14261aa48),0);
-  REFG(undefined8, 0x1432405f8) = 0;
-  REFG(undefined8, 0x143240600) = &REFG(undefined8, 0x143240618);
-  REFG(undefined8, 0x143240608) = 0;
-  REFG(undefined8, 0x143240610) = 0x800000000000000f;
-  REFG(undefined8, 0x143240618) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x143240578));
-  REFG(undefined1, 0x143240628) = 0;
-  atexit(((code *)REFP(0x1425fe8b0)));
-  return 0;
-}
-
-/* ref: FUN_1402029a0 */
-undefined8 FUN_1402029a0(void)
-{
-  REFG(undefined8, 0x1432407b0) = CALLF(ulonglong, FUN_140216fc0)("est_cameraTargetFocusInteractEnable",0xaf63e94c860202a3);
-  REFG(undefined8, 0x1432407d0) = 0x20000000;
-  REFG(undefined8, 0x1432407b8) = "test_cameraTargetFocusInteractEnable";
-  REFG(undefined8, 0x1432407d4) = 5;
-  REFG(undefined8, 0x1432407d8) = &REFG(undefined8, 0x1432407f0);
-  REFG(undefined8, 0x1432407c0) = REFG(undefined8, 0x142842a70);
-  REFG(undefined4, 0x1432407c8) = REFG(undefined8, 0x142842a78);
-  REFG(undefined8, 0x1432407e0) = 0;
-  REFG(undefined8, 0x1432407e8) = 0x8000000000000010;
-  REFG(undefined8, 0x1432407f0) = 0;
-  REFG(undefined8, 0x143240808) = 0;
-  REFG(undefined4, 0x143240810) = 0;
-  REFG(undefined8, 0x143240818) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1432407d8),&REFG(undefined8, 0x14261aa48),0);
-  REFG(undefined8, 0x143240820) = 0;
-  REFG(undefined8, 0x143240828) = &REFG(undefined8, 0x143240840);
-  REFG(undefined8, 0x143240830) = 0;
-  REFG(undefined8, 0x143240838) = 0x800000000000000f;
-  REFG(undefined8, 0x143240840) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x1432407a0));
-  REFG(undefined1, 0x143240850) = 0;
-  atexit(((code *)REFP(0x1425fe910)));
-  return 0;
-}
-
-/* ref: FUN_140202ac0 */
-undefined8 FUN_140202ac0(void)
-{
-  REFG(undefined8, 0x14323f728) = CALLF(ulonglong, FUN_140216fc0)("hakeStrengthCamera",0xaf63ee4c86020b22);
-  REFG(undefined8, 0x14323f738) = 0x13;
-  REFG(undefined8, 0x14323f748) = 0x20000000;
-  REFG(undefined8, 0x14323f730) = "ShakeStrengthCamera";
-  REFG(undefined8, 0x14323f74c) = 5;
-  REFG(undefined8, 0x14323f740) = "Motion sickness control for how much effects can shake the camera";
-  REFG(undefined8, 0x14323f758) = 0;
-  REFG(undefined8, 0x14323f750) = &REFG(undefined8, 0x14323f768);
-  REFG(undefined8, 0x14323f760) = 0x8000000000000010;
-  REFG(undefined8, 0x14323f780) = ((code *)REFP(0x141cadec0));
-  REFG(undefined8, 0x14323f768) = 0;
-  REFG(undefined8, 0x14323f788) = 0;
-  REFG(undefined8, 0x14323f790) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14323f750),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x14261c978));
-  REFG(undefined8, 0x14323f798) = 0;
-  REFG(undefined8, 0x14323f7a0) = &REFG(undefined8, 0x14323f7b8);
-  REFG(undefined8, 0x14323f7a8) = 0;
-  REFG(undefined8, 0x14323f7b0) = 0x800000000000000f;
-  REFG(undefined8, 0x14323f7b8) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14323f718));
-  REFG(undefined4, 0x14323f7c8) = 0x3f800000;
-  atexit(((code *)REFP(0x1425fe970)));
-  return 0;
-}
-
-/* ref: FUN_140202c00 */
-undefined8 FUN_140202c00(void)
-{
-  REFG(undefined8, 0x14323f7e0) = CALLF(ulonglong, FUN_140216fc0)("hakeStrengthUI",0xaf63ee4c86020b22);
-  REFG(undefined8, 0x14323f7f0) = 0xf;
-  REFG(undefined8, 0x14323f800) = 0x20000000;
-  REFG(undefined8, 0x14323f7e8) = "ShakeStrengthUI";
-  REFG(undefined8, 0x14323f804) = 5;
-  REFG(undefined8, 0x14323f7f8) = "Motion sickness control for how much effects can shake in 2D UI";
-  REFG(undefined8, 0x14323f810) = 0;
-  REFG(undefined8, 0x14323f808) = &REFG(undefined8, 0x14323f820);
-  REFG(undefined8, 0x14323f818) = 0x8000000000000010;
-  REFG(undefined8, 0x14323f838) = ((code *)REFP(0x141cadec0));
-  REFG(undefined8, 0x14323f820) = 0;
-  REFG(undefined8, 0x14323f840) = 0;
-  REFG(undefined8, 0x14323f848) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14323f808),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x14261c978));
-  REFG(undefined8, 0x14323f850) = 0;
-  REFG(undefined8, 0x14323f858) = &REFG(undefined8, 0x14323f870);
-  REFG(undefined8, 0x14323f860) = 0;
-  REFG(undefined8, 0x14323f868) = 0x800000000000000f;
-  REFG(undefined8, 0x14323f870) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14323f7d0));
-  REFG(undefined8, 0x14323f880) = 0x3f800000;
-  atexit(((code *)REFP(0x1425fe9d0)));
-  return 0;
-}
-
-/* ref: FUN_140202d40 */
-undefined8 FUN_140202d40(void)
-{
-  REFG(undefined8, 0x14323fac0) = CALLF(ulonglong, FUN_140216fc0)("ameraBobbing",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14323fae0) = 0x20000000;
-  REFG(undefined8, 0x14323fac8) = "cameraBobbing";
-  REFG(undefined8, 0x14323fae4) = 5;
-  REFG(undefined8, 0x14323fae8) = &REFG(undefined8, 0x14323fb00);
-  REFG(undefined8, 0x14323fad0) = REFG(undefined8, 0x142842a00);
-  REFG(undefined4, 0x14323fad8) = REFG(undefined8, 0x142842a08);
-  REFG(undefined8, 0x14323faf0) = 0;
-  REFG(undefined8, 0x14323faf8) = 0x8000000000000010;
-  REFG(undefined8, 0x14323fb00) = 0;
-  REFG(undefined8, 0x14323fb18) = 0;
-  REFG(undefined4, 0x14323fb20) = 0;
-  REFG(undefined8, 0x14323fb28) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14323fae8),&REFG(undefined8, 0x14261aa48),0);
-  REFG(undefined8, 0x14323fb30) = 0;
-  REFG(undefined8, 0x14323fb38) = &REFG(undefined8, 0x14323fb50);
-  REFG(undefined8, 0x14323fb40) = 0;
-  REFG(undefined8, 0x14323fb48) = 0x800000000000000f;
-  REFG(undefined8, 0x14323fb50) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f530),&REFG(undefined8, 0x14323fab0));
-  REFG(undefined1, 0x14323fb60) = 0;
-  atexit(((code *)REFP(0x1425feaa0)));
-  return 0;
-}
-
-/* ref: FUN_140202e60 */
-undefined8 FUN_140202e60(void)
-{
-  REFG(undefined8, 0x143240cb8) = CALLF(ulonglong, FUN_140216fc0)("ameraBobbingSmoothSpeed",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143240cd8) = 0x20000000;
-  REFG(undefined8, 0x143240cc0) = "cameraBobbingSmoothSpeed";
-  REFG(undefined8, 0x143240cdc) = 5;
-  REFG(undefined8, 0x143240ce0) = &REFG(undefined8, 0x143240cf8);
-  REFG(undefined8, 0x143240ce8) = 0;
-  REFG(undefined8, 0x143240cf0) = 0x8000000000000010;
-  REFG(undefined8, 0x143240d10) = ((code *)REFP(0x141cadcf0));
-  REFG(undefined8, 0x143240cc8) = REFG(undefined8, 0x142842a50);
-  REFG(undefined4, 0x143240cd0) = REFG(undefined8, 0x142842a58);
-  REFG(undefined8, 0x143240cf8) = 0;
-  REFG(undefined8, 0x143240d18) = 0;
-  REFG(undefined8, 0x143240d20) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143240ce0),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x142842970));
-  REFG(undefined8, 0x143240d28) = 0;
-  REFG(undefined8, 0x143240d30) = &REFG(undefined8, 0x143240d48);
-  REFG(undefined8, 0x143240d38) = 0;
-  REFG(undefined8, 0x143240d40) = 0x800000000000000f;
-  REFG(undefined8, 0x143240d48) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143240ca8));
-  REFG(undefined4, 0x143240d58) = 0x3f4ccccd;
-  atexit(((code *)REFP(0x1425feb00)));
-  return 0;
-}
-
-/* ref: FUN_1402031f0 */
-undefined8 FUN_1402031f0(void)
-{
-  REFG(undefined8, 0x14324ec40) = CALLF(ulonglong, FUN_140216fc0)("ameraDive",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14324ec60) = 0x20000000;
-  REFG(undefined8, 0x14324ec48) = "cameraDive";
-  REFG(undefined8, 0x14324ec64) = 5;
-  REFG(undefined8, 0x14324ec68) = &REFG(undefined8, 0x14324ec80);
-  REFG(undefined8, 0x14324ec50) = REFG(undefined8, 0x1428429e0);
-  REFG(undefined4, 0x14324ec58) = REFG(undefined8, 0x1428429e8);
-  REFG(undefined8, 0x14324ec70) = 0;
-  REFG(undefined8, 0x14324ec78) = 0x8000000000000010;
-  REFG(undefined8, 0x14324ec80) = 0;
-  REFG(undefined8, 0x14324ec98) = 0;
-  REFG(undefined4, 0x14324eca0) = 0;
-  REFG(undefined8, 0x14324eca8) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14324ec68),&REFG(undefined8, 0x14261aa48),1);
-  REFG(undefined8, 0x14324ecb0) = 0;
-  REFG(undefined8, 0x14324ecb8) = &REFG(undefined8, 0x14324ecd0);
-  REFG(undefined8, 0x14324ecc0) = 0;
-  REFG(undefined8, 0x14324ecc8) = 0x800000000000000f;
-  REFG(undefined8, 0x14324ecd0) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14324ec30));
-  REFG(undefined1, 0x14324ece0) = 1;
-  atexit(((code *)REFP(0x1425fec20)));
-  return 0;
-}
-
-/* ref: FUN_140203310 */
-undefined8 FUN_140203310(void)
-{
-  REFG(undefined8, 0x1432401f0) = CALLF(ulonglong, FUN_140216fc0)("est_cameraDynamicPitchBaseFovPad",0xaf63e94c860202a3);
-  REFG(undefined8, 0x143240200) = 0x21;
-  REFG(undefined8, 0x143240210) = 0x20000000;
-  REFG(undefined8, 0x1432401f8) = "test_cameraDynamicPitchBaseFovPad";
-  REFG(undefined8, 0x143240214) = 5;
-  REFG(undefined8, 0x143240208) = "Fraction of screen height to keep feet below";
-  REFG(undefined8, 0x143240220) = 0;
-  REFG(undefined8, 0x143240218) = &REFG(undefined8, 0x143240230);
-  REFG(undefined8, 0x143240228) = 0x8000000000000010;
-  REFG(undefined8, 0x143240248) = ((code *)REFP(0x141cadec0));
-  REFG(undefined8, 0x143240230) = 0;
-  REFG(undefined8, 0x143240250) = 0;
-  REFG(undefined8, 0x143240258) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143240218),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x142842960));
-  REFG(undefined8, 0x143240260) = 0;
-  REFG(undefined8, 0x143240268) = &REFG(undefined8, 0x143240280);
-  REFG(undefined8, 0x143240270) = 0;
-  REFG(undefined8, 0x143240278) = 0x800000000000000f;
-  REFG(undefined8, 0x143240280) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x1432401e0));
-  REFG(undefined4, 0x143240290) = 0x3ecccccd;
-  atexit(((code *)REFP(0x1425fec80)));
-  return 0;
-}
-
-/* ref: FUN_140203450 */
-undefined8 FUN_140203450(void)
-{
-  REFG(undefined8, 0x143240360) = CALLF(ulonglong, FUN_140216fc0)("est_cameraDynamicPitchBaseFovPadDownScale",0xaf63e94c860202a3);
-  REFG(undefined8, 0x143240370) = 0x2a;
-  REFG(undefined8, 0x143240380) = 0x20000000;
-  REFG(undefined8, 0x143240368) = "test_cameraDynamicPitchBaseFovPadDownScale";
-  REFG(undefined8, 0x143240384) = 5;
-  REFG(undefined8, 0x143240378) = "Strength of dynamic pitch when looking down";
-  REFG(undefined8, 0x143240390) = 0;
-  REFG(undefined8, 0x143240388) = &REFG(undefined8, 0x1432403a0);
-  REFG(undefined8, 0x143240398) = 0x8000000000000010;
-  REFG(undefined8, 0x1432403b8) = ((code *)REFP(0x141cadec0));
-  REFG(undefined8, 0x1432403a0) = 0;
-  REFG(undefined8, 0x1432403c0) = 0;
-  REFG(undefined8, 0x1432403c8) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143240388),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x1427348d0));
-  REFG(undefined8, 0x1432403d0) = 0;
-  REFG(undefined8, 0x1432403d8) = &REFG(undefined8, 0x1432403f0);
-  REFG(undefined8, 0x1432403e0) = 0;
-  REFG(undefined8, 0x1432403e8) = 0x800000000000000f;
-  REFG(undefined8, 0x1432403f0) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x143240350));
-  REFG(undefined4, 0x143240400) = 0x3e800000;
-  atexit(((code *)REFP(0x1425fece0)));
-  return 0;
-}
-
-/* ref: FUN_140203590 */
-undefined8 FUN_140203590(void)
-{
-  REFG(undefined8, 0x1432402a8) = CALLF(ulonglong, FUN_140216fc0)("est_cameraDynamicPitchBaseFovPadFlying",0xaf63e94c860202a3);
-  REFG(undefined8, 0x1432402b8) = 0x27;
-  REFG(undefined8, 0x1432402c8) = 0x20000000;
-  REFG(undefined8, 0x1432402b0) = "test_cameraDynamicPitchBaseFovPadFlying";
-  REFG(undefined8, 0x1432402cc) = 5;
-  REFG(undefined8, 0x1432402c0) = "Fraction of screen height to keep character below when able to fly";
-  REFG(undefined8, 0x1432402d8) = 0;
-  REFG(undefined8, 0x1432402d0) = &REFG(undefined8, 0x1432402e8);
-  REFG(undefined8, 0x1432402e0) = 0x8000000000000010;
-  REFG(undefined8, 0x143240300) = ((code *)REFP(0x141cadec0));
-  REFG(undefined8, 0x1432402e8) = 0;
-  REFG(undefined8, 0x143240308) = 0;
-  REFG(undefined8, 0x143240310) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1432402d0),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x142631a40));
-  REFG(undefined8, 0x143240318) = 0;
-  REFG(undefined8, 0x143240320) = &REFG(undefined8, 0x143240338);
-  REFG(undefined8, 0x143240328) = 0;
-  REFG(undefined8, 0x143240330) = 0x800000000000000f;
-  REFG(undefined8, 0x143240338) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x143240298));
-  REFG(undefined4, 0x143240348) = 0x3f400000;
-  atexit(((code *)REFP(0x1425fed40)));
-  return 0;
-}
-
-/* ref: FUN_140203810 */
-undefined8 FUN_140203810(void)
-{
-  REFG(undefined8, 0x143240d70) = CALLF(ulonglong, FUN_140216fc0)("ameraFoVSmoothSpeed",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143240d90) = 0x20000000;
-  REFG(undefined8, 0x143240d78) = "cameraFoVSmoothSpeed";
-  REFG(undefined8, 0x143240d94) = 5;
-  REFG(undefined8, 0x143240d98) = &REFG(undefined8, 0x143240db0);
-  REFG(undefined8, 0x143240da0) = 0;
-  REFG(undefined8, 0x143240da8) = 0x8000000000000010;
-  REFG(undefined8, 0x143240dc8) = ((code *)REFP(0x141cadb90));
-  REFG(undefined8, 0x143240d80) = REFG(undefined8, 0x142842a40);
-  REFG(undefined4, 0x143240d88) = REFG(undefined8, 0x142842a48);
-  REFG(undefined8, 0x143240db0) = 0;
-  REFG(undefined8, 0x143240dd0) = 0;
-  REFG(undefined8, 0x143240dd8) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143240d98),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x1427348e0));
-  REFG(undefined8, 0x143240de0) = 0;
-  REFG(undefined8, 0x143240de8) = &REFG(undefined8, 0x143240e00);
-  REFG(undefined8, 0x143240df0) = 0;
-  REFG(undefined8, 0x143240df8) = 0x800000000000000f;
-  REFG(undefined8, 0x143240e00) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143240d60));
-  REFG(undefined4, 0x143240e10) = 0x3f000000;
-  atexit(((code *)REFP(0x1425fee00)));
-  return 0;
-}
-
-/* ref: FUN_140203940 */
-undefined8 FUN_140203940(void)
-{
-  REFG(undefined8, 0x143247660) = CALLF(ulonglong, FUN_140216fc0)("ameraFollowGamepadAdjustDelay",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143247670) = 0x1e;
-  REFG(undefined8, 0x143247668) = "CameraFollowGamepadAdjustDelay";
-  REFG(undefined8, 0x143247680) = 0x20000000;
-  REFG(undefined8, 0x143247678) =
-       "Delay before follow resuming after manually adjusting the camera with Gamepad input";
-  REFG(undefined8, 0x143247684) = 5;
-  REFG(undefined8, 0x143247688) = &REFG(undefined8, 0x1432476a0);
-  REFG(undefined8, 0x143247690) = 0;
-  REFG(undefined8, 0x143247698) = 0x8000000000000010;
-  REFG(undefined8, 0x1432476a0) = 0;
-  REFG(undefined8, 0x1432476b8) = 0;
-  REFG(undefined4, 0x1432476c0) = 0;
-  REFG(undefined8, 0x1432476c8) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143247688),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x14261c978));
-  REFG(undefined8, 0x1432476d0) = 0;
-  REFG(undefined8, 0x1432476d8) = &REFG(undefined8, 0x1432476f0);
-  REFG(undefined8, 0x1432476e0) = 0;
-  REFG(undefined8, 0x1432476e8) = 0x800000000000000f;
-  REFG(undefined8, 0x1432476f0) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143247650));
-  REFG(undefined4, 0x143247700) = 0x3f800000;
-  atexit(((code *)REFP(0x1425fee60)));
-  return 0;
-}
-
-/* ref: FUN_140203a70 */
-undefined8 FUN_140203a70(void)
-{
-  REFG(undefined8, 0x143247718) = CALLF(ulonglong, FUN_140216fc0)("ameraFollowGamepadAdjustEaseIn",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143247728) = 0x1f;
-  REFG(undefined8, 0x143247720) = "CameraFollowGamepadAdjustEaseIn";
-  REFG(undefined8, 0x143247738) = 0x20000000;
-  REFG(undefined8, 0x143247730) =
-       "Ease-in time for follow resuming after manually adjusting the camera with Gamepad input";
-  REFG(undefined8, 0x14324773c) = 5;
-  REFG(undefined8, 0x143247740) = &REFG(undefined8, 0x143247758);
-  REFG(undefined8, 0x143247748) = 0;
-  REFG(undefined8, 0x143247750) = 0x8000000000000010;
-  REFG(undefined8, 0x143247758) = 0;
-  REFG(undefined8, 0x143247770) = 0;
-  REFG(undefined4, 0x143247778) = 0;
-  REFG(undefined8, 0x143247780) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143247740),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x14261c978));
-  REFG(undefined8, 0x143247788) = 0;
-  REFG(undefined8, 0x143247790) = &REFG(undefined8, 0x1432477a8);
-  REFG(undefined8, 0x143247798) = 0;
-  REFG(undefined8, 0x1432477a0) = 0x800000000000000f;
-  REFG(undefined8, 0x1432477a8) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143247708));
-  REFG(undefined4, 0x1432477b8) = 0x3f800000;
-  atexit(((code *)REFP(0x1425feec0)));
-  return 0;
-}
-
-/* ref: FUN_140203ba0 */
-undefined8 FUN_140203ba0(void)
-{
-  REFG(undefined8, 0x143247210) = CALLF(ulonglong, FUN_140216fc0)("ameraFollowOnStick",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143247220) = 0x13;
-  REFG(undefined8, 0x143247218) = "CameraFollowOnStick";
-  REFG(undefined8, 0x143247230) = 0x20000000;
-  REFG(undefined8, 0x143247228) = "Enable camera to follow target as though being pushed/pulled along on a stick";
-  REFG(undefined8, 0x143247234) = 5;
-  REFG(undefined8, 0x143247238) = &REFG(undefined8, 0x143247250);
-  REFG(undefined8, 0x143247240) = 0;
-  REFG(undefined8, 0x143247248) = 0x8000000000000010;
-  REFG(undefined8, 0x143247250) = 0;
-  REFG(undefined8, 0x143247268) = 0;
-  REFG(undefined4, 0x143247270) = 0;
-  REFG(undefined8, 0x143247278) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143247238),&REFG(undefined8, 0x14261aa48),0);
-  REFG(undefined8, 0x143247280) = 0;
-  REFG(undefined8, 0x143247288) = &REFG(undefined8, 0x1432472a0);
-  REFG(undefined8, 0x143247290) = 0;
-  REFG(undefined8, 0x143247298) = 0x800000000000000f;
-  REFG(undefined8, 0x1432472a0) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143247200));
-  REFG(undefined1, 0x1432472b0) = 0;
-  atexit(((code *)REFP(0x1425fef20)));
-  return 0;
-}
-
-/* ref: FUN_140203cc0 */
-undefined8 FUN_140203cc0(void)
-{
-  REFG(undefined8, 0x1432474f0) = CALLF(ulonglong, FUN_140216fc0)("ameraFollowPitchDeadZone",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143247500) = 0x19;
-  REFG(undefined8, 0x1432474f8) = "CameraFollowPitchDeadZone";
-  REFG(undefined8, 0x143247510) = 0x20000000;
-  REFG(undefined8, 0x143247508) = "Controls pitch follow deadzone size";
-  REFG(undefined8, 0x143247514) = 5;
-  REFG(undefined8, 0x143247518) = &REFG(undefined8, 0x143247530);
-  REFG(undefined8, 0x143247520) = 0;
-  REFG(undefined8, 0x143247528) = 0x8000000000000010;
-  REFG(undefined8, 0x143247530) = 0;
-  REFG(undefined8, 0x143247548) = 0;
-  REFG(undefined4, 0x143247550) = 0;
-  REFG(undefined8, 0x143247558) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143247518),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x1426e2cf0));
-  REFG(undefined8, 0x143247560) = 0;
-  REFG(undefined8, 0x143247568) = &REFG(undefined8, 0x143247580);
-  REFG(undefined8, 0x143247570) = 0;
-  REFG(undefined8, 0x143247578) = 0x800000000000000f;
-  REFG(undefined8, 0x143247580) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x1432474e0));
-  REFG(undefined4, 0x143247590) = 0x40a00000;
-  atexit(((code *)REFP(0x1425fef80)));
-  return 0;
-}
-
-/* ref: FUN_140203df0 */
-undefined8 FUN_140203df0(void)
-{
-  REFG(undefined8, 0x143247380) = CALLF(ulonglong, FUN_140216fc0)("ameraFollowPitchSpeed",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143247390) = 0x16;
-  REFG(undefined8, 0x143247388) = "CameraFollowPitchSpeed";
-  REFG(undefined8, 0x1432473a0) = 0x20000000;
-  REFG(undefined8, 0x143247398) = "Controls speed of pitch following";
-  REFG(undefined8, 0x1432473a4) = 5;
-  REFG(undefined8, 0x1432473a8) = &REFG(undefined8, 0x1432473c0);
-  REFG(undefined8, 0x1432473b0) = 0;
-  REFG(undefined8, 0x1432473b8) = 0x8000000000000010;
-  REFG(undefined8, 0x1432473c0) = 0;
-  REFG(undefined8, 0x1432473d8) = 0;
-  REFG(undefined4, 0x1432473e0) = 0;
-  REFG(undefined8, 0x1432473e8) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1432473a8),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x14261c978));
-  REFG(undefined8, 0x1432473f0) = 0;
-  REFG(undefined8, 0x1432473f8) = &REFG(undefined8, 0x143247410);
-  REFG(undefined8, 0x143247400) = 0;
-  REFG(undefined8, 0x143247408) = 0x800000000000000f;
-  REFG(undefined8, 0x143247410) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143247370));
-  REFG(undefined4, 0x143247420) = 0x3f800000;
-  atexit(((code *)REFP(0x1425fefe0)));
-  return 0;
-}
-
-/* ref: FUN_140203f20 */
-undefined8 FUN_140203f20(void)
-{
-  REFG(undefined8, 0x143247438) = CALLF(ulonglong, FUN_140216fc0)("ameraFollowPitchStrength",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143247448) = 0x19;
-  REFG(undefined8, 0x143247440) = "CameraFollowPitchStrength";
-  REFG(undefined8, 0x143247458) = 0x20000000;
-  REFG(undefined8, 0x143247450) = "Controls strength of pitch following";
-  REFG(undefined8, 0x14324745c) = 5;
-  REFG(undefined8, 0x143247460) = &REFG(undefined8, 0x143247478);
-  REFG(undefined8, 0x143247468) = 0;
-  REFG(undefined8, 0x143247470) = 0x8000000000000010;
-  REFG(undefined8, 0x143247478) = 0;
-  REFG(undefined8, 0x143247490) = 0;
-  REFG(undefined4, 0x143247498) = 0;
-  REFG(undefined8, 0x1432474a0) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143247460),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x142842968));
-  REFG(undefined8, 0x1432474a8) = 0;
-  REFG(undefined8, 0x1432474b0) = &REFG(undefined8, 0x1432474c8);
-  REFG(undefined8, 0x1432474b8) = 0;
-  REFG(undefined8, 0x1432474c0) = 0x800000000000000f;
-  REFG(undefined8, 0x1432474c8) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143247428));
-  REFG(undefined4, 0x1432474d8) = 0x3f333333;
-  atexit(((code *)REFP(0x1425ff040)));
-  return 0;
-}
-
-/* ref: FUN_140204180 */
-undefined8 FUN_140204180(void)
-{
-  REFG(undefined8, 0x1432477d0) = CALLF(ulonglong, FUN_140216fc0)("ameraFollowTarget",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x1432477e0) = 0x12;
-  REFG(undefined8, 0x1432477d8) = "CameraFollowTarget";
-  REFG(undefined8, 0x1432477f0) = 0x20000040;
-  REFG(undefined8, 0x1432477e8) = "Camera follow the locked target instead of your movement.";
-  REFG(undefined8, 0x1432477f4) = 5;
-  REFG(undefined8, 0x1432477f8) = &REFG(undefined8, 0x143247810);
-  REFG(undefined8, 0x143247800) = 0;
-  REFG(undefined8, 0x143247808) = 0x8000000000000010;
-  REFG(undefined8, 0x143247810) = 0;
-  REFG(undefined8, 0x143247828) = 0;
-  REFG(undefined4, 0x143247830) = 0;
-  REFG(undefined8, 0x143247838) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1432477f8),&REFG(undefined8, 0x14261aa48),0);
-  REFG(undefined8, 0x143247840) = 0;
-  REFG(undefined8, 0x143247848) = &REFG(undefined8, 0x143247860);
-  REFG(undefined8, 0x143247850) = 0;
-  REFG(undefined8, 0x143247858) = 0x800000000000000f;
-  REFG(undefined8, 0x143247860) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x1432477c0));
-  REFG(undefined1, 0x143247870) = 0;
-  atexit(((code *)REFP(0x1425ff100)));
-  return 0;
-}
-
-/* ref: FUN_1402042a0 */
-undefined8 FUN_1402042a0(void)
-{
-  REFG(undefined8, 0x143247888) = CALLF(ulonglong, FUN_140216fc0)("ameraFollowTargetCombat",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143247898) = 0x18;
-  REFG(undefined8, 0x143247890) = "CameraFollowTargetCombat";
-  REFG(undefined8, 0x1432478a8) = 0x20000000;
-  REFG(undefined8, 0x1432478a0) = "Camera follow the locked target only during combat.";
-  REFG(undefined8, 0x1432478ac) = 5;
-  REFG(undefined8, 0x1432478b0) = &REFG(undefined8, 0x1432478c8);
-  REFG(undefined8, 0x1432478b8) = 0;
-  REFG(undefined8, 0x1432478c0) = 0x8000000000000010;
-  REFG(undefined8, 0x1432478c8) = 0;
-  REFG(undefined8, 0x1432478e0) = 0;
-  REFG(undefined4, 0x1432478e8) = 0;
-  REFG(undefined8, 0x1432478f0) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1432478b0),&REFG(undefined8, 0x14261aa48),1);
-  REFG(undefined8, 0x1432478f8) = 0;
-  REFG(undefined8, 0x143247900) = &REFG(undefined8, 0x143247918);
-  REFG(undefined8, 0x143247908) = 0;
-  REFG(undefined8, 0x143247910) = 0x800000000000000f;
-  REFG(undefined8, 0x143247918) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143247878));
-  REFG(undefined1, 0x143247928) = 1;
-  atexit(((code *)REFP(0x1425ff160)));
-  return 0;
-}
-
-/* ref: FUN_1402043d0 */
-undefined8 FUN_1402043d0(void)
-{
-  REFG(undefined8, 0x143247940) = CALLF(ulonglong, FUN_140216fc0)("ameraFollowTargetPvp",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143247950) = 0x15;
-  REFG(undefined8, 0x143247948) = "CameraFollowTargetPvp";
-  REFG(undefined8, 0x143247960) = 0x20000040;
-  REFG(undefined8, 0x143247958) = "Camera follow the locked target allowed during pvp";
-  REFG(undefined8, 0x143247964) = 5;
-  REFG(undefined8, 0x143247968) = &REFG(undefined8, 0x143247980);
-  REFG(undefined8, 0x143247970) = 0;
-  REFG(undefined8, 0x143247978) = 0x8000000000000010;
-  REFG(undefined8, 0x143247980) = 0;
-  REFG(undefined8, 0x143247998) = 0;
-  REFG(undefined4, 0x1432479a0) = 0;
-  REFG(undefined8, 0x1432479a8) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143247968),&REFG(undefined8, 0x14261aa48),0);
-  REFG(undefined8, 0x1432479b0) = 0;
-  REFG(undefined8, 0x1432479b8) = &REFG(undefined8, 0x1432479d0);
-  REFG(undefined8, 0x1432479c0) = 0;
-  REFG(undefined8, 0x1432479c8) = 0x800000000000000f;
-  REFG(undefined8, 0x1432479d0) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143247930));
-  REFG(undefined1, 0x1432479e0) = 0;
-  atexit(((code *)REFP(0x1425ff1c0)));
-  return 0;
-}
-
-/* ref: FUN_1402044f0 */
-undefined8 FUN_1402044f0(void)
-{
-  REFG(undefined8, 0x1432472c8) = CALLF(ulonglong, FUN_140216fc0)("ameraFollowYawSpeed",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x1432472d8) = 0x14;
-  REFG(undefined8, 0x1432472d0) = "CameraFollowYawSpeed";
-  REFG(undefined8, 0x1432472e8) = 0x20000000;
-  REFG(undefined8, 0x1432472e0) = "Controls speed of yaw following";
-  REFG(undefined8, 0x1432472ec) = 5;
-  REFG(undefined8, 0x1432472f0) = &REFG(undefined8, 0x143247308);
-  REFG(undefined8, 0x1432472f8) = 0;
-  REFG(undefined8, 0x143247300) = 0x8000000000000010;
-  REFG(undefined8, 0x143247308) = 0;
-  REFG(undefined8, 0x143247320) = 0;
-  REFG(undefined4, 0x143247328) = 0;
-  REFG(undefined8, 0x143247330) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1432472f0),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x14261c978));
-  REFG(undefined8, 0x143247338) = 0;
-  REFG(undefined8, 0x143247340) = &REFG(undefined8, 0x143247358);
-  REFG(undefined8, 0x143247348) = 0;
-  REFG(undefined8, 0x143247350) = 0x800000000000000f;
-  REFG(undefined8, 0x143247358) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x1432472b8));
-  REFG(undefined4, 0x143247368) = 0x3f800000;
-  atexit(((code *)REFP(0x1425ff220)));
-  return 0;
-}
-
-/* ref: FUN_140204620 */
-undefined8 FUN_140204620(void)
-{
-  REFG(undefined8, 0x14323fa08) = CALLF(ulonglong, FUN_140216fc0)("ameraFov",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14323fa18) = 9;
-  REFG(undefined8, 0x14323fa28) = 0x20000200;
-  REFG(undefined8, 0x14323fa10) = "cameraFov";
-  REFG(undefined8, 0x14323fa2c) = 5;
-  REFG(undefined8, 0x14323fa20) = "Default camera field of view";
-  REFG(undefined8, 0x14323fa38) = 0;
-  REFG(undefined8, 0x14323fa30) = &REFG(undefined8, 0x14323fa48);
-  REFG(undefined8, 0x14323fa40) = 0x8000000000000010;
-  REFG(undefined8, 0x14323fa60) = ((code *)REFP(0x141cadc50));
-  REFG(undefined8, 0x14323fa48) = 0;
-  REFG(undefined8, 0x14323fa68) = 0;
-  REFG(undefined8, 0x14323fa70) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14323fa30),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x142842980));
-  REFG(undefined8, 0x14323fa78) = 0;
-  REFG(undefined8, 0x14323fa80) = &REFG(undefined8, 0x14323fa98);
-  REFG(undefined8, 0x14323fa88) = 0;
-  REFG(undefined8, 0x14323fa90) = 0x800000000000000f;
-  REFG(undefined8, 0x14323fa98) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f590),&REFG(undefined8, 0x14323f9f8));
-  REFG(undefined4, 0x14323faa8) = 0x42b40000;
-  atexit(((code *)REFP(0x1425ff280)));
-  return 0;
-}
-
-/* ref: FUN_140204890 */
-undefined8 FUN_140204890(void)
-{
-  REFG(undefined8, 0x143240080) = CALLF(ulonglong, FUN_140216fc0)("est_cameraHeadMovementDeadZone",0xaf63e94c860202a3);
-  REFG(undefined8, 0x1432400a0) = 0x20000000;
-  REFG(undefined8, 0x143240088) = "test_cameraHeadMovementDeadZone";
-  REFG(undefined8, 0x1432400a4) = 5;
-  REFG(undefined8, 0x1432400a8) = &REFG(undefined8, 0x1432400c0);
-  REFG(undefined8, 0x1432400b0) = 0;
-  REFG(undefined8, 0x1432400b8) = 0x8000000000000010;
-  REFG(undefined8, 0x1432400d8) = ((code *)REFP(0x141c9e3d0));
-  REFG(undefined8, 0x143240090) = REFG(undefined8, 0x1427fcbd0);
-  REFG(undefined4, 0x143240098) = REFG(undefined8, 0x1427fcbd8);
-  REFG(undefined8, 0x1432400c0) = 0;
-  REFG(undefined8, 0x1432400e0) = 0;
-  REFG(undefined8, 0x1432400e8) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1432400a8),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x142842948));
-  REFG(undefined8, 0x1432400f0) = 0;
-  REFG(undefined8, 0x1432400f8) = &REFG(undefined8, 0x143240110);
-  REFG(undefined8, 0x143240100) = 0;
-  REFG(undefined8, 0x143240108) = 0x800000000000000f;
-  REFG(undefined8, 0x143240110) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x143240070));
-  REFG(undefined4, 0x143240120) = 0x3c75c28f;
-  atexit(((code *)REFP(0x1425ff340)));
-  return 0;
-}
-
-/* ref: FUN_1402049c0 */
-undefined8 FUN_1402049c0(void)
-{
-  REFG(undefined8, 0x14323ffc8) = CALLF(ulonglong, FUN_140216fc0)("est_cameraHeadMovementFirstPersonDampRate",0xaf63e94c860202a3);
-  REFG(undefined8, 0x14323ffe8) = 0x20000000;
-  REFG(undefined8, 0x14323ffd0) = "test_cameraHeadMovementFirstPersonDampRate";
-  REFG(undefined8, 0x14323ffec) = 5;
-  REFG(undefined8, 0x14323fff0) = &REFG(undefined8, 0x143240008);
-  REFG(undefined8, 0x14323fff8) = 0;
-  REFG(undefined8, 0x143240000) = 0x8000000000000010;
-  REFG(undefined8, 0x143240020) = ((code *)REFP(0x141cadcf0));
-  REFG(undefined8, 0x14323ffd8) = REFG(undefined8, 0x142842ad0);
-  REFG(undefined4, 0x14323ffe0) = REFG(undefined8, 0x142842ad8);
-  REFG(undefined8, 0x143240008) = 0;
-  REFG(undefined8, 0x143240028) = 0;
-  REFG(undefined8, 0x143240030) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14323fff0),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x1426f6198));
-  REFG(undefined8, 0x143240038) = 0;
-  REFG(undefined8, 0x143240040) = &REFG(undefined8, 0x143240058);
-  REFG(undefined8, 0x143240048) = 0;
-  REFG(undefined8, 0x143240050) = 0x800000000000000f;
-  REFG(undefined8, 0x143240058) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x14323ffb8));
-  REFG(undefined4, 0x143240068) = 0x41a00000;
-  atexit(((code *)REFP(0x1425ff3a0)));
-  return 0;
-}
-
-/* ref: FUN_140204c20 */
-undefined8 FUN_140204c20(void)
-{
-  REFG(undefined8, 0x14323fce8) = CALLF(ulonglong, FUN_140216fc0)("est_cameraHeadMovementMovingStrength",0xaf63e94c860202a3);
-  REFG(undefined8, 0x14323fd08) = 0x20000000;
-  REFG(undefined8, 0x14323fcf0) = "test_cameraHeadMovementMovingStrength";
-  REFG(undefined8, 0x14323fd0c) = 5;
-  REFG(undefined8, 0x14323fd10) = &REFG(undefined8, 0x14323fd28);
-  REFG(undefined8, 0x14323fcf8) = REFG(undefined8, 0x142842a80);
-  REFG(undefined4, 0x14323fd00) = REFG(undefined8, 0x142842a88);
-  REFG(undefined8, 0x14323fd20) = 0x8000000000000010;
-  REFG(undefined8, 0x14323fd18) = 0;
-  REFG(undefined8, 0x14323fd28) = 0;
-  REFG(undefined8, 0x14323fd40) = 0;
-  REFG(undefined4, 0x14323fd48) = 0;
-  REFG(undefined8, 0x14323fd50) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14323fd10),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x1427348e0));
-  REFG(undefined8, 0x14323fd58) = 0;
-  REFG(undefined8, 0x14323fd60) = &REFG(undefined8, 0x14323fd78);
-  REFG(undefined8, 0x14323fd68) = 0;
-  REFG(undefined8, 0x14323fd70) = 0x800000000000000f;
-  REFG(undefined8, 0x14323fd78) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x14323fcd8));
-  REFG(undefined4, 0x14323fd88) = 0x3f000000;
-  atexit(((code *)REFP(0x1425ff460)));
-  return 0;
-}
-
-/* ref: FUN_140204d50 */
-undefined8 FUN_140204d50(void)
-{
-  REFG(undefined8, 0x14323fc30) = CALLF(ulonglong, FUN_140216fc0)("est_cameraHeadMovementRangeScale",0xaf63e94c860202a3);
-  REFG(undefined8, 0x14323fc50) = 0x20000000;
-  REFG(undefined8, 0x14323fc38) = "test_cameraHeadMovementRangeScale";
-  REFG(undefined8, 0x14323fc54) = 5;
-  REFG(undefined8, 0x14323fc58) = &REFG(undefined8, 0x14323fc70);
-  REFG(undefined8, 0x14323fc60) = 0;
-  REFG(undefined8, 0x14323fc68) = 0x8000000000000010;
-  REFG(undefined8, 0x14323fc88) = ((code *)REFP(0x141c9e3d0));
-  REFG(undefined8, 0x14323fc40) = REFG(undefined8, 0x142842a60);
-  REFG(undefined4, 0x14323fc48) = REFG(undefined8, 0x142842a68);
-  REFG(undefined8, 0x14323fc70) = 0;
-  REFG(undefined8, 0x14323fc90) = 0;
-  REFG(undefined8, 0x14323fc98) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14323fc58),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x1426e2cf0));
-  REFG(undefined8, 0x14323fca0) = 0;
-  REFG(undefined8, 0x14323fca8) = &REFG(undefined8, 0x14323fcc0);
-  REFG(undefined8, 0x14323fcb0) = 0;
-  REFG(undefined8, 0x14323fcb8) = 0x800000000000000f;
-  REFG(undefined8, 0x14323fcc0) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x14323fc20));
-  REFG(undefined4, 0x14323fcd0) = 0x40a00000;
-  atexit(((code *)REFP(0x1425ff4c0)));
-  return 0;
-}
-
-/* ref: FUN_140204fb0 */
-undefined8 FUN_140204fb0(void)
-{
-  REFG(undefined8, 0x14323fda0) = CALLF(ulonglong, FUN_140216fc0)("est_cameraHeadMovementStandingStrength",0xaf63e94c860202a3);
-  REFG(undefined8, 0x14323fdc0) = 0x20000000;
-  REFG(undefined8, 0x14323fda8) = "test_cameraHeadMovementStandingStrength";
-  REFG(undefined8, 0x14323fdc4) = 5;
-  REFG(undefined8, 0x14323fdc8) = &REFG(undefined8, 0x14323fde0);
-  REFG(undefined8, 0x14323fdb0) = REFG(undefined8, 0x142842aa0);
-  REFG(undefined4, 0x14323fdb8) = REFG(undefined8, 0x142842aa8);
-  REFG(undefined8, 0x14323fdd8) = 0x8000000000000010;
-  REFG(undefined8, 0x14323fdd0) = 0;
-  REFG(undefined8, 0x14323fde0) = 0;
-  REFG(undefined8, 0x14323fdf8) = 0;
-  REFG(undefined4, 0x14323fe00) = 0;
-  REFG(undefined8, 0x14323fe08) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14323fdc8),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x142842958));
-  REFG(undefined8, 0x14323fe10) = 0;
-  REFG(undefined8, 0x14323fe18) = &REFG(undefined8, 0x14323fe30);
-  REFG(undefined8, 0x14323fe20) = 0;
-  REFG(undefined8, 0x14323fe28) = 0x800000000000000f;
-  REFG(undefined8, 0x14323fe30) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x14323fd90));
-  REFG(undefined4, 0x14323fe40) = 0x3e99999a;
-  atexit(((code *)REFP(0x1425ff580)));
-  return 0;
-}
-
-/* ref: FUN_140205200 */
-undefined8 FUN_140205200(void)
-{
-  REFG(undefined8, 0x143240b48) = CALLF(ulonglong, FUN_140216fc0)("ameraPitchMoveSpeed",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143240b68) = 0x20000000;
-  REFG(undefined8, 0x143240b50) = "cameraPitchMoveSpeed";
-  REFG(undefined8, 0x143240b6c) = 5;
-  REFG(undefined8, 0x143240b70) = &REFG(undefined8, 0x143240b88);
-  REFG(undefined8, 0x143240b78) = 0;
-  REFG(undefined8, 0x143240b80) = 0x8000000000000010;
-  REFG(undefined8, 0x143240ba0) = ((code *)REFP(0x141cadb90));
-  REFG(undefined8, 0x143240b58) = REFG(undefined8, 0x142842a40);
-  REFG(undefined4, 0x143240b60) = REFG(undefined8, 0x142842a48);
-  REFG(undefined8, 0x143240b88) = 0;
-  REFG(undefined8, 0x143240ba8) = 0;
-  REFG(undefined8, 0x143240bb0) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143240b70),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x142842980));
-  REFG(undefined8, 0x143240bb8) = 0;
-  REFG(undefined8, 0x143240bc0) = &REFG(undefined8, 0x143240bd8);
-  REFG(undefined8, 0x143240bc8) = 0;
-  REFG(undefined8, 0x143240bd0) = 0x800000000000000f;
-  REFG(undefined8, 0x143240bd8) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143240b38));
-  REFG(undefined4, 0x143240be8) = 0x42b40000;
-  atexit(((code *)REFP(0x1425ff640)));
-  return 0;
-}
-
-/* ref: FUN_140205330 */
-undefined8 FUN_140205330(void)
-{
-  REFG(undefined8, 0x14324efd8) = CALLF(ulonglong, FUN_140216fc0)("ameraPitchSmoothMax",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14324eff8) = 0x20000000;
-  REFG(undefined8, 0x14324efe0) = "cameraPitchSmoothMax";
-  REFG(undefined8, 0x14324effc) = 5;
-  REFG(undefined8, 0x14324f000) = &REFG(undefined8, 0x14324f018);
-  REFG(undefined8, 0x14324f008) = 0;
-  REFG(undefined8, 0x14324f010) = 0x8000000000000010;
-  REFG(undefined8, 0x14324f030) = ((code *)REFP(0x141c9e420));
-  REFG(undefined8, 0x14324efe8) = REFG(undefined8, 0x142842a40);
-  REFG(undefined4, 0x14324eff0) = REFG(undefined8, 0x142842a48);
-  REFG(undefined8, 0x14324f018) = 0;
-  REFG(undefined8, 0x14324f038) = 0;
-  REFG(undefined8, 0x14324f040) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14324f000),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x1426f61b0));
-  REFG(undefined8, 0x14324f048) = 0;
-  REFG(undefined8, 0x14324f050) = &REFG(undefined8, 0x14324f068);
-  REFG(undefined8, 0x14324f058) = 0;
-  REFG(undefined8, 0x14324f060) = 0x800000000000000f;
-  REFG(undefined8, 0x14324f068) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14324efc8));
-  REFG(undefined4, 0x14324f078) = 0x41b80000;
-  atexit(((code *)REFP(0x1425ff6a0)));
-  return 0;
-}
-
-/* ref: FUN_140205460 */
-undefined8 FUN_140205460(void)
-{
-  REFG(undefined8, 0x14324ef20) = CALLF(ulonglong, FUN_140216fc0)("ameraPitchSmoothMin",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14324ef40) = 0x20000000;
-  REFG(undefined8, 0x14324ef44) = 5;
-  REFG(undefined8, 0x14324ef28) = "cameraPitchSmoothMin";
-  REFG(undefined8, 0x14324ef50) = 0;
-  REFG(undefined8, 0x14324ef48) = &REFG(undefined8, 0x14324ef60);
-  REFG(undefined8, 0x14324ef60) = 0;
-  REFG(undefined8, 0x14324ef58) = 0x8000000000000010;
-  REFG(undefined8, 0x14324ef80) = 0;
-  REFG(undefined8, 0x14324ef78) = ((code *)REFP(0x141c9e420));
-  REFG(undefined8, 0x14324ef30) = REFG(undefined8, 0x142842a40);
-  REFG(undefined4, 0x14324ef38) = REFG(undefined8, 0x142842a48);
-  REFG(undefined8, 0x14324ef88) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14324ef48),&REFG(undefined8, 0x142635a08),0);
-  REFG(undefined8, 0x14324ef90) = 0;
-  REFG(undefined8, 0x14324ef98) = &REFG(undefined8, 0x14324efb0);
-  REFG(undefined8, 0x14324efa0) = 0;
-  REFG(undefined8, 0x14324efa8) = 0x800000000000000f;
-  REFG(undefined8, 0x14324efb0) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14324ef10));
-  REFG(undefined4, 0x14324efc0) = 0;
-  atexit(((code *)REFP(0x1425ff700)));
-  return 0;
-}
-
-/* ref: FUN_1402056c0 */
-undefined8 FUN_1402056c0(void)
-{
-  REFG(undefined8, 0x14324ea18) = CALLF(ulonglong, FUN_140216fc0)("ameraPivot",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14324ea38) = 0x20000000;
-  REFG(undefined8, 0x14324ea20) = "cameraPivot";
-  REFG(undefined8, 0x14324ea3c) = 5;
-  REFG(undefined8, 0x14324ea40) = &REFG(undefined8, 0x14324ea58);
-  REFG(undefined8, 0x14324ea28) = REFG(undefined8, 0x1428429f0);
-  REFG(undefined4, 0x14324ea30) = REFG(undefined8, 0x1428429f8);
-  REFG(undefined8, 0x14324ea48) = 0;
-  REFG(undefined8, 0x14324ea50) = 0x8000000000000010;
-  REFG(undefined8, 0x14324ea58) = 0;
-  REFG(undefined8, 0x14324ea70) = 0;
-  REFG(undefined4, 0x14324ea78) = 0;
-  REFG(undefined8, 0x14324ea80) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14324ea40),&REFG(undefined8, 0x14261aa48),1);
-  REFG(undefined8, 0x14324ea88) = 0;
-  REFG(undefined8, 0x14324ea90) = &REFG(undefined8, 0x14324eaa8);
-  REFG(undefined8, 0x14324ea98) = 0;
-  REFG(undefined8, 0x14324eaa0) = 0x800000000000000f;
-  REFG(undefined8, 0x14324eaa8) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14324ea08));
-  REFG(undefined1, 0x14324eab8) = 1;
-  atexit(((code *)REFP(0x1425ff7c0)));
-  return 0;
-}
-
-/* ref: FUN_1402057e0 */
-undefined8 FUN_1402057e0(void)
-{
-  REFG(undefined8, 0x14324ead0) = CALLF(ulonglong, FUN_140216fc0)("ameraPivotDXMax",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14324eaf0) = 0x20000000;
-  REFG(undefined8, 0x14324ead8) = "cameraPivotDXMax";
-  REFG(undefined8, 0x14324eaf4) = 5;
-  REFG(undefined8, 0x14324eaf8) = &REFG(undefined8, 0x14324eb10);
-  REFG(undefined8, 0x14324eae0) = REFG(undefined8, 0x1427fcba0);
-  REFG(undefined4, 0x14324eae8) = REFG(undefined8, 0x1427fcba8);
-  REFG(undefined8, 0x14324eb08) = 0x8000000000000010;
-  REFG(undefined8, 0x14324eb00) = 0;
-  REFG(undefined8, 0x14324eb10) = 0;
-  REFG(undefined8, 0x14324eb28) = 0;
-  REFG(undefined4, 0x14324eb30) = 0;
-  REFG(undefined8, 0x14324eb38) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14324eaf8),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x1427fb008));
-  REFG(undefined8, 0x14324eb40) = 0;
-  REFG(undefined8, 0x14324eb48) = &REFG(undefined8, 0x14324eb60);
-  REFG(undefined8, 0x14324eb50) = 0;
-  REFG(undefined8, 0x14324eb58) = 0x800000000000000f;
-  REFG(undefined8, 0x14324eb60) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14324eac0));
-  REFG(undefined4, 0x14324eb70) = 0x3d4ccccd;
-  atexit(((code *)REFP(0x1425ff820)));
-  return 0;
-}
-
-/* ref: FUN_140205910 */
-undefined8 FUN_140205910(void)
-{
-  REFG(undefined8, 0x14324eb88) = CALLF(ulonglong, FUN_140216fc0)("ameraPivotDYMin",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14324eba8) = 0x20000000;
-  REFG(undefined8, 0x14324eb90) = "cameraPivotDYMin";
-  REFG(undefined8, 0x14324ebac) = 5;
-  REFG(undefined8, 0x14324ebb0) = &REFG(undefined8, 0x14324ebc8);
-  REFG(undefined8, 0x14324eb98) = REFG(undefined8, 0x1427fcba0);
-  REFG(undefined4, 0x14324eba0) = REFG(undefined8, 0x1427fcba8);
-  REFG(undefined8, 0x14324ebb8) = 0;
-  REFG(undefined8, 0x14324ebc0) = 0x8000000000000010;
-  REFG(undefined8, 0x14324ebc8) = 0;
-  REFG(undefined8, 0x14324ebe0) = 0;
-  REFG(undefined4, 0x14324ebe8) = 0;
-  REFG(undefined8, 0x14324ebf0) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14324ebb0),&REFG(undefined8, 0x142635a08),0);
-  REFG(undefined8, 0x14324ebf8) = 0;
-  REFG(undefined8, 0x14324ec00) = &REFG(undefined8, 0x14324ec18);
-  REFG(undefined8, 0x14324ec08) = 0;
-  REFG(undefined8, 0x14324ec10) = 0x800000000000000f;
-  REFG(undefined8, 0x14324ec18) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14324eb78));
-  REFG(undefined4, 0x14324ec28) = 0;
-  atexit(((code *)REFP(0x1425ff880)));
-  return 0;
-}
-
-/* ref: FUN_140205a30 */
-undefined8 FUN_140205a30(void)
-{
-  float fVar1;
-  
-  fVar1 = REFG(undefined4, 0x143241768);
-  REFG(undefined8, 0x14324f370) = CALLF(ulonglong, FUN_140216fc0)("ameraSavedDistance",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14324f390) = 0x20000000;
-  REFG(undefined8, 0x14324f394) = 5;
-  REFG(undefined8, 0x14324f378) = "cameraSavedDistance";
-  REFG(undefined8, 0x14324f3a0) = 0;
-  REFG(undefined8, 0x14324f398) = &REFG(undefined8, 0x14324f3b0);
-  REFG(undefined8, 0x14324f3a8) = 0x8000000000000010;
-  REFG(undefined8, 0x14324f3c8) = ((code *)REFP(0x141c9e3d0));
-  REFG(undefined8, 0x14324f3b0) = 0;
-  REFG(undefined8, 0x14324f380) = REFG(undefined8, 0x142842a30);
-  REFG(undefined4, 0x14324f388) = REFG(undefined8, 0x142842a38);
-  REFG(undefined8, 0x14324f3d0) = 0;
-  REFG(undefined8, 0x14324f3d8) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14324f398),&REFG(undefined8, 0x142635a08),(double)fVar1);
-  REFG(undefined8, 0x14324f3e0) = 0;
-  REFG(undefined8, 0x14324f3e8) = &REFG(undefined8, 0x14324f400);
-  REFG(undefined8, 0x14324f3f0) = 0;
-  REFG(undefined8, 0x14324f3f8) = 0x800000000000000f;
-  REFG(undefined8, 0x14324f400) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f548),&REFG(undefined8, 0x14324f360));
-  REFG(undefined4, 0x14324f410) = fVar1;
-  atexit(((code *)REFP(0x1425ff8e0)));
-  return 0;
-}
-
-/* ref: FUN_140205ca0 */
-undefined8 FUN_140205ca0(void)
-{
-  float fVar1;
-  
-  fVar1 = REFG(undefined4, 0x143241820);
-  REFG(undefined8, 0x14324f598) = CALLF(ulonglong, FUN_140216fc0)("ameraSavedPitch",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14324f5b8) = 0x20000000;
-  REFG(undefined8, 0x14324f5a0) = "cameraSavedPitch";
-  REFG(undefined8, 0x14324f5bc) = 5;
-  REFG(undefined8, 0x14324f5c0) = &REFG(undefined8, 0x14324f5d8);
-  REFG(undefined8, 0x14324f5d0) = 0x8000000000000010;
-  REFG(undefined8, 0x14324f5a8) = REFG(undefined8, 0x1427fcba0);
-  REFG(undefined4, 0x14324f5b0) = REFG(undefined8, 0x1427fcba8);
-  REFG(undefined8, 0x14324f5c8) = 0;
-  REFG(undefined8, 0x14324f5d8) = 0;
-  REFG(undefined8, 0x14324f600) = 0;
-  REFG(undefined8, 0x14324f5f0) = 0;
-  REFG(undefined4, 0x14324f5f8) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14324f5c0),&REFG(undefined8, 0x142635a08),(double)fVar1);
-  REFG(undefined8, 0x14324f608) = 0;
-  REFG(undefined8, 0x14324f610) = &REFG(undefined8, 0x14324f628);
-  REFG(undefined8, 0x14324f618) = 0;
-  REFG(undefined8, 0x14324f620) = 0x800000000000000f;
-  REFG(undefined8, 0x14324f628) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f548),&REFG(undefined8, 0x14324f588));
-  REFG(undefined4, 0x14324f638) = fVar1;
-  atexit(((code *)REFP(0x1425ff9a0)));
-  return 0;
-}
-
-/* ref: FUN_140205f00 */
-undefined8 FUN_140205f00(void)
-{
-  REFG(undefined8, 0x1432425e0) = CALLF(ulonglong, FUN_140216fc0)("ameraSmooth",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143242600) = 0x20000000;
-  REFG(undefined8, 0x1432425e8) = "cameraSmooth";
-  REFG(undefined8, 0x143242604) = 5;
-  REFG(undefined8, 0x143242608) = &REFG(undefined8, 0x143242620);
-  REFG(undefined8, 0x1432425f0) = REFG(undefined8, 0x1427fcb80);
-  REFG(undefined4, 0x1432425f8) = REFG(undefined8, 0x1427fcb88);
-  REFG(undefined8, 0x143242610) = 0;
-  REFG(undefined8, 0x143242618) = 0x8000000000000010;
-  REFG(undefined8, 0x143242620) = 0;
-  REFG(undefined8, 0x143242638) = 0;
-  REFG(undefined4, 0x143242640) = 0;
-  REFG(undefined8, 0x143242648) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143242608),&REFG(undefined8, 0x14261aa48),1);
-  REFG(undefined8, 0x143242650) = 0;
-  REFG(undefined8, 0x143242658) = &REFG(undefined8, 0x143242670);
-  REFG(undefined8, 0x143242660) = 0;
-  REFG(undefined8, 0x143242668) = 0x800000000000000f;
-  REFG(undefined8, 0x143242670) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x1432425d0));
-  REFG(undefined1, 0x143242680) = 1;
-  atexit(((code *)REFP(0x1425ffa60)));
-  return 0;
-}
-
-/* ref: FUN_1402064b0 */
-undefined8 FUN_1402064b0(void)
-{
-  REFG(undefined8, 0x143242698) = CALLF(ulonglong, FUN_140216fc0)("ameraSmoothPitch",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x1432426b8) = 0x20000000;
-  REFG(undefined8, 0x1432426a0) = "cameraSmoothPitch";
-  REFG(undefined8, 0x1432426bc) = 5;
-  REFG(undefined8, 0x1432426c0) = &REFG(undefined8, 0x1432426d8);
-  REFG(undefined8, 0x1432426a8) = REFG(undefined8, 0x142842a20);
-  REFG(undefined4, 0x1432426b0) = REFG(undefined8, 0x142842a28);
-  REFG(undefined8, 0x1432426c8) = 0;
-  REFG(undefined8, 0x1432426d0) = 0x8000000000000010;
-  REFG(undefined8, 0x1432426d8) = 0;
-  REFG(undefined8, 0x1432426f0) = 0;
-  REFG(undefined4, 0x1432426f8) = 0;
-  REFG(undefined8, 0x143242700) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1432426c0),&REFG(undefined8, 0x14261aa48),1);
-  REFG(undefined8, 0x143242708) = 0;
-  REFG(undefined8, 0x143242710) = &REFG(undefined8, 0x143242728);
-  REFG(undefined8, 0x143242718) = 0;
-  REFG(undefined8, 0x143242720) = 0x800000000000000f;
-  REFG(undefined8, 0x143242728) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143242688));
-  REFG(undefined1, 0x143242738) = 1;
-  atexit(((code *)REFP(0x1425ffb40)));
-  return 0;
-}
-
-/* ref: FUN_140206700 */
-undefined8 FUN_140206700(void)
-{
-  REFG(undefined8, 0x14324f2b8) = CALLF(ulonglong, FUN_140216fc0)("ameraSmoothTimeMax",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14324f2d8) = 0x20000000;
-  REFG(undefined8, 0x14324f2c0) = "cameraSmoothTimeMax";
-  REFG(undefined8, 0x14324f2dc) = 5;
-  REFG(undefined8, 0x14324f2e0) = &REFG(undefined8, 0x14324f2f8);
-  REFG(undefined8, 0x14324f2e8) = 0;
-  REFG(undefined8, 0x14324f2f0) = 0x8000000000000010;
-  REFG(undefined8, 0x14324f310) = ((code *)REFP(0x141cadda0));
-  REFG(undefined8, 0x14324f2c8) = REFG(undefined8, 0x142842a30);
-  REFG(undefined4, 0x14324f2d0) = REFG(undefined8, 0x142842a38);
-  REFG(undefined8, 0x14324f2f8) = 0;
-  REFG(undefined8, 0x14324f318) = 0;
-  REFG(undefined8, 0x14324f320) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14324f2e0),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x1426e2ce0));
-  REFG(undefined8, 0x14324f328) = 0;
-  REFG(undefined8, 0x14324f330) = &REFG(undefined8, 0x14324f348);
-  REFG(undefined8, 0x14324f338) = 0;
-  REFG(undefined8, 0x14324f340) = 0x800000000000000f;
-  REFG(undefined8, 0x14324f348) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14324f2a8));
-  REFG(undefined4, 0x14324f358) = 0x40000000;
-  atexit(((code *)REFP(0x1425ffc00)));
-  return 0;
-}
-
-/* ref: FUN_140206830 */
-undefined8 FUN_140206830(void)
-{
-  REFG(undefined8, 0x14324f200) = CALLF(ulonglong, FUN_140216fc0)("ameraSmoothTimeMin",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14324f220) = 0x20000000;
-  REFG(undefined8, 0x14324f208) = "cameraSmoothTimeMin";
-  REFG(undefined8, 0x14324f224) = 5;
-  REFG(undefined8, 0x14324f228) = &REFG(undefined8, 0x14324f240);
-  REFG(undefined8, 0x14324f230) = 0;
-  REFG(undefined8, 0x14324f238) = 0x8000000000000010;
-  REFG(undefined8, 0x14324f258) = ((code *)REFP(0x141cadda0));
-  REFG(undefined8, 0x14324f210) = REFG(undefined8, 0x142842a30);
-  REFG(undefined4, 0x14324f218) = REFG(undefined8, 0x142842a38);
-  REFG(undefined8, 0x14324f240) = 0;
-  REFG(undefined8, 0x14324f260) = 0;
-  REFG(undefined8, 0x14324f268) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14324f228),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x1427fb018));
-  REFG(undefined8, 0x14324f270) = 0;
-  REFG(undefined8, 0x14324f278) = &REFG(undefined8, 0x14324f290);
-  REFG(undefined8, 0x14324f280) = 0;
-  REFG(undefined8, 0x14324f288) = 0x800000000000000f;
-  REFG(undefined8, 0x14324f290) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14324f1f0));
-  REFG(undefined4, 0x14324f2a0) = 0x3dcccccd;
-  atexit(((code *)REFP(0x1425ffc60)));
-  return 0;
-}
-
-/* ref: FUN_140206c80 */
-undefined8 FUN_140206c80(void)
-{
-  REFG(undefined8, 0x143242750) = CALLF(ulonglong, FUN_140216fc0)("ameraSmoothYaw",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143242770) = 0x20000000;
-  REFG(undefined8, 0x143242758) = "cameraSmoothYaw";
-  REFG(undefined8, 0x143242774) = 5;
-  REFG(undefined8, 0x143242778) = &REFG(undefined8, 0x143242790);
-  REFG(undefined8, 0x143242760) = REFG(undefined8, 0x142842a10);
-  REFG(undefined4, 0x143242768) = REFG(undefined8, 0x142842a18);
-  REFG(undefined8, 0x143242780) = 0;
-  REFG(undefined8, 0x143242788) = 0x8000000000000010;
-  REFG(undefined8, 0x143242790) = 0;
-  REFG(undefined8, 0x1432427a8) = 0;
-  REFG(undefined4, 0x1432427b0) = 0;
-  REFG(undefined8, 0x1432427b8) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143242778),&REFG(undefined8, 0x14261aa48),1);
-  REFG(undefined8, 0x1432427c0) = 0;
-  REFG(undefined8, 0x1432427c8) = &REFG(undefined8, 0x1432427e0);
-  REFG(undefined8, 0x1432427d0) = 0;
-  REFG(undefined8, 0x1432427d8) = 0x800000000000000f;
-  REFG(undefined8, 0x1432427e0) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143242740));
-  REFG(undefined1, 0x1432427f0) = 1;
-  atexit(((code *)REFP(0x1425ffda0)));
-  return 0;
-}
-
-/* ref: FUN_140206da0 */
-undefined8 FUN_140206da0(void)
-{
-  REFG(undefined8, 0x14324edb0) = CALLF(ulonglong, FUN_140216fc0)("ameraSubmergePitch",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14324edd0) = 0x20000000;
-  REFG(undefined8, 0x14324edb8) = "cameraSubmergePitch";
-  REFG(undefined8, 0x14324edd4) = 5;
-  REFG(undefined8, 0x14324edd8) = &REFG(undefined8, 0x14324edf0);
-  REFG(undefined8, 0x14324ede0) = 0;
-  REFG(undefined8, 0x14324ede8) = 0x8000000000000010;
-  REFG(undefined8, 0x14324ee08) = ((code *)REFP(0x141c9e420));
-  REFG(undefined8, 0x14324edc0) = REFG(undefined8, 0x142842a30);
-  REFG(undefined4, 0x14324edc8) = REFG(undefined8, 0x142842a38);
-  REFG(undefined8, 0x14324edf0) = 0;
-  REFG(undefined8, 0x14324ee10) = 0;
-  REFG(undefined8, 0x14324ee18) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14324edd8),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x1426f6188));
-  REFG(undefined8, 0x14324ee20) = 0;
-  REFG(undefined8, 0x14324ee28) = &REFG(undefined8, 0x14324ee40);
-  REFG(undefined8, 0x14324ee30) = 0;
-  REFG(undefined8, 0x14324ee38) = 0x800000000000000f;
-  REFG(undefined8, 0x14324ee40) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14324eda0));
-  REFG(undefined4, 0x14324ee50) = 0x41900000;
-  atexit(((code *)REFP(0x1425ffe00)));
-  return 0;
-}
-
-/* ref: FUN_140206ed0 */
-undefined8 FUN_140206ed0(void)
-{
-  REFG(undefined8, 0x14324ecf8) = CALLF(ulonglong, FUN_140216fc0)("ameraSurfacePitch",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14324ed18) = 0x20000000;
-  REFG(undefined8, 0x14324ed1c) = 5;
-  REFG(undefined8, 0x14324ed00) = "cameraSurfacePitch";
-  REFG(undefined8, 0x14324ed28) = 0;
-  REFG(undefined8, 0x14324ed20) = &REFG(undefined8, 0x14324ed38);
-  REFG(undefined8, 0x14324ed38) = 0;
-  REFG(undefined8, 0x14324ed30) = 0x8000000000000010;
-  REFG(undefined8, 0x14324ed58) = 0;
-  REFG(undefined8, 0x14324ed50) = ((code *)REFP(0x141c9e420));
-  REFG(undefined8, 0x14324ed08) = REFG(undefined8, 0x1427fcbb0);
-  REFG(undefined4, 0x14324ed10) = REFG(undefined8, 0x1427fcbb8);
-  REFG(undefined8, 0x14324ed60) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14324ed20),&REFG(undefined8, 0x142635a08),0);
-  REFG(undefined8, 0x14324ed68) = 0;
-  REFG(undefined8, 0x14324ed70) = &REFG(undefined8, 0x14324ed88);
-  REFG(undefined8, 0x14324ed78) = 0;
-  REFG(undefined8, 0x14324ed80) = 0x800000000000000f;
-  REFG(undefined8, 0x14324ed88) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14324ece8));
-  REFG(undefined4, 0x14324ed98) = 0;
-  atexit(((code *)REFP(0x1425ffe60)));
-  return 0;
-}
-
-/* ref: FUN_140207000 */
-undefined8 FUN_140207000(void)
-{
-  REFG(undefined8, 0x143240640) = CALLF(ulonglong, FUN_140216fc0)("est_cameraTargetFocusEnemyStrengthPitch",0xaf63e94c860202a3);
-  REFG(undefined8, 0x143240660) = 0x20000000;
-  REFG(undefined8, 0x143240648) = "test_cameraTargetFocusEnemyStrengthPitch";
-  REFG(undefined8, 0x143240664) = 5;
-  REFG(undefined8, 0x143240668) = &REFG(undefined8, 0x143240680);
-  REFG(undefined8, 0x143240650) = REFG(undefined8, 0x142842ab0);
-  REFG(undefined4, 0x143240658) = REFG(undefined8, 0x142842ab8);
-  REFG(undefined8, 0x143240678) = 0x8000000000000010;
-  REFG(undefined8, 0x143240670) = 0;
-  REFG(undefined8, 0x143240680) = 0;
-  REFG(undefined8, 0x143240698) = 0;
-  REFG(undefined4, 0x1432406a0) = 0;
-  REFG(undefined8, 0x1432406a8) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143240668),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x142842960));
-  REFG(undefined8, 0x1432406b0) = 0;
-  REFG(undefined8, 0x1432406b8) = &REFG(undefined8, 0x1432406d0);
-  REFG(undefined8, 0x1432406c0) = 0;
-  REFG(undefined8, 0x1432406c8) = 0x800000000000000f;
-  REFG(undefined8, 0x1432406d0) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x143240630));
-  REFG(undefined4, 0x1432406e0) = 0x3ecccccd;
-  atexit(((code *)REFP(0x1425ffec0)));
-  return 0;
-}
-
-/* ref: FUN_140207130 */
-undefined8 FUN_140207130(void)
-{
-  REFG(undefined8, 0x1432406f8) = CALLF(ulonglong, FUN_140216fc0)("est_cameraTargetFocusEnemyStrengthYaw",0xaf63e94c860202a3);
-  REFG(undefined8, 0x143240718) = 0x20000000;
-  REFG(undefined8, 0x143240700) = "test_cameraTargetFocusEnemyStrengthYaw";
-  REFG(undefined8, 0x14324071c) = 5;
-  REFG(undefined8, 0x143240720) = &REFG(undefined8, 0x143240738);
-  REFG(undefined8, 0x143240708) = REFG(undefined8, 0x142842a90);
-  REFG(undefined4, 0x143240710) = REFG(undefined8, 0x142842a98);
-  REFG(undefined8, 0x143240730) = 0x8000000000000010;
-  REFG(undefined8, 0x143240728) = 0;
-  REFG(undefined8, 0x143240738) = 0;
-  REFG(undefined8, 0x143240750) = 0;
-  REFG(undefined4, 0x143240758) = 0;
-  REFG(undefined8, 0x143240760) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143240720),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x1427348e0));
-  REFG(undefined8, 0x143240768) = 0;
-  REFG(undefined8, 0x143240770) = &REFG(undefined8, 0x143240788);
-  REFG(undefined8, 0x143240778) = 0;
-  REFG(undefined8, 0x143240780) = 0x800000000000000f;
-  REFG(undefined8, 0x143240788) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x1432406e8));
-  REFG(undefined4, 0x143240798) = 0x3f000000;
-  atexit(((code *)REFP(0x1425fff20)));
-  return 0;
-}
-
-/* ref: FUN_140207260 */
-undefined8 FUN_140207260(void)
-{
-  REFG(undefined8, 0x143240868) = CALLF(ulonglong, FUN_140216fc0)("est_cameraTargetFocusInteractStrengthPitch",0xaf63e94c860202a3);
-  REFG(undefined8, 0x143240888) = 0x20000000;
-  REFG(undefined8, 0x143240870) = "test_cameraTargetFocusInteractStrengthPitch";
-  REFG(undefined8, 0x14324088c) = 5;
-  REFG(undefined8, 0x143240890) = &REFG(undefined8, 0x1432408a8);
-  REFG(undefined8, 0x143240878) = REFG(undefined8, 0x1427fcbe0);
-  REFG(undefined4, 0x143240880) = REFG(undefined8, 0x1427fcbe8);
-  REFG(undefined8, 0x1432408a0) = 0x8000000000000010;
-  REFG(undefined8, 0x143240898) = 0;
-  REFG(undefined8, 0x1432408a8) = 0;
-  REFG(undefined8, 0x1432408c0) = 0;
-  REFG(undefined4, 0x1432408c8) = 0;
-  REFG(undefined8, 0x1432408d0) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143240890),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x142631a40));
-  REFG(undefined8, 0x1432408d8) = 0;
-  REFG(undefined8, 0x1432408e0) = &REFG(undefined8, 0x1432408f8);
-  REFG(undefined8, 0x1432408e8) = 0;
-  REFG(undefined8, 0x1432408f0) = 0x800000000000000f;
-  REFG(undefined8, 0x1432408f8) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x143240858));
-  REFG(undefined4, 0x143240908) = 0x3f400000;
-  atexit(((code *)REFP(0x1425fff80)));
-  return 0;
-}
-
-/* ref: FUN_140207390 */
-undefined8 FUN_140207390(void)
-{
-  REFG(undefined8, 0x143240920) = CALLF(ulonglong, FUN_140216fc0)("est_cameraTargetFocusInteractStrengthYaw",0xaf63e94c860202a3);
-  REFG(undefined8, 0x143240940) = 0x20000000;
-  REFG(undefined8, 0x143240928) = "test_cameraTargetFocusInteractStrengthYaw";
-  REFG(undefined8, 0x143240944) = 5;
-  REFG(undefined8, 0x143240948) = &REFG(undefined8, 0x143240960);
-  REFG(undefined8, 0x143240930) = REFG(undefined8, 0x142842ac0);
-  REFG(undefined4, 0x143240938) = REFG(undefined8, 0x142842ac8);
-  REFG(undefined8, 0x143240958) = 0x8000000000000010;
-  REFG(undefined8, 0x143240950) = 0;
-  REFG(undefined8, 0x143240960) = 0;
-  REFG(undefined8, 0x143240978) = 0;
-  REFG(undefined4, 0x143240980) = 0;
-  REFG(undefined8, 0x143240988) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143240948),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x14261c978));
-  REFG(undefined8, 0x143240990) = 0;
-  REFG(undefined8, 0x143240998) = &REFG(undefined8, 0x1432409b0);
-  REFG(undefined8, 0x1432409a0) = 0;
-  REFG(undefined8, 0x1432409a8) = 0x800000000000000f;
-  REFG(undefined8, 0x1432409b0) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f578),&REFG(undefined8, 0x143240910));
-  REFG(undefined4, 0x1432409c0) = 0x3f800000;
-  atexit(((code *)REFP(0x1425fffe0)));
-  return 0;
-}
-
-/* ref: FUN_140207720 */
-undefined8 FUN_140207720(void)
-{
-  REFG(undefined8, 0x143247ab0) = CALLF(ulonglong, FUN_140216fc0)("ameraTerrainTilt",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143247ad0) = 0x20000000;
-  REFG(undefined8, 0x143247ab8) = "cameraTerrainTilt";
-  REFG(undefined8, 0x143247ad4) = 5;
-  REFG(undefined8, 0x143247ad8) = &REFG(undefined8, 0x143247af0);
-  REFG(undefined8, 0x143247ac0) = REFG(undefined8, 0x142842a20);
-  REFG(undefined4, 0x143247ac8) = REFG(undefined8, 0x142842a28);
-  REFG(undefined8, 0x143247ae0) = 0;
-  REFG(undefined8, 0x143247ae8) = 0x8000000000000010;
-  REFG(undefined8, 0x143247af0) = 0;
-  REFG(undefined8, 0x143247b08) = 0;
-  REFG(undefined4, 0x143247b10) = 0;
-  REFG(undefined8, 0x143247b18) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143247ad8),&REFG(undefined8, 0x14261aa48),0);
-  REFG(undefined8, 0x143247b20) = 0;
-  REFG(undefined8, 0x143247b28) = &REFG(undefined8, 0x143247b40);
-  REFG(undefined8, 0x143247b30) = 0;
-  REFG(undefined8, 0x143247b38) = 0x800000000000000f;
-  REFG(undefined8, 0x143247b40) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143247aa0));
-  REFG(undefined1, 0x143247b50) = 0;
-  atexit(((code *)REFP(0x142600100)));
-  return 0;
-}
-
-/* ref: FUN_1402082a0 */
-undefined8 FUN_1402082a0(void)
-{
-  REFG(undefined8, 0x143247b68) = CALLF(ulonglong, FUN_140216fc0)("ameraTerrainTiltTimeMin",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143247b88) = 0x20000000;
-  REFG(undefined8, 0x143247b70) = "cameraTerrainTiltTimeMin";
-  REFG(undefined8, 0x143247b8c) = 5;
-  REFG(undefined8, 0x143247b90) = &REFG(undefined8, 0x143247ba8);
-  REFG(undefined8, 0x143247b98) = 0;
-  REFG(undefined8, 0x143247ba0) = 0x8000000000000010;
-  REFG(undefined8, 0x143247bc0) = ((code *)REFP(0x141cadda0));
-  REFG(undefined8, 0x143247b78) = REFG(undefined8, 0x142842a50);
-  REFG(undefined4, 0x143247b80) = REFG(undefined8, 0x142842a58);
-  REFG(undefined8, 0x143247ba8) = 0;
-  REFG(undefined8, 0x143247bc8) = 0;
-  REFG(undefined8, 0x143247bd0) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143247b90),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x1426e2ce8));
-  REFG(undefined8, 0x143247bd8) = 0;
-  REFG(undefined8, 0x143247be0) = &REFG(undefined8, 0x143247bf8);
-  REFG(undefined8, 0x143247be8) = 0;
-  REFG(undefined8, 0x143247bf0) = 0x800000000000000f;
-  REFG(undefined8, 0x143247bf8) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143247b58));
-  REFG(undefined4, 0x143247c08) = 0x40400000;
-  atexit(((code *)REFP(0x142600240)));
-  return 0;
-}
-
-/* ref: FUN_140208810 */
-undefined8 FUN_140208810(void)
-{
-  REFG(undefined8, 0x14324e8a8) = CALLF(ulonglong, FUN_140216fc0)("ameraWaterCollision",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14324e8c8) = 0x20000000;
-  REFG(undefined8, 0x14324e8b0) = "cameraWaterCollision";
-  REFG(undefined8, 0x14324e8cc) = 5;
-  REFG(undefined8, 0x14324e8d0) = &REFG(undefined8, 0x14324e8e8);
-  REFG(undefined8, 0x14324e8b8) = REFG(undefined8, 0x142842a40);
-  REFG(undefined4, 0x14324e8c0) = REFG(undefined8, 0x142842a48);
-  REFG(undefined8, 0x14324e8d8) = 0;
-  REFG(undefined8, 0x14324e8e0) = 0x8000000000000010;
-  REFG(undefined8, 0x14324e8e8) = 0;
-  REFG(undefined8, 0x14324e900) = 0;
-  REFG(undefined4, 0x14324e908) = 0;
-  REFG(undefined8, 0x14324e910) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14324e8d0),&REFG(undefined8, 0x14261aa48),0);
-  REFG(undefined8, 0x14324e918) = 0;
-  REFG(undefined8, 0x14324e920) = &REFG(undefined8, 0x14324e938);
-  REFG(undefined8, 0x14324e928) = 0;
-  REFG(undefined8, 0x14324e930) = 0x800000000000000f;
-  REFG(undefined8, 0x14324e938) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14324e898));
-  REFG(undefined1, 0x14324e948) = 0;
-  atexit(((code *)REFP(0x1426003e0)));
-  return 0;
-}
-
-/* ref: FUN_140208930 */
-undefined8 FUN_140208930(void)
-{
-  REFG(undefined8, 0x143240c00) = CALLF(ulonglong, FUN_140216fc0)("ameraYawMoveSpeed",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143240c20) = 0x20000000;
-  REFG(undefined8, 0x143240c08) = "cameraYawMoveSpeed";
-  REFG(undefined8, 0x143240c24) = 5;
-  REFG(undefined8, 0x143240c28) = &REFG(undefined8, 0x143240c40);
-  REFG(undefined8, 0x143240c30) = 0;
-  REFG(undefined8, 0x143240c38) = 0x8000000000000010;
-  REFG(undefined8, 0x143240c58) = ((code *)REFP(0x141cadb90));
-  REFG(undefined8, 0x143240c10) = REFG(undefined8, 0x1427fcbb0);
-  REFG(undefined4, 0x143240c18) = REFG(undefined8, 0x1427fcbb8);
-  REFG(undefined8, 0x143240c40) = 0;
-  REFG(undefined8, 0x143240c60) = 0;
-  REFG(undefined8, 0x143240c68) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143240c28),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x142842988));
-  REFG(undefined8, 0x143240c70) = 0;
-  REFG(undefined8, 0x143240c78) = &REFG(undefined8, 0x143240c90);
-  REFG(undefined8, 0x143240c80) = 0;
-  REFG(undefined8, 0x143240c88) = 0x800000000000000f;
-  REFG(undefined8, 0x143240c90) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143240bf0));
-  REFG(undefined4, 0x143240ca0) = 0x43340000;
-  atexit(((code *)REFP(0x142600440)));
-  return 0;
-}
-
-/* ref: FUN_140208a60 */
-undefined8 FUN_140208a60(void)
-{
-  REFG(undefined8, 0x14324f148) = CALLF(ulonglong, FUN_140216fc0)("ameraYawSmoothMax",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14324f168) = 0x20000000;
-  REFG(undefined8, 0x14324f16c) = 5;
-  REFG(undefined8, 0x14324f150) = "cameraYawSmoothMax";
-  REFG(undefined8, 0x14324f178) = 0;
-  REFG(undefined8, 0x14324f170) = &REFG(undefined8, 0x14324f188);
-  REFG(undefined8, 0x14324f188) = 0;
-  REFG(undefined8, 0x14324f180) = 0x8000000000000010;
-  REFG(undefined8, 0x14324f1a8) = 0;
-  REFG(undefined8, 0x14324f1a0) = ((code *)REFP(0x141c9e450));
-  REFG(undefined8, 0x14324f158) = REFG(undefined8, 0x1427fcbb0);
-  REFG(undefined4, 0x14324f160) = REFG(undefined8, 0x1427fcbb8);
-  REFG(undefined8, 0x14324f1b0) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14324f170),&REFG(undefined8, 0x142635a08),0);
-  REFG(undefined8, 0x14324f1b8) = 0;
-  REFG(undefined8, 0x14324f1c0) = &REFG(undefined8, 0x14324f1d8);
-  REFG(undefined8, 0x14324f1c8) = 0;
-  REFG(undefined8, 0x14324f1d0) = 0x800000000000000f;
-  REFG(undefined8, 0x14324f1d8) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14324f138));
-  REFG(undefined4, 0x14324f1e8) = 0;
-  atexit(((code *)REFP(0x1426004a0)));
-  return 0;
-}
-
-/* ref: FUN_140208b90 */
-undefined8 FUN_140208b90(void)
-{
-  REFG(undefined8, 0x14324f090) = CALLF(ulonglong, FUN_140216fc0)("ameraYawSmoothMin",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x14324f0b0) = 0x20000000;
-  REFG(undefined8, 0x14324f0b4) = 5;
-  REFG(undefined8, 0x14324f098) = "cameraYawSmoothMin";
-  REFG(undefined8, 0x14324f0c0) = 0;
-  REFG(undefined8, 0x14324f0b8) = &REFG(undefined8, 0x14324f0d0);
-  REFG(undefined8, 0x14324f0d0) = 0;
-  REFG(undefined8, 0x14324f0c8) = 0x8000000000000010;
-  REFG(undefined8, 0x14324f0f0) = 0;
-  REFG(undefined8, 0x14324f0e8) = ((code *)REFP(0x141c9e450));
-  REFG(undefined8, 0x14324f0a0) = REFG(undefined8, 0x1427fcbb0);
-  REFG(undefined4, 0x14324f0a8) = REFG(undefined8, 0x1427fcbb8);
-  REFG(undefined8, 0x14324f0f8) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14324f0b8),&REFG(undefined8, 0x142635a08),0);
-  REFG(undefined8, 0x14324f100) = 0;
-  REFG(undefined8, 0x14324f108) = &REFG(undefined8, 0x14324f120);
-  REFG(undefined8, 0x14324f110) = 0;
-  REFG(undefined8, 0x14324f118) = 0x800000000000000f;
-  REFG(undefined8, 0x14324f120) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14324f080));
-  REFG(undefined4, 0x14324f130) = 0;
-  atexit(((code *)REFP(0x142600500)));
-  return 0;
-}
-
-/* ref: FUN_140208cc0 */
-undefined8 FUN_140208cc0(void)
-{
-  REFG(undefined8, 0x143241050) = CALLF(ulonglong, FUN_140216fc0)("ameraYawSmoothSpeed",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x143241070) = 0x20000000;
-  REFG(undefined8, 0x143241058) = "cameraYawSmoothSpeed";
-  REFG(undefined8, 0x143241074) = 5;
-  REFG(undefined8, 0x143241078) = &REFG(undefined8, 0x143241090);
-  REFG(undefined8, 0x143241080) = 0;
-  REFG(undefined8, 0x143241088) = 0x8000000000000010;
-  REFG(undefined8, 0x1432410a8) = ((code *)REFP(0x141cadb90));
-  REFG(undefined8, 0x143241060) = REFG(undefined8, 0x142842a40);
-  REFG(undefined4, 0x143241068) = REFG(undefined8, 0x142842a48);
-  REFG(undefined8, 0x143241090) = 0;
-  REFG(undefined8, 0x1432410b0) = 0;
-  REFG(undefined8, 0x1432410b8) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143241078),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x142842988));
-  REFG(undefined8, 0x1432410c0) = 0;
-  REFG(undefined8, 0x1432410c8) = &REFG(undefined8, 0x1432410e0);
-  REFG(undefined8, 0x1432410d0) = 0;
-  REFG(undefined8, 0x1432410d8) = 0x800000000000000f;
-  REFG(undefined8, 0x1432410e0) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x143241040));
-  REFG(undefined4, 0x1432410f0) = 0x43340000;
-  atexit(((code *)REFP(0x142600560)));
-  return 0;
-}
-
-/* ref: FUN_140208df0 */
-undefined8 FUN_140208df0(void)
-{
-  REFG(undefined8, 0x1432409d8) = CALLF(ulonglong, FUN_140216fc0)("ameraZoomSpeed",0xaf63de4c8601eff2);
-  REFG(undefined8, 0x1432409f8) = 0x20000000;
-  REFG(undefined8, 0x1432409e0) = "cameraZoomSpeed";
-  REFG(undefined8, 0x1432409fc) = 5;
-  REFG(undefined8, 0x143240a00) = &REFG(undefined8, 0x143240a18);
-  REFG(undefined8, 0x143240a08) = 0;
-  REFG(undefined8, 0x143240a10) = 0x8000000000000010;
-  REFG(undefined8, 0x143240a30) = ((code *)REFP(0x141cadcf0));
-  REFG(undefined8, 0x1432409e8) = REFG(undefined8, 0x142842a10);
-  REFG(undefined4, 0x1432409f0) = REFG(undefined8, 0x142842a18);
-  REFG(undefined8, 0x143240a18) = 0;
-  REFG(undefined8, 0x143240a38) = 0;
-  REFG(undefined8, 0x143240a40) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x143240a00),&REFG(undefined8, 0x142635a08),REFG(undefined8, 0x1426f6198));
-  REFG(undefined8, 0x143240a48) = 0;
-  REFG(undefined8, 0x143240a50) = &REFG(undefined8, 0x143240a68);
-  REFG(undefined8, 0x143240a58) = 0;
-  REFG(undefined8, 0x143240a60) = 0x800000000000000f;
-  REFG(undefined8, 0x143240a68) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x1432409c8));
-  REFG(undefined4, 0x143240a78) = 0x41a00000;
-  atexit(((code *)REFP(0x1426005c0)));
-  return 0;
-}
-
-/* ref: FUN_140209040 */
-undefined8 FUN_140209040(void)
-{
-  REFG(undefined8, 0x14323f950) = CALLF(ulonglong, FUN_140216fc0)("ouseInvertPitch",0xaf63e04c8601f358);
-  REFG(undefined8, 0x14323f970) = 0x20000000;
-  REFG(undefined8, 0x14323f958) = "mouseInvertPitch";
-  REFG(undefined8, 0x14323f974) = 5;
-  REFG(undefined8, 0x14323f978) = &REFG(undefined8, 0x14323f990);
-  REFG(undefined8, 0x14323f960) = REFG(undefined8, 0x1427fcba0);
-  REFG(undefined4, 0x14323f968) = REFG(undefined8, 0x1427fcba8);
-  REFG(undefined8, 0x14323f980) = 0;
-  REFG(undefined8, 0x14323f988) = 0x8000000000000010;
-  REFG(undefined8, 0x14323f990) = 0;
-  REFG(undefined8, 0x14323f9a8) = 0;
-  REFG(undefined4, 0x14323f9b0) = 0;
-  REFG(undefined8, 0x14323f9b8) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14323f978),&REFG(undefined8, 0x14261aa48),0);
-  REFG(undefined8, 0x14323f9c0) = 0;
-  REFG(undefined8, 0x14323f9c8) = &REFG(undefined8, 0x14323f9e0);
-  REFG(undefined8, 0x14323f9d0) = 0;
-  REFG(undefined8, 0x14323f9d8) = 0x800000000000000f;
-  REFG(undefined8, 0x14323f9e0) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14323f940));
-  REFG(undefined1, 0x14323f9f0) = 0;
-  atexit(((code *)REFP(0x142600680)));
-  return 0;
-}
-
-/* ref: FUN_140209160 */
-undefined8 FUN_140209160(void)
-{
-  REFG(undefined8, 0x14323f898) = CALLF(ulonglong, FUN_140216fc0)("ouseInvertYaw",0xaf63e04c8601f358);
-  REFG(undefined8, 0x14323f8b8) = 0x20000000;
-  REFG(undefined8, 0x14323f8a0) = "mouseInvertYaw";
-  REFG(undefined8, 0x14323f8bc) = 5;
-  REFG(undefined8, 0x14323f8c0) = &REFG(undefined8, 0x14323f8d8);
-  REFG(undefined8, 0x14323f8a8) = REFG(undefined8, 0x1427fcb90);
-  REFG(undefined4, 0x14323f8b0) = REFG(undefined8, 0x1427fcb98);
-  REFG(undefined8, 0x14323f8c8) = 0;
-  REFG(undefined8, 0x14323f8d0) = 0x8000000000000010;
-  REFG(undefined8, 0x14323f8d8) = 0;
-  REFG(undefined8, 0x14323f8f0) = 0;
-  REFG(undefined4, 0x14323f8f8) = 0;
-  REFG(undefined8, 0x14323f900) = 0;
-  CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x14323f8c0),&REFG(undefined8, 0x14261aa48),0);
-  REFG(undefined8, 0x14323f908) = 0;
-  REFG(undefined8, 0x14323f910) = &REFG(undefined8, 0x14323f928);
-  REFG(undefined8, 0x14323f918) = 0;
-  REFG(undefined8, 0x14323f920) = 0x800000000000000f;
-  REFG(undefined8, 0x14323f928) = 0;
-  CALLF(undefined8, FUN_14031ede0)(&REFG(undefined4, 0x14323f560),&REFG(undefined8, 0x14323f888));
-  REFG(undefined1, 0x14323f938) = 0;
-  atexit(((code *)REFP(0x1426006e0)));
-  return 0;
-}
-
-/* ref: FUN_140209340 */
-undefined8 FUN_140209340(void)
-{
-  CALLF(undefined4 *, FUN_141cae1c0)(&REFG(undefined8, 0x14324f660));
-  REFG(undefined1, 0x14324f8d0) = 0x10;
-  atexit((code *)((code *)REFP(0x142600740)));
-  return 0;
-}
-
-/* ref: FUN_140209430 */
-undefined8 FUN_140209430(void)
-{
-  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143251cf0),0x8d0,10);
-  atexit((code *)((code *)REFP(0x1426008f0)));
-  return 0;
-}
-
-/* ref: FUN_140209470 */
-undefined8 FUN_140209470(void)
-{
-  CALLF(byte *, FUN_14031e970)(&REFG(undefined8, 0x143251728),3,0x49,0x7b);
-  atexit(((code *)REFP(0x142600910)));
-  return 0;
-}
-
-/* ref: FUN_1402094b0 */
-undefined8 FUN_1402094b0(void)
-{
-  CALLF(undefined4 *, FUN_141cbff00)(&REFG(undefined4, 0x143251750));
-  _vector_constructor_iterator_(&REFG(undefined4, 0x1432519d0),0x28,2,((code *)REFP(0x141cc0210)));
-  CALLF(undefined8, FUN_141cd0970)(&REFG(undefined4, 0x143251750));
-  CALLF(undefined4 *, FUN_141cbff00)(&REFG(undefined8, 0x143251a20));
-  _vector_constructor_iterator_(&REFG(undefined4, 0x143251ca0),0x28,2,((code *)REFP(0x141cc0210)));
-  CALLF(undefined8, FUN_141cd0970)(&REFG(undefined8, 0x143251a20));
-  atexit(((code *)REFP(0x142600970)));
-  return 0;
-}
-
-/* ref: FUN_1402095a0 */
-undefined8 FUN_1402095a0(void)
-{
-  REFG(undefined8, 0x142d38648) = 0x142d38641;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d38638));
-  REFG(undefined4, 0x142d38638) = 0x10;
-  REFG(undefined8, 0x142d38640) = (undefined *)&REFG(undefined8, 0x142d38640);
-  REFG(undefined8, 0x142d38648) = 0x142d38641;
-  REFG(undefined4, 0x142d38678) = 0xffffffff;
-  REFG(undefined8, 0x142d3867c) = 0x80000000;
-  atexit(((code *)REFP(0x142600a40)));
-  return 0;
-}
-
-/* ref: FUN_140209610 */
-undefined8 FUN_140209610(void)
-{
-  REFG(undefined8, 0x142d386e8) = 0x142d386e1;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d386d8));
-  REFG(undefined4, 0x142d386d8) = 0x10;
-  REFG(undefined8, 0x142d386e0) = (undefined *)&REFG(undefined8, 0x142d386e0);
-  REFG(undefined8, 0x142d386e8) = 0x142d386e1;
-  REFG(undefined4, 0x142d38718) = 0xffffffff;
-  REFG(undefined8, 0x142d3871c) = 0x80000000;
-  atexit(((code *)REFP(0x142600b90)));
-  return 0;
-}
-
-/* ref: FUN_1402097e0 */
-undefined8 FUN_1402097e0(void)
-{
-  REFG(undefined8, 0x142d38698) = 0x142d38691;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d38688));
-  REFG(undefined4, 0x142d38688) = 0x10;
-  REFG(undefined8, 0x142d38690) = (undefined *)&REFG(undefined8, 0x142d38690);
-  REFG(undefined8, 0x142d38698) = 0x142d38691;
-  REFG(undefined4, 0x142d386c8) = 0xffffffff;
-  REFG(undefined8, 0x142d386cc) = 0x80000000;
-  atexit(((code *)REFP(0x142600db0)));
-  return 0;
-}
-
-/* ref: FUN_140209850 */
-undefined8 FUN_140209850(void)
-{
-  REFG(undefined8, 0x142d38738) = 0x142d38731;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d38728));
-  REFG(undefined4, 0x142d38728) = 0x10;
-  REFG(undefined8, 0x142d38730) = (undefined *)&REFG(undefined8, 0x142d38730);
-  REFG(undefined8, 0x142d38738) = 0x142d38731;
-  REFG(undefined4, 0x142d38768) = 0xffffffff;
-  REFG(undefined8, 0x142d3876c) = 0x80000000;
-  atexit(((code *)REFP(0x142600f00)));
-  return 0;
-}
-
-/* ref: FUN_140209980 */
-undefined8 FUN_140209980(void)
-{
-  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x1432617e0),0x90,8);
-  atexit(((code *)REFP(0x1426010b0)));
-  return 0;
-}
-
-/* ref: FUN_1402099b0 */
-undefined8 FUN_1402099b0(void)
-{
-  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143261808),0x70,8);
-  atexit(((code *)REFP(0x1426010f0)));
-  return 0;
-}
-
-/* ref: FUN_1402099e0 */
-undefined8 FUN_1402099e0(void)
-{
-  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143261830),0x78,8);
-  atexit(((code *)REFP(0x142601130)));
-  return 0;
-}
-
-/* ref: FUN_140209a10 */
-undefined8 FUN_140209a10(void)
-{
-  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143261860),0x168,8);
-  atexit(((code *)REFP(0x142601170)));
-  return 0;
-}
-
-/* ref: FUN_140209a40 */
-undefined8 FUN_140209a40(void)
-{
-  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143261888),0x78,8);
-  atexit(((code *)REFP(0x1426011b0)));
-  return 0;
-}
-
-/* ref: FUN_14020aa40 */
-undefined8 FUN_14020aa40(void)
-{
-  REFG(undefined4, 0x143264f90) = CALLF(uint, FUN_141df9b70)(&REFG(undefined1, 0x14287bad0));
-  return 0;
-}
-
-/* ref: FUN_14020aa60 */
-undefined8 FUN_14020aa60(void)
-{
-  REFG(undefined4, 0x143264f80) = CALLF(uint, FUN_141df9b70)(&REFG(undefined1, 0x14287bac0));
-  return 0;
-}
-
-/* ref: FUN_14020aa80 */
-undefined8 FUN_14020aa80(void)
-{
-  REFG(undefined4, 0x143264f94) = CALLF(uint, FUN_141df9b70)(&REFG(undefined1, 0x14287bad4));
-  return 0;
-}
-
-/* ref: FUN_14020aaa0 */
-undefined8 FUN_14020aaa0(void)
-{
-  REFG(undefined4, 0x143264f84) = CALLF(uint, FUN_141df9b70)(&REFG(undefined1, 0x14287bac4));
-  return 0;
-}
-
-/* ref: FUN_14020aac0 */
-undefined8 FUN_14020aac0(void)
-{
-  REFG(undefined4, 0x143264f98) = CALLF(uint, FUN_141df9b70)(&REFG(undefined1, 0x14287bad8));
-  return 0;
-}
-
-/* ref: FUN_14020aae0 */
-undefined8 FUN_14020aae0(void)
-{
-  REFG(undefined4, 0x143264f88) = CALLF(uint, FUN_141df9b70)(&REFG(undefined1, 0x14287bac8));
-  return 0;
-}
-
-/* ref: FUN_14020ab00 */
-undefined8 FUN_14020ab00(void)
-{
-  REFG(undefined4, 0x143264fa0) = CALLF(uint, FUN_141df9b70)(&REFG(undefined1, 0x14287bae0));
-  return 0;
-}
-
-/* ref: FUN_14020ab20 */
-undefined8 FUN_14020ab20(void)
-{
-  REFG(undefined4, 0x143264fa4) = CALLF(uint, FUN_141df9b70)(&REFG(undefined1, 0x14287bae4));
-  return 0;
-}
-
-/* ref: FUN_14020ab40 */
-undefined8 FUN_14020ab40(void)
-{
-  REFG(undefined4, 0x143264f7c) = CALLF(uint, FUN_141df9b70)(&REFG(undefined8, 0x1427e4edc));
-  return 0;
-}
-
-/* ref: FUN_14020ab60 */
-undefined8 FUN_14020ab60(void)
-{
-  REFG(undefined4, 0x143264f9c) = CALLF(uint, FUN_141df9b70)(&REFG(undefined1, 0x14287badc));
-  return 0;
-}
-
-/* ref: FUN_14020ab80 */
-undefined8 FUN_14020ab80(void)
-{
-  REFG(undefined4, 0x143264f8c) = CALLF(uint, FUN_141df9b70)(&REFG(undefined1, 0x14287bacc));
-  return 0;
-}
-
-/* ref: FUN_14020aba0 */
-undefined8 FUN_14020aba0(void)
-{
-  REFG(undefined4, 0x143264f78) = CALLF(uint, FUN_141df9b70)(&REFG(undefined1, 0x1426249b8));
-  return 0;
-}
-
-/* ref: FUN_14020afa0 */
-undefined8 FUN_14020afa0(void)
-{
-  longlong lVar1;
-  ulonglong uVar2;
-  
-  lVar1 = CALLF(undefined8, FUN_140266ca0)();
-  uVar2 = 1;
-  REFG(undefined4, 0x143478420) = (int)(lVar1 / 1000000);
-  if (REFG(undefined4, 0x143478420) == 0) {
-    REFG(undefined4, 0x143478420) = 1;
+/* ref: FUN_140201fc0 */
+undefined8 FUN_140201fc0(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
   }
-  do {
-    (&REFG(undefined4, 0x143478420))[uVar2] =
-         (*(uint *)(uVar2 * 4 + 0x14347841c) >> 0x1e ^ *(uint *)(uVar2 * 4 + 0x14347841c)) *
-         0x6c078965 + (int)uVar2;
-    uVar2 = uVar2 + 1;
-  } while (uVar2 < 0x270);
-  REFG(undefined4, 0x143478de0) = 0x270;
-  return 0;
-}
-
-/* ref: FUN_14020b5a0 */
-undefined8 FUN_14020b5a0(void)
-{
-  CALLF(undefined1, FUN_1402637c0)(&REFG(undefined8, 0x143490880));
-  atexit((code *)((code *)REFP(0x142601bd0)));
-  return 0;
-}
-
-/* ref: FUN_14020b5c0 */
-undefined8 FUN_14020b5c0(void)
-{
-  REFG(undefined8, 0x142d41b90) = CALLF(undefined8, FUN_140266c80)();
-  REFG(undefined8, 0x142d41b98) = REFG(undefined8, 0x142d41b90);
-  REFG(undefined8, 0x142d41ba0) = REFG(undefined8, 0x142d41b90);
-  atexit(((code *)REFP(0x142601be0)));
-  return 0;
-}
-
-/* ref: FUN_14020b730 */
-undefined8 FUN_14020b730(void)
-{
-  CALLF(undefined1, FUN_140262450)(&REFG(undefined8, 0x143490a00));
-  atexit((code *)((code *)REFP(0x142602090)));
+  atexit((code *)((code *)REFP(0x1425fdf90)));
   return 0;
 }
 
