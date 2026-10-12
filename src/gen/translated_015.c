@@ -476,7 +476,7 @@ undefined8 FUN_1413557c0(longlong *param_1)
 {
                     /* WARNING: Could not recover jumptable at 0x0001413557c3. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-  (**(code **)(*param_1 + 0x60))();
+  (**(code **)(*param_1 + 0x60))(param_1);
   return 0;
 }
 
@@ -486,7 +486,7 @@ longlong FUN_141355d30(longlong *param_1)
   longlong lVar1;
   int iVar2;
   
-  iVar2 = (**(code **)(*param_1 + 0xf8))();
+  iVar2 = (**(code **)(*param_1 + 0xf8))(param_1);
   lVar1 = param_1[8];
   while( true ) {
     if (lVar1 == 0) {

@@ -149,6 +149,8 @@ def main():
     ap.add_argument("--cwd", default=os.path.join(ROOT, "client", "_classic_"))
     ap.add_argument("--timeout", type=float, default=120.0)
     ap.add_argument("--log", default=None)
+    ap.add_argument("--skip", type=int, default=0, help="let this many exceptions pass first")
+    ap.add_argument("--dump", nargs="*", default=[], help="memory to show at the stop: hexaddr[:len] or a register")
     ap.add_argument("--second-chance", action="store_true",
                     help="report only an exception nothing handled (guarded faults pass through)")
     ap.add_argument("--args", default="", help="the command line after the exe, as one string")
@@ -203,6 +205,10 @@ def main():
             elif args.second_chance and event.u.Exception.dwFirstChance:
                 # let the program's own handlers (GenFault's guards) have it first
                 status = DBG_EXCEPTION_NOT_HANDLED
+            elif args.skip > 0:
+                # an earlier fault than the one wanted: the program handles it
+                args.skip -= 1
+                status = DBG_EXCEPTION_NOT_HANDLED
             else:
                 thread = k32.OpenThread(0x1FFFFF, False, event.dwThreadId)
                 context = CONTEXT()
@@ -216,6 +222,15 @@ def main():
                              "R13", "R14", "R15"):
                     print("  %s %016x" % (name, getattr(context, name)))
                 dump_stack(pi.hProcess, exe, base, context)
+                for spec in args.dump:
+                    # address:length, or a register name for what it points at
+                    where, _, length = spec.partition(":")
+                    address = getattr(context, where.capitalize()) if hasattr(context, where.capitalize()) \
+                        else int(where, 16)
+                    data = read(pi.hProcess, address, int(length or "64", 0))
+                    print("memory %x:" % address)
+                    for k in range(0, len(data), 16):
+                        print("  %x  %s" % (address + k, data[k:k + 16].hex(" ")))
                 k32.TerminateProcess(pi.hProcess, 1)
                 return 0
         k32.ContinueDebugEvent(event.dwProcessId, event.dwThreadId, status)

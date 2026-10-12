@@ -3118,7 +3118,7 @@ undefined8 FUN_140330ba0(void)
   pcVar6 = "D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\DB\\DBClient\\DBCacheInstances.cpp";
   (*(undefined8 *)(gen_frame + 0x8)) = 0;
   uVar4 = 0x811c9dc5;
-  (*(undefined1 * *)(gen_frame + 0x10)) = &REFG(undefined8, 0x20);
+  (*(undefined1 * *)(gen_frame + 0x10)) = ((undefined1 *)0x8000000000000020ULL);
   uVar5 = 0x44;
   uVar7 = 0x811c9dc5;
   uVar2 = 0x44;
@@ -3911,7 +3911,7 @@ undefined8 FUN_14033f860(undefined **param_1)
   }
   puVar1 = (undefined8 *)(REFG(undefined8, 0x142ccc1d0) + (longlong)REFG(undefined8, 0x142ccc1d8) * 8);
   for (puVar5 = (undefined8 *)REFG(undefined8, 0x142ccc1d0); puVar5 != puVar1; puVar5 = puVar5 + 1) {
-    (**(code **)(*(longlong *)*puVar5 + 8))();
+    (**(code **)(*(longlong *)*puVar5 + 8))(*puVar5);
   }
   return 0;
 }
@@ -3926,7 +3926,7 @@ undefined8 FUN_14033fa30(void)
   REFG(undefined8, 0x14309d390) = ((code *)REFP(0x14033f560));
   puVar1 = (undefined8 *)(REFG(undefined8, 0x142ccc1d0) + REFG(undefined8, 0x142ccc1d8) * 8);
   for (puVar2 = (undefined8 *)REFG(undefined8, 0x142ccc1d0); puVar2 != puVar1; puVar2 = puVar2 + 1) {
-    (**(code **)(*(longlong *)*puVar2 + 0x30))();
+    (**(code **)(*(longlong *)*puVar2 + 0x30))(*puVar2);
   }
   return 0;
 }

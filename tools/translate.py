@@ -298,9 +298,47 @@ def stack_frame(body: str) -> str:
     return body
 
 
+IMAGE_LO, IMAGE_HI = 0x140000000, 0x150000000   # the reference image's address range
 INIT_EPOCH = re.compile(r"\*\(int \*\)\(\*\(longlong \*\)\(\(longlong\)ThreadLocalStoragePointer \+ "
                         r"\(ulonglong\)_tls_index \* 8\) \+\s*0x2140\)")
 STRLEN_LOOP = re.compile(r"(\w+) = -1;\s*do \{\s*\1 = \1 \+ 1;\s*\} while \(\*\(char \*\)\((\w+) \+ \1\) != '\\0'\);")
+
+
+VCALL = re.compile(r"\(\*\*\(code \*\*\)(?:\(\*(?:\((?:\w+ )*\w+ ?\*+\))?|\*(?:\((?:\w+ )*\w+ ?\*+\))?)")
+
+
+def virtual_this(text: str) -> str:
+    """A virtual call shown with no arguments gets the object it reads the vtable of.
+
+    `(**(code **)(*(longlong *)*puVar2 + 0x30))()`: the instructions load the object into rcx,
+    read its vtable from it and call the slot (mov rcx,[rbx]; mov rax,[rcx]; call [rax+0x30]);
+    Ghidra dropped rcx. A virtual call always passes that object first."""
+    out, pos = [], 0
+    for m in VCALL.finditer(text):
+        if m.start() < pos:
+            continue
+        # the object: up to ` + K))()` (a slot past the first) or `)()` (slot 0), parentheses
+        # balanced
+        i, depth = m.end(), 0
+        while i < len(text) and text[i] not in ";\n":
+            ch = text[i]
+            if ch == "(":
+                depth += 1
+            elif ch == ")":
+                if depth == 0:
+                    break
+                depth -= 1
+            elif depth == 0 and text.startswith(" + ", i):
+                break
+            i += 1
+        obj = text[m.end():i].strip()
+        rest = re.match(r"(?: \+ (?:0x[0-9a-f]+|\d+))?\)+\(\)", text[i:])
+        if not obj or rest is None or not re.fullmatch(r"[\w\[\]\*\(\) +-]+", obj):
+            continue
+        end = i + rest.end()
+        out.append(text[pos:end - 1] + obj + ")")
+        pos = end
+    return "".join(out) + text[pos:]
 
 
 def split_args(args: str) -> list[str]:
@@ -663,6 +701,7 @@ class Translator:
         text = INIT_EPOCH.sub("_Init_thread_epoch", text)
         # Ghidra's function-pointer types (`_func_5014 *`) are code
         text = re.sub(r"\b_func_\w+\b", "code", text)
+        text = virtual_this(text)
         return self.recover_arguments(a, self.restore_lengths(text))
 
     # the image's C++ static initializers: the table FUN_14026b874 hands _initterm
@@ -1035,6 +1074,17 @@ class Translator:
                                 f"(*({c_type_of(gtype, size)} *)((char *)&gen_g_{base:x} + 0x{addr - base:x}))")
 
         aliases, exported = {}, {}
+
+        # a constant Ghidra wrote as the address of a "global" outside the image
+        # (`&DAT_8000000000000020`, a blz::vector's inline capacity flag) is that constant
+        def outside(m):
+            v = int(m.group(1), 16)
+            return m.group(0) if IMAGE_LO <= v < IMAGE_HI else f"((undefined1 *){v:#x}ULL)"
+
+        body = re.sub(r"&\s*\b_?(?:PTR_)*(?:DAT|UNK|PTR|LAB)_([0-9a-f]+)\b", outside, body)
+        for m in re.finditer(r"\b_?(?:PTR_)*(?:DAT|UNK|PTR)_([0-9a-f]+)\b", body):
+            if not IMAGE_LO <= int(m.group(1), 16) < IMAGE_HI:
+                raise Untranslatable(f"reads a global outside the image ({m.group(0)})")
         body = SYMBOL.sub(global_, body)
         body = RAM.sub(lambda m: f"REFG(undefined{ {'u': 4, 'l': 8, 'c': 1, 's': 2}.get(m.group(1)[0], 8)}, 0x{m.group(2)})", body)
         body = IMPORT.sub(lambda m: f"(*(code *)&{m.group(2)})", body)

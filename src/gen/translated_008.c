@@ -1963,7 +1963,7 @@ longlong * FUN_14023d9b0(longlong *param_1, undefined8 param_2, longlong param_3
     lVar3 = (longlong)*(int *)(*param_1 + 4);
     uVar2 = *(uint *)(lVar3 + 0x10 + (longlong)param_1);
     if (uVar2 == 0) {
-      lVar3 = (**(code **)(**(longlong **)(lVar3 + 8 + (longlong)param_1) + 0x50))();
+      lVar3 = (**(code **)(**(longlong **)(lVar3 + 8 + (longlong)param_1) + 0x50))(*(longlong **)(lVar3 + 8 + (longlong)param_1));
       if (lVar3 != param_3) {
         puVar1 = (uint *)((longlong)*(int *)(*param_1 + 4) + 0x10 + (longlong)param_1);
         *puVar1 = *puVar1 | 1;

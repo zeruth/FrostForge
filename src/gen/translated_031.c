@@ -1553,7 +1553,7 @@ undefined8 FUN_1425e7da0(void)
             piVar1 = (int *)((longlong)plVar6 + 0xc);
             iVar2 = GEN_ATOMIC_ADD(*piVar1, -1);
             if (iVar2 == 1) {
-              (**(code **)(*plVar6 + 0x18))();
+              (**(code **)(*plVar6 + 0x18))(plVar6);
             }
           }
           CALLF(undefined8, FUN_140688840)(uVar3);

@@ -611,7 +611,7 @@ undefined8 FUN_141c9f400(longlong param_1)
                           "D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\UIUtil\\Camera.cpp",
                           0x16c3);
     if (lVar4 != 0) {
-      (**(code **)(**(longlong **)(lVar4 + 0x30) + 0x38))();
+      (**(code **)(**(longlong **)(lVar4 + 0x30) + 0x38))(*(longlong **)(lVar4 + 0x30));
       uVar5 = CALLF(float, FUN_141343a60)();
       uVar2 = CALLF(undefined4, FUN_14065f960)();
       CALLF(bool, FUN_141ca7c90)(param_1,uVar5,0,REFG(float, 0x1426d2734),uVar2);
@@ -1188,7 +1188,7 @@ undefined8 * FUN_141cfaf90(undefined8 param_1, undefined8 *param_2, undefined8 *
     piVar1 = (int *)((longlong)plVar5 + 0xc);
     iVar2 = GEN_ATOMIC_ADD(*piVar1, -1);
     if (iVar2 == 1) {
-      (**(code **)(*plVar5 + 0x18))();
+      (**(code **)(*plVar5 + 0x18))(plVar5);
     }
   }
   return param_2;
@@ -1517,7 +1517,7 @@ undefined8 FUN_141cfb560(longlong *param_1, undefined8 param_2, int param_3, lon
         if (iVar8 != 1) {
           return 0;
         }
-        (**(code **)(*(*(longlong * *)(gen_frame + 0x10)) + 0x18))();
+        (**(code **)(*(*(longlong * *)(gen_frame + 0x10)) + 0x18))((*(longlong * *)(gen_frame + 0x10)));
         return 0;
       }
     }

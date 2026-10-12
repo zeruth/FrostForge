@@ -4730,7 +4730,7 @@ undefined8 FUN_1416850d0(int param_1, int param_2)
           return 1;
         }
       }
-      (**(code **)(*(*(longlong * *)(gen_frame + 0x20)) + 0x50))();
+      (**(code **)(*(*(longlong * *)(gen_frame + 0x20)) + 0x50))((*(longlong * *)(gen_frame + 0x20)));
       uVar1 = (*(undefined8 *)(gen_frame + 0x18));
     }
   }

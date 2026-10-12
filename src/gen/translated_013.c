@@ -5417,7 +5417,7 @@ undefined8 * FUN_140f7f190(undefined8 param_1, undefined8 *param_2, undefined8 *
     piVar1 = (int *)((longlong)plVar4 + 0xc);
     iVar2 = GEN_ATOMIC_ADD(*piVar1, -1);
     if (iVar2 == 1) {
-      (**(code **)(*plVar4 + 0x18))();
+      (**(code **)(*plVar4 + 0x18))(plVar4);
     }
   }
   return param_2;

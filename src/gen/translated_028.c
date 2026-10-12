@@ -1972,7 +1972,7 @@ undefined8 FUN_141c02300(longlong param_1, undefined1 param_2)
       piVar1 = (int *)((longlong)(*(longlong * *)(gen_frame + 0x40)) + 0xc);
       iVar2 = GEN_ATOMIC_ADD(*piVar1, -1);
       if (iVar2 == 1) {
-        (**(code **)(*(*(longlong * *)(gen_frame + 0x40)) + 0x18))();
+        (**(code **)(*(*(longlong * *)(gen_frame + 0x40)) + 0x18))((*(longlong * *)(gen_frame + 0x40)));
       }
     }
     CALLF(undefined8, FUN_1402547e0)((*(undefined8 *)(gen_frame + 0x0)));
@@ -1980,7 +1980,7 @@ undefined8 FUN_141c02300(longlong param_1, undefined1 param_2)
   }
                     /* WARNING: Could not recover jumptable at 0x000141c02392. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-  (**(code **)(**(longlong **)(param_1 + 0x18) + 0xb8))();
+  (**(code **)(**(longlong **)(param_1 + 0x18) + 0xb8))(*(longlong **)(param_1 + 0x18));
   return 0;
 }
 
@@ -2002,7 +2002,7 @@ undefined8 FUN_141c025b0(longlong param_1, undefined4 param_2, undefined4 param_
       piVar1 = (int *)((longlong)(*(longlong * *)(gen_frame + 0x40)) + 0xc);
       iVar2 = GEN_ATOMIC_ADD(*piVar1, -1);
       if (iVar2 == 1) {
-        (**(code **)(*(*(longlong * *)(gen_frame + 0x40)) + 0x18))();
+        (**(code **)(*(*(longlong * *)(gen_frame + 0x40)) + 0x18))((*(longlong * *)(gen_frame + 0x40)));
       }
     }
     CALLF(undefined8, FUN_1402547e0)((*(undefined8 *)(gen_frame + 0x0)));
@@ -2028,7 +2028,7 @@ undefined8 FUN_141c02660(longlong param_1, undefined4 param_2, undefined4 param_
       piVar1 = (int *)((longlong)(*(longlong * *)(gen_frame + 0x40)) + 0xc);
       iVar2 = GEN_ATOMIC_ADD(*piVar1, -1);
       if (iVar2 == 1) {
-        (**(code **)(*(*(longlong * *)(gen_frame + 0x40)) + 0x18))();
+        (**(code **)(*(*(longlong * *)(gen_frame + 0x40)) + 0x18))((*(longlong * *)(gen_frame + 0x40)));
       }
     }
     CALLF(undefined8, FUN_1402547e0)((*(undefined8 *)(gen_frame + 0x0)));
@@ -2054,7 +2054,7 @@ undefined8 FUN_141c027a0(longlong param_1, undefined1 param_2)
       piVar1 = (int *)((longlong)(*(longlong * *)(gen_frame + 0x40)) + 0xc);
       iVar2 = GEN_ATOMIC_ADD(*piVar1, -1);
       if (iVar2 == 1) {
-        (**(code **)(*(*(longlong * *)(gen_frame + 0x40)) + 0x18))();
+        (**(code **)(*(*(longlong * *)(gen_frame + 0x40)) + 0x18))((*(longlong * *)(gen_frame + 0x40)));
       }
     }
     CALLF(undefined8, FUN_1402547e0)((*(undefined8 *)(gen_frame + 0x0)));
@@ -2062,7 +2062,7 @@ undefined8 FUN_141c027a0(longlong param_1, undefined1 param_2)
   }
                     /* WARNING: Could not recover jumptable at 0x000141c02832. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-  (**(code **)(**(longlong **)(param_1 + 0x18) + 0xc0))();
+  (**(code **)(**(longlong **)(param_1 + 0x18) + 0xc0))(*(longlong **)(param_1 + 0x18));
   return 0;
 }
 
@@ -2587,7 +2587,7 @@ undefined8 FUN_141c16b70(longlong *param_1)
               (*(longlong *)(*param_1 + (uVar2 >> 3 & param_1[1] - 1U) * 8) +
               (ulonglong)((uint)uVar2 & 7) * 0x18);
     if (plVar1 != (longlong *)0x0) {
-      (**(code **)(*plVar1 + 0x10))();
+      (**(code **)(*plVar1 + 0x10))(plVar1);
     }
   }
   uVar2 = 0;
@@ -4416,7 +4416,7 @@ undefined8 FUN_141c666d0(longlong *param_1, undefined1 param_2, undefined2 param
                        );
   if (lVar3 != 0) {
     CALLF(undefined8, FUN_1417ff330)(lVar3,param_2,param_3);
-    uVar1 = (**(code **)(*(longlong *)(lVar3 + 0xe8) + 8))();
+    uVar1 = (**(code **)(*(longlong *)(lVar3 + 0xe8) + 8))((lVar3 + 0xe8));
     if (((uVar1 >> 0x13 & 1) != 0) &&
        (lVar3 = CALLF(longlong, FUN_1418ea610)(lVar3 + 0x198,2,
                               "D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\UiAndMobile\\ItemLocking.cpp"
@@ -4438,7 +4438,7 @@ undefined8 FUN_141c666d0(longlong *param_1, undefined1 param_2, undefined2 param
                                 "D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\UiAndMobile\\ItemLocking.cpp"
                                );
           if ((((lVar4 != 0) &&
-               (uVar2 = (**(code **)(*(longlong *)(lVar4 + 0xe8) + 8))(), (uVar2 >> 0x13 & 1) != 0))
+               (uVar2 = (**(code **)(*(longlong *)(lVar4 + 0xe8) + 8))((lVar4 + 0xe8)), (uVar2 >> 0x13 & 1) != 0))
               && (*param_1 == *(longlong *)(lVar4 + 0x198))) &&
              (param_1[1] == *(longlong *)(lVar4 + 0x1a0))) {
             CALLF(undefined8, FUN_1417ff330)(lVar4,param_2,param_3);

@@ -5562,11 +5562,11 @@ LAB_140d32d6b:
         plVar1 = (*(longlong * *)(gen_frame + 0x10)) + 1;
         lVar13 = GEN_ATOMIC_ADD(*(int *)plVar1, -1);
         if ((int)lVar13 == 1) {
-          (**(code **)(*(*(longlong * *)(gen_frame + 0x10)) + 0x10))();
+          (**(code **)(*(*(longlong * *)(gen_frame + 0x10)) + 0x10))((*(longlong * *)(gen_frame + 0x10)));
           piVar14 = (int *)((longlong)plVar9 + 0xc);
           iVar3 = GEN_ATOMIC_ADD(*piVar14, -1);
           if (iVar3 == 1) {
-            (**(code **)(*plVar9 + 0x18))();
+            (**(code **)(*plVar9 + 0x18))(plVar9);
           }
         }
       }
@@ -5647,11 +5647,11 @@ LAB_140d33b2b:
         plVar1 = (*(longlong * *)(gen_frame + 0x30)) + 1;
         lVar13 = GEN_ATOMIC_ADD(*(int *)plVar1, -1);
         if ((int)lVar13 == 1) {
-          (**(code **)(*(*(longlong * *)(gen_frame + 0x30)) + 0x10))();
+          (**(code **)(*(*(longlong * *)(gen_frame + 0x30)) + 0x10))((*(longlong * *)(gen_frame + 0x30)));
           piVar14 = (int *)((longlong)plVar9 + 0xc);
           iVar3 = GEN_ATOMIC_ADD(*piVar14, -1);
           if (iVar3 == 1) {
-            (**(code **)(*plVar9 + 0x18))();
+            (**(code **)(*plVar9 + 0x18))(plVar9);
           }
         }
       }
@@ -5671,11 +5671,11 @@ LAB_140d33b2b:
         plVar1 = (*(longlong * *)(gen_frame + 0x10)) + 1;
         lVar13 = GEN_ATOMIC_ADD(*(int *)plVar1, -1);
         if ((int)lVar13 == 1) {
-          (**(code **)(*(*(longlong * *)(gen_frame + 0x10)) + 0x10))();
+          (**(code **)(*(*(longlong * *)(gen_frame + 0x10)) + 0x10))((*(longlong * *)(gen_frame + 0x10)));
           piVar14 = (int *)((longlong)plVar9 + 0xc);
           iVar3 = GEN_ATOMIC_ADD(*piVar14, -1);
           if (iVar3 == 1) {
-            (**(code **)(*plVar9 + 0x18))();
+            (**(code **)(*plVar9 + 0x18))(plVar9);
           }
         }
       }
@@ -5755,11 +5755,11 @@ LAB_140d34a0b:
         plVar1 = (*(longlong * *)(gen_frame + 0x30)) + 1;
         lVar13 = GEN_ATOMIC_ADD(*(int *)plVar1, -1);
         if ((int)lVar13 == 1) {
-          (**(code **)(*(*(longlong * *)(gen_frame + 0x30)) + 0x10))();
+          (**(code **)(*(*(longlong * *)(gen_frame + 0x30)) + 0x10))((*(longlong * *)(gen_frame + 0x30)));
           piVar14 = (int *)((longlong)plVar9 + 0xc);
           iVar3 = GEN_ATOMIC_ADD(*piVar14, -1);
           if (iVar3 == 1) {
-            (**(code **)(*plVar9 + 0x18))();
+            (**(code **)(*plVar9 + 0x18))(plVar9);
           }
         }
       }
@@ -5778,11 +5778,11 @@ LAB_140d34a0b:
         plVar1 = (*(longlong * *)(gen_frame + 0x18)) + 1;
         lVar13 = GEN_ATOMIC_ADD(*(int *)plVar1, -1);
         if ((int)lVar13 == 1) {
-          (**(code **)(*(*(longlong * *)(gen_frame + 0x18)) + 0x10))();
+          (**(code **)(*(*(longlong * *)(gen_frame + 0x18)) + 0x10))((*(longlong * *)(gen_frame + 0x18)));
           piVar14 = (int *)((longlong)plVar9 + 0xc);
           iVar3 = GEN_ATOMIC_ADD(*piVar14, -1);
           if (iVar3 == 1) {
-            (**(code **)(*plVar9 + 0x18))();
+            (**(code **)(*plVar9 + 0x18))(plVar9);
           }
         }
       }
