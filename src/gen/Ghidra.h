@@ -119,7 +119,13 @@ typedef unsigned long long code();
 #undef NAN
 #define NAN(x) ((x) != (x))
 #define ABS(x) ((x) < 0 ? -(x) : (x))
+#include <math.h>
 #define SQRT(x) sqrt(x)
+/* Ghidra's rounding pseudo-ops: the instruction's own (round to nearest in the default mode) */
+#define ROUND(x) nearbyint(x)
+#define TRUNC(x) trunc(x)
+#define FLOOR(x) floor(x)
+#define CEIL(x) ceil(x)
 
 /* a `lock`-prefixed instruction (Ghidra's LOCK(); ... UNLOCK();), by the size of the lvalue it
    works on; each yields the value before the operation, as the instruction leaves it */

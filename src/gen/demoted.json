@@ -34,6 +34,7 @@
  "1407d0e40": "C2065 'param_2': undeclared identifier [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcxproj]",
  "1407d0f90": "C2065 'param_2': undeclared identifier [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcxproj]",
  "140ce4750": "C2065 'local_res8': undeclared identifier [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcxproj]",
+ "140fc97b0": "C2065 '_uStack_30': undeclared identifier [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcxproj]",
  "141207b20": "C2297 '^': not valid as right operand has type 'float' [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcx",
  "141207d10": "C2297 '^': not valid as right operand has type 'float' [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcx",
  "141216ff0": "C2297 '&': not valid as right operand has type 'float' [C:\\Users\\tyler\\runicworld-client\\FrostLite\\build\\cmake\\src\\gen\\gen.vcx",

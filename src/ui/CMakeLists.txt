@@ -19,6 +19,9 @@ add_library(ui STATIC
     CSimpleStatusBar.cpp
     CGTooltip.cpp
     CGTooltipScript.cpp
+    ModelSceneFrame.cpp
+    ModelSceneFrameScript.cpp
+    ModelSceneActorScript.cpp
     CSimpleEditBox.cpp
     CSimpleEditBoxInput.cpp
     CSimpleEditBoxLayout.cpp

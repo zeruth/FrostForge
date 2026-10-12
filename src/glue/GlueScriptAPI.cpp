@@ -22,7 +22,11 @@
 #include "ui/CSimpleFontString.hpp"
 #include "ui/CSimpleFrame.hpp"
 #include "ui/CSimpleTexture.hpp"
+#include "ui/ModelSceneFrame.hpp"
 #include "util/Unimplemented.hpp"
+
+// The ModelSceneActor methods after the script object ones (src/ui/ModelSceneActorScript.cpp).
+void ModelSceneActor_FillScriptMethods(lua_State* L);
 
 extern "C" {
 #include "lua.h"
@@ -30,11 +34,13 @@ extern "C" {
 
 namespace {
 
-// the ModelScene metatables.
-// ref: FUN_141a96680
+int32_t s_modelSceneActorMetaTable = -2;  // DAT_142d2f560
+int32_t s_modelSceneActorRestrictedMetaTable = -2;  // DAT_142d2f564
+
+// the ModelScene metatables (ModelSceneFrame::CreateScriptMetaTables, FUN_141a96680).
 void ScriptClass_ModelScene(lua_State* L) {
     (void)L;
-    FROST_UNIMPLEMENTED();
+    ModelSceneFrame::CreateScriptMetaTables();
 }
 
 // the Checkout metatables.
@@ -106,11 +112,13 @@ void ScriptClass_PlayerModel(lua_State* L) {
     FROST_UNIMPLEMENTED();
 }
 
-// the ModelSceneActor metatables.
+// the ModelSceneActor metatables: the actors are the reference's own objects, made by the
+// translated ModelScene methods, which read these (shared at the reference's addresses).
 // ref: FUN_141a95840
 void ScriptClass_ModelSceneActor(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
+    s_modelSceneActorMetaTable = FrameScript_Object::CreateScriptMetaTable(L, ModelSceneActor_FillScriptMethods, false);
+    s_modelSceneActorRestrictedMetaTable =
+        FrameScript_Object::CreateScriptMetaTable(L, ModelSceneActor_FillScriptMethods, true);
 }
 
 // C_Seasons (Lua::C_Seasons::GetActiveSeason, HasActiveSeason): Classic has no seasons here.

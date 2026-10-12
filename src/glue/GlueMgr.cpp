@@ -23,6 +23,7 @@
 #include "framescript/FrameScriptObject.hpp"
 #include "client/Locale.hpp"
 #include "ui/CGTooltip.hpp"
+#include "ui/ModelSceneFrame.hpp"
 #include "ui/CSimpleFont.hpp"
 #include "ui/CSimpleFrame.hpp"
 #include "ui/CSimpleTop.hpp"
@@ -99,9 +100,7 @@ CSimpleFrame* CreateGameTooltip(CSimpleFrame* parent) {
 
 // ref: FUN_14167aee0
 CSimpleFrame* CreateModelScene(CSimpleFrame* parent) {
-    (void)parent;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    return new ModelSceneFrame(parent);
 }
 
 // ref: FUN_14167ae90
