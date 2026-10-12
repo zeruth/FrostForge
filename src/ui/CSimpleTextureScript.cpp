@@ -2,6 +2,7 @@
 // their masks (0x142cf9c70); the MaskTexture's own metatables; and frame:CreateTexture's
 // region factory.
 
+#include "base/Coordinate.hpp"
 #include "ui/CSimpleTexture.hpp"
 
 #include <cstring>
@@ -31,8 +32,11 @@ namespace {
 
 using namespace ScriptMethod;
 
+// The UI's 1024 units across (DAT_14261a9c4), the screen's width in UI units (DAT_142ccb9f4) and
+// the aspect compensation (DAT_142ccb9fc): live, they change with the window's shape.
 const float TEXELS_PER_SCREEN = 1024.0f;
-const float UI_WIDTH = 0.8f;
+const float& UI_WIDTH = g_coordinateSpace.m_diagonalWidth;
+const float& UI_ASPECT = g_coordinateSpace.m_aspectCompensation;
 
 CSimpleRegion* RegionSelf(lua_State* L, int32_t* index, const char* usage) {
     return static_cast<CSimpleRegion*>(Self(L, CScriptRegion::GetObjectType(), index, usage));
@@ -576,8 +580,8 @@ int GetVertexOffset(lua_State* L) {
     float y = 0.0f;
     texture->GetVertexOffset(vertex, &x, &y);
     RaisePendingError(L, texture, "GetVertexOffset");
-    lua_pushnumber(L, (1.0f * TEXELS_PER_SCREEN * x) / UI_WIDTH);
-    lua_pushnumber(L, (1.0f * TEXELS_PER_SCREEN * y) / UI_WIDTH);
+    lua_pushnumber(L, (UI_ASPECT * TEXELS_PER_SCREEN * x) / UI_WIDTH);
+    lua_pushnumber(L, (UI_ASPECT * TEXELS_PER_SCREEN * y) / UI_WIDTH);
     return 2;
 }
 
@@ -644,7 +648,7 @@ int SetAtlas(lua_State* L) {
     if (useAtlasSize) {
         float size[2] = {};
         TextureAtlasGetSize(&atlas, size);
-        float toUi = 1.0f / (1.0f * TEXELS_PER_SCREEN);
+        float toUi = 1.0f / (UI_ASPECT * TEXELS_PER_SCREEN);
         texture->SetSize(toUi * size[0] * UI_WIDTH, toUi * size[1] * UI_WIDTH);
     }
     lua_pushboolean(L, 1);
@@ -912,7 +916,7 @@ int SetVertexOffset(lua_State* L) {
     const char* usage = "Usage: self:SetVertexOffset(vertexIndex, offsetX, offsetY)";
     auto texture = TextureSelf(L, &index, usage);
     uint32_t vertex = RequiredIndex(L, &index, usage);
-    float toUi = (1.0f / 1024.0f) / 1.0f * UI_WIDTH;
+    float toUi = 1.0f / (UI_ASPECT * TEXELS_PER_SCREEN) * UI_WIDTH;
     float x = RequiredFinite(L, &index, usage) * toUi;
     float y = RequiredFinite(L, &index, usage) * toUi;
     texture->SetVertexOffset(vertex, &x, &y);

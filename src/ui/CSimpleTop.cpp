@@ -195,10 +195,10 @@ void UiGetCursorPosition(float* x, float* y) {
         if (width <= 1.0f) {
             width = 1.0f;
         }
-        *x = (static_cast<float>(cursorX) / width) * 0.8f;
+        *x = (static_cast<float>(cursorX) / width) * g_coordinateSpace.m_diagonalWidth;   // DAT_142ccb9f4
     }
     if (y != nullptr) {
-        *y = fromBottom * 0.6f;
+        *y = fromBottom * g_coordinateSpace.m_diagonalHeight;   // DAT_142ccb9f8
     }
 }
 

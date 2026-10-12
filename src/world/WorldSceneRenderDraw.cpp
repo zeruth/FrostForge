@@ -495,7 +495,14 @@ void CWorldSceneRender::ClearFrame(GXRENDERTARGETS* targets, bool clearDepth) {
     GxRenderContext* context = g_gxRenderContext;
     uint8_t stencil = static_cast<uint8_t>(~(view->m_flags >> 0xc) & 1);
     const float* viewport = &context->Field<float>(0x1c);
-    if (viewport[0] == 0.0f && viewport[2] == 0.0f && viewport[1] == 1.0f && viewport[3] == 1.0f) {
+    // Diverges: the frame's rectangle also counts when it is only the scissor. A UI model scene
+    // draws through its rectangle's projection and scissor with the viewport left whole, so the
+    // whole-target clear painted the fog colour (white for a scene DayNight never computes) over
+    // the window outside the glue's 16:9 area, which the reference leaves black. Where the
+    // reference narrows the viewport for that frame is not found yet.
+    const float* scissor = &context->Field<float>(0x78);
+    bool wholeScissor = scissor[0] <= 0.0f && scissor[1] <= 0.0f && 1.0f <= scissor[2] && 1.0f <= scissor[3];
+    if (wholeScissor && viewport[0] == 0.0f && viewport[2] == 0.0f && viewport[1] == 1.0f && viewport[3] == 1.0f) {
         context->Clear(targets, clearDepth ? 0x31 : 1, color, 0.0f, stencil, 0);
         return;
     }
