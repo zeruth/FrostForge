@@ -11,6 +11,8 @@
 #include "util/Unimplemented.hpp"
 #include <cstdlib>
 #include <intrin.h>
+#include <windows.h>
+#include "gx/Gx.hpp"
 
 namespace {
 
@@ -124,7 +126,13 @@ void ClientRun(int32_t argc, char** argv) {
     _set_invalid_parameter_handler(&InvalidParameterHandler);
     CrashReportConfigure();
     CommonMain();
-    std::exit(0);
+    // Diverges: the reference leaves through the CRT's exit (FUN_14027258c), whose destructors are
+    // its own. Here exit would destroy the port's statics while the tact scheduler's workers still
+    // run and use them (a worker faulted logging through the destroyed set of reported stubs, and
+    // the quit hung, 2026-10-12), so the process ends without them; the gx log is closed first,
+    // the other logs flush per line.
+    GxLogClose();
+    TerminateProcess(GetCurrentProcess(), 0);
 }
 
 // What wWinMain calls with UTF-8 argv: records crash-report context, then runs the client.
