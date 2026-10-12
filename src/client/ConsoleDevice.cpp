@@ -559,8 +559,6 @@ void GetFullscreenSizes(blz::vector<GXSIZE, s_gxSizeTag>* sizes, uint32_t monito
     sizes->resize(count);
 }
 
-namespace {
-
 // The default fullscreen size for the adapter: the desktop, except on parts that run better
 // at 720p or 1080p.
 // ref: FUN_1403281e0
@@ -613,6 +611,8 @@ GXSIZE DefaultFullscreenSize(GxAdapterInfo* adapter, uint32_t monitor) {
     }
     return size;
 }
+
+namespace {
 
 // The graphics defaults for the machine's CPU, GPU and memory.
 // ref: FUN_14032b0a0

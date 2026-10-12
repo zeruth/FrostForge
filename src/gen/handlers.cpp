@@ -7,20 +7,15 @@
 
 extern "C" {
 int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
-unsigned long long FUN_1407e2490(unsigned long long param_1);
 unsigned long long FUN_1407e7830(unsigned long long param_1);
 unsigned long long FUN_1407e7ec0(unsigned long long param_1);
 unsigned long long FUN_1407e8550(unsigned long long param_1);
-unsigned long long FUN_1407e8be0(unsigned long long param_1);
 unsigned long long FUN_140ae9880(unsigned long long param_1);
 unsigned long long FUN_140aea0e0(unsigned long long param_1);
-unsigned long long FUN_140aea8a0(unsigned long long param_1);
 unsigned long long FUN_140b11bf0(unsigned long long param_1);
 unsigned long long FUN_140b13090(unsigned long long param_1);
 unsigned long long FUN_140b6c5c0(unsigned long long param_1);
 unsigned long long FUN_140b6ce20(unsigned long long param_1);
-unsigned long long FUN_140b6dc00(unsigned long long param_1);
-unsigned long long FUN_140b6fe30(unsigned long long param_1);
 unsigned long long FUN_140b71d60(unsigned long long param_1);
 unsigned long long FUN_140b723f0(unsigned long long param_1);
 unsigned long long FUN_140b740c0(unsigned long long param_1);
@@ -64,11 +59,9 @@ unsigned long long FUN_140b92ef0(unsigned long long param_1);
 unsigned long long FUN_140b93580(unsigned long long param_1);
 unsigned long long FUN_140b94a20(unsigned long long param_1);
 unsigned long long FUN_140b96550(unsigned long long param_1);
-unsigned long long FUN_140b97fd0(unsigned long long param_1);
 unsigned long long FUN_140b99590(unsigned long long param_1);
 unsigned long long FUN_140b9c6c0(unsigned long long param_1);
 unsigned long long FUN_140b9cd50(unsigned long long param_1);
-unsigned long long FUN_140b9ea50(unsigned long long param_1);
 unsigned long long FUN_140c2fa80(unsigned long long param_1);
 unsigned long long FUN_140c307b0(unsigned long long param_1);
 unsigned long long FUN_140c314e0(unsigned long long param_1);
@@ -90,11 +83,8 @@ unsigned long long FUN_140c93fc0(unsigned long long param_1);
 unsigned long long FUN_140c946b0(unsigned long long param_1);
 unsigned long long FUN_140c95420(unsigned long long param_1);
 unsigned long long FUN_140c99690(unsigned long long param_1);
-unsigned long long FUN_140ccdb50(unsigned long long param_1);
 unsigned long long FUN_140ccef50(unsigned long long param_1);
-unsigned long long FUN_140cd03a0(unsigned long long param_1);
 unsigned long long FUN_140cd0b00(unsigned long long param_1);
-unsigned long long FUN_140cd1860(unsigned long long param_1);
 unsigned long long FUN_140cd1fc0(unsigned long long param_1);
 unsigned long long FUN_140cd2d20(unsigned long long param_1);
 unsigned long long FUN_140cd3a80(unsigned long long param_1);
@@ -120,12 +110,7 @@ unsigned long long FUN_140ce1960(unsigned long long param_1);
 unsigned long long FUN_140ce1ff0(unsigned long long param_1);
 unsigned long long FUN_140ce2680(unsigned long long param_1);
 unsigned long long FUN_140ce39f0(unsigned long long param_1);
-unsigned long long FUN_140ce4080(unsigned long long param_1);
-unsigned long long FUN_140ce54b0(unsigned long long param_1);
-unsigned long long FUN_140ce5c00(unsigned long long param_1);
-unsigned long long FUN_140ce6990(unsigned long long param_1);
 unsigned long long FUN_140ce9240(unsigned long long param_1);
-unsigned long long FUN_140ce98d0(unsigned long long param_1);
 unsigned long long FUN_140cebda0(unsigned long long param_1);
 unsigned long long FUN_140ced900(unsigned long long param_1);
 unsigned long long FUN_140cee0e0(unsigned long long param_1);
@@ -142,7 +127,6 @@ unsigned long long FUN_140cf84d0(unsigned long long param_1);
 unsigned long long FUN_140cf9200(unsigned long long param_1);
 unsigned long long FUN_140cf9f50(unsigned long long param_1);
 unsigned long long FUN_140cfac90(unsigned long long param_1);
-unsigned long long FUN_140cfb9d0(unsigned long long param_1);
 unsigned long long FUN_140d2cce0(unsigned long long param_1);
 unsigned long long FUN_140d2da20(unsigned long long param_1);
 unsigned long long FUN_140d2e7c0(unsigned long long param_1);
@@ -150,8 +134,6 @@ unsigned long long FUN_140d2f520(unsigned long long param_1);
 unsigned long long FUN_140d32cc0(unsigned long long param_1);
 unsigned long long FUN_140d33a70(unsigned long long param_1);
 unsigned long long FUN_140d34960(unsigned long long param_1);
-unsigned long long FUN_140d43310(unsigned long long param_1);
-unsigned long long FUN_140d43a80(unsigned long long param_1);
 unsigned long long FUN_140d440c0(unsigned long long param_1);
 unsigned long long FUN_140e1db20(unsigned long long param_1);
 unsigned long long FUN_140e1e890(unsigned long long param_1);
@@ -160,16 +142,11 @@ unsigned long long FUN_140e20a70(unsigned long long param_1);
 unsigned long long FUN_140e217e0(unsigned long long param_1);
 unsigned long long FUN_140e22570(unsigned long long param_1);
 unsigned long long FUN_140e22d70(unsigned long long param_1);
-unsigned long long FUN_140e23ad0(unsigned long long param_1);
 unsigned long long FUN_140e24210(unsigned long long param_1);
-unsigned long long FUN_140e248b0(unsigned long long param_1);
 unsigned long long FUN_140e74b60(unsigned long long param_1);
 unsigned long long FUN_140e751f0(unsigned long long param_1);
 unsigned long long FUN_140e75880(unsigned long long param_1);
-unsigned long long FUN_140e765e0(unsigned long long param_1);
 unsigned long long FUN_140e76cb0(unsigned long long param_1);
-unsigned long long FUN_140e77a30(unsigned long long param_1);
-unsigned long long FUN_140e787c0(unsigned long long param_1);
 unsigned long long FUN_140e795c0(unsigned long long param_1);
 unsigned long long FUN_140e79c50(unsigned long long param_1);
 unsigned long long FUN_140e7a2e0(unsigned long long param_1);
@@ -221,7 +198,6 @@ unsigned long long FUN_140f4e170(unsigned long long param_1);
 unsigned long long FUN_140f4eea0(unsigned long long param_1);
 unsigned long long FUN_140f511e0(unsigned long long param_1);
 unsigned long long FUN_140f52550(unsigned long long param_1);
-unsigned long long FUN_140fa2c30(unsigned long long param_1);
 unsigned long long FUN_140fa3a00(unsigned long long param_1);
 unsigned long long FUN_14107fdf0(unsigned long long param_1);
 unsigned long long FUN_141080b20(unsigned long long param_1);
@@ -239,7 +215,6 @@ unsigned long long FUN_1410874f0(unsigned long long param_1);
 unsigned long long FUN_1410c2620(unsigned long long param_1);
 unsigned long long FUN_1410c3a00(unsigned long long param_1);
 unsigned long long FUN_1410c4730(unsigned long long param_1);
-unsigned long long FUN_1410c5460(unsigned long long param_1);
 unsigned long long FUN_14115ce90(unsigned long long param_1);
 unsigned long long FUN_14168de20(unsigned long long param_1);
 unsigned long long FUN_14168deb0(unsigned long long param_1);
@@ -330,7 +305,6 @@ unsigned long long FUN_1416a4db0(unsigned long long param_1);
 unsigned long long FUN_1416a4dc0(unsigned long long param_1);
 unsigned long long FUN_1416a4dd0(unsigned long long param_1);
 unsigned long long FUN_1416a4f00(unsigned long long param_1);
-unsigned long long FUN_1416a4f30(unsigned long long param_1);
 unsigned long long FUN_1416a6470(unsigned long long param_1);
 unsigned long long FUN_1416a64a0(unsigned long long param_1);
 unsigned long long FUN_1416a65d0(unsigned long long param_1);
@@ -428,9 +402,6 @@ unsigned long long FUN_141d058b0(unsigned long long param_1);
 unsigned long long FUN_141d058e0(unsigned long long param_1);
 unsigned long long FUN_141d05920(unsigned long long param_1);
 unsigned long long FUN_141d059a0(unsigned long long param_1);
-unsigned long long FUN_141d94a10(unsigned long long param_1);
-unsigned long long FUN_141d95090(unsigned long long param_1);
-unsigned long long FUN_141d95710(unsigned long long param_1);
 unsigned long long FUN_141db18a0(unsigned long long param_1);
 unsigned long long FUN_141db18f0(unsigned long long param_1);
 }
@@ -471,24 +442,6 @@ int Lua_C_AccountServices_IsAccountSaveInProgress(lua_State* L) {
     }
 }
 
-// translated: FUN_1407e8be0
-int Lua_C_AccountServices_SaveAccountData(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_1407e8be0(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x1407e8be0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_1407e2490
-int Lua_C_AddOns_GetAddOnMetadata(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_1407e2490(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x1407e2490ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
 // translated: FUN_141b44dd0
 int Lua_C_AuthChallenge_DidChallengeSucceed(lua_State* L) {
     __try {
@@ -507,15 +460,6 @@ int Lua_C_CVar_RegisterCVar(lua_State* L) {
     }
 }
 
-// translated: FUN_140ccdb50
-int Lua_C_CameraDefaults_GetCameraFOVDefaults(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140ccdb50(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140ccdb50ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
 // translated: FUN_140ccef50
 int Lua_C_CharacterCreation_CreateCharacter(lua_State* L) {
     __try {
@@ -525,29 +469,11 @@ int Lua_C_CharacterCreation_CreateCharacter(lua_State* L) {
     }
 }
 
-// translated: FUN_140cd03a0
-int Lua_C_CharacterCreation_CycleCharCustomization(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140cd03a0(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140cd03a0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
 // translated: FUN_140cd0b00
 int Lua_C_CharacterCreation_GenerateRandomName(lua_State* L) {
     __try {
         return static_cast<int>(FUN_140cd0b00(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x140cd0b00ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_140cd1860
-int Lua_C_CharacterCreation_GetAlliedRaceCreationRequirements(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140cd1860(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140cd1860ull, GetExceptionInformation())) {
         return 0;
     }
 }
@@ -773,42 +699,6 @@ int Lua_C_CharacterCreation_ResetCharCustomize(lua_State* L) {
     __try {
         return static_cast<int>(FUN_140ce39f0(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x140ce39f0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_140ce4080
-int Lua_C_CharacterCreation_SetCharCustomizeBackground(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140ce4080(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140ce4080ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_140ce54b0
-int Lua_C_CharacterCreation_SetCharacterCreateType(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140ce54b0(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140ce54b0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_140ce5c00
-int Lua_C_CharacterCreation_SetCharacterTemplate(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140ce5c00(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140ce5c00ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_140ce6990
-int Lua_C_CharacterCreation_SetSelectedClass(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140ce6990(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140ce6990ull, GetExceptionInformation())) {
         return 0;
     }
 }
@@ -1173,15 +1063,6 @@ int Lua_C_ChatInfo_SendAddonMessageLogged(lua_State* L) {
     }
 }
 
-// translated: FUN_140cfb9d0
-int Lua_C_ChatInfo_SwapChatChannelsByChannelIndex(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140cfb9d0(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140cfb9d0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
 // translated: FUN_140e1db20
 int Lua_C_ConfigurationWarnings_GetConfigurationWarningString(lua_State* L) {
     __try {
@@ -1245,38 +1126,11 @@ int Lua_C_Console_GetAllCommands(lua_State* L) {
     }
 }
 
-// translated: FUN_140e23ad0
-int Lua_C_Console_GetColorFromType(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140e23ad0(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140e23ad0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
 // translated: FUN_140e24210
 int Lua_C_Console_GetFontHeight(lua_State* L) {
     __try {
         return static_cast<int>(FUN_140e24210(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x140e24210ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_140e248b0
-int Lua_C_Console_PrintAllMatchingCommands(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140e248b0(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140e248b0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_140fa2c30
-int Lua_C_Debug_TeleportToMapDebugObject(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140fa2c30(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140fa2c30ull, GetExceptionInformation())) {
         return 0;
     }
 }
@@ -1713,15 +1567,6 @@ int Lua_C_PaidServices_GetCurrentRaceID(lua_State* L) {
     }
 }
 
-// translated: FUN_1410c5460
-int Lua_C_PaidServices_GetName(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_1410c5460(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x1410c5460ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
 // translated: FUN_1416a82b0
 int Lua_C_RealmList_ClearRealmList(lua_State* L) {
     __try {
@@ -1893,15 +1738,6 @@ int Lua_C_Sound_IsPlaying(lua_State* L) {
     }
 }
 
-// translated: FUN_140aea8a0
-int Lua_C_Sound_PlayItemSound(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140aea8a0(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140aea8a0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
 // translated: FUN_140e74b60
 int Lua_C_StoreGlue_GetDisconnectOnLogout(lua_State* L) {
     __try {
@@ -1929,38 +1765,11 @@ int Lua_C_StoreGlue_GetVASPurchaseStateInfo(lua_State* L) {
     }
 }
 
-// translated: FUN_140e765e0
-int Lua_C_StoreGlue_GetVasTransferQueues(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140e765e0(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140e765e0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
 // translated: FUN_140e76cb0
 int Lua_C_StoreGlue_IsExpansionPreorderInStore(lua_State* L) {
     __try {
         return static_cast<int>(FUN_140e76cb0(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x140e76cb0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_140e77a30
-int Lua_C_StoreGlue_RequestCurrentVASTransferQueues(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140e77a30(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140e77a30ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_140e787c0
-int Lua_C_StoreGlue_UpdateVASPurchaseStates(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140e787c0(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140e787c0ull, GetExceptionInformation())) {
         return 0;
     }
 }
@@ -2307,24 +2116,6 @@ int Lua_C_Timer_NewTimer(lua_State* L) {
     }
 }
 
-// translated: FUN_140d43310
-int Lua_C_UI_GetTopLeftNotchSafeRegion(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140d43310(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140d43310ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_140d43a80
-int Lua_C_UI_Reload(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140d43a80(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140d43a80ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
 // translated: FUN_140d440c0
 int Lua_C_UI_ShouldUIParentAvoidNotch(lua_State* L) {
     __try {
@@ -2348,24 +2139,6 @@ int Lua_C_UserFeedback_SubmitSuggestion(lua_State* L) {
     __try {
         return static_cast<int>(FUN_140b6ce20(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x140b6ce20ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_140b6dc00
-int Lua_C_VideoOptions_GetDefaultGameWindowSize(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140b6dc00(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140b6dc00ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_140b6fe30
-int Lua_C_VideoOptions_SetGameWindowSize(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140b6fe30(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140b6fe30ull, GetExceptionInformation())) {
         return 0;
     }
 }
@@ -2757,15 +2530,6 @@ int Lua_C_VoiceChat_SetInputDevice(lua_State* L) {
     }
 }
 
-// translated: FUN_140b97fd0
-int Lua_C_VoiceChat_SetMemberMuted(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140b97fd0(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140b97fd0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
 // translated: FUN_140b99590
 int Lua_C_VoiceChat_SetOutputDevice(lua_State* L) {
     __try {
@@ -2789,15 +2553,6 @@ int Lua_C_VoiceChat_SpeakRemoteTextSample(lua_State* L) {
     __try {
         return static_cast<int>(FUN_140b9cd50(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x140b9cd50ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_140b9ea50
-int Lua_C_VoiceChat_ToggleDeafened(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140b9ea50(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140b9ea50ull, GetExceptionInformation())) {
         return 0;
     }
 }
@@ -2924,15 +2679,6 @@ int Lua_CancelPreloadingMovie(lua_State* L) {
     __try {
         return static_cast<int>(FUN_141d01b40(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x141d01b40ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_140ce98d0
-int Lua_CharacterHasAlternativeRaceOptions(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_140ce98d0(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x140ce98d0ull, GetExceptionInformation())) {
         return 0;
     }
 }
@@ -3297,15 +3043,6 @@ int Lua_GetExpansionTrialInfo(lua_State* L) {
     }
 }
 
-// translated: FUN_141d94a10
-int Lua_GetGameTime(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_141d94a10(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x141d94a10ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
 // translated: FUN_1419f5f60
 int Lua_GetGraphicsCVarOffsetForCVar(lua_State* L) {
     __try {
@@ -3338,15 +3075,6 @@ int Lua_GetLaunchETA(lua_State* L) {
     __try {
         return static_cast<int>(FUN_140cebda0(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x140cebda0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_141d95090
-int Lua_GetLocalGameTime(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_141d95090(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x141d95090ull, GetExceptionInformation())) {
         return 0;
     }
 }
@@ -3491,15 +3219,6 @@ int Lua_GetServerExpansionLevel(lua_State* L) {
     __try {
         return static_cast<int>(FUN_141086140(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x141086140ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_141d95710
-int Lua_GetServerTime(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_141d95710(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x141d95710ull, GetExceptionInformation())) {
         return 0;
     }
 }
@@ -4013,15 +3732,6 @@ int Lua_RestartGx(lua_State* L) {
     __try {
         return static_cast<int>(FUN_1416a4db0(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x1416a4db0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_1416a4f30
-int Lua_RunScript(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_1416a4f30(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x1416a4f30ull, GetExceptionInformation())) {
         return 0;
     }
 }

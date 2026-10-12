@@ -454,6 +454,40 @@ int32_t GetGameWindowSizesBody(lua_State* L, void*) {
 
 }  // namespace
 
+// The default window size for a monitor, as a Vector2D: its default fullscreen size
+// (FUN_1419f6050), pushed as FUN_1407caed0 pushes a C2Vector. (Ported from the instructions:
+// the decompilation of this handler is damaged by its anti-tamper check.)
+// ref: FUN_140b6dc00
+int Lua_C_VideoOptions_GetDefaultGameWindowSize(lua_State* L) {
+    const char* usage = "Usage: local size = C_VideoOptions.GetDefaultGameWindowSize(monitor)";
+    uint32_t monitor = 0;
+    // FUN_140a54180: an integer in range
+    if (lua_type(L, 1) < 1) {
+        luaL_error(L, usage);
+    } else {
+        double value = lua_isnumber(L, 1) ? lua_tonumber(L, 1) : -1.0;
+        if (!lua_isnumber(L, 1) || value != value || value < 0.0 || value > 4294967295.0) {
+            luaL_argerror(L, 1, usage);
+        } else if (!lua_checkstack(L, 1)) {
+            luaL_error(L, "stack overflow");
+        } else {
+            monitor = static_cast<uint32_t>(static_cast<int64_t>(value));
+        }
+    }
+    GXSIZE size = DefaultFullscreenSize(GxSelectGpuToUse(), monitor);
+    if (!lua_checkstack(L, 1)) {
+        luaL_error(L, "stack overflow");
+        return 0;
+    }
+    ScriptMethod::PushFromMixin(L, "Vector2DMixin");
+    int32_t entry = lua_gettop(L);
+    lua_pushnumber(L, static_cast<double>(static_cast<float>(size.m_width)));
+    lua_setfield(L, entry, "x");
+    lua_pushnumber(L, static_cast<double>(static_cast<float>(size.m_height)));
+    lua_setfield(L, entry, "y");
+    return 1;
+}
+
 // ref: FUN_140b6e390
 int Lua_C_VideoOptions_GetGameWindowSizes(lua_State* L) {
     return ScriptMethod::ProtectedCall(L, GetGameWindowSizesBody, nullptr);

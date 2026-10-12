@@ -468,8 +468,7 @@ undefined8 FUN_1401fe010(void)
   undefined4 uVar1;
   
   uVar1 = CALLF(undefined8, FUN_141237bf0)();
-  CALLF(undefined8, FUN_14133cae0)(&REFG(undefined8, 0x1431f6858),uVar1);
-  return 0;
+  return (undefined8)CALLF(undefined8, FUN_14133cae0)(&REFG(undefined8, 0x1431f6858),uVar1);
 }
 
 /* ref: FUN_1401fe030 */
@@ -716,8 +715,7 @@ undefined8 FUN_1401fea80(void)
   CALLF(undefined1 *, FUN_1406d0b70)(&REFG(undefined8, 0x1432087d4));
   CALLF(undefined1 *, FUN_1406d0b70)(&REFG(undefined8, 0x143208820));
   CALLF(undefined1 *, FUN_1406d0b70)(&REFG(undefined8, 0x14320886c));
-  CALLF(undefined1 *, FUN_1406d0b70)(&REFG(undefined8, 0x1432088b8));
-  return 0;
+  return (undefined8)CALLF(undefined1 *, FUN_1406d0b70)(&REFG(undefined8, 0x1432088b8));
 }
 
 /* ref: FUN_1401feaf0 */

@@ -42,4 +42,7 @@ bool ConsoleDeviceRequestRestart(CVar* cvar, const char* oldValue, const char* n
 // The fullscreen sizes a monitor offers that suit the client (FUN_14032abf0).
 void GetFullscreenSizes(blz::vector<GXSIZE, s_gxSizeTag>* sizes, uint32_t monitor, bool matchAspect);
 
+// The default fullscreen size for the adapter on a monitor (FUN_1403281e0).
+GXSIZE DefaultFullscreenSize(GxAdapterInfo* adapter, uint32_t monitor);
+
 #endif

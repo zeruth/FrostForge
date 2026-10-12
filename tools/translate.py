@@ -64,6 +64,10 @@ HARD = [
     ("thread-local storage", re.compile(r"ThreadLocalStoragePointer|_tls_index")),
     ("bad data or a trap", re.compile(r"halt_baddata|\bswi\(|software_interrupt|halt_unimplemented")),
     ("struct member access", re.compile(r"->")),
+    # Ghidra's own word that it lost the flow (anti-tamper bytes decoded as code, overlapping
+    # instructions): what it printed is not the function
+    ("a decompilation Ghidra marked as damaged",
+     re.compile(r"Control flow encountered bad instruction data|overlaps instruction at")),
 ]
 CRT = {"memcpy", "memmove", "memset", "memcmp", "strlen", "strcmp", "strncmp", "strchr", "strrchr", "strstr",
        "strcpy", "strncpy", "strcat", "abs", "labs", "fabs", "sqrt", "sqrtf", "floor", "floorf", "ceil", "ceilf",
@@ -1147,6 +1151,13 @@ class Translator:
         # a function's address taken, `&FUN_x`: the reference address, which the jumps dispatch
         body = re.sub(r"&\s*\b(?:thunk_)?FUN_([0-9a-f]{9})\b(?!\s*\()", r"((code *)REFP(0x\1))", body)
         body = re.sub(r"&\s*\bLAB_([0-9a-f]{9})\b", r"((code *)REFP(0x\1))", body)
+        if re.match(r"(?s)\s*(?:/\*.*?\*/\s*)*void\b", head):
+            # A function Ghidra calls void because it ends in a tail call (FUN_140d11f10 jumps
+            # to GetObjectFromLua and hands its object back in rax): a call just before a return
+            # leaves its result where the caller reads one, so the return carries it.
+            body = re.sub(r"^(\s*)((?:thunk_)?FUN_[0-9a-f]{9}\([^;]*\)|\(\*+\(code \*+\)[^;]*\)\([^;]*\));"
+                          r"(\s*\n\s*)return\s*;",
+                          r"\1return (undefined8)\2;", body, flags=re.M)
         body = re.sub(r"\breturn\s*;", "return 0;", body)
 
         def bare(m):
