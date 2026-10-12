@@ -4,7 +4,7 @@
 #include "util/Unimplemented.hpp"
 #include <cstring>
 
-GxRenderContext* g_gxRenderContext;
+GxRenderContext* g_gxRenderContext;  // DAT_14348b658
 
 // ref: FUN_14228c430
 gxDx12Backend::TargetView* GxTexTargetView(gxDx12Backend::Tex* tex) {

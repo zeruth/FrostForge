@@ -2,6 +2,20 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 
+/* ref: FUN_1401fc740 */
+undefined8 FUN_1401fc740(void)
+{
+  REFG(undefined8, 0x142d2a628) = 0x142d2a621;
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2a618));
+  REFG(undefined4, 0x142d2a618) = 0x10;
+  REFG(undefined8, 0x142d2a620) = (undefined *)&REFG(undefined8, 0x142d2a620);
+  REFG(undefined8, 0x142d2a628) = 0x142d2a621;
+  REFG(undefined8, 0x142d2a658) = 0xffffffff;
+  REFG(undefined8, 0x142d2a65c) = 0x80000000;
+  atexit(((code *)REFP(0x1425f5200)));
+  return 0;
+}
+
 /* ref: FUN_1401fc7f0 */
 undefined8 FUN_1401fc7f0(void)
 {
@@ -883,11 +897,11 @@ undefined8 FUN_1401ff1a0(void)
                          "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Base\\BitArray.h",uVar4
                          ,0xf9);
   if ((REFG(undefined1, 0x142d30e84) != '\0') && (REFG(undefined1, 0x142d30e85) != '\0')) {
-    CALLF(undefined8, FUN_1402547e0)(REFG(undefined8, 0x142d30e78));
+    CALLF(undefined8, FUN_1402547e0)(REFG(undefined8 *, 0x142d30e78));
   }
   REFG(undefined4, 0x142d30e80) = 0x200;
   REFG(undefined1, 0x142d30e84) = 0x101;
-  REFG(undefined8, 0x142d30e78) = puVar2;
+  REFG(undefined8 *, 0x142d30e78) = puVar2;
   *puVar2 = 0;
   puVar2[1] = 0;
   puVar2[2] = 0;
@@ -921,11 +935,11 @@ undefined8 FUN_1401ff360(void)
                          "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Base\\BitArray.h",uVar4
                          ,0xf9);
   if ((REFG(undefined1, 0x142d30e94) != '\0') && (REFG(undefined1, 0x142d30e95) != '\0')) {
-    CALLF(undefined8, FUN_1402547e0)(REFG(undefined8, 0x142d30e88));
+    CALLF(undefined8, FUN_1402547e0)(REFG(undefined8 *, 0x142d30e88));
   }
   REFG(undefined4, 0x142d30e90) = 0x200;
   REFG(undefined1, 0x142d30e94) = 0x101;
-  REFG(undefined8, 0x142d30e88) = puVar2;
+  REFG(undefined8 *, 0x142d30e88) = puVar2;
   *puVar2 = 0;
   puVar2[1] = 0;
   puVar2[2] = 0;
@@ -2148,17 +2162,6 @@ undefined8 FUN_140201ee0(void)
     _guard_check_icall();
   }
   atexit((code *)((code *)REFP(0x1425fdeb0)));
-  return 0;
-}
-
-/* ref: FUN_140201f20 */
-undefined8 FUN_140201f20(void)
-{
-  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
-  if (REFG(undefined4, 0x1430d0280) == 1) {
-    _guard_check_icall();
-  }
-  atexit((code *)((code *)REFP(0x1425fdf10)));
   return 0;
 }
 

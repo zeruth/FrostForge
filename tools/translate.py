@@ -306,7 +306,7 @@ def stack_frame(body: str) -> str:
 IMAGE_LO, IMAGE_HI = 0x140000000, 0x150000000   # the reference image's address range
 INIT_EPOCH = re.compile(r"\*\(int \*\)\(\*\(longlong \*\)\(\(longlong\)ThreadLocalStoragePointer \+ "
                         r"\(ulonglong\)_tls_index \* 8\) \+\s*0x2140\)")
-STRLEN_LOOP = re.compile(r"(\w+) = -1;\s*do \{\s*\1 = \1 \+ 1;\s*\} while \(\*\(char \*\)\((\w+) \+ \1\) != '\\0'\);")
+STRLEN_LOOP = re.compile(r"(\w+) = -1;\s*do \{\s*\1 = \1 \+ 1;\s*\} while \(\*\(char \*\)\(([\w\[\]\*]+) \+ \1\) != '\\0'\);")
 
 
 VCALL = re.compile(r"\(\*\*\(code \*\*\)(?:\(\*(?:\((?:\w+ )*\w+ ?\*+\))?|\*(?:\((?:\w+ )*\w+ ?\*+\))?)")
@@ -826,11 +826,18 @@ class Translator:
         out, last = [], 0
         for start, end, b, args in list(call_sites(text)):
             need = self.arity(b)
-            if need is None or len(args) != need - 1 or not args:
+            if need is None or not args:
                 continue
-            loops = [m for m in STRLEN_LOOP.finditer(text, 0, start) if m.group(2) == args[-1]]
-            if loops:
-                out.append((end, f",{loops[-1].group(1)}"))
+            if len(args) == need - 1:
+                loops = [m for m in STRLEN_LOOP.finditer(text, 0, start) if m.group(2) == args[-1]]
+                if loops:
+                    out.append((end, f",{loops[-1].group(1)}"))
+            elif len(args) == need - 2:
+                # both the string and its length dropped: the strlen just before the call (no
+                # other call between) measured the string the call pushes
+                loops = list(STRLEN_LOOP.finditer(text, 0, start))
+                if loops and not re.search(r"\b\w+\(", text[loops[-1].end():start]):
+                    out.append((end, f",{loops[-1].group(2)},{loops[-1].group(1)}"))
         for pos, extra in reversed(out):
             text = text[:pos] + extra + text[pos:]
         return text
@@ -1078,10 +1085,9 @@ class Translator:
                     if self.port_target(b) is not None and b not in roots:
                         adapt[b] = True
                         seen.add(b)
-                    elif b in self.tied and self.tied[b]["kind"] != "stub" and b not in self.mismatched:
-                        # (a port whose signature is not the reference's is translated instead)
-                        stub[b] = "a port that cannot be called from C (internal or aggregate ABI)"
-                        seen.add(b)
+                    # (a port the translated code cannot call, internal or returning an aggregate,
+                    # or whose signature is not the reference's, is translated like any other:
+                    # what it shares with the port is redirected to the port's own)
                     elif d + 1 <= self.depth:
                         frontier.append((b, d + 1))
                     else:
@@ -1211,6 +1217,8 @@ class Translator:
                 # labels stay labels
                 return whole
             size, gtype = self.refdata.get(addr, (8, "undefined8"))
+            if gtype.startswith("undefined") and size == 8 and addr in borrowed:
+                gtype = borrowed[addr]
             expr = global_expr(gtype, size, addr)
             held = self.held_global(addr)
             if held is None or held[1]["const"]:
@@ -1230,6 +1238,18 @@ class Translator:
                                 f"(*({c_type_of(gtype, size)} *)((char *)&gen_g_{base:x} + 0x{addr - base:x}))")
 
         aliases, exported = {}, {}
+
+        # an untyped 8-byte global the function copies to or from a pointer local
+        # (`piVar10 = DAT_142de0de8;`): the local's type is the global's
+        local_types = {m.group(2): re.sub(r"\s+", " ", m.group(1)).strip()
+                       for m in re.finditer(r"^\s*((?:\w+ )*\w+ ?\*+)\s*(\w+);$", body, re.M)}
+        borrowed = {}
+        for m in re.finditer(r"\b(\w+) = (?:\([^()]*\))?_?DAT_([0-9a-f]{9});|\b_?DAT_([0-9a-f]{9}) = (?:\([^()]*\))?(\w+);",
+                             body):
+            var, addr = (m.group(1), m.group(2)) if m.group(1) else (m.group(4), m.group(3))
+            ctype = local_types.get(var)
+            if ctype and ctype.endswith("*"):
+                borrowed.setdefault(int(addr, 16), ctype.replace(" *", "*").replace("*", " *").strip())
 
         # a constant Ghidra wrote as the address of a "global" outside the image
         # (`&DAT_8000000000000020`, a blz::vector's inline capacity flag) is that constant
@@ -1591,6 +1611,10 @@ def main() -> None:
             forwarded |= {int(a, 16) for a in re.findall(r"^// translated: FUN_([0-9a-f]{9})$",
                                                          path.read_text(errors="replace"), re.M)}
     roots = sorted(set(handlers) | forwarded | {int(a.lower().removeprefix("fun_"), 16) for a in args.addr})
+    if args.fix and DEMOTED.exists():
+        # every demotion is retried: what failed to compile under an older translator may
+        # compile now (a recovered argument, a type), and the loop below re-demotes what does not
+        DEMOTED.unlink()
     for round_ in range(1, 30 if args.fix else 2):
         t = Translator(args.depth)
         manifest = t.emit(sorted(set(roots) | set(t.static_initializers())), handlers)

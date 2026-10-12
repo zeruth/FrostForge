@@ -2,6 +2,17 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 
+/* ref: FUN_140201f20 */
+undefined8 FUN_140201f20(void)
+{
+  REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
+  if (REFG(undefined4, 0x1430d0280) == 1) {
+    _guard_check_icall();
+  }
+  atexit((code *)((code *)REFP(0x1425fdf10)));
+  return 0;
+}
+
 /* ref: FUN_140201f50 */
 undefined8 FUN_140201f50(void)
 {
@@ -2046,6 +2057,37 @@ undefined8 FUN_14020afa0(void)
   return 0;
 }
 
+/* ref: FUN_14020b250 */
+undefined8 FUN_14020b250(void)
+{
+  char *pcVar1;
+  longlong lVar2;
+  char *pcVar3;
+  
+  pcVar3 = ((undefined1 *)0x9ULL);
+  pcVar1 = "VoiceChat";
+  lVar2 = 9;
+  do {
+    lVar2 = lVar2 + -1;
+    if (*pcVar1 == '\0') {
+      if (pcVar1 != (char *)0x0) {
+        pcVar3 = pcVar1 + -0x14283ae90;
+      }
+      break;
+    }
+    pcVar1 = pcVar1 + 1;
+  } while (lVar2 != 0);
+  if ((char *)0x3f < pcVar3) {
+    pcVar3 = (char *)0x3f;
+  }
+  memmove(&REFG(undefined8, 0x143479568),"VoiceChat",pcVar3);
+  pcVar3[0x143479568] = '\0';
+  REFG(undefined8, 0x1434795a7) = 0;
+  REFG(undefined8, 0x143479560) = 9;
+  REFG(undefined8, 0x143479564) = CALLF(uint, FUN_142363e10)(&REFG(undefined8, 0x143479568),9,0x0);
+  return 0;
+}
+
 /* ref: FUN_14020b5a0 */
 undefined8 FUN_14020b5a0(void)
 {
@@ -3038,22 +3080,6 @@ undefined8 FUN_14020f420(void)
 {
   CALLF(undefined1, FUN_1402637c0)(&REFG(undefined8, 0x1447ce6e0));
   atexit((code *)((code *)REFP(0x14260b1b0)));
-  return 0;
-}
-
-/* ref: FUN_14020f450 */
-undefined8 FUN_14020f450(void)
-{
-  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x1447ce730),200,0x100);
-  atexit(((code *)REFP(0x14260b1e0)));
-  return 0;
-}
-
-/* ref: FUN_14020f480 */
-undefined8 FUN_14020f480(void)
-{
-  CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x1447ce768),0x7e0,0x20);
-  atexit(((code *)REFP(0x14260b220)));
   return 0;
 }
 

@@ -33,7 +33,9 @@ VALUE_TYPE = re.compile(r"^(?:const\s+)?(?:bool|int|unsigned|unsigned int|int(?:
                         r"size_t|DWORD|BOOL|float|double)$")
 # stubs kept the port's by what they do: the WowConnection network layer (offline), the
 # reference's unhandled-exception filter, the allocator hooks
-KEEP_NAMES = {"Sub1415002E0", "OsInitializeExceptionHandling", "Sub14165C0E0"}
+KEEP_NAMES = {"Sub1415002E0", "OsInitializeExceptionHandling", "Sub14165C0E0",
+              # the final shutdown: the port tears its subsystems down itself
+              "Sub140216880"}
 DEFAULT_RESULT ={"void": "", "bool": "false", "float": "0.0f", "double": "0.0"}
 
 

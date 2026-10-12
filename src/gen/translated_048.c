@@ -2,6 +2,152 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 
+/* ref: FUN_142601130 */
+undefined8 FUN_142601130(void)
+{
+  CALLF(undefined8, FUN_142430e30)(&REFG(undefined8, 0x143261830),0,((char *)REFP(0x142dceb68)),0xfffffffe,1);
+  return (undefined8)CALLF(undefined8, FUN_142430de0)(&REFG(undefined8, 0x143261830));
+}
+
+/* ref: FUN_142601170 */
+undefined8 FUN_142601170(void)
+{
+  CALLF(undefined8, FUN_142430e30)(&REFG(undefined8, 0x143261860),0,((char *)REFP(0x142dceba0)),0xfffffffe,1);
+  return (undefined8)CALLF(undefined8, FUN_142430de0)(&REFG(undefined8, 0x143261860));
+}
+
+/* ref: FUN_1426011b0 */
+undefined8 FUN_1426011b0(void)
+{
+  CALLF(undefined8, FUN_142430e30)(&REFG(undefined8, 0x143261888),0,((char *)REFP(0x142dcebd0)),0xfffffffe,1);
+  return (undefined8)CALLF(undefined8, FUN_142430de0)(&REFG(undefined8, 0x143261888));
+}
+
+/* ref: FUN_142601bd0 */
+undefined8 FUN_142601bd0(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
+{
+  ulonglong t0 = ((ulonglong)&REFG(undefined8, 0x143490880));
+  return CALLF(undefined8, FUN_1402637e0)(t0, a1, a2, a3);
+}
+
+/* ref: FUN_142601be0 */
+undefined8 FUN_142601be0(void)
+{
+  if (-1 < REFG(undefined8, 0x142d41c10)) {
+    CALLF(undefined8, FUN_140255210)(REFG(undefined8, 0x142d41c00),((char *)REFP(0x142dd3438)),0xfffffffa);
+    REFG(undefined8, 0x142d41c00) = 0;
+  }
+  if (-1 < REFG(undefined8, 0x142d41bf8)) {
+    CALLF(undefined8, FUN_140255210)(REFG(undefined8, 0x142d41be8),((char *)REFP(0x142dd3438)),0xfffffffa);
+    REFG(undefined8, 0x142d41be8) = 0;
+  }
+                    /* WARNING: Could not recover jumptable at 0x000142601c52. Too many branches */
+                    /* WARNING: Treating indirect jump as call */
+  (*REFG(code *, 0x142d41bd0))(&REFG(undefined8, 0x142d41bd8),0,0);
+  return 0;
+}
+
+/* ref: FUN_142602090 */
+undefined8 FUN_142602090(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
+{
+  ulonglong t0 = ((ulonglong)&REFG(undefined8, 0x143490a00));
+  return CALLF(undefined8, FUN_1402112e0)(t0, a1, a2, a3);
+}
+
+/* ref: FUN_142602140 */
+undefined8 FUN_142602140(void)
+{
+  longlong lVar1;
+  ulonglong uVar2;
+  ulonglong uVar3;
+  ulonglong uVar4;
+  
+  uVar3 = 0;
+  uVar2 = REFG(undefined8, 0x142d438c8);
+  uVar4 = uVar3;
+  if (REFG(undefined8, 0x142d438c8) != 0) {
+    do {
+      if ((1 < *(int *)(REFG(undefined8, 0x142d438d0) + uVar4) + 1U) &&
+         (lVar1 = *(longlong *)(REFG(undefined8, 0x142d438d0) + 8 + uVar4), lVar1 != 0)) {
+        CALLF(undefined8, FUN_140255210)(lVar1,"D:\\BuildServer\\A\\work-git\\wow\\Storm\\H\\SMemNew.h",0xa8,0);
+        uVar2 = REFG(undefined8, 0x142d438c8);
+      }
+      uVar3 = uVar3 + 1;
+      uVar4 = uVar4 + 0x10;
+    } while (uVar3 < uVar2);
+  }
+  CALLF(undefined8, FUN_140255210)(REFG(undefined8, 0x142d438d0),((char *)REFP(0x142dd37e0)),0xfffffffa);
+  return 0;
+}
+
+/* ref: FUN_1426021e0 */
+undefined8 FUN_1426021e0(void)
+{
+  CALLF(undefined8, FUN_1402637e0)(&REFG(undefined8, 0x142d43c38));
+  CALLF(undefined8, FUN_1422c2050)(&REFG(undefined8, 0x142d43bd0));
+  CALLF(undefined8, FUN_1422c1f70)(&REFG(undefined8, 0x142d43b10));
+  CALLF(undefined8, FUN_1422c4e70)(&REFG(undefined8, 0x142d43af0));
+  CALLF(undefined8, FUN_1422c1e90)(&REFG(undefined8, 0x142d43ad0));
+  CALLF(undefined8, FUN_1422c1ca0)(&REFG(undefined8, 0x142d43ab0));
+  CALLF(undefined8, FUN_1422c1f00)(&REFG(undefined8, 0x142d43a90));
+  CALLF(undefined8, FUN_1422c1d40)(&REFG(undefined8, 0x142d43a70));
+  CALLF(undefined8, FUN_1422c1db0)(&REFG(undefined8, 0x142d43a50));
+  CALLF(undefined8, FUN_1422c1b50)(&REFG(undefined8, 0x142d43a30));
+  if (REFG(undefined8, 0x142d43a20) != 0) {
+    return (undefined8)(*(code *)(*(code *)&FreeLibrary))();
+  }
+  return 0;
+}
+
+/* ref: FUN_142602290 */
+undefined8 FUN_142602290(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
+{
+  ulonglong t0 = ((ulonglong)&REFG(undefined8, 0x1434913b8));
+  return CALLF(undefined8, FUN_1402112e0)(t0, a1, a2, a3);
+}
+
+/* ref: FUN_1426023f0 */
+undefined8 FUN_1426023f0(void)
+{
+  _guard_check_icall(&REFG(undefined8, 0x144689550));
+  CALLF(undefined8, FUN_14062dfe0)(&REFG(undefined8, 0x144689548));
+  CALLF(undefined8, FUN_14062dfe0)(&REFG(undefined8, 0x144689540));
+  _guard_check_icall(&REFG(undefined8, 0x1445c1510));
+  CALLF(undefined8, FUN_14062dfe0)(&REFG(undefined8, 0x1445c1508));
+  CALLF(undefined8, FUN_14062dfe0)(&REFG(undefined8, 0x1445c1500));
+  _guard_check_icall(&REFG(undefined8, 0x1444f94d0));
+  CALLF(undefined8, FUN_14062dfe0)(&(*(undefined8 *)((char *)&gen_g_1444f94c0 + 0x8)));
+  return (undefined8)CALLF(undefined8, FUN_14062dfe0)(&(*(undefined8 *)((char *)&gen_g_1444f94c0 + 0x0)));
+}
+
+/* ref: FUN_1426025d0 */
+undefined8 FUN_1426025d0(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
+{
+  ulonglong t0 = ((ulonglong)&REFG(undefined8, 0x1447aa218));
+  return CALLF(undefined8, FUN_1402637e0)(t0, a1, a2, a3);
+}
+
+/* ref: FUN_1426025e0 */
+undefined8 FUN_1426025e0(void)
+{
+  CALLF(undefined8, FUN_142430e30)(&REFG(undefined8, 0x1447aa310),0,((char *)REFP(0x142dd7348)),0xfffffffe,1);
+  return (undefined8)CALLF(undefined8, FUN_142430de0)(&REFG(undefined8, 0x1447aa310));
+}
+
+/* ref: FUN_1426026d0 */
+undefined8 FUN_1426026d0(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
+{
+  ulonglong t0 = ((ulonglong)&REFG(undefined8, 0x1447aadd0));
+  return CALLF(undefined8, FUN_1402637e0)(t0, a1, a2, a3);
+}
+
+/* ref: FUN_1426026f0 */
+undefined8 FUN_1426026f0(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
+{
+  ulonglong t0 = ((ulonglong)&REFG(undefined8, 0x1447aec88));
+  return CALLF(undefined8, FUN_142430de0)(t0, a1, a2, a3);
+}
+
 /* ref: FUN_142602860 */
 undefined8 FUN_142602860(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
 {

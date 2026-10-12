@@ -2,6 +2,15 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 
+/* ref: FUN_1401f45b0 */
+undefined8 FUN_1401f45b0(void)
+{
+  undefined8 uVar1;
+  
+  uVar1 = CALLF(undefined *, FUN_141845b00)();
+  return (undefined8)CALLF(undefined8 *, FUN_1418a5ed0)(&REFG(undefined8, 0x143144130),"SetCameraEx",uVar1,((code *)REFP(0x1418398a0)),((code *)REFP(0x141840250)));
+}
+
 /* ref: FUN_1401f45f0 */
 undefined8 FUN_1401f45f0(void)
 {
@@ -1337,14 +1346,5 @@ undefined8 FUN_1401f7040(void)
   
   uVar1 = CALLF(undefined *, FUN_1418d0760)();
   return (undefined8)CALLF(undefined8 *, FUN_1418a5ed0)(&REFG(undefined8, 0x14315a498),"GetHoverHeightSpeed",uVar1,((code *)REFP(0x1418b4170)),((code *)REFP(0x1418bd570)));
-}
-
-/* ref: FUN_1401f7080 */
-undefined8 FUN_1401f7080(void)
-{
-  undefined8 uVar1;
-  
-  uVar1 = CALLF(undefined *, FUN_1418d0760)();
-  return (undefined8)CALLF(undefined8 *, FUN_1418a5ed0)(&REFG(undefined8, 0x14315a428),"GetHoverHeight",uVar1,((code *)REFP(0x1418b4190)),((code *)REFP(0x1418bd680)));
 }
 

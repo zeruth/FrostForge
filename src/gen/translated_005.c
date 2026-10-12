@@ -2,6 +2,15 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 
+/* ref: FUN_1401f9600 */
+undefined8 FUN_1401f9600(void)
+{
+  undefined8 uVar1;
+  
+  uVar1 = CALLF(undefined *, FUN_1418d0860)();
+  return (undefined8)CALLF(undefined8 *, FUN_1418a5fb0)(&REFG(undefined8, 0x143158a90),"animKitID",uVar1,((code *)REFP(0x1418d5ac0)),((code *)REFP(0x141846500)),((code *)REFP(0x1418c9640)));
+}
+
 /* ref: FUN_1401f9650 */
 undefined8 FUN_1401f9650(void)
 {
@@ -1423,20 +1432,6 @@ undefined8 FUN_1401fc6c0(void)
   REFG(undefined4, 0x142d2a6a8) = 0xffffffff;
   REFG(undefined8, 0x142d2a6ac) = 0x80000000;
   atexit(((code *)REFP(0x1425f5100)));
-  return 0;
-}
-
-/* ref: FUN_1401fc740 */
-undefined8 FUN_1401fc740(void)
-{
-  REFG(undefined8, 0x142d2a628) = 0x142d2a621;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2a618));
-  REFG(undefined4, 0x142d2a618) = 0x10;
-  REFG(undefined8, 0x142d2a620) = (undefined *)&REFG(undefined8, 0x142d2a620);
-  REFG(undefined8, 0x142d2a628) = 0x142d2a621;
-  REFG(undefined8, 0x142d2a658) = 0xffffffff;
-  REFG(undefined8, 0x142d2a65c) = 0x80000000;
-  atexit(((code *)REFP(0x1425f5200)));
   return 0;
 }
 

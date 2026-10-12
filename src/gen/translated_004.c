@@ -2,6 +2,15 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 
+/* ref: FUN_1401f7080 */
+undefined8 FUN_1401f7080(void)
+{
+  undefined8 uVar1;
+  
+  uVar1 = CALLF(undefined *, FUN_1418d0760)();
+  return (undefined8)CALLF(undefined8 *, FUN_1418a5ed0)(&REFG(undefined8, 0x14315a428),"GetHoverHeight",uVar1,((code *)REFP(0x1418b4190)),((code *)REFP(0x1418bd680)));
+}
+
 /* ref: FUN_1401f70c0 */
 undefined8 FUN_1401f70c0(void)
 {
@@ -1345,14 +1354,5 @@ undefined8 FUN_1401f95b0(void)
   
   uVar1 = CALLF(undefined *, FUN_1418d06e0)();
   return (undefined8)CALLF(undefined8 *, FUN_1418a5fb0)(&REFG(undefined8, 0x143157f10),"active",uVar1,((code *)REFP(0x1418d5a80)),((code *)REFP(0x1418aa660)),((code *)REFP(0x1418c9510)));
-}
-
-/* ref: FUN_1401f9600 */
-undefined8 FUN_1401f9600(void)
-{
-  undefined8 uVar1;
-  
-  uVar1 = CALLF(undefined *, FUN_1418d0860)();
-  return (undefined8)CALLF(undefined8 *, FUN_1418a5fb0)(&REFG(undefined8, 0x143158a90),"animKitID",uVar1,((code *)REFP(0x1418d5ac0)),((code *)REFP(0x141846500)),((code *)REFP(0x1418c9640)));
 }
 

@@ -252,13 +252,6 @@ int Lua_C_CharacterServices_GetCharacterServiceDisplayDataByVASType(lua_State* L
     return 0;
 }
 
-// ref: FUN_141698860
-int Lua_C_CharacterServices_GetFactionGroupByIndex(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140cf1ed0
 int Lua_C_ChatInfo_GetChannelShortcut(lua_State* L) {
     (void)L;
@@ -1029,13 +1022,6 @@ int Lua_GetAccountCharacterInfo(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_141d02ae0
-int Lua_GetAddOnDependencies(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_1416a48e0
 int Lua_GetBillingPlan(lua_State* L) {
     (void)L;
@@ -1045,13 +1031,6 @@ int Lua_GetBillingPlan(lua_State* L) {
 
 // ref: FUN_141d03650
 int Lua_GetCVarInfo(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1416a49a0
-int Lua_GetCreditsText(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -1094,13 +1073,6 @@ int Lua_GetMaxLevelForExpansionLevel(lua_State* L) {
 
 // ref: FUN_141d05a40
 int Lua_GetMouseButtonClicked(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1416a44f0
-int Lua_GetServerName(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;

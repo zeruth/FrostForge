@@ -266,6 +266,7 @@ unsigned long long FUN_14168e740(unsigned long long param_1);
 unsigned long long FUN_14168e770(unsigned long long param_1);
 unsigned long long FUN_14168e7d0(unsigned long long param_1);
 unsigned long long FUN_14168e7f0(unsigned long long param_1);
+unsigned long long FUN_141698860(unsigned long long param_1);
 unsigned long long FUN_1416989c0(unsigned long long param_1);
 unsigned long long FUN_141698c90(unsigned long long param_1);
 unsigned long long FUN_141698d50(unsigned long long param_1);
@@ -318,6 +319,7 @@ unsigned long long FUN_1416a41d0(unsigned long long param_1);
 unsigned long long FUN_1416a42b0(unsigned long long param_1);
 unsigned long long FUN_1416a4310(unsigned long long param_1);
 unsigned long long FUN_1416a44a0(unsigned long long param_1);
+unsigned long long FUN_1416a44f0(unsigned long long param_1);
 unsigned long long FUN_1416a4680(unsigned long long param_1);
 unsigned long long FUN_1416a46b0(unsigned long long param_1);
 unsigned long long FUN_1416a46e0(unsigned long long param_1);
@@ -327,6 +329,7 @@ unsigned long long FUN_1416a4860(unsigned long long param_1);
 unsigned long long FUN_1416a4880(unsigned long long param_1);
 unsigned long long FUN_1416a48a0(unsigned long long param_1);
 unsigned long long FUN_1416a4970(unsigned long long param_1);
+unsigned long long FUN_1416a49a0(unsigned long long param_1);
 unsigned long long FUN_1416a4af0(unsigned long long param_1);
 unsigned long long FUN_1416a4d30(unsigned long long param_1);
 unsigned long long FUN_1416a4d70(unsigned long long param_1);
@@ -406,6 +409,7 @@ unsigned long long FUN_141d02620(unsigned long long param_1);
 unsigned long long FUN_141d02760(unsigned long long param_1);
 unsigned long long FUN_141d02890(unsigned long long param_1);
 unsigned long long FUN_141d028c0(unsigned long long param_1);
+unsigned long long FUN_141d02ae0(unsigned long long param_1);
 unsigned long long FUN_141d02bf0(unsigned long long param_1);
 unsigned long long FUN_141d02cf0(unsigned long long param_1);
 unsigned long long FUN_141d02d00(unsigned long long param_1);
@@ -872,6 +876,15 @@ int Lua_C_CharacterServices_GetCharacterServiceDisplayOrder(lua_State* L) {
     __try {
         return static_cast<int>(FUN_140c91d60(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x140c91d60ull, GetExceptionInformation())) {
+        return 0;
+    }
+}
+
+// translated: FUN_141698860
+int Lua_C_CharacterServices_GetFactionGroupByIndex(lua_State* L) {
+    __try {
+        return static_cast<int>(FUN_141698860(reinterpret_cast<unsigned long long>(L)));
+    } __except (GenFault(0x141698860ull, GetExceptionInformation())) {
         return 0;
     }
 }
@@ -3081,6 +3094,15 @@ int Lua_GetAccountExpansionLevel(lua_State* L) {
     }
 }
 
+// translated: FUN_141d02ae0
+int Lua_GetAddOnDependencies(lua_State* L) {
+    __try {
+        return static_cast<int>(FUN_141d02ae0(reinterpret_cast<unsigned long long>(L)));
+    } __except (GenFault(0x141d02ae0ull, GetExceptionInformation())) {
+        return 0;
+    }
+}
+
 // translated: FUN_141d02bf0
 int Lua_GetAddOnEnableState(lua_State* L) {
     __try {
@@ -3185,6 +3207,15 @@ int Lua_GetCharacterUndeleteStatus(lua_State* L) {
     __try {
         return static_cast<int>(FUN_14168e630(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x14168e630ull, GetExceptionInformation())) {
+        return 0;
+    }
+}
+
+// translated: FUN_1416a49a0
+int Lua_GetCreditsText(lua_State* L) {
+    __try {
+        return static_cast<int>(FUN_1416a49a0(reinterpret_cast<unsigned long long>(L)));
+    } __except (GenFault(0x1416a49a0ull, GetExceptionInformation())) {
         return 0;
     }
 }
@@ -3491,6 +3522,15 @@ int Lua_GetServerExpansionLevel(lua_State* L) {
     __try {
         return static_cast<int>(FUN_141086140(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x141086140ull, GetExceptionInformation())) {
+        return 0;
+    }
+}
+
+// translated: FUN_1416a44f0
+int Lua_GetServerName(lua_State* L) {
+    __try {
+        return static_cast<int>(FUN_1416a44f0(reinterpret_cast<unsigned long long>(L)));
+    } __except (GenFault(0x1416a44f0ull, GetExceptionInformation())) {
         return 0;
     }
 }
