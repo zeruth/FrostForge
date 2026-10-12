@@ -17,6 +17,8 @@ add_library(ui STATIC
     CSimpleHTML.cpp
     CSimpleSlider.cpp
     CSimpleStatusBar.cpp
+    CGTooltip.cpp
+    CGTooltipScript.cpp
     CSimpleEditBox.cpp
     CSimpleEditBoxInput.cpp
     CSimpleEditBoxLayout.cpp

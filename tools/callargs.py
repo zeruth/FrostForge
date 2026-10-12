@@ -42,6 +42,29 @@ class _Function:
                 self.targets.add(i.operands[0].imm)
                 self.sources.setdefault(i.operands[0].imm, []).append(k)
         self.pinned = self._pinned()
+        self.frame, self.body_start = self._frame()
+
+    def _frame(self) -> tuple[int | None, int]:
+        """How far the prologue moves rsp (its pushes and `sub rsp, N`), and where the body
+        starts; None when the prologue does something else to rsp (a probe, a frame pointer
+        the body addresses through)."""
+        delta = 0
+        for k, i in enumerate(self.ins):
+            ops = i.operands
+            if i.mnemonic == "push":
+                delta += 8
+            elif i.mnemonic == "sub" and len(ops) == 2 and ops[0].type == x86.X86_OP_REG \
+                    and i.reg_name(ops[0].reg) == "rsp" and ops[1].type == x86.X86_OP_IMM:
+                delta += ops[1].imm
+            elif i.mnemonic == "mov" and len(ops) == 2 and ops[0].type == x86.X86_OP_MEM \
+                    and i.reg_name(ops[0].mem.base) == "rsp" and ops[1].type == x86.X86_OP_REG:
+                pass        # saving a register in the home space
+            elif i.mnemonic in ("mov", "lea") and len(ops) == 2 and ops[0].type == x86.X86_OP_REG \
+                    and i.reg_name(ops[0].reg) == "rbp":
+                pass        # a frame pointer set up beside rsp; rsp itself does not move
+            else:
+                return delta, k
+        return None, 0
 
     def path(self, k: int):
         """The instructions executed just before instruction k, latest first, while there is
@@ -211,6 +234,11 @@ class _Function:
             ctype = {1: "byte", 2: "ushort", 4: "uint", 8: "ulonglong"}[size]
             if i.reg_name(mem.base) == "rip":
                 return f"(*({ctype} *)&DAT_{(i.address + i.size + mem.disp) & MASK[8]:x})"
+            if i.reg_name(mem.base) == "rsp" and self.frame is not None and size == 8 and j >= self.body_start:
+                # a stack slot: the local Ghidra names by its offset from the entry stack pointer
+                # (local_N below it, local_resN in the caller's home space above it)
+                o = mem.disp - self.frame
+                return f"local_res{o:x}" if o > 0 else f"local_{-o:x}"
             base = self.value(j, FAMILY.get(i.reg_name(mem.base), ""), floor, depth + 1)
             if isinstance(base, str):
                 return f"(*({ctype} *)((char *)({base}) + {mem.disp:#x}))"
@@ -249,9 +277,11 @@ class CallArgs:
         return sum(1 for i in f.ins if i.mnemonic == "call" and i.operands
                    and i.operands[0].type != x86.X86_OP_IMM)
 
-    def recover(self, function: int, size: int, target: int, positions: list[int]) -> list[int] | None:
+    def recover(self, function: int, size: int, target: int, positions: list[int], every: list | None = None):
         """The constants every call from `function` to `target` passes in the argument
-        `positions` (0-3), when all calls agree; None when any is unknown or they differ."""
+        `positions` (0-3), when all calls agree; None when any is unknown or they differ.
+        With `every` (a list), each call's values are appended to it instead, unknowns as None,
+        and the list is returned."""
         if any(p >= len(ARG_REGS) for p in positions):
             return None
         f = self._functions.get(function)
@@ -264,9 +294,12 @@ class CallArgs:
             if i.operands[0].imm != target:
                 continue
             values = [f.value(k, ARG_REGS[p], 0) for p in positions]
+            if every is not None:
+                every.append(values)
+                continue
             if any(v is None for v in values):
                 return None
             if found is not None and values != found:
                 return None
             found = values
-        return found
+        return every if every is not None else found

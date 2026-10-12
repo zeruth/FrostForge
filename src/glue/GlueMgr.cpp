@@ -22,6 +22,7 @@
 #include "storm/Memory.hpp"
 #include "framescript/FrameScriptObject.hpp"
 #include "client/Locale.hpp"
+#include "ui/CGTooltip.hpp"
 #include "ui/CSimpleFont.hpp"
 #include "ui/CSimpleFrame.hpp"
 #include "ui/CSimpleTop.hpp"
@@ -93,9 +94,7 @@ CSimpleFrame* CreatePlayerModel(CSimpleFrame* parent) {
 
 // ref: FUN_14167b220
 CSimpleFrame* CreateGameTooltip(CSimpleFrame* parent) {
-    (void)parent;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    return new CGTooltip(parent);
 }
 
 // ref: FUN_14167aee0
@@ -444,11 +443,6 @@ void Sub141C43E60() {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_141cd13c0
-void Sub141CD13C0() {
-    FROST_UNIMPLEMENTED();
-}
-
 // ref: FUN_141a49240
 void Sub141A49240() {
     FROST_UNIMPLEMENTED();
@@ -643,7 +637,7 @@ void CGlueMgr::Initialize() {
     Sub141D06170();
     Sub1424CD500();
     Sub141C43E60();
-    Sub141CD13C0();
+    CGTooltip::CreateScriptMetaTables();
     Sub1416A70B0();
     Sub14168ED20();
     Sub14169C190();

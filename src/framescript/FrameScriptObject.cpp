@@ -614,7 +614,7 @@ bool FrameScript_PushObjectError(lua_State* L, FrameScript_Object* object, const
 
 // ---- FrameScript_Object -------------------------------------------------------------------
 
-int32_t FrameScript_Object::s_objectTypeCount;
+int32_t FrameScript_Object::s_objectTypeCount;  // DAT_142e979f0
 
 // ref: FUN_140641fd0
 FrameScript_Object::FrameScript_Object() {

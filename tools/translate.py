@@ -247,7 +247,7 @@ def global_expr(ghidra: str, size: int, addr: int) -> str:
     return f"REFG({c_type_of(ghidra, size)}, 0x{addr:x})"
 
 
-PORT_GLOBAL = re.compile(r"^(?!(?:struct|class|union|enum|typedef|using)\b)([A-Za-z_][\w:<>,\t \*&]*?[\t \*&])(\w+)(\[[^\]\n]*\])?(?:[\t ]*(?:=|\{)[^;\n]*)?;[\t ]*"
+PORT_GLOBAL = re.compile(r"^(?!(?:struct|class|union|enum|typedef|using)\b)([A-Za-z_][\w:<>,\t \*&]*?[\t \*&:])(\w+)(\[[^\]\n]*\])?(?:[\t ]*(?:=|\{)[^;\n]*)?;[\t ]*"
                          r"//\s*(?:ref:\s*)?(?:DAT_|0x)(14[0-9a-f]{7})\b", re.M)
 SCALAR = re.compile(r"^(?:static\s+|extern\s+|thread_local\s+)*(?:const\s+)?(?:u?int\d+_t|bool|float|double|char|"
                     r"int|unsigned|DWORD|size_t|uintptr_t|HANDLE|HWND|\w+\s*\*+)$")
@@ -415,6 +415,11 @@ def upper_half_only(text: str) -> list[str]:
         decl = re.search(rf"^\s*[\w ]+ {name};$", text, re.M)
         rest = [m for m in uses if not (decl and decl.start() <= m.start() < decl.end())]
         if rest and all(re.match(r"\s*>>\s*0x20\b", text[m.end():]) for m in rest):
+            out.append(name)
+        elif re.fullmatch(r"in_stack_ffff[0-9a-f]+", name):
+            # a slot of the function's own outgoing-argument area (below its entry rsp): the
+            # instructions set the bytes a narrow stack argument has (`mov byte ptr [rsp+0x20],0`)
+            # and Ghidra carries the rest as this; the callee reads only what was set
             out.append(name)
     return out
 
@@ -618,7 +623,8 @@ def load_data_sizes() -> dict[str, int]:
 def load_data_publics() -> list[str]:
     out = subprocess.run([str(F.LLVM / "llvm-pdbutil.exe"), "dump", "-publics", str(F.PORT_PDB)],
                          capture_output=True, text=True, errors="replace").stdout
-    return re.findall(r"S_PUB32 \[size = \d+\] `(\?[^`]*@3[^`]*)`\n\s+flags = none", out)
+    # namespace-scope variables mangle as @3, static data members as @2
+    return re.findall(r"S_PUB32 \[size = \d+\] `(\?[^`]*@[23][^`]*)`\n\s+flags = none", out)
 
 
 # ---- translation --------------------------------------------------------------------------------
@@ -678,7 +684,7 @@ class Translator:
         for addr, g in self.held.items():
             # the compiler's own size for it: a span past it would land in other port memory
             g["size"] = cache["data_sizes"].get(g["name"])
-            hits = [n for n in data_publics if re.match(rf"\?{re.escape(g['name'])}@(?:\w+@)*@3", n)]
+            hits = [n for n in data_publics if re.match(rf"\?{re.escape(g['name'])}@(?:\w+@)*@[23]", n)]
             g["mangled"] = hits[0] if len(hits) == 1 else None
         self.global_aliases: dict[int, str] = {}
         self.exported: dict[int, dict] = {}
@@ -709,6 +715,11 @@ class Translator:
         if mangled is None or sig is None:
             return None
         ret, args, this = sig
+        if this and re.search(r"@@[CKS]", mangled):
+            # a static member function (MSVC's C/K/S access codes): no this, whatever the
+            # signature record says
+            this = False
+            sig = (ret, args, this)
         if ret == "complex" or any(c == "complex" for c in args):
             return None
         # a port that takes fewer arguments than the reference (and is not variadic, `...`
@@ -827,6 +838,7 @@ class Translator:
         if not e:
             return text
         fixes = []
+        nth: dict[tuple[int, int], int] = {}     # (callee, shown) -> which short call this is
         for start, end, b, args in list(call_sites(text)):
             need = self.arity(b)
             if need is None or len(args) >= need:
@@ -834,6 +846,13 @@ class Translator:
             sig = self.signature(b)
             positions = list(range(len(args), need))
             values = self.callargs.recover(a, e["size"], b, positions)
+            if values is None:
+                values = self.recover_by_elimination(a, e["size"], b, positions, text, len(args))
+                if isinstance(values, tuple):
+                    # one value list per short call, in their order
+                    k = nth.get((b, len(args)), 0)
+                    nth[(b, len(args))] = k + 1
+                    values = values[k] if k < len(values) else None
             if values is not None:
                 # a float travels in an xmm register: only an argument this function was itself
                 # handed in the same place (a wrapper passing it on) carries it unchanged
@@ -884,6 +903,56 @@ class Translator:
         first = text.index("{\n") + 2
         return (text[:first] + "  union { double d; float f; unsigned int u32[4]; unsigned long long u64[2]; } gen_xmm0;\n"
                 + text[first:])
+
+    def recover_by_elimination(self, a: int, size: int, b: int, positions: list[int], text: str, shown: int):
+        """The calls to `b` disagree on the dropped arguments (luaL_error with a different
+        message at each), but the calls the text shows in full account for some of them: take
+        those out, and when what is left agrees, it is what the short calls pass."""
+        every = self.callargs.recover(a, size, b, positions, every=[])
+        if not every:
+            return None
+        sites = [args for _, _, t, args in call_sites(text) if t == b]
+        short = [args for args in sites if len(args) == shown]
+        full = [args for args in sites if len(args) > max(positions)]
+        if len(every) != len(short) + len(full):
+            return None
+
+        def same(machine, written: str) -> bool:
+            written = written.strip()
+            if isinstance(machine, int):
+                try:
+                    return int(written, 0) & 0xffffffffffffffff == machine
+                except ValueError:
+                    return False
+            m = re.fullmatch(r"&DAT_([0-9a-f]+)", str(machine))
+            if m and written.startswith('"') and written.endswith('"'):
+                literal = written[1:-1].encode().decode("unicode_escape")
+                return self.ref.cstr(int(m.group(1), 16)) == literal
+            return str(machine) == written
+
+        left = list(every)
+        for args in full:
+            for k, values in enumerate(left):
+                if values is not None and all(same(v, args[p]) for v, p in zip(values, positions)):
+                    del left[k]
+                    break
+            else:
+                return None
+        if len(left) != len(short) or any(x is None for v in left for x in v):
+            return None
+        if all(v == left[0] for v in left):
+            return left[0]
+        # they differ: the short calls in the text's order are the remaining instructions in
+        # theirs, when every value is the same kind (all locals, all constants, all globals) so a
+        # pairing could not swap, say, a count for a pointer
+        def kind(v):
+            if isinstance(v, int):
+                return "int"
+            m = re.match(r"(?:local|param|&DAT)", str(v))
+            return m.group(0) if m else "expression"
+        if len({tuple(kind(x) for x in v) for v in left}) != 1:
+            return None
+        return tuple(left)
 
     def lost_arguments(self, text: str) -> str | None:
         for _, _, b, args in call_sites(text):

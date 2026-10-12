@@ -604,6 +604,7 @@ extern "C" void* const gen_p_142cfbe84 = (void*)&s_messageLevelMax;
 extern "C" void* const gen_p_142cfbe88 = (void*)&s_messageCategories;
 extern "C" void* const gen_p_142de1930 = (void*)&s_errorDisplayReady;
 extern "C" void* const gen_p_142de1931 = (void*)&s_errorDisplayEnabled;
+extern "C" void* const gen_p_142de1932 = (void*)&s_errorDisplayHidden;
 extern "C" void* const gen_p_142de29b8 = (void*)&s_accountUsesTokenCVar;
 extern "C" void* const gen_p_142de29c0 = (void*)&s_checkAddonVersionCVar;
 extern "C" void* const gen_p_142de29c8 = (void*)&s_lastAddonVersionCVar;

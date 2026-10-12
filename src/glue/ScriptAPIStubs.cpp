@@ -98,13 +98,6 @@ int Lua_C_CharacterCreation_GetNameForRace(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140cdb440
-int Lua_C_CharacterCreation_GetRaceIDFromName(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140cdf6c0
 int Lua_C_CharacterCreation_IsAdvancedClass(lua_State* L) {
     (void)L;
@@ -231,13 +224,6 @@ int Lua_C_ChatInfo_GetChannelShortcutForChannelID(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_140cf6f20
-int Lua_C_ChatInfo_IsAddonMessagePrefixRegistered(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_140cf7630
 int Lua_C_ChatInfo_IsChatLineCensored(lua_State* L) {
     (void)L;
@@ -247,13 +233,6 @@ int Lua_C_ChatInfo_IsChatLineCensored(lua_State* L) {
 
 // ref: FUN_140cf7d40
 int Lua_C_ChatInfo_IsPartyChannelType(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140cf9200
-int Lua_C_ChatInfo_RegisterAddonMessagePrefix(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -408,13 +387,6 @@ int Lua_C_LoginUI_ReconnectToRealmList(lua_State* L) {
 
 // ref: FUN_14169ca90
 int Lua_C_Login_Login(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_14169d680
-int Lua_C_Login_SetCaptchaTexture(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -667,13 +639,6 @@ int Lua_C_Texture_ClearTitleIconTexture(lua_State* L) {
 
 // ref: FUN_140ea8e00
 int Lua_C_Texture_GetTitleIconTexture(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_140b6ce20
-int Lua_C_UserFeedback_SubmitSuggestion(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -1241,27 +1206,6 @@ int Lua_SaveCharacterOrder(lua_State* L) {
 
 // ref: FUN_1419f56b0
 int Lua_SetDefaultVideoOptions(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141d01f30
-int Lua_SetPortraitToTexture(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1416a65f0
-int Lua_SetWorldFrameStrata(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1419f50b0
-int Lua_SetupFullscreenScale(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
