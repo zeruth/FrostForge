@@ -340,7 +340,7 @@ undefined8 FUN_141cb51d0(undefined8 param_1)
     CALLF(undefined8, FUN_141cd0c90)(plVar6);
     iVar5 = CALLF(undefined4, FUN_1419d7000)(iVar10);
     if (iVar5 == 0) {
-      uVar1 = *(uint *)(&REFG(undefined8, 0x1431f20dc) + (longlong)iVar4 * 4);
+      uVar1 = *(uint *)((undefined1 *)&REFG(undefined8, 0x1431f20dc) + (longlong)iVar4 * 4);
       if (uVar1 != 0) {
         if ((uVar1 & 0xf0000000) == 0x80000000) {
           bVar2 = CALLF(undefined1, FUN_141ccede0)(plVar6,iVar10,((byte *)(gen_frame + 0x188))[0],((int *)(gen_frame + 0x0))[0],
@@ -5568,31 +5568,31 @@ undefined8 FUN_141cd3370(longlong param_1)
   uVar11 = uVar9;
   do {
     iVar3 = (int)uVar8;
-    piVar1 = (int *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847140) + uVar8 * 4) * 4);
+    piVar1 = (int *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847140) + uVar8 * 4) * 4);
     *piVar1 = *piVar1 + iVar2;
     if ((bVar10) &&
        ((iVar3 == 0 ||
-        (*(int *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847140) + uVar8 * 4) * 4) == (int)uVar11
+        (*(int *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847140) + uVar8 * 4) * 4) == (int)uVar11
         )))) {
       bVar10 = true;
     }
     else {
       bVar10 = false;
     }
-    iVar4 = *(int *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847140) + uVar8 * 4) * 4);
+    iVar4 = *(int *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847140) + uVar8 * 4) * 4);
     lVar7 = (ulonglong)(iVar3 + 1U) * 4;
-    piVar1 = (int *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847140) + lVar7) * 4);
+    piVar1 = (int *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847140) + lVar7) * 4);
     *piVar1 = *piVar1 + iVar2;
     if ((bVar10) &&
        ((iVar3 + 1U == 0 ||
-        (*(int *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847140) + lVar7) * 4) == iVar4)))) {
+        (*(int *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847140) + lVar7) * 4) == iVar4)))) {
       bVar10 = true;
     }
     else {
       bVar10 = false;
     }
     uVar8 = (ulonglong)(iVar3 + 2U);
-    uVar11 = (ulonglong)*(uint *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847140) + lVar7) * 4);
+    uVar11 = (ulonglong)*(uint *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847140) + lVar7) * 4);
   } while (iVar3 + 2U < 2);
   if (bVar10) {
     *(undefined4 *)(param_1 + 0xe8) = *(undefined4 *)(param_1 + 0xdc);
@@ -5609,31 +5609,31 @@ undefined8 FUN_141cd3370(longlong param_1)
     uVar11 = uVar9;
     do {
       iVar3 = (int)uVar8;
-      piVar1 = (int *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847148) + uVar8 * 4) * 4);
+      piVar1 = (int *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847148) + uVar8 * 4) * 4);
       *piVar1 = *piVar1 + iVar2;
       if ((bVar10) &&
          ((iVar3 == 0 ||
-          (*(int *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847148) + uVar8 * 4) * 4) ==
+          (*(int *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847148) + uVar8 * 4) * 4) ==
            (int)uVar11)))) {
         bVar10 = true;
       }
       else {
         bVar10 = false;
       }
-      iVar4 = *(int *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847148) + uVar8 * 4) * 4);
+      iVar4 = *(int *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847148) + uVar8 * 4) * 4);
       lVar7 = (ulonglong)(iVar3 + 1U) * 4;
-      piVar1 = (int *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847148) + lVar7) * 4);
+      piVar1 = (int *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847148) + lVar7) * 4);
       *piVar1 = *piVar1 + iVar2;
       if ((bVar10) &&
          ((iVar3 + 1U == 0 ||
-          (*(int *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847148) + lVar7) * 4) == iVar4)))) {
+          (*(int *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847148) + lVar7) * 4) == iVar4)))) {
         bVar10 = true;
       }
       else {
         bVar10 = false;
       }
       uVar8 = (ulonglong)(iVar3 + 2U);
-      uVar11 = (ulonglong)*(uint *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847148) + lVar7) * 4);
+      uVar11 = (ulonglong)*(uint *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847148) + lVar7) * 4);
     } while (iVar3 + 2U < 2);
     if (!bVar10) goto LAB_141cd35e9;
     *(undefined4 *)(param_1 + 0xb0) = *(undefined4 *)(param_1 + 0x74);
@@ -5694,31 +5694,31 @@ LAB_141cd3635:
   uVar8 = uVar9;
   do {
     iVar3 = (int)uVar9;
-    piVar1 = (int *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847150) + uVar9 * 4) * 4);
+    piVar1 = (int *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847150) + uVar9 * 4) * 4);
     *piVar1 = *piVar1 + iVar2;
     if ((bVar10) &&
        ((iVar3 == 0 ||
-        (*(int *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847150) + uVar9 * 4) * 4) == (int)uVar8)
+        (*(int *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847150) + uVar9 * 4) * 4) == (int)uVar8)
         ))) {
       bVar10 = true;
     }
     else {
       bVar10 = false;
     }
-    iVar4 = *(int *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847150) + uVar9 * 4) * 4);
+    iVar4 = *(int *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847150) + uVar9 * 4) * 4);
     lVar7 = (ulonglong)(iVar3 + 1U) * 4;
-    piVar1 = (int *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847150) + lVar7) * 4);
+    piVar1 = (int *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847150) + lVar7) * 4);
     *piVar1 = *piVar1 + iVar2;
     if ((bVar10) &&
        ((iVar3 + 1U == 0 ||
-        (*(int *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847150) + lVar7) * 4) == iVar4)))) {
+        (*(int *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847150) + lVar7) * 4) == iVar4)))) {
       bVar10 = true;
     }
     else {
       bVar10 = false;
     }
     uVar9 = (ulonglong)(iVar3 + 2U);
-    uVar8 = (ulonglong)*(uint *)(param_1 + 4 + (ulonglong)*(uint *)(&REFG(undefined8, 0x142847150) + lVar7) * 4);
+    uVar8 = (ulonglong)*(uint *)(param_1 + 4 + (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142847150) + lVar7) * 4);
   } while (iVar3 + 2U < 2);
   if (bVar10) {
     *(undefined4 *)(param_1 + 0x24) = *(undefined4 *)(param_1 + 0x28);

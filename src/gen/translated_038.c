@@ -4008,7 +4008,7 @@ undefined4 FUN_141be51f0(uint param_1, int param_2)
       return REFG(undefined4, 0x1432380a0);
     }
     if ((ulonglong)param_1 * 0x90 != -0x142d34f40) {
-      return *(undefined4 *)(&REFG(undefined8, 0x142d34fb0) + (ulonglong)param_1 * 0x90);
+      return *(undefined4 *)((undefined1 *)&REFG(undefined8, 0x142d34fb0) + (ulonglong)param_1 * 0x90);
     }
   }
   return 0;

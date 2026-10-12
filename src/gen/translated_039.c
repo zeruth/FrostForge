@@ -4148,7 +4148,7 @@ undefined8 FUN_141ca60d0(longlong param_1)
                             0xc9a), lVar3 == 0)) {
     return 0;
   }
-  if (((*(uint *)(&REFG(undefined8, 0x1427ed420) + (ulonglong)*(byte *)(lVar3 + 0x10) * 4) >> 6 & 1) != 0) &&
+  if (((*(uint *)((undefined1 *)&REFG(undefined8, 0x1427ed420) + (ulonglong)*(byte *)(lVar3 + 0x10) * 4) >> 6 & 1) != 0) &&
      (cVar2 = CALLF(undefined8, FUN_14173e4a0)(lVar3), cVar2 != '\0')) {
     return 0;
   }
@@ -4780,17 +4780,17 @@ undefined8 FUN_141cb26d0(uint param_1, uint param_2, undefined4 param_3, undefin
       return 0;
     }
     *(undefined1 *)(param_4 + 10) = 1;
-    cVar1 = CALLF(bool, FUN_141cb2820)(uVar3,*(undefined8 *)(&REFG(undefined8, 0x142842ba0) + uVar2 * 0x10),0,param_3,param_4);
+    cVar1 = CALLF(bool, FUN_141cb2820)(uVar3,*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142842ba0) + uVar2 * 0x10),0,param_3,param_4);
     if (cVar1 != '\0') {
       return 0;
     }
-    if ((*(uint *)(&REFG(undefined8, 0x1432514c0) + uVar2 * 4) != 0) &&
+    if ((*(uint *)((undefined1 *)&REFG(undefined8, 0x1432514c0) + uVar2 * 4) != 0) &&
        (cVar1 = CALLF(bool, FUN_141cb2820)(uVar3,*(undefined8 *)
-                                     (&REFG(undefined8, 0x142842ba0) +
-                                     (ulonglong)*(uint *)(&REFG(undefined8, 0x1432514c0) + uVar2 * 4) * 0x10),0,
+                                     ((undefined1 *)&REFG(undefined8, 0x142842ba0) +
+                                     (ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x1432514c0) + uVar2 * 4) * 0x10),0,
                               param_3,param_4), cVar1 != '\0')) break;
     if ((int)uVar3 == 0) {
-      if ((*(int *)(&REFG(undefined8, 0x1432514c0) + uVar2 * 4) != 0) &&
+      if ((*(int *)((undefined1 *)&REFG(undefined8, 0x1432514c0) + uVar2 * 4) != 0) &&
          (cVar1 = CALLF(bool, FUN_141cb2820)(uVar3,"UnablePoint",0,param_3,param_4), cVar1 != '\0')) {
         return 0;
       }

@@ -92,10 +92,10 @@ undefined8 FUN_14020f7f0(void)
     return 0;
   }
   uVar2 = (uVar4 & 0x7fffff) >> 0xd;
-  iVar7 = (*(int *)(&REFG(undefined8, 0x142988a00) + (ulonglong)uVar2 * 4) -
+  iVar7 = (*(int *)((undefined1 *)&REFG(undefined8, 0x142988a00) + (ulonglong)uVar2 * 4) -
           (int)((ulonglong)
-                (uint)(*(int *)(&REFG(undefined8, 0x142988a00) + (ulonglong)uVar2 * 4) -
-                      *(int *)(&REFG(undefined8, 0x142988a00) + (ulonglong)(uVar2 + 1) * 4)) *
+                (uint)(*(int *)((undefined1 *)&REFG(undefined8, 0x142988a00) + (ulonglong)uVar2 * 4) -
+                      *(int *)((undefined1 *)&REFG(undefined8, 0x142988a00) + (ulonglong)(uVar2 + 1) * 4)) *
                 (ulonglong)(((uVar4 & 0x1fff) << 6 | uVar4 << 0x13) >> 0xd | uVar4 << 0x13) >> 0x20)
           ) - (uVar10 & 0x7f800000);
   uVar8 = uVar8 & 0x7f800000;
@@ -184,10 +184,10 @@ undefined8 FUN_14020fb30(void)
     return 0;
   }
   uVar2 = (uVar4 & 0x7fffff) >> 0xd;
-  iVar7 = (*(int *)(&REFG(undefined8, 0x142988a00) + (ulonglong)uVar2 * 4) -
+  iVar7 = (*(int *)((undefined1 *)&REFG(undefined8, 0x142988a00) + (ulonglong)uVar2 * 4) -
           (int)((ulonglong)
-                (uint)(*(int *)(&REFG(undefined8, 0x142988a00) + (ulonglong)uVar2 * 4) -
-                      *(int *)(&REFG(undefined8, 0x142988a00) + (ulonglong)(uVar2 + 1) * 4)) *
+                (uint)(*(int *)((undefined1 *)&REFG(undefined8, 0x142988a00) + (ulonglong)uVar2 * 4) -
+                      *(int *)((undefined1 *)&REFG(undefined8, 0x142988a00) + (ulonglong)(uVar2 + 1) * 4)) *
                 (ulonglong)(((uVar4 & 0x1fff) << 6 | uVar4 << 0x13) >> 0xd | uVar4 << 0x13) >> 0x20)
           ) - (uVar10 & 0x7f800000);
   uVar8 = uVar8 & 0x7f800000;

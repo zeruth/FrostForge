@@ -332,21 +332,21 @@ undefined8 FUN_140689380(undefined8 param_1, undefined8 param_2, undefined8 para
 /* ref: FUN_14068c4c0 */
 undefined2 * FUN_14068c4c0(undefined2 *param_1, int param_2)
 {
-  *param_1 = *(undefined2 *)(&REFG(undefined8, 0x142cf5e50) + (longlong)param_2 * 2);
+  *param_1 = *(undefined2 *)((undefined1 *)&REFG(undefined8, 0x142cf5e50) + (longlong)param_2 * 2);
   return param_1;
 }
 
 /* ref: FUN_14068c4e0 */
 undefined8 * FUN_14068c4e0(undefined8 *param_1, int param_2)
 {
-  *param_1 = *(undefined8 *)(&REFG(undefined8, 0x142cf5e30) + (longlong)param_2 * 8);
+  *param_1 = *(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142cf5e30) + (longlong)param_2 * 8);
   return param_1;
 }
 
 /* ref: FUN_14068c500 */
 undefined4 * FUN_14068c500(undefined4 *param_1, int param_2)
 {
-  *param_1 = *(undefined4 *)(&REFG(undefined8, 0x142cf5e60) + (longlong)param_2 * 4);
+  *param_1 = *(undefined4 *)((undefined1 *)&REFG(undefined8, 0x142cf5e60) + (longlong)param_2 * 4);
   return param_1;
 }
 

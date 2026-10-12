@@ -2059,12 +2059,12 @@ float FUN_141297630(uint *param_1)
     iVar4 = -0x1c;
   }
   uVar1 = iVar4 + (uVar3 & 0xff);
-  uVar3 = ((*(uint *)(&REFG(undefined8, 0x142734470) + (int)uVar6) >> 0x1d |
-           *(uint *)(&REFG(undefined8, 0x142734470) + (int)uVar6) << 3) ^
-           (*(uint *)(&REFG(undefined8, 0x142734470) + (int)uVar2) >> 0x1e |
-           *(uint *)(&REFG(undefined8, 0x142734470) + (int)uVar2) << 2) ^
-           (*(uint *)(&REFG(undefined8, 0x142734470) + iVar5) >> 0x1f | *(uint *)(&REFG(undefined8, 0x142734470) + iVar5) << 1) ^
-          *(uint *)(&REFG(undefined8, 0x142734470) + (int)uVar1)) + *param_1;
+  uVar3 = ((*(uint *)((undefined1 *)&REFG(undefined8, 0x142734470) + (int)uVar6) >> 0x1d |
+           *(uint *)((undefined1 *)&REFG(undefined8, 0x142734470) + (int)uVar6) << 3) ^
+           (*(uint *)((undefined1 *)&REFG(undefined8, 0x142734470) + (int)uVar2) >> 0x1e |
+           *(uint *)((undefined1 *)&REFG(undefined8, 0x142734470) + (int)uVar2) << 2) ^
+           (*(uint *)((undefined1 *)&REFG(undefined8, 0x142734470) + iVar5) >> 0x1f | *(uint *)((undefined1 *)&REFG(undefined8, 0x142734470) + iVar5) << 1) ^
+          *(uint *)((undefined1 *)&REFG(undefined8, 0x142734470) + (int)uVar1)) + *param_1;
   *param_1 = uVar3;
   param_1[1] = ((iVar5 << 8 | uVar2) << 8 | uVar6) << 8 | uVar1;
   return (float)(uVar3 & 0x7fffff | 0x3f800000) - REFG(float, 0x142618d64);
@@ -2529,7 +2529,7 @@ undefined4 * FUN_1412af6f0(undefined4 *param_1, ulonglong param_2)
     REFG(undefined8, 0x1430a5cd8) = 0xc;
   }
   lVar1 = (param_2 & 0xffffffff) * 5;
-  *param_1 = *(undefined4 *)(&REFG(undefined8, 0x1430a5c60) + lVar1);
+  *param_1 = *(undefined4 *)((undefined1 *)&REFG(undefined8, 0x1430a5c60) + lVar1);
   *(undefined *)(param_1 + 1) = (&REFG(undefined8, 0x1430a5c64))[lVar1];
   return param_1;
 }

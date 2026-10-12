@@ -1252,7 +1252,7 @@ int FUN_1419f2950(undefined4 param_1)
     uVar3 = CALLF(undefined *, FUN_14051b280)();
     uVar1 = CALLF(ulonglong, FUN_14022b390)(lVar2 + 0x28,4,0x28,uVar3);
     if (uVar1 < 0x1bb) {
-      return *(int *)(&REFG(undefined8, 0x1431f4384) + (longlong)(short)uVar1 * 0x10) +
+      return *(int *)((undefined1 *)&REFG(undefined8, 0x1431f4384) + (longlong)(short)uVar1 * 0x10) +
              (&REFG(undefined4, 0x1431f4388))[(longlong)(short)uVar1 * 4];
     }
   }
@@ -2796,7 +2796,7 @@ undefined8 FUN_1419f8f30(longlong *param_1)
   ((undefined1 *)(gen_frame + 0x18))[0] = 0;
   CALLF(undefined8, FUN_1402135c0)(&(*(undefined4 * *)(gen_frame + 0x0)),0);
   *(undefined1 *)(*(undefined4 * *)(gen_frame + 0x0)) = 0;
-  uVar4 = (longlong)&REFG(undefined8, 0x14273b2e4) - (longlong)(*(undefined4 * *)(gen_frame + 0x0));
+  uVar4 = (longlong)(undefined1 *)&REFG(undefined8, 0x14273b2e4) - (longlong)(*(undefined4 * *)(gen_frame + 0x0));
   (*(ulonglong *)(gen_frame + 0x8)) = 0;
   (*(undefined8 * *)(gen_frame + 0x28)) = (undefined8 *)0x0;
   (*(longlong *)(gen_frame + 0x30)) = 0;

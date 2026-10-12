@@ -1357,7 +1357,7 @@ bool FUN_14243dcf0(longlong param_1, int param_2, int param_3)
   cVar2 = CALLF(ulonglong, FUN_14022b1b0)(param_1 + 0x28,7,0x28,uVar1);
   if (cVar2 == '\0') {
     cVar2 = CALLF(bool, FUN_14243abd0)(param_3);
-    if ((cVar2 != '\0') && (*(int *)(&REFG(undefined8, 0x142968a50) + (longlong)param_3 * 4) <= param_2)) {
+    if ((cVar2 != '\0') && (*(int *)((undefined1 *)&REFG(undefined8, 0x142968a50) + (longlong)param_3 * 4) <= param_2)) {
       return true;
     }
   }

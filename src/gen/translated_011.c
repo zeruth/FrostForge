@@ -7149,8 +7149,8 @@ longlong * FUN_1406739c0(longlong *param_1, uint param_2)
   if (lVar3 == 0) {
     return &REFG(undefined8, 0x142e9a6d8);
   }
-  if ((*(uint *)(&REFG(undefined8, 0x1427ed420) + (ulonglong)*(byte *)(lVar3 + 0x10) * 4) >> 5 & 1) == 0) {
-    if ((*(uint *)(&REFG(undefined8, 0x1427ed420) + (ulonglong)*(byte *)(lVar3 + 0x10) * 4) >> 8 & 1) == 0) {
+  if ((*(uint *)((undefined1 *)&REFG(undefined8, 0x1427ed420) + (ulonglong)*(byte *)(lVar3 + 0x10) * 4) >> 5 & 1) == 0) {
+    if ((*(uint *)((undefined1 *)&REFG(undefined8, 0x1427ed420) + (ulonglong)*(byte *)(lVar3 + 0x10) * 4) >> 8 & 1) == 0) {
       return param_1;
     }
     if (lVar3 == -0x10) {

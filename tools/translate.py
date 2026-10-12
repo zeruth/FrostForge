@@ -1261,6 +1261,13 @@ class Translator:
         for m in re.finditer(r"\b_?(?:PTR_)*(?:DAT|UNK|PTR)_([0-9a-f]+)\b", body):
             if not IMAGE_LO <= int(m.group(1), 16) < IMAGE_HI:
                 raise Untranslatable(f"reads a global outside the image ({m.group(0)})")
+        # A global the data export does not type is `undefined` (one byte) to Ghidra, so its
+        # `&DAT_x + n` is a byte offset; the 8-byte type it is declared with for loads would scale
+        # it by 8 (FUN_14068c500's raster table read entry 3 at +0x60, not +0xc: a garbage cull
+        # mode, the pipeline rejected and the device failed - the white screen of 2026-10-12)
+        body = re.sub(r"&\s*(_?DAT_([0-9a-f]{9}))(?=\s*[+-][^+-=>])",
+                      lambda m: m.group(0) if int(m.group(2), 16) in self.refdata else f"(undefined1 *)&{m.group(1)}",
+                      body)
         body = SYMBOL.sub(global_, body)
         body = RAM.sub(lambda m: f"REFG(undefined{ {'u': 4, 'l': 8, 'c': 1, 's': 2}.get(m.group(1)[0], 8)}, 0x{m.group(2)})", body)
         body = IMPORT.sub(lambda m: f"(*(code *)&{m.group(2)})", body)
