@@ -1,4 +1,5 @@
-"""A one-page visual of port fidelity by subsystem, from build/fidelity.json.
+"""A one-page visual of port fidelity by subsystem, from build/fidelity.json, with the code
+tools/translate.py generated (src/gen, its manifest) shown apart from the hand ports.
 
     python tools/fidelity.py --summary        # refresh build/fidelity.json first
     python tools/fidelity_report.py           # writes build/fidelity.html
@@ -8,11 +9,13 @@ from __future__ import annotations
 import datetime
 import html
 import json
-from collections import defaultdict
+import re
+from collections import Counter, defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "build/fidelity.json"
+MANIFEST = ROOT / "src/gen/manifest.json"
 OUT = ROOT / "build/fidelity.html"
 
 # source folder -> bucket
@@ -43,8 +46,26 @@ def folder(path: str) -> str:
     return parts[1] if len(parts) > 2 and parts[0] == "src" else "other"
 
 
+def generated(r: dict) -> bool:
+    return r["file"].replace("\\", "/").startswith("src/gen/")
+
+
+def reason_class(why: str) -> str:
+    """A demotion reason without its particulars, so like ones count together."""
+    if why.startswith("did not compile"):
+        return "did not compile"
+    k = re.sub(r"\s*\(.*", "", why)
+    k = re.sub(r"\b(?:FUN|DAT|LAB|PTR)_[0-9a-f]+|0x[0-9a-f]+", "…", k)
+    return k.strip()
+
+
 def main() -> None:
-    rows = json.loads(SRC.read_text())
+    every = json.loads(SRC.read_text())
+    rows = [r for r in every if not generated(r)]
+    gen_rows = [r for r in every if generated(r) and r["kind"] != "stub"]
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.exists() else {}
+    translated = manifest.get("translated", {})
+    not_translated = manifest.get("stubbed", {})
     groups = defaultdict(list)
     for r in rows:
         groups[BUCKET_OF.get(folder(r["file"]), "Platform & core")].append(r)
@@ -110,13 +131,57 @@ def main() -> None:
   <p class="folders">{' · '.join(html.escape(f) for f in s['folders'])}</p>
 </section>""")
 
+    # the translated code: what it covers beyond the hand ports, how close its compile comes to the
+    # reference's, and why the rest of what it reached stayed a stub
+    hand = {r["addr"] for r in rows if r["kind"] != "stub"}
+    gen_only = set(translated) - hand
+    g = stats(gen_rows) if gen_rows else None
+    reasons = Counter(reason_class(w) for w in not_translated.values())
+    peak = max(reasons.values(), default=1)
+    reason_list = "".join(
+        f'<li><span class="rbar" style="width:{100 * v / peak:.1f}%"></span><b>{v:,}</b> {html.escape(k)}</li>'
+        for k, v in reasons.most_common(10))
+    gen_section = ""
+    if g:
+        gworst = "".join(f'<li><span class="score">{r["score"]:.2f}</span>FUN_{html.escape(r["addr"])}'
+                         f' <span class="dim">{r["ref_size"]:,} bytes</span></li>' for r in g["worst"])
+        gen_section = f"""
+<h3>Translated from the decompilation</h3>
+<p class="sub small">Reference functions with no hand port, run as C that tools/translate.py writes from the
+Ghidra decompilation (src/gen). The score compares the compiled translation with the reference function itself.</p>
+<div class="grid">
+<section class="card" style="--accent:var(--gen)">
+  <header><h2>Translated</h2><span class="count">{len(translated):,} functions</span></header>
+  <div class="top">
+  <dl>
+    <div><dt>Mean</dt><dd>{g['mean']:.2f}</dd></div>
+    <div><dt>0.9+</dt><dd>{g['high']:,}</dd></div>
+    <div><dt>Scored</dt><dd>{g['total']:,}</dd></div>
+    <div><dt>Lua handlers</dt><dd>{len(manifest.get('handlers', {})):,}</dd></div>
+    <div><dt>Adapted to ports</dt><dd>{len(manifest.get('adapted', [])):,}</dd></div>
+    <div><dt>Left as stubs</dt><dd>{len(not_translated):,}</dd></div>
+  </dl>
+  <div class="ring" style="--p:{g['weighted'] * 100:.1f}"><div><b>{g['weighted'] * 100:.0f}</b><small>size-weighted</small></div></div>
+  </div>
+  <div class="hist">{hist(g, 'var(--gen)')}</div>
+  <div class="axis"><span>0</span><span>score</span><span>1</span></div>
+  <h3>Largest gaps</h3><ol>{gworst or '<li>none</li>'}</ol>
+</section>
+<section class="card" style="--accent:var(--stub)">
+  <header><h2>Why the rest stayed stubs</h2><span class="count">{len(not_translated):,} functions</span></header>
+  <p class="folders">Reached from translated code but refused by the translator; each class is one fix in tools/translate.py.</p>
+  <ol class="reasons">{reason_list or '<li>none</li>'}</ol>
+</section>
+</div>"""
+
     o = overall
+    covered = len(hand) + len(gen_only)
     page = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>FrostLite Fidelity</title>
 <style>
 :root {{ --bg:#f6f7fb; --card:#fff; --ink:#1c2030; --muted:#6b7285; --line:#e4e7ef;
-  --high:#3cb179; --mid:#9fd3b6; --partial:#f0b44c; --stub:#e5677a; }}
+  --high:#3cb179; --mid:#9fd3b6; --partial:#f0b44c; --stub:#e5677a; --gen:#5b8def; }}
 @media (prefers-color-scheme: dark) {{ :root:not([data-theme="light"]) {{ --bg:#11131a; --card:#1a1d27; --ink:#e8eaf2;
   --muted:#9097ab; --line:#2a2e3b; --mid:#2f6b4d; }} }}
 * {{ box-sizing:border-box }}
@@ -154,10 +219,14 @@ ol {{ margin:0; padding:0; list-style:none; font-size:13px }} ol li {{ padding:3
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis }}
 .score {{ display:inline-block; min-width:38px; color:var(--stub); font-variant-numeric:tabular-nums }}
 .folders {{ color:var(--muted); font-size:12px; margin:12px 0 0 }}
+.seg-gen {{ background:var(--gen) }} .dim {{ color:var(--muted); font-size:12px }} .sub.small {{ font-size:13px; margin:-2px 0 14px }}
+ol.reasons li {{ position:relative; isolation:isolate; padding:5px 6px; white-space:normal }}
+ol.reasons b {{ display:inline-block; min-width:44px; font-variant-numeric:tabular-nums }}
+.rbar {{ position:absolute; left:0; top:3px; bottom:3px; background:var(--stub); opacity:.16; border-radius:4px; z-index:-1 }}
 @media (max-width:420px) {{ .grid {{ grid-template-columns:1fr }} }}
 </style></head><body><main>
 <h1>FrostLite fidelity</h1>
-<p class="sub">Ported functions compared against the reference 3.4.3 client, by subsystem · generated {datetime.date.today().isoformat()}</p>
+<p class="sub">Hand-ported and translated functions compared against the reference 3.4.3 client · generated {datetime.date.today().isoformat()}</p>
 <div class="hero">
   <div class="stat"><b>{o['total']:,}</b><span>tagged · {100 * o['total'] / ref_game:.1f}% of {ref_game:,}</span></div>
   <div class="stat"><b>{o['mean']:.2f}</b><span>mean fidelity</span></div>
@@ -165,17 +234,21 @@ ol {{ margin:0; padding:0; list-style:none; font-size:13px }} ol li {{ padding:3
   <div class="stat"><b>{o['high']:,}</b><span>at 0.9 or better</span></div>
   <div class="stat"><b>{o['same']:,}</b><span>instruction-identical</span></div>
   <div class="stat"><b>{o['stub']:,}</b><span>stubs · {o['live']} live</span></div>
+  <div class="stat"><b>{len(gen_only):,}</b><span>translated · {g['mean'] if g else 0:.2f} mean</span></div>
 </div>
 <div class="cover">
-  <div><b>{tagged:,}</b> of <b>{ref_game:,}</b> game functions tagged <span>({100 * tagged / ref_game:.1f}%)</span></div>
-  <div class="bar thin"><span class="seg-high" style="width:{100 * (o['high'] + o['mid']) / ref_game:.2f}%" title="ported"></span><span class="seg-partial" style="width:{100 * o['partial'] / ref_game:.2f}%" title="partial"></span><span class="seg-stub" style="width:{100 * o['stub'] / ref_game:.2f}%" title="stub"></span></div>
-  <div class="note">{ref_total:,} functions in the reference; {ref_total - ref_game:,} are library code (CRT, std) and left out. Ported {100 * (o['high'] + o['mid']) / ref_game:.1f}% · partial {100 * o['partial'] / ref_game:.1f}% · stub {100 * o['stub'] / ref_game:.1f}%</div>
+  <div><b>{covered:,}</b> of <b>{ref_game:,}</b> game functions covered <span>({100 * covered / ref_game:.1f}%):
+    {len(hand):,} hand-ported, {len(gen_only):,} translated</span></div>
+  <div class="bar thin"><span class="seg-high" style="width:{100 * (o['high'] + o['mid']) / ref_game:.2f}%" title="ported"></span><span class="seg-partial" style="width:{100 * o['partial'] / ref_game:.2f}%" title="partial"></span><span class="seg-gen" style="width:{100 * len(gen_only) / ref_game:.2f}%" title="translated"></span><span class="seg-stub" style="width:{100 * o['stub'] / ref_game:.2f}%" title="stub"></span></div>
+  <div class="note">{ref_total:,} functions in the reference; {ref_total - ref_game:,} are library code (CRT, std) and left out. Ported {100 * (o['high'] + o['mid']) / ref_game:.1f}% · partial {100 * o['partial'] / ref_game:.1f}% · translated {100 * len(gen_only) / ref_game:.1f}% · stub {100 * o['stub'] / ref_game:.1f}%</div>
 </div>
 <h3>Fidelity of what is tagged</h3>
 <div class="bar" style="height:16px">{bar(o)}</div>
 <div class="legend"><span><i style="background:var(--high)"></i>ported, 0.9+</span><span><i style="background:var(--mid)"></i>ported, below 0.9</span>
-<span><i style="background:var(--partial)"></i>partial</span><span><i style="background:var(--stub)"></i>stub</span></div>
+<span><i style="background:var(--partial)"></i>partial</span><span><i style="background:var(--gen)"></i>translated</span><span><i style="background:var(--stub)"></i>stub</span></div>
+<h3>Hand ports by subsystem</h3>
 <div class="grid">{''.join(cards)}</div>
+{gen_section}
 </main></body></html>
 """
     OUT.write_text(page, encoding="utf-8", newline="\n")
