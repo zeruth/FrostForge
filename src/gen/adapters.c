@@ -2614,6 +2614,12 @@ undefined8 FUN_1420bdd00(unsigned long long a0, unsigned long long a1, unsigned 
     return 0;
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_142288900=?GxBufCreateSimple@@YAPEAUGxBuf@@EEII@Z")
+extern char gen_alias_142288900;
+longlong FUN_142288900(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3) {
+    return (longlong)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long))&gen_alias_142288900)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2, (unsigned long long)a3);
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_142288af0=?GxBufDestroy@@YAXPEAPEAUGxBuf@@@Z")
 extern char gen_alias_142288af0;
 undefined8 FUN_142288af0(unsigned long long a0) {

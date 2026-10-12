@@ -2432,7 +2432,7 @@ undefined8 FUN_141366ab0() {
     return (undefined8)0;
 }
 
-/* did not compile: C2100 you cannot dereference an operand of type 'undefined8' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\g */
+/* a global used as a pointer the data export does not type */
 undefined8 FUN_141367ed0() {
     GenUnimplemented(0x141367ed0ULL);
     return (undefined8)0;

@@ -4,7 +4,9 @@
 #include "util/Unimplemented.hpp"
 #include <cstring>
 
-GxRenderContext* g_gxRenderContext;  // DAT_14348b658
+// (DAT_14348b658 in the reference. Not shared with translated code yet: the forwarded per-frame
+// functions that draw through it whited out the screen when it was, 2026-10-12.)
+GxRenderContext* g_gxRenderContext;
 
 // ref: FUN_14228c430
 gxDx12Backend::TargetView* GxTexTargetView(gxDx12Backend::Tex* tex) {

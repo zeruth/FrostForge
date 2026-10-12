@@ -1176,17 +1176,17 @@ undefined8 FUN_14022ea60(void)
   undefined4 uVar16;
   
   if ((REFG(undefined1, 0x142de0b35) != '\0') &&
-     (cVar9 = CALLF(undefined1, FUN_142289a70)(), lVar8 = (*(undefined8 *)((char *)&gen_g_14348b658 + 0x0)), fVar7 = REFG(float, 0x142618d64), cVar9 != '\0')) {
-    fVar1 = *(float *)((*(undefined8 *)((char *)&gen_g_14348b658 + 0x0)) + 0x30);
-    fVar2 = *(float *)((*(undefined8 *)((char *)&gen_g_14348b658 + 0x0)) + 0x28);
-    fVar3 = *(float *)((*(undefined8 *)((char *)&gen_g_14348b658 + 0x0)) + 0x2c);
-    fVar4 = *(float *)((*(undefined8 *)((char *)&gen_g_14348b658 + 0x0)) + 0x20);
-    fVar5 = *(float *)((*(undefined8 *)((char *)&gen_g_14348b658 + 0x0)) + 0x24);
-    fVar6 = *(float *)((*(undefined8 *)((char *)&gen_g_14348b658 + 0x0)) + 0x1c);
+     (cVar9 = CALLF(undefined1, FUN_142289a70)(), lVar8 = REFG(undefined8, 0x14348b658), fVar7 = REFG(float, 0x142618d64), cVar9 != '\0')) {
+    fVar1 = *(float *)(REFG(undefined8, 0x14348b658) + 0x30);
+    fVar2 = *(float *)(REFG(undefined8, 0x14348b658) + 0x28);
+    fVar3 = *(float *)(REFG(undefined8, 0x14348b658) + 0x2c);
+    fVar4 = *(float *)(REFG(undefined8, 0x14348b658) + 0x20);
+    fVar5 = *(float *)(REFG(undefined8, 0x14348b658) + 0x24);
+    fVar6 = *(float *)(REFG(undefined8, 0x14348b658) + 0x1c);
     if (((fVar6 != 0.0) ||
         (((fVar4 != REFG(float, 0x142618d64) || (fVar5 != 0.0)) || (fVar2 != REFG(float, 0x142618d64))))) ||
        ((fVar3 != 0.0 || (fVar1 != REFG(float, 0x142618d64))))) {
-      *(undefined1 *)((*(undefined8 *)((char *)&gen_g_14348b658 + 0x0)) + 0x18) = 1;
+      *(undefined1 *)(REFG(undefined8, 0x14348b658) + 0x18) = 1;
       *(undefined4 *)(lVar8 + 0x1c) = 0;
       *(undefined8 *)(lVar8 + 0x20) = 0x3f800000;
       *(undefined8 *)(lVar8 + 0x28) = 0x3f800000;
@@ -2230,7 +2230,7 @@ undefined8 FUN_140238d50(void)
     (*(undefined4 *)(gen_frame + 0x94)) = REFG(undefined4, 0x14261aa14);
     (*(undefined4 *)(gen_frame + 0x98)) = REFG(undefined4, 0x14261aa18);
     (*(undefined4 *)(gen_frame + 0x9c)) = REFG(undefined4, 0x14261aa1c);
-    CALLF(undefined8, FUN_14068b6c0)((*(undefined8 *)((char *)&gen_g_14348b658 + 0x0)),REFG(undefined8, 0x142de1938),&(*(undefined8 *)(gen_frame + 0x60)),&(*(undefined8 *)(gen_frame + 0x20)),0);
+    CALLF(undefined8, FUN_14068b6c0)(REFG(undefined8, 0x14348b658),REFG(undefined8, 0x142de1938),&(*(undefined8 *)(gen_frame + 0x60)),&(*(undefined8 *)(gen_frame + 0x20)),0);
     CALLF(undefined8, FUN_14068a370)(REFG(undefined8, 0x142de1938));
     REFG(undefined1, 0x142de1933) = '\0';
   }
