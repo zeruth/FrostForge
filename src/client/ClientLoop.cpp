@@ -69,15 +69,10 @@ void Sub140235040();
 void Sub140234080();
 void Sub140570630();
 void ClientOnMouseCapture(uint32_t x, uint32_t y);
-void UiInputChar(void* input, uint32_t character);
 void UiInputIme(void* input, const void* event);
 void ClientOnFocus(uint32_t active);
-void ClientKeyBinding(uint32_t key, uint32_t down, char* handled);
 bool ConsoleIsToggleKey(uint32_t key);
 void OsWindowFocus(void* window);
-void UiInputKeyDown(void* input, const void* event);
-void UiInputKeyDownBound(void* input, const void* event);
-void ClientOnKeyUp(const uint32_t* params, uint32_t time);
 uint64_t Sub14152CF90(uint32_t a1);
 void UiInputGamepadDown(void* input, const void* event);
 void UiInputGamepadUp(void* input, const void* event);
@@ -106,9 +101,19 @@ uint32_t s_heldButtons;             // DAT_142de0e20
 uint32_t s_pressedButtons;          // DAT_142de0e30
 uint32_t s_mouseMode;               // DAT_142de0e34
 uint32_t s_mouseCaptureButtons;     // DAT_142de0e28: the buttons a held cursor waits on
-// The mouse-ups that came while the events were paused (DAT_142de0e00), replayed into the UI
-// when they resume (LAB_1402384e0).
-std::vector<MOUSEEVENT> s_deferredMouseUps;  // untied: a std::vector, not the reference's array
+// The releases (mouse buttons and keys) that came while the events were paused, replayed into
+// the UI in order when they resume. The reference keeps closures (DAT_142de0e00: LAB_1402384e0
+// for a button, LAB_1402384f0 for a key); the port keeps the events.
+struct DEFERREDRELEASE {
+    bool m_key;
+    MOUSEEVENT m_mouse;
+    KEYEVENT m_keyEvent;
+};
+std::vector<DEFERREDRELEASE> s_deferredMouseUps;  // untied: a std::vector of events, not the reference's closures
+const char s_heldKeyTag[] = ".?AW4KEY@@";
+// The keys held down, by the engine's key code (DAT_142de0de8): a second press of a held key is
+// an auto-repeat.
+blz::vector<int32_t, s_heldKeyTag> s_heldKeys;  // DAT_142de0de8
 int32_t* s_loadingScreen;           // DAT_142de0bf8
 
 }
@@ -151,6 +156,72 @@ MOUSEEVENT MouseEventAt(bool alternate, uint32_t button, uint32_t x, uint32_t y,
 
 }  // namespace
 
+// A key pressed or let go, in the held set: a press of a key already held says so in `held`
+// (an auto-repeat); a release drops it.
+// ref: FUN_1402382b0
+void ClientTrackHeldKey(int32_t key, bool down, char* held) {
+    uint64_t at = 0;
+    while (at < s_heldKeys.size() && s_heldKeys[at] != key) {
+        at++;
+    }
+    bool found = at < s_heldKeys.size();
+    if (!down) {
+        if (found) {
+            s_heldKeys[at] = s_heldKeys.back();
+            s_heldKeys.pop_back();
+        }
+        return;
+    }
+    *held = found ? 1 : 0;
+    if (!found) {
+        s_heldKeys.push_back(key);
+    }
+}
+
+// The key event the UI gets from an OS key event's words.
+KEYEVENT KeyEventFrom(const uint32_t* params, uint32_t time) {
+    KEYEVENT event = {};
+    event.m_key = static_cast<int32_t>(params[0] & 0x3fffffff);
+    event.m_time = time;
+    event.m_repeat = static_cast<uint8_t>((params[0] >> 30) & 1);
+    event.m_system = static_cast<uint8_t>(params[0] >> 31);
+    event.m_virtualKey = params[1];
+    std::memcpy(&event.m_scan, &params[2], sizeof(event.m_scan));
+    return event;
+}
+
+// A key came up: a held modifier is dropped (one not held is ignored), the held set lets it go,
+// the console's toggle key re-arms the character swallow, and the UI gets the release (or keeps
+// it for when the events resume).
+// ref: FUN_140237b00
+void ClientOnKeyUp(const uint32_t* params, uint32_t time) {
+    uint32_t key = params[0] & 0x3fffffff;
+    if (key < 6) {
+        uint32_t bit = 1u << key;
+        if ((s_heldModifiers & bit) == 0) {
+            return;
+        }
+        s_heldModifiers &= ~bit;
+    }
+    char held = 0;
+    ClientTrackHeldKey(static_cast<int32_t>(key), false, &held);
+    KEYEVENT event = KeyEventFrom(params, time);
+    // FUN_140326980
+    if (ConsoleIsToggleKey(key)) {
+        s_swallowChar = 0;
+    }
+    if (s_eventsPaused == 0) {
+        if (s_eventTarget != nullptr) {
+            static_cast<CSimpleTop*>(s_eventTarget)->OnKeyUpEvent(&event);
+        }
+    } else {
+        DEFERREDRELEASE release = {};
+        release.m_key = true;
+        release.m_keyEvent = event;
+        s_deferredMouseUps.push_back(release);
+    }
+}
+
 // A mouse button came up: the held buttons drop it, and the UI gets the event (or keeps it
 // for when the events resume); a held cursor waiting on the button is let go.
 // ref: FUN_140237c80
@@ -164,7 +235,9 @@ void ClientOnMouseUp(uint32_t button, uint32_t x, uint32_t y, uint32_t flags, ui
             static_cast<CSimpleTop*>(s_eventTarget)->OnMouseUpEvent(&event);
         }
     } else {
-        s_deferredMouseUps.push_back(event);
+        DEFERREDRELEASE release = {};
+        release.m_mouse = event;
+        s_deferredMouseUps.push_back(release);
     }
     if (s_mouseCaptureButtons != 0 && s_mouseCaptureButtons != (s_mouseCaptureButtons & s_heldButtons)) {
         s_mouseCaptureButtons = 0;
@@ -192,7 +265,7 @@ void ClientHandleEvent(void* context, uint32_t id, uint32_t* params, void* param
             if (s_eventsPaused == 0) {
                 if (s_swallowChar == 0) {
                     if (s_eventTarget != nullptr) {
-                        UiInputChar(s_eventTarget, params[0] & 0x3fffffff);
+                        static_cast<CSimpleTop*>(s_eventTarget)->OnCharEvent(params[0] & 0x3fffffff);
                     }
                 } else {
                     s_swallowChar = 0;
@@ -227,23 +300,14 @@ void ClientHandleEvent(void* context, uint32_t id, uint32_t* params, void* param
                 }
                 s_heldModifiers |= bit;
             }
-            struct {
-                uint32_t m_key;
-                uint32_t m_time;
-                uint8_t m_repeat;
-                uint8_t m_system;
-                uint16_t m_pad;
-                uint32_t m_virtualKey;
-                float m_scan;
-            } event = { key, time, static_cast<uint8_t>((params[0] >> 30) & 1), static_cast<uint8_t>(params[0] >> 31), 0,
-                params[1], static_cast<float>(params[2]) };
-            char handled = 0;
-            ClientKeyBinding(key, 1, &handled);
-            if (handled == 0) {
+            KEYEVENT event = KeyEventFrom(params, time);
+            char held = 0;
+            ClientTrackHeldKey(static_cast<int32_t>(key), true, &held);
+            if (held == 0) {
                 if (s_eventsPaused == 0) {
                     if (!ConsoleIsToggleKey(key)) {
                         if (s_eventTarget != nullptr) {
-                            UiInputKeyDown(s_eventTarget, &event);
+                            static_cast<CSimpleTop*>(s_eventTarget)->OnKeyDownEvent(&event);
                         }
                     } else {
                         OsWindowFocus(OsGetMainWindow(0));
@@ -251,7 +315,7 @@ void ClientHandleEvent(void* context, uint32_t id, uint32_t* params, void* param
                     }
                 }
             } else if (s_eventsPaused == 0 && s_eventTarget != nullptr) {
-                UiInputKeyDownBound(s_eventTarget, &event);
+                static_cast<CSimpleTop*>(s_eventTarget)->OnKeyDownRepeatEvent(&event);
             }
             break;
         }
@@ -350,8 +414,12 @@ bool ClientProcessEvents() {
         CSimpleTop::s_instance->ApplyDeferredInputChanges();
     }
     if (s_eventsPaused == 0 && !s_deferredMouseUps.empty()) {
-        for (MOUSEEVENT& event : s_deferredMouseUps) {
-            static_cast<CSimpleTop*>(s_eventTarget)->OnMouseUpEvent(&event);
+        for (DEFERREDRELEASE& release : s_deferredMouseUps) {
+            if (release.m_key) {
+                static_cast<CSimpleTop*>(s_eventTarget)->OnKeyUpEvent(&release.m_keyEvent);
+            } else {
+                static_cast<CSimpleTop*>(s_eventTarget)->OnMouseUpEvent(&release.m_mouse);
+            }
         }
         s_deferredMouseUps.clear();
     }
@@ -633,6 +701,7 @@ void Sub140225AB0() {
 
 // ---- GENERATED by tools/translate.py: the port globals translated code reaches ----
 extern "C" void* const gen_p_142de0bf8 = (void*)&s_loadingScreen;
+extern "C" void* const gen_p_142de0de8 = (void*)&s_heldKeys;
 extern "C" void* const gen_p_142de0e18 = (void*)&s_eventTarget;
 extern "C" void* const gen_p_142de0e20 = (void*)&s_heldButtons;
 extern "C" void* const gen_p_142de0e24 = (void*)&s_heldModifiers;

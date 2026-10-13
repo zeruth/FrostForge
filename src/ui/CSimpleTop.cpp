@@ -1,5 +1,6 @@
 #include "ui/CSimpleTop.hpp"
 
+#include <algorithm>
 #include <cstring>
 #include <memory>
 #include <new>
@@ -801,6 +802,120 @@ bool IsBatchedRegionAbove(CSimpleFrame* aFrame, CScriptRegion* aRegion, CSimpleF
 }
 
 }  // namespace
+
+// ---- the keyboard ---------------------------------------------------------------------------
+
+namespace {
+
+const char s_keyRegionTag[] = ".PEAVCScriptRegion@@";
+
+// The frames registered for `type` that want this event, topmost first (FUN_1405ea280 over a
+// copy: the list may change while the event is handed on).
+template <class Wants>
+void KeyCandidates(CSimpleTop* top, int32_t type, blz::embedded_vector<CScriptRegion*, 8, s_regionVectorTag>* out,
+    Wants&& wants) {
+    top->m_dispatchDepth++;
+    blz::vector<CScriptRegion*, s_regionVectorTag>& regions = top->m_inputRegions[type];
+    for (uint64_t i = 0; i < regions.size(); i++) {
+        CScriptRegion* region = regions[i];
+        if (wants(region)) {
+            out->push_back(region);
+        }
+    }
+    top->m_dispatchDepth--;
+    std::sort(out->begin(), out->end(), [top](CScriptRegion* a, CScriptRegion* b) {
+        return top->IsRegionAbove(b, a);
+    });
+}
+
+}  // namespace
+
+// A character: offered to the frames that take characters, topmost first, until one keeps it.
+// True when none did.
+// ref: FUN_1405efc40
+bool CSimpleTop::OnCharEvent(uint32_t character) {
+    uint8_t phase = this->m_inputPhase;
+    this->m_inputPhase = 1;
+    blz::embedded_vector<CScriptRegion*, 8, s_regionVectorTag> frames;
+    KeyCandidates(this, INPUT_EVENT_CHAR, &frames, [](CScriptRegion* region) {
+        return region->HasCharHandler();
+    });
+    bool unhandled = true;
+    for (CScriptRegion* region : frames) {
+        if (region->OnChar(static_cast<int32_t>(character))) {
+            unhandled = false;
+            break;
+        }
+    }
+    this->m_inputPhase = phase;
+    return unhandled;
+}
+
+// A key going down: the hook hears it first, then the frames that take this key, topmost
+// first; the one that keeps it holds the key (m_keyFocus) until it is let go.
+// ref: FUN_1405f0680
+bool CSimpleTop::OnKeyDownEvent(KEYEVENT* event) {
+    uint8_t phase = this->m_inputPhase;
+    this->m_inputPhase = 1;
+    s_lastMouseTime = static_cast<int32_t>(event->m_time);
+    if (this->m_keyDownHook != nullptr) {
+        reinterpret_cast<void (*)(KEYEVENT*)>(this->m_keyDownHook)(event);
+    }
+    blz::embedded_vector<CScriptRegion*, 8, s_regionVectorTag> frames;
+    KeyCandidates(this, INPUT_EVENT_KEY, &frames, [event](CScriptRegion* region) {
+        return region->HasKeyHandler(event);
+    });
+    bool unhandled = true;
+    for (CScriptRegion* region : frames) {
+        if (region->OnKeyDown(event)) {
+            if (event->m_key != -1) {
+                this->m_keyFocus[event->m_key] = region;
+            }
+            unhandled = false;
+            break;
+        }
+    }
+    this->m_inputPhase = phase;
+    return unhandled;
+}
+
+// A key that is already down again (auto-repeat): to the frame holding it, if any.
+// ref: FUN_1405f0890
+bool CSimpleTop::OnKeyDownRepeatEvent(KEYEVENT* event) {
+    uint8_t phase = this->m_inputPhase;
+    this->m_inputPhase = 1;
+    if (event->m_key != -1) {
+        if (CScriptRegion* region = this->m_keyFocus[event->m_key]) {
+            region->Unknown168(event);
+            this->m_inputPhase = phase;
+            return false;
+        }
+    }
+    this->m_inputPhase = phase;
+    return true;
+}
+
+// A key let go: to the frame holding it, which lets it go. Print Screen (0x121) only reports
+// its release, so its release is offered as a press.
+// ref: FUN_1405f0900
+bool CSimpleTop::OnKeyUpEvent(KEYEVENT* event) {
+    uint8_t phase = this->m_inputPhase;
+    this->m_inputPhase = 1;
+    s_lastMouseTime = static_cast<int32_t>(event->m_time);
+    bool result = true;
+    CScriptRegion* region = event->m_key != -1 ? this->m_keyFocus[event->m_key] : nullptr;
+    if (region != nullptr) {
+        region->OnKeyUp(event);
+        result = false;
+    } else if (event->m_key == 0x121) {
+        result = this->OnKeyDownEvent(event);
+    }
+    if (event->m_key != -1) {
+        this->m_keyFocus[event->m_key] = nullptr;
+    }
+    this->m_inputPhase = phase;
+    return result;
+}
 
 // Each side is taken at its frame. Two batched frames are ordered by their batches; when only
 // one is batched it stands at its first unbatched ancestor; otherwise the draw orders (a

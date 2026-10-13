@@ -20,8 +20,8 @@ struct XMLOBJECT;
 
 // The input event kinds a region can be registered for (bits of m_enabledInput).
 enum : int32_t {
-    INPUT_EVENT_0 = 0,
-    INPUT_EVENT_1 = 1,
+    INPUT_EVENT_CHAR = 0,
+    INPUT_EVENT_KEY = 1,
     INPUT_EVENT_CLICK = 2,
     INPUT_EVENT_MOTION = 3,
     INPUT_EVENT_WHEEL = 4,

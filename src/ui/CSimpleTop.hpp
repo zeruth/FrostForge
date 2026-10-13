@@ -86,6 +86,18 @@ class DeferredScriptBuffer {
 };
 static_assert(sizeof(DeferredScriptBuffer) == 0x38, "DeferredScriptBuffer is 0x38 bytes");
 
+// A key event as the client hands it to the UI (0x14).
+struct KEYEVENT {
+    int32_t m_key;                  // 0x00 the engine's key code, -1 for none
+    uint32_t m_time;                // 0x04
+    uint8_t m_repeat;               // 0x08 the OS's previous-state bit
+    uint8_t m_system;               // 0x09 a system key (alt held)
+    uint16_t m_pad0a;
+    uint32_t m_virtualKey;          // 0x0C
+    float m_scan;                   // 0x10
+};
+static_assert(sizeof(KEYEVENT) == 0x14, "KEYEVENT is 0x14 bytes");
+
 class CSimpleTop : public CLayoutFrame {
     public:
     // The one root (0x142e979d8).
@@ -219,6 +231,12 @@ class CSimpleTop : public CLayoutFrame {
     void OnMouseUpEvent(MOUSEEVENT* event);
     bool OnMouseWheelEvent(MOUSEEVENT* event);
     bool OnMouseDeltaEvent(MOUSEEVENT* event);
+    // The keyboard events from the client: a character to the frames that take characters, a
+    // key to those that take keys (the one that takes it keeps the key until it is let go).
+    bool OnCharEvent(uint32_t character);
+    bool OnKeyDownEvent(KEYEVENT* event);
+    bool OnKeyDownRepeatEvent(KEYEVENT* event);
+    bool OnKeyUpEvent(KEYEVENT* event);
 
     // The UI's frame: animations, layout, OnUpdate scripts and the mouse focus.
     void OnUpdate(float elapsed);
