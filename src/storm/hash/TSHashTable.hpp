@@ -362,7 +362,9 @@ class TSHashTable {
     void Rehash(uint32_t count) {
         TSExplicitList<T> moving;
         moving.InitEmpty(LinkBase);
-        for (uint32_t i = 0; i <= this->m_slotmod; i++) {
+        // modulus + 1 buckets: none on a table never used (the modulus is still -1)
+        uint32_t buckets = this->m_slotmod + 1;
+        for (uint32_t i = 0; i < buckets; i++) {
             TSExplicitList<T>* slot = &this->m_slots[i];
             while (T* node = slot->Head()) {
                 slot->Link(node)->Unlink();

@@ -73,12 +73,6 @@ void Sub141174300() {
     FROST_UNIMPLEMENTED();
 }
 
-// Releases textures the UI no longer uses (CSimpleTop.cpp, "WUNNEEDEDTEXTURE").
-// ref: FUN_1405eef20
-void TopReleaseUnneededTextures() {
-    FROST_UNIMPLEMENTED();
-}
-
 // The glue-only frame types.
 
 // ref: FUN_141697530
@@ -646,7 +640,7 @@ void GlueMgrStartup() {
         s_aspect = aspect;
         Sub141174300();
     }
-    TopReleaseUnneededTextures();
+    UiUnneededTexturesInitialize();
     FrameXML_RegisterFactory("ModelFFX", CreateModelFFX, false);
     FrameXML_RegisterFactory("PlayerModel", CreatePlayerModel, false);
     FrameXML_RegisterFactory("GameTooltip", CreateGameTooltip, false);

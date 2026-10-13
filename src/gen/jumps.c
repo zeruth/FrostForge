@@ -208,13 +208,6 @@ static undefined8 gen_entry_1401df370(void) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1401df500(void) {
-    __try {
-        return CALLF(undefined8, FUN_1401df500)();
-    } __except (GenFault(0x1401df500ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
 static undefined8 gen_entry_1401df570(void) {
     __try {
         return CALLF(undefined8, FUN_1401df570)();
@@ -12220,13 +12213,6 @@ static longlong * gen_entry_1405ebd60(longlong *param_1, longlong *param_2) {
         return (longlong *)0;
     }
 }
-static undefined8 gen_entry_1405ec470(uint *param_1) {
-    __try {
-        return CALLF(undefined8, FUN_1405ec470)(param_1);
-    } __except (GenFault(0x1405ec470ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
 static undefined8 gen_entry_1405ed3a0(longlong *param_1, undefined4 param_2, longlong *param_3) {
     __try {
         return CALLF(undefined8, FUN_1405ed3a0)(param_1, param_2, param_3);
@@ -12266,13 +12252,6 @@ static undefined8 gen_entry_1405f1fd0(longlong param_1, longlong *param_2) {
     __try {
         return CALLF(undefined8, FUN_1405f1fd0)(param_1, param_2);
     } __except (GenFault(0x1405f1fd0ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_1405f27e0(char param_1) {
-    __try {
-        return CALLF(undefined8, FUN_1405f27e0)(param_1);
-    } __except (GenFault(0x1405f27e0ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
@@ -20347,13 +20326,6 @@ static undefined8 gen_entry_14127f980(undefined8 param_1, undefined8 param_2) {
         return (undefined8)0;
     }
 }
-static undefined4 gen_entry_1412809a0(longlong param_1) {
-    __try {
-        return CALLF(undefined4, FUN_1412809a0)(param_1);
-    } __except (GenFault(0x1412809a0ULL, GetExceptionInformation())) {
-        return (undefined4)0;
-    }
-}
 static undefined8 * gen_entry_141282970(undefined8 *param_1, undefined4 param_2, undefined8 param_3, undefined4 param_4, undefined4 param_5) {
     __try {
         return CALLF(undefined8 *, FUN_141282970)(param_1, param_2, param_3, param_4, param_5);
@@ -20407,20 +20379,6 @@ static undefined8 gen_entry_141283690(void) {
     __try {
         return CALLF(undefined8, FUN_141283690)();
     } __except (GenFault(0x141283690ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_141283a70(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3) {
-    __try {
-        return CALLF(undefined8, FUN_141283a70)(a0, a1, a2, a3);
-    } __except (GenFault(0x141283a70ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_141283a80(undefined4 param_1) {
-    __try {
-        return CALLF(undefined8, FUN_141283a80)(param_1);
-    } __except (GenFault(0x141283a80ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
@@ -22405,13 +22363,6 @@ static undefined1 gen_entry_141480b20(void) {
         return (undefined1)0;
     }
 }
-static bool gen_entry_141480b60(void) {
-    __try {
-        return CALLF(bool, FUN_141480b60)();
-    } __except (GenFault(0x141480b60ULL, GetExceptionInformation())) {
-        return (bool)0;
-    }
-}
 static bool gen_entry_141480b70(void) {
     __try {
         return CALLF(bool, FUN_141480b70)();
@@ -23866,13 +23817,6 @@ static ulonglong gen_entry_141563820(longlong param_1, int param_2, longlong par
         return CALLF(ulonglong, FUN_141563820)(param_1, param_2, param_3);
     } __except (GenFault(0x141563820ULL, GetExceptionInformation())) {
         return (ulonglong)0;
-    }
-}
-static undefined8 gen_entry_1415642a0(void) {
-    __try {
-        return CALLF(undefined8, FUN_1415642a0)();
-    } __except (GenFault(0x1415642a0ULL, GetExceptionInformation())) {
-        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_141564430(longlong param_1, undefined4 param_2, undefined4 param_3) {
@@ -25923,13 +25867,6 @@ static undefined8 gen_entry_14169dfd0(undefined8 param_1) {
     __try {
         return CALLF(undefined8, FUN_14169dfd0)(param_1);
     } __except (GenFault(0x14169dfd0ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_14169dff0(undefined8 param_1) {
-    __try {
-        return CALLF(undefined8, FUN_14169dff0)(param_1);
-    } __except (GenFault(0x14169dff0ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
@@ -47801,13 +47738,6 @@ static undefined8 gen_entry_1425e2e50(undefined8 a0, undefined8 a1, undefined8 a
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1425e3190(void) {
-    __try {
-        return CALLF(undefined8, FUN_1425e3190)();
-    } __except (GenFault(0x1425e3190ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
 static undefined8 gen_entry_1425e32e0(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3) {
     __try {
         return CALLF(undefined8, FUN_1425e32e0)(a0, a1, a2, a3);
@@ -51704,7 +51634,6 @@ const unsigned long long g_genInits[] = {
     0x1401df2a0ULL,
     0x1401df330ULL,
     0x1401df370ULL,
-    0x1401df500ULL,
     0x1401df570ULL,
     0x1401df660ULL,
     0x1401df6b0ULL,
@@ -52945,7 +52874,7 @@ const unsigned long long g_genInits[] = {
     0x140211250ULL,
     0
 };
-const size_t g_genInitCount = 1269;
+const size_t g_genInitCount = 1268;
 
 typedef struct { unsigned long long m_address; void* m_target; } GENJUMP;
 const GENJUMP g_genJumps[] = {
@@ -52978,7 +52907,6 @@ const GENJUMP g_genJumps[] = {
     { 0x1401df2a0ULL, (void*)&gen_entry_1401df2a0 },
     { 0x1401df330ULL, (void*)&gen_entry_1401df330 },
     { 0x1401df370ULL, (void*)&gen_entry_1401df370 },
-    { 0x1401df500ULL, (void*)&gen_entry_1401df500 },
     { 0x1401df570ULL, (void*)&gen_entry_1401df570 },
     { 0x1401df660ULL, (void*)&gen_entry_1401df660 },
     { 0x1401df6b0ULL, (void*)&gen_entry_1401df6b0 },
@@ -54429,7 +54357,6 @@ const GENJUMP g_genJumps[] = {
     { 0x1402ccc60ULL, (void*)&FUN_1402ccc60 },
     { 0x1402ccd10ULL, (void*)&FUN_1402ccd10 },
     { 0x1402cd040ULL, (void*)&FUN_1402cd040 },
-    { 0x1402cd230ULL, (void*)&FUN_1402cd230 },
     { 0x1402cda40ULL, (void*)&FUN_1402cda40 },
     { 0x1402cdac0ULL, (void*)&FUN_1402cdac0 },
     { 0x1402cdfc0ULL, (void*)&FUN_1402cdfc0 },
@@ -54860,7 +54787,6 @@ const GENJUMP g_genJumps[] = {
     { 0x1405da370ULL, (void*)&FUN_1405da370 },
     { 0x1405da650ULL, (void*)&FUN_1405da650 },
     { 0x1405da830ULL, (void*)&FUN_1405da830 },
-    { 0x1405daee0ULL, (void*)&FUN_1405daee0 },
     { 0x1405daef0ULL, (void*)&FUN_1405daef0 },
     { 0x1405db600ULL, (void*)&FUN_1405db600 },
     { 0x1405db6d0ULL, (void*)&FUN_1405db6d0 },
@@ -54874,7 +54800,6 @@ const GENJUMP g_genJumps[] = {
     { 0x1405eb130ULL, (void*)&gen_entry_1405eb130 },
     { 0x1405eb390ULL, (void*)&gen_entry_1405eb390 },
     { 0x1405ebd60ULL, (void*)&gen_entry_1405ebd60 },
-    { 0x1405ec470ULL, (void*)&gen_entry_1405ec470 },
     { 0x1405ed3a0ULL, (void*)&gen_entry_1405ed3a0 },
     { 0x1405ed840ULL, (void*)&gen_entry_1405ed840 },
     { 0x1405ee7c0ULL, (void*)&FUN_1405ee7c0 },
@@ -54883,7 +54808,6 @@ const GENJUMP g_genJumps[] = {
     { 0x1405f0900ULL, (void*)&gen_entry_1405f0900 },
     { 0x1405f1910ULL, (void*)&FUN_1405f1910 },
     { 0x1405f1fd0ULL, (void*)&gen_entry_1405f1fd0 },
-    { 0x1405f27e0ULL, (void*)&gen_entry_1405f27e0 },
     { 0x1405f37b0ULL, (void*)&gen_entry_1405f37b0 },
     { 0x1405f4710ULL, (void*)&gen_entry_1405f4710 },
     { 0x1405f4860ULL, (void*)&gen_entry_1405f4860 },
@@ -56194,7 +56118,6 @@ const GENJUMP g_genJumps[] = {
     { 0x14127f9a0ULL, (void*)&FUN_14127f9a0 },
     { 0x1412802f0ULL, (void*)&FUN_1412802f0 },
     { 0x1412808c0ULL, (void*)&FUN_1412808c0 },
-    { 0x1412809a0ULL, (void*)&gen_entry_1412809a0 },
     { 0x141281020ULL, (void*)&FUN_141281020 },
     { 0x141281140ULL, (void*)&FUN_141281140 },
     { 0x1412814f0ULL, (void*)&FUN_1412814f0 },
@@ -56208,8 +56131,6 @@ const GENJUMP g_genJumps[] = {
     { 0x141282d40ULL, (void*)&gen_entry_141282d40 },
     { 0x1412834a0ULL, (void*)&gen_entry_1412834a0 },
     { 0x141283690ULL, (void*)&gen_entry_141283690 },
-    { 0x141283a70ULL, (void*)&gen_entry_141283a70 },
-    { 0x141283a80ULL, (void*)&gen_entry_141283a80 },
     { 0x141283c30ULL, (void*)&gen_entry_141283c30 },
     { 0x141283c90ULL, (void*)&gen_entry_141283c90 },
     { 0x141283cc0ULL, (void*)&gen_entry_141283cc0 },
@@ -56545,7 +56466,6 @@ const GENJUMP g_genJumps[] = {
     { 0x1414808d0ULL, (void*)&gen_entry_1414808d0 },
     { 0x141480b00ULL, (void*)&gen_entry_141480b00 },
     { 0x141480b20ULL, (void*)&gen_entry_141480b20 },
-    { 0x141480b60ULL, (void*)&gen_entry_141480b60 },
     { 0x141480b70ULL, (void*)&gen_entry_141480b70 },
     { 0x141480b80ULL, (void*)&gen_entry_141480b80 },
     { 0x141485ed0ULL, (void*)&gen_entry_141485ed0 },
@@ -56761,7 +56681,6 @@ const GENJUMP g_genJumps[] = {
     { 0x141561fd0ULL, (void*)&gen_entry_141561fd0 },
     { 0x141563170ULL, (void*)&gen_entry_141563170 },
     { 0x141563820ULL, (void*)&gen_entry_141563820 },
-    { 0x1415642a0ULL, (void*)&gen_entry_1415642a0 },
     { 0x141564430ULL, (void*)&gen_entry_141564430 },
     { 0x141565aa0ULL, (void*)&gen_entry_141565aa0 },
     { 0x1415667f0ULL, (void*)&gen_entry_1415667f0 },
@@ -57061,7 +56980,6 @@ const GENJUMP g_genJumps[] = {
     { 0x14169df60ULL, (void*)&gen_entry_14169df60 },
     { 0x14169dfa0ULL, (void*)&gen_entry_14169dfa0 },
     { 0x14169dfd0ULL, (void*)&gen_entry_14169dfd0 },
-    { 0x14169dff0ULL, (void*)&gen_entry_14169dff0 },
     { 0x14169e040ULL, (void*)&gen_entry_14169e040 },
     { 0x14169e050ULL, (void*)&gen_entry_14169e050 },
     { 0x14169e060ULL, (void*)&gen_entry_14169e060 },
@@ -60249,7 +60167,6 @@ const GENJUMP g_genJumps[] = {
     { 0x1425e2330ULL, (void*)&gen_entry_1425e2330 },
     { 0x1425e2d20ULL, (void*)&gen_entry_1425e2d20 },
     { 0x1425e2e50ULL, (void*)&gen_entry_1425e2e50 },
-    { 0x1425e3190ULL, (void*)&gen_entry_1425e3190 },
     { 0x1425e32e0ULL, (void*)&gen_entry_1425e32e0 },
     { 0x1425e3500ULL, (void*)&gen_entry_1425e3500 },
     { 0x1425e3510ULL, (void*)&gen_entry_1425e3510 },
@@ -60804,4 +60721,4 @@ const GENJUMP g_genJumps[] = {
     { 0x14260c5a0ULL, (void*)&gen_entry_14260c5a0 },
     { 0, 0 }
 };
-const size_t g_genJumpCount = 7853;
+const size_t g_genJumpCount = 7841;

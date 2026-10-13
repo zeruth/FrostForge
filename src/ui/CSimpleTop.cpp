@@ -5,6 +5,10 @@
 #include <new>
 
 #include "base/Coordinate.hpp"
+#include "base/ObjectAlloc.hpp"
+#include "os/Os.hpp"
+#include "storm/hash/TSHashTable.hpp"
+#include <cstddef>
 #include "blz/Murmur.hpp"
 #include "blz/RbTree.hpp"
 #include "storm/Memory.hpp"
@@ -1210,12 +1214,202 @@ void CSimpleTop::RemoveLayoutWaiting(CLayoutFrame* frame) {
     }
 }
 
+// ---- the unneeded textures ------------------------------------------------------------------
+//
+// A texture the UI lets go of stays loaded a while: the cache holds a reference to it, by its
+// handle, so a frame that asks for it again soon finds it ready. What it keeps is bounded in
+// bytes (and per texture), and the oldest go first.
+
+// A texture the UI let go of (0x58, its heap index at +0x5c).
+struct UNEEDED_TEXTURE : TSHashObject<UNEEDED_TEXTURE> {
+    HTEXTURE m_key;                             // 0x30 HASHKEY_PTR
+    TSLink<UNEEDED_TEXTURE> m_lruLink;          // 0x38 oldest first, while it has a size
+    HTEXTURE m_texture;                         // 0x48 the reference the cache holds
+    int32_t m_size;                             // 0x50 bytes; 0 not loaded yet, -1 over the per-texture limit
+    uint32_t m_pad54;
+};
+static_assert(sizeof(UNEEDED_TEXTURE) == 0x58, "UNEEDED_TEXTURE is 0x58 bytes");
+
+template <>
+struct TSHashTableTags<UNEEDED_TEXTURE> {
+    static constexpr const char* s_fixedArray =
+        ".?AV?$TSFixedArray@V?$TSExplicitList@UUNEEDED_TEXTURE@@$0?CCCCCCCD@$07@@$07@@";
+    static constexpr const char* s_growableArray =
+        ".?AV?$TSGrowableArray@V?$TSExplicitList@UUNEEDED_TEXTURE@@$0?CCCCCCCD@$07@@$07@@";
+};
+
+namespace {
+
+const char s_unneededTableTag[] = ".?AV?$TSHashTable@UUNEEDED_TEXTURE@@VHASHKEY_PTR@@$07@@";
+const char s_unneededListTag[] = ".?AV?$TSList@UUNEEDED_TEXTURE@@V?$TSGetExplicitLink@UUNEEDED_TEXTURE@@@@$07@@";
+const char s_topFile[] = "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Frame\\CSimpleTop.cpp";
+
+// TSHashTable<UNEEDED_TEXTURE, HASHKEY_PTR, 8> (vtable 0x1426c76f8).
+class UNEEDEDTEXTURETABLE : public TSHashTable<UNEEDED_TEXTURE> {
+    public:
+    // ref: FUN_1405ea070
+    void Delete(UNEEDED_TEXTURE* node) override {
+        node->m_lruLink.Unlink();
+        this->Unlink(node);
+        SMemFree(node, s_unneededTableTag, -2, 0);
+    }
+
+    // ref: FUN_1405ea0f0
+    UNEEDED_TEXTURE* NewNode(TSExplicitList<UNEEDED_TEXTURE>* slot, uint32_t extra, uint32_t flags) override {
+        void* memory = SMemAlloc(extra + sizeof(UNEEDED_TEXTURE), 8, s_unneededListTag, 0, -2, flags | 8);
+        std::memset(memory, 0, sizeof(UNEEDED_TEXTURE));
+        auto node = static_cast<UNEEDED_TEXTURE*>(memory);
+        slot->LinkToTail(node);
+        return node;
+    }
+
+    // ref: FUN_1405eea60
+    void Resize(uint32_t buckets) {
+        this->Rehash(buckets);
+    }
+};
+
+UNEEDEDTEXTURETABLE s_unneededTextures;     // DAT_142cce720
+uint32_t s_unneededBudget;                  // DAT_142cce70c: the bytes the cache may keep
+int32_t s_unneededMaxSize;                  // DAT_142cce71c: the largest texture it keeps
+// DAT_142cce770: the entries with a size, oldest first (link at +0x38).
+TSList<UNEEDED_TEXTURE, TSGetLink<UNEEDED_TEXTURE>, 8> s_unneededLru(offsetof(UNEEDED_TEXTURE, m_lruLink));  // DAT_142cce770
+TObjectAllocHeap* s_unneededHeap;           // DAT_142e979e8: "WUNNEEDEDTEXTURE"
+
+// HASHKEY_PTR: MurmurHash3's finalizer over the pointer, folded to 32 bits.
+uint32_t PtrHash(const void* ptr) {
+    return static_cast<uint32_t>(blz::fmix64(reinterpret_cast<uint64_t>(ptr)));
+}
+
+// Lets go of the entry's texture and the entry.
+void UnneededFree(UNEEDED_TEXTURE* entry) {
+    TextureFree(&entry->m_texture);
+    s_unneededTextures.Unlink(entry);
+    entry->m_lruLink.Unlink();
+    s_unneededHeap->Free(entry);
+}
+
+}  // namespace
+
+// The cache's limits by the machine (a quarter of them under 2 GB of video memory or 3.5 GB
+// of system memory), and its heap.
+// ref: FUN_1405eef20
+void UiUnneededTexturesInitialize() {
+    if (s_unneededHeap == nullptr) {
+        void* memory = SMemAlloc(sizeof(TObjectAllocHeap), 0x22, s_topFile, SStrHashFnv1a(s_topFile), 0x8cf, 0);
+        s_unneededHeap = new (memory) TObjectAllocHeap("WUNNEEDEDTEXTURE", 0x60, 0x80, 0x22);
+    }
+    uint32_t dedicated;
+    uint32_t shared;
+    GxDeviceVideoMemory(&dedicated, &shared);
+    uint64_t physical = OsGetPhysicalMemory();
+    if (shared <= dedicated) {
+        shared = dedicated;
+    }
+    uint32_t buckets;
+    if (shared < 0x7d1 || (physical >> 0x14) < 0xdad) {
+        s_unneededBudget = 0xa00000;
+        s_unneededMaxSize = 0x10000;
+        s_unneededTextures.m_slotlimit = 0x80;
+        buckets = 0x80;
+    } else {
+        s_unneededBudget = 0x4000000;
+        s_unneededMaxSize = 0x800000;
+        s_unneededTextures.m_slotlimit = 0x100;
+        buckets = 0x100;
+    }
+    if (s_unneededTextures.m_slotmod + 1 < buckets) {
+        s_unneededTextures.Resize(buckets);
+    }
+    // RenderSettingsAddHandler(FUN_1405f1c00, nullptr): the UI's answer to a resolution
+    // change, not ported.
+    FROST_UNIMPLEMENTED();
+}
+
+// The UI lets go of a texture: one from a file is parked in the cache (its reference kept, and
+// moved to the newest end once its size is known) before the caller's reference goes.
 // ref: FUN_1405f3c30
 void UiReleaseTexture(CTexture** texture) {
-    // The reference parks the texture in the unneeded-texture cache (DAT_142cce720, trimmed by
-    // FUN_1405f27e0) before letting it go; the cache is not ported yet.
-    FROST_UNIMPLEMENTED();
+    if (TextureInFileCache(*texture)) {
+        HTEXTURE key = *texture;
+        uint32_t hash = PtrHash(key);
+        UNEEDED_TEXTURE* entry = s_unneededTextures.Find(hash, [key](UNEEDED_TEXTURE* node) {
+            return node->m_key == key;
+        });
+        bool measure;
+        if (entry != nullptr) {
+            measure = entry->m_size == 0 && TextureIsReady(key);
+        } else {
+            entry = static_cast<UNEEDED_TEXTURE*>(s_unneededHeap->Alloc());
+            std::memset(entry, 0, sizeof(UNEEDED_TEXTURE));
+            s_unneededTextures.Insert(entry, hash);
+            entry->m_hashval = hash;
+            entry->m_key = key;
+            entry->m_texture = *texture;
+            TextureAddRef(*texture);
+            measure = TextureIsReady(*texture);
+            if (!measure) {
+                entry->m_size = 0;
+            }
+        }
+        if (measure) {
+            int32_t size = TextureGetMemorySize(*texture);
+            entry->m_size = size <= s_unneededMaxSize ? size : -1;
+        }
+        if (0 < entry->m_size) {
+            s_unneededLru.Link(entry)->Unlink();
+            s_unneededLru.LinkToTail(entry);
+        }
+    }
     TextureFree(texture);
+}
+
+// Once a frame: the entries in use again (or that never loaded) go, then the oldest until the
+// rest fit the budget. `all` empties the cache.
+// ref: FUN_1405f27e0
+void UiTrimUnneededTextures(bool all) {
+    if (all) {
+        UNEEDED_TEXTURE* entry = s_unneededTextures.m_fulllist.Head();
+        while (entry != nullptr) {
+            UNEEDED_TEXTURE* next = s_unneededTextures.m_fulllist.Link(entry)->Next();
+            UnneededFree(entry);
+            entry = next;
+        }
+        return;
+    }
+    uint32_t total = 0;
+    UNEEDED_TEXTURE* entry = s_unneededTextures.m_fulllist.Head();
+    while (entry != nullptr) {
+        UNEEDED_TEXTURE* next = s_unneededTextures.m_fulllist.Link(entry)->Next();
+        if (entry->m_size < 1 || 1 < static_cast<uint32_t>(TextureGetRefCount(entry->m_texture))) {
+            UnneededFree(entry);
+        } else {
+            total += static_cast<uint32_t>(entry->m_size);
+        }
+        entry = next;
+    }
+    entry = s_unneededLru.Head();
+    while (entry != nullptr) {
+        UNEEDED_TEXTURE* next = s_unneededLru.Next(entry);
+        if (total <= s_unneededBudget) {
+            return;
+        }
+        total -= static_cast<uint32_t>(entry->m_size);
+        UnneededFree(entry);
+        entry = next;
+    }
+}
+
+// The cache emptied and its heap destroyed.
+// ref: FUN_1405ee2c0
+void UiUnneededTexturesShutdown() {
+    // RenderSettingsRemoveHandler(FUN_1405f1c00, nullptr): never added (see the initialize)
+    UiTrimUnneededTextures(true);
+    if (s_unneededHeap != nullptr) {
+        s_unneededHeap->~TObjectAllocHeap();
+        SMemFree(s_unneededHeap, s_topFile, -2, 0);
+        s_unneededHeap = nullptr;
+    }
 }
 
 // ref: FUN_1405f09a0

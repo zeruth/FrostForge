@@ -1779,6 +1779,18 @@ void TextureAddRef(HTEXTURE texture) {
     AddRefCount(&texture->m_refCount);
 }
 
+// ref: FUN_1412809a0
+int32_t TextureGetRefCount(HTEXTURE texture) {
+    return texture->m_refCount;
+}
+
+// The bytes the texture's levels take on the device.
+// ref: FUN_14127d810
+int32_t TextureGetMemorySize(HTEXTURE texture) {
+    return TextureMemorySize(texture->m_desc.m_format, texture->m_desc.m_usage & 7, texture->m_desc.m_width,
+        texture->m_desc.m_height);
+}
+
 void TextureRelease(HTEXTURE texture, int32_t flag) {
     (void)flag;
     ReleaseTexture(texture);

@@ -131,6 +131,8 @@ HTEXTURE TextureGetWhite();
 HTEXTURE TextureCreateUnique(uint8_t type, uint32_t width, uint32_t height, uint32_t depth, uint8_t format,
     uint8_t dataFormat, uint64_t gxFlags, blz::function_storage* fill, const char* name, bool ownFilter);
 void TextureAddRef(HTEXTURE texture);
+int32_t TextureGetRefCount(HTEXTURE texture);
+int32_t TextureGetMemorySize(HTEXTURE texture);
 void TextureRelease(HTEXTURE texture, int32_t flag);
 void TextureFree(HTEXTURE* texture);
 

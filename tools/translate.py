@@ -1695,6 +1695,11 @@ def build_errors() -> list[tuple[str, int, str]]:
                          capture_output=True, text=True, errors="replace").stdout
     for m in re.finditer(r"unresolved external symbol (\S+) referenced in function FUN_([0-9a-f]{9})", out):
         errors.append(("LINK", int(m.group(2), 16), f"LNK2019 unresolved {m.group(1)}"))
+    if not errors and re.search(r"\berror [A-Z]+\d+", out):
+        # the port itself does not build, so the link that would show the translated
+        # functions' unresolved symbols never ran: not clean, and nothing known to demote
+        other = sorted({l.strip() for l in out.splitlines() if re.search(r"\berror [A-Z]+\d+", l)})
+        raise SystemExit("the port does not build (fix it, then run again):\n" + "\n".join(other[:10]))
     return errors
 
 

@@ -307,7 +307,6 @@ unsigned long long FUN_14169de80(unsigned long long param_1);
 unsigned long long FUN_14169df60(unsigned long long param_1);
 unsigned long long FUN_14169dfa0(unsigned long long param_1);
 unsigned long long FUN_14169dfd0(unsigned long long param_1);
-unsigned long long FUN_14169dff0(unsigned long long param_1);
 unsigned long long FUN_14169e040(unsigned long long param_1);
 unsigned long long FUN_14169e050(unsigned long long param_1);
 unsigned long long FUN_14169e060(unsigned long long param_1);
@@ -1513,15 +1512,6 @@ int Lua_C_Login_GetWaitQueueInfo(lua_State* L) {
     __try {
         return static_cast<int>(FUN_14169e060(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x14169e060ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_14169dff0
-int Lua_C_Login_IsLoginReady(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_14169dff0(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x14169dff0ull, GetExceptionInformation())) {
         return 0;
     }
 }

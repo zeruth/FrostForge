@@ -25,6 +25,7 @@ void AgentFreeInstallConfig();
 
 void AgentInitialize(const char* uid);
 bool AgentStart();
+bool AgentUpdate();
 void AgentShutdown();
 
 bool AgentSetTextLocale(uint32_t locale);

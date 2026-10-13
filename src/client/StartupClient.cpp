@@ -15,6 +15,7 @@
 #include "framescript/FrameScript.hpp"
 #include "framescript/ScriptMethod.hpp"
 #include "glue/GlueMgr.hpp"
+#include "services/Agent.hpp"
 #include "services/ClientServices.hpp"
 #include "db/GlobalColor.hpp"
 #include "gxu/GxuFont.hpp"
@@ -47,13 +48,40 @@ extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 // the window and device are tagged stubs, called in the reference order, until each is ported.
 
 // the async preload queue
-extern "C" unsigned long long FUN_141283a80(unsigned long long);
-// translated: FUN_141283a80
+namespace {
+
+uint32_t s_preloadQueued;           // DAT_1430a55f8: the files the preload asked for
+uint32_t s_preloadDone;             // DAT_1430a55fc: and those that came back
+
+// Every preload read's done, error and cancel callback: one more is back.
+// ref: FUN_141283a70
+void PreloadOnRead(void* userData, void* buffer, uint32_t size) {
+    (void)userData;
+    (void)buffer;
+    (void)size;
+    s_preloadDone++;
+}
+
+// The reference passes the one callback as the error callback too; C++ wants its own type.
+void PreloadOnError(void* userData, void* buffer, uint32_t size, const char* error) {
+    (void)error;
+    PreloadOnRead(userData, buffer, size);
+}
+
+}  // namespace
+
+// A file the preload reads ahead when it exists and is not resident yet.
+// ref: FUN_141283a80
 void PreloadQueueFile(uint32_t fileDataId) {
-    __try {
-        FUN_141283a80((unsigned long long)fileDataId);
-    } __except (GenFault(0x141283a80ull, GetExceptionInformation())) {
+    if (!cas::CASFileExists(static_cast<int32_t>(fileDataId))) {
+        return;
     }
+    if (cas::CASFileGetResidency(static_cast<int32_t>(fileDataId), 0, 0) == 2) {
+        return;
+    }
+    AsyncFileReadById(static_cast<int32_t>(fileDataId), 3, nullptr, nullptr, nullptr, nullptr, &PreloadOnRead,
+        &PreloadOnError, &PreloadOnRead);
+    s_preloadQueued++;
 }
 
 // starts the preload; true when it is under way
@@ -617,13 +645,8 @@ void Sub14021F090() {
     }
 }
 
-extern "C" unsigned long long FUN_1415642a0();
-// translated: FUN_1415642a0
 void Sub1415642A0() {
-    __try {
-        FUN_1415642a0();
-    } __except (GenFault(0x1415642a0ull, GetExceptionInformation())) {
-    }
+    AgentUpdate();
 }
 
 // ref: FUN_14230b040
@@ -1357,13 +1380,8 @@ void Sub14022EA60() {
     }
 }
 
-extern "C" unsigned long long FUN_1405f27e0(unsigned long long);
-// translated: FUN_1405f27e0
 void Sub1405F27E0(bool a1) {
-    __try {
-        FUN_1405f27e0((unsigned long long)a1);
-    } __except (GenFault(0x1405f27e0ull, GetExceptionInformation())) {
-    }
+    UiTrimUnneededTextures(a1);
 }
 
 extern "C" unsigned long long FUN_140238d50();

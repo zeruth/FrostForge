@@ -1,6 +1,8 @@
 // The glue's plain script functions that read client state: the saved account, the build,
 // the screen and render scale limits, and the event and login queries.
 
+#include "services/BattleNet.hpp"
+#include "services/ClientServices.hpp"
 #include "client/ClientCVars.hpp"
 #include "client/CommandLine.hpp"
 #include "client/ConsoleDevice.hpp"
@@ -275,6 +277,17 @@ int Lua_C_EventUtils_IsEventValid(lua_State* L) {
 int Lua_C_Login_IsLauncherLogin(lua_State* L) {
     // FUN_14148ba60
     lua_pushboolean(L, CommandLineHasOption(0x20) && g_launcherLoginUsed == 0);
+    return 1;
+}
+
+// The login may go ahead: Battle.net defers no disconnect, and ClientServices is not in state 6.
+// ref: FUN_14169dff0
+int Lua_C_Login_IsLoginReady(lua_State* L) {
+    if (BattleNetIsReady() && *reinterpret_cast<int32_t*>(static_cast<uint8_t*>(ClientServicesGet()) + 0x98) != 6) {
+        lua_pushboolean(L, 1);
+        return 1;
+    }
+    lua_pushboolean(L, 0);
     return 1;
 }
 

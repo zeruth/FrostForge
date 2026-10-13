@@ -1,0 +1,17 @@
+#include "services/BattleNet.hpp"
+
+// WoW/Source/WowBattleNet/IBattleNet.cpp: the Battle.net login. Offline (docs/stubs.md); only
+// the state the glue reads is held here, so the translated module and the port share it.
+
+namespace {
+
+// DAT_1430af01c: a disconnect is deferred ("BattleNet Defer Disconnect", FUN_14147f510);
+// cleared when the login initializes (FUN_141480920).
+uint8_t s_disconnectDeferred;       // DAT_1430af01c
+
+}  // namespace
+
+// ref: FUN_141480b60
+bool BattleNetIsReady() {
+    return s_disconnectDeferred == 0;
+}

@@ -236,6 +236,10 @@ class CSimpleTop : public CLayoutFrame {
 class CTexture;
 // Lets a UI texture go (FUN_1405f3c30); the reference keeps recently released ones a while.
 void UiReleaseTexture(CTexture** texture);
+// The unneeded-texture cache: its limits and heap, the per-frame trim, and the teardown.
+void UiUnneededTexturesInitialize();
+void UiTrimUnneededTextures(bool all);
+void UiUnneededTexturesShutdown();
 
 // The cursor in UI units (FUN_140236a40).
 void UiGetCursorPosition(float* x, float* y);
