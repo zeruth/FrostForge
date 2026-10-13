@@ -2480,21 +2480,9 @@ undefined8 FUN_141399160() {
     return (undefined8)0;
 }
 
-/* did not compile: C2297 '^': not valid as right operand has type 'float' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcx */
-bool FUN_14139baf0() {
-    GenUnimplemented(0x14139baf0ULL);
-    return (bool)0;
-}
-
 /* SIMD union */
 undefined8 FUN_14139be00() {
     GenUnimplemented(0x14139be00ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_1413b2320 reads 2, the call passes 1) */
-undefined8 FUN_1413ae6d0() {
-    GenUnimplemented(0x1413ae6d0ULL);
     return (undefined8)0;
 }
 
@@ -2567,6 +2555,18 @@ undefined8 FUN_141400330() {
 /* the decompiler lost a call's arguments (FUN_14144a500 reads 1, the call passes 0) */
 undefined8 FUN_141400870() {
     GenUnimplemented(0x141400870ULL);
+    return (undefined8)0;
+}
+
+/* the decompiler lost a call's arguments (FUN_1414329b0 reads 1, the call passes 0) */
+undefined8 FUN_14141a140() {
+    GenUnimplemented(0x14141a140ULL);
+    return (undefined8)0;
+}
+
+/* the decompiler lost a call's arguments (FUN_14142d370 reads 2, the call passes 1) */
+undefined8 FUN_14142d0c0() {
+    GenUnimplemented(0x14142d0c0ULL);
     return (undefined8)0;
 }
 
@@ -6852,12 +6852,6 @@ undefined8 FUN_142549d00() {
 undefined8 FUN_142549e60() {
     GenUnimplemented(0x142549e60ULL);
     return (undefined8)0;
-}
-
-/* a global used as a pointer the data export does not type */
-int * FUN_14254d240() {
-    GenUnimplemented(0x14254d240ULL);
-    return (int *)0;
 }
 
 /* register the decompiler lost track of */

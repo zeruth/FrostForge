@@ -28,6 +28,7 @@ FRAMEBUFFER* WindowGetFrameBuffer();
 
 // Draws the software cursor (FUN_1414fc400).
 void WindowDrawCursor();
+void WindowUpdateForeground();
 void WindowSetClipCursor(bool clip);
 void WindowSetTitle(void* window, const char* title);
 

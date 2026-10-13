@@ -4,6 +4,7 @@
 // What the world answers about its geometry: segment intersections, the ground under a
 // point, the wind volumes, and the projected decals and physics bones a view collects.
 
+#include "base/RndSeed.hpp"
 #include <cstdint>
 
 class CWorldMap;
@@ -29,23 +30,39 @@ struct WORLDSEGMENTHIT {
     uint64_t m_18;                  // 0x18
 };
 
-// A wind volume of the map (WoW/Source/WorldClient2/MapWind.cpp), on the global list
-// DAT_142d00f68 by its link at +0.
+// A wind source (0x88, WoW/Source/WorldClient2/MapWind.cpp), on one of two global lists by its
+// link at +0. Each frame its direction and speed wander at random within their ranges.
 struct MAPWIND {
     void* m_prevlink;               // 0x00
     MAPWIND* m_next;                // 0x08 tagged at the end of the list
-    uint8_t m_10[0x34];
-    float m_direction[3];           // 0x44 scaled by its speed
-    uint8_t m_50[0x14];
-    uint8_t m_flags;                // 0x64 4 a sphere, 0x20 gusts
+    float m_baseDirection[3];       // 0x10 the direction it wanders about
+    float m_baseSpeed;              // 0x1c
+    float m_directionRange[3];      // 0x20 how far each component may stray from it
+    float m_speedAbove;             // 0x2c how far the speed may rise above its base
+    float m_speedBelow;             // 0x30 and fall below it
+    float m_currentDirection[3];    // 0x34 normalized
+    float m_speed;                  // 0x40
+    float m_direction[3];           // 0x44 the current direction scaled by its speed
+    float m_directionRate[3];       // 0x50 the most each component moves in a second
+    float m_speedRate;              // 0x5c the most the speed moves in a second
+    float m_lifetime;               // 0x60 seconds left, when flag 2 is set
+    uint8_t m_flags;                // 0x64 2 expires, 4 a sphere, 0x20 gusts
     uint8_t m_pad65[3];
     float m_center[3];              // 0x68
     float m_radius;                 // 0x74
+    uint32_t m_pad78;
+    CRndSeed m_seed;                // 0x7c
+    uint32_t m_pad84;
 };
+static_assert(sizeof(MAPWIND) == 0x88, "MAPWIND is 0x88 bytes");
 
 // The first wind volume, and the next.
 MAPWIND* MapWindFirst();
 MAPWIND* MapWindNext(MAPWIND* wind);
+// Once a frame, from the scene's animate: every source steps, the expired ones are deleted,
+// and the global wind follows their sum.
+// ref: FUN_14139b480
+void MapWindUpdate();
 
 // ref: FUN_1413bc550
 bool WorldMapIntersectSegment(CWorldMap* map, WORLDSEGMENT* segment, WORLDSEGMENTHIT* hit);

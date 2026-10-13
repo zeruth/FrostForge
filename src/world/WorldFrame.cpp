@@ -27,6 +27,7 @@
 #include "world/SceneOcclusion.hpp"
 #include "world/WorldClip.hpp"
 #include "world/WorldMap.hpp"
+#include "world/WorldQueries.hpp"
 #include "world/WorldScene.hpp"
 #include "world/WorldView.hpp"
 #include <cmath>
@@ -67,7 +68,15 @@ float s_lodScale = 1.0f;
 // The renderer's feature switches (DAT_142ccbc00): set by the client's option setup.
 uint8_t s_features[8] = {1, 1, 1, 0, 0, 0, 0, 0};
 
+int32_t s_frameRect[4];             // DAT_1430aba78: the frame's screen rectangle
+uint32_t s_loadSortMask = 0x3f;     // DAT_142cfdb68: what the map loader sorts, 0 under worldLoadSort 0
+
 }  // namespace
+
+// ref: FUN_141365480
+int32_t* WorldGetFrameRect() {
+    return s_frameRect;
+}
 
 // DAT_1430ab790: DayNight's zone lights and light run on a pool job.
 uint8_t g_dayNightOnJob;
@@ -84,6 +93,53 @@ void WorldReadGraphicsQuality() {
     if (raid != nullptr) {
         s_raidGraphicsQuality = static_cast<uint32_t>(raid->m_intValue);
     }
+}
+
+extern "C" unsigned long long FUN_141383630();
+extern "C" unsigned long long FUN_14136e890();
+extern "C" unsigned long long FUN_141196d60(unsigned long long);
+extern "C" unsigned long long FUN_141398500();
+extern "C" unsigned long long FUN_141399160();
+extern "C" unsigned long long FUN_141386d50(unsigned long long);
+extern "C" unsigned long long FUN_14139abd0();
+// translated: FUN_141383630
+// translated: FUN_14136e890
+// translated: FUN_141196d60
+// translated: FUN_141398500
+// translated: FUN_141399160
+// translated: FUN_141386d50
+// translated: FUN_14139abd0
+// Once a frame from the client loop (`inWorld` in the game state): the world's caches let go of
+// what went unused (colour gradings, map areas, scene vertices, models, textures), the load
+// sort is read, and the map objects are updated.
+// ref: FUN_141350fd0
+void WorldFrameUpdate(bool inWorld) {
+    if (!GxDevExists()) {
+        int32_t* rect = WorldGetFrameRect();
+        rect[2] = 0x7fff;
+        rect[3] = 0x7fff;
+    }
+    DayNightReleaseUnused();
+    WorldMapsReleaseUnusedAreas(inWorld);
+    WorldScenesResetVertices();
+    FUN_141383630();
+    FUN_14136e890();
+    FUN_141196d60(FrameTime_GetTime());
+    // two calls to an empty function (0x1402112e0) sit here
+    FUN_141398500();
+    FUN_141399160();
+    CVar* loadSort = CVarLookup(t2util::FnvHashStringI("orldLoadSort", 0xaf63ea4c86020456ull));  // "worldLoadSort"
+    s_loadSortMask = 0x3f;
+    if (loadSort != nullptr && loadSort->m_intValue == 0) {
+        s_loadSortMask = 0;
+    }
+    WorldReadGraphicsQuality();
+    struct {
+        uint32_t m_elapsed;
+        float m_distance;
+    } update = {FrameTime_GetElapsed(), 1111.1111f};    // 0x448ae38e
+    FUN_141386d50(reinterpret_cast<uintptr_t>(&update));
+    FUN_14139abd0();
 }
 
 // ref: FUN_14134e7e0
@@ -146,7 +202,14 @@ void WorldWaitGlobalJobs() {
 // The frame's screen rectangle reset (DAT_1430aba78, DAT_1430aba80).
 // ref: FUN_141365b20
 void WorldResetFrameRect() {
-    FROST_UNIMPLEMENTED();  // DAT_1430aba78 = 0, DAT_1430aba80 = 0x7fff00007fff without a device
+    s_frameRect[0] = 0;
+    s_frameRect[1] = 0;
+    s_frameRect[2] = 0;
+    s_frameRect[3] = 0;
+    if (!GxDevExists()) {
+        s_frameRect[2] = 0x7fff;
+        s_frameRect[3] = 0x7fff;
+    }
 }
 
 // ref: FUN_1413c9380
@@ -214,14 +277,6 @@ void ParticulateVolumesUpdate(void* particulates, const void* camera, const floa
     FROST_UNIMPLEMENTED();
 }
 
-extern "C" unsigned long long FUN_14139b480();
-// translated: FUN_14139b480
-void WorldUpdateLiquidSounds() {
-    __try {
-        FUN_14139b480();
-    } __except (GenFault(0x14139b480ull, GetExceptionInformation())) {
-    }
-}
 
 // ref: FUN_142527370
 void WorldRunFrameCallbacks() {
@@ -498,7 +553,7 @@ void CWorldScene::Animate(CWorldView* view, const int32_t* lod, float elapsed, u
         bool daytime = this->m_dayNight == nullptr ? true : DayNightIsDaytime(this->m_dayNight);
         ParticulateVolumesUpdate(this->m_particulates, &view->m_camera, WorldPlayerPosition(), daytime, this->m_a68);
     }
-    WorldUpdateLiquidSounds();
+    MapWindUpdate();
     WorldRunFrameCallbacks();
     m2Scene->m_d738 = WorldWaterDetail() != 0;
     uint32_t frameTime = GxDeviceFrameTime();

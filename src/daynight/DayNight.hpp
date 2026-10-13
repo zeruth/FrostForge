@@ -362,6 +362,9 @@ struct DNColorGrading {
     // A light's grading blocks rendered into the grading target `index` (0 or 1).
     // ref: FUN_142450110
     void Blend(void* target, uint8_t* block, int32_t index);
+    // Once a frame: the grading textures not used since the last frame are freed.
+    // ref: FUN_142450020
+    void ReleaseUnused();
 };
 static_assert(sizeof(DNColorGrading) == 0x128, "DNColorGrading is 0x128 bytes");
 
@@ -537,6 +540,7 @@ static_assert(sizeof(DAYNIGHT) == 0x20, "DAYNIGHT is 0x20 bytes");
 DAYNIGHT* DayNightCreate(CWorldScene* scene, CWorldView* view);
 // ref: FUN_142442370
 void DayNightDestroy(DAYNIGHT* dayNight);
+void DayNightReleaseUnused();
 // ref: FUN_142442fe0
 void DayNightSetMap(DAYNIGHT* dayNight, int32_t mapId);
 // The light ids of area slot `index`.

@@ -3,6 +3,7 @@
 #include "os/Sync.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
+#include "storm/list/TSList.hpp"
 #include "threadpool/ThreadPool.hpp"
 #include "ui/FrameTime.hpp"
 #include "util/Unimplemented.hpp"
@@ -46,6 +47,10 @@ uint8_t* MapLoadStateCreate(uint8_t* state) {
     MapLoadStateReset(state);
     return state;
 }
+
+// DAT_142d01200: every map, linked at the tail as it is made (the link is the map's first
+// field).
+TSList<CWorldMap, TSGetLink<CWorldMap>, 8> s_maps;
 
 }  // namespace
 
@@ -106,7 +111,9 @@ CWorldMap::CWorldMap(CWorldScene* scene, uint32_t slot) {
 
 // ref: FUN_1413ab600
 CWorldMap::~CWorldMap() {
+    // the members' teardown is not ported; the last step, leaving every map, is
     FROST_UNIMPLEMENTED();
+    s_maps.Link(this)->Unlink();
 }
 
 // ref: FUN_141427730
@@ -157,8 +164,49 @@ void CWorldMap::Unload() {
 
 // ref: FUN_1413cac10
 void WorldMapLink(CWorldMap* map) {
-    (void)map;
-    FROST_UNIMPLEMENTED();
+    s_maps.Link(map)->Unlink();
+    s_maps.LinkToTail(map);
+}
+
+extern "C" unsigned long long FUN_14142d0c0(unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_141427610(unsigned long long);
+// translated: FUN_14142d0c0
+// translated: FUN_141427610
+// An area no one holds any more: its light leaves the map's light set, it lets go of what it
+// loaded, and it is deleted.
+// ref: FUN_1413b2320
+void CWorldMap::ReleaseArea(void* area) {
+    void* lights = this->Field<void*>(0xe8);
+    if (lights != nullptr) {
+        FUN_14142d0c0(reinterpret_cast<uintptr_t>(lights), *reinterpret_cast<uint32_t*>(static_cast<uint8_t*>(area) + 0xfc));
+    }
+    FUN_141427610(reinterpret_cast<uintptr_t>(area));
+    if (area != nullptr) {
+        auto destroy = **reinterpret_cast<void (***)(void*, int32_t)>(area);
+        destroy(area, 1);
+    }
+}
+
+// Once a frame (when asked): every area whose reference count reached 0 is released.
+// ref: FUN_1413ae6d0
+void CWorldMap::ReleaseUnusedAreas(bool release) {
+    if (!release) {
+        return;
+    }
+    for (int32_t i = 0; i < 0x18; i++) {
+        void*& area = this->Field<void*>(0x28 + i * 8);
+        if (area != nullptr && *reinterpret_cast<int32_t*>(static_cast<uint8_t*>(area) + 0xc) == 0) {
+            this->ReleaseArea(area);
+            area = nullptr;
+        }
+    }
+}
+
+// ref: FUN_1413cb0e0
+void WorldMapsReleaseUnusedAreas(bool release) {
+    for (CWorldMap* map = s_maps.Head(); map != nullptr; map = s_maps.Next(map)) {
+        map->ReleaseUnusedAreas(release);
+    }
 }
 
 // Whether the map's definition asks for a water clip plane (its +0x104 bit 6).

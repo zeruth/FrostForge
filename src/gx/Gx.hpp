@@ -199,6 +199,7 @@ void* GxTexGetDesc(const void* tex, void* out);
 
 // Once-a-frame Gx work (FUN_14228c670) and the callbacks it runs (FUN_14228e190, FUN_14228e8f0).
 void GxFrameUpdate();
+void GxSetForeground(bool foreground);
 void GxAddFrameStartCallback(void (*callback)(void*), void* param);
 void GxRemoveFrameStartCallback(void (*callback)(void*), void* param);
 void GxRemoveEngineDeviceCreatedCallback(void (*callback)(void*), void* param);

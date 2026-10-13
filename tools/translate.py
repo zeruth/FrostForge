@@ -30,7 +30,7 @@ import json
 import re
 import subprocess
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import callargs
@@ -750,6 +750,30 @@ class Translator:
         self.exceptions = json.loads((ROOT / "tools/fidelity_exceptions.json").read_text(encoding="utf-8"))
 
     # ---- classification -------------------------------------------------------------------
+    def why_no_target(self, a: int) -> str | None:
+        """Why a hand-ported function gets no adapter (the translator then translates it a second
+        time): None when it has one, or when it is not hand-ported at all."""
+        rec = self.tied.get(a)
+        if rec is None:
+            return None
+        if rec["kind"] == "stub":
+            return f"the port ({rec['name']}) is a stub"
+        if self.port_target(a) is not None:
+            return None
+        vas = self.port_va_by_name.get(rec["name"], [])
+        if not vas:
+            return f"{rec['name']} is not in the port's PDB (inlined, or internal and folded)"
+        if len(vas) > 1:
+            return f"{rec['name']} has {len(vas)} overloads and the argument count does not pick one"
+        va = vas[0]
+        if self.publics.get(va) is None:
+            return f"{rec['name']} has no public symbol (an anonymous namespace or static)"
+        if self.signatures.get(va) is None:
+            return f"{rec['name']} has no signature record"
+        if a in self.mismatched:
+            return f"{rec['name']} takes fewer arguments than the reference"
+        return f"{rec['name']} returns or takes an aggregate by value"
+
     def port_target(self, a: int):
         """(va, mangled, signature) when the port has a callable counterpart of `a`."""
         rec = self.tied.get(a)
@@ -1740,10 +1764,24 @@ def main() -> None:
     ap.add_argument("--addr", nargs="*", default=[], help="more roots")
     ap.add_argument("--depth", type=int, default=2)
     ap.add_argument("--fix", action="store_true", help="build, demote what fails to compile, repeat")
+    ap.add_argument("--why", action="store_true",
+                    help="list the translated functions that have a hand port, and why it is not used; stop")
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if args.risks:
         return report_risks()
+    if args.why:
+        t = Translator(args.depth)
+        manifest = json.loads((GEN / "manifest.json").read_text(encoding="utf-8"))
+        rows = Counter()
+        for k in sorted(manifest.get("translated", {})):
+            reason = t.why_no_target(int(k, 16))
+            if reason:
+                print(f"FUN_{k}  {reason}")
+                rows[re.sub(r"\(.*?\) ", "", re.sub(r"^`anonymous namespace'::", "", reason).split(" ", 1)[1])] += 1
+        for reason, n in rows.most_common():
+            print(f"{n:5}  {reason}", file=sys.stderr)
+        return
     if args.faults:
         return report_faults(Path(args.faults))
 

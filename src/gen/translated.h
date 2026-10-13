@@ -9,46 +9,34 @@
 #pragma comment(lib, "kernel32.lib")
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "ws2_32.lib")
-__declspec(dllimport) unsigned long long ClientToScreen();
 __declspec(dllimport) unsigned long long CloseHandle();
-__declspec(dllimport) unsigned long long CreateBitmap();
-__declspec(dllimport) unsigned long long CreateDIBSection();
-__declspec(dllimport) unsigned long long CreateIconIndirect();
 __declspec(dllimport) unsigned long long CreateProcessW();
 __declspec(dllimport) unsigned long long CryptAcquireContextW();
 __declspec(dllimport) unsigned long long CryptGenRandom();
 __declspec(dllimport) unsigned long long CryptReleaseContext();
 __declspec(dllimport) unsigned long long DeleteCriticalSection();
-__declspec(dllimport) unsigned long long DeleteObject();
 __declspec(dllimport) unsigned long long DuplicateHandle();
 __declspec(dllimport) unsigned long long EnterCriticalSection();
 __declspec(dllimport) unsigned long long FreeLibrary();
 __declspec(dllimport) unsigned long long GetACP();
-__declspec(dllimport) unsigned long long GetActiveWindow();
 __declspec(dllimport) unsigned long long GetAsyncKeyState();
-__declspec(dllimport) unsigned long long GetClientRect();
 __declspec(dllimport) unsigned long long GetComputerNameW();
 __declspec(dllimport) unsigned long long GetCurrentProcess();
 __declspec(dllimport) unsigned long long GetDC();
 __declspec(dllimport) unsigned long long GetDeviceCaps();
 __declspec(dllimport) unsigned long long GetFileAttributesW();
-__declspec(dllimport) unsigned long long GetFocus();
 __declspec(dllimport) unsigned long long GetModuleHandleExW();
 __declspec(dllimport) unsigned long long GetModuleHandleW();
 __declspec(dllimport) unsigned long long GetNativeSystemInfo();
 __declspec(dllimport) unsigned long long GetProcAddress();
 __declspec(dllimport) unsigned long long GetSystemDefaultLangID();
 __declspec(dllimport) unsigned long long GetSystemInfo();
-__declspec(dllimport) unsigned long long GetSystemMetrics();
 __declspec(dllimport) unsigned long long GetTimeZoneInformation();
 __declspec(dllimport) unsigned long long GetUserDefaultLangID();
 __declspec(dllimport) unsigned long long GetUserNameW();
 __declspec(dllimport) unsigned long long GlobalMemoryStatusEx();
-__declspec(dllimport) unsigned long long InflateRect();
 __declspec(dllimport) unsigned long long InitializeCriticalSection();
-__declspec(dllimport) unsigned long long IsIconic();
 __declspec(dllimport) unsigned long long LeaveCriticalSection();
-__declspec(dllimport) unsigned long long LoadCursorA();
 __declspec(dllimport) unsigned long long LoadLibraryW();
 __declspec(dllimport) unsigned long long MonitorFromWindow();
 __declspec(dllimport) unsigned long long MoveFileExW();
@@ -59,10 +47,6 @@ __declspec(dllimport) unsigned long long RegQueryValueExW();
 __declspec(dllimport) unsigned long long RegSetValueExW();
 __declspec(dllimport) unsigned long long ReleaseDC();
 __declspec(dllimport) unsigned long long ResumeThread();
-__declspec(dllimport) unsigned long long SetClassLongPtrW();
-__declspec(dllimport) unsigned long long SetCursor();
-__declspec(dllimport) unsigned long long SetCursorPos();
-__declspec(dllimport) unsigned long long ShowCursor();
 __declspec(dllimport) unsigned long long Sleep();
 __declspec(dllimport) unsigned long long TerminateProcess();
 __declspec(dllimport) unsigned long long VkKeyScanA();
@@ -593,30 +577,6 @@ extern void *const gen_p_142cfca08;
 /* s_missing (src/db/GlobalColor.cpp), internal: through its pointer */
 extern void *const gen_p_142d1ad40;
 #define gen_g_142d1ad40 (*(char *)gen_p_142d1ad40)
-/* s_sampleTimeout (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_142d5e8e0;
-#define gen_g_142d5e8e0 (*(char *)gen_p_142d5e8e0)
-/* s_sampleTimeoutRemote (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_142d5e8e4;
-#define gen_g_142d5e8e4 (*(char *)gen_p_142d5e8e4)
-/* s_holdGrace (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_142d5e900;
-#define gen_g_142d5e900 (*(char *)gen_p_142d5e900)
-/* s_cursorState (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_142d5e90c;
-#define gen_g_142d5e90c (*(char *)gen_p_142d5e90c)
-/* s_trackLeave (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_142d5e910;
-#define gen_g_142d5e910 (*(char *)gen_p_142d5e910)
-/* s_cursorFrame (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_142d5e914;
-#define gen_g_142d5e914 (*(char *)gen_p_142d5e914)
-/* s_samplesConstructed (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_142d5e920;
-#define gen_g_142d5e920 (*(char *)gen_p_142d5e920)
-/* s_samples (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_142d5e938;
-#define gen_g_142d5e938 (*(char *)gen_p_142d5e938)
 /* s_seedA (src/client/Startup.cpp), internal: through its pointer */
 extern void *const gen_p_142ddcf50;
 #define gen_g_142ddcf50 (*(char *)gen_p_142ddcf50)
@@ -707,15 +667,9 @@ extern void *const gen_p_142e99e28;
 /* s_initCount (src/framescript/FrameScript.cpp), internal: through its pointer */
 extern void *const gen_p_142e99f30;
 #define gen_g_142e99f30 (*(char *)gen_p_142e99f30)
-/* s_cancelled (src/ui/FrameTime.cpp), internal: through its pointer */
-extern void *const gen_p_142e9a1c0;
-#define gen_g_142e9a1c0 (*(char *)gen_p_142e9a1c0)
 /* s_rawSkip (src/os/win/Window.cpp), internal: through its pointer */
 extern void *const gen_p_1430a1594;
 #define gen_g_1430a1594 (*(char *)gen_p_1430a1594)
-/* s_mouseNoRepositioning (src/os/win/Window.cpp), internal: through its pointer */
-extern void *const gen_p_1430a15c8;
-#define gen_g_1430a15c8 (*(char *)gen_p_1430a15c8)
 /* s_mouseWindow (src/os/win/Window.cpp), internal: through its pointer */
 extern void *const gen_p_1430a1640;
 #define gen_g_1430a1640 (*(char *)gen_p_1430a1640)
@@ -743,9 +697,6 @@ extern void *const gen_p_1430a99f0;
 /* s_musicHandle (src/sound/SI3Sound.cpp), internal: through its pointer */
 extern void *const gen_p_1430a99f4;
 #define gen_g_1430a99f4 (*(char *)gen_p_1430a99f4)
-/* s_window (src/client/GxWindow.cpp), internal: through its pointer */
-extern void *const gen_p_1430b0030;
-#define gen_g_1430b0030 (*(char *)gen_p_1430b0030)
 /* s_cursorHotspot (src/client/GxWindow.cpp), internal: through its pointer */
 extern void *const gen_p_1430b0050;
 #define gen_g_1430b0050 (*(char *)gen_p_1430b0050)
@@ -806,81 +757,6 @@ extern void *const gen_p_1444f94c0;
 /* s_waterSwitch (src/client/GraphicsSettings.cpp), internal: through its pointer */
 extern void *const gen_p_1447ce202;
 #define gen_g_1447ce202 (*(char *)gen_p_1447ce202)
-/* s_initialized (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceac0;
-#define gen_g_1447ceac0 (*(char *)gen_p_1447ceac0)
-/* s_remoteSession (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceac1;
-#define gen_g_1447ceac1 (*(char *)gen_p_1447ceac1)
-/* s_holdMoved (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceac2;
-#define gen_g_1447ceac2 (*(char *)gen_p_1447ceac2)
-/* s_remoteCheckTime (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceac4;
-#define gen_g_1447ceac4 (*(char *)gen_p_1447ceac4)
-/* s_holdWindow (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceac8;
-#define gen_g_1447ceac8 (*(char *)gen_p_1447ceac8)
-/* s_holdTime (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447cead0;
-#define gen_g_1447cead0 (*(char *)gen_p_1447cead0)
-/* s_haveMessagePosition (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447cead4;
-#define gen_g_1447cead4 (*(char *)gen_p_1447cead4)
-/* s_velocityStarted (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447cead5;
-#define gen_g_1447cead5 (*(char *)gen_p_1447cead5)
-/* s_holdCenter (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447cead8;
-#define gen_g_1447cead8 (*(char *)gen_p_1447cead8)
-/* s_heldPosition (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceae0;
-#define gen_g_1447ceae0 (*(char *)gen_p_1447ceae0)
-/* s_releaseSample (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceae8;
-#define gen_g_1447ceae8 (*(char *)gen_p_1447ceae8)
-/* s_appCursor (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceaf0;
-#define gen_g_1447ceaf0 (*(char *)gen_p_1447ceaf0)
-/* s_blankCursor (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceaf8;
-#define gen_g_1447ceaf8 (*(char *)gen_p_1447ceaf8)
-/* s_frameDepth (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceb00;
-#define gen_g_1447ceb00 (*(char *)gen_p_1447ceb00)
-/* s_sequence (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceb0c;
-#define gen_g_1447ceb0c (*(char *)gen_p_1447ceb0c)
-/* s_moves (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceb10;
-#define gen_g_1447ceb10 (*(char *)gen_p_1447ceb10)
-/* s_currentSample (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceb14;
-#define gen_g_1447ceb14 (*(char *)gen_p_1447ceb14)
-/* s_messagePosition (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceb18;
-#define gen_g_1447ceb18 (*(char *)gen_p_1447ceb18)
-/* s_motion (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceb28;
-#define gen_g_1447ceb28 (*(char *)gen_p_1447ceb28)
-/* s_motionStart (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceb30;
-#define gen_g_1447ceb30 (*(char *)gen_p_1447ceb30)
-/* s_velocitySpan (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceb34;
-#define gen_g_1447ceb34 (*(char *)gen_p_1447ceb34)
-/* s_velocity (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceb38;
-#define gen_g_1447ceb38 (*(char *)gen_p_1447ceb38)
-/* s_velocityTime (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceb40;
-#define gen_g_1447ceb40 (*(char *)gen_p_1447ceb40)
-/* s_velocityMoves (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceb44;
-#define gen_g_1447ceb44 (*(char *)gen_p_1447ceb44)
-/* s_visibilityParam (src/os/win/Cursor.cpp), internal: through its pointer */
-extern void *const gen_p_1447ceb50;
-#define gen_g_1447ceb50 (*(char *)gen_p_1447ceb50)
 undefined8 FUN_1401ca520();
 undefined8 FUN_1401ca540();
 int FUN_1401ca670();
@@ -3085,8 +2961,6 @@ longlong * FUN_14065f7b0();
 undefined4 FUN_14065f960();
 undefined4 FUN_14065f980();
 int FUN_14065f9a0();
-undefined4 FUN_14065f9b0();
-float FUN_14065f9c0();
 undefined8 FUN_14065fa60();
 int FUN_14065fb50();
 longlong * FUN_140660a90();
@@ -4533,6 +4407,12 @@ longlong * FUN_141283fd0();
 undefined8 FUN_1412843c0();
 undefined8 FUN_141285240();
 undefined8 FUN_141285300();
+undefined8 FUN_141286390();
+undefined8 FUN_141288800();
+undefined8 FUN_1412888d0();
+undefined8 FUN_14128a0a0();
+undefined8 FUN_14128a140();
+undefined8 FUN_14128d1e0();
 float FUN_141297630();
 ulonglong FUN_141297a40();
 ulonglong FUN_141297eb0();
@@ -4574,6 +4454,7 @@ undefined8 FUN_1412bddd0();
 ulonglong * FUN_1412bde50();
 longlong FUN_1412bdf70();
 undefined8 FUN_1412be750();
+undefined8 FUN_1412c44d0();
 undefined8 FUN_1412c4750();
 undefined8 FUN_1412c49e0();
 code * FUN_1412c51b0();
@@ -4658,14 +4539,12 @@ undefined * FUN_14134ec00();
 undefined8 FUN_14134ec50();
 undefined8 FUN_14134f460();
 undefined8 FUN_14134fd60();
-undefined8 FUN_141350fd0();
 undefined8 FUN_1413517e0();
 undefined8 FUN_1413518b0();
 undefined8 FUN_141352210();
 undefined8 FUN_141352c70();
 undefined8 FUN_1413543b0();
 undefined8 FUN_1413544d0();
-undefined8 FUN_141354f80();
 undefined8 FUN_141355300();
 undefined8 FUN_141355600();
 bool FUN_141355640();
@@ -4701,7 +4580,6 @@ int FUN_14135c8d0();
 undefined * FUN_14135ce70();
 ulonglong FUN_141362730();
 char FUN_1413627a0();
-undefined * FUN_141365480();
 undefined8 FUN_141365b60();
 undefined8 FUN_141365b80();
 undefined8 FUN_141365ba0();
@@ -4742,6 +4620,7 @@ undefined8 FUN_1413895d0();
 undefined8 FUN_141395570();
 undefined8 FUN_141395b90();
 undefined8 FUN_141395d70();
+undefined8 FUN_141396030();
 undefined8 FUN_141396180();
 undefined8 FUN_141396800();
 undefined8 FUN_141396b30();
@@ -4761,8 +4640,6 @@ undefined8 FUN_14139a4f0();
 undefined8 FUN_14139aa40();
 undefined8 FUN_14139aa60();
 undefined8 FUN_14139abd0();
-undefined8 FUN_14139b480();
-bool FUN_14139baf0();
 undefined8 FUN_14139be00();
 undefined8 FUN_14139c1a0();
 undefined8 FUN_14139ca60();
@@ -4770,7 +4647,6 @@ undefined8 FUN_14139dda0();
 undefined8 FUN_1413a36b0();
 undefined8 FUN_1413acc50();
 undefined8 FUN_1413ae280();
-undefined8 FUN_1413ae6d0();
 undefined8 FUN_1413afb30();
 undefined8 FUN_1413b1430();
 undefined8 FUN_1413b1650();
@@ -4783,12 +4659,11 @@ undefined8 FUN_1413c1080();
 undefined8 FUN_1413c10b0();
 undefined8 FUN_1413c2e10();
 undefined8 FUN_1413c3450();
-undefined8 FUN_1413cad70();
+ulonglong FUN_1413c4700();
 undefined8 FUN_1413cadd0();
 undefined8 FUN_1413cae30();
 undefined8 FUN_1413caec0();
 undefined8 FUN_1413caf20();
-undefined8 FUN_1413cb0e0();
 undefined8 FUN_1413cb1c0();
 undefined8 FUN_1413ce8c0();
 undefined8 FUN_1413ceaf0();
@@ -4800,6 +4675,7 @@ undefined4 FUN_1413e4df0();
 undefined8 FUN_1413e6290();
 undefined8 FUN_1413e71b0();
 undefined8 FUN_1413e72b0();
+undefined8 FUN_1413e77d0();
 undefined8 FUN_1413e78a0();
 undefined8 FUN_1413ecc50();
 undefined8 * FUN_1413edb80();
@@ -4832,9 +4708,15 @@ undefined8 FUN_141407490();
 undefined8 FUN_14140e540();
 undefined8 FUN_14140e610();
 longlong FUN_14140e660();
+undefined8 FUN_141419b20();
+undefined8 FUN_141419f50();
+undefined8 FUN_14141a140();
+undefined8 FUN_14141abe0();
+undefined8 FUN_14141d890();
+undefined8 FUN_141427610();
 undefined4 * FUN_14142a4f0();
 undefined8 FUN_14142b3e0();
-undefined8 FUN_141438520();
+undefined8 FUN_14142d0c0();
 undefined8 FUN_141438530();
 undefined8 FUN_141438730();
 undefined8 FUN_141438770();
@@ -4854,7 +4736,12 @@ undefined8 FUN_141441160();
 undefined8 FUN_1414411a0();
 undefined8 FUN_14144a2d0();
 undefined8 FUN_14144a5a0();
+undefined8 FUN_14144c900();
 undefined8 FUN_14144d230();
+undefined8 FUN_1414519c0();
+undefined8 FUN_141451bf0();
+undefined8 FUN_141451c50();
+undefined8 FUN_141451cf0();
 undefined8 FUN_141463f00();
 undefined8 * FUN_141464360();
 undefined8 * FUN_141467110();
@@ -5020,7 +4907,6 @@ undefined8 FUN_1414f8950();
 undefined8 FUN_1414f8960();
 undefined8 FUN_1414f8d60();
 undefined8 FUN_1414f8d70();
-undefined8 FUN_1414f8e20();
 undefined8 FUN_1414f9300();
 undefined8 FUN_1414f9d60();
 undefined8 FUN_1414f9d90();
@@ -8927,7 +8813,6 @@ undefined8 FUN_14228b3b0();
 undefined8 FUN_14228b580();
 undefined8 FUN_14228b640();
 undefined8 FUN_14228b7a0();
-undefined8 FUN_14228b800();
 char FUN_14228c1d0();
 undefined8 FUN_14228c330();
 undefined8 FUN_14228c390();
@@ -9040,11 +8925,9 @@ char * FUN_1424419e0();
 undefined8 FUN_142442270();
 undefined8 FUN_142442460();
 undefined8 FUN_142442f50();
-undefined8 FUN_142443190();
 undefined8 FUN_14244f8b0();
 undefined8 FUN_14244f9f0();
 undefined8 FUN_14244fd20();
-undefined8 FUN_142450020();
 undefined8 FUN_142458e70();
 undefined8 FUN_142458ed0();
 undefined4 * FUN_1424630a0();
@@ -9115,9 +8998,11 @@ undefined8 FUN_14252cd60();
 undefined8 FUN_14252d310();
 undefined8 FUN_14252d620();
 undefined8 FUN_14252e8b0();
+undefined8 FUN_14252f200();
 undefined8 FUN_14252fb00();
 undefined8 FUN_14252fe10();
 undefined8 FUN_142530290();
+undefined8 FUN_142530810();
 undefined8 FUN_142530960();
 undefined8 FUN_1425309c0();
 undefined8 FUN_142530e60();
@@ -9228,21 +9113,8 @@ undefined8 FUN_14254a580();
 undefined8 FUN_14254b130();
 undefined8 FUN_14254b210();
 ulonglong FUN_14254b290();
-undefined8 FUN_14254b620();
-undefined8 FUN_14254b8c0();
-undefined8 FUN_14254b980();
-undefined8 FUN_14254c230();
-undefined8 FUN_14254c350();
 undefined8 FUN_14254c3d0();
-undefined8 FUN_14254c400();
-undefined8 FUN_14254c4f0();
-undefined8 FUN_14254c6a0();
-undefined4 * FUN_14254c760();
 undefined8 FUN_14254cef0();
-undefined4 FUN_14254cfd0();
-int * FUN_14254d240();
-undefined8 FUN_14254d4b0();
-ulonglong FUN_14254d770();
 undefined8 FUN_142550640();
 undefined8 FUN_1425506a0();
 undefined8 FUN_1425580f0();

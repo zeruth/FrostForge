@@ -668,6 +668,10 @@ def main() -> None:
 
     # ---- tie each tag to its compiled function -------------------------------------------
     tags = [t for t in tagscan.scan() if t["name"] and not t.get("label")]
+    # a hand port claims its address before the translated copy does: src/gen sorts ahead of
+    # most of the tree, and a function promoted to a hand port is still translated until the
+    # next translate.py run, which only drops it once this file says the port has it
+    tags.sort(key=lambda t: t["file"].replace("\\", "/").startswith("src/gen/"))
     wanted = {short_name(t["name"]) for t in tags}
     candidates = sorted({va for s in wanted for va in by_short.get(s, [])})
     where = symbolize(candidates, port.base)

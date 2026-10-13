@@ -1956,8 +1956,7 @@ uint8_t s_frameSceneOpen;           // DAT_14348b641: a scene draw is under way 
 uint32_t s_deviceLostCount;         // DAT_143490858
 uint8_t s_deviceRestartPending;     // DAT_14349069e
 uint32_t s_lastMarkedFrame;         // DAT_142d438bc
-// DAT_142d41c18: in .data as 1 and never written, so the foreground limit always applies.
-const uint8_t s_foregroundFps = 1;
+uint8_t s_foregroundFps = 1;        // DAT_142d41c18: the window has the focus (GxSetForeground)
 uint32_t s_frameLimitFps;           // DAT_1434908c0
 uint64_t s_frameLimitTicks;         // DAT_1434908c8: counter ticks per frame
 uint64_t s_frameLimitNext;          // DAT_1434908d0: when the next frame may start
@@ -2347,6 +2346,13 @@ void GxRemoveEngineDeviceCreatedCallback(GXDEVICECALLBACK callback, void* param)
 // ref: FUN_14228e910
 void GxRemoveLowMemoryCallback(GXDEVICECALLBACK callback, void* param) {
     CallbackRemove(&s_lowMemoryCallbacks, callback, param);
+}
+
+// Whether the window has the focus, which picks maxFPS over maxFPSBk (set each frame by
+// WindowUpdateForeground).
+// ref: FUN_14228b800
+void GxSetForeground(bool foreground) {
+    s_foregroundFps = foreground;
 }
 
 // Once a frame: notices a changed GPU set (re-enumerating, and restarting the device when the

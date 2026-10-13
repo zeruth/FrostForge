@@ -313,6 +313,8 @@ void* WorldSceneGetEnv(CWorldScene* scene);
 // The scene being drawn into, when one is (DAT_1430ad2f8).
 // ref: FUN_1413cb140
 CWorldScene* WorldSceneGetCurrent();
+// ref: FUN_1413cad70
+void WorldScenesResetVertices();
 // ref: FUN_1413cb310
 void WorldSceneSetCurrent(CWorldScene* scene);
 

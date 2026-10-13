@@ -14,6 +14,7 @@
 #include "os/Window.hpp"
 #include "ui/CSimpleTop.hpp"
 #include "util/Unimplemented.hpp"
+#include "world/WorldFrame.hpp"
 #include <cstring>
 #include <vector>
 
@@ -53,8 +54,6 @@ void Sub1412E1FB0();
 void Sub1402F4D00(uint64_t a1);
 void Sub14021C040();
 void Sub14228C670();
-void Sub1414F8E20();
-void Sub141350FD0(bool a1);
 void* Sub14192FA70();
 void Sub14192FCB0(void* a1);
 void Sub1413528E0(bool a1);
@@ -450,10 +449,10 @@ bool Sub1402225D0() {
     Sub1402F4D00(Sub140216570());
     Sub14021C040();
     Sub14228C670();
-    Sub1414F8E20();
+    WindowUpdateForeground();
     // The scheduled callbacks (DAT_142cc8060, with additions at DAT_142cc8300 and removals at
     // DAT_142cc8460) run here; nothing schedules any yet.
-    Sub141350FD0(s_gameState == 7);
+    WorldFrameUpdate(s_gameState == 7);
     Sub14192FCB0(Sub14192FA70());
     Sub1413528E0(s_gameState != 7 || LoadingScreenIsActive());
     switch (s_gameState) {

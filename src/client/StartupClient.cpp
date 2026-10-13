@@ -671,25 +671,6 @@ void Sub14228C670() {
     GxFrameUpdate();
 }
 
-// the window
-extern "C" unsigned long long FUN_1414f8e20();
-// translated: FUN_1414f8e20
-void Sub1414F8E20() {
-    __try {
-        FUN_1414f8e20();
-    } __except (GenFault(0x1414f8e20ull, GetExceptionInformation())) {
-    }
-}
-
-extern "C" unsigned long long FUN_141350fd0(unsigned long long);
-// translated: FUN_141350fd0
-void Sub141350FD0(bool a1) {
-    __try {
-        FUN_141350fd0((unsigned long long)a1);
-    } __except (GenFault(0x141350fd0ull, GetExceptionInformation())) {
-    }
-}
-
 // ref: FUN_14192fcb0
 void Sub14192FCB0(void* a1) {
     (void)a1;

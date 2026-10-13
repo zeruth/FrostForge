@@ -172,23 +172,6 @@ bool WorldMapGroundHeight(CWorldMap* map, const float* position, float* height) 
     return false;
 }
 
-// ---- wind ----------------------------------------------------------------------------------
-
-namespace {
-
-// DAT_142d00f60: the map's wind volumes (WoW/Source/WorldClient2/MapWind.cpp links them).
-TSList<MAPWIND, TSGetLink<MAPWIND>, 8> s_mapWinds;
-
-}  // namespace
-
-MAPWIND* MapWindFirst() {
-    return s_mapWinds.Head();
-}
-
-MAPWIND* MapWindNext(MAPWIND* wind) {
-    return s_mapWinds.Next(wind);
-}
-
 // ---- the view's lists ----------------------------------------------------------------------
 
 // ref: FUN_1413a2970

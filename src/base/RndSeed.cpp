@@ -70,6 +70,7 @@ float RndSeedUnit(CRndSeed* seed) {
     return RndSeedMantissa(RndSeedNext(seed)) - 1.0f;
 }
 
+// ref: FUN_14125abd0
 float RndSeedSigned(CRndSeed* seed) {
     uint32_t sum = RndSeedNext(seed);
     float value = RndSeedMantissa(sum);

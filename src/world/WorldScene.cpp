@@ -746,6 +746,15 @@ void CWorldScene::UpdateLight(CWorldView* view, DAYNIGHT* dayNight) {
     this->m_fog = *DayNightFogF8(dayNight);
 }
 
+// Once a frame: every scene's vertex array starts the frame empty.
+// ref: FUN_1413cad70
+void WorldScenesResetVertices() {
+    for (CWorldScene* scene = s_scenes.Head(); scene != nullptr; scene = s_scenes.Next(scene)) {
+        // FUN_141438520 on the array at +0x6a0: its count
+        scene->m_6a8 = 0;
+    }
+}
+
 // Whether any scene has the model file ready.
 // ref: FUN_1413cb320
 bool WorldScenesModelReady(const char* name, uint8_t priority) {

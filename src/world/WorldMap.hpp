@@ -63,12 +63,19 @@ class CWorldMap {
     void Load(int32_t mapId, uint8_t a3, int32_t a4, uint8_t a5);
     // ref: FUN_1413b1f60
     void Unload();
+    // ref: FUN_1413b2320
+    void ReleaseArea(void* area);
+    // ref: FUN_1413ae6d0
+    void ReleaseUnusedAreas(bool release);
 };
 static_assert(sizeof(CWorldMap) == 0x520, "CWorldMap is 0x520 bytes");
 
 // Links a map into every map (DAT_142d01200), at the tail.
 // ref: FUN_1413cac10
 void WorldMapLink(CWorldMap* map);
+// Once a frame: every map releases the areas no one holds (when `release`).
+// ref: FUN_1413cb0e0
+void WorldMapsReleaseUnusedAreas(bool release);
 
 // ref: FUN_1413b7140
 bool WorldMapHasWaterPlane(CWorldMap* map);

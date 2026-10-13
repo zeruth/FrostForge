@@ -199,6 +199,30 @@ DNColorGrading::~DNColorGrading() {
     }
 }
 
+// ref: FUN_142450020
+void DNColorGrading::ReleaseUnused() {
+    // the loaded textures at +0x108 (count +0x110), those used this frame at +0xf0 (+0xf8)
+    HTEXTURE* texture = DNField<HTEXTURE*>(this->m_data, 0x108);
+    while (texture != DNField<HTEXTURE*>(this->m_data, 0x108) + DNField<uint64_t>(this->m_data, 0x110)) {
+        HTEXTURE* used = DNField<HTEXTURE*>(this->m_data, 0xf0);
+        HTEXTURE* usedEnd = used + DNField<uint64_t>(this->m_data, 0xf8);
+        for (; used != usedEnd; used++) {
+            if (*used == *texture) {
+                break;
+            }
+        }
+        if (used != usedEnd) {
+            texture++;
+            continue;
+        }
+        TextureFree(texture);
+        HTEXTURE* end = DNField<HTEXTURE*>(this->m_data, 0x108) + DNField<uint64_t>(this->m_data, 0x110);
+        std::memmove(texture, texture + 1, static_cast<size_t>(end - (texture + 1)) * sizeof(HTEXTURE));
+        DNField<uint64_t>(this->m_data, 0x110)--;
+    }
+    DNField<uint64_t>(this->m_data, 0xf8) = 0;
+}
+
 // ---- the scene -----------------------------------------------------------------------------
 
 // ref: FUN_1424587b0
@@ -475,6 +499,14 @@ void DayNightOnCelestialBodyPatched(uint32_t a1, uint32_t id, uint32_t a3, void*
     for (DAYNIGHT* handle = s_handles.Head(); handle != nullptr; handle = s_handles.Next(handle)) {
         (void)id;
         FROST_UNIMPLEMENTED();  // FUN_142455b50: the fourth planet from the CelestialBody row
+    }
+}
+
+// Once a frame: every handle's colour grading lets go of the textures it stopped using.
+// ref: FUN_142443190
+void DayNightReleaseUnused() {
+    for (DAYNIGHT* handle = s_handles.Head(); handle != nullptr; handle = s_handles.Next(handle)) {
+        handle->m_scene->m_colorGrading->ReleaseUnused();
     }
 }
 
