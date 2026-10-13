@@ -39,6 +39,8 @@ add_subdirectory(vendor/expat-1.95.5)
 add_subdirectory(vendor/freetype-2.9.1)
 # FMOD Ex 4.44.64 ("fmod/fmod4/src/fmod.cpp", FSB5/CELT codecs): linked as a DLL.
 add_subdirectory(vendor/fmodex-4.44.64)
+# libvpx 1.10.0 ("WebM Project VP9 Decoder v1.10.0"): the cinematics are VP9 in AVI.
+add_subdirectory(vendor/libvpx-1.10.0)
 
 add_subdirectory(src)
 

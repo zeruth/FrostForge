@@ -10,6 +10,11 @@ class GxRenderContext;
 
 // ref: FUN_14022ea60
 void LoadingBarRender();
+// The bar shown (its three textures loaded the first time), at half; at `progress`; hidden, its
+// textures let go. A movie that runs short of data shows it while it waits.
+void LoadingBarShow();
+void LoadingBarSetProgress(float progress);
+void LoadingBarHide();
 
 // The context's 2D state for the loading screen: the UILoadingScreen pipeline for a topology,
 // blend and raster state.

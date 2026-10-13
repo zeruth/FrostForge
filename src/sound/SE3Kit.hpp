@@ -299,6 +299,10 @@ int32_t SE3RandomRange(int32_t low, int32_t high);
 SE3SoundKitObject* SE3GetObject(uint32_t handle);
 // ref: FUN_1412cd270
 bool SE3IsPlaying(uint32_t handle);
+// ref: FUN_1412cde60
+void SE3SetPaused(uint32_t handle, bool paused);
+// ref: FUN_1412c96d0
+uint32_t SE3GetPositionMs(uint32_t handle);
 // ref: FUN_1412c9c50
 int32_t SE3GetKitId(uint32_t handle);
 // ref: FUN_1412c93c0

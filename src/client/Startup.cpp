@@ -1,5 +1,6 @@
 #include "base/RndSeed.hpp"
 #include "client/Startup.hpp"
+#include "ui/OldMovie.hpp"
 #include "client/CommandLine.hpp"
 #include "client/Locale.hpp"
 #include "client/LocalFileHandlers.hpp"
@@ -272,10 +273,9 @@ int32_t TimingInfoCommand(const char* command, const char* arguments) {
 }
 
 
-// Opens Logs\Movie.log and registers the movie recorder's two handlers.
-// ref: FUN_1405fde10
+// Opens Logs\Movie.log and registers the movie player's audio device handlers (ui/OldMovie).
 void MovieInitialize() {
-    FROST_UNIMPLEMENTED();
+    MoviePlayerInitialize();
 }
 
 // agentUID's default: the program name Agent knows this build by.

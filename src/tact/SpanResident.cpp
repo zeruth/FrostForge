@@ -3,10 +3,11 @@
 #include "tact/Common.hpp"
 #include "tact/Container.hpp"
 #include "tact/FileHandle.hpp"
+#include "tact/HeaderCache.hpp"
 #include "tact/Instance.hpp"
+#include "tact/ReadQueue.hpp"
 #include "tact/TaskScheduler.hpp"
 #include "blz/Log.hpp"
-#include "util/Unimplemented.hpp"
 #include <cstddef>
 #include <new>
 
@@ -23,6 +24,8 @@ const char s_file[] =
     "D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_span_resident_state.cpp";
 const char s_instanceFile[] = "D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\instance.cpp";
 const char s_noTag[] = "";  // DAT_1426178ba
+// The eSpec a raw read of the header asks for (DAT_1426cc7c8).
+const char s_eSpecNone[] = "n";
 
 enum : uint8_t {
     STAGE_CHECK = 1,
@@ -37,7 +40,7 @@ class SpanResidentState : public AsyncState {
     FILEKEY m_key;                  // 0x40
     uint32_t m_offset;              // 0x80
     uint32_t m_size;                // 0x84
-    AsyncState* m_header;           // 0x88: the cached encoding header (reference counted)
+    HEADERCACHEVALUE* m_header;     // 0x88: the cached encoding header (reference counted)
     uint32_t m_headerSize;          // 0x90
     void* m_scratch;                // 0x98
     uint8_t m_stage;                // 0xa0
@@ -51,6 +54,7 @@ class SpanResidentState : public AsyncState {
     void Finish(uint8_t result);
     uint8_t Check(uint8_t* waiting);
     uint8_t CheckSpan();
+    void OnHeader(uint8_t result);
     void Start(const FILEKEY* key, uint32_t offset, uint32_t size);
     void StartByName(const char* path, uint32_t offset, uint32_t size);
 };
@@ -60,6 +64,7 @@ static_assert(offsetof(SpanResidentState, m_scratch) == 0x98, "SpanResidentState
 static_assert(sizeof(SpanResidentState) == 0xa8, "SpanResidentState is 0xa8 bytes");
 
 void StepTask(void* argument);
+void HeaderRead(void* context, uint8_t result);
 
 SpanResidentState::SpanResidentState(Instance* instance, uint64_t opId, OPCALLBACK callback, void* context)
     : AsyncState(instance, opId, callback, context) {
@@ -101,13 +106,18 @@ void SpanResidentState::Finish(uint8_t result) {
 // The span through the encoding header onto the stored blocks, then whether those are local.
 // ref: FUN_1420f1390
 uint8_t SpanResidentState::CheckSpan() {
-    // The encoding-header cache (instance +0xa28, FUN_1420db860 / FUN_1420db550) is not
-    // ported, so no header is ever held here; Check never gets this far without one.
-    FROST_UNIMPLEMENTED();
-    char text[0x30];
-    KeyToString(text, 0x21, this->m_key.m_ekey);
-    blz::log(g_logCategory, 4, s_file, 0x100, "Failed to translate requested span to on-disk file span. Key: %s", text);
-    return ERR_INVALID_PARAMETER;
+    uint32_t cSpan[2] = { this->m_offset, this->m_size };
+    uint32_t eSpan[2] = { 0, 0 };
+    if (EncodingHeaderMapSpan(this->m_header->m_header, cSpan, eSpan, nullptr) != 0) {
+        char text[0x30];
+        KeyToString(text, 0x21, this->m_key.m_ekey);
+        blz::log(g_logCategory, 4, s_file, 0x100, "Failed to translate requested span to on-disk file span. Key: %s",
+            text);
+        return ERR_INVALID_PARAMETER;
+    }
+    bool resident = this->m_instance->m_container->GetSpan(this->m_key.m_ekey, eSpan);
+    this->m_stage = STAGE_DONE;
+    return resident ? ERR_SUCCESS : ERR_NOT_AVAILABLE;
 }
 
 // ref: FUN_1420f1470
@@ -134,12 +144,66 @@ uint8_t SpanResidentState::Check(uint8_t* waiting) {
             return instance->m_container->GetSpan(this->m_key.m_ekey, span) ? ERR_SUCCESS : ERR_NOT_AVAILABLE;
         }
     }
-    // A block-encoded file (or one whose spec is not known yet): its encoding header, from
-    // the instance's cache (FUN_1420db860) or read into a scratch block and parsed
-    // (FUN_1420f9950, FUN_1420dcda0, then FUN_1420f1310 caches it with FUN_1420db550). That
-    // cache is not ported.
-    FROST_UNIMPLEMENTED();
-    return ERR_NOT_SUPPORTED;
+    // A block-encoded file: its encoding header from the instance's cache, or read raw from the
+    // container into a scratch block and parsed when it lands (HeaderRead).
+    HEADERCACHE* cache = reinterpret_cast<HEADERCACHE*>(instance->m_a28);
+    HEADERCACHEVALUE* cached = cache->Find(this->m_key.m_ekey);
+    if (this->m_header != nullptr) {
+        this->m_header->Release();
+    }
+    this->m_header = cached;
+    if (this->m_header != nullptr) {
+        this->m_stage = STAGE_SPAN;
+        return this->CheckSpan();
+    }
+    uint8_t result = ESpecEncodingHeaderSize(this->m_key.m_eSpec, this->m_key.m_csize, &this->m_headerSize);
+    if (result != ERR_SUCCESS) {
+        return result;
+    }
+    this->m_scratch = instance->m_scratch.Allocate(this->m_headerSize);
+    this->m_stage = STAGE_HEADER;
+    uint64_t cSpan = static_cast<uint64_t>(this->m_headerSize) << 32;
+    uint64_t eSpan = static_cast<uint64_t>(this->m_headerSize) << 32;
+    instance->m_readQueue.Submit(this->m_key.m_ekey, this->m_key.m_eSpecFlags, s_eSpecNone, 1, nullptr, &eSpan, &cSpan,
+        static_cast<uint8_t*>(this->m_scratch), 1, 2, 2, &HeaderRead, this, nullptr, nullptr);
+    *waiting = 1;
+    return ERR_SUCCESS;
+}
+
+// The header's bytes are in: parsed and cached, then the span mapped on the scheduler; or the
+// check ends with the read's error.
+// ref: FUN_1420f11a0
+void SpanResidentState::OnHeader(uint8_t result) {
+    if (result == ERR_SUCCESS) {
+        uint32_t headerSize = 0;
+        ENCODINGHEADER* header = EncodingHeaderCreate(this->m_key.m_ekey, this->m_key.m_eSpecFlags,
+            static_cast<const uint8_t*>(this->m_scratch), this->m_headerSize, &headerSize, &result);
+        if (header != nullptr) {
+            HEADERCACHE* cache = reinterpret_cast<HEADERCACHE*>(this->m_instance->m_a28);
+            HEADERCACHEVALUE* value = cache->Insert(this->m_key.m_ekey, header);
+            if (this->m_header != nullptr) {
+                this->m_header->Release();
+            }
+            this->m_header = value;
+            this->m_stage = STAGE_SPAN;
+            this->m_instance->m_scheduler->Post(&StepTask, this, 0);
+            return;
+        }
+    }
+    this->m_stage = STAGE_DONE;
+    if (this->m_scratch != nullptr) {
+        this->m_instance->m_scratch.Free(this->m_scratch);
+        this->m_scratch = nullptr;
+    }
+    this->Complete(result);
+}
+
+// The read queue's callback.
+// ref: FUN_1420f1310
+void HeaderRead(void* context, uint8_t result) {
+    auto state = static_cast<SpanResidentState*>(context);
+    AsyncStateScope scope(state);
+    state->OnHeader(result);
 }
 
 // ref: FUN_1420f1000

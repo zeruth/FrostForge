@@ -454,6 +454,37 @@ bool SE3IsPlaying(uint32_t handle) {
     return object != nullptr && IsAlive(object);
 }
 
+// An instance's first channel paused or resumed; a combined handle passes it to each member.
+// ref: FUN_1412cde60
+void SE3SetPaused(uint32_t handle, bool paused) {
+    if (SE3HANDLENODE* node = FindHandle(handle)) {
+        if (node->m_object != nullptr && node->m_object->m_slots[0].m_channel != nullptr) {
+            node->m_object->m_slots[0].m_channel->setPaused(paused);
+        }
+        return;
+    }
+    if (SE3COMBINEDNODE* combined = FindCombined(handle)) {
+        for (uint32_t i = 0; i < combined->m_count; i++) {
+            SE3SetPaused(combined->m_handles[i], paused);
+        }
+    }
+}
+
+// Where an instance's first channel is, in milliseconds (4 for none, as the reference answers).
+// ref: FUN_1412c96d0
+uint32_t SE3GetPositionMs(uint32_t handle) {
+    if (handle != 0) {
+        if (SE3HANDLENODE* node = FindHandle(handle)) {
+            if (node->m_object != nullptr && node->m_object->m_slots[0].m_channel != nullptr) {
+                unsigned int position = 0;
+                node->m_object->m_slots[0].m_channel->getPosition(&position, FMOD_TIMEUNIT_MS);
+                return position;
+            }
+        }
+    }
+    return 4;
+}
+
 // ref: FUN_1412c9c50
 int32_t SE3GetKitId(uint32_t handle) {
     SE3SoundKitObject* object = SE3GetObject(handle);

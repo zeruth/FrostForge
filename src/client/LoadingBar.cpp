@@ -8,6 +8,7 @@
 #include "client/LoadingBar.hpp"
 
 #include "base/Coordinate.hpp"
+#include "base/Status.hpp"
 #include "base/Matrix.hpp"
 #include "client/GxWindow.hpp"
 #include "gx/Gx.hpp"
@@ -266,4 +267,48 @@ void LoadingBarRender() {
     LoadingScreenSetConstants(context, projection);
     DrawQuads(context, 3, s_loadingBarQuads, s_loadingBarTextures);
     LoadingScreenSetViewport(context, savedMinX, savedMaxX, savedMinY, savedMaxY, savedMinZ, savedMaxZ);
+}
+
+namespace {
+
+// The three textures, each loaded once (TextureCreate with gx flags 0x82001).
+void LoadBarTextures() {
+    CStatus status;
+    for (int32_t i = 0; i < 3; i++) {
+        if (s_loadingBarTextures[i] == nullptr) {
+            s_loadingBarTextures[i] = TextureCreate(s_loadingBarQuads[i].m_fileDataId, 0x82001, &status, 1, 0, 0);
+        }
+    }
+}
+
+}  // namespace
+
+// ref: FUN_14022e960
+void LoadingBarShow() {
+    if (s_loadingBarShown == 0) {
+        LoadBarTextures();
+        s_loadingBarShown = 1;
+        s_loadingBarProgress = 0.5f;
+    }
+}
+
+// ref: FUN_14022ed70
+void LoadingBarSetProgress(float progress) {
+    if (s_loadingBarShown == 0) {
+        LoadBarTextures();
+        s_loadingBarShown = 1;
+        s_loadingBarProgress = 0.5f;
+    }
+    s_loadingBarProgress = progress;
+}
+
+// ref: FUN_14022e8f0
+void LoadingBarHide() {
+    s_loadingBarShown = 0;
+    for (int32_t i = 0; i < 3; i++) {
+        if (s_loadingBarTextures[i] != nullptr) {
+            TextureFree(&s_loadingBarTextures[i]);
+        }
+        s_loadingBarTextures[i] = nullptr;
+    }
 }

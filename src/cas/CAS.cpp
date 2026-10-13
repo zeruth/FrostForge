@@ -1502,6 +1502,41 @@ bool CASLastErrorWasCanceled() {
     return t_lastError.m_tactError == 2;
 }
 
+// The download rate the stats measure, bytes a second.
+// ref: FUN_1402cda20
+float CASGetBytesPerSecond() {
+    return g_casInstance->m_stats->m_rate;
+}
+
+// The last error as a class: 0 none, 1 failed, 6 canceled, 7 not resident, 8 tact's 0xb, 9 an
+// OS error; the code itself for kinds 1 and 3.
+// ref: FUN_1402cdba0
+uint32_t CASGetErrorClass() {
+    int32_t kind = t_lastError.m_kind;
+    if (kind == 0) {
+        uint8_t tact = t_lastError.m_tactError;
+        if (tact == 0) {
+            return 0;
+        }
+        if (tact == 2) {
+            return 6;
+        }
+        if (tact == 0xb) {
+            return 8;
+        }
+        return tact == 0xd ? 7 : 1;
+    }
+    if (kind != 1) {
+        if (kind == 2) {
+            return GetLastError() == 0 ? 0 : 9;
+        }
+        if (kind != 3) {
+            return 1;
+        }
+    }
+    return t_lastError.m_code;
+}
+
 // An error as text, by its kind and code (CASFormatLastError for a saved error).
 // ref: FUN_1402cde10
 char* CASFormatError(int32_t kind, uint32_t code, char* dest, uint64_t size) {

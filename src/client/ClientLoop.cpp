@@ -706,8 +706,6 @@ extern "C" void* const gen_p_142de0e18 = (void*)&s_eventTarget;
 extern "C" void* const gen_p_142de0e20 = (void*)&s_heldButtons;
 extern "C" void* const gen_p_142de0e24 = (void*)&s_heldModifiers;
 extern "C" void* const gen_p_142de0e28 = (void*)&s_mouseCaptureButtons;
-extern "C" void* const gen_p_142de0e2c = (void*)&s_eventsPaused;
-extern "C" void* const gen_p_142de0e2d = (void*)&s_swallowChar;
 extern "C" void* const gen_p_142de0e30 = (void*)&s_pressedButtons;
 extern "C" void* const gen_p_142de0e34 = (void*)&s_mouseMode;
 // ---- end of generated globals ----

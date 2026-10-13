@@ -142,6 +142,8 @@ void SE3BusInit(SE3CONFIG* config);
 void SE3BusSetEnabled(int8_t bus, bool enabled);
 // ref: FUN_1412d8d50
 void SE3BusSetMuted(int8_t bus, bool muted);
+// ref: FUN_1412d8d00
+bool SE3BusIsMuted(int8_t bus, bool inherited);
 // ref: FUN_1412d8e60
 void SE3BusSetVolume(int8_t bus, float volume);
 // The bus a SoundBus record id names (SE3BUS_COUNT when none).

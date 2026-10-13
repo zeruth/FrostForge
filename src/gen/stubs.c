@@ -962,12 +962,6 @@ undefined8 FUN_1405a4c00() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_1405ee730 reads 1, the call passes 0) */
-bool FUN_1405ef2d0() {
-    GenUnimplemented(0x1405ef2d0ULL);
-    return (bool)0;
-}
-
 /* the stack frame addressed directly */
 undefined8 FUN_140603620() {
     GenUnimplemented(0x140603620ULL);
@@ -984,12 +978,6 @@ ulonglong FUN_140611af0() {
 undefined8 FUN_14062d590() {
     GenUnimplemented(0x14062d590ULL);
     return (undefined8)0;
-}
-
-/* did not compile: C2100 you cannot dereference an operand of type 'undefined8' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\g */
-ulonglong FUN_14062d670() {
-    GenUnimplemented(0x14062d670ULL);
-    return (ulonglong)0;
 }
 
 /* the decompiler lost a call's arguments (FUN_1402b3ab0 reads 3, the call passes 2) */
@@ -2192,12 +2180,6 @@ undefined8 * FUN_14122d8a0() {
     return (undefined8 *)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_1402d0690 reads 6, the call passes 4) */
-undefined8 FUN_14122ddf0() {
-    GenUnimplemented(0x14122ddf0ULL);
-    return (undefined8)0;
-}
-
 /* register the decompiler lost track of */
 ulonglong FUN_1412323a0() {
     GenUnimplemented(0x1412323a0ULL);
@@ -2345,6 +2327,18 @@ undefined8 FUN_1413544d0() {
 /* the decompiler lost a call's arguments (FUN_1411cdc50 reads 7, the call passes 0) */
 undefined8 FUN_141356ed0() {
     GenUnimplemented(0x141356ed0ULL);
+    return (undefined8)0;
+}
+
+/* SIMD union */
+undefined8 FUN_1413593d0() {
+    GenUnimplemented(0x1413593d0ULL);
+    return (undefined8)0;
+}
+
+/* a global used as a pointer the data export does not type */
+undefined8 FUN_141359c30() {
+    GenUnimplemented(0x141359c30ULL);
     return (undefined8)0;
 }
 

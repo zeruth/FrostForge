@@ -70,12 +70,9 @@ extern char gen_g_142cfcdd8;
 /* g_groundEffectDist (src/client/GraphicsSettings.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142d00c20=?g_groundEffectDist@@3MA")
 extern char gen_g_142d00c20;
-/* s_loadingBarShown (src/client/LoadingBar.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142de0b35=?s_loadingBarShown@@3EA")
-extern char gen_g_142de0b35;
-/* s_loadingBarTextures (src/client/LoadingBar.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142de0c20=?s_loadingBarTextures@@3PAPEAVCTexture@@A")
-extern char gen_g_142de0c20;
+/* g_moviesOpen (src/ui/OldMovie.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_142de0b30=?g_moviesOpen@@3HA")
+extern char gen_g_142de0b30;
 /* s_loadingScreenEffect (src/client/LoadingBar.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142de0ca0=?s_loadingScreenEffect@@3PEAVCShaderEffect@@EA")
 extern char gen_g_142de0ca0;
@@ -184,6 +181,9 @@ extern char gen_g_142e43430;
 /* g_chrSpecializationDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e43640=?g_chrSpecializationDB@@3VWowClientDB2@@A")
 extern char gen_g_142e43640;
+/* g_cinematicCameraDB (src/db/DB2Tables.hpp) */
+#pragma comment(linker, "/alternatename:gen_g_142e43e80=?g_cinematicCameraDB@@3VWowClientDB2@@A")
+extern char gen_g_142e43e80;
 /* g_creatureDisplayInfoDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e477d0=?g_creatureDisplayInfoDB@@3VWowClientDB2@@A")
 extern char gen_g_142e477d0;
@@ -466,9 +466,33 @@ extern char gen_g_142e979d8;
 /* s_objectTypeCount (src/framescript/FrameScriptObject.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e979f0=?s_objectTypeCount@FrameScript_Object@@2HA")
 extern char gen_g_142e979f0;
+/* g_cSimpleFrameType (src/ui/CSimpleFrame.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_142e979f4=?g_cSimpleFrameType@@3HA")
+extern char gen_g_142e979f4;
+/* g_cSimpleFrameTypeGuard (src/ui/CSimpleFrame.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_142e979f8=?g_cSimpleFrameTypeGuard@@3HA")
+extern char gen_g_142e979f8;
 /* g_editBoxFocus (src/ui/FrameScriptGlobals.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e97b30=?g_editBoxFocus@@3PEAVCSimpleFrame@@EA")
 extern char gen_g_142e97b30;
+/* g_cSimpleTextureType (src/ui/CSimpleTexture.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_142e97b60=?g_cSimpleTextureType@@3HA")
+extern char gen_g_142e97b60;
+/* g_cSimpleTextureTypeGuard (src/ui/CSimpleTexture.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_142e97b64=?g_cSimpleTextureTypeGuard@@3HA")
+extern char gen_g_142e97b64;
+/* g_cSimpleEditBoxType (src/ui/CSimpleEditBox.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_14309febc=?g_cSimpleEditBoxType@@3HA")
+extern char gen_g_14309febc;
+/* g_cSimpleEditBoxTypeGuard (src/ui/CSimpleEditBox.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_14309fec0=?g_cSimpleEditBoxTypeGuard@@3HA")
+extern char gen_g_14309fec0;
+/* g_modelSceneFrameType (src/ui/ModelSceneFrame.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_1430a0b0c=?g_modelSceneFrameType@@3HA")
+extern char gen_g_1430a0b0c;
+/* g_modelSceneFrameTypeGuard (src/ui/ModelSceneFrame.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_1430a0b10=?g_modelSceneFrameTypeGuard@@3HA")
+extern char gen_g_1430a0b10;
 /* g_soundEnableInBackground (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9ef8=?g_soundEnableInBackground@@3PEAUCVar@@EA")
 extern char gen_g_1430a9ef8;
@@ -511,9 +535,6 @@ extern char gen_g_14348b650;
 /* s_screenshotQuality (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142cc87b0;
 #define gen_g_142cc87b0 (*(char *)gen_p_142cc87b0)
-/* s_consoleHotKey (src/console/Command.cpp), internal: through its pointer */
-extern void *const gen_p_142ccbed0;
-#define gen_g_142ccbed0 (*(char *)gen_p_142ccbed0)
 /* s_loadFlags (src/db/DBClient.cpp), internal: through its pointer */
 extern void *const gen_p_142ccdf30;
 #define gen_g_142ccdf30 (*(char *)gen_p_142ccdf30)
@@ -556,12 +577,6 @@ extern void *const gen_p_142de0e24;
 /* s_mouseCaptureButtons (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142de0e28;
 #define gen_g_142de0e28 (*(char *)gen_p_142de0e28)
-/* s_eventsPaused (src/client/ClientLoop.cpp), internal: through its pointer */
-extern void *const gen_p_142de0e2c;
-#define gen_g_142de0e2c (*(char *)gen_p_142de0e2c)
-/* s_swallowChar (src/client/ClientLoop.cpp), internal: through its pointer */
-extern void *const gen_p_142de0e2d;
-#define gen_g_142de0e2d (*(char *)gen_p_142de0e2d)
 /* s_pressedButtons (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142de0e30;
 #define gen_g_142de0e30 (*(char *)gen_p_142de0e30)
@@ -592,9 +607,6 @@ extern void *const gen_p_142de29e0;
 /* s_seenExpansionTrialPopupCVar (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142de29e8;
 #define gen_g_142de29e8 (*(char *)gen_p_142de29e8)
-/* s_consoleEnabledFromCommandLine (src/client/StartupClient.cpp), internal: through its pointer */
-extern void *const gen_p_142e301b4;
-#define gen_g_142e301b4 (*(char *)gen_p_142e301b4)
 /* s_consoleMayToggle (src/client/StartupClient.cpp), internal: through its pointer */
 extern void *const gen_p_142e301b8;
 #define gen_g_142e301b8 (*(char *)gen_p_142e301b8)
@@ -613,21 +625,6 @@ extern void *const gen_p_142e8e218;
 /* s_dbHotfixRecordLog (src/client/StartupClient.cpp), internal: through its pointer */
 extern void *const gen_p_142e8e220;
 #define gen_g_142e8e220 (*(char *)gen_p_142e8e220)
-/* s_lastMouseTime (src/ui/CSimpleTop.cpp), internal: through its pointer */
-extern void *const gen_p_142e979e0;
-#define gen_g_142e979e0 (*(char *)gen_p_142e979e0)
-/* g_cSimpleFrameType (src/ui/CSimpleFrame.cpp), internal: through its pointer */
-extern void *const gen_p_142e979f4;
-#define gen_g_142e979f4 (*(char *)gen_p_142e979f4)
-/* g_cSimpleFrameTypeGuard (src/ui/CSimpleFrame.cpp), internal: through its pointer */
-extern void *const gen_p_142e979f8;
-#define gen_g_142e979f8 (*(char *)gen_p_142e979f8)
-/* g_cSimpleTextureType (src/ui/CSimpleTexture.cpp), internal: through its pointer */
-extern void *const gen_p_142e97b60;
-#define gen_g_142e97b60 (*(char *)gen_p_142e97b60)
-/* g_cSimpleTextureTypeGuard (src/ui/CSimpleTexture.cpp), internal: through its pointer */
-extern void *const gen_p_142e97b64;
-#define gen_g_142e97b64 (*(char *)gen_p_142e97b64)
 /* s_fontStringHeap (src/ui/CSimpleFontString.cpp), internal: through its pointer */
 extern void *const gen_p_142e97be0;
 #define gen_g_142e97be0 (*(char *)gen_p_142e97be0)
@@ -640,18 +637,6 @@ extern void *const gen_p_142e99e28;
 /* s_initCount (src/framescript/FrameScript.cpp), internal: through its pointer */
 extern void *const gen_p_142e99f30;
 #define gen_g_142e99f30 (*(char *)gen_p_142e99f30)
-/* g_cSimpleEditBoxType (src/ui/CSimpleEditBox.cpp), internal: through its pointer */
-extern void *const gen_p_14309febc;
-#define gen_g_14309febc (*(char *)gen_p_14309febc)
-/* g_cSimpleEditBoxTypeGuard (src/ui/CSimpleEditBox.cpp), internal: through its pointer */
-extern void *const gen_p_14309fec0;
-#define gen_g_14309fec0 (*(char *)gen_p_14309fec0)
-/* g_modelSceneFrameType (src/ui/ModelSceneFrame.cpp), internal: through its pointer */
-extern void *const gen_p_1430a0b0c;
-#define gen_g_1430a0b0c (*(char *)gen_p_1430a0b0c)
-/* g_modelSceneFrameTypeGuard (src/ui/ModelSceneFrame.cpp), internal: through its pointer */
-extern void *const gen_p_1430a0b10;
-#define gen_g_1430a0b10 (*(char *)gen_p_1430a0b10)
 /* s_rawSkip (src/os/win/Window.cpp), internal: through its pointer */
 extern void *const gen_p_1430a1594;
 #define gen_g_1430a1594 (*(char *)gen_p_1430a1594)
@@ -676,6 +661,9 @@ extern void *const gen_p_1430a99f0;
 /* s_musicHandle (src/sound/SI3Sound.cpp), internal: through its pointer */
 extern void *const gen_p_1430a99f4;
 #define gen_g_1430a99f4 (*(char *)gen_p_1430a99f4)
+/* s_handler (src/db/TactKeys.cpp), internal: through its pointer */
+extern void *const gen_p_1430ab768;
+#define gen_g_1430ab768 (*(char *)gen_p_1430ab768)
 /* s_bspCaches (src/world/MapObjGroupBspCache.cpp), internal: through its pointer */
 extern void *const gen_p_1430ac0e0;
 #define gen_g_1430ac0e0 (*(char *)gen_p_1430ac0e0)
@@ -2138,12 +2126,10 @@ undefined8 FUN_140236ba0();
 undefined8 FUN_140237660();
 undefined8 FUN_140237b00();
 undefined8 FUN_140237c80();
+int FUN_140237f80();
 undefined8 FUN_140238190();
-undefined8 FUN_1402382b0();
-undefined8 FUN_1402384f0();
-undefined8 FUN_1402385d0();
-undefined8 FUN_1402386a0();
-undefined8 FUN_1402389b0();
+undefined8 FUN_1402381d0();
+undefined8 FUN_140238780();
 undefined4 * FUN_1402394a0();
 undefined8 FUN_14023a490();
 undefined8 FUN_14023a680();
@@ -2304,13 +2290,11 @@ bool FUN_1402ccd10();
 ulonglong FUN_1402cce50();
 ulonglong FUN_1402cd040();
 ulonglong FUN_1402cda40();
-ulonglong FUN_1402cdac0();
 undefined1 FUN_1402cdfc0();
 undefined1 FUN_1402ce000();
 undefined8 * FUN_1402ceef0();
 bool FUN_1402cf230();
 bool FUN_1402cfd70();
-undefined1 FUN_1402d07a0();
 undefined8 FUN_1402d0f60();
 undefined8 FUN_1402d0f80();
 undefined4 FUN_1402d6c40();
@@ -2478,7 +2462,6 @@ undefined8 FUN_140326090();
 undefined4 FUN_140326660();
 undefined1 FUN_140326880();
 undefined4 FUN_1403268a0();
-bool FUN_140326980();
 undefined8 FUN_140326a30();
 undefined8 FUN_140326b40();
 undefined8 FUN_140326b50();
@@ -2587,6 +2570,7 @@ undefined * FUN_14051ae20();
 undefined * FUN_14051aea0();
 undefined * FUN_14051aec0();
 undefined * FUN_14051aed0();
+undefined * FUN_14051af10();
 undefined * FUN_14051b040();
 undefined * FUN_14051b060();
 undefined * FUN_14051b080();
@@ -2771,20 +2755,10 @@ longlong FUN_1405db6d0();
 undefined8 FUN_1405db870();
 undefined8 FUN_1405dba50();
 undefined8 FUN_1405e13c0();
-undefined8 FUN_1405ea280();
-undefined8 FUN_1405eacf0();
-undefined8 * FUN_1405eaeb0();
-undefined8 FUN_1405eaf60();
-undefined8 FUN_1405eb130();
-undefined8 FUN_1405eb390();
 longlong * FUN_1405ebd60();
 undefined8 FUN_1405ed3a0();
-undefined1 FUN_1405ed840();
 int FUN_1405ee7c0();
-bool FUN_1405ef2d0();
 undefined8 FUN_1405effb0();
-undefined8 FUN_1405f0680();
-ulonglong FUN_1405f0900();
 undefined8 FUN_1405f1fd0();
 undefined8 FUN_1405f37b0();
 undefined8 FUN_1405f4710();
@@ -4210,14 +4184,8 @@ undefined8 * FUN_14122d8a0();
 undefined4 * FUN_14122da80();
 undefined8 FUN_14122dae0();
 undefined8 FUN_14122db40();
-undefined8 FUN_14122dbc0();
 undefined8 FUN_14122dc10();
 bool FUN_14122dc70();
-undefined8 FUN_14122ddf0();
-bool FUN_14122e300();
-undefined8 FUN_14122ee80();
-undefined8 FUN_14122f020();
-undefined8 FUN_14122f430();
 undefined8 FUN_141231c90();
 undefined8 FUN_141231cb0();
 undefined8 * FUN_141231cc0();
@@ -4389,10 +4357,15 @@ undefined8 FUN_1412dc020();
 undefined8 FUN_1412dc0f0();
 undefined8 FUN_1412dcfb0();
 undefined8 FUN_1412df510();
+longlong * FUN_1412e19a0();
 undefined8 FUN_1412e1bd0();
 undefined8 FUN_1412e5ae0();
 undefined4 FUN_1412e6120();
+int FUN_1412e6330();
+undefined8 FUN_1412e6c50();
+undefined8 FUN_1412e6c70();
 undefined8 FUN_1412e7130();
+undefined8 FUN_1412e7190();
 ulonglong FUN_1412e8790();
 ulonglong FUN_1412ea4a0();
 ulonglong FUN_1412ee600();
@@ -4482,7 +4455,18 @@ undefined8 FUN_141356dd0();
 undefined8 FUN_141356ed0();
 undefined8 FUN_141357070();
 undefined8 FUN_1413571e0();
+undefined8 * FUN_141357630();
+longlong * FUN_141357be0();
+undefined8 FUN_141358a40();
+undefined8 FUN_1413593d0();
+undefined8 FUN_141359b60();
+undefined8 FUN_141359c30();
+undefined8 FUN_141359dc0();
 undefined8 FUN_14135a290();
+undefined8 FUN_14135ab20();
+undefined8 FUN_14135acd0();
+undefined8 FUN_14135b630();
+undefined8 FUN_14135bc40();
 int FUN_14135c8d0();
 undefined * FUN_14135ce70();
 ulonglong FUN_141362730();
@@ -6108,6 +6092,7 @@ undefined8 FUN_141846510();
 undefined8 FUN_141846520();
 undefined8 FUN_141846530();
 undefined8 FUN_141846560();
+undefined8 FUN_141846870();
 undefined8 FUN_141846ae0();
 undefined8 FUN_141847010();
 longlong FUN_141847030();
@@ -7295,6 +7280,7 @@ undefined8 FUN_141911a50();
 undefined8 FUN_141913390();
 ulonglong FUN_1419133a0();
 undefined8 FUN_141917c40();
+undefined8 FUN_141917d00();
 undefined8 FUN_1419182f0();
 undefined8 FUN_14191a470();
 bool FUN_14191ad20();
@@ -7314,6 +7300,7 @@ undefined8 FUN_141928690();
 undefined8 FUN_1419286e0();
 undefined8 FUN_141929a20();
 undefined8 FUN_14192c8c0();
+undefined8 FUN_14192dcd0();
 undefined8 FUN_14192de70();
 undefined8 FUN_14192e3b0();
 undefined1 * FUN_14192fa70();

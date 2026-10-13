@@ -384,6 +384,21 @@ void SE3BusSetMuted(int8_t bus, bool muted) {
     }
 }
 
+// Whether a bus is muted, or with `inherited` any bus above it.
+// ref: FUN_1412d8d00
+bool SE3BusIsMuted(int8_t bus, bool inherited) {
+    if (static_cast<uint32_t>(static_cast<int32_t>(bus)) < g_se3Buses.m_count) {
+        do {
+            const SE3SoundBus& entry = g_se3Buses.m_data[bus];
+            if (entry.m_muted != 0) {
+                return true;
+            }
+            bus = entry.m_parent;
+        } while (inherited && bus != -1);
+    }
+    return false;
+}
+
 // ref: FUN_1412d8e60
 void SE3BusSetVolume(int8_t bus, float volume) {
     if (blz::chained_find<VOLUMENODE>(&s_volumes, bus) == nullptr) {

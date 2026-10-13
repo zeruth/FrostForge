@@ -62,6 +62,10 @@ struct CASERROR {
     uint8_t m_tactError;            // TLS +0x2150
 };
 CASERROR* CASGetLastError();
+// The download rate, bytes a second (smoothed).
+float CASGetBytesPerSecond();
+// The last error as a class (7: not resident yet).
+uint32_t CASGetErrorClass();
 // The last error's code and kind.
 uint32_t CASGetErrorCode(int32_t* kind);
 // The last error as text, truncated to `size` (FUN_1402cdca0).

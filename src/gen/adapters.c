@@ -158,6 +158,13 @@ ulonglong FUN_14022b390(unsigned long long a0, unsigned long long a1, unsigned l
     return (ulonglong)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long))&gen_alias_14022b390)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2, (unsigned long long)a3);
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_14022e8f0=?LoadingBarHide@@YAXXZ")
+extern char gen_alias_14022e8f0;
+undefined8 FUN_14022e8f0(void) {
+    ((void (*)(void))&gen_alias_14022e8f0)();
+    return 0;
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_140233370=?DB2FieldU32@@YAIPEBEI_JPEAVWowClientDB2_Base@@@Z")
 extern char gen_alias_140233370;
 ulonglong FUN_140233370(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3) {
@@ -168,6 +175,13 @@ ulonglong FUN_140233370(unsigned long long a0, unsigned long long a1, unsigned l
 extern char gen_alias_140236510;
 longlong * FUN_140236510(unsigned long long a0, unsigned long long a1) {
     ((void (*)(unsigned long long, unsigned long long))&gen_alias_140236510)((unsigned long long)a0, (unsigned long long)a1);
+    return 0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_140237b00=?ClientOnKeyUp@@YAXPEBII@Z")
+extern char gen_alias_140237b00;
+undefined8 FUN_140237b00(unsigned long long a0, unsigned long long a1) {
+    ((void (*)(unsigned long long, unsigned long long))&gen_alias_140237b00)((unsigned long long)a0, (unsigned long long)a1);
     return 0;
 }
 
@@ -807,12 +821,6 @@ ulonglong FUN_1402cda40(unsigned long long a0, unsigned long long a1) {
     return (ulonglong)((unsigned long long (*)(unsigned long long, unsigned long long))&gen_alias_1402cda40)((unsigned long long)a0, (unsigned long long)a1);
 }
 
-#pragma comment(linker, "/alternatename:gen_alias_1402cdac0=?CASFileGetSize@cas@@YA_KPEAUCASFILE@1@@Z")
-extern char gen_alias_1402cdac0;
-ulonglong FUN_1402cdac0(unsigned long long a0) {
-    return (ulonglong)((unsigned long long (*)(unsigned long long))&gen_alias_1402cdac0)((unsigned long long)a0);
-}
-
 #pragma comment(linker, "/alternatename:gen_alias_1402cdfc0=?CASFileGetContentKeyById@cas@@YA_NHPEAE@Z")
 extern char gen_alias_1402cdfc0;
 undefined1 FUN_1402cdfc0(unsigned long long a0, unsigned long long a1) {
@@ -835,12 +843,6 @@ bool FUN_1402cf230(unsigned long long a0, unsigned long long a1, unsigned long l
 extern char gen_alias_1402cfd70;
 bool FUN_1402cfd70(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
     return (bool)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_1402cfd70)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
-}
-
-#pragma comment(linker, "/alternatename:gen_alias_1402d07a0=?CASFileReadAtOffset@cas@@YA_NPEAUCASFILE@1@PEAXIIPEAIIH@Z")
-extern char gen_alias_1402d07a0;
-undefined1 FUN_1402d07a0(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3, unsigned long long a4, unsigned long long a5, unsigned long long a6) {
-    return (undefined1)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long))&gen_alias_1402d07a0)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2, (unsigned long long)a3, (unsigned long long)a4, (unsigned long long)a5, (unsigned long long)a6);
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_1402d0f80=?CASFileFree@cas@@YAXPEAX@Z")
@@ -1171,6 +1173,13 @@ undefined8 FUN_1405fa5c0(unsigned long long a0, unsigned long long a1) {
     return (undefined8)((unsigned long long (*)(unsigned long long, unsigned long long))&gen_alias_1405fa5c0)((unsigned long long)a0, (unsigned long long)a1);
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_140600090=?MoviePlayerSetRenderEnabled@@YAX_N@Z")
+extern char gen_alias_140600090;
+undefined8 FUN_140600090(unsigned long long a0) {
+    ((void (*)(unsigned long long))&gen_alias_140600090)((unsigned long long)a0);
+    return 0;
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_140602b20=?TextureAtlasGetFileDataId@@YAHPEBH@Z")
 extern char gen_alias_140602b20;
 undefined4 FUN_140602b20(unsigned long long a0) {
@@ -1392,6 +1401,12 @@ extern char gen_alias_14062ce80;
 undefined8 FUN_14062ce80(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
     ((void (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_14062ce80)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
     return 0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_14062d670=?MovieGetVariation@@YAPEBEH_N@Z")
+extern char gen_alias_14062d670;
+ulonglong FUN_14062d670(unsigned long long a0, unsigned long long a1) {
+    return (ulonglong)((unsigned long long (*)(unsigned long long, unsigned long long))&gen_alias_14062d670)((unsigned long long)a0, (unsigned long long)a1);
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_14062e920=?SetDrawRegions@CSimpleMovieFrame@@SAX_N@Z")
@@ -1943,6 +1958,40 @@ undefined8 FUN_141200300(unsigned long long a0, unsigned long long a1) {
     return 0;
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_14122da80=??0CAviParser@movieplayerv1@@QEAA@XZ")
+extern char gen_alias_14122da80;
+undefined4 * FUN_14122da80(unsigned long long a0) {
+    ((void (*)(unsigned long long))&gen_alias_14122da80)((unsigned long long)a0);
+    return 0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_14122dae0=??1CAviParser@movieplayerv1@@QEAA@XZ")
+extern char gen_alias_14122dae0;
+undefined8 FUN_14122dae0(unsigned long long a0) {
+    ((void (*)(unsigned long long))&gen_alias_14122dae0)((unsigned long long)a0);
+    return 0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_14122db40=?Close@CAviParser@movieplayerv1@@QEAAXXZ")
+extern char gen_alias_14122db40;
+undefined8 FUN_14122db40(unsigned long long a0) {
+    ((void (*)(unsigned long long))&gen_alias_14122db40)((unsigned long long)a0);
+    return 0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_14122dc10=?SetFile@CAviParser@movieplayerv1@@QEAAXH@Z")
+extern char gen_alias_14122dc10;
+undefined8 FUN_14122dc10(unsigned long long a0, unsigned long long a1) {
+    ((void (*)(unsigned long long, unsigned long long))&gen_alias_14122dc10)((unsigned long long)a0, (unsigned long long)a1);
+    return 0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_14122dc70=?Open@CAviParser@movieplayerv1@@QEAA_NXZ")
+extern char gen_alias_14122dc70;
+bool FUN_14122dc70(unsigned long long a0) {
+    return (bool)((unsigned long long (*)(unsigned long long))&gen_alias_14122dc70)((unsigned long long)a0);
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_141237bf0=?OsGetAsyncTimeMs@@YAIXZ")
 extern char gen_alias_141237bf0;
 undefined8 FUN_141237bf0(void) {
@@ -2290,6 +2339,13 @@ longlong FUN_1412d8be0(unsigned long long a0) {
 extern char gen_alias_1412e6120;
 undefined4 FUN_1412e6120(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3, unsigned long long a4, unsigned long long a5) {
     return (undefined4)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long))&gen_alias_1412e6120)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2, (unsigned long long)a3, (unsigned long long)a4, (unsigned long long)a5);
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_1412e6c50=?SI3StopMusic@@YAXXZ")
+extern char gen_alias_1412e6c50;
+undefined8 FUN_1412e6c50(void) {
+    ((void (*)(void))&gen_alias_1412e6c50)();
+    return 0;
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_1412fcc70=?SI3StopMusicFile@@YAXXZ")
