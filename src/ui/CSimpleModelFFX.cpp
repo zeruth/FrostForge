@@ -8,6 +8,7 @@
 #include "framescript/FrameScriptObject.hpp"
 #include "framescript/ScriptMethod.hpp"
 #include "model2/M2Api.hpp"
+#include "sound/SE3Kit.hpp"
 #include "ui/BinaryXML.hpp"
 #include "ui/CRenderBatch.hpp"
 #include "client/FrameBufferCache.hpp"
@@ -35,14 +36,25 @@ namespace {
 // The ModelFFX frames' pool (0x143122788).
 CDataAllocator s_modelFfxHeap(0x13d8, 5);  // DAT_143122788
 
-// A model event: '$DSO' plays the sound the event names (FUN_1412d25a0, FUN_1412ce0f0).
+// A model event, as CM2Model::RunCallback hands it on: the model, the key bone, the sequence,
+// the event's id and data, where it happened, how late, and the closure. '$DSO' plays the sound
+// kit its data names, at the event's position, one-shot (FUN_1412d25a0, FUN_1412ce0f0).
 // ref: FUN_1416973f0
-void ModelEvent(void* param, uint32_t event, void* data) {
-    (void)param;
-    (void)data;
-    if (event == 0x4f534424) {
-        FROST_UNIMPLEMENTED();  // the sound kit of the event, played (the sound engine)
+void ModelEvent(CM2Model* model, uint32_t keyBone, uint32_t sequence, uint32_t event, uint32_t data,
+    const float* position, uint32_t delay, const void* closure) {
+    (void)model;
+    (void)keyBone;
+    (void)sequence;
+    (void)delay;
+    (void)closure;
+    if (event != 0x4f534424) {
+        return;
     }
+    SE3PLAYPARAMS params;
+    SE3PlayParamsConstruct(&params);
+    params.m_3dMode = 2;
+    SE3PlayKit(data, position, &params, nullptr, nullptr, false, nullptr);
+    SE3PlayParamsDestroy(&params);
 }
 
 // The full-screen effects (Engine/Source/FFX): their slots (DAT_142e97120), the glow pass
@@ -411,7 +423,8 @@ void CSimpleModelFFX::SetModel(CM2Model* model) {
     this->CSimpleModel::SetModel(model);
     if (this->m_model != nullptr) {
         void* closure[2] = { this, nullptr };
-        M2ModelSetEventCallback(this->m_model, ModelEvent, closure);
+        M2ModelSetEventCallback(this->m_model,
+            reinterpret_cast<void (*)(void* param, uint32_t event, void* data)>(&ModelEvent), closure);
     }
 }
 
