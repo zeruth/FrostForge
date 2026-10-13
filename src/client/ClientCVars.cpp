@@ -2,6 +2,12 @@
 // (FUN_1414725c0), with the callbacks that carry a new value to the system it configures.
 
 #include "client/ClientCVars.hpp"
+#include "base/Matrix.hpp"
+#include "gx/GxRenderTargets.hpp"
+#include "gxu/GxuFont.hpp"
+#include "gxu/GxuFontPrivate.hpp"
+#include "gxu/TextBlock.hpp"
+#include "ui/FrameTime.hpp"
 #include "console/Command.hpp"
 #include "console/Var.hpp"
 #include "framescript/EventCallbacks.hpp"
@@ -127,6 +133,160 @@ void ErrorDisplayShow() {
         s_errorDisplayHidden = 0;
     }
 }
+
+}  // namespace
+
+// ---- the error display -----------------------------------------------------------------------
+//
+// The last ten messages drawn over the screen in the debug font, each fading over its last
+// three seconds and gone thirteen seconds after it came. (Nothing feeds it in this build: the
+// init hands ErrorDisplayAdd to a registration compiled down to an empty function.)
+
+namespace {
+
+// One line (0x118).
+struct ERRORLINE {
+    uint32_t m_time;                // 0x000 when it came
+    char m_text[0x104];             // 0x004 set until the line's string is made
+    CGxString* m_string;            // 0x108
+    uint32_t m_color;               // 0x110 b, g, r, a
+    uint32_t m_pad114;
+};
+static_assert(sizeof(ERRORLINE) == 0x118, "ERRORLINE is 0x118 bytes");
+
+constexpr int32_t ERROR_LINES = 10;
+constexpr float ERROR_LINE_STEP = 0.025f;   // DAT_14261b480
+constexpr float ERROR_LINE_DEPTH = -0.45f;  // DAT_14261b488
+constexpr float ERROR_ORTHO_FAR = 500.0f;   // DAT_14261a9bc
+constexpr float ERROR_COLOR_SCALE = 255.0f; // DAT_14261b484
+
+ERRORLINE s_errorLines[ERROR_LINES];        // DAT_142de0e40
+uint8_t s_errorLinesMoved;                  // DAT_142de1933: draw every line at its place again
+float s_errorFontHeight;                    // DAT_142de1934
+GxuStringBatch* s_errorBatch;               // DAT_142de1938
+CGxuFont* s_errorFont;                      // DAT_142de1940
+uint32_t s_errorHead;                       // DAT_142de1948: the next line written
+
+}  // namespace
+
+extern "C" unsigned long long FUN_14126ece0(unsigned long long);
+extern "C" unsigned long long FUN_14126ed00(unsigned long long);
+extern "C" unsigned long long FUN_141283c30(unsigned long long, unsigned long long, unsigned long long,
+    unsigned long long);
+// translated: FUN_14126ece0
+// translated: FUN_14126ed00
+// translated: FUN_141283c30
+
+// A message line: its text, its level's colour, at the next place.
+// ref: FUN_140238c30
+void ErrorDisplayAdd(const char* text, int32_t level) {
+    if (s_errorDisplayEnabled == 0) {
+        return;
+    }
+    ERRORLINE& line = s_errorLines[s_errorHead];
+    line.m_time = FrameTime_GetTime();
+    char* out = line.m_text;
+    const char* in = text;
+    int32_t left = 0xff;
+    for (;;) {
+        char c = *in++;
+        *out++ = c;
+        if (c == '\0') {
+            break;
+        }
+        if (--left == 0) {
+            *out = '\0';
+            break;
+        }
+    }
+    float r;
+    float g;
+    float b;
+    FUN_141283c30(static_cast<uint32_t>(level), reinterpret_cast<uintptr_t>(&r), reinterpret_cast<uintptr_t>(&g),
+        reinterpret_cast<uintptr_t>(&b));
+    auto color = reinterpret_cast<uint8_t*>(&line.m_color);
+    color[3] = 0xff;
+    s_errorLinesMoved = 1;
+    color[2] = static_cast<uint8_t>(static_cast<int32_t>(r * ERROR_COLOR_SCALE));
+    color[1] = static_cast<uint8_t>(static_cast<int32_t>(g * ERROR_COLOR_SCALE));
+    color[0] = static_cast<uint8_t>(static_cast<int32_t>(b * ERROR_COLOR_SCALE));
+    s_errorHead = (s_errorHead + 1) % ERROR_LINES;
+    ConsoleWrite(static_cast<uint32_t>((level < 2) + 3), text);
+}
+
+// The display's batch and the debug font.
+// ref: FUN_140238bc0
+void ErrorDisplayInitialize() {
+    if (s_errorDisplayReady != 0) {
+        return;
+    }
+    s_errorBatch = GxuStringBatchCreate();
+    if (s_errorBatch == nullptr) {
+        return;
+    }
+    s_errorFont = TextBlockGetFontPtr(*reinterpret_cast<const HTEXTFONT*>(FUN_14126ece0(1)));
+    if (s_errorFont == nullptr) {
+        return;
+    }
+    uint32_t height = static_cast<uint32_t>(FUN_14126ed00(1));
+    std::memcpy(&s_errorFontHeight, &height, sizeof(height));
+    if (s_errorFontHeight == 0.0f) {
+        return;
+    }
+    // the registration of ErrorDisplayAdd: a call to an empty function (0x1402112e0)
+    s_errorDisplayReady = 1;
+}
+
+// Once a frame: each line's string made when it is new, faded, moved up when lines came, and
+// drawn; lines past their time let go.
+// ref: FUN_140238d50
+void ErrorDisplayRender() {
+    if (s_errorDisplayHidden != 0) {
+        return;
+    }
+    float projection[16] = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+    Orthographic(0.0f, 1.0f, 0.0f, 1.0f, 0.0f, ERROR_ORTHO_FAR, projection);
+    uint32_t now = FrameTime_GetTime();
+    for (uint32_t i = 0; i < ERROR_LINES; i++) {
+        ERRORLINE& line = s_errorLines[(s_errorHead + i) % ERROR_LINES];
+        float y = 1.0f - static_cast<float>(i + 12) * ERROR_LINE_STEP;
+        float position[3] = {0.0f, y, 1.0f};
+        bool made = false;
+        if (line.m_text[0] != '\0') {
+            if (line.m_string != nullptr) {
+                GxuFontDestroyString(&line.m_string);
+            }
+            GxuFontCreateString(s_errorFont, line.m_text, 0.0f, position, 1.0f, s_errorFontHeight, 0.0f,
+                &line.m_string, 1, 0, 0x1f44, &line.m_color, ERROR_LINE_DEPTH, 1.0f, 1.0f, 0.0f);
+            made = true;
+            line.m_text[0] = '\0';
+        }
+        if (line.m_string == nullptr) {
+            continue;
+        }
+        uint32_t age = now - line.m_time;
+        if (age > 13000) {
+            GxuFontDestroyString(&line.m_string);
+            line.m_string = nullptr;
+            continue;
+        }
+        if (age > 10000) {
+            reinterpret_cast<uint8_t*>(&line.m_color)[3] = static_cast<uint8_t>((13000 - age) / 12);
+            GxuFontStringSetColor(line.m_string, &line.m_color);
+        }
+        if (s_errorLinesMoved != 0 && !made) {
+            float moved[3] = {0.0f, y, 0.0f};
+            line.m_string->SetPosition(moved);
+        }
+        GxuStringBatchAddString(s_errorBatch, line.m_string);
+    }
+    float view[16] = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+    GxuStringBatchRender(g_gxRenderContext, s_errorBatch, view, projection, nullptr);
+    GxuStringBatchClear(s_errorBatch);
+    s_errorLinesMoved = 0;
+}
+
+namespace {
 
 // "Displaying [only ]<min>[ through <max>]".
 // ref: FUN_14024b530
@@ -610,9 +770,6 @@ extern "C" void* const gen_p_142cc87b0 = (void*)&s_screenshotQuality;
 extern "C" void* const gen_p_142cfbe80 = (void*)&s_messageFilter;
 extern "C" void* const gen_p_142cfbe84 = (void*)&s_messageLevelMax;
 extern "C" void* const gen_p_142cfbe88 = (void*)&s_messageCategories;
-extern "C" void* const gen_p_142de1930 = (void*)&s_errorDisplayReady;
-extern "C" void* const gen_p_142de1931 = (void*)&s_errorDisplayEnabled;
-extern "C" void* const gen_p_142de1932 = (void*)&s_errorDisplayHidden;
 extern "C" void* const gen_p_142de29b8 = (void*)&s_accountUsesTokenCVar;
 extern "C" void* const gen_p_142de29c0 = (void*)&s_checkAddonVersionCVar;
 extern "C" void* const gen_p_142de29c8 = (void*)&s_lastAddonVersionCVar;

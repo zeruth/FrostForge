@@ -63,6 +63,9 @@ MAPWIND* MapWindNext(MAPWIND* wind);
 // and the global wind follows their sum.
 // ref: FUN_14139b480
 void MapWindUpdate();
+// Once a frame: the WMO group BSP caches forget everything when the frame time went back.
+// ref: FUN_14139abd0
+void BspCacheUpdate();
 
 // ref: FUN_1413bc550
 bool WorldMapIntersectSegment(CWorldMap* map, WORLDSEGMENT* segment, WORLDSEGMENTHIT* hit);

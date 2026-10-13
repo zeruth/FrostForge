@@ -62,6 +62,8 @@ extern uint8_t g_dayNightOnJob;
 
 // ref: FUN_141354f80
 void WorldReadGraphicsQuality();
+// ref: FUN_14134ec00
+float* WorldGetCameraPosition();
 // ref: FUN_141365480
 int32_t* WorldGetFrameRect();
 // ref: FUN_141350fd0

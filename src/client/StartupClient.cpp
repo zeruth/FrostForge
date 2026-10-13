@@ -311,13 +311,8 @@ void Sub141283C90() {
     }
 }
 
-extern "C" unsigned long long FUN_140238bc0();
-// translated: FUN_140238bc0
 void Sub140238BC0() {
-    __try {
-        FUN_140238bc0();
-    } __except (GenFault(0x140238bc0ull, GetExceptionInformation())) {
-    }
+    ErrorDisplayInitialize();
 }
 
 // The reloadUI and TakeScreenshot console commands.
@@ -1384,13 +1379,8 @@ void Sub1405F27E0(bool a1) {
     UiTrimUnneededTextures(a1);
 }
 
-extern "C" unsigned long long FUN_140238d50();
-// translated: FUN_140238d50
 void Sub140238D50() {
-    __try {
-        FUN_140238d50();
-    } __except (GenFault(0x140238d50ull, GetExceptionInformation())) {
-    }
+    ErrorDisplayRender();
 }
 
 // The loading screen's draw.

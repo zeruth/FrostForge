@@ -674,9 +674,9 @@ undefined8 FUN_140266ca0() {
     return (undefined8)0;
 }
 
-/* did not compile: C2065 '__scrt_unhandled_exception_filter': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\g */
-undefined8 FUN_14026c0c4() {
-    GenUnimplemented(0x14026c0c4ULL);
+/* did not compile: LNK2019 unresolved LOCK */
+undefined8 FUN_14026b858() {
+    GenUnimplemented(0x14026b858ULL);
     return (undefined8)0;
 }
 
@@ -696,12 +696,6 @@ ulonglong FUN_140279b50() {
 undefined8 FUN_140279d94() {
     GenUnimplemented(0x140279d94ULL);
     return (undefined8)0;
-}
-
-/* did not compile: LNK2019 unresolved LOCK */
-uint FUN_1402849d4() {
-    GenUnimplemented(0x1402849d4ULL);
-    return (uint)0;
 }
 
 /* the decompiler lost calls (1 shown, the reference makes 3) */
@@ -2483,6 +2477,12 @@ undefined8 FUN_141399160() {
 /* SIMD union */
 undefined8 FUN_14139be00() {
     GenUnimplemented(0x14139be00ULL);
+    return (undefined8)0;
+}
+
+/* the decompiler lost a call's arguments (FUN_1411d8c80 reads 5, the call passes 1) */
+undefined8 FUN_1413c3450() {
+    GenUnimplemented(0x1413c3450ULL);
     return (undefined8)0;
 }
 
@@ -6635,6 +6635,12 @@ undefined8 FUN_1424cef50() {
 /* a decompilation Ghidra marked as damaged */
 undefined8 FUN_1424cfca0() {
     GenUnimplemented(0x1424cfca0ULL);
+    return (undefined8)0;
+}
+
+/* did not compile: C2297 '&': not valid as right operand has type 'float' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcx */
+undefined8 FUN_1424d0a40() {
+    GenUnimplemented(0x1424d0a40ULL);
     return (undefined8)0;
 }
 

@@ -894,41 +894,6 @@ static undefined8 gen_entry_1401e68c0(void) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1401e6950(void) {
-    __try {
-        return CALLF(undefined8, FUN_1401e6950)();
-    } __except (GenFault(0x1401e6950ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_1401e6980(void) {
-    __try {
-        return CALLF(undefined8, FUN_1401e6980)();
-    } __except (GenFault(0x1401e6980ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_1401e69b0(void) {
-    __try {
-        return CALLF(undefined8, FUN_1401e69b0)();
-    } __except (GenFault(0x1401e69b0ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_1401e69e0(void) {
-    __try {
-        return CALLF(undefined8, FUN_1401e69e0)();
-    } __except (GenFault(0x1401e69e0ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_1401e6a10(void) {
-    __try {
-        return CALLF(undefined8, FUN_1401e6a10)();
-    } __except (GenFault(0x1401e6a10ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
 static undefined8 gen_entry_1401e6a60(void) {
     __try {
         return CALLF(undefined8, FUN_1401e6a60)();
@@ -968,13 +933,6 @@ static undefined8 gen_entry_1401e6c70(void) {
     __try {
         return CALLF(undefined8, FUN_1401e6c70)();
     } __except (GenFault(0x1401e6c70ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_1401e6d00(void) {
-    __try {
-        return CALLF(undefined8, FUN_1401e6d00)();
-    } __except (GenFault(0x1401e6d00ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
@@ -9154,27 +9112,6 @@ static undefined8 gen_entry_1402389b0(longlong *param_1, ulonglong param_2) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_140238bc0(void) {
-    __try {
-        return CALLF(undefined8, FUN_140238bc0)();
-    } __except (GenFault(0x140238bc0ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_140238c30(char *param_1, int param_2) {
-    __try {
-        return CALLF(undefined8, FUN_140238c30)(param_1, param_2);
-    } __except (GenFault(0x140238c30ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_140238d50(void) {
-    __try {
-        return CALLF(undefined8, FUN_140238d50)();
-    } __except (GenFault(0x140238d50ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
 static undefined8 gen_entry_14023a490(undefined8 *param_1, char *param_2, char *param_3, char *param_4) {
     __try {
         return CALLF(undefined8, FUN_14023a490)(param_1, param_2, param_3, param_4);
@@ -9397,13 +9334,6 @@ static undefined8 * gen_entry_140264120(undefined8 *param_1) {
         return CALLF(undefined8 *, FUN_140264120)(param_1);
     } __except (GenFault(0x140264120ULL, GetExceptionInformation())) {
         return (undefined8 *)0;
-    }
-}
-static undefined8 gen_entry_14026b858(void) {
-    __try {
-        return CALLF(undefined8, FUN_14026b858)();
-    } __except (GenFault(0x14026b858ULL, GetExceptionInformation())) {
-        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_14026bd4c(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3) {
@@ -20949,6 +20879,13 @@ static undefined8 gen_entry_14134cbb0(undefined8 param_1) {
         return (undefined8)0;
     }
 }
+static undefined8 gen_entry_14134dd50(undefined4 param_1, undefined4 param_2, char param_3) {
+    __try {
+        return CALLF(undefined8, FUN_14134dd50)(param_1, param_2, param_3);
+    } __except (GenFault(0x14134dd50ULL, GetExceptionInformation())) {
+        return (undefined8)0;
+    }
+}
 static undefined8 gen_entry_14134dfc0(void) {
     __try {
         return CALLF(undefined8, FUN_14134dfc0)();
@@ -20977,11 +20914,18 @@ static undefined8 gen_entry_14134e350(longlong param_1, int param_2, int param_3
         return (undefined8)0;
     }
 }
-static undefined * gen_entry_14134ec00(void) {
+static undefined4 gen_entry_14134e7e0(void) {
     __try {
-        return CALLF(undefined *, FUN_14134ec00)();
-    } __except (GenFault(0x14134ec00ULL, GetExceptionInformation())) {
-        return (undefined *)0;
+        return CALLF(undefined4, FUN_14134e7e0)();
+    } __except (GenFault(0x14134e7e0ULL, GetExceptionInformation())) {
+        return (undefined4)0;
+    }
+}
+static undefined8 gen_entry_14134e8a0(longlong param_1) {
+    __try {
+        return CALLF(undefined8, FUN_14134e8a0)(param_1);
+    } __except (GenFault(0x14134e8a0ULL, GetExceptionInformation())) {
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_14134ec50(void) {
@@ -21023,6 +20967,13 @@ static undefined8 gen_entry_141352210(int param_1) {
     __try {
         return CALLF(undefined8, FUN_141352210)(param_1);
     } __except (GenFault(0x141352210ULL, GetExceptionInformation())) {
+        return (undefined8)0;
+    }
+}
+static undefined8 gen_entry_141352960(undefined8 *param_1, longlong param_2) {
+    __try {
+        return CALLF(undefined8, FUN_141352960)(param_1, param_2);
+    } __except (GenFault(0x141352960ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
@@ -21170,6 +21121,13 @@ static undefined8 gen_entry_141357070(longlong param_1) {
     __try {
         return CALLF(undefined8, FUN_141357070)(param_1);
     } __except (GenFault(0x141357070ULL, GetExceptionInformation())) {
+        return (undefined8)0;
+    }
+}
+static undefined8 gen_entry_1413571e0(uint *param_1, uint param_2, char param_3) {
+    __try {
+        return CALLF(undefined8, FUN_1413571e0)(param_1, param_2, param_3);
+    } __except (GenFault(0x1413571e0ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
@@ -21478,13 +21436,6 @@ static undefined8 gen_entry_14139aa60(longlong param_1) {
     __try {
         return CALLF(undefined8, FUN_14139aa60)(param_1);
     } __except (GenFault(0x14139aa60ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_14139abd0(void) {
-    __try {
-        return CALLF(undefined8, FUN_14139abd0)();
-    } __except (GenFault(0x14139abd0ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
@@ -46310,6 +46261,13 @@ static undefined8 gen_entry_1424cd590(undefined8 param_1) {
         return (undefined8)0;
     }
 }
+static undefined8 gen_entry_1424d1370(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 *param_4, longlong param_5, undefined4 param_6, uint param_7) {
+    __try {
+        return CALLF(undefined8, FUN_1424d1370)(param_1, param_2, param_3, param_4, param_5, param_6, param_7);
+    } __except (GenFault(0x1424d1370ULL, GetExceptionInformation())) {
+        return (undefined8)0;
+    }
+}
 static bool gen_entry_1424d2060(longlong param_1) {
     __try {
         return CALLF(bool, FUN_1424d2060)(param_1);
@@ -46455,6 +46413,13 @@ static undefined8 gen_entry_142526e40(void) {
         return CALLF(undefined8, FUN_142526e40)();
     } __except (GenFault(0x142526e40ULL, GetExceptionInformation())) {
         return (undefined8)0;
+    }
+}
+static undefined1 gen_entry_142526ee0(void) {
+    __try {
+        return CALLF(undefined1, FUN_142526ee0)();
+    } __except (GenFault(0x142526ee0ULL, GetExceptionInformation())) {
+        return (undefined1)0;
     }
 }
 static undefined8 gen_entry_142526ef0(void) {
@@ -48340,41 +48305,6 @@ static undefined8 gen_entry_1425e9fe0(void) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1425ea100(void) {
-    __try {
-        return CALLF(undefined8, FUN_1425ea100)();
-    } __except (GenFault(0x1425ea100ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_1425ea140(void) {
-    __try {
-        return CALLF(undefined8, FUN_1425ea140)();
-    } __except (GenFault(0x1425ea140ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_1425ea180(void) {
-    __try {
-        return CALLF(undefined8, FUN_1425ea180)();
-    } __except (GenFault(0x1425ea180ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_1425ea1c0(void) {
-    __try {
-        return CALLF(undefined8, FUN_1425ea1c0)();
-    } __except (GenFault(0x1425ea1c0ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_1425ea200(void) {
-    __try {
-        return CALLF(undefined8, FUN_1425ea200)();
-    } __except (GenFault(0x1425ea200ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
 static undefined8 gen_entry_1425ea240(void) {
     __try {
         return CALLF(undefined8, FUN_1425ea240)();
@@ -48414,13 +48344,6 @@ static undefined8 gen_entry_1425ea620(void) {
     __try {
         return CALLF(undefined8, FUN_1425ea620)();
     } __except (GenFault(0x1425ea620ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
-static undefined8 gen_entry_1425ea700(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3) {
-    __try {
-        return CALLF(undefined8, FUN_1425ea700)(a0, a1, a2, a3);
-    } __except (GenFault(0x1425ea700ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
@@ -51604,7 +51527,6 @@ static undefined8 gen_entry_14260c5a0(undefined8 a0, undefined8 a1, undefined8 a
 }
 
 const unsigned long long g_genInits[] = {
-    0x14026b858ULL,
     0x1401ca520ULL,
     0x1401ca540ULL,
     0x1401ca790ULL,
@@ -51732,18 +51654,12 @@ const unsigned long long g_genInits[] = {
     0x1401e67c0ULL,
     0x1401e67f0ULL,
     0x1401e68c0ULL,
-    0x1401e6950ULL,
-    0x1401e6a10ULL,
-    0x1401e69b0ULL,
-    0x1401e6980ULL,
-    0x1401e69e0ULL,
     0x1401e6a60ULL,
     0x1401e6ad0ULL,
     0x1401e6b40ULL,
     0x1401e6b60ULL,
     0x1401e6c70ULL,
     0x1401e6c00ULL,
-    0x1401e6d00ULL,
     0x1401e6d90ULL,
     0x1401e6e50ULL,
     0x1401e70a0ULL,
@@ -52874,7 +52790,7 @@ const unsigned long long g_genInits[] = {
     0x140211250ULL,
     0
 };
-const size_t g_genInitCount = 1268;
+const size_t g_genInitCount = 1261;
 
 typedef struct { unsigned long long m_address; void* m_target; } GENJUMP;
 const GENJUMP g_genJumps[] = {
@@ -53005,18 +52921,12 @@ const GENJUMP g_genJumps[] = {
     { 0x1401e67f0ULL, (void*)&gen_entry_1401e67f0 },
     { 0x1401e6850ULL, (void*)&gen_entry_1401e6850 },
     { 0x1401e68c0ULL, (void*)&gen_entry_1401e68c0 },
-    { 0x1401e6950ULL, (void*)&gen_entry_1401e6950 },
-    { 0x1401e6980ULL, (void*)&gen_entry_1401e6980 },
-    { 0x1401e69b0ULL, (void*)&gen_entry_1401e69b0 },
-    { 0x1401e69e0ULL, (void*)&gen_entry_1401e69e0 },
-    { 0x1401e6a10ULL, (void*)&gen_entry_1401e6a10 },
     { 0x1401e6a60ULL, (void*)&gen_entry_1401e6a60 },
     { 0x1401e6ad0ULL, (void*)&gen_entry_1401e6ad0 },
     { 0x1401e6b40ULL, (void*)&gen_entry_1401e6b40 },
     { 0x1401e6b60ULL, (void*)&gen_entry_1401e6b60 },
     { 0x1401e6c00ULL, (void*)&gen_entry_1401e6c00 },
     { 0x1401e6c70ULL, (void*)&gen_entry_1401e6c70 },
-    { 0x1401e6d00ULL, (void*)&gen_entry_1401e6d00 },
     { 0x1401e6d90ULL, (void*)&gen_entry_1401e6d90 },
     { 0x1401e6e50ULL, (void*)&gen_entry_1401e6e50 },
     { 0x1401e6fa0ULL, (void*)&gen_entry_1401e6fa0 },
@@ -54210,9 +54120,6 @@ const GENJUMP g_genJumps[] = {
     { 0x1402385d0ULL, (void*)&gen_entry_1402385d0 },
     { 0x1402386a0ULL, (void*)&gen_entry_1402386a0 },
     { 0x1402389b0ULL, (void*)&gen_entry_1402389b0 },
-    { 0x140238bc0ULL, (void*)&gen_entry_140238bc0 },
-    { 0x140238c30ULL, (void*)&gen_entry_140238c30 },
-    { 0x140238d50ULL, (void*)&gen_entry_140238d50 },
     { 0x1402394a0ULL, (void*)&FUN_1402394a0 },
     { 0x14023a490ULL, (void*)&gen_entry_14023a490 },
     { 0x14023a680ULL, (void*)&gen_entry_14023a680 },
@@ -54289,7 +54196,6 @@ const GENJUMP g_genJumps[] = {
     { 0x140265ca0ULL, (void*)&FUN_140265ca0 },
     { 0x140266c30ULL, (void*)&FUN_140266c30 },
     { 0x140266c80ULL, (void*)&FUN_140266c80 },
-    { 0x14026b858ULL, (void*)&gen_entry_14026b858 },
     { 0x14026bd4cULL, (void*)&gen_entry_14026bd4c },
     { 0x14026be80ULL, (void*)&gen_entry_14026be80 },
     { 0x14026bea0ULL, (void*)&gen_entry_14026bea0 },
@@ -54508,7 +54414,6 @@ const GENJUMP g_genJumps[] = {
     { 0x140326b40ULL, (void*)&gen_entry_140326b40 },
     { 0x140326b50ULL, (void*)&gen_entry_140326b50 },
     { 0x140326b60ULL, (void*)&FUN_140326b60 },
-    { 0x140326be0ULL, (void*)&FUN_140326be0 },
     { 0x140326c80ULL, (void*)&gen_entry_140326c80 },
     { 0x140326ce0ULL, (void*)&gen_entry_140326ce0 },
     { 0x1403271d0ULL, (void*)&FUN_1403271d0 },
@@ -54945,14 +54850,7 @@ const GENJUMP g_genJumps[] = {
     { 0x140688f50ULL, (void*)&FUN_140688f50 },
     { 0x140689380ULL, (void*)&gen_entry_140689380 },
     { 0x140689b30ULL, (void*)&FUN_140689b30 },
-    { 0x14068a1e0ULL, (void*)&FUN_14068a1e0 },
-    { 0x14068a370ULL, (void*)&FUN_14068a370 },
-    { 0x14068a390ULL, (void*)&FUN_14068a390 },
-    { 0x14068a7e0ULL, (void*)&FUN_14068a7e0 },
     { 0x14068ab80ULL, (void*)&FUN_14068ab80 },
-    { 0x14068abd0ULL, (void*)&FUN_14068abd0 },
-    { 0x14068b6c0ULL, (void*)&FUN_14068b6c0 },
-    { 0x14068b780ULL, (void*)&FUN_14068b780 },
     { 0x14068c4c0ULL, (void*)&gen_entry_14068c4c0 },
     { 0x14068c4e0ULL, (void*)&gen_entry_14068c4e0 },
     { 0x14068c500ULL, (void*)&gen_entry_14068c500 },
@@ -54960,7 +54858,6 @@ const GENJUMP g_genJumps[] = {
     { 0x14068fee0ULL, (void*)&gen_entry_14068fee0 },
     { 0x140691f30ULL, (void*)&FUN_140691f30 },
     { 0x1406935d0ULL, (void*)&gen_entry_1406935d0 },
-    { 0x1406960c0ULL, (void*)&FUN_1406960c0 },
     { 0x140697120ULL, (void*)&gen_entry_140697120 },
     { 0x140697410ULL, (void*)&gen_entry_140697410 },
     { 0x1406978f0ULL, (void*)&gen_entry_1406978f0 },
@@ -56137,7 +56034,6 @@ const GENJUMP g_genJumps[] = {
     { 0x141283d90ULL, (void*)&gen_entry_141283d90 },
     { 0x1412843c0ULL, (void*)&FUN_1412843c0 },
     { 0x141285240ULL, (void*)&gen_entry_141285240 },
-    { 0x141285300ULL, (void*)&FUN_141285300 },
     { 0x141286390ULL, (void*)&gen_entry_141286390 },
     { 0x141288800ULL, (void*)&gen_entry_141288800 },
     { 0x1412888d0ULL, (void*)&gen_entry_1412888d0 },
@@ -56152,10 +56048,15 @@ const GENJUMP g_genJumps[] = {
     { 0x14129d3e0ULL, (void*)&FUN_14129d3e0 },
     { 0x14129d890ULL, (void*)&FUN_14129d890 },
     { 0x14129d9d0ULL, (void*)&gen_entry_14129d9d0 },
+    { 0x14129f070ULL, (void*)&FUN_14129f070 },
+    { 0x14129fd70ULL, (void*)&FUN_14129fd70 },
+    { 0x1412a0660ULL, (void*)&FUN_1412a0660 },
+    { 0x1412a1070ULL, (void*)&FUN_1412a1070 },
     { 0x1412a11c0ULL, (void*)&gen_entry_1412a11c0 },
     { 0x1412a1be0ULL, (void*)&gen_entry_1412a1be0 },
     { 0x1412a1d10ULL, (void*)&gen_entry_1412a1d10 },
     { 0x1412a1d50ULL, (void*)&gen_entry_1412a1d50 },
+    { 0x1412a29c0ULL, (void*)&FUN_1412a29c0 },
     { 0x1412a30e0ULL, (void*)&FUN_1412a30e0 },
     { 0x1412a3680ULL, (void*)&FUN_1412a3680 },
     { 0x1412a5c10ULL, (void*)&FUN_1412a5c10 },
@@ -56170,6 +56071,7 @@ const GENJUMP g_genJumps[] = {
     { 0x1412af6f0ULL, (void*)&gen_entry_1412af6f0 },
     { 0x1412b1720ULL, (void*)&gen_entry_1412b1720 },
     { 0x1412b20e0ULL, (void*)&gen_entry_1412b20e0 },
+    { 0x1412b2130ULL, (void*)&FUN_1412b2130 },
     { 0x1412b2260ULL, (void*)&gen_entry_1412b2260 },
     { 0x1412b22a0ULL, (void*)&gen_entry_1412b22a0 },
     { 0x1412b2500ULL, (void*)&gen_entry_1412b2500 },
@@ -56245,21 +56147,21 @@ const GENJUMP g_genJumps[] = {
     { 0x141348900ULL, (void*)&gen_entry_141348900 },
     { 0x14134cac0ULL, (void*)&gen_entry_14134cac0 },
     { 0x14134cbb0ULL, (void*)&gen_entry_14134cbb0 },
-    { 0x14134dd50ULL, (void*)&FUN_14134dd50 },
+    { 0x14134dd50ULL, (void*)&gen_entry_14134dd50 },
     { 0x14134dfc0ULL, (void*)&gen_entry_14134dfc0 },
     { 0x14134dfe0ULL, (void*)&gen_entry_14134dfe0 },
     { 0x14134e2a0ULL, (void*)&gen_entry_14134e2a0 },
     { 0x14134e340ULL, (void*)&FUN_14134e340 },
     { 0x14134e350ULL, (void*)&gen_entry_14134e350 },
-    { 0x14134e7e0ULL, (void*)&FUN_14134e7e0 },
-    { 0x14134e8a0ULL, (void*)&FUN_14134e8a0 },
-    { 0x14134ec00ULL, (void*)&gen_entry_14134ec00 },
+    { 0x14134e7e0ULL, (void*)&gen_entry_14134e7e0 },
+    { 0x14134e8a0ULL, (void*)&gen_entry_14134e8a0 },
     { 0x14134ec50ULL, (void*)&gen_entry_14134ec50 },
     { 0x14134f460ULL, (void*)&gen_entry_14134f460 },
     { 0x14134fd60ULL, (void*)&gen_entry_14134fd60 },
     { 0x1413517e0ULL, (void*)&gen_entry_1413517e0 },
     { 0x1413518b0ULL, (void*)&gen_entry_1413518b0 },
     { 0x141352210ULL, (void*)&gen_entry_141352210 },
+    { 0x141352960ULL, (void*)&gen_entry_141352960 },
     { 0x141352c70ULL, (void*)&gen_entry_141352c70 },
     { 0x1413543b0ULL, (void*)&gen_entry_1413543b0 },
     { 0x141355300ULL, (void*)&gen_entry_141355300 },
@@ -56289,8 +56191,9 @@ const GENJUMP g_genJumps[] = {
     { 0x141356ae0ULL, (void*)&FUN_141356ae0 },
     { 0x141356c00ULL, (void*)&FUN_141356c00 },
     { 0x141356d00ULL, (void*)&FUN_141356d00 },
+    { 0x141357060ULL, (void*)&FUN_141357060 },
     { 0x141357070ULL, (void*)&gen_entry_141357070 },
-    { 0x1413571e0ULL, (void*)&FUN_1413571e0 },
+    { 0x1413571e0ULL, (void*)&gen_entry_1413571e0 },
     { 0x14135c8d0ULL, (void*)&FUN_14135c8d0 },
     { 0x14135ce70ULL, (void*)&FUN_14135ce70 },
     { 0x1413627a0ULL, (void*)&FUN_1413627a0 },
@@ -56339,7 +56242,6 @@ const GENJUMP g_genJumps[] = {
     { 0x14139a4f0ULL, (void*)&gen_entry_14139a4f0 },
     { 0x14139aa40ULL, (void*)&gen_entry_14139aa40 },
     { 0x14139aa60ULL, (void*)&gen_entry_14139aa60 },
-    { 0x14139abd0ULL, (void*)&gen_entry_14139abd0 },
     { 0x14139c1a0ULL, (void*)&gen_entry_14139c1a0 },
     { 0x14139ca60ULL, (void*)&gen_entry_14139ca60 },
     { 0x14139dda0ULL, (void*)&gen_entry_14139dda0 },
@@ -56356,9 +56258,12 @@ const GENJUMP g_genJumps[] = {
     { 0x1413c1050ULL, (void*)&gen_entry_1413c1050 },
     { 0x1413c1080ULL, (void*)&gen_entry_1413c1080 },
     { 0x1413c10b0ULL, (void*)&gen_entry_1413c10b0 },
+    { 0x1413c17f0ULL, (void*)&FUN_1413c17f0 },
+    { 0x1413c29d0ULL, (void*)&FUN_1413c29d0 },
     { 0x1413c2e10ULL, (void*)&gen_entry_1413c2e10 },
-    { 0x1413c3450ULL, (void*)&FUN_1413c3450 },
+    { 0x1413c35c0ULL, (void*)&FUN_1413c35c0 },
     { 0x1413c4700ULL, (void*)&gen_entry_1413c4700 },
+    { 0x1413c88f0ULL, (void*)&FUN_1413c88f0 },
     { 0x1413cae30ULL, (void*)&gen_entry_1413cae30 },
     { 0x1413cb1c0ULL, (void*)&gen_entry_1413cb1c0 },
     { 0x1413ceaf0ULL, (void*)&gen_entry_1413ceaf0 },
@@ -56587,6 +56492,7 @@ const GENJUMP g_genJumps[] = {
     { 0x1414fca90ULL, (void*)&gen_entry_1414fca90 },
     { 0x1414fcc60ULL, (void*)&FUN_1414fcc60 },
     { 0x1414fcdc0ULL, (void*)&gen_entry_1414fcdc0 },
+    { 0x1414fce30ULL, (void*)&FUN_1414fce30 },
     { 0x1414fce40ULL, (void*)&FUN_1414fce40 },
     { 0x1414fcfc0ULL, (void*)&gen_entry_1414fcfc0 },
     { 0x1414fd100ULL, (void*)&FUN_1414fd100 },
@@ -59830,6 +59736,7 @@ const GENJUMP g_genJumps[] = {
     { 0x14228b580ULL, (void*)&FUN_14228b580 },
     { 0x14228b640ULL, (void*)&FUN_14228b640 },
     { 0x14228b7a0ULL, (void*)&FUN_14228b7a0 },
+    { 0x14228b8c0ULL, (void*)&FUN_14228b8c0 },
     { 0x14228c1d0ULL, (void*)&FUN_14228c1d0 },
     { 0x14228c330ULL, (void*)&FUN_14228c330 },
     { 0x14228c390ULL, (void*)&FUN_14228c390 },
@@ -59839,6 +59746,8 @@ const GENJUMP g_genJumps[] = {
     { 0x14228e040ULL, (void*)&FUN_14228e040 },
     { 0x14228e190ULL, (void*)&FUN_14228e190 },
     { 0x14228f5d0ULL, (void*)&FUN_14228f5d0 },
+    { 0x14228f790ULL, (void*)&FUN_14228f790 },
+    { 0x14228f960ULL, (void*)&FUN_14228f960 },
     { 0x14228f9a0ULL, (void*)&FUN_14228f9a0 },
     { 0x1422916d0ULL, (void*)&gen_entry_1422916d0 },
     { 0x142291b20ULL, (void*)&gen_entry_142291b20 },
@@ -59959,7 +59868,7 @@ const GENJUMP g_genJumps[] = {
     { 0x1424cd0a0ULL, (void*)&gen_entry_1424cd0a0 },
     { 0x1424cd4b0ULL, (void*)&gen_entry_1424cd4b0 },
     { 0x1424cd590ULL, (void*)&gen_entry_1424cd590 },
-    { 0x1424d1370ULL, (void*)&FUN_1424d1370 },
+    { 0x1424d1370ULL, (void*)&gen_entry_1424d1370 },
     { 0x1424d2060ULL, (void*)&gen_entry_1424d2060 },
     { 0x1424d4360ULL, (void*)&gen_entry_1424d4360 },
     { 0x1424d4560ULL, (void*)&gen_entry_1424d4560 },
@@ -59981,7 +59890,7 @@ const GENJUMP g_genJumps[] = {
     { 0x142525db0ULL, (void*)&gen_entry_142525db0 },
     { 0x142526d80ULL, (void*)&gen_entry_142526d80 },
     { 0x142526e40ULL, (void*)&gen_entry_142526e40 },
-    { 0x142526ee0ULL, (void*)&FUN_142526ee0 },
+    { 0x142526ee0ULL, (void*)&gen_entry_142526ee0 },
     { 0x142526ef0ULL, (void*)&gen_entry_142526ef0 },
     { 0x142526fc0ULL, (void*)&gen_entry_142526fc0 },
     { 0x1425272c0ULL, (void*)&gen_entry_1425272c0 },
@@ -60253,18 +60162,12 @@ const GENJUMP g_genJumps[] = {
     { 0x1425e9f30ULL, (void*)&gen_entry_1425e9f30 },
     { 0x1425e9fb0ULL, (void*)&gen_entry_1425e9fb0 },
     { 0x1425e9fe0ULL, (void*)&gen_entry_1425e9fe0 },
-    { 0x1425ea100ULL, (void*)&gen_entry_1425ea100 },
-    { 0x1425ea140ULL, (void*)&gen_entry_1425ea140 },
-    { 0x1425ea180ULL, (void*)&gen_entry_1425ea180 },
-    { 0x1425ea1c0ULL, (void*)&gen_entry_1425ea1c0 },
-    { 0x1425ea200ULL, (void*)&gen_entry_1425ea200 },
     { 0x1425ea240ULL, (void*)&gen_entry_1425ea240 },
     { 0x1425ea2e0ULL, (void*)&gen_entry_1425ea2e0 },
     { 0x1425ea430ULL, (void*)&gen_entry_1425ea430 },
     { 0x1425ea440ULL, (void*)&gen_entry_1425ea440 },
     { 0x1425ea580ULL, (void*)&gen_entry_1425ea580 },
     { 0x1425ea620ULL, (void*)&gen_entry_1425ea620 },
-    { 0x1425ea700ULL, (void*)&gen_entry_1425ea700 },
     { 0x1425ea890ULL, (void*)&gen_entry_1425ea890 },
     { 0x1425eaba0ULL, (void*)&gen_entry_1425eaba0 },
     { 0x1425ead90ULL, (void*)&gen_entry_1425ead90 },
@@ -60721,4 +60624,4 @@ const GENJUMP g_genJumps[] = {
     { 0x14260c5a0ULL, (void*)&gen_entry_14260c5a0 },
     { 0, 0 }
 };
-const size_t g_genJumpCount = 7841;
+const size_t g_genJumpCount = 7828;

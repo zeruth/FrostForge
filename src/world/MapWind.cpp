@@ -4,11 +4,10 @@
 #include "base/RndSeed.hpp"
 #include "storm/list/TSList.hpp"
 #include "ui/FrameTime.hpp"
+#include "world/WorldFrame.hpp"
 #include "world/WorldQueries.hpp"
 #include <cmath>
 #include <new>
-
-extern "C" unsigned long long FUN_14134ec00();
 
 namespace {
 
@@ -101,7 +100,6 @@ MAPWIND* MapWindNext(MAPWIND* wind) {
     return s_mapWinds.Next(wind);
 }
 
-// translated: FUN_14134ec00
 // ref: FUN_14139b480
 void MapWindUpdate() {
     // the first call starts the interval (a function-local static, guard DAT_1430ac128)
@@ -127,7 +125,7 @@ void MapWindUpdate() {
     StepList(s_mapWinds, elapsed);
     StepList(s_mapWinds2, elapsed);
     // the camera position: a sphere source only blows inside its radius
-    auto position = reinterpret_cast<const float*>(FUN_14134ec00());
+    const float* position = WorldGetCameraPosition();
     float x = 0.0f;
     float y = 0.0f;
     float z = 0.0f;

@@ -1,5 +1,6 @@
 add_library(world STATIC
     CullWorker.cpp
+    MapObjGroupBspCache.cpp
     MapWind.cpp
     ModelFog.cpp
     ParticulateVolumeManager.cpp

@@ -12,6 +12,10 @@ extern CVar* g_accountListCVar;     // DAT_142de29b0
 // The client's own CVars (FUN_14024c220), the full-screen effect switches among them.
 void ClientRegisterCVars();
 void FullScreenEffectRegisterCVars();
+// The error display: its batch and font, a message, and the per-frame draw.
+void ErrorDisplayInitialize();
+void ErrorDisplayAdd(const char* text, int32_t level);
+void ErrorDisplayRender();
 
 // The screenshot size override, {width, height} with 0 for the window's (FUN_14023a3f0).
 void ClientSetScreenshotSize(const uint16_t* size);
