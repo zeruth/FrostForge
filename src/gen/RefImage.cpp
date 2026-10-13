@@ -2,7 +2,9 @@
 
 #include <cstdio>
 #include <cstring>
+#include <algorithm>
 #include <mutex>
+#include <vector>
 #include <unordered_set>
 
 #include <windows.h>
@@ -27,6 +29,9 @@ extern const GENJUMP g_genJumps[];
 extern const size_t g_genJumpCount;
 extern const uint64_t g_genInits[];
 extern const size_t g_genInitCount;
+extern unsigned int gen_hits[];
+extern const unsigned int gen_hit_count;
+extern const unsigned long long gen_hit_addrs[];
 
 void GenUnimplemented(uint64_t address);
 int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
@@ -41,6 +46,39 @@ extern "C" int GenInitThreadEpoch() {
 namespace {
 
 // One static initializer, at its reference address (the jump to its translation).
+// Which translated functions a run reaches and how often (hits.c): with FROST_HITS naming a
+// file, every five seconds the functions called so far, "address count" a line, most first.
+DWORD WINAPI HitDumpThread(void* param) {
+    auto path = static_cast<const char*>(param);
+    std::vector<std::pair<uint32_t, uint64_t>> rows;
+    for (;;) {
+        Sleep(5000);
+        rows.clear();
+        for (uint32_t i = 0; i < gen_hit_count; i++) {
+            if (gen_hits[i] != 0) {
+                rows.emplace_back(gen_hits[i], gen_hit_addrs[i]);
+            }
+        }
+        std::sort(rows.begin(), rows.end(), [](const auto& a, const auto& b) { return a.first > b.first; });
+        FILE* file = nullptr;
+        if (fopen_s(&file, path, "w") == 0 && file != nullptr) {
+            for (const auto& row : rows) {
+                fprintf(file, "%llx %u\n", static_cast<unsigned long long>(row.second), row.first);
+            }
+            fclose(file);
+        }
+    }
+}
+
+void StartHitDump() {
+    static char path[MAX_PATH];
+    DWORD length = GetEnvironmentVariableA("FROST_HITS", path, sizeof(path));
+    if (length == 0 || length >= sizeof(path)) {
+        return;
+    }
+    CloseHandle(CreateThread(nullptr, 0, HitDumpThread, path, 0, nullptr));
+}
+
 bool RunInitializer(uint64_t address) {
     __try {
         reinterpret_cast<void (*)()>(address)();
@@ -212,6 +250,7 @@ bool RefImageInitialize(const char* path) {
         ran += RunInitializer(g_genInits[i]);
     }
     FrostLog("refimage", "%zu of the image's static initializers run", ran);
+    StartHitDump();
     return true;
 }
 

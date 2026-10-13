@@ -66,6 +66,9 @@ typedef unsigned long long code();
    function and its callers, and a definition earlier in the same file would otherwise impose its
    own (floats are promoted to double; the definitions take them that way) */
 #define CALLF(type, f) ((type (*)())(f))
+/* a translated function's call count (hits.c; written out by RefImage.cpp under FROST_HITS) */
+extern unsigned int gen_hits[];
+#define GEN_HIT(i) (gen_hits[i]++)
 /* a floating point argument Ghidra spelled through an integer (`*param_3` of an undefined8 *):
    its bits, not its value - an unprototyped call would pass the integer in a general register
    while the callee reads xmm */

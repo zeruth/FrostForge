@@ -7,6 +7,7 @@ add_library(gen STATIC
     adapters.c
     stubs.c
     jumps.c
+    hits.c
     ${GEN_TRANSLATED}
 )
 target_include_directories(gen PUBLIC ${CMAKE_SOURCE_DIR}/src)
