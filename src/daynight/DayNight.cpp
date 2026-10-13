@@ -1,5 +1,6 @@
 #include "daynight/DayNight.hpp"
 
+#include "base/DataAllocator.hpp"
 #include "base/Matrix.hpp"
 #include "db/DB2Tables.hpp"
 #include "db/WowDB2Lookup.hpp"
@@ -402,6 +403,55 @@ void DNScene::SetMap(int32_t mapId) {
     this->m_planets[1].Initialize(MOON_TEXTURE, MOON_SCALE, 1.0f);
     this->m_planets[2].Initialize(MOON2_TEXTURE, 1.0f, MOON2_SCALE2);
     this->m_skyModel = this->m_m2Scene->CreateModel(SKY_MODEL, 0x100, 1, 0);
+}
+
+// ---- the module ----------------------------------------------------------------------------
+
+namespace {
+
+// A device came up: every handle's scene makes its device objects again.
+// ref: FUN_142442270
+void OnDeviceCreated(void* param) {
+    (void)param;
+    for (DAYNIGHT* handle = s_handles.Head(); handle != nullptr; handle = s_handles.Next(handle)) {
+        handle->m_scene->CreateDeviceObjects();
+    }
+}
+
+// The device is going away: every handle's scene lets go of its device objects.
+// ref: FUN_142442460
+void OnDeviceDestroyed(void* param) {
+    (void)param;
+    for (DAYNIGHT* handle = s_handles.Head(); handle != nullptr; handle = s_handles.Next(handle)) {
+        handle->m_scene->DestroyDeviceObjects();
+    }
+}
+
+}  // namespace
+
+extern "C" unsigned long long FUN_14244fd20();
+// translated: FUN_14244fd20
+extern "C" unsigned long long FUN_14244f9b0();
+// translated: FUN_14244f9b0
+
+// ref: FUN_142442f50
+void DayNightInitialize() {
+    GxAddDeviceCreatedCallback(&OnDeviceCreated, nullptr);
+    GxAddDeviceDestroyedCallback(&OnDeviceDestroyed, nullptr);
+    // the colour grading's device callbacks and its texture (0x1167fd)
+    FUN_14244fd20();
+}
+
+// ref: FUN_1424422d0
+void DayNightShutdown() {
+    GxRemoveDeviceCreatedCallback(&OnDeviceCreated, nullptr);
+    GxRemoveDeviceDestroyedCallback(&OnDeviceDestroyed, nullptr);
+    for (DAYNIGHT* handle = s_handles.Head(); handle != nullptr; handle = s_handles.Next(handle)) {
+        handle->m_scene->DestroyDeviceObjects();
+    }
+    FUN_14244f9b0();
+    // the area overrides' Light copies (DAT_1447aa310), still the image's pool
+    reinterpret_cast<CDataAllocator*>(0x1447aa310ull)->Clear(".?AVLightRec_C@@", -2);
 }
 
 // ---- the handle ----------------------------------------------------------------------------

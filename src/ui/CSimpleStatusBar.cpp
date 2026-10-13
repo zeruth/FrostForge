@@ -26,7 +26,7 @@ int32_t CSimpleStatusBar::s_restrictedMetaTable = -2;
 namespace {
 
 // The status bars' pool (0x1447aef00).
-CDataAllocator s_statusBarHeap(0x318, 5);
+CDataAllocator s_statusBarHeap(0x318, 5);  // DAT_1447aef00
 
 // The scripts of a status bar.
 enum : uint8_t {
@@ -40,7 +40,7 @@ constexpr float BAR_VALUE_MIN = -1.0e18f;
 
 // The bar texture's coordinates as top, left, bottom, right: the whole texture
 // (DAT_1426c8890).
-constexpr float BAR_TEXCOORDS_RECT[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+constexpr float BAR_TEXCOORDS_RECT[4] = { 0.0f, 0.0f, 1.0f, 1.0f };  // DAT_1426c8890
 // The whole texture turned a quarter, as the four corners (DAT_14261a9d0, DAT_142737610).
 constexpr float BAR_TEXCOORDS_ROTATED[8] = { 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f };
 

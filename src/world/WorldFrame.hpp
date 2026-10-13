@@ -62,6 +62,8 @@ extern uint8_t g_dayNightOnJob;
 
 // ref: FUN_141354f80
 void WorldReadGraphicsQuality();
+// The world's subsystems set up (the client's startup).
+void WorldInitialize();
 // ref: FUN_14134ec00
 float* WorldGetCameraPosition();
 // ref: FUN_141365480

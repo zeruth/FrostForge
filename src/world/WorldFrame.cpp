@@ -8,6 +8,7 @@
 #include "client/GxWindow.hpp"
 #include "client/RenderSettings.hpp"
 #include "client/Resample.hpp"
+#include "client/Startup.hpp"
 #include "console/Var.hpp"
 #include "daynight/DayNight.hpp"
 #include "gx/Gx.hpp"
@@ -20,6 +21,7 @@
 #include "storm/Memory.hpp"
 #include "ui/CSimpleModel.hpp"
 #include "storm/String.hpp"
+#include "texture/Texture.hpp"
 #include "threadpool/ThreadPool.hpp"
 #include "ui/FrameTime.hpp"
 #include "util/Fnv.hpp"
@@ -48,7 +50,7 @@ namespace {
 const char s_worldFile[] = "D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WorldClient2\\World.cpp";
 
 // DAT_1430aba60: cleared when a scene loads its map here and by the world's startup.
-uint32_t s_1430aba60;
+uint32_t s_1430aba60;  // DAT_1430aba60
 
 // The world's player position (DAT_1430abb28), what the particulates follow.
 float s_playerPosition[3];
@@ -73,6 +75,14 @@ uint8_t s_features[8] = {1, 1, 1, 0, 0, 0, 0, 0};
 
 int32_t s_frameRect[4];             // DAT_1430aba78: the frame's screen rectangle
 uint32_t s_loadSortMask = 0x3f;     // DAT_142cfdb68: what the map loader sorts, 0 under worldLoadSort 0
+
+// The last frame's view arguments (FUN_141352f70 keeps its 13th to 17th), cleared by the
+// world's startup; the last three again once the frame is done.
+float s_frameViewScale;             // DAT_1430ab9e4
+uint32_t s_frameView14;             // DAT_1430aba18
+uint32_t s_frameView16;             // DAT_1430aba1c
+uint64_t s_frameView15;             // DAT_1430aba20
+uint32_t s_frameView17;             // DAT_1430aba28
 
 }  // namespace
 
@@ -101,6 +111,85 @@ void WorldReadGraphicsQuality() {
     if (raid != nullptr) {
         s_raidGraphicsQuality = static_cast<uint32_t>(raid->m_intValue);
     }
+}
+
+// ---- the world's startup -------------------------------------------------------------------
+
+extern "C" {
+unsigned long long FUN_1413cb1c0();
+unsigned long long FUN_142526ef0();
+unsigned long long FUN_14139ca60();
+unsigned long long FUN_14136db90();
+unsigned long long FUN_141396800();
+unsigned long long FUN_14134dfc0(unsigned long long);
+unsigned long long FUN_14134dfe0(unsigned long long);
+unsigned long long FUN_141355300();
+unsigned long long FUN_1413afb30();
+unsigned long long FUN_1413cf1d0();
+unsigned long long FUN_14139aa40();
+unsigned long long FUN_14139a4f0(unsigned long long);
+}
+// translated: FUN_1413cb1c0
+// translated: FUN_142526ef0
+// translated: FUN_14139ca60
+// translated: FUN_14136db90
+// translated: FUN_141396800
+// translated: FUN_14134dfc0
+// translated: FUN_14134dfe0
+// translated: FUN_141355300
+// translated: FUN_1413afb30
+// translated: FUN_1413cf1d0
+// translated: FUN_14139aa40
+// translated: FUN_14139a4f0
+
+namespace {
+
+template <class F>
+void WorldGuarded(uint64_t address, F&& body) {
+    __try {
+        body();
+    } __except (GenFault(address, GetExceptionInformation())) {
+    }
+}
+
+// Every texture is loaded (FUN_141355300): the world's caches hear of it.
+void OnAllTexturesLoaded(void* storage) {
+    (void)storage;
+    WorldGuarded(0x141355300, [] { FUN_141355300(); });
+}
+
+}  // namespace
+
+// The world's subsystems set up in order: the scenes, DayNight, the map, the particulates and
+// the liquids, the device callbacks, the all-textures-loaded hook, the map objects, and the
+// world's telemetry stream.
+// ref: FUN_14134ec50
+void WorldInitialize() {
+    WorldGuarded(0x1413cb1c0, [] { FUN_1413cb1c0(); });
+    DayNightInitialize();
+    WorldGuarded(0x142526ef0, [] { FUN_142526ef0(); });
+    WorldGuarded(0x14139ca60, [] { FUN_14139ca60(); });
+    WorldGuarded(0x14136db90, [] { FUN_14136db90(); });
+    WorldGuarded(0x141396800, [] { FUN_141396800(); });
+    s_frameViewScale = 0.0f;
+    s_frameView14 = 0;
+    s_frameView15 = 0;
+    s_frameView16 = 0;
+    s_frameView17 = 0;
+    GxAddDeviceCreatedCallback(reinterpret_cast<GXDEVICECALLBACK>(&FUN_14134dfc0), nullptr);
+    GxAddDeviceDestroyedCallback(reinterpret_cast<GXDEVICECALLBACK>(&FUN_14134dfe0), nullptr);
+    blz::function_storage loaded;
+    loaded.m_invoke = reinterpret_cast<void*>(&OnAllTexturesLoaded);
+    loaded.m_manager = &blz::function_trivial_manager;
+    TextureAddAllLoadedCallback(&loaded, reinterpret_cast<uint64_t>(&WorldInitialize));
+    s_1430aba60 = 0;
+    WorldGuarded(0x1413afb30, [] { FUN_1413afb30(); });
+    WorldGuarded(0x1413cf1d0, [] { FUN_1413cf1d0(); });
+    WorldGuarded(0x14139aa40, [] { FUN_14139aa40(); });
+    WorldGuarded(0x14139a4f0, [] { FUN_14139a4f0(0); });
+    WorldGuarded(0x14139a4f0, [] { FUN_14139a4f0(1); });
+    // the world's stream (DAT_142e91d10), at its default flags
+    TelemetryStreamEnable(reinterpret_cast<void*>(0x142e91d10ull), 4);
 }
 
 extern "C" unsigned long long FUN_141383630();

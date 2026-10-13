@@ -14,7 +14,7 @@ class CSimpleMovieFrame;
 struct CMoviePlayer;
 
 // The movie log, Logs\Movie.log (DAT_142e97a88).
-extern HSLOG g_movieLog;
+extern HSLOG g_movieLog;  // untied: the port's own log handle
 
 // ref: FUN_1405fc880
 CMoviePlayer* MoviePlayerCreate(CSimpleMovieFrame* frame);

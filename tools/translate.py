@@ -266,8 +266,17 @@ def global_expr(ghidra: str, size: int, addr: int) -> str:
     return f"REFG({c_type_of(ghidra, size)}, 0x{addr:x})"
 
 
-PORT_GLOBAL = re.compile(r"^(?!(?:struct|class|union|enum|typedef|using)\b)([A-Za-z_][\w:<>,\t \*&]*?[\t \*&:])(\w+)(\[[^\]\n]*\])?(?:[\t ]*(?:=|\{)[^;\n]*)?;[\t ]*"
+# A global with a trailing address tag. The initializer may be `= x`, `{x}` or a constructor's
+# `(a, b)` (CDataAllocator s_pool(0x20, 0x20); went untied until 2026-10-13); group 5 holds a
+# constructor's arguments, so a prototype (`bool F(int x);`) can be told apart in port_globals.
+PORT_GLOBAL = re.compile(r"^(?!(?:struct|class|union|enum|typedef|using|return)\b)([A-Za-z_][\w:<>,\t \*&]*?[\t \*&:])(\w+)(\[[^\]\n]*\])?"
+                         r"(?:[\t ]*(?:=|\{)[^;\n]*|[\t ]*\(([^;\n]*)\))?;[\t ]*"
                          r"//\s*(?:ref:\s*)?(?:DAT_|0x)(14[0-9a-f]{7})\b", re.M)
+# A function pointer global: `void (*s_hook)(int);  // DAT_x`, `BOOL(WINAPI* s_f)(HWND);  // DAT_x`.
+PORT_FNPTR = re.compile(r"^(?!(?:typedef|using|return)\b)([A-Za-z_][\w:<>,\t \*&]*?)\(\s*(?:\w+\s*)?\*\s*(\w+)\s*\)\s*\([^;\n]*\)"
+                        r"(?:[\t ]*=[^;\n]*)?;[\t ]*//\s*(?:ref:\s*)?(?:DAT_|0x)(14[0-9a-f]{7})\b", re.M)
+# a parameter declaration (`int32_t x`, `const char* s`): what a prototype's parentheses hold
+PARAM_DECL = re.compile(r"(?:^|,)\s*(?:const\s+)?[A-Za-z_][\w:<>]*[\s\*&]+(?:const\s+)?[A-Za-z_]\w*\s*(?=,|$)")
 SCALAR = re.compile(r"^(?:static\s+|extern\s+|thread_local\s+)*(?:const\s+)?(?:u?int\d+_t|bool|float|double|char|"
                     r"int|unsigned|DWORD|size_t|uintptr_t|HANDLE|HWND|\w+\s*\*+)$")
 
@@ -622,12 +631,21 @@ def port_globals() -> dict[int, dict]:
         text = p.read_text(encoding="utf-8", errors="replace")
         for m in PORT_GLOBAL.finditer(text):
             decl = m.group(1).strip()
-            out[int(m.group(4), 16)] = {
+            args = m.group(4)
+            if args is not None and (not args.strip() or PARAM_DECL.search(args) or args.strip() == "void"):
+                continue  # a prototype, not a constructed global
+            out[int(m.group(5), 16)] = {
                 "name": m.group(2), "file": p.relative_to(ROOT).as_posix(), "decl": decl,
                 "const": bool(re.match(r"(?:static\s+)?(?:const|constexpr)\b", decl)) and "*" not in decl,
                 "scalar": bool(SCALAR.match(decl)) and not m.group(3),
                 "qual": scope_at(text, m.start()) + m.group(2),
                 "tls": "thread_local" in decl,
+            }
+        for m in PORT_FNPTR.finditer(text):
+            out[int(m.group(3), 16)] = {
+                "name": m.group(2), "file": p.relative_to(ROOT).as_posix(), "decl": "void*",
+                "const": False, "scalar": True,
+                "qual": scope_at(text, m.start()) + m.group(2), "tls": False,
             }
     return out
 
@@ -1420,6 +1438,9 @@ class Translator:
         body = IMPORT.sub(lambda m: f"(*(code *)&{m.group(2)})", body)
         # a global called through: a code pointer, whatever the export typed it
         body = re.sub(r"\(\*REFG\(undefined\d?, (0x[0-9a-f]+)\)\)\s*\(", r"(*REFG(code *, \1))(", body)
+        # the same at a port global it is tied to (a function pointer the port holds)
+        body = re.sub(r"\(\*\(\*\(undefined\d? \*\)(\(\(char \*\)&gen_g_[0-9a-f]{9} \+ 0x[0-9a-f]+\))\)\)\s*\(",
+                      r"(*(*(code **)\1))(", body)
         if re.search(r"\*REFG\(undefined\d?,|REFG\(undefined\d?, 0x[0-9a-f]+\)\s*\[", body):
             raise Untranslatable("a global used as a pointer the data export does not type")
         body = self.float_arguments(body, params)

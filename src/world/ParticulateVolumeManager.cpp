@@ -16,7 +16,7 @@ const char s_blockTag[] = ".H";
 const char s_nodeTag[] = ".?AU?$rb_node@U?$pair@QEBVCMapObjInst@@PEAVCParticulateVolume@@@blz@@@blz@@";
 
 // DAT_1430ac038: every manager.
-blz::vector<CParticulateVolumeManager*, s_managerPtrTag> s_managers;
+blz::vector<CParticulateVolumeManager*, s_managerPtrTag> s_managers;  // untied: FUN_141397d30 would walk the port's managers at the reference's offsets
 
 struct VolumeNode {
     uint8_t m_00[8];

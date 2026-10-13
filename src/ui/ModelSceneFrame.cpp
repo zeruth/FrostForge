@@ -9,6 +9,7 @@
 #include "framescript/FrameScript.hpp"
 #include "model2/CM2Lighting.hpp"
 #include "storm/Memory.hpp"
+#include "ui/BinaryXML.hpp"
 #include "world/ModelFog.hpp"
 #include "world/WorldScene.hpp"
 
@@ -25,9 +26,14 @@ void __cdecl _Init_thread_header(int* guard);
 void __cdecl _Init_thread_footer(int* guard);
 // translated: FUN_141a93190
 unsigned long long FUN_141a93190(unsigned long long actor);
-// translated: FUN_141a96bb0
-unsigned long long FUN_141a96bb0(unsigned long long frame, unsigned long long node, unsigned long long status,
-                                 unsigned long long intrinsic);
+// translated: FUN_141a95670
+unsigned long long FUN_141a95670(unsigned long long block, unsigned long long frame);
+// translated: FUN_141a97cd0
+unsigned long long FUN_141a97cd0(unsigned long long array, unsigned long long count);
+// translated: FUN_141a935a0
+unsigned long long FUN_141a935a0(unsigned long long actor, unsigned long long node, unsigned long long status);
+// translated: FUN_14060f390
+unsigned long long FUN_14060f390(unsigned long long object, unsigned long long node, unsigned long long status);
 // translated: FUN_141a96fe0
 unsigned long long FUN_141a96fe0(unsigned long long frame, unsigned long long elapsedBits);
 // translated: FUN_141a96ee0
@@ -49,7 +55,13 @@ int32_t ModelSceneFrame::s_restrictedMetaTable = -2; // DAT_142d2f56c
 namespace {
 
 // The model scenes' pool (DAT_143208508).
-CDataAllocator s_modelSceneHeap(0x4d0, 10);
+CDataAllocator s_modelSceneHeap(0x4d0, 10);  // DAT_143208508
+
+// The actors' pool (0xe8 bytes, 20 a chunk): the reference's own, in the image, since the
+// translated actor destructor returns blocks to it.
+CDataAllocator& ActorHeap() {
+    return *reinterpret_cast<CDataAllocator*>(0x1432084e0ull);
+}
 
 // The one script past the Frame ones a model scene has (OnModelLoaded's index), no arguments.
 constexpr uint8_t SCRIPT_MODELSCENE = 0x30;
@@ -194,9 +206,66 @@ uint32_t ModelSceneFrame::GetObjectSize() {
     return 0x4d0;
 }
 
+// The fog distances, the fog colour, the draw layer, then one actor per <Actors> child and the
+// view insets. The actors are the reference's own objects (translated), from its own pool.
 // ref: FUN_141a96bb0
 void ModelSceneFrame::LoadXML(XMLOBJECT* node, CStatus* status, const char* intrinsic) {
-    Guarded(0x141a96bb0, [&] { FUN_141a96bb0(Raw(this), Raw(node), Raw(status), Raw(intrinsic)); });
+    this->CSimpleFrame::LoadXML(node, status, intrinsic);
+    if (!(node->m_flags & 0x4000)) {
+        return;
+    }
+    auto scene = static_cast<XMLMODELSCENE*>(node);
+    if (scene->m_sceneFlags & 1) {
+        this->At<float>(0x374) = scene->m_fogNear;
+    }
+    if (scene->m_sceneFlags & 2) {
+        this->At<float>(0x378) = scene->m_fogFar;
+    }
+    if (auto color = static_cast<XMLCOLOR*>(XMLObjectFindChild(node, XMLTYPE_FOGCOLOR))) {
+        uint32_t argb = XmlColorPack(color);
+        this->At<uint32_t>(0x370) = argb;
+        this->At<uint32_t>(0x3a0) = argb;
+        this->At<uint32_t>(0x3a4) = argb;
+        this->At<uint32_t>(0x3a8) = argb;
+    }
+    if (scene->m_frameFlags & 0x100000) {
+        uint32_t flags = this->At<uint32_t>(0x4a8);
+        if ((flags & 0xf) != scene->m_drawLayer) {
+            this->At<uint32_t>(0x4a8) = ((flags ^ scene->m_drawLayer) & 0xf) ^ flags;
+            this->MarkBatchDirty();
+        }
+    }
+    for (XMLOBJECT* child = node->m_child; child; child = child->m_next) {
+        if (child->m_type == XMLTYPE_ACTORS) {
+            for (XMLOBJECT* entry = child->m_child; entry; entry = entry->m_next) {
+                void* block = ActorHeap().GetData(false, ".?AVModelSceneFrameActor@@", -2, 0x1f);
+                uint64_t actor = 0;
+                Guarded(0x141a95670, [&] { actor = block ? FUN_141a95670(Raw(block), Raw(this)) : 0; });
+                // m_actors: data, count, capacity (top bit: not owned)
+                uint64_t capacity = this->At<uint64_t>(0x368) & 0x7fffffffffffffffull;
+                if (this->At<uint64_t>(0x360) == capacity) {
+                    Guarded(0x141a97cd0, [&] { FUN_141a97cd0(Raw(&this->At<uint64_t>(0x358)), capacity + 1); });
+                }
+                reinterpret_cast<uint64_t*>(this->At<uint64_t>(0x358))[this->At<uint64_t>(0x360)] = actor;
+                this->At<uint64_t>(0x360) += 1;
+                // FUN_140643a20, the port's own over the actor's script object
+                auto object = reinterpret_cast<FrameScript_Object*>(actor);
+                Guarded(0x140643a20, [&] { object->LoadXML(entry, status, nullptr); });
+                Guarded(0x141a935a0, [&] { FUN_141a935a0(actor, Raw(entry), Raw(status)); });
+                Guarded(0x14060f390, [&] { FUN_14060f390(actor, Raw(entry), Raw(status)); });
+            }
+        } else if (child->m_type == XMLTYPE_VIEWINSETS) {
+            float left = 0.0f;
+            float right;
+            float top;
+            float bottom;
+            XMLInsetGet(static_cast<XMLINSET*>(child), &left, &right, &top, &bottom, status);
+            this->At<float>(0x4bc) = top;
+            this->At<float>(0x4c0) = left;
+            this->At<float>(0x4c4) = bottom;
+            this->At<float>(0x4c8) = right;
+        }
+    }
 }
 
 // ref: FUN_141a96fe0

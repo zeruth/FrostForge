@@ -36,6 +36,15 @@ uint32_t g_clientTeardownFlags;  // DAT_142ddd0dc
 CVar* g_agentUid;     // DAT_142ddfa40
 CVar* g_launchAgent;  // DAT_142ddfa48
 
+// A telemetry stream's enable (vtable slot 0x88 of DAT_142e94e90 / DAT_142e94c80, flag 4 meaning
+// DAT_142ccdf30's default); the streams are offline.
+// ref: FUN_14057d1b0
+void TelemetryStreamEnable(void* stream, uint32_t flags) {
+    (void)stream;
+    (void)flags;
+    FROST_UNIMPLEMENTED();
+}
+
 namespace {
 
 // DAT_142ddfa20: a growable array of OsNotifyDir pointers, emptied by stage 1. Owned by the
@@ -661,14 +670,6 @@ void TelemetryHotfixListener(int32_t event) {
     }
 }
 
-// A telemetry stream's enable (vtable slot 0x88 of DAT_142e94e90 / DAT_142e94c80, flag 4 meaning
-// DAT_142ccdf30's default); the streams are offline.
-// ref: FUN_14057d1b0
-void TelemetryStreamEnable(void* stream, uint32_t flags) {
-    (void)stream;
-    (void)flags;
-    FROST_UNIMPLEMENTED();
-}
 uint8_t s_telemetryStreamA;  // DAT_142e94e90
 uint8_t s_telemetryStreamB;  // DAT_142e94c80
 

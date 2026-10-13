@@ -38,7 +38,7 @@ const char s_verticesTag[] = ".?AV?$TSFixedArray@UGxVertexPNCT2@@$07@@";
 CWorldScene* s_currentScene;
 
 // DAT_142d011e8: every scene, linked at the tail as it is made.
-TSList<CWorldScene, TSGetLink<CWorldScene>, 8> s_scenes;
+TSList<CWorldScene, TSGetLink<CWorldScene>, 8> s_scenes;  // untied: the world's device callbacks (FUN_1413cae30) still walk the image's list
 
 // A map's far clips are held to this while its flag 2 is set (DAT_142738a68).
 constexpr float MAP_FAR_CLIP_CAP = 4400.0f;

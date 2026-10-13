@@ -185,4 +185,5 @@ void AgentSetCallback(void (*callback)(void* param)) {
 extern "C" void* const gen_p_1430d2538 = (void*)&s_programCode;
 extern "C" void* const gen_p_1430d253c = (void*)&s_textLocaleCode;
 extern "C" void* const gen_p_1430d2540 = (void*)&s_audioLocaleCode;
+extern "C" void* const gen_p_1430d2548 = (void*)&s_callback;
 // ---- end of generated globals ----

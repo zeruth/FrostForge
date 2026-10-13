@@ -20,7 +20,7 @@ constexpr float BOX_EMPTY_MAX = -3.4028235e+38f;
 // DAT_14261a954
 constexpr float LENGTH_EPSILON = 2.3841858e-07f;
 // DAT_14261a95c: below this a matrix is not inverted.
-constexpr float DETERMINANT_EPSILON = 1.0e-06f;
+constexpr float DETERMINANT_EPSILON = 1.0e-06f;  // DAT_14261a95c
 // DAT_1426c6f7c, DAT_142618d64
 constexpr float SCALE_EPSILON = 1.1920929e-07f;
 

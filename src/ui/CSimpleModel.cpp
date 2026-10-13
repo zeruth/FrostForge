@@ -30,7 +30,7 @@ bool CSimpleModel::s_drawFlagAll = true;
 namespace {
 
 // The model frames' pool (0x1447aee28).
-CDataAllocator s_modelHeap(0x4d0, 5);
+CDataAllocator s_modelHeap(0x4d0, 5);  // DAT_1447aee28
 
 // The scripts of a model frame.
 enum : uint8_t {

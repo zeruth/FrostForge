@@ -108,7 +108,7 @@ uint32_t s_mouseMode;               // DAT_142de0e34
 uint32_t s_mouseCaptureButtons;     // DAT_142de0e28: the buttons a held cursor waits on
 // The mouse-ups that came while the events were paused (DAT_142de0e00), replayed into the UI
 // when they resume (LAB_1402384e0).
-std::vector<MOUSEEVENT> s_deferredMouseUps;
+std::vector<MOUSEEVENT> s_deferredMouseUps;  // untied: a std::vector, not the reference's array
 int32_t* s_loadingScreen;           // DAT_142de0bf8
 
 }

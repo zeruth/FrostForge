@@ -33,7 +33,7 @@ int32_t CSimpleModelFFX::s_restrictedMetaTable = -2;
 namespace {
 
 // The ModelFFX frames' pool (0x143122788).
-CDataAllocator s_modelFfxHeap(0x13d8, 5);
+CDataAllocator s_modelFfxHeap(0x13d8, 5);  // DAT_143122788
 
 // A model event: '$DSO' plays the sound the event names (FUN_1412d25a0, FUN_1412ce0f0).
 // ref: FUN_1416973f0

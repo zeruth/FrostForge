@@ -459,7 +459,7 @@ struct WINDOWSIZEVECTOR {
 };
 
 // The sizes GetGameWindowSizes last handed out (DAT_1431f6680).
-blz::vector<GXSIZE, s_gxSizeTag> s_gameWindowSizes;
+blz::vector<GXSIZE, s_gxSizeTag> s_gameWindowSizes;  // untied: GetScreenResolutions (FUN_1419f4d40) is the translated user
 
 // The window sizes for a monitor, windowed or fullscreen: its fullscreen sizes, as vectors.
 // ref: FUN_1419f60b0

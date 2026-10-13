@@ -33,7 +33,7 @@ uint8_t s_clipSuspended;            // DAT_1430b001e: the cursor left while clip
 uint8_t s_visible;                  // DAT_1430d009c: not minimized
 
 // The once-only lookup of EnableNonClientDpiScaling (DAT_1430b0000: a lock, then "done").
-SRWLOCK s_dpiOnceLock = SRWLOCK_INIT;
+SRWLOCK s_dpiOnceLock = SRWLOCK_INIT;  // DAT_1430b0000
 uint8_t s_dpiOnceDone;
 BOOL(WINAPI* s_enableNonClientDpiScaling)(HWND);  // DAT_1430b0048
 

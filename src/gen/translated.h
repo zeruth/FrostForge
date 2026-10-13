@@ -52,6 +52,9 @@ __declspec(dllimport) unsigned long long TerminateProcess();
 __declspec(dllimport) unsigned long long VkKeyScanA();
 __declspec(dllimport) unsigned long long WaitForSingleObject();
 __declspec(dllimport) unsigned long long send();
+/* g_coordinateSpace (src/base/Coordinate.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_142ccb9f0=?g_coordinateSpace@@3UCOORDINATESPACE@@A")
+extern char gen_g_142ccb9f0;
 /* g_se3VoiceOverPriority (src/sound/SE3Kit.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142cfca30=?g_se3VoiceOverPriority@@3HA")
 extern char gen_g_142cfca30;
@@ -271,9 +274,6 @@ extern char gen_g_142e62460;
 /* g_loadingScreenTaxiSplinesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e62eb0=?g_loadingScreenTaxiSplinesDB@@3VWowClientDB2@@A")
 extern char gen_g_142e62eb0;
-/* g_localeDB (src/db/DB2Tables.hpp) */
-#pragma comment(linker, "/alternatename:gen_g_142e632d0=?g_localeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e632d0;
 /* g_manifestInterfaceDataDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e64770=?g_manifestInterfaceDataDB@@3VWowClientDB2@@A")
 extern char gen_g_142e64770;
@@ -457,9 +457,6 @@ extern char gen_g_142e8e560;
 /* g_mapDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e914d0=?g_mapDB@@3VWowClientDB2@@A")
 extern char gen_g_142e914d0;
-/* g_occluderCurtainDB (src/db/DB2Tables.hpp) */
-#pragma comment(linker, "/alternatename:gen_g_142e91d10=?g_occluderCurtainDB@@3VWowClientDB2@@A")
-extern char gen_g_142e91d10;
 /* g_voiceOverPriorityDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e95af0=?g_voiceOverPriorityDB@@3VWowClientDB2@@A")
 extern char gen_g_142e95af0;
@@ -472,6 +469,9 @@ extern char gen_g_142e979d8;
 /* s_objectTypeCount (src/framescript/FrameScriptObject.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e979f0=?s_objectTypeCount@FrameScript_Object@@2HA")
 extern char gen_g_142e979f0;
+/* g_editBoxFocus (src/ui/FrameScriptGlobals.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_142e97b30=?g_editBoxFocus@@3PEAVCSimpleFrame@@EA")
+extern char gen_g_142e97b30;
 /* g_soundEnableInBackground (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9ef8=?g_soundEnableInBackground@@3PEAUCVar@@EA")
 extern char gen_g_1430a9ef8;
@@ -493,6 +493,24 @@ extern char gen_g_1430ab9d4;
 /* g_worldOptionsChanged (src/client/GraphicsSettings.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430abef8=?g_worldOptionsChanged@@3EA")
 extern char gen_g_1430abef8;
+/* g_launcherLoginUsed (src/glue/ScriptAPIGlue.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_1430af424=?g_launcherLoginUsed@@3EA")
+extern char gen_g_1430af424;
+/* g_reconnectLoginPossible (src/glue/ScriptAPIGlue.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_1430af4c8=?g_reconnectLoginPossible@@3EA")
+extern char gen_g_1430af4c8;
+/* g_charSelectModelFrame (src/glue/ScriptAPIGlue.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_143122460=?g_charSelectModelFrame@@3PEAVCSimpleModelFFX@@EA")
+extern char gen_g_143122460;
+/* g_numCharacters (src/glue/ScriptAPIGlue.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_143122480=?g_numCharacters@@3HA")
+extern char gen_g_143122480;
+/* g_glueLoginFlags (src/glue/ScriptAPIGlue.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_143122810=?g_glueLoginFlags@@3UGLUELOGINFLAGS@@A")
+extern char gen_g_143122810;
+/* g_glueLoginState (src/glue/ScriptAPIGlue.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_143122848=?g_glueLoginState@@3UGLUELOGINSTATE@@A")
+extern char gen_g_143122848;
 /* g_gxDevice (src/gx/Gx.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_14348b650=?g_gxDevice@@3PEAXEA")
 extern char gen_g_14348b650;
@@ -502,6 +520,9 @@ extern void *const gen_p_142cc87b0;
 /* s_consoleHotKey (src/console/Command.cpp), internal: through its pointer */
 extern void *const gen_p_142ccbed0;
 #define gen_g_142ccbed0 (*(char *)gen_p_142ccbed0)
+/* s_loadFlags (src/db/DBClient.cpp), internal: through its pointer */
+extern void *const gen_p_142ccdf30;
+#define gen_g_142ccdf30 (*(char *)gen_p_142ccdf30)
 /* s_virtualNodes (src/ui/FrameXML.cpp), internal: through its pointer */
 extern void *const gen_p_142cf57e0;
 #define gen_g_142cf57e0 (*(char *)gen_p_142cf57e0)
@@ -583,6 +604,18 @@ extern void *const gen_p_142e302a8;
 /* s_hotfixesClosed (src/client/StartupClient.cpp), internal: through its pointer */
 extern void *const gen_p_142e8e0e9;
 #define gen_g_142e8e0e9 (*(char *)gen_p_142e8e0e9)
+/* s_dbHotfixLog (src/client/StartupClient.cpp), internal: through its pointer */
+extern void *const gen_p_142e8e218;
+#define gen_g_142e8e218 (*(char *)gen_p_142e8e218)
+/* s_dbHotfixRecordLog (src/client/StartupClient.cpp), internal: through its pointer */
+extern void *const gen_p_142e8e220;
+#define gen_g_142e8e220 (*(char *)gen_p_142e8e220)
+/* s_lastMouseTime (src/ui/CSimpleTop.cpp), internal: through its pointer */
+extern void *const gen_p_142e979e0;
+#define gen_g_142e979e0 (*(char *)gen_p_142e979e0)
+/* s_fontStringHeap (src/ui/CSimpleFontString.cpp), internal: through its pointer */
+extern void *const gen_p_142e97be0;
+#define gen_g_142e97be0 (*(char *)gen_p_142e97be0)
 /* s_L (src/framescript/FrameScript.cpp), internal: through its pointer */
 extern void *const gen_p_142e99e18;
 #define gen_g_142e99e18 (*(char *)gen_p_142e99e18)
@@ -643,6 +676,9 @@ extern void *const gen_p_1430d253c;
 /* s_audioLocaleCode (src/services/Agent.cpp), internal: through its pointer */
 extern void *const gen_p_1430d2540;
 #define gen_g_1430d2540 (*(char *)gen_p_1430d2540)
+/* s_callback (src/services/Agent.cpp), internal: through its pointer */
+extern void *const gen_p_1430d2548;
+#define gen_g_1430d2548 (*(char *)gen_p_1430d2548)
 /* s_sessionUp (src/services/ClientServices.cpp), internal: through its pointer */
 extern void *const gen_p_1430d258a;
 #define gen_g_1430d258a (*(char *)gen_p_1430d258a)
@@ -690,7 +726,6 @@ undefined8 FUN_1401cb650();
 undefined8 FUN_1401cb670();
 undefined8 FUN_1401cb820();
 undefined8 FUN_1401cb840();
-undefined8 FUN_1401cb860();
 undefined8 FUN_1401cb880();
 undefined8 FUN_1401cb8a0();
 undefined8 FUN_1401cb8f0();
@@ -705,7 +740,6 @@ undefined8 FUN_1401dd690();
 undefined8 FUN_1401dd800();
 undefined8 FUN_1401dd8d0();
 undefined8 FUN_1401df1f0();
-undefined8 FUN_1401df2a0();
 undefined8 FUN_1401df330();
 undefined8 FUN_1401df370();
 undefined8 FUN_1401df570();
@@ -713,18 +747,15 @@ undefined8 FUN_1401df660();
 undefined8 FUN_1401df6b0();
 undefined8 FUN_1401df6e0();
 undefined8 FUN_1401df730();
-undefined8 FUN_1401df780();
 undefined8 FUN_1401df7d0();
 undefined8 FUN_1401df850();
 undefined8 FUN_1401df920();
 undefined8 FUN_1401df960();
-undefined8 FUN_1401df9a0();
 undefined8 FUN_1401df9d0();
 undefined8 FUN_1401dfa00();
 undefined8 FUN_1401dfa40();
 undefined8 FUN_1401dfb00();
 undefined8 FUN_1401dfb60();
-undefined8 FUN_1401dfc30();
 undefined8 FUN_1401dfdc0();
 undefined8 FUN_1401dfee0();
 undefined8 FUN_1401e0000();
@@ -768,7 +799,6 @@ undefined8 FUN_1401e4af0();
 undefined8 FUN_1401e4bd0();
 undefined8 FUN_1401e4cd0();
 undefined8 FUN_1401e4f00();
-undefined8 FUN_1401e4f30();
 undefined8 FUN_1401e4f50();
 undefined8 FUN_1401e50d0();
 undefined8 FUN_1401e5100();
@@ -784,9 +814,6 @@ undefined8 FUN_1401e5600();
 undefined8 FUN_1401e5940();
 undefined8 FUN_1401e5970();
 undefined8 FUN_1401e5990();
-undefined8 FUN_1401e5d00();
-undefined8 FUN_1401e5d30();
-undefined8 FUN_1401e5e50();
 undefined8 FUN_1401e5ee0();
 undefined8 FUN_1401e5f70();
 undefined8 FUN_1401e6080();
@@ -930,7 +957,6 @@ undefined8 FUN_1401ed540();
 undefined8 FUN_1401ed620();
 undefined8 FUN_1401ed650();
 undefined8 FUN_1401ed680();
-undefined8 FUN_1401ed6a0();
 undefined8 FUN_1401ede30();
 undefined8 FUN_1401ede50();
 undefined8 FUN_1401ede90();
@@ -1017,7 +1043,6 @@ undefined8 FUN_1401f0db0();
 undefined8 FUN_1401f0e00();
 undefined8 FUN_1401f0e20();
 undefined8 FUN_1401f0e50();
-undefined8 FUN_1401f0e90();
 undefined8 FUN_1401f0ef0();
 undefined8 FUN_1401f0f20();
 undefined8 FUN_1401f0f70();
@@ -1670,7 +1695,6 @@ undefined8 FUN_1401fe7f0();
 undefined8 FUN_1401fe820();
 undefined8 FUN_1401fe850();
 undefined8 FUN_1401fe880();
-undefined8 FUN_1401fe8b0();
 undefined8 FUN_1401fe8e0();
 undefined8 FUN_1401fe910();
 undefined8 FUN_1401fe950();
@@ -1840,7 +1864,6 @@ undefined8 FUN_140208df0();
 undefined8 FUN_140209040();
 undefined8 FUN_140209160();
 undefined8 FUN_140209340();
-undefined8 FUN_140209430();
 undefined8 FUN_140209470();
 undefined8 FUN_1402094b0();
 undefined8 FUN_1402095a0();
@@ -1902,7 +1925,6 @@ undefined8 FUN_14020aca0();
 undefined8 FUN_14020afa0();
 undefined8 FUN_14020b250();
 undefined8 FUN_14020b2e0();
-undefined8 FUN_14020b5a0();
 undefined8 FUN_14020b5c0();
 undefined8 FUN_14020b730();
 undefined8 FUN_14020b790();
@@ -1938,13 +1960,10 @@ undefined8 FUN_14020db60();
 undefined8 FUN_14020db90();
 undefined8 FUN_14020dbc0();
 undefined8 FUN_14020dbf0();
-undefined8 FUN_14020dc20();
 undefined8 FUN_14020dc50();
-undefined8 FUN_14020dc80();
 undefined8 FUN_14020dcb0();
 undefined8 FUN_14020dce0();
 undefined8 FUN_14020dd10();
-undefined8 FUN_14020dd50();
 undefined8 FUN_14020dd80();
 undefined8 FUN_14020de60();
 undefined8 FUN_14020deb0();
@@ -2156,9 +2175,7 @@ undefined8 FUN_14025a990();
 undefined8 FUN_14025afa0();
 undefined4 FUN_14025b2e0();
 undefined4 FUN_14025b4a0();
-undefined8 * FUN_14025cba0();
 undefined8 * FUN_14025cc10();
-undefined8 FUN_14025cc20();
 undefined8 FUN_14025cfe0();
 ulonglong FUN_140260060();
 ulonglong FUN_140260f80();
@@ -2568,7 +2585,6 @@ undefined8 * FUN_14051b6d0();
 undefined * FUN_14051b740();
 undefined * FUN_14051b790();
 undefined * FUN_14051b7e0();
-undefined * FUN_14051b800();
 undefined * FUN_14051b8d0();
 undefined * FUN_14051b900();
 undefined * FUN_14051b930();
@@ -2718,7 +2734,6 @@ undefined8 FUN_1405d5a70();
 undefined * FUN_1405d5bc0();
 undefined8 FUN_1405d5d80();
 longlong * FUN_1405d68f0();
-bool FUN_1405d6bf0();
 undefined8 FUN_1405d9f80();
 undefined8 FUN_1405da370();
 ulonglong FUN_1405da650();
@@ -2775,8 +2790,6 @@ int FUN_140610c10();
 ulonglong FUN_140611af0();
 undefined4 FUN_140611e30();
 undefined8 FUN_140616300();
-undefined8 FUN_140616a70();
-undefined8 FUN_140617390();
 undefined8 FUN_1406187a0();
 undefined8 FUN_140618b30();
 undefined8 FUN_140618d20();
@@ -2859,11 +2872,8 @@ undefined8 FUN_140665160();
 undefined8 FUN_140666840();
 undefined8 * FUN_140667240();
 undefined8 FUN_1406672f0();
-undefined8 FUN_140667b40();
 undefined8 FUN_140667c50();
 undefined8 FUN_1406683d0();
-longlong FUN_140669bf0();
-bool FUN_14066a0d0();
 char * FUN_140672410();
 ulonglong FUN_140672450();
 undefined8 * FUN_140672c40();
@@ -4266,7 +4276,6 @@ undefined4 FUN_1412802f0();
 longlong FUN_1412808c0();
 longlong FUN_141281020();
 longlong FUN_141281140();
-undefined8 FUN_1412814f0();
 undefined8 FUN_141281690();
 undefined8 FUN_141281880();
 undefined8 * FUN_141282970();
@@ -4400,7 +4409,6 @@ undefined4 FUN_14134e340();
 undefined8 FUN_14134e350();
 undefined4 FUN_14134e7e0();
 undefined8 FUN_14134e8a0();
-undefined8 FUN_14134ec50();
 undefined8 FUN_14134f460();
 undefined8 FUN_14134fd60();
 undefined8 FUN_141350a30();
@@ -4686,11 +4694,9 @@ undefined8 FUN_141488a80();
 undefined8 FUN_141488c90();
 undefined8 FUN_14148a020();
 undefined8 FUN_14148b310();
-undefined8 FUN_14148b330();
 undefined * FUN_14148ba10();
 undefined8 FUN_14148ba20();
 undefined1 FUN_14148ba50();
-undefined8 FUN_14148bae0();
 undefined8 * FUN_14148c410();
 undefined8 FUN_14148c460();
 undefined8 FUN_14148c510();
@@ -5240,23 +5246,15 @@ undefined8 FUN_14169ca60();
 undefined8 FUN_14169ca90();
 undefined8 FUN_14169cd70();
 undefined8 FUN_14169d0c0();
-undefined8 FUN_14169d3b0();
 undefined8 FUN_14169d3c0();
 undefined8 FUN_14169d420();
 undefined8 FUN_14169d550();
 undefined8 FUN_14169d680();
-undefined8 FUN_14169d7d0();
 undefined8 FUN_14169d890();
 undefined8 FUN_14169d980();
 undefined8 FUN_14169dab0();
 undefined8 FUN_14169dbb0();
 undefined8 FUN_14169de80();
-undefined8 FUN_14169df60();
-undefined8 FUN_14169dfa0();
-undefined8 FUN_14169dfd0();
-undefined8 FUN_14169e040();
-undefined8 FUN_14169e050();
-undefined8 FUN_14169e060();
 undefined8 FUN_14169e0a0();
 undefined8 FUN_14169e0f0();
 undefined8 FUN_14169e150();
@@ -5318,7 +5316,6 @@ undefined8 FUN_1416a69e0();
 undefined8 FUN_1416a6a80();
 undefined8 FUN_1416a6a90();
 undefined8 FUN_1416a6ac0();
-undefined8 FUN_1416a6af0();
 undefined8 FUN_1416a6b50();
 undefined8 FUN_1416a6b70();
 undefined8 FUN_1416a6b90();
@@ -7683,7 +7680,6 @@ longlong FUN_141a96890();
 undefined4 * FUN_141a968a0();
 undefined4 FUN_141a968f0();
 undefined8 FUN_141a96910();
-undefined8 FUN_141a96bb0();
 undefined8 FUN_141a96e70();
 undefined8 FUN_141a96ee0();
 undefined8 FUN_141a96f70();
@@ -7951,7 +7947,6 @@ undefined8 FUN_141c16a30();
 undefined8 FUN_141c16b00();
 undefined8 FUN_141c16b70();
 undefined8 FUN_141c17720();
-undefined8 FUN_141c191f0();
 undefined8 FUN_141c20090();
 undefined8 FUN_141c20160();
 bool FUN_141c28bb0();
@@ -8236,7 +8231,6 @@ int FUN_141cd4a20();
 undefined8 FUN_141cd5260();
 undefined8 FUN_141cd5a40();
 int FUN_141cd5b60();
-undefined8 FUN_141cd6500();
 undefined8 FUN_141cd6810();
 undefined8 FUN_141cd68a0();
 undefined8 FUN_141cd6e40();
@@ -8690,6 +8684,8 @@ undefined8 FUN_14228dec0();
 undefined8 FUN_14228dfb0();
 undefined8 FUN_14228e040();
 undefined8 FUN_14228e190();
+undefined8 FUN_14228e6d0();
+undefined8 FUN_14228e6f0();
 undefined8 FUN_14228f5d0();
 undefined8 FUN_14228f9a0();
 ulonglong * FUN_1422901d0();
@@ -8787,14 +8783,10 @@ undefined8 FUN_142440320();
 int FUN_142440990();
 undefined4 FUN_142441570();
 char * FUN_1424419e0();
-undefined8 FUN_142442270();
-undefined8 FUN_142442460();
-undefined8 FUN_142442f50();
 undefined8 FUN_14244f8b0();
+undefined8 FUN_14244f9b0();
 undefined8 FUN_14244f9f0();
 undefined8 FUN_14244fd20();
-undefined8 FUN_142458e70();
-undefined8 FUN_142458ed0();
 undefined4 * FUN_1424630a0();
 undefined8 FUN_142463ad0();
 undefined8 FUN_142468a20();
@@ -9068,7 +9060,6 @@ undefined8 FUN_1425daf80();
 undefined8 FUN_1425daf90();
 undefined8 FUN_1425db3c0();
 undefined8 FUN_1425db3d0();
-undefined8 FUN_1425db3e0();
 undefined8 FUN_1425db3f0();
 undefined8 FUN_1425db400();
 undefined8 FUN_1425db450();
@@ -9078,22 +9069,18 @@ undefined8 FUN_1425dbb70();
 undefined8 FUN_1425dc2b0();
 undefined8 FUN_1425dc370();
 undefined8 FUN_1425e2330();
-undefined8 FUN_1425e2d20();
 undefined8 FUN_1425e2e50();
 undefined8 FUN_1425e32e0();
 undefined8 FUN_1425e3500();
 undefined8 FUN_1425e3510();
 undefined8 FUN_1425e35e0();
-undefined8 FUN_1425e36b0();
 undefined8 FUN_1425e3700();
 undefined8 FUN_1425e37a0();
 undefined8 FUN_1425e38f0();
-undefined8 FUN_1425e3950();
 undefined8 FUN_1425e3960();
 undefined8 FUN_1425e3970();
 undefined8 FUN_1425e39d0();
 undefined8 FUN_1425e3ab0();
-undefined8 FUN_1425e3bb0();
 undefined8 FUN_1425e3d40();
 undefined8 FUN_1425e3da0();
 undefined8 FUN_1425e3e00();
@@ -9132,7 +9119,6 @@ undefined8 FUN_1425e6e80();
 undefined8 FUN_1425e7260();
 undefined8 FUN_1425e74e0();
 undefined8 FUN_1425e7560();
-undefined8 FUN_1425e75f0();
 undefined8 FUN_1425e7600();
 undefined8 FUN_1425e78e0();
 undefined8 FUN_1425e7940();
@@ -9145,9 +9131,6 @@ undefined8 FUN_1425e8450();
 undefined8 FUN_1425e86c0();
 undefined8 FUN_1425e8800();
 undefined8 FUN_1425e88c0();
-undefined8 FUN_1425e8f00();
-undefined8 FUN_1425e8f40();
-undefined8 FUN_1425e9080();
 undefined8 FUN_1425e90f0();
 undefined8 FUN_1425e9250();
 undefined8 FUN_1425e93f0();
@@ -9236,7 +9219,6 @@ undefined8 FUN_1425ec770();
 undefined8 FUN_1425ec7c0();
 undefined8 FUN_1425ec890();
 undefined8 FUN_1425eca90();
-undefined8 FUN_1425ecaa0();
 undefined8 FUN_1425ecc80();
 undefined8 FUN_1425ecc90();
 undefined8 FUN_1425ece70();
@@ -9286,7 +9268,6 @@ undefined8 FUN_1425efea0();
 undefined8 FUN_1425eff30();
 undefined8 FUN_1425eff40();
 undefined8 FUN_1425eff80();
-undefined8 FUN_1425f0060();
 undefined8 FUN_1425f0180();
 undefined8 FUN_1425f0280();
 undefined8 FUN_1425f02e0();
@@ -9434,7 +9415,6 @@ undefined8 FUN_1425f87f0();
 undefined8 FUN_1425f8900();
 undefined8 FUN_1425f8910();
 undefined8 FUN_1425f8950();
-undefined8 FUN_1425f8960();
 undefined8 FUN_1425f8970();
 undefined8 FUN_1425f8980();
 undefined8 FUN_1425f8a30();
@@ -9551,7 +9531,6 @@ undefined8 FUN_1426005c0();
 undefined8 FUN_142600680();
 undefined8 FUN_1426006e0();
 undefined8 FUN_142600740();
-undefined8 FUN_1426008f0();
 undefined8 FUN_142600910();
 undefined8 FUN_142600970();
 undefined8 FUN_142600a40();
@@ -9597,7 +9576,6 @@ undefined8 FUN_142601950();
 undefined8 FUN_142601980();
 undefined8 FUN_1426019b0();
 undefined8 FUN_1426019f0();
-undefined8 FUN_142601bd0();
 undefined8 FUN_142601be0();
 undefined8 FUN_142602090();
 undefined8 FUN_142602140();
@@ -9612,13 +9590,10 @@ undefined8 FUN_142602860();
 undefined8 FUN_142602870();
 undefined8 FUN_142602880();
 undefined8 FUN_1426028e0();
-undefined8 FUN_1426028f0();
 undefined8 FUN_142602900();
-undefined8 FUN_142602910();
 undefined8 FUN_142602920();
 undefined8 FUN_142602930();
 undefined8 FUN_142602940();
-undefined8 FUN_1426029a0();
 undefined8 FUN_1426029b0();
 undefined8 FUN_142602a40();
 undefined8 FUN_14260af70();

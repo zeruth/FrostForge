@@ -192,7 +192,7 @@ const ParticleKind s_kinds[5] = {
 // The pool of the fast path's keys (DAT_1430a1cc0).
 TObjectAllocHeap* s_keyPool;
 // What the models particles carry are updated under (DAT_1430a1f70).
-OSMUTEX s_modelLock;
+OSMUTEX s_modelLock;  // DAT_1430a1f70
 // How many have started the particle system (DAT_1430a1f18).
 int32_t s_initCount;
 

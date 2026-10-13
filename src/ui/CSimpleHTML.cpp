@@ -41,7 +41,7 @@ int32_t CSimpleHTML::s_restrictedMetaTable = -2;
 namespace {
 
 // The SimpleHTML frames' pool (0x1447aedd8).
-CDataAllocator s_htmlHeap(0x358, 5);
+CDataAllocator s_htmlHeap(0x358, 5);  // DAT_1447aedd8
 
 const char* const HTML_FILE = "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Frame\\CSimpleHTML.cpp";
 

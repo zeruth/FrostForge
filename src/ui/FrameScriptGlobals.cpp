@@ -24,7 +24,7 @@ extern "C" {
 }
 
 // The edit box holding the keyboard focus (0x142e97b30); CSimpleEditBox sets it.
-CSimpleFrame* g_editBoxFocus;
+CSimpleFrame* g_editBoxFocus;  // DAT_142e97b30
 
 // The metatables of classes not ported yet: EditBox (DAT_142d5e4a8) and Button (DAT_142d4e470).
 int32_t g_editBoxMetaTable = -2;

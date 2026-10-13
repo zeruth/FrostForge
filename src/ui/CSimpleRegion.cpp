@@ -15,7 +15,7 @@ namespace {
 const char s_regionVectorTag[] = ".PEAVCSimpleRegion@@";
 
 // The gradients' pool (0x142e99d00).
-CDataAllocator s_gradientHeap(sizeof(CGradient), 0x80);
+CDataAllocator s_gradientHeap(sizeof(CGradient), 0x80);  // DAT_142e99d00
 
 // The regions whose deletion waits for a frame to finish walking its list (0x142e99ce8).
 blz::vector<CSimpleRegion*, s_regionVectorTag> s_deferredDeletes;

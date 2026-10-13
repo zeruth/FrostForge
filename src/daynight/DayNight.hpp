@@ -536,6 +536,9 @@ struct DAYNIGHT {
 };
 static_assert(sizeof(DAYNIGHT) == 0x20, "DAYNIGHT is 0x20 bytes");
 
+// The module's device callbacks and the colour grading's (the world's startup and shutdown).
+void DayNightInitialize();
+void DayNightShutdown();
 // ref: FUN_142442100
 DAYNIGHT* DayNightCreate(CWorldScene* scene, CWorldView* view);
 // ref: FUN_142442370

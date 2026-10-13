@@ -35,6 +35,8 @@ extern CVar* g_overrideArchive;  // DAT_142ddfa78: "overrideArchive"
 
 // Adds a listener for the initial hotfix events (3 applied, 4 failed).
 void HotfixAddInitialListener(void (*listener)(int32_t event));
+// A telemetry stream's enable (offline: does nothing).
+void TelemetryStreamEnable(void* stream, uint32_t flags);
 
 void StartupErrorCallback(uint32_t code, const char* text);
 void Sub14165C0E0();

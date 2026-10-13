@@ -267,15 +267,6 @@ void Sub14125F550() {
     }
 }
 
-extern "C" unsigned long long FUN_14134ec50();
-// translated: FUN_14134ec50
-void Sub14134EC50() {
-    __try {
-        FUN_14134ec50();
-    } __except (GenFault(0x14134ec50ull, GetExceptionInformation())) {
-    }
-}
-
 // ---- Sub14023DBD0's callees ----------------------------------------------------------------
 
 static uint8_t s_flag142de2990;      // DAT_142de2990
@@ -1243,7 +1234,7 @@ bool Sub14022A260() {
     M2Initialize(m2Flags | 0x53, 0, 0);
     Sub14125F550();
     FullScreenEffectsRegisterCVars();
-    Sub14134EC50();
+    WorldInitialize();
     Sub14023DBD0();
     g_clientInitFlags |= 0x1000;
     Sub1412A99A0();
@@ -1395,4 +1386,6 @@ void Sub14023D170(GXFRAMESTATS* stats) {
 extern "C" void* const gen_p_142de194c = (void*)&s_compositorEnabled;
 extern "C" void* const gen_p_142e301b4 = (void*)&s_consoleEnabledFromCommandLine;
 extern "C" void* const gen_p_142e8e0e9 = (void*)&s_hotfixesClosed;
+extern "C" void* const gen_p_142e8e218 = (void*)&s_dbHotfixLog;
+extern "C" void* const gen_p_142e8e220 = (void*)&s_dbHotfixRecordLog;
 // ---- end of generated globals ----

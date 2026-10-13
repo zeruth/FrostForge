@@ -53,6 +53,22 @@ def call_edges(b: Binary, targets: set[int]) -> dict[int, set[int]]:
         f = b.func_containing(va)
         if f is not None and f != int(dest[p]):
             callers[int(dest[p])].add(f)
+    del dest, hit
+    # A function whose address another takes (lea reg, [rip+X]: callbacks, std::function
+    # managers, script handler tables) is reached through it, so the taker counts as a
+    # caller. Without this every callback looked like a root.
+    n = len(data) - 7
+    disp = np.ndarray(shape=(n,), dtype="<i4", buffer=data, offset=3, strides=(1,)).astype(np.int64)
+    pos = np.arange(n, dtype=np.int64)
+    dest = pos + disp + (start + 7)
+    modrm = raw[2 : n + 2]
+    lea = ((raw[:n] == 0x48) | (raw[:n] == 0x4C)) & (raw[1 : n + 1] == 0x8D) & ((modrm & 0xC7) == 0x05)
+    hit = lea & np.isin(dest, want)
+    for p in np.nonzero(hit)[0].tolist():
+        va = start + p
+        f = b.func_containing(va)
+        if f is not None and f != int(dest[p]) and b.is_insn_start(va):
+            callers[int(dest[p])].add(f)
     return callers
 
 

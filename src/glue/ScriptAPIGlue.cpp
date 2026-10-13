@@ -26,6 +26,7 @@
 #include "world/WorldFrame.hpp"
 #include <cstring>
 #include <string>
+#include <windows.h>
 
 extern "C" {
 #include "lauxlib.h"
@@ -33,7 +34,7 @@ extern "C" {
 }
 
 // The character list's size (DAT_143122480), set by the character list when it arrives.
-int32_t g_numCharacters;
+int32_t g_numCharacters;  // DAT_143122480
 // The glue screen's display state (DAT_14311c534): 2 once the first screen has been shown.
 int32_t g_glueScreenDisplayState;
 // The live region's character services (DAT_1431227b3..5), from the realm list.
@@ -41,11 +42,39 @@ uint8_t g_liveRegionCharacterList;
 uint8_t g_liveRegionCharacterCopy;
 uint8_t g_liveRegionAccountCopy;
 // Set when the launcher's login has been used up (DAT_1430af424).
-uint8_t g_launcherLoginUsed;
+uint8_t g_launcherLoginUsed;  // DAT_1430af424
 // Whether the realm connection can be resumed without a password (DAT_1430af4c8).
-uint8_t g_reconnectLoginPossible;
+uint8_t g_reconnectLoginPossible;  // DAT_1430af4c8
 // The character select screen's model frame (DAT_143122460).
-CSimpleModelFFX* g_charSelectModelFrame;
+CSimpleModelFFX* g_charSelectModelFrame;  // DAT_143122460
+
+// GlueLogin.cpp's flags (DAT_143122810..17); the login's state machine (FUN_14169e1c0 and its
+// neighbours, still translated) writes them through the tie.
+struct GLUELOGINFLAGS {
+    uint8_t m_attemptedLauncherLogin;   // 0x00 C_Login.SetAttemptedLauncherLogin
+    uint8_t m_connectedToWoW;           // 0x01
+    uint8_t m_02;                       // 0x02
+    uint8_t m_pad03;
+    int32_t m_autoRealmAddress;         // 0x04 C_Login.RequestAutoRealmJoin's, until the realm list
+};
+static_assert(sizeof(GLUELOGINFLAGS) == 8, "GLUELOGINFLAGS is 8 bytes");
+GLUELOGINFLAGS g_glueLoginFlags;  // DAT_143122810
+
+// GlueLogin.cpp's state (DAT_143122848..5f), cleared in wide stores, so held as one block.
+struct GLUELOGINSTATE {
+    int32_t m_auroraState;              // 0x00 0 none, 1 waiting, 2 logged on, 3 disconnecting, 4..7
+    uint32_t m_04;
+    uint8_t m_waitingForRealmList;      // 0x08
+    uint8_t m_wowConnecting;            // 0x09
+    uint16_t m_pad0a;
+    int32_t m_queuePosition;            // 0x0c the wait queue (C_Login.GetWaitQueueInfo)
+    int32_t m_queueWait;                // 0x10
+    uint8_t m_queueFlag;                // 0x14
+    uint8_t m_queued;                   // 0x15
+    uint16_t m_pad16;
+};
+static_assert(sizeof(GLUELOGINSTATE) == 0x18, "GLUELOGINSTATE is 0x18 bytes");
+GLUELOGINSTATE g_glueLoginState;  // DAT_143122848
 
 namespace {
 
@@ -103,8 +132,53 @@ int Lua_ClearSavedAccountList(lua_State* L) {
     return 0;
 }
 
-extern "C" unsigned long long FUN_141c191f0(unsigned long long, unsigned long long, unsigned long long);
-// translated: FUN_141c191f0
+extern "C" unsigned long long FUN_141480b80();
+// translated: FUN_141480b80
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+
+// The locales the client offers, by Locale.db2: under a region below 10 those whose region (field
+// 3) is it (region 2 counting as 4 when FUN_141480b80 says so), otherwise, or when `all` asks,
+// every locale not marked hidden (field 2). Each is its id (field 0).
+// ref: FUN_141c191f0
+void LocaleGetAvailable(uint32_t* locales, int32_t* count, bool all) {
+    int32_t found = 0;
+    *count = 0;
+    uint32_t region = RegionGet();
+    WowDB2Lookup* lookup = g_localeDB.m_lookup;
+    DB2LOOKUPITER it;
+    if (static_cast<int32_t>(region) < 10 && !all) {
+        if (region == 2) {
+            bool other = false;
+            __try {
+                other = (FUN_141480b80() & 0xff) != 0;
+            } __except (GenFault(0x141480b80ull, GetExceptionInformation())) {
+            }
+            if (other) {
+                region = 4;
+            }
+        }
+        if (lookup != nullptr) {
+            WowDB2LookupBegin(lookup, &it);
+            while (it.m_index != -2) {
+                auto row = static_cast<const uint8_t*>(it.m_record);
+                if (DB2FieldU8(row, 3, 0, &g_localeDB) == region) {
+                    locales[found++] = DB2FieldU8(row, 0, 0, &g_localeDB);
+                }
+                lookup->Next(&it);
+            }
+        }
+    } else if (lookup != nullptr) {
+        WowDB2LookupBegin(lookup, &it);
+        while (it.m_index != -2) {
+            auto row = static_cast<const uint8_t*>(it.m_record);
+            if (DB2FieldU8(row, 2, 0, &g_localeDB) == 0) {
+                locales[found++] = DB2FieldU8(row, 0, 0, &g_localeDB);
+            }
+            lookup->Next(&it);
+        }
+    }
+    *count = found;
+}
 
 // The locales the client offers, as their names: those of the region's (FUN_141c191f0), or every
 // locale when the argument asks and the region is 1 or 3. One result per locale; a locale
@@ -116,7 +190,7 @@ int Lua_GetAvailableLocales(lua_State* L) {
     uint32_t region = RegionGet();
     bool all = lua_toboolean(L, 1) != 0 && ((region - 1) & 0xfffffffd) == 0;
     uint32_t locales[12];
-    FUN_141c191f0(reinterpret_cast<unsigned long long>(locales), reinterpret_cast<unsigned long long>(&count), all);
+    LocaleGetAvailable(locales, &count, all);
     for (int32_t i = 0; i < count; i++) {
         const char* name = LocaleGetName(locales[i]);
         if (name == nullptr) {
@@ -346,6 +420,136 @@ int Lua_C_Login_IsReconnectLoginPossible(lua_State* L) {
     // FUN_14148ba50
     lua_pushboolean(L, g_reconnectLoginPossible);
     return 1;
+}
+
+extern "C" {
+unsigned long long FUN_141175fc0();
+unsigned long long FUN_140c5b410(unsigned long long token);
+unsigned long long FUN_14169fd10();
+unsigned long long FUN_1416a71d0(unsigned long long L, unsigned long long index);
+int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+}
+// translated: FUN_141175fc0
+// translated: FUN_140c5b410
+// translated: FUN_14169fd10
+// translated: FUN_1416a71d0
+
+namespace {
+
+template <class F>
+void LoginGuarded(uint64_t address, F&& body) {
+    __try {
+        body();
+    } __except (GenFault(address, GetExceptionInformation())) {
+    }
+}
+
+// The realm list (DAT_1430d25f0), still the image's: +0x78 is set once it has arrived.
+bool RealmListReady() {
+    auto realmList = *reinterpret_cast<uint8_t* const*>(0x1430d25f0ull);
+    return realmList != nullptr && realmList[0x78] != 0;
+}
+
+}  // namespace
+
+// The launcher's login is given up: used, and the launcher told (FUN_141175fc0).
+// ref: FUN_14148b310
+void LauncherLoginCancel() {
+    if (g_launcherLoginUsed == 0) {
+        g_launcherLoginUsed = 1;
+        LoginGuarded(0x141175fc0, [] { FUN_141175fc0(); });
+    }
+}
+
+// The reconnect token is dropped (its storage at DAT_1430af440 cleared first).
+// ref: FUN_14148b330
+void ReconnectLoginClear() {
+    if (g_reconnectLoginPossible != 0) {
+        LoginGuarded(0x140c5b410, [] { FUN_140c5b410(0x1430af440ull); });
+    }
+    g_reconnectLoginPossible = 0;
+}
+
+// auroraState, connectedToWoW, wowConnectionState (1 idle, 2 connecting, 3 queued),
+// hasRealmList, waitingForRealmList.
+// ref: FUN_14169d7d0
+int Lua_C_Login_GetState(lua_State* L) {
+    int32_t state = g_glueLoginFlags.m_connectedToWoW ? 0 : g_glueLoginState.m_auroraState;
+    lua_pushnumber(L, state + 1);
+    lua_pushboolean(L, g_glueLoginFlags.m_connectedToWoW);
+    int32_t connection = 1;
+    if (static_cast<uint8_t*>(ClientServicesGet())[0x772] != 0 || g_glueLoginState.m_wowConnecting != 0) {
+        connection = 2;
+    } else if (g_glueLoginState.m_queued != 0) {
+        connection = 3;
+    }
+    lua_pushnumber(L, connection);
+    lua_pushboolean(L, RealmListReady());
+    lua_pushboolean(L, g_glueLoginState.m_waitingForRealmList);
+    return 5;
+}
+
+// ref: FUN_14169d3b0
+int Lua_C_Login_ClearReconnectLogin(lua_State* L) {
+    (void)L;
+    ReconnectLoginClear();
+    return 0;
+}
+
+// ref: FUN_14169df60
+int Lua_C_Login_DisconnectFromServer(lua_State* L) {
+    (void)L;
+    LoginGuarded(0x14169fd10, [] { FUN_14169fd10(); });
+    return 0;
+}
+
+// Whether the client was started for a launcher login at all, used or not.
+// ref: FUN_14169dfa0
+int Lua_C_Login_WasEverLauncherLogin(lua_State* L) {
+    // FUN_14148bae0
+    lua_pushboolean(L, CommandLineHasOption(0x20));
+    return 1;
+}
+
+// ref: FUN_14169dfd0
+int Lua_C_Login_AttemptedLauncherLogin(lua_State* L) {
+    lua_pushboolean(L, g_glueLoginFlags.m_attemptedLauncherLogin);
+    return 1;
+}
+
+// ref: FUN_14169e040
+int Lua_C_Login_SetAttemptedLauncherLogin(lua_State* L) {
+    (void)L;
+    g_glueLoginFlags.m_attemptedLauncherLogin = 1;
+    return 0;
+}
+
+// ref: FUN_14169e050
+int Lua_C_Login_CancelLauncherLogin(lua_State* L) {
+    (void)L;
+    LauncherLoginCancel();
+    return 0;
+}
+
+// ref: FUN_14169e060
+int Lua_C_Login_GetWaitQueueInfo(lua_State* L) {
+    lua_pushnumber(L, g_glueLoginState.m_queuePosition);
+    lua_pushnumber(L, g_glueLoginState.m_queueWait);
+    lua_pushboolean(L, g_glueLoginState.m_queueFlag);
+    return 3;
+}
+
+// ref: FUN_1416a6af0
+int Lua_LogAuroraClient(lua_State* L) {
+    if (lua_isstring(L, 1) && lua_isstring(L, 2)) {
+        int result = 0;
+        LoginGuarded(0x1416a71d0, [&] {
+            result = static_cast<int>(FUN_1416a71d0(reinterpret_cast<unsigned long long>(L), 2));
+        });
+        return result;
+    }
+    luaL_error(L, "Usage: LogAuroraClient(\"priority\", \"logMessage\")");
+    return 0;
 }
 
 // For each sample count and quality the device takes: "<samples>,<quality>" and the colour

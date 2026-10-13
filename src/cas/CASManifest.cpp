@@ -16,7 +16,7 @@ const char s_slotTag[] = ".PEAUBuildManifestEntry@@";
 const char s_diffTag[] = ".?AUBuildManifestDiffEntry@@";
 
 // DAT_142e25828
-SRWLOCK s_cursorLock = SRWLOCK_INIT;
+SRWLOCK s_cursorLock = SRWLOCK_INIT;  // DAT_142e25828
 // DAT_142e25808: the walk has started
 volatile uint8_t s_cursorStarted;
 

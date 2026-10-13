@@ -34,8 +34,9 @@ unsigned long long FUN_141cd5b60();
 unsigned long long FUN_141cd7720(unsigned long long tooltip, unsigned long long node, unsigned long long status);
 // translated: FUN_141cd6810
 unsigned long long FUN_141cd6810(unsigned long long tooltip, double elapsed);
-// translated: FUN_141cd6500
-unsigned long long FUN_141cd6500(unsigned long long layout);
+// translated: FUN_141ce01f0
+unsigned long long FUN_141ce01f0(unsigned long long tooltip, unsigned long long owner, unsigned long long anchor,
+                                 float x, float y);
 // translated: FUN_141ce96e0
 unsigned long long FUN_141ce96e0(unsigned long long layout);
 }
@@ -46,7 +47,7 @@ int32_t CGTooltip::s_restrictedMetaTable = -2; // DAT_142d37e74
 namespace {
 
 // The tooltips' pool (DAT_143251cf0).
-CDataAllocator s_tooltipHeap(0x8d0, 10);
+CDataAllocator s_tooltipHeap(0x8d0, 10);  // DAT_143251cf0
 
 // The reference's scripts past the Frame ones a tooltip has (0x34..0x3d: OnTooltipSetDefaultAnchor
 // .. OnTooltipSetFramesToHide); only OnTooltipAddMoney takes arguments.
@@ -208,10 +209,14 @@ bool CGTooltip::WantsUpdate() {
     return true;
 }
 
+// Hidden: the owner let go of (FUN_141ce01f0 with none, anchor 9), the frame hidden, and the
+// shown-for-owner bit (0x10 at +0x8cc) cleared.
 // ref: FUN_141cd6500
 void CGTooltip::ApplyHide() {
-    auto layout = reinterpret_cast<unsigned long long>(static_cast<CLayoutFrame*>(this));
-    Guarded(0x141cd6500, [&] { FUN_141cd6500(layout); });
+    auto self = reinterpret_cast<unsigned long long>(this);
+    Guarded(0x141ce01f0, [&] { FUN_141ce01f0(self, 0, 9, 0.0f, 0.0f); });
+    this->CSimpleFrame::ApplyHide();
+    this->m_tooltip[0x8cc - 0x300] &= ~0x10;
 }
 
 // ref: FUN_141ce96e0

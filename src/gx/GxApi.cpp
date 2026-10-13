@@ -1807,7 +1807,7 @@ void GxShutdown() {
 
 // ---- what the device backends take from GxApi ---------------------------------------------
 
-SCritSect g_gxDeviceLock;
+SCritSect g_gxDeviceLock;  // DAT_143490880
 
 namespace {
 
