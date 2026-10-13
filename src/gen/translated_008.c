@@ -1011,8 +1011,8 @@ undefined8 FUN_140237660(int param_1)
         if ((float)((*(uint *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) - (*(int *)(gen_frame + 0x4))) <= fVar6) {
           fVar5 = fVar6;
         }
-        fVar16 = (fVar6 - (float)iVar2 / fVar15) * (*(float *)((char *)&gen_g_142ccb9f0 + 0x8));
-        fVar15 = ((float)iVar7 / fVar5) * (*(float *)((char *)&gen_g_142ccb9f0 + 0x4));
+        fVar16 = (fVar6 - (float)iVar2 / fVar15) * REFG(float, 0x142ccb9f8);
+        fVar15 = ((float)iVar7 / fVar5) * REFG(float, 0x142ccb9f4);
         uVar9 = CALLF(undefined4, FUN_14065f960)();
         CALLF(undefined8, FUN_140237c80)(uVar3,(int)fVar15,(int)fVar16,0,(unsigned long long)(uVar9),(unsigned long long)(0));
       }

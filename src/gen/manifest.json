@@ -58180,15 +58180,6 @@
     "vtable": []
    }
   },
-  "140237660": {
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0x4",
-     "0x8"
-    ],
-    "vtable": []
-   }
-  },
   "14024a6b0": {
    "g_creatureModelDataDB (src/db/DB2Tables.hpp) itself": {
     "offsets": [
@@ -59948,24 +59939,6 @@
     "vtable": []
    }
   },
-  "141068c30": {
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0x4",
-     "0xc"
-    ],
-    "vtable": []
-   }
-  },
-  "14107cc10": {
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0x4",
-     "0xc"
-    ],
-    "vtable": []
-   }
-  },
   "14116c560": {
    "EventCallbacks_Table (FUN_141273d80) result": {
     "offsets": [
@@ -60433,14 +60406,6 @@
     "offsets": [
      "0x20",
      "0x26"
-    ],
-    "vtable": []
-   }
-  },
-  "14126ead0": {
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0x8"
     ],
     "vtable": []
    }
@@ -61118,14 +61083,6 @@
     "vtable": []
    }
   },
-  "141691ae0": {
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0x0"
-    ],
-    "vtable": []
-   }
-  },
   "141698860": {
    "g_factionTemplateDB (src/db/DB2Tables.hpp) value": {
     "offsets": [
@@ -61292,13 +61249,6 @@
    "s_instance (src/ui/CSimpleTop.cpp) itself": {
     "offsets": [
      "0x0"
-    ],
-    "vtable": []
-   },
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0x4",
-     "0xc"
     ],
     "vtable": []
    }
@@ -62365,12 +62315,6 @@
      "0x0"
     ],
     "vtable": []
-   },
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0xc"
-    ],
-    "vtable": []
    }
   },
   "1419f5700": {
@@ -62614,14 +62558,6 @@
    "g_itemSparseDB (src/db/DB2Tables.hpp) itself": {
     "offsets": [
      "0x0"
-    ],
-    "vtable": []
-   }
-  },
-  "141a95ee0": {
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0x8"
     ],
     "vtable": []
    }
@@ -62912,13 +62848,6 @@
      "0x8",
      "0x60"
     ]
-   },
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0x4",
-     "0xc"
-    ],
-    "vtable": []
    }
   },
   "141cb3440": {
@@ -62926,13 +62855,6 @@
     "offsets": [
      "0x620",
      "0x624"
-    ],
-    "vtable": []
-   },
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0x4",
-     "0xc"
     ],
     "vtable": []
    }
@@ -62962,13 +62884,6 @@
      "0x60",
      "0xc0"
     ]
-   },
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0x4",
-     "0xc"
-    ],
-    "vtable": []
    }
   },
   "141cb3960": {
@@ -62981,13 +62896,6 @@
      "0x8",
      "0x60"
     ]
-   },
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0x4",
-     "0xc"
-    ],
-    "vtable": []
    }
   },
   "141cb3f40": {
@@ -63451,13 +63359,6 @@
      "0xc0"
     ]
    },
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0x4",
-     "0xc"
-    ],
-    "vtable": []
-   },
    "s_fontStringHeap (src/ui/CSimpleFontString.cpp) itself": {
     "offsets": [
      "0x0"
@@ -63512,15 +63413,6 @@
     "vtable": []
    }
   },
-  "141ccfbf0": {
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0x4",
-     "0xc"
-    ],
-    "vtable": []
-   }
-  },
   "141cd0c90": {
    "g_spellDB (src/db/DB2Tables.hpp) itself": {
     "offsets": [
@@ -63531,13 +63423,6 @@
    "g_itemSparseDB (src/db/DB2Tables.hpp) itself": {
     "offsets": [
      "0x0"
-    ],
-    "vtable": []
-   },
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0x4",
-     "0xc"
     ],
     "vtable": []
    }
@@ -63917,15 +63802,6 @@
    "g_friendshipReputationDB (src/db/DB2Tables.hpp) itself": {
     "offsets": [
      "0x0"
-    ],
-    "vtable": []
-   }
-  },
-  "1424d4360": {
-   "g_coordinateSpace (src/base/Coordinate.cpp) itself": {
-    "offsets": [
-     "0x4",
-     "0xc"
     ],
     "vtable": []
    }

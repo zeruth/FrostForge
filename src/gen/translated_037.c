@@ -3089,7 +3089,7 @@ undefined8 FUN_141a95ee0(longlong param_1, undefined8 param_2, undefined8 param_
   if (cVar3 != '\0') {
     puVar5 = *(undefined8 **)(param_1 + 0x358);
     puVar1 = puVar5 + *(longlong *)(param_1 + 0x360);
-    fVar6 = *(float *)(param_1 + 600) * *(float *)(param_1 + 0x1b0) * (*(float *)((char *)&gen_g_142ccb9f0 + 0x8)) * REFG(float, 0x142737e34);
+    fVar6 = *(float *)(param_1 + 600) * *(float *)(param_1 + 0x1b0) * REFG(float, 0x142ccb9f8) * REFG(float, 0x142737e34);
     for (; puVar5 != puVar1; puVar5 = puVar5 + 1) {
       CALLF(undefined8, FUN_141a93b60)(*puVar5,fVar6);
     }

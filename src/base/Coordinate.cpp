@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-COORDINATESPACE g_coordinateSpace = { 4.0f / 3.0f, 0.8f, 0.6f, 1.0f };  // DAT_142ccb9f0
+COORDINATESPACE g_coordinateSpace = { 4.0f / 3.0f, 0.8f, 0.6f, 1.0f };  // untied: tied (DAT_142ccb9f0), the translated font table (FUN_14126ead0) came out null and ErrorDisplayInitialize crashed, 2026-10-13; cause not found
 
 // ref: FUN_1402c9820
 void CoordinateSetAspectRatio(COORDINATESPACE* space, float aspect) {

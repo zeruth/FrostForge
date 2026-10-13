@@ -52,9 +52,6 @@ __declspec(dllimport) unsigned long long TerminateProcess();
 __declspec(dllimport) unsigned long long VkKeyScanA();
 __declspec(dllimport) unsigned long long WaitForSingleObject();
 __declspec(dllimport) unsigned long long send();
-/* g_coordinateSpace (src/base/Coordinate.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142ccb9f0=?g_coordinateSpace@@3UCOORDINATESPACE@@A")
-extern char gen_g_142ccb9f0;
 /* g_se3VoiceOverPriority (src/sound/SE3Kit.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142cfca30=?g_se3VoiceOverPriority@@3HA")
 extern char gen_g_142cfca30;

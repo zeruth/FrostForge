@@ -3702,7 +3702,7 @@ undefined8 FUN_141691ae0(void)
   undefined4 uVar1;
   
   uVar1 = CALLF(float, FUN_1414fcc60)();
-  return (undefined8)CALLF(undefined8, FUN_1402c9820)(&(*(float *)((char *)&gen_g_142ccb9f0 + 0x0)),GEN_AS_FLOAT((unsigned long long)(uVar1)));
+  return (undefined8)CALLF(undefined8, FUN_1402c9820)(&REFG(float, 0x142ccb9f0),GEN_AS_FLOAT((unsigned long long)(uVar1)));
 }
 
 /* ref: FUN_141694220 */

@@ -1515,8 +1515,8 @@ undefined8 FUN_1419f50b0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,((longlong *)(gen_frame + 0x8)));
     uVar2 = 0;
   }
-  fVar3 = (*(float *)((char *)&gen_g_142ccb9f0 + 0xc));
-  if (REFG(float, 0x142618d64) <= (*(float *)((char *)&gen_g_142ccb9f0 + 0xc))) {
+  fVar3 = REFG(float, 0x142ccb9fc);
+  if (REFG(float, 0x142618d64) <= REFG(float, 0x142ccb9fc)) {
     fVar3 = REFG(float, 0x142618d64);
   }
   CALLF(ulonglong, FUN_14061af60)(uVar2,fVar3,0);
