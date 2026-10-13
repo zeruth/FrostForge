@@ -23,6 +23,7 @@
 #include "sound/SE3.hpp"
 #include "sound/SE3Bus.hpp"
 #include "sound/SE3Internal.hpp"
+#include <cstddef>
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
 #include "ui/FrameTime.hpp"
@@ -31,13 +32,21 @@
 SE3HANDLETABLE g_se3Handles;
 SE3COMBINEDTABLE g_se3Combined;
 int32_t g_se3LastHandle;
-SE3KITLIST g_se3Playing;
-SE3KITLIST g_se3Loading;
-SE3KITLIST g_se3Pending;
-SE3KITLIST g_se3Release;
-SE3KITLIST g_se3Fading;
-SE3KITLIST g_se3Timed;
-SE3KITLIST g_se3Waiting;
+// Each list threads its own link in the instance (the reference keeps the offset as the list's
+// first word: 0x142cfcda8 holds 0x358, ...). Built at +0 they all threaded m_playing, so a fade
+// re-linked a playing instance into the fading list and the two lists closed into a cycle
+// (SE3UpdateFades spun forever, 2026-10-13).
+SE3KITLIST g_se3Playing(offsetof(SE3SoundKitObject, m_playing));
+SE3KITLIST g_se3Loading(offsetof(SE3SoundKitObject, m_loading));
+SE3KITLIST g_se3Pending(offsetof(SE3SoundKitObject, m_pending));
+SE3KITLIST g_se3Release(offsetof(SE3SoundKitObject, m_release));
+SE3KITLIST g_se3Fading(offsetof(SE3SoundKitObject, m_fading));
+SE3KITLIST g_se3Timed(offsetof(SE3SoundKitObject, m_timed));
+SE3KITLIST g_se3Waiting(offsetof(SE3SoundKitObject, m_waiting));
+static_assert(offsetof(SE3SoundKitObject, m_loading) == 0x358 && offsetof(SE3SoundKitObject, m_pending) == 0x368
+                  && offsetof(SE3SoundKitObject, m_release) == 0x378 && offsetof(SE3SoundKitObject, m_fading) == 0x388
+                  && offsetof(SE3SoundKitObject, m_waiting) == 0x3a8 && offsetof(SE3SoundKitObject, m_timed) == 0x3d8,
+              "the instance lists' links are where the reference keeps them");
 TSList<SE3SoundKitDef, TSGetLink<SE3SoundKitDef>, 8> g_se3DefTimers(offsetof(SE3SoundKitDef, m_timerLink));
 
 namespace {
