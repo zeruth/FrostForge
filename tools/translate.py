@@ -1690,7 +1690,10 @@ def build_errors() -> list[tuple[str, int, str]]:
         # an error outside the translated bodies (a header, the runtime): nothing to demote,
         # and certainly not clean
         raise SystemExit("the gen library does not build:\n" + "\n".join(other[:10]))
-    # it compiles: then link, and name the translated functions whose symbols do not resolve
+    # it compiles: then link, and name the translated functions whose symbols do not resolve.
+    # A handler demoted this round needs its stub first (gen_script_api.py writes the stubs for
+    # the handlers neither ported nor translated), or the link fails on the registry instead.
+    subprocess.run([sys.executable, str(ROOT / "tools/gen_script_api.py"), "--emit"], capture_output=True)
     out = subprocess.run(["cmake", "--build", str(ROOT / "build/cmake"), "--config", "Release", "--target", "FrostLite"],
                          capture_output=True, text=True, errors="replace").stdout
     for m in re.finditer(r"unresolved external symbol (\S+) referenced in function FUN_([0-9a-f]{9})", out):

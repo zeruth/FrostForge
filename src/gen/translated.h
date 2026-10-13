@@ -52,15 +52,6 @@ __declspec(dllimport) unsigned long long TerminateProcess();
 __declspec(dllimport) unsigned long long VkKeyScanA();
 __declspec(dllimport) unsigned long long WaitForSingleObject();
 __declspec(dllimport) unsigned long long send();
-/* g_particleDensity (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142cfbb38=?g_particleDensity@@3MA")
-extern char gen_g_142cfbb38;
-/* g_particleMTDensity (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142cfbb3c=?g_particleMTDensity@@3MA")
-extern char gen_g_142cfbb3c;
-/* g_renderSettingsChangeCount (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142cfc00f=?g_renderSettingsChangeCount@@3EA")
-extern char gen_g_142cfc00f;
 /* g_se3VoiceOverPriority (src/sound/SE3Kit.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142cfca30=?g_se3VoiceOverPriority@@3HA")
 extern char gen_g_142cfca30;
@@ -79,39 +70,6 @@ extern char gen_g_142cfcdd8;
 /* g_groundEffectDist (src/client/GraphicsSettings.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142d00c20=?g_groundEffectDist@@3MA")
 extern char gen_g_142d00c20;
-/* g_farClip (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142d00c34=?g_farClip@@3MA")
-extern char gen_g_142d00c34;
-/* g_horizonStart (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142d00c3c=?g_horizonStart@@3MA")
-extern char gen_g_142d00c3c;
-/* g_horizonClip (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142d00c40=?g_horizonClip@@3MA")
-extern char gen_g_142d00c40;
-/* g_lodObjectCullSize (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142d00ca0=?g_lodObjectCullSize@@3MA")
-extern char gen_g_142d00ca0;
-/* g_lodObjectCullDist (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142d00ca4=?g_lodObjectCullDist@@3MA")
-extern char gen_g_142d00ca4;
-/* g_lodObjectMinSize (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142d00ca8=?g_lodObjectMinSize@@3MA")
-extern char gen_g_142d00ca8;
-/* g_lodObjectFadeScale (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142d00cac=?g_lodObjectFadeScale@@3MA")
-extern char gen_g_142d00cac;
-/* g_terrainLodDist (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142d0119c=?g_terrainLodDist@@3MA")
-extern char gen_g_142d0119c;
-/* g_terrainLodDiv (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142d011a0=?g_terrainLodDiv@@3MA")
-extern char gen_g_142d011a0;
-/* g_entityLodDist (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142d011ac=?g_entityLodDist@@3MA")
-extern char gen_g_142d011ac;
-/* g_entityLodScale (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_142d011b0=?g_entityLodScale@@3MA")
-extern char gen_g_142d011b0;
 /* g_localManifest (src/cas/CAS.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e20860=?g_localManifest@cas@@3PEAULOCALMANIFEST@1@EA")
 extern char gen_g_142e20860;
@@ -382,9 +340,6 @@ extern char gen_g_142e786b0;
 /* g_spellDispelTypeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e788c0=?g_spellDispelTypeDB@@3VWowClientDB2@@A")
 extern char gen_g_142e788c0;
-/* g_spellDurationDB (src/db/DB2Tables.hpp) */
-#pragma comment(linker, "/alternatename:gen_g_142e78ad0=?g_spellDurationDB@@3VWowClientDB2@@A")
-extern char gen_g_142e78ad0;
 /* g_spellEffectAutoDescriptionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e78ce0=?g_spellEffectAutoDescriptionDB@@3VWowClientDB2@@A")
 extern char gen_g_142e78ce0;
@@ -403,9 +358,6 @@ extern char gen_g_142e79f70;
 /* g_spellLabelDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7a390=?g_spellLabelDB@@3VWowClientDB2@@A")
 extern char gen_g_142e7a390;
-/* g_spellLevelsDB (src/db/DB2Tables.hpp) */
-#pragma comment(linker, "/alternatename:gen_g_142e7a7b0=?g_spellLevelsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7a7b0;
 /* g_spellMiscDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7abd0=?g_spellMiscDB@@3VWowClientDB2@@A")
 extern char gen_g_142e7abd0;
@@ -538,9 +490,6 @@ extern char gen_g_1430ab9d4;
 /* g_worldOptionsChanged (src/client/GraphicsSettings.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430abef8=?g_worldOptionsChanged@@3EA")
 extern char gen_g_1430abef8;
-/* g_wmoLodDist (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_1430ad2f0=?g_wmoLodDist@@3MA")
-extern char gen_g_1430ad2f0;
 /* g_gxDevice (src/gx/Gx.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_14348b650=?g_gxDevice@@3PEAXEA")
 extern char gen_g_14348b650;
@@ -679,18 +628,12 @@ extern void *const gen_p_1430a55f0;
 /* s_messageLevelMin (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_1430a5600;
 #define gen_g_1430a5600 (*(char *)gen_p_1430a5600)
-/* s_shadowSwitch (src/client/GraphicsSettings.cpp), internal: through its pointer */
-extern void *const gen_p_1430a5d88;
-#define gen_g_1430a5d88 (*(char *)gen_p_1430a5d88)
 /* s_1430a99f0 (src/sound/SI3.cpp), internal: through its pointer */
 extern void *const gen_p_1430a99f0;
 #define gen_g_1430a99f0 (*(char *)gen_p_1430a99f0)
 /* s_musicHandle (src/sound/SI3Sound.cpp), internal: through its pointer */
 extern void *const gen_p_1430a99f4;
 #define gen_g_1430a99f4 (*(char *)gen_p_1430a99f4)
-/* s_cameraPosition (src/world/WorldFrame.cpp), internal: through its pointer */
-extern void *const gen_p_1430abb08;
-#define gen_g_1430abb08 (*(char *)gen_p_1430abb08)
 /* s_bspCaches (src/world/MapObjGroupBspCache.cpp), internal: through its pointer */
 extern void *const gen_p_1430ac0e0;
 #define gen_g_1430ac0e0 (*(char *)gen_p_1430ac0e0)
@@ -748,9 +691,6 @@ extern void *const gen_p_14311c5f0;
 /* s_queues (src/threadpool/ThreadPool.cpp), internal: through its pointer */
 extern void *const gen_p_1444f94c0;
 #define gen_g_1444f94c0 (*(char *)gen_p_1444f94c0)
-/* s_waterSwitch (src/client/GraphicsSettings.cpp), internal: through its pointer */
-extern void *const gen_p_1447ce202;
-#define gen_g_1447ce202 (*(char *)gen_p_1447ce202)
 undefined8 FUN_1401ca520();
 undefined8 FUN_1401ca540();
 int FUN_1401ca670();
@@ -885,12 +825,18 @@ undefined8 FUN_1401e67c0();
 undefined8 FUN_1401e67f0();
 undefined8 FUN_1401e6850();
 undefined8 FUN_1401e68c0();
+undefined8 FUN_1401e6950();
+undefined8 FUN_1401e6980();
+undefined8 FUN_1401e69b0();
+undefined8 FUN_1401e69e0();
+undefined8 FUN_1401e6a10();
 undefined8 FUN_1401e6a60();
 undefined8 FUN_1401e6ad0();
 undefined8 FUN_1401e6b40();
 undefined8 FUN_1401e6b60();
 undefined8 FUN_1401e6c00();
 undefined8 FUN_1401e6c70();
+undefined8 FUN_1401e6d00();
 undefined8 FUN_1401e6d90();
 undefined8 FUN_1401e6e50();
 undefined8 FUN_1401e6fa0();
@@ -2172,9 +2118,7 @@ undefined8 FUN_140237b00();
 undefined8 FUN_140237c80();
 undefined8 FUN_140238190();
 undefined8 FUN_1402382b0();
-undefined8 FUN_1402384e0();
 undefined8 FUN_1402384f0();
-undefined8 FUN_140238500();
 undefined8 FUN_1402385d0();
 undefined8 FUN_1402386a0();
 undefined8 FUN_1402389b0();
@@ -2246,7 +2190,6 @@ ulonglong FUN_140261010();
 ulonglong FUN_140261040();
 ulonglong FUN_1402610c0();
 char * FUN_140262050();
-undefined8 FUN_1402622c0();
 undefined8 FUN_140262440();
 undefined1 FUN_140262450();
 undefined8 FUN_140262470();
@@ -2318,7 +2261,6 @@ longlong FUN_1402b4880();
 double FUN_1402b4920();
 longlong FUN_1402b49f0();
 undefined4 FUN_1402b4a30();
-char * FUN_1402b4a60();
 undefined8 FUN_1402b5250();
 undefined8 FUN_1402b75e0();
 undefined4 * FUN_1402c8f90();
@@ -2524,7 +2466,6 @@ undefined8 FUN_140326b50();
 undefined8 FUN_140326b60();
 undefined8 FUN_140326c80();
 undefined8 FUN_140326ce0();
-undefined8 FUN_1403271d0();
 undefined * FUN_140328750();
 undefined1 FUN_140328760();
 undefined8 FUN_140328c10();
@@ -2676,10 +2617,8 @@ undefined * FUN_14051be90();
 undefined * FUN_14051bea0();
 undefined * FUN_14051beb0();
 undefined * FUN_14051bed0();
-undefined * FUN_14051bee0();
 undefined * FUN_14051bf10();
 undefined * FUN_14051bf50();
-undefined * FUN_14051bfa0();
 undefined * FUN_14051bfb0();
 undefined * FUN_14051bfd0();
 undefined * FUN_14051bff0();
@@ -2713,7 +2652,6 @@ undefined8 FUN_14051faf0();
 undefined8 FUN_14051fd70();
 undefined8 FUN_14051feb0();
 undefined8 FUN_14051fff0();
-undefined8 FUN_140520130();
 longlong FUN_140520270();
 undefined8 FUN_1405203b0();
 undefined8 FUN_1405204f0();
@@ -2832,7 +2770,6 @@ bool FUN_1405ef2d0();
 undefined8 FUN_1405effb0();
 undefined8 FUN_1405f0680();
 ulonglong FUN_1405f0900();
-undefined8 FUN_1405f1910();
 undefined8 FUN_1405f1fd0();
 undefined8 FUN_1405f37b0();
 undefined8 FUN_1405f4710();
@@ -2932,7 +2869,6 @@ undefined4 FUN_1406466c0();
 undefined8 FUN_140646d10();
 undefined8 FUN_14065e900();
 undefined8 FUN_14065f590();
-undefined8 FUN_14065f6a0();
 undefined8 FUN_14065f6b0();
 longlong * FUN_14065f7b0();
 undefined4 FUN_14065f960();
@@ -2975,6 +2911,7 @@ bool FUN_14067af20();
 undefined8 * FUN_14067c900();
 undefined8 FUN_140684a90();
 undefined8 FUN_140684ac0();
+undefined8 FUN_140684b70();
 undefined8 FUN_140688840();
 undefined8 FUN_140688f50();
 undefined8 FUN_140689380();
@@ -4053,7 +3990,6 @@ undefined8 FUN_141175de0();
 undefined8 FUN_141175fc0();
 undefined8 FUN_141176a70();
 undefined8 FUN_1411776f0();
-undefined8 FUN_1411779b0();
 undefined8 FUN_141179f70();
 undefined8 FUN_14117a900();
 undefined8 FUN_14117a930();
@@ -4086,7 +4022,6 @@ undefined8 FUN_1411836b0();
 undefined8 FUN_141183720();
 undefined8 FUN_1411838f0();
 undefined8 FUN_141183960();
-undefined8 FUN_141184050();
 undefined8 FUN_141184110();
 undefined8 FUN_1411845a0();
 undefined8 FUN_141184800();
@@ -4107,17 +4042,22 @@ undefined8 FUN_1411a6af0();
 undefined8 FUN_1411ad8a0();
 undefined8 FUN_1411b6240();
 ulonglong FUN_1411bab10();
+undefined8 FUN_1411bac00();
 ulonglong FUN_1411bd7a0();
+float FUN_1411be130();
+float FUN_1411be2b0();
 undefined8 * FUN_1411bfd30();
 undefined8 FUN_1411c07c0();
 undefined8 FUN_1411c0d80();
 undefined8 FUN_1411c0ed0();
 bool FUN_1411c0f80();
+undefined1 FUN_1411c1220();
 undefined8 FUN_1411c6d30();
 undefined8 FUN_1411c8c70();
 undefined8 FUN_1411c8e30();
 undefined8 FUN_1411c8e40();
 undefined8 FUN_1411c9dd0();
+undefined8 FUN_1411cad10();
 undefined8 FUN_1411caf50();
 undefined8 FUN_1411caff0();
 bool FUN_1411cb1b0();
@@ -4144,6 +4084,7 @@ undefined8 * FUN_1411e98a0();
 undefined8 FUN_1411ec9e0();
 undefined8 FUN_1411f9160();
 undefined8 FUN_1411f91f0();
+bool FUN_1411feef0();
 undefined8 FUN_1411ff0e0();
 undefined8 FUN_1411ff860();
 float * FUN_1411ffcd0();
@@ -4386,17 +4327,12 @@ undefined8 FUN_141298180();
 undefined8 FUN_14129d3e0();
 undefined8 * FUN_14129d890();
 undefined4 FUN_14129d9d0();
-undefined8 * FUN_14129f070();
-undefined8 FUN_14129fd70();
-undefined8 FUN_1412a0660();
-undefined8 FUN_1412a1070();
 undefined8 FUN_1412a1110();
 undefined8 FUN_1412a11c0();
 undefined8 FUN_1412a1be0();
 undefined8 FUN_1412a1c20();
 undefined8 FUN_1412a1d10();
 undefined8 FUN_1412a1d50();
-undefined8 FUN_1412a29c0();
 ulonglong * FUN_1412a30e0();
 undefined8 FUN_1412a3680();
 undefined8 * FUN_1412a5c10();
@@ -4412,8 +4348,6 @@ undefined8 FUN_1412aee70();
 undefined4 * FUN_1412af6f0();
 bool FUN_1412b1720();
 undefined8 FUN_1412b20e0();
-undefined8 FUN_1412b2130();
-undefined8 FUN_1412b2260();
 undefined8 * FUN_1412b22a0();
 undefined8 FUN_1412b2500();
 undefined8 FUN_1412b5b00();
@@ -4509,10 +4443,10 @@ undefined8 FUN_14134e8a0();
 undefined8 FUN_14134ec50();
 undefined8 FUN_14134f460();
 undefined8 FUN_14134fd60();
+undefined8 FUN_141350a30();
 undefined8 FUN_1413517e0();
 undefined8 FUN_1413518b0();
 undefined8 FUN_141352210();
-undefined8 FUN_141352960();
 undefined8 FUN_141352c70();
 undefined8 FUN_1413543b0();
 undefined8 FUN_1413544d0();
@@ -4521,11 +4455,14 @@ undefined8 FUN_141355600();
 bool FUN_141355640();
 undefined8 FUN_1413557c0();
 undefined8 FUN_141355870();
+undefined4 FUN_1413558c0();
 undefined4 FUN_1413558d0();
 undefined8 FUN_141355960();
+bool FUN_141355ab0();
 undefined8 FUN_141355d20();
 longlong FUN_141355d30();
 undefined8 FUN_141355d90();
+undefined8 FUN_141355de0();
 undefined8 FUN_141355fe0();
 undefined4 FUN_141356060();
 longlong FUN_141356140();
@@ -4536,15 +4473,18 @@ uint FUN_141356360();
 bool FUN_141356380();
 uint FUN_1413563f0();
 undefined8 FUN_1413566c0();
+undefined8 FUN_1413566f0();
 undefined8 FUN_141356700();
 undefined8 FUN_1413567b0();
 undefined8 FUN_141356810();
+undefined8 FUN_141356920();
 undefined8 FUN_141356950();
 undefined8 FUN_141356ae0();
 undefined8 FUN_141356c00();
 undefined8 FUN_141356d00();
+undefined8 FUN_141356d80();
+undefined8 FUN_141356dd0();
 undefined8 FUN_141356ed0();
-longlong FUN_141357060();
 undefined8 FUN_141357070();
 undefined8 FUN_1413571e0();
 undefined8 FUN_14135a290();
@@ -4621,6 +4561,7 @@ undefined8 FUN_1413ae280();
 undefined8 FUN_1413afb30();
 undefined8 FUN_1413b1430();
 undefined8 FUN_1413b1650();
+undefined8 FUN_1413b2640();
 undefined8 FUN_1413b4350();
 bool FUN_1413b6530();
 undefined8 FUN_1413c0db0();
@@ -4628,13 +4569,9 @@ undefined8 FUN_1413c0fc0();
 undefined8 FUN_1413c1050();
 undefined8 FUN_1413c1080();
 undefined8 FUN_1413c10b0();
-undefined8 * FUN_1413c17f0();
-undefined8 FUN_1413c29d0();
 undefined8 FUN_1413c2e10();
 undefined8 FUN_1413c3450();
-undefined8 FUN_1413c35c0();
 ulonglong FUN_1413c4700();
-undefined8 FUN_1413c88f0();
 undefined8 FUN_1413cadd0();
 undefined8 FUN_1413cae30();
 undefined8 FUN_1413caec0();
@@ -4690,7 +4627,9 @@ undefined8 FUN_14141abe0();
 undefined8 FUN_14141d890();
 undefined8 FUN_141427610();
 undefined4 * FUN_14142a4f0();
+undefined8 FUN_14142b320();
 undefined8 FUN_14142b3e0();
+undefined8 FUN_14142b3f0();
 undefined8 FUN_14142d0c0();
 undefined8 FUN_141438530();
 undefined8 FUN_141438730();
@@ -4712,7 +4651,6 @@ undefined8 FUN_1414411a0();
 undefined8 FUN_14144a2d0();
 undefined8 FUN_14144a5a0();
 undefined8 FUN_14144c900();
-undefined8 FUN_14144d230();
 undefined8 FUN_1414519c0();
 undefined8 FUN_141451bf0();
 undefined8 FUN_141451c50();
@@ -4789,7 +4727,6 @@ undefined8 FUN_141488c90();
 undefined8 FUN_14148a020();
 undefined8 FUN_14148b310();
 undefined8 FUN_14148b330();
-undefined8 FUN_14148b460();
 undefined * FUN_14148ba10();
 undefined8 FUN_14148ba20();
 undefined1 FUN_14148ba50();
@@ -4881,7 +4818,6 @@ undefined8 FUN_1414f8950();
 undefined8 FUN_1414f8960();
 undefined8 FUN_1414f8d60();
 undefined8 FUN_1414f8d70();
-undefined8 FUN_1414f9300();
 undefined8 FUN_1414f9d60();
 undefined8 FUN_1414f9d90();
 undefined8 FUN_1414fa300();
@@ -4907,7 +4843,6 @@ undefined8 FUN_1414fc940();
 undefined8 FUN_1414fca90();
 float FUN_1414fcc60();
 float FUN_1414fcdc0();
-undefined * FUN_1414fce30();
 undefined4 * FUN_1414fce40();
 undefined8 FUN_1414fcfc0();
 bool FUN_1414fd100();
@@ -5154,8 +5089,11 @@ undefined8 FUN_141662b20();
 undefined8 FUN_141666d30();
 undefined8 FUN_141668800();
 undefined8 FUN_141669ee0();
+int * FUN_14166bfc0();
 undefined8 FUN_14166d6a0();
 undefined8 FUN_14166f5f0();
+undefined8 FUN_14166fc60();
+undefined8 * FUN_14166fee0();
 undefined8 * FUN_141670b10();
 longlong FUN_141671b10();
 undefined * FUN_141672420();
@@ -5267,7 +5205,6 @@ undefined8 FUN_14168ebf0();
 bool FUN_14168ecb0();
 undefined8 FUN_14168f150();
 undefined8 FUN_14168f290();
-int FUN_14168f520();
 undefined8 FUN_14168f5b0();
 longlong FUN_14168f630();
 undefined8 FUN_14168faa0();
@@ -5477,7 +5414,6 @@ undefined4 FUN_1416cc5f0();
 undefined4 FUN_1416cc600();
 int FUN_1416ccc50();
 uint FUN_1416ccee0();
-int FUN_1416cd1f0();
 uint FUN_1416cdc20();
 undefined8 FUN_1416cf140();
 undefined8 FUN_1416cf5e0();
@@ -5505,20 +5441,13 @@ undefined8 FUN_1416e4600();
 undefined8 FUN_1416e6730();
 undefined8 FUN_1416eb390();
 undefined8 FUN_1416eb3c0();
-undefined8 FUN_1416eb3f0();
 ulonglong FUN_1416eb420();
 longlong FUN_1416ec3a0();
 undefined8 FUN_1416f1190();
-undefined8 FUN_1416f11c0();
-undefined8 FUN_1416f11f0();
 undefined8 FUN_1416f2aa0();
 undefined8 FUN_1416f31f0();
-undefined8 FUN_1416f33b0();
-int FUN_1416f33f0();
-undefined8 FUN_1416f3bf0();
 ulonglong FUN_1416f7160();
 undefined1 FUN_1416f71c0();
-undefined8 FUN_1416f8650();
 undefined8 FUN_1416f95f0();
 undefined8 * FUN_1416fa3b0();
 undefined8 FUN_1416faad0();
@@ -5546,7 +5475,6 @@ undefined8 FUN_141700020();
 undefined8 FUN_141700280();
 undefined8 FUN_1417003a0();
 undefined8 FUN_141700aa0();
-bool FUN_141700d50();
 undefined1 FUN_141700e80();
 undefined4 FUN_1417011c0();
 ulonglong FUN_141702440();
@@ -5567,7 +5495,6 @@ undefined8 FUN_141705580();
 undefined8 FUN_1417057b0();
 ulonglong FUN_141705d30();
 ulonglong FUN_141705dc0();
-undefined8 FUN_141706390();
 longlong FUN_1417069a0();
 ulonglong * FUN_141706cf0();
 undefined8 FUN_141707470();
@@ -5675,23 +5602,25 @@ undefined8 FUN_14176a750();
 undefined8 FUN_14176aac0();
 undefined8 FUN_14176af80();
 undefined8 FUN_14176b090();
+undefined1 FUN_14176cb00();
 undefined8 FUN_14176cd90();
 undefined8 FUN_14176d6d0();
 undefined8 FUN_14176d7c0();
 ulonglong FUN_14176d820();
 uint FUN_14176d8e0();
-undefined8 FUN_14176d910();
 bool FUN_14176df90();
+bool FUN_14176e070();
 undefined8 FUN_14176f2b0();
 undefined8 FUN_141771680();
 undefined8 FUN_1417734b0();
+undefined8 FUN_141773aa0();
+undefined8 FUN_141773bb0();
 undefined8 FUN_141773f60();
 undefined8 FUN_1417740e0();
 undefined8 FUN_1417742a0();
 undefined8 FUN_141774530();
 undefined8 FUN_141774560();
 undefined8 FUN_141774590();
-undefined8 FUN_141774880();
 undefined8 FUN_141778780();
 undefined8 * FUN_14177d2b0();
 undefined8 FUN_14177eca0();
@@ -5823,17 +5752,19 @@ undefined8 FUN_1417d6e30();
 undefined8 FUN_1417d6f10();
 undefined8 FUN_1417d7190();
 undefined8 FUN_1417d74a0();
-undefined8 FUN_1417d77c0();
 undefined8 FUN_1417d7b50();
 undefined8 FUN_1417d8000();
 undefined8 FUN_1417d8240();
 bool FUN_1417d9d10();
+undefined8 FUN_1417e4180();
 undefined8 FUN_1417e6eb0();
 undefined8 FUN_1417eaa40();
 undefined8 FUN_1417ec140();
 undefined8 FUN_1417efbb0();
 undefined8 FUN_1417f0cc0();
+undefined8 FUN_1417f15f0();
 undefined8 FUN_1417f2480();
+undefined8 FUN_1417f2f20();
 undefined8 FUN_1417f69e0();
 bool FUN_1417f6f60();
 bool FUN_1417f7b50();
@@ -5873,6 +5804,16 @@ bool FUN_14181df20();
 undefined8 FUN_14181dfc0();
 undefined8 FUN_14181e120();
 undefined8 FUN_14181e2b0();
+undefined8 FUN_14181fff0();
+undefined8 FUN_141820ee0();
+undefined8 FUN_141821da0();
+int FUN_141821f50();
+undefined8 FUN_141822060();
+undefined8 FUN_141822210();
+undefined8 FUN_141822300();
+undefined8 FUN_141822480();
+undefined8 FUN_141823490();
+undefined8 FUN_1418239d0();
 undefined8 FUN_1418252d0();
 undefined8 FUN_141825820();
 undefined8 FUN_1418258c0();
@@ -6338,6 +6279,7 @@ undefined8 FUN_141883a70();
 undefined8 FUN_141884280();
 undefined8 FUN_1418842c0();
 ulonglong FUN_141884d40();
+undefined8 FUN_141888140();
 undefined8 FUN_14188ad30();
 undefined8 FUN_14188b0c0();
 undefined8 FUN_14188b4f0();
@@ -8328,7 +8270,6 @@ undefined8 FUN_141cd0c90();
 undefined8 FUN_141cd1270();
 undefined8 FUN_141cd17c0();
 undefined8 FUN_141cd2000();
-undefined8 FUN_141cd22f0();
 undefined8 FUN_141cd2bf0();
 undefined8 FUN_141cd3020();
 undefined8 FUN_141cd3190();
@@ -8518,7 +8459,6 @@ undefined8 FUN_141dfa470();
 undefined8 FUN_141dfa7c0();
 undefined8 FUN_141dfa970();
 undefined8 FUN_141dfac30();
-undefined8 FUN_141dfb910();
 undefined8 * FUN_141dfbe30();
 undefined8 * FUN_141dfbe80();
 undefined8 FUN_141dfc780();
@@ -8786,7 +8726,6 @@ undefined8 FUN_14228b3b0();
 undefined8 FUN_14228b580();
 undefined8 FUN_14228b640();
 undefined8 FUN_14228b7a0();
-undefined1 FUN_14228b8c0();
 char FUN_14228c1d0();
 undefined8 FUN_14228c330();
 undefined8 FUN_14228c390();
@@ -8796,8 +8735,6 @@ undefined8 FUN_14228dfb0();
 undefined8 FUN_14228e040();
 undefined8 FUN_14228e190();
 undefined8 FUN_14228f5d0();
-undefined8 FUN_14228f790();
-undefined8 FUN_14228f960();
 undefined8 FUN_14228f9a0();
 ulonglong * FUN_1422901d0();
 undefined8 FUN_1422916d0();
@@ -8849,7 +8786,6 @@ undefined8 FUN_142425080();
 int FUN_1424252d0();
 double FUN_1424253b0();
 int FUN_1424254e0();
-undefined8 FUN_142425aa0();
 uint * FUN_142430da0();
 undefined8 FUN_142430de0();
 undefined8 FUN_142430e30();
@@ -8871,8 +8807,6 @@ bool FUN_142439f40();
 undefined1 FUN_14243a0a0();
 bool FUN_14243abc0();
 bool FUN_14243abd0();
-longlong FUN_14243ae80();
-int FUN_14243af10();
 longlong FUN_14243afd0();
 longlong FUN_14243b0f0();
 int FUN_14243b1d0();
@@ -8915,8 +8849,10 @@ undefined8 FUN_14246bc40();
 undefined8 FUN_14246cf60();
 undefined8 * FUN_142474960();
 undefined4 FUN_142474b40();
+int FUN_142474b60();
 undefined8 FUN_142474c40();
 undefined8 FUN_142474c90();
+undefined8 FUN_1424752c0();
 undefined8 FUN_142475ca0();
 undefined8 * FUN_1424783f0();
 undefined8 FUN_142478500();
@@ -8931,7 +8867,6 @@ undefined8 FUN_1424cd590();
 undefined8 FUN_1424ce280();
 undefined8 FUN_1424cef50();
 undefined8 FUN_1424cfca0();
-undefined8 FUN_1424d0a40();
 undefined8 FUN_1424d1370();
 bool FUN_1424d2060();
 int FUN_1424d3de0();
@@ -9157,7 +9092,6 @@ undefined8 FUN_14258e540();
 undefined4 FUN_14258ec50();
 undefined1 FUN_14258ed90();
 undefined8 FUN_1425918f0();
-undefined1 FUN_1425aaed0();
 bool FUN_1425ab490();
 undefined8 FUN_1425abd60();
 longlong FUN_1425abe80();
@@ -9278,12 +9212,18 @@ undefined8 FUN_1425e9e70();
 undefined8 FUN_1425e9f30();
 undefined8 FUN_1425e9fb0();
 undefined8 FUN_1425e9fe0();
+undefined8 FUN_1425ea100();
+undefined8 FUN_1425ea140();
+undefined8 FUN_1425ea180();
+undefined8 FUN_1425ea1c0();
+undefined8 FUN_1425ea200();
 undefined8 FUN_1425ea240();
 undefined8 FUN_1425ea2e0();
 undefined8 FUN_1425ea430();
 undefined8 FUN_1425ea440();
 undefined8 FUN_1425ea580();
 undefined8 FUN_1425ea620();
+undefined8 FUN_1425ea700();
 undefined8 FUN_1425ea890();
 undefined8 FUN_1425eaba0();
 undefined8 FUN_1425ead90();

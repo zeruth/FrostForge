@@ -67,6 +67,8 @@ const float DEFAULT_TEX_COORDS[8] = { 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 
 // The quad's two triangles (DAT_142cf54c0).
 const uint16_t s_quadIndices[6] = { 0, 1, 2, 2, 1, 3 };
 
+}  // namespace
+
 // A path's FileDataID, tried again with ".blp" (FUN_1406380e0).
 // ref: FUN_1406380e0
 int32_t* TextureFileId(int32_t* id, const char* name) {
@@ -83,6 +85,8 @@ int32_t* TextureFileId(int32_t* id, const char* name) {
     *id = found;
     return id;
 }
+
+namespace {
 
 uint32_t FileDataIdOf(const char* name) {
     int32_t id = 0;

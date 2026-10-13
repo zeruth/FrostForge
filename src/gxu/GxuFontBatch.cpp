@@ -46,20 +46,26 @@ const uint64_t s_depthStates[4] = { 0x0000000700000020ull, 0x0000000700000015ull
 const uint16_t s_blends[4] = { 0xf000, 0xf002, 0xf003, 0xf001 };
 const uint32_t s_rasterStates[2] = { 0x00010000, 0x00020001 };
 
+}  // namespace
+
 // ref: FUN_14068c4e0
 uint64_t FontDepthState(int32_t index) {
     return s_depthStates[index];
 }
+
 
 // ref: FUN_14068c4c0
 uint16_t FontBlend(int32_t index) {
     return s_blends[index];
 }
 
+
 // ref: FUN_14068c500
 uint32_t FontRaster(int32_t index) {
     return s_rasterStates[index];
 }
+
+namespace {
 
 void SetKeyTargets(GXPIPELINEKEY* key, uint32_t kind) {
     RENDERTARGETFORMATS formats = RenderTargetFormats(kind);

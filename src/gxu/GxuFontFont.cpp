@@ -57,6 +57,8 @@ void CodeSetClear(GXUCODESET* set) {
     set->m_size = 0;
 }
 
+}  // namespace
+
 // ref: FUN_140697410
 void CodeSetDestroy(GXUCODESET* set) {
     if (set->m_buckets != nullptr) {
@@ -72,6 +74,8 @@ void CodeSetDestroy(GXUCODESET* set) {
         set->m_buckets = nullptr;
     }
 }
+
+namespace {
 
 // The kerning cache, every pair unknown.
 void ResetKernCache(float* cache) {

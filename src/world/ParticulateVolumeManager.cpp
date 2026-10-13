@@ -24,6 +24,8 @@ struct VolumeNode {
     VolumeNode* m_right;            // 0x10
 };
 
+}  // namespace
+
 // ref: FUN_141397750
 void FreeNodes(PARTICULATEVOLUMEMAP* map, VolumeNode* node) {
     while (node != nullptr) {
@@ -34,7 +36,6 @@ void FreeNodes(PARTICULATEVOLUMEMAP* map, VolumeNode* node) {
     }
 }
 
-}  // namespace
 
 // ref: FUN_141397e00
 uint32_t* PARTICULATEINDEXQUEUE::PushBack() {

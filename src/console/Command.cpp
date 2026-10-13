@@ -474,6 +474,8 @@ int32_t HelpCommand(const char* command, const char* arguments) {
     return 1;
 }
 
+}  // namespace
+
 // SStrPrintf into a char[128]; another copy of the same template body as 0x1402544f0.
 // ref: FUN_140211780
 void FormatBuffer128(char* dest, const char* format, ...) {
@@ -482,6 +484,8 @@ void FormatBuffer128(char* dest, const char* format, ...) {
     SStrVPrintf(dest, 0x80, format, args);
     va_end(args);
 }
+
+namespace {
 
 // "ver": the build and the compiler it was built with.
 // ref: FUN_142434840

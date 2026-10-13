@@ -850,10 +850,14 @@ const GRAPHICSLEVELVALUE* const s_levelValues[2][10] = {
 
 // ---- the world's option setters -----------------------------------------------------------
 
+}  // namespace
+
 // ref: FUN_141377b90
 void WorldOptionsChanged() {
     g_worldOptionsChanged = 1;
 }
+
+namespace {
 
 // ref: FUN_141351ff0
 void WorldSetGroundEffectAnimation(bool animate) {
@@ -919,6 +923,8 @@ void WorldSetWmoDoodadDist(float dist) {
     g_wmoDoodadDist = dist;
 }
 
+}  // namespace
+
 // ref: FUN_141365b60
 void WorldSetFarClip(float clip) {
     if (5180.0f <= clip) {
@@ -929,6 +935,7 @@ void WorldSetFarClip(float clip) {
     }
     g_farClip = clip;
 }
+
 
 // ref: FUN_141365b80
 void WorldSetHorizonClip(float clip) {
@@ -941,6 +948,7 @@ void WorldSetHorizonClip(float clip) {
     g_horizonClip = clip;
 }
 
+
 // ref: FUN_141365ba0
 void WorldSetHorizonStart(float start) {
     if (6000.0f <= start) {
@@ -951,6 +959,8 @@ void WorldSetHorizonStart(float start) {
     }
     g_horizonStart = start;
 }
+
+namespace {
 
 // ref: FUN_141365bc0
 void WorldSetTeleportMaxNoLoadDist(float dist) {
@@ -969,25 +979,32 @@ void WorldSetNearClip() {
     g_nearClip = 0.2f;
 }
 
+}  // namespace
+
 // ref: FUN_141365bf0
 void WorldSetLodObjectCullDist(float dist) {
     g_lodObjectCullDist = dist;
 }
+
 
 // ref: FUN_141365c00
 void WorldSetLodObjectCullSize(float size) {
     g_lodObjectCullSize = size;
 }
 
+
 // ref: FUN_141365c10
 void WorldSetLodObjectFadeScale(float scale) {
     g_lodObjectFadeScale = scale;
 }
 
+
 // ref: FUN_141365c20
 void WorldSetLodObjectMinSize(float size) {
     g_lodObjectMinSize = size;
 }
+
+namespace {
 
 // The ground effect density's range (FUN_141378600) and the distance's (FUN_141378610).
 // ref: FUN_141378600
@@ -1002,6 +1019,8 @@ void GroundEffectDistRange(float* low, float* high) {
     *high = 500.0f;
 }
 
+}  // namespace
+
 // A percentage, 0.5 .. 2.
 // ref: FUN_1413c0db0
 void WorldSetEntityLodScale(float percent) {
@@ -1015,6 +1034,7 @@ void WorldSetEntityLodScale(float percent) {
     }
 }
 
+
 // ref: FUN_1413c0fc0
 void WorldSetEntityLodDist(float dist) {
     if (dist < 5.0f) {
@@ -1023,6 +1043,8 @@ void WorldSetEntityLodDist(float dist) {
     }
     g_entityLodDist = 1000.0f <= dist ? 1000.0f : dist;
 }
+
+namespace {
 
 // ref: FUN_1413c0ff0
 void WorldSetEntityLodOffset(float offset) {
@@ -1033,6 +1055,8 @@ void WorldSetEntityLodOffset(float offset) {
     g_entityLodOffset = 1000.0f <= offset ? 1000.0f : offset;
 }
 
+}  // namespace
+
 // ref: FUN_1413c1050
 void WorldSetTerrainLodDist(float dist) {
     if (dist < 200.0f) {
@@ -1041,6 +1065,7 @@ void WorldSetTerrainLodDist(float dist) {
     }
     g_terrainLodDist = 5180.0f <= dist ? 5180.0f : dist;
 }
+
 
 // ref: FUN_1413c1080
 void WorldSetTerrainLodDiv(float div) {
@@ -1051,6 +1076,7 @@ void WorldSetTerrainLodDiv(float div) {
     g_terrainLodDiv = 1024.0f <= div ? 1024.0f : div;
 }
 
+
 // ref: FUN_1413c10b0
 void WorldSetWmoLodDist(float dist) {
     if (dist < 200.0f) {
@@ -1059,6 +1085,8 @@ void WorldSetWmoLodDist(float dist) {
     }
     g_wmoLodDist = 5180.0f <= dist ? 5180.0f : dist;
 }
+
+namespace {
 
 // ref: FUN_1413c10e0
 void WorldSetWmoLodDistScale(float scale) {
@@ -1073,6 +1101,8 @@ void WorldSetWmoLodDistScale(float scale) {
 void ParticleSetDensityEnabled(uint32_t enabled) {
     g_particleDensityEnabled = enabled;
 }
+
+}  // namespace
 
 // The density, 0..1, of the main thread's particles or (mt) the job threads'.
 // ref: FUN_14124e100
@@ -1090,6 +1120,8 @@ void ParticleSetDensity(float density, bool mt) {
     }
     g_particleDensity = 1.0f <= density ? 1.0f : density;
 }
+
+namespace {
 
 // 1 .. 16 jobs.
 // ref: FUN_14254ff10
@@ -1111,6 +1143,8 @@ void SkySetCloudLod(long lod) {
 
 // ---- the render settings the CVars change ---------------------------------------------------
 
+}  // namespace
+
 // A switch counted in DAT_142cfc00f while on (FUN_1412b2260).
 // ref: FUN_1412b2260
 void RenderCountSwitch(bool on, uint8_t* state) {
@@ -1126,12 +1160,16 @@ void RenderCountSwitch(bool on, uint8_t* state) {
     *state = 0;
 }
 
+namespace {
+
 uint8_t s_shadowSwitch;     // DAT_1430a5d88
 uint8_t s_waterSwitch;      // DAT_1447ce202
 
 void SetFlag(uint32_t bit, bool on) {
     g_pendingRenderSettings.m_flags = (on ? bit : 0) | (g_pendingRenderSettings.m_flags & ~bit);
 }
+
+}  // namespace
 
 // ref: FUN_1412b20e0
 bool RenderSetSunshafts(uint32_t quality) {
@@ -1142,10 +1180,14 @@ bool RenderSetSunshafts(uint32_t quality) {
     return true;
 }
 
+namespace {
+
 // ref: FUN_1412b5ac0
 void RenderSetShadowMultithreaded(bool on) {
     SetFlag(0x20000, on);
 }
+
+}  // namespace
 
 // ref: FUN_1412b5b00
 bool RenderSetShadowRt(uint32_t mode) {
@@ -1159,10 +1201,14 @@ bool RenderSetShadowRt(uint32_t mode) {
     return true;
 }
 
+namespace {
+
 // ref: FUN_1412b5c20
 void RenderSetShadowBlendCascades(bool on) {
     SetFlag(4, on);
 }
+
+}  // namespace
 
 // ref: FUN_1412b5fa0
 bool RenderSetShadowMode(uint8_t mode) {
@@ -1174,6 +1220,8 @@ bool RenderSetShadowMode(uint8_t mode) {
     return false;
 }
 
+namespace {
+
 // ref: FUN_1412b6060
 void RenderSetShadowSoft(bool on) {
     if (on && reinterpret_cast<int32_t*>(GxDeviceCaps())[2] == 0) {
@@ -1181,6 +1229,8 @@ void RenderSetShadowSoft(bool on) {
     }
     SetFlag(2, on);
 }
+
+}  // namespace
 
 // 0x200, 0x400 or 0x800.
 // ref: FUN_1412b60c0
@@ -1191,6 +1241,8 @@ bool RenderSetShadowTextureSize(int32_t size) {
     }
     return false;
 }
+
+namespace {
 
 // ref: FUN_1412af510
 void RenderSetValar(uint8_t valar) {
@@ -1216,6 +1268,8 @@ bool RenderSetReflectionDownscale(uint32_t downscale) {
     return false;
 }
 
+}  // namespace
+
 // ref: FUN_1425272c0
 bool RenderSetReflectionMode(uint32_t mode) {
     if (mode != 0) {
@@ -1227,6 +1281,7 @@ bool RenderSetReflectionMode(uint32_t mode) {
     return true;
 }
 
+
 // ref: FUN_142527300
 bool RenderSetRippleDetail(int32_t detail) {
     if (detail < 3) {
@@ -1235,6 +1290,7 @@ bool RenderSetRippleDetail(int32_t detail) {
     }
     return false;
 }
+
 
 // ref: FUN_142527330
 bool RenderSetWaterDetail(uint32_t detail) {
@@ -1245,6 +1301,7 @@ bool RenderSetWaterDetail(uint32_t detail) {
     }
     return false;
 }
+
 
 // ref: FUN_1425580f0
 bool RenderSetSsao(uint8_t ssao) {
@@ -1257,6 +1314,8 @@ bool RenderSetSsao(uint8_t ssao) {
     g_pendingRenderSettings.m_ssao = ssao;
     return true;
 }
+
+namespace {
 
 // ---- the checks of what a device can take (0 when it can) ---------------------------------
 
@@ -2124,10 +2183,14 @@ bool TerrainMipLevelCallback(CVar*, const char*, const char* value, void* raid) 
     return true;
 }
 
+}  // namespace
+
 // ref: FUN_14026bea0
 bool WorldMaxMipLevelCallback(CVar*, const char*, const char*, void*) {
     return true;
 }
+
+namespace {
 
 // ref: FUN_1413646c0
 bool WorldBaseMipCallback(CVar*, const char*, const char* value, void* raid) {
@@ -2799,8 +2862,3 @@ void GraphicsRegisterCVars() {
     ApplyGraphicsQualityDefaults(true);
     ApplyGraphicsQualityDefaults(false);
 }
-
-// ---- GENERATED by tools/translate.py: the port globals translated code reaches ----
-extern "C" void* const gen_p_1430a5d88 = (void*)&s_shadowSwitch;
-extern "C" void* const gen_p_1447ce202 = (void*)&s_waterSwitch;
-// ---- end of generated globals ----

@@ -335,6 +335,8 @@ void OnDisplaySizeChanged(void* storage) {
     FROST_UNIMPLEMENTED();  // the UI is not up yet
 }
 
+}  // namespace
+
 // The window brought to the current CVars without a restart: size, mode, monitor; the UI is
 // told (NOTCHED_DISPLAY_MODE_CHANGED). What UpdateWindow (console and Lua) runs.
 // ref: FUN_140328c10
@@ -345,6 +347,8 @@ void ConsoleDeviceUpdateWindow() {
     WindowUpdate(&window);
     UiSignalNotchedDisplayModeChanged();
 }
+
+namespace {
 
 // ref: FUN_140327c50
 int32_t CommandGxRestart(const char* command, const char* arguments) {

@@ -24,6 +24,8 @@ void InitList(CWorldMap* map, size_t offset, uint32_t linkOffset) {
     map->Field<uintptr_t>(offset + 0x10) = terminator | 1;
 }
 
+}  // namespace
+
 // The map's 0x28 load state (FUN_142474960, reset by FUN_142474b40): no request, the slot
 // -1, idle.
 // ref: FUN_142474960
@@ -36,10 +38,13 @@ void MapLoadStateInit(uint8_t* state) {
     InterlockedExchange(reinterpret_cast<volatile long*>(state + 0x24), 0);
 }
 
+
 // ref: FUN_142474b40
 void MapLoadStateReset(uint8_t* state) {
     MapLoadStateInit(state);
 }
+
+namespace {
 
 // ref: FUN_14142b2e0
 uint8_t* MapLoadStateCreate(uint8_t* state) {

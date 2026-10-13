@@ -613,13 +613,14 @@ float WorldSceneFarClip3(CWorldScene* scene) {
     return WorldGetFarClip3CVar();
 }
 
-namespace {
 
 // The Map row's flags word `index` (Map.Flags[3], FUN_14134cac0).
 // ref: FUN_14134cac0
 uint32_t MapRowFlags(const uint8_t* fields, uint32_t index) {
     return DB2FieldArrayU32(fields, 0x15, 0x18, index, &g_mapDB);
 }
+
+namespace {
 
 // The pool job the handle runs the light on (LAB_1413c8a60).
 void UpdateLightJob(void* storage) {

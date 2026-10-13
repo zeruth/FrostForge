@@ -100,33 +100,8 @@ float RequiredUnit(lua_State* L, int32_t* index, const char* usage) {
     return value;
 }
 
-// An optional alpha 0..1 into {value, present}.
-void OptionalAlphaByte(lua_State* L, int32_t* index, const char* usage, uint8_t* alpha) {
-    if (lua_type(L, *index) < 1) {
-        (*index)++;
-        return;
-    }
-    auto valid = [&]() {
-        if (lua_type(L, *index) != LUA_TNUMBER) {
-            return false;
-        }
-        float value = static_cast<float>(lua_tonumber(L, *index));
-        return !(value < 0.0f) && !(1.0f < value);
-    };
-    if (!valid()) {
-        luaL_argerror(L, *index, usage);
-        return;
-    }
-    if (!lua_checkstack(L, 1)) {
-        luaL_error(L, "stack overflow");
-        return;
-    }
-    alpha[0] = valid() ? static_cast<uint8_t>(static_cast<int32_t>(static_cast<float>(lua_tonumber(L, *index)) * 255.0f + 0.5f)) : 0;
-    (*index)++;
-    if (alpha[1] == 0) {
-        alpha[1] = 1;
-    }
-}
+// An optional alpha 0..1 into {value, present}: CSimpleTextureScript.cpp's (FUN_1407cbb50).
+void OptionalAlphaByte(lua_State* L, int32_t* index, const char* usage, uint8_t* alpha);
 
 // A justification name (FUN_1408c6380).
 uint32_t RequiredJustify(lua_State* L, int32_t* index, const char* usage) {

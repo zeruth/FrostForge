@@ -1071,6 +1071,13 @@ int Lua_GetMouseButtonClicked(lua_State* L) {
     return 0;
 }
 
+// ref: FUN_14168e7f0
+int Lua_GetSelectBackgroundModel(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
 // ref: FUN_141d95710
 int Lua_GetServerTime(lua_State* L) {
     (void)L;

@@ -366,6 +366,8 @@ CSimpleAnimGroup* SetParentArgs(lua_State* L, CSimpleAnim** anim) {
     return group;
 }
 
+}  // namespace
+
 // An optional integer argument (luaL_optinteger with the template's checks).
 // ref: FUN_1424252d0
 int32_t OptionalInteger(lua_State* L, int32_t index, int32_t fallback) {
@@ -378,6 +380,8 @@ int32_t OptionalInteger(lua_State* L, int32_t index, int32_t fallback) {
     }
     return value;
 }
+
+namespace {
 
 // ref: FUN_14084f640
 int Anim_SetParent(lua_State* L) {

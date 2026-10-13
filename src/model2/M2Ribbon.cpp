@@ -19,11 +19,15 @@ namespace {
 // Ribbons are drawn at all (DAT_142cfbf74).
 uint8_t s_ribbonsDrawn = 1;
 
+}  // namespace
+
 // A ribbon's random stream's next value in 0..1 (FUN_141297630).
 // ref: FUN_141297630
 float RibbonRandom(CRndSeed* random) {
     return RndSeedUnit(random);
 }
+
+namespace {
 
 // The squared distance past which a new position is a jump and the strip starts again
 // (DAT_1426c6510).

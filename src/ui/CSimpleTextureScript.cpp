@@ -88,6 +88,8 @@ uint32_t RequiredRGB(lua_State* L, int32_t* index, const char* usage) {
     return ((r | 0xffffff00u) << 8 | g) << 8 | b;
 }
 
+}  // namespace
+
 // An optional alpha 0..1 into {value, present} (the template's inline reader).
 // ref: FUN_1407cbb50
 void OptionalAlphaByte(lua_State* L, int32_t* index, const char* usage, uint8_t* alpha) {
@@ -116,6 +118,8 @@ void OptionalAlphaByte(lua_State* L, int32_t* index, const char* usage, uint8_t*
         alpha[1] = 1;
     }
 }
+
+namespace {
 
 // A vertex index, 1-based in Lua (FUN_1408c5f10).
 uint32_t RequiredIndex(lua_State* L, int32_t* index, const char* usage) {

@@ -498,6 +498,8 @@ struct ADDLIGHTARGS {
     SCRIPTLIGHT m_light;
 };
 
+}  // namespace
+
 // [index], light: FUN_1408c5ad0 reads the optional index.
 // ref: FUN_1407d22e0
 void ReadAddLight(lua_State* L, const char* usage, ADDLIGHTARGS* args) {
@@ -511,6 +513,8 @@ void ReadAddLight(lua_State* L, const char* usage, ADDLIGHTARGS* args) {
     }
     ReadScriptLight(L, index, usage, &args->m_light);
 }
+
+namespace {
 
 // ref: FUN_1408e38f0
 int32_t AddCharacterLightBody(lua_State* L, void* context) {

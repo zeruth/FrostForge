@@ -150,6 +150,8 @@ MOUSEEVENT MouseEventAt(bool alternate, uint32_t button, uint32_t x, uint32_t y,
     return event;
 }
 
+}  // namespace
+
 // A mouse button came up: the held buttons drop it, and the UI gets the event (or keeps it
 // for when the events resume); a held cursor waiting on the button is let go.
 // ref: FUN_140237c80
@@ -173,6 +175,8 @@ void ClientOnMouseUp(uint32_t button, uint32_t x, uint32_t y, uint32_t flags, ui
         }
     }
 }
+
+namespace {
 
 // An OS event into the client: input goes to the UI's target, and close and quit stop the
 // pump.

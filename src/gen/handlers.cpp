@@ -265,7 +265,6 @@ unsigned long long FUN_14168e690(unsigned long long param_1);
 unsigned long long FUN_14168e740(unsigned long long param_1);
 unsigned long long FUN_14168e770(unsigned long long param_1);
 unsigned long long FUN_14168e7d0(unsigned long long param_1);
-unsigned long long FUN_14168e7f0(unsigned long long param_1);
 unsigned long long FUN_141698860(unsigned long long param_1);
 unsigned long long FUN_1416989c0(unsigned long long param_1);
 unsigned long long FUN_141698c90(unsigned long long param_1);
@@ -3474,15 +3473,6 @@ int Lua_GetSecondsUntilParentalControlsKick(lua_State* L) {
     __try {
         return static_cast<int>(FUN_141d01eb0(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x141d01eb0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_14168e7f0
-int Lua_GetSelectBackgroundModel(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_14168e7f0(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x14168e7f0ull, GetExceptionInformation())) {
         return 0;
     }
 }

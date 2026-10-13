@@ -137,6 +137,8 @@ uint32_t OsRegistryReadString(blz::string* key, blz::string* value, blz::string*
     return 0x2EE1;
 }
 
+}  // namespace
+
 // Reads a launch option the Battle.net launcher left for `product` (only with -launcherlogin).
 // ref: FUN_14148b460
 bool LauncherOptionRead(const char* product, const char* name, char* buffer, uint64_t size, bool encrypted) {
@@ -175,10 +177,13 @@ bool LauncherOptionRead(const char* product, const char* name, char* buffer, uin
     return true;
 }
 
+
 // ref: FUN_14148ba20
 bool LauncherSettingRead(const char* name, char* buffer, uint64_t size, bool encrypted) {
     return LauncherOptionRead("WoW", name, buffer, size, encrypted);
 }
+
+namespace {
 
 // The region/language picker (dialog resource 0x90) shown when the portal or the locale had
 // to be guessed: returns the chosen region and locale, false on cancel. Not ported: the
