@@ -68,7 +68,13 @@ void OsCursorSet(void* window, void* cursor, uint32_t time);
 void OsCursorEnable(void* window, uint32_t time);
 void OsCursorDisable(void* window, uint32_t time);
 void OsCursorFrameBegin(uint32_t time);
-void OsCursorFrameEnd(uint32_t time);
+uint32_t OsCursorFrameEnd(uint32_t time);
+void OsCursorSetPosition(void* window, const uint64_t* position, uint32_t time);
+void OsCursorHold(void* window, uint32_t time, bool noRecenter);
+void OsCursorRelease(uint32_t time);
+
+// The mouse held for relative motion (1) or free (0) (FUN_14123b3c0).
+void OsSetMouseMode(uint32_t mode);
 
 // The IME (os/win/Window.cpp): on while an edit box has the focus (FUN_14123e5f0); the
 // composition's target clause and cursor (FUN_14123e7e0); its result and composition strings

@@ -6854,18 +6854,6 @@ undefined8 FUN_142549e60() {
     return (undefined8)0;
 }
 
-/* the stack frame addressed directly */
-undefined8 FUN_14254c350() {
-    GenUnimplemented(0x14254c350ULL);
-    return (undefined8)0;
-}
-
-/* the stack frame addressed directly */
-undefined8 FUN_14254ca30() {
-    GenUnimplemented(0x14254ca30ULL);
-    return (undefined8)0;
-}
-
 /* a global used as a pointer the data export does not type */
 int * FUN_14254d240() {
     GenUnimplemented(0x14254d240ULL);

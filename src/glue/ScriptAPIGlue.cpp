@@ -4,6 +4,7 @@
 #include "client/ClientCVars.hpp"
 #include "client/CommandLine.hpp"
 #include "client/ConsoleDevice.hpp"
+#include "client/Locale.hpp"
 #include "client/GraphicsSettings.hpp"
 #include "client/GxWindow.hpp"
 #include "client/RenderSettings.hpp"
@@ -98,6 +99,31 @@ int Lua_ClearSavedAccountList(lua_State* L) {
     (void)L;
     CVarSet(g_accountListCVar, "", true, false, false, true);
     return 0;
+}
+
+extern "C" unsigned long long FUN_141c191f0(unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_141c191f0
+
+// The locales the client offers, as their names: those of the region's (FUN_141c191f0), or every
+// locale when the argument asks and the region is 1 or 3. One result per locale; a locale
+// without a name is a nil. The decompilation calls this void, but the count of results is what
+// it leaves in eax, and the translated copy returned garbage there.
+// ref: FUN_141d01d00
+int Lua_GetAvailableLocales(lua_State* L) {
+    int32_t count = 12;
+    uint32_t region = RegionGet();
+    bool all = lua_toboolean(L, 1) != 0 && ((region - 1) & 0xfffffffd) == 0;
+    uint32_t locales[12];
+    FUN_141c191f0(reinterpret_cast<unsigned long long>(locales), reinterpret_cast<unsigned long long>(&count), all);
+    for (int32_t i = 0; i < count; i++) {
+        const char* name = LocaleGetName(locales[i]);
+        if (name == nullptr) {
+            lua_pushnil(L);
+        } else {
+            lua_pushlstring(L, name, strlen(name));
+        }
+    }
+    return count;
 }
 
 // ref: FUN_141d01f00

@@ -3031,6 +3031,12 @@ undefined1 FUN_142526ee0(void) {
     return (undefined1)((unsigned long long (*)(void))&gen_alias_142526ee0)();
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_14254c350=?OsCursorGetSystemPosition@@YA_KXZ")
+extern char gen_alias_14254c350;
+undefined8 FUN_14254c350(void) {
+    return (undefined8)((unsigned long long (*)(void))&gen_alias_14254c350)();
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_14254c3d0=?OsCursorGetClientPosition@@YA_KPEAX@Z")
 extern char gen_alias_14254c3d0;
 undefined8 FUN_14254c3d0(unsigned long long a0) {

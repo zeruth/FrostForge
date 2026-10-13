@@ -29,7 +29,6 @@ __declspec(dllimport) unsigned long long GetAsyncKeyState();
 __declspec(dllimport) unsigned long long GetClientRect();
 __declspec(dllimport) unsigned long long GetComputerNameW();
 __declspec(dllimport) unsigned long long GetCurrentProcess();
-__declspec(dllimport) unsigned long long GetCursorPos();
 __declspec(dllimport) unsigned long long GetDC();
 __declspec(dllimport) unsigned long long GetDeviceCaps();
 __declspec(dllimport) unsigned long long GetFileAttributesW();
@@ -66,7 +65,6 @@ __declspec(dllimport) unsigned long long SetCursorPos();
 __declspec(dllimport) unsigned long long ShowCursor();
 __declspec(dllimport) unsigned long long Sleep();
 __declspec(dllimport) unsigned long long TerminateProcess();
-__declspec(dllimport) unsigned long long TrackMouseEvent();
 __declspec(dllimport) unsigned long long VkKeyScanA();
 __declspec(dllimport) unsigned long long WaitForSingleObject();
 __declspec(dllimport) unsigned long long send();
@@ -595,6 +593,30 @@ extern void *const gen_p_142cfca08;
 /* s_missing (src/db/GlobalColor.cpp), internal: through its pointer */
 extern void *const gen_p_142d1ad40;
 #define gen_g_142d1ad40 (*(char *)gen_p_142d1ad40)
+/* s_sampleTimeout (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_142d5e8e0;
+#define gen_g_142d5e8e0 (*(char *)gen_p_142d5e8e0)
+/* s_sampleTimeoutRemote (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_142d5e8e4;
+#define gen_g_142d5e8e4 (*(char *)gen_p_142d5e8e4)
+/* s_holdGrace (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_142d5e900;
+#define gen_g_142d5e900 (*(char *)gen_p_142d5e900)
+/* s_cursorState (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_142d5e90c;
+#define gen_g_142d5e90c (*(char *)gen_p_142d5e90c)
+/* s_trackLeave (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_142d5e910;
+#define gen_g_142d5e910 (*(char *)gen_p_142d5e910)
+/* s_cursorFrame (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_142d5e914;
+#define gen_g_142d5e914 (*(char *)gen_p_142d5e914)
+/* s_samplesConstructed (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_142d5e920;
+#define gen_g_142d5e920 (*(char *)gen_p_142d5e920)
+/* s_samples (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_142d5e938;
+#define gen_g_142d5e938 (*(char *)gen_p_142d5e938)
 /* s_seedA (src/client/Startup.cpp), internal: through its pointer */
 extern void *const gen_p_142ddcf50;
 #define gen_g_142ddcf50 (*(char *)gen_p_142ddcf50)
@@ -784,6 +806,81 @@ extern void *const gen_p_1444f94c0;
 /* s_waterSwitch (src/client/GraphicsSettings.cpp), internal: through its pointer */
 extern void *const gen_p_1447ce202;
 #define gen_g_1447ce202 (*(char *)gen_p_1447ce202)
+/* s_initialized (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceac0;
+#define gen_g_1447ceac0 (*(char *)gen_p_1447ceac0)
+/* s_remoteSession (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceac1;
+#define gen_g_1447ceac1 (*(char *)gen_p_1447ceac1)
+/* s_holdMoved (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceac2;
+#define gen_g_1447ceac2 (*(char *)gen_p_1447ceac2)
+/* s_remoteCheckTime (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceac4;
+#define gen_g_1447ceac4 (*(char *)gen_p_1447ceac4)
+/* s_holdWindow (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceac8;
+#define gen_g_1447ceac8 (*(char *)gen_p_1447ceac8)
+/* s_holdTime (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447cead0;
+#define gen_g_1447cead0 (*(char *)gen_p_1447cead0)
+/* s_haveMessagePosition (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447cead4;
+#define gen_g_1447cead4 (*(char *)gen_p_1447cead4)
+/* s_velocityStarted (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447cead5;
+#define gen_g_1447cead5 (*(char *)gen_p_1447cead5)
+/* s_holdCenter (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447cead8;
+#define gen_g_1447cead8 (*(char *)gen_p_1447cead8)
+/* s_heldPosition (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceae0;
+#define gen_g_1447ceae0 (*(char *)gen_p_1447ceae0)
+/* s_releaseSample (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceae8;
+#define gen_g_1447ceae8 (*(char *)gen_p_1447ceae8)
+/* s_appCursor (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceaf0;
+#define gen_g_1447ceaf0 (*(char *)gen_p_1447ceaf0)
+/* s_blankCursor (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceaf8;
+#define gen_g_1447ceaf8 (*(char *)gen_p_1447ceaf8)
+/* s_frameDepth (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceb00;
+#define gen_g_1447ceb00 (*(char *)gen_p_1447ceb00)
+/* s_sequence (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceb0c;
+#define gen_g_1447ceb0c (*(char *)gen_p_1447ceb0c)
+/* s_moves (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceb10;
+#define gen_g_1447ceb10 (*(char *)gen_p_1447ceb10)
+/* s_currentSample (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceb14;
+#define gen_g_1447ceb14 (*(char *)gen_p_1447ceb14)
+/* s_messagePosition (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceb18;
+#define gen_g_1447ceb18 (*(char *)gen_p_1447ceb18)
+/* s_motion (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceb28;
+#define gen_g_1447ceb28 (*(char *)gen_p_1447ceb28)
+/* s_motionStart (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceb30;
+#define gen_g_1447ceb30 (*(char *)gen_p_1447ceb30)
+/* s_velocitySpan (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceb34;
+#define gen_g_1447ceb34 (*(char *)gen_p_1447ceb34)
+/* s_velocity (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceb38;
+#define gen_g_1447ceb38 (*(char *)gen_p_1447ceb38)
+/* s_velocityTime (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceb40;
+#define gen_g_1447ceb40 (*(char *)gen_p_1447ceb40)
+/* s_velocityMoves (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceb44;
+#define gen_g_1447ceb44 (*(char *)gen_p_1447ceb44)
+/* s_visibilityParam (src/os/win/Cursor.cpp), internal: through its pointer */
+extern void *const gen_p_1447ceb50;
+#define gen_g_1447ceb50 (*(char *)gen_p_1447ceb50)
 undefined8 FUN_1401ca520();
 undefined8 FUN_1401ca540();
 int FUN_1401ca670();
@@ -8469,7 +8566,6 @@ undefined8 FUN_141d01b40();
 undefined8 FUN_141d01b90();
 undefined8 FUN_141d01c70();
 undefined8 FUN_141d01cd0();
-undefined8 FUN_141d01d00();
 undefined8 FUN_141d01dc0();
 undefined8 FUN_141d01e20();
 undefined8 FUN_141d01e50();
@@ -9133,26 +9229,17 @@ undefined8 FUN_14254b130();
 undefined8 FUN_14254b210();
 ulonglong FUN_14254b290();
 undefined8 FUN_14254b620();
-undefined8 FUN_14254b840();
 undefined8 FUN_14254b8c0();
 undefined8 FUN_14254b980();
-int FUN_14254ba70();
 undefined8 FUN_14254c230();
 undefined8 FUN_14254c350();
 undefined8 FUN_14254c3d0();
 undefined8 FUN_14254c400();
-undefined8 FUN_14254c490();
 undefined8 FUN_14254c4f0();
 undefined8 FUN_14254c6a0();
 undefined4 * FUN_14254c760();
-undefined8 FUN_14254c870();
-undefined8 FUN_14254ca30();
-undefined8 FUN_14254ce40();
 undefined8 FUN_14254cef0();
-undefined8 FUN_14254cf70();
 undefined4 FUN_14254cfd0();
-undefined8 FUN_14254d110();
-undefined8 FUN_14254d160();
 int * FUN_14254d240();
 undefined8 FUN_14254d4b0();
 ulonglong FUN_14254d770();

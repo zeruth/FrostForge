@@ -1458,6 +1458,24 @@ uint8_t s_mouseNoRepositioning;     // DAT_1430a15c8
 
 }
 
+// The mouse held in the main window for relative motion (any mode but 0), re-centered unless
+// repositioning is off, or let go.
+// ref: FUN_14123b3c0
+void OsSetMouseMode(uint32_t mode) {
+    uint8_t noRecenter = s_mouseNoRepositioning;
+    if (mode == s_mouseMode) {
+        return;
+    }
+    if (mode != 0) {
+        uint32_t time = OsGetAsyncTimeMs();
+        OsCursorHold(OsGetMainWindow(0), time, noRecenter != 0);
+        s_mouseMode = mode;
+        return;
+    }
+    OsCursorRelease(OsGetAsyncTimeMs());
+    s_mouseMode = 0;
+}
+
 // ref: FUN_14123b180
 float OsGetMouseSpeed() {
     return s_mouseSpeedScale;

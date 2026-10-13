@@ -395,7 +395,6 @@ unsigned long long FUN_141d01b40(unsigned long long param_1);
 unsigned long long FUN_141d01b90(unsigned long long param_1);
 unsigned long long FUN_141d01c70(unsigned long long param_1);
 unsigned long long FUN_141d01cd0(unsigned long long param_1);
-unsigned long long FUN_141d01d00(unsigned long long param_1);
 unsigned long long FUN_141d01dc0(unsigned long long param_1);
 unsigned long long FUN_141d01e20(unsigned long long param_1);
 unsigned long long FUN_141d01e50(unsigned long long param_1);
@@ -3116,15 +3115,6 @@ int Lua_GetAddOnInfo(lua_State* L) {
     __try {
         return static_cast<int>(FUN_141d028c0(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x141d028c0ull, GetExceptionInformation())) {
-        return 0;
-    }
-}
-
-// translated: FUN_141d01d00
-int Lua_GetAvailableLocales(lua_State* L) {
-    __try {
-        return static_cast<int>(FUN_141d01d00(reinterpret_cast<unsigned long long>(L)));
-    } __except (GenFault(0x141d01d00ull, GetExceptionInformation())) {
         return 0;
     }
 }

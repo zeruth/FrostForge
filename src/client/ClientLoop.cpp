@@ -151,13 +151,6 @@ MOUSEEVENT MouseEventAt(bool alternate, uint32_t button, uint32_t x, uint32_t y,
     return event;
 }
 
-// A held cursor lets go when one of its buttons comes up.
-// ref: FUN_14123b3c0
-void OsSetMouseMode(uint32_t mode) {
-    (void)mode;
-    FROST_UNIMPLEMENTED();  // the cursor clipped and hidden (FUN_14254b980) or freed (FUN_14254b8c0)
-}
-
 // A mouse button came up: the held buttons drop it, and the UI gets the event (or keeps it
 // for when the events resume); a held cursor waiting on the button is let go.
 // ref: FUN_140237c80
