@@ -2,6 +2,7 @@
 #include "client/ClientInput.hpp"
 #include "client/FrameBufferCache.hpp"
 #include "client/GxWindow.hpp"
+#include "client/LoadingBar.hpp"
 #include "gx/GxDevice.hpp"
 #include "gx/d3d12/DeviceD3d12.hpp"
 #include "client/Startup.hpp"
@@ -31,7 +32,6 @@ bool Sub14026BEA0();
 void Sub1413544D0();
 void Sub14167BA90(uint64_t a1, uint64_t a2);
 void UiRender(void* ui);
-void Sub14022EA60();
 void Sub1405F27E0(bool a1);
 void Sub140238D50();
 void Sub14022EE80(GxRenderContext* context, GXRENDERTARGETS* targets, bool a3);
@@ -579,7 +579,7 @@ void Sub140225AB0() {
                 Sub1413544D0();
                 Sub14167BA90(Sub140216570(), Sub140216580());
                 UiRender(CSimpleTop::s_instance);
-                Sub14022EA60();
+                LoadingBarRender();
                 Sub1405F27E0(!Sub14026BEA0());
                 if (!Sub1405DC320() && !Sub1405DBDE0() && !Sub140239E90()) {
                     void* back = GxSwapChainGetBackBuffer(chain);

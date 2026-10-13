@@ -7,6 +7,7 @@ add_library(client STATIC
     ConsoleDevice.cpp
     CrashReport.cpp
     GxWindow.cpp
+    LoadingBar.cpp
     Locale.cpp
     LocalFileHandlers.cpp
     Main.cpp

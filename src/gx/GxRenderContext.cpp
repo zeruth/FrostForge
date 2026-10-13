@@ -367,7 +367,7 @@ bool GxRenderContext::BufUnlock(GxBuf*, uint32_t) {
     FROST_UNIMPLEMENTED();
     return false;
 }
-void GxRenderContext::Slot190() {
+void GxRenderContext::BufWrite(GxBuf*, const void*, uint32_t, uint32_t) {
     FROST_UNIMPLEMENTED();
 }
 bool GxRenderContext::CopyTex(gxDx12Backend::Tex*, gxDx12Backend::Tex*, int32_t*, int32_t*, uint32_t*, uint32_t, int32_t) {

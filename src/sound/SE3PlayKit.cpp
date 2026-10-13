@@ -364,8 +364,23 @@ uint32_t SE3PlayKit(uint32_t kitId, const float* position, SE3PLAYPARAMS* params
         p->m_bus = def->m_bus;
     }
     const uint8_t* kit = def != nullptr ? SoundKitRecord(def->m_kitId) : nullptr;
+    if (def != nullptr) {
+        // SoundKit flags 0x2000: never combined; 0x8: m_10 cleared. A kit with child kits is
+        // never combined either.
+        if (kit != nullptr) {
+            if (((DB2FieldU16(kit, 3, 0, &g_soundKitDB) >> 0xd) & 1) != 0) {
+                p->m_combinable = 0;
+            }
+            if ((DB2FieldU16(kit, 3, 0, &g_soundKitDB) & 8) != 0) {
+                p->m_10 = 0;
+            }
+        }
+        if (def->m_childCount != 0) {
+            p->m_combinable = 0;
+        }
+    }
     if (p->m_combinable != 0) {
-        FROST_UNIMPLEMENTED();  // the combinable positions (TSHashTable at 0x142cfce70, FUN_1412ccbc0): world sounds
+        SE3CombinableAdd(kitId, position, p);
         SE3PlayParamsDestroy(&local);
         return 0;
     }

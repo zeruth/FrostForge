@@ -578,12 +578,6 @@ undefined8 FUN_14022b8f0() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_141280410 reads 1, the call passes 0) */
-undefined8 FUN_140230490() {
-    GenUnimplemented(0x140230490ULL);
-    return (undefined8)0;
-}
-
 /* register the decompiler lost track of */
 undefined8 FUN_140231ab0() {
     GenUnimplemented(0x140231ab0ULL);

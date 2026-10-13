@@ -82,6 +82,7 @@ class RenderContextD3d12 : public GxRenderContext {
         void* param) override;                                                  // FUN_1422e3390
     void* BufLock(GxBuf* buf) override;                                        // FUN_1422cd8e0
     bool BufUnlock(GxBuf* buf, uint32_t size) override;                        // FUN_1422cd9f0
+    void BufWrite(GxBuf* buf, const void* data, uint32_t size, uint32_t offset) override;  // FUN_1422cd7e0
     GxBuf* GetUploadBuf(uint8_t type) override;                                // FUN_1422d40c0
     void SetPipeline(GxPipeline* pipeline) override;                           // FUN_1422dc9e0
     void SetTexture(uint8_t stage, uint32_t slot, Tex* tex) override;          // FUN_1422e4620

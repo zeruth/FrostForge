@@ -567,6 +567,12 @@ void DefCheckEnvelopes(SE3SoundKitDef* def) {
 
 }
 
+// The kit's definition when one was made, without making it (inlined into FUN_1412cf720).
+SE3SoundKitDef* SE3FindKitDef(int32_t kitId) {
+    DEFNODE* node = DefFind(kitId);
+    return node != nullptr ? node->m_def : nullptr;
+}
+
 // The definition of a SoundKit, made on first use.
 // ref: FUN_1412c93c0
 SE3SoundKitDef* SE3GetKitDef(int32_t kitId) {
@@ -830,7 +836,6 @@ void SE3ReleaseKitDefs() {
 
 // The shutdown's frees: every instance left, the instance heap, the combined handles, and the
 // messages (FUN_1412d41d0's middle).
-// ref: FUN_140323620
 void SE3FreeEngineLists() {
     TSExplicitList<SE3HANDLENODE>& handles = g_se3Handles.m_fulllist;
     while (SE3HANDLENODE* node = handles.Head()) {

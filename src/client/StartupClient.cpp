@@ -1366,15 +1366,6 @@ void UiRender(void* ui) {
     static_cast<CSimpleTop*>(ui)->Render();
 }
 
-extern "C" unsigned long long FUN_14022ea60();
-// translated: FUN_14022ea60
-void Sub14022EA60() {
-    __try {
-        FUN_14022ea60();
-    } __except (GenFault(0x14022ea60ull, GetExceptionInformation())) {
-    }
-}
-
 void Sub1405F27E0(bool a1) {
     UiTrimUnneededTextures(a1);
 }

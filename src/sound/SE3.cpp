@@ -779,6 +779,7 @@ void SE3Shutdown(bool restart) {
     SE3BusShutdown();
     ReleaseSystem();
     SE3FreeEngineLists();
+    SE3CombinableShutdown();
     if (!restart) {
         SE3EmitterManagerShutdown();
     }

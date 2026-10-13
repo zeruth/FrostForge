@@ -4,7 +4,9 @@
 #include "sound/SE3Kit.hpp"
 
 #include <cmath>
+#include <cstddef>
 #include <cstring>
+#include <new>
 
 #include "db/DB2Tables.hpp"
 #include "db/ParameterCurve.hpp"
@@ -14,6 +16,7 @@
 #include "sound/SE3.hpp"
 #include "sound/SE3Bus.hpp"
 #include "sound/SE3Internal.hpp"
+#include "base/DataAllocator.hpp"
 #include "storm/Memory.hpp"
 #include "util/Unimplemented.hpp"
 #include <windows.h>
@@ -538,12 +541,212 @@ void SE3UpdateRange() {
     }
 }
 
-// The combinable positions' kits (world sounds sharing one instance).
-extern "C" unsigned long long FUN_1412cf720();
-// translated: FUN_1412cf720
-void SE3UpdateCombinedKits() {
-    __try {
-        FUN_1412cf720();
-    } __except (GenFault(0x1412cf720ull, GetExceptionInformation())) {
+// ---- the combinable kits ------------------------------------------------------------------
+
+// A kit marked combinable is not played when asked: each request in a frame adds its position
+// (or none) to the kit's entry, and the frame plays the entry once, at the one position when
+// there was one request, otherwise unplaced with the volume of the nearest.
+
+namespace {
+
+// One request's position (0x20, from the pool below).
+struct SE3CombinableSoundKitPosition {
+    TSLink<SE3CombinableSoundKitPosition> m_link;   // 0x00
+    uint8_t m_hasPosition;                          // 0x10
+    float m_position[3];                            // 0x14
+};
+static_assert(sizeof(SE3CombinableSoundKitPosition) == 0x20, "SE3CombinableSoundKitPosition is 0x20 bytes");
+
+// One kit's requests this frame (0x198).
+struct SE3CombinableSoundList : TSHashObject<SE3CombinableSoundList> {
+    int32_t m_kitId;                                // 0x30 (also the hash)
+    uint32_t m_pad34;
+    SE3PLAYPARAMS m_params;                         // 0x38 the last request's
+    // 0x180: the unplaced requests at the head, the placed ones at the tail
+    TSList<SE3CombinableSoundKitPosition, TSGetLink<SE3CombinableSoundKitPosition>, 8> m_positions;
+};
+static_assert(offsetof(SE3CombinableSoundList, m_params) == 0x38, "m_params is at 0x38");
+static_assert(offsetof(SE3CombinableSoundList, m_positions) == 0x180, "m_positions is at 0x180");
+static_assert(sizeof(SE3CombinableSoundList) == 0x198, "SE3CombinableSoundList is 0x198 bytes");
+
+}  // namespace
+
+template <>
+struct TSHashTableTags<SE3CombinableSoundList> {
+    static constexpr const char* s_fixedArray =
+        ".?AV?$TSFixedArray@V?$TSExplicitList@USE3CombinableSoundList@@$0?CCCCCCCD@$07@@$07@@";
+    static constexpr const char* s_growableArray =
+        ".?AV?$TSGrowableArray@V?$TSExplicitList@USE3CombinableSoundList@@$0?CCCCCCCD@$07@@$07@@";
+};
+
+namespace {
+
+const char s_combinableTableTag[] = ".?AV?$TSHashTable@USE3CombinableSoundList@@VHASHKEY_NONE@@$07@@";
+const char s_combinableListTag[] =
+    ".?AV?$TSList@USE3CombinableSoundList@@V?$TSGetExplicitLink@USE3CombinableSoundList@@@@$07@@";
+const char s_positionTag[] = ".?AVSE3CombinableSoundKitPosition@@";
+const char s_positionListTag[] =
+    ".?AV?$TSList@VSE3CombinableSoundKitPosition@@V?$TSGetLink@VSE3CombinableSoundKitPosition@@@@$07@@";
+
+CDataAllocator s_positions(0x20, 0x20);     // DAT_1430a94e0 (FUN_1401e5d00)
+
+// The entry's destructor: its positions back to the pool, its parameters, its links.
+// ref: FUN_1412c6330
+void CombinableListDestroy(SE3CombinableSoundList* list) {
+    for (SE3CombinableSoundKitPosition* position = list->m_positions.Head(); position != nullptr;) {
+        SE3CombinableSoundKitPosition* next = list->m_positions.Next(position);
+        position->m_link.Unlink();
+        s_positions.PutData(position);
+        position = next;
     }
+    while (SE3CombinableSoundKitPosition* position = list->m_positions.Head()) {
+        position->m_link.Unlink();
+        SMemFree(position, s_positionListTag, -2, 0);
+    }
+    list->m_positions.~TSList();
+    SE3PlayParamsDestroy(&list->m_params);
+    list->Destroy();
+}
+
+// TSHashTableReuse<SE3CombinableSoundList, HASHKEY_NONE, 8> (vtable 0x142728d50); the
+// requests' path only reaches its first two slots, which allocate and free.
+class SE3COMBINABLETABLE : public TSHashTable<SE3CombinableSoundList> {
+    public:
+    // ref: FUN_1412c5610
+    void Delete(SE3CombinableSoundList* node) override {
+        CombinableListDestroy(node);
+        SMemFree(node, s_combinableTableTag, -2, 0);
+    }
+
+    // FUN_1412c5640 -> TSList<SE3CombinableSoundList>::NewNode (FUN_1412cda80)
+    // ref: FUN_1412c5640
+    SE3CombinableSoundList* NewNode(TSExplicitList<SE3CombinableSoundList>* slot, uint32_t extra, uint32_t flags) override {
+        void* memory = SMemAlloc(extra + sizeof(SE3CombinableSoundList), 8, s_combinableListTag, 0, -2, flags | 8);
+        std::memset(memory, 0, offsetof(SE3CombinableSoundList, m_hashval) + sizeof(uint32_t));
+        auto node = static_cast<SE3CombinableSoundList*>(memory);
+        SE3PlayParamsConstruct(&node->m_params);
+        new (&node->m_positions) TSList<SE3CombinableSoundKitPosition, TSGetLink<SE3CombinableSoundKitPosition>, 8>();
+        slot->LinkToTail(node);
+        return node;
+    }
+};
+
+SE3COMBINABLETABLE s_combinable;            // 0x142cfce70 (FUN_1401e59c0)
+
+}  // namespace
+
+// SE3PlayKit's combinable branch (FUN_1412ce100): the kit's entry, found by its id or made, takes
+// the request's parameters and its position.
+void SE3CombinableAdd(uint32_t kitId, const float* position, const SE3PLAYPARAMS* params) {
+    SE3CombinableSoundList* list = s_combinable.Find(kitId, [](SE3CombinableSoundList*) {
+        return true;
+    });
+    if (list == nullptr) {
+        list = s_combinable.New(kitId, 0, 0);
+        list->m_hashval = kitId;
+    }
+    list->m_kitId = static_cast<int32_t>(kitId);
+    SE3PlayParamsCopy(&list->m_params, params);
+    auto entry = static_cast<SE3CombinableSoundKitPosition*>(s_positions.GetData(false, s_positionTag, -2, 1));
+    entry->m_link.m_prevlink = nullptr;
+    entry->m_link.m_next = nullptr;
+    entry->m_hasPosition = 0;
+    entry->m_position[0] = 0.0f;
+    entry->m_position[1] = 0.0f;
+    entry->m_position[2] = 0.0f;
+    if (position != nullptr) {
+        entry->m_hasPosition = 1;
+        entry->m_position[0] = position[0];
+        entry->m_position[1] = position[1];
+        entry->m_position[2] = position[2];
+        list->m_positions.LinkToTail(entry);
+    } else {
+        list->m_positions.LinkToHead(entry);
+    }
+}
+
+// The frame's pass over the entries: each plays once and goes. An entry with more than one
+// request plays unplaced, as loud as its nearest request would have been (silent past the
+// kit's maximum distance, fading over its last tenth), or at full volume when any request
+// had no position.
+// ref: FUN_1412cf720
+void SE3UpdateCombinedKits() {
+    SE3CombinableSoundList* list = s_combinable.m_fulllist.Head();
+    if (list == nullptr) {
+        return;
+    }
+    FMOD_VECTOR listener = {0.0f, 0.0f, 0.0f};
+    g_fmodSystem->get3DListenerAttributes(0, &listener, nullptr, nullptr, nullptr);
+    float last[3] = {0.0f, 0.0f, 0.0f};
+    do {
+        SE3SoundKitDef* def = SE3FindKitDef(list->m_kitId);
+        if (def == nullptr) {
+            s_combinable.Unlink(list);
+            s_combinable.Delete(list);
+            list = s_combinable.m_fulllist.Head();
+            continue;
+        }
+        bool placed = true;
+        uint32_t count = 0;
+        float nearest = 3.4028235e+38f;
+        for (SE3CombinableSoundKitPosition* entry = list->m_positions.Head(); entry != nullptr;
+             entry = list->m_positions.Next(entry)) {
+            last[0] = entry->m_position[0];
+            last[1] = entry->m_position[1];
+            last[2] = entry->m_position[2];
+            count++;
+            if (entry->m_hasPosition == 0) {
+                placed = false;
+                break;
+            }
+            float dx = listener.x - entry->m_position[0];
+            float dz = listener.z - entry->m_position[2];
+            float distance2 = (listener.y - entry->m_position[1]) * (listener.y - entry->m_position[1]) + dx * dx + dz * dz;
+            if (distance2 < nearest) {
+                nearest = distance2;
+            }
+        }
+        list->m_params.m_combinable = 0;
+        if (count == 1) {
+            SE3PlayKit(static_cast<uint32_t>(list->m_kitId), placed ? last : nullptr, &list->m_params, nullptr, nullptr,
+                false, nullptr);
+        } else {
+            float volume = 1.0f;
+            if (placed) {
+                float distance = std::sqrt(nearest);
+                bool local;
+                g_soundKitAdvancedDB.GetRecord(static_cast<uint32_t>(def->m_advancedId), false, &local);
+                float minDistance = SE3GetMinDistance(&list->m_params, def);
+                if (minDistance <= 0.0f) {
+                    minDistance = 0.0f;
+                }
+                float maxDistance = SE3GetMaxDistance(&list->m_params, def);
+                if (maxDistance <= minDistance) {
+                    maxDistance = minDistance;
+                }
+                if (minDistance < distance) {
+                    if (distance < maxDistance) {
+                        float fadeStart = maxDistance * 0.9f;
+                        volume = minDistance / ((distance - minDistance) * 4.0f + minDistance);
+                        if (fadeStart < distance) {
+                            volume *= 1.0f - (distance - fadeStart) / (maxDistance - fadeStart);
+                        }
+                    } else {
+                        volume = 0.0f;
+                    }
+                }
+            }
+            list->m_params.m_08 = volume;
+            SE3PlayKit(static_cast<uint32_t>(list->m_kitId), nullptr, &list->m_params, nullptr, nullptr, false, nullptr);
+        }
+        s_combinable.Unlink(list);
+        s_combinable.Delete(list);
+        list = s_combinable.m_fulllist.Head();
+    } while (list != nullptr);
+}
+
+// The shutdown's part (FUN_1412d41d0): every entry deleted, then the pool's chunks freed.
+void SE3CombinableShutdown() {
+    s_combinable.Clear(false);
+    s_positions.Clear(s_positionTag, -2);
 }

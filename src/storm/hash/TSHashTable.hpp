@@ -81,6 +81,9 @@ struct TSExplicitList {
     }
 };
 
+template <class T, int32_t LinkBase = 0>
+class TSHashTable;
+
 // The fields every node starts with.
 template <class T>
 struct TSHashObject {
@@ -88,6 +91,16 @@ struct TSHashObject {
     TSLink<T> m_linktofull;   // 0x10
     void* m_table;            // 0x20
     uint32_t m_hashval;       // 0x28
+
+    // The node's destructor: out of its table, then out of both lists.
+    // ref: FUN_140323620
+    void Destroy() {
+        if (this->m_table != nullptr) {
+            static_cast<TSHashTable<T>*>(this->m_table)->Unlink(static_cast<T*>(this));
+        }
+        this->m_linktofull.Unlink();
+        this->m_linktoslot.Unlink();
+    }
 };
 
 // HASHKEY_CONSTSTRI: the caller's string, by pointer, compared case-insensitively.
@@ -107,7 +120,7 @@ struct TSHashTableTags {
 
 // LinkBase is where the node's TSHashObject starts: 0 for most tables, 0x10 when the node
 // is a handle object (vtable and reference count first).
-template <class T, int32_t LinkBase = 0>
+template <class T, int32_t LinkBase>
 class TSHashTable {
     public:
     TSExplicitList<T> m_fulllist;  // 0x08

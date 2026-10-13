@@ -1048,6 +1048,25 @@ bool RenderContextD3d12::BufUnlock(GxBuf* buf, uint32_t size) {
     return true;
 }
 
+// ref: FUN_1422cd770
+void BufWriteList(CopyCommandList* list, GxBuf* buf, const void* data, uint32_t size, uint32_t offset) {
+    if (GxDeviceD3d12()->m_ready == 0) {
+        return;
+    }
+    if (size == 0) {
+        size = buf->m_size;
+    }
+    auto memory = static_cast<uint8_t*>(BufLockUpload(list, buf));
+    std::memcpy(memory + offset, data, size);
+    BufUnlockUpload(list, buf, size);
+    buf->m_flags |= GXBUF_UNLOCKED;
+}
+
+// ref: FUN_1422cd7e0
+void RenderContextD3d12::BufWrite(GxBuf* buf, const void* data, uint32_t size, uint32_t offset) {
+    BufWriteList(&this->Owner()->m_copy, buf, data, size, offset);
+}
+
 // ref: FUN_1422d40c0
 GxBuf* RenderContextD3d12::GetUploadBuf(uint8_t type) {
     return static_cast<GxBuf*>(this->Owner()->m_uploadBufs[type]);

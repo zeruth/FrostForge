@@ -303,6 +303,12 @@ bool SE3IsPlaying(uint32_t handle);
 int32_t SE3GetKitId(uint32_t handle);
 // ref: FUN_1412c93c0
 SE3SoundKitDef* SE3GetKitDef(int32_t kitId);
+SE3SoundKitDef* SE3FindKitDef(int32_t kitId);
+// A combinable kit is held for the frame: one queue entry per kit, each play adding its position
+// (or none) to it (SE3PlayKit's combinable branch). The frame plays each entry once.
+void SE3CombinableAdd(uint32_t kitId, const float* position, const SE3PLAYPARAMS* params);
+// The shutdown's part: every queued kit and the positions' pool (FUN_1412d41d0).
+void SE3CombinableShutdown();
 // ref: FUN_1412c9b20
 const uint8_t* SE3GetKitEntry(SE3SoundKitDef* def, int32_t index);
 // ref: FUN_1412c99c0

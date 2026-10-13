@@ -298,7 +298,9 @@ class GxRenderContext {
     // when 0).
     virtual void* BufLock(GxBuf* buf);                      // 0x180
     virtual bool BufUnlock(GxBuf* buf, uint32_t size);      // 0x188
-    virtual void Slot190();
+    // Copies `size` bytes (all of it when 0) into the buffer at `offset` through this
+    // frame's upload memory.
+    virtual void BufWrite(GxBuf* buf, const void* data, uint32_t size, uint32_t offset);  // 0x190
     virtual bool CopyTex(gxDx12Backend::Tex* source, gxDx12Backend::Tex* dest, int32_t* sourceOrigin,
         int32_t* destOrigin, uint32_t* size, uint32_t slice, int32_t mip);  // 0x198
     virtual void Slot1a0();
