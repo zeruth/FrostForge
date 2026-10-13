@@ -256,25 +256,6 @@ void Sub14022AD90(uint32_t a1) {
     FROST_UNIMPLEMENTED();
 }
 
-extern "C" unsigned long long FUN_140328760();
-// translated: FUN_140328760
-bool Sub140328760() {
-    __try {
-        return (FUN_140328760() & 0xff) != 0;
-    } __except (GenFault(0x140328760ull, GetExceptionInformation())) {
-        return false;
-    }
-}
-
-extern "C" unsigned long long FUN_140329220();
-// translated: FUN_140329220
-bool Sub140329220() {
-    __try {
-        return (FUN_140329220() & 0xff) != 0;
-    } __except (GenFault(0x140329220ull, GetExceptionInformation())) {
-        return false;
-    }
-}
 
 
 extern "C" unsigned long long FUN_14125f550();
@@ -300,16 +281,6 @@ void Sub14134EC50() {
 static uint8_t s_flag142de2990;      // DAT_142de2990
 static CWorldScene* s_worldScene;   // DAT_142ddcf58: the world's scene
 static uint32_t* s_worldParams;      // DAT_142ddcf60: its view's flags
-
-// Four render-state defaults (0x142cfbe80..).
-extern "C" unsigned long long FUN_141283c90();
-// translated: FUN_141283c90
-void Sub141283C90() {
-    __try {
-        FUN_141283c90();
-    } __except (GenFault(0x141283c90ull, GetExceptionInformation())) {
-    }
-}
 
 void Sub140238BC0() {
     ErrorDisplayInitialize();
@@ -504,7 +475,7 @@ void StartWorkerThread() {
 // ref: FUN_14023dbd0
 void Sub14023DBD0() {
     // FUN_14029fae0: anti-tamper (Aegis), not ported
-    Sub141283C90();
+    MessageInitialize();
     Sub140238BC0();
     Sub14024D040();
     ClientRegisterCVars();
@@ -565,16 +536,6 @@ void Sub1402D0F60() {
     }
 }
 
-// whether the console is enabled
-extern "C" unsigned long long FUN_140326070();
-// translated: FUN_140326070
-bool Sub140326070() {
-    __try {
-        return (FUN_140326070() & 0xff) != 0;
-    } __except (GenFault(0x140326070ull, GetExceptionInformation())) {
-        return false;
-    }
-}
 
 // ref: FUN_14192fa70
 void* Sub14192FA70() {
@@ -1148,6 +1109,12 @@ void ConsoleSetEnabledFromCommandLine(bool enabled) {
     s_consoleEnabledFromCommandLine = enabled;
 }
 
+// Whether the command line enabled the console.
+// ref: FUN_140326070
+bool ConsoleIsEnabled() {
+    return s_consoleEnabledFromCommandLine != 0;
+}
+
 // The splash window stage 1 shows while loading (stage 1 does not make it yet).
 HWND s_splashWindow;                // DAT_142dde7f8
 void* s_splashImage;                // DAT_142dde810
@@ -1268,7 +1235,7 @@ bool Sub14022A260() {
         reinterpret_cast<void*>(&LoadingCallback14022F660) };
     Sub1413527A0(s_loadingCallbacks);
     Sub140327010(Sub14022AD90);
-    if (Sub140328760() || Sub140329220()) {
+    if (ConsoleDeviceHwDetected() || ConsoleDeviceApiWasReset()) {
         for (uint32_t i = 0; i < 3; i++) {
             Sub14022AD90(i);
         }
@@ -1283,7 +1250,7 @@ bool Sub14022A260() {
     Sub1402D0B60(nullptr);
     Sub1402D0F60();
     s_clientStarted = 1;
-    if (!Sub140326070() && !Sub1406A8850(Sub14192FA70())) {
+    if (!ConsoleIsEnabled() && !Sub1406A8850(Sub14192FA70())) {
         ConsoleCommandRegister("enable", CommandConsoleEnable, 2,
             "Enable the console with \"/console enable\" in the chat window. This is the same as launching the client with -console",
             0);
@@ -1407,15 +1374,6 @@ bool Sub141C9CBD0() {
 void Sub140239EC0(FRAMEBUFFER* frame) {
     (void)frame;
     FROST_UNIMPLEMENTED();
-}
-
-extern "C" unsigned long long FUN_1412c51b0();
-// translated: FUN_1412c51b0
-void Sub1412C51B0() {
-    __try {
-        FUN_1412c51b0();
-    } __except (GenFault(0x1412c51b0ull, GetExceptionInformation())) {
-    }
 }
 
 void Sub14068BC30() {

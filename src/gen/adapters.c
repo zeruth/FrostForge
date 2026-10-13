@@ -2909,13 +2909,6 @@ undefined8 FUN_14230d6e0(unsigned long long a0, unsigned long long a1, unsigned 
     return (undefined8)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_14230d6e0)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
 }
 
-#pragma comment(linker, "/alternatename:gen_alias_142359cf0=?ThreadPoolSubmit@@YAX_KPEAUfunction_storage@blz@@HPEAUTHREADPOOLGROUP@@@Z")
-extern char gen_alias_142359cf0;
-undefined8 FUN_142359cf0(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3) {
-    ((void (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long))&gen_alias_142359cf0)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2, (unsigned long long)a3);
-    return 0;
-}
-
 #pragma comment(linker, "/alternatename:gen_alias_14235a070=?ThreadPoolGroupCreate@@YAPEAUTHREADPOOLGROUP@@H@Z")
 extern char gen_alias_14235a070;
 undefined ** FUN_14235a070(unsigned long long a0) {

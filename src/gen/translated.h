@@ -70,6 +70,15 @@ extern char gen_g_142cfcdd8;
 /* g_groundEffectDist (src/client/GraphicsSettings.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142d00c20=?g_groundEffectDist@@3MA")
 extern char gen_g_142d00c20;
+/* s_loadingBarShown (src/client/LoadingBar.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_142de0b35=?s_loadingBarShown@@3EA")
+extern char gen_g_142de0b35;
+/* s_loadingBarTextures (src/client/LoadingBar.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_142de0c20=?s_loadingBarTextures@@3PAPEAVCTexture@@A")
+extern char gen_g_142de0c20;
+/* s_loadingScreenEffect (src/client/LoadingBar.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_142de0ca0=?s_loadingScreenEffect@@3PEAVCShaderEffect@@EA")
+extern char gen_g_142de0ca0;
 /* g_localManifest (src/cas/CAS.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e20860=?g_localManifest@cas@@3PEAULOCALMANIFEST@1@EA")
 extern char gen_g_142e20860;
@@ -502,15 +511,6 @@ extern void *const gen_p_142cf70b4;
 /* s_bounds (src/model2/M2Cache.cpp), internal: through its pointer */
 extern void *const gen_p_142cfbe38;
 #define gen_g_142cfbe38 (*(char *)gen_p_142cfbe38)
-/* s_messageFilter (src/client/ClientCVars.cpp), internal: through its pointer */
-extern void *const gen_p_142cfbe80;
-#define gen_g_142cfbe80 (*(char *)gen_p_142cfbe80)
-/* s_messageLevelMax (src/client/ClientCVars.cpp), internal: through its pointer */
-extern void *const gen_p_142cfbe84;
-#define gen_g_142cfbe84 (*(char *)gen_p_142cfbe84)
-/* s_messageCategories (src/client/ClientCVars.cpp), internal: through its pointer */
-extern void *const gen_p_142cfbe88;
-#define gen_g_142cfbe88 (*(char *)gen_p_142cfbe88)
 /* s_initialized (src/sound/SE3.cpp), internal: through its pointer */
 extern void *const gen_p_142cfca08;
 #define gen_g_142cfca08 (*(char *)gen_p_142cfca08)
@@ -523,18 +523,9 @@ extern void *const gen_p_142ddcf50;
 /* s_seedB (src/client/Startup.cpp), internal: through its pointer */
 extern void *const gen_p_142ddcf80;
 #define gen_g_142ddcf80 (*(char *)gen_p_142ddcf80)
-/* s_loadingBarShown (src/client/LoadingBar.cpp), internal: through its pointer */
-extern void *const gen_p_142de0b35;
-#define gen_g_142de0b35 (*(char *)gen_p_142de0b35)
 /* s_loadingScreen (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142de0bf8;
 #define gen_g_142de0bf8 (*(char *)gen_p_142de0bf8)
-/* s_loadingBarTextures (src/client/LoadingBar.cpp), internal: through its pointer */
-extern void *const gen_p_142de0c20;
-#define gen_g_142de0c20 (*(char *)gen_p_142de0c20)
-/* s_loadingScreenEffect (src/client/LoadingBar.cpp), internal: through its pointer */
-extern void *const gen_p_142de0ca0;
-#define gen_g_142de0ca0 (*(char *)gen_p_142de0ca0)
 /* s_eventTarget (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142de0e18;
 #define gen_g_142de0e18 (*(char *)gen_p_142de0e18)
@@ -586,12 +577,6 @@ extern void *const gen_p_142de29e8;
 /* s_consoleEnabledFromCommandLine (src/client/StartupClient.cpp), internal: through its pointer */
 extern void *const gen_p_142e301b4;
 #define gen_g_142e301b4 (*(char *)gen_p_142e301b4)
-/* s_hwDetect (src/client/ConsoleDevice.cpp), internal: through its pointer */
-extern void *const gen_p_142e30205;
-#define gen_g_142e30205 (*(char *)gen_p_142e30205)
-/* s_apiReset (src/client/ConsoleDevice.cpp), internal: through its pointer */
-extern void *const gen_p_142e30206;
-#define gen_g_142e30206 (*(char *)gen_p_142e30206)
 /* s_notchedDisplayCVar (src/client/ConsoleDevice.cpp), internal: through its pointer */
 extern void *const gen_p_142e302a8;
 #define gen_g_142e302a8 (*(char *)gen_p_142e302a8)
@@ -625,9 +610,6 @@ extern void *const gen_p_1430a55e8;
 /* s_boundsFile (src/model2/M2Cache.cpp), internal: through its pointer */
 extern void *const gen_p_1430a55f0;
 #define gen_g_1430a55f0 (*(char *)gen_p_1430a55f0)
-/* s_messageLevelMin (src/client/ClientCVars.cpp), internal: through its pointer */
-extern void *const gen_p_1430a5600;
-#define gen_g_1430a5600 (*(char *)gen_p_1430a5600)
 /* s_1430a99f0 (src/sound/SI3.cpp), internal: through its pointer */
 extern void *const gen_p_1430a99f0;
 #define gen_g_1430a99f0 (*(char *)gen_p_1430a99f0)
@@ -2448,7 +2430,6 @@ undefined8 FUN_140325650();
 undefined8 FUN_140325700();
 undefined8 * FUN_1403257d0();
 undefined8 * FUN_140325ff0();
-bool FUN_140326070();
 undefined8 FUN_140326090();
 undefined4 FUN_140326660();
 undefined1 FUN_140326880();
@@ -2461,9 +2442,7 @@ undefined8 FUN_140326b60();
 undefined8 FUN_140326c80();
 undefined8 FUN_140326ce0();
 undefined * FUN_140328750();
-undefined1 FUN_140328760();
 undefined8 FUN_140328c10();
-undefined1 FUN_140329220();
 undefined1 FUN_1403293f0();
 undefined8 FUN_14032abf0();
 undefined8 FUN_14032ba20();
@@ -4300,7 +4279,6 @@ undefined8 FUN_141283140();
 undefined8 FUN_1412834a0();
 undefined8 FUN_141283690();
 undefined8 FUN_141283c30();
-undefined8 FUN_141283c90();
 undefined8 FUN_141283cc0();
 undefined8 FUN_141283d90();
 longlong * FUN_141283fd0();
@@ -4352,10 +4330,6 @@ ulonglong * FUN_1412bde50();
 longlong FUN_1412bdf70();
 undefined8 FUN_1412be750();
 undefined8 FUN_1412c44d0();
-undefined8 FUN_1412c4750();
-undefined8 FUN_1412c49e0();
-code * FUN_1412c51b0();
-undefined8 FUN_1412c5260();
 undefined8 FUN_1412c88b0();
 undefined8 FUN_1412c8ff0();
 float FUN_1412c9780();
@@ -8745,7 +8719,6 @@ float FUN_14230ce30();
 undefined8 FUN_14230d6e0();
 undefined8 FUN_14230d710();
 ulonglong FUN_1423592f0();
-undefined8 FUN_142359cf0();
 undefined ** FUN_14235a070();
 undefined8 FUN_14235c4b0();
 undefined8 FUN_14235c7c0();

@@ -2288,12 +2288,6 @@ undefined8 FUN_1412a64f0() {
     return (undefined8)0;
 }
 
-/* SIMD union */
-undefined8 FUN_1412c49e0() {
-    GenUnimplemented(0x1412c49e0ULL);
-    return (undefined8)0;
-}
-
 /* the decompiler lost a call's arguments (FUN_1412ce100 reads 7, the call passes 0) */
 undefined8 FUN_1412ce0f0() {
     GenUnimplemented(0x1412ce0f0ULL);

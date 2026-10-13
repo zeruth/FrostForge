@@ -32,6 +32,12 @@ None of them may contact Blizzard endpoints.
 | `LogoutCommand` | 0x14156b7c0 | `logout`: ends the session when one is up | stub |
 | `ClientServicesStatusCallback` | 0x140227770 | ClientServices' readiness poll | stub, never called |
 
+## Diverged on purpose
+
+| function | ref | what the reference does | FrostLite now |
+|---|---|---|---|
+| small-block allocator frame step | 0x1412c51b0 (0x1412c4750, 0x1412c49e0) | once a frame, moves the blocks other threads freed back to their size classes in the heap at DAT_1430a8c70; every 600th frame trims it on the thread pool | left out of the frame (both calls in FUN_140225ab0): Storm's allocations go through the CRT, and the hooks that set the heap up (FUN_1412c46b0) are a stub, so there is no heap to keep |
+
 ## Local, not yet ported
 
 | function | ref | why it waits |

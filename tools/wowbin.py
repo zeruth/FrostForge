@@ -194,6 +194,10 @@ class Binary:
         seen = set()
         for p in sorted(found):
             field = start + p
+            # Outside every .pdata piece (a leaf function with no unwind info) any address
+            # passes is_insn_start, so the first candidate that decodes proves nothing: keep
+            # trying until one's RIP operand lands in the range.
+            in_piece = self.func_containing(field) is not None
             for back in range(1, 12):
                 insn_va = field - back
                 if insn_va in seen or not self.is_insn_start(insn_va):
@@ -202,13 +206,16 @@ class Binary:
                 ins = next(md.disasm(bytes(self.image[o : o + 16]), insn_va, 1), None)
                 if ins is None or not (insn_va < field < insn_va + ins.size):
                     continue
+                matched = False
                 for op in ins.operands:
                     if op.type == x86.X86_OP_MEM and op.mem.base == x86.X86_REG_RIP:
                         target = insn_va + ins.size + op.mem.disp
                         if lo <= target < hi:
                             out.append((insn_va, target, f"{ins.mnemonic} {ins.op_str}"))
                             seen.add(insn_va)
-                break
+                            matched = True
+                if in_piece or matched:
+                    break
         return sorted(out)
 
     def callers(self, target: int) -> list[tuple[int, str]]:

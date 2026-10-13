@@ -1,7 +1,8 @@
 {
   "_comment": "Deliberate divergences and runtime routines tools/fidelity.py honours when it reads a reference function's calls. skip: calls the port leaves out on purpose. lib: C runtime routines FID left unnamed (the port's copies are assembly with no PDB procedure to match), dropped like any library call. alias: a reference wrapper the port reaches through what it wraps. Every entry says why.",
   "skip": {
-    "1402bd260": "Aegis: the obfuscated per-thread copy of the current taint (lua_State +0x18) that anti-tamper checks compare with lua_taint; not ported, see vendor/lua-5.1.4/src/lblizzard.c"
+    "1402bd260": "Aegis: the obfuscated per-thread copy of the current taint (lua_State +0x18) that anti-tamper checks compare with lua_taint; not ported, see vendor/lua-5.1.4/src/lblizzard.c",
+    "1412c51b0": "the small-block allocator's frame step (deferred frees per size class, a trim job every 600 frames): FrostLite allocates through the CRT and never sets up the heap at DAT_1430a8c70 (FUN_1412c46b0 is a stub), see docs/stubs.md"
   },
   "alias": {
     "14063e310": {

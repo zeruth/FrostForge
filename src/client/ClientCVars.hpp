@@ -13,6 +13,12 @@ extern CVar* g_accountListCVar;     // DAT_142de29b0
 void ClientRegisterCVars();
 void FullScreenEffectRegisterCVars();
 // The error display: its batch and font, a message, and the per-frame draw.
+// The system message filter (FUN_141283xxx).
+void MessageInitialize();
+void MessageShutdown();
+uint32_t MessageGetCategories();
+int32_t MessageGetLevelMax();
+int32_t MessageGetLevelMin();
 void ErrorDisplayInitialize();
 void ErrorDisplayAdd(const char* text, int32_t level);
 void ErrorDisplayRender();

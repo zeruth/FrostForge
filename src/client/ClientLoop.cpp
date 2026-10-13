@@ -39,7 +39,6 @@ void Sub14192FFC0(GxRenderContext* context, GXRENDERTARGETS* targets);
 void Sub141350FC0();
 bool Sub141C9CBD0();
 void Sub140239EC0(FRAMEBUFFER* frame);
-void Sub1412C51B0();
 void Sub14068BC30();
 void Sub14068AAE0();
 void Sub14023D170(GXFRAMESTATS* stats);
@@ -550,7 +549,9 @@ void Sub140225AB0() {
     GxFrameWorkFlush(2);
     bool overlapped = GxFrameArm(true) && (s_gameState == 0 || s_gameState == 7);
     if (!GxFrameBegin()) {
-        Sub1412C51B0();
+        // FUN_1412c51b0, the small-block allocator's frame step, is left out: FrostLite
+        // allocates through the CRT, so its heap (DAT_1430a8c70) is never set up
+        // (diverged, docs/stubs.md).
         s_inFrame = 0;
         return;
     }
@@ -624,7 +625,9 @@ void Sub140225AB0() {
     blz::function_storage callback = { reinterpret_cast<void*>(&OnFrameEnded), blz::function_empty_manager, {} };
     GxFrameEnd(&callback, overlapped);
     callback.m_manager(callback.m_storage, nullptr, 0);
-    Sub1412C51B0();
+    // FUN_1412c51b0, the small-block allocator's frame step, is left out: FrostLite
+    // allocates through the CRT, so its heap (DAT_1430a8c70) is never set up
+    // (diverged, docs/stubs.md).
     s_inFrame = 0;
 }
 

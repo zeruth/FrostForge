@@ -23,6 +23,8 @@ struct CONSOLEDETECTED {
 // Opens gx.log, registers the CVars and commands, starts Gx, makes the window (titled
 // `title`) and the device. False when the machine cannot run the game.
 bool ConsoleDeviceInitialize(const char* title);
+bool ConsoleDeviceHwDetected();
+bool ConsoleDeviceApiWasReset();
 
 // The detected defaults (FUN_140328750).
 CONSOLEDETECTED* ConsoleGetDetected();
