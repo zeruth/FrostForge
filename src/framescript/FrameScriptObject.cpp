@@ -616,6 +616,14 @@ bool FrameScript_PushObjectError(lua_State* L, FrameScript_Object* object, const
 
 int32_t FrameScript_Object::s_objectTypeCount;  // DAT_142e979f0
 
+int32_t FrameScript_TypeId(int32_t* type, int32_t* guard) {
+    if (*guard == 0) {
+        *type = ++FrameScript_Object::s_objectTypeCount;
+        *guard = 0x7fffffff;
+    }
+    return *type;
+}
+
 // ref: FUN_140641fd0
 FrameScript_Object::FrameScript_Object() {
     this->m_luaRef = -2;
@@ -701,10 +709,13 @@ uint32_t FrameScript_Object::GetObjectSize() {
     return 0x10;
 }
 
+// The reference's type id and its magic-static guard (FrameScript_Object), held here so translated code
+// and the port number the class once, alike.
+int32_t g_frameScript_ObjectType;  // DAT_142e97a94
+int32_t g_frameScript_ObjectTypeGuard;  // DAT_142e97a98
+
 int32_t FrameScript_Object::GetObjectType() {
-    // 0x142e97a94, numbered on first use
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_frameScript_ObjectType, &g_frameScript_ObjectTypeGuard);
 }
 
 // ref: FUN_140642110

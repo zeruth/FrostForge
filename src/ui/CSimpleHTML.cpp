@@ -127,9 +127,13 @@ void CSimpleHTML::operator delete(void* html) {
 }
 
 // DAT_142e97b68
+// The reference's type id and its magic-static guard (CSimpleHTML), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleHTMLType;  // DAT_142e97b68
+int32_t g_cSimpleHTMLTypeGuard;  // DAT_142e97b6c
+
 int32_t CSimpleHTML::GetObjectType() {
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleHTMLType, &g_cSimpleHTMLTypeGuard);
 }
 
 // ref: FUN_1424b8bd0

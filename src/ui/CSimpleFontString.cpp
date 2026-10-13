@@ -475,9 +475,13 @@ void CSimpleFontString::DestroyScriptMetaTables() {
     s_restrictedMetaTable = -2;
 }
 
+// The reference's type id and its magic-static guard (CSimpleFontString), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleFontStringType;  // DAT_142e97c08
+int32_t g_cSimpleFontStringTypeGuard;  // DAT_142e97c0c
+
 int32_t CSimpleFontString::GetObjectType() {
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleFontStringType, &g_cSimpleFontStringTypeGuard);
 }
 
 // ref: FUN_140624c80

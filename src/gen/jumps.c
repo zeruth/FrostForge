@@ -22027,13 +22027,6 @@ static undefined8 gen_entry_14148a020(ulonglong *param_1, ulonglong param_2) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14148b310(void) {
-    __try {
-        return CALLF(undefined8, FUN_14148b310)();
-    } __except (GenFault(0x14148b310ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
 static undefined * gen_entry_14148ba10(void) {
     __try {
         return CALLF(undefined *, FUN_14148ba10)();
@@ -55690,7 +55683,7 @@ const GENJUMP g_genJumps[] = {
     { 0x141488a80ULL, (void*)&gen_entry_141488a80 },
     { 0x141488c90ULL, (void*)&gen_entry_141488c90 },
     { 0x14148a020ULL, (void*)&gen_entry_14148a020 },
-    { 0x14148b310ULL, (void*)&gen_entry_14148b310 },
+    { 0x14148b310ULL, (void*)&FUN_14148b310 },
     { 0x14148ba10ULL, (void*)&gen_entry_14148ba10 },
     { 0x14148ba20ULL, (void*)&FUN_14148ba20 },
     { 0x14148ba50ULL, (void*)&gen_entry_14148ba50 },

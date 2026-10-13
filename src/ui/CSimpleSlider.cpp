@@ -114,9 +114,13 @@ void CSimpleSlider::operator delete(void* slider) {
 }
 
 // DAT_14309fefc
+// The reference's type id and its magic-static guard (CSimpleSlider), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleSliderType;  // DAT_14309fefc
+int32_t g_cSimpleSliderTypeGuard;  // DAT_14309ff00
+
 int32_t CSimpleSlider::GetObjectType() {
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleSliderType, &g_cSimpleSliderTypeGuard);
 }
 
 // ref: FUN_1424c1c50

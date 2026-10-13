@@ -4570,7 +4570,7 @@ undefined4 FUN_140326660(undefined8 param_1, char *param_2)
 undefined1 FUN_140326880(void)
 {
   GEN_HIT(1445);
-  return REFG(undefined1, 0x142e301c9);
+  return (*(undefined1 *)((char *)&gen_g_142e301c9 + 0x0));
 }
 
 /* ref: FUN_1403268a0 */
@@ -4623,7 +4623,7 @@ undefined8 FUN_140326b40(undefined8 param_1)
 undefined8 FUN_140326b50(undefined8 param_1)
 {
   GEN_HIT(1450);
-  REFG(undefined8, 0x142e301b8) = param_1;
+  (*(undefined8 *)((char *)&gen_g_142e301b8 + 0x0)) = param_1;
   return 0;
 }
 

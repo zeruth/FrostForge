@@ -38,6 +38,13 @@ enum : uint16_t {
 };
 
 class FrameScript_Object;
+
+// A script class's type id, numbered once from FrameScript_Object::s_objectTypeCount. The
+// reference keeps each in a function-local static; the port keeps the pair at the reference's
+// addresses (tied through `// DAT_` tags), so translated code that reads or makes the id sees the
+// same number. The guard follows the CRT's magic-static protocol: 0 until made, then neither 0
+// nor -1, which _Init_thread_header takes as done.
+int32_t FrameScript_TypeId(int32_t* type, int32_t* guard);
 // A registry reference pushed as the value it refers to.
 struct FRAMESCRIPT_REF {
     int32_t m_ref;

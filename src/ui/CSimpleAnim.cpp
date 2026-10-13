@@ -276,10 +276,13 @@ CSimpleAnim::~CSimpleAnim() {
     delete this->m_smoothing;
 }
 
+// The reference's type id and its magic-static guard (CSimpleAnim), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleAnimType;  // DAT_142e97aa4
+int32_t g_cSimpleAnimTypeGuard;  // DAT_142e97aa8
+
 int32_t CSimpleAnim::GetObjectType() {
-    // 0x142e97aa4
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleAnimType, &g_cSimpleAnimTypeGuard);
 }
 
 // ref: FUN_1406077f0
@@ -752,10 +755,13 @@ bool CSimpleAnim::SetTargetParent() {
 CSimpleAlphaAnim::CSimpleAlphaAnim(CSimpleAnimGroup* group) : CSimpleAnim(group) {
 }
 
+// The reference's type id and its magic-static guard (CSimpleAlphaAnim), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleAlphaAnimType;  // DAT_142e97aec
+int32_t g_cSimpleAlphaAnimTypeGuard;  // DAT_142e97af0
+
 int32_t CSimpleAlphaAnim::GetObjectType() {
-    // 0x142e97aec
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleAlphaAnimType, &g_cSimpleAlphaAnimTypeGuard);
 }
 
 // ref: FUN_1406077c0
@@ -863,10 +869,13 @@ float CSimpleAlphaAnim::GetToAlpha() {
 CSimpleTranslationAnim::CSimpleTranslationAnim(CSimpleAnimGroup* group) : CSimpleAnim(group) {
 }
 
+// The reference's type id and its magic-static guard (CSimpleTranslationAnim), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleTranslationAnimType;  // DAT_142e97aac
+int32_t g_cSimpleTranslationAnimTypeGuard;  // DAT_142e97ab0
+
 int32_t CSimpleTranslationAnim::GetObjectType() {
-    // 0x142e97aac
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleTranslationAnimType, &g_cSimpleTranslationAnimTypeGuard);
 }
 
 // ref: FUN_1406079d0
@@ -935,10 +944,13 @@ void CSimpleTranslationAnim::SetOffset(const float* offset) {
 CSimpleLineTranslationAnim::CSimpleLineTranslationAnim(CSimpleAnimGroup* group) : CSimpleTranslationAnim(group) {
 }
 
+// The reference's type id and its magic-static guard (CSimpleLineTranslationAnim), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleLineTranslationAnimType;  // DAT_142e97ab4
+int32_t g_cSimpleLineTranslationAnimTypeGuard;  // DAT_142e97ab8
+
 int32_t CSimpleLineTranslationAnim::GetObjectType() {
-    // 0x142e97ab4
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleLineTranslationAnimType, &g_cSimpleLineTranslationAnimTypeGuard);
 }
 
 // ref: FUN_1406078e0
@@ -978,10 +990,13 @@ void CSimpleLineTranslationAnim::Apply(float progress) {
 CSimpleTexCoordTranslationAnim::CSimpleTexCoordTranslationAnim(CSimpleAnimGroup* group) : CSimpleAnim(group) {
 }
 
+// The reference's type id and its magic-static guard (CSimpleTexCoordTranslationAnim), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleTexCoordTranslationAnimType;  // DAT_142e97abc
+int32_t g_cSimpleTexCoordTranslationAnimTypeGuard;  // DAT_142e97ac0
+
 int32_t CSimpleTexCoordTranslationAnim::GetObjectType() {
-    // 0x142e97abc
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleTexCoordTranslationAnimType, &g_cSimpleTexCoordTranslationAnimTypeGuard);
 }
 
 // ref: FUN_1406079a0
@@ -1038,10 +1053,13 @@ void CSimpleTexCoordTranslationAnim::Apply(float progress) {
 CSimpleRotationAnim::CSimpleRotationAnim(CSimpleAnimGroup* group) : CSimpleAnim(group) {
 }
 
+// The reference's type id and its magic-static guard (CSimpleRotationAnim), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleRotationAnimType;  // DAT_142e97ac4
+int32_t g_cSimpleRotationAnimTypeGuard;  // DAT_142e97ac8
+
 int32_t CSimpleRotationAnim::GetObjectType() {
-    // 0x142e97ac4
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleRotationAnimType, &g_cSimpleRotationAnimTypeGuard);
 }
 
 // ref: FUN_140607940
@@ -1096,10 +1114,13 @@ void CSimpleRotationAnim::Apply(float progress) {
 CSimpleScaleAnim::CSimpleScaleAnim(CSimpleAnimGroup* group) : CSimpleAnim(group) {
 }
 
+// The reference's type id and its magic-static guard (CSimpleScaleAnim), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleScaleAnimType;  // DAT_142e97acc
+int32_t g_cSimpleScaleAnimTypeGuard;  // DAT_142e97ad0
+
 int32_t CSimpleScaleAnim::GetObjectType() {
-    // 0x142e97acc
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleScaleAnimType, &g_cSimpleScaleAnimTypeGuard);
 }
 
 // ref: FUN_140607970
@@ -1275,10 +1296,13 @@ void CSimpleScaleAnim::GetScaleTo(float* scale) {
 CSimpleLineScaleAnim::CSimpleLineScaleAnim(CSimpleAnimGroup* group) : CSimpleScaleAnim(group) {
 }
 
+// The reference's type id and its magic-static guard (CSimpleLineScaleAnim), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleLineScaleAnimType;  // DAT_142e97ad4
+int32_t g_cSimpleLineScaleAnimTypeGuard;  // DAT_142e97ad8
+
 int32_t CSimpleLineScaleAnim::GetObjectType() {
-    // 0x142e97ad4
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleLineScaleAnimType, &g_cSimpleLineScaleAnimTypeGuard);
 }
 
 // ref: FUN_1406078b0
@@ -1325,10 +1349,13 @@ void CSimpleLineScaleAnim::Apply(float progress) {
 CSimpleFlipBookAnim::CSimpleFlipBookAnim(CSimpleAnimGroup* group) : CSimpleAnim(group) {
 }
 
+// The reference's type id and its magic-static guard (CSimpleFlipBookAnim), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleFlipBookAnimType;  // DAT_142e97af4
+int32_t g_cSimpleFlipBookAnimTypeGuard;  // DAT_142e97af8
+
 int32_t CSimpleFlipBookAnim::GetObjectType() {
-    // 0x142e97af4
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleFlipBookAnimType, &g_cSimpleFlipBookAnimTypeGuard);
 }
 
 // ref: FUN_140607880
@@ -1402,10 +1429,13 @@ CSimpleControlPoint::~CSimpleControlPoint() {
     this->m_link.Unlink();
 }
 
+// The reference's type id and its magic-static guard (CSimpleControlPoint), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleControlPointType;  // DAT_142e97adc
+int32_t g_cSimpleControlPointTypeGuard;  // DAT_142e97ae0
+
 int32_t CSimpleControlPoint::GetObjectType() {
-    // 0x142e97adc
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleControlPointType, &g_cSimpleControlPointTypeGuard);
 }
 
 // ref: FUN_140607850
@@ -1583,10 +1613,13 @@ CSimpleAnimPath::~CSimpleAnimPath() {
     this->m_points.m_terminator.Unlink();
 }
 
+// The reference's type id and its magic-static guard (CSimpleAnimPath), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleAnimPathType;  // DAT_142e97ae4
+int32_t g_cSimpleAnimPathTypeGuard;  // DAT_142e97ae8
+
 int32_t CSimpleAnimPath::GetObjectType() {
-    // 0x142e97ae4
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleAnimPathType, &g_cSimpleAnimPathTypeGuard);
 }
 
 // ref: FUN_140607910

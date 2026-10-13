@@ -78,10 +78,13 @@ void CScriptObject::GetSourceLocation(blz::string_header* text) {
 }
 
 // ref: FUN_140607480
+// The reference's type id and its magic-static guard (CScriptObject), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cScriptObjectType;  // DAT_142e97a9c
+int32_t g_cScriptObjectTypeGuard;  // DAT_142e97aa0
+
 int32_t CScriptObject::GetObjectType() {
-    // 0x142e97a9c, numbered on first use
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cScriptObjectType, &g_cScriptObjectTypeGuard);
 }
 
 // Each '.'-separated step is "$parent" or a key of the current object's table holding a

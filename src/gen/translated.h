@@ -490,9 +490,6 @@ extern char gen_g_1430ab9d4;
 /* g_worldOptionsChanged (src/client/GraphicsSettings.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430abef8=?g_worldOptionsChanged@@3EA")
 extern char gen_g_1430abef8;
-/* g_launcherLoginUsed (src/glue/ScriptAPIGlue.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_1430af424=?g_launcherLoginUsed@@3EA")
-extern char gen_g_1430af424;
 /* g_reconnectLoginPossible (src/glue/ScriptAPIGlue.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430af4c8=?g_reconnectLoginPossible@@3EA")
 extern char gen_g_1430af4c8;
@@ -544,6 +541,9 @@ extern void *const gen_p_142ddcf80;
 /* s_loadingScreen (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142de0bf8;
 #define gen_g_142de0bf8 (*(char *)gen_p_142de0bf8)
+/* s_heldKeys (src/client/ClientLoop.cpp), internal: through its pointer */
+extern void *const gen_p_142de0de8;
+#define gen_g_142de0de8 (*(char *)gen_p_142de0de8)
 /* s_eventTarget (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142de0e18;
 #define gen_g_142de0e18 (*(char *)gen_p_142de0e18)
@@ -595,6 +595,12 @@ extern void *const gen_p_142de29e8;
 /* s_consoleEnabledFromCommandLine (src/client/StartupClient.cpp), internal: through its pointer */
 extern void *const gen_p_142e301b4;
 #define gen_g_142e301b4 (*(char *)gen_p_142e301b4)
+/* s_consoleMayToggle (src/client/StartupClient.cpp), internal: through its pointer */
+extern void *const gen_p_142e301b8;
+#define gen_g_142e301b8 (*(char *)gen_p_142e301b8)
+/* s_consoleShown (src/client/StartupClient.cpp), internal: through its pointer */
+extern void *const gen_p_142e301c9;
+#define gen_g_142e301c9 (*(char *)gen_p_142e301c9)
 /* s_notchedDisplayCVar (src/client/ConsoleDevice.cpp), internal: through its pointer */
 extern void *const gen_p_142e302a8;
 #define gen_g_142e302a8 (*(char *)gen_p_142e302a8)
@@ -610,6 +616,18 @@ extern void *const gen_p_142e8e220;
 /* s_lastMouseTime (src/ui/CSimpleTop.cpp), internal: through its pointer */
 extern void *const gen_p_142e979e0;
 #define gen_g_142e979e0 (*(char *)gen_p_142e979e0)
+/* g_cSimpleFrameType (src/ui/CSimpleFrame.cpp), internal: through its pointer */
+extern void *const gen_p_142e979f4;
+#define gen_g_142e979f4 (*(char *)gen_p_142e979f4)
+/* g_cSimpleFrameTypeGuard (src/ui/CSimpleFrame.cpp), internal: through its pointer */
+extern void *const gen_p_142e979f8;
+#define gen_g_142e979f8 (*(char *)gen_p_142e979f8)
+/* g_cSimpleTextureType (src/ui/CSimpleTexture.cpp), internal: through its pointer */
+extern void *const gen_p_142e97b60;
+#define gen_g_142e97b60 (*(char *)gen_p_142e97b60)
+/* g_cSimpleTextureTypeGuard (src/ui/CSimpleTexture.cpp), internal: through its pointer */
+extern void *const gen_p_142e97b64;
+#define gen_g_142e97b64 (*(char *)gen_p_142e97b64)
 /* s_fontStringHeap (src/ui/CSimpleFontString.cpp), internal: through its pointer */
 extern void *const gen_p_142e97be0;
 #define gen_g_142e97be0 (*(char *)gen_p_142e97be0)
@@ -622,6 +640,18 @@ extern void *const gen_p_142e99e28;
 /* s_initCount (src/framescript/FrameScript.cpp), internal: through its pointer */
 extern void *const gen_p_142e99f30;
 #define gen_g_142e99f30 (*(char *)gen_p_142e99f30)
+/* g_cSimpleEditBoxType (src/ui/CSimpleEditBox.cpp), internal: through its pointer */
+extern void *const gen_p_14309febc;
+#define gen_g_14309febc (*(char *)gen_p_14309febc)
+/* g_cSimpleEditBoxTypeGuard (src/ui/CSimpleEditBox.cpp), internal: through its pointer */
+extern void *const gen_p_14309fec0;
+#define gen_g_14309fec0 (*(char *)gen_p_14309fec0)
+/* g_modelSceneFrameType (src/ui/ModelSceneFrame.cpp), internal: through its pointer */
+extern void *const gen_p_1430a0b0c;
+#define gen_g_1430a0b0c (*(char *)gen_p_1430a0b0c)
+/* g_modelSceneFrameTypeGuard (src/ui/ModelSceneFrame.cpp), internal: through its pointer */
+extern void *const gen_p_1430a0b10;
+#define gen_g_1430a0b10 (*(char *)gen_p_1430a0b10)
 /* s_rawSkip (src/os/win/Window.cpp), internal: through its pointer */
 extern void *const gen_p_1430a1594;
 #define gen_g_1430a1594 (*(char *)gen_p_1430a1594)

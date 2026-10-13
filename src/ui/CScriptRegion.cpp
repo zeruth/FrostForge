@@ -706,9 +706,13 @@ CScriptRegion* CScriptRegion::GetScriptRegion() {
 }
 
 // ref: FUN_14060e250
+// The reference's type id and its magic-static guard (CScriptRegion), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cScriptRegionType;  // DAT_142e97b04
+int32_t g_cScriptRegionTypeGuard;  // DAT_142e97b08
+
 int32_t CScriptRegion::GetObjectType() {
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cScriptRegionType, &g_cScriptRegionTypeGuard);
 }
 
 // The layout frame of a global region of a name; a locked-down object still finds one.

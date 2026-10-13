@@ -165,10 +165,13 @@ CSimpleAnimGroup::~CSimpleAnimGroup() {
     this->m_groupLink.Unlink();
 }
 
+// The reference's type id and its magic-static guard (CSimpleAnimGroup), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleAnimGroupType;  // DAT_142e97afc
+int32_t g_cSimpleAnimGroupTypeGuard;  // DAT_142e97b00
+
 int32_t CSimpleAnimGroup::GetObjectType() {
-    // 0x142e97afc
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleAnimGroupType, &g_cSimpleAnimGroupTypeGuard);
 }
 
 // ref: FUN_140607820

@@ -68,9 +68,13 @@ void CSimpleCheckButton::operator delete(void* button) {
 }
 
 // DAT_14309fec4
+// The reference's type id and its magic-static guard (CSimpleCheckButton), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleCheckButtonType;  // DAT_14309fec4
+int32_t g_cSimpleCheckButtonTypeGuard;  // DAT_14309fec8
+
 int32_t CSimpleCheckButton::GetObjectType() {
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleCheckButtonType, &g_cSimpleCheckButtonTypeGuard);
 }
 
 // ref: FUN_1424acce0

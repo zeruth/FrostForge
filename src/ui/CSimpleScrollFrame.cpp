@@ -78,9 +78,13 @@ void CSimpleScrollFrame::operator delete(void* frame) {
 }
 
 // DAT_14309fef4
+// The reference's type id and its magic-static guard (CSimpleScrollFrame), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleScrollFrameType;  // DAT_14309fef4
+int32_t g_cSimpleScrollFrameTypeGuard;  // DAT_14309fef8
+
 int32_t CSimpleScrollFrame::GetObjectType() {
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleScrollFrameType, &g_cSimpleScrollFrameTypeGuard);
 }
 
 // ref: FUN_1424c0d80

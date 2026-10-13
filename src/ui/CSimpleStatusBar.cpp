@@ -76,9 +76,13 @@ void CSimpleStatusBar::operator delete(void* bar) {
 }
 
 // DAT_14309ff04
+// The reference's type id and its magic-static guard (CSimpleStatusBar), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleStatusBarType;  // DAT_14309ff04
+int32_t g_cSimpleStatusBarTypeGuard;  // DAT_14309ff08
+
 int32_t CSimpleStatusBar::GetObjectType() {
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleStatusBarType, &g_cSimpleStatusBarTypeGuard);
 }
 
 // ref: FUN_1424c2df0

@@ -86,9 +86,13 @@ void CSimpleMovieFrame::operator delete(void* frame) {
 }
 
 // DAT_142e9a2b0
+// The reference's type id and its magic-static guard (CSimpleMovieFrame), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleMovieFrameType;  // DAT_142e9a2b0
+int32_t g_cSimpleMovieFrameTypeGuard;  // DAT_142e9a2b4
+
 int32_t CSimpleMovieFrame::GetObjectType() {
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleMovieFrameType, &g_cSimpleMovieFrameTypeGuard);
 }
 
 // ref: FUN_14062e940

@@ -2582,6 +2582,13 @@ undefined8 FUN_1413c3450(unsigned long long a0, unsigned long long a1, unsigned 
     return (undefined8)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long))&gen_alias_1413c3450)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2, (unsigned long long)a3, (unsigned long long)a4);
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_14148b310=?LauncherLoginCancel@@YAXXZ")
+extern char gen_alias_14148b310;
+undefined8 FUN_14148b310(void) {
+    ((void (*)(void))&gen_alias_14148b310)();
+    return 0;
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_14148ba20=?LauncherSettingRead@@YA_NPEBDPEAD_K_N@Z")
 extern char gen_alias_14148ba20;
 undefined8 FUN_14148ba20(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3) {

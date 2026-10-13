@@ -350,9 +350,13 @@ void CSimpleModelFFX::operator delete(void* frame) {
 }
 
 // DAT_14309fee4
+// The reference's type id and its magic-static guard (CSimpleModelFFX), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleModelFFXType;  // DAT_14309fee4
+int32_t g_cSimpleModelFFXTypeGuard;  // DAT_14309fee8
+
 int32_t CSimpleModelFFX::GetObjectType() {
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleModelFFXType, &g_cSimpleModelFFXTypeGuard);
 }
 
 // ref: FUN_141697780

@@ -951,15 +951,15 @@ undefined8 FUN_140d0ff70(undefined8 a0, undefined8 a1, undefined8 a2, undefined8
 undefined8 FUN_140d11f10(undefined8 param_1, undefined8 param_2, undefined4 param_3, undefined1 param_4, undefined1 param_5)
 {
   GEN_HIT(2273);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0b10)) {
-    _Init_thread_header(&REFG(undefined4, 0x1430a0b10));
-    if (REFG(undefined4, 0x1430a0b10) == -1) {
+  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_1430a0b10 + 0x0))) {
+    _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_1430a0b10 + 0x0)));
+    if ((*(undefined4 *)((char *)&gen_g_1430a0b10 + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
-      REFG(undefined4, 0x1430a0b0c) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0));
-      _Init_thread_footer(&REFG(undefined4, 0x1430a0b10));
+      (*(undefined4 *)((char *)&gen_g_1430a0b0c + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0));
+      _Init_thread_footer(&(*(undefined4 *)((char *)&gen_g_1430a0b10 + 0x0)));
     }
   }
-  return (undefined8)CALLF(longlong *, FUN_140642590)(param_1,param_2,REFG(undefined4, 0x1430a0b0c),param_3,(unsigned long long)(param_4),(unsigned long long)(param_5));
+  return (undefined8)CALLF(longlong *, FUN_140642590)(param_1,param_2,(*(undefined4 *)((char *)&gen_g_1430a0b0c + 0x0)),param_3,(unsigned long long)(param_4),(unsigned long long)(param_5));
 }
 
 /* ref: FUN_140d127b0 */

@@ -215,9 +215,13 @@ void CSimpleModel::operator delete(void* frame) {
 }
 
 // DAT_14309fedc
+// The reference's type id and its magic-static guard (CSimpleModel), held here so translated code
+// and the port number the class once, alike.
+int32_t g_cSimpleModelType;  // DAT_14309fedc
+int32_t g_cSimpleModelTypeGuard;  // DAT_14309fee0
+
 int32_t CSimpleModel::GetObjectType() {
-    static int32_t s_type = ++FrameScript_Object::s_objectTypeCount;
-    return s_type;
+    return FrameScript_TypeId(&g_cSimpleModelType, &g_cSimpleModelTypeGuard);
 }
 
 // ref: FUN_1424bd400
