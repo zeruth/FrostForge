@@ -685,9 +685,9 @@ extern void *const gen_p_142e99e28;
 /* s_initCount (src/framescript/FrameScript.cpp), internal: through its pointer */
 extern void *const gen_p_142e99f30;
 #define gen_g_142e99f30 (*(char *)gen_p_142e99f30)
-/* s_time (src/ui/FrameTime.cpp), internal: through its pointer */
-extern void *const gen_p_142e9a1f0;
-#define gen_g_142e9a1f0 (*(char *)gen_p_142e9a1f0)
+/* s_cancelled (src/ui/FrameTime.cpp), internal: through its pointer */
+extern void *const gen_p_142e9a1c0;
+#define gen_g_142e9a1c0 (*(char *)gen_p_142e9a1c0)
 /* s_rawSkip (src/os/win/Window.cpp), internal: through its pointer */
 extern void *const gen_p_1430a1594;
 #define gen_g_1430a1594 (*(char *)gen_p_1430a1594)
@@ -2992,10 +2992,6 @@ undefined4 FUN_14065f9b0();
 float FUN_14065f9c0();
 undefined8 FUN_14065fa60();
 int FUN_14065fb50();
-int * FUN_14065fd40();
-undefined8 FUN_140660110();
-undefined8 * FUN_140660180();
-undefined8 FUN_1406603c0();
 longlong * FUN_140660a90();
 undefined8 FUN_140661460();
 undefined8 FUN_140662b60();
@@ -9273,7 +9269,6 @@ undefined8 FUN_1425e3960();
 undefined8 FUN_1425e3970();
 undefined8 FUN_1425e39d0();
 undefined8 FUN_1425e3ab0();
-undefined8 FUN_1425e3b60();
 undefined8 FUN_1425e3bb0();
 undefined8 FUN_1425e3d40();
 undefined8 FUN_1425e3da0();

@@ -42,7 +42,6 @@ void Sub1412C51B0();
 void Sub14068BC30();
 void Sub14068AAE0();
 void Sub14023D170(GXFRAMESTATS* stats);
-void Sub14065FD40();
 void Sub14135A290();
 void Sub140222A60();
 void Sub14021F090();
@@ -441,7 +440,7 @@ bool Sub1402225D0() {
     if (!ClientProcessEvents()) {
         return false;
     }
-    Sub14065FD40();
+    FrameTime_RunTimers();
     AsyncReadPoll();
     Sub14135A290();
     Sub140222A60();

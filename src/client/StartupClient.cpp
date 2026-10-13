@@ -590,15 +590,6 @@ int32_t CommandSetGraphicsQualityRaid(const char* command, const char* arguments
     return 1;
 }
 
-extern "C" unsigned long long FUN_14065fd40();
-// translated: FUN_14065fd40
-void Sub14065FD40() {
-    __try {
-        FUN_14065fd40();
-    } __except (GenFault(0x14065fd40ull, GetExceptionInformation())) {
-    }
-}
-
 extern "C" unsigned long long FUN_14135a290();
 // translated: FUN_14135a290
 void Sub14135A290() {

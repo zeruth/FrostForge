@@ -1591,6 +1591,12 @@ float FUN_14065f9c0(void) {
     return (float)((float (*)(void))&gen_alias_14065f9c0)();
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_14065fb50=?FrameTime_AddTimer@@YAH_JP6AXPEAX@Z1@Z")
+extern char gen_alias_14065fb50;
+int FUN_14065fb50(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
+    return (int)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_14065fb50)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_140661460=?XMLTree_GetRoot@@YAPEAVXMLNode@@PEAUXMLTREE@@@Z")
 extern char gen_alias_140661460;
 undefined8 FUN_140661460(unsigned long long a0) {

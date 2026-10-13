@@ -1022,18 +1022,6 @@ undefined8 FUN_14065f6b0() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_140660050 reads 2, the call passes 1) */
-int FUN_14065fb50() {
-    GenUnimplemented(0x14065fb50ULL);
-    return (int)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_140660050 reads 2, the call passes 1) */
-undefined8 * FUN_140660180() {
-    GenUnimplemented(0x140660180ULL);
-    return (undefined8 *)0;
-}
-
 /* the decompiler lost a call's arguments (FUN_1417aefe0 reads 2, the call passes 1) */
 undefined8 FUN_140673cb0() {
     GenUnimplemented(0x140673cb0ULL);
