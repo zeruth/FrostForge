@@ -1607,7 +1607,7 @@ HTEXTURE TextureCreateByName(const char* name, uint64_t gxFlags, CStatus* status
     (void)status;
     gxFlags = FilterFlags(gxFlags, createFlags);
     char path[0x110];
-    OsPathChangeExtension(path, 0x104, name, ".blp");  // FUN_140214020
+    OsPathReplaceExtension(path, 0x104, name, ".blp");  // FUN_140214020
     int32_t fileDataId = cas::CASFileGetIdByName(path, (createFlags >> 1) & 0x21);
     uint8_t ownFilter = static_cast<uint8_t>(~createFlags);
     uint8_t notSampled = static_cast<uint8_t>(createFlags >> 8);
@@ -2523,7 +2523,7 @@ MIPBITS* TextureLoadImageById(int32_t fileDataId, uint32_t* width, uint32_t* hei
 MIPBITS* TextureLoadImageByName(const char* name, uint32_t* width, uint32_t* height, uint32_t* format, bool* opaque,
     CStatus* status, uint32_t* alphaBits, uint8_t allowLoose) {
     char path[0x110];
-    OsPathChangeExtension(path, 0x104, name, ".blp");
+    OsPathReplaceExtension(path, 0x104, name, ".blp");  // FUN_140214020
     uint8_t* data = nullptr;
     uint32_t size = 0;
     if (!cas::CASFileLoadByName(path, &data, &size, allowLoose, 0x17)) {

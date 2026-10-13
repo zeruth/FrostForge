@@ -86,7 +86,8 @@ IMPORT = re.compile(r"\bImport::(\w+)::(\w+)\b")
 # the types a body names: in casts, and in declarations of its locals
 TYPE_WORD = re.compile(r"\(\s*(?:const\s+)?([A-Za-z_]\w*)\s*\*+\s*\)|"
                        r"^\s+(?!(?:return|goto|break|continue|case|else|do|delete|new)\b)"
-                       r"(?:const\s+)?([A-Za-z_]\w*)\s*\**\s*[A-Za-z_]\w*\s*(?:\[[^\]]*\])?\s*;", re.M)
+                       # the type and the name apart (a wrapped `uVar4;` is not type `uVa`, name `r4`)
+                       r"(?:const\s+)?([A-Za-z_]\w*)(?:\s+\**\s*|\s*\*+\s*)[A-Za-z_]\w*\s*(?:\[[^\]]*\])?\s*;", re.M)
 
 
 # ---- the port's functions, as the PDB has them ----------------------------------------------
@@ -380,10 +381,25 @@ def virtual_this(text: str) -> str:
 
 
 def split_args(args: str) -> list[str]:
-    """A call's arguments, split at the top-level commas."""
+    """A call's arguments, split at the top-level commas (not those in string literals)."""
     out, depth, cur = [], 0, ""
-    for ch in args:
-        if ch in "([":
+    quote = None
+    i = 0
+    while i < len(args):
+        ch = args[i]
+        if quote:
+            cur += ch
+            if ch == "\\" and i + 1 < len(args):
+                cur += args[i + 1]
+                i += 2
+                continue
+            if ch == quote:
+                quote = None
+            i += 1
+            continue
+        if ch in "\"'":
+            quote = ch
+        elif ch in "([":
             depth += 1
         elif ch in ")]":
             depth -= 1
@@ -392,9 +408,31 @@ def split_args(args: str) -> list[str]:
             cur = ""
         else:
             cur += ch
+        i += 1
     if cur.strip():
         out.append(cur.strip())
     return out
+
+
+def matching_paren(text: str, start: int) -> int:
+    """The index just past the `)` closing the `(` before `start`, string literals skipped."""
+    depth, i, quote = 1, start, None
+    while i < len(text) and depth:
+        ch = text[i]
+        if quote:
+            if ch == "\\":
+                i += 2
+                continue
+            if ch == quote:
+                quote = None
+        elif ch in "\"'":
+            quote = ch
+        elif ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+        i += 1
+    return i
 
 
 def call_sites(text: str):
@@ -1059,35 +1097,36 @@ class Translator:
                             r"\*\s*\((?:float|double)\s*\*\)|REFG\((?:float|double)\b|CALLF\((?:float|double)\b|"
                             r"\b\d+\.\d*(?:e[+-]?\d+)?\b|\b\d+e[+-]?\d+\b|extraout_XMM|gen_xmm0\.[df]|"
                             r"\b(?:SQRT|ABS|FLOAT_|GEN_AS_)\w*\(")
-        out, pos = [], 0
-        for m in re.finditer(r"CALLF\(([^,()]+(?:\s*\*)*), FUN_([0-9a-f]{9})\)\(", body):
-            if m.start() < pos:
-                continue
-            sig = self.signature(int(m.group(2), 16))
-            # a float parameter, not a pointer to one (`float *param_7`)
-            def scalar_float(p: str) -> bool:
-                return bool(p.split()) and "*" not in p and bool(self.FLOAT_TYPE.match(p.split()[0]))
+        # a float parameter, not a pointer to one (`float *param_7`)
+        def scalar_float(p: str) -> bool:
+            return bool(p.split()) and "*" not in p and bool(self.FLOAT_TYPE.match(p.split()[0]))
 
-            if sig is None or not any(scalar_float(p) for p in sig[2]):
-                continue
-            # the argument list, to its matching parenthesis
-            depth, i = 1, m.end()
-            while i < len(body) and depth:
-                depth += {"(": 1, ")": -1}.get(body[i], 0)
-                i += 1
-            args = split_args(body[m.end():i - 1])
+        # last call first: a call in another's arguments is done before the call around it, whose
+        # arguments are read again from the text as it stands
+        calls = list(re.finditer(r"CALLF\(([^,()]+(?:\s*\*)*), FUN_([0-9a-f]{9})\)\(", body))
+        for m in reversed(calls):
+            start = m.end()
+            i = matching_paren(body, start)
+            args = split_args(body[start:i - 1])
+            sig = self.signature(int(m.group(2), 16))
             changed = False
             for k, arg in enumerate(args):
-                if k >= len(sig[2]) or not scalar_float(sig[2][k]) or floaty.search(arg):
-                    continue
-                ptype = sig[2][k].split()[0]
-                helper = "GEN_AS_FLOAT" if ptype in ("float", "float4") else "GEN_AS_DOUBLE"
-                args[k] = f"{helper}((unsigned long long)({arg}))"
-                changed = True
+                if sig is not None and k < len(sig[2]) and scalar_float(sig[2][k]):
+                    if floaty.search(arg):
+                        continue
+                    ptype = sig[2][k].split()[0]
+                    helper = "GEN_AS_FLOAT" if ptype in ("float", "float4") else "GEN_AS_DOUBLE"
+                    args[k] = f"{helper}((unsigned long long)({arg}))"
+                    changed = True
+                elif k >= 4 and not floaty.search(arg) and not arg.startswith("(unsigned long long)("):
+                    # from the fifth on an argument is a stack slot of 8 bytes, and an unprototyped
+                    # call stores an int's 4 only: the callee read the rest as garbage (a CStatus *
+                    # of 0x100000000 loading the cursor's textures, 2026-10-12)
+                    args[k] = f"(unsigned long long)({arg})"
+                    changed = True
             if changed:
-                out.append(body[pos:m.end()] + ",".join(args) + ")")
-                pos = i
-        return "".join(out) + body[pos:]
+                body = body[:start] + ",".join(args) + body[i - 1:]
+        return body
 
     def decl(self, a: int) -> tuple[str, list[str] | None]:
         """(return type, parameters) as C can declare them; parameters None when Ghidra's use a
@@ -1197,6 +1236,11 @@ class Translator:
         head, rest = text.split("{", 1)
         sig = self.signature(a)
         ret, _, params = sig
+        # `_local_a8`: Ghidra's name for a wider store over a declared local (`local_a8` an
+        # undefined4, the store 8 bytes: CONCAT44), as `_DAT_x` is for a global
+        rest = re.sub(r"\b_((?:local|[a-z]*Stack)_[0-9a-f]+)\b",
+                      lambda m: f"(*(undefined8 *)&{m.group(1)})"
+                      if re.search(rf"^\s*[\w ]+\**\s*{m.group(1)}\b", rest, re.M) else m.group(0), rest)
         body = stack_frame(atomics("{" + rest))
         for name in upper_half_only(body):
             body = re.sub(rf"^(\s*[\w ]+ {name});$", r"\1 = 0;", body, count=1, flags=re.M)

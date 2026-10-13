@@ -60,8 +60,11 @@ def lift(binary, address: int, limit: int = 48) -> str | None:
         body, _ = _lift(binary, address, limit)
     except Unliftable:
         return None
+    # the four register arguments, and the stack arguments it reads
+    count = max([4] + [int(n) + 1 for n in re.findall(r"\ba(\d+)\b", body)])
+    params = ",".join(f"undefined8 a{i}" for i in range(count))
     return (f"/* lifted from the instructions (tools/lift.py) */\n"
-            f"undefined8 FUN_{address:x}(undefined8 a0,undefined8 a1,undefined8 a2,undefined8 a3)\n\n"
+            f"undefined8 FUN_{address:x}({params})\n\n"
             f"{{\n{body}\n}}\n")
 
 
@@ -125,6 +128,7 @@ def _lift(binary, address: int, limit: int):
     used: set[str] = set()        # registers read
     written: set[str] = set(ARGS)  # set before they are read, in address order
     reads: set[str] = set()       # argument registers read: the arguments the code takes
+    stack_args: set[int] = set()  # stack arguments read (a4 on)
     set_here: set[str] = set()    # registers the code itself has set
     flags = {"kind": None}        # what the last flag-setting instruction left
     fcount = [0]
@@ -148,6 +152,15 @@ def _lift(binary, address: int, limit: int):
             return f"(ulonglong){int(op, 0) & 0xffffffffffffffff:#x}ULL"
         m = re.fullmatch(r"(qword|dword|word|byte) ptr \[(.+)\]", op)
         if m:
+            # a stack argument (the fifth on), where the caller left it: rsp never moves here
+            s = re.fullmatch(r"rsp \+ (0x[0-9a-f]+)", m.group(2))
+            if s:
+                disp = int(s.group(1), 16)
+                if disp < 0x28 or (disp - 0x28) % 8 != 0:
+                    raise Unliftable(f"stack slot {m.group(2)}")
+                index = 4 + (disp - 0x28) // 8
+                stack_args.add(index)
+                return f"(({CTYPE[SIZE[m.group(1)]]})a{index})"
             return f"(*({CTYPE[SIZE[m.group(1)]]} *)({address_of(m.group(2))}))"
         raise Unliftable(f"operand {op}")
 
@@ -158,6 +171,13 @@ def _lift(binary, address: int, limit: int):
             # named as the decompilation names a global, so the translator places it (the
             # image's copy, or the port's when the port holds it)
             return f"((ulonglong)&DAT_{target:x})"
+        # an index scaled with no base (`lea ecx, [rcx*4]`)
+        m = re.fullmatch(r"([a-z]\w*)\*(\d)(?: ([+-]) (0x[0-9a-f]+|\d+))?", expr)
+        if m and m.group(1) in R64 and R64[m.group(1)][1] == 8 and m.group(1) not in ("rsp", "rbp"):
+            out = f"({read(m.group(1))} * {m.group(2)})"
+            if m.group(3):
+                out = f"({out} {m.group(3)} {int(m.group(4), 0):#x})"
+            return out
         m = re.fullmatch(r"(\w+)(?: \+ ([a-z]\w*)(?:\*(\d))?)?(?: ([+-]) (0x[0-9a-f]+|\d+))?", expr)
         if not m or m.group(1) not in R64 or R64[m.group(1)][1] != 8 or m.group(1) in ("rsp", "rbp"):
             raise Unliftable(f"address {expr}")

@@ -614,6 +614,12 @@ undefined8 FUN_14023b440() {
     return (undefined8)0;
 }
 
+/* a type C does not know (FILE) */
+longlong * FUN_14023d5f0() {
+    GenUnimplemented(0x14023d5f0ULL);
+    return (longlong *)0;
+}
+
 /* SIMD union */
 undefined8 FUN_140246580() {
     GenUnimplemented(0x140246580ULL);
@@ -845,42 +851,6 @@ undefined8 FUN_1402f41b0() {
 /* register the decompiler lost track of */
 undefined8 FUN_1402f4d00() {
     GenUnimplemented(0x1402f4d00ULL);
-    return (undefined8)0;
-}
-
-/* a type C does not know (cVa) */
-undefined8 FUN_1402f7c00() {
-    GenUnimplemented(0x1402f7c00ULL);
-    return (undefined8)0;
-}
-
-/* a type C does not know (cVa) */
-undefined8 FUN_1402f7d40() {
-    GenUnimplemented(0x1402f7d40ULL);
-    return (undefined8)0;
-}
-
-/* a type C does not know (cVa) */
-undefined8 FUN_1402f7e70() {
-    GenUnimplemented(0x1402f7e70ULL);
-    return (undefined8)0;
-}
-
-/* a type C does not know (cVa) */
-undefined8 FUN_1402f7f70() {
-    GenUnimplemented(0x1402f7f70ULL);
-    return (undefined8)0;
-}
-
-/* a type C does not know (cVa) */
-undefined8 FUN_1402f8090() {
-    GenUnimplemented(0x1402f8090ULL);
-    return (undefined8)0;
-}
-
-/* a type C does not know (cVa) */
-undefined8 FUN_1402f8190() {
-    GenUnimplemented(0x1402f8190ULL);
     return (undefined8)0;
 }
 
@@ -2090,12 +2060,6 @@ undefined8 FUN_140fa32c0() {
     return (undefined8)0;
 }
 
-/* did not compile: C2065 '_uStack_30': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
-undefined8 FUN_140fc97b0() {
-    GenUnimplemented(0x140fc97b0ULL);
-    return (undefined8)0;
-}
-
 /* a decompilation Ghidra marked as damaged */
 undefined8 FUN_140fcb2c0() {
     GenUnimplemented(0x140fcb2c0ULL);
@@ -2408,6 +2372,12 @@ ulonglong FUN_1412ee600() {
     return (ulonglong)0;
 }
 
+/* did not compile: C2297 '^': not valid as right operand has type 'float' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcx */
+undefined8 FUN_141341f90() {
+    GenUnimplemented(0x141341f90ULL);
+    return (undefined8)0;
+}
+
 /* did not compile: C2297 '&': not valid as right operand has type 'float' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcx */
 float * FUN_141347cd0() {
     GenUnimplemented(0x141347cd0ULL);
@@ -2522,10 +2492,10 @@ undefined8 FUN_141399160() {
     return (undefined8)0;
 }
 
-/* a type C does not know (DAT_142d00) */
-undefined8 FUN_14139b480() {
-    GenUnimplemented(0x14139b480ULL);
-    return (undefined8)0;
+/* did not compile: C2297 '^': not valid as right operand has type 'float' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcx */
+bool FUN_14139baf0() {
+    GenUnimplemented(0x14139baf0ULL);
+    return (bool)0;
 }
 
 /* SIMD union */
@@ -2738,16 +2708,58 @@ ulonglong FUN_1414cb4e0() {
     return (ulonglong)0;
 }
 
+/* SIMD union */
+undefined8 FUN_1414f9d90() {
+    GenUnimplemented(0x1414f9d90ULL);
+    return (undefined8)0;
+}
+
+/* the stack frame addressed directly */
+undefined8 FUN_1414fa300() {
+    GenUnimplemented(0x1414fa300ULL);
+    return (undefined8)0;
+}
+
+/* the stack frame addressed directly */
+undefined8 FUN_1414fa3a0() {
+    GenUnimplemented(0x1414fa3a0ULL);
+    return (undefined8)0;
+}
+
+/* the stack frame addressed directly */
+undefined8 FUN_1414fa470() {
+    GenUnimplemented(0x1414fa470ULL);
+    return (undefined8)0;
+}
+
+/* the stack frame addressed directly */
+undefined8 FUN_1414faf40() {
+    GenUnimplemented(0x1414faf40ULL);
+    return (undefined8)0;
+}
+
+/* the stack frame addressed directly */
+undefined8 FUN_1414fafe0() {
+    GenUnimplemented(0x1414fafe0ULL);
+    return (undefined8)0;
+}
+
+/* the stack frame addressed directly */
+undefined8 FUN_1414fb080() {
+    GenUnimplemented(0x1414fb080ULL);
+    return (undefined8)0;
+}
+
+/* SIMD union */
+undefined8 FUN_1414fb180() {
+    GenUnimplemented(0x1414fb180ULL);
+    return (undefined8)0;
+}
+
 /* a global used as a pointer the data export does not type */
 undefined8 FUN_1414fc940() {
     GenUnimplemented(0x1414fc940ULL);
     return (undefined8)0;
-}
-
-/* did not compile: C2065 '_local_a8': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
-bool FUN_1414fd100() {
-    GenUnimplemented(0x1414fd100ULL);
-    return (bool)0;
 }
 
 /* did not compile: LNK2019 unresolved __imp_htons_or_ntohs */
@@ -2840,21 +2852,9 @@ longlong FUN_14155f3d0() {
     return (longlong)0;
 }
 
-/* did not compile: C2065 '_local_218': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
-undefined8 FUN_1415606c0() {
-    GenUnimplemented(0x1415606c0ULL);
-    return (undefined8)0;
-}
-
 /* the stack frame addressed directly */
 undefined8 FUN_141560b20() {
     GenUnimplemented(0x141560b20ULL);
-    return (undefined8)0;
-}
-
-/* did not compile: C2065 '_local_1d8': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
-undefined8 FUN_141560ca0() {
-    GenUnimplemented(0x141560ca0ULL);
     return (undefined8)0;
 }
 
@@ -2879,12 +2879,6 @@ undefined8 FUN_1415649f0() {
 /* a global used as a pointer the data export does not type */
 undefined8 FUN_141565ac0() {
     GenUnimplemented(0x141565ac0ULL);
-    return (undefined8)0;
-}
-
-/* a type C does not know (vtable_14261b9) */
-undefined8 FUN_141567f50() {
-    GenUnimplemented(0x141567f50ULL);
     return (undefined8)0;
 }
 
@@ -4184,16 +4178,16 @@ undefined8 FUN_14187aba0() {
     return (undefined8)0;
 }
 
+/* the decompiler lost a call's arguments (FUN_141343a20 reads 1, the call passes 0) */
+undefined8 FUN_14187c2d0() {
+    GenUnimplemented(0x14187c2d0ULL);
+    return (undefined8)0;
+}
+
 /* beyond the translation depth */
 undefined8 FUN_14187c950() {
     GenUnimplemented(0x14187c950ULL);
     return (undefined8)0;
-}
-
-/* did not compile: C2065 '_local_188': undeclared identifier [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
-float * FUN_14187d140() {
-    GenUnimplemented(0x14187d140ULL);
-    return (float *)0;
 }
 
 /* the decompiler lost a call's arguments (FUN_141343a20 reads 1, the call passes 0) */
@@ -4230,6 +4224,12 @@ undefined8 FUN_1418823c0() {
 undefined8 FUN_141883a70() {
     GenUnimplemented(0x141883a70ULL);
     return (undefined8)0;
+}
+
+/* a type C does not know (BADSPACEBASE) */
+ulonglong FUN_141884d40() {
+    GenUnimplemented(0x141884d40ULL);
+    return (ulonglong)0;
 }
 
 /* did not compile: C5299 a label appearing at the end of a compound statement requires at least '/std:clatest' [C:\Users\tyler\runicworld-client\ */
@@ -5991,9 +5991,9 @@ undefined8 FUN_141caf6f0() {
 }
 
 /* register the decompiler lost track of */
-undefined8 FUN_141cb01c0() {
-    GenUnimplemented(0x141cb01c0ULL);
-    return (undefined8)0;
+ulonglong FUN_141cb2190() {
+    GenUnimplemented(0x141cb2190ULL);
+    return (ulonglong)0;
 }
 
 /* thread-local storage */
@@ -6116,12 +6116,6 @@ undefined4 * FUN_141cc0580() {
     return (undefined4 *)0;
 }
 
-/* a type C does not know (param) */
-undefined8 FUN_141cc2ed0() {
-    GenUnimplemented(0x141cc2ed0ULL);
-    return (undefined8)0;
-}
-
 /* the stack frame addressed directly */
 undefined1 * FUN_141ccd920() {
     GenUnimplemented(0x141ccd920ULL);
@@ -6156,6 +6150,12 @@ undefined8 FUN_141cd7720() {
 undefined1 FUN_141cd96e0() {
     GenUnimplemented(0x141cd96e0ULL);
     return (undefined1)0;
+}
+
+/* register the decompiler lost track of */
+ulonglong FUN_141cda680() {
+    GenUnimplemented(0x141cda680ULL);
+    return (ulonglong)0;
 }
 
 /* the decompiler lost a call's arguments (FUN_141cd17c0 reads 5, the call passes 4) */
@@ -6716,6 +6716,12 @@ undefined8 FUN_142532e10() {
     return (undefined8)0;
 }
 
+/* register the decompiler lost track of */
+undefined8 FUN_14253a9a0() {
+    GenUnimplemented(0x14253a9a0ULL);
+    return (undefined8)0;
+}
+
 /* did not compile: C2297 '&': not valid as right operand has type 'float' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcx */
 undefined8 FUN_142541dc0() {
     GenUnimplemented(0x142541dc0ULL);
@@ -6866,6 +6872,12 @@ undefined8 FUN_14254c350() {
     return (undefined8)0;
 }
 
+/* the stack frame addressed directly */
+undefined8 FUN_14254ca30() {
+    GenUnimplemented(0x14254ca30ULL);
+    return (undefined8)0;
+}
+
 /* a global used as a pointer the data export does not type */
 int * FUN_14254d240() {
     GenUnimplemented(0x14254d240ULL);
@@ -6959,12 +6971,6 @@ undefined8 FUN_1425da0c0() {
 /* a global used as a pointer the data export does not type */
 undefined8 FUN_1425da420() {
     GenUnimplemented(0x1425da420ULL);
-    return (undefined8)0;
-}
-
-/* a type C does not know (vtable_14261b9) */
-undefined8 FUN_1425da9d0() {
-    GenUnimplemented(0x1425da9d0ULL);
     return (undefined8)0;
 }
 

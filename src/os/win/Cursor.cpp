@@ -1,75 +1,39 @@
 #include "os/Window.hpp"
 #include "util/Unimplemented.hpp"
 #include <windows.h>
-#include <windows.h>
 
 extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 // The cursor module (0x14254b000..): the cursor's visibility and lock state machine
-// (DAT_142d5e90c), its sample history, and the position the engine reads. Its entry points
-// are stubs until the module is ported; the window procedure calls them on every message.
+// (DAT_142d5e90c), its sample history (DAT_142d5e920..), where a held cursor stays and the
+// image the engine gives the window. It runs as the reference's own code, translated, whole: its
+// state lives in the image, so every entry point goes there and none of it is kept here.
 
+extern "C" unsigned long long FUN_14254c870(unsigned long long, unsigned long long, unsigned long long,
+    unsigned long long, unsigned long long);
 // Tracks the message for the cursor's state; returns the relative motion when the cursor is
 // locked (zero otherwise).
-// ref: FUN_14254c870
+// translated: FUN_14254c870
 uint64_t OsCursorTrackMessage(void* window, uint32_t message, uint64_t wparam, uint64_t lparam, uint32_t time) {
-    (void)window;
-    (void)message;
-    (void)wparam;
-    (void)lparam;
-    (void)time;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-namespace {
-
-// The cursor's state (DAT_142d5e90c): 1 a remote session, 2 held in place, 0x40 the window
-// inactive, 0x80 minimized.
-uint32_t s_cursorState;
-// Where a held cursor stays (DAT_1447ceae0).
-uint64_t s_heldPosition;
-// The positions the window's messages reported (DAT_142d5e920..): TrackMessage fills them, and
-// until it is ported there are none.
-uint32_t s_sampleCount;             // DAT_142d5e940
-// The window whose middle stands in when the system cannot say (DAT_1447ceac8).
-HWND s_cursorWindow;
-
-// The system's cursor position, or the middle of the window (the desktop when there is none)
-// when it cannot be had.
-// ref: FUN_14254c350
-uint64_t CursorSystemPosition() {
-    POINT point;
-    if (!GetCursorPos(&point)) {
-        HWND window = s_cursorWindow != nullptr ? s_cursorWindow : GetDesktopWindow();
-        RECT rect;
-        GetWindowRect(window, &rect);
-        point.x = (rect.right + rect.left) / 2;
-        point.y = (rect.bottom + rect.top) / 2;
+    __try {
+        return FUN_14254c870(reinterpret_cast<unsigned long long>(window), message, wparam, lparam, time);
+    } __except (GenFault(0x14254c870ull, GetExceptionInformation())) {
+        return 0;
     }
-    return static_cast<uint32_t>(point.x) | static_cast<uint64_t>(static_cast<uint32_t>(point.y)) << 32;
 }
 
-// The newest reported position (FUN_14254c760).
-// ref: FUN_14254c760
-uint64_t CursorLatestSample() {
-    FROST_UNIMPLEMENTED();
-    return CursorSystemPosition();
-}
-
-}  // namespace
-
-// The cursor's position in screen coordinates as the engine sees it: where it is held, the
-// last position the messages reported, or the system's.
+// The cursor's position in screen coordinates as the engine sees it. The reference
+// (FUN_14254c400) answers with where the cursor is held, else the newest position the messages
+// recorded; the recording (FUN_14254ca30, from WM_MOUSEMOVE) does not translate yet, and reading
+// its empty history put every click in the wrong place (2026-10-12). Until it does, the system's
+// position, which is what an unheld cursor reports anyway.
 // ref: FUN_14254c400
 uint64_t OsCursorGetPosition() {
-    if ((s_cursorState & 2) != 0 && (s_cursorState & 0xc0) == 0) {
-        return s_heldPosition;
+    POINT point = {};
+    if (!GetCursorPos(&point)) {
+        return 0;
     }
-    if (s_sampleCount != 0) {
-        return CursorLatestSample();
-    }
-    return CursorSystemPosition();
+    return static_cast<uint32_t>(point.x) | static_cast<uint64_t>(static_cast<uint32_t>(point.y)) << 32;
 }
 
 // ref: FUN_14254c3d0
@@ -79,29 +43,34 @@ uint64_t OsCursorGetClientPosition(void* window) {
     return position;
 }
 
+extern "C" unsigned long long FUN_14254cf70(unsigned long long, unsigned long long, unsigned long long);
 // Sets the cursor image (and the window class's).
-// ref: FUN_14254cf70
+// translated: FUN_14254cf70
 void OsCursorSet(void* window, void* cursor, uint32_t time) {
-    (void)window;
-    (void)cursor;
-    (void)time;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14254cf70(reinterpret_cast<unsigned long long>(window), reinterpret_cast<unsigned long long>(cursor), time);
+    } __except (GenFault(0x14254cf70ull, GetExceptionInformation())) {
+    }
 }
 
+extern "C" unsigned long long FUN_14254c490(unsigned long long, unsigned long long);
 // Puts the cursor in the engine's hardware-cursor state.
-// ref: FUN_14254c490
+// translated: FUN_14254c490
 void OsCursorEnable(void* window, uint32_t time) {
-    (void)window;
-    (void)time;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14254c490(reinterpret_cast<unsigned long long>(window), time);
+    } __except (GenFault(0x14254c490ull, GetExceptionInformation())) {
+    }
 }
 
+extern "C" unsigned long long FUN_14254d110(unsigned long long, unsigned long long);
 // Leaves the engine's hardware-cursor state (clears 0x20 in the state).
-// ref: FUN_14254d110
+// translated: FUN_14254d110
 void OsCursorDisable(void* window, uint32_t time) {
-    (void)window;
-    (void)time;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14254d110(reinterpret_cast<unsigned long long>(window), time);
+    } __except (GenFault(0x14254d110ull, GetExceptionInformation())) {
+    }
 }
 
 // The cursor module's per-pump bookkeeping, before and after the messages.
@@ -122,7 +91,3 @@ void OsCursorFrameEnd(uint32_t time) {
     } __except (GenFault(0x14254ba70ull, GetExceptionInformation())) {
     }
 }
-
-// ---- GENERATED by tools/translate.py: the port globals translated code reaches ----
-extern "C" void* const gen_p_142d5e940 = (void*)&s_sampleCount;
-// ---- end of generated globals ----

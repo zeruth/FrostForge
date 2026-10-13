@@ -592,6 +592,41 @@ void OsPathChangeExtension(char* dest, uint64_t destSize, const char* path, cons
     *dest = '\0';
 }
 
+// The path with its extension replaced by `extension` as given, its dot included (".blp"),
+// where OsPathChangeExtension adds the dot itself.
+// ref: FUN_140214020
+void OsPathReplaceExtension(char* dest, uint64_t destSize, const char* path, const char* extension) {
+    const char* dot = nullptr;
+    const char* end = path;
+    for (char c; (c = *end) != '\0'; end++) {
+        if (c == '.') {
+            dot = end;
+        } else if (c == '/' || c == '\\') {
+            dot = nullptr;
+        }
+    }
+    uint64_t stem = static_cast<uint64_t>((dot ? dot : end) - path);
+    if (stem >= destSize) {
+        *dest = '\0';
+        return;
+    }
+    if (path != dest) {
+        std::memmove(dest, path, stem);
+    }
+    dest += stem;
+    for (uint64_t left = destSize - stem; left != 0;) {
+        if (--left == 0) {
+            *dest = '\0';
+            return;
+        }
+        char c = *extension++;
+        *dest++ = c;
+        if (c == '\0') {
+            return;
+        }
+    }
+}
+
 // ref: FUN_140214360
 bool OsGetFullPath(const char* path, char* dest, uint64_t destSize) {
     DWORD error;

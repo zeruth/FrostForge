@@ -893,9 +893,7 @@ undefined8 FUN_1401ff1a0(void)
     uVar1 = (uint)(byte)*pcVar3;
   } while (*pcVar3 != 0);
   puVar2 = (undefined8 *)
-           CALLF(ulonglong *, FUN_1402545c0)(0x40,1,
-                         "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Base\\BitArray.h",uVar4
-                         ,0xf9);
+           CALLF(ulonglong *, FUN_1402545c0)(0x40,1,"D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Base\\BitArray.h",uVar4,(unsigned long long)(0xf9));
   if ((REFG(undefined1, 0x142d30e84) != '\0') && (REFG(undefined1, 0x142d30e85) != '\0')) {
     CALLF(undefined8, FUN_1402547e0)(REFG(undefined8 *, 0x142d30e78));
   }
@@ -931,9 +929,7 @@ undefined8 FUN_1401ff360(void)
     uVar1 = (uint)(byte)*pcVar3;
   } while (*pcVar3 != 0);
   puVar2 = (undefined8 *)
-           CALLF(ulonglong *, FUN_1402545c0)(0x40,1,
-                         "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Base\\BitArray.h",uVar4
-                         ,0xf9);
+           CALLF(ulonglong *, FUN_1402545c0)(0x40,1,"D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Base\\BitArray.h",uVar4,(unsigned long long)(0xf9));
   if ((REFG(undefined1, 0x142d30e94) != '\0') && (REFG(undefined1, 0x142d30e95) != '\0')) {
     CALLF(undefined8, FUN_1402547e0)(REFG(undefined8 *, 0x142d30e88));
   }
@@ -1753,7 +1749,7 @@ undefined8 FUN_1402014d0(void)
     } while (*pcVar2 != 0);
   }
   REFG(undefined8, 0x14323b138) =
-       CALLF(ulonglong *, FUN_140255140)(0x14,0xb,((char *)REFP(0x142dccff0)),uVar3,0xfffffffa,0);
+       CALLF(ulonglong *, FUN_140255140)(0x14,0xb,((char *)REFP(0x142dccff0)),uVar3,(unsigned long long)(0xfffffffa),(unsigned long long)(0));
   REFG(undefined8, 0x14323b148) = 5;
   memmove(REFG(undefined8, 0x14323b138),&(*(undefined8 *)(gen_frame + 0x0)),0x14);
   REFG(undefined8, 0x14323b140) = 5;
@@ -1815,7 +1811,7 @@ undefined8 FUN_140201630(void)
       uVar1 = (uint)(byte)*pcVar2;
     } while (*pcVar2 != 0);
   }
-  REFG(undefined8, 0x14323b1c0) = CALLF(ulonglong *, FUN_140255140)(0x30,0xb,((char *)REFP(0x142d9d050)),uVar3,0xfffffffa,0)
+  REFG(undefined8, 0x14323b1c0) = CALLF(ulonglong *, FUN_140255140)(0x30,0xb,((char *)REFP(0x142d9d050)),uVar3,(unsigned long long)(0xfffffffa),(unsigned long long)(0))
   ;
   REFG(undefined8, 0x14323b1d0) = 3;
   memmove(REFG(undefined8, 0x14323b1c0),&(*(char * *)(gen_frame + 0x0)),0x30);
@@ -1929,9 +1925,7 @@ undefined8 FUN_1402019a0(void)
     uVar5 = (uVar1 ^ uVar5) * 0x1000193;
     uVar1 = (uint)(byte)*pcVar4;
   } while (*pcVar4 != 0);
-  lVar2 = CALLF(ulonglong *, FUN_1402545c0)(0x20a0,0xb,
-                        "D:\\BuildServer\\A\\work\\package_cache\\blz\\3.11.13\\include\\blz\\mem_unique_ptr.h"
-                        ,uVar5,0x20e);
+  lVar2 = CALLF(ulonglong *, FUN_1402545c0)(0x20a0,0xb,"D:\\BuildServer\\A\\work\\package_cache\\blz\\3.11.13\\include\\blz\\mem_unique_ptr.h",uVar5,(unsigned long long)(0x20e));
   uVar3 = 0;
   if (lVar2 != 0) {
     uVar3 = CALLF(undefined2 *, FUN_141c490a0)(lVar2);
@@ -1958,9 +1952,7 @@ undefined8 FUN_140201a20(void)
     uVar5 = (uVar1 ^ uVar5) * 0x1000193;
     uVar1 = (uint)(byte)*pcVar4;
   } while (*pcVar4 != 0);
-  lVar2 = CALLF(ulonglong *, FUN_1402545c0)(0x98,0xb,
-                        "D:\\BuildServer\\A\\work\\package_cache\\blz\\3.11.13\\include\\blz\\mem_unique_ptr.h"
-                        ,uVar5,0x20e);
+  lVar2 = CALLF(ulonglong *, FUN_1402545c0)(0x98,0xb,"D:\\BuildServer\\A\\work\\package_cache\\blz\\3.11.13\\include\\blz\\mem_unique_ptr.h",uVar5,(unsigned long long)(0x20e));
   uVar3 = 0;
   if (lVar2 != 0) {
     uVar3 = CALLF(undefined2 *, FUN_141c84e20)(lVar2);
@@ -1986,9 +1978,7 @@ undefined8 FUN_140201aa0(void)
     uVar1 = (uint)(byte)*pcVar2;
   } while (*pcVar2 != 0);
   REFG(undefined8, 0x14323b2a8) =
-       CALLF(ulonglong *, FUN_1402545c0)(1,0xb,
-                     "D:\\BuildServer\\A\\work\\package_cache\\blz\\3.11.13\\include\\blz\\mem_unique_ptr.h"
-                     ,uVar3,0x20e);
+       CALLF(ulonglong *, FUN_1402545c0)(1,0xb,"D:\\BuildServer\\A\\work\\package_cache\\blz\\3.11.13\\include\\blz\\mem_unique_ptr.h",uVar3,(unsigned long long)(0x20e));
   atexit((code *)((code *)REFP(0x1425fd830)));
   return 0;
 }
@@ -2017,9 +2007,7 @@ undefined8 FUN_140201b30(void)
     uVar1 = (uint)(byte)*pcVar2;
   } while (*pcVar2 != 0);
   REFG(undefined8, 0x14323b2b8) =
-       CALLF(ulonglong *, FUN_1402545c0)(1,0xb,
-                     "D:\\BuildServer\\A\\work\\package_cache\\blz\\3.11.13\\include\\blz\\mem_unique_ptr.h"
-                     ,uVar3,0x20e);
+       CALLF(ulonglong *, FUN_1402545c0)(1,0xb,"D:\\BuildServer\\A\\work\\package_cache\\blz\\3.11.13\\include\\blz\\mem_unique_ptr.h",uVar3,(unsigned long long)(0x20e));
   atexit((code *)((code *)REFP(0x1425fd890)));
   return 0;
 }
@@ -2041,9 +2029,7 @@ undefined8 FUN_140201ba0(void)
     uVar5 = (uVar1 ^ uVar5) * 0x1000193;
     uVar1 = (uint)(byte)*pcVar4;
   } while (*pcVar4 != 0);
-  lVar2 = CALLF(ulonglong *, FUN_1402545c0)(0x20,0xb,
-                        "D:\\BuildServer\\A\\work\\package_cache\\blz\\3.11.13\\include\\blz\\mem_unique_ptr.h"
-                        ,uVar5,0x20e);
+  lVar2 = CALLF(ulonglong *, FUN_1402545c0)(0x20,0xb,"D:\\BuildServer\\A\\work\\package_cache\\blz\\3.11.13\\include\\blz\\mem_unique_ptr.h",uVar5,(unsigned long long)(0x20e));
   uVar3 = 0;
   if (lVar2 != 0) {
     uVar3 = CALLF(undefined8 *, FUN_141c8bb10)(lVar2);

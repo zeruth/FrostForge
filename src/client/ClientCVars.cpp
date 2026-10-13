@@ -452,6 +452,11 @@ bool MouseNoRepositioningCallback(CVar*, const char*, const char* value, void*) 
     return true;
 }
 
+// translated: FUN_14167f5c0
+extern "C" unsigned long long FUN_14167f5c0(unsigned long long);
+// translated: FUN_141cb1cf0
+extern "C" unsigned long long FUN_141cb1cf0();
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 // -1 .. 4.
 // ref: FUN_14024b440
 bool CursorSizePreferredCallback(CVar*, const char*, const char* value, void*) {
@@ -459,9 +464,12 @@ bool CursorSizePreferredCallback(CVar*, const char*, const char* value, void*) {
     if (static_cast<uint32_t>(size + 1) > 5) {
         size = size < -1 ? -1 : 4;
     }
-    // FUN_14167f5c0 (the cursor size, -1 from the monitor DPI, through FUN_1414fc880) and
-    // FUN_141cb1cf0 (the cursor textures rebuilt) are not ported.
-    FROST_UNIMPLEMENTED();
+    // the cursor size (-1 from the monitor's DPI) and the cursor textures rebuilt at it
+    __try {
+        FUN_14167f5c0(static_cast<unsigned long long>(size));
+        FUN_141cb1cf0();
+    } __except (GenFault(0x14024b440ull, GetExceptionInformation())) {
+    }
     return true;
 }
 

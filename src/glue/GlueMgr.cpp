@@ -35,6 +35,8 @@ extern "C" {
 #include "lua.h"
 }
 
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+
 namespace {
 
 const char s_glueFile[] = "D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\CGlueMgr.cpp";
@@ -239,29 +241,101 @@ void GlueOnGamePad() {
     FROST_UNIMPLEMENTED();
 }
 
-// Whether the cursor textures are loaded, and loading them (Interface\Cursor\*.blp).
-// ref: FUN_141cb2810
+// The cursor module (Interface\Cursor\*.blp, DAT_1432515e0..): its textures, the mode, and the
+// image it hands the window's hardware cursor run as the reference's own code, translated.
+}  // namespace
+extern "C" unsigned long long FUN_141cb2810();
+extern "C" unsigned long long FUN_141cb1440();
+extern "C" unsigned long long FUN_14167b4d0();
+extern "C" unsigned long long FUN_141cb20e0(unsigned long long);
+namespace {
+
+// Whether the cursor textures are loaded, and loading them.
+// translated: FUN_141cb2810
 bool CursorIsLoaded() {
-    FROST_UNIMPLEMENTED();
-    return true;
+    __try {
+        return (FUN_141cb2810() & 0xff) != 0;
+    } __except (GenFault(0x141cb2810ull, GetExceptionInformation())) {
+        return true;
+    }
 }
 
-// ref: FUN_141cb1440
+// translated: FUN_141cb1440
 void CursorLoad() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141cb1440();
+    } __except (GenFault(0x141cb1440ull, GetExceptionInformation())) {
+    }
 }
 
-// The cursorSizePreferred CVar.
-// ref: FUN_14167b4d0
+// The cursor's size from cursorSizePreferred (or the monitor's DPI), then the cursor again.
+// translated: FUN_14167b4d0
 void Sub14167B4D0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14167b4d0();
+    } __except (GenFault(0x14167b4d0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141cb20e0
+// translated: FUN_141cb20e0
 void CursorSetMode(uint32_t mode) {
-    (void)mode;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141cb20e0(mode);
+    } __except (GenFault(0x141cb20e0ull, GetExceptionInformation())) {
+    }
 }
+
+}  // namespace
+
+extern "C" unsigned long long FUN_141cafa20(unsigned long long, unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_141cb25b0(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_141cb0380(unsigned long long, unsigned long long, unsigned long long);
+
+// A loaded image's cursor at a size (32, 48, 64, 96 or 128): the rectangle `rect` names (row,
+// column, then their ends; the whole image when it is empty or already that size) copied out
+// row by row into the cursor's pixels, which are then registered; an image too small for it, or
+// none, leaves the cursor cleared at the smallest size. (The decompiler lost the rectangle's
+// third value and the clear's pixels argument; the instructions give both.)
+// ref: FUN_141cb01c0
+bool CursorImageFromMips(const char* name, uint32_t* cursor, uint8_t** mips, uint32_t width, uint32_t height,
+    uint32_t sizeIndex, const float* rect) {
+    static const int32_t s_sizes[5] = { 0x20, 0x30, 0x40, 0x60, 0x80 };
+    if (mips != nullptr) {
+        float row = rect[0];
+        float column = rect[1];
+        float rowEnd = rect[2];
+        float columnEnd = rect[3];
+        int32_t size = s_sizes[sizeIndex];
+        bool whole = rowEnd <= row || columnEnd <= column
+            || (static_cast<int32_t>(static_cast<int64_t>(column)) + size == static_cast<int32_t>(static_cast<int64_t>(columnEnd))
+                && static_cast<int32_t>(static_cast<int64_t>(row)) + size == static_cast<int32_t>(static_cast<int64_t>(rowEnd)));
+        if (whole && static_cast<uint32_t>(static_cast<int64_t>(columnEnd)) <= width
+            && static_cast<uint32_t>(static_cast<int64_t>(rowEnd)) <= height) {
+            __try {
+                auto out = reinterpret_cast<uint8_t*>(FUN_141cafa20(reinterpret_cast<unsigned long long>(cursor),
+                    static_cast<unsigned long long>(size), static_cast<unsigned long long>(size)));
+                for (int32_t i = 0; i < size; i++) {
+                    uint64_t offset = static_cast<uint64_t>((static_cast<int32_t>(static_cast<int64_t>(row)) + i) * width)
+                        + static_cast<uint32_t>(static_cast<int64_t>(column));
+                    std::memcpy(out, mips[0] + offset * 4, static_cast<size_t>(size) * 4);
+                    out += static_cast<size_t>(size) * 4;
+                }
+                *cursor = sizeIndex;
+                FUN_141cb25b0(reinterpret_cast<unsigned long long>(name), reinterpret_cast<unsigned long long>(cursor),
+                    static_cast<unsigned long long>(size), static_cast<unsigned long long>(size));
+            } __except (GenFault(0x141cb01c0ull, GetExceptionInformation())) {
+            }
+            return true;
+        }
+    }
+    __try {
+        FUN_141cb0380(reinterpret_cast<unsigned long long>(name), reinterpret_cast<unsigned long long>(cursor), 0);
+    } __except (GenFault(0x141cb0380ull, GetExceptionInformation())) {
+    }
+    return false;
+}
+
+namespace {
 
 // ref: FUN_141527450
 void Sub141527450(uint32_t value) {

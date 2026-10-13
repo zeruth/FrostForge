@@ -2135,7 +2135,7 @@ undefined8 FUN_14020b790(void)
   }
   uVar3 = 0;
   REFG(undefined8, 0x142d438d0) =
-       CALLF(ulonglong *, FUN_140255140)(0x80,0xb,((char *)REFP(0x142dd37e0)),uVar5,0xfffffffa,0);
+       CALLF(ulonglong *, FUN_140255140)(0x80,0xb,((char *)REFP(0x142dd37e0)),uVar5,(unsigned long long)(0xfffffffa),(unsigned long long)(0));
   uVar4 = uVar3;
   if (REFG(undefined8, 0x142d438c8) != 0) {
     do {

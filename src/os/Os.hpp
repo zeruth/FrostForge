@@ -199,6 +199,8 @@ const char* OsPathGetExtension(const char* path);
 const char* OsPathGetDotExtension(const char* path);
 // Copies `path` with its extension replaced (an empty one removes it).
 void OsPathChangeExtension(char* dest, uint64_t destSize, const char* path, const char* extension);
+// The extension replaced by `extension` as given, dot included (FUN_140214020).
+void OsPathReplaceExtension(char* dest, uint64_t destSize, const char* path, const char* extension);
 // GetFullPathNameW over UTF-8; false (with the last error set) when it fails or does not fit.
 bool OsGetFullPath(const char* path, char* dest, uint64_t destSize);
 // FormatMessage text for an error (UTF-8, a trailing CR LF dropped).

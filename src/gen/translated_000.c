@@ -28,7 +28,7 @@ undefined8 FUN_1401ca540(void)
     } while (*pcVar2 != 0);
   }
   REFG(undefined8, 0x142ddce98) =
-       CALLF(ulonglong *, FUN_140255140)(0x10140,0xb,((char *)REFP(0x142d602f8)),uVar3,0xfffffffa,0)
+       CALLF(ulonglong *, FUN_140255140)(0x10140,0xb,((char *)REFP(0x142d602f8)),uVar3,(unsigned long long)(0xfffffffa),(unsigned long long)(0))
   ;
   *(undefined8 *)REFG(undefined8, 0x142ddce98) = REFG(undefined8, 0x142ddce98);
   atexit(((code *)REFP(0x1425da0c0)));
@@ -546,7 +546,7 @@ undefined8 FUN_1401dfb60(void)
   }
   uVar3 = 0;
   REFG(undefined8, 0x142cf57b8) =
-       CALLF(ulonglong *, FUN_140255140)(0x100,0xb,((char *)REFP(0x142d95640)),uVar5,0xfffffffa,0);
+       CALLF(ulonglong *, FUN_140255140)(0x100,0xb,((char *)REFP(0x142d95640)),uVar5,(unsigned long long)(0xfffffffa),(unsigned long long)(0));
   uVar4 = uVar3;
   if (REFG(undefined8, 0x142cf57b0) != 0) {
     do {
@@ -959,7 +959,7 @@ undefined8 FUN_1401e1450(void)
     } while (*pcVar4 != 0);
   }
   uVar5 = 0;
-  lVar3 = CALLF(ulonglong *, FUN_140255140)(0xc0,0xb,((char *)REFP(0x142d95fd0)),uVar7,0xfffffffa,0)
+  lVar3 = CALLF(ulonglong *, FUN_140255140)(0xc0,0xb,((char *)REFP(0x142d95fd0)),uVar7,(unsigned long long)(0xfffffffa),(unsigned long long)(0))
   ;
   uVar6 = uVar5;
   uVar8 = REFG(undefined8, 0x142cf59b0);
@@ -1397,7 +1397,7 @@ undefined8 FUN_1401e4f50(void)
   REFG(undefined8, 0x142cfbc30) = (undefined *)(*(undefined8 (*)[1])(uintptr_t)0x142631f90ULL);
   REFG(undefined4, 0x142cfbc38) = 0x58;
   REFG(undefined8, 0x142cfbc50) = "Physics Def Pool";
-  REFG(undefined4, 0x142cfbc58) = CALLF(uint, FUN_1412401e0)(0x58,0x10,"Physics Def Pool",0x14,0);
+  REFG(undefined4, 0x142cfbc58) = CALLF(uint, FUN_1412401e0)(0x58,0x10,"Physics Def Pool",0x14,(unsigned long long)(0));
   REFG(undefined8, 0x142cfbc60) = 0;
   REFG(undefined8, 0x142cfbc30) = (undefined *)(*(undefined8 (*)[1])(uintptr_t)0x142631f90ULL);
   atexit(((code *)REFP(0x1425e7600)));
