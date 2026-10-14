@@ -26,9 +26,9 @@ None of them may contact Blizzard endpoints.
 
 | function | ref | what the reference does | FrostLite now |
 |---|---|---|---|
-| `ClientServicesConstruct` | 0x141569c00 | NetClient / RealmConnection base (0x1414f7080, which also installs the realm packet handlers), `Logs/Connection.log`, a handler list | stub returning null: the instance stays null until the net layer is ported |
-| `ClientServicesSetStatusCallback` | 0x14156dc90 | stores a callback at instance+0x858 | **diverged**: null-checked |
-| `ClientServicesShutdown` (instance part) | 0x14156b7f0 | ends the session (vtable +0x58, reason 0xd) and deletes the instance | unreachable while the instance is null |
+| `ClientServicesConstruct` | 0x141569c00 | NetClient / RealmConnection base (0x1414f7080, which also installs the realm packet handlers), `Logs/Connection.log`, a handler list runs translated (2026-10-13: the instance is live, vtable 0x1427b5518); the hand port is Phase 1 of docs/login-roadmap.md |
+| `ClientServicesSetStatusCallback` | 0x14156dc90 | stores a callback at instance+0x858 | ported, as the reference (no null check) |
+| `ClientServicesShutdown` (instance part) | 0x14156b7f0 | ends the session (vtable +0x58, reason 0xd) and deletes the instance | ported (the virtuals run translated); reached only from the startup cancel path and the stage 3 teardown, which is still a stub |
 | `LogoutCommand` | 0x14156b7c0 | `logout`: ends the session when one is up | stub |
 | `ClientServicesStatusCallback` | 0x140227770 | ClientServices' readiness poll | stub, never called |
 

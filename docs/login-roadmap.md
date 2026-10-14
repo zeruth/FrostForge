@@ -81,14 +81,19 @@ The 3.4.3 conversion pieces that every later phase stands on. They can proceed a
 
 The client's network core, so a session exists for the login code to drive.
 
-- [ ] `ClientServicesConstruct` 0x141569c00 (translated today, stubbed to null in the port): the
-      NetClient/RealmConnection base 0x1414f7080, which installs the realm packet handlers, and
-      `Logs/Connection.log`.
+- [x] The session exists: `ClientServicesConstruct` 0x141569c00 runs translated and returns a live
+      instance with the reference's vtable (0x1427b5518), seen in a run on 2026-10-13. The NetClient /
+      RealmConnection base 0x1414f7080 runs inside it.
+- [ ] Hand-port the constructor and its base 0x1414f7080 (the realm packet handlers, Connection.log)
+      from translated to hand code.
 - [ ] NetClient.cpp: 0x141233a70, 0x141233c00, 0x141234230, 0x141234c30, 0x141234d00, 0x141235dd0.
 - [ ] NetInternal: 0x141235f60, 0x141236120, 0x141236220, 0x141236300.
-- [ ] Undo the null-check divergences (`ClientServicesSetStatusCallback`, shutdown) listed in `docs/stubs.md`.
-- **Check:** the client starts with a live ClientServices instance, Connection.log opens, and the
-  login screen still works.
+- [x] Undo the null-check divergences: `ClientServicesSetStatusCallback` without the check, and
+      `ClientServicesShutdown`'s instance part ported (end the session, delete the instance).
+- [ ] Connection.log reaches disk: it is written in memory, but logs flush only when closed, and the
+      stage 3 teardown that closes it (FUN_1402293f0) is a stub.
+- **Check:** the client starts with a live ClientServices instance and the login screen still works.
+  **Seen 2026-10-13** (the user's run: login screen, Login reached FUN_1416a0db0, a clean close).
 
 ### Phase 2: Battle.net transport
 
@@ -186,4 +191,5 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
 | date | phase | what landed | commits |
 |---|---|---|---|
 | 2026-10-13 | - | roadmap written; FrostForge confirmed 3.3.5-only; the reference's TLS is SChannel | 4b79686 |
+| 2026-10-13 | 1 | the session is live (translated constructor); null-check divergences removed; ClientServicesShutdown's instance part ported | see git log |
 | 2026-10-13 | - | decisions made: D3 (FrostForge goes 3.4.3 on every level, 3.3.5 removed), D4 (127.0.0.1, minimal recorded client changes), D5 (native customization schema) | this commit |

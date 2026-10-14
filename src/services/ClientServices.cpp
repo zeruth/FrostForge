@@ -218,12 +218,8 @@ void* ClientServicesGet() {
 }
 
 // Stores the callback ClientServices polls for whether the client is idle enough (+0x858).
-// Diverged: null-checked, since the instance is null while ClientServices is unported.
 // ref: FUN_14156dc90
 void ClientServicesSetStatusCallback(void* services, bool (*callback)()) {
-    if (!services) {
-        return;
-    }
     *reinterpret_cast<bool (**)()>(static_cast<uint8_t*>(services) + 0x858) = callback;
 }
 
@@ -232,9 +228,17 @@ void ClientServicesShutdown() {
     s_logoutPending = 0;
     ConsoleCommandUnregister("logout");
     if (s_clientServices) {
-        // tells the session to end (vtable +0x58, reason 0xd) and deletes the instance
-        // (vtable +0); unreachable while the constructor is unported
-        FROST_UNIMPLEMENTED();
+        // a session that is up (+0x771) is ended with reason 0xd, then the instance deletes
+        // itself; both are the reference's virtuals (translated, vtable 0x1427b5518)
+        auto services = static_cast<uint8_t*>(s_clientServices);
+        void** vtable = *reinterpret_cast<void***>(services);
+        __try {
+            if (services[0x771] != 0) {
+                reinterpret_cast<void (*)(void*, uint32_t)>(vtable[0x58 / 8])(services, 0xd);
+            }
+            reinterpret_cast<void (*)(void*, uint32_t)>(vtable[0])(services, 1);
+        } __except (GenFault(reinterpret_cast<unsigned long long>(vtable[0]), GetExceptionInformation())) {
+        }
         s_clientServices = nullptr;
     }
     if (s_servicesHelper) {
