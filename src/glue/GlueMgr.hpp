@@ -4,6 +4,8 @@
 // CGlueMgr (Classic/Source/Glue/CGlueMgr.cpp): the pre-world UI - login, realm list, character
 // select - its UI root, its script API and the GlueXML it loads.
 
+#include <cstdint>
+
 // The glue's start: frame types, the glue script API, then CGlueMgr::Initialize.
 void GlueMgrStartup();
 
@@ -15,5 +17,8 @@ namespace CGlueMgr {
 // Builds the glue UI root, a fresh Lua state with the glue API, and loads GlueXML.
 void Initialize();
 }
+
+// The Login button's start (FUN_1416a0db0, translated).
+void GlueLoginStart(int32_t a1);
 
 #endif

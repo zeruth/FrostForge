@@ -1441,6 +1441,21 @@ class Translator:
         # the same at a port global it is tied to (a function pointer the port holds)
         body = re.sub(r"\(\*\(\*\(undefined\d? \*\)(\(\(char \*\)&gen_g_[0-9a-f]{9} \+ 0x[0-9a-f]+\))\)\)\s*\(",
                       r"(*(*(code **)\1))(", body)
+        # a local Ghidra typed as an 8-byte integer and called through: the slot of a blz::function
+        # whose stack layout it merged with other data (FUN_1416a0db0: `(*local_180)(...)` with
+        # `undefined8 local_180`, C2100 in 22 functions). The call is a code pointer; the other
+        # uses keep the integer type
+        int_locals = {m.group(2) for m in re.finditer(r"^\s*(undefined8|longlong|ulonglong) (\w+);$", body, re.M)}
+        if int_locals:
+            body = re.sub(r"\(\*(\w+)\)\s*\(",
+                          lambda m: f"(*(code *){m.group(1)})(" if m.group(1) in int_locals else m.group(0), body)
+        # the same local once stack_frame() has put it on the frame:
+        # `(*(*(undefined8 *)(gen_frame + 0x8)))(` (FUN_1416a0db0)
+        body = re.sub(r"\(\*\(\*\((?:undefined\d?|longlong|ulonglong) \*\)(\(gen_frame \+ 0x[0-9a-f]+\))\)\)\s*\(",
+                      r"(*(*(code **)\1))(", body)
+        # a byte Ghidra typed `code` (a buffer of them, e.g. FUN_141487ed0's `local_res10[0] =
+        # (code)(DAT_1430af3f8 != 0)`): C cannot cast to a function type; it is a byte store
+        body = re.sub(r"\(code\)\s*\(", "(undefined1)(", body)
         if re.search(r"\*REFG\(undefined\d?,|REFG\(undefined\d?, 0x[0-9a-f]+\)\s*\[", body):
             raise Untranslatable("a global used as a pointer the data export does not type")
         body = self.float_arguments(body, params)

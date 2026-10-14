@@ -132,6 +132,18 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
         EKU serverAuth, issued by a local FrostForge root CA added to the current user's Trusted
         Root store (no admin needed). The login REST endpoint (Phase 3) goes through curl's own
         schannel backend, which has its own pinning option: read it in Phase 3.
+- [x] The Battle.net client runs translated (2026-10-14): `BattleNetInitialize` (0x141487ed0),
+      `BattleNetShutdown` (0x141487dc0) and the Login button's start `GlueLoginStart`
+      (0x1416a0db0) are `// translated:` roots; translate.py --depth 16 pulls in the bgs-sdk,
+      cross_ssl and protobuf code under them (9420 translated functions). Two translator rules
+      landed for them (a call through an integer-typed frame slot, a `(code)` byte cast).
+      `client/_classic_/WTF/Config.wtf` has `SET portal "127.0.0.1"`.
+      **State (user's run):** the login screen comes up, Login is accepted, and the run reaches
+      FUN_14169ca90 (GlueLogin), which faults reading address 8; quitting closes cleanly.
+      `BattleNetInitialize` itself also faults once at startup (contained, address 0x10).
+      **Next:** find what FUN_14169ca90 and FUN_141487ed0 read as null (a port object or global the
+      translated code expects, most likely unported state the hand stubs never built), port it,
+      and follow the run forward to the first socket connect to 127.0.0.1.
 - [ ] The TLS transport over SChannel (the reference's strings: "SChannel GetClientHello failed",
       "SChannel decrypt failed"), and the portal host resolution (`<portal>.actual.battle.net`,
       `.bgs.battle.net`).
@@ -222,3 +234,4 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
 | 2026-10-13 | - | decisions made: D3 (FrostForge goes 3.4.3 on every level, 3.3.5 removed), D4 (127.0.0.1, minimal recorded client changes), D5 (native customization schema) | this commit |
 | 2026-10-13 | 1 | ClientServices / RealmConnection / NetClient / NetInternal by hand (src/net); stage 2 and 4 teardowns; Connection.log written; phase 1 done | this commit |
 | 2026-10-13 | 2 | the host and certificate read: no client change needed; FrostForge needs a cert (CN/SAN 127.0.0.1, serverAuth) from a local root in the user's Trusted Root store | this commit |
+| 2026-10-14 | 2 | Battle.net init/shutdown and the Login start run translated; portal 127.0.0.1; Login reaches FUN_14169ca90 (faults) | this commit |

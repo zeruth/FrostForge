@@ -776,6 +776,7 @@ extern "C" void* const gen_p_1430d2589 = (void*)&s_state2589;
 extern "C" void* const gen_p_1430d258a = (void*)&s_sessionUp;
 extern "C" void* const gen_p_1430d258b = (void*)&s_state258b;
 extern "C" void* const gen_p_1430d25b0 = (void*)&s_serverTimeOffset;
+extern "C" void* const gen_p_1430d2a98 = (void*)&s_portal;
 extern "C" void* const gen_p_1430d2ab8 = (void*)&s_auroraSuffix;
 extern "C" void* const gen_p_1430d2b38 = (void*)&s_clientServices;
 extern "C" void* const gen_p_1430d2b40 = (void*)&s_connectionLog;

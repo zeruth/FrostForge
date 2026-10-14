@@ -722,11 +722,16 @@ void StreamingCameraRegisterCVars() {
         "2000", static_cast<CVARCALLBACK>(nullptr), 1, false, nullptr, false);
 }
 
-// The Battle.net client: realm-list CVars, the login and account services. Offline until the
-// AzerothCore side serves it (docs/stubs.md).
-// ref: FUN_141487ed0
+extern "C" unsigned long long FUN_141487ed0();
+// The Battle.net client (WoW/Source/WowBattleNet/IBattleNet.cpp): the bgs-sdk core and its TLS
+// layer, the realm-list CVars, the login and account services. Not ported: it runs translated,
+// and connects only where the portal CVar points (docs/login-roadmap.md, Phase 2).
+// translated: FUN_141487ed0
 void BattleNetInitialize() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141487ed0();
+    } __except (GenFault(0x141487ed0ull, GetExceptionInformation())) {
+    }
 }
 
 // DAT_142cc8000: cleared while the system sleeps.
@@ -756,12 +761,16 @@ void OnResume() {
     OsQueueEvent(0x1a, 0, 0, 0);
 }
 
-// The Battle.net client's end: its log line, the Aurora and login services torn down, the
-// realm connection's status and auth-data callbacks cleared. Offline like
-// BattleNetInitialize (docs/stubs.md).
-// ref: FUN_141487dc0
+extern "C" unsigned long long FUN_141487dc0();
+// The Battle.net client's end: its log line, the Aurora and login services torn down, the realm
+// connection's status and auth-data callbacks cleared. Runs translated, like
+// BattleNetInitialize.
+// translated: FUN_141487dc0
 void BattleNetShutdown() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141487dc0();
+    } __except (GenFault(0x141487dc0ull, GetExceptionInformation())) {
+    }
 }
 
 extern "C" unsigned long long FUN_141282a80();
