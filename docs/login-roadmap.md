@@ -21,8 +21,10 @@ The two ends speak different protocols:
 | world | world socket with the modern auth, encryption and packet framing; 3.4.3 opcodes and update fields | 3.3.5 world socket: RC4 header encryption, 3.3.5 opcodes |
 | characters | customizations as ChrCustomizationChoice ids | skin/face/hair/facial-hair bytes |
 
-So the work is a **server track** (teach FrostForge the 3.4.3 protocol) and a **client track** (port
-FrostLite's network stack, which is offline today by design), met in the middle phase by phase.
+FrostForge is becoming a **3.4.3 server on every level** (D3): protocol, data, database schema and
+game rules. 3.3.5 support is removed, not kept beside it. This roadmap is the first stretch of that
+conversion: the parts a client needs to reach character select. The **client track** ports
+FrostLite's network stack, offline until now by design. The two tracks meet phase by phase.
 
 ## Decisions
 
@@ -30,9 +32,9 @@ FrostLite's network stack, which is offline today by design), met in the middle 
 |---|---|---|
 | D1 | No Blizzard endpoints, ever. The client only talks to our server. | **made** (2026-10-08) |
 | D2 | FrostLite stays a 1:1 port. Anything we must change to reach our server is recorded as `diverged` in `docs/stubs.md`. | **made** |
-| D3 | How FrostForge speaks 3.4.3: (a) add a Battle.net service and a 3.4.3 world session **alongside** the 3.3.5 ones in FrostForge, porting from TrinityCore's `wotlk_classic` branch; (b) a translating proxy in front of an unchanged 3.3.5 core; (c) switch to TrinityCore `wotlk_classic`. | **open**. (a) is the recommendation: the server keeps its game logic and gains a second front door. FrostForge's AGENTS.md requires `--author` credit for code mirrored from TrinityCore. |
-| D4 | Reaching our server without Blizzard's hosts and certificates. The reference resolves `<portal>.actual.battle.net` (the portal CVar, e.g. "US") and connects with Windows SChannel TLS, which validates the server's certificate. Options: a documented divergence (a portal host override, and our own certificate trusted for that host only), or a hosts-file entry plus a locally trusted certificate if the client does no pinning. | **open**: find out first whether the reference pins Blizzard's certificate (Phase 2, first item). |
-| D5 | Character customization data on the server: 3.3.5 characters store skin/face/hair bytes; 3.4.3 sends ChrCustomizationChoice ids. A mapping table, or new columns. | **open** (Phase 6) |
+| D3 | FrostForge is converted to 3.4.3 **on every level**, and 3.3.5 support is removed entirely. That covers the authentication (Battle.net in place of authserver's SRP6), the world protocol, the opcodes and update fields, client data (3.4.3 DB2s in place of 3.3.5 DBCs), the database schema and the game rules. Nothing is translated or kept for 3.3.5 compatibility. TrinityCore's `wotlk_classic` branch is a source to port from; FrostForge's AGENTS.md requires `--author` credit for anything mirrored from it. | **made** (2026-10-13) |
+| D4 | FrostLite connects to FrostForge on **127.0.0.1**, with the **absolute minimum** of client changes. Every change is a recorded `diverged` entry in `docs/stubs.md`, with the reference's behaviour beside it. The reference resolves `<portal>.actual.battle.net` (from the portal CVar, e.g. "US") and connects with Windows SChannel TLS, which validates the server's certificate. Phase 2 reads exactly how the host is built and the certificate checked, then picks the smallest change that reaches 127.0.0.1 with FrostForge's certificate. | **made**; the exact change is chosen in Phase 2 |
+| D5 | Characters are stored the 3.4.3 way: customizations as ChrCustomizationChoice ids in FrostForge's schema (as TrinityCore keeps them), in place of 3.3.5's skin/face/hair/facial-hair bytes. No mapping layer. | **made** (2026-10-13), follows from D3 |
 
 ## Where things stand (2026-10-13)
 
@@ -50,10 +52,26 @@ until its check has been seen working, with both programs running locally.
 
 ### Phase 0: local setup
 
-- [ ] FrostForge builds and runs locally: authserver, worldserver, MySQL; test account.
-- [ ] Decide D3, and set up the place the 3.4.3 server code will live.
-- [ ] Decide how FrostLite finds the server (D4). Write the Config.wtf lines (`portal`, and anything
-      D4 adds) into this file.
+- [ ] FrostForge builds and runs locally as it is (3.3.5), with MySQL and a test account: the
+      baseline before the conversion starts.
+- [ ] Plan the conversion's order with FrostForge's own planning docs (`.agents/plans/`, per its
+      AGENTS.md). This roadmap covers only what character select needs. The rest of the conversion
+      (maps, spells, movement, everything in world) gets its own plan.
+- [ ] Server data: extract the 3.4.3 client data FrostForge will load (DB2s first; maps and vmaps
+      later) from the FrostLite install.
+
+### Server groundwork (D3)
+
+The 3.4.3 conversion pieces that every later phase stands on. They can proceed alongside Phases 1-2.
+
+- [ ] Client data: replace the DBC stores with 3.4.3 DB2 loading, starting with what login and
+      character select read: ChrRaces, ChrClasses, ChrCustomization*, ChrModel, CharBaseInfo,
+      AreaTable/Map (for the zone shown per character), Item displays.
+- [ ] Auth database: Battle.net accounts (email-style login) holding the game accounts, replacing
+      authserver's SRP6 account table.
+- [ ] Characters database: the 3.4.3 character schema, with customizations as ChrCustomizationChoice
+      rows (D5).
+- [ ] Remove authserver (the 3.3.5 SRP6 login service); Phase 2-4's Battle.net service replaces it.
 
 ### Phase 1: the session object (client)
 
@@ -72,8 +90,10 @@ The client's network core, so a session exists for the login code to drive.
 
 The client side of the Battle.net (bgs) connection: TLS, RPC framing and the protobuf runtime.
 
-- [ ] **First:** find out how the reference validates the server certificate (SChannel credential
-      setup and the certificate callback). This settles D4.
+- [ ] **First:** read how the reference builds the Battle.net host from `portal` and how it validates
+      the server certificate (SChannel credential setup, the certificate callback, any pinning). Then
+      make D4's minimal change: just enough to reach 127.0.0.1 and accept FrostForge's certificate,
+      recorded as `diverged` in `docs/stubs.md`. Write the change and the Config.wtf lines it needs here.
 - [ ] The TLS transport over SChannel (the reference's strings: "SChannel GetClientHello failed",
       "SChannel decrypt failed"), and the portal host resolution (`<portal>.actual.battle.net`,
       `.bgs.battle.net`).
@@ -125,9 +145,9 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
 - [ ] The modern world handshake: auth challenge, auth session (the join ticket and session key from
       Phase 4), entering encrypted mode, compression. Write the exact packet layouts into this file
       as they are read out of the reference.
-- **Server:** a 3.4.3 world socket in FrostForge beside the 3.3.5 one: the modern framing,
-  encryption and opcode table, an auth session checked against the Phase 4 session key, and the
-  auth response.
+- **Server:** FrostForge's world socket replaced by the 3.4.3 one: the modern framing, encryption
+  and opcode table (the 3.3.5 opcodes and handlers go), an auth session checked against the Phase 4
+  session key, and the auth response.
 - **Check:** the client authenticates to the world server and receives the auth response.
 
 ### Phase 6: character list
@@ -136,8 +156,8 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
       CharacterSelect screen (CharacterSelection.cpp 0x1416943f0).
 - [ ] The CharacterSelect Lua API the GlueXML calls (character count, info per character,
       selection). Check `gen_script_api.py`'s stubs for which are missing.
-- **Server:** the 3.4.3 enum-characters result built from AzerothCore's `characters` table, with
-  the customization mapping (D5).
+- **Server:** the 3.4.3 enum-characters result, built from the 3.4.3 character schema (customization
+  choices stored natively, D5).
 - **Check:** the character select screen lists the account's characters by name, level, class and zone.
 
 ### Phase 7: the character select scene
@@ -161,4 +181,5 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
 
 | date | phase | what landed | commits |
 |---|---|---|---|
-| 2026-10-13 | - | roadmap written; FrostForge confirmed 3.3.5-only; the reference's TLS is SChannel | - |
+| 2026-10-13 | - | roadmap written; FrostForge confirmed 3.3.5-only; the reference's TLS is SChannel | 4b79686 |
+| 2026-10-13 | - | decisions made: D3 (FrostForge goes 3.4.3 on every level, 3.3.5 removed), D4 (127.0.0.1, minimal recorded client changes), D5 (native customization schema) | this commit |
