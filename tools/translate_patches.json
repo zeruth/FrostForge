@@ -4,5 +4,43 @@
   {"from": "FUN_1420cd5a0(0,uVar3 & 0xffffffff);",
    "to": "FUN_1420cd5a0(param_1,uVar3 & 0xffffffff);",
    "why": "mp_init_size(a, n): rcx is param_1 from entry to the call at 0x1420bde48 (copied to rbx at 0x1420bde22, never changed); Ghidra printed the argument as 0"}
+ ],
+ "1414cfc40": [
+  {"from": "  FUN_1414d0dd0();",
+   "to": "  FUN_1414d0dd0(param_1);",
+   "why": "the Aurora back interface setup takes the object: rcx is param_1 from entry (the fields are zeroed through it at 0x1414cfc4a..0x1414cfc6e) to the call at 0x1414cfc72"}
+ ],
+ "1414d0dd0": [
+  {"from": "FUN_1414d0380(plVar1);",
+   "to": "FUN_1414d0380(plVar1,lVar11);",
+   "why": "the old member goes in rdx: mov rdx,[rbp+8] at 0x1414d0e2b, rcx = rdi (param_1 + 1) at 0x1414d0e3b, call at 0x1414d0e3e"},
+  {"from": "FUN_1414d0570(plVar2);",
+   "to": "FUN_1414d0570(plVar2,lVar11);",
+   "why": "the old member goes in rdx: mov rdx,[rbp+0x18] at 0x1414d0e65, call at 0x1414d0e78"},
+  {"from": "FUN_1414d0710(plVar3);",
+   "to": "FUN_1414d0710(plVar3,lVar11);",
+   "why": "the old member goes in rdx: mov rdx,[rbp+0x28] at 0x1414d0e9f, call at 0x1414d0eb3"},
+  {"from": "FUN_1414d0440(param_1 + 7);",
+   "to": "FUN_1414d0440(param_1 + 7,lVar11);",
+   "why": "the old member goes in rdx: mov rdx,[rbp+0x38] at 0x1414d0eb8, call at 0x1414d0ec9"},
+  {"from": "FUN_1414d0650(param_1 + 8);",
+   "to": "FUN_1414d0650(param_1 + 8,lVar11);",
+   "why": "the old member goes in rdx: mov rdx,[rbp+0x40] at 0x1414d0ece, call at 0x1414d0edf"}
+ ],
+ "141f6fcf0": [
+  {"from": "  ulonglong in_RAX;\n",
+   "to": "",
+   "why": "in_RAX is only the error path's return; see below"},
+  {"from": "    in_RAX = (**(code **)(*param_3 + 8))(param_3,1,\"This factory is already initialized.\",0,0);",
+   "to": "    (**(code **)(*param_3 + 8))(param_3,1,\"This factory is already initialized.\",0,0);",
+   "why": "the error callback's result is discarded: xor al,al at 0x141f6fd34 follows the call at 0x141f6fd31"},
+  {"from": "  return in_RAX & 0xffffffffffffff00;",
+   "to": "  return 0;",
+   "why": "the already-initialized path returns false: xor al,al at 0x141f6fd34, then ret at 0x141f6fd40 (callers test al)"}
+ ],
+ "14147f390": [
+  {"from": "return *DAT_1430af3f8;",
+   "to": "return *(undefined8 *)DAT_1430af3f8;",
+   "why": "the export leaves DAT_1430af3f8 untyped; the load is 8 bytes: mov rax,[rip->0x1430af3f8] at 0x14147f390, then mov rax,[rax] at 0x14147f397"}
  ]
 }

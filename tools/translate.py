@@ -513,7 +513,49 @@ def wide_multiply(text: str) -> str:
         new = re.sub(rf"(undefined1?|undefined) {v} \[16\];", f"ulonglong {lo};", new)
         if not re.search(rf"\b{v}\b(?!_lo)", new):
             text = new
-    return text
+    return signed_wide_multiply(text)
+
+
+def signed_wide_multiply(text: str) -> str:
+    """`SUB168(SEXT816(a) * SEXT816(b),8)`, an `imul` keeping the high half (a signed divide by a
+    constant, e.g. FUN_14147ad20's element count), as __mulh; `,0` is the plain product. The
+    operands nest parentheses, so they are cut out by balance, not by a regex."""
+    def balanced(s: str, i: int) -> int:
+        depth = 0
+        for j in range(i, len(s)):
+            depth += {"(": 1, ")": -1}.get(s[j], 0)
+            if depth == 0:
+                return j
+        return -1
+
+    out, i = [], 0
+    while True:
+        k = text.find("SUB168(SEXT816(", i)
+        if k < 0:
+            out.append(text[i:])
+            return "".join(out)
+        a0 = k + len("SUB168(SEXT816")
+        a1 = balanced(text, a0)
+        rest = text[a1 + 1:]
+        m = re.match(r"\s*\*\s*SEXT816", rest)
+        if a1 < 0 or not m:
+            out.append(text[i:k + 1])
+            i = k + 1
+            continue
+        b0 = a1 + 1 + m.end()
+        b1 = balanced(text, b0)
+        m2 = re.match(r"\s*,\s*([08])\s*\)", text[b1 + 1:])
+        if b1 < 0 or not m2:
+            out.append(text[i:k + 1])
+            i = k + 1
+            continue
+        a, b = text[a0 + 1:a1], text[b0 + 1:b1]
+        if m2.group(1) == "8":
+            expr = f"__mulh((longlong)({a}), (longlong)({b}))"
+        else:
+            expr = f"((longlong)({a}) * (longlong)({b}))"
+        out.append(text[i:k] + expr)
+        i = b1 + 1 + m2.end()
 
 
 LOCK_BLOCK = re.compile(r"([ \t]*)LOCK\(\);\n(.*?)\n[ \t]*UNLOCK\(\);", re.S)
@@ -721,6 +763,15 @@ class Translator:
             if gtype.startswith("undefined") and size in (0, 4 if kind == "float" else 8):
                 self.refdata[addr] = (4 if kind == "float" else 8, kind)
         self.ref = Binary()
+        # vtables (tools/vtables.py): code that stores one makes every slot callable, though
+        # nothing names the slots as calls (bgs::ssl's factory 0x142880130: its Initialize
+        # 0x141f6fcf0 was never translated, the SSL module failed to start, and GlueLogin
+        # faulted on the null filter map, 2026-10-14)
+        vt = ROOT / "build/facts/vtables.json"
+        self.vtables: dict[int, list[int]] = {}
+        if vt.exists():
+            for t in json.loads(vt.read_text(encoding="utf-8"))["vtables"]:
+                self.vtables[int(t["vtable"], 16)] = [int(s, 16) for s in t["slots"]]
         self._lifted: dict[int, str | None] = {}
         self._arity: dict[int, int | None] = {}
         self._extra_params: dict[int, dict[int, str]] = {}
@@ -1084,6 +1135,11 @@ class Translator:
             a = int(m.group(1), 16)
             if a in self.cor or self.lifted(a) is not None:
                 out.add(a)
+        # a vtable whose address is taken or stored: its slots run when the object is called
+        for m in re.finditer(r"\b(?:vtable|PTR)_\w*?_?(1[0-9a-f]{8})\b|\b0x(1[0-9a-f]{8})\b", text):
+            for s in self.vtables.get(int(m.group(1) or m.group(2), 16), ()):
+                if s in self.cor or self.lifted(s) is not None:
+                    out.add(s)
         for name in CALL.findall(text):
             if "::" in name and not name.startswith("Import::"):
                 cands = self.by_name.get(name, [])
@@ -1305,7 +1361,10 @@ class Translator:
         # a function's address taken, `&FUN_x`: the reference address, which the jumps dispatch
         body = re.sub(r"&\s*\b(?:thunk_)?FUN_([0-9a-f]{9})\b(?!\s*\()", r"((code *)REFP(0x\1))", body)
         body = re.sub(r"&\s*\bLAB_([0-9a-f]{9})\b", r"((code *)REFP(0x\1))", body)
-        if re.match(r"(?s)\s*(?:/\*.*?\*/\s*)*void\b", head):
+        # (comments stripped first: `(?:/\*.*?\*/\s*)*void` backtracked exponentially over the
+        # long `types:` block comment and `//` lines of FUN_1414d0dd0's header and never returned)
+        bare_head = re.sub(r"//[^\n]*", "", re.sub(r"(?s)/\*.*?\*/", "", head))
+        if re.match(r"\s*void\b", bare_head):
             # A function Ghidra calls void because it ends in a tail call (FUN_140d11f10 jumps
             # to GetObjectFromLua and hands its object back in rax): a call just before a return
             # leaves its result where the caller reads one, so the return carries it.

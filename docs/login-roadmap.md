@@ -141,9 +141,26 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
       **State (user's run):** the login screen comes up, Login is accepted, and the run reaches
       FUN_14169ca90 (GlueLogin), which faults reading address 8; quitting closes cleanly.
       `BattleNetInitialize` itself also faults once at startup (contained, address 0x10).
-      **Next:** find what FUN_14169ca90 and FUN_141487ed0 read as null (a port object or global the
-      translated code expects, most likely unported state the hand stubs never built), port it,
-      and follow the run forward to the first socket connect to 127.0.0.1.
+      **Found 2026-10-14:** both faults were untranslated code, not missing port state.
+      `ssl::Initialize` (FUN_141dfb2f0) builds the SSL filter map DAT_143264bc0, starts cross_ssl
+      through its factory, and frees the map again when that fails. The factory's `Initialize`
+      (0x141f6fcf0, vtable 0x142880130) is reached only through the vtable, so it was never
+      translated, the start failed, and GlueLogin and the shutdown then read the null map. Separately,
+      FUN_14147f390 (`return *DAT_1430af3f8`, the Battle.net client singleton) was stubbed because
+      the export leaves that global untyped, which faulted BattleNetInitialize in GetName.
+      Fixes: translate.py now walks every slot of a vtable that translated code stores
+      (build/facts/vtables.json; 9420 -> 15161 translated functions), signed 128-bit products
+      become `__mulh` (`SUB168(SEXT816..)`, new with that code), and translate_patches.json fixes
+      FUN_14147f390's load width and 0x141f6fcf0's lost return (`xor al,al`). The user's run then
+      showed BattleNetInitialize still faulting: the singleton's constructor (0x1414cfc40) calls
+      the AuroraBackInterface setup (0x1414d0dd0, which creates the backend's members) with
+      `this` in rcx, and that setup passes each old member in rdx to its reset helpers; the
+      decompiler dropped both, so the setup stayed a stub and the first member stayed null. Both
+      patched (translate_patches.json). Translating it exposed a catastrophic regex in
+      translate.py's `void` test (comments are stripped first now). 16443 functions translated;
+      built 2026-10-14 02:51, **not run yet**.
+      **Next:** a run. Expect the Login click to get past FUN_14169ca90; follow it forward to the
+      first socket connect to 127.0.0.1.
 - [ ] The TLS transport over SChannel (the reference's strings: "SChannel GetClientHello failed",
       "SChannel decrypt failed"), and the portal host resolution (`<portal>.actual.battle.net`,
       `.bgs.battle.net`).
@@ -234,4 +251,5 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
 | 2026-10-13 | - | decisions made: D3 (FrostForge goes 3.4.3 on every level, 3.3.5 removed), D4 (127.0.0.1, minimal recorded client changes), D5 (native customization schema) | this commit |
 | 2026-10-13 | 1 | ClientServices / RealmConnection / NetClient / NetInternal by hand (src/net); stage 2 and 4 teardowns; Connection.log written; phase 1 done | this commit |
 | 2026-10-13 | 2 | the host and certificate read: no client change needed; FrostForge needs a cert (CN/SAN 127.0.0.1, serverAuth) from a local root in the user's Trusted Root store | this commit |
-| 2026-10-14 | 2 | Battle.net init/shutdown and the Login start run translated; portal 127.0.0.1; Login reaches FUN_14169ca90 (faults) | this commit |
+| 2026-10-14 | 2 | Battle.net init/shutdown and the Login start run translated; portal 127.0.0.1; Login reaches FUN_14169ca90 (faults) | 1c4d706 |
+| 2026-10-14 | 2 | the faults traced to untranslated vtable code (SSL factory), an untyped global and the AuroraBackInterface setup; translator walks vtable slots (16443 functions); built, not run | this commit |
