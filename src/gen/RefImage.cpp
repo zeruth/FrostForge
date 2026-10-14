@@ -43,6 +43,11 @@ extern "C" int GenInitThreadEpoch() {
     return _Init_thread_epoch;
 }
 
+// Its address, for code that holds a pointer to the epoch (bgs_low's Initialize, FUN_141dea240).
+extern "C" int* GenInitThreadEpochPtr() {
+    return &_Init_thread_epoch;
+}
+
 namespace {
 
 // One static initializer, at its reference address (the jump to its translation).

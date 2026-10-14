@@ -37,5 +37,9 @@ void AgentSetTextLocaleCode(uint32_t code);
 void AgentSetAudioLocaleCode(uint32_t code);
 void AgentSetProgramCode(uint32_t code);
 void AgentSetCallback(void (*callback)(void* param));
+uint32_t AgentGetAudioLocaleCode();
+void AgentRunCallback(void* param);
+uint32_t AgentGetProgramCode();
+uint32_t AgentGetTextLocaleCode();
 
 #endif

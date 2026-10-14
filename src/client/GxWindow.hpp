@@ -21,6 +21,10 @@ float WindowGetAspect();
 GXSIZE* WindowGetSize(GXSIZE* size);
 GXSIZE* WindowGetResolution(GXSIZE* size);
 void* WindowGetSwapChain();
+// The hardware cursor's size index (FUN_1414fc880).
+void WindowSetCursorSize(int32_t index);
+// The monitor's DPI scale times the window's height over the back buffer's (FUN_1414fcdc0).
+float WindowGetDpiScale();
 
 // The window's frame buffer (DAT_1430d00a0, FUN_1414fce30).
 struct FRAMEBUFFER;

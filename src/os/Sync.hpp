@@ -26,4 +26,15 @@ struct OSLAZYCRITSECT {
 int32_t OsLazyCritSectEnter(OSLAZYCRITSECT* section);
 void OsLazyCritSectLeave(OSLAZYCRITSECT* section);
 
+// A once-only call: the lock, then whether it has run.
+struct OSONCE {
+    OSMUTEX m_mutex;    // 0x00
+    uint8_t m_done;     // 0x08
+};
+
+// Runs `function` (a blz::function<void()>: its invoker, manager and storage) the first time
+// only, under the lock.
+// ref: FUN_1423631d0
+void OsCallOnce(OSONCE* once, const void* function);
+
 #endif

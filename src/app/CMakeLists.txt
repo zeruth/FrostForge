@@ -7,6 +7,12 @@ target_link_libraries(FrostLite PRIVATE client gen)
 # (src/gen/RefImage.cpp), so the port lives elsewhere.
 # Fixed, so ASLR cannot place it over that range.
 target_link_options(FrostLite PRIVATE /BASE:0x180000000 /DYNAMICBASE:NO)
+# Hand ports whose only callers are translated: nothing in the port names them, so their object
+# would stay out of the link and the translator could never tie them (src/client/DBCache.cpp).
+target_link_options(FrostLite PRIVATE
+    "/INCLUDE:?DBCacheGetBuild@@YAIXZ"
+    "/INCLUDE:?DBCacheGetDirectory@@YAXPEAD_K@Z"
+)
 # FMOD Ex runs from a DLL beside the executable.
 add_custom_command(TARGET FrostLite POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${FMODEX_DLL} $<TARGET_FILE_DIR:FrostLite>

@@ -53,6 +53,12 @@ void* OsGetMainWindow(uint32_t a1);
 bool OsGetClientRect(int32_t* rect);
 // The cursor in client coordinates (FUN_14123b140).
 void OsGetCursorPosition(int32_t* x, int32_t* y);
+// A window's DPI over 96 (FUN_141237e80).
+float OsGetWindowDpiScale(void* window);
+// An engine key code's Windows virtual key (FUN_141239f50), and whether it is down now
+// (FUN_14123aba0).
+bool OsKeyToVirtualKey(uint32_t key, uint32_t* virtualKey);
+bool OsIsKeyDown(uint32_t key);
 
 // Pumps messages and drains the event queue into `handler` (context, id, params, param).
 bool OsEventPump(OSEVENTSINK handler, void* context, void* param);

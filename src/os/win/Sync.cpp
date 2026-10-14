@@ -16,6 +16,17 @@ void OsMutexUnlock(OSMUTEX* mutex) {
     ReleaseSRWLockExclusive(&mutex->m_lock);
 }
 
+// ref: FUN_1423631d0
+void OsCallOnce(OSONCE* once, const void* function) {
+    OsMutexLock(&once->m_mutex);
+    if (once->m_done == 0) {
+        auto words = static_cast<void* const*>(function);
+        reinterpret_cast<void (*)(const void*)>(words[0])(words + 2);
+        once->m_done = 1;
+    }
+    OsMutexUnlock(&once->m_mutex);
+}
+
 // ref: FUN_14025cc90
 int32_t OsLazyCritSectEnter(OSLAZYCRITSECT* section) {
     if (section->m_state == 2) {

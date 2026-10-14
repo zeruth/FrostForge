@@ -55,7 +55,7 @@ void ReleaseAndNull(T** object) {
 
 }
 
-GxUploadInterface* g_gxUploadInterface;
+GxUploadInterface* g_gxUploadInterface;  // DAT_14348b648
 
 // Builds the D3D12 device in Gx's state block.
 // ref: FUN_1422a8d70

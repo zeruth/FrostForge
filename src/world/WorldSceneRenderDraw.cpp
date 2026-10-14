@@ -470,7 +470,7 @@ void CWorldSceneRender::ClearFrame(GXRENDERTARGETS* targets, bool clearDepth) {
     CWorldView* view = ViewOf(this);
     uint32_t color = 0;
     auto environment = reinterpret_cast<const uint8_t*>(&scene->m_farClip);
-    if ((g_renderSettings.m_flags & 0x60000000) == 0x20000000) {    // FUN_14129d9d0
+    if (RenderSettingsDepthFillMode(&g_renderSettings)) {
         color = scene->m_1968;
     } else if (this->m_040[2] != 0) {
         DAYNIGHT* dayNight = DayNightOf(this);

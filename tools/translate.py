@@ -235,6 +235,45 @@ def load_refdata() -> dict[int, tuple[int, str]]:
     return out
 
 
+GLOBAL_CAST = re.compile(r"\b_?DAT_([0-9a-f]{9})\s*(?:==|!=|=)\s*\(((?:\w+ )*\w+ ?\*+)\)")
+GLOBAL_COPY = re.compile(r"\b(\w+) = (?:\([^()]*\))?_?DAT_([0-9a-f]{9});|\b_?DAT_([0-9a-f]{9}) = (?:\([^()]*\))?(\w+);")
+POINTER_LOCAL = re.compile(r"^\s*((?:\w+ )*\w+ ?\*+)\s*(\w+);$", re.M)
+EIGHT_BYTE = {"undefined8", "longlong", "ulonglong", "pointer", "pointer64", "double"}
+
+
+def corpus_global_pointers(cor: dict) -> dict[int, str]:
+    """The pointer type of each untyped global, where the whole corpus agrees on it.
+
+    The data export leaves many 8-byte globals `undefined8`, while the decompiler, seeing them
+    dereferenced, prints `*DAT_x` and `DAT_x[2]`: the translator cannot spell those without a
+    pointer type, and guessing an element width is how the 2026-10-12 white screen came about.
+    The function that creates such a global usually says it (`DAT_x = (undefined8 *)alloc(...)`,
+    `DAT_x == (longlong *)0x0`, or a copy through a declared pointer local). Elements of 8 bytes
+    (`longlong *`, `undefined8 *`, `undefined **`) access memory alike and count as one;
+    a global that is cast to two widths is left alone. 82 of 220 such demotions settle."""
+    seen: dict[int, set[str]] = defaultdict(set)
+
+    def norm(t: str) -> str:
+        t = re.sub(r"\s+", "", t)
+        element = t[:-1]
+        if element.endswith("*") or element in EIGHT_BYTE:
+            return "undefined8 *"
+        return re.sub(r"(\*+)$", r" \1", t)
+
+    for e in cor.values():
+        c = e.get("c", "")
+        if "DAT_" not in c:
+            continue
+        for m in GLOBAL_CAST.finditer(c):
+            seen[int(m.group(1), 16)].add(norm(m.group(2)))
+        local = {d.group(2): d.group(1) for d in POINTER_LOCAL.finditer(c)}
+        for m in GLOBAL_COPY.finditer(c):
+            var, addr = (m.group(1), m.group(2)) if m.group(1) else (m.group(4), m.group(3))
+            if var in local:
+                seen[int(addr, 16)].add(norm(local[var]))
+    return {a: next(iter(t)) for a, t in seen.items() if len(t) == 1}
+
+
 def c_type_of(ghidra: str, size: int) -> str:
     """The C type a scalar global is declared with, from Ghidra's data type."""
     t = ghidra.strip()
@@ -330,7 +369,39 @@ def stack_frame(body: str) -> str:
 IMAGE_LO, IMAGE_HI = 0x140000000, 0x150000000   # the reference image's address range
 INIT_EPOCH = re.compile(r"\*\(int \*\)\(\*\(longlong \*\)\(\(longlong\)ThreadLocalStoragePointer \+ "
                         r"\(ulonglong\)_tls_index \* 8\) \+\s*0x2140\)")
-STRLEN_LOOP = re.compile(r"(\w+) = -1;\s*do \{\s*\1 = \1 \+ 1;\s*\} while \(\*\(char \*\)\(([\w\[\]\*]+) \+ \1\) != '\\0'\);")
+TLS_BLOCK = r"\*\(longlong \*\)\(\(longlong\)ThreadLocalStoragePointer \+ \(ulonglong\)_tls_index \* 8\)"
+EPOCH_PTR = re.compile(r"\(int \*\)\(" + TLS_BLOCK + r"\s*\+\s*0x2140\)")
+TLS_BLOCK_LOAD = re.compile(r"^(\s*)(\w+) = " + TLS_BLOCK + r";$", re.M)
+
+
+def init_epoch_pointers(text: str) -> str:
+    """The epoch held in a variable rather than read in place (bgs_low's Initialize,
+    FUN_141dea240, which creates the RPC connection manager): its address, or the TLS block
+    when the epoch is the only slot read from it. Any other slot is a reference thread-local
+    the port does not have, so that function stays demoted."""
+    text = EPOCH_PTR.sub("GenInitThreadEpochPtr()", text)
+    for m in list(TLS_BLOCK_LOAD.finditer(text)):
+        var = m.group(2)
+        rest = text[:m.start()] + text[m.end():]
+        uses = re.findall(rf"\b{var}\b(\s*\+\s*0x[0-9a-f]+)?", rest)
+        decl = len(re.findall(rf"^\s*[\w ]+\**\s*{var};$", rest, re.M))
+        offsets = [u for u in uses]
+        if len(offsets) - decl > 0 and all(re.sub(r"\s", "", o) == "+0x2140" for o in offsets[decl:]) \
+                and offsets[:decl] == [""] * decl:
+            text = text[:m.start()] + f"{m.group(1)}{var} = (longlong)GenInitThreadEpochPtr() - 0x2140;" \
+                + text[m.end():]
+    return text
+
+
+# an inlined strlen: `n = -1; do { n = n + 1; } while (*(char *)(p + n) != '\0');`, or with a
+# char pointer `while (p[n] != '\0')` (the ostream writes on the login path, FUN_14023d9b0)
+STRLEN_LOOP = re.compile(r"(\w+) = -1;\s*do \{\s*\1 = \1 \+ 1;\s*\} while "
+                         r"\((?:\*\(char \*\)\((?P<sum>[\w\[\]\*]+) \+ \1\)|(?P<index>\w+)\[\1\]) != '\\0'\);")
+
+
+def strlen_loops(text: str, end: int) -> list[tuple[str, str]]:
+    """The inlined strlens before `end`, each as (the length's variable, the string)."""
+    return [(m.group(1), m.group("sum") or m.group("index")) for m in STRLEN_LOOP.finditer(text, 0, end)]
 
 
 VCALL = re.compile(r"\(\*\*\(code \*\*\)(?:\(\*(?:\((?:\w+ )*\w+ ?\*+\))?|\*(?:\((?:\w+ )*\w+ ?\*+\))?)")
@@ -459,13 +530,104 @@ def matching_paren(text: str, start: int) -> int:
 
 
 def call_sites(text: str):
-    """Each `FUN_x(args)` call: (match start, end of the argument list, address, arguments)."""
-    for m in re.finditer(r"\bFUN_([0-9a-f]{9})\(", text):
+    """Each `FUN_x(args)` call: (match start, end of the argument list, address, arguments).
+    A `thunk_FUN_x(args)` call counts as a call to x: Ghidra drops a thunk's arguments as
+    readily as anyone's, and before this the lost-argument check never saw them (55 translated
+    functions called their thunks short)."""
+    for m in re.finditer(r"\b(?:thunk_)?FUN_([0-9a-f]{9})\(", text):
         depth, i = 1, m.end()
+        quote = None
         while i < len(text) and depth:
-            depth += {"(": 1, ")": -1}.get(text[i], 0)
+            ch = text[i]
+            if quote:
+                # a parenthesis inside a string literal is text: protobuf's VerifyVersion
+                # (FUN_1422046d0) appends "... (Version verification failed in \"", and counting
+                # its "(" ran the argument list into the next call, which then read as a call
+                # one argument short; the stub broke cross_ssl's start on the login path
+                if ch == "\\":
+                    i += 2
+                    continue
+                if ch == quote:
+                    quote = None
+            elif ch in "\"'":
+                quote = ch
+            else:
+                depth += {"(": 1, ")": -1}.get(ch, 0)
             i += 1
         yield m.start(), i - 1, int(m.group(1), 16), split_args(text[m.end():i - 1])
+
+
+def spelled_alike(machine: str, written: str, integers: set[str]) -> bool:
+    """Whether callargs' expression and the decompiler's spelling name the same field read:
+    `(uint)((*(uint *)((char *)(param_1) + 0x20)))` and `*(uint *)(param_1 + 0x20)`. callargs
+    adds in bytes; Ghidra's `p + n` is in bytes only when p is an integer, so every name in the
+    written form must be one the function declares with an integer type (`integers`)."""
+    def norm(s: str) -> str:
+        s = s.replace("(char *)", "")
+        s = re.sub(r"^\(uint\)", "", s.strip())
+        return re.sub(r"[()\s]", "", s)
+    names = set(re.findall(r"\b(?:param_\d+|[a-z]*Var\d+|local_\w+)\b", written))
+    if not names or not names <= integers:
+        return False
+    return norm(machine) == norm(written)
+
+
+INTEGER_DECL = re.compile(r"(?:^|[(,])\s*(?:longlong|ulonglong|undefined8|int|uint|undefined4|long|ulong) (\w+)(?=[,);])",
+                          re.M)
+
+
+def code_arithmetic(text: str) -> str:
+    """Byte arithmetic on a `code *` local. Ghidra types a block whose first slot it saw called
+    as `code *` and goes on addressing it by bytes (`*(undefined4 *)(pcVar4 + 0x10)`, a heap
+    object whose vtable pointer is the first word); in C `code` is a function type, and
+    arithmetic on its pointer does not compile (C2296, 11 functions, 4 on the login path)."""
+    for name in re.findall(r"^\s*code \*(\w+);\s*$", text, re.M):
+        text = re.sub(rf"(?<![\w*.>&])\b{name}(\s*[+-]\s*(?![=+-]))", rf"(char *){name}\1", text)
+    return text
+
+
+# the image's float sign masks (16 bytes each, for andps / xorps)
+FLOAT_ABS_MASK = "DAT_14261aa20"    # 0x7fffffff
+FLOAT_SIGN_MASK = "DAT_14261aa30"   # 0x80000000
+
+
+def float_masks(text: str) -> str:
+    """Ghidra's spelling of `andps` / `xorps` with the float sign masks:
+    `(float)((uint)(a - b) & DAT_14261aa20)` is fabsf(a - b), `(float)((uint)x ^ DAT_14261aa30)`
+    is -x. In C the `(uint)` converts the value instead of reinterpreting its bits, and a bitwise
+    operator on the float-typed mask does not compile (C2297, 45 functions). Only this wrapped
+    form is rewritten: a bare `uVar ^ DAT_14261aa30` may be an integer's bits and stays as it is."""
+    out, i = [], 0
+    head = re.compile(r"\(float\)\(\(uint\)")
+    while True:
+        m = head.search(text, i)
+        if not m:
+            out.append(text[i:])
+            return "".join(out)
+        j = m.end()
+        if j < len(text) and text[j] == "(":
+            depth, k = 1, j + 1
+            while k < len(text) and depth:
+                depth += {"(": 1, ")": -1}.get(text[k], 0)
+                k += 1
+            operand = text[j:k]
+        else:
+            w = re.match(r"[\w\[\]]+", text[j:])
+            operand, k = (w.group(0), j + w.end()) if w else ("", j)
+        tail = re.match(rf"\s*([&^])\s*({FLOAT_ABS_MASK}|{FLOAT_SIGN_MASK})\)", text[k:])
+        # the operand must be a float (a float local or array, an fVar, or a float load in the
+        # expression): an integer's bits would be converted, not reinterpreted
+        root = re.match(r"\(*\s*(\w+)", operand)
+        floaty = (re.search(r"\bfVar\d+\b|\(float\b", operand)
+                  or (root and re.search(rf"^\s*float \*?{root.group(1)}\b", text, re.M)))
+        if (not operand or not tail or not floaty
+                or (tail.group(1) == "&") != (tail.group(2) == FLOAT_ABS_MASK)):
+            out.append(text[i:m.end()])
+            i = m.end()
+            continue
+        op = "fabsf" if tail.group(1) == "&" else "-"
+        out.append(text[i:m.start()] + f"({op}((float){operand}))")
+        i = k + tail.end()
 
 
 def upper_half_only(text: str) -> list[str]:
@@ -762,6 +924,7 @@ class Translator:
             size, gtype = self.refdata.get(addr, (0, "undefined"))
             if gtype.startswith("undefined") and size in (0, 4 if kind == "float" else 8):
                 self.refdata[addr] = (4 if kind == "float" else 8, kind)
+        self.global_pointers = corpus_global_pointers(self.cor)
         self.ref = Binary()
         # vtables (tools/vtables.py): code that stores one makes every slot callable, though
         # nothing names the slots as calls (bgs::ssl's factory 0x142880130: its Initialize
@@ -772,6 +935,11 @@ class Translator:
         if vt.exists():
             for t in json.loads(vt.read_text(encoding="utf-8"))["vtables"]:
                 self.vtables[int(t["vtable"], 16)] = [int(s, 16) for s in t["slots"]]
+                # a static object whose vptr the linker filled: naming the object is naming
+                # its vtable (bgs::ssl's default filter factory 0x142d39828, whose CreateFilter
+                # 0x141f185d0 stayed untranslated and GlueLogin memset a null filter, 2026-10-14)
+                for g in t.get("held_by", ()):
+                    self.vtables[int(g, 16)] = self.vtables[int(t["vtable"], 16)]
         self._lifted: dict[int, str | None] = {}
         self._arity: dict[int, int | None] = {}
         self._extra_params: dict[int, dict[int, str]] = {}
@@ -895,8 +1063,11 @@ class Translator:
         # the guard, then _Init_thread_header / _footer. All three are the port's own runtime's,
         # so the protocol stays one runtime's.
         text = INIT_EPOCH.sub("_Init_thread_epoch", text)
+        text = init_epoch_pointers(text)
         # Ghidra's function-pointer types (`_func_5014 *`) are code
         text = re.sub(r"\b_func_\w+\b", "code", text)
+        text = code_arithmetic(text)
+        text = float_masks(text)
         text = virtual_this(text)
         text = self.xmm_results(text)
         text = global_pieces(text)
@@ -925,6 +1096,33 @@ class Translator:
         self._inits = out
         return out
 
+    @staticmethod
+    def without_va_spill(body: str, names: list[str]) -> str:
+        """A variadic function's body with its va_start spill taken out. Ghidra shows a variadic
+        function (the log writer FUN_142292410, `fn(fmt, ...)`) with four parameters: the last
+        ones are only stored to their home slots, `local_res10 = param_2; local_res18 = param_3;
+        local_res20 = param_4;`, and only the first slot is ever used, as the va_list. Those are
+        not parameters the callers must pass: a one-argument call to it was taken for a lost
+        argument, demoting its caller (FUN_1422901d0, the vertex format cache) and every caller
+        above that, until the D3D12 pipeline build dereferenced the stub's null."""
+        spill = {}
+        for slot, name in re.findall(r"^\s*(local_res[0-9a-f]+) = (\w+);\s*$", body, re.M):
+            if name in names:
+                spill[names.index(name)] = slot
+        if len(names) < 2 or len(names) - 1 not in spill:
+            return body
+        k = len(names) - 1
+        while k - 1 in spill and k - 1 > 0:
+            k -= 1
+        # the spilled run is names[k:], all through the last; past the first, the slots are
+        # written and never read (declarations aside)
+        code = re.sub(r"^\s*[\w\s\*]+\blocal_res[0-9a-f]+(?:\s*\[[^\]]*\])?;\s*$", "", body, flags=re.M)
+        if any(len(re.findall(rf"\b{spill[j]}\b", code)) != 1 for j in range(k + 1, len(names))):
+            return body
+        for j in range(k, len(names)):
+            body = re.sub(rf"^\s*{spill[j]} = {names[j]};\s*$", "", body, flags=re.M)
+        return body
+
     def arity(self, b: int) -> int | None:
         """How many arguments `b` reads: the highest `param_N` its decompiled body uses (capped
         by the port's own count when it is adapted), or None when that is not known."""
@@ -944,6 +1142,7 @@ class Translator:
                          or re.search(r"([A-Za-z_]\w*)\s*(?:\[[^\]]*\])?\s*$", p))
                     names.append(m.group(1) if m else "")
                 names = [n for n in names]
+                rest = self.without_va_spill(rest, names)
                 need = max((k + 1 for k, n in enumerate(names) if n and re.search(rf"\b{n}\b", rest)), default=0)
         elif self.lifted(b) is not None:
             used = [int(n) for n in re.findall(r"\ba(\d)\b", self.lifted(b).partition("{")[2])]
@@ -974,15 +1173,16 @@ class Translator:
             if need is None or not args:
                 continue
             if len(args) == need - 1:
-                loops = [m for m in STRLEN_LOOP.finditer(text, 0, start) if m.group(2) == args[-1]]
+                loops = [n for n, s in strlen_loops(text, start) if s == args[-1]]
                 if loops:
-                    out.append((end, f",{loops[-1].group(1)}"))
+                    out.append((end, f",{loops[-1]}"))
             elif len(args) == need - 2:
                 # both the string and its length dropped: the strlen just before the call (no
                 # other call between) measured the string the call pushes
-                loops = list(STRLEN_LOOP.finditer(text, 0, start))
-                if loops and not re.search(r"\b\w+\(", text[loops[-1].end():start]):
-                    out.append((end, f",{loops[-1].group(2)},{loops[-1].group(1)}"))
+                last = list(STRLEN_LOOP.finditer(text, 0, start))
+                if last and not re.search(r"\b\w+\(", text[last[-1].end():start]):
+                    n, s = strlen_loops(text, start)[-1]
+                    out.append((end, f",{s},{n}"))
         for pos, extra in reversed(out):
             text = text[:pos] + extra + text[pos:]
         return text
@@ -1003,12 +1203,16 @@ class Translator:
             positions = list(range(len(args), need))
             values = self.callargs.recover(a, e["size"], b, positions)
             if values is None:
+                values = self.recover_returned(a, e["size"], b, positions, text)
+            if values is None:
                 values = self.recover_by_elimination(a, e["size"], b, positions, text, len(args))
                 if isinstance(values, tuple):
                     # one value list per short call, in their order
                     k = nth.get((b, len(args)), 0)
                     nth[(b, len(args))] = k + 1
                     values = values[k] if k < len(values) else None
+            if values is not None:
+                values = self.name_returns(text, values)
             if values is not None:
                 # a float travels in an xmm register: only an argument this function was itself
                 # handed in the same place (a wrapper passing it on) carries it unchanged
@@ -1060,6 +1264,64 @@ class Translator:
         return (text[:first] + "  union { double d; float f; unsigned int u32[4]; unsigned long long u64[2]; } gen_xmm0;\n"
                 + text[first:])
 
+    def recover_returned(self, a: int, size: int, b: int, positions: list[int], text: str):
+        """Arguments the instructions show are what the function returns on another exit: a
+        protobuf serializer tail-calls the unknown-fields writer (FUN_1422323d0) with its output
+        pointer, the register the plain exit returns, and Ghidra drops it from the call while
+        its `return param_2;` keeps the variable. Each position either recovers as callargs
+        does, or holds the returned value; that value is the one variable every other return
+        statement names. 373 serializers were demoted for this; 272 recover (the rest also call
+        the varint writer, thunk_FUN_14222d6e0, with arguments no register holds plainly)."""
+        # a variable the call's own result is stored in is not the other exit's
+        assigned = {m.group(1) for m in re.finditer(rf"\b(\w+)\s*=\s*(?:\([^;=]*?\))?\s*FUN_{b:x}\s*\(", text)}
+        returned = set()
+        for m in re.finditer(r"\breturn\b([^;]*);", text):
+            value = m.group(1).strip()
+            if f"FUN_{b:x}" in value:
+                continue
+            v = re.fullmatch(r"(?:\([\w ]+\*?\s*\)\s*)?([A-Za-z_]\w*)", value)
+            if v is None:
+                return None     # an exit returning something else: no one variable to name
+            if v.group(1) not in assigned:
+                returned.add(v.group(1))
+        values = []
+        for p in positions:
+            v = self.callargs.recover(a, size, b, [p])
+            if v is not None:
+                values.append(v[0])
+                continue
+            if len(returned) != 1 or not self.callargs.returned_at_every_call(a, size, b, p):
+                return None
+            var = next(iter(returned))
+            if not re.match(r"[A-Za-z_]\w*$", var) or var.isdigit():
+                return None
+            values.append(f"(undefined8){var}")
+        return values
+
+    @staticmethod
+    def name_returns(text: str, values):
+        """callargs' `RET(0xT)` (what the call to T returned) as the variable the decompilation
+        assigns from that call. Only when the text calls T once and assigns that variable once,
+        so the name cannot mean another value; otherwise the recovery is dropped (None)."""
+        if isinstance(values, tuple):
+            # elimination's per-call lists: a call result there cannot be told apart per call
+            return None if any("RET(" in str(x) for v in values for x in v) else values
+        out = []
+        for v in values:
+            if not isinstance(v, str) or "RET(" not in v:
+                out.append(v)
+                continue
+            for target in set(re.findall(r"RET\(0x([0-9a-f]+)\)", v)):
+                t = int(target, 16)
+                if sum(1 for _, _, b, _ in call_sites(text) if b == t) != 1:
+                    return None
+                m = re.search(rf"\b(\w+) = (?:\([^()]*\))?(?:thunk_)?FUN_{t:09x}\(", text)
+                if not m or len(re.findall(rf"(?<![\w.>]){m.group(1)} = ", text)) != 1:
+                    return None
+                v = v.replace(f"RET(0x{target})", m.group(1))
+            out.append(v)
+        return out
+
     def recover_by_elimination(self, a: int, size: int, b: int, positions: list[int], text: str, shown: int):
         """The calls to `b` disagree on the dropped arguments (luaL_error with a different
         message at each), but the calls the text shows in full account for some of them: take
@@ -1067,14 +1329,27 @@ class Translator:
         every = self.callargs.recover(a, size, b, positions, every=[])
         if not every:
             return None
-        sites = [args for _, _, t, args in call_sites(text) if t == b]
-        short = [args for args in sites if len(args) == shown]
-        full = [args for args in sites if len(args) > max(positions)]
+        sites = [(start, args) for start, _, t, args in call_sites(text) if t == b]
+        short = [args for _, args in sites if len(args) == shown]
+        full = [(start, args) for start, args in sites if len(args) > max(positions)]
         if len(every) != len(short) + len(full):
             return None
+        integers = set(INTEGER_DECL.findall(text))
 
-        def same(machine, written: str) -> bool:
+        def same(machine, written: str, at: int) -> bool:
             written = written.strip()
+            if re.fullmatch(r"[a-z]*Var\d+", written) and isinstance(machine, str):
+                # a local the call passes: what it was last assigned before the call
+                # (protobuf's ByteSize: `uVar1 = *(uint *)(param_1 + 0x1c); ... FUN_x(uVar1)`)
+                assigned = list(re.finditer(rf"(?<![\w.>]){written} = ([^;]+);", text[:at]))
+                if assigned:
+                    expr = re.sub(r"^\((?:ulonglong|uint|longlong|int)\)", "", assigned[-1].group(1).strip())
+                    if spelled_alike(machine, expr, integers):
+                        return True
+                    # or a call's result: `uVar2 = FUN_14131b890(...)` against RET(0x14131b890)
+                    ret = re.fullmatch(r"(?:\(uint\)\()*RET\(0x([0-9a-f]+)\)\)*", machine.replace(" ", ""))
+                    if ret and re.match(rf"(?:\(\w+\s*\**\))?(?:thunk_)?FUN_{int(ret.group(1), 16):09x}\(", expr):
+                        return True
             if isinstance(machine, int):
                 try:
                     return int(written, 0) & 0xffffffffffffffff == machine
@@ -1084,12 +1359,12 @@ class Translator:
             if m and written.startswith('"') and written.endswith('"'):
                 literal = written[1:-1].encode().decode("unicode_escape")
                 return self.ref.cstr(int(m.group(1), 16)) == literal
-            return str(machine) == written
+            return str(machine) == written or spelled_alike(str(machine), written, integers)
 
         left = list(every)
-        for args in full:
+        for at, args in full:
             for k, values in enumerate(left):
-                if values is not None and all(same(v, args[p]) for v, p in zip(values, positions)):
+                if values is not None and all(same(v, args[p], at) for v, p in zip(values, positions)):
                     del left[k]
                     break
             else:
@@ -1136,7 +1411,7 @@ class Translator:
             if a in self.cor or self.lifted(a) is not None:
                 out.add(a)
         # a vtable whose address is taken or stored: its slots run when the object is called
-        for m in re.finditer(r"\b(?:vtable|PTR)_\w*?_?(1[0-9a-f]{8})\b|\b0x(1[0-9a-f]{8})\b", text):
+        for m in re.finditer(r"\b(?:vtable|PTR|DAT)_\w*?_?(1[0-9a-f]{8})\b|\b0x(1[0-9a-f]{8})\b", text):
             for s in self.vtables.get(int(m.group(1) or m.group(2), 16), ()):
                 if s in self.cor or self.lifted(s) is not None:
                     out.add(s)
@@ -1367,8 +1642,11 @@ class Translator:
         if re.match(r"\s*void\b", bare_head):
             # A function Ghidra calls void because it ends in a tail call (FUN_140d11f10 jumps
             # to GetObjectFromLua and hands its object back in rax): a call just before a return
-            # leaves its result where the caller reads one, so the return carries it.
-            body = re.sub(r"^(\s*)((?:thunk_)?FUN_[0-9a-f]{9}\([^;]*\)|\(\*+\(code \*+\)[^;]*\)\([^;]*\));"
+            # leaves its result where the caller reads one, so the return carries it. Named calls
+            # too: FUN_140574f50, the string buffer's grow, ends in Storm::SMemAlloc and its
+            # `return 0` handed the SChannel filter a null 0xa000-byte buffer, 2026-10-14.
+            body = re.sub(r"^(\s*)((?:thunk_)?FUN_[0-9a-f]{9}\([^;]*\)|[A-Za-z_]\w*(?:::~?\w+)+\([^;]*\)"
+                          r"|\(\*+\(code \*+\)[^;]*\)\([^;]*\));"
                           r"(\s*\n\s*)return\s*;",
                           r"\1return (undefined8)\2;", body, flags=re.M)
         body = re.sub(r"\breturn\s*;", "return 0;", body)
@@ -1426,6 +1704,10 @@ class Translator:
             size, gtype = self.refdata.get(addr, (8, "undefined8"))
             if gtype.startswith("undefined") and size == 8 and addr in borrowed:
                 gtype = borrowed[addr]
+            elif gtype.startswith("undefined") and size == 8 and addr in self.global_pointers and addr in derefed:
+                # only where this function dereferences it: elsewhere Ghidra's `DAT_x + 8` is
+                # integer arithmetic, which a pointer type would scale by the element
+                gtype = self.global_pointers[addr]
             expr = global_expr(gtype, size, addr)
             held = self.held_global(addr)
             if held is None or held[1]["const"]:
@@ -1445,6 +1727,8 @@ class Translator:
                                 f"(*({c_type_of(gtype, size)} *)((char *)&gen_g_{base:x} + 0x{addr - base:x}))")
 
         aliases, exported = {}, {}
+        derefed = {int(x, 16) for pair in re.findall(r"\*_?DAT_([0-9a-f]{9})\b|\b_?DAT_([0-9a-f]{9})\[", body)
+                   for x in pair if x}
 
         # an untyped 8-byte global the function copies to or from a pointer local
         # (`piVar10 = DAT_142de0de8;`): the local's type is the global's
@@ -1457,6 +1741,12 @@ class Translator:
             ctype = local_types.get(var)
             if ctype and ctype.endswith("*"):
                 borrowed.setdefault(int(addr, 16), ctype.replace(" *", "*").replace("*", " *").strip())
+        # or one the decompiler casts a pointer into or compares with one: the bgs log sink
+        # registry (FUN_141effc10) is `DAT_143264a00 = (undefined8 *)FUN_1402545c0(...)` and
+        # `DAT_143264a00 == (undefined8 *)0x0`; demoted, it left the registry null and
+        # BattleNetInitialize faulted on it (98 of 220 such demotions show a cast like this)
+        for m in re.finditer(r"\b_?DAT_([0-9a-f]{9})\s*(?:==|!=|=)\s*\(((?:\w+ )*\w+ ?\*+)\)", body):
+            borrowed.setdefault(int(m.group(1), 16), re.sub(r"\s*(\*+)$", r" \1", m.group(2)).strip())
 
         # a constant Ghidra wrote as the address of a "global" outside the image
         # (`&DAT_8000000000000020`, a blz::vector's inline capacity flag) is that constant

@@ -1208,6 +1208,15 @@ bool CSimpleTop::OnMouseDeltaEvent(MOUSEEVENT* event) {
     return true;
 }
 
+// The window took (true) or lost the focus: the hook at 0xf48 hears it.
+// ref: FUN_1405effb0
+bool CSimpleTop::OnFocusChanged(bool active) {
+    if (this->m_keyCaptureHook != nullptr) {
+        reinterpret_cast<void (*)(bool)>(this->m_keyCaptureHook)(active);
+    }
+    return true;
+}
+
 // ---- the update ------------------------------------------------------------------------------
 
 namespace {

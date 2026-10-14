@@ -1,4 +1,8 @@
 #include "glue/GlueMgr.hpp"
+#include "blz/Function.hpp"
+#include "blz/String.hpp"
+#include "texture/Texture.hpp"
+#include <cstddef>
 #include "ui/CSimpleModelFFX.hpp"
 #include "framescript/EventCallbacks.hpp"
 #include "db/DB2Tables.hpp"
@@ -241,7 +245,6 @@ void GlueOnGamePad() {
 extern "C" unsigned long long FUN_141cb2810();
 extern "C" unsigned long long FUN_141cb1440();
 extern "C" unsigned long long FUN_14167b4d0();
-extern "C" unsigned long long FUN_141cb20e0(unsigned long long);
 namespace {
 
 // Whether the cursor textures are loaded, and loading them.
@@ -271,19 +274,100 @@ void Sub14167B4D0() {
     }
 }
 
-// translated: FUN_141cb20e0
-void CursorSetMode(uint32_t mode) {
-    __try {
-        FUN_141cb20e0(mode);
-    } __except (GenFault(0x141cb20e0ull, GetExceptionInformation())) {
-    }
+
+}  // namespace
+
+extern "C" unsigned long long FUN_141cb0380(unsigned long long, unsigned long long, unsigned long long);
+// blz::vector<uint8_t>::resize (a template the translator runs)
+extern "C" unsigned long long FUN_14078f3c0(unsigned long long, unsigned long long);
+
+namespace {
+
+// A cursor image: its size index, its texture and its RGBA pixels (a blz::vector).
+struct CURSORIMAGE {
+    uint32_t m_sizeIndex;
+    HTEXTURE m_texture;      // +0x08
+    uint8_t* m_pixels;       // +0x10
+    uint64_t m_pixelCount;   // +0x18
+    uint64_t m_capacity;     // +0x20
+};
+static_assert(offsetof(CURSORIMAGE, m_pixels) == 0x10, "CURSORIMAGE layout");
+
+// The cursor texture's writer: the pixels are tightly packed rows (the blz::function's
+// storage holds the pixel pointer).
+// ref: LAB_141cb2d60
+void CursorFill(uint32_t width, uint32_t height, uint32_t slice, uint32_t mip, uint32_t* pitch, const void** data,
+    void* storage) {
+    (void)height;
+    (void)slice;
+    (void)mip;
+    *pitch = width * 4;
+    *data = *static_cast<void**>(storage);
 }
 
 }  // namespace
 
-extern "C" unsigned long long FUN_141cafa20(unsigned long long, unsigned long long, unsigned long long);
-extern "C" unsigned long long FUN_141cb25b0(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
-extern "C" unsigned long long FUN_141cb0380(unsigned long long, unsigned long long, unsigned long long);
+// Frees the cursor's texture and makes room for width x height pixels, returning them.
+// ref: FUN_141cafa20
+uint8_t* CursorAllocPixels(uint32_t* cursor, int32_t width, int32_t height) {
+    auto image = reinterpret_cast<CURSORIMAGE*>(cursor);
+    if (image->m_texture != nullptr) {
+        image->m_texture->m_mipBits = nullptr;
+        TextureFree(&image->m_texture);
+    }
+    image->m_sizeIndex = 0;
+    image->m_pixelCount = 0;
+    FUN_14078f3c0(reinterpret_cast<unsigned long long>(&image->m_pixels), static_cast<unsigned long long>(width * height));
+    return image->m_pixels;
+}
+
+// The cursor's texture ("Cursor <name>") over its pixels; one that is not a power of two on
+// either side is made as type 2.
+// ref: FUN_141cb25b0
+void CursorCreateTexture(const char* name, uint32_t* cursor, uint32_t width, uint32_t height) {
+    auto image = reinterpret_cast<CURSORIMAGE*>(cursor);
+    blz::inline_string<0x80> label;
+    blz::string_format(label.header(), "Cursor %s", name);
+    blz::function_storage fill;
+    *reinterpret_cast<uint8_t**>(fill.m_storage) = image->m_pixels;
+    uint8_t type = ((width & (width - 1)) == 0 && (height & (height - 1)) == 0) ? 0 : 2;
+    fill.m_invoke = reinterpret_cast<void*>(&CursorFill);
+    fill.m_manager = blz::function_trivial_manager;
+    image->m_texture = TextureCreateUnique(type, width, height, 1, 2, 2, 0x10082001, &fill, label.m_data, true);
+}
+
+// The cursor mode (0x47 is not one); the image is rebuilt for it, and the hardware cursor
+// redrawn when it is shown.
+extern "C" unsigned long long FUN_1414fc2f0();
+extern "C" unsigned long long FUN_141cb26d0(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_141cb2b30();
+extern "C" unsigned long long FUN_1419272e0();
+// The cursor module's state stays the image's (its code is translated), so these read it there;
+// no trailing address tags, which would make the translator tie them.
+namespace {
+uint32_t& s_cursorMode = *reinterpret_cast<uint32_t*>(0x1432515e0ull);
+uint32_t& s_cursorSource = *reinterpret_cast<uint32_t*>(0x1432515e4ull);
+uint8_t& s_cursorFromSource = *reinterpret_cast<uint8_t*>(0x1432515ecull);
+uint32_t& s_cursorState = *reinterpret_cast<uint32_t*>(0x1432515f0ull);
+uint8_t& s_cursorShown = *reinterpret_cast<uint8_t*>(0x14311c528ull);
+}
+
+// ref: FUN_141cb20e0
+void CursorSetMode(uint32_t mode) {
+    if (mode == 0x47 || s_cursorMode == mode) {
+        return;
+    }
+    s_cursorFromSource = s_cursorSource == 1;
+    if (s_cursorState == 4) {
+        s_cursorState = 0;
+    }
+    s_cursorMode = mode;
+    auto size = FUN_1414fc2f0();
+    FUN_141cb26d0(mode, s_cursorSource, size & 0xffffffff, 0);
+    if ((FUN_141cb2b30() & 0xff) != 0 && s_cursorShown != 0) {
+        FUN_1419272e0();
+    }
+}
 
 // A loaded image's cursor at a size (32, 48, 64, 96 or 128): the rectangle `rect` names (row,
 // column, then their ends; the whole image when it is empty or already that size) copied out
@@ -306,8 +390,7 @@ bool CursorImageFromMips(const char* name, uint32_t* cursor, uint8_t** mips, uin
         if (whole && static_cast<uint32_t>(static_cast<int64_t>(columnEnd)) <= width
             && static_cast<uint32_t>(static_cast<int64_t>(rowEnd)) <= height) {
             __try {
-                auto out = reinterpret_cast<uint8_t*>(FUN_141cafa20(reinterpret_cast<unsigned long long>(cursor),
-                    static_cast<unsigned long long>(size), static_cast<unsigned long long>(size)));
+                uint8_t* out = CursorAllocPixels(cursor, size, size);
                 for (int32_t i = 0; i < size; i++) {
                     uint64_t offset = static_cast<uint64_t>((static_cast<int32_t>(static_cast<int64_t>(row)) + i) * width)
                         + static_cast<uint32_t>(static_cast<int64_t>(column));
@@ -315,8 +398,7 @@ bool CursorImageFromMips(const char* name, uint32_t* cursor, uint8_t** mips, uin
                     out += static_cast<size_t>(size) * 4;
                 }
                 *cursor = sizeIndex;
-                FUN_141cb25b0(reinterpret_cast<unsigned long long>(name), reinterpret_cast<unsigned long long>(cursor),
-                    static_cast<unsigned long long>(size), static_cast<unsigned long long>(size));
+                CursorCreateTexture(name, cursor, size, size);
             } __except (GenFault(0x141cb01c0ull, GetExceptionInformation())) {
             }
             return true;

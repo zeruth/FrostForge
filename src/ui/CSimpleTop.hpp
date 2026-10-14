@@ -231,6 +231,8 @@ class CSimpleTop : public CLayoutFrame {
     void OnMouseUpEvent(MOUSEEVENT* event);
     bool OnMouseWheelEvent(MOUSEEVENT* event);
     bool OnMouseDeltaEvent(MOUSEEVENT* event);
+    // The window took or lost the focus.
+    bool OnFocusChanged(bool active);
     // The keyboard events from the client: a character to the frames that take characters, a
     // key to those that take keys (the one that takes it keeps the key until it is let go).
     bool OnCharEvent(uint32_t character);

@@ -33,7 +33,31 @@ def main() -> None:
             f = b.func_containing(insn)
             if f is not None:
                 takers[tgt].add(f)
-    starts = sorted(takers)
+    # static objects: a global whose vptr the linker fills in (bgs::ssl's default filter
+    # factory 0x142d39828 -> 0x1428783c8) has no code that takes its vtable's address, so
+    # read the vptr out of the data instead. Only targets no lea-found vtable already covers,
+    # so a pointer into the middle of one cannot split it.
+    lea_starts = sorted(takers)
+
+    def covered(t: int) -> bool:
+        """True when t is a slot of the lea-found vtable at or before it."""
+        k = bisect.bisect_right(lea_starts, t) - 1
+        if k < 0:
+            return False
+        i = (lea_starts[k] - s) // 8
+        stop = (t - s) // 8
+        while i < stop and is_fp[i]:
+            i += 1
+        return i == stop
+
+    holders: dict[int, set[int]] = defaultdict(set)
+    for sec in (".data",):
+        ds, dd = b.bytes_of(sec)
+        for j in range(0, len(dd) - 7, 8):
+            t = struct.unpack_from("<Q", dd, j)[0]
+            if s <= t < s + 8 * n and (t - s) % 8 == 0 and is_fp[(t - s) // 8] and not covered(t):
+                holders[t].add(ds + j)
+    starts = sorted(set(takers) | set(holders))
 
     vtables = []
     for k, vt in enumerate(starts):
@@ -43,7 +67,10 @@ def main() -> None:
         while i < limit and is_fp[i]:
             slots.append(hexa(q[i]))
             i += 1
-        vtables.append({"vtable": hexa(vt), "slots": slots, "referenced_by": sorted(hexa(f) for f in takers[vt])})
+        entry = {"vtable": hexa(vt), "slots": slots, "referenced_by": sorted(hexa(f) for f in takers[vt])}
+        if vt in holders:
+            entry["held_by"] = sorted(hexa(g) for g in holders[vt])
+        vtables.append(entry)
 
     # how often each function appears as a slot: shared slots are base-class
     # implementations or pure-virtual / empty stubs

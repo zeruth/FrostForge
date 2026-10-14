@@ -325,6 +325,13 @@ uint32_t RenderSettingsRayTracedShadows() {
     return kind;
 }
 
+// Whether a settings block's 0x60000000 bits select the first of their modes (0x20000000): the
+// world clears to its own colour and the barrier passes add a depth fill.
+// ref: FUN_14129d9d0
+bool RenderSettingsDepthFillMode(const RENDERSETTINGS* settings) {
+    return (settings->m_flags & 0x60000000) == 0x20000000;
+}
+
 // ref: FUN_14129d7e0
 float RenderSettingsMaxScale() {
     uint32_t dedicated;

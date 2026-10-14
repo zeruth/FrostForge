@@ -212,6 +212,7 @@ static __inline unsigned long long gen_vector_iterate(void *p, unsigned long lon
 /* (read through RefImage.cpp: the C compiler crashes on the thread-local itself) */
 int GenInitThreadEpoch(void);
 #define _Init_thread_epoch GenInitThreadEpoch()
+int *GenInitThreadEpochPtr(void);
 void __cdecl _Init_thread_header(int *guard);
 void __cdecl _Init_thread_footer(int *guard);
 

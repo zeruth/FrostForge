@@ -838,19 +838,22 @@ void UiInputIme(void* input, const void* event) {
     FROST_UNIMPLEMENTED();
 }
 
-extern "C" unsigned long long FUN_140237660(unsigned long long);
-// translated: FUN_140237660
-void ClientOnFocus(uint32_t active) {
-    __try {
-        FUN_140237660((unsigned long long)active);
-    } __except (GenFault(0x140237660ull, GetExceptionInformation())) {
-    }
-}
-
 // ref: FUN_141237fa0
 void OsWindowFocus(void* window) {
     (void)window;
     FROST_UNIMPLEMENTED();
+}
+
+namespace {
+
+uint8_t s_gamepadInBackground;  // DAT_1430d13da
+
+}
+
+// The gamepad hears that the window lost (true) or took the focus.
+// ref: FUN_14152d7d0
+void GamepadSetInBackground(bool background) {
+    s_gamepadInBackground = background ? 1 : 0;
 }
 
 // ref: FUN_14152cf90

@@ -78,6 +78,9 @@ def main() -> None:
     ap.add_argument("--limit", type=int, default=60)
     ap.add_argument("--startup", action="store_true", help="list the startup-only functions instead")
     ap.add_argument("--roots", action="store_true", help="only the runtime roots (called from hand code or a pointer)")
+    ap.add_argument("--json", nargs="?", const=str(ROOT / "build/reached.json"),
+                    help="also write every reached function, runtime or startup, here "
+                         "(default build/reached.json, which tools/fidelity_report.py shows)")
     args = ap.parse_args()
 
     hits = read_hits(Path(args.hits))
@@ -129,6 +132,15 @@ def main() -> None:
         print(f"FUN_{a:x} {n:8d} {size:6d} {mark}")
     print(f"{len(reached)} translated reached: {len(runtime)} runtime ({len(runtime_roots)} roots), "
           f"{len(startup)} startup only ({len(roots & inits)} initializers)")
+    if args.json:
+        out = []
+        for a in sorted(reached, key=lambda a: -hits[a]):
+            e = cor.get(a) or {}
+            out.append({"addr": f"{a:x}", "name": e.get("name", ""), "calls": hits[a], "size": e.get("size", 0),
+                        "runtime": a in runtime, "root": a in roots, "initializer": a in inits})
+        Path(args.json).write_text(json.dumps({"hits": str(Path(args.hits).resolve()), "functions": out}, indent=1),
+                                   encoding="utf-8", newline="\n")
+        print(f"wrote {args.json}")
 
 
 if __name__ == "__main__":

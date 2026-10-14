@@ -1,5 +1,9 @@
 #include "ui/FrameTime.hpp"
+#include "base/Coordinate.hpp"
+#include "blz/ChainedHash.hpp"
+#include "blz/Function.hpp"
 #include "client/ClientInput.hpp"
+#include "sound/SI3.hpp"
 #include "client/FrameBufferCache.hpp"
 #include "client/GxWindow.hpp"
 #include "client/LoadingBar.hpp"
@@ -80,6 +84,7 @@ void UiInputGamepadStick(void* input, const void* event);
 void GxSetMouseCursorActive(uint32_t active);
 void UiInputDisplayChanged();
 void Sub14065FB00();
+void GamepadSetInBackground(bool background);
 
 namespace {
 
@@ -116,6 +121,78 @@ const char s_heldKeyTag[] = ".?AW4KEY@@";
 blz::vector<int32_t, s_heldKeyTag> s_heldKeys;  // DAT_142de0de8
 int32_t* s_loadingScreen;           // DAT_142de0bf8
 
+// The focus listeners: blz::function<void(bool)> by the id their registration returned.
+struct FOCUSNODE {
+    FOCUSNODE* m_next;
+    int32_t m_key;
+    blz::function_storage m_function;
+};
+static_assert(sizeof(FOCUSNODE) == 0x30, "a focus listener node is 0x30 bytes");
+const char s_focusNodeTag[] = ".?AU?$chained_hash_node@U?$pair@$$CBHV?$function@$$A6AX_N@Z@blz@@@blz@@@blz@@";
+const char s_focusBucketTag[] = ".PEAU?$chained_hash_node@U?$pair@$$CBHV?$function@$$A6AX_N@Z@blz@@@blz@@@blz@@";
+int32_t s_focusNextId = 1;                  // DAT_142cc878c
+blz::chained_hash_header s_focusListeners;  // DAT_142cc8790
+
+}
+
+// Adds a focus listener (a copy of `function`) and returns its id.
+// ref: FUN_140237f80
+int32_t ClientAddFocusListener(const blz::function_storage* function) {
+    int32_t id = s_focusNextId++;
+    if (s_focusListeners.m_buckets == nullptr) {
+        blz::chained_rehash<FOCUSNODE>(&s_focusListeners, s_focusListeners.m_bucketCount, s_focusBucketTag);
+    }
+    uint64_t index = blz::chained_bucket(blz::chained_key_bits(id), s_focusListeners.m_bucketCount);
+    auto head = reinterpret_cast<FOCUSNODE**>(&s_focusListeners.m_buckets[index]);
+    FOCUSNODE* node = *head;
+    while (node != nullptr && node->m_key != id) {
+        node = node->m_next;
+    }
+    if (node == nullptr) {
+        node = static_cast<FOCUSNODE*>(SMemAlloc(sizeof(FOCUSNODE), 0xb, s_focusNodeTag, SStrHashFnv1a(s_focusNodeTag), -6, 0));
+        if (node != nullptr) {
+            node->m_next = *head;
+            node->m_key = id;
+            node->m_function.m_invoke = nullptr;
+            node->m_function.m_manager = blz::function_empty_manager;
+        }
+        *head = node;
+        s_focusListeners.m_size++;
+        if (s_focusListeners.m_maxLoad < static_cast<float>(s_focusListeners.m_size) / static_cast<float>(s_focusListeners.m_bucketCount)) {
+            blz::chained_rehash<FOCUSNODE>(&s_focusListeners, s_focusListeners.m_bucketCount * 2, s_focusBucketTag);
+        }
+    }
+    if (&node->m_function != function) {
+        if (node->m_function.m_manager != blz::function_empty_manager) {
+            node->m_function.m_manager(node->m_function.m_storage, nullptr, 0);
+        }
+        function->m_manager(node->m_function.m_storage, const_cast<uint8_t*>(function->m_storage), 1);
+        node->m_function.m_invoke = function->m_invoke;
+        node->m_function.m_manager = function->m_manager;
+    }
+    return id;
+}
+
+// Removes the focus listener `id` registered.
+// ref: FUN_1402381d0
+void ClientRemoveFocusListener(int32_t id) {
+    if (s_focusListeners.m_buckets == nullptr) {
+        return;
+    }
+    uint64_t index = blz::chained_bucket(blz::chained_key_bits(id), s_focusListeners.m_bucketCount);
+    auto link = reinterpret_cast<FOCUSNODE**>(&s_focusListeners.m_buckets[index]);
+    while (*link != nullptr && (*link)->m_key != id) {
+        link = &(*link)->m_next;
+    }
+    FOCUSNODE* node = *link;
+    if (node == nullptr) {
+        return;
+    }
+    FOCUSNODE* next = node->m_next;
+    node->m_function.m_manager(node->m_function.m_storage, nullptr, 0);
+    SMemFree(node, s_focusNodeTag, -6, 0);
+    *link = next;
+    s_focusListeners.m_size--;
 }
 
 // What the loading screen is doing: true while it holds the game.
@@ -240,6 +317,79 @@ void ClientOnMouseUp(uint32_t button, uint32_t x, uint32_t y, uint32_t flags, ui
         s_deferredMouseUps.push_back(release);
     }
     if (s_mouseCaptureButtons != 0 && s_mouseCaptureButtons != (s_mouseCaptureButtons & s_heldButtons)) {
+        s_mouseCaptureButtons = 0;
+        if (s_mouseMode != 0) {
+            OsSetMouseMode(0);
+            s_mouseMode = 0;
+        }
+    }
+}
+
+// The window took (non-zero) or lost the focus. Losing it lets go of every pressed mouse button
+// (at the cursor, in UI units) and every held key, as their releases; taking it back drops the
+// keys the keyboard no longer holds. Then the gamepad, the sound, the listeners and the UI hear
+// of it, and a held cursor waiting on buttons no longer held is let go.
+// ref: FUN_140237660
+void ClientOnFocus(uint32_t active) {
+    if (active == 0) {
+        static const uint32_t buttons[] = { 1, 2, 4, 8, 0x10 };
+        s_heldModifiers = 0;
+        for (uint32_t button : buttons) {
+            if ((s_pressedButtons & button) == 0) {
+                continue;
+            }
+            int32_t x = 0;
+            int32_t y = 0;
+            OsGetCursorPosition(&x, &y);
+            int32_t rect[4] = {};
+            OsGetClientRect(rect);
+            float height = static_cast<float>(rect[2] - rect[0]);
+            if (height <= 1.0f) {  // DAT_142618d64
+                height = 1.0f;
+            }
+            float width = static_cast<float>(rect[3] - rect[1]);
+            if (width <= 1.0f) {
+                width = 1.0f;
+            }
+            float fromBottom = (1.0f - static_cast<float>(y) / height) * g_coordinateSpace.m_diagonalHeight;  // DAT_142ccb9f8
+            float across = (static_cast<float>(x) / width) * g_coordinateSpace.m_diagonalWidth;            // DAT_142ccb9f4
+            ClientOnMouseUp(button, static_cast<uint32_t>(static_cast<int32_t>(across)),
+                static_cast<uint32_t>(static_cast<int32_t>(fromBottom)), 0, FrameTime_GetTime(), false);
+        }
+        s_pressedButtons = 0;
+        int32_t* begin = s_heldKeys.data();
+        for (int32_t* at = begin + s_heldKeys.size(); at != begin;) {
+            at--;
+            uint32_t params[4] = { static_cast<uint32_t>(*at) & 0x3fffffff, 0, 0, 0 };
+            ClientOnKeyUp(params, FrameTime_GetTime());
+        }
+        s_heldKeys.clear();
+    } else {
+        for (uint64_t at = 0; at != s_heldKeys.size();) {
+            int32_t key = s_heldKeys[at];
+            if (OsIsKeyDown(static_cast<uint32_t>(key))) {
+                at++;
+                continue;
+            }
+            if (at != s_heldKeys.size() - 1) {
+                s_heldKeys[at] = s_heldKeys.back();
+            }
+            s_heldKeys.pop_back();
+            if (key < 6) {
+                s_heldModifiers &= ~(1u << (key & 0x1f));
+            }
+        }
+    }
+    bool focused = active != 0;
+    GamepadSetInBackground(active == 0);
+    SI3OnFocus(focused);
+    blz::chained_for_each<FOCUSNODE>(&s_focusListeners, [focused](FOCUSNODE* node) {
+        reinterpret_cast<void (*)(bool, void*)>(node->m_function.m_invoke)(focused, node->m_function.m_storage);
+    });
+    if (s_eventTarget != nullptr) {
+        static_cast<CSimpleTop*>(s_eventTarget)->OnFocusChanged(focused);
+    }
+    if (s_mouseCaptureButtons != 0 && s_mouseCaptureButtons != (s_heldButtons & s_mouseCaptureButtons)) {
         s_mouseCaptureButtons = 0;
         if (s_mouseMode != 0) {
             OsSetMouseMode(0);
@@ -706,13 +856,11 @@ void Sub140225AB0() {
 }
 
 // ---- GENERATED by tools/translate.py: the port globals translated code reaches ----
+extern "C" void* const gen_p_142cc878c = (void*)&s_focusNextId;
+extern "C" void* const gen_p_142cc8790 = (void*)&s_focusListeners;
 extern "C" void* const gen_p_142ddfa08 = (void*)&s_gameState;
 extern "C" void* const gen_p_142de0bf8 = (void*)&s_loadingScreen;
 extern "C" void* const gen_p_142de0de8 = (void*)&s_heldKeys;
-extern "C" void* const gen_p_142de0e18 = (void*)&s_eventTarget;
-extern "C" void* const gen_p_142de0e20 = (void*)&s_heldButtons;
 extern "C" void* const gen_p_142de0e24 = (void*)&s_heldModifiers;
-extern "C" void* const gen_p_142de0e28 = (void*)&s_mouseCaptureButtons;
 extern "C" void* const gen_p_142de0e30 = (void*)&s_pressedButtons;
-extern "C" void* const gen_p_142de0e34 = (void*)&s_mouseMode;
 // ---- end of generated globals ----

@@ -1,4 +1,5 @@
 #include "os/Window.hpp"
+#include "os/Sync.hpp"
 #include "os/Timer.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
@@ -279,6 +280,45 @@ void OsInputInitialize() {
         RegCloseKey(key);
     }
     s_mouseCurves = status == ERROR_SUCCESS;
+}
+
+namespace {
+
+OSONCE s_dpiOnce;                   // DAT_1430a1508
+void* s_getDpiForMonitorOnce;       // DAT_1430a1520: shcore's GetDpiForMonitor, looked up once
+
+// ref: FUN_1412381f0
+void LoadGetDpiForMonitor() {
+    HMODULE shcore = LoadLibraryW(L"shcore.dll");
+    if (shcore != nullptr) {
+        s_getDpiForMonitorOnce = reinterpret_cast<void*>(GetProcAddress(shcore, "GetDpiForMonitor"));
+    }
+}
+
+void LoadGetDpiForMonitorInvoke(const void*) {
+    LoadGetDpiForMonitor();
+}
+
+}
+
+// A window's DPI over 96: its monitor's effective DPI, else the screen's LOGPIXELSY.
+// ref: FUN_141237e80
+float OsGetWindowDpiScale(void* window) {
+    void* function[4] = { reinterpret_cast<void*>(&LoadGetDpiForMonitorInvoke), nullptr, nullptr, nullptr };
+    OsCallOnce(&s_dpiOnce, function);
+    if (window != nullptr && s_getDpiForMonitorOnce != nullptr) {
+        HMONITOR monitor = MonitorFromWindow(static_cast<HWND>(window), MONITOR_DEFAULTTOPRIMARY);
+        UINT dpiX = 0;
+        UINT dpiY = 0;
+        typedef HRESULT(WINAPI * GETDPIFORMONITOR)(HMONITOR, int, UINT*, UINT*);
+        if (reinterpret_cast<GETDPIFORMONITOR>(s_getDpiForMonitorOnce)(monitor, 0, &dpiX, &dpiY) >= 0) {
+            return static_cast<float>(dpiX) * (1.0f / 96.0f);  // DAT_14272426c
+        }
+    }
+    HDC screen = GetDC(nullptr);
+    int32_t dpi = GetDeviceCaps(screen, LOGPIXELSY);
+    ReleaseDC(nullptr, screen);
+    return static_cast<float>(static_cast<uint32_t>(dpi)) * (1.0f / 96.0f);
 }
 
 // ref: FUN_14123b190
@@ -1212,6 +1252,93 @@ void OsGetCursorPosition(int32_t* x, int32_t* y) {
     if (y != nullptr) {
         *y = static_cast<int32_t>(position >> 0x20);
     }
+}
+
+// The Windows virtual key of an engine key code: the modifiers (left and right shift, control,
+// alt, then the two Windows keys), the digits and space as they are, the keypad, the named keys
+// and F1..F24; anything else is a character, through the keyboard layout.
+// ref: FUN_141239f50
+bool OsKeyToVirtualKey(uint32_t key, uint32_t* virtualKey) {
+    int32_t k = static_cast<int32_t>(key);
+    if (k < 0x123) {
+        if (k < 0x30) {
+            if (k < 0x21) {
+                if (key == 0x20) {
+                    *virtualKey = VK_SPACE;
+                    return true;
+                }
+                switch (key) {
+                    case 0: *virtualKey = VK_LSHIFT; return true;
+                    case 1: *virtualKey = VK_RSHIFT; return true;
+                    case 2: *virtualKey = VK_LCONTROL; return true;
+                    case 3: *virtualKey = VK_RCONTROL; return true;
+                    case 4: *virtualKey = VK_LMENU; return true;
+                    case 5: *virtualKey = VK_RMENU; return true;
+                    case 6: *virtualKey = VK_LWIN; return true;
+                    case 7: *virtualKey = VK_RWIN; return true;
+                }
+                goto scan;
+            }
+        } else if (k < 0x3a) {
+            *virtualKey = key;  // the digits
+            return true;
+        }
+    } else if (k < 0x12f) {
+        *virtualKey = key - 0xb3;  // F1..F12
+        return true;
+    }
+    switch (key) {
+        case 0x100: *virtualKey = VK_NUMPAD0; return true;
+        case 0x101: *virtualKey = VK_NUMPAD1; return true;
+        case 0x102: *virtualKey = VK_NUMPAD2; return true;
+        case 0x103: *virtualKey = VK_NUMPAD3; return true;
+        case 0x104: *virtualKey = VK_NUMPAD4; return true;
+        case 0x105: *virtualKey = VK_NUMPAD5; return true;
+        case 0x106: *virtualKey = VK_NUMPAD6; return true;
+        case 0x107: *virtualKey = VK_NUMPAD7; return true;
+        case 0x108: *virtualKey = VK_NUMPAD8; return true;
+        case 0x109: *virtualKey = VK_NUMPAD9; return true;
+        case 0x10a: *virtualKey = VK_ADD; return true;
+        case 0x10b: *virtualKey = VK_SUBTRACT; return true;
+        case 0x10c: *virtualKey = VK_MULTIPLY; return true;
+        case 0x10d: *virtualKey = VK_DIVIDE; return true;
+        case 0x10e: *virtualKey = VK_DECIMAL; return true;
+        case 0x10f: *virtualKey = VK_ESCAPE; return true;
+        case 0x110: *virtualKey = VK_RETURN; return true;
+        case 0x111: *virtualKey = VK_BACK; return true;
+        case 0x112: *virtualKey = VK_TAB; return true;
+        case 0x113: *virtualKey = VK_LEFT; return true;
+        case 0x114: *virtualKey = VK_UP; return true;
+        case 0x115: *virtualKey = VK_RIGHT; return true;
+        case 0x116: *virtualKey = VK_DOWN; return true;
+        case 0x117: *virtualKey = VK_INSERT; return true;
+        case 0x118: *virtualKey = VK_DELETE; return true;
+        case 0x119: *virtualKey = VK_HOME; return true;
+        case 0x11a: *virtualKey = VK_END; return true;
+        case 0x11b: *virtualKey = VK_PRIOR; return true;
+        case 0x11c: *virtualKey = VK_NEXT; return true;
+        case 0x11d: *virtualKey = VK_CAPITAL; return true;
+        case 0x11e: *virtualKey = VK_NUMLOCK; return true;
+        case 0x11f: *virtualKey = VK_SCROLL; return true;
+        case 0x120: *virtualKey = VK_PAUSE; return true;
+        case 0x121: *virtualKey = VK_SNAPSHOT; return true;
+    }
+scan:
+    uint8_t scanned = static_cast<uint8_t>(VkKeyScanA(static_cast<char>(key)));
+    *virtualKey = scanned;
+    return scanned != 0;
+}
+
+// Whether an engine key is down on the keyboard now (not as the event queue has it).
+// ref: FUN_14123aba0
+bool OsIsKeyDown(uint32_t key) {
+    uint32_t virtualKey[6];
+    if (OsKeyToVirtualKey(key, virtualKey)) {
+        if (GetAsyncKeyState(static_cast<int32_t>(virtualKey[0])) < 0) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // Pumps the thread's messages, handing every queued event to `handler` (directly, while the

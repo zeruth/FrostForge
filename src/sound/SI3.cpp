@@ -231,6 +231,29 @@ void UpdateKitLoads() {
 
 }
 
+extern "C" unsigned long long FUN_1419fa0c0(unsigned long long);
+// The voice chat's audio on a focus change (DAT_1431f6738).
+// translated: FUN_1419fa0c0
+void Sub1419FA0C0(bool active) {
+    __try {
+        FUN_1419fa0c0(active ? 1 : 0);
+    } __except (GenFault(0x1419fa0c0ull, GetExceptionInformation())) {
+    }
+}
+
+// The window took or lost the focus: the engine stays audible in the background only when
+// Sound_EnableSoundWhenGameIsInBG says so, and the voice chat's audio follows.
+// ref: FUN_1412e5ae0
+void SI3OnFocus(bool active) {
+    if (active) {
+        SE3SetActive(true);
+        Sub1419FA0C0(true);
+        return;
+    }
+    SE3SetActive(g_soundEnableInBackground != nullptr && g_soundEnableInBackground->m_intValue != 0);
+    Sub1419FA0C0(false);
+}
+
 // ref: FUN_1412e59c0
 void SI3Init(bool restart) {
     Start(restart);

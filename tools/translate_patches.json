@@ -1,5 +1,10 @@
 {
  "_doc": "Corrections to the decompilation, applied before translation (tools/translate.py). Each is a decompiler error proven against the instructions: 'from' must occur exactly once in the function's corpus text, and 'why' gives the instruction evidence.",
+ "141f2ece0": [
+  {"from": "(**(code **)(*(longlong *)*DAT_143264fa8 + 8))((longlong *)*DAT_143264fa8,local_b8);",
+   "to": "(**(code **)(*(longlong *)*DAT_143264fa8 + 8))((longlong *)*DAT_143264fa8,local_b8,puVar12);",
+   "why": "cross_ssl's start calls the factory's Initialize (vtable 0x142880130 slot 1, 0x141f6fcf0, which reads a logger third) with the logger it just made: r8 = rax from the allocation at 0x141f2ee01 (r14 = 0 when it failed, 0x141f2ee1c), stored to DAT_143264fb0 at 0x141f2ee91, call at 0x141f2ee98. Without it the SChannel setup logged through a garbage pointer and faulted, ssl::Initialize freed the filter map, and GlueLogin read the null map"}
+ ],
  "1420bdde0": [
   {"from": "FUN_1420cd5a0(0,uVar3 & 0xffffffff);",
    "to": "FUN_1420cd5a0(param_1,uVar3 & 0xffffffff);",

@@ -6,6 +6,7 @@ add_library(client STATIC
     CommandLine.cpp
     ConsoleDevice.cpp
     CrashReport.cpp
+    DBCache.cpp
     GxWindow.cpp
     LoadingBar.cpp
     Locale.cpp

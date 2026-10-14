@@ -156,6 +156,10 @@ void SE3CacheSetMaxSize(int32_t bytes);
 // ref: FUN_1412db890
 void SE3CacheSetMaxCacheableSize(int32_t bytes);
 
+// Whether the buses sound: on at start, then by the client's focus.
+// ref: FUN_1412d3420
+void SE3SetActive(bool active);
+
 // Sets the FMOD reverb (an FMOD_REVERB_PROPERTIES).
 // ref: FUN_1412d3ad0
 void SE3SetReverbProperties(const void* properties);

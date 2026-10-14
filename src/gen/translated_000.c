@@ -1390,13 +1390,88 @@ undefined8 FUN_1401e4af0(void)
   return 0;
 }
 
-/* ref: FUN_1401e4bd0 */
-undefined8 FUN_1401e4bd0(void)
+/* ref: FUN_1401e4cd0 */
+undefined8 FUN_1401e4cd0(void)
 {
   GEN_HIT(81);
-  CALLF(undefined1, FUN_140262450)(&REFG(undefined8, 0x1430a1508));
-  REFG(undefined8, 0x1430a1510) = 0;
-  atexit((code *)((code *)REFP(0x1425e7260)));
+  uint uVar1;
+  uint uVar2;
+  char *pcVar3;
+  uint uVar4;
+  uint uVar5;
+  char *pcVar6;
+  uint uVar7;
+  
+  uVar4 = 0x811c9dc5;
+  pcVar6 = "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\ParticleSystem\\ParticleSystem2.cpp";
+  uVar5 = 0x44;
+  uVar7 = 0x811c9dc5;
+  pcVar3 = "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\ParticleSystem\\ParticleSystem2.cpp";
+  uVar2 = 0x44;
+  uVar1 = 0x44;
+  do {
+    pcVar3 = pcVar3 + 1;
+    uVar7 = (uVar1 ^ uVar7) * 0x1000193;
+    uVar1 = (uint)(byte)*pcVar3;
+  } while (*pcVar3 != 0);
+  REFG(undefined8 *, 0x1430a1f20) =
+       (undefined8 *)
+       CALLF(ulonglong *, FUN_140255140)(8,0x15,"D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\ParticleSystem\\ParticleSystem2.cpp",uVar7,(unsigned long long)(0x68),(unsigned long long)(0));
+  uVar1 = 0x811c9dc5;
+  *REFG(undefined8 *, 0x1430a1f20) = (*(undefined8 (*)[4])(uintptr_t)0x142724958ULL);
+  pcVar3 = "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\ParticleSystem\\ParticleSystem2.cpp";
+  REFG(undefined8, 0x1430a1f28) = 0x20;
+  do {
+    pcVar3 = pcVar3 + 1;
+    uVar1 = uVar1 ^ uVar2;
+    uVar2 = (uint)(byte)*pcVar3;
+    uVar1 = uVar1 * 0x1000193;
+  } while (*pcVar3 != 0);
+  REFG(undefined8 *, 0x1430a1f30) =
+       (undefined8 *)
+       CALLF(ulonglong *, FUN_140255140)(8,0x15,"D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\ParticleSystem\\ParticleSystem2.cpp",uVar1,(unsigned long long)(0x69),(unsigned long long)(0));
+  uVar7 = 0x811c9dc5;
+  *REFG(undefined8 *, 0x1430a1f30) = (*(undefined8 (*)[4])(uintptr_t)0x142724978ULL);
+  uVar2 = 0x44;
+  uVar1 = 0x44;
+  pcVar3 = "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\ParticleSystem\\ParticleSystem2.cpp";
+  REFG(undefined8, 0x1430a1f38) = 0x48;
+  do {
+    pcVar3 = pcVar3 + 1;
+    uVar7 = uVar7 ^ uVar1;
+    uVar1 = (uint)(byte)*pcVar3;
+    uVar7 = uVar7 * 0x1000193;
+  } while (*pcVar3 != 0);
+  REFG(undefined8 *, 0x1430a1f40) =
+       (undefined8 *)
+       CALLF(ulonglong *, FUN_140255140)(8,0x15,"D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\ParticleSystem\\ParticleSystem2.cpp",uVar7,(unsigned long long)(0x6a),(unsigned long long)(0));
+  uVar1 = 0x811c9dc5;
+  *REFG(undefined8 *, 0x1430a1f40) = (*(undefined8 (*)[4])(uintptr_t)0x142724998ULL);
+  pcVar3 = "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\ParticleSystem\\ParticleSystem2.cpp";
+  REFG(undefined8, 0x1430a1f48) = 0x40;
+  do {
+    pcVar3 = pcVar3 + 1;
+    uVar1 = uVar1 ^ uVar2;
+    uVar2 = (uint)(byte)*pcVar3;
+    uVar1 = uVar1 * 0x1000193;
+  } while (*pcVar3 != 0);
+  REFG(undefined8 *, 0x1430a1f50) =
+       (undefined8 *)
+       CALLF(ulonglong *, FUN_140255140)(8,0x15,"D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\ParticleSystem\\ParticleSystem2.cpp",uVar1,(unsigned long long)(0x6b),(unsigned long long)(0));
+  *REFG(undefined8 *, 0x1430a1f50) = (*(undefined8 (*)[4])(uintptr_t)0x142724998ULL);
+  REFG(undefined8, 0x1430a1f58) = 0x40;
+  do {
+    pcVar6 = pcVar6 + 1;
+    uVar4 = uVar4 ^ uVar5;
+    uVar5 = (uint)(byte)*pcVar6;
+    uVar4 = uVar4 * 0x1000193;
+  } while (*pcVar6 != 0);
+  REFG(undefined8 *, 0x1430a1f60) =
+       (undefined8 *)
+       CALLF(ulonglong *, FUN_140255140)(8,0x15,"D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\ParticleSystem\\ParticleSystem2.cpp",uVar4,(unsigned long long)(0x6c),(unsigned long long)(0));
+  *REFG(undefined8 *, 0x1430a1f60) = (*(undefined8 (*)[4])(uintptr_t)0x1427249b8ULL);
+  REFG(undefined8, 0x1430a1f68) = 0x50;
+  atexit(((code *)REFP(0x1425e74e0)));
   return 0;
 }
 

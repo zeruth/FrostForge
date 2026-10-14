@@ -21,6 +21,7 @@
 #include "glue/ScriptAPIHandlers.hpp"
 #include "gx/Gx.hpp"
 #include "gx/GxDevice.hpp"
+#include "storm/String.hpp"
 #include "ui/CScriptObject.hpp"
 #include "ui/CSimpleModelFFX.hpp"
 #include "world/WorldFrame.hpp"
@@ -413,6 +414,46 @@ int Lua_SetCharSelectModelFrame(lua_State* L) {
         g_charSelectModelFrame = static_cast<CSimpleModelFFX*>(frame);
     }
     return 0;
+}
+
+// The last login error (an optional at DAT_143122860, still the image's: GlueLogin's state
+// machine, translated, sets and clears it): the code, then two blz::strings, then whether it
+// holds one at all.
+struct GLUELOGINERROR {
+    uint32_t m_code;                    // 0x00 below 0x80000000 a Battle.net error, else WoW's
+    uint32_t m_pad04;
+    blz::string_header m_message;       // 0x08
+    uint8_t m_inline30[0x10];
+    blz::string_header m_other;         // 0x30 (no reader here)
+    uint8_t m_inline48[0x10];
+    uint8_t m_set;                      // 0x58
+};
+static_assert(offsetof(GLUELOGINERROR, m_set) == 0x58, "the login error's flag is at +0x58");
+
+// The last login error: its source ("BNET" or "WOW"), its code, its message (nil without one),
+// nil, and the code as the support site spells it ("BLZ51900123" or "WOW51900123").
+// ref: FUN_14169dab0
+int Lua_C_Login_GetLastError(lua_State* L) {
+    auto error = reinterpret_cast<const GLUELOGINERROR*>(0x143122860ull);
+    uint32_t code = error->m_code;
+    if (error->m_set == 0 || code == 0) {
+        return 0;
+    }
+    bool battleNet = code < 0x80000000u;
+    uint32_t number = battleNet ? code : code + 0x80000000u;
+    lua_pushstring(L, battleNet ? "BNET" : "WOW");     // DAT_1427e69d4, DAT_1427e69d0
+    lua_pushinteger(L, number);
+    if (error->m_message.m_size == 0) {
+        lua_pushnil(L);
+    } else {
+        lua_pushstring(L, error->m_message.m_data);
+    }
+    lua_pushnil(L);
+    char text[256];
+    // FUN_14024ab10
+    SStrPrintf(text, sizeof(text), battleNet ? "BLZ%d%05d" : "WOW%d%05d", 0x207, number);
+    lua_pushstring(L, text);
+    return 5;
 }
 
 // ref: FUN_14169d380

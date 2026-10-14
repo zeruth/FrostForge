@@ -448,13 +448,6 @@ int Lua_C_ModelInfo_ClearActiveModelSceneActor(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_1410c2cb0
-int Lua_C_PaidServices_GetCurrentFaction(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_1410c5460
 int Lua_C_PaidServices_GetName(lua_State* L) {
     (void)L;
@@ -513,6 +506,13 @@ int Lua_C_SocialContractGlue_GetShouldShowSocialContract(lua_State* L) {
 
 // ref: FUN_140ae6b20
 int Lua_C_SocialContractGlue_TryUpdateSocialContract(lua_State* L) {
+    (void)L;
+    FROST_UNIMPLEMENTED();
+    return 0;
+}
+
+// ref: FUN_140aea0e0
+int Lua_C_Sound_IsPlaying(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -1001,13 +1001,6 @@ int Lua_CopyToClipboard(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_1416a4bb0
-int Lua_DeclineName(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_1416a6740
 int Lua_GetAccountCharacterInfo(lua_State* L) {
     (void)L;
@@ -1031,13 +1024,6 @@ int Lua_GetCVarInfo(lua_State* L) {
 
 // ref: FUN_141d02f30
 int Lua_GetFontInfo(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141d02e20
-int Lua_GetFonts(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -1106,13 +1092,6 @@ int Lua_GetTime(lua_State* L) {
     return 0;
 }
 
-// ref: FUN_141d05a90
-int Lua_GetUITextureKitInfo(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // Returns nothing.
 // ref: FUN_14022c3f0
 int Lua_HandleAtlasMemberCommand(lua_State* L) {
@@ -1129,13 +1108,6 @@ int Lua_IsUsingFixedTimeStep(lua_State* L) {
 
 // ref: FUN_140cee770
 int Lua_IsVASEnabledOnRealm(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_141d021b0
-int Lua_LoadAddOn(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;
@@ -1171,13 +1143,6 @@ int Lua_SetDefaultVideoOptions(lua_State* L) {
 
 // ref: FUN_1424d5250
 int Lua_StoreSecureReference(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
-// ref: FUN_1416a64b0
-int Lua_VisitPromotionURL(lua_State* L) {
     (void)L;
     FROST_UNIMPLEMENTED();
     return 0;

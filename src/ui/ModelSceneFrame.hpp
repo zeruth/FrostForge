@@ -39,6 +39,9 @@ class ModelSceneFrame : public CSimpleFrame {
     // This class's type id: the reference's own function-local static (DAT_1430a0b0c, guard
     // DAT_1430a0b10), so the translated code agrees.
     static int32_t GetObjectType();
+    // The model scene a script method was called on (FUN_140d11f10).
+    static FrameScript_Object* GetObjectFromLua(const char** error, lua_State* L, int32_t index, bool allowForbidden,
+        bool allowLockdown);
     // ref: FUN_141a96680
     static void CreateScriptMetaTables();
     // The metatables (DAT_142d2f568, DAT_142d2f56c).

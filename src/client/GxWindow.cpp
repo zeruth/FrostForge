@@ -286,6 +286,14 @@ void WindowComputeRect(uint32_t style, GXWINDOWPARAMS* params, int32_t* position
 // translated: FUN_1414fb720
 // translated: FUN_1414fc050
 
+// The hardware cursor's size (an index into 32, 64, 64, 96, 128), for the next reset.
+// ref: FUN_1414fc880
+void WindowSetCursorSize(int32_t index) {
+    if (static_cast<uint32_t>(index) != s_cursorSizeIndex) {
+        s_cursorSizeIndex = static_cast<uint32_t>(index);
+    }
+}
+
 // The engine's hardware cursor: the current image as a cursor of the chosen size.
 // ref: FUN_1414fd2f0
 void WindowResetCursor() {
@@ -678,6 +686,25 @@ LRESULT CALLBACK WindowProc(HWND window, UINT message, WPARAM wparam, LPARAM lpa
 // ref: FUN_1414f8d60
 void* WindowGetHandle() {
     return s_window;
+}
+
+// The window's DPI scale, carried over to the back buffer: the monitor's DPI over 96, times the
+// window's height over the back buffer's (the swap chain's requested height when it asked for
+// one, else the parameters' resolution).
+// ref: FUN_1414fcdc0
+float WindowGetDpiScale() {
+    float dpi = OsGetWindowDpiScale(WindowGetHandle());
+    uint32_t height = s_params.m_size.m_height;
+    uint32_t backBuffer;
+    auto chain = static_cast<const GXSWAPCHAIN*>(WindowGetSwapChain());
+    if (chain == nullptr) {
+        backBuffer = s_params.m_resolution.m_height;
+    } else if (chain->m_requestWidth == 0) {
+        backBuffer = s_params.m_size.m_height;
+    } else {
+        backBuffer = chain->m_requestHeight;
+    }
+    return (static_cast<float>(height) / static_cast<float>(backBuffer)) * dpi;
 }
 
 // Once a frame: the foreground frame-rate cap applies while the window has the focus.

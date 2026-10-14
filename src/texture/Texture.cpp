@@ -1743,10 +1743,15 @@ HTEXTURE TextureGetWhite() {
     static HTEXTURE s_white;
     if (s_white == nullptr) {
         uint32_t color = 0xffffffff;
-        // FUN_14127f980
-        s_white = TextureCreateSolid(&color, nullptr, "", 0);
+        s_white = TextureCreateSolidColor(&color, "");
     }
     return s_white;
+}
+
+// A one-colour texture with no second colour.
+// ref: FUN_14127f980
+HTEXTURE TextureCreateSolidColor(const uint32_t* color, const char* name) {
+    return TextureCreateSolid(color, nullptr, name, 0);
 }
 
 // ref: FUN_14127f9a0

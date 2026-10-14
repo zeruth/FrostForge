@@ -16,6 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "build/fidelity.json"
 MANIFEST = ROOT / "src/gen/manifest.json"
+REACHED = ROOT / "build/reached.json"   # tools/reached.py --json, from a FROST_HITS run
 OUT = ROOT / "build/fidelity.html"
 
 # source folder -> bucket
@@ -174,6 +175,45 @@ Ghidra decompilation (src/gen). The score compares the compiled translation with
 </section>
 </div>"""
 
+    # what the last FROST_HITS run reached of the translated code: the runtime part, by calls, is
+    # the hand-port queue (tools/reached.py)
+    reached_section = ""
+    if REACHED.exists():
+        rd = json.loads(REACHED.read_text(encoding="utf-8"))
+        funcs = [f for f in rd.get("functions", []) if f["addr"] in translated]
+        runtime = [f for f in funcs if f["runtime"]]
+        startup = [f for f in funcs if not f["runtime"]]
+        stamp = datetime.datetime.fromtimestamp(REACHED.stat().st_mtime).strftime("%Y-%m-%d %H:%M")
+        peak_calls = max((f["calls"] for f in runtime), default=1)
+        queue = "".join(
+            f'<li><span class="rbar gen" style="width:{100 * f["calls"] / peak_calls:.1f}%"></span>'
+            f'<b>{f["calls"]:,}</b> {html.escape(f["name"] or "FUN_" + f["addr"])}'
+            f'{" <span class=dim>root</span>" if f["root"] else ""}'
+            f' <span class="dim">{f["size"]:,} bytes</span></li>'
+            for f in runtime[:15])
+        reached_section = f"""
+<section class="card" style="--accent:var(--gen)">
+  <header><h2>Reached by the last run</h2><span class="count">{len(funcs):,} functions · {stamp}</span></header>
+  <div class="top">
+  <dl>
+    <div><dt>Runtime</dt><dd>{len(runtime):,}</dd></div>
+    <div><dt>Startup only</dt><dd>{len(startup):,}</dd></div>
+    <div><dt>Runtime roots</dt><dd>{sum(f['root'] for f in runtime):,}</dd></div>
+    <div><dt>Initializers</dt><dd>{sum(f['initializer'] for f in funcs):,}</dd></div>
+  </dl>
+  </div>
+  <p class="folders">Translated code a FROST_HITS run entered, still without a hand port. The runtime part,
+  most-called first, is the queue for porting by hand (tools/reached.py, tools/promote.py for a home file).</p>
+  <ol class="reasons">{queue or '<li>none</li>'}</ol>
+</section>"""
+    if reached_section:
+        # a third card in the translated section's grid, which its last </div> closes
+        if gen_section:
+            cut = gen_section.rfind("</div>")
+            gen_section = gen_section[:cut] + reached_section + gen_section[cut:]
+        else:
+            gen_section = f'<div class="grid">{reached_section}</div>'
+
     o = overall
     covered = len(hand) + len(gen_only)
     page = f"""<!doctype html>
@@ -223,6 +263,7 @@ ol {{ margin:0; padding:0; list-style:none; font-size:13px }} ol li {{ padding:3
 ol.reasons li {{ position:relative; isolation:isolate; padding:5px 6px; white-space:normal }}
 ol.reasons b {{ display:inline-block; min-width:44px; font-variant-numeric:tabular-nums }}
 .rbar {{ position:absolute; left:0; top:3px; bottom:3px; background:var(--stub); opacity:.16; border-radius:4px; z-index:-1 }}
+.rbar.gen {{ background:var(--gen) }}
 @media (max-width:420px) {{ .grid {{ grid-template-columns:1fr }} }}
 </style></head><body><main>
 <h1>FrostLite fidelity</h1>

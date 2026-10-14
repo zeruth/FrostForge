@@ -161,6 +161,38 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
       built 2026-10-14 02:51, **not run yet**.
       **Next:** a run. Expect the Login click to get past FUN_14169ca90; follow it forward to the
       first socket connect to 127.0.0.1.
+      **User's run (2026-10-14):** Login was accepted with no visual feedback and no fault. The
+      RPC connection manager (DAT_143264a40) was still null, because bgs_low's Initialize
+      (FUN_141dea240) was demoted for reading TLS. translate.py now stands in a pointer for the
+      thread-safe-statics epoch (`GenInitThreadEpochPtr`), which frees it. Also landed: the run's
+      most-called translated functions on the login path were hand-ported in call order (focus
+      handling `ClientOnFocus` and its listeners, `SI3OnFocus`, the DPI scale, `OsIsKeyDown`,
+      `Lua_C_Login_GetLastError`), and the translator now recovers the protobuf serializers'
+      returned-alias argument and checks thunk calls for lost arguments.
+      **Runs 2026-10-14 (login4, login5):** translating more broke startup first: the vertex
+      format cache (FUN_1422901d0) was a stub returning 0 because the decompiler shows the
+      variadic log writer as a four-argument function, and its newly translated caller
+      dereferenced the 0 in the D3D12 pipeline build. With that fixed (and the `p[n]` strlen
+      form, `code *` byte arithmetic and the float sign masks), login5 reached the login screen
+      and the Login click ran GlueLoginStart, which faulted in FUN_141480920 on the null
+      IBattleNet object (DAT_1430af3f0). BattleNetInitialize had faulted at startup: the bgs log
+      sink registry (FUN_141effc10, DAT_143264a00) was stubbed for an untyped global, so it was
+      never created. translate.py now types an untyped global from the pointer casts the corpus
+      agrees on (3202 globals; applied only where a function dereferences it).
+      **login6, login7:** login6 crashed at startup on `g_gxUploadInterface` (DAT_14348b648),
+      a port global defined without its address tag, so the new translated caller of
+      GxTexUpdate read the image's null; tagged. protobuf's VerifyVersion (FUN_1422046d0) was a
+      stub because a "(" inside a string literal made a call look one argument short; fixed in
+      `call_sites`. login7 reaches the login screen, and the Login click goes four calls deeper
+      (FUN_14147ee10 -> FUN_14148d5e0 -> FUN_1414e1dc0 -> FUN_141dfb1c0), which faults on the
+      ssl filter map (DAT_143264bc0): ssl::Initialize freed it because the SChannel factory's
+      Initialize faulted at startup. Cause: cross_ssl's start (FUN_141f2ece0) calls the
+      factory's Initialize through its vtable with the logger in r8, and the decompiler dropped
+      it, so the SChannel setup logged through a garbage pointer. Patched in
+      translate_patches.json; **not yet translated or run.**
+      **Next:** translate, then run; expect the SChannel setup to log "SChannel Solution
+      Initialized" (or "Cannot Read Trusted Certificates"), the filter map to survive, and the
+      Login click to reach the connection attempt to 127.0.0.1:1119.
 - [ ] The TLS transport over SChannel (the reference's strings: "SChannel GetClientHello failed",
       "SChannel decrypt failed"), and the portal host resolution (`<portal>.actual.battle.net`,
       `.bgs.battle.net`).
@@ -253,3 +285,4 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
 | 2026-10-13 | 2 | the host and certificate read: no client change needed; FrostForge needs a cert (CN/SAN 127.0.0.1, serverAuth) from a local root in the user's Trusted Root store | this commit |
 | 2026-10-14 | 2 | Battle.net init/shutdown and the Login start run translated; portal 127.0.0.1; Login reaches FUN_14169ca90 (faults) | 1c4d706 |
 | 2026-10-14 | 2 | the faults traced to untranslated vtable code (SSL factory), an untyped global and the AuroraBackInterface setup; translator walks vtable slots (16443 functions); built, not run | this commit |
+| 2026-10-14 | 2 | hand-port sweep (focus, DPI, Agent, CPU log, cursor, DBCache); translator: variadic callees, global pointer typing, call results and pieces in callargs, strings in call_sites (16578 -> 17749 translated); login7 reaches the Login click's ssl lookup; cross_ssl's logger patched, not run | this commit |

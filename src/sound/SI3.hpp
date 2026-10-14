@@ -53,6 +53,9 @@ void SI3RegisterCVars();
 // Starts the sound system from the CVars.
 // ref: FUN_1412e59c0
 void SI3Init(bool restart);
+// The window took (true) or lost the focus.
+// ref: FUN_1412e5ae0
+void SI3OnFocus(bool active);
 // ref: FUN_1412e6a50
 void SI3Shutdown(bool restart);
 // The frame's update: the interface's own lists, then a pending restart.

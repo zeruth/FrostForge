@@ -30,10 +30,30 @@ MASK = {8: (1 << 64) - 1, 4: (1 << 32) - 1}
 CALLEE_SAVED = {"rbx", "rbp", "rsi", "rdi", "r12", "r13", "r14", "r15"}
 
 
+def _pieces(binary) -> dict[int, list[tuple[int, int]]]:
+    """Each root function's pieces, (start, end), from the binary's .pdata chains (cached)."""
+    cached = getattr(binary, "_callargs_pieces", None)
+    if cached is None:
+        cached = {}
+        for s, e, r in zip(binary.piece_starts, binary.piece_ends, binary.piece_root):
+            cached.setdefault(r, []).append((s, e))
+        binary._callargs_pieces = cached
+    return cached
+
+
 class _Function:
     def __init__(self, binary, start: int, size: int):
         o = binary.off(start)
         self.ins = list(_md.disasm(bytes(binary.image[o:o + size]), start))
+        # the function's other pieces (cold paths the compiler moved out of line): a protobuf
+        # message's ByteSize keeps its varint-size calls there, so without them every call site
+        # was outside the function and 117 callers of FUN_14222d2d0 read as calls with their
+        # argument lost
+        for piece, end in _pieces(binary).get(start, []):
+            if start <= piece < start + size:
+                continue
+            o = binary.off(piece)
+            self.ins += list(_md.disasm(bytes(binary.image[o:o + end - piece]), piece))
         self.index = {i.address: k for k, i in enumerate(self.ins)}
         self.targets = set()
         self.sources: dict[int, list[int]] = {}
@@ -142,6 +162,71 @@ class _Function:
                 out[reg] = (k, value)
         return out
 
+    def writes(self, k: int, reg: str) -> bool:
+        i = self.ins[k]
+        if i.group(capstone.CS_GRP_CALL):
+            return reg not in CALLEE_SAVED
+        _, written = i.regs_access()
+        return any(FAMILY.get(i.reg_name(r)) == reg for r in written)
+
+    def returned_exits(self, reg: str) -> list[int]:
+        """The exits that return `reg` (`mov rax, reg`, then only the epilogue and the ret)."""
+        out = []
+        for k, i in enumerate(self.ins):
+            ops = i.operands
+            if i.mnemonic != "mov" or len(ops) != 2 or ops[0].type != x86.X86_OP_REG or ops[1].type != x86.X86_OP_REG:
+                continue
+            if i.reg_name(ops[0].reg) != "rax" or i.reg_name(ops[1].reg) != reg:
+                continue
+            for nxt in self.ins[k + 1:k + 8]:
+                if nxt.group(capstone.CS_GRP_RET):
+                    out.append(k)
+                    break
+                if nxt.mnemonic not in ("pop", "add") or nxt.group(capstone.CS_GRP_JUMP):
+                    break
+                if nxt.mnemonic == "add" and nxt.op_str.split(",")[0] != "rsp":
+                    break
+        return out
+
+    def same_as_returned(self, k: int, reg: str) -> bool:
+        """Whether `reg` just before instruction k holds what an exit returns: walking back from
+        k with `reg` untouched reaches instructions every way back from a `mov rax, reg; ret`
+        exit also reaches with it untouched (the tail call and the plain return of a protobuf
+        serializer, which leave the output pointer where it was)."""
+        shared = set()
+        for p in self.path(k):
+            if p in ("entry", "split"):
+                break
+            if self.writes(p, reg):
+                break
+            shared.add(p)
+        if not shared:
+            return False
+        for exit_ in self.returned_exits(reg):
+            todo = [exit_]
+            seen = set()
+            ok = True
+            while todo and ok:
+                p = todo.pop()
+                if p in seen:
+                    continue
+                seen.add(p)
+                if len(seen) > 200:
+                    ok = False
+                    break
+                for q in self.predecessors(p):
+                    if q in shared:
+                        continue
+                    if self.writes(q, reg) or q == 0:
+                        ok = False
+                        break
+                    todo.append(q)
+                if not self.predecessors(p):
+                    ok = False
+            if ok:
+                return True
+        return False
+
     def stack_slot(self, base: str, disp: int, j: int) -> str | None:
         """The local at [base + disp] in the body, by Ghidra's naming: local_N is N bytes below
         the entry stack pointer, local_resN N above it (the caller's home space)."""
@@ -159,7 +244,8 @@ class _Function:
         """The instructions that can run just before instruction p."""
         out = [q for q in self.sources.get(self.ins[p].address, []) if q != p]
         prev = self.ins[p - 1] if p > 0 else None
-        if prev is not None and prev.mnemonic != "jmp" and not prev.group(capstone.CS_GRP_RET):
+        if (prev is not None and prev.mnemonic != "jmp" and not prev.group(capstone.CS_GRP_RET)
+                and prev.address + prev.size == self.ins[p].address):
             out.append(p - 1)
         return out
 
@@ -204,6 +290,12 @@ class _Function:
             """The value just after instruction q has run."""
             i = self.ins[q]
             if i.group(capstone.CS_GRP_CALL):
+                if reg == "rax" and i.operands and i.operands[0].type == x86.X86_OP_IMM:
+                    # what a direct call returned: the translator names it by the variable the
+                    # decompilation assigns from that call (`lVar1 = FUN_x(...)`), when there is
+                    # one; a tail jump through a field of it lost its argument
+                    # (FUN_1414ac6f0: `jmp FUN_1414e7fa0` with rcx = [rax + 0x3a8])
+                    return f"RET(0x{i.operands[0].imm & MASK[8]:x})"
                 if reg not in CALLEE_SAVED:
                     return None         # a call clobbers the volatile registers
                 return before(q, False, visiting, budget)
@@ -234,7 +326,9 @@ class _Function:
         if mn == "mov" and ops[1].type == x86.X86_OP_REG:
             src = self.value(j, FAMILY.get(i.reg_name(ops[1].reg), ""), floor, depth + 1)
             if isinstance(src, str):
-                return src if width == 8 else None
+                # a 32-bit move zero-extends: the low half of the value (protobuf's
+                # `mov ecx, eax` of a uint field into the varint size call)
+                return src if width == 8 else f"(uint)({src})" if width == 4 else None
             return None if src is None else src & MASK[width]
         if mn in ("add", "sub") and ops[1].type == x86.X86_OP_IMM:
             before = self.value(j, reg, floor, depth + 1)
@@ -299,6 +393,34 @@ class CallArgs:
         return sum(1 for i in f.ins if i.mnemonic == "call" and i.operands
                    and i.operands[0].type != x86.X86_OP_IMM)
 
+    def calls(self, i, target: int) -> bool:
+        """Whether instruction i calls (or tail-jumps to) `target`, directly or through a thunk
+        (a function that is only `jmp target`), as Ghidra's thunk_FUN_ names show it."""
+        if i.mnemonic not in ("call", "jmp") or not i.operands or i.operands[0].type != x86.X86_OP_IMM:
+            return False
+        imm = i.operands[0].imm
+        if imm == target:
+            return True
+        try:
+            o = self.binary.off(imm)
+        except Exception:
+            return False
+        code = bytes(self.binary.image[o:o + 5])
+        if len(code) == 5 and code[0] == 0xE9:
+            return imm + 5 + int.from_bytes(code[1:5], "little", signed=True) == target
+        return False
+
+    def returned_at_every_call(self, function: int, size: int, target: int, position: int) -> bool:
+        """Whether, at every call to `target`, argument `position` holds what the function
+        returns on another exit (Function.same_as_returned)."""
+        if position >= len(ARG_REGS):
+            return False
+        f = self._functions.get(function)
+        if f is None:
+            f = self._functions[function] = _Function(self.binary, function, size)
+        sites = [k for k, i in enumerate(f.ins) if self.calls(i, target)]
+        return bool(sites) and all(f.same_as_returned(k, ARG_REGS[position]) for k in sites)
+
     def recover(self, function: int, size: int, target: int, positions: list[int], every: list | None = None):
         """The constants every call from `function` to `target` passes in the argument
         `positions` (0-3), when all calls agree; None when any is unknown or they differ.
@@ -311,9 +433,7 @@ class CallArgs:
             f = self._functions[function] = _Function(self.binary, function, size)
         found = None
         for k, i in enumerate(f.ins):
-            if i.mnemonic not in ("call", "jmp") or not i.operands or i.operands[0].type != x86.X86_OP_IMM:
-                continue
-            if i.operands[0].imm != target:
+            if not self.calls(i, target):
                 continue
             values = [f.value(k, ARG_REGS[p], 0) for p in positions]
             if every is not None:

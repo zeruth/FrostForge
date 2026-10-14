@@ -157,6 +157,15 @@ int32_t ModelSceneFrame::GetObjectType() {
     return FrameScript_TypeId(&g_modelSceneFrameType, &g_modelSceneFrameTypeGuard);
 }
 
+// The model scene a script method was called on (its table at `index`), or null with the
+// reason in *error.
+// ref: FUN_140d11f10
+FrameScript_Object* ModelSceneFrame::GetObjectFromLua(const char** error, lua_State* L, int32_t index,
+    bool allowForbidden, bool allowLockdown) {
+    return FrameScript_Object::GetObjectFromLua(error, L, ModelSceneFrame::GetObjectType(), index, allowForbidden,
+        allowLockdown);
+}
+
 // ref: FUN_141a96680
 void ModelSceneFrame::CreateScriptMetaTables() {
     lua_State* L = FrameScript_GetContext();

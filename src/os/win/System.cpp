@@ -1,6 +1,9 @@
 #include "os/Os.hpp"
+#include "storm/Log.hpp"
+#include "storm/String.hpp"
 #include "storm/Unicode.hpp"
 #include "util/Unimplemented.hpp"
+#include <cstdarg>
 #include <cstring>
 #include <windows.h>
 #include <malloc.h>
@@ -66,14 +69,74 @@ bool OsIsFirstInstance() {
     return s_isFirstInstance;
 }
 
+namespace {
+
+// The feature list Logs\cpu.log shows: text with its length after it.
+struct CPUFEATURES {
+    char m_text[0x100];
+    int32_t m_length;  // +0x100
+};
+
+// Appends to the list, as far as it has room.
+// ref: FUN_141236a80
+void CpuFeaturesAppend(CPUFEATURES* features, const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    features->m_length += static_cast<int32_t>(SStrVPrintfCount(features->m_text + features->m_length,
+        0x100 - features->m_length, format, args));
+    va_end(args);
+}
+
+}
+
 // Detects the CPU's features and writes them to Logs\cpu.log.
-extern "C" unsigned long long FUN_141237360();
-// translated: FUN_141237360
+// ref: FUN_141237360
 void OsLogCpuInfo() {
-    __try {
-        FUN_141237360();
-    } __except (GenFault(0x141237360ull, GetExceptionInformation())) {
+    const OSCPUINFO* info = OsGetCpuInfo();
+    auto bytes = reinterpret_cast<const uint8_t*>(info);
+    OsCreateDirectory("Logs", false, false);
+    HSLOG log;
+    SLogCreate("Logs\\cpu.log", 0, &log);
+    CPUFEATURES features;
+    features.m_text[0] = '\0';
+    features.m_length = 0;
+    // x86, when byte 0x20 bit 0 says the CPUID features were read
+    if (bytes[0x20] & 1) {
+        if (bytes[0x25] & 0x10) CpuFeaturesAppend(&features, "%s ", "lahf64");
+        if (bytes[0x25] & 0x08) CpuFeaturesAppend(&features, "%s ", "cmpxchg16b");
+        if (bytes[0x20] & 0x02) CpuFeaturesAppend(&features, "%s ", "sse");
+        if (bytes[0x20] & 0x04) CpuFeaturesAppend(&features, "%s ", "sse2");
+        if (bytes[0x20] & 0x08) CpuFeaturesAppend(&features, "%s ", "sse3");
+        if (bytes[0x20] & 0x10) CpuFeaturesAppend(&features, "%s ", "ssse3");
+        if (bytes[0x20] & 0x20) CpuFeaturesAppend(&features, "%s ", "sse41");
+        if (bytes[0x20] & 0x40) CpuFeaturesAppend(&features, "%s ", "sse42");
+        if (bytes[0x20] & 0x80) CpuFeaturesAppend(&features, "%s ", "avx");
+        if (bytes[0x21] & 0x01) CpuFeaturesAppend(&features, "%s ", "avx2");
+        if (bytes[0x21] & 0x04) CpuFeaturesAppend(&features, "%s ", "avx512f");
+        if (bytes[0x24] & 0x08) CpuFeaturesAppend(&features, "%s ", "aesni");
+        if (bytes[0x24] & 0x10) CpuFeaturesAppend(&features, "%s ", "clmul");
+        if (bytes[0x24] & 0x20) CpuFeaturesAppend(&features, "%s ", "sha");
+        if (bytes[0x25] & 0x02) CpuFeaturesAppend(&features, "%s ", "rdrand");
     }
+    // ARM, when byte 0x26 bit 0 is set
+    if (bytes[0x26] & 1) {
+        if (bytes[0x26] & 0x02) CpuFeaturesAppend(&features, "%s ", "neon");
+        if (bytes[0x26] & 0x04) CpuFeaturesAppend(&features, "%s ", "fma");
+        if (bytes[0x27] & 0x02) CpuFeaturesAppend(&features, "%s ", "atomicsv81");
+        if (bytes[0x27] & 0x04) CpuFeaturesAppend(&features, "%s ", "fphp");
+        if (bytes[0x27] & 0x08) CpuFeaturesAppend(&features, "%s ", "asimdfphp");
+        if (bytes[0x26] & 0x10) CpuFeaturesAppend(&features, "%s ", "aes");
+        if (bytes[0x26] & 0x20) CpuFeaturesAppend(&features, "%s ", "pmull");
+        if (bytes[0x26] & 0x40) CpuFeaturesAppend(&features, "%s ", "sha1");
+        if (bytes[0x26] & 0x80) CpuFeaturesAppend(&features, "%s ", "sha256");
+    }
+    SLogWrite(log, "vendor: %s", reinterpret_cast<const char*>(bytes + 0x2b));
+    SLogWrite(log, "branding: %s", info->m_brand);
+    SLogWrite(log, "features: %s", features.m_text);
+    SLogWrite(log, "sockets: %u", info->m_packages);
+    SLogWrite(log, "cores: %u", info->m_cores);
+    SLogWrite(log, "threads: %u", info->m_logical);
+    SLogClose(log);
 }
 
 // Installs the unhandled-exception filter (0x1402113a0) and clears the process's

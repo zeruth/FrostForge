@@ -127,6 +127,7 @@ HTEXTURE TextureCreateByName(const char* name, uint64_t gxFlags, CStatus* status
 HTEXTURE TextureCreateById(int32_t fileDataId, CStatus* status);
 HTEXTURE TextureCreateByNameDefault(const char* name, CStatus* status);
 HTEXTURE TextureCreateSolid(const uint32_t* color, const uint32_t* color2, const char* name, uint8_t kind);
+HTEXTURE TextureCreateSolidColor(const uint32_t* color, const char* name);
 HTEXTURE TextureGetWhite();
 HTEXTURE TextureCreateUnique(uint8_t type, uint32_t width, uint32_t height, uint32_t depth, uint8_t format,
     uint8_t dataFormat, uint64_t gxFlags, blz::function_storage* fill, const char* name, bool ownFilter);
