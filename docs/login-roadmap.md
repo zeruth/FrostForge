@@ -190,9 +190,21 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
       factory's Initialize through its vtable with the logger in r8, and the decompiler dropped
       it, so the SChannel setup logged through a garbage pointer. Patched in
       translate_patches.json; **not yet translated or run.**
-      **Next:** translate, then run; expect the SChannel setup to log "SChannel Solution
-      Initialized" (or "Cannot Read Trusted Certificates"), the filter map to survive, and the
-      Login click to reach the connection attempt to 127.0.0.1:1119.
+      **login8 to login10 (2026-10-14):** with the logger patched the SChannel setup no longer
+      faults and the filter map survives. login8: no crash, exit code 0, and Connection.log shows
+      "BattleNet Attempt Logon" for the first time; getaddrinfo ran (FUN_1414fe800), but the
+      connect function (FUN_141500ed0) was a stub that failed to link on Ghidra's merged import
+      name `htons_or_ntohs`. Fixed with `PTR_s_` string pointers typed as `char *` (the
+      protobuf service names) and the merged import mapped to htons. login9 took another branch
+      and faulted on two lost-argument stubs (the MethodInfo map copy FUN_141f01560, a string
+      grow FUN_140666bd0; both patched) and crashed at quit in ssl's shutdown (FUN_141dfb5d0,
+      recovered: a stack spill no longer hides a global's load from callargs).
+      **login10: the Login click resolves the portal, creates a socket (FUN_1415013f0) and
+      runs the connect (FUN_141500ed0).** 703 translated functions ran past startup.
+      **Open:** the SSL handshake step FUN_141f72c40 is a stub (its stack frame is addressed
+      directly); the quit faults in FUN_141f07db0 and then ends on an uncaught C++ exception
+      (0xe06d7363) before Connection.log is flushed; and FrostForge has no Battle.net listener
+      on 1119, which is the server half of this phase.
 - [ ] The TLS transport over SChannel (the reference's strings: "SChannel GetClientHello failed",
       "SChannel decrypt failed"), and the portal host resolution (`<portal>.actual.battle.net`,
       `.bgs.battle.net`).
@@ -285,4 +297,5 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
 | 2026-10-13 | 2 | the host and certificate read: no client change needed; FrostForge needs a cert (CN/SAN 127.0.0.1, serverAuth) from a local root in the user's Trusted Root store | this commit |
 | 2026-10-14 | 2 | Battle.net init/shutdown and the Login start run translated; portal 127.0.0.1; Login reaches FUN_14169ca90 (faults) | 1c4d706 |
 | 2026-10-14 | 2 | the faults traced to untranslated vtable code (SSL factory), an untyped global and the AuroraBackInterface setup; translator walks vtable slots (16443 functions); built, not run | this commit |
-| 2026-10-14 | 2 | hand-port sweep (focus, DPI, Agent, CPU log, cursor, DBCache); translator: variadic callees, global pointer typing, call results and pieces in callargs, strings in call_sites (16578 -> 17749 translated); login7 reaches the Login click's ssl lookup; cross_ssl's logger patched, not run | this commit |
+| 2026-10-14 | 2 | hand-port sweep (focus, DPI, Agent, CPU log, cursor, DBCache); translator: variadic callees, global pointer typing, call results and pieces in callargs, strings in call_sites (16578 -> 17749 translated); login7 reaches the Login click's ssl lookup; cross_ssl's logger patched, not run | 57f6a26 |
+| 2026-10-14 | 2 | cross_ssl logger, string pointers, merged imports, three login-path patches, stack-spill rule (17786 translated); login10 resolves the portal, opens a socket and runs the connect | this commit |

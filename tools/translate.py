@@ -97,6 +97,9 @@ SYMBOL = re.compile(r"\b((?:PTR_)*(?:DAT|_DAT|UNK|_UNK|s|u|ws|LAB|vtable|switchD
 RAM = re.compile(r"\b([a-z]+)Ram0*(1[0-9a-f]{8})\b")
 FUNREF = re.compile(r"\b(?:thunk_)?FUN_([0-9a-f]{9})\b")
 IMPORT = re.compile(r"\bImport::(\w+)::(\w+)\b")
+# imports Ghidra names by both of the exports it matched (the same code): one of them links.
+# `htons_or_ntohs` (WS2_32) left the socket address setup on the logon path unlinked (LNK2019)
+IMPORT_MERGED = {"htons_or_ntohs": "htons", "htonl_or_ntohl": "htonl"}
 # the types a body names: in casts, and in declarations of its locals
 TYPE_WORD = re.compile(r"\(\s*(?:const\s+)?([A-Za-z_]\w*)\s*\*+\s*\)|"
                        r"^\s+(?!(?:return|goto|break|continue|case|else|do|delete|new)\b)"
@@ -1702,7 +1705,12 @@ class Translator:
                 # labels stay labels
                 return whole
             size, gtype = self.refdata.get(addr, (8, "undefined8"))
-            if gtype.startswith("undefined") and size == 8 and addr in borrowed:
+            if whole.startswith(("PTR_s_", "PTR_u_")) and size == 8 and gtype in ("pointer", "pointer64", "undefined8"):
+                # a pointer to a string (Ghidra names it by the string): the protobuf services'
+                # names (`*PTR_s_bgs_protocol_account_v1_AccountS_142d39950`, read and measured by
+                # the service lookups on the logon path) were untyped pointers and demoted
+                gtype = "char *" if whole.startswith("PTR_s_") else "ushort *"
+            elif gtype.startswith("undefined") and size == 8 and addr in borrowed:
                 gtype = borrowed[addr]
             elif gtype.startswith("undefined") and size == 8 and addr in self.global_pointers and addr in derefed:
                 # only where this function dereferences it: elsewhere Ghidra's `DAT_x + 8` is
@@ -1784,7 +1792,7 @@ class Translator:
         body = re.sub(r"((?:[!=]=|[<>]=?)\s*)&\s*_?DAT_([0-9a-f]{9})\b(?!\s*[\[.+-])", bound, body)
         body = SYMBOL.sub(global_, body)
         body = RAM.sub(lambda m: f"REFG(undefined{ {'u': 4, 'l': 8, 'c': 1, 's': 2}.get(m.group(1)[0], 8)}, 0x{m.group(2)})", body)
-        body = IMPORT.sub(lambda m: f"(*(code *)&{m.group(2)})", body)
+        body = IMPORT.sub(lambda m: f"(*(code *)&{IMPORT_MERGED.get(m.group(2), m.group(2))})", body)
         # a global called through: a code pointer, whatever the export typed it
         body = re.sub(r"\(\*REFG\(undefined\d?, (0x[0-9a-f]+)\)\)\s*\(", r"(*REFG(code *, \1))(", body)
         # the same at a port global it is tied to (a function pointer the port holds)
@@ -1877,7 +1885,7 @@ class Translator:
                 plan["stub"][a] = str(e)
                 continue
             uses |= mine
-            imports.update(m.group(2) for m in IMPORT.finditer(text))
+            imports.update(IMPORT_MERGED.get(m.group(2), m.group(2)) for m in IMPORT.finditer(text))
             dlls.update(m.group(1) for m in IMPORT.finditer(text))
         # whatever is called and neither translated nor adapted is stubbed
         for b in uses:

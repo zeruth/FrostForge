@@ -306,7 +306,15 @@ class _Function:
                 if any(FAMILY.get(i.reg_name(r)) == reg for r in written):
                     return self._evaluate(q, i, reg, floor, depth, clean)
                 if writes_memory:
-                    clean = False
+                    # a store into this function's own frame (a spill to [rsp + d] below the entry
+                    # stack pointer) cannot change a global: loads of globals stay good ("stack");
+                    # any other store spoils every load (ssl's shutdown FUN_141dfb5d0 spills rbx
+                    # between loading DAT_143264bc0 into rcx and the call that takes it)
+                    own = self.frame is not None and all(
+                        op.mem.base != 0 and i.reg_name(op.mem.base) == "rsp" and op.mem.index == 0
+                        and 0 <= op.mem.disp < self.frame
+                        for op in i.operands if op.type == x86.X86_OP_MEM and op.access & capstone.CS_AC_WRITE)
+                    clean = "stack" if own and clean else False
             return before(q, clean, visiting, budget)
 
         return before(k, True, frozenset(), [400])
@@ -347,6 +355,8 @@ class _Function:
             ctype = {1: "byte", 2: "ushort", 4: "uint", 8: "ulonglong"}[size]
             if i.reg_name(mem.base) == "rip":
                 return f"(*({ctype} *)&DAT_{(i.address + i.size + mem.disp) & MASK[8]:x})"
+            if clean is not True:
+                return None     # only a stack store came between: good for globals alone
             slot = self.stack_slot(i.reg_name(mem.base), mem.disp, j)
             if slot is not None and size == 8:
                 # a stack slot: the local Ghidra names by its offset from the entry stack pointer

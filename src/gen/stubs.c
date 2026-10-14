@@ -1526,12 +1526,6 @@ undefined8 FUN_14065f6b0() {
     return (undefined8)0;
 }
 
-/* the decompiler lost a call's arguments (FUN_1425bf3b0 reads 3, the call passes 2) */
-longlong * FUN_140666bd0() {
-    GenUnimplemented(0x140666bd0ULL);
-    return (longlong *)0;
-}
-
 /* the decompiler lost a call's arguments (FUN_14026bea0 reads 4, the call passes 0) */
 undefined8 FUN_140672a50() {
     GenUnimplemented(0x140672a50ULL);
@@ -2990,12 +2984,6 @@ bool FUN_141237130() {
     return (bool)0;
 }
 
-/* did not compile: LNK2019 unresolved __imp_htonl_or_ntohl */
-undefined8 FUN_1412388d0() {
-    GenUnimplemented(0x1412388d0ULL);
-    return (undefined8)0;
-}
-
 /* the decompiler lost a call's arguments (FUN_1402ca320 reads 2, the call passes 1) */
 undefined8 FUN_141238ba0() {
     GenUnimplemented(0x141238ba0ULL);
@@ -4286,24 +4274,6 @@ undefined8 FUN_1414bd890() {
     return (undefined8)0;
 }
 
-/* a global used as a pointer the data export does not type */
-undefined8 FUN_1414c77b0() {
-    GenUnimplemented(0x1414c77b0ULL);
-    return (undefined8)0;
-}
-
-/* a global used as a pointer the data export does not type */
-undefined8 FUN_1414c8060() {
-    GenUnimplemented(0x1414c8060ULL);
-    return (undefined8)0;
-}
-
-/* a global used as a pointer the data export does not type */
-undefined8 FUN_1414c83a0() {
-    GenUnimplemented(0x1414c83a0ULL);
-    return (undefined8)0;
-}
-
 /* the decompiler lost a call's arguments (FUN_14069a510 reads 2, the call passes 1) */
 undefined8 FUN_1414cafb0() {
     GenUnimplemented(0x1414cafb0ULL);
@@ -4463,24 +4433,6 @@ undefined8 FUN_1414fb080() {
 /* SIMD union */
 undefined8 FUN_1414fb180() {
     GenUnimplemented(0x1414fb180ULL);
-    return (undefined8)0;
-}
-
-/* did not compile: LNK2019 unresolved __imp_htons_or_ntohs */
-undefined8 FUN_1414fffa0() {
-    GenUnimplemented(0x1414fffa0ULL);
-    return (undefined8)0;
-}
-
-/* did not compile: LNK2019 unresolved __imp_htons_or_ntohs */
-undefined8 FUN_1415006b0() {
-    GenUnimplemented(0x1415006b0ULL);
-    return (undefined8)0;
-}
-
-/* did not compile: LNK2019 unresolved __imp_htons_or_ntohs */
-undefined8 FUN_141500ed0() {
-    GenUnimplemented(0x141500ed0ULL);
     return (undefined8)0;
 }
 
@@ -8612,12 +8564,6 @@ ulonglong FUN_141b93640() {
     return (ulonglong)0;
 }
 
-/* a global used as a pointer the data export does not type */
-undefined8 FUN_141b93c80() {
-    GenUnimplemented(0x141b93c80ULL);
-    return (undefined8)0;
-}
-
 /* the decompiler lost a call's arguments (FUN_1417fe0d0 reads 1, the call passes 0) */
 bool FUN_141b94260() {
     GenUnimplemented(0x141b94260ULL);
@@ -10283,12 +10229,6 @@ undefined8 FUN_141dfa7c0() {
 /* did not compile: LNK2019 unresolved cpuid */
 undefined8 FUN_141dfa970() {
     GenUnimplemented(0x141dfa970ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_141f19450 reads 1, the call passes 0) */
-undefined8 FUN_141dfb5d0() {
-    GenUnimplemented(0x141dfb5d0ULL);
     return (undefined8)0;
 }
 
@@ -13496,18 +13436,6 @@ bool FUN_141ef46f0() {
     return (bool)0;
 }
 
-/* a global used as a pointer the data export does not type */
-undefined8 FUN_141efe360() {
-    GenUnimplemented(0x141efe360ULL);
-    return (undefined8)0;
-}
-
-/* a global used as a pointer the data export does not type */
-undefined8 FUN_141efe9a0() {
-    GenUnimplemented(0x141efe9a0ULL);
-    return (undefined8)0;
-}
-
 /* the decompiler lost a call's arguments (FUN_1402135c0 reads 2, the call passes 1) */
 undefined8 FUN_141f000d0() {
     GenUnimplemented(0x141f000d0ULL);
@@ -13524,12 +13452,6 @@ ulonglong * FUN_141f01000() {
 ulonglong * FUN_141f011b0() {
     GenUnimplemented(0x141f011b0ULL);
     return (ulonglong *)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_141efe6c0 reads 2, the call passes 1) */
-undefined4 * FUN_141f01560() {
-    GenUnimplemented(0x141f01560ULL);
-    return (undefined4 *)0;
 }
 
 /* the decompiler lost a call's arguments (FUN_141dec370 reads 2, the call passes 0) */
@@ -14067,12 +13989,6 @@ undefined8 FUN_141f161e0() {
 }
 
 /* a global used as a pointer the data export does not type */
-undefined8 FUN_141f16230() {
-    GenUnimplemented(0x141f16230ULL);
-    return (undefined8)0;
-}
-
-/* a global used as a pointer the data export does not type */
 undefined8 FUN_141f16280() {
     GenUnimplemented(0x141f16280ULL);
     return (undefined8)0;
@@ -14096,30 +14012,6 @@ undefined8 FUN_141f18d10() {
     return (undefined8)0;
 }
 
-/* a global used as a pointer the data export does not type */
-undefined8 FUN_141f1a5d0() {
-    GenUnimplemented(0x141f1a5d0ULL);
-    return (undefined8)0;
-}
-
-/* a global used as a pointer the data export does not type */
-undefined8 FUN_141f1a980() {
-    GenUnimplemented(0x141f1a980ULL);
-    return (undefined8)0;
-}
-
-/* a global used as a pointer the data export does not type */
-undefined8 FUN_141f1af00() {
-    GenUnimplemented(0x141f1af00ULL);
-    return (undefined8)0;
-}
-
-/* a global used as a pointer the data export does not type */
-undefined8 FUN_141f1b440() {
-    GenUnimplemented(0x141f1b440ULL);
-    return (undefined8)0;
-}
-
 /* the decompiler lost a call's arguments (FUN_14222eda0 reads 2, the call passes 1) */
 ulonglong FUN_141f1be40() {
     GenUnimplemented(0x141f1be40ULL);
@@ -14130,12 +14022,6 @@ ulonglong FUN_141f1be40() {
 ulonglong FUN_141f1c150() {
     GenUnimplemented(0x141f1c150ULL);
     return (ulonglong)0;
-}
-
-/* a global used as a pointer the data export does not type */
-undefined8 FUN_141f1cd30() {
-    GenUnimplemented(0x141f1cd30ULL);
-    return (undefined8)0;
 }
 
 /* beyond the translation depth */

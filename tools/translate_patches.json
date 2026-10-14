@@ -1,5 +1,15 @@
 {
  "_doc": "Corrections to the decompilation, applied before translation (tools/translate.py). Each is a decompiler error proven against the instructions: 'from' must occur exactly once in the function's corpus text, and 'why' gives the instruction evidence.",
+ "141f01560": [
+  {"from": "FUN_141efe6c0(param_1 + 0xc);",
+   "to": "FUN_141efe6c0(param_1 + 0xc,*(undefined8 *)(param_2 + 0xc));",
+   "why": "the MethodInfo map copy rehashes to the source's bucket count: rdx = [r12 + 0x30] (r12 = param_2) at 0x141f01585, rcx = r13 + 0x30 at 0x141f0158a, call at 0x141f015ac; the stores between go to the copy (r13), so callargs could not show the load unchanged"}
+ ],
+ "140666bd0": [
+  {"from": "FUN_1425bf3b0(plVar2,*param_1);",
+   "to": "FUN_1425bf3b0(plVar2,*param_1,param_1[1] + 1);",
+   "why": "the grown string copies its old text with the terminator: r8 = [rdi + 8] + 1 (rdi = param_1) at 0x140666cd8..0x140666cdf, rdx = [rdi] at 0x140666ce5, memmove at 0x140666ceb"}
+ ],
  "141f2ece0": [
   {"from": "(**(code **)(*(longlong *)*DAT_143264fa8 + 8))((longlong *)*DAT_143264fa8,local_b8);",
    "to": "(**(code **)(*(longlong *)*DAT_143264fa8 + 8))((longlong *)*DAT_143264fa8,local_b8,puVar12);",

@@ -956,4 +956,5 @@ extern "C" void* const gen_p_142ddcf80 = (void*)&s_seedB;
 extern "C" void* const gen_p_142ddcfc0 = (void*)&s_parentProcessName;
 extern "C" void* const gen_p_1430a55d8 = (void*)&s_streamingCameraRadius;
 extern "C" void* const gen_p_1430a55e8 = (void*)&s_streamingCameraLookAheadTime;
+extern "C" void* const gen_p_1430d0278 = (void*)&s_wowConnectionLogCallback;
 // ---- end of generated globals ----
