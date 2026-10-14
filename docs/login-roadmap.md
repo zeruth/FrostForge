@@ -111,10 +111,27 @@ The client's network core, so a session exists for the login code to drive.
 
 The client side of the Battle.net (bgs) connection: TLS, RPC framing and the protobuf runtime.
 
-- [ ] **First:** read how the reference builds the Battle.net host from `portal` and how it validates
-      the server certificate (SChannel credential setup, the certificate callback, any pinning). Then
-      make D4's minimal change: just enough to reach 127.0.0.1 and accept FrostForge's certificate,
-      recorded as `diverged` in `docs/stubs.md`. Write the change and the Config.wtf lines it needs here.
+- [x] **First:** how the reference builds the Battle.net host and checks the server's certificate.
+      Read 2026-10-13. **Result: no client change is needed (D4 met with zero divergences).**
+      - Host: `PortalGetHost` (0x141566cb0) appends `.actual.battle.net` only to a portal that is
+        not an address and has no dot, and splits `host:port` (default 1119). So
+        `SET portal "127.0.0.1"` (or `"127.0.0.1:<port>"`) in `WTF/Config.wtf` points it at us.
+      - TLS: bgs-sdk's cross_ssl layer creates one global factory (0x141f2ece0) with type 0, which
+        maps to SChannel (0x141f73c30), **no trust certificates** (settings +0x30 null) and **the
+        system store allowed** (+0x38 = 1). SChannel credentials are acquired with
+        `SCH_CRED_MANUAL_CRED_VALIDATION | SCH_CRED_NO_DEFAULT_CREDS` (0x141f71c80): SChannel
+        checks nothing, the client's own verifier does (0x141f707f0 -> 0x141f769d0).
+      - Chain check (0x141f769d0): `CertGetCertificateChain` on the current-user engine, then the
+        local-machine one; EKU serverAuth (or the two SGC usages); no revocation check; time
+        validity checked; `CertVerifyCertificateChainPolicy(CERT_CHAIN_POLICY_SSL)` with no server
+        name. No certificate or key is pinned (the only PEM markers in the binary are curl's).
+      - Host check (network_connection.cpp 0x141f33ec0 -> 0x141f34250): the certificate must have
+        a common name; each subject-alternative name is matched against the remote host string,
+        and failing that the common name against the connected endpoint's address.
+      - So FrostForge's certificate needs: CN=127.0.0.1, SAN IP:127.0.0.1 (and DNS:localhost),
+        EKU serverAuth, issued by a local FrostForge root CA added to the current user's Trusted
+        Root store (no admin needed). The login REST endpoint (Phase 3) goes through curl's own
+        schannel backend, which has its own pinning option: read it in Phase 3.
 - [ ] The TLS transport over SChannel (the reference's strings: "SChannel GetClientHello failed",
       "SChannel decrypt failed"), and the portal host resolution (`<portal>.actual.battle.net`,
       `.bgs.battle.net`).
@@ -204,3 +221,4 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
 | 2026-10-13 | 1 | the session is live (translated constructor); null-check divergences removed; ClientServicesShutdown's instance part ported | see git log |
 | 2026-10-13 | - | decisions made: D3 (FrostForge goes 3.4.3 on every level, 3.3.5 removed), D4 (127.0.0.1, minimal recorded client changes), D5 (native customization schema) | this commit |
 | 2026-10-13 | 1 | ClientServices / RealmConnection / NetClient / NetInternal by hand (src/net); stage 2 and 4 teardowns; Connection.log written; phase 1 done | this commit |
+| 2026-10-13 | 2 | the host and certificate read: no client change needed; FrostForge needs a cert (CN/SAN 127.0.0.1, serverAuth) from a local root in the user's Trusted Root store | this commit |
