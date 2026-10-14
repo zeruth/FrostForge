@@ -52,8 +52,12 @@ until its check has been seen working, with both programs running locally.
 
 ### Phase 0: local setup
 
-- [ ] FrostForge builds and runs locally as it is (3.3.5), with MySQL and a test account: the
-      baseline before the conversion starts.
+Waived by the user (2026-10-13): no separate baseline step. FrostLite builds and runs in CLion, and
+FrostForge is brought up when the first server item needs it. The items below are done as they
+come up, not as a gate.
+
+- [ ] ~~FrostForge builds and runs locally as it is (3.3.5): the baseline before the conversion.~~
+      Skipped.
 - [ ] Plan the conversion's order with FrostForge's own planning docs (`.agents/plans/`, per its
       AGENTS.md). This roadmap covers only what character select needs. The rest of the conversion
       (maps, spells, movement, everything in world) gets its own plan.
