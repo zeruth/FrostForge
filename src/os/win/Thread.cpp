@@ -3,6 +3,7 @@
 // processor topology.
 
 #include "os/Os.hpp"
+#include <cstdlib>
 #include <cstring>
 #include <intrin.h>
 #include <malloc.h>
@@ -386,12 +387,271 @@ void OsGetProcessorTopology(OSCPUINFO* info) {
     }
 }
 
-// The process-wide CPU description, filled once. The feature detection (cpuid, 0x1402652c0)
-// and the architecture (0x140265790) are not ported: only the topology.
+namespace {
+
+// A 64-bit RDRAND value, retried up to five times; false when none came.
+bool ReadRandom(uint64_t* value) {
+    for (int32_t attempt = 0; attempt < 5; attempt++) {
+        unsigned long long out;
+        if (_rdrand64_step(&out) != 0) {
+            *value = out;
+            return true;
+        }
+    }
+    return false;
+}
+
+// Whether RDRAND works: three more values that all repeat the first mean the instruction is
+// broken (some AMD parts return the same value every time).
+bool RandomWorks() {
+    uint64_t first;
+    if (!ReadRandom(&first)) {
+        return true;
+    }
+    for (int32_t i = 0; i < 3; i++) {
+        uint64_t next;
+        if (!ReadRandom(&next) || next != first) {
+            return true;
+        }
+    }
+    return false;
+}
+
+}
+
+// The processor's features from CPUID into the flag bytes at 0x20..0x25 and 0x2a (SSE through
+// AVX-512, the bit-manipulation, crypto and RDRAND extensions, AVX only where the OS saves the
+// registers), its vendor (0x2b), its rated clock (leaf 0x16), its brand string (0x6b) and, under a
+// hypervisor, the hypervisor's vendor (0xab).
+// ref: FUN_1402652c0
+void OsCpuDetectFeatures(OSCPUINFO* info) {
+    auto bytes = reinterpret_cast<uint8_t*>(info);
+    int regs[4];
+    __cpuid(regs, 0);
+    uint32_t maxLeaf = static_cast<uint32_t>(regs[0]);
+    std::memcpy(bytes + 0x2b, &regs[1], 4);  // ebx
+    std::memcpy(bytes + 0x2f, &regs[3], 4);  // edx
+    std::memcpy(bytes + 0x33, &regs[2], 4);  // ecx
+    bytes[0x37] = 0;
+    bool avx = false;
+    bool avx512 = false;
+    if (maxLeaf >= 2) {
+        __cpuid(regs, 1);
+        uint32_t edx = static_cast<uint32_t>(regs[3]);
+        uint32_t ecx = static_cast<uint32_t>(regs[2]);
+        if ((edx >> 25 & 1) != 0) bytes[0x20] |= 2;      // SSE
+        if ((edx >> 26 & 1) != 0) bytes[0x20] |= 4;      // SSE2
+        if ((ecx & 1) != 0) bytes[0x20] |= 8;            // SSE3
+        if ((ecx >> 9 & 1) != 0) bytes[0x20] |= 0x10;    // SSSE3
+        if ((ecx >> 19 & 1) != 0) bytes[0x20] |= 0x20;   // SSE4.1
+        if ((ecx >> 20 & 1) != 0) bytes[0x20] |= 0x40;   // SSE4.2
+        if ((ecx >> 13 & 1) != 0) bytes[0x25] |= 8;      // CMPXCHG16B
+        if ((ecx >> 22 & 1) != 0) bytes[0x23] |= 8;      // MOVBE
+        if ((ecx >> 23 & 1) != 0) bytes[0x23] |= 0x10;   // POPCNT
+        if ((ecx >> 29 & 1) != 0) bytes[0x24] |= 2;      // F16C
+        if ((ecx >> 25 & 1) != 0) bytes[0x24] |= 8;      // AES
+        if ((ecx & 2) != 0) bytes[0x24] |= 0x10;         // PCLMULQDQ
+        if ((ecx >> 30 & 1) != 0) {                      // RDRAND
+            bytes[0x25] = static_cast<uint8_t>((bytes[0x25] & 0xfd) | (RandomWorks() ? 2 : 0));
+        }
+        if ((ecx >> 31 & 1) != 0) bytes[0x2a] |= 1;      // under a hypervisor
+        if ((ecx >> 27 & 1) != 0) {                      // OSXSAVE
+            uint64_t xcr0 = _xgetbv(0);
+            avx = (xcr0 & 6) == 6;
+            avx512 = (xcr0 & 0xe6) == 0xe6;
+            if (avx && (ecx >> 28 & 1) != 0) {
+                bytes[0x20] |= 0x80;                     // AVX
+                if ((ecx >> 12 & 1) != 0) bytes[0x24] |= 4;  // FMA
+            }
+        }
+    }
+    if (maxLeaf > 6) {
+        __cpuidex(regs, 7, 0);
+        uint32_t subleaves = static_cast<uint32_t>(regs[0]);
+        uint32_t ebx = static_cast<uint32_t>(regs[1]);
+        uint32_t ecx = static_cast<uint32_t>(regs[2]);
+        uint32_t edx = static_cast<uint32_t>(regs[3]);
+        if ((ebx & 8) != 0) bytes[0x23] |= 0x20;         // BMI1
+        if ((ebx >> 8 & 1) != 0) bytes[0x23] |= 0x40;    // BMI2
+        if ((ebx >> 19 & 1) != 0) bytes[0x24] |= 1;      // ADX
+        if ((ebx >> 18 & 1) != 0) bytes[0x25] |= 4;      // RDSEED
+        if ((ebx >> 29 & 1) != 0) bytes[0x24] |= 0x20;   // SHA
+        if ((ecx >> 8 & 1) != 0) bytes[0x24] |= 0x40;    // GFNI
+        if ((edx >> 15 & 1) != 0) bytes[0x2a] |= 2;      // hybrid
+        if (avx) {
+            if ((ebx & 0x20) != 0) bytes[0x21] |= 1;     // AVX2
+            if ((ecx >> 9 & 1) != 0) bytes[0x24] |= 0x80;    // VAES
+            if ((ecx >> 10 & 1) != 0) bytes[0x25] |= 1;      // VPCLMULQDQ
+            if (avx512) {
+                if ((ebx >> 16 & 1) != 0) bytes[0x21] |= 4;      // AVX512F
+                if ((ebx >> 17 & 1) != 0) bytes[0x21] |= 8;      // AVX512DQ
+                if ((ebx >> 21 & 1) != 0) bytes[0x21] |= 0x10;   // AVX512IFMA
+                if ((ebx >> 26 & 1) != 0) bytes[0x21] |= 0x20;   // AVX512PF
+                if ((ebx >> 27 & 1) != 0) bytes[0x21] |= 0x40;   // AVX512ER
+                if ((ebx >> 28 & 1) != 0) bytes[0x21] |= 0x80;   // AVX512CD
+                if ((ebx >> 30 & 1) != 0) bytes[0x22] |= 1;      // AVX512BW
+                if ((ebx >> 31 & 1) != 0) bytes[0x22] |= 2;      // AVX512VL
+                if ((ecx & 2) != 0) bytes[0x22] |= 4;            // AVX512VBMI
+                if ((ecx & 0x40) != 0) bytes[0x22] |= 8;         // AVX512VBMI2
+                if ((ecx >> 11 & 1) != 0) bytes[0x22] |= 0x10;   // AVX512VNNI
+                if ((ecx >> 12 & 1) != 0) bytes[0x22] |= 0x20;   // AVX512BITALG
+                if ((ecx >> 14 & 1) != 0) bytes[0x22] |= 0x40;   // AVX512VPOPCNTDQ
+                if ((edx & 4) != 0) bytes[0x22] |= 0x80;         // AVX5124VNNIW
+                if ((edx & 8) != 0) bytes[0x23] |= 1;            // AVX5124FMAPS
+                if ((edx >> 8 & 1) != 0) bytes[0x23] |= 2;       // AVX512VP2INTERSECT
+            }
+        }
+        if (subleaves != 0) {
+            __cpuidex(regs, 7, 1);
+            uint32_t eax = static_cast<uint32_t>(regs[0]);
+            if (avx) {
+                if ((eax & 0x10) != 0) bytes[0x21] |= 2;                 // AVX-VNNI
+                if (avx512 && (eax & 0x20) != 0) bytes[0x23] |= 4;       // AVX512BF16
+            }
+        }
+    }
+    if (maxLeaf > 0x15) {
+        __cpuid(regs, 0x16);
+        info->m_maxFrequency = static_cast<uint64_t>(static_cast<uint32_t>(regs[1])) * 1000000;
+    }
+    __cpuid(regs, static_cast<int>(0x80000000));
+    uint32_t maxExtended = static_cast<uint32_t>(regs[0]);
+    if (maxExtended > 0x80000000) {
+        __cpuid(regs, static_cast<int>(0x80000001));
+        uint32_t ecx = static_cast<uint32_t>(regs[2]);
+        if ((ecx & 1) != 0) bytes[0x25] |= 0x10;         // LAHF/SAHF
+        if ((ecx & 0x20) != 0) bytes[0x23] |= 0x80;      // LZCNT
+        if ((ecx >> 8 & 1) != 0) bytes[0x25] |= 0x20;    // PREFETCHW
+    }
+    if (maxExtended > 0x80000003) {
+        for (uint32_t i = 0; i < 3; i++) {
+            __cpuid(regs, static_cast<int>(0x80000002 + i));
+            std::memcpy(bytes + 0x6b + i * 0x10, regs, 0x10);
+        }
+        bytes[0x9b] = 0;
+    }
+    if ((bytes[0x2a] & 1) != 0) {
+        bytes[0xb7] = 0;
+        __cpuid(regs, 0x40000000);
+        std::memcpy(bytes + 0xab, &regs[1], 4);
+        std::memcpy(bytes + 0xaf, &regs[2], 4);
+        std::memcpy(bytes + 0xb3, &regs[3], 4);
+    }
+}
+
+// The rated clock from the power manager: the first processor's maximum, in Hz.
+// ref: FUN_1402651d0
+bool OsCpuFrequencyFromPower(uint64_t* frequency) {
+    HMODULE library = LoadLibraryW(L"powrprof.dll");
+    if (library == nullptr) {
+        return false;
+    }
+    typedef LONG(WINAPI * CALLPOWER)(int level, void* in, ULONG inSize, void* out, ULONG outSize);
+    auto call = reinterpret_cast<CALLPOWER>(GetProcAddress(library, "CallNtPowerInformation"));
+    bool result = false;
+    if (call != nullptr) {
+        SYSTEM_INFO system = {};
+        GetSystemInfo(&system);
+        // PROCESSOR_POWER_INFORMATION: Number, MaxMhz, CurrentMhz, MhzLimit, MaxIdleState,
+        // CurrentIdleState
+        uint32_t size = system.dwNumberOfProcessors * 0x18;
+        auto processors = static_cast<uint32_t*>(_alloca((static_cast<uint64_t>(size) + 0xf) & ~0xfull));
+        if (call(0xb, nullptr, 0, processors, size) == 0) {
+            *frequency = static_cast<uint64_t>(processors[1]) * 1000000;
+            result = true;
+        }
+    }
+    FreeLibrary(library);
+    return result;
+}
+
+// The machine's architecture (IsWow64Process2's native machine, else GetNativeSystemInfo),
+// its word-size class, and when CPUID gave no clock, one read off the brand string ("3.60GHz")
+// or else from the power manager.
+// ref: FUN_140265790
+void OsCpuDetectArchitecture(OSCPUINFO* info) {
+    info->m_architecture = 0;
+    typedef BOOL(WINAPI * ISWOW64PROCESS2)(HANDLE process, USHORT* processMachine, USHORT* nativeMachine);
+    auto isWow64Process2 =
+        reinterpret_cast<ISWOW64PROCESS2>(GetProcAddress(GetModuleHandleW(L"kernel32.dll"), "IsWow64Process2"));
+    USHORT processMachine = 0;
+    USHORT nativeMachine = 0;
+    if (isWow64Process2 != nullptr && isWow64Process2(GetCurrentProcess(), &processMachine, &nativeMachine) != 0) {
+        if (nativeMachine == IMAGE_FILE_MACHINE_I386) {
+            info->m_architecture = 1;
+        } else if (nativeMachine == IMAGE_FILE_MACHINE_AMD64) {
+            info->m_architecture = 2;
+        } else if (nativeMachine == IMAGE_FILE_MACHINE_ARMNT) {
+            info->m_architecture = 3;
+        } else if (nativeMachine == IMAGE_FILE_MACHINE_ARM64) {
+            info->m_architecture = 4;
+        }
+    }
+    if (info->m_architecture == 0) {
+        SYSTEM_INFO system;
+        GetNativeSystemInfo(&system);
+        if (system.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL) {
+            info->m_architecture = 1;
+        } else if (system.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64) {
+            info->m_architecture = 2;
+        } else if (system.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM) {
+            info->m_architecture = 3;
+        } else if (system.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM64) {
+            info->m_architecture = 4;
+        }
+    }
+    uint32_t architecture = info->m_architecture;
+    info->m_unknown18 = architecture == 1 || architecture == 2 ? 1
+        : architecture == 3 || architecture == 4                ? 2
+        : architecture == 5                                     ? 3
+                                                                : 0;
+    if (info->m_maxFrequency == 0) {
+        const char* brand = reinterpret_cast<const char*>(info) + 0x6b;
+        uint64_t length = strnlen(brand, 0x40);
+        const char* end = brand + length - 1;
+        if (brand < end && *end == 'z' && brand < end - 1 && end[-1] == 'H' && brand < end - 2) {
+            double scale = 0.0;
+            if (end[-2] == 'G') {
+                scale = 1000000000.0;  // DAT_142620ec8
+            } else if (end[-2] == 'M') {
+                scale = 1000000.0;  // DAT_142620ec0
+            } else if (end[-2] == 'T') {
+                scale = 1000000000000.0;  // DAT_142620ed0
+            }
+            if (scale != 0.0) {
+                const char* number = end - 3;
+                while (brand < number && (static_cast<uint8_t>(*number - '0') < 10 || *number == '.')) {
+                    number--;
+                }
+                double value = std::strtod(number, nullptr);
+                if (value != 0.0) {
+                    info->m_maxFrequency = static_cast<uint64_t>(value * scale);
+                }
+            }
+        }
+    }
+    if (info->m_maxFrequency == 0) {
+        OsCpuFrequencyFromPower(&info->m_maxFrequency);
+    }
+}
+
+// The process-wide CPU description, filled once: the defaults (one package, core and thread,
+// x86-64, "?" for the vendor and brand), the CPUID features, the architecture and clock, the
+// topology.
 // ref: FUN_140265ca0
 const OSCPUINFO* OsGetCpuInfo() {
     static OSCPUINFO s_info = [] {
         OSCPUINFO info = {};
+        info.m_packages = 1;
+        info.m_cores = 1;
+        info.m_logical = 1;
+        info.m_unknown18 = 1;
+        info.m_architecture = 2;
+        reinterpret_cast<uint8_t*>(&info)[0x2b] = '?';
+        reinterpret_cast<uint8_t*>(&info)[0x6b] = '?';
+        OsCpuDetectFeatures(&info);
+        reinterpret_cast<uint8_t*>(&info)[0x20] |= 1;
+        OsCpuDetectArchitecture(&info);
         OsGetProcessorTopology(&info);
         return info;
     }();

@@ -228,6 +228,9 @@ struct OSCPUINFO {
 };
 static_assert(sizeof(OSCPUINFO) == 0xC0, "OSCPUINFO is 0xc0 bytes");
 int64_t OsGetNanoseconds();
+void OsCpuDetectFeatures(OSCPUINFO* info);
+bool OsCpuFrequencyFromPower(uint64_t* frequency);
+void OsCpuDetectArchitecture(OSCPUINFO* info);
 // The raw performance counter (FUN_140266c80) and a tick count in nanoseconds (FUN_140266bf0).
 int64_t OsGetPerformanceCounter();
 int64_t OsTicksToNanoseconds(uint64_t ticks);

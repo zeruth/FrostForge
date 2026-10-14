@@ -33,5 +33,6 @@ const GRAPHICSLEVELVALUE* GraphicsLevelValues(uint32_t level, bool raid);
 
 // Where the RenderScale default comes from (FUN_141363b80).
 void GraphicsSetRenderScaleDefault(float (*getter)());
+void GraphicsResetQualityGroups(bool raid);
 
 #endif

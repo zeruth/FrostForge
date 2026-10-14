@@ -59,5 +59,13 @@ void Sub140227810();
 void Sub140226550();
 void Sub140226260();
 void Sub140216880();
+void ConsoleCommandTableClear();
+void GamePadSaveAddonConfig();
+void Sub14022A040();
+void Sub14123ABD0();
+void Sub1402293F0();
+void Sub1402285E0();
+void* Sub14192FA70();
+bool Sub1406A8850(void* a1);
 
 #endif

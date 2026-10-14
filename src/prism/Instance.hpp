@@ -37,16 +37,22 @@ struct APIDEVICEDATA {
     uint8_t m_intelGeneration;      // 0x78: then the driver's device information
     uint8_t m_79[0x17];
     uint8_t m_nvidiaFamily;         // 0x90
-    uint8_t m_91[0x1b];
+    uint8_t m_91[0xf];
+    uint32_t m_appleGpuCores;       // 0xa0: Apple silicon's GPU core count
+    uint8_t m_a4[8];
     uint32_t m_osClass;             // 0xac
     uint32_t m_osBuild;             // 0xb0
     uint8_t m_b4[8];
     uint32_t m_featureLevel;        // 0xbc: D3D_FEATURE_LEVEL
-    uint8_t m_c0[0x156];
+    uint8_t m_c0[0x19];
+    uint8_t m_d9;                   // 0xd9: below 4 caps a discrete part's tier at 1
+    uint8_t m_da[0x13c];
     uint8_t m_216;                  // 0x216
     uint8_t m_217[0x11];
 };
 static_assert(offsetof(APIDEVICEDATA, m_osClass) == 0xac, "APIDEVICEDATA layout");
+static_assert(offsetof(APIDEVICEDATA, m_appleGpuCores) == 0xa0, "APIDEVICEDATA layout");
+static_assert(offsetof(APIDEVICEDATA, m_d9) == 0xd9, "APIDEVICEDATA layout");
 static_assert(offsetof(APIDEVICEDATA, m_featureLevel) == 0xbc, "APIDEVICEDATA layout");
 static_assert(sizeof(APIDEVICEDATA) == 0x228, "APIDEVICEDATA is 0x228 bytes");
 

@@ -229,6 +229,11 @@ void OsTimerSetSpeed(float speed) {
     timer->m_lock.Leave();
 }
 
+// ref: FUN_141237d80
+void OsTimerShutdown() {
+    timeEndPeriod(1);
+}
+
 // ref: FUN_141237d90
 void OsTimerInitialize(int32_t method) {
     timeBeginPeriod(1);

@@ -42,8 +42,8 @@ None of them may contact Blizzard endpoints.
 
 | function | ref | why it waits |
 |---|---|---|
-| `RegionDialogRun` | 0x140219cc0 (dlgproc 0x14021a7d0) | the region/language picker is a dialog resource (0x90) with string resources in the reference exe; FrostLite has no resources yet. Only shown when the portal or locale had to be guessed (a fresh install). The stub returns **cancel**, so on a fresh install startup stops there - set `portal` and `textLocale` in WTF\Config.wtf. |
 | `OsRegistryReadString` | 0x141dfb910 | reads `HKCU\Software\Blizzard Entertainment\Battle.net\Launch Options\WoW` values (DPAPI-decrypted when asked); only reached with `-launcherlogin` |
 | `LibraryAddRef` / `LibraryRelease` | 0x142204650 / 0x142204520 | a third-party library's ref-counted global init/shutdown; only on the startup cancel path; not identified |
 | Locale CVar callbacks | 0x140226bd0, 0x140226d90, 0x140226460, 0x140226a10 | reach the locale/portal code they share with StartupService; they accept every value for now |
-| Timing, movie log | 0x141237d90, 0x1405fde10 | stage 2 edges, next in line |
+| The teardown after the save | 0x14022a040, 0x14123abd0, 0x1402293f0, 0x1402285e0, 0x140323870 (console commands), 0x14031fad0 (`CVarShutdown`) | stage 4, the window system and stage 3 torn down, then the console commands and every CVar freed. The final shutdown (FUN_140216880) and the stage 2 teardown (FUN_140226550) are ported and write Config.wtf, but these stay stubs: the sound engine, the UI and the tact workers are never stopped, and still read CVars and commands until the process ends |
+| `GamePadSaveAddonConfig` | 0x14152ad60 | writes WTF\GamePadConfig_Addons.json on quit | no game pad support is ported |

@@ -15,6 +15,8 @@
 #include "util/Fnv.hpp"
 #include "util/Unimplemented.hpp"
 #include <cstring>
+#include <windows.h>
+#include <commctrl.h>
 
 CVar* g_overrideArchive;  // DAT_142ddfa78
 
@@ -185,16 +187,214 @@ bool LauncherSettingRead(const char* name, char* buffer, uint64_t size, bool enc
 
 namespace {
 
+// The reference executable, mapped at its own base with its headers and resources
+// (src/gen/RefImage.cpp): the region picker's dialog and strings are its resources, and it
+// names itself as their module.
+HINSTANCE const s_resources = reinterpret_cast<HINSTANCE>(0x140000000ull);  // IMAGE_DOS_HEADER_140000000
+
+// The picker's rows (0x18 bytes each, DAT_142cc8650): the language's code, its locale, the
+// group (region) it is listed under, and the region it picks.
+struct REGIONCHOICE {
+    const char* m_code;
+    int32_t m_locale;
+    int32_t m_group;
+    int32_t m_region;
+    int32_t m_pad;
+};
+const REGIONCHOICE s_choices[13] = {
+    { "enUS", 0, 0, 1, 0 },
+    { "esMX", 7, 0, 1, 0 },
+    { "ptBR", 10, 0, 1, 0 },
+    { "deDE", 3, 1, 3, 0 },
+    { "enGB", 0, 1, 3, 0 },
+    { "esES", 6, 1, 3, 0 },
+    { "frFR", 2, 1, 3, 0 },
+    { "itIT", 11, 1, 3, 0 },
+    { "ptPT", 10, 1, 3, 0 },
+    { "ruRU", 8, 1, 3, 0 },
+    { "koKR", 1, 2, 2, 0 },
+    { "zhTW", 5, 3, 4, 0 },
+    { "zhCN", 4, 4, 5, 0 },
+};  // DAT_142cc8650
+
+// Each locale's Windows language group, for whether its strings can be shown (DAT_142cc8018).
+const uint32_t s_languageGroups[12] = { 1, 8, 1, 1, 10, 9, 1, 1, 5, 0, 1, 1 };  // DAT_142cc8018
+
+// The string ids: each group's header (DAT_142618d20) and confirmation (DAT_142618d70), then the
+// locale's own version of a string at that id plus the locale.
+const int32_t s_groupHeaders[6] = { 0xec, 0xf8, 0x104, 0x110, 0x11c, 0x128 };  // DAT_142618d20
+const int32_t s_groupConfirms[5] = { 0xb0, 0xbc, 0xc8, 0xd4, 0xe0 };          // DAT_142618d70
+
+constexpr int32_t ID_LIST = 0x3ec;
+
+// String `id + locale` in the locale's own language when Windows can show it, else string `id`.
+void LoadLocalizedString(int32_t id, int32_t localized, int32_t locale, wchar_t* text) {
+    if ((LoadStringW(s_resources, static_cast<UINT>(localized), text, 0x1000) == 0
+            || !IsValidLanguageGroup(s_languageGroups[locale], LGRPID_INSTALLED))
+        && LoadStringW(s_resources, static_cast<UINT>(id), text, 0x1000) == 0) {
+        text[0] = L'\0';
+    }
+}
+
+// The list: one full-row column, a group per region (headed in the current choice's language),
+// each language in its own; the current choice selected.
+// ref: FUN_14021a250
+INT_PTR RegionDialogInit(HWND dialog, WPARAM focus, int32_t* selected) {
+    (void)focus;
+    HWND list = GetDlgItem(dialog, ID_LIST);
+    RECT rect;
+    GetClientRect(list, &rect);
+    wchar_t empty = L'\0';
+    LVCOLUMNA column = {};
+    column.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;
+    column.cx = rect.right - rect.left - 4;
+    column.pszText = reinterpret_cast<char*>(&empty);
+    SendMessageA(list, LVM_INSERTCOLUMNA, 0, reinterpret_cast<LPARAM>(&column));
+    SendMessageA(list, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
+    SendMessageA(list, LVM_ENABLEGROUPVIEW, 1, 0);
+    wchar_t text[0x1000];
+    int32_t group = -1;
+    for (int32_t i = 0; i < 13; i++) {
+        const REGIONCHOICE& choice = s_choices[i];
+        if (choice.m_group != group) {
+            int32_t locale = s_choices[*selected == -1 ? 0 : *selected].m_locale;
+            int32_t id = s_groupHeaders[choice.m_group];
+            LoadLocalizedString(id, id + locale, locale, text);
+            LVGROUP header = {};
+            header.cbSize = 0x98;
+            header.mask = LVGF_HEADER | LVGF_GROUPID;
+            header.pszHeader = text;
+            header.iGroupId = choice.m_group;
+            SendMessageA(list, LVM_INSERTGROUP, static_cast<WPARAM>(-1), reinterpret_cast<LPARAM>(&header));
+            group = choice.m_group;
+        }
+        LoadLocalizedString(0x134 + i, 0x90 + i, choice.m_locale, text);
+        LVITEMW item = {};
+        item.mask = LVIF_TEXT | LVIF_GROUPID;
+        item.pszText = text;
+        item.iGroupId = choice.m_group;
+        item.iItem = static_cast<int>(SendMessageA(list, LVM_GETITEMCOUNT, 0, 0));
+        SendMessageW(list, LVM_INSERTITEMW, 0, reinterpret_cast<LPARAM>(&item));
+    }
+    SetFocus(list);
+    if (*selected != -1) {
+        LVITEMW item = {};
+        item.stateMask = 0xf;
+        item.state = LVIS_FOCUSED | LVIS_SELECTED;
+        SendMessageA(list, LVM_SETITEMSTATE, static_cast<WPARAM>(*selected), reinterpret_cast<LPARAM>(&item));
+    }
+    return 1;
+}
+
+// A selection enables OK and relabels both buttons in the chosen language; the selected row is
+// drawn in the highlight colours.
+// ref: FUN_14021a570
+INT_PTR RegionDialogNotify(HWND dialog, int32_t control, NMHDR* header) {
+    if (control != ID_LIST) {
+        return 0;
+    }
+    if (static_cast<int32_t>(header->code) == LVN_ITEMCHANGED) {
+        auto changed = reinterpret_cast<NMLISTVIEW*>(header);
+        uint32_t selected = changed->uNewState >> 1 & 1;
+        if (selected != (changed->uOldState >> 1 & 1)) {
+            EnableWindow(GetDlgItem(dialog, IDOK), static_cast<BOOL>(selected));
+        }
+        if (selected != 0) {
+            int32_t locale = s_choices[changed->iItem].m_locale;
+            wchar_t text[0x1000];
+            LoadLocalizedString(0x84, locale + 0x84, locale, text);
+            SetDlgItemTextW(dialog, IDCANCEL, text);
+            LoadLocalizedString(0xa4, locale + 0xa4, locale, text);
+            SetDlgItemTextW(dialog, IDOK, text);
+        }
+        return 1;
+    }
+    if (static_cast<int32_t>(header->code) != NM_CUSTOMDRAW) {
+        return 0;
+    }
+    auto draw = reinterpret_cast<NMLVCUSTOMDRAW*>(header);
+    if (draw->nmcd.dwDrawStage == CDDS_PREPAINT) {
+        SetWindowLongPtrW(dialog, DWLP_MSGRESULT, CDRF_NOTIFYITEMDRAW);
+        return 1;
+    }
+    if (draw->nmcd.dwDrawStage != CDDS_ITEMPREPAINT) {
+        return 0;
+    }
+    HWND list = GetDlgItem(dialog, ID_LIST);
+    if (SendMessageA(list, LVM_GETITEMSTATE, draw->nmcd.dwItemSpec, LVIS_SELECTED) != 0) {
+        draw->clrTextBk = GetSysColor(COLOR_HIGHLIGHT);
+        draw->clrText = GetSysColor(COLOR_HIGHLIGHTTEXT);
+    }
+    SetWindowLongPtrW(dialog, DWLP_MSGRESULT, CDRF_DODEFAULT);
+    return 1;
+}
+
+// OK asks for confirmation in the chosen language and ends with the row; Cancel and closing end
+// with -1.
+// ref: FUN_14021a7d0
+INT_PTR CALLBACK RegionDialogProc(HWND dialog, UINT message, WPARAM wparam, LPARAM lparam) {
+    INT_PTR result = -1;
+    if (message != WM_CLOSE) {
+        if (message == WM_NOTIFY) {
+            return RegionDialogNotify(dialog, static_cast<int32_t>(wparam), reinterpret_cast<NMHDR*>(lparam));
+        }
+        if (message == WM_INITDIALOG) {
+            return RegionDialogInit(dialog, wparam, reinterpret_cast<int32_t*>(lparam));
+        }
+        if (message != WM_COMMAND) {
+            return 0;
+        }
+        if (LOWORD(wparam) == IDOK) {
+            int32_t row = static_cast<int32_t>(
+                SendMessageA(GetDlgItem(dialog, ID_LIST), LVM_GETNEXTITEM, static_cast<WPARAM>(-1), LVNI_SELECTED));
+            if (row == -1) {
+                return 0;
+            }
+            int32_t locale = s_choices[row].m_locale;
+            int32_t id = s_groupConfirms[s_choices[row].m_group];
+            wchar_t text[0x1000];
+            LoadLocalizedString(id, id + locale, locale, text);
+            if (MessageBoxW(dialog, text, L"World of Warcraft", MB_OKCANCEL | MB_ICONEXCLAMATION) != IDOK) {
+                return 0;
+            }
+            result = row;
+        } else if (LOWORD(wparam) != IDCANCEL) {
+            return 0;
+        }
+    }
+    EndDialog(dialog, result);
+    return 1;
+}
+
 // The region/language picker (dialog resource 0x90) shown when the portal or the locale had
-// to be guessed: returns the chosen region and locale, false on cancel. Not ported: the
-// dialog and its strings are resources of the reference executable (docs/stubs.md). Returns
-// cancel.
+// to be guessed: starts on the row matching the guess (or the first in the guessed region),
+// and returns the chosen region and locale; false on cancel.
 // ref: FUN_140219cc0
 bool RegionDialogRun(uint32_t* region, uint32_t* locale) {
-    (void)region;
-    (void)locale;
-    FROST_UNIMPLEMENTED();
-    return false;
+    int32_t regionMatch = -1;
+    int32_t selected = -1;
+    for (int32_t i = 0; i < 13; i++) {
+        if (s_choices[i].m_region == static_cast<int32_t>(*region)) {
+            if (s_choices[i].m_locale == static_cast<int32_t>(*locale)) {
+                selected = i;
+                break;
+            }
+            if (regionMatch == -1) {
+                regionMatch = i;
+            }
+        }
+        selected = regionMatch;
+    }
+    INITCOMMONCONTROLSEX controls = { sizeof(controls), ICC_LISTVIEW_CLASSES };
+    InitCommonControlsEx(&controls);
+    INT_PTR row = DialogBoxParamW(s_resources, MAKEINTRESOURCEW(0x90), nullptr, &RegionDialogProc,
+        reinterpret_cast<LPARAM>(&selected));
+    if (static_cast<int32_t>(row) == -1) {
+        return false;
+    }
+    *region = static_cast<uint32_t>(s_choices[row].m_region);
+    *locale = static_cast<uint32_t>(s_choices[row].m_locale);
+    return true;
 }
 
 // Reference-counted start/stop of a library's global state (call-once init, a shutdown list).

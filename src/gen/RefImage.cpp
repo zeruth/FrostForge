@@ -187,6 +187,12 @@ bool RefImageInitialize(const char* path) {
         std::fclose(file);
         return false;
     }
+    // the headers too: the reference names its own image as the module of its resources (the
+    // region picker's dialog and strings), and the resource functions read them from here
+    std::fseek(file, 0, SEEK_SET);
+    if (std::fread(image, 1, nt.OptionalHeader.SizeOfHeaders, file) != nt.OptionalHeader.SizeOfHeaders) {
+        FrostLog("refimage", "short read of the headers");
+    }
     std::fseek(file, dos.e_lfanew + offsetof(IMAGE_NT_HEADERS64, OptionalHeader) + nt.FileHeader.SizeOfOptionalHeader,
                SEEK_SET);
     for (uint32_t i = 0; i < count; i++) {

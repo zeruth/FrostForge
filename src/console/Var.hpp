@@ -94,6 +94,14 @@ bool CVarParseFile(void* file, CVARSECTIONCALLBACK sectionCallback, void* param,
 bool CVarExecFile(const char* name, CVARSECTIONCALLBACK sectionCallback, void* param, bool executeAll);
 void CVarLoadConfig(const char* name);
 void CVarExecFileDirty(const char* name);
+// A saving CVar's name and value; false stops the walk.
+typedef bool (*CVARENUMPROC)(const char* name, const char* value, void* param, uint32_t param2);
+bool CVarEnumerate(uint32_t scope, uint32_t exclude, bool annotate, CVARENUMPROC proc, void* param, uint32_t param2);
+bool CVarSaveFile(const char* name);
+bool CVarSaveConfig();
+bool CVarDeleteFile(const char* name);
+void CVarShutdownConfig();
+void CVarShutdown();
 
 // Makes a latched CVar's pending value current; false when nothing was pending.
 bool CVarApplyLatched(CVar* cvar);

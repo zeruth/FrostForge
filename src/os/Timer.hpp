@@ -20,6 +20,8 @@ const char* OsTimerMethodName(int32_t method);
 void OsTimerSetSpeed(float speed);
 // timeBeginPeriod(1), then the method (the timingMethod CVar's value).
 void OsTimerInitialize(int32_t method);
+// The timer resolution OsTimerInitialize raised, let go.
+void OsTimerShutdown();
 int64_t OsTimerGetFrequency();
 uint64_t OsTimerGetTicks();
 // The raw GetTickCount milliseconds, whatever the timing method.

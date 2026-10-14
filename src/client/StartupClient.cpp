@@ -1,6 +1,8 @@
 #include "model2/M2Particle.hpp"
 #include "client/ClientCVars.hpp"
 #include "world/WorldFrame.hpp"
+#include "blz/Vector.hpp"
+#include "util/Fnv.hpp"
 #include "client/GraphicsSettings.hpp"
 #include "client/RenderCVars.hpp"
 #include "client/ConsoleDevice.hpp"
@@ -245,16 +247,60 @@ void Sub1413527A0(void* const* functions) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_140327010
-void Sub140327010(void (*callback)(uint32_t)) {
-    (void)callback;
-    FROST_UNIMPLEMENTED();
+namespace {
+
+const char s_optionPageTag[] = ".P6AXW4OPTION_PAGE__@Z";
+// What each options page's Defaults button runs (DAT_142e30208).
+blz::vector<void (*)(uint32_t), s_optionPageTag> s_optionPageResets;  // DAT_142e30208
+
 }
 
+// ref: FUN_140327010
+void Sub140327010(void (*callback)(uint32_t)) {
+    s_optionPageResets.push_back(callback);
+}
+
+namespace {
+
+void ResetCVar(const char* name) {
+    if (CVar* cvar = CVarLookup(t2util::ConstFnvHashStringI(name))) {
+        CVarResetToDefault(cvar);
+    }
+}
+
+// The advanced page's settings (PTR_s_textureFilteringMode_142619af0).
+const char* const s_advancedOptions[] = { "textureFilteringMode", "MSAAQuality", "FFXAntiAliasingMode", "MSAAAlphaTest",
+    "ResampleQuality", "ResampleSharpness", "gxAdapter", "physicsLevel", "maxFPS", "maxFPSBk", "targetFPS", "gamma",
+    "brightness", "contrast", "clipcursor", "shadowRt", "RAIDshadowRt", "SSAOType" };
+
+}
+
+// An options page back to its defaults: the graphics page (0) its quality settings, every
+// quality group and the render scale; the advanced page (1) its settings, and the graphics API
+// the best this machine has; the interface page (2) the UI scale. The first start does all
+// three, with the defaults the hardware detection chose.
 // ref: FUN_14022ad90
-void Sub14022AD90(uint32_t a1) {
-    (void)a1;
-    FROST_UNIMPLEMENTED();
+void Sub14022AD90(uint32_t page) {
+    if (page == 0) {
+        for (const char* name : { "windowResizeLock", "graphicsQuality", "RAIDgraphicsQuality" }) {
+            ResetCVar(name);
+        }
+        GraphicsResetQualityGroups(true);
+        GraphicsResetQualityGroups(false);
+        ResetCVar("RenderScale");
+    } else if (page == 1) {
+        for (const char* name : s_advancedOptions) {
+            ResetCVar(name);
+        }
+        CVar* api = CVarLookup(t2util::ConstFnvHashStringI("gxapi"));
+        if (api == nullptr) {
+            return;
+        }
+        CVarSet(api, GxApiName(GxGetBestApi()), true, false, false, true);
+    } else if (page == 2) {
+        ResetCVar("uiScale");
+        ResetCVar("useUiScale");
+    }
 }
 
 
@@ -529,17 +575,35 @@ void Sub1402D0F60() {
 }
 
 
+// Kiosk mode (0x24 bytes): on or off, the session's length and how much of it has passed, its
+// stage (1 running, 2 over), and two warnings, each a time left and whether it is still due
+// (5 minutes and 1 minute).
+struct KIOSKSTATE {
+    uint8_t m_enabled;              // 0x00
+    uint8_t m_pad01[7];
+    float m_length;                 // 0x08
+    float m_elapsed;                // 0x0C
+    uint8_t m_stage;                // 0x10
+    uint8_t m_pad11[3];
+    struct {
+        float m_left;
+        uint8_t m_due;
+        uint8_t m_pad[3];
+    } m_warnings[2];                // 0x14
+};
+static_assert(sizeof(KIOSKSTATE) == 0x24, "KIOSKSTATE is 0x24 bytes");
+
+KIOSKSTATE s_kiosk = { 0, {}, 0.0f, 0.0f, 0, {}, { { 300.0f, 0, {} }, { 60.0f, 0, {} } } };  // DAT_142d2a4e0
+
 // ref: FUN_14192fa70
 void* Sub14192FA70() {
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    return &s_kiosk;
 }
 
+// Whether kiosk mode is on.
 // ref: FUN_1406a8850
 bool Sub1406A8850(void* a1) {
-    (void)a1;
-    FROST_UNIMPLEMENTED();
-    return false;
+    return static_cast<KIOSKSTATE*>(a1)->m_enabled != 0;
 }
 
 // ref: FUN_140229ce0

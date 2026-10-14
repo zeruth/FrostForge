@@ -2443,6 +2443,20 @@ bool WorldPreloadHighResTexturesCallback(CVar*, const char*, const char* value, 
     return true;
 }
 
+}  // namespace
+
+// Each group's UI value back to its coded default.
+// ref: FUN_141363a10
+void GraphicsResetQualityGroups(bool raid) {
+    for (const auto& group : s_groups[raid ? 1 : 0]) {
+        if (CVar* cvar = CVarLookup(t2util::ConstFnvHashStringI(group.first.c_str()))) {
+            CVarResetToDefault(cvar);
+        }
+    }
+}
+
+namespace {
+
 // Each group's UI value gets the coded default its quality level setting gives it.
 // ref: FUN_141363610
 void ApplyGraphicsQualityDefaults(bool raid) {

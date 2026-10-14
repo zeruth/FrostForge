@@ -1,4 +1,5 @@
 #include "console/Var.hpp"
+#include "base/RCString.hpp"
 #include "console/Command.hpp"
 #include "os/Os.hpp"
 #include "storm/Memory.hpp"
@@ -6,6 +7,7 @@
 #include "storm/thread/SCritSect.hpp"
 #include "util/Fnv.hpp"
 #include "util/FunctionPointer.hpp"
+#include "util/Unimplemented.hpp"
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
@@ -829,6 +831,134 @@ void CVarExecFileDirty(const char* name) {
     CVarExecFile(name, nullptr, nullptr, false);
 }
 
+// Each CVar worth saving, to `proc` with its value: registered and not internal (flags 1 set,
+// 0x80 clear), in the scope `scope` (the 0x30 bits: 0 the machine's, else an account's or a
+// character's), with none of `exclude`, and not at its coded default unless it keeps its value
+// regardless (0x800). The value is the pending one, else the current, else the default. With
+// `annotate`, a CVar that is flagged 0x4000 passes "(default)" or "(configured)" instead. False
+// when `proc` stops it.
+// ref: FUN_140320130
+bool CVarEnumerate(uint32_t scope, uint32_t exclude, bool annotate, CVARENUMPROC proc, void* param, uint32_t param2) {
+    if (RCStringPoolIsEmpty()) {
+        return true;
+    }
+    for (CVarEntry* entry = s_cvars.Skip(s_cvars.m_buckets); entry < s_cvars.End(); entry = s_cvars.Skip(entry + 1)) {
+        CVar* cvar = entry->m_cvar;
+        uint32_t flags = cvar->m_flags;
+        if ((flags & 0x81) != 1 || (flags & 0x30) != scope || (exclude & flags) != 0) {
+            continue;
+        }
+        const char* value = cvar->m_latchedValue.m_str;
+        if (value == nullptr) {
+            value = cvar->m_stringValue.m_str;
+        }
+        if (value == nullptr) {
+            value = cvar->m_defaultValue.m_str;
+        }
+        if (value == nullptr) {
+            continue;
+        }
+        if ((flags >> 11 & 1) == 0 && cvar->m_defaultValue.m_str != nullptr
+            && std::strcmp(cvar->m_stringValue.m_str, cvar->m_defaultValue.m_str) == 0) {
+            continue;
+        }
+        if ((flags >> 14 & 1) != 0 && annotate) {
+            const char* current = value;
+            const char* coded = cvar->m_defaultValue.m_str != nullptr ? cvar->m_defaultValue.m_str : "";
+            if (std::strcmp(current, coded) == 0 && *coded != '\0') {
+                value = "(default)";
+            } else {
+                value = *current == '\0' ? "" : "(configured)";
+            }
+        }
+        if (!proc(cvar->m_name.m_data, value, param, param2)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+namespace {
+
+// A SET line into the config file being written.
+// ref: FUN_140321ec0
+bool CVarWriteLine(const char* name, const char* value, void* file, uint32_t unused) {
+    (void)unused;
+    char line[0x46a];
+    uint32_t length = static_cast<uint32_t>(SStrPrintf(line, sizeof(line), "SET %s \"%s\"\r\n", name, value));
+    uint32_t written = 0;
+    OsWriteFile(file, line, length, &written);
+    return written != 0;
+}
+
+}
+
+// The machine's CVars written to WTF\<name>, when anything changed since the last write.
+// ref: FUN_140321d60
+bool CVarSaveFile(const char* name) {
+    if (s_cvarsDirty == 0) {
+        return true;
+    }
+    if (name == nullptr || *name == '\0') {
+        return false;
+    }
+    char path[0x104];
+    // inlined: a bounded copy of WTF\ and a bounded append of the name
+    std::strncpy(path, "WTF\\", sizeof(path) - 1);
+    path[sizeof(path) - 1] = '\0';
+    strncat_s(path, sizeof(path), name, _TRUNCATE);
+    s_cvarsDirty = 0;
+    bool result = false;
+    void* file = OsCreateFile(path, GENERIC_WRITE, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL);
+    if (file != INVALID_HANDLE_VALUE) {
+        g_cvarLock.Enter();
+        result = CVarEnumerate(0, 0, false, &CVarWriteLine, file, 0);
+        g_cvarLock.Leave();
+        OsCloseFile(file);
+    }
+    return result;
+}
+
+// The config file CVarLoadConfig read, written back.
+// ref: FUN_140326a10
+bool CVarSaveConfig() {
+    return CVarSaveFile(s_configFile);
+}
+
+// A config file deleted, by name or as WTF\<name> (a RunOnce file once applied).
+// ref: FUN_14031fa10
+bool CVarDeleteFile(const char* name) {
+    if (OsFileExists(name)) {
+        OsDeleteFile(name);
+        return true;
+    }
+    char path[0x110];
+    SStrPrintf(path, 0x104, "WTF\\%s", name);
+    if (OsFileExists(path)) {
+        OsDeleteFile(path);
+        return true;
+    }
+    return false;
+}
+
+// The CVar system's end: every CVar and its command let go, then the config file's name.
+// ref: FUN_140326840
+void CVarShutdownConfig() {
+    CVarShutdown();
+    SMemFree(s_configFile, "D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\Console\\Client\\ConsoleClient.cpp",
+        0x101, 0);
+    s_configFile = nullptr;
+}
+
+// Every CVar unregistered and freed.
+// ref: FUN_14031fad0
+void CVarShutdown() {
+    // Not run: the port's later teardown stages are not ported, so the sound engine, the UI and
+    // the tact workers are still up and still read CVars when the process ends; freeing them
+    // here would hand those readers freed memory.
+    FROST_UNIMPLEMENTED();
+}
+
 // Makes a latched CVar's pending value its value (without the callback). False when the
 // CVar is not latched or nothing is pending.
 // ref: FUN_140322af0
@@ -867,7 +997,7 @@ void CVarSetDefaultInt(CVar* cvar, int64_t value) {
     }
     char text[0x20];
     SStrPrintf(text, sizeof(text), "%lli", value);
-    cvar->m_defaultValue.Intern(text);
+    cvar->m_defaultValue.m_str = cvar->m_defaultValue.Intern(text);
 }
 
 // ref: FUN_140322640

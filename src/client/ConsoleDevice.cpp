@@ -1,5 +1,7 @@
 #include "client/ConsoleDevice.hpp"
 #include "client/CommandLine.hpp"
+#include "client/GraphicsSettings.hpp"
+#include "prism/Instance.hpp"
 #include "client/GxWindow.hpp"
 #include "client/Startup.hpp"
 #include "console/Command.hpp"
@@ -18,6 +20,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <intrin.h>
 
 namespace {
 
@@ -692,12 +695,205 @@ GXSIZE DefaultFullscreenSize(GxAdapterInfo* adapter, uint32_t monitor) {
 
 namespace {
 
-// The graphics defaults for the machine's CPU, GPU and memory.
+// The lowest of the three tiers.
+// ref: FUN_14032b830
+int8_t DetectedTier(const CONSOLEDETECTED* detected) {
+    if (detected->m_gpu < detected->m_cpu) {
+        return detected->m_memory < detected->m_gpu ? detected->m_memory : detected->m_gpu;
+    }
+    return detected->m_memory < detected->m_cpu ? detected->m_memory : detected->m_cpu;
+}
+
+// renderScale's coded default: the detected scale.
+// ref: FUN_14032b860
+float DetectedRenderScale() {
+    return ConsoleGetDetected()->m_renderScale;
+}
+
+// The CPU tier for a processor family the tiers overrate: older Intel cores and AMD's
+// Bulldozer and early Zen parts are held to 4.
+bool IsHeldBackCpu(const OSCPUINFO* cpu) {
+    int cpuInfo[4];
+    __cpuid(cpuInfo, 1);
+    uint32_t version = static_cast<uint32_t>(cpuInfo[0]);
+    uint32_t family = version >> 8 & 0xf;
+    uint32_t model = version >> 4 & 0xf;
+    uint32_t extModel = version >> 16 & 0xf;
+    uint32_t extFamily = version >> 20 & 0xff;
+    const char* vendor = reinterpret_cast<const char*>(cpu) + 0x2b;
+    if (std::strcmp(vendor, "GenuineIntel") == 0) {
+        if (extFamily != 0 || family != 6) {
+            return false;
+        }
+        if (extModel == 3) {
+            return model == 0xc || model == 0xf || model == 0xd;
+        }
+        if (extModel == 4) {
+            return model - 5 < 2 || ((model - 7) & ~8u) == 0 || model == 0xe;
+        }
+        if (extModel == 5) {
+            return model == 6 || model == 0xe || model == 5;
+        }
+        return false;
+    }
+    if (std::strcmp(vendor, "AuthenticAMD") == 0) {
+        return family == 0xf && (extFamily == 9 || (extFamily == 8 && (extModel << 4 | model) < 0x31));
+    }
+    return false;
+}
+
+// The graphics defaults for the machine: a tier (0 lowest to 6) each for the CPU (cores,
+// clock, family), the GPU (vendor family, or for an integrated part its generation; capped by
+// video memory) and the memory; the window size the adapter wants; and for a GPU below the top
+// tiers a render scale bringing the world down to 1080 (1440 for tiers 4 and 5) lines. The
+// lowest tier becomes graphicsQuality's coded default, and the scale renderScale's. Fails, with
+// a message, on a system older than Windows Vista (or macOS 10.14).
 // ref: FUN_14032b0a0
 bool DetectDefaults(CONSOLEDETECTED* detected, uint32_t monitor) {
-    (void)detected;
-    (void)monitor;
-    FROST_UNIMPLEMENTED();  // the tiers, the "Detected Graphics Defaults" line and the quality CVars
+    const OSVERSION* os = OsGetVersion();
+    const OSCPUINFO* cpu = OsGetCpuInfo();
+    bool tooOld = false;
+    if (os->m_platform == 10) {
+        tooOld = os->m_major < 6 || (os->m_major == 6 && os->m_minor == 0);
+    } else if (os->m_platform == 6 && os->m_major == 10 && os->m_minor < 0xe) {
+        tooOld = true;
+    }
+    if (tooOld) {
+        const char* caption = GlobalStringsGet(1, "World of Warcraft");
+        const char* text = GlobalStringsGet(0x1b, "World of Warcraft was unable to start in compatibility mode.");
+        OsMessageBox(nullptr, 1, text, caption);
+        return false;
+    }
+
+    // the CPU
+    uint32_t threads = cpu->m_logical;
+    int8_t coreTier = threads == 1 ? 0 : threads < 4 ? 2 : threads < 6 ? 4 : 6;
+    int8_t cpuTier = coreTier;
+    uint64_t clock = cpu->m_maxFrequency;
+    if (clock != 0) {
+        cpuTier = clock < 2000000000 ? 0 : clock < 3000000000 ? 2 : clock < 3500000000 ? 4 : 6;
+    }
+    int8_t capTier = 6;
+    if ((reinterpret_cast<const uint8_t*>(cpu)[0x21] & 1) == 0) {
+        capTier = 2;
+    } else if (IsHeldBackCpu(cpu)) {
+        cpuTier = 4;
+    }
+    if (coreTier < cpuTier) {
+        cpuTier = coreTier;
+    }
+    if (capTier < cpuTier) {
+        cpuTier = capTier;
+    }
+
+    // the memory
+    uint64_t memory = OsGetPhysicalMemory();
+    int8_t memoryTier = memory < 0x73800000 ? 0
+        : memory < 0xf3800000                ? 2
+        : memory < 0x1f3800000               ? 3
+        : memory < 0x3f3800000               ? 4
+                                             : 6;
+
+    // the GPU
+    GxAdapterInfo* adapter = GxSelectGpuToUse();
+    pm::GPU* gpu = adapter->m_gpu;
+    pm::APIDEVICEDATA* data = adapter->m_data;
+    int8_t gpuTier;
+    if ((gpu->m_type & 0xfd) == 0) {
+        // unknown or integrated
+        if (gpu->m_vendorId == 0x8086) {
+            gpuTier = static_cast<uint8_t>(data->m_intelGeneration - 1) > 0xb ? 2 : 1;
+        } else if (gpu->m_vendorId == 0x106b) {
+            uint32_t cores = data->m_appleGpuCores;
+            gpuTier = cores > 0x17 ? 6 : cores > 0xd ? 4 : cores > 7 ? 3 : 2;
+        } else {
+            gpuTier = 1;
+        }
+    } else {
+        uint32_t dedicated = 0;
+        uint32_t shared = 0;
+        GxDeviceVideoMemory(&dedicated, &shared);
+        if (gpu->m_vendorId == 0x1002) {
+            uint8_t family = data->m_amdFamily;
+            if (static_cast<uint8_t>(family - 1) >= 7) {
+                gpuTier = 6;
+            } else if (static_cast<uint8_t>(family - 6) < 2) {
+                gpuTier = 5;
+            } else if (family == 5) {
+                gpuTier = 4;
+            } else {
+                gpuTier = family == 4 ? 2 : 1;
+            }
+        } else if (gpu->m_vendorId == 0x10de) {
+            uint8_t family = data->m_nvidiaFamily;
+            if (static_cast<uint8_t>(family - 1) > 5) {
+                gpuTier = 6;
+            } else if (static_cast<uint8_t>(family - 5) < 2) {
+                gpuTier = 5;
+            } else if (family == 4) {
+                gpuTier = 4;
+            } else {
+                gpuTier = family > 1 ? 2 : 1;
+            }
+        } else {
+            gpuTier = gpu->m_vendorId == 0x8086 ? 6 : 4;
+        }
+        if (gpu->m_virtualization == 3) {
+            dedicated += shared;
+        }
+        int8_t memoryCap = dedicated < 0x401 ? 1 : dedicated < 0xb38 ? 2 : dedicated < 0x1f38 ? 4 : 6;
+        if (memoryCap < gpuTier) {
+            gpuTier = memoryCap;
+        }
+        if (data->m_d9 < 4 && 1 < gpuTier) {
+            gpuTier = 1;
+        }
+    }
+
+    detected->m_cpu = cpuTier;
+    detected->m_memory = memoryTier;
+    detected->m_gpu = gpuTier;
+    detected->m_windowSize = DefaultFullscreenSize(GxSelectGpuToUse(), monitor);
+    detected->m_renderScale = 1.0f;
+
+    // the world's render size
+    uint16_t shorter = detected->m_windowSize.m_width < detected->m_windowSize.m_height ? detected->m_windowSize.m_width
+                                                                                       : detected->m_windowSize.m_height;
+    float target = 0.0f;
+    if (gpuTier < 4) {
+        target = shorter < 0x439 ? 0.0f : 1080.0f;  // DAT_142637040
+    } else if (gpuTier <= 5) {
+        target = shorter < 0x5a1 ? 0.0f : 1440.0f;  // DAT_142637044
+    }
+    if (target != 0.0f) {
+        float scale = target / static_cast<float>(shorter);
+        if (scale <= 1.0f / 3.0f) {  // DAT_14261bf60
+            scale = 1.0f / 3.0f;
+        }
+        detected->m_renderScale = scale;
+    }
+
+    GraphicsSetRenderScaleDefault(&DetectedRenderScale);
+    if (CVar* renderScale = CVarLookup(t2util::ConstFnvHashStringI("renderScale"))) {
+        CVarSetFloat(renderScale, detected->m_renderScale, false, false, true, true);
+    }
+
+    blz::inline_string<0x400> text;
+    int8_t tier = DetectedTier(detected);
+    blz::string_format(text.header(), "Detected Graphics Defaults: %d (CPU = %d, GPU = %d, MEM = %d) WindowSize: %ux%u",
+        tier + 1, cpuTier + 1, gpuTier + 1, memoryTier + 1, detected->m_windowSize.m_width,
+        detected->m_windowSize.m_height);
+    float scale = detected->m_renderScale;
+    if (scale != 1.0f) {
+        blz::string_append_format(text.header(), " WorldRenderSize: %ux%u (%.1f%%)",
+            static_cast<uint32_t>(static_cast<int64_t>(static_cast<float>(detected->m_windowSize.m_width) * scale)),
+            static_cast<uint32_t>(static_cast<int64_t>(static_cast<float>(detected->m_windowSize.m_height) * scale)),
+            static_cast<double>(scale));
+    }
+    GxLog("%s", text.m_data);
+    for (const char* name : { "graphicsQuality", "RAIDgraphicsQuality" }) {
+        CVarSetDefaultInt(CVarLookup(t2util::ConstFnvHashStringI(name)), DetectedTier(detected));
+    }
     return true;
 }
 

@@ -22,5 +22,7 @@ void RCStringDestroyPool();
 
 // Shutdown step: RCStringDestroyPool, then a call to an empty function.
 void RCStringShutdown();
+// Whether the string pool is gone (or not made yet).
+bool RCStringPoolIsEmpty();
 
 #endif

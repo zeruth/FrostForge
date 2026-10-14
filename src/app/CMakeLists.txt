@@ -1,5 +1,6 @@
 add_executable(FrostLite WIN32
     win/WinMain.cpp
+    win/FrostLite.manifest
 )
 target_link_libraries(FrostLite PRIVATE client gen)
 # The reference image is mapped at its own base (0x140000000) for the translated functions

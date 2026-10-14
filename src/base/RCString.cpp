@@ -154,3 +154,8 @@ void RCStringDestroyPool() {
 void RCStringShutdown() {
     RCStringDestroyPool();
 }
+
+// ref: FUN_1402cb2b0
+bool RCStringPoolIsEmpty() {
+    return s_pool == nullptr;
+}

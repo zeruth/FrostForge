@@ -463,6 +463,12 @@ bool ClientIsAltKeyDown() {
 // ref: FUN_140216680
 void ClientRequestQuit() {
     s_quitRequested = 1;
+    ClientReleaseOnQuit();
+}
+
+// The first time the client quits: the window and the connection let go and the pump drained
+// once more. (Inlined into ClientRequestQuit and the final shutdown.)
+void ClientReleaseOnQuit() {
     if (s_quitHandled == 0) {
         FROST_UNIMPLEMENTED();  // FUN_1414f8d90 (window), FUN_1412d4870(0xfe, 1) and FUN_1412cab50 (the connection)
         Sub1412CAB50(s_quitArgument);

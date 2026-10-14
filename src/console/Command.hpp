@@ -30,6 +30,7 @@ void ConsoleRegisterBasicCommands();
 
 // The client's quit request (client/Main.cpp), which the quit command calls.
 void ClientRequestQuit();
+void ClientReleaseOnQuit();
 
 // Executes console input, one command per line; true when a handler accepted a line.
 bool ConsoleCommandExecute(const char* text, int32_t addToHistory);
