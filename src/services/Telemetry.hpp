@@ -12,10 +12,14 @@
 // endpoint. Offline stub.
 void TelemetryInitialize(blz::function_storage* ids, blz::function_storage* client, blz::function_storage* character,
     blz::function_storage* world, bool china);
+// Stops the telemetry service if it was started. Offline it never was.
+void TelemetryShutdown();
 
 // WoW/Source/WowServices/WowDownload.cpp: the background downloader (CDN). Offline stub:
 // *holder is left null.
 void** WowDownloadCreate(void** holder);
 void WowDownloadStart(void** holder);
+// Deletes the downloader the holder points at (nothing, offline).
+void WowDownloadDestroy(void** holder);
 
 #endif

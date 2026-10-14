@@ -15,4 +15,6 @@ target_link_libraries(gen PRIVATE util lua)
 if(MSVC)
     # decompiled C: its implicit conversions are expected; keep the build output for real errors
     target_compile_options(gen PRIVATE $<$<COMPILE_LANGUAGE:C>:/W1 /wd4047 /wd4024 /wd4133 /wd4312 /wd4311 /wd4302>)
+    # jumps.c holds an entry per runnable function: past COFF's 2^16 section limit
+    target_compile_options(gen PRIVATE /bigobj)
 endif()

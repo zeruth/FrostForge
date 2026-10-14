@@ -26,9 +26,12 @@ None of them may contact Blizzard endpoints.
 
 | function | ref | what the reference does | FrostLite now |
 |---|---|---|---|
-| `ClientServicesConstruct` | 0x141569c00 | NetClient / RealmConnection base (0x1414f7080, which also installs the realm packet handlers), `Logs/Connection.log`, a handler list runs translated (2026-10-13: the instance is live, vtable 0x1427b5518); the hand port is Phase 1 of docs/login-roadmap.md |
+| `ClientServices` (class) | 0x141569c00, 0x14156b1d0; RealmConnection 0x1414f7080, 0x1414f73c0; NetClient 0x141231cc0, 0x1412320d0 | the session object, its realm-message handlers, `Logs/Connection.log`, the event queue (NetInternal) | ported by hand (2026-10-13). Its virtuals that are not ported yet (the Handle* slots, Poll, the WowConnection callbacks) and the WowConnection, PacketPipe and JAM message code under it run translated |
 | `ClientServicesSetStatusCallback` | 0x14156dc90 | stores a callback at instance+0x858 | ported, as the reference (no null check) |
-| `ClientServicesShutdown` (instance part) | 0x14156b7f0 | ends the session (vtable +0x58, reason 0xd) and deletes the instance | ported (the virtuals run translated); reached only from the startup cancel path and the stage 3 teardown, which is still a stub |
+| `ClientServicesShutdown` | 0x14156b7f0 | ends the session (reason 0xd) and deletes the instance | ported; reached from the stage 2 teardown (FUN_140227810, ported) and the startup cancel path |
+| `TelemetryShutdown` | 0x141565c10 | stops the telemetry service (waits up to 5 s), releases its objects, shuts curl down | ported as far as its flag: offline the service never started, so the body is a stub |
+| `WowDownloadDestroy` | 0x141556340 | destroys the downloader (0x4f8 bytes) | ported as far as its null check: offline there is no downloader |
+| `BattleNetShutdown` | 0x141487dc0 | logs "Shutting down", destroys the Aurora and login services, clears two realm-connection callbacks | stub, like `BattleNetInitialize` (Phase 2-3) |
 | `LogoutCommand` | 0x14156b7c0 | `logout`: ends the session when one is up | stub |
 | `ClientServicesStatusCallback` | 0x140227770 | ClientServices' readiness poll | stub, never called |
 

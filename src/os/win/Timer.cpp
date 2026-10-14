@@ -5,6 +5,7 @@
 #include <timeapi.h>
 #include <cstdlib>
 #include <cstddef>
+#include <ctime>
 
 // The engine's clock (0x142cfb9f8): milliseconds from GetTickCount or QueryPerformanceCounter,
 // scaled and offset so the speed can change without a jump, and never going backwards.
@@ -184,6 +185,11 @@ uint32_t OsGetAsyncTimeMs() {
 // ref: FUN_141237c10
 uint32_t OsPeekAsyncTimeMs() {
     return OsTimerPeekMs(OsTimerGet());
+}
+
+// ref: FUN_141237be0
+int64_t OsGetUnixTime() {
+    return _time64(nullptr);
 }
 
 // ref: FUN_141237c30

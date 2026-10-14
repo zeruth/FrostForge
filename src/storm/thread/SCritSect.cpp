@@ -6,6 +6,11 @@ bool SCritSect::Initialize() {
     return true;
 }
 
+// ref: FUN_1402637e0
+void SCritSect::Destroy() {
+    DeleteCriticalSection(&this->m_opaqueData);
+}
+
 // ref: FUN_1402637b0
 void SCritSect::Enter() {
     EnterCriticalSection(&this->m_opaqueData);

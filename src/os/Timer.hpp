@@ -26,5 +26,7 @@ int64_t OsTimerGetFrequency();
 uint64_t OsTimerGetTicks();
 // The raw GetTickCount milliseconds, whatever the timing method.
 uint32_t OsGetTickCount();
+// The wall clock in seconds since 1970 (_time64).
+int64_t OsGetUnixTime();
 
 #endif

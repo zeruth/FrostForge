@@ -4,9 +4,12 @@
 #include "console/Command.hpp"
 #include "console/Var.hpp"
 #include "os/Os.hpp"
+#include "os/Timer.hpp"
+#include "storm/Log.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
 #include "util/Fnv.hpp"
+#include "ui/FrameTime.hpp"
 #include "util/Unimplemented.hpp"
 #include <cstring>
 #include <malloc.h>
@@ -14,17 +17,54 @@
 #include <windows.h>
 
 extern "C" {
-// src/gen: the reference's constructor, translated (tools/translate.py --addr FUN_141569c00)
-unsigned long long FUN_141569c00(unsigned long long memory, unsigned long long vtable);
 int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+unsigned long long FUN_1425825f0(unsigned long long);
+unsigned long long FUN_1425827c0(unsigned long long);
+unsigned long long FUN_14169fb00(unsigned long long);
+unsigned long long FUN_1416a1750(unsigned long long, unsigned long long, unsigned long long);
+unsigned long long FUN_1416a16a0(unsigned long long, unsigned long long, unsigned long long);
+unsigned long long FUN_141569970(unsigned long long, unsigned long long, unsigned long long);
+unsigned long long FUN_1415699d0(unsigned long long, unsigned long long);
+unsigned long long FUN_14116d920(unsigned long long);
+unsigned long long FUN_14156b870(unsigned long long, unsigned long long);
+unsigned long long FUN_14156c960(unsigned long long);
+unsigned long long FUN_14156c7d0(unsigned long long);
+unsigned long long FUN_14156c850(unsigned long long);
+unsigned long long FUN_14156c2b0(unsigned long long);
+unsigned long long FUN_14156c0b0(unsigned long long, unsigned long long);
+unsigned long long FUN_14156cc20(unsigned long long, unsigned long long);
+unsigned long long FUN_14156cbc0(unsigned long long, unsigned long long);
+unsigned long long FUN_14156c3a0(unsigned long long, unsigned long long);
+unsigned long long FUN_14156ca70(unsigned long long, unsigned long long);
+unsigned long long FUN_14156cb00(unsigned long long, unsigned long long);
+unsigned long long FUN_14156c650(unsigned long long, unsigned long long);
+unsigned long long FUN_14156c680(unsigned long long, unsigned long long);
+unsigned long long FUN_14156c6b0(unsigned long long, unsigned long long);
+unsigned long long FUN_14156c6e0(unsigned long long, unsigned long long);
+unsigned long long FUN_14156cb80(unsigned long long, unsigned long long);
+unsigned long long FUN_14156c410(unsigned long long, unsigned long long, unsigned long long);
+unsigned long long FUN_14156c480(unsigned long long, unsigned long long);
+unsigned long long FUN_14156c4f0(unsigned long long, unsigned long long);
+unsigned long long FUN_14156c9f0(unsigned long long);
+unsigned long long FUN_14156ca30(unsigned long long, unsigned long long, unsigned long long);
+unsigned long long FUN_14156c9d0(unsigned long long);
 }
 
+const char s_tagAuthListeners[] = ".P6AX_N@Z";
+const char s_tagStateListeners[] = ".P6AXW4ClientConnectionState@@@Z";
+
 namespace {
+
+const char s_clientServicesFile[] = "D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowSvcs\\WowSvcsClient\\ClientServices.cpp";
+const char s_sockAddrFile[] = "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h";
 
 // DAT_142d09818: the build type (static value 2, live).
 int32_t s_buildType = 2;
 
-void* s_clientServices;     // DAT_1430d2b38: the ClientServices instance (0x860 bytes)
+ClientServices* s_clientServices;   // DAT_1430d2b38: the ClientServices instance (0x860 bytes)
+HSLOG s_connectionLog;      // DAT_1430d2b40: Logs/Connection.log
+int64_t s_serverTimeOffset; // DAT_1430d25b0: the server's clock minus ours, in seconds
+ClientServicesResponse s_glueResponse;  // DAT_142d098e8
 uint32_t s_logoutPending;   // DAT_1430d2680
 void* s_servicesHelper;     // DAT_1430d2a90: an 8-byte object freed at shutdown
 CVar* s_portal;             // DAT_1430d2a98
@@ -45,18 +85,29 @@ int32_t LogoutCommand(const char* command, const char* arguments) {
     return 1;
 }
 
-// The ClientServices constructor: the NetClient / RealmConnection base (0x1414f7080, which
-// also installs the realm packet handlers), Logs/Connection.log, and a handler list.
-// translated: FUN_141569c00
-void* ClientServicesConstruct(void* memory, const void* vtable) {
-    // The reference's constructor, translated (src/gen): RealmConnection and NetClient under it,
-    // the connection object, the realm packet handlers, Logs/Connection.log. Nothing connects
-    // here; a fault in it leaves the instance null as before.
+// The listener the constructor adds for auth results: on success it calls an empty function
+// (0x1402112e0), on failure nothing.
+// ref: 0x14156b360 (reached only through the pointer)
+void AuthResultListener(bool success) {
+    (void)success;
+}
+
+// The Battlepay distribution state ClientServices owns (WoW/Source/WowServices,
+// BattlepayDistribution.cpp). Not ported: it runs translated.
+// translated: FUN_1425825f0
+void* DistributionConstruct(void* memory) {
     __try {
-        return reinterpret_cast<void*>(FUN_141569c00(reinterpret_cast<unsigned long long>(memory),
-            reinterpret_cast<unsigned long long>(vtable)));
-    } __except (GenFault(0x141569c00ull, GetExceptionInformation())) {
-        return nullptr;
+        return reinterpret_cast<void*>(FUN_1425825f0(reinterpret_cast<uintptr_t>(memory)));
+    } __except (GenFault(0x1425825f0ull, GetExceptionInformation())) {
+        return memory;
+    }
+}
+
+// translated: FUN_1425827c0
+void DistributionDestroy(void* distribution) {
+    __try {
+        FUN_1425827c0(reinterpret_cast<uintptr_t>(distribution));
+    } __except (GenFault(0x1425827c0ull, GetExceptionInformation())) {
     }
 }
 
@@ -206,8 +257,9 @@ void SetBuildType(int32_t type) {
 // ref: FUN_14156ce70
 void ClientServicesInitialize() {
     if (!s_clientServices) {
-        void* memory = SMemAlloc(0x860, 3, __FILE__, SStrHashFnv1a(__FILE__), 0x432, 0);
-        s_clientServices = ClientServicesConstruct(memory, nullptr);
+        void* memory = SMemAlloc(sizeof(ClientServices), 3, s_clientServicesFile, SStrHashFnv1a(s_clientServicesFile),
+            0x432, 0);
+        s_clientServices = new (memory) ClientServices(&s_glueResponse);
     }
     ConsoleCommandRegister("logout", &LogoutCommand, 5, nullptr, 0);
 }
@@ -217,34 +269,37 @@ void* ClientServicesGet() {
     return s_clientServices;
 }
 
-// Stores the callback ClientServices polls for whether the client is idle enough (+0x858).
+// ref: FUN_14156cf10
+bool ClientServicesExists() {
+    return s_clientServices != nullptr;
+}
+
+// Stores the callback ClientServices polls for whether the client is idle enough.
 // ref: FUN_14156dc90
 void ClientServicesSetStatusCallback(void* services, bool (*callback)()) {
-    *reinterpret_cast<bool (**)()>(static_cast<uint8_t*>(services) + 0x858) = callback;
+    static_cast<ClientServices*>(services)->m_statusCallback = callback;
 }
 
 // ref: FUN_14156b7f0
 void ClientServicesShutdown() {
     s_logoutPending = 0;
     ConsoleCommandUnregister("logout");
-    if (s_clientServices) {
-        // a session that is up (+0x771) is ended with reason 0xd, then the instance deletes
-        // itself; both are the reference's virtuals (translated, vtable 0x1427b5518)
-        auto services = static_cast<uint8_t*>(s_clientServices);
-        void** vtable = *reinterpret_cast<void***>(services);
-        __try {
-            if (services[0x771] != 0) {
-                reinterpret_cast<void (*)(void*, uint32_t)>(vtable[0x58 / 8])(services, 0xd);
-            }
-            reinterpret_cast<void (*)(void*, uint32_t)>(vtable[0])(services, 1);
-        } __except (GenFault(reinterpret_cast<unsigned long long>(vtable[0]), GetExceptionInformation())) {
+    if (ClientServices* services = s_clientServices) {
+        if (services->m_sessionUp) {
+            services->Disconnect(0xd);
         }
+        delete services;
         s_clientServices = nullptr;
     }
     if (s_servicesHelper) {
         ::operator delete(s_servicesHelper, 8);
         s_servicesHelper = nullptr;
     }
+}
+
+// ref: FUN_141567f30
+void ClientServicesSetServerTime(int64_t serverTime) {
+    s_serverTimeOffset = serverTime - OsGetUnixTime();
 }
 
 // ref: FUN_14156cd10
@@ -387,9 +442,341 @@ bool ClientServicesIsSessionUp() {
     return s_sessionUp != 0;
 }
 
+// ---- ClientServicesResponse: the glue's side (vtable 0x1427b50e8) ----
+
+namespace {
+
+// The login screen's handlers ClientServicesResponse calls (GlueLogin.cpp, CharacterCreate):
+// not ported yet, they run translated.
+
+// translated: FUN_14169fb00
+void GlueLoginAuthResult(int32_t result) {
+    __try {
+        FUN_14169fb00(static_cast<uint32_t>(result));
+    } __except (GenFault(0x14169fb00ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_1416a1750
+void GlueLoginWaitQueueUpdate(uint32_t position, uint32_t minutes, bool hasFcm) {
+    __try {
+        FUN_1416a1750(position, minutes, hasFcm);
+    } __except (GenFault(0x1416a1750ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_1416a16a0
+void GlueLoginWaitQueueStatus(uint32_t position, uint32_t minutes, bool hasFcm) {
+    __try {
+        FUN_1416a16a0(position, minutes, hasFcm);
+    } __except (GenFault(0x1416a16a0ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14116d920
+void GlueCharacterLoginFailed(const char* result) {
+    __try {
+        FUN_14116d920(reinterpret_cast<uintptr_t>(result));
+    } __except (GenFault(0x14116d920ull, GetExceptionInformation())) {
+    }
+}
+
+}
+
+// Slots 0x00 and 0x10 are empty (_guard_check_icall).
+void ClientServicesResponse::Slot00() {
+}
+
+// ref: 0x141569940 (reached only through the pointer)
+void ClientServicesResponse::AuthResult(int32_t result) {
+    GlueLoginAuthResult(result);
+}
+
+void ClientServicesResponse::Slot10() {
+}
+
+// ref: 0x141569950 (reached only through the pointer)
+void ClientServicesResponse::WaitQueueUpdate(uint32_t position, uint32_t minutes, bool hasFcm) {
+    GlueLoginWaitQueueUpdate(position, minutes, hasFcm);
+}
+
+// ref: 0x141569960 (reached only through the pointer)
+void ClientServicesResponse::WaitQueueStatus(uint32_t position, uint32_t minutes, bool hasFcm) {
+    GlueLoginWaitQueueStatus(position, minutes, hasFcm);
+}
+
+// translated: FUN_141569970
+void ClientServicesResponse::CharacterCreateResult(const char* result, const void* guid) {
+    __try {
+        FUN_141569970(reinterpret_cast<uintptr_t>(this), reinterpret_cast<uintptr_t>(result),
+            reinterpret_cast<uintptr_t>(guid));
+    } __except (GenFault(0x141569970ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_1415699d0
+void ClientServicesResponse::CharacterDeleteResult(const char* result) {
+    __try {
+        FUN_1415699d0(reinterpret_cast<uintptr_t>(this), reinterpret_cast<uintptr_t>(result));
+    } __except (GenFault(0x1415699d0ull, GetExceptionInformation())) {
+    }
+}
+
+// ref: 0x141569a20 (reached only through the pointer)
+void ClientServicesResponse::CharacterLoginFailed(const char* result) {
+    if (result != nullptr && *result != '\0') {
+        GlueCharacterLoginFailed(result);
+    }
+}
+
+// ---- ClientServices ----
+
+// ref: FUN_141569c00
+ClientServices::ClientServices(ClientServicesResponse* response) {
+    std::memset(&this->m_address.m_address, 0, 0x18);
+    this->m_address.m_port = 0;
+    std::memset(&this->m_fallbackAddress.m_address, 0, 0x18);
+    this->m_fallbackAddress.m_port = 0;
+    this->m_createTime = FrameTime_GetTime();
+    std::memset(&this->m_join.m_address.m_address, 0, 0x18);
+    this->m_join.m_address.m_port = 0;
+    std::memset(&this->m_join.m_fallbackAddress.m_address, 0, 0x18);
+    this->m_join.m_fallbackAddress.m_port = 0;
+    this->m_reconnect = 0;
+    this->m_sessionUp = 0;
+    this->m_unk772 = 0;
+    this->m_unk773 = 0;
+    this->m_response = response;
+    this->m_hasCharEnum = 0;
+    OsCreateDirectory("Logs", false, false);
+    SLogCreate("Logs/Connection.log", 0, &s_connectionLog);
+    if (s_connectionLog) {
+        SLogWrite(s_connectionLog, "Connection Initialize");
+    }
+    void* memory = SMemAlloc(0x40, 3, s_clientServicesFile, SStrHashFnv1a(s_clientServicesFile), 0x1fd, 0);
+    this->m_distribution = DistributionConstruct(memory);
+    this->m_authListeners.push_back(&AuthResultListener);
+}
+
+// The log is closed but its handle kept, as in the reference.
+// ref: FUN_14156b1d0
+ClientServices::~ClientServices() {
+    if (void* distribution = this->m_distribution) {
+        DistributionDestroy(distribution);
+        ::operator delete(distribution, 0x40);
+    }
+    if (s_connectionLog) {
+        SLogWrite(s_connectionLog, "Connection Destroy");
+        SLogClose(s_connectionLog);
+    }
+    if (this->m_hasCharEnum) {
+        // the held character list's own destructor (slot 0 of the object at +0x7b0)
+        auto object = reinterpret_cast<void (***)(void*, uint32_t)>(this->m_charEnum);
+        (**object)(this->m_charEnum, 0);
+    }
+    this->m_hasCharEnum = 0;
+    // then the members' destructors: m_stateListeners, m_authListeners, m_join, the two addresses
+}
+
+// SockAddr.h's destructor: a family-3 address frees its host name, then all of it is cleared.
+ClientServices::SERVERADDRESS::~SERVERADDRESS() {
+    void* name = *reinterpret_cast<void**>(this->m_address.m_bytes);
+    if (this->m_address.m_family == 3 && name != nullptr) {
+        SMemFree(name, s_sockAddrFile, 0x27, 0);
+    }
+    std::memset(&this->m_address, 0, 0x18);
+}
+
+// The two addresses' destructors, the fallback first.
+// ref: FUN_14156a110
+ClientServices::REALMJOIN::~REALMJOIN() {
+}
+
+// The virtuals below are not ported yet: they run translated, each logging to Connection.log
+// ("Handle Auth Response: %u", "Handle Char Enum", ...) and reporting to m_response.
+
+// translated: FUN_14156b870
+void ClientServices::Disconnect(uint32_t reason) {
+    __try {
+        FUN_14156b870(reinterpret_cast<uintptr_t>(this), reason);
+    } __except (GenFault(0x14156b870ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156c960
+void ClientServices::Poll() {
+    __try {
+        FUN_14156c960(reinterpret_cast<uintptr_t>(this));
+    } __except (GenFault(0x14156c960ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156c7d0
+void ClientServices::HandleConnect() {
+    __try {
+        FUN_14156c7d0(reinterpret_cast<uintptr_t>(this));
+    } __except (GenFault(0x14156c7d0ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156c850
+void ClientServices::HandleDisconnect() {
+    __try {
+        FUN_14156c850(reinterpret_cast<uintptr_t>(this));
+    } __except (GenFault(0x14156c850ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156c2b0
+void ClientServices::HandleCantConnect() {
+    __try {
+        FUN_14156c2b0(reinterpret_cast<uintptr_t>(this));
+    } __except (GenFault(0x14156c2b0ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156c0b0
+void ClientServices::HandleAuthResponse(const NETMESSAGEARGS* args) {
+    __try {
+        FUN_14156c0b0(reinterpret_cast<uintptr_t>(this), reinterpret_cast<uintptr_t>(args));
+    } __except (GenFault(0x14156c0b0ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156cc20
+void ClientServices::HandleWaitQueueUpdate(const NETMESSAGEARGS* args) {
+    __try {
+        FUN_14156cc20(reinterpret_cast<uintptr_t>(this), reinterpret_cast<uintptr_t>(args));
+    } __except (GenFault(0x14156cc20ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156cbc0
+void ClientServices::HandleWaitQueueFinish(const NETMESSAGEARGS* args) {
+    __try {
+        FUN_14156cbc0(reinterpret_cast<uintptr_t>(this), reinterpret_cast<uintptr_t>(args));
+    } __except (GenFault(0x14156cbc0ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156c3a0
+void ClientServices::HandleCharEnum(const NETMESSAGEARGS* args) {
+    __try {
+        FUN_14156c3a0(reinterpret_cast<uintptr_t>(this), reinterpret_cast<uintptr_t>(args));
+    } __except (GenFault(0x14156c3a0ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156ca70
+void ClientServices::HandleUpdateExpansionLevel(const NETMESSAGEARGS* args) {
+    __try {
+        FUN_14156ca70(reinterpret_cast<uintptr_t>(this), reinterpret_cast<uintptr_t>(args));
+    } __except (GenFault(0x14156ca70ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156cb00
+void ClientServices::HandleUpdateGameTimeState(const NETMESSAGEARGS* args) {
+    __try {
+        FUN_14156cb00(reinterpret_cast<uintptr_t>(this), reinterpret_cast<uintptr_t>(args));
+    } __except (GenFault(0x14156cb00ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156c650
+void ClientServices::HandleLobbyMatchmakerPartyInfo(const NETMESSAGEARGS* args) {
+    __try {
+        FUN_14156c650(reinterpret_cast<uintptr_t>(this), reinterpret_cast<uintptr_t>(args));
+    } __except (GenFault(0x14156c650ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156c680
+void ClientServices::HandleLobbyMatchmakerPartyInviteRejected(const NETMESSAGEARGS* args) {
+    __try {
+        FUN_14156c680(reinterpret_cast<uintptr_t>(this), reinterpret_cast<uintptr_t>(args));
+    } __except (GenFault(0x14156c680ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156c6b0
+void ClientServices::HandleClientLobbyMatchmakerReceiveInvite(const NETMESSAGEARGS* args) {
+    __try {
+        FUN_14156c6b0(reinterpret_cast<uintptr_t>(this), reinterpret_cast<uintptr_t>(args));
+    } __except (GenFault(0x14156c6b0ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156c6e0
+void ClientServices::HandleClientNewDataBuild(const NETMESSAGEARGS* args) {
+    __try {
+        FUN_14156c6e0(reinterpret_cast<uintptr_t>(this), reinterpret_cast<uintptr_t>(args));
+    } __except (GenFault(0x14156c6e0ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156cb80
+void ClientServices::HandleOptionalTime(const NETMESSAGEARGS* args) {
+    __try {
+        FUN_14156cb80(reinterpret_cast<uintptr_t>(this), reinterpret_cast<uintptr_t>(args));
+    } __except (GenFault(0x14156cb80ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156c410
+void ClientServices::HandleCharacterCreate(uint8_t result, const void* a3) {
+    __try {
+        FUN_14156c410(reinterpret_cast<uintptr_t>(this), result, reinterpret_cast<uintptr_t>(a3));
+    } __except (GenFault(0x14156c410ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156c480
+void ClientServices::HandleCharacterDelete(uint8_t result) {
+    __try {
+        FUN_14156c480(reinterpret_cast<uintptr_t>(this), result);
+    } __except (GenFault(0x14156c480ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156c4f0
+void ClientServices::HandleCharacterLoginFailed(uint32_t code) {
+    __try {
+        FUN_14156c4f0(reinterpret_cast<uintptr_t>(this), code);
+    } __except (GenFault(0x14156c4f0ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156c9f0
+void ClientServices::HandleLogoutComplete() {
+    __try {
+        FUN_14156c9f0(reinterpret_cast<uintptr_t>(this));
+    } __except (GenFault(0x14156c9f0ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156ca30
+void ClientServices::HandleLogoutResponse(int32_t result, bool instant) {
+    __try {
+        FUN_14156ca30(reinterpret_cast<uintptr_t>(this), static_cast<uint32_t>(result), instant);
+    } __except (GenFault(0x14156ca30ull, GetExceptionInformation())) {
+    }
+}
+
+// translated: FUN_14156c9d0
+void ClientServices::HandleLogoutAbortAck() {
+    __try {
+        FUN_14156c9d0(reinterpret_cast<uintptr_t>(this));
+    } __except (GenFault(0x14156c9d0ull, GetExceptionInformation())) {
+    }
+}
+
 // ---- GENERATED by tools/translate.py: the port globals translated code reaches ----
+extern "C" void* const gen_p_1430d2589 = (void*)&s_state2589;
 extern "C" void* const gen_p_1430d258a = (void*)&s_sessionUp;
 extern "C" void* const gen_p_1430d258b = (void*)&s_state258b;
+extern "C" void* const gen_p_1430d25b0 = (void*)&s_serverTimeOffset;
 extern "C" void* const gen_p_1430d2ab8 = (void*)&s_auroraSuffix;
 extern "C" void* const gen_p_1430d2b38 = (void*)&s_clientServices;
+extern "C" void* const gen_p_1430d2b40 = (void*)&s_connectionLog;
 // ---- end of generated globals ----

@@ -32,9 +32,9 @@ FrostLite's network stack, offline until now by design. The two tracks meet phas
 |---|---|---|
 | D1 | No Blizzard endpoints, ever. The client only talks to our server. | **made** (2026-10-08) |
 | D2 | FrostLite stays a 1:1 port. Anything we must change to reach our server is recorded as `diverged` in `docs/stubs.md`. | **made** |
-| D3 | FrostForge is converted to 3.4.3 **on every level**, and 3.3.5 support is removed entirely. That covers the authentication (Battle.net in place of authserver's SRP6), the world protocol, the opcodes and update fields, client data (3.4.3 DB2s in place of 3.3.5 DBCs), the database schema and the game rules. Nothing is translated or kept for 3.3.5 compatibility. TrinityCore's `wotlk_classic` branch is a source to port from; FrostForge's AGENTS.md requires `--author` credit for anything mirrored from it. | **made** (2026-10-13) |
+| D3 | FrostForge is converted to 3.4.3 **on every level**, and 3.3.5 support is removed entirely. That covers the authentication (Battle.net in place of authserver's SRP6), the world protocol, the opcodes and update fields, client data (3.4.3 DB2s in place of 3.3.5 DBCs), the database schema and the game rules. Nothing is translated or kept for 3.3.5 compatibility. | **made** (2026-10-13) |
 | D4 | FrostLite connects to FrostForge on **127.0.0.1**, with the **absolute minimum** of client changes. Every change is a recorded `diverged` entry in `docs/stubs.md`, with the reference's behaviour beside it. The reference resolves `<portal>.actual.battle.net` (from the portal CVar, e.g. "US") and connects with Windows SChannel TLS, which validates the server's certificate. Phase 2 reads exactly how the host is built and the certificate checked, then picks the smallest change that reaches 127.0.0.1 with FrostForge's certificate. | **made**; the exact change is chosen in Phase 2 |
-| D5 | Characters are stored the 3.4.3 way: customizations as ChrCustomizationChoice ids in FrostForge's schema (as TrinityCore keeps them), in place of 3.3.5's skin/face/hair/facial-hair bytes. No mapping layer. | **made** (2026-10-13), follows from D3 |
+| D5 | Characters are stored the 3.4.3 way: customizations as ChrCustomizationChoice ids in FrostForge's schema, in place of 3.3.5's skin/face/hair/facial-hair bytes. No mapping layer. | **made** (2026-10-13), follows from D3 |
 
 ## Where things stand (2026-10-13)
 
@@ -84,16 +84,28 @@ The client's network core, so a session exists for the login code to drive.
 - [x] The session exists: `ClientServicesConstruct` 0x141569c00 runs translated and returns a live
       instance with the reference's vtable (0x1427b5518), seen in a run on 2026-10-13. The NetClient /
       RealmConnection base 0x1414f7080 runs inside it.
-- [ ] Hand-port the constructor and its base 0x1414f7080 (the realm packet handlers, Connection.log)
-      from translated to hand code.
-- [ ] NetClient.cpp: 0x141233a70, 0x141233c00, 0x141234230, 0x141234c30, 0x141234d00, 0x141235dd0.
-- [ ] NetInternal: 0x141235f60, 0x141236120, 0x141236220, 0x141236300.
+- [x] Hand-port the constructor and its base: `ClientServices` (0x141569c00, dtor 0x14156b1d0),
+      `RealmConnection` (0x1414f7080, dtor 0x1414f73c0, the realm-message handlers and callback
+      setters 0x1414f8790..0x1414f8970) and `NetClient` (0x141231cc0, dtor 0x1412320d0) are C++
+      classes in `src/net` and `src/services`, laid out as the reference (static_asserts) with its
+      vtable slot order. Slots not ported yet forward to translated code. The glue response object
+      (DAT_142d098e8) is ported too: the instance was built with null there before.
+- [x] NetClient.cpp: 0x141233a70, 0x141233c00, 0x141234230, 0x141234c30, 0x141234d00, 0x141235dd0
+      (plus 0x141233840, 0x141233de0, 0x141233e40, 0x141234f90, 0x1412325a0, 0x1412348c0..0x1412349f0).
+- [x] NetInternal: 0x141235f60, 0x141236120, 0x141236220, 0x141236300 (plus the queue's
+      constructor, destructor and clear, 0x141235eb0, 0x141235f00, 0x1412361d0).
 - [x] Undo the null-check divergences: `ClientServicesSetStatusCallback` without the check, and
       `ClientServicesShutdown`'s instance part ported (end the session, delete the instance).
-- [ ] Connection.log reaches disk: it is written in memory, but logs flush only when closed, and the
-      stage 3 teardown that closes it (FUN_1402293f0) is a stub.
+- [x] Connection.log reaches disk. The teardown that closes it is stage 2's (FUN_140227810, which
+      calls ClientServicesShutdown), ported with stage 4's (FUN_1402293f0). Note: the reference's
+      name is `Logs/Connection.log` with a forward slash, and Storm resolves a name without a
+      backslash against the executable's folder, so FrostLite writes it to
+      `build/cmake/bin/Release/Logs/`, not `client/_classic_/Logs/` (faithful; the reference's exe
+      sits in `_classic_`).
+- Open: the server key's big numbers (FUN_1420cd4e0) are a demoted stub, so they leak at exit.
 - **Check:** the client starts with a live ClientServices instance and the login screen still works.
-  **Seen 2026-10-13** (the user's run: login screen, Login reached FUN_1416a0db0, a clean close).
+  **Seen 2026-10-13** with the hand port: login screen, then a clean close (WM_CLOSE, exit 0), and
+  Connection.log holding "Connection Initialize" and "Connection Destroy".
 
 ### Phase 2: Battle.net transport
 
@@ -126,7 +138,7 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
       and receives a login ticket, then logs on with the ticket. Document the exact exchange here
       once it is read out of the reference.
 - [ ] `OsRegistryReadString` 0x141dfb910, only for `-launcherlogin`. It can stay a stub.
-- **Server:** the login endpoint (REST, as TrinityCore's bnetserver does it) checking the account
+- **Server:** the login endpoint (REST) checking the account
   against the auth database and issuing the ticket; the Authentication service accepting it. Accounts
   may need a Battle.net-style record beside the game account.
 - **Check:** a correct password gets past the "Connecting" / "Authenticating" dialogs, and a wrong
@@ -181,8 +193,6 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
 
 - Port from the reference, as everywhere in FrostLite: `// ref:` tags, the reference's structures
   and behaviour. Do not write client protocol code from a server's point of view.
-- Server code mirrored from TrinityCore is committed with `--author` naming the original author
-  (FrostForge AGENTS.md).
 - Nothing contacts Blizzard (D1). Ports and hosts stay local while developing.
 - Each phase is one or more scoped commits. Record the commits in the progress log.
 
@@ -193,3 +203,4 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
 | 2026-10-13 | - | roadmap written; FrostForge confirmed 3.3.5-only; the reference's TLS is SChannel | 4b79686 |
 | 2026-10-13 | 1 | the session is live (translated constructor); null-check divergences removed; ClientServicesShutdown's instance part ported | see git log |
 | 2026-10-13 | - | decisions made: D3 (FrostForge goes 3.4.3 on every level, 3.3.5 removed), D4 (127.0.0.1, minimal recorded client changes), D5 (native customization schema) | this commit |
+| 2026-10-13 | 1 | ClientServices / RealmConnection / NetClient / NetInternal by hand (src/net); stage 2 and 4 teardowns; Connection.log written; phase 1 done | this commit |

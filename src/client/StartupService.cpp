@@ -18,6 +18,8 @@
 #include <windows.h>
 #include <commctrl.h>
 
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+
 CVar* g_overrideArchive;  // DAT_142ddfa78
 
 namespace {
@@ -553,4 +555,69 @@ bool StartupServiceInitialize() {
     // 0x1402112e0, an empty function, is called here
     g_clientInitFlags |= 0x40;
     return true;
+}
+
+// Removes every registration of a listener for the initial hotfix events: the matches are
+// swapped to the back from the front, then cut off.
+// ref: FUN_14056fc60
+void HotfixRemoveInitialListener(void (*listener)(int32_t event)) {
+    auto& list = s_initialHotfixListeners;
+    void (**end)(int32_t) = list.m_data + list.m_size;
+    void (**last)(int32_t) = end;
+    void (**it)(int32_t) = list.m_data;
+    for (; it != last; it++) {
+        if (*it != listener) {
+            continue;
+        }
+        do {
+            last--;
+            if (it == last) {
+                goto done;
+            }
+        } while (*last == listener);
+        *it = *last;
+        *last = listener;
+    }
+done:
+    if (it != end) {
+        list.m_size = static_cast<uint64_t>(it - list.m_data);
+    }
+}
+
+namespace {
+
+extern "C" unsigned long long FUN_1421af680();
+// The three tag_rpc method registries (Blizzard/tag_rpc/src/method.cpp) freed. Not ported:
+// it runs translated.
+// translated: FUN_1421af680
+void TagRpcMethodRegistriesFree() {
+    __try {
+        FUN_1421af680();
+    } __except (GenFault(0x1421af680ull, GetExceptionInformation())) {
+    }
+}
+
+}
+
+// Stage 2 torn down (also its unwind when stage 3 fails): the Agent, the downloader, the
+// hotfix listener, ClientServices and telemetry, each marked in the teardown flags.
+// ref: FUN_140227810
+void Sub140227810() {
+    TagRpcMethodRegistriesFree();
+    AgentShutdown();
+    g_clientTeardownFlags |= 0x20;
+    AgentFreeInstallConfig();
+    void** holder = s_downloader;
+    g_clientTeardownFlags |= 0x10;
+    if (holder != nullptr) {
+        WowDownloadDestroy(holder);
+        ::operator delete(holder, 8);
+    }
+    g_clientTeardownFlags |= 8;
+    s_downloader = nullptr;
+    HotfixRemoveInitialListener(&InitialHotfixListener);
+    ClientServicesShutdown();
+    g_clientTeardownFlags |= 4;
+    TelemetryShutdown();
+    g_clientTeardownFlags |= 0x40;
 }
