@@ -40,7 +40,12 @@ def main() -> None:
     lea_starts = sorted(takers)
 
     def covered(t: int) -> bool:
-        """True when t is a slot of the lea-found vtable at or before it."""
+        """True when t is a slot inside the lea-found vtable before it. A vtable's own start is
+        not covered: a static object can hold a vtable whose destructor also takes its address
+        (GlueLogin's Battle.net listener 0x142d1b850 -> 0x1427e6d00, whose slots set the login
+        state and stayed untranslated, so the Login click showed nothing, 2026-10-15)."""
+        if t in takers:
+            return False
         k = bisect.bisect_right(lea_starts, t) - 1
         if k < 0:
             return False

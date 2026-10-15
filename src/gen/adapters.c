@@ -3372,6 +3372,13 @@ undefined8 FUN_14148b310(void) {
     return 0;
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_14148b330=?ReconnectLoginClear@@YAXXZ")
+extern char gen_alias_14148b330;
+undefined8 FUN_14148b330(void) {
+    ((void (*)(void))&gen_alias_14148b330)();
+    return 0;
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_14148b460=?LauncherOptionRead@@YA_NPEBD0PEAD_K_N@Z")
 extern char gen_alias_14148b460;
 undefined8 FUN_14148b460(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3, unsigned long long a4) {

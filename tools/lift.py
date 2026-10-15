@@ -88,6 +88,8 @@ def _decode(binary, address: int, limit: int) -> dict:
             if mn == "ret":
                 break
             if mn == "jmp":
+                if re.fullmatch(r"qword ptr \[(?!rip)[^\]]+\]", ins.op_str):
+                    break   # a tail call through memory: a vcall thunk, blz::function's invoker
                 if not re.fullmatch(r"0x[0-9a-f]+", ins.op_str):
                     raise Unliftable("an indirect jump")
                 target = int(ins.op_str, 16)
@@ -326,6 +328,17 @@ def _lift(binary, address: int, limit: int):
             written.update(("rax", "rdx"))
             set_here.update(("rax", "rdx"))
             used.update(("rax", "rdx"))
+        elif mn == "jmp" and ops[0].startswith("qword ptr ["):
+            # a tail call through a pointer in memory (`mov rax,[rcx]; jmp [rax+8]`, the thunk
+            # a member-function pointer to a virtual is: GlueLogin hands the Battle.net client
+            # its listener's slots this way), the argument registers passed on as they stand
+            where = address_of(ops[0][len("qword ptr ["):-1])
+            args = []
+            for r in ARGS:
+                used.add(r)
+                reads.add(r)
+                args.append(reg(r))
+            lines.append(f"  return (**(code **)({where}))({', '.join(args)});")
         elif mn == "jmp":
             target = int(ops[0], 16)
             if target in found:

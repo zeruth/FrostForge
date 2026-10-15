@@ -704,6 +704,12 @@ ulonglong FUN_1402630f0() {
     return (ulonglong)0;
 }
 
+/* the decompiler lost a call's arguments (FUN_140268dd0 reads 3, the call passes 2) */
+ulonglong FUN_140268d20() {
+    GenUnimplemented(0x140268d20ULL);
+    return (ulonglong)0;
+}
+
 /* SIMD union */
 ulonglong FUN_14026b0e0() {
     GenUnimplemented(0x14026b0e0ULL);
@@ -984,12 +990,6 @@ undefined8 FUN_1402f9430() {
 undefined8 FUN_1402f9a70() {
     GenUnimplemented(0x1402f9a70ULL);
     return (undefined8)0;
-}
-
-/* beyond the translation depth */
-undefined4 * FUN_1402fad40() {
-    GenUnimplemented(0x1402fad40ULL);
-    return (undefined4 *)0;
 }
 
 /* the decompiler lost a call's arguments (FUN_1425bf3b0 reads 3, the call passes 2) */
@@ -3884,6 +3884,18 @@ longlong FUN_1413fe580() {
     return (longlong)0;
 }
 
+/* did not compile: C2100 you cannot dereference an operand of type 'undefined8' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\g */
+undefined8 FUN_1414069e0() {
+    GenUnimplemented(0x1414069e0ULL);
+    return (undefined8)0;
+}
+
+/* did not compile: C2100 you cannot dereference an operand of type 'undefined8' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\g */
+undefined8 FUN_141406b50() {
+    GenUnimplemented(0x141406b50ULL);
+    return (undefined8)0;
+}
+
 /* the decompiler lost a call's arguments (FUN_1414329b0 reads 1, the call passes 0) */
 undefined8 FUN_14141a140() {
     GenUnimplemented(0x14141a140ULL);
@@ -4535,6 +4547,12 @@ longlong FUN_141671b10() {
 /* the decompiler lost a call's arguments (FUN_141675e10 reads 1, the call passes 0) */
 undefined8 FUN_141675b50() {
     GenUnimplemented(0x141675b50ULL);
+    return (undefined8)0;
+}
+
+/* the decompiler lost a call's arguments (FUN_141550b20 reads 4, the call passes 2) */
+undefined8 FUN_141676630() {
+    GenUnimplemented(0x141676630ULL);
     return (undefined8)0;
 }
 
@@ -15828,6 +15846,24 @@ undefined1 * FUN_142562ba0() {
 undefined1 * FUN_142562dd0() {
     GenUnimplemented(0x142562dd0ULL);
     return (undefined1 *)0;
+}
+
+/* the decompiler lost a call's arguments (FUN_14222ca90 reads 2, the call passes 1) */
+ulonglong FUN_142563950() {
+    GenUnimplemented(0x142563950ULL);
+    return (ulonglong)0;
+}
+
+/* the decompiler lost a call's arguments (FUN_14222d6e0 reads 2, the call passes 0) */
+undefined1 * FUN_142563c70() {
+    GenUnimplemented(0x142563c70ULL);
+    return (undefined1 *)0;
+}
+
+/* did not compile: C2059 syntax error: 'return' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
+undefined8 FUN_142563ee0() {
+    GenUnimplemented(0x142563ee0ULL);
+    return (undefined8)0;
 }
 
 /* did not compile: C2059 syntax error: 'return' [C:\Users\tyler\runicworld-client\FrostLite\build\cmake\src\gen\gen.vcxproj] */
