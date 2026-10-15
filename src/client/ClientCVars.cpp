@@ -11,6 +11,7 @@
 #include "console/Command.hpp"
 #include "console/Var.hpp"
 #include "framescript/EventCallbacks.hpp"
+#include "glue/GlueMgr.hpp"
 #include "os/Window.hpp"
 #include "storm/String.hpp"
 #include "util/Unimplemented.hpp"
@@ -198,13 +199,22 @@ uint32_t s_errorHead;                       // DAT_142de1948: the next line writ
 
 }  // namespace
 
-extern "C" unsigned long long FUN_14126ece0(unsigned long long);
-extern "C" unsigned long long FUN_14126ed00(unsigned long long);
 extern "C" unsigned long long FUN_141283c30(unsigned long long, unsigned long long, unsigned long long,
     unsigned long long);
-// translated: FUN_14126ece0
-// translated: FUN_14126ed00
 // translated: FUN_141283c30
+
+// The engine's fonts, 16 bytes each with the font handle first (the table stays the image's,
+// 0x1430a2030: the code that fills it is translated).
+// ref: FUN_14126ece0
+void* EngineFontGet(int32_t index) {
+    return reinterpret_cast<uint8_t*>(0x1430a2030ull) + static_cast<int64_t>(index) * 0x10;
+}
+
+// The engine fonts' height (DAT_142725ca0, a constant 0.01953125).
+// ref: FUN_14126ed00
+float EngineFontGetHeight() {
+    return 0.01953125f;
+}
 
 // A message line: its text, its level's colour, at the next place.
 // ref: FUN_140238c30
@@ -253,12 +263,11 @@ void ErrorDisplayInitialize() {
     if (s_errorBatch == nullptr) {
         return;
     }
-    s_errorFont = TextBlockGetFontPtr(*reinterpret_cast<const HTEXTFONT*>(FUN_14126ece0(1)));
+    s_errorFont = TextBlockGetFontPtr(*static_cast<const HTEXTFONT*>(EngineFontGet(1)));
     if (s_errorFont == nullptr) {
         return;
     }
-    uint32_t height = static_cast<uint32_t>(FUN_14126ed00(1));
-    std::memcpy(&s_errorFontHeight, &height, sizeof(height));
+    s_errorFontHeight = EngineFontGetHeight();
     if (s_errorFontHeight == 0.0f) {
         return;
     }
@@ -641,11 +650,6 @@ bool MouseNoRepositioningCallback(CVar*, const char*, const char* value, void*) 
     return true;
 }
 
-// translated: FUN_14167f5c0
-extern "C" unsigned long long FUN_14167f5c0(unsigned long long);
-// translated: FUN_141cb1cf0
-extern "C" unsigned long long FUN_141cb1cf0();
-extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 // -1 .. 4.
 // ref: FUN_14024b440
 bool CursorSizePreferredCallback(CVar*, const char*, const char* value, void*) {
@@ -654,11 +658,8 @@ bool CursorSizePreferredCallback(CVar*, const char*, const char* value, void*) {
         size = size < -1 ? -1 : 4;
     }
     // the cursor size (-1 from the monitor's DPI) and the cursor textures rebuilt at it
-    __try {
-        FUN_14167f5c0(static_cast<unsigned long long>(size));
-        FUN_141cb1cf0();
-    } __except (GenFault(0x14024b440ull, GetExceptionInformation())) {
-    }
+    CursorSetSize(static_cast<int32_t>(size));
+    CursorUnload();
     return true;
 }
 

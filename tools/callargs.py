@@ -394,6 +394,7 @@ class CallArgs:
     def __init__(self, binary):
         self.binary = binary
         self._functions: dict[int, _Function] = {}
+        self._thunks: dict[int, tuple[int, dict[str, int]] | None] = {}   # thunk -> (target, sets)
 
     def indirect_calls(self, function: int, size: int) -> int:
         """How many calls the function makes through a register or memory (imports included)."""
@@ -405,20 +406,50 @@ class CallArgs:
 
     def calls(self, i, target: int) -> bool:
         """Whether instruction i calls (or tail-jumps to) `target`, directly or through a thunk
-        (a function that is only `jmp target`), as Ghidra's thunk_FUN_ names show it."""
+        (a function that is only `jmp target`, or one that first sets argument registers to
+        constants), as Ghidra's thunk_FUN_ names show it."""
+        return self.thunk_sets(i, target) is not None
+
+    def thunk_sets(self, i, target: int) -> dict[str, int] | None:
+        """For an instruction that calls `target` (directly or through a thunk): the argument
+        registers the thunk sets before its jump, {} for a direct call or a plain thunk; None
+        when i does not call `target`.
+
+        A setter thunk is `mov dl, 1; jmp target` (FUN_14216a000 before FUN_14216a080): Ghidra
+        calls it a thunk of target and drops what it sets, so the call reads short by those
+        arguments. The constants are the thunk's own, the same at every call through it."""
         if i.mnemonic not in ("call", "jmp") or not i.operands or i.operands[0].type != x86.X86_OP_IMM:
-            return False
+            return None
         imm = i.operands[0].imm
         if imm == target:
-            return True
+            return {}
+        if imm in self._thunks:
+            t = self._thunks[imm]
+            return t[1] if t and t[0] == target else None
+        self._thunks[imm] = None
         try:
             o = self.binary.off(imm)
         except Exception:
-            return False
-        code = bytes(self.binary.image[o:o + 5])
-        if len(code) == 5 and code[0] == 0xE9:
-            return imm + 5 + int.from_bytes(code[1:5], "little", signed=True) == target
-        return False
+            return None
+        sets: dict[str, int] = {}
+        for j in _md.disasm(bytes(self.binary.image[o:o + 32]), imm):
+            if j.mnemonic == "jmp" and j.operands and j.operands[0].type == x86.X86_OP_IMM:
+                self._thunks[imm] = (j.operands[0].imm, sets)
+                break
+            ops = j.operands
+            if len(ops) != 2 or ops[0].type != x86.X86_OP_REG:
+                break
+            reg = FAMILY.get(j.reg_name(ops[0].reg))
+            if reg not in ARG_REGS:
+                break
+            if j.mnemonic == "mov" and ops[1].type == x86.X86_OP_IMM:
+                sets[reg] = ops[1].imm & ((1 << (8 * ops[0].size)) - 1)
+            elif j.mnemonic == "xor" and ops[1].type == x86.X86_OP_REG and ops[1].reg == ops[0].reg:
+                sets[reg] = 0
+            else:
+                break
+        t = self._thunks[imm]
+        return t[1] if t and t[0] == target else None
 
     def returned_at_every_call(self, function: int, size: int, target: int, position: int) -> bool:
         """Whether, at every call to `target`, argument `position` holds what the function
@@ -431,21 +462,26 @@ class CallArgs:
         sites = [k for k, i in enumerate(f.ins) if self.calls(i, target)]
         return bool(sites) and all(f.same_as_returned(k, ARG_REGS[position]) for k in sites)
 
-    def recover(self, function: int, size: int, target: int, positions: list[int], every: list | None = None):
+    def recover(self, function: int, size: int, target: int, positions: list[int], every: list | None = None,
+                tail: bool = False):
         """The constants every call from `function` to `target` passes in the argument
         `positions` (0-3), when all calls agree; None when any is unknown or they differ.
         With `every` (a list), each call's values are appended to it instead, unknowns as None,
-        and the list is returned."""
+        and the list is returned. With `tail`, only the tail calls (`jmp target`) count, and
+        there must be exactly one."""
         if any(p >= len(ARG_REGS) for p in positions):
             return None
         f = self._functions.get(function)
         if f is None:
             f = self._functions[function] = _Function(self.binary, function, size)
+        if tail and sum(1 for i in f.ins if i.mnemonic == "jmp" and self.thunk_sets(i, target) is not None) != 1:
+            return None
         found = None
         for k, i in enumerate(f.ins):
-            if not self.calls(i, target):
+            sets = self.thunk_sets(i, target)
+            if sets is None or (tail and i.mnemonic != "jmp"):
                 continue
-            values = [f.value(k, ARG_REGS[p], 0) for p in positions]
+            values = [sets[ARG_REGS[p]] if ARG_REGS[p] in sets else f.value(k, ARG_REGS[p], 0) for p in positions]
             if every is not None:
                 every.append(values)
                 continue

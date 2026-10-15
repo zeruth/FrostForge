@@ -2,6 +2,9 @@
 #include "blz/Function.hpp"
 #include "blz/String.hpp"
 #include "texture/Texture.hpp"
+#include "console/Var.hpp"
+#include "images/Images.hpp"
+#include "util/Fnv.hpp"
 #include <cstddef>
 #include "ui/CSimpleModelFFX.hpp"
 #include "framescript/EventCallbacks.hpp"
@@ -226,10 +229,26 @@ void GlueOnWindowSize() {
     FROST_UNIMPLEMENTED();
 }
 
-// The cursor follows the cursorSizePreferred CVar (the root's +0xf40 hook).
+// The cursor follows the cursorSizePreferred CVar (the root's +0xf40 hook): the size (-1, or no
+// CVar, meaning from the monitor's DPI: the larger size once its scale passes 1.3), then the
+// cursor textures rebuilt at it.
 // ref: FUN_14167b330
 bool GlueOnCursorSize() {
-    FROST_UNIMPLEMENTED();
+    CVar* cvar = CVarLookup(t2util::FnvHashStringI("ursorSizePreferred", 0xaf63de4c8601eff2ull));
+    uint32_t index;
+    if (cvar == nullptr) {
+        index = 0xffffffff;
+    } else {
+        index = static_cast<uint32_t>(cvar->m_intValue);
+        if (index + 1 > 5) {
+            index = (~(static_cast<int32_t>(index + 1) >> 31) & 5u) - 1;
+        }
+    }
+    if (index == 0xffffffff) {
+        index = 1.3f < WindowGetDpiScale();
+    }
+    WindowSetCursorSize(static_cast<int32_t>(index));
+    CursorUnload();
     return true;
 }
 
@@ -242,19 +261,17 @@ void GlueOnGamePad() {
 // The cursor module (Interface\Cursor\*.blp, DAT_1432515e0..): its textures, the mode, and the
 // image it hands the window's hardware cursor run as the reference's own code, translated.
 }  // namespace
-extern "C" unsigned long long FUN_141cb2810();
+// translated: FUN_141cb2190
 extern "C" unsigned long long FUN_141cb1440();
-extern "C" unsigned long long FUN_14167b4d0();
+extern "C" unsigned long long FUN_141cb2190();
+// The cursor textures' loaded flag stays the image's (the loader is translated).
+static uint8_t& s_cursorLoaded = *reinterpret_cast<uint8_t*>(0x1432515edull);
 namespace {
 
 // Whether the cursor textures are loaded, and loading them.
-// translated: FUN_141cb2810
+// ref: FUN_141cb2810
 bool CursorIsLoaded() {
-    __try {
-        return (FUN_141cb2810() & 0xff) != 0;
-    } __except (GenFault(0x141cb2810ull, GetExceptionInformation())) {
-        return true;
-    }
+    return s_cursorLoaded != 0;
 }
 
 // translated: FUN_141cb1440
@@ -265,17 +282,116 @@ void CursorLoad() {
     }
 }
 
-// The cursor's size from cursorSizePreferred (or the monitor's DPI), then the cursor again.
-// translated: FUN_14167b4d0
-void Sub14167B4D0() {
-    __try {
-        FUN_14167b4d0();
-    } __except (GenFault(0x14167b4d0ull, GetExceptionInformation())) {
+// The cursor's size from cursorSizePreferred (-1, or no CVar, meaning from the monitor's DPI),
+// then the cursor again.
+// ref: FUN_14167b4d0
+void GlueResetCursorSize() {
+    CVar* cvar = CVarLookup(t2util::FnvHashStringI("ursorSizePreferred", 0xaf63de4c8601eff2ull));
+    uint32_t index;
+    if (cvar == nullptr) {
+        index = 0xffffffff;
+    } else {
+        index = static_cast<uint32_t>(cvar->m_intValue);
+        if (index + 1 > 5) {
+            index = (~(static_cast<int32_t>(index + 1) >> 31) & 5u) - 1;
+        }
     }
+    if (index == 0xffffffff) {
+        index = 1.3f < WindowGetDpiScale();
+    }
+    WindowSetCursorSize(static_cast<int32_t>(index));
+    CursorSetMode(1);
 }
 
-
 }  // namespace
+
+// The cursor size index (-1 .. 4; out of range goes to -1 or 4), -1 meaning from the monitor's
+// DPI: the larger size once its scale passes 1.3.
+// ref: FUN_14167f5c0
+void CursorSetSize(int32_t index) {
+    uint32_t size = static_cast<uint32_t>(index);
+    if (size + 1 > 5) {
+        size = (~(static_cast<int32_t>(size + 1) >> 31) & 5u) - 1;
+    }
+    if (size == 0xffffffff) {
+        size = 1.3f < WindowGetDpiScale();
+    }
+    WindowSetCursorSize(static_cast<int32_t>(size));
+}
+
+// The cursor slots: 0x48 cursors by two sets, each a CURSORIMAGE and its loaded flag.
+struct CURSORSLOT {
+    uint32_t m_sizeIndex;
+    HTEXTURE m_texture;      // +0x08
+    uint8_t* m_pixels;       // +0x10
+    uint64_t m_pixelCount;   // +0x18
+    uint64_t m_capacity;     // +0x20
+    uint8_t m_loaded;        // +0x28
+};
+static_assert(sizeof(CURSORSLOT) == 0x30, "CURSORSLOT layout");
+static CURSORSLOT (&s_cursorSlots)[0x48][2] = *reinterpret_cast<CURSORSLOT(*)[0x48][2]>(0x14324f930ull);
+// The three fixed cursors (the default and Item64 among them) and the source image.
+static CURSORSLOT (&s_fixedCursors)[3] = *reinterpret_cast<CURSORSLOT(*)[3]>(0x143251430ull);
+static MIPBITS*& s_cursorSourceBits = *reinterpret_cast<MIPBITS**>(0x1432515f8ull);
+static uint32_t& s_cursorSourceWidth = *reinterpret_cast<uint32_t*>(0x1432515f4ull);
+static uint32_t& s_cursorSourceHeight = *reinterpret_cast<uint32_t*>(0x143251600ull);
+static uint32_t& s_cursorSource604 = *reinterpret_cast<uint32_t*>(0x143251604ull);
+
+// The cursor textures dropped and loaded again (at a new size), when they are loaded: the
+// source image freed, the resize callback taken off, the first set's slots and the fixed
+// cursors released, then the load and the source image's cursor again.
+// ref: FUN_141cb1cf0
+void CursorUnload() {
+    if (s_cursorLoaded == 0) {
+        return;
+    }
+    s_cursorLoaded = 0;
+    if (s_cursorSourceBits != nullptr) {
+        MipBitsFree(&s_cursorSourceBits);
+        s_cursorSourceBits = nullptr;
+        s_cursorSourceWidth = 0;
+        s_cursorSourceHeight = 0;
+        s_cursorSource604 = 0;
+    }
+    WindowRemoveResizeCallback(reinterpret_cast<void (*)(void*)>(0x141cb2b20ull), nullptr);
+    // The reference walks both sets and clears only the first (a `set == 0` test in the loop).
+    for (uint32_t set = 0; set < 2; set++) {
+        if (set != 0) {
+            continue;
+        }
+        for (uint32_t i = 0; i < 0x48; i++) {
+            CURSORSLOT& slot = s_cursorSlots[i][set];
+            if (slot.m_texture != nullptr) {
+                slot.m_texture->m_mipBits = nullptr;
+                TextureFree(&slot.m_texture);
+            }
+            slot.m_sizeIndex = 0;
+            slot.m_pixelCount = 0;
+            slot.m_loaded = 0;
+        }
+    }
+    // the three fixed cursors, unrolled as the reference has them
+    if (s_fixedCursors[0].m_texture != nullptr) {
+        s_fixedCursors[0].m_texture->m_mipBits = nullptr;
+        TextureFree(&s_fixedCursors[0].m_texture);
+    }
+    s_fixedCursors[0].m_sizeIndex = 0;
+    s_fixedCursors[0].m_pixelCount = 0;
+    if (s_fixedCursors[1].m_texture != nullptr) {
+        s_fixedCursors[1].m_texture->m_mipBits = nullptr;
+        TextureFree(&s_fixedCursors[1].m_texture);
+    }
+    s_fixedCursors[1].m_sizeIndex = 0;
+    s_fixedCursors[1].m_pixelCount = 0;
+    if (s_fixedCursors[2].m_texture != nullptr) {
+        s_fixedCursors[2].m_texture->m_mipBits = nullptr;
+        TextureFree(&s_fixedCursors[2].m_texture);
+    }
+    s_fixedCursors[2].m_sizeIndex = 0;
+    s_fixedCursors[2].m_pixelCount = 0;
+    CursorLoad();
+    FUN_141cb2190();
+}
 
 extern "C" unsigned long long FUN_141cb0380(unsigned long long, unsigned long long, unsigned long long);
 // blz::vector<uint8_t>::resize (a template the translator runs)
@@ -769,7 +885,7 @@ void CGlueMgr::Initialize() {
     if (!CursorIsLoaded()) {
         CursorLoad();
     }
-    Sub14167B4D0();
+    GlueResetCursorSize();
     CursorSetMode(1);
     Sub141527450(1);
     Sub141CFE3E0();

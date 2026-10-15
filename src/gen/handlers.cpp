@@ -404,6 +404,7 @@ unsigned long long FUN_141d02cf0(unsigned long long param_1);
 unsigned long long FUN_141d02d00(unsigned long long param_1);
 unsigned long long FUN_141d02d20(unsigned long long param_1);
 unsigned long long FUN_141d02d50(unsigned long long param_1);
+unsigned long long FUN_141d02d70(unsigned long long param_1);
 unsigned long long FUN_141d02e20(unsigned long long param_1);
 unsigned long long FUN_141d03630(unsigned long long param_1);
 unsigned long long FUN_141d03980(unsigned long long param_1);
@@ -435,6 +436,15 @@ int Lua_AutoChooseCurrentGraphicsSetting(lua_State* L) {
     __try {
         return static_cast<int>(FUN_1419f5e70(reinterpret_cast<unsigned long long>(L)));
     } __except (GenFault(0x1419f5e70ull, GetExceptionInformation())) {
+        return 0;
+    }
+}
+
+// translated: FUN_141d02d70
+int Lua_BreakUpLargeNumbers(lua_State* L) {
+    __try {
+        return static_cast<int>(FUN_141d02d70(reinterpret_cast<unsigned long long>(L)));
+    } __except (GenFault(0x141d02d70ull, GetExceptionInformation())) {
         return 0;
     }
 }

@@ -1,5 +1,10 @@
 {
  "_doc": "Corrections to the decompilation, applied before translation (tools/translate.py). Each is a decompiler error proven against the instructions: 'from' must occur exactly once in the function's corpus text, and 'why' gives the instruction evidence.",
+ "141f09460": [
+  {"from": "Storm::SMemFree(plStack_1a0,s___AU__chained_hash_node_U__pair__142dd0420,0xfffffffa);",
+   "to": "Storm::SMemFree(plVar5,s___AU__chained_hash_node_U__pair__142dd0420,0xfffffffa);",
+   "why": "the connection map's erase frees the node it unlinked, not the bucket: the walk at 0x141f095c2..0x141f095d3 stops when rcx == [rsp + 0x30] (the iterator's node, plVar5 == local_1a8), and rcx goes unchanged to SMemFree at 0x141f095e5; Ghidra printed the bucket slot (plStack_1a0, [rsp + 0x38]). Freeing a slot inside the bucket array corrupted the heap, and the Battle.net shutdown died in the manager's destructor (0xC0000374 on quit)"}
+ ],
  "141f01560": [
   {"from": "FUN_141efe6c0(param_1 + 0xc);",
    "to": "FUN_141efe6c0(param_1 + 0xc,*(undefined8 *)(param_2 + 0xc));",
@@ -52,6 +57,16 @@
   {"from": "  return in_RAX & 0xffffffffffffff00;",
    "to": "  return 0;",
    "why": "the already-initialized path returns false: xor al,al at 0x141f6fd34, then ret at 0x141f6fd40 (callers test al)"}
+ ],
+ "141c5ce70": [
+  {"from": "  bVar13 = DAT_14323b2b0 != 0;\n  DAT_14323b2b0 = uVar5;\n  if (bVar13) {\n    FUN_141c5cc20(&DAT_14323b2b0);",
+   "to": "  lVar4 = DAT_14323b2b0;\n  bVar13 = lVar4 != 0;\n  DAT_14323b2b0 = uVar5;\n  if (bVar13) {\n    FUN_141c5cc20(&DAT_14323b2b0,lVar4);",
+   "why": "a unique_ptr reset hands its deleter the old pointer: rdx = [0x14323b2b0] at 0x141c5d022, read before the new one is stored at 0x141c5d029, rcx = &DAT_14323b2b0 at 0x141c5d035, call at 0x141c5d03c (FUN_141c5cc20 frees param_2). lVar4 is free here: every later use reassigns it first"}
+ ],
+ "1414cafb0": [
+  {"from": "FUN_14069a510(&local_60);",
+   "to": "FUN_14069a510(&local_60,local_60);",
+   "why": "the map copy rehashes to the source's bucket count: rdx = [r12] at 0x1414cb13a (r12 = param_1 + 0x20, 0x1414cb123..0x1414cb12b), the same register stored to local_60 ([rbp-1]) at 0x1414cb14f, rcx = &local_60 at 0x1414cb127, call at 0x1414cb157"}
  ],
  "14147f390": [
   {"from": "return *DAT_1430af3f8;",

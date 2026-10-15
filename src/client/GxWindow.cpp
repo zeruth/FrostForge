@@ -7,6 +7,8 @@
 #include "os/Os.hpp"
 #include "os/Timer.hpp"
 #include "os/Window.hpp"
+#include "storm/Memory.hpp"
+#include "storm/String.hpp"
 #include "storm/Unicode.hpp"
 #include "util/Unimplemented.hpp"
 #include <windows.h>
@@ -90,6 +92,64 @@ void WindowRunResizeCallbacks() {
     }
     g_pendingRenderSettings.m_resolution = s_params.m_resolution;
 }
+
+const char s_callbackTag[] = ".?AU?$pair@P6AXPEAX@ZPEAX@blz@@";
+
+}  // namespace
+
+// A resize callback added at the end of the list (grown by half again, at least one).
+// ref: FUN_1414fca90
+void WindowAddResizeCallback(void (*function)(void*), void* param) {
+    uint64_t capacity = s_resizeCallbacks.m_capacity & 0x7fffffffffffffffull;
+    if (s_resizeCallbacks.m_size == capacity && capacity < capacity + 1) {
+        uint64_t half = (s_resizeCallbacks.m_capacity >> 1) & 0x3fffffffffffffffull;
+        uint64_t grow = 1;
+        if (capacity + 1 <= half + capacity) {
+            grow = half;
+        }
+        s_resizeCallbacks.m_capacity =
+            ((grow + capacity) & 0x7fffffffffffffffull) | (s_resizeCallbacks.m_capacity & 0x8000000000000000ull);
+        auto data = static_cast<WINDOWCALLBACK*>(
+            SMemAlloc((grow + capacity) * sizeof(WINDOWCALLBACK), 0xb, s_callbackTag, SStrHashFnv1a(s_callbackTag), -6, 0));
+        WINDOWCALLBACK* out = data;
+        for (WINDOWCALLBACK* in = s_resizeCallbacks.m_data; in != s_resizeCallbacks.m_data + s_resizeCallbacks.m_size; in++) {
+            *out++ = *in;
+        }
+        if ((s_resizeCallbacks.m_capacity & 0x8000000000000000ull) == 0) {
+            SMemFree(s_resizeCallbacks.m_data, s_callbackTag, -6, 0);
+        }
+        s_resizeCallbacks.m_capacity &= 0x7fffffffffffffffull;
+        s_resizeCallbacks.m_data = data;
+    }
+    WINDOWCALLBACK* slot = s_resizeCallbacks.m_data + s_resizeCallbacks.m_size;
+    if (slot != nullptr) {
+        slot->m_function = reinterpret_cast<void (*)(void*, void*)>(function);
+        slot->m_param = param;
+    }
+    s_resizeCallbacks.m_size++;
+}
+
+// The first resize callback with this function and param taken out, the rest moved down.
+// ref: FUN_1414fcfc0
+void WindowRemoveResizeCallback(void (*function)(void*), void* param) {
+    WINDOWCALLBACK* end = s_resizeCallbacks.m_data + s_resizeCallbacks.m_size;
+    WINDOWCALLBACK* entry = s_resizeCallbacks.m_data;
+    if (entry == end) {
+        return;
+    }
+    while (entry->m_function != reinterpret_cast<void (*)(void*, void*)>(function) || entry->m_param != param) {
+        entry++;
+        if (entry == end) {
+            return;
+        }
+    }
+    while (++entry != end) {
+        entry[-1] = *entry;
+    }
+    s_resizeCallbacks.m_size--;
+}
+
+namespace {
 
 // ref: FUN_1414f89a0
 void WindowClipCursor(bool clip) {
@@ -286,6 +346,8 @@ void WindowComputeRect(uint32_t style, GXWINDOWPARAMS* params, int32_t* position
 // translated: FUN_1414fb720
 // translated: FUN_1414fc050
 
+}  // namespace
+
 // The hardware cursor's size (an index into 32, 64, 64, 96, 128), for the next reset.
 // ref: FUN_1414fc880
 void WindowSetCursorSize(int32_t index) {
@@ -293,6 +355,8 @@ void WindowSetCursorSize(int32_t index) {
         s_cursorSizeIndex = static_cast<uint32_t>(index);
     }
 }
+
+namespace {
 
 // The engine's hardware cursor: the current image as a cursor of the chosen size.
 // ref: FUN_1414fd2f0
@@ -1004,5 +1068,4 @@ extern "C" void* const gen_p_1430b0050 = (void*)&s_cursorHotspot;
 extern "C" void* const gen_p_1430b0060 = (void*)&s_cursorPixels;
 extern "C" void* const gen_p_1430c0060 = (void*)&s_cursorShown;
 extern "C" void* const gen_p_1430d0060 = (void*)&s_cursorSizeIndex;
-extern "C" void* const gen_p_1430d01d0 = (void*)&s_resizeCallbacks;
 // ---- end of generated globals ----

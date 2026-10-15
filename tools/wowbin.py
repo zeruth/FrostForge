@@ -34,8 +34,9 @@ class Section:
 class Binary:
     def __init__(self, path: Path = EXE):
         self.path = path
+        # (the exception directory is read from the image below, not through pefile: its parse
+        # built ~320 MB of objects nothing used, held in reference cycles until a collection)
         pe = pefile.PE(str(path), fast_load=True)
-        pe.parse_data_directories(directories=[pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_EXCEPTION"]])
         self.base = pe.OPTIONAL_HEADER.ImageBase
         self.image = bytearray(pe.OPTIONAL_HEADER.SizeOfImage)
         self.sections: list[Section] = []
@@ -54,6 +55,7 @@ class Binary:
         # address resolves to the piece it lands in, then to the root function; only
         # roots are functions.
         d = pe.OPTIONAL_HEADER.DATA_DIRECTORY[pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_EXCEPTION"]]
+        pe.close()
         pieces = []  # (begin, end, parent begin or None)
         for i in range(d.Size // 12):
             begin, end, unwind = struct.unpack_from("<III", self.image, d.VirtualAddress + 12 * i)

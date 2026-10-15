@@ -269,6 +269,12 @@ void* ClientServicesGet() {
     return s_clientServices;
 }
 
+// A listener told each change of the connection's state.
+// ref: FUN_14156d0e0
+void ClientServicesAddStateListener(void* services, void (*listener)(ClientConnectionState)) {
+    static_cast<ClientServices*>(services)->m_stateListeners.push_back(listener);
+}
+
 // ref: FUN_14156cf10
 bool ClientServicesExists() {
     return s_clientServices != nullptr;

@@ -18,6 +18,12 @@ namespace CGlueMgr {
 void Initialize();
 }
 
+// The cursor module (Interface\Cursor): its mode (FUN_141cb20e0), the size index from
+// cursorSizePreferred (FUN_14167f5c0), and its textures dropped and loaded again (FUN_141cb1cf0).
+void CursorSetMode(uint32_t mode);
+void CursorSetSize(int32_t index);
+void CursorUnload();
+
 // The Login button's start (FUN_1416a0db0, translated).
 void GlueLoginStart(int32_t a1);
 

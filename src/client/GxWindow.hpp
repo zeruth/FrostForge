@@ -23,6 +23,10 @@ GXSIZE* WindowGetResolution(GXSIZE* size);
 void* WindowGetSwapChain();
 // The hardware cursor's size index (FUN_1414fc880).
 void WindowSetCursorSize(int32_t index);
+// Resize callbacks, run with their param when the window size changes (FUN_1414fca90 adds,
+// FUN_1414fcfc0 removes the first match).
+void WindowAddResizeCallback(void (*function)(void*), void* param);
+void WindowRemoveResizeCallback(void (*function)(void*), void* param);
 // The monitor's DPI scale times the window's height over the back buffer's (FUN_1414fcdc0).
 float WindowGetDpiScale();
 

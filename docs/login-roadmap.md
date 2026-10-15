@@ -214,7 +214,15 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
       services we need. Most of this should go through the translator. The `club_*` messages and
       other unneeded services can stay untranslated.
 - **Server:** a Battle.net listener on 1119 (TLS) with the RPC framing, and the Connection
-  service (Connect, Bind).
+  service (Connect, Bind). **Written 2026-10-14, not built or run** (FrostForge):
+  - protobuf v21.12 vendored (19ed8a5ba);
+  - the client's 62 bgs .proto files compiled by a bnetproto library (66c1fd089);
+  - the authserver's `Battlenet::Server`/`Session` (f2e47d4e6): TLS 1.2+, the frame format
+    above, responses on service_id 254 matched by token, and Connect/Echo/KeepAlive/
+    RequestDisconnect;
+  - `apps/bnetproto/makecert.sh` (e66961e63) for the CN/SAN 127.0.0.1 certificate.
+  
+  The client runs bindless, so Bind is never called.
 - **Check:** the client completes the TLS handshake and Connection.Connect with FrostForge.
   Both logs show it.
 
@@ -227,6 +235,16 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
 - [ ] How the password reaches the server: the reference sends the credentials to a login endpoint
       and receives a login ticket, then logs on with the ticket. Document the exact exchange here
       once it is read out of the reference.
+      **First read (2026-10-14).** Details are in FrostForge
+      `.agents/plans/frostforge-server/bnet-rpc.ANALYSIS.md`.
+      1. LogonRequest has no password field.
+      2. The server sends ChallengeNotify.OnExternalChallenge (0xbbda171f, method 3) with a URL.
+      3. The client GETs the JSON form (FUN_141496cc0); FUN_141495050 reads
+         `authentication_state` (LOGIN, AUTHENTICATOR, LEGAL or DONE) and `inputs[]`, and draws
+         the form in AuthChallenge.cpp.
+      4. It POSTs `{input_id, value}` pairs with the JSESSIONID cookie (FUN_1414982e0).
+      5. DONE carries `login_ticket`; the client then calls VerifyWebCredentials (0x0decfc01,
+         method 7), and the server answers with OnLogonComplete.
 - [ ] `OsRegistryReadString` 0x141dfb910, only for `-launcherlogin`. It can stay a stub.
 - **Server:** the login endpoint (REST) checking the account
   against the auth database and issuing the ticket; the Authentication service accepting it. Accounts

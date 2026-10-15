@@ -98,12 +98,6 @@ bool FUN_140215150(unsigned long long a0, unsigned long long a1, unsigned long l
     return (bool)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long))&gen_alias_140215150)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2, (unsigned long long)a3);
 }
 
-#pragma comment(linker, "/alternatename:gen_alias_140215240=?OsSetFilePointer@@YA_JPEAX_JI@Z")
-extern char gen_alias_140215240;
-undefined8 FUN_140215240(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
-    return (undefined8)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_140215240)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
-}
-
 #pragma comment(linker, "/alternatename:gen_alias_1402152a0=?OsWriteFile@@YA_NPEAXPEBXIPEAI@Z")
 extern char gen_alias_1402152a0;
 bool FUN_1402152a0(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3) {
@@ -604,6 +598,12 @@ undefined8 FUN_140266c80(void) {
     return (undefined8)((unsigned long long (*)(void))&gen_alias_140266c80)();
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_14026b260=?OsFileTimeToNanoseconds@@YA_J_J@Z")
+extern char gen_alias_14026b260;
+longlong FUN_14026b260(unsigned long long a0) {
+    return (longlong)((unsigned long long (*)(unsigned long long))&gen_alias_14026b260)((unsigned long long)a0);
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_14026bea0=?WorldMaxMipLevelCallback@@YA_NPEAUCVar@@PEBD1PEAX@Z")
 extern char gen_alias_14026bea0;
 undefined1 FUN_14026bea0(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3) {
@@ -1070,6 +1070,12 @@ bool FUN_1402cfd70(unsigned long long a0, unsigned long long a1, unsigned long l
     return (bool)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_1402cfd70)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_1402d0660=?CASFileRead@cas@@YA_NPEAUCASFILE@1@PEAXI@Z")
+extern char gen_alias_1402d0660;
+undefined8 FUN_1402d0660(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
+    return (undefined8)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_1402d0660)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_1402d0f80=?CASFileFree@cas@@YAXPEAX@Z")
 extern char gen_alias_1402d0f80;
 undefined8 FUN_1402d0f80(unsigned long long a0) {
@@ -1252,13 +1258,6 @@ undefined8 FUN_140351d40(void) {
     return 0;
 }
 
-#pragma comment(linker, "/alternatename:gen_alias_140351f70=?ClientDBReload@@YAXXZ")
-extern char gen_alias_140351f70;
-undefined8 FUN_140351f70(void) {
-    ((void (*)(void))&gen_alias_140351f70)();
-    return 0;
-}
-
 #pragma comment(linker, "/alternatename:gen_alias_14056df90=?HotfixAddInitialListener@@YAXP6AXH@Z@Z")
 extern char gen_alias_14056df90;
 undefined8 FUN_14056df90(unsigned long long a0) {
@@ -1302,12 +1301,6 @@ undefined8 FUN_14057b830(unsigned long long a0, unsigned long long a1, unsigned 
 extern char gen_alias_14057b920;
 longlong FUN_14057b920(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
     return (longlong)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_14057b920)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
-}
-
-#pragma comment(linker, "/alternatename:gen_alias_14057bb40=?WowClientDB2GetByTableHash@@YAPEAVWowClientDB2_Base@@I@Z")
-extern char gen_alias_14057bb40;
-undefined8 FUN_14057bb40(unsigned long long a0) {
-    return (undefined8)((unsigned long long (*)(unsigned long long))&gen_alias_14057bb40)((unsigned long long)a0);
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_140581790=?HasRecord@WowClientDB2_Base@@QEAA_NH@Z")
@@ -1964,6 +1957,12 @@ undefined4 FUN_14065f960(void) {
     return (undefined4)((unsigned long long (*)(void))&gen_alias_14065f960)();
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_14065f970=?FrameTime_GetTimeSeconds@@YAMXZ")
+extern char gen_alias_14065f970;
+float FUN_14065f970(void) {
+    return (float)((float (*)(void))&gen_alias_14065f970)();
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_14065f9a0=?FrameTime_GetRunTime@@YAIXZ")
 extern char gen_alias_14065f9a0;
 int FUN_14065f9a0(void) {
@@ -2443,6 +2442,12 @@ undefined4 FUN_1411febe0(unsigned long long a0, unsigned long long a1) {
     return (undefined4)((unsigned long long (*)(unsigned long long, unsigned long long))&gen_alias_1411febe0)((unsigned long long)a0, (unsigned long long)a1);
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_1411fed70=?M2FindSequenceById@@YAGIPEBU?$M2Array@G@@PEBU?$M2Array@UM2Sequence@@@@@Z")
+extern char gen_alias_1411fed70;
+ulonglong FUN_1411fed70(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
+    return (ulonglong)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_1411fed70)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_1411fee80=?M2FindSequenceVariation@@YAGIHPEBU?$M2Array@UM2Sequence@@@@PEBU?$M2Array@G@@@Z")
 extern char gen_alias_1411fee80;
 ushort FUN_1411fee80(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3) {
@@ -2455,10 +2460,30 @@ bool FUN_1411feef0(unsigned long long a0, unsigned long long a1, unsigned long l
     return (bool)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long))&gen_alias_1411feef0)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2, (unsigned long long)a3);
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_1411ff000=?M2SequenceRepeats@@YAHPEBUM2Sequence@@@Z")
+extern char gen_alias_1411ff000;
+int FUN_1411ff000(unsigned long long a0) {
+    return (int)((unsigned long long (*)(unsigned long long))&gen_alias_1411ff000)((unsigned long long)a0);
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_1411ff040=?M2PickVariation@@YAXPEAHPEAGPEBU?$M2Array@UM2Sequence@@@@@Z")
+extern char gen_alias_1411ff040;
+undefined8 FUN_1411ff040(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
+    ((void (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_1411ff040)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
+    return 0;
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_1411ff0e0=?M2ResolveSequence@@YAXIPEAUM2SequenceResolve@@PEAUM2AnimState@@PEAU?$M2Array@UM2Sequence@@@@PEAU?$M2Array@G@@3@Z")
 extern char gen_alias_1411ff0e0;
 undefined8 FUN_1411ff0e0(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3, unsigned long long a4, unsigned long long a5) {
     ((void (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long))&gen_alias_1411ff0e0)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2, (unsigned long long)a3, (unsigned long long)a4, (unsigned long long)a5);
+    return 0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_1411ff860=?M2ModelLightingAdd@@YAXPEAUCM2ModelLighting@@PEAVCM2Lighting@@@Z")
+extern char gen_alias_1411ff860;
+undefined8 FUN_1411ff860(unsigned long long a0, unsigned long long a1) {
+    ((void (*)(unsigned long long, unsigned long long))&gen_alias_1411ff860)((unsigned long long)a0, (unsigned long long)a1);
     return 0;
 }
 
@@ -2827,6 +2852,13 @@ undefined8 FUN_1412843c0(unsigned long long a0) {
     return 0;
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_141295ff0=?M2CameraRelease@@YAXPEAPEAVCM2Camera@@@Z")
+extern char gen_alias_141295ff0;
+undefined8 FUN_141295ff0(unsigned long long a0) {
+    ((void (*)(unsigned long long))&gen_alias_141295ff0)((unsigned long long)a0);
+    return 0;
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_141297630=?RibbonRandom@@YAMPEAUCRndSeed@@@Z")
 extern char gen_alias_141297630;
 float FUN_141297630(unsigned long long a0) {
@@ -3177,6 +3209,13 @@ undefined8 FUN_141356ae0(unsigned long long a0, unsigned long long a1) {
     return 0;
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_141356c00=?M2ModelSetCallback318@@YAXPEAVCM2Model@@PEAX1@Z")
+extern char gen_alias_141356c00;
+undefined8 FUN_141356c00(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
+    ((void (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_141356c00)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
+    return 0;
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_141356d00=?M2ModelSetPausedA@@YAXPEAVCM2Model@@_N@Z")
 extern char gen_alias_141356d00;
 undefined8 FUN_141356d00(unsigned long long a0, unsigned long long a1) {
@@ -3394,6 +3433,13 @@ undefined8 FUN_1414f8970(unsigned long long a0) {
     return 0;
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_1414fca90=?WindowAddResizeCallback@@YAXP6AXPEAX@Z0@Z")
+extern char gen_alias_1414fca90;
+undefined8 FUN_1414fca90(unsigned long long a0, unsigned long long a1) {
+    ((void (*)(unsigned long long, unsigned long long))&gen_alias_1414fca90)((unsigned long long)a0, (unsigned long long)a1);
+    return 0;
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_1414fcc60=?WindowGetAspect@@YAMXZ")
 extern char gen_alias_1414fcc60;
 float FUN_1414fcc60(void) {
@@ -3607,6 +3653,12 @@ extern char gen_alias_142288af0;
 undefined8 FUN_142288af0(unsigned long long a0) {
     ((void (*)(unsigned long long))&gen_alias_142288af0)((unsigned long long)a0);
     return 0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_142289a70=?GxDevExists@@YA_NXZ")
+extern char gen_alias_142289a70;
+undefined1 FUN_142289a70(void) {
+    return (undefined1)((unsigned long long (*)(void))&gen_alias_142289a70)();
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_14228a060=?GxGetAdapterList@@YAPEAUGXADAPTERLIST@@XZ")

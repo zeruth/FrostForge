@@ -333,13 +333,10 @@ void SI3CheckPendingReset() {
     }
 }
 
-extern "C" unsigned long long FUN_141312260(unsigned long long);
-// translated: FUN_141312260
+// The flag stays the image's: the reverb code that reads it is translated.
+// ref: FUN_141312260
 void SI3SetReverbEnabled(bool enabled) {
-    __try {
-        FUN_141312260((unsigned long long)enabled);
-    } __except (GenFault(0x141312260ull, GetExceptionInformation())) {
-    }
+    *reinterpret_cast<uint8_t*>(0x1430aa028ull) = enabled;
 }
 
 // ref: FUN_141312590

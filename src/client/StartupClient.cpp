@@ -96,14 +96,22 @@ bool PreloadStart(void (*callback)(void*), void* param) {
     return true;
 }
 
-// DB2 hotfix callbacks
-extern "C" unsigned long long FUN_1405705d0();
-// translated: FUN_1405705d0
+// The image's code these callbacks run (through its jump table); 0x1402112e0 is
+// _guard_check_icall, a return, standing for "nothing".
+template <class Callback>
+Callback ImageCallback(uint64_t address) {
+    return reinterpret_cast<Callback>(address);
+}
+
+// DB2 hotfix callbacks: a connection state listener (FUN_140574e60) and four script-function
+// slots of the image (their code is translated).
+// ref: FUN_1405705d0
 void Sub1405705D0() {
-    __try {
-        FUN_1405705d0();
-    } __except (GenFault(0x1405705d0ull, GetExceptionInformation())) {
-    }
+    ClientServicesAddStateListener(ClientServicesGet(), ImageCallback<void (*)(ClientConnectionState)>(0x140574e60ull));
+    *reinterpret_cast<uint64_t*>(0x14309ec10ull) = 0x140574350ull;
+    *reinterpret_cast<uint64_t*>(0x14309f0e0ull) = 0x140574bc0ull;
+    *reinterpret_cast<uint64_t*>(0x14309f180ull) = 0x1405744b0ull;
+    *reinterpret_cast<uint64_t*>(0x14309ee60ull) = 0x14056fd20ull;
 }
 
 // the hwDetect defaults (DAT_142e303c0 hook)
@@ -127,13 +135,11 @@ void Sub14068C520() {
     GxuFontRegisterCallbacks();
 }
 
-extern "C" unsigned long long FUN_1412a11c0();
-// translated: FUN_1412a11c0
+// Device callbacks: FUN_1412a1110 on create, nothing on destroy.
+// ref: FUN_1412a11c0
 void Sub1412A11C0() {
-    __try {
-        FUN_1412a11c0();
-    } __except (GenFault(0x1412a11c0ull, GetExceptionInformation())) {
-    }
+    GxAddDeviceCreatedCallback(ImageCallback<GXDEVICECALLBACK>(0x1412a1110ull), nullptr);
+    GxAddDeviceDestroyedCallback(ImageCallback<GXDEVICECALLBACK>(0x1402112e0ull), nullptr);
 }
 
 // client objects made with the device
@@ -149,13 +155,9 @@ void OnDeviceDestroyedClient(void* param) {
     FROST_UNIMPLEMENTED();
 }
 
-extern "C" unsigned long long FUN_1402f9e30();
-// translated: FUN_1402f9e30
+// ref: FUN_1402f9e30
 void Sub1402F9E30() {
-    __try {
-        FUN_1402f9e30();
-    } __except (GenFault(0x1402f9e30ull, GetExceptionInformation())) {
-    }
+    *reinterpret_cast<uint32_t*>(0x142e25ffcull) = 0;
 }
 
 
@@ -219,13 +221,11 @@ bool OnM2ForceAdditiveParticleSortChanged(CVar* cvar, const char* oldValue, cons
     return true;
 }
 
-extern "C" unsigned long long FUN_1412a1d50();
-// translated: FUN_1412a1d50
+// Device callbacks: FUN_1412a1c20 on create, FUN_1412a1d10 on destroy.
+// ref: FUN_1412a1d50
 void Sub1412A1D50() {
-    __try {
-        FUN_1412a1d50();
-    } __except (GenFault(0x1412a1d50ull, GetExceptionInformation())) {
-    }
+    GxAddDeviceCreatedCallback(ImageCallback<GXDEVICECALLBACK>(0x1412a1c20ull), nullptr);
+    GxAddDeviceDestroyedCallback(ImageCallback<GXDEVICECALLBACK>(0x1412a1d10ull), nullptr);
 }
 
 // The world's startup: its CVars, then its subsystems.
@@ -305,11 +305,25 @@ void Sub14022AD90(uint32_t page) {
 
 
 
-extern "C" unsigned long long FUN_14125f550();
-// translated: FUN_14125f550
+// Called only from this port now, so named here for the translator to bring in.
+// translated: FUN_141260910
+// translated: FUN_1412608c0
+// translated: FUN_141260880
+// translated: FUN_141260af0
+extern "C" unsigned long long FUN_141260910();
+extern "C" unsigned long long FUN_1412608c0();
+extern "C" unsigned long long FUN_141260880();
+extern "C" unsigned long long FUN_141260af0(unsigned long long, unsigned long long);
+// Three setups, then FUN_141260af0 with two zeroed 16-byte values.
+// ref: FUN_14125f550
 void Sub14125F550() {
     __try {
-        FUN_14125f550();
+        FUN_141260910();
+        FUN_1412608c0();
+        FUN_141260880();
+        uint64_t second[2] = {};
+        uint64_t first[2] = {};
+        FUN_141260af0(reinterpret_cast<unsigned long long>(first), reinterpret_cast<unsigned long long>(second));
     } __except (GenFault(0x14125f550ull, GetExceptionInformation())) {
     }
 }
@@ -373,13 +387,16 @@ void Sub1412E59C0(uint32_t value) {
     SI3Init(value != 0);
 }
 
-extern "C" unsigned long long FUN_14192c8c0();
-// translated: FUN_14192c8c0
+// A game UI check the image keeps (DAT_143238298; its readers are translated).
+// ref: FUN_141bf29b0
+void Sub141BF29B0(void* check) {
+    *reinterpret_cast<void**>(0x143238298ull) = check;
+}
+
+// The check is FUN_141925590 (GameUI.cpp).
+// ref: FUN_14192c8c0
 void Sub14192C8C0() {
-    __try {
-        FUN_14192c8c0();
-    } __except (GenFault(0x14192c8c0ull, GetExceptionInformation())) {
-    }
+    Sub141BF29B0(reinterpret_cast<void*>(0x141925590ull));
 }
 
 // The ImpactModelCollision* CVars.
@@ -392,13 +409,10 @@ void Sub141897E90() {
     }
 }
 
-extern "C" unsigned long long FUN_141658730();
-// translated: FUN_141658730
+// A script-function slot of the image (DAT_14309e5a0) gets FUN_141658c60.
+// ref: FUN_141658730
 void Sub141658730() {
-    __try {
-        FUN_141658730();
-    } __except (GenFault(0x141658730ull, GetExceptionInformation())) {
-    }
+    *reinterpret_cast<uint64_t*>(0x14309e5a0ull) = 0x141658c60ull;
 }
 
 extern "C" unsigned long long FUN_141671c80(unsigned long long, unsigned long long);
@@ -417,11 +431,6 @@ void Sub141672070(const void* message) {
     Sub141671C80(message);
 }
 
-// ref: FUN_14156d0e0
-void Sub14156D0E0(void* services) {
-    (void)services;
-    FROST_UNIMPLEMENTED();
-}
 
 extern "C" unsigned long long FUN_140330ba0();
 // translated: FUN_140330ba0
@@ -441,13 +450,29 @@ void Sub14033FA30() {
     }
 }
 
-extern "C" unsigned long long FUN_14165a560();
-// translated: FUN_14165a560
+// translated: FUN_142261300
+extern "C" unsigned long long FUN_142261300(unsigned long long);
+// Once, when FUN_142261300 accepts the table at 0x142d1a1e8: three script-function slots of the
+// image get FUN_14165a3c0, FUN_14165a510 and FUN_14165a4a0, and DAT_14311a510 is cleared.
+// ref: FUN_14165a560
 void Sub14165A560() {
-    __try {
-        FUN_14165a560();
-    } __except (GenFault(0x14165a560ull, GetExceptionInformation())) {
+    if (*reinterpret_cast<uint8_t*>(0x14311a509ull) != 0) {
+        return;
     }
+    int32_t result;
+    __try {
+        result = static_cast<int32_t>(FUN_142261300(0x142d1a1e8ull));
+    } __except (GenFault(0x142261300ull, GetExceptionInformation())) {
+        return;
+    }
+    if (result != 0) {
+        return;
+    }
+    *reinterpret_cast<uint8_t*>(0x14311a509ull) = 1;
+    *reinterpret_cast<uint64_t*>(0x14309f780ull) = 0x14165a3c0ull;
+    *reinterpret_cast<uint64_t*>(0x14309f850ull) = 0x14165a510ull;
+    *reinterpret_cast<uint64_t*>(0x14309f8d0ull) = 0x14165a4a0ull;
+    *reinterpret_cast<uint32_t*>(0x14311a510ull) = 0;
 }
 
 // The cursor freelook CVars.
@@ -529,7 +554,8 @@ void Sub14023DBD0() {
     Sub141658730();
     RealmConnectionSetServerTimeCallback(&ClientServicesSetServerTime);
     RealmConnectionSetMessageCallback(&Sub141672070);
-    Sub14156D0E0(ClientServicesGet());
+    // the empty function (0x1402112e0) as a state listener
+    ClientServicesAddStateListener(ClientServicesGet(), ImageCallback<void (*)(ClientConnectionState)>(0x1402112e0ull));
     Sub140330BA0();
     Sub14033FA30();
     FrameTime_Initialize();
@@ -547,13 +573,19 @@ void Sub14023DBD0() {
     StartWorkerThread();
 }
 
-extern "C" unsigned long long FUN_1412a99a0();
-// translated: FUN_1412a99a0
+// translated: FUN_1412a6f30
+extern "C" unsigned long long FUN_1412a6f30(unsigned long long);
+// FUN_1412a6f30 run once, then as the destroy callback after FUN_1412a64f0 on create, and
+// FUN_1412a99e0 as a render settings handler.
+// ref: FUN_1412a99a0
 void Sub1412A99A0() {
     __try {
-        FUN_1412a99a0();
-    } __except (GenFault(0x1412a99a0ull, GetExceptionInformation())) {
+        FUN_1412a6f30(0);
+    } __except (GenFault(0x1412a6f30ull, GetExceptionInformation())) {
     }
+    GxAddDeviceCreatedCallback(ImageCallback<GXDEVICECALLBACK>(0x1412a64f0ull), nullptr);
+    GxAddDeviceDestroyedCallback(ImageCallback<GXDEVICECALLBACK>(0x1412a6f30ull), nullptr);
+    RenderSettingsAddHandler(ImageCallback<RENDERSETTINGSHANDLER>(0x1412a99e0ull), nullptr);
 }
 
 // ref: FUN_1402d0b60
@@ -1433,7 +1465,4 @@ extern "C" void* const gen_p_142ddcf58 = (void*)&s_worldScene;
 extern "C" void* const gen_p_142de194c = (void*)&s_compositorEnabled;
 extern "C" void* const gen_p_142e301b8 = (void*)&s_consoleMayToggle;
 extern "C" void* const gen_p_142e301c9 = (void*)&s_consoleShown;
-extern "C" void* const gen_p_142e8e0e9 = (void*)&s_hotfixesClosed;
-extern "C" void* const gen_p_142e8e218 = (void*)&s_dbHotfixLog;
-extern "C" void* const gen_p_142e8e220 = (void*)&s_dbHotfixRecordLog;
 // ---- end of generated globals ----

@@ -26,12 +26,19 @@ from __future__ import annotations
 
 import argparse
 import bisect
+import gc
 import json
+import mmap
+import os
 import re
 import subprocess
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
+
+# numpy (through fidelity) starts OpenBLAS with a buffer per core, ~620 MB of commit on a
+# 20-thread machine before anything runs; the translator does no linear algebra
+os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
 
 import callargs
 import fidelity as F
@@ -234,8 +241,25 @@ def load_refdata() -> dict[int, tuple[int, str]]:
     with REFDATA.open(encoding="utf-8") as f:
         for line in f:
             d = json.loads(line)
-            out[int(d["addr"], 16)] = (d["len"], d["type"])
+            # half a million globals share a few thousand type names
+            out[int(d["addr"], 16)] = (d["len"], sys.intern(d["type"]))
     return out
+
+
+REF_CALLS = re.compile(rb'"([0-9a-f]+)": \{"calls": \[([^\]]*)\]')
+
+
+def load_ref_call_counts(path: Path) -> dict[str, int]:
+    """How many calls each reference function makes, from tools/fidelity.py's cache.
+
+    That is all the translator reads of it, and the whole cache parsed as JSON is ~590 MB of
+    objects; scanning the mapped file for each entry's `"calls": [...]` list keeps only the
+    counts."""
+    if not path.exists():
+        return {}
+    with path.open("rb") as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as m:
+        return {r.group(1).decode(): (r.group(2).count(b",") + 1 if r.group(2).strip() else 0)
+                for r in REF_CALLS.finditer(m)}
 
 
 GLOBAL_CAST = re.compile(r"\b_?DAT_([0-9a-f]{9})\s*(?:==|!=|=)\s*\(((?:\w+ )*\w+ ?\*+)\)")
@@ -323,7 +347,7 @@ SCALAR = re.compile(r"^(?:static\s+|extern\s+|thread_local\s+)*(?:const\s+)?(?:u
                     r"int|unsigned|DWORD|size_t|uintptr_t|HANDLE|HWND|\w+\s*\*+)$")
 
 
-STACK_DECL = re.compile(r"^(\s*)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local_|[a-z]{1,4}Stack_)(res)?([0-9a-f]+))"
+STACK_DECL = re.compile(r"^(\s*)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local_|[a-z]{1,4}Stack_|[a-z]{1,4}StackX_)(res)?([0-9a-f]+))"
                         r"\s*(?:\[\s*(\w+)\s*\])?\s*;[^\n]*\n", re.M)
 
 
@@ -343,9 +367,13 @@ def stack_frame(body: str) -> str:
         return body
     names = [m.group(4) for m in decls]
     arrays = {m.group(4) for m in decls if m.group(7)}
-    if not arrays and not any(re.search(rf"&\s*{n}\b", body) for n in names):
+    # a `StackX_` local shares its home slot with the `local_res` beside it: on the frame,
+    # a write of either is seen by the other
+    if not arrays and not any(re.search(rf"&\s*{n}\b", body) for n in names) and \
+            not any("StackX_" in n for n in names):
         return body
-    offs = {m.group(4): (int(m.group(6), 16) if m.group(5) else -int(m.group(6), 16)) for m in decls}
+    offs = {m.group(4): (int(m.group(6), 16) if m.group(5) or "StackX_" in m.group(4) else -int(m.group(6), 16))
+            for m in decls}
     lo = min(offs.values())
     pad = (8 + lo) % 16          # the entry stack pointer is 8 past a 16-byte boundary
     top = max(decls, key=lambda m: offs[m.group(4)])
@@ -402,9 +430,21 @@ STRLEN_LOOP = re.compile(r"(\w+) = -1;\s*do \{\s*\1 = \1 \+ 1;\s*\} while "
                          r"\((?:\*\(char \*\)\((?P<sum>[\w\[\]\*]+) \+ \1\)|(?P<index>\w+)\[\1\]) != '\\0'\);")
 
 
+# the same loop with the index read through a copy made each pass (FUN_14148b360:
+# `lVar4 = -1; do { lVar1 = lVar4 + 1; lVar4 = lVar4 + 1; } while (local_408[lVar1] != '\0');`)
+STRLEN_LOOP_COPY = re.compile(r"(\w+) = -1;\s*do \{\s*(\w+) = \1 \+ 1;\s*\1 = \1 \+ 1;\s*\} while "
+                              r"\((?:\*\(char \*\)\((?P<sum>[\w\[\]\*]+) \+ \2\)|(?P<index>\w+)\[\2\]) != '\\0'\);")
+
+
+def strlen_matches(text: str, end: int) -> list[re.Match]:
+    """Every inlined strlen loop before `end`, in text order."""
+    found = list(STRLEN_LOOP.finditer(text, 0, end)) + list(STRLEN_LOOP_COPY.finditer(text, 0, end))
+    return sorted(found, key=lambda m: m.start())
+
+
 def strlen_loops(text: str, end: int) -> list[tuple[str, str]]:
     """The inlined strlens before `end`, each as (the length's variable, the string)."""
-    return [(m.group(1), m.group("sum") or m.group("index")) for m in STRLEN_LOOP.finditer(text, 0, end)]
+    return [(m.group(1), m.group("sum") or m.group("index")) for m in strlen_matches(text, end)]
 
 
 VCALL = re.compile(r"\(\*\*\(code \*\*\)(?:\(\*(?:\((?:\w+ )*\w+ ?\*+\))?|\*(?:\((?:\w+ )*\w+ ?\*+\))?)")
@@ -429,6 +469,19 @@ def global_pieces(text: str) -> str:
     # the same notation on a local or a parameter (`local_res18[0]._1_3_`, a register's upper
     # bytes): a typed access at its address, or, for an odd width only read, a shift and a mask
     vectors = set(re.findall(r"\b(\w+) \[16\];", text))     # a real 16-byte value stays refused
+
+    def odd_write(m):
+        # an odd-width piece written (`local_res10._0_3_ = CONCAT12(...)`, the bytes of a pixel
+        # built one channel at a time: the cursor scalers FUN_1414f9d90 / FUN_1414fb180, whose
+        # stubs left the 48-pixel cursor empty) has no C lvalue: the whole value, the piece's bits
+        # replaced
+        indent, var, off, size, rhs = m.group(1), m.group(2), int(m.group(3)), int(m.group(4)), m.group(5)
+        if size in PIECE_TYPE or var.split("[")[0] in vectors or off + size > 8:
+            return m.group(0)
+        mask = ((1 << (8 * size)) - 1) << (8 * off)
+        return f"{indent}{var} = ({var} & ~{mask:#x}ULL) | (((ulonglong)({rhs}) << {8 * off}) & {mask:#x}ULL);"
+
+    text = re.sub(r"^([ \t]*)([A-Za-z_]\w*(?:\[[^\]\[]+\])?)\._(\d+)_(\d+)_ = ([^;\n]+);", odd_write, text, flags=re.M)
 
     def local_piece(m):
         var, off, size = m.group(1), int(m.group(2)), int(m.group(3))
@@ -650,6 +703,34 @@ def upper_half_only(text: str) -> list[str]:
             # a slot of the function's own outgoing-argument area (below its entry rsp): the
             # instructions set the bytes a narrow stack argument has (`mov byte ptr [rsp+0x20],0`)
             # and Ghidra carries the rest as this; the callee reads only what was set
+            out.append(name)
+    return out
+
+
+def written_home_slots(text: str) -> list[str]:
+    """`uStackX_c`-style locals the function owns: a declared part of its own home area.
+
+    Ghidra names the bytes above the entry stack pointer that do not start a home slot
+    `xStackX_N` (N bytes above it, e.g. the upper half of `local_res8`). When the function
+    declares one and writes it before any read, it is scratch the function keeps there, a
+    plain local; stack_frame() puts it at its offset. A declared buffer there (`auStackX_8 [8]`,
+    handed to a callee to fill) is the same. One read first would be the caller's leftovers,
+    and stays refused, except as the high part of a `CONCAT` over the slot's low bytes
+    (`CONCAT71(uStackX_9,local_res8)`): a narrow value moved as its whole 8-byte slot, whose
+    upper bytes are leftovers in the reference too, as upper_half_only() reasons."""
+    out = []
+    for name in set(re.findall(r"\b[a-z]{1,4}StackX_[0-9a-f]+\b", text)):
+        if re.search(rf"^\s*[\w ]+\s+{name}\s*\[\s*\w+\s*\];$", text, re.M):
+            out.append(name)
+            continue
+        decl = re.search(rf"^\s*[\w ]+\**\s*{name};$", text, re.M)
+        if decl is None:
+            continue
+        rest = text[decl.end():]
+        uses = list(re.finditer(rf"\b{name}\b", rest))
+        if uses and re.match(r"\s*=[^=]", rest[uses[0].end():]):
+            out.append(name)
+        elif uses and all(re.search(r"CONCAT\d+\(\s*$", rest[max(0, u.start() - 12):u.start()]) for u in uses):
             out.append(name)
     return out
 
@@ -984,8 +1065,7 @@ class Translator:
             g["mangled"] = hits[0] if len(hits) == 1 else None
         self.global_aliases: dict[int, str] = {}
         self.exported: dict[int, dict] = {}
-        cache_path = ROOT / "build/fidelity-ref-cache.json"
-        self.refcache = json.loads(cache_path.read_text())["functions"] if cache_path.exists() else {}
+        self.ref_call_counts = load_ref_call_counts(ROOT / "build/fidelity-ref-cache.json")
         self.demoted = json.loads(DEMOTED.read_text()) if DEMOTED.exists() else {}
         self.exceptions = json.loads((ROOT / "tools/fidelity_exceptions.json").read_text(encoding="utf-8"))
 
@@ -1182,7 +1262,7 @@ class Translator:
             elif len(args) == need - 2:
                 # both the string and its length dropped: the strlen just before the call (no
                 # other call between) measured the string the call pushes
-                last = list(STRLEN_LOOP.finditer(text, 0, start))
+                last = strlen_matches(text, start)
                 if last and not re.search(r"\b\w+\(", text[last[-1].end():start]):
                     n, s = strlen_loops(text, start)[-1]
                     out.append((end, f",{s},{n}"))
@@ -1207,6 +1287,10 @@ class Translator:
             values = self.callargs.recover(a, e["size"], b, positions)
             if values is None:
                 values = self.recover_returned(a, e["size"], b, positions, text)
+            if values is None and self.is_tail_call(text, start, end, b):
+                # the call the function ends in is its one `jmp`: that site's registers, which
+                # may be its own parameters passed on (a header Ghidra cut short gets them)
+                values = self.callargs.recover(a, e["size"], b, positions, tail=True)
             if values is None:
                 values = self.recover_by_elimination(a, e["size"], b, positions, text, len(args))
                 if isinstance(values, tuple):
@@ -1387,6 +1471,21 @@ class Translator:
         if len({tuple(kind(x) for x in v) for v in left}) != 1:
             return None
         return tuple(left)
+
+    @staticmethod
+    def is_tail_call(text: str, start: int, end: int, b: int) -> bool:
+        """Whether the call at text[start:end+1] is one the function ends in: `return FUN_b(..)`,
+        `FUN_b(..); return;`, or `v = FUN_b(..); return v;`. The compiler makes such a call
+        the function's `jmp b`, which is how callargs finds its instruction."""
+        line_start = text.rfind("\n", 0, start) + 1
+        before = text[line_start:start].strip()
+        after = text[end + 1:]
+        if re.fullmatch(r"return(?:\s*\([\w\s\*]+\))?", before) and re.match(r"\s*;", after):
+            return True
+        if before == "" and re.match(r"\s*;\s*return\s*;", after):
+            return True
+        v = re.fullmatch(r"(\w+)\s*=(?:\s*\([\w\s\*]+\))?", before)
+        return bool(v and re.match(rf"\s*;\s*return\s+(?:\([\w\s\*]+\)\s*)?{v.group(1)}\s*;", after))
 
     def lost_arguments(self, text: str) -> str | None:
         for _, _, b, args in call_sites(text):
@@ -1589,7 +1688,7 @@ class Translator:
         if text is None:
             return "not in the corpus"
         for reason, rx in HARD:
-            hits = {m.group(0) for m in rx.finditer(text)} - set(upper_half_only(text))
+            hits = {m.group(0) for m in rx.finditer(text)} - set(upper_half_only(text)) - set(written_home_slots(text))
             if hits:
                 return reason
         if any(g in text for g in ("DAT_14261a0b0", "DAT_14261a0b8")):
@@ -1608,11 +1707,11 @@ class Translator:
                 return "an indirect call the decompiler lost"
         # the reference's own call list (tools/fidelity.py's cache, once the function has been
         # measured): a body that shows under half of it is one the decompiler lost
-        ref = self.refcache.get(f"{a:x}")
-        if ref is not None and len(ref["calls"]) >= 2:
+        calls = self.ref_call_counts.get(f"{a:x}", 0)
+        if calls >= 2:
             shown = len(FUNREF.findall(text)) + sum(1 for n in CALL.findall(text) if "::" in n)
-            if shown * 2 < len(ref["calls"]):
-                return f"the decompiler lost calls ({shown} shown, the reference makes {len(ref['calls'])})"
+            if shown * 2 < calls:
+                return f"the decompiler lost calls ({shown} shown, the reference makes {calls})"
         words = [x or y for x, y in TYPE_WORD.findall(text.split("{", 1)[1])]
         for word in words + [w for p in sig[2] for w in p.split()[:-1]]:
             w = word.strip("*")
@@ -1873,13 +1972,25 @@ class Translator:
         for old in GEN.glob("translated_*.c"):
             old.unlink()
         uses: set[int] = set()
-        bodies = {}
         imports, dlls = set(), set()
+        # the translated bodies, a few hundred to a file, each with its line range kept. A file
+        # is written as soon as it is full: holding every body until the end is what ran the
+        # translator out of memory. (translated.h, written after, is only #included by name.)
+        lines_of = {}
+        chunk: list[int] = []        # the translated functions in order; a body's index is its hit slot
+        port_reads = {}
+        out: list[str] = []
+
+        def flush():
+            path = GEN / f"translated_{(len(chunk) - 1) // PER_FILE:03}.c"
+            write_out(path, "\n".join(out) + "\n", encoding="utf-8", newline="\n")
+            out.clear()
+
         for a in sorted(plan["translate"]):
             text = self.body(a)
             mine: set[int] = set()
             try:
-                bodies[a] = self.rewrite(a, text, mine)
+                body = self.rewrite(a, text, mine)
             except Untranslatable as e:
                 del plan["translate"][a]
                 plan["stub"][a] = str(e)
@@ -1887,6 +1998,29 @@ class Translator:
             uses |= mine
             imports.update(IMPORT_MERGED.get(m.group(2), m.group(2)) for m in IMPORT.finditer(text))
             dlls.update(m.group(1) for m in IMPORT.finditer(text))
+            if r := self.port_reads(body, plan["adapt"]):
+                port_reads[f"{a:x}"] = r
+            if not out:
+                out += ["/* GENERATED by tools/translate.py from build/corpus.jsonl; do not edit by hand. */",
+                        "#include \"gen/translated.h\"", "#pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 "
+                        "4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 "
+                        "4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)", ""]
+            chunk.append(a)
+            start = len(out) + 1
+            out.append(f"/* ref: FUN_{a:x} */")
+            lines = body.splitlines()
+            # a call count per function (gen_hits, written out under FROST_HITS): which
+            # translated code a run reaches, and how often, for choosing what to port by hand
+            brace = lines.index("{") if "{" in lines else -1
+            if brace >= 0:
+                lines.insert(brace + 1, f"  GEN_HIT({len(chunk) - 1});")
+            out.extend(lines)
+            lines_of[a] = (f"translated_{(len(chunk) - 1) // PER_FILE:03}.c", start, len(out))
+            out.append("")
+            if len(chunk) % PER_FILE == 0:
+                flush()
+        if out:
+            flush()
         # whatever is called and neither translated nor adapted is stubbed
         for b in uses:
             if b not in plan["translate"] and b not in plan["adapt"] and b not in plan["stub"]:
@@ -1915,29 +2049,6 @@ class Translator:
         header += prototypes + ["", "#endif", ""]
         write_out(GEN / "translated.h", "\n".join(header), encoding="utf-8", newline="\n")
 
-        # the translated bodies, a few hundred to a file, each with its line range kept
-        lines_of = {}
-        chunk = sorted(bodies)
-        hit_index = {a: i for i, a in enumerate(chunk)}
-        for n in range(0, len(chunk), PER_FILE):
-            path = GEN / f"translated_{n // PER_FILE:03}.c"
-            out = ["/* GENERATED by tools/translate.py from build/corpus.jsonl; do not edit by hand. */",
-                   "#include \"gen/translated.h\"", "#pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 "
-                   "4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 "
-                   "4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)", ""]
-            for a in chunk[n:n + PER_FILE]:
-                start = len(out) + 1
-                out.append(f"/* ref: FUN_{a:x} */")
-                body = bodies[a].splitlines()
-                # a call count per function (gen_hits, written out under FROST_HITS): which
-                # translated code a run reaches, and how often, for choosing what to port by hand
-                brace = body.index("{") if "{" in body else -1
-                if brace >= 0:
-                    body.insert(brace + 1, f"  GEN_HIT({hit_index[a]});")
-                out.extend(body)
-                lines_of[a] = (path.name, start, len(out))
-                out.append("")
-            write_out(path, "\n".join(out) + "\n", encoding="utf-8", newline="\n")
         hits = ["/* GENERATED by tools/translate.py; do not edit by hand. */",
                 "/* each translated function's call count, by its index in gen_hit_addrs */",
                 f"unsigned int gen_hits[{max(1, len(chunk))}];",
@@ -2034,7 +2145,6 @@ class Translator:
                         "        return 0;", "    }", "}", ""]
         write_out(GEN / "handlers.cpp", "\n".join(fwd), encoding="utf-8", newline="\n")
 
-        port_reads = {f"{a:x}": r for a in sorted(bodies) if (r := self.port_reads(bodies[a], plan["adapt"]))}
         manifest = {
             "translated": {f"{a:x}": {"depth": d, "file": lines_of[a][0], "lines": lines_of[a][1:]}
                            for a, d in sorted(plan["translate"].items())},
@@ -2201,6 +2311,10 @@ def main() -> None:
         # compile now (a recovered argument, a type), and the loop below re-demotes what does not
         DEMOTED.unlink()
     for round_ in range(1, 30 if args.fix else 2):
+        # the last round's translator goes before the next is built, or each round holds two
+        # copies of the corpus and the reference image at its peak
+        t = manifest = None
+        gc.collect()
         t = Translator(args.depth)
         manifest = t.emit(sorted(set(roots) | set(t.static_initializers())), handlers)
         print(f"translated {len(manifest['translated'])}, adapted {len(manifest['adapted'])}, "

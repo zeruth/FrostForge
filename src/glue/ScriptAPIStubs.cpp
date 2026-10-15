@@ -7,13 +7,6 @@
 
 #include "util/Unimplemented.hpp"
 
-// ref: FUN_141d02d70
-int Lua_BreakUpLargeNumbers(lua_State* L) {
-    (void)L;
-    FROST_UNIMPLEMENTED();
-    return 0;
-}
-
 // ref: FUN_1407e8be0
 int Lua_C_AccountServices_SaveAccountData(lua_State* L) {
     (void)L;

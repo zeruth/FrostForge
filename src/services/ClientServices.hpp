@@ -128,6 +128,8 @@ void SetBuildType(int32_t type);
 void ClientServicesInitialize();
 void* ClientServicesGet();
 bool ClientServicesExists();
+// Adds a listener of the connection's state (FUN_14156d0e0).
+void ClientServicesAddStateListener(void* services, void (*listener)(ClientConnectionState));
 void ClientServicesSetStatusCallback(void* services, bool (*callback)());
 void ClientServicesShutdown();
 
