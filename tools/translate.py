@@ -75,8 +75,23 @@ PRIMITIVE = {
     "ulong", "longlong", "ulonglong", "qword", "uint8", "uint4", "uint2", "int4", "int8", "int2", "sbyte",
     "float4", "float8", "float10", "pointer", "pointer64", "code", "char", "short", "int", "long", "float", "double",
     "bool", "wchar_t", "HANDLE", "size_t", "unsigned", "signed", "uint5", "uint6", "uint7", "int3", "int5",
-    "int6", "int7", "int1", "__time64_t",
+    "int6", "int7", "int1", "__time64_t", "__int64", "uintptr_t", "va_list",
 }
+# the Windows names src/gen/Ghidra.h declares, which the typed import slots bring into the corpus
+WINDOWS_TYPES = {
+    "BOOL", "BOOLEAN", "BYTE", "WORD", "DWORD", "DWORD64", "UINT", "INT", "LONG", "ULONG", "SHORT", "USHORT",
+    "CHAR", "WCHAR", "LONGLONG", "ULONGLONG", "HRESULT", "LSTATUS", "LCID", "ATOM", "SIZE_T", "ULONG_PTR",
+    "DWORD_PTR", "UINT_PTR", "LONG_PTR", "INT_PTR", "LPARAM", "WPARAM", "LRESULT", "SOCKET", "u_short", "u_long",
+    "u_int", "u_char", "errno_t", "rsize_t", "wint_t", "__uint64",
+    "HMODULE", "HINSTANCE", "HWND", "HDC", "HKEY", "HLOCAL", "HGLOBAL", "HCURSOR", "HICON", "HMENU", "HDROP",
+    "HIMC", "HBRUSH", "FARPROC", "LPVOID", "PVOID", "LPCVOID", "LPSTR", "LPCSTR", "LPWSTR", "BSTR", "LPCWSTR",
+    "LPDWORD", "LPBOOL", "LPBYTE", "LPLONG", "LPCRITICAL_SECTION", "PSRWLOCK", "PCONDITION_VARIABLE",
+    "LPSECURITY_ATTRIBUTES", "LPOVERLAPPED", "PCCRL_CONTEXT", "PCCERT_CONTEXT", "LPRECT", "LPPOINT",
+    "LPUNKNOWN", "LPCGUID", "PRAWINPUTDEVICELIST", "PUNWIND_HISTORY_TABLE",
+}
+PRIMITIVE |= WINDOWS_TYPES
+# the C library's own structs, which src/gen/Ghidra.h names the way Ghidra writes them
+PRIMITIVE |= {"tm"}
 HARD = [
     ("register the decompiler lost track of", re.compile(r"\b(in_|unaff_|extraout_)\w+")),
     ("SIMD union", re.compile(r"\._\d+_\d+_")),
@@ -98,7 +113,21 @@ CRT = {"memcpy", "memmove", "memset", "memcmp", "strlen", "strcmp", "strncmp", "
 CRT_BY_ADDR = {0x1425bf3b0: "memmove", 0x1425bfa50: "memset",
                # the thread-safe static guard's header (its footer is named in the corpus)
                0x14026bca8: "_Init_thread_header"}
+# reference runtime entry points code stores as pointers, jumped to the port's own runtime: a
+# call through the pointer reaches the same routine a direct call does. curl_global_init
+# (FUN_14216a080) fills curl's allocator table with these; without them every curl allocation
+# landed on int3 and returned null (the Login click's _calloc_base, 2026-10-15).
+CRT_ENTRY = {0x140286974: "malloc", 0x140279d94: "free", 0x140289938: "realloc",
+             0x14241d3f8: "_strdup", 0x1402857f8: "calloc", 0x14241c294: "_wcsdup"}
+# the UCRT's internal templates the corpus names, as the public routine each one implements:
+# common_gmtime_s<__int64> (0x1424147d0) is _gmtime64_s, which cross_ssl's log timestamp
+# (FUN_141f35740) calls; that function stubbed left its caller a string with no buffer, and the
+# first log line crashed in memmove at startup (2026-10-15)
+CRT_TEMPLATES = {"common_gmtime_s<__int64>": "_gmtime64_s", "common_gmtime_s<long>": "_gmtime32_s"}
 
+# one printf-style conversion (`%%` included, so it can be told apart and skipped)
+FORMAT_CONVERSION = re.compile(r"%(?:%|[-+ #0]*(?:\*|\d+)?(?:\.(?:\*|\d+))?"
+                               r"(?:hh|h|ll|l|L|z|j|t|I64|I32|I)?[diouxXeEfgGaAcspn])")
 CALL = re.compile(r"(?<![\w:])((?:[A-Za-z_]\w*::)+[~A-Za-z_]\w*|[A-Za-z_]\w*)\s*\(")
 SYMBOL = re.compile(r"\b((?:PTR_)*(?:DAT|_DAT|UNK|_UNK|s|u|ws|LAB|vtable|switchD|PTR|[a-zA-Z]+Ram)_\w*?_?([0-9a-f]{9}))\b")
 RAM = re.compile(r"\b([a-z]+)Ram0*(1[0-9a-f]{8})\b")
@@ -347,7 +376,11 @@ SCALAR = re.compile(r"^(?:static\s+|extern\s+|thread_local\s+)*(?:const\s+)?(?:u
                     r"int|unsigned|DWORD|size_t|uintptr_t|HANDLE|HWND|\w+\s*\*+)$")
 
 
-STACK_DECL = re.compile(r"^(\s*)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local_|[a-z]{1,4}Stack_|[a-z]{1,4}StackX_)(res)?([0-9a-f]+))"
+# (Ghidra's prefix spells the type, one `p` per pointer level: `pppppplStack_350` is a
+# `longlong ******` at -0x350, which a 1-4 letter prefix left out of the frame. It was the child
+# pointer of a struct FUN_142578b20 builds at gen_frame + 0x18; zeroed as a separate variable, the
+# frame's slot kept stale stack bytes, and the copy of that struct followed them, 2026-10-15)
+STACK_DECL = re.compile(r"^(\s*)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local_|[a-z]+Stack_|[a-z]+StackX_)(res)?([0-9a-f]+))"
                         r"\s*(?:\[\s*(\w+)\s*\])?\s*;[^\n]*\n", re.M)
 
 
@@ -379,8 +412,15 @@ def stack_frame(body: str) -> str:
     top = max(decls, key=lambda m: offs[m.group(4)])
     ctype = lambda m: f"{m.group(2).strip()} {m.group(3)}".strip()
     size_of = lambda m: f"sizeof({ctype(m)}[{m.group(7)}])" if m.group(7) else f"sizeof({ctype(m)})"
-    frame = (f"{decls[0].group(1)}__declspec(align(16)) unsigned char gen_frame"
-             f"[0x{pad + offs[top.group(4)] - lo:x} + {size_of(top)}];\n")
+    size = f"0x{pad + offs[top.group(4)] - lo:x} + {size_of(top)}"
+    # The reference's locals fill its frame up to the entry stack pointer, and a struct whose
+    # address escapes has fields past the last one Ghidra names: FUN_14020b2e0 hands
+    # `&local_38` to FUN_141c011a0 as a hidden return pointer, the callee fills 0x20 bytes, and a
+    # frame that ended at the last named local took the overrun into its /GS cookie at startup
+    # (2026-10-15). So a frame of plain locals reaches the entry stack pointer.
+    if offs[top.group(4)] < 0:
+        size = f"({size} > 0x{pad - lo:x} ? {size} : 0x{pad - lo:x})"
+    frame = (f"{decls[0].group(1)}__declspec(align(16)) unsigned char gen_frame[{size}];\n")
     for m in reversed(decls):
         body = body[:m.start()] + body[m.end():]
     first = re.search(r"\{\n", body).end()
@@ -642,6 +682,109 @@ def code_arithmetic(text: str) -> str:
     return text
 
 
+def va_args(text: str) -> str:
+    """A variadic function's body (`fn(L, fmt, ...)`, marked by tools/varargs.py) with C's
+    own va_list in place of the home-slot spill. The prologue stores the register arguments
+    past the fixed ones to their home slots, `local_res18 = in_R8; local_res20 = in_R9;`, so
+    `&local_res18` is a pointer that walks on into the caller's stack arguments: the same
+    pointer MSVC's va_start gives on x64. Translated with the slots as locals, it walked into
+    the translation's own frame past the second variadic argument. Left alone when a slot or
+    one of those registers is used any other way."""
+    head, _, body = text.partition("{")
+    m = re.search(r"\(([^()]*),\s*\.\.\.\)\s*$", head.strip())
+    if not m:
+        return text
+    fixed = m.group(1).count(",") + 1
+    last = re.search(r"(\w+)\s*$", m.group(1)).group(1)
+    reg = {0x10: r"in_RDX", 0x18: r"in_R8", 0x20: r"in_R9"}
+    first = 8 * (fixed + 1)
+    if first > 0x20:
+        return text
+    for off in range(first, 0x28, 8):
+        slot = f"local_res{off:x}"
+        # ([ \t], not \s: the blank line after the declarations stays where it is)
+        new = re.sub(rf"^[ \t]*{slot} = {reg[off]};\n", "", body, count=1, flags=re.M)
+        if new == body:
+            return text
+        body = re.sub(rf"^[ \t]*[\w ]+\**[ \t]*(?:{slot}|{reg[off]});\n", "", new, flags=re.M)
+    body = re.sub(rf"&local_res{first:x}\b", "(undefined8 *)gen_va", body)
+    # another use of a slot past the fixed parameters, or of the registers they came in
+    names = [f"local_res{o:x}" for o in range(first, 0x28, 8)] + [reg[o] for o in range(first, 0x28, 8)]
+    if any(re.search(rf"\b{n}\b", body) for n in names):
+        return text
+    blank = re.search(r"\n[ \t]*\n", body)
+    if blank is None:
+        return text
+    body = (body[:blank.end()] + f"  va_start(gen_va, {last});\n" + body[blank.end():])
+    return head + "{\n  va_list gen_va;" + body
+
+
+def rax_upper_parts(text: str) -> str:
+    """RAX bytes past what the code means, read only to be carried along.
+
+    `extraout_var` is the upper part of a call's RAX beyond the result its committed prototype
+    returns: `CONCAT44(extraout_var,uVar1)` after a 32-bit result, `CONCAT71(extraout_var,cVar2)`
+    after a byte. A 32-bit write zero-extends, and a byte result's callers read only the byte,
+    so it is 0 (150 functions were stubbed for it once prototypes were committed, 2026-10-15).
+
+    `in_RAX` read at entry is the bool idiom: `return in_RAX & 0xffffffffffffff00;` is false
+    and `CONCAT71((int7)(in_RAX >> 8),1)` true, with whatever RAX held above the byte. Those
+    reads, and any read after an assignment (`in_RAX = FUN_x(p); if ((char)in_RAX == '\\0')`),
+    make it a local that starts at 0. A plain read before any assignment would be a value
+    passed in RAX, and stays refused."""
+    decl_rx = r"^[ \t]*[\w ]+\**[ \t]*{}(?:[ \t]*\[\w*\])?;\n"
+    # `register0x00000020 = (BADSPACEBASE *)FUN_x(...)`: a call's result Ghidra put in RSP's
+    # slot of the register space once prototypes were committed. The instructions use rax
+    # (cross_ssl's start, FUN_141f2ece0: `call [rax+8]` at 0x141f2ee98, then `movzx ebx, al`),
+    # so when every assignment is a call result it is in_RAX, under the checks below.
+    if "register0x00000020" in text:
+        cast = r"\(BADSPACEBASE \*\)\s*"
+        sets = re.findall(rf"\bregister0x00000020\s*=(?!=)\s*({cast}(?:[\w:]+\(|\(\*))?", text)
+        if sets and all(sets):
+            new = re.sub(cast, "", text)
+            new = re.sub(decl_rx.format("register0x00000020"), "", new, flags=re.M)
+            if "BADSPACEBASE" not in new:
+                text = re.sub(r"\bregister0x00000020\b", "in_RAX", new)
+    if re.search(r"\bextraout_var(?:_\d+)?\b", text):
+        new = re.sub(decl_rx.format(r"extraout_var(?:_\d+)?"), "", text, flags=re.M)
+        text = re.sub(r"\bextraout_var(?:_\d+)?\b", "0", new)
+    if re.search(r"\bin_RAX\b", text):
+        body = re.sub(decl_rx.format("in_RAX"), "", text, flags=re.M)
+        # what follows a read of the bytes above AL: `in_RAX & 0xff..00`, `(in_RAX >> 8)`
+        upper = re.compile(r"\s*(?:&\s*0xffffffffffffff00\b|>>\s*8\b)")
+        assigned = False
+        for m in re.finditer(r"\bin_RAX\b", body):
+            if upper.match(body, m.end()):
+                continue
+            if re.match(r"\s*=(?!=)", body[m.end():]):
+                assigned = True
+            elif not assigned:
+                return text
+        first = body.index("{\n") + 2
+        text = body[:first] + "  ulonglong gen_rax = 0;\n" + re.sub(r"\bin_RAX\b", "gen_rax", body[first:])
+    return text
+
+
+def return_address_args(text: str) -> str:
+    """`unaff_retaddr` handed on as a call argument: the word at [rsp] on entry, the function's
+    own return address, which the Storm containers pass down as the caller tag of an allocation
+    (`FUN_140325310(param_1,uVar4,s___AV__TSGrowableArray...,unaff_retaddr)`, the array resize
+    FUN_1417d6790 that the static initializer FUN_1417d0a00 needs at startup; 112 functions were
+    stubbed for nothing else, 2026-10-15). MSVC's `_ReturnAddress()` is that same word. Left
+    alone when the value is read any other way: indexed (`unaff_retaddr[-5] != 0xe8`, code that
+    inspects its call site), compared, or stored."""
+    decl = re.compile(r"^[ \t]*([\w ]+?\**)[ \t]*unaff_retaddr;\n", re.M)
+    m = decl.search(text)
+    if not m:
+        return text
+    body = text[:m.start()] + text[m.end():]
+    uses = list(re.finditer(r"\bunaff_retaddr\b", body))
+    if not uses or not all(re.search(r"[(,]\s*$", body[:u.start()]) and re.match(r"\s*[,)]", body[u.end():])
+                           for u in uses):
+        return text
+    return re.sub(r"\bunaff_retaddr\b", f"(({m.group(1).strip()})_ReturnAddress())", body)
+
+
 # the image's float sign masks (16 bytes each, for andps / xorps)
 FLOAT_ABS_MASK = "DAT_14261aa20"    # 0x7fffffff
 FLOAT_SIGN_MASK = "DAT_14261aa30"   # 0x80000000
@@ -719,7 +862,7 @@ def written_home_slots(text: str) -> list[str]:
     (`CONCAT71(uStackX_9,local_res8)`): a narrow value moved as its whole 8-byte slot, whose
     upper bytes are leftovers in the reference too, as upper_half_only() reasons."""
     out = []
-    for name in set(re.findall(r"\b[a-z]{1,4}StackX_[0-9a-f]+\b", text)):
+    for name in set(re.findall(r"\b[a-z]+StackX_[0-9a-f]+\b", text)):
         if re.search(rf"^\s*[\w ]+\s+{name}\s*\[\s*\w+\s*\];$", text, re.M):
             out.append(name)
             continue
@@ -1141,7 +1284,9 @@ class Translator:
             if text.count(patch["from"]) != 1:
                 raise SystemExit(f"tools/translate_patches.json: FUN_{a:x}'s patch no longer matches once")
             text = text.replace(patch["from"], patch["to"])
-        text = wide_multiply(strip_retcheck(text)[0])
+        for template, routine in CRT_TEMPLATES.items():
+            text = text.replace(template + "(", routine + "(")
+        text = va_args(wide_multiply(strip_retcheck(text)[0]))
         # a function-local static's guard: MSVC's per-thread epoch (TLS slot 0x2140) compared with
         # the guard, then _Init_thread_header / _footer. All three are the port's own runtime's,
         # so the protocol stays one runtime's.
@@ -1153,6 +1298,8 @@ class Translator:
         text = float_masks(text)
         text = virtual_this(text)
         text = self.xmm_results(text)
+        text = rax_upper_parts(text)
+        text = return_address_args(text)
         text = global_pieces(text)
         return self.recover_arguments(a, self.restore_lengths(text))
 
@@ -1279,7 +1426,7 @@ class Translator:
         fixes = []
         nth: dict[tuple[int, int], int] = {}     # (callee, shown) -> which short call this is
         for start, end, b, args in list(call_sites(text)):
-            need = self.arity(b)
+            need = self.site_need(b, args)
             if need is None or len(args) >= need:
                 continue
             sig = self.signature(b)
@@ -1312,7 +1459,8 @@ class Translator:
                     m = re.fullmatch(r"param_(\d+)", str(values[k]))
                     if m and int(m.group(1)) > own:
                         # a parameter the header never declared (the function only hands it on)
-                        ptype = sig[2][p].rsplit(None, 1)[0] if sig and p < len(sig[2]) else "undefined8"
+                        ptype = (sig[2][p].rsplit(None, 1)[0] if sig and p < len(sig[2]) and sig[2][p] != "..."
+                                 else "undefined8")
                         self._extra_params.setdefault(a, {})[int(m.group(1))] = ptype
                 spelled = [v if isinstance(v, str) else f"{v:#x}" for v in values]
                 fixes.append((end, ("," if args else "") + ",".join(spelled)))
@@ -1487,9 +1635,29 @@ class Translator:
         v = re.fullmatch(r"(\w+)\s*=(?:\s*\([\w\s\*]+\))?", before)
         return bool(v and re.match(rf"\s*;\s*return\s+(?:\([\w\s\*]+\)\s*)?{v.group(1)}\s*;", after))
 
+    def site_need(self, b: int, args: list[str]) -> int | None:
+        """How many arguments a call to `b` must pass: its arity, or for a variadic function
+        (`fn(L, fmt, ...)`, tools/varargs.py) its fixed parameters plus what a literal format
+        string in the last of them asks for. Ghidra infers a variadic call's arguments from the
+        registers set before it, and drops some: 472 of 14,648 calls with a literal format
+        were short once the variadic functions were marked (`"%s:%d: "` passed one value)."""
+        need = self.arity(b)
+        if need is not None:
+            return need
+        sig = self.signature(b)
+        if sig is None or not sig[2] or sig[2][-1] != "...":
+            return None
+        fixed = len(sig[2]) - 1
+        if len(args) < fixed or fixed == 0:
+            return fixed or None
+        fmt = args[fixed - 1].strip()
+        if not (fmt.startswith('"') and fmt.endswith('"')):
+            return None
+        return fixed + sum(1 + m.group(0).count("*") for m in FORMAT_CONVERSION.finditer(fmt) if m.group(0) != "%%")
+
     def lost_arguments(self, text: str) -> str | None:
         for _, _, b, args in call_sites(text):
-            need = self.arity(b)
+            need = self.site_need(b, args)
             if need is not None and len(args) < need:
                 return f"the decompiler lost a call's arguments (FUN_{b:x} reads {need}, the call passes {len(args)})"
         return None
@@ -1815,6 +1983,19 @@ class Translator:
                 # only where this function dereferences it: elsewhere Ghidra's `DAT_x + 8` is
                 # integer arithmetic, which a pointer type would scale by the element
                 gtype = self.global_pointers[addr]
+            if whole.startswith(("_DAT_", "_UNK_")) and a in self.cor:
+                # Ghidra's `_DAT_x` is an access wider (or of another kind) than the item defined
+                # at x, so that item's type is the wrong one: the instructions say what is read.
+                # FUN_141283140 divides by `_DAT_142cfbe58`, a float load factor
+                # (`divss xmm0, dword ptr [0x142cfbe58]`) over an undefined1, and read one byte of
+                # it: 0, a quotient of inf and a bucket count that wrapped (2026-10-15).
+                seen = self.callargs.global_accesses(a, self.cor[a]["size"]).get(addr, set())
+                if len(seen) == 1:
+                    n, kind = next(iter(seen))
+                    t = {(4, "x"): "float", (8, "x"): "double", (1, "i"): "undefined1", (2, "i"): "undefined2",
+                         (4, "i"): "undefined4", (8, "i"): "undefined8"}.get((n, kind))
+                    if t is not None and (n != size or (kind == "x") != (gtype in ("float", "double"))):
+                        size, gtype = n, t
             expr = global_expr(gtype, size, addr)
             held = self.held_global(addr)
             if held is None or held[1]["const"]:
@@ -2027,8 +2208,15 @@ class Translator:
                 plan["stub"][b] = "called, not in the work set"
         # declared without parameters: Ghidra's argument counts disagree between a function and
         # its callers, and an unprototyped declaration takes them all
-        prototypes = [f"{self.decl(a)[0]} FUN_{a:x}();"
-                      for a in sorted(set(plan["translate"]) | set(plan["adapt"]) | set(plan["stub"]))]
+        # (a translated variadic function is declared as it is defined: C takes no unprototyped
+        # declaration of a `...` definition; its callers still call through CALLF)
+        def prototype(a: int) -> str:
+            ret, params = self.decl(a)
+            if a in plan["translate"] and params and params[-1] == "...":
+                return f"{ret} FUN_{a:x}({', '.join(params)});"
+            return f"{ret} FUN_{a:x}();"
+
+        prototypes = [prototype(a) for a in sorted(set(plan["translate"]) | set(plan["adapt"]) | set(plan["stub"]))]
         header = ["/* GENERATED by tools/translate.py; do not edit by hand. */",
                   "#ifndef GEN_TRANSLATED_H", "#define GEN_TRANSLATED_H", "", "#include \"gen/Ghidra.h\"", ""]
         # the import libraries of the DLLs the reference's imports come from (combase's exports
@@ -2125,7 +2313,9 @@ class Translator:
                   "const GENJUMP g_genJumps[] = {"]
         reachable = sorted(set(plan["translate"]) | set(plan["adapt"]))
         jumps += [f"    {{ 0x{a:x}ULL, (void*)&{entry_of.get(a, f'FUN_{a:x}')} }}," for a in reachable]
-        jumps += ["    { 0, 0 }", "};", f"const size_t g_genJumpCount = {len(reachable)};", ""]
+        crt = [(a, name) for a, name in sorted(CRT_ENTRY.items()) if a not in set(reachable)]
+        jumps += [f"    {{ 0x{a:x}ULL, (void*)&{name} }}," for a, name in crt]
+        jumps += ["    { 0, 0 }", "};", f"const size_t g_genJumpCount = {len(reachable) + len(crt)};", ""]
         write_out(GEN / "jumps.c", "\n".join(jumps), encoding="utf-8", newline="\n")
 
         # the Lua handlers: the port registers them by their C++ names

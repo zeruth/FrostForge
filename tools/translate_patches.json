@@ -1,51 +1,9 @@
 {
  "_doc": "Corrections to the decompilation, applied before translation (tools/translate.py). Each is a decompiler error proven against the instructions: 'from' must occur exactly once in the function's corpus text, and 'why' gives the instruction evidence.",
- "141f09460": [
-  {"from": "Storm::SMemFree(plStack_1a0,s___AU__chained_hash_node_U__pair__142dd0420,0xfffffffa);",
-   "to": "Storm::SMemFree(plVar5,s___AU__chained_hash_node_U__pair__142dd0420,0xfffffffa);",
-   "why": "the connection map's erase frees the node it unlinked, not the bucket: the walk at 0x141f095c2..0x141f095d3 stops when rcx == [rsp + 0x30] (the iterator's node, plVar5 == local_1a8), and rcx goes unchanged to SMemFree at 0x141f095e5; Ghidra printed the bucket slot (plStack_1a0, [rsp + 0x38]). Freeing a slot inside the bucket array corrupted the heap, and the Battle.net shutdown died in the manager's destructor (0xC0000374 on quit)"}
- ],
- "141f01560": [
-  {"from": "FUN_141efe6c0(param_1 + 0xc);",
-   "to": "FUN_141efe6c0(param_1 + 0xc,*(undefined8 *)(param_2 + 0xc));",
-   "why": "the MethodInfo map copy rehashes to the source's bucket count: rdx = [r12 + 0x30] (r12 = param_2) at 0x141f01585, rcx = r13 + 0x30 at 0x141f0158a, call at 0x141f015ac; the stores between go to the copy (r13), so callargs could not show the load unchanged"}
- ],
- "140666bd0": [
-  {"from": "FUN_1425bf3b0(plVar2,*param_1);",
-   "to": "FUN_1425bf3b0(plVar2,*param_1,param_1[1] + 1);",
-   "why": "the grown string copies its old text with the terminator: r8 = [rdi + 8] + 1 (rdi = param_1) at 0x140666cd8..0x140666cdf, rdx = [rdi] at 0x140666ce5, memmove at 0x140666ceb"}
- ],
  "141f2ece0": [
   {"from": "(**(code **)(*(longlong *)*DAT_143264fa8 + 8))((longlong *)*DAT_143264fa8,local_b8);",
    "to": "(**(code **)(*(longlong *)*DAT_143264fa8 + 8))((longlong *)*DAT_143264fa8,local_b8,puVar12);",
    "why": "cross_ssl's start calls the factory's Initialize (vtable 0x142880130 slot 1, 0x141f6fcf0, which reads a logger third) with the logger it just made: r8 = rax from the allocation at 0x141f2ee01 (r14 = 0 when it failed, 0x141f2ee1c), stored to DAT_143264fb0 at 0x141f2ee91, call at 0x141f2ee98. Without it the SChannel setup logged through a garbage pointer and faulted, ssl::Initialize freed the filter map, and GlueLogin read the null map"}
- ],
- "1420bdde0": [
-  {"from": "FUN_1420cd5a0(0,uVar3 & 0xffffffff);",
-   "to": "FUN_1420cd5a0(param_1,uVar3 & 0xffffffff);",
-   "why": "mp_init_size(a, n): rcx is param_1 from entry to the call at 0x1420bde48 (copied to rbx at 0x1420bde22, never changed); Ghidra printed the argument as 0"}
- ],
- "1414cfc40": [
-  {"from": "  FUN_1414d0dd0();",
-   "to": "  FUN_1414d0dd0(param_1);",
-   "why": "the Aurora back interface setup takes the object: rcx is param_1 from entry (the fields are zeroed through it at 0x1414cfc4a..0x1414cfc6e) to the call at 0x1414cfc72"}
- ],
- "1414d0dd0": [
-  {"from": "FUN_1414d0380(plVar1);",
-   "to": "FUN_1414d0380(plVar1,lVar11);",
-   "why": "the old member goes in rdx: mov rdx,[rbp+8] at 0x1414d0e2b, rcx = rdi (param_1 + 1) at 0x1414d0e3b, call at 0x1414d0e3e"},
-  {"from": "FUN_1414d0570(plVar2);",
-   "to": "FUN_1414d0570(plVar2,lVar11);",
-   "why": "the old member goes in rdx: mov rdx,[rbp+0x18] at 0x1414d0e65, call at 0x1414d0e78"},
-  {"from": "FUN_1414d0710(plVar3);",
-   "to": "FUN_1414d0710(plVar3,lVar11);",
-   "why": "the old member goes in rdx: mov rdx,[rbp+0x28] at 0x1414d0e9f, call at 0x1414d0eb3"},
-  {"from": "FUN_1414d0440(param_1 + 7);",
-   "to": "FUN_1414d0440(param_1 + 7,lVar11);",
-   "why": "the old member goes in rdx: mov rdx,[rbp+0x38] at 0x1414d0eb8, call at 0x1414d0ec9"},
-  {"from": "FUN_1414d0650(param_1 + 8);",
-   "to": "FUN_1414d0650(param_1 + 8,lVar11);",
-   "why": "the old member goes in rdx: mov rdx,[rbp+0x40] at 0x1414d0ece, call at 0x1414d0edf"}
  ],
  "141f6fcf0": [
   {"from": "  ulonglong in_RAX;\n",
@@ -57,16 +15,6 @@
   {"from": "  return in_RAX & 0xffffffffffffff00;",
    "to": "  return 0;",
    "why": "the already-initialized path returns false: xor al,al at 0x141f6fd34, then ret at 0x141f6fd40 (callers test al)"}
- ],
- "141c5ce70": [
-  {"from": "  bVar13 = DAT_14323b2b0 != 0;\n  DAT_14323b2b0 = uVar5;\n  if (bVar13) {\n    FUN_141c5cc20(&DAT_14323b2b0);",
-   "to": "  lVar4 = DAT_14323b2b0;\n  bVar13 = lVar4 != 0;\n  DAT_14323b2b0 = uVar5;\n  if (bVar13) {\n    FUN_141c5cc20(&DAT_14323b2b0,lVar4);",
-   "why": "a unique_ptr reset hands its deleter the old pointer: rdx = [0x14323b2b0] at 0x141c5d022, read before the new one is stored at 0x141c5d029, rcx = &DAT_14323b2b0 at 0x141c5d035, call at 0x141c5d03c (FUN_141c5cc20 frees param_2). lVar4 is free here: every later use reassigns it first"}
- ],
- "1414cafb0": [
-  {"from": "FUN_14069a510(&local_60);",
-   "to": "FUN_14069a510(&local_60,local_60);",
-   "why": "the map copy rehashes to the source's bucket count: rdx = [r12] at 0x1414cb13a (r12 = param_1 + 0x20, 0x1414cb123..0x1414cb12b), the same register stored to local_60 ([rbp-1]) at 0x1414cb14f, rcx = &local_60 at 0x1414cb127, call at 0x1414cb157"}
  ],
  "14147f390": [
   {"from": "return *DAT_1430af3f8;",

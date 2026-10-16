@@ -676,23 +676,21 @@ float GxuFontGetEffectiveHeight(CGxuFont* font, float height, uint32_t flags) {
 }
 
 // ref: FUN_14068a2d0
-int32_t GxuFontGetFacePixelSize(uint32_t fileDataId, float height, uint32_t flags, uint32_t* pixelSize) {
+GXUFONTPIXELSIZE GxuFontGetFacePixelSize(uint32_t fileDataId, float height, uint32_t flags) {
     FT_FaceRec_* face = GxuFontFaceFindById(fileDataId);
     if (face == nullptr) {
-        return 2;
+        return {2, 0};
     }
-    *pixelSize = GxuFontComputePixelSize(face, height, flags);
-    return 1;
+    return {1, GxuFontComputePixelSize(face, height, flags)};
 }
 
 // ref: FUN_14068a320
-int32_t GxuFontGetFacePixelSizeByName(const char* path, float height, uint32_t flags, uint32_t* pixelSize) {
+GXUFONTPIXELSIZE GxuFontGetFacePixelSizeByName(const char* path, float height, uint32_t flags) {
     FT_FaceRec_* face = GxuFontFaceFindByName(path);
     if (face == nullptr) {
-        return 2;
+        return {2, 0};
     }
-    *pixelSize = GxuFontComputePixelSize(face, height, flags);
-    return 1;
+    return {1, GxuFontComputePixelSize(face, height, flags)};
 }
 
 // ref: FUN_14068b630

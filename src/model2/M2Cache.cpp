@@ -75,6 +75,7 @@ struct BOUNDSMAP {
     BOUNDSSLOT* m_slots;        // DAT_142cfbe40
     uint64_t m_count;           // DAT_142cfbe48
     uint64_t m_removed;         // DAT_142cfbe50
+    float m_maxLoad;            // DAT_142cfbe58 (the translated grow, FUN_141283800, divides by it)
 };
 // (tagged on the variable too: translated code that loads the file fills this map, the one the
 // port reads, rather than the image's copy)
@@ -216,6 +217,24 @@ struct CACHEINIT {
     }
 };
 CACHEINIT s_cacheInit;
+
+// The bounds map's static initializer: eight empty slots and a 0.75 load factor. The capacity of
+// 8 is the image's initialized data. Without it the map was all zero, and the bounds file's load
+// (FUN_141283140, translated) sized the table by dividing by a load factor of 0 (2026-10-15).
+const char s_boundsSlotTag[] = ".?AU?$pair@$$CBHPEAUSEntry@CModelBlob@@@blz@@";
+// ref: FUN_1401e5200
+struct BOUNDSINIT {
+    BOUNDSINIT() {
+        s_bounds.m_capacity = 8;
+        s_bounds.m_slots = static_cast<BOUNDSSLOT*>(
+            SMemAlloc(0x80, 0xb, s_boundsSlotTag, SStrHashFnv1a(s_boundsSlotTag), -6, 0));
+        for (uint64_t i = 0; i < s_bounds.m_capacity; i++) {
+            s_bounds.m_slots[i].m_key = 0;
+        }
+        s_bounds.m_maxLoad = 0.75f;
+    }
+};
+BOUNDSINIT s_boundsInit;
 
 }
 

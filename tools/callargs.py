@@ -404,6 +404,24 @@ class CallArgs:
         return sum(1 for i in f.ins if i.mnemonic == "call" and i.operands
                    and i.operands[0].type != x86.X86_OP_IMM)
 
+    def global_accesses(self, function: int, size: int) -> dict[int, set[tuple[int, str]]]:
+        """Each RIP-relative address the function reads or writes, with how: (bytes, "x") for a
+        scalar SSE instruction (its operand size tells float from double: `cvtss2sd` reads 4
+        bytes), "i" otherwise. `lea` takes an address without accessing it and is left out."""
+        f = self._functions.get(function)
+        if f is None:
+            f = self._functions[function] = _Function(self.binary, function, size)
+        out: dict[int, set[tuple[int, str]]] = {}
+        for i in f.ins:
+            if i.mnemonic == "lea":
+                continue
+            for op in i.operands:
+                if op.type != x86.X86_OP_MEM or op.mem.base != x86.X86_REG_RIP:
+                    continue
+                kind = "x" if i.mnemonic.endswith(("ss", "sd")) else "i"
+                out.setdefault(i.address + i.size + op.mem.disp, set()).add((op.size, kind))
+        return out
+
     def calls(self, i, target: int) -> bool:
         """Whether instruction i calls (or tail-jumps to) `target`, directly or through a thunk
         (a function that is only `jmp target`, or one that first sets argument registers to

@@ -11,16 +11,30 @@ import com.google.gson.JsonParser;
 import ghidra.app.cmd.function.CreateFunctionCmd;
 import ghidra.app.script.GhidraScript;
 import ghidra.program.model.address.Address;
+import ghidra.framework.Application;
 import ghidra.program.model.data.ArrayDataType;
+import ghidra.program.model.data.DataType;
+import ghidra.program.model.data.DataTypeConflictHandler;
+import ghidra.program.model.data.DataTypeManager;
+import ghidra.program.model.data.FileDataTypeManager;
+import ghidra.program.model.data.FunctionDefinition;
 import ghidra.program.model.data.PointerDataType;
 import ghidra.program.model.listing.CodeUnit;
 import ghidra.program.model.listing.Function;
+import ghidra.program.model.listing.Function.FunctionUpdateType;
+import ghidra.program.model.listing.Parameter;
+import ghidra.program.model.listing.ParameterImpl;
+import ghidra.program.model.listing.Variable;
 import ghidra.program.model.symbol.Namespace;
 import ghidra.program.model.symbol.SourceType;
 import ghidra.program.model.symbol.Symbol;
 import ghidra.program.model.symbol.SymbolTable;
 import java.io.File;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class ApplyFacts extends GhidraScript {
@@ -50,6 +64,8 @@ public class ApplyFacts extends GhidraScript {
         if (rc.exists()) applyRetcheck(read(rc));
         File nr = new File(dir, "noreturn.json");
         if (nr.exists()) applyNoReturn(read(nr));
+        File va = new File(dir, "varargs.json");
+        if (va.exists()) applyVarargs(read(va));
         // hand-identified names last, so they win over anything extracted
         File names = new File(dir, "names.json");
         if (names.exists()) applyNames(read(names));
@@ -135,9 +151,37 @@ public class ApplyFacts extends GhidraScript {
         }
     }
 
+    // The Windows API prototypes Ghidra ships (Base/data/typeinfo/win32), by function name. The
+    // definitions read through the archive, so it stays open until they are resolved.
+    private Map<String, FunctionDefinition> windowsPrototypes(FileDataTypeManager archive) {
+        Map<String, FunctionDefinition> out = new HashMap<>();
+        Iterator<DataType> it = archive.getAllDataTypes();
+        while (it.hasNext()) {
+            DataType t = it.next();
+            if (t instanceof FunctionDefinition) {
+                out.putIfAbsent(t.getName(), (FunctionDefinition) t);
+            }
+        }
+        return out;
+    }
+
     // Import slots recovered from a live process by tools/iat_dump.py: label each slot
-    // with its API name and type it as a pointer, so `call [slot]` reads as the API.
+    // with its API name and type it as a pointer to the API's prototype, so `call [slot]`
+    // reads as the API with its arguments. A bare pointer let the decompiler call
+    // EnterCriticalSection with none (FUN_1415ae990: the bgs mutex lock, 2026-10-15).
     private void applyImports(JsonObject root) throws Exception {
+        File gdt = Application.getModuleDataFile("Base", "typeinfo/win32/windows_vs12_64.gdt").getFile(false);
+        FileDataTypeManager archive = FileDataTypeManager.openFileArchive(gdt, false);
+        try {
+            applyImports(root, windowsPrototypes(archive));
+        } finally {
+            archive.close();
+        }
+    }
+
+    private void applyImports(JsonObject root, Map<String, FunctionDefinition> prototypes) throws Exception {
+        DataTypeManager dtm = currentProgram.getDataTypeManager();
+        int typed = 0, untyped = 0;
         for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("imports").entrySet()) {
             JsonObject i = e.getValue().getAsJsonObject();
             JsonElement n = i.get("imported_name");
@@ -156,6 +200,17 @@ public class ApplyFacts extends GhidraScript {
             }
             Address a = addr(e.getKey());
             String dll = i.get("dll").getAsString().toUpperCase();
+            // folded identical code (htons_or_ntohs): the candidates share a prototype
+            FunctionDefinition proto = prototypes.get(name.split("_or_")[0]);
+            DataType slot = proto == null ? PointerDataType.dataType
+                    : new PointerDataType(dtm.resolve(proto, DataTypeConflictHandler.DEFAULT_HANDLER), 8);
+            try {
+                clearListing(a, a.add(7));
+                createData(a, slot);
+                if (proto != null) typed++; else untyped++;
+            } catch (Exception ex) {
+                // keep analysis' typing
+            }
             Symbol existing = getSymbolAt(a);
             if (existing != null && existing.getSource() == SourceType.USER_DEFINED) {
                 kept++;
@@ -163,14 +218,9 @@ public class ApplyFacts extends GhidraScript {
             }
             createLabel(a, name, namespace("Import::" + dll.replace('.', '_')),
                     true, SourceType.IMPORTED);
-            try {
-                clearListing(a, a.add(7));
-                createData(a, PointerDataType.dataType);
-            } catch (Exception ex) {
-                // keep analysis' typing
-            }
             named++;
         }
+        println("ApplyFacts: import slots typed with a Windows prototype " + typed + ", bare pointers " + untyped);
     }
 
     // data/names.json: functions identified by hand, with the evidence as a comment.
@@ -232,6 +282,36 @@ public class ApplyFacts extends GhidraScript {
             noreturnSet++;
         }
         println("ApplyFacts: marked " + noreturnSet + " functions noreturn");
+    }
+
+    // varargs.json: variadic functions and their fixed parameter count (tools/varargs.py).
+    // Marked varargs with only the fixed parameters, and the signature locked as IMPORTED so
+    // the commit pass (CommitPrototypes.java, which re-derives only ANALYSIS and below) keeps
+    // it: committed with all four register parameters, every caller passed its own r8/r9.
+    private void applyVarargs(JsonObject root) throws Exception {
+        int set = 0, user = 0;
+        for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("functions").entrySet()) {
+            Function f = getFunctionAt(addr(e.getKey()));
+            if (f == null) continue;
+            if (f.getSignatureSource() == SourceType.USER_DEFINED) {
+                user++;
+                continue;
+            }
+            int fixed = e.getValue().getAsInt();
+            Parameter[] cur = f.getParameters();
+            if (cur.length < fixed) continue;
+            if (f.hasVarArgs() && cur.length == fixed && f.getSignatureSource() == SourceType.IMPORTED) continue;
+            List<Variable> params = new ArrayList<>();
+            for (int i = 0; i < fixed; i++) {
+                params.add(new ParameterImpl(cur[i].getName(), cur[i].getDataType(), currentProgram));
+            }
+            f.updateFunction(null, null, params, FunctionUpdateType.DYNAMIC_STORAGE_ALL_PARAMS, true,
+                    SourceType.IMPORTED);
+            f.setVarArgs(true);
+            f.setSignatureSource(SourceType.IMPORTED);
+            set++;
+        }
+        println("ApplyFacts: marked " + set + " functions variadic (kept " + user + " user signatures)");
     }
 
     // retcheck.json: functions carrying the anti-tamper return-address check.

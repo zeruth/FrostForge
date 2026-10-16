@@ -1008,5 +1008,7 @@ extern "C" void* const gen_p_14311c51e = (void*)&s_initialized;
 extern "C" void* const gen_p_14311c528 = (void*)&s_destroying;
 extern "C" void* const gen_p_14311c529 = (void*)&s_reloadPending;
 extern "C" void* const gen_p_14311c52b = (void*)&s_unknown52b;
+extern "C" void* const gen_p_14311c52c = (void*)&s_unknown52c;
+extern "C" void* const gen_p_14311c530 = (void*)&s_startTime;
 extern "C" void* const gen_p_14311c5f0 = (void*)&s_unknown5f0;
 // ---- end of generated globals ----

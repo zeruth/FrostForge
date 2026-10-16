@@ -65,10 +65,16 @@ const char* GxuFontGetFontName(CGxuFont* font);             // FUN_14068ac40, th
 void GxuFontSetFlag40(CGxuFont* font);                      // FUN_14068b750
 float GxuFontGetOneToOneHeight(CGxuFont* font);             // FUN_14068b180
 float GxuFontGetEffectiveHeight(CGxuFont* font, float height, uint32_t flags);  // FUN_14068ac70
-// The pixel size a face already loaded would get (1), or 2 when it is not loaded
-// (FUN_14068a2d0, FUN_14068a320).
-int32_t GxuFontGetFacePixelSize(uint32_t fileDataId, float height, uint32_t flags, uint32_t* pixelSize);
-int32_t GxuFontGetFacePixelSizeByName(const char* path, float height, uint32_t flags, uint32_t* pixelSize);
+// The pixel size a face already loaded would get (result 1), or result 2 when it is not loaded
+// (FUN_14068a2d0, FUN_14068a320). The reference returns the pair packed in rax,
+// `pixelSize << 32 | 1`, and translated callers read it from there: an 8-byte aggregate comes
+// back the same way.
+struct GXUFONTPIXELSIZE {
+    int32_t m_result;
+    uint32_t m_pixelSize;
+};
+GXUFONTPIXELSIZE GxuFontGetFacePixelSize(uint32_t fileDataId, float height, uint32_t flags);
+GXUFONTPIXELSIZE GxuFontGetFacePixelSizeByName(const char* path, float height, uint32_t flags);
 // A face over bytes already loaded, by the file's name (FUN_14068b630).
 void* GxuFontCreateFaceFromBuffer(const char* path, void* data, uint32_t size);
 

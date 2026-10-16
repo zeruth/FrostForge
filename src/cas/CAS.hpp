@@ -159,6 +159,8 @@ bool CASFileGetContentKeyById(int32_t fileDataId, uint8_t* key);
 bool CASFileGetContentKeyByName(const char* name, uint8_t* key, uint32_t flags);
 // Reads a whole file by FileDataID into a new Storm block (FUN_1402cf090).
 bool CASFileLoadById(int32_t fileDataId, uint8_t** data, uint32_t* size, uint64_t flags, int32_t allocFlags);
+uint8_t** CASFileLoadByIdHolder(uint8_t** holder, int32_t fileDataId, uint32_t* size, uint32_t flags,
+    int32_t allocFlags);
 bool CASFileLoadByName(const char* name, uint8_t** data, uint32_t* size, uint64_t flags, int32_t allocFlags);
 // Whether a named file can be loaded (flag 1: local overrides count).
 bool CASFileExistsByName(const char* name, uint64_t flags);

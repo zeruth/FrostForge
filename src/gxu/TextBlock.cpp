@@ -260,9 +260,9 @@ HTEXTFONT TextBlockGenerateFont(int32_t fileDataId, uint8_t flags, float height)
     height = GenerateHeight(flags, height);
     uint32_t gxuFlags = ConvertFontFlags(flags);
 
-    uint32_t pixelSize = 0;
-    if (GxuFontGetFacePixelSize(static_cast<uint32_t>(fileDataId), height, gxuFlags, &pixelSize) == 1) {
-        key.m_pixelSize = pixelSize;
+    GXUFONTPIXELSIZE size = GxuFontGetFacePixelSize(static_cast<uint32_t>(fileDataId), height, gxuFlags);
+    if (size.m_result == 1) {
+        key.m_pixelSize = size.m_pixelSize;
         HTEXTFONT found = FindFont(key);
         if (found) {
             if ((flags & TEXTBLOCK_FONT_20) != 0) {
@@ -288,9 +288,9 @@ HTEXTFONT TextBlockGenerateFont(const char* path, uint8_t flags, float height) {
     height = GenerateHeight(flags, height);
     uint32_t gxuFlags = ConvertFontFlags(flags);
 
-    uint32_t pixelSize = 0;
-    if (GxuFontGetFacePixelSizeByName(path, height, gxuFlags, &pixelSize) == 1) {
-        key.m_pixelSize = pixelSize;
+    GXUFONTPIXELSIZE size = GxuFontGetFacePixelSizeByName(path, height, gxuFlags);
+    if (size.m_result == 1) {
+        key.m_pixelSize = size.m_pixelSize;
         HTEXTFONT found = FindFont(key);
         if (found) {
             if ((flags & TEXTBLOCK_FONT_20) != 0) {

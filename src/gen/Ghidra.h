@@ -7,10 +7,15 @@
 #ifndef GEN_GHIDRA_H
 #define GEN_GHIDRA_H
 
+#include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
+#include <time.h>
+
+/* Ghidra writes the C library's structs by their bare tag (`tm local_38;`) */
+typedef struct tm tm;
 
 typedef unsigned char undefined;
 typedef unsigned char undefined1;
@@ -56,6 +61,66 @@ typedef unsigned long long ulonglong8;
 typedef void *pointer;
 typedef void *pointer64;
 typedef void *HANDLE;
+/* Windows names the import prototypes bring in (tools/ghidra/ApplyFacts.java types each import
+   slot from Ghidra's windows_vs12_64 archive), as tools/translate.py's WINDOWS_TYPES lists them.
+   Scalars are the SDK's own; handles and pointers to structs the translation never looks inside
+   are void *. Not under windows.h, which has its own. */
+#ifndef _WINDEF_
+typedef int BOOL;
+typedef unsigned char BOOLEAN;
+typedef unsigned char BYTE;
+typedef unsigned short WORD;
+typedef unsigned long DWORD;
+typedef unsigned long long DWORD64;
+typedef unsigned int UINT;
+typedef int INT;
+typedef long LONG;
+typedef unsigned long ULONG;
+typedef short SHORT;
+typedef unsigned short USHORT;
+typedef char CHAR;
+typedef wchar_t WCHAR;
+typedef long long LONGLONG;
+typedef unsigned long long ULONGLONG;
+typedef long HRESULT;
+typedef long LSTATUS;
+typedef unsigned long LCID;
+typedef unsigned short ATOM;
+typedef unsigned long long SIZE_T;
+typedef unsigned long long ULONG_PTR;
+typedef unsigned long long DWORD_PTR;
+typedef unsigned long long UINT_PTR;
+typedef long long LONG_PTR;
+typedef long long INT_PTR;
+typedef long long LPARAM;
+typedef unsigned long long WPARAM;
+typedef long long LRESULT;
+typedef unsigned long long SOCKET;
+typedef unsigned short u_short;
+typedef unsigned long u_long;
+typedef unsigned int u_int;
+typedef unsigned char u_char;
+typedef int errno_t;
+typedef size_t rsize_t;
+typedef unsigned short wint_t;
+typedef unsigned long long __uint64;
+typedef void *HMODULE, *HINSTANCE, *HWND, *HDC, *HKEY, *HLOCAL, *HGLOBAL, *HCURSOR, *HICON, *HMENU,
+    *HDROP, *HIMC, *HBRUSH;
+typedef long long (*FARPROC)();
+typedef void *LPVOID, *PVOID;
+typedef const void *LPCVOID;
+typedef char *LPSTR;
+typedef const char *LPCSTR;
+typedef wchar_t *LPWSTR, *BSTR;
+typedef const wchar_t *LPCWSTR;
+typedef DWORD *LPDWORD;
+typedef BOOL *LPBOOL;
+typedef BYTE *LPBYTE;
+typedef long *LPLONG;
+typedef void *LPCRITICAL_SECTION, *PSRWLOCK, *PCONDITION_VARIABLE, *LPSECURITY_ATTRIBUTES, *LPOVERLAPPED,
+    *PCCRL_CONTEXT, *PCCERT_CONTEXT, *LPRECT, *LPPOINT, *LPUNKNOWN, *LPCGUID, *PRAWINPUTDEVICELIST,
+    *PUNWIND_HISTORY_TABLE;
+#endif
 /* a call through `code *`: any arguments, the result in rax */
 typedef unsigned long long code();
 

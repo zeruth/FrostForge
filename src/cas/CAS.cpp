@@ -1045,6 +1045,46 @@ bool CASFileLoadById(int32_t fileDataId, uint8_t** data, uint32_t* size, uint64_
     return result;
 }
 
+// CASFileLoadById's form that hands the block back in a holder (`*holder`, null when nothing was
+// read) and returns the holder; the size goes to `size` when it is not null. Translated callers
+// (the preload of FUN_141297eb0) read the holder: stubbed, it left them stack garbage
+// (2026-10-15).
+// ref: FUN_1402ceef0
+uint8_t** CASFileLoadByIdHolder(uint8_t** holder, int32_t fileDataId, uint32_t* size, uint32_t flags,
+    int32_t allocFlags) {
+    uint8_t* data = nullptr;
+    t_lastError.m_kind = 1;
+    BuildManifestEntry* entry = g_casManifest->FindById(static_cast<uint32_t>(fileDataId));
+    t_lastError.m_kind = 2;
+    t_lastError.m_code = entry != nullptr ? 0 : 2;
+    const char* path = nullptr;
+    if ((flags & 1) != 0) {
+        if (LocalManifestEntry* local = g_localManifest->FindById(fileDataId)) {
+            path = local->m_path;
+        } else if (entry != nullptr) {
+            path = g_localManifest->FindPathByName(entry->m_nameHash, nullptr);
+        }
+    }
+    if (path != nullptr) {
+        OsFileReadAll(path, &data, size, static_cast<int32_t>((flags >> 1) & 1), allocFlags);
+    } else if (entry == nullptr) {
+        t_lastError.m_kind = 1;
+        t_lastError.m_code = 2;
+    } else {
+        uint32_t localSize = 0;
+        t_lastError.m_kind = 0;
+        uint32_t* sizeOut = size != nullptr ? size : &localSize;
+        char name[0x40];
+        CASFormatKeyName(name, entry->m_ckey, entry->m_fileDataId, entry->m_localeFlags, entry->m_contentFlags);
+        CASReadFile(g_casInstance, name, &data, sizeOut, flags, allocFlags);
+        if (g_casReadHook != nullptr) {
+            g_casReadHook(entry->m_ckey, *sizeOut, s_casReadHookContext);
+        }
+    }
+    *holder = data;
+    return holder;
+}
+
 // Reads a whole file by path into a new Storm block: from the local manifest's loose file
 // when bit 0 of `flags` allows one, else from storage (never while only the manifest is up).
 // ref: FUN_1402cf230

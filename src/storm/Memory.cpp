@@ -3,8 +3,81 @@
 #include "util/Unimplemented.hpp"
 #include <cstdlib>
 #include <cstring>
+#include <windows.h>
 
 namespace {
+
+// ---- the debug guard heap (not the reference's) -------------------------------------------------
+// FROST_GUARD_HEAP=1 puts every Storm block flush against a no-access page and decommits it on
+// free, so a write past a block or a use after free faults at the instruction that does it rather
+// than as heap corruption at some later free: page heap for the blocks the port allocates, without
+// the admin rights gflags needs. The CRT path below is otherwise unchanged; the mode is read once.
+constexpr uint64_t kPage = 0x1000;
+
+bool GuardHeap() {
+    static const int s_mode = [] {
+        char value[8] = {};
+        return GetEnvironmentVariableA("FROST_GUARD_HEAP", value, sizeof(value)) && value[0] == '1' ? 1 : 0;
+    }();
+    return s_mode != 0;
+}
+
+// The reservation's size sits in the 16 bytes at its base, ahead of the block.
+void* GuardAlloc(uint64_t bytes, bool zero) {
+    (void)zero;  // fresh pages are zero
+    uint64_t pages = (bytes + 0x10 + kPage - 1) / kPage;
+    uint64_t total = (pages + 1) * kPage;
+    auto base = static_cast<uint8_t*>(VirtualAlloc(nullptr, total, MEM_RESERVE, PAGE_NOACCESS));
+    if (!base || !VirtualAlloc(base, pages * kPage, MEM_COMMIT, PAGE_READWRITE)) {
+        return nullptr;
+    }
+    *reinterpret_cast<uint64_t*>(base) = total;
+    // bytes is a multiple of 16 on every Storm path, so the block stays 16-aligned
+    return base + pages * kPage - bytes;
+}
+
+uint8_t* GuardBase(void* block) {
+    MEMORY_BASIC_INFORMATION info;
+    VirtualQuery(block, &info, sizeof(info));
+    return static_cast<uint8_t*>(info.AllocationBase);
+}
+
+void GuardFree(void* block) {
+    uint8_t* base = GuardBase(block);
+    // decommitted and left reserved: the address is never handed out again
+    VirtualFree(base, *reinterpret_cast<uint64_t*>(base) - kPage, MEM_DECOMMIT);
+}
+
+void* GuardRealloc(void* block, uint64_t bytes) {
+    uint8_t* base = GuardBase(block);
+    uint64_t old = base + *reinterpret_cast<uint64_t*>(base) - kPage - static_cast<uint8_t*>(block);
+    void* fresh = GuardAlloc(bytes, false);
+    if (fresh) {
+        std::memcpy(fresh, block, old < bytes ? old : bytes);
+        GuardFree(block);
+    }
+    return fresh;
+}
+
+void* RawMalloc(uint64_t bytes) {
+    return GuardHeap() ? GuardAlloc(bytes, false) : std::malloc(bytes);
+}
+
+void* RawCalloc(uint64_t bytes) {
+    return GuardHeap() ? GuardAlloc(bytes, true) : std::calloc(1, bytes);
+}
+
+void* RawRealloc(void* block, uint64_t bytes) {
+    return GuardHeap() ? GuardRealloc(block, bytes) : std::realloc(block, bytes);
+}
+
+void RawFree(void* block) {
+    if (GuardHeap()) {
+        GuardFree(block);
+    } else {
+        std::free(block);
+    }
+}
 
 // DAT_142cc8a48: 1 = the CRT-backed default allocator is enabled (its static value).
 int32_t s_defaultAllocator = 1;
@@ -51,7 +124,7 @@ void* SMemAlloc(uint64_t bytes, int32_t a2, const char* tag, uint32_t tagHash, i
         // a 16-byte header, size | 1 then 0, in front of a 16-byte aligned payload; any
         // gap between them is zero, which is how SMemFree walks back to the header
         uint64_t* header = static_cast<uint64_t*>(
-            (flags & SMEM_FLAG_ZEROMEMORY) ? std::calloc(1, size + 0x10) : std::malloc(size + 0x10));
+            (flags & SMEM_FLAG_ZEROMEMORY) ? RawCalloc(size + 0x10) : RawMalloc(size + 0x10));
         if (header) {
             header[0] = size | 1;
             header[1] = 0;
@@ -95,7 +168,7 @@ bool SMemFree(void* ptr, const char* tag, int32_t line, uint32_t flags) {
         return true;
     }
 
-    std::free(header);
+    RawFree(header);
     return true;
 }
 
@@ -129,7 +202,7 @@ void* StormNew(uint64_t bytes, int32_t a2, const char* tag, int32_t line) {
 
     uint64_t size = (bytes + 0xF) & ~uint64_t(0xF);
     if (s_defaultAllocator == 1) {
-        if (uint64_t* header = static_cast<uint64_t*>(std::malloc(size + 0x10))) {
+        if (uint64_t* header = static_cast<uint64_t*>(RawMalloc(size + 0x10))) {
             header[0] = size | 1;
             header[1] = 0;
             uint64_t* payload = header + 2;
@@ -173,7 +246,7 @@ void StormDelete(void* ptr, const char* name) {
         return;
     }
 
-    std::free(header);
+    RawFree(header);
 }
 
 }
@@ -281,7 +354,7 @@ void* SMemReAllocBlock(int32_t a2, const char* tag, uint32_t tagHash, int32_t li
     uint64_t* header = SMemHeader(ptr);
     uint64_t value = *header;
     if (static_cast<uint32_t>(value & 3) == static_cast<uint32_t>(s_defaultAllocator) && s_defaultAllocator == 1) {
-        auto block = static_cast<uint64_t*>(std::realloc(header, size + 0x10));
+        auto block = static_cast<uint64_t*>(RawRealloc(header, size + 0x10));
         if (block) {
             *block = size | 1;
             return block + (static_cast<uint64_t*>(ptr) - header);
@@ -291,7 +364,7 @@ void* SMemReAllocBlock(int32_t a2, const char* tag, uint32_t tagHash, int32_t li
 
     uint64_t* payload = nullptr;
     if (s_defaultAllocator == 1) {
-        if (uint64_t* block = static_cast<uint64_t*>(std::malloc(size + 0x10))) {
+        if (uint64_t* block = static_cast<uint64_t*>(RawMalloc(size + 0x10))) {
             block[0] = size | 1;
             block[1] = 0;
             payload = block + 2;
@@ -318,7 +391,7 @@ void* SMemReAllocBlock(int32_t a2, const char* tag, uint32_t tagHash, int32_t li
         ErrorDisplayFormatted(0x8510007B, nullptr, 0, "Memory corrupted -- %s %d", tag ? tag : "unknown", line);
         return payload;
     }
-    std::free(oldHeader);
+    RawFree(oldHeader);
     return payload;
 }
 

@@ -799,4 +799,3 @@ void SE3SamplesLock(bool enter) {
         s_samplesLock.Leave();
     }
 }
-
