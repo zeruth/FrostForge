@@ -4615,7 +4615,7 @@ LAB_1416c96fd:
   if (lVar23 != 0) {
     uVar24 = CALLF(undefined *, FUN_14051beb0)();
     uVar24 = CALLF(undefined8, FUN_140229de0)(lVar23,3,0,uVar24);
-    if ((((int)uVar24 != 0) && (REFG(undefined8, 0x1431f6e08) != 0)) && ((REFG(undefined8, 0x1431f6e00) & 4) == 0))
+    if ((((int)uVar24 != 0) && (REFG(undefined8, 0x1431f6e08) != 0)) && ((REFG(undefined1, 0x1431f6e00) & 4) == 0))
     goto LAB_1416c9a2a;
   }
   plVar27 = (*(undefined8 *)(gen_frame + 0x50));
@@ -4879,13 +4879,13 @@ LAB_1416c9eab:
     if (((((int *)(gen_frame + 0xa0))[0] == 0x7f) && (param_3 != (longlong *)0x0)) && (((char *)(gen_frame + 0x8))[0] != '\0')) {
       if ((_Init_thread_epoch < REFG(undefined4, 0x14312ca88)) && (_Init_thread_header(&REFG(undefined4, 0x14312ca88)), REFG(undefined4, 0x14312ca88) == -1))
       {
-        CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined8, 0x14312ca78));
+        CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined4, 0x14312ca78));
         REFG(undefined4, 0x14312ca80) = 5;
         REFG(undefined4, 0x14312ca78) = 5;
         REFG(undefined4, 0x14312ca7c) = 2000;
         _Init_thread_footer(&REFG(undefined4, 0x14312ca88));
       }
-      cVar7 = CALLF(bool, FUN_141653a80)(&REFG(undefined8, 0x14312ca78));
+      cVar7 = CALLF(bool, FUN_141653a80)(&REFG(undefined4, 0x14312ca78));
       if (cVar7 != '\0') {
         CALLF(undefined8 *, FUN_1406d5230)(((undefined1 *)(gen_frame + 0x200)));
         (*(longlong *)(gen_frame + 0x220)) = param_3[3];

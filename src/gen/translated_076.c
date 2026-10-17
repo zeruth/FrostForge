@@ -4374,7 +4374,7 @@ uint FUN_141352210(int param_1)
   }
   (*(uint *)((char *)&REFG(double, 0x142cfc010) + 4)) = uVar3 | (*(uint *)((char *)&REFG(double, 0x142cfc010) + 4)) & 0xfffffeff;
   if (iVar6 != -1) {
-    REFG(undefined8, 0x142cfbff3) = (undefined1)iVar6;
+    REFG(undefined1, 0x142cfbff3) = (undefined1)iVar6;
   }
   uVar5 = CALLF(ulonglong, FUN_142526ee0)();
   if (iVar7 != (int)uVar5) {

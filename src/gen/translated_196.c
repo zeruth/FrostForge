@@ -544,9 +544,9 @@ undefined ** FUN_1425fe270(void)
 undefined8 FUN_1425fe490(void)
 {
   GEN_HIT(22);
-  REFG(undefined8, 0x14323f4f0) = 0;
-  REFG(undefined8, 0x14323f438) = 0;
-  REFG(undefined8, 0x14323f404) = 0;
+  REFG(undefined1, 0x14323f4f0) = 0;
+  REFG(undefined1, 0x14323f438) = 0;
+  REFG(undefined1, 0x14323f404) = 0;
   CALLF(undefined8, FUN_141c9bee0)(&REFG(undefined8, 0x14323f2c0));
   if (-1 < REFG(undefined8, 0x14323f268)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x14323f258),((char *)REFP(0x142d60790)),0xfffffffa,0);

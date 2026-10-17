@@ -6209,7 +6209,8 @@ undefined8 FUN_1415aec50(undefined8 a0, undefined8 a1, undefined8 a2, undefined8
 undefined8 FUN_1415aec60(undefined8 param_1)
 {
   GEN_HIT(90);
-  return (undefined8)CALLF(undefined8, FUN_140279d94)(param_1);
+  free(param_1);
+  return 0;
 }
 
 /* ref: FUN_1415aec70 */

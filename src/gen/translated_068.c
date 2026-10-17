@@ -5231,7 +5231,7 @@ undefined1 FUN_14121fbc0(undefined8 param_1, undefined8 *param_2)
   uVar5 = CALLF(undefined8, FUN_140216570)();
   cVar2 = CALLF(undefined1, FUN_14134e680)(uVar5,&REFG(undefined4, 0x1430a1390),&REFG(undefined8, 0x142cfb7d0),uVar4);
   uVar1 = REFG(float, 0x14261aa30);
-  if ((cVar2 == '\0') || ((REFG(undefined8, 0x142cfb838) & 2) != 0)) {
+  if ((cVar2 == '\0') || ((REFG(undefined1, 0x142cfb838) & 2) != 0)) {
     uVar3 = 1;
   }
   else {

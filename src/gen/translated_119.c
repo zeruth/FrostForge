@@ -7696,14 +7696,14 @@ undefined8 FUN_141a47750(void)
   if (_Init_thread_epoch < REFG(undefined4, 0x1431f7888)) {
     _Init_thread_header(&REFG(undefined4, 0x1431f7888));
     if (REFG(undefined4, 0x1431f7888) == -1) {
-      CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined8, 0x1431f7878));
+      CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined4, 0x1431f7878));
       REFG(undefined4, 0x1431f7880) = 5;
       REFG(undefined4, 0x1431f7878) = 5;
       REFG(undefined4, 0x1431f787c) = 2000;
       _Init_thread_footer(&REFG(undefined4, 0x1431f7888));
     }
   }
-  cVar1 = CALLF(bool, FUN_141653a80)(&REFG(undefined8, 0x1431f7878));
+  cVar1 = CALLF(bool, FUN_141653a80)(&REFG(undefined4, 0x1431f7878));
   if (cVar1 != '\0') {
     CALLF(undefined8 *, FUN_1406d6ae0)(((undefined1 *)(gen_frame + 0x0)));
     CALLF(undefined8, FUN_14156dc60)(((undefined1 *)(gen_frame + 0x0)));

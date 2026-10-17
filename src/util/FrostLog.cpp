@@ -50,6 +50,12 @@ void FrostLog(const char* category, const char* format, ...) {
     WriteLine(text);
 }
 
+namespace {
+
+void WriteFrames(void* const* frames, int captured);
+
+}
+
 void FrostLogStack(int skip, int count) {
     void* frames[64];
     if (count > 64) {
@@ -57,6 +63,36 @@ void FrostLogStack(int skip, int count) {
     }
     // This function and FrostLogStack's caller's own frame are skipped as well.
     USHORT captured = CaptureStackBackTrace(static_cast<DWORD>(skip + 2), static_cast<DWORD>(count), frames, nullptr);
+    WriteFrames(frames, captured);
+}
+
+void FrostLogContextStack(const void* context, int count) {
+    void* frames[64];
+    if (count > 64) {
+        count = 64;
+    }
+    CONTEXT walk = *static_cast<const CONTEXT*>(context);
+    int captured = 0;
+    while (captured < count && walk.Rip != 0) {
+        frames[captured++] = reinterpret_cast<void*>(walk.Rip);
+        DWORD64 base = 0;
+        RUNTIME_FUNCTION* entry = RtlLookupFunctionEntry(walk.Rip, &base, nullptr);
+        if (entry == nullptr) {
+            // a leaf: its return address is on top of the stack
+            walk.Rip = *reinterpret_cast<DWORD64*>(walk.Rsp);
+            walk.Rsp += 8;
+            continue;
+        }
+        void* handlerData = nullptr;
+        DWORD64 establisher = 0;
+        RtlVirtualUnwind(UNW_FLAG_NHANDLER, base, walk.Rip, entry, &walk, &handlerData, &establisher, nullptr);
+    }
+    WriteFrames(frames, captured);
+}
+
+namespace {
+
+void WriteFrames(void* const* frames, int captured) {
     std::lock_guard<std::recursive_mutex> guard(s_lock);
     HANDLE process = GetCurrentProcess();
     if (!s_symbols) {
@@ -64,7 +100,7 @@ void FrostLogStack(int skip, int count) {
         SymSetOptions(SYMOPT_UNDNAME | SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES);
         SymInitialize(process, nullptr, TRUE);
     }
-    for (USHORT i = 0; i < captured; i++) {
+    for (int i = 0; i < captured; i++) {
         auto address = reinterpret_cast<DWORD64>(frames[i]);
         alignas(SYMBOL_INFO) char buffer[sizeof(SYMBOL_INFO) + 256];
         auto symbol = reinterpret_cast<SYMBOL_INFO*>(buffer);
@@ -92,4 +128,6 @@ void FrostLogStack(int skip, int count) {
         }
         WriteLine(text);
     }
+}
+
 }

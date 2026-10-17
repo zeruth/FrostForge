@@ -158,7 +158,11 @@ CRT_BY_ADDR = {0x1425bf3b0: "memmove", 0x1425bfa50: "memset",
 # call through the pointer reaches the same routine a direct call does. curl_global_init
 # (FUN_14216a080) fills curl's allocator table with these; without them every curl allocation
 # landed on int3 and returned null (the Login click's _calloc_base, 2026-10-15).
-CRT_ENTRY = {0x140286974: "malloc", 0x140279d94: "free", 0x140289938: "realloc",
+# Never translated, either: the reference's malloc and realloc allocate from its CRT heap handle
+# (DAT_142e1eda8), which only its CRT startup creates and the port never runs. Planned once
+# translated code called them directly, the jump went to the translated body, and HeapAlloc on a
+# null heap faulted in ntdll at shutdown (FUN_140286974, 2026-10-17)
+CRT_ENTRY ={0x140286974: "malloc", 0x140279d94: "free", 0x140289938: "realloc",
              0x14241d3f8: "_strdup", 0x1402857f8: "calloc", 0x14241c294: "_wcsdup"}
 # the UCRT's internal templates the corpus names, as the public routine each one implements:
 # common_gmtime_s<__int64> (0x1424147d0) is _gmtime64_s, which cross_ssl's log timestamp
@@ -1967,7 +1971,9 @@ C_LIBRARY = {"longjmp", "setjmp", "qsort", "bsearch", "abort", "exit", "atexit",
 # the C runtime routines a call can land on (CRT, CRT_BY_ADDR) by their parameter count
 CRT_ARITY = {"memmove": 3, "memset": 3, "memcpy": 3, "memcmp": 3, "strlen": 1, "strcmp": 2, "strncmp": 3,
              "strchr": 2, "strrchr": 2, "strstr": 2, "strcpy": 2, "strncpy": 3, "strcat": 2, "free": 1,
-             "malloc": 1, "_Init_thread_header": 1, "_Init_thread_footer": 1}
+             "malloc": 1, "_Init_thread_header": 1, "_Init_thread_footer": 1,
+             # (CRT_ENTRY's: FUN_140279da8 hands realloc all four registers)
+             "realloc": 2, "calloc": 2, "_strdup": 1, "_wcsdup": 1}
 
 
 def crt_arity(body: str) -> str:
@@ -3112,7 +3118,9 @@ class Translator:
             return None
 
         def by_addr(target: int) -> int | str:
-            return CRT_BY_ADDR.get(target, target)
+            # (and a runtime entry point called directly is the port's routine too, as a call
+            # through its stored pointer is: see CRT_ENTRY)
+            return CRT_BY_ADDR.get(target) or CRT_ENTRY.get(target, target)
 
         if "::" in name:
             cands = self.by_name.get(name, [])
@@ -3353,7 +3361,7 @@ class Translator:
             if reason is None:
                 translate[a] = d
                 for b in self.callees(self.body(a), self.cor[a]["name"] if a in self.cor else ""):
-                    if b in seen or b in CRT_BY_ADDR or self.is_lib(b):
+                    if b in seen or b in CRT_BY_ADDR or b in CRT_ENTRY or self.is_lib(b):
                         continue
                     if self.port_target(b) is not None and b not in roots:
                         adapt[b] = True
@@ -3546,6 +3554,11 @@ class Translator:
 
         body = CALL.sub(call, body)
         body = crt_arity(body)
+        # a void runtime routine whose result the reference's own wrapper returned (rax as it left
+        # it): FUN_1415aec60 tail-calls the reference free, now the port's (CRT_ENTRY), and
+        # `return (undefined8)free(param_1);` is C2069
+        body = re.sub(r"^([ \t]*)return (?:\(\w+\))?((?:free|_free_base)\([^;]*\));$", r"\1\2;\n\1return 0;",
+                      body, flags=re.M)
 
         def funref(m):
             # a function used as a value: its reference address, which the jump stubs dispatch
@@ -3593,7 +3606,11 @@ class Translator:
                 # As an integer it demoted 98 functions, among them the blz::string clears on the
                 # Login click (FUN_14147f360: `*PTR_DAT_142d076f0 = 0` is `mov byte ptr [rax], 0`)
                 gtype = "undefined *"
-            if whole.startswith(("_DAT_", "_UNK_")) and a in self.cor:
+            # (and a global the data export has no item for at all, whose 8 bytes above are only a
+            # default: the tick's `DAT_14311c52a = '\0'`, `mov byte ptr`, cleared the port's bool
+            # s_gxRestarted and the seven bytes after it each frame, 2026-10-17)
+            wide = whole.startswith(("_DAT_", "_UNK_"))
+            if (wide or (addr not in self.refdata and addr not in derefed)) and a in self.cor:
                 # Ghidra's `_DAT_x` is an access wider (or of another kind) than the item defined
                 # at x, so that item's type is the wrong one: the instructions say what is read.
                 # FUN_141283140 divides by `_DAT_142cfbe58`, a float load factor
@@ -3608,7 +3625,7 @@ class Translator:
                         size, gtype = n, t
                 # (and read 8 bytes wide and dereferenced, `lVar1 = *_DAT_142d01560;`: a pointer, to
                 # what its casts say or to 8-byte slots)
-                if size == 8 and gtype.startswith("undefined") and addr in derefed:
+                if wide and size == 8 and gtype.startswith("undefined") and addr in derefed:
                     gtype = self.global_pointers.get(addr, "undefined8 *")
             expr = global_expr(gtype, size, addr)
             held = self.held_global(addr)

@@ -45,6 +45,13 @@ def _pieces(binary) -> dict[int, list[tuple[int, int]]]:
 
 class _Function:
     def __init__(self, binary, start: int, size: int):
+        # (the root piece to its .pdata end: Ghidra's size stops where its body did, which in a
+        # guarded function is the guard. The tick FUN_14167c520 is 0x3098 bytes in .pdata and 1837
+        # in the corpus, and its every access past that (the byte flags at 0x14311c529/52a) read
+        # as none, so an untyped flag kept the 8-byte default, 2026-10-17)
+        for piece, end in _pieces(binary).get(start, []):
+            if piece == start and end - start > size:
+                size = end - start
         o = binary.off(start)
         self.ins = list(_md.disasm(bytes(binary.image[o:o + size]), start))
         # the function's other pieces (cold paths the compiler moved out of line): a protobuf

@@ -654,11 +654,11 @@ undefined8 FUN_14192fbb0(void)
   undefined8 uVar2;
   
   (*(undefined8 *)((char *)&gen_g_142d2a4e0 + 0x8)) = 0;
-  (*(undefined8 *)((char *)&gen_g_142d2a4e0 + 0x10)) = 0;
+  (*(undefined1 *)((char *)&gen_g_142d2a4e0 + 0x10)) = 0;
   (*(undefined4 *)((char *)&gen_g_142d2a4e0 + 0x14)) = 0x43960000;
-  (*(undefined8 *)((char *)&gen_g_142d2a4e0 + 0x18)) = 0;
+  (*(undefined1 *)((char *)&gen_g_142d2a4e0 + 0x18)) = 0;
   (*(undefined4 *)((char *)&gen_g_142d2a4e0 + 0x1c)) = 0x42700000;
-  (*(undefined8 *)((char *)&gen_g_142d2a4e0 + 0x20)) = 0;
+  (*(undefined1 *)((char *)&gen_g_142d2a4e0 + 0x20)) = 0;
   cVar1 = CALLF(undefined1, FUN_141567e50)();
   if (cVar1 != '\0') {
     CALLF(undefined8, FUN_141567d00)();
@@ -678,9 +678,9 @@ bool FUN_14192fc40(void)
   (*(undefined4 *)((char *)&gen_g_142d2a4e0 + 0xc)) = 0;
   (*(undefined4 *)((char *)&gen_g_142d2a4e0 + 0x14)) = 0x43960000;
   (*(undefined4 *)((char *)&gen_g_142d2a4e0 + 0x1c)) = 0x42700000;
-  (*(undefined8 *)((char *)&gen_g_142d2a4e0 + 0x10)) = 1;
-  (*(undefined8 *)((char *)&gen_g_142d2a4e0 + 0x18)) = REFG(float, 0x142737e60) < (*(float *)((char *)&gen_g_142d2a4e0 + 0x8));
-  (*(undefined8 *)((char *)&gen_g_142d2a4e0 + 0x20)) = REFG(float, 0x1426c9760) < (*(float *)((char *)&gen_g_142d2a4e0 + 0x8));
+  (*(undefined1 *)((char *)&gen_g_142d2a4e0 + 0x10)) = 1;
+  (*(undefined1 *)((char *)&gen_g_142d2a4e0 + 0x18)) = REFG(float, 0x142737e60) < (*(float *)((char *)&gen_g_142d2a4e0 + 0x8));
+  (*(undefined1 *)((char *)&gen_g_142d2a4e0 + 0x20)) = REFG(float, 0x1426c9760) < (*(float *)((char *)&gen_g_142d2a4e0 + 0x8));
   return REFG(float, 0x1426c9760) < (*(float *)((char *)&gen_g_142d2a4e0 + 0x8));
 }
 
@@ -10134,7 +10134,7 @@ undefined1 * FUN_14195baa0(void)
   uVar4 = 0;
   REFG(undefined4, 0x1431e94b4) = 0;
   REFG(undefined4, 0x142d2ae84) = 0xffffffff;
-  REFG(undefined8, 0x1431e94b0) = 0;
+  REFG(undefined1, 0x1431e94b0) = 0;
   REFG(undefined4, 0x1431e94b8) = 0;
   REFG(undefined4, 0x1431e94bc) = 0;
   REFG(undefined4, 0x1431e94c0) = 0;

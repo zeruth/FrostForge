@@ -19763,7 +19763,7 @@ undefined8 FUN_1414fc940(char param_1)
 undefined1 FUN_1414fcea0(void)
 {
   GEN_HIT(337);
-  return (*(undefined8 *)((char *)&gen_g_1430d009c + 0x0));
+  return (*(undefined1 *)((char *)&gen_g_1430d009c + 0x0));
 }
 
 /* ref: FUN_1414fd5e0 */

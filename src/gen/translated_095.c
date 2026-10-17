@@ -11586,13 +11586,13 @@ undefined4 FUN_1416a5610(undefined8 param_1)
   else {
     dVar3 = CALLF(double, FUN_1402b4920)(param_1,1);
     if ((_Init_thread_epoch < REFG(undefined4, 0x143122928)) && (_Init_thread_header(&REFG(undefined4, 0x143122928)), REFG(undefined4, 0x143122928) == -1)) {
-      CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined8, 0x143122918));
-      REFG(undefined8, 0x143122920) = 3;
-      REFG(undefined8, 0x143122918) = 3;
-      REFG(undefined8, 0x14312291c) = 5000;
+      CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined4, 0x143122918));
+      REFG(undefined4, 0x143122920) = 3;
+      REFG(undefined4, 0x143122918) = 3;
+      REFG(undefined4, 0x14312291c) = 5000;
       _Init_thread_footer(&REFG(undefined4, 0x143122928));
     }
-    cVar1 = CALLF(bool, FUN_141653a80)(&REFG(undefined8, 0x143122918));
+    cVar1 = CALLF(bool, FUN_141653a80)(&REFG(undefined4, 0x143122918));
     if (cVar1 != '\0') {
       (*(char *)(gen_frame + 0x0)) = '\0';
       memset(((undefined1 *)(gen_frame + 0x1)),0,0x3ff);

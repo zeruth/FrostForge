@@ -99,7 +99,7 @@ undefined8 FUN_1421a86c0(undefined8 param_1, int param_2, undefined8 param_3, un
     lVar7 = *(*(longlong * *)(gen_frame + 0x18));
     while ((lVar7 != 0 && (lVar7 != plVar6[2]))) {
       lVar2 = *(longlong *)(lVar7 + 0x10);
-      CALLF(undefined8, FUN_140279d94)(lVar7);
+      free(lVar7);
       *plVar6 = lVar2;
       lVar7 = lVar2;
     }
@@ -109,7 +109,7 @@ undefined8 FUN_1421a86c0(undefined8 param_1, int param_2, undefined8 param_3, un
     lVar7 = *(*(longlong * *)(gen_frame + 0x18));
     while ((lVar7 != 0 && (lVar7 != plVar6[2]))) {
       lVar2 = *(longlong *)(lVar7 + 0x10);
-      CALLF(undefined8, FUN_140279d94)(lVar7);
+      free(lVar7);
       *plVar6 = lVar2;
       lVar7 = lVar2;
     }
@@ -121,7 +121,7 @@ undefined8 FUN_1421a86c0(undefined8 param_1, int param_2, undefined8 param_3, un
   CALLF(undefined8, FUN_140254670)(plVar6[4]);
   CALLF(undefined8, FUN_140254670)(plVar6);
 LAB_1421a8987:
-  CALLF(undefined8, FUN_140279d94)((*(undefined8 *)(gen_frame + 0x30)));
+  free((*(undefined8 *)(gen_frame + 0x30)));
   return (undefined8)CALLF(undefined8, FUN_140254670)((*(undefined8 *)(gen_frame + 0x28)));
 }
 

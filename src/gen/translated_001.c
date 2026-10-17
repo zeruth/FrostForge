@@ -206,19 +206,19 @@ int FUN_1401cad70(void)
        "If 1, enables airlock logging, which will print out the various steps as they happen so that timing can be done."
   ;
   REFG(undefined4, 0x142de0d14) = 5;
-  REFG(undefined8, 0x142de0d18) = &REFG(undefined8, 0x142de0d30);
+  REFG(undefined8, 0x142de0d18) = &REFG(undefined1, 0x142de0d30);
   REFG(undefined8, 0x142de0d20) = 0;
   REFG(undefined8, 0x142de0d28) = 0x8000000000000010;
-  REFG(undefined8, 0x142de0d30) = 0;
+  REFG(undefined1, 0x142de0d30) = 0;
   REFG(undefined8, 0x142de0d48) = 0;
   REFG(undefined4, 0x142de0d50) = 0;
   REFG(undefined2, 0x142de0d58) = 0;
   CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x142de0d18),&REFG(undefined8, 0x14261aa48),0);
   REFG(undefined8, 0x142de0d60) = 0;
-  REFG(undefined8, 0x142de0d68) = &REFG(undefined8, 0x142de0d80);
+  REFG(undefined8, 0x142de0d68) = &REFG(undefined1, 0x142de0d80);
   REFG(undefined8, 0x142de0d70) = 0;
   REFG(undefined8, 0x142de0d78) = 0x800000000000000f;
-  REFG(undefined8, 0x142de0d80) = 0;
+  REFG(undefined1, 0x142de0d80) = 0;
   CALLF(longlong, FUN_14031ede0)(&REFG(undefined4, 0x142de0cc8),&REFG(undefined8, 0x142de0ce0));
   REFG(undefined1, 0x142de0d90) = 0;
   iVar1 = atexit(((code *)REFP(0x1425da730)));

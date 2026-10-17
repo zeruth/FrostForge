@@ -377,7 +377,7 @@ undefined1 * FUN_142591dc0(void)
   ulonglong uVar4;
   uint uVar5;
   
-  REFG(undefined8, 0x1447cf736) = 0;
+  REFG(undefined1, 0x1447cf736) = 0;
   uVar2 = CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d5fee8));
   uVar4 = 0;
   uVar5 = REFG(undefined4, 0x142d5ff08);
@@ -8416,7 +8416,7 @@ LAB_1425b7a9f:
           } while (puVar6 != (undefined1 *)0x0);
         }
         if (iVar13 != 0) {
-          CALLF(undefined8, FUN_140279d94)(puVar9);
+          free(puVar9);
         }
         for (; puVar8 < param_3; puVar8 = puVar8 + 1) {
           (param_4 + 1)[(longlong)puVar8 * 2] = -1;
@@ -8426,7 +8426,7 @@ LAB_1425b7a9f:
       return 0;
     }
     if (iVar13 != 0) {
-      CALLF(undefined8, FUN_140279d94)(puVar9);
+      free(puVar9);
     }
     switch(iVar7) {
     case -0x1c:

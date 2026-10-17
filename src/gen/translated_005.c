@@ -4123,7 +4123,7 @@ int FUN_1401fbf50(void)
   int iVar1;
   
   REFG(undefined8, 0x142d232e8) = 0x142d232e1;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d232d8));
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d232d8));
   REFG(undefined4, 0x142d232d8) = 0x10;
   REFG(undefined8, 0x142d232e0) = (undefined *)&REFG(undefined8, 0x142d232e0);
   REFG(undefined8, 0x142d232e8) = 0x142d232e1;
@@ -4185,7 +4185,7 @@ int FUN_1401fc220(void)
   int iVar1;
   
   REFG(undefined8, 0x142d23488) = 0x142d23481;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d23478));
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d23478));
   REFG(undefined4, 0x142d23478) = 0x10;
   REFG(undefined8, 0x142d23480) = (undefined *)&REFG(undefined8, 0x142d23480);
   REFG(undefined8, 0x142d23488) = 0x142d23481;
@@ -4236,7 +4236,7 @@ undefined8 FUN_1401fc340(void)
   GEN_HIT(379);
   undefined8 uVar1;
   
-  uVar1 = CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined8, 0x1431e8ab0));
+  uVar1 = CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined4, 0x1431e8ab0));
   REFG(undefined4, 0x1431e8ab8) = 10;
   REFG(undefined4, 0x1431e8ab0) = 10;
   REFG(undefined4, 0x1431e8ab4) = 1000;
@@ -4272,7 +4272,7 @@ int FUN_1401fc480(void)
   int iVar1;
   
   REFG(undefined8, 0x142d2a6c8) = 0x142d2a6c1;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2a6b8));
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2a6b8));
   REFG(undefined8, 0x142d2a6c8) = 0x142d2a6c1;
   REFG(undefined8, 0x142d2a6c0) = (undefined *)&REFG(undefined8, 0x142d2a6c0);
   REFG(undefined4, 0x142d2a6b8) = 0x10;
@@ -4282,7 +4282,7 @@ int FUN_1401fc480(void)
   REFG(undefined8, 0x142d2a6b0) = (undefined *)(*(undefined8 (*)[4])(uintptr_t)0x142813ff0ULL);
   REFG(undefined4, 0x142d2a700) = 0xdddddddd;
   REFG(undefined1 *, 0x142d2a708) = (undefined1 *)&REFG(undefined1 *, 0x142d2a708);
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2a700));
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2a700));
   REFG(undefined8, 0x142d2a710) = 0x142d2a709;
   REFG(undefined1 *, 0x142d2a708) = (undefined1 *)&REFG(undefined1 *, 0x142d2a708);
   REFG(undefined4, 0x142d2a700) = 0;
@@ -4295,7 +4295,7 @@ int FUN_1401fc480(void)
   REFG(undefined4, 0x142d2a750) = 0;
   REFG(undefined4, 0x142d2a758) = 0;
   REFG(undefined4, 0x142d2a738) = 0;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2a720));
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2a720));
   REFG(undefined8, 0x142d2a730) = 0x142d2a729;
   REFG(undefined8, 0x142d2a728) = &REFG(undefined8, 0x142d2a728);
   REFG(undefined4, 0x142d2a720) = 0x10;
@@ -4305,7 +4305,7 @@ int FUN_1401fc480(void)
   REFG(undefined8, 0x142d2a718) = (*(undefined8 (*)[4])(uintptr_t)0x142813ff0ULL);
   REFG(undefined4, 0x142d2a768) = 0xdddddddd;
   REFG(undefined8, 0x142d2a770) = &REFG(undefined8, 0x142d2a770);
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2a768));
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2a768));
   REFG(undefined4, 0x142d2a768) = 0;
   REFG(undefined8, 0x142d2a770) = &REFG(undefined8, 0x142d2a770);
   REFG(undefined8, 0x142d2a778) = 0x142d2a771;
@@ -4397,7 +4397,7 @@ int FUN_1401fca30(void)
   int iVar1;
   
   REFG(undefined8, 0x142d2aed8) = 0x142d2aed1;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2aec8));
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2aec8));
   REFG(undefined4, 0x142d2aec8) = 0x10;
   REFG(undefined8, 0x142d2aed0) = (undefined *)&REFG(undefined8, 0x142d2aed0);
   REFG(undefined8, 0x142d2aed8) = 0x142d2aed1;
@@ -4428,7 +4428,7 @@ int FUN_1401fcb70(void)
   int iVar1;
   
   REFG(undefined8, 0x142d2b008) = 0x142d2b001;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2aff8));
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2aff8));
   REFG(undefined4, 0x142d2aff8) = 0x10;
   REFG(undefined1 *, 0x142d2b000) = (undefined1 *)&REFG(undefined1 *, 0x142d2b000);
   REFG(undefined8, 0x142d2b008) = 0x142d2b001;
@@ -4445,7 +4445,7 @@ int FUN_1401fcbe0(void)
   int iVar1;
   
   REFG(undefined8, 0x142d2afb8) = 0x142d2afb1;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2afa8));
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2afa8));
   REFG(undefined4, 0x142d2afa8) = 0x10;
   REFG(undefined8, 0x142d2afb0) = (undefined *)&REFG(undefined8, 0x142d2afb0);
   REFG(undefined8, 0x142d2afb8) = 0x142d2afb1;
@@ -4478,19 +4478,19 @@ int FUN_1401fcca0(void)
   REFG(undefined4, 0x1431e9ba0) = 0x20000120;
   REFG(undefined8, 0x1431e9b98) = "Stores what roles the player is willing to take on.";
   REFG(undefined4, 0x1431e9ba4) = 4;
-  REFG(undefined8, 0x1431e9ba8) = &REFG(undefined8, 0x1431e9bc0);
+  REFG(undefined8, 0x1431e9ba8) = &REFG(undefined1, 0x1431e9bc0);
   REFG(undefined8, 0x1431e9bb0) = 0;
   REFG(undefined8, 0x1431e9bb8) = 0x8000000000000010;
-  REFG(undefined8, 0x1431e9bc0) = 0;
+  REFG(undefined1, 0x1431e9bc0) = 0;
   REFG(undefined8, 0x1431e9bd8) = 0;
   REFG(undefined4, 0x1431e9be0) = 0;
   REFG(undefined2, 0x1431e9be8) = 0;
   CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1431e9ba8),&REFG(undefined8, 0x142815450),0);
   REFG(undefined8, 0x1431e9bf0) = 0;
-  REFG(undefined8, 0x1431e9bf8) = &REFG(undefined8, 0x1431e9c10);
+  REFG(undefined8, 0x1431e9bf8) = &REFG(undefined1, 0x1431e9c10);
   REFG(undefined8, 0x1431e9c00) = 0;
   REFG(undefined8, 0x1431e9c08) = 0x800000000000000f;
-  REFG(undefined8, 0x1431e9c10) = 0;
+  REFG(undefined1, 0x1431e9c10) = 0;
   REFG(undefined1, 0x1431e9c20) = 0;
   iVar1 = atexit(((code *)REFP(0x1425f59d0)));
   return iVar1;
@@ -4510,20 +4510,20 @@ int FUN_1401fcdb0(void)
        "Stores whether the player has been previously notified of new mail. Only set to false once everything in their Inbox has been marked as read."
   ;
   REFG(undefined4, 0x1431e9aec) = 4;
-  REFG(undefined8, 0x1431e9af0) = &REFG(undefined8, 0x1431e9b08);
+  REFG(undefined8, 0x1431e9af0) = &REFG(undefined1, 0x1431e9b08);
   REFG(undefined8, 0x1431e9af8) = 0;
   REFG(undefined8, 0x1431e9b00) = 0x8000000000000010;
-  REFG(undefined8, 0x1431e9b08) = 0;
+  REFG(undefined1, 0x1431e9b08) = 0;
   REFG(undefined8, 0x1431e9b20) = 0;
   REFG(undefined4, 0x1431e9b28) = 0;
   REFG(undefined2, 0x1431e9b30) = 0;
   CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1431e9af0),&REFG(undefined8, 0x14261aa48),0);
   REFG(undefined8, 0x1431e9b38) = 0;
-  REFG(undefined8, 0x1431e9b40) = &REFG(undefined8, 0x1431e9b58);
+  REFG(undefined8, 0x1431e9b40) = &REFG(undefined1, 0x1431e9b58);
   REFG(undefined8, 0x1431e9b48) = 0;
   REFG(undefined8, 0x1431e9b50) = 0x800000000000000f;
-  REFG(undefined8, 0x1431e9b58) = 0;
-  REFG(undefined8, 0x1431e9b68) = 0;
+  REFG(undefined1, 0x1431e9b58) = 0;
+  REFG(undefined1, 0x1431e9b68) = 0;
   iVar1 = atexit(((code *)REFP(0x1425f5a30)));
   return iVar1;
 }
@@ -4540,19 +4540,19 @@ int FUN_1401fcec0(void)
   REFG(undefined4, 0x1431e9c58) = 0x20000120;
   REFG(undefined8, 0x1431e9c50) = "Stores what roles the player will fulfill in a BG.";
   REFG(undefined4, 0x1431e9c5c) = 4;
-  REFG(undefined8, 0x1431e9c60) = &REFG(undefined8, 0x1431e9c78);
+  REFG(undefined8, 0x1431e9c60) = &REFG(undefined1, 0x1431e9c78);
   REFG(undefined8, 0x1431e9c68) = 0;
   REFG(undefined8, 0x1431e9c70) = 0x8000000000000010;
-  REFG(undefined8, 0x1431e9c78) = 0;
+  REFG(undefined1, 0x1431e9c78) = 0;
   REFG(undefined8, 0x1431e9c90) = 0;
   REFG(undefined4, 0x1431e9c98) = 0;
   REFG(undefined2, 0x1431e9ca0) = 0;
   CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1431e9c60),&REFG(undefined8, 0x142815450),0);
   REFG(undefined8, 0x1431e9ca8) = 0;
-  REFG(undefined8, 0x1431e9cb0) = &REFG(undefined8, 0x1431e9cc8);
+  REFG(undefined8, 0x1431e9cb0) = &REFG(undefined1, 0x1431e9cc8);
   REFG(undefined8, 0x1431e9cb8) = 0;
   REFG(undefined8, 0x1431e9cc0) = 0x800000000000000f;
-  REFG(undefined8, 0x1431e9cc8) = 0;
+  REFG(undefined1, 0x1431e9cc8) = 0;
   REFG(undefined1, 0x1431e9cd8) = 0;
   iVar1 = atexit(((code *)REFP(0x1425f5a90)));
   return iVar1;
@@ -4571,18 +4571,18 @@ int FUN_1401fcfd0(void)
   REFG(undefined4, 0x1431e9d2c) = 5;
   REFG(undefined8, 0x1431e9d20) = "Whether to restrict calendar invites to friends and guilds only.";
   REFG(undefined8, 0x1431e9d38) = 0;
-  REFG(undefined8, 0x1431e9d30) = &REFG(undefined8, 0x1431e9d48);
-  REFG(undefined8, 0x1431e9d48) = 0;
+  REFG(undefined8, 0x1431e9d30) = &REFG(undefined1, 0x1431e9d48);
+  REFG(undefined1, 0x1431e9d48) = 0;
   REFG(undefined8, 0x1431e9d40) = 0x8000000000000010;
   REFG(undefined8, 0x1431e9d60) = ((code *)REFP(0x14196ee40));
   REFG(undefined8, 0x1431e9d68) = 0;
   REFG(undefined2, 0x1431e9d70) = 0;
   CALLF(longlong *, FUN_140236510)(&REFG(undefined8, 0x1431e9d30),&REFG(undefined8, 0x14261aa48),1);
   REFG(undefined8, 0x1431e9d78) = 0;
-  REFG(undefined8, 0x1431e9d80) = &REFG(undefined8, 0x1431e9d98);
+  REFG(undefined8, 0x1431e9d80) = &REFG(undefined1, 0x1431e9d98);
   REFG(undefined8, 0x1431e9d88) = 0;
   REFG(undefined8, 0x1431e9d90) = 0x800000000000000f;
-  REFG(undefined8, 0x1431e9d98) = 0;
+  REFG(undefined1, 0x1431e9d98) = 0;
   CALLF(longlong, FUN_14031ede0)(&REFG(undefined4, 0x1431e9ce0),&REFG(undefined8, 0x1431e9cf8));
   REFG(undefined1, 0x1431e9da8) = 1;
   iVar1 = atexit(((code *)REFP(0x1425f5af0)));
@@ -4642,7 +4642,7 @@ int FUN_1401fd280(void)
   int iVar1;
   
   REFG(undefined8, 0x142d2bcc8) = 0x142d2bcc1;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2bcb8));
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2bcb8));
   REFG(undefined4, 0x142d2bcb8) = 0x10;
   REFG(undefined8, 0x142d2bcc0) = (undefined *)&REFG(undefined8, 0x142d2bcc0);
   REFG(undefined8, 0x142d2bcc8) = 0x142d2bcc1;
@@ -4756,7 +4756,7 @@ int FUN_1401fd690(void)
   int iVar1;
   
   REFG(undefined8, 0x142d2c958) = 0x142d2c951;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2c948));
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2c948));
   REFG(undefined4, 0x142d2c948) = 0x10;
   REFG(undefined8, 0x142d2c950) = (undefined *)&REFG(undefined8, 0x142d2c950);
   REFG(undefined8, 0x142d2c958) = 0x142d2c951;
@@ -4847,7 +4847,7 @@ int FUN_1401fd880(void)
   int iVar1;
   
   REFG(undefined8, 0x142d2c908) = 0x142d2c901;
-  CALLF(undefined8, FUN_140325700)(&REFG(undefined8, 0x142d2c8f8));
+  CALLF(undefined8, FUN_140325700)(&REFG(undefined4, 0x142d2c8f8));
   REFG(undefined4, 0x142d2c8f8) = 0x10;
   REFG(undefined8, 0x142d2c900) = (undefined *)&REFG(undefined8, 0x142d2c900);
   REFG(undefined8, 0x142d2c908) = 0x142d2c901;
@@ -4892,7 +4892,7 @@ undefined8 FUN_1401fdab0(void)
   GEN_HIT(414);
   undefined8 uVar1;
   
-  uVar1 = CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined8, 0x1431f42d8));
+  uVar1 = CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined4, 0x1431f42d8));
   REFG(undefined4, 0x1431f42e0) = 1;
   REFG(undefined4, 0x1431f42d8) = 1;
   REFG(undefined4, 0x1431f42dc) = 500;

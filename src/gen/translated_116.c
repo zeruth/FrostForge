@@ -5797,7 +5797,7 @@ undefined1 * FUN_1419cd060(void)
       puVar5 = REFG(undefined1 *, 0x142d2c970);
     } while (uVar7 < uVar9);
   }
-  REFG(undefined8, 0x142d2c960) = 0;
+  REFG(undefined4, 0x142d2c960) = 0;
   return puVar5;
 }
 

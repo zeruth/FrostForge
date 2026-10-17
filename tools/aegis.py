@@ -275,6 +275,12 @@ def _block_write(stmt: str) -> bool:
     if len(parts) < 2 or re.match(r"\s*(?:if|while|for|switch|return)\b", stmt):
         return False
     return any(BLOCK[0] <= int(h, 16) < BLOCK[1] for h in BLOCK_ADDR.findall(parts[0]))
+# a call's return address, pushed: where the guard's stack games lose Ghidra the stack pointer, it
+# shows each later call as a store of the return point below a stack array it tracks instead
+# (`*(undefined **)(puVar22 + -8) = &UNK_14167f4bc;` before FUN_1416a3ab0 in the tick). No such
+# store is in the instructions, and translated it writes 8 bytes below a local array of the
+# frame: 44 of them in five guarded functions, the tick's 20 among them, 2026-10-17
+RETURN_PUSH = re.compile(r"\s*\*\(undefined \*\*\)\(\w+ \+ -8\) = &(?:UNK|LAB)_[0-9a-f]{9};\s*$")
 EXIT = re.compile(r"\b(?:break|return|goto)\b")
 LOOP = re.compile(r"\s*(?:while|do|for)\b")
 CONTEXT_NULL = re.compile(r"PTR_142ddf848 == \(undefined1 \*\)0x0")
@@ -403,6 +409,9 @@ def strip_guards(text: str, prot: set[str], force: bool = False) -> tuple[str, s
                 continue
             own = n.own_text()
             if n.kind == "stmt":
+                if RETURN_PUSH.match(own):
+                    removed += keeping
+                    continue
                 v = _assigned(own)
                 bad = _marked(own, prot) or bool(rhs_reads(own) & tainted) or bool(FASTFAIL.search(own)) \
                     or bool(DECODED_POINTER.search(own)) or _block_write(own)

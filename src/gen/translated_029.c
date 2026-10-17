@@ -451,7 +451,7 @@ undefined8 FUN_1405d60b0(void)
   puVar1 = REFG(undefined1 *, 0x142e96970);
   REFG(undefined8, 0x14309d300) = 0;
   if (REFG(undefined1 *, 0x142e96970) != (undefined1 *)0x0) {
-    REFG(undefined8, 0x142e96978) = 0;
+    REFG(undefined1, 0x142e96978) = 0;
     CALLF(undefined8, FUN_1405d5ea0)(REFG(undefined1 *, 0x142e96970));
     CALLF(undefined8, FUN_140254670)(puVar1);
   }

@@ -1397,7 +1397,7 @@ undefined4 * FUN_14241f760(undefined4 *param_1)
         (*(*(code *)&OutputDebugStringW))
                   (L"ERROR : Unable to initialize critical section in CAtlBaseModule\n");
       }
-      REFG(undefined8, 0x1432383f8) = 1;
+      REFG(undefined1, 0x1432383f8) = 1;
     }
   }
   return param_1;
@@ -1409,7 +1409,7 @@ undefined8 FUN_14241f808(longlong param_1)
   GEN_HIT(27);
   (*(*(code *)&DeleteCriticalSection))(param_1 + 0x28);
   if (*(longlong *)(param_1 + 0x50) != 0) {
-    CALLF(undefined8, FUN_140279d94)(*(longlong *)(param_1 + 0x50));
+    free(*(longlong *)(param_1 + 0x50));
     *(undefined8 *)(param_1 + 0x50) = 0;
   }
   *(undefined4 *)(param_1 + 0x58) = 0;

@@ -6650,7 +6650,7 @@ undefined ** FUN_1413e78a0(void)
   *puVar5 = (*(undefined8 (*)[1])(uintptr_t)0x142631f90ULL);
   puVar5[6] = 0;
   REFG(undefined1 *, 0x1430ad4e0) = (undefined1 *)puVar5;
-  REFG(undefined8, 0x1430ad4e8) = 1;
+  REFG(undefined1, 0x1430ad4e8) = 1;
   return (*(undefined8 (*)[1])(uintptr_t)0x142631f90ULL);
 }
 

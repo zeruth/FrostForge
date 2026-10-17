@@ -3674,36 +3674,36 @@ LAB_14199c63f:
         (*(byte *)((char *)&REFG(undefined4, 0x1431ea18c) + 2)) = (*(byte *)((char *)&REFG(undefined4, 0x1431ea18c) + 3));
       }
       if (REFG(undefined4, 0x1431ea190) != 0) {
-        REFG(undefined8, 0x1431ea194) = REFG(undefined1, 0x1431ea195);
-        REFG(undefined8, 0x1431ea196) = REFG(undefined1, 0x1431ea197);
+        REFG(undefined1, 0x1431ea194) = REFG(undefined1, 0x1431ea195);
+        REFG(undefined1, 0x1431ea196) = REFG(undefined1, 0x1431ea197);
       }
       if (REFG(undefined4, 0x1431ea198) != 0) {
-        REFG(undefined8, 0x1431ea19c) = REFG(undefined1, 0x1431ea19d);
-        REFG(undefined8, 0x1431ea19e) = REFG(undefined1, 0x1431ea19f);
+        REFG(undefined1, 0x1431ea19c) = REFG(undefined1, 0x1431ea19d);
+        REFG(undefined1, 0x1431ea19e) = REFG(undefined1, 0x1431ea19f);
       }
       if (REFG(undefined4, 0x1431ea1a0) != 0) {
-        REFG(undefined8, 0x1431ea1a4) = REFG(undefined1, 0x1431ea1a5);
-        REFG(undefined8, 0x1431ea1a6) = REFG(undefined1, 0x1431ea1a7);
+        REFG(undefined1, 0x1431ea1a4) = REFG(undefined1, 0x1431ea1a5);
+        REFG(undefined1, 0x1431ea1a6) = REFG(undefined1, 0x1431ea1a7);
       }
       if (REFG(undefined4, 0x1431ea1a8) != 0) {
-        REFG(undefined8, 0x1431ea1ac) = REFG(undefined1, 0x1431ea1ad);
-        REFG(undefined8, 0x1431ea1ae) = REFG(undefined1, 0x1431ea1af);
+        REFG(undefined1, 0x1431ea1ac) = REFG(undefined1, 0x1431ea1ad);
+        REFG(undefined1, 0x1431ea1ae) = REFG(undefined1, 0x1431ea1af);
       }
       if (REFG(undefined4, 0x1431ea1b0) != 0) {
-        REFG(undefined8, 0x1431ea1b4) = REFG(undefined1, 0x1431ea1b5);
-        REFG(undefined8, 0x1431ea1b6) = REFG(undefined1, 0x1431ea1b7);
+        REFG(undefined1, 0x1431ea1b4) = REFG(undefined1, 0x1431ea1b5);
+        REFG(undefined1, 0x1431ea1b6) = REFG(undefined1, 0x1431ea1b7);
       }
       if (REFG(undefined4, 0x1431ea1b8) != 0) {
-        REFG(undefined8, 0x1431ea1bc) = REFG(undefined1, 0x1431ea1bd);
-        REFG(undefined8, 0x1431ea1be) = REFG(undefined1, 0x1431ea1bf);
+        REFG(undefined1, 0x1431ea1bc) = REFG(undefined1, 0x1431ea1bd);
+        REFG(undefined1, 0x1431ea1be) = REFG(undefined1, 0x1431ea1bf);
       }
       if (REFG(undefined4, 0x1431ea1c0) != 0) {
-        REFG(undefined8, 0x1431ea1c4) = REFG(undefined1, 0x1431ea1c5);
-        REFG(undefined8, 0x1431ea1c6) = REFG(undefined1, 0x1431ea1c7);
+        REFG(undefined1, 0x1431ea1c4) = REFG(undefined1, 0x1431ea1c5);
+        REFG(undefined1, 0x1431ea1c6) = REFG(undefined1, 0x1431ea1c7);
       }
       if (REFG(undefined4, 0x1431ea1c8) != 0) {
-        REFG(undefined8, 0x1431ea1cc) = REFG(undefined1, 0x1431ea1cd);
-        REFG(undefined8, 0x1431ea1ce) = REFG(undefined1, 0x1431ea1cf);
+        REFG(undefined1, 0x1431ea1cc) = REFG(undefined1, 0x1431ea1cd);
+        REFG(undefined1, 0x1431ea1ce) = REFG(undefined1, 0x1431ea1cf);
       }
       if (((REFG(undefined8, 0x142d2bd78) & 1) != 0) || (bVar3 = bVar2, REFG(undefined8, 0x142d2bd78) == 0)) {
         bVar3 = true;

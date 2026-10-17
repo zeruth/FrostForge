@@ -7982,7 +7982,7 @@ float FUN_141c0d2a0(float *param_1, float *param_2)
   (*(undefined8 *)(gen_frame + 0x38)) = REFG(undefined4, 0x14261aa18);
   (*(undefined8 *)(gen_frame + 0x20)) = REFG(undefined8, 0x14261aa00);
   (*(undefined8 *)(gen_frame + 0x28)) = REFG(undefined8, 0x14261aa08);
-  CALLF(float, FUN_141342e50)(&(*(undefined8 *)(gen_frame + 0x0)),&REFG(undefined8, 0x142d35ebc));
+  CALLF(float, FUN_141342e50)(&(*(undefined8 *)(gen_frame + 0x0)),&REFG(float, 0x142d35ebc));
   CALLF(float, FUN_141342570)(&(*(undefined8 *)(gen_frame + 0x0)),REFG(float, 0x142d35ec8));
   CALLF(float, FUN_141342690)(&(*(undefined8 *)(gen_frame + 0x0)),REFG(float, 0x142d35ed0));
   CALLF(float, FUN_141342600)(&(*(undefined8 *)(gen_frame + 0x0)),REFG(float, 0x142d35ecc));

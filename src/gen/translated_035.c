@@ -6009,7 +6009,7 @@ undefined8 FUN_140688190(void)
 {
   GEN_HIT(61);
   CALLF(undefined8, FUN_1406880a0)();
-  REFG(undefined8, 0x142e9cbf1) = 0;
+  REFG(undefined1, 0x142e9cbf1) = 0;
   return 0;
 }
 

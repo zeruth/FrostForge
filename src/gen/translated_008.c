@@ -6626,11 +6626,11 @@ LAB_140257f5c:
   }
   *(*(int * *)(gen_frame + 0x48)) = 1;
   CALLF(undefined8, FUN_140262440)(&(*(undefined8 *)((char *)&gen_g_142e1c998 + 0x0)));
-  REFG(undefined8, 0x142e1d010) = 0;
+  REFG(undefined1, 0x142e1d010) = 0;
   REFG(undefined1, 0x142e1d120) = 0;
   REFG(undefined1, 0x142e1d230) = 0;
-  CALLF(undefined4, FUN_1402630f0)(&REFG(undefined8, 0x142e1d010),0x104);
-  CALLF(uint, FUN_140261ce0)(&REFG(undefined1, 0x142e1d120),0x104,&REFG(undefined8, 0x142e1d010));
+  CALLF(undefined4, FUN_1402630f0)(&REFG(undefined1, 0x142e1d010),0x104);
+  CALLF(uint, FUN_140261ce0)(&REFG(undefined1, 0x142e1d120),0x104,&REFG(undefined1, 0x142e1d010));
   uVar26 = 0xffffffffffffffff;
   do {
     uVar25 = uVar26 + 1;
@@ -6668,7 +6668,7 @@ LAB_140257f5c:
   if (iVar8 == 0) {
     puVar23 = REFG(undefined *, 0x14261f900);
   }
-  CALLF(undefined4, FUN_140256070)(((byte *)(gen_frame + 0x2a0)),puVar23,&REFG(undefined8, 0x142e1d010));
+  CALLF(undefined4, FUN_140256070)(((byte *)(gen_frame + 0x2a0)),puVar23,&REFG(undefined1, 0x142e1d010));
   uVar9 = (*(*(code *)&GetCurrentProcessId))();
   uVar12 = CALLF(HMODULE, FUN_14025cfd0)();
   iVar8 = (*(*(code *)&LoadStringA))(uVar12,0x5115,&REFG(undefined8, 0x142e1c9a0),0x100);

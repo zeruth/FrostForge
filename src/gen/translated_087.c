@@ -6963,15 +6963,15 @@ undefined1 FUN_14152d7e0(char *param_1)
   
   REFG(undefined1, 0x1430d13db) = 0;
   REFG(undefined4, 0x142d08790) = 1;
-  CALLF(undefined1, FUN_14152c300)(&REFG(undefined8, 0x142d08790));
+  CALLF(undefined1, FUN_14152c300)(&REFG(undefined4, 0x142d08790));
   REFG(undefined4, 0x142d088b0) = 2;
   CALLF(undefined1, FUN_14152c300)(&REFG(undefined4, 0x142d088b0));
   REFG(undefined4, 0x142d089d0) = 3;
-  CALLF(undefined1, FUN_14152c300)(&REFG(undefined8, 0x142d089d0));
+  CALLF(undefined1, FUN_14152c300)(&REFG(undefined4, 0x142d089d0));
   REFG(undefined4, 0x142d08af0) = 4;
-  CALLF(undefined1, FUN_14152c300)(&REFG(undefined8, 0x142d08af0));
+  CALLF(undefined1, FUN_14152c300)(&REFG(undefined4, 0x142d08af0));
   REFG(undefined4, 0x142d08c10) = 5;
-  CALLF(undefined1, FUN_14152c300)(&REFG(undefined8, 0x142d08c10));
+  CALLF(undefined1, FUN_14152c300)(&REFG(undefined4, 0x142d08c10));
   CALLF(undefined1 *, FUN_141542410)();
   puVar5 = (undefined8 *)0x0;
   REFG(undefined8, 0x1430d1df8) = 0;
@@ -6989,19 +6989,19 @@ undefined1 FUN_14152d7e0(char *param_1)
     _guard_check_icall();
   }
   if (REFG(undefined1, 0x142d08794) != '\0') {
-    CALLF(undefined8, FUN_141541eb0)(&REFG(undefined8, 0x142d08790),&REFG(undefined1, 0x1430d05a0));
+    CALLF(undefined8, FUN_141541eb0)(&REFG(undefined4, 0x142d08790),&REFG(undefined1, 0x1430d05a0));
   }
   if (REFG(undefined1, 0x142d088b4) != '\0') {
     CALLF(undefined8, FUN_141541eb0)(&REFG(undefined4, 0x142d088b0),&REFG(undefined1, 0x1430d0878));
   }
   if (REFG(undefined1, 0x142d089d4) != '\0') {
-    CALLF(undefined8, FUN_141541eb0)(&REFG(undefined8, 0x142d089d0),&REFG(undefined1, 0x1430d0b50));
+    CALLF(undefined8, FUN_141541eb0)(&REFG(undefined4, 0x142d089d0),&REFG(undefined1, 0x1430d0b50));
   }
   if (REFG(undefined1, 0x142d08af4) != '\0') {
-    CALLF(undefined8, FUN_141541eb0)(&REFG(undefined8, 0x142d08af0),&REFG(undefined1, 0x1430d0e28));
+    CALLF(undefined8, FUN_141541eb0)(&REFG(undefined4, 0x142d08af0),&REFG(undefined1, 0x1430d0e28));
   }
   if (REFG(undefined1, 0x142d08c14) != '\0') {
-    CALLF(undefined8, FUN_141541eb0)(&REFG(undefined8, 0x142d08c10),&REFG(undefined1, 0x1430d1100));
+    CALLF(undefined8, FUN_141541eb0)(&REFG(undefined4, 0x142d08c10),&REFG(undefined1, 0x1430d1100));
   }
   GEN_ATOMIC_XCHG(REFG(undefined1, 0x1430d13d8), 1);
   (*(undefined8 *)(gen_frame + 0x0)) = 0;

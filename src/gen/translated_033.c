@@ -2083,7 +2083,7 @@ undefined8 FUN_140644b80(longlong *param_1, longlong *param_2, int param_3)
 undefined1 FUN_1406469a0(void)
 {
   GEN_HIT(45);
-  return (*(undefined8 *)((char *)&gen_g_142e9a07c + 0x0));
+  return (*(undefined1 *)((char *)&gen_g_142e9a07c + 0x0));
 }
 
 /* ref: FUN_14065e900 */

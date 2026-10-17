@@ -14017,10 +14017,8 @@ undefined8 FUN_141801cf0(void)
   }
   while ((uVar22 = uVar24, (uVar22 & 1) == 0 && (uVar22 != 0))) {
     uVar24 = *(ulonglong *)(uVar22 + 8);
-    *(undefined **)(puVar21 + -8) = &REFG(undefined8, 0x1418073e9);
     uVar13 = CALLF(ulonglong, FUN_14065f960)();
     if (*(uint *)(uVar22 + 0xb0) <= (uint)uVar13) {
-      *(undefined **)(puVar21 + -8) = &REFG(undefined8, 0x1418073fe);
       CALLF(undefined8, FUN_141807830)(uVar22,0,1);
     }
   }

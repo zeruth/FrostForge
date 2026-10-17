@@ -6746,7 +6746,7 @@ undefined * FUN_140ec4cf0(void)
     _Init_thread_header(&REFG(undefined4, 0x1430a0d98));
     if (REFG(undefined4, 0x1430a0d98) == -1) {
       REFG(undefined4, 0x1430a0ce8) = 0;
-      REFG(undefined8, 0x1430a0ced) = 1;
+      REFG(undefined1, 0x1430a0ced) = 1;
       REFG(undefined8, 0x1430a0ce0) = (*(undefined8 (*)[8])(uintptr_t)0x142710d40ULL);
       REFG(undefined8, 0x1430a0d18) = 0;
       REFG(undefined8, 0x1430a0d20) = ((code *)REFP(0x1402112e0));

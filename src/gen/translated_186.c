@@ -2058,7 +2058,7 @@ longlong FUN_142523570(longlong *param_1, longlong param_2)
     uVar5 = uVar4;
   }
   if (uVar5 == 0) {
-    CALLF(undefined8, FUN_140279d94)(lVar3);
+    free(lVar3);
     lVar2 = 0;
   }
   else {
@@ -3078,7 +3078,7 @@ undefined8 * FUN_142525790(undefined8 *param_1, undefined8 param_2)
 undefined8 FUN_1425258d0(longlong param_1)
 {
   GEN_HIT(62);
-  CALLF(undefined8, FUN_140279d94)(*(undefined8 *)(param_1 + 0x20));
+  free(*(undefined8 *)(param_1 + 0x20));
   return (undefined8)CALLF(undefined8, FUN_140254670)(*(undefined8 *)(param_1 + 0x18));
 }
 
@@ -3285,7 +3285,7 @@ undefined8 FUN_142525ec0(longlong param_1)
   GEN_HIT(72);
   CALLF(undefined8, FUN_142526a00)(*(undefined8 *)(param_1 + 0x48));
   CALLF(undefined8, FUN_140254670)(*(undefined8 *)(param_1 + 0x40));
-  CALLF(undefined8, FUN_140279d94)(*(undefined8 *)(param_1 + 0x10));
+  free(*(undefined8 *)(param_1 + 0x10));
   return (undefined8)CALLF(undefined8, FUN_140254670)(*(undefined8 *)(param_1 + 8));
 }
 

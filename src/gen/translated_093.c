@@ -4104,7 +4104,7 @@ undefined8 FUN_14165a5e0(void)
   int iVar1;
   undefined8 uVar2;
   
-  if (REFG(undefined8, 0x14311a509) != '\0') {
+  if (REFG(undefined1, 0x14311a509) != '\0') {
     iVar1 = CALLF(undefined4, FUN_1422611d0)();
     while (iVar1 != 0) {
       CALLF(undefined8 *, FUN_1406d86c0)(((undefined1 *)(gen_frame + 0x0)));

@@ -164,6 +164,9 @@ extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info) {
         }
         FrostLog("translated", "FUN_%llx faulted (%08lx at %p, touching %llx); it returns nothing",
                  address, code, info->ExceptionRecord->ExceptionAddress, static_cast<unsigned long long>(at));
+        // (the filter runs on the faulting thread with its stack intact: from the fault up to the
+        // translated function this filter guards, which may be many calls away)
+        FrostLogContextStack(info->ContextRecord, 24);
     }
     return EXCEPTION_EXECUTE_HANDLER;
 }

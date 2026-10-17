@@ -933,7 +933,7 @@ undefined1 FUN_1405e6790(undefined8 param_1, int param_2)
 undefined8 FUN_1405e6820(void)
 {
   GEN_HIT(46);
-  REFG(undefined8, 0x142e9774c) = 0;
+  REFG(undefined1, 0x142e9774c) = 0;
   return 0;
 }
 

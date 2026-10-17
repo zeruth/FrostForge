@@ -11237,7 +11237,7 @@ undefined8 FUN_1402ed2b0(void)
   longlong lVar4;
   undefined8 uVar5;
   
-  REFG(undefined8, 0x142e25a18) = 1;
+  REFG(undefined1, 0x142e25a18) = 1;
   if ((*(longlong * *)((char *)&gen_g_142e43430 + 0x140)) != (longlong *)0x0) {
     (*(int *)(gen_frame + 0x10)) = -2;
     (*(undefined8 *)(gen_frame + 0x18)) = 0;
@@ -27473,14 +27473,14 @@ undefined8 FUN_140309940(longlong *param_1, ulonglong param_2)
 undefined1 FUN_140309cb0(void)
 {
   GEN_HIT(381);
-  return REFG(undefined8, 0x142e2608c);
+  return REFG(undefined1, 0x142e2608c);
 }
 
 /* ref: FUN_140309f10 */
 undefined8 FUN_140309f10(undefined1 param_1)
 {
   GEN_HIT(382);
-  REFG(undefined8, 0x142e2608c) = param_1;
+  REFG(undefined1, 0x142e2608c) = param_1;
   return 0;
 }
 

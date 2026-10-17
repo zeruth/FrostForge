@@ -12,7 +12,7 @@ undefined8 FUN_141a76240(undefined1 param_1)
   
   REFG(undefined4, 0x143208238) = 0;
   REFG(undefined4, 0x14320823c) = 0;
-  REFG(undefined8, 0x1432081d4) = 0;
+  REFG(undefined1, 0x1432081d4) = 0;
   if ((REFG(undefined1, 0x143208200) != '\0') && (-1 < REFG(undefined8, 0x1432081e8))) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1432081d8),((char *)REFP(0x142d602e0)),0xfffffffa,0);
   }

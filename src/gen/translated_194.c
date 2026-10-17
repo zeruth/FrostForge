@@ -2230,7 +2230,7 @@ undefined1 FUN_1425efd50(void)
 undefined8 FUN_1425efe40(void)
 {
   GEN_HIT(107);
-  REFG(undefined8, 0x143122321) = 0;
+  REFG(undefined1, 0x143122321) = 0;
   if (-1 < REFG(undefined8, 0x143122318)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x143122308),((char *)REFP(0x142d61788)),0xfffffffa,0);
     REFG(undefined8, 0x143122308) = 0;

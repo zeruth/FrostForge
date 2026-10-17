@@ -1037,7 +1037,7 @@ undefined8 FUN_1403316a0(void)
   
   CALLF(undefined8, FUN_1403301c0)(&REFG(undefined1 *, 0x142e303f0));
   uVar1 = (**(code **)REFG(undefined1 *, 0x142e303f0))(&REFG(undefined1 *, 0x142e303f0));
-  REFG(undefined8, 0x142e30420) = 0;
+  REFG(undefined1, 0x142e30420) = 0;
   return uVar1;
 }
 

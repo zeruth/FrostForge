@@ -2821,13 +2821,13 @@ undefined8 FUN_14252ff60(longlong param_1, uint param_2)
 undefined8 FUN_142530290(void)
 {
   GEN_HIT(64);
-  REFG(undefined8, 0x1447ce7c4) = REFG(undefined8, 0x1447ce7c4) | 5;
+  REFG(undefined1, 0x1447ce7c4) = REFG(undefined1, 0x1447ce7c4) | 5;
   REFG(undefined4, 0x1447ce7c0) = REFG(undefined4, 0x1447ce7c0) + 1;
-  REFG(undefined8, 0x1447ce814) = REFG(undefined8, 0x1447ce814) | 5;
+  REFG(undefined1, 0x1447ce814) = REFG(undefined1, 0x1447ce814) | 5;
   REFG(undefined4, 0x1447ce810) = REFG(undefined4, 0x1447ce810) + 1;
-  REFG(undefined8, 0x1447ce864) = REFG(undefined8, 0x1447ce864) | 7;
+  REFG(undefined1, 0x1447ce864) = REFG(undefined1, 0x1447ce864) | 7;
   REFG(undefined4, 0x1447ce860) = REFG(undefined4, 0x1447ce860) + 1;
-  REFG(undefined8, 0x1447ce8b4) = REFG(undefined8, 0x1447ce8b4) | 4;
+  REFG(undefined1, 0x1447ce8b4) = REFG(undefined1, 0x1447ce8b4) | 4;
   REFG(undefined4, 0x1447ce8b0) = REFG(undefined4, 0x1447ce8b0) + 1;
   REFG(undefined4, 0x1447ce818) = 2;
   REFG(undefined4, 0x1447ce868) = 1;

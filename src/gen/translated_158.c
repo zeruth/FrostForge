@@ -7427,7 +7427,7 @@ undefined8 FUN_1420cd4e0(undefined8 *param_1)
     if (lVar2 != 0) {
       memset(lVar1,0,lVar2);
     }
-    CALLF(undefined8, FUN_140279d94)(lVar1);
+    free(lVar1);
     param_1[2] = 0;
     *param_1 = 0;
     *(undefined4 *)(param_1 + 1) = 0;

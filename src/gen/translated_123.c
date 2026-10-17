@@ -1221,7 +1221,7 @@ undefined1 FUN_141ac6ac0(void)
   REFG(undefined8, 0x1432089e8) = 0;
   REFG(undefined8, 0x1432089f0) = 0;
   REFG(undefined2, 0x1432089f8) = 0;
-  REFG(undefined8, 0x1432089fa) = 0;
+  REFG(undefined1, 0x1432089fa) = 0;
   REFG(undefined8, 0x143208a00) = 0;
   REFG(undefined4, 0x143208a08) = 0;
   REFG(undefined4, 0x142d2fb88) = 0;
@@ -1232,7 +1232,7 @@ undefined1 FUN_141ac6ac0(void)
   REFG(undefined4, 0x143208a18) = 0;
   REFG(undefined8, 0x143208a20) = 0;
   REFG(undefined2, 0x143208a28) = 0;
-  REFG(undefined8, 0x143208a2a) = 0;
+  REFG(undefined1, 0x143208a2a) = 0;
   REFG(undefined8, 0x143208a30) = 0;
   REFG(undefined4, 0x143208a38) = 0;
   REFG(undefined4, 0x142d2fbb0) = 0;
@@ -1243,7 +1243,7 @@ undefined1 FUN_141ac6ac0(void)
   REFG(undefined4, 0x143208a48) = 0;
   REFG(undefined8, 0x143208a50) = 0;
   REFG(undefined2, 0x143208a58) = 0;
-  REFG(undefined8, 0x143208a5a) = 0;
+  REFG(undefined1, 0x143208a5a) = 0;
   REFG(undefined8, 0x143208a60) = 0;
   REFG(undefined4, 0x143208a68) = 0;
   REFG(undefined4, 0x142d2fbd8) = 0;
@@ -1254,7 +1254,7 @@ undefined1 FUN_141ac6ac0(void)
   REFG(undefined4, 0x143208a78) = 0;
   REFG(undefined8, 0x143208a80) = 0;
   REFG(undefined2, 0x143208a88) = 0;
-  REFG(undefined8, 0x143208a8a) = 0;
+  REFG(undefined1, 0x143208a8a) = 0;
   REFG(undefined8, 0x143208a90) = 0;
   REFG(undefined4, 0x143208a98) = 0;
   REFG(undefined4, 0x142d2fc00) = 0;
@@ -1265,7 +1265,7 @@ undefined1 FUN_141ac6ac0(void)
   REFG(undefined4, 0x143208aa8) = 0;
   REFG(undefined8, 0x143208ab0) = 0;
   REFG(undefined2, 0x143208ab8) = 0;
-  REFG(undefined8, 0x143208aba) = 0;
+  REFG(undefined1, 0x143208aba) = 0;
   REFG(undefined8, 0x143208ac0) = 0;
   REFG(undefined4, 0x143208ac8) = 0;
   REFG(undefined4, 0x142d2fc28) = 0;
@@ -1276,7 +1276,7 @@ undefined1 FUN_141ac6ac0(void)
   REFG(undefined4, 0x143208ad8) = 0;
   REFG(undefined8, 0x143208ae0) = 0;
   REFG(undefined2, 0x143208ae8) = 0;
-  REFG(undefined8, 0x143208aea) = 0;
+  REFG(undefined1, 0x143208aea) = 0;
   REFG(undefined8, 0x143208af0) = 0;
   REFG(undefined4, 0x143208af8) = 0;
   REFG(undefined4, 0x142d2fc50) = 0;
@@ -1287,7 +1287,7 @@ undefined1 FUN_141ac6ac0(void)
   REFG(undefined4, 0x143208b08) = 0;
   REFG(undefined8, 0x143208b10) = 0;
   REFG(undefined2, 0x143208b18) = 0;
-  REFG(undefined8, 0x143208b1a) = 0;
+  REFG(undefined1, 0x143208b1a) = 0;
   REFG(undefined8, 0x143208b20) = 0;
   REFG(undefined4, 0x143208b28) = 0;
   while ((uVar1 = REFG(undefined8, 0x142d2fc88), (REFG(undefined8, 0x142d2fc88) & 1) == 0 && (REFG(undefined8, 0x142d2fc88) != 0))) {

@@ -4493,7 +4493,7 @@ undefined8 FUN_1412ea4a0(void)
   }
   puVar22 = puVar21;
   uVar23 = __rdtsc();
-  if ((*(undefined8 *)((char *)&gen_g_142cfd2ca + 0x0)) == '\0') {
+  if ((*(undefined1 *)((char *)&gen_g_142cfd2ca + 0x0)) == '\0') {
     *(undefined8 *)(puVar22 + -8) = 0x1412ee5da;
     cVar11 = CALLF(bool, FUN_1412cd270)((*(undefined4 *)((char *)&gen_g_1430a9938 + 0x0)));
     if (cVar11 == '\0') {
@@ -4527,27 +4527,21 @@ char FUN_1412ee600(void)
   uVar29 = __rdtsc();
   puVar24 = auStackY_718;
   uVar29 = __rdtsc();
-  if ((*(undefined8 *)((char *)&gen_g_142cfd2c9 + 0x0)) == '\0') {
-    *(undefined **)(puVar24 + -8) = &REFG(undefined8, 0x1412f1d18);
+  if ((*(undefined1 *)((char *)&gen_g_142cfd2c9 + 0x0)) == '\0') {
     cVar8 = CALLF(bool, FUN_1412cd270)((*(undefined4 *)((char *)&gen_g_1430a9930 + 0x0)));
     if (cVar8 == '\0') {
-      *(undefined **)(puVar24 + -8) = &REFG(undefined8, 0x1412f1d23);
       cVar9 = CALLF(undefined1, FUN_1412d8be0)(1);
       cVar8 = '\0';
       if (cVar9 != '\0') {
-        *(undefined **)(puVar24 + -8) = &REFG(undefined8, 0x1412f1d34);
         CALLF(longlong, FUN_1412c5dc0)(puVar24 + 0x490);
-        *(undefined **)(puVar24 + -8) = &REFG(undefined8, 0x1412f1d40);
         uVar10 = CALLF(undefined1, FUN_1412e1780)(2,2);
         *(undefined8 *)(puVar24 + 0x30) = 0;
         puVar24[0x28] = 1;
         *(undefined8 *)(puVar24 + 0x20) = 0;
         puVar24[0x490] = uVar10;
         puVar24[0x5cc] = 1;
-        *(undefined **)(puVar24 + -8) = &REFG(undefined8, 0x1412f1d82);
-        CALLF(undefined4, FUN_1412ce0f0)((*(undefined8 *)((char *)&gen_g_1430a992c + 0x0)),0,puVar24 + 0x490,&(*(undefined4 *)((char *)&gen_g_1430a9930 + 0x0)),(unsigned long long)(*(undefined8 *)(puVar24 + 0x20)),(unsigned long long)(puVar24[0x28]),(unsigned long long)(*(undefined8 *)(puVar24 + 0x30)))
+        CALLF(undefined4, FUN_1412ce0f0)((*(undefined4 *)((char *)&gen_g_1430a992c + 0x0)),0,puVar24 + 0x490,&(*(undefined4 *)((char *)&gen_g_1430a9930 + 0x0)),(unsigned long long)(*(undefined8 *)(puVar24 + 0x20)),(unsigned long long)(puVar24[0x28]),(unsigned long long)(*(undefined8 *)(puVar24 + 0x30)))
         ;
-        *(undefined **)(puVar24 + -8) = &REFG(undefined8, 0x1412f1d8f);
         uVar16 = CALLF(undefined8, FUN_1412dc440)(puVar24 + 0x490);
         cVar8 = (char)uVar16;
       }

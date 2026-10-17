@@ -24,7 +24,7 @@ undefined1 FUN_1412250d0(longlong param_1, undefined8 param_2, undefined8 param_
   uVar8 = CALLF(undefined8, FUN_140216570)();
   uVar9 = CALLF(ulonglong, FUN_141221fd0)(param_1);
   cVar6 = CALLF(undefined1, FUN_14134e420)(uVar8,param_2,&REFG(undefined4, 0x1430a1390),&REFG(undefined8, 0x142cfb7d0),(unsigned long long)(uVar9));
-  if ((cVar6 == '\0') || ((REFG(undefined8, 0x142cfb838) & 2) != 0)) {
+  if ((cVar6 == '\0') || ((REFG(undefined1, 0x142cfb838) & 2) != 0)) {
     uVar7 = 0;
   }
   else {

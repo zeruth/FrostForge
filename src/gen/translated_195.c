@@ -1704,7 +1704,7 @@ undefined8 FUN_1425f72e0(undefined8 a0, undefined8 a1, undefined8 a2, undefined8
 undefined8 FUN_1425f74d0(void)
 {
   GEN_HIT(88);
-  REFG(undefined8, 0x1431f6851) = 0;
+  REFG(undefined1, 0x1431f6851) = 0;
   if (-1 < REFG(undefined8, 0x1431f6848)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1431f6838),((char *)REFP(0x142d61788)),0xfffffffa,0);
     REFG(undefined8, 0x1431f6838) = 0;

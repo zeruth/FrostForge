@@ -4047,7 +4047,7 @@ undefined4 FUN_14156e050(char param_1)
     uVar3 = uVar3 + 0xf;
     puVar2 = puVar2 + 0x5a0;
   } while (uVar3 < 0xf);
-  REFG(undefined8, 0x1430d3698) = 0;
+  REFG(undefined1, 0x1430d3698) = 0;
   pcVar4 = "Character";
   if (param_1 != '\0') {
     pcVar4 = "Account Wide";
@@ -4115,7 +4115,7 @@ undefined4 FUN_14156e1e0(char param_1)
   }
   CALLF(undefined8, FUN_14156f620)(uVar2);
 LAB_14156e2b5:
-  REFG(undefined8, 0x1430d3698) = 1;
+  REFG(undefined1, 0x1430d3698) = 1;
   pcVar3 = "Character";
   if (param_1 != '\0') {
     pcVar3 = "Account Wide";

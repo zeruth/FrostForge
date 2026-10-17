@@ -193,7 +193,7 @@ undefined8 FUN_140216870(undefined1 param_1)
   GEN_HIT(10);
   undefined8 uVar1;
   
-  REFG(undefined8, 0x142ddcf99) = param_1;
+  REFG(undefined1, 0x142ddcf99) = param_1;
   uVar1 = CALLF(undefined1 *, FUN_142288660)(param_1);
   return uVar1;
 }
@@ -995,13 +995,9 @@ undefined1 FUN_14021f090(void)
   lVar17 = gen_v16_bytes(gen_v16_mul(gen_v16_zext(gen_v16_u(0x47ae147ae147ae15), 8), auVar35), (int)(8), 8);
   uVar18 = __rdtsc();
   (*(undefined8 *)((char *)&auVar36 + 8)) = 0;
-  *(undefined **)(puVar20 + -8) = &REFG(undefined8, 0x1402221cd);
   CALLF(undefined8, FUN_1414f8400)();
-  *(undefined **)(puVar20 + -8) = &REFG(undefined8, 0x1402221d2);
   CALLF(undefined8, FUN_14165a5e0)();
-  *(undefined **)(puVar20 + -8) = &REFG(undefined8, 0x1402221d7);
   CALLF(undefined8, FUN_141484c30)();
-  *(undefined **)(puVar20 + -8) = &REFG(undefined8, 0x1402221dc);
   uVar9 = CALLF(undefined1, FUN_14021ee40)();
   return uVar9;
 }
@@ -2659,7 +2655,7 @@ undefined8 FUN_140233a60(char param_1, byte param_2)
     CALLF(undefined1 *, FUN_1412f7d80)();
     CALLF(undefined8, FUN_1412d4870)(0xfe,1,0);
     REFG(undefined1, 0x1430a9890) = 0;
-    REFG(undefined8, 0x1430a9891) = 0;
+    REFG(undefined1, 0x1430a9891) = 0;
     CALLF(undefined8, FUN_1412f9e30)(0xffffffff);
     CALLF(undefined8, FUN_1416cbe90)();
     CALLF(undefined8, FUN_1418e6690)();

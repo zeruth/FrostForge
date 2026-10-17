@@ -2,7 +2,7 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 #define GEN_HITS gen_hits_009
-unsigned int gen_hits_009[49];
+unsigned int gen_hits_009[48];
 
 /* ref: FUN_14026b467 */
 undefined8 FUN_14026b467(undefined4 param_1, undefined4 param_2)
@@ -1902,29 +1902,21 @@ LAB_140279d4c:
   return fVar6;
 }
 
-/* ref: FUN_140279d94 */
-undefined8 FUN_140279d94(undefined8 param_1)
-{
-  GEN_HIT(34);
-  _free_base(param_1);
-  return 0;
-}
-
 /* ref: FUN_140279da8 */
 undefined8 FUN_140279da8(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
 {
-  GEN_HIT(35);
+  GEN_HIT(34);
   ulonglong r_r8 = a2;
   ulonglong r_r9 = a3;
   ulonglong r_rcx = a0;
   ulonglong r_rdx = a1;
-  return CALLF(undefined8, FUN_140289938)(r_rcx, r_rdx, r_r8, r_r9);
+  return realloc(r_rcx, r_rdx);
 }
 
 /* ref: FUN_140282c80 */
 double FUN_140282c80(undefined8 param_1, undefined8 param_2)
 {
-  GEN_HIT(36);
+  GEN_HIT(35);
   double dVar1;
   
   dVar1 = _strtod_l(param_1,param_2,0);
@@ -1934,7 +1926,7 @@ double FUN_140282c80(undefined8 param_1, undefined8 param_2)
 /* ref: FUN_140282c88 */
 float FUN_140282c88(undefined8 param_1, undefined8 param_2)
 {
-  GEN_HIT(37);
+  GEN_HIT(36);
   float fVar1;
   
   fVar1 = _strtod_l(param_1,param_2,0);
@@ -1944,18 +1936,18 @@ float FUN_140282c88(undefined8 param_1, undefined8 param_2)
 /* ref: FUN_140282cb0 */
 undefined8 FUN_140282cb0(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
 {
-  GEN_HIT(38);
+  GEN_HIT(37);
   ulonglong r_r8 = a2;
   ulonglong r_r9 = a3;
   ulonglong r_rcx = a0;
   ulonglong r_rdx = a1;
-  return CALLF(undefined8, FUN_140286974)(r_rcx, r_rdx, r_r8, r_r9);
+  return malloc(r_rcx);
 }
 
 /* ref: FUN_140282e48 */
 undefined8 FUN_140282e48(longlong param_1)
 {
-  GEN_HIT(39);
+  GEN_HIT(38);
   undefined8 uVar1;
   
   uVar1 = (*(*(code *)&EnterCriticalSection))((LPCRITICAL_SECTION)(param_1 + 0x30));
@@ -1965,7 +1957,7 @@ undefined8 FUN_140282e48(longlong param_1)
 /* ref: FUN_140282e54 */
 undefined8 FUN_140282e54(longlong param_1)
 {
-  GEN_HIT(40);
+  GEN_HIT(39);
   undefined8 uVar1;
   
   uVar1 = (*(*(code *)&LeaveCriticalSection))((LPCRITICAL_SECTION)(param_1 + 0x30));
@@ -1975,7 +1967,7 @@ undefined8 FUN_140282e54(longlong param_1)
 /* ref: FUN_1402831c0 */
 double FUN_1402831c0(double param_1)
 {
-  GEN_HIT(41);
+  GEN_HIT(40);
   gen_v16 auVar1;
   gen_v16 auVar2;
   gen_v16 auVar3;
@@ -2152,7 +2144,7 @@ LAB_140283710:
 /* ref: FUN_1402838f4 */
 undefined8 FUN_1402838f4(undefined8 param_1, undefined8 param_2)
 {
-  GEN_HIT(42);
+  GEN_HIT(41);
   undefined8 uVar1;
   
   uVar1 = _wfsopen(param_1,param_2,0x40);
@@ -2162,7 +2154,7 @@ undefined8 FUN_1402838f4(undefined8 param_1, undefined8 param_2)
 /* ref: FUN_140283958 */
 undefined8 FUN_140283958(char *param_1, char *param_2)
 {
-  GEN_HIT(43);
+  GEN_HIT(42);
   undefined8 uVar1;
   
   uVar1 = _fsopen(param_1,param_2,0x40);
@@ -2172,7 +2164,7 @@ undefined8 FUN_140283958(char *param_1, char *param_2)
 /* ref: FUN_14028399c */
 undefined4 FUN_14028399c(undefined8 param_1)
 {
-  GEN_HIT(44);
+  GEN_HIT(43);
   uint uVar1;
   undefined4 uVar2;
   ulonglong uVar3;
@@ -2201,7 +2193,7 @@ undefined4 FUN_14028399c(undefined8 param_1)
 /* ref: FUN_1402839e4 */
 undefined4 FUN_1402839e4(uint param_1)
 {
-  GEN_HIT(45);
+  GEN_HIT(44);
   undefined4 uVar1;
   longlong lVar2;
   uint *puVar3;
@@ -2228,7 +2220,7 @@ undefined4 FUN_1402839e4(uint param_1)
 /* ref: FUN_140283a54 */
 undefined * FUN_140283a54(void)
 {
-  GEN_HIT(46);
+  GEN_HIT(45);
   longlong lVar1;
   undefined *puVar2;
   
@@ -2245,7 +2237,7 @@ undefined * FUN_140283a54(void)
 /* ref: FUN_140283dd4 */
 bool FUN_140283dd4(void)
 {
-  GEN_HIT(47);
+  GEN_HIT(46);
   byte bVar1;
   
   bVar1 = (byte)REFG(undefined8, 0x142ccab40) & 0x3f;
@@ -2256,7 +2248,7 @@ bool FUN_140283dd4(void)
 /* ref: FUN_140283dfc */
 undefined4 FUN_140283dfc(undefined8 param_1)
 {
-  GEN_HIT(48);
+  GEN_HIT(47);
   undefined4 uVar1;
   byte bVar2;
   
@@ -2304,7 +2296,6 @@ const unsigned long long gen_hit_addrs_009[] = {
     0x1402792c0ULL,
     0x140279378ULL,
     0x140279b50ULL,
-    0x140279d94ULL,
     0x140279da8ULL,
     0x140282c80ULL,
     0x140282c88ULL,
