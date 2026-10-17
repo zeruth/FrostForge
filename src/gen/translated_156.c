@@ -459,7 +459,7 @@ undefined4 FUN_14205e2e0(longlong param_1, code *param_2, undefined8 param_3)
   memcpy(gen_frame + 0x10, &param_3, sizeof(param_3) < 8 ? sizeof(param_3) : 8);
   undefined4 uVar1;
   longlong lVar2;
-                                       
+/*                                   */
   
   ((undefined4 *)(gen_frame + 0x0))[0] = 0;
   lVar2 = *(longlong *)(param_1 + 0x48);
@@ -538,7 +538,7 @@ undefined8 FUN_14205e4d0(longlong param_1)
 {
   GEN_HIT(17);
   BOOL BVar1;
-                          
+/*                      */
   
   (*(*(code *)&WaitForSingleObjectEx))(*(undefined8 *)(param_1 + 8),0xffffffff,0);
   BVar1 = (*(*(code *)&CloseHandle))(*(HANDLE *)(param_1 + 8));

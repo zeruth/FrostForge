@@ -265,6 +265,15 @@ class Analyzer:
         self.switches = ({int(j, 16): [int(t, 16) for t in ts] for j, ts in json.loads(sw.read_text())["jumps"].items()}
                          if sw.exists() else {})
         self._guessed_switch: set[int] = set()
+        # each import slot -> the API's parameters, [kind, size] ("i" or "f"), by its name
+        # (data/imports.json, data/import_protos.json); a folded slot (htons_or_ntohs) by its first
+        api_protos = json.loads((ROOT / "data" / "import_protos.json").read_text())["protos"]
+        self.import_params: dict[int, list] = {}
+        for slot, info in json.loads((ROOT / "data" / "imports.json").read_text())["imports"].items():
+            n = info.get("imported_name")
+            n = n if n is None or isinstance(n, str) else n[0]
+            if n in api_protos:
+                self.import_params[int(slot, 16)] = api_protos[n]["params"]
         # __security_check_cookie: `cmp rcx, [rip + __security_cookie]; jne; rol rcx, 0x10`
         self.transparent = set()
         for s in starts:
@@ -744,6 +753,22 @@ class Analyzer:
                     res.slot_reads.add(fam % 4)
 
         # control transfers
+        # a call or tail jump through an import slot reads the API's arguments (tools/import_protos.py):
+        # as an indirect call it read none, and a wrapper that only hands its registers on came out
+        # taking nothing (OsMutexInit, FUN_140262450: `call [InitializeSRWLock]`, so its caller
+        # FUN_1401ca520 dropped the lock and the client crashed at launch, 2026-10-17)
+        if (insn.group(X.X86_GRP_CALL) or insn.group(X.X86_GRP_JUMP)) and len(ops) == 1 \
+                and ops[0].type == X.X86_OP_MEM and ops[0].mem.base == X.X86_REG_RIP:
+            api = self.import_params.get(insn.address + insn.size + ops[0].mem.disp)
+            if api is not None:
+                for pos, (kind, size) in enumerate(api[:4]):
+                    fam = pos + 4 if kind == "f" else pos
+                    width = min(size, 8)
+                    if defs[fam] < width:
+                        use(fam, width)
+                if m == "jmp" and frame.get(X.X86_REG_RSP) == 0 and len(api) > 4:
+                    # a tail jump at the entry's depth hands on the stack arguments too
+                    res.stack = max(res.stack, len(api) - 4)
         if insn.group(X.X86_GRP_CALL):
             if ops and ops[0].type == X.X86_OP_IMM and ops[0].imm in self.transparent:
                 # __security_check_cookie: called at a function's end with the result already in

@@ -2280,7 +2280,7 @@ undefined4 FUN_141083950(undefined8 param_1)
   (*(gen_v16 *)(gen_frame + 0x8)).b[0] = 0;
   (*(undefined1 *)(gen_frame + 0x18)) = 0;
   uVar3 = CALLF(longlong, FUN_1402b30b0)(param_1);
-  cVar1 = CALLF(undefined1, FUN_1407d0960)(param_1, ((code *)REFP(0x140fb4ed0)), (int)uVar3, gen_v16_q0((*(gen_v16 *)(gen_frame + 0x8))));
+  cVar1 = CALLF(undefined1, FUN_1407d0960)(param_1, ((code *)REFP(0x140fb4ed0)), (int)uVar3, (void *)&(*(gen_v16 *)(gen_frame + 0x8)));
   lVar7 = -1;
   if (cVar1 == '\0') {
     pcVar6 = ((char *)(gen_frame + 0x20));

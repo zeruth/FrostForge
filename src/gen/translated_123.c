@@ -2,7 +2,7 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 #define GEN_HITS gen_hits_123
-unsigned int gen_hits_123[57];
+unsigned int gen_hits_123[55];
 
 /* ref: FUN_141ab6df0 */
 undefined8 * FUN_141ab6df0(undefined8 *param_1)
@@ -2532,35 +2532,6 @@ LAB_141af8366:
   return param_5;
 }
 
-/* ref: FUN_141af84f0 */
-undefined4 FUN_141af84f0(void)
-{
-  GEN_HIT(55);
-  CALLF(undefined8, FUN_141af6550)(REFG(undefined1 *, 0x143209480),REFG(undefined1 *, 0x143209480) + REFG(undefined8, 0x143209488) * 0x46a0);
-  REFG(undefined8, 0x143209488) = 0;
-  REFG(undefined4, 0x1432094b0) = 0;
-  REFG(undefined8, 0x143209520) = 0;
-  return 0;
-}
-
-/* ref: FUN_141af85b0 */
-undefined8 FUN_141af85b0(void)
-{
-  GEN_HIT(56);
-  undefined8 uVar1;
-  undefined **ppuVar2;
-  longlong lVar3;
-  
-  ppuVar2 = &REFG(char *, 0x142d309d0);
-  lVar3 = 0x20;
-  do {
-    uVar1 = CALLF(undefined8, FUN_14063e230)(*ppuVar2);
-    ppuVar2 = ppuVar2 + 2;
-    lVar3 = lVar3 + -1;
-  } while (lVar3 != 0);
-  return uVar1;
-}
-
 const unsigned long long gen_hit_addrs_123[] = {
     0x141ab6df0ULL,
     0x141ab6f60ULL,
@@ -2617,7 +2588,5 @@ const unsigned long long gen_hit_addrs_123[] = {
     0x141af7ee0ULL,
     0x141af7f30ULL,
     0x141af7f80ULL,
-    0x141af84f0ULL,
-    0x141af85b0ULL,
 };
 

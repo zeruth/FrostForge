@@ -279,7 +279,7 @@ undefined8 FUN_1405ce210(int param_1, int param_2, undefined4 *param_3)
     (*(int *)(gen_frame + 0x10)) = -2;
     (*(undefined8 *)(gen_frame + 0x18)) = 0;
     (*(longlong * *)(gen_frame + 0x20)) = (*(longlong * *)((char *)&gen_g_142e956d0 + 0x140));
-    piVar2 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e956d0 + 0x140)), gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0))));
+    piVar2 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e956d0 + 0x140)), (void *)&(*(gen_v16 *)(gen_frame + 0x0)));
     (*(int *)(gen_frame + 0x10)) = *piVar2;
     (*(int *)(gen_frame + 0x14)) = piVar2[1];
     (*(undefined8 *)(gen_frame + 0x18)) = *(undefined8 *)(piVar2 + 2);

@@ -2,6 +2,8 @@
 #include "util/Unimplemented.hpp"
 #include <initializer_list>
 
+#include <windows.h>
+
 namespace {
 
 uint8_t s_telemetryStarted;  // DAT_1430d24c4: set when TelemetryInitialize starts the service
@@ -19,25 +21,30 @@ void TelemetryInitialize(blz::function_storage* ids, blz::function_storage* clie
     FROST_UNIMPLEMENTED();
 }
 
-// Allocates and constructs the downloader (0x4f8 bytes, 0x141555800) into *holder. Offline
-// stub: nothing is constructed.
-// ref: FUN_141555d80
+// The downloader runs as translated (tools/translate.py) until it is ported by hand: the client
+// loop's FUN_140222a60 polls it every frame (FUN_1415577d0 locks its +0x460), so the offline
+// stub that left it null faulted there once that loop step stopped being a stub (2026-10-17).
+extern "C" unsigned long long FUN_141555d80(void** holder);
+extern "C" unsigned long long FUN_141557640(void** holder);
+extern "C" unsigned long long FUN_141556340(void** holder);
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+
+// Allocates and constructs the downloader (0x4f8 bytes, 0x141555800) into *holder.
+// translated: FUN_141555d80
 void** WowDownloadCreate(void** holder) {
-    *holder = nullptr;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141555d80(holder);
+    } __except (GenFault(0x141555d80ull, GetExceptionInformation())) {
+    }
     return holder;
 }
 
-// Sets the downloader's started flag (+0x28). Diverged: null-checked while the downloader is
-// a stub.
-// ref: FUN_141557640
+// Sets the downloader's started flag (+0x28).
+// translated: FUN_141557640
 void WowDownloadStart(void** holder) {
-    if (!*holder) {
-        return;
-    }
-    uint8_t* started = static_cast<uint8_t*>(*holder) + 0x28;
-    if (*started == 0) {
-        *started = 1;
+    __try {
+        FUN_141557640(holder);
+    } __except (GenFault(0x141557640ull, GetExceptionInformation())) {
     }
 }
 
@@ -50,10 +57,11 @@ void TelemetryShutdown() {
     }
 }
 
-// The downloader (0x4f8 bytes) destroyed and freed. Offline there is none.
-// ref: FUN_141556340
+// The downloader (0x4f8 bytes) destroyed and freed.
+// translated: FUN_141556340
 void WowDownloadDestroy(void** holder) {
-    if (*holder != nullptr) {
-        FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141556340(holder);
+    } __except (GenFault(0x141556340ull, GetExceptionInformation())) {
     }
 }

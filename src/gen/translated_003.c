@@ -2,7 +2,7 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 #define GEN_HITS gen_hits_003
-unsigned int gen_hits_003[80];
+unsigned int gen_hits_003[76];
 
 /* ref: FUN_1401dd690 */
 int FUN_1401dd690(void)
@@ -24,7 +24,7 @@ int FUN_1401dd800(void)
   GEN_HIT(1);
   int iVar1;
   
-  CALLF(undefined1, FUN_140262450)();
+  CALLF(undefined1, FUN_140262450)(&REFG(undefined8, 0x142e8e280));
   iVar1 = atexit(((code *)REFP(0x1425e2330)));
   return iVar1;
 }
@@ -57,21 +57,10 @@ int FUN_1401df1f0(void)
   return iVar1;
 }
 
-/* ref: FUN_1401df300 */
-int FUN_1401df300(void)
-{
-  GEN_HIT(4);
-  int iVar1;
-  
-  CALLF(undefined1, FUN_140262450)();
-  iVar1 = atexit(((code *)REFP(0x1425e2d90)));
-  return iVar1;
-}
-
 /* ref: FUN_1401df330 */
 int FUN_1401df330(void)
 {
-  GEN_HIT(5);
+  GEN_HIT(4);
   int iVar1;
   
   REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
@@ -85,10 +74,10 @@ int FUN_1401df330(void)
 /* ref: FUN_1401df370 */
 int FUN_1401df370(void)
 {
-  GEN_HIT(6);
+  GEN_HIT(5);
   int iVar1;
   
-  CALLF(undefined1, FUN_1402637c0)();
+  CALLF(undefined1, FUN_1402637c0)(&REFG(undefined8, 0x142e96e08));
   iVar1 = atexit(((code *)REFP(0x1425e2e50)));
   return iVar1;
 }
@@ -96,7 +85,7 @@ int FUN_1401df370(void)
 /* ref: FUN_1401df570 */
 int FUN_1401df570(void)
 {
-  GEN_HIT(7);
+  GEN_HIT(6);
   int iVar1;
   
   CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x142e97a08),0x58,100);
@@ -107,7 +96,7 @@ int FUN_1401df570(void)
 /* ref: FUN_1401df660 */
 int FUN_1401df660(void)
 {
-  GEN_HIT(8);
+  GEN_HIT(7);
   int iVar1;
   
   REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
@@ -121,7 +110,7 @@ int FUN_1401df660(void)
 /* ref: FUN_1401df6b0 */
 int FUN_1401df6b0(void)
 {
-  GEN_HIT(9);
+  GEN_HIT(8);
   int iVar1;
   
   CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x142e97b38),0x300,100);
@@ -132,7 +121,7 @@ int FUN_1401df6b0(void)
 /* ref: FUN_1401df6e0 */
 int FUN_1401df6e0(void)
 {
-  GEN_HIT(10);
+  GEN_HIT(9);
   int iVar1;
   
   CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x142e97ba0),0x68,100);
@@ -143,10 +132,10 @@ int FUN_1401df6e0(void)
 /* ref: FUN_1401df730 */
 int FUN_1401df730(void)
 {
-  GEN_HIT(11);
+  GEN_HIT(10);
   int iVar1;
   
-  CALLF(undefined1, FUN_140262450)();
+  CALLF(undefined1, FUN_140262450)(&REFG(undefined8, 0x142e97b98));
   iVar1 = atexit(((code *)REFP(0x1425e35e0)));
   return iVar1;
 }
@@ -154,7 +143,7 @@ int FUN_1401df730(void)
 /* ref: FUN_1401df7d0 */
 int FUN_1401df7d0(void)
 {
-  GEN_HIT(12);
+  GEN_HIT(11);
   int iVar1;
   
   REFG(undefined8, 0x142cf5358) = 0x142cf5351;
@@ -171,7 +160,7 @@ int FUN_1401df7d0(void)
 /* ref: FUN_1401df850 */
 int FUN_1401df850(void)
 {
-  GEN_HIT(13);
+  GEN_HIT(12);
   int iVar1;
   
   CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x142e99c40),0x18,0xaaa);
@@ -182,7 +171,7 @@ int FUN_1401df850(void)
 /* ref: FUN_1401df920 */
 int FUN_1401df920(void)
 {
-  GEN_HIT(14);
+  GEN_HIT(13);
   int iVar1;
   
   REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
@@ -196,7 +185,7 @@ int FUN_1401df920(void)
 /* ref: FUN_1401df960 */
 int FUN_1401df960(void)
 {
-  GEN_HIT(15);
+  GEN_HIT(14);
   int iVar1;
   
   CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x142e99cb8),0x350,5);
@@ -207,7 +196,7 @@ int FUN_1401df960(void)
 /* ref: FUN_1401df9d0 */
 int FUN_1401df9d0(void)
 {
-  GEN_HIT(16);
+  GEN_HIT(15);
   int iVar1;
   
   CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x142e99d70),0x2a0,0xc30);
@@ -218,7 +207,7 @@ int FUN_1401df9d0(void)
 /* ref: FUN_1401dfa00 */
 int FUN_1401dfa00(void)
 {
-  GEN_HIT(17);
+  GEN_HIT(16);
   int iVar1;
   
   CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x142e99d30),0xf8,0x14);
@@ -229,7 +218,7 @@ int FUN_1401dfa00(void)
 /* ref: FUN_1401dfa40 */
 int FUN_1401dfa40(void)
 {
-  GEN_HIT(18);
+  GEN_HIT(17);
   int iVar1;
   
   CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x142e99da0),0x2a0,100);
@@ -240,7 +229,7 @@ int FUN_1401dfa40(void)
 /* ref: FUN_1401dfb00 */
 int FUN_1401dfb00(void)
 {
-  GEN_HIT(19);
+  GEN_HIT(18);
   int iVar1;
   
   REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
@@ -254,7 +243,7 @@ int FUN_1401dfb00(void)
 /* ref: FUN_1401dfb60 */
 int FUN_1401dfb60(void)
 {
-  GEN_HIT(20);
+  GEN_HIT(19);
   uint uVar1;
   int iVar2;
   char *pcVar3;
@@ -290,7 +279,7 @@ int FUN_1401dfb60(void)
 /* ref: FUN_1401dfdc0 */
 int FUN_1401dfdc0(void)
 {
-  GEN_HIT(21);
+  GEN_HIT(20);
   int iVar1;
   
   REFG(undefined8, 0x142e9a408) = CALLF(ulonglong, FUN_140216fc0)("argetAutoEnemy",0xaf63e94c860202a3);
@@ -321,7 +310,7 @@ int FUN_1401dfdc0(void)
 /* ref: FUN_1401dfee0 */
 int FUN_1401dfee0(void)
 {
-  GEN_HIT(22);
+  GEN_HIT(21);
   int iVar1;
   
   REFG(undefined8, 0x142e9a4c0) = CALLF(ulonglong, FUN_140216fc0)("argetAutoFriend",0xaf63e94c860202a3);
@@ -352,7 +341,7 @@ int FUN_1401dfee0(void)
 /* ref: FUN_1401e0000 */
 int FUN_1401e0000(void)
 {
-  GEN_HIT(23);
+  GEN_HIT(22);
   int iVar1;
   
   REFG(undefined8, 0x142e9a630) = CALLF(ulonglong, FUN_140216fc0)("argetAutoLock",0xaf63e94c860202a3);
@@ -383,7 +372,7 @@ int FUN_1401e0000(void)
 /* ref: FUN_1401e0130 */
 int FUN_1401e0130(void)
 {
-  GEN_HIT(24);
+  GEN_HIT(23);
   int iVar1;
   
   REFG(undefined8, 0x142e9a578) = CALLF(ulonglong, FUN_140216fc0)("argetEnemyAttacker",0xaf63e94c860202a3);
@@ -414,7 +403,7 @@ int FUN_1401e0130(void)
 /* ref: FUN_1401e0260 */
 int FUN_1401e0260(void)
 {
-  GEN_HIT(25);
+  GEN_HIT(24);
   int iVar1;
   
   REFG(undefined8, 0x142e9a338) = CALLF(ulonglong, FUN_140216fc0)("argetNearestUseNew",0xaf63e94c860202a3);
@@ -446,7 +435,7 @@ int FUN_1401e0260(void)
 /* ref: FUN_1401e0510 */
 int FUN_1401e0510(void)
 {
-  GEN_HIT(26);
+  GEN_HIT(25);
   int iVar1;
   
   REFG(undefined8, 0x142e9bf80) = CALLF(ulonglong, FUN_140216fc0)("oftTargetIconEnemy",0xaf63ee4c86020b22);
@@ -477,7 +466,7 @@ int FUN_1401e0510(void)
 /* ref: FUN_1401e0630 */
 int FUN_1401e0630(void)
 {
-  GEN_HIT(27);
+  GEN_HIT(26);
   int iVar1;
   
   REFG(undefined8, 0x142e9c038) = CALLF(ulonglong, FUN_140216fc0)("oftTargetIconFriend",0xaf63ee4c86020b22);
@@ -508,7 +497,7 @@ int FUN_1401e0630(void)
 /* ref: FUN_1401e0750 */
 int FUN_1401e0750(void)
 {
-  GEN_HIT(28);
+  GEN_HIT(27);
   int iVar1;
   
   REFG(undefined8, 0x142e9c1a8) = CALLF(ulonglong, FUN_140216fc0)("oftTargetIconGameObject",0xaf63ee4c86020b22);
@@ -540,7 +529,7 @@ int FUN_1401e0750(void)
 /* ref: FUN_1401e0870 */
 int FUN_1401e0870(void)
 {
-  GEN_HIT(29);
+  GEN_HIT(28);
   int iVar1;
   
   REFG(undefined8, 0x142e9c0f0) = CALLF(ulonglong, FUN_140216fc0)("oftTargetIconInteract",0xaf63ee4c86020b22);
@@ -571,7 +560,7 @@ int FUN_1401e0870(void)
 /* ref: FUN_1401e09a0 */
 int FUN_1401e09a0(void)
 {
-  GEN_HIT(30);
+  GEN_HIT(29);
   int iVar1;
   
   REFG(undefined8, 0x142e9c5f8) = CALLF(ulonglong, FUN_140216fc0)("oftTargetLowPriorityIcons",0xaf63ee4c86020b22);
@@ -604,7 +593,7 @@ int FUN_1401e09a0(void)
 /* ref: FUN_1401e0ac0 */
 int FUN_1401e0ac0(void)
 {
-  GEN_HIT(31);
+  GEN_HIT(30);
   int iVar1;
   
   REFG(undefined8, 0x142e9bd58) = CALLF(ulonglong, FUN_140216fc0)("oftTargetNameplateEnemy",0xaf63ee4c86020b22);
@@ -635,7 +624,7 @@ int FUN_1401e0ac0(void)
 /* ref: FUN_1401e0bf0 */
 int FUN_1401e0bf0(void)
 {
-  GEN_HIT(32);
+  GEN_HIT(31);
   int iVar1;
   
   REFG(undefined8, 0x142e9be10) = CALLF(ulonglong, FUN_140216fc0)("oftTargetNameplateFriend",0xaf63ee4c86020b22);
@@ -666,7 +655,7 @@ int FUN_1401e0bf0(void)
 /* ref: FUN_1401e0d10 */
 int FUN_1401e0d10(void)
 {
-  GEN_HIT(33);
+  GEN_HIT(32);
   int iVar1;
   
   REFG(undefined8, 0x142e9bec8) = CALLF(ulonglong, FUN_140216fc0)("oftTargetNameplateInteract",0xaf63ee4c86020b22);
@@ -697,7 +686,7 @@ int FUN_1401e0d10(void)
 /* ref: FUN_1401e1450 */
 int FUN_1401e1450(void)
 {
-  GEN_HIT(34);
+  GEN_HIT(33);
   undefined8 *puVar1;
   uint uVar2;
   int iVar3;
@@ -744,7 +733,7 @@ int FUN_1401e1450(void)
 /* ref: FUN_1401e2020 */
 int FUN_1401e2020(void)
 {
-  GEN_HIT(35);
+  GEN_HIT(34);
   int iVar1;
   
   REFG(undefined8, 0x142e9bbe8) = CALLF(ulonglong, FUN_140216fc0)("oftTargetInteractRangeIsHard",0xaf63ee4c86020b22);
@@ -777,7 +766,7 @@ int FUN_1401e2020(void)
 /* ref: FUN_1401e2cc0 */
 int FUN_1401e2cc0(void)
 {
-  GEN_HIT(36);
+  GEN_HIT(35);
   int iVar1;
   
   REFG(undefined8, 0x142e9b248) = CALLF(ulonglong, FUN_140216fc0)("argetPriorityCombatLockContextualRelaxation",0xaf63e94c860202a3);
@@ -809,7 +798,7 @@ int FUN_1401e2cc0(void)
 /* ref: FUN_1401e2f10 */
 int FUN_1401e2f10(void)
 {
-  GEN_HIT(37);
+  GEN_HIT(36);
   int iVar1;
   
   REFG(undefined8, 0x142e9ac70) = CALLF(ulonglong, FUN_140216fc0)("argetPriorityContinueFromManualTarget",0xaf63e94c860202a3);
@@ -842,7 +831,7 @@ int FUN_1401e2f10(void)
 /* ref: FUN_1401e3760 */
 int FUN_1401e3760(void)
 {
-  GEN_HIT(38);
+  GEN_HIT(37);
   int iVar1;
   
   REFG(undefined8, 0x142e9aa48) = CALLF(ulonglong, FUN_140216fc0)("argetPriorityPvpLock",0xaf63e94c860202a3);
@@ -873,7 +862,7 @@ int FUN_1401e3760(void)
 /* ref: FUN_1401e3880 */
 int FUN_1401e3880(void)
 {
-  GEN_HIT(39);
+  GEN_HIT(38);
   int iVar1;
   
   REFG(undefined8, 0x142e9ab00) = CALLF(ulonglong, FUN_140216fc0)("argetPriorityPvpLockHighlight",0xaf63e94c860202a3);
@@ -905,7 +894,7 @@ int FUN_1401e3880(void)
 /* ref: FUN_1401e3ad0 */
 int FUN_1401e3ad0(void)
 {
-  GEN_HIT(40);
+  GEN_HIT(39);
   int iVar1;
   
   REFG(undefined8, 0x142e9abb8) = CALLF(ulonglong, FUN_140216fc0)("argetPriorityValueBank",0xaf63e94c860202a3);
@@ -936,7 +925,7 @@ int FUN_1401e3ad0(void)
 /* ref: FUN_1401e3ca0 */
 int FUN_1401e3ca0(void)
 {
-  GEN_HIT(41);
+  GEN_HIT(40);
   int iVar1;
   
   CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x142e9cbc8),0x48,0x20);
@@ -947,7 +936,7 @@ int FUN_1401e3ca0(void)
 /* ref: FUN_1401e3cd0 */
 int FUN_1401e3cd0(void)
 {
-  GEN_HIT(42);
+  GEN_HIT(41);
   int iVar1;
   
   CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x142e9cb78),0x138,0x20);
@@ -958,7 +947,7 @@ int FUN_1401e3cd0(void)
 /* ref: FUN_1401e3d00 */
 int FUN_1401e3d00(void)
 {
-  GEN_HIT(43);
+  GEN_HIT(42);
   int iVar1;
   
   CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x142e9cba0),0xb0,0x20);
@@ -969,7 +958,7 @@ int FUN_1401e3d00(void)
 /* ref: FUN_1401e3de0 */
 int FUN_1401e3de0(void)
 {
-  GEN_HIT(44);
+  GEN_HIT(43);
   int iVar1;
   
   REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
@@ -983,7 +972,7 @@ int FUN_1401e3de0(void)
 /* ref: FUN_1401e3e40 */
 int FUN_1401e3e40(void)
 {
-  GEN_HIT(45);
+  GEN_HIT(44);
   int iVar1;
   
   REFG(undefined8, 0x142cf5ec8) = 0x142cf5ec1;
@@ -1000,10 +989,10 @@ int FUN_1401e3e40(void)
 /* ref: FUN_1401e3ef0 */
 int FUN_1401e3ef0(void)
 {
-  GEN_HIT(46);
+  GEN_HIT(45);
   int iVar1;
   
-  CALLF(undefined1, FUN_140262450)();
+  CALLF(undefined1, FUN_140262450)(&REFG(undefined8, 0x14309d078));
   iVar1 = atexit(((code *)REFP(0x1425e58b0)));
   return iVar1;
 }
@@ -1011,7 +1000,7 @@ int FUN_1401e3ef0(void)
 /* ref: FUN_1401e4360 */
 int FUN_1401e4360(void)
 {
-  GEN_HIT(47);
+  GEN_HIT(46);
   int iVar1;
   
   REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
@@ -1025,7 +1014,7 @@ int FUN_1401e4360(void)
 /* ref: FUN_1401e4420 */
 int FUN_1401e4420(void)
 {
-  GEN_HIT(48);
+  GEN_HIT(47);
   int iVar1;
   
   REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
@@ -1039,7 +1028,7 @@ int FUN_1401e4420(void)
 /* ref: FUN_1401e4490 */
 int FUN_1401e4490(void)
 {
-  GEN_HIT(49);
+  GEN_HIT(48);
   int iVar1;
   
   CALLF(byte *, FUN_14031e970)(&REFG(undefined8, 0x1430a0df0),3,0x49,0x7b);
@@ -1050,7 +1039,7 @@ int FUN_1401e4490(void)
 /* ref: FUN_1401e4550 */
 int FUN_1401e4550(void)
 {
-  GEN_HIT(50);
+  GEN_HIT(49);
   int iVar1;
   
   REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
@@ -1064,7 +1053,7 @@ int FUN_1401e4550(void)
 /* ref: FUN_1401e4580 */
 int FUN_1401e4580(void)
 {
-  GEN_HIT(51);
+  GEN_HIT(50);
   int iVar1;
   
   REFG(undefined8, 0x142cfaef0) = 0x142cfaee9;
@@ -1072,9 +1061,9 @@ int FUN_1401e4580(void)
   REFG(undefined8, 0x142cfafb0) = 0x142cfafa9;
   REFG(undefined8, 0x142cfafc8) = 0x142cfafc1;
   REFG(undefined8, 0x142cfafe0) = 0x142cfafd9;
-  CALLF(undefined1, FUN_140262450)();
-  CALLF(undefined1, FUN_140262450)();
-  CALLF(undefined1, FUN_140262450)();
+  CALLF(undefined1, FUN_140262450)(&REFG(undefined8, 0x142cfafe8));
+  CALLF(undefined1, FUN_140262450)(&REFG(undefined8, 0x142cfaff0));
+  CALLF(undefined1, FUN_140262450)(&REFG(undefined8, 0x142cfaff8));
   REFG(undefined4, 0x142cfb000) = 100;
   REFG(undefined8, 0x142cfaef8) = 0;
   iVar1 = atexit(((code *)REFP(0x1425e6a70)));
@@ -1084,7 +1073,7 @@ int FUN_1401e4580(void)
 /* ref: FUN_1401e4630 */
 int FUN_1401e4630(void)
 {
-  GEN_HIT(52);
+  GEN_HIT(51);
   int iVar1;
   
   CALLF(longlong, FUN_142362f80)(&REFG(undefined8, 0x1430a0ef8));
@@ -1095,7 +1084,7 @@ int FUN_1401e4630(void)
 /* ref: FUN_1401e4650 */
 int FUN_1401e4650(void)
 {
-  GEN_HIT(53);
+  GEN_HIT(52);
   int iVar1;
   
   REFG(undefined8, 0x142cfb028) = 0x142cfb021;
@@ -1112,7 +1101,7 @@ int FUN_1401e4650(void)
 /* ref: FUN_1401e4700 */
 int FUN_1401e4700(void)
 {
-  GEN_HIT(54);
+  GEN_HIT(53);
   int iVar1;
   
   CALLF(longlong, FUN_142362f80)(&REFG(undefined8, 0x1430a0f80));
@@ -1123,10 +1112,10 @@ int FUN_1401e4700(void)
 /* ref: FUN_1401e4720 */
 int FUN_1401e4720(void)
 {
-  GEN_HIT(55);
+  GEN_HIT(54);
   int iVar1;
   
-  CALLF(undefined1, FUN_1402637c0)();
+  CALLF(undefined1, FUN_1402637c0)(&REFG(undefined8, 0x1430a0fe0));
   iVar1 = atexit(((code *)REFP(0x1425e6e60)));
   return iVar1;
 }
@@ -1134,10 +1123,10 @@ int FUN_1401e4720(void)
 /* ref: FUN_1401e4740 */
 int FUN_1401e4740(void)
 {
-  GEN_HIT(56);
+  GEN_HIT(55);
   int iVar1;
   
-  CALLF(undefined1, FUN_140262450)();
+  CALLF(undefined1, FUN_140262450)(&REFG(undefined8, 0x1430a1028));
   iVar1 = atexit(((code *)REFP(0x1425e6e70)));
   return iVar1;
 }
@@ -1145,13 +1134,13 @@ int FUN_1401e4740(void)
 /* ref: FUN_1401e4760 */
 int FUN_1401e4760(void)
 {
-  GEN_HIT(57);
+  GEN_HIT(56);
   int iVar1;
   
   REFG(undefined8, 0x142cfb350) = 0x142cfb349;
   REFG(undefined8, 0x142cfb368) = 0x142cfb361;
   REFG(undefined8, 0x142cfb380) = 0x142cfb379;
-  CALLF(undefined1, FUN_1402637c0)();
+  CALLF(undefined1, FUN_1402637c0)(&REFG(undefined8, 0x142cfb388));
   REFG(undefined8, 0x142cfb310) = 0;
   REFG(undefined8, 0x142cfb308) = 0;
   iVar1 = atexit(((code *)REFP(0x1425e6e80)));
@@ -1161,7 +1150,7 @@ int FUN_1401e4760(void)
 /* ref: FUN_1401e4a60 */
 int FUN_1401e4a60(void)
 {
-  GEN_HIT(58);
+  GEN_HIT(57);
   int iVar1;
   
   REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
@@ -1175,7 +1164,7 @@ int FUN_1401e4a60(void)
 /* ref: FUN_1401e4ab0 */
 int FUN_1401e4ab0(void)
 {
-  GEN_HIT(59);
+  GEN_HIT(58);
   int iVar1;
   
   REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
@@ -1189,7 +1178,7 @@ int FUN_1401e4ab0(void)
 /* ref: FUN_1401e4af0 */
 int FUN_1401e4af0(void)
 {
-  GEN_HIT(60);
+  GEN_HIT(59);
   int iVar1;
   
   REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
@@ -1200,21 +1189,10 @@ int FUN_1401e4af0(void)
   return iVar1;
 }
 
-/* ref: FUN_1401e4c40 */
-int FUN_1401e4c40(void)
-{
-  GEN_HIT(61);
-  int iVar1;
-  
-  CALLF(undefined1, FUN_140262450)();
-  iVar1 = atexit(((code *)REFP(0x1425e72d0)));
-  return iVar1;
-}
-
 /* ref: FUN_1401e4cd0 */
 int FUN_1401e4cd0(void)
 {
-  GEN_HIT(62);
+  GEN_HIT(60);
   uint uVar1;
   int iVar2;
   uint uVar3;
@@ -1301,7 +1279,7 @@ int FUN_1401e4cd0(void)
 /* ref: FUN_1401e4f00 */
 int FUN_1401e4f00(void)
 {
-  GEN_HIT(63);
+  GEN_HIT(61);
   int iVar1;
   
   CALLF(undefined1, FUN_14124ff80)(&REFG(undefined1 *, 0x142cfbbb0),7);
@@ -1309,21 +1287,10 @@ int FUN_1401e4f00(void)
   return iVar1;
 }
 
-/* ref: FUN_1401e4f30 */
-int FUN_1401e4f30(void)
-{
-  GEN_HIT(64);
-  int iVar1;
-  
-  CALLF(undefined1, FUN_140262450)();
-  iVar1 = atexit(((code *)REFP(0x1425e75f0)));
-  return iVar1;
-}
-
 /* ref: FUN_1401e4f50 */
 int FUN_1401e4f50(void)
 {
-  GEN_HIT(65);
+  GEN_HIT(62);
   int iVar1;
   
   CALLF(undefined8, FUN_141240d80)(&REFG(undefined8, 0x142cfbc30));
@@ -1342,7 +1309,7 @@ int FUN_1401e4f50(void)
 /* ref: FUN_1401e50d0 */
 int FUN_1401e50d0(void)
 {
-  GEN_HIT(66);
+  GEN_HIT(63);
   int iVar1;
   
   REFG(undefined4, 0x1430d0280) = REFG(undefined4, 0x1430d0280) + 1;
@@ -1356,10 +1323,10 @@ int FUN_1401e50d0(void)
 /* ref: FUN_1401e5100 */
 int FUN_1401e5100(void)
 {
-  GEN_HIT(67);
+  GEN_HIT(64);
   int iVar1;
   
-  CALLF(undefined1, FUN_1402637c0)();
+  CALLF(undefined1, FUN_1402637c0)(&REFG(undefined8, 0x1430a5490));
   iVar1 = atexit(((code *)REFP(0x1425e78e0)));
   return iVar1;
 }
@@ -1367,10 +1334,10 @@ int FUN_1401e5100(void)
 /* ref: FUN_1401e5130 */
 int FUN_1401e5130(void)
 {
-  GEN_HIT(68);
+  GEN_HIT(65);
   int iVar1;
   
-  CALLF(undefined1, FUN_1402637c0)();
+  CALLF(undefined1, FUN_1402637c0)(&REFG(undefined8, 0x1430a54f8));
   iVar1 = atexit(((code *)REFP(0x1425e7940)));
   return iVar1;
 }
@@ -1378,7 +1345,7 @@ int FUN_1401e5130(void)
 /* ref: FUN_1401e5150 */
 int FUN_1401e5150(void)
 {
-  GEN_HIT(69);
+  GEN_HIT(66);
   int iVar1;
   
   CALLF(longlong, FUN_142362f80)(&REFG(undefined8, 0x1430a5538));
@@ -1386,21 +1353,10 @@ int FUN_1401e5150(void)
   return iVar1;
 }
 
-/* ref: FUN_1401e5180 */
-int FUN_1401e5180(void)
-{
-  GEN_HIT(70);
-  int iVar1;
-  
-  CALLF(undefined1, FUN_140262450)();
-  iVar1 = atexit(((code *)REFP(0x1425e7a50)));
-  return iVar1;
-}
-
 /* ref: FUN_1401e51b0 */
 int FUN_1401e51b0(void)
 {
-  GEN_HIT(71);
+  GEN_HIT(67);
   int iVar1;
   
   CALLF(longlong, FUN_142362f80)(&REFG(undefined8, 0x1430a5570));
@@ -1411,7 +1367,7 @@ int FUN_1401e51b0(void)
 /* ref: FUN_1401e52b0 */
 int FUN_1401e52b0(void)
 {
-  GEN_HIT(72);
+  GEN_HIT(68);
   int iVar1;
   
   REFG(undefined8, 0x142cfbea8) = 0x142cfbea1;
@@ -1429,10 +1385,10 @@ int FUN_1401e52b0(void)
 /* ref: FUN_1401e54d0 */
 int FUN_1401e54d0(void)
 {
-  GEN_HIT(73);
+  GEN_HIT(69);
   int iVar1;
   
-  CALLF(undefined1, FUN_140262450)();
+  CALLF(undefined1, FUN_140262450)(&REFG(undefined8, 0x1430a5b80));
   iVar1 = atexit(((code *)REFP(0x1425e8380)));
   return iVar1;
 }
@@ -1440,7 +1396,7 @@ int FUN_1401e54d0(void)
 /* ref: FUN_1401e54f0 */
 int FUN_1401e54f0(void)
 {
-  GEN_HIT(74);
+  GEN_HIT(70);
   int iVar1;
   
   CALLF(longlong, FUN_142362f80)(&REFG(undefined8, 0x1430a5b60));
@@ -1451,10 +1407,10 @@ int FUN_1401e54f0(void)
 /* ref: FUN_1401e5570 */
 int FUN_1401e5570(void)
 {
-  GEN_HIT(75);
+  GEN_HIT(71);
   int iVar1;
   
-  CALLF(undefined1, FUN_140262450)();
+  CALLF(undefined1, FUN_140262450)(&REFG(undefined8, 0x1430a5ce0));
   iVar1 = atexit(((code *)REFP(0x1425e8450)));
   return iVar1;
 }
@@ -1462,7 +1418,7 @@ int FUN_1401e5570(void)
 /* ref: FUN_1401e55c0 */
 int FUN_1401e55c0(void)
 {
-  GEN_HIT(76);
+  GEN_HIT(72);
   int iVar1;
   
   CALLF(undefined8 *, FUN_1412b22a0)(&REFG(undefined8, 0x1430a5db0));
@@ -1473,7 +1429,7 @@ int FUN_1401e55c0(void)
 /* ref: FUN_1401e5600 */
 int FUN_1401e5600(void)
 {
-  GEN_HIT(77);
+  GEN_HIT(73);
   int iVar1;
   
   CALLF(undefined4, FUN_14228dec0)(&REFG(undefined8, 0x1430a6138));
@@ -1589,10 +1545,10 @@ int FUN_1401e5600(void)
 /* ref: FUN_1401e5940 */
 int FUN_1401e5940(void)
 {
-  GEN_HIT(78);
+  GEN_HIT(74);
   int iVar1;
   
-  CALLF(undefined1, FUN_140262450)();
+  CALLF(undefined1, FUN_140262450)(&REFG(undefined8, 0x1430a79f0));
   iVar1 = atexit(((code *)REFP(0x1425e8800)));
   return iVar1;
 }
@@ -1600,7 +1556,7 @@ int FUN_1401e5940(void)
 /* ref: FUN_1401e5970 */
 undefined8 FUN_1401e5970(void)
 {
-  GEN_HIT(79);
+  GEN_HIT(75);
   REFG(undefined8, 0x1430a8490) = CALLF(ulonglong, FUN_140263440)();
   return REFG(undefined8, 0x1430a8490);
 }
@@ -1610,7 +1566,6 @@ const unsigned long long gen_hit_addrs_003[] = {
     0x1401dd800ULL,
     0x1401dd8d0ULL,
     0x1401df1f0ULL,
-    0x1401df300ULL,
     0x1401df330ULL,
     0x1401df370ULL,
     0x1401df570ULL,
@@ -1667,16 +1622,13 @@ const unsigned long long gen_hit_addrs_003[] = {
     0x1401e4a60ULL,
     0x1401e4ab0ULL,
     0x1401e4af0ULL,
-    0x1401e4c40ULL,
     0x1401e4cd0ULL,
     0x1401e4f00ULL,
-    0x1401e4f30ULL,
     0x1401e4f50ULL,
     0x1401e50d0ULL,
     0x1401e5100ULL,
     0x1401e5130ULL,
     0x1401e5150ULL,
-    0x1401e5180ULL,
     0x1401e51b0ULL,
     0x1401e52b0ULL,
     0x1401e54d0ULL,

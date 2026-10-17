@@ -629,7 +629,7 @@ undefined8 FUN_1412a1690(longlong *param_1, longlong param_2, char param_3, char
     *(undefined8 *)(pfVar31 + 0x3c) = uVar33;
     *(ulonglong *)(pfVar31 + 0x3e) = (ulonglong)uVar5;
   }
-  uVar33 = (**(code **)(*param_1 + 0x170))(param_1,0,1,fVar41);
+  uVar33 = ((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long, float))(**(code **)(*param_1 + 0x170)))((unsigned long long)(param_1),(unsigned long long)(0),(unsigned long long)(1),(float)(fVar41));
   return uVar33;
 }
 

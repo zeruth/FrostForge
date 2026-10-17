@@ -1473,7 +1473,7 @@ undefined4 FUN_1413a3e00(longlong param_1, undefined8 param_2)
     bVar1 = true;
   }
   if ((*(code * *)(gen_frame + 0x8)) != ((code *)REFP(0x1402112e0))) {
-    (*(*(code * *)(gen_frame + 0x8)))(gen_v16_q0((*(gen_v16 *)(gen_frame + 0x10))), 0, 0);
+    (*(*(code * *)(gen_frame + 0x8)))((void *)&(*(gen_v16 *)(gen_frame + 0x10)), 0, 0);
   }
   if (!bVar1) {
     iVar3 = CALLF(undefined4, FUN_1405daff0)(param_1,&(*(undefined8 *)(gen_frame + 0x30)));
@@ -7288,29 +7288,27 @@ undefined8 FUN_1413b8430(longlong param_1, longlong param_2, longlong param_3, i
 undefined4 FUN_1413b8750(longlong param_1, longlong param_2, int param_3)
 {
   GEN_HIT(112);
+  __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(undefined8) > 0x48 ? 0x10 + sizeof(undefined8) : 0x48)];
   undefined8 uVar1;
   longlong lVar2;
   uint uVar3;
   ulonglong uVar4;
   ulonglong uVar5;
   float *pfVar6;
-                                  
+/*                              */
   ulonglong uVar7;
   longlong lVar8;
   ulonglong uVar9;
-  undefined8 local_48;
-  undefined8 uStack_40;
-  undefined8 local_38;
   
-  local_38 = 0;
+  (*(undefined8 *)(gen_frame + 0x10)) = 0;
   pfVar6 = (float *)(param_2 + 0xa0);
   if (param_3 == 0) {
     pfVar6 = (float *)(param_1 + 0x3bc);
   }
-  local_48 = 0;
-  uStack_40 = 0;
+  (*(undefined8 *)(gen_frame + 0x0)) = 0;
+  (*(undefined8 *)(gen_frame + 0x8)) = 0;
   uVar3 = CALLF(float, FUN_14142b900)(param_1,REFG(float, 0x14272c5c8),
-                        CONCAT71((int7)(CONCAT44(0,param_3) >> 8),1),&local_48);
+                        CONCAT71((int7)(CONCAT44(0,param_3) >> 8),1),&(*(undefined8 *)(gen_frame + 0x0)));
   uVar4 = (ulonglong)uVar3;
   uVar7 = *(ulonglong *)(param_1 + 400);
   if (((uVar7 & 1) != 0) || (uVar7 == 0)) {
@@ -7356,15 +7354,15 @@ undefined4 FUN_1413b8750(longlong param_1, longlong param_2, int param_3)
                ((*(uint *)(uVar4 + 0x10) & 0x80000) != 0)) {
               *(int *)(param_2 + 0x10c) = *(int *)(param_2 + 0x10c) + 1;
             }
-            if (((((*(float *)(lVar2 + 100) <= (*(undefined4 *)((char *)&uStack_40 + 4))) &&
-                  (*(float *)(lVar2 + 0x68) <= (float)local_38)) &&
-                 (*(float *)(lVar2 + 0x6c) <= (*(undefined4 *)((char *)&local_38 + 4)))) &&
-                (((float)local_48 < *(float *)(lVar2 + 0x70) ||
-                  (float)local_48 == *(float *)(lVar2 + 0x70) &&
-                 ((*(undefined4 *)((char *)&local_48 + 4)) < *(float *)(lVar2 + 0x74) ||
-                  (*(undefined4 *)((char *)&local_48 + 4)) == *(float *)(lVar2 + 0x74))))) &&
-               ((float)uStack_40 < *(float *)(lVar2 + 0x78) ||
-                (float)uStack_40 == *(float *)(lVar2 + 0x78))) {
+            if (((((*(float *)(lVar2 + 100) <= (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4))) &&
+                  (*(float *)(lVar2 + 0x68) <= (float)(*(undefined8 *)(gen_frame + 0x10)))) &&
+                 (*(float *)(lVar2 + 0x6c) <= (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)))) &&
+                (((float)(*(undefined8 *)(gen_frame + 0x0)) < *(float *)(lVar2 + 0x70) ||
+                  (float)(*(undefined8 *)(gen_frame + 0x0)) == *(float *)(lVar2 + 0x70) &&
+                 ((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) < *(float *)(lVar2 + 0x74) ||
+                  (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) == *(float *)(lVar2 + 0x74))))) &&
+               ((float)(*(undefined8 *)(gen_frame + 0x8)) < *(float *)(lVar2 + 0x78) ||
+                (float)(*(undefined8 *)(gen_frame + 0x8)) == *(float *)(lVar2 + 0x78))) {
               *(int *)(param_2 + 0xe8) = *(int *)(param_2 + 0xe8) + 1;
               uVar4 = CALLF(longlong, FUN_141383ba0)(uVar1,0,*(undefined4 *)(lVar2 + 0x48),0);
               if (uVar4 != 0) {
@@ -7566,20 +7564,20 @@ uint FUN_1413b9360(longlong param_1, longlong param_2)
   ulonglong uVar14;
   uint uVar15;
   ulonglong uVar16;
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       
+/*                                   */
+/*                                   */
+/*                                   */
+/*                                   */
+/*                                   */
+/*                                   */
+/*                                   */
+/*                                   */
+/*                                   */
+/*                                   */
+/*                                   */
+/*                                   */
+/*                                   */
+/*                                   */
   
   fVar2 = *(float *)(param_1 + 0x374);
   lVar9 = 0x38c;
@@ -7656,6 +7654,7 @@ uint FUN_1413b9360(longlong param_1, longlong param_2)
 undefined4 FUN_1413b9640(longlong param_1, longlong param_2, longlong param_3)
 {
   GEN_HIT(116);
+  __declspec(align(16)) unsigned char gen_frame[(0x20 + sizeof(undefined *) > 0x58 ? 0x20 + sizeof(undefined *) : 0x58)];
   longlong lVar1;
   byte bVar2;
   int iVar3;
@@ -7667,12 +7666,10 @@ undefined4 FUN_1413b9640(longlong param_1, longlong param_2, longlong param_3)
   longlong lVar9;
   int *piVar10;
   uint uVar11;
-                                       
-                                       
-                                       
-                                       
-  undefined *local_58 [4];
-  undefined *local_38;
+/*                                   */
+/*                                   */
+/*                                   */
+/*                                   */
   
   uVar7 = *(uint *)(param_3 + 8);
   if ((uVar7 & 2) == 0) {
@@ -7693,12 +7690,12 @@ undefined4 FUN_1413b9640(longlong param_1, longlong param_2, longlong param_3)
       if (bVar2 == 0) {
         uVar11 = (uint)(*(longlong *)(lVar9 + 0x38) == 0);
       }
-      local_58[0] = &REFG(undefined8, 0x1426f9770);
-      local_58[1] = &REFG(undefined8, 0x142738580);
-      local_58[2] = &REFG(undefined8, 0x142738588);
-      local_58[3] = &REFG(undefined8, 0x142738590);
-      local_38 = &REFG(undefined8, 0x142738598);
-      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",0,local_58[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
+      ((undefined * *)(gen_frame + 0x0))[0] = &REFG(undefined8, 0x1426f9770);
+      ((undefined * *)(gen_frame + 0x0))[1] = &REFG(undefined8, 0x142738580);
+      ((undefined * *)(gen_frame + 0x0))[2] = &REFG(undefined8, 0x142738588);
+      ((undefined * *)(gen_frame + 0x0))[3] = &REFG(undefined8, 0x142738590);
+      (*(undefined * *)(gen_frame + 0x20)) = &REFG(undefined8, 0x142738598);
+      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",0,((undefined * *)(gen_frame + 0x0))[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
                                      (uint)(*(longlong *)(lVar9 + 0x38) != 0))),(unsigned long long)(CONCAT44(0,uVar11)),(unsigned long long)(CONCAT44(0,(uint)bVar2)));
     }
     lVar9 = *(longlong *)(param_3 + 0x60);
@@ -7708,12 +7705,12 @@ undefined4 FUN_1413b9640(longlong param_1, longlong param_2, longlong param_3)
       if (bVar2 == 0) {
         uVar11 = (uint)(*(longlong *)(lVar9 + 0x38) == 0);
       }
-      local_58[0] = &REFG(undefined8, 0x1426f9770);
-      local_58[1] = &REFG(undefined8, 0x142738580);
-      local_58[2] = &REFG(undefined8, 0x142738588);
-      local_58[3] = &REFG(undefined8, 0x142738590);
-      local_38 = &REFG(undefined8, 0x142738598);
-      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",1,local_58[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
+      ((undefined * *)(gen_frame + 0x0))[0] = &REFG(undefined8, 0x1426f9770);
+      ((undefined * *)(gen_frame + 0x0))[1] = &REFG(undefined8, 0x142738580);
+      ((undefined * *)(gen_frame + 0x0))[2] = &REFG(undefined8, 0x142738588);
+      ((undefined * *)(gen_frame + 0x0))[3] = &REFG(undefined8, 0x142738590);
+      (*(undefined * *)(gen_frame + 0x20)) = &REFG(undefined8, 0x142738598);
+      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",1,((undefined * *)(gen_frame + 0x0))[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
                                      (uint)(*(longlong *)(lVar9 + 0x38) != 0))),(unsigned long long)(CONCAT44(0,uVar11)),(unsigned long long)(CONCAT44(0,(uint)bVar2)));
     }
     lVar9 = *(longlong *)(param_3 + 0x68);
@@ -7723,12 +7720,12 @@ undefined4 FUN_1413b9640(longlong param_1, longlong param_2, longlong param_3)
       if (bVar2 == 0) {
         uVar11 = (uint)(*(longlong *)(lVar9 + 0x38) == 0);
       }
-      local_58[0] = &REFG(undefined8, 0x1426f9770);
-      local_58[1] = &REFG(undefined8, 0x142738580);
-      local_58[2] = &REFG(undefined8, 0x142738588);
-      local_58[3] = &REFG(undefined8, 0x142738590);
-      local_38 = &REFG(undefined8, 0x142738598);
-      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",2,local_58[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
+      ((undefined * *)(gen_frame + 0x0))[0] = &REFG(undefined8, 0x1426f9770);
+      ((undefined * *)(gen_frame + 0x0))[1] = &REFG(undefined8, 0x142738580);
+      ((undefined * *)(gen_frame + 0x0))[2] = &REFG(undefined8, 0x142738588);
+      ((undefined * *)(gen_frame + 0x0))[3] = &REFG(undefined8, 0x142738590);
+      (*(undefined * *)(gen_frame + 0x20)) = &REFG(undefined8, 0x142738598);
+      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",2,((undefined * *)(gen_frame + 0x0))[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
                                      (uint)(*(longlong *)(lVar9 + 0x38) != 0))),(unsigned long long)(CONCAT44(0,uVar11)),(unsigned long long)(CONCAT44(0,(uint)bVar2)));
     }
     lVar9 = *(longlong *)(param_3 + 0x70);
@@ -7737,12 +7734,12 @@ undefined4 FUN_1413b9640(longlong param_1, longlong param_2, longlong param_3)
       if (bVar2 == 0) {
         uVar7 = (uint)(*(longlong *)(lVar9 + 0x38) == 0);
       }
-      local_58[0] = &REFG(undefined8, 0x1426f9770);
-      local_58[1] = &REFG(undefined8, 0x142738580);
-      local_58[2] = &REFG(undefined8, 0x142738588);
-      local_58[3] = &REFG(undefined8, 0x142738590);
-      local_38 = &REFG(undefined8, 0x142738598);
-      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",3,local_58[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
+      ((undefined * *)(gen_frame + 0x0))[0] = &REFG(undefined8, 0x1426f9770);
+      ((undefined * *)(gen_frame + 0x0))[1] = &REFG(undefined8, 0x142738580);
+      ((undefined * *)(gen_frame + 0x0))[2] = &REFG(undefined8, 0x142738588);
+      ((undefined * *)(gen_frame + 0x0))[3] = &REFG(undefined8, 0x142738590);
+      (*(undefined * *)(gen_frame + 0x20)) = &REFG(undefined8, 0x142738598);
+      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",3,((undefined * *)(gen_frame + 0x0))[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
                                      (uint)(*(longlong *)(lVar9 + 0x38) != 0))),(unsigned long long)(CONCAT44(0,uVar7)),(unsigned long long)(CONCAT44(0,(uint)bVar2)));
     }
     lVar9 = *(longlong *)(param_3 + 0x78);
@@ -7754,12 +7751,12 @@ undefined4 FUN_1413b9640(longlong param_1, longlong param_2, longlong param_3)
       uVar5 = (uint)(*(longlong *)(lVar9 + 0x38) == 0);
     }
     lVar1 = *(longlong *)(lVar9 + 0x38);
-    local_58[0] = &REFG(undefined8, 0x1426f9770);
-    local_58[1] = &REFG(undefined8, 0x142738580);
-    local_58[2] = &REFG(undefined8, 0x142738588);
-    local_58[3] = &REFG(undefined8, 0x142738590);
-    local_38 = &REFG(undefined8, 0x142738598);
-    puVar8 = local_58[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf];
+    ((undefined * *)(gen_frame + 0x0))[0] = &REFG(undefined8, 0x1426f9770);
+    ((undefined * *)(gen_frame + 0x0))[1] = &REFG(undefined8, 0x142738580);
+    ((undefined * *)(gen_frame + 0x0))[2] = &REFG(undefined8, 0x142738588);
+    ((undefined * *)(gen_frame + 0x0))[3] = &REFG(undefined8, 0x142738590);
+    (*(undefined * *)(gen_frame + 0x20)) = &REFG(undefined8, 0x142738598);
+    puVar8 = ((undefined * *)(gen_frame + 0x0))[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf];
   }
   else {
     CALLF(undefined4, FUN_140216640)("PreloadHelperGetUnloadedAreaInfo : Map (%04d) Current (%d) Area (%02d, %02d) Lod Band (%d) ",*(undefined4 *)(param_2 + 0xfc),*(byte *)(param_2 + 0x104) >> 2 & 1,*(undefined4 *)(param_3 + 0x4c),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_3 + 0x50))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_3 + 0x54))));
@@ -7781,12 +7778,12 @@ undefined4 FUN_1413b9640(longlong param_1, longlong param_2, longlong param_3)
       if (bVar2 == 0) {
         uVar11 = (uint)(*(longlong *)(lVar9 + 0x38) == 0);
       }
-      local_58[0] = &REFG(undefined8, 0x1426f9770);
-      local_58[1] = &REFG(undefined8, 0x142738580);
-      local_58[2] = &REFG(undefined8, 0x142738588);
-      local_58[3] = &REFG(undefined8, 0x142738590);
-      local_38 = &REFG(undefined8, 0x142738598);
-      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",0,local_58[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
+      ((undefined * *)(gen_frame + 0x0))[0] = &REFG(undefined8, 0x1426f9770);
+      ((undefined * *)(gen_frame + 0x0))[1] = &REFG(undefined8, 0x142738580);
+      ((undefined * *)(gen_frame + 0x0))[2] = &REFG(undefined8, 0x142738588);
+      ((undefined * *)(gen_frame + 0x0))[3] = &REFG(undefined8, 0x142738590);
+      (*(undefined * *)(gen_frame + 0x20)) = &REFG(undefined8, 0x142738598);
+      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",0,((undefined * *)(gen_frame + 0x0))[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
                                      (uint)(*(longlong *)(lVar9 + 0x38) != 0))),(unsigned long long)(CONCAT44(0,uVar11)),(unsigned long long)(CONCAT44(0,(uint)bVar2)));
     }
     lVar9 = *(longlong *)(param_3 + 0x60);
@@ -7797,12 +7794,12 @@ undefined4 FUN_1413b9640(longlong param_1, longlong param_2, longlong param_3)
       if (bVar2 == 0) {
         uVar6 = (uint)(*(longlong *)(lVar9 + 0x38) == 0);
       }
-      local_58[0] = &REFG(undefined8, 0x1426f9770);
-      local_58[1] = &REFG(undefined8, 0x142738580);
-      local_58[2] = &REFG(undefined8, 0x142738588);
-      local_58[3] = &REFG(undefined8, 0x142738590);
-      local_38 = &REFG(undefined8, 0x142738598);
-      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",1,local_58[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
+      ((undefined * *)(gen_frame + 0x0))[0] = &REFG(undefined8, 0x1426f9770);
+      ((undefined * *)(gen_frame + 0x0))[1] = &REFG(undefined8, 0x142738580);
+      ((undefined * *)(gen_frame + 0x0))[2] = &REFG(undefined8, 0x142738588);
+      ((undefined * *)(gen_frame + 0x0))[3] = &REFG(undefined8, 0x142738590);
+      (*(undefined * *)(gen_frame + 0x20)) = &REFG(undefined8, 0x142738598);
+      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",1,((undefined * *)(gen_frame + 0x0))[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
                                      (uint)(*(longlong *)(lVar9 + 0x38) != 0))),(unsigned long long)(CONCAT44(0,uVar6)),(unsigned long long)(CONCAT44(0,(uint)bVar2)));
     }
     lVar9 = *(longlong *)(param_3 + 0x68);
@@ -7811,12 +7808,12 @@ undefined4 FUN_1413b9640(longlong param_1, longlong param_2, longlong param_3)
       if (bVar2 == 0) {
         uVar11 = (uint)(*(longlong *)(lVar9 + 0x38) == 0);
       }
-      local_58[0] = &REFG(undefined8, 0x1426f9770);
-      local_58[1] = &REFG(undefined8, 0x142738580);
-      local_58[2] = &REFG(undefined8, 0x142738588);
-      local_58[3] = &REFG(undefined8, 0x142738590);
-      local_38 = &REFG(undefined8, 0x142738598);
-      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",2,local_58[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
+      ((undefined * *)(gen_frame + 0x0))[0] = &REFG(undefined8, 0x1426f9770);
+      ((undefined * *)(gen_frame + 0x0))[1] = &REFG(undefined8, 0x142738580);
+      ((undefined * *)(gen_frame + 0x0))[2] = &REFG(undefined8, 0x142738588);
+      ((undefined * *)(gen_frame + 0x0))[3] = &REFG(undefined8, 0x142738590);
+      (*(undefined * *)(gen_frame + 0x20)) = &REFG(undefined8, 0x142738598);
+      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",2,((undefined * *)(gen_frame + 0x0))[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
                                      (uint)(*(longlong *)(lVar9 + 0x38) != 0))),(unsigned long long)(CONCAT44(0,uVar11)),(unsigned long long)(CONCAT44(0,(uint)bVar2)));
     }
     lVar9 = *(longlong *)(param_3 + 0x70);
@@ -7825,12 +7822,12 @@ undefined4 FUN_1413b9640(longlong param_1, longlong param_2, longlong param_3)
       if (bVar2 == 0) {
         uVar7 = (uint)(*(longlong *)(lVar9 + 0x38) == 0);
       }
-      local_58[0] = &REFG(undefined8, 0x1426f9770);
-      local_58[1] = &REFG(undefined8, 0x142738580);
-      local_58[2] = &REFG(undefined8, 0x142738588);
-      local_58[3] = &REFG(undefined8, 0x142738590);
-      local_38 = &REFG(undefined8, 0x142738598);
-      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",3,local_58[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
+      ((undefined * *)(gen_frame + 0x0))[0] = &REFG(undefined8, 0x1426f9770);
+      ((undefined * *)(gen_frame + 0x0))[1] = &REFG(undefined8, 0x142738580);
+      ((undefined * *)(gen_frame + 0x0))[2] = &REFG(undefined8, 0x142738588);
+      ((undefined * *)(gen_frame + 0x0))[3] = &REFG(undefined8, 0x142738590);
+      (*(undefined * *)(gen_frame + 0x20)) = &REFG(undefined8, 0x142738598);
+      uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",3,((undefined * *)(gen_frame + 0x0))[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf],*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,
                                      (uint)(*(longlong *)(lVar9 + 0x38) != 0))),(unsigned long long)(CONCAT44(0,uVar7)),(unsigned long long)(CONCAT44(0,(uint)bVar2)));
     }
     lVar9 = *(longlong *)(param_3 + 0x78);
@@ -7842,18 +7839,18 @@ undefined4 FUN_1413b9640(longlong param_1, longlong param_2, longlong param_3)
       uVar5 = (uint)(*(longlong *)(lVar9 + 0x38) == 0);
     }
     lVar1 = *(longlong *)(lVar9 + 0x38);
-    local_58[0] = &REFG(undefined8, 0x1426f9770);
-    local_58[1] = &REFG(undefined8, 0x142738580);
-    local_58[2] = &REFG(undefined8, 0x142738588);
-    local_58[3] = &REFG(undefined8, 0x142738590);
-    local_38 = &REFG(undefined8, 0x142738598);
-    puVar8 = local_58[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf];
+    ((undefined * *)(gen_frame + 0x0))[0] = &REFG(undefined8, 0x1426f9770);
+    ((undefined * *)(gen_frame + 0x0))[1] = &REFG(undefined8, 0x142738580);
+    ((undefined * *)(gen_frame + 0x0))[2] = &REFG(undefined8, 0x142738588);
+    ((undefined * *)(gen_frame + 0x0))[3] = &REFG(undefined8, 0x142738590);
+    (*(undefined * *)(gen_frame + 0x20)) = &REFG(undefined8, 0x142738598);
+    puVar8 = ((undefined * *)(gen_frame + 0x0))[*(uint *)(lVar9 + 0x28) >> 0xc & 0xf];
   }
-  local_38 = &REFG(undefined8, 0x142738598);
-  local_58[3] = &REFG(undefined8, 0x142738590);
-  local_58[2] = &REFG(undefined8, 0x142738588);
-  local_58[1] = &REFG(undefined8, 0x142738580);
-  local_58[0] = &REFG(undefined8, 0x1426f9770);
+  (*(undefined * *)(gen_frame + 0x20)) = &REFG(undefined8, 0x142738598);
+  ((undefined * *)(gen_frame + 0x0))[3] = &REFG(undefined8, 0x142738590);
+  ((undefined * *)(gen_frame + 0x0))[2] = &REFG(undefined8, 0x142738588);
+  ((undefined * *)(gen_frame + 0x0))[1] = &REFG(undefined8, 0x142738580);
+  ((undefined * *)(gen_frame + 0x0))[0] = &REFG(undefined8, 0x1426f9770);
   uVar4 = CALLF(undefined4, FUN_140216640)("                                 : adtFileData[%d] : Type(%s) FileDataId(%d) Async(%d) Loaded(%d) Failed(%d)",4,puVar8,*(undefined4 *)(lVar9 + 0x34),(unsigned long long)(CONCAT44(0,(uint)(lVar1 != 0))),(unsigned long long)(CONCAT44(0,uVar5)),(unsigned long long)(CONCAT44(0,(uint)bVar2)));
   return uVar4;
 }

@@ -2,12 +2,520 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 #define GEN_HITS gen_hits_094
-unsigned int gen_hits_094[321];
+unsigned int gen_hits_094[314];
+
+/* ref: FUN_14165f470 */
+undefined1 FUN_14165f470(undefined4 *param_1, undefined4 param_2, longlong param_3, uint *param_4)
+{
+  GEN_HIT(0);
+  byte bVar1;
+  uint *puVar3;
+  ulonglong uVar4;
+  uint uVar2;
+  
+  *param_1 = param_2;
+  bVar1 = CALLF(undefined1, FUN_1403006a0)(param_1 + 2,param_3);
+  uVar2 = (uint)bVar1;
+  for (; param_3 != 0; param_3 = param_3 + -1) {
+    uVar4 = (longlong)param_4 - *(longlong *)(param_1 + 2) >> 2;
+    if (*(ulonglong *)(param_1 + 4) == (*(ulonglong *)(param_1 + 6) & 0x7fffffffffffffff)) {
+      CALLF(undefined1, FUN_1403006a0)(param_1 + 2,(*(ulonglong *)(param_1 + 6) & 0x7fffffffffffffff) + 1);
+    }
+    puVar3 = (uint *)(*(longlong *)(param_1 + 2) + uVar4 * 4);
+    if (*(ulonglong *)(param_1 + 4) <= uVar4) {
+      puVar3 = param_4;
+    }
+    uVar2 = *puVar3;
+    param_4 = param_4 + 1;
+    *(uint *)(*(longlong *)(param_1 + 2) + *(ulonglong *)(param_1 + 4) * 4) = uVar2;
+    *(longlong *)(param_1 + 4) = *(longlong *)(param_1 + 4) + 1;
+  }
+  return (char)uVar2;
+}
+
+/* ref: FUN_14165f520 */
+undefined1 FUN_14165f520(longlong *param_1, longlong *param_2, longlong param_3, undefined1 param_4)
+{
+  GEN_HIT(1);
+  __declspec(align(16)) unsigned char gen_frame[(0x28 + sizeof(longlong) > 0x78 ? 0x28 + sizeof(longlong) : 0x78)];
+  uint uVar1;
+  uint uVar2;
+  longlong lVar3;
+  byte bVar4;
+  undefined4 *puVar5;
+  ulonglong uVar6;
+  longlong *plVar7;
+  longlong *plVar8;
+  longlong *plVar9;
+  longlong *plVar10;
+  longlong *plVar11;
+  longlong *plVar12;
+  longlong *plVar13;
+  
+joined_r0x00014165f55b:
+  if (((longlong)param_2 - (longlong)param_1 < 0x630) || (param_3 < 1)) {
+    uVar6 = (longlong)param_2 - (longlong)param_1;
+    if ((longlong)uVar6 < 0x630) {
+      plVar13 = param_1;
+      if (param_1 < param_2) {
+        while (plVar13 = plVar13 + 6, plVar13 != param_2) {
+          ((undefined4 *)(gen_frame + 0x0))[0] = (undefined4)*plVar13;
+          (*(undefined8 *)(gen_frame + 0x8)) = 0;
+          (*(undefined8 *)(gen_frame + 0x10)) = 0;
+          (*(ulonglong *)(gen_frame + 0x18)) = 0;
+          CALLF(undefined8, FUN_1407701f0)(&(*(undefined8 *)(gen_frame + 0x8)),plVar13 + 1);
+          (*(undefined1 *)(gen_frame + 0x20)) = (undefined1)plVar13[4];
+          lVar3 = plVar13[5];
+          (*(longlong *)(gen_frame + 0x28)) = lVar3;
+          plVar9 = plVar13;
+          while ((plVar9 != param_1 && (*(uint *)(plVar9[-1] + 0x1b8) < *(uint *)(lVar3 + 0x1b8))))
+          {
+            CALLF(undefined4 *, FUN_141660660)(plVar9,plVar9 + -6);
+            plVar9[5] = plVar9[-1];
+            plVar9 = plVar9 + -6;
+          }
+          CALLF(undefined4 *, FUN_141660660)(plVar9,((undefined4 *)(gen_frame + 0x0)));
+          plVar9[5] = (*(longlong *)(gen_frame + 0x28));
+          uVar6 = 0;
+          if (((*(ulonglong *)(gen_frame + 0x18)) & 0x8000000000000000) == 0) {
+            bVar4 = CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x8)),((char *)REFP(0x142d61730)),0xfffffffa,0);
+            uVar6 = (ulonglong)bVar4;
+          }
+        }
+      }
+    }
+    else {
+      bVar4 = CALLF(undefined1, FUN_14165fe90)(param_1,param_2,param_4);
+      uVar6 = (ulonglong)bVar4;
+    }
+    return (char)uVar6;
+  }
+  plVar13 = param_2 + -6;
+  puVar5 = (undefined4 *)CALLF(longlong, FUN_14165fb50)(param_1,param_2);
+  ((undefined4 *)(gen_frame + 0x0))[0] = *puVar5;
+  (*(undefined8 *)(gen_frame + 0x8)) = 0;
+  (*(undefined8 *)(gen_frame + 0x10)) = 0;
+  (*(ulonglong *)(gen_frame + 0x18)) = 0;
+  CALLF(undefined8, FUN_1407701f0)(&(*(undefined8 *)(gen_frame + 0x8)),puVar5 + 2);
+  (*(undefined1 *)(gen_frame + 0x20)) = *(undefined1 *)(puVar5 + 8);
+  (*(longlong *)(gen_frame + 0x28)) = *(longlong *)(puVar5 + 10);
+  CALLF(undefined4 *, FUN_141660660)(puVar5,plVar13);
+  *(longlong *)(puVar5 + 10) = param_2[-1];
+  CALLF(undefined4 *, FUN_141660660)(plVar13,((undefined4 *)(gen_frame + 0x0)));
+  param_2[-1] = (*(longlong *)(gen_frame + 0x28));
+  plVar7 = param_1;
+  plVar9 = param_1;
+  plVar11 = plVar13;
+  plVar12 = plVar13;
+  if (((*(ulonglong *)(gen_frame + 0x18)) & 0x8000000000000000) == 0) {
+    CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x8)),((char *)REFP(0x142d61730)),0xfffffffa,0);
+  }
+LAB_14165f610:
+  do {
+    uVar1 = *(uint *)(plVar9[5] + 0x1b8);
+    while (*(uint *)(param_2[-1] + 0x1b8) < uVar1) {
+      plVar10 = plVar9 + 0xb;
+      plVar9 = plVar9 + 6;
+      uVar1 = *(uint *)(*plVar10 + 0x1b8);
+    }
+    do {
+      plVar10 = plVar11;
+      plVar11 = plVar10 + -6;
+      if (*(uint *)(param_2[-1] + 0x1b8) <= *(uint *)(plVar10[-1] + 0x1b8)) break;
+    } while (plVar11 != param_1);
+    ((undefined4 *)(gen_frame + 0x0))[0] = (undefined4)*plVar9;
+    if (plVar11 <= plVar9) break;
+    (*(undefined8 *)(gen_frame + 0x8)) = 0;
+    (*(undefined8 *)(gen_frame + 0x10)) = 0;
+    (*(ulonglong *)(gen_frame + 0x18)) = 0;
+    CALLF(undefined8, FUN_1407701f0)(&(*(undefined8 *)(gen_frame + 0x8)),plVar9 + 1);
+    (*(undefined1 *)(gen_frame + 0x20)) = (undefined1)plVar9[4];
+    (*(longlong *)(gen_frame + 0x28)) = plVar9[5];
+    CALLF(undefined4 *, FUN_141660660)(plVar9,plVar11);
+    plVar9[5] = plVar10[-1];
+    CALLF(undefined4 *, FUN_141660660)(plVar11,((undefined4 *)(gen_frame + 0x0)));
+    plVar10[-1] = (*(longlong *)(gen_frame + 0x28));
+    if (((*(ulonglong *)(gen_frame + 0x18)) & 0x8000000000000000) == 0) {
+      CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x8)),((char *)REFP(0x142d61730)),0xfffffffa,0);
+    }
+    uVar2 = *(uint *)(plVar9[5] + 0x1b8);
+    uVar1 = *(uint *)(param_2[-1] + 0x1b8);
+    plVar8 = plVar7;
+    if ((uVar1 > uVar2 || uVar2 == uVar1) && (uVar1 <= uVar2)) {
+      plVar8 = plVar7 + 6;
+      ((undefined4 *)(gen_frame + 0x0))[0] = (undefined4)*plVar7;
+      (*(undefined8 *)(gen_frame + 0x8)) = 0;
+      (*(undefined8 *)(gen_frame + 0x10)) = 0;
+      (*(ulonglong *)(gen_frame + 0x18)) = 0;
+      CALLF(undefined8, FUN_1407701f0)(&(*(undefined8 *)(gen_frame + 0x8)),plVar7 + 1);
+      (*(undefined1 *)(gen_frame + 0x20)) = (undefined1)plVar7[4];
+      (*(longlong *)(gen_frame + 0x28)) = plVar7[5];
+      CALLF(undefined4 *, FUN_141660660)(plVar7,plVar9);
+      plVar7[5] = plVar9[5];
+      CALLF(undefined4 *, FUN_141660660)(plVar9,((undefined4 *)(gen_frame + 0x0)));
+      plVar9[5] = (*(longlong *)(gen_frame + 0x28));
+      if (((*(ulonglong *)(gen_frame + 0x18)) & 0x8000000000000000) == 0) {
+        CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x8)),((char *)REFP(0x142d61730)),0xfffffffa,0);
+      }
+    }
+    uVar1 = *(uint *)(plVar10[-1] + 0x1b8);
+    uVar2 = *(uint *)(param_2[-1] + 0x1b8);
+    plVar7 = plVar8;
+    if ((uVar1 > uVar2 || uVar2 == uVar1) && (uVar1 <= uVar2)) {
+      ((undefined4 *)(gen_frame + 0x0))[0] = (undefined4)*plVar11;
+      plVar8 = plVar12 + -6;
+      (*(undefined8 *)(gen_frame + 0x8)) = 0;
+      (*(undefined8 *)(gen_frame + 0x10)) = 0;
+      (*(ulonglong *)(gen_frame + 0x18)) = 0;
+      CALLF(undefined8, FUN_1407701f0)(&(*(undefined8 *)(gen_frame + 0x8)),plVar10 + -5);
+      (*(undefined1 *)(gen_frame + 0x20)) = (undefined1)plVar10[-2];
+      (*(longlong *)(gen_frame + 0x28)) = plVar10[-1];
+      CALLF(undefined4 *, FUN_141660660)(plVar11,plVar8);
+      plVar10[-1] = plVar12[-1];
+      CALLF(undefined4 *, FUN_141660660)(plVar8,((undefined4 *)(gen_frame + 0x0)));
+      plVar12[-1] = (*(longlong *)(gen_frame + 0x28));
+      plVar12 = plVar8;
+      if (((*(ulonglong *)(gen_frame + 0x18)) & 0x8000000000000000) == 0) {
+        CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x8)),((char *)REFP(0x142d61730)),0xfffffffa,0);
+        plVar9 = plVar9 + 6;
+        goto LAB_14165f610;
+      }
+    }
+    plVar9 = plVar9 + 6;
+  } while( true );
+  (*(undefined8 *)(gen_frame + 0x8)) = 0;
+  (*(undefined8 *)(gen_frame + 0x10)) = 0;
+  (*(ulonglong *)(gen_frame + 0x18)) = 0;
+  CALLF(undefined8, FUN_1407701f0)(&(*(undefined8 *)(gen_frame + 0x8)),plVar9 + 1);
+  (*(undefined1 *)(gen_frame + 0x20)) = (undefined1)plVar9[4];
+  (*(longlong *)(gen_frame + 0x28)) = plVar9[5];
+  CALLF(undefined4 *, FUN_141660660)(plVar9,plVar13);
+  plVar9[5] = param_2[-1];
+  CALLF(undefined4 *, FUN_141660660)(plVar13,((undefined4 *)(gen_frame + 0x0)));
+  param_2[-1] = (*(longlong *)(gen_frame + 0x28));
+  if (((*(ulonglong *)(gen_frame + 0x18)) & 0x8000000000000000) == 0) {
+    CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x8)),((char *)REFP(0x142d61730)),0xfffffffa,0);
+  }
+  plVar13 = plVar9 + -6;
+  if (param_1 + 6 < plVar7) {
+    plVar11 = param_1 + 5;
+    do {
+      ((undefined4 *)(gen_frame + 0x0))[0] = (undefined4)plVar11[-5];
+      (*(undefined8 *)(gen_frame + 0x8)) = 0;
+      (*(undefined8 *)(gen_frame + 0x10)) = 0;
+      (*(ulonglong *)(gen_frame + 0x18)) = 0;
+      CALLF(undefined8, FUN_1407701f0)(&(*(undefined8 *)(gen_frame + 0x8)),plVar11 + -4);
+      (*(undefined1 *)(gen_frame + 0x20)) = (undefined1)plVar11[-1];
+      (*(longlong *)(gen_frame + 0x28)) = *plVar11;
+      CALLF(undefined4 *, FUN_141660660)(plVar11 + -5,plVar13);
+      *plVar11 = plVar13[5];
+      CALLF(undefined4 *, FUN_141660660)(plVar13,((undefined4 *)(gen_frame + 0x0)));
+      plVar13[5] = (*(longlong *)(gen_frame + 0x28));
+      if (((*(ulonglong *)(gen_frame + 0x18)) & 0x8000000000000000) == 0) {
+        CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x8)),((char *)REFP(0x142d61730)),0xfffffffa,0);
+      }
+      plVar13 = plVar13 + -6;
+      plVar10 = plVar11 + 7;
+      plVar11 = plVar11 + 6;
+    } while (plVar10 < plVar7);
+  }
+  for (plVar7 = param_2 + -0xc; plVar9 = plVar9 + 6, plVar12 < plVar7; plVar7 = plVar7 + -6) {
+    ((undefined4 *)(gen_frame + 0x0))[0] = (undefined4)*plVar9;
+    (*(undefined8 *)(gen_frame + 0x8)) = 0;
+    (*(undefined8 *)(gen_frame + 0x10)) = 0;
+    (*(ulonglong *)(gen_frame + 0x18)) = 0;
+    CALLF(undefined8, FUN_1407701f0)(&(*(undefined8 *)(gen_frame + 0x8)),plVar9 + 1);
+    (*(undefined1 *)(gen_frame + 0x20)) = (undefined1)plVar9[4];
+    (*(longlong *)(gen_frame + 0x28)) = plVar9[5];
+    CALLF(undefined4 *, FUN_141660660)(plVar9,plVar7);
+    plVar9[5] = plVar7[5];
+    CALLF(undefined4 *, FUN_141660660)(plVar7,((undefined4 *)(gen_frame + 0x0)));
+    plVar7[5] = (*(longlong *)(gen_frame + 0x28));
+    if (((*(ulonglong *)(gen_frame + 0x18)) & 0x8000000000000000) == 0) {
+      CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x8)),((char *)REFP(0x142d61730)),0xfffffffa,0);
+    }
+  }
+  param_3 = param_3 >> 1;
+  CALLF(undefined1, FUN_14165f520)(param_1,plVar13 + 6,param_3,param_4);
+  param_1 = plVar9;
+  goto joined_r0x00014165f55b;
+}
+
+/* ref: FUN_14165fb50 */
+longlong FUN_14165fb50(longlong param_1, longlong param_2)
+{
+  GEN_HIT(2);
+  uint uVar1;
+  uint uVar2;
+  uint uVar3;
+  uint uVar4;
+  longlong lVar5;
+  longlong lVar6;
+  longlong lVar7;
+  longlong lVar8;
+  longlong lVar9;
+  longlong lVar10;
+  
+  lVar10 = param_2 + -0x30;
+  lVar9 = ((param_2 - param_1) / 0x60) * 0x30 + param_1;
+  lVar8 = (lVar10 - param_1) / 0x30 + 1;
+  lVar5 = (longlong)(lVar8 + (ulonglong)((uint)(lVar8 >> 0x3f) & 7)) >> 3;
+  lVar8 = lVar5 * 0x30 + param_1;
+  lVar7 = lVar5 * 0x60 + param_1;
+  uVar1 = *(uint *)(*(longlong *)(param_1 + 0x28) + 0x1b8);
+  uVar2 = *(uint *)(*(longlong *)(lVar8 + 0x28) + 0x1b8);
+  uVar3 = *(uint *)(*(longlong *)(lVar7 + 0x28) + 0x1b8);
+  lVar6 = lVar8;
+  uVar4 = uVar2;
+  if (uVar2 < uVar1) {
+    lVar6 = param_1;
+    uVar4 = uVar1;
+    param_1 = lVar8;
+    uVar1 = uVar2;
+  }
+  if ((uVar1 <= uVar3) && (param_1 = lVar6, uVar3 < uVar4)) {
+    param_1 = lVar7;
+  }
+  lVar8 = lVar5 * 0x30 + lVar9;
+  lVar6 = lVar9 + lVar5 * -0x30;
+  uVar1 = *(uint *)(*(longlong *)(lVar6 + 0x28) + 0x1b8);
+  uVar2 = *(uint *)(*(longlong *)(lVar9 + 0x28) + 0x1b8);
+  uVar3 = *(uint *)(*(longlong *)(lVar8 + 0x28) + 0x1b8);
+  lVar7 = lVar9;
+  uVar4 = uVar2;
+  if (uVar2 < uVar1) {
+    lVar7 = lVar6;
+    lVar6 = lVar9;
+    uVar4 = uVar1;
+    uVar1 = uVar2;
+  }
+  if ((uVar1 <= uVar3) && (lVar6 = lVar7, uVar3 < uVar4)) {
+    lVar6 = lVar8;
+  }
+  lVar9 = lVar10 + lVar5 * -0x60;
+  lVar7 = lVar10 + lVar5 * -0x30;
+  uVar1 = *(uint *)(*(longlong *)(lVar9 + 0x28) + 0x1b8);
+  uVar2 = *(uint *)(*(longlong *)(lVar7 + 0x28) + 0x1b8);
+  uVar3 = *(uint *)(*(longlong *)(param_2 + -8) + 0x1b8);
+  lVar8 = lVar9;
+  uVar4 = uVar2;
+  if (uVar2 < uVar1) {
+    lVar8 = lVar7;
+    lVar7 = lVar9;
+    uVar4 = uVar1;
+    uVar1 = uVar2;
+  }
+  if ((uVar1 <= uVar3) && (lVar8 = lVar7, uVar3 < uVar4)) {
+    lVar8 = lVar10;
+  }
+  uVar2 = *(uint *)(*(longlong *)(param_1 + 0x28) + 0x1b8);
+  uVar3 = *(uint *)(*(longlong *)(lVar6 + 0x28) + 0x1b8);
+  uVar1 = *(uint *)(*(longlong *)(lVar8 + 0x28) + 0x1b8);
+  if (uVar3 < uVar2) {
+    if (uVar1 < uVar3) {
+      return lVar6;
+    }
+    if (uVar1 < uVar2) {
+      param_1 = lVar8;
+    }
+  }
+  else if (uVar2 <= uVar1) {
+    if (uVar3 <= uVar1) {
+      return lVar6;
+    }
+    return lVar8;
+  }
+  return param_1;
+}
+
+/* ref: FUN_14165fd20 */
+undefined8 FUN_14165fd20(longlong param_1, longlong param_2, longlong param_3, longlong param_4)
+{
+  GEN_HIT(3);
+  undefined8 uVar1;
+  longlong lVar2;
+  longlong lVar3;
+  longlong lVar4;
+  longlong lVar5;
+  
+  lVar2 = param_2;
+  while( true ) {
+    lVar4 = lVar2 * 2;
+    lVar5 = lVar4 + 2;
+    if (param_3 <= lVar5) break;
+    lVar4 = lVar4 + 1;
+    if (*(uint *)(*(longlong *)(param_1 + 0x28 + lVar5 * 0x30) + 0x1b8) <=
+        *(uint *)(*(longlong *)(param_1 + -8 + lVar5 * 0x30) + 0x1b8)) {
+      lVar4 = lVar5;
+    }
+    lVar2 = lVar2 * 0x30 + param_1;
+    lVar5 = lVar4 * 0x30 + param_1;
+    CALLF(undefined4 *, FUN_141660660)(lVar2,lVar5);
+    *(undefined8 *)(lVar2 + 0x28) = *(undefined8 *)(lVar5 + 0x28);
+    lVar2 = lVar4;
+  }
+  if (lVar5 == param_3) {
+    lVar3 = lVar2 * 0x30 + param_1;
+    CALLF(undefined4 *, FUN_141660660)(lVar3,param_1 + -0x30 + lVar5 * 0x30);
+    lVar2 = lVar4 + 1;
+    *(undefined8 *)(lVar3 + 0x28) = *(undefined8 *)(lVar5 * 0x30 + -8 + param_1);
+  }
+  while (param_2 < lVar2) {
+    lVar5 = lVar2 + -1 >> 1;
+    lVar4 = lVar5 * 0x30 + param_1;
+    if (*(uint *)(*(longlong *)(lVar4 + 0x28) + 0x1b8) <=
+        *(uint *)(*(longlong *)(param_4 + 0x28) + 0x1b8)) break;
+    lVar2 = lVar2 * 0x30 + param_1;
+    CALLF(undefined4 *, FUN_141660660)(lVar2,lVar4);
+    *(undefined8 *)(lVar2 + 0x28) = *(undefined8 *)(lVar4 + 0x28);
+    lVar2 = lVar5;
+  }
+  lVar2 = lVar2 * 0x30 + param_1;
+  CALLF(undefined4 *, FUN_141660660)(lVar2,param_4);
+  uVar1 = *(undefined8 *)(param_4 + 0x28);
+  *(undefined8 *)(lVar2 + 0x28) = uVar1;
+  return uVar1;
+}
+
+/* ref: FUN_14165fe90 */
+undefined1 FUN_14165fe90(longlong param_1, longlong param_2, undefined1 param_3)
+{
+  GEN_HIT(4);
+  __declspec(align(16)) unsigned char gen_frame[(0x28 + sizeof(undefined8) > 0x58 ? 0x28 + sizeof(undefined8) : 0x58)];
+  undefined8 *puVar1;
+  byte bVar2;
+  undefined1 uVar3;
+  ulonglong uVar4;
+  longlong lVar5;
+  undefined4 *puVar6;
+  undefined8 *puVar7;
+  longlong lVar8;
+  
+  lVar5 = (param_2 - param_1) / 6 + (param_2 - param_1 >> 0x3f);
+  uVar4 = -(lVar5 >> 0x3f);
+  lVar5 = (lVar5 >> 3) + uVar4;
+  if (1 < lVar5) {
+    (*(undefined8 *)(gen_frame + 0x8)) = 0;
+    (*(undefined8 *)(gen_frame + 0x10)) = 0;
+    (*(ulonglong *)(gen_frame + 0x18)) = 0;
+    lVar8 = (lVar5 >> 1) + -1;
+    puVar6 = (undefined4 *)(lVar8 * 0x30 + param_1);
+    ((undefined4 *)(gen_frame + 0x0))[0] = *puVar6;
+    CALLF(undefined8, FUN_1407701f0)(&(*(undefined8 *)(gen_frame + 0x8)),puVar6 + 2);
+    (*(undefined1 *)(gen_frame + 0x20)) = *(undefined1 *)(puVar6 + 8);
+    (*(undefined8 *)(gen_frame + 0x28)) = *(undefined8 *)(puVar6 + 10);
+    uVar4 = CALLF(undefined8, FUN_14165fd20)(param_1,lVar8,lVar5,((undefined4 *)(gen_frame + 0x0)));
+    puVar6 = puVar6 + 8;
+    while (lVar8 != 0) {
+      lVar8 = lVar8 + -1;
+      if (((*(ulonglong *)(gen_frame + 0x18)) & 0x8000000000000000) == 0) {
+        CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x8)),((char *)REFP(0x142d61730)),0xfffffffa,0);
+      }
+      ((undefined4 *)(gen_frame + 0x0))[0] = puVar6[-0x14];
+      (*(undefined8 *)(gen_frame + 0x8)) = 0;
+      (*(undefined8 *)(gen_frame + 0x10)) = 0;
+      (*(ulonglong *)(gen_frame + 0x18)) = 0;
+      CALLF(undefined8, FUN_1407701f0)(&(*(undefined8 *)(gen_frame + 0x8)),puVar6 + -0x12);
+      (*(undefined1 *)(gen_frame + 0x20)) = *(undefined1 *)(puVar6 + -0xc);
+      (*(undefined8 *)(gen_frame + 0x28)) = *(undefined8 *)(puVar6 + -10);
+      uVar4 = CALLF(undefined8, FUN_14165fd20)(param_1,lVar8,lVar5,((undefined4 *)(gen_frame + 0x0)));
+      puVar6 = puVar6 + -0xc;
+    }
+    if (-1 < (longlong)(*(ulonglong *)(gen_frame + 0x18))) {
+      bVar2 = CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x8)),((char *)REFP(0x142d61730)),0xfffffffa,0);
+      uVar4 = (ulonglong)bVar2;
+    }
+  }
+  uVar3 = (undefined1)uVar4;
+  if (1 < lVar5) {
+    puVar7 = (undefined8 *)(param_2 + 0x28);
+    do {
+      ((undefined4 *)(gen_frame + 0x0))[0] = *(undefined4 *)(puVar7 + -0xb);
+      puVar1 = puVar7 + -6;
+      (*(undefined8 *)(gen_frame + 0x8)) = 0;
+      (*(undefined8 *)(gen_frame + 0x10)) = 0;
+      (*(ulonglong *)(gen_frame + 0x18)) = 0;
+      CALLF(undefined8, FUN_1407701f0)(&(*(undefined8 *)(gen_frame + 0x8)),puVar7 + -10);
+      (*(undefined1 *)(gen_frame + 0x20)) = *(undefined1 *)(puVar7 + -7);
+      (*(undefined8 *)(gen_frame + 0x28)) = *puVar1;
+      CALLF(undefined4 *, FUN_141660660)(puVar7 + -0xb,param_1);
+      lVar5 = (-0x28 - param_1) + (longlong)puVar1;
+      *puVar1 = *(undefined8 *)(param_1 + 0x28);
+      lVar5 = lVar5 / 6 + (lVar5 >> 0x3f);
+      lVar5 = (lVar5 >> 3) - (lVar5 >> 0x3f);
+      CALLF(undefined8, FUN_14165fd20)(param_1,0,lVar5,((undefined4 *)(gen_frame + 0x0)));
+      uVar3 = 0;
+      if (((*(ulonglong *)(gen_frame + 0x18)) & 0x8000000000000000) == 0) {
+        uVar3 = CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x8)),((char *)REFP(0x142d61730)),0xfffffffa,0);
+      }
+      puVar7 = puVar1;
+    } while (1 < lVar5);
+  }
+  return uVar3;
+}
+
+/* ref: FUN_1416600f0 */
+undefined8 * FUN_1416600f0(ulonglong *param_1, undefined8 *param_2, undefined4 *param_3, undefined8 *param_4)
+{
+  GEN_HIT(5);
+  int iVar1;
+  undefined8 *puVar2;
+  undefined8 *puVar3;
+  undefined8 *puVar4;
+  ulonglong uVar5;
+  ulonglong uVar6;
+  undefined8 *puVar7;
+  
+  if (param_1[1] == 0) {
+    CALLF(undefined1, FUN_141662b20)(param_1,*param_1);
+  }
+  puVar4 = (undefined8 *)CALLF(longlong, FUN_1405795f0)();
+  if (puVar4 != (undefined8 *)0x0) {
+    *puVar4 = 0;
+    *(undefined4 *)(puVar4 + 1) = *param_3;
+    (*(code *)param_4[1])(puVar4 + 4,param_4 + 2,2);
+    puVar4[2] = *param_4;
+    puVar4[3] = param_4[1];
+    param_4[1] = ((code *)REFP(0x1402112e0));
+    *param_4 = 0;
+    puVar4[6] = param_4[4];
+  }
+  iVar1 = *(int *)(puVar4 + 1);
+  uVar5 = ((ulonglong)(longlong)iVar1 >> 0x21 ^ (longlong)iVar1) * -0xae502812aa7333;
+  uVar5 = (uVar5 >> 0x21 ^ uVar5) * -0x3b314601e57a13ad;
+  uVar5 = (uVar5 >> 0x21 ^ uVar5) & *param_1 - 1;
+  puVar7 = (undefined8 *)(param_1[1] + uVar5 * 8);
+  puVar2 = puVar7;
+  for (puVar3 = *(undefined8 **)(param_1[1] + uVar5 * 8);
+      (puVar3 != (undefined8 *)0x0 && (iVar1 != *(int *)(puVar3 + 1)));
+      puVar3 = (undefined8 *)*puVar3) {
+    puVar2 = puVar3;
+  }
+  *puVar4 = *puVar2;
+  *puVar2 = puVar4;
+  param_1[2] = param_1[2] + 1;
+  uVar5 = *param_1;
+  if (*(float *)(param_1 + 3) <= (float)param_1[2] / (float)uVar5 &&
+      (float)param_1[2] / (float)uVar5 != *(float *)(param_1 + 3)) {
+    CALLF(undefined1, FUN_141662b20)(param_1,uVar5 * 2);
+    uVar5 = *param_1;
+    uVar6 = ((ulonglong)(longlong)*(int *)(puVar4 + 1) >> 0x21 ^ (longlong)*(int *)(puVar4 + 1)) *
+            -0xae502812aa7333;
+    uVar6 = (uVar6 >> 0x21 ^ uVar6) * -0x3b314601e57a13ad;
+    puVar7 = (undefined8 *)(param_1[1] + ((uVar6 >> 0x21 ^ uVar6) & uVar5 - 1) * 8);
+  }
+  uVar6 = param_1[1];
+  *param_2 = puVar4;
+  param_2[1] = puVar7;
+  param_2[2] = uVar6 + uVar5 * 8;
+  *(undefined1 *)(param_2 + 3) = 1;
+  return param_2;
+}
 
 /* ref: FUN_1416602d0 */
 int * FUN_1416602d0(int *param_1, int param_2, undefined1 param_3)
 {
-  GEN_HIT(0);
+  GEN_HIT(6);
   __declspec(align(16)) unsigned char gen_frame[(0x28 + sizeof(undefined8) > 0x68 ? 0x28 + sizeof(undefined8) : 0x68)];
   longlong *plVar1;
   int iVar2;
@@ -109,7 +617,7 @@ int * FUN_1416602d0(int *param_1, int param_2, undefined1 param_3)
 /* ref: FUN_1416604c0 */
 longlong FUN_1416604c0(longlong param_1, undefined4 *param_2)
 {
-  GEN_HIT(1);
+  GEN_HIT(7);
   uint uVar1;
   undefined8 uVar2;
   
@@ -133,7 +641,7 @@ longlong FUN_1416604c0(longlong param_1, undefined4 *param_2)
 /* ref: FUN_141660510 */
 undefined4 * FUN_141660510(undefined4 *param_1, undefined4 *param_2)
 {
-  GEN_HIT(2);
+  GEN_HIT(8);
   undefined4 *puVar1;
   undefined4 *puVar2;
   undefined4 *puVar3;
@@ -161,7 +669,7 @@ undefined4 * FUN_141660510(undefined4 *param_1, undefined4 *param_2)
 /* ref: FUN_1416605c0 */
 longlong FUN_1416605c0(longlong param_1, undefined4 param_2, undefined1 *param_3)
 {
-  GEN_HIT(3);
+  GEN_HIT(9);
   *(undefined8 *)(param_1 + 8) = 0;
   *(undefined8 *)(param_1 + 0x10) = 0;
   *(undefined8 *)(param_1 + 0x18) = 0;
@@ -173,7 +681,7 @@ longlong FUN_1416605c0(longlong param_1, undefined4 param_2, undefined1 *param_3
 /* ref: FUN_141660600 */
 longlong FUN_141660600(longlong param_1, undefined4 param_2, undefined1 param_3, uint param_4, undefined8 param_5)
 {
-  GEN_HIT(4);
+  GEN_HIT(10);
   *(undefined8 *)(param_1 + 8) = 0;
   *(undefined8 *)(param_1 + 0x10) = 0;
   *(undefined8 *)(param_1 + 0x18) = 0;
@@ -185,14 +693,14 @@ longlong FUN_141660600(longlong param_1, undefined4 param_2, undefined1 param_3,
 /* ref: FUN_141660640 */
 undefined8 FUN_141660640(undefined8 param_1)
 {
-  GEN_HIT(5);
+  GEN_HIT(11);
   return (undefined8)CALLF(undefined8, FUN_14057ac30)(&(*(undefined1 * *)((char *)&gen_g_142e5ed20 + 0x0)),param_1,0);
 }
 
 /* ref: FUN_141660660 */
 undefined4 * FUN_141660660(undefined4 *param_1, undefined4 *param_2)
 {
-  GEN_HIT(6);
+  GEN_HIT(12);
   undefined8 *puVar1;
   
   puVar1 = (undefined8 *)(param_1 + 2);
@@ -211,7 +719,7 @@ undefined4 * FUN_141660660(undefined4 *param_1, undefined4 *param_2)
 /* ref: FUN_141660810 */
 longlong FUN_141660810(longlong param_1, longlong *param_2)
 {
-  GEN_HIT(7);
+  GEN_HIT(13);
   __declspec(align(16)) unsigned char gen_frame[(0x144 + sizeof(int) > 0x1e8 ? 0x144 + sizeof(int) : 0x1e8)];
   longlong *plVar1;
   int *piVar2;
@@ -430,7 +938,7 @@ LAB_141661120:
 /* ref: FUN_1416611c0 */
 int FUN_1416611c0(longlong param_1, uint param_2, uint *param_3)
 {
-  GEN_HIT(8);
+  GEN_HIT(14);
   __declspec(align(16)) unsigned char gen_frame[(0x28 + sizeof(longlong *) > 0x58 ? 0x28 + sizeof(longlong *) : 0x58)];
   longlong *plVar1;
   byte bVar2;
@@ -539,7 +1047,7 @@ LAB_1416612f2:
 /* ref: FUN_141661440 */
 undefined8 FUN_141661440(undefined1 param_1, int *param_2)
 {
-  GEN_HIT(9);
+  GEN_HIT(15);
   longlong *plVar1;
   int *piVar2;
   longlong lVar3;
@@ -586,7 +1094,7 @@ undefined8 FUN_141661440(undefined1 param_1, int *param_2)
 /* ref: FUN_141661530 */
 undefined8 FUN_141661530(undefined4 *param_1, longlong param_2)
 {
-  GEN_HIT(10);
+  GEN_HIT(16);
   __declspec(align(16)) unsigned char gen_frame[(0xa8 + sizeof(undefined4[2]) > 0xb0 ? 0xa8 + sizeof(undefined4[2]) : 0xb0)];
   memcpy(gen_frame + 0x90, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x98, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -758,7 +1266,7 @@ undefined8 FUN_141661530(undefined4 *param_1, longlong param_2)
 /* ref: FUN_1416619d0 */
 undefined8 FUN_1416619d0(void)
 {
-  GEN_HIT(11);
+  GEN_HIT(17);
   longlong lVar1;
   longlong lVar2;
   longlong lVar3;
@@ -804,7 +1312,7 @@ undefined8 FUN_1416619d0(void)
 /* ref: FUN_141661b10 */
 undefined1 FUN_141661b10(void)
 {
-  GEN_HIT(12);
+  GEN_HIT(18);
   __declspec(align(16)) unsigned char gen_frame[(0x80 + sizeof(undefined1 *) > 0xa0 ? 0x80 + sizeof(undefined1 *) : 0xa0)];
   int *piVar1;
   longlong lVar2;
@@ -980,7 +1488,7 @@ joined_r0x000141661c6c:
 /* ref: FUN_141661ee0 */
 undefined4 FUN_141661ee0(uint *param_1, uint param_2)
 {
-  GEN_HIT(13);
+  GEN_HIT(19);
   longlong lVar1;
   undefined8 uVar2;
   
@@ -996,7 +1504,7 @@ undefined4 FUN_141661ee0(uint *param_1, uint param_2)
 /* ref: FUN_141661fc0 */
 int FUN_141661fc0(uint *param_1, uint param_2)
 {
-  GEN_HIT(14);
+  GEN_HIT(20);
   longlong lVar1;
   undefined8 uVar2;
   
@@ -1012,7 +1520,7 @@ int FUN_141661fc0(uint *param_1, uint param_2)
 /* ref: FUN_141662010 */
 uint FUN_141662010(uint *param_1, uint param_2)
 {
-  GEN_HIT(15);
+  GEN_HIT(21);
   longlong lVar1;
   uint uVar2;
   undefined8 uVar3;
@@ -1029,7 +1537,7 @@ uint FUN_141662010(uint *param_1, uint param_2)
 /* ref: FUN_141662060 */
 undefined4 FUN_141662060(uint *param_1, uint param_2)
 {
-  GEN_HIT(16);
+  GEN_HIT(22);
   longlong lVar1;
   undefined8 uVar2;
   
@@ -1045,7 +1553,7 @@ undefined4 FUN_141662060(uint *param_1, uint param_2)
 /* ref: FUN_1416620a0 */
 uint FUN_1416620a0(uint *param_1, uint param_2)
 {
-  GEN_HIT(17);
+  GEN_HIT(23);
   longlong lVar1;
   uint uVar2;
   undefined8 uVar3;
@@ -1062,7 +1570,7 @@ uint FUN_1416620a0(uint *param_1, uint param_2)
 /* ref: FUN_1416620f0 */
 undefined4 FUN_1416620f0(uint *param_1, uint param_2)
 {
-  GEN_HIT(18);
+  GEN_HIT(24);
   undefined4 uVar1;
   
   if ((((char)param_1[1] == '\0') && (param_2 < *param_1)) &&
@@ -1076,7 +1584,7 @@ undefined4 FUN_1416620f0(uint *param_1, uint param_2)
 /* ref: FUN_141662110 */
 int FUN_141662110(uint *param_1, uint param_2)
 {
-  GEN_HIT(19);
+  GEN_HIT(25);
   longlong lVar1;
   undefined8 uVar2;
   
@@ -1092,7 +1600,7 @@ int FUN_141662110(uint *param_1, uint param_2)
 /* ref: FUN_141662160 */
 longlong FUN_141662160(undefined4 *param_1)
 {
-  GEN_HIT(20);
+  GEN_HIT(26);
   __declspec(align(16)) unsigned char gen_frame[(0x30 + sizeof(longlong) > 0x50 ? 0x30 + sizeof(longlong) : 0x50)];
   memcpy(gen_frame + 0x30, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   undefined4 uVar1;
@@ -1122,7 +1630,7 @@ longlong FUN_141662160(undefined4 *param_1)
 /* ref: FUN_141662220 */
 longlong FUN_141662220(undefined4 *param_1, undefined8 *param_2, undefined8 param_3, undefined4 param_4)
 {
-  GEN_HIT(21);
+  GEN_HIT(27);
   __declspec(align(16)) unsigned char gen_frame[(0x58 + sizeof(longlong) > 0x70 ? 0x58 + sizeof(longlong) : 0x70)];
   memcpy(gen_frame + 0x50, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x58, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -1133,7 +1641,7 @@ longlong FUN_141662220(undefined4 *param_1, undefined8 *param_2, undefined8 para
   longlong lVar3;
   
   uVar1 = *param_1;
-  (*(code *)param_2[1])(gen_v16_q0((*(gen_v16 *)(gen_frame + 0x10))), param_2 + 2, 1, param_4);
+  (*(code *)param_2[1])((void *)&(*(gen_v16 *)(gen_frame + 0x10)), param_2 + 2, 1, param_4);
   (*(undefined8 *)(gen_frame + 0x0)) = *param_2;
   (*(undefined1 * *)(gen_frame + 0x8)) = (undefined1 *)param_2[1];
   uVar2 = CALLF(undefined8, FUN_141662350)(&(*(undefined1 * *)((char *)&gen_g_142e5ed20 + 0x0)),uVar1,&(*(undefined8 *)(gen_frame + 0x0)),param_3,(unsigned long long)((char)param_4));
@@ -1163,7 +1671,7 @@ longlong FUN_141662220(undefined4 *param_1, undefined8 *param_2, undefined8 para
 /* ref: FUN_141662340 */
 undefined4 FUN_141662340(undefined4 *param_1)
 {
-  GEN_HIT(22);
+  GEN_HIT(28);
   if (*(char *)(param_1 + 1) != '\0') {
     return 0;
   }
@@ -1173,7 +1681,7 @@ undefined4 FUN_141662340(undefined4 *param_1)
 /* ref: FUN_141662350 */
 undefined8 FUN_141662350(longlong *param_1, undefined4 param_2, undefined8 *param_3, undefined8 param_4, byte param_5)
 {
-  GEN_HIT(23);
+  GEN_HIT(29);
   __declspec(align(16)) unsigned char gen_frame[(0x50 + sizeof(undefined8) > 0x68 ? 0x50 + sizeof(undefined8) : 0x68)];
   char cVar1;
   longlong lVar2;
@@ -1189,14 +1697,14 @@ undefined8 FUN_141662350(longlong *param_1, undefined4 param_2, undefined8 *para
       return 3;
     }
     (*(longlong *)(gen_frame + 0x8)) = CONCAT44((*(undefined4 *)((char *)&(*(longlong *)(gen_frame + 0x8)) + 4)),param_2);
-    (*(code *)param_3[1])(gen_v16_q0((*(gen_v16 *)(gen_frame + 0x40))), param_3 + 2, 2);
+    (*(code *)param_3[1])((void *)&(*(gen_v16 *)(gen_frame + 0x40)), param_3 + 2, 2);
     (*(undefined8 *)(gen_frame + 0x30)) = *param_3;
     (*(code * *)(gen_frame + 0x38)) = (code *)param_3[1];
     *param_3 = 0;
     param_3[1] = ((code *)REFP(0x1402112e0));
     (*(undefined8 *)(gen_frame + 0x50)) = param_4;
     CALLF(undefined8 *, FUN_1416600f0)(param_1 + 0x71,((undefined1 *)(gen_frame + 0x10)),&(*(longlong *)(gen_frame + 0x8)),&(*(undefined8 *)(gen_frame + 0x30)));
-    (*(*(code * *)(gen_frame + 0x38)))(gen_v16_q0((*(gen_v16 *)(gen_frame + 0x40))), 0, 0);
+    (*(*(code * *)(gen_frame + 0x38)))((void *)&(*(gen_v16 *)(gen_frame + 0x40)), 0, 0);
     if ((code *)param_3[1] != ((code *)REFP(0x1402112e0))) {
       (*(code *)param_3[1])(param_3 + 2,0,0);
     }
@@ -1227,7 +1735,7 @@ undefined8 FUN_141662350(longlong *param_1, undefined4 param_2, undefined8 *para
 /* ref: FUN_141662500 */
 int FUN_141662500(longlong param_1, int param_2)
 {
-  GEN_HIT(24);
+  GEN_HIT(30);
   if ((*(byte *)(param_1 + 0x1b0) & 0x80) != 0) {
     return (int)*(char *)(param_1 + 0x187);
   }
@@ -1240,7 +1748,7 @@ int FUN_141662500(longlong param_1, int param_2)
 /* ref: FUN_141662530 */
 undefined8 FUN_141662530(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
 {
-  GEN_HIT(25);
+  GEN_HIT(31);
   ulonglong r_r8 = a2;
   ulonglong r_r9 = a3;
   ulonglong r_rcx = a0;
@@ -1251,14 +1759,14 @@ undefined8 FUN_141662530(undefined8 a0, undefined8 a1, undefined8 a2, undefined8
 /* ref: FUN_141662590 */
 undefined1 FUN_141662590(longlong param_1)
 {
-  GEN_HIT(26);
+  GEN_HIT(32);
   return *(undefined1 *)(param_1 + 5);
 }
 
 /* ref: FUN_1416625a0 */
 undefined8 FUN_1416625a0(void)
 {
-  GEN_HIT(27);
+  GEN_HIT(33);
   if (REFG(undefined1, 0x14311b88d) != '\0') {
     REFG(undefined1, 0x14311b88d) = 0;
     CALLF(longlong *, FUN_14057ae20)(&(*(undefined1 * *)((char *)&gen_g_142e5e4e0 + 0x0)),((code *)REFP(0x141662530)));
@@ -1271,7 +1779,7 @@ undefined8 FUN_1416625a0(void)
 /* ref: FUN_1416625f0 */
 undefined8 * FUN_1416625f0(ulonglong *param_1, undefined8 *param_2, byte *param_3)
 {
-  GEN_HIT(28);
+  GEN_HIT(34);
   byte *pbVar1;
   byte *pbVar2;
   byte *pbVar3;
@@ -1362,7 +1870,7 @@ undefined8 * FUN_1416625f0(ulonglong *param_1, undefined8 *param_2, byte *param_
 /* ref: FUN_141662800 */
 undefined8 FUN_141662800(ulonglong *param_1)
 {
-  GEN_HIT(29);
+  GEN_HIT(35);
   __declspec(align(16)) unsigned char gen_frame[(0x20 + sizeof(undefined1) > 0x48 ? 0x20 + sizeof(undefined1) : 0x48)];
   ulonglong uVar1;
   undefined8 *puVar2;
@@ -1407,7 +1915,7 @@ undefined8 FUN_141662800(ulonglong *param_1)
 /* ref: FUN_141662930 */
 undefined8 * FUN_141662930(longlong *param_1, undefined8 *param_2, byte *param_3)
 {
-  GEN_HIT(30);
+  GEN_HIT(36);
   byte *pbVar1;
   int iVar2;
   longlong lVar3;
@@ -1460,7 +1968,7 @@ LAB_141662a5e:
 /* ref: FUN_141662aa0 */
 undefined8 FUN_141662aa0(undefined8 param_1, longlong *param_2, uint param_3, longlong *param_4)
 {
-  GEN_HIT(31);
+  GEN_HIT(37);
   longlong lVar1;
   undefined1 uVar2;
   
@@ -1488,7 +1996,7 @@ undefined8 FUN_141662aa0(undefined8 param_1, longlong *param_2, uint param_3, lo
 /* ref: FUN_141662b20 */
 undefined1 FUN_141662b20(ulonglong *param_1, ulonglong param_2)
 {
-  GEN_HIT(32);
+  GEN_HIT(38);
   int iVar1;
   undefined8 *puVar2;
   undefined8 *puVar3;
@@ -1576,7 +2084,7 @@ undefined1 FUN_141662b20(ulonglong *param_1, ulonglong param_2)
 /* ref: FUN_141662d80 */
 ulonglong FUN_141662d80(ulonglong *param_1, ulonglong param_2)
 {
-  GEN_HIT(33);
+  GEN_HIT(39);
   byte *pbVar1;
   uint uVar2;
   longlong lVar3;
@@ -1702,7 +2210,7 @@ ulonglong FUN_141662d80(ulonglong *param_1, ulonglong param_2)
 /* ref: FUN_141663130 */
 undefined4 FUN_141663130(ulonglong param_1, char *param_2, uint param_3, char *param_4)
 {
-  GEN_HIT(34);
+  GEN_HIT(40);
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(ulonglong[2]) > 0x28 ? 0x0 + sizeof(ulonglong[2]) : 0x28)];
   char cVar1;
   undefined4 uVar2;
@@ -1793,7 +2301,8 @@ undefined4 FUN_141663130(ulonglong param_1, char *param_2, uint param_3, char *p
 /* ref: FUN_1416634b0 */
 undefined4 FUN_1416634b0(ulonglong param_1, char *param_2, uint param_3, undefined4 param_4)
 {
-  GEN_HIT(35);
+  GEN_HIT(41);
+  __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(ulonglong[2]) > 0x28 ? 0x0 + sizeof(ulonglong[2]) : 0x28)];
   ulonglong uVar1;
   undefined4 uVar2;
   undefined8 uVar3;
@@ -1807,9 +2316,8 @@ undefined4 FUN_1416634b0(ulonglong param_1, char *param_2, uint param_3, undefin
   char *pcVar11;
   ulonglong uVar12;
   bool bVar13;
-                                       
-                                       
-  ulonglong local_28 [2];
+/*                                   */
+/*                                   */
   
   uVar1 = (ulonglong)param_3;
   if (param_1 == 0) {
@@ -1820,7 +2328,7 @@ undefined4 FUN_1416634b0(ulonglong param_1, char *param_2, uint param_3, undefin
   puVar6 = &REFG(undefined4, 0x14311b8e0);
   uVar8 = 0;
   bVar13 = false;
-  puVar10 = local_28;
+  puVar10 = ((ulonglong *)(gen_frame + 0x0));
   do {
     if (bVar13) break;
     uVar12 = (ulonglong)*puVar6;
@@ -1838,8 +2346,8 @@ undefined4 FUN_1416634b0(ulonglong param_1, char *param_2, uint param_3, undefin
   iVar9 = 2;
   do {
     uVar2 = 0;
-    if (*(ulonglong *)((longlong)local_28 + uVar8) != 0) {
-      if (0x7fffffff < *(ulonglong *)((longlong)local_28 + uVar8)) {
+    if (*(ulonglong *)((longlong)((ulonglong *)(gen_frame + 0x0)) + uVar8) != 0) {
+      if (0x7fffffff < *(ulonglong *)((longlong)((ulonglong *)(gen_frame + 0x0)) + uVar8)) {
         uVar3 = CALLF(undefined1 *, FUN_140641860)(REFG(char *, 0x142d1a5a0),0xffffffff,0,0);
         uVar2 = CALLF(undefined4, FUN_1402534b0)(param_2,uVar1,uVar3,0,(unsigned long long)(CONCAT44(0,param_4)),(unsigned long long)(CONCAT44(0,param_4)));
         return uVar2;
@@ -1870,7 +2378,7 @@ undefined4 FUN_1416634b0(ulonglong param_1, char *param_2, uint param_3, undefin
       }
       uVar3 = CALLF(undefined1 *, FUN_140641860)(*(undefined8 *)((longlong)&REFG(char *, 0x142d1a5b0) + uVar8),
                             0xffffffff,0,0);
-      uVar2 = CALLF(undefined4, FUN_1402529c0)(param_2,uVar1,uVar3,*(undefined4 *)((longlong)local_28 + uVar8),(unsigned long long)(CONCAT44(0,param_4)),(unsigned long long)(CONCAT44(0,param_4)));
+      uVar2 = CALLF(undefined4, FUN_1402529c0)(param_2,uVar1,uVar3,*(undefined4 *)((longlong)((ulonglong *)(gen_frame + 0x0)) + uVar8),(unsigned long long)(CONCAT44(0,param_4)),(unsigned long long)(CONCAT44(0,param_4)));
     }
     uVar8 = uVar8 - 8;
     iVar9 = iVar9 + -1;
@@ -1883,7 +2391,7 @@ undefined4 FUN_1416634b0(ulonglong param_1, char *param_2, uint param_3, undefin
 /* ref: FUN_141663670 */
 undefined8 FUN_141663670(void)
 {
-  GEN_HIT(36);
+  GEN_HIT(42);
   REFG(undefined8, 0x14311b8e4) = 0;
   return 0;
 }
@@ -1891,7 +2399,7 @@ undefined8 FUN_141663670(void)
 /* ref: FUN_1416636e0 */
 undefined2 FUN_1416636e0(undefined8 param_1)
 {
-  GEN_HIT(37);
+  GEN_HIT(43);
   undefined8 uVar1;
   
   uVar1 = CALLF(undefined *, FUN_1405cddf0)();
@@ -1902,7 +2410,7 @@ undefined2 FUN_1416636e0(undefined8 param_1)
 /* ref: FUN_1416639a0 */
 float FUN_1416639a0(void)
 {
-  GEN_HIT(38);
+  GEN_HIT(44);
   if (REFG(undefined1, 0x14311b8f5) != '\0') {
     return *(float *)((undefined1 *)&REFG(undefined8, 0x14311b938) + (longlong)REFG(undefined4, 0x142d1a5f0) * 4);
   }
@@ -1912,7 +2420,7 @@ float FUN_1416639a0(void)
 /* ref: FUN_141663b30 */
 uint FUN_141663b30(double param_1_promoted, double param_2_promoted)
 {
-  GEN_HIT(39);
+  GEN_HIT(45);
   float param_1 = (float)param_1_promoted;
   float param_2 = (float)param_2_promoted;
   byte bVar1;
@@ -1946,7 +2454,7 @@ LAB_141663bd0:
 /* ref: FUN_141664270 */
 undefined4 FUN_141664270(void)
 {
-  GEN_HIT(40);
+  GEN_HIT(46);
   REFG(undefined4, 0x142d1a5dc) = 0xffffffff;
   REFG(undefined4, 0x14311b9c0) = 0;
   REFG(undefined4, 0x14311b9c4) = 0;
@@ -1963,7 +2471,7 @@ undefined4 FUN_141664270(void)
 /* ref: FUN_141666d30 */
 undefined8 FUN_141666d30(longlong param_1, int param_2, undefined8 param_3, undefined8 param_4, uint *param_5, longlong param_6)
 {
-  GEN_HIT(41);
+  GEN_HIT(47);
   __declspec(align(16)) unsigned char gen_frame[(0x1b0 + sizeof(undefined1[224]) > 0x2c8 ? 0x1b0 + sizeof(undefined1[224]) : 0x2c8)];
   char cVar1;
   uint uVar2;
@@ -2277,7 +2785,7 @@ LAB_141666e2b:
 /* ref: FUN_141667d90 */
 undefined1 FUN_141667d90(undefined8 param_1, longlong *param_2)
 {
-  GEN_HIT(42);
+  GEN_HIT(48);
   longlong *plVar1;
   
   plVar1 = (longlong *)CALLF(undefined8 *, FUN_140672df0)();
@@ -2301,7 +2809,7 @@ undefined1 FUN_141667d90(undefined8 param_1, longlong *param_2)
 /* ref: FUN_141668670 */
 undefined8 * FUN_141668670(undefined8 *param_1)
 {
-  GEN_HIT(43);
+  GEN_HIT(49);
   ulonglong uVar1;
   undefined8 uVar2;
   undefined4 uVar3;
@@ -2366,7 +2874,7 @@ undefined8 * FUN_141668670(undefined8 *param_1)
 /* ref: FUN_141668800 */
 undefined8 FUN_141668800(longlong param_1, undefined4 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6)
 {
-  GEN_HIT(44);
+  GEN_HIT(50);
   int iVar1;
   longlong lVar2;
   
@@ -2383,7 +2891,7 @@ undefined8 FUN_141668800(longlong param_1, undefined4 param_2, undefined8 param_
 /* ref: FUN_1416688a0 */
 undefined8 FUN_1416688a0(longlong param_1, longlong param_2)
 {
-  GEN_HIT(45);
+  GEN_HIT(51);
   longlong lVar1;
   
   if (param_2 != 0) {
@@ -2401,7 +2909,7 @@ undefined8 FUN_1416688a0(longlong param_1, longlong param_2)
 /* ref: FUN_141669b20 */
 undefined1 FUN_141669b20(longlong param_1)
 {
-  GEN_HIT(46);
+  GEN_HIT(52);
   if ((param_1 != 0) && ((*(byte *)(param_1 + 0x38) & 8) != 0)) {
     return 1;
   }
@@ -2411,7 +2919,7 @@ undefined1 FUN_141669b20(longlong param_1)
 /* ref: FUN_141669b40 */
 undefined8 FUN_141669b40(void)
 {
-  GEN_HIT(47);
+  GEN_HIT(53);
   int *piVar1;
   int iVar2;
   ulonglong uVar3;
@@ -2560,7 +3068,7 @@ undefined8 FUN_141669b40(void)
 /* ref: FUN_141669e90 */
 undefined8 FUN_141669e90(longlong param_1)
 {
-  GEN_HIT(48);
+  GEN_HIT(54);
   if (param_1 != 0) {
     *(uint *)(param_1 + 0x38) = *(uint *)(param_1 + 0x38) | 2;
   }
@@ -2570,7 +3078,7 @@ undefined8 FUN_141669e90(longlong param_1)
 /* ref: FUN_141669ee0 */
 undefined8 FUN_141669ee0(longlong param_1)
 {
-  GEN_HIT(49);
+  GEN_HIT(55);
   if (param_1 != 0) {
     *(uint *)(param_1 + 0x38) = *(uint *)(param_1 + 0x38) | 1;
   }
@@ -2580,7 +3088,7 @@ undefined8 FUN_141669ee0(longlong param_1)
 /* ref: FUN_14166a290 */
 undefined8 FUN_14166a290(undefined8 param_1, longlong *param_2)
 {
-  GEN_HIT(50);
+  GEN_HIT(56);
   longlong lVar1;
   ulonglong uVar2;
   undefined8 uVar3;
@@ -2622,7 +3130,7 @@ undefined8 FUN_14166a290(undefined8 param_1, longlong *param_2)
 /* ref: FUN_14166b6f0 */
 undefined8 FUN_14166b6f0(undefined8 param_1, longlong param_2)
 {
-  GEN_HIT(51);
+  GEN_HIT(57);
   longlong lVar1;
   
   while (param_2 != 0) {
@@ -2641,7 +3149,7 @@ undefined8 FUN_14166b6f0(undefined8 param_1, longlong param_2)
 /* ref: FUN_14166b920 */
 undefined8 * FUN_14166b920(undefined8 *param_1, undefined8 *param_2, undefined8 *param_3)
 {
-  GEN_HIT(52);
+  GEN_HIT(58);
   undefined8 uVar1;
   
   for (; param_1 != param_2; param_1 = (undefined8 *)((longlong)param_1 + 0x3c)) {
@@ -2664,7 +3172,7 @@ undefined8 * FUN_14166b920(undefined8 *param_1, undefined8 *param_2, undefined8 
 /* ref: FUN_14166b970 */
 undefined8 * FUN_14166b970(longlong *param_1, undefined8 *param_2, int *param_3)
 {
-  GEN_HIT(53);
+  GEN_HIT(59);
   int iVar1;
   int iVar2;
   undefined8 uVar3;
@@ -2753,7 +3261,7 @@ LAB_14166bada:
 /* ref: FUN_14166bb00 */
 undefined8 * FUN_14166bb00(longlong *param_1, undefined8 *param_2, int *param_3)
 {
-  GEN_HIT(54);
+  GEN_HIT(60);
   int iVar1;
   int iVar2;
   undefined8 uVar3;
@@ -2842,7 +3350,7 @@ LAB_14166bc6a:
 /* ref: FUN_14166bc90 */
 undefined8 FUN_14166bc90(int *param_1)
 {
-  GEN_HIT(55);
+  GEN_HIT(61);
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[8]) > 0x20 ? 0x0 + sizeof(undefined1[8]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   longlong lVar1;
@@ -2927,7 +3435,7 @@ undefined8 FUN_14166bc90(int *param_1)
 /* ref: FUN_14166be00 */
 longlong * FUN_14166be00(longlong *param_1, longlong *param_2)
 {
-  GEN_HIT(56);
+  GEN_HIT(62);
   uint uVar1;
   longlong lVar2;
   char *pcVar3;
@@ -2981,7 +3489,7 @@ longlong * FUN_14166be00(longlong *param_1, longlong *param_2)
 /* ref: FUN_14166bfc0 */
 int * FUN_14166bfc0(int *param_1, uint param_2)
 {
-  GEN_HIT(57);
+  GEN_HIT(63);
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[8]) > 0x20 ? 0x0 + sizeof(undefined1[8]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -3060,7 +3568,7 @@ int * FUN_14166bfc0(int *param_1, uint param_2)
 /* ref: FUN_14166c570 */
 bool FUN_14166c570(int param_1, undefined8 param_2)
 {
-  GEN_HIT(58);
+  GEN_HIT(64);
   char cVar1;
   undefined8 *puVar2;
   undefined8 *puVar3;
@@ -3090,7 +3598,7 @@ bool FUN_14166c570(int param_1, undefined8 param_2)
 /* ref: FUN_14166c5d0 */
 undefined1 FUN_14166c5d0(longlong param_1, float *param_2)
 {
-  GEN_HIT(59);
+  GEN_HIT(65);
   __declspec(align(16)) unsigned char gen_frame[(0xc8 + sizeof(longlong) > 0x198 ? 0xc8 + sizeof(longlong) : 0x198)];
   undefined8 *puVar1;
   undefined8 *puVar2;
@@ -3349,7 +3857,7 @@ undefined1 FUN_14166c5d0(longlong param_1, float *param_2)
 /* ref: FUN_14166cfd0 */
 undefined4 * FUN_14166cfd0(undefined4 *param_1, undefined8 param_2)
 {
-  GEN_HIT(60);
+  GEN_HIT(66);
   undefined *puVar1;
   undefined *puVar2;
   undefined4 *puVar3;
@@ -3389,7 +3897,7 @@ undefined4 * FUN_14166cfd0(undefined4 *param_1, undefined8 param_2)
 /* ref: FUN_14166d090 */
 undefined8 FUN_14166d090(void)
 {
-  GEN_HIT(61);
+  GEN_HIT(67);
   __declspec(align(16)) unsigned char gen_frame[(0x70 + sizeof(undefined1[8]) > 0x80 ? 0x70 + sizeof(undefined1[8]) : 0x80)];
   undefined4 *puVar1;
   
@@ -3437,7 +3945,7 @@ undefined8 FUN_14166d090(void)
 /* ref: FUN_14166d210 */
 undefined4 * FUN_14166d210(undefined4 *param_1, int param_2, undefined8 *param_3)
 {
-  GEN_HIT(62);
+  GEN_HIT(68);
   int iVar1;
   longlong lVar2;
   longlong lVar3;
@@ -3654,7 +4162,7 @@ undefined4 * FUN_14166d210(undefined4 *param_1, int param_2, undefined8 *param_3
 /* ref: FUN_14166d6a0 */
 undefined8 FUN_14166d6a0(int param_1)
 {
-  GEN_HIT(63);
+  GEN_HIT(69);
   undefined8 *puVar1;
   undefined8 *puVar2;
   undefined8 uVar3;
@@ -3686,7 +4194,7 @@ undefined8 FUN_14166d6a0(int param_1)
 /* ref: FUN_14166d710 */
 undefined8 FUN_14166d710(void)
 {
-  GEN_HIT(64);
+  GEN_HIT(70);
   undefined *puVar1;
   longlong lVar2;
   
@@ -3704,7 +4212,7 @@ undefined8 FUN_14166d710(void)
 /* ref: FUN_14166e1f0 */
 int * FUN_14166e1f0(undefined8 param_1, undefined1 param_2)
 {
-  GEN_HIT(65);
+  GEN_HIT(71);
   __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(gen_v16) > 0x28 ? 0x10 + sizeof(gen_v16) : 0x28)];
   ulonglong uVar1;
   int *piVar2;
@@ -3757,7 +4265,7 @@ int * FUN_14166e1f0(undefined8 param_1, undefined1 param_2)
   } while (bVar5);
   *piVar2 = ((int *)(gen_frame + 0x0))[0];
   (*(int * *)(gen_frame + 0x8)) = piVar2;
-  CALLF(undefined8 *, FUN_14166b970)(&REFG(undefined8, 0x142d1acc0), gen_v16_q0((*(gen_v16 *)(gen_frame + 0x10))), ((int *)(gen_frame + 0x0)));
+  CALLF(undefined8 *, FUN_14166b970)(&REFG(undefined8, 0x142d1acc0), (void *)&(*(gen_v16 *)(gen_frame + 0x10)), ((int *)(gen_frame + 0x0)));
   CALLF(undefined1, FUN_141670420)(piVar2 + 2,0x40);
   uVar1 = *(ulonglong *)(piVar2 + 4);
   if ((uVar1 < (*(ulonglong *)(piVar2 + 6) & 0x7fffffffffffffff)) &&
@@ -3783,7 +4291,7 @@ int * FUN_14166e1f0(undefined8 param_1, undefined1 param_2)
 /* ref: FUN_14166e370 */
 int * FUN_14166e370(undefined8 param_1, undefined1 param_2)
 {
-  GEN_HIT(66);
+  GEN_HIT(72);
   __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(gen_v16) > 0x28 ? 0x10 + sizeof(gen_v16) : 0x28)];
   int *piVar1;
   bool bVar2;
@@ -3873,14 +4381,14 @@ int * FUN_14166e370(undefined8 param_1, undefined1 param_2)
   } while (bVar2);
   *piVar1 = ((int *)(gen_frame + 0x0))[0];
   (*(int * *)(gen_frame + 0x8)) = piVar1;
-  CALLF(undefined8 *, FUN_14166bb00)(&REFG(undefined8, 0x142d1ac98), gen_v16_q0((*(gen_v16 *)(gen_frame + 0x10))), ((int *)(gen_frame + 0x0)));
+  CALLF(undefined8 *, FUN_14166bb00)(&REFG(undefined8, 0x142d1ac98), (void *)&(*(gen_v16 *)(gen_frame + 0x10)), ((int *)(gen_frame + 0x0)));
   return piVar1;
 }
 
 /* ref: FUN_14166e680 */
 longlong FUN_14166e680(int param_1, char param_2)
 {
-  GEN_HIT(67);
+  GEN_HIT(73);
   __declspec(align(16)) unsigned char gen_frame[(0x20 + sizeof(int) > 0x38 ? 0x20 + sizeof(int) : 0x38)];
   uint uVar1;
   longlong lVar2;
@@ -3910,7 +4418,7 @@ LAB_14166e74a:
 /* ref: FUN_14166e760 */
 undefined4 FUN_14166e760(longlong param_1, longlong param_2)
 {
-  GEN_HIT(68);
+  GEN_HIT(74);
   undefined8 uVar1;
   undefined *puVar2;
   longlong lVar3;
@@ -3933,7 +4441,7 @@ undefined4 FUN_14166e760(longlong param_1, longlong param_2)
 /* ref: FUN_14166f2b0 */
 undefined8 FUN_14166f2b0(int param_1, undefined8 param_2)
 {
-  GEN_HIT(69);
+  GEN_HIT(75);
   undefined8 *puVar1;
   undefined8 *puVar2;
   undefined8 *puVar3;
@@ -3961,7 +4469,7 @@ undefined8 FUN_14166f2b0(int param_1, undefined8 param_2)
 /* ref: FUN_14166f300 */
 undefined8 FUN_14166f300(longlong param_1, longlong *param_2)
 {
-  GEN_HIT(70);
+  GEN_HIT(76);
   longlong lVar1;
   undefined8 uVar2;
   
@@ -4005,7 +4513,7 @@ undefined8 FUN_14166f300(longlong param_1, longlong *param_2)
 /* ref: FUN_14166f3c0 */
 undefined4 FUN_14166f3c0(void)
 {
-  GEN_HIT(71);
+  GEN_HIT(77);
   ulonglong uVar1;
   bool bVar2;
   undefined4 uVar3;
@@ -4059,7 +4567,7 @@ undefined4 FUN_14166f3c0(void)
 /* ref: FUN_14166f540 */
 float FUN_14166f540(longlong param_1)
 {
-  GEN_HIT(72);
+  GEN_HIT(78);
   longlong lVar1;
   ulonglong uVar2;
   longlong *plVar3;
@@ -4102,7 +4610,7 @@ float FUN_14166f540(longlong param_1)
 /* ref: FUN_14166f5f0 */
 undefined8 FUN_14166f5f0(int param_1)
 {
-  GEN_HIT(73);
+  GEN_HIT(79);
   longlong lVar1;
   undefined8 *puVar2;
   undefined8 *puVar3;
@@ -4137,7 +4645,7 @@ undefined8 FUN_14166f5f0(int param_1)
 /* ref: FUN_14166fc60 */
 undefined8 FUN_14166fc60(undefined8 param_1, longlong param_2)
 {
-  GEN_HIT(74);
+  GEN_HIT(80);
   longlong lVar1;
   
   while (param_2 != 0) {
@@ -4152,7 +4660,7 @@ undefined8 FUN_14166fc60(undefined8 param_1, longlong param_2)
 /* ref: FUN_14166fcc0 */
 undefined8 FUN_14166fcc0(undefined8 param_1, longlong param_2)
 {
-  GEN_HIT(75);
+  GEN_HIT(81);
   longlong lVar1;
   
   while (param_2 != 0) {
@@ -4167,7 +4675,7 @@ undefined8 FUN_14166fcc0(undefined8 param_1, longlong param_2)
 /* ref: FUN_14166fd20 */
 undefined1 FUN_14166fd20(longlong *param_1, undefined8 *param_2)
 {
-  GEN_HIT(76);
+  GEN_HIT(82);
   undefined8 uVar1;
   undefined1 uVar2;
   undefined8 *puVar3;
@@ -4200,7 +4708,7 @@ undefined1 FUN_14166fd20(longlong *param_1, undefined8 *param_2)
 /* ref: FUN_14166fda0 */
 undefined1 FUN_14166fda0(longlong *param_1, undefined8 *param_2)
 {
-  GEN_HIT(77);
+  GEN_HIT(83);
   undefined8 uVar1;
   undefined1 uVar2;
   undefined8 *puVar3;
@@ -4228,7 +4736,7 @@ undefined1 FUN_14166fda0(longlong *param_1, undefined8 *param_2)
 /* ref: FUN_14166fe10 */
 undefined8 FUN_14166fe10(undefined8 param_1, longlong param_2)
 {
-  GEN_HIT(78);
+  GEN_HIT(84);
   uint uVar1;
   undefined8 uVar2;
   char *pcVar3;
@@ -4251,7 +4759,7 @@ undefined8 FUN_14166fe10(undefined8 param_1, longlong param_2)
 /* ref: FUN_14166fe70 */
 undefined8 FUN_14166fe70(undefined8 param_1, longlong param_2)
 {
-  GEN_HIT(79);
+  GEN_HIT(85);
   uint uVar1;
   undefined8 uVar2;
   char *pcVar3;
@@ -4274,7 +4782,7 @@ undefined8 FUN_14166fe70(undefined8 param_1, longlong param_2)
 /* ref: FUN_14166fee0 */
 undefined8 * FUN_14166fee0(longlong *param_1, undefined8 *param_2, longlong *param_3, longlong *param_4)
 {
-  GEN_HIT(80);
+  GEN_HIT(86);
   longlong lVar1;
   longlong *plVar2;
   longlong lVar3;
@@ -4446,7 +4954,7 @@ LAB_141670094:
 /* ref: FUN_141670180 */
 undefined8 * FUN_141670180(longlong *param_1, undefined8 *param_2, longlong *param_3, longlong *param_4)
 {
-  GEN_HIT(81);
+  GEN_HIT(87);
   longlong lVar1;
   longlong *plVar2;
   longlong lVar3;
@@ -4618,7 +5126,7 @@ LAB_141670334:
 /* ref: FUN_141670420 */
 undefined1 FUN_141670420(longlong *param_1, undefined8 *param_2)
 {
-  GEN_HIT(82);
+  GEN_HIT(88);
   byte bVar1;
   uint uVar2;
   undefined8 *puVar3;
@@ -4700,7 +5208,7 @@ undefined1 FUN_141670420(longlong *param_1, undefined8 *param_2)
 /* ref: FUN_141670600 */
 undefined1 FUN_141670600(longlong *param_1, undefined8 *param_2)
 {
-  GEN_HIT(83);
+  GEN_HIT(89);
   longlong lVar1;
   byte bVar2;
   uint uVar3;
@@ -4776,7 +5284,7 @@ undefined1 FUN_141670600(longlong *param_1, undefined8 *param_2)
 /* ref: FUN_141670b10 */
 undefined8 * FUN_141670b10(undefined8 *param_1, undefined4 param_2)
 {
-  GEN_HIT(84);
+  GEN_HIT(90);
   undefined8 uVar1;
   undefined8 *puVar2;
   uint uVar3;
@@ -4825,7 +5333,7 @@ undefined8 * FUN_141670b10(undefined8 *param_1, undefined4 param_2)
 /* ref: FUN_141670c20 */
 longlong FUN_141670c20(undefined4 param_1)
 {
-  GEN_HIT(85);
+  GEN_HIT(91);
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[32]) > 0x20 ? 0x0 + sizeof(undefined1[32]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   longlong lVar1;
@@ -4840,7 +5348,7 @@ longlong FUN_141670c20(undefined4 param_1)
 /* ref: FUN_141670c50 */
 ulonglong FUN_141670c50(int param_1)
 {
-  GEN_HIT(86);
+  GEN_HIT(92);
   longlong lVar1;
   undefined8 uVar2;
   ulonglong uVar3;
@@ -4874,7 +5382,7 @@ ulonglong FUN_141670c50(int param_1)
 /* ref: FUN_141670d10 */
 undefined8 FUN_141670d10(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
 {
-  GEN_HIT(87);
+  GEN_HIT(93);
   ulonglong r_r8 = a2;
   ulonglong r_r9 = a3;
   ulonglong r_rax = 0;
@@ -4899,7 +5407,7 @@ L_141670d2e:;
 /* ref: FUN_141670d60 */
 undefined8 FUN_141670d60(void)
 {
-  GEN_HIT(88);
+  GEN_HIT(94);
   undefined8 uVar1;
   
   uVar1 = CALLF(longlong *, FUN_14057ae20)(&(*(undefined8 *)((char *)&gen_g_142e4dce0 + 0x0)),((code *)REFP(0x141670d10)));
@@ -4909,7 +5417,7 @@ undefined8 FUN_141670d60(void)
 /* ref: FUN_141670d80 */
 undefined8 FUN_141670d80(uint *param_1, uint *param_2, longlong param_3, undefined1 param_4)
 {
-  GEN_HIT(89);
+  GEN_HIT(95);
   uint uVar1;
   undefined8 uVar2;
   uint *puVar3;
@@ -5005,7 +5513,7 @@ joined_r0x000141670daf:
 /* ref: FUN_141670fb0 */
 undefined8 FUN_141670fb0(undefined8 *param_1, undefined8 *param_2, longlong param_3, undefined1 param_4)
 {
-  GEN_HIT(90);
+  GEN_HIT(96);
   __declspec(align(16)) unsigned char gen_frame[(0x4 + sizeof(ushort) > 0x20 ? 0x4 + sizeof(ushort) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -5114,7 +5622,7 @@ LAB_1416710b4:
 /* ref: FUN_141671210 */
 uint * FUN_141671210(uint *param_1, longlong param_2)
 {
-  GEN_HIT(91);
+  GEN_HIT(97);
   uint *puVar1;
   uint uVar2;
   uint uVar3;
@@ -5200,7 +5708,7 @@ uint * FUN_141671210(uint *param_1, longlong param_2)
 /* ref: FUN_141671350 */
 longlong FUN_141671350(longlong param_1, longlong param_2)
 {
-  GEN_HIT(92);
+  GEN_HIT(98);
   longlong lVar1;
   ushort uVar2;
   ushort uVar3;
@@ -5286,7 +5794,7 @@ longlong FUN_141671350(longlong param_1, longlong param_2)
 /* ref: FUN_1416714c0 */
 undefined8 FUN_1416714c0(undefined8 *param_1, undefined8 *param_2)
 {
-  GEN_HIT(93);
+  GEN_HIT(99);
   undefined8 uVar1;
   longlong lVar2;
   longlong lVar3;
@@ -5365,7 +5873,7 @@ undefined8 FUN_1416714c0(undefined8 *param_1, undefined8 *param_2)
 /* ref: FUN_141671640 */
 undefined8 FUN_141671640(undefined8 *param_1, undefined8 *param_2)
 {
-  GEN_HIT(94);
+  GEN_HIT(100);
   __declspec(align(16)) unsigned char gen_frame[(0x4 + sizeof(ushort) > 0x20 ? 0x4 + sizeof(ushort) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -5461,7 +5969,7 @@ joined_r0x000141671732:
 /* ref: FUN_1416717f0 */
 longlong * FUN_1416717f0(longlong *param_1)
 {
-  GEN_HIT(95);
+  GEN_HIT(101);
   uint uVar1;
   longlong *plVar2;
   char *pcVar3;
@@ -5499,7 +6007,7 @@ longlong * FUN_1416717f0(longlong *param_1)
 /* ref: FUN_141671b10 */
 undefined8 FUN_141671b10(longlong param_1, undefined8 param_2, undefined8 *param_3, code *param_4, longlong param_5)
 {
-  GEN_HIT(96);
+  GEN_HIT(102);
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(uint[2]) > 0x20 ? 0x8 + sizeof(uint[2]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -5568,7 +6076,7 @@ LAB_141671bed:
 /* ref: FUN_141671c80 */
 undefined1 FUN_141671c80(longlong param_1, longlong param_2)
 {
-  GEN_HIT(97);
+  GEN_HIT(103);
   __declspec(align(16)) unsigned char gen_frame[(0xa8 + sizeof(ulonglong) > 0xb0 ? 0xa8 + sizeof(ulonglong) : 0xb0)];
   memcpy(gen_frame + 0x90, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x98, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -5725,7 +6233,7 @@ undefined1 FUN_141671c80(longlong param_1, longlong param_2)
 /* ref: FUN_141672080 */
 undefined8 FUN_141672080(byte *param_1, undefined8 param_2)
 {
-  GEN_HIT(98);
+  GEN_HIT(104);
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(uint[2]) > 0x20 ? 0x0 + sizeof(uint[2]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -5746,7 +6254,7 @@ undefined8 FUN_141672080(byte *param_1, undefined8 param_2)
 /* ref: FUN_141672110 */
 undefined8 FUN_141672110(undefined8 param_1, longlong param_2)
 {
-  GEN_HIT(99);
+  GEN_HIT(105);
   uint uVar1;
   undefined8 uVar2;
   char *pcVar3;
@@ -5769,7 +6277,7 @@ undefined8 FUN_141672110(undefined8 param_1, longlong param_2)
 /* ref: FUN_141672180 */
 ulonglong FUN_141672180(longlong *param_1, longlong *param_2)
 {
-  GEN_HIT(100);
+  GEN_HIT(106);
   undefined8 *puVar1;
   longlong lVar2;
   undefined8 uVar3;
@@ -5871,7 +6379,7 @@ ulonglong FUN_141672180(longlong *param_1, longlong *param_2)
 /* ref: FUN_141672590 */
 longlong FUN_141672590(undefined8 param_1, undefined8 param_2)
 {
-  GEN_HIT(101);
+  GEN_HIT(107);
   longlong lVar1;
   
   lVar1 = CALLF(undefined8, FUN_141672440)(param_1,param_2);
@@ -5884,7 +6392,7 @@ longlong FUN_141672590(undefined8 param_1, undefined8 param_2)
 /* ref: FUN_141672800 */
 undefined * FUN_141672800(uint param_1, undefined1 *param_2)
 {
-  GEN_HIT(102);
+  GEN_HIT(108);
   undefined *puVar1;
   undefined *puVar2;
   
@@ -5905,7 +6413,7 @@ undefined * FUN_141672800(uint param_1, undefined1 *param_2)
 /* ref: FUN_141672850 */
 longlong FUN_141672850(uint param_1, undefined1 *param_2)
 {
-  GEN_HIT(103);
+  GEN_HIT(109);
   longlong lVar1;
   
   if ((ulonglong)param_1 < 9) {
@@ -5923,7 +6431,7 @@ longlong FUN_141672850(uint param_1, undefined1 *param_2)
 /* ref: FUN_141672890 */
 undefined * FUN_141672890(int param_1, undefined1 *param_2)
 {
-  GEN_HIT(104);
+  GEN_HIT(110);
   undefined *puVar1;
   undefined *puVar2;
   
@@ -5944,7 +6452,8 @@ undefined * FUN_141672890(int param_1, undefined1 *param_2)
 /* ref: FUN_141672fc0 */
 undefined8 FUN_141672fc0(longlong param_1, longlong *param_2, undefined8 param_3, longlong param_4, undefined8 *param_5, undefined8 *param_6)
 {
-  GEN_HIT(105);
+  GEN_HIT(111);
+  __declspec(align(16)) unsigned char gen_frame[(0x140 + sizeof(undefined8) > 0x1c8 ? 0x140 + sizeof(undefined8) : 0x1c8)];
   undefined2 uVar1;
   uint uVar2;
   int iVar3;
@@ -5963,61 +6472,17 @@ undefined8 FUN_141672fc0(longlong param_1, longlong *param_2, undefined8 param_3
   float fVar16;
   float fVar17;
   ulonglong uVar18;
-                                 
-                                       
-  undefined4 local_1c8 [2];
-  float local_1c0;
-  float fStack_1bc;
-  float local_1b8;
-  float local_1b0;
-  float fStack_1ac;
-  float local_1a8;
-  float local_1a0;
-  float fStack_19c;
-  float local_198;
-  undefined1 local_190 [8];
-  undefined4 local_188 [2];
-  undefined8 local_180;
-  undefined8 local_178;
-  undefined8 uStack_170;
-  undefined8 local_168;
-  undefined8 uStack_160;
-  undefined8 local_158;
-  undefined8 uStack_150;
-  undefined8 local_148;
-  undefined8 local_140;
-  undefined8 uStack_138;
-  undefined8 local_130;
-  undefined8 uStack_128;
-  undefined8 local_120;
-  undefined8 uStack_118;
-  undefined8 local_110;
-  undefined8 uStack_108;
-  undefined8 local_100;
-  undefined8 uStack_f8;
-  undefined8 local_f0;
-  undefined8 uStack_e8;
-  undefined8 local_e0;
-  undefined8 uStack_d8;
-  undefined8 local_d0;
-  undefined8 uStack_c8;
-  undefined8 local_c0;
-  undefined8 uStack_b8;
-  undefined8 local_b0;
-  undefined8 uStack_a8;
-  undefined8 local_a0;
-  undefined8 uStack_98;
-  undefined8 local_90;
-  undefined8 uStack_88;
+/*                             */
+/*                                   */
   
-  CALLF(undefined8, FUN_141355cb0)(&local_1b0,param_3,0x54545724);
-  CALLF(undefined8, FUN_141355cb0)(&local_1a0,param_3,0x42545724);
-  fVar17 = (local_1a0 + local_1b0) * REFG(float, 0x14261a988);
-  fVar16 = (fStack_19c + fStack_1ac) * REFG(float, 0x14261a988);
-  fVar14 = (local_1a8 + local_198) * REFG(float, 0x14261a988);
-  local_1c0 = fVar17;
-  fStack_1bc = fVar16;
-  local_1b8 = fVar14;
+  CALLF(undefined8, FUN_141355cb0)(&(*(float *)(gen_frame + 0x18)),param_3,0x54545724);
+  CALLF(undefined8, FUN_141355cb0)(&(*(float *)(gen_frame + 0x28)),param_3,0x42545724);
+  fVar17 = ((*(float *)(gen_frame + 0x28)) + (*(float *)(gen_frame + 0x18))) * REFG(float, 0x14261a988);
+  fVar16 = ((*(float *)(gen_frame + 0x2c)) + (*(float *)(gen_frame + 0x1c))) * REFG(float, 0x14261a988);
+  fVar14 = ((*(float *)(gen_frame + 0x20)) + (*(float *)(gen_frame + 0x30))) * REFG(float, 0x14261a988);
+  (*(float *)(gen_frame + 0x8)) = fVar17;
+  (*(float *)(gen_frame + 0xc)) = fVar16;
+  (*(float *)(gen_frame + 0x10)) = fVar14;
   uVar5 = CALLF(undefined8, FUN_140318020)(param_3);
   pfVar6 = (float *)CALLF(longlong, FUN_141356500)(uVar5);
   fVar12 = REFG(float, 0x142618d64);
@@ -6099,13 +6564,13 @@ undefined8 FUN_141672fc0(longlong param_1, longlong *param_2, undefined8 param_3
     if ((0.0 <= fVar14) && (fVar15 = fVar14, fVar12 <= fVar14)) {
       fVar15 = fVar12;
     }
-    local_1c8[0] = CONCAT13((char)(int)ROUND(fVar15 * REFG(float, 0x14261b484)),
+    ((undefined4 *)(gen_frame + 0x0))[0] = CONCAT13((char)(int)ROUND(fVar15 * REFG(float, 0x14261b484)),
                             CONCAT12((char)(int)ROUND(fVar13 * REFG(float, 0x14261b484)),
                                      CONCAT11((char)(int)ROUND(fVar17 * REFG(float, 0x14261b484)),
                                               (char)(int)ROUND(fVar16 * REFG(float, 0x14261b484)))));
-    fVar12 = local_1c0;
-    fVar14 = fStack_1bc;
-    fVar17 = local_1b8;
+    fVar12 = (*(float *)(gen_frame + 0x8));
+    fVar14 = (*(float *)(gen_frame + 0xc));
+    fVar17 = (*(float *)(gen_frame + 0x10));
     if (REFG(float, 0x14261a954) <=
         GEN_FABS((*(float *)(param_1 + 0x10) * *(float *)(param_1 + 0x10) +
                        *(float *)(param_1 + 0x14) * *(float *)(param_1 + 0x14) +
@@ -6114,64 +6579,64 @@ undefined8 FUN_141672fc0(longlong param_1, longlong *param_2, undefined8 param_3
       fVar14 = (float)((ulonglong)*(undefined8 *)(param_1 + 0x10) >> 0x20);
       fVar17 = *(float *)(param_1 + 0x18);
     }
-    *puVar8 = CONCAT44(fStack_1ac,local_1b0);
-    *(float *)(puVar8 + 1) = local_1a8;
-    *(undefined4 *)((longlong)puVar8 + 0xc) = local_1c8[0];
-    puVar8[2] = CONCAT44(fStack_19c,local_1a0);
+    *puVar8 = CONCAT44((*(float *)(gen_frame + 0x1c)),(*(float *)(gen_frame + 0x18)));
+    *(float *)(puVar8 + 1) = (*(float *)(gen_frame + 0x20));
+    *(undefined4 *)((longlong)puVar8 + 0xc) = ((undefined4 *)(gen_frame + 0x0))[0];
+    puVar8[2] = CONCAT44((*(float *)(gen_frame + 0x2c)),(*(float *)(gen_frame + 0x28)));
     puVar8[4] = CONCAT44(fVar14,fVar12);
     *(float *)(puVar8 + 5) = fVar17;
-    *(float *)(puVar8 + 3) = local_198;
-    *(undefined4 *)((longlong)puVar8 + 0x1c) = local_1c8[0];
-    *(undefined4 *)((longlong)puVar8 + 0x2c) = local_1c8[0];
+    *(float *)(puVar8 + 3) = (*(float *)(gen_frame + 0x30));
+    *(undefined4 *)((longlong)puVar8 + 0x1c) = ((undefined4 *)(gen_frame + 0x0))[0];
+    *(undefined4 *)((longlong)puVar8 + 0x2c) = ((undefined4 *)(gen_frame + 0x0))[0];
     *puVar9 = 0x20000;
     puVar9[1] = 0x10002;
     (**(code **)(*param_2 + 0x188))(param_2,uVar5,0,puVar9);
     (**(code **)(*param_2 + 0x130))(param_2,uVar5,1);
     (**(code **)(*param_2 + 0x188))(param_2,uVar7,0);
     CALLF(undefined8, FUN_14228f830)(param_2,uVar7,0xb);
-    local_130 = param_5[2];
-    uStack_128 = param_5[3];
-    local_180 = 0;
-    local_178 = 0;
-    uStack_170 = 0;
-    local_158 = REFG(undefined8, 0x142721230);
-    uStack_150 = REFG(undefined8, 0x142721238);
-    local_140 = *param_5;
-    uStack_138 = param_5[1];
-    local_148 = 0;
-    local_188[0] = 8;
-    local_110 = param_5[6];
-    uStack_108 = param_5[7];
-    local_120 = param_5[4];
-    uStack_118 = param_5[5];
-    local_100 = *param_6;
-    uStack_f8 = param_6[1];
-    local_f0 = param_6[2];
-    uStack_e8 = param_6[3];
-    local_e0 = param_6[4];
-    uStack_d8 = param_6[5];
-    local_d0 = param_6[6];
-    uStack_c8 = param_6[7];
-    local_168 = REFG(undefined8, 0x14261a9d0);
-    uStack_160 = REFG(undefined8, 0x14261a9d8);
-    local_c0 = REFG(undefined8, 0x14261a9d0);
-    uStack_b8 = REFG(undefined8, 0x14261a9d8);
-    local_b0 = REFG(undefined4, 0x14261a9e0);
-    uStack_a8 = REFG(undefined4, 0x14261a9e8);
-    local_a0 = REFG(undefined8, 0x14261aa00);
-    uStack_98 = REFG(undefined8, 0x14261aa08);
-    local_90 = REFG(float, 0x14261aa10);
-    uStack_88 = REFG(undefined4, 0x14261aa18);
+    (*(undefined8 *)(gen_frame + 0x98)) = param_5[2];
+    (*(undefined8 *)(gen_frame + 0xa0)) = param_5[3];
+    (*(undefined8 *)(gen_frame + 0x48)) = 0;
+    (*(undefined8 *)(gen_frame + 0x50)) = 0;
+    (*(undefined8 *)(gen_frame + 0x58)) = 0;
+    (*(undefined8 *)(gen_frame + 0x70)) = REFG(undefined8, 0x142721230);
+    (*(undefined8 *)(gen_frame + 0x78)) = REFG(undefined8, 0x142721238);
+    (*(undefined8 *)(gen_frame + 0x88)) = *param_5;
+    (*(undefined8 *)(gen_frame + 0x90)) = param_5[1];
+    (*(undefined8 *)(gen_frame + 0x80)) = 0;
+    ((undefined4 *)(gen_frame + 0x40))[0] = 8;
+    (*(undefined8 *)(gen_frame + 0xb8)) = param_5[6];
+    (*(undefined8 *)(gen_frame + 0xc0)) = param_5[7];
+    (*(undefined8 *)(gen_frame + 0xa8)) = param_5[4];
+    (*(undefined8 *)(gen_frame + 0xb0)) = param_5[5];
+    (*(undefined8 *)(gen_frame + 0xc8)) = *param_6;
+    (*(undefined8 *)(gen_frame + 0xd0)) = param_6[1];
+    (*(undefined8 *)(gen_frame + 0xd8)) = param_6[2];
+    (*(undefined8 *)(gen_frame + 0xe0)) = param_6[3];
+    (*(undefined8 *)(gen_frame + 0xe8)) = param_6[4];
+    (*(undefined8 *)(gen_frame + 0xf0)) = param_6[5];
+    (*(undefined8 *)(gen_frame + 0xf8)) = param_6[6];
+    (*(undefined8 *)(gen_frame + 0x100)) = param_6[7];
+    (*(undefined8 *)(gen_frame + 0x60)) = REFG(undefined8, 0x14261a9d0);
+    (*(undefined8 *)(gen_frame + 0x68)) = REFG(undefined8, 0x14261a9d8);
+    (*(undefined8 *)(gen_frame + 0x108)) = REFG(undefined8, 0x14261a9d0);
+    (*(undefined8 *)(gen_frame + 0x110)) = REFG(undefined8, 0x14261a9d8);
+    (*(undefined8 *)(gen_frame + 0x118)) = REFG(undefined4, 0x14261a9e0);
+    (*(undefined8 *)(gen_frame + 0x120)) = REFG(undefined4, 0x14261a9e8);
+    (*(undefined8 *)(gen_frame + 0x128)) = REFG(undefined8, 0x14261aa00);
+    (*(undefined8 *)(gen_frame + 0x130)) = REFG(undefined8, 0x14261aa08);
+    (*(undefined8 *)(gen_frame + 0x138)) = REFG(float, 0x14261aa10);
+    (*(undefined8 *)(gen_frame + 0x140)) = REFG(undefined4, 0x14261aa18);
     uVar5 = CALLF(undefined8, FUN_140318020)(param_3);
     uVar4 = CALLF(undefined4, FUN_14134f900)(uVar5);
-    CALLF(undefined8, FUN_1412a11f0)(local_188,*(undefined4 *)(param_4 + 0x104),uVar4);
-    puVar9 = (undefined4 *)CALLF(undefined4 *, FUN_14068c500)(local_190,0);
+    CALLF(undefined8, FUN_1412a11f0)(((undefined4 *)(gen_frame + 0x40)),*(undefined4 *)(param_4 + 0x104),uVar4);
+    puVar9 = (undefined4 *)CALLF(undefined4 *, FUN_14068c500)(((undefined1 *)(gen_frame + 0x38)),0);
     uVar4 = *puVar9;
-    puVar10 = (undefined2 *)CALLF(undefined2 *, FUN_14068c4c0)(local_1c8,1);
+    puVar10 = (undefined2 *)CALLF(undefined2 *, FUN_14068c4c0)(((undefined4 *)(gen_frame + 0x0)),1);
     uVar1 = *puVar10;
-    puVar11 = (ulonglong *)CALLF(undefined8 *, FUN_14068c4e0)(&local_1c0,1);
+    puVar11 = (ulonglong *)CALLF(undefined8 *, FUN_14068c4e0)(&(*(float *)(gen_frame + 0x8)),1);
     uVar18 = *puVar11;
-    CALLF(undefined4, FUN_1412a1570)(param_2,local_188,0,2,(unsigned long long)(uVar18),(unsigned long long)(uVar1),(unsigned long long)(uVar4),(unsigned long long)(1),(unsigned long long)(6),(unsigned long long)(0xb),(unsigned long long)(0x2b));
+    CALLF(undefined4, FUN_1412a1570)(param_2,((undefined4 *)(gen_frame + 0x40)),0,2,(unsigned long long)(uVar18),(unsigned long long)(uVar1),(unsigned long long)(uVar4),(unsigned long long)(1),(unsigned long long)(6),(unsigned long long)(0xb),(unsigned long long)(0x2b));
     (**(code **)(*param_2 + 0x150))
               (param_2,4,1,0,uVar18 & 0xffffffff00000000,
                (ulonglong)0 << 0x20,
@@ -6183,7 +6648,7 @@ undefined8 FUN_141672fc0(longlong param_1, longlong *param_2, undefined8 param_3
 /* ref: FUN_141673500 */
 undefined8 FUN_141673500(longlong param_1, undefined1 param_2)
 {
-  GEN_HIT(106);
+  GEN_HIT(112);
   *(undefined1 *)(param_1 + 0x1c) = param_2;
   return 0;
 }
@@ -6191,12 +6656,12 @@ undefined8 FUN_141673500(longlong param_1, undefined1 param_2)
 /* ref: FUN_141673510 */
 undefined1 FUN_141673510(longlong param_1, undefined8 param_2, longlong param_3)
 {
-  GEN_HIT(107);
+  GEN_HIT(113);
+  __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(gen_v16) > 0x18 ? 0x0 + sizeof(gen_v16) : 0x18)];
   char cVar1;
   byte bVar2;
   undefined8 *puVar4;
   undefined4 uVar5;
-  gen_v16 local_18;
   uint uVar3;
   
   uVar3 = 0;
@@ -6218,7 +6683,7 @@ undefined1 FUN_141673510(longlong param_1, undefined8 param_2, longlong param_3)
     else {
       uVar5 = 0x23;
     }
-    puVar4 = (undefined8 *)CALLF(undefined8, FUN_141355930)(gen_v16_q0(local_18), param_3, uVar5);
+    puVar4 = (undefined8 *)CALLF(undefined8, FUN_141355930)((void *)&(*(gen_v16 *)(gen_frame + 0x0)), param_3, uVar5);
     *(undefined8 *)(param_1 + 0x10) = *puVar4;
     uVar3 = *(uint *)(puVar4 + 1);
     *(uint *)(param_1 + 0x18) = uVar3;
@@ -6230,7 +6695,7 @@ LAB_14167358f:
 /* ref: FUN_1416735a0 */
 undefined8 FUN_1416735a0(undefined8 param_1, longlong param_2)
 {
-  GEN_HIT(108);
+  GEN_HIT(114);
   if (-1 < *(longlong *)(param_2 + 0x48)) {
     CALLF(undefined1, FUN_140255210)(*(undefined8 *)(param_2 + 0x38),((char *)REFP(0x142dba418)),
                     0xfffffffa,0);
@@ -6243,7 +6708,7 @@ undefined8 FUN_1416735a0(undefined8 param_1, longlong param_2)
 /* ref: FUN_141673600 */
 undefined8 * FUN_141673600(undefined8 param_1, int *param_2, uint param_3, uint param_4)
 {
-  GEN_HIT(109);
+  GEN_HIT(115);
   longlong lVar1;
   ulonglong uVar2;
   undefined8 *puVar3;
@@ -6301,7 +6766,7 @@ undefined8 * FUN_141673600(undefined8 param_1, int *param_2, uint param_3, uint 
 /* ref: FUN_141673710 */
 undefined4 FUN_141673710(longlong param_1)
 {
-  GEN_HIT(110);
+  GEN_HIT(116);
   CALLF(undefined4, FUN_140324d50)(param_1,1);
   *(undefined4 *)(param_1 + 0x48) = 0xffffffff;
   CALLF(undefined8, FUN_141673940)(param_1 + 0x28);
@@ -6314,7 +6779,7 @@ undefined4 FUN_141673710(longlong param_1)
 /* ref: FUN_141673750 */
 undefined8 FUN_141673750(undefined8 param_1, uint param_2)
 {
-  GEN_HIT(111);
+  GEN_HIT(117);
   CALLF(undefined4, FUN_141673a10)(param_1);
   if ((param_2 & 1) != 0) {
     CALLF(undefined8, FUN_140254670)(param_1);
@@ -6325,7 +6790,7 @@ undefined8 FUN_141673750(undefined8 param_1, uint param_2)
 /* ref: FUN_141673790 */
 undefined8 * FUN_141673790(longlong *param_1)
 {
-  GEN_HIT(112);
+  GEN_HIT(118);
   undefined8 *puVar1;
   ulonglong uVar2;
   undefined8 uVar3;
@@ -6402,7 +6867,7 @@ undefined8 * FUN_141673790(longlong *param_1)
 /* ref: FUN_141673910 */
 longlong FUN_141673910(longlong param_1)
 {
-  GEN_HIT(113);
+  GEN_HIT(119);
   CALLF(longlong, FUN_1406cfcd0)(param_1);
   CALLF(undefined4, FUN_1406f4750)(param_1);
   *(undefined8 *)(param_1 + 0x2f90) = 0;
@@ -6412,7 +6877,7 @@ longlong FUN_141673910(longlong param_1)
 /* ref: FUN_141673940 */
 undefined8 FUN_141673940(uint *param_1)
 {
-  GEN_HIT(114);
+  GEN_HIT(120);
   longlong lVar1;
   longlong lVar2;
   ulonglong uVar3;
@@ -6453,7 +6918,7 @@ undefined8 FUN_141673940(uint *param_1)
 /* ref: FUN_141673a10 */
 undefined4 FUN_141673a10(undefined8 *param_1)
 {
-  GEN_HIT(115);
+  GEN_HIT(121);
   longlong lVar1;
   ulonglong uVar2;
   undefined4 uVar3;
@@ -6486,7 +6951,7 @@ undefined4 FUN_141673a10(undefined8 *param_1)
 /* ref: FUN_141673a90 */
 undefined8 FUN_141673a90(longlong param_1)
 {
-  GEN_HIT(116);
+  GEN_HIT(122);
   longlong *plVar1;
   longlong lVar2;
   longlong lVar3;
@@ -6510,7 +6975,7 @@ undefined8 FUN_141673a90(longlong param_1)
 /* ref: FUN_141673b30 */
 longlong FUN_141673b30(longlong param_1, undefined8 param_2)
 {
-  GEN_HIT(117);
+  GEN_HIT(123);
   longlong *plVar1;
   longlong lVar2;
   longlong lVar3;
@@ -6536,7 +7001,7 @@ longlong FUN_141673b30(longlong param_1, undefined8 param_2)
 /* ref: FUN_141673be0 */
 undefined8 FUN_141673be0(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
 {
-  GEN_HIT(118);
+  GEN_HIT(124);
   ulonglong r_r8 = a2;
   ulonglong r_r9 = a3;
   ulonglong r_rcx = a0;
@@ -6548,7 +7013,7 @@ undefined8 FUN_141673be0(undefined8 a0, undefined8 a1, undefined8 a2, undefined8
 /* ref: FUN_141673bf0 */
 undefined8 FUN_141673bf0(longlong param_1)
 {
-  GEN_HIT(119);
+  GEN_HIT(125);
   int *piVar1;
   
   if (param_1 != 0) {
@@ -6573,7 +7038,7 @@ undefined8 FUN_141673bf0(longlong param_1)
 /* ref: FUN_141673ce0 */
 undefined4 FUN_141673ce0(longlong param_1)
 {
-  GEN_HIT(120);
+  GEN_HIT(126);
   if (*(longlong *)(param_1 + 0x2f90) != 0) {
     return *(undefined4 *)(*(longlong *)(param_1 + 0x2f90) + 8);
   }
@@ -6583,7 +7048,7 @@ undefined4 FUN_141673ce0(longlong param_1)
 /* ref: FUN_141673d20 */
 undefined1 FUN_141673d20(uint param_1, undefined4 *param_2, undefined8 param_3, undefined4 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7)
 {
-  GEN_HIT(121);
+  GEN_HIT(127);
   __declspec(align(16)) unsigned char gen_frame[(0x30 + sizeof(undefined8[4]) > 0x78 ? 0x30 + sizeof(undefined8[4]) : 0x78)];
   longlong lVar1;
   undefined1 uVar2;
@@ -6639,7 +7104,7 @@ undefined1 FUN_141673d20(uint param_1, undefined4 *param_2, undefined8 param_3, 
 /* ref: FUN_141673e60 */
 undefined1 FUN_141673e60(int param_1, longlong param_2, longlong *param_3, int param_4, undefined8 param_5, undefined8 param_6, code *param_7)
 {
-  GEN_HIT(122);
+  GEN_HIT(128);
   __declspec(align(16)) unsigned char gen_frame[(0x20 + sizeof(longlong) > 0x68 ? 0x20 + sizeof(longlong) : 0x68)];
   undefined8 *puVar1;
   undefined8 uVar2;
@@ -6882,7 +7347,7 @@ undefined1 FUN_141673e60(int param_1, longlong param_2, longlong *param_3, int p
 /* ref: FUN_1416743f0 */
 undefined8 FUN_1416743f0(undefined8 param_1, char param_2, undefined8 *param_3)
 {
-  GEN_HIT(123);
+  GEN_HIT(129);
   int *piVar1;
   
   if (param_3 != (undefined8 *)0x0) {
@@ -6910,7 +7375,7 @@ undefined8 FUN_1416743f0(undefined8 param_1, char param_2, undefined8 *param_3)
 /* ref: FUN_141674460 */
 undefined8 FUN_141674460(uint param_1, longlong param_2, longlong param_3, longlong param_4)
 {
-  GEN_HIT(124);
+  GEN_HIT(130);
   __declspec(align(16)) unsigned char gen_frame[(0x38 + sizeof(longlong *) > 0x88 ? 0x38 + sizeof(longlong *) : 0x88)];
   undefined8 *puVar1;
   bool bVar2;
@@ -7103,7 +7568,7 @@ joined_r0x0001416745d9:
 /* ref: FUN_141674900 */
 undefined1 FUN_141674900(longlong *param_1, int param_2, undefined8 param_3, undefined8 param_4, code *param_5)
 {
-  GEN_HIT(125);
+  GEN_HIT(131);
   uint uVar1;
   char cVar2;
   undefined4 uVar3;
@@ -7280,7 +7745,7 @@ LAB_141674b76:
 /* ref: FUN_141674d20 */
 undefined4 FUN_141674d20(longlong param_1, uint param_2, int param_3)
 {
-  GEN_HIT(126);
+  GEN_HIT(132);
   longlong lVar1;
   uint uVar2;
   longlong lVar3;
@@ -7302,7 +7767,7 @@ undefined4 FUN_141674d20(longlong param_1, uint param_2, int param_3)
 /* ref: FUN_141674d70 */
 undefined4 FUN_141674d70(longlong param_1, int param_2)
 {
-  GEN_HIT(127);
+  GEN_HIT(133);
   longlong *plVar1;
   
   plVar1 = *(longlong **)(param_1 + 0x2f90);
@@ -7315,7 +7780,7 @@ undefined4 FUN_141674d70(longlong param_1, int param_2)
 /* ref: FUN_141674da0 */
 undefined4 FUN_141674da0(longlong param_1, int param_2)
 {
-  GEN_HIT(128);
+  GEN_HIT(134);
   longlong *plVar1;
   
   plVar1 = *(longlong **)(param_1 + 0x2f90);
@@ -7328,7 +7793,7 @@ undefined4 FUN_141674da0(longlong param_1, int param_2)
 /* ref: FUN_141674ee0 */
 undefined8 FUN_141674ee0(longlong param_1, uint param_2)
 {
-  GEN_HIT(129);
+  GEN_HIT(135);
   __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(undefined8 **) > 0x38 ? 0x10 + sizeof(undefined8 **) : 0x38)];
   int *piVar1;
   undefined8 ****ppppuVar2;
@@ -7485,7 +7950,7 @@ undefined8 FUN_141674ee0(longlong param_1, uint param_2)
 /* ref: FUN_141675210 */
 longlong FUN_141675210(longlong *param_1, uint param_2, undefined4 param_3, undefined4 param_4)
 {
-  GEN_HIT(130);
+  GEN_HIT(136);
   undefined4 *puVar1;
   undefined4 *puVar2;
   longlong lVar3;
@@ -7565,7 +8030,7 @@ longlong FUN_141675210(longlong *param_1, uint param_2, undefined4 param_3, unde
 /* ref: FUN_141675450 */
 undefined8 FUN_141675450(longlong *param_1, longlong param_2, char param_3)
 {
-  GEN_HIT(131);
+  GEN_HIT(137);
   undefined8 *puVar1;
   undefined8 *puVar2;
   undefined8 uVar3;
@@ -7637,7 +8102,7 @@ undefined8 FUN_141675450(longlong *param_1, longlong param_2, char param_3)
 /* ref: FUN_1416755f0 */
 undefined8 FUN_1416755f0(uint *param_1, undefined8 param_2)
 {
-  GEN_HIT(132);
+  GEN_HIT(138);
   longlong lVar1;
   uint uVar2;
   ulonglong uVar3;
@@ -7722,7 +8187,7 @@ undefined8 FUN_1416755f0(uint *param_1, undefined8 param_2)
 /* ref: FUN_141675780 */
 undefined1 * FUN_141675780(void)
 {
-  GEN_HIT(133);
+  GEN_HIT(139);
   undefined *puVar1;
   code *pcVar2;
   undefined8 *puVar3;
@@ -7818,7 +8283,7 @@ undefined1 * FUN_141675780(void)
 /* ref: FUN_141675960 */
 undefined8 FUN_141675960(undefined4 *param_1)
 {
-  GEN_HIT(134);
+  GEN_HIT(140);
   bool bVar1;
   char cVar2;
   uint uVar3;
@@ -7910,7 +8375,7 @@ undefined8 FUN_141675960(undefined4 *param_1)
 /* ref: FUN_141675b50 */
 undefined8 FUN_141675b50(int param_1, char param_2)
 {
-  GEN_HIT(135);
+  GEN_HIT(141);
   __declspec(align(16)) unsigned char gen_frame[(0x20 + sizeof(int[2]) > 0x40 ? 0x20 + sizeof(int[2]) : 0x40)];
   memcpy(gen_frame + 0x20, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x28, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -8020,7 +8485,7 @@ LAB_141675c1d:
 /* ref: FUN_141675db0 */
 undefined8 FUN_141675db0(char param_1, undefined4 *param_2)
 {
-  GEN_HIT(136);
+  GEN_HIT(142);
   if (param_2 != (undefined4 *)0x0) {
     if (param_1 != '\0') {
       CALLF(undefined8, FUN_141675b50)(*param_2,1);
@@ -8033,7 +8498,7 @@ undefined8 FUN_141675db0(char param_1, undefined4 *param_2)
 /* ref: FUN_141675de0 */
 undefined8 FUN_141675de0(undefined8 param_1, char param_2, undefined4 *param_3)
 {
-  GEN_HIT(137);
+  GEN_HIT(143);
   if (param_3 != (undefined4 *)0x0) {
     if (param_2 != '\0') {
       CALLF(undefined8, FUN_141675b50)(*param_3,1);
@@ -8046,7 +8511,7 @@ undefined8 FUN_141675de0(undefined8 param_1, char param_2, undefined4 *param_3)
 /* ref: FUN_141675e10 */
 undefined8 FUN_141675e10(longlong *param_1)
 {
-  GEN_HIT(138);
+  GEN_HIT(144);
   longlong lVar1;
   longlong lVar2;
   
@@ -8067,7 +8532,7 @@ undefined8 FUN_141675e10(longlong *param_1)
 /* ref: FUN_141675e80 */
 undefined8 FUN_141675e80(undefined8 param_1, longlong *param_2, int param_3, uint *param_4)
 {
-  GEN_HIT(139);
+  GEN_HIT(145);
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(longlong) > 0x20 ? 0x8 + sizeof(longlong) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -8115,7 +8580,7 @@ LAB_141675f0d:
 /* ref: FUN_141675f70 */
 undefined8 FUN_141675f70(undefined8 param_1, longlong *param_2, int param_3, uint *param_4)
 {
-  GEN_HIT(140);
+  GEN_HIT(146);
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(longlong) > 0x20 ? 0x8 + sizeof(longlong) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -8162,7 +8627,7 @@ LAB_141676018:
 /* ref: FUN_141676040 */
 undefined8 FUN_141676040(longlong *param_1, ulonglong param_2)
 {
-  GEN_HIT(141);
+  GEN_HIT(147);
   ulonglong uVar1;
   uint uVar2;
   undefined4 *puVar3;
@@ -8222,7 +8687,7 @@ undefined8 FUN_141676040(longlong *param_1, ulonglong param_2)
 /* ref: FUN_1416761d0 */
 undefined8 FUN_1416761d0(longlong *param_1, ulonglong param_2)
 {
-  GEN_HIT(142);
+  GEN_HIT(148);
   ulonglong uVar1;
   longlong lVar2;
   longlong lVar3;
@@ -8258,7 +8723,7 @@ undefined8 FUN_1416761d0(longlong *param_1, ulonglong param_2)
 /* ref: FUN_1416762b0 */
 ulonglong FUN_1416762b0(void)
 {
-  GEN_HIT(143);
+  GEN_HIT(149);
   longlong lVar1;
   
   lVar1 = CALLF(undefined1 *, FUN_14156b750)();
@@ -8268,7 +8733,7 @@ ulonglong FUN_1416762b0(void)
 /* ref: FUN_1416762d0 */
 undefined2 FUN_1416762d0(void)
 {
-  GEN_HIT(144);
+  GEN_HIT(150);
   longlong lVar1;
   
   lVar1 = CALLF(undefined1 *, FUN_14156b750)();
@@ -8278,7 +8743,7 @@ undefined2 FUN_1416762d0(void)
 /* ref: FUN_141676300 */
 undefined8 FUN_141676300(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4)
 {
-  GEN_HIT(145);
+  GEN_HIT(151);
   undefined8 uVar1;
   
   uVar1 = CALLF(undefined8, FUN_1403474b0)(param_1,param_2,param_2,param_3,(unsigned long long)(param_4),(unsigned long long)(0));
@@ -8288,7 +8753,7 @@ undefined8 FUN_141676300(undefined8 param_1, undefined8 param_2, undefined8 para
 /* ref: FUN_141676330 */
 uint FUN_141676330(longlong param_1, undefined8 param_2)
 {
-  GEN_HIT(146);
+  GEN_HIT(152);
   __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(uint[4]) > 0x20 ? 0x10 + sizeof(uint[4]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -8332,7 +8797,7 @@ uint FUN_141676330(longlong param_1, undefined8 param_2)
 /* ref: FUN_141676450 */
 char * FUN_141676450(char *param_1, char *param_2, int param_3, int param_4)
 {
-  GEN_HIT(147);
+  GEN_HIT(153);
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(undefined8) > 0x18 ? 0x8 + sizeof(undefined8) : 0x18)];
   char cVar1;
   char *pcVar2;
@@ -8369,7 +8834,7 @@ char * FUN_141676450(char *param_1, char *param_2, int param_3, int param_4)
 /* ref: FUN_141676540 */
 undefined4 FUN_141676540(undefined8 param_1, undefined8 *param_2, longlong param_3, code *param_4, undefined8 param_5)
 {
-  GEN_HIT(148);
+  GEN_HIT(154);
   __declspec(align(16)) unsigned char gen_frame[(0x30 + sizeof(longlong) > 0x48 ? 0x30 + sizeof(longlong) : 0x48)];
   undefined4 uVar1;
   undefined8 uVar2;
@@ -8407,7 +8872,7 @@ undefined4 FUN_141676540(undefined8 param_1, undefined8 *param_2, longlong param
 /* ref: FUN_141676630 */
 uint FUN_141676630(longlong param_1, undefined8 param_2)
 {
-  GEN_HIT(149);
+  GEN_HIT(155);
   __declspec(align(16)) unsigned char gen_frame[(0x18 + sizeof(undefined4[2]) > 0x20 ? 0x18 + sizeof(undefined4[2]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -8460,7 +8925,7 @@ uint FUN_141676630(longlong param_1, undefined8 param_2)
 /* ref: FUN_141676780 */
 ulonglong FUN_141676780(char *param_1, int param_2, char *param_3, ulonglong param_4)
 {
-  GEN_HIT(150);
+  GEN_HIT(156);
   __declspec(align(16)) unsigned char gen_frame[(0x430 + sizeof(char[5120]) > 0x1868 ? 0x430 + sizeof(char[5120]) : 0x1868)];
   char cVar1;
   uint uVar2;
@@ -8915,7 +9380,7 @@ LAB_141676d30:
 /* ref: FUN_141677030 */
 undefined8 FUN_141677030(longlong param_1, char *param_2)
 {
-  GEN_HIT(151);
+  GEN_HIT(157);
   __declspec(align(16)) unsigned char gen_frame[(0x28 + sizeof(undefined1[24]) > 0x58 ? 0x28 + sizeof(undefined1[24]) : 0x58)];
   ulonglong uVar1;
   longlong *plVar2;
@@ -8987,7 +9452,7 @@ undefined8 FUN_141677030(longlong param_1, char *param_2)
 /* ref: FUN_141677680 */
 undefined8 FUN_141677680(void)
 {
-  GEN_HIT(152);
+  GEN_HIT(158);
   REFG(undefined8, 0x14309f820) = 0;
   return 0;
 }
@@ -8995,7 +9460,7 @@ undefined8 FUN_141677680(void)
 /* ref: FUN_141677690 */
 int FUN_141677690(void)
 {
-  GEN_HIT(153);
+  GEN_HIT(159);
   int iVar1;
   int iVar2;
   longlong lVar3;
@@ -9014,21 +9479,21 @@ int FUN_141677690(void)
 /* ref: FUN_1416776d0 */
 undefined4 FUN_1416776d0(void)
 {
-  GEN_HIT(154);
+  GEN_HIT(160);
   return (undefined4)REFG(undefined8, 0x14311c318);
 }
 
 /* ref: FUN_1416776f0 */
 undefined * FUN_1416776f0(void)
 {
-  GEN_HIT(155);
+  GEN_HIT(161);
   return &REFG(undefined8, 0x14311c360);
 }
 
 /* ref: FUN_141677720 */
 undefined1 FUN_141677720(longlong param_1)
 {
-  GEN_HIT(156);
+  GEN_HIT(162);
   __declspec(align(16)) unsigned char gen_frame[(0x158 + sizeof(undefined4) > 0x168 ? 0x158 + sizeof(undefined4) : 0x168)];
   undefined1 uVar1;
   undefined8 uVar2;
@@ -9063,21 +9528,21 @@ undefined1 FUN_141677720(longlong param_1)
 /* ref: FUN_141677830 */
 undefined8 FUN_141677830(undefined8 param_1)
 {
-  GEN_HIT(157);
+  GEN_HIT(163);
   return (undefined8)CALLF(undefined8, FUN_141653350)(&REFG(undefined8, 0x14311c360),param_1);
 }
 
 /* ref: FUN_141677850 */
 undefined1 FUN_141677850(uint param_1)
 {
-  GEN_HIT(158);
+  GEN_HIT(164);
   return *(undefined1 *)(REFG(undefined8, 0x14311c310) + 4 + (ulonglong)param_1 * 8);
 }
 
 /* ref: FUN_141677860 */
 undefined8 FUN_141677860(char param_1)
 {
-  GEN_HIT(159);
+  GEN_HIT(165);
   undefined4 *puVar1;
   int iVar2;
   undefined8 uVar3;
@@ -9102,14 +9567,14 @@ undefined8 FUN_141677860(char param_1)
 /* ref: FUN_141677910 */
 undefined4 FUN_141677910(uint param_1)
 {
-  GEN_HIT(160);
+  GEN_HIT(166);
   return *(undefined4 *)(REFG(undefined8, 0x14311c310) + (ulonglong)param_1 * 8);
 }
 
 /* ref: FUN_141677eb0 */
 undefined4 FUN_141677eb0(undefined4 param_1)
 {
-  GEN_HIT(161);
+  GEN_HIT(167);
   undefined8 uVar1;
   
   uVar1 = CALLF(undefined8, FUN_14057b590)(&(*(undefined8 *)((char *)&gen_g_142e6bd00 + 0x0)),param_1);
@@ -9119,7 +9584,7 @@ undefined4 FUN_141677eb0(undefined4 param_1)
 /* ref: FUN_141677ec0 */
 undefined8 FUN_141677ec0(undefined4 param_1, undefined8 *param_2)
 {
-  GEN_HIT(162);
+  GEN_HIT(168);
   __declspec(align(16)) unsigned char gen_frame[(0x28 + sizeof(longlong *) > 0x58 ? 0x28 + sizeof(longlong *) : 0x58)];
   undefined2 *puVar1;
   undefined2 uVar2;
@@ -9232,7 +9697,7 @@ undefined8 FUN_141677ec0(undefined4 param_1, undefined8 *param_2)
 /* ref: FUN_141678160 */
 uint FUN_141678160(undefined4 param_1)
 {
-  GEN_HIT(163);
+  GEN_HIT(169);
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(undefined1[24]) > 0x20 ? 0x8 + sizeof(undefined1[24]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   uint uVar1;
@@ -9251,7 +9716,7 @@ uint FUN_141678160(undefined4 param_1)
 /* ref: FUN_1416781b0 */
 undefined8 FUN_1416781b0(undefined8 param_1, longlong param_2)
 {
-  GEN_HIT(164);
+  GEN_HIT(170);
   if (*(longlong *)(param_2 + 0x38) != 0) {
     CALLF(undefined1, FUN_140255210)(*(longlong *)(param_2 + 0x38),((char *)REFP(0x142d605c0)),0xfffffffe,0
                    );
@@ -9263,7 +9728,7 @@ undefined8 FUN_1416781b0(undefined8 param_1, longlong param_2)
 /* ref: FUN_141678200 */
 undefined8 * FUN_141678200(undefined8 param_1, int *param_2, uint param_3, uint param_4)
 {
-  GEN_HIT(165);
+  GEN_HIT(171);
   longlong lVar1;
   ulonglong uVar2;
   undefined8 *puVar3;
@@ -9320,7 +9785,7 @@ undefined8 * FUN_141678200(undefined8 param_1, int *param_2, uint param_3, uint 
 /* ref: FUN_141678310 */
 undefined4 FUN_141678310(longlong param_1)
 {
-  GEN_HIT(166);
+  GEN_HIT(172);
   CALLF(undefined4, FUN_140324d50)(param_1,1);
   *(undefined4 *)(param_1 + 0x48) = 0xffffffff;
   CALLF(undefined8, FUN_141678970)(param_1 + 0x28);
@@ -9333,7 +9798,7 @@ undefined4 FUN_141678310(longlong param_1)
 /* ref: FUN_141678350 */
 undefined8 FUN_141678350(undefined8 param_1, uint param_2)
 {
-  GEN_HIT(167);
+  GEN_HIT(173);
   CALLF(undefined4, FUN_141678a40)(param_1);
   if ((param_2 & 1) != 0) {
     CALLF(undefined8, FUN_140254670)(param_1);
@@ -9344,7 +9809,7 @@ undefined8 FUN_141678350(undefined8 param_1, uint param_2)
 /* ref: FUN_141678390 */
 undefined1 FUN_141678390(int param_1, undefined4 param_2, int param_3, uint param_4, longlong param_5, int *param_6)
 {
-  GEN_HIT(168);
+  GEN_HIT(174);
   uint uVar1;
   int *piVar2;
   int iVar3;
@@ -9750,7 +10215,7 @@ LAB_141678885:
 /* ref: FUN_141678970 */
 undefined8 FUN_141678970(uint *param_1)
 {
-  GEN_HIT(169);
+  GEN_HIT(175);
   longlong lVar1;
   longlong lVar2;
   ulonglong uVar3;
@@ -9791,7 +10256,7 @@ undefined8 FUN_141678970(uint *param_1)
 /* ref: FUN_141678a40 */
 undefined4 FUN_141678a40(undefined8 *param_1)
 {
-  GEN_HIT(170);
+  GEN_HIT(176);
   longlong lVar1;
   ulonglong uVar2;
   undefined4 uVar3;
@@ -9824,7 +10289,7 @@ undefined4 FUN_141678a40(undefined8 *param_1)
 /* ref: FUN_141678ac0 */
 undefined8 FUN_141678ac0(longlong param_1, uint param_2)
 {
-  GEN_HIT(171);
+  GEN_HIT(177);
   __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(undefined8 **) > 0x38 ? 0x10 + sizeof(undefined8 **) : 0x38)];
   int *piVar1;
   undefined8 ****ppppuVar2;
@@ -9981,7 +10446,7 @@ undefined8 FUN_141678ac0(longlong param_1, uint param_2)
 /* ref: FUN_141678df0 */
 longlong FUN_141678df0(longlong *param_1, uint param_2, undefined4 param_3, undefined4 param_4)
 {
-  GEN_HIT(172);
+  GEN_HIT(178);
   undefined4 *puVar1;
   undefined4 *puVar2;
   longlong lVar3;
@@ -10061,7 +10526,7 @@ longlong FUN_141678df0(longlong *param_1, uint param_2, undefined4 param_3, unde
 /* ref: FUN_141678fd0 */
 bool FUN_141678fd0(longlong param_1, int param_2, char param_3)
 {
-  GEN_HIT(173);
+  GEN_HIT(179);
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[8]) > 0x20 ? 0x0 + sizeof(undefined1[8]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -10105,7 +10570,7 @@ LAB_14167906b:
 /* ref: FUN_141679070 */
 bool FUN_141679070(longlong param_1, int param_2, char param_3)
 {
-  GEN_HIT(174);
+  GEN_HIT(180);
   uint uVar1;
   ulonglong uVar2;
   
@@ -10128,20 +10593,20 @@ bool FUN_141679070(longlong param_1, int param_2, char param_3)
 /* ref: FUN_1416790b0 */
 undefined8 FUN_1416790b0(undefined4 param_1, undefined4 param_2)
 {
-  GEN_HIT(175);
+  GEN_HIT(181);
   __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(gen_v16) > 0x20 ? 0x10 + sizeof(gen_v16) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
   undefined8 uVar1;
   
-  uVar1 = CALLF(undefined8, FUN_1416790e0)(param_1,param_2,gen_v16_q0((*(gen_v16 *)(gen_frame + 0x10))),0,(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(1));
+  uVar1 = CALLF(undefined8, FUN_1416790e0)(param_1,param_2,(void *)&(*(gen_v16 *)(gen_frame + 0x10)),0,(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(1));
   return uVar1;
 }
 
 /* ref: FUN_1416790e0 */
 undefined8 FUN_1416790e0(uint param_1, int param_2, undefined1 *param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined1 param_7)
 {
-  GEN_HIT(176);
+  GEN_HIT(182);
   __declspec(align(16)) unsigned char gen_frame[(0x38 + sizeof(undefined1) > 0x58 ? 0x38 + sizeof(undefined1) : 0x58)];
   ulonglong uVar1;
   uint uVar2;
@@ -10211,7 +10676,7 @@ undefined8 FUN_1416790e0(uint param_1, int param_2, undefined1 *param_3, undefin
 /* ref: FUN_141679270 */
 undefined8 FUN_141679270(void)
 {
-  GEN_HIT(177);
+  GEN_HIT(183);
   undefined8 uVar1;
   uint uVar2;
   ulonglong uVar3;
@@ -10263,7 +10728,7 @@ undefined8 FUN_141679270(void)
 /* ref: FUN_141679390 */
 undefined4 * FUN_141679390(uint *param_1, undefined4 *param_2)
 {
-  GEN_HIT(178);
+  GEN_HIT(184);
   undefined4 *puVar1;
   longlong lVar2;
   uint uVar3;
@@ -10331,7 +10796,7 @@ undefined4 * FUN_141679390(uint *param_1, undefined4 *param_2)
 /* ref: FUN_1416794c0 */
 undefined8 FUN_1416794c0(uint *param_1, undefined8 param_2)
 {
-  GEN_HIT(179);
+  GEN_HIT(185);
   longlong lVar1;
   uint uVar2;
   ulonglong uVar3;
@@ -10416,7 +10881,7 @@ undefined8 FUN_1416794c0(uint *param_1, undefined8 param_2)
 /* ref: FUN_141679650 */
 undefined8 FUN_141679650(int *param_1, undefined4 param_2)
 {
-  GEN_HIT(180);
+  GEN_HIT(186);
   uint uVar1;
   int *piVar2;
   int iVar3;
@@ -10779,7 +11244,7 @@ LAB_141679b03:
 /* ref: FUN_141679ba0 */
 undefined1 FUN_141679ba0(longlong param_1, longlong param_2, int param_3)
 {
-  GEN_HIT(181);
+  GEN_HIT(187);
   __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(int[2]) > 0x20 ? 0x10 + sizeof(int[2]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -10823,7 +11288,7 @@ LAB_141679c39:
 /* ref: FUN_141679c50 */
 undefined1 FUN_141679c50(int param_1, undefined8 param_2, int *param_3, longlong param_4, uint *param_5, uint *param_6)
 {
-  GEN_HIT(182);
+  GEN_HIT(188);
   bool bVar1;
   byte bVar2;
   uint uVar3;
@@ -10961,7 +11426,7 @@ LAB_141679e70:
 /* ref: FUN_141679f40 */
 undefined1 FUN_141679f40(undefined4 param_1, longlong param_2, longlong param_3, longlong param_4, longlong param_5, byte param_6)
 {
-  GEN_HIT(183);
+  GEN_HIT(189);
   __declspec(align(16)) unsigned char gen_frame[(0xb0 + sizeof(longlong) > 0xc0 ? 0xb0 + sizeof(longlong) : 0xc0)];
   memcpy(gen_frame + 0xa0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0xa8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -11044,14 +11509,14 @@ LAB_14167a1c0:
          (cVar1 = (**(code **)((*(undefined1 * *)((char *)&gen_g_142e5ed20 + 0x0)) + 0xd8))(&(*(undefined1 * *)((char *)&gen_g_142e5ed20 + 0x0)),param_1,((code *)REFP(0x1416790e0))),
          cVar1 == '\0')) {
         (*(longlong *)(gen_frame + 0xb0)) = CONCAT44((*(undefined4 *)((char *)&(*(longlong *)(gen_frame + 0xb0)) + 4)),param_1);
-        (*(*(code * *)(gen_frame + 0x10)))(gen_v16_q0((*(gen_v16 *)(gen_frame + 0x58))), ((longlong * *)(gen_frame + 0x18)), 2);
+        (*(*(code * *)(gen_frame + 0x10)))((void *)&(*(gen_v16 *)(gen_frame + 0x58)), ((longlong * *)(gen_frame + 0x18)), 2);
         (*(undefined1 * *)(gen_frame + 0x48)) = (*(code * *)(gen_frame + 0x8));
         (*(code * *)(gen_frame + 0x50)) = (*(code * *)(gen_frame + 0x10));
         (*(code * *)(gen_frame + 0x8)) = (code *)0x0;
         (*(code * *)(gen_frame + 0x10)) = ((code *)REFP(0x1402112e0));
         (*(undefined1 * *)(gen_frame + 0x68)) = ((code *)REFP(0x1416790e0));
         CALLF(undefined8 *, FUN_1416600f0)(&(*(undefined8 *)((char *)&gen_g_142e5ed20 + 0x388)),((undefined1 *)(gen_frame + 0x28)),&(*(longlong *)(gen_frame + 0xb0)),&(*(undefined1 * *)(gen_frame + 0x48)));
-        (*(*(code * *)(gen_frame + 0x50)))(gen_v16_q0((*(gen_v16 *)(gen_frame + 0x58))), 0, 0);
+        (*(*(code * *)(gen_frame + 0x50)))((void *)&(*(gen_v16 *)(gen_frame + 0x58)), 0, 0);
       }
       if ((*(code * *)(gen_frame + 0x10)) != ((code *)REFP(0x1402112e0))) {
         (*(*(code * *)(gen_frame + 0x10)))(((longlong * *)(gen_frame + 0x18)),0,0);
@@ -11087,7 +11552,7 @@ LAB_14167a0bb:
 /* ref: FUN_14167a2c0 */
 undefined1 FUN_14167a2c0(undefined4 param_1, longlong param_2)
 {
-  GEN_HIT(184);
+  GEN_HIT(190);
   __declspec(align(16)) unsigned char gen_frame[(0x80 + sizeof(int) > 0x90 ? 0x80 + sizeof(int) : 0x90)];
   memcpy(gen_frame + 0x70, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x78, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -11215,7 +11680,7 @@ undefined1 FUN_14167a2c0(undefined4 param_1, longlong param_2)
 /* ref: FUN_14167a5b0 */
 undefined8 FUN_14167a5b0(undefined4 param_1, uint *param_2, uint *param_3)
 {
-  GEN_HIT(185);
+  GEN_HIT(191);
   __declspec(align(16)) unsigned char gen_frame[(0x80 + sizeof(undefined4[4]) > 0x90 ? 0x80 + sizeof(undefined4[4]) : 0x90)];
   memcpy(gen_frame + 0x70, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x78, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -11259,7 +11724,7 @@ undefined8 FUN_14167a5b0(undefined4 param_1, uint *param_2, uint *param_3)
 /* ref: FUN_14167a6f0 */
 undefined8 FUN_14167a6f0(undefined4 param_1, longlong *param_2, int param_3, longlong *param_4)
 {
-  GEN_HIT(186);
+  GEN_HIT(192);
   longlong lVar1;
   longlong *plVar2;
   code *pcVar3;
@@ -11324,7 +11789,7 @@ LAB_14167a75c:
 /* ref: FUN_14167a7c0 */
 float FUN_14167a7c0(int param_1, undefined8 param_2, uint param_3)
 {
-  GEN_HIT(187);
+  GEN_HIT(193);
   uint uVar1;
   longlong lVar2;
   
@@ -11344,7 +11809,7 @@ float FUN_14167a7c0(int param_1, undefined8 param_2, uint param_3)
 /* ref: FUN_14167ae30 */
 undefined8 FUN_14167ae30(void)
 {
-  GEN_HIT(188);
+  GEN_HIT(194);
   undefined8 uVar1;
   
   uVar1 = CALLF(undefined1 *, FUN_14156b750)();
@@ -11355,7 +11820,7 @@ undefined8 FUN_14167ae30(void)
 /* ref: FUN_14167ae50 */
 undefined8 FUN_14167ae50(undefined8 param_1)
 {
-  GEN_HIT(189);
+  GEN_HIT(195);
   undefined8 uVar1;
   
   uVar1 = CALLF(undefined1 *, FUN_14156b750)();
@@ -11366,7 +11831,7 @@ undefined8 FUN_14167ae50(undefined8 param_1)
 /* ref: FUN_14167af30 */
 undefined8 FUN_14167af30(void)
 {
-  GEN_HIT(190);
+  GEN_HIT(196);
   (*(undefined8 *)((char *)&gen_g_14311c5f0 + 0x0)) = 0;
   return 0;
 }
@@ -11374,7 +11839,7 @@ undefined8 FUN_14167af30(void)
 /* ref: FUN_14167b270 */
 undefined8 FUN_14167b270(int param_1)
 {
-  GEN_HIT(191);
+  GEN_HIT(197);
   int *piVar1;
   
   piVar1 = REFG(int *, 0x14311c600);
@@ -11391,45 +11856,17 @@ undefined8 FUN_14167b270(int param_1)
 /* ref: FUN_14167b2a0 */
 undefined8 FUN_14167b2a0(uint param_1)
 {
-  GEN_HIT(192);
+  GEN_HIT(198);
   if ((*(undefined8 *)((char *)&gen_g_14311c5f0 + 0x0)) <= param_1) {
     return 0;
   }
   return (ulonglong)param_1 * 0x170 + REFG(undefined8, 0x14311c5e8);
 }
 
-/* ref: FUN_14167b4d0 */
-undefined8 FUN_14167b4d0(void)
-{
-  GEN_HIT(193);
-  undefined8 uVar1;
-  longlong lVar2;
-  uint uVar3;
-  float fVar4;
-  
-  uVar1 = CALLF(ulonglong, FUN_140216fc0)("ursorSizePreferred",0xaf63de4c8601eff2);
-  lVar2 = CALLF(ulonglong, FUN_140320970)(uVar1);
-  if (lVar2 == 0) {
-    uVar3 = 0xffffffff;
-  }
-  else {
-    uVar3 = *(uint *)(lVar2 + 0x14);
-    if (5 < uVar3 + 1) {
-      uVar3 = (~((int)(uVar3 + 1) >> 0x1f) & 5U) - 1;
-    }
-  }
-  if (uVar3 == 0xffffffff) {
-    fVar4 = CALLF(float, FUN_1414fcdc0)();
-    uVar3 = (uint)(REFG(float, 0x1427e5490) < fVar4);
-  }
-  CALLF(undefined8, FUN_1414fc880)(uVar3);
-  return (undefined8)CALLF(undefined8, FUN_141cb20e0)(1);
-}
-
 /* ref: FUN_14167b540 */
 undefined8 FUN_14167b540(void)
 {
-  GEN_HIT(194);
+  GEN_HIT(199);
   if (REFG(undefined1, 0x14311c51d) == '\0') {
     CALLF(undefined8, FUN_140351d40)();
     CALLF(undefined8 *, FUN_1405791e0)(&(*(undefined8 *)((char *)&gen_g_142e43430 + 0x0)),((code *)REFP(0x141695fd0)),0);
@@ -11442,55 +11879,10 @@ undefined8 FUN_14167b540(void)
   return (undefined8)CALLF(undefined8, FUN_1416876e0)();
 }
 
-/* ref: FUN_14167b590 */
-undefined4 FUN_14167b590(undefined8 *param_1)
-{
-  GEN_HIT(195);
-  __declspec(align(16)) unsigned char gen_frame[(0x18 + sizeof(ulonglong) > 0x20 ? 0x18 + sizeof(ulonglong) : 0x20)];
-  memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
-  ulonglong uVar1;
-  undefined1 *puVar2;
-  void *pvVar3;
-  uint uVar4;
-  
-  pvVar3 = ((void *)__readgsqword(0x30));
-  puVar2 = REFG(undefined1 *, 0x142ddf848);
-  (*(ulonglong *)(gen_frame + 0x10)) = 0x2aec33e15f139680;
-  (*(ulonglong *)(gen_frame + 0x18)) = 0xe208f80eae96b5fe;
-  CALLF(undefined8, FUN_1400b1420)(&(*(ulonglong *)(gen_frame + 0x18)),&(*(ulonglong *)(gen_frame + 0x10)));
-  uVar1 = *(ulonglong *)(puVar2 + 0x6e0);
-  (*(ulonglong *)(gen_frame + 0x18)) = ((ulonglong)
-                ((uint)uVar1 + 0x1df707f2 ^
-                ((uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x10)) & 0xfff)) >> 0xb |
-                (uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x10)) & 0xfff)) << 0x15) ^
-                ~(uint)uVar1) << 0x20 ^ uVar1 & 0xffffffff00000000 | uVar1 & 0xffffffff) ^
-               (*(ulonglong *)(gen_frame + 0x18));
-  if ((void *)((ulonglong)
-               (((int)((ulonglong)*(longlong *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x10)) & 0xfff)) >> 0x20
-                      ) << 1 |
-                (uint)(*(longlong *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x10)) & 0xfff)) < 0)) +
-                (int)(*(ulonglong *)(gen_frame + 0x18)) ^
-               (int)(*(ulonglong *)(gen_frame + 0x18)) * 2 -
-               ((uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0x10)) >> 0x34)) << 9 |
-               (uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0x10)) >> 0x34)) >> 0x17)) << 0x20 ^
-               (*(ulonglong *)(gen_frame + 0x18)) & 0xffffffff00000000 | (*(ulonglong *)(gen_frame + 0x18)) & 0xffffffff) != pvVar3) {
-    if (*(int *)*param_1 == -0x7ffffffc) {
-      uVar4 = 0x27314402 - (int)(REFG(undefined8, 0x142ddf594) >> 4);
-      *(uint *)(REFG(undefined1 *, 0x142ddf848) + 0x310) = uVar4 ^ (uVar4 ^ *(uint *)(REFG(undefined1 *, 0x142ddf848) + 0x310)) + 1;
-      return 0;
-    }
-    if (*(int *)*param_1 == -0x3fffff6c) {
-      uVar4 = 0xb83f09f2 - (int)REFG(undefined4, 0x142ddf259);
-      *(uint *)(REFG(undefined1 *, 0x142ddf848) + 0x314) = uVar4 ^ (uVar4 ^ *(uint *)(REFG(undefined1 *, 0x142ddf848) + 0x314)) + 1;
-    }
-  }
-  return 0;
-}
-
 /* ref: FUN_14167b850 */
 undefined1 * FUN_14167b850(undefined1 *param_1, int param_2)
 {
-  GEN_HIT(196);
+  GEN_HIT(200);
   int *piVar1;
   
   piVar1 = REFG(int *, 0x14311c600);
@@ -11515,7 +11907,7 @@ undefined1 * FUN_14167b850(undefined1 *param_1, int param_2)
 /* ref: FUN_14167ba90 */
 undefined8 FUN_14167ba90(void)
 {
-  GEN_HIT(197);
+  GEN_HIT(201);
   undefined8 uVar1;
   
   uVar1 = CALLF(undefined8, FUN_141237bf0)();
@@ -11529,7 +11921,7 @@ undefined8 FUN_14167ba90(void)
 /* ref: FUN_14167bff0 */
 undefined8 FUN_14167bff0(longlong param_1, longlong param_2)
 {
-  GEN_HIT(198);
+  GEN_HIT(202);
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(longlong) > 0x28 ? 0x8 + sizeof(longlong) : 0x28)];
   longlong lVar1;
   undefined8 uVar2;
@@ -11548,828 +11940,10 @@ undefined8 FUN_14167bff0(longlong param_1, longlong param_2)
   return uVar2;
 }
 
-/* ref: FUN_14167c3c0 */
-undefined8 FUN_14167c3c0(int param_1)
-{
-  GEN_HIT(199);
-  if (param_1 != 2) {
-    CALLF(longlong, FUN_14116be90)(0);
-  }
-  (*(undefined1 *)((char *)&gen_g_14311c528 + 0x0)) = 1;
-  CALLF(undefined1, FUN_141cf93e0)();
-  CALLF(undefined8, FUN_141273d50)();
-  CALLF(undefined8, FUN_141c9a070)(1);
-  CALLF(undefined4, FUN_1416961a0)();
-  CALLF(undefined8, FUN_141b1b240)();
-  if ((*(undefined1 * *)((char *)&gen_g_14311c520 + 0x0)) != (undefined1 *)0x0) {
-    (*(code *)**(undefined8 **)(*(undefined1 * *)((char *)&gen_g_14311c520 + 0x0)))((*(undefined1 * *)((char *)&gen_g_14311c520 + 0x0)),1);
-    (*(undefined1 * *)((char *)&gen_g_14311c520 + 0x0)) = (undefined1 *)0x0;
-  }
-  CALLF(undefined8, FUN_141686350)(0);
-  CALLF(undefined8, FUN_1416910e0)(0);
-  CALLF(uint, FUN_140663410)(8);
-  CALLF(undefined8, FUN_141c9a7a0)(0);
-  CALLF(undefined8, FUN_1406031d0)();
-  CALLF(undefined8, FUN_141db1020)();
-  CALLF(undefined8, FUN_1424deab0)();
-  CALLF(undefined8, FUN_141d06a40)();
-  _guard_check_icall();
-  CALLF(undefined1, FUN_141c47590)();
-  CALLF(undefined8, FUN_141cd1410)();
-  CALLF(undefined8, FUN_1416a7180)();
-  CALLF(undefined8, FUN_14168ed80)();
-  CALLF(undefined8, FUN_14169c3f0)();
-  CALLF(undefined8, FUN_14169c410)();
-  CALLF(undefined8, FUN_14130c3c0)();
-  CALLF(undefined8, FUN_1419f64c0)();
-  CALLF(undefined8, FUN_141b48360)();
-  CALLF(undefined8, FUN_141a44f70)();
-  CALLF(undefined4, FUN_141a44f50)();
-  CALLF(undefined8, FUN_141b66210)();
-  CALLF(undefined8, FUN_1416a1650)();
-  CALLF(undefined8, FUN_1416a88d0)();
-  CALLF(undefined8, FUN_141db1a30)();
-  CALLF(undefined8, FUN_1416a7900)();
-  CALLF(undefined1 *, FUN_1406635a0)();
-  CALLF(undefined1 *, FUN_140663520)();
-  CALLF(undefined1, FUN_141cfe550)();
-  CALLF(undefined8, FUN_141b46e90)();
-  CALLF(undefined8, FUN_141696170)();
-  REFG(undefined8, 0x14309dc70) = 0;
-  REFG(undefined8, 0x14309e788) = 0;
-  REFG(undefined8, 0x14309f628) = 0;
-  REFG(undefined8, 0x14309d0d8) = 0;
-  REFG(undefined8, 0x14309d178) = 0;
-  REFG(undefined8, 0x14309f6d0) = 0;
-  REFG(undefined8, 0x14309ea20) = 0;
-  REFG(undefined8, 0x14309eaa8) = 0;
-  REFG(undefined8, 0x14309e428) = 0;
-  CALLF(undefined1 *, FUN_14148bc80)();
-  CALLF(undefined8, FUN_1416a7910)();
-  CALLF(undefined4, FUN_141b37900)();
-  return (undefined8)CALLF(undefined8, FUN_1416a37c0)(&REFG(undefined8, 0x14311c580));
-}
-
-/* ref: FUN_14167c520 */
-undefined1 FUN_14167c520(void)
-{
-  GEN_HIT(200);
-  ulonglong *puVar1;
-  gen_v16 auVar2;
-  ulonglong auVar3_lo;
-  ulonglong auVar4_lo;
-  gen_v16 auVar5;
-  ulonglong auVar6_lo;
-  ulonglong uVar7;
-  undefined4 uVar8;
-  ulonglong uVar9;
-  ulonglong uVar10;
-  char cVar11;
-  undefined1 uVar12;
-  int iVar13;
-  undefined4 uVar16;
-  ulonglong *puVar14;
-  undefined8 uVar15;
-  uint uVar17;
-  undefined8 ****ppppuVar18;
-  ulonglong *puVar19;
-  longlong lVar20;
-  longlong lVar21;
-  undefined1 *puVar22;
-  uint uVar23;
-  ulonglong uVar24;
-  longlong lVar25;
-  longlong lVar26;
-  ulonglong uVar27;
-  code *pcVar28;
-  undefined1 *pcVar29;
-  bool bVar30;
-  undefined1 auStackY_518 [8];
-  undefined1 auStackY_510 [24];
-                                       
-                                       
-                                       
-                                 
-                                       
-                                       
-                                       
-  undefined8 ***pppuStack_4b8;
-  undefined8 ***pppuStack_4b0;
-  undefined1 uStack_4a8;
-  undefined4 uStack_4a7;
-  undefined1 uStack_4a3;
-  uint uStack_4a2;
-  undefined2 uStack_49e;
-  longlong lStack_49c;
-  undefined2 uStack_494;
-  IMAGE_DOS_HEADER *pIStack_492;
-  undefined4 uStack_48a;
-  undefined4 uStack_486;
-  undefined4 uStack_482;
-  undefined4 uStack_47e;
-  undefined4 uStack_47a;
-  undefined4 uStack_476;
-  undefined4 uStack_472;
-  undefined4 uStack_46e;
-  ulonglong uStack_468;
-  ulonglong uStack_460;
-  ulonglong uStack_458;
-  ulonglong uStack_450;
-  ulonglong uStack_448;
-  undefined8 uStack_440;
-  undefined8 uStack_438;
-  longlong lStack_430;
-  undefined8 uStack_428;
-  undefined8 uStack_420;
-  undefined8 local_418;
-  ulonglong uStack_410;
-  ulonglong uStack_408;
-  ulonglong uStack_400;
-  ulonglong uStack_3f8;
-  ulonglong uStack_3f0;
-  ulonglong uStack_3e8;
-  ulonglong uStack_3e0;
-  ulonglong uStack_3d8;
-  ulonglong uStack_3d0;
-  ulonglong uStack_3c8;
-  ulonglong uStack_3c0;
-  ulonglong uStack_3b8;
-  ulonglong uStack_3b0;
-  ulonglong uStack_3a8;
-  ulonglong uStack_3a0;
-  code *pcStack_398;
-  ulonglong uStack_390;
-  ulonglong uStack_388;
-  ulonglong uStack_380;
-  ulonglong uStack_378;
-  ulonglong uStack_370;
-  ulonglong uStack_368;
-  ulonglong uStack_360;
-  ulonglong uStack_358;
-  ulonglong uStack_350;
-  ulonglong uStack_348;
-  ulonglong uStack_340;
-  ulonglong uStack_338;
-  ulonglong uStack_330;
-  ulonglong uStack_328;
-  ulonglong uStack_320;
-  ulonglong uStack_318;
-  undefined8 **ppuStack_310;
-  undefined8 **ppuStack_308;
-  longlong lStack_300;
-  undefined8 **ppuStack_2f8;
-  undefined8 **ppuStack_2f0;
-  undefined1 auStack_2e8 [8];
-  undefined1 uStack_2e0;
-  undefined8 **ppuStack_2d8;
-  undefined8 **ppuStack_2d0;
-  undefined8 **ppuStack_2c8;
-  undefined8 **ppuStack_2c0;
-  undefined8 **ppuStack_2b8;
-  undefined8 **ppuStack_2b0;
-  ulonglong auStack_2a8 [4];
-  undefined4 uStack_288;
-  undefined4 uStack_284;
-  undefined4 uStack_280;
-  undefined4 uStack_27c;
-  byte bStack_278;
-  byte bStack_277;
-  byte bStack_276;
-  byte bStack_275;
-  byte bStack_274;
-  byte bStack_273;
-  byte bStack_272;
-  byte bStack_271;
-  undefined1 uStack_270;
-  undefined1 uStack_26f;
-  undefined1 uStack_26e;
-  undefined1 uStack_26d;
-  undefined1 uStack_26c;
-  undefined1 uStack_26b;
-  undefined1 uStack_26a;
-  undefined1 uStack_269;
-  longlong lStack_268;
-  undefined8 uStack_260;
-  longlong lStack_258;
-  undefined8 uStack_250;
-  ulonglong auStack_248 [32];
-  ulonglong auStack_148 [33];
-  
-  puVar22 = REFG(undefined1 *, 0x142ddf848);
-  uStack_3f8 = 0x27e6d9c4d540a100;
-  uStack_380 = 0x14b611a459e2fef3;
-  CALLF(undefined8, FUN_1400b1420)(&uStack_380,&uStack_3f8);
-  uVar27 = *(ulonglong *)(puVar22 + 0x2a0);
-  uVar24 = ((uVar27 >> 0x20 ^ (ulonglong)((int)uVar27 + 0x296c2348) ^
-            (ulonglong)
-            (uint)((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_3f8 & 0xfff)) - (int)uVar27))
-            << 0x20 | uVar27 & 0xffffffff) ^ uStack_380;
-  uVar15 = *(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_3f8 >> 0x34));
-  lVar20 = *(longlong *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_3f8 & 0xfff));
-  uStack_450 = 0x986df0fd23303a27;
-  uStack_378 = 0xefcbd4cd17f5569c;
-  CALLF(undefined8, FUN_1400b1420)(&uStack_378,&uStack_450);
-  uVar27 = *(ulonglong *)(puVar22 + 0x2a8);
-  uVar27 = ((uVar27 >> 0x20 ^
-             (ulonglong)
-             (((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_450 & 0xfff)) << 1 |
-              (uint)((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_450 & 0xfff)) < 0)) +
-             (uint)uVar27) ^ (ulonglong)((uint)uVar27 ^ 0x10342b32)) << 0x20 | uVar27 & 0xffffffff)
-           ^ uStack_378;
-  uVar23 = (uint)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_450 & 0xfff)) >> 0x20);
-  uVar16 = 0;
-  if ((uint)*(byte *)((uVar27 >> 0x20 ^
-                       (ulonglong)
-                       ((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_450 >> 0x34)) - (uint)uVar27)
-                      ^ (ulonglong)((uVar23 >> 0xb | uVar23 << 0x15) ^ ~(uint)uVar27)) << 0x20 |
-                     uVar27 & 0xffffffff) +
-      (uint)*(byte *)((uVar24 >> 0x20 ^
-                       (ulonglong)
-                       (((int)((ulonglong)lVar20 >> 0x20) << 1 | (uint)(lVar20 < 0)) + (int)uVar24)
-                      ^ (ulonglong)(((int)uVar15 << 1 | (uint)((int)uVar15 < 0)) + (int)uVar24)) <<
-                      0x20 | uVar24 & 0xffffffff) != 0x186) {
-    pppuStack_4b8 = &pppuStack_4b8;
-    uVar27 = 0x1000;
-    if (((void *)__readgsqword(0x30)) != (void *)0x0) {
-      uVar27 = __rdtsc();
-      pppuStack_4b8 = (undefined8 ***)(uVar27 % 100 + 0x10 + *(longlong *)((longlong)((void *)__readgsqword(0x30)) + 0x10));
-      uVar27 = (*(longlong *)((longlong)((void *)__readgsqword(0x30)) + 8) - (longlong)pppuStack_4b8) - 0x1000;
-    }
-    uVar24 = 0;
-    if (uVar27 != 0) {
-      do {
-        ppppuVar18 = (undefined8 ****)((longlong)pppuStack_4b8 + uVar24);
-        if ((((ppppuVar18 == &pppuStack_4b8) || (ppppuVar18 == (undefined8 ****)&ppuStack_2d8)) ||
-            (ppppuVar18 == (undefined8 ****)&ppuStack_2d0)) ||
-           (((ppppuVar18 == (undefined8 ****)&ppuStack_2c8 ||
-             (ppppuVar18 == (undefined8 ****)&ppuStack_2f8)) ||
-            (ppppuVar18 == (undefined8 ****)&ppuStack_310)))) {
-          uVar24 = uVar24 + 7;
-        }
-        else {
-          uVar7 = __rdtsc();
-          *(char *)(uVar24 + (longlong)pppuStack_4b8) = (char)(uVar7 % 0xff);
-        }
-        uVar24 = uVar24 + 1;
-      } while (uVar24 < uVar27);
-    }
-    CALLF(undefined8, FUN_14021b2d0)(1,0x1b,0x186,2,(unsigned long long)(CONCAT44(0,0x63b)),(unsigned long long)(CONCAT44(0,2)),(unsigned long long)(CONCAT44(0,0xd2b)),(unsigned long long)(CONCAT44(0,2)),(unsigned long long)(CONCAT44(0,0x129b)));
-    uVar16 = 0;
-  }
-  puVar22 = REFG(undefined1 *, 0x142ddf848);
-  uVar27 = __rdtsc();
-  uVar27 = CONCAT44(uVar16,(int)uVar27) | uVar27 & 0xffffffff00000000;
-  (*(undefined8 *)((char *)&auVar2 + 8)) = 0;
-  (*(undefined8 *)((char *)&auVar2 + 0)) = uVar27;
-  uVar23 = gen_v16_bytes(gen_v16_mul(gen_v16_zext(gen_v16_u(0x47ae147ae147ae15), 8), auVar2), (int)(4), 4);
-  lVar20 = gen_v16_bytes(gen_v16_mul(gen_v16_zext(gen_v16_u(0x47ae147ae147ae15), 8), auVar2), (int)(8), 8);
-  if (uVar27 + ((uVar27 - lVar20 >> 1) + lVar20 >> 6) * -100 < 5) {
-    uVar27 = __rdtsc();
-        auVar3_lo = uVar27;
-    lVar20 = __umulh((ulonglong)(0x624dd2f1a9fbe77), (ulonglong)(auVar3_lo));
-    if (uVar27 + ((uVar27 - lVar20 >> 1) + lVar20 >> 9) * -1000 < 0xb) {
-      bVar30 = GEN_ATOMIC_CAS(REFG(undefined8, 0x14311c618), 1, 0) == 0;
-      while (!bVar30) {
-        bVar30 = GEN_ATOMIC_CAS(REFG(undefined8, 0x14311c618), 1, 0) == 0;
-      }
-      uStack_370 = 0x89c504ba82cec298;
-      CALLF(undefined8, FUN_1400b1420)((short)&uStack_370);
-      uVar27 = *(ulonglong *)(puVar22 + 0x308);
-      uVar27 = ((uVar27 >> 0x20 ^
-                 (ulonglong)
-                 (((uint)REFG(undefined4, 0x142ddf190) >> 3 | (uint)REFG(undefined4, 0x142ddf190) << 0x1d) * 2 -
-                 (int)uVar27) ^
-                (ulonglong)(uint)((int)((ulonglong)REFG(undefined4, 0x142ddec51) >> 0x20) - (int)uVar27)) <<
-                0x20 | uVar27 & 0xffffffff) ^ uStack_370;
-      if ((uVar27 >> 0x20 ^ (ulonglong)((int)uVar27 + 0x59d8531)) !=
-          (ulonglong)(uint)((int)((ulonglong)REFG(undefined4, 0x142ddf190) >> 0x20) - (int)uVar27) ||
-          (uVar27 & 0xffffffff) != 0) {
-        uStack_368 = 0xef2ef83c852169b1;
-        uStack_360 = 0x874aa1c0f130339d;
-        CALLF(undefined8, FUN_1400b1420)((short)&uStack_360);
-        uVar27 = *(ulonglong *)(puVar22 + 0xe28);
-        uVar24 = ((((uVar27 >> 0x20 ^ (ulonglong)((uint)uVar27 ^ 0xf130339d)) << 0x20 ^
-                   *(ulonglong *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_368 >> 0x34))) >> 0x20 ^
-                  uVar27 & 0xffffffff) << 0x20 | uVar27 & 0xffffffff) ^ uStack_360;
-        iVar13 = *(int *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_368 & 0xfff));
-        uStack_358 = 0x89c504ba82cec298;
-        CALLF(undefined8, FUN_1400b1420)((short)&uStack_358);
-        uVar27 = *(ulonglong *)(puVar22 + 0x308);
-        uVar27 = ((uVar27 >> 0x20 ^
-                   (ulonglong)
-                   (((uint)REFG(undefined4, 0x142ddf190) >> 3 | (uint)REFG(undefined4, 0x142ddf190) << 0x1d) * 2 -
-                   (int)uVar27) ^
-                  (ulonglong)(uint)((int)((ulonglong)REFG(undefined4, 0x142ddec51) >> 0x20) - (int)uVar27))
-                  << 0x20 | uVar27 & 0xffffffff) ^ uStack_358;
-        iVar13 = (*(code *)((uVar24 >> 0x20 ^ (ulonglong)(uint)((int)uVar24 - iVar13) ^
-                            (ulonglong)(0x874aa1c0 - (int)uVar24)) << 0x20 | uVar24 & 0xffffffff))
-                           (((ulonglong)
-                             (uint)((int)((ulonglong)REFG(undefined4, 0x142ddf190) >> 0x20) - (int)uVar27) ^
-                            uVar27 >> 0x20 ^ (ulonglong)((int)uVar27 + 0x59d8531)) << 0x20 |
-                            uVar27 & 0xffffffff);
-        if (iVar13 != 0) {
-          uStack_350 = 0x89c504ba82cec298;
-          uStack_3f0 = 0x950315778c9da411;
-          CALLF(undefined8, FUN_1400b1420)((short)&uStack_350);
-          uVar27 = *(ulonglong *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_3f0 >> 0x34)) & 0xffffffff00000000 ^
-                   uStack_350 ^ 0x59d853100000000;
-          *(ulonglong *)(puVar22 + 0x308) =
-               (uVar27 >> 0x20 ^
-                (ulonglong)
-                (((uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_3f0 >> 0x34)) >> 3 |
-                 (uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_3f0 >> 0x34)) << 0x1d) * 2 -
-                (int)uStack_350) ^
-               (ulonglong)
-               (uint)((int)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_3f0 & 0xfff))
-                           >> 0x20) - (int)uStack_350)) << 0x20 | uVar27 & 0xffffffff;
-        }
-      }
-      uStack_468 = 0x54b9b09b7c4958c7;
-      uStack_348 = 0xcb0e2f7c9438ed89;
-      CALLF(undefined8, FUN_1400b1420)((short)&uStack_348);
-      uVar27 = *(ulonglong *)(puVar22 + 0xe20);
-      uVar27 = (((ulonglong)*(uint *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_468 & 0xfff)) ^ uVar27 >> 0x20
-                 ^ uVar27 & 0xffffffff ^ (ulonglong)((uint)uVar27 ^ 0x34f1d083)) << 0x20 |
-               uVar27 & 0xffffffff) ^ uStack_348;
-      uVar23 = (uint)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_468 & 0xfff)) >>
-                     0x20);
-      uVar27 = (*(code *)((uVar27 >> 0x20 ^
-                           (ulonglong)
-                           (~(uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_468 >> 0x34)) ^
-                           (uint)uVar27) ^
-                          (ulonglong)((uVar23 >> 0xb | uVar23 << 0x15) ^ ~(uint)uVar27)) << 0x20 |
-                         uVar27 & 0xffffffff))(1,((code *)REFP(0x14167b590)));
-      uStack_3e8 = 0x950315778c9da411;
-      uStack_340 = 0x89c504ba82cec298;
-      CALLF(undefined8, FUN_1400b1420)((short)&uStack_340);
-      uVar27 = ((uVar27 >> 0x20 ^ (ulonglong)((int)uVar27 + 0x59d8531) ^
-                (ulonglong)
-                (uint)((int)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_3e8 >> 0x34)) >>
-                            0x20) - (int)uVar27)) << 0x20 | uVar27 & 0xffffffff) ^ uStack_340;
-      *(ulonglong *)(puVar22 + 0x308) =
-           (uVar27 >> 0x20 ^
-            (ulonglong)
-            (((uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_3e8 >> 0x34)) >> 3 |
-             (uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_3e8 >> 0x34)) << 0x1d) * 2 - (int)uVar27
-            ) ^ (ulonglong)
-                (uint)((int)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_3e8 & 0xfff))
-                            >> 0x20) - (int)uVar27)) << 0x20 | uVar27 & 0xffffffff;
-      REFG(undefined8, 0x14311c618) = 0;
-    }
-    uVar23 = (uint)(REFG(undefined8, 0x142ddf594) >> 0x24) | (uint)((REFG(undefined8, 0x142ddf594) << 0x3c) >> 0x20);
-    uVar27 = (ulonglong)(0x27314402 - (int)(REFG(undefined8, 0x142ddf594) >> 4) != *(int *)(puVar22 + 0x310));
-    if (uVar27 != 0) {
-      CALLF(undefined8, FUN_14021b510)(uVar27,0x1b,0x71,3,(unsigned long long)(CONCAT44(0,0xbf4)),(unsigned long long)(CONCAT44(0,2)),(unsigned long long)(CONCAT44(0,0x131)),(unsigned long long)((ulonglong)0 << 0x20),(unsigned long long)(CONCAT44(0,0x6f)),(unsigned long long)(CONCAT44(0,3)),(unsigned long long)(CONCAT44(0,0x7b3)));
-      uVar23 = 0;
-    }
-  }
-  uVar27 = __rdtsc();
-  uVar27 = CONCAT44(uVar23,(int)uVar27) | uVar27 & 0xffffffff00000000;
-    auVar4_lo = uVar27;
-  lVar20 = __umulh((ulonglong)(0x47ae147ae147ae15), (ulonglong)(auVar4_lo));
-  puVar22 = auStackY_518;
-  if (uVar27 + ((uVar27 - lVar20 >> 1) + lVar20 >> 6) * -100 < 0x1e) {
-    uStack_400 = REFG(undefined8, 0x142ddf890);
-    uStack_3e0 = 0xfc9820211599030d;
-    CALLF(undefined8, FUN_1400b1420)((short)&uStack_3e0);
-    lVar21 = 6;
-    lVar25 = 6;
-    lVar20 = 0;
-    do {
-      uVar27 = *(ulonglong *)(lVar20 + 0x142ddf860);
-      *(ulonglong *)((longlong)auStack_2a8 + lVar20) =
-           uStack_400 * 2 - (uStack_3e0 << 9 | uStack_3e0 >> 0x37) ^ uVar27;
-      uStack_3e0 = (uStack_400 << 10 | uStack_400 >> 0x36) - uVar27;
-      lVar25 = lVar25 + -1;
-      lVar20 = lVar20 + 8;
-    } while (lVar25 != 0);
-    uStack_440 = auStack_2a8[0];
-    uStack_438 = auStack_2a8[1];
-    lStack_430 = auStack_2a8[2];
-    uStack_428 = auStack_2a8[3];
-    uStack_420 = CONCAT44(uStack_284,uStack_288);
-    local_418 = CONCAT44(uStack_27c,uStack_280);
-    lVar20 = 0x20;
-    (*(undefined8 *)((char *)&auVar5 + 8)) = 0;
-    (*(undefined8 *)((char *)&auVar5 + 0)) = (*(volatile undefined8 *)0x7ffe0320ULL) << 8;
-    auVar5 = gen_v16_mul((gen_v16_shl(gen_v16_zext(gen_v16_u((*(volatile undefined4 *)0x7ffe0004ULL)), 4), (int)(0x20))), auVar5);
-    if (auStack_2a8[1] < (*(undefined8 *)((char *)&auVar5 + 8))) {
-      uVar27 = 0;
-      puVar22 = auStackY_518;
-      if (uStack_420 != 0) {
-        uStack_420 = 0;
-        bVar30 = GEN_ATOMIC_CAS(REFG(undefined8, 0x142ddf898), 1, 0) == 0;
-        while (!bVar30) {
-          bVar30 = GEN_ATOMIC_CAS(REFG(undefined8, 0x142ddf898), 1, 0) == 0;
-        }
-        lVar25 = __rdtsc();
-        REFG(undefined8, 0x142ddf890) = REFG(undefined8, 0x142ddf890) + lVar25 * (ulonglong)(((uint)REFG(undefined8, 0x142ddf890) & 0xff) + 1);
-        REFG(undefined8, 0x142ddf890) = REFG(undefined8, 0x142ddf890) * 0x20 | REFG(undefined8, 0x142ddf890) >> 0x3b;
-        uStack_3d0 = 0xfc9820211599030d;
-        uStack_3d8 = REFG(undefined8, 0x142ddf890);
-        CALLF(undefined8, FUN_1400b1420)((short)&uStack_3d0);
-        lVar25 = lStack_430;
-        uVar24 = uVar27;
-        do {
-          uStack_3d0 = uStack_3d8 * 2 - (uStack_3d0 << 9 | uStack_3d0 >> 0x37) ^
-                       *(ulonglong *)((longlong)&uStack_440 + uVar24);
-          *(ulonglong *)(uVar24 + 0x142ddf860) = uStack_3d0;
-          uVar24 = uVar24 + 8;
-          uStack_3d0 = (uStack_3d8 << 10 | uStack_3d8 >> 0x36) - uStack_3d0;
-          lVar21 = lVar21 + -1;
-        } while (lVar21 != 0);
-        uVar23 = (*(undefined4 *)((char *)&uStack_428 + 4));
-        REFG(undefined8, 0x142ddf898) = 0;
-        puVar22 = auStackY_518;
-        if (lStack_430 != 0) {
-          pppuStack_4b0 = &pppuStack_4b0;
-          uVar24 = 0x1000;
-          if (((void *)__readgsqword(0x30)) != (void *)0x0) {
-            uVar24 = __rdtsc();
-            pppuStack_4b0 =
-                 (undefined8 ***)(uVar24 % 100 + 0x10 + *(longlong *)((longlong)((void *)__readgsqword(0x30)) + 0x10));
-            uVar24 = (*(longlong *)((longlong)((void *)__readgsqword(0x30)) + 8) - (longlong)pppuStack_4b0) - 0x1000;
-          }
-          if (uVar24 != 0) {
-            do {
-              ppppuVar18 = (undefined8 ****)((longlong)pppuStack_4b0 + uVar27);
-              if (((ppppuVar18 == &pppuStack_4b0) || (ppppuVar18 == (undefined8 ****)&ppuStack_2c0))
-                 || ((ppppuVar18 == (undefined8 ****)&ppuStack_2b8 ||
-                     (((ppppuVar18 == (undefined8 ****)&ppuStack_2b0 ||
-                       (ppppuVar18 == (undefined8 ****)&ppuStack_308)) ||
-                      (ppppuVar18 == (undefined8 ****)&ppuStack_2f0)))))) {
-                uVar27 = uVar27 + 7;
-              }
-              else {
-                uVar7 = __rdtsc();
-                *(char *)(uVar27 + (longlong)pppuStack_4b0) = (char)(uVar7 % 0xff);
-              }
-              uVar27 = uVar27 + 1;
-            } while (uVar27 < uVar24);
-          }
-          REFG(undefined4, 0x142ddcea0) = (*(undefined4 *)((char *)&uStack_428 + 4));
-          uStack_448 = 0xabfc809f2f60fe89;
-          uStack_338 = 0x3a52cef496b45e5e;
-          CALLF(undefined8, FUN_1400b1420)((short)&uStack_338);
-          uVar17 = (uint)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_448 & 0xfff)) >>
-                         0x20);
-          uVar27 = ((REFG(undefined8, 0x142ddf9a8) >> 0x20 ^
-                     (ulonglong)
-                     ((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_448 >> 0x34)) -
-                     (uint)REFG(undefined8, 0x142ddf9a8)) ^
-                    (ulonglong)((uVar17 >> 0xb | uVar17 << 0x15) ^ ~(uint)REFG(undefined8, 0x142ddf9a8))) << 0x20 |
-                   REFG(undefined8, 0x142ddf9a8) & 0xffffffff) ^ uStack_338;
-          if ((uVar27 >> 0x20 ^ (ulonglong)((int)uVar27 * 2 + 0x974342d3)) !=
-              (ulonglong)
-              (uint)((int)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_448 >> 0x34)) >> 0x20
-                          ) - (int)uVar27) || (uVar27 & 0xffffffff) != 0) {
-            uStack_3c8 = REFG(undefined8, 0x142ddf9a0);
-            uStack_3c0 = 0x273a6e0a62aad15a;
-            CALLF(undefined8, FUN_1400b1420)((short)&uStack_3c0);
-            lVar26 = 0x20;
-            lVar21 = 0;
-            do {
-              uVar27 = *(ulonglong *)(lVar21 + 0x142ddf8a0);
-              *(ulonglong *)((longlong)auStack_148 + lVar21) = ~uStack_3c0 ^ uStack_3c8 ^ uVar27;
-              uStack_3c0 = ~uStack_3c8 ^ uVar27;
-              lVar26 = lVar26 + -1;
-              lVar21 = lVar21 + 8;
-            } while (lVar26 != 0);
-            lVar21 = 2;
-            puVar14 = auStack_248;
-            puVar19 = auStack_148;
-            do {
-              puVar1 = puVar14 + 0x10;
-              uVar27 = puVar19[1];
-              uVar24 = puVar19[2];
-              uVar7 = puVar19[3];
-              *puVar14 = *puVar19;
-              puVar14[1] = uVar27;
-              uVar27 = puVar19[4];
-              uVar9 = puVar19[5];
-              puVar14[2] = uVar24;
-              puVar14[3] = uVar7;
-              uVar24 = puVar19[6];
-              uVar7 = puVar19[7];
-              puVar14[4] = uVar27;
-              puVar14[5] = uVar9;
-              uVar27 = puVar19[8];
-              uVar9 = puVar19[9];
-              puVar14[6] = uVar24;
-              puVar14[7] = uVar7;
-              uVar24 = puVar19[10];
-              uVar7 = puVar19[0xb];
-              puVar14[8] = uVar27;
-              puVar14[9] = uVar9;
-              uVar9 = puVar19[0xc];
-              uVar16 = *(undefined4 *)((longlong)puVar19 + 100);
-              uVar10 = puVar19[0xd];
-              uVar8 = *(undefined4 *)((longlong)puVar19 + 0x6c);
-              puVar14[10] = uVar24;
-              puVar14[0xb] = uVar7;
-              uVar27 = puVar19[0xe];
-              uVar24 = puVar19[0xf];
-              *(int *)(puVar14 + 0xc) = (int)uVar9;
-              *(undefined4 *)((longlong)puVar14 + 100) = uVar16;
-              *(int *)(puVar14 + 0xd) = (int)uVar10;
-              *(undefined4 *)((longlong)puVar14 + 0x6c) = uVar8;
-              puVar14[0xe] = uVar27;
-              puVar14[0xf] = uVar24;
-              lVar21 = lVar21 + -1;
-              puVar14 = puVar1;
-              puVar19 = puVar19 + 0x10;
-            } while (lVar21 != 0);
-            if (*(char *)((longlong)auStack_248 + (ulonglong)(uVar23 & 0xff)) == '\0') {
-              *(undefined1 *)((longlong)auStack_248 + (ulonglong)(uVar23 & 0xff)) = 1;
-              uVar27 = __rdtsc();
-              REFG(undefined8, 0x142ddf9a0) =
-                   REFG(undefined8, 0x142ddf9a0) +
-                   (CONCAT44((int)((ulonglong)puVar1 >> 0x20),(int)uVar27) |
-                   uVar27 & 0xffffffff00000000) * (ulonglong)(((uint)REFG(undefined8, 0x142ddf9a0) & 0xff) + 1);
-              REFG(undefined8, 0x142ddf9a0) = REFG(undefined8, 0x142ddf9a0) * 0x20 | REFG(undefined8, 0x142ddf9a0) >> 0x3b;
-              uStack_3b0 = 0x273a6e0a62aad15a;
-              uStack_3b8 = REFG(undefined8, 0x142ddf9a0);
-              CALLF(undefined8, FUN_1400b1420)((short)&uStack_3b0);
-              lVar21 = 0;
-              do {
-                uStack_3b0 = ~uStack_3b0 ^ uStack_3b8 ^
-                             *(ulonglong *)((longlong)auStack_248 + lVar21);
-                *(ulonglong *)(lVar21 + 0x142ddf8a0) = uStack_3b0;
-                uStack_3b0 = ~uStack_3b8 ^ uStack_3b0;
-                lVar20 = lVar20 + -1;
-                lVar21 = lVar21 + 8;
-              } while (lVar20 != 0);
-              uStack_460 = 0xabfc809f2f60fe89;
-              uStack_330 = 0x3a52cef496b45e5e;
-              CALLF(undefined8, FUN_1400b1420)((short)&uStack_330);
-              uVar17 = (uint)((ulonglong)
-                              *(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_460 & 0xfff)) >> 0x20);
-              uVar27 = ((REFG(undefined8, 0x142ddf9a8) >> 0x20 ^
-                         (ulonglong)
-                         ((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_460 >> 0x34)) -
-                         (uint)REFG(undefined8, 0x142ddf9a8)) ^
-                        (ulonglong)((uVar17 >> 0xb | uVar17 << 0x15) ^ ~(uint)REFG(undefined8, 0x142ddf9a8))) <<
-                        0x20 | REFG(undefined8, 0x142ddf9a8) & 0xffffffff) ^ uStack_330;
-              if ((uVar27 >> 0x20 ^ (ulonglong)((int)uVar27 * 2 + 0x974342d3)) !=
-                  (ulonglong)
-                  (uint)((int)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_460 >> 0x34)) >>
-                              0x20) - (int)uVar27) || (uVar27 & 0xffffffff) != 0) {
-                uStack_458 = 0xabfc809f2f60fe89;
-                uStack_328 = 0x3a52cef496b45e5e;
-                CALLF(undefined8, FUN_1400b1420)((short)&uStack_328);
-                uVar17 = (uint)((ulonglong)
-                                *(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_458 & 0xfff)) >> 0x20
-                               );
-                uVar27 = ((REFG(undefined8, 0x142ddf9a8) >> 0x20 ^
-                           (ulonglong)
-                           ((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_458 >> 0x34)) -
-                           (uint)REFG(undefined8, 0x142ddf9a8)) ^
-                          (ulonglong)((uVar17 >> 0xb | uVar17 << 0x15) ^ ~(uint)REFG(undefined8, 0x142ddf9a8))) <<
-                          0x20 | REFG(undefined8, 0x142ddf9a8) & 0xffffffff) ^ uStack_328;
-                (*(code *)((uVar27 >> 0x20 ^ (ulonglong)((int)uVar27 * 2 + 0x974342d3) ^
-                           (ulonglong)
-                           (uint)((int)((ulonglong)
-                                        *(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_458 >> 0x34)) >>
-                                       0x20) - (int)uVar27)) << 0x20 | uVar27 & 0xffffffff))
-                          (uVar23,0x1b,lVar25);
-              }
-            }
-          }
-          puVar22 = REFG(undefined1 *, 0x142ddf848);
-          do {
-          } while ((uint)((ulonglong)(*(volatile undefined4 *)0x7ffe0004ULL) * (*(volatile undefined8 *)0x7ffe0320ULL) >> 0x18) <
-                   (int)((ulonglong)(*(volatile undefined4 *)0x7ffe0004ULL) * (*(volatile undefined8 *)0x7ffe0320ULL) >> 0x18) + 1000U);
-          uStack_4a8 = (undefined1)0xb9;
-          pIStack_492 = ((char *)REFP(0x140000000));
-          uStack_4a7 = 0x1b;
-          uStack_4a3 = 0xba;
-          uStack_4a2 = uVar23;
-          uStack_49e = 0xbd48;
-          lStack_49c = lVar25;
-          uStack_494 = 0xbb48;
-          uStack_48a = 0xf633ff33;
-          uStack_486 = 0x45c03345;
-          uStack_482 = 0x3345c933;
-          uStack_47e = 0xdb3345d2;
-          uStack_47a = 0x45e43345;
-          uStack_476 = 0x3345ed33;
-          uStack_472 = 0xff3345f6;
-          uStack_46e = 0xe0ffc033;
-          if (REFG(undefined1 *, 0x142ddf848) != (undefined1 *)0x0) {
-            uStack_3a8 = 0x2a0a0383165ad96a;
-            uStack_320 = 0x8bf5dc1450517e24;
-            CALLF(undefined8, FUN_1400b1420)((short)&uStack_320);
-            uVar27 = *(ulonglong *)(puVar22 + 0xdb8);
-            uVar27 = ((ulonglong)
-                      (~(uint)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_3a8 >> 0x34)) >>
-                              0x20) ^ (uint)uVar27 ^ (uint)uVar27 + 0xafae81dc) << 0x20 ^
-                      uVar27 & 0xffffffff00000000 | uVar27 & 0xffffffff) ^ uStack_320;
-            if (((ulonglong)
-                 (((uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_3a8 & 0xfff)) >> 3 |
-                  (uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_3a8 & 0xfff)) << 0x1d) * 2 -
-                 (int)uVar27) ^ uVar27 & 0xffffffff ^ 0xffffffff8bf5dc14) << 0x20 !=
-                (uVar27 & 0xffffffff00000000) || (uVar27 & 0xffffffff) != 0) {
-              uStack_3a0 = 0x27e6d9c4d540a100;
-              uStack_318 = 0x14b611a459e2fef3;
-              CALLF(undefined8, FUN_1400b1420)((short)&uStack_318);
-              uVar27 = *(ulonglong *)(puVar22 + 0xe10);
-              uVar27 = ((ulonglong)
-                        ((int)uVar27 + 0x296c2348U ^
-                        (int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_3a0 & 0xfff)) -
-                        (int)uVar27) << 0x20 ^ uVar27 & 0xffffffff00000000 | uVar27 & 0xffffffff) ^
-                       uStack_318;
-              pcVar28 = (code *)((ulonglong)
-                                 (((int)((ulonglong)
-                                         *(longlong *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_3a0 & 0xfff))
-                                        >> 0x20) << 1 |
-                                  (uint)(*(longlong *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_3a0 & 0xfff))
-                                        < 0)) + (int)uVar27 ^
-                                 ((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_3a0 >> 0x34)) << 1 |
-                                 (uint)((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + (uStack_3a0 >> 0x34))
-                                       < 0)) + (int)uVar27) << 0x20 ^ uVar27 & 0xffffffff00000000 |
-                                uVar27 & 0xffffffff);
-              if (pcVar28 != (code *)0x0) {
-                pcStack_398 = (code *)0x0;
-                uVar27 = __rdtsc();
-                lStack_300 = uVar27 % 0x1000 + 0x3e;
-                iVar13 = (*pcVar28)(0xffffffffffffffff,&pcStack_398,0,&lStack_300);
-                if (-1 < iVar13) {
-                  pcVar28 = (code *)&uStack_4a8;
-                  pcVar29 = pcStack_398;
-                  for (lVar20 = 0x3e; lVar20 != 0; lVar20 = lVar20 + -1) {
-                    *pcVar29 = *pcVar28;
-                    pcVar28 = (char *)pcVar28 + 1;
-                    pcVar29 = (char *)pcVar29 + 1;
-                  }
-                  (*pcStack_398)();
-                }
-              }
-            }
-          }
-          pcVar28 = (code *)swi(0x29);
-          (*pcVar28)(0);
-          puVar22 = auStackY_510;
-        }
-      }
-    }
-    else {
-      uVar27 = __rdtsc();
-      uVar27 = CONCAT44((*(undefined4 *)((char *)&auVar5 + 4)), (int)uVar27) | uVar27 & 0xffffffff00000000;
-            auVar6_lo = uVar27;
-      lVar20 = __umulh((ulonglong)(0x47ae147ae147ae15), (ulonglong)(auVar6_lo));
-      puVar22 = auStackY_518;
-      if (uVar27 + ((uVar27 - lVar20 >> 1) + lVar20 >> 6) * -100 < 5) {
-        bVar30 = GEN_ATOMIC_CAS(REFG(undefined8, 0x142ddf898), 1, 0) == 0;
-        while (!bVar30) {
-          bVar30 = GEN_ATOMIC_CAS(REFG(undefined8, 0x142ddf898), 1, 0) == 0;
-        }
-        uStack_390 = REFG(undefined8, 0x142ddf890);
-        uStack_388 = 0xfc9820211599030d;
-        CALLF(undefined8, FUN_1400b1420)((short)&uStack_388);
-        lVar25 = 6;
-        lVar20 = 0;
-        do {
-          uVar27 = *(ulonglong *)(lVar20 + 0x142ddf860);
-          *(ulonglong *)(&bStack_278 + lVar20) =
-               uStack_390 * 2 - (uStack_388 << 9 | uStack_388 >> 0x37) ^ uVar27;
-          uStack_388 = (uStack_390 << 10 | uStack_390 >> 0x36) - uVar27;
-          lVar25 = lVar25 + -1;
-          lVar20 = lVar20 + 8;
-        } while (lVar25 != 0);
-        uStack_438 = CONCAT17(uStack_269,
-                              CONCAT16(uStack_26a,
-                                       CONCAT15(uStack_26b,
-                                                CONCAT14(uStack_26c,
-                                                         CONCAT13(uStack_26d,
-                                                                  CONCAT12(uStack_26e,
-                                                                           CONCAT11(uStack_26f,
-                                                                                    uStack_270))))))
-                             );
-        lStack_430 = lStack_268;
-        uStack_428 = uStack_260;
-        uStack_420 = lStack_258;
-        local_418 = uStack_250;
-        uVar27 = __rdtsc();
-        bStack_278 = bStack_278 ^ (byte)(uVar27 & 0xffffffff);
-        uVar15 = __rdtsc();
-        uVar23 = (int)((uVar27 & 0xffffffff) >> 3) + (int)uVar15 + (uint)bStack_278;
-        bStack_277 = bStack_277 ^ (byte)uVar23;
-        uVar15 = __rdtsc();
-        uVar23 = (uVar23 >> 3) + (int)uVar15 + (uint)bStack_277;
-        bStack_276 = bStack_276 ^ (byte)uVar23;
-        uVar15 = __rdtsc();
-        uVar23 = (uVar23 >> 3) + (int)uVar15 + (uint)bStack_276;
-        bStack_275 = bStack_275 ^ (byte)uVar23;
-        uVar15 = __rdtsc();
-        uVar23 = (uVar23 >> 3) + (int)uVar15 + (uint)bStack_275;
-        bStack_274 = bStack_274 ^ (byte)uVar23;
-        uVar15 = __rdtsc();
-        uVar23 = (uVar23 >> 3) + (int)uVar15 + (uint)bStack_274;
-        bStack_273 = bStack_273 ^ (byte)uVar23;
-        uVar15 = __rdtsc();
-        uVar23 = (uVar23 >> 3) + (int)uVar15 + (uint)bStack_273;
-        bStack_272 = bStack_272 ^ (byte)uVar23;
-        uVar15 = __rdtsc();
-        uStack_440 = CONCAT17(bStack_271 ^ (char)uVar15 + (char)(uVar23 >> 3) + bStack_272,
-                              CONCAT16(bStack_272,
-                                       CONCAT15(bStack_273,
-                                                CONCAT14(bStack_274,
-                                                         CONCAT13(bStack_275,
-                                                                  CONCAT12(bStack_276,
-                                                                           CONCAT11(bStack_277,
-                                                                                    bStack_278))))))
-                             );
-        lVar20 = __rdtsc();
-        REFG(undefined8, 0x142ddf890) = REFG(undefined8, 0x142ddf890) + lVar20 * (ulonglong)(((uint)REFG(undefined8, 0x142ddf890) & 0xff) + 1);
-        REFG(undefined8, 0x142ddf890) = REFG(undefined8, 0x142ddf890) * 0x20 | REFG(undefined8, 0x142ddf890) >> 0x3b;
-        uStack_408 = 0xfc9820211599030d;
-        uStack_410 = REFG(undefined8, 0x142ddf890);
-        CALLF(undefined8, FUN_1400b1420)((short)&uStack_408);
-        lVar20 = 0;
-        do {
-          uStack_408 = uStack_410 * 2 - (uStack_408 << 9 | uStack_408 >> 0x37) ^
-                       *(ulonglong *)((longlong)&uStack_440 + lVar20);
-          *(ulonglong *)(lVar20 + 0x142ddf860) = uStack_408;
-          lVar20 = lVar20 + 8;
-          uStack_408 = (uStack_410 << 10 | uStack_410 >> 0x36) - uStack_408;
-          lVar21 = lVar21 + -1;
-        } while (lVar21 != 0);
-        REFG(undefined8, 0x142ddf898) = 0;
-        puVar22 = auStackY_518;
-      }
-    }
-  }
-  *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f4bc);
-  cVar11 = CALLF(undefined1, FUN_1416a3ab0)(&REFG(undefined8, 0x14311c580));
-  if (cVar11 != '\0') {
-    uStack_2e0 = 0;
-    *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f4d3);
-    uVar15 = CALLF(undefined8, FUN_140661460)(&REFG(undefined8, 0x14311c580));
-    *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f4e2);
-    CALLF(undefined8, FUN_14117bef0)(uVar15,auStack_2e8);
-    uStack_2e0 = 0;
-    *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f4f5);
-    CALLF(undefined8, FUN_1416a3850)(&REFG(undefined8, 0x14311c580));
-  }
-  *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f4fc);
-  CALLF(undefined1, FUN_141930f30)(1);
-  *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f501);
-  CALLF(undefined8, FUN_141273e00)();
-  *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f506);
-  CALLF(undefined1, FUN_140582890)();
-  *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f50b);
-  CALLF(int, FUN_1405da670)();
-  *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f510);
-  CALLF(undefined8, FUN_141b4a9d0)();
-  *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f515);
-  _guard_check_icall();
-  if (REFG(undefined4, 0x14311c534) == 0) {
-    *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f53a);
-    cVar11 = CALLF(longlong, FUN_142289ea0)();
-    if (cVar11 != '\0') {
-      *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f543);
-      cVar11 = CALLF(undefined1, FUN_1414fcea0)();
-      if (cVar11 != '\0') {
-        REFG(undefined4, 0x14311c534) = 1;
-      }
-    }
-  }
-  else if (REFG(undefined4, 0x14311c534) == 1) {
-    REFG(undefined4, 0x14311c534) = 2;
-    *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f533);
-    CALLF(longlong, FUN_14117bb80)();
-  }
-  if ((*(undefined1 *)((char *)&gen_g_14311c529 + 0x0)) != '\0') {
-    if ((*(undefined1 *)((char *)&gen_g_14311c528 + 0x0)) == '\0') {
-      *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f564);
-      CALLF(undefined4, FUN_141687460)();
-      *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f569);
-      CALLF(undefined4, FUN_141691990)();
-      *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f570);
-      CALLF(undefined8, FUN_14167c3c0)(1);
-      *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f575);
-      CALLF(undefined4, FUN_141b4b7a0)();
-      *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f57a);
-      CALLF(undefined4, FUN_14167bac0)();
-    }
-    (*(undefined1 *)((char *)&gen_g_14311c529 + 0x0)) = '\0';
-  }
-  if ((*(undefined8 *)((char *)&gen_g_14311c52a + 0x0)) != '\0') {
-    if ((*(undefined1 *)((char *)&gen_g_14311c528 + 0x0)) == '\0') {
-      *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f598);
-      CALLF(undefined8, FUN_14167b4d0)();
-    }
-    (*(undefined8 *)((char *)&gen_g_14311c52a + 0x0)) = '\0';
-  }
-  *(undefined **)(puVar22 + -8) = &REFG(undefined8, 0x14167f5a4);
-  uVar12 = CALLF(undefined8, FUN_1424d38d0)();
-  return uVar12;
-}
-
 /* ref: FUN_14167f600 */
 undefined8 * FUN_14167f600(longlong *param_1, undefined8 *param_2, undefined8 *param_3, longlong param_4)
 {
-  GEN_HIT(201);
+  GEN_HIT(203);
   longlong lVar1;
   longlong lVar2;
   ulonglong uVar3;
@@ -12470,7 +12044,7 @@ undefined8 * FUN_14167f600(longlong *param_1, undefined8 *param_2, undefined8 *p
 /* ref: FUN_14167f860 */
 int * FUN_14167f860(int *param_1, int *param_2, longlong param_3, undefined1 param_4)
 {
-  GEN_HIT(202);
+  GEN_HIT(204);
   __declspec(align(16)) unsigned char gen_frame[(0x20 + sizeof(undefined8) > 0x58 ? 0x20 + sizeof(undefined8) : 0x58)];
   undefined8 uVar1;
   int iVar2;
@@ -12731,7 +12305,7 @@ joined_r0x00014167f894:
 /* ref: FUN_14167fcc0 */
 undefined8 * FUN_14167fcc0(undefined8 *param_1, undefined8 *param_2, longlong param_3, undefined1 param_4)
 {
-  GEN_HIT(203);
+  GEN_HIT(205);
   __declspec(align(16)) unsigned char gen_frame[(0x30 + sizeof(undefined8) > 0x68 ? 0x30 + sizeof(undefined8) : 0x68)];
   undefined8 uVar1;
   int iVar2;
@@ -13055,7 +12629,7 @@ joined_r0x00014167fcf4:
 /* ref: FUN_1416801f0 */
 undefined8 FUN_1416801f0(ulonglong *param_1, ulonglong *param_2, longlong param_3, undefined1 param_4)
 {
-  GEN_HIT(204);
+  GEN_HIT(206);
   __declspec(align(16)) unsigned char gen_frame[(0x88 + sizeof(undefined1) > 0x90 ? 0x88 + sizeof(undefined1) : 0x90)];
   memcpy(gen_frame + 0x70, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x78, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -13260,7 +12834,7 @@ LAB_141680640:
 /* ref: FUN_141680860 */
 undefined8 FUN_141680860(undefined8 param_1, undefined8 param_2, undefined8 param_3)
 {
-  GEN_HIT(205);
+  GEN_HIT(207);
   __declspec(align(16)) unsigned char gen_frame[(0x18 + sizeof(undefined1[8]) > 0x20 ? 0x18 + sizeof(undefined1[8]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -13294,7 +12868,7 @@ undefined8 FUN_141680860(undefined8 param_1, undefined8 param_2, undefined8 para
 /* ref: FUN_141680910 */
 int * FUN_141680910(int *param_1, longlong param_2)
 {
-  GEN_HIT(206);
+  GEN_HIT(208);
   int iVar1;
   int iVar2;
   int iVar3;
@@ -13405,7 +12979,7 @@ LAB_141680a32:
 /* ref: FUN_141680a80 */
 longlong FUN_141680a80(longlong param_1, longlong param_2)
 {
-  GEN_HIT(207);
+  GEN_HIT(209);
   int iVar1;
   int iVar2;
   int iVar3;
@@ -13517,7 +13091,7 @@ LAB_141680b9e:
 /* ref: FUN_141680bf0 */
 longlong FUN_141680bf0(longlong param_1, longlong param_2, longlong param_3, int *param_4)
 {
-  GEN_HIT(208);
+  GEN_HIT(210);
   longlong lVar1;
   undefined8 *puVar2;
   undefined8 *puVar3;
@@ -13594,7 +13168,7 @@ longlong FUN_141680bf0(longlong param_1, longlong param_2, longlong param_3, int
 /* ref: FUN_141680d30 */
 longlong FUN_141680d30(longlong param_1, longlong param_2, longlong param_3, undefined8 *param_4)
 {
-  GEN_HIT(209);
+  GEN_HIT(211);
   undefined8 *puVar1;
   undefined8 uVar2;
   longlong lVar3;
@@ -13688,7 +13262,7 @@ longlong FUN_141680d30(longlong param_1, longlong param_2, longlong param_3, und
 /* ref: FUN_141680e90 */
 undefined8 FUN_141680e90(longlong param_1, longlong param_2)
 {
-  GEN_HIT(210);
+  GEN_HIT(212);
   __declspec(align(16)) unsigned char gen_frame[(0x68 + sizeof(undefined1[8]) > 0x70 ? 0x68 + sizeof(undefined1[8]) : 0x70)];
   memcpy(gen_frame + 0x50, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x58, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -13769,7 +13343,7 @@ undefined8 FUN_141680e90(longlong param_1, longlong param_2)
 /* ref: FUN_141681090 */
 ulonglong FUN_141681090(ulonglong *param_1, ulonglong *param_2)
 {
-  GEN_HIT(211);
+  GEN_HIT(213);
   __declspec(align(16)) unsigned char gen_frame[(0x68 + sizeof(undefined1[8]) > 0x70 ? 0x68 + sizeof(undefined1[8]) : 0x70)];
   memcpy(gen_frame + 0x50, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x58, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -13834,7 +13408,7 @@ ulonglong FUN_141681090(ulonglong *param_1, ulonglong *param_2)
         lVar7 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e41960 + 0x0)),(int)param_1[lVar8],0,((undefined1 *)(gen_frame + 0x68)));
         uVar2 = 0;
         if (lVar7 == 0) break;
-        lVar4 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e41960 + 0x0)), (int)uVar1, 0, gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0))));
+        lVar4 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e41960 + 0x0)), (int)uVar1, 0, (void *)&(*(gen_v16 *)(gen_frame + 0x0)));
         if (lVar4 != 0) {
           uVar5 = CALLF(undefined *, FUN_14051ae20)();
           uVar5 = CALLF(undefined8, FUN_140229de0)(lVar7 + 4,5,4,uVar5);
@@ -13855,7 +13429,7 @@ ulonglong FUN_141681090(ulonglong *param_1, ulonglong *param_2)
 /* ref: FUN_141681290 */
 undefined8 * FUN_141681290(longlong *param_1)
 {
-  GEN_HIT(212);
+  GEN_HIT(214);
   undefined8 *puVar1;
   ulonglong uVar2;
   undefined8 uVar3;
@@ -13942,7 +13516,7 @@ undefined8 * FUN_141681290(longlong *param_1)
 /* ref: FUN_141681430 */
 undefined1 FUN_141681430(undefined8 param_1, undefined4 *param_2, undefined4 *param_3)
 {
-  GEN_HIT(213);
+  GEN_HIT(215);
   __declspec(align(16)) unsigned char gen_frame[(0x18 + sizeof(undefined1[8]) > 0x20 ? 0x18 + sizeof(undefined1[8]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -13970,7 +13544,7 @@ undefined1 FUN_141681430(undefined8 param_1, undefined4 *param_2, undefined4 *pa
 /* ref: FUN_1416814f0 */
 longlong FUN_1416814f0(longlong *param_1)
 {
-  GEN_HIT(214);
+  GEN_HIT(216);
   longlong *plVar1;
   undefined8 *puVar2;
   longlong *plVar3;
@@ -14053,7 +13627,7 @@ longlong FUN_1416814f0(longlong *param_1)
 /* ref: FUN_1416816d0 */
 undefined1 FUN_1416816d0(undefined8 param_1)
 {
-  GEN_HIT(215);
+  GEN_HIT(217);
   __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(undefined8 *[2]) > 0x20 ? 0x10 + sizeof(undefined8 *[2]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   char cVar1;
@@ -14095,7 +13669,7 @@ undefined1 FUN_1416816d0(undefined8 param_1)
 /* ref: FUN_1416817a0 */
 undefined8 FUN_1416817a0(int param_1)
 {
-  GEN_HIT(216);
+  GEN_HIT(218);
   __declspec(align(16)) unsigned char gen_frame[(0x48 + sizeof(undefined1[8]) > 0x60 ? 0x48 + sizeof(undefined1[8]) : 0x60)];
   memcpy(gen_frame + 0x40, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   undefined1 *puVar1;
@@ -14115,7 +13689,7 @@ undefined8 FUN_1416817a0(int param_1)
     (*(int *)(gen_frame + 0x10)) = -2;
     (*(undefined8 *)(gen_frame + 0x18)) = 0;
     (*(longlong * *)(gen_frame + 0x20)) = (*(longlong * *)((char *)&gen_g_142e3cd10 + 0x140));
-    piVar4 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e3cd10 + 0x140)), gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0))));
+    piVar4 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e3cd10 + 0x140)), (void *)&(*(gen_v16 *)(gen_frame + 0x0)));
     (*(int *)(gen_frame + 0x10)) = *piVar4;
     (*(int *)(gen_frame + 0x14)) = piVar4[1];
     uVar7 = uVar9;
@@ -14174,7 +13748,7 @@ undefined8 FUN_1416817a0(int param_1)
     (*(int *)(gen_frame + 0x10)) = -2;
     (*(undefined8 *)(gen_frame + 0x18)) = 0;
     (*(longlong * *)(gen_frame + 0x20)) = (*(longlong * *)((char *)&gen_g_142e3cd10 + 0x140));
-    piVar4 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e3cd10 + 0x140)), gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0))));
+    piVar4 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e3cd10 + 0x140)), (void *)&(*(gen_v16 *)(gen_frame + 0x0)));
     (*(int *)(gen_frame + 0x10)) = *piVar4;
     (*(int *)(gen_frame + 0x14)) = piVar4[1];
     uVar6 = *(undefined8 *)(piVar4 + 2);
@@ -14199,7 +13773,7 @@ undefined8 FUN_1416817a0(int param_1)
 /* ref: FUN_141681a40 */
 undefined8 FUN_141681a40(void)
 {
-  GEN_HIT(217);
+  GEN_HIT(219);
   REFG(undefined4, 0x142d1b494) = 0xffffffff;
   return 0;
 }
@@ -14207,7 +13781,7 @@ undefined8 FUN_141681a40(void)
 /* ref: FUN_141681a50 */
 undefined8 FUN_141681a50(longlong param_1)
 {
-  GEN_HIT(218);
+  GEN_HIT(220);
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(undefined1) > 0x18 ? 0x8 + sizeof(undefined1) : 0x18)];
   undefined8 uVar1;
   
@@ -14225,7 +13799,7 @@ undefined8 FUN_141681a50(longlong param_1)
 /* ref: FUN_141681a90 */
 undefined1 FUN_141681a90(longlong param_1)
 {
-  GEN_HIT(219);
+  GEN_HIT(221);
   __declspec(align(16)) unsigned char gen_frame[(0x78 + sizeof(undefined1[1160]) > 0x508 ? 0x78 + sizeof(undefined1[1160]) : 0x508)];
   undefined1 uVar1;
   
@@ -14255,7 +13829,7 @@ undefined1 FUN_141681a90(longlong param_1)
 /* ref: FUN_141681ba0 */
 undefined8 FUN_141681ba0(longlong param_1)
 {
-  GEN_HIT(220);
+  GEN_HIT(222);
   __declspec(align(16)) unsigned char gen_frame[(0x78 + sizeof(undefined1[1160]) > 0x508 ? 0x78 + sizeof(undefined1[1160]) : 0x508)];
   byte bVar1;
   undefined8 uVar2;
@@ -14339,7 +13913,7 @@ undefined8 FUN_141681ba0(longlong param_1)
 /* ref: FUN_141681df0 */
 undefined8 FUN_141681df0(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
 {
-  GEN_HIT(221);
+  GEN_HIT(223);
   ulonglong r_r8 = a2;
   ulonglong r_r9 = a3;
   ulonglong r_rax = 0;
@@ -14358,7 +13932,7 @@ L_141681e03:;
 /* ref: FUN_141681e10 */
 undefined8 FUN_141681e10(longlong *param_1, undefined8 *param_2)
 {
-  GEN_HIT(222);
+  GEN_HIT(224);
   __declspec(align(16)) unsigned char gen_frame[(0x4fc + sizeof(undefined2) > 0x528 ? 0x4fc + sizeof(undefined2) : 0x528)];
   char cVar1;
   longlong lVar2;
@@ -14537,7 +14111,7 @@ LAB_14168223e:
 /* ref: FUN_141682270 */
 undefined8 FUN_141682270(undefined4 param_1)
 {
-  GEN_HIT(223);
+  GEN_HIT(225);
   __declspec(align(16)) unsigned char gen_frame[(0x98 + sizeof(undefined1[24]) > 0xb0 ? 0x98 + sizeof(undefined1[24]) : 0xb0)];
   memcpy(gen_frame + 0x90, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   char cVar1;
@@ -14594,7 +14168,7 @@ undefined8 FUN_141682270(undefined4 param_1)
 /* ref: FUN_1416823e0 */
 undefined8 FUN_1416823e0(undefined4 param_1, int param_2)
 {
-  GEN_HIT(224);
+  GEN_HIT(226);
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(undefined1 *) > 0x18 ? 0x8 + sizeof(undefined1 *) : 0x18)];
   int iVar1;
   int *piVar2;
@@ -14619,7 +14193,7 @@ undefined8 FUN_1416823e0(undefined4 param_1, int param_2)
 /* ref: FUN_1416824b0 */
 undefined8 FUN_1416824b0(void)
 {
-  GEN_HIT(225);
+  GEN_HIT(227);
   undefined1 *puVar1;
   int iVar2;
   int iVar3;
@@ -14659,7 +14233,7 @@ undefined8 FUN_1416824b0(void)
 /* ref: FUN_141682590 */
 undefined1 FUN_141682590(int param_1)
 {
-  GEN_HIT(226);
+  GEN_HIT(228);
   __declspec(align(16)) unsigned char gen_frame[(0x920 + sizeof(uint) > 0x930 ? 0x920 + sizeof(uint) : 0x930)];
   memcpy(gen_frame + 0x910, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   ulonglong uVar1;
@@ -14901,7 +14475,7 @@ LAB_141682a39:
 /* ref: FUN_141682bc0 */
 undefined8 FUN_141682bc0(longlong param_1, undefined8 param_2, undefined4 *param_3)
 {
-  GEN_HIT(227);
+  GEN_HIT(229);
   int iVar1;
   char cVar2;
   byte bVar3;
@@ -14972,7 +14546,7 @@ undefined8 FUN_141682bc0(longlong param_1, undefined8 param_2, undefined4 *param
 /* ref: FUN_141682cf0 */
 undefined1 FUN_141682cf0(longlong param_1)
 {
-  GEN_HIT(228);
+  GEN_HIT(230);
   undefined4 *puVar1;
   longlong lVar2;
   ulonglong uVar3;
@@ -15019,7 +14593,7 @@ undefined1 FUN_141682cf0(longlong param_1)
 /* ref: FUN_141682e40 */
 undefined4 FUN_141682e40(int param_1, longlong param_2, int *param_3)
 {
-  GEN_HIT(229);
+  GEN_HIT(231);
   __declspec(align(16)) unsigned char gen_frame[(0x50 + sizeof(undefined1[8]) > 0x70 ? 0x50 + sizeof(undefined1[8]) : 0x70)];
   memcpy(gen_frame + 0x50, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x58, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -15086,7 +14660,7 @@ LAB_141682f37:
     (*(uint *)(gen_frame + 0x10)) = 0xfffffffe;
     (*(int * *)(gen_frame + 0x18)) = (int *)0x0;
     (*(longlong * *)(gen_frame + 0x20)) = (*(longlong * *)((char *)&gen_g_142e4c840 + 0x140));
-    puVar9 = (uint *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e4c840 + 0x140)), gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0))));
+    puVar9 = (uint *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e4c840 + 0x140)), (void *)&(*(gen_v16 *)(gen_frame + 0x0)));
     (*(uint *)(gen_frame + 0x10)) = *puVar9;
     (*(uint *)(gen_frame + 0x14)) = puVar9[1];
     piVar1 = *(int **)(puVar9 + 2);
@@ -15139,7 +14713,7 @@ LAB_141683015:
 /* ref: FUN_1416830e0 */
 undefined4 FUN_1416830e0(int param_1, longlong param_2)
 {
-  GEN_HIT(230);
+  GEN_HIT(232);
   __declspec(align(16)) unsigned char gen_frame[(0x48 + sizeof(undefined1[8]) > 0x60 ? 0x48 + sizeof(undefined1[8]) : 0x60)];
   memcpy(gen_frame + 0x40, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x48, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -15157,7 +14731,7 @@ undefined4 FUN_1416830e0(int param_1, longlong param_2)
       (*(int *)(gen_frame + 0x10)) = -2;
       (*(longlong *)(gen_frame + 0x18)) = 0;
       (*(longlong * *)(gen_frame + 0x20)) = (*(longlong * *)((char *)&gen_g_142e43430 + 0x140));
-      piVar5 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e43430 + 0x140)), gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0))));
+      piVar5 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e43430 + 0x140)), (void *)&(*(gen_v16 *)(gen_frame + 0x0)));
       (*(int *)(gen_frame + 0x10)) = *piVar5;
       (*(int *)(gen_frame + 0x14)) = piVar5[1];
       (*(longlong *)(gen_frame + 0x18)) = *(longlong *)(piVar5 + 2);
@@ -15184,7 +14758,7 @@ undefined4 FUN_1416830e0(int param_1, longlong param_2)
 /* ref: FUN_141683240 */
 longlong * FUN_141683240(longlong *param_1)
 {
-  GEN_HIT(231);
+  GEN_HIT(233);
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(char[16]) > 0x18 ? 0x0 + sizeof(char[16]) : 0x18)];
   longlong lVar1;
   longlong lVar2;
@@ -15224,7 +14798,7 @@ longlong * FUN_141683240(longlong *param_1)
 /* ref: FUN_141683330 */
 undefined4 FUN_141683330(undefined4 param_1, undefined1 *param_2, byte *param_3)
 {
-  GEN_HIT(232);
+  GEN_HIT(234);
   byte bVar1;
   longlong lVar2;
   
@@ -15243,7 +14817,7 @@ undefined4 FUN_141683330(undefined4 param_1, undefined1 *param_2, byte *param_3)
 /* ref: FUN_141683380 */
 longlong * FUN_141683380(longlong *param_1)
 {
-  GEN_HIT(233);
+  GEN_HIT(235);
   __declspec(align(16)) unsigned char gen_frame[(0x20 + sizeof(longlong *) > 0x58 ? 0x20 + sizeof(longlong *) : 0x58)];
   undefined8 *puVar1;
   undefined8 *puVar2;
@@ -15270,7 +14844,7 @@ longlong * FUN_141683380(longlong *param_1)
     (*(int *)(gen_frame + 0x10)) = -2;
     (*(undefined8 *)(gen_frame + 0x18)) = 0;
     (*(longlong * *)(gen_frame + 0x20)) = (*(longlong * *)((char *)&gen_g_142e3fc80 + 0x140));
-    piVar8 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e3fc80 + 0x140)), gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0))));
+    piVar8 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e3fc80 + 0x140)), (void *)&(*(gen_v16 *)(gen_frame + 0x0)));
     (*(int *)(gen_frame + 0x10)) = *piVar8;
     (*(int *)(gen_frame + 0x14)) = piVar8[1];
     uVar5 = *(undefined8 *)(piVar8 + 2);
@@ -15352,7 +14926,7 @@ longlong * FUN_141683380(longlong *param_1)
 /* ref: FUN_141683650 */
 longlong * FUN_141683650(longlong *param_1, int *param_2)
 {
-  GEN_HIT(234);
+  GEN_HIT(236);
   __declspec(align(16)) unsigned char gen_frame[(0x20 + sizeof(longlong *) > 0x38 ? 0x20 + sizeof(longlong *) : 0x38)];
   undefined8 uVar1;
   char cVar2;
@@ -15372,7 +14946,7 @@ longlong * FUN_141683650(longlong *param_1, int *param_2)
     (*(undefined8 *)(gen_frame + 0x18)) = 0;
     (*(int *)(gen_frame + 0x10)) = -2;
     (*(longlong * *)(gen_frame + 0x20)) = (*(longlong * *)((char *)&gen_g_142e43430 + 0x140));
-    piVar5 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e43430 + 0x140)), gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0))));
+    piVar5 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e43430 + 0x140)), (void *)&(*(gen_v16 *)(gen_frame + 0x0)));
     (*(int *)(gen_frame + 0x10)) = *piVar5;
     (*(int *)(gen_frame + 0x14)) = piVar5[1];
     (*(undefined8 *)(gen_frame + 0x18)) = *(undefined8 *)(piVar5 + 2);
@@ -15396,14 +14970,14 @@ longlong * FUN_141683650(longlong *param_1, int *param_2)
 /* ref: FUN_1416837c0 */
 float FUN_1416837c0(void)
 {
-  GEN_HIT(235);
+  GEN_HIT(237);
   return REFG(float, 0x14311c63c) * REFG(float, 0x1426e6330);
 }
 
 /* ref: FUN_1416837e0 */
 undefined1 FUN_1416837e0(undefined4 param_1, longlong *param_2, undefined8 *param_3)
 {
-  GEN_HIT(236);
+  GEN_HIT(238);
   undefined8 uVar1;
   longlong lVar2;
   
@@ -15420,7 +14994,7 @@ undefined1 FUN_1416837e0(undefined4 param_1, longlong *param_2, undefined8 *para
 /* ref: FUN_141683840 */
 undefined8 * FUN_141683840(undefined8 *param_1, undefined4 param_2)
 {
-  GEN_HIT(237);
+  GEN_HIT(239);
   __declspec(align(16)) unsigned char gen_frame[(0x50 + sizeof(gen_v16) > 0x60 ? 0x50 + sizeof(gen_v16) : 0x60)];
   memcpy(gen_frame + 0x40, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x48, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -15428,7 +15002,7 @@ undefined8 * FUN_141683840(undefined8 *param_1, undefined4 param_2)
   longlong lVar2;
   undefined1 uVar3;
   
-  lVar1 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e3fc80 + 0x0)), param_2, 0, gen_v16_q0((*(gen_v16 *)(gen_frame + 0x50))));
+  lVar1 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e3fc80 + 0x0)), param_2, 0, (void *)&(*(gen_v16 *)(gen_frame + 0x50)));
   if (lVar1 != 0) {
     uVar3 = REFG(undefined1, 0x1431222e4);
     if ((REFG(undefined1, 0x14311c632) == '\0') && (uVar3 = 0, REFG(undefined1 *, 0x143122350) != (undefined1 *)0x0)) {
@@ -15462,7 +15036,7 @@ undefined8 * FUN_141683840(undefined8 *param_1, undefined4 param_2)
 /* ref: FUN_141683920 */
 undefined4 FUN_141683920(undefined8 param_1)
 {
-  GEN_HIT(238);
+  GEN_HIT(240);
   longlong lVar1;
   
   lVar1 = CALLF(undefined8, FUN_14051de50)(param_1);
@@ -15475,7 +15049,7 @@ undefined4 FUN_141683920(undefined8 param_1)
 /* ref: FUN_141683940 */
 undefined4 FUN_141683940(undefined8 *param_1)
 {
-  GEN_HIT(239);
+  GEN_HIT(241);
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[8]) > 0x20 ? 0x0 + sizeof(undefined1[8]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   char cVar1;
@@ -15523,7 +15097,7 @@ undefined4 FUN_141683940(undefined8 *param_1)
 /* ref: FUN_141683a30 */
 uint FUN_141683a30(void)
 {
-  GEN_HIT(240);
+  GEN_HIT(242);
   longlong *plVar1;
   
   plVar1 = (longlong *)CALLF(undefined1 *, FUN_14168f630)(REFG(undefined4, 0x142d1b498));
@@ -15536,7 +15110,7 @@ uint FUN_141683a30(void)
 /* ref: FUN_141683a60 */
 uint * FUN_141683a60(uint *param_1)
 {
-  GEN_HIT(241);
+  GEN_HIT(243);
   byte bVar1;
   longlong lVar2;
   
@@ -15558,7 +15132,7 @@ uint * FUN_141683a60(uint *param_1)
 /* ref: FUN_141683ab0 */
 uint FUN_141683ab0(char param_1)
 {
-  GEN_HIT(242);
+  GEN_HIT(244);
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(undefined1[24]) > 0x20 ? 0x8 + sizeof(undefined1[24]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   longlong *plVar1;
@@ -15581,14 +15155,14 @@ uint FUN_141683ab0(char param_1)
 /* ref: FUN_141683b40 */
 undefined4 FUN_141683b40(void)
 {
-  GEN_HIT(243);
+  GEN_HIT(245);
   return REFG(undefined4, 0x14311daa8);
 }
 
 /* ref: FUN_141683b50 */
 longlong FUN_141683b50(undefined4 param_1)
 {
-  GEN_HIT(244);
+  GEN_HIT(246);
   undefined4 uVar1;
   int *piVar2;
   undefined1 uVar3;
@@ -15609,7 +15183,7 @@ longlong FUN_141683b50(undefined4 param_1)
 /* ref: FUN_141683bb0 */
 undefined1 FUN_141683bb0(undefined4 param_1, undefined8 *param_2, undefined8 *param_3)
 {
-  GEN_HIT(245);
+  GEN_HIT(247);
   __declspec(align(16)) unsigned char gen_frame[(0x78 + sizeof(undefined1[8]) > 0x80 ? 0x78 + sizeof(undefined1[8]) : 0x80)];
   memcpy(gen_frame + 0x60, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x68, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -15629,7 +15203,7 @@ undefined1 FUN_141683bb0(undefined4 param_1, undefined8 *param_2, undefined8 *pa
     (*(int *)(gen_frame + 0x10)) = -2;
     (*(int * *)(gen_frame + 0x18)) = (int *)0x0;
     (*(longlong * *)(gen_frame + 0x20)) = (*(longlong * *)((char *)&gen_g_142e4c840 + 0x140));
-    piVar2 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e4c840 + 0x140)), gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0))));
+    piVar2 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e4c840 + 0x140)), (void *)&(*(gen_v16 *)(gen_frame + 0x0)));
     (*(int *)(gen_frame + 0x10)) = *piVar2;
     (*(int *)(gen_frame + 0x14)) = piVar2[1];
     (*(int * *)(gen_frame + 0x18)) = *(int **)(piVar2 + 2);
@@ -15682,7 +15256,7 @@ LAB_141683d6f:
 /* ref: FUN_141683da0 */
 longlong FUN_141683da0(void)
 {
-  GEN_HIT(246);
+  GEN_HIT(248);
   longlong lVar1;
   longlong lVar2;
   
@@ -15697,7 +15271,7 @@ longlong FUN_141683da0(void)
 /* ref: FUN_141683dd0 */
 undefined1 FUN_141683dd0(undefined4 param_1, longlong *param_2, longlong *param_3)
 {
-  GEN_HIT(247);
+  GEN_HIT(249);
   __declspec(align(16)) unsigned char gen_frame[(0x18 + sizeof(undefined1[8]) > 0x20 ? 0x18 + sizeof(undefined1[8]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -15729,7 +15303,7 @@ undefined1 FUN_141683dd0(undefined4 param_1, longlong *param_2, longlong *param_
 /* ref: FUN_141683e80 */
 int FUN_141683e80(undefined4 param_1)
 {
-  GEN_HIT(248);
+  GEN_HIT(250);
   __declspec(align(16)) unsigned char gen_frame[(0x88 + sizeof(undefined1[8]) > 0xa0 ? 0x88 + sizeof(undefined1[8]) : 0xa0)];
   memcpy(gen_frame + 0x80, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   bool bVar1;
@@ -15805,7 +15379,7 @@ LAB_141683f52:
 /* ref: FUN_141684050 */
 undefined4 FUN_141684050(void)
 {
-  GEN_HIT(249);
+  GEN_HIT(251);
   longlong lVar1;
   
   lVar1 = CALLF(undefined1 *, FUN_14156b750)();
@@ -15815,13 +15389,13 @@ undefined4 FUN_141684050(void)
 /* ref: FUN_141684070 */
 undefined8 * FUN_141684070(undefined8 *param_1, undefined4 param_2)
 {
-  GEN_HIT(250);
+  GEN_HIT(252);
   __declspec(align(16)) unsigned char gen_frame[(0x60 + sizeof(gen_v16) > 0x70 ? 0x60 + sizeof(gen_v16) : 0x70)];
   memcpy(gen_frame + 0x50, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x58, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
   longlong lVar1;
   
-  lVar1 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e43430 + 0x0)), param_2, 0, gen_v16_q0((*(gen_v16 *)(gen_frame + 0x60))));
+  lVar1 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e43430 + 0x0)), param_2, 0, (void *)&(*(gen_v16 *)(gen_frame + 0x60)));
   if (lVar1 == 0) {
     *(undefined1 *)(param_1 + 7) = 0;
     return param_1;
@@ -15851,7 +15425,7 @@ undefined8 * FUN_141684070(undefined8 *param_1, undefined4 param_2)
 /* ref: FUN_141684130 */
 undefined4 FUN_141684130(undefined8 param_1)
 {
-  GEN_HIT(251);
+  GEN_HIT(253);
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(undefined4[6]) > 0x20 ? 0x8 + sizeof(undefined4[6]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   
@@ -15862,7 +15436,7 @@ undefined4 FUN_141684130(undefined8 param_1)
 /* ref: FUN_141684150 */
 undefined1 FUN_141684150(undefined4 *param_1)
 {
-  GEN_HIT(252);
+  GEN_HIT(254);
   __declspec(align(16)) unsigned char gen_frame[(0x128 + sizeof(undefined1[8]) > 0x130 ? 0x128 + sizeof(undefined1[8]) : 0x130)];
   memcpy(gen_frame + 0x110, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   undefined4 uVar1;
@@ -15946,7 +15520,7 @@ LAB_1416842c1:
 /* ref: FUN_141684380 */
 undefined1 FUN_141684380(undefined8 *param_1)
 {
-  GEN_HIT(253);
+  GEN_HIT(255);
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(undefined1[8]) > 0x20 ? 0x8 + sizeof(undefined1[8]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   int iVar1;
@@ -15993,7 +15567,7 @@ undefined1 FUN_141684380(undefined8 *param_1)
 /* ref: FUN_141684480 */
 undefined1 FUN_141684480(void)
 {
-  GEN_HIT(254);
+  GEN_HIT(256);
   if (REFG(undefined1, 0x14311c632) != '\0') {
     return REFG(undefined1, 0x1431222e4);
   }
@@ -16006,7 +15580,7 @@ undefined1 FUN_141684480(void)
 /* ref: FUN_1416844b0 */
 int FUN_1416844b0(void)
 {
-  GEN_HIT(255);
+  GEN_HIT(257);
   if (REFG(undefined1, 0x14311c632) != '\0') {
     return (int)REFG(undefined1, 0x1431222e4);
   }
@@ -16019,7 +15593,7 @@ int FUN_1416844b0(void)
 /* ref: FUN_1416844f0 */
 undefined8 * FUN_1416844f0(undefined8 *param_1, undefined4 param_2)
 {
-  GEN_HIT(256);
+  GEN_HIT(258);
   __declspec(align(16)) unsigned char gen_frame[(0x4 + sizeof(undefined1) > 0x20 ? 0x4 + sizeof(undefined1) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -16063,14 +15637,14 @@ undefined8 * FUN_1416844f0(undefined8 *param_1, undefined4 param_2)
 /* ref: FUN_1416845b0 */
 bool FUN_1416845b0(void)
 {
-  GEN_HIT(257);
+  GEN_HIT(259);
   return REFG(undefined1 *, 0x143122358) != (undefined1 *)0x0;
 }
 
 /* ref: FUN_1416845c0 */
 undefined1 FUN_1416845c0(void)
 {
-  GEN_HIT(258);
+  GEN_HIT(260);
   int iVar1;
   longlong lVar2;
   int iVar3;
@@ -16092,15 +15666,15 @@ undefined1 FUN_1416845c0(void)
 /* ref: FUN_141684610 */
 undefined1 FUN_141684610(longlong *param_1, longlong param_2)
 {
-  GEN_HIT(259);
+  GEN_HIT(261);
+  __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(gen_v16) > 0x18 ? 0x0 + sizeof(gen_v16) : 0x18)];
   int iVar1;
   undefined4 uVar2;
   longlong lVar3;
   undefined8 uVar4;
   longlong *plVar5;
-  gen_v16 local_18;
   
-  lVar3 = CALLF(undefined8 *, FUN_141742af0)(gen_v16_q0(local_18), param_2, 0);
+  lVar3 = CALLF(undefined8 *, FUN_141742af0)((void *)&(*(gen_v16 *)(gen_frame + 0x0)), param_2, 0);
   if (*(longlong *)(lVar3 + 8) != 0) {
     iVar1 = CALLF(undefined4, FUN_1403588d0)(*(longlong *)(lVar3 + 8));
     if (0 < iVar1) {
@@ -16131,10 +15705,10 @@ undefined1 FUN_141684610(longlong *param_1, longlong param_2)
 /* ref: FUN_141684730 */
 undefined1 FUN_141684730(undefined4 *param_1, char param_2)
 {
-  GEN_HIT(260);
-  __declspec(align(16)) unsigned char gen_frame[(0x3 + sizeof(undefined1) > 0x20 ? 0x3 + sizeof(undefined1) : 0x20)];
-  memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
-  memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
+  GEN_HIT(262);
+  __declspec(align(16)) unsigned char gen_frame[(0x113 + sizeof(undefined1) > 0x130 ? 0x113 + sizeof(undefined1) : 0x130)];
+  memcpy(gen_frame + 0x110, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
+  memcpy(gen_frame + 0x118, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
   float fVar1;
   char cVar2;
   longlong lVar3;
@@ -16143,59 +15717,47 @@ undefined1 FUN_141684730(undefined4 *param_1, char param_2)
   undefined1 *puVar6;
   uint in_stack_fffffffffffffeb8 = 0;
   uint uVar7;
-                                       
-  undefined8 local_108;
-  undefined4 local_100;
-  int local_f8;
-  undefined1 local_f4;
-  undefined4 local_d4;
-  undefined8 local_d0;
-  longlong local_c0;
-  char local_b7;
-  undefined1 local_78 [40];
-  undefined8 local_50;
-  longlong local_40;
-  undefined1 local_37;
+/*                                   */
   
-  lVar3 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e43430 + 0x0)),*param_1,0,&(*(undefined1 *)(gen_frame + 0x0)));
+  lVar3 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e43430 + 0x0)),*param_1,0,&(*(undefined1 *)(gen_frame + 0x110)));
   if ((lVar3 == 0) || (*(char *)(lVar3 + 0xcc) == '\0')) {
     REFG(undefined1, 0x14311c631) = '\0';
   }
   else {
-    CALLF(longlong, FUN_1402dd070)(&local_f8,param_1);
-    lVar4 = CALLF(undefined8, FUN_1402fea40)((int)*(char *)(lVar3 + 0xcc),local_f4);
+    CALLF(longlong, FUN_1402dd070)(&(*(int *)(gen_frame + 0x10)),param_1);
+    lVar4 = CALLF(undefined8, FUN_1402fea40)((int)*(char *)(lVar3 + 0xcc),(*(undefined1 *)(gen_frame + 0x14)));
     if (lVar4 != 0) {
-      local_f8 = (int)*(char *)(lVar3 + 0xcc);
+      (*(int *)(gen_frame + 0x10)) = (int)*(char *)(lVar3 + 0xcc);
       uVar5 = CALLF(undefined *, FUN_14051aea0)();
       uVar5 = CALLF(undefined8, FUN_140229de0)(lVar4 + 0x18,2,0x18,uVar5);
-      local_d4 = (undefined4)uVar5;
+      (*(undefined4 *)(gen_frame + 0x34)) = (undefined4)uVar5;
     }
     if (param_2 != '\0') {
-      uVar5 = CALLF(undefined8, FUN_141685780)(local_78,&local_f8,0);
-      CALLF(undefined4 *, FUN_1402ddea0)(&local_f8,uVar5);
-      local_37 = 0;
-      if (-1 < local_40) {
-        CALLF(undefined1, FUN_140255210)(local_50,((char *)REFP(0x142d61788)),0xfffffffa,0);
+      uVar5 = CALLF(undefined8, FUN_141685780)(((undefined1 *)(gen_frame + 0x90)),&(*(int *)(gen_frame + 0x10)),0);
+      CALLF(undefined4 *, FUN_1402ddea0)(&(*(int *)(gen_frame + 0x10)),uVar5);
+      (*(undefined1 *)(gen_frame + 0xd1)) = 0;
+      if (-1 < (*(longlong *)(gen_frame + 0xc8))) {
+        CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0xb8)),((char *)REFP(0x142d61788)),0xfffffffa,0);
       }
     }
     lVar3 = CALLF(undefined1 *, FUN_14168f630)(REFG(undefined4, 0x142d1b498));
-    CALLF(undefined8, FUN_1402f83a0)(&local_f8,-(uint)(lVar3 != 0) & 2);
+    CALLF(undefined8, FUN_1402f83a0)(&(*(int *)(gen_frame + 0x10)),-(uint)(lVar3 != 0) & 2);
     lVar3 = CALLF(undefined1 *, FUN_14168f630)(REFG(undefined4, 0x142d1b498));
-    CALLF(undefined8, FUN_1402ef430)(&local_f8,-(uint)(lVar3 != 0) & 2);
-    local_b7 = CALLF(undefined1, FUN_141684610)(&REFG(undefined1 *, 0x143122358),&local_f8);
-    if (local_b7 == '\0') {
-      if (local_c0 < 0) {
+    CALLF(undefined8, FUN_1402ef430)(&(*(int *)(gen_frame + 0x10)),-(uint)(lVar3 != 0) & 2);
+    (*(char *)(gen_frame + 0x51)) = CALLF(undefined1, FUN_141684610)(&REFG(undefined1 *, 0x143122358),&(*(int *)(gen_frame + 0x10)));
+    if ((*(char *)(gen_frame + 0x51)) == '\0') {
+      if ((*(longlong *)(gen_frame + 0x48)) < 0) {
         return 0;
       }
-      CALLF(undefined1, FUN_140255210)(local_d0,((char *)REFP(0x142d61788)),0xfffffffa,0);
+      CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x38)),((char *)REFP(0x142d61788)),0xfffffffa,0);
       return 0;
     }
     if ((REFG(undefined1 *, 0x143122358) != (undefined1 *)0x0) && (*(longlong *)(REFG(undefined1 *, 0x143122358) + 0xb0) != 0)) {
       CALLF(undefined8, FUN_1411e7db0)(*(longlong *)(REFG(undefined1 *, 0x143122358) + 0xb0),1);
     }
-    local_b7 = 0;
-    if (-1 < local_c0) {
-      CALLF(undefined1, FUN_140255210)(local_d0,((char *)REFP(0x142d61788)),0xfffffffa,0);
+    (*(char *)(gen_frame + 0x51)) = 0;
+    if (-1 < (*(longlong *)(gen_frame + 0x48))) {
+      CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x38)),((char *)REFP(0x142d61788)),0xfffffffa,0);
     }
   }
   lVar3 = CALLF(undefined8, FUN_1402fea40)(*param_1,*(undefined1 *)(param_1 + 1));
@@ -16205,11 +15767,11 @@ undefined1 FUN_141684730(undefined4 *param_1, char param_2)
     param_1[9] = (int)uVar5;
   }
   if (param_2 != '\0') {
-    uVar5 = CALLF(undefined8, FUN_141685780)(local_78,param_1,0);
+    uVar5 = CALLF(undefined8, FUN_141685780)(((undefined1 *)(gen_frame + 0x90)),param_1,0);
     CALLF(undefined4 *, FUN_1402ddea0)(param_1,uVar5);
-    local_37 = 0;
-    if (-1 < local_40) {
-      CALLF(undefined1, FUN_140255210)(local_50,((char *)REFP(0x142d61788)),0xfffffffa,0);
+    (*(undefined1 *)(gen_frame + 0xd1)) = 0;
+    if (-1 < (*(longlong *)(gen_frame + 0xc8))) {
+      CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0xb8)),((char *)REFP(0x142d61788)),0xfffffffa,0);
     }
   }
   lVar3 = CALLF(undefined1 *, FUN_14168f630)(REFG(undefined4, 0x142d1b498));
@@ -16220,12 +15782,12 @@ undefined1 FUN_141684730(undefined4 *param_1, char param_2)
   if (cVar2 == '\0') {
     return 0;
   }
-  (*(undefined2 *)(gen_frame + 0x1)) = 0;
-  (*(undefined1 *)(gen_frame + 0x3)) = 0;
-  (*(undefined1 *)(gen_frame + 0x0)) = 1;
+  (*(undefined2 *)(gen_frame + 0x111)) = 0;
+  (*(undefined1 *)(gen_frame + 0x113)) = 0;
+  (*(undefined1 *)(gen_frame + 0x110)) = 1;
   REFG(undefined8, 0x143122360) = CALLF(uint *, FUN_1417cc1c0)();
   CALLF(undefined1, FUN_1417d6920)(REFG(undefined8, 0x143122360),1);
-  CALLF(undefined8, FUN_1417d6a50)(REFG(undefined8, 0x143122360),*(undefined8 *)(param_1 + 0x14),&(*(undefined1 *)(gen_frame + 0x0)));
+  CALLF(undefined8, FUN_1417d6a50)(REFG(undefined8, 0x143122360),*(undefined8 *)(param_1 + 0x14),&(*(undefined1 *)(gen_frame + 0x110)));
   CALLF(undefined8, FUN_1411e7db0)(*(undefined8 *)(REFG(undefined1 *, 0x143122350) + 0xb0),1);
   cVar2 = CALLF(undefined1, FUN_141696160)();
   fVar1 = REFG(float, 0x142618d64);
@@ -16242,9 +15804,9 @@ undefined1 FUN_141684730(undefined4 *param_1, char param_2)
   puVar6 = REFG(undefined1 *, 0x143122350);
 LAB_141684abe:
   if ((puVar6 != (undefined1 *)0x0) && (*(longlong *)(puVar6 + 0xb0) != 0)) {
-    local_108 = 0;
-    local_100 = 0;
-    CALLF(undefined8, FUN_1411e7ee0)(*(longlong *)(puVar6 + 0xb0),&local_108,REFG(float, 0x14311c63c),fVar1);
+    (*(undefined8 *)(gen_frame + 0x0)) = 0;
+    (*(undefined4 *)(gen_frame + 0x8)) = 0;
+    CALLF(undefined8, FUN_1411e7ee0)(*(longlong *)(puVar6 + 0xb0),&(*(undefined8 *)(gen_frame + 0x0)),REFG(float, 0x14311c63c),fVar1);
   }
   CALLF(undefined8, FUN_1416824b0)();
   CALLF(undefined1, FUN_1402f0ce0)(REFG(undefined1 *, 0x143122350),0,0);
@@ -16278,7 +15840,7 @@ LAB_141684abe:
 /* ref: FUN_141684bd0 */
 undefined4 FUN_141684bd0(longlong param_1, float *param_2)
 {
-  GEN_HIT(261);
+  GEN_HIT(263);
   __declspec(align(16)) unsigned char gen_frame[(0x108 + sizeof(undefined8) > 0x158 ? 0x108 + sizeof(undefined8) : 0x158)];
   float fVar1;
   float fVar2;
@@ -16392,7 +15954,7 @@ undefined4 FUN_141684bd0(longlong param_1, float *param_2)
 /* ref: FUN_141684ef0 */
 bool FUN_141684ef0(int param_1)
 {
-  GEN_HIT(262);
+  GEN_HIT(264);
   if (param_1 != 6) {
     return param_1 == 0xc;
   }
@@ -16402,7 +15964,7 @@ bool FUN_141684ef0(int param_1)
 /* ref: FUN_141684f00 */
 undefined1 * FUN_141684f00(undefined1 *param_1, undefined4 param_2)
 {
-  GEN_HIT(263);
+  GEN_HIT(265);
   longlong lVar1;
   
   lVar1 = CALLF(undefined8, FUN_14167b270)(param_2);
@@ -16420,7 +15982,7 @@ undefined1 * FUN_141684f00(undefined1 *param_1, undefined4 param_2)
 /* ref: FUN_141684f40 */
 undefined1 FUN_141684f40(undefined8 *param_1, undefined1 *param_2, undefined8 *param_3)
 {
-  GEN_HIT(264);
+  GEN_HIT(266);
   undefined1 uVar1;
   uint uVar2;
   undefined8 uVar3;
@@ -16451,7 +16013,7 @@ undefined1 FUN_141684f40(undefined8 *param_1, undefined1 *param_2, undefined8 *p
 /* ref: FUN_141684fc0 */
 undefined1 FUN_141684fc0(longlong param_1, undefined4 param_2)
 {
-  GEN_HIT(265);
+  GEN_HIT(267);
   __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(gen_v16) > 0x20 ? 0x10 + sizeof(gen_v16) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -16465,9 +16027,9 @@ undefined1 FUN_141684fc0(longlong param_1, undefined4 param_2)
   uVar1 = CALLF(undefined1 *, FUN_14156b750)();
   lVar2 = CALLF(longlong, FUN_1414f7690)(uVar1,REFG(undefined4, 0x142d1b494));
   if (lVar2 != 0) {
-    lVar3 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e43430 + 0x0)), param_2, 0, gen_v16_q0((*(gen_v16 *)(gen_frame + 0x10))));
+    lVar3 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e43430 + 0x0)), param_2, 0, (void *)&(*(gen_v16 *)(gen_frame + 0x10)));
     if (lVar3 != 0) {
-      lVar3 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e4cc60 + 0x0)), (int)*(short *)(lVar3 + 0xc4), 0, gen_v16_q0((*(gen_v16 *)(gen_frame + 0x10))));
+      lVar3 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e4cc60 + 0x0)), (int)*(short *)(lVar3 + 0xc4), 0, (void *)&(*(gen_v16 *)(gen_frame + 0x10)));
       if (lVar3 != 0) {
         uVar1 = CALLF(undefined *, FUN_14051b290)();
         uVar4 = CALLF(ulonglong, FUN_14022b1b0)(lVar3,2,0,uVar1);
@@ -16492,7 +16054,7 @@ undefined1 FUN_141684fc0(longlong param_1, undefined4 param_2)
 /* ref: FUN_1416850b0 */
 undefined1 FUN_1416850b0(void)
 {
-  GEN_HIT(266);
+  GEN_HIT(268);
   longlong lVar1;
   
   lVar1 = CALLF(undefined1 *, FUN_14156b750)();
@@ -16505,7 +16067,7 @@ undefined1 FUN_1416850b0(void)
 /* ref: FUN_1416850d0 */
 undefined1 FUN_1416850d0(int param_1, int param_2)
 {
-  GEN_HIT(267);
+  GEN_HIT(269);
   __declspec(align(16)) unsigned char gen_frame[(0x20 + sizeof(longlong *) > 0x38 ? 0x20 + sizeof(longlong *) : 0x38)];
   int *piVar1;
   undefined8 uVar2;
@@ -16515,7 +16077,7 @@ undefined1 FUN_1416850d0(int param_1, int param_2)
     (*(int *)(gen_frame + 0x10)) = -2;
     (*(undefined8 *)(gen_frame + 0x18)) = 0;
     (*(longlong * *)(gen_frame + 0x20)) = (*(longlong * *)((char *)&gen_g_142e3cd10 + 0x140));
-    piVar1 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e3cd10 + 0x140)), gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0))));
+    piVar1 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e3cd10 + 0x140)), (void *)&(*(gen_v16 *)(gen_frame + 0x0)));
     (*(int *)(gen_frame + 0x10)) = *piVar1;
     (*(int *)(gen_frame + 0x14)) = piVar1[1];
     uVar3 = *(undefined8 *)(piVar1 + 2);
@@ -16540,7 +16102,7 @@ undefined1 FUN_1416850d0(int param_1, int param_2)
 /* ref: FUN_1416851a0 */
 undefined1 FUN_1416851a0(void)
 {
-  GEN_HIT(268);
+  GEN_HIT(270);
   undefined1 uVar1;
   
   uVar1 = 0;
@@ -16553,7 +16115,7 @@ undefined1 FUN_1416851a0(void)
 /* ref: FUN_1416851c0 */
 undefined8 FUN_1416851c0(int param_1)
 {
-  GEN_HIT(269);
+  GEN_HIT(271);
   longlong lVar1;
   ulonglong uVar2;
   
@@ -16570,7 +16132,7 @@ undefined8 FUN_1416851c0(int param_1)
 /* ref: FUN_141685260 */
 undefined8 FUN_141685260(void)
 {
-  GEN_HIT(270);
+  GEN_HIT(272);
   if (REFG(undefined1, 0x14311c634) != '\0') {
     REFG(undefined1, 0x14311c634) = 0;
     CALLF(undefined4, FUN_1416819e0)();
@@ -16587,7 +16149,7 @@ undefined8 FUN_141685260(void)
 /* ref: FUN_1416852b0 */
 undefined8 FUN_1416852b0(void)
 {
-  GEN_HIT(271);
+  GEN_HIT(273);
   __declspec(align(16)) unsigned char gen_frame[(0x81 + sizeof(undefined1) > 0xc8 ? 0x81 + sizeof(undefined1) : 0xc8)];
   char cVar1;
   longlong lVar2;
@@ -16671,7 +16233,7 @@ undefined8 FUN_1416852b0(void)
 /* ref: FUN_141685560 */
 undefined8 FUN_141685560(void)
 {
-  GEN_HIT(272);
+  GEN_HIT(274);
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[8]) > 0x20 ? 0x0 + sizeof(undefined1[8]) : 0x20)];
   undefined4 uVar1;
   undefined4 uVar2;
@@ -16720,7 +16282,7 @@ undefined8 FUN_141685560(void)
 /* ref: FUN_141685680 */
 int FUN_141685680(void)
 {
-  GEN_HIT(273);
+  GEN_HIT(275);
   undefined1 *puVar1;
   int iVar2;
   longlong lVar3;
@@ -16760,7 +16322,7 @@ int FUN_141685680(void)
 /* ref: FUN_141685780 */
 undefined8 FUN_141685780(undefined8 param_1, undefined4 *param_2, byte param_3)
 {
-  GEN_HIT(274);
+  GEN_HIT(276);
   __declspec(align(16)) unsigned char gen_frame[(0x88 + sizeof(undefined1[18368]) > 0x4888 ? 0x88 + sizeof(undefined1[18368]) : 0x4888)];
   undefined8 *puVar1;
   char cVar2;
@@ -16886,7 +16448,7 @@ LAB_141685a16:
 /* ref: FUN_141685b10 */
 undefined4 FUN_141685b10(undefined1 *param_1)
 {
-  GEN_HIT(275);
+  GEN_HIT(277);
   __declspec(align(16)) unsigned char gen_frame[(0x51 + sizeof(undefined1) > 0x88 ? 0x51 + sizeof(undefined1) : 0x88)];
   undefined4 *puVar1;
   int iVar2;
@@ -16950,7 +16512,7 @@ undefined4 FUN_141685b10(undefined1 *param_1)
 /* ref: FUN_141685d00 */
 undefined8 FUN_141685d00(void)
 {
-  GEN_HIT(276);
+  GEN_HIT(278);
   __declspec(align(16)) unsigned char gen_frame[(0x80 + sizeof(undefined1[48]) > 0xc8 ? 0x80 + sizeof(undefined1[48]) : 0xc8)];
   longlong *plVar1;
   undefined4 uVar2;
@@ -17028,7 +16590,7 @@ undefined8 FUN_141685d00(void)
 /* ref: FUN_141686020 */
 undefined8 FUN_141686020(void)
 {
-  GEN_HIT(277);
+  GEN_HIT(279);
   longlong *plVar1;
   longlong lVar2;
   
@@ -17051,14 +16613,14 @@ undefined8 FUN_141686020(void)
 /* ref: FUN_141686080 */
 undefined8 FUN_141686080(void)
 {
-  GEN_HIT(278);
+  GEN_HIT(280);
   return (undefined8)CALLF(undefined8, FUN_1416a3490)(REFG(undefined1 *, 0x143122350)[0x60],REFG(undefined1 *, 0x143122350)[100]);
 }
 
 /* ref: FUN_1416860a0 */
 undefined8 FUN_1416860a0(uint *param_1, int param_2, undefined8 param_3)
 {
-  GEN_HIT(279);
+  GEN_HIT(281);
   longlong lVar1;
   uint uVar2;
   undefined8 uVar3;
@@ -17122,7 +16684,7 @@ undefined8 FUN_1416860a0(uint *param_1, int param_2, undefined8 param_3)
 /* ref: FUN_1416861b0 */
 undefined1 FUN_1416861b0(void)
 {
-  GEN_HIT(280);
+  GEN_HIT(282);
   __declspec(align(16)) unsigned char gen_frame[(0x41 + sizeof(undefined1) > 0x88 ? 0x41 + sizeof(undefined1) : 0x88)];
   char cVar1;
   undefined4 uVar2;
@@ -17185,18 +16747,10 @@ LAB_1416862f4:
   return uVar7;
 }
 
-/* ref: FUN_141686350 */
-undefined8 FUN_141686350(undefined1 *param_1)
-{
-  GEN_HIT(281);
-  REFG(undefined1 *, 0x14311c620) = param_1;
-  return 0;
-}
-
 /* ref: FUN_141686360 */
 undefined1 FUN_141686360(undefined8 param_1)
 {
-  GEN_HIT(282);
+  GEN_HIT(283);
   undefined1 uVar1;
   undefined8 uVar2;
   undefined1 *puVar3;
@@ -17223,7 +16777,7 @@ undefined1 FUN_141686360(undefined8 param_1)
 /* ref: FUN_141686430 */
 undefined8 FUN_141686430(int param_1)
 {
-  GEN_HIT(283);
+  GEN_HIT(284);
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(int[2]) > 0x20 ? 0x0 + sizeof(int[2]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   longlong lVar1;
@@ -17285,7 +16839,7 @@ LAB_1416864d7:
 /* ref: FUN_141686550 */
 undefined1 * FUN_141686550(double param_1_promoted)
 {
-  GEN_HIT(284);
+  GEN_HIT(285);
   float param_1 = (float)param_1_promoted;
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(undefined4) > 0x18 ? 0x8 + sizeof(undefined4) : 0x18)];
   undefined1 *puVar1;
@@ -17306,7 +16860,7 @@ undefined1 * FUN_141686550(double param_1_promoted)
 /* ref: FUN_1416865c0 */
 undefined8 FUN_1416865c0(double param_1)
 {
-  GEN_HIT(285);
+  GEN_HIT(286);
   undefined8 uVar1;
   
   uVar1 = CALLF(undefined1 *, FUN_141686550)((float)param_1 * REFG(float, 0x14263a04c));
@@ -17316,7 +16870,7 @@ undefined8 FUN_1416865c0(double param_1)
 /* ref: FUN_1416865e0 */
 undefined8 FUN_1416865e0(char param_1, char param_2)
 {
-  GEN_HIT(286);
+  GEN_HIT(287);
   char cVar1;
   undefined1 *puVar2;
   
@@ -17350,7 +16904,7 @@ undefined8 FUN_1416865e0(char param_1, char param_2)
 /* ref: FUN_1416866d0 */
 undefined8 FUN_1416866d0(char param_1, undefined8 param_2)
 {
-  GEN_HIT(287);
+  GEN_HIT(288);
   undefined1 *puVar1;
   undefined7 uVar2;
   
@@ -17376,7 +16930,7 @@ undefined8 FUN_1416866d0(char param_1, undefined8 param_2)
 /* ref: FUN_141686760 */
 undefined8 FUN_141686760(undefined4 param_1, int param_2, undefined4 param_3)
 {
-  GEN_HIT(288);
+  GEN_HIT(289);
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(undefined1[18360]) > 0x47e8 ? 0x8 + sizeof(undefined1[18360]) : 0x47e8)];
   undefined8 *puVar1;
   undefined4 uVar2;
@@ -17448,7 +17002,7 @@ undefined8 FUN_141686760(undefined4 param_1, int param_2, undefined4 param_3)
 /* ref: FUN_141686940 */
 undefined8 FUN_141686940(undefined1 param_1)
 {
-  GEN_HIT(289);
+  GEN_HIT(290);
   REFG(undefined8, 0x14311c637) = param_1;
   return 0;
 }
@@ -17456,7 +17010,7 @@ undefined8 FUN_141686940(undefined1 param_1)
 /* ref: FUN_141686950 */
 undefined1 FUN_141686950(int param_1, char param_2)
 {
-  GEN_HIT(290);
+  GEN_HIT(291);
   __declspec(align(16)) unsigned char gen_frame[(0x148 + sizeof(undefined1[136]) > 0x1f8 ? 0x148 + sizeof(undefined1[136]) : 0x1f8)];
   undefined1 *puVar1;
   int iVar2;
@@ -17560,7 +17114,7 @@ undefined1 FUN_141686950(int param_1, char param_2)
 /* ref: FUN_141686c80 */
 undefined8 FUN_141686c80(int param_1, undefined8 param_2)
 {
-  GEN_HIT(291);
+  GEN_HIT(292);
   REFG(undefined4, 0x142d1b49c) = param_1;
   return (undefined8)CALLF(undefined8, FUN_1416866d0)(param_1 == 1,param_2);
 }
@@ -17568,7 +17122,7 @@ undefined8 FUN_141686c80(int param_1, undefined8 param_2)
 /* ref: FUN_141686ca0 */
 undefined1 FUN_141686ca0(uint param_1)
 {
-  GEN_HIT(292);
+  GEN_HIT(293);
   __declspec(align(16)) unsigned char gen_frame[(0x41 + sizeof(undefined1) > 0x88 ? 0x41 + sizeof(undefined1) : 0x88)];
   char cVar1;
   uint uVar2;
@@ -17710,7 +17264,7 @@ LAB_141686e5c:
 /* ref: FUN_141687040 */
 undefined1 FUN_141687040(int param_1)
 {
-  GEN_HIT(293);
+  GEN_HIT(294);
   __declspec(align(16)) unsigned char gen_frame[(0x41 + sizeof(undefined1) > 0x88 ? 0x41 + sizeof(undefined1) : 0x88)];
   char cVar1;
   uint uVar2;
@@ -17802,7 +17356,7 @@ undefined1 FUN_141687040(int param_1)
 /* ref: FUN_1416872a0 */
 undefined8 FUN_1416872a0(char param_1)
 {
-  GEN_HIT(294);
+  GEN_HIT(295);
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(undefined4) > 0x18 ? 0x8 + sizeof(undefined4) : 0x18)];
   longlong lVar1;
   longlong lVar2;
@@ -17844,7 +17398,7 @@ undefined8 FUN_1416872a0(char param_1)
 /* ref: FUN_1416873f0 */
 undefined1 FUN_1416873f0(undefined4 param_1)
 {
-  GEN_HIT(295);
+  GEN_HIT(296);
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(undefined1[24]) > 0x20 ? 0x8 + sizeof(undefined1[24]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   byte bVar1;
@@ -17857,108 +17411,6 @@ undefined1 FUN_1416873f0(undefined4 param_1)
   }
   bVar1 = CALLF(undefined1, FUN_1416850d0)(param_1,REFG(undefined4, 0x142d1b490));
   return bVar1 ^ 1;
-}
-
-/* ref: FUN_141687460 */
-undefined4 FUN_141687460(void)
-{
-  GEN_HIT(296);
-  longlong lVar1;
-  undefined4 uVar2;
-  undefined1 *puVar3;
-  ulonglong uVar4;
-  longlong lVar5;
-  uint uVar6;
-  longlong *plVar7;
-  ulonglong uVar8;
-  bool bVar9;
-  
-  uVar4 = 0;
-  if (REFG(undefined1, 0x14311c634) != '\0') {
-    REFG(undefined1, 0x14311c634) = '\0';
-    CALLF(undefined4, FUN_1416819e0)();
-    CALLF(undefined8, FUN_14022e8f0)();
-    CALLF(undefined8, FUN_1416960b0)(0.0);
-    REFG(undefined1, 0x14311c633) = 0;
-    REFG(undefined1, 0x14311db18) = 0;
-    REFG(undefined4, 0x14311db1c) = 0;
-    CALLF(undefined8, FUN_141687e10)();
-  }
-  bVar9 = REFG(undefined1 *, 0x143122350) != (undefined1 *)0x0;
-  if (bVar9) {
-    CALLF(undefined4 *, FUN_1402ddea0)(&REFG(undefined4, 0x1431222e0),REFG(undefined1 *, 0x143122350) + 0x60);
-    CALLF(longlong, FUN_1416814f0)(&REFG(undefined8, 0x143122308));
-  }
-  REFG(undefined1, 0x14311c632) = bVar9;
-  CALLF(undefined8, FUN_141687e10)();
-  if (REFG(undefined8, 0x14311dae0) != 0) {
-    CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x14311dae0),((char *)REFP(0x142d623f0)),0xfffffffe,0);
-  }
-  REFG(undefined4, 0x14311dae8) = 0;
-  REFG(undefined4, 0x14311dad8) = 0;
-  REFG(undefined8, 0x14311dae0) = 0;
-  if (REFG(undefined8, 0x14311daf8) != 0) {
-    CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x14311daf8),((char *)REFP(0x142dba7d0)),0xfffffffe,0);
-  }
-  REFG(undefined4, 0x14311db00) = 0;
-  plVar7 = &REFG(undefined8, 0x14311d630);
-  REFG(undefined4, 0x14311daf0) = 0;
-  lVar5 = 0x47;
-  REFG(undefined8, 0x14311daf8) = 0;
-  do {
-    lVar1 = *plVar7;
-    if (lVar1 != 0) {
-      *(undefined1 *)(lVar1 + 0x41) = 0;
-      if (-1 < *(longlong *)(lVar1 + 0x38)) {
-        CALLF(undefined1, FUN_140255210)(*(undefined8 *)(lVar1 + 0x28),((char *)REFP(0x142d61788)),
-                        0xfffffffa,0);
-        *(undefined8 *)(lVar1 + 0x28) = 0;
-      }
-      CALLF(undefined8, FUN_140254670)(lVar1);
-      *plVar7 = 0;
-    }
-    lVar1 = plVar7[1];
-    if (lVar1 != 0) {
-      *(undefined1 *)(lVar1 + 0x41) = 0;
-      if (-1 < *(longlong *)(lVar1 + 0x38)) {
-        CALLF(undefined1, FUN_140255210)(*(undefined8 *)(lVar1 + 0x28),((char *)REFP(0x142d61788)),
-                        0xfffffffa,0);
-        *(undefined8 *)(lVar1 + 0x28) = 0;
-      }
-      CALLF(undefined8, FUN_140254670)(lVar1);
-      plVar7[1] = 0;
-    }
-    plVar7 = plVar7 + 2;
-    lVar5 = lVar5 + -1;
-  } while (lVar5 != 0);
-  plVar7 = &REFG(undefined8, 0x14311c640);
-  uVar8 = uVar4;
-  do {
-    CALLF(undefined8, FUN_141687d60)(&REFG(undefined8, 0x14311c648) + (longlong)(int)uVar8 * 2);
-    if (*plVar7 != 0) {
-      *plVar7 = 0;
-    }
-    uVar6 = (int)uVar8 + 1;
-    uVar8 = (ulonglong)uVar6;
-    plVar7 = plVar7 + 2;
-  } while (uVar6 < 0xff);
-  uVar2 = 0;
-  if (REFG(undefined4, 0x143122328) != 0) {
-    uVar8 = (ulonglong)REFG(undefined4, 0x143122328);
-    do {
-      puVar3 = REFG(undefined1 *, 0x143122330);
-      if (*(longlong *)(REFG(undefined1 *, 0x143122330) + uVar4) != 0) {
-        puVar3 = (undefined1 *)CALLF(undefined8, FUN_1405d9f80)(*(longlong *)(REFG(undefined1 *, 0x143122330) + uVar4));
-      }
-      uVar2 = SUB84(puVar3,0);
-      uVar4 = uVar4 + 8;
-      uVar8 = uVar8 - 1;
-    } while (uVar8 != 0);
-  }
-  REFG(undefined4, 0x143122328) = 0;
-  REFG(undefined8, 0x14309db70) = 0;
-  REFG(undefined1, 0x14311c635) = 0;
-  return uVar2;
 }
 
 /* ref: FUN_141687690 */
@@ -18044,7 +17496,7 @@ LAB_141687804:
     (*(int *)(gen_frame + 0x40)) = -2;
     (*(int * *)(gen_frame + 0x48)) = (int *)0x0;
     (*(longlong * *)(gen_frame + 0x50)) = plVar15;
-    piVar6 = (int *)CALLF(undefined4 *, FUN_1405a0640)(plVar15, gen_v16_q0((*(gen_v16 *)(gen_frame + 0x8))));
+    piVar6 = (int *)CALLF(undefined4 *, FUN_1405a0640)(plVar15, (void *)&(*(gen_v16 *)(gen_frame + 0x8)));
     (*(int *)(gen_frame + 0x40)) = *piVar6;
     (*(int *)(gen_frame + 0x44)) = piVar6[1];
     piVar6 = *(int **)(piVar6 + 2);
@@ -18064,7 +17516,7 @@ LAB_1416878a4:
             (*(int *)(gen_frame + 0x28)) = -2;
             (*(longlong *)(gen_frame + 0x30)) = 0;
             (*(longlong * *)(gen_frame + 0x38)) = (*(longlong * *)((char *)&gen_g_142e43430 + 0x140));
-            piVar8 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e43430 + 0x140)), gen_v16_q0((*(gen_v16 *)(gen_frame + 0x18))));
+            piVar8 = (int *)CALLF(undefined4 *, FUN_1405a0640)((*(longlong * *)((char *)&gen_g_142e43430 + 0x140)), (void *)&(*(gen_v16 *)(gen_frame + 0x18)));
             (*(int *)(gen_frame + 0x28)) = *piVar8;
             (*(int *)(gen_frame + 0x2c)) = piVar8[1];
             (*(longlong *)(gen_frame + 0x30)) = *(longlong *)(piVar8 + 2);
@@ -18289,1007 +17741,10 @@ undefined8 FUN_141687e10(void)
   return 0;
 }
 
-/* ref: FUN_141687ed0 */
-undefined8 FUN_141687ed0(void)
-{
-  GEN_HIT(302);
-  __declspec(align(16)) unsigned char gen_frame[(0x4690 + sizeof(uint) > 0x46a0 ? 0x4690 + sizeof(uint) : 0x46a0)];
-  ulonglong *puVar1;
-  undefined8 uVar2;
-  undefined8 uVar3;
-  gen_v16 auVar4;
-  gen_v16 auVar5;
-  gen_v16 auVar6;
-  ulonglong auVar7_lo;
-  gen_v16 auVar8;
-  ulonglong auVar9_lo;
-  undefined4 uVar10;
-  undefined4 uVar11;
-  undefined1 *puVar12;
-  int iVar13;
-  char cVar14;
-  int iVar15;
-  ulonglong uVar16;
-  ulonglong *puVar17;
-  char *pcVar18;
-  uint *puVar19;
-  ushort uVar20;
-  undefined8 ****ppppuVar21;
-  ulonglong *puVar22;
-  undefined1 *puVar23;
-  char cVar24;
-  ushort uVar25;
-  uint uVar26;
-  uint uVar27;
-  ulonglong uVar28;
-  longlong lVar29;
-  short *psVar30;
-  undefined4 uVar31;
-  undefined1 *puVar32;
-  longlong lVar33;
-  uint *puVar34;
-  longlong *plVar35;
-  ulonglong uVar36;
-  undefined1 *pcVar37;
-  ushort *puVar38;
-  ulonglong uVar39;
-  uint uVar40;
-  ulonglong uVar41;
-  code *pcVar42;
-  uint *puVar43;
-  longlong lVar44;
-  bool bVar45;
-  IMAGE_DOS_HEADER *pIStack_45e2;
-  
-  puVar23 = REFG(undefined1 *, 0x142ddf848);
-  uVar36 = 0;
-  uVar41 = 1;
-  (*(undefined8 *)((char *)&auVar4 + 8)) = 0;
-  (*(undefined8 *)((char *)&auVar4 + 0)) = (*(volatile undefined8 *)0x7ffe0320ULL) << 8;
-  uVar28 = gen_v16_bytes(gen_v16_mul((gen_v16_shl(gen_v16_zext(gen_v16_u((*(volatile undefined4 *)0x7ffe0004ULL)), 4), (int)(0x20))), auVar4), (int)(8), 8);
-  uVar16 = REFG(undefined8, 0x143122410) + 1000;
-  puVar32 = ((undefined1 *)(gen_frame + 0x0));
-  if (uVar16 < uVar28) {
-    uVar26 = (uint)REFG(undefined8, 0x142ddf1cb) ^ 0x21cd332f;
-    *(uint *)(REFG(undefined1 *, 0x142ddf848) + 0x120) = (uVar26 ^ *(uint *)(REFG(undefined1 *, 0x142ddf848) + 0x120)) + 1 ^ uVar26;
-    uVar16 = REFG(undefined8, 0x142ddf13c) >> 4 | REFG(undefined8, 0x142ddf13c) << 0x3c;
-    REFG(undefined8, 0x143122410) = uVar28;
-    if (((int)(REFG(undefined8, 0x142ddf13c) >> 4) + 0xc8febdd3U ^ *(uint *)(puVar23 + 0x84)) <
-        ((uint)REFG(undefined8, 0x142ddf1cb) ^ 0x21cd332f ^ *(uint *)(puVar23 + 0x120))) {
-      ((undefined8 *** *)(gen_frame + 0x70))[0] = ((undefined8 *** *)(gen_frame + 0x70));
-      uVar16 = 0x1000;
-      if (((void *)__readgsqword(0x30)) != (void *)0x0) {
-        uVar16 = __rdtsc();
-        ((undefined8 *** *)(gen_frame + 0x70))[0] =
-             (undefined8 ***)(uVar16 % 100 + 0x10 + *(longlong *)((longlong)((void *)__readgsqword(0x30)) + 0x10));
-        uVar16 = (*(longlong *)((longlong)((void *)__readgsqword(0x30)) + 8) - (longlong)((undefined8 *** *)(gen_frame + 0x70))[0]) - 0x1000;
-      }
-      if (uVar16 != 0) {
-        do {
-          ppppuVar21 = (undefined8 ****)((longlong)((undefined8 *** *)(gen_frame + 0x70))[0] + uVar36);
-          if (((((ppppuVar21 == ((undefined8 *** *)(gen_frame + 0x70))) || (ppppuVar21 == (undefined8 ****)&(*(undefined8 ** *)(gen_frame + 0x328))))
-               || (ppppuVar21 == (undefined8 ****)&(*(undefined8 ** *)(gen_frame + 0x330)))) ||
-              ((ppppuVar21 == (undefined8 ****)&(*(undefined8 ** *)(gen_frame + 0x338)) ||
-               (ppppuVar21 == (undefined8 ****)&(*(undefined8 ** *)(gen_frame + 0x278)))))) ||
-             (ppppuVar21 == (undefined8 ****)&(*(undefined8 ** *)(gen_frame + 0x2a0)))) {
-            uVar36 = uVar36 + 7;
-          }
-          else {
-            uVar28 = __rdtsc();
-            *(char *)(uVar36 + (longlong)((undefined8 *** *)(gen_frame + 0x70))[0]) = (char)(uVar28 % 0xff);
-          }
-          uVar36 = uVar36 + 1;
-        } while (uVar36 < uVar16);
-      }
-      uVar31 = 0x8d;
-      (*(ulonglong *)(gen_frame + 0xd8)) = 0xabfc809f2f60fe89;
-      (*(ulonglong *)(gen_frame + 0x268)) = 0x3a52cef496b45e5e;
-      REFG(undefined4, 0x142ddcea0) = uVar31;
-      CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x268)));
-      uVar26 = (uint)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0xd8)) & 0xfff)) >>
-                     0x20);
-      uVar16 = ((REFG(undefined8, 0x142ddf9a8) >> 0x20 ^
-                 (ulonglong)
-                 ((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0xd8)) >> 0x34)) -
-                 (uint)REFG(undefined8, 0x142ddf9a8)) ^
-                (ulonglong)((uVar26 >> 0xb | uVar26 << 0x15) ^ ~(uint)REFG(undefined8, 0x142ddf9a8))) << 0x20 |
-               REFG(undefined8, 0x142ddf9a8) & 0xffffffff) ^ (*(ulonglong *)(gen_frame + 0x268));
-      if ((uVar16 >> 0x20 ^ (ulonglong)((int)uVar16 * 2 + 0x974342d3)) !=
-          (ulonglong)
-          (uint)((int)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0xd8)) >> 0x34)) >> 0x20) -
-                (int)uVar16) || (uVar16 & 0xffffffff) != 0) {
-        (*(ulonglong *)(gen_frame + 0x160)) = REFG(undefined8, 0x142ddf9a0);
-        (*(ulonglong *)(gen_frame + 0x168)) = 0x273a6e0a62aad15a;
-        CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x168)));
-        lVar33 = 0x20;
-        lVar29 = 0;
-        do {
-          uVar16 = *(ulonglong *)(lVar29 + 0x142ddf8a0);
-          *(ulonglong *)((longlong)((ulonglong *)(gen_frame + 0x510)) + lVar29) = ~(*(ulonglong *)(gen_frame + 0x168)) ^ (*(ulonglong *)(gen_frame + 0x160)) ^ uVar16;
-          (*(ulonglong *)(gen_frame + 0x168)) = ~(*(ulonglong *)(gen_frame + 0x160)) ^ uVar16;
-          lVar33 = lVar33 + -1;
-          lVar29 = lVar29 + 8;
-        } while (lVar33 != 0);
-        lVar29 = 2;
-        puVar17 = ((ulonglong *)(gen_frame + 0x410));
-        puVar22 = ((ulonglong *)(gen_frame + 0x510));
-        do {
-          puVar1 = puVar17 + 0x10;
-          uVar16 = puVar22[1];
-          uVar28 = puVar22[2];
-          uVar41 = puVar22[3];
-          *puVar17 = *puVar22;
-          puVar17[1] = uVar16;
-          uVar16 = puVar22[4];
-          uVar36 = puVar22[5];
-          puVar17[2] = uVar28;
-          puVar17[3] = uVar41;
-          uVar28 = puVar22[6];
-          uVar41 = puVar22[7];
-          puVar17[4] = uVar16;
-          puVar17[5] = uVar36;
-          uVar16 = puVar22[8];
-          uVar36 = puVar22[9];
-          puVar17[6] = uVar28;
-          puVar17[7] = uVar41;
-          uVar28 = puVar22[10];
-          uVar41 = puVar22[0xb];
-          puVar17[8] = uVar16;
-          puVar17[9] = uVar36;
-          uVar36 = puVar22[0xc];
-          uVar10 = *(undefined4 *)((longlong)puVar22 + 100);
-          uVar39 = puVar22[0xd];
-          uVar11 = *(undefined4 *)((longlong)puVar22 + 0x6c);
-          puVar17[10] = uVar28;
-          puVar17[0xb] = uVar41;
-          uVar16 = puVar22[0xe];
-          uVar28 = puVar22[0xf];
-          *(int *)(puVar17 + 0xc) = (int)uVar36;
-          *(undefined4 *)((longlong)puVar17 + 100) = uVar10;
-          *(int *)(puVar17 + 0xd) = (int)uVar39;
-          *(undefined4 *)((longlong)puVar17 + 0x6c) = uVar11;
-          puVar17[0xe] = uVar16;
-          puVar17[0xf] = uVar28;
-          lVar29 = lVar29 + -1;
-          puVar17 = puVar1;
-          puVar22 = puVar22 + 0x10;
-        } while (lVar29 != 0);
-        if ((*(char *)(gen_frame + 0x49d)) == '\0') {
-          (*(char *)(gen_frame + 0x49d)) = '\x01';
-          uVar16 = __rdtsc();
-          REFG(undefined8, 0x142ddf9a0) =
-               REFG(undefined8, 0x142ddf9a0) +
-               (uVar16
-               ) * (ulonglong)(((uint)REFG(undefined8, 0x142ddf9a0) & 0xff) + 1);
-          REFG(undefined8, 0x142ddf9a0) = REFG(undefined8, 0x142ddf9a0) * 0x20 | REFG(undefined8, 0x142ddf9a0) >> 0x3b;
-          (*(ulonglong *)(gen_frame + 0x178)) = 0x273a6e0a62aad15a;
-          (*(ulonglong *)(gen_frame + 0x170)) = REFG(undefined8, 0x142ddf9a0);
-          CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x178)));
-          lVar33 = 0x20;
-          lVar29 = 0;
-          do {
-            (*(ulonglong *)(gen_frame + 0x178)) = ~(*(ulonglong *)(gen_frame + 0x178)) ^ (*(ulonglong *)(gen_frame + 0x170)) ^
-                          *(ulonglong *)((longlong)((ulonglong *)(gen_frame + 0x410)) + lVar29);
-            *(ulonglong *)(lVar29 + 0x142ddf8a0) = (*(ulonglong *)(gen_frame + 0x178));
-            (*(ulonglong *)(gen_frame + 0x178)) = ~(*(ulonglong *)(gen_frame + 0x170)) ^ (*(ulonglong *)(gen_frame + 0x178));
-            lVar33 = lVar33 + -1;
-            lVar29 = lVar29 + 8;
-          } while (lVar33 != 0);
-          (*(ulonglong *)(gen_frame + 0xe0)) = 0xabfc809f2f60fe89;
-          (*(ulonglong *)(gen_frame + 0x270)) = 0x3a52cef496b45e5e;
-          CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x270)));
-          uVar26 = (uint)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0xe0)) & 0xfff))
-                         >> 0x20);
-          uVar16 = ((REFG(undefined8, 0x142ddf9a8) >> 0x20 ^
-                     (ulonglong)
-                     ((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0xe0)) >> 0x34)) -
-                     (uint)REFG(undefined8, 0x142ddf9a8)) ^
-                    (ulonglong)((uVar26 >> 0xb | uVar26 << 0x15) ^ ~(uint)REFG(undefined8, 0x142ddf9a8))) << 0x20 |
-                   REFG(undefined8, 0x142ddf9a8) & 0xffffffff) ^ (*(ulonglong *)(gen_frame + 0x270));
-          if ((uVar16 >> 0x20 ^ (ulonglong)((int)uVar16 * 2 + 0x974342d3)) !=
-              (ulonglong)
-              (uint)((int)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0xe0)) >> 0x34)) >>
-                          0x20) - (int)uVar16) || (uVar16 & 0xffffffff) != 0) {
-            (*(ulonglong *)(gen_frame + 0xe8)) = 0xabfc809f2f60fe89;
-            (*(ulonglong *)(gen_frame + 0x210)) = 0x3a52cef496b45e5e;
-            CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x210)));
-            uVar26 = (uint)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0xe8)) & 0xfff))
-                           >> 0x20);
-            uVar16 = ((REFG(undefined8, 0x142ddf9a8) >> 0x20 ^
-                       (ulonglong)
-                       ((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0xe8)) >> 0x34)) -
-                       (uint)REFG(undefined8, 0x142ddf9a8)) ^
-                      (ulonglong)((uVar26 >> 0xb | uVar26 << 0x15) ^ ~(uint)REFG(undefined8, 0x142ddf9a8))) << 0x20
-                     | REFG(undefined8, 0x142ddf9a8) & 0xffffffff) ^ (*(ulonglong *)(gen_frame + 0x210));
-            (*(code *)((uVar16 >> 0x20 ^ (ulonglong)((int)uVar16 * 2 + 0x974342d3) ^
-                       (ulonglong)
-                       (uint)((int)((ulonglong)
-                                    *(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0xe8)) >> 0x34)) >> 0x20)
-                             - (int)uVar16)) << 0x20 | uVar16 & 0xffffffff))(0x8d,0x1c,1);
-          }
-        }
-      }
-      puVar23 = REFG(undefined1 *, 0x142ddf848);
-      do {
-      } while ((uint)((ulonglong)(*(volatile undefined4 *)0x7ffe0004ULL) * (*(volatile undefined8 *)0x7ffe0320ULL) >> 0x18) <
-               (int)((ulonglong)(*(volatile undefined4 *)0x7ffe0004ULL) * (*(volatile undefined8 *)0x7ffe0320ULL) >> 0x18) + 1000U);
-      (*(undefined1 *)(gen_frame + 0x80)) = (undefined1)0xb9;
-      (*(undefined8 *)(gen_frame + 0x8c)) = 1;
-      pIStack_45e2 = ((char *)REFP(0x140000000));
-      (*(undefined4 *)(gen_frame + 0x81)) = 0x1c;
-      (*(undefined1 *)(gen_frame + 0x85)) = 0xba;
-      (*(undefined2 *)(gen_frame + 0x8a)) = 0xbd48;
-      (*(undefined2 *)(gen_frame + 0x94)) = 0xbb48;
-      (*(undefined4 *)(gen_frame + 0x9e)) = 0xf633ff33;
-      (*(undefined4 *)(gen_frame + 0xa2)) = 0x45c03345;
-      (*(undefined4 *)(gen_frame + 0xa6)) = 0x3345c933;
-      (*(undefined4 *)(gen_frame + 0xaa)) = 0xdb3345d2;
-      (*(undefined4 *)(gen_frame + 0xae)) = 0x45e43345;
-      (*(undefined4 *)(gen_frame + 0xb2)) = 0x3345ed33;
-      (*(undefined4 *)(gen_frame + 0xb6)) = 0xff3345f6;
-      (*(undefined4 *)(gen_frame + 0xba)) = 0xe0ffc033;
-      (*(undefined4 *)(gen_frame + 0x86)) = uVar31;
-      if (REFG(undefined1 *, 0x142ddf848) != (undefined1 *)0x0) {
-        (*(ulonglong *)(gen_frame + 0x180)) = 0x2a0a0383165ad96a;
-        (*(ulonglong *)(gen_frame + 0x218)) = 0x8bf5dc1450517e24;
-        CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x218)));
-        uVar16 = *(ulonglong *)(puVar23 + 0xdb8);
-        uVar16 = ((uVar16 >> 0x20 ^
-                   (ulonglong)
-                   (~(uint)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0x180)) >> 0x34)) >>
-                           0x20) ^ (uint)uVar16) ^ (ulonglong)((uint)uVar16 + 0xafae81dc)) << 0x20 |
-                 uVar16 & 0xffffffff) ^ (*(ulonglong *)(gen_frame + 0x218));
-        if ((uVar16 >> 0x20 ^
-             (ulonglong)
-             (((uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x180)) & 0xfff)) >> 3 |
-              (uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x180)) & 0xfff)) << 0x1d) * 2 -
-             (int)uVar16) ^ uVar16 & 0xffffffff) != 0x8bf5dc14 || (uVar16 & 0xffffffff) != 0) {
-          (*(ulonglong *)(gen_frame + 0x188)) = 0x27e6d9c4d540a100;
-          (*(ulonglong *)(gen_frame + 0x220)) = 0x14b611a459e2fef3;
-          CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x220)));
-          uVar16 = *(ulonglong *)(puVar23 + 0xe10);
-          uVar16 = ((uVar16 >> 0x20 ^ (ulonglong)((int)uVar16 + 0x296c2348) ^
-                    (ulonglong)
-                    (uint)((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x188)) & 0xfff)) -
-                          (int)uVar16)) << 0x20 | uVar16 & 0xffffffff) ^ (*(ulonglong *)(gen_frame + 0x220));
-          pcVar42 = (code *)((uVar16 >> 0x20 ^
-                              (ulonglong)
-                              (((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0x188)) >> 0x34)) << 1 |
-                               (uint)((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0x188)) >> 0x34)) <
-                                     0)) + (int)uVar16) ^
-                             (ulonglong)
-                             (((int)((ulonglong)
-                                     *(longlong *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x188)) & 0xfff)) >>
-                                    0x20) << 1 |
-                              (uint)(*(longlong *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x188)) & 0xfff)) < 0
-                                    )) + (int)uVar16)) << 0x20 | uVar16 & 0xffffffff);
-          if (pcVar42 != (code *)0x0) {
-            (*(code * *)(gen_frame + 0x190)) = (code *)0x0;
-            uVar16 = __rdtsc();
-            (*(longlong *)(gen_frame + 0x2a8)) = uVar16 % 0x1000 + 0x3e;
-            (*(undefined4 *)(gen_frame + 0x28)) = 0x40;
-            (*(undefined4 *)(gen_frame + 0x20)) = 0x1000;
-            iVar15 = (*pcVar42)(0xffffffffffffffff,&(*(code * *)(gen_frame + 0x190)));
-            if (-1 < iVar15) {
-              pcVar42 = (code *)&(*(undefined1 *)(gen_frame + 0x80));
-              pcVar37 = (*(code * *)(gen_frame + 0x190));
-              for (lVar29 = 0x3e; lVar29 != 0; lVar29 = lVar29 + -1) {
-                *pcVar37 = *pcVar42;
-                pcVar42 = (char *)pcVar42 + 1;
-                pcVar37 = (char *)pcVar37 + 1;
-              }
-              (*(*(code * *)(gen_frame + 0x190)))();
-            }
-          }
-        }
-      }
-      uVar41 = 1;
-      pcVar42 = (code *)swi(0x29);
-      uVar16 = (*pcVar42)(0);
-      puVar32 = ((undefined1 *)(gen_frame + 0x8));
-    }
-    else {
-      uVar41 = 1;
-      puVar32 = ((undefined1 *)(gen_frame + 0x0));
-    }
-  }
-  puVar23 = REFG(undefined1 *, 0x142ddf848);
-  uVar28 = __rdtsc();
-  uVar16 = uVar28;
-  (*(undefined8 *)((char *)&auVar5 + 8)) = 0;
-  (*(undefined8 *)((char *)&auVar5 + 0)) = uVar16;
-  uVar31 = gen_v16_bytes(gen_v16_mul(gen_v16_zext(gen_v16_u(0x47ae147ae147ae15), 8), auVar5), (int)(4), 4);
-  lVar29 = gen_v16_bytes(gen_v16_mul(gen_v16_zext(gen_v16_u(0x47ae147ae147ae15), 8), auVar5), (int)(8), 8);
-  if (4 < uVar16 + ((uVar16 - lVar29 >> 1) + lVar29 >> 6) * -100) goto code_r0x00014168c955;
-  (*(int *)(gen_frame + 0x4680)) = 0xd4;
-  uVar16 = uVar41;
-  if (REFG(undefined1 *, 0x142ddf848) == (undefined1 *)0x0) {
-code_r0x00014168bf7e:
-    iVar15 = (int)uVar16;
-    uVar16 = uVar41;
-  }
-  else {
-    ((short *)(gen_frame + 0xc8))[0] = 0x5c;
-    ((short *)(gen_frame + 0xc8))[1] = 0x44;
-    ((short *)(gen_frame + 0xc8))[2] = 0x65;
-    ((short *)(gen_frame + 0xc8))[3] = 0x76;
-    ((short *)(gen_frame + 0xc8))[4] = 0x69;
-    ((short *)(gen_frame + 0xc8))[5] = 99;
-    ((short *)(gen_frame + 0xc8))[6] = 0x65;
-    iVar15 = 0;
-    ((short *)(gen_frame + 0xc8))[7] = 0;
-    ((ushort *)(gen_frame + 0xf8))[0] = 0x43;
-    ((ushort *)(gen_frame + 0xf8))[1] = 0x45;
-    ((ushort *)(gen_frame + 0xf8))[2] = 0x44;
-    ((ushort *)(gen_frame + 0xf8))[3] = 0x52;
-    ((ushort *)(gen_frame + 0xf8))[4] = 0x49;
-    ((ushort *)(gen_frame + 0xf8))[5] = 0x56;
-    ((ushort *)(gen_frame + 0xf8))[6] = 0x45;
-    ((ushort *)(gen_frame + 0xf8))[7] = 0x52;
-    ((ushort *)(gen_frame + 0xf8))[8] = 0;
-    ((ushort *)(gen_frame + 0x110))[0] = 0x58;
-    ((ushort *)(gen_frame + 0x110))[1] = 0x69;
-    ((ushort *)(gen_frame + 0x110))[2] = 0x73;
-    ((ushort *)(gen_frame + 0x110))[3] = 0x44;
-    ((ushort *)(gen_frame + 0x110))[4] = 0x52;
-    ((ushort *)(gen_frame + 0x110))[5] = 0x49;
-    ((ushort *)(gen_frame + 0x110))[6] = 0x56;
-    ((ushort *)(gen_frame + 0x110))[7] = 0x45;
-    ((ushort *)(gen_frame + 0x110))[8] = 0x52;
-    ((ushort *)(gen_frame + 0x110))[9] = 0;
-    psVar30 = ((short *)(gen_frame + 0xc8));
-    do {
-      if (*psVar30 == 0) break;
-      iVar15 = iVar15 + 1;
-      psVar30 = psVar30 + 1;
-    } while (iVar15 != -1);
-    (*(short *)(gen_frame + 0x290)) = (short)iVar15 * 2;
-    (*(short *)(gen_frame + 0x292)) = (*(short *)(gen_frame + 0x290)) + 2;
-    (*(short * *)(gen_frame + 0x298)) = ((short *)(gen_frame + 0xc8));
-    (*(undefined4 *)(gen_frame + 0x370)) = 0x40;
-    (*(short * *)(gen_frame + 0x368)) = &(*(short *)(gen_frame + 0x290));
-    (*(undefined4 *)(gen_frame + 0x358)) = 0x30;
-    (*(ulonglong *)(gen_frame + 0x158)) = 0xe7d6a489a031c37e;
-    (*(ulonglong *)(gen_frame + 0x228)) = 0xeee0f4ca45c6aafa;
-    (*(undefined8 *)(gen_frame + 0x360)) = 0;
-    (*(undefined8 *)(gen_frame + 0x378)) = 0;
-    (*(undefined8 *)(gen_frame + 0x380)) = 0;
-    *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168a3a0);
-    CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x228)));
-    uVar16 = *(ulonglong *)(puVar23 + 0xfe0);
-    uVar28 = ((uVar16 >> 0x20 ^ (ulonglong)((int)uVar16 + 0xddc1e995) ^
-              (ulonglong)
-              (((uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x158)) & 0xfff)) >> 3 |
-               (uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x158)) & 0xfff)) << 0x1d) * 2 -
-              (int)uVar16)) << 0x20 | uVar16 & 0xffffffff) ^ (*(ulonglong *)(gen_frame + 0x228));
-    uVar16 = 1;
-    iVar15 = 1;
-    uVar41 = 1;
-    if ((uVar28 >> 0x20 ^
-        (ulonglong)
-        (~(uint)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x158)) & 0xfff)) >> 0x20) ^
-        (uint)uVar28)) ==
-        (ulonglong)
-        (((uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0x158)) >> 0x34)) >> 3 |
-         (uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0x158)) >> 0x34)) << 0x1d) * 2 - (uint)uVar28)
-        && (uVar28 & 0xffffffff) == 0) goto code_r0x00014168bf7e;
-    (*(ulonglong *)(gen_frame + 0x198)) = 0x129853dd90fff9b6;
-    (*(ulonglong *)(gen_frame + 0x230)) = 0xd003c40448039791;
-    *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168a4d3);
-    CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x230)));
-    uVar28 = (((ulonglong)
-               ((uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0x198)) >> 0x34)) >> 0xb |
-               (uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0x198)) >> 0x34)) << 0x15) ^
-               *(ulonglong *)(puVar23 + 0x1018) >> 0x20 ^
-              *(ulonglong *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x198)) & 0xfff)) >> 0x20) << 0x20 |
-             *(ulonglong *)(puVar23 + 0x1018) & 0xffffffff) ^ (*(ulonglong *)(gen_frame + 0x230));
-    uVar16 = 1;
-    if ((uVar28 >> 0x20 ^
-        (ulonglong)
-        (~(uint)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0x198)) >> 0x34)) >> 0x20) ^
-        (uint)uVar28)) != (ulonglong)((uint)uVar28 + 0xb7fc686f) || (uVar28 & 0xffffffff) != 0) {
-      (*(ulonglong *)(gen_frame + 0xf0)) = 0xf4e0b7cc3a8468af;
-      (*(ulonglong *)(gen_frame + 0x238)) = 0xe4a74481da39da99;
-      *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168a5f9);
-      CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x238)));
-      uVar16 = *(ulonglong *)(puVar23 + 0x1090);
-      uVar28 = ((uVar16 >> 0x20 ^
-                 (ulonglong)
-                 (((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0xf0)) & 0xfff)) << 1 |
-                  (uint)((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0xf0)) & 0xfff)) < 0)) +
-                 (uint)uVar16) ^ (ulonglong)((uint)uVar16 ^ 0xe4a74481)) << 0x20 |
-               uVar16 & 0xffffffff) ^ (*(ulonglong *)(gen_frame + 0x238));
-      uVar26 = (uint)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0xf0)) & 0xfff)) >>
-                     0x20);
-      iVar15 = 1;
-      uVar16 = uVar41;
-      if ((uVar28 >> 0x20 ^
-          (ulonglong)((uint)uVar28 - (int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0xf0)) >> 0x34))))
-          != (ulonglong)((uVar26 >> 0xb | uVar26 << 0x15) ^ ~(uint)uVar28) ||
-          (uVar28 & 0xffffffff) != 0) {
-        (*(ulonglong *)(gen_frame + 0x1a0)) = 0xe7d6a489a031c37e;
-        (*(ulonglong *)(gen_frame + 0x240)) = 0xeee0f4ca45c6aafa;
-        *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168a79b);
-        CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x240)));
-        uVar16 = *(ulonglong *)(puVar23 + 0xfe0);
-        uVar16 = ((uVar16 >> 0x20 ^ (ulonglong)((int)uVar16 + 0xddc1e995) ^
-                  (ulonglong)
-                  (((uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x1a0)) & 0xfff)) >> 3 |
-                   (uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x1a0)) & 0xfff)) << 0x1d) * 2
-                  - (int)uVar16)) << 0x20 | uVar16 & 0xffffffff) ^ (*(ulonglong *)(gen_frame + 0x240));
-        uVar2 = *(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0x1a0)) >> 0x34));
-        uVar3 = *(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x1a0)) & 0xfff));
-        *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168a8ae);
-        iVar15 = (*(code *)((uVar16 >> 0x20 ^
-                             (ulonglong)(~(uint)((ulonglong)uVar3 >> 0x20) ^ (uint)uVar16) ^
-                            (ulonglong)(((uint)uVar2 >> 3 | (uint)uVar2 << 0x1d) * 2 - (uint)uVar16)
-                            ) << 0x20 | uVar16 & 0xffffffff))(&(*(undefined8 *)(gen_frame + 0x258)),1);
-        puVar12 = REFG(undefined1 *, 0x142ddf848);
-        if (iVar15 < 0) {
-          puVar19 = (uint *)0x0;
-          (*(int *)(gen_frame + 0x4680)) = 0xd3;
-          uVar41 = 1;
-          uVar31 = 0;
-          if (REFG(undefined1 *, 0x142ddf848) != (undefined1 *)0x0) {
-            puVar32[0x60] = 0x5c;
-            puVar32[0x61] = 100;
-            puVar32[0x62] = 0x62;
-            puVar32[99] = 0x6b;
-            puVar32[100] = 0x36;
-            puVar32[0x65] = 0x34;
-            puVar32[0x66] = 0x2e;
-            puVar32[0x67] = 0x73;
-            puVar32[0x68] = 0x79;
-            puVar32[0x69] = 0x73;
-            puVar32[0x6a] = 0;
-            while( true ) {
-              (*(ulonglong *)(gen_frame + 0x260)) = 0xefcbd4cd17f5569c;
-              *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168b917);
-              CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x260)));
-              uVar16 = *(ulonglong *)(puVar12 + 0xfa8);
-              uVar16 = ((uVar16 >> 0x20 ^
-                         (ulonglong)
-                         (((int)REFG(undefined4, 0x142ddf267) << 1 | (uint)((int)REFG(undefined4, 0x142ddf267) < 0)) +
-                         (uint)uVar16) ^ (ulonglong)((uint)uVar16 ^ 0x10342b32)) << 0x20 |
-                       uVar16 & 0xffffffff) ^ (*(ulonglong *)(gen_frame + 0x260));
-              uVar26 = (uint)((ulonglong)REFG(undefined4, 0x142ddf267) >> 0x20);
-              *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168ba2c);
-              iVar15 = (*(code *)((uVar16 >> 0x20 ^
-                                   (ulonglong)((int)REFG(undefined4, 0x142ddf1c6) - (uint)uVar16) ^
-                                  (ulonglong)((uVar26 >> 0xb | uVar26 << 0x15) ^ ~(uint)uVar16)) <<
-                                  0x20 | uVar16 & 0xffffffff))(0xb,puVar19);
-              uVar16 = 0;
-              if (iVar15 != -0x3ffffffc) break;
-              if ((*(uint *)(gen_frame + 0x4690)) == 0) {
-                (*(uint *)(gen_frame + 0x4690)) = 0x1000;
-              }
-              *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168bb68);
-              puVar19 = (uint *)_realloc_base(puVar19,(ulonglong)(*(uint *)(gen_frame + 0x4690)));
-            }
-            (*(int *)(gen_frame + 0x4680)) = 0xd3;
-            uVar41 = 1;
-            if (-1 < iVar15) {
-              uVar26 = 0;
-              uVar16 = 0;
-              uVar41 = 0;
-              if (*puVar19 != 0) {
-                do {
-                  uVar16 = (ulonglong)uVar26;
-                  puVar43 = puVar19 + uVar16 * 0x4a + 0xc;
-                  uVar41 = 0;
-                  if (puVar43 != (uint *)0x0) {
-                    pcVar18 = puVar32 + 0x60;
-                    uVar28 = uVar41;
-                    do {
-                      uVar27 = (uint)uVar28;
-                      if (*pcVar18 == '\0') break;
-                      uVar27 = uVar27 + 1;
-                      uVar28 = (ulonglong)uVar27;
-                      pcVar18 = pcVar18 + 1;
-                    } while (uVar27 != 0xffffffff);
-                    if ((uVar27 != 0) && (cVar14 = (char)*puVar43, cVar14 != '\0')) {
-                      puVar34 = puVar43;
-                      uVar28 = uVar41;
-                      uVar36 = uVar41;
-                      do {
-                        cVar24 = puVar32[uVar28 + 0x60];
-                        if ((byte)(cVar14 + 0xbfU) < 0x1a) {
-                          cVar14 = cVar14 + ' ';
-                        }
-                        uVar16 = 0;
-                        if ((byte)(cVar24 + 0xbfU) < 0x1a) {
-                          cVar24 = cVar24 + ' ';
-                        }
-                        uVar39 = uVar41;
-                        if (cVar14 == cVar24) {
-                          uVar39 = uVar28 + 1;
-                        }
-                        uVar40 = (int)uVar36 + 1;
-                        uVar36 = (ulonglong)uVar40;
-                        if ((longlong)(int)uVar27 == uVar39) {
-                          uVar16 = (longlong)puVar43 +
-                                   ((longlong)(int)uVar40 - (longlong)(int)uVar27);
-                          if (uVar16 != 0) {
-                            uVar41 = 1;
-                            goto code_r0x00014168bf62;
-                          }
-                          break;
-                        }
-                        cVar14 = *(char *)((longlong)puVar34 + 1);
-                        puVar34 = (uint *)((longlong)puVar34 + 1);
-                        uVar28 = uVar39;
-                      } while (cVar14 != '\0');
-                    }
-                  }
-                  uVar26 = uVar26 + 1;
-                } while (uVar26 < *puVar19);
-              }
-            }
-code_r0x00014168bf62:
-            uVar31 = (undefined4)(uVar16 >> 0x20);
-            if (puVar19 != (uint *)0x0) {
-              *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168bf6f);
-              CALLF(undefined8, FUN_140279d94)(puVar19);
-              uVar31 = 0;
-            }
-          }
-        }
-        else {
-          pcVar18 = ((char *)(gen_frame + 0x3e8));
-          for (lVar29 = 0x20; lVar29 != 0; lVar29 = lVar29 + -1) {
-            *pcVar18 = '\0';
-            pcVar18 = pcVar18 + 1;
-          }
-          (*(ulonglong *)(gen_frame + 0x1a8)) = 0x129853dd90fff9b6;
-          (*(ulonglong *)(gen_frame + 0x248)) = 0xd003c40448039791;
-          *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168aa12);
-          CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x248)));
-          uVar16 = (((ulonglong)
-                     ((uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0x1a8)) >> 0x34)) >> 0xb |
-                     (uint)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0x1a8)) >> 0x34)) << 0x15) ^
-                     *(ulonglong *)(puVar23 + 0x1018) >> 0x20 ^
-                    *(ulonglong *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x1a8)) & 0xfff)) >> 0x20) << 0x20 |
-                   *(ulonglong *)(puVar23 + 0x1018) & 0xffffffff) ^ (*(ulonglong *)(gen_frame + 0x248));
-          uVar2 = *(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0x1a8)) >> 0x34));
-          *(undefined8 *)(puVar32 + 0x30) = 0;
-          *(undefined4 **)(puVar32 + 0x28) = &REFG(undefined4, 0x143122418);
-          puVar32[0x20] = 0;
-          *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168ab29);
-          iVar15 = (*(code *)((uVar16 >> 0x20 ^
-                               (ulonglong)(~(uint)((ulonglong)uVar2 >> 0x20) ^ (uint)uVar16) ^
-                              (ulonglong)((uint)uVar16 + 0xb7fc686f)) << 0x20 | uVar16 & 0xffffffff)
-                   )((*(undefined8 *)(gen_frame + 0x258)),((char *)(gen_frame + 0x610)));
-          if (iVar15 < 0) {
-            uVar41 = 0;
-code_r0x00014168b17f:
-            REFG(undefined4, 0x143122418) = 0;
-          }
-          else {
-            uVar41 = 0;
-            (*(undefined8 *)(gen_frame + 0x2b0)) = 0x20;
-            uVar16 = uVar41;
-            do {
-              lVar29 = 0x20;
-              pcVar18 = ((char *)(gen_frame + 0x610)) + uVar16 * 0x20;
-              lVar33 = -(longlong)pcVar18;
-              while( true ) {
-                lVar29 = lVar29 + -1;
-                if (*pcVar18 != pcVar18[(longlong)(((char *)(gen_frame + 0x3e8)) + lVar33)]) break;
-                pcVar18 = pcVar18 + 1;
-                if (lVar29 == 0) goto code_r0x00014168ac5a;
-              }
-              if (*pcVar18 == pcVar18[(longlong)(((char *)(gen_frame + 0x3e8)) + lVar33)]) break;
-              if (((longlong *)(gen_frame + 0x618))[uVar16 * 4] != 0) {
-                puVar38 = ((ushort *)(gen_frame + 0xf8));
-                uVar28 = uVar41;
-                do {
-                  uVar26 = (uint)uVar28;
-                  if (*puVar38 == 0) break;
-                  uVar20 = *(ushort *)
-                            ((longlong)puVar38 + (((longlong *)(gen_frame + 0x618))[uVar16 * 4] - (longlong)((ushort *)(gen_frame + 0xf8)))
-                            );
-                  uVar25 = *puVar38;
-                  if ((ushort)(uVar20 - 0x41) < 0x1a) {
-                    uVar20 = uVar20 | 0x20;
-                  }
-                  if ((ushort)(uVar25 - 0x41) < 0x1a) {
-                    uVar25 = uVar25 | 0x20;
-                  }
-                  uVar26 = (uint)uVar20 - (uint)uVar25;
-                  uVar28 = (ulonglong)uVar26;
-                  puVar38 = puVar38 + 1;
-                } while (uVar26 == 0);
-                if (uVar26 != 0) {
-                  puVar38 = ((ushort *)(gen_frame + 0x110));
-                  uVar28 = uVar41;
-                  do {
-                    uVar26 = (uint)uVar28;
-                    if (*puVar38 == 0) break;
-                    uVar20 = *(ushort *)
-                              ((longlong)puVar38 +
-                              (((longlong *)(gen_frame + 0x618))[uVar16 * 4] - (longlong)((ushort *)(gen_frame + 0x110))));
-                    uVar25 = *puVar38;
-                    if ((ushort)(uVar20 - 0x41) < 0x1a) {
-                      uVar20 = uVar20 | 0x20;
-                    }
-                    if ((ushort)(uVar25 - 0x41) < 0x1a) {
-                      uVar25 = uVar25 | 0x20;
-                    }
-                    uVar26 = (uint)uVar20 - (uint)uVar25;
-                    uVar28 = (ulonglong)uVar26;
-                    puVar38 = puVar38 + 1;
-                  } while (uVar26 == 0);
-                  if (uVar26 != 0) goto code_r0x00014168b0f5;
-                }
-                uVar41 = 1;
-                break;
-              }
-code_r0x00014168b0f5:
-              uVar16 = uVar16 + 1;
-            } while (uVar16 < 0x200);
-code_r0x00014168ac5a:
-            if (uVar16 == 0) goto code_r0x00014168b17f;
-          }
-          (*(ulonglong *)(gen_frame + 0xc0)) = 0xf4e0b7cc3a8468af;
-          (*(ulonglong *)(gen_frame + 0x250)) = 0xe4a74481da39da99;
-          *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168b1b9);
-          CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x250)));
-          uVar16 = *(ulonglong *)(puVar23 + 0x1090);
-          uVar16 = ((uVar16 >> 0x20 ^
-                     (ulonglong)
-                     (((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0xc0)) & 0xfff)) << 1 |
-                      (uint)((int)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0xc0)) & 0xfff)) < 0)
-                      ) + (uint)uVar16) ^ (ulonglong)((uint)uVar16 ^ 0xe4a74481)) << 0x20 |
-                   uVar16 & 0xffffffff) ^ (*(ulonglong *)(gen_frame + 0x250));
-          uVar2 = *(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0xc0)) >> 0x34));
-          uVar26 = (uint)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0xc0)) & 0xfff))
-                         >> 0x20);
-          *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168b2be);
-          (*(code *)((uVar16 >> 0x20 ^ (ulonglong)((uint)uVar16 - (int)uVar2) ^
-                     (ulonglong)((uVar26 >> 0xb | uVar26 << 0x15) ^ ~(uint)uVar16)) << 0x20 |
-                    uVar16 & 0xffffffff))((*(undefined8 *)(gen_frame + 0x258)));
-          uVar31 = 0;
-        }
-        if (uVar41 == 0) goto code_r0x00014168c955;
-        uVar16 = 1;
-        goto code_r0x00014168bf7e;
-      }
-    }
-  }
-  lVar29 = 6;
-  uVar28 = __rdtsc();
-  (*(undefined8 *)((char *)&auVar6 + 8)) = 0;
-  (*(undefined8 *)((char *)&auVar6 + 0)) = (*(volatile undefined8 *)0x7ffe0320ULL) << 8;
-  uVar28 = gen_v16_bytes(gen_v16_mul((gen_v16_shl(gen_v16_zext(gen_v16_u((*(volatile undefined4 *)0x7ffe0004ULL)), 4), (int)(0x20))), auVar6), (int)(8), 8) + (ulonglong)((int)((uVar28 & 0xffffffff) % 120000) + 120000);
-  { long long gen_cas_ = GEN_ATOMIC_CAS(REFG(undefined8, 0x142ddf898), iVar15, 0); bVar45 = gen_cas_ == 0; iVar13 = bVar45 ? iVar15 : gen_cas_; }
-  while (!bVar45) {
-    { long long gen_cas_ = GEN_ATOMIC_CAS(REFG(undefined8, 0x142ddf898), iVar15, 0); bVar45 = gen_cas_ == 0; iVar13 = bVar45 ? iVar15 : gen_cas_; }
-  }
-  (*(ulonglong *)(gen_frame + 0x1b0)) = REFG(undefined8, 0x142ddf890);
-  (*(ulonglong *)(gen_frame + 0x1b8)) = 0xfc9820211599030d;
-  *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168c326);
-  CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x1b8)));
-  lVar33 = lVar29;
-  lVar44 = 0;
-  do {
-    uVar41 = *(ulonglong *)(lVar44 + 0x142ddf860);
-    *(ulonglong *)((longlong)((ulonglong *)(gen_frame + 0x2f8)) + lVar44) =
-         (*(ulonglong *)(gen_frame + 0x1b0)) * 2 - ((*(ulonglong *)(gen_frame + 0x1b8)) << 9 | (*(ulonglong *)(gen_frame + 0x1b8)) >> 0x37) ^ uVar41;
-    (*(ulonglong *)(gen_frame + 0x1b8)) = ((*(ulonglong *)(gen_frame + 0x1b0)) << 10 | (*(ulonglong *)(gen_frame + 0x1b0)) >> 0x36) - uVar41;
-    lVar33 = lVar33 + -1;
-    lVar44 = lVar44 + 8;
-  } while (lVar33 != 0);
-  ((ulonglong *)(gen_frame + 0x2c8))[0] = ((ulonglong *)(gen_frame + 0x2f8))[0];
-  ((ulonglong *)(gen_frame + 0x2c8))[1] = ((ulonglong *)(gen_frame + 0x2f8))[1];
-  ((ulonglong *)(gen_frame + 0x2c8))[2] = ((ulonglong *)(gen_frame + 0x2f8))[2];
-  (*(undefined8 *)(gen_frame + 0x2e0)) = ((ulonglong *)(gen_frame + 0x2f8))[3];
-  (*(undefined8 *)(gen_frame + 0x2e8)) = (*(undefined8 *)(gen_frame + 0x318));
-  (*(longlong *)(gen_frame + 0x2f0)) = (*(longlong *)(gen_frame + 0x320));
-  if (((*(longlong *)(gen_frame + 0x320)) != 0) ||
-     (((int)(((ulonglong *)(gen_frame + 0x2f8))[3] >> 0x20) != (*(int *)(gen_frame + 0x4680)) && (uVar28 < ((ulonglong *)(gen_frame + 0x2f8))[1])))) {
-    (*(longlong *)(gen_frame + 0x2f0)) = 0;
-    (*(undefined8 *)(gen_frame + 0x2e0)) = CONCAT44((*(int *)(gen_frame + 0x4680)),0x1c);
-    ((ulonglong *)(gen_frame + 0x2c8))[1] = uVar28;
-    ((ulonglong *)(gen_frame + 0x2c8))[2] = uVar16;
-  }
-  lVar33 = __rdtsc();
-  REFG(undefined8, 0x142ddf890) = REFG(undefined8, 0x142ddf890) + lVar33 * (ulonglong)(((uint)REFG(undefined8, 0x142ddf890) & 0xff) + 1);
-  REFG(undefined8, 0x142ddf890) = REFG(undefined8, 0x142ddf890) * 0x20 | REFG(undefined8, 0x142ddf890) >> 0x3b;
-  (*(ulonglong *)(gen_frame + 0x1c8)) = 0xfc9820211599030d;
-  *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168c7a4);
-  (*(ulonglong *)(gen_frame + 0x1c0)) = REFG(undefined8, 0x142ddf890);
-  CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x1c8)));
-  lVar33 = 0;
-  do {
-    (*(ulonglong *)(gen_frame + 0x1c8)) = (*(ulonglong *)(gen_frame + 0x1c0)) * 2 - ((*(ulonglong *)(gen_frame + 0x1c8)) << 9 | (*(ulonglong *)(gen_frame + 0x1c8)) >> 0x37) ^
-                  *(ulonglong *)((longlong)((ulonglong *)(gen_frame + 0x2c8)) + lVar33);
-    *(ulonglong *)(lVar33 + 0x142ddf860) = (*(ulonglong *)(gen_frame + 0x1c8));
-    lVar33 = lVar33 + 8;
-    (*(ulonglong *)(gen_frame + 0x1c8)) = ((*(ulonglong *)(gen_frame + 0x1c0)) << 10 | (*(ulonglong *)(gen_frame + 0x1c0)) >> 0x36) - (*(ulonglong *)(gen_frame + 0x1c8));
-    lVar29 = lVar29 + -1;
-  } while (lVar29 != 0);
-  REFG(undefined8, 0x142ddf898) = 0;
-  uVar31 = 0;
-code_r0x00014168c955:
-  lVar44 = 6;
-  uVar16 = 0;
-  lVar33 = 0xff;
-  uVar28 = __rdtsc();
-  uVar28 = CONCAT44(uVar31,(int)uVar28) | uVar28 & 0xffffffff00000000;
-    auVar7_lo = uVar28;
-  lVar29 = __umulh((ulonglong)(0x47ae147ae147ae15), (ulonglong)(auVar7_lo));
-  if (uVar28 + ((uVar28 - lVar29 >> 1) + lVar29 >> 6) * -100 < 0x1e) {
-    (*(ulonglong *)(gen_frame + 0x1d0)) = REFG(undefined8, 0x142ddf890);
-    (*(ulonglong *)(gen_frame + 0x1d8)) = 0xfc9820211599030d;
-    *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168cb3d);
-    CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x1d8)));
-    lVar29 = lVar44;
-    uVar28 = uVar16;
-    do {
-      uVar41 = *(ulonglong *)(uVar28 + 0x142ddf860);
-      *(ulonglong *)((longlong)((ulonglong *)(gen_frame + 0x388)) + uVar28) =
-           (*(ulonglong *)(gen_frame + 0x1d0)) * 2 - ((*(ulonglong *)(gen_frame + 0x1d8)) << 9 | (*(ulonglong *)(gen_frame + 0x1d8)) >> 0x37) ^ uVar41;
-      (*(ulonglong *)(gen_frame + 0x1d8)) = ((*(ulonglong *)(gen_frame + 0x1d0)) << 10 | (*(ulonglong *)(gen_frame + 0x1d0)) >> 0x36) - uVar41;
-      lVar29 = lVar29 + -1;
-      uVar28 = uVar28 + 8;
-    } while (lVar29 != 0);
-    (*(undefined8 *)(gen_frame + 0x128)) = ((ulonglong *)(gen_frame + 0x388))[0];
-    (*(undefined8 *)(gen_frame + 0x130)) = ((ulonglong *)(gen_frame + 0x388))[1];
-    (*(longlong *)(gen_frame + 0x138)) = ((ulonglong *)(gen_frame + 0x388))[2];
-    (*(ulonglong *)(gen_frame + 0x140)) = ((ulonglong *)(gen_frame + 0x388))[3];
-    (*(longlong *)(gen_frame + 0x148)) = (*(longlong *)(gen_frame + 0x3a8));
-    (*(undefined8 *)(gen_frame + 0x150)) = (*(undefined8 *)(gen_frame + 0x3b0));
-    (*(undefined8 *)((char *)&auVar8 + 8)) = 0;
-    (*(undefined8 *)((char *)&auVar8 + 0)) = (*(volatile undefined8 *)0x7ffe0320ULL) << 8;
-    auVar8 = gen_v16_mul((gen_v16_shl(gen_v16_zext(gen_v16_u((*(volatile undefined4 *)0x7ffe0004ULL)), 4), (int)(0x20))), auVar8);
-    if (((ulonglong *)(gen_frame + 0x388))[1] < (*(undefined8 *)((char *)&auVar8 + 8))) {
-      if ((*(longlong *)(gen_frame + 0x3a8)) != 0) {
-        (*(longlong *)(gen_frame + 0x148)) = 0;
-        bVar45 = GEN_ATOMIC_CAS(REFG(undefined8, 0x142ddf898), 1, 0) == 0;
-        while (!bVar45) {
-          bVar45 = GEN_ATOMIC_CAS(REFG(undefined8, 0x142ddf898), 1, 0) == 0;
-        }
-        lVar29 = __rdtsc();
-        REFG(undefined8, 0x142ddf890) = REFG(undefined8, 0x142ddf890) + lVar29 * (ulonglong)(((uint)REFG(undefined8, 0x142ddf890) & 0xff) + 1);
-        REFG(undefined8, 0x142ddf890) = REFG(undefined8, 0x142ddf890) * 0x20 | REFG(undefined8, 0x142ddf890) >> 0x3b;
-        (*(ulonglong *)(gen_frame + 0x1e8)) = 0xfc9820211599030d;
-        *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168ceaa);
-        (*(ulonglong *)(gen_frame + 0x1e0)) = REFG(undefined8, 0x142ddf890);
-        CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x1e8)));
-        uVar28 = uVar16;
-        do {
-          (*(ulonglong *)(gen_frame + 0x1e8)) = (*(ulonglong *)(gen_frame + 0x1e0)) * 2 - ((*(ulonglong *)(gen_frame + 0x1e8)) << 9 | (*(ulonglong *)(gen_frame + 0x1e8)) >> 0x37) ^
-                        *(ulonglong *)((longlong)&(*(undefined8 *)(gen_frame + 0x128)) + uVar28);
-          *(ulonglong *)(uVar28 + 0x142ddf860) = (*(ulonglong *)(gen_frame + 0x1e8));
-          uVar28 = uVar28 + 8;
-          (*(ulonglong *)(gen_frame + 0x1e8)) = ((*(ulonglong *)(gen_frame + 0x1e0)) << 10 | (*(ulonglong *)(gen_frame + 0x1e0)) >> 0x36) - (*(ulonglong *)(gen_frame + 0x1e8));
-          lVar44 = lVar44 + -1;
-        } while (lVar44 != 0);
-        REFG(undefined8, 0x142ddf898) = 0;
-        if ((*(longlong *)(gen_frame + 0x138)) != 0) {
-          *(undefined1 **)(puVar32 + 0x78) = puVar32 + 0x78;
-          uVar28 = 0x1000;
-          if (((void *)__readgsqword(0x30)) != (void *)0x0) {
-            uVar28 = __rdtsc();
-            *(ulonglong *)(puVar32 + 0x78) =
-                 uVar28 % 100 + 0x10 + *(longlong *)((longlong)((void *)__readgsqword(0x30)) + 0x10);
-            uVar28 = (*(longlong *)((longlong)((void *)__readgsqword(0x30)) + 8) - *(longlong *)(puVar32 + 0x78)) - 0x1000;
-          }
-          if (uVar28 != 0) {
-            do {
-              puVar23 = (undefined1 *)(*(longlong *)(puVar32 + 0x78) + uVar16);
-              if ((((puVar23 == puVar32 + 0x78) || (puVar23 == ((undefined1 *)(gen_frame + 0x340)))) ||
-                  (puVar23 == ((undefined1 *)(gen_frame + 0x350)))) ||
-                 (((puVar23 == ((undefined1 *)(gen_frame + 0x348)) || (puVar23 == ((undefined1 *)(gen_frame + 0x288)))) ||
-                  (puVar23 == ((undefined1 *)(gen_frame + 0x280)))))) {
-                uVar16 = uVar16 + 7;
-              }
-              else {
-                uVar41 = __rdtsc();
-                *(char *)(uVar16 + *(longlong *)(puVar32 + 0x78)) = (char)(uVar41 % 0xff);
-              }
-              uVar16 = uVar16 + 1;
-            } while (uVar16 < uVar28);
-          }
-          *(undefined4 *)(puVar32 + 0x40) = 0x7ff;
-          *(undefined4 *)(puVar32 + 0x38) = 0;
-          *(undefined4 *)(puVar32 + 0x30) = 0xe6c;
-          *(undefined4 *)(puVar32 + 0x28) = 0;
-          *(undefined4 *)(puVar32 + 0x20) = 0x694;
-          *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168d2c2);
-          CALLF(undefined8, FUN_14021b2d0)((*(longlong *)(gen_frame + 0x138)),0x1c,(*(ulonglong *)(gen_frame + 0x140)) >> 0x20,1,(unsigned long long)(*(undefined8 *)(puVar32 + 0x20)),(unsigned long long)(*(undefined8 *)(puVar32 + 0x28)),(unsigned long long)(*(undefined8 *)(puVar32 + 0x30)),(unsigned long long)(*(undefined8 *)(puVar32 + 0x38)),(unsigned long long)(*(undefined8 *)(puVar32 + 0x40)));
-        }
-      }
-    }
-    else {
-      uVar28 = __rdtsc();
-      uVar28 = CONCAT44((*(undefined4 *)((char *)&auVar8 + 4)), (int)uVar28) | uVar28 & 0xffffffff00000000;
-            auVar9_lo = uVar28;
-      lVar29 = __umulh((ulonglong)(0x47ae147ae147ae15), (ulonglong)(auVar9_lo));
-      if (uVar28 + ((uVar28 - lVar29 >> 1) + lVar29 >> 6) * -100 < 5) {
-        bVar45 = GEN_ATOMIC_CAS(REFG(undefined8, 0x142ddf898), 1, 0) == 0;
-        while (!bVar45) {
-          bVar45 = GEN_ATOMIC_CAS(REFG(undefined8, 0x142ddf898), 1, 0) == 0;
-        }
-        (*(ulonglong *)(gen_frame + 0x1f0)) = REFG(undefined8, 0x142ddf890);
-        (*(ulonglong *)(gen_frame + 0x1f8)) = 0xfc9820211599030d;
-        *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168d45d);
-        CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x1f8)));
-        lVar29 = lVar44;
-        uVar28 = uVar16;
-        do {
-          uVar41 = *(ulonglong *)(uVar28 + 0x142ddf860);
-          *(ulonglong *)(&(*(byte *)(gen_frame + 0x3b8)) + uVar28) =
-               (*(ulonglong *)(gen_frame + 0x1f0)) * 2 - ((*(ulonglong *)(gen_frame + 0x1f8)) << 9 | (*(ulonglong *)(gen_frame + 0x1f8)) >> 0x37) ^ uVar41;
-          (*(ulonglong *)(gen_frame + 0x1f8)) = ((*(ulonglong *)(gen_frame + 0x1f0)) << 10 | (*(ulonglong *)(gen_frame + 0x1f0)) >> 0x36) - uVar41;
-          lVar29 = lVar29 + -1;
-          uVar28 = uVar28 + 8;
-        } while (lVar29 != 0);
-        (*(undefined8 *)(gen_frame + 0x130)) = CONCAT17((*(undefined1 *)(gen_frame + 0x3c7)),
-                               CONCAT16((*(undefined1 *)(gen_frame + 0x3c6)),
-                                        CONCAT15((*(undefined1 *)(gen_frame + 0x3c5)),
-                                                 CONCAT14((*(undefined1 *)(gen_frame + 0x3c4)),
-                                                          CONCAT13((*(undefined1 *)(gen_frame + 0x3c3)),
-                                                                   CONCAT12((*(undefined1 *)(gen_frame + 0x3c2)),
-                                                                            CONCAT11((*(undefined1 *)(gen_frame + 0x3c1)),
-                                                                                     (*(undefined1 *)(gen_frame + 0x3c0))))))
-                                                )));
-        (*(longlong *)(gen_frame + 0x138)) = (*(longlong *)(gen_frame + 0x3c8));
-        (*(ulonglong *)(gen_frame + 0x140)) = (*(ulonglong *)(gen_frame + 0x3d0));
-        (*(longlong *)(gen_frame + 0x148)) = (*(longlong *)(gen_frame + 0x3d8));
-        (*(undefined8 *)(gen_frame + 0x150)) = (*(undefined8 *)(gen_frame + 0x3e0));
-        uVar28 = __rdtsc();
-        (*(byte *)(gen_frame + 0x3b8)) = (*(byte *)(gen_frame + 0x3b8)) ^ (byte)(uVar28 & 0xffffffff);
-        uVar2 = __rdtsc();
-        uVar26 = (int)((uVar28 & 0xffffffff) >> 3) + (int)uVar2 + (uint)(*(byte *)(gen_frame + 0x3b8));
-        (*(byte *)(gen_frame + 0x3b9)) = (*(byte *)(gen_frame + 0x3b9)) ^ (byte)uVar26;
-        uVar2 = __rdtsc();
-        uVar26 = (uVar26 >> 3) + (int)uVar2 + (uint)(*(byte *)(gen_frame + 0x3b9));
-        (*(byte *)(gen_frame + 0x3ba)) = (*(byte *)(gen_frame + 0x3ba)) ^ (byte)uVar26;
-        uVar2 = __rdtsc();
-        uVar26 = (uVar26 >> 3) + (int)uVar2 + (uint)(*(byte *)(gen_frame + 0x3ba));
-        (*(byte *)(gen_frame + 0x3bb)) = (*(byte *)(gen_frame + 0x3bb)) ^ (byte)uVar26;
-        uVar2 = __rdtsc();
-        uVar26 = (uVar26 >> 3) + (int)uVar2 + (uint)(*(byte *)(gen_frame + 0x3bb));
-        (*(byte *)(gen_frame + 0x3bc)) = (*(byte *)(gen_frame + 0x3bc)) ^ (byte)uVar26;
-        uVar2 = __rdtsc();
-        uVar26 = (uVar26 >> 3) + (int)uVar2 + (uint)(*(byte *)(gen_frame + 0x3bc));
-        (*(byte *)(gen_frame + 0x3bd)) = (*(byte *)(gen_frame + 0x3bd)) ^ (byte)uVar26;
-        uVar2 = __rdtsc();
-        uVar26 = (uVar26 >> 3) + (int)uVar2 + (uint)(*(byte *)(gen_frame + 0x3bd));
-        (*(byte *)(gen_frame + 0x3be)) = (*(byte *)(gen_frame + 0x3be)) ^ (byte)uVar26;
-        uVar2 = __rdtsc();
-        (*(undefined8 *)(gen_frame + 0x128)) = CONCAT17((*(byte *)(gen_frame + 0x3bf)) ^ (char)uVar2 + (char)(uVar26 >> 3) + (*(byte *)(gen_frame + 0x3be)),
-                               CONCAT16((*(byte *)(gen_frame + 0x3be)),
-                                        CONCAT15((*(byte *)(gen_frame + 0x3bd)),
-                                                 CONCAT14((*(byte *)(gen_frame + 0x3bc)),
-                                                          CONCAT13((*(byte *)(gen_frame + 0x3bb)),
-                                                                   CONCAT12((*(byte *)(gen_frame + 0x3ba)),
-                                                                            CONCAT11((*(byte *)(gen_frame + 0x3b9)),
-                                                                                     (*(byte *)(gen_frame + 0x3b8))))))
-                                                )));
-        lVar29 = __rdtsc();
-        REFG(undefined8, 0x142ddf890) = REFG(undefined8, 0x142ddf890) + lVar29 * (ulonglong)(((uint)REFG(undefined8, 0x142ddf890) & 0xff) + 1);
-        REFG(undefined8, 0x142ddf890) = REFG(undefined8, 0x142ddf890) * 0x20 | REFG(undefined8, 0x142ddf890) >> 0x3b;
-        (*(ulonglong *)(gen_frame + 0x208)) = 0xfc9820211599030d;
-        *(undefined **)(puVar32 + -8) = &REFG(undefined8, 0x14168d6ca);
-        (*(ulonglong *)(gen_frame + 0x200)) = REFG(undefined8, 0x142ddf890);
-        CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x208)));
-        do {
-          (*(ulonglong *)(gen_frame + 0x208)) = (*(ulonglong *)(gen_frame + 0x200)) * 2 - ((*(ulonglong *)(gen_frame + 0x208)) << 9 | (*(ulonglong *)(gen_frame + 0x208)) >> 0x37) ^
-                        *(ulonglong *)((longlong)&(*(undefined8 *)(gen_frame + 0x128)) + uVar16);
-          *(ulonglong *)(uVar16 + 0x142ddf860) = (*(ulonglong *)(gen_frame + 0x208));
-          uVar16 = uVar16 + 8;
-          (*(ulonglong *)(gen_frame + 0x208)) = ((*(ulonglong *)(gen_frame + 0x200)) << 10 | (*(ulonglong *)(gen_frame + 0x200)) >> 0x36) - (*(ulonglong *)(gen_frame + 0x208));
-          lVar44 = lVar44 + -1;
-        } while (lVar44 != 0);
-        REFG(undefined8, 0x142ddf898) = 0;
-      }
-    }
-  }
-  if (REFG(undefined1, 0x14311c634) != '\0') {
-    *(undefined8 *)(puVar32 + -8) = 0x14168d7c9;
-    CALLF(undefined8, FUN_14168d9e0)();
-    if ((REFG(undefined1 *, 0x143122350) != (undefined1 *)0x0) &&
-       (lVar29 = *(longlong *)(REFG(undefined1 *, 0x143122350) + 0xb0), lVar29 != 0)) {
-      *(undefined8 *)(puVar32 + -8) = 0x14168d7e9;
-      cVar14 = CALLF(byte, FUN_141356340)(lVar29);
-      if (cVar14 != '\0') {
-        *(undefined8 *)(puVar32 + -8) = 0x14168d7f5;
-        cVar14 = CALLF(byte, FUN_141356360)(lVar29);
-        if (cVar14 != '\0') {
-          *(undefined8 *)(puVar32 + -8) = 0x14168d80a;
-          cVar14 = CALLF(undefined1, FUN_1402f0ce0)(REFG(undefined1 *, 0x143122350),0,0);
-          if (cVar14 != '\0') {
-            *(undefined8 *)(puVar32 + -8) = 0x14168d816;
-            cVar14 = CALLF(undefined1, FUN_1411e74e0)(lVar29);
-            if (cVar14 != '\0') {
-              *(undefined1 **)(puVar32 + -8) = ((code *)REFP(0x14168d824));
-              CALLF(undefined8, FUN_1411e7db0)(lVar29,0);
-            }
-          }
-        }
-      }
-    }
-    if ((REFG(undefined1 *, 0x143122358) != (undefined1 *)0x0) &&
-       (lVar29 = *(longlong *)(REFG(undefined1 *, 0x143122358) + 0xb0), lVar29 != 0)) {
-      *(undefined8 *)(puVar32 + -8) = 0x14168d844;
-      cVar14 = CALLF(byte, FUN_141356340)(lVar29);
-      if (cVar14 != '\0') {
-        *(undefined8 *)(puVar32 + -8) = 0x14168d850;
-        cVar14 = CALLF(byte, FUN_141356360)(lVar29);
-        if (cVar14 != '\0') {
-          *(undefined8 *)(puVar32 + -8) = 0x14168d865;
-          cVar14 = CALLF(undefined1, FUN_1402f0ce0)(REFG(undefined1 *, 0x143122358),0,0);
-          if (cVar14 != '\0') {
-            *(undefined8 *)(puVar32 + -8) = 0x14168d871;
-            cVar14 = CALLF(undefined1, FUN_1411e74e0)(lVar29);
-            if (cVar14 != '\0') {
-              *(undefined1 **)(puVar32 + -8) = ((code *)REFP(0x14168d87f));
-              CALLF(undefined8, FUN_1411e7db0)(lVar29,0);
-            }
-          }
-        }
-      }
-    }
-    uVar31 = REFG(float, 0x142618d64);
-    if (0 < REFG(undefined4, 0x14311c638)) {
-      *(undefined4 *)(puVar32 + 0x4620) = 0;
-      *(undefined4 *)(puVar32 + 0x4624) = 0;
-      *(undefined4 *)(puVar32 + 0x4628) = 0;
-      *(undefined4 *)(puVar32 + 0x462c) = 0;
-      plVar35 = &REFG(undefined8, 0x14311c648);
-      *(undefined4 *)(puVar32 + 0x4610) = 0;
-      *(undefined4 *)(puVar32 + 0x4614) = 0;
-      *(undefined4 *)(puVar32 + 0x4618) = 0;
-      *(undefined4 *)(puVar32 + 0x461c) = 0;
-      REFG(undefined4, 0x14311c638) = 0;
-      do {
-        lVar29 = *plVar35;
-        if (lVar29 != 0) {
-          uVar2 = *(undefined8 *)(lVar29 + 0xb0);
-          *(undefined8 *)(puVar32 + -8) = 0x14168d8c9;
-          cVar14 = CALLF(byte, FUN_1413562d0)(uVar2);
-          if (cVar14 != '\0') {
-            *(undefined8 *)(puVar32 + -8) = 0x14168d8d5;
-            iVar15 = CALLF(undefined4, FUN_1402ed950)(lVar29);
-            if (iVar15 == 0) {
-              REFG(undefined4, 0x14311c638) = REFG(undefined4, 0x14311c638) + 1;
-            }
-            else {
-              uVar2 = *(undefined8 *)(lVar29 + 0xb0);
-              *(undefined4 *)(puVar32 + 0x58) = uVar31;
-              *(undefined4 *)(puVar32 + 0x50) = 0;
-              *(undefined2 *)(puVar32 + 0x48) = 0;
-              puVar32[0x40] = 0;
-              *(undefined4 *)(puVar32 + 0x38) = 0;
-              *(undefined4 *)(puVar32 + 0x30) = 1;
-              *(undefined4 *)(puVar32 + 0x28) = 0;
-              *(undefined4 *)(puVar32 + 0x20) = 0;
-              *(undefined8 *)(puVar32 + -8) = 0x14168d91a;
-              CALLF(undefined8, FUN_1413567b0)(uVar2,0xffffffff,0,0,(unsigned long long)(*(undefined4 *)(puVar32 + 0x20)),(unsigned long long)(*(undefined4 *)(puVar32 + 0x28)),(unsigned long long)(*(undefined4 *)(puVar32 + 0x30)),(unsigned long long)(*(undefined4 *)(puVar32 + 0x38)),(unsigned long long)(puVar32[0x40]),(unsigned long long)(*(undefined2 *)(puVar32 + 0x48)),(unsigned long long)(*(undefined4 *)(puVar32 + 0x50)),(unsigned long long)(*(undefined4 *)(puVar32 + 0x58)));
-              uVar2 = *(undefined8 *)(lVar29 + 0xb0);
-              *(undefined8 *)(puVar32 + -8) = 0x14168d928;
-              CALLF(uint, FUN_141356880)(uVar2,0);
-            }
-          }
-        }
-        plVar35 = plVar35 + 2;
-        lVar33 = lVar33 + -1;
-      } while (lVar33 != 0);
-    }
-    (*(undefined1 * *)(gen_frame + 0x2b8)) = REFG(undefined1 *, 0x143122350);
-    (*(undefined1 * *)(gen_frame + 0x2c0)) = REFG(undefined1 *, 0x143122358);
-    *(undefined8 *)(puVar32 + -8) = 0x14168d97b;
-    CALLF(undefined4, FUN_1416a8c00)(&(*(undefined1 * *)(gen_frame + 0x2b8)),2);
-  }
-  return 0;
-}
-
 /* ref: FUN_14168d9a0 */
 undefined8 FUN_14168d9a0(void)
 {
-  GEN_HIT(303);
+  GEN_HIT(302);
   if (REFG(undefined1 *, 0x143122350) != (undefined1 *)0x0) {
     CALLF(undefined1, FUN_1402f0ce0)(REFG(undefined1 *, 0x143122350),0,0);
   }
@@ -19302,7 +17757,7 @@ undefined8 FUN_14168d9a0(void)
 /* ref: FUN_14168d9e0 */
 undefined8 FUN_14168d9e0(void)
 {
-  GEN_HIT(304);
+  GEN_HIT(303);
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1 *[2]) > 0x18 ? 0x0 + sizeof(undefined1 *[2]) : 0x18)];
   undefined1 *puVar1;
   longlong lVar2;
@@ -19346,7 +17801,7 @@ undefined8 FUN_14168d9e0(void)
 /* ref: FUN_14168daf0 */
 ulonglong FUN_14168daf0(uint param_1, uint *param_2)
 {
-  GEN_HIT(305);
+  GEN_HIT(304);
   uint uVar1;
   uint uVar2;
   int iVar3;
@@ -19390,7 +17845,7 @@ ulonglong FUN_14168daf0(uint param_1, uint *param_2)
 /* ref: FUN_14168dbe0 */
 undefined1 FUN_14168dbe0(longlong *param_1, undefined8 *param_2)
 {
-  GEN_HIT(306);
+  GEN_HIT(305);
   undefined8 *puVar1;
   ulonglong uVar2;
   byte bVar3;
@@ -19442,7 +17897,7 @@ undefined1 FUN_14168dbe0(longlong *param_1, undefined8 *param_2)
 /* ref: FUN_14168de20 */
 undefined4 FUN_14168de20(undefined8 param_1)
 {
-  GEN_HIT(307);
+  GEN_HIT(306);
   undefined4 uVar1;
   undefined8 uVar2;
   char *pcVar3;
@@ -19471,7 +17926,7 @@ undefined4 FUN_14168de20(undefined8 param_1)
 /* ref: FUN_14168deb0 */
 undefined4 FUN_14168deb0(undefined8 param_1)
 {
-  GEN_HIT(308);
+  GEN_HIT(307);
   undefined8 uVar1;
   
   uVar1 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
@@ -19487,7 +17942,7 @@ undefined4 FUN_14168deb0(undefined8 param_1)
 /* ref: FUN_14168df20 */
 undefined4 FUN_14168df20(void)
 {
-  GEN_HIT(309);
+  GEN_HIT(308);
   CALLF(undefined8, FUN_14168eaa0)(REFG(undefined1 *, 0x143122478),REFG(undefined1 *, 0x143122478) + (*(undefined8 *)((char *)&gen_g_143122480 + 0x0)) * 0x30);
   (*(undefined8 *)((char *)&gen_g_143122480 + 0x0)) = 0;
   REFG(undefined1, 0x14312245c) = 0;
@@ -19507,7 +17962,7 @@ undefined4 FUN_14168df20(void)
 /* ref: FUN_14168dfb0 */
 undefined4 FUN_14168dfb0(undefined8 param_1)
 {
-  GEN_HIT(310);
+  GEN_HIT(309);
   CALLF(uint, FUN_1402b3850)(param_1,(uint)(REFG(undefined1, 0x14312245c) == '\0'));
   return 1;
 }
@@ -19515,7 +17970,7 @@ undefined4 FUN_14168dfb0(undefined8 param_1)
 /* ref: FUN_14168dfd0 */
 undefined4 FUN_14168dfd0(undefined8 param_1)
 {
-  GEN_HIT(311);
+  GEN_HIT(310);
   CALLF(uint, FUN_1402b3850)(param_1,(uint)REFG(undefined1, 0x14312245d));
   return 1;
 }
@@ -19523,7 +17978,7 @@ undefined4 FUN_14168dfd0(undefined8 param_1)
 /* ref: FUN_14168dff0 */
 undefined4 FUN_14168dff0(undefined8 param_1)
 {
-  GEN_HIT(312);
+  GEN_HIT(311);
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(undefined1[8]) > 0x20 ? 0x8 + sizeof(undefined1[8]) : 0x20)];
   memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   int iVar1;
@@ -19580,7 +18035,7 @@ undefined4 FUN_14168dff0(undefined8 param_1)
 /* ref: FUN_14168e160 */
 undefined4 FUN_14168e160(undefined8 param_1)
 {
-  GEN_HIT(313);
+  GEN_HIT(312);
   undefined8 uVar1;
   int iVar2;
   double dVar3;
@@ -19615,177 +18070,18 @@ undefined4 FUN_14168e160(undefined8 param_1)
 /* ref: FUN_14168e210 */
 undefined4 FUN_14168e210(undefined8 param_1)
 {
-  GEN_HIT(314);
+  GEN_HIT(313);
   CALLF(undefined1 *, FUN_1402b3a10)(param_1,REFG(undefined4, 0x142d1b4b0) + 1);
   return 1;
 }
 
-/* ref: FUN_14168e230 */
-undefined4 FUN_14168e230(undefined8 param_1)
-{
-  GEN_HIT(315);
-  uint uVar1;
-  undefined8 uVar2;
-  double dVar3;
-  
-  uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
-  if ((int)uVar2 == 0) {
-    CALLF(undefined4, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_14168e230)(index)");
-    return 0;
-  }
-  dVar3 = CALLF(double, FUN_1402b4920)(param_1,1);
-  uVar1 = (int)dVar3 - 1;
-  if (uVar1 < (*(undefined8 *)((char *)&gen_g_143122480 + 0x0))) {
-    if (uVar1 == *(uint *)((*(undefined1 * *)((char *)&gen_g_142de29d0 + 0x0)) + 0x14)) {
-      CALLF(undefined8, FUN_140322110)((*(undefined1 * *)((char *)&gen_g_142de29d0 + 0x0)),*(uint *)((*(undefined1 * *)((char *)&gen_g_142de29d0 + 0x0)) + 0x14) - 1,1,0,(unsigned long long)(0),(unsigned long long)(1));
-    }
-    if (((int)uVar1 < 0) || ((int)(*(undefined8 *)((char *)&gen_g_143122480 + 0x0)) <= (int)uVar1)) {
-      uVar2 = 0;
-    }
-    else {
-      uVar2 = *(undefined8 *)(REFG(undefined1 *, 0x143122478) + (longlong)(int)dVar3 * 0x30 + -0x30);
-    }
-    CALLF(undefined8, FUN_1416a3120)(uVar2);
-  }
-  return 0;
-}
-
-/* ref: FUN_14168e2f0 */
-undefined4 FUN_14168e2f0(void)
-{
-  GEN_HIT(316);
-  char cVar1;
-  undefined8 uVar2;
-  uint uVar3;
-  
-  uVar2 = CALLF(undefined1 *, FUN_14192fa70)();
-  cVar1 = CALLF(undefined1, FUN_1406a8850)(uVar2);
-  if (cVar1 != '\0') {
-    uVar3 = 0;
-    if ((*(undefined8 *)((char *)&gen_g_143122480 + 0x0)) != 0) {
-      do {
-        if (((int)uVar3 < 0) || ((int)(*(undefined8 *)((char *)&gen_g_143122480 + 0x0)) <= (int)uVar3)) {
-          uVar2 = 0;
-        }
-        else {
-          uVar2 = *(undefined8 *)(REFG(undefined1 *, 0x143122478) + (longlong)(int)uVar3 * 0x30);
-        }
-        CALLF(undefined8, FUN_1416a3120)(uVar2);
-        uVar3 = uVar3 + 1;
-      } while (uVar3 < (*(undefined8 *)((char *)&gen_g_143122480 + 0x0)));
-    }
-    CALLF(undefined8, FUN_140322110)((*(undefined1 * *)((char *)&gen_g_142de29d0 + 0x0)),0,1,0,(unsigned long long)(0),(unsigned long long)(1));
-  }
-  return 0;
-}
-
-/* ref: FUN_14168e380 */
-undefined4 FUN_14168e380(undefined8 param_1)
-{
-  GEN_HIT(317);
-  int iVar1;
-  longlong lVar2;
-  byte bVar3;
-  undefined8 uVar4;
-  char *pcVar5;
-  int iVar6;
-  double dVar7;
-  
-  uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
-  if ((int)uVar4 == 0) {
-    CALLF(undefined4, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_14168e380)(index, name)");
-    return 0;
-  }
-  uVar4 = CALLF(undefined8, FUN_1402b33f0)(param_1,2);
-  if ((((int)uVar4 != 0) && (pcVar5 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,2,0), pcVar5 != (char *)0x0)) &&
-     (*pcVar5 != '\0')) {
-    dVar7 = CALLF(double, FUN_1402b4920)(param_1,1);
-    iVar6 = (int)dVar7;
-    iVar1 = iVar6 + -1;
-    if (((-1 < iVar1) && (iVar1 < (*(undefined4 *)((char *)&gen_g_143122480 + 0x0)))) &&
-       ((lVar2 = *(longlong *)(REFG(undefined1 *, 0x143122478) + (longlong)iVar6 * 0x30 + -0x30), lVar2 != 0 &&
-        ((*(uint *)(lVar2 + 0x328) & 0x4000) != 0)))) {
-      uVar4 = CALLF(ulonglong, FUN_140252aa0)(pcVar5,lVar2 + 0x18,0x7fffffff);
-      if ((int)uVar4 != 0) {
-        if (iVar1 < (*(undefined4 *)((char *)&gen_g_143122480 + 0x0))) {
-          uVar4 = *(undefined8 *)(REFG(undefined1 *, 0x143122478) + (longlong)iVar6 * 0x30 + -0x30);
-        }
-        else {
-          uVar4 = 0;
-        }
-        bVar3 = CALLF(undefined1, FUN_1416a33a0)(uVar4,pcVar5);
-        CALLF(uint, FUN_1402b3850)(param_1,(uint)bVar3);
-        return 1;
-      }
-      CALLF(longlong, FUN_1411749b0)("CHAR_CREATE_NAME_IN_USE");
-    }
-  }
-  return 0;
-}
-
-/* ref: FUN_14168e4b0 */
-undefined4 FUN_14168e4b0(undefined8 param_1)
-{
-  GEN_HIT(318);
-  __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined8[6]) > 0x38 ? 0x0 + sizeof(undefined8[6]) : 0x38)];
-  longlong lVar1;
-  byte bVar2;
-  undefined8 uVar3;
-  char *pcVar4;
-  int iVar5;
-  undefined8 *puVar6;
-  double dVar7;
-  
-  uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
-  if ((int)uVar3 == 0) {
-    CALLF(undefined4, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_14168e4b0)(index,name1,name2,name3,(unsigned long long)(name4),(unsigned long long)(name5))");
-    return 0;
-  }
-  iVar5 = 0;
-  puVar6 = ((undefined8 *)(gen_frame + 0x0));
-  while( true ) {
-    pcVar4 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,iVar5 + 2,0);
-    *puVar6 = pcVar4;
-    if (pcVar4 == (char *)0x0) {
-      return 0;
-    }
-    if (*pcVar4 == '\0') break;
-    iVar5 = iVar5 + 1;
-    puVar6 = puVar6 + 1;
-    if (4 < iVar5) {
-      dVar7 = CALLF(double, FUN_1402b4920)(param_1,1);
-      iVar5 = (int)dVar7 + -1;
-      if ((((-1 < iVar5) && (iVar5 < (*(undefined4 *)((char *)&gen_g_143122480 + 0x0)))) &&
-          (lVar1 = *(longlong *)(REFG(undefined1 *, 0x143122478) + (longlong)(int)dVar7 * 0x30 + -0x30), lVar1 != 0))
-         && ((*(uint *)(lVar1 + 0x328) & 0x2000000) == 0)) {
-        bVar2 = CALLF(undefined1, FUN_1416a2f50)(lVar1,((undefined8 *)(gen_frame + 0x0)));
-        CALLF(uint, FUN_1402b3850)(param_1,(uint)bVar2);
-        return 1;
-      }
-      return 0;
-    }
-  }
-  return 0;
-}
-
-/* ref: FUN_14168e5a0 */
-undefined4 FUN_14168e5a0(void)
-{
-  GEN_HIT(319);
-  CALLF(undefined8, FUN_1416a3290)();
-  return 0;
-}
-
-/* ref: FUN_14168e5b0 */
-undefined4 FUN_14168e5b0(void)
-{
-  GEN_HIT(320);
-  CALLF(undefined8, FUN_1416a3260)();
-  CALLF(undefined8, FUN_1416a2d60)();
-  return 0;
-}
-
 const unsigned long long gen_hit_addrs_094[] = {
+    0x14165f470ULL,
+    0x14165f520ULL,
+    0x14165fb50ULL,
+    0x14165fd20ULL,
+    0x14165fe90ULL,
+    0x1416600f0ULL,
     0x1416602d0ULL,
     0x1416604c0ULL,
     0x141660510ULL,
@@ -19979,14 +18275,10 @@ const unsigned long long gen_hit_addrs_094[] = {
     0x14167af30ULL,
     0x14167b270ULL,
     0x14167b2a0ULL,
-    0x14167b4d0ULL,
     0x14167b540ULL,
-    0x14167b590ULL,
     0x14167b850ULL,
     0x14167ba90ULL,
     0x14167bff0ULL,
-    0x14167c3c0ULL,
-    0x14167c520ULL,
     0x14167f600ULL,
     0x14167f860ULL,
     0x14167fcc0ULL,
@@ -20067,7 +18359,6 @@ const unsigned long long gen_hit_addrs_094[] = {
     0x141686080ULL,
     0x1416860a0ULL,
     0x1416861b0ULL,
-    0x141686350ULL,
     0x141686360ULL,
     0x141686430ULL,
     0x141686550ULL,
@@ -20082,13 +18373,11 @@ const unsigned long long gen_hit_addrs_094[] = {
     0x141687040ULL,
     0x1416872a0ULL,
     0x1416873f0ULL,
-    0x141687460ULL,
     0x141687690ULL,
     0x1416876e0ULL,
     0x141687d40ULL,
     0x141687d60ULL,
     0x141687e10ULL,
-    0x141687ed0ULL,
     0x14168d9a0ULL,
     0x14168d9e0ULL,
     0x14168daf0ULL,
@@ -20101,11 +18390,5 @@ const unsigned long long gen_hit_addrs_094[] = {
     0x14168dff0ULL,
     0x14168e160ULL,
     0x14168e210ULL,
-    0x14168e230ULL,
-    0x14168e2f0ULL,
-    0x14168e380ULL,
-    0x14168e4b0ULL,
-    0x14168e5a0ULL,
-    0x14168e5b0ULL,
 };
 

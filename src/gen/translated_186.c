@@ -2,7 +2,7 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 #define GEN_HITS gen_hits_186
-unsigned int gen_hits_186[104];
+unsigned int gen_hits_186[102];
 
 /* ref: FUN_1425210d0 */
 undefined1 * FUN_1425210d0(longlong *param_1, uint param_2)
@@ -3647,7 +3647,7 @@ undefined1 FUN_142526980(longlong *param_1, undefined4 param_2)
   undefined1 *puVar4;
   undefined1 *puVar5;
   
-  puVar4 = (undefined1 *)CALLF(char *, FUN_14149bc60)(param_2, gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0))));
+  puVar4 = (undefined1 *)CALLF(char *, FUN_14149bc60)(param_2, (void *)&(*(gen_v16 *)(gen_frame + 0x0)));
   lVar2 = *param_1;
   if (*(longlong *)(lVar2 + 0x20) - *(longlong *)(lVar2 + 0x18) < (longlong)puVar4 - ((longlong)gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0))))) {
     CALLF(longlong, FUN_14148e050)(lVar2, (longlong)puVar4 - ((longlong)gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0)))));
@@ -3723,7 +3723,7 @@ undefined8 * FUN_142526b30(undefined4 param_1, undefined4 param_2, longlong *par
   lVar3 = CALLF(undefined *, FUN_1425304c0)(param_1,param_2,(uint)uVar2 & 0xff);
   if ((((*(byte *)(lVar3 + 0x34) & 4) == 0) && (*(int *)(lVar3 + 0x30) == 1)) &&
      (*(int *)(lVar3 + 0x38) == 1)) {
-    fVar4 = (**(code **)(*param_3 + 0x30))(param_3);
+    fVar4 = ((float (*)())(**(code **)(*param_3 + 0x30)))(param_3);
     *(float *)(lVar3 + 0x3c) = fVar4;
   }
   puVar1[4] = lVar3;
@@ -3748,7 +3748,7 @@ longlong FUN_142526ca0(undefined4 param_1, undefined4 param_2, longlong *param_3
                   "Create Liquid Instance: Liquid type [%d] not found, defaulting to debug liquid!",
                   param_2);
     param_2 = 8;
-    lVar1 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e910b0 + 0x0)), 8, 0, gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0))));
+    lVar1 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e910b0 + 0x0)), 8, 0, (void *)&(*(gen_v16 *)(gen_frame + 0x0)));
     if (lVar1 == 0) {
       return 0;
     }
@@ -3758,7 +3758,7 @@ longlong FUN_142526ca0(undefined4 param_1, undefined4 param_2, longlong *param_3
   lVar1 = CALLF(undefined *, FUN_1425304c0)(param_1,param_2,(uint)uVar2 & 0xff);
   if ((((*(byte *)(lVar1 + 0x34) & 4) == 0) && (*(int *)(lVar1 + 0x30) == 1)) &&
      (*(int *)(lVar1 + 0x38) == 1)) {
-    fVar3 = (**(code **)(*param_3 + 0x30))(param_3);
+    fVar3 = ((float (*)())(**(code **)(*param_3 + 0x30)))(param_3);
     *(float *)(lVar1 + 0x3c) = fVar3;
   }
   return lVar1;
@@ -3875,22 +3875,6 @@ undefined8 FUN_142526fc0(longlong param_1, longlong param_2)
   return 0;
 }
 
-/* ref: FUN_142527270 */
-undefined8 FUN_142527270(undefined4 param_1)
-{
-  GEN_HIT(102);
-  REFG(undefined4, 0x1447ce250) = param_1;
-  return 0;
-}
-
-/* ref: FUN_142527280 */
-undefined8 FUN_142527280(undefined4 param_1)
-{
-  GEN_HIT(103);
-  REFG(undefined4, 0x1447ce254) = param_1;
-  return 0;
-}
-
 const unsigned long long gen_hit_addrs_186[] = {
     0x1425210d0ULL,
     0x142521260ULL,
@@ -3994,7 +3978,5 @@ const unsigned long long gen_hit_addrs_186[] = {
     0x142526f40ULL,
     0x142526f80ULL,
     0x142526fc0ULL,
-    0x142527270ULL,
-    0x142527280ULL,
 };
 

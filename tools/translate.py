@@ -45,6 +45,7 @@ import fidelity as F
 import floatdata
 import lift
 import v16
+import aegis
 from corpus import load_corpus, strip_retcheck
 from wowbin import Binary
 
@@ -77,6 +78,9 @@ DEMOTED = GEN / "demoted.json"       # functions the compile loop found the tran
 PORT_CACHE = ROOT / "build/translate-port.json"  # the port's functions, from its last good link
 # corpus functions to a file's address range (about a quarter of them translated): ~195 files
 PER_FILE = 450
+# how many 8-byte argument slots a variadic port's adapter passes on, fixed ones included (the widest
+# translated call, to SStrPrintf, passes under 20)
+VA_SLOTS = 24
 
 PRIMITIVE = {
     "void", "undefined", "undefined1", "undefined2", "undefined3", "undefined4", "undefined5", "undefined6",
@@ -640,7 +644,12 @@ def register_upper_halves(text: str) -> str:
             for u in decl:
                 line_start = text.rfind("\n", 0, u.start()) + 1
                 line_end = text.find("\n", u.end())
-                text = text[:line_start] + " " * (line_end - line_start) + text[line_end:]
+                # (as a comment of the same length, so the offsets of the later uses hold: a line
+                # of spaces read as Ghidra's blank line after the declarations, and stack_frame
+                # left out the ones below it, FUN_1412366b0's on-stack TSList split into three
+                # C locals that NetEventListClear walked forever, 2026-10-17)
+                n = line_end - line_start
+                text = text[:line_start] + ("/*" + " " * (n - 4) + "*/" if n >= 4 else " " * n) + text[line_end:]
             text = re.sub(rf"\b{name}\b", "0", text)
     return text
 
@@ -797,6 +806,121 @@ def virtual_this(text: str) -> str:
         out.append(text[pos:end - 1] + obj + ")")
         pos = end
     return "".join(out) + text[pos:]
+
+
+# a call through a code pointer, as the body spells one by now: `(**(code **)(x))(`,
+# `(*(code *)x)(`, `(*(code **)x)(`, `(*(*(code **)x))(`, `(*REFG(code *, x))(`
+INDIRECT_CALL = re.compile(r"\((?:\*\*\(code \*\*\)|\*\(code \*\*?\)|\*\(\*\(code \*\*\)|\*REFG\(code \*,)")
+# a top-level operator that makes an expression something other than its operands' type
+NOT_FLOAT_OP = re.compile(r"<|(?<!-)>|[!=]=|&&|\|\||\?|%|\^|(?<![&])&(?![&])|\|")
+
+
+def indirect_float_calls(body: str, params: list[str]) -> str:
+    """A call through a code pointer that passes or returns a float gets a prototype.
+
+    `code` is unprototyped and returns rax, so a float argument went promoted to double and the
+    callee - a port virtual, or a translated one behind its gen_entry wrapper, both of the
+    reference's ABI - read the low half of the double from xmm; and a float result was read
+    from rax. The tooltip sized itself from line widths read out of rax and set its width and
+    height with doubles where floats were read (w 0, h 2.0 or -3.7e19: a screen-tall, collapsed
+    tooltip, 2026-10-17). The prototype names a parameter's type up to the last floating
+    point argument (`unsigned long long` for the rest of those) and leaves the remainder to `...`,
+    which passes them as the unprototyped call did."""
+    kinds = {}
+    # (with an initializer too: a float parameter narrowed from its promoted double)
+    for m in re.finditer(r"^\s*(float|double)\s+(\w+)(?:\[[^\]]*\])?\s*(?:=[^;\n]*)?;", body, re.M):
+        kinds[m.group(2)] = m.group(1)
+    for p in params:
+        w = p.split()
+        if len(w) == 2 and w[0] in ("float", "double", "float4", "float8") and re.fullmatch(r"\w+", w[1]):
+            kinds[w[1]] = "double" if w[0] in ("double", "float8") else "float"
+    floats = [n for n, k in kinds.items() if k == "float"]
+    doubles = [n for n, k in kinds.items() if k == "double"]
+
+    def alt(names):
+        return r"\b(?:" + "|".join(sorted(names, key=len, reverse=True)) + r")\b" if names else r"(?!)"
+
+    float_rx = re.compile(alt(floats) + r"|\*\s*\(float\s*\*\)|REFG\(float\b|CALLF\(float\b|\(float\)|GEN_AS_FLOAT\(|"
+                          r"\b\d+\.\d*(?:e[+-]?\d+)?\b|\b\d+e[+-]?\d+\b")
+    double_rx = re.compile(alt(doubles) + r"|\*\s*\(double\s*\*\)|REFG\(double\b|CALLF\(double\b|\(double\)|GEN_AS_DOUBLE\(")
+
+    def top_level(expr: str) -> str:
+        """The expression with everything inside parentheses blanked out."""
+        out, depth = [], 0
+        for ch in expr:
+            if ch == "(":
+                depth += 1
+                out.append(ch if depth == 1 else " ")
+            elif ch == ")":
+                depth -= 1
+                out.append(ch if depth == 0 else " ")
+            else:
+                out.append(ch if depth == 0 else " ")
+        return "".join(out)
+
+    def kind(expr: str) -> str | None:
+        e = expr.strip()
+        while e.startswith("(") and matching_paren(e, 1) == len(e):
+            e = e[1:-1].strip()
+        # (Ghidra's byte slices, `SUB84(dVar1,0)`, are bits, not a value of the operand's type)
+        if not e or e.startswith(("&", "\"", "SUB", "CONCAT", "ZEXT", "SEXT")):
+            return None
+        # a cast to a non-floating type decides it
+        cast = re.match(r"\(\s*([A-Za-z_][\w ]*?)\s*(\**)\s*\)", e)
+        if cast and matching_paren(e, 1) == cast.end() and (cast.group(2) or cast.group(1) not in ("float", "double")):
+            return None
+        if NOT_FLOAT_OP.search(top_level(e)):
+            return None
+        if double_rx.search(e):
+            return "double"
+        if float_rx.search(e):
+            return "float"
+        return None
+
+    out = body
+    for m in reversed(list(INDIRECT_CALL.finditer(body))):
+        start = m.start()
+        callee_end = matching_paren(out, start + 1)
+        j = callee_end
+        # (Ghidra breaks a long call between the callee and its arguments: the tooltip's
+        # SetWidth went on passing a double, 2026-10-17)
+        while j < len(out) and out[j] in " \t\r\n":
+            j += 1
+        if j >= len(out) or out[j] != "(":
+            continue
+        args_end = matching_paren(out, j + 1)
+        args = split_args(out[j + 1:args_end - 1])
+        arg_kinds = [kind(a) for a in args]
+        # the result: what the call is assigned to, as the statement opens
+        line_start = max(out.rfind(c, 0, start) for c in ";{}\n") + 1
+        prefix = out[line_start:start]
+        ret = "unsigned long long"
+        pm = re.fullmatch(r"\s*(\w+)\s*=\s*", prefix)
+        if pm and pm.group(1) in kinds:
+            ret = kinds[pm.group(1)]
+        else:
+            pm = re.fullmatch(r"\s*\*\s*\((float|double)\s*\*\).*=\s*", prefix)
+            if pm and "==" not in prefix:
+                ret = pm.group(1)
+        last = max((k for k, t in enumerate(arg_kinds) if t), default=-1)
+        if last < 0 and ret == "unsigned long long":
+            continue
+        types, new_args = [], []
+        for k, a in enumerate(args):
+            if k <= last:
+                t = arg_kinds[k] or "unsigned long long"
+                types.append(t)
+                new_args.append(f"({t})({a})")
+            else:
+                new_args.append(a)
+        if last < 0:
+            proto = ""
+        else:
+            proto = ", ".join(types) + (", ..." if len(args) > last + 1 else "")
+        callee = out[start:callee_end]
+        call = f"(({ret} (*)({proto})){callee})({','.join(new_args)})"
+        out = out[:start] + call + out[args_end:]
+    return out
 
 
 def split_args(args: str) -> list[str]:
@@ -2288,6 +2412,13 @@ class Translator:
         self.cor = load_corpus()
         jf = ROOT / "build/facts/junk.json"
         self.junk_functions = ({int(k, 16) for k in json.loads(jf.read_text())["functions"]} if jf.exists() else set())
+        # the second anti-tamper layer (tools/aegis.py): its runtime, stubbed as protection, and
+        # the guards it inlines into game functions, stripped from their bodies
+        layer = aegis.load(self.cor)
+        self.protection = {int(a, 16) for a in layer["protection"]}
+        self.protection_hex = set(layer["protection"])
+        self.guarded = {int(a, 16) for a in layer["guarded"]}
+        self.guard_failed: dict[int, str] = {}
         self.by_name: dict[str, list[int]] = defaultdict(list)
         for a, e in self.cor.items():
             self.by_name[e["name"]].append(a)
@@ -2532,7 +2663,12 @@ class Translator:
         for var in re.findall(r"\bswitch\((\w+)\)", text):
             if re.search(rf"^\s*[\w ]+\*+\s*{var};$", text, re.M):
                 text = text.replace(f"switch({var})", f"switch((longlong){var})")
-        text = call_results(dead_lost_stores(rdtsc_upper(decompiler_temps(wide_vectors(va_args(wide_multiply(strip_retcheck(text)[0])), a)))))
+        text = strip_retcheck(text)[0]
+        if a in self.guarded:
+            text, status = aegis.strip_guards(text, self.protection_hex)
+            if status.startswith("kept"):
+                self.guard_failed[a] = status[len("kept: "):]
+        text = call_results(dead_lost_stores(rdtsc_upper(decompiler_temps(wide_vectors(va_args(wide_multiply(text)), a)))))
         # a function-local static's guard: MSVC's per-thread epoch (TLS slot 0x2140) compared with
         # the guard, then _Init_thread_header / _footer. All three are the port's own runtime's,
         # so the protocol stays one runtime's.
@@ -3167,7 +3303,7 @@ class Translator:
                     changed = True
             if changed:
                 body = body[:start] + ",".join(args) + body[i - 1:]
-        return body
+        return indirect_float_calls(body, params)
 
     def decl(self, a: int) -> tuple[str, list[str] | None]:
         """(return type, parameters) as C can declare them; parameters None when Ghidra's use a
@@ -3247,9 +3383,15 @@ class Translator:
     def why_not(self, a: int, root: bool, demotion: bool = True) -> str | None:
         if demotion and f"{a:x}" in self.demoted:
             return "did not compile: " + self.demoted[f"{a:x}"]
+        if a in self.protection:
+            # (the report leaves out reasons starting "anti-tamper": protection, not code to port)
+            return "anti-tamper runtime (tools/aegis.py): protection, not ported"
         text = self.body(a)
         if text is None:
             return "not in the corpus"
+        if a in self.guard_failed:
+            # (a game function: listed with the defects, unlike the runtime above)
+            return f"an inlined anti-tamper guard tools/aegis.py could not strip: {self.guard_failed[a]}"
         if a in self.v16_failed:
             return f"16-byte values: {self.v16_failed[a]}"
         # (the code only, not what its strings say: `"in_token"` is no register)
@@ -3783,17 +3925,43 @@ class Translator:
         # an adapter takes the port function's own arguments (the callers are unprototyped, so a
         # float arrives promoted to double) and passes them on with the port's ABI
         promoted = {"int": "unsigned long long", "float": "double", "double": "double"}
+        void_for_value = []
         for a in sorted(plan["adapt"]):
             va, mangled, (ret, args, this) = self.port_target(a)
             gret = self.decl(a)[0]
+            # (a typed result only: Ghidra's `undefinedN` return is mostly whatever rax held)
+            # an MSVC constructor (`??0`) returns `this` in rax, though the PDB types it void, and
+            # the reference's callers use it: `new (pool) CSimpleFontString(...)` is the line
+            # GameTooltip:AddLine names next. Returning 0 there made every new tooltip line null
+            # (SetName faulted on it, the tooltip stayed empty and unsized), 2026-10-17
+            ctor = this and mangled.startswith("??0")
+            if ret == "void" and not ctor and gret.strip() != "void" and not gret.strip().startswith("undefined"):
+                # the reference returns something the port does not, and the adapter returns 0 in
+                # its place (string_format, FUN_140236510, returns its string: a caller read `*0`,
+                # 2026-10-17): the port's signature is the one to fix
+                void_for_value.append(f"{a:x} {gret.strip()} <- {mangled}")
             classes = (["int"] if this else []) + list(args)
             alias = f"gen_alias_{a:x}"
             params = [f"{promoted[c]} a{i}" for i, c in enumerate(classes)]
             pass_args = [f"({abi[c]})a{i}" for i, c in enumerate(classes)]
+            if mangled.endswith("ZZ"):
+                # a variadic port (`...` mangles as a trailing ZZ): the variadic arguments go on as
+                # 8-byte integer slots up to VA_SLOTS in all. In Win64 a variadic callee reads them
+                # from the home area and the stack, where an integer and a double (which a call
+                # through no prototype also passes in the integer register) are the same 8 bytes;
+                # a caller that passed fewer leaves its own frame there, which the format never
+                # reads. Passing the fixed ones alone dropped every value of every SStrPrintf and
+                # string_format from translated code (17 ports, 2026-10-17)
+                tail = [f"unsigned long long v{i}" for i in range(VA_SLOTS - len(classes))]
+                params += tail
+                pass_args += [f"v{i}" for i in range(len(tail))]
+                classes = classes + ["int"] * len(tail)
             fptr = f"{abi[ret]} (*)({', '.join(abi[c] for c in classes) or 'void'})"
             call = f"(({fptr})&{alias})({', '.join(pass_args)})"
             proto = f"{gret} FUN_{a:x}({', '.join(params) or 'void'})"
-            if ret == "void":
+            if ctor and gret.strip() != "void":
+                inner = f"    {call};\n    return ({gret})a0;"
+            elif ret == "void":
                 inner = f"    {call};\n    return 0;"
             elif ret == "int" and ("float" in gret or "double" in gret):
                 inner = f"    return ({gret})(long long){call};"
@@ -3802,6 +3970,11 @@ class Translator:
             adapters += [f"#pragma comment(linker, \"/alternatename:{alias}={mangled}\")",
                          f"extern char {alias};", f"{proto} {{", inner, "}", ""]
         write_out(GEN / "adapters.c", "\n".join(adapters), encoding="utf-8", newline="\n")
+        if void_for_value:
+            print(f"ports returning void where the reference returns a value ({len(void_for_value)}; the "
+                  "adapter returns 0, fix the port's signature):", file=sys.stderr)
+            for line in void_for_value:
+                print(f"  {line}", file=sys.stderr)
 
         # stubs
         stubs = ["/* GENERATED by tools/translate.py; do not edit by hand. */", "#include \"gen/translated.h\"",

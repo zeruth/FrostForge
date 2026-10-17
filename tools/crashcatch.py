@@ -19,7 +19,9 @@ SYMBOLIZER = r"C:\Program Files\LLVM\bin\llvm-symbolizer.exe"
 
 DEBUG_ONLY_THIS_PROCESS = 0x2
 EXCEPTION_DEBUG_EVENT = 1
+CREATE_THREAD_DEBUG_EVENT = 2
 CREATE_PROCESS_DEBUG_EVENT = 3
+EXIT_THREAD_DEBUG_EVENT = 4
 EXIT_PROCESS_DEBUG_EVENT = 5
 LOAD_DLL_DEBUG_EVENT = 6
 DBG_CONTINUE = 0x00010002
@@ -53,8 +55,13 @@ class LOAD_DLL_DEBUG_INFO(ctypes.Structure):
                 ("nDebugInfoSize", wt.DWORD), ("lpImageName", ctypes.c_void_p), ("fUnicode", wt.WORD)]
 
 
+class CREATE_THREAD_DEBUG_INFO(ctypes.Structure):
+    _fields_ = [("hThread", wt.HANDLE), ("lpThreadLocalBase", ctypes.c_void_p), ("lpStartAddress", ctypes.c_void_p)]
+
+
 class DEBUG_EVENT_UNION(ctypes.Union):
     _fields_ = [("Exception", EXCEPTION_DEBUG_INFO), ("CreateProcessInfo", CREATE_PROCESS_DEBUG_INFO),
+                ("CreateThread", CREATE_THREAD_DEBUG_INFO),
                 ("LoadDll", LOAD_DLL_DEBUG_INFO), ("raw", ctypes.c_byte * 160)]
 
 
@@ -154,6 +161,8 @@ def main():
     ap.add_argument("--second-chance", action="store_true",
                     help="report only an exception nothing handled (guarded faults pass through)")
     ap.add_argument("--args", default="", help="the command line after the exe, as one string")
+    ap.add_argument("--all-threads", action="store_true",
+                    help="at a timeout, also show every thread once, with its registers")
     args = ap.parse_args()
     exe = os.path.abspath(args.exe)
     si = STARTUPINFO()
@@ -188,6 +197,12 @@ def main():
         code = event.dwDebugEventCode
         if code == CREATE_PROCESS_DEBUG_EVENT:
             base = event.u.CreateProcessInfo.lpBaseOfImage
+        elif code == CREATE_THREAD_DEBUG_EVENT:
+            # (every thread, for a timeout's samples: a hang is often one thread waiting on a
+            # lock another holds)
+            threads[event.dwThreadId] = event.u.CreateThread.hThread
+        elif code == EXIT_THREAD_DEBUG_EVENT:
+            threads.pop(event.dwThreadId, None)
         elif code == EXIT_PROCESS_DEBUG_EVENT:
             print("process exited, code", hex(ctypes.cast(ctypes.byref(event.u), ctypes.POINTER(wt.DWORD))[0]))
             return 0
@@ -244,6 +259,32 @@ def main():
         dump_stack(pi.hProcess, exe, base, context, 25)
         k32.ResumeThread(pi.hThread)
         time.sleep(0.3)
+    if args.all_threads:
+        # the loaded modules, so a rip outside the exe names its DLL and offset
+        psapi = ctypes.WinDLL("psapi", use_last_error=True)
+        mods = (ctypes.c_void_p * 1024)()
+        need = wt.DWORD()
+        psapi.EnumProcessModulesEx(pi.hProcess, mods, ctypes.sizeof(mods), ctypes.byref(need), 3)
+        spans = []
+        for m in mods[:need.value // ctypes.sizeof(ctypes.c_void_p)]:
+            name = ctypes.create_unicode_buffer(260)
+            psapi.GetModuleBaseNameW(pi.hProcess, ctypes.c_void_p(m), name, 260)
+            spans.append((m or 0, name.value))
+        spans.sort()
+
+        def where(va):
+            owner = [s for s in spans if s[0] <= va]
+            return "%s+%x" % (owner[-1][1], va - owner[-1][0]) if owner else "?"
+        # every thread once, with its argument registers (a lock wait holds the lock in rcx)
+        for tid, handle in sorted(threads.items()):
+            k32.SuspendThread(handle)
+            context = CONTEXT()
+            context.ContextFlags = CONTEXT_FULL
+            if k32.GetThreadContext(handle, ctypes.byref(context)):
+                print("thread %d  rip %s  rcx %016x rdx %016x rbx %016x rsi %016x rdi %016x" % (
+                    tid, where(context.Rip), context.Rcx, context.Rdx, context.Rbx, context.Rsi, context.Rdi))
+                dump_stack(pi.hProcess, exe, base, context, 14)
+            k32.ResumeThread(handle)
     k32.TerminateProcess(pi.hProcess, 1)
     return 0
 

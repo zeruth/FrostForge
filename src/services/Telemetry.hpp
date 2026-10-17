@@ -15,11 +15,11 @@ void TelemetryInitialize(blz::function_storage* ids, blz::function_storage* clie
 // Stops the telemetry service if it was started. Offline it never was.
 void TelemetryShutdown();
 
-// WoW/Source/WowServices/WowDownload.cpp: the background downloader (CDN). Offline stub:
-// *holder is left null.
+// WoW/Source/WowServices/WowDownload.cpp: the background downloader (CDN), run as translated
+// (Telemetry.cpp forwards to the reference functions).
 void** WowDownloadCreate(void** holder);
 void WowDownloadStart(void** holder);
-// Deletes the downloader the holder points at (nothing, offline).
+// Deletes the downloader the holder points at.
 void WowDownloadDestroy(void** holder);
 
 #endif

@@ -603,7 +603,7 @@ longlong FUN_1415fe9c0(uint *param_1, ulonglong param_2)
   undefined4 uVar9;
   undefined8 uVar10;
   longlong lVar11;
-                          
+/*                      */
   uint uVar12;
   uint uVar13;
   uint uVar14;
@@ -2261,7 +2261,7 @@ LAB_14162afff:
     }
   }
   else {
-    cVar2 = (*(code *)*param_4)(param_1,param_4[1],0.0,fVar8);
+    cVar2 = ((unsigned long long (*)(unsigned long long, unsigned long long, float, float))(*(code *)*param_4))((unsigned long long)(param_1),(unsigned long long)(param_4[1]),(float)(0.0),(float)(fVar8));
     if (cVar2 == '\0') {
 LAB_14162b0c6:
       *(undefined1 *)(param_4 + 2) = 1;

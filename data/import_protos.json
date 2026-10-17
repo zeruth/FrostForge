@@ -1,0 +1,9285 @@
+{
+ "protos": {
+  "AcquireSRWLockExclusive": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "AcquireSRWLockShared": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ActivateActCtx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "AdjustWindowRectEx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "AllocateLocallyUniqueId": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "AssignProcessToJobObject": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "AttachThreadInput": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "BCryptGenRandom": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "BeginPaint": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "BitBlt": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CLSIDFromString": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CM_Get_Device_IDA": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CM_Get_Parent": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CM_Locate_DevNodeA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CallNextHookEx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CallWindowProcW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CancelIo": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CancelIoEx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CertAddCRLContextToStore": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CertCloseStore": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CertCreateCertificateChainEngine": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CertCreateCertificateContext": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CertEnumCertificatesInStore": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CertFindCertificateInStore": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CertFindExtension": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CertFreeCRLContext": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CertFreeCertificateChain": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CertFreeCertificateChainEngine": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CertGetCertificateChain": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CertGetCertificateContextProperty": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CertGetIssuerCertificateFromStore": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CertGetNameStringA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CertGetNameStringW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CertNameToStrA": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CertOpenStore": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CertVerifyCertificateChainPolicy": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CertVerifyTimeValidity": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ChangeDisplaySettingsExW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CharLowerBuffA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CharNextW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ClientToScreen": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ClipCursor": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CloseClipboard": {
+   "params": []
+  },
+  "CloseHandle": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CoCreateInstance": {
+   "params": [
+    [
+     "i",
+     16
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     16
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CoInitialize": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CoInitializeEx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CoInitializeSecurity": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CoSetProxyBlanket": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CoTaskMemAlloc": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CoTaskMemFree": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CoUninitialize": {
+   "params": []
+  },
+  "CombineRgn": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CommandLineToArgvW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CompareStringA": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CompareStringW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "ConvertStringSecurityDescriptorToSecurityDescriptorW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ConvertThreadToFiber": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ConvertThreadToFiberEx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CopyFileW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CopyImage": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CreateActCtxW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateBitmap": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateCompatibleBitmap": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CreateCompatibleDC": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateDCW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateDIBSection": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CreateDialogParamW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateDirectoryA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateDirectoryW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateEventA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateEventW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateFiber": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateFiberEx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateFileA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateFileMappingA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateFileMappingW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateFileW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateFontIndirectW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateIconFromResource": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CreateIconIndirect": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateIoCompletionPort": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CreateJobObjectW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateMutexA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateMutexW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreatePipe": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CreateProcessW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateRectRgn": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CreateSemaphoreA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateSemaphoreExW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CreateSemaphoreW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateSolidBrush": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CreateThread": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateToolhelp32Snapshot": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CreateWaitableTimerA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateWindowExA": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CreateWindowExW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CryptAcquireContextW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CryptCreateHash": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CryptDecodeObjectEx": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CryptDestroyHash": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CryptDestroyKey": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CryptEncrypt": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CryptGenRandom": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CryptGetHashParam": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CryptHashData": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CryptImportKey": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CryptMemFree": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CryptQueryObject": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CryptReleaseContext": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "CryptStringToBinaryA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CryptStringToBinaryW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "CryptUnprotectData": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DeactivateActCtx": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DefWindowProcW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DeleteCriticalSection": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DeleteDC": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DeleteFiber": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DeleteFileA": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DeleteFileW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DeleteObject": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DestroyCursor": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DestroyWindow": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DeviceIoControl": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DialogBoxIndirectParamW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DialogBoxParamW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DispatchMessageW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DragAcceptFiles": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "DragFinish": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "DragQueryFileW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "DrawTextW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "DuplicateHandle": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "DwmGetCompositionTimingInfo": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "EmptyClipboard": {
+   "params": []
+  },
+  "EnableWindow": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "EndDialog": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "EndPaint": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "EnterCriticalSection": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "EnumDisplayDevicesA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "EnumDisplayDevicesW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "EnumDisplayMonitors": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "EnumDisplaySettingsA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "EnumDisplaySettingsW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "EnumSystemLocalesW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "EnumThreadWindows": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "EventRegister": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "EventUnregister": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "EventWriteTransfer": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ExitProcess": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "ExitThread": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "ExtractIconExW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "FileTimeToSystemTime": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "FillRect": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "FindClose": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "FindExecutableA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "FindFirstFileExW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "FindFirstFileW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "FindNextFileW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "FlashWindowEx": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "FlushFileBuffers": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "FlushInstructionCache": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "FlushProcessWriteBuffers": {
+   "params": []
+  },
+  "FlushViewOfFile": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "FormatMessageA": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "FormatMessageW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "FreeAddrInfoW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "FreeEnvironmentStringsW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "FreeLibrary": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "FreeLibraryAndExitThread": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetACP": {
+   "params": []
+  },
+  "GetActiveWindow": {
+   "params": []
+  },
+  "GetAdaptersInfo": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetAsyncKeyState": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetCPInfo": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetClassInfoExW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetClientRect": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetClipCursor": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetClipboardData": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetClipboardSequenceNumber": {
+   "params": []
+  },
+  "GetCommandLineA": {
+   "params": []
+  },
+  "GetCommandLineW": {
+   "params": []
+  },
+  "GetComputerNameW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetConsoleMode": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetConsoleOutputCP": {
+   "params": []
+  },
+  "GetCurrentDirectoryW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetCurrentProcess": {
+   "params": []
+  },
+  "GetCurrentProcessId": {
+   "params": []
+  },
+  "GetCurrentProcessorNumberEx": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetCurrentThread": {
+   "params": []
+  },
+  "GetCurrentThreadId": {
+   "params": []
+  },
+  "GetCursorPos": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetDC": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetDIBits": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetDateFormatW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetDesktopWindow": {
+   "params": []
+  },
+  "GetDeviceCaps": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetDeviceGammaRamp": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetDiskFreeSpaceExW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetDlgItem": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetDriveTypeW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetEnvironmentStringsW": {
+   "params": []
+  },
+  "GetEnvironmentVariableA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetEnvironmentVariableW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetFileAttributesExW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetFileAttributesW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetFileInformationByHandle": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetFileSize": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetFileSizeEx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetFileType": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetFileVersionInfoA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetFileVersionInfoSizeA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetFinalPathNameByHandleW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetFocus": {
+   "params": []
+  },
+  "GetForegroundWindow": {
+   "params": []
+  },
+  "GetFullPathNameW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetICMProfileW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetKeyState": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetKeyboardLayout": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetKeyboardState": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetLastError": {
+   "params": []
+  },
+  "GetLocalTime": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetLocaleInfoA": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetLocaleInfoW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetLogicalProcessorInformationEx": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetMenu": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetMessageExtraInfo": {
+   "params": []
+  },
+  "GetMessageW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetModuleFileNameA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetModuleFileNameW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetModuleHandleA": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetModuleHandleExW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetModuleHandleW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetMonitorInfoA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetMonitorInfoW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetNativeSystemInfo": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetOEMCP": {
+   "params": []
+  },
+  "GetOverlappedResult": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetParent": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetPriorityClass": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetProcAddress": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetProcessAffinityMask": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetProcessHeap": {
+   "params": []
+  },
+  "GetProcessId": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetProcessTimes": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetPropW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetQueuedCompletionStatusEx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetRawInputData": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetRawInputDeviceInfoA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetRawInputDeviceList": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetStartupInfoW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetStdHandle": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetStringTypeW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetSysColor": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetSystemDefaultLangID": {
+   "params": []
+  },
+  "GetSystemDirectoryA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetSystemDirectoryW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetSystemInfo": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetSystemMetrics": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetSystemPowerStatus": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetSystemTimeAsFileTime": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetTempPathA": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetTextExtentPoint32A": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetTextMetricsW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetThreadContext": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetThreadId": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetThreadPriority": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetTickCount": {
+   "params": []
+  },
+  "GetTickCount64": {
+   "params": []
+  },
+  "GetTimeFormatW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetTimeZoneInformation": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetUpdateRect": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetUserDefaultLCID": {
+   "params": []
+  },
+  "GetUserDefaultLangID": {
+   "params": []
+  },
+  "GetUserDefaultLocaleName": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetUserDefaultUILanguage": {
+   "params": []
+  },
+  "GetUserNameW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetVersionExA": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetVersionExW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetVolumeInformationW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetVolumePathNameW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetWindow": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetWindowLongA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetWindowLongPtrW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetWindowLongW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetWindowPlacement": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetWindowRect": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetWindowTextLengthW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GetWindowTextW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "GetWindowThreadProcessId": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GlobalAlloc": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GlobalFree": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GlobalLock": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GlobalMemoryStatusEx": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "GlobalUnWire": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "HeapAlloc": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "HeapCreate": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "HeapFree": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "HeapReAlloc": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "HeapSize": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ImmAssociateContext": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ImmAssociateContextEx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "ImmGetCandidateListW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "ImmGetCompositionStringW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "ImmGetContext": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ImmGetConversionStatus": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ImmGetIMEFileNameA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "ImmGetIMEFileNameW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "ImmNotifyIME": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "ImmReleaseContext": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ImmSetCandidateWindow": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ImmSetCompositionStringW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "ImmSetCompositionWindow": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ImmSetConversionStatus": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "InflateRect": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "InitCommonControlsEx": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "InitOnceBeginInitialize": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "InitOnceComplete": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "InitializeConditionVariable": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "InitializeCriticalSection": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "InitializeCriticalSectionAndSpinCount": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "InitializeCriticalSectionEx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "InitializeSListHead": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "IntersectRect": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "InvalidateRect": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "IsClipboardFormatAvailable": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "IsDebuggerPresent": {
+   "params": []
+  },
+  "IsDialogMessageW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "IsIconic": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "IsRectEmpty": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "IsValidCodePage": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "IsValidLanguageGroup": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "IsValidLocale": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "IsWindow": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "IsWindowVisible": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "IsZoomed": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "K32GetProcessMemoryInfo": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "KillTimer": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "LCMapStringW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "LeaveCriticalSection": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "LoadCursorA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "LoadCursorW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "LoadIconW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "LoadImageA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "LoadImageW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "LoadLibraryA": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "LoadLibraryExW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "LoadLibraryW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "LoadStringA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "LoadStringW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "LocalAlloc": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "LocalFree": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "MapViewOfFile": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "MapVirtualKeyA": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "MapVirtualKeyW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "MessageBoxW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "Module32First": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "Module32Next": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "MonitorFromPoint": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "MonitorFromRect": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "MonitorFromWindow": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "MoveFileExW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "MoveFileW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "MoveWindow": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "MulDiv": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "MultiByteToWideChar": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "OpenClipboard": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "OpenFile": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "OpenFileMappingW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "OpenMutexW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "OpenProcess": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "OpenThread": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "OutputDebugStringA": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "OutputDebugStringW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "PFXImportCertStore": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "PeekMessageW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "PeekNamedPipe": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "PostMessageA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "PostMessageW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "PostQueuedCompletionStatus": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "PostQuitMessage": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "PostThreadMessageW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "Process32FirstW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "Process32NextW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "PropVariantClear": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "PtInRect": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "QueryFullProcessImageNameW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "QueryPerformanceCounter": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "QueryPerformanceFrequency": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RaiseException": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ReadConsoleW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ReadFile": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ReadFileEx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegCloseKey": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegCreateKeyExA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegCreateKeyExW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegDeleteKeyExA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "RegDeleteValueA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegEnumKeyA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "RegEnumKeyExA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegEnumValueA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegFlushKey": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegGetValueW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegOpenKeyA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegOpenKeyExA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegOpenKeyExW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegQueryInfoKeyA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegQueryValueExA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegQueryValueExW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegSetValueExA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "RegSetValueExW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "RegisterClassExA": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegisterClassExW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegisterClassW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegisterClipboardFormatA": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegisterClipboardFormatW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RegisterDeviceNotificationW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "RegisterPowerSettingNotification": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "RegisterRawInputDevices": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "ReleaseCapture": {
+   "params": []
+  },
+  "ReleaseDC": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ReleaseMutex": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ReleaseSRWLockExclusive": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ReleaseSRWLockShared": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ReleaseSemaphore": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RemoveDirectoryW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RemovePropW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ResetEvent": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ResumeThread": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RtlCaptureContext": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RtlCaptureStackBackTrace": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RtlLookupFunctionEntry": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RtlPcToFileHeader": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RtlUnwind": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RtlUnwindEx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "RtlVirtualUnwind": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SHGetFolderPathW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SHGetKnownFolderPath": {
+   "params": [
+    [
+     "i",
+     16
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ScreenToClient": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SelectObject": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SendInput": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SendMessageA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SendMessageW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetActiveWindow": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetCapture": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetClassLongPtrW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetClipboardData": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetConsoleCtrlHandler": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetCurrentDirectoryW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetCursor": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetCursorPos": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetDeviceGammaRamp": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetDlgItemTextW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetDllDirectoryW": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetEndOfFile": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetEnvironmentVariableW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetErrorMode": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetEvent": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetFileAttributesW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetFilePointer": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetFilePointerEx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetFocus": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetForegroundWindow": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetHandleInformation": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetInformationJobObject": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetLastError": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetLayeredWindowAttributes": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     1
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetNamedPipeHandleState": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetPriorityClass": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetProcessAffinityMask": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetPropW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetStdHandle": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetThreadAffinityMask": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetThreadContext": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetThreadExecutionState": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetThreadPriority": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetTimer": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetWaitableTimer": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetWindowLongPtrA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetWindowLongPtrW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetWindowLongW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetWindowPos": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetWindowRgn": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetWindowTextW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetWindowsHookExA": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetWindowsHookExW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetupDiDestroyDeviceInfoList": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetupDiEnumDeviceInfo": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetupDiEnumDeviceInterfaces": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetupDiGetClassDevsA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SetupDiGetDeviceInterfaceDetailA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SetupDiGetDeviceRegistryPropertyA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ShellExecuteA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "ShellExecuteW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "ShowCursor": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "ShowWindow": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "Sleep": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SleepConditionVariableSRW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SleepEx": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SuspendThread": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SwitchToFiber": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "SystemParametersInfoA": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SystemParametersInfoW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "SystemTimeToTzSpecificLocalTime": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "TerminateProcess": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "TerminateThread": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "Thread32First": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "Thread32Next": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "TlsAlloc": {
+   "params": []
+  },
+  "TlsFree": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "TlsGetValue": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "TlsSetValue": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ToUnicode": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "TrackMouseEvent": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "TranslateMessage": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "TryAcquireSRWLockExclusive": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "TryEnterCriticalSection": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "UnhookWindowsHookEx": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "UnmapViewOfFile": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "UnregisterClassA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "UnregisterClassW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "UnregisterDeviceNotification": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "UnregisterPowerSettingNotification": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ValidateRect": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "VerQueryValueA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "VerSetConditionMask": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     1
+    ]
+   ]
+  },
+  "VerifyVersionInfoW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "VirtualAlloc": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "VirtualFree": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "VirtualProtect": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "VirtualQuery": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "VkKeyScanA": {
+   "params": [
+    [
+     "i",
+     1
+    ]
+   ]
+  },
+  "WSAAddressToStringA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WSAAsyncGetHostByName": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "WSACancelAsyncRequest": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WSACleanup": {
+   "params": []
+  },
+  "WSADuplicateSocketW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WSAGetLastError": {
+   "params": []
+  },
+  "WSAIoctl": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WSASend": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WSASetLastError": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "WSASocketW": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "WSAStartup": {
+   "params": [
+    [
+     "i",
+     2
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WaitForMultipleObjectsEx": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "WaitForSingleObject": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "WaitForSingleObjectEx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "WakeAllConditionVariable": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WakeConditionVariable": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WerRegisterRuntimeExceptionModule": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WideCharToMultiByte": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WinHttpCloseHandle": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WinHttpCrackUrl": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WinHttpGetDefaultProxyConfiguration": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WinHttpGetIEProxyConfigForCurrentUser": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WinHttpGetProxyForUrl": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WinHttpOpen": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "WriteConsoleW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WriteFile": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "WriteFileEx": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "__WSAFDIsSet": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "accept": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "acmFormatSuggest": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "acmStreamConvert": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "acmStreamOpen": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "acmStreamPrepareHeader": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "acmStreamSize": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "acmStreamUnprepareHeader": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "bind": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "closesocket": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "connect": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "getaddrinfo": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "gethostname": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "getpeername": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "getsockname": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "getsockopt": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "htonl": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "htons": {
+   "params": [
+    [
+     "i",
+     2
+    ]
+   ]
+  },
+  "inet_addr": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "inet_ntoa": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "inet_ntop": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "inet_pton": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "ioctlsocket": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "listen": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "recv": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "select": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "send": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "setsockopt": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "socket": {
+   "params": [
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "timeBeginPeriod": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "timeEndPeriod": {
+   "params": [
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "timeGetTime": {
+   "params": []
+  },
+  "waveInAddBuffer": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "waveInClose": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "waveInGetDevCapsA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "waveInGetDevCapsW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "waveInGetNumDevs": {
+   "params": []
+  },
+  "waveInOpen": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "waveInPrepareHeader": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "waveInReset": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "waveInStart": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "waveInUnprepareHeader": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "waveOutClose": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "waveOutGetDevCapsA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "waveOutGetDevCapsW": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "waveOutGetNumDevs": {
+   "params": []
+  },
+  "waveOutGetPosition": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "waveOutOpen": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "waveOutPrepareHeader": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "waveOutReset": {
+   "params": [
+    [
+     "i",
+     8
+    ]
+   ]
+  },
+  "waveOutUnprepareHeader": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "waveOutWrite": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     4
+    ]
+   ]
+  },
+  "wsprintfA": {
+   "params": [
+    [
+     "i",
+     8
+    ],
+    [
+     "i",
+     8
+    ]
+   ],
+   "variadic": true
+  }
+ }
+}

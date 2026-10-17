@@ -24,10 +24,10 @@ string_header* string_assign(string_header* text, const char* source, uint64_t l
 string_header* string_append(string_header* text, const char* source, uint64_t length);
 
 // Replaces the contents with the formatted text; an empty string for a bad format.
-void string_format(string_header* text, const char* format, ...);
+string_header* string_format(string_header* text, const char* format, ...);
 
 // Appends the formatted text.
-void string_append_format(string_header* text, const char* format, ...);
+string_header* string_append_format(string_header* text, const char* format, ...);
 
 // Frees a heap buffer (the strings' destructor).
 void string_free(string_header* text);

@@ -279,7 +279,7 @@ undefined1 FUN_14073d4e0(undefined4 param_1, undefined8 param_2, undefined8 para
   char cVar1;
   longlong *plVar2;
   longlong *plVar3;
-                                       
+/*                                   */
   
   plVar2 = (longlong *)CALLF(undefined8 *, FUN_140721270)();
   plVar3 = (longlong *)*plVar2;
@@ -305,7 +305,7 @@ undefined1 FUN_14074a450(undefined8 param_1, undefined4 param_2, undefined4 para
   char cVar2;
   longlong *plVar3;
   longlong *plVar4;
-                                       
+/*                                   */
   
   plVar3 = (longlong *)CALLF(undefined8 *, FUN_140721270)();
   plVar4 = (longlong *)*plVar3;

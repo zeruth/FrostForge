@@ -19756,7 +19756,7 @@ float FUN_14133d640(longlong *param_1, double param_2_promoted, undefined8 param
   if (param_4 == 1) {
                     /* WARNING: Could not recover jumptable at 0x00014133d65f. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-    fVar1 = (float)(**(code **)(*param_1 + 0x30))(param_2,fVar1);
+    fVar1 = (float)((unsigned long long (*)(float, float))(**(code **)(*param_1 + 0x30)))((float)(param_2),(float)(fVar1));
     return fVar1;
   }
   return param_2;

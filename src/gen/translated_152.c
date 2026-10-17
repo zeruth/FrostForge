@@ -2,16 +2,66 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)
 #define GEN_HITS gen_hits_152
-unsigned int gen_hits_152[1];
+unsigned int gen_hits_152[2];
+
+/* ref: FUN_141f80240 */
+uint * FUN_141f80240(longlong param_1)
+{
+  GEN_HIT(0);
+  undefined8 *puVar1;
+  longlong lVar2;
+  longlong lVar3;
+  longlong *plVar4;
+  uint *puVar5;
+  
+  puVar1 = *(undefined8 **)(*(longlong *)(param_1 + 8) + 0x90);
+  lVar2 = puVar1[2];
+  if (*(code **)(puVar1[3] + 0x70) != (code *)0x0) {
+    (**(code **)(puVar1[3] + 0x70))(param_1);
+  }
+  puVar5 = *(uint **)(param_1 + 0xf0);
+  if ((puVar5 == (uint *)0x0) || ((puVar5[2] & 1) == 0)) {
+    *(undefined8 *)(param_1 + 0x78) = 0;
+  }
+  else {
+    lVar3 = *(longlong *)(*(longlong *)(param_1 + 8) + 0x98);
+    if (*(longlong *)(param_1 + 0x78) != 0) {
+      (**(code **)(lVar3 + 0x10))(lVar3,*(longlong *)(param_1 + 0x78));
+    }
+    puVar5 = *(uint **)(param_1 + 0xf0);
+    *(undefined8 *)(param_1 + 0x78) = 0;
+    puVar5[2] = puVar5[2] & 0xfffffffe;
+  }
+  if (*(longlong **)(param_1 + 0xf0) != (longlong *)0x0) {
+    puVar5 = (uint *)*puVar1;
+    if ((*puVar5 & 0x200) == 0) {
+      plVar4 = (longlong *)**(longlong **)(param_1 + 0xf0);
+      if (plVar4 != (longlong *)0x0) {
+        lVar3 = *plVar4;
+        CALLF(double, FUN_141f7ac50)(plVar4);
+        (**(code **)(lVar3 + 0x10))(lVar3,plVar4);
+      }
+      puVar5 = *(uint **)(param_1 + 0xf0);
+      puVar5[0] = 0;
+      puVar5[1] = 0;
+    }
+    if (*(longlong *)(param_1 + 0xf0) != 0) {
+      puVar5 = (uint *)(**(code **)(lVar2 + 0x10))(lVar2,*(longlong *)(param_1 + 0xf0));
+    }
+    *(undefined8 *)(param_1 + 0xf0) = 0;
+  }
+  return puVar5;
+}
 
 /* ref: FUN_141f8f7d0 */
 undefined4 FUN_141f8f7d0(undefined8 param_1, undefined8 param_2, undefined4 param_3)
 {
-  GEN_HIT(0);
+  GEN_HIT(1);
   return param_3;
 }
 
 const unsigned long long gen_hit_addrs_152[] = {
+    0x141f80240ULL,
     0x141f8f7d0ULL,
 };
 

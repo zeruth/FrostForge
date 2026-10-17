@@ -2338,33 +2338,19 @@ undefined4 FUN_140c77fd0(undefined8 param_1, undefined8 param_2, longlong param_
 int FUN_140c786b0(undefined8 param_1, undefined8 param_2, undefined4 *param_3)
 {
   GEN_HIT(48);
+  __declspec(align(16)) unsigned char gen_frame[(0x68 + sizeof(undefined1) > 0xa8 ? 0x68 + sizeof(undefined1) : 0xa8)];
   undefined8 *puVar1;
   double dVar2;
   int iVar3;
   undefined8 uVar4;
   int iVar5;
-                                       
-                                       
-  undefined8 local_a8;
-  undefined1 local_a0;
-  undefined4 local_9c;
-  undefined8 local_98;
-  undefined8 uStack_90;
-  undefined8 local_88;
-  undefined8 uStack_80;
-  undefined8 local_78;
-  undefined8 uStack_70;
-  undefined8 local_68;
-  undefined8 uStack_60;
-  undefined1 local_58;
-  undefined8 local_50;
-  undefined8 uStack_48;
-  undefined1 local_40;
+/*                                   */
+/*                                   */
   
   iVar5 = 1;
-  local_a0 = 0;
-  local_9c = 0xffffffff;
-  local_a8 = param_2;
+  (*(undefined1 *)(gen_frame + 0x8)) = 0;
+  (*(undefined4 *)(gen_frame + 0xc)) = 0xffffffff;
+  (*(undefined8 *)(gen_frame + 0x0)) = param_2;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_2,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined4, FUN_142424d80)(param_2,
@@ -2374,7 +2360,7 @@ int FUN_140c786b0(undefined8 param_1, undefined8 param_2, undefined4 *param_3)
   else {
     uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_2,1);
     if ((int)uVar4 == 0) {
-      CALLF(undefined4, FUN_1407cbb50)(&local_a8,1,
+      CALLF(undefined4, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,
                     "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignPCTDistribution(sourceRealm, sourcePlayer [, desiredRealm, desiredWowAccount, desiredBnetAccount], isGuildFollow, isValidateOnly)"
                    );
     }
@@ -2399,7 +2385,7 @@ int FUN_140c786b0(undefined8 param_1, undefined8 param_2, undefined4 *param_3)
   else {
     uVar4 = CALLF(undefined8, FUN_1402b33f0)(param_2,iVar5);
     if ((int)uVar4 == 0) {
-      CALLF(undefined4, FUN_1407cbb50)(&local_a8,iVar5,
+      CALLF(undefined4, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),iVar5,
                     "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignPCTDistribution(sourceRealm, sourcePlayer [, desiredRealm, desiredWowAccount, desiredBnetAccount], isGuildFollow, isValidateOnly)"
                    );
     }
@@ -2409,10 +2395,10 @@ int FUN_140c786b0(undefined8 param_1, undefined8 param_2, undefined4 *param_3)
         CALLF(undefined4, FUN_142424d80)(param_2,"stack overflow");
       }
       else {
-        CALLF(longlong *, FUN_14065f7b0)(&local_98,param_2,iVar5);
+        CALLF(longlong *, FUN_14065f7b0)(&(*(undefined8 *)(gen_frame + 0x10)),param_2,iVar5);
         iVar5 = iVar5 + 1;
-        *(undefined8 *)(param_3 + 2) = local_98;
-        *(undefined8 *)(param_3 + 4) = uStack_90;
+        *(undefined8 *)(param_3 + 2) = (*(undefined8 *)(gen_frame + 0x10));
+        *(undefined8 *)(param_3 + 4) = (*(undefined8 *)(gen_frame + 0x18));
       }
     }
   }
@@ -2423,7 +2409,7 @@ int FUN_140c786b0(undefined8 param_1, undefined8 param_2, undefined4 *param_3)
   else {
     uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_2,iVar5);
     if ((int)uVar4 == 0) {
-      CALLF(undefined4, FUN_1407cbb50)(&local_a8,iVar5,
+      CALLF(undefined4, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),iVar5,
                     "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignPCTDistribution(sourceRealm, sourcePlayer [, desiredRealm, desiredWowAccount, desiredBnetAccount], isGuildFollow, isValidateOnly)"
                    );
     }
@@ -2449,7 +2435,7 @@ int FUN_140c786b0(undefined8 param_1, undefined8 param_2, undefined4 *param_3)
   else {
     uVar4 = CALLF(undefined8, FUN_1402b33f0)(param_2,iVar5);
     if ((int)uVar4 == 0) {
-      CALLF(undefined4, FUN_1407cbb50)(&local_a8,iVar5,
+      CALLF(undefined4, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),iVar5,
                     "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignPCTDistribution(sourceRealm, sourcePlayer [, desiredRealm, desiredWowAccount, desiredBnetAccount], isGuildFollow, isValidateOnly)"
                    );
     }
@@ -2459,22 +2445,22 @@ int FUN_140c786b0(undefined8 param_1, undefined8 param_2, undefined4 *param_3)
         CALLF(undefined4, FUN_142424d80)(param_2,"stack overflow");
       }
       else {
-        CALLF(longlong *, FUN_14065f7b0)(&local_88,param_2,iVar5);
+        CALLF(longlong *, FUN_14065f7b0)(&(*(undefined8 *)(gen_frame + 0x20)),param_2,iVar5);
         iVar5 = iVar5 + 1;
-        local_68 = local_88;
-        uStack_60 = uStack_80;
+        (*(undefined8 *)(gen_frame + 0x40)) = (*(undefined8 *)(gen_frame + 0x20));
+        (*(undefined8 *)(gen_frame + 0x48)) = (*(undefined8 *)(gen_frame + 0x28));
         if (*(char *)(param_3 + 0xc) == '\0') {
-          *(undefined8 *)(param_3 + 8) = local_88;
-          *(undefined8 *)(param_3 + 10) = uStack_80;
+          *(undefined8 *)(param_3 + 8) = (*(undefined8 *)(gen_frame + 0x20));
+          *(undefined8 *)(param_3 + 10) = (*(undefined8 *)(gen_frame + 0x28));
           *(undefined1 *)(param_3 + 0xc) = 1;
         }
         else {
-          local_68 = *(undefined8 *)(param_3 + 8);
-          uStack_60 = *(undefined8 *)(param_3 + 10);
-          *(undefined8 *)(param_3 + 8) = local_88;
-          *(undefined8 *)(param_3 + 10) = uStack_80;
+          (*(undefined8 *)(gen_frame + 0x40)) = *(undefined8 *)(param_3 + 8);
+          (*(undefined8 *)(gen_frame + 0x48)) = *(undefined8 *)(param_3 + 10);
+          *(undefined8 *)(param_3 + 8) = (*(undefined8 *)(gen_frame + 0x20));
+          *(undefined8 *)(param_3 + 10) = (*(undefined8 *)(gen_frame + 0x28));
         }
-        local_58 = 0;
+        (*(undefined1 *)(gen_frame + 0x50)) = 0;
       }
     }
   }
@@ -2486,7 +2472,7 @@ int FUN_140c786b0(undefined8 param_1, undefined8 param_2, undefined4 *param_3)
   else {
     uVar4 = CALLF(undefined8, FUN_1402b33f0)(param_2,iVar5);
     if ((int)uVar4 == 0) {
-      CALLF(undefined4, FUN_1407cbb50)(&local_a8,iVar5,
+      CALLF(undefined4, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),iVar5,
                     "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignPCTDistribution(sourceRealm, sourcePlayer [, desiredRealm, desiredWowAccount, desiredBnetAccount], isGuildFollow, isValidateOnly)"
                    );
     }
@@ -2496,22 +2482,22 @@ int FUN_140c786b0(undefined8 param_1, undefined8 param_2, undefined4 *param_3)
         CALLF(undefined4, FUN_142424d80)(param_2,"stack overflow");
       }
       else {
-        CALLF(longlong *, FUN_14065f7b0)(&local_78,param_2,iVar5);
+        CALLF(longlong *, FUN_14065f7b0)(&(*(undefined8 *)(gen_frame + 0x30)),param_2,iVar5);
         iVar5 = iVar5 + 1;
-        local_50 = local_78;
-        uStack_48 = uStack_70;
+        (*(undefined8 *)(gen_frame + 0x58)) = (*(undefined8 *)(gen_frame + 0x30));
+        (*(undefined8 *)(gen_frame + 0x60)) = (*(undefined8 *)(gen_frame + 0x38));
         if (*(char *)(param_3 + 0x12) == '\0') {
-          *puVar1 = local_78;
-          *(undefined8 *)(param_3 + 0x10) = uStack_70;
+          *puVar1 = (*(undefined8 *)(gen_frame + 0x30));
+          *(undefined8 *)(param_3 + 0x10) = (*(undefined8 *)(gen_frame + 0x38));
           *(undefined1 *)(param_3 + 0x12) = 1;
         }
         else {
-          local_50 = *puVar1;
-          uStack_48 = *(undefined8 *)(param_3 + 0x10);
-          *puVar1 = local_78;
-          *(undefined8 *)(param_3 + 0x10) = uStack_70;
+          (*(undefined8 *)(gen_frame + 0x58)) = *puVar1;
+          (*(undefined8 *)(gen_frame + 0x60)) = *(undefined8 *)(param_3 + 0x10);
+          *puVar1 = (*(undefined8 *)(gen_frame + 0x30));
+          *(undefined8 *)(param_3 + 0x10) = (*(undefined8 *)(gen_frame + 0x38));
         }
-        local_40 = 0;
+        (*(undefined1 *)(gen_frame + 0x68)) = 0;
       }
     }
   }
@@ -2600,13 +2586,12 @@ undefined4 FUN_140c790d0(undefined8 param_1, undefined8 param_2, longlong param_
 undefined4 FUN_140c79860(undefined8 param_1, undefined8 param_2, undefined8 *param_3)
 {
   GEN_HIT(50);
+  __declspec(align(16)) unsigned char gen_frame[(0x18 + sizeof(undefined1) > 0x38 ? 0x18 + sizeof(undefined1) : 0x38)];
   undefined8 uVar1;
   int iVar2;
   undefined8 *puVar3;
-  gen_v16 local_30;
-  undefined1 local_20;
   
-  puVar3 = (undefined8 *)CALLF(undefined8 *, FUN_14169ae20)(gen_v16_q0(local_30));
+  puVar3 = (undefined8 *)CALLF(undefined8 *, FUN_14169ae20)((void *)&(*(gen_v16 *)(gen_frame + 0x8)));
   if (*(char *)(puVar3 + 2) != '\0') {
     uVar1 = puVar3[1];
     if (*(char *)(param_3 + 2) != '\0') {
@@ -2627,7 +2612,7 @@ undefined4 FUN_140c79860(undefined8 param_1, undefined8 param_2, undefined8 *par
     *(undefined1 *)(param_3 + 2) = 0;
   }
 LAB_140c798be:
-  local_20 = 0;
+  (*(undefined1 *)(gen_frame + 0x18)) = 0;
   if (*(char *)(param_3 + 2) == '\0') {
     iVar2 = CALLF(undefined4, FUN_1402b2770)(param_2,1);
     if (iVar2 != 0) {
@@ -4289,7 +4274,7 @@ undefined4 FUN_140c8e480(undefined8 param_1)
   ((char *)(gen_frame + 0x20))[0] = '\0';
   (*(undefined1 *)(gen_frame + 0x18)) = 0;
   uVar3 = CALLF(longlong, FUN_1402b30b0)(param_1);
-  cVar1 = CALLF(undefined1, FUN_1407d0960)(param_1, ((code *)REFP(0x140c36e60)), (int)uVar3, gen_v16_q0((*(gen_v16 *)(gen_frame + 0x8))));
+  cVar1 = CALLF(undefined1, FUN_1407d0960)(param_1, ((code *)REFP(0x140c36e60)), (int)uVar3, (void *)&(*(gen_v16 *)(gen_frame + 0x8)));
   lVar7 = -1;
   if (cVar1 == '\0') {
     pcVar6 = ((char *)(gen_frame + 0x20));

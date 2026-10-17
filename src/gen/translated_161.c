@@ -11,7 +11,7 @@ undefined8 FUN_14212d540(undefined8 param_1, int param_2, int param_3)
   longlong lVar1;
   undefined8 uVar2;
   uint7 in_stack_ffffffffffffffd9 = 0;
-                                 
+/*                             */
   
   lVar1 = CALLF(undefined *, FUN_1420daf10)();
   uVar2 = (**(code **)(lVar1 + 8))
@@ -27,7 +27,7 @@ longlong FUN_14212d590(undefined8 param_1, longlong param_2)
   GEN_HIT(1);
   longlong lVar1;
   uint7 in_stack_ffffffffffffffd9 = 0;
-                                 
+/*                             */
   
   lVar1 = CALLF(undefined *, FUN_1420daf10)();
   if (param_2 != 0) {
@@ -47,7 +47,7 @@ undefined1 FUN_14212dcf0(undefined8 *param_1)
   int iVar2;
   undefined8 uVar3;
   char *pcVar4;
-                                       
+/*                                   */
   
   *param_1 = 0;
   param_1[1] = 0;
@@ -92,7 +92,7 @@ undefined8 FUN_14212e070(char *param_1)
   longlong *plVar4;
   char *pcVar5;
   uint7 in_stack_ffffffffffffffd9 = 0;
-                                 
+/*                             */
   
   lVar2 = CALLF(undefined *, FUN_1420daf10)();
   uVar3 = (**(code **)(lVar2 + 8))
@@ -574,7 +574,7 @@ undefined8 FUN_14212e910(longlong param_1, longlong *param_2, uint param_3)
   iVar10 = 0;
   if (param_3 != 0) {
     do {
-      if (((*(char *)(param_1 + 0x80) == '\x02') || (iVar5 = CALLF(undefined4, FUN_142367df0)(*param_2, ((undefined1 *)(gen_frame + 0x50))), iVar5 != 0)) && ((*(char *)(param_1 + 0x80) == '\x01' || (iVar5 = CALLF(undefined4, FUN_142367db0)(*param_2, gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0)))), iVar5 != 0)))) {
+      if (((*(char *)(param_1 + 0x80) == '\x02') || (iVar5 = CALLF(undefined4, FUN_142367df0)(*param_2, ((undefined1 *)(gen_frame + 0x50))), iVar5 != 0)) && ((*(char *)(param_1 + 0x80) == '\x01' || (iVar5 = CALLF(undefined4, FUN_142367db0)(*param_2, (void *)&(*(gen_v16 *)(gen_frame + 0x0))), iVar5 != 0)))) {
         CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",0xe4,(unsigned long long)("Improperly formatted socket address during DNS resolution: %s"),(unsigned long long)(*param_2));
       }
       else {
@@ -647,6 +647,7 @@ int FUN_14212eab0(longlong *param_1, undefined8 param_2, undefined4 param_3)
 undefined1 FUN_14212eb40(longlong param_1)
 {
   GEN_HIT(13);
+  __declspec(align(16)) unsigned char gen_frame[(0x240 + sizeof(undefined1[256]) > 0x358 ? 0x240 + sizeof(undefined1[256]) : 0x358)];
   ulonglong *puVar1;
   longlong lVar2;
   char cVar3;
@@ -661,33 +662,7 @@ undefined1 FUN_14212eb40(longlong param_1)
   undefined1 uVar12;
   uint uVar13;
   longlong lVar14;
-                                       
-  undefined8 local_358;
-  undefined8 local_350;
-  undefined8 uStack_348;
-  undefined4 local_340;
-  undefined4 local_338;
-  undefined4 local_334;
-  undefined8 local_330;
-  undefined8 local_328;
-  undefined8 uStack_320;
-  undefined8 local_318;
-  undefined8 uStack_310;
-  undefined8 local_308;
-  undefined8 uStack_300;
-  undefined8 local_2f8;
-  undefined8 uStack_2f0;
-  undefined8 local_2e8;
-  undefined8 uStack_2e0;
-  undefined8 local_2d8;
-  undefined8 uStack_2d0;
-  undefined8 local_2c8;
-  undefined8 uStack_2c0;
-  undefined8 local_2b8;
-  undefined1 local_2a8 [24];
-  undefined1 local_290 [120];
-  char local_218 [256];
-  undefined1 local_118 [256];
+/*                                   */
   longlong lVar15;
   
   if (*(code **)(param_1 + 0x90) != (code *)0x0) {
@@ -708,46 +683,46 @@ undefined1 FUN_14212eb40(longlong param_1)
   uVar5 = CALLF(undefined **, FUN_142363a50)();
   iVar4 = CALLF(undefined4, FUN_142368070)(uVar5,0,0);
   if (iVar4 != REFG(undefined4, 0x142620be0)) {
-    CALLF(undefined4, FUN_140263fa0)(local_118,0x100,iVar4);
+    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x240)),0x100,iVar4);
     plVar7 = (longlong *)(param_1 + 0x48);
     if ((*(byte *)(param_1 + 0x40) & 1) == 0) {
       plVar7 = (longlong *)*plVar7;
     }
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",0x94,(unsigned long long)("Network initialization error while performing host resolution for \'%s\'. Error (%d): %s"),(unsigned long long)(plVar7),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(local_118));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",0x94,(unsigned long long)("Network initialization error while performing host resolution for \'%s\'. Error (%d): %s"),(unsigned long long)(plVar7),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x240))));
     return 1;
   }
   cVar3 = *(char *)(param_1 + 0x80);
-  local_334 = 0;
-  local_328 = 0;
-  uStack_320 = 0;
-  local_318 = 0;
-  uStack_310 = 0;
-  local_308 = 0;
-  uStack_300 = 0;
-  local_2f8 = 0;
-  uStack_2f0 = 0;
-  local_2e8 = 0;
-  uStack_2e0 = 0;
-  local_2d8 = 0;
-  uStack_2d0 = 0;
-  local_2c8 = 0;
-  uStack_2c0 = 0;
-  local_2b8 = 0;
+  (*(undefined4 *)(gen_frame + 0x24)) = 0;
+  (*(undefined8 *)(gen_frame + 0x30)) = 0;
+  (*(undefined8 *)(gen_frame + 0x38)) = 0;
+  (*(undefined8 *)(gen_frame + 0x40)) = 0;
+  (*(undefined8 *)(gen_frame + 0x48)) = 0;
+  (*(undefined8 *)(gen_frame + 0x50)) = 0;
+  (*(undefined8 *)(gen_frame + 0x58)) = 0;
+  (*(undefined8 *)(gen_frame + 0x60)) = 0;
+  (*(undefined8 *)(gen_frame + 0x68)) = 0;
+  (*(undefined8 *)(gen_frame + 0x70)) = 0;
+  (*(undefined8 *)(gen_frame + 0x78)) = 0;
+  (*(undefined8 *)(gen_frame + 0x80)) = 0;
+  (*(undefined8 *)(gen_frame + 0x88)) = 0;
+  (*(undefined8 *)(gen_frame + 0x90)) = 0;
+  (*(undefined8 *)(gen_frame + 0x98)) = 0;
+  (*(undefined8 *)(gen_frame + 0xa0)) = 0;
   if (cVar3 != '\0') {
     if (cVar3 == '\x01') {
-      local_334 = 2;
+      (*(undefined4 *)(gen_frame + 0x24)) = 2;
     }
     else if (cVar3 == '\x02') {
-      local_334 = 3;
+      (*(undefined4 *)(gen_frame + 0x24)) = 3;
     }
   }
-  local_330 = 0;
-  local_338 = 0;
-  local_358 = CALLF(undefined **, FUN_142363a50)();
+  (*(undefined8 *)(gen_frame + 0x28)) = 0;
+  (*(undefined4 *)(gen_frame + 0x20)) = 0;
+  (*(undefined8 *)(gen_frame + 0x0)) = CALLF(undefined **, FUN_142363a50)();
   plVar7 = (longlong *)(param_1 + 0x68);
-  local_350 = 0;
-  uStack_348 = 0;
-  local_340 = 0;
+  (*(undefined8 *)(gen_frame + 0x8)) = 0;
+  (*(undefined8 *)(gen_frame + 0x10)) = 0;
+  (*(undefined4 *)(gen_frame + 0x18)) = 0;
   if ((*(byte *)(param_1 + 0x60) & 1) == 0) {
     plVar7 = (longlong *)*plVar7;
   }
@@ -756,12 +731,12 @@ undefined1 FUN_14212eb40(longlong param_1)
   if ((*(byte *)(param_1 + 0x40) & 1) == 0) {
     plVar8 = (longlong *)*plVar11;
   }
-  iVar4 = CALLF(undefined4, FUN_142367e30)(plVar8,plVar7,&local_338,&local_358);
+  iVar4 = CALLF(undefined4, FUN_142367e30)(plVar8,plVar7,&(*(undefined4 *)(gen_frame + 0x20)),&(*(undefined8 *)(gen_frame + 0x0)));
   if (iVar4 == REFG(undefined4, 0x142620be0)) {
-    memset(local_218,0,0x100);
-    cVar3 = CALLF(undefined1, FUN_142367c80)(&local_358,local_2a8);
+    memset(((char *)(gen_frame + 0x140)),0,0x100);
+    cVar3 = CALLF(undefined1, FUN_142367c80)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined1 *)(gen_frame + 0xb0)));
     while (cVar3 != '\0') {
-      uVar6 = CALLF(longlong, FUN_142368150)(local_218,0x100,local_290);
+      uVar6 = CALLF(longlong, FUN_142368150)(((char *)(gen_frame + 0x140)),0x100,((undefined1 *)(gen_frame + 0xc8)));
       if (uVar6 < 0x100) {
         puVar1 = *(ulonglong **)(param_1 + 0x88);
         uVar10 = *(uint *)((longlong)puVar1 + 0x14);
@@ -786,8 +761,8 @@ undefined1 FUN_14212eb40(longlong param_1)
             lVar14 = lVar15 + 1;
             lVar2 = lVar15 + 1;
             lVar15 = lVar14;
-          } while (local_218[lVar2] != '\0');
-          CALLF(ulonglong, FUN_142365500)(puVar9,0,local_218,(int)lVar14);
+          } while (((char *)(gen_frame + 0x140))[lVar2] != '\0');
+          CALLF(ulonglong, FUN_142365500)(puVar9,0,((char *)(gen_frame + 0x140)),(int)lVar14);
         }
         *(int *)(puVar1 + 2) = (int)puVar1[2] + 1;
       }
@@ -798,21 +773,21 @@ undefined1 FUN_14212eb40(longlong param_1)
         }
         CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",0xba,(unsigned long long)("Address too long while performing host resolution for \'%s\'"),(unsigned long long)(plVar7));
       }
-      cVar3 = CALLF(undefined1, FUN_142367c80)(&local_358,local_2a8);
+      cVar3 = CALLF(undefined1, FUN_142367c80)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined1 *)(gen_frame + 0xb0)));
     }
     *(undefined1 *)(param_1 + 0xa0) = 3;
     CALLF(undefined8, FUN_1420dbc70)(param_1,*(int *)(*(longlong *)(param_1 + 0x88) + 0x10) == 0);
     uVar12 = 0;
   }
   else {
-    CALLF(undefined4, FUN_140263fa0)(local_118,0x100,iVar4);
+    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x240)),0x100,iVar4);
     if ((*(byte *)(param_1 + 0x40) & 1) == 0) {
       plVar11 = (longlong *)*plVar11;
     }
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",0xae,(unsigned long long)("Error while performing host resolution for \'%s\'. Error (%d): %s"),(unsigned long long)(plVar11),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(local_118));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",0xae,(unsigned long long)("Error while performing host resolution for \'%s\'. Error (%d): %s"),(unsigned long long)(plVar11),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x240))));
     uVar12 = 1;
   }
-  CALLF(undefined8, FUN_142367c50)(&local_358);
+  CALLF(undefined8, FUN_142367c50)(&(*(undefined8 *)(gen_frame + 0x0)));
   uVar5 = CALLF(undefined **, FUN_142363a50)();
   CALLF(undefined4, FUN_142368100)(uVar5,0,0);
   return uVar12;
@@ -822,6 +797,7 @@ undefined1 FUN_14212eb40(longlong param_1)
 undefined8 FUN_14212ef20(longlong param_1, undefined8 param_2, char *param_3, char *param_4, undefined1 param_5, undefined8 param_6, undefined8 param_7)
 {
   GEN_HIT(14);
+  __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(char *) > 0x58 ? 0x10 + sizeof(char *) : 0x58)];
   longlong *plVar1;
   char cVar2;
   undefined8 uVar3;
@@ -834,22 +810,20 @@ undefined8 FUN_14212ef20(longlong param_1, undefined8 param_2, char *param_3, ch
   longlong lVar10;
   undefined4 uVar11;
   undefined4 uVar12;
-  gen_v16 local_58;
-  char *local_48;
   
   uVar3 = CALLF(undefined *, FUN_1420daf10)();
   uVar12 = 0;
   iVar8 = 0;
-  CALLF(longlong *, FUN_1423663e0)(gen_v16_q0(local_58),uVar3,0,0,(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
-  cVar2 = CALLF(undefined1, FUN_142366680)(gen_v16_q0(local_58), param_3);
+  CALLF(longlong *, FUN_1423663e0)((void *)&(*(gen_v16 *)(gen_frame + 0x0)),uVar3,0,0,(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
+  cVar2 = CALLF(undefined1, FUN_142366680)((void *)&(*(gen_v16 *)(gen_frame + 0x0)), param_3);
   pcVar4 = param_3;
   if (cVar2 == '\0') {
-    CALLF(undefined8, FUN_142366670)(gen_v16_q0(local_58));
+    CALLF(undefined8, FUN_142366670)((void *)&(*(gen_v16 *)(gen_frame + 0x0)));
   }
   else {
     do {
-      iVar5 = (int)*local_48;
-      local_48 = local_48 + 1;
+      iVar5 = (int)*(*(char * *)(gen_frame + 0x10));
+      (*(char * *)(gen_frame + 0x10)) = (*(char * *)(gen_frame + 0x10)) + 1;
       iVar7 = iVar5 + 0x20;
       if (0x19 < iVar5 - 0x41U) {
         iVar7 = iVar5;
@@ -865,7 +839,7 @@ undefined8 FUN_14212ef20(longlong param_1, undefined8 param_2, char *param_3, ch
       }
       pcVar4 = pcVar4 + 1;
     } while (iVar7 != 0);
-    CALLF(undefined8, FUN_142366670)(gen_v16_q0(local_58));
+    CALLF(undefined8, FUN_142366670)((void *)&(*(gen_v16 *)(gen_frame + 0x0)));
     if (iVar8 == 0) {
       if ((param_4 != (char *)0x0) && (*param_4 != '\0')) {
         lVar9 = -1;
@@ -1867,11 +1841,11 @@ undefined8 FUN_142138290(longlong param_1, longlong *param_2, uint *param_3)
 undefined1 FUN_142138460(longlong param_1, longlong param_2, uint param_3, uint *param_4)
 {
   GEN_HIT(26);
-  __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(longlong) > 0x20 ? 0x8 + sizeof(longlong) : 0x20)];
-  memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
-  memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
-  memcpy(gen_frame + 0x10, &param_3, sizeof(param_3) < 8 ? sizeof(param_3) : 8);
-  memcpy(gen_frame + 0x18, &param_4, sizeof(param_4) < 8 ? sizeof(param_4) : 8);
+  __declspec(align(16)) unsigned char gen_frame[(0x78 + sizeof(longlong) > 0x90 ? 0x78 + sizeof(longlong) : 0x90)];
+  memcpy(gen_frame + 0x70, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
+  memcpy(gen_frame + 0x78, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
+  memcpy(gen_frame + 0x80, &param_3, sizeof(param_3) < 8 ? sizeof(param_3) : 8);
+  memcpy(gen_frame + 0x88, &param_4, sizeof(param_4) < 8 ? sizeof(param_4) : 8);
   byte bVar1;
   uint uVar2;
   undefined4 uVar3;
@@ -1886,14 +1860,11 @@ undefined1 FUN_142138460(longlong param_1, longlong param_2, uint param_3, uint 
   int *piVar12;
   char *pcVar13;
   undefined4 uVar14;
-                                       
-                                       
-  int local_68;
-  undefined4 local_64;
-  undefined1 local_60 [40];
+/*                                   */
+/*                                   */
   
-  local_68 = 0;
-  (*(longlong *)(gen_frame + 0x8)) = param_2;
+  (*(int *)(gen_frame + 0x0)) = 0;
+  (*(longlong *)(gen_frame + 0x78)) = param_2;
   uVar8 = CALLF(int, FUN_1420f9a00)(1);
   uVar2 = *(uint *)(param_1 + 0xc0);
   if (uVar2 < uVar8) {
@@ -1906,24 +1877,24 @@ undefined1 FUN_142138460(longlong param_1, longlong param_2, uint param_3, uint 
   }
   if (*(uint *)(param_1 + 0xc0) == uVar8) {
     uVar10 = *(undefined8 *)(param_1 + 0xb8);
-    pcVar13 = ((char *)(gen_frame + 0x0));
-    piVar12 = &local_68;
+    pcVar13 = ((char *)(gen_frame + 0x70));
+    piVar12 = &(*(int *)(gen_frame + 0x0));
     uVar9 = CALLF(undefined8, FUN_1420f96e0)(param_1 + 0x6c,*(undefined1 *)(param_1 + 0x88),uVar10,uVar8,(unsigned long long)(piVar12),(unsigned long long)(pcVar13));
-    iVar5 = local_68;
+    iVar5 = (*(int *)(gen_frame + 0x0));
     uVar14 = (undefined4)((ulonglong)pcVar13 >> 0x20);
     *(undefined8 *)(param_1 + 0xf0) = uVar9;
-    if (((char *)(gen_frame + 0x0))[0] == '\0') {
-      local_64 = *(undefined4 *)(param_1 + 0x104);
-      if (local_68 != 0) {
-        uVar9 = CONCAT44((int)((ulonglong)piVar12 >> 0x20),local_68);
+    if (((char *)(gen_frame + 0x70))[0] == '\0') {
+      (*(undefined4 *)(gen_frame + 0x4)) = *(undefined4 *)(param_1 + 0x104);
+      if ((*(int *)(gen_frame + 0x0)) != 0) {
+        uVar9 = CONCAT44((int)((ulonglong)piVar12 >> 0x20),(*(int *)(gen_frame + 0x0)));
         plVar4 = *(longlong **)(*(longlong *)(param_1 + 0x28) + 0xe00);
         if (*(longlong *)(param_1 + 0xe8) == 0) {
-          uVar10 = (**(code **)(*plVar4 + 0x78))(plVar4,param_1 + 0x6c,uVar10,local_64,uVar9);
+          uVar10 = (**(code **)(*plVar4 + 0x78))(plVar4,param_1 + 0x6c,uVar10,(*(undefined4 *)(gen_frame + 0x4)),uVar9);
           bVar6 = (byte)uVar10;
         }
         else {
           bVar6 = (**(code **)(*plVar4 + 0xa0))
-                            (plVar4,*(longlong *)(param_1 + 0xe8),uVar10,local_64,uVar9);
+                            (plVar4,*(longlong *)(param_1 + 0xe8),uVar10,(*(undefined4 *)(gen_frame + 0x4)),uVar9);
         }
         if (bVar6 != 0) {
           bVar1 = *(byte *)(param_1 + 0x181);
@@ -1935,27 +1906,27 @@ undefined1 FUN_142138460(longlong param_1, longlong param_2, uint param_3, uint 
             bVar7 = 8;
           }
           *(byte *)(param_1 + 0x181) = bVar7;
-          CALLF(undefined4, FUN_1420d8f40)(local_60,0x21,param_1 + 0x6c);
+          CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x8)),0x21,param_1 + 0x6c);
           uVar10 = CALLF(undefined *, FUN_1420d9030)(bVar6);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar14,local_64)),(unsigned long long)(CONCAT44(0,iVar5)),(unsigned long long)(local_60),(unsigned long long)(CONCAT44(0,(uint)bVar6)),(unsigned long long)(uVar10));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar14,(*(undefined4 *)(gen_frame + 0x4)))),(unsigned long long)(CONCAT44(0,iVar5)),(unsigned long long)(((undefined1 *)(gen_frame + 0x8))),(unsigned long long)(CONCAT44(0,(uint)bVar6)),(unsigned long long)(uVar10));
         }
       }
-      *(int *)(param_1 + 0x104) = *(int *)(param_1 + 0x104) + local_68;
+      *(int *)(param_1 + 0x104) = *(int *)(param_1 + 0x104) + (*(int *)(gen_frame + 0x0));
       *(undefined4 *)(param_1 + 0x100) = *(undefined4 *)(*(longlong *)(param_1 + 0xf0) + 0x18);
       *(byte *)(param_1 + 0x180) = *(byte *)(param_1 + 0x180) | 4;
       *(undefined4 *)(param_1 + 0xc0) = 0;
-      if (((char *)(gen_frame + 0x0))[0] == '\0') {
+      if (((char *)(gen_frame + 0x70))[0] == '\0') {
         return 0;
       }
     }
-    if (((char *)(gen_frame + 0x0))[0] != '\a') {
+    if (((char *)(gen_frame + 0x70))[0] != '\a') {
       return 8;
     }
-    if (local_68 == 0) {
+    if ((*(int *)(gen_frame + 0x0)) == 0) {
       return 8;
     }
-    CALLF(undefined8, FUN_1420d9bc0)(param_1 + 0xb0,local_68);
-    *(int *)(param_1 + 0xf8) = local_68;
+    CALLF(undefined8, FUN_1420d9bc0)(param_1 + 0xb0,(*(int *)(gen_frame + 0x0)));
+    *(int *)(param_1 + 0xf8) = (*(int *)(gen_frame + 0x0));
   }
   uVar2 = *(uint *)(param_1 + 0xc0);
   if ((uVar8 <= uVar2) && (uVar2 < *(uint *)(param_1 + 0xf8))) {
@@ -1964,21 +1935,21 @@ undefined1 FUN_142138460(longlong param_1, longlong param_2, uint param_3, uint 
     if (uVar11 < uVar8) {
       uVar8 = uVar11;
     }
-    CALLF(undefined8, FUN_14210a3d0)(param_1 + 0xb0,uVar2,(ulonglong)*param_4 + (*(longlong *)(gen_frame + 0x8)),uVar8);
+    CALLF(undefined8, FUN_14210a3d0)(param_1 + 0xb0,uVar2,(ulonglong)*param_4 + (*(longlong *)(gen_frame + 0x78)),uVar8);
     *param_4 = *param_4 + uVar8;
   }
   if (*(int *)(param_1 + 0xc0) == *(int *)(param_1 + 0xf8)) {
     uVar10 = *(undefined8 *)(param_1 + 0xb8);
-    pcVar13 = ((char *)(gen_frame + 0x0));
-    piVar12 = &local_68;
+    pcVar13 = ((char *)(gen_frame + 0x70));
+    piVar12 = &(*(int *)(gen_frame + 0x0));
     uVar9 = CALLF(undefined8, FUN_1420f96e0)(param_1 + 0x6c,*(undefined1 *)(param_1 + 0x88),uVar10,*(int *)(param_1 + 0xf8),(unsigned long long)(piVar12),(unsigned long long)(pcVar13));
-    iVar5 = local_68;
+    iVar5 = (*(int *)(gen_frame + 0x0));
     uVar14 = (undefined4)((ulonglong)pcVar13 >> 0x20);
     *(undefined8 *)(param_1 + 0xf0) = uVar9;
-    if (((char *)(gen_frame + 0x0))[0] == '\0') {
+    if (((char *)(gen_frame + 0x70))[0] == '\0') {
       uVar3 = *(undefined4 *)(param_1 + 0x104);
-      if (local_68 != 0) {
-        uVar9 = CONCAT44((int)((ulonglong)piVar12 >> 0x20),local_68);
+      if ((*(int *)(gen_frame + 0x0)) != 0) {
+        uVar9 = CONCAT44((int)((ulonglong)piVar12 >> 0x20),(*(int *)(gen_frame + 0x0)));
         plVar4 = *(longlong **)(*(longlong *)(param_1 + 0x28) + 0xe00);
         if (*(longlong *)(param_1 + 0xe8) == 0) {
           uVar10 = (**(code **)(*plVar4 + 0x78))(plVar4,param_1 + 0x6c,uVar10,uVar3,uVar9);
@@ -1999,17 +1970,17 @@ undefined1 FUN_142138460(longlong param_1, longlong param_2, uint param_3, uint 
             bVar7 = 8;
           }
           *(byte *)(param_1 + 0x181) = bVar7;
-          CALLF(undefined4, FUN_1420d8f40)(local_60,0x21,param_1 + 0x6c);
+          CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x8)),0x21,param_1 + 0x6c);
           uVar10 = CALLF(undefined *, FUN_1420d9030)(bVar6);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar14,uVar3)),(unsigned long long)(CONCAT44(0,iVar5)),(unsigned long long)(local_60),(unsigned long long)(CONCAT44(0,(uint)bVar6)),(unsigned long long)(uVar10));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar14,uVar3)),(unsigned long long)(CONCAT44(0,iVar5)),(unsigned long long)(((undefined1 *)(gen_frame + 0x8))),(unsigned long long)(CONCAT44(0,(uint)bVar6)),(unsigned long long)(uVar10));
         }
       }
-      *(int *)(param_1 + 0x104) = *(int *)(param_1 + 0x104) + local_68;
+      *(int *)(param_1 + 0x104) = *(int *)(param_1 + 0x104) + (*(int *)(gen_frame + 0x0));
       uVar14 = *(undefined4 *)(*(longlong *)(param_1 + 0xf0) + 0x18);
       *(byte *)(param_1 + 0x180) = *(byte *)(param_1 + 0x180) | 4;
       *(undefined4 *)(param_1 + 0x100) = uVar14;
       *(undefined4 *)(param_1 + 0xc0) = 0;
-      if (((char *)(gen_frame + 0x0))[0] == '\0') {
+      if (((char *)(gen_frame + 0x70))[0] == '\0') {
         return 0;
       }
     }
@@ -2022,11 +1993,11 @@ undefined1 FUN_142138460(longlong param_1, longlong param_2, uint param_3, uint 
 undefined4 FUN_1421388b0(longlong param_1, undefined8 param_2, uint param_3, uint *param_4)
 {
   GEN_HIT(27);
-  __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(byte[8]) > 0x20 ? 0x0 + sizeof(byte[8]) : 0x20)];
-  memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
-  memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
-  memcpy(gen_frame + 0x10, &param_3, sizeof(param_3) < 8 ? sizeof(param_3) : 8);
-  memcpy(gen_frame + 0x18, &param_4, sizeof(param_4) < 8 ? sizeof(param_4) : 8);
+  __declspec(align(16)) unsigned char gen_frame[(0x60 + sizeof(byte[8]) > 0x80 ? 0x60 + sizeof(byte[8]) : 0x80)];
+  memcpy(gen_frame + 0x60, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
+  memcpy(gen_frame + 0x68, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
+  memcpy(gen_frame + 0x70, &param_3, sizeof(param_3) < 8 ? sizeof(param_3) : 8);
+  memcpy(gen_frame + 0x78, &param_4, sizeof(param_4) < 8 ? sizeof(param_4) : 8);
   byte bVar1;
   undefined4 uVar2;
   longlong *plVar3;
@@ -2039,23 +2010,21 @@ undefined4 FUN_1421388b0(longlong param_1, undefined8 param_2, uint param_3, uin
   ulonglong uVar10;
   uint *puVar11;
   byte *pbVar12;
-                                       
-                                       
-  uint local_58 [2];
-  undefined1 local_50 [40];
+/*                                   */
+/*                                   */
   
-  local_58[0] = 0;
+  ((uint *)(gen_frame + 0x0))[0] = 0;
   uVar8 = CALLF(int, FUN_1420f9a00)(1);
-  pbVar12 = ((byte *)(gen_frame + 0x0));
-  puVar11 = local_58;
+  pbVar12 = ((byte *)(gen_frame + 0x60));
+  puVar11 = ((uint *)(gen_frame + 0x0));
   uVar9 = CALLF(undefined8, FUN_1420f96e0)(param_1 + 0x6c,*(undefined1 *)(param_1 + 0x88),param_2,uVar8,(unsigned long long)(puVar11),(unsigned long long)(pbVar12));
-  uVar4 = local_58[0];
+  uVar4 = ((uint *)(gen_frame + 0x0))[0];
   uVar8 = (undefined4)((ulonglong)pbVar12 >> 0x20);
   *(undefined8 *)(param_1 + 0xf0) = uVar9;
-  if (((byte *)(gen_frame + 0x0))[0] == 0) {
+  if (((byte *)(gen_frame + 0x60))[0] == 0) {
     uVar2 = *(undefined4 *)(param_1 + 0x104);
-    if (local_58[0] != 0) {
-      uVar9 = CONCAT44((int)((ulonglong)puVar11 >> 0x20),local_58[0]);
+    if (((uint *)(gen_frame + 0x0))[0] != 0) {
+      uVar9 = CONCAT44((int)((ulonglong)puVar11 >> 0x20),((uint *)(gen_frame + 0x0))[0]);
       plVar3 = *(longlong **)(*(longlong *)(param_1 + 0x28) + 0xe00);
       if (*(longlong *)(param_1 + 0xe8) == 0) {
         uVar9 = (**(code **)(*plVar3 + 0x78))(plVar3,param_1 + 0x6c,param_2,uVar2,uVar9);
@@ -2082,36 +2051,36 @@ undefined4 FUN_1421388b0(longlong param_1, undefined8 param_2, uint param_3, uin
           }
         }
         *(byte *)(param_1 + 0x181) = bVar6;
-        CALLF(undefined4, FUN_1420d8f40)(local_50,0x21,param_1 + 0x6c);
+        CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x8)),0x21,param_1 + 0x6c);
         uVar9 = CALLF(undefined *, FUN_1420d9030)(bVar5);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar8,uVar2)),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(local_50),(unsigned long long)(CONCAT44(0,(uint)bVar5)),(unsigned long long)(uVar9));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar8,uVar2)),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x8))),(unsigned long long)(CONCAT44(0,(uint)bVar5)),(unsigned long long)(uVar9));
       }
     }
-    *param_4 = *param_4 + local_58[0];
-    *(int *)(param_1 + 0x104) = *(int *)(param_1 + 0x104) + local_58[0];
+    *param_4 = *param_4 + ((uint *)(gen_frame + 0x0))[0];
+    *(int *)(param_1 + 0x104) = *(int *)(param_1 + 0x104) + ((uint *)(gen_frame + 0x0))[0];
     *(undefined4 *)(param_1 + 0x100) = *(undefined4 *)(*(longlong *)(param_1 + 0xf0) + 0x18);
     *(byte *)(param_1 + 0x180) = *(byte *)(param_1 + 0x180) | 4;
   }
-  uVar10 = (ulonglong)((byte *)(gen_frame + 0x0))[0];
-  if (((byte *)(gen_frame + 0x0))[0] != 0) {
-    if ((((byte *)(gen_frame + 0x0))[0] == 7) && (local_58[0] != 0)) {
-      *(uint *)(param_1 + 0xf8) = local_58[0];
-      if (param_3 < local_58[0]) {
-        CALLF(undefined8, FUN_1420d9bc0)(param_1 + 0xb0,local_58[0]);
+  uVar10 = (ulonglong)((byte *)(gen_frame + 0x60))[0];
+  if (((byte *)(gen_frame + 0x60))[0] != 0) {
+    if ((((byte *)(gen_frame + 0x60))[0] == 7) && (((uint *)(gen_frame + 0x0))[0] != 0)) {
+      *(uint *)(param_1 + 0xf8) = ((uint *)(gen_frame + 0x0))[0];
+      if (param_3 < ((uint *)(gen_frame + 0x0))[0]) {
+        CALLF(undefined8, FUN_1420d9bc0)(param_1 + 0xb0,((uint *)(gen_frame + 0x0))[0]);
         uVar10 = CALLF(undefined8, FUN_14210a3d0)(param_1 + 0xb0,*(undefined4 *)(param_1 + 0xc0),param_2,param_3);
         *param_4 = *param_4 + param_3;
         goto LAB_142138ca9;
       }
-      pbVar12 = ((byte *)(gen_frame + 0x0));
-      puVar11 = local_58;
-      uVar9 = CALLF(undefined8, FUN_1420f96e0)(param_1 + 0x6c,*(undefined1 *)(param_1 + 0x88),param_2,local_58[0],(unsigned long long)(puVar11),(unsigned long long)(pbVar12));
-      uVar4 = local_58[0];
+      pbVar12 = ((byte *)(gen_frame + 0x60));
+      puVar11 = ((uint *)(gen_frame + 0x0));
+      uVar9 = CALLF(undefined8, FUN_1420f96e0)(param_1 + 0x6c,*(undefined1 *)(param_1 + 0x88),param_2,((uint *)(gen_frame + 0x0))[0],(unsigned long long)(puVar11),(unsigned long long)(pbVar12));
+      uVar4 = ((uint *)(gen_frame + 0x0))[0];
       uVar8 = (undefined4)((ulonglong)pbVar12 >> 0x20);
       *(undefined8 *)(param_1 + 0xf0) = uVar9;
-      if (((byte *)(gen_frame + 0x0))[0] == 0) {
+      if (((byte *)(gen_frame + 0x60))[0] == 0) {
         uVar2 = *(undefined4 *)(param_1 + 0x104);
-        if (local_58[0] != 0) {
-          uVar9 = CONCAT44((int)((ulonglong)puVar11 >> 0x20),local_58[0]);
+        if (((uint *)(gen_frame + 0x0))[0] != 0) {
+          uVar9 = CONCAT44((int)((ulonglong)puVar11 >> 0x20),((uint *)(gen_frame + 0x0))[0]);
           plVar3 = *(longlong **)(*(longlong *)(param_1 + 0x28) + 0xe00);
           if (*(longlong *)(param_1 + 0xe8) == 0) {
             uVar9 = (**(code **)(*plVar3 + 0x78))(plVar3,param_1 + 0x6c,param_2,uVar2,uVar9);
@@ -2132,18 +2101,18 @@ undefined4 FUN_1421388b0(longlong param_1, undefined8 param_2, uint param_3, uin
               bVar6 = 8;
             }
             *(byte *)(param_1 + 0x181) = bVar6;
-            CALLF(undefined4, FUN_1420d8f40)(local_50,0x21,param_1 + 0x6c);
+            CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x8)),0x21,param_1 + 0x6c);
             uVar9 = CALLF(undefined *, FUN_1420d9030)(bVar5);
-            CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar8,uVar2)),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(local_50),(unsigned long long)(CONCAT44(0,(uint)bVar5)),(unsigned long long)(uVar9));
+            CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar8,uVar2)),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x8))),(unsigned long long)(CONCAT44(0,(uint)bVar5)),(unsigned long long)(uVar9));
           }
         }
-        *param_4 = *param_4 + local_58[0];
-        *(int *)(param_1 + 0x104) = *(int *)(param_1 + 0x104) + local_58[0];
+        *param_4 = *param_4 + ((uint *)(gen_frame + 0x0))[0];
+        *(int *)(param_1 + 0x104) = *(int *)(param_1 + 0x104) + ((uint *)(gen_frame + 0x0))[0];
         uVar10 = *(ulonglong *)(param_1 + 0xf0);
         uVar8 = *(undefined4 *)(uVar10 + 0x18);
         *(byte *)(param_1 + 0x180) = *(byte *)(param_1 + 0x180) | 4;
         *(undefined4 *)(param_1 + 0x100) = uVar8;
-        if (((byte *)(gen_frame + 0x0))[0] == 0) goto LAB_142138ca9;
+        if (((byte *)(gen_frame + 0x60))[0] == 0) goto LAB_142138ca9;
       }
     }
     *(byte *)(param_1 + 0x180) = *(byte *)(param_1 + 0x180) | 2;
@@ -2324,16 +2293,16 @@ undefined8 FUN_142139060(longlong param_1, undefined8 param_2, uint param_3)
 byte FUN_1421390c0(longlong param_1, undefined8 param_2, int param_3, uint param_4)
 {
   GEN_HIT(31);
+  __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[48]) > 0x38 ? 0x0 + sizeof(undefined1[48]) : 0x38)];
   byte bVar1;
   longlong *plVar2;
   byte bVar3;
   byte bVar4;
   undefined8 uVar5;
   undefined8 in_stack_ffffffffffffff98 = 0;
-                                       
-                                       
-                                       
-  undefined1 local_38 [48];
+/*                                   */
+/*                                   */
+/*                                   */
   
   if (param_3 == 0) {
     bVar3 = 0;
@@ -2370,9 +2339,9 @@ byte FUN_1421390c0(longlong param_1, undefined8 param_2, int param_3, uint param
         }
       }
       *(byte *)(param_1 + 0x181) = bVar4;
-      CALLF(undefined4, FUN_1420d8f40)(local_38,0x21,param_1 + 0x6c);
+      CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x6c);
       uVar5 = CALLF(undefined *, FUN_1420d9030)(bVar3);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(0,param_4)),(unsigned long long)(CONCAT44(0,param_3)),(unsigned long long)(local_38),(unsigned long long)(CONCAT44(0,(uint)bVar3)),(unsigned long long)(uVar5));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(0,param_4)),(unsigned long long)(CONCAT44(0,param_3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)bVar3)),(unsigned long long)(uVar5));
     }
   }
   return bVar3;
@@ -2554,12 +2523,12 @@ undefined8 FUN_1421395a0(longlong param_1)
 undefined1 FUN_142139690(longlong param_1)
 {
   GEN_HIT(35);
+  __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(gen_v16) > 0x18 ? 0x0 + sizeof(gen_v16) : 0x18)];
   byte bVar1;
   char cVar2;
   uint uVar3;
   ulonglong uVar4;
   undefined8 uVar5;
-  gen_v16 local_18;
   
   if (*(int *)(param_1 + 0x104) != *(int *)(param_1 + 0xa0) + *(int *)(param_1 + 0x9c)) {
     cVar2 = *(char *)(param_1 + 0x181);
@@ -2575,8 +2544,8 @@ undefined1 FUN_142139690(longlong param_1)
     uVar3 = *(uint *)(param_1 + 0x17c) >> 1;
     uVar4 = (ulonglong)uVar3;
     if ((uVar3 & 1) == 0) {
-      CALLF(undefined4, FUN_142365fd0)(param_1 + 0x110, gen_v16_q0(local_18));
-      uVar4 = memcmp(gen_v16_q0(local_18), (void *)(param_1 + 0x6c), (ulonglong)*(byte *)(param_1 + 0x88));
+      CALLF(undefined4, FUN_142365fd0)(param_1 + 0x110, (void *)&(*(gen_v16 *)(gen_frame + 0x0)));
+      uVar4 = memcmp((void *)&(*(gen_v16 *)(gen_frame + 0x0)), (void *)(param_1 + 0x6c), (ulonglong)*(byte *)(param_1 + 0x88));
       if ((int)uVar4 != 0) {
         bVar1 = *(byte *)(param_1 + 0x181);
         uVar4 = (ulonglong)bVar1;
@@ -3061,11 +3030,11 @@ undefined8 FUN_14213a0c0(longlong param_1, longlong param_2, uint param_3)
 char FUN_14213a220(longlong param_1, undefined8 param_2, undefined8 *param_3, int *param_4, undefined8 param_5, longlong param_6, undefined8 param_7, undefined4 param_8, undefined4 param_9, undefined8 param_10, undefined8 param_11, undefined8 param_12)
 {
   GEN_HIT(45);
-  __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(char[8]) > 0x20 ? 0x0 + sizeof(char[8]) : 0x20)];
-  memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
-  memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
-  memcpy(gen_frame + 0x10, &param_3, sizeof(param_3) < 8 ? sizeof(param_3) : 8);
-  memcpy(gen_frame + 0x18, &param_4, sizeof(param_4) < 8 ? sizeof(param_4) : 8);
+  __declspec(align(16)) unsigned char gen_frame[(0x40 + sizeof(char[8]) > 0x60 ? 0x40 + sizeof(char[8]) : 0x60)];
+  memcpy(gen_frame + 0x40, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
+  memcpy(gen_frame + 0x48, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
+  memcpy(gen_frame + 0x50, &param_3, sizeof(param_3) < 8 ? sizeof(param_3) : 8);
+  memcpy(gen_frame + 0x58, &param_4, sizeof(param_4) < 8 ? sizeof(param_4) : 8);
   byte *pbVar1;
   longlong *plVar2;
   char cVar3;
@@ -3073,12 +3042,11 @@ char FUN_14213a220(longlong param_1, undefined8 param_2, undefined8 *param_3, in
   undefined8 uVar5;
   undefined8 in_stack_ffffffffffffffa8 = 0;
   undefined4 uVar6;
-                                       
-                                       
-  undefined1 local_38 [48];
+/*                                   */
+/*                                   */
   
   uVar6 = (undefined4)((ulonglong)in_stack_ffffffffffffffa8 >> 0x20);
-  ((char *)(gen_frame + 0x0))[0] = '\0';
+  ((char *)(gen_frame + 0x40))[0] = '\0';
   *(undefined8 *)(param_1 + 8) = param_5;
   *(undefined8 *)(param_1 + 0x10) = param_10;
   *(undefined8 *)(param_1 + 0x18) = param_11;
@@ -3125,8 +3093,8 @@ char FUN_14213a220(longlong param_1, undefined8 param_2, undefined8 *param_3, in
     uVar5 = CALLF(undefined8, FUN_1420d8300)(*(longlong *)(param_1 + 0x80),0);
     *(int *)(param_1 + 0x98) = (int)uVar5;
     if ((int)uVar5 == 0) {
-      CALLF(undefined4, FUN_1420d8f40)(local_38,0x21,param_1 + 0x6c);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x97,(unsigned long long)("Failed to prepare file streamer for key \'%s\' due to a bad eSpec: %s"),(unsigned long long)(local_38),(unsigned long long)(*(undefined8 *)(param_1 + 0x80)));
+      CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x6c);
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x97,(unsigned long long)("Failed to prepare file streamer for key \'%s\' due to a bad eSpec: %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(*(undefined8 *)(param_1 + 0x80)));
       return 3;
     }
   }
@@ -3140,24 +3108,24 @@ char FUN_14213a220(longlong param_1, undefined8 param_2, undefined8 *param_3, in
     *(ulonglong *)(param_1 + 0xa4) = (ulonglong)*(uint *)(param_1 + 0x68) << 0x20;
     if (*(longlong *)(param_1 + 0x170) != 0) {
       if (*(int *)(param_1 + 0x98) == 2) {
-        uVar5 = CALLF(undefined8, FUN_14212e070)(((char *)(gen_frame + 0x0)));
+        uVar5 = CALLF(undefined8, FUN_14212e070)(((char *)(gen_frame + 0x40)));
         *(undefined8 *)(param_1 + 0xe0) = uVar5;
-        if (((char *)(gen_frame + 0x0))[0] != '\0') {
-          return ((char *)(gen_frame + 0x0))[0];
+        if (((char *)(gen_frame + 0x40))[0] != '\0') {
+          return ((char *)(gen_frame + 0x40))[0];
         }
       }
 LAB_14213a525:
       if ((*(longlong *)(param_1 + 0x170) != 0) &&
          (*(uint *)(param_1 + 0x178) < *(uint *)(param_1 + 0xa8))) {
-        CALLF(undefined4, FUN_1420d8f40)(local_38,0x21,param_1 + 0x6c);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0xe1,(unsigned long long)("Failed to prepare file streamer for key \'%s\' with the offset \'%u\'. The destination buffer of size \'%u\' is smaller than the raw span size: \'%u\'"),(unsigned long long)(local_38),(unsigned long long)(CONCAT44(uVar6,*(undefined4 *)(param_1 + 0x9c))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0x178))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0xa8))));
+        CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x6c);
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0xe1,(unsigned long long)("Failed to prepare file streamer for key \'%s\' with the offset \'%u\'. The destination buffer of size \'%u\' is smaller than the raw span size: \'%u\'"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(uVar6,*(undefined4 *)(param_1 + 0x9c))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0x178))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0xa8))));
         return 3;
       }
     }
     CALLF(undefined4, FUN_142366090)(param_1 + 0x110);
     if (*(longlong *)(param_1 + 0xe8) == 0) {
       plVar2 = *(longlong **)(*(longlong *)(param_1 + 0x28) + 0xe00);
-      ((char *)(gen_frame + 0x0))[0] =
+      ((char *)(gen_frame + 0x40))[0] =
            (**(code **)(*plVar2 + 0xb0))(plVar2,param_1 + 0x6c,*(undefined4 *)(param_1 + 0x7c));
     }
   }
@@ -3172,11 +3140,11 @@ LAB_14213a525:
         goto LAB_14213a525;
       }
     }
-    CALLF(undefined4, FUN_1420d8f40)(local_38,0x21,param_1 + 0x6c);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0xbc,(unsigned long long)("Failed to prepare file streamer for a block encoded key \'%s\' due to an invalid block span. Requested span: {%u, %u}"),(unsigned long long)(local_38),(unsigned long long)(CONCAT44(uVar6,*(undefined4 *)(param_1 + 0x9c))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0xa0))));
-    ((char *)(gen_frame + 0x0))[0] = '\x03';
+    CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x6c);
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0xbc,(unsigned long long)("Failed to prepare file streamer for a block encoded key \'%s\' due to an invalid block span. Requested span: {%u, %u}"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(uVar6,*(undefined4 *)(param_1 + 0x9c))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0xa0))));
+    ((char *)(gen_frame + 0x40))[0] = '\x03';
   }
-  return ((char *)(gen_frame + 0x0))[0];
+  return ((char *)(gen_frame + 0x40))[0];
 }
 
 /* ref: FUN_14213a7c0 */

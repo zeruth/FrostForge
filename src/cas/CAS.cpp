@@ -1680,6 +1680,5 @@ extern "C" void* const gen_p_142e208b8 = (void*)&cas::s_hotfixLock;
 extern "C" void* const gen_p_142e208d8 = (void*)&cas::s_preSwapHandlers;
 extern "C" void* const gen_p_142e208f0 = (void*)&cas::s_preSwapLock;
 extern "C" void* const gen_p_142e20948 = (void*)&cas::s_streamingLock;
-extern "C" void* const gen_p_142e20950 = (void*)&cas::s_logLock;
 extern "C" void* const gen_p_142e25560 = (void*)&cas::s_keyCallback;
 // ---- end of generated globals ----

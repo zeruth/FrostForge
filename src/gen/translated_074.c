@@ -1389,7 +1389,7 @@ undefined8 FUN_14130f030(undefined4 param_1, longlong param_2, char param_3)
       uVar6 = (uint)puVar7;
       if (((uVar2 >> (uVar6 & 0x1f) & 1) != 0) &&
          (lVar3 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e717c0 + 0x0)),uVar6,0,((undefined1 *)(gen_frame + 0x198))), lVar3 != 0)) {
-        (**(code * *)(**(longlong * *)(param_2 + 0x30) + 8))(*(longlong * *)(param_2 + 0x30), gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0))));
+        (**(code * *)(**(longlong * *)(param_2 + 0x30) + 8))(*(longlong * *)(param_2 + 0x30), (void *)&(*(gen_v16 *)(gen_frame + 0x0)));
         (*(undefined4 *)(gen_frame + 0x1c)) = 0xffffffff;
         (*(code * *)(gen_frame + 0x60)) = ((code *)REFP(0x1402112e0));
         (*(code * *)(gen_frame + 0xa0)) = ((code *)REFP(0x1402112e0));
@@ -6508,21 +6508,23 @@ undefined8 FUN_1413195a0(void)
 undefined1 FUN_14131b520(longlong param_1, undefined8 param_2)
 {
   GEN_HIT(151);
+  __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(uint[2]) > 0x20 ? 0x0 + sizeof(uint[2]) : 0x20)];
+  memcpy(gen_frame + 0x0, &param_1, sizeof(param_1) < 8 ? sizeof(param_1) : 8);
+  memcpy(gen_frame + 0x8, &param_2, sizeof(param_2) < 8 ? sizeof(param_2) : 8);
   byte *pbVar1;
   char cVar2;
   int iVar3;
   undefined4 uVar4;
-                   
-                   
-  uint local_res8 [2];
+/*               */
+/*               */
   
   pbVar1 = *(byte **)(param_1 + 8);
   if ((pbVar1 < *(byte **)(param_1 + 0x10)) && (*pbVar1 < 0x80)) {
-    local_res8[0] = (uint)*pbVar1;
+    ((uint *)(gen_frame + 0x0))[0] = (uint)*pbVar1;
     *(byte **)(param_1 + 8) = pbVar1 + 1;
   }
   else {
-    cVar2 = CALLF(undefined1, FUN_14222ca90)(param_1,local_res8);
+    cVar2 = CALLF(undefined1, FUN_14222ca90)(param_1,((uint *)(gen_frame + 0x0)));
     if (cVar2 == '\0') {
       return 0;
     }
@@ -6530,7 +6532,7 @@ undefined1 FUN_14131b520(longlong param_1, undefined8 param_2)
   iVar3 = *(int *)(param_1 + 0x38) + 1;
   *(int *)(param_1 + 0x38) = iVar3;
   if (iVar3 <= *(int *)(param_1 + 0x3c)) {
-    uVar4 = CALLF(int, FUN_14222c460)(param_1,local_res8[0]);
+    uVar4 = CALLF(int, FUN_14222c460)(param_1,((uint *)(gen_frame + 0x0))[0]);
     cVar2 = CALLF(undefined1, FUN_14131c120)(param_2,param_1,0,0);
     if ((cVar2 != '\0') && (*(char *)(param_1 + 0x24) != '\0')) {
       CALLF(undefined8, FUN_14222c410)(param_1,uVar4);

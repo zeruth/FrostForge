@@ -766,7 +766,7 @@ longlong * FUN_1413df690(void)
              CALLF(longlong, FUN_140255140)(0x4cc8,0x27,"D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WorldClient2\\WorldMem.cpp",uVar6,(unsigned long long)(0xda),(unsigned long long)(0));
     *plVar3 = 0;
     plVar3[1] = 0;
-    CALLF(undefined1, FUN_140262450)();
+    CALLF(undefined1, FUN_140262450)(plVar3 + 7);
     *(undefined4 *)(plVar3 + 0xd) = 0;
     *(undefined4 *)(plVar3 + 0x816) = 0;
     *(undefined4 *)(plVar3 + 0x897) = 0;
@@ -3527,7 +3527,7 @@ undefined4 FUN_1413e4370(longlong param_1, undefined8 param_2)
   bVar1 = false;
 LAB_1413e43d2:
   if ((*(code * *)(gen_frame + 0x8)) != ((code *)REFP(0x1402112e0))) {
-    (*(*(code * *)(gen_frame + 0x8)))(gen_v16_q0((*(gen_v16 *)(gen_frame + 0x10))), 0, 0);
+    (*(*(code * *)(gen_frame + 0x8)))((void *)&(*(gen_v16 *)(gen_frame + 0x10)), 0, 0);
   }
   if (bVar1) {
     uVar3 = 1;
@@ -3887,17 +3887,15 @@ undefined4 FUN_1413e4a60(longlong param_1, undefined8 param_2)
 undefined4 FUN_1413e4b00(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(66);
+  __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(gen_v16) > 0x28 ? 0x10 + sizeof(gen_v16) : 0x28)];
   bool bVar1;
   char cVar2;
   undefined4 uVar3;
-                                 
-  undefined8 local_28;
-  code *local_20;
-  gen_v16 local_18;
+/*                             */
   
-  local_28 = 0;
-  local_20 = ((code *)REFP(0x1402112e0));
-  cVar2 = CALLF(undefined1, FUN_1402cd660)(param_1,&local_28,0,0,(unsigned long long)((ulonglong)0 << 0x20));
+  (*(undefined8 *)(gen_frame + 0x0)) = 0;
+  (*(code * *)(gen_frame + 0x8)) = ((code *)REFP(0x1402112e0));
+  cVar2 = CALLF(undefined1, FUN_1402cd660)(param_1,&(*(undefined8 *)(gen_frame + 0x0)),0,0,(unsigned long long)((ulonglong)0 << 0x20));
   if (cVar2 != '\0') {
     cVar2 = CALLF(undefined1, FUN_1402cffe0)(param_1,param_2,0);
     if (cVar2 != '\0') {
@@ -3907,8 +3905,8 @@ undefined4 FUN_1413e4b00(undefined8 param_1, undefined8 param_2)
   }
   bVar1 = false;
 LAB_1413e4b5d:
-  if (local_20 != ((code *)REFP(0x1402112e0))) {
-    (*local_20)(gen_v16_q0(local_18), 0, 0);
+  if ((*(code * *)(gen_frame + 0x8)) != ((code *)REFP(0x1402112e0))) {
+    (*(*(code * *)(gen_frame + 0x8)))((void *)&(*(gen_v16 *)(gen_frame + 0x10)), 0, 0);
   }
   if (bVar1) {
     uVar3 = 1;
@@ -9543,7 +9541,7 @@ undefined8 FUN_1413eed30(longlong param_1)
   GEN_HIT(167);
   byte bVar1;
   undefined8 uVar2;
-                                       
+/*                                   */
   
   bVar1 = (**(code **)(**(longlong **)(param_1 + 0x3b8) + 0x30))(*(longlong **)(param_1 + 0x3b8));
   uVar2 = (**(code **)(**(longlong **)(param_1 + 0x3d0) + 0x18))

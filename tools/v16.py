@@ -581,7 +581,17 @@ class Emitter:
             # low qword, what a scalar parameter in xmm or a general register holds)
             # (but whole to a callee that takes 16 bytes there, a vector parameter)
             whole = T.vparams.get(fn.val, ()) if fn.kind == "id" else ()
-            out = [self.e(a) if T.ty(a) != V or k in whole else f"gen_v16_q0({self.e(a)})" for k, a in enumerate(args)]
+            # (and a 16-byte array in the frame is its address, as C's array decay has it, the same
+            # as assigned to a pointer above: `FUN_1419ad790(&DAT_142d2c038,&local_28,local_10)`
+            # hands on the end of a six-int initializer list, and its first 8 bytes crashed the
+            # static initializer FUN_1401fd640, 2026-10-17; a register's value `auVarN` is its bits)
+            def arg(k, a):
+                if T.ty(a) != V or k in whole:
+                    return self.e(a)
+                if a.kind == "id" and a.val in T.v16 and not re.fullmatch(r"auVar\d+", a.val):
+                    return f"(void *)&{self.e(a)}"
+                return f"gen_v16_q0({self.e(a)})"
+            out = [arg(k, a) for k, a in enumerate(args)]
             return f"{self.e(fn)}({', '.join(out)})"
         raise V16Unsupported(f"node {k}")
 

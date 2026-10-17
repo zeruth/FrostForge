@@ -445,7 +445,7 @@ undefined4 FUN_140d2f520(undefined8 param_1)
   (*(longlong *)(gen_frame + 0x38)) = 0;
   (*(undefined4 *)(gen_frame + 0x40)) = 0;
   uVar3 = CALLF(longlong, FUN_1402b30b0)(param_1);
-  cVar1 = CALLF(undefined1, FUN_1407d0960)(param_1, ((code *)REFP(0x140d0ff30)), (int)uVar3, gen_v16_q0((*(gen_v16 *)(gen_frame + 0x0))));
+  cVar1 = CALLF(undefined1, FUN_1407d0960)(param_1, ((code *)REFP(0x140d0ff30)), (int)uVar3, (void *)&(*(gen_v16 *)(gen_frame + 0x0)));
   lVar7 = -1;
   if (cVar1 == '\0') {
     pcVar6 = ((char *)(gen_frame + 0x50));
@@ -671,7 +671,7 @@ LAB_140d33b2b:
       }
     }
     else {
-      (*((code * *)(gen_frame + 0x40))[(*(longlong *)(gen_frame + 0x18)) + 2])(gen_v16_q0((*(gen_v16 *)(gen_frame + 0x170))), &(*(undefined8 *)(gen_frame + 0x8)));
+      (*((code * *)(gen_frame + 0x40))[(*(longlong *)(gen_frame + 0x18)) + 2])((void *)&(*(gen_v16 *)(gen_frame + 0x170)), &(*(undefined8 *)(gen_frame + 0x8)));
     }
     (*(longlong *)(gen_frame + 0x18)) = -1;
   }
@@ -788,7 +788,7 @@ LAB_140d34a0b:
       }
     }
     else {
-      (*((code * *)(gen_frame + 0x40))[(*(longlong *)(gen_frame + 0x20)) + 2])(gen_v16_q0((*(gen_v16 *)(gen_frame + 0x170))), &(*(undefined8 *)(gen_frame + 0x10)));
+      (*((code * *)(gen_frame + 0x40))[(*(longlong *)(gen_frame + 0x20)) + 2])((void *)&(*(gen_v16 *)(gen_frame + 0x170)), &(*(undefined8 *)(gen_frame + 0x10)));
     }
     (*(longlong *)(gen_frame + 0x20)) = -1;
   }
@@ -2767,7 +2767,7 @@ undefined4 FUN_140d77dc0(undefined8 param_1, undefined8 param_2, int *param_3)
       }
     }
   }
-  puVar7 = (undefined8 *)CALLF(longlong, FUN_141cf9f10)(gen_v16_q0((*(gen_v16 *)(gen_frame + 0x28))));
+  puVar7 = (undefined8 *)CALLF(longlong, FUN_141cf9f10)((void *)&(*(gen_v16 *)(gen_frame + 0x28)));
   piVar1 = param_3 + 2;
   if (*(char *)(puVar7 + 2) == '\0') {
     if ((char)param_3[6] == '\0') goto LAB_140d77ea7;
@@ -2824,7 +2824,7 @@ undefined4 FUN_140d784e0(undefined8 param_1, undefined8 param_2, longlong param_
   ((undefined4 *)(gen_frame + 0x70))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_2;
   CALLF(undefined1, FUN_1407ca770)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x70)),"Usage: local data = C_ConsoleScriptCollection.GetCollectionDataByTag(collectionTag)",0,(unsigned long long)(param_3));
-  puVar3 = (undefined8 *)CALLF(longlong, FUN_141cf9f10)(gen_v16_q0((*(gen_v16 *)(gen_frame + 0x30))));
+  puVar3 = (undefined8 *)CALLF(longlong, FUN_141cf9f10)((void *)&(*(gen_v16 *)(gen_frame + 0x30)));
   puVar1 = (undefined8 *)(param_3 + 0x28);
   if (*(char *)(puVar3 + 2) == '\0') {
     if (*(char *)(param_3 + 0x38) == '\0') goto LAB_140d78574;

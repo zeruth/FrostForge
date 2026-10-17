@@ -720,7 +720,7 @@ undefined4 FUN_140fa2c30(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   ((undefined4 *)(gen_frame + 0x38))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined4, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_Debug.CALLF(undefined4, FUN_140fa2c30)(debugObjectIndex)",0,(unsigned long long)(gen_v16_q0((*(gen_v16 *)(gen_frame + 0x40)))));
+  CALLF(undefined4, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_Debug.CALLF(undefined4, FUN_140fa2c30)(debugObjectIndex)",0,(unsigned long long)((void *)&(*(gen_v16 *)(gen_frame + 0x40))));
   _guard_check_icall();
   return 0;
 }
