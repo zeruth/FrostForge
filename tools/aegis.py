@@ -66,7 +66,7 @@ def compute(bodies: dict[str, str]) -> dict:
         for a, c in bodies.items():
             if a in prot or a in game or not callees[a] <= prot:
                 continue
-            if _marked(c, prot):
+            if _marked(c, prot, whole=True):
                 prot.add(a)
                 changed = True
     # internals: called only from protection, calling only protection or leaves
@@ -234,7 +234,18 @@ LIVE = re.compile(r"\b(?:PTR|DAT|_DAT|pcRam0*|lRam0*)_?(?:142ddf848|142ddf850)\b
 # and the TEB and PEB read straight: the debugger flag at ProcessEnvironmentBlock + 2, and the
 # stack bounds at Self + 8 / + 0x10 that FUN_14021f090 scribbles random bytes between. Game code
 # reaches its thread's data through the TLS pointer instead)
-WAITS = re.compile(r"Ram000000007ffe0|\binvalidInstructionException\(\)|\bProcessEnvironmentBlock\b|\bSelf\b")
+# Only the layer's own uses of them, though: game code walks the PEB's loader list (the crash
+# reporter's module list, FUN_140251190), saves the TEB's stack bounds on a stack overflow
+# (FUN_140256d10) and frees to the process heap at PEB + 0x30; all of that runs in the port, and
+# marking any `Self` stubbed them, 2026-10-17. The layer's: the debugger flag (PEB + 2), the
+# NtGlobalFlag heap-debug bits (PEB + 0xbc), and the scribble that fills the stack between a
+# random point above its limit and 0x1000 below its base with rdtsc bytes
+WAITS = re.compile(r"Ram000000007ffe0|\binvalidInstructionException\(\)|"
+                   r"\(longlong\)ProcessEnvironmentBlock \+ (?:2|0xbc)\)|"
+                   r"% 100 \+ 0x10 \+ \*\(longlong \*\)\(\(longlong\)Self \+ 0x10\)|"
+                   r"\(\*\(longlong \*\)\(\(longlong\)Self \+ 8\) - \(longlong\)\w+(?:\[\d+\])?\) - 0x1000")
+# string literals, blanked before looking for marks ("Armor Foley SFX (Self)" is no TEB read)
+STRING = re.compile(r'"(?:\\.|[^"\\\n])*"')
 DECODED_CALL = re.compile(r"\(\*\(code \*\)\s*\(")
 # (in a guarded function, its __fastfail is the guard's: FUN_14021f090's guard runs a stub it
 # builds, which jumps on to the rest of the function and never returns, so Ghidra shows that rest
@@ -244,15 +255,42 @@ FASTFAIL = re.compile(r"\bswi\(0x29\)")
 # read in an earlier statement: `(*(code *)((uVar22 >> 0x20 ^ ...) << 0x20 | uVar22 & 0xffffffff))`.
 # Game code calls through a vtable or a stored pointer, `(**(code **)(*plVar + 0x10))`)
 DECODED_POINTER = re.compile(r"\(\*\(code \*\)\s*\(\((?:(?!;).)*?\^(?:(?!;).)*?<< 0x20", re.S)
+# the layer's sampler: a branch taken on the time stamp counter modulo 100 or 1000, divided through
+# the compiler's magic multiply (`if (uVar27 + ((uVar27 - lVar20 >> 1) + lVar20 >> 6) * -100 < 5)`:
+# rdtsc() % 100 < 5). It picks which of its checks runs this time; no game function does it (25
+# read rdtsc for timing or seeds, none divides it so), so the whole block, else arms too, is the
+# layer's, game lookups in it included: FUN_1412ee600's 5% integrity sample calls FUN_1412e73c0,
+# which hashes game data and was stubbed as a guard around game code, 2026-10-17
+SAMPLE = re.compile(r"\* -(?:100|1000) <")
+# an address in the state block, by name or as a raw constant (`*(ulonglong *)(lVar20 + 0x142ddf860)`)
+BLOCK_ADDR = re.compile(r"\b(?:0x|_?DAT_|PTR_|UNK_|[a-z]+Ram0*)(142dd[0-9a-f]{4})\b")
+
+
+def _block_write(stmt: str) -> bool:
+    """A store into the state block. Game code reads it (the opaque predicates, a masked value
+    decoded) but never writes it: the stores are the layer's own, its spinlock (_DAT_142ddf898)
+    and the reseeded key table at 0x142ddf860. Left in, the lock's cmpxchg was an interlocked
+    shape the translator cannot map and stubbed FUN_141687ed0, 2026-10-17."""
+    parts = re.split(r"(?<![=!<>])=(?!=)", stmt, maxsplit=1)
+    if len(parts) < 2 or re.match(r"\s*(?:if|while|for|switch|return)\b", stmt):
+        return False
+    return any(BLOCK[0] <= int(h, 16) < BLOCK[1] for h in BLOCK_ADDR.findall(parts[0]))
 EXIT = re.compile(r"\b(?:break|return|goto)\b")
 LOOP = re.compile(r"\s*(?:while|do|for)\b")
 CONTEXT_NULL = re.compile(r"PTR_142ddf848 == \(undefined1 \*\)0x0")
 CONTEXT_SET = re.compile(r"PTR_142ddf848 != \(undefined1 \*\)0x0")
 
 
-def _marked(text: str, prot: set[str]) -> bool:
+# (a whole function with no game text that reads the TEB or PEB at all is the runtime's: its module
+# walkers and stack checks, 0x1400202b0..0x140285134, nothing game code calls. WAITS' narrow shapes
+# are for guards inside game functions, where the same reads are the game's own)
+TEB_ANY = re.compile(r"\bProcessEnvironmentBlock\b|\bSelf\b")
+
+
+def _marked(text: str, prot: set[str], whole: bool = False) -> bool:
     # (a call to the key stub alone is no mark: a masked value's getter makes it too)
-    return bool(LIVE.search(text)) or bool(WAITS.search(text)) \
+    text = STRING.sub('""', text)
+    return bool(LIVE.search(text)) or bool(WAITS.search(text)) or (whole and bool(TEB_ANY.search(text))) \
         or any(c in prot and c != KEY for c in CALL.findall(text)) \
         or (bool(DECODED_CALL.search(text)) and "142dde840" in text)
 
@@ -306,14 +344,60 @@ def strip_guards(text: str, prot: set[str], force: bool = False) -> tuple[str, s
         rhs = re.split(r"(?<![=!<>])=(?!=)", stmt, maxsplit=1)[1]
         return set(IDENT.findall(rhs))
 
+    # the locals that hold a time stamp counter value, or one computed from it (Ghidra folds the
+    # upper half back in: `uVar27 = CONCAT44(uVar16,(int)uVar27) | uVar27 & 0xffffffff00000000;`)
+    stamps: set[str] = set()
+    grew = True
+    while grew:
+        grew = False
+        for m in re.finditer(r"^\s*(\w+) = ([^;]*);", "\n".join(lines[decl_end:close]), re.M):
+            if m.group(1) in locals_ and m.group(1) not in stamps and \
+                    ("rdtsc()" in m.group(2) or set(IDENT.findall(m.group(2))) & stamps):
+                stamps.add(m.group(1))
+                grew = True
+
     def head_stores(text: str) -> set[str]:
         # (the comma stores in a head: `while ((uVar17 = uVar21, ...))`)
         return {m.group(1) for m in re.finditer(r"\b(\w+)\s*(?<![=!<>])=(?!=)", text)} & locals_
 
+    def landing(removed_nodes: list[Node]) -> list[Node]:
+        """The labels inside removed code, kept where it was: game code that jumps into a removed
+        guard (`goto code_r0x00014242449b;` into the arm FUN_142420a40's guard frees its buffer
+        from) lands there and goes on past it, as if the guard had run and done nothing. Removed
+        with the block, the goto named a label that no longer existed (C2094), 2026-10-17. Those
+        nothing jumps to are dropped below."""
+        out = []
+        for x in removed_nodes:
+            if x.kind == "label" and LABEL.match(x.lines[0]) and not CASE.match(x.lines[0]):
+                out.append(x)
+            elif x.kind == "block":
+                for arm in x.arms:
+                    out += landing(arm)
+        return out
+
+    def touches_block(text: str) -> bool:
+        return any(BLOCK[0] <= int(h, 16) < BLOCK[1] for h in BLOCK_ADDR.findall(text))
+
     def walk(nodes: list[Node], keeping: bool = True) -> list[Node]:
         nonlocal removed
         keep = []
-        for n in nodes:
+        skip_to = -1
+        for i, n in enumerate(nodes):
+            if i <= skip_to:
+                continue
+            if n.kind == "stmt" and n.own_text().strip() == "LOCK();":
+                # an interlocked operation on the state block (the layer's spinlock): the whole
+                # LOCK() .. UNLOCK() span is the layer's, and what it stores is lost with it
+                j = next((k for k in range(i + 1, len(nodes))
+                          if nodes[k].kind == "stmt" and nodes[k].own_text().strip() == "UNLOCK();"), None)
+                if j is not None and any(touches_block(x.all_text()) for x in nodes[i + 1:j]):
+                    for x in nodes[i + 1:j]:
+                        tainted.update(head_stores(x.all_text()))
+                    removed += keeping
+                    if keeping:
+                        keep += landing(nodes[i + 1:j])
+                    skip_to = j
+                    continue
             if n.kind == "label":
                 keep.append(n)
                 continue
@@ -321,7 +405,7 @@ def strip_guards(text: str, prot: set[str], force: bool = False) -> tuple[str, s
             if n.kind == "stmt":
                 v = _assigned(own)
                 bad = _marked(own, prot) or bool(rhs_reads(own) & tainted) or bool(FASTFAIL.search(own)) \
-                    or bool(DECODED_POINTER.search(own))
+                    or bool(DECODED_POINTER.search(own)) or _block_write(own)
                 if bad and not (_game(own, prot) and not _marked(own, prot)):
                     # (what a marked right-hand side gives is the runtime's too: the context, or a
                     # protection call's result, `bVar8 = FUN_14021ac70(...)` in FUN_14021f090)
@@ -341,6 +425,14 @@ def strip_guards(text: str, prot: set[str], force: bool = False) -> tuple[str, s
             # merely names a local a guard also used is game control flow: `if ((lVar15 != 0) &&
             # (iVar8 = *(int *)(lVar15 + 0x14), ...))` in FUN_1402f4d00 reassigning the guard's iVar8)
             head = "\n".join(l for h in n.heads for l in h)
+            if SAMPLE.search(n.heads[0][0] if len(n.heads[0]) == 1 else "\n".join(n.heads[0])) \
+                    and set(IDENT.findall("\n".join(n.heads[0]))) & stamps:
+                # the sampler's branch: the layer's, whole
+                tainted.update(head_stores(n.all_text()))
+                removed += keeping
+                if keeping:
+                    keep += landing([n])
+                continue
             reads = (set(IDENT.findall(head)) - head_stores(head)) & tainted
             if _marked(own, prot) or reads:
                 if not _game(n.all_text(), prot):
@@ -350,6 +442,8 @@ def strip_guards(text: str, prot: set[str], force: bool = False) -> tuple[str, s
                     for arm in n.arms:
                         walk(arm, False)
                     removed += keeping
+                    if keeping:
+                        keep += landing([n])
                     continue
                 # game work inside a guard's block (FUN_1412ee600 samples an integrity check that
                 # calls game lookups, then punishes through a decoded call): the block stays and
@@ -373,6 +467,7 @@ def strip_guards(text: str, prot: set[str], force: bool = False) -> tuple[str, s
                     # (and what it stored is lost, as for any removed block)
                     tainted.update(head_stores(n.all_text()))
                     removed += 1
+                    keep += landing([n])
                     continue
             keep.append(n)
         return keep

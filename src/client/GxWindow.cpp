@@ -1070,4 +1070,5 @@ extern "C" void* const gen_p_1430b0050 = (void*)&s_cursorHotspot;
 extern "C" void* const gen_p_1430b0060 = (void*)&s_cursorPixels;
 extern "C" void* const gen_p_1430c0060 = (void*)&s_cursorShown;
 extern "C" void* const gen_p_1430d0060 = (void*)&s_cursorSizeIndex;
+extern "C" void* const gen_p_1430d009c = (void*)&s_visible;
 // ---- end of generated globals ----

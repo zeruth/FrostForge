@@ -3423,7 +3423,12 @@ class Translator:
         if re.search(r"^\s*_guard_check_icall\([^;]*\);", text, re.M) and a in self.cor:
             # (an import called through its slot too: `(*Import::KERNEL32_DLL::GetCurrentProcess)()`,
             # uncounted, made FUN_140250520's 29 calls look like 28, 2026-10-16)
-            shown = len(re.findall(r"\(\*+\s*\([^;]*?\)\s*\(|\(\*[\w:]+\)\s*\(", text))
+            # (in a guarded function the shown calls are counted before tools/aegis.py strips the
+            # guards: their calls through decoded pointers are in the instructions too. Counted
+            # after, the per-frame tick FUN_14167c520 looked like it had lost one, and was stubbed
+            # with the 213 game functions only it reaches, 2026-10-17)
+            seen = self.cor[a].get("c", text) if a in self.guarded else text
+            shown = len(re.findall(r"\(\*+\s*\([^;]*?\)\s*\(|\(\*[\w:]+\)\s*\(", seen))
             if self.callargs.indirect_calls(a, self.cor[a]["size"]) > shown:
                 return "an indirect call the decompiler lost"
         # the reference's own direct call sites (tools/protos.py): a body that shows under half

@@ -869,7 +869,13 @@ undefined1 FUN_14021f090(void)
   puVar20 = ((undefined1 *)(gen_frame + 0x0));
   uVar26 = 0;
   uVar18 = 1;
+  if (((void *)__readgsqword(0x60)) != (void *)0x0) {
+    uVar32 = 0;
+  }
   uVar22 = 0x1000;
+  if (((void *)__readgsqword(0x30)) != (void *)0x0) {
+    uVar22 = __rdtsc();
+  }
   uVar32 = 100;
   (*(ulonglong *)(gen_frame + 0x150)) = 0xabfc809f2f60fe89;
   (*(ulonglong *)(gen_frame + 0x218)) = 0x3a52cef496b45e5e;
@@ -936,11 +942,6 @@ undefined1 FUN_14021f090(void)
     if ((*(char *)(gen_frame + 0x3b4)) == '\0') {
       (*(char *)(gen_frame + 0x3b4)) = '\x01';
       uVar26 = __rdtsc();
-      REFG(undefined8, 0x142ddf9a0) =
-           REFG(undefined8, 0x142ddf9a0) +
-           (uVar26) *
-           (ulonglong)(((uint)REFG(undefined8, 0x142ddf9a0) & 0xff) + 1);
-      REFG(undefined8, 0x142ddf9a0) = REFG(undefined8, 0x142ddf9a0) * 0x20 | REFG(undefined8, 0x142ddf9a0) >> 0x3b;
       (*(ulonglong *)(gen_frame + 0x1b0)) = 0x273a6e0a62aad15a;
       (*(ulonglong *)(gen_frame + 0x1a8)) = REFG(undefined8, 0x142ddf9a0);
       CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x1b0)));
@@ -948,7 +949,6 @@ undefined1 FUN_14021f090(void)
       lVar17 = 0;
       do {
         (*(ulonglong *)(gen_frame + 0x1b0)) = ~(*(ulonglong *)(gen_frame + 0x1b0)) ^ (*(ulonglong *)(gen_frame + 0x1a8)) ^ *(ulonglong *)((longlong)((ulonglong *)(gen_frame + 0x350)) + lVar17);
-        *(ulonglong *)(lVar17 + 0x142ddf8a0) = (*(ulonglong *)(gen_frame + 0x1b0));
         (*(ulonglong *)(gen_frame + 0x1b0)) = ~(*(ulonglong *)(gen_frame + 0x1a8)) ^ (*(ulonglong *)(gen_frame + 0x1b0));
         lVar23 = lVar23 + -1;
         lVar17 = lVar17 + 8;
@@ -993,12 +993,6 @@ undefined1 FUN_14021f090(void)
   (*(undefined8 *)((char *)&auVar35 + 0)) = uVar18;
   uVar32 = gen_v16_bytes(gen_v16_mul(gen_v16_zext(gen_v16_u(0x47ae147ae147ae15), 8), auVar35), (int)(4), 4);
   lVar17 = gen_v16_bytes(gen_v16_mul(gen_v16_zext(gen_v16_u(0x47ae147ae147ae15), 8), auVar35), (int)(8), 8);
-  if (uVar18 + ((uVar18 - lVar17 >> 1) + lVar17 >> 6) * -100 < 5) {
-    *(undefined4 *)(puVar20 + 0xe8) = 0;
-    *(undefined4 *)(puVar20 + 0x20) = 0x118b;
-    *(undefined **)(puVar20 + -8) = &REFG(undefined8, 0x14022096a);
-    uVar32 = 0;
-  }
   uVar18 = __rdtsc();
   (*(undefined8 *)((char *)&auVar36 + 8)) = 0;
   *(undefined **)(puVar20 + -8) = &REFG(undefined8, 0x1402221cd);

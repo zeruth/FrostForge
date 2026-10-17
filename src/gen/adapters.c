@@ -1975,6 +1975,12 @@ undefined4 FUN_1405da650(unsigned long long a0, unsigned long long a1, unsigned 
     return 0;
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_1405da670=?AsyncGetNetStatus@@YAHXZ")
+extern char gen_alias_1405da670;
+int FUN_1405da670(void) {
+    return (int)((unsigned long long (*)(void))&gen_alias_1405da670)();
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_1405da740=?AsyncGetStats@@YAXPEAIH@Z")
 extern char gen_alias_1405da740;
 undefined8 FUN_1405da740(unsigned long long a0, unsigned long long a1) {
@@ -3800,6 +3806,27 @@ undefined8 FUN_140662c30(unsigned long long a0, unsigned long long a1, unsigned 
 extern char gen_alias_1406630a0;
 undefined4 FUN_1406630a0(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3, unsigned long long a4) {
     return (undefined4)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long))&gen_alias_1406630a0)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2, (unsigned long long)a3, (unsigned long long)a4);
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_140663410=?FrameXML_AddScopedMask@@YAXI@Z")
+extern char gen_alias_140663410;
+uint FUN_140663410(unsigned long long a0) {
+    ((void (*)(unsigned long long))&gen_alias_140663410)((unsigned long long)a0);
+    return 0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_140663520=?FrameXML_FreeIntrinsics@@YAXXZ")
+extern char gen_alias_140663520;
+undefined1 * FUN_140663520(void) {
+    ((void (*)(void))&gen_alias_140663520)();
+    return 0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_1406635a0=?FrameXML_FreeVirtuals@@YAXXZ")
+extern char gen_alias_1406635a0;
+undefined1 * FUN_1406635a0(void) {
+    ((void (*)(void))&gen_alias_1406635a0)();
+    return 0;
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_140663620=?FrameXML_GetDebugLevel@@YAHXZ")
@@ -6999,6 +7026,13 @@ undefined8 FUN_1414f8940(unsigned long long a0) {
 extern char gen_alias_1414f8970;
 undefined8 FUN_1414f8970(unsigned long long a0) {
     ((void (*)(unsigned long long))&gen_alias_1414f8970)((unsigned long long)a0);
+    return 0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_1414fc880=?WindowSetCursorSize@@YAXH@Z")
+extern char gen_alias_1414fc880;
+undefined8 FUN_1414fc880(unsigned long long a0) {
+    ((void (*)(unsigned long long))&gen_alias_1414fc880)((unsigned long long)a0);
     return 0;
 }
 

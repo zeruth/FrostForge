@@ -13,33 +13,3 @@ undefined4 FUN_14021c040() {
     GenUnimplemented(0x14021c040ULL);
     return (undefined4)0;
 }
-
-/* an inlined anti-tamper guard tools/aegis.py could not strip: puVar10 is read but only the guard stored it */
-undefined4 FUN_140251190() {
-    GenUnimplemented(0x140251190ULL);
-    return (undefined4)0;
-}
-
-/* an inlined anti-tamper guard tools/aegis.py could not strip: a guard around game code (a loop whose exit was a guard's: do {) */
-char FUN_1412e73c0() {
-    GenUnimplemented(0x1412e73c0ULL);
-    return (char)0;
-}
-
-/* an indirect call the decompiler lost */
-undefined1 FUN_14167c520() {
-    GenUnimplemented(0x14167c520ULL);
-    return (undefined1)0;
-}
-
-/* an interlocked operation of a shape the translator does not map */
-undefined8 FUN_141687ed0() {
-    GenUnimplemented(0x141687ed0ULL);
-    return (undefined8)0;
-}
-
-/* an inlined anti-tamper guard tools/aegis.py could not strip: plVar23 is read but only the guard stored it */
-undefined4 FUN_142420a40() {
-    GenUnimplemented(0x142420a40ULL);
-    return (undefined4)0;
-}

@@ -13858,7 +13858,6 @@ undefined8 FUN_141801cf0(void)
   __declspec(align(16)) unsigned char gen_frame[(0x700 + sizeof(ulonglong[32]) > 0xa38 ? 0x700 + sizeof(ulonglong[32]) : 0xa38)];
   ulonglong *puVar1;
   gen_v16 auVar2;
-  ulonglong auVar3_lo;
   ulonglong uVar7;
   undefined4 uVar8;
   ulonglong uVar9;
@@ -13877,14 +13876,19 @@ undefined8 FUN_141801cf0(void)
   ulonglong uVar27;
   longlong lVar29;
   longlong lVar30;
-  bool bVar31;
 
   /* anti-tamper guard removed (tools/aegis.py) */
   puVar21 = ((undefined1 *)(gen_frame + 0x0));
   uVar24 = 1;
   lVar29 = 0x20;
   lVar30 = 2;
+  if (((void *)__readgsqword(0x60)) != (void *)0x0) {
+    uVar14 = 0;
+  }
   uVar22 = 0x1000;
+  if (((void *)__readgsqword(0x30)) != (void *)0x0) {
+    uVar22 = __rdtsc();
+  }
   uVar27 = 0;
   uVar16 = 100;
   (*(ulonglong *)(gen_frame + 0x280)) = 0x3a52cef496b45e5e;
@@ -13956,11 +13960,6 @@ undefined8 FUN_141801cf0(void)
     if ((*(char *)(gen_frame + 0x464)) == '\0') {
       (*(char *)(gen_frame + 0x464)) = '\x01';
       uVar22 = __rdtsc();
-      REFG(undefined8, 0x142ddf9a0) =
-           REFG(undefined8, 0x142ddf9a0) +
-           (uVar22) *
-           (ulonglong)(((uint)REFG(undefined8, 0x142ddf9a0) & 0xff) + 1);
-      REFG(undefined8, 0x142ddf9a0) = REFG(undefined8, 0x142ddf9a0) * 0x20 | REFG(undefined8, 0x142ddf9a0) >> 0x3b;
       (*(ulonglong *)(gen_frame + 0x1a8)) = 0x273a6e0a62aad15a;
       (*(ulonglong *)(gen_frame + 0x1a0)) = REFG(undefined8, 0x142ddf9a0);
       CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x1a8)));
@@ -13968,7 +13967,6 @@ undefined8 FUN_141801cf0(void)
       lVar23 = lVar29;
       do {
         (*(ulonglong *)(gen_frame + 0x1a8)) = ~(*(ulonglong *)(gen_frame + 0x1a8)) ^ (*(ulonglong *)(gen_frame + 0x1a0)) ^ *(ulonglong *)((longlong)((ulonglong *)(gen_frame + 0x400)) + lVar20);
-        *(ulonglong *)(lVar20 + 0x142ddf8a0) = (*(ulonglong *)(gen_frame + 0x1a8));
         (*(ulonglong *)(gen_frame + 0x1a8)) = ~(*(ulonglong *)(gen_frame + 0x1a0)) ^ (*(ulonglong *)(gen_frame + 0x1a8));
         lVar23 = lVar23 + -1;
         lVar20 = lVar20 + 8;
@@ -14013,33 +14011,6 @@ undefined8 FUN_141801cf0(void)
   (*(undefined8 *)((char *)&auVar2 + 0)) = uVar24;
   uVar15 = gen_v16_bytes(gen_v16_mul(gen_v16_zext(gen_v16_u(0x47ae147ae147ae15), 8), auVar2), (int)(4), 4);
   lVar20 = gen_v16_bytes(gen_v16_mul(gen_v16_zext(gen_v16_u(0x47ae147ae147ae15), 8), auVar2), (int)(8), 8);
-  if (uVar24 + ((uVar24 - lVar20 >> 1) + lVar20 >> 6) * -100 < 5) {
-    uVar24 = __rdtsc();
-        auVar3_lo = uVar24;
-    lVar20 = __umulh((ulonglong)(0x624dd2f1a9fbe77), (ulonglong)(auVar3_lo));
-    if (uVar24 + ((uVar24 - lVar20 >> 1) + lVar20 >> 9) * -1000 < 0xb) {
-      bVar31 = GEN_ATOMIC_CAS(REFG(undefined8, 0x14311c618), 1, 0) == 0;
-      while (!bVar31) {
-        bVar31 = GEN_ATOMIC_CAS(REFG(undefined8, 0x14311c618), 1, 0) == 0;
-      }
-      (*(ulonglong *)(gen_frame + 0x2a8)) = 0x89c504ba82cec298;
-      *(undefined **)(puVar21 + -8) = &REFG(undefined8, 0x14180373b);
-      CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x2a8)));
-      (*(ulonglong *)(gen_frame + 0x128)) = 0x54b9b09b7c4958c7;
-      (*(ulonglong *)(gen_frame + 0x2d0)) = 0xcb0e2f7c9438ed89;
-      *(undefined **)(puVar21 + -8) = &REFG(undefined8, 0x141803cd3);
-      CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x2d0)));
-      uVar13 = *(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((*(ulonglong *)(gen_frame + 0x128)) >> 0x34));
-      uVar15 = (uint)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)(*(ulonglong *)(gen_frame + 0x128)) & 0xfff)) >>
-                     0x20);
-      *(undefined **)(puVar21 + -8) = &REFG(undefined8, 0x141803dee);
-      (*(ulonglong *)(gen_frame + 0x2d8)) = 0x89c504ba82cec298;
-      *(undefined **)(puVar21 + -8) = &REFG(undefined8, 0x141803e20);
-      CALLF(undefined8, FUN_1400b1420)((short)&(*(ulonglong *)(gen_frame + 0x2d8)));
-      REFG(undefined8, 0x14311c618) = 0;
-    }
-    uVar15 = (uint)(REFG(undefined8, 0x142ddf594) >> 0x24) | (uint)((REFG(undefined8, 0x142ddf594) << 0x3c) >> 0x20);
-  }
   uVar24 = __rdtsc();
   if (((REFG(undefined8, 0x142d20fe8) & 1) != 0) || (uVar24 = REFG(undefined8, 0x142d20fe8), REFG(undefined8, 0x142d20fe8) == 0)) {
     uVar24 = 0;
