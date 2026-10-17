@@ -23,6 +23,38 @@ EXE = ROOT / "client" / "_classic_" / "WowClassic-clean.exe"
 FACTS = ROOT / "build" / "facts"
 
 
+def regs_access(insn) -> tuple[list[int], list[int]]:
+    """capstone's (registers read, registers written), with the operands it leaves out.
+
+    capstone 5.0 reports some register operands with no access at all, and leaves them out of
+    regs_access: `test dword ptr [rcx + 0x28], edx` reads only rcx by its account. Over .text that
+    is ~6k `test m, r` alone, and FUN_140520fe0 (`test [rcx + 0x28], edx; setne al; ret`) was
+    found taking one parameter, its decompilation reading `in_EDX` (2026-10-16). Such an operand
+    is read; a first operand of an instruction that has others is written too (`vbroadcasti128
+    ymm0, [m]`), unless the instruction only compares or pushes."""
+    import capstone
+    from capstone import x86_const as X
+    try:
+        reads, writes = insn.regs_access()
+    except capstone.CsError:
+        return [], []
+    reads, writes = list(reads), list(writes)
+    ops = insn.operands
+    for k, o in enumerate(ops):
+        if o.type != X.X86_OP_REG or o.reg in reads or o.reg in writes:
+            continue
+        if k == 0 and len(ops) > 1 and insn.mnemonic not in ("test", "cmp", "bt", "push") \
+                and not insn.mnemonic.startswith("vpscatter"):
+            writes.append(o.reg)
+            if insn.mnemonic in ("bswap", "xchg"):
+                reads.append(o.reg)
+        else:
+            reads.append(o.reg)
+            if insn.mnemonic == "bswap":
+                writes.append(o.reg)
+    return reads, writes
+
+
 @dataclass
 class Section:
     name: str

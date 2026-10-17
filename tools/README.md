@@ -13,11 +13,35 @@ replaces a name set by hand (`USER_DEFINED`). The JSON is also the input for lat
 measurement.
 
 ```bash
-bash tools/facts.sh                   # every extractor -> build/facts/*.json, then apply to Ghidra
-python tools/corpus.py --export       # decompile everything -> build/corpus.jsonl (~20 min)
+bash tools/pipeline.sh                # the whole pipeline: facts, one Ghidra session, translate
+bash tools/pipeline.sh --no-ghidra    # facts and translate against the corpus as it is
 python tools/corpus.py --module Unit_C.cpp --out unit_c   # read a module, anti-tamper stripped
 python tools/iat_dump.py              # imports (needs a running client, see below; committed)
 ```
+
+### The pipeline (`tools/pipeline.sh`, 2026-10-16)
+
+Three steps, one Ghidra session:
+
+1. **Facts** (~2 min): every extractor below, the independent ones in parallel, then
+   `funcptrs.py` and `protos.py`, which read the others' facts.
+2. **Ghidra** (`ghidra/ghidra.sh all`, ~12 min): the program opens once; `ApplyFacts.java`
+   applies every fact, then `ExportData.java` and `ExportDecompAll.java` write
+   `build/refdata.jsonl` and `build/corpus.jsonl` (each written beside the old one and moved
+   over only when complete). The Decompiler Parameter ID pass (`CommitPrototypes.java`) is gone:
+   its prototypes were guesses, and `protos.py` reads them off the instructions instead.
+3. **Translate** (`tools/translate.py --handlers --depth 24 --fix`, ~5 min): one load and one
+   plan; a fix round re-emits only the bodies that did not compile, as stubs, and the build
+   recompiles only the files that changed (`src/gen` compiles with `/MP`). Each demotion in
+   `src/gen/demoted.json` carries the line the compiler pointed at.
+
+The goal is that the corpus comes out of Ghidra right: a defect is fixed where it arises (a fact,
+or the translator's reading of a construct), not patched per function. `tools/translate_patches.json`
+holds what is not fixed at its source yet; a patch that no longer matches is reported and skipped.
+
+Back up the Ghidra project before a session that changes much
+(`cp -r FrostLite.rep FrostLite.rep.bak-<date>` in `C:\Users\tyler\tools\ghidra-projects`): the
+facts are re-runnable, but what they replace is not kept.
 
 | tool | what it recovers | how |
 |---|---|---|
@@ -29,7 +53,10 @@ python tools/iat_dump.py              # imports (needs a running client, see bel
 | `luabind.py` | Lua C function tables: name -> function | 16-byte `{name, func}` runs |
 | `iat_dump.py` | the stripped import table: 614 slots -> DLL!API | reads the slots from a live process, evaluates the obfuscated stubs, resolves against exports |
 | `typetags.py` | which classes each function creates or destroys (9.8k functions) | the type-name string passed to `SMemAlloc`/`SMemFree` |
-| `retcheck.py` | functions carrying the anti-tamper return-address check, and where it starts | loads of the check's code-range global |
+| `retcheck.py` | functions carrying the anti-tamper return-address check, and where it starts; the check's jumps over junk (2,885), which ApplyFacts makes unconditional and whose junk it clears, so the 155 functions Ghidra decoded with overlapping instructions decompile | loads of the check's code-range global; a forward jump inside the check whose fall-through, decoded linearly, runs across the jump's own target |
+| `protos.py` | every function's parameters and result, and every indirect call's arguments (`protos.json`, `callsites.json`), in place of Ghidra's Decompiler Parameter ID | a must-define pass over rcx/rdx/r8/r9/xmm0-3 by width, the home slots and the stack parameters through rsp and the registers set from it, closed over direct and tail calls; results from the width the direct callers read (`test al, al`: a byte), or what a function only a vtable reaches leaves in rax; an indirect call's arguments are the registers written since the caller's last call, or its own untouched parameters, and the outgoing stack stores below its lowest local. Also the variadic functions (`varargs.json`: the first variadic slot's address taken, the register slots from there through r9 spilled and never read back as values), the `call __chkstk` sites ApplyFacts makes nops, and 16-byte vector arguments and results (placed in xmm by custom storage). `--show` / `--trace` say which instruction makes an input |
+| `funcptrs.py` | data slots holding a function's address that code calls through, typed as a pointer to the target's signature | `call [rip+X]` / `mov reg, [rip+X]` on a slot whose value is a function start |
+| `switches.py` | MSVC jump tables, written by ApplyFacts as jump-table overrides where Ghidra has no flow out of the jump | `cmp r, N; ja` bound, the image base, an optional byte index table, the 32-bit table, `add; jmp reg`; every target inside the jump's own function |
 | `pieces.py` | chained `.pdata` pieces and their parents | `UNW_FLAG_CHAININFO` |
 | `cregister.py` | `C_` namespaced Lua APIs: 1,237 handlers in 102 namespaces | the two registration forms in code (below) |
 | `noreturn.py` | functions that never return (35) | no `ret` in any piece + tail jumps only to noreturn functions, cross-checked against call sites the compiler dead-ended |

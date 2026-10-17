@@ -228,7 +228,6 @@ _EXCEPTIONS = json.loads((Path(__file__).with_name("fidelity_exceptions.json")).
 REF_SKIP = {int(a, 16) for a in _EXCEPTIONS["skip"]} | {int(a, 16) for a in _EXCEPTIONS.get("lib", {})}
 REF_ALIAS = {int(a, 16): int(v["to"], 16) for a, v in _EXCEPTIONS["alias"].items()}
 
-
 def ref_is_lib(cor: dict, a: int) -> bool:
     entry = cor.get(a)
     if entry is None:
@@ -281,11 +280,57 @@ def float_text(raw: bytes) -> str:
     return f"f:{v:.6g}"
 
 
-def features(binary: Binary, md, ranges: list[tuple[int, int]], inside) -> Features:
+def check_code(binary: Binary, md, ranges: list[tuple[int, int]], checks: dict[int, int],
+               junk: dict[int, int]) -> set[int]:
+    """The instructions of the anti-tamper checks in these ranges (tools/retcheck.py): what each
+    check's start reaches and its success target does not, the range tests, the table walk and
+    the crash loops. Counted as the function's, a Lua handler of one call looked like it made six
+    and its decompilation was stubbed as having lost calls (61 functions, 2026-10-16)."""
+    insns = {}
+    for begin, end in ranges:
+        code = binary.image[binary.off(begin):binary.off(begin) + (end - begin)]
+        for insn in md.disasm(bytes(code), begin):
+            insns[insn.address] = insn
+
+    def walk(seeds, stop):
+        seen, todo = set(), list(seeds)
+        while todo:
+            va = todo.pop()
+            if va in seen or va in stop or va not in insns:
+                continue
+            seen.add(va)
+            i = insns[va]
+            m = i.mnemonic
+            nxt = va + i.size
+            if va in junk:
+                todo.append(junk[va])
+                continue
+            if m in ("ret", "int3", "ud2", "hlt"):
+                continue
+            if m.startswith("j") and i.operands and i.operands[0].type == capstone.x86.X86_OP_IMM:
+                todo.append(i.operands[0].imm)
+                if m != "jmp":
+                    todo.append(nxt)
+                continue
+            if m == "jmp":
+                continue
+            todo.append(nxt)
+        return seen
+
+    out: set[int] = set()
+    for s, t in checks.items():
+        if s in insns:
+            out |= walk([s], {t}) - walk([t], set())
+    return out
+
+
+def features(binary: Binary, md, ranges: list[tuple[int, int]], inside, skip: set[int] | None = None) -> Features:
     f = Features()
     for begin, end in ranges:
         code = binary.image[binary.off(begin):binary.off(begin) + (end - begin)]
         for insn in md.disasm(bytes(code), begin):
+            if skip and insn.address in skip:
+                continue
             mn = insn.mnemonic
             norm = "jcc" if JCC.match(mn) and mn.startswith("j") else ("cmov" if mn.startswith("cmov") else mn)
             f.mnemonics.append(norm)
@@ -743,11 +788,16 @@ def main() -> None:
         i = bisect.bisect_right(ref.piece_starts, t) - 1
         return ref.piece_root[i] if i >= 0 and t < ref.piece_ends[i] else t
 
+    # the anti-tamper checks, left out of the reference's features (check_code)
+    rc_path = ROOT / "build/facts/retcheck.json"
+    rc = json.loads(rc_path.read_text()) if rc_path.exists() else {}
+    rc_checks = {int(s, 16): int(t, 16) for s, t in rc.get("checks", {}).items()}
+    rc_junk = {int(j, 16): int(t, 16) for j, t in rc.get("junk_jumps", {}).items()}
     cache = {}
-    ref_mtime = str(Path(ref.path).stat().st_mtime)
+    ref_mtime = str(Path(ref.path).stat().st_mtime) + ":" + (str(rc_path.stat().st_mtime) if rc_path.exists() else "")
     if REF_CACHE.exists():
         loaded = json.loads(REF_CACHE.read_text())
-        if loaded.get("mtime") == ref_mtime and loaded.get("version") == 5:
+        if loaded.get("mtime") == ref_mtime and loaded.get("version") == 6:
             cache = loaded["functions"]
     cache_dirty = False
 
@@ -761,7 +811,9 @@ def main() -> None:
         def inside(t):
             return ref_root(t) == a and any(b <= t < e for b, e in pieces)
 
-        f = features(ref, md, pieces, inside)
+        mine = {s: t for s, t in rc_checks.items() if any(b <= s < e for b, e in pieces)}
+        skip = check_code(ref, md, pieces, mine, rc_junk) if mine else None
+        f = features(ref, md, pieces, inside, skip)
         f.calls = [ref_root(resolve_thunk(ref, md, t)) for t in f.calls]
         cache[key] = f.to_json()
         cache_dirty = True
@@ -790,6 +842,12 @@ def main() -> None:
     crt_bodies.sort()
     crt_sizes = [c[0] for c in crt_bodies]
     crt_known: dict[int, str | None] = {int(k, 16): v for k, v in cache.get("_crt", {}).items()}
+    # (and the routines the translator calls by their C library names, identified by running
+    # them, tools/oracle.py: the port's call to `cos` is then the reference's to FUN_142416680,
+    # where the trigram match above misses the compiler's inline expansions; 2026-10-17)
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from translate import CRT_BY_ADDR
+    crt_known.update(CRT_BY_ADDR)
 
     def ref_crt(a: int) -> str | None:
         """The runtime routine a reference function is, or None."""
@@ -987,7 +1045,7 @@ def main() -> None:
         }
 
     if cache_dirty:
-        REF_CACHE.write_text(json.dumps({"mtime": ref_mtime, "version": 5, "functions": cache}))
+        REF_CACHE.write_text(json.dumps({"mtime": ref_mtime, "version": 6, "functions": cache}))
 
     # ---- stub liveness ---------------------------------------------------------------------
     stub_ports = {pva: r for r, pva in port_of_ref.items() if records[r]["kind"] == "stub"}

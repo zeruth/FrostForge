@@ -12,6 +12,8 @@ from __future__ import annotations
 import capstone
 from capstone import x86
 
+from wowbin import regs_access
+
 ARG_REGS = ("rcx", "rdx", "r8", "r9")
 _md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
 _md.detail = True
@@ -131,7 +133,7 @@ class _Function:
                 dst, src = FAMILY.get(i.reg_name(ops[0].reg)), FAMILY.get(i.reg_name(ops[1].reg))
                 if dst in CALLEE_SAVED and src in live:
                     found[dst] = (k, live[src])
-            _, written = i.regs_access()
+            _, written = regs_access(i)
             for r in written:
                 family = FAMILY.get(i.reg_name(r))
                 live.pop(family, None)
@@ -156,7 +158,7 @@ class _Function:
             for n, i in enumerate(self.ins):
                 if i.mnemonic in ("pop", "push") or restore(n):
                     continue
-                _, written = i.regs_access()
+                _, written = regs_access(i)
                 writes += any(FAMILY.get(i.reg_name(r)) == reg for r in written)
             if writes == 1:
                 out[reg] = (k, value)
@@ -166,7 +168,7 @@ class _Function:
         i = self.ins[k]
         if i.group(capstone.CS_GRP_CALL):
             return reg not in CALLEE_SAVED
-        _, written = i.regs_access()
+        _, written = regs_access(i)
         return any(FAMILY.get(i.reg_name(r)) == reg for r in written)
 
     def returned_exits(self, reg: str) -> list[int]:
@@ -302,7 +304,7 @@ class _Function:
             if not i.group(capstone.CS_GRP_JUMP):
                 writes_memory = any(op.type == x86.X86_OP_MEM and op.access & capstone.CS_AC_WRITE
                                     for op in i.operands)
-                _, written = i.regs_access()
+                _, written = regs_access(i)
                 if any(FAMILY.get(i.reg_name(r)) == reg for r in written):
                     return self._evaluate(q, i, reg, floor, depth, clean)
                 if writes_memory:
@@ -401,8 +403,40 @@ class CallArgs:
         f = self._functions.get(function)
         if f is None:
             f = self._functions[function] = _Function(self.binary, function, size)
-        return sum(1 for i in f.ins if i.mnemonic == "call" and i.operands
-                   and i.operands[0].type != x86.X86_OP_IMM)
+        # (a call through a register or frame slot that holds a function's address taken in this
+        # function, `lea rax, [rip + x]; mov [rsp + 0x28], rax; ... call [rsp + 0x28]`, is one the
+        # decompiler resolves and shows by the callee's name: FUN_1414c51e0's call to the CFG
+        # no-op `_guard_check_icall` that way was counted lost, 2026-10-17)
+        regs: dict[int, int] = {}
+        slots: dict[int, int] = {}
+        n = 0
+        for i in f.ins:
+            ops = i.operands
+            if i.mnemonic == "call":
+                if ops and ops[0].type != x86.X86_OP_IMM:
+                    o = ops[0]
+                    known = (o.type == x86.X86_OP_REG and o.reg in regs) or (
+                        o.type == x86.X86_OP_MEM and o.mem.base == x86.X86_REG_RSP and o.mem.index == 0
+                        and o.mem.disp in slots)
+                    n += not known
+                regs.clear()
+                continue
+            if i.mnemonic == "lea" and len(ops) == 2 and ops[1].mem.base == x86.X86_REG_RIP:
+                regs[ops[0].reg] = i.address + i.size + ops[1].mem.disp
+                continue
+            if i.mnemonic == "mov" and len(ops) == 2 and ops[0].type == x86.X86_OP_MEM \
+                    and ops[0].mem.base == x86.X86_REG_RSP and ops[0].mem.index == 0:
+                if ops[1].type == x86.X86_OP_REG and ops[1].reg in regs:
+                    slots[ops[0].mem.disp] = regs[ops[1].reg]
+                else:
+                    slots.pop(ops[0].mem.disp, None)
+                continue
+            if ops and ops[0].type == x86.X86_OP_REG:
+                regs.pop(ops[0].reg, None)
+            if i.group(x86.X86_GRP_JUMP) or i.mnemonic.startswith(("push", "pop", "sub", "add")) and ops \
+                    and ops[0].type == x86.X86_OP_REG and ops[0].reg == x86.X86_REG_RSP:
+                slots.clear()
+        return n
 
     def global_accesses(self, function: int, size: int) -> dict[int, set[tuple[int, str]]]:
         """Each RIP-relative address the function reads or writes, with how: (bytes, "x") for a

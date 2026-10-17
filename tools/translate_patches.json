@@ -1,21 +1,5 @@
 {
- "_doc": "Corrections to the decompilation, applied before translation (tools/translate.py). Each is a decompiler error proven against the instructions: 'from' must occur exactly once in the function's corpus text, and 'why' gives the instruction evidence.",
- "141f2ece0": [
-  {"from": "(**(code **)(*(longlong *)*DAT_143264fa8 + 8))((longlong *)*DAT_143264fa8,local_b8);",
-   "to": "(**(code **)(*(longlong *)*DAT_143264fa8 + 8))((longlong *)*DAT_143264fa8,local_b8,puVar12);",
-   "why": "cross_ssl's start calls the factory's Initialize (vtable 0x142880130 slot 1, 0x141f6fcf0, which reads a logger third) with the logger it just made: r8 = rax from the allocation at 0x141f2ee01 (r14 = 0 when it failed, 0x141f2ee1c), stored to DAT_143264fb0 at 0x141f2ee91, call at 0x141f2ee98. Without it the SChannel setup logged through a garbage pointer and faulted, ssl::Initialize freed the filter map, and GlueLogin read the null map"}
- ],
- "141f6fcf0": [
-  {"from": "  ulonglong in_RAX;\n",
-   "to": "",
-   "why": "in_RAX is only the error path's return; see below"},
-  {"from": "    in_RAX = (**(code **)(*param_3 + 8))(param_3,1,\"This factory is already initialized.\",0,0);",
-   "to": "    (**(code **)(*param_3 + 8))(param_3,1,\"This factory is already initialized.\",0,0);",
-   "why": "the error callback's result is discarded: xor al,al at 0x141f6fd34 follows the call at 0x141f6fd31"},
-  {"from": "  return in_RAX & 0xffffffffffffff00;",
-   "to": "  return 0;",
-   "why": "the already-initialized path returns false: xor al,al at 0x141f6fd34, then ret at 0x141f6fd40 (callers test al)"}
- ],
+ "_doc": "Corrections to the decompilation, applied before translation (tools/translate.py). Each is a decompiler error proven against the instructions: 'from' should occur exactly once in the function's corpus text, and 'why' gives the instruction evidence. A patch is a defect the pipeline has not fixed at its source yet: the goal is none. The five of 2026-10-15/16 are gone, each fixed where it arose (tools/protos.py's prototypes and indirect-call signatures, Ghidra.h's LPC* typedefs). A patch that no longer matches is reported and skipped: the corpus may have been fixed underneath it.",
  "14147f390": [
   {"from": "return *DAT_1430af3f8;",
    "to": "return *(undefined8 *)DAT_1430af3f8;",

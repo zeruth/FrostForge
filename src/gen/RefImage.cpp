@@ -29,9 +29,14 @@ extern const GENJUMP g_genJumps[];
 extern const size_t g_genJumpCount;
 extern const uint64_t g_genInits[];
 extern const size_t g_genInitCount;
-extern unsigned int gen_hits[];
-extern const unsigned int gen_hit_count;
-extern const unsigned long long gen_hit_addrs[];
+// each translated file's call counts and the addresses they belong to (hits.c)
+struct GENHITS {
+    unsigned int* m_hits;
+    const unsigned long long* m_addrs;
+    unsigned int m_count;
+};
+extern const GENHITS gen_hit_tables[];
+extern const unsigned int gen_hit_table_count;
 
 void GenUnimplemented(uint64_t address);
 int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
@@ -59,9 +64,12 @@ DWORD WINAPI HitDumpThread(void* param) {
     for (;;) {
         Sleep(5000);
         rows.clear();
-        for (uint32_t i = 0; i < gen_hit_count; i++) {
-            if (gen_hits[i] != 0) {
-                rows.emplace_back(gen_hits[i], gen_hit_addrs[i]);
+        for (uint32_t t = 0; t < gen_hit_table_count; t++) {
+            const GENHITS& table = gen_hit_tables[t];
+            for (uint32_t i = 0; i < table.m_count; i++) {
+                if (table.m_hits[i] != 0) {
+                    rows.emplace_back(table.m_hits[i], table.m_addrs[i]);
+                }
             }
         }
         std::sort(rows.begin(), rows.end(), [](const auto& a, const auto& b) { return a.first > b.first; });
@@ -267,4 +275,47 @@ bool RefImageInitialize(const char* path) {
 
 bool RefImageMapped() {
     return s_mapped;
+}
+
+// The reference's own thread-locals: translated code reaches them as the image's TLS block
+// (`ThreadLocalStoragePointer[_tls_index]`), which the loader never built, the image not being
+// loaded as a module. Each thread gets one the first time it asks, from the image's TLS template
+// (its raw data, then the zero fill), as the loader would have made it. Its callbacks do not run,
+// so a thread-local with a constructor starts as its template. The thread-safe statics' epoch
+// (+0x2140) is the port's own and never read from here (tools/translate.py, INIT_EPOCH).
+// The thread's TLS slot array as the reference's code indexes it (`*(longlong *)(
+// ThreadLocalStoragePointer + _tls_index * 8)`): one slot, the block below, at index 0, which is
+// what Ghidra.h spells _tls_index. With these two names any shape of the access works, where the
+// translator matched a few spellings and stubbed 18 functions for the rest (2026-10-16).
+extern "C" void* GenRefTlsBlock();
+extern "C" void** GenRefTlsSlots() {
+    static thread_local void* s_slot = nullptr;
+    if (s_slot == nullptr) {
+        s_slot = GenRefTlsBlock();
+    }
+    return &s_slot;
+}
+
+extern "C" void* GenRefTlsBlock() {
+    static thread_local uint8_t* s_block = nullptr;
+    if (s_block == nullptr) {
+        constexpr uint64_t base = 0x140000000ull;
+        auto dos = reinterpret_cast<const IMAGE_DOS_HEADER*>(base);
+        auto nt = reinterpret_cast<const IMAGE_NT_HEADERS64*>(base + dos->e_lfanew);
+        const IMAGE_DATA_DIRECTORY& dir = nt->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS];
+        const uint8_t* raw = nullptr;
+        size_t rawSize = 0;
+        size_t size = 0;
+        if (dir.VirtualAddress != 0) {
+            auto tls = reinterpret_cast<const IMAGE_TLS_DIRECTORY64*>(base + dir.VirtualAddress);
+            raw = reinterpret_cast<const uint8_t*>(tls->StartAddressOfRawData);
+            rawSize = static_cast<size_t>(tls->EndAddressOfRawData - tls->StartAddressOfRawData);
+            size = rawSize + tls->SizeOfZeroFill;
+        }
+        s_block = static_cast<uint8_t*>(std::calloc(1, (std::max)(size, static_cast<size_t>(0x2200))));
+        if (raw != nullptr && rawSize != 0) {
+            std::memcpy(s_block, raw, rawSize);
+        }
+    }
+    return s_block;
 }

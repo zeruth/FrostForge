@@ -8,6 +8,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import ghidra.app.cmd.disassemble.DisassembleCommand;
 import ghidra.app.cmd.function.CreateFunctionCmd;
 import ghidra.app.script.GhidraScript;
 import ghidra.program.model.address.Address;
@@ -18,12 +19,19 @@ import ghidra.program.model.data.DataTypeConflictHandler;
 import ghidra.program.model.data.DataTypeManager;
 import ghidra.program.model.data.FileDataTypeManager;
 import ghidra.program.model.data.FunctionDefinition;
+import ghidra.program.model.data.FunctionDefinitionDataType;
+import ghidra.program.model.data.Pointer;
 import ghidra.program.model.data.PointerDataType;
+import ghidra.program.model.data.Undefined;
+import ghidra.program.model.listing.Data;
 import ghidra.program.model.listing.CodeUnit;
 import ghidra.program.model.listing.Function;
 import ghidra.program.model.listing.Function.FunctionUpdateType;
 import ghidra.program.model.listing.Parameter;
 import ghidra.program.model.listing.ParameterImpl;
+import ghidra.program.model.listing.ReturnParameterImpl;
+import ghidra.program.model.listing.FlowOverride;
+import ghidra.program.model.listing.Instruction;
 import ghidra.program.model.listing.Variable;
 import ghidra.program.model.symbol.Namespace;
 import ghidra.program.model.symbol.SourceType;
@@ -40,6 +48,8 @@ import java.util.Map;
 public class ApplyFacts extends GhidraScript {
     private SymbolTable symbols;
     private int named, kept, created, tagged, labelled;
+    // the variadic functions' fixed parameter counts (varargs.json), for applyProtos
+    private final Map<Address, Integer> vaFixed = new HashMap<>();
 
     @Override
     public void run() throws Exception {
@@ -66,9 +76,23 @@ public class ApplyFacts extends GhidraScript {
         if (nr.exists()) applyNoReturn(read(nr));
         File va = new File(dir, "varargs.json");
         if (va.exists()) applyVarargs(read(va));
+        // after the varargs (which keep their own fixed count)
+        File sw = new File(dir, "switches.json");
+        if (sw.exists()) applySwitches(read(sw));
+        File pr = new File(dir, "protos.json");
+        if (pr.exists()) applyProtos(read(pr));
+        File cs = new File(dir, "callsites.json");
+        if (cs.exists()) applyCallsites(read(cs));
         // hand-identified names last, so they win over anything extracted
         File names = new File(dir, "names.json");
         if (names.exists()) applyNames(read(names));
+        // after the names and varargs, so each slot takes its target's final signature
+        File fp = new File(dir, "funcptrs.json");
+        if (fp.exists()) applyFuncptrs(read(fp));
+        // after the function-pointer slots, which keep their signature types
+        File gp = new File(dir, "globalptrs.json");
+        if (gp.exists()) applyGlobalPtrs(read(gp));
+        uniqueNames();
 
         println(String.format("ApplyFacts: named %d (kept %d user names), created %d functions, " +
                 "tagged %d, labelled %d vtables", named, kept, created, tagged, labelled));
@@ -108,7 +132,18 @@ public class ApplyFacts extends GhidraScript {
             kept++;
             return;
         }
-        f.setParentNamespace(namespace(ns));
+        Namespace space = namespace(ns);
+        // a name another function already has in the namespace gets this one's address: five
+        // script object types each register their own CreateAnimationGroup, and with one name
+        // between them a call in the decompiled text no longer says which function it calls (the
+        // translator left 125 such Lua:: calls unresolved, C2065 'Lua', 2026-10-16)
+        for (Symbol s : symbols.getSymbols(name, space)) {
+            if (s.getObject() instanceof Function && !s.getAddress().equals(f.getEntryPoint())) {
+                name = name + "_" + f.getEntryPoint().toString();
+                break;
+            }
+        }
+        f.setParentNamespace(space);
         f.setName(name, SourceType.IMPORTED);
         named++;
     }
@@ -223,6 +258,44 @@ public class ApplyFacts extends GhidraScript {
         println("ApplyFacts: import slots typed with a Windows prototype " + typed + ", bare pointers " + untyped);
     }
 
+    // funcptrs.json (tools/funcptrs.py): data slots holding a function's address that code calls
+    // through. Typed as a pointer to the target's own signature, as the import slots are, so the
+    // decompiler stops guessing each call's arguments from the registers it sees set: as a bare
+    // pointer, curl's Curl_ccalloc slot (0x142d3e8b8 -> _calloc_base) came out as `(1)` with the
+    // size dropped at about half of its calls (Curl_multi_handle, 2026-10-15).
+    private void applyFuncptrs(JsonObject root) throws Exception {
+        DataTypeManager dtm = currentProgram.getDataTypeManager();
+        int typed = 0, unsigned = 0, occupied = 0;
+        for (Map.Entry<String, JsonElement> e : root.entrySet()) {
+            Address a = addr(e.getKey());
+            Function f = getFunctionAt(addr(e.getValue().getAsJsonObject().get("target").getAsString()));
+            if (f == null || f.getSignatureSource() == SourceType.DEFAULT) {
+                // no signature to give it: an empty one would drop every argument
+                unsigned++;
+                continue;
+            }
+            Data d = getDataAt(a);
+            if (d != null && d.isDefined() && !(d.getDataType() instanceof Pointer)
+                    && !(d.getDataType() instanceof Undefined)) {
+                // a struct or array someone typed: leave it
+                occupied++;
+                continue;
+            }
+            FunctionDefinitionDataType sig = new FunctionDefinitionDataType(f, true);
+            sig.setName("fp_" + f.getName());
+            DataType slot = new PointerDataType(dtm.resolve(sig, DataTypeConflictHandler.REPLACE_HANDLER), 8);
+            try {
+                clearListing(a, a.add(7));
+                createData(a, slot);
+                typed++;
+            } catch (Exception ex) {
+                occupied++;
+            }
+        }
+        println(String.format("ApplyFacts: function-pointer slots typed %d, target without a signature %d, " +
+                "left as typed %d", typed, unsigned, occupied));
+    }
+
     // data/names.json: functions identified by hand, with the evidence as a comment.
     private void applyNames(JsonObject root) throws Exception {
         for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("functions").entrySet()) {
@@ -289,7 +362,21 @@ public class ApplyFacts extends GhidraScript {
     // the commit pass (CommitPrototypes.java, which re-derives only ANALYSIS and below) keeps
     // it: committed with all four register parameters, every caller passed its own r8/r9.
     private void applyVarargs(JsonObject root) throws Exception {
-        int set = 0, user = 0;
+        int set = 0, user = 0, unset = 0;
+        // a function an earlier session marked variadic that the facts no longer call one (the
+        // text-based tools/varargs.py took a parameter passed on by reference for a va_start,
+        // FUN_1417eec30's fourth, and its body decompiled `in_R9`): back to a fixed signature,
+        // which applyProtos then gives the parameters the instructions read. Only what this script
+        // marked (IMPORTED): FID's library signatures are ANALYSIS, user ones USER_DEFINED
+        JsonObject want = root.getAsJsonObject("functions");
+        for (Function f : currentProgram.getFunctionManager().getFunctions(true)) {
+            if (!f.hasVarArgs() || f.getSignatureSource() != SourceType.IMPORTED) continue;
+            if (want.has("0x" + f.getEntryPoint().toString())) continue;
+            f.setVarArgs(false);
+            f.setSignatureSource(SourceType.ANALYSIS);
+            unset++;
+        }
+        println("ApplyFacts: no longer variadic " + unset);
         for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("functions").entrySet()) {
             Function f = getFunctionAt(addr(e.getKey()));
             if (f == null) continue;
@@ -298,12 +385,15 @@ public class ApplyFacts extends GhidraScript {
                 continue;
             }
             int fixed = e.getValue().getAsInt();
+            vaFixed.put(f.getEntryPoint(), fixed);
             Parameter[] cur = f.getParameters();
-            if (cur.length < fixed) continue;
             if (f.hasVarArgs() && cur.length == fixed && f.getSignatureSource() == SourceType.IMPORTED) continue;
+            // (fewer than the fixed count so far: the rest as plain registers, which applyProtos
+            // then types; FUN_14253a9a0 takes six and starts its va_list past the sixth)
             List<Variable> params = new ArrayList<>();
             for (int i = 0; i < fixed; i++) {
-                params.add(new ParameterImpl(cur[i].getName(), cur[i].getDataType(), currentProgram));
+                params.add(i < cur.length ? new ParameterImpl(cur[i].getName(), cur[i].getDataType(), currentProgram)
+                        : new ParameterImpl("param_" + (i + 1), Undefined.getUndefinedDataType(8), currentProgram));
             }
             f.updateFunction(null, null, params, FunctionUpdateType.DYNAMIC_STORAGE_ALL_PARAMS, true,
                     SourceType.IMPORTED);
@@ -312,6 +402,682 @@ public class ApplyFacts extends GhidraScript {
             set++;
         }
         println("ApplyFacts: marked " + set + " functions variadic (kept " + user + " user signatures)");
+    }
+
+    // protos.json (tools/protos.py): each function's parameters as its instructions read them,
+    // in place of the Decompiler Parameter ID guesses CommitPrototypes.java used to commit
+    // (FUN_1414fc8b0 reads dx and r8w and was committed as `(uint)`: its body then read registers
+    // the decompiler lost track of). Each position keeps Ghidra's type when the kind agrees
+    // (integer, float, double), and otherwise takes one of the width read. Locked as IMPORTED.
+    // An `open` function (it leaves through an indirect tail call, so it may pass registers on
+    // unseen) only ever gains parameters.
+    private void applyProtos(JsonObject root) throws Exception {
+        int set = 0, same = 0, skipped = 0;
+        // the call targets no function covered (leaves without .pdata, tools/protos.py): made
+        // functions first, so they decompile and take their prototypes below
+        if (root.has("leaves")) {
+            int made = 0;
+            for (JsonElement l : root.getAsJsonArray("leaves")) {
+                Address a = addr(l.getAsString());
+                if (getFunctionContaining(a) != null) continue;
+                if (getInstructionAt(a) == null) disassemble(a);
+                if (new CreateFunctionCmd(a).applyTo(currentProgram, monitor)) made++;
+            }
+            println("ApplyFacts: leaf functions created " + made + " of " + root.getAsJsonArray("leaves").size());
+        }
+        // the code after a run of the clean exe's nops: Ghidra's disassembly stopped at the end of
+        // the run, leaving the rest of the function undefined bytes, and the decompiler went on
+        // through them alone, taking the tail call it found there for code of its own
+        // (FUN_141832090 ran into FUN_1418a72a0, its loop's registers `in_R9`, `unaff_RDI`)
+        int resumed = 0, rounds = 0;
+        boolean more = true;
+        while (more && rounds++ < 12) {
+            more = false;
+            for (Function f : currentProgram.getFunctionManager().getFunctions(true)) {
+                if (f.isThunk() || f.isExternal()) continue;
+                boolean grew = false;
+                for (ghidra.program.model.address.AddressRange r : f.getBody()) {
+                    Instruction last = getInstructionContaining(r.getMaxAddress());
+                    if (last == null || !last.getFlowType().hasFallthrough()) continue;
+                    Address next = last.getMaxAddress().add(1);
+                    if (currentProgram.getListing().getUndefinedDataAt(next) == null) continue;
+                    if (getFunctionAt(next) != null) continue;
+                    // (the disassembler stops part way along a long run of one instruction, its
+                    // guard against decoding data: the run of nops is decoded here without flow,
+                    // and the flow resumes at the code after it)
+                    Address code = next;
+                    int nops = 0;
+                    while (nops < 4096 && currentProgram.getMemory().contains(code)
+                            && (currentProgram.getMemory().getByte(code) & 0xff) == 0x90
+                            && currentProgram.getListing().getUndefinedDataAt(code) != null) {
+                        code = code.add(1);
+                        nops++;
+                    }
+                    if (nops > 0) {
+                        new DisassembleCommand(new ghidra.program.model.address.AddressSet(next, code.subtract(1)),
+                                null, false).applyTo(currentProgram, monitor);
+                    }
+                    if (currentProgram.getListing().getUndefinedDataAt(code) != null) {
+                        new DisassembleCommand(code, null, true).applyTo(currentProgram, monitor);
+                    }
+                    if (getInstructionAt(next) != null) {
+                        grew = true;
+                        resumed++;
+                    }
+                }
+                if (grew) {
+                    CreateFunctionCmd.fixupFunctionBody(currentProgram, f, monitor);
+                    more = true;
+                }
+            }
+        }
+        println("ApplyFacts: function code resumed after undisassembled bytes " + resumed);
+        // each jump from one function to another's start, now that the code holding it is
+        // disassembled: a call that returns, the callee a function of its own and the caller's
+        // body recomputed. Left a branch, the callee's code read as the caller's (FUN_141832090
+        // decompiled FUN_1418a72a0's loop as its own, reading the registers that callee's own
+        // caller had set: `in_R9`, `unaff_RDI`)
+        if (root.has("tail_jumps")) {
+            int marked = 0;
+            for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("tail_jumps").entrySet()) {
+                Address j = addr(e.getKey());
+                Address t = addr(e.getValue().getAsString());
+                Function c = getFunctionContaining(j);
+                Instruction insn = getInstructionAt(j);
+                if (c == null || insn == null || c.getEntryPoint().equals(t)) continue;
+                if (insn.getFlowOverride() == FlowOverride.CALL_RETURN) continue;
+                if (getFunctionAt(t) == null) {
+                    if (getInstructionAt(t) == null) disassemble(t);
+                    new CreateFunctionCmd(t).applyTo(currentProgram, monitor);
+                }
+                insn.setFlowOverride(FlowOverride.CALL_RETURN);
+                if (c.getBody().contains(t)) {
+                    CreateFunctionCmd.fixupFunctionBody(currentProgram, c, monitor);
+                }
+                marked++;
+            }
+            println("ApplyFacts: tail jumps marked calls that return " + marked);
+        }
+        // no function is decompiled into its callers: each is translated on its own, and inlined
+        // its body reads its callers' callers' registers (`in_R9`, `unaff_RDI`)
+        int inlined = 0;
+        for (Function f : currentProgram.getFunctionManager().getFunctions(true)) {
+            if (f.isInline()) {
+                f.setInline(false);
+                inlined++;
+            }
+        }
+        println("ApplyFacts: functions no longer inlined into their callers " + inlined);
+        // a function Ghidra made a thunk whose code does more than jump (`mov dl, 1; jmp
+        // FUN_14216a080`): decompiled as the target, its callers passed the target's second
+        // parameter themselves and read `in_DL` (FUN_141ef4090, 2026-10-16). A function of its own
+        int unthunked = 0;
+        for (Function f : currentProgram.getFunctionManager().getFunctions(true)) {
+            if (!f.isThunk() || f.isExternal()) continue;
+            Instruction first = getInstructionAt(f.getEntryPoint());
+            if (first == null || first.getFlowType().isJump()) continue;
+            f.setThunkedFunction(null);
+            unthunked++;
+        }
+        println("ApplyFacts: thunks that do more than jump made functions " + unthunked);
+        // functions that do nothing (spills and a ret: the release build's log calls) were given
+        // the cspec's security_check_cookie fixup on 2026-10-16, which is no code: but no code
+        // also leaves the call's return-address push in place, so the stack drifted 8 bytes a call
+        // and the decompiler lost it in 10 of the 85 callers (FUN_142586960: `auStackY_1e8`, the
+        // pushes stored as `*(puVar17 + -8) = 0x142586e03`, its second loop behind a 32-byte
+        // value; 2026-10-17). They get a calling convention that keeps every register instead
+        // (applyNoops); the fixup comes off
+        if (root.has("noops")) {
+            int cleared = 0;
+            for (JsonElement n : root.getAsJsonArray("noops")) {
+                Function f = getFunctionAt(addr(n.getAsString()));
+                if (f == null || f.isExternal()) continue;
+                if ("security_check_cookie".equals(f.getCallFixup())) {
+                    f.setCallFixup(null);
+                    cleared++;
+                }
+            }
+            println("ApplyFacts: no-op call fixups taken off functions that do nothing " + cleared);
+        }
+        // each `call __chkstk` of a large frame, a 5-byte nop in Ghidra's copy (tools/protos.py)
+        if (root.has("chkstk_calls")) {
+            int nopped = 0, done = 0, missing = 0;
+            byte[] nop5 = new byte[] { 0x0f, 0x1f, 0x44, 0x00, 0x00 };
+            for (JsonElement c : root.getAsJsonArray("chkstk_calls")) {
+                Address at = addr(c.getAsString());
+                Instruction insn = getInstructionAt(at);
+                if (insn == null) {
+                    missing++;
+                    continue;
+                }
+                byte[] code = insn.getBytes();
+                if (code.length == 5 && (code[0] & 0xff) == 0x0f && (code[1] & 0xff) == 0x1f) {
+                    done++;
+                    continue;
+                }
+                if (code.length != 5 || (code[0] & 0xff) != 0xe8) {
+                    missing++;
+                    continue;
+                }
+                clearListing(at, at.add(4));
+                currentProgram.getMemory().setBytes(at, nop5);
+                new DisassembleCommand(at, null, false).applyTo(currentProgram, monitor);
+                nopped++;
+            }
+            println("ApplyFacts: __chkstk calls made nops " + nopped + " (already " + done + "), not a call " + missing);
+        }
+        for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("functions").entrySet()) {
+            Function f = getFunctionAt(addr(e.getKey()));
+            // (a variadic function this script marked takes its fixed parameters from here too)
+            Integer fixed = f != null ? vaFixed.get(f.getEntryPoint()) : null;
+            if (f == null || f.isThunk() || f.isExternal() || (f.hasVarArgs() && fixed == null)
+                    || f.getSignatureSource() == SourceType.USER_DEFINED) {
+                skipped++;
+                continue;
+            }
+            JsonObject o = e.getValue().getAsJsonObject();
+            JsonArray want = o.getAsJsonArray("params");
+            boolean open = o.has("open") && o.get("open").getAsBoolean();
+            Parameter[] cur = f.getParameters();
+            int n = fixed != null ? fixed : open ? Math.max(want.size(), cur.length) : want.size();
+            // a 16-byte value in an xmm register (a vector argument or result): Win64 as Ghidra
+            // models it has none, and passes and returns 16 bytes through memory, so these are
+            // placed by hand (custom storage). Returned through a hidden pointer, the sincos
+            // FUN_14240ad20's two lanes were `extraout_XMM0_Db` in 17 callers, and the hidden
+            // pointer moved every parameter of FUN_141345190 one register on (2026-10-16)
+            boolean custom = o.has("ret") && "v".equals(o.getAsJsonArray("ret").get(0).getAsString());
+            for (int i = 0; i < Math.min(n, want.size()); i++) {
+                custom |= "v".equals(want.get(i).getAsJsonArray().get(0).getAsString());
+            }
+            List<Variable> params = new ArrayList<>();
+            boolean differs = n != cur.length || custom != f.hasCustomVariableStorage();
+            for (int i = 0; i < n; i++) {
+                String kind = i < want.size() ? want.get(i).getAsJsonArray().get(0).getAsString() : "?";
+                int size = i < want.size() ? want.get(i).getAsJsonArray().get(1).getAsInt() : 8;
+                DataType have = i < cur.length ? cur[i].getDataType() : null;
+                DataType dt = paramType(kind, size, have);
+                if (have == null || !dt.isEquivalent(have)) differs = true;
+                String name = i < cur.length ? cur[i].getName() : "param_" + (i + 1);
+                if (name.equals("this")) name = "param_" + (i + 1);
+                params.add(custom ? new ParameterImpl(name, dt, paramStorage(i, kind, dt), currentProgram)
+                        : new ParameterImpl(name, dt, currentProgram));
+            }
+            // the result, as wide as the direct callers read it (`test al, al`: a byte). Only
+            // functions with direct callers have one: what only a vtable reaches keeps Ghidra's
+            // with no result fact (no caller reads it, the function writes nothing of rax) it is
+            // void: kept as an earlier pass typed it, a static initializer that registers an atexit
+            // handler returned its stack pointer (`BADSPACEBASE`, 106 stubs, 2026-10-16)
+            ReturnParameterImpl ret = null;
+            DataType have = f.getReturnType();
+            DataType dt = o.has("ret")
+                    ? returnType(o.getAsJsonArray("ret").get(0).getAsString(), o.getAsJsonArray("ret").get(1).getAsInt(), have)
+                    : (open ? have : ghidra.program.model.data.VoidDataType.dataType);
+            if (!dt.isEquivalent(have)) {
+                differs = true;
+                ret = new ReturnParameterImpl(dt, currentProgram);
+            }
+            if (custom) {
+                String rk = o.has("ret") ? o.getAsJsonArray("ret").get(0).getAsString() : null;
+                ret = new ReturnParameterImpl(dt, returnStorage(rk, dt), currentProgram);
+            }
+            // `__thiscall` adds a `this` typed by the class (FID's library signatures): on x64 it
+            // is the same registers as __fastcall, and `this` an ordinary first parameter
+            String cc = "__thiscall".equals(f.getCallingConventionName()) ? "__fastcall" : null;
+            if (cc != null) differs = true;
+            if (!differs && f.getSignatureSource() == SourceType.IMPORTED) {
+                same++;
+                continue;
+            }
+            f.updateFunction(cc, ret != null ? ret : f.getReturn(), params,
+                    custom ? FunctionUpdateType.CUSTOM_STORAGE : FunctionUpdateType.DYNAMIC_STORAGE_ALL_PARAMS,
+                    true, SourceType.IMPORTED);
+            if (fixed != null) f.setVarArgs(true);
+            f.setSignatureSource(SourceType.IMPORTED);
+            set++;
+            if (custom) customs++;
+        }
+        println("ApplyFacts: prototypes committed " + set + " (" + customs + " with xmm vectors placed by hand), already so "
+                + same + ", skipped " + skipped);
+        java.util.Set<Address> noops = new java.util.HashSet<>();
+        if (root.has("noops")) for (JsonElement e : root.getAsJsonArray("noops")) noops.add(addr(e.getAsString()));
+        if (root.has("keep_xmm0")) applyConvention(KEEP_XMM0, root.getAsJsonArray("keep_xmm0"), noops);
+        if (root.has("noops")) applyConvention(KEEP_ALL, root.getAsJsonArray("noops"), java.util.Collections.emptySet());
+    }
+
+    private int customs;
+
+    // The functions xmm0 comes out of as it went in (tools/protos.py: none of their instructions
+    // writes it and all they call are such functions). The whole-program build keeps a value in
+    // xmm0 across a call to one; under Win64's __fastcall, where xmm0 is killed by any call, the
+    // decompiler printed the value after the call `extraout_XMM0` (FUN_140315680). A calling
+    // convention of their own, __fastcall with xmm0 among the unaffected registers, added to the
+    // program as a compiler-spec extension
+    private static final String KEEP_XMM0 = "__fastcall_keepxmm0";
+    // and the functions that do nothing at all (tools/protos.py `noops`): __fastcall with every
+    // register unaffected, which is what they do, so a value kept in rax or a volatile register
+    // across a call to one stays the same variable (not `extraout_EAX`)
+    private static final String KEEP_ALL = "__fastcall_keepall";
+
+    private static String conventionXml(String name) {
+        boolean all = KEEP_ALL.equals(name);
+        String g = "<group><pentry minsize=\"4\" maxsize=\"8\" metatype=\"float\"><register name=\"XMM%d_Qa\"/></pentry>"
+                + "<pentry minsize=\"1\" maxsize=\"8\"><register name=\"%s\"/></pentry></group>";
+        StringBuilder x = new StringBuilder();
+        x.append("<prototype name=\"").append(name).append("\" extrapop=\"8\" stackshift=\"8\">");
+        x.append("<input pointermax=\"8\">");
+        String[] gpr = { "RCX", "RDX", "R8", "R9" };
+        for (int i = 0; i < 4; i++) x.append(String.format(g, i, gpr[i]));
+        x.append("<pentry minsize=\"1\" maxsize=\"500\" align=\"8\"><addr offset=\"40\" space=\"stack\"/></pentry>");
+        x.append("<rule><datatype name=\"struct\" sizes=\"3,5,6,7\"/><convert_to_ptr/></rule></input>");
+        x.append("<output><pentry minsize=\"4\" maxsize=\"8\" metatype=\"float\"><register name=\"XMM0_Qa\"/></pentry>");
+        x.append("<pentry minsize=\"1\" maxsize=\"8\"><register name=\"RAX\"/></pentry>");
+        x.append("<rule><datatype name=\"struct\" sizes=\"3,5,6,7\"/><hidden_return/></rule></output>");
+        x.append("<unaffected><varnode space=\"ram\" offset=\"0\" size=\"8\"/>");
+        for (String r : new String[] { "RBX", "RBP", "RDI", "RSI", "RSP", "R12", "R13", "R14", "R15", "DF", "GS_OFFSET",
+                "XMM0", "XMM6", "XMM7", "XMM8", "XMM9", "XMM10", "XMM11", "XMM12", "XMM13", "XMM14", "XMM15" }) {
+            x.append("<register name=\"").append(r).append("\"/>");
+        }
+        if (all) {
+            for (String r : new String[] { "RAX", "RCX", "RDX", "R8", "R9", "R10", "R11",
+                    "XMM1", "XMM2", "XMM3", "XMM4", "XMM5" }) {
+                x.append("<register name=\"").append(r).append("\"/>");
+            }
+            x.append("</unaffected>");
+        } else {
+            x.append("</unaffected><killedbycall><register name=\"RAX\"/></killedbycall>");
+        }
+        x.append("<localrange><range space=\"stack\" first=\"0xfffffffffff0bdc1\" last=\"0xffffffffffffffff\"/>");
+        x.append("<range space=\"stack\" first=\"8\" last=\"39\"/></localrange></prototype>");
+        return x.toString();
+    }
+
+    // the convention `name` (a compiler-spec extension, added once) on the listed functions but
+    // `skip`, and __fastcall back on any that has it and is no longer listed
+    private void applyConvention(String name, JsonArray list, java.util.Set<Address> skip) throws Exception {
+        if (currentProgram.getCompilerSpec().getCallingConvention(name) == null) {
+            // (through Ghidra's own class loader, as JumpTable: the script bundle does not import
+            // ghidra.program.database)
+            Class<?> se = Function.class.getClassLoader().loadClass("ghidra.program.database.SpecExtension");
+            Object ext = se.getConstructor(ghidra.program.model.listing.Program.class).newInstance(currentProgram);
+            se.getMethod("addReplaceCompilerSpecExtension", String.class, ghidra.util.task.TaskMonitor.class)
+                    .invoke(ext, conventionXml(name), monitor);
+        }
+        int set = 0, kept = 0, reset = 0;
+        java.util.Set<Address> want = new java.util.HashSet<>();
+        for (JsonElement e : list) want.add(addr(e.getAsString()));
+        want.removeAll(skip);
+        for (Function f : currentProgram.getFunctionManager().getFunctions(true)) {
+            if (name.equals(f.getCallingConventionName()) && !want.contains(f.getEntryPoint())) {
+                f.setCallingConvention("__fastcall");
+                reset++;
+            }
+        }
+        if (reset > 0) println("ApplyFacts: " + reset + " functions no longer listed for " + name + ": __fastcall");
+        for (Address a : want) {
+            Function f = getFunctionAt(a);
+            if (f == null || f.isExternal() || f.isThunk() || f.hasCustomVariableStorage()) continue;
+            if (name.equals(f.getCallingConventionName())) {
+                kept++;
+                continue;
+            }
+            f.setCallingConvention(name);
+            set++;
+        }
+        println("ApplyFacts: " + name + " given to " + set + " functions (already " + kept + ")");
+    }
+
+    // switches.json (tools/switches.py): jump tables read off the instructions, written as a
+    // jump-table override where Ghidra has no flow out of the jump (the decompiler then followed
+    // it into nothing: FUN_1406303d0, "Flow exceeded maximum allowable instructions"). A function
+    // Ghidra made at a case is removed: it is the switch's own code
+    private void applySwitches(JsonObject root) throws Exception {
+        int set = 0, resolved = 0, missing = 0, removed = 0;
+        Class<?> jt = Function.class.getClassLoader().loadClass("ghidra.program.model.pcode.JumpTable");
+        // (Ghidra 12: JumpTable(Address, ArrayList<Address>, boolean override, int format); older
+        // versions take the first three)
+        java.lang.reflect.Constructor<?> make = null;
+        for (java.lang.reflect.Constructor<?> c : jt.getConstructors()) {
+            Class<?>[] ps = c.getParameterTypes();
+            if ((ps.length == 3 || (ps.length == 4 && ps[3] == int.class)) && ps[0] == Address.class
+                    && ps[1].isAssignableFrom(ArrayList.class) && ps[2] == boolean.class) {
+                make = c;
+            }
+        }
+        if (make == null) {
+            StringBuilder have = new StringBuilder();
+            for (java.lang.reflect.Constructor<?> c : jt.getConstructors()) have.append(c).append("; ");
+            println("ApplyFacts: no JumpTable(Address, List, boolean) constructor: " + have);
+            return;
+        }
+        java.lang.reflect.Method write = jt.getMethod("writeOverride", Function.class);
+        for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("jumps").entrySet()) {
+            Address j = addr(e.getKey());
+            Instruction insn = getInstructionAt(j);
+            Function f = getFunctionContaining(j);
+            if (insn == null || f == null) {
+                missing++;
+                continue;
+            }
+            boolean flows = false;
+            for (ghidra.program.model.symbol.Reference r : insn.getReferencesFrom()) {
+                if (r.getReferenceType().isJump() || r.getReferenceType().isComputed()) flows = true;
+            }
+            // (and where Ghidra's table is shorter than the one the instructions give: it truncated
+            // it, "Sanity check requires truncation of jumptable", and FUN_1419c3450 ran on into
+            // the bytes after it as code)
+            // (or a different one: FUN_1419c3450's two-level table, a case of Ghidra's own running
+            // into data, "Bad instruction - Truncating control flow here")
+            java.util.Set<Address> have = new java.util.HashSet<>();
+            for (ghidra.program.model.symbol.Reference r : insn.getReferencesFrom()) {
+                if (r.getReferenceType().isJump() || r.getReferenceType().isComputed()) have.add(r.getToAddress());
+            }
+            for (Address fl : insn.getFlows()) have.add(fl);
+            java.util.Set<Address> ours = new java.util.HashSet<>();
+            for (JsonElement t : e.getValue().getAsJsonArray()) ours.add(addr(t.getAsString()));
+            if (have.equals(ours)) {
+                resolved++;
+                continue;
+            }
+            // (Ghidra's references that are not cases go: they are what the decompiler followed)
+            for (ghidra.program.model.symbol.Reference r : insn.getReferencesFrom()) {
+                if ((r.getReferenceType().isJump() || r.getReferenceType().isComputed()) && !ours.contains(r.getToAddress())) {
+                    currentProgram.getReferenceManager().delete(r);
+                }
+            }
+            ArrayList<Address> dests = new ArrayList<>();
+            for (JsonElement t : e.getValue().getAsJsonArray()) {
+                Address d = addr(t.getAsString());
+                Function at = getFunctionAt(d);
+                if (at != null && !at.equals(f)) {
+                    currentProgram.getFunctionManager().removeFunction(d);
+                    removed++;
+                }
+                if (getInstructionAt(d) == null) disassemble(d);
+                currentProgram.getReferenceManager().addMemoryReference(j, d,
+                        ghidra.program.model.symbol.RefType.COMPUTED_JUMP, SourceType.USER_DEFINED, 0);
+                dests.add(d);
+            }
+            Object table = make.getParameterCount() == 4 ? make.newInstance(j, dests, true, 0) : make.newInstance(j, dests, true);
+            write.invoke(table, f);
+            CreateFunctionCmd.fixupFunctionBody(currentProgram, f, monitor);
+            set++;
+        }
+        println("ApplyFacts: jump tables written " + set + " (Ghidra had " + resolved + "), functions at cases removed "
+                + removed + ", not found " + missing);
+    }
+
+    // Win64's place for position i (0-based) of a kind: rcx/rdx/r8/r9 as wide as the type, the
+    // low lane of xmm0-3 for a float or double, all of it for a vector, the stack from entry +0x28
+    private ghidra.program.model.listing.VariableStorage paramStorage(int i, String kind, DataType dt) throws Exception {
+        if (i >= 4) {
+            return new ghidra.program.model.listing.VariableStorage(currentProgram, 0x28 + 8 * (i - 4), dt.getLength());
+        }
+        String reg;
+        switch (kind) {
+            case "f": case "x": reg = "XMM" + i + "_Da"; break;
+            case "d": reg = "XMM" + i + "_Qa"; break;
+            case "v": reg = "XMM" + i; break;
+            default: {
+                String[][] names = { { "CL", "CX", "ECX", "RCX" }, { "DL", "DX", "EDX", "RDX" },
+                        { "R8B", "R8W", "R8D", "R8" }, { "R9B", "R9W", "R9D", "R9" } };
+                int w = dt.getLength();
+                reg = names[i][w <= 1 ? 0 : w <= 2 ? 1 : w <= 4 ? 2 : 3];
+            }
+        }
+        return new ghidra.program.model.listing.VariableStorage(currentProgram, currentProgram.getRegister(reg));
+    }
+
+    private ghidra.program.model.listing.VariableStorage returnStorage(String kind, DataType dt) throws Exception {
+        if (kind == null || dt instanceof ghidra.program.model.data.VoidDataType) {
+            return ghidra.program.model.listing.VariableStorage.VOID_STORAGE;
+        }
+        String reg;
+        switch (kind) {
+            case "f": case "x": reg = "XMM0_Da"; break;
+            case "d": reg = "XMM0_Qa"; break;
+            case "v": reg = "XMM0"; break;
+            default: {
+                int w = dt.getLength();
+                reg = w <= 1 ? "AL" : w <= 2 ? "AX" : w <= 4 ? "EAX" : "RAX";
+            }
+        }
+        return new ghidra.program.model.listing.VariableStorage(currentProgram, currentProgram.getRegister(reg));
+    }
+
+    // callsites.json (tools/protos.py): each indirect call's arguments as the caller sets them up,
+    // written as a call-site signature override. Without one the decompiler guesses from the
+    // registers it sees set and drops what it cannot tie to the call: cross_ssl's start lost the
+    // logger in r8 at its factory Initialize call (0x141f2ee98), and the SChannel setup then logged
+    // through a garbage pointer. One signature per distinct shape, shared by every site.
+    private void applyCallsites(JsonObject root) throws Exception {
+        Map<String, FunctionDefinitionDataType> shapes = new HashMap<>();
+        int written = 0, missing = 0, failed = 0;
+        // HighFunctionDBUtil through Ghidra's own class loader: the script bundle's manifest
+        // did not import its package (ghidra.program.model.pcode), and the class was not found
+        // however it was named, aborting the session before its exports (2026-10-16)
+        java.lang.reflect.Method writeOverride = Function.class.getClassLoader()
+                .loadClass("ghidra.program.model.pcode.HighFunctionDBUtil")
+                .getMethod("writeOverride", Function.class, Address.class,
+                        ghidra.program.model.listing.FunctionSignature.class);
+        String firstError = null;
+        // every call-site override from earlier sessions goes first: writeOverride adds a symbol
+        // per signature (`override::prt_1417dbac9_<hash>`) and removes none, so a call kept every
+        // override it was ever given and the decompiler went on using an old one (the float
+        // return written for 0x1417dbac9 beside two undefined8 ones, 2026-10-16)
+        List<ghidra.program.model.symbol.Symbol> stale = new ArrayList<>();
+        for (ghidra.program.model.symbol.Symbol s : currentProgram.getSymbolTable().getAllSymbols(false)) {
+            Namespace p = s.getParentNamespace();
+            if (p != null && "override".equals(p.getName()) && s.getName().startsWith("prt_")) stale.add(s);
+        }
+        for (ghidra.program.model.symbol.Symbol s : stale) s.delete();
+        println("ApplyFacts: earlier call-site overrides removed " + stale.size());
+        for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("calls").entrySet()) {
+            Address at = addr(e.getKey());
+            Function f = getFunctionContaining(at);
+            if (f == null) {
+                missing++;
+                continue;
+            }
+            JsonArray args = e.getValue().getAsJsonArray();
+            StringBuilder key = new StringBuilder();
+            for (JsonElement a : args) {
+                JsonArray p = a.getAsJsonArray();
+                key.append(p.get(0).getAsString()).append(p.get(1).getAsInt());
+            }
+            // a direct call (to a variadic function, tools/protos.py) returns what its callee
+            // does; an indirect one a register's worth
+            DataType ret = Undefined.getUndefinedDataType(8);
+            // an indirect call's result as its caller reads it (a float through `call [rax +
+            // 0x68]` was `extraout_XMM0_Da` against undefined8: 46 stubs, 2026-10-16)
+            JsonObject rets = root.has("rets") ? root.getAsJsonObject("rets") : null;
+            if (rets != null && rets.has(e.getKey())) {
+                JsonArray r = rets.getAsJsonArray(e.getKey());
+                ret = returnType(r.get(0).getAsString(), r.get(1).getAsInt(), null);
+                key.append("_r").append(r.get(0).getAsString()).append(r.get(1).getAsInt());
+            }
+            Instruction insn = getInstructionAt(at);
+            Address[] flows = insn != null ? insn.getFlows() : null;
+            // (a call through a pointer whose target Ghidra knows, the CFG guard's `call [rip +
+            // __guard_dispatch_icall_fptr]`, has a flow to that routine: what the caller reads
+            // of the real target's result is the return, not the guard routine's void)
+            if (flows != null && flows.length == 1 && (rets == null || !rets.has(e.getKey()))) {
+                Function callee = getFunctionAt(flows[0]);
+                if (callee != null) {
+                    ret = callee.getReturnType();
+                    key.append("_r").append(ret.getName().replaceAll("\\W", ""));
+                }
+            }
+            FunctionDefinitionDataType sig = shapes.get(key.toString());
+            if (sig == null) {
+                sig = new FunctionDefinitionDataType("icall_" + (key.length() == 0 ? "void" : key.toString()));
+                List<ghidra.program.model.data.ParameterDefinition> defs = new ArrayList<>();
+                int i = 0;
+                for (JsonElement a : args) {
+                    JsonArray p = a.getAsJsonArray();
+                    defs.add(new ghidra.program.model.data.ParameterDefinitionImpl("param_" + (++i),
+                            paramType(p.get(0).getAsString(), p.get(1).getAsInt(), null), null));
+                }
+                sig.setArguments(defs.toArray(new ghidra.program.model.data.ParameterDefinition[0]));
+                sig.setReturnType(ret);
+                shapes.put(key.toString(), sig);
+            }
+            try {
+                writeOverride.invoke(null, f, at, sig);
+                written++;
+            } catch (Exception ex) {
+                if (firstError == null) {
+                    Throwable cause = ex.getCause() != null ? ex.getCause() : ex;
+                    firstError = at + ": " + cause;
+                }
+                failed++;
+            }
+        }
+        println("ApplyFacts: indirect call signatures written " + written + " (" + shapes.size() + " shapes), "
+                + "outside any function " + missing + ", failed " + failed
+                + (firstError != null ? " (first: " + firstError + ")" : ""));
+    }
+
+    // a result's type: Ghidra's when it is as wide as the callers read and of the same kind, else
+    // one of that width (a byte read of an undefined8 result was `in_RAX & 0xffffffffffffff00`)
+    private DataType returnType(String kind, int size, DataType have) {
+        boolean haveFloat = have instanceof ghidra.program.model.data.AbstractFloatDataType;
+        switch (kind) {
+            case "f":
+                return haveFloat && have.getLength() == 4 ? have : ghidra.program.model.data.FloatDataType.dataType;
+            case "d":
+                return haveFloat && have.getLength() == 8 ? have : ghidra.program.model.data.DoubleDataType.dataType;
+            case "x":
+                return haveFloat ? have : ghidra.program.model.data.FloatDataType.dataType;
+            case "v":
+                // a vector result (xmm0 whole: a sincos's two lanes): 16 bytes
+                return new ArrayDataType(Undefined.getUndefinedDataType(1), 16, 1);
+            default:
+                if (have != null && !haveFloat && have.getLength() == size && plain(have)) return have;
+                return Undefined.getUndefinedDataType(Math.min(8, Math.max(1, size)));
+        }
+    }
+
+    // a position's type: Ghidra's when it is of the kind the instructions read, else one of the
+    // width read ("-": nothing reads it, but a later position is used, so it is still passed)
+    private DataType paramType(String kind, int size, DataType have) {
+        boolean haveFloat = have instanceof ghidra.program.model.data.AbstractFloatDataType;
+        switch (kind) {
+            case "f":
+                return haveFloat && have.getLength() == 4 ? have : ghidra.program.model.data.FloatDataType.dataType;
+            case "d":
+                return haveFloat && have.getLength() == 8 ? have : ghidra.program.model.data.DoubleDataType.dataType;
+            case "x":
+                // an xmm argument only ever moved whole: float or double is not in the code
+                return haveFloat ? have : ghidra.program.model.data.FloatDataType.dataType;
+            case "v":
+                // four lanes in the register (packed arithmetic reads them): 16 bytes
+                return new ArrayDataType(Undefined.getUndefinedDataType(1), 16, 1);
+            case "i":
+                // Ghidra's only when it is as wide as the code reads: an int kept for a register
+                // read whole made the decompiler fill the upper half with a register it lost
+                // track of (`CONCAT44(in_register_00000014, param_2)`), 591 stubs on 2026-10-16
+                // Nor wider than it: a uint kept for a byte the code reads (`movzx edi, r8b`)
+                // made every caller that sets only r8b pass `CONCAT31((int3)(in_R8D >> 8), 1)`
+                // And only a type C knows: a class or array pointer (`MRECmpImpl *this`, an FID
+                // library signature's; `undefined1 (*param_1) [16]`, Ghidra's for a pointer SSE
+                // reads through) left `->` and type names the translator cannot spell (~40
+                // stubs, 2026-10-16)
+                if (have != null && !haveFloat && have.getLength() == Math.min(8, size) && plain(have)) {
+                    return have;
+                }
+                return Undefined.getUndefinedDataType(Math.min(8, Math.max(1, size)));
+            default:
+                if (have != null && have.getLength() > 0 && have.getLength() <= 8 && plain(have)) return have;
+                return Undefined.getUndefinedDataType(8);
+        }
+    }
+
+    // Every function name a call can be read back by: a name more than one function has (FID's
+    // `FID_conflict:fallbackMethod` on three, library copies the image links twice) gets its
+    // address appended, so a decompiled call says which one (tools/translate.py resolves a
+    // `name_<address>` to that address; by the name alone 20 calls did not link, 2026-10-16)
+    private void uniqueNames() throws Exception {
+        Map<String, List<Function>> byName = new HashMap<>();
+        for (Function f : currentProgram.getFunctionManager().getFunctions(true)) {
+            if (f.isThunk() || f.isExternal() || f.getName().startsWith("FUN_")) continue;
+            byName.computeIfAbsent(f.getName(true), k -> new ArrayList<>()).add(f);
+        }
+        int renamed = 0;
+        for (List<Function> fs : byName.values()) {
+            if (fs.size() < 2) continue;
+            for (Function f : fs) {
+                String suffix = "_" + f.getEntryPoint().toString();
+                if (f.getName().endsWith(suffix)) continue;
+                f.setName(f.getName().replace(':', '_') + suffix, SourceType.IMPORTED);
+                renamed++;
+            }
+        }
+        println("ApplyFacts: functions sharing a name made unique by address " + renamed);
+    }
+
+    // globalptrs.json: .data globals the code dereferences after loading them whole. Typed
+    // `undefined *` where nothing typed them (no data, or an undefined of up to 8 bytes): the
+    // decompiler then casts each access through one to its width, where it printed `*DAT_x` of a
+    // bare undefined8 that the translator cannot spell (13 stubs, 2026-10-16)
+    private void applyGlobalPtrs(JsonObject root) throws Exception {
+        int set = 0, typed = 0, inside = 0;
+        DataType bytePtr = new PointerDataType(Undefined.getUndefinedDataType(1));
+        for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("globals").entrySet()) {
+            Address g = addr(e.getKey());
+            Data d = getDataAt(g);
+            if (d == null) {
+                Data over = currentProgram.getListing().getDataContaining(g);
+                if (over != null) {
+                    inside++;
+                    continue;
+                }
+                if (currentProgram.getListing().getInstructionContaining(g) != null) {
+                    inside++;
+                    continue;
+                }
+            } else {
+                DataType t = d.getDataType();
+                boolean untyped = t instanceof ghidra.program.model.data.Undefined
+                        || t instanceof ghidra.program.model.data.DefaultDataType;
+                if (!untyped || d.getLength() > 8) {
+                    typed++;
+                    continue;
+                }
+            }
+            // (and nothing typed starts inside the 8 bytes it takes)
+            boolean clash = false;
+            for (int k = 1; k < 8 && !clash; k++) {
+                Data dk = getDataAt(g.add(k));
+                clash = dk != null && !(dk.getDataType() instanceof ghidra.program.model.data.Undefined
+                        || dk.getDataType() instanceof ghidra.program.model.data.DefaultDataType);
+            }
+            if (clash) {
+                inside++;
+                continue;
+            }
+            clearListing(g, g.add(7));
+            createData(g, bytePtr);
+            set++;
+        }
+        println("ApplyFacts: global pointers typed " + set + ", already typed " + typed + ", inside other data " + inside);
+    }
+
+    // an integer, or a pointer to one (or to nothing, or to such a pointer): what the decompiled
+    // C can spell without the program's own types
+    private static boolean plain(DataType t) {
+        while (t instanceof ghidra.program.model.data.TypeDef) {
+            t = ((ghidra.program.model.data.TypeDef) t).getBaseDataType();
+        }
+        if (t instanceof Pointer) {
+            DataType to = ((Pointer) t).getDataType();
+            return to == null || to instanceof ghidra.program.model.data.VoidDataType || plain(to)
+                    || to instanceof ghidra.program.model.data.AbstractFloatDataType;
+        }
+        return t instanceof ghidra.program.model.data.AbstractIntegerDataType
+                || t instanceof ghidra.program.model.data.Undefined
+                || t instanceof ghidra.program.model.data.DefaultDataType
+                || t instanceof ghidra.program.model.data.BooleanDataType
+                || t instanceof ghidra.program.model.data.CharDataType;
     }
 
     // retcheck.json: functions carrying the anti-tamper return-address check.
@@ -326,6 +1092,131 @@ public class ApplyFacts extends GhidraScript {
             setEOLComment(tail, "anti-tamper return-address check starts here: protection, not game logic");
             tagged++;
         }
+        if (root.has("junk_jumps")) applyJunkJumps(root.getAsJsonObject("junk_jumps"));
+        if (root.has("checks")) applyChecks(root.getAsJsonObject("checks"));
+    }
+
+    // Each check skipped (tools/retcheck.py): its start, the 7-byte load of the range base,
+    // becomes `jmp T; nop; nop`, T being where the function's code resumes once the return
+    // address passes. The check is then unreachable and the decompiler leaves it out; stripped
+    // from the decompiled text instead, 143 functions in shapes the pattern did not know were
+    // stubbed (2026-10-16). Ghidra's copy only, as for the junk jumps; done already, left alone.
+    private void applyChecks(JsonObject checks) throws Exception {
+        int set = 0, done = 0, missing = 0;
+        for (Map.Entry<String, JsonElement> e : checks.entrySet()) {
+            Address s = addr(e.getKey());
+            Address t = addr(e.getValue().getAsString());
+            Instruction insn = getInstructionAt(s);
+            if (insn == null) {
+                CodeUnit over = currentProgram.getListing().getCodeUnitContaining(s);
+                if (over != null) {
+                    clearListing(over.getMinAddress(), over.getMaxAddress());
+                }
+                new DisassembleCommand(s, null, false).applyTo(currentProgram, monitor);
+                insn = getInstructionAt(s);
+            }
+            if (insn == null) {
+                missing++;
+                continue;
+            }
+            byte[] code = insn.getBytes();
+            if ((code[0] & 0xff) == 0xe9) {
+                done++;
+                continue;
+            }
+            if (code.length != 7) {
+                missing++;
+                continue;
+            }
+            long rel = t.getOffset() - (s.getOffset() + 5);
+            byte[] patched = new byte[] { (byte) 0xe9, (byte) rel, (byte) (rel >> 8), (byte) (rel >> 16),
+                    (byte) (rel >> 24), (byte) 0x90, (byte) 0x90 };
+            clearListing(s, s.add(6));
+            currentProgram.getMemory().setBytes(s, patched);
+            new DisassembleCommand(s, null, false).applyTo(currentProgram, monitor);
+            if (getInstructionAt(s) == null) {
+                missing++;
+                continue;
+            }
+            if (getInstructionAt(t) == null) {
+                disassemble(t);
+            }
+            set++;
+        }
+        println("ApplyFacts: return-address checks skipped " + set + " (already " + done + "), not patched " + missing);
+    }
+
+    // The check's conditional jumps over junk (tools/retcheck.py): the fall-through bytes are no
+    // code, and decoded they run straight across the jump's own target, so the decompiler saw
+    // overlapping instructions and lost the function (155 stubs, 2026-10-16). Each jump is made
+    // unconditional (a flow override), the junk is cleared, and the target disassembled.
+    private void applyJunkJumps(JsonObject jumps) throws Exception {
+        int set = 0, missing = 0;
+        for (Map.Entry<String, JsonElement> e : jumps.entrySet()) {
+            Address j = addr(e.getKey());
+            Address t = addr(e.getValue().getAsString());
+            Instruction insn = getInstructionAt(j);
+            if (insn == null) {
+                // Ghidra's own decode went through the junk and is out of step here: whatever
+                // covers the jump goes, and the jump is decoded where it starts
+                CodeUnit over = currentProgram.getListing().getCodeUnitContaining(j);
+                if (over != null) {
+                    clearListing(over.getMinAddress(), over.getMaxAddress());
+                }
+                CodeUnit next = currentProgram.getListing().getCodeUnitContaining(j.add(1));
+                if (next != null && next.getMinAddress().compareTo(j) > 0) {
+                    clearListing(next.getMinAddress(), next.getMaxAddress());
+                }
+                // the jump alone, without following its flow back into the junk
+                new DisassembleCommand(j, null, false).applyTo(currentProgram, monitor);
+                insn = getInstructionAt(j);
+            }
+            if (insn == null) {
+                missing++;
+                continue;
+            }
+            // The jump made unconditional in the program's bytes: a flow override does not
+            // reach a conditional jump (the decompiler still took the fall-through into the junk
+            // and reported the overlap, 2026-10-16). `0f 8x rel32` becomes `e9 rel32+1; nop` and
+            // `7x rel8` becomes `eb rel8`, to the same target. Ghidra's copy only: the exe on
+            // disk, which the Python tools read, keeps its bytes
+            byte[] code = insn.getBytes();
+            byte[] patched = null;
+            if (code.length == 6 && (code[0] & 0xff) == 0x0f && (code[1] & 0xf0) == 0x80) {
+                int rel = (code[2] & 0xff) | (code[3] & 0xff) << 8 | (code[4] & 0xff) << 16 | (code[5] & 0xff) << 24;
+                rel += 1;
+                patched = new byte[] { (byte) 0xe9, (byte) rel, (byte) (rel >> 8), (byte) (rel >> 16),
+                        (byte) (rel >> 24), (byte) 0x90 };
+            } else if (code.length == 2 && (code[0] & 0xf0) == 0x70) {
+                patched = new byte[] { (byte) 0xeb, code[1] };
+            }
+            if (patched != null) {
+                clearListing(j, j.add(code.length - 1));
+                currentProgram.getMemory().setBytes(j, patched);
+                new DisassembleCommand(j, null, false).applyTo(currentProgram, monitor);
+                insn = getInstructionAt(j);
+                if (insn == null) {
+                    missing++;
+                    continue;
+                }
+            }
+            Address after = j.add(insn.getLength());
+            // the junk, and whatever decoded instruction spans the target
+            Address end = t.subtract(1);
+            CodeUnit across = currentProgram.getListing().getCodeUnitContaining(t);
+            if (across != null && across.getMinAddress().compareTo(t) < 0) {
+                end = across.getMaxAddress();
+            }
+            if (after.compareTo(end) <= 0) {
+                clearListing(after, end);
+            }
+            insn.setFlowOverride(FlowOverride.BRANCH);
+            if (getInstructionAt(t) == null) {
+                disassemble(t);
+            }
+            set++;
+        }
+        println("ApplyFacts: jumps over junk made unconditional " + set + ", not an instruction " + missing);
     }
 
     private void applySrcrefs(JsonObject root) throws Exception {

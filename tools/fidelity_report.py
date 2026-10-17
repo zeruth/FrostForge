@@ -66,7 +66,8 @@ def main() -> None:
     gen_rows = [r for r in every if generated(r) and r["kind"] != "stub"]
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.exists() else {}
     translated = manifest.get("translated", {})
-    not_translated = manifest.get("stubbed", {})
+    # (the anti-tamper junk the clean exe never runs is protection, not code to port: not listed)
+    not_translated = {a: w for a, w in manifest.get("stubbed", {}).items() if not w.startswith("anti-tamper")}
     groups = defaultdict(list)
     for r in rows:
         groups[BUCKET_OF.get(folder(r["file"]), "Platform & core")].append(r)

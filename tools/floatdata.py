@@ -21,15 +21,17 @@ from wowbin import Binary
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / "build" / "refdata-float.json"
 
+# Only what does floating-point arithmetic, compares, converts or moves one scalar says a float.
+# The packed moves (movaps, movups) are MSVC's 16-byte copy of anything, and the bitwise ops
+# (andps, xorps, ...) work on bits: a global pair of function pointers copied with movups was
+# typed float, and `REFG(float, 0x142d2b310) = <a function>` did not compile (C2440, 2026-10-16)
 FLOAT = {"movss", "addss", "subss", "mulss", "divss", "minss", "maxss", "sqrtss", "comiss", "ucomiss",
-         "cvtss2sd", "cvtss2si", "cvttss2si", "movaps", "movups", "addps", "mulps", "subps", "divps",
-         "andps", "orps", "xorps", "andnps", "minps", "maxps", "shufps", "unpcklps",
+         "cvtss2sd", "cvtss2si", "cvttss2si", "addps", "mulps", "subps", "divps", "minps", "maxps",
          "vmovss", "vaddss", "vsubss", "vmulss", "vdivss", "vcomiss", "vucomiss", "vcvtss2sd",
          "vminss", "vmaxss", "vsqrtss", "vfmadd213ss", "vfmadd231ss", "vfmadd132ss"}
 DOUBLE = {"movsd", "addsd", "subsd", "mulsd", "divsd", "minsd", "maxsd", "sqrtsd", "comisd", "ucomisd",
-          "cvtsd2ss", "cvtsd2si", "cvttsd2si", "movapd", "movupd", "addpd", "mulpd", "subpd",
-          "andpd", "orpd", "xorpd", "vmovsd", "vaddsd", "vsubsd", "vmulsd", "vdivsd", "vcomisd",
-          "vucomisd", "vcvtsd2ss"}
+          "cvtsd2ss", "cvtsd2si", "cvttsd2si", "addpd", "mulpd", "subpd",
+          "vmovsd", "vaddsd", "vsubsd", "vmulsd", "vdivsd", "vcomisd", "vucomisd", "vcvtsd2ss"}
 
 
 def scan() -> dict[str, str]:

@@ -11,6 +11,9 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+/* curl's defaults name the C library's stream routines as values: Curl_open (FUN_14217a1f0)
+   stores fwrite and fread as the write and read callbacks */
+#include <stdio.h>
 #include <string.h>
 #include <time.h>
 
@@ -108,19 +111,103 @@ typedef void *HMODULE, *HINSTANCE, *HWND, *HDC, *HKEY, *HLOCAL, *HGLOBAL, *HCURS
     *HDROP, *HIMC, *HBRUSH;
 typedef long long (*FARPROC)();
 typedef void *LPVOID, *PVOID;
-typedef const void *LPCVOID;
+/* the LPC* names without their const: Ghidra types a local after the API parameter it ends up in,
+   and the code may well have written through it first. SChannel's loader (FUN_141f74e30) builds
+   the DLL path in a blz::wstring's buffer, terminates it (`mov word ptr [rdi + rax], r14w`,
+   0x141f7525f) and hands it to LoadLibraryW: as const that store was C2166 and the loader was
+   stubbed (2026-10-16). Nothing translated is checked against the SDK's declarations. */
+typedef void *LPCVOID;
 typedef char *LPSTR;
-typedef const char *LPCSTR;
+typedef char *LPCSTR;
 typedef wchar_t *LPWSTR, *BSTR;
-typedef const wchar_t *LPCWSTR;
+typedef wchar_t *LPCWSTR;
 typedef DWORD *LPDWORD;
 typedef BOOL *LPBOOL;
 typedef BYTE *LPBYTE;
 typedef long *LPLONG;
 typedef void *LPCRITICAL_SECTION, *PSRWLOCK, *PCONDITION_VARIABLE, *LPSECURITY_ATTRIBUTES, *LPOVERLAPPED,
     *PCCRL_CONTEXT, *PCCERT_CONTEXT, *LPRECT, *LPPOINT, *LPUNKNOWN, *LPCGUID, *PRAWINPUTDEVICELIST,
-    *PUNWIND_HISTORY_TABLE;
+    *PUNWIND_HISTORY_TABLE, *PFILETIME, *LPFILETIME, *PHKEY, *LPHANDLE, *PHANDLE, *HCERTSTORE,
+    *PCCERT_CHAIN_CONTEXT, *LPSYSTEMTIME, *PSYSTEMTIME;
+/* crypto handles (ULONG_PTR in the SDK) */
+typedef unsigned long long HCRYPTHASH, HCRYPTPROV, HCRYPTKEY;
+/* winsock's fd_set, as the code reaches it through pointers only */
+typedef struct fd_set fd_set;
+/* the structs translated code fills and reads by field, by their SDK layout. SChannel's SSPI
+   loader (FUN_141f74e30) asks GetVersionExA which DLL to load (dwOSVersionInfoSize = 0x94); it was
+   stubbed for the type, so the SChannel factory never initialized and the Login click found no
+   SSL factory (2026-10-15) */
+typedef struct _OSVERSIONINFOA {
+    DWORD dwOSVersionInfoSize;
+    DWORD dwMajorVersion;
+    DWORD dwMinorVersion;
+    DWORD dwBuildNumber;
+    DWORD dwPlatformId;
+    CHAR szCSDVersion[128];
+} _OSVERSIONINFOA;
+/* the rest of the SDK structs Ghidra names in the corpus (each a stub until 2026-10-16: "a type C
+   does not know"), by their SDK layout */
+typedef unsigned long long DWORDLONG;
+typedef struct _FILETIME {
+    DWORD dwLowDateTime;
+    DWORD dwHighDateTime;
+} _FILETIME, FILETIME;
+typedef union _LARGE_INTEGER {
+    struct {
+        DWORD LowPart;
+        long HighPart;
+    };
+    struct {
+        DWORD LowPart;
+        long HighPart;
+    } u;
+    long long QuadPart;
+} _LARGE_INTEGER, LARGE_INTEGER;
+typedef struct tagRECT {
+    long left;
+    long top;
+    long right;
+    long bottom;
+} tagRECT;
+typedef struct _SYSTEM_INFO {
+    union {
+        DWORD dwOemId;
+        struct {
+            unsigned short wProcessorArchitecture;
+            unsigned short wReserved;
+        };
+    };
+    DWORD dwPageSize;
+    void *lpMinimumApplicationAddress;
+    void *lpMaximumApplicationAddress;
+    unsigned long long dwActiveProcessorMask;
+    DWORD dwNumberOfProcessors;
+    DWORD dwProcessorType;
+    DWORD dwAllocationGranularity;
+    unsigned short wProcessorLevel;
+    unsigned short wProcessorRevision;
+} _SYSTEM_INFO, SYSTEM_INFO;
+/* the image's own DOS header, which code reads to find its sections (e_lfanew at +0x3c) */
+/* (as Ghidra lays it out: e_magic two chars, and the DOS stub after the header as e_program,
+   which code reading a buffer Ghidra typed with it indexes, `param_3->e_magic[0]`) */
+typedef struct _IMAGE_DOS_HEADER {
+    char e_magic[2];
+    unsigned short e_cblp, e_cp, e_crlc, e_cparhdr, e_minalloc, e_maxalloc, e_ss, e_sp, e_csum, e_ip,
+        e_cs, e_lfarlc, e_ovno, e_res[4], e_oemid, e_oeminfo, e_res2[10];
+    long e_lfanew;
+    unsigned char e_program[64];
+} _IMAGE_DOS_HEADER, IMAGE_DOS_HEADER;
 #endif
+/* the UCRT's tag for FILE, as Ghidra names it */
+typedef struct _iobuf _iobuf;
+/* _onexit_t */
+#include <stdlib.h>
+/* _alloca: a reference function's stack allocation (`sub rsp, rax`) in the translated frame */
+#include <malloc.h>
+/* the reference's _setjmp(buf, frame) (FUN_1425bf1f0): the port's, on the translated function's
+   own frame; the reference's longjmp is the port's by name. Same runtime, same jmp_buf */
+#include <setjmp.h>
+#define GEN_SETJMP(buf, frame) setjmp(*(jmp_buf *)(buf))
 /* a call through `code *`: any arguments, the result in rax */
 typedef unsigned long long code();
 
@@ -131,9 +218,27 @@ typedef unsigned long long code();
    function and its callers, and a definition earlier in the same file would otherwise impose its
    own (floats are promoted to double; the definitions take them that way) */
 #define CALLF(type, f) ((type (*)())(f))
-/* a translated function's call count (hits.c; written out by RefImage.cpp under FROST_HITS) */
-extern unsigned int gen_hits[];
-#define GEN_HIT(i) (gen_hits[i]++)
+/* andps / xorps with the float sign masks, as tools/translate.py's float_masks rewrites them.
+   Ghidra spells both an operand that is a float and one that already holds a float's bits as the
+   same text; _Generic sees which it is: a float's bits are taken, an integer's are the bits */
+static __inline unsigned int gen_f2bits(float f) { unsigned int u; memcpy(&u, &f, 4); return u; }
+static __inline float gen_bits2f(unsigned int u) { float f; memcpy(&f, &u, 4); return f; }
+static __inline unsigned int gen_u2bits(unsigned long long v) { return (unsigned int)v; }
+#define GEN_F32BITS(x) _Generic((x), float: gen_f2bits, double: gen_f2bits, default: gen_u2bits)(x)
+/* a double's 64 bits as an integer (an integer as it is): what an 8-byte slot holds, whatever
+   the decompiler typed it (tools/translate.py int_variants()) */
+static __inline long long gen_d2q(double d) { long long q; memcpy(&q, &d, 8); return q; }
+static __inline long long gen_q2q(long long q) { return q; }
+static __inline double gen_q2d(long long q) { double d; memcpy(&d, &q, 8); return d; }
+#define GEN_D2Q(x) _Generic((x), double: gen_d2q, float: gen_d2q, default: gen_q2q)(x)
+#define GEN_FABSBITS(x) (GEN_F32BITS(x) & 0x7fffffffu)
+#define GEN_FNEGBITS(x) (GEN_F32BITS(x) ^ 0x80000000u)
+#define GEN_FABS(x) gen_bits2f(GEN_FABSBITS(x))
+#define GEN_FNEG(x) gen_bits2f(GEN_FNEGBITS(x))
+/* a translated function's call count, in its own file's table (GEN_HITS is that file's
+   gen_hits_NNN, listed in hits.c; written out by RefImage.cpp under FROST_HITS). Per file, so a
+   function moving in or out of one file renumbers no other */
+#define GEN_HIT(i) (GEN_HITS[i]++)
 /* a floating point argument Ghidra spelled through an integer (`*param_3` of an undefined8 *):
    its bits, not its value - an unprototyped call would pass the integer in a general register
    while the callee reads xmm */
@@ -169,18 +274,38 @@ static __inline double GEN_AS_FLOAT(unsigned long long bits) {
 #define CONCAT53(a, b) ((uint64_t)((((uint64_t)(a) & 0xffffffffffULL) << 24) | ((uint32_t)(b) & 0xffffff)))
 #define CONCAT62(a, b) ((uint64_t)((((uint64_t)(a) & 0xffffffffffffULL) << 16) | (uint16_t)(b)))
 #define CONCAT71(a, b) ((uint64_t)((((uint64_t)(a) & 0xffffffffffffffULL) << 8) | (uint8_t)(b)))
+/* the rest of CONCATab with a + b <= 8: a bytes over b bytes */
+#define GEN_CONCAT(a, na, b, nb) ((uint64_t)((((uint64_t)(a) & (~0ULL >> (64 - 8 * (na)))) << (8 * (nb))) | \
+    ((uint64_t)(b) & (~0ULL >> (64 - 8 * (nb))))))
+#define CONCAT23(a, b) GEN_CONCAT(a, 2, b, 3)
+#define CONCAT25(a, b) GEN_CONCAT(a, 2, b, 5)
+#define CONCAT33(a, b) GEN_CONCAT(a, 3, b, 3)
+#define CONCAT34(a, b) GEN_CONCAT(a, 3, b, 4)
+#define CONCAT43(a, b) GEN_CONCAT(a, 4, b, 3)
+#define CONCAT51(a, b) GEN_CONCAT(a, 5, b, 1)
+#define CONCAT52(a, b) GEN_CONCAT(a, 5, b, 2)
+#define CONCAT61(a, b) GEN_CONCAT(a, 6, b, 1)
 #define SUB41(x, n) ((uint8_t)((uint32_t)(x) >> ((n) * 8)))
 #define SUB42(x, n) ((uint16_t)((uint32_t)(x) >> ((n) * 8)))
 #define SUB81(x, n) ((uint8_t)((uint64_t)(x) >> ((n) * 8)))
 #define SUB82(x, n) ((uint16_t)((uint64_t)(x) >> ((n) * 8)))
 #define SUB84(x, n) ((uint32_t)((uint64_t)(x) >> ((n) * 8)))
 #define SUB21(x, n) ((uint8_t)((uint16_t)(x) >> ((n) * 8)))
+/* the odd widths, held in the next C type up and masked to their bytes */
+#define SUB43(x, n) ((uint32_t)(((uint32_t)(x) >> ((n) * 8)) & 0xffffffu))
+#define SUB83(x, n) ((uint32_t)(((uint64_t)(x) >> ((n) * 8)) & 0xffffffu))
+#define SUB85(x, n) ((uint64_t)(((uint64_t)(x) >> ((n) * 8)) & 0xffffffffffull))
+#define SUB86(x, n) ((uint64_t)(((uint64_t)(x) >> ((n) * 8)) & 0xffffffffffffull))
+#define SUB87(x, n) ((uint64_t)(((uint64_t)(x) >> ((n) * 8)) & 0xffffffffffffffull))
 #define ZEXT14(x) ((uint32_t)(uint8_t)(x))
 #define ZEXT18(x) ((uint64_t)(uint8_t)(x))
 #define ZEXT24(x) ((uint32_t)(uint16_t)(x))
 #define ZEXT28(x) ((uint64_t)(uint16_t)(x))
 #define ZEXT48(x) ((uint64_t)(uint32_t)(x))
 #define ZEXT816(x) ((uint64_t)(x))
+/* (to 12 bytes: a value no wider than 8 there, which a 12-byte store then takes whole) */
+#define ZEXT412(x) ((uint64_t)(uint32_t)(x))
+#define ZEXT812(x) ((uint64_t)(x))
 #define SEXT14(x) ((int32_t)(int8_t)(x))
 #define SEXT18(x) ((int64_t)(int8_t)(x))
 #define SEXT24(x) ((int32_t)(int16_t)(x))
@@ -194,11 +319,15 @@ static __inline double GEN_AS_FLOAT(unsigned long long bits) {
 #define SCARRY4(a, b) ((((int32_t)(a) ^ (int32_t)((uint32_t)(a) + (uint32_t)(b))) & ((int32_t)(b) ^ (int32_t)((uint32_t)(a) + (uint32_t)(b)))) < 0)
 #define SCARRY8(a, b) ((((int64_t)(a) ^ (int64_t)((uint64_t)(a) + (uint64_t)(b))) & ((int64_t)(b) ^ (int64_t)((uint64_t)(a) + (uint64_t)(b)))) < 0)
 #define SBORROW4(a, b) ((((int32_t)(a) ^ (int32_t)(b)) & ((int32_t)(a) ^ (int32_t)((uint32_t)(a) - (uint32_t)(b)))) < 0)
+#define SBORROW1(a, b) ((((int8_t)(a) ^ (int8_t)(b)) & ((int8_t)(a) ^ (int8_t)((uint8_t)(a) - (uint8_t)(b)))) < 0)
+#define SBORROW2(a, b) ((((int16_t)(a) ^ (int16_t)(b)) & ((int16_t)(a) ^ (int16_t)((uint16_t)(a) - (uint16_t)(b)))) < 0)
 #define SBORROW8(a, b) ((((int64_t)(a) ^ (int64_t)(b)) & ((int64_t)(a) ^ (int64_t)((uint64_t)(a) - (uint64_t)(b)))) < 0)
 #define POPCOUNT(x) ((int)__popcnt64((uint64_t)(x)))
 #define NAN_FLOAT(x) ((x) != (x))
-#undef NAN
-#define NAN(x) ((x) != (x))
+/* Ghidra's `NAN(x)` is a test, the C library's `NAN` the constant (`local_48 = -NAN;`): the
+   translator spells the test GEN_ISNAN, and math.h keeps NAN. Redefined here instead, math.h
+   below took it back and every test failed to compile (C2064, 2026-10-16) */
+#define GEN_ISNAN(x) ((x) != (x))
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 #include <math.h>
 #define SQRT(x) sqrt(x)
@@ -216,12 +345,180 @@ static __inline double GEN_AS_FLOAT(unsigned long long bits) {
      : sizeof(lv) == 4 ? (long long)_Interlocked##op((volatile long *)&(lv), (long)(v)) \
      : sizeof(lv) == 2 ? (long long)_Interlocked##op##16((volatile short *)&(lv), (short)(v)) \
      : (long long)_Interlocked##op##8((volatile char *)&(lv), (char)(v)))
+/* a piece of a variable 3, 5, 6 or 7 bytes wide (`local_1e4._0_3_`), read and written in place */
+static __inline unsigned long long GEN_PIECE(const void *p, int off, int n) {
+    unsigned long long x = 0;
+    memcpy(&x, (const char *)p + off, n);
+    return x;
+}
+#define GEN_PIECE_SET(p, off, n, v) do { unsigned long long gen_piece_ = (unsigned long long)(v); \
+    memcpy((char *)(p) + (off), &gen_piece_, (n)); } while (0)
+/* ---- 16-byte values (tools/v16.py) ----------------------------------------------------------
+   Ghidra's `undefined1 auVar [16]`, an SSE register, as a union C can assign, pass and return.
+   Integer operators Ghidra writes on one are 128-bit arithmetic (gen_v16_add ...); its SSE
+   pseudo-ops are the intrinsics (v16.PSEUDO). A scalar moves in and out by its bits: Ghidra
+   moves a float into a register with movd, not a conversion */
+typedef union gen_v16 {
+    __m128i m;
+    __m128 f;
+    __m128d d;
+    unsigned char b[16];
+    unsigned short w[8];
+    unsigned int u[4];
+    unsigned long long q[2];
+} gen_v16;
+/* 32- and 64-byte values (an AVX2 / AVX-512 register): storage only, tools/translate.py's
+   wide_vectors(). Their pieces are read and written in place, and any operation on one is a wide
+   path the translation does not take (the CPU-feature bits in the reference's data stay clear):
+   GenWidePath, logged as an unimplemented address should it ever run */
+typedef struct gen_v32 { __declspec(align(16)) unsigned char b[32]; } gen_v32;
+typedef struct gen_v64 { __declspec(align(16)) unsigned char b[64]; } gen_v64;
+#define GenWidePath(a) GenUnimplemented(a)
+static __inline gen_v16 gen_v16_qq(unsigned long long lo, unsigned long long hi) {
+    gen_v16 r; r.q[0] = lo; r.q[1] = hi; return r;
+}
+static __inline gen_v16 gen_v16_m(__m128i m) { gen_v16 r; r.m = m; return r; }
+static __inline gen_v16 gen_v16_f(__m128 f) { gen_v16 r; r.f = f; return r; }
+static __inline gen_v16 gen_v16_d(__m128d d) { gen_v16 r; r.d = d; return r; }
+static __inline gen_v16 gen_v16_fromq(unsigned long long x) { return gen_v16_qq(x, 0); }
+static __inline gen_v16 gen_v16_fromf(float x) { gen_v16 r = gen_v16_qq(0, 0); memcpy(&r, &x, 4); return r; }
+static __inline gen_v16 gen_v16_fromd(double x) { gen_v16 r = gen_v16_qq(0, 0); memcpy(&r, &x, 8); return r; }
+#define gen_v16_u(x) _Generic((x), float: gen_v16_fromf, double: gen_v16_fromd, \
+    default: gen_v16_fromq)(x)
+static __inline unsigned long long gen_v16_q0(gen_v16 v) { return v.q[0]; }
+static __inline float gen_v16_f0(gen_v16 v) { float f; memcpy(&f, &v, 4); return f; }
+static __inline double gen_v16_d0(gen_v16 v) { double d; memcpy(&d, &v, 8); return d; }
+/* a scalar taken from one, as the variable it is stored in reads it */
+#define GEN_V16_AS(like, v) _Generic((like), float: gen_v16_f0(v), double: gen_v16_d0(v), \
+    default: gen_v16_q0(v))
+static __inline gen_v16 gen_v16_and(gen_v16 a, gen_v16 b) { return gen_v16_m(_mm_and_si128(a.m, b.m)); }
+static __inline gen_v16 gen_v16_or(gen_v16 a, gen_v16 b) { return gen_v16_m(_mm_or_si128(a.m, b.m)); }
+static __inline gen_v16 gen_v16_xor(gen_v16 a, gen_v16 b) { return gen_v16_m(_mm_xor_si128(a.m, b.m)); }
+static __inline gen_v16 gen_v16_not(gen_v16 a) { return gen_v16_qq(~a.q[0], ~a.q[1]); }
+static __inline gen_v16 gen_v16_add(gen_v16 a, gen_v16 b) {
+    unsigned long long lo = a.q[0] + b.q[0];
+    return gen_v16_qq(lo, a.q[1] + b.q[1] + (lo < a.q[0]));
+}
+static __inline gen_v16 gen_v16_sub(gen_v16 a, gen_v16 b) {
+    return gen_v16_qq(a.q[0] - b.q[0], a.q[1] - b.q[1] - (a.q[0] < b.q[0]));
+}
+static __inline gen_v16 gen_v16_neg(gen_v16 a) { return gen_v16_sub(gen_v16_qq(0, 0), a); }
+/* the low 128 bits of the product */
+static __inline gen_v16 gen_v16_mul(gen_v16 a, gen_v16 b) {
+    unsigned long long hi;
+    unsigned long long lo = _umul128(a.q[0], b.q[0], &hi);
+    return gen_v16_qq(lo, hi + a.q[0] * b.q[1] + a.q[1] * b.q[0]);
+}
+static __inline gen_v16 gen_v16_shl(gen_v16 a, int n) {
+    if (n <= 0) return a;
+    if (n >= 128) return gen_v16_qq(0, 0);
+    if (n >= 64) return gen_v16_qq(0, a.q[0] << (n - 64));
+    return gen_v16_qq(a.q[0] << n, (a.q[1] << n) | (a.q[0] >> (64 - n)));
+}
+static __inline gen_v16 gen_v16_shr(gen_v16 a, int n) {
+    if (n <= 0) return a;
+    if (n >= 128) return gen_v16_qq(0, 0);
+    if (n >= 64) return gen_v16_qq(a.q[1] >> (n - 64), 0);
+    return gen_v16_qq((a.q[0] >> n) | (a.q[1] << (64 - n)), a.q[1] >> n);
+}
+static __inline int gen_v16_eq(gen_v16 a, gen_v16 b) { return a.q[0] == b.q[0] && a.q[1] == b.q[1]; }
+static __inline int gen_v16_lt(gen_v16 a, gen_v16 b) {
+    return a.q[1] < b.q[1] || (a.q[1] == b.q[1] && a.q[0] < b.q[0]);
+}
+static __inline int gen_v16_gt(gen_v16 a, gen_v16 b) { return gen_v16_lt(b, a); }
+static __inline int gen_v16_zero(gen_v16 a) { return (a.q[0] | a.q[1]) == 0; }
+/* unsigned 128-bit division: by shift and subtract (Ghidra writes it for a 64-bit divide by a
+   constant done through a 128-bit product, which wide_multiply takes before it gets here) */
+static __inline void gen_v16_divmod(gen_v16 a, gen_v16 b, gen_v16 *q, gen_v16 *r) {
+    gen_v16 quo = gen_v16_qq(0, 0), rem = gen_v16_qq(0, 0);
+    int i;
+    if (b.q[1] == 0 && a.q[1] == 0) {
+        *q = gen_v16_qq(b.q[0] ? a.q[0] / b.q[0] : 0, 0);
+        *r = gen_v16_qq(b.q[0] ? a.q[0] % b.q[0] : 0, 0);
+        return;
+    }
+    for (i = 127; i >= 0; i--) {
+        rem = gen_v16_shl(rem, 1);
+        rem.q[0] |= (i >= 64 ? a.q[1] >> (i - 64) : a.q[0] >> i) & 1;
+        if (!gen_v16_lt(rem, b)) {
+            rem = gen_v16_sub(rem, b);
+            if (i >= 64) quo.q[1] |= 1ull << (i - 64); else quo.q[0] |= 1ull << i;
+        }
+    }
+    *q = quo;
+    *r = rem;
+}
+static __inline gen_v16 gen_v16_div(gen_v16 a, gen_v16 b) { gen_v16 q, r; gen_v16_divmod(a, b, &q, &r); return q; }
+static __inline gen_v16 gen_v16_mod(gen_v16 a, gen_v16 b) { gen_v16 q, r; gen_v16_divmod(a, b, &q, &r); return r; }
+/* ZEXTn16 / SEXTn16 of a value already held in one: its low n bytes, zero or sign extended */
+static __inline gen_v16 gen_v16_zext(gen_v16 a, int n) {
+    gen_v16 r = gen_v16_qq(0, 0);
+    memcpy(&r, &a, n < 16 ? n : 16);
+    return r;
+}
+static __inline gen_v16 gen_v16_sext(gen_v16 a, int n) {
+    gen_v16 r = gen_v16_zext(a, n);
+    if (n < 16 && (a.b[n - 1] & 0x80)) memset(r.b + n, 0xff, 16 - n);
+    return r;
+}
+/* CONCATab with a + b == 16: hi above the low `lo_bytes` of lo */
+static __inline gen_v16 gen_v16_concat(gen_v16 hi, gen_v16 lo, int lo_bytes) {
+    gen_v16 r = hi;
+    gen_v16 h = gen_v16_shl(hi, lo_bytes * 8);
+    r = gen_v16_or(h, gen_v16_zext(lo, lo_bytes));
+    return r;
+}
+/* SUB16n(v, k): n bytes at offset k */
+static __inline unsigned long long gen_v16_bytes(gen_v16 v, int k, int n) {
+    unsigned long long x = 0;
+    if (k >= 0 && k < 16) memcpy(&x, v.b + k, (n < 16 - k ? n : 16 - k) < 8 ? (n < 16 - k ? n : 16 - k) : 8);
+    return x;
+}
+/* a piece wider than 8 bytes (`auVar1._4_12_`), read or written in place */
+static __inline gen_v16 gen_v16_load(const void *p, int n) {
+    gen_v16 r = gen_v16_qq(0, 0);
+    memcpy(&r, p, n < 16 ? n : 16);
+    return r;
+}
+static __inline void gen_v16_store(void *p, int n, gen_v16 v) { memcpy(p, &v, n < 16 ? n : 16); }
+/* vpmullq on 128 bits (AVX-512VL): each 64-bit lane's product, low 64 bits; in plain C, so it
+   runs where AVX-512 does not */
+static __inline __m128i gen_mullo_epi64(__m128i a, __m128i b) {
+    gen_v16 x, y, r;
+    x.m = a;
+    y.m = b;
+    r.q[0] = x.q[0] * y.q[0];
+    r.q[1] = x.q[1] * y.q[1];
+    return r.m;
+}
+/* movmskps / movmskpd as Ghidra spells them, `movmskpd(dest, vector)`: the lanes' sign bits */
+static __inline unsigned int movmskps(unsigned long long dest, gen_v16 v) {
+    (void)dest;
+    return (unsigned int)_mm_movemask_ps(v.f);
+}
+static __inline unsigned int movmskpd(unsigned long long dest, gen_v16 v) {
+    (void)dest;
+    return (unsigned int)_mm_movemask_pd(v.d);
+}
+
+/* Ghidra's `(code *)swi(n)`, called: the trap the instruction raises. `int3` (swi(3)) breaks
+   into a debugger; `int 0x29` (swi(0x29)) is __fastfail, which ends the process. Ghidra drops
+   the code a __fastfail passes in ecx, so it is reported as a generic one (7,
+   FAST_FAIL_FATAL_APP_EXIT). 8 functions were stubbed as "bad data or a trap" for these */
+static unsigned long long gen_swi_break(void) { __debugbreak(); return 0; }
+static unsigned long long gen_swi_fastfail(void) { __fastfail(7); }
+#define swi(n) ((n) == 0x29 ? gen_swi_fastfail : gen_swi_break)
+/* `ud2`, which Ghidra spells `(code *)invalidInstructionException()` and calls: the same fault */
+static unsigned long long gen_ud2(void) { __ud2(); }
+#define invalidInstructionException() gen_ud2
 #define GEN_ATOMIC_ADD(lv, v) GEN_ATOMIC_(ExchangeAdd, lv, v)
 #define GEN_ATOMIC_AND(lv, v) GEN_ATOMIC_(And, lv, v)
 #define GEN_ATOMIC_OR(lv, v) GEN_ATOMIC_(Or, lv, v)
 #define GEN_ATOMIC_XOR(lv, v) GEN_ATOMIC_(Xor, lv, v)
 #define GEN_ATOMIC_XCHG(lv, v) GEN_ATOMIC_(Exchange, lv, v)
 /* cmpxchg: stores `v` when the lvalue holds `cmp`; the value it held either way */
+/* a locked instruction Ghidra kept nothing of (`lock or [rsp], 0`): a full memory fence */
+#define GEN_FENCE() __faststorefence()
 #define GEN_ATOMIC_CAS(lv, v, cmp) \
     (sizeof(lv) == 8 ? (long long)_InterlockedCompareExchange64((volatile long long *)&(lv), (long long)(v), (long long)(cmp)) \
      : sizeof(lv) == 4 ? (long long)_InterlockedCompareExchange((volatile long *)&(lv), (long)(v), (long)(cmp)) \
@@ -240,6 +537,10 @@ static __inline unsigned int *gen_cpuid(int leaf) {
     regs[3] = r[2];
     return (unsigned int *)regs;
 }
+/* Ghidra's `xinuse(0)`: xgetbv with ecx = 1, the state components in use */
+#define xinuse(x) _xgetbv(1)
+/* (any other leaf, `cpuid(0x80000000)`, the same) */
+#define cpuid(x) gen_cpuid((int)(x))
 #define cpuid_basic_info(x) gen_cpuid(0)
 #define cpuid_Version_info(x) gen_cpuid(1)
 #define cpuid_cache_tlb_info(x) gen_cpuid(2)
@@ -278,6 +579,15 @@ static __inline unsigned long long gen_vector_iterate(void *p, unsigned long lon
 int GenInitThreadEpoch(void);
 #define _Init_thread_epoch GenInitThreadEpoch()
 int *GenInitThreadEpochPtr(void);
+/* the reference's thread-local block for this thread (RefImage.cpp): `ThreadLocalStoragePointer
+   [_tls_index]` as the loader would have built it from the image's TLS template */
+void *GenRefTlsBlock(void);
+/* and the names Ghidra reaches it by, whatever shape the access takes (`pvVar = ThreadLocal
+   StoragePointer; uVar = _tls_index; ... *(longlong *)((longlong)pvVar + uVar * 8)`): a
+   one-slot array holding that block, at index 0 */
+void **GenRefTlsSlots(void);
+#define ThreadLocalStoragePointer ((void *)GenRefTlsSlots())
+#define _tls_index 0u
 void __cdecl _Init_thread_header(int *guard);
 void __cdecl _Init_thread_footer(int *guard);
 

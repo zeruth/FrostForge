@@ -10,6 +10,7 @@
 //   lo/hi are hex addresses; hi is exclusive. Thunks are skipped (they carry no body worth reading).
 import ghidra.app.script.GhidraScript;
 import ghidra.app.decompiler.DecompInterface;
+import ghidra.app.decompiler.DecompileOptions;
 import ghidra.app.decompiler.DecompileResults;
 import ghidra.app.decompiler.parallel.DecompileConfigurer;
 import ghidra.app.decompiler.parallel.DecompilerCallback;
@@ -59,6 +60,15 @@ public class ExportDecompAll extends GhidraScript {
             lo = Long.parseLong(args[1].replaceFirst("^0[xX]", ""), 16);
             hi = Long.parseLong(args[2].replaceFirst("^0[xX]", ""), 16);
         }
+        // `@file`: only the functions at the addresses listed in it, one hex address a line (a
+        // sample to check before a whole export)
+        java.util.Set<Long> only = null;
+        if (args.length == 2 && args[1].startsWith("@")) {
+            only = new java.util.HashSet<>();
+            for (String line : java.nio.file.Files.readAllLines(java.nio.file.Paths.get(args[1].substring(1)))) {
+                if (!line.isBlank()) only.add(Long.parseLong(line.trim().replaceFirst("^0[xX]", ""), 16));
+            }
+        }
 
         List<Function> functions = new ArrayList<>();
         FunctionIterator it = currentProgram.getFunctionManager().getFunctions(true);
@@ -68,7 +78,7 @@ public class ExportDecompAll extends GhidraScript {
                 continue;
             }
             long a = f.getEntryPoint().getOffset();
-            if (a < lo || a >= hi) {
+            if (a < lo || a >= hi || (only != null && !only.contains(a))) {
                 continue;
             }
             functions.add(f);
@@ -97,12 +107,42 @@ public class ExportDecompAll extends GhidraScript {
             }
         };
         callback.setTimeout(90);
+        // what failed in the first pass gets a second, alone, with ten times the time and the
+        // decompiler's limits raised: the 90 s timeout lost five functions, among them the 833-case
+        // FUN_140727d90 with its 268 KB frame (2026-10-16)
+        DecompilerCallback<String[]> retry = new DecompilerCallback<String[]>(currentProgram,
+                new DecompileConfigurer() {
+                    @Override
+                    public void configure(DecompInterface ifc) {
+                        ifc.toggleCCode(true);
+                        ifc.toggleSyntaxTree(true);
+                        ifc.setSimplificationStyle("decompile");
+                        DecompileOptions opts = new DecompileOptions();
+                        opts.grabFromProgram(currentProgram);
+                        opts.setMaxInstructions(400000);
+                        opts.setMaxPayloadMBytes(400);
+                        ifc.setOptions(opts);
+                    }
+                }) {
+            @Override
+            public String[] process(DecompileResults res, TaskMonitor mon) throws Exception {
+                return callback.process(res, mon);
+            }
+        };
+        retry.setTimeout(900);
+        final List<Function> failed = new ArrayList<>();
 
         final int[] count = { 0 };
         final long start = System.currentTimeMillis();
         try (PrintWriter out = new PrintWriter(new FileWriter(args[0]))) {
             ParallelDecompiler.decompileFunctions(callback, currentProgram, functions.iterator(), r -> {
                 if (r == null) {
+                    return;
+                }
+                if (r[3] == null) {
+                    synchronized (failed) {
+                        failed.add(getFunctionAt(toAddr(Long.parseUnsignedLong(r[0], 16))));
+                    }
                     return;
                 }
                 synchronized (out) {
@@ -123,8 +163,30 @@ public class ExportDecompAll extends GhidraScript {
                     }
                 }
             }, monitor);
+            println("ExportDecompAll: " + failed.size() + " failed, decompiling them again with longer limits");
+            failed.removeIf(f -> f == null);
+            ParallelDecompiler.decompileFunctions(retry, currentProgram, failed.iterator(), r -> {
+                if (r == null) {
+                    return;
+                }
+                synchronized (out) {
+                    StringBuilder b = new StringBuilder();
+                    b.append("{\"addr\":\"").append(r[0]).append("\",\"name\":\"").append(jsonEscape(r[1]))
+                     .append("\",\"size\":").append(r[2]);
+                    if (r[3] != null) {
+                        b.append(",\"c\":\"").append(jsonEscape(r[3])).append("\"}");
+                    } else {
+                        b.append(",\"error\":\"").append(jsonEscape(r[4] == null ? "" : r[4])).append("\"}");
+                    }
+                    out.println(b);
+                    count[0]++;
+                    println("ExportDecompAll: again " + r[0] + (r[3] != null ? " decompiled" : " failed: "
+                            + (r[4] == null ? "" : r[4].trim().split("\n")[0])));
+                }
+            }, monitor);
         } finally {
             callback.dispose();
+            retry.dispose();
         }
         long s = (System.currentTimeMillis() - start) / 1000;
         println("ExportDecompAll: wrote " + count[0] + " functions to " + args[0] + " in " + s + "s");
