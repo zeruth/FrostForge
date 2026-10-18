@@ -1016,7 +1016,6 @@ void FrameScript_SetGlobalNumber(const char* name, int32_t value) {
 extern "C" void* const gen_p_142cf5504 = (void*)&s_objectTableRef;
 extern "C" void* const gen_p_142e99e18 = (void*)&s_L;
 extern "C" void* const gen_p_142e99e20 = (void*)&s_threadId;
-extern "C" void* const gen_p_142e99e28 = (void*)&s_stateHook;
 extern "C" void* const gen_p_142e99f30 = (void*)&s_initCount;
 extern "C" void* const gen_p_142e9a07c = (void*)&s_currentObjectScoped;
 // ---- end of generated globals ----

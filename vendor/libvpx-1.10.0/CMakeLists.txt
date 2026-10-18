@@ -59,5 +59,5 @@ add_library(vpx STATIC
 target_include_directories(vpx PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/config)
 if(MSVC)
     # Upstream code, built as is.
-    target_compile_options(vpx PRIVATE /W0)
+    frost_warning_level(vpx /W0)
 endif()

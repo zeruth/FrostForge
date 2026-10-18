@@ -105,6 +105,7 @@ __declspec(dllimport) unsigned long long GetSystemDefaultLangID();
 __declspec(dllimport) unsigned long long GetSystemDirectoryW();
 __declspec(dllimport) unsigned long long GetSystemInfo();
 __declspec(dllimport) unsigned long long GetSystemTimeAsFileTime();
+__declspec(dllimport) unsigned long long GetSystemTimePreciseAsFileTime();
 __declspec(dllimport) unsigned long long GetTempPathA();
 __declspec(dllimport) unsigned long long GetThreadContext();
 __declspec(dllimport) unsigned long long GetTickCount();
@@ -261,2053 +262,2047 @@ __declspec(dllimport) unsigned long long timeEndPeriod();
 __declspec(dllimport) unsigned long long timeGetTime();
 /* s_takenEvents (src/net/NetInternal.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142cfb9c0=?s_takenEvents@@3V?$TSList@UNETEVENTQUEUENODE@@V?$TSGetLink@UNETEVENTQUEUENODE@@@@$07@@A")
-extern char gen_g_142cfb9c0;
+extern unsigned char gen_g_142cfb9c0[24];
 /* g_fmodOutputType (src/sound/SE3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142cfca00=?g_fmodOutputType@@3HA")
-extern char gen_g_142cfca00;
+extern unsigned char gen_g_142cfca00[4];
 /* g_se3VoiceOverPriority (src/sound/SE3Kit.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142cfca30=?g_se3VoiceOverPriority@@3HA")
-extern char gen_g_142cfca30;
+extern unsigned char gen_g_142cfca30[4];
 /* g_se3Config (src/sound/SE3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142cfca40=?g_se3Config@@3USE3CONFIG@@A")
-extern char gen_g_142cfca40;
+extern unsigned char gen_g_142cfca40[688];
 /* g_se3Handles (src/sound/SE3Kit.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142cfccf0=?g_se3Handles@@3VSE3HANDLETABLE@@A")
-extern char gen_g_142cfccf0;
+extern unsigned char gen_g_142cfccf0[80];
 /* g_se3Combined (src/sound/SE3Kit.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142cfcd40=?g_se3Combined@@3VSE3COMBINEDTABLE@@A")
-extern char gen_g_142cfcd40;
+extern unsigned char gen_g_142cfcd40[80];
 /* g_se3Playing (src/sound/SE3Kit.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142cfcd90=?g_se3Playing@@3V?$TSList@USE3SoundKitObject@@V?$TSGetLink@USE3SoundKitObject@@@@$07@@A")
-extern char gen_g_142cfcd90;
+extern unsigned char gen_g_142cfcd90[24];
 /* g_se3Loading (src/sound/SE3Kit.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142cfcda8=?g_se3Loading@@3V?$TSList@USE3SoundKitObject@@V?$TSGetLink@USE3SoundKitObject@@@@$07@@A")
-extern char gen_g_142cfcda8;
+extern unsigned char gen_g_142cfcda8[24];
 /* g_se3Pending (src/sound/SE3Kit.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142cfcdc0=?g_se3Pending@@3V?$TSList@USE3SoundKitObject@@V?$TSGetLink@USE3SoundKitObject@@@@$07@@A")
-extern char gen_g_142cfcdc0;
+extern unsigned char gen_g_142cfcdc0[24];
 /* g_se3Release (src/sound/SE3Kit.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142cfcdd8=?g_se3Release@@3V?$TSList@USE3SoundKitObject@@V?$TSGetLink@USE3SoundKitObject@@@@$07@@A")
-extern char gen_g_142cfcdd8;
+extern unsigned char gen_g_142cfcdd8[24];
 /* g_se3Waiting (src/sound/SE3Kit.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142cfce20=?g_se3Waiting@@3V?$TSList@USE3SoundKitObject@@V?$TSGetLink@USE3SoundKitObject@@@@$07@@A")
-extern char gen_g_142cfce20;
+extern unsigned char gen_g_142cfce20[24];
 /* g_groundEffectDist (src/client/GraphicsSettings.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142d00c20=?g_groundEffectDist@@3MA")
-extern char gen_g_142d00c20;
+extern unsigned char gen_g_142d00c20[4];
 /* g_lodObjectCullSize (src/client/GraphicsSettings.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142d00ca0=?g_lodObjectCullSize@@3MA")
-extern char gen_g_142d00ca0;
+extern unsigned char gen_g_142d00ca0[4];
 /* s_kiosk (src/client/StartupClient.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142d2a4e0=?s_kiosk@@3UKIOSKSTATE@@A")
-extern char gen_g_142d2a4e0;
+extern unsigned char gen_g_142d2a4e0[36];
 /* g_moviesOpen (src/ui/OldMovie.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142de0b30=?g_moviesOpen@@3HA")
-extern char gen_g_142de0b30;
+extern unsigned char gen_g_142de0b30[4];
 /* s_loadingBarProgress (src/client/LoadingBar.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142de0c48=?s_loadingBarProgress@@3MA")
-extern char gen_g_142de0c48;
+extern unsigned char gen_g_142de0c48[4];
 /* s_loadingScreenEffect (src/client/LoadingBar.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142de0ca0=?s_loadingScreenEffect@@3PEAVCShaderEffect@@EA")
-extern char gen_g_142de0ca0;
+extern unsigned char gen_g_142de0ca0[8];
 /* g_accountNameCVar (src/client/ClientCVars.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142de29a0=?g_accountNameCVar@@3PEAUCVar@@EA")
-extern char gen_g_142de29a0;
+extern unsigned char gen_g_142de29a0[8];
 /* g_accountListCVar (src/client/ClientCVars.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142de29b0=?g_accountListCVar@@3PEAUCVar@@EA")
-extern char gen_g_142de29b0;
+extern unsigned char gen_g_142de29b0[8];
 /* g_localManifest (src/cas/CAS.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e20860=?g_localManifest@cas@@3PEAULOCALMANIFEST@1@EA")
-extern char gen_g_142e20860;
+extern unsigned char gen_g_142e20860[8];
 /* g_casManifest (src/cas/CAS.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e25568=?g_casManifest@cas@@3PEAUCASMANIFEST@1@EA")
-extern char gen_g_142e25568;
+extern unsigned char gen_g_142e25568[8];
 /* g_casInstance (src/cas/CAS.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e25570=?g_casInstance@cas@@3PEAUCASINSTANCE@1@EA")
-extern char gen_g_142e25570;
+extern unsigned char gen_g_142e25570[8];
 /* g_cvarLock (src/console/Var.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e260c8=?g_cvarLock@@3VSCritSect@@A")
-extern char gen_g_142e260c8;
+extern unsigned char gen_g_142e260c8[40];
 /* g_achievementDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e30500=?g_achievementDB@@3VWowClientDB2@@A")
-extern char gen_g_142e30500;
+extern unsigned char gen_g_142e30500[528];
 /* g_adventureMapPOIDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e30f50=?g_adventureMapPOIDB@@3VWowClientDB2@@A")
-extern char gen_g_142e30f50;
+extern unsigned char gen_g_142e30f50[528];
 /* g_animKitBoneSetAliasDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e31bb0=?g_animKitBoneSetAliasDB@@3VWowClientDB2@@A")
-extern char gen_g_142e31bb0;
+extern unsigned char gen_g_142e31bb0[528];
 /* g_animKitBoneSetDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e31dc0=?g_animKitBoneSetDB@@3VWowClientDB2@@A")
-extern char gen_g_142e31dc0;
+extern unsigned char gen_g_142e31dc0[528];
 /* g_animKitConfigBoneSetDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e31fd0=?g_animKitConfigBoneSetDB@@3VWowClientDB2@@A")
-extern char gen_g_142e31fd0;
+extern unsigned char gen_g_142e31fd0[528];
 /* g_animKitConfigDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e321e0=?g_animKitConfigDB@@3VWowClientDB2@@A")
-extern char gen_g_142e321e0;
+extern unsigned char gen_g_142e321e0[528];
 /* g_animKitPriorityDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e323f0=?g_animKitPriorityDB@@3VWowClientDB2@@A")
-extern char gen_g_142e323f0;
+extern unsigned char gen_g_142e323f0[528];
 /* g_animKitDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e32600=?g_animKitDB@@3VWowClientDB2@@A")
-extern char gen_g_142e32600;
+extern unsigned char gen_g_142e32600[528];
 /* g_animKitSegmentDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e32a20=?g_animKitSegmentDB@@3VWowClientDB2@@A")
-extern char gen_g_142e32a20;
+extern unsigned char gen_g_142e32a20[528];
 /* g_aoiBoxDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e33680=?g_aoiBoxDB@@3VWowClientDB2@@A")
-extern char gen_g_142e33680;
+extern unsigned char gen_g_142e33680[528];
 /* g_areaGroupMemberDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e33cb0=?g_areaGroupMemberDB@@3VWowClientDB2@@A")
-extern char gen_g_142e33cb0;
+extern unsigned char gen_g_142e33cb0[528];
 /* g_areaTriggerActionSetDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e342e0=?g_areaTriggerActionSetDB@@3VWowClientDB2@@A")
-extern char gen_g_142e342e0;
+extern unsigned char gen_g_142e342e0[528];
 /* g_areaTriggerBoxDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e344f0=?g_areaTriggerBoxDB@@3VWowClientDB2@@A")
-extern char gen_g_142e344f0;
+extern unsigned char gen_g_142e344f0[528];
 /* g_areaTriggerCylinderDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e34910=?g_areaTriggerCylinderDB@@3VWowClientDB2@@A")
-extern char gen_g_142e34910;
+extern unsigned char gen_g_142e34910[528];
 /* g_areaTriggerDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e34b20=?g_areaTriggerDB@@3VWowClientDB2@@A")
-extern char gen_g_142e34b20;
+extern unsigned char gen_g_142e34b20[528];
 /* g_areaTriggerSphereDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e34d30=?g_areaTriggerSphereDB@@3VWowClientDB2@@A")
-extern char gen_g_142e34d30;
+extern unsigned char gen_g_142e34d30[528];
 /* g_armorLocationDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e35360=?g_armorLocationDB@@3VWowClientDB2@@A")
-extern char gen_g_142e35360;
+extern unsigned char gen_g_142e35360[528];
 /* g_artifactAppearanceDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e35570=?g_artifactAppearanceDB@@3VWowClientDB2@@A")
-extern char gen_g_142e35570;
+extern unsigned char gen_g_142e35570[528];
 /* g_artifactAppearanceSetDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e35780=?g_artifactAppearanceSetDB@@3VWowClientDB2@@A")
-extern char gen_g_142e35780;
+extern unsigned char gen_g_142e35780[528];
 /* g_artifactPowerRankDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e35fc0=?g_artifactPowerRankDB@@3VWowClientDB2@@A")
-extern char gen_g_142e35fc0;
+extern unsigned char gen_g_142e35fc0[528];
 /* g_artifactPowerDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e361d0=?g_artifactPowerDB@@3VWowClientDB2@@A")
-extern char gen_g_142e361d0;
+extern unsigned char gen_g_142e361d0[528];
 /* g_artifactDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e365f0=?g_artifactDB@@3VWowClientDB2@@A")
-extern char gen_g_142e365f0;
+extern unsigned char gen_g_142e365f0[528];
 /* g_auctionHouseDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e36e30=?g_auctionHouseDB@@3VWowClientDB2@@A")
-extern char gen_g_142e36e30;
+extern unsigned char gen_g_142e36e30[528];
 /* g_azeriteEmpoweredItemDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e37040=?g_azeriteEmpoweredItemDB@@3VWowClientDB2@@A")
-extern char gen_g_142e37040;
+extern unsigned char gen_g_142e37040[528];
 /* g_azeriteItemDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e37880=?g_azeriteItemDB@@3VWowClientDB2@@A")
-extern char gen_g_142e37880;
+extern unsigned char gen_g_142e37880[528];
 /* g_battlePetAbilityDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e38f30=?g_battlePetAbilityDB@@3VWowClientDB2@@A")
-extern char gen_g_142e38f30;
+extern unsigned char gen_g_142e38f30[528];
 /* g_battlePetBreedQualityDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e39560=?g_battlePetBreedQualityDB@@3VWowClientDB2@@A")
-extern char gen_g_142e39560;
+extern unsigned char gen_g_142e39560[528];
 /* g_battlePetBreedStateDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e39770=?g_battlePetBreedStateDB@@3VWowClientDB2@@A")
-extern char gen_g_142e39770;
+extern unsigned char gen_g_142e39770[528];
 /* g_battlePetSpeciesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e39fb0=?g_battlePetSpeciesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e39fb0;
+extern unsigned char gen_g_142e39fb0[528];
 /* g_battlePetSpeciesStateDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3a1c0=?g_battlePetSpeciesStateDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3a1c0;
+extern unsigned char gen_g_142e3a1c0[528];
 /* g_battlePetSpeciesXAbilityDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3a3d0=?g_battlePetSpeciesXAbilityDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3a3d0;
+extern unsigned char gen_g_142e3a3d0[528];
 /* g_battlePetStateDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3a5e0=?g_battlePetStateDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3a5e0;
+extern unsigned char gen_g_142e3a5e0[528];
 /* g_battlemasterListDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3aa00=?g_battlemasterListDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3aa00;
+extern unsigned char gen_g_142e3aa00[528];
 /* g_battlepayCurrencyDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3ac10=?g_battlepayCurrencyDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3ac10;
+extern unsigned char gen_g_142e3ac10[528];
 /* g_beamEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3ae20=?g_beamEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3ae20;
+extern unsigned char gen_g_142e3ae20[528];
 /* g_bountyDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3b240=?g_bountyDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3b240;
+extern unsigned char gen_g_142e3b240[528];
 /* g_cameraEffectEntryDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3b870=?g_cameraEffectEntryDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3b870;
+extern unsigned char gen_g_142e3b870[528];
 /* g_cameraEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3ba80=?g_cameraEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3ba80;
+extern unsigned char gen_g_142e3ba80[528];
 /* g_cameraModeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3bc90=?g_cameraModeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3bc90;
+extern unsigned char gen_g_142e3bc90[528];
 /* g_castableRaidBuffsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3c4d0=?g_castableRaidBuffsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3c4d0;
+extern unsigned char gen_g_142e3c4d0[528];
 /* g_cfg_CategoriesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3c6e0=?g_cfg_CategoriesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3c6e0;
+extern unsigned char gen_g_142e3c6e0[528];
 /* g_cfg_ConfigsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3c8f0=?g_cfg_ConfigsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3c8f0;
+extern unsigned char gen_g_142e3c8f0[528];
 /* g_cfg_RegionsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3cb00=?g_cfg_RegionsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3cb00;
+extern unsigned char gen_g_142e3cb00[528];
 /* g_charBaseInfoDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3cd10=?g_charBaseInfoDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3cd10;
+extern unsigned char gen_g_142e3cd10[528];
 /* g_charComponentTextureLayoutsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3d130=?g_charComponentTextureLayoutsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3d130;
+extern unsigned char gen_g_142e3d130[528];
 /* g_charComponentTextureSectionsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3d340=?g_charComponentTextureSectionsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3d340;
+extern unsigned char gen_g_142e3d340[528];
 /* g_charStartOutfitDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3dfa0=?g_charStartOutfitDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3dfa0;
+extern unsigned char gen_g_142e3dfa0[528];
 /* g_charTitlesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3e1b0=?g_charTitlesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3e1b0;
+extern unsigned char gen_g_142e3e1b0[528];
 /* g_characterLoadoutItemDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3e7e0=?g_characterLoadoutItemDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3e7e0;
+extern unsigned char gen_g_142e3e7e0[528];
 /* g_characterLoadoutDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3ec00=?g_characterLoadoutDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3ec00;
+extern unsigned char gen_g_142e3ec00[528];
 /* g_characterServiceInfoDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3ee10=?g_characterServiceInfoDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3ee10;
+extern unsigned char gen_g_142e3ee10[528];
 /* g_chatChannelsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3f020=?g_chatChannelsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3f020;
+extern unsigned char gen_g_142e3f020[528];
 /* g_chatProfanityDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3f230=?g_chatProfanityDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3f230;
+extern unsigned char gen_g_142e3f230[528];
 /* g_chrClassRaceSexDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3f440=?g_chrClassRaceSexDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3f440;
+extern unsigned char gen_g_142e3f440[528];
 /* g_chrClassTitleDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3f650=?g_chrClassTitleDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3f650;
+extern unsigned char gen_g_142e3f650[528];
 /* g_chrClassVillainDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3fa70=?g_chrClassVillainDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3fa70;
+extern unsigned char gen_g_142e3fa70[528];
 /* g_chrClassesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e3fc80=?g_chrClassesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e3fc80;
+extern unsigned char gen_g_142e3fc80[528];
 /* g_chrCustClientChoiceConversionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e400a0=?g_chrCustClientChoiceConversionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e400a0;
+extern unsigned char gen_g_142e400a0[528];
 /* g_chrCustItemGeoModifyDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e402b0=?g_chrCustItemGeoModifyDB@@3VWowClientDB2@@A")
-extern char gen_g_142e402b0;
+extern unsigned char gen_g_142e402b0[528];
 /* g_chrCustomizationBoneSetDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e404c0=?g_chrCustomizationBoneSetDB@@3VWowClientDB2@@A")
-extern char gen_g_142e404c0;
+extern unsigned char gen_g_142e404c0[528];
 /* g_chrCustomizationChoiceDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e408e0=?g_chrCustomizationChoiceDB@@3VWowClientDB2@@A")
-extern char gen_g_142e408e0;
+extern unsigned char gen_g_142e408e0[528];
 /* g_chrCustomizationCondModelDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e40af0=?g_chrCustomizationCondModelDB@@3VWowClientDB2@@A")
-extern char gen_g_142e40af0;
+extern unsigned char gen_g_142e40af0[528];
 /* g_chrCustomizationConversionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e40d00=?g_chrCustomizationConversionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e40d00;
+extern unsigned char gen_g_142e40d00[528];
 /* g_chrCustomizationDisplayInfoDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e40f10=?g_chrCustomizationDisplayInfoDB@@3VWowClientDB2@@A")
-extern char gen_g_142e40f10;
+extern unsigned char gen_g_142e40f10[528];
 /* g_chrCustomizationElementDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e41120=?g_chrCustomizationElementDB@@3VWowClientDB2@@A")
-extern char gen_g_142e41120;
+extern unsigned char gen_g_142e41120[528];
 /* g_chrCustomizationGeosetDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e41330=?g_chrCustomizationGeosetDB@@3VWowClientDB2@@A")
-extern char gen_g_142e41330;
+extern unsigned char gen_g_142e41330[528];
 /* g_chrCustomizationMaterialDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e41750=?g_chrCustomizationMaterialDB@@3VWowClientDB2@@A")
-extern char gen_g_142e41750;
+extern unsigned char gen_g_142e41750[528];
 /* g_chrCustomizationOptionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e41960=?g_chrCustomizationOptionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e41960;
+extern unsigned char gen_g_142e41960[528];
 /* g_chrCustomizationDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e41b70=?g_chrCustomizationDB@@3VWowClientDB2@@A")
-extern char gen_g_142e41b70;
+extern unsigned char gen_g_142e41b70[528];
 /* g_chrCustomizationReqChoiceDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e41d80=?g_chrCustomizationReqChoiceDB@@3VWowClientDB2@@A")
-extern char gen_g_142e41d80;
+extern unsigned char gen_g_142e41d80[528];
 /* g_chrCustomizationReqDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e41f90=?g_chrCustomizationReqDB@@3VWowClientDB2@@A")
-extern char gen_g_142e41f90;
+extern unsigned char gen_g_142e41f90[528];
 /* g_chrCustomizationSkinnedModelDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e421a0=?g_chrCustomizationSkinnedModelDB@@3VWowClientDB2@@A")
-extern char gen_g_142e421a0;
+extern unsigned char gen_g_142e421a0[528];
 /* g_chrCustomizationVisReqDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e423b0=?g_chrCustomizationVisReqDB@@3VWowClientDB2@@A")
-extern char gen_g_142e423b0;
+extern unsigned char gen_g_142e423b0[528];
 /* g_chrCustomizationVoiceDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e425c0=?g_chrCustomizationVoiceDB@@3VWowClientDB2@@A")
-extern char gen_g_142e425c0;
+extern unsigned char gen_g_142e425c0[528];
 /* g_chrModelMaterialDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e427d0=?g_chrModelMaterialDB@@3VWowClientDB2@@A")
-extern char gen_g_142e427d0;
+extern unsigned char gen_g_142e427d0[528];
 /* g_chrModelDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e429e0=?g_chrModelDB@@3VWowClientDB2@@A")
-extern char gen_g_142e429e0;
+extern unsigned char gen_g_142e429e0[528];
 /* g_chrModelTextureLayerDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e42bf0=?g_chrModelTextureLayerDB@@3VWowClientDB2@@A")
-extern char gen_g_142e42bf0;
+extern unsigned char gen_g_142e42bf0[528];
 /* g_chrRaceXChrModelDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e43010=?g_chrRaceXChrModelDB@@3VWowClientDB2@@A")
-extern char gen_g_142e43010;
+extern unsigned char gen_g_142e43010[528];
 /* g_chrRacesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e43430=?g_chrRacesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e43430;
+extern unsigned char gen_g_142e43430[528];
 /* g_chrSpecializationDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e43640=?g_chrSpecializationDB@@3VWowClientDB2@@A")
-extern char gen_g_142e43640;
+extern unsigned char gen_g_142e43640[528];
 /* g_chrUpgradeBucketDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e43850=?g_chrUpgradeBucketDB@@3VWowClientDB2@@A")
-extern char gen_g_142e43850;
+extern unsigned char gen_g_142e43850[528];
 /* g_chrUpgradeBucketSpellDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e43a60=?g_chrUpgradeBucketSpellDB@@3VWowClientDB2@@A")
-extern char gen_g_142e43a60;
+extern unsigned char gen_g_142e43a60[528];
 /* g_chrUpgradeTierDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e43c70=?g_chrUpgradeTierDB@@3VWowClientDB2@@A")
-extern char gen_g_142e43c70;
+extern unsigned char gen_g_142e43c70[528];
 /* g_cinematicCameraDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e43e80=?g_cinematicCameraDB@@3VWowClientDB2@@A")
-extern char gen_g_142e43e80;
+extern unsigned char gen_g_142e43e80[528];
 /* g_clientSceneEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e442a0=?g_clientSceneEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e442a0;
+extern unsigned char gen_g_142e442a0[528];
 /* g_cloneEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e444b0=?g_cloneEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e444b0;
+extern unsigned char gen_g_142e444b0[528];
 /* g_commentatorIndirectSpellDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e448d0=?g_commentatorIndirectSpellDB@@3VWowClientDB2@@A")
-extern char gen_g_142e448d0;
+extern unsigned char gen_g_142e448d0[528];
 /* g_commentatorStartLocationDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e44ae0=?g_commentatorStartLocationDB@@3VWowClientDB2@@A")
-extern char gen_g_142e44ae0;
+extern unsigned char gen_g_142e44ae0[528];
 /* g_commentatorTrackedCooldownDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e44cf0=?g_commentatorTrackedCooldownDB@@3VWowClientDB2@@A")
-extern char gen_g_142e44cf0;
+extern unsigned char gen_g_142e44cf0[528];
 /* g_componentModelFileDataDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e45110=?g_componentModelFileDataDB@@3VWowClientDB2@@A")
-extern char gen_g_142e45110;
+extern unsigned char gen_g_142e45110[528];
 /* g_componentTextureFileDataDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e45320=?g_componentTextureFileDataDB@@3VWowClientDB2@@A")
-extern char gen_g_142e45320;
+extern unsigned char gen_g_142e45320[528];
 /* g_conditionalChrModelDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e45530=?g_conditionalChrModelDB@@3VWowClientDB2@@A")
-extern char gen_g_142e45530;
+extern unsigned char gen_g_142e45530[528];
 /* g_configurationWarningDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e45950=?g_configurationWarningDB@@3VWowClientDB2@@A")
-extern char gen_g_142e45950;
+extern unsigned char gen_g_142e45950[528];
 /* g_contentTuningDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e45b60=?g_contentTuningDB@@3VWowClientDB2@@A")
-extern char gen_g_142e45b60;
+extern unsigned char gen_g_142e45b60[528];
 /* g_creatureDifficultyDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e46750=?g_creatureDifficultyDB@@3VWowClientDB2@@A")
-extern char gen_g_142e46750;
+extern unsigned char gen_g_142e46750[528];
 /* g_creatureDisplayInfoCondDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e46b70=?g_creatureDisplayInfoCondDB@@3VWowClientDB2@@A")
-extern char gen_g_142e46b70;
+extern unsigned char gen_g_142e46b70[528];
 /* g_creatureDisplayInfoCondXChoiceDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e46d80=?g_creatureDisplayInfoCondXChoiceDB@@3VWowClientDB2@@A")
-extern char gen_g_142e46d80;
+extern unsigned char gen_g_142e46d80[528];
 /* g_creatureDisplayInfoEvtDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e46f90=?g_creatureDisplayInfoEvtDB@@3VWowClientDB2@@A")
-extern char gen_g_142e46f90;
+extern unsigned char gen_g_142e46f90[528];
 /* g_creatureDisplayInfoExtraDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e471a0=?g_creatureDisplayInfoExtraDB@@3VWowClientDB2@@A")
-extern char gen_g_142e471a0;
+extern unsigned char gen_g_142e471a0[528];
 /* g_creatureDisplayInfoGeosetDataDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e473b0=?g_creatureDisplayInfoGeosetDataDB@@3VWowClientDB2@@A")
-extern char gen_g_142e473b0;
+extern unsigned char gen_g_142e473b0[528];
 /* g_creatureDisplayInfoOptionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e475c0=?g_creatureDisplayInfoOptionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e475c0;
+extern unsigned char gen_g_142e475c0[528];
 /* g_creatureDisplayInfoDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e477d0=?g_creatureDisplayInfoDB@@3VWowClientDB2@@A")
-extern char gen_g_142e477d0;
+extern unsigned char gen_g_142e477d0[528];
 /* g_creatureFamilyDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e47bf0=?g_creatureFamilyDB@@3VWowClientDB2@@A")
-extern char gen_g_142e47bf0;
+extern unsigned char gen_g_142e47bf0[528];
 /* g_creatureImmunitiesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e47e00=?g_creatureImmunitiesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e47e00;
+extern unsigned char gen_g_142e47e00[528];
 /* g_creatureModelDataDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e48010=?g_creatureModelDataDB@@3VWowClientDB2@@A")
-extern char gen_g_142e48010;
+extern unsigned char gen_g_142e48010[528];
 /* g_creatureDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e48430=?g_creatureDB@@3VWowClientDB2@@A")
-extern char gen_g_142e48430;
+extern unsigned char gen_g_142e48430[528];
 /* g_creatureSoundDataDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e48640=?g_creatureSoundDataDB@@3VWowClientDB2@@A")
-extern char gen_g_142e48640;
+extern unsigned char gen_g_142e48640[528];
 /* g_creatureSoundFidgetDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e48850=?g_creatureSoundFidgetDB@@3VWowClientDB2@@A")
-extern char gen_g_142e48850;
+extern unsigned char gen_g_142e48850[528];
 /* g_creatureSpellDataDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e48a60=?g_creatureSpellDataDB@@3VWowClientDB2@@A")
-extern char gen_g_142e48a60;
+extern unsigned char gen_g_142e48a60[528];
 /* g_creatureTypeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e48c70=?g_creatureTypeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e48c70;
+extern unsigned char gen_g_142e48c70[528];
 /* g_creatureXDisplayInfoDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e49090=?g_creatureXDisplayInfoDB@@3VWowClientDB2@@A")
-extern char gen_g_142e49090;
+extern unsigned char gen_g_142e49090[528];
 /* g_criteriaDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e492a0=?g_criteriaDB@@3VWowClientDB2@@A")
-extern char gen_g_142e492a0;
+extern unsigned char gen_g_142e492a0[528];
 /* g_criteriaTreeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e494b0=?g_criteriaTreeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e494b0;
+extern unsigned char gen_g_142e494b0[528];
 /* g_criteriaTreeXEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e496c0=?g_criteriaTreeXEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e496c0;
+extern unsigned char gen_g_142e496c0[528];
 /* g_currencyContainerDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e49ae0=?g_currencyContainerDB@@3VWowClientDB2@@A")
-extern char gen_g_142e49ae0;
+extern unsigned char gen_g_142e49ae0[528];
 /* g_currencyTypesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e49cf0=?g_currencyTypesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e49cf0;
+extern unsigned char gen_g_142e49cf0[528];
 /* g_decalPropertiesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4a110=?g_decalPropertiesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4a110;
+extern unsigned char gen_g_142e4a110[528];
 /* g_declinedWordCasesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4a320=?g_declinedWordCasesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4a320;
+extern unsigned char gen_g_142e4a320[528];
 /* g_declinedWordDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4a530=?g_declinedWordDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4a530;
+extern unsigned char gen_g_142e4a530[528];
 /* g_difficultyDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4a950=?g_difficultyDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4a950;
+extern unsigned char gen_g_142e4a950[528];
 /* g_dissolveEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4ad70=?g_dissolveEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4ad70;
+extern unsigned char gen_g_142e4ad70[528];
 /* g_dungeonEncounterDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4af80=?g_dungeonEncounterDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4af80;
+extern unsigned char gen_g_142e4af80[528];
 /* g_durabilityCostsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4b190=?g_durabilityCostsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4b190;
+extern unsigned char gen_g_142e4b190[528];
 /* g_durabilityQualityDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4b3a0=?g_durabilityQualityDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4b3a0;
+extern unsigned char gen_g_142e4b3a0[528];
 /* g_edgeGlowEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4b5b0=?g_edgeGlowEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4b5b0;
+extern unsigned char gen_g_142e4b5b0[528];
 /* g_emotesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4b7c0=?g_emotesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4b7c0;
+extern unsigned char gen_g_142e4b7c0[528];
 /* g_emotesTextSoundDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4bdf0=?g_emotesTextSoundDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4bdf0;
+extern unsigned char gen_g_142e4bdf0[528];
 /* g_factionGroupDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4c840=?g_factionGroupDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4c840;
+extern unsigned char gen_g_142e4c840[528];
 /* g_factionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4ca50=?g_factionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4ca50;
+extern unsigned char gen_g_142e4ca50[528];
 /* g_factionTemplateDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4cc60=?g_factionTemplateDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4cc60;
+extern unsigned char gen_g_142e4cc60[528];
 /* g_friendshipRepReactionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4d080=?g_friendshipRepReactionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4d080;
+extern unsigned char gen_g_142e4d080[528];
 /* g_friendshipReputationDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4d290=?g_friendshipReputationDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4d290;
+extern unsigned char gen_g_142e4d290[528];
 /* g_gameClockDebugDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4dce0=?g_gameClockDebugDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4dce0;
+extern unsigned char gen_g_142e4dce0[528];
 /* g_gameObjectDisplayInfoDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4e520=?g_gameObjectDisplayInfoDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4e520;
+extern unsigned char gen_g_142e4e520[528];
 /* g_gameObjectDisplayInfoXSoundKitDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4e730=?g_gameObjectDisplayInfoXSoundKitDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4e730;
+extern unsigned char gen_g_142e4e730[528];
 /* g_gameObjectsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4e940=?g_gameObjectsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4e940;
+extern unsigned char gen_g_142e4e940[528];
 /* g_gameTipsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e4eb50=?g_gameTipsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e4eb50;
+extern unsigned char gen_g_142e4eb50[528];
 /* g_garrMissionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e51ee0=?g_garrMissionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e51ee0;
+extern unsigned char gen_g_142e51ee0[528];
 /* g_gemPropertiesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e54610=?g_gemPropertiesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e54610;
+extern unsigned char gen_g_142e54610[528];
 /* g_glyphExclusiveCategoryDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e55270=?g_glyphExclusiveCategoryDB@@3VWowClientDB2@@A")
-extern char gen_g_142e55270;
+extern unsigned char gen_g_142e55270[528];
 /* g_glyphPropertiesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e55480=?g_glyphPropertiesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e55480;
+extern unsigned char gen_g_142e55480[528];
 /* g_glyphSlotDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e558a0=?g_glyphSlotDB@@3VWowClientDB2@@A")
-extern char gen_g_142e558a0;
+extern unsigned char gen_g_142e558a0[528];
 /* g_gossipNPCOptionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e55cc0=?g_gossipNPCOptionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e55cc0;
+extern unsigned char gen_g_142e55cc0[528];
 /* g_gradientEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e55ed0=?g_gradientEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e55ed0;
+extern unsigned char gen_g_142e55ed0[528];
 /* g_guildColorBackgroundDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e56920=?g_guildColorBackgroundDB@@3VWowClientDB2@@A")
-extern char gen_g_142e56920;
+extern unsigned char gen_g_142e56920[528];
 /* g_guildColorBorderDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e56b30=?g_guildColorBorderDB@@3VWowClientDB2@@A")
-extern char gen_g_142e56b30;
+extern unsigned char gen_g_142e56b30[528];
 /* g_guildColorEmblemDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e56d40=?g_guildColorEmblemDB@@3VWowClientDB2@@A")
-extern char gen_g_142e56d40;
+extern unsigned char gen_g_142e56d40[528];
 /* g_guildPerkSpellsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e57160=?g_guildPerkSpellsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e57160;
+extern unsigned char gen_g_142e57160[528];
 /* g_guildShirtBackgroundDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e57370=?g_guildShirtBackgroundDB@@3VWowClientDB2@@A")
-extern char gen_g_142e57370;
+extern unsigned char gen_g_142e57370[528];
 /* g_guildShirtBorderDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e57580=?g_guildShirtBorderDB@@3VWowClientDB2@@A")
-extern char gen_g_142e57580;
+extern unsigned char gen_g_142e57580[528];
 /* g_guildTabardBackgroundDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e57790=?g_guildTabardBackgroundDB@@3VWowClientDB2@@A")
-extern char gen_g_142e57790;
+extern unsigned char gen_g_142e57790[528];
 /* g_guildTabardBorderDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e579a0=?g_guildTabardBorderDB@@3VWowClientDB2@@A")
-extern char gen_g_142e579a0;
+extern unsigned char gen_g_142e579a0[528];
 /* g_guildTabardEmblemDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e57bb0=?g_guildTabardEmblemDB@@3VWowClientDB2@@A")
-extern char gen_g_142e57bb0;
+extern unsigned char gen_g_142e57bb0[528];
 /* g_heirloomDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e57dc0=?g_heirloomDB@@3VWowClientDB2@@A")
-extern char gen_g_142e57dc0;
+extern unsigned char gen_g_142e57dc0[528];
 /* g_helmetAnimScalingDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e57fd0=?g_helmetAnimScalingDB@@3VWowClientDB2@@A")
-extern char gen_g_142e57fd0;
+extern unsigned char gen_g_142e57fd0[528];
 /* g_helmetGeosetDataDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e581e0=?g_helmetGeosetDataDB@@3VWowClientDB2@@A")
-extern char gen_g_142e581e0;
+extern unsigned char gen_g_142e581e0[528];
 /* g_highlightColorDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e583f0=?g_highlightColorDB@@3VWowClientDB2@@A")
-extern char gen_g_142e583f0;
+extern unsigned char gen_g_142e583f0[528];
 /* g_holidayNamesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e58810=?g_holidayNamesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e58810;
+extern unsigned char gen_g_142e58810[528];
 /* g_holidaysDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e58a20=?g_holidaysDB@@3VWowClientDB2@@A")
-extern char gen_g_142e58a20;
+extern unsigned char gen_g_142e58a20[528];
 /* g_itemAppearanceDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e59680=?g_itemAppearanceDB@@3VWowClientDB2@@A")
-extern char gen_g_142e59680;
+extern unsigned char gen_g_142e59680[528];
 /* g_itemArmorQualityDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e59aa0=?g_itemArmorQualityDB@@3VWowClientDB2@@A")
-extern char gen_g_142e59aa0;
+extern unsigned char gen_g_142e59aa0[528];
 /* g_itemArmorShieldDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e59cb0=?g_itemArmorShieldDB@@3VWowClientDB2@@A")
-extern char gen_g_142e59cb0;
+extern unsigned char gen_g_142e59cb0[528];
 /* g_itemArmorTotalDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e59ec0=?g_itemArmorTotalDB@@3VWowClientDB2@@A")
-extern char gen_g_142e59ec0;
+extern unsigned char gen_g_142e59ec0[528];
 /* g_itemBonusListLevelDeltaDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5a2e0=?g_itemBonusListLevelDeltaDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5a2e0;
+extern unsigned char gen_g_142e5a2e0[528];
 /* g_itemBonusDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5a4f0=?g_itemBonusDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5a4f0;
+extern unsigned char gen_g_142e5a4f0[528];
 /* g_itemBonusTreeNodeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5a700=?g_itemBonusTreeNodeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5a700;
+extern unsigned char gen_g_142e5a700[528];
 /* g_itemChildEquipmentDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5a910=?g_itemChildEquipmentDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5a910;
+extern unsigned char gen_g_142e5a910[528];
 /* g_itemClassDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5ab20=?g_itemClassDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5ab20;
+extern unsigned char gen_g_142e5ab20[528];
 /* g_itemCurrencyCostDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5af40=?g_itemCurrencyCostDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5af40;
+extern unsigned char gen_g_142e5af40[528];
 /* g_itemDamageAmmoDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5b150=?g_itemDamageAmmoDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5b150;
+extern unsigned char gen_g_142e5b150[528];
 /* g_itemDamageOneHandCasterDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5b360=?g_itemDamageOneHandCasterDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5b360;
+extern unsigned char gen_g_142e5b360[528];
 /* g_itemDamageOneHandDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5b570=?g_itemDamageOneHandDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5b570;
+extern unsigned char gen_g_142e5b570[528];
 /* g_itemDamageTwoHandCasterDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5b780=?g_itemDamageTwoHandCasterDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5b780;
+extern unsigned char gen_g_142e5b780[528];
 /* g_itemDamageTwoHandDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5b990=?g_itemDamageTwoHandDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5b990;
+extern unsigned char gen_g_142e5b990[528];
 /* g_itemDisenchantLootDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5bba0=?g_itemDisenchantLootDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5bba0;
+extern unsigned char gen_g_142e5bba0[528];
 /* g_itemDisplayInfoMaterialResDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5bdb0=?g_itemDisplayInfoMaterialResDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5bdb0;
+extern unsigned char gen_g_142e5bdb0[528];
 /* g_itemDisplayInfoModelMatResDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5bfc0=?g_itemDisplayInfoModelMatResDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5bfc0;
+extern unsigned char gen_g_142e5bfc0[528];
 /* g_itemDisplayInfoDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5c1d0=?g_itemDisplayInfoDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5c1d0;
+extern unsigned char gen_g_142e5c1d0[528];
 /* g_itemEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5c3e0=?g_itemEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5c3e0;
+extern unsigned char gen_g_142e5c3e0[528];
 /* g_itemExtendedCostDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5c5f0=?g_itemExtendedCostDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5c5f0;
+extern unsigned char gen_g_142e5c5f0[528];
 /* g_itemGroupSoundsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5c800=?g_itemGroupSoundsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5c800;
+extern unsigned char gen_g_142e5c800[528];
 /* g_itemLevelSelectorQualityDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5ca10=?g_itemLevelSelectorQualityDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5ca10;
+extern unsigned char gen_g_142e5ca10[528];
 /* g_itemLevelSelectorQualitySetDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5cc20=?g_itemLevelSelectorQualitySetDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5cc20;
+extern unsigned char gen_g_142e5cc20[528];
 /* g_itemLevelSelectorDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5ce30=?g_itemLevelSelectorDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5ce30;
+extern unsigned char gen_g_142e5ce30[528];
 /* g_itemLimitCategoryConditionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5d040=?g_itemLimitCategoryConditionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5d040;
+extern unsigned char gen_g_142e5d040[528];
 /* g_itemLimitCategoryDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5d250=?g_itemLimitCategoryDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5d250;
+extern unsigned char gen_g_142e5d250[528];
 /* g_itemModifiedAppearanceExtraDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5d460=?g_itemModifiedAppearanceExtraDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5d460;
+extern unsigned char gen_g_142e5d460[528];
 /* g_itemModifiedAppearanceDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5d670=?g_itemModifiedAppearanceDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5d670;
+extern unsigned char gen_g_142e5d670[528];
 /* g_itemNameDescriptionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5d880=?g_itemNameDescriptionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5d880;
+extern unsigned char gen_g_142e5d880[528];
 /* g_itemPetFoodDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5da90=?g_itemPetFoodDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5da90;
+extern unsigned char gen_g_142e5da90[528];
 /* g_itemRandomPropertiesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5deb0=?g_itemRandomPropertiesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5deb0;
+extern unsigned char gen_g_142e5deb0[528];
 /* g_itemRandomSuffixDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5e0c0=?g_itemRandomSuffixDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5e0c0;
+extern unsigned char gen_g_142e5e0c0[528];
 /* g_itemRangedDisplayInfoDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5e2d0=?g_itemRangedDisplayInfoDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5e2d0;
+extern unsigned char gen_g_142e5e2d0[528];
 /* g_itemDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5e4e0=?g_itemDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5e4e0;
+extern unsigned char gen_g_142e5e4e0[528];
 /* g_itemSetDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5e900=?g_itemSetDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5e900;
+extern unsigned char gen_g_142e5e900[528];
 /* g_itemSetSpellDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5eb10=?g_itemSetSpellDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5eb10;
+extern unsigned char gen_g_142e5eb10[528];
 /* g_itemSparseDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5ed20=?g_itemSparseDB@@3VWowClientSparseDB2Table@@A")
-extern char gen_g_142e5ed20;
+extern unsigned char gen_g_142e5ed20[944];
 /* g_itemSpecOverrideDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5f0d0=?g_itemSpecOverrideDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5f0d0;
+extern unsigned char gen_g_142e5f0d0[528];
 /* g_itemSpecDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5f2e0=?g_itemSpecDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5f2e0;
+extern unsigned char gen_g_142e5f2e0[528];
 /* g_itemSubClassMaskDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5f4f0=?g_itemSubClassMaskDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5f4f0;
+extern unsigned char gen_g_142e5f4f0[528];
 /* g_itemSubClassDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5f700=?g_itemSubClassDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5f700;
+extern unsigned char gen_g_142e5f700[528];
 /* g_itemUpgradeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5f910=?g_itemUpgradeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5f910;
+extern unsigned char gen_g_142e5f910[528];
 /* g_itemVisualsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5fb20=?g_itemVisualsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5fb20;
+extern unsigned char gen_g_142e5fb20[528];
 /* g_itemVisualsXEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5fd30=?g_itemVisualsXEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5fd30;
+extern unsigned char gen_g_142e5fd30[528];
 /* g_itemXBonusTreeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e5ff40=?g_itemXBonusTreeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e5ff40;
+extern unsigned char gen_g_142e5ff40[528];
 /* g_lFGDungeonsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e62460=?g_lFGDungeonsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e62460;
+extern unsigned char gen_g_142e62460[528];
 /* g_languageWordsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e62880=?g_languageWordsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e62880;
+extern unsigned char gen_g_142e62880[528];
 /* g_languagesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e62a90=?g_languagesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e62a90;
+extern unsigned char gen_g_142e62a90[528];
 /* g_lfgDungeonsGroupingMapDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e62ca0=?g_lfgDungeonsGroupingMapDB@@3VWowClientDB2@@A")
-extern char gen_g_142e62ca0;
+extern unsigned char gen_g_142e62ca0[528];
 /* g_loadingScreenTaxiSplinesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e62eb0=?g_loadingScreenTaxiSplinesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e62eb0;
+extern unsigned char gen_g_142e62eb0[528];
 /* g_loadingScreensDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e630c0=?g_loadingScreensDB@@3VWowClientDB2@@A")
-extern char gen_g_142e630c0;
+extern unsigned char gen_g_142e630c0[528];
 /* g_locationDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e634e0=?g_locationDB@@3VWowClientDB2@@A")
-extern char gen_g_142e634e0;
+extern unsigned char gen_g_142e634e0[528];
 /* g_lockDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e636f0=?g_lockDB@@3VWowClientDB2@@A")
-extern char gen_g_142e636f0;
+extern unsigned char gen_g_142e636f0[528];
 /* g_lockTypeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e63900=?g_lockTypeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e63900;
+extern unsigned char gen_g_142e63900[528];
 /* g_managedWorldStateDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e64350=?g_managedWorldStateDB@@3VWowClientDB2@@A")
-extern char gen_g_142e64350;
+extern unsigned char gen_g_142e64350[528];
 /* g_manifestInterfaceDataDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e64770=?g_manifestInterfaceDataDB@@3VWowClientDB2@@A")
-extern char gen_g_142e64770;
+extern unsigned char gen_g_142e64770[528];
 /* g_mapChallengeModeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e64fb0=?g_mapChallengeModeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e64fb0;
+extern unsigned char gen_g_142e64fb0[528];
 /* g_mapDifficultyDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e651c0=?g_mapDifficultyDB@@3VWowClientDB2@@A")
-extern char gen_g_142e651c0;
+extern unsigned char gen_g_142e651c0[528];
 /* g_mapLoadingScreenDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e657f0=?g_mapLoadingScreenDB@@3VWowClientDB2@@A")
-extern char gen_g_142e657f0;
+extern unsigned char gen_g_142e657f0[528];
 /* g_marketingPromotionsXLocaleDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e65a00=?g_marketingPromotionsXLocaleDB@@3VWowClientDB2@@A")
-extern char gen_g_142e65a00;
+extern unsigned char gen_g_142e65a00[528];
 /* g_materialDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e65c10=?g_materialDB@@3VWowClientDB2@@A")
-extern char gen_g_142e65c10;
+extern unsigned char gen_g_142e65c10[528];
 /* g_minorTalentDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e65e20=?g_minorTalentDB@@3VWowClientDB2@@A")
-extern char gen_g_142e65e20;
+extern unsigned char gen_g_142e65e20[528];
 /* g_missileTargetingDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e66030=?g_missileTargetingDB@@3VWowClientDB2@@A")
-extern char gen_g_142e66030;
+extern unsigned char gen_g_142e66030[528];
 /* g_modifierTreeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e66450=?g_modifierTreeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e66450;
+extern unsigned char gen_g_142e66450[528];
 /* g_mountCapabilityDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e66660=?g_mountCapabilityDB@@3VWowClientDB2@@A")
-extern char gen_g_142e66660;
+extern unsigned char gen_g_142e66660[528];
 /* g_mountDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e66870=?g_mountDB@@3VWowClientDB2@@A")
-extern char gen_g_142e66870;
+extern unsigned char gen_g_142e66870[528];
 /* g_mountTypeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e66a80=?g_mountTypeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e66a80;
+extern unsigned char gen_g_142e66a80[528];
 /* g_mountTypeXCapabilityDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e66c90=?g_mountTypeXCapabilityDB@@3VWowClientDB2@@A")
-extern char gen_g_142e66c90;
+extern unsigned char gen_g_142e66c90[528];
 /* g_mountXDisplayDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e66ea0=?g_mountXDisplayDB@@3VWowClientDB2@@A")
-extern char gen_g_142e66ea0;
+extern unsigned char gen_g_142e66ea0[528];
 /* g_movieDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e672c0=?g_movieDB@@3VWowClientDB2@@A")
-extern char gen_g_142e672c0;
+extern unsigned char gen_g_142e672c0[528];
 /* g_movieVariationDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e674d0=?g_movieVariationDB@@3VWowClientDB2@@A")
-extern char gen_g_142e674d0;
+extern unsigned char gen_g_142e674d0[528];
 /* g_nPCModelItemSlotDisplayInfoDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e68340=?g_nPCModelItemSlotDisplayInfoDB@@3VWowClientDB2@@A")
-extern char gen_g_142e68340;
+extern unsigned char gen_g_142e68340[528];
 /* g_nPCSoundsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e68550=?g_nPCSoundsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e68550;
+extern unsigned char gen_g_142e68550[528];
 /* g_nameGenDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e68760=?g_nameGenDB@@3VWowClientDB2@@A")
-extern char gen_g_142e68760;
+extern unsigned char gen_g_142e68760[528];
 /* g_namesProfanityDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e68970=?g_namesProfanityDB@@3VWowClientDB2@@A")
-extern char gen_g_142e68970;
+extern unsigned char gen_g_142e68970[528];
 /* g_namesReservedLocaleDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e68b80=?g_namesReservedLocaleDB@@3VWowClientDB2@@A")
-extern char gen_g_142e68b80;
+extern unsigned char gen_g_142e68b80[528];
 /* g_namesReservedDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e68d90=?g_namesReservedDB@@3VWowClientDB2@@A")
-extern char gen_g_142e68d90;
+extern unsigned char gen_g_142e68d90[528];
 /* g_objectEffectModifierDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e691b0=?g_objectEffectModifierDB@@3VWowClientDB2@@A")
-extern char gen_g_142e691b0;
+extern unsigned char gen_g_142e691b0[528];
 /* g_objectEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e695d0=?g_objectEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e695d0;
+extern unsigned char gen_g_142e695d0[528];
 /* g_outlineEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e697e0=?g_outlineEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e697e0;
+extern unsigned char gen_g_142e697e0[528];
 /* g_overrideSpellDataDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e699f0=?g_overrideSpellDataDB@@3VWowClientDB2@@A")
-extern char gen_g_142e699f0;
+extern unsigned char gen_g_142e699f0[528];
 /* g_pVPItemDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6a020=?g_pVPItemDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6a020;
+extern unsigned char gen_g_142e6a020[528];
 /* g_particleColorDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6a860=?g_particleColorDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6a860;
+extern unsigned char gen_g_142e6a860[528];
 /* g_pathNodePropertyDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6ac80=?g_pathNodePropertyDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6ac80;
+extern unsigned char gen_g_142e6ac80[528];
 /* g_pathNodeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6ae90=?g_pathNodeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6ae90;
+extern unsigned char gen_g_142e6ae90[528];
 /* g_pathPropertyDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6b0a0=?g_pathPropertyDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6b0a0;
+extern unsigned char gen_g_142e6b0a0[528];
 /* g_pathDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6b2b0=?g_pathDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6b2b0;
+extern unsigned char gen_g_142e6b2b0[528];
 /* g_petPersonalityDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6b6d0=?g_petPersonalityDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6b6d0;
+extern unsigned char gen_g_142e6b6d0[528];
 /* g_phaseDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6b8e0=?g_phaseDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6b8e0;
+extern unsigned char gen_g_142e6b8e0[528];
 /* g_phaseXPhaseGroupDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6bd00=?g_phaseXPhaseGroupDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6bd00;
+extern unsigned char gen_g_142e6bd00[528];
 /* g_playerConditionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6c120=?g_playerConditionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6c120;
+extern unsigned char gen_g_142e6c120[528];
 /* g_positionerDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6c330=?g_positionerDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6c330;
+extern unsigned char gen_g_142e6c330[528];
 /* g_positionerStateEntryDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6c540=?g_positionerStateEntryDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6c540;
+extern unsigned char gen_g_142e6c540[528];
 /* g_positionerStateDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6c750=?g_positionerStateDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6c750;
+extern unsigned char gen_g_142e6c750[528];
 /* g_powerDisplayDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6c960=?g_powerDisplayDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6c960;
+extern unsigned char gen_g_142e6c960[528];
 /* g_powerTypeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6cb70=?g_powerTypeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6cb70;
+extern unsigned char gen_g_142e6cb70[528];
 /* g_pvpTalentDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6de00=?g_pvpTalentDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6de00;
+extern unsigned char gen_g_142e6de00[528];
 /* g_pvpTierDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6e220=?g_pvpTierDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6e220;
+extern unsigned char gen_g_142e6e220[528];
 /* g_questInfoDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6e850=?g_questInfoDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6e850;
+extern unsigned char gen_g_142e6e850[528];
 /* g_questObjectiveDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6f2a0=?g_questObjectiveDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6f2a0;
+extern unsigned char gen_g_142e6f2a0[528];
 /* g_questPackageItemDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6f8d0=?g_questPackageItemDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6f8d0;
+extern unsigned char gen_g_142e6f8d0[528];
 /* g_questSortDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6fae0=?g_questSortDB@@3VWowClientDB2@@A")
-extern char gen_g_142e6fae0;
+extern unsigned char gen_g_142e6fae0[528];
 /* g_questV2DB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e6ff00=?g_questV2DB@@3VWowClientDB2@@A")
-extern char gen_g_142e6ff00;
+extern unsigned char gen_g_142e6ff00[528];
 /* g_randPropPointsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e70740=?g_randPropPointsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e70740;
+extern unsigned char gen_g_142e70740[528];
 /* g_researchBranchDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e70f80=?g_researchBranchDB@@3VWowClientDB2@@A")
-extern char gen_g_142e70f80;
+extern unsigned char gen_g_142e70f80[528];
 /* g_researchProjectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e713a0=?g_researchProjectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e713a0;
+extern unsigned char gen_g_142e713a0[528];
 /* g_resistancesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e717c0=?g_resistancesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e717c0;
+extern unsigned char gen_g_142e717c0[528];
 /* g_sDReplacementModelDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e72210=?g_sDReplacementModelDB@@3VWowClientDB2@@A")
-extern char gen_g_142e72210;
+extern unsigned char gen_g_142e72210[528];
 /* g_scalingStatDistributionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e72420=?g_scalingStatDistributionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e72420;
+extern unsigned char gen_g_142e72420[528];
 /* g_scalingStatValuesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e72630=?g_scalingStatValuesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e72630;
+extern unsigned char gen_g_142e72630[528];
 /* g_scenarioEventEntryDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e72840=?g_scenarioEventEntryDB@@3VWowClientDB2@@A")
-extern char gen_g_142e72840;
+extern unsigned char gen_g_142e72840[528];
 /* g_scenarioDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e72a50=?g_scenarioDB@@3VWowClientDB2@@A")
-extern char gen_g_142e72a50;
+extern unsigned char gen_g_142e72a50[528];
 /* g_scenarioStepDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e72c60=?g_scenarioStepDB@@3VWowClientDB2@@A")
-extern char gen_g_142e72c60;
+extern unsigned char gen_g_142e72c60[528];
 /* g_sceneScriptPackageMemberDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e73080=?g_sceneScriptPackageMemberDB@@3VWowClientDB2@@A")
-extern char gen_g_142e73080;
+extern unsigned char gen_g_142e73080[528];
 /* g_sceneScriptPackageDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e73290=?g_sceneScriptPackageDB@@3VWowClientDB2@@A")
-extern char gen_g_142e73290;
+extern unsigned char gen_g_142e73290[528];
 /* g_sceneScriptDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e734a0=?g_sceneScriptDB@@3VWowClientDB2@@A")
-extern char gen_g_142e734a0;
+extern unsigned char gen_g_142e734a0[528];
 /* g_sceneScriptTextDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e736b0=?g_sceneScriptTextDB@@3VWowClientSparseDB2Table@@A")
-extern char gen_g_142e736b0;
+extern unsigned char gen_g_142e736b0[944];
 /* g_screenEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e73c70=?g_screenEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e73c70;
+extern unsigned char gen_g_142e73c70[528];
 /* g_screenEffectTypeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e73e80=?g_screenEffectTypeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e73e80;
+extern unsigned char gen_g_142e73e80[528];
 /* g_screenLocationDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e74090=?g_screenLocationDB@@3VWowClientDB2@@A")
-extern char gen_g_142e74090;
+extern unsigned char gen_g_142e74090[528];
 /* g_seamlessSiteDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e742a0=?g_seamlessSiteDB@@3VWowClientDB2@@A")
-extern char gen_g_142e742a0;
+extern unsigned char gen_g_142e742a0[528];
 /* g_shadowyEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e746c0=?g_shadowyEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e746c0;
+extern unsigned char gen_g_142e746c0[528];
 /* g_skillLineAbilityDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e74cf0=?g_skillLineAbilityDB@@3VWowClientDB2@@A")
-extern char gen_g_142e74cf0;
+extern unsigned char gen_g_142e74cf0[528];
 /* g_skillLineDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e75110=?g_skillLineDB@@3VWowClientDB2@@A")
-extern char gen_g_142e75110;
+extern unsigned char gen_g_142e75110[528];
 /* g_skillRaceClassInfoDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e75530=?g_skillRaceClassInfoDB@@3VWowClientDB2@@A")
-extern char gen_g_142e75530;
+extern unsigned char gen_g_142e75530[528];
 /* g_soundAmbienceDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e75b60=?g_soundAmbienceDB@@3VWowClientDB2@@A")
-extern char gen_g_142e75b60;
+extern unsigned char gen_g_142e75b60[528];
 /* g_spamMessagesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e763a0=?g_spamMessagesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e763a0;
+extern unsigned char gen_g_142e763a0[528];
 /* g_specializationSpellsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e769d0=?g_specializationSpellsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e769d0;
+extern unsigned char gen_g_142e769d0[528];
 /* g_spellActivationOverlayDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e76df0=?g_spellActivationOverlayDB@@3VWowClientDB2@@A")
-extern char gen_g_142e76df0;
+extern unsigned char gen_g_142e76df0[528];
 /* g_spellAuraOptionsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e77000=?g_spellAuraOptionsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e77000;
+extern unsigned char gen_g_142e77000[528];
 /* g_spellAuraRestrictionsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e77210=?g_spellAuraRestrictionsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e77210;
+extern unsigned char gen_g_142e77210[528];
 /* g_spellCastTimesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e77840=?g_spellCastTimesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e77840;
+extern unsigned char gen_g_142e77840[528];
 /* g_spellCastingRequirementsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e77a50=?g_spellCastingRequirementsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e77a50;
+extern unsigned char gen_g_142e77a50[528];
 /* g_spellCategoriesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e77c60=?g_spellCategoriesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e77c60;
+extern unsigned char gen_g_142e77c60[528];
 /* g_spellCategoryDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e77e70=?g_spellCategoryDB@@3VWowClientDB2@@A")
-extern char gen_g_142e77e70;
+extern unsigned char gen_g_142e77e70[528];
 /* g_spellClassOptionsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e78080=?g_spellClassOptionsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e78080;
+extern unsigned char gen_g_142e78080[528];
 /* g_spellCooldownsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e78290=?g_spellCooldownsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e78290;
+extern unsigned char gen_g_142e78290[528];
 /* g_spellCraftUIDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e784a0=?g_spellCraftUIDB@@3VWowClientDB2@@A")
-extern char gen_g_142e784a0;
+extern unsigned char gen_g_142e784a0[528];
 /* g_spellDescriptionVariablesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e786b0=?g_spellDescriptionVariablesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e786b0;
+extern unsigned char gen_g_142e786b0[528];
 /* g_spellDispelTypeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e788c0=?g_spellDispelTypeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e788c0;
+extern unsigned char gen_g_142e788c0[528];
 /* g_spellDurationDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e78ad0=?g_spellDurationDB@@3VWowClientDB2@@A")
-extern char gen_g_142e78ad0;
+extern unsigned char gen_g_142e78ad0[528];
 /* g_spellEffectAutoDescriptionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e78ce0=?g_spellEffectAutoDescriptionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e78ce0;
+extern unsigned char gen_g_142e78ce0[528];
 /* g_spellEffectEmissionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e78ef0=?g_spellEffectEmissionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e78ef0;
+extern unsigned char gen_g_142e78ef0[528];
 /* g_spellEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e79100=?g_spellEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e79100;
+extern unsigned char gen_g_142e79100[528];
 /* g_spellEquippedItemsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e79310=?g_spellEquippedItemsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e79310;
+extern unsigned char gen_g_142e79310[528];
 /* g_spellFlyoutDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e79730=?g_spellFlyoutDB@@3VWowClientDB2@@A")
-extern char gen_g_142e79730;
+extern unsigned char gen_g_142e79730[528];
 /* g_spellFocusObjectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e79940=?g_spellFocusObjectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e79940;
+extern unsigned char gen_g_142e79940[528];
 /* g_spellInterruptsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e79b50=?g_spellInterruptsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e79b50;
+extern unsigned char gen_g_142e79b50[528];
 /* g_spellItemEnchantmentConditionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e79d60=?g_spellItemEnchantmentConditionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e79d60;
+extern unsigned char gen_g_142e79d60[528];
 /* g_spellItemEnchantmentDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e79f70=?g_spellItemEnchantmentDB@@3VWowClientDB2@@A")
-extern char gen_g_142e79f70;
+extern unsigned char gen_g_142e79f70[528];
 /* g_spellLabelDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7a390=?g_spellLabelDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7a390;
+extern unsigned char gen_g_142e7a390[528];
 /* g_spellLearnSpellDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7a5a0=?g_spellLearnSpellDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7a5a0;
+extern unsigned char gen_g_142e7a5a0[528];
 /* g_spellLevelsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7a7b0=?g_spellLevelsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7a7b0;
+extern unsigned char gen_g_142e7a7b0[528];
 /* g_spellMechanicDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7a9c0=?g_spellMechanicDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7a9c0;
+extern unsigned char gen_g_142e7a9c0[528];
 /* g_spellMiscDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7abd0=?g_spellMiscDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7abd0;
+extern unsigned char gen_g_142e7abd0[528];
 /* g_spellMissileMotionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7ade0=?g_spellMissileMotionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7ade0;
+extern unsigned char gen_g_142e7ade0[528];
 /* g_spellMissileDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7aff0=?g_spellMissileDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7aff0;
+extern unsigned char gen_g_142e7aff0[528];
 /* g_spellNameDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7b200=?g_spellNameDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7b200;
+extern unsigned char gen_g_142e7b200[528];
 /* g_spellPowerDifficultyDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7b410=?g_spellPowerDifficultyDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7b410;
+extern unsigned char gen_g_142e7b410[528];
 /* g_spellPowerDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7b620=?g_spellPowerDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7b620;
+extern unsigned char gen_g_142e7b620[528];
 /* g_spellProceduralEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7b830=?g_spellProceduralEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7b830;
+extern unsigned char gen_g_142e7b830[528];
 /* g_spellRadiusDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7be60=?g_spellRadiusDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7be60;
+extern unsigned char gen_g_142e7be60[528];
 /* g_spellRangeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7c070=?g_spellRangeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7c070;
+extern unsigned char gen_g_142e7c070[528];
 /* g_spellReagentsCurrencyDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7c280=?g_spellReagentsCurrencyDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7c280;
+extern unsigned char gen_g_142e7c280[528];
 /* g_spellReagentsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7c490=?g_spellReagentsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7c490;
+extern unsigned char gen_g_142e7c490[528];
 /* g_spellDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7c6a0=?g_spellDB@@3VWowClientSparseDB2Table@@A")
-extern char gen_g_142e7c6a0;
+extern unsigned char gen_g_142e7c6a0[944];
 /* g_spellScalingDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7ca50=?g_spellScalingDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7ca50;
+extern unsigned char gen_g_142e7ca50[528];
 /* g_spellShapeshiftFormDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7cc60=?g_spellShapeshiftFormDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7cc60;
+extern unsigned char gen_g_142e7cc60[528];
 /* g_spellShapeshiftDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7ce70=?g_spellShapeshiftDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7ce70;
+extern unsigned char gen_g_142e7ce70[528];
 /* g_spellSpecialUnitEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7d080=?g_spellSpecialUnitEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7d080;
+extern unsigned char gen_g_142e7d080[528];
 /* g_spellTargetRestrictionsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7d290=?g_spellTargetRestrictionsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7d290;
+extern unsigned char gen_g_142e7d290[528];
 /* g_spellTotemsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7d4a0=?g_spellTotemsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7d4a0;
+extern unsigned char gen_g_142e7d4a0[528];
 /* g_spellVisualAnimDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7d6b0=?g_spellVisualAnimDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7d6b0;
+extern unsigned char gen_g_142e7d6b0[528];
 /* g_spellVisualColorEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7d8c0=?g_spellVisualColorEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7d8c0;
+extern unsigned char gen_g_142e7d8c0[528];
 /* g_spellVisualEffectNameDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7dad0=?g_spellVisualEffectNameDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7dad0;
+extern unsigned char gen_g_142e7dad0[528];
 /* g_spellVisualEventDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7dce0=?g_spellVisualEventDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7dce0;
+extern unsigned char gen_g_142e7dce0[528];
 /* g_spellVisualKitAreaModelDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7def0=?g_spellVisualKitAreaModelDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7def0;
+extern unsigned char gen_g_142e7def0[528];
 /* g_spellVisualKitEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7e100=?g_spellVisualKitEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7e100;
+extern unsigned char gen_g_142e7e100[528];
 /* g_spellVisualKitModelAttachDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7e310=?g_spellVisualKitModelAttachDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7e310;
+extern unsigned char gen_g_142e7e310[528];
 /* g_spellVisualKitDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7e520=?g_spellVisualKitDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7e520;
+extern unsigned char gen_g_142e7e520[528];
 /* g_spellVisualMissileDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7e730=?g_spellVisualMissileDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7e730;
+extern unsigned char gen_g_142e7e730[528];
 /* g_spellVisualDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7e940=?g_spellVisualDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7e940;
+extern unsigned char gen_g_142e7e940[528];
 /* g_spellXDescriptionVariablesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7eb50=?g_spellXDescriptionVariablesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7eb50;
+extern unsigned char gen_g_142e7eb50[528];
 /* g_spellXSpellVisualDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7ed60=?g_spellXSpellVisualDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7ed60;
+extern unsigned char gen_g_142e7ed60[528];
 /* g_summonPropertiesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7f390=?g_summonPropertiesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7f390;
+extern unsigned char gen_g_142e7f390[528];
 /* g_tactKeyDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7f7b0=?g_tactKeyDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7f7b0;
+extern unsigned char gen_g_142e7f7b0[528];
 /* g_talentDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7f9c0=?g_talentDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7f9c0;
+extern unsigned char gen_g_142e7f9c0[528];
 /* g_talentTabDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7fbd0=?g_talentTabDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7fbd0;
+extern unsigned char gen_g_142e7fbd0[528];
 /* g_taxiNodesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7fde0=?g_taxiNodesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7fde0;
+extern unsigned char gen_g_142e7fde0[528];
 /* g_taxiPathNodeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e7fff0=?g_taxiPathNodeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e7fff0;
+extern unsigned char gen_g_142e7fff0[528];
 /* g_taxiPathDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e80200=?g_taxiPathDB@@3VWowClientDB2@@A")
-extern char gen_g_142e80200;
+extern unsigned char gen_g_142e80200[528];
 /* g_textureFileDataDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e80620=?g_textureFileDataDB@@3VWowClientDB2@@A")
-extern char gen_g_142e80620;
+extern unsigned char gen_g_142e80620[528];
 /* g_totemCategoryDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e80a40=?g_totemCategoryDB@@3VWowClientDB2@@A")
-extern char gen_g_142e80a40;
+extern unsigned char gen_g_142e80a40[528];
 /* g_toyDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e80c50=?g_toyDB@@3VWowClientDB2@@A")
-extern char gen_g_142e80c50;
+extern unsigned char gen_g_142e80c50[528];
 /* g_transformMatrixDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e84400=?g_transformMatrixDB@@3VWowClientDB2@@A")
-extern char gen_g_142e84400;
+extern unsigned char gen_g_142e84400[528];
 /* g_transportAnimationDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e84e50=?g_transportAnimationDB@@3VWowClientDB2@@A")
-extern char gen_g_142e84e50;
+extern unsigned char gen_g_142e84e50[528];
 /* g_transportRotationDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e85270=?g_transportRotationDB@@3VWowClientDB2@@A")
-extern char gen_g_142e85270;
+extern unsigned char gen_g_142e85270[528];
 /* g_uiMapAssignmentDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e87160=?g_uiMapAssignmentDB@@3VWowClientDB2@@A")
-extern char gen_g_142e87160;
+extern unsigned char gen_g_142e87160[528];
 /* g_uiMapFogOfWarDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e87370=?g_uiMapFogOfWarDB@@3VWowClientDB2@@A")
-extern char gen_g_142e87370;
+extern unsigned char gen_g_142e87370[528];
 /* g_uiMapFogOfWarVisualizationDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e87580=?g_uiMapFogOfWarVisualizationDB@@3VWowClientDB2@@A")
-extern char gen_g_142e87580;
+extern unsigned char gen_g_142e87580[528];
 /* g_uiMapLinkDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e879a0=?g_uiMapLinkDB@@3VWowClientDB2@@A")
-extern char gen_g_142e879a0;
+extern unsigned char gen_g_142e879a0[528];
 /* g_uiMapDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e87bb0=?g_uiMapDB@@3VWowClientDB2@@A")
-extern char gen_g_142e87bb0;
+extern unsigned char gen_g_142e87bb0[528];
 /* g_uiModelSceneActorDisplayDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e87fd0=?g_uiModelSceneActorDisplayDB@@3VWowClientDB2@@A")
-extern char gen_g_142e87fd0;
+extern unsigned char gen_g_142e87fd0[528];
 /* g_uiModelSceneActorDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e881e0=?g_uiModelSceneActorDB@@3VWowClientDB2@@A")
-extern char gen_g_142e881e0;
+extern unsigned char gen_g_142e881e0[528];
 /* g_uiModelSceneCameraDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e883f0=?g_uiModelSceneCameraDB@@3VWowClientDB2@@A")
-extern char gen_g_142e883f0;
+extern unsigned char gen_g_142e883f0[528];
 /* g_uiModelSceneDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e88600=?g_uiModelSceneDB@@3VWowClientDB2@@A")
-extern char gen_g_142e88600;
+extern unsigned char gen_g_142e88600[528];
 /* g_uiTextureAtlasMemberDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e88c30=?g_uiTextureAtlasMemberDB@@3VWowClientDB2@@A")
-extern char gen_g_142e88c30;
+extern unsigned char gen_g_142e88c30[528];
 /* g_uiTextureAtlasDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e88e40=?g_uiTextureAtlasDB@@3VWowClientDB2@@A")
-extern char gen_g_142e88e40;
+extern unsigned char gen_g_142e88e40[528];
 /* g_uiTextureKitDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e89050=?g_uiTextureKitDB@@3VWowClientDB2@@A")
-extern char gen_g_142e89050;
+extern unsigned char gen_g_142e89050[528];
 /* g_uiWidgetConstantSourceDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e89260=?g_uiWidgetConstantSourceDB@@3VWowClientDB2@@A")
-extern char gen_g_142e89260;
+extern unsigned char gen_g_142e89260[528];
 /* g_uiWidgetDataSourceDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e89470=?g_uiWidgetDataSourceDB@@3VWowClientDB2@@A")
-extern char gen_g_142e89470;
+extern unsigned char gen_g_142e89470[528];
 /* g_uiWidgetDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e89680=?g_uiWidgetDB@@3VWowClientDB2@@A")
-extern char gen_g_142e89680;
+extern unsigned char gen_g_142e89680[528];
 /* g_uiWidgetStringSourceDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e89890=?g_uiWidgetStringSourceDB@@3VWowClientDB2@@A")
-extern char gen_g_142e89890;
+extern unsigned char gen_g_142e89890[528];
 /* g_uiWidgetVisualizationDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e89aa0=?g_uiWidgetVisualizationDB@@3VWowClientDB2@@A")
-extern char gen_g_142e89aa0;
+extern unsigned char gen_g_142e89aa0[528];
 /* g_unitBloodLevelsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e89cb0=?g_unitBloodLevelsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e89cb0;
+extern unsigned char gen_g_142e89cb0[528];
 /* g_unitBloodDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e89ec0=?g_unitBloodDB@@3VWowClientDB2@@A")
-extern char gen_g_142e89ec0;
+extern unsigned char gen_g_142e89ec0[528];
 /* g_unitConditionDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8a0d0=?g_unitConditionDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8a0d0;
+extern unsigned char gen_g_142e8a0d0[528];
 /* g_unitPowerBarDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8a2e0=?g_unitPowerBarDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8a2e0;
+extern unsigned char gen_g_142e8a2e0[528];
 /* g_vehicleDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8a700=?g_vehicleDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8a700;
+extern unsigned char gen_g_142e8a700[528];
 /* g_vehicleSeatDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8a910=?g_vehicleSeatDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8a910;
+extern unsigned char gen_g_142e8a910[528];
 /* g_vignetteDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8af40=?g_vignetteDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8af40;
+extern unsigned char gen_g_142e8af40[528];
 /* g_vocalUISoundsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8b150=?g_vocalUISoundsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8b150;
+extern unsigned char gen_g_142e8b150[528];
 /* g_wbAccessControlListDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8b780=?g_wbAccessControlListDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8b780;
+extern unsigned char gen_g_142e8b780[528];
 /* g_weaponTrailModelDefDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8bdb0=?g_weaponTrailModelDefDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8bdb0;
+extern unsigned char gen_g_142e8bdb0[528];
 /* g_weaponTrailParamDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8bfc0=?g_weaponTrailParamDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8bfc0;
+extern unsigned char gen_g_142e8bfc0[528];
 /* g_weaponTrailDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8c1d0=?g_weaponTrailDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8c1d0;
+extern unsigned char gen_g_142e8c1d0[528];
 /* g_worldStateUIDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8d460=?g_worldStateUIDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8d460;
+extern unsigned char gen_g_142e8d460[528];
 /* g_world_PVP_AreaDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8d880=?g_world_PVP_AreaDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8d880;
+extern unsigned char gen_g_142e8d880[528];
 /* g_zoneMusicDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8dca0=?g_zoneMusicDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8dca0;
+extern unsigned char gen_g_142e8dca0[528];
 /* g_animationDataDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8e350=?g_animationDataDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8e350;
+extern unsigned char gen_g_142e8e350[528];
 /* g_areaTableDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8e560=?g_areaTableDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8e560;
+extern unsigned char gen_g_142e8e560[528];
 /* g_deviceBlacklistDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8f3d0=?g_deviceBlacklistDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8f3d0;
+extern unsigned char gen_g_142e8f3d0[528];
 /* g_driverBlacklistDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8f5e0=?g_driverBlacklistDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8f5e0;
+extern unsigned char gen_g_142e8f5e0[528];
 /* g_footprintTexturesDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8f7f0=?g_footprintTexturesDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8f7f0;
+extern unsigned char gen_g_142e8f7f0[528];
 /* g_fullScreenEffectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8fa00=?g_fullScreenEffectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8fa00;
+extern unsigned char gen_g_142e8fa00[528];
 /* g_groundEffectDoodadDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8fc10=?g_groundEffectDoodadDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8fc10;
+extern unsigned char gen_g_142e8fc10[528];
 /* g_groundEffectTextureDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e8fe20=?g_groundEffectTextureDB@@3VWowClientDB2@@A")
-extern char gen_g_142e8fe20;
+extern unsigned char gen_g_142e8fe20[528];
 /* g_lightDataDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e90240=?g_lightDataDB@@3VWowClientDB2@@A")
-extern char gen_g_142e90240;
+extern unsigned char gen_g_142e90240[528];
 /* g_lightParamsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e90450=?g_lightParamsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e90450;
+extern unsigned char gen_g_142e90450[528];
 /* g_lightSkyboxDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e90870=?g_lightSkyboxDB@@3VWowClientDB2@@A")
-extern char gen_g_142e90870;
+extern unsigned char gen_g_142e90870[528];
 /* g_liquidMaterialDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e90c90=?g_liquidMaterialDB@@3VWowClientDB2@@A")
-extern char gen_g_142e90c90;
+extern unsigned char gen_g_142e90c90[528];
 /* g_liquidObjectDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e90ea0=?g_liquidObjectDB@@3VWowClientDB2@@A")
-extern char gen_g_142e90ea0;
+extern unsigned char gen_g_142e90ea0[528];
 /* g_liquidTypeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e910b0=?g_liquidTypeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e910b0;
+extern unsigned char gen_g_142e910b0[528];
 /* g_mapDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e914d0=?g_mapDB@@3VWowClientDB2@@A")
-extern char gen_g_142e914d0;
+extern unsigned char gen_g_142e914d0[528];
 /* g_modelFileDataDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e918f0=?g_modelFileDataDB@@3VWowClientDB2@@A")
-extern char gen_g_142e918f0;
+extern unsigned char gen_g_142e918f0[528];
 /* g_soundEmitterPillPointsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e92fa0=?g_soundEmitterPillPointsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e92fa0;
+extern unsigned char gen_g_142e92fa0[528];
 /* g_soundEmittersDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e931b0=?g_soundEmittersDB@@3VWowClientDB2@@A")
-extern char gen_g_142e931b0;
+extern unsigned char gen_g_142e931b0[528];
 /* g_soundKitAdvancedDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e939f0=?g_soundKitAdvancedDB@@3VWowClientDB2@@A")
-extern char gen_g_142e939f0;
+extern unsigned char gen_g_142e939f0[528];
 /* g_soundKitEntryDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e93e10=?g_soundKitEntryDB@@3VWowClientDB2@@A")
-extern char gen_g_142e93e10;
+extern unsigned char gen_g_142e93e10[528];
 /* g_soundKitFallbackDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e94020=?g_soundKitFallbackDB@@3VWowClientDB2@@A")
-extern char gen_g_142e94020;
+extern unsigned char gen_g_142e94020[528];
 /* g_soundKitDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e94440=?g_soundKitDB@@3VWowClientDB2@@A")
-extern char gen_g_142e94440;
+extern unsigned char gen_g_142e94440[528];
 /* g_soundWaterfallEmitterDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e94860=?g_soundWaterfallEmitterDB@@3VWowClientDB2@@A")
-extern char gen_g_142e94860;
+extern unsigned char gen_g_142e94860[528];
 /* g_spellChainEffectsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e94a70=?g_spellChainEffectsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e94a70;
+extern unsigned char gen_g_142e94a70[528];
 /* g_startup_StringsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e94e90=?g_startup_StringsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e94e90;
+extern unsigned char gen_g_142e94e90[528];
 /* g_terrainMaterialDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e950a0=?g_terrainMaterialDB@@3VWowClientDB2@@A")
-extern char gen_g_142e950a0;
+extern unsigned char gen_g_142e950a0[528];
 /* g_terrainTypeDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e952b0=?g_terrainTypeDB@@3VWowClientDB2@@A")
-extern char gen_g_142e952b0;
+extern unsigned char gen_g_142e952b0[528];
 /* g_textureBlendSetDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e954c0=?g_textureBlendSetDB@@3VWowClientDB2@@A")
-extern char gen_g_142e954c0;
+extern unsigned char gen_g_142e954c0[528];
 /* g_virtualAttachmentCustomizationDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e956d0=?g_virtualAttachmentCustomizationDB@@3VWowClientDB2@@A")
-extern char gen_g_142e956d0;
+extern unsigned char gen_g_142e956d0[528];
 /* g_virtualAttachmentDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e958e0=?g_virtualAttachmentDB@@3VWowClientDB2@@A")
-extern char gen_g_142e958e0;
+extern unsigned char gen_g_142e958e0[528];
 /* g_voiceOverPriorityDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e95af0=?g_voiceOverPriorityDB@@3VWowClientDB2@@A")
-extern char gen_g_142e95af0;
+extern unsigned char gen_g_142e95af0[528];
 /* g_wMOAreaTableDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e95d00=?g_wMOAreaTableDB@@3VWowClientDB2@@A")
-extern char gen_g_142e95d00;
+extern unsigned char gen_g_142e95d00[528];
 /* g_weatherDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e95f10=?g_weatherDB@@3VWowClientDB2@@A")
-extern char gen_g_142e95f10;
+extern unsigned char gen_g_142e95f10[528];
 /* g_weatherXParticulateDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e96120=?g_weatherXParticulateDB@@3VWowClientDB2@@A")
-extern char gen_g_142e96120;
+extern unsigned char gen_g_142e96120[528];
 /* g_windSettingsDB (src/db/DB2Tables.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e96330=?g_windSettingsDB@@3VWowClientDB2@@A")
-extern char gen_g_142e96330;
+extern unsigned char gen_g_142e96330[528];
 /* s_instance (src/ui/CSimpleTop.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e979d8=?s_instance@CSimpleTop@@2PEAV1@EA")
-extern char gen_g_142e979d8;
+extern unsigned char gen_g_142e979d8[8];
 /* s_objectTypeCount (src/framescript/FrameScriptObject.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e979f0=?s_objectTypeCount@FrameScript_Object@@2HA")
-extern char gen_g_142e979f0;
+extern unsigned char gen_g_142e979f0[4];
 /* g_cSimpleFrameType (src/ui/CSimpleFrame.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e979f4=?g_cSimpleFrameType@@3HA")
-extern char gen_g_142e979f4;
+extern unsigned char gen_g_142e979f4[4];
 /* g_cSimpleFrameTypeGuard (src/ui/CSimpleFrame.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e979f8=?g_cSimpleFrameTypeGuard@@3HA")
-extern char gen_g_142e979f8;
+extern unsigned char gen_g_142e979f8[4];
 /* g_editBoxFocus (src/ui/FrameScriptGlobals.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e97b30=?g_editBoxFocus@@3PEAVCSimpleFrame@@EA")
-extern char gen_g_142e97b30;
+extern unsigned char gen_g_142e97b30[8];
 /* g_cSimpleTextureType (src/ui/CSimpleTexture.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e97b60=?g_cSimpleTextureType@@3HA")
-extern char gen_g_142e97b60;
+extern unsigned char gen_g_142e97b60[4];
 /* g_cSimpleTextureTypeGuard (src/ui/CSimpleTexture.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e97b64=?g_cSimpleTextureTypeGuard@@3HA")
-extern char gen_g_142e97b64;
+extern unsigned char gen_g_142e97b64[4];
 /* g_cSimpleFontStringType (src/ui/CSimpleFontString.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e97c08=?g_cSimpleFontStringType@@3HA")
-extern char gen_g_142e97c08;
+extern unsigned char gen_g_142e97c08[4];
 /* g_cSimpleFontStringTypeGuard (src/ui/CSimpleFontString.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e97c0c=?g_cSimpleFontStringTypeGuard@@3HA")
-extern char gen_g_142e97c0c;
+extern unsigned char gen_g_142e97c0c[4];
 /* g_cSimpleFontType (src/ui/CSimpleFont.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e99c28=?g_cSimpleFontType@@3HA")
-extern char gen_g_142e99c28;
+extern unsigned char gen_g_142e99c28[4];
 /* g_cSimpleFontTypeGuard (src/ui/CSimpleFont.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_142e99c2c=?g_cSimpleFontTypeGuard@@3HA")
-extern char gen_g_142e99c2c;
+extern unsigned char gen_g_142e99c2c[4];
 /* g_cSimpleEditBoxType (src/ui/CSimpleEditBox.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_14309febc=?g_cSimpleEditBoxType@@3HA")
-extern char gen_g_14309febc;
+extern unsigned char gen_g_14309febc[4];
 /* g_cSimpleEditBoxTypeGuard (src/ui/CSimpleEditBox.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_14309fec0=?g_cSimpleEditBoxTypeGuard@@3HA")
-extern char gen_g_14309fec0;
+extern unsigned char gen_g_14309fec0[4];
 /* g_cSimpleModelFFXType (src/ui/CSimpleModelFFX.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_14309fee4=?g_cSimpleModelFFXType@@3HA")
-extern char gen_g_14309fee4;
+extern unsigned char gen_g_14309fee4[4];
 /* g_cSimpleModelFFXTypeGuard (src/ui/CSimpleModelFFX.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_14309fee8=?g_cSimpleModelFFXTypeGuard@@3HA")
-extern char gen_g_14309fee8;
+extern unsigned char gen_g_14309fee8[4];
 /* g_cSimpleStatusBarType (src/ui/CSimpleStatusBar.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_14309ff04=?g_cSimpleStatusBarType@@3HA")
-extern char gen_g_14309ff04;
+extern unsigned char gen_g_14309ff04[4];
 /* g_cSimpleStatusBarTypeGuard (src/ui/CSimpleStatusBar.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_14309ff08=?g_cSimpleStatusBarTypeGuard@@3HA")
-extern char gen_g_14309ff08;
+extern unsigned char gen_g_14309ff08[4];
 /* g_modelSceneFrameType (src/ui/ModelSceneFrame.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a0b0c=?g_modelSceneFrameType@@3HA")
-extern char gen_g_1430a0b0c;
+extern unsigned char gen_g_1430a0b0c[4];
 /* g_modelSceneFrameTypeGuard (src/ui/ModelSceneFrame.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a0b10=?g_modelSceneFrameTypeGuard@@3HA")
-extern char gen_g_1430a0b10;
+extern unsigned char gen_g_1430a0b10[4];
 /* g_m2Log (src/model2/M2Cache.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a12c8=?g_m2Log@@3PEAXEA")
-extern char gen_g_1430a12c8;
+extern unsigned char gen_g_1430a12c8[8];
 /* g_netBytesSent (src/net/NetClient.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a1450=?g_netBytesSent@@3IA")
-extern char gen_g_1430a1450;
+extern unsigned char gen_g_1430a1450[4];
 /* g_netBytesReceived (src/net/NetClient.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a145c=?g_netBytesReceived@@3IA")
-extern char gen_g_1430a145c;
+extern unsigned char gen_g_1430a145c[4];
 /* s_takenEventCount (src/net/NetInternal.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a14a8=?s_takenEventCount@@3IA")
-extern char gen_g_1430a14a8;
+extern unsigned char gen_g_1430a14a8[4];
 /* g_fmodSystem (src/sound/SE3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9460=?g_fmodSystem@@3PEAVSystem@FMOD@@EA")
-extern char gen_g_1430a9460;
+extern unsigned char gen_g_1430a9460[8];
 /* g_soundNumChannels (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9e38=?g_soundNumChannels@@3PEAUCVar@@EA")
-extern char gen_g_1430a9e38;
+extern unsigned char gen_g_1430a9e38[8];
 /* g_soundEnableReverb (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9e40=?g_soundEnableReverb@@3PEAUCVar@@EA")
-extern char gen_g_1430a9e40;
+extern unsigned char gen_g_1430a9e40[8];
 /* g_soundOutputDriverIndex (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9e48=?g_soundOutputDriverIndex@@3PEAUCVar@@EA")
-extern char gen_g_1430a9e48;
+extern unsigned char gen_g_1430a9e48[8];
 /* g_soundOutputDriverName (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9e50=?g_soundOutputDriverName@@3PEAUCVar@@EA")
-extern char gen_g_1430a9e50;
+extern unsigned char gen_g_1430a9e50[8];
 /* g_soundDSPBufferSize (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9e58=?g_soundDSPBufferSize@@3PEAUCVar@@EA")
-extern char gen_g_1430a9e58;
+extern unsigned char gen_g_1430a9e58[8];
 /* g_soundEnableMixMode2 (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9e60=?g_soundEnableMixMode2@@3PEAUCVar@@EA")
-extern char gen_g_1430a9e60;
+extern unsigned char gen_g_1430a9e60[8];
 /* g_soundOutputSampleRate (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9e68=?g_soundOutputSampleRate@@3PEAUCVar@@EA")
-extern char gen_g_1430a9e68;
+extern unsigned char gen_g_1430a9e68[8];
 /* g_soundEnableSFX (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9e70=?g_soundEnableSFX@@3PEAUCVar@@EA")
-extern char gen_g_1430a9e70;
+extern unsigned char gen_g_1430a9e70[8];
 /* g_soundEnableAmbience (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9e78=?g_soundEnableAmbience@@3PEAUCVar@@EA")
-extern char gen_g_1430a9e78;
+extern unsigned char gen_g_1430a9e78[8];
 /* g_soundEnableErrorSpeech (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9e80=?g_soundEnableErrorSpeech@@3PEAUCVar@@EA")
-extern char gen_g_1430a9e80;
+extern unsigned char gen_g_1430a9e80[8];
 /* g_soundEnableMusic (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9e88=?g_soundEnableMusic@@3PEAUCVar@@EA")
-extern char gen_g_1430a9e88;
+extern unsigned char gen_g_1430a9e88[8];
 /* g_soundEnableAllSound (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9e90=?g_soundEnableAllSound@@3PEAUCVar@@EA")
-extern char gen_g_1430a9e90;
+extern unsigned char gen_g_1430a9e90[8];
 /* g_soundEnableDialog (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9e98=?g_soundEnableDialog@@3PEAUCVar@@EA")
-extern char gen_g_1430a9e98;
+extern unsigned char gen_g_1430a9e98[8];
 /* g_soundMasterVolume (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9ea0=?g_soundMasterVolume@@3PEAUCVar@@EA")
-extern char gen_g_1430a9ea0;
+extern unsigned char gen_g_1430a9ea0[8];
 /* g_soundSFXVolume (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9ea8=?g_soundSFXVolume@@3PEAUCVar@@EA")
-extern char gen_g_1430a9ea8;
+extern unsigned char gen_g_1430a9ea8[8];
 /* g_soundMusicVolume (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9eb0=?g_soundMusicVolume@@3PEAUCVar@@EA")
-extern char gen_g_1430a9eb0;
+extern unsigned char gen_g_1430a9eb0[8];
 /* g_soundAmbienceVolume (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9eb8=?g_soundAmbienceVolume@@3PEAUCVar@@EA")
-extern char gen_g_1430a9eb8;
+extern unsigned char gen_g_1430a9eb8[8];
 /* g_soundDialogVolume (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9ec0=?g_soundDialogVolume@@3PEAUCVar@@EA")
-extern char gen_g_1430a9ec0;
+extern unsigned char gen_g_1430a9ec0[8];
 /* g_soundListenerAtCharacter (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9ec8=?g_soundListenerAtCharacter@@3PEAUCVar@@EA")
-extern char gen_g_1430a9ec8;
+extern unsigned char gen_g_1430a9ec8[8];
 /* g_soundEnableEmoteSounds (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9ed0=?g_soundEnableEmoteSounds@@3PEAUCVar@@EA")
-extern char gen_g_1430a9ed0;
+extern unsigned char gen_g_1430a9ed0[8];
 /* g_soundZoneMusicNoDelay (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9ed8=?g_soundZoneMusicNoDelay@@3PEAUCVar@@EA")
-extern char gen_g_1430a9ed8;
+extern unsigned char gen_g_1430a9ed8[8];
 /* g_soundEnableArmorFoleySelf (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9ee0=?g_soundEnableArmorFoleySelf@@3PEAUCVar@@EA")
-extern char gen_g_1430a9ee0;
+extern unsigned char gen_g_1430a9ee0[8];
 /* g_soundEnableArmorFoleyOthers (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9ee8=?g_soundEnableArmorFoleyOthers@@3PEAUCVar@@EA")
-extern char gen_g_1430a9ee8;
+extern unsigned char gen_g_1430a9ee8[8];
 /* g_soundEnableDSPEffects (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9ef0=?g_soundEnableDSPEffects@@3PEAUCVar@@EA")
-extern char gen_g_1430a9ef0;
+extern unsigned char gen_g_1430a9ef0[8];
 /* g_soundEnableInBackground (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9ef8=?g_soundEnableInBackground@@3PEAUCVar@@EA")
-extern char gen_g_1430a9ef8;
+extern unsigned char gen_g_1430a9ef8[8];
 /* g_soundMaxCacheSize (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9f00=?g_soundMaxCacheSize@@3PEAUCVar@@EA")
-extern char gen_g_1430a9f00;
+extern unsigned char gen_g_1430a9f00[8];
 /* g_soundMaxCacheableSize (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9f08=?g_soundMaxCacheableSize@@3PEAUCVar@@EA")
-extern char gen_g_1430a9f08;
+extern unsigned char gen_g_1430a9f08[8];
 /* g_footstepSounds (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9f10=?g_footstepSounds@@3PEAUCVar@@EA")
-extern char gen_g_1430a9f10;
+extern unsigned char gen_g_1430a9f10[8];
 /* g_soundEnablePetSounds (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9f18=?g_soundEnablePetSounds@@3PEAUCVar@@EA")
-extern char gen_g_1430a9f18;
+extern unsigned char gen_g_1430a9f18[8];
 /* g_soundAlternateListener (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9f20=?g_soundAlternateListener@@3PEAUCVar@@EA")
-extern char gen_g_1430a9f20;
+extern unsigned char gen_g_1430a9f20[8];
 /* g_soundVoiceInputDriverIndex (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9f30=?g_soundVoiceInputDriverIndex@@3PEAUCVar@@EA")
-extern char gen_g_1430a9f30;
+extern unsigned char gen_g_1430a9f30[8];
 /* g_soundVoiceInputDriverName (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9f38=?g_soundVoiceInputDriverName@@3PEAUCVar@@EA")
-extern char gen_g_1430a9f38;
+extern unsigned char gen_g_1430a9f38[8];
 /* g_soundVoiceOutputDriverIndex (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9f40=?g_soundVoiceOutputDriverIndex@@3PEAUCVar@@EA")
-extern char gen_g_1430a9f40;
+extern unsigned char gen_g_1430a9f40[8];
 /* g_soundVoiceOutputDriverName (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9f48=?g_soundVoiceOutputDriverName@@3PEAUCVar@@EA")
-extern char gen_g_1430a9f48;
+extern unsigned char gen_g_1430a9f48[8];
 /* g_soundEnablePingSounds (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9f50=?g_soundEnablePingSounds@@3PEAUCVar@@EA")
-extern char gen_g_1430a9f50;
+extern unsigned char gen_g_1430a9f50[8];
 /* g_soundPingVolume (src/sound/SI3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9f58=?g_soundPingVolume@@3PEAUCVar@@EA")
-extern char gen_g_1430a9f58;
+extern unsigned char gen_g_1430a9f58[8];
 /* g_worldGraphicsMode (src/client/GraphicsSettings.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430aaac8=?g_worldGraphicsMode@@3HA")
-extern char gen_g_1430aaac8;
+extern unsigned char gen_g_1430aaac8[4];
 /* g_groundEffectDistSquared (src/client/GraphicsSettings.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430ab9c0=?g_groundEffectDistSquared@@3MA")
-extern char gen_g_1430ab9c0;
+extern unsigned char gen_g_1430ab9c0[4];
 /* g_groundEffectDensity (src/client/GraphicsSettings.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430ab9c4=?g_groundEffectDensity@@3HA")
-extern char gen_g_1430ab9c4;
+extern unsigned char gen_g_1430ab9c4[4];
 /* g_groundEffectFade (src/client/GraphicsSettings.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430ab9c8=?g_groundEffectFade@@3MA")
-extern char gen_g_1430ab9c8;
+extern unsigned char gen_g_1430ab9c8[4];
 /* g_groundEffectAnimation (src/client/GraphicsSettings.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430ab9cc=?g_groundEffectAnimation@@3EA")
-extern char gen_g_1430ab9cc;
+extern unsigned char gen_g_1430ab9cc[1];
 /* g_worldRenderFlags (src/client/GraphicsSettings.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430ab9d4=?g_worldRenderFlags@@3IA")
-extern char gen_g_1430ab9d4;
+extern unsigned char gen_g_1430ab9d4[4];
 /* g_worldOptionsChanged (src/client/GraphicsSettings.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_1430abef8=?g_worldOptionsChanged@@3EA")
-extern char gen_g_1430abef8;
+#pragma comment(linker, "/alternatename:gen_g_1430abef8=?g_worldOptionsChanged@@3IA")
+extern unsigned char gen_g_1430abef8[4];
 /* g_reconnectLoginPossible (src/glue/ScriptAPIGlue.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430af4c8=?g_reconnectLoginPossible@@3EA")
-extern char gen_g_1430af4c8;
+extern unsigned char gen_g_1430af4c8[1];
 /* g_charSelectModelFrame (src/glue/ScriptAPIGlue.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_143122460=?g_charSelectModelFrame@@3PEAVCSimpleModelFFX@@EA")
-extern char gen_g_143122460;
+extern unsigned char gen_g_143122460[8];
 /* g_numCharacters (src/glue/ScriptAPIGlue.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_143122480=?g_numCharacters@@3HA")
-extern char gen_g_143122480;
+#pragma comment(linker, "/alternatename:gen_g_143122480=?g_numCharacters@@3_KA")
+extern unsigned char gen_g_143122480[8];
 /* g_glueLoginFlags (src/glue/ScriptAPIGlue.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_143122810=?g_glueLoginFlags@@3UGLUELOGINFLAGS@@A")
-extern char gen_g_143122810;
+extern unsigned char gen_g_143122810[8];
 /* g_glueLoginState (src/glue/ScriptAPIGlue.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_143122848=?g_glueLoginState@@3UGLUELOGINSTATE@@A")
-extern char gen_g_143122848;
+extern unsigned char gen_g_143122848[24];
 /* g_gxUploadInterface (src/gx/d3d12/Device.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_14348b648=?g_gxUploadInterface@@3PEAVGxUploadInterface@@EA")
-extern char gen_g_14348b648;
+extern unsigned char gen_g_14348b648[8];
 /* g_gxDevice (src/gx/Gx.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_14348b650=?g_gxDevice@@3PEAXEA")
-extern char gen_g_14348b650;
+extern unsigned char gen_g_14348b650[8];
 /* g_gxRenderContext (src/ui/MovieDecoder.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_14348b658=?g_gxRenderContext@@3PEAVGxRenderContext@@EA")
-extern char gen_g_14348b658;
-/* g_logSinks (src/blz/Log.cpp) */
-#pragma comment(linker, "/alternatename:gen_g_144751aa0=?g_logSinks@blz@@3PAP6AXPEBDH0H0PEAD@ZA")
-extern char gen_g_144751aa0;
+extern unsigned char gen_g_14348b658[8];
 /* s_focusNextId (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142cc878c;
-#define gen_g_142cc878c (*(char *)gen_p_142cc878c)
+#define gen_g_142cc878c (*(unsigned char (*)[4])gen_p_142cc878c)
 /* s_focusListeners (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142cc8790;
-#define gen_g_142cc8790 (*(char *)gen_p_142cc8790)
+#define gen_g_142cc8790 (*(unsigned char (*)[32])gen_p_142cc8790)
 /* s_screenshotQuality (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142cc87b0;
-#define gen_g_142cc87b0 (*(char *)gen_p_142cc87b0)
+#define gen_g_142cc87b0 (*(unsigned char (*)[1])gen_p_142cc87b0)
 /* s_threads (src/storm/thread/SThread.cpp), internal: through its pointer */
 extern void *const gen_p_142cc8a50;
-#define gen_g_142cc8a50 (*(char *)gen_p_142cc8a50)
+#define gen_g_142cc8a50 (*(unsigned char (*)[24])gen_p_142cc8a50)
 /* s_openA4 (src/cas/CAS.cpp), internal: through its pointer */
 extern void *const gen_p_142ccba48;
-#define gen_g_142ccba48 (*(char *)gen_p_142ccba48)
+#define gen_g_142ccba48 (*(unsigned char (*)[4])gen_p_142ccba48)
 /* s_cvars (src/console/Var.cpp), internal: through its pointer */
 extern void *const gen_p_142ccbd68;
-#define gen_g_142ccbd68 (*(char *)gen_p_142ccbd68)
+#define gen_g_142ccbd68 (*(unsigned char (*)[40])gen_p_142ccbd68)
 /* s_commands (src/console/Command.cpp), internal: through its pointer */
 extern void *const gen_p_142ccbd90;
-#define gen_g_142ccbd90 (*(char *)gen_p_142ccbd90)
+#define gen_g_142ccbd90 (*(unsigned char (*)[80])gen_p_142ccbd90)
 /* s_loadFlags (src/db/DBClient.cpp), internal: through its pointer */
 extern void *const gen_p_142ccdf30;
-#define gen_g_142ccdf30 (*(char *)gen_p_142ccdf30)
+#define gen_g_142ccdf30 (*(unsigned char (*)[4])gen_p_142ccdf30)
 /* s_objectTableRef (src/framescript/FrameScript.cpp), internal: through its pointer */
 extern void *const gen_p_142cf5504;
-#define gen_g_142cf5504 (*(char *)gen_p_142cf5504)
+#define gen_g_142cf5504 (*(unsigned char (*)[4])gen_p_142cf5504)
 /* s_virtualNodes (src/ui/FrameXML.cpp), internal: through its pointer */
 extern void *const gen_p_142cf57e0;
-#define gen_g_142cf57e0 (*(char *)gen_p_142cf57e0)
+#define gen_g_142cf57e0 (*(unsigned char (*)[80])gen_p_142cf57e0)
 /* s_trampolineRef (src/framescript/ScriptMethod.cpp), internal: through its pointer */
 extern void *const gen_p_142cf70b4;
-#define gen_g_142cf70b4 (*(char *)gen_p_142cf70b4)
+#define gen_g_142cf70b4 (*(unsigned char (*)[4])gen_p_142cf70b4)
 /* s_bounds (src/model2/M2Cache.cpp), internal: through its pointer */
 extern void *const gen_p_142cfbe38;
-#define gen_g_142cfbe38 (*(char *)gen_p_142cfbe38)
+#define gen_g_142cfbe38 (*(unsigned char (*)[40])gen_p_142cfbe38)
 /* s_creditsStopped (src/sound/SI3Sound.cpp), internal: through its pointer */
 extern void *const gen_p_142cfd2c8;
-#define gen_g_142cfd2c8 (*(char *)gen_p_142cfd2c8)
+#define gen_g_142cfd2c8 (*(unsigned char (*)[1])gen_p_142cfd2c8)
 /* s_glueMusicStopped (src/sound/SI3Sound.cpp), internal: through its pointer */
 extern void *const gen_p_142cfd2c9;
-#define gen_g_142cfd2c9 (*(char *)gen_p_142cfd2c9)
+#define gen_g_142cfd2c9 (*(unsigned char (*)[1])gen_p_142cfd2c9)
 /* s_glueAmbienceStopped (src/sound/SI3Sound.cpp), internal: through its pointer */
 extern void *const gen_p_142cfd2ca;
-#define gen_g_142cfd2ca (*(char *)gen_p_142cfd2ca)
+#define gen_g_142cfd2ca (*(unsigned char (*)[1])gen_p_142cfd2ca)
 /* s_creditsTrack (src/sound/SI3Sound.cpp), internal: through its pointer */
 extern void *const gen_p_142cfd2cc;
-#define gen_g_142cfd2cc (*(char *)gen_p_142cfd2cc)
+#define gen_g_142cfd2cc (*(unsigned char (*)[4])gen_p_142cfd2cc)
 /* s_loadSortMask (src/world/WorldFrame.cpp), internal: through its pointer */
 extern void *const gen_p_142cfdb68;
-#define gen_g_142cfdb68 (*(char *)gen_p_142cfdb68)
+#define gen_g_142cfdb68 (*(unsigned char (*)[4])gen_p_142cfdb68)
 /* s_windDirection (src/world/MapWind.cpp), internal: through its pointer */
 extern void *const gen_p_142d00f40;
-#define gen_g_142d00f40 (*(char *)gen_p_142d00f40)
+#define gen_g_142d00f40 (*(unsigned char (*)[12])gen_p_142d00f40)
 /* s_windVelocity (src/world/MapWind.cpp), internal: through its pointer */
 extern void *const gen_p_142d00f50;
-#define gen_g_142d00f50 (*(char *)gen_p_142d00f50)
+#define gen_g_142d00f50 (*(unsigned char (*)[8])gen_p_142d00f50)
 /* s_mapWinds (src/world/MapWind.cpp), internal: through its pointer */
 extern void *const gen_p_142d00f58;
-#define gen_g_142d00f58 (*(char *)gen_p_142d00f58)
+#define gen_g_142d00f58 (*(unsigned char (*)[24])gen_p_142d00f58)
 /* s_mapWinds2 (src/world/MapWind.cpp), internal: through its pointer */
 extern void *const gen_p_142d00f70;
-#define gen_g_142d00f70 (*(char *)gen_p_142d00f70)
+#define gen_g_142d00f70 (*(unsigned char (*)[24])gen_p_142d00f70)
 /* s_ffxGlow (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142d074e5;
-#define gen_g_142d074e5 (*(char *)gen_p_142d074e5)
+#define gen_g_142d074e5 (*(unsigned char (*)[1])gen_p_142d074e5)
 /* s_ffxDeath (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142d074e6;
-#define gen_g_142d074e6 (*(char *)gen_p_142d074e6)
+#define gen_g_142d074e6 (*(unsigned char (*)[1])gen_p_142d074e6)
 /* s_ffxNether (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142d074e7;
-#define gen_g_142d074e7 (*(char *)gen_p_142d074e7)
+#define gen_g_142d074e7 (*(unsigned char (*)[1])gen_p_142d074e7)
 /* s_realmConnections (src/net/RealmConnection.cpp), internal: through its pointer */
 extern void *const gen_p_142d08138;
-#define gen_g_142d08138 (*(char *)gen_p_142d08138)
+#define gen_g_142d08138 (*(unsigned char (*)[24])gen_p_142d08138)
 /* s_cursorWasDisabled (src/client/GxWindow.cpp), internal: through its pointer */
 extern void *const gen_p_142d08258;
-#define gen_g_142d08258 (*(char *)gen_p_142d08258)
+#define gen_g_142d08258 (*(unsigned char (*)[1])gen_p_142d08258)
 /* s_cursorEnable (src/client/GxWindow.cpp), internal: through its pointer */
 extern void *const gen_p_142d08259;
-#define gen_g_142d08259 (*(char *)gen_p_142d08259)
+#define gen_g_142d08259 (*(unsigned char (*)[1])gen_p_142d08259)
 /* s_missing (src/db/GlobalColor.cpp), internal: through its pointer */
 extern void *const gen_p_142d1ad40;
-#define gen_g_142d1ad40 (*(char *)gen_p_142d1ad40)
+#define gen_g_142d1ad40 (*(unsigned char (*)[16])gen_p_142d1ad40)
 /* s_modelSceneActorMetaTable (src/glue/GlueScriptAPI.cpp), internal: through its pointer */
 extern void *const gen_p_142d2f560;
-#define gen_g_142d2f560 (*(char *)gen_p_142d2f560)
+#define gen_g_142d2f560 (*(unsigned char (*)[4])gen_p_142d2f560)
 /* s_modelSceneActorRestrictedMetaTable (src/glue/GlueScriptAPI.cpp), internal: through its pointer */
 extern void *const gen_p_142d2f564;
-#define gen_g_142d2f564 (*(char *)gen_p_142d2f564)
+#define gen_g_142d2f564 (*(unsigned char (*)[4])gen_p_142d2f564)
 /* s_metaTable (src/ui/ModelSceneFrame.cpp), internal: through its pointer */
 extern void *const gen_p_142d2f568;
-#define gen_g_142d2f568 (*(char *)gen_p_142d2f568)
+#define gen_g_142d2f568 (*(unsigned char (*)[4])gen_p_142d2f568)
 /* s_restrictedMetaTable (src/ui/ModelSceneFrame.cpp), internal: through its pointer */
 extern void *const gen_p_142d2f56c;
-#define gen_g_142d2f56c (*(char *)gen_p_142d2f56c)
+#define gen_g_142d2f56c (*(unsigned char (*)[4])gen_p_142d2f56c)
 /* s_mainReturnAddress (src/os/win/ThreadEntry.cpp), internal: through its pointer */
 extern void *const gen_p_142ddce20;
-#define gen_g_142ddce20 (*(char *)gen_p_142ddce20)
+#define gen_g_142ddce20 (*(unsigned char (*)[8])gen_p_142ddce20)
 /* s_seedA (src/client/Startup.cpp), internal: through its pointer */
 extern void *const gen_p_142ddcf50;
-#define gen_g_142ddcf50 (*(char *)gen_p_142ddcf50)
+#define gen_g_142ddcf50 (*(unsigned char (*)[8])gen_p_142ddcf50)
 /* s_worldScene (src/client/StartupClient.cpp), internal: through its pointer */
 extern void *const gen_p_142ddcf58;
-#define gen_g_142ddcf58 (*(char *)gen_p_142ddcf58)
+#define gen_g_142ddcf58 (*(unsigned char (*)[8])gen_p_142ddcf58)
 /* s_seedB (src/client/Startup.cpp), internal: through its pointer */
 extern void *const gen_p_142ddcf80;
-#define gen_g_142ddcf80 (*(char *)gen_p_142ddcf80)
+#define gen_g_142ddcf80 (*(unsigned char (*)[8])gen_p_142ddcf80)
 /* s_parentProcessName (src/client/Startup.cpp), internal: through its pointer */
 extern void *const gen_p_142ddcfc0;
-#define gen_g_142ddcfc0 (*(char *)gen_p_142ddcfc0)
+#define gen_g_142ddcfc0 (*(unsigned char (*)[260])gen_p_142ddcfc0)
 /* s_gameState (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142ddfa08;
-#define gen_g_142ddfa08 (*(char *)gen_p_142ddfa08)
+#define gen_g_142ddfa08 (*(unsigned char (*)[4])gen_p_142ddfa08)
 /* s_skippedFrames (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142ddfa0c;
-#define gen_g_142ddfa0c (*(char *)gen_p_142ddfa0c)
+#define gen_g_142ddfa0c (*(unsigned char (*)[4])gen_p_142ddfa0c)
 /* s_loadingScreen (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142de0bf8;
-#define gen_g_142de0bf8 (*(char *)gen_p_142de0bf8)
+#define gen_g_142de0bf8 (*(unsigned char (*)[8])gen_p_142de0bf8)
 /* s_engineSurveyCVar (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142de0cb8;
-#define gen_g_142de0cb8 (*(char *)gen_p_142de0cb8)
+#define gen_g_142de0cb8 (*(unsigned char (*)[8])gen_p_142de0cb8)
 /* s_engineSurveyPatchCVar (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142de0cc0;
-#define gen_g_142de0cc0 (*(char *)gen_p_142de0cc0)
+#define gen_g_142de0cc0 (*(unsigned char (*)[8])gen_p_142de0cc0)
 /* s_heldKeys (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142de0de8;
-#define gen_g_142de0de8 (*(char *)gen_p_142de0de8)
+#define gen_g_142de0de8 (*(unsigned char (*)[24])gen_p_142de0de8)
 /* s_heldModifiers (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142de0e24;
-#define gen_g_142de0e24 (*(char *)gen_p_142de0e24)
+#define gen_g_142de0e24 (*(unsigned char (*)[4])gen_p_142de0e24)
 /* s_mouseCaptureButtons (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142de0e28;
-#define gen_g_142de0e28 (*(char *)gen_p_142de0e28)
+#define gen_g_142de0e28 (*(unsigned char (*)[4])gen_p_142de0e28)
 /* s_pressedButtons (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142de0e30;
-#define gen_g_142de0e30 (*(char *)gen_p_142de0e30)
+#define gen_g_142de0e30 (*(unsigned char (*)[4])gen_p_142de0e30)
 /* s_mouseMode (src/client/ClientLoop.cpp), internal: through its pointer */
 extern void *const gen_p_142de0e34;
-#define gen_g_142de0e34 (*(char *)gen_p_142de0e34)
+#define gen_g_142de0e34 (*(unsigned char (*)[4])gen_p_142de0e34)
 /* s_compositorEnabled (src/client/StartupClient.cpp), internal: through its pointer */
 extern void *const gen_p_142de194c;
-#define gen_g_142de194c (*(char *)gen_p_142de194c)
+#define gen_g_142de194c (*(unsigned char (*)[1])gen_p_142de194c)
 /* s_accountUsesTokenCVar (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142de29b8;
-#define gen_g_142de29b8 (*(char *)gen_p_142de29b8)
+#define gen_g_142de29b8 (*(unsigned char (*)[8])gen_p_142de29b8)
 /* s_checkAddonVersionCVar (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142de29c0;
-#define gen_g_142de29c0 (*(char *)gen_p_142de29c0)
+#define gen_g_142de29c0 (*(unsigned char (*)[8])gen_p_142de29c0)
 /* s_lastAddonVersionCVar (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142de29c8;
-#define gen_g_142de29c8 (*(char *)gen_p_142de29c8)
+#define gen_g_142de29c8 (*(unsigned char (*)[8])gen_p_142de29c8)
 /* s_lastCharacterIndexCVar (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142de29d0;
-#define gen_g_142de29d0 (*(char *)gen_p_142de29d0)
+#define gen_g_142de29d0 (*(unsigned char (*)[8])gen_p_142de29d0)
 /* s_lastCharacterGuidCVar (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142de29d8;
-#define gen_g_142de29d8 (*(char *)gen_p_142de29d8)
+#define gen_g_142de29d8 (*(unsigned char (*)[8])gen_p_142de29d8)
 /* s_seenCharacterUpgradePopupCVar (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142de29e0;
-#define gen_g_142de29e0 (*(char *)gen_p_142de29e0)
+#define gen_g_142de29e0 (*(unsigned char (*)[8])gen_p_142de29e0)
 /* s_seenExpansionTrialPopupCVar (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142de29e8;
-#define gen_g_142de29e8 (*(char *)gen_p_142de29e8)
+#define gen_g_142de29e8 (*(unsigned char (*)[8])gen_p_142de29e8)
 /* s_seenConfigurationWarningsCVar (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142de29f8;
-#define gen_g_142de29f8 (*(char *)gen_p_142de29f8)
+#define gen_g_142de29f8 (*(unsigned char (*)[8])gen_p_142de29f8)
 /* s_threadLock (src/storm/thread/SThread.cpp), internal: through its pointer */
 extern void *const gen_p_142e1c4c8;
-#define gen_g_142e1c4c8 (*(char *)gen_p_142e1c4c8)
+#define gen_g_142e1c4c8 (*(unsigned char (*)[48])gen_p_142e1c4c8)
 /* s_fullDump (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142e1c528;
-#define gen_g_142e1c528 (*(char *)gen_p_142e1c528)
+#define gen_g_142e1c528 (*(unsigned char (*)[1])gen_p_142e1c528)
 /* s_crashActionLock (src/storm/ErrorReport.cpp), internal: through its pointer */
 extern void *const gen_p_142e1c998;
-#define gen_g_142e1c998 (*(char *)gen_p_142e1c998)
+#define gen_g_142e1c998 (*(unsigned char (*)[8])gen_p_142e1c998)
 /* s_8c0 (src/storm/Log.cpp), internal: through its pointer */
 extern void *const gen_p_142e1d8c0;
-#define gen_g_142e1d8c0 (*(char *)gen_p_142e1d8c0)
+#define gen_g_142e1d8c0 (*(unsigned char (*)[16])gen_p_142e1d8c0)
 /* s_updateInstance (src/cas/CAS.cpp), internal: through its pointer */
 extern void *const gen_p_142e20868;
-#define gen_g_142e20868 (*(char *)gen_p_142e20868)
+#define gen_g_142e20868 (*(unsigned char (*)[8])gen_p_142e20868)
 /* s_patchInstances (src/cas/CAS.cpp), internal: through its pointer */
 extern void *const gen_p_142e20881;
-#define gen_g_142e20881 (*(char *)gen_p_142e20881)
+#define gen_g_142e20881 (*(unsigned char (*)[1])gen_p_142e20881)
 /* s_hotfixHandlers (src/cas/CAS.cpp), internal: through its pointer */
 extern void *const gen_p_142e208a0;
-#define gen_g_142e208a0 (*(char *)gen_p_142e208a0)
+#define gen_g_142e208a0 (*(unsigned char (*)[24])gen_p_142e208a0)
 /* s_hotfixLock (src/cas/CAS.cpp), internal: through its pointer */
 extern void *const gen_p_142e208b8;
-#define gen_g_142e208b8 (*(char *)gen_p_142e208b8)
+#define gen_g_142e208b8 (*(unsigned char (*)[32])gen_p_142e208b8)
 /* s_preSwapHandlers (src/cas/CAS.cpp), internal: through its pointer */
 extern void *const gen_p_142e208d8;
-#define gen_g_142e208d8 (*(char *)gen_p_142e208d8)
+#define gen_g_142e208d8 (*(unsigned char (*)[24])gen_p_142e208d8)
 /* s_preSwapLock (src/cas/CAS.cpp), internal: through its pointer */
 extern void *const gen_p_142e208f0;
-#define gen_g_142e208f0 (*(char *)gen_p_142e208f0)
+#define gen_g_142e208f0 (*(unsigned char (*)[32])gen_p_142e208f0)
 /* s_streamingLock (src/cas/CAS.cpp), internal: through its pointer */
 extern void *const gen_p_142e20948;
-#define gen_g_142e20948 (*(char *)gen_p_142e20948)
+#define gen_g_142e20948 (*(unsigned char (*)[8])gen_p_142e20948)
 /* s_keyCallback (src/cas/CAS.cpp), internal: through its pointer */
 extern void *const gen_p_142e25560;
-#define gen_g_142e25560 (*(char *)gen_p_142e25560)
+#define gen_g_142e25560 (*(unsigned char (*)[8])gen_p_142e25560)
 /* s_testCVarChanged (src/console/Var.cpp), internal: through its pointer */
 extern void *const gen_p_142e260b4;
-#define gen_g_142e260b4 (*(char *)gen_p_142e260b4)
+#define gen_g_142e260b4 (*(unsigned char (*)[1])gen_p_142e260b4)
 /* s_consoleMayToggle (src/client/StartupClient.cpp), internal: through its pointer */
 extern void *const gen_p_142e301b8;
-#define gen_g_142e301b8 (*(char *)gen_p_142e301b8)
+#define gen_g_142e301b8 (*(unsigned char (*)[8])gen_p_142e301b8)
 /* s_consoleShown (src/client/StartupClient.cpp), internal: through its pointer */
 extern void *const gen_p_142e301c9;
-#define gen_g_142e301c9 (*(char *)gen_p_142e301c9)
+#define gen_g_142e301c9 (*(unsigned char (*)[1])gen_p_142e301c9)
 /* s_monitorCVar (src/client/ConsoleDevice.cpp), internal: through its pointer */
 extern void *const gen_p_142e30248;
-#define gen_g_142e30248 (*(char *)gen_p_142e30248)
+#define gen_g_142e30248 (*(unsigned char (*)[8])gen_p_142e30248)
 /* s_vsyncCVar (src/client/ConsoleDevice.cpp), internal: through its pointer */
 extern void *const gen_p_142e30250;
-#define gen_g_142e30250 (*(char *)gen_p_142e30250)
+#define gen_g_142e30250 (*(unsigned char (*)[8])gen_p_142e30250)
 /* s_cachelessCVar (src/client/ConsoleDevice.cpp), internal: through its pointer */
 extern void *const gen_p_142e30258;
-#define gen_g_142e30258 (*(char *)gen_p_142e30258)
+#define gen_g_142e30258 (*(unsigned char (*)[8])gen_p_142e30258)
 /* s_maxFrameLatencyCVar (src/client/ConsoleDevice.cpp), internal: through its pointer */
 extern void *const gen_p_142e30260;
-#define gen_g_142e30260 (*(char *)gen_p_142e30260)
+#define gen_g_142e30260 (*(unsigned char (*)[8])gen_p_142e30260)
 /* s_aspectCVar (src/client/ConsoleDevice.cpp), internal: through its pointer */
 extern void *const gen_p_142e30270;
-#define gen_g_142e30270 (*(char *)gen_p_142e30270)
+#define gen_g_142e30270 (*(unsigned char (*)[8])gen_p_142e30270)
 /* s_maximizeCVar (src/client/ConsoleDevice.cpp), internal: through its pointer */
 extern void *const gen_p_142e30278;
-#define gen_g_142e30278 (*(char *)gen_p_142e30278)
+#define gen_g_142e30278 (*(unsigned char (*)[8])gen_p_142e30278)
 /* s_forceMaxSizeCVar (src/client/ConsoleDevice.cpp), internal: through its pointer */
 extern void *const gen_p_142e30298;
-#define gen_g_142e30298 (*(char *)gen_p_142e30298)
+#define gen_g_142e30298 (*(unsigned char (*)[8])gen_p_142e30298)
 /* s_notchedDisplayCVar (src/client/ConsoleDevice.cpp), internal: through its pointer */
 extern void *const gen_p_142e302a8;
-#define gen_g_142e302a8 (*(char *)gen_p_142e302a8)
+#define gen_g_142e302a8 (*(unsigned char (*)[8])gen_p_142e302a8)
 /* s_ffxPassSlot (src/ui/CSimpleModelFFX.cpp), internal: through its pointer */
 extern void *const gen_p_142e96fd0;
-#define gen_g_142e96fd0 (*(char *)gen_p_142e96fd0)
+#define gen_g_142e96fd0 (*(unsigned char (*)[1])gen_p_142e96fd0)
 /* s_colorblindSimulatorCVar (src/client/RenderCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142e96fd8;
-#define gen_g_142e96fd8 (*(char *)gen_p_142e96fd8)
+#define gen_g_142e96fd8 (*(unsigned char (*)[8])gen_p_142e96fd8)
 /* s_colorblindWeaknessFactorCVar (src/client/RenderCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142e96fe0;
-#define gen_g_142e96fe0 (*(char *)gen_p_142e96fe0)
+#define gen_g_142e96fe0 (*(unsigned char (*)[8])gen_p_142e96fe0)
 /* s_daltonizeCVar (src/client/RenderCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142e96fe8;
-#define gen_g_142e96fe8 (*(char *)gen_p_142e96fe8)
+#define gen_g_142e96fe8 (*(unsigned char (*)[8])gen_p_142e96fe8)
 /* s_ffxSlots (src/ui/CSimpleModelFFX.cpp), internal: through its pointer */
 extern void *const gen_p_142e97120;
-#define gen_g_142e97120 (*(char *)gen_p_142e97120)
+#define gen_g_142e97120 (*(unsigned char (*)[64])gen_p_142e97120)
 /* s_ffxNetherEffect (src/ui/CSimpleModelFFX.cpp), internal: through its pointer */
 extern void *const gen_p_142e9769b;
-#define gen_g_142e9769b (*(char *)gen_p_142e9769b)
+#define gen_g_142e9769b (*(unsigned char (*)[1])gen_p_142e9769b)
 /* s_lastMouseTime (src/ui/CSimpleTop.cpp), internal: through its pointer */
 extern void *const gen_p_142e979e0;
-#define gen_g_142e979e0 (*(char *)gen_p_142e979e0)
+#define gen_g_142e979e0 (*(unsigned char (*)[4])gen_p_142e979e0)
 /* s_fontStringHeap (src/ui/CSimpleFontString.cpp), internal: through its pointer */
 extern void *const gen_p_142e97be0;
-#define gen_g_142e97be0 (*(char *)gen_p_142e97be0)
+#define gen_g_142e97be0 (*(unsigned char (*)[40])gen_p_142e97be0)
 /* s_L (src/framescript/FrameScript.cpp), internal: through its pointer */
 extern void *const gen_p_142e99e18;
-#define gen_g_142e99e18 (*(char *)gen_p_142e99e18)
+#define gen_g_142e99e18 (*(unsigned char (*)[8])gen_p_142e99e18)
 /* s_threadId (src/framescript/FrameScript.cpp), internal: through its pointer */
 extern void *const gen_p_142e99e20;
-#define gen_g_142e99e20 (*(char *)gen_p_142e99e20)
-/* s_stateHook (src/framescript/FrameScript.cpp), internal: through its pointer */
-extern void *const gen_p_142e99e28;
-#define gen_g_142e99e28 (*(char *)gen_p_142e99e28)
+#define gen_g_142e99e20 (*(unsigned char (*)[4])gen_p_142e99e20)
 /* s_initCount (src/framescript/FrameScript.cpp), internal: through its pointer */
 extern void *const gen_p_142e99f30;
-#define gen_g_142e99f30 (*(char *)gen_p_142e99f30)
+#define gen_g_142e99f30 (*(unsigned char (*)[4])gen_p_142e99f30)
 /* s_fontGroup (src/client/Locale.cpp), internal: through its pointer */
 extern void *const gen_p_142e9a060;
-#define gen_g_142e9a060 (*(char *)gen_p_142e9a060)
+#define gen_g_142e9a060 (*(unsigned char (*)[4])gen_p_142e9a060)
 /* s_currentObjectScoped (src/framescript/FrameScript.cpp), internal: through its pointer */
 extern void *const gen_p_142e9a07c;
-#define gen_g_142e9a07c (*(char *)gen_p_142e9a07c)
+#define gen_g_142e9a07c (*(unsigned char (*)[1])gen_p_142e9a07c)
 /* s_stringRenderer (src/gxu/GxuFontMain.cpp), internal: through its pointer */
 extern void *const gen_p_142e9cf78;
-#define gen_g_142e9cf78 (*(char *)gen_p_142e9cf78)
+#define gen_g_142e9cf78 (*(unsigned char (*)[8])gen_p_142e9cf78)
 /* s_accumBoundsPool (src/model2/M2Model.cpp), internal: through its pointer */
 extern void *const gen_p_1430a0f40;
-#define gen_g_1430a0f40 (*(char *)gen_p_1430a0f40)
+#define gen_g_1430a0f40 (*(unsigned char (*)[8])gen_p_1430a0f40)
 /* s_matrixPool (src/model2/M2Model.cpp), internal: through its pointer */
 extern void *const gen_p_1430a0f50;
-#define gen_g_1430a0f50 (*(char *)gen_p_1430a0f50)
+#define gen_g_1430a0f50 (*(unsigned char (*)[8])gen_p_1430a0f50)
 /* s_boneSeqPool (src/model2/M2Model.cpp), internal: through its pointer */
 extern void *const gen_p_1430a0f60;
-#define gen_g_1430a0f60 (*(char *)gen_p_1430a0f60)
+#define gen_g_1430a0f60 (*(unsigned char (*)[8])gen_p_1430a0f60)
 /* s_useIPv6 (src/net/NetClient.cpp), internal: through its pointer */
 extern void *const gen_p_1430a1440;
-#define gen_g_1430a1440 (*(char *)gen_p_1430a1440)
+#define gen_g_1430a1440 (*(unsigned char (*)[8])gen_p_1430a1440)
 /* s_disableServerNagle (src/net/NetClient.cpp), internal: through its pointer */
 extern void *const gen_p_1430a1448;
-#define gen_g_1430a1448 (*(char *)gen_p_1430a1448)
+#define gen_g_1430a1448 (*(unsigned char (*)[8])gen_p_1430a1448)
 /* s_nodeHeap (src/net/NetInternal.cpp), internal: through its pointer */
 extern void *const gen_p_1430a14a0;
-#define gen_g_1430a14a0 (*(char *)gen_p_1430a14a0)
+#define gen_g_1430a14a0 (*(unsigned char (*)[8])gen_p_1430a14a0)
 /* s_rawSkip (src/os/win/Window.cpp), internal: through its pointer */
 extern void *const gen_p_1430a1594;
-#define gen_g_1430a1594 (*(char *)gen_p_1430a1594)
+#define gen_g_1430a1594 (*(unsigned char (*)[4])gen_p_1430a1594)
 /* s_mouseWindow (src/os/win/Window.cpp), internal: through its pointer */
 extern void *const gen_p_1430a1640;
-#define gen_g_1430a1640 (*(char *)gen_p_1430a1640)
+#define gen_g_1430a1640 (*(unsigned char (*)[8])gen_p_1430a1640)
 /* s_mouseMode (src/os/win/Window.cpp), internal: through its pointer */
 extern void *const gen_p_1430a1648;
-#define gen_g_1430a1648 (*(char *)gen_p_1430a1648)
+#define gen_g_1430a1648 (*(unsigned char (*)[4])gen_p_1430a1648)
 /* s_beforePump (src/os/win/Window.cpp), internal: through its pointer */
 extern void *const gen_p_1430a1680;
-#define gen_g_1430a1680 (*(char *)gen_p_1430a1680)
+#define gen_g_1430a1680 (*(unsigned char (*)[8])gen_p_1430a1680)
 /* s_streamingCameraRadius (src/client/Startup.cpp), internal: through its pointer */
 extern void *const gen_p_1430a55d8;
-#define gen_g_1430a55d8 (*(char *)gen_p_1430a55d8)
+#define gen_g_1430a55d8 (*(unsigned char (*)[8])gen_p_1430a55d8)
 /* s_streamingCameraLookAheadTime (src/client/Startup.cpp), internal: through its pointer */
 extern void *const gen_p_1430a55e8;
-#define gen_g_1430a55e8 (*(char *)gen_p_1430a55e8)
+#define gen_g_1430a55e8 (*(unsigned char (*)[8])gen_p_1430a55e8)
 /* s_boundsFile (src/model2/M2Cache.cpp), internal: through its pointer */
 extern void *const gen_p_1430a55f0;
-#define gen_g_1430a55f0 (*(char *)gen_p_1430a55f0)
+#define gen_g_1430a55f0 (*(unsigned char (*)[8])gen_p_1430a55f0)
 /* s_creditsHandle (src/sound/SI3Sound.cpp), internal: through its pointer */
 extern void *const gen_p_1430a9928;
-#define gen_g_1430a9928 (*(char *)gen_p_1430a9928)
+#define gen_g_1430a9928 (*(unsigned char (*)[4])gen_p_1430a9928)
 /* s_glueMusicKit (src/sound/SI3Sound.cpp), internal: through its pointer */
 extern void *const gen_p_1430a992c;
-#define gen_g_1430a992c (*(char *)gen_p_1430a992c)
+#define gen_g_1430a992c (*(unsigned char (*)[4])gen_p_1430a992c)
 /* s_glueMusicHandle (src/sound/SI3Sound.cpp), internal: through its pointer */
 extern void *const gen_p_1430a9930;
-#define gen_g_1430a9930 (*(char *)gen_p_1430a9930)
+#define gen_g_1430a9930 (*(unsigned char (*)[4])gen_p_1430a9930)
 /* s_glueAmbienceKit (src/sound/SI3Sound.cpp), internal: through its pointer */
 extern void *const gen_p_1430a9934;
-#define gen_g_1430a9934 (*(char *)gen_p_1430a9934)
+#define gen_g_1430a9934 (*(unsigned char (*)[4])gen_p_1430a9934)
 /* s_glueAmbienceHandle (src/sound/SI3Sound.cpp), internal: through its pointer */
 extern void *const gen_p_1430a9938;
-#define gen_g_1430a9938 (*(char *)gen_p_1430a9938)
+#define gen_g_1430a9938 (*(unsigned char (*)[4])gen_p_1430a9938)
 /* s_kitState0 (src/sound/SI3.cpp), internal: through its pointer */
 extern void *const gen_p_1430a99e0;
-#define gen_g_1430a99e0 (*(char *)gen_p_1430a99e0)
+#define gen_g_1430a99e0 (*(unsigned char (*)[1])gen_p_1430a99e0)
 /* s_kitState2 (src/sound/SI3.cpp), internal: through its pointer */
 extern void *const gen_p_1430a99e2;
-#define gen_g_1430a99e2 (*(char *)gen_p_1430a99e2)
+#define gen_g_1430a99e2 (*(unsigned char (*)[1])gen_p_1430a99e2)
 /* s_1430a99f0 (src/sound/SI3.cpp), internal: through its pointer */
 extern void *const gen_p_1430a99f0;
-#define gen_g_1430a99f0 (*(char *)gen_p_1430a99f0)
+#define gen_g_1430a99f0 (*(unsigned char (*)[1])gen_p_1430a99f0)
 /* s_musicHandle (src/sound/SI3Sound.cpp), internal: through its pointer */
 extern void *const gen_p_1430a99f4;
-#define gen_g_1430a99f4 (*(char *)gen_p_1430a99f4)
+#define gen_g_1430a99f4 (*(unsigned char (*)[4])gen_p_1430a99f4)
 /* s_handler (src/db/TactKeys.cpp), internal: through its pointer */
 extern void *const gen_p_1430ab768;
-#define gen_g_1430ab768 (*(char *)gen_p_1430ab768)
+#define gen_g_1430ab768 (*(unsigned char (*)[8])gen_p_1430ab768)
 /* s_1430aba60 (src/world/WorldFrame.cpp), internal: through its pointer */
 extern void *const gen_p_1430aba60;
-#define gen_g_1430aba60 (*(char *)gen_p_1430aba60)
+#define gen_g_1430aba60 (*(unsigned char (*)[4])gen_p_1430aba60)
 /* s_bspCaches (src/world/MapObjGroupBspCache.cpp), internal: through its pointer */
 extern void *const gen_p_1430ac0e0;
-#define gen_g_1430ac0e0 (*(char *)gen_p_1430ac0e0)
+#define gen_g_1430ac0e0 (*(unsigned char (*)[24])gen_p_1430ac0e0)
 /* s_windStrength (src/world/MapWind.cpp), internal: through its pointer */
 extern void *const gen_p_1430ac108;
-#define gen_g_1430ac108 (*(char *)gen_p_1430ac108)
+#define gen_g_1430ac108 (*(unsigned char (*)[4])gen_p_1430ac108)
 /* s_windSpeed (src/world/MapWind.cpp), internal: through its pointer */
 extern void *const gen_p_1430ac10c;
-#define gen_g_1430ac10c (*(char *)gen_p_1430ac10c)
+#define gen_g_1430ac10c (*(unsigned char (*)[4])gen_p_1430ac10c)
 /* s_disconnectDeferred (src/services/BattleNet.cpp), internal: through its pointer */
 extern void *const gen_p_1430af01c;
-#define gen_g_1430af01c (*(char *)gen_p_1430af01c)
+#define gen_g_1430af01c (*(unsigned char (*)[1])gen_p_1430af01c)
 /* s_realmConnectionLock (src/net/RealmConnection.cpp), internal: through its pointer */
 extern void *const gen_p_1430affa0;
-#define gen_g_1430affa0 (*(char *)gen_p_1430affa0)
+#define gen_g_1430affa0 (*(unsigned char (*)[40])gen_p_1430affa0)
 /* s_realmNameCallback (src/net/RealmConnection.cpp), internal: through its pointer */
 extern void *const gen_p_1430affc8;
-#define gen_g_1430affc8 (*(char *)gen_p_1430affc8)
+#define gen_g_1430affc8 (*(unsigned char (*)[8])gen_p_1430affc8)
 /* s_authDataCallback (src/net/RealmConnection.cpp), internal: through its pointer */
 extern void *const gen_p_1430affd0;
-#define gen_g_1430affd0 (*(char *)gen_p_1430affd0)
+#define gen_g_1430affd0 (*(unsigned char (*)[8])gen_p_1430affd0)
 /* s_authValueCallback (src/net/RealmConnection.cpp), internal: through its pointer */
 extern void *const gen_p_1430affe0;
-#define gen_g_1430affe0 (*(char *)gen_p_1430affe0)
+#define gen_g_1430affe0 (*(unsigned char (*)[8])gen_p_1430affe0)
 /* s_serverTimeCallback (src/net/RealmConnection.cpp), internal: through its pointer */
 extern void *const gen_p_1430affe8;
-#define gen_g_1430affe8 (*(char *)gen_p_1430affe8)
+#define gen_g_1430affe8 (*(unsigned char (*)[8])gen_p_1430affe8)
 /* s_cursorHotspot (src/client/GxWindow.cpp), internal: through its pointer */
 extern void *const gen_p_1430b0050;
-#define gen_g_1430b0050 (*(char *)gen_p_1430b0050)
+#define gen_g_1430b0050 (*(unsigned char (*)[4])gen_p_1430b0050)
 /* s_cursorPixels (src/client/GxWindow.cpp), internal: through its pointer */
 extern void *const gen_p_1430b0060;
-#define gen_g_1430b0060 (*(char *)gen_p_1430b0060)
+#define gen_g_1430b0060 (*(unsigned char (*)[65536])gen_p_1430b0060)
 /* s_cursorShown (src/client/GxWindow.cpp), internal: through its pointer */
 extern void *const gen_p_1430c0060;
-#define gen_g_1430c0060 (*(char *)gen_p_1430c0060)
+#define gen_g_1430c0060 (*(unsigned char (*)[8])gen_p_1430c0060)
 /* s_cursorSizeIndex (src/client/GxWindow.cpp), internal: through its pointer */
 extern void *const gen_p_1430d0060;
-#define gen_g_1430d0060 (*(char *)gen_p_1430d0060)
+#define gen_g_1430d0060 (*(unsigned char (*)[4])gen_p_1430d0060)
 /* s_visible (src/client/GxWindow.cpp), internal: through its pointer */
 extern void *const gen_p_1430d009c;
-#define gen_g_1430d009c (*(char *)gen_p_1430d009c)
+#define gen_g_1430d009c (*(unsigned char (*)[1])gen_p_1430d009c)
 /* s_wowConnectionLogCallback (src/client/Startup.cpp), internal: through its pointer */
 extern void *const gen_p_1430d0278;
-#define gen_g_1430d0278 (*(char *)gen_p_1430d0278)
+#define gen_g_1430d0278 (*(unsigned char (*)[8])gen_p_1430d0278)
 /* s_gamepadInBackground (src/client/StartupClient.cpp), internal: through its pointer */
 extern void *const gen_p_1430d13da;
-#define gen_g_1430d13da (*(char *)gen_p_1430d13da)
+#define gen_g_1430d13da (*(unsigned char (*)[1])gen_p_1430d13da)
 /* s_downloader (src/client/StartupService.cpp), internal: through its pointer */
 extern void *const gen_p_1430d2378;
-#define gen_g_1430d2378 (*(char *)gen_p_1430d2378)
+#define gen_g_1430d2378 (*(unsigned char (*)[8])gen_p_1430d2378)
 /* s_state2589 (src/services/ClientServices.cpp), internal: through its pointer */
 extern void *const gen_p_1430d2589;
-#define gen_g_1430d2589 (*(char *)gen_p_1430d2589)
+#define gen_g_1430d2589 (*(unsigned char (*)[1])gen_p_1430d2589)
 /* s_sessionUp (src/services/ClientServices.cpp), internal: through its pointer */
 extern void *const gen_p_1430d258a;
-#define gen_g_1430d258a (*(char *)gen_p_1430d258a)
+#define gen_g_1430d258a (*(unsigned char (*)[1])gen_p_1430d258a)
 /* s_state258b (src/services/ClientServices.cpp), internal: through its pointer */
 extern void *const gen_p_1430d258b;
-#define gen_g_1430d258b (*(char *)gen_p_1430d258b)
+#define gen_g_1430d258b (*(unsigned char (*)[1])gen_p_1430d258b)
 /* s_serverTimeOffset (src/services/ClientServices.cpp), internal: through its pointer */
 extern void *const gen_p_1430d25b0;
-#define gen_g_1430d25b0 (*(char *)gen_p_1430d25b0)
+#define gen_g_1430d25b0 (*(unsigned char (*)[8])gen_p_1430d25b0)
 /* s_portal (src/services/ClientServices.cpp), internal: through its pointer */
 extern void *const gen_p_1430d2a98;
-#define gen_g_1430d2a98 (*(char *)gen_p_1430d2a98)
+#define gen_g_1430d2a98 (*(unsigned char (*)[8])gen_p_1430d2a98)
 /* s_auroraSuffix (src/services/ClientServices.cpp), internal: through its pointer */
 extern void *const gen_p_1430d2ab8;
-#define gen_g_1430d2ab8 (*(char *)gen_p_1430d2ab8)
+#define gen_g_1430d2ab8 (*(unsigned char (*)[8])gen_p_1430d2ab8)
 /* s_clientServices (src/services/ClientServices.cpp), internal: through its pointer */
 extern void *const gen_p_1430d2b38;
-#define gen_g_1430d2b38 (*(char *)gen_p_1430d2b38)
+#define gen_g_1430d2b38 (*(unsigned char (*)[8])gen_p_1430d2b38)
 /* s_connectionLog (src/services/ClientServices.cpp), internal: through its pointer */
 extern void *const gen_p_1430d2b40;
-#define gen_g_1430d2b40 (*(char *)gen_p_1430d2b40)
+#define gen_g_1430d2b40 (*(unsigned char (*)[8])gen_p_1430d2b40)
 /* s_initialized (src/glue/GlueMgr.cpp), internal: through its pointer */
 extern void *const gen_p_14311c51e;
-#define gen_g_14311c51e (*(char *)gen_p_14311c51e)
+#define gen_g_14311c51e (*(unsigned char (*)[1])gen_p_14311c51e)
 /* s_initializing (src/glue/GlueMgr.cpp), internal: through its pointer */
 extern void *const gen_p_14311c51f;
-#define gen_g_14311c51f (*(char *)gen_p_14311c51f)
+#define gen_g_14311c51f (*(unsigned char (*)[1])gen_p_14311c51f)
 /* s_uiRoot (src/glue/GlueMgr.cpp), internal: through its pointer */
 extern void *const gen_p_14311c520;
-#define gen_g_14311c520 (*(char *)gen_p_14311c520)
+#define gen_g_14311c520 (*(unsigned char (*)[8])gen_p_14311c520)
 /* s_destroying (src/glue/GlueMgr.cpp), internal: through its pointer */
 extern void *const gen_p_14311c528;
-#define gen_g_14311c528 (*(char *)gen_p_14311c528)
+#define gen_g_14311c528 (*(unsigned char (*)[1])gen_p_14311c528)
 /* s_reloadPending (src/glue/GlueMgr.cpp), internal: through its pointer */
 extern void *const gen_p_14311c529;
-#define gen_g_14311c529 (*(char *)gen_p_14311c529)
+#define gen_g_14311c529 (*(unsigned char (*)[1])gen_p_14311c529)
 /* s_gxRestarted (src/glue/GlueMgr.cpp), internal: through its pointer */
 extern void *const gen_p_14311c52a;
-#define gen_g_14311c52a (*(char *)gen_p_14311c52a)
+#define gen_g_14311c52a (*(unsigned char (*)[1])gen_p_14311c52a)
 /* s_unknown52b (src/glue/GlueMgr.cpp), internal: through its pointer */
 extern void *const gen_p_14311c52b;
-#define gen_g_14311c52b (*(char *)gen_p_14311c52b)
+#define gen_g_14311c52b (*(unsigned char (*)[1])gen_p_14311c52b)
 /* s_unknown52c (src/glue/GlueMgr.cpp), internal: through its pointer */
 extern void *const gen_p_14311c52c;
-#define gen_g_14311c52c (*(char *)gen_p_14311c52c)
+#define gen_g_14311c52c (*(unsigned char (*)[1])gen_p_14311c52c)
 /* s_startTime (src/glue/GlueMgr.cpp), internal: through its pointer */
 extern void *const gen_p_14311c530;
-#define gen_g_14311c530 (*(char *)gen_p_14311c530)
+#define gen_g_14311c530 (*(unsigned char (*)[4])gen_p_14311c530)
 /* s_unknown5f0 (src/glue/GlueMgr.cpp), internal: through its pointer */
 extern void *const gen_p_14311c5f0;
-#define gen_g_14311c5f0 (*(char *)gen_p_14311c5f0)
+#define gen_g_14311c5f0 (*(unsigned char (*)[8])gen_p_14311c5f0)
 /* s_flag14323f218 (src/client/StartupClient.cpp), internal: through its pointer */
 extern void *const gen_p_14323f218;
-#define gen_g_14323f218 (*(char *)gen_p_14323f218)
+#define gen_g_14323f218 (*(unsigned char (*)[1])gen_p_14323f218)
 /* s_lastKey (src/aio/Aio.cpp), internal: through its pointer */
 extern void *const gen_p_143477868;
-#define gen_g_143477868 (*(char *)gen_p_143477868)
+#define gen_g_143477868 (*(unsigned char (*)[8])gen_p_143477868)
 /* s_deviceGeneration (src/gx/GxApi.cpp), internal: through its pointer */
 extern void *const gen_p_143490878;
-#define gen_g_143490878 (*(char *)gen_p_143490878)
+#define gen_g_143490878 (*(unsigned char (*)[4])gen_p_143490878)
 /* s_gxLog (src/gx/GxLog.cpp), internal: through its pointer */
 extern void *const gen_p_1434909f0;
-#define gen_g_1434909f0 (*(char *)gen_p_1434909f0)
+#define gen_g_1434909f0 (*(unsigned char (*)[8])gen_p_1434909f0)
 /* s_gxLogSize (src/gx/GxLog.cpp), internal: through its pointer */
 extern void *const gen_p_1434909f8;
-#define gen_g_1434909f8 (*(char *)gen_p_1434909f8)
+#define gen_g_1434909f8 (*(unsigned char (*)[4])gen_p_1434909f8)
 /* s_table (src/db/ParameterCurve.cpp), internal: through its pointer */
 extern void *const gen_p_1434913b0;
-#define gen_g_1434913b0 (*(char *)gen_p_1434913b0)
+#define gen_g_1434913b0 (*(unsigned char (*)[8])gen_p_1434913b0)
 /* s_queues (src/threadpool/ThreadPool.cpp), internal: through its pointer */
 extern void *const gen_p_1444f94c0;
-#define gen_g_1444f94c0 (*(char *)gen_p_1444f94c0)
+#define gen_g_1444f94c0 (*(unsigned char (*)[16])gen_p_1444f94c0)
 undefined8 FUN_1400b1420();
 int FUN_1401ca520();
 int FUN_1401ca540();
@@ -3646,6 +3641,7 @@ int FUN_140211020();
 int FUN_140211210();
 int FUN_140211250();
 undefined8 FUN_1402112e0();
+undefined4 FUN_1402113a0();
 undefined8 FUN_1402114e0();
 char * FUN_140211570();
 undefined8 FUN_140211580();
@@ -4130,7 +4126,6 @@ undefined8 FUN_1402727cc();
 longlong * FUN_140272878();
 ulonglong FUN_140272928();
 undefined8 FUN_140272964();
-undefined8 FUN_140272d6c();
 char * FUN_140272d78();
 char * FUN_140272e20();
 float FUN_1402731f0();
@@ -4141,10 +4136,8 @@ bool FUN_1402791dc();
 int FUN_1402792c0();
 int FUN_140279378();
 float FUN_140279b50();
-undefined8 FUN_140279da8();
 double FUN_140282c80();
 float FUN_140282c88();
-undefined8 FUN_140282cb0();
 undefined8 FUN_140282e48();
 undefined8 FUN_140282e54();
 double FUN_1402831c0();
@@ -11551,17 +11544,24 @@ undefined8 * FUN_14129d3e0();
 undefined8 * FUN_14129d890();
 bool FUN_14129d9d0();
 ulonglong FUN_14129de10();
+undefined1 FUN_14129e2b0();
+undefined8 FUN_1412a1110();
 undefined8 FUN_1412a11f0();
 undefined8 FUN_1412a1250();
 undefined4 FUN_1412a1570();
 undefined8 FUN_1412a1690();
+undefined8 FUN_1412a1be0();
+undefined8 FUN_1412a1c20();
 ulonglong * FUN_1412a30e0();
 undefined8 FUN_1412a3680();
 undefined8 FUN_1412a38a0();
 undefined8 * FUN_1412a5c10();
 longlong * FUN_1412a5e70();
 undefined8 FUN_1412a60a0();
+undefined4 * FUN_1412a6320();
+undefined4 FUN_1412a64f0();
 undefined8 FUN_1412a6f30();
+undefined4 FUN_1412a99e0();
 undefined8 FUN_1412aa7b0();
 undefined8 FUN_1412aabc0();
 undefined4 * FUN_1412abac0();
@@ -12713,6 +12713,8 @@ undefined8 FUN_14135acd0();
 undefined8 FUN_14135ae10();
 undefined1 FUN_14135b630();
 undefined1 FUN_14135bc40();
+undefined1 FUN_14135bec0();
+undefined8 FUN_14135bfc0();
 int FUN_14135c8d0();
 undefined * FUN_14135ce70();
 float FUN_14135ce90();
@@ -15870,7 +15872,6 @@ undefined4 FUN_1415ae990();
 undefined4 FUN_1415ae9b0();
 undefined4 FUN_1415aea10();
 undefined8 FUN_1415aec50();
-undefined8 FUN_1415aec60();
 undefined8 FUN_1415aec70();
 undefined4 FUN_1415aec80();
 undefined4 FUN_1415aecc0();
@@ -16005,6 +16006,7 @@ undefined8 FUN_141659540();
 undefined8 FUN_1416597c0();
 undefined8 FUN_141659a70();
 undefined8 FUN_141659d00();
+undefined8 FUN_141659eb0();
 undefined8 FUN_14165a5e0();
 undefined8 FUN_14165a740();
 undefined8 * FUN_14165a790();
@@ -25457,6 +25459,7 @@ undefined8 FUN_141debb30();
 undefined8 FUN_141debec0();
 undefined8 FUN_141dec140();
 undefined8 FUN_141dec210();
+undefined8 FUN_141dec240();
 undefined8 FUN_141dec250();
 undefined1 FUN_141dec370();
 undefined1 FUN_141dec5a0();
@@ -32551,6 +32554,8 @@ undefined4 FUN_142193000();
 uintptr_t FUN_1421930c0();
 undefined8 FUN_142193100();
 uint FUN_142193110();
+uint FUN_142193570();
+undefined8 FUN_142193590();
 undefined8 FUN_1421965a0();
 undefined1 FUN_142196650();
 undefined4 FUN_1421966e0();
@@ -33954,6 +33959,7 @@ bool FUN_142290c30();
 int * FUN_142290c90();
 undefined8 FUN_1422916d0();
 undefined1 FUN_1422919d0();
+undefined1 FUN_142291b20();
 undefined1 FUN_1422920e0();
 undefined8 FUN_142292410(undefined8 param_1, ...);
 undefined8 FUN_142292a10();

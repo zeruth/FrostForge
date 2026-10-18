@@ -22,8 +22,9 @@ extern "C" {
 // tools/translate.py take it as a root.
 extern "C" {
 int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
-void __cdecl _Init_thread_header(int* guard);
-void __cdecl _Init_thread_footer(int* guard);
+// (noexcept, as the runtime declares them; C5043 otherwise)
+void __cdecl _Init_thread_header(int* guard) noexcept;
+void __cdecl _Init_thread_footer(int* guard) noexcept;
 // translated: FUN_141a93190
 unsigned long long FUN_141a93190(unsigned long long actor);
 // translated: FUN_141a95670

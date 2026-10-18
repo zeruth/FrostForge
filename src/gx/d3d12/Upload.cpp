@@ -68,6 +68,7 @@ void CopyCommandList::AddResidency(uint32_t index, Tex* tex) {
 void CopyCommandList::UploadSubresource(Tex* tex, const int32_t* rect, uint32_t levels, uint32_t face, uint32_t mip,
     uint32_t width, uint32_t height, uint32_t depth, const uint8_t* data, uint32_t pitch) {
     (void)width;
+    (void)depth;  // (the slice count comes from the texture, tex->m_depth, as in the reference)
     if (GxDeviceD3d12()->m_ready == 0) {
         return;
     }

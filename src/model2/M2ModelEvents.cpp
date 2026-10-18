@@ -187,8 +187,8 @@ bool CM2Model::QueueEvents(M2SceneDrawList* list, void* collected) {
         M2ModelCallback* last = callback + callbacks->m_size;
         for (; callback != last; callback++) {
             if (callback->m_kind == 0) {
-                uint16_t bone = KeyBoneIndex(anim, callback->m_10);
-                M2SequenceTime* slot = this->m_animState->m_boneStates[bone].m_sequence;
+                uint16_t keyBone = KeyBoneIndex(anim, callback->m_10);
+                M2SequenceTime* slot = this->m_animState->m_boneStates[keyBone].m_sequence;
                 uint16_t index = slot->m_nextSequence;
                 uint32_t queuedIndex;
                 int32_t queuedStart;

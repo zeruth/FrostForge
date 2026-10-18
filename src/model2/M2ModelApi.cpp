@@ -108,13 +108,13 @@ void CM2Model::SetTextureAt(uint32_t index, CTexture* texture) {
             }
             continue;
         }
-        if ((slots & 0x1f) == index) {
+        if (static_cast<uint32_t>(slots & 0x1f) == index) {
             ParticleEmitterSetTexture(this->m_particles[i], 0, texture);
         }
-        if ((slots >> 5 & 0x1f) == index) {
+        if (static_cast<uint32_t>(slots >> 5 & 0x1f) == index) {
             ParticleEmitterSetTexture(this->m_particles[i], 1, texture);
         }
-        if ((slots >> 10 & 0x1f) == index) {
+        if (static_cast<uint32_t>(slots >> 10 & 0x1f) == index) {
             ParticleEmitterSetTexture(this->m_particles[i], 2, texture);
         }
     }

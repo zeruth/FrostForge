@@ -152,7 +152,7 @@ uint64_t TakeNodes(uint64_t count) {
             continue;
         }
         uint64_t rest = Untag(last)->m_next;
-        if (InterlockedCompareExchange64(reinterpret_cast<volatile LONG64*>(&s_freeNodes), rest, head) == head) {
+        if (static_cast<uint64_t>(InterlockedCompareExchange64(reinterpret_cast<volatile LONG64*>(&s_freeNodes), rest, head)) == head) {
             Untag(last)->m_next &= TAG_MASK;
             return head;
         }

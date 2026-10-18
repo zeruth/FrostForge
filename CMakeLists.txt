@@ -22,6 +22,9 @@ add_compile_definitions(
     WIN32_LEAN_AND_MEAN
     UNICODE
     _UNICODE
+    # strcpy, strcat, _strlwr, localtime...: the reference calls these, and their _s forms behave
+    # differently (they end the process on overflow). C4996 is the CRT's opinion, not a defect.
+    _CRT_SECURE_NO_WARNINGS
 )
 
 if(MSVC)
@@ -29,6 +32,23 @@ if(MSVC)
     add_compile_options(/W4 /permissive- /Zi)
     add_link_options(/DEBUG)
 endif()
+
+# A target's own warning level in place of the project's /W4 (none given: the target's sources
+# set their own, with COMPILE_OPTIONS). Added beside /W4, both reached the command line and cl
+# warned D9025, "overriding '/W4' with '/W1'", once per file: thousands of lines a translator
+# build. Removing it from the target works the same for Ninja (CLion) and Visual Studio.
+function(frost_warning_level target)
+    if(MSVC)
+        get_target_property(options ${target} COMPILE_OPTIONS)
+        if(options)
+            list(REMOVE_ITEM options /W4)
+            set_target_properties(${target} PROPERTIES COMPILE_OPTIONS "${options}")
+        endif()
+        if(ARGC GREATER 1)
+            target_compile_options(${target} PRIVATE ${ARGV1})
+        endif()
+    endif()
+endfunction()
 
 # Third-party code the reference links as is (zlib 1.2.11, "inflate 1.2.11 Copyright" in the binary).
 add_subdirectory(vendor/zlib-1.2.11)

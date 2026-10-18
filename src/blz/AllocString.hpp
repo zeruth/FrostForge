@@ -12,6 +12,10 @@ namespace blz {
 // Out of line, word 1 is the heap text, +0x10 the length and +0x14 the capacity.
 struct alloc_string {
     uint64_t m_allocator;  // 0x00: allocator | inline flag
+    // (the heap fields and the inline text share the same bytes, as in the reference: the
+    // anonymous struct is meant, C4201 is MSVC noting the extension)
+#pragma warning(push)
+#pragma warning(disable : 4201)
     union {
         struct {
             char* m_data;        // 0x08
@@ -21,6 +25,7 @@ struct alloc_string {
         };
         char m_inline[24];       // 0x08..0x1f, byte 0x1f = 23 - length
     };
+#pragma warning(pop)
 
     static const uint32_t INLINE_CAPACITY = 0x17;
 

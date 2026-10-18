@@ -736,8 +736,8 @@ void CM2Model::StartSequence(uint16_t index, uint16_t bone, const M2SequenceReso
     M2BoneState* state = &states[bone];
     M2SequenceTime* blendSlot = state->m_blendSequence;
     M2Array<M2Sequence>* fromSequences = sequences;
-    int16_t from;
-    bool useBlend;
+    int16_t from = -1;     // (set on every path below)
+    bool useBlend = false;
     bool decided = false;
     if (blendSlot != nullptr && (state->m_flags & 0x4000) != 0) {
         float w = static_cast<float>(state->m_blendEnd - static_cast<int32_t>(this->m_scene->m_time)) * state->m_blendRate;

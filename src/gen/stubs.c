@@ -8,8 +8,20 @@ undefined8 FUN_1400b1420() {
     return (undefined8)0;
 }
 
+/* register the decompiler lost track of */
+undefined4 FUN_1402113a0() {
+    GenUnimplemented(0x1402113a0ULL);
+    return (undefined4)0;
+}
+
 /* anti-tamper runtime (tools/aegis.py): protection, not ported */
 undefined4 FUN_14021c040() {
     GenUnimplemented(0x14021c040ULL);
     return (undefined4)0;
+}
+
+/* not in the corpus */
+undefined8 FUN_141dec240() {
+    GenUnimplemented(0x141dec240ULL);
+    return (undefined8)0;
 }

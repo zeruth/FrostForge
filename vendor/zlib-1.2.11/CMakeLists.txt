@@ -14,5 +14,5 @@ add_library(zlib STATIC
 target_include_directories(zlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 if(MSVC)
     # Upstream code, built as is.
-    target_compile_options(zlib PRIVATE /W0)
+    frost_warning_level(zlib /W0)
 endif()

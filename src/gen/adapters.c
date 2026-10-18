@@ -6038,6 +6038,12 @@ ulonglong FUN_14129de10(unsigned long long a0, unsigned long long a1) {
     return 0;
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_14129e2b0=?RenderSettingsCheckLowLatencyMode@@YAIE@Z")
+extern char gen_alias_14129e2b0;
+undefined1 FUN_14129e2b0(unsigned long long a0) {
+    return (undefined1)((unsigned long long (*)(unsigned long long))&gen_alias_14129e2b0)((unsigned long long)a0);
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_1412a30e0=?ShaderEffectCreate@@YAPEAVCShaderEffect@@PEBDII@Z")
 extern char gen_alias_1412a30e0;
 ulonglong * FUN_1412a30e0(unsigned long long a0, unsigned long long a1, unsigned long long a2) {

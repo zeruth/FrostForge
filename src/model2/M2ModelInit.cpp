@@ -586,7 +586,7 @@ bool CM2Model::InitializeLoaded() {
             generator->m_gravity = state->m_18.m_value;
             M2Array<M2ExtendedParticle>* extended = this->m_shared->m_extendedParticles;
             generator->m_zSource = extended == nullptr ? state->m_zSource.m_value : (*extended)[i].m_zSource;
-            int32_t kind;
+            int32_t kind = 0;  // (set on every path that sets textured)
             bool textured = false;
             if ((def.m_flags & 0x10100000) == 0) {
                 if ((this->m_createFlags & 0x800) != 0) {

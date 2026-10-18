@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import argparse
 import bisect
+import datetime
 import gc
 import json
 import os
@@ -161,9 +162,19 @@ CRT_BY_ADDR = {0x1425bf3b0: "memmove", 0x1425bfa50: "memset",
 # Never translated, either: the reference's malloc and realloc allocate from its CRT heap handle
 # (DAT_142e1eda8), which only its CRT startup creates and the port never runs. Planned once
 # translated code called them directly, the jump went to the translated body, and HeapAlloc on a
-# null heap faulted in ntdll at shutdown (FUN_140286974, 2026-10-17)
-CRT_ENTRY ={0x140286974: "malloc", 0x140279d94: "free", 0x140289938: "realloc",
-             0x14241d3f8: "_strdup", 0x1402857f8: "calloc", 0x14241c294: "_wcsdup"}
+# null heap faulted in ntdll on the Login click (FUN_140286974, 2026-10-17)
+CRT_ENTRY = {0x140286974: "malloc", 0x140279d94: "free", 0x140289938: "realloc",
+             0x14241d3f8: "_strdup", 0x1402857f8: "calloc", 0x14241c294: "_wcsdup",
+             # the CRT's lazy resolver behind its time pointer (0x142cc8ac8): looks the precise
+             # clock up in kernel32 on the first call and stores it. Translated it reads a FILETIME
+             # through `->` (stubbed), and the stub filled no time at all (2026-10-17)
+             0x140266b10: "GetSystemTimePreciseAsFileTime",
+             # FID's Global::_endthreadex: its body is common_end_thread, which CRT_TEMPLATES
+             # names _endthreadex, which resolved back to this function: translated it called
+             # itself until the stack ran out (C4717, 2026-10-17)
+             0x140272d6c: "_endthreadex"}
+# (the CRT_ENTRY routines that are Windows APIs, declared as imports in translated.h)
+CRT_ENTRY_IMPORTS = {"GetSystemTimePreciseAsFileTime"}
 # the UCRT's internal templates the corpus names, as the public routine each one implements:
 # common_gmtime_s<__int64> (0x1424147d0) is _gmtime64_s, which cross_ssl's log timestamp
 # (FUN_141f35740) calls; that function stubbed left its caller a string with no buffer, and the
@@ -444,6 +455,151 @@ STACK_DECL = re.compile(r"^(\s*)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local_|[a-z]+St
                         r"\s*(?:\[\s*(\w+)\s*\])?\s*;[^\n]*\n", re.M)
 
 
+# the C runtime routines translated code calls with Ghidra's 64-bit integers where they take
+# pointers, by the (1-based) positions of those parameters
+CRT_POINTER_PARAMS = {"memmove": (1, 2), "memcpy": (1, 2), "memset": (1,), "memcmp": (1, 2), "free": (1,),
+                      "_free_base": (1,), "realloc": (1,), "_realloc_base": (1,), "qsort": (1,),
+                      "fwrite": (1, 4), "fread": (1, 4), "strlen": (1,), "strcmp": (1, 2), "strcpy": (1, 2)}
+INT32_TYPES = r"(?:int|uint|undefined4|ushort|short|undefined2|byte|char|undefined1|uchar|word|dword)"
+
+
+def call_args(body: str, start: int) -> tuple[list[tuple[int, int]], int]:
+    """The (start, end) of each argument of the call whose `(` is at `start`, and the `)` after it."""
+    depth, k, spans, s = 1, start + 1, [], start + 1
+    while k < len(body) and depth:
+        ch = body[k]
+        if ch in "([":
+            depth += 1
+        elif ch in ")]":
+            depth -= 1
+            if depth == 0:
+                break
+        elif ch == "," and depth == 1:
+            spans.append((s, k))
+            s = k + 1
+        elif ch == '"':
+            k += 1
+            while k < len(body) and body[k] != '"':
+                k += 2 if body[k] == "\\" else 1
+        k += 1
+    spans.append((s, k))
+    return spans, k
+
+
+def explicit_casts(body: str, params: list[str]) -> str:
+    """Conversions the reference makes and C only warns about, written out so a build log shows
+    what is left. Each is the same value as before; nothing here changes what runs:
+    - a 64-bit integer handed to a C runtime pointer parameter (`memmove(lVar1, ...)`, C4022 at
+      1,728 sites): cast to `void *`;
+    - a pointer read as 32 bits (`return (int)puVar6;`, `uVar6 = (uint)puVar7;`: the reference
+      reading eax of a register that held a pointer, C4311 at 1,737 sites): through `longlong`;
+    - a bool negated (`-bVar8 & 2U`, C4804): as the int C promotes it to."""
+    # C4022
+    out, i = [], 0
+    for m in re.finditer(r"(?<![\w.>])(" + "|".join(CRT_POINTER_PARAMS) + r")\(", body):
+        if m.start() < i:
+            continue
+        spans, close = call_args(body, m.end() - 1)
+        pieces, at = [body[i:m.end()]], m.end()
+        for n, (s, e) in enumerate(spans, 1):
+            arg = body[s:e]
+            pieces.append(body[at:s])
+            pieces.append(f"(void *)({arg.strip()})" if n in CRT_POINTER_PARAMS[m.group(1)] and arg.strip() else arg)
+            at = e
+        out += pieces
+        i = at
+    out.append(body[i:])
+    body = "".join(out)
+    # C4311: the pointer-typed names (locals, parameters), then a 32-bit cast of one or of a cast
+    # to a pointer
+    pointers = set(re.findall(r"^\s*(?:const\s+)?\w+\s*\*+\s*(\w+)\s*;", body, re.M)) \
+        | {m.group(1) for p in params if (m := re.search(r"\*\s*(\w+)\s*$", p))}
+    if pointers:
+        names = "|".join(map(re.escape, sorted(pointers, key=len, reverse=True)))
+        body = re.sub(rf"(\({INT32_TYPES}\))\s*(?=(?:{names})\b(?!\s*(?:\[|->|\.)))", r"\1(longlong)", body)
+        # (pointer arithmetic on one: `(int)(pbVar13 + 1)`)
+        body = re.sub(rf"(\({INT32_TYPES}\))\s*(?=\((?:{names})\s*[+-])", r"\1(longlong)", body)
+    # (a cast to a pointer, `(uint)(char *)x`; a pointer made from the frame, `(int)((byte *)(...))`;
+    # an address, `(int)&x`; a pointer read through a pointer to it, `(uint)(*(undefined ** *)(...))`)
+    body = re.sub(rf"(\({INT32_TYPES}\))\s*(?=\((?:const\s+)?\w+\s*\*+\s*\))", r"\1(longlong)", body)
+    body = re.sub(rf"(\({INT32_TYPES}\))\s*(?=\(\((?:const\s+)?\w+(?:\s*\*)+\s*\)\()", r"\1(longlong)", body)
+    # (a pointer read through a pointer to it, then offset: `(int)((*(undefined1 * *)(...)) + 8)`)
+    body = re.sub(rf"(\({INT32_TYPES}\))\s*(?=\(\(\*\((?:const\s+)?\w+(?:\s*\*){{2,}}\s*\)\()", r"\1(longlong)", body)
+    body = re.sub(rf"(\({INT32_TYPES}\))\s*(?=&)", r"\1(longlong)", body)
+    body = re.sub(rf"(\({INT32_TYPES}\))\s*(?=REFG\((?:const\s+)?\w+\s*\*+\s*,)", r"\1(longlong)", body)
+    # (and unparenthesized, `(int)*(char **)(param_2 + 0x10)`)
+    body = re.sub(rf"(\({INT32_TYPES}\))\s*(?=\*\((?:const\s+)?\w+(?:\s*\*){{2,}}\s*\))", r"\1(longlong)", body)
+    body = re.sub(rf"(\({INT32_TYPES}\))\s*(?=\(\*\((?:const\s+)?\w+(?:\s*\*){{2,}}\s*\)\()", r"\1(longlong)", body)
+    # C4804
+    for name in re.findall(r"^\s*bool\s+(\w+)\s*;", body, re.M):
+        body = re.sub(rf"(?<![\w)\]])-\s*{name}\b", f"-(int){name}", body)
+    return body
+
+
+DECL_KEYWORDS = {"return", "goto", "break", "continue", "case", "default", "else", "do", "extern", "static", "typedef"}
+
+
+def zero_locals(body: str) -> str:
+    """Ghidra's scalar locals start at zero instead of whatever the stack held.
+
+    The reads the compiler flags as uninitialized (C4700/C4701/C4703, 173 sites in 2026-10-17's
+    build) are the reference's own: a stack slot it never writes either (FUN_1401fd160 copies a
+    16-byte pair whose upper half nothing stores, `movups xmm0, [rsp+0x30]`), or outgoing stack
+    arguments stored on one path and read after the paths join. The reference reads garbage
+    there; zero is the one value that makes a run repeatable. (A register the decompiler lost is
+    another matter, refused before this as "a register the decompiler lost track of".)"""
+    # (the block runs from the first declaration to the blank line after the declarations: a
+    # prelude can come first, `{  longlong *gen_param_1 = (longlong *)param_1;` and a blank line,
+    # which ended the block before FUN_141a45040's locals and left C4703 on them)
+    decl = re.compile(r"(\s+)((?:const\s+)?\w+(?:\s+\w+)*?(?:\s*\*+\s*|\s+))(\w+);")
+    lines = body.split("\n")
+    out, started, done = [], False, False
+    for i, l in enumerate(lines):
+        if i == 0 or done:
+            out.append(l)
+            continue
+        if not l.strip():
+            done = started
+            out.append(l)
+            continue
+        m = decl.fullmatch(l)
+        if m and m.group(2).split()[0] not in DECL_KEYWORDS and m.group(3) != "gen_frame" and "GEN_HIT" not in l:
+            started = True
+            out.append(f"{m.group(1)}{m.group(2)}{m.group(3)} = {{0}};")
+        else:
+            out.append(l)
+    return "\n".join(out)
+
+
+NARROW_TYPES = {"char", "uchar", "byte", "bool", "undefined", "undefined1", "short", "ushort", "undefined2", "word",
+                "int", "uint", "undefined4", "dword", "float", "long", "ulong", "wchar_t", "wchar16"}
+
+
+def param_slots(body: str, params: list[str] | None) -> str:
+    """A parameter narrower than 8 bytes whose address the body takes lives in an 8-byte slot.
+
+    In the reference every argument has a whole 8-byte slot (its register's home, or its place
+    among the stack arguments), and Ghidra uses the slot as storage: `_param_5 = CONCAT11(...)`,
+    `(*(undefined8 *)&param_5) = ...` here. C's parameter is only its type's size, so the store ran
+    past it into the frame (C4739/C4789 in FUN_14030d360, FUN_140311510, FUN_14120bd80 and four
+    more, 2026-10-17). The slot starts as the argument; the parameter is read and written in it."""
+    seeds, out = [], body
+    for p in params or []:
+        m = re.fullmatch(r"\s*((?:unsigned |signed |const )*\w+)\s+(param_\d+)\s*", p)
+        if not m or m.group(1).split()[-1] not in NARROW_TYPES or not re.search(rf"&\s*{m.group(2)}\b", body):
+            continue
+        t, n = m.group(1), m.group(2)
+        out = re.sub(rf"\b{n}\b", f"(*({t} *)&gen_slot_{n})", out)
+        # (but va_start names the parameter itself: the variable arguments are found from its
+        # address. Given the slot, FUN_141a4d260 read them from the slot's neighbours, C5082)
+        out = out.replace(f"va_start(gen_va, (*({t} *)&gen_slot_{n}))", f"va_start(gen_va, {n})")
+        seeds.append(f"  unsigned long long gen_slot_{n} = 0;\n  memcpy(&gen_slot_{n}, &{n}, sizeof({n}));\n")
+    if not seeds:
+        return body
+    first = re.search(r"\{\n", out).end()
+    return out[:first] + "".join(seeds) + out[first:]
+
+
 def stack_frame(body: str, params: list[str] | None = None) -> str:
     """Locals at their offsets in the reference's frame, when one's address escapes.
 
@@ -528,7 +684,9 @@ def stack_frame(body: str, params: list[str] | None = None) -> str:
             if name and p.strip() != "...":
                 seeds.append(f"{decls[0].group(1)}memcpy(gen_frame + 0x{pad + 8 * (k + 1) - lo:x}, &{name.group(1)}, "
                              f"sizeof({name.group(1)}) < 8 ? sizeof({name.group(1)}) : 8);\n")
-    frame = (f"{decls[0].group(1)}__declspec(align(16)) unsigned char gen_frame[{size}];\n")
+    # (zeroed, as zero_locals() does a scalar's: what the function reads of its frame before
+    # writing it is the reference's garbage too, C4700 at 50 sites on 2026-10-17)
+    frame = (f"{decls[0].group(1)}__declspec(align(16)) unsigned char gen_frame[{size}] = {{0}};\n")
     for m in reversed(decls):
         body = body[:m.start()] + body[m.end():]
     first = re.search(r"\{\n", body).end()
@@ -1411,9 +1569,22 @@ def wide_vectors(text: str, a: int) -> str:
     # (only the ones used as values: pieces, whole assignments, a register's. A 32-byte buffer
     # handed to callees by its address, `FUN_142484130(..., local_28, ...)`, is a C array as it
     # is; taken for a vector, FUN_14246c7b0's calls became wide paths, 2026-10-17)
+    # (and not a byte buffer: one indexed, `local_20[0] = 0;`, or decayed into a pointer local,
+    # `local_38 = local_20;`, a string's inline storage. Taken for a vector, both statements were
+    # wide paths and dropped, and the string's data pointer was left as stack garbage in
+    # FUN_1414e1f80 on the Login click, 2026-10-17)
+    pointers = set(re.findall(r"^\s*(?:const\s+)?\w+\s*\*+\s*(\w+)\s*;", text, re.M)) \
+        | set(re.findall(r"\*\s*(\w+)\s*[,)]", text.partition("{")[0]))
+    uses = WIDE_VAR_DECL.sub("", text)
+
+    def buffer(n: str) -> bool:
+        return bool(re.search(rf"(?<![\w.]){n}\s*\[", uses)) \
+            or any(lhs in pointers for lhs in re.findall(rf"\b(\w+)\s*=\s*{n}\s*;", uses))
+
     sizes = {n: s for n, s in sizes.items()
              if re.match(r"(?:in|unaff)_[XYZ]MM", n)
-             or re.search(rf"\b{n}\._\d+_\d+_|\b{n}\s*=(?!=)|=\s*{n}\s*;|[\^|&]\s*{n}\b|\b{n}\s*[\^|&]", text)}
+             or (not buffer(n)
+                 and re.search(rf"\b{n}\._\d+_\d+_|\b{n}\s*=(?!=)|=\s*{n}\s*;|[\^|&]\s*{n}\b|\b{n}\s*[\^|&]", text))}
     if not sizes and not WIDE_OP.search(text):
         return text
     head, _, body = text.partition("{")
@@ -1973,7 +2144,7 @@ CRT_ARITY = {"memmove": 3, "memset": 3, "memcpy": 3, "memcmp": 3, "strlen": 1, "
              "strchr": 2, "strrchr": 2, "strstr": 2, "strcpy": 2, "strncpy": 3, "strcat": 2, "free": 1,
              "malloc": 1, "_Init_thread_header": 1, "_Init_thread_footer": 1,
              # (CRT_ENTRY's: FUN_140279da8 hands realloc all four registers)
-             "realloc": 2, "calloc": 2, "_strdup": 1, "_wcsdup": 1}
+             "realloc": 2, "calloc": 2, "_strdup": 1, "_wcsdup": 1, "_endthreadex": 1}
 
 
 def crt_arity(body: str) -> str:
@@ -2370,9 +2541,17 @@ def load_data_sizes() -> dict[str, int]:
     out = subprocess.run([str(F.LLVM / "llvm-pdbutil.exe"), "pretty", "-globals", str(F.PORT_PDB)],
                          capture_output=True, text=True, errors="replace").stdout
     sizes = {}
-    for m in re.finditer(r"^\s*data \[0x[0-9a-f]+, sizeof=(\d+)\] .*?(\w+)(?:\[\d*\])*\s*$", out, re.M):
-        name, size = m.group(2), int(m.group(1))
-        sizes[name] = min(size, sizes.get(name, size))
+    for m in re.finditer(r"^\s*data \[0x[0-9a-f]+, sizeof=(\d+)\] (.*?)\s*$", out, re.M):
+        # (a function pointer, or an array of them, ends in its parameter list: `void (__cdecl *
+        # blz::g_logSinks[16])(const char*, ...)`. Read as the last word, it had no size, so the
+        # translated code's lock at +0x88 past the 0x80-byte array went to other port data, C4739
+        # unseen, 2026-10-17)
+        fp = re.search(r"\(\s*(?:__\w+\s*)?\*+\s*(?:\w+::)*(\w+)(?:\[\d*\])*\s*\)\s*\(", m.group(2))
+        plain = re.search(r"(\w+)(?:\[\d*\])*$", m.group(2))
+        name = fp.group(1) if fp else plain.group(1) if plain else None
+        if name:
+            size = int(m.group(1))
+            sizes[name] = min(size, sizes.get(name, size))
     return sizes
 
 
@@ -2455,6 +2634,18 @@ class Translator:
                 # 0x141f185d0 stayed untranslated and GlueLogin memset a null filter, 2026-10-14)
                 for g in t.get("held_by", ()):
                     self.vtables[int(g, 16)] = self.vtables[int(t["vtable"], 16)]
+        # the image's `jmp` thunks to the CRT_ENTRY routines (`jmp _calloc_base` at 0x140282ca8,
+        # padded with int3): curl_global_init stores the thunk, not the routine, so its calloc
+        # still landed on int3 and returned null after CRT_ENTRY had the routine (2026-10-17)
+        self.crt_thunks: dict[int, str] = {}
+        tbase = 0x140001000
+        o = self.ref.off(tbase)
+        text = bytes(self.ref.image[o:o + 0x260b5d3])
+        for m in re.finditer(rb"\xe9(....)\xcc", text, re.S):
+            a = tbase + m.start()
+            target = a + 5 + int.from_bytes(m.group(1), "little", signed=True)
+            if target in CRT_ENTRY and a % 8 == 0:
+                self.crt_thunks[a] = CRT_ENTRY[target]
         self._lifted: dict[int, str | None] = {}
         self.v16_failed: dict[int, str] = {}   # what tools/v16.py could not take, by function
         self._arity: dict[int, int | None] = {}
@@ -2481,7 +2672,8 @@ class Translator:
         # (and read again when what is cached is empty: the cache written while a build had the
         # PDB open held no procedure, no public and no data symbol, and two runs translated with
         # no view of the port at all, 2026-10-17. An empty read is an error, not a result)
-        stale = not PORT_CACHE.exists() or PORT_CACHE.stat().st_mtime < F.PORT_EXE.stat().st_mtime
+        # (no exe at all, after a clean: nothing is newer than the cache, which stands)
+        stale = not PORT_CACHE.exists() or (F.PORT_EXE.exists() and PORT_CACHE.stat().st_mtime < F.PORT_EXE.stat().st_mtime)
         if not stale:
             try:
                 old = json.loads(PORT_CACHE.read_text(encoding="utf-8"))
@@ -3120,7 +3312,7 @@ class Translator:
         def by_addr(target: int) -> int | str:
             # (and a runtime entry point called directly is the port's routine too, as a call
             # through its stored pointer is: see CRT_ENTRY)
-            return CRT_BY_ADDR.get(target) or CRT_ENTRY.get(target, target)
+            return CRT_BY_ADDR.get(target) or CRT_ENTRY.get(target) or self.crt_thunks.get(target, target)
 
         if "::" in name:
             cands = self.by_name.get(name, [])
@@ -3158,7 +3350,7 @@ class Translator:
             return bare
         if len(cands) == 1 and name not in self.port_public_names and bare not in self.port_public_names \
                 and bare not in CRT and bare not in C_LIBRARY:
-            return cands[0]
+            return by_addr(cands[0])
         return None
 
     def callees(self, text: str, own_name: str = "") -> set[int]:
@@ -3245,6 +3437,46 @@ class Translator:
             for n in range(len(params) + 1, max(extra) + 1):
                 params.append(f"{extra.get(n, 'undefined8')} param_{n}")
         return ret, m.group(2), params
+
+    LITERAL_COMPARE = re.compile(r'(?:([!=]=)\s*("(?:\\.|[^"\\\n])*"))|(?:("(?:\\.|[^"\\\n])*")\s*([!=]=))')
+
+    def literal_compares(self, a: int, body: str) -> str:
+        """A pointer compared with a string literal is compared with the reference's string:
+        Ghidra prints the `.rdata` address the instructions load as the text there, and C's
+        literal is another address, so the test came out "different" every time
+        (FUN_141c7a3b0's `local_58 != "unknown or exploit addon"`, C4130, 2026-10-17). The
+        address is the one this function loads (`lea`) whose bytes are that text."""
+        if not self.LITERAL_COMPARE.search(body) or a not in self.cor:
+            return body
+        f = self.callargs._functions.get(a) or callargs._Function(self.ref, a, self.cor[a]["size"])
+        loads = []
+        for i in f.ins:
+            for op in i.operands:
+                if i.mnemonic == "lea" and op.type == callargs.x86.X86_OP_MEM and op.mem.base == callargs.x86.X86_REG_RIP:
+                    loads.append(i.address + i.size + op.mem.disp)
+
+        def text_at(va: int) -> bytes | None:
+            try:
+                o = self.ref.off(va)
+            except Exception:
+                return None
+            end = self.ref.image.find(b"\0", o, o + 0x1000)
+            return bytes(self.ref.image[o:end]) if end >= 0 else None
+
+        def address_of(literal: str) -> int | None:
+            want = literal[1:-1].encode("latin-1", "backslashreplace").decode("unicode_escape").encode("latin-1")
+            hits = {t for t in loads if text_at(t) == want}
+            return hits.pop() if len(hits) == 1 else None
+
+        def swap(m):
+            op, lit = (m.group(1), m.group(2)) if m.group(1) else (m.group(4), m.group(3))
+            at = address_of(lit)
+            if at is None:
+                return m.group(0)
+            ref = f"((char *)REFP(0x{at:x}))"
+            return f"{op} {ref}" if m.group(1) else f"{ref} {op}"
+
+        return self.LITERAL_COMPARE.sub(swap, body)
 
     def held_global(self, addr: int):
         """(base, port global) when `addr` lies in a global the port holds, else None.
@@ -3361,7 +3593,7 @@ class Translator:
             if reason is None:
                 translate[a] = d
                 for b in self.callees(self.body(a), self.cor[a]["name"] if a in self.cor else ""):
-                    if b in seen or b in CRT_BY_ADDR or b in CRT_ENTRY or self.is_lib(b):
+                    if b in seen or b in CRT_BY_ADDR or b in CRT_ENTRY or b in self.crt_thunks or self.is_lib(b):
                         continue
                     if self.port_target(b) is not None and b not in roots:
                         adapt[b] = True
@@ -3478,7 +3710,30 @@ class Translator:
             if not re.search(rf"^\s*[\w ]+\**\s*{slot}\b", rest, re.M):
                 rest = "\n  undefined8 " + slot + ";" + rest
             rest = re.sub(rf"\b_{slot}\b", f"(*(undefined8 *)&{slot})", rest)
-        body = stack_frame(atomics("{" + rest), params)
+        body = param_slots(stack_frame(atomics("{" + rest), params), params)
+        # FLT_MAX as Ghidra prints it, shortest: a double literal past FLT_MAX that the compiler
+        # rounds back down and flags as an overflow (C4056/C4756 at 20 sites in 8 functions);
+        # the float.h constant is the exact value
+        body = re.sub(r"(?<![\w.])3\.4028235e\+38(?![\w.])", "FLT_MAX", body)
+        # Ghidra's `long` is 8 bytes and it writes an 8-byte constant `1L`; MSVC's long is 4, so
+        # `1L << (bVar22 & 0x3f)` shifted 32 bits and every bit past 31 of a 64-bit mask was lost
+        # (C4334 at 37 sites in 31 functions, 2026-10-17)
+        body = "".join(re.sub(r"(?<![\w.])((?:0x[0-9a-fA-F]+|\d+)U?)L\b", r"\1LL", piece) if k % 2 == 0 else piece
+                       for k, piece in enumerate(re.split(r'("(?:\\.|[^"\\\n])*")', body)))
+        # a `code *` local dereferenced as data: Ghidra merged a byte cursor with a code pointer
+        # (FUN_141ce0a80's strcpy loop, `*pcVar28 = *pcVar37;`), and C reads `*pcVar28` as the
+        # function itself: an assignment to it is C4550 and stores nothing. A call, `(*pcVar28)(`,
+        # stays a call
+        body = self.literal_compares(a, body)
+        # the address of a frame local returned: what rax was left holding (FUN_1402e1000's loop
+        # sentinel `lea rax, [rbp-0x40]`, FUN_1418b28d0's), a pointer into a frame that is gone.
+        # No caller of either reads it (their next instructions do not touch rax); C4172, 2026-10-17
+        body = re.sub(r"^([ \t]*)return\s+(?:\((?:\w+\s*)+\*+\s*\)\s*)?(?:&\(\*\([^;]*?\)\(gen_frame \+ 0x[0-9a-f]+\)\)"
+                      r"|\(\((?:\w+\s*)+\*+\)\(gen_frame \+ 0x[0-9a-f]+\)\));$", r"\1return 0;", body, flags=re.M)
+        for name in re.findall(r"^\s*code\s*\*\s*(\w+)\s*;", body, re.M):
+            data = re.compile(rf"(?<![\w)\]])\*\s*{name}\b(?!\s*\))")
+            body = "\n".join(l if re.match(rf"^\s*code\s*\*\s*{name}\s*;", l) else data.sub(f"(*(undefined1 *){name})", l)
+                             for l in body.split("\n"))
         for name in upper_half_only(body):
             body = re.sub(rf"^(\s*[\w ]+ {name});$", r"\1 = 0;", body, count=1, flags=re.M)
         # switch cases are labels Ghidra qualifies with `::`
@@ -3616,13 +3871,38 @@ class Translator:
                 # FUN_141283140 divides by `_DAT_142cfbe58`, a float load factor
                 # (`divss xmm0, dword ptr [0x142cfbe58]`) over an undefined1, and read one byte of
                 # it: 0, a quotient of inf and a bucket count that wrapped (2026-10-15).
-                seen = self.callargs.global_accesses(a, self.cor[a]["size"]).get(addr, set())
+                # (a vector access at x, 16 bytes, says nothing of a scalar's width: the pieces
+                # rule below takes it)
+                seen = {(n, k) for n, k in self.callargs.global_accesses(a, self.cor[a]["size"]).get(addr, set()) if n <= 8}
                 if len(seen) == 1:
                     n, kind = next(iter(seen))
                     t = {(4, "x"): "float", (8, "x"): "double", (1, "i"): "undefined1", (2, "i"): "undefined2",
                          (4, "i"): "undefined4", (8, "i"): "undefined8"}.get((n, kind))
                     if t is not None and (n != size or (kind == "x") != (gtype in ("float", "double"))):
                         size, gtype = n, t
+                elif wide and seen and all(k == "i" for _n, k in seen):
+                    # (several integer widths at x: Ghidra's wider view is the widest of them.
+                    # FUN_1402ef340 reads `_DAT_142e25a14` a byte at a time and writes it as a
+                    # dword; at the item's one byte, `>> 0x18` was always 0, C4333, 2026-10-17)
+                    n = max(n for n, _k in seen)
+                    if n > size:
+                        size, gtype = n, f"undefined{n}"
+                elif not seen and not gtype.startswith(("float", "double")):
+                    # (no access at x itself: x is inside a wider access from below, a 16-byte
+                    # load, which Ghidra splits into the pieces the function names. x's piece runs
+                    # to the next one named, or to the access's end, at most 8 bytes.
+                    # `_DAT_14261aa18 >> 0x20` on the 4-byte item was undefined (C4293 in
+                    # FUN_1418b21a0), and FUN_1420c6200's 4-byte pieces of the constant at
+                    # 0x1428e4a80 took the 8-byte default (C4319), 2026-10-17)
+                    allacc = self.callargs.global_accesses(a, self.cor[a]["size"])
+                    ends = [y + w for y, ws in allacc.items() for w, _k in ws if y <= addr < y + w and w > 8]
+                    named = sorted(int(x, 16) for x in re.findall(r"\b_?(?:DAT|UNK)_([0-9a-f]{9})\b", body))
+                    nxt = next((x for x in named if x > addr), None)
+                    if ends:
+                        end = max(ends) if nxt is None else min(max(ends), nxt)
+                        n = min(8, end - addr)
+                        if n in (1, 2, 4, 8) and (wide and n != size or addr not in self.refdata):
+                            size, gtype = n, f"undefined{n}"
                 # (and read 8 bytes wide and dereferenced, `lVar1 = *_DAT_142d01560;`: a pointer, to
                 # what its casts say or to 8-byte slots)
                 if wide and size == 8 and gtype.startswith("undefined") and addr in derefed:
@@ -3742,11 +4022,22 @@ class Translator:
         body = self.float_arguments(body, params)
         # callers are unprototyped, so a float argument arrives promoted to double
         decls, narrow = [], []
-        for p in params:
+        for k, p in enumerate(params):
             m = re.match(r"^(?:float|float4)\s+(\w+)$", p)
+            s = re.fullmatch(r"\s*((?:unsigned |signed )*\w+)\s+(param_\d+)\s*", p)
             if m:
                 decls.append(f"double {m.group(1)}_promoted")
                 narrow.append(f"  float {m.group(1)} = (float){m.group(1)}_promoted;")
+            elif k >= 4 and s and s.group(1).split()[-1] in NARROW_TYPES and s.group(1).split()[-1] != "float" \
+                    and not any(x.strip() == "..." for x in params):
+                # (not a variadic one: translated.h declares those with their parameters as typed)
+                # a stack argument is an 8-byte slot, and every caller (unprototyped, through
+                # CALLF) writes it whole: declared narrower, the definition disagreed with the
+                # call, C4789 where the two met (FUN_141f24bb0 handing FUN_141f198c0's undefined2
+                # param_5 0xfffd, 2026-10-17). The value is the slot's low bytes, as the
+                # reference's callee reads it
+                decls.append(f"unsigned long long {s.group(2)}_slot")
+                narrow.append(f"  {s.group(1)} {s.group(2)} = ({s.group(1)}){s.group(2)}_slot;")
             else:
                 decls.append(p)
         if narrow:
@@ -3772,7 +4063,16 @@ class Translator:
             if pm and not re.search(rf"\(\*\s*{pm.group(1)}\)\s*\(|\b{pm.group(1)}\s*\(", body):
                 v = pm.group(1)
                 body = re.sub(rf"(?<![\w.>])\b{v}\b(?=\s*(?:\[|[+-]\s))", f"((undefined1 *){v})", body)
-        # only a body that is taken holds the port's globals
+        body = explicit_casts(body, params)
+        body = zero_locals(body)
+        # a function that ends in a call that does not return (std::_Xlength_error's throw, a
+        # thread's _endthreadex): the reference has int3 after it, not a return value. As C it
+        # fell off the end of a non-void function (C4716 in 4 functions, 2026-10-17); a trap there
+        # is what the reference does should the call ever come back (the break for a debugger,
+        # then the end an unhandled int3 would be; __fastfail is what C knows does not return)
+        if ret.strip() != "void":
+            body = re.sub(r"(/\* WARNING: Subroutine does not return \*/\s*\n[^\n]*;\n)(\}\s*)$",
+                          r"\1  __debugbreak();\n  __fastfail(7);\n  __assume(0);\n\2", body.rstrip() + "\n")
         self.global_aliases.update(aliases)
         self.exported.update(exported)
         return f"{ret} FUN_{a:x}({', '.join(decls) or 'void'})\n{body.rstrip()}\n"
@@ -3868,9 +4168,15 @@ class Translator:
         for name, funcs in sorted(by_file.items()):
             k = name[len("translated_"):-2]
             out = ["/* GENERATED by tools/translate.py from build/corpus.jsonl; do not edit by hand. */",
+                   # (not disabled, since 2026-10-17: what can be a translation defect rather than
+                   # Ghidra's style. 4700/4701/4703 a local read before any store (a register the
+                   # decompiler lost), 4715/4716 a path without a return value, 4334 a 32-bit
+                   # shift widened after it overflowed, 4307 a constant that overflowed, 4098 a void
+                   # function returning a value. 4554, precedence, stays off: Ghidra prints by C's
+                   # grammar, `a >> b & c`, 1,355 sites of style)
                    "#include \"gen/translated.h\"", "#pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 "
-                   "4244 4267 4305 4306 4307 4310 4312 4389 4700 4701 4702 4703 4715 4716 4100 4101 4102 4146 "
-                   "4018 4057 4098 4113 4152 4204 4459 4456 4457 4127 4334 4554 4805 4800 4996)",
+                   "4244 4267 4305 4306 4310 4312 4389 4554 4702 4100 4101 4102 4146 "
+                   "4018 4057 4113 4152 4204 4459 4456 4457 4127 4805 4800 4996)",
                    # a call count per function (written out under FROST_HITS): which translated
                    # code a run reaches, and how often, for choosing what to port by hand
                    f"#define GEN_HITS gen_hits_{k}", f"unsigned int gen_hits_{k}[{len(funcs)}];", ""]
@@ -3904,7 +4210,7 @@ class Translator:
                 return f"{ret} FUN_{a:x}({', '.join(params)});"
             return f"{ret} FUN_{a:x}();"
 
-        imports = set().union(*self._imports.values()) if self._imports else set()
+        imports = (set().union(*self._imports.values()) if self._imports else set()) | CRT_ENTRY_IMPORTS
         dlls = set().union(*self._dlls.values()) if self._dlls else set()
         prototypes = [prototype(a) for a in sorted(set(plan["translate"]) | set(plan["adapt"]) | set(plan["stub"]))]
         header = ["/* GENERATED by tools/translate.py; do not edit by hand. */",
@@ -3915,14 +4221,22 @@ class Translator:
                    for d in sorted(dlls)]
         header += [f"__declspec(dllimport) unsigned long long {name}();" for name in sorted(imports)]
         # the port's own globals, where the translated code would read the image's
+        # (declared at the port object's own size from the PDB: as a `char` every access wider
+        # than a byte was C4739, 115 of them in 57 functions, all inside the object, and a real
+        # overrun could not be told from them; 2026-10-17)
+        def storage(g: dict) -> str:
+            return f"unsigned char gen_g_{{}}[{g['size']}]" if g.get("size") else "char gen_g_{}"
+
         for base, mangled in sorted(self.global_aliases.items()):
-            header += [f"/* {self.held[base]['name']} ({self.held[base]['file']}) */",
+            g = self.held[base]
+            header += [f"/* {g['name']} ({g['file']}) */",
                        f"#pragma comment(linker, \"/alternatename:gen_g_{base:x}={mangled}\")",
-                       f"extern char gen_g_{base:x};"]
+                       f"extern {storage(g).format(f'{base:x}')};"]
         for base, g in sorted(self.exported.items()):
+            cast = f"(*(unsigned char (*)[{g['size']}])gen_p_{base:x})" if g.get("size") else f"(*(char *)gen_p_{base:x})"
             header += [f"/* {g['name']} ({g['file']}), internal: through its pointer */",
                        f"extern void *const gen_p_{base:x};",
-                       f"#define gen_g_{base:x} (*(char *)gen_p_{base:x})"]
+                       f"#define gen_g_{base:x} {cast}"]
         write_exports(self.exported)
         header += prototypes + ["", "#endif", ""]
         write_out(GEN / "translated.h", "\n".join(header), encoding="utf-8", newline="\n")
@@ -4016,7 +4330,10 @@ class Translator:
         # that caller, as a guarded handler does, rather than unwinding through the port's frames
         # (their locks and cleanup) to some outer guard.
         jumps = ["/* GENERATED by tools/translate.py; do not edit by hand. */", "#include \"gen/translated.h\"",
-                 "#include <excpt.h>", "#pragma warning(disable: 4013 4024 4047 4133 4244 4305 4312 4100)", "",
+                 # (4232: a runtime routine's address in the table is its import thunk's, not
+                 # "the" function's; only a callable target matters here)
+                 "#include <excpt.h>", "#pragma warning(disable: 4013 4024 4047 4133 4244 4305 4312 4100 4232)", "",
+                 "struct _EXCEPTION_POINTERS;",
                  "int GenFault(unsigned long long address, struct _EXCEPTION_POINTERS* info);", ""]
         entry_of = {}
         for a in sorted(plan["translate"]):
@@ -4041,7 +4358,7 @@ class Translator:
                   "const GENJUMP g_genJumps[] = {"]
         reachable = sorted(set(plan["translate"]) | set(plan["adapt"]))
         jumps += [f"    {{ 0x{a:x}ULL, (void*)&{entry_of.get(a, f'FUN_{a:x}')} }}," for a in reachable]
-        crt = [(a, name) for a, name in sorted(CRT_ENTRY.items()) if a not in set(reachable)]
+        crt = [(a, name) for a, name in sorted({**CRT_ENTRY, **self.crt_thunks}.items()) if a not in set(reachable)]
         jumps += [f"    {{ 0x{a:x}ULL, (void*)&{name} }}," for a, name in crt]
         jumps += ["    { 0, 0 }", "};", f"const size_t g_genJumpCount = {len(reachable) + len(crt)};", ""]
         write_out(GEN / "jumps.c", "\n".join(jumps), encoding="utf-8", newline="\n")
@@ -4198,12 +4515,42 @@ def report_faults(log: Path) -> None:
             print(f"      the object is likely: {', '.join(suspects)}")
 
 
+INDIRECT_ROOTS = ROOT / "data/indirect_roots.json"
+HIT = re.compile(r"\[unimplemented\] reference FUN_([0-9a-f]{9}) \(translated code reached it\)")
+
+
+def load_indirect_roots() -> set[int]:
+    """Functions a run saw translated code reach through a pointer (a vtable slot, a callback, a
+    table in data). No static rule finds them all: the pointers come from descriptor structs and
+    registrations the planner cannot follow (a measured rule over the data items translated code
+    names covered none of eleven such hits and added ~600 functions, 2026-10-17). A run names
+    them exactly, on the int3 each one landed on, so they are roots like the hand forwarders."""
+    if not INDIRECT_ROOTS.exists():
+        return set()
+    return {int(k, 16) for k in json.loads(INDIRECT_ROOTS.read_text(encoding="utf-8"))}
+
+
+def harvest_roots(log: Path) -> None:
+    roots = json.loads(INDIRECT_ROOTS.read_text(encoding="utf-8")) if INDIRECT_ROOTS.exists() else {}
+    stamp = datetime.date.today().isoformat()
+    added = []
+    for m in HIT.finditer(log.read_text(encoding="utf-8", errors="replace")):
+        key = f"0x{m.group(1)}"
+        if key not in roots:
+            roots[key] = f"reached through a pointer, {stamp}"
+            added.append(key)
+    INDIRECT_ROOTS.write_text(json.dumps(dict(sorted(roots.items())), indent=1) + "\n", encoding="utf-8")
+    print(f"{len(added)} new roots ({len(roots)} in all): {' '.join(added)}")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--risks", action="store_true", help="list the port objects translated code reads, and stop")
     ap.add_argument("--faults", metavar="LOG", help="map a run log's translated faults to source, and stop")
     ap.add_argument("--handlers", action="store_true", help="the stubbed Lua API handlers as roots")
     ap.add_argument("--addr", nargs="*", default=[], help="more roots")
+    ap.add_argument("--harvest", metavar="LOG",
+                    help="add a run log's int3 hits (functions reached through pointers) to data/indirect_roots.json, and stop")
     ap.add_argument("--depth", type=int, default=2)
     ap.add_argument("--fix", action="store_true", help="build, demote what fails to compile, repeat")
     ap.add_argument("--why", action="store_true",
@@ -4226,6 +4573,8 @@ def main() -> None:
         return
     if args.faults:
         return report_faults(Path(args.faults))
+    if args.harvest:
+        return harvest_roots(Path(args.harvest))
 
     handlers = {}
     if args.handlers:
@@ -4236,7 +4585,8 @@ def main() -> None:
         if not path.relative_to(ROOT).as_posix().startswith("src/gen/"):
             forwarded |= {int(a, 16) for a in re.findall(r"^// translated: FUN_([0-9a-f]{9})$",
                                                          path.read_text(errors="replace"), re.M)}
-    roots = sorted(set(handlers) | forwarded | {int(a.lower().removeprefix("fun_"), 16) for a in args.addr})
+    roots = sorted(set(handlers) | forwarded | load_indirect_roots()
+                   | {int(a.lower().removeprefix("fun_"), 16) for a in args.addr})
     if args.fix and DEMOTED.exists():
         # every demotion is retried: what failed to compile under an older translator may
         # compile now (a recovered argument, a type), and the loop below re-demotes what does not
@@ -4248,6 +4598,8 @@ def main() -> None:
     t0 = time.time()
     print("loading the corpus and the port's PDB ...", file=sys.stderr, flush=True)
     t = Translator(args.depth)
+    # (a root that is a runtime entry or a thunk to one is the port's routine, never translated)
+    roots = [r for r in roots if r not in CRT_ENTRY and r not in t.crt_thunks]
     t.prepare(sorted(set(roots) | set(t.static_initializers())))
     demoted = {} if args.fix else dict(t.demoted)
     files_before = {p.name for p in GEN.glob("translated_*.c")}

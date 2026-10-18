@@ -414,7 +414,7 @@ int Script_hooksecurefunc(lua_State* L) {
 }
 
 // ref: FUN_1406524e0
-int Script_debugprofilestart(lua_State* L) {
+int Script_debugprofilestart(lua_State* /*L*/) {
     s_debugProfileStart = OsTimerGetTicks();
     return 0;
 }

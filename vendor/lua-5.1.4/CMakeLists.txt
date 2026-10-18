@@ -33,5 +33,5 @@ add_library(lua STATIC
 )
 target_include_directories(lua PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 if(MSVC)
-    target_compile_options(lua PRIVATE /W0)
+    frost_warning_level(lua /W0)
 endif()

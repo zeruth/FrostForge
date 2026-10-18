@@ -35,7 +35,7 @@ float g_groundEffectFade;               // DAT_1430ab9c8
 uint8_t g_groundEffectAnimation;        // DAT_1430ab9cc
 float g_wmoDoodadDist;                  // DAT_1430ab9d0
 uint32_t g_worldRenderFlags = 0x37ffff; // DAT_1430ab9d4
-uint8_t g_worldOptionsChanged;          // DAT_1430abef8
+uint32_t g_worldOptionsChanged;         // DAT_1430abef8 (a dword: every reference access is)
 uint8_t g_dayNightMultithreaded;        // DAT_1430ab790
 float g_groundEffectDist = 70.0f;       // DAT_142d00c20
 float g_entityShadowFadeScale = 10.0f;  // DAT_142d00c28

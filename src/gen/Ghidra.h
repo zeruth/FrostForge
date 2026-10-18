@@ -7,6 +7,8 @@
 #ifndef GEN_GHIDRA_H
 #define GEN_GHIDRA_H
 
+#include <float.h>
+#include <process.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -342,9 +344,9 @@ static __inline double GEN_AS_FLOAT(unsigned long long bits) {
 #include <intrin.h>
 #define GEN_ATOMIC_(op, lv, v) \
     (sizeof(lv) == 8 ? (long long)_Interlocked##op##64((volatile long long *)&(lv), (long long)(v)) \
-     : sizeof(lv) == 4 ? (long long)_Interlocked##op((volatile long *)&(lv), (long)(v)) \
-     : sizeof(lv) == 2 ? (long long)_Interlocked##op##16((volatile short *)&(lv), (short)(v)) \
-     : (long long)_Interlocked##op##8((volatile char *)&(lv), (char)(v)))
+     : sizeof(lv) == 4 ? (long long)_Interlocked##op((volatile long *)&(lv), (long)(long long)(v)) \
+     : sizeof(lv) == 2 ? (long long)_Interlocked##op##16((volatile short *)&(lv), (short)(long long)(v)) \
+     : (long long)_Interlocked##op##8((volatile char *)&(lv), (char)(long long)(v)))
 /* a piece of a variable 3, 5, 6 or 7 bytes wide (`local_1e4._0_3_`), read and written in place */
 static __inline unsigned long long GEN_PIECE(const void *p, int off, int n) {
     unsigned long long x = 0;
@@ -519,11 +521,13 @@ static unsigned long long gen_ud2(void) { __ud2(); }
 /* cmpxchg: stores `v` when the lvalue holds `cmp`; the value it held either way */
 /* a locked instruction Ghidra kept nothing of (`lock or [rsp], 0`): a full memory fence */
 #define GEN_FENCE() __faststorefence()
+/* (every width's branch is compiled and only lv's runs: the narrow ones convert through long long,
+   so a pointer lvalue's 8-byte case does not warn of truncation in branches it never takes) */
 #define GEN_ATOMIC_CAS(lv, v, cmp) \
     (sizeof(lv) == 8 ? (long long)_InterlockedCompareExchange64((volatile long long *)&(lv), (long long)(v), (long long)(cmp)) \
-     : sizeof(lv) == 4 ? (long long)_InterlockedCompareExchange((volatile long *)&(lv), (long)(v), (long)(cmp)) \
-     : sizeof(lv) == 2 ? (long long)_InterlockedCompareExchange16((volatile short *)&(lv), (short)(v), (short)(cmp)) \
-     : (long long)_InterlockedCompareExchange8((volatile char *)&(lv), (char)(v), (char)(cmp)))
+     : sizeof(lv) == 4 ? (long long)_InterlockedCompareExchange((volatile long *)&(lv), (long)(long long)(v), (long)(long long)(cmp)) \
+     : sizeof(lv) == 2 ? (long long)_InterlockedCompareExchange16((volatile short *)&(lv), (short)(long long)(v), (short)(long long)(cmp)) \
+     : (long long)_InterlockedCompareExchange8((volatile char *)&(lv), (char)(long long)(v), (char)(long long)(cmp)))
 
 /* Ghidra's `cpuid` pseudo-functions: the leaf's registers as Ghidra's x86 spec reads them back,
    EAX, EBX, EDX, ECX (per thread, as the instruction's registers are) */

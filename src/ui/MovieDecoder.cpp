@@ -18,10 +18,14 @@
 #include "ui/CRenderBatch.hpp"
 #include "util/Unimplemented.hpp"
 
+// (libvpx's headers define a static typed wrapper per control id; the unused ones are C4505)
+#pragma warning(push)
+#pragma warning(disable : 4505)
 extern "C" {
 #include "vpx/vp8dx.h"
 #include "vpx/vpx_decoder.h"
 }
+#pragma warning(pop)
 
 extern GxRenderContext* g_gxRenderContext;  // DAT_14348b658
 

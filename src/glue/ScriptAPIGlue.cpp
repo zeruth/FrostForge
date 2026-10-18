@@ -34,8 +34,11 @@ extern "C" {
 #include "lua.h"
 }
 
-// The character list's size (DAT_143122480), set by the character list when it arrives.
-int32_t g_numCharacters;  // DAT_143122480
+// The character list's size (DAT_143122480), set by the character list when it arrives: the
+// size word of the list's vector (its data at 0x143122478, entries 0x30 bytes), 64 bits. As an
+// int32_t, the reference's `_DAT_143122480 = 0` (GetCharacterListUpdate's clear, a qword
+// store) ran 4 bytes past it into other port data, C4739, 2026-10-17.
+uint64_t g_numCharacters;  // DAT_143122480
 // The glue screen's display state (DAT_14311c534): 2 once the first screen has been shown.
 int32_t g_glueScreenDisplayState;
 // The live region's character services (DAT_1431227b3..5), from the realm list.
@@ -219,7 +222,7 @@ int Lua_IsMacClient(lua_State* L) {
 // ref: FUN_140cec430
 int Lua_GetNumCharacters(lua_State* L) {
     // FUN_14168fbf0
-    int32_t count = g_numCharacters;
+    int32_t count = static_cast<int32_t>(g_numCharacters);
     if (!lua_checkstack(L, 1)) {
         luaL_error(L, "stack overflow");
         return 0;

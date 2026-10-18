@@ -183,7 +183,7 @@ void CM2Model::AnimateBone(const M2CompBone* bone, M2BoneState* state, uint32_t 
 
         // The blend weight: the parent's, or this bone's own blend easing in.
         M2SequenceTime* primary = state->m_sequence;
-        float weight;
+        float weight = 0.0f;  // (set on every path below)
         bool ownBlend = false;
         if (primary->m_nextSequence == 0xffff || (state->m_flags & 0x2000) == 0) {
             if (state->m_blendSequence != nullptr && state->m_blendSequence->m_nextSequence != 0xffff

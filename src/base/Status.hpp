@@ -38,7 +38,7 @@ class CStatus {
     // class ignores the file and hands out a shared dummy position.
     virtual void Unknown08() {}
     virtual void Add(const CStatus& other);
-    virtual void SetFile(const uint32_t* file) {}
+    virtual void SetFile(const uint32_t* /*file*/) {}
     virtual void* GetLocation();
     virtual void AddV(int32_t severity, const char* format, va_list args);
     virtual void PrependV(int32_t severity, const char* format, va_list args);

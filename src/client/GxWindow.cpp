@@ -227,7 +227,7 @@ bool WindowFitToMonitor(uint32_t monitorIndex, float aspect, int32_t* rect, uint
         newBottom = info.rcWork.bottom;
         if (aspect != 0.0f) {
             int32_t heightSpan = info.rcWork.bottom - y;
-            float columns;
+            float columns = 0.0f;  // (set by the search or after it)
             bool found = false;
             for (int32_t h = heightSpan - frameHeight; height / 2 <= h; h--) {
                 float w = static_cast<float>(h) * aspect;

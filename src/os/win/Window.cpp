@@ -785,16 +785,16 @@ void HandleRawInput(HRAWINPUT input) {
         float rawX = static_cast<float>(raw.data.mouse.lLastX);
         float rawY = static_cast<float>(raw.data.mouse.lLastY);
         float speed = std::sqrt(rawY * rawY + rawX * rawX);
-        float input = speed * s_mouseAccelScale / s_mouseAccelBase;
+        float scaled = speed * s_mouseAccelScale / s_mouseAccelBase;
         int32_t segment = 1;
-        while (segment < 4 && input > s_mouseCurve[segment][0]) {
+        while (segment < 4 && scaled > s_mouseCurve[segment][0]) {
             segment++;
         }
         float x0 = s_mouseCurve[segment - 1][0];
         float x1 = s_mouseCurve[segment][0];
         float clamped = x0;
-        if (x0 <= input) {
-            clamped = input <= x1 ? input : x1;
+        if (x0 <= scaled) {
+            clamped = scaled <= x1 ? scaled : x1;
         }
         float y0 = s_mouseCurve[segment - 1][1];
         float y1 = s_mouseCurve[segment][1];

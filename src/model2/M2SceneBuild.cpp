@@ -1502,7 +1502,7 @@ bool M2SceneModelElements(CM2Scene* scene, M2SceneDrawList* list, BaseModelDrawP
             elementFlags);
         element->SetBatch(i, batch, reinterpret_cast<const uint16_t*>(baseMaterial));
         element->SetFaded(7 < pass);
-        float screen;
+        float screen = 0.0f;  // (set on both paths below)
         bool computeDistance = false;
         if ((model->m_createFlags & 0x10) == 0) {
             if (7 < pass) {

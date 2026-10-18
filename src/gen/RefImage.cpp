@@ -1,6 +1,7 @@
 #include "gen/RefImage.hpp"
 
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <algorithm>
 #include <mutex>
@@ -92,6 +93,50 @@ void StartHitDump() {
     CloseHandle(CreateThread(nullptr, 0, HitDumpThread, path, 0, nullptr));
 }
 
+// A write watch on one 8-byte slot of the image (FROST_WATCH=<hex address>), for a value that
+// arrives through a pointer no static search follows: the main thread's first debug register,
+// set from inside a handler (a running thread cannot set its own), and each write logged with
+// the new value and the writer's stack. The first 16 writes are logged.
+constexpr DWORD kArmWatch = 0xE0F05701;
+uint64_t s_watch = 0;
+LONG s_watchHits = 0;
+
+LONG CALLBACK WatchHandler(EXCEPTION_POINTERS* info) {
+    DWORD code = info->ExceptionRecord->ExceptionCode;
+    CONTEXT* context = info->ContextRecord;
+    if (code == kArmWatch) {
+        context->Dr0 = s_watch;
+        // local enable 0, break on write (RW0 = 01), 8 bytes (LEN0 = 10)
+        context->Dr7 = (context->Dr7 & ~0xF0003ull) | 1ull | (1ull << 16) | (2ull << 18);
+        return EXCEPTION_CONTINUE_EXECUTION;
+    }
+    if (code == EXCEPTION_SINGLE_STEP && (context->Dr6 & 1)) {
+        context->Dr6 &= ~0xFull;
+        if (InterlockedIncrement(&s_watchHits) <= 16) {
+            FrostLog("watch", "%llx written: now %llx", static_cast<unsigned long long>(s_watch),
+                     static_cast<unsigned long long>(*reinterpret_cast<volatile uint64_t*>(s_watch)));
+            FrostLogContextStack(context, 12);
+        }
+        return EXCEPTION_CONTINUE_EXECUTION;
+    }
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+
+void StartWatch() {
+    char value[32];
+    DWORD length = GetEnvironmentVariableA("FROST_WATCH", value, sizeof(value));
+    if (length == 0 || length >= sizeof(value)) {
+        return;
+    }
+    s_watch = std::strtoull(value, nullptr, 16) & ~7ull;
+    if (s_watch == 0) {
+        return;
+    }
+    AddVectoredExceptionHandler(1, WatchHandler);
+    RaiseException(kArmWatch, 0, 0, nullptr);
+    FrostLog("watch", "watching writes to %llx on this thread", static_cast<unsigned long long>(s_watch));
+}
+
 bool RunInitializer(uint64_t address) {
     __try {
         reinterpret_cast<void (*)()>(address)();
@@ -113,6 +158,19 @@ uint64_t s_pool = 0;
 std::mutex s_reportedLock;
 std::unordered_set<uint64_t>* s_reported;
 
+// Logs a reference function translated code reached, once; true the first time.
+bool ReportUnimplemented(uint64_t address) {
+    std::lock_guard<std::mutex> guard(s_reportedLock);
+    if (s_reported == nullptr) {
+        s_reported = new std::unordered_set<uint64_t>();
+    }
+    if (!s_reported->insert(address).second) {
+        return false;
+    }
+    FrostLog("unimplemented", "reference FUN_%llx (translated code reached it)", static_cast<unsigned long long>(address));
+    return true;
+}
+
 LONG CALLBACK TrapHandler(EXCEPTION_POINTERS* info) {
     if (info->ExceptionRecord->ExceptionCode != EXCEPTION_BREAKPOINT) {
         return EXCEPTION_CONTINUE_SEARCH;
@@ -122,7 +180,10 @@ LONG CALLBACK TrapHandler(EXCEPTION_POINTERS* info) {
     if (address < kTextStart || address >= kTextEnd) {
         return EXCEPTION_CONTINUE_SEARCH;
     }
-    GenUnimplemented(address);
+    if (ReportUnimplemented(address)) {
+        // (who called it: the int3 is the callee's first byte, its return address on top)
+        FrostLogContextStack(context, 8);
+    }
     // return 0 to the caller, as an empty function would
     context->Rax = 0;
     context->Rip = *reinterpret_cast<uint64_t*>(context->Rsp);
@@ -133,14 +194,7 @@ LONG CALLBACK TrapHandler(EXCEPTION_POINTERS* info) {
 }
 
 extern "C" void GenUnimplemented(uint64_t address) {
-    std::lock_guard<std::mutex> guard(s_reportedLock);
-    if (s_reported == nullptr) {
-        s_reported = new std::unordered_set<uint64_t>();
-    }
-    if (s_reported->insert(address).second) {
-        FrostLog("unimplemented", "reference FUN_%llx (translated code reached it)",
-                 static_cast<unsigned long long>(address));
-    }
+    ReportUnimplemented(address);
 }
 
 // The exception filter around a translated Lua handler (src/gen/handlers.cpp): a hardware fault
@@ -180,8 +234,8 @@ bool RefImageInitialize(const char* path) {
         FrostLog("refimage", "%s not found: translated code disabled", path);
         return false;
     }
-    IMAGE_DOS_HEADER dos;
-    IMAGE_NT_HEADERS64 nt;
+    IMAGE_DOS_HEADER dos = {};
+    IMAGE_NT_HEADERS64 nt = {};
     bool ok = std::fread(&dos, sizeof(dos), 1, file) == 1 && dos.e_magic == IMAGE_DOS_SIGNATURE
         && std::fseek(file, dos.e_lfanew, SEEK_SET) == 0 && std::fread(&nt, sizeof(nt), 1, file) == 1
         && nt.Signature == IMAGE_NT_SIGNATURE && nt.OptionalHeader.ImageBase == 0x140000000ull;
@@ -267,6 +321,7 @@ bool RefImageInitialize(const char* path) {
     // the image's own static initializers (its CRT table), the ones translated: they construct
     // the reference's globals (locks, lists, tables) as its startup would have, so translated
     // code finds them built rather than zeroed. Each goes through its guarded entry.
+    StartWatch();
     size_t ran = 0;
     for (size_t i = 0; i < g_genInitCount; i++) {
         ran += RunInitializer(g_genInits[i]);

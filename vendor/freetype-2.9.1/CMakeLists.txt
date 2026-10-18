@@ -45,5 +45,5 @@ target_include_directories(freetype PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_definitions(freetype PRIVATE FT2_BUILD_LIBRARY _CRT_SECURE_NO_WARNINGS)
 if(MSVC)
     # Upstream code, built as is.
-    target_compile_options(freetype PRIVATE /W0)
+    frost_warning_level(freetype /W0)
 endif()

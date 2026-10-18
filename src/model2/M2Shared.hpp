@@ -15,7 +15,7 @@
 #include "storm/list/TSLink.hpp"
 #include "storm/list/TSList.hpp"
 
-class CAsyncObject;
+struct CAsyncObject;  // (a struct where it is defined, fileservices/AsyncFile.hpp; C4099)
 class CM2Model;
 class CShaderEffect;
 struct GxBuf;

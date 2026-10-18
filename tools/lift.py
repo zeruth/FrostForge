@@ -132,9 +132,28 @@ def _lift(binary, address: int, limit: int):
     reads: set[str] = set()       # argument registers read: the arguments the code takes
     stack_args: set[int] = set()  # stack arguments read (a4 on)
     set_here: set[str] = set()    # registers the code itself has set
-    flags = {"kind": None}        # what the last flag-setting instruction left
+    # The flags live in three variables every flag-setting instruction writes (`fa`, `fb` a
+    # compare's operands, `fr` a result), so a jump carries its own path's flags to the label it
+    # lands on. What is known statically is only their kind and width, which every path into a
+    # label must agree on. (Kept as fresh names per instruction, a label read the flags of the
+    # instruction textually before it: FUN_14168eff0's `ja` after `jne` from a 64-bit compare of
+    # the high halves tested the low halves' compare that path never ran, C4700, 2026-10-17)
+    flags = {"kind": None}        # the kind and width of what the flag variables hold here
+    incoming: dict[int, list[tuple]] = {}   # label -> the flag states jumps bring to it
+    fallthrough = [True]          # whether the previous instruction can run into this one
     fcount = [0]
     callees = []
+
+    def state() -> tuple:
+        return (flags.get("kind"), flags.get("width"))
+
+    # the label whose incoming flags the code since it still depends on, and the labels whose
+    # code read flags before setting any: only those care what a jump back brings
+    since_label = [None]
+    label_reads: set[int] = set()
+
+    def arrive(target: int):
+        incoming.setdefault(target, []).append(state())
 
     def reg(full: str) -> str:
         return f"r_{full}"
@@ -228,19 +247,20 @@ def _lift(binary, address: int, limit: int):
 
     def keep_result(width: int, value: str):
         """Flags of a result: kept as the value, read as zero/sign tests."""
-        name = f"f{fcount[0]}"
-        fcount[0] += 1
-        lines.append(f"  {CTYPE[width]} {name} = ({CTYPE[width]})({value});")
-        flags.update(kind="result", r=name, width=width)
+        lines.append(f"  fr = (ulonglong)({CTYPE[width]})({value});")
+        flags.update(kind="result", r=f"(({CTYPE[width]})fr)", width=width)
+        since_label[0] = None
 
     def keep_compare(width: int, a: str, b: str):
-        names = (f"f{fcount[0]}", f"f{fcount[0] + 1}")
-        fcount[0] += 2
-        lines.append(f"  {CTYPE[width]} {names[0]} = ({CTYPE[width]})({a});")
-        lines.append(f"  {CTYPE[width]} {names[1]} = ({CTYPE[width]})({b});")
-        flags.update(kind="compare", a=names[0], b=names[1], width=width)
+        # (both operands are read before either is stored: `cmp rax, [rax]`'s b reads rax)
+        lines.append(f"  {{ ulonglong ca = (ulonglong)({CTYPE[width]})({a}); ulonglong cb = (ulonglong)({CTYPE[width]})({b}); "
+                     f"fa = ca; fb = cb; }}")
+        flags.update(kind="compare", a=f"(({CTYPE[width]})fa)", b=f"(({CTYPE[width]})fb)", width=width)
+        since_label[0] = None
 
     def condition(cc: str) -> str:
+        if since_label[0] is not None:
+            label_reads.add(since_label[0])
         if cc not in CONDITIONS or flags["kind"] is None:
             raise Unliftable(f"condition {cc}")
         zero_form, compare_form = CONDITIONS[cc]
@@ -253,10 +273,31 @@ def _lift(binary, address: int, limit: int):
             raise Unliftable(f"condition {cc} after a compare")
         return "(" + compare_form.format(a=flags["a"], b=flags["b"], s=s) + ")"
 
+    def set_state(st: tuple):
+        kind, width = st
+        flags.clear()
+        flags["kind"] = kind
+        if kind is not None:
+            flags["width"] = width
+            if kind == "result":
+                flags["r"] = f"(({CTYPE[width]})fr)"
+            else:
+                flags["a"], flags["b"] = f"(({CTYPE[width]})fa)", f"(({CTYPE[width]})fb)"
+
+    at_label: dict[int, tuple] = {}
     for at in order:
         ins = found[at]
         if at in targets:
             lines.append(f"L_{at:x}:;")
+            # the flags here are whichever path came: known only when every path agrees on their
+            # kind and width; otherwise unknown, which only a condition that reads them refuses
+            paths = set(incoming.get(at, [])) | ({state()} if fallthrough[0] else set())
+            set_state(next(iter(paths)) if len(paths) == 1 else (None, None))
+            at_label[at] = state()
+            since_label[0] = at
+        elif not fallthrough[0]:
+            set_state((None, None))
+        fallthrough[0] = True
         here = ins.address + ins.size
         mn, ops = ins.mnemonic, [x.strip() for x in ins.op_str.split(",")] if ins.op_str else []
         if mn in ("mov", "movabs", "movzx"):
@@ -339,9 +380,12 @@ def _lift(binary, address: int, limit: int):
                 reads.add(r)
                 args.append(reg(r))
             lines.append(f"  return (**(code **)({where}))({', '.join(args)});")
+            fallthrough[0] = False
         elif mn == "jmp":
             target = int(ops[0], 16)
+            fallthrough[0] = False
             if target in found:
+                arrive(target)
                 lines.append(f"  goto L_{target:x};")
             else:
                 callees.append(target)
@@ -352,8 +396,10 @@ def _lift(binary, address: int, limit: int):
                     args.append(reg(r))
                 lines.append(f"  return FUN_{target:x}({', '.join(args)});")
         elif mn.startswith("j"):
+            arrive(int(ops[0], 16))
             lines.append(f"  if {condition(mn[1:])} goto L_{int(ops[0], 16):x};")
         elif mn == "ret" and not ops:
+            fallthrough[0] = False
             if "rax" in written:
                 used.add("rax")
                 lines.append(f"  return {reg('rax')};")
@@ -363,8 +409,13 @@ def _lift(binary, address: int, limit: int):
             pass
         else:
             raise Unliftable(f"instruction {mn} {ins.op_str}")
+    # (a jump backwards, to a label already lifted, must bring the flags that label assumed)
+    for t, paths in incoming.items():
+        st = at_label.get(t)
+        if st is not None and t in label_reads and any(p != st for p in paths):
+            raise Unliftable("a jump back brings other flags than its label assumed")
     # the registers it reads, the arguments from their own registers and the rest zero
-    decls = []
+    decls = ["  ulonglong fa = 0, fb = 0, fr = 0;"]
     for full in sorted(used):
         init = f"a{ARGS.index(full)}" if full in reads and full in ARGS else "0"
         decls.append(f"  ulonglong {reg(full)} = {init};")

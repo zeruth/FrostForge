@@ -347,8 +347,10 @@ void RibbonEmitterSetVisible(CRibbonEmitter* ribbon, bool visible) {
     ribbon->m_flags = static_cast<uint8_t>((visible ? 8 : 0) | (ribbon->m_flags & 0xf7));
 }
 
+// (external like its neighbours: as a file static nothing in the port called it, and translated
+// code could not reach it either)
 // ref: FUN_141296ce0
-static void RibbonEmitterSetLifetime(CRibbonEmitter* ribbon, float lifetime) {
+void RibbonEmitterSetLifetime(CRibbonEmitter* ribbon, float lifetime) {
     ribbon->m_strip.SetLifetime(lifetime);
 }
 

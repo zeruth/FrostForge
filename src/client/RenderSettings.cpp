@@ -7,8 +7,25 @@
 #include <windows.h>
 #include <cstring>
 
-RENDERSETTINGS g_renderSettings = { 1.0f, 1.0f, { 0, 0 }, 0, 0, 0, 0, 0, 4, 0, 0, 0, {}, 0.0f, {}, 0, {}, 0, 0, {}, 3, 1, 1, 0, {}, 0 };
-RENDERSETTINGS g_pendingRenderSettings = { 1.0f, 1.0f, { 0, 0 }, 0, 0, 0, 0, 0, 4, 0, 0, 0, {}, 0.0f, {}, 0, {}, 0, 0, {}, 3, 1, 1, 0, {}, 0 };
+// The reference's static values (DAT_142cfbfa8 and DAT_142cfbfe0, the same 0x38 bytes): scale 1.0
+// and 1.0, a 0x400 shadow map, filter mode 3 at level 1, one outline scene, the rest zero. One
+// value per field of the layout as it stands: the list was written against an older one (bytes
+// 0x0e..0x11 unnamed), so after 26ca1c0 named them it ran a field off, leaving the shadow map size
+// 0, the device-reset count 4 and filtering off, and putting 3/1/1 in the water and reflection
+// levels (C4838 on the float landing in a pad byte, 2026-10-17)
+#define FROST_RENDER_SETTINGS_DEFAULTS                                                            \
+    { 1.0f, 1.0f, { 0, 0 },                                                                       \
+      0, 0, 0, 0,          /* msaa samples, quality, anti-aliasing, sunshafts */                  \
+      0x400,               /* shadow texture size */                                              \
+      0, 0, 0, {},         /* device resets, spell clutter, upscaler, pad */                     \
+      0.0f,                /* sharpness */                                                        \
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0x1c..0x26 */                                           \
+      {},                  /* 0x27 */                                                             \
+      3, 1, 1, 0, {},      /* filter mode, filter level, outlines, low latency, pad */           \
+      0 }
+RENDERSETTINGS g_renderSettings = FROST_RENDER_SETTINGS_DEFAULTS;
+RENDERSETTINGS g_pendingRenderSettings = FROST_RENDER_SETTINGS_DEFAULTS;
+#undef FROST_RENDER_SETTINGS_DEFAULTS
 
 namespace {
 
