@@ -33,13 +33,14 @@ COLORS = {"Rendering": "#7c6cf2", "UI & Lua": "#2fa8d8", "Data & files": "#3cb17
 BUCKET_OF = {d: b for b, ds in BUCKETS.items() for d in ds}
 
 
-def reference_counts() -> tuple[int, int]:
-    """Every function in the reference, and those that are not FID-named library code."""
+def reference_counts() -> tuple[int, set[str]]:
+    """Every function in the reference, and the addresses of those that are not FID-named
+    library code (the game functions coverage is counted over)."""
     from corpus import load_corpus
     from fidelity import REF_KEEP
     cor = load_corpus()
-    lib = sum(1 for e in cor.values() if not e["name"].startswith(REF_KEEP) and "::" not in e["name"])
-    return len(cor), len(cor) - lib
+    game = {f"{a:x}" for a, e in cor.items() if e["name"].startswith(REF_KEEP) or "::" in e["name"]}
+    return len(cor), game
 
 
 def folder(path: str) -> str:
@@ -92,7 +93,8 @@ def main() -> None:
         }
 
     overall = stats(rows)
-    ref_total, ref_game = reference_counts()
+    ref_total, game = reference_counts()
+    ref_game = len(game)
     tagged = len(rows)
     order = sorted(groups, key=lambda b: -len(groups[b]))
 
@@ -135,8 +137,11 @@ def main() -> None:
 
     # the translated code: what it covers beyond the hand ports, how close its compile comes to the
     # reference's, and why the rest of what it reached stayed a stub
-    hand = {r["addr"] for r in rows if r["kind"] != "stub"}
-    gen_only = set(translated) - hand
+    # (counted over the game functions only, as the denominator is: --all also translates library
+    # code, and the manifest lists jump entries that are no corpus function; with both counted,
+    # coverage read 89,036 of 87,408, 2026-10-18)
+    hand = {r["addr"] for r in rows if r["kind"] != "stub"} & game
+    gen_only = (set(translated) & game) - hand
     g = stats(gen_rows) if gen_rows else None
     reasons = Counter(reason_class(w) for w in not_translated.values())
     peak = max(reasons.values(), default=1)

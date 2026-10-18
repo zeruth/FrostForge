@@ -400,16 +400,32 @@ class _Function:
 class CallArgs:
     """Recovered constant arguments per function, cached."""
 
+    # (the decoded functions kept, most recent last: a translator run asks about one function at a
+    # time, so a few hundred hold every repeat. Kept without bound, every function decoded stayed
+    # as capstone instructions, and a run over the whole corpus (83k functions) ran the machine
+    # out of memory in emission, 2026-10-17)
+    KEEP = 512
+
     def __init__(self, binary):
         self.binary = binary
-        self._functions: dict[int, _Function] = {}
+        from collections import OrderedDict
+        self._functions: "OrderedDict[int, _Function]" = OrderedDict()
         self._thunks: dict[int, tuple[int, dict[str, int]] | None] = {}   # thunk -> (target, sets)
+        self._accesses: dict[int, dict[int, set[tuple[int, str]]]] = {}
 
-    def indirect_calls(self, function: int, size: int) -> int:
-        """How many calls the function makes through a register or memory (imports included)."""
+    def _function(self, function: int, size: int) -> "_Function":
         f = self._functions.get(function)
         if f is None:
             f = self._functions[function] = _Function(self.binary, function, size)
+            if len(self._functions) > self.KEEP:
+                self._functions.popitem(last=False)
+        else:
+            self._functions.move_to_end(function)
+        return f
+
+    def indirect_calls(self, function: int, size: int) -> int:
+        """How many calls the function makes through a register or memory (imports included)."""
+        f = self._function(function, size)
         # (a call through a register or frame slot that holds a function's address taken in this
         # function, `lea rax, [rip + x]; mov [rsp + 0x28], rax; ... call [rsp + 0x28]`, is one the
         # decompiler resolves and shows by the callee's name: FUN_1414c51e0's call to the CFG
@@ -449,10 +465,12 @@ class CallArgs:
         """Each RIP-relative address the function reads or writes, with how: (bytes, "x") for a
         scalar SSE instruction (its operand size tells float from double: `cvtss2sd` reads 4
         bytes), "i" otherwise. `lea` takes an address without accessing it and is left out."""
-        f = self._functions.get(function)
-        if f is None:
-            f = self._functions[function] = _Function(self.binary, function, size)
+        # (the translator asks once per global a function names, all together: the last answer)
+        if function in self._accesses:
+            return self._accesses[function]
+        f = self._function(function, size)
         out: dict[int, set[tuple[int, str]]] = {}
+        self._accesses = {function: out}
         for i in f.ins:
             if i.mnemonic == "lea":
                 continue
@@ -515,9 +533,7 @@ class CallArgs:
         returns on another exit (Function.same_as_returned)."""
         if position >= len(ARG_REGS):
             return False
-        f = self._functions.get(function)
-        if f is None:
-            f = self._functions[function] = _Function(self.binary, function, size)
+        f = self._function(function, size)
         sites = [k for k, i in enumerate(f.ins) if self.calls(i, target)]
         return bool(sites) and all(f.same_as_returned(k, ARG_REGS[position]) for k in sites)
 
@@ -530,9 +546,7 @@ class CallArgs:
         there must be exactly one."""
         if any(p >= len(ARG_REGS) for p in positions):
             return None
-        f = self._functions.get(function)
-        if f is None:
-            f = self._functions[function] = _Function(self.binary, function, size)
+        f = self._function(function, size)
         if tail and sum(1 for i in f.ins if i.mnemonic == "jmp" and self.thunk_sets(i, target) is not None) != 1:
             return None
         found = None

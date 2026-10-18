@@ -613,7 +613,12 @@ def stack_frame(body: str, params: list[str] | None = None) -> str:
     decls = [m for m in STACK_DECL.finditer(body, 0, end.end() if end else 0)
              if m.group(2).split()[0] not in ("return", "goto", "else", "case")]
     if not decls:
-        return body
+        # no local named, and an address at or above the entry stack pointer (`&stack0x00000008`,
+        # the home slot handed to a callback, FUN_1415b2250; `(longlong)&stack0x00000000`, its
+        # value hashed): the real stack's, where the return address is (C2065 in 4 functions,
+        # 2026-10-17). Below it is a frame no local maps, which stays unresolved.
+        return re.sub(r"&stack0x(0{8}[0-9a-f]{0,8}|[0-7][0-9a-f]{0,7})\b",
+                      lambda x: f"((undefined1 *)_AddressOfReturnAddress() + 0x{int(x.group(1), 16):x})", body)
     names = [m.group(4) for m in decls]
     arrays = {m.group(4) for m in decls if m.group(7)}
     # a `StackX_` local shares its home slot with the `local_res` beside it: on the frame,
@@ -1308,7 +1313,10 @@ def stack_values(text: str) -> str:
     for n in set(re.findall(r"(?<![&\w])(stack0x[0-9a-f]+)\b", body)):
         if re.search(rf"^[ \t]*[\w ]+\**[ \t]*{n};$", body, re.M):
             continue
-        ptr = bool(re.search(rf"(?:^|[^\w)\]\s])\s*\*\s*{n}\b|\b{n}\s*\[|\b{n}\s*[!=]=\s*\(\w+ \*\)", body, re.M))
+        # (`(ulonglong *)*stack0x...`: dereferenced right after a pointer cast, whose `)` the first
+        # alternative refuses as the end of a multiplication's operand; 789 functions, C2100)
+        ptr = bool(re.search(rf"(?:^|[^\w)\]\s])\s*\*\s*{n}\b|\(\w[\w ]*\*+\)\s*\*\s*{n}\b|\b{n}\s*\[|"
+                             rf"\b{n}\s*[!=]=\s*\(\w+ \*\)", body, re.M))
         typ = "undefined8 *" if ptr else "undefined8"
         body = re.sub(rf"(?<![&\w]){n}\b", f"(*({typ} *)&{n})", body)
     uses = list(re.finditer(r"\bregister0x00000020\b", body))
@@ -1991,7 +1999,9 @@ def float_bit_exprs(text: str) -> str:
             depth += {"(": 1, ")": -1}.get(text[k], 0)
             k += 1
         inner = text[m.end():k - 1]
-        if not re.search(r"(?<![&|])[&|^](?![&|=])", inner) or "(uint)" not in inner and "REFG(float" not in inner:
+        # (a binary operator, after an operand: `(float)(&DAT_142cfc8e0)[param_1]` is an array of
+        # floats read, its `&` an address; as bits, `&GEN_F32BITS(...)` was C2102 in 5 functions)
+        if not re.search(r"[\w)\]]\s*[&|^](?![&|=])", inner) or "(uint)" not in inner and "REFG(float" not in inner:
             continue
         new = wrap_uint_casts(inner)
         new = re.sub(r"(?<!F32BITS\()REFG\(float, (0x[0-9a-f]+)\)", r"GEN_F32BITS(REFG(float, \1))", new)
@@ -2849,9 +2859,10 @@ class Translator:
         text = re.sub(r"\bin_XCR0\b", "_xgetbv(0)", text)
         # a string Ghidra named with brackets (`s_<unknown>_142617978`): its address, as any `s_`;
         # and a pointer to one (`&PTR_s_<no_protocol>_1428f8060`): the slot, or what it holds
-        text = re.sub(r"\bs_<[^<>\n]*>_(1[0-9a-f]{8})\b", r"((char *)REFP(0x\1))", text)
-        text = re.sub(r"&PTR_s_<[^<>\n]*>_(1[0-9a-f]{8})\b", r"((char **)REFP(0x\1))", text)
-        text = re.sub(r"\bPTR_s_<[^<>\n]*>_(1[0-9a-f]{8})\b", r"(*(char **)REFP(0x\1))", text)
+        # (several brackets, not all closed: `s_<Realm_Name>_____<Realm_IP>_____<_142618260`, C2065)
+        text = re.sub(r"\bs_<[\w<>]*?_(1[0-9a-f]{8})\b", r"((char *)REFP(0x\1))", text)
+        text = re.sub(r"&PTR_s_<[\w<>]*?_(1[0-9a-f]{8})\b", r"((char **)REFP(0x\1))", text)
+        text = re.sub(r"\bPTR_s_<[\w<>]*?_(1[0-9a-f]{8})\b", r"(*(char **)REFP(0x\1))", text)
         # a stack allocation (`&stack0xffffffffffffffe8 + -(uVar5 & 0xfffffffffffffff0)`, the
         # `sub rsp, rax` of an alloca): the same allocation in this frame
         text = re.sub(r"^([ \t]*\w+ = (?:\([\w ]+\*+\))?)&stack0x[0-9a-f]+ \+ -\(([^;()]*(?:\([^;()]*\)[^;()]*)*)\);$",
@@ -3397,7 +3408,10 @@ class Translator:
         m = re.match(r"(?s)(.*?)\b([\w:~<>,]+)\s*\((.*)\)\s*$", head)
         if not m:
             return None
-        ret = re.sub(r"\b__\w+\b", "", m.group(1)).strip() or "void"
+        # (the calling convention and pointer keywords only: `__uint64 * __fastcall_keepxmm0` lost
+        # its type to the same strip, and the result was a bare `*`, 2026-10-17)
+        ret = re.sub(r"\b__(?:cdecl|fastcall\w*|thiscall|stdcall|vectorcall\w*|ptr64|ptr32|unaligned|restrict|w64)\b",
+                     "", m.group(1)).strip() or "void"
         # (a function-pointer return type is code, as for the parameters below: `fp_FUN_x *`)
         ret = re.sub(r"\b(?:_func|fp)_\w+\b", "code", ret)
         # (16 bytes, a vector result, or a pointer to them: Ghidra.h's gen_v16, tools/v16.py)
@@ -3794,6 +3808,23 @@ class Translator:
         body = re.sub(r"(?<![\w:.>])&?([A-Za-z_]\w*(?:::~?\w+)+)\b(?!\s*[(:])",
                       lambda m: f"((code *)REFP(0x{self.by_name[m.group(1)][0]:x}))"
                       if len(self.by_name.get(m.group(1), [])) == 1 else m.group(0), body)
+        # an unqualified name inside a namespace, which is how the decompiler prints one of its
+        # members there: `Lua::GetAuctionItemInfo` passes itself as `GetAuctionItemInfo` (a
+        # handler registered with the auction cache, 7 handlers demoted as undeclared, 2026-10-17)
+        if "::" in own_name:
+            scope = own_name.rsplit("::", 1)[0]
+
+            def scoped(m):
+                # (not the class's own name, its constructor's, which a cast spells as a type)
+                if m.group(1) == scope.rsplit("::", 1)[-1]:
+                    return m.group(0)
+                cands = self.by_name.get(f"{scope}::{m.group(1)}", [])
+                return f"((code *)REFP(0x{cands[0]:x}))" if len(cands) == 1 else m.group(0)
+
+            # (outside string and character literals: the usage messages name the handler too)
+            parts = re.split(r"(\"(?:[^\"\\\n]|\\.)*\"|'(?:[^'\\\n]|\\.)*')", body)
+            body = "".join(p if k % 2 else re.sub(r"(?<![\w:.>])([A-Z]\w*)\b(?!\s*[(:*])", scoped, p)
+                           for k, p in enumerate(parts))
         body = re.sub(r"&?\b([A-Za-z_][\w<>,]*(?:::[\w<>,~]+)*::vftable)\b",
                       lambda m: f"((undefined8 *)REFP(0x{VFTABLES[m.group(1)]:x}))" if m.group(1) in VFTABLES
                       else m.group(0), body)
@@ -3809,6 +3840,11 @@ class Translator:
 
         body = CALL.sub(call, body)
         body = crt_arity(body)
+        # the carried result of a callee that returns 16 bytes (a float or vector in xmm0, where
+        # this one's caller reads rax): the low qword, as `(undefined8)` cannot convert a
+        # gen_v16 (C2440, 4 functions, 2026-10-17)
+        body = re.sub(r"^([ \t]*)return \(undefined8\)(CALLF\(gen_v16, @FUN_[0-9a-f]{9}\)\([^;]*\));$",
+                      r"\1return gen_v16_q0(\2);", body, flags=re.M)
         # a void runtime routine whose result the reference's own wrapper returned (rax as it left
         # it): FUN_1415aec60 tail-calls the reference free, now the port's (CRT_ENTRY), and
         # `return (undefined8)free(param_1);` is C2069
@@ -4298,7 +4334,9 @@ class Translator:
             if ctor and gret.strip() != "void":
                 inner = f"    {call};\n    return ({gret})a0;"
             elif ret == "void":
-                inner = f"    {call};\n    return 0;"
+                # (zero of the reference's own type: a 16-byte vector result is no int, C2440 in
+                # the ParticleEmitterRender and ShaderEffectLightMatrix adapters, 2026-10-17)
+                inner = f"    {call};\n    return {zero_of(gret)};"
             elif ret == "int" and ("float" in gret or "double" in gret):
                 inner = f"    return ({gret})(long long){call};"
             else:
@@ -4449,6 +4487,22 @@ def build_errors(reconfigure: bool = True) -> list[tuple[str, int, str]]:
     out = run_shown(["cmake", "--build", str(ROOT / "build/cmake"), "--config", "Release", "--target", "FrostLite"])
     for m in re.finditer(r"unresolved external symbol (\S+) referenced in function FUN_([0-9a-f]{9})", out):
         errors.append(("LINK", int(m.group(2), 16), f"LNK2019 unresolved {m.group(1)}"))
+    # The linker names one referencing function per symbol and object, and none at all for the
+    # rest (LNK2001): demoting only those took a full link per two or three functions (28 rounds
+    # on Ghidra's SSE pseudo-ops in the --all run, 2026-10-17, `pshufhw` never attributed). Every
+    # translated function that calls an unresolved symbol is demoted in this round instead.
+    missing = set(re.findall(r"error LNK20(?:01|19): unresolved external symbol (\w+)", out))
+    if missing:
+        call = re.compile(r"\b(" + "|".join(sorted(map(re.escape, missing))) + r")\s*\(")
+        named = {(a, why) for _, a, why in errors}
+        for f in sorted(GEN.glob("translated_*.c")):
+            for body in re.split(r"(?=^/\* ref: FUN_[0-9a-f]{9} \*/$)", f.read_text(encoding="utf-8"), flags=re.M):
+                head = re.match(r"/\* ref: FUN_([0-9a-f]{9}) \*/", body)
+                if not head:
+                    continue
+                for sym in sorted(set(call.findall(body))):
+                    if (int(head.group(1), 16), f"LNK2019 unresolved {sym}") not in named:
+                        errors.append(("LINK", int(head.group(1), 16), f"LNK2019 unresolved {sym}"))
     if not errors and re.search(r"\berror [A-Z]+\d+", out):
         # the port itself does not build, so the link that would show the translated
         # functions' unresolved symbols never ran: not clean, and nothing known to demote
@@ -4552,6 +4606,8 @@ def main() -> None:
     ap.add_argument("--harvest", metavar="LOG",
                     help="add a run log's int3 hits (functions reached through pointers) to data/indirect_roots.json, and stop")
     ap.add_argument("--depth", type=int, default=2)
+    ap.add_argument("--all", action="store_true",
+                    help="every function in the corpus a root (but the port's own, the protection and the runtime)")
     ap.add_argument("--fix", action="store_true", help="build, demote what fails to compile, repeat")
     ap.add_argument("--why", action="store_true",
                     help="list the translated functions that have a hand port, and why it is not used; stop")
@@ -4598,6 +4654,14 @@ def main() -> None:
     t0 = time.time()
     print("loading the corpus and the port's PDB ...", file=sys.stderr, flush=True)
     t = Translator(args.depth)
+    if args.all:
+        # the whole client: every function the corpus has, where the port has no counterpart
+        # (a port's own stays the port's, reached through its adapter) and it is neither the
+        # anti-tamper runtime nor the C runtime's
+        everything = [a for a in t.cor if a not in t.protection and not t.is_lib(a) and a not in CRT_BY_ADDR
+                      and t.port_target(a) is None]
+        print(f"--all: {len(everything)} of {len(t.cor)} corpus functions as roots", file=sys.stderr, flush=True)
+        roots = sorted(set(roots) | set(everything))
     # (a root that is a runtime entry or a thunk to one is the port's routine, never translated)
     roots = [r for r in roots if r not in CRT_ENTRY and r not in t.crt_thunks]
     t.prepare(sorted(set(roots) | set(t.static_initializers())))

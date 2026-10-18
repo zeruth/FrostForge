@@ -2,7 +2,7 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4310 4312 4389 4554 4702 4100 4101 4102 4146 4018 4057 4113 4152 4204 4459 4456 4457 4127 4805 4800 4996)
 #define GEN_HITS gen_hits_005
-unsigned int gen_hits_005[449];
+unsigned int gen_hits_005[450];
 
 /* ref: FUN_1401f5b20 */
 undefined8 FUN_1401f5b20(void)
@@ -5319,10 +5319,21 @@ int FUN_1401fe880(void)
   return iVar1;
 }
 
+/* ref: FUN_1401fe8b0 */
+int FUN_1401fe8b0(void)
+{
+  GEN_HIT(445);
+  int iVar1 = {0};
+  
+  CALLF(uint *, FUN_142430da0)(&(*(undefined8 *)((char *)&gen_g_143208508 + 0x0)),0x4d0,10);
+  iVar1 = atexit(((code *)REFP(0x1425f8960)));
+  return iVar1;
+}
+
 /* ref: FUN_1401fe8e0 */
 int FUN_1401fe8e0(void)
 {
-  GEN_HIT(445);
+  GEN_HIT(446);
   int iVar1 = {0};
   
   CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143208530),0xce8,5);
@@ -5333,7 +5344,7 @@ int FUN_1401fe8e0(void)
 /* ref: FUN_1401fe910 */
 int FUN_1401fe910(void)
 {
-  GEN_HIT(446);
+  GEN_HIT(447);
   int iVar1 = {0};
   
   CALLF(uint *, FUN_142430da0)(&REFG(undefined8, 0x143208570),0xbd0,1);
@@ -5344,7 +5355,7 @@ int FUN_1401fe910(void)
 /* ref: FUN_1401fe950 */
 int FUN_1401fe950(void)
 {
-  GEN_HIT(447);
+  GEN_HIT(448);
   int iVar1 = {0};
   
   CALLF(byte *, FUN_14031e970)(&REFG(undefined1, 0x1432085c8),3,0x49,0x7b);
@@ -5355,7 +5366,7 @@ int FUN_1401fe950(void)
 /* ref: FUN_1401fe990 */
 int FUN_1401fe990(void)
 {
-  GEN_HIT(448);
+  GEN_HIT(449);
   int iVar1 = {0};
   undefined8 uStack_10 = {0};
   
@@ -5811,6 +5822,7 @@ const unsigned long long gen_hit_addrs_005[] = {
     0x1401fe820ULL,
     0x1401fe850ULL,
     0x1401fe880ULL,
+    0x1401fe8b0ULL,
     0x1401fe8e0ULL,
     0x1401fe910ULL,
     0x1401fe950ULL,

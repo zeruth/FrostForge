@@ -38,4 +38,8 @@ class SThread : public SSyncObject {
     static bool Create(STHREADPROC proc, void* param, SThread* thread, const char* name, uint32_t stackSize);
 };
 
+// FROST: not the reference's. Called at the start of every thread SThread creates, when set: the
+// write watch (FROST_WATCH, gen/RefImage.cpp) arms each thread's debug registers through it.
+extern void (*g_sthreadStartHook)();
+
 #endif

@@ -6,5 +6,7 @@
 // of every function the port can run (see RefImage.cpp). Call before anything translated runs.
 bool RefImageInitialize(const char* path);
 bool RefImageMapped();
+// Arms FROST_WATCH's write watch on the calling thread (each thread has its own debug registers).
+void RefImageArmWatch();
 
 #endif

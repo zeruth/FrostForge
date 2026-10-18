@@ -87,6 +87,12 @@ void SetThreadName(uint32_t threadId, const char* name) {
     }
 }
 
+}
+
+void (*g_sthreadStartHook)() = nullptr;
+
+namespace {
+
 // ref: FUN_140255de0
 unsigned __stdcall ThreadEntry(void* argument) {
     auto start = static_cast<THREADSTART*>(argument);
@@ -96,6 +102,9 @@ unsigned __stdcall ThreadEntry(void* argument) {
     void* param = start->m_param;
     SetThreadName(static_cast<uint32_t>(-1), track->m_name);
     OsLazyCritSectLeave(&s_threadLock);
+    if (g_sthreadStartHook != nullptr) {
+        g_sthreadStartHook();  // (FROST: a debug aid, FROST_WATCH's per-thread arming)
+    }
     // "Calling thread proc %p\n" goes to a log that is compiled out (FUN_140255c60).
     uint32_t result = proc(param);
     // "Thread %lu (%s:%p) is stopping.\n", likewise.

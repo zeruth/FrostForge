@@ -10,6 +10,7 @@
 
 #include <windows.h>
 
+#include "storm/thread/SThread.hpp"
 #include "util/FrostLog.hpp"
 
 // The reference's own address space, for the translated functions (src/gen/translated_*.c).
@@ -98,6 +99,7 @@ void StartHitDump() {
 // set from inside a handler (a running thread cannot set its own), and each write logged with
 // the new value and the writer's stack. The first 16 writes are logged.
 constexpr DWORD kArmWatch = 0xE0F05701;
+constexpr DWORD kCheckWatch = 0xE0F05702;
 uint64_t s_watch = 0;
 LONG s_watchHits = 0;
 
@@ -108,6 +110,15 @@ LONG CALLBACK WatchHandler(EXCEPTION_POINTERS* info) {
         context->Dr0 = s_watch;
         // local enable 0, break on write (RW0 = 01), 8 bytes (LEN0 = 10)
         context->Dr7 = (context->Dr7 & ~0xF0003ull) | 1ull | (1ull << 16) | (2ull << 18);
+        // (without this flag the continue leaves the debug registers as they were: the first
+        // watched run, 2026-10-17, armed nothing and saw no write)
+        context->ContextFlags |= CONTEXT_DEBUG_REGISTERS;
+        return EXCEPTION_CONTINUE_EXECUTION;
+    }
+    if (code == kCheckWatch) {
+        // what the thread's debug registers hold now, as the kernel sees them
+        FrostLog("watch", "thread %lu: dr0 %llx dr7 %llx", GetCurrentThreadId(),
+                 static_cast<unsigned long long>(context->Dr0), static_cast<unsigned long long>(context->Dr7));
         return EXCEPTION_CONTINUE_EXECUTION;
     }
     if (code == EXCEPTION_SINGLE_STEP && (context->Dr6 & 1)) {
@@ -133,9 +144,24 @@ void StartWatch() {
         return;
     }
     AddVectoredExceptionHandler(1, WatchHandler);
-    RaiseException(kArmWatch, 0, 0, nullptr);
-    FrostLog("watch", "watching writes to %llx on this thread", static_cast<unsigned long long>(s_watch));
+    FrostLog("watch", "watching writes to %llx", static_cast<unsigned long long>(s_watch));
+    g_sthreadStartHook = RefImageArmWatch;
+    RefImageArmWatch();
 }
+
+}
+
+// Arms the write watch (FROST_WATCH) on the calling thread; each thread has its own debug
+// registers, so the port's thread entry calls this too. Nothing without a watch set.
+void RefImageArmWatch() {
+    if (s_watch == 0) {
+        return;
+    }
+    RaiseException(kArmWatch, 0, 0, nullptr);
+    RaiseException(kCheckWatch, 0, 0, nullptr);
+}
+
+namespace {
 
 bool RunInitializer(uint64_t address) {
     __try {

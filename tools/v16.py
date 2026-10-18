@@ -240,6 +240,39 @@ PSEUDO = {
     "vcvtdq2ps_avx": ("_mm_cvtepi32_ps({0})", "f"),
     "vpslld_avx": ("_mm_slli_epi32({0}, {1:imm})", "i"),
     "pmovsxwd": ("_mm_cvtepi16_epi32({1})", "i"),
+    # the codecs' (the --all run linked none of these, 2026-10-17: ~600 functions)
+    "pshufhw": ("_mm_shufflehi_epi16({1}, {2:imm})", "i"),
+    "packssdw": ("_mm_packs_epi32({0}, {1})", "i"),
+    "packsswb": ("_mm_packs_epi16({0}, {1})", "i"),
+    "pmaddwd": ("_mm_madd_epi16({0}, {1})", "i"),
+    "pmaddubsw": ("_mm_maddubs_epi16({0}, {1})", "i"),
+    "pmulhrsw": ("_mm_mulhrs_epi16({0}, {1})", "i"),
+    "psubsw": ("_mm_subs_epi16({0}, {1})", "i"),
+    "psubsb": ("_mm_subs_epi8({0}, {1})", "i"),
+    "paddsb": ("_mm_adds_epi8({0}, {1})", "i"),
+    "psubusb": ("_mm_subs_epu8({0}, {1})", "i"),
+    "phaddsw": ("_mm_hadds_epi16({0}, {1})", "i"),
+    "pmovsxdq": ("_mm_cvtepi32_epi64({1})", "i"),
+    "pblendvb": ("_mm_blendv_epi8({0}, {1}, {2})", "i"),
+    "sqrtps": ("_mm_sqrt_ps(_mm_castsi128_ps({1}))", "f"),
+    "sqrtpd": ("_mm_sqrt_pd(_mm_castsi128_pd({1}))", "d"),
+    "rcpss": ("_mm_move_ss(_mm_castsi128_ps({0}), _mm_rcp_ss(_mm_castsi128_ps({1})))", "f"),
+    "blendvpd": ("_mm_blendv_pd(_mm_castsi128_pd({0}), _mm_castsi128_pd({1}), _mm_castsi128_pd({2}))", "d"),
+    "vpackuswb_avx": ("_mm_packus_epi16({0}, {1})", "i"),
+    "vpacksswb_avx": ("_mm_packs_epi16({0}, {1})", "i"),
+    "vpavgb_avx": ("_mm_avg_epu8({0}, {1})", "i"),
+    "vpcmpgtb_avx": ("_mm_cmpgt_epi8({0}, {1})", "i"),
+    "vphaddsw_avx": ("_mm_hadds_epi16({0}, {1})", "i"),
+    "vpmaddubsw_avx": ("_mm_maddubs_epi16({0}, {1})", "i"),
+    "vpaddsw_avx": ("_mm_adds_epi16({0}, {1})", "i"),
+    "vpshufb_avx": ("_mm_shuffle_epi8({0}, {1})", "i"),
+    "vpsraw_avx": ("_mm_srai_epi16({0}, {1:imm})", "i"),
+    "vpunpcklbw_avx": ("_mm_unpacklo_epi8({0}, {1})", "i"),
+    "vpunpckhdq_avx": ("_mm_unpackhi_epi32({0}, {1})", "i"),
+    "vpmovsxwd_avx": ("_mm_cvtepi16_epi32({0})", "i"),
+    "vpmovzxbd_avx": ("_mm_cvtepu8_epi32({0})", "i"),
+    "vcvtph2ps_f16c": ("_mm_cvtph_ps({0})", "f"),
+    "vcmpsd_avx": ("_mm_cmp_sd(_mm_castsi128_pd({0}), _mm_castsi128_pd({1}), {2:imm})", "d"),
     # AVX-512VL on 128 bits: each 64-bit lane multiplied, kept low (Ghidra.h, in plain C)
     "vpmullq_avx512vl": ("gen_mullo_epi64({0}, {1})", "i"),
     "lddqu": ("({1})", "i"),
@@ -560,6 +593,13 @@ class Emitter:
                 return f"gen_v16_bytes({self.v(args[0])}, (int)({self.e(args[1])}), {w})"
             if name in PSEUDO:
                 tpl, kind = PSEUDO[name]
+                # a shift by a register (`psraw(auVar24,ZEXT416(n))`, `psllw(a,auVar50)`): the
+                # count is that register's low qword, the intrinsic's non-immediate form (C2440 on
+                # gen_v16 to int, 5 functions, 2026-10-17)
+                by_reg = re.match(r"_mm_s(ll|rl|ra)i_(epi16|epi32|epi64)\(", tpl) and \
+                    any(sp == ":imm" and self.T.ty(args[int(ix)]) == V for ix, sp in re.findall(r"\{(\d)(:imm)?\}", tpl))
+                if by_reg:
+                    tpl = re.sub(r"^_mm_s(ll|rl|ra)i_", r"_mm_s\1_", tpl).replace(":imm}", "}")
 
                 def fill(mm):
                     i, spec = int(mm.group(1)), mm.group(2)
