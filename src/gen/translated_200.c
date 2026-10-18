@@ -2,40 +2,75 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4310 4312 4389 4554 4702 4100 4101 4102 4146 4018 4057 4113 4152 4204 4459 4456 4457 4127 4805 4800 4996)
 #define GEN_HITS gen_hits_200
-unsigned int gen_hits_200[31];
+unsigned int gen_hits_200[36];
+
+/* ref: FUN_14260bcc0 */
+undefined8 FUN_14260bcc0(void)
+{
+  GEN_HIT(0);
+  return 0;
+}
+
+/* ref: FUN_14260bcd0 */
+undefined8 FUN_14260bcd0(void)
+{
+  GEN_HIT(1);
+  return 0;
+}
+
+/* ref: FUN_14260bce0 */
+undefined8 FUN_14260bce0(void)
+{
+  GEN_HIT(2);
+  return 0;
+}
+
+/* ref: FUN_14260bcf0 */
+undefined8 FUN_14260bcf0(void)
+{
+  GEN_HIT(3);
+  return 0;
+}
+
+/* ref: FUN_14260bd00 */
+undefined8 FUN_14260bd00(void)
+{
+  GEN_HIT(4);
+  return 0;
+}
 
 /* ref: FUN_14260bd10 */
 undefined8 FUN_14260bd10(void)
 {
-  GEN_HIT(0);
+  GEN_HIT(5);
   return 0;
 }
 
 /* ref: FUN_14260bd20 */
 undefined8 FUN_14260bd20(void)
 {
-  GEN_HIT(1);
+  GEN_HIT(6);
   return 0;
 }
 
 /* ref: FUN_14260bd30 */
 undefined8 FUN_14260bd30(void)
 {
-  GEN_HIT(2);
+  GEN_HIT(7);
   return 0;
 }
 
 /* ref: FUN_14260bd40 */
 undefined8 FUN_14260bd40(void)
 {
-  GEN_HIT(3);
+  GEN_HIT(8);
   return 0;
 }
 
 /* ref: FUN_14260bd70 */
 undefined8 FUN_14260bd70(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
 {
-  GEN_HIT(4);
+  GEN_HIT(9);
   ulonglong fa = 0, fb = 0, fr = 0;
   ulonglong r_r8 = a2;
   ulonglong r_r9 = a3;
@@ -58,7 +93,7 @@ L_14260bd9d:;
 /* ref: FUN_14260bdb0 */
 undefined4 FUN_14260bdb0(void)
 {
-  GEN_HIT(5);
+  GEN_HIT(10);
   if ((REFG(undefined4, 0x1447cf3f8) == 3) && (REFG(undefined8, 0x1447cf3e8) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf3e8),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -72,7 +107,7 @@ undefined4 FUN_14260bdb0(void)
 /* ref: FUN_14260be10 */
 undefined8 FUN_14260be10(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
 {
-  GEN_HIT(6);
+  GEN_HIT(11);
   ulonglong fa = 0, fb = 0, fr = 0;
   ulonglong r_r8 = a2;
   ulonglong r_r9 = a3;
@@ -95,7 +130,7 @@ L_14260be3d:;
 /* ref: FUN_14260be40 */
 undefined8 FUN_14260be40(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
 {
-  GEN_HIT(7);
+  GEN_HIT(12);
   ulonglong fa = 0, fb = 0, fr = 0;
   ulonglong r_r8 = a2;
   ulonglong r_r9 = a3;
@@ -118,7 +153,7 @@ L_14260be6d:;
 /* ref: FUN_14260be70 */
 undefined8 FUN_14260be70(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
 {
-  GEN_HIT(8);
+  GEN_HIT(13);
   ulonglong fa = 0, fb = 0, fr = 0;
   ulonglong r_r8 = a2;
   ulonglong r_r9 = a3;
@@ -141,7 +176,7 @@ L_14260be9d:;
 /* ref: FUN_14260bea0 */
 undefined4 FUN_14260bea0(void)
 {
-  GEN_HIT(9);
+  GEN_HIT(14);
   if ((REFG(undefined4, 0x1447cf470) == 3) && (REFG(undefined8, 0x1447cf460) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf460),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -155,7 +190,7 @@ undefined4 FUN_14260bea0(void)
 /* ref: FUN_14260bf00 */
 undefined8 FUN_14260bf00(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
 {
-  GEN_HIT(10);
+  GEN_HIT(15);
   ulonglong fa = 0, fb = 0, fr = 0;
   ulonglong r_r8 = a2;
   ulonglong r_r9 = a3;
@@ -178,7 +213,7 @@ L_14260bf2d:;
 /* ref: FUN_14260bf30 */
 undefined4 FUN_14260bf30(void)
 {
-  GEN_HIT(11);
+  GEN_HIT(16);
   if ((REFG(undefined4, 0x1447cf4a8) == 3) && (REFG(undefined8, 0x1447cf498) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf498),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -192,14 +227,14 @@ undefined4 FUN_14260bf30(void)
 /* ref: FUN_14260bf90 */
 undefined8 FUN_14260bf90(void)
 {
-  GEN_HIT(12);
+  GEN_HIT(17);
   return (undefined8)CALLF(undefined8, FUN_14257fda0)(&REFG(undefined8, 0x142d5f348));
 }
 
 /* ref: FUN_14260bfa0 */
 undefined4 FUN_14260bfa0(void)
 {
-  GEN_HIT(13);
+  GEN_HIT(18);
   if ((REFG(undefined4, 0x1447cf4d8) == 3) && (REFG(undefined8, 0x1447cf4c8) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf4c8),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -213,7 +248,7 @@ undefined4 FUN_14260bfa0(void)
 /* ref: FUN_14260c000 */
 undefined4 FUN_14260c000(void)
 {
-  GEN_HIT(14);
+  GEN_HIT(19);
   if ((REFG(undefined4, 0x1447cf518) == 3) && (REFG(undefined8, 0x1447cf508) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf508),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -227,7 +262,7 @@ undefined4 FUN_14260c000(void)
 /* ref: FUN_14260c050 */
 undefined4 FUN_14260c050(void)
 {
-  GEN_HIT(15);
+  GEN_HIT(20);
   if ((REFG(undefined4, 0x1447cf6a0) == 3) && (REFG(undefined8, 0x1447cf690) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf690),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -241,7 +276,7 @@ undefined4 FUN_14260c050(void)
 /* ref: FUN_14260c0a0 */
 undefined4 FUN_14260c0a0(void)
 {
-  GEN_HIT(16);
+  GEN_HIT(21);
   if ((REFG(undefined4, 0x1447cf6c8) == 3) && (REFG(undefined8, 0x1447cf6b8) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf6b8),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -255,7 +290,7 @@ undefined4 FUN_14260c0a0(void)
 /* ref: FUN_14260c0f0 */
 undefined4 FUN_14260c0f0(void)
 {
-  GEN_HIT(17);
+  GEN_HIT(22);
   if ((REFG(undefined4, 0x1447cf6e8) == 3) && (REFG(undefined8, 0x1447cf6d8) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf6d8),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -269,7 +304,7 @@ undefined4 FUN_14260c0f0(void)
 /* ref: FUN_14260c140 */
 undefined4 FUN_14260c140(void)
 {
-  GEN_HIT(18);
+  GEN_HIT(23);
   if ((REFG(undefined4, 0x1447cf700) == 3) && (REFG(undefined8, 0x1447cf6f0) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf6f0),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -283,7 +318,7 @@ undefined4 FUN_14260c140(void)
 /* ref: FUN_14260c1a0 */
 undefined4 FUN_14260c1a0(void)
 {
-  GEN_HIT(19);
+  GEN_HIT(24);
   if ((REFG(undefined4, 0x1447cf720) == 3) && (REFG(undefined8, 0x1447cf710) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf710),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -297,7 +332,7 @@ undefined4 FUN_14260c1a0(void)
 /* ref: FUN_14260c200 */
 undefined ** FUN_14260c200(void)
 {
-  GEN_HIT(20);
+  GEN_HIT(25);
   undefined **ppuVar1 = {0};
   undefined8 *puVar2 = {0};
   
@@ -327,7 +362,7 @@ undefined ** FUN_14260c200(void)
 /* ref: FUN_14260c2a0 */
 undefined4 FUN_14260c2a0(void)
 {
-  GEN_HIT(21);
+  GEN_HIT(26);
   if ((REFG(undefined4, 0x1447cf750) == 3) && (REFG(undefined8, 0x1447cf740) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf740),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -341,7 +376,7 @@ undefined4 FUN_14260c2a0(void)
 /* ref: FUN_14260c2f0 */
 undefined1 FUN_14260c2f0(void)
 {
-  GEN_HIT(22);
+  GEN_HIT(27);
   undefined1 uVar1 = {0};
   
   uVar1 = 0;
@@ -356,7 +391,7 @@ undefined1 FUN_14260c2f0(void)
 /* ref: FUN_14260c340 */
 undefined4 FUN_14260c340(void)
 {
-  GEN_HIT(23);
+  GEN_HIT(28);
   if ((REFG(undefined4, 0x1447cf788) == 3) && (REFG(undefined8, 0x1447cf778) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf778),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -370,7 +405,7 @@ undefined4 FUN_14260c340(void)
 /* ref: FUN_14260c3a0 */
 undefined4 FUN_14260c3a0(void)
 {
-  GEN_HIT(24);
+  GEN_HIT(29);
   if ((REFG(undefined4, 0x1447cf7b0) == 3) && (REFG(undefined8, 0x1447cf7a0) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf7a0),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -384,7 +419,7 @@ undefined4 FUN_14260c3a0(void)
 /* ref: FUN_14260c3f0 */
 undefined4 FUN_14260c3f0(void)
 {
-  GEN_HIT(25);
+  GEN_HIT(30);
   if ((REFG(undefined4, 0x1447cf7d8) == 3) && (REFG(undefined8, 0x1447cf7c8) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf7c8),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -398,7 +433,7 @@ undefined4 FUN_14260c3f0(void)
 /* ref: FUN_14260c450 */
 undefined4 FUN_14260c450(void)
 {
-  GEN_HIT(26);
+  GEN_HIT(31);
   if ((REFG(undefined4, 0x1447cf7f8) == 3) && (REFG(undefined8, 0x1447cf7e8) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf7e8),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -412,7 +447,7 @@ undefined4 FUN_14260c450(void)
 /* ref: FUN_14260c4a0 */
 undefined4 FUN_14260c4a0(void)
 {
-  GEN_HIT(27);
+  GEN_HIT(32);
   if ((REFG(undefined4, 0x1447cf838) == 3) && (REFG(undefined8, 0x1447cf828) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf828),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -426,7 +461,7 @@ undefined4 FUN_14260c4a0(void)
 /* ref: FUN_14260c4f0 */
 undefined4 FUN_14260c4f0(void)
 {
-  GEN_HIT(28);
+  GEN_HIT(33);
   if ((REFG(undefined4, 0x1447cf890) == 3) && (REFG(undefined8, 0x1447cf880) != 0)) {
     CALLF(undefined1, FUN_140255210)(REFG(undefined8, 0x1447cf880),
                     "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Os\\SockAddr.h",0x27,0);
@@ -440,7 +475,7 @@ undefined4 FUN_14260c4f0(void)
 /* ref: FUN_14260c540 */
 undefined8 FUN_14260c540(void)
 {
-  GEN_HIT(29);
+  GEN_HIT(34);
   longlong *plVar1 = {0};
   int *piVar2 = {0};
   int iVar3 = {0};
@@ -466,7 +501,7 @@ undefined8 FUN_14260c540(void)
 /* ref: FUN_14260c5a0 */
 undefined8 FUN_14260c5a0(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3)
 {
-  GEN_HIT(30);
+  GEN_HIT(35);
   ulonglong fa = 0, fb = 0, fr = 0;
   ulonglong r_r8 = a2;
   ulonglong r_r9 = a3;
@@ -487,6 +522,11 @@ L_14260c5cd:;
 }
 
 const unsigned long long gen_hit_addrs_200[] = {
+    0x14260bcc0ULL,
+    0x14260bcd0ULL,
+    0x14260bce0ULL,
+    0x14260bcf0ULL,
+    0x14260bd00ULL,
     0x14260bd10ULL,
     0x14260bd20ULL,
     0x14260bd30ULL,

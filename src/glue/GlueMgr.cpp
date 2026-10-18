@@ -75,9 +75,13 @@ CSimpleFrame* GetGlueParent() {
     return parent;
 }
 
-// ref: FUN_141174300
+extern "C" unsigned long long FUN_141174300();
+// translated: FUN_141174300
 void Sub141174300() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141174300();
+    } __except (GenFault(0x141174300ull, GetExceptionInformation())) {
+    }
 }
 
 // The glue-only frame types.
@@ -129,45 +133,77 @@ void KioskRegisterCVars(void* settings) {
 
 // Script-function implementations the glue installs into the client's function slots.
 
-// ref: FUN_141b4a6e0
+extern "C" unsigned long long FUN_141b4a6e0();
+// translated: FUN_141b4a6e0
 void Sub141B4A6E0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141b4a6e0();
+    } __except (GenFault(0x141b4a6e0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141696aa0
+extern "C" unsigned long long FUN_141696aa0();
+// translated: FUN_141696aa0
 void Sub141696AA0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141696aa0();
+    } __except (GenFault(0x141696aa0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_14169bf50
+extern "C" unsigned long long FUN_14169bf50();
+// translated: FUN_14169bf50
 void Sub14169BF50() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14169bf50();
+    } __except (GenFault(0x14169bf50ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141a255a0
+extern "C" unsigned long long FUN_141a255a0();
+// translated: FUN_141a255a0
 void Sub141A255A0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141a255a0();
+    } __except (GenFault(0x141a255a0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141a3cc80
+extern "C" unsigned long long FUN_141a3cc80();
+// translated: FUN_141a3cc80
 void Sub141A3CC80() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141a3cc80();
+    } __except (GenFault(0x141a3cc80ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1419ee9b0
+extern "C" unsigned long long FUN_1419ee9b0();
+// translated: FUN_1419ee9b0
 void Sub1419EE9B0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1419ee9b0();
+    } __except (GenFault(0x1419ee9b0ull, GetExceptionInformation())) {
+    }
 }
 
 // The account data log and the synchronizeSettings CVar.
-// ref: FUN_14156e300
+extern "C" unsigned long long FUN_14156e300();
+// translated: FUN_14156e300
 void Sub14156E300() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14156e300();
+    } __except (GenFault(0x14156e300ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1416a7bb0
+extern "C" unsigned long long FUN_1416a7bb0();
+// translated: FUN_1416a7bb0
 void Sub1416A7BB0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1416a7bb0();
+    } __except (GenFault(0x1416a7bb0ull, GetExceptionInformation())) {
+    }
 }
 
 // Walks the glue model-info list (0x142e3fdc0) and preloads each entry.
@@ -205,22 +241,34 @@ namespace {
 // ---- CGlueMgr::Initialize's callees -----------------------------------------------------
 
 // The enableSourceLocationLookup CVar (source file names for script positions).
-// ref: FUN_141b4b720
+extern "C" unsigned long long FUN_141b4b720();
+// translated: FUN_141b4b720
 void Sub141B4B720() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141b4b720();
+    } __except (GenFault(0x141b4b720ull, GetExceptionInformation())) {
+    }
 }
 
 // The AddOns directory scan (Interface/AddOns/).
-// ref: FUN_141c99c50
+extern "C" unsigned long long FUN_141c99c50();
+// translated: FUN_141c99c50
 void Sub141C99C50() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141c99c50();
+    } __except (GenFault(0x141c99c50ull, GetExceptionInformation())) {
+    }
 }
 
 // The timers whose time has come run (C_Timer's queue, 0x1432521a8): the UI root's
 // pre-update hook.
-// ref: FUN_141cf9a60
+extern "C" unsigned long long FUN_141cf9a60();
+// translated: FUN_141cf9a60
 void UiTimersRun() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141cf9a60();
+    } __except (GenFault(0x141cf9a60ull, GetExceptionInformation())) {
+    }
 }
 
 // The glue follows a new window size: the GlueParent rescales (the root's +0xf38 hook).
@@ -535,30 +583,49 @@ void Sub141527450(uint32_t value) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_141cfe3e0
+extern "C" unsigned long long FUN_141cfe3e0();
+// translated: FUN_141cfe3e0
 void Sub141CFE3E0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141cfe3e0();
+    } __except (GenFault(0x141cfe3e0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141b46e90
+extern "C" unsigned long long FUN_141b46e90();
+// translated: FUN_141b46e90
 void Sub141B46E90() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141b46e90();
+    } __except (GenFault(0x141b46e90ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141695dd0
+extern "C" unsigned long long FUN_141695dd0();
+// translated: FUN_141695dd0
 void Sub141695DD0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141695dd0();
+    } __except (GenFault(0x141695dd0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141695d80
+extern "C" unsigned long long FUN_141695d80();
+// translated: FUN_141695d80
 void Sub141695D80() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141695d80();
+    } __except (GenFault(0x141695d80ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141c9a070
+extern "C" unsigned long long FUN_141c9a070(unsigned long long);
+// translated: FUN_141c9a070
 void Sub141C9A070(uint32_t value) {
-    (void)value;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141c9a070((unsigned long long)value);
+    } __except (GenFault(0x141c9a070ull, GetExceptionInformation())) {
+    }
 }
 
 DynamicLifeTimeDB s_globalStrings(&g_globalStringsDB);  // DAT_1431e9ee8
@@ -687,46 +754,72 @@ namespace {
 
 // Glue script globals and API tables, in registration order.
 
-// ref: FUN_1416a4070
+extern "C" unsigned long long FUN_1416a4070();
+// translated: FUN_1416a4070
 void Sub1416A4070() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1416a4070();
+    } __except (GenFault(0x1416a4070ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_14063d240
+extern "C" unsigned long long FUN_14063d240();
+// translated: FUN_14063d240
 void Sub14063D240() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14063d240();
+    } __except (GenFault(0x14063d240ull, GetExceptionInformation())) {
+    }
 }
 
 // The FullUserdataObject metatable.
-// ref: FUN_1424cd500
+extern "C" unsigned long long FUN_1424cd500();
+// translated: FUN_1424cd500
 void Sub1424CD500() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1424cd500();
+    } __except (GenFault(0x1424cd500ull, GetExceptionInformation())) {
+    }
 }
 
 // LuaFunctionContainer and C_FunctionContainers.
+// Forwarded with tools/forward_stubs.py --all, the translation faulted inside Lua's string
+// table (lstring.c, touching -1) registering these (2026-10-18): a stub again until that is
+// understood.
 // ref: FUN_141c43e60
 void Sub141C43E60() {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_141a49240
+extern "C" unsigned long long FUN_141a49240();
+// translated: FUN_141a49240
 void Sub141A49240() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141a49240();
+    } __except (GenFault(0x141a49240ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141a49200
+extern "C" unsigned long long FUN_141a49200();
+// translated: FUN_141a49200
 void Sub141A49200() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141a49200();
+    } __except (GenFault(0x141a49200ull, GetExceptionInformation())) {
+    }
 }
 
 namespace {
 
 // The interface files written out of the archives ('art' and/or 'code'). Not ported.
-// ref: FUN_141cf3c70
+extern "C" unsigned long long FUN_141cf3c70(unsigned long long);
+// translated: FUN_141cf3c70
 bool InterfaceExportFiles(const char* arguments) {
-    (void)arguments;
-    FROST_UNIMPLEMENTED();
-    return false;
+    __try {
+        return (FUN_141cf3c70((unsigned long long)arguments) & 0xff) != 0;
+    } __except (GenFault(0x141cf3c70ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 
 // ref: FUN_1416a7810
@@ -762,11 +855,13 @@ void Sub1416A7840() {
     lua_rawset(L, LUA_GLOBALSINDEX);
 }
 
-// ref: FUN_141d06200
+extern "C" unsigned long long FUN_141d06200(unsigned long long, unsigned long long);
+// translated: FUN_141d06200
 void SetVisitableUrl(uint32_t index, const char* url) {
-    (void)index;
-    (void)url;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141d06200((unsigned long long)index, (unsigned long long)url);
+    } __except (GenFault(0x141d06200ull, GetExceptionInformation())) {
+    }
 }
 
 // The glue's frames have loaded: FRAMES_LOADED.
@@ -776,19 +871,31 @@ void Sub1411749F0() {
     EventCallbacks_Fire(0x10e8, 0x295344b1926539ccull, args);
 }
 
-// ref: FUN_14148c1d0
+extern "C" unsigned long long FUN_14148c1d0();
+// translated: FUN_14148c1d0
 void Sub14148C1D0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14148c1d0();
+    } __except (GenFault(0x14148c1d0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1416a7d00
+extern "C" unsigned long long FUN_1416a7d00();
+// translated: FUN_1416a7d00
 void Sub1416A7D00() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1416a7d00();
+    } __except (GenFault(0x1416a7d00ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141b37f60
+extern "C" unsigned long long FUN_141b37f60();
+// translated: FUN_141b37f60
 void Sub141B37F60() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141b37f60();
+    } __except (GenFault(0x141b37f60ull, GetExceptionInformation())) {
+    }
 }
 
 // The name of the glue's starting screen.
@@ -805,13 +912,13 @@ void Sub1416A3860(const char* screen) {
 }
 
 // The glue's world-scene camera (position, look and up vectors).
-// ref: FUN_1412d3440
+extern "C" unsigned long long FUN_1412d3440(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_1412d3440
 void Sub1412D3440(const float* position, const float* look, const float* up, uint32_t flags) {
-    (void)position;
-    (void)look;
-    (void)up;
-    (void)flags;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1412d3440((unsigned long long)position, (unsigned long long)look, (unsigned long long)up, (unsigned long long)flags);
+    } __except (GenFault(0x1412d3440ull, GetExceptionInformation())) {
+    }
 }
 
 }  // namespace
@@ -1002,6 +1109,49 @@ void GlueLoginStart(int32_t a1) {
 // translated: FUN_14169ef40
 // translated: FUN_14169f2a0
 // translated: FUN_14169f2b0
+
+// ---- GENERATED by tools/forward_stubs.py: link fallbacks where src/gen is not linked ----
+#pragma comment(linker, "/include:GenForwardMissing")
+#pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
+#pragma comment(linker, "/alternatename:FUN_14063d240=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14078f3c0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141174300=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412d3440=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14148c1d0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1414fc2f0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14156e300=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14167c3c0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141695d80=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141695dd0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141696aa0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14169bf50=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1416a0db0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1416a4070=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1416a7bb0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1416a7d00=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1419272e0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1419ee9b0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141a255a0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141a3cc80=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141a49200=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141a49240=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141b37f60=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141b46e90=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141b4a6e0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141b4b720=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141c99c50=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141c9a070=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141cb0380=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141cb1440=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141cb2190=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141cb26d0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141cb2b30=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141cf3c70=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141cf9a60=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141cfe3e0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141d06200=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1424cd500=GenForwardMissing")
+// ---- end of link fallbacks ----
 
 // ---- GENERATED by tools/translate.py: the port globals translated code reaches ----
 extern "C" void* const gen_p_14311c510 = (void*)&s_windowWidth;

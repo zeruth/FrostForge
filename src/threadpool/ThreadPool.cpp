@@ -462,6 +462,8 @@ void ThreadPoolFlush(int32_t priority) {
 extern "C" void* const gen_p_1444f9480 = (void*)&s_poolLock;
 extern "C" void* const gen_p_1444f9488 = (void*)&s_shutdown;
 extern "C" void* const gen_p_1444f94c0 = (void*)&s_queues;
+extern "C" void* const gen_p_144751580 = (void*)&s_freeNodes;
+extern "C" void* const gen_p_1447515c0 = (void*)&s_returnedNodes;
 extern "C" void* const gen_p_144751600 = (void*)&s_threads;
 extern "C" void* const gen_p_144751a80 = (void*)&s_threadCount;
 // ---- end of generated globals ----

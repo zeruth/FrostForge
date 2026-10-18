@@ -31,6 +31,17 @@ from wowbin import Binary, hexa, write_facts
 
 MIN_SITES = 3
 MIN_RATIO = 0.95
+# and by hand, where neither signal can see it: Lua's error path ends in a longjmp (or the panic
+# handler's exit) that the structural pass reads as a return, and the compiler tail-calls
+# luaL_error from every handler (`return luaL_error(L, "Usage: ...")`), so no call site is dead.
+# Unmarked, Ghidra decompiled the code after a usage error, and the anti-tamper check placed there
+# (SendChatMessage) could not be stripped, leaving the handler stubbed as junk (2026-10-18)
+HAND = {
+    0x142424D80: "luaL_error",
+    0x1402B29F0: "lua_error",
+    0x1402B5250: "luaG_errormsg",
+    0x1402B72D0: "luaD_throw",
+}
 
 
 def body_facts(b: Binary):
@@ -107,8 +118,9 @@ def main() -> None:
                 f"call-site: >= {MIN_SITES} sites, >= {MIN_RATIO:.0%} followed by int3 / end of piece",
         "functions": {
             hexa(f): {"structural": f in noret, "callsite": f in callsite,
-                      "sites": sites.get(f, 0), "dead_sites": dead.get(f, 0)}
-            for f in sorted(noret | callsite)
+                      "sites": sites.get(f, 0), "dead_sites": dead.get(f, 0),
+                      **({"hand": HAND[f]} if f in HAND else {})}
+            for f in sorted(noret | callsite | set(HAND))
         },
     })
     both = noret & callsite

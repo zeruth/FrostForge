@@ -56,6 +56,8 @@ for i in range(4):
 
 # what a call leaves behind: every volatile register is written (garbage, but written)
 VOLATILE_DEF = (8, 8, 8, 8, 16, 16, 16, 16)
+# the argument positions by register (defs and fresh index them so)
+POS_NAMES = ("RCX", "RDX", "R8", "R9", "XMM0", "XMM1", "XMM2", "XMM3")
 # every general register by its 64-bit name, for the frame registers
 GPR64: dict[int, int] = {}
 for _q, _d, _w, _b in [("RAX", "EAX", "AX", "AL"), ("RBX", "EBX", "BX", "BL"), ("RCX", "ECX", "CX", "CL"),
@@ -77,6 +79,12 @@ RAXW = -1002
 FRESH = [-2000 - fam for fam in range(8)]
 OUTSTK = -3000
 MAX_KEYS = {RAXW, OUTSTK, *FRESH}
+# an argument register written on some path since the entry (a call kills the volatile ones):
+# united at a join. `defs` keeps the least written of the paths, which a parameter wants; a
+# parameter "handed on" to an indirect call wants it untouched on every path. On a loop's first
+# pass r8 still held FUN_1402f25e0's own param_3, after that FUN_140229de0's leftover, and the
+# virtual call was given four arguments it does not take: `extraout_R8` (2026-10-18)
+DIRTY = [-5000 - fam for fam in range(8)]
 # what rax holds on every path, for a function no caller's read types: the narrowest width the
 # function wrote itself (CALLW: a callee's result), absent where it can be garbage (unwritten
 # since the entry); and the callees whose untouched result can reach here (0: an indirect one)
@@ -254,6 +262,14 @@ class Analyzer:
         # 2026-10-16)
         va = FACTS / "varargs.json"
         self.variadic = {int(k, 16) for k in json.loads(va.read_text())["functions"]} if va.exists() else set()
+        # the volatile registers each function leaves alone (tools/preserved.py 'all', which depends
+        # on the instructions only): a direct call does not write them, and a read of one after it
+        # is still the caller's own argument. Taken for written, FUN_1412942f0's rdx and r8, read
+        # after a call that keeps both, were no parameters, and the decompilation read `in_RDX`
+        # and `in_R8` (2026-10-18)
+        pv = FACTS / "preserved.json"
+        self.kept = ({int(k, 16): set(v) for k, v in json.loads(pv.read_text()).get("all", {}).items()}
+                     if pv.exists() else {})
         # each check's start -> where the code resumes once it passes: ApplyFacts makes the start
         # a jump there, so the check's crash paths (reading whatever junk registers hold, which
         # made callers look like they read a result: the thunk call in GetSoundScaledVolume) are
@@ -464,6 +480,12 @@ class Analyzer:
             if not (va in self.checks and succ[va] == [self.checks[va]]):
                 # (a skipped check's start is a plain jump: its load does nothing)
                 defs, frame = self.step(a, insn, defs, dict(frame), res)
+                if any(d >= 8 for d in defs):
+                    fd = dict(frame)
+                    for fam, d in enumerate(defs):
+                        if d >= 8:
+                            fd[DIRTY[fam]] = 1
+                    frame = tuple(sorted(fd.items()))
             if va in self._guessed_switch and dict(frame).get(X.X86_REG_RSP) == 0:
                 # an indirect jump with the stack back at the entry is a tail call (after the
                 # epilogue), not a switch: its "cases" got the entry's frame, and their locals
@@ -478,8 +500,9 @@ class Analyzer:
                 merged = tuple(min(x, y) for x, y in zip(old[0], defs))
                 # an offset that disagrees between paths is unknown from there on; the width of
                 # rax written since the last call is the widest of the paths'
-                mframe = [p for p in old[1] if p in frame and p[0] not in MAX_KEYS]
+                mframe = [p for p in old[1] if p in frame and p[0] not in MAX_KEYS and p[0] not in DIRTY]
                 od, nd = dict(old[1]), dict(frame)
+                mframe += [(k, 1) for k in DIRTY if k in od or k in nd]
                 for k in MAX_KEYS:
                     if k == RAXW:
                         w = max(od.get(k, 0), nd.get(k, 0))
@@ -520,6 +543,18 @@ class Analyzer:
                     state[t] = (merged, mframe)
                     work.append(t)
         return res
+
+    def thunk_target(self, t: int) -> int:
+        """Where a lone `jmp rel32` at t goes, when that is a function and t is none: t otherwise."""
+        try:
+            o = self.b.off(t)
+            if self.b.image[o] == 0xE9:
+                to = t + 5 + int.from_bytes(bytes(self.b.image[o + 1:o + 5]), "little", signed=True)
+                if to in self.starts:
+                    return to
+        except (IndexError, ValueError):
+            pass
+        return t
 
     def step(self, a: int, insn, defs: tuple, frame: dict, res: Local):
         m = insn.mnemonic
@@ -793,7 +828,9 @@ class Analyzer:
                           (op.reg,) if op is not None and op.type == X.X86_OP_REG else ()):
                     if r in FAMILY and FAMILY[r][0] < 4:
                         fresh[FAMILY[r][0]] = 0
-                res.icalls[insn.address] = (tuple(fresh), tuple(defs), frame.get(OUTSTK, 0),
+                # (an argument register written on any path in counts as written: see DIRTY)
+                seen = tuple(max(d, 8) if frame.get(DIRTY[fam]) else d for fam, d in enumerate(defs))
+                res.icalls[insn.address] = (tuple(fresh), seen, frame.get(OUTSTK, 0),
                                             op.imm if op is not None and op.type == X.X86_OP_IMM else 0)
             if op is not None and op.type == X.X86_OP_IMM and frame.get(PEND_XMM):
                 # xmm0 still as an earlier call left it, handed to this callee as its first
@@ -819,6 +856,10 @@ class Analyzer:
                 # `undefined8` left a float read as `extraout_XMM0_Da` (46 stubs, 2026-10-16)
                 frame[PEND_RAX] = frame[PEND_XMM] = frame[PEND_XMM_ALL] = frozenset((-insn.address,))
                 frame[RAXCALLS] = frozenset((-insn.address,))   # (an indirect one: by its site, negated)
+            if op is not None and op.type == X.X86_OP_IMM and op.imm in self.kept:
+                kept = self.kept[op.imm]
+                return (tuple(defs[i] if POS_NAMES[i] in kept else VOLATILE_DEF[i] for i in range(8)),
+                        tuple(sorted(frame.items())))
             return VOLATILE_DEF, tuple(sorted(frame.items()))
         # (a conditional jump to another function is a tail call on its path: `test rcx, rcx; jne
         # FUN_1417e4050` hands that callee its registers, and its `dl` input was never ours)
@@ -826,13 +867,25 @@ class Analyzer:
             op = ops[0] if ops else None
             if op is not None and op.type == X.X86_OP_IMM:
                 t = op.imm
+                via_thunk = False
+                if t not in self.starts:
+                    # (through a lone `jmp` the linker left between them, no function of its own:
+                    # FUN_1412942f0's `jne 0x141356c10`, a `jmp FUN_1411e7c70` that takes rdx and r8,
+                    # which it hands on unseen, `in_RDX` and `in_R8`, 2026-10-18)
+                    t = self.thunk_target(t)
+                    via_thunk = t != op.imm
                 if t in self.starts and t != a:
                     # a tail call at the entry's stack depth hands on the stack parameters too
                     res.calls.append((t, tuple(defs) + ((1,) if frame.get(X.X86_REG_RSP) == 0 else (0,))))
                     # (tail calls by target: the decompiler shows four `jmp g` from the ends of
                     # one function as one call)
                     res.call_sites.add(-t)
-                    res.tail_sites[insn.address] = t
+                    # (not a site to make a call of when it goes through a thunk: the jump is to
+                    # the thunk, no function, and as a call ApplyFacts made it `func_0x14065f73d()`
+                    # with no arguments, where Ghidra had followed it to FUN_1402b3b30(param_1);
+                    # 48 functions refused, 2026-10-18)
+                    if not via_thunk:
+                        res.tail_sites[insn.address] = t
                     # and its result is this function's
                     res.passes.add(t)
                     res.xpasses.add(t)
@@ -1534,6 +1587,14 @@ def main() -> None:
             # `extraout_XMM0_Da` (378 stubs, 2026-10-16); by the widest read instead of the most
             # callers, a pointer-returning function 3,425 callers use was typed float
             e["ret"] = [{4: "f", 8: "d"}.get(r[1], "x"), min(r[1], 8)]
+        elif r and r[4] > r[2] and not _k and _xw and set(_xw) <= {16} and not _xg:
+            # xmm0 written whole at every ret, by a load and nothing that says what it holds
+            # (`movups xmm0, [rdx + rax + 0x60]; ret`, and `movaps xmm0, [default]; ret` on the
+            # other path, FUN_142471d10), no scalar arithmetic saying it is a float, and more
+            # callers keep xmm0 whole than read rax: the 16 bytes it returns. Typed by the pointer
+            # rax still held, its callers read `extraout_XMM0_Da` to `_Dd` (2026-10-18). (Callers
+            # reading it as a scalar are no evidence: a float function ends `movaps xmm0, xmm6`)
+            e["ret"] = ["v", 16]
         elif a in called and r and r[0]:
             # as wide as its direct callers read it. A narrower write than that (a byte-returning
             # body handed on to callers that read rax whole) is `CONCAT71(in_register_00000001,

@@ -94,7 +94,24 @@ def load_facts(name: str) -> dict:
 
 # the success test: `if (iVar8 - uVar11 < 0x41) {`, or through a temporary,
 # `uVar9 = iVar8 - uVar15; if (uVar9 < 0x41) {`
-_SUCCESS = re.compile(r"^\s*if \(\w+(?: - \w+)? < 0x41\) \{\s*$")
+# (or the table entry's base computed in place, `if (iVar2 - (iVar14 + 0xc0000000U) < 0x41) {`:
+# Lua::UnitSetRole and seven other handlers kept their checks, "no success block", 2026-10-18)
+_SUCCESS = re.compile(r"^\s*if \(\w+(?: - (?:\w+|\(\w+ [+-] \w+\)))? < 0x41\) \{\s*$")
+# and as a jump to the code after the check
+_SUCCESS_JUMP = re.compile(r"^\s*if \(\w+(?: - (?:\w+|\(\w+ [+-] \w+\)))? < 0x41\) goto (\w+);\s*$")
+
+
+def _crash_path_end(lines: list[str], end_if: int) -> int:
+    """The last line of the check's own crash path right after it (`code_r0x...:` then
+    `do { ... } while( true );`), or the check's own end when there is none."""
+    j = end_if + 1
+    while j < len(lines) and not lines[j].strip():
+        j += 1
+    if j < len(lines) and _LABEL.match(lines[j]) and j + 1 < len(lines) and lines[j + 1].strip() == "do {":
+        loop_end = _block_end(lines, j + 1)
+        if loop_end is not None and "while( true );" in lines[loop_end]:
+            return loop_end
+    return end_if
 # the range test that opens a check: `if ((DAT_14261a0b0 <= unaff_retaddr) && ...`
 _CHECK_OPEN = re.compile(r"^\s*if \(\(DAT_14261a0b0 <= \w+\) &&")
 
@@ -118,7 +135,26 @@ def _strip_one(lines: list[str], start: int) -> tuple[list[str] | None, str]:
         return None, "check block does not close"
     succ = next((i for i in range(start, end_if) if _SUCCESS.match(lines[i])), None)
     if succ is None:
-        return None, "no success block in the check"
+        # the success test as a jump to the code after the check (`if (iVar24 - (iVar33 +
+        # 0xc0000000U) < 0x41) goto code_r0x000141c6db8f;`, PostAuction's and PlaceAuctionBid's
+        # later return points): the check is that jump
+        jump = next((m for i in range(start, end_if) if (m := _SUCCESS_JUMP.match(lines[i]))), None)
+        if jump is None:
+            return None, "no success block in the check"
+        stop = _crash_path_end(lines, end_if)
+        removed = lines[start:stop + 1]
+        for l in removed:
+            for m in _CALL.finditer(l):
+                if m.group(1) not in _NOT_CALLS:
+                    return None, f"call to {m.group(1)} in the check"
+        labels_removed = {m.group(1) for l in removed if (m := _LABEL.match(l))}
+        for l in lines[:start] + lines[stop + 1:]:
+            m = _GOTO.search(l)
+            if m and m.group(1) in labels_removed:
+                return None, f"code outside the check jumps to {m.group(1)}"
+        indent = re.match(r"\s*", lines[start]).group(0)
+        return (lines[:start] + [f"{indent}/* anti-tamper return-address check removed (tools/corpus.py) */",
+                                 f"{indent}goto {jump.group(1)};"] + lines[stop + 1:]), ""
     succ_end = _block_end(lines, succ)
     if succ_end is None or succ_end >= end_if:
         return None, "success block does not close"

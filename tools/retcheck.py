@@ -33,12 +33,31 @@ def main() -> None:
             first[f] = insn
     print(f"{unverified - len(refs)} pattern matches rejected as mid-instruction")
     junk = junk_jumps(b, first)
+    # (the check's junk is short: of 1,458 spans none lies between 0xc0 and 0x3c0 bytes. What is
+    # longer rests only on a linear decode out of step, and was a real branch over real code:
+    # 0x14198e978, `test rax, rax; je T` over 6 KB of Lua::PickupPetAction, 2026-10-18. The
+    # always-taken jumps below are proven by their flags and keep any length)
+    long = {a: t for a, t in junk.items() if t - a > 0x200}
+    print(f"{len(long)} jumps in the checks dropped as too long to be over junk")
+    for a in long:
+        del junk[a]
     opaque = opaque_jumps(b)
     print(f"{len(opaque)} always-taken jumps over junk, {len(set(opaque) - set(junk))} outside the checks")
+    flowed = opaque_jumps_flow(b)
+    print(f"{len(flowed)} more found following the flow, {len(set(flowed) - set(opaque) - set(junk))} new")
+    for a, t in flowed.items():
+        opaque.setdefault(a, t)
     junk.update(opaque)
+    # (the always-taken ones are proven by their flags; only the checks' jumps rest on a decode)
+    bad = skipping_reached_code(b, junk, proven=set(opaque))
+    print(f"{len(bad)} jumps dropped: other code reaches the bytes they skip "
+          f"({', '.join(f'{a:x}->{junk[a]:x}' for a in sorted(bad)[:8])})")
+    for a in bad:
+        del junk[a]
     # (the outermost of the two sets together: one may sit inside the other's junk)
-    spans = sorted(junk.items())
-    junk = {a: t for a, t in spans if not any(j < a < u for j, u in spans if j != a)}
+    # (a jump whose junk ends before its target spans only the junk: the code after is real)
+    spans = sorted((a, JUNK_ENDS.get(a, t)) for a, t in junk.items())
+    junk = {a: t for a, t in junk.items() if not any(j < a < u for j, u in spans if j != a)}
     checks = success_branches(b, sorted(i for i, t in refs if t == RANGE_BASE), junk)
     refs2 = b.riprel_refs(keep=lambda t: t == RANGE2_BASE)
     checks2 = call_check_branches(b, sorted(i for i, _t in refs2))
@@ -48,6 +67,8 @@ def main() -> None:
         "range_globals": [hexa(RANGE_BASE), hexa(RANGE_LEN)],
         "functions": {hexa(f): hexa(i) for f, i in sorted(first.items())},
         "junk_jumps": {hexa(j): hexa(t) for j, t in sorted(junk.items())},
+        # (where the junk a jump skips ends before its target: ApplyFacts clears only up to there)
+        "junk_ends": {hexa(j): hexa(JUNK_ENDS[j]) for j in sorted(junk) if j in JUNK_ENDS},
         "checks": {hexa(s): hexa(t) for s, t in sorted(checks.items())},
     })
     n = sum(1 for i, t in refs if t == RANGE_BASE)
@@ -112,6 +133,197 @@ def opaque_jumps(b: Binary) -> dict[int, int]:
     ranges = sorted((a + size, t) for a, (t, size) in out.items())
     return {a: t for a, (t, size) in out.items()
             if not any(lo <= a < hi for lo, hi in ranges if (lo, hi) != (a + size, t))}
+
+
+def skipping_reached_code(b: Binary, jumps: dict[int, int], proven: set[int] = frozenset()) -> set[int]:
+    """The jumps over "junk" whose skipped bytes the function's flow reaches some other way: real
+    code, which ApplyFacts would clear. The linear decodes that find them can run out of step
+    through real code, and a real jump in there looked like one over junk: 0x14193bb05 skipped
+    12 KB of Lua::CastSpellByID, eight such spans in all, and each of those handlers came out
+    damaged (2026-10-18). The flow follows every jump's target, and never the fall-through of one
+    of these (that is the junk), from the function's pieces."""
+    import capstone
+    md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
+    roots: dict[int, list[int]] = {}
+    for a in jumps:
+        r = b.func_containing(a)
+        if r is not None:
+            roots.setdefault(r, []).append(a)
+    pieces: dict[int, list[tuple[int, int]]] = {}
+    for s, e, r in zip(b.piece_starts, b.piece_ends, b.piece_root):
+        if r in roots:
+            pieces.setdefault(r, []).append((s, e))
+    bad = set()
+    for r, js in roots.items():
+        ps = pieces[r]
+
+        def inside(x):
+            return any(s <= x < e for s, e in ps)
+
+        reached: set[int] = set()
+        todo, seen = [s for s, _e in ps], set()
+        while todo:
+            a = todo.pop()
+            while inside(a) and a not in seen:
+                seen.add(a)
+                o = b.off(a)
+                ins = next(md.disasm_lite(bytes(b.image[o:o + 16]), a), None)
+                if ins is None:
+                    break
+                _x, size, mn, ops = ins
+                reached.update(range(a, a + size))
+                if mn in ("ret", "int3", "ud2", "hlt") or (mn == "jmp" and not ops.startswith("0x")):
+                    break
+                if mn.startswith("j") or mn.startswith("loop"):
+                    try:
+                        t = int(ops, 16)
+                    except ValueError:
+                        t = None
+                    if mn == "jmp":
+                        a = t
+                        continue
+                    if t is not None:
+                        todo.append(t)
+                    if a in jumps:
+                        break
+                a += size
+        for a in js:
+            o = b.off(a)
+            ins = next(md.disasm_lite(bytes(b.image[o:o + 16]), a), None)
+            size = ins[1] if ins else 2
+            if any(x in reached for x in range(a + size, JUNK_ENDS.get(a, jumps[a]))):
+                bad.add(a)
+                continue
+            # and junk ends inside an instruction that spans the target: decoded from the jump's
+            # own fall-through, real code lands on it (0x14198e978, `test rax, rax; je T` over
+            # 6 KB of Lua::PickupPetAction, its decode from the piece start out of step)
+            if a in proven:
+                continue    # (a short opaque jump can skip junk that happens to decode onto T)
+            x, t = a + size, jumps[a]
+            o = b.off(x)
+            for _y, sz, _m, _o in md.disasm_lite(bytes(b.image[o:o + (t - x) + 16]), x):
+                if x >= t:
+                    break
+                x += sz
+            if x == t:
+                bad.add(a)
+    return bad
+
+
+OPPOSITE = {}
+for _x, _y in [("jo", "jno"), ("jb", "jae"), ("je", "jne"), ("jbe", "ja"), ("js", "jns"), ("jp", "jnp"),
+               ("jl", "jge"), ("jle", "jg"), ("jc", "jnc"), ("jz", "jnz"), ("jnb", "jnae")]:
+    OPPOSITE[_x], OPPOSITE[_y] = _y, _x
+
+
+def opaque_jumps_flow(b: Binary) -> dict[int, int]:
+    """opaque_jumps, decoding along the flow from each function's pieces rather than straight
+    through them. A linear decode that runs into junk can stay out of step for hundreds of bytes
+    of real code after it, and the always-taken jump there is never seen: Lua::CastSpellByID's
+    `stc; xchg ah, ah; jb T` (0x14193d5f4), whose fall-through into junk left the function
+    damaged, and ten more Lua handlers with it (2026-10-18). The flow never takes an opaque
+    jump's fall-through, and a jump counts only if nothing else the flow reaches lies in the
+    bytes it skips: those are junk, and ApplyFacts clears them."""
+    # Each instruction carries the conditions known true on every path into it, the flags
+    # untouched since they were set: `clc` makes jae/jnb/jnc so, `stc` jb/jc/jnae and jbe/jna (CF
+    # is enough for those: Lua::PostAuction's `stc; jbe T`), a test, and, or or xor clears CF and
+    # OF; a taken jump makes its own condition true at its target, and its fall-through the
+    # opposite one. An instruction that leaves the flags alone keeps them, anything else forgets
+    # them, and where paths meet only what both know is kept. A conditional jump whose condition
+    # is known is always taken, and its fall-through never followed. That covers the second of
+    # two opposite jumps (`jl X; ...; jge Y`, Lua::AutoStoreGuildBankItem: past the first, the
+    # second's condition holds) and a jump repeated at the first one's target (`clc; jae T` with
+    # another jae at T, Lua::GetMacroItemIcons), which the patterns before did not (2026-10-18).
+    import capstone
+    md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
+    neutral = {"mov", "lea", "nop", "push", "pop", "xchg", "movzx", "movsx", "movsxd", "bswap", "not"}
+    shifts = ("shl", "shr", "sal", "sar", "rol", "ror")
+    sets = {"clc": frozenset(("jae", "jnb", "jnc")),
+            "stc": frozenset(("jb", "jc", "jnae", "jbe", "jna")),
+            **{m: frozenset(("jae", "jnb", "jnc", "jno")) for m in ("test", "and", "or", "xor")}}
+    pieces: dict[int, list[tuple[int, int]]] = {}
+    for s, e, r in zip(b.piece_starts, b.piece_ends, b.piece_root):
+        pieces.setdefault(r, []).append((s, e))
+    decoded: dict[int, tuple] = {}
+
+    def decode(x):
+        if x not in decoded:
+            o = b.off(x)
+            decoded[x] = next(md.disasm_lite(bytes(b.image[o:o + 16]), x), None)
+        return decoded[x]
+
+    out: dict[int, int] = {}
+    for root, ps in pieces.items():
+        decoded.clear()
+        hi = max(e for _s, e in ps)
+
+        def inside(x):
+            return any(s <= x < e for s, e in ps)
+
+        state: dict[int, frozenset] = {}
+        todo = [(s, frozenset()) for s, _e in ps]
+        while todo:
+            a, known = todo.pop()
+            if not inside(a):
+                continue
+            old = state.get(a)
+            if old is not None:
+                known = old & known
+                if known == old:
+                    continue
+            state[a] = known
+            ins = decode(a)
+            if ins is None:
+                continue
+            _x, size, mn, ops = ins
+            if mn in ("ret", "int3", "ud2", "hlt") or (mn == "jmp" and not ops.startswith("0x")):
+                continue
+            if mn == "jmp":
+                todo.append((int(ops, 16), known))
+                continue
+            if mn.startswith("j") or mn.startswith("loop"):
+                t = int(ops, 16) if ops.startswith("0x") else None
+                if t is not None:
+                    todo.append((t, known | {mn}))
+                if mn in known and t is not None:
+                    continue        # always taken: no fall-through
+                opp = OPPOSITE.get(mn)
+                todo.append((a + size, (known | {opp}) if opp else known))
+                continue
+            if mn in sets:
+                after = sets[mn]
+            elif mn in neutral or mn.startswith("cmov") or (mn in shifts and ops.endswith(", 0")):
+                after = known
+            else:
+                after = frozenset()
+            todo.append((a + size, after))
+        # the jumps always taken, and what the flow reaches without their fall-throughs
+        found = {}
+        for a, known in state.items():
+            ins = decode(a)
+            if ins and ins[2].startswith("j") and ins[2] != "jmp" and ins[2] in known and ins[3].startswith("0x"):
+                t = int(ins[3], 16)
+                if a + ins[1] < t < hi:
+                    found[a] = (t, ins[1])
+        reached: set[int] = set()
+        for a in state:
+            ins = decode(a)
+            if ins:
+                reached.update(range(a, a + ins[1]))
+        for a, (t, size) in found.items():
+            hit = next((x for x in range(a + size, t) if x in reached), None)
+            if hit is None:
+                out[a] = t
+            elif hit > a + size:
+                # real code before the target (the block the opposite jump before it goes to):
+                # the junk is only what lies before that
+                out[a] = t
+                JUNK_ENDS[a] = hit
+    return out
+
+
+# the always-taken jumps whose junk ends before their target (opaque_jumps_flow): jump -> end
+JUNK_ENDS: dict[int, int] = {}
 
 
 def call_check_branches(b: Binary, starts: list[int]) -> dict[int, int]:

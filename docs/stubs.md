@@ -39,6 +39,7 @@ None of them may contact Blizzard endpoints.
 
 | function | ref | what the reference does | FrostLite now |
 |---|---|---|---|
+| startup working directory (stage 1) | 0x1402262e0 (0x140211520) | with no `-datadir`, moves to its executable's directory, the install it ships in | keeps the directory it was started in: FrostLite's exe lives in the build tree. Exposed 2026-10-18 when `OsPathStripFilename` stopped being a stub and the move began to succeed (no Config.wtf, no .build.info, CAS init failed) |
 | small-block allocator frame step | 0x1412c51b0 (0x1412c4750, 0x1412c49e0) | once a frame, moves the blocks other threads freed back to their size classes in the heap at DAT_1430a8c70; every 600th frame trims it on the thread pool | left out of the frame (both calls in FUN_140225ab0): Storm's allocations go through the CRT, and the hooks that set the heap up (FUN_1412c46b0) are a stub, so there is no heap to keep |
 
 ## Local, not yet ported

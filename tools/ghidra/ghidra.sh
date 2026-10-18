@@ -45,6 +45,10 @@ case "$1" in
             -postScript ExportDecompAll.java "$(cygpath -w "$ROOT/build/corpus.jsonl.new")" \
             2>&1 | tee "$ROOT/build/ghidra-last.log" | grep --line-buffered -E "ApplyFacts:|ExportD|ERROR|Exception" || true
           [ -s "$ROOT/build/refdata.jsonl.new" ] && [ -s "$ROOT/build/corpus.jsonl.new" ] || { echo "export incomplete"; exit 1; }
+          # (and each export said it finished: a session stopped mid-export left both files
+          # non-empty and partial, and the partial corpus replaced the good one, 2026-10-18)
+          grep -q "ExportData: wrote " "$ROOT/build/ghidra-last.log" && grep -q "ExportDecompAll: wrote " "$ROOT/build/ghidra-last.log" \
+            || { echo "export did not finish (build/ghidra-last.log): the old corpus is kept"; exit 1; }
           # (Windows will not replace a file another process has open: a tool reading the old
           # corpus left the new one beside it once, and the session still reported success)
           for f in refdata corpus; do

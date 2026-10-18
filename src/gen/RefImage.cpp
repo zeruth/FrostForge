@@ -31,6 +31,19 @@ extern const GENJUMP g_genJumps[];
 extern const size_t g_genJumpCount;
 extern const uint64_t g_genInits[];
 extern const size_t g_genInitCount;
+// the code ranges mapped as the reference's own bytes, from and to in pairs (third-party
+// assembly the translated code calls: tools/translate.py native_ok)
+extern const uint64_t g_genNative[];
+extern const size_t g_genNativeCount;
+// the import slots that native code calls through (the protector resolves the image's own at
+// run time, so the mapped ones are empty): filled here, by name
+struct GENIMPORT {
+    uint64_t m_slot;
+    const char* m_dll;
+    const char* m_name;
+};
+extern const GENIMPORT g_genImports[];
+extern const size_t g_genImportCount;
 // each translated file's call counts and the addresses they belong to (hits.c)
 struct GENHITS {
     unsigned int* m_hits;
@@ -180,6 +193,8 @@ constexpr uint64_t kTextStart = 0x140001000ull;
 constexpr uint64_t kTextEnd = 0x14260c5d3ull;
 bool s_mapped = false;
 uint64_t s_pool = 0;
+// the functions reached through the int3 rather than a jump, by address (sorted)
+std::vector<std::pair<uint64_t, void*>> s_traps;
 
 std::mutex s_reportedLock;
 std::unordered_set<uint64_t>* s_reported;
@@ -205,6 +220,13 @@ LONG CALLBACK TrapHandler(EXCEPTION_POINTERS* info) {
     uint64_t address = context->Rip;
     if (address < kTextStart || address >= kTextEnd) {
         return EXCEPTION_CONTINUE_SEARCH;
+    }
+    // a function too close to the next for a jump (RefImageInitialize): on to its target, as
+    // the jump would have gone, the return address still on top
+    auto trap = std::lower_bound(s_traps.begin(), s_traps.end(), std::make_pair(address, static_cast<void*>(nullptr)));
+    if (trap != s_traps.end() && trap->first == address) {
+        context->Rip = reinterpret_cast<uint64_t>(trap->second);
+        return EXCEPTION_CONTINUE_EXECUTION;
     }
     if (ReportUnimplemented(address)) {
         // (who called it: the int3 is the callee's first byte, its return address on top)
@@ -304,6 +326,15 @@ bool RefImageInitialize(const char* path) {
         void* memory = reinterpret_cast<void*>(va);
         if (code) {
             std::memset(memory, 0xcc, size);
+            // except the native ranges: the reference's own machine code, which runs in place
+            for (size_t n = 0; n < g_genNativeCount; n++) {
+                uint64_t lo = (std::max)(g_genNative[2 * n], va);
+                uint64_t hi = (std::min)(g_genNative[2 * n + 1], va + (std::min)(size, static_cast<uint64_t>(section.SizeOfRawData)));
+                if (lo < hi && std::fseek(file, static_cast<long>(section.PointerToRawData + (lo - va)), SEEK_SET) == 0
+                    && std::fread(reinterpret_cast<void*>(lo), 1, hi - lo, file) != hi - lo) {
+                    FrostLog("refimage", "short read of the native range at %llx", static_cast<unsigned long long>(lo));
+                }
+            }
         } else if (section.SizeOfRawData != 0) {
             std::fseek(file, section.PointerToRawData, SEEK_SET);
             size_t raw = (std::min)(static_cast<size_t>(section.SizeOfRawData), static_cast<size_t>(section.Misc.VirtualSize));
@@ -315,6 +346,23 @@ bool RefImageInitialize(const char* path) {
     }
     std::fclose(file);
 
+    for (size_t i = 0; i < g_genImportCount; i++) {
+        const GENIMPORT& imp = g_genImports[i];
+        HMODULE module = LoadLibraryA(imp.m_dll);
+        FARPROC proc = nullptr;
+        if (module) {
+            // (`#12`: by ordinal)
+            proc = imp.m_name[0] == '#'
+                ? GetProcAddress(module, MAKEINTRESOURCEA(static_cast<WORD>(std::atoi(imp.m_name + 1))))
+                : GetProcAddress(module, imp.m_name);
+        }
+        if (proc) {
+            *reinterpret_cast<FARPROC*>(imp.m_slot) = proc;
+        } else {
+            FrostLog("refimage", "native code's import %s!%s not found", imp.m_dll, imp.m_name);
+        }
+    }
+
     // at every function the port can run, a 5-byte `jmp rel32` (functions can start closer
     // together than an absolute jump is long) into a pool past the image, whose entry is
     // `jmp [rip+0]` and the target
@@ -325,16 +373,61 @@ bool RefImageInitialize(const char* path) {
         FrostLog("refimage", "cannot place the jump pool: translated code disabled");
         return false;
     }
+    // A function that starts less than 5 bytes before the next one (MSVC packs one-instruction
+    // functions, `mov al, 1; ret`, four bytes apart) cannot take the jump: the next one's would
+    // overwrite its last byte, or its own would overwrite the next one's int3. FUN_14026bea0, the
+    // SSL filter's slot 1, jumped to 0x129a4d530 at login on that (2026-10-18; 19 such pairs).
+    // Those keep the int3, and the trap handler sends them on. Function starts: the jump
+    // table's, and the image's .pdata, which also has the non-leaf functions the port cannot run.
+    std::vector<uint64_t> starts;
+    starts.reserve(g_genJumpCount * 2);
+    for (size_t i = 0; i < g_genJumpCount; i++) {
+        starts.push_back(g_genJumps[i].m_address);
+    }
+    const IMAGE_DATA_DIRECTORY& pdata = nt.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXCEPTION];
+    auto functions = reinterpret_cast<const RUNTIME_FUNCTION*>(base + pdata.VirtualAddress);
+    for (size_t i = 0; pdata.VirtualAddress != 0 && i < pdata.Size / sizeof(RUNTIME_FUNCTION); i++) {
+        starts.push_back(base + functions[i].BeginAddress);
+    }
+    std::sort(starts.begin(), starts.end());
+    starts.erase(std::unique(starts.begin(), starts.end()), starts.end());
+    // the native ranges' unwind entries (the image's .pdata is sorted, so each range's are one
+    // run of it): a fault or a stack walk through the reference's own code unwinds its frames
+    for (size_t n = 0; pdata.VirtualAddress != 0 && n < g_genNativeCount; n++) {
+        size_t total = pdata.Size / sizeof(RUNTIME_FUNCTION);
+        size_t first = 0;
+        while (first < total && base + functions[first].BeginAddress < g_genNative[2 * n]) {
+            first++;
+        }
+        size_t last = first;
+        while (last < total && base + functions[last].BeginAddress < g_genNative[2 * n + 1]) {
+            last++;
+        }
+        if (last > first) {
+            RtlAddFunctionTable(const_cast<RUNTIME_FUNCTION*>(functions + first), static_cast<DWORD>(last - first), base);
+        }
+    }
     for (size_t i = 0; i < g_genJumpCount; i++) {
         uint8_t* entry = pool + i * 16;
         entry[0] = 0xff;
         entry[1] = 0x25;
         std::memset(entry + 2, 0, 4);
         std::memcpy(entry + 6, &g_genJumps[i].m_target, 8);
-        auto at = reinterpret_cast<uint8_t*>(g_genJumps[i].m_address);
+        uint64_t address = g_genJumps[i].m_address;
+        auto next = std::upper_bound(starts.begin(), starts.end(), address);
+        if (next != starts.end() && *next - address < 5) {
+            s_traps.emplace_back(address, g_genJumps[i].m_target);
+            continue;
+        }
+        auto at = reinterpret_cast<uint8_t*>(address);
         int32_t rel = static_cast<int32_t>(reinterpret_cast<intptr_t>(entry) - reinterpret_cast<intptr_t>(at + 5));
         at[0] = 0xe9;
         std::memcpy(at + 1, &rel, 4);
+    }
+    std::sort(s_traps.begin(), s_traps.end());
+    if (!s_traps.empty()) {
+        FrostLog("refimage", "%zu functions too close to the next for a jump: reached through the trap",
+                 s_traps.size());
     }
     DWORD old;
     VirtualProtect(pool, poolSize, PAGE_EXECUTE_READ, &old);

@@ -135,6 +135,21 @@ typedef void *LPCRITICAL_SECTION, *PSRWLOCK, *PCONDITION_VARIABLE, *LPSECURITY_A
 typedef unsigned long long HCRYPTHASH, HCRYPTPROV, HCRYPTKEY;
 /* winsock's fd_set, as the code reaches it through pointers only */
 typedef struct fd_set fd_set;
+/* and the rest the import thunks and runtime helpers pass on (sockets, IME, DPAPI, BCrypt, the
+   PE-section walk): handles and pointers, by their SDK width; the structs through pointers only
+   (incomplete types, as fd_set). 26 functions were stubbed as "a type C does not know" (2026-10-18) */
+typedef void *HKL, *HGDIOBJ, *LPWSADATA, *LPCANDIDATELIST, *LPCOMPOSITIONFORM, *LPCANDIDATEFORM,
+    *PEXCEPTION_RECORD, *BCRYPT_ALG_HANDLE, *PSLIST_HEADER;
+typedef unsigned char *PBYTE, *PUCHAR;
+typedef unsigned short *LPWORD;
+typedef unsigned int *PUINT;
+typedef wchar_t *PCWSTR;
+typedef long NTSTATUS;
+typedef unsigned short wctype_t;
+typedef struct sockaddr sockaddr;
+typedef struct timeval timeval;
+typedef struct _DATA_BLOB DATA_BLOB;
+typedef struct _CRYPTPROTECT_PROMPTSTRUCT CRYPTPROTECT_PROMPTSTRUCT;
 /* the structs translated code fills and reads by field, by their SDK layout. SChannel's SSPI
    loader (FUN_141f74e30) asks GetVersionExA which DLL to load (dwOSVersionInfoSize = 0x94); it was
    stubbed for the type, so the SChannel factory never initialized and the Login click found no
@@ -298,6 +313,10 @@ static __inline double GEN_AS_FLOAT(unsigned long long bits) {
 #define SUB83(x, n) ((uint32_t)(((uint64_t)(x) >> ((n) * 8)) & 0xffffffu))
 #define SUB85(x, n) ((uint64_t)(((uint64_t)(x) >> ((n) * 8)) & 0xffffffffffull))
 #define SUB86(x, n) ((uint64_t)(((uint64_t)(x) >> ((n) * 8)) & 0xffffffffffffull))
+/* (a 6-byte value's 2 bytes at n, FUN_1423f32a0; it did not link, 2026-10-18) */
+#define SUB62(x, n) ((uint16_t)((uint64_t)(x) >> ((n) * 8)))
+#define SUB61(x, n) ((uint8_t)((uint64_t)(x) >> ((n) * 8)))
+#define SUB64(x, n) ((uint32_t)((uint64_t)(x) >> ((n) * 8)))
 #define SUB87(x, n) ((uint64_t)(((uint64_t)(x) >> ((n) * 8)) & 0xffffffffffffffull))
 #define ZEXT14(x) ((uint32_t)(uint8_t)(x))
 #define ZEXT18(x) ((uint64_t)(uint8_t)(x))
@@ -308,6 +327,18 @@ static __inline double GEN_AS_FLOAT(unsigned long long bits) {
 /* (to 12 bytes: a value no wider than 8 there, which a 12-byte store then takes whole) */
 #define ZEXT412(x) ((uint64_t)(uint32_t)(x))
 #define ZEXT812(x) ((uint64_t)(x))
+/* (and the other widths up to 8, `auVar2._0_12_ = ZEXT712(0)`: 10 functions did not link,
+   2026-10-18; and the odd widths to 8, masked to their bytes) */
+#define ZEXT112(x) ((uint64_t)(uint8_t)(x))
+#define ZEXT212(x) ((uint64_t)(uint16_t)(x))
+#define ZEXT312(x) ((uint64_t)(x) & 0xffffffull)
+#define ZEXT512(x) ((uint64_t)(x) & 0xffffffffffull)
+#define ZEXT612(x) ((uint64_t)(x) & 0xffffffffffffull)
+#define ZEXT712(x) ((uint64_t)(x) & 0xffffffffffffffull)
+#define ZEXT38(x) ((uint64_t)(x) & 0xffffffull)
+#define ZEXT58(x) ((uint64_t)(x) & 0xffffffffffull)
+#define ZEXT68(x) ((uint64_t)(x) & 0xffffffffffffull)
+#define ZEXT78(x) ((uint64_t)(x) & 0xffffffffffffffull)
 #define SEXT14(x) ((int32_t)(int8_t)(x))
 #define SEXT18(x) ((int64_t)(int8_t)(x))
 #define SEXT24(x) ((int32_t)(int16_t)(x))
@@ -355,6 +386,20 @@ static __inline unsigned long long GEN_PIECE(const void *p, int off, int n) {
 }
 #define GEN_PIECE_SET(p, off, n, v) do { unsigned long long gen_piece_ = (unsigned long long)(v); \
     memcpy((char *)(p) + (off), &gen_piece_, (n)); } while (0)
+/* the same as an expression (a store of a value's low n bytes inside a comma expression,
+   `(GEN_PIECE(&local_8, 0, 7) = SUB87(dVar1,0), ...)`, C2106, 2026-10-18), and a value's bits:
+   a double's or a float's as they are in memory, an integer's as it is */
+static __inline unsigned long long gen_piece_set(void *p, int off, int n, unsigned long long v) {
+    memcpy((char *)p + off, &v, n);
+    return v;
+}
+static __inline unsigned long long gen_d2bits(double x) { unsigned long long r; memcpy(&r, &x, 8); return r; }
+static __inline unsigned long long gen_fl2bits(float x) { unsigned int r; memcpy(&r, &x, 4); return r; }
+static __inline unsigned long long gen_u2bits64(unsigned long long x) { return x; }
+#define GEN_BITS(x) _Generic((x), double: gen_d2bits, float: gen_fl2bits, default: gen_u2bits64)(x)
+/* a switch on a double (`case 0.0:`, which C refuses, C2052): its bits, -0.0 as 0.0, so a case
+   matches exactly the values == would */
+static __inline unsigned long long gen_dkey(double x) { return x == 0.0 ? 0ull : gen_d2bits(x); }
 /* ---- 16-byte values (tools/v16.py) ----------------------------------------------------------
    Ghidra's `undefined1 auVar [16]`, an SSE register, as a union C can assign, pass and return.
    Integer operators Ghidra writes on one are 128-bit arithmetic (gen_v16_add ...); its SSE
@@ -385,8 +430,11 @@ static __inline gen_v16 gen_v16_d(__m128d d) { gen_v16 r; r.d = d; return r; }
 static __inline gen_v16 gen_v16_fromq(unsigned long long x) { return gen_v16_qq(x, 0); }
 static __inline gen_v16 gen_v16_fromf(float x) { gen_v16 r = gen_v16_qq(0, 0); memcpy(&r, &x, 4); return r; }
 static __inline gen_v16 gen_v16_fromd(double x) { gen_v16 r = gen_v16_qq(0, 0); memcpy(&r, &x, 8); return r; }
+/* (a 16-byte value is itself: `gen_v16_u(CALLF(gen_v16, FUN_1412c9f10)(...))`, a call already
+   returning one, C2440 in 2 functions, 2026-10-18) */
+static __inline gen_v16 gen_v16_same(gen_v16 v) { return v; }
 #define gen_v16_u(x) _Generic((x), float: gen_v16_fromf, double: gen_v16_fromd, \
-    default: gen_v16_fromq)(x)
+    gen_v16: gen_v16_same, default: gen_v16_fromq)(x)
 static __inline unsigned long long gen_v16_q0(gen_v16 v) { return v.q[0]; }
 static __inline float gen_v16_f0(gen_v16 v) { float f; memcpy(&f, &v, 4); return f; }
 static __inline double gen_v16_d0(gen_v16 v) { double d; memcpy(&d, &v, 8); return d; }
@@ -501,6 +549,23 @@ static __inline unsigned int movmskps(unsigned long long dest, gen_v16 v) {
 static __inline unsigned int movmskpd(unsigned long long dest, gen_v16 v) {
     (void)dest;
     return (unsigned int)_mm_movemask_pd(v.d);
+}
+/* Ghidra's rdrand pseudo-op and its carry flag (the CRT's random seeding, FUN_14026b280): the
+   intrinsic, whose success is the flag. Did not link (3 functions, 2026-10-18) */
+static __declspec(thread) int gen_rdrand_ok;
+static __inline unsigned long long rdrand(void) {
+    unsigned long long v = 0;
+    gen_rdrand_ok = _rdrand64_step(&v);
+    return v;
+}
+static __inline int rdrandIsValid(void) { return gen_rdrand_ok; }
+/* pavgb / pavgw as Ghidra writes one lane of them, on scalars (`pavgb((char)uVar1, *p)`): the
+   rounded average of the two, unsigned (did not link, 2026-10-18) */
+static __inline unsigned char pavgb(unsigned int a, unsigned int b) {
+    return (unsigned char)(((a & 0xffu) + (b & 0xffu) + 1u) >> 1);
+}
+static __inline unsigned short pavgw(unsigned int a, unsigned int b) {
+    return (unsigned short)(((a & 0xffffu) + (b & 0xffffu) + 1u) >> 1);
 }
 
 /* Ghidra's `(code *)swi(n)`, called: the trap the instruction raises. `int3` (swi(3)) breaks

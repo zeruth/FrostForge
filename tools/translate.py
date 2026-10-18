@@ -28,6 +28,7 @@ import argparse
 import bisect
 import datetime
 import gc
+import functools
 import json
 import os
 import re
@@ -106,6 +107,9 @@ WINDOWS_TYPES = {
     "HCRYPTHASH", "HCRYPTPROV", "HCRYPTKEY", "LPSYSTEMTIME", "PSYSTEMTIME", "fd_set",
     "_OSVERSIONINFOA", "DWORDLONG", "_FILETIME", "FILETIME", "_LARGE_INTEGER", "LARGE_INTEGER", "tagRECT",
     "_SYSTEM_INFO", "SYSTEM_INFO", "IMAGE_DOS_HEADER", "_IMAGE_DOS_HEADER", "_iobuf",
+    "HKL", "HGDIOBJ", "LPWSADATA", "LPCANDIDATELIST", "LPCOMPOSITIONFORM", "LPCANDIDATEFORM",
+    "PEXCEPTION_RECORD", "BCRYPT_ALG_HANDLE", "PSLIST_HEADER", "PBYTE", "PUCHAR", "LPWORD", "PUINT", "PCWSTR",
+    "NTSTATUS", "wctype_t", "sockaddr", "timeval", "DATA_BLOB", "CRYPTPROTECT_PROMPTSTRUCT",
 }
 PRIMITIVE |= WINDOWS_TYPES
 # the C library's own structs and types, which src/gen/Ghidra.h names the way Ghidra writes them
@@ -137,7 +141,13 @@ HARD = [
 CRT = {"memcpy", "memmove", "memset", "memcmp", "strlen", "strcmp", "strncmp", "strchr", "strrchr", "strstr",
        "strcpy", "strncpy", "strcat", "abs", "labs", "fabs", "sqrt", "sqrtf", "floor", "floorf", "ceil", "ceilf",
        "sin", "cos", "tan", "sinf", "cosf", "tanf", "atan2", "atan2f", "pow", "powf", "fmod", "fmodf", "exp", "log",
-       "tolower", "toupper", "isdigit", "isalpha", "isspace", "atoi", "atof", "strtol", "strtoul", "free", "malloc"}
+       "tolower", "toupper", "isdigit", "isalpha", "isspace", "atoi", "atof", "strtol", "strtoul", "free", "malloc",
+       # (whose reference bodies are the CRT's templates and lambdas, not C: fflush's
+       # `__crt_seh_guarded_call<int>::operator()<...>`, 2026-10-18)
+       "fflush", "strtoull", "wcstol", "wcstoul", "raise"}
+# and runtime routines by their exact name, the leading underscore part of it (`_close` is not
+# `close`): the port's runtime has each under that name
+CRT_EXACT = {"_close", "_commit", "_fstat64", "_wtol", "_strtoi64", "_fullpath", "_wfullpath"}
 # reference runtime routines FID left unnamed (tools/fidelity_exceptions.json)
 CRT_BY_ADDR = {0x1425bf3b0: "memmove", 0x1425bfa50: "memset",
                # the thread-safe static guard's header (its footer is named in the corpus)
@@ -154,7 +164,12 @@ CRT_BY_ADDR = {0x1425bf3b0: "memmove", 0x1425bfa50: "memset",
                # and fmod (oracle), frexp and acos (what Lua::frexp and Lua::acos call; acos(0.25)
                # under the oracle is 1.3181...): their error paths return the error handler's
                # double, which the decompiler shows as `extraout_XMM0_Qa`
-               0x14241a730: "fmod", 0x140282f8c: "frexp", 0x142417a9c: "acos"}
+               0x14241a730: "fmod", 0x140282f8c: "frexp", 0x142417a9c: "acos",
+               # FID-unnamed wrappers of the runtime's templates, each `return common_X(args, k)`
+               # (their template a runtime internal, which game code reaching them left a stub,
+               # 2026-10-18): common_fseek with a 32-bit offset, and common_exit with the full
+               # cleanup and with none (the UCRT's _crt_exit_full_cleanup, _crt_exit_no_cleanup)
+               0x140279378: "fseek", 0x14027258c: "exit", 0x140272544: "_exit"}
 # reference runtime entry points code stores as pointers, jumped to the port's own runtime: a
 # call through the pointer reaches the same routine a direct call does. curl_global_init
 # (FUN_14216a080) fills curl's allocator table with these; without them every curl allocation
@@ -197,6 +212,11 @@ CRT_TEMPLATES = {"common_vsprintf<__crt_stdio_output::standard_base,char>": "__s
                  # (the float instantiation reads the same text: a double rounded once more)
                  "common_strtod_l<>": "_strtod_l",
                  "common_end_thread": "_endthreadex",
+                 # (inlined into game code: FUN_142284280 enumerating a folder, 2026-10-18)
+                 "common_find_first_wide<_wfinddata64i32_t>": "_wfindfirst64i32",
+                 "common_find_next_wide<_wfinddata64i32_t>": "_wfindnext64i32",
+                 "common_vsprintf<__crt_stdio_output::standard_base,wchar_t>": "__stdio_common_vswprintf",
+                 "common_lseek_nolock<__int64>": "_lseeki64_nolock", "common_lseek_nolock<long>": "_lseek_nolock",
                  "FID_conflict:__stdio_common_vfwprintf": "__stdio_common_vfwprintf",
                  "FID_conflict___stdio_common_vfwprintf": "__stdio_common_vfwprintf",
                  # Ghidra's spelling of an inlined strncpy of a constant
@@ -227,8 +247,7 @@ TYPE_WORD = re.compile(r"\(\s*(?:const\s+)?([A-Za-z_]\w*)\s*\*+\s*\)|"
 
 def load_publics() -> dict[int, str]:
     """va -> mangled name of the port's functions."""
-    out = subprocess.run([str(F.LLVM / "llvm-pdbutil.exe"), "dump", "-publics", str(F.PORT_PDB)],
-                         capture_output=True, text=True, errors="replace").stdout
+    out = F.pdbutil("-publics")
     port = Binary(F.PORT_EXE)
     names = {}
     pending = None
@@ -253,8 +272,7 @@ def load_signatures() -> dict[int, tuple]:
 
     A class is 'int' (integers, pointers, references, enums, bools), 'float', 'double', 'void',
     or 'complex' (an aggregate by value, or variadic): an adapter only takes the simple ones."""
-    types = subprocess.run([str(F.LLVM / "llvm-pdbutil.exe"), "dump", "-types", str(F.PORT_PDB)],
-                           capture_output=True, text=True, errors="replace").stdout.splitlines()
+    types = F.pdbutil("-types").splitlines()
     kind_of: dict[int, str] = {}
     proc_of: dict[int, tuple] = {}
     args_of: dict[int, list] = {}
@@ -309,8 +327,7 @@ def load_signatures() -> dict[int, tuple]:
             return "complex"
         return "complex"
 
-    syms = subprocess.run([str(F.LLVM / "llvm-pdbutil.exe"), "dump", "-symbols", str(F.PORT_PDB)],
-                          capture_output=True, text=True, errors="replace").stdout.splitlines()
+    syms = F.pdbutil("-symbols").splitlines()
     port = Binary(F.PORT_EXE)
     enum_names = set()
     for line in types:
@@ -661,7 +678,8 @@ def stack_frame(body: str, params: list[str] | None = None) -> str:
     # scalar of its size, which C can assign (C2106 in 6 functions, 2026-10-16)
     for m in decls:
         n = m.group(4)
-        if m.group(7) in ("2", "4", "8") and not m.group(3) and m.group(2).strip() in ("undefined1", "undefined") \
+        # (a `char` array as well: `char local_38 [8]` assigned a string's first 8 bytes, C2106)
+        if m.group(7) in ("2", "4", "8") and not m.group(3) and m.group(2).strip() in ("undefined1", "undefined", "char") \
                 and re.search(rf"(?<![\w.>*]){n}\s*=(?!=)", body):
             retyped[n] = f"undefined{m.group(7)}"
     whole = {n for n, t in retyped.items() if not t.endswith("*")}
@@ -794,8 +812,9 @@ def register_upper_halves(text: str) -> str:
         rest = [u for u in uses if u not in decl]
         if name in upper:
             ok = all(re.search(r"CONCAT\d+\(\s*(?:\(\w+\))?\s*$", text[max(0, u.start() - 24):u.start()])
+                     # (the high bytes above any low part: `<< 0x20`, `<< 0x10`, `<< 8`, FUN_14138f9d0)
                      or (name.startswith("in_stack_") and re.search(r"\(ulonglong\)\s*$", text[max(0, u.start() - 12):u.start()])
-                         and re.match(r"\s*<<\s*0x20\b", text[u.end():u.end() + 10])) for u in rest)
+                         and re.match(r"\s*<<\s*(?:0x[12]0|8)\b", text[u.end():u.end() + 10])) for u in rest)
         else:
             # (or only its upper bits, `(int)((ulonglong)in_R9 >> 0x20)`: the half of a home slot
             # the function wrote 4 bytes of and read 8, which Ghidra takes for the register's)
@@ -1827,6 +1846,304 @@ def return_address_args(text: str) -> str:
     return re.sub(r"\bunaff_retaddr\b", f"(({m.group(1).strip()})_ReturnAddress())", body)
 
 
+def crt_block(a: int) -> bool:
+    """In one of the image's two runs of C runtime code (vcruntime and the UCRT, linked in one
+    piece each: 0x14026b400.., 0x14240ee60..)."""
+    return 0x14026b400 <= a < 0x140296900 or 0x14240ee60 <= a < 0x14241f760
+
+
+def balanced(text: str, open_at: int) -> int:
+    """The index just past the bracket that closes the one at open_at."""
+    depth, k = 0, open_at
+    pairs = {"(": ")", "[": "]", "{": "}"}
+    close = pairs[text[open_at]]
+    while k < len(text):
+        ch = text[k]
+        if ch == text[open_at]:
+            depth += 1
+        elif ch == close:
+            depth -= 1
+            if depth == 0:
+                return k + 1
+        k += 1
+    return -1
+
+
+DOUBLE_ROUTINES = ("frexp", "ldexp", "fmod", "sin", "cos", "tan", "sqrt", "pow", "floor", "ceil", "exp",
+                   "log", "log10", "atan", "atan2", "acos", "asin", "modf")
+
+
+def late_fixes(text: str) -> str:
+    """The last shapes the compiler refused in 2026-10-18's build, each a class of its own, on the
+    final text (they are made of the translator's own forms: REFG, gen_frame, GEN_PIECE)."""
+    # a register Ghidra has no name for (`register0x0000120c = 0;`, C2065): a local of its own
+    regs = sorted(set(re.findall(r"\bregister0x[0-9a-f]+\b", text)))
+    if regs:
+        brace = text.find("\n{\n")
+        if brace >= 0:
+            decls = "".join(f"\n  unsigned long long gen_{r} = 0;" for r in regs)
+            text = text[:brace + 2] + decls + text[brace + 2:]
+            for r in regs:
+                text = re.sub(rf"\b{r}\b", f"gen_{r}", text)
+    # a field of the image's own DOS header (`((char *)REFP(0x140000000)).e_res_4_`, C2224): an
+    # array field is its address, a scalar one its value
+    dos = {"e_res_4_": (0x1c, None), "e_res2_10_": (0x28, None), "e_lfanew": (0x3c, "int"),
+           "e_magic": (0x0, "ushort"), "e_cblp": (0x2, "ushort"), "e_oemid": (0x24, "ushort")}
+    text = re.sub(r"\(\(char \*\)REFP\(0x140000000\)\)\.(\w+)",
+                  lambda m: (f"((char *)REFP(0x{0x140000000 + dos[m.group(1)][0]:x}))" if dos[m.group(1)][1] is None
+                             else f"(*({dos[m.group(1)][1]} *)REFP(0x{0x140000000 + dos[m.group(1)][0]:x}))")
+                  if m.group(1) in dos else m.group(0), text)
+    # (and the header's first word compared as a pointer: `((char *)REFP(0x140000000)) ==
+    # (undefined2)0x5a4d`, the MZ check, its e_magic dropped)
+    text = re.sub(r"\(\(char \*\)REFP\((0x[0-9a-f]+)\)\) ([=!]=) \(undefined2\)(0x[0-9a-f]+)",
+                  r"(*(unsigned short *)REFP(\1)) \2 \3", text)
+    # a zero cast to a byte array of no scalar's size (`(undefined1 [7])0x0`, C2067): stored as
+    # that many zero bytes, and as a value, zero
+    text = re.sub(r"\(\((?:undefined1|char) \*\)\(([^;]*?)\)\) = \((?:undefined1|char)\s*\[\s*(\d+)\s*\]\)0x0;",
+                  r"memset((void *)(\1), 0, \2);", text)
+    text = re.sub(r"\((?:undefined1|char)\s*\[\s*\d+\s*\]\)0x0\b", "0ULL", text)
+    # a value's low bytes stored through a byte pointer or into a piece (`((undefined1 *)(gen_frame
+    # + 0x21)) = SUB87(x,0)`, `GEN_PIECE(&local_8, 0, 7) = SUB87(d,0)`, C2106)
+    out, i = [], 0
+    for m in re.finditer(r"(\(\((?:undefined1|char) \*\)|GEN_PIECE\()", text):
+        if m.start() < i:
+            continue
+        if m.group(1).startswith("GEN_PIECE"):
+            end = balanced(text, m.end() - 1)
+            if end < 0:
+                continue
+            target = text[m.end():end - 1]
+        else:
+            end = balanced(text, m.start())
+            if end < 0:
+                continue
+            target = f"(void *){text[m.start() + len(m.group(1)):end - 1]}, 0"
+        s = re.match(r"\s*=\s*SUB(\d)(\d)\(", text[end:])
+        if not s:
+            continue
+        vstart = end + s.end() - 1
+        vend = balanced(text, vstart)
+        args = text[vstart + 1:vend - 1]
+        if not re.search(r",\s*0\s*$", args):
+            continue
+        value = re.sub(r",\s*0\s*$", "", args)
+        if m.group(1).startswith("GEN_PIECE"):
+            call = f"gen_piece_set({target.rsplit(',', 2)[0]}, {target.rsplit(',', 2)[1].strip()}, {s.group(2)}, GEN_BITS({value}))"
+        else:
+            call = f"gen_piece_set({target}, {s.group(2)}, GEN_BITS({value}))"
+        out.append(text[i:m.start()] + call)
+        i = vend
+    text = "".join(out) + text[i:]
+    # a float global Ghidra typed as a pointer, read as the float it is (`fVar50 < REFG(float *,
+    # 0x14297b6b0)`, `*pfVar34 = REFG(float *, ...)`, C2440)
+    # (an ordering only: `==` between pointers is a pointer comparison)
+    text = re.sub(r"((?<![<>=!])[<>]=?\s*|\*pfVar\w*\s*=\s*)REFG\(float \*, ", r"\1REFG(float, ", text)
+    # a double global masked as the integer its bits are (`REFG(double, x) & 0xffffffff`, C2296)
+    text = re.sub(r"(REFG\(double, 0x[0-9a-f]+\))(\s*[&|^]\s)", r"GEN_BITS(\1)\2", text)
+    # the address of a float global's bits (C2102): the global's own address
+    text = re.sub(r"&GEN_F32BITS\(REFG\(float, (0x[0-9a-f]+)\)\)", r"((uint *)REFP(\1))", text)
+    # a pointer variable scaled as an integer (`puVar4 * 4`, C2296)
+    for p in set(re.findall(r"^\s+(?:const\s+)?\w+\s*\*+\s*(\w+)\s*(?:=[^;]*)?;", text, re.M)):
+        text = re.sub(rf"(?<![\w*(])\b{p}\s*\*\s*(0x[0-9a-f]+|\d+)\b", rf"((longlong){p} * \1)", text)
+    # a double result cast straight to a pointer (`(wchar_t *)frexp(...)`, C2440): by its integer
+    text = re.sub(r"\((\w+ \*+)\)(" + "|".join(DOUBLE_ROUTINES) + r")\(", r"(\1)(longlong)\2(", text)
+    # a call through a pointer read as a pointer to an integer (`(*(*(undefined8 * *)p))(...)`,
+    # C2064): through it as code
+    out, i = [], 0
+    for m in re.finditer(r"\(\*\(\*\(undefined8 \* \*\)", text):
+        end = balanced(text, m.start())
+        if end > 0 and text[end:end + 1] == "(":
+            out.append(text[i:m.start()] + "(*(code *)(*(undefined8 * *)")
+            i = m.end()
+    text = "".join(out) + text[i:]
+    # Ghidra's 10-byte integer around a shift pair (`((unkuint10)x << 0x30) >> 0x10`, C2065): the
+    # result's 64 bits, which is the value shifted by the difference
+    text = re.sub(r"\(\(unkuint10\)(\w+\([^()]*\)|\w+) << (0x[0-9a-f]+|\d+)\) >> (0x[0-9a-f]+|\d+)",
+                  lambda m: f"((ulonglong)({m.group(1)}) << {int(m.group(2), 0) - int(m.group(3), 0)})", text)
+    # a switch on a double (`case 0.0:`, C2052): on its bits (gen_dkey), the cases as theirs
+    for m in reversed(list(re.finditer(r"switch\(\(long long\)\(", text))):
+        open_ = text.find("{", m.end())
+        close = balanced(text, open_) if open_ >= 0 else -1
+        if close < 0:
+            continue
+        block = text[open_:close]
+        if not re.search(r"\bcase -?\d+\.\d+(?:e[+-]?\d+)?:", block):
+            continue
+
+        def bits(c):
+            v = float(c.group(1))
+            return f"case 0x{(0 if v == 0 else struct.unpack('<Q', struct.pack('<d', v))[0]):x}ULL:"
+
+        block = re.sub(r"\bcase (-?\d+(?:\.\d+)?(?:e[+-]?\d+)?):", bits, block)
+        text = text[:m.start()] + "switch(gen_dkey(" + text[m.end():open_] + block + text[close:]
+    return text
+
+
+LEFTOVER_REG = {"RCX": "RCX", "ECX": "RCX", "CX": "RCX", "CL": "RCX", "RDX": "RDX", "EDX": "RDX", "DX": "RDX",
+                "DL": "RDX", **{f"R{n}{s}": f"R{n}" for n in (8, 9, 10, 11) for s in ("", "D", "W", "B")}}
+ARG_REGS = ("RCX", "RDX", "R8", "R9")
+
+
+def call_arg_spans(text: str, open_at: int) -> list[tuple[int, int]] | None:
+    """The spans of a call's top-level arguments, from the index just past its `(`."""
+    spans, depth, start, k = [], 1, open_at, open_at
+    while k < len(text):
+        ch = text[k]
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            depth -= 1
+            if depth == 0:
+                if text[start:k].strip():
+                    spans.append((start, k))
+                return spans
+        elif ch == "," and depth == 1:
+            spans.append((start, k))
+            start = k + 1
+        elif ch == '"':
+            k += 1
+            while k < len(text) and text[k] != '"':
+                k += 2 if text[k] == "\\" else 1
+        k += 1
+    return None
+
+
+PHANTOM_CAST = r"(?:\(\s*[\w ]+\**\s*\)\s*)*"
+
+
+def indirect_arg(text: str, start: int, end: int) -> bool:
+    """Whether text[start:end] is a whole argument (under casts) of a call through a pointer,
+    `(**(code **)(*p + 0x30))(p, &x, (int)uVar7)`."""
+    m = re.search(r"([(,])\s*" + PHANTOM_CAST + r"$", text[max(0, start - 200):start])
+    if not m or not re.match(r"\s*[,)]", text[end:]):
+        return False
+    k = max(0, start - 200) + m.start()
+    if m.group(1) == ",":
+        depth = 0
+        k -= 1
+        while k >= 0:
+            ch = text[k]
+            if ch == ")":
+                depth += 1
+            elif ch == "(":
+                if depth == 0:
+                    break
+                depth -= 1
+            k -= 1
+        if k < 0:
+            return False
+    return text[:k].rstrip().endswith(")")
+
+
+def phantom_register(text: str, name: str) -> bool:
+    """A register read after a call that only ever becomes an argument of a call through a pointer,
+    directly or through variables read only so. Such a call has no prototype the compiler could
+    rely on: it sets every argument the callee takes, at every site. A register it does not set
+    is no argument, whatever the decompiler guessed from it still holding something (the leftover
+    of FUN_140229de0 in r8 and r9, passed on to a virtual call that takes two; 2026-10-18)."""
+    body_at = text.find("{")
+
+    def reads(v: str):
+        for u in re.finditer(rf"\b{v}\b", text):
+            if u.start() <= body_at:
+                continue
+            ls = text.rfind("\n", 0, u.start()) + 1
+            if re.fullmatch(rf"[ \t]*[\w ]+\**\s*{v};", text[ls:text.find(chr(10), u.end())]):
+                continue        # its declaration
+            if re.match(r"\s*=(?!=)", text[u.end():]):
+                continue        # an assignment to it
+            yield u
+
+    for u in reads(name):
+        if indirect_arg(text, u.start(), u.end()):
+            continue
+        # `v = name` (a statement, or in a comma expression): v read only as such an argument
+        m = re.search(r"\b(\w+)\s*=\s*" + PHANTOM_CAST + r"$", text[max(0, u.start() - 120):u.start()])
+        if m and re.match(r"\s*[;,)]", text[u.end():]) and m.group(1) != name and \
+                all(indirect_arg(text, w.start(), w.end()) for w in reads(m.group(1))):
+            continue
+        return False
+    return True
+
+
+def leftovers(text: str, callee_of, facts: dict[int, dict[str, list]], relied: dict[int, set[str]] | None = None) -> str:
+    """`extraout_R11` read after a call to a function that returns with r11 holding one of its own
+    arguments (tools/leftover.py): that argument, as the call passed it.
+
+    Ghidra sees only that the register died at the call. The variable is assigned inside the
+    call's argument list, `FUN_1402bfa60((gen_extraout_R11 = (longlong)(param_1)), lVar1)`, so it
+    holds what the register held whatever else changed since; a 32-bit leftover (`mov r9d, edx`)
+    keeps only the low half. A read no fact explains is left for the "lost track" refusal."""
+    body_at = text.find("{")
+    if body_at < 0:
+        return text
+    call = re.compile(r"\b(FUN_1[0-9a-f]{8}|[A-Za-z_][\w:]*)\s*\(")
+    for name in sorted(set(re.findall(r"\bextraout_[A-Z0-9]+(?:_\d+)?\b", text[body_at:]))):
+        m = re.fullmatch(r"extraout_([A-Z0-9]+?)(?:_\d+)?", name)
+        reg = LEFTOVER_REG.get(m.group(1)) if m else None
+        if reg is None:
+            continue
+        decl = re.search(rf"^[ \t]*([\w ]+?\**)[ \t]*\b{name};$", text, re.M)
+        uses = [u for u in re.finditer(rf"\b{name}\b", text) if u.start() > body_at and
+                (decl is None or not decl.start() <= u.start() < decl.end())]
+        if decl is None or not uses:
+            continue
+        before = text[:uses[0].start()]
+        calls = [c for c in call.finditer(before, body_at)
+                 if c.group(1) not in ("if", "while", "for", "switch", "return", "sizeof", "CONCAT44", "CALLF")]
+        if not calls:
+            continue
+        c = calls[-1]
+        target = callee_of(c.group(1))
+        fact = facts.get(target) if isinstance(target, int) else None
+        if not fact or reg not in fact:
+            continue
+        arg, bits = fact[reg]
+        k = ARG_REGS.index(arg)
+        spans = call_arg_spans(text, c.end())
+        if spans is None or k >= len(spans):
+            continue
+        lo, hi = spans[k]
+        t = decl.group(1).strip()
+        value = text[lo:hi].strip()
+        if bits == 32:
+            value = f"(uint)({value})"
+        new = f"gen_{name}"
+        text = text[:lo] + f"({new} = ({t})({value}))" + text[hi:]
+        text = re.sub(rf"\b{name}\b", new, text)
+    # and what reaches only the arguments of calls through pointers: no argument at all; or what
+    # follows a direct call whose callee writes the register while this function's instructions
+    # never read it after that call (`relied`, tools/preserved.py's liveness): the decompiler's
+    # own merge of paths, a variable it gave the register on one of them, `uVar7 = extraout_RDX;`
+    # read only where uVar7 holds something else (39 such reads, 2026-10-18). Its value is never
+    # used for anything the reference computes, so any value will do
+    for name in sorted(set(re.findall(r"\bextraout_\w+\b", text[body_at:]))):
+        decl = re.search(rf"^([ \t]*[\w ]+?\**[ \t]*)\b{name};$", text, re.M)
+        if not decl:
+            continue
+        if not phantom_register(text, name):
+            if relied is None:
+                continue
+            m = re.fullmatch(r"extraout_([A-Z0-9]+?)(?:_[A-Z][a-z])?(?:_\d+)?", name)
+            reg = LEFTOVER_REG.get(m.group(1)) if m else None
+            if reg is None and m and re.fullmatch(r"XMM\d+", m.group(1)):
+                reg = m.group(1)
+            uses = [u for u in re.finditer(rf"\b{name}\b", text) if u.start() > decl.end()]
+            if reg is None or not uses:
+                continue
+            calls = [c for c in re.finditer(r"\b(FUN_1[0-9a-f]{8}|[A-Za-z_][\w:]*)\s*\(", text[:uses[0].start()])
+                     if c.start() > body_at and c.group(1) not in ("if", "while", "for", "switch", "return", "sizeof",
+                                                                  "CONCAT44", "CALLF")]
+            if not calls:
+                continue
+            target = callee_of(calls[-1].group(1))
+            if not isinstance(target, int) or reg in relied.get(target, ()):
+                continue
+        text = text[:decl.start()] + f"{decl.group(1)}gen_{name} = 0;" + text[decl.end():]
+        text = re.sub(rf"\b{name}\b", f"gen_{name}", text)
+    return text
+
+
 # the image's float sign masks (16 bytes each, for andps / xorps)
 FLOAT_ABS_MASK = "DAT_14261aa20"    # 0x7fffffff
 FLOAT_SIGN_MASK = "DAT_14261aa30"   # 0x80000000
@@ -2342,8 +2659,12 @@ def _local_set(line: str) -> bool:
 
 def _rmw(lhs: str, rhs: str) -> tuple[str, str] | None:
     """(op, operand) when `lhs = rhs` is `lv = lv OP k`."""
-    m = re.fullmatch(r"(.+?) ([+&|^]) (-?\w+|\(.+\))", rhs.strip())
+    m = re.fullmatch(r"(.+?) ([+&|^-]) (-?\w+|\(.+\))", rhs.strip())
     if m and _bare(m.group(1)) == _bare(lhs):
+        # (a subtraction, `*puVar1 = *puVar1 - 1`, Ghidra's `lock dec`: the add of its negation;
+        # 7 functions' reference counts were stubbed for it, 2026-10-18)
+        if m.group(2) == "-":
+            return "ADD", f"-({m.group(3)})"
         return RMW_OPS[m.group(2)], m.group(3)
     return None
 
@@ -2362,6 +2683,16 @@ def atomics(body: str) -> str:
             lhs, rhs = assigns[0].groups()
             op = _rmw(lhs, rhs)
             out = [f"GEN_ATOMIC_{op[0]}({lhs}, {op[1]});" if op else f"GEN_ATOMIC_XCHG({lhs}, {rhs});"]
+        elif len(lines) == 3 and all(assigns) and re.fullmatch(r"\w+", assigns[0].group(1)) \
+                and re.fullmatch(r"\w+", assigns[1].group(1)) \
+                and re.fullmatch(rf"(?:\([\w ]+\)\s*)*{assigns[0].group(1)}", assigns[1].group(2).strip()) \
+                and _bare(assigns[0].group(2)) == _bare(assigns[2].group(1)) \
+                and _rmw(*assigns[2].groups()):
+            # old = lv; x = (casts)old; lv = lv OP k  (a copy of the old value between, FUN_141c36320's
+            # `uVar7 = (undefined1)(int)lVar11`): the xadd, then the copy
+            old, (lhs, rhs) = assigns[0].group(1), assigns[2].groups()
+            op = _rmw(lhs, rhs)
+            out = [f"{old} = GEN_ATOMIC_{op[0]}({lhs}, {op[1]});", lines[1]]
         elif len(lines) == 2 and all(assigns) and re.fullmatch(r"\w+", assigns[0].group(1)) \
                 and _bare(assigns[0].group(2)) == _bare(assigns[1].group(1)):
             old, (lhs, rhs) = assigns[0].group(1), assigns[1].groups()
@@ -2414,6 +2745,47 @@ def atomics(body: str) -> str:
                 flag, lv, v, new = c.groups()
                 out = [f"{{ long long gen_cas_ = GEN_ATOMIC_CAS({lv}, {new}, 0); {flag} = gen_cas_ != 0; "
                        f"{v} = {flag} ? gen_cas_ : {new}; }}"]
+            # old = lv; if (a == old) { lv = new; } else { x = y; }  (cmpxchg with the old value read
+            # on failure: a reference count bumped only if unchanged, FUN_141c36320)
+            c = out is None and re.fullmatch(r"(\w+) = ([^;]+); if \(([^;]+?) == ([^;]+?)\) \{ ([^;]+?) = ([^;]+); \} "
+                                             r"else \{ ((?:[^;{}]+; )+)\}", text)
+            if c:
+                old, loaded, a, b, lv, new, other = c.groups()
+                if _bare(loaded) == _bare(lv) and old in (a, b):
+                    cmp = b if a == old else a
+                    out = [f"{old} = GEN_ATOMIC_CAS({lv}, {new}, {cmp});",
+                           f"if ({old} != {cmp}) {{ {other.strip()} }}"]
+            # flag = a == lv; old = lv; if (flag) { lv = new; old = a; }  (the flag first, then the
+            # value: Ghidra's other order of the same cmpxchg, FUN_14235a180, FUN_1422613d0)
+            c = out is None and re.fullmatch(r"(\w+) = ([^;]+?) == ([^;]+?); (\w+) = ([^;]+); if \(\1\) \{ "
+                                             r"([^;]+?) = ([^;]+); \4 = ([^;]+); \}", text)
+            if c:
+                flag, a, b, old, loaded, lv, new, after = c.groups()
+                if _bare(loaded) == _bare(lv) and _bare(lv) in (_bare(a), _bare(b)):
+                    cmp = b if _bare(a) == _bare(lv) else a
+                    if _bare(after) == _bare(cmp):
+                        out = [f"{old} = GEN_ATOMIC_CAS({lv}, {new}, {cmp});", f"{flag} = {old} == {cmp};"]
+            # flag = c != lv; r = new; if (flag) { c = lv; r = lv; } lv = r;  (cmpxchg, the expected
+            # value reloaded on failure, the flag kept, FUN_14235a180)
+            c = out is None and re.fullmatch(r"(\w+) = ([^;]+?) != ([^;]+?); (\w+) = ([^;]+); if \(\1\) \{ "
+                                             r"([^;]+?) = ([^;]+); \4 = ([^;]+); \} ([^;]+?) = \4;", text)
+            if c:
+                flag, a, b, r, new, cvar, got1, got2, lv = c.groups()
+                if _bare(lv) in (_bare(a), _bare(b)) and _bare(got1) == _bare(lv) == _bare(got2):
+                    cmp = b if _bare(a) == _bare(lv) else a
+                    if _bare(cvar) == _bare(cmp):
+                        out = [f"{{ long long gen_cas_ = GEN_ATOMIC_CAS({lv}, {new}, {cmp}); {flag} = gen_cas_ != {cmp}; "
+                               f"if ({flag}) {{ {cvar} = gen_cas_; {r} = gen_cas_; }} else {{ {r} = {new}; }} }}"]
+            # if (a == lv) { lv = new; [x = y;] }  (cmpxchg whose old value nothing keeps: clear a
+            # global only if it still holds what this function put there, FUN_1405d7cd0)
+            c = out is None and re.fullmatch(r"if \(([^;]+?) == ([^;]+?)\) \{ ([^;]+?) = ([^;]+); "
+                                             r"((?:\w+ = [^;]+; )?)\}", text)
+            if c:
+                a, b, lv, new, extra = c.groups()
+                if _bare(lv) in (_bare(a), _bare(b)):
+                    cmp = b if _bare(a) == _bare(lv) else a
+                    out = [f"if (GEN_ATOMIC_CAS({lv}, {new}, {cmp}) == {cmp}) {{ {extra.strip()} }}"
+                           if extra.strip() else f"GEN_ATOMIC_CAS({lv}, {new}, {cmp});"]
             # flag = lv == 0; v = new; if (!flag) { v = lv; } lv = v;  (the same, the flag the
             # other way round: a spin lock's acquire, FUN_141687ed0)
             c = out is None and re.fullmatch(r"(\w+) = ([^;]+?) == (?:\([\w ]+\**\))?0x?0?; (\w+) = ([^;]+); "
@@ -2546,10 +2918,69 @@ def write_exports(exported: dict[int, dict]):
             p.write_text(kept, encoding="utf-8", newline="\n")
 
 
+PRIMITIVE_SIZES = {0x03: 0, 0x08: 4, 0x10: 1, 0x11: 2, 0x12: 4, 0x13: 8, 0x14: 16, 0x20: 1, 0x21: 2, 0x22: 4,
+                   0x23: 8, 0x24: 16, 0x30: 1, 0x31: 2, 0x32: 4, 0x33: 8, 0x40: 4, 0x41: 8, 0x42: 10, 0x43: 16,
+                   0x46: 2, 0x68: 1, 0x69: 1, 0x70: 1, 0x71: 2, 0x72: 2, 0x73: 2, 0x74: 4, 0x75: 4, 0x76: 8,
+                   0x77: 8, 0x78: 16, 0x79: 16, 0x7a: 2, 0x7b: 4, 0x7c: 1}
+
+
 def load_data_sizes() -> dict[str, int]:
-    """Each port global's size, by its unqualified name (the smallest, when the name repeats)."""
-    out = subprocess.run([str(F.LLVM / "llvm-pdbutil.exe"), "pretty", "-globals", str(F.PORT_PDB)],
-                         capture_output=True, text=True, errors="replace").stdout
+    """Each port global's size, by its unqualified name (the smallest, when the name repeats), from
+    the data symbols' types in the dumps the translator reads anyway.
+
+    (`llvm-pdbutil pretty -globals`, which gave them before, took over 20 minutes on its own
+    after each build, while the four other dumps ran in parallel in a minute: most of the
+    translator's start, 2026-10-18)"""
+    types = F.pdbutil("-types")
+    rec: dict[int, tuple[str, str]] = {}
+    for m in re.finditer(r"^\s*0x([0-9A-F]+) \| (LF_\w+) \[size = \d+\][^\n]*\n((?:(?!\s*0x[0-9A-F]+ \| LF_)[^\n]*\n)*)",
+                         types, re.M):
+        rec[int(m.group(1), 16)] = (m.group(2), m.group(3))
+    memo: dict[int, int | None] = {}
+
+    def size_of(ti: int, depth: int = 0) -> int | None:
+        if ti < 0x1000:
+            if (ti >> 8) & 0xF:
+                return 8    # a pointer mode
+            return PRIMITIVE_SIZES.get(ti & 0xFF)
+        if ti in memo or depth > 20:
+            return memo.get(ti)
+        kind, body = rec.get(ti, ("", ""))
+        out = None
+        if kind == "LF_ARRAY":
+            m = re.search(r"\bsize: (\d+)", body)
+            out = int(m.group(1)) if m else None
+        elif kind in ("LF_STRUCTURE", "LF_CLASS", "LF_UNION", "LF_INTERFACE"):
+            ref = re.search(r"forward ref \(-> 0x([0-9A-F]+)\)", body)
+            if ref:
+                out = size_of(int(ref.group(1), 16), depth + 1)
+            else:
+                m = re.search(r"sizeof (\d+)", body)
+                out = int(m.group(1)) if m else None
+        elif kind == "LF_POINTER":
+            out = 8
+        elif kind == "LF_MODIFIER":
+            m = re.search(r"referent = 0x([0-9A-F]+)", body)
+            out = size_of(int(m.group(1), 16), depth + 1) if m else None
+        elif kind == "LF_ENUM":
+            m = re.search(r"underlying type = 0x([0-9A-F]+)", body)
+            out = size_of(int(m.group(1), 16), depth + 1) if m else 4
+        memo[ti] = out
+        return out
+
+    sizes: dict[str, int] = {}
+    for dump in (F.pdbutil("-globals"), F.pdbutil("-symbols")):
+        for m in re.finditer(r"S_[GL]DATA32 \[size = \d+\] `([^`]*)`\s*\n\s*type = 0x([0-9A-F]+)", dump):
+            size = size_of(int(m.group(2), 16))
+            name = re.sub(r"^.*::", "", m.group(1))
+            if size and re.fullmatch(r"\w+", name):
+                sizes[name] = min(size, sizes.get(name, size))
+    return sizes
+
+
+def load_data_sizes_pretty() -> dict[str, int]:
+    """(the old reader, by `pretty -globals`, kept to compare against)"""
+    out = F.pdbutil("pretty", "-globals")
     sizes = {}
     for m in re.finditer(r"^\s*data \[0x[0-9a-f]+, sizeof=(\d+)\] (.*?)\s*$", out, re.M):
         # (a function pointer, or an array of them, ends in its parameter list: `void (__cdecl *
@@ -2577,6 +3008,14 @@ def port_imports() -> set[str]:
            if imp.name}
     pe.close()
     # and everything its C runtime DLLs export, imported yet or not (`_rmdir`): linkable all the same
+    return out | crt_exports()
+
+
+@functools.lru_cache(maxsize=None)
+def crt_exports() -> frozenset[str]:
+    """Every name the port's C runtime DLLs export."""
+    import pefile
+    out = set()
     for dll in ("ucrtbase.dll", "vcruntime140.dll", "vcruntime140_1.dll", "msvcp140.dll"):
         path = Path(os.environ.get("SystemRoot", r"C:\Windows")) / "System32" / dll
         if not path.exists():
@@ -2585,12 +3024,11 @@ def port_imports() -> set[str]:
         d.parse_data_directories(directories=[pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_EXPORT"]])
         out |= {s.name.decode() for s in getattr(getattr(d, "DIRECTORY_ENTRY_EXPORT", None), "symbols", []) if s.name}
         d.close()
-    return out
+    return frozenset(out)
 
 
 def load_data_publics() -> list[str]:
-    out = subprocess.run([str(F.LLVM / "llvm-pdbutil.exe"), "dump", "-publics", str(F.PORT_PDB)],
-                         capture_output=True, text=True, errors="replace").stdout
+    out = F.pdbutil("-publics")
     # namespace-scope variables mangle as @3, static data members as @2
     return re.findall(r"S_PUB32 \[size = \d+\] `(\?[^`]*@[23][^`]*)`\n\s+flags = none", out)
 
@@ -2670,6 +3108,7 @@ class Translator:
         self.ref_call_counts = {k[2:]: v["calls"] for k, v in protos.items() if v.get("calls")}
         del protos
         self._extra_params: dict[int, dict[int, str]] = {}
+        self._pool = None   # worker processes (start_pool), or None to do the work here
         self.mismatched: set[int] = set()   # ports whose signature is not the reference's
         self.callargs = callargs.CallArgs(self.ref)
         self.patches = json.loads((ROOT / "tools/translate_patches.json").read_text(encoding="utf-8"))
@@ -2691,6 +3130,9 @@ class Translator:
             except (OSError, ValueError):
                 stale = True
         if F.PORT_EXE.exists() and stale:
+            # (every dump the loaders below read, all at once: one after another they were most
+            # of a run's start after each build)
+            F.prefetch_pdb(("-types",), ("-ids",), ("-symbols",), ("-publics",), ("-globals",))
             procs, _ = F.load_pdb(Binary(F.PORT_EXE))
             cache = {"procs": [[va, size, name] for va, size, name in procs],
                      "publics": {str(k): v for k, v in load_publics().items()},
@@ -2798,13 +3240,75 @@ class Translator:
             return None
         return va, mangled, sig
 
+    def relied_facts(self, a: int) -> dict[int, set[str]] | None:
+        """For function a, per direct callee, the registers that callee writes which a's own
+        instructions still read after calling it (tools/preserved.py 'relied'); None when the
+        facts do not cover a (its flow was not followed, or no facts at all)."""
+        if not hasattr(self, "_relied"):
+            p = ROOT / "build/facts/preserved.json"
+            facts = json.loads(p.read_text()) if p.exists() else {}
+            self._relied = ({int(f, 16): {int(g, 16): set(r) for g, r in gs.items()}
+                             for f, gs in facts["relied"].items()} if "relied" in facts else None)
+            self._liveness_done = set(facts["followed"]) if "followed" in facts else None
+        if self._relied is None:
+            return None
+        if self._liveness_done is not None and f"0x{a:x}" not in self._liveness_done:
+            return None
+        return self._relied.get(a, {})
+
+    def leftover_facts(self) -> dict[int, dict[str, list]]:
+        """build/facts/leftover.json: the registers each function returns holding an argument."""
+        if not hasattr(self, "_leftover"):
+            p = ROOT / "build/facts/leftover.json"
+            self._leftover = ({int(k, 16): v for k, v in json.loads(p.read_text())["functions"].items()}
+                              if p.exists() else {})
+        return self._leftover
+
+    def delay_imports(self) -> dict[int, str]:
+        """The reference's delay-load import slots, by address: `OLEAUT32_DLL::SysFreeString`,
+        as Ghidra names a regular import (Import::<dll>_DLL::<name>)."""
+        if not hasattr(self, "_delay_imports"):
+            import pefile
+            pe = pefile.PE(str(self.ref.path), fast_load=True)
+            pe.parse_data_directories(directories=[pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT"]])
+            self._delay_imports = {
+                i.address: f"{d.dll.decode().rsplit('.', 1)[0].upper()}_DLL::{i.name.decode()}"
+                for d in getattr(pe, "DIRECTORY_ENTRY_DELAY_IMPORT", []) for i in d.imports if i.name}
+            pe.close()
+        return self._delay_imports
+
     def body(self, a: int) -> str | None:
         """The function's corrected decompilation, computed once: planning asks for it twice
         (vetting, callees) and emission once more, which was two thirds of a run (2026-10-16)."""
         cache = self.__dict__.setdefault("_bodies", {})
         if a not in cache:
-            cache[a] = self._body(a)
+            text = self._body(a)
+            if text is not None and "FUN_" in text:
+                # a runtime routine the port's own runtime exports, reached by its address (the
+                # lifter's `CALLF(undefined8, FUN_140272964)(...)`, the reference's _stricmp): the
+                # port's, as a call by its name is; three lifted callers left it a stub (2026-10-18)
+                exported = self.exported_runtime()
+                # (called through an unprototyped pointer: the decompiler, and the lifter, pass the
+                # four argument registers whatever the routine takes, `_stricmp(r_rcx, r_rdx, r_r8,
+                # r_r9)`, which its own declaration refused, C2197 in 5 functions, 2026-10-18)
+                # (as `gen_rt_<name>`, declared unprototyped in translated.h and linked to the
+                # routine by an alternate name: no header need declare it)
+                text = FUNREF.sub(lambda m: f"gen_rt_{exported[int(m.group(1), 16)]}"
+                                  if int(m.group(1), 16) in exported else m.group(0), text)
+            cache[a] = text
         return cache[a]
+
+    def exported_runtime(self) -> dict[int, str]:
+        """The reference's runtime routines by address whose names the port's runtime exports."""
+        if not hasattr(self, "_exported_runtime"):
+            names = crt_exports()
+            out = {}
+            for a, e in self.cor.items():
+                bare = re.sub(r"^FID_conflict[:_]", "", e["name"])
+                if bare in names and "::" not in bare and self.is_lib(a) and a not in CRT_ENTRY:
+                    out[a] = bare
+            self._exported_runtime = out
+        return self._exported_runtime
 
     def _body(self, a: int) -> str | None:
         e = self.cor.get(a)
@@ -2838,12 +3342,59 @@ class Translator:
             text = re.sub(rf"^([ \t]*){imp} \*(\w+);$", r"\1code *\2;", text, flags=re.M)
         # Ghidra's NaN test, apart from the C library's NAN constant (Ghidra.h)
         text = re.sub(r"\bNAN\s*\(", "GEN_ISNAN(", text)
+        # a switch on a value Ghidra typed a pointer (`switch(param_2)`, an `int *param_2` the cases
+        # compare with numbers, 2 functions, C2050): the whole operand as an integer, which an
+        # integer operand already is
+        out, i = [], 0
+        for sm in re.finditer(r"\bswitch\s*\(", text):
+            if sm.start() < i:
+                continue
+            depth, k = 1, sm.end()
+            while k < len(text) and depth:
+                depth += {"(": 1, ")": -1}.get(text[k], 0)
+                k += 1
+            out.append(text[i:sm.end()] + f"(long long)({text[sm.end():k - 1]}))")
+            i = k
+        text = "".join(out) + text[i:]
+        # a qualified name Ghidra wrapped after a `::` (`(*Import::KERNEL32_DLL::` and the name on the
+        # next line; `Lua::C_UIWidgetManager::` ...), as the header's are joined in signature():
+        # read apart, `Import` was undeclared (3 functions, 2026-10-18)
+        text = re.sub(r"(?<=\w)::[ \t]*\n[ \t]*(?=[\w~<])", "::", text)
+        # a delay-load import slot (`(*ImgDelayDescr_IAT_142dda4d8)(p)`, OLEAUT32's SysFreeString):
+        # the import it is, as any other (and its DLL's import library linked with it); 8
+        # functions were demoted as undeclared (2026-10-18)
+        if "ImgDelayDescr_IAT_" in text:
+            delay = self.delay_imports()
+            text = re.sub(r"\bImgDelayDescr_IAT_(1[0-9a-f]{8})\b",
+                          lambda m: f"Import::{delay[int(m.group(1), 16)]}" if int(m.group(1), 16) in delay
+                          else m.group(0), text)
+        # the function's own return address (`unaff_retaddr`, FUN_1402113a0 checking which module
+        # called it): the intrinsic. Not where it feeds the anti-tamper return-address check (the
+        # range at DAT_14261a0b0, tools/retcheck.py): the port's addresses fail it, and its
+        # failure is a deliberate crash, so those stay protection (2026-10-18)
+        # an `in_stack_` slot this function writes before it reads it (an outgoing argument it
+        # fills, `in_stack_fffffffffffffa28 = local_res18;` then the call, FUN_141b138a0): its own
+        # local, whatever Ghidra named it
+        for name in set(re.findall(r"\bin_stack_[0-9a-f]+\b", text)):
+            body_at = text.find("{")
+            uses = [u for u in re.finditer(rf"\b{name}\b", text) if u.start() > body_at
+                    and not re.match(rf"[ \t]*[\w ]+\**\s*{name};$",
+                                     text[text.rfind("\n", 0, u.start()) + 1:text.find("\n", u.end())])]
+            if uses and re.match(r"\s*=(?!=)", text[uses[0].end():]) and \
+                    re.fullmatch(r"\s*", text[text.rfind("\n", 0, uses[0].start()) + 1:uses[0].start()]):
+                text = re.sub(rf"\b{name}\b", "gen_" + name[3:], text)
+        if "unaff_retaddr" in text and "14261a0b0" not in text and "142618df8" not in text:
+            text = re.sub(r"^[ \t]*[\w ]+\*?\s*unaff_retaddr;\n", "", text, flags=re.M)
+            text = re.sub(r"\bunaff_retaddr\b", "((longlong)_ReturnAddress())", text)
+        if "extraout_" in text:
+            text = leftovers(text, lambda n: self.named_callee(n, e["name"]), self.leftover_facts(), self.relied_facts(a))
         # a cast to a small byte array (`(undefined1 [8])CONCAT44(...)`): to the scalar of its size,
         # since C casts to no array type (C2067)
-        text = re.sub(r"\(undefined1?\s*\[([1248])\]\)", r"(undefined\1)", text)
+        # (`char` too: `(char  [8])(*(ulonglong *)...)`, 3 functions, 2026-10-18)
+        text = re.sub(r"\((?:undefined1?|char)\s*\[\s*([1248])\s*\]\)", r"(undefined\1)", text)
         # and through a pointer to one (`*(undefined1 (*) [8])(lVar7 + 0x1c) = ...`, an 8-byte
         # store): a pointer to the scalar, which C can assign through (C2106)
-        text = re.sub(r"\(undefined1?\s*\(\*\)\s*\[([1248])\]\)", r"(undefined\1 *)", text)
+        text = re.sub(r"\((?:undefined1?|char)\s*\(\*\)\s*\[\s*([1248])\s*\]\)", r"(undefined\1 *)", text)
         # a local byte array of a scalar's size assigned whole (`undefined1 auVar4 [8];`, then
         # `auVar4 = local_198;` and `*(float *)((longlong)auVar4 + 0x24)`, a pointer held in xmm,
         # FUN_141544600): that scalar, when it is never indexed nor has its address taken (C2106)
@@ -2860,6 +3411,11 @@ class Translator:
         # a string Ghidra named with brackets (`s_<unknown>_142617978`): its address, as any `s_`;
         # and a pointer to one (`&PTR_s_<no_protocol>_1428f8060`): the slot, or what it holds
         # (several brackets, not all closed: `s_<Realm_Name>_____<Realm_IP>_____<_142618260`, C2065)
+        # (and one whose text holds a `>`, read as a piece: `s_fff>D__BuildServer_A_work_git_wo_
+        # 14280032c._0_4_`, the first four bytes of the data there, C2065, 2026-10-18)
+        text = re.sub(r"\bs_\w*[<>][\w<>]*?_(1[0-9a-f]{8})\._(\d+)_(\d+)_",
+                      lambda m: f"(*(undefined{m.group(3)} *)((char *)REFP(0x{m.group(1)}) + {m.group(2)}))"
+                      if m.group(3) in ("1", "2", "4", "8") else m.group(0), text)
         text = re.sub(r"\bs_<[\w<>]*?_(1[0-9a-f]{8})\b", r"((char *)REFP(0x\1))", text)
         text = re.sub(r"&PTR_s_<[\w<>]*?_(1[0-9a-f]{8})\b", r"((char **)REFP(0x\1))", text)
         text = re.sub(r"\bPTR_s_<[\w<>]*?_(1[0-9a-f]{8})\b", r"(*(char **)REFP(0x\1))", text)
@@ -2867,6 +3423,35 @@ class Translator:
         # `sub rsp, rax` of an alloca): the same allocation in this frame
         text = re.sub(r"^([ \t]*\w+ = (?:\([\w ]+\*+\))?)&stack0x[0-9a-f]+ \+ -\(([^;()]*(?:\([^;()]*\)[^;()]*)*)\);$",
                       r"\1(undefined1 *)_alloca(\2);", text, flags=re.M)
+        # (anywhere else in an expression, and used more than once: `(uint *)(&stack0x..fff8 +
+        # -(n))` and later `(longlong)(&stack0x..fff8 + -(n)) - ...`, the same allocation, C2065
+        # in FUN_141647080, 2026-10-18): allocated where first met, and its address after
+        allocs: dict[str, str] = {}
+        out, i = [], 0
+        for m in re.finditer(r"&stack0x[0-9a-f]+ \+ -\(", text):
+            end = balanced(text, m.end() - 1)
+            if end < 0 or m.start() < i:
+                continue
+            size = text[m.end():end - 1]
+            # (the parentheses a cast's, `+ -(longlong)pcVar5`: the size is the cast operand,
+            # C2275 in 15 functions, 2026-10-18)
+            cast = re.match(r"\s*(\w+|\([^()]*\))", text[end:])
+            if re.fullmatch(r"\s*(?:const\s+)?\w+(?:\s+\w+)*\s*\**\s*", size) and cast:
+                size = f"({size}){cast.group(1)}"
+                end += cast.end()
+            whole = text[m.start():end]
+            if whole not in allocs:
+                allocs[whole] = f"gen_alloca_{len(allocs)}"
+                use = f"({allocs[whole]} = (undefined1 *)_alloca({size}))"
+            else:
+                use = allocs[whole]
+            out.append(text[i:m.start()] + use)
+            i = end
+        if allocs:
+            text = "".join(out) + text[i:]
+            brace = text.find("\n{\n")
+            if brace >= 0:
+                text = text[:brace + 2] + "".join(f"\n  undefined1 *{v};" for v in allocs.values()) + text[brace + 2:]
         # a switch on a value Ghidra typed a pointer (`switch(plVar5)`, a jump-table index held in
         # a pointer-typed register variable): C switches on integers (C2050)
         for var in re.findall(r"\bswitch\((\w+)\)", text):
@@ -2984,6 +3569,7 @@ class Translator:
         by the port's own count when it is adapted), or None when that is not known."""
         if b in self._arity:
             return self._arity[b]
+        self._arity[b] = None     # (until known: thunks that jump to each other)
         need = None
         e = self.cor.get(b)
         if e and "c" in e:
@@ -3001,8 +3587,17 @@ class Translator:
                 rest = self.without_va_spill(rest, names)
                 need = max((k + 1 for k, n in enumerate(names) if n and re.search(rf"\b{n}\b", rest)), default=0)
         elif self.lifted(b) is not None:
-            used = [int(n) for n in re.findall(r"\ba(\d)\b", self.lifted(b).partition("{")[2])]
-            need = max(used, default=-1) + 1
+            body = self.lifted(b).partition("{")[2]
+            # (a lone jump to a function, `jmp FUN_1405dec80`, lifted as handing its four argument
+            # registers on: it needs what its target needs, not four. As four, a caller passing
+            # none was refused, "the decompiler lost a call's arguments", 48 functions, 2026-10-18)
+            only = re.fullmatch(r"\s*ulonglong fa = 0, fb = 0, fr = 0;(?:\s*ulonglong r_\w+ = a\d;)*"
+                                r"\s*return FUN_([0-9a-f]{9})\((?:r_\w+(?:, )?)*\);\s*}\s*", body)
+            if only and int(only.group(1), 16) != b and self.arity(int(only.group(1), 16)) is not None:
+                need = self.arity(int(only.group(1), 16))
+            else:
+                used = [int(n) for n in re.findall(r"\ba(\d)\b", body)]
+                need = max(used, default=-1) + 1
         if need is not None and b in self.tied:
             pt = self.port_target(b)
             if pt is not None:
@@ -3306,7 +3901,7 @@ class Translator:
         if a not in self._lifted:
             root = self.ref.func_containing(a)
             inside = root is not None and root != a and root in self.cor
-            self._lifted[a] = None if inside or not self.ref.is_code(a) else lift.lift(self.ref, a)
+            self._lifted[a] = None if inside or not self.ref.is_code(a) else lift.lift(self.ref, a, arity=self.arity)
         return self._lifted[a]
 
     def named_callee(self, name: str, own_name: str) -> int | str | None:
@@ -3336,6 +3931,8 @@ class Translator:
         if sm and int(sm.group(1), 16) in self.cor:
             return by_addr(int(sm.group(1), 16))
         # FID names a runtime routine it matched more than once `FID_conflict_<name>`
+        if name.removeprefix("FID_conflict_") in CRT_EXACT:
+            return name.removeprefix("FID_conflict_")
         plain = name.removeprefix("FID_conflict_").lstrip("_")
         if plain in CRT:
             return plain
@@ -3586,7 +4183,7 @@ class Translator:
 
     # ---- the work set ---------------------------------------------------------------------
     def plan(self, roots: list[int]) -> dict:
-        translate, stub, adapt = {}, {}, {}
+        translate, stub, adapt, native = {}, {}, {}, {}
         # breadth first: a function is planned at its shortest depth. Depth first, the first
         # visit could be the deepest, stub it "beyond the translation depth" and mark it seen:
         # a new corpus changed the order, and 619 functions lost the string-buffer helpers
@@ -3595,19 +4192,34 @@ class Translator:
         frontier = deque((a, 0) for a in roots)
         queued = set(roots)
         seen = set()
+        warmed = -1
         while frontier:
             a, d = frontier.popleft()
+            if d > warmed:
+                # each depth's bodies at once, in the workers when there are any (start_pool)
+                self.warm([a] + [x for x, dx in frontier if dx == d and x not in seen])
+                warmed = d
             if a in seen:
                 continue
             seen.add(a)
             # (a function that did not compile is planned as translated, and stubbed only at
             # emission: its callees stay in the work set, so the set, the files and the
             # declarations stay as they were from one --fix round to the next)
+            if self.native_ok(a):
+                # (a root in a native range too: the reference's own code runs, not a translation)
+                native[a] = True
+                continue
             reason = self.why_not(a, root=d == 0, demotion=False)
             if reason is None:
                 translate[a] = d
                 for b in self.callees(self.body(a), self.cor[a]["name"] if a in self.cor else ""):
-                    if b in seen or b in CRT_BY_ADDR or b in CRT_ENTRY or b in self.crt_thunks or self.is_lib(b):
+                    if b in seen or b in CRT_BY_ADDR or b in CRT_ENTRY or b in self.crt_thunks:
+                        continue
+                    if self.native_ok(b):
+                        native[b] = True
+                        seen.add(b)
+                        continue
+                    if self.is_lib(b) and not (b in self.cor and self.stateless(b)):
                         continue
                     if self.port_target(b) is not None and b not in roots:
                         adapt[b] = True
@@ -3624,15 +4236,316 @@ class Translator:
                         seen.add(b)
             else:
                 stub[a] = reason
-        return {"translate": translate, "stub": stub, "adapt": adapt}
+        return {"translate": translate, "stub": stub, "adapt": adapt, "native": native}
 
-    def is_lib(self, a: int) -> bool:
+    def runtime_only_dropped(self, roots: list[int]) -> list[int]:
+        """The roots less the reference runtime's own named routines that only the runtime calls.
+
+        A routine the port's runtime has is the port's (is_lib), and what only such routines call
+        is the reference runtime's inside: `_expandlocale` under setlocale, `_write_nolock` under
+        _write. As roots they were translated and called its internals, stubbed (2026-10-18).
+        Non-member functions only, with at least one caller, all of them the runtime's or dropped
+        already (unnamed too: the EH frame handler's helpers under __CxxFrameHandler, which read
+        _GetImageBase, 19 demoted). A lambda is no runtime caller (the game has its own, under
+        the same `<lambda_` names); code reached only through a stored pointer stays."""
+        cands = {a for a in roots if "::" not in self.cor[a]["name"]}
+        if not cands:
+            return roots
+        named = {self.cor[a]["name"]: a for a in cands if not self.cor[a]["name"].startswith(("FUN_", "thunk_FUN_"))}
+        ref = re.compile(r"\b(" + "|".join(re.escape(n) for n in sorted(named, key=len, reverse=True)) + r")\b") \
+            if named else None
+        callers: dict[int, set[int]] = defaultdict(set)
+        for a, e in self.cor.items():
+            c = e.get("c", "")
+            c = c[c.find("{"):]
+            for x in set(FUNREF.findall(c)):
+                b = int(x, 16)
+                if b in cands and b != a:
+                    callers[b].add(a)
+            if ref is not None:
+                for n in set(ref.findall(c)):
+                    if named[n] != a:
+                        callers[named[n]].add(a)
+
+        def runtime(c: int) -> bool:
+            n = self.cor[c]["name"] if c in self.cor else ""
+            # (a lambda in the runtime's own code is the runtime's: __crt_seh_guarded_call's
+            # `operator()` bodies, through which _close reaches _close_nolock)
+            return self.is_lib(c) and ("<lambda" not in n and "operator()" not in n or crt_block(c))
+
+        # and a function nothing calls (an exception funclet, a slot in one of the runtime's
+        # tables) that calls the runtime's internals by name: the runtime's too (the CRT's
+        # `__finally` funclets at 0x1425d4xxx unlocking with __acrt_unlock, its locale tables'
+        # free routines; 2026-10-18)
+        internal = [re.compile(r["pattern"]) for r in self.exceptions.get("third_party_names", [])]
+        called_internal: set[int] = set()
+        for a in cands:
+            # (in the runtime's own code, or among the funclets the image keeps at its end: a
+            # game method nothing calls but its vtable can use __std_exception_copy and is kept)
+            if callers.get(a) or not (crt_block(a) or a >= 0x1425d4000):
+                continue
+            c = self.cor[a].get("c", "")
+            for n in set(re.findall(r"\b([A-Za-z_][\w:<>,]*)\s*\(", c[c.find("{"):])):
+                if any(p.search(n) for p in internal):
+                    called_internal.add(a)
+                    break
+        dropped: set[int] = set(called_internal)
+        changed = True
+        while changed:
+            changed = False
+            for a in cands - dropped:
+                cs = callers.get(a)
+                if cs and all(runtime(c) or c in dropped for c in cs):
+                    dropped.add(a)
+                    changed = True
+        print(f"--all: {len(dropped)} runtime routines only the runtime calls, left out", file=sys.stderr, flush=True)
+        return [a for a in roots if a not in dropped]
+
+    def native_ranges(self) -> list[tuple[int, int]]:
+        return [(int(r["from"], 16), int(r["to"], 16)) for r in self.exceptions.get("native", [])] + \
+            sorted(r for rs in self.__dict__.get("_leaf_ranges", {}).values() for r in rs)
+
+    def native_leaf(self, a: int) -> list[tuple[int, int]] | None:
+        """The code ranges of a function that may run as the reference's own machine code instead
+        of a stub: a leaf (no call, no jump out of it, no indirect jump), whose decompilation
+        reads no register the decompiler lost (an argument passed outside the ABI, which a
+        translated caller would not set), and which touches no global the port keeps for itself
+        (the port's object, not the image's copy, is the live one). What the translator could
+        not put in C (a pointer-to-array type, AVX2 the 16-byte values cannot hold: libvpx's
+        kernels, the C runtime's vectorized strnlen; 22 stubs, 2026-10-18) runs that way."""
+        import capstone
+        from capstone import x86 as CX
         e = self.cor.get(a)
         if e is None:
+            return None
+        c = e.get("c", "")
+        if re.search(r"\b(in_|unaff_|extraout_)\w+", c[c.find("{"):]):
+            return None
+        md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
+        md.detail = True
+        spans, seen, todo = [], set(), [a]
+        while todo:
+            x = todo.pop()
+            while x not in seen:
+                seen.add(x)
+                o = self.ref.off(x)
+                ins = next(md.disasm(bytes(self.ref.image[o:o + 16]), x), None)
+                if ins is None or len(seen) > 20000:
+                    return None
+                spans.append((x, x + ins.size))
+                mn = ins.mnemonic
+                op = ins.operands[0] if ins.operands else None
+                if mn in ("call", "syscall", "int", "int1", "into"):
+                    return None
+                for o2 in ins.operands:
+                    if o2.type == CX.X86_OP_MEM and o2.mem.base == CX.X86_REG_RIP:
+                        t = ins.address + ins.size + o2.mem.disp
+                        i = bisect.bisect_right(self.held_sorted, t) - 1
+                        if i >= 0 and t < self.held_sorted[i] + max(1, self.held[self.held_sorted[i]].get("size") or 1):
+                            return None
+                if mn == "jmp":
+                    if op is None or op.type != CX.X86_OP_IMM or (op.imm in self.cor and op.imm != a):
+                        return None
+                    x = op.imm
+                    continue
+                if mn.startswith("j") or mn.startswith("loop"):
+                    todo.append(op.imm)
+                elif mn in ("ret", "int3", "ud2", "hlt"):
+                    break
+                x += ins.size
+        # (merged: one range per run of instructions)
+        spans.sort()
+        out = []
+        for lo, hi in spans:
+            if out and lo <= out[-1][1]:
+                out[-1] = (out[-1][0], max(out[-1][1], hi))
+            else:
+                out.append((lo, hi))
+        return out
+
+    def native_ok(self, a: int) -> bool:
+        """Third-party assembly the port runs as the reference's own machine code
+        (tools/fidelity_exceptions.json "native"; RefImage.cpp maps those ranges' bytes): a
+        function there, called from translated code, unless it reaches out of the image's code
+        through an import slot, which the mapped image leaves unresolved. The codecs' SIMD kernels
+        have no decompilation that is C (their blocks pass state in registers), and stubbed, the
+        63 the codec C side calls returned 0 (2026-10-18).
+
+        Its instructions are followed from the entry, not read straight through: a straight read
+        ran into the data a kernel keeps between its blocks and found "calls" out of the range in
+        it (FUN_140195660, FUN_14019b510). A call through an import slot is allowed, as RefImage.cpp
+        fills the slots (g_genImports); any other call or jump out of the mapped code is not."""
+        memo = self.__dict__.setdefault("_native", {})
+        if a in memo:
+            return memo[a]
+        ranges = self.native_ranges()
+
+        def inside(x):
+            return any(lo <= x < hi for lo, hi in ranges)
+
+        ok = inside(a)
+        if ok:
+            import capstone
+            from capstone import x86 as CX
+            md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
+            md.detail = True
+            slots = self.import_slots()
+            seen, todo = set(), [a]
+            while todo and ok:
+                x = todo.pop()
+                while ok and x not in seen and len(seen) < 50000:
+                    seen.add(x)
+                    if not inside(x):
+                        ok = False
+                        break
+                    o = self.ref.off(x)
+                    ins = next(md.disasm(bytes(self.ref.image[o:o + 16]), x), None)
+                    if ins is None:
+                        ok = False
+                        break
+                    mn = ins.mnemonic
+                    op = ins.operands[0] if ins.operands else None
+                    if mn in ("call", "jmp") and op is not None:
+                        if op.type == CX.X86_OP_MEM and op.mem.base == CX.X86_REG_RIP:
+                            slot = ins.address + ins.size + op.mem.disp
+                            if slot not in slots:
+                                ok = False      # a pointer in the data, not an import
+                            else:
+                                self.__dict__.setdefault("_native_slots", set()).add(slot)
+                            if mn == "jmp":
+                                break
+                        elif op.type == CX.X86_OP_IMM:
+                            if not inside(op.imm):
+                                ok = False      # out of the mapped code
+                            elif mn == "jmp":
+                                x = op.imm
+                                continue
+                        elif mn == "jmp":
+                            break               # a table jump within the kernel
+                    elif mn.startswith("j") or mn.startswith("loop"):
+                        if op is not None and op.type == CX.X86_OP_IMM:
+                            todo.append(op.imm)
+                    elif mn in ("ret", "int3", "ud2", "hlt"):
+                        break
+                    x = ins.address + ins.size
+        memo[a] = ok
+        return ok
+
+    def stateless(self, a: int, depth: int = 0) -> bool:
+        """A runtime routine that reads or writes none of the runtime's own state: no store to the
+        image's writable data and no load from it, calling only imports and other such routines.
+        Translated, it does what it did (`__crt_time_is_leap_year`, `__acrt_GetDateFormatEx` over
+        the Windows call, the UTF-8 conversions); a stub returned 0 to the translated runtime code
+        game code still reaches through FID-unnamed wrappers (21 stubs, 2026-10-18). The per-thread
+        data, the locks and the locale references read state only the reference's startup makes,
+        and stay out."""
+        memo = self.__dict__.setdefault("_stateless", {})
+        if a in memo:
+            return memo[a]
+        if depth > 6:
             return False
-        name = e["name"]
-        return a in {int(k, 16) for k in self.exceptions.get("lib", {})} or (
-            not name.startswith(F.REF_KEEP) and "::" not in name and name.lstrip("_") in CRT)
+        memo[a] = False     # (until shown: recursion)
+        import capstone
+        from capstone import x86 as CX
+        md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
+        md.detail = True
+        data = self.ref.section(".data")
+        slots = self.import_slots()
+        ok, seen, todo = True, set(), [a]
+        while todo and ok:
+            x = todo.pop()
+            while ok and x not in seen and len(seen) < 4000:
+                seen.add(x)
+                o = self.ref.off(x)
+                ins = next(md.disasm(bytes(self.ref.image[o:o + 16]), x), None)
+                if ins is None:
+                    ok = False
+                    break
+                mn = ins.mnemonic
+                for op in ins.operands:
+                    if op.type == CX.X86_OP_MEM and op.mem.base == CX.X86_REG_RIP:
+                        t = ins.address + ins.size + op.mem.disp
+                        if data.start <= t < data.end:
+                            ok = False      # the runtime's own state
+                op = ins.operands[0] if ins.operands else None
+                if mn in ("call", "jmp") and op is not None:
+                    if op.type == CX.X86_OP_IMM:
+                        if op.imm in self.cor and op.imm != a and (mn == "call" or op.imm in self.cor):
+                            if not self.stateless(op.imm, depth + 1):
+                                ok = False
+                            if mn == "jmp":
+                                break
+                        elif mn == "jmp":
+                            x = op.imm
+                            continue
+                    elif op.type == CX.X86_OP_MEM and op.mem.base == CX.X86_REG_RIP:
+                        if ins.address + ins.size + op.mem.disp not in slots:
+                            ok = False
+                        if mn == "jmp":
+                            break
+                    else:
+                        ok = False          # through a register: what, unknown
+                elif mn.startswith("j") or mn.startswith("loop"):
+                    if op is not None and op.type == CX.X86_OP_IMM:
+                        todo.append(op.imm)
+                elif mn in ("ret", "int3", "ud2", "hlt"):
+                    break
+                x = ins.address + ins.size
+        memo[a] = ok
+        return ok
+
+    def import_slots(self) -> dict[int, tuple[str, str]]:
+        """The image's import slots, as a live client resolved them (build/facts/imports.json):
+        slot -> (DLL, name)."""
+        if not hasattr(self, "_import_slots"):
+            p = ROOT / "build/facts/imports.json"
+            if not p.exists():
+                p = ROOT / "data/imports.json"
+            rows = json.loads(p.read_text(encoding="utf-8")).get("imports", {}) if p.exists() else {}
+            self._import_slots = {int(k, 16): (v["dll"], v.get("imported_name") or v["name"])
+                                  for k, v in rows.items() if v.get("dll") and (v.get("imported_name") or v.get("name"))}
+        return self._import_slots
+
+    def is_lib(self, a: int) -> bool:
+        """Library code the port does not translate, memoized: planning asks for every callee of
+        every body, and this rebuilt the `lib` address set on each call."""
+        memo = self.__dict__.setdefault("_is_lib", {})
+        if a in memo:
+            return memo[a]
+        if not hasattr(self, "_lib_rules"):
+            ex = self.exceptions
+            self._lib_rules = ([(int(r["from"], 16), int(r["to"], 16)) for r in ex.get("third_party", [])],
+                               [re.compile(r["pattern"]) for r in ex.get("third_party_names", [])],
+                               {int(k, 16) for k in ex.get("lib", {})})
+        ranges, names, lib = self._lib_rules
+        e = self.cor.get(a)
+        if any(lo <= a < hi for lo, hi in ranges):
+            # third-party code by range (tools/fidelity_exceptions.json: the codecs' assembly, the
+            # protector's loader)
+            out = True
+        elif e is None:
+            out = False
+        else:
+            # and by name (the reference CRT's internals), the listed runtime routines, and the
+            # CRT's public names
+            name = e["name"]
+            # (FID's `FID_conflict:_strtoi64` as well as `_strtoi64`)
+            bare = re.sub(r"^FID_conflict[:_]", "", name)
+            out = any(n.search(name) for n in names) or a in lib or bare in CRT_EXACT or (
+                not name.startswith(F.REF_KEEP) and "::" not in name and name.lstrip("_") in CRT) or (
+                # a routine the port's C runtime DLLs export (`fclose`, `_wgetcwd`, `abort`): the
+                # port's, which a call by that name reaches (named_callee). Translated, the
+                # reference's ran on its own runtime's state (lowio handles, locales, the stdio
+                # streams) that FrostLite never initializes, through 104 internals stubbed
+                # "called, not in the work set" (2026-10-18)
+                "::" not in name and bare in crt_exports()) or (
+                # vcruntime's exception handling (CatchIt<__FrameHandler3>, BuildCatchObjectInternal,
+                # Is_bad_exception_allowed and unnamed helpers): only it reads the image base
+                # through _GetImageBase / _GetThrowImageBase, and the port has its own (19
+                # demotions, LNK2019, 2026-10-18)
+                re.search(r"\b_Get(?:Throw)?ImageBase\s*\(", e.get("c", "")) is not None)
+        memo[a] = out
+        return out
 
     def why_not(self, a: int, root: bool, demotion: bool = True) -> str | None:
         if demotion and f"{a:x}" in self.demoted:
@@ -3762,6 +4675,10 @@ class Translator:
         body = re.sub(r"&?\s*\bIMAGE_DOS_HEADER_140000000\.e_program\b", "((char *)REFP(0x140000040))", body)
         # (and `e_lfanew`, the offset of the PE header, the int at +0x3c)
         body = re.sub(r"\bIMAGE_DOS_HEADER_140000000\.e_lfanew\b", "(*(int *)REFP(0x14000003c))", body)
+        # (the "MZ" test, `e_magic == (char  [2])0x5a4d`: the 2 bytes there against the number; as
+        # the base address it was a pointer compared with an array cast, C2067, 2026-10-18)
+        body = re.sub(r"\bIMAGE_DOS_HEADER_140000000\.e_magic\s*([!=]=)\s*\(char\s*\[2\]\)\s*(0x[0-9a-f]+)",
+                      r"(*(unsigned short *)REFP(0x140000000)) \1 \2", body)
         body = re.sub(r"&?\s*\bIMAGE_DOS_HEADER_140000000(?:\.e_magic)?\b", "((char *)REFP(0x140000000))", body)
         # the thread's own TEB and PEB, which Ghidra names by field (`Self`, the TEB's pointer to
         # itself at gs:[0x30]; `ProcessEnvironmentBlock` at gs:[0x60]): this process has them too
@@ -4111,6 +5028,8 @@ class Translator:
                           r"\1  __debugbreak();\n  __fastfail(7);\n  __assume(0);\n\2", body.rstrip() + "\n")
         self.global_aliases.update(aliases)
         self.exported.update(exported)
+        # (this function's own, for rewrite_one to hand back from a worker)
+        self._last_aliases, self._last_exported = aliases, exported
         return f"{ret} FUN_{a:x}({', '.join(decls) or 'void'})\n{body.rstrip()}\n"
 
     def port_reads(self, body: str, adapted) -> dict[str, dict]:
@@ -4147,6 +5066,48 @@ class Translator:
                     "vtable": [f"0x{o:x}" for o in sorted(v["vtable"])]}
                 for k, v in out.items() if v["offsets"] or v["vtable"]}
 
+    def rewrite_one(self, a: int, text: str, adapted) -> tuple[int, tuple]:
+        """One planned body rewritten, with everything prepare() keeps of it: in a worker
+        process or here alike, so the two paths give the same result."""
+        mine: set[int] = set()
+        self._last_aliases, self._last_exported = {}, {}
+        try:
+            body = self.rewrite(a, text, mine)
+        except Untranslatable as e:
+            return a, ("untranslatable", str(e))
+        aliases, exported = self._last_aliases, self._last_exported
+        return a, ("ok", body, mine,
+                   {IMPORT_MERGED.get(m.group(2), m.group(2)) for m in IMPORT.finditer(text)},
+                   {m.group(1) for m in IMPORT.finditer(text)},
+                   self.port_reads(body, adapted), aliases, exported)
+
+    def start_pool(self, jobs: int) -> None:
+        """Worker processes for the per-function work (body recovery and rewriting are about
+        three quarters of an --all run, and independent per function once the bodies are all
+        known): each builds its own Translator, 30 s and ~1.5 GB."""
+        self._pool = None
+        if jobs > 1:
+            import multiprocessing
+            print(f"starting {jobs} workers ...", file=sys.stderr, flush=True)
+            self._pool = multiprocessing.get_context("spawn").Pool(jobs, _worker_init, (self.depth,))
+
+    def warm(self, addrs) -> None:
+        """Bodies for these addresses, computed by the workers (with what recovering them
+        learned: the stack parameters found, a guard left in, what tools/v16.py refused)."""
+        cache = self.__dict__.setdefault("_bodies", {})
+        todo = sorted({a for a in addrs if a not in cache})
+        if self._pool is None or len(todo) < 200:
+            return
+        for batch in self._pool.imap(_worker_bodies, [todo[i:i + 400] for i in range(0, len(todo), 400)]):
+            for a, body, extra, guard, v16 in batch:
+                cache[a] = body
+                if extra:
+                    self._extra_params[a] = extra
+                if guard is not None:
+                    self.guard_failed[a] = guard
+                if v16 is not None:
+                    self.v16_failed[a] = v16
+
     # ---- emission -------------------------------------------------------------------------
     def prepare(self, roots: list[int]) -> None:
         """Plan once and rewrite every planned body once. The --fix rounds then only re-emit:
@@ -4156,27 +5117,51 @@ class Translator:
         plan = self.plan(roots)
         print(f"plan: {len(plan['translate'])} to translate, {len(plan['adapt'])} adapted, "
               f"{len(plan['stub'])} stubbed", file=sys.stderr, flush=True)
+        # A body's recovery reads its callees' signatures, which carry the stack parameters their
+        # own recovery found (recover_arguments, _extra_params): known only once that callee's
+        # body was done, so a caller done first did without them, by planning order, and in a
+        # worker by which worker had done what. The callers of those callees are done again now
+        # that all are known: one result whatever the order.
+        if self._extra_params:
+            call = re.compile(r"\bFUN_(" + "|".join(f"{b:x}" for b in self._extra_params) + r")\b")
+            cache = self.__dict__.setdefault("_bodies", {})
+            redo = [a for a in plan["translate"] if cache.get(a) and call.search(cache[a])]
+            for a in redo:
+                del cache[a]
+                self.body(a)
+            print(f"{len(redo)} bodies redone with their callees' recovered parameters",
+                  file=sys.stderr, flush=True)
         bodies: dict[int, str] = {}
         uses: set[int] = set()
         self._imports, self._dlls, self._port_reads = {}, {}, {}
-        for a in sorted(plan["translate"]):
-            text = self.body(a)
-            mine: set[int] = set()
-            try:
-                body = self.rewrite(a, text, mine)
-            except Untranslatable as e:
-                del plan["translate"][a]
-                plan["stub"][a] = str(e)
-                continue
-            uses |= mine
-            bodies[a] = body
-            self._imports[a] = {IMPORT_MERGED.get(m.group(2), m.group(2)) for m in IMPORT.finditer(text)}
-            self._dlls[a] = {m.group(1) for m in IMPORT.finditer(text)}
-            if r := self.port_reads(body, plan["adapt"]):
-                self._port_reads[a] = r
+        order = sorted(plan["translate"])
+        if self._pool is not None and len(order) > 200:
+            # (in the workers, a chunk each: what the bodies' recovery learned is theirs too)
+            state = (self._extra_params, set(plan["adapt"]))
+            chunks = [order[i:i + 400] for i in range(0, len(order), 400)]
+            results = self._pool.imap(_worker_rewrite,
+                                      ((state, [(a, self.body(a)) for a in ch]) for ch in chunks))
+        else:
+            results = ([self.rewrite_one(a, self.body(a), plan["adapt"])] for a in order)
+        for batch in results:
+            for a, out in batch:
+                if out[0] == "untranslatable":
+                    del plan["translate"][a]
+                    plan["stub"][a] = out[1]
+                    continue
+                _, body, mine, imports, dlls, reads, aliases, exported = out
+                uses |= mine
+                bodies[a] = body
+                self._imports[a], self._dlls[a] = imports, dlls
+                if reads:
+                    self._port_reads[a] = reads
+                self.global_aliases.update(aliases)
+                self.exported.update(exported)
         # whatever is called and neither translated nor adapted is stubbed
         for b in uses:
-            if b not in plan["translate"] and b not in plan["adapt"] and b not in plan["stub"]:
+            if b in plan["native"] or self.native_ok(b):
+                plan["native"][b] = True
+            elif b not in plan["translate"] and b not in plan["adapt"] and b not in plan["stub"]:
                 plan["stub"][b] = "called, not in the work set"
         self._plan, self._rewritten = plan, bodies
         # the files: fixed address ranges, PER_FILE corpus functions to a range, so a function's
@@ -4191,10 +5176,27 @@ class Translator:
 
     def emit(self, handlers: dict[int, str], demoted: dict[str, str]) -> dict:
         plan = {"translate": {a: d for a, d in self._plan["translate"].items() if f"{a:x}" not in demoted},
-                "adapt": self._plan["adapt"], "stub": dict(self._plan["stub"])}
+                "adapt": self._plan["adapt"], "stub": dict(self._plan["stub"]),
+                "native": dict(self._plan.get("native", {}))}
         for a in self._plan["translate"]:
             if f"{a:x}" in demoted:
                 plan["stub"][a] = "did not compile: " + demoted[f"{a:x}"]
+        # a stub the reference's own machine code can stand in for (native_leaf): native instead.
+        # Not protection, nor the runtime's internals, nor what nothing translated calls
+        leaves = self.__dict__.setdefault("_leaf_ranges", {})
+        for a, why in list(plan["stub"].items()):
+            if why.startswith(("anti-tamper", "an inlined anti-tamper", "called, not in", "beyond the")):
+                continue
+            if a not in leaves:
+                leaves[a] = self.native_leaf(a)
+            if leaves[a]:
+                del plan["stub"][a]
+                plan["native"][a] = why
+        self.__dict__["_leaf_ranges"] = {a: r for a, r in leaves.items() if r and a in plan["native"]}
+        # (a native function is a pointer to the reference's code, not a C function: an address
+        # taken of it is the pointer itself)
+        native_ref = (re.compile(r"&\s*(FUN_(?:" + "|".join(f"{a:x}" for a in plan["native"]) + r"))\b")
+                      if plan["native"] else None)
         GEN.mkdir(exist_ok=True)
         port_reads = {f"{a:x}": r for a, r in self._port_reads.items() if a in plan["translate"]}
         by_file: dict[str, list[int]] = defaultdict(list)
@@ -4219,7 +5221,16 @@ class Translator:
             for i, a in enumerate(funcs):
                 start = len(out) + 1
                 out.append(f"/* ref: FUN_{a:x} */")
-                lines = self._rewritten[a].splitlines()
+                text = late_fixes(self._rewritten[a])
+                if native_ref is not None:
+                    text = native_ref.sub(r"\1", text)
+                if self.decl(a)[0] == "gen_v16":
+                    # a 16-byte result loaded from a global (`movaps xmm0, [rip + X]; ret`), which
+                    # the decompiler reads at the global's own, smaller type: all 16 bytes (C2440
+                    # in FUN_1424719f0 and three more, 2026-10-18)
+                    text = re.sub(r"\breturn REFG\([\w ]+\**, (0x[0-9a-f]+)\);",
+                                  r"return (*(gen_v16 *)REFP(\1));", text)
+                lines = text.splitlines()
                 brace = lines.index("{") if "{" in lines else -1
                 if brace >= 0:
                     lines.insert(brace + 1, f"  GEN_HIT({i});")
@@ -4249,6 +5260,13 @@ class Translator:
         imports = (set().union(*self._imports.values()) if self._imports else set()) | CRT_ENTRY_IMPORTS
         dlls = set().union(*self._dlls.values()) if self._dlls else set()
         prototypes = [prototype(a) for a in sorted(set(plan["translate"]) | set(plan["adapt"]) | set(plan["stub"]))]
+        # the third-party assembly run as the reference's own code (RefImage.cpp maps it): a call
+        # is a call to its address, with the parameters Ghidra gave it where it has them (an
+        # unprototyped call would pass a float as a double)
+        for a in sorted(plan["native"]):
+            ret, params = self.decl(a)
+            sig = ", ".join(params) if params and "..." not in params else ""
+            prototypes.append(f"#define FUN_{a:x} (({ret} (*)({sig}))0x{a:x}ULL)")
         header = ["/* GENERATED by tools/translate.py; do not edit by hand. */",
                   "#ifndef GEN_TRANSLATED_H", "#define GEN_TRANSLATED_H", "", "#include \"gen/Ghidra.h\"", ""]
         # the import libraries of the DLLs the reference's imports come from (combase's exports
@@ -4256,6 +5274,12 @@ class Translator:
         header += [f"#pragma comment(lib, \"{'ole32' if d == 'COMBASE_DLL' else d.removesuffix('_DLL').lower()}.lib\")"
                    for d in sorted(dlls)]
         header += [f"__declspec(dllimport) unsigned long long {name}();" for name in sorted(imports)]
+        # the runtime routines translated code reaches by address, the port's own (body())
+        rt = sorted({n for a in plan["translate"] for n in re.findall(r"\bgen_rt_(\w+)", self._rewritten.get(a, ""))})
+        for name in rt:
+            header += [f"#pragma comment(linker, \"/include:{name}\")",
+                       f"#pragma comment(linker, \"/alternatename:gen_rt_{name}={name}\")",
+                       f"unsigned long long gen_rt_{name}();"]
         # the port's own globals, where the translated code would read the image's
         # (declared at the port object's own size from the PDB: as a `char` every access wider
         # than a byte was C4739, 115 of them in 57 functions, all inside the object, and a real
@@ -4399,6 +5423,19 @@ class Translator:
         crt = [(a, name) for a, name in sorted({**CRT_ENTRY, **self.crt_thunks}.items()) if a not in set(reachable)]
         jumps += [f"    {{ 0x{a:x}ULL, (void*)&{name} }}," for a, name in crt]
         jumps += ["    { 0, 0 }", "};", f"const size_t g_genJumpCount = {len(reachable) + len(crt)};", ""]
+        # the code ranges RefImage.cpp maps as the reference's own bytes (native_ok), from, to
+        ranges = self.native_ranges()
+        jumps += ["const unsigned long long g_genNative[] = {"]
+        jumps += [f"    0x{lo:x}ULL, 0x{hi:x}ULL," for lo, hi in ranges] + ["    0, 0", "};",
+                                                                             f"const size_t g_genNativeCount = {len(ranges)};", ""]
+        # and the import slots that code calls through, which RefImage.cpp fills: the mapped
+        # image's own are empty (the protector resolves them at run time)
+        slots = sorted(self.__dict__.get("_native_slots", set()))
+        imports = self.import_slots()
+        jumps += ["typedef struct { unsigned long long m_slot; const char* m_dll; const char* m_name; } GENIMPORT;",
+                  "const GENIMPORT g_genImports[] = {"]
+        jumps += [f"    {{ 0x{s:x}ULL, \"{imports[s][0]}\", \"{imports[s][1]}\" }}," for s in slots]
+        jumps += ["    { 0, 0, 0 }", "};", f"const size_t g_genImportCount = {len(slots)};", ""]
         write_out(GEN / "jumps.c", "\n".join(jumps), encoding="utf-8", newline="\n")
 
         # the Lua handlers: the port registers them by their C++ names
@@ -4425,6 +5462,10 @@ class Translator:
             # only if the port's layout matches there (tools/translate.py --risks)
             "port_reads": port_reads,
             "adapted": sorted(f"{a:x}" for a in plan["adapt"]),
+            # run as the reference's own machine code: the third-party assembly the translated code
+            # calls, and leaves C could not take (with why not)
+            "native": {f"{a:x}": (why if isinstance(why, str) else "third-party assembly (native range)")
+                       for a, why in sorted(plan["native"].items())},
             "stubbed": {f"{a:x}": why for a, why in sorted(plan["stub"].items())},
             "handlers": {f"{a:x}": cname for a, cname in sorted(handlers.items()) if a in plan["translate"]},
         }
@@ -4597,6 +5638,32 @@ def harvest_roots(log: Path) -> None:
     print(f"{len(added)} new roots ({len(roots)} in all): {' '.join(added)}")
 
 
+# ---- worker processes (Translator.start_pool) ----------------------------------------------
+_WORKER = None
+
+
+def _worker_init(depth: int) -> None:
+    global _WORKER
+    _WORKER = Translator(depth)
+
+
+def _worker_bodies(addrs: list[int]) -> list[tuple]:
+    t = _WORKER
+    out = []
+    for a in addrs:
+        body = t.body(a)
+        out.append((a, body, t._extra_params.get(a), t.guard_failed.get(a), t.v16_failed.get(a)))
+    return out
+
+
+def _worker_rewrite(job) -> list[tuple]:
+    (extra_params, adapted), items = job
+    t = _WORKER
+    # (every body's recovered stack parameters: a callee's signature carries them)
+    t._extra_params = extra_params
+    return [t.rewrite_one(a, text, adapted) for a, text in items]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--risks", action="store_true", help="list the port objects translated code reads, and stop")
@@ -4609,6 +5676,8 @@ def main() -> None:
     ap.add_argument("--all", action="store_true",
                     help="every function in the corpus a root (but the port's own, the protection and the runtime)")
     ap.add_argument("--fix", action="store_true", help="build, demote what fails to compile, repeat")
+    ap.add_argument("--jobs", type=int, default=4,
+                    help="worker processes for the per-function work (~1.5 GB each; 1: none)")
     ap.add_argument("--why", action="store_true",
                     help="list the translated functions that have a hand port, and why it is not used; stop")
     args = ap.parse_args()
@@ -4658,13 +5727,22 @@ def main() -> None:
         # the whole client: every function the corpus has, where the port has no counterpart
         # (a port's own stays the port's, reached through its adapter) and it is neither the
         # anti-tamper runtime nor the C runtime's
-        everything = [a for a in t.cor if a not in t.protection and not t.is_lib(a) and a not in CRT_BY_ADDR
+        everything = [a for a in t.cor if a not in t.protection and not t.is_lib(a) and a not in CRT_BY_ADDR and not t.native_ok(a)
                       and t.port_target(a) is None]
+        everything = t.runtime_only_dropped(everything)
         print(f"--all: {len(everything)} of {len(t.cor)} corpus functions as roots", file=sys.stderr, flush=True)
         roots = sorted(set(roots) | set(everything))
     # (a root that is a runtime entry or a thunk to one is the port's routine, never translated)
     roots = [r for r in roots if r not in CRT_ENTRY and r not in t.crt_thunks]
-    t.prepare(sorted(set(roots) | set(t.static_initializers())))
+    t.start_pool(args.jobs)
+    try:
+        t.prepare(sorted(set(roots) | set(t.static_initializers())))
+    finally:
+        # (the workers hold ~1.5 GB each: gone before the build rounds)
+        if t._pool is not None:
+            t._pool.close()
+            t._pool.join()
+            t._pool = None
     demoted = {} if args.fix else dict(t.demoted)
     files_before = {p.name for p in GEN.glob("translated_*.c")}
     for round_ in range(1, 30 if args.fix else 2):

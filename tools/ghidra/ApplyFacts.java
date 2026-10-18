@@ -32,6 +32,7 @@ import ghidra.program.model.listing.ParameterImpl;
 import ghidra.program.model.listing.ReturnParameterImpl;
 import ghidra.program.model.listing.FlowOverride;
 import ghidra.program.model.listing.Instruction;
+import ghidra.program.model.listing.InstructionIterator;
 import ghidra.program.model.listing.Variable;
 import ghidra.program.model.symbol.Namespace;
 import ghidra.program.model.symbol.SourceType;
@@ -57,6 +58,9 @@ public class ApplyFacts extends GhidraScript {
         File dir = new File(args.length > 0 ? args[0] : "build/facts");
         symbols = currentProgram.getSymbolTable();
 
+        // first, so no other fact lands on a function that is part of another
+        File pc = new File(dir, "pieces.json");
+        if (pc.exists()) applyPieces(read(pc));
         File lua = new File(dir, "luabind.json");
         if (lua.exists()) applyLua(read(lua));
         // C_ namespaces registered in code (same "functions" map: "C_X.Name" -> handler)
@@ -79,6 +83,19 @@ public class ApplyFacts extends GhidraScript {
         // after the varargs (which keep their own fixed count)
         File sw = new File(dir, "switches.json");
         if (sw.exists()) applySwitches(read(sw));
+        // (read before the prototypes, which give each function its keep convention)
+        File pv = new File(dir, "preserved.json");
+        if (pv.exists()) {
+            JsonObject pvRoot = read(pv);
+            // (with 'needed' in the file, its 'functions' are the chosen conventions, xmm0 among
+            // them where a caller relies on it: protos.py's keep_xmm0 is folded in already)
+            preservedChosen = pvRoot.has("needed");
+            for (Map.Entry<String, JsonElement> e : pvRoot.getAsJsonObject("functions").entrySet()) {
+                java.util.List<String> regs = new ArrayList<>();
+                for (JsonElement r : e.getValue().getAsJsonArray()) regs.add(r.getAsString());
+                preserved.put(addr(e.getKey()), regs);
+            }
+        }
         File pr = new File(dir, "protos.json");
         if (pr.exists()) applyProtos(read(pr));
         File cs = new File(dir, "callsites.json");
@@ -106,9 +123,12 @@ public class ApplyFacts extends GhidraScript {
         return toAddr(Long.parseUnsignedLong(hex.startsWith("0x") ? hex.substring(2) : hex, 16));
     }
 
+    // the piece and interior addresses (applyPieces): never a function of their own
+    private final java.util.Set<Address> partOfAnother = new java.util.HashSet<>();
+
     private Function functionAt(Address a) {
         Function f = getFunctionAt(a);
-        if (f == null) {
+        if (f == null && !partOfAnother.contains(a)) {
             CreateFunctionCmd cmd = new CreateFunctionCmd(a);
             if (cmd.applyTo(currentProgram, monitor)) {
                 created++;
@@ -419,7 +439,7 @@ public class ApplyFacts extends GhidraScript {
             int made = 0;
             for (JsonElement l : root.getAsJsonArray("leaves")) {
                 Address a = addr(l.getAsString());
-                if (getFunctionContaining(a) != null) continue;
+                if (getFunctionContaining(a) != null || partOfAnother.contains(a)) continue;
                 if (getInstructionAt(a) == null) disassemble(a);
                 if (new CreateFunctionCmd(a).applyTo(currentProgram, monitor)) made++;
             }
@@ -478,6 +498,28 @@ public class ApplyFacts extends GhidraScript {
         // decompiled FUN_1418a72a0's loop as its own, reading the registers that callee's own
         // caller had set: `in_R9`, `unaff_RDI`)
         if (root.has("tail_jumps")) {
+            // first, a jump an earlier session marked and the facts no longer list goes back to a
+            // branch: the overrides are saved with the program and nothing else takes them off.
+            // A thunk-resolved jump marked once (`je 0x14065f73d`, into a lone `jmp`) stayed a
+            // call to a non-function after protos.py stopped listing it, `func_0x00014065f73d()`
+            // with no arguments in 41 functions (2026-10-18)
+            java.util.Set<Address> listed = new java.util.HashSet<>();
+            for (String k : root.getAsJsonObject("tail_jumps").keySet()) listed.add(addr(k));
+            int cleared = 0;
+            java.util.Set<Function> refit = new java.util.HashSet<>();
+            InstructionIterator it = currentProgram.getListing().getInstructions(true);
+            while (it.hasNext()) {
+                Instruction insn = it.next();
+                if (insn.getFlowOverride() == FlowOverride.CALL_RETURN && insn.getFlowType().isJump()
+                        && !listed.contains(insn.getAddress())) {
+                    insn.setFlowOverride(FlowOverride.NONE);
+                    Function c = getFunctionContaining(insn.getAddress());
+                    if (c != null) refit.add(c);
+                    cleared++;
+                }
+            }
+            for (Function c : refit) CreateFunctionCmd.fixupFunctionBody(currentProgram, c, monitor);
+            println("ApplyFacts: tail jumps no longer listed, back to branches " + cleared);
             int marked = 0;
             for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("tail_jumps").entrySet()) {
                 Address j = addr(e.getKey());
@@ -486,7 +528,7 @@ public class ApplyFacts extends GhidraScript {
                 Instruction insn = getInstructionAt(j);
                 if (c == null || insn == null || c.getEntryPoint().equals(t)) continue;
                 if (insn.getFlowOverride() == FlowOverride.CALL_RETURN) continue;
-                if (getFunctionAt(t) == null) {
+                if (getFunctionAt(t) == null && !partOfAnother.contains(t)) {
                     if (getInstructionAt(t) == null) disassemble(t);
                     new CreateFunctionCmd(t).applyTo(currentProgram, monitor);
                 }
@@ -640,8 +682,205 @@ public class ApplyFacts extends GhidraScript {
                 + same + ", skipped " + skipped);
         java.util.Set<Address> noops = new java.util.HashSet<>();
         if (root.has("noops")) for (JsonElement e : root.getAsJsonArray("noops")) noops.add(addr(e.getAsString()));
-        if (root.has("keep_xmm0")) applyConvention(KEEP_XMM0, root.getAsJsonArray("keep_xmm0"), noops);
-        if (root.has("noops")) applyConvention(KEEP_ALL, root.getAsJsonArray("noops"), java.util.Collections.emptySet());
+        java.util.Set<Address> keepXmm0 = new java.util.HashSet<>();
+        if (root.has("keep_xmm0")) for (JsonElement e : root.getAsJsonArray("keep_xmm0")) keepXmm0.add(addr(e.getAsString()));
+        applyKeepConventions(keepXmm0, noops);
+    }
+
+    // the volatile integer registers each function preserves (tools/preserved.py), read in run()
+    private final Map<Address, java.util.List<String>> preserved = new HashMap<>();
+    private boolean preservedChosen;
+
+    // Each function's calling convention from what it leaves as it found it: everything (a no-op),
+    // xmm0 (protos.py keep_xmm0), and the volatile integer registers (preserved.py), one
+    // convention per combination, __fastcall_keep_r8_r9_xmm0 and so on. A function that has one of
+    // these and no longer qualifies goes back to __fastcall; any other convention is left alone.
+    private void applyKeepConventions(java.util.Set<Address> keepXmm0, java.util.Set<Address> noops) throws Exception {
+        Map<Address, String> want = new HashMap<>();
+        java.util.Set<Address> every = new java.util.HashSet<>(preservedChosen ? java.util.Collections.emptySet() : keepXmm0);
+        every.addAll(noops);
+        every.addAll(preserved.keySet());
+        for (Address a : every) {
+            if (noops.contains(a)) {
+                want.put(a, KEEP_ALL);
+                continue;
+            }
+            java.util.List<String> regs = preserved.getOrDefault(a, java.util.Collections.emptyList());
+            boolean x = preservedChosen ? regs.contains("XMM0") : keepXmm0.contains(a);
+            if (preservedChosen && regs.size() == 1 && x) {
+                want.put(a, KEEP_XMM0);
+                continue;
+            }
+            if (regs.isEmpty()) {
+                want.put(a, KEEP_XMM0);
+                continue;
+            }
+            StringBuilder n = new StringBuilder("__fastcall_keep");
+            for (String r : KEEPABLE) if (regs.contains(r)) n.append('_').append(r.toLowerCase());
+            if (x) n.append("_xmm0");
+            want.put(a, n.toString());
+        }
+        // the conventions, each added (or replaced) once
+        Class<?> se = Function.class.getClassLoader().loadClass("ghidra.program.database.SpecExtension");
+        Object ext = se.getConstructor(ghidra.program.model.listing.Program.class).newInstance(currentProgram);
+        java.lang.reflect.Method add = se.getMethod("addReplaceCompilerSpecExtension", String.class,
+                ghidra.util.task.TaskMonitor.class);
+        for (String name : new java.util.TreeSet<>(want.values())) add.invoke(ext, conventionXml(name), monitor);
+        reclaimConventionSlots(want);
+        int set = 0, kept = 0, reset = 0, fell = 0;
+        // The program holds only so many convention names (a byte's worth, and a name once used
+        // keeps its slot): with xmm1-xmm5 there were 355 kinds, and 285 of them failed "allocation
+        // capacity exceeded" (2026-10-18). The commonest go first; a function whose own does not
+        // fit gets the working one that keeps the most of its registers and nothing more (a
+        // register it does not keep is only killed by the call, as under __fastcall)
+        Map<String, Integer> uses = new HashMap<>();
+        for (String w : want.values()) uses.merge(w, 1, Integer::sum);
+        java.util.List<Function> order = new ArrayList<>();
+        for (Function f : currentProgram.getFunctionManager().getFunctions(true)) order.add(f);
+        order.sort((x, y) -> Integer.compare(uses.getOrDefault(want.get(y.getEntryPoint()), 0),
+                uses.getOrDefault(want.get(x.getEntryPoint()), 0)));
+        java.util.Set<String> working = new java.util.HashSet<>(), failed = new java.util.HashSet<>();
+        for (Function f : order) {
+            String cur = f.getCallingConventionName();
+            boolean ours = cur != null && cur.startsWith("__fastcall_keep");
+            String w = want.get(f.getEntryPoint());
+            if (w == null) {
+                if (ours) {
+                    f.setCallingConvention("__fastcall");
+                    reset++;
+                }
+                continue;
+            }
+            if (f.isExternal() || f.isThunk() || f.hasCustomVariableStorage()) continue;
+            if (w.equals(cur)) {
+                working.add(w);
+                kept++;
+                continue;
+            }
+            // (only over __fastcall or one of these: a function given another convention keeps it)
+            if (cur != null && !cur.equals("__fastcall") && !ours && !cur.equals("unknown") && !cur.equals("default")) continue;
+            String c = failed.contains(w) ? fallback(w, working) : w;
+            while (true) {
+                try {
+                    f.setCallingConvention(c);
+                } catch (Exception e) {
+                    // (a refused name is reported as an error and the convention left as it was)
+                }
+                if (c.equals(f.getCallingConventionName()) || c.equals("__fastcall")) break;
+                failed.add(c);
+                working.remove(c);
+                c = fallback(w, working);
+            }
+            working.add(c);
+            if (!c.equals(w)) fell++;
+            set++;
+        }
+        println("ApplyFacts: keep conventions (" + new java.util.TreeSet<>(want.values()).size() + " kinds, "
+                + failed.size() + " beyond the program's capacity) given to " + set + " functions ("
+                + fell + " with a narrower one; already " + kept + "), " + reset + " back to __fastcall");
+    }
+
+    // The program's table of convention names holds 126 (a signed byte's ids) and never lets one go:
+    // every keep convention an earlier session assigned kept its slot after nothing used it, and on
+    // 2026-10-18 one slot was left, so 33 of the 49 conventions tools/preserved.py chose could not
+    // be named and 5,488 functions fell back to narrower ones. Before assigning: every function
+    // whose keep convention is about to change goes to __fastcall, and each keep name no function
+    // and no function definition then uses is deleted from the table (its record, through the
+    // adapter the data type manager keeps), freeing its id. Anything unexpected and it is left as
+    // it was: the assignment below still falls back to what fits.
+    private void reclaimConventionSlots(Map<Address, String> want) {
+        try {
+            int moved = 0;
+            for (Function f : currentProgram.getFunctionManager().getFunctions(true)) {
+                String cur = f.getCallingConventionName();
+                if (cur != null && cur.startsWith("__fastcall_keep") && !cur.equals(want.get(f.getEntryPoint()))) {
+                    f.setCallingConvention("__fastcall");
+                    moved++;
+                }
+            }
+            java.util.Set<String> used = new java.util.HashSet<>();
+            for (Function f : currentProgram.getFunctionManager().getFunctions(true)) {
+                if (f.getCallingConventionName() != null) used.add(f.getCallingConventionName());
+            }
+            ghidra.program.model.data.DataTypeManager dtm = currentProgram.getDataTypeManager();
+            java.util.Iterator<ghidra.program.model.data.DataType> all = dtm.getAllDataTypes();
+            while (all.hasNext()) {
+                ghidra.program.model.data.DataType d = all.next();
+                if (d instanceof ghidra.program.model.data.FunctionDefinition fd && fd.getCallingConventionName() != null) {
+                    used.add(fd.getCallingConventionName());
+                }
+            }
+            Class<?> c = dtm.getClass();
+            while (c != null && !c.getSimpleName().equals("DataTypeManagerDB")) c = c.getSuperclass();
+            java.lang.reflect.Field af = c.getDeclaredField("callingConventionAdapter");
+            af.setAccessible(true);
+            Object adapter = af.get(dtm);
+            java.lang.reflect.Method names = adapter.getClass().getDeclaredMethod("getCallingConventionNames");
+            names.setAccessible(true);
+            names.invoke(adapter);      // (fills the adapter's name -> id map)
+            java.lang.reflect.Field mf = adapter.getClass().getDeclaredField("callingConventionNameToIDMap");
+            mf.setAccessible(true);
+            @SuppressWarnings("unchecked")
+            Map<String, Byte> ids = new HashMap<>((Map<String, Byte>) mf.get(adapter));
+            java.lang.reflect.Field tf = adapter.getClass().getDeclaredField("callingConventionTable");
+            tf.setAccessible(true);
+            // (through reflection: the script bundle's manifest does not import the db package, as it
+            // did not import ghidra.program.model.pcode, see applyCallsites)
+            Object table = tf.get(adapter);
+            // (keyed by a byte field, not a long: "Field key required")
+            Class<?> fieldClass = table.getClass().getClassLoader().loadClass("db.Field");
+            Class<?> byteField = table.getClass().getClassLoader().loadClass("db.ByteField");
+            java.lang.reflect.Constructor<?> key = byteField.getConstructor(byte.class);
+            java.lang.reflect.Method delete = table.getClass().getMethod("deleteRecord", fieldClass);
+            int freed = 0;
+            for (Map.Entry<String, Byte> e : ids.entrySet()) {
+                if (e.getKey().startsWith("__fastcall_keep") && !used.contains(e.getKey())) {
+                    if ((Boolean) delete.invoke(table, key.newInstance(e.getValue()))) freed++;
+                }
+            }
+            java.lang.reflect.Method inv = adapter.getClass().getDeclaredMethod("invalidateCache");
+            inv.setAccessible(true);
+            inv.invoke(adapter);
+            dtm.getClass().getMethod("invalidateCache").invoke(dtm);
+            println("ApplyFacts: convention slots: " + moved + " functions moved off a changing convention, "
+                    + freed + " unused names freed of " + ids.size());
+        } catch (Throwable t) {
+            println("ApplyFacts: convention slots not reclaimed (" + t + "); assigning within what is left");
+        }
+    }
+
+    // the registers a keep convention leaves alone, from its name
+    private static java.util.Set<String> keptBy(String name) {
+        java.util.Set<String> out = new java.util.HashSet<>();
+        if (KEEP_ALL.equals(name)) {
+            out.addAll(java.util.Arrays.asList(KEEPABLE));
+            out.add("XMM0");
+            out.add("RAX");
+            return out;
+        }
+        if (KEEP_XMM0.equals(name)) {
+            out.add("XMM0");
+            return out;
+        }
+        if (name.startsWith("__fastcall_keep_")) {
+            for (String t : name.substring("__fastcall_keep_".length()).split("_")) out.add(t.toUpperCase());
+        }
+        return out;
+    }
+
+    // the working convention that keeps the most of what `want` keeps and nothing else, or __fastcall
+    private static String fallback(String want, java.util.Set<String> working) {
+        java.util.Set<String> regs = keptBy(want);
+        String best = "__fastcall";
+        int size = 0;
+        for (String w : working) {
+            java.util.Set<String> k = keptBy(w);
+            if (regs.containsAll(k) && (k.size() > size || (k.size() == size && w.compareTo(best) < 0))) {
+                best = w;
+                size = k.size();
+            }
+        }
+        return best;
     }
 
     private int customs;
@@ -658,8 +897,23 @@ public class ApplyFacts extends GhidraScript {
     // across a call to one stays the same variable (not `extraout_EAX`)
     private static final String KEEP_ALL = "__fastcall_keepall";
 
+    // the volatile integer registers a convention keeps beside xmm0 (tools/preserved.py), as named
+    // (and xmm1-xmm5, as preserved.py finds them since 2026-10-18)
+    private static final String[] KEEPABLE = { "RCX", "RDX", "R8", "R9", "R10", "R11",
+            "XMM1", "XMM2", "XMM3", "XMM4", "XMM5" };
+
     private static String conventionXml(String name) {
+        // __fastcall_keepxmm0, __fastcall_keepall, or __fastcall_keep_<regs>[_xmm0]
         boolean all = KEEP_ALL.equals(name);
+        boolean xmm0 = KEEP_XMM0.equals(name) || name.endsWith("_xmm0");
+        java.util.Set<String> regs = new java.util.HashSet<>();
+        if (name.startsWith("__fastcall_keep_")) {
+            for (String r : KEEPABLE) {
+                if (java.util.Arrays.asList(name.substring("__fastcall_keep_".length()).split("_")).contains(r.toLowerCase())) {
+                    regs.add(r);
+                }
+            }
+        }
         String g = "<group><pentry minsize=\"4\" maxsize=\"8\" metatype=\"float\"><register name=\"XMM%d_Qa\"/></pentry>"
                 + "<pentry minsize=\"1\" maxsize=\"8\"><register name=\"%s\"/></pentry></group>";
         StringBuilder x = new StringBuilder();
@@ -674,8 +928,12 @@ public class ApplyFacts extends GhidraScript {
         x.append("<rule><datatype name=\"struct\" sizes=\"3,5,6,7\"/><hidden_return/></rule></output>");
         x.append("<unaffected><varnode space=\"ram\" offset=\"0\" size=\"8\"/>");
         for (String r : new String[] { "RBX", "RBP", "RDI", "RSI", "RSP", "R12", "R13", "R14", "R15", "DF", "GS_OFFSET",
-                "XMM0", "XMM6", "XMM7", "XMM8", "XMM9", "XMM10", "XMM11", "XMM12", "XMM13", "XMM14", "XMM15" }) {
+                "XMM6", "XMM7", "XMM8", "XMM9", "XMM10", "XMM11", "XMM12", "XMM13", "XMM14", "XMM15" }) {
             x.append("<register name=\"").append(r).append("\"/>");
+        }
+        if (xmm0 || all) x.append("<register name=\"XMM0\"/>");
+        if (!all) {
+            for (String r : regs) x.append("<register name=\"").append(r).append("\"/>");
         }
         if (all) {
             for (String r : new String[] { "RAX", "RCX", "RDX", "R8", "R9", "R10", "R11",
@@ -684,7 +942,18 @@ public class ApplyFacts extends GhidraScript {
             }
             x.append("</unaffected>");
         } else {
-            x.append("</unaffected><killedbycall><register name=\"RAX\"/></killedbycall>");
+            // every volatile register but xmm0, as __fastcall kills them. With only RAX listed,
+            // rcx, rdx, r8-r11 and xmm1-5 were neither killed nor kept, and the decompiler let a
+            // value flow through a call in them: `FUN_1405ee730(in_R8)` in FUN_1405ef2d0, which
+            // passes rcx on untouched, and in_R8/in_R9/in_R10/in_R11 read around calls to the
+            // 12,471 functions that have this convention (2026-10-18)
+            x.append("</unaffected><killedbycall>");
+            for (String r : new String[] { "RAX", "RCX", "RDX", "R8", "R9", "R10", "R11",
+                    "XMM1", "XMM2", "XMM3", "XMM4", "XMM5" }) {
+                if (!regs.contains(r)) x.append("<register name=\"").append(r).append("\"/>");
+            }
+            if (!xmm0) x.append("<register name=\"XMM0\"/>");
+            x.append("</killedbycall>");
         }
         x.append("<localrange><range space=\"stack\" first=\"0xfffffffffff0bdc1\" last=\"0xffffffffffffffff\"/>");
         x.append("<range space=\"stack\" first=\"8\" last=\"39\"/></localrange></prototype>");
@@ -694,7 +963,9 @@ public class ApplyFacts extends GhidraScript {
     // the convention `name` (a compiler-spec extension, added once) on the listed functions but
     // `skip`, and __fastcall back on any that has it and is no longer listed
     private void applyConvention(String name, JsonArray list, java.util.Set<Address> skip) throws Exception {
-        if (currentProgram.getCompilerSpec().getCallingConvention(name) == null) {
+        {
+            // (every session, add or replace: added only when missing, a corrected definition
+            // never reached a program that had the old one)
             // (through Ghidra's own class loader, as JumpTable: the script bundle does not import
             // ghidra.program.database)
             Class<?> se = Function.class.getClassLoader().loadClass("ghidra.program.database.SpecExtension");
@@ -1092,7 +1363,8 @@ public class ApplyFacts extends GhidraScript {
             setEOLComment(tail, "anti-tamper return-address check starts here: protection, not game logic");
             tagged++;
         }
-        if (root.has("junk_jumps")) applyJunkJumps(root.getAsJsonObject("junk_jumps"));
+        if (root.has("junk_jumps")) applyJunkJumps(root.getAsJsonObject("junk_jumps"),
+                root.has("junk_ends") ? root.getAsJsonObject("junk_ends") : new JsonObject());
         if (root.has("checks")) applyChecks(root.getAsJsonObject("checks"));
     }
 
@@ -1150,7 +1422,7 @@ public class ApplyFacts extends GhidraScript {
     // code, and decoded they run straight across the jump's own target, so the decompiler saw
     // overlapping instructions and lost the function (155 stubs, 2026-10-16). Each jump is made
     // unconditional (a flow override), the junk is cleared, and the target disassembled.
-    private void applyJunkJumps(JsonObject jumps) throws Exception {
+    private void applyJunkJumps(JsonObject jumps, JsonObject ends) throws Exception {
         int set = 0, missing = 0;
         for (Map.Entry<String, JsonElement> e : jumps.entrySet()) {
             Address j = addr(e.getKey());
@@ -1201,10 +1473,13 @@ public class ApplyFacts extends GhidraScript {
                 }
             }
             Address after = j.add(insn.getLength());
-            // the junk, and whatever decoded instruction spans the target
-            Address end = t.subtract(1);
-            CodeUnit across = currentProgram.getListing().getCodeUnitContaining(t);
-            if (across != null && across.getMinAddress().compareTo(t) < 0) {
+            // the junk, and whatever decoded instruction spans its end: up to the target, or
+            // (tools/retcheck.py junk_ends) up to the real code the function reaches before it,
+            // the block an opposite jump just before goes to (`jl X; jge T` with X between)
+            Address stop = ends.has(e.getKey()) ? addr(ends.get(e.getKey()).getAsString()) : t;
+            Address end = stop.subtract(1);
+            CodeUnit across = currentProgram.getListing().getCodeUnitContaining(stop);
+            if (across != null && across.getMinAddress().compareTo(stop) < 0) {
                 end = across.getMaxAddress();
             }
             if (after.compareTo(end) <= 0) {
@@ -1214,9 +1489,51 @@ public class ApplyFacts extends GhidraScript {
             if (getInstructionAt(t) == null) {
                 disassemble(t);
             }
+            if (!stop.equals(t) && getInstructionAt(stop) == null) {
+                disassemble(stop);
+            }
             set++;
         }
         println("ApplyFacts: jumps over junk made unconditional " + set + ", not an instruction " + missing);
+    }
+
+    // Functions that are part of another (tools/pieces.py): a chained .pdata piece, or an entry
+    // strictly inside a .pdata function that only its parent jumps to. Each split cost both
+    // halves their registers. Removed every session (RemovePieceFunctions.java did it once;
+    // analysis made new ones), DEFAULT-named only, and the parents re-flow into the code.
+    private void applyPieces(JsonObject root) throws Exception {
+        java.util.Set<Address> parents = new java.util.TreeSet<>();
+        int removed = 0, failed = 0;
+        for (String key : new String[] {"pieces", "interior"}) {
+            JsonArray list = root.getAsJsonArray(key);
+            if (list == null) continue;
+            for (JsonElement el : list) {
+                Address a = addr(el.getAsString());
+                partOfAnother.add(a);
+                Function f = getFunctionAt(a);
+                // (and analysis-named: a switch case Ghidra made a function of,
+                // `switchD_1416f346c::caseD_6`, is a piece all the same; only user and imported
+                // names are kept)
+                if (f == null || (f.getSymbol().getSource() != SourceType.DEFAULT
+                        && f.getSymbol().getSource() != SourceType.ANALYSIS)) continue;
+                try {
+                    // (a ConcurrentModificationException inside Ghidra's removal is state-
+                    // dependent and clears in a later session: logged, not fatal)
+                    removeFunction(f);
+                    removed++;
+                    Function parent = getFunctionBefore(a);
+                    if (parent != null) parents.add(parent.getEntryPoint());
+                } catch (java.util.ConcurrentModificationException ex) {
+                    failed++;
+                }
+            }
+        }
+        for (Address p : parents) {
+            Function f = getFunctionAt(p);
+            if (f != null) CreateFunctionCmd.fixupFunctionBody(currentProgram, f, monitor);
+        }
+        println("ApplyFacts: removed " + removed + " functions on pieces and interior entries ("
+                + failed + " removals threw), re-flowed " + parents.size() + " parents");
     }
 
     private void applySrcrefs(JsonObject root) throws Exception {

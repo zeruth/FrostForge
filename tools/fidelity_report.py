@@ -39,7 +39,12 @@ def reference_counts() -> tuple[int, set[str]]:
     from corpus import load_corpus
     from fidelity import REF_KEEP
     cor = load_corpus()
-    game = {f"{a:x}" for a, e in cor.items() if e["name"].startswith(REF_KEEP) or "::" in e["name"]}
+    # (less third-party code by range, tools/fidelity_exceptions.json: the codecs' assembly)
+    exceptions = json.loads((ROOT / "tools/fidelity_exceptions.json").read_text(encoding="utf-8"))
+    ranges = [(int(r["from"], 16), int(r["to"], 16)) for r in exceptions.get("third_party", [])]
+    names = [re.compile(r["pattern"]) for r in exceptions.get("third_party_names", [])]
+    game = {f"{a:x}" for a, e in cor.items() if (e["name"].startswith(REF_KEEP) or "::" in e["name"])
+            and not any(lo <= a < hi for lo, hi in ranges) and not any(n.search(e["name"]) for n in names)}
     return len(cor), game
 
 
@@ -142,6 +147,17 @@ def main() -> None:
     # coverage read 89,036 of 87,408, 2026-10-18)
     hand = {r["addr"] for r in rows if r["kind"] != "stub"} & game
     gen_only = (set(translated) & game) - hand
+    # the hand stubs that now forward to their translation (tools/forward_stubs.py: the stub's
+    # `// ref:` became `// translated:`), and the stubs with neither a port nor a translation
+    # behind them: only those are uncovered (a stub whose address translated is counted there)
+    forwarded = set()
+    for path in (ROOT / "src").rglob("*.cpp"):
+        if "gen" not in path.relative_to(ROOT / "src").parts[:1]:
+            forwarded |= set(re.findall(r"^// translated: FUN_([0-9a-f]{9})\s*$", path.read_text(encoding="utf-8", errors="replace"), re.M))
+    # and what runs as the reference's own machine code (tools/translate.py native_ok / native_leaf):
+    # covered, by the reference itself
+    native = (set(manifest.get("native", {})) & game) - hand - gen_only
+    bare_stubs = {r["addr"] for r in rows if r["kind"] == "stub"} & game - set(translated) - native
     g = stats(gen_rows) if gen_rows else None
     reasons = Counter(reason_class(w) for w in not_translated.values())
     peak = max(reasons.values(), default=1)
@@ -166,6 +182,8 @@ Ghidra decompilation (src/gen). The score compares the compiled translation with
     <div><dt>Scored</dt><dd>{g['total']:,}</dd></div>
     <div><dt>Lua handlers</dt><dd>{len(manifest.get('handlers', {})):,}</dd></div>
     <div><dt>Adapted to ports</dt><dd>{len(manifest.get('adapted', [])):,}</dd></div>
+    <div><dt>Hand stubs forwarded</dt><dd>{len(forwarded):,}</dd></div>
+    <div><dt>Run as native code</dt><dd>{len(manifest.get('native', {})):,}</dd></div>
     <div><dt>Left as stubs</dt><dd>{len(not_translated):,}</dd></div>
   </dl>
   <div class="ring" style="--p:{g['weighted'] * 100:.1f}"><div><b>{g['weighted'] * 100:.0f}</b><small>size-weighted</small></div></div>
@@ -221,7 +239,7 @@ Ghidra decompilation (src/gen). The score compares the compiled translation with
             gen_section = f'<div class="grid">{reached_section}</div>'
 
     o = overall
-    covered = len(hand) + len(gen_only)
+    covered = len(hand) + len(gen_only) + len(native)
     page = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>FrostLite Fidelity</title>
@@ -285,9 +303,9 @@ ol.reasons b {{ display:inline-block; min-width:44px; font-variant-numeric:tabul
 </div>
 <div class="cover">
   <div><b>{covered:,}</b> of <b>{ref_game:,}</b> game functions covered <span>({100 * covered / ref_game:.1f}%):
-    {len(hand):,} hand-ported, {len(gen_only):,} translated</span></div>
-  <div class="bar thin"><span class="seg-high" style="width:{100 * (o['high'] + o['mid']) / ref_game:.2f}%" title="ported"></span><span class="seg-partial" style="width:{100 * o['partial'] / ref_game:.2f}%" title="partial"></span><span class="seg-gen" style="width:{100 * len(gen_only) / ref_game:.2f}%" title="translated"></span><span class="seg-stub" style="width:{100 * o['stub'] / ref_game:.2f}%" title="stub"></span></div>
-  <div class="note">{ref_total:,} functions in the reference; {ref_total - ref_game:,} are library code (CRT, std) and left out. Ported {100 * (o['high'] + o['mid']) / ref_game:.1f}% · partial {100 * o['partial'] / ref_game:.1f}% · translated {100 * len(gen_only) / ref_game:.1f}% · stub {100 * o['stub'] / ref_game:.1f}%</div>
+    {len(hand):,} hand-ported, {len(gen_only):,} translated, {len(native):,} run natively</span></div>
+  <div class="bar thin"><span class="seg-high" style="width:{100 * (o['high'] + o['mid']) / ref_game:.2f}%" title="ported"></span><span class="seg-partial" style="width:{100 * o['partial'] / ref_game:.2f}%" title="partial"></span><span class="seg-gen" style="width:{100 * len(gen_only) / ref_game:.2f}%" title="translated"></span><span class="seg-stub" style="width:{100 * len(bare_stubs) / ref_game:.2f}%" title="stub"></span></div>
+  <div class="note">{ref_total:,} functions in the reference; {ref_total - ref_game:,} are library code (CRT, std) and left out. Ported {100 * (o['high'] + o['mid']) / ref_game:.1f}% · partial {100 * o['partial'] / ref_game:.1f}% · translated {100 * len(gen_only) / ref_game:.1f}% · stub with nothing behind it {100 * len(bare_stubs) / ref_game:.1f}% ({len(bare_stubs):,}) · {len(forwarded):,} hand stubs forward to their translation</div>
 </div>
 <h3>Fidelity of what is tagged</h3>
 <div class="bar" style="height:16px">{bar(o)}</div>

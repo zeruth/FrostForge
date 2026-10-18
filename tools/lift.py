@@ -54,10 +54,12 @@ class Unliftable(Exception):
     pass
 
 
-def lift(binary, address: int, limit: int = 48) -> str | None:
-    """The code at `address` as a function in the decompilation's own C, or None."""
+def lift(binary, address: int, limit: int = 48, arity=None) -> str | None:
+    """The code at `address` as a function in the decompilation's own C, or None. `arity(target)`,
+    when given, is how many arguments a tail-called function reads: the stack ones are passed on
+    too (the lifted code never moves rsp, so they are where its own caller put them)."""
     try:
-        body, _ = _lift(binary, address, limit)
+        body, _ = _lift(binary, address, limit, arity)
     except Unliftable:
         return None
     # the four register arguments, and the stack arguments it reads
@@ -116,7 +118,7 @@ def _local(binary, start: int, target: int, is_start) -> bool:
     return start < target < start + 0x400
 
 
-def _lift(binary, address: int, limit: int):
+def _lift(binary, address: int, limit: int, arity=None):
     found = _decode(binary, address, limit)
     order = sorted(found)
     targets = set()
@@ -394,6 +396,11 @@ def _lift(binary, address: int, limit: int):
                     used.add(r)
                     reads.add(r)
                     args.append(reg(r))
+                # and the stack arguments the target reads, this function's own fifth on: a
+                # `this` adjuster in front of a seven-argument function passed four, and the
+                # translator stubbed it for the lost ones (FUN_141297730, 39 thunks, 2026-10-18)
+                need = arity(target) if arity else None
+                args += [f"a{i}" for i in range(4, need or 4)]
                 lines.append(f"  return FUN_{target:x}({', '.join(args)});")
         elif mn.startswith("j"):
             arrive(int(ops[0], 16))

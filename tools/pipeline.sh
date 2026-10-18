@@ -30,6 +30,9 @@ for p in "${pids[@]}"; do wait "$p"; done
 p1=$!
 python tools/protos.py 2>&1 | tail -2 | sed "s/^/  protos: /"
 wait $p1
+# (the registers each function leaves alone, through the switches above, and protos.py's xmm0:
+# ApplyFacts gives them their keep conventions)
+python tools/preserved.py 2>&1 | tail -2 | sed "s/^/  preserved: /"
 [ "$1" = "--facts" ] && { stamp "done"; exit 0; }
 
 if [ "$1" != "--no-ghidra" ]; then
@@ -38,5 +41,7 @@ if [ "$1" != "--no-ghidra" ]; then
 fi
 
 stamp "translate"
-python tools/translate.py --handlers --depth 24 --fix
+# (the arguments callees return in other registers, for the reads the new corpus has of them)
+python tools/leftover.py 2>&1 | tail -2 | sed "s/^/  leftover: /"
+python tools/translate.py --handlers --all --depth 24 --fix --jobs 4
 stamp "done"

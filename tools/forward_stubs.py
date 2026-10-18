@@ -30,12 +30,25 @@ ROOT = Path(__file__).resolve().parent.parent
 KEEP_FILES = ("src/services/", "src/client/CrashReport.cpp", "src/storm/ErrorReport.cpp", "src/storm/Memory.cpp",
               "src/client/Telemetry", "src/glue/ScriptAPIStubs.cpp")
 VALUE_TYPE = re.compile(r"^(?:const\s+)?(?:bool|int|unsigned|unsigned int|int(?:8|16|32|64)_t|uint(?:8|16|32|64)_t|"
-                        r"size_t|DWORD|BOOL|float|double)$")
+                        r"size_t|DWORD|BOOL|float|double|long|unsigned long)$")
+# a pointer to plain data (a string, a float buffer): no object, so no layout to agree on. Not
+# `uint8_t *`, which the port also uses for an object it has not typed (`DownloadQueueDestroy(
+# uint8_t* queue)`), so a layout after all
+DATA_POINTER = re.compile(r"^(?:const\s+)?(?:char|float|double)\s*\*$")
+# teardown: the port leaves through its own quit path, and the shutdown faults came from code
+# walking its containers at exit (2026-10-17)
+TEARDOWN = re.compile(r"Shutdown|Destroy|Release|Clear|AddRef")
 # stubs kept the port's by what they do: the WowConnection network layer (offline), the
 # reference's unhandled-exception filter, the allocator hooks
 KEEP_NAMES = {"Sub1415002E0", "OsInitializeExceptionHandling", "Sub14165C0E0",
               # the final shutdown: the port tears its subsystems down itself
               "Sub140216880"}
+# the stubs held back on purpose, by the registry of them (docs/stubs.md: the network services
+# until they are ported against our own server), and the families it covers by name, whose
+# members also live outside their own files (`TelemetryEncryptionHandler` in Startup.cpp,
+# forwarded with --all, ran the telemetry key setup and CAS init failed, 2026-10-18)
+DELIBERATE = set(re.findall(r"\b0x(1[0-9a-f]{8})\b", (ROOT / "docs/stubs.md").read_text(encoding="utf-8")))
+OFFLINE_NAMES = re.compile(r"^(?:Telemetry|Agent|WowDownload|ClientServices|BattleNet|RealmConnection|NetClient)")
 DEFAULT_RESULT ={"void": "", "bool": "false", "float": "0.0f", "double": "0.0"}
 
 
@@ -66,9 +79,17 @@ def stub_at(lines: list[str], i: int):
     return j, k, m.group(1).strip(), m.group(2), m.group(3).strip()
 
 
-def plan(log: Path):
-    hits = set(re.findall(r"\[unimplemented\] (.+)$", log.read_text(encoding="utf-8", errors="replace"), re.M))
+def plan(log: Path | None):
+    # (every tagged stub with --all, not only those a run reached)
+    hits = None if log is None else set(re.findall(r"\[unimplemented\] (.+)$", log.read_text(encoding="utf-8", errors="replace"), re.M))
     out, skipped = [], []
+    translated = set(json.loads((ROOT / "src/gen/manifest.json").read_text(encoding="utf-8"))["translated"])
+    # each translated definition's parameter count (translated.h declares them unprototyped)
+    arity = {}
+    for f in (ROOT / "src/gen").glob("translated_*.c"):
+        for d in re.finditer(r"^/\* ref: FUN_([0-9a-f]{9}) \*/\n[^\n]*?\bFUN_\1\(([^\n]*)\)\s*$",
+                             f.read_text(encoding="utf-8"), re.M):
+            arity[d.group(1)] = len([p for p in d.group(2).split(",") if p.strip() and p.strip() != "void"])
     for path in (ROOT / "src").rglob("*.cpp"):
         rel = path.relative_to(ROOT).as_posix()
         if rel.startswith("src/gen/"):
@@ -82,11 +103,14 @@ def plan(log: Path):
             if s is None:
                 continue
             first, last, ret, name, params = s
-            if name not in hits and name.split("::")[-1] not in hits:
+            if hits is not None and name not in hits and name.split("::")[-1] not in hits:
                 continue
             why = None
-            if rel.startswith(KEEP_FILES) or name in KEEP_NAMES:
+            if rel.startswith(KEEP_FILES) or name in KEEP_NAMES or m.group(1) in DELIBERATE \
+                    or OFFLINE_NAMES.search(name):
                 why = "kept offline / the port's own"
+            elif TEARDOWN.search(name):
+                why = "teardown (the quit path is the port's)"
             elif "::" in name:
                 why = "a member function (a port object at the reference's offsets)"
             elif ret not in DEFAULT_RESULT and not VALUE_TYPE.match(ret):
@@ -94,9 +118,19 @@ def plan(log: Path):
             else:
                 for p in [p.strip() for p in params.split(",") if p.strip() and p.strip() != "void"]:
                     ptype = re.sub(r"\s*\w+$", "", p) if " " in p else p
-                    if not VALUE_TYPE.match(ptype):
+                    if not VALUE_TYPE.match(ptype) and not DATA_POINTER.match(ptype.strip()):
                         why = f"takes {ptype}"
                         break
+            if why is None and m.group(1) not in translated:
+                # (the forwarder calls the translated definition: none, and it does not link)
+                why = "not translated"
+            if why is None:
+                # a stub whose signature is not the reference's ("Signature not yet known", a
+                # callback declared `()`): forwarded, the translated body reads the parameters it
+                # was never given (15 of the first 77, 2026-10-18)
+                n = len([p for p in params.split(",") if p.strip() and p.strip() != "void"])
+                if arity.get(m.group(1)) != n:
+                    why = f"signature differs (the port's {n} parameters, the reference's {arity.get(m.group(1))})"
             entry = {"file": rel, "line": i + 1, "addr": m.group(1), "name": name, "ret": ret, "params": params,
                      "first": first, "last": last}
             (skipped if why else out).append(entry | ({"why": why} if why else {}))
@@ -105,6 +139,11 @@ def plan(log: Path):
 
 def forwarder(e: dict) -> list[str]:
     params = [p.strip() for p in e["params"].split(",") if p.strip() and p.strip() != "void"]
+    # an unnamed parameter (`void FfxInitialize(bool)`) gets a name to pass along, not its type
+    # as one (`(unsigned long long)bool`, C2062)
+    params = [p if re.search(r"[\w\]]\s+\**\s*\w+$|\*\s*\w+$", p) and not VALUE_TYPE.match(p) and not DATA_POINTER.match(p)
+              else f"{p} p{k}" for k, p in enumerate(params)]
+    e = e | {"params": ", ".join(params) if params else e["params"]}
     names = [re.search(r"(\w+)$", p).group(1) for p in params]
     types = [re.sub(r"\s*\w+$", "", p) for p in params]
     # the translated definitions take a float promoted to double (their callers are unprototyped)
@@ -154,13 +193,59 @@ def apply(entries: list[dict]):
         path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 
 
+FALLBACK_START = "// ---- GENERATED by tools/forward_stubs.py: link fallbacks where src/gen is not linked ----"
+FALLBACK_END = "// ---- end of link fallbacks ----"
+
+
+def link_fallbacks() -> int:
+    """At the end of each port file that calls translated code: the alternates the linker takes
+    when nothing defines the translated function or GenFault (src/util/Unimplemented.cpp).
+
+    A forwarder names them directly, and a test executable that links the library without
+    src/gen did not link: ObjectAllocTest pulled os's Path.cpp in for its own reasons and failed on
+    FUN_140214150 and GenFault (LNK2019, 2026-10-18). The client links src/gen, which defines both,
+    and an alternate name is only used for a symbol nothing defines."""
+    changed = 0
+    for path in sorted((ROOT / "src").rglob("*.cpp")):
+        if path.relative_to(ROOT).as_posix().startswith("src/gen/"):
+            continue
+        text = path.read_text(encoding="utf-8")
+        if FALLBACK_START in text:
+            text = text[:text.index(FALLBACK_START)].rstrip("\n") + "\n" + text[text.index(FALLBACK_END) + len(FALLBACK_END):].lstrip("\n")
+        code = "\n".join(l for l in text.splitlines() if not l.lstrip().startswith("//"))
+        funs = sorted(set(re.findall(r"\b(FUN_[0-9a-f]{9})\b", code)))
+        if not funs and "GenFault(" not in code:
+            if text != path.read_text(encoding="utf-8"):
+                path.write_text(text, encoding="utf-8", newline="\n")
+                changed += 1
+            continue
+        block = [FALLBACK_START, '#pragma comment(linker, "/include:GenForwardMissing")']
+        if "GenFault(" in code:
+            block.append('#pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")')
+        block += [f'#pragma comment(linker, "/alternatename:{f}=GenForwardMissing")' for f in funs]
+        block.append(FALLBACK_END)
+        new = text.rstrip("\n") + "\n\n" + "\n".join(block) + "\n"
+        if new != path.read_text(encoding="utf-8"):
+            path.write_text(new, encoding="utf-8", newline="\n")
+            changed += 1
+    return changed
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--log", required=True)
+    ap.add_argument("--log")
+    ap.add_argument("--all", action="store_true", help="every tagged stub, reached or not")
     ap.add_argument("--apply", action="store_true")
+    ap.add_argument("--link-fallbacks", action="store_true",
+                    help="only refresh the link fallbacks of the files that call translated code")
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-    out, skipped = plan(Path(args.log))
+    if args.link_fallbacks:
+        print(f"link fallbacks refreshed in {link_fallbacks()} files")
+        return
+    if not args.all and not args.log:
+        ap.error("--log or --all")
+    out, skipped = plan(None if args.all else Path(args.log))
     print(f"{len(out)} stubs to forward, {len(skipped)} left as they are")
     reasons = {}
     for s in skipped:
@@ -169,6 +254,7 @@ def main():
         print(f"  {len(v):3} {k}: {', '.join(v[:6])}{' ...' if len(v) > 6 else ''}")
     if args.apply:
         apply(out)
+        link_fallbacks()
         print("applied")
 
 

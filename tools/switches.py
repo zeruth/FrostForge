@@ -43,7 +43,15 @@ def main() -> None:
     md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
     md.detail = True
     md.skipdata = True
-    spans = list(zip(b.piece_starts, b.piece_ends, b.piece_root))
+    # (adjacent pieces of one function decode as one span: the bound check and the jump can sit
+    # in different chained pieces, FUN_1402bfa60's `cmp eax, 6` before the piece that saves rsi
+    # and its jump after, and a jump whose bound was out of reach was dropped unseen)
+    spans = []
+    for s, e, r in zip(b.piece_starts, b.piece_ends, b.piece_root):
+        if spans and spans[-1][2] == r and spans[-1][1] == s:
+            spans[-1] = (spans[-1][0], e, r)
+        else:
+            spans.append((s, e, r))
     # and the leaves, which have no .pdata entry (no frame to unwind): each corpus function no
     # piece covers, up to the next known start (FUN_1406303d0 is one, its table run from a leaf)
     # (to the next .pdata piece, not the next corpus function: where Ghidra lost the switch it
@@ -90,8 +98,16 @@ def main() -> None:
             if table is None:
                 continue
             # the base register is the image base (`lea base, [rip - X]` landing on it)
-            if not any(i.mnemonic == "lea" and i.operands[0].reg == base_reg and i.operands[1].mem.base == X.X86_REG_RIP
-                       and i.address + i.size + i.operands[1].mem.disp == b.base for i in back):
+            # (the nearest write to it, however far back: a function with several switches loads
+            # the base once in its prologue and keeps it in a saved register, `lea r12, [rip - X]`
+            # some hundred instructions before FUN_14024d4f0's jump, and only the last 12 were
+            # looked at, which left 590 tables unread)
+            last = next((i for i in insns[max(0, k - 2000):k][::-1]
+                         if i.operands and i.operands[0].type == X.X86_OP_REG
+                         and wide(md, i.operands[0].reg) == wide(md, base_reg)
+                         and i.mnemonic not in ("cmp", "test", "push")), None)
+            if last is None or not (last.mnemonic == "lea" and last.operands[1].mem.base == X.X86_REG_RIP
+                                    and last.address + last.size + last.operands[1].mem.disp == b.base):
                 continue
             # a byte index table in front (two-level), and the bound check
             bytes_at = None

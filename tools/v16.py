@@ -259,6 +259,10 @@ PSEUDO = {
     "rcpss": ("_mm_move_ss(_mm_castsi128_ps({0}), _mm_rcp_ss(_mm_castsi128_ps({1})))", "f"),
     "blendvpd": ("_mm_blendv_pd(_mm_castsi128_pd({0}), _mm_castsi128_pd({1}), _mm_castsi128_pd({2}))", "d"),
     "vpackuswb_avx": ("_mm_packus_epi16({0}, {1})", "i"),
+    # (LNK2019 in 2026-10-18's build: the 128-bit forms, as the others here)
+    "vpackssdw_avx": ("_mm_packs_epi32({0}, {1})", "i"),
+    "vpsubusb_avx": ("_mm_subs_epu8({0}, {1})", "i"),
+    "pmuldq": ("_mm_mul_epi32({0}, {1})", "i"),
     "vpacksswb_avx": ("_mm_packs_epi16({0}, {1})", "i"),
     "vpavgb_avx": ("_mm_avg_epu8({0}, {1})", "i"),
     "vpcmpgtb_avx": ("_mm_cmpgt_epi8({0}, {1})", "i"),
@@ -273,6 +277,12 @@ PSEUDO = {
     "vpmovzxbd_avx": ("_mm_cvtepu8_epi32({0})", "i"),
     "vcvtph2ps_f16c": ("_mm_cvtph_ps({0})", "f"),
     "vcmpsd_avx": ("_mm_cmp_sd(_mm_castsi128_pd({0}), _mm_castsi128_pd({1}), {2:imm})", "d"),
+    "vpunpckhbw_avx": ("_mm_unpackhi_epi8({0}, {1})", "i"),
+    # (the load form, `vmovhps xmm, xmm, m64`: the first's low qword, the 8 bytes above it)
+    "vmovhps_avx": ("_mm_unpacklo_epi64({0}, _mm_cvtsi64_si128((long long)({1:imm})))", "i"),
+    "vpaddsb_avx": ("_mm_adds_epi8({0}, {1})", "i"),
+    "vcvtps2dq_avx": ("_mm_cvtps_epi32(_mm_castsi128_ps({0}))", "i"),
+    "vroundsd_avx": ("_mm_round_sd(_mm_castsi128_pd({0}), _mm_castsi128_pd({1}), {2:imm})", "d"),
     # AVX-512VL on 128 bits: each 64-bit lane multiplied, kept low (Ghidra.h, in plain C)
     "vpmullq_avx512vl": ("gen_mullo_epi64({0}, {1})", "i"),
     "lddqu": ("({1})", "i"),
@@ -600,6 +610,11 @@ class Emitter:
                     any(sp == ":imm" and self.T.ty(args[int(ix)]) == V for ix, sp in re.findall(r"\{(\d)(:imm)?\}", tpl))
                 if by_reg:
                     tpl = re.sub(r"^_mm_s(ll|rl|ra)i_", r"_mm_s\1_", tpl).replace(":imm}", "}")
+
+                if max(int(ix) for ix in re.findall(r"\{(\d)", tpl)) >= len(args):
+                    # (another form of the instruction than the template's: `vmovhps_avx(x)`, the
+                    # store, against the load's two operands)
+                    raise V16Unsupported(f"{name} with {len(args)} operands")
 
                 def fill(mm):
                     i, spec = int(mm.group(1)), mm.group(2)

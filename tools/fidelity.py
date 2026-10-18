@@ -54,8 +54,12 @@ from corpus import load_corpus
 from wowbin import Binary
 
 ROOT = Path(__file__).resolve().parent.parent
-PORT_EXE = ROOT / "build/cmake/bin/Release/FrostLite.exe"
-PORT_PDB = ROOT / "build/cmake/bin/Release/FrostLite.pdb"
+# the newer of the two builds: tools/translate.py links build/cmake, the user builds
+# cmake-build-release from CLion. Measuring the older one tied today's tags to yesterday's
+# functions (210 hand ports went untied, 2026-10-18).
+PORT_EXE, PORT_PDB = max(
+    ((ROOT / d / "FrostLite.exe", ROOT / d / "FrostLite.pdb") for d in ("build/cmake/bin/Release", "cmake-build-release/bin")),
+    key=lambda p: p[0].stat().st_mtime if p[0].exists() and p[1].exists() else 0)
 LLVM = Path("C:/Program Files/LLVM/bin")
 OUT_JSON = ROOT / "build/fidelity.json"
 # links a source tag cannot express: a template instance or header code, by its PDB name
@@ -83,9 +87,46 @@ ID_NAME = re.compile(r"name = (.*), type = 0x[0-9A-F]+, (?:class type = 0x([0-9A
 TYPE_REC = re.compile(r"^\s*0x([0-9A-F]+) \| LF_(?:CLASS|STRUCTURE|UNION) \[size = \d+\] `(.*)`$")
 
 
+_PDB_DUMPS: dict[tuple, str] = {}
+
+
+def _pdb_command(args: tuple) -> list[str]:
+    # (`pretty ...` is its own subcommand; anything else is a `dump`)
+    sub = list(args) if args and args[0] == "pretty" else ["dump", *args]
+    return [str(LLVM / "llvm-pdbutil.exe"), *sub, str(PORT_PDB)]
+
+
 def pdbutil(*args: str) -> str:
-    return subprocess.run([str(LLVM / "llvm-pdbutil.exe"), "dump", *args, str(PORT_PDB)], capture_output=True,
-                          text=True, errors="replace").stdout
+    """One llvm-pdbutil dump of the port's PDB, read once per PDB (by its time): fidelity's
+    load_pdb and the translator's loaders each dumped -types, -symbols and -publics again, six
+    sequential runs over the PDB after every build, minutes of a translate's start (2026-10-18)."""
+    key = (args, PORT_PDB.stat().st_mtime if PORT_PDB.exists() else 0)
+    if key not in _PDB_DUMPS:
+        _PDB_DUMPS[key] = subprocess.run(_pdb_command(args), capture_output=True, text=True,
+                                         errors="replace").stdout
+    return _PDB_DUMPS[key]
+
+
+def prefetch_pdb(*kinds: tuple[str, ...]) -> None:
+    """Start the listed dumps together and keep their output for pdbutil(): each is one process
+    reading the PDB, and they do not wait on one another."""
+    stamp = PORT_PDB.stat().st_mtime if PORT_PDB.exists() else 0
+    todo = [k for k in kinds if (k, stamp) not in _PDB_DUMPS]
+    procs = {k: subprocess.Popen(_pdb_command(k), stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                                 text=True, errors="replace") for k in todo}
+    import threading
+    out: dict[tuple, str] = {}
+
+    def drain(k, p):
+        out[k] = p.communicate()[0]
+
+    threads = [threading.Thread(target=drain, args=(k, p)) for k, p in procs.items()]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    for k, text in out.items():
+        _PDB_DUMPS[(k, stamp)] = text
 
 
 def strip_name(name: str) -> str:
