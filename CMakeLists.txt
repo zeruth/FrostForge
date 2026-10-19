@@ -4,7 +4,8 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
     message(FATAL_ERROR "In-source builds are not allowed; configure into build/.")
 endif()
 
-project(frostlite LANGUAGES C CXX)
+# The version is MAJOR.MINOR.PATCH, with the milestones that move it in README.md.
+project(frostlite VERSION 0.1.0 LANGUAGES C CXX)
 
 if(NOT WIN32 OR NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
     message(FATAL_ERROR "FrostLite targets Windows x64 only for now (see CONTRIBUTING.md).")
