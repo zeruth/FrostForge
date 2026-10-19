@@ -1,13 +1,16 @@
-# FrostLite
+# FrostForge
 
-**Version 0.1.0** · the FrostForge client · WoW Classic **3.4.3.54261** (Wrath Classic), Windows x64
+**Version 0.1.0** · WoW Classic **3.4.3.54261** (Wrath Classic), Windows x64
 
-FrostLite reimplements the World of Warcraft Classic 3.4.3.54261 client function by function from
+FrostForge reimplements the World of Warcraft Classic 3.4.3.54261 client function by function from
 the reference binary. Every reference function gets a counterpart, either a hand port in `src/` or a
-machine translation of its decompilation in `src/gen/`. It is the client half of **FrostForge**. The
-server half is [azerothcore-FrostForge](https://github.com/zeruth/azerothcore-FrostForge), an
-AzerothCore fork being converted to 3.4.3 on every level. FrostLite talks only to that server and
-never to Blizzard endpoints.
+machine translation of its decompilation in `src/gen/`. Its server is
+[azerothcore-FrostForge](https://github.com/zeruth/azerothcore-FrostForge), an AzerothCore fork being
+converted to 3.4.3 on every level. The client talks only to that server and never to Blizzard
+endpoints.
+
+The code still carries the earlier name, FrostLite: the build target, the exe, the repository
+directory, `frostlite-install` and the CMake project. Those will be renamed in the code later.
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) before writing code. This is a decompilation project, so ports
 keep the original names, signatures, layouts and behaviour.
@@ -41,19 +44,19 @@ report is `build/fidelity.html` (`python tools/fidelity_report.py`), and the his
 - **PATCH** goes up for fixes and tooling work that leave the milestone where it is.
 - **MINOR** goes up when a milestone below is reached and **seen working in a run**. A clean build
   or a fidelity score alone does not count.
-- **MAJOR** goes to 1 when FrostLite logs in to FrostForge, selects a character and enters the world,
+- **MAJOR** goes to 1 when FrostForge logs in to its server, selects a character and enters the world,
   with no stubs left and every deliberate divergence recorded in [docs/stubs.md](docs/stubs.md).
 
 | version | milestone | state |
 |---|---|---|
 | 0.1.0 | every reference function translated or ported; boots clean to the login screen | **current** |
-| 0.2.0 | TLS to FrostForge on 127.0.0.1 and the Battle.net RPC connection up (roadmap phase 2) | open |
+| 0.2.0 | TLS to the server on 127.0.0.1 and the Battle.net RPC connection up (roadmap phase 2) | open |
 | 0.3.0 | logging in with an account and password (phase 3) | open |
 | 0.4.0 | realm list and realm join (phase 4) | open |
 | 0.5.0 | the world connection handshake (phase 5) | open |
 | 0.6.0 | character list in the glue (phase 6) | open |
 | 0.7.0 | character select scene with customized models (phase 7) | open |
-| 1.0.0 | in world on FrostForge | open |
+| 1.0.0 | in world on azerothcore-FrostForge | open |
 
 ## Layout
 
@@ -86,7 +89,7 @@ cmake --build build/cmake --config Release --target FrostLite
 ```
 
 Run `FrostLite.exe` with the working directory set to `client/_classic_`, where Config.wtf, the CASC
-data and `.build.info` live. Unlike the reference, FrostLite does not move to its own directory at
+data and `.build.info` live. Unlike the reference, FrostForge does not move to its own directory at
 startup (docs/stubs.md, "Diverged on purpose"). Keep the PDB beside the exe, because crash
 symbolization depends on it.
 
@@ -141,24 +144,24 @@ replace is not kept.
 | `disasm.py`, `callers.py`, `calltree.py`, `xrefs.py` | disassembly, callers, callees, references |
 | `tags.py` | check every `// ref:` tag against the corpus |
 | `fidelity.py --summary` / `--show` / `--stubs` / `--delta` / `--record` | measure the ports; `fidelity_report.py` writes `build/fidelity.html` |
-| `crashcatch.py [--second-chance] [--timeout N] [--hits out.txt]` | run FrostLite under a minimal debugger, report the first real exception with a symbolized stack. With `--hits`, dump each translated function's call count at the stop, which locates an early abort by comparing counts along a call path |
+| `crashcatch.py [--second-chance] [--timeout N] [--hits out.txt]` | run the client under a minimal debugger, report the first real exception with a symbolized stack. With `--hits`, dump each translated function's call count at the stop, which locates an early abort by comparing counts along a call path |
 | `oracle.py`, `printf_oracle.py`, `probe_oracle.py` | run reference functions under Unicorn and compare them with the ports |
 | `translate.py --faults <log>` / `--why` / `--risks` | map a run's translated faults to source, explain why a function is or is not translated |
 | `junkscan.py`, `leftover.py` | anti-tamper junk still in the clean exe; what the translator left out |
 | `iat_dump.py` | the stripped import table, read once from a live client (committed as `data/imports.json`) |
 
-At run time, setting `FROST_HITS=<file>` makes FrostLite write the translated functions' call counts
+At run time, setting `FROST_HITS=<file>` makes the client write the translated functions' call counts
 every 5 seconds.
 
 ## What is left
 
 **Toward the next milestones** ([docs/login-roadmap.md](docs/login-roadmap.md)):
 - Phase 2: the SChannel TLS transport, `rpc_connection` and its manager, and the protobuf runtime
-  with the Battle.net messages, all running against FrostForge's certificate on 127.0.0.1.
+  with the Battle.net messages, all running against the server's certificate on 127.0.0.1.
 - Phases 3 to 7: GlueLogin and the Authentication service, the GameUtilities realm list, the realm
   join, `WowConnection` / `PacketPipe` / `WDataStore` with the modern world handshake, character
   enumeration and the CharacterSelect Lua API, and the character select scene.
-- On the server side, FrostForge needs 3.4.3 DB2 loading, Battle.net accounts, the 3.4.3 character
+- On the server side, azerothcore-FrostForge needs 3.4.3 DB2 loading, Battle.net accounts, the 3.4.3 character
   schema, and authserver removed.
 
 **Fidelity:**
