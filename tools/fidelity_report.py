@@ -77,6 +77,15 @@ def main() -> None:
     groups = defaultdict(list)
     for r in rows:
         groups[BUCKET_OF.get(folder(r["file"]), "Platform & core")].append(r)
+    # a hand port still a stub runs the reference function's translation (or its own machine code,
+    # native) instead: translated, not a stub. Only a stub with nothing behind it is one
+    behind = set(translated) | set(manifest.get("native", {})) | set(manifest.get("adapted", []))
+    # (a stub tied to a `jmp` thunk is its target's: fidelity.thunk_target)
+    from fidelity import thunk_target
+    behind |= {r["addr"] for r in rows if r["kind"] == "stub" and thunk_target(r["addr"]) in behind}
+
+    def covered_stub(r):
+        return r["kind"] == "stub" and r["addr"] in behind
 
     def stats(rs):
         scored = [r for r in rs if r["kind"] != "stub"]
@@ -86,8 +95,9 @@ def main() -> None:
             "high": sum(r["kind"] == "ported" and r["score"] >= 0.9 for r in rs),
             "mid": sum(r["kind"] == "ported" and r["score"] < 0.9 for r in rs),
             "partial": sum(r["kind"] == "partial" for r in rs),
-            "stub": sum(r["kind"] == "stub" for r in rs),
-            "live": sum(r["kind"] == "stub" and r.get("live", False) for r in rs),
+            "translated": sum(covered_stub(r) for r in rs),
+            "stub": sum(r["kind"] == "stub" and not covered_stub(r) for r in rs),
+            "live": sum(r["kind"] == "stub" and not covered_stub(r) and r.get("live", False) for r in rs),
             "same": sum(r.get("same", False) for r in rs),
             "mean": sum(r["score"] for r in scored) / len(scored) if scored else 0.0,
             "weighted": sum(r["score"] * r["ref_size"] for r in scored) / size,
@@ -106,7 +116,7 @@ def main() -> None:
     def bar(s):
         t = s["total"] or 1
         segs = [("high", "seg-high", "0.9+"), ("mid", "seg-mid", "below 0.9"), ("partial", "seg-partial", "partial"),
-                ("stub", "seg-stub", "stub")]
+                ("translated", "seg-gen", "stub running its translation"), ("stub", "seg-stub", "stub")]
         return "".join(f'<span class="{c}" style="width:{100 * s[k] / t:.2f}%" title="{s[k]} {label}"></span>'
                        for k, c, label in segs if s[k])
 
@@ -129,7 +139,8 @@ def main() -> None:
     <div><dt>Mean</dt><dd>{s['mean']:.2f}</dd></div>
     <div><dt>0.9+</dt><dd>{s['high']:,}</dd></div>
     <div><dt>Partial</dt><dd>{s['partial']:,}</dd></div>
-    <div><dt>Stubs</dt><dd>{s['stub']:,} <em>{s['live']} live</em></dd></div>
+    <div><dt>Translated</dt><dd>{s['translated']:,}</dd></div>
+    <div><dt>Stubs</dt><dd>{s['stub']:,}{f" <em>{s['live']} live</em>" if s['live'] else ""}</dd></div>
   </dl>
   <div class="ring" style="--p:{s['weighted'] * 100:.1f}"><div><b>{s['weighted'] * 100:.0f}</b><small>size-weighted</small></div></div>
   </div>
@@ -156,8 +167,21 @@ def main() -> None:
             forwarded |= set(re.findall(r"^// translated: FUN_([0-9a-f]{9})\s*$", path.read_text(encoding="utf-8", errors="replace"), re.M))
     # and what runs as the reference's own machine code (tools/translate.py native_ok / native_leaf):
     # covered, by the reference itself
-    native = (set(manifest.get("native", {})) & game) - hand - gen_only
-    bare_stubs = {r["addr"] for r in rows if r["kind"] == "stub"} & game - set(translated) - native
+    # (and whatever lies in a native range, run as the reference's own code whether or not a run of
+    # the translator happened to reach it)
+    exceptions = json.loads((ROOT / "tools/fidelity_exceptions.json").read_text(encoding="utf-8"))
+    native_ranges = [(int(r["from"], 16), int(r["to"], 16)) for r in exceptions.get("native", [])]
+    in_native = {a for a in game if any(lo <= int(a, 16) < hi for lo, hi in native_ranges)}
+    native = ((set(manifest.get("native", {})) | in_native) & game) - hand - gen_only
+    # what the translator left out on purpose (the manifest's `excluded`, with why): accounted for,
+    # not uncovered
+    excluded_why = {a: w for a, w in manifest.get("excluded", {}).items()
+                    if a in game and a not in hand and a not in gen_only and a not in native}
+    excluded_kinds = Counter(excluded_why.values())
+    bare_stubs = {r["addr"] for r in rows if r["kind"] == "stub"} & game - behind
+    # every stub in the build: a hand stub with nothing behind it, or a function the translator left
+    # a stub (the anti-tamper junk the clean exe never runs aside)
+    all_stubs = bare_stubs | set(not_translated)
     g = stats(gen_rows) if gen_rows else None
     reasons = Counter(reason_class(w) for w in not_translated.values())
     peak = max(reasons.values(), default=1)
@@ -195,7 +219,7 @@ Ghidra decompilation (src/gen). The score compares the compiled translation with
 <section class="card" style="--accent:var(--stub)">
   <header><h2>Why the rest stayed stubs</h2><span class="count">{len(not_translated):,} functions</span></header>
   <p class="folders">Reached from translated code but refused by the translator; each class is one fix in tools/translate.py.</p>
-  <ol class="reasons">{reason_list or '<li>none</li>'}</ol>
+  <ol class="reasons">{reason_list or '<li class="zero">None: every function the build reaches is hand-ported, translated, adapted to a port or run as native code.</li>'}</ol>
 </section>
 </div>"""
 
@@ -240,9 +264,11 @@ Ghidra decompilation (src/gen). The score compares the compiled translation with
 
     o = overall
     covered = len(hand) + len(gen_only) + len(native)
+    accounted = covered + len(excluded_why)
+    excluded_note = " · ".join(f"{n:,} {html.escape(k)}" for k, n in excluded_kinds.most_common())
     page = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FrostLite Fidelity</title>
+<title>FrostForge Fidelity</title>
 <style>
 :root {{ --bg:#f6f7fb; --card:#fff; --ink:#1c2030; --muted:#6b7285; --line:#e4e7ef;
   --high:#3cb179; --mid:#9fd3b6; --partial:#f0b44c; --stub:#e5677a; --gen:#5b8def; }}
@@ -288,9 +314,11 @@ ol.reasons li {{ position:relative; isolation:isolate; padding:5px 6px; white-sp
 ol.reasons b {{ display:inline-block; min-width:44px; font-variant-numeric:tabular-nums }}
 .rbar {{ position:absolute; left:0; top:3px; bottom:3px; background:var(--stub); opacity:.16; border-radius:4px; z-index:-1 }}
 .rbar.gen {{ background:var(--gen) }}
+.stat.zero {{ border-color:var(--high); box-shadow:inset 0 0 0 1px var(--high) }} .stat.zero b {{ color:var(--high) }}
+ol.reasons li.zero {{ color:var(--high); border-bottom:none }}
 @media (max-width:420px) {{ .grid {{ grid-template-columns:1fr }} }}
 </style></head><body><main>
-<h1>FrostLite fidelity</h1>
+<h1>FrostForge fidelity</h1>
 <p class="sub">Hand-ported and translated functions compared against the reference 3.4.3 client · generated {datetime.date.today().isoformat()}</p>
 <div class="hero">
   <div class="stat"><b>{o['total']:,}</b><span>tagged · {100 * o['total'] / ref_game:.1f}% of {ref_game:,}</span></div>
@@ -298,19 +326,21 @@ ol.reasons b {{ display:inline-block; min-width:44px; font-variant-numeric:tabul
   <div class="stat"><b>{o['weighted']:.2f}</b><span>size-weighted fidelity</span></div>
   <div class="stat"><b>{o['high']:,}</b><span>at 0.9 or better</span></div>
   <div class="stat"><b>{o['same']:,}</b><span>instruction-identical</span></div>
-  <div class="stat"><b>{o['stub']:,}</b><span>stubs · {o['live']} live</span></div>
+  <div class="stat{' zero' if not all_stubs else ''}"><b>{len(all_stubs):,}</b><span>{'stubs: none left' if not all_stubs else f"stubs · {len(bare_stubs):,} hand, {len(not_translated):,} translator"}</span></div>
   <div class="stat"><b>{len(gen_only):,}</b><span>translated · {g['mean'] if g else 0:.2f} mean</span></div>
 </div>
 <div class="cover">
   <div><b>{covered:,}</b> of <b>{ref_game:,}</b> game functions covered <span>({100 * covered / ref_game:.1f}%):
     {len(hand):,} hand-ported, {len(gen_only):,} translated, {len(native):,} run natively</span></div>
+  <div><b>{accounted:,}</b> of <b>{ref_game:,}</b> accounted for <span>({100 * accounted / ref_game:.1f}%), with
+    {len(excluded_why):,} left out on purpose{(": " + excluded_note) if excluded_note else ""}</span></div>
   <div class="bar thin"><span class="seg-high" style="width:{100 * (o['high'] + o['mid']) / ref_game:.2f}%" title="ported"></span><span class="seg-partial" style="width:{100 * o['partial'] / ref_game:.2f}%" title="partial"></span><span class="seg-gen" style="width:{100 * len(gen_only) / ref_game:.2f}%" title="translated"></span><span class="seg-stub" style="width:{100 * len(bare_stubs) / ref_game:.2f}%" title="stub"></span></div>
-  <div class="note">{ref_total:,} functions in the reference; {ref_total - ref_game:,} are library code (CRT, std) and left out. Ported {100 * (o['high'] + o['mid']) / ref_game:.1f}% · partial {100 * o['partial'] / ref_game:.1f}% · translated {100 * len(gen_only) / ref_game:.1f}% · stub with nothing behind it {100 * len(bare_stubs) / ref_game:.1f}% ({len(bare_stubs):,}) · {len(forwarded):,} hand stubs forward to their translation</div>
+  <div class="note">{ref_total:,} functions in the reference; {ref_total - ref_game:,} are library code (CRT, std) and left out. Ported {100 * (o['high'] + o['mid']) / ref_game:.1f}% · partial {100 * o['partial'] / ref_game:.1f}% · translated {100 * len(gen_only) / ref_game:.1f}% · stub with nothing behind it {100 * len(bare_stubs) / ref_game:.1f}% ({len(bare_stubs):,}) · {o['translated']:,} hand stubs run their translation</div>
 </div>
 <h3>Fidelity of what is tagged</h3>
 <div class="bar" style="height:16px">{bar(o)}</div>
 <div class="legend"><span><i style="background:var(--high)"></i>ported, 0.9+</span><span><i style="background:var(--mid)"></i>ported, below 0.9</span>
-<span><i style="background:var(--partial)"></i>partial</span><span><i style="background:var(--gen)"></i>translated</span><span><i style="background:var(--stub)"></i>stub</span></div>
+<span><i style="background:var(--partial)"></i>partial</span><span><i style="background:var(--gen)"></i>translated (a hand stub runs the reference's translation)</span><span><i style="background:var(--stub)"></i>stub, nothing behind it</span></div>
 <h3>Hand ports by subsystem</h3>
 <div class="grid">{''.join(cards)}</div>
 {gen_section}

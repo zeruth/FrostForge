@@ -436,14 +436,31 @@ public class ApplyFacts extends GhidraScript {
         // the call targets no function covered (leaves without .pdata, tools/protos.py): made
         // functions first, so they decompile and take their prototypes below
         if (root.has("leaves")) {
-            int made = 0;
+            // (a leaf a pointer reaches is an entry point even inside a body Ghidra drew over it,
+            // a callback it absorbed through a jump: made there too, and the body it was taken
+            // from fixed up. A leaf only called from inside a function's body is the anti-tamper
+            // junk's call into the middle of code, and is left alone)
+            java.util.Set<Address> pointed = new java.util.HashSet<>();
+            if (root.has("pointed")) {
+                for (JsonElement l : root.getAsJsonArray("pointed")) pointed.add(addr(l.getAsString()));
+            }
+            int made = 0, split = 0;
             for (JsonElement l : root.getAsJsonArray("leaves")) {
                 Address a = addr(l.getAsString());
-                if (getFunctionContaining(a) != null || partOfAnother.contains(a)) continue;
+                if (getFunctionAt(a) != null || partOfAnother.contains(a)) continue;
+                Function in = getFunctionContaining(a);
+                if (in != null && !pointed.contains(a)) continue;
                 if (getInstructionAt(a) == null) disassemble(a);
-                if (new CreateFunctionCmd(a).applyTo(currentProgram, monitor)) made++;
+                if (new CreateFunctionCmd(a).applyTo(currentProgram, monitor)) {
+                    made++;
+                    if (in != null) {
+                        split++;
+                        CreateFunctionCmd.fixupFunctionBody(currentProgram, in, monitor);
+                    }
+                }
             }
-            println("ApplyFacts: leaf functions created " + made + " of " + root.getAsJsonArray("leaves").size());
+            println("ApplyFacts: leaf functions created " + made + " of " + root.getAsJsonArray("leaves").size()
+                    + " (" + split + " inside another function's body, " + pointed.size() + " reached by a pointer)");
         }
         // the code after a run of the clean exe's nops: Ghidra's disassembly stopped at the end of
         // the run, leaving the rest of the function undefined bytes, and the decompiler went on
@@ -899,7 +916,7 @@ public class ApplyFacts extends GhidraScript {
 
     // the volatile integer registers a convention keeps beside xmm0 (tools/preserved.py), as named
     // (and xmm1-xmm5, as preserved.py finds them since 2026-10-18)
-    private static final String[] KEEPABLE = { "RCX", "RDX", "R8", "R9", "R10", "R11",
+    private static final String[] KEEPABLE = { "RAX", "RCX", "RDX", "R8", "R9", "R10", "R11",
             "XMM1", "XMM2", "XMM3", "XMM4", "XMM5" };
 
     private static String conventionXml(String name) {
@@ -947,13 +964,17 @@ public class ApplyFacts extends GhidraScript {
             // value flow through a call in them: `FUN_1405ee730(in_R8)` in FUN_1405ef2d0, which
             // passes rcx on untouched, and in_R8/in_R9/in_R10/in_R11 read around calls to the
             // 12,471 functions that have this convention (2026-10-18)
-            x.append("</unaffected><killedbycall>");
+            // (and no <killedbycall> at all when it would be empty: a convention that keeps every
+            // volatile register, rax among them since 2026-10-18, failed the spec's schema with an
+            // empty one, "uncompleted content model")
+            StringBuilder killed = new StringBuilder();
             for (String r : new String[] { "RAX", "RCX", "RDX", "R8", "R9", "R10", "R11",
                     "XMM1", "XMM2", "XMM3", "XMM4", "XMM5" }) {
-                if (!regs.contains(r)) x.append("<register name=\"").append(r).append("\"/>");
+                if (!regs.contains(r)) killed.append("<register name=\"").append(r).append("\"/>");
             }
-            if (!xmm0) x.append("<register name=\"XMM0\"/>");
-            x.append("</killedbycall>");
+            if (!xmm0) killed.append("<register name=\"XMM0\"/>");
+            x.append("</unaffected>");
+            if (killed.length() > 0) x.append("<killedbycall>").append(killed).append("</killedbycall>");
         }
         x.append("<localrange><range space=\"stack\" first=\"0xfffffffffff0bdc1\" last=\"0xffffffffffffffff\"/>");
         x.append("<range space=\"stack\" first=\"8\" last=\"39\"/></localrange></prototype>");
@@ -1368,6 +1389,77 @@ public class ApplyFacts extends GhidraScript {
         if (root.has("checks")) applyChecks(root.getAsJsonObject("checks"));
     }
 
+    // A jump an earlier session made unconditional that tools/retcheck.py no longer lists: its
+    // bytes back as the file has them, and the code after it decoded again with flow. Patched,
+    // it took the program's bytes with it, and the junk cleared after it was real code: the
+    // `je` past Lua::SendChatMessage's lua_isstring test went straight to the usage error, the
+    // 40 KB of the handler after it left undefined bytes, and the function was stubbed as one
+    // the decompiler lost calls in (2026-10-18). Only that shape is undone, an original
+    // conditional jump (`0f 8x`, `7x`) now `e9`/`eb`: the skipped checks and the __chkstk nops are
+    // patches of other bytes and stay.
+    private void revertStaleJunkJumps(JsonObject jumps) throws Exception {
+        java.util.Set<Address> current = new java.util.HashSet<>();
+        for (String k : jumps.keySet()) current.add(addr(k));
+        ghidra.program.model.mem.Memory mem = currentProgram.getMemory();
+        ghidra.program.model.mem.MemoryBlock text = mem.getBlock(".text");
+        if (text == null) return;
+        int reverted = 0, regrown = 0;
+        java.util.Set<Function> touched = new java.util.HashSet<>();
+        for (ghidra.program.model.mem.MemoryBlockSourceInfo info : text.getSourceInfos()) {
+            if (info.getFileBytes().isEmpty()) continue;
+            // (through reflection: the script bundle does not import the db package, as for the
+            // convention table in reclaimConventionSlots)
+            Object fb = info.getFileBytes().get();
+            java.lang.reflect.Method original = fb.getClass().getMethod("getOriginalBytes", long.class, byte[].class);
+            Address lo = info.getMinAddress();
+            long size = info.getLength();
+            int chunk = 1 << 20;
+            for (long off = 0; off < size; off += chunk) {
+                int n = (int) Math.min(chunk + 8, size - off);
+                byte[] now = new byte[n], orig = new byte[n];
+                mem.getBytes(lo.add(off), now);
+                original.invoke(fb, info.getFileBytesOffset() + off, orig);
+                for (int i = 0; i < Math.min(chunk, n); i++) {
+                    if (now[i] == orig[i]) continue;
+                    int o0 = orig[i] & 0xff, n0 = now[i] & 0xff;
+                    int len;
+                    if (o0 == 0x0f && i + 1 < n && (orig[i + 1] & 0xf0) == 0x80 && n0 == 0xe9) len = 6;
+                    else if ((o0 & 0xf0) == 0x70 && n0 == 0xeb) len = 2;
+                    else continue;
+                    Address j = lo.add(off + i);
+                    i += len - 1;
+                    if (current.contains(j)) continue;
+                    Function f = getFunctionContaining(j);
+                    // (code only where code runs into it: a jump table's entry taken for a jump,
+                    // FUN_1417354c0's `0x73`, gets its byte back and stays data)
+                    Instruction prev = getInstructionContaining(j.subtract(1));
+                    boolean code = prev != null && prev.getMaxAddress().equals(j.subtract(1)) && prev.getFlowType().hasFallthrough();
+                    clearListing(j, j.add(len - 1));
+                    byte[] back = java.util.Arrays.copyOfRange(orig, (int) (j.subtract(lo) - off), (int) (j.subtract(lo) - off) + len);
+                    mem.setBytes(j, back);
+                    reverted++;
+                    if (!code) continue;
+                    DisassembleCommand cmd = new DisassembleCommand(j, null, true);
+                    cmd.applyTo(currentProgram, monitor);
+                    Instruction insn = getInstructionAt(j);
+                    if (insn != null) {
+                        insn.setFlowOverride(FlowOverride.NONE);
+                        // (and its fall-through, which the old patch had cleared as junk)
+                        Address ft = insn.getFallThrough();
+                        if (ft != null && getInstructionAt(ft) == null) {
+                            new DisassembleCommand(ft, null, true).applyTo(currentProgram, monitor);
+                            if (getInstructionAt(ft) != null) regrown++;
+                        }
+                    }
+                    if (f != null) touched.add(f);
+                }
+            }
+        }
+        for (Function f : touched) CreateFunctionCmd.fixupFunctionBody(currentProgram, f, monitor);
+        println("ApplyFacts: stale jumps over junk reverted " + reverted + " (" + regrown
+                + " fall-throughs decoded again), in " + touched.size() + " functions");
+    }
+
     // Each check skipped (tools/retcheck.py): its start, the 7-byte load of the range base,
     // becomes `jmp T; nop; nop`, T being where the function's code resumes once the return
     // address passes. The check is then unreachable and the decompiler leaves it out; stripped
@@ -1379,13 +1471,24 @@ public class ApplyFacts extends GhidraScript {
             Address s = addr(e.getKey());
             Address t = addr(e.getValue().getAsString());
             Instruction insn = getInstructionAt(s);
-            if (insn == null) {
-                CodeUnit over = currentProgram.getListing().getCodeUnitContaining(s);
-                if (over != null) {
-                    clearListing(over.getMinAddress(), over.getMaxAddress());
+            // (Ghidra's decode out of step at the start, or none there at all: a check that a jump
+            // over junk lands on, FUN_1424db710's at 0x1424dc570 among six left unpatched,
+            // 2026-10-19. The bytes say what is there: the 7-byte `mov reg, [rip + base]`, every code
+            // unit across them cleared, then decoded alone)
+            if (insn == null || insn.getLength() != 7) {
+                byte[] b7 = new byte[7];
+                currentProgram.getMemory().getBytes(s, b7);
+                boolean load = ((b7[0] & 0xfb) == 0x48) && (b7[1] & 0xff) == 0x8b && (b7[2] & 0xc7) == 0x05;
+                if (load) {
+                    Address end = s.add(6);
+                    CodeUnit first = currentProgram.getListing().getCodeUnitContaining(s);
+                    CodeUnit last = currentProgram.getListing().getCodeUnitContaining(end);
+                    Address lo = first != null && first.getMinAddress().compareTo(s) < 0 ? first.getMinAddress() : s;
+                    Address hi = last != null && last.getMaxAddress().compareTo(end) > 0 ? last.getMaxAddress() : end;
+                    clearListing(lo, hi);
+                    new DisassembleCommand(s, null, false).applyTo(currentProgram, monitor);
+                    insn = getInstructionAt(s);
                 }
-                new DisassembleCommand(s, null, false).applyTo(currentProgram, monitor);
-                insn = getInstructionAt(s);
             }
             if (insn == null) {
                 missing++;
@@ -1394,6 +1497,7 @@ public class ApplyFacts extends GhidraScript {
             byte[] code = insn.getBytes();
             if ((code[0] & 0xff) == 0xe9) {
                 done++;
+                clearDeadCheck(s, t);
                 continue;
             }
             if (code.length != 7) {
@@ -1413,9 +1517,47 @@ public class ApplyFacts extends GhidraScript {
             if (getInstructionAt(t) == null) {
                 disassemble(t);
             }
+            clearDeadCheck(s, t);
             set++;
         }
-        println("ApplyFacts: return-address checks skipped " + set + " (already " + done + "), not patched " + missing);
+        for (Function f : deadCheckFunctions) CreateFunctionCmd.fixupFunctionBody(currentProgram, f, monitor);
+        println("ApplyFacts: return-address checks skipped " + set + " (already " + done + "), not patched " + missing
+                + "; dead check bodies cleared " + deadCleared + ", kept for a jump into them " + deadKept);
+    }
+
+    private int deadCleared, deadKept;
+    private final java.util.Set<Function> deadCheckFunctions = new java.util.HashSet<>();
+
+    // A skipped check's own body, from past its start's jump to where the code resumes: dead once
+    // the start jumps over it, but still in the listing, and the decompiler decodes every block of
+    // a function before it drops the unreachable ones, so the junk in the check's crash path
+    // marked the decompilation damaged (CreateFrame's core, FUN_1424db710, warned of an overlap at
+    // 0x1424dc1ea in its second check and was kept as protection junk, 2026-10-19). Cleared only
+    // when it runs forward to the resumption and nothing outside it jumps in.
+    private void clearDeadCheck(Address s, Address t) throws Exception {
+        Address lo = s.add(7);
+        if (t.compareTo(lo) <= 0 || t.subtract(lo) > 0x4000) return;
+        Address hi = t.subtract(1);
+        ghidra.program.model.address.AddressSet region = new ghidra.program.model.address.AddressSet(lo, hi);
+        ghidra.program.model.symbol.ReferenceManager rm = currentProgram.getReferenceManager();
+        ghidra.program.model.address.AddressIterator dests = rm.getReferenceDestinationIterator(region, true);
+        while (dests.hasNext()) {
+            Address d = dests.next();
+            for (ghidra.program.model.symbol.Reference r : rm.getReferencesTo(d)) {
+                Address from = r.getFromAddress();
+                if (from.compareTo(s) < 0 || from.compareTo(hi) > 0) {
+                    deadKept++;
+                    return;
+                }
+            }
+        }
+        Function f = getFunctionContaining(s);
+        CodeUnit across = currentProgram.getListing().getCodeUnitContaining(hi);
+        if (across != null && across.getMaxAddress().compareTo(hi) > 0) hi = across.getMinAddress().subtract(1);
+        if (hi.compareTo(lo) < 0) return;
+        clearListing(lo, hi);
+        if (f != null) deadCheckFunctions.add(f);
+        deadCleared++;
     }
 
     // The check's conditional jumps over junk (tools/retcheck.py): the fall-through bytes are no
@@ -1423,6 +1565,7 @@ public class ApplyFacts extends GhidraScript {
     // overlapping instructions and lost the function (155 stubs, 2026-10-16). Each jump is made
     // unconditional (a flow override), the junk is cleared, and the target disassembled.
     private void applyJunkJumps(JsonObject jumps, JsonObject ends) throws Exception {
+        revertStaleJunkJumps(jumps);
         int set = 0, missing = 0;
         for (Map.Entry<String, JsonElement> e : jumps.entrySet()) {
             Address j = addr(e.getKey());

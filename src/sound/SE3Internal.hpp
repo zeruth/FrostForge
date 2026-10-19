@@ -9,7 +9,9 @@
 #include "blz/Function.hpp"
 #include "fmod.hpp"
 
-extern uint8_t s_1430a9538;    // DAT_1430a9538 the device list changed
+extern uint32_t s_1430a9538;   // DAT_1430a9538 the driver count: the 0x104-byte names at DAT_1430a9540
+                               // (FUN_1412c8a30 stores and compares it as a dword; as a byte, the
+                               // translation's store overran it, C4739, 2026-10-19)
 
 // The distance falloff each instance's kit asks for.
 // ref: FUN_1412c8700

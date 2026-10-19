@@ -48,6 +48,87 @@ public class ExportDecompAll extends GhidraScript {
         return b.toString();
     }
 
+    /** The widths the decompiler gave each global it reads or writes directly, as `"g"`:
+     *  {"142725a78":[4], ...}. The C names a global by address only (`_UNK_142725a78`,
+     *  `uRam0000000142ddedb0`), and a piece of a 16-byte constant or a raw address has no data item
+     *  to give its width, so the translator guessed 8 where the decompiler had built the expression
+     *  around a 4-byte lane (C4319 in four functions, C4293 in FUN_1401b94f0, 2026-10-18). */
+    // (by reflection: the script's bundle cannot load ghidra.program.model.pcode, and a direct
+    // reference failed every function with NoClassDefFoundError: HighFunction, 2026-10-19)
+    private static volatile java.lang.reflect.Method mHigh, mOps, mOut, mIns, mAddr, mSize;
+
+    private static java.lang.reflect.Method method(Object o, String name) throws Exception {
+        java.lang.reflect.Method m = o.getClass().getMethod(name);
+        m.setAccessible(true);
+        return m;
+    }
+
+    private String globalWidths(DecompileResults res) {
+        try {
+            if (mHigh == null) mHigh = method(res, "getHighFunction");
+            Object hf = mHigh.invoke(res);
+            if (hf == null) {
+                return null;
+            }
+            if (mOps == null) mOps = method(hf, "getPcodeOps");
+            java.util.TreeMap<Long, java.util.TreeSet<Integer>> widths = new java.util.TreeMap<>();
+            java.util.Iterator<?> ops = (java.util.Iterator<?>) mOps.invoke(hf);
+            while (ops.hasNext()) {
+                Object op = ops.next();
+                if (mOut == null) {
+                    mOut = method(op, "getOutput");
+                    mIns = method(op, "getInputs");
+                }
+                Object out = mOut.invoke(op);
+                if (out != null) {
+                    note(widths, out);
+                }
+                for (Object v : (Object[]) mIns.invoke(op)) {
+                    note(widths, v);
+                }
+            }
+            return render(widths);
+        } catch (Throwable e) {
+            return null;
+        }
+    }
+
+    private String render(java.util.TreeMap<Long, java.util.TreeSet<Integer>> widths) {
+        if (widths.isEmpty()) {
+            return null;
+        }
+        StringBuilder b = new StringBuilder("{");
+        for (java.util.Map.Entry<Long, java.util.TreeSet<Integer>> e : widths.entrySet()) {
+            if (b.length() > 1) b.append(',');
+            b.append('"').append(Long.toHexString(e.getKey())).append("\":[");
+            int n = 0;
+            for (int w : e.getValue()) {
+                if (n++ > 0) b.append(',');
+                b.append(w);
+            }
+            b.append(']');
+        }
+        return b.append('}').toString();
+    }
+
+    private void note(java.util.Map<Long, java.util.TreeSet<Integer>> widths, Object v) throws Exception {
+        if (v == null) {
+            return;
+        }
+        if (mAddr == null) {
+            mAddr = method(v, "getAddress");
+            mSize = method(v, "getSize");
+        }
+        // (the address space says what the varnode is: ram is a global; register, unique, const
+        // and stack spaces are not)
+        Address a = (Address) mAddr.invoke(v);
+        if (!a.isMemoryAddress() || a.isStackAddress() || a.isRegisterAddress() || a.isUniqueAddress()
+                || a.isConstantAddress()) {
+            return;
+        }
+        widths.computeIfAbsent(a.getOffset(), k -> new java.util.TreeSet<>()).add((Integer) mSize.invoke(v));
+    }
+
     @Override
     public void run() throws Exception {
         String[] args = getScriptArgs();
@@ -101,9 +182,10 @@ public class ExportDecompAll extends GhidraScript {
                 String name = f.getName(true);  // with namespace: Lua::C_Container::GetBagName
                 String size = Long.toString(f.getBody().getNumAddresses());
                 if (res.decompileCompleted()) {
-                    return new String[] { addr, name, size, res.getDecompiledFunction().getC(), null };
+                    return new String[] { addr, name, size, res.getDecompiledFunction().getC(), null,
+                                          globalWidths(res) };
                 }
-                return new String[] { addr, name, size, null, res.getErrorMessage() };
+                return new String[] { addr, name, size, null, res.getErrorMessage(), null };
             }
         };
         callback.setTimeout(90);
@@ -150,7 +232,9 @@ public class ExportDecompAll extends GhidraScript {
                     b.append("{\"addr\":\"").append(r[0]).append("\",\"name\":\"").append(jsonEscape(r[1]))
                      .append("\",\"size\":").append(r[2]);
                     if (r[3] != null) {
-                        b.append(",\"c\":\"").append(jsonEscape(r[3])).append("\"}");
+                        b.append(",\"c\":\"").append(jsonEscape(r[3])).append("\"");
+                        if (r[5] != null) b.append(",\"g\":").append(r[5]);
+                        b.append("}");
                     } else {
                         b.append(",\"error\":\"").append(jsonEscape(r[4] == null ? "" : r[4])).append("\"}");
                     }
@@ -174,7 +258,9 @@ public class ExportDecompAll extends GhidraScript {
                     b.append("{\"addr\":\"").append(r[0]).append("\",\"name\":\"").append(jsonEscape(r[1]))
                      .append("\",\"size\":").append(r[2]);
                     if (r[3] != null) {
-                        b.append(",\"c\":\"").append(jsonEscape(r[3])).append("\"}");
+                        b.append(",\"c\":\"").append(jsonEscape(r[3])).append("\"");
+                        if (r[5] != null) b.append(",\"g\":").append(r[5]);
+                        b.append("}");
                     } else {
                         b.append(",\"error\":\"").append(jsonEscape(r[4] == null ? "" : r[4])).append("\"}");
                     }

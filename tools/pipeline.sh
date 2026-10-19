@@ -19,11 +19,13 @@ stamp() { echo "[$(( $(date +%s) - start ))s] $*"; }
 stamp "facts"
 # independent of one another
 pids=()
-for t in pieces vtables srcrefs luabind cregister typetags retcheck noreturn globalptrs switches; do
+for t in pieces vtables srcrefs luabind cregister typetags noreturn globalptrs switches; do
   ( python "tools/$t.py" 2>&1 | tail -1 | sed "s/^/  $t: /" ) &
   pids+=($!)
 done
 for p in "${pids[@]}"; do wait "$p"; done
+# (the return-address checks after the switches: their tables' bytes are no jumps over junk)
+python tools/retcheck.py 2>&1 | tail -1 | sed "s/^/  retcheck: /"
 # these read the facts above (imports, vtables, noreturn, retcheck); protos.py also writes
 # varargs.json, the variadic functions read off their prologues
 ( python tools/funcptrs.py 2>&1 | tail -1 | sed "s/^/  funcptrs: /" ) &
@@ -43,5 +45,8 @@ fi
 stamp "translate"
 # (the arguments callees return in other registers, for the reads the new corpus has of them)
 python tools/leftover.py 2>&1 | tail -2 | sed "s/^/  leftover: /"
+# (what still decodes as junk in the new corpus, and the entries that are no function at all, the
+# padding between two that Ghidra made functions of: translate.py leaves both out)
+python tools/junkscan.py 2>&1 | tail -4 | sed "s/^/  junkscan: /"
 python tools/translate.py --handlers --all --depth 24 --fix --jobs 4
 stamp "done"

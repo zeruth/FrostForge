@@ -1713,6 +1713,7 @@ extern "C" void* const gen_p_1430a165c = (void*)&s_dragCancelled;
 extern "C" void* const gen_p_1430a1660 = (void*)&s_dragStart;
 extern "C" void* const gen_p_1430a1668 = (void*)&s_dragRect;
 extern "C" void* const gen_p_1430a1680 = (void*)&s_beforePump;
+extern "C" void* const gen_p_1430a1a90 = (void*)&s_modalTimerProc;
 extern "C" void* const gen_p_1430a1aa0 = (void*)&s_imeDisabled;
 extern "C" void* const gen_p_1430a1aa1 = (void*)&s_imeOwnsNotify;
 extern "C" void* const gen_p_1430a1aa4 = (void*)&s_imeComposing;

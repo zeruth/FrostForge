@@ -727,14 +727,19 @@ void Sub1402F4D00(uint64_t a1) {
     }
 }
 
-extern "C" unsigned long long FUN_14021c040();
-// translated: FUN_14021c040
+// The anti-tamper layer's frame tick: reads its context, times itself from KUSER_SHARED_DATA and
+// rdtsc, and traps on purpose into its own handler (tools/aegis.py). FrostLite runs without the
+// protector, so there is nothing to tick. DIVERGED (docs/stubs.md).
+// ref: FUN_14021c040
 void Sub14021C040() {
-    __try {
-        FUN_14021c040();
-    } __except (GenFault(0x14021c040ull, GetExceptionInformation())) {
-    }
 }
+
+// (and the layer's routines in Protection.cpp, which only translated code calls, through adapters
+// tools/translate.py binds by the names in the port's PDB: linked in by name, or the static library
+// leaves their object out)
+#pragma comment(linker, "/include:?AegisDecodeKey@@YAX_K@Z")
+#pragma comment(linker, "/include:?AegisCheckCodeHash@@YA_NXZ")
+#pragma comment(linker, "/include:?AegisCheckTiming@@YAX_KI0@Z")
 
 // Gx
 // ref: FUN_14228c670
@@ -1501,7 +1506,6 @@ void Sub14023D170(GXFRAMESTATS* stats) {
 #pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
 #pragma comment(linker, "/alternatename:FUN_1402165b0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140217000=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_14021c040=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14021f090=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140222a60=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140229d20=GenForwardMissing")

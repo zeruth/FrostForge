@@ -18,6 +18,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+/* localeconv, the port's in place of the reference's FID-unnamed one (tools/translate.py
+   CRT_BY_ADDR): undeclared, its pointer result would be cut to an int */
+#include <locale.h>
 
 /* Ghidra writes the C library's structs by their bare tag (`tm local_38;`) */
 typedef struct tm tm;
@@ -145,6 +148,8 @@ typedef unsigned short *LPWORD;
 typedef unsigned int *PUINT;
 typedef wchar_t *PCWSTR;
 typedef long NTSTATUS;
+/* winnt.h's DWORD of power-request flags, SetThreadExecutionState's (FUN_14205dfb0, 2026-10-19) */
+typedef DWORD EXECUTION_STATE;
 typedef unsigned short wctype_t;
 typedef struct sockaddr sockaddr;
 typedef struct timeval timeval;
@@ -318,6 +323,15 @@ static __inline double GEN_AS_FLOAT(unsigned long long bits) {
 #define SUB61(x, n) ((uint8_t)((uint64_t)(x) >> ((n) * 8)))
 #define SUB64(x, n) ((uint32_t)((uint64_t)(x) >> ((n) * 8)))
 #define SUB87(x, n) ((uint64_t)(((uint64_t)(x) >> ((n) * 8)) & 0xffffffffffffffull))
+/* SUBab with b wider than a: Ghidra's spelling of a narrow value passed in a wider register, its
+   own bytes and zeros above (`SUB14(param_2 != 0,0)`, the bool DragAcceptFiles takes as a BOOL in
+   FUN_142041da0; it did not link, 2026-10-19) */
+#define SUB12(x, n) ((uint16_t)(uint8_t)((uint8_t)(x) >> ((n) * 8)))
+#define SUB14(x, n) ((uint32_t)(uint8_t)((uint8_t)(x) >> ((n) * 8)))
+#define SUB18(x, n) ((uint64_t)(uint8_t)((uint8_t)(x) >> ((n) * 8)))
+#define SUB24(x, n) ((uint32_t)(uint16_t)((uint16_t)(x) >> ((n) * 8)))
+#define SUB28(x, n) ((uint64_t)(uint16_t)((uint16_t)(x) >> ((n) * 8)))
+#define SUB48(x, n) ((uint64_t)(uint32_t)((uint32_t)(x) >> ((n) * 8)))
 #define ZEXT14(x) ((uint32_t)(uint8_t)(x))
 #define ZEXT18(x) ((uint64_t)(uint8_t)(x))
 #define ZEXT24(x) ((uint32_t)(uint16_t)(x))
@@ -573,7 +587,7 @@ static __inline unsigned short pavgw(unsigned int a, unsigned int b) {
    the code a __fastfail passes in ecx, so it is reported as a generic one (7,
    FAST_FAIL_FATAL_APP_EXIT). 8 functions were stubbed as "bad data or a trap" for these */
 static unsigned long long gen_swi_break(void) { __debugbreak(); return 0; }
-static unsigned long long gen_swi_fastfail(void) { __fastfail(7); }
+static unsigned long long gen_swi_fastfail(void) { __fastfail(7); return 0; }
 #define swi(n) ((n) == 0x29 ? gen_swi_fastfail : gen_swi_break)
 /* `ud2`, which Ghidra spells `(code *)invalidInstructionException()` and calls: the same fault */
 static unsigned long long gen_ud2(void) { __ud2(); }

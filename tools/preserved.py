@@ -20,6 +20,7 @@ ApplyFacts.java gives each function a calling convention with those registers un
 """
 from __future__ import annotations
 
+import struct
 import sys
 import time
 from collections import Counter
@@ -33,9 +34,14 @@ from wowbin import Binary, hexa, regs_access, write_facts
 # (and xmm1-xmm5: FUN_1405f81a0 leaves xmm2 alone and its caller FUN_140622410 keeps a float there
 # across the call, `fVar13 = extraout_XMM2_Da`; 40 lost-register stubs read one, 2026-10-18.
 # xmm0 is tools/protos.py's keep_xmm0, beside the return value)
-VOLATILE = ("RCX", "RDX", "R8", "R9", "R10", "R11", "XMM1", "XMM2", "XMM3", "XMM4", "XMM5")
+# (and rax, which a function returning a float or nothing need not write: FUN_1401a3c00 is
+# `movss xmm0, [rcx+0xdc]; ret`, and its caller FUN_1401a3c90 loads a pointer into rax before the
+# call and reads through it after, `*extraout_RAX`; FUN_1405e5490 keeps al across a float getter.
+# A function whose result is in rax writes it, so only those that leave it can keep it, 2026-10-18)
+VOLATILE = ("RAX", "RCX", "RDX", "R8", "R9", "R10", "R11", "XMM1", "XMM2", "XMM3", "XMM4", "XMM5")
 FAMILY = {}
-for full, names in {"RCX": ("rcx", "ecx", "cx", "cl", "ch"), "RDX": ("rdx", "edx", "dx", "dl", "dh"),
+for full, names in {"RAX": ("rax", "eax", "ax", "al", "ah"),
+                    "RCX": ("rcx", "ecx", "cx", "cl", "ch"), "RDX": ("rdx", "edx", "dx", "dl", "dh"),
                     **{f"R{n}": (f"r{n}", f"r{n}d", f"r{n}w", f"r{n}b") for n in (8, 9, 10, 11)},
                     **{f"XMM{n}": (f"xmm{n}", f"ymm{n}", f"zmm{n}") for n in range(1, 6)}}.items():
     for n in names:
@@ -160,9 +166,29 @@ def local_facts(b: Binary, starts: set[int]):
 # functions leave it, and the liveness here which callers rely on that)
 BIT = {r: 1 << i for i, r in enumerate(VOLATILE + ("XMM0",))}
 XMM0_NAMES = {"xmm0", "ymm0", "zmm0"}
-NARROW = {"cl", "ch", "cx", "dl", "dh", "dx", *(f"r{n}{s}" for n in (8, 9, 10, 11) for s in ("b", "w"))}
+NARROW = {"al", "ah", "ax", "cl", "ch", "cx", "dl", "dh", "dx", *(f"r{n}{s}" for n in (8, 9, 10, 11) for s in ("b", "w"))}
 ARGS = BIT["RCX"] | BIT["RDX"] | BIT["R8"] | BIT["R9"] | BIT["XMM0"] | BIT["XMM1"] | BIT["XMM2"] | BIT["XMM3"]
 EVERY = sum(BIT.values())
+# (and the low byte of each integer register on its own: `mov dl, 1; call FUN_14179f260`, whose
+# second parameter is a byte, reads nothing of rdx above dl. With a byte write no kill and the
+# call reading all of rdx, the rdx a call before left looked relied on, and FUN_1418555d0's four
+# `extraout_RDX` stayed refused, 2026-10-18. A byte write kills the low bit, a byte parameter or a
+# byte read reads only it; for 'needed' and 'relied' both bits are the register)
+LOW_SHIFT = len(BIT)
+LOW = {r: BIT[r] << LOW_SHIFT for r in ("RAX", "RCX", "RDX", "R8", "R9", "R10", "R11")}
+BYTE_NAMES = {"al": "RAX", "cl": "RCX", "dl": "RDX", "r8b": "R8", "r9b": "R9", "r10b": "R10", "r11b": "R11"}
+WORD_NAMES = {"ax": "RAX", "cx": "RCX", "dx": "RDX", "r8w": "R8", "r9w": "R9", "r10w": "R10", "r11w": "R11"}
+EVERY_LOW = sum(LOW.values())
+
+
+def low_of(m: int) -> int:
+    """The low-byte bits of the registers in m."""
+    return sum(LOW[r] for r in LOW if m & BIT[r])
+
+
+def fold(m: int) -> int:
+    """The registers m holds anything of: a live low byte is the register live."""
+    return (m & EVERY) | ((m >> LOW_SHIFT) & EVERY)
 
 
 def arg_masks() -> tuple[dict[int, int], dict[int, int]]:
@@ -176,7 +202,9 @@ def arg_masks() -> tuple[dict[int, int], dict[int, int]]:
     def mask_of(params):
         m = 0
         for k, p in enumerate(params[:4]):
-            if p[0] == "i":
+            if p[0] == "i" and len(p) > 1 and p[1] == 1:
+                m |= LOW[gpr[k]]
+            elif p[0] == "i":
                 m |= BIT[gpr[k]]
             elif p[0] in ("f", "d", "x"):
                 m |= BIT[xmm[k]]
@@ -187,7 +215,7 @@ def arg_masks() -> tuple[dict[int, int], dict[int, int]]:
     return funcs, sites
 
 
-def needed(b: Binary, starts: set[int], keep: dict[int, set[str]]):
+def needed(b: Binary, starts: set[int], keep: dict[int, set[str]], thunks: dict[int, int] | None = None):
     """Of what each function keeps, what some caller holds a live value in across a call to it.
 
     The keep conventions are one per distinct set, and the program holds only so many names (see
@@ -216,6 +244,7 @@ def needed(b: Binary, starts: set[int], keep: dict[int, set[str]]):
         todo, n, open_flow = [f], 0, False
         while todo and not open_flow:
             a = todo.pop()
+            last = None
             while a not in insns:
                 if not (text.start <= a < text.end):
                     open_flow = True
@@ -226,19 +255,27 @@ def needed(b: Binary, starts: set[int], keep: dict[int, set[str]]):
                 if ins is None or n > LIMIT:
                     open_flow = True
                     break
+                # (the instruction before, in this straight run: a table jump's `add`)
+                prev, last = last, ins
                 reads, writes = regs_access(ins)
                 use = dfn = 0
                 for r in reads:
                     name = ins.reg_name(r)
                     fam = "XMM0" if name in XMM0_NAMES else FAMILY.get(name)
-                    if fam:
+                    if name in BYTE_NAMES:
+                        use |= LOW[BYTE_NAMES[name]]
+                    elif fam:
                         use |= BIT[fam]
                 for r in writes:
                     name = ins.reg_name(r)
                     fam = "XMM0" if name in XMM0_NAMES else FAMILY.get(name)
-                    # (a byte or word write merges into the register: no kill)
-                    if fam and name not in NARROW:
-                        dfn |= BIT[fam]
+                    # (a byte or word write merges into the register: no kill, but of its low byte)
+                    if name in BYTE_NAMES:
+                        dfn |= LOW[BYTE_NAMES[name]]
+                    elif name in WORD_NAMES:
+                        dfn |= LOW[WORD_NAMES[name]]
+                    elif fam and name not in NARROW:
+                        dfn |= BIT[fam] | LOW.get(fam, 0)
                 dfn &= ~use
                 mn = ins.mnemonic
                 # (a register zeroed with itself, `xor edx, edx`, reads nothing: taken for a read,
@@ -250,12 +287,26 @@ def needed(b: Binary, starts: set[int], keep: dict[int, set[str]]):
                         and all(o.type == X.X86_OP_REG and o.reg == ins.operands[0].reg for o in ins.operands[1:])):
                     name = ins.reg_name(ins.operands[0].reg)
                     fam = "XMM0" if name in XMM0_NAMES else FAMILY.get(name)
-                    use, dfn = 0, (BIT[fam] if fam else 0)
+                    if name in BYTE_NAMES:
+                        use, dfn = 0, LOW[BYTE_NAMES[name]]
+                    elif name in WORD_NAMES:
+                        use, dfn = 0, LOW[WORD_NAMES[name]]
+                    else:
+                        use, dfn = 0, ((BIT[fam] | LOW.get(fam, 0)) if fam and name not in NARROW else 0)
                 op = ins.operands[0] if ins.operands else None
                 nxt = ins.address + ins.size
                 if mn == "call":
                     callee = op.imm if op is not None and op.type == X.X86_OP_IMM else None
-                    kills = EVERY & ~mask.get(callee, 0) if callee is not None else EVERY
+                    # (through a jump thunk: the function it lands on, see jump_thunks; resolved
+                    # here as well, as the map holds only the thunks local_facts saw, and it stops
+                    # decoding a function at its first indirect call: FUN_1402e5190's thunks past
+                    # one kept r8 looking relied, 2026-10-18)
+                    if callee is not None and callee not in starts:
+                        if thunks is not None and callee not in thunks:
+                            thunks.update(jump_thunks(b, starts, {callee}))
+                        callee = (thunks or {}).get(callee, callee)
+                    kept = mask.get(callee, 0) if callee is not None else 0
+                    kills = (EVERY | EVERY_LOW) & ~(kept | low_of(kept))
                     args = callee_reads.get(callee, ARGS) if callee is not None else site_reads.get(ins.address, ARGS)
                     insns[a] = (use | args, kills, [nxt], callee)
                     a = nxt
@@ -269,6 +320,13 @@ def needed(b: Binary, starts: set[int], keep: dict[int, set[str]]):
                     elif ins.address in switches:
                         insns[a] = (use, dfn, list(switches[ins.address]), None)
                         todo.extend(switches[ins.address])
+                        break
+                    elif op is not None and not table_jump(prev, ins):
+                        # (a tail call through a pointer, `jmp [rax+0x28]` or `jmp rax` past the
+                        # epilogue: it reads the argument registers and nothing follows. Taken for
+                        # flow lost, FUN_1411d6e10's and FUN_1419c5290's liveness was given up,
+                        # and their `extraout_` merges stayed refused, 2026-10-18)
+                        insns[a] = (use | ARGS, 0, [], None)
                         break
                     else:
                         insns[a] = (use, dfn, [], None)
@@ -307,12 +365,22 @@ def needed(b: Binary, starts: set[int], keep: dict[int, set[str]]):
                     changed = True
         for a, (_u, _d, succ, callee) in insns.items():
             if callee is not None and callee in mask:
-                after = live.get(succ[0], 0) if succ else 0
+                after = fold(live.get(succ[0], 0) if succ else 0)
                 if after & mask[callee]:
                     need[callee] = need.get(callee, 0) | (after & mask[callee])
+            if callee is None and succ and insns[a][1] == (EVERY | EVERY_LOW):
+                # (an indirect call, under 0: what is live after one is the caller's own; the
+                # translator reads it when it cannot name the call a register came out of,
+                # `in_XMM0 = extraout_XMM0` after `(**(code **)param_1[1])(...)` in FUN_141fe3480)
+                after = fold(live.get(succ[0], 0))
+                clobbered = after & EVERY & ~BIT["RAX"]
+                if clobbered:
+                    relied.setdefault(f, {})[0] = relied.get(f, {}).get(0, 0) | clobbered
             if callee is not None:
-                after = live.get(succ[0], 0) if succ else 0
-                clobbered = after & (EVERY & ~mask.get(callee, 0))
+                after = fold(live.get(succ[0], 0) if succ else 0)
+                # (rax read after a call it writes is the call's result, not a leftover: the
+                # translator's reading of `relied` stays what it was before rax was tracked)
+                clobbered = after & (EVERY & ~mask.get(callee, 0)) & ~BIT["RAX"]
                 if clobbered:
                     relied.setdefault(f, {})[callee] = relied.get(f, {}).get(callee, 0) | clobbered
     names = lambda m: {r for r in BIT if m & BIT[r]}
@@ -334,6 +402,24 @@ def recover() -> None:
     print(f"{len(need)} functions; {kinds} conventions used, {short} covered only in part -> {out}")
 
 
+def jump_thunks(b: Binary, starts: set[int], targets) -> dict[int, int]:
+    """The `jmp rel32` thunks among the call targets that are no corpus function, each to the
+    function it lands on (through chained thunks). Ghidra makes thunks of them, which the corpus
+    leaves out, and its decompilation shows a call to one under the target's name. Taken for
+    unknown code, a call to one wrote every register and read every argument: FUN_141c911a0's
+    call through 0x1416762f0 (`jmp FUN_14156dc60`) made the rdx a call before it left look live
+    (an `extraout_RDX` stub, and three more like it, 2026-10-18)."""
+    out = {}
+    for t in targets:
+        a, hops = t, 0
+        while a not in starts and hops < 8 and b.is_code(a) and b.image[b.off(a)] == 0xE9:
+            a = a + 5 + struct.unpack_from("<i", b.image, b.off(a) + 1)[0]
+            hops += 1
+        if a != t and a in starts:
+            out[t] = a
+    return out
+
+
 def main() -> None:
     if "--cover" in sys.argv:
         return recover()
@@ -342,6 +428,9 @@ def main() -> None:
     starts = set(load_corpus())
     local = local_facts(b, starts)
     print(f"decoded {len(local)} functions ({time.time() - t0:.0f}s)", file=sys.stderr, flush=True)
+    thunks = jump_thunks(b, starts, {g for _w, cs, _e in local.values() for g in cs if g not in starts})
+    print(f"{len(thunks)} jump thunks resolved to their targets", file=sys.stderr, flush=True)
+    local = {f: (w, frozenset(thunks.get(g, g) for g in cs), e) for f, (w, cs, e) in local.items()}
     writes = {f: set(w) for f, (w, _c, _e) in local.items()}
     changed = True
     while changed:
@@ -363,7 +452,7 @@ def main() -> None:
     full = {f: set(r) for f, r in keep.items()}
     for x in load_facts("protos").get("keep_xmm0", []):
         full.setdefault(int(x, 16), set()).add("XMM0")
-    need, relied, followed = needed(b, starts, full)
+    need, relied, followed = needed(b, starts, full, thunks)
     chosen, family = cover(need, full)
     out = write_facts("preserved", {
         "rule": "the volatile registers neither the function nor anything it calls writes ('all'); "

@@ -18,6 +18,7 @@ add_library(client STATIC
     RenderSettings.cpp
     StartupClient.cpp
     StartupService.cpp
+    Protection.cpp
 )
 target_include_directories(client PUBLIC ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(client PUBLIC base cas console db fileservices framescript glue gx os services shadereffect sound storm texture threadpool ui util comctl32)

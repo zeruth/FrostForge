@@ -253,6 +253,16 @@ PSEUDO = {
     "psubusb": ("_mm_subs_epu8({0}, {1})", "i"),
     "phaddsw": ("_mm_hadds_epi16({0}, {1})", "i"),
     "pmovsxdq": ("_mm_cvtepi32_epi64({1})", "i"),
+    # (and the rest of the family the corpus has: FUN_1423a9a70 and FUN_1423aba20 sign-extend
+    # bytes, LNK2019 on pmovsxbd once their saved xmm registers stopped refusing them, 2026-10-18)
+    "pmovsxbd": ("_mm_cvtepi8_epi32({1})", "i"),
+    "vpmovzxbw_avx": ("_mm_cvtepu8_epi16({0})", "i"),
+    "vpmaxub_avx": ("_mm_max_epu8({0}, {1})", "i"),
+    "vpcmpeqb_avx": ("_mm_cmpeq_epi8({0}, {1})", "i"),
+    "vpsrlw_avx": ("_mm_srli_epi16({0}, {1:imm})", "i"),
+    "vpaddusb_avx": ("_mm_adds_epu8({0}, {1})", "i"),
+    "vpsubsb_avx": ("_mm_subs_epi8({0}, {1})", "i"),
+    "vpandn_avx": ("_mm_andnot_si128({0}, {1})", "i"),
     "pblendvb": ("_mm_blendv_epi8({0}, {1}, {2})", "i"),
     "sqrtps": ("_mm_sqrt_ps(_mm_castsi128_ps({1}))", "f"),
     "sqrtpd": ("_mm_sqrt_pd(_mm_castsi128_pd({1}))", "d"),
@@ -323,6 +333,12 @@ PSEUDO = {
     "maxps": ("_mm_max_ps(_mm_castsi128_ps({0}), _mm_castsi128_ps({1}))", "f"),
     "divps": ("_mm_div_ps(_mm_castsi128_ps({0}), _mm_castsi128_ps({1}))", "f"),
     "blendvps": ("_mm_blendv_ps(_mm_castsi128_ps({0}), _mm_castsi128_ps({1}), _mm_castsi128_ps({2}))", "f"),
+    # SSE4.1 (FUN_1412c3ab0's frustum test, a pointer leaf first decompiled on 2026-10-19, was
+    # LNK2019 on both): the immediate as encoded; the memory form of insertps reads a float into
+    # lane 0, which is where the scalar operand lands here, and its count_s bits are 0
+    "insertps": ("_mm_insert_ps(_mm_castsi128_ps({0}), _mm_castsi128_ps({1}), {2:imm})", "f"),
+    "dpps": ("_mm_dp_ps(_mm_castsi128_ps({0}), _mm_castsi128_ps({1}), {2:imm})", "f"),
+    "dppd": ("_mm_dp_pd(_mm_castsi128_pd({0}), _mm_castsi128_pd({1}), {2:imm})", "d"),
 }
 # pseudo-ops on 32 or 64 bytes (AVX2 / AVX-512 paths): no gen_v16 holds them
 WIDE_PSEUDO = re.compile(r"_avx2$|_avx512(?!vl$)|^vp\w+_avx512(?!vl$)")

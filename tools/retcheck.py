@@ -11,6 +11,7 @@ instruction of its check, so the decompile export and the recomp can skip it.
 """
 from __future__ import annotations
 
+from corpus import load_facts
 from wowbin import Binary, hexa, write_facts
 
 RANGE_BASE = 0x14261A0B0
@@ -54,11 +55,36 @@ def main() -> None:
           f"({', '.join(f'{a:x}->{junk[a]:x}' for a in sorted(bad)[:8])})")
     for a in bad:
         del junk[a]
+    # (and none inside a jump table: its entries decode as code too, and a `0x73` byte of
+    # FUN_1417354c0's table taken for a `jae` over junk was patched to `jmp`, so the decompiler,
+    # which reads the table from the program's bytes, sent case 0x11 into FUN_141eb53b0 and the
+    # function was stubbed on that code's registers, 2026-10-18. tools/switches.py's tables)
+    tables = [(int(lo, 16), int(hi, 16)) for lo, hi in load_facts("switches").get("tables", [])]
+    in_tables = {a for a in junk if any(lo <= a < hi for lo, hi in tables)}
+    print(f"{len(in_tables)} jumps dropped: inside a jump table")
+    for a in in_tables:
+        del junk[a]
     # (the outermost of the two sets together: one may sit inside the other's junk)
     # (a jump whose junk ends before its target spans only the junk: the code after is real)
     spans = sorted((a, JUNK_ENDS.get(a, t)) for a, t in junk.items())
     junk = {a: t for a, t in junk.items() if not any(j < a < u for j, u in spans if j != a)}
-    checks = success_branches(b, sorted(i for i, t in refs if t == RANGE_BASE), junk)
+    # (and the loads a linear decode of the piece is out of step at: past junk the cleaner left,
+    # every later instruction boundary is off, and the second half of Lua::SendChatMessage's 24
+    # checks were rejected as mid-instruction, left in the decompilation, one in a shape the text
+    # stripper does not know, and the handler stubbed, 2026-10-18. Such a load counts when it
+    # decodes as the check's 7-byte `mov` there; success_branches then wants both its ways to T)
+    import capstone as _cs
+    _md = _cs.Cs(_cs.CS_ARCH_X86, _cs.CS_MODE_64)
+    verified = {i for i, t in refs if t == RANGE_BASE}
+    loose = set()
+    for i, t in b.riprel_refs(keep=lambda t: t == RANGE_BASE, verify=False):
+        if i in verified:
+            continue
+        ins = next(_md.disasm(bytes(b.image[b.off(i):b.off(i) + 16]), i), None)
+        if ins is not None and ins.mnemonic == "mov" and ins.size == 7 and b.func_containing(i) is not None:
+            loose.add(i)
+    checks = success_branches(b, sorted(verified | loose), junk)
+    print(f"{sum(1 for s in checks if s in loose)} checks past a linear decode out of step")
     refs2 = b.riprel_refs(keep=lambda t: t == RANGE2_BASE)
     checks2 = call_check_branches(b, sorted(i for i, _t in refs2))
     print(f"{len(checks2)} of {len(refs2)} checks on the second range pass straight on")
@@ -74,6 +100,60 @@ def main() -> None:
     n = sum(1 for i, t in refs if t == RANGE_BASE)
     print(f"{len(first)} functions carry the return-address check, {len(junk)} jumps over junk, "
           f"{len(checks)} of {n} checks with their success branch -> {out}")
+
+
+_PIECES = None
+
+
+def all_pieces(b: Binary) -> list[tuple[int, int, int]]:
+    """(start, end, root) of every piece of code to scan: the .pdata pieces, and each function
+    the corpus has that no piece covers, as one piece of its own. Those are the leaves
+    tools/protos.py found reached only through a pointer, which have no unwind entry (a leaf needs
+    none): 0x14165a4a0 and 0x14165a510, callbacks behind `stc; jbe` and `xor al, 0; jno` over junk,
+    were never scanned, kept their junk, and were stubbed as damaged (2026-10-19)."""
+    global _PIECES
+    if _PIECES is not None:
+        return _PIECES
+    import bisect
+    import json
+    from corpus import CORPUS
+    out = list(zip(b.piece_starts, b.piece_ends, b.piece_root))
+    spans = sorted((s, e) for s, e, _r in out)
+    lo = [s for s, _e in spans]
+    if CORPUS.exists():
+        with CORPUS.open(encoding="utf-8") as f:
+            for line in f:
+                head = line[:120]
+                i, j = head.find('"addr":"'), head.find('"size":')
+                if i < 0 or j < 0:
+                    continue
+                a = int(head[i + 8:head.index('"', i + 8)], 16)
+                size = int("".join(c for c in head[j + 7:j + 20].split(",")[0].split("}")[0] if c.isdigit()) or 0)
+                k = bisect.bisect_right(lo, a) - 1
+                if size <= 0 or (k >= 0 and a < spans[k][1]) or not b.is_code(a):
+                    continue
+                out.append((a, a + size, a))
+    _PIECES = out
+    return out
+
+
+def piece_root(b: Binary, a: int) -> int | None:
+    """The function a piece of all_pieces holds `a` in: .pdata's, else a corpus leaf's."""
+    global _EXTRA
+    r = b.func_containing(a)
+    if r is not None:
+        return r
+    if _EXTRA is None:
+        import bisect
+        n = len(b.piece_starts)
+        extra = sorted(all_pieces(b)[n:])
+        _EXTRA = ([s for s, _e, _r in extra], extra, bisect)
+    lo, extra, bisect = _EXTRA
+    k = bisect.bisect_right(lo, a) - 1
+    return extra[k][2] if k >= 0 and a < extra[k][1] else None
+
+
+_EXTRA = None
 
 
 def opaque_jumps(b: Binary) -> dict[int, int]:
@@ -99,7 +179,7 @@ def opaque_jumps(b: Binary) -> dict[int, int]:
                  ("jl", "jge"), ("jle", "jg"), ("jc", "jnc"), ("jz", "jnz"), ("jnb", "jnae")]:
         opposite[x], opposite[y] = y, x
     out: dict[int, tuple[int, int]] = {}
-    for s, e, _r in zip(b.piece_starts, b.piece_ends, b.piece_root):
+    for s, e, _r in all_pieces(b):
         o = b.off(s)
         code = bytes(b.image[o:o + (e - s)])
         insns = list(md.disasm_lite(code, s))
@@ -130,9 +210,41 @@ def opaque_jumps(b: Binary) -> dict[int, int]:
             clean = list(md.disasm_lite(code[t - s:t - s + 64], t))
             if len(clean) >= 4 and sum(z for _a, z, _m, _o in clean) >= 16:
                 out[first] = (t, fsize)
-    ranges = sorted((a + size, t) for a, (t, size) in out.items())
+        # and the pair whose first jump goes to the same condition again, `jg X; xchg ch, ch;
+        # jle T` with `X: jg T` inside the junk the second skips: X is reached only when the
+        # condition holds, so its jump is always taken, and the second jump only when it does
+        # not, so that one is too. Every path goes to T. The decompiler cannot tie the two tests
+        # of one flag together and followed X's fall-through into the junk: CreateFrame's core,
+        # FUN_1424db710, after its lua_pushfstring (0x1424db8d1), kept as protection junk,
+        # 2026-10-19. The junk the second jump skips ends at X, which stays
+        for k, (a, size, mn, ops) in enumerate(insns):
+            if mn not in opposite:
+                continue
+            try:
+                x = int(ops, 16)
+            except ValueError:
+                continue
+            j = k + 1
+            while j < len(insns) and insns[j][2] in neutral:
+                j += 1
+            if j >= len(insns) or insns[j][2] != opposite[mn]:
+                continue
+            a2, size2, _m2, ops2 = insns[j]
+            try:
+                t = int(ops2, 16)
+            except ValueError:
+                continue
+            if not (a2 + size2 < x < t < e):
+                continue
+            at_x = next(md.disasm_lite(code[x - s:x - s + 16], x), None)
+            if at_x is None or at_x[2] != mn or at_x[3] != ops2:
+                continue
+            out[a2] = (t, size2)
+            out[x] = (t, at_x[1])
+            JUNK_ENDS[a2] = x
+    ranges = sorted((a + size, JUNK_ENDS.get(a, t)) for a, (t, size) in out.items())
     return {a: t for a, (t, size) in out.items()
-            if not any(lo <= a < hi for lo, hi in ranges if (lo, hi) != (a + size, t))}
+            if not any(lo <= a < hi for lo, hi in ranges if (lo, hi) != (a + size, JUNK_ENDS.get(a, t)))}
 
 
 def skipping_reached_code(b: Binary, jumps: dict[int, int], proven: set[int] = frozenset()) -> set[int]:
@@ -146,11 +258,11 @@ def skipping_reached_code(b: Binary, jumps: dict[int, int], proven: set[int] = f
     md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
     roots: dict[int, list[int]] = {}
     for a in jumps:
-        r = b.func_containing(a)
+        r = piece_root(b, a)
         if r is not None:
             roots.setdefault(r, []).append(a)
     pieces: dict[int, list[tuple[int, int]]] = {}
-    for s, e, r in zip(b.piece_starts, b.piece_ends, b.piece_root):
+    for s, e, r in all_pieces(b):
         if r in roots:
             pieces.setdefault(r, []).append((s, e))
     bad = set()
@@ -242,7 +354,7 @@ def opaque_jumps_flow(b: Binary) -> dict[int, int]:
             "stc": frozenset(("jb", "jc", "jnae", "jbe", "jna")),
             **{m: frozenset(("jae", "jnb", "jnc", "jno")) for m in ("test", "and", "or", "xor")}}
     pieces: dict[int, list[tuple[int, int]]] = {}
-    for s, e, r in zip(b.piece_starts, b.piece_ends, b.piece_root):
+    for s, e, r in all_pieces(b):
         pieces.setdefault(r, []).append((s, e))
     decoded: dict[int, tuple] = {}
 
@@ -374,16 +486,23 @@ def success_branches(b: Binary, starts: list[int], junk: dict[int, int]) -> dict
     for n, s in enumerate(starts):
         o = b.off(s)
         nxt = starts[n + 1] if n + 1 < len(starts) else s + 0x2000
-        win = bytes(b.image[o:o + min(0x2000, nxt - s)])
         t = None
-        k = win.find(b"\x83\xf8\x40")
-        while k >= 0 and t is None:
-            if win[k + 3:k + 5] == b"\x0f\x86":
-                t = s + k + 9 + struct.unpack_from("<i", win, k + 5)[0]
-            elif win[k + 3] == 0x76:
-                t = s + k + 5 + struct.unpack_from("<b", win, k + 4)[0]
-            else:
-                k = win.find(b"\x83\xf8\x40", k + 1)
+        # (to the next check, or past it when the table walk two checks share lies beyond it:
+        # 0x1418fdf00 and 0x1418fe070 end in the same `cmp eax, 0x40`; the decode walk below still
+        # has to agree)
+        for limit in (min(0x2000, nxt - s), 0x2000):
+            win = bytes(b.image[o:o + limit])
+            k = win.find(b"\x83\xf8\x40")
+            while k >= 0 and t is None:
+                if win[k + 3:k + 5] == b"\x0f\x86":
+                    t = s + k + 9 + struct.unpack_from("<i", win, k + 5)[0]
+                elif win[k + 3] == 0x76:
+                    t = s + k + 5 + struct.unpack_from("<b", win, k + 4)[0]
+                else:
+                    k = win.find(b"\x83\xf8\x40", k + 1)
+            if t is not None:
+                break
+        win = bytes(b.image[o:o + 16])
         if t is None or b.func_containing(t) != b.func_containing(s):
             continue
         first = next(md.disasm(win[:16], s), None)

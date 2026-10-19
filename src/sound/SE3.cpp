@@ -23,7 +23,7 @@
 #include "ui/FrameTime.hpp"
 
 SE3CONFIG g_se3Config;
-uint8_t s_1430a9538;
+uint32_t s_1430a9538;
 TObjectAllocHeap* g_soundKitDefHeap;
 TObjectAllocHeap* g_soundKitHeap;
 FMOD::System* g_fmodSystem;

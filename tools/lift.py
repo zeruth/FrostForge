@@ -23,6 +23,8 @@ import capstone
 _md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
 
 ARGS = ("rcx", "rdx", "r8", "r9")
+# a whole general register, as a `jmp` operand names one
+REG64 = r"r(?:[a-d]x|[sd]i|bp|8|9|1[0-5])"
 R64 = {}
 for full, names in {
     "rax": ("rax", "eax", "ax", "al"), "rcx": ("rcx", "ecx", "cx", "cl"), "rdx": ("rdx", "edx", "dx", "dl"),
@@ -92,6 +94,8 @@ def _decode(binary, address: int, limit: int) -> dict:
             if mn == "jmp":
                 if re.fullmatch(r"qword ptr \[(?!rip)[^\]]+\]", ins.op_str):
                     break   # a tail call through memory: a vcall thunk, blz::function's invoker
+                if re.fullmatch(REG64, ins.op_str):
+                    break   # and through a register the code loaded (see the emitter)
                 if not re.fullmatch(r"0x[0-9a-f]+", ins.op_str):
                     raise Unliftable("an indirect jump")
                 target = int(ins.op_str, 16)
@@ -382,6 +386,17 @@ def _lift(binary, address: int, limit: int, arity=None):
                 reads.add(r)
                 args.append(reg(r))
             lines.append(f"  return (**(code **)({where}))({', '.join(args)});")
+            fallthrough[0] = False
+        elif mn == "jmp" and re.fullmatch(REG64, ops[0]):
+            # (the same through a register: `mov rdx, [rdx]; mov rax, [rdx]; add rdx, 8; jmp rax`,
+            # a callback trampoline the Login click reaches through a pointer, 0x141dec240, which
+            # Ghidra has no function for; refused as an indirect jump, it was a stub, 2026-10-18)
+            args = []
+            for r in ARGS:
+                used.add(r)
+                reads.add(r)
+                args.append(reg(r))
+            lines.append(f"  return (*(code *)({read(ops[0])}))({', '.join(args)});")
             fallthrough[0] = False
         elif mn == "jmp":
             target = int(ops[0], 16)

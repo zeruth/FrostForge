@@ -516,7 +516,14 @@ class Analyzer:
                         # reading `in_R8` (2026-10-16)
                         # (written on both, as wide as the wider: `this` set by `mov rcx, rbx`
                         # on one path and `mov ecx, ...` on another is still the pointer)
-                        w = max(od[k], nd[k]) if k in od and k in nd else 0
+                        # (but a path that wrote only a byte or a word of it bounds the argument:
+                        # the compiler writes the whole of a parameter on every path, and `mov r8b,
+                        # 1` on one path with `xor r8d, r8d` on the other is a bool, the xor only
+                        # its zeroing idiom. By the wider, FUN_1419c5290's virtual call took an int
+                        # whose upper bytes were what FUN_14022b1b0 left in r8, `extraout_R8`,
+                        # 2026-10-18. A 4-byte write zero-extends, so 4 and 8 stay the wider)
+                        w = (min(od[k], nd[k]) if min(od[k], nd[k]) < 4 else max(od[k], nd[k])) \
+                            if k in od and k in nd else 0
                     if w:
                         mframe.append((k, w))
                 # rax as defined on both paths: the narrower, and either path's callee results
@@ -1173,6 +1180,28 @@ def corpus_sizes() -> dict[int, int]:
     return sizes
 
 
+def code_pointers(b: Binary) -> set[int]:
+    """Every code address an absolute pointer outside .text holds, by the relocation table."""
+    import pefile
+    from wowbin import EXE
+    pe = pefile.PE(str(EXE), fast_load=True)
+    pe.parse_data_directories(directories=[pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_BASERELOC"]])
+    base = pe.OPTIONAL_HEADER.ImageBase
+    out = set()
+    for blk in getattr(pe, "DIRECTORY_ENTRY_BASERELOC", []):
+        for e in blk.entries:
+            if e.type != 10:    # IMAGE_REL_BASED_DIR64
+                continue
+            va = base + e.rva
+            if b.is_code(va):
+                continue        # (an operand inside an instruction is no table entry)
+            t = b.u64(va)
+            if b.is_code(t):
+                out.add(t)
+    pe.close()
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--jobs", type=int, default=max(1, min(12, (os.cpu_count() or 4) - 2)))
@@ -1201,6 +1230,8 @@ def main() -> None:
     # is not needed again)
     text_start, text = b.bytes_of(".text")
     piece_spans = sorted(zip(b.piece_starts, b.piece_ends))
+    # (and every code address the image points to, for the leaves reached only so, below)
+    pointed = code_pointers(b) | {t for _i, t in b.riprel_refs(keep=b.is_code)}
     del b
     chunks = [funcs[i:i + 400] for i in range(0, len(funcs), 400)]
     local = {}
@@ -1255,11 +1286,62 @@ def main() -> None:
                 leaves.add(g)
                 if g in exits:
                     jumpers.add(f)
+    # and the code nothing calls directly but something points to: a function's address stored in
+    # data (the relocation table lists every absolute pointer in the image: vtable slots, callback
+    # tables) or taken in code (`lea rdx, [rip + fn]`, a callback handed to a registration). A leaf
+    # reached only so has no .pdata entry and no caller, so nothing made it a function: 3,370 of
+    # them in game code had no decompilation and no translation, the hand-ported hotfix listeners,
+    # loading callbacks and DB2 sort helpers among them, still stubs with nothing behind them
+    # (2026-10-19). Not in a native or third-party range (run as the reference's own code), not the
+    # exception funclets at the image's end, and decoding as code (a thunk resolves as below)
+    excluded_ranges = [(int(r["from"], 16), int(r["to"], 16)) for key in ("native", "third_party")
+                       for r in json.loads((ROOT / "tools/fidelity_exceptions.json").read_text(encoding="utf-8")).get(key, [])]
+    added = 0
+    pointed_leaves = set()
+    for g in pointed:
+        o = g - text_start
+        if g in local or g in leaves or not (0 <= o < len(text) - 2) or text[o] == 0xE9 or text[o:o + 2] == b"\xff\x25":
+            continue
+        if g >= 0x1425d4000 or any(lo <= g < hi for lo, hi in excluded_ranges) or inside_known(g):
+            continue
+        if text[o] == 0xCC or text[o:o + 2] == b"\x00\x00":
+            continue
+        leaves.add(g)
+        pointed_leaves.add(g)
+        added += 1
+    print(f"{added} leaves reached only through a pointer", file=sys.stderr, flush=True)
     if leaves and not args.show:
-        _init(starts | leaves, noreturn, sizes)
-        for a, inputs, kinds, stack, calls, open_, err, got, passes, wr, ic, lf, nc in _work(sorted(leaves | jumpers)):
-            local[a] = (inputs, kinds, stack, calls, open_, err)
-            reads_of[a], passes_of[a], written_of[a], icalls_of[a], floor_of[a], ncalls_of[a] = got, passes, wr, ic, lf, nc
+        # (to a fixed point: a leaf's own calls and tail jumps reach code nothing else does. The
+        # hotfix listener behind 0x14022992a's `jmp 0x141359fd0` was a stub with nothing behind it,
+        # 2026-10-19)
+        todo = sorted(leaves | jumpers)
+        while todo:
+            _init(starts | leaves, noreturn, sizes)
+            more, entries, rejump = set(), set(), set()
+            for a, inputs, kinds, stack, calls, open_, err, got, passes, wr, ic, lf, nc in _work(todo):
+                local[a] = (inputs, kinds, stack, calls, open_, err)
+                reads_of[a], passes_of[a], written_of[a], icalls_of[a], floor_of[a], ncalls_of[a] = got, passes, wr, ic, lf, nc
+                for g in [g for g, _d in calls] + list(nc[2]):
+                    o = g - text_start
+                    if g in local or g in leaves or not (0 <= o < len(text) - 2) or text[o] == 0xE9 \
+                            or text[o:o + 2] == b"\xff\x25" or text[o] == 0xCC or inside_known(g):
+                        continue
+                    more.add(g)
+                    if a in pointed_leaves:
+                        # (an entry as surely as the pointed one that reaches it: ApplyFacts made
+                        # 0x140229920 first, its body took the code it jumps to, and the
+                        # containing check then skipped 0x141359fd0. A junk call's target is not)
+                        entries.add(g)
+                    if g in nc[2]:
+                        jumpers.add(a)
+                        rejump.add(a)
+            leaves |= more
+            pointed_leaves |= entries
+            # (and a function that jumps to a leaf found only now, decoded again with it a start:
+            # decoded before, the jump was a branch inside it, not a tail call, and 0x1418d7b10's
+            # `jne 0x1418820a0` passed on no xmm1, so its float parameter was lost and the function
+            # stubbed, 2026-10-19)
+            todo = sorted(more | rejump)
         print(f"decoded {len(leaves)} leaves no function covered", file=sys.stderr, flush=True)
 
     if args.show:
@@ -1615,6 +1697,13 @@ def main() -> None:
             # itself at every ret: the float (`movsd xmm0, [rsp + 0x40]; ret` after a call that
             # returns a pointer, FUN_14028958c, was typed by the call's eax)
             e["ret"] = [{4: "f", 8: "d"}[xret[a]], xret[a]]
+        elif (r and (r[3] or r[4]) and not r[2] and wmin == 1 << 30 and not wcalls
+              and e["params"] and e["params"][0][0] in ("f", "d")):
+            # rax written on no path and no callee's result in it, its callers reading xmm0 and none
+            # rax, and its first argument a float in xmm0: the float it hands back, written on one
+            # path and passed through on the other (FUN_1401a4880 negates it when positive and
+            # returns it as it came otherwise; untyped, its caller read `extraout_XMM0_Da`)
+            e["ret"] = list(e["params"][0])
         elif written.get(a):
             # only a vtable or a pointer reaches it: what it leaves in rax itself (`xor al, al;
             # ret` returns a byte, `xor eax, eax; ... setne al` an int)
@@ -1631,6 +1720,27 @@ def main() -> None:
         if open_:
             e["open"] = True
         out[hexa(a)] = e
+    # a function whose result is only ever what the functions it tail-jumps to return, writing
+    # neither rax nor xmm0 itself (a CPU dispatch, `cmp [level], 2; jge FUN_14240e0c0; jmp
+    # FUN_14240d750`): what they return, when they agree. Typed by "what it leaves in rax", the
+    # dispatcher of two 16-byte vector routines returned an int, and its caller, which reads all
+    # four lanes, `extraout_XMM0_Da` to `_Dd` (FUN_1415b98c0, 2026-10-18). To a fixed point: a
+    # dispatcher may jump to another
+    changed = True
+    while changed:
+        changed = False
+        for a in local:
+            wmin, wgarbage, wcalls, xw, _xg, _k = written_of.get(a, (1 << 30, False, [], [], True, 0))
+            e = out.get(hexa(a))
+            if e is None or wmin != CALLW or wgarbage or not wcalls or xw or 0 in wcalls:
+                continue
+            rets = {tuple(out[hexa(t)]["ret"]) if hexa(t) in out and "ret" in out[hexa(t)] else None for t in wcalls}
+            # (an xmm result only: an integer one is typed by its callers' reads, as above)
+            if len(rets) == 1 and None not in rets and next(iter(rets))[0] in ("f", "d", "v"):
+                new = list(next(iter(rets)))
+                if e.get("ret") != new:
+                    e["ret"] = new
+                    changed = True
     if args.mismatch:
         import collections
         kinds = collections.Counter()
@@ -1666,6 +1776,9 @@ def main() -> None:
                 "direct calls and tail calls",
         # call targets no function covered, for ApplyFacts to create
         "leaves": [hexa(g) for g in sorted(leaves)],
+        # those of them a pointer reaches (a relocation or a `lea`): an entry point however Ghidra
+        # drew the function bodies around it, so ApplyFacts creates one inside another's body too
+        "pointed": [hexa(g) for g in sorted(pointed_leaves)],
         # each jump from one function to another's start (a tail call), for ApplyFacts to mark
         "tail_jumps": tail_jumps,
         # each `call __chkstk` of a large frame (`mov eax, <size>; call __chkstk; sub rsp, rax`),

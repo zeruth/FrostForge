@@ -224,6 +224,9 @@ def strip_retcheck(c: str) -> tuple[str, str]:
     so each check is replaced by the contents of its success block, and only when
     everything removed is free of calls and nothing outside jumps into it. A check in
     another shape (the inverted `if (out of range) goto crash;` form) is left visible."""
+    # (the range base as Ghidra names it where it holds no data item, `UNK_14261a0b0`: the same
+    # global; unread, two checks stayed in FUN_140a00f40 and FUN_141000a60, 2026-10-19)
+    c = re.sub(r"\b_?UNK_(14261a0b[08])\b", r"DAT_\1", c)
     if not any(g in c for g in RETCHECK_GLOBALS):
         return c, "none"
     lines = c.split("\n")

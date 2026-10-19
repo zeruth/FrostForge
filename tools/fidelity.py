@@ -269,6 +269,27 @@ _EXCEPTIONS = json.loads((Path(__file__).with_name("fidelity_exceptions.json")).
 REF_SKIP = {int(a, 16) for a in _EXCEPTIONS["skip"]} | {int(a, 16) for a in _EXCEPTIONS.get("lib", {})}
 REF_ALIAS = {int(a, 16): int(v["to"], 16) for a, v in _EXCEPTIONS["alias"].items()}
 
+_REF = None
+
+
+def thunk_target(addr: str) -> str:
+    """Where a reference `jmp rel32` thunk ends up (hex, as the manifest keys), else `addr`.
+
+    A hand port tied to a thunk is the thunk's target: Ghidra spells calls through it
+    `thunk_FUN_<target>`, and so translated callers already run the target's translation
+    (FUN_14134e050 and FUN_140229ca0, hand stubs with "nothing behind them", 2026-10-19)."""
+    global _REF
+    if _REF is None:
+        _REF = Binary()
+    a = int(addr, 16)
+    for _ in range(8):
+        if not _REF.is_code(a) or _REF.image[_REF.off(a)] != 0xE9:
+            break
+        o = _REF.off(a)
+        a = a + 5 + int.from_bytes(bytes(_REF.image[o + 1:o + 5]), "little", signed=True)
+    return f"{a:x}"
+
+
 def ref_is_lib(cor: dict, a: int) -> bool:
     entry = cor.get(a)
     if entry is None:
@@ -1177,7 +1198,16 @@ def main() -> None:
 
     translated = [rec for rec in records.values() if generated(rec) and rec["kind"] != "stub"]
     scored = [rec for rec in records.values() if rec["kind"] != "stub" and not generated(rec)]
-    stubs = [rec for rec in records.values() if rec["kind"] == "stub"]
+    # a hand port still a stub runs the reference function's translation instead (or its own machine
+    # code, or the adapter to another port): tools/translate.py's manifest says which. Those are
+    # translated, not stubs; a stub is one with nothing behind it (2026-10-19)
+    manifest_path = ROOT / "src/gen/manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
+    behind = set(manifest.get("translated", {})) | set(manifest.get("native", {})) | set(manifest.get("adapted", []))
+    behind |= {a for a in (rec["addr"] for rec in records.values() if rec["kind"] == "stub")
+               if thunk_target(a) in behind}
+    stubs_translated = [rec for rec in records.values() if rec["kind"] == "stub" and not generated(rec) and rec["addr"] in behind]
+    stubs = [rec for rec in records.values() if rec["kind"] == "stub" and rec["addr"] not in behind]
     live = [rec for rec in stubs if rec.get("live")]
     mean = sum(rec["score"] for rec in scored) / len(scored) if scored else 0.0
     weighted = (sum(rec["score"] * rec["ref_size"] for rec in scored) / sum(rec["ref_size"] for rec in scored)
@@ -1186,7 +1216,8 @@ def main() -> None:
         "tags": len(tags), "tied": len(port_of_ref), "untied": len(untied),
         "ported": sum(rec["kind"] == "ported" for rec in records.values()),
         "partial": sum(rec["kind"] == "partial" for rec in records.values()),
-        "stubs": len(stubs), "live_stubs": len(live), "same": sum(rec["same"] for rec in scored),
+        "stubs": len(stubs), "live_stubs": len(live), "stubs_translated": len(stubs_translated),
+        "same": sum(rec["same"] for rec in scored),
         "live_virtual": sum(1 for rec in live if not rec["callers"]),
         "mean": round(mean, 4), "size_weighted": round(weighted, 4),
         "above_0.9": sum(rec["score"] >= 0.9 for rec in scored),
@@ -1310,7 +1341,8 @@ def main() -> None:
         print(f"{len(rows)} ports listed", file=sys.stderr)
 
     print(f"{summary['tied']} of {summary['tags']} tags tied to compiled functions; {summary['ported']} ported, "
-          f"{summary['partial']} partial, {summary['stubs']} stubs ({summary['live_stubs']} live, "
+          f"{summary['partial']} partial, {summary['stubs_translated']} stubs running their translation, "
+          f"{summary['stubs']} stubs with nothing behind them ({summary['live_stubs']} live, "
           f"{summary['live_virtual']} of them only through tables); "
           f"fidelity mean {summary['mean']:.3f}, size-weighted {summary['size_weighted']:.3f}; "
           f"{summary['above_0.9']} at 0.9 or better, {summary['below_0.5']} below 0.5, {summary['same']} same",
@@ -1333,7 +1365,7 @@ def main() -> None:
             f.write(f"| {stamp} | {commit} | {summary['tied']} | {summary['ported']} | {summary['partial']} | "
                     f"{summary['stubs']} | {summary['live_stubs']} | {summary['mean']:.3f} | "
                     f"{summary['size_weighted']:.3f} | {summary['above_0.9']} | {summary['below_0.5']} | "
-                    f"{summary['same']} |\n")
+                    f"{summary['same']} | {summary['stubs_translated']} |\n")
 
 
 if __name__ == "__main__":

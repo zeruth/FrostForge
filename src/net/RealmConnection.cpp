@@ -443,4 +443,5 @@ extern "C" void* const gen_p_1430affc8 = (void*)&s_realmNameCallback;
 extern "C" void* const gen_p_1430affd0 = (void*)&s_authDataCallback;
 extern "C" void* const gen_p_1430affe0 = (void*)&s_authValueCallback;
 extern "C" void* const gen_p_1430affe8 = (void*)&s_serverTimeCallback;
+extern "C" void* const gen_p_1430afff0 = (void*)&s_messageCallback;
 // ---- end of generated globals ----

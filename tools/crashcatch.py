@@ -150,6 +150,45 @@ def dump_stack(process, exe, base, context, limit=60):
         print("  +%07x %s  %s" % (rva, lines[0] if lines else "?", lines[1] if len(lines) > 1 else ""))
 
 
+def symbol_rva(exe, name):
+    """A public symbol's RVA, from the PDB beside the exe (llvm-pdbutil) and the exe's sections."""
+    import re
+    import pefile
+    out = subprocess.run([SYMBOLIZER.replace("llvm-symbolizer", "llvm-pdbutil"), "dump", "-publics",
+                          os.path.splitext(exe)[0] + ".pdb"], capture_output=True, text=True).stdout
+    m = re.search(r"`%s`\s*\n\s*flags = [^,]*, addr = (\d+):(\d+)" % re.escape(name), out)
+    if not m:
+        return None
+    pe = pefile.PE(exe, fast_load=True)
+    return pe.sections[int(m.group(1)) - 1].VirtualAddress + int(m.group(2))
+
+
+def dump_hits(process, exe, base, path):
+    """What FROST_HITS would have written (RefImage.cpp's HitDumpThread), read out of the stopped
+    process: a run that dies within the dump thread's first five seconds still leaves its counts.
+    "address count" a line, most first."""
+    tables, count = symbol_rva(exe, "gen_hit_tables"), symbol_rva(exe, "gen_hit_table_count")
+    if tables is None or count is None:
+        print("hits: gen_hit_tables not in the PDB")
+        return
+    n = int.from_bytes(read(process, base + count, 4), "little")
+    raw = read(process, base + tables, n * 24)
+    rows = []
+    for t in range(n):
+        hits, addrs, m = int.from_bytes(raw[t * 24:t * 24 + 8], "little"), \
+            int.from_bytes(raw[t * 24 + 8:t * 24 + 16], "little"), int.from_bytes(raw[t * 24 + 16:t * 24 + 20], "little")
+        h, a = read(process, hits, 4 * m), read(process, addrs, 8 * m)
+        for i in range(min(len(h) // 4, len(a) // 8)):
+            c = int.from_bytes(h[4 * i:4 * i + 4], "little")
+            if c:
+                rows.append((c, int.from_bytes(a[8 * i:8 * i + 8], "little")))
+    rows.sort(key=lambda r: -r[0])
+    with open(path, "w") as f:
+        for c, a in rows:
+            f.write("%x %u\n" % (a, c))
+    print("hits: %d functions reached, written to %s" % (len(rows), path))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--exe", default=os.path.join(ROOT, "build", "cmake", "bin", "Release", "FrostLite.exe"))
@@ -161,6 +200,7 @@ def main():
     ap.add_argument("--second-chance", action="store_true",
                     help="report only an exception nothing handled (guarded faults pass through)")
     ap.add_argument("--args", default="", help="the command line after the exe, as one string")
+    ap.add_argument("--hits", default=None, help="at the stop, write the translated functions' call counts here")
     ap.add_argument("--all-threads", action="store_true",
                     help="at a timeout, also show every thread once, with its registers")
     args = ap.parse_args()
@@ -237,6 +277,8 @@ def main():
                              "R13", "R14", "R15"):
                     print("  %s %016x" % (name, getattr(context, name)))
                 dump_stack(pi.hProcess, exe, base, context)
+                if args.hits:
+                    dump_hits(pi.hProcess, exe, base, args.hits)
                 for spec in args.dump:
                     # address:length, or a register name for what it points at
                     where, _, length = spec.partition(":")

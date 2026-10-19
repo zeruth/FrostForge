@@ -74,6 +74,7 @@ def main() -> None:
         return roots[i] if i >= 0 and va < ends[i] else None
 
     out: dict[str, list[str]] = {}
+    tables: list[tuple[int, int]] = []
     one = two = dropped = 0
     for s, e, r in zip(starts, ends, roots):
         o = b.off(s)
@@ -102,10 +103,24 @@ def main() -> None:
             # the base once in its prologue and keeps it in a saved register, `lea r12, [rip - X]`
             # some hundred instructions before FUN_14024d4f0's jump, and only the last 12 were
             # looked at, which left 590 tables unread)
-            last = next((i for i in insns[max(0, k - 2000):k][::-1]
-                         if i.operands and i.operands[0].type == X.X86_OP_REG
-                         and wide(md, i.operands[0].reg) == wide(md, base_reg)
-                         and i.mnemonic not in ("cmp", "test", "push")), None)
+            # (but not a write on an exit path that ends before the jump: the restore `mov rsi,
+            # [rsp + 0x18]` before a `ret` between the prologue's lea and strpbrk's third table
+            # (FUN_140272e20) hid the base, the table went unread, and tools/protos.py read the
+            # `pslldq xmm2` ladder it jumps into as an xmm2 parameter, 2026-10-18)
+            last = None
+            ended = False
+            for i in insns[max(0, k - 2000):k][::-1]:
+                if i.mnemonic in ("ret", "jmp") or i.mnemonic.startswith("rep") and i.mnemonic.endswith("ret"):
+                    ended = True
+                    continue
+                if (i.operands and i.operands[0].type == X.X86_OP_REG
+                        and wide(md, i.operands[0].reg) == wide(md, base_reg)
+                        and i.mnemonic not in ("cmp", "test", "push")):
+                    if ended and not (i.mnemonic == "lea" and i.operands[1].type == X.X86_OP_MEM
+                                      and i.operands[1].mem.base == X.X86_REG_RIP):
+                        continue
+                    last = i
+                    break
             if last is None or not (last.mnemonic == "lea" and last.operands[1].mem.base == X.X86_REG_RIP
                                     and last.address + last.size + last.operands[1].mem.disp == b.base):
                 continue
@@ -120,6 +135,25 @@ def main() -> None:
                 if i.mnemonic == "cmp" and len(i.operands) == 2 and i.operands[1].type == X.X86_OP_IMM:
                     bound = i.operands[1].imm
                     break
+            if bound is None:
+                # (a later table on an index already bounded: FUN_14161e960 tests `cmp r8d, 0xf;
+                # ja` once and jumps through four more tables on r8, or on `movsxd rax, r8d` and
+                # `mov ebp, r8d` copies of it, the nearest compare well past the twelve looked at
+                # above. Ghidra lost those tables, and the decompilation 29 of its 34 calls,
+                # 2026-10-18. The index back through its register copies, to a `cmp` of one of
+                # them with an `ja` after it; the targets are checked below as for any table)
+                chain = {wide(md, idx_reg)}
+                run = insns[max(0, k - 400):k]
+                for p, i in reversed(list(enumerate(run))):
+                    if (i.mnemonic in ("mov", "movsxd", "movzx") and len(i.operands) == 2
+                            and i.operands[0].type == X.X86_OP_REG and i.operands[1].type == X.X86_OP_REG
+                            and wide(md, i.operands[0].reg) in chain):
+                        chain.add(wide(md, i.operands[1].reg))
+                    elif (i.mnemonic == "cmp" and len(i.operands) == 2 and i.operands[0].type == X.X86_OP_REG
+                          and i.operands[1].type == X.X86_OP_IMM and wide(md, i.operands[0].reg) in chain
+                          and p + 1 < len(run) and run[p + 1].mnemonic == "ja"):
+                        bound = i.operands[1].imm
+                        break
             if bound is None or not (0 <= bound < 4096):
                 continue
             n = bound + 1
@@ -146,6 +180,11 @@ def main() -> None:
                     seen.add(t)
                     ordered.append(t)
             out[hexa(j.address)] = [hexa(t) for t in ordered]
+            # (and where the tables lie: they sit in .text, and decoded as code their bytes look
+            # like jumps, tools/retcheck.py's jumps over junk among them)
+            tables.append((table, table + 4 * (max(idx) + 1)))
+            if bytes_at is not None:
+                tables.append((bytes_at, bytes_at + n))
             if bytes_at is not None:
                 two += 1
             else:
@@ -153,7 +192,8 @@ def main() -> None:
     path = write_facts("switches", {
         "rule": "an indirect jmp through an image-relative 32-bit table (optionally indexed by a byte table) "
                 "after a bound check; every target inside the jump's own function",
-        "jumps": out})
+        "jumps": out,
+        "tables": [[hexa(lo), hexa(hi)] for lo, hi in sorted(set(tables))]})
     print(f"{len(out)} jump tables ({one} one-level, {two} two-level), {dropped} dropped -> {path}")
 
 

@@ -432,6 +432,13 @@ class CallArgs:
         # no-op `_guard_check_icall` that way was counted lost, 2026-10-17)
         regs: dict[int, int] = {}
         slots: dict[int, int] = {}
+        # (what a call leaves of them: the callee-saved registers, and the frame slots. Cleared
+        # whole at a call and at every jump, FUN_14227fec0's `lea r15, [FUN_140215350]`, stored to
+        # [rsp + 0x50], reloaded into rax and called only when rax differs from r15 (a
+        # std::function's manager against the trivial one), was two calls lost, and the function
+        # stubbed; the decompiler had proved them dead, 2026-10-18)
+        volatile = {x86.X86_REG_RAX, x86.X86_REG_RCX, x86.X86_REG_RDX, x86.X86_REG_R8, x86.X86_REG_R9,
+                    x86.X86_REG_R10, x86.X86_REG_R11}
         n = 0
         for i in f.ins:
             ops = i.operands
@@ -442,7 +449,8 @@ class CallArgs:
                         o.type == x86.X86_OP_MEM and o.mem.base == x86.X86_REG_RSP and o.mem.index == 0
                         and o.mem.disp in slots)
                     n += not known
-                regs.clear()
+                for r in volatile:
+                    regs.pop(r, None)
                 continue
             if i.mnemonic == "lea" and len(ops) == 2 and ops[1].mem.base == x86.X86_REG_RIP:
                 regs[ops[0].reg] = i.address + i.size + ops[1].mem.disp
@@ -454,9 +462,20 @@ class CallArgs:
                 else:
                     slots.pop(ops[0].mem.disp, None)
                 continue
-            if ops and ops[0].type == x86.X86_OP_REG:
+            if i.mnemonic == "mov" and len(ops) == 2 and ops[0].type == x86.X86_OP_REG \
+                    and ops[1].type == x86.X86_OP_MEM and ops[1].mem.base == x86.X86_REG_RSP \
+                    and ops[1].mem.index == 0 and ops[1].mem.disp in slots and ops[0].size == 8:
+                # (a slot's known address loaded back into a register)
+                regs[ops[0].reg] = slots[ops[1].mem.disp]
+                continue
+            if i.mnemonic == "mov" and len(ops) == 2 and ops[0].type == x86.X86_OP_REG \
+                    and ops[1].type == x86.X86_OP_REG and ops[1].reg in regs and ops[0].size == 8:
+                regs[ops[0].reg] = regs[ops[1].reg]
+                continue
+            # (an instruction that only reads its first operand leaves it: `cmp rax, r15`)
+            if ops and ops[0].type == x86.X86_OP_REG and i.mnemonic not in ("cmp", "test", "push", "bt"):
                 regs.pop(ops[0].reg, None)
-            if i.group(x86.X86_GRP_JUMP) or i.mnemonic.startswith(("push", "pop", "sub", "add")) and ops \
+            if i.mnemonic.startswith(("push", "pop", "sub", "add")) and ops \
                     and ops[0].type == x86.X86_OP_REG and ops[0].reg == x86.X86_REG_RSP:
                 slots.clear()
         return n

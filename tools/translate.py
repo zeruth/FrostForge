@@ -110,12 +110,14 @@ WINDOWS_TYPES = {
     "HKL", "HGDIOBJ", "LPWSADATA", "LPCANDIDATELIST", "LPCOMPOSITIONFORM", "LPCANDIDATEFORM",
     "PEXCEPTION_RECORD", "BCRYPT_ALG_HANDLE", "PSLIST_HEADER", "PBYTE", "PUCHAR", "LPWORD", "PUINT", "PCWSTR",
     "NTSTATUS", "wctype_t", "sockaddr", "timeval", "DATA_BLOB", "CRYPTPROTECT_PROMPTSTRUCT",
+    # (SetThreadExecutionState's, winnt.h: FUN_14205dfb0, a pointer leaf, 2026-10-19)
+    "EXECUTION_STATE",
 }
 PRIMITIVE |= WINDOWS_TYPES
 # the C library's own structs and types, which src/gen/Ghidra.h names the way Ghidra writes them
 PRIMITIVE |= {"tm", "FILE", "_onexit_t", "__time32_t", "__time64_t", "intptr_t", "uintptr_t", "time_t", "size_t", "mbstate_t"}
-# Ghidra.h's 16-byte value (tools/v16.py)
-PRIMITIVE |= {"gen_v16"}
+# Ghidra.h's 16-byte value (tools/v16.py), and its 32-byte storage (an AVX2 kernel's parameters)
+PRIMITIVE |= {"gen_v16", "gen_v32"}
 HARD = [
     ("register the decompiler lost track of", re.compile(r"\b(in_|unaff_|extraout_)\w+")),
     ("SIMD union", re.compile(r"\._\d+_\d+_")),
@@ -169,7 +171,30 @@ CRT_BY_ADDR = {0x1425bf3b0: "memmove", 0x1425bfa50: "memset",
                # (their template a runtime internal, which game code reaching them left a stub,
                # 2026-10-18): common_fseek with a 32-bit offset, and common_exit with the full
                # cleanup and with none (the UCRT's _crt_exit_full_cleanup, _crt_exit_no_cleanup)
-               0x140279378: "fseek", 0x14027258c: "exit", 0x140272544: "_exit"}
+               0x140279378: "fseek", 0x14027258c: "exit", 0x140272544: "_exit",
+               # and the rest game code calls, each read off its body (2026-10-18): translated,
+               # they ran on the reference runtime's per-thread data and locks, which FrostLite
+               # never sets up, through internals stubbed "called, not in the work set" (16).
+               # rand: the 0x343fd/0x269ec3 step on __acrt_getptd's seed at +0x28
+               0x142415c90: "rand",
+               # localeconv: __acrt_getptd's locale info (+0x90) updated, its lconv (+0xf8)
+               # returned (Lua's read_numeral reads the decimal point through it)
+               0x14028ecc4: "localeconv",
+               # _mktime64 and _mkgmtime64: `return common_mktime(tm, true / false)` (Lua::time)
+               0x1424151f4: "_mktime64", 0x1424151ec: "_mkgmtime64",
+               # wcstombs: `return _wcstombs_l_helper(dst, src, n, NULL)`
+               0x142419228: "wcstombs",
+               # _errno and __doserrno: __acrt_getptd_noexit's +0x20 and +0x24, or the globals
+               # without one. FID calls both __doserrno (__doserrno_140283a54, _140283a34)
+               0x140283a54: "_errno", 0x140283a34: "__doserrno",
+               # _invalid_parameter_noinfo: `return _invalid_parameter(0, 0, 0, 0, 0)`, and the
+               # noreturn form, which then calls _invoke_watson
+               0x1402727ac: "_invalid_parameter_noinfo", 0x1402727cc: "_invalid_parameter_noinfo_noreturn",
+               # strpbrk, the SSE one (tools/oracle.py: libc's answer in 8 cases, the empty set and
+               # Lua's SPECIALS among them; not strstr). Its tail is a jump into a `pslldq xmm2`
+               # ladder, which tools/protos.py read as an xmm2 input: a float third parameter, and
+               # its callers (Lua's str_find_aux) passed `in_XMM2_Da`, 2026-10-18
+               0x140272e20: "strpbrk"}
 # reference runtime entry points code stores as pointers, jumped to the port's own runtime: a
 # call through the pointer reaches the same routine a direct call does. curl_global_init
 # (FUN_14216a080) fills curl's allocator table with these; without them every curl allocation
@@ -187,7 +212,9 @@ CRT_ENTRY = {0x140286974: "malloc", 0x140279d94: "free", 0x140289938: "realloc",
              # FID's Global::_endthreadex: its body is common_end_thread, which CRT_TEMPLATES
              # names _endthreadex, which resolved back to this function: translated it called
              # itself until the stack ran out (C4717, 2026-10-17)
-             0x140272d6c: "_endthreadex"}
+             0x140272d6c: "_endthreadex",
+             # _msize_base: HeapSize on the reference CRT heap handle, as malloc's (2026-10-18)
+             0x140295920: "_msize"}
 # (the CRT_ENTRY routines that are Windows APIs, declared as imports in translated.h)
 CRT_ENTRY_IMPORTS = {"GetSystemTimePreciseAsFileTime"}
 # the UCRT's internal templates the corpus names, as the public routine each one implements:
@@ -380,7 +407,11 @@ VFTABLES: dict[str, int] = {}
 
 
 GLOBAL_CAST = re.compile(r"\b_?DAT_([0-9a-f]{9})\s*(?:==|!=|=)\s*\(((?:\w+ )*\w+ ?\*+)\)")
-GLOBAL_COPY = re.compile(r"\b(\w+) = (?:\([^()]*\))?_?DAT_([0-9a-f]{9});|\b_?DAT_([0-9a-f]{9}) = (?:\([^()]*\))?(\w+);")
+# (the local itself, not a store through it: `*pfVar34 = _DAT_14297aad0;` writes the float the
+# global holds through a float pointer, and read as a copy into pfVar34 it typed the global
+# `float *`, C2440 in FUN_14247b930 and FUN_14249eec0, 2026-10-18)
+GLOBAL_COPY = re.compile(r"(?<![\w*.>\]])(\w+) = (?:\([^()]*\))?_?DAT_([0-9a-f]{9});|"
+                         r"(?<![\w*.>\]&])_?DAT_([0-9a-f]{9}) = (?:\([^()]*\))?(\w+);")
 POINTER_LOCAL = re.compile(r"^\s*((?:\w+ )*\w+ ?\*+)\s*(\w+);$", re.M)
 EIGHT_BYTE = {"undefined8", "longlong", "ulonglong", "pointer", "pointer64", "double"}
 
@@ -468,7 +499,10 @@ SCALAR = re.compile(r"^(?:static\s+|extern\s+|thread_local\s+)*(?:const\s+)?(?:u
 # `longlong ******` at -0x350, which a 1-4 letter prefix left out of the frame. It was the child
 # pointer of a struct FUN_142578b20 builds at gen_frame + 0x18; zeroed as a separate variable, the
 # frame's slot kept stale stack bytes, and the copy of that struct followed them, 2026-10-15)
-STACK_DECL = re.compile(r"^(\s*)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local_|[a-z]+Stack_|[a-z]+StackX_)(res)?([0-9a-f]+))"
+# (`StackY_` is entry-relative too, below the frame Ghidra sized: the stack pointer after a
+# __chkstk, `puVar26 = auStackY_988;` and the locals at `puVar26 + 0x60`. Off the frame it was an
+# 8-byte array of its own and those stores overran it, C4789 in FUN_1412fd5c0, 2026-10-18)
+STACK_DECL = re.compile(r"^(\s*)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local_|[a-z]+Stack_|[a-z]+StackX_|[a-z]+StackY_)(res)?([0-9a-f]+))"
                         r"\s*(?:\[\s*(\w+)\s*\])?\s*;[^\n]*\n", re.M)
 
 
@@ -476,8 +510,10 @@ STACK_DECL = re.compile(r"^(\s*)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local_|[a-z]+St
 # pointers, by the (1-based) positions of those parameters
 CRT_POINTER_PARAMS = {"memmove": (1, 2), "memcpy": (1, 2), "memset": (1,), "memcmp": (1, 2), "free": (1,),
                       "_free_base": (1,), "realloc": (1,), "_realloc_base": (1,), "qsort": (1,),
-                      "fwrite": (1, 4), "fread": (1, 4), "strlen": (1,), "strcmp": (1, 2), "strcpy": (1, 2)}
-INT32_TYPES = r"(?:int|uint|undefined4|ushort|short|undefined2|byte|char|undefined1|uchar|word|dword)"
+                      "fwrite": (1, 4), "fread": (1, 4), "strlen": (1,), "strcmp": (1, 2), "strcpy": (1, 2),
+                      # (FUN_140291ca8 hands _msize the block as an integer: C4022 at 3 sites)
+                      "_msize": (1,), "strpbrk": (1, 2), "wcstombs": (1, 2)}
+INT32_TYPES = r"(?:int|uint|undefined4|int3|uint3|undefined3|ushort|short|undefined2|byte|char|undefined1|uchar|word|dword)"
 
 
 def call_args(body: str, start: int) -> tuple[list[tuple[int, int]], int]:
@@ -529,8 +565,12 @@ def explicit_casts(body: str, params: list[str]) -> str:
     body = "".join(out)
     # C4311: the pointer-typed names (locals, parameters), then a 32-bit cast of one or of a cast
     # to a pointer
-    pointers = set(re.findall(r"^\s*(?:const\s+)?\w+\s*\*+\s*(\w+)\s*;", body, re.M)) \
-        | {m.group(1) for p in params if (m := re.search(r"\*\s*(\w+)\s*$", p))}
+    # (initialized ones too, `undefined1 *gen_rsp = (undefined1 *)_AddressOfReturnAddress();`, and
+    # pointers to arrays, `undefined1 (*pauVar23) [32];`: C4311 in FUN_1413444e0, FUN_1401a9730)
+    pointers = set(re.findall(r"^\s*(?:const\s+)?\w+\s*\*+\s*(\w+)\s*(?:=[^;\n]*)?;", body, re.M)) \
+        | set(re.findall(r"^\s*(?:const\s+)?\w+\s*\(\s*\*+\s*(\w+)\s*\)\s*\[\w+\]\s*(?:=[^;\n]*)?;", body, re.M)) \
+        | {m.group(1) or m.group(2) for p in params
+           if (m := re.search(r"\*\s*(\w+)\s*$|\(\s*\*+\s*(\w+)\s*\)\s*\[\w+\]\s*$", p))}
     if pointers:
         names = "|".join(map(re.escape, sorted(pointers, key=len, reverse=True)))
         body = re.sub(rf"(\({INT32_TYPES}\))\s*(?=(?:{names})\b(?!\s*(?:\[|->|\.)))", r"\1(longlong)", body)
@@ -554,6 +594,149 @@ def explicit_casts(body: str, params: list[str]) -> str:
 
 
 DECL_KEYWORDS = {"return", "goto", "break", "continue", "case", "default", "else", "do", "extern", "static", "typedef"}
+
+
+# the runtime routines the port calls instead (named_callee's strings) that return nothing: a tail
+# call to one carries no result
+VOID_RUNTIME = {"free", "_free_base", "_endthreadex", "_exit", "exit", "abort", "qsort", "srand",
+                "_invalid_parameter_noinfo", "_invalid_parameter_noinfo_noreturn",
+                "_Init_thread_header", "_Init_thread_footer", "_Init_thread_abort", "_CxxThrowException",
+                "terminate", "_lock", "_unlock"}
+
+TAIL_CALL_STMT = re.compile(r"^([ \t]*)((?:thunk_)?FUN_[0-9a-f]{9}\([^;]*\)|[A-Za-z_]\w*(?:::~?\w+)+\([^;]*\)"
+                            r"|\(\*+\(code \*+\)[^;]*\)\([^;]*\));", re.M)
+
+
+def _block_open(body: str, close: int) -> int | None:
+    """The `{` a `}` at `close` closes (strings and comments do not hold braces in Ghidra's C
+    often enough to matter, but string literals are skipped)."""
+    depth, i, in_str = 0, close, False
+    while i >= 0:
+        c = body[i]
+        if c == '"' and (i == 0 or body[i - 1] != "\\"):
+            in_str = not in_str
+        elif not in_str:
+            if c == "}":
+                depth += 1
+            elif c == "{":
+                depth -= 1
+                if depth == 0:
+                    return i
+        i -= 1
+    return None
+
+
+def _block_close(body: str, open_: int) -> int | None:
+    depth, i, in_str = 0, open_, False
+    while i < len(body):
+        c = body[i]
+        if c == '"' and body[i - 1] != "\\":
+            in_str = not in_str
+        elif not in_str:
+            if c == "{":
+                depth += 1
+            elif c == "}":
+                depth -= 1
+                if depth == 0:
+                    return i
+        i += 1
+    return None
+
+
+def carry_tail_calls(body: str, returns_value=lambda call: True) -> str:
+    """A function Ghidra calls void because it ends in a tail call hands its callee's result back
+    in rax: each call statement from which control goes straight to a `return;` or the end of the
+    function returns that call's value. Straight means through nothing but the ends of if and
+    else blocks (an `else` block after one is skipped, the branch not taken) and labels; the end
+    of a loop or a switch goes elsewhere, and any other statement may change rax."""
+    ends = body.rstrip()
+    fn_end = len(ends) - 1 if ends.endswith("}") else None
+    edits = []
+    for m in TAIL_CALL_STMT.finditer(body):
+        # (the text before, less the comments between: Ghidra's `/* WARNING: Treating indirect
+        # jump as call */` above a tail jump through a pointer, FUN_14031ef60, FUN_14057d1b0)
+        before = body[:m.start()].rstrip()
+        # (not a call that does not return, `_endthreadex(0)` under Ghidra's warning: there is no
+        # result, and `return (undefined8)` of a void one was C2069 in FUN_1415aed50; nor one to
+        # a function the translation declares void)
+        if re.search(r"/\* WARNING: Subroutine does not return \*/\s*$", before) or not returns_value(m.group(2)):
+            continue
+        while before.endswith("*/") and "/*" in before:
+            before = before[:before.rfind("/*")].rstrip()
+        if before and before[-1] not in ";{}:":
+            continue    # (the right side of an assignment begun on the line above)
+        i = m.end()
+        tail = False
+        while True:
+            # (whitespace, comments and labels pass)
+            n = re.match(r"(?:\s+|/\*.*?\*/|//[^\n]*|\b(?:LAB|code_r0x)\w*:(?!:))*", body[i:], re.S)
+            i += n.end()
+            if body.startswith("return", i) and re.match(r"return\s*;", body[i:]):
+                tail = True
+                break
+            if i >= len(body) or body[i] != "}":
+                break
+            if fn_end is not None and i == fn_end:
+                tail = True
+                break
+            o = _block_open(body, i)
+            if o is None:
+                break
+            opener = body[body.rfind("\n", 0, o) + 1:o]
+            if not re.match(r"\s*(?:\}\s*)?(?:else\b|if\s*\()", opener) or re.match(r"\s*do\b", opener):
+                break
+            i += 1
+            # (the branch not taken: an `else` or `else if` block after this one)
+            while True:
+                e = re.match(r"\s*else\b(?:\s*if\s*\([^{]*\))?\s*\{", body[i:])
+                if not e:
+                    break
+                c = _block_close(body, i + e.end() - 1)
+                if c is None:
+                    break
+                i = c + 1
+        if tail:
+            edits.append((m.start(), m.end(), f"{m.group(1)}return (undefined8){m.group(2)};"))
+    for s, e, text in reversed(edits):
+        body = body[:s] + text + body[e:]
+    return body
+
+
+NON_SCALAR_RETURNS = {"float", "double", "longdouble", "gen_v16", "gen_v32", "tm", "FILE", "mbstate_t"}
+
+
+def fall_off_return(body: str, ret: str) -> str:
+    """A non-void function whose last top-level statement is no return: a path where the
+    reference reaches its `ret` with whatever RAX held.
+
+    Ghidra drops the value when nothing it tracks wrote RAX on that path: the `test; je ret`
+    before a tail jump through a pointer (FUN_141f80d10, FUN_14228c9b0), a stack-cookie compare
+    whose failure call was stripped (FUN_1402bd150), an anti-tamper guard removed whole
+    (FUN_14029fae0). C4715/C4716 in the 2026-10-18 build, and an undefined return value as C.
+    RAX's last known value is what the reference returns (gen_rax, where the translation keeps
+    it), otherwise zero, as zero_locals gives the decompiler's other unwritten values."""
+    lines = body.rstrip().split("\n")
+    if not lines or lines[-1].strip() != "}":
+        return body
+    last = None
+    for l in reversed(lines[:-1]):
+        s = l.strip()
+        if not s or s.startswith("/*") or s.startswith("*") or s.startswith("//"):
+            continue
+        indent = len(l) - len(l.lstrip(" "))
+        if indent <= 2:
+            last = l
+            break
+    if last is not None and re.match(r"\s{2}(?:return\b|__assume\(0\);)", last):
+        return body
+    if ret not in NON_SCALAR_RETURNS and "*" not in ret and re.search(r"\bulonglong gen_rax\b", body):
+        value = f"({ret})gen_rax"
+    elif "*" in ret:
+        value = f"({ret})0"
+    else:
+        value = None
+    tail = f"  return {value};\n" if value else f"  {{\n    {ret} gen_fall = {{0}};\n    return gen_fall;\n  }}\n"
+    return "\n".join(lines[:-1]) + "\n" + tail + "}\n"
 
 
 def zero_locals(body: str) -> str:
@@ -805,11 +988,30 @@ def register_upper_halves(text: str) -> str:
     # (and a callee-saved register handed on as a call argument as it came in, `unaff_R15` in a
     # stack argument slot a callee reads past what the caller set: nothing of this function's)
     saved = set(re.findall(r"\bunaff_(?:R(?:BX|BP|SI|DI)|R1[2-5][DWB]?|E(?:BX|BP|SI|DI))\b", text))
-    for name in upper | set(ARG_REGISTER.findall(text)) | saved:
+    # (and what a call left in a register, read only for the bytes above a low part the caller
+    # writes itself: `CONCAT71((int7)((ulonglong)extraout_RDX >> 8),1)`, `setg dl` before the
+    # next call, whose callee spills all of rdx and reads dl. The caller wrote only the byte:
+    # what lies above it is nothing the compiler kept, whatever the call before left there
+    # (14138db20, 141863530, 141874be0, 141cfebf0, 14179cc90, 1412a7350, 2026-10-18). Read whole,
+    # as an argument or a value, it stays refused)
+    left = set(re.findall(r"\bextraout_(?:R[A-D]X|R[SD]I|RBP|R(?:8|9|1[0-5])|E[A-D]X|E[SD]I|R(?:8|9|1[0-5])D)(?:_\d+)?\b",
+                          text))
+    for name in upper | set(ARG_REGISTER.findall(text)) | saved | left:
         uses = list(re.finditer(rf"\b{name}\b", text))
         decl = [u for u in uses if re.match(rf"[ \t]*[\w ]+\**\s*{name};$", text[text.rfind("\n", 0, u.start()) + 1:
                                                                                text.find("\n", u.end())])]
         rest = [u for u in uses if u not in decl]
+        # (a plain store of a value to it reads nothing: `in_register_00000014 = 0;`, what
+        # leftovers() left of `in_register_00000014 = extraout_var;` after a call, the bytes above
+        # the edx it gave a virtual call. Taken for a read, FUN_14058a4a0 and two copies of it stayed
+        # refused, 2026-10-18. Such statements go with the variable)
+        stores = [u for u in rest if re.fullmatch(r"[ \t]*", text[text.rfind("\n", 0, u.start()) + 1:u.start()])
+                  # (zero only: the value every read becomes, so nothing it stored is lost; or
+                  # `extraout_var`, the bytes of a call's result above it, which rax_upper_parts()
+                  # makes that zero afterwards)
+                  and re.match(r"\s*=\s*(?:\(\w+\))?\s*(?:0|extraout_var(?:_\d+)?);[ \t]*$",
+                               text[u.end():text.find("\n", u.end())])]
+        rest = [u for u in rest if u not in stores]
         if name in upper:
             ok = all(re.search(r"CONCAT\d+\(\s*(?:\(\w+\))?\s*$", text[max(0, u.start() - 24):u.start()])
                      # (the high bytes above any low part: `<< 0x20`, `<< 0x10`, `<< 8`, FUN_14138f9d0)
@@ -820,13 +1022,38 @@ def register_upper_halves(text: str) -> str:
             # the function wrote 4 bytes of and read 8, which Ghidra takes for the register's)
             # (or the bytes above what the call is given, as a CONCAT's high part:
             # `CONCAT31((int3)((uint)in_R8D >> 8),0x24)`, r8b set and the rest left, FUN_141860a50)
-            ok = all(_is_call_argument(text, u.start(), u.end())
-                     or (re.search(r"\(\(ulonglong\)\s*$", text[max(0, u.start() - 16):u.start()])
+            ok = all((name not in left and _is_call_argument(text, u.start(), u.end()))
+                     # (the upper bytes as a value of their own: `(undefined7)((ulonglong)extraout_RDX
+                     # >> 8)`, which a CONCAT puts back above a byte further on)
+                     or (name in left and re.search(r"\(undefined[67]\)\s*\(\(ulonglong\)\s*$",
+                                                    text[max(0, u.start() - 28):u.start()])
+                         and re.match(r"\s*>>\s*(?:8|0x8|0x10)\)", text[u.end():u.end() + 12]))
+                     or (name not in left and re.search(r"\(\(ulonglong\)\s*$", text[max(0, u.start() - 16):u.start()])
                          and re.match(r"\s*>>\s*0x[2-3][0-9a-f]\)", text[u.end():u.end() + 12]))
-                     or (re.search(r"CONCAT\d+\((?:\(\w+\)|\()*$", text[max(0, u.start() - 40):u.start()])
+                     or (name not in left and re.search(r"CONCAT\d+\((?:\(\w+\)|\()*$", text[max(0, u.start() - 40):u.start()])
                          and re.match(r"(?:\s*>>\s*(?:0x)?[0-9a-f]+)?\)*,", text[u.end():u.end() + 16]))
+                     # (a call's leftover only above a byte or a word the caller writes itself, which
+                     # does not extend: a 4-byte write zero-extends, and an upper half read whole can
+                     # be a second result the whole-program build hands back in rdx)
+                     or (name in left and re.search(r"CONCAT(?:71|62|31|22|11)\((?:\(\w+\)|\()*$",
+                                                    text[max(0, u.start() - 40):u.start()])
+                         and re.match(r"\s*>>\s*(?:8|0x8|0x10)\)*,", text[u.end():u.end() + 16]))
+                     # (or with its low bytes masked off, the bytes above a byte the function writes
+                     # into a callee-saved register it borrows: `uVar12 = unaff_R15 &
+                     # 0xffffffffffffff00;` then the byte or'd in, FUN_141225d80; `unaff_ESI &
+                     # 0xffffff00`, FUN_141ae8460. Above the byte is the caller's, 2026-10-18)
+                     # (a call's leftover too: `uVar21 = extraout_RCX & 0xffffffffffffff00;` before a
+                     # byte goes into it, FUN_1418555d0)
+                     or ((name in saved or name in left)
+                         and re.match(r"\s*&\s*0x(?:ffffffffffffff|ffffff)00\b", text[u.end():u.end() + 24]))
                      for u in rest)
         if rest and ok:
+            for u in stores:
+                # (blanked to the same length, so the offsets of the other uses hold)
+                line_start = text.rfind("\n", 0, u.start()) + 1
+                line_end = text.find("\n", u.end())
+                n = line_end - line_start
+                text = text[:line_start] + ("/*" + " " * (n - 4) + "*/" if n >= 4 else " " * n) + text[line_end:]
             for u in decl:
                 line_start = text.rfind("\n", 0, u.start()) + 1
                 line_end = text.find("\n", u.end())
@@ -1522,6 +1749,12 @@ def decompiler_temps(text: str) -> str:
         # (a write to one, the restore before a ret, goes: there is nothing to restore)
         text = re.sub(rf"^[ \t]*{n}\s*=(?!=)[^;]*;\n", "", text, flags=re.M)
         text = re.sub(rf"\b{n}\b", "0", text)
+    # and a whole one the function borrows (saved in its prologue, restored before it returns) as
+    # its own scratch: `unaff_XMM6`..`unaff_XMM11` in FUN_1423a9a70, each written before any lane is
+    # read; FUN_141633ad0's four lanes stored, then read (5 functions, 2026-10-18). A local of the
+    # function's, starting at zero as every local does (zero_locals), whatever the caller left
+    for n in set(re.findall(r"\bunaff_XMM\d+\b(?!_)", text)):
+        text = re.sub(rf"\b{n}\b", f"gen_{n}", text)
     # the lanes of a float or double argument above it (`in_XMM0_Db` in the sincos, which puts
     # its argument into a vector whole): undefined in the ABI, zero
     # (and of an xmm register that carries no argument at all, `in_XMM2_Db` in a one-argument
@@ -1539,6 +1772,18 @@ def decompiler_temps(text: str) -> str:
                     continue
                 text = re.sub(rf"^[ \t]*[\w ]+\**[ \t]*{n};\n", "", text, flags=re.M)
                 text = re.sub(rf"\b{n}\b", "0", text)
+    # a register xor'd with itself, `pxor xmm5, xmm5` as Ghidra folds it into an expression of the
+    # lanes it never saw set: `CONCAT13(in_XMM5_Bd,...,in_XMM5_Ba) ^ CONCAT13(in_XMM5_Bd,...)`, zero
+    # whatever the lanes held (FUN_1423f7ed0, 2026-10-18). Only an expression of such lanes and
+    # CONCATs, which has no effect of its own; the lanes nothing else reads go with it
+    lane = r"in_XMM\d+_[A-Z][a-z]"
+    xor_self = re.compile(rf"((?:CONCAT\d+\(|{lane}|[,()\s])+?)\s*\^\s*\1(?![\w(])")
+    if re.search(lane, text):
+        text = xor_self.sub(lambda m: "0" if re.search(lane, m.group(1)) and m.group(1).count("(") == m.group(1).count(")")
+                            else m.group(0), text)
+        for n in set(re.findall(rf"\b{lane}\b", text)):
+            if len(re.findall(rf"\b{n}\b", text)) == 1:
+                text = re.sub(rf"^[ \t]*[\w ]+\**[ \t]*{n};\n", "", text, flags=re.M)
     text = int_variants(duplicate_labels(deref_locals(stack_values(text))))
     # a data label Ghidra named by its type (`UINT_1419c4b3c`, a byte table a switch reads): the
     # global at that address, as any DAT_
@@ -1846,6 +2091,40 @@ def return_address_args(text: str) -> str:
     return re.sub(r"\bunaff_retaddr\b", f"(({m.group(1).strip()})_ReturnAddress())", body)
 
 
+def array_copies(text: str) -> str:
+    """One local array assigned whole to another, `auVar2 = local_b0;` for two `uint [2]` (an
+    8-byte copy, FUN_14250e390), is no C (C2106 once local_b0 is a frame slot): the bytes copied,
+    as many as the destination holds."""
+    # (the size from the declaration: once a frame slot, the array is a pointer expression, whose
+    # sizeof is a pointer's)
+    arrays = {m.group(2): f"sizeof({m.group(1).strip()}) * {m.group(3)}"
+              for m in re.finditer(r"^[ \t]*((?:\w+ )+?\**)\s*(\w+)\s*\[\s*(\d+)\s*\];$", text, re.M)}
+    if len(arrays) < 2:
+        return text
+    return re.sub(r"^([ \t]*)(\w+) = (\w+);$",
+                  lambda m: f"{m.group(1)}memcpy({m.group(2)}, {m.group(3)}, {arrays[m.group(2)]});"
+                  if m.group(2) in arrays and m.group(3) in arrays else m.group(0), text, flags=re.M)
+
+
+def v32_params(text: str) -> str:
+    """A parameter Ghidra types a pointer to 32 bytes, `undefined1 (*param_1) [32]` (declared
+    gen_v32 * by signature()): `*param_1` is its array, which C decays to its first byte's address,
+    so `*param_1 + param_2` steps bytes and `(*param_1)[i]` reads one. On gen_v32 neither is C
+    (C2088, 11 AVX2 kernels, 2026-10-18): the bytes, through a byte pointer."""
+    head, sep, body = text.partition("{")
+    names = re.findall(r"undefined1?\s*\(\*(param_\d+)\)\s*\[32\]", head)
+    if not names or not sep:
+        return text
+    def unary(m):
+        # (a dereference, not `x * param_1`: what comes before the `*` is no operand's end)
+        prev = body[:m.start()].rstrip()[-1:]
+        return m.group(0) if prev and (prev.isalnum() or prev in "_)]") else f"((undefined1 *)({m.group(1)}))"
+
+    for n in names:
+        body = re.sub(rf"\*\s*({n})\b(?!\s*=[^=])", unary, body)
+    return head + sep + body
+
+
 def crt_block(a: int) -> bool:
     """In one of the image's two runs of C runtime code (vcruntime and the UCRT, linked in one
     piece each: 0x14026b400.., 0x14240ee60..)."""
@@ -2118,7 +2397,11 @@ def leftovers(text: str, callee_of, facts: dict[int, dict[str, list]], relied: d
     # read only where uVar7 holds something else (39 such reads, 2026-10-18). Its value is never
     # used for anything the reference computes, so any value will do
     for name in sorted(set(re.findall(r"\bextraout_\w+\b", text[body_at:]))):
-        decl = re.search(rf"^([ \t]*[\w ]+?\**[ \t]*)\b{name};$", text, re.M)
+        # (a whole xmm register is declared as Ghidra's 16-byte array, `undefined1 extraout_XMM0
+        # [16];`, which this pass runs before tools/v16.py retypes: taken for no declaration, every
+        # such merge was refused, `auVar32 = extraout_XMM0;` in FUN_140315680 with all four lanes
+        # stored before any is read, and 5 functions more, 2026-10-18)
+        decl = re.search(rf"^([ \t]*[\w ]+?\**[ \t]*)\b{name}(\s*\[\d+\])?;$", text, re.M)
         if not decl:
             continue
         if not phantom_register(text, name):
@@ -2137,9 +2420,19 @@ def leftovers(text: str, callee_of, facts: dict[int, dict[str, list]], relied: d
             if not calls:
                 continue
             target = callee_of(calls[-1].group(1))
-            if not isinstance(target, int) or reg in relied.get(target, ()):
+            if isinstance(target, int):
+                if reg in relied.get(target, ()):
+                    continue
+            elif reg in set().union(*relied.values()) if relied else False:
+                # (a call it cannot name, through a pointer or behind a cast Ghidra put first: what
+                # any call of this function leaves that is read after it, indirect ones under 0.
+                # A register live after none is the decompiler's merge, FUN_141fe3480's xmm0)
                 continue
-        text = text[:decl.start()] + f"{decl.group(1)}gen_{name} = 0;" + text[decl.end():]
+        if decl.group(2):
+            # (the array keeps its declaration; zero_locals() starts it at zero once retyped)
+            text = text[:decl.start()] + f"{decl.group(1)}gen_{name}{decl.group(2)};" + text[decl.end():]
+        else:
+            text = text[:decl.start()] + f"{decl.group(1)}gen_{name} = 0;" + text[decl.end():]
         text = re.sub(rf"\b{name}\b", f"gen_{name}", text)
     return text
 
@@ -2786,6 +3079,15 @@ def atomics(body: str) -> str:
                     cmp = b if _bare(a) == _bare(lv) else a
                     out = [f"if (GEN_ATOMIC_CAS({lv}, {new}, {cmp}) == {cmp}) {{ {extra.strip()} }}"
                            if extra.strip() else f"GEN_ATOMIC_CAS({lv}, {new}, {cmp});"]
+            # flag = old == cmp; lv = old; if (flag) { lv = new; old = cmp; }  (the memory's value
+            # read before the markers, as Ghidra hoists it, and written back as cmpxchg always
+            # writes: `xor eax, eax; lock cmpxchg [0x143479470], edi` in FUN_1422613d0's second
+            # spin loop, the same instruction its first loop decoded in another shape, 2026-10-18)
+            c = out is None and re.fullmatch(r"(\w+) = (\w+) == ([^;]+?); ([^;]+?) = \2; if \(\1\) \{ \4 = ([^;]+); "
+                                             r"\2 = \3; \}", text)
+            if c:
+                flag, old, cmp, lv, new = c.groups()
+                out = [f"{old} = GEN_ATOMIC_CAS({lv}, {new}, {cmp});", f"{flag} = {old} == {cmp};"]
             # flag = lv == 0; v = new; if (!flag) { v = lv; } lv = v;  (the same, the flag the
             # other way round: a spin lock's acquire, FUN_141687ed0)
             c = out is None and re.fullmatch(r"(\w+) = ([^;]+?) == (?:\([\w ]+\**\))?0x?0?; (\w+) = ([^;]+); "
@@ -3044,7 +3346,11 @@ class Translator:
         self.depth = depth
         self.cor = load_corpus()
         jf = ROOT / "build/facts/junk.json"
-        self.junk_functions = ({int(k, 16) for k in json.loads(jf.read_text())["functions"]} if jf.exists() else set())
+        junk = json.loads(jf.read_text())["functions"] if jf.exists() else {}
+        self.junk_functions = {int(k, 16) for k in junk}
+        # (the padding between functions Ghidra made functions of, tools/junkscan.py fragments():
+        # no function, so never a root, and what reaches one is the protection's junk)
+        self.fragments = {int(k, 16): v["fragment"] for k, v in junk.items() if "fragment" in v}
         # the second anti-tamper layer (tools/aegis.py): its runtime, stubbed as protection, and
         # the guards it inlines into game functions, stripped from their bodies
         layer = aegis.load(self.cor)
@@ -3336,6 +3642,21 @@ class Translator:
         # a call to an address Ghidra has no function at (`func_0x00014062aba0`): the function
         # there all the same, planned, lifted or stubbed like any other (LNK2019, Lua::GetFontInfo)
         text = re.sub(r"\bfunc_0x0*(14[0-9a-f]{7})\b", r"FUN_\1", text)
+        # (and a call to an import's `jmp [slot]` thunk that is no corpus function: the import, as a
+        # call through its slot reads. FUN_1401c9f70 calls GetAdaptersInfo through 0x14241f757,
+        # stubbed "not in the corpus", 2026-10-18)
+        def import_thunk(m):
+            t = int(m.group(1), 16)
+            if t in self.cor or not self.ref.is_code(t) or self.ref.image[self.ref.off(t)] != 0xFF \
+                    or self.ref.image[self.ref.off(t) + 1] != 0x25:
+                return m.group(0)
+            slot = t + 6 + struct.unpack_from("<i", self.ref.image, self.ref.off(t) + 2)[0]
+            imp = self.import_slots().get(slot)
+            if imp is None:
+                return m.group(0)
+            # (the DLL named as Ghidra names a regular import, delay_imports() as well)
+            return f"(*Import::{imp[0].rsplit('.', 1)[0].upper()}_DLL::{imp[1]})("
+        text = re.sub(r"\bFUN_(1[0-9a-f]{8})\s*\(", import_thunk, text)
         # a local typed by an import's own function type (`DefWindowProcW *local_50;`, holding
         # `Import::USER32_DLL::DefWindowProcW`): a code pointer
         for imp in set(re.findall(r"\bImport::\w+::(\w+)", text)):
@@ -3458,6 +3779,12 @@ class Translator:
             if re.search(rf"^\s*[\w ]+\*+\s*{var};$", text, re.M):
                 text = text.replace(f"switch({var})", f"switch((longlong){var})")
         text = strip_retcheck(text)[0]
+        # (and the return address read outside the checks just stripped, which the rule above left
+        # while they were there: Lua::C_LFGList::UpdateListing hands it to its usage error and keeps
+        # its high half in a local, 2026-10-18)
+        if "unaff_retaddr" in text and "14261a0b0" not in text and "142618df8" not in text:
+            text = re.sub(r"^[ \t]*[\w ]+\*?\s*unaff_retaddr;\n", "", text, flags=re.M)
+            text = re.sub(r"\bunaff_retaddr\b", "((longlong)_ReturnAddress())", text)
         if a in self.guarded:
             text, status = aegis.strip_guards(text, self.protection_hex)
             if status.startswith("kept"):
@@ -3512,6 +3839,8 @@ class Translator:
         text = return_address_args(text)
         text = global_pieces(text)
         text = code_as_bytes(text)
+        text = array_copies(text)
+        text = v32_params(text)
         return self.recover_arguments(a, self.restore_lengths(text))
 
     # the image's C++ static initializers: the table FUN_14026b874 hands _initterm
@@ -4038,6 +4367,10 @@ class Translator:
         # (a pointer to 16 bytes, `undefined1 (*param_2) [16]`, the type the decompiler infers for
         # a pointer SSE loads through: Ghidra.h's gen_v16, tools/v16.py; 20 functions stubbed)
         params = [re.sub(r"^undefined1? \(\*(\w+)\) \[16\]$", r"gen_v16 *\1", p.strip()) for p in params]
+        # (and to 32, `undefined1 (*param_1) [32]`, what an AVX2 kernel loads a ymm through:
+        # Ghidra.h's gen_v32 storage; read as a type word it was "a type C does not know
+        # ((*param_1))", FUN_142400370 and FUN_1424009d0, 2026-10-18)
+        params = [re.sub(r"^undefined1? \(\*(\w+)\) \[32\]$", r"gen_v32 *\1", p) for p in params]
         # (and 16 bytes by value, a vector argument ApplyFacts placed in an xmm register)
         params = [re.sub(r"^undefined1? (\w+) \[16\]$", r"gen_v16 \1", p) for p in params]
         params = [p.strip() for p in params if p.strip() and p.strip() != "void"]
@@ -4202,6 +4535,13 @@ class Translator:
             if a in seen:
                 continue
             seen.add(a)
+            # (a root reached only through a pointer, data/indirect_roots.json, that the port has:
+            # the port, through its adapter, which the jump table dispatches to as to any. Taken
+            # for a function to translate, the anti-tamper frame tick and key stub, ported as the
+            # diverged no-ops in src/client, were stubbed as protection, 2026-10-19)
+            if d == 0 and a in getattr(self, "adapt_roots", ()):
+                adapt[a] = True
+                continue
             # (a function that did not compile is planned as translated, and stubbed only at
             # emission: its callees stay in the work set, so the set, the files and the
             # declarations stay as they were from one --fix round to the next)
@@ -4269,9 +4609,18 @@ class Translator:
 
         def runtime(c: int) -> bool:
             n = self.cor[c]["name"] if c in self.cor else ""
+            # (a routine sent to the port's by address is the runtime's as well: under the CRT's
+            # FID-unnamed _mktime64 and wcstombs, the reference's common_mktime and
+            # _wcstombs_l_helper were translated and called __acrt_getptd, stubbed, 2026-10-18)
+            if c in CRT_BY_ADDR or c in CRT_ENTRY:
+                return True
             # (a lambda in the runtime's own code is the runtime's: __crt_seh_guarded_call's
             # `operator()` bodies, through which _close reaches _close_nolock)
             return self.is_lib(c) and ("<lambda" not in n and "operator()" not in n or crt_block(c))
+
+        def internal_callee(b: int) -> bool:
+            # a runtime internal: in the runtime's code and not one of the port's routines
+            return crt_block(b) and b not in CRT_BY_ADDR and b not in CRT_ENTRY and b not in self.crt_thunks
 
         # and a function nothing calls (an exception funclet, a slot in one of the runtime's
         # tables) that calls the runtime's internals by name: the runtime's too (the CRT's
@@ -4289,15 +4638,43 @@ class Translator:
                 if any(p.search(n) for p in internal):
                     called_internal.add(a)
                     break
-        dropped: set[int] = set(called_internal)
+            else:
+                # (or unnamed ones: vcruntime's exception filter funclets, FUN_1425d48bd calling
+                # FUN_1402703b0, which sets __vcrt_getptd's rethrow flag. Every callee internal,
+                # so a game funclet that also frees, through the port's free, is kept)
+                bs = {int(x, 16) for x in FUNREF.findall(c[c.find("{"):])} - {a}
+                if bs and all(internal_callee(b) for b in bs):
+                    called_internal.add(a)
+        # the reference's own entry: the protection's loader calls it, not code in the corpus, so
+        # it has no caller here, and the CRT startup under it (__scrt_common_main_seh, the CRT's
+        # initialization, its initializer tables) was translated and called the runtime's insides
+        # (__vcrt_uninitialize, __acrt_execute_initializers: stubs, 2026-10-18). FrostLite has its
+        # own entry and runtime
+        startup = {a for a in cands if re.sub(r"^FID_conflict[:_]", "", self.cor[a]["name"])
+                   in ("WinMainCRTStartup", "wWinMainCRTStartup", "mainCRTStartup", "wmainCRTStartup")}
+        seeds = called_internal | startup
+        # The greatest set whose every caller is the runtime's or in the set, not the least: the
+        # runtime's routines call each other (strftime's expand_time and store_winword), and grown
+        # from the outside in, neither of a pair could go first (both translated, stubs under
+        # them, 2026-10-18). Then only what the runtime or a seed reaches through the set: two game
+        # functions calling each other, otherwise reached through a vtable, are no runtime's
+        dropped: set[int] = {a for a in cands if callers.get(a)} | seeds
         changed = True
         while changed:
             changed = False
-            for a in cands - dropped:
-                cs = callers.get(a)
-                if cs and all(runtime(c) or c in dropped for c in cs):
-                    dropped.add(a)
+            for a in list(dropped - seeds):
+                if any(not runtime(c) and c not in dropped for c in callers[a]):
+                    dropped.discard(a)
                     changed = True
+        reached = set(seeds) | {a for a in dropped if any(runtime(c) for c in callers.get(a, ()))}
+        changed = True
+        while changed:
+            changed = False
+            for a in dropped - reached:
+                if any(c in reached for c in callers[a]):
+                    reached.add(a)
+                    changed = True
+        dropped = reached
         print(f"--all: {len(dropped)} runtime routines only the runtime calls, left out", file=sys.stderr, flush=True)
         return [a for a in roots if a not in dropped]
 
@@ -4547,12 +4924,35 @@ class Translator:
         memo[a] = out
         return out
 
+    def dead_check_warnings(self, a: int, text: str) -> bool:
+        """Ghidra's damage warnings all about a skipped check's dead body. The decompiler decodes
+        every block of the function before it drops the unreachable ones, and a check's crash path
+        is junk: CreateFrame's core, FUN_1424db710, warned of an overlap at 0x1424dc1ea inside its
+        second check (0x1424dbf40, skipped to 0x1424dc3b7) with nothing of it in the code, and was
+        kept as protection junk (2026-10-19). True when the body never hits bad data
+        (`halt_baddata`) and every address the warnings name lies in a listed check's span, past
+        its start's jump and before where the code resumes, in this function."""
+        head, _sep, body = text.partition("{")
+        if "halt_baddata" in body or "Control flow encountered bad instruction data" in body:
+            return False
+        named = [int(x, 16) for x in re.findall(r"overlaps instruction at \(ram,0x([0-9a-f]+)\)|Instruction at \(ram,0x([0-9a-f]+)\)",
+                                                 head) for x in x if x]
+        if not hasattr(self, "_check_spans"):
+            p = ROOT / "build/facts/retcheck.json"
+            checks = json.loads(p.read_text())["checks"] if p.exists() else {}
+            self._check_spans = sorted((int(s, 16) + 7, int(t, 16)) for s, t in checks.items() if int(t, 16) > int(s, 16) + 7)
+        root = self.ref.func_containing(a)
+        spans = [(lo, hi) for lo, hi in self._check_spans if self.ref.func_containing(lo) == root]
+        return bool(spans) and all(any(lo <= x < hi for lo, hi in spans) for x in named)
+
     def why_not(self, a: int, root: bool, demotion: bool = True) -> str | None:
         if demotion and f"{a:x}" in self.demoted:
             return "did not compile: " + self.demoted[f"{a:x}"]
         if a in self.protection:
             # (the report leaves out reasons starting "anti-tamper": protection, not code to port)
             return "anti-tamper runtime (tools/aegis.py): protection, not ported"
+        if a in self.fragments:
+            return f"anti-tamper junk between two functions, no function ({self.fragments[a]})"
         text = self.body(a)
         if text is None:
             return "not in the corpus"
@@ -4570,6 +4970,8 @@ class Translator:
             code = re.sub(r"\b(?:" + "|".join(map(re.escape, known)) + r")->", "known.", code)
         for reason, rx in HARD:
             hits = {m.group(0) for m in rx.finditer(code)} - set(upper_half_only(text)) - set(written_home_slots(text))
+            if hits and reason.startswith("a decompilation Ghidra marked") and self.dead_check_warnings(a, text):
+                continue
             if hits:
                 if a in self.junk_functions and "/* src: " not in text and reason.startswith(
                         ("register the decompiler", "bad data", "a decompilation Ghidra marked")):
@@ -4673,6 +5075,13 @@ class Translator:
         # address plus the RVA (C2065, 6 functions on 2026-10-16)
         # (its `e_program`, the DOS stub after the header, is the bytes at +0x40)
         body = re.sub(r"&?\s*\bIMAGE_DOS_HEADER_140000000\.e_program\b", "((char *)REFP(0x140000040))", body)
+        # (a field of a label Ghidra gave a structure no header has, `&UNK_140000080.field_0x4`, the
+        # PE header's machine word read through the DOS header's e_lfanew in FUN_141236c80: the
+        # address that many bytes on, and without the `&` the byte there; C2224, 2026-10-18)
+        body = re.sub(r"&\s*\b(?:UNK|DAT)_(1[0-9a-f]{8})\.field_0x([0-9a-f]+)\b",
+                      lambda m: f"((undefined1 *)REFP(0x{int(m.group(1), 16) + int(m.group(2), 16):x}))", body)
+        body = re.sub(r"\b(?:UNK|DAT)_(1[0-9a-f]{8})\.field_0x([0-9a-f]+)\b",
+                      lambda m: f"(*(undefined1 *)REFP(0x{int(m.group(1), 16) + int(m.group(2), 16):x}))", body)
         # (and `e_lfanew`, the offset of the PE header, the int at +0x3c)
         body = re.sub(r"\bIMAGE_DOS_HEADER_140000000\.e_lfanew\b", "(*(int *)REFP(0x14000003c))", body)
         # (the "MZ" test, `e_magic == (char  [2])0x5a4d`: the 2 bytes there against the number; as
@@ -4701,16 +5110,27 @@ class Translator:
             # Only a call that is a statement of its own: one that continues the line above
             # (`DAT_x =\n       FUN_y(...);`) is the right side of an assignment, and turning it
             # into `return` was C2059 in 14 functions (the CVar registrations, 2026-10-16)
-            def carry(m):
-                before = body[:m.start()].rstrip()
-                if before and before[-1] not in ";{}:":
-                    return m.group(0)
-                return f"{m.group(1)}return (undefined8){m.group(2)};"
+            # (and a call that reaches the return through the end of an if or else: both branches
+            # of FUN_142237350, ExtensionSet::ParseField, end in a call, the field skipper's or
+            # ParseFieldWithExtensionInfo's, and meet at one `return;`. As `return 0` every
+            # extension failed to parse, protobuf's MessageOptions with it, and the first
+            # descriptor with a custom option, ClientException.proto's, aborted the client at
+            # startup, 2026-10-19)
+            def returns_value(call: str) -> bool:
+                fm = re.match(r"(?:thunk_)?FUN_([0-9a-f]{9})\(", call)
+                if fm:
+                    d = self.decl(int(fm.group(1), 16))
+                    return d is not None and d[0].strip() != "void"
+                nm = re.match(r"([A-Za-z_]\w*(?:::~?\w+)+)\(", call)
+                if nm:
+                    target = self.named_callee(nm.group(1), own_name)
+                    if isinstance(target, int):
+                        d = self.decl(target)
+                        return d is not None and d[0].strip() != "void"
+                    return target is None or target not in VOID_RUNTIME
+                return True
 
-            body = re.sub(r"^(\s*)((?:thunk_)?FUN_[0-9a-f]{9}\([^;]*\)|[A-Za-z_]\w*(?:::~?\w+)+\([^;]*\)"
-                          r"|\(\*+\(code \*+\)[^;]*\)\([^;]*\));"
-                          r"(\s*\n\s*)return\s*;",
-                          carry, body, flags=re.M)
+            body = carry_tail_calls(body, returns_value)
         body = re.sub(r"\breturn\s*;", "return 0;", body)
 
         def bare(m):
@@ -4745,6 +5165,18 @@ class Translator:
         body = re.sub(r"&?\b([A-Za-z_][\w<>,]*(?:::[\w<>,~]+)*::vftable)\b",
                       lambda m: f"((undefined8 *)REFP(0x{VFTABLES[m.group(1)]:x}))" if m.group(1) in VFTABLES
                       else m.group(0), body)
+        # (and one printed bare, inside its own class's namespace: std::exception's copy
+        # constructor stores `*param_1 = vftable;`, C2065, 2026-10-18. The table the function's own
+        # instructions load, when they load exactly one)
+        if re.search(r"(?<![\w:.>])vftable\b", body) and a in self.cor:
+            from capstone import x86 as CX
+            tables = set(VFTABLES.values())
+            mine = {i.address + i.size + i.operands[1].mem.disp
+                    for i in self.callargs._function(a, self.cor[a]["size"]).ins
+                    if i.mnemonic == "lea" and len(i.operands) == 2 and i.operands[1].type == CX.X86_OP_MEM
+                    and i.operands[1].mem.base == CX.X86_REG_RIP} & tables
+            if len(mine) == 1:
+                body = re.sub(r"&?(?<![\w:.>])vftable\b", f"((undefined8 *)REFP(0x{next(iter(mine)):x}))", body)
 
         def call(m):
             target = self.named_callee(m.group(1), own_name)
@@ -4818,6 +5250,18 @@ class Translator:
             # default: the tick's `DAT_14311c52a = '\0'`, `mov byte ptr`, cleared the port's bool
             # s_gxRestarted and the seven bytes after it each frame, 2026-10-17)
             wide = whole.startswith(("_DAT_", "_UNK_"))
+            # (not where Ghidra spells it `PTR_`: it kept the pointer in the expression, and a
+            # movsd only copied it. FUN_141fb2700 copies a table of handlers into an object, the
+            # last through xmm0, and `puVar1 = REFG(double, ...)` was C2440, 2026-10-19)
+            if gtype.endswith("*") and a in self.cor and addr not in derefed and not whole.startswith("PTR_"):
+                # (a pointer by the data export that the instructions read only as a float or a
+                # double, `movss xmm1, [0x14297aad0]`: the scalar. As `float *`, stored into a
+                # float and compared with one, C2440 in FUN_14247b930 and FUN_14249eec0,
+                # 2026-10-18)
+                seen = {(n, k) for n, k in self.callargs.global_accesses(a, self.cor[a]["size"]).get(addr, set()) if n <= 8}
+                if len(seen) == 1 and next(iter(seen))[1] == "x":
+                    size = next(iter(seen))[0]
+                    gtype = "float" if size == 4 else "double"
             if (wide or (addr not in self.refdata and addr not in derefed)) and a in self.cor:
                 # Ghidra's `_DAT_x` is an access wider (or of another kind) than the item defined
                 # at x, so that item's type is the wrong one: the instructions say what is read.
@@ -4860,6 +5304,18 @@ class Translator:
                 # what its casts say or to 8-byte slots)
                 if wide and size == 8 and gtype.startswith("undefined") and addr in derefed:
                     gtype = self.global_pointers.get(addr, "undefined8 *")
+            # the width the decompiler built the expression around, where it gave the global one
+            # (the corpus's "g", ExportDecompAll's p-code varnodes): a lane of a 16-byte constant,
+            # `~uVar8 & _UNK_142725a78` with uVar8 a uint, took the 8 bytes to the access's end
+            # above, and the compare of a lane against 8 bytes of the constant was C4319 (four
+            # functions, 2026-10-18). Ghidra's one width is the expression's; several, the rules'.
+            gw = gwidths.get(f"{addr:x}")
+            if gw and len(gw) == 1 and gw[0] in (1, 2, 4, 8) and gw[0] != size \
+                    and (gtype.startswith("undefined") or gtype in ("float", "double")):
+                n = gw[0]
+                size = n
+                gtype = ("float" if n == 4 else "double") if gtype in ("float", "double") and n in (4, 8) \
+                    else f"undefined{n}"
             expr = global_expr(gtype, size, addr)
             held = self.held_global(addr)
             if held is None or held[1]["const"]:
@@ -4879,8 +5335,11 @@ class Translator:
                                 f"(*({c_type_of(gtype, size)} *)((char *)&gen_g_{base:x} + 0x{addr - base:x}))")
 
         aliases, exported = {}, {}
-        derefed = {int(x, 16) for pair in re.findall(r"\*_?(?:PTR_)*DAT_([0-9a-f]{9})\b|(?<!\w)_?(?:PTR_)*DAT_([0-9a-f]{9})\[",
-                                                     body)
+        gwidths = self.cor[a].get("g") or {} if a in self.cor else {}
+        # (`PTR_PTR_x` too, a pointer to a pointer with no DAT_ in its name: FUN_1420fab00 indexes
+        # `PTR_PTR_142d3e690[0x38]`, refused as a global used as a pointer, 2026-10-18)
+        derefed = {int(x, 16) for pair in re.findall(r"\*_?(?:(?:PTR_)+(?:DAT_)?|DAT_)([0-9a-f]{9})\b|"
+                                                     r"(?<!\w)_?(?:(?:PTR_)+(?:DAT_)?|DAT_)([0-9a-f]{9})\[", body)
                    for x in pair if x}
         vtable_reads = {int(x, 16) for x in re.findall(r"\(\s*\*_?DAT_([0-9a-f]{9})\s*\+\s*0x[0-9a-f]+\s*\)", body)}
 
@@ -4889,8 +5348,8 @@ class Translator:
         local_types = {m.group(2): re.sub(r"\s+", " ", m.group(1)).strip()
                        for m in re.finditer(r"^\s*((?:\w+ )*\w+ ?\*+)\s*(\w+);$", body, re.M)}
         borrowed = {}
-        for m in re.finditer(r"\b(\w+) = (?:\([^()]*\))?_?DAT_([0-9a-f]{9});|\b_?DAT_([0-9a-f]{9}) = (?:\([^()]*\))?(\w+);",
-                             body):
+        # (GLOBAL_COPY's pattern: a store through the local, `*pfVar34 = _DAT_x;`, is no copy)
+        for m in GLOBAL_COPY.finditer(body):
             var, addr = (m.group(1), m.group(2)) if m.group(1) else (m.group(4), m.group(3))
             ctype = local_types.get(var)
             if ctype and ctype.endswith("*"):
@@ -4946,7 +5405,14 @@ class Translator:
         # `ram0x0001432089b0`: a global the decompiler reached as a raw address (FUN_141ac6ac0)
         body = re.sub(r"\bram0x0*(1[0-9a-f]{8})\b", lambda m: global_(re.match(SYMBOL, f"DAT_{m.group(1)}")), body)
         body = SYMBOL.sub(global_, body)
-        body = RAM.sub(lambda m: f"REFG(undefined{ {'u': 4, 'l': 8, 'c': 1, 's': 2}.get(m.group(1)[0], 8)}, 0x{m.group(2)})", body)
+        # (Ghidra's prefix is the kind, not the width: `uRam0000000142ddedb0 >> 0x20` is 8 bytes,
+        # and as 4 it was C4293 in FUN_1401b94f0; the decompiler's own width first)
+        def ram(m):
+            gw = gwidths.get(m.group(2))
+            n = gw[0] if gw and len(gw) == 1 and gw[0] in (1, 2, 4, 8) else \
+                {'u': 4, 'l': 8, 'c': 1, 's': 2}.get(m.group(1)[0], 8)
+            return f"REFG(undefined{n}, 0x{m.group(2)})"
+        body = RAM.sub(ram, body)
         body = IMPORT.sub(lambda m: f"(*(code *)&{IMPORT_MERGED.get(m.group(2), m.group(2))})", body)
         # a global called through: a code pointer, whatever the export typed it
         # (and one typed a data pointer, `undefined8 *` / `undefined *` (tools/globalptrs.py)):
@@ -5024,13 +5490,74 @@ class Translator:
         # is what the reference does should the call ever come back (the break for a debugger,
         # then the end an unhandled int3 would be; __fastfail is what C knows does not return)
         if ret.strip() != "void":
-            body = re.sub(r"(/\* WARNING: Subroutine does not return \*/\s*\n[^\n]*;\n)(\}\s*)$",
+            # (the call may span lines: a long string argument wraps; C4715 in FUN_141b3a390)
+            body = re.sub(r"(/\* WARNING: Subroutine does not return \*/\s*\n(?:[^;\"\n]|\"(?:[^\"\\\n]|\\.)*\"|\n)*;\n)(\}\s*)$",
                           r"\1  __debugbreak();\n  __fastfail(7);\n  __assume(0);\n\2", body.rstrip() + "\n")
+            body = fall_off_return(body, ret.strip())
+            body = self.dead_frame_return(body)
         self.global_aliases.update(aliases)
         self.exported.update(exported)
         # (this function's own, for rewrite_one to hand back from a worker)
         self._last_aliases, self._last_exported = aliases, exported
         return f"{ret} FUN_{a:x}({', '.join(decls) or 'void'})\n{body.rstrip()}\n"
+
+    def returned_param(self, b: int) -> int | None:
+        """The parameter (1-based) a function returns on every path, from its decompilation
+        (`return param_2;`), else None."""
+        e = self.cor.get(b)
+        if not e or "c" not in e:
+            return None
+        rets = set(re.findall(r"\breturn\s+([^;]*);", e["c"]))
+        if len(rets) != 1:
+            return None
+        m = re.fullmatch(r"(?:\([^()]*\))?param_(\d+)", next(iter(rets)).strip())
+        return int(m.group(1)) if m else None
+
+    def dead_frame_return(self, body: str) -> str:
+        """A function whose result is its callee's handing back an address in this function's
+        own frame: the reference leaves that address in rax as the frame goes, a pointer to stack
+        nothing owns any more. FUN_1411bba70 returns FUN_1411cda20's second argument, its own
+        local, and its callers all drop it; the translation's would be gen_frame's address, not
+        even the reference's, and the compiler's C4172 (2026-10-19). Diverged: zero, which no
+        caller can mistake for a live object."""
+        if "gen_frame" not in body:
+            return body
+        out = body
+        for rm in re.finditer(r"^([ \t]*)return\s+(\w+)\s*;", body, re.M):
+            var = rm.group(2)
+            before = body[:rm.start()]
+            assigns = list(re.finditer(rf"^[ \t]*{var}\s*=\s*(?:\([^()]*\))?CALLF\([^,]+,\s*FUN_([0-9a-f]{{9}})\)\(",
+                                       before, re.M))
+            if not assigns:
+                continue
+            last = assigns[-1]
+            # (and nothing assigns it after that call)
+            if re.search(rf"^[ \t]*{var}\s*=", before[last.end():], re.M):
+                continue
+            k = self.returned_param(int(last.group(1), 16))
+            if k is None:
+                continue
+            spans, _close = call_args(before, last.end() - 1)
+            if len(spans) < k or "gen_frame" not in before[spans[k - 1][0]:spans[k - 1][1]]:
+                continue
+            out = out.replace(rm.group(0), f"{rm.group(1)}return 0;  /* the callee's handing back of this "
+                                           f"function's own frame: dead once it returns */", 1)
+        # (and the call returned directly, a tail call carried: `return (undefined8)CALLF(ulonglong *,
+        # FUN_1414f3330)(param_1 + 0x20, &frame..., &frame...)`, C4172 in five functions once
+        # carry_tail_calls followed tail calls out of if blocks, 2026-10-19)
+        for rm in reversed(list(re.finditer(r"^([ \t]*)return\s+(?:\(\w+[\w *]*\))?(CALLF\([^,]+,\s*FUN_([0-9a-f]{9})\)\()",
+                                            out, re.M))):
+            k = self.returned_param(int(rm.group(3), 16))
+            if k is None:
+                continue
+            spans, close = call_args(out, rm.end() - 1)
+            if len(spans) < k or "gen_frame" not in out[spans[k - 1][0]:spans[k - 1][1]]:
+                continue
+            end = out.index(";", close) + 1
+            call = out[rm.start(2):close + 1]
+            out = (out[:rm.start()] + f"{rm.group(1)}{call};\n{rm.group(1)}return 0;  /* the callee's handing back "
+                   f"of this function's own frame: dead once it returns */" + out[end:])
+        return out
 
     def port_reads(self, body: str, adapted) -> dict[str, dict]:
         """What a translated body reads out of the port's objects, by where the object came from.
@@ -5468,6 +5995,11 @@ class Translator:
                        for a, why in sorted(plan["native"].items())},
             "stubbed": {f"{a:x}": why for a, why in sorted(plan["stub"].items())},
             "handlers": {f"{a:x}": cname for a, cname in sorted(handlers.items()) if a in plan["translate"]},
+            # left out on purpose, with why (--all): the protection, the padding Ghidra made functions
+            # of, the reference's C runtime (the port runs its own), and what only that runtime reaches
+            "excluded": {f"{a:x}": why for a, why in sorted(getattr(self, "excluded", {}).items())
+                         if a not in plan["translate"] and a not in plan["adapt"] and a not in plan["native"]
+                         and a not in plan["stub"]},
         }
         write_out(MANIFEST, json.dumps(manifest, indent=1) + "\n", encoding="utf-8", newline="\n")
         return manifest
@@ -5727,13 +6259,30 @@ def main() -> None:
         # the whole client: every function the corpus has, where the port has no counterpart
         # (a port's own stays the port's, reached through its adapter) and it is neither the
         # anti-tamper runtime nor the C runtime's
-        everything = [a for a in t.cor if a not in t.protection and not t.is_lib(a) and a not in CRT_BY_ADDR and not t.native_ok(a)
-                      and t.port_target(a) is None]
-        everything = t.runtime_only_dropped(everything)
+        everything = [a for a in t.cor if a not in t.protection and a not in t.fragments and not t.is_lib(a)
+                      and a not in CRT_BY_ADDR and not t.native_ok(a) and t.port_target(a) is None]
+        kept = t.runtime_only_dropped(everything)
+        # (and why each corpus function that is no root was left out, for the manifest: the fidelity
+        # report counts these as accounted for, not as functions nothing covers, 2026-10-19)
+        dropped = set(everything) - set(kept)
+        t.excluded = {}
+        for a in t.cor:
+            if a in t.protection:
+                t.excluded[a] = "the anti-tamper runtime"
+            elif a in t.fragments:
+                t.excluded[a] = "padding between functions, no function"
+            elif t.is_lib(a) or a in CRT_BY_ADDR or a in CRT_ENTRY:
+                t.excluded[a] = "the C runtime, the port's own"
+            elif a in dropped:
+                t.excluded[a] = "a runtime routine only the runtime reaches"
+        everything = kept
         print(f"--all: {len(everything)} of {len(t.cor)} corpus functions as roots", file=sys.stderr, flush=True)
         roots = sorted(set(roots) | set(everything))
     # (a root that is a runtime entry or a thunk to one is the port's routine, never translated)
     roots = [r for r in roots if r not in CRT_ENTRY and r not in t.crt_thunks]
+    # (and one reached through a pointer that the port has: adapted, see plan())
+    t.adapt_roots = {r for r in load_indirect_roots() if r not in forwarded and r not in handlers
+                     and t.port_target(r) is not None}
     t.start_pool(args.jobs)
     try:
         t.prepare(sorted(set(roots) | set(t.static_initializers())))

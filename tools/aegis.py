@@ -81,6 +81,22 @@ def compute(bodies: dict[str, str]) -> dict:
                 prot.add(a)
                 changed = True
     guarded = {a for a, c in bodies.items() if a not in prot and _marked(c, prot)}
+    # and a marked function with no game text whose guards do not come out: the layer's own, which
+    # also calls the runtime and helpers of its own (free, memset, MinHook's MH_CreateHook in
+    # FUN_1402a9e00; the crc32 and rdtsc of FUN_14029fc80; FUN_14023deb0, the scan job
+    # StartupClient queues), so it never qualified above, where every callee had to be protection
+    # already. Stripped, nothing of it is left that a game function would be: six were stubbed as
+    # guards around game code or reading what only a guard stored (2026-10-18)
+    changed = True
+    while changed:
+        changed = False
+        for a in sorted(guarded - prot):
+            if a in game:
+                continue
+            if strip_guards(bodies[a].replace("\r\n", "\n"), prot)[1].startswith("kept"):
+                prot.add(a)
+                changed = True
+    guarded -= prot
     return {"protection": sorted(prot), "guarded": sorted(guarded)}
 
 
@@ -240,7 +256,13 @@ LIVE = re.compile(r"\b(?:PTR|DAT|_DAT|pcRam0*|lRam0*)_?(?:142ddf848|142ddf850)\b
 # marking any `Self` stubbed them, 2026-10-17. The layer's: the debugger flag (PEB + 2), the
 # NtGlobalFlag heap-debug bits (PEB + 0xbc), and the scribble that fills the stack between a
 # random point above its limit and 0x1000 below its base with rdtsc bytes
-WAITS = re.compile(r"Ram000000007ffe0|\binvalidInstructionException\(\)|"
+# (not the Windows version, though: NtMajorVersion at 0x7ffe026c, NtMinorVersion at +0x270 and
+# NtBuildNumber at +0x260 are fields the translator reads where they are, as every process maps
+# KUSER_SHARED_DATA, and game code tests them: `if (uRam000000007ffe026c < 6) {` around the XP path
+# of FUN_1401b2ea0, whose other arm is the game's own call and store; marked, the block was a guard
+# around game code and the function stubbed, with two more, 2026-10-18. A whole function still
+# counts them, KUSER_ANY below: the layer's runtime picks its methods by version too)
+WAITS = re.compile(r"Ram000000007ffe0(?!26c|270|260)|\binvalidInstructionException\(\)|"
                    r"\(longlong\)ProcessEnvironmentBlock \+ (?:2|0xbc)\)|"
                    r"% 100 \+ 0x10 \+ \*\(longlong \*\)\(\(longlong\)Self \+ 0x10\)|"
                    r"\(\*\(longlong \*\)\(\(longlong\)Self \+ 8\) - \(longlong\)\w+(?:\[\d+\])?\) - 0x1000")
@@ -291,12 +313,15 @@ CONTEXT_SET = re.compile(r"PTR_142ddf848 != \(undefined1 \*\)0x0")
 # walkers and stack checks, 0x1400202b0..0x140285134, nothing game code calls. WAITS' narrow shapes
 # are for guards inside game functions, where the same reads are the game's own)
 TEB_ANY = re.compile(r"\bProcessEnvironmentBlock\b|\bSelf\b")
+# (and any KUSER_SHARED_DATA field, the version too: what made the runtime's whole functions before)
+KUSER_ANY = re.compile(r"Ram000000007ffe0")
 
 
 def _marked(text: str, prot: set[str], whole: bool = False) -> bool:
     # (a call to the key stub alone is no mark: a masked value's getter makes it too)
     text = STRING.sub('""', text)
-    return bool(LIVE.search(text)) or bool(WAITS.search(text)) or (whole and bool(TEB_ANY.search(text))) \
+    return bool(LIVE.search(text)) or bool(WAITS.search(text)) \
+        or (whole and (bool(TEB_ANY.search(text)) or bool(KUSER_ANY.search(text)))) \
         or any(c in prot and c != KEY for c in CALL.findall(text)) \
         or (bool(DECODED_CALL.search(text)) and "142dde840" in text)
 
