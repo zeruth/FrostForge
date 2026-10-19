@@ -1,0 +1,28 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  windows-x64:
+    runs-on: windows-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -S . -B build/cmake -A x64
+
+      - name: Build
+        run: cmake --build build/cmake --config Release --target FrostLite --parallel
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FrostLite-windows-x64
+          path: |
+            build/cmake/bin/Release/FrostLite.exe
+            build/cmake/bin/Release/FrostLite.pdb
+            build/cmake/bin/Release/*.dll
