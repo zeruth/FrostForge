@@ -4356,13 +4356,13 @@ uint FUN_14239d4d0(longlong param_1, longlong param_2, longlong param_3, undefin
   bool bVar13 = {0};
   
   lVar9 = (longlong)param_10 * 4;
-  uVar8 = (uint)(byte)(&REFG(undefined8, 0x142940630))[lVar9];
+  uVar8 = (uint)(byte)(&REFG(undefined1, 0x142940630))[lVar9];
   if ((int)(param_7 - param_5) < (int)uVar8) {
     uVar8 = param_7 - param_5;
   }
   uVar1 = param_8 - param_6;
-  uVar6 = (uint)(byte)(&REFG(undefined8, 0x142940631))[(longlong)param_10 * 4];
-  if ((int)uVar1 < (int)(uint)(byte)(&REFG(undefined8, 0x142940631))[(longlong)param_10 * 4]) {
+  uVar6 = (uint)(byte)(&REFG(undefined1, 0x142940631))[(longlong)param_10 * 4];
+  if ((int)uVar1 < (int)(uint)(byte)(&REFG(undefined1, 0x142940631))[(longlong)param_10 * 4]) {
     uVar6 = uVar1;
   }
   if ((uVar8 != 0) && (uVar6 != 0)) {
@@ -4389,13 +4389,13 @@ uint FUN_14239d4d0(longlong param_1, longlong param_2, longlong param_3, undefin
     bVar12 = param_14 == 1;
     bVar13 = param_14 != 3;
     iVar5 = ((int)(param_7 + (uint)bVar13) >> bVar13) - ((int)param_5 >> bVar13);
-    iVar10 = (int)((uint)(byte)(&REFG(undefined8, 0x142940630))[lVar9] + (uint)bVar13) >> bVar13;
+    iVar10 = (int)((uint)(byte)(&REFG(undefined1, 0x142940630))[lVar9] + (uint)bVar13) >> bVar13;
     if (iVar5 < iVar10) {
       iVar10 = iVar5;
     }
     uVar1 = (int)param_6 >> bVar12;
     uVar6 = ((int)(param_8 + (uint)bVar12) >> bVar12) - uVar1;
-    uVar8 = (int)((uint)(byte)(&REFG(undefined8, 0x142940631))[lVar9] + (uint)bVar12) >> bVar12;
+    uVar8 = (int)((uint)(byte)(&REFG(undefined1, 0x142940631))[lVar9] + (uint)bVar12) >> bVar12;
     if ((int)uVar6 < (int)uVar8) {
       uVar8 = uVar6;
     }
@@ -4451,13 +4451,13 @@ uint FUN_14239d7c0(longlong param_1, longlong param_2, longlong param_3, undefin
   bool bVar12 = {0};
   
   lVar8 = (longlong)param_9 * 4;
-  uVar7 = (uint)(byte)(&REFG(undefined8, 0x142940630))[(longlong)param_9 * 4];
-  if ((int)(param_7 - param_5) < (int)(uint)(byte)(&REFG(undefined8, 0x142940630))[(longlong)param_9 * 4]) {
+  uVar7 = (uint)(byte)(&REFG(undefined1, 0x142940630))[(longlong)param_9 * 4];
+  if ((int)(param_7 - param_5) < (int)(uint)(byte)(&REFG(undefined1, 0x142940630))[(longlong)param_9 * 4]) {
     uVar7 = param_7 - param_5;
   }
   uVar1 = param_8 - param_6;
-  uVar5 = (uint)(byte)(&REFG(undefined8, 0x142940631))[lVar8];
-  if ((int)uVar1 < (int)(uint)(byte)(&REFG(undefined8, 0x142940631))[lVar8]) {
+  uVar5 = (uint)(byte)(&REFG(undefined1, 0x142940631))[lVar8];
+  if ((int)uVar1 < (int)(uint)(byte)(&REFG(undefined1, 0x142940631))[lVar8]) {
     uVar5 = uVar1;
   }
   if ((uVar7 != 0) && (uVar5 != 0)) {
@@ -4483,13 +4483,13 @@ uint FUN_14239d7c0(longlong param_1, longlong param_2, longlong param_3, undefin
     bVar11 = param_12 == 1;
     bVar12 = param_12 != 3;
     iVar4 = ((int)(param_7 + (uint)bVar12) >> bVar12) - ((int)param_5 >> bVar12);
-    iVar9 = (int)((uint)(byte)(&REFG(undefined8, 0x142940630))[lVar8] + (uint)bVar12) >> bVar12;
+    iVar9 = (int)((uint)(byte)(&REFG(undefined1, 0x142940630))[lVar8] + (uint)bVar12) >> bVar12;
     if (iVar4 < iVar9) {
       iVar9 = iVar4;
     }
     uVar1 = (int)param_6 >> bVar11;
     uVar5 = ((int)(param_8 + (uint)bVar11) >> bVar11) - uVar1;
-    uVar7 = (int)((uint)(byte)(&REFG(undefined8, 0x142940631))[lVar8] + (uint)bVar11) >> bVar11;
+    uVar7 = (int)((uint)(byte)(&REFG(undefined1, 0x142940631))[lVar8] + (uint)bVar11) >> bVar11;
     if ((int)uVar5 < (int)uVar7) {
       uVar7 = uVar5;
     }
@@ -4546,30 +4546,30 @@ undefined4 FUN_14239daa0(longlong param_1, uint param_2, undefined8 param_3, int
     if (((param_2 == 0) || (1 < lVar10)) ||
        ((*(ushort *)(param_6 + lVar10 * 2) >> ((char)param_5 + (char)param_4 * '\x04' & 0x1fU) & 1)
         == 0)) break;
-    param_2 = (uint)(byte)(&REFG(undefined8, 0x142940696))[lVar9 * 8];
-    bVar1 = (&REFG(undefined8, 0x142940691))[lVar9 * 8];
+    param_2 = (uint)(byte)(&REFG(undefined1, 0x142940696))[lVar9 * 8];
+    bVar1 = (&REFG(undefined1, 0x142940691))[lVar9 * 8];
     iVar6 = param_4 * 2;
-    bVar2 = (&REFG(undefined8, 0x142940690))[lVar9 * 8];
+    bVar2 = (&REFG(undefined1, 0x142940690))[lVar9 * 8];
     iVar4 = param_5 * 2;
     CALLF(undefined4, FUN_14239daa0)(param_1,param_2,uVar11,iVar6,(unsigned long long)(iVar4),(unsigned long long)(param_6));
     param_5 = iVar4 + 1;
-    if ((byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8] <= (byte)(&REFG(undefined8, 0x142940690))[lVar9 * 8]) {
+    if ((byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8] <= (byte)(&REFG(undefined1, 0x142940690))[lVar9 * 8]) {
       CALLF(undefined4, FUN_14239daa0)((ulonglong)(bVar2 >> 1) + param_1,param_2,uVar11,iVar6,(unsigned long long)(param_5),(unsigned long long)(param_6));
-      uVar5 = (ulonglong)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8];
-      if ((byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8] < (byte)(&REFG(undefined8, 0x142940690))[lVar9 * 8]) goto LAB_14239de66;
+      uVar5 = (ulonglong)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8];
+      if ((byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8] < (byte)(&REFG(undefined1, 0x142940690))[lVar9 * 8]) goto LAB_14239de66;
     }
     param_4 = iVar6 + 1;
     lVar13 = (ulonglong)(bVar1 >> 1) * 0x20;
     CALLF(undefined4, FUN_14239daa0)(lVar13 + param_1,param_2,uVar11,param_4,(unsigned long long)(iVar4),(unsigned long long)(param_6));
-    uVar5 = (ulonglong)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8];
-    if ((byte)(&REFG(undefined8, 0x142940690))[lVar9 * 8] < (byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8]) goto LAB_14239de66;
+    uVar5 = (ulonglong)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8];
+    if ((byte)(&REFG(undefined1, 0x142940690))[lVar9 * 8] < (byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8]) goto LAB_14239de66;
     lVar10 = lVar10 + 1;
     param_1 = param_1 + (ulonglong)(bVar2 >> 1) + lVar13;
   }
   uVar11 = (ulonglong)(byte)(&REFG(undefined1, 0x142940692))[lVar9 * 8];
   uVar5 = 2;
   uVar12 = (ulonglong)(byte)(&REFG(undefined1, 0x142940693))[lVar9 * 8];
-  cVar3 = (&REFG(undefined8, 0x142940690))[lVar9 * 8];
+  cVar3 = (&REFG(undefined1, 0x142940690))[lVar9 * 8];
   if (2 < (byte)(&REFG(undefined1, 0x142940692))[lVar9 * 8]) {
     uVar11 = 2;
   }
@@ -4578,61 +4578,61 @@ undefined4 FUN_14239daa0(longlong param_1, uint param_2, undefined8 param_3, int
   }
   if (cVar3 == '\x01') {
     iVar6 = 0;
-    if ((&REFG(undefined8, 0x142940691))[lVar9 * 8] != '\0') {
+    if ((&REFG(undefined1, 0x142940691))[lVar9 * 8] != '\0') {
       puVar8 = (undefined1 *)(param_1 + 0x400);
       do {
         puVar8[-0x400] = (char)uVar11;
         iVar6 = iVar6 + 1;
         puVar8[0x400] = (char)uVar12;
-        *puVar8 = (&REFG(undefined8, 0x142940690))[lVar9 * 8];
-        uVar5 = (ulonglong)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8];
+        *puVar8 = (&REFG(undefined1, 0x142940690))[lVar9 * 8];
+        uVar5 = (ulonglong)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8];
         puVar8 = puVar8 + 0x20;
-      } while (iVar6 < (int)(uint)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8]);
+      } while (iVar6 < (int)(uint)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8]);
     }
   }
   else if (cVar3 == '\x02') {
     iVar6 = 0;
-    if ((&REFG(undefined8, 0x142940691))[lVar9 * 8] != '\0') {
+    if ((&REFG(undefined1, 0x142940691))[lVar9 * 8] != '\0') {
       puVar8 = (undefined1 *)(param_1 + 0x400);
       do {
         *(short *)(puVar8 + -0x400) = (short)uVar11 * 0x101;
         iVar6 = iVar6 + 1;
         *(short *)(puVar8 + 0x400) = (short)uVar12 * 0x101;
-        *puVar8 = (&REFG(undefined8, 0x142940690))[lVar9 * 8];
-        uVar5 = (ulonglong)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8];
+        *puVar8 = (&REFG(undefined1, 0x142940690))[lVar9 * 8];
+        uVar5 = (ulonglong)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8];
         puVar8 = puVar8 + 0x20;
-      } while (iVar6 < (int)(uint)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8]);
+      } while (iVar6 < (int)(uint)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8]);
     }
   }
   else if (cVar3 == '\x04') {
     iVar6 = 0;
-    if ((&REFG(undefined8, 0x142940691))[lVar9 * 8] != '\0') {
+    if ((&REFG(undefined1, 0x142940691))[lVar9 * 8] != '\0') {
       puVar8 = (undefined1 *)(param_1 + 0x400);
       do {
         *(int *)(puVar8 + -0x400) = (int)uVar11 * 0x1010101;
         iVar6 = iVar6 + 1;
         *(int *)(puVar8 + 0x400) = (int)uVar12 * 0x1010101;
-        *puVar8 = (&REFG(undefined8, 0x142940690))[lVar9 * 8];
-        uVar5 = (ulonglong)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8];
+        *puVar8 = (&REFG(undefined1, 0x142940690))[lVar9 * 8];
+        uVar5 = (ulonglong)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8];
         puVar8 = puVar8 + 0x20;
-      } while (iVar6 < (int)(uint)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8]);
+      } while (iVar6 < (int)(uint)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8]);
     }
   }
   else if (cVar3 == '\b') {
     iVar6 = 0;
-    if ((&REFG(undefined8, 0x142940691))[lVar9 * 8] != '\0') {
+    if ((&REFG(undefined1, 0x142940691))[lVar9 * 8] != '\0') {
       puVar8 = (undefined1 *)(param_1 + 0x400);
       do {
         *(ulonglong *)(puVar8 + -0x400) = uVar11 * 0x101010101010101;
         iVar6 = iVar6 + 1;
         *(ulonglong *)(puVar8 + 0x400) = uVar12 * 0x101010101010101;
-        *puVar8 = (&REFG(undefined8, 0x142940690))[lVar9 * 8];
-        uVar5 = (ulonglong)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8];
+        *puVar8 = (&REFG(undefined1, 0x142940690))[lVar9 * 8];
+        uVar5 = (ulonglong)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8];
         puVar8 = puVar8 + 0x20;
-      } while (iVar6 < (int)(uint)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8]);
+      } while (iVar6 < (int)(uint)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8]);
     }
   }
-  else if ((cVar3 == '\x10') && (iVar6 = 0, (&REFG(undefined8, 0x142940691))[lVar9 * 8] != '\0')) {
+  else if ((cVar3 == '\x10') && (iVar6 = 0, (&REFG(undefined1, 0x142940691))[lVar9 * 8] != '\0')) {
     plVar7 = (longlong *)(param_1 + 0x800);
     do {
       plVar7[-0x100] = uVar11 * 0x101010101010101;
@@ -4640,29 +4640,29 @@ undefined4 FUN_14239daa0(longlong param_1, uint param_2, undefined8 param_3, int
       plVar7[-0xff] = uVar11 * 0x101010101010101;
       *plVar7 = uVar12 * 0x101010101010101;
       plVar7[1] = uVar12 * 0x101010101010101;
-      *(undefined *)(plVar7 + -0x80) = (&REFG(undefined8, 0x142940690))[lVar9 * 8];
-      uVar5 = (ulonglong)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8];
+      *(undefined *)(plVar7 + -0x80) = (&REFG(undefined1, 0x142940690))[lVar9 * 8];
+      uVar5 = (ulonglong)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8];
       plVar7 = plVar7 + 4;
-    } while (iVar6 < (int)(uint)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8]);
+    } while (iVar6 < (int)(uint)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8]);
   }
-  cVar3 = (&REFG(undefined8, 0x142940690))[lVar9 * 8];
+  cVar3 = (&REFG(undefined1, 0x142940690))[lVar9 * 8];
   if (cVar3 == '\x01') {
-    uVar5 = (ulonglong)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8];
-    *(undefined *)(param_1 + 0xc00) = (&REFG(undefined8, 0x142940691))[lVar9 * 8];
+    uVar5 = (ulonglong)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8];
+    *(undefined *)(param_1 + 0xc00) = (&REFG(undefined1, 0x142940691))[lVar9 * 8];
   }
   else if (cVar3 == '\x02') {
-    *(ushort *)(param_1 + 0xc00) = (ushort)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8] * 0x101;
+    *(ushort *)(param_1 + 0xc00) = (ushort)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8] * 0x101;
   }
   else if (cVar3 == '\x04') {
-    uVar5 = (ulonglong)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8];
-    *(uint *)(param_1 + 0xc00) = (uint)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8] * 0x1010101;
+    uVar5 = (ulonglong)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8];
+    *(uint *)(param_1 + 0xc00) = (uint)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8] * 0x1010101;
   }
   else if (cVar3 == '\b') {
-    uVar5 = (ulonglong)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8] * 0x101010101010101;
+    uVar5 = (ulonglong)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8] * 0x101010101010101;
     *(ulonglong *)(param_1 + 0xc00) = uVar5;
   }
   else if (cVar3 == '\x10') {
-    uVar5 = (ulonglong)(byte)(&REFG(undefined8, 0x142940691))[lVar9 * 8] * 0x101010101010101;
+    uVar5 = (ulonglong)(byte)(&REFG(undefined1, 0x142940691))[lVar9 * 8] * 0x101010101010101;
     *(ulonglong *)(param_1 + 0xc00) = uVar5;
     *(ulonglong *)(param_1 + 0xc08) = uVar5;
   }
@@ -4749,7 +4749,7 @@ undefined4 FUN_14239de90(longlong param_1, int param_2, int param_3, int param_4
     uVar10 = (uVar10 << ((byte)param_5 & 0x3f)) - uVar10;
     uVar16 = uVar16 - 1 & uVar10;
     bVar7 = bVar7 & 0x1f;
-    bVar2 = (&REFG(undefined8, 0x142940690))[lVar6];
+    bVar2 = (&REFG(undefined1, 0x142940690))[lVar6];
     uVar13 = (ulonglong)bVar2;
     if ((longlong)uVar13 < lVar14) {
       do {
@@ -4767,7 +4767,7 @@ undefined4 FUN_14239de90(longlong param_1, int param_2, int param_3, int param_4
     uVar4 = (uVar4 << ((byte)param_4 & 0x3f)) - uVar4;
     uVar9 = uVar9 - 1 & uVar4;
     bVar8 = bVar8 & 0x1f;
-    bVar7 = (&REFG(undefined8, 0x142940691))[lVar6];
+    bVar7 = (&REFG(undefined1, 0x142940691))[lVar6];
     uVar13 = (ulonglong)bVar7;
     if ((longlong)uVar13 < lVar17) {
       do {
@@ -4894,11 +4894,11 @@ undefined8 FUN_14239e310(longlong param_1, int param_2, int param_3, int param_4
         do {
           CALLF(undefined4, FUN_14239daa0)(((byte *)(gen_frame + 0x70)) + (longlong)iVar9 + (longlong)(*(int *)(gen_frame + 0x30)) * 0x20,param_7,0,iVar19,(unsigned long long)(iVar12),(unsigned long long)(uVar5));
           iVar12 = iVar12 + 1;
-          iVar9 = iVar9 + (uint)(byte)(&REFG(undefined8, 0x142940690))[(longlong)param_7 * 8];
+          iVar9 = iVar9 + (uint)(byte)(&REFG(undefined1, 0x142940690))[(longlong)param_7 * 8];
         } while (iVar9 < param_4);
       }
       iVar19 = iVar19 + 1;
-      (*(int *)(gen_frame + 0x30)) = (*(int *)(gen_frame + 0x30)) + (uint)(byte)(&REFG(undefined8, 0x142940691))[(longlong)param_7 * 8];
+      (*(int *)(gen_frame + 0x30)) = (*(int *)(gen_frame + 0x30)) + (uint)(byte)(&REFG(undefined1, 0x142940691))[(longlong)param_7 * 8];
     } while ((*(int *)(gen_frame + 0x30)) < param_5);
   }
   lVar14 = 0;
@@ -5126,7 +5126,7 @@ undefined4 FUN_14239e7d0(longlong param_1, int param_2, int param_3, int param_4
   }
   lVar15 = (longlong)param_5;
   uVar17 = (uVar17 << ((byte)param_5 & 0x3f)) - uVar17;
-  bVar2 = (&REFG(undefined8, 0x142940690))[lVar6];
+  bVar2 = (&REFG(undefined1, 0x142940690))[lVar6];
   for (uVar13 = (ulonglong)bVar2; (longlong)uVar13 < lVar14; uVar13 = uVar13 + bVar2) {
     if ((uVar17 & 0xffff) != 0) {
       puVar1 = (ushort *)(param_1 + (uVar10 + (lVar16 + uVar13) * 3) * 4);
@@ -5138,7 +5138,7 @@ undefined4 FUN_14239e7d0(longlong param_1, int param_2, int param_3, int param_4
     }
   }
   uVar11 = (uVar11 << ((byte)param_4 & 0x3f)) - uVar11;
-  bVar2 = (&REFG(undefined8, 0x142940691))[lVar6];
+  bVar2 = (&REFG(undefined1, 0x142940691))[lVar6];
   uVar13 = (ulonglong)bVar2;
   if ((longlong)uVar13 < lVar15) {
     do {
@@ -6660,7 +6660,7 @@ uint FUN_1423a0d70(longlong param_1, longlong param_2, undefined8 param_3, uint 
           if (uVar14 < 0xff) {
             uVar8 = uVar14;
           }
-          bVar4 = (&REFG(undefined8, 0x142940960))[uVar8];
+          bVar4 = (&REFG(undefined1, 0x142940960))[uVar8];
           *psVar9 = 0x100 - (ushort)bVar4;
           *puVar25 = iVar22 * (uint)bVar4 * iVar6 + 0x800 >> 0xc;
           uVar28 = uVar28 - 1;
@@ -7567,7 +7567,7 @@ uint FUN_1423a24b0(longlong param_1, longlong param_2, undefined8 param_3, uint 
           if (uVar12 < 0xff) {
             uVar9 = uVar12;
           }
-          bVar4 = (&REFG(undefined8, 0x142940960))[uVar9];
+          bVar4 = (&REFG(undefined1, 0x142940960))[uVar9];
           *piVar17 = 0x100 - (uint)bVar4;
           piVar17[0x6798] = iVar5 * (uint)bVar4 * iVar11 + 0x800 >> 0xc;
           uVar19 = uVar19 - 1;
@@ -8564,7 +8564,7 @@ undefined8 FUN_1423a39e0(uint *param_1, longlong param_2, undefined *param_3, un
   gen_v16 auVar31 = {0};
   
   lVar25 = (longlong)(int)param_4;
-  puVar26 = (undefined1 *)&REFG(undefined8, 0x142941760) + lVar25;
+  puVar26 = (undefined1 *)&REFG(undefined1, 0x142941760) + lVar25;
   uVar23 = (int)param_4 * 3 >> 2;
   lVar24 = (longlong)puVar26 - (longlong)param_3;
   do {
@@ -9052,7 +9052,7 @@ int FUN_1423a4340(undefined2 *param_1, longlong param_2, longlong param_3, int p
       uVar16 = param_8 & 3;
     }
     uVar17 = (ulonglong)uVar16;
-    pcVar24 = (undefined1 *)&REFG(undefined8, 0x142940a60) + (uVar17 * 0xf + (longlong)(param_6 + -1)) * 8;
+    pcVar24 = (undefined1 *)&REFG(undefined1, 0x142940a60) + (uVar17 * 0xf + (longlong)(param_6 + -1)) * 8;
   }
   if (param_7 != 0) {
     if (param_5 < 5) {
@@ -9061,7 +9061,7 @@ int FUN_1423a4340(undefined2 *param_1, longlong param_2, longlong param_3, int p
     else {
       uVar17 = (longlong)(int)param_8 >> 2;
     }
-    (*(char * *)(gen_frame + 0x38)) = (undefined1 *)&REFG(undefined8, 0x142940a60) + (uVar17 * 0xf + (longlong)(param_7 + -1)) * 8;
+    (*(char * *)(gen_frame + 0x38)) = (undefined1 *)&REFG(undefined1, 0x142940a60) + (uVar17 * 0xf + (longlong)(param_7 + -1)) * 8;
   }
   if (pcVar24 == (char *)0x0) {
     if ((*(char * *)(gen_frame + 0x38)) == (char *)0x0) {
@@ -9328,16 +9328,16 @@ LAB_1423a4bab:
             uVar5 = param_10 & 3;
           }
           lVar1 = ((ulonglong)uVar5 * 0xf + (longlong)(((int)uVar8 >> 6) + -1)) * 8;
-          if ((undefined1 *)&REFG(undefined8, 0x142940a60) + lVar1 == (char *)0x0) goto LAB_1423a4bab;
+          if ((undefined1 *)&REFG(undefined1, 0x142940a60) + lVar1 == (char *)0x0) goto LAB_1423a4bab;
           pbVar11 = (byte *)(iVar7 + lVar9);
-          sVar3 = (short)((int)((uint)*pbVar11 * (int)(char)(&REFG(undefined8, 0x142940a63))[lVar1] +
-                               (uint)pbVar11[4] * (int)(char)(&REFG(undefined8, 0x142940a67))[lVar1] +
-                               (uint)pbVar11[3] * (int)(char)(&REFG(undefined8, 0x142940a66))[lVar1] +
-                               (uint)pbVar11[2] * (int)(char)(&REFG(undefined8, 0x142940a65))[lVar1] +
-                               (uint)pbVar11[1] * (int)(char)(&REFG(undefined8, 0x142940a64))[lVar1] +
-                               (uint)pbVar11[-1] * (int)(char)(&REFG(undefined8, 0x142940a62))[lVar1] +
-                               (uint)pbVar11[-2] * (int)(char)(&REFG(undefined8, 0x142940a61))[lVar1] +
-                               (uint)pbVar11[-3] * (int)(char)(&REFG(undefined8, 0x142940a60))[lVar1] + 2) >> 2);
+          sVar3 = (short)((int)((uint)*pbVar11 * (int)(char)(&REFG(undefined1, 0x142940a63))[lVar1] +
+                               (uint)pbVar11[4] * (int)(char)(&REFG(undefined1, 0x142940a67))[lVar1] +
+                               (uint)pbVar11[3] * (int)(char)(&REFG(undefined1, 0x142940a66))[lVar1] +
+                               (uint)pbVar11[2] * (int)(char)(&REFG(undefined1, 0x142940a65))[lVar1] +
+                               (uint)pbVar11[1] * (int)(char)(&REFG(undefined1, 0x142940a64))[lVar1] +
+                               (uint)pbVar11[-1] * (int)(char)(&REFG(undefined1, 0x142940a62))[lVar1] +
+                               (uint)pbVar11[-2] * (int)(char)(&REFG(undefined1, 0x142940a61))[lVar1] +
+                               (uint)pbVar11[-3] * (int)(char)(&REFG(undefined1, 0x142940a60))[lVar1] + 2) >> 2);
         }
         *(short *)(puVar16 + lVar14 * 2) = sVar3;
         lVar14 = lVar14 + 1;
@@ -9364,7 +9364,7 @@ LAB_1423a4bab:
             else {
               uVar2 = (longlong)(int)param_10 >> 2;
             }
-            pcVar12 = (undefined1 *)&REFG(undefined8, 0x142940a60) + (uVar2 * 0xf + (longlong)(((int)param_7 >> 6) + -1)) * 8;
+            pcVar12 = (undefined1 *)&REFG(undefined1, 0x142940a60) + (uVar2 * 0xf + (longlong)(((int)param_7 >> 6) + -1)) * 8;
           }
           if (0 < lVar15) {
             if (pcVar12 == (char *)0x0) {
@@ -10364,7 +10364,7 @@ undefined4 FUN_1423a5b40(longlong param_1, longlong param_2, longlong param_3, l
     else {
       uVar10 = param_9 & 3;
     }
-    pcVar21 = (undefined1 *)&REFG(undefined8, 0x142940a60) + ((ulonglong)uVar10 * 0xf + (longlong)(param_7 + -1)) * 8;
+    pcVar21 = (undefined1 *)&REFG(undefined1, 0x142940a60) + ((ulonglong)uVar10 * 0xf + (longlong)(param_7 + -1)) * 8;
   }
   if (param_8 == 0) {
     pcVar23 = (char *)0x0;
@@ -10377,7 +10377,7 @@ undefined4 FUN_1423a5b40(longlong param_1, longlong param_2, longlong param_3, l
     else {
       uVar12 = (longlong)(int)param_9 >> 2;
     }
-    pcVar23 = (undefined1 *)&REFG(undefined8, 0x142940a60) + (uVar12 * 0xf + (longlong)(param_8 + -1)) * 8;
+    pcVar23 = (undefined1 *)&REFG(undefined1, 0x142940a60) + (uVar12 * 0xf + (longlong)(param_8 + -1)) * 8;
   }
   if (pcVar21 == (char *)0x0) {
     if (pcVar23 == (char *)0x0) {
@@ -10660,16 +10660,16 @@ LAB_1423a6405:
             uVar3 = param_11 & 3;
           }
           lVar1 = ((ulonglong)uVar3 * 0xf + (longlong)(((int)uVar13 >> 6) + -1)) * 8;
-          if ((undefined1 *)&REFG(undefined8, 0x142940a60) + lVar1 == (char *)0x0) goto LAB_1423a6405;
+          if ((undefined1 *)&REFG(undefined1, 0x142940a60) + lVar1 == (char *)0x0) goto LAB_1423a6405;
           pbVar6 = (byte *)(iVar7 + lVar8);
-          sVar2 = (short)((int)((uint)*pbVar6 * (int)(char)(&REFG(undefined8, 0x142940a63))[lVar1] +
-                               (uint)pbVar6[4] * (int)(char)(&REFG(undefined8, 0x142940a67))[lVar1] +
-                               (uint)pbVar6[3] * (int)(char)(&REFG(undefined8, 0x142940a66))[lVar1] +
-                               (uint)pbVar6[2] * (int)(char)(&REFG(undefined8, 0x142940a65))[lVar1] +
-                               (uint)pbVar6[1] * (int)(char)(&REFG(undefined8, 0x142940a64))[lVar1] +
-                               (uint)pbVar6[-1] * (int)(char)(&REFG(undefined8, 0x142940a62))[lVar1] +
-                               (uint)pbVar6[-2] * (int)(char)(&REFG(undefined8, 0x142940a61))[lVar1] +
-                               (uint)pbVar6[-3] * (int)(char)(&REFG(undefined8, 0x142940a60))[lVar1] + 2) >> 2);
+          sVar2 = (short)((int)((uint)*pbVar6 * (int)(char)(&REFG(undefined1, 0x142940a63))[lVar1] +
+                               (uint)pbVar6[4] * (int)(char)(&REFG(undefined1, 0x142940a67))[lVar1] +
+                               (uint)pbVar6[3] * (int)(char)(&REFG(undefined1, 0x142940a66))[lVar1] +
+                               (uint)pbVar6[2] * (int)(char)(&REFG(undefined1, 0x142940a65))[lVar1] +
+                               (uint)pbVar6[1] * (int)(char)(&REFG(undefined1, 0x142940a64))[lVar1] +
+                               (uint)pbVar6[-1] * (int)(char)(&REFG(undefined1, 0x142940a62))[lVar1] +
+                               (uint)pbVar6[-2] * (int)(char)(&REFG(undefined1, 0x142940a61))[lVar1] +
+                               (uint)pbVar6[-3] * (int)(char)(&REFG(undefined1, 0x142940a60))[lVar1] + 2) >> 2);
         }
         *(short *)(puVar14 + lVar12 * 2) = sVar2;
         lVar12 = lVar12 + 1;
@@ -10696,7 +10696,7 @@ LAB_1423a6405:
             else {
               uVar4 = (longlong)(int)param_11 >> 2;
             }
-            pcVar11 = (undefined1 *)&REFG(undefined8, 0x142940a60) + (uVar4 * 0xf + (longlong)(((int)param_8 >> 6) + -1)) * 8;
+            pcVar11 = (undefined1 *)&REFG(undefined1, 0x142940a60) + (uVar4 * 0xf + (longlong)(((int)param_8 >> 6) + -1)) * 8;
           }
           lVar8 = 0;
           if (0 < lVar15) {
@@ -11788,14 +11788,14 @@ LAB_1423a75e2:
           iVar3 = iVar1;
         }
         iVar12 = (int)((((((((0x40 - (uint)*(byte *)(iVar3 + param_3) *
-                                     (int)(char)(&REFG(undefined8, 0x14294133f))[lVar2]) -
-                            (uint)*(byte *)(iVar10 + param_3) * (int)(char)(&REFG(undefined8, 0x14294133e))[lVar2])
-                           - (uint)*(byte *)(iVar4 + param_3) * (int)(char)(&REFG(undefined8, 0x14294133d))[lVar2])
-                          - (uint)*(byte *)(iVar7 + param_3) * (int)(char)(&REFG(undefined8, 0x14294133c))[lVar2]) -
-                         (uint)*(byte *)(iVar13 + param_3) * (int)(char)(&REFG(undefined8, 0x14294133b))[lVar2]) -
-                        (uint)*(byte *)(iVar9 + param_3) * (int)(char)(&REFG(undefined8, 0x14294133a))[lVar2]) -
-                       (uint)*(byte *)(iVar6 + param_3) * (int)(char)(&REFG(undefined8, 0x142941339))[lVar2]) -
-                      (uint)*(byte *)(iVar12 + param_3) * (int)(char)(&REFG(undefined8, 0x142941338))[lVar2]) >> 7;
+                                     (int)(char)(&REFG(undefined1, 0x14294133f))[lVar2]) -
+                            (uint)*(byte *)(iVar10 + param_3) * (int)(char)(&REFG(undefined1, 0x14294133e))[lVar2])
+                           - (uint)*(byte *)(iVar4 + param_3) * (int)(char)(&REFG(undefined1, 0x14294133d))[lVar2])
+                          - (uint)*(byte *)(iVar7 + param_3) * (int)(char)(&REFG(undefined1, 0x14294133c))[lVar2]) -
+                         (uint)*(byte *)(iVar13 + param_3) * (int)(char)(&REFG(undefined1, 0x14294133b))[lVar2]) -
+                        (uint)*(byte *)(iVar9 + param_3) * (int)(char)(&REFG(undefined1, 0x14294133a))[lVar2]) -
+                       (uint)*(byte *)(iVar6 + param_3) * (int)(char)(&REFG(undefined1, 0x142941339))[lVar2]) -
+                      (uint)*(byte *)(iVar12 + param_3) * (int)(char)(&REFG(undefined1, 0x142941338))[lVar2]) >> 7;
         if (iVar12 < 0) {
           iVar12 = 0;
         }
@@ -12296,50 +12296,50 @@ short * FUN_1423a7e40(longlong param_1, longlong param_2, longlong param_3, long
       lVar15 = ((longlong)iVar22 >> 10) + 0x40;
       lVar17 = lVar15 * 8;
       bVar7 = pbVar23[-4];
-      psVar13[-2] = (short)((int)((uint)pbVar23[-6] * (int)(char)(&REFG(undefined8, 0x142940d30))[lVar15 * 8] +
-                                  (int)(char)(&REFG(undefined8, 0x142940d33))[lVar17] * (uint)bVar3 +
-                                  (int)(char)(&REFG(undefined8, 0x142940d31))[lVar17] * (uint)bVar2 +
-                                  (int)(char)(&REFG(undefined8, 0x142940d32))[lVar17] * (uint)bVar7 +
-                                  (int)(char)(&REFG(undefined8, 0x142940d34))[lVar17] * (uint)bVar4 +
-                                  (int)(char)(&REFG(undefined8, 0x142940d35))[lVar17] * (uint)bVar5 +
-                                  (int)(char)(&REFG(undefined8, 0x142940d37))[lVar17] * (uint)bVar6 + 4 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d36))[lVar17] * uVar19) >> 3);
+      psVar13[-2] = (short)((int)((uint)pbVar23[-6] * (int)(char)(&REFG(undefined1, 0x142940d30))[lVar15 * 8] +
+                                  (int)(char)(&REFG(undefined1, 0x142940d33))[lVar17] * (uint)bVar3 +
+                                  (int)(char)(&REFG(undefined1, 0x142940d31))[lVar17] * (uint)bVar2 +
+                                  (int)(char)(&REFG(undefined1, 0x142940d32))[lVar17] * (uint)bVar7 +
+                                  (int)(char)(&REFG(undefined1, 0x142940d34))[lVar17] * (uint)bVar4 +
+                                  (int)(char)(&REFG(undefined1, 0x142940d35))[lVar17] * (uint)bVar5 +
+                                  (int)(char)(&REFG(undefined1, 0x142940d37))[lVar17] * (uint)bVar6 + 4 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d36))[lVar17] * uVar19) >> 3);
       iVar21 = iVar22 + iVar14 + iVar14;
       lVar15 = ((longlong)(iVar22 + iVar14) >> 10) + 0x40;
       lVar17 = lVar15 * 8;
       bVar8 = pbVar23[2];
       bVar9 = pbVar23[3];
-      psVar13[-1] = (short)((int)((int)(char)(&REFG(undefined8, 0x142940d30))[lVar17] * (uint)bVar2 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d37))[lVar17] * (uint)bVar8 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d32))[lVar15 * 8] * (uint)bVar3 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d31))[lVar17] * (uint)bVar7 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d33))[lVar17] * (uint)bVar4 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d34))[lVar17] * (uint)bVar5 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d36))[lVar17] * (uint)bVar6 + 4 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d35))[lVar17] * uVar19) >> 3);
+      psVar13[-1] = (short)((int)((int)(char)(&REFG(undefined1, 0x142940d30))[lVar17] * (uint)bVar2 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d37))[lVar17] * (uint)bVar8 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d32))[lVar15 * 8] * (uint)bVar3 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d31))[lVar17] * (uint)bVar7 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d33))[lVar17] * (uint)bVar4 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d34))[lVar17] * (uint)bVar5 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d36))[lVar17] * (uint)bVar6 + 4 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d35))[lVar17] * uVar19) >> 3);
       lVar17 = ((longlong)iVar21 >> 10) * 8;
       pbVar23 = pbVar23 + 4;
       iVar21 = iVar21 + iVar14;
       bVar2 = *pbVar23;
       iVar22 = iVar21 + iVar14;
-      *psVar13 = (short)((int)((int)(char)(&REFG(undefined8, 0x142940f30))[lVar17] * (uint)bVar7 +
-                              (int)(char)(&REFG(undefined8, 0x142940f37))[lVar17] * (uint)bVar9 +
-                              (int)(char)(&REFG(undefined8, 0x142940f36))[lVar17] * (uint)bVar8 +
-                              (int)(char)(&REFG(undefined8, 0x142940f31))[lVar17] * (uint)bVar3 +
-                              (int)(char)(&REFG(undefined8, 0x142940f32))[lVar17] * (uint)bVar4 +
-                              (int)(char)(&REFG(undefined8, 0x142940f33))[lVar17] * (uint)bVar5 +
-                              (int)(char)(&REFG(undefined8, 0x142940f35))[lVar17] * (uint)bVar6 +
-                              (int)(char)(&REFG(undefined8, 0x142940f34))[lVar17] * uVar19 + 4) >> 3);
+      *psVar13 = (short)((int)((int)(char)(&REFG(undefined1, 0x142940f30))[lVar17] * (uint)bVar7 +
+                              (int)(char)(&REFG(undefined1, 0x142940f37))[lVar17] * (uint)bVar9 +
+                              (int)(char)(&REFG(undefined1, 0x142940f36))[lVar17] * (uint)bVar8 +
+                              (int)(char)(&REFG(undefined1, 0x142940f31))[lVar17] * (uint)bVar3 +
+                              (int)(char)(&REFG(undefined1, 0x142940f32))[lVar17] * (uint)bVar4 +
+                              (int)(char)(&REFG(undefined1, 0x142940f33))[lVar17] * (uint)bVar5 +
+                              (int)(char)(&REFG(undefined1, 0x142940f35))[lVar17] * (uint)bVar6 +
+                              (int)(char)(&REFG(undefined1, 0x142940f34))[lVar17] * uVar19 + 4) >> 3);
       lVar15 = (longlong)iVar21 >> 10;
       lVar17 = lVar15 * 8;
-      psVar13[1] = (short)((int)((int)(char)(&REFG(undefined8, 0x142940f37))[lVar17] * (uint)bVar2 +
-                                 (int)(char)(&REFG(undefined8, 0x142940f36))[lVar15 * 8] * (uint)bVar9 +
-                                 (int)(char)(&REFG(undefined8, 0x142940f35))[lVar17] * (uint)bVar8 +
-                                 (int)(char)(&REFG(undefined8, 0x142940f31))[lVar17] * (uint)bVar4 +
-                                 (int)(char)(&REFG(undefined8, 0x142940f32))[lVar17] * (uint)bVar5 +
-                                 (int)(char)(&REFG(undefined8, 0x142940f34))[lVar17] * (uint)bVar6 +
-                                 (int)(char)(&REFG(undefined8, 0x142940f33))[lVar17] * uVar19 + 4 +
-                                (int)(char)(&REFG(undefined8, 0x142940f30))[lVar17] * (uint)bVar3) >> 3);
+      psVar13[1] = (short)((int)((int)(char)(&REFG(undefined1, 0x142940f37))[lVar17] * (uint)bVar2 +
+                                 (int)(char)(&REFG(undefined1, 0x142940f36))[lVar15 * 8] * (uint)bVar9 +
+                                 (int)(char)(&REFG(undefined1, 0x142940f35))[lVar17] * (uint)bVar8 +
+                                 (int)(char)(&REFG(undefined1, 0x142940f31))[lVar17] * (uint)bVar4 +
+                                 (int)(char)(&REFG(undefined1, 0x142940f32))[lVar17] * (uint)bVar5 +
+                                 (int)(char)(&REFG(undefined1, 0x142940f34))[lVar17] * (uint)bVar6 +
+                                 (int)(char)(&REFG(undefined1, 0x142940f33))[lVar17] * uVar19 + 4 +
+                                (int)(char)(&REFG(undefined1, 0x142940f30))[lVar17] * (uint)bVar3) >> 3);
       psVar13 = psVar13 + 4;
       (*(longlong *)(gen_frame + 0x10)) = (*(longlong *)(gen_frame + 0x10)) + -1;
       uVar19 = (uint)bVar2;
@@ -12358,14 +12358,14 @@ short * FUN_1423a7e40(longlong param_1, longlong param_2, longlong param_3, long
     do {
       lVar16 = (longlong)(iVar12 + 0x200) >> 10;
       lVar1 = lVar16 * 8;
-      iVar22 = (int)*psVar13 * (int)(char)(&REFG(undefined8, 0x142940f36))[lVar1] +
-               (int)psVar13[-0x28] * (int)(char)(&REFG(undefined8, 0x142940f31))[lVar16 * 8] +
-               (int)psVar13[-0x20] * (int)(char)(&REFG(undefined8, 0x142940f32))[lVar1] +
-               (int)psVar13[-0x18] * (int)(char)(&REFG(undefined8, 0x142940f33))[lVar1] +
-               (int)psVar13[-0x10] * (int)(char)(&REFG(undefined8, 0x142940f34))[lVar1] +
-               (int)psVar13[8] * (int)(char)(&REFG(undefined8, 0x142940f37))[lVar1] +
-               (int)psVar13[-8] * (int)(char)(&REFG(undefined8, 0x142940f35))[lVar1] +
-               (int)psVar13[-0x30] * (int)(char)(&REFG(undefined8, 0x142940f30))[lVar1] + 0x400 >> 0xb;
+      iVar22 = (int)*psVar13 * (int)(char)(&REFG(undefined1, 0x142940f36))[lVar1] +
+               (int)psVar13[-0x28] * (int)(char)(&REFG(undefined1, 0x142940f31))[lVar16 * 8] +
+               (int)psVar13[-0x20] * (int)(char)(&REFG(undefined1, 0x142940f32))[lVar1] +
+               (int)psVar13[-0x18] * (int)(char)(&REFG(undefined1, 0x142940f33))[lVar1] +
+               (int)psVar13[-0x10] * (int)(char)(&REFG(undefined1, 0x142940f34))[lVar1] +
+               (int)psVar13[8] * (int)(char)(&REFG(undefined1, 0x142940f37))[lVar1] +
+               (int)psVar13[-8] * (int)(char)(&REFG(undefined1, 0x142940f35))[lVar1] +
+               (int)psVar13[-0x30] * (int)(char)(&REFG(undefined1, 0x142940f30))[lVar1] + 0x400 >> 0xb;
       if (iVar22 < 0) {
         iVar22 = 0;
       }
@@ -12377,14 +12377,14 @@ short * FUN_1423a7e40(longlong param_1, longlong param_2, longlong param_3, long
       sVar11 = param_5[2];
       lVar16 = (longlong)(iVar12 + sVar11 + 0x200) >> 10;
       lVar1 = lVar16 * 8;
-      iVar22 = (int)(char)(&REFG(undefined8, 0x142940f30))[lVar1] * (int)psVar13[-0x2f] +
-               (int)sVar10 * (int)(char)(&REFG(undefined8, 0x142940f31))[lVar16 * 8] +
-               (int)psVar13[-0x1f] * (int)(char)(&REFG(undefined8, 0x142940f32))[lVar1] +
-               (int)psVar13[-0x17] * (int)(char)(&REFG(undefined8, 0x142940f33))[lVar1] +
-               (int)psVar13[-0xf] * (int)(char)(&REFG(undefined8, 0x142940f34))[lVar1] +
-               (int)psVar13[9] * (int)(char)(&REFG(undefined8, 0x142940f37))[lVar1] +
-               (int)psVar13[-7] * (int)(char)(&REFG(undefined8, 0x142940f35))[lVar1] +
-               (int)psVar13[1] * (int)(char)(&REFG(undefined8, 0x142940f36))[lVar1] + 0x400 >> 0xb;
+      iVar22 = (int)(char)(&REFG(undefined1, 0x142940f30))[lVar1] * (int)psVar13[-0x2f] +
+               (int)sVar10 * (int)(char)(&REFG(undefined1, 0x142940f31))[lVar16 * 8] +
+               (int)psVar13[-0x1f] * (int)(char)(&REFG(undefined1, 0x142940f32))[lVar1] +
+               (int)psVar13[-0x17] * (int)(char)(&REFG(undefined1, 0x142940f33))[lVar1] +
+               (int)psVar13[-0xf] * (int)(char)(&REFG(undefined1, 0x142940f34))[lVar1] +
+               (int)psVar13[9] * (int)(char)(&REFG(undefined1, 0x142940f37))[lVar1] +
+               (int)psVar13[-7] * (int)(char)(&REFG(undefined1, 0x142940f35))[lVar1] +
+               (int)psVar13[1] * (int)(char)(&REFG(undefined1, 0x142940f36))[lVar1] + 0x400 >> 0xb;
       if (iVar22 < 0) {
         iVar22 = 0;
       }
@@ -12396,14 +12396,14 @@ short * FUN_1423a7e40(longlong param_1, longlong param_2, longlong param_3, long
       iVar12 = iVar12 + sVar11 + (int)param_5[2];
       lVar16 = (longlong)(iVar12 + 0x200) >> 10;
       lVar1 = lVar16 * 8;
-      iVar22 = (int)(char)(&REFG(undefined8, 0x142940f30))[lVar1] * (int)psVar13[-0x2e] + 0x400 +
-               (int)sVar10 * (int)(char)(&REFG(undefined8, 0x142940f31))[lVar16 * 8] +
-               (int)psVar13[-0x1e] * (int)(char)(&REFG(undefined8, 0x142940f32))[lVar1] +
-               (int)psVar13[-0x16] * (int)(char)(&REFG(undefined8, 0x142940f33))[lVar1] +
-               (int)psVar13[-0xe] * (int)(char)(&REFG(undefined8, 0x142940f34))[lVar1] +
-               (int)psVar13[10] * (int)(char)(&REFG(undefined8, 0x142940f37))[lVar1] +
-               (int)psVar13[-6] * (int)(char)(&REFG(undefined8, 0x142940f35))[lVar1] +
-               (int)psVar13[2] * (int)(char)(&REFG(undefined8, 0x142940f36))[lVar1] >> 0xb;
+      iVar22 = (int)(char)(&REFG(undefined1, 0x142940f30))[lVar1] * (int)psVar13[-0x2e] + 0x400 +
+               (int)sVar10 * (int)(char)(&REFG(undefined1, 0x142940f31))[lVar16 * 8] +
+               (int)psVar13[-0x1e] * (int)(char)(&REFG(undefined1, 0x142940f32))[lVar1] +
+               (int)psVar13[-0x16] * (int)(char)(&REFG(undefined1, 0x142940f33))[lVar1] +
+               (int)psVar13[-0xe] * (int)(char)(&REFG(undefined1, 0x142940f34))[lVar1] +
+               (int)psVar13[10] * (int)(char)(&REFG(undefined1, 0x142940f37))[lVar1] +
+               (int)psVar13[-6] * (int)(char)(&REFG(undefined1, 0x142940f35))[lVar1] +
+               (int)psVar13[2] * (int)(char)(&REFG(undefined1, 0x142940f36))[lVar1] >> 0xb;
       if (iVar22 < 0) {
         iVar22 = 0;
       }
@@ -12415,14 +12415,14 @@ short * FUN_1423a7e40(longlong param_1, longlong param_2, longlong param_3, long
       iVar12 = iVar12 + param_5[2];
       lVar16 = (longlong)(iVar12 + 0x200) >> 10;
       lVar1 = lVar16 * 8;
-      iVar22 = (int)(char)(&REFG(undefined8, 0x142940f30))[lVar1] * (int)psVar13[-0x2d] + 0x400 +
-               (int)sVar10 * (int)(char)(&REFG(undefined8, 0x142940f31))[lVar16 * 8] +
-               (int)psVar13[-0x1d] * (int)(char)(&REFG(undefined8, 0x142940f32))[lVar1] +
-               (int)psVar13[-0x15] * (int)(char)(&REFG(undefined8, 0x142940f33))[lVar1] +
-               (int)psVar13[0xb] * (int)(char)(&REFG(undefined8, 0x142940f37))[lVar1] +
-               (int)psVar13[-0xd] * (int)(char)(&REFG(undefined8, 0x142940f34))[lVar1] +
-               (int)psVar13[-5] * (int)(char)(&REFG(undefined8, 0x142940f35))[lVar1] +
-               (int)psVar13[3] * (int)(char)(&REFG(undefined8, 0x142940f36))[lVar1] >> 0xb;
+      iVar22 = (int)(char)(&REFG(undefined1, 0x142940f30))[lVar1] * (int)psVar13[-0x2d] + 0x400 +
+               (int)sVar10 * (int)(char)(&REFG(undefined1, 0x142940f31))[lVar16 * 8] +
+               (int)psVar13[-0x1d] * (int)(char)(&REFG(undefined1, 0x142940f32))[lVar1] +
+               (int)psVar13[-0x15] * (int)(char)(&REFG(undefined1, 0x142940f33))[lVar1] +
+               (int)psVar13[0xb] * (int)(char)(&REFG(undefined1, 0x142940f37))[lVar1] +
+               (int)psVar13[-0xd] * (int)(char)(&REFG(undefined1, 0x142940f34))[lVar1] +
+               (int)psVar13[-5] * (int)(char)(&REFG(undefined1, 0x142940f35))[lVar1] +
+               (int)psVar13[3] * (int)(char)(&REFG(undefined1, 0x142940f36))[lVar1] >> 0xb;
       if (iVar22 < 0) {
         iVar22 = 0;
       }
@@ -12498,50 +12498,50 @@ int FUN_1423a84a0(longlong param_1, longlong param_2, longlong param_3, longlong
       bVar7 = pbVar14[-4];
       lVar19 = ((longlong)iVar26 >> 10) + 0x40;
       lVar18 = lVar19 * 8;
-      puVar23[-2] = (short)((int)((uint)pbVar14[-6] * (int)(char)(&REFG(undefined8, 0x142940d30))[lVar19 * 8] +
-                                  (int)(char)(&REFG(undefined8, 0x142940d36))[lVar18] * uVar22 +
-                                  (int)(char)(&REFG(undefined8, 0x142940d33))[lVar18] * (uint)bVar3 +
-                                  (int)(char)(&REFG(undefined8, 0x142940d31))[lVar18] * (uint)bVar2 +
-                                  (int)(char)(&REFG(undefined8, 0x142940d32))[lVar18] * (uint)bVar7 +
-                                  (int)(char)(&REFG(undefined8, 0x142940d34))[lVar18] * (uint)bVar4 +
-                                  (int)(char)(&REFG(undefined8, 0x142940d35))[lVar18] * (uint)bVar5 + 4 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d37))[lVar18] * (uint)bVar6) >> 3);
+      puVar23[-2] = (short)((int)((uint)pbVar14[-6] * (int)(char)(&REFG(undefined1, 0x142940d30))[lVar19 * 8] +
+                                  (int)(char)(&REFG(undefined1, 0x142940d36))[lVar18] * uVar22 +
+                                  (int)(char)(&REFG(undefined1, 0x142940d33))[lVar18] * (uint)bVar3 +
+                                  (int)(char)(&REFG(undefined1, 0x142940d31))[lVar18] * (uint)bVar2 +
+                                  (int)(char)(&REFG(undefined1, 0x142940d32))[lVar18] * (uint)bVar7 +
+                                  (int)(char)(&REFG(undefined1, 0x142940d34))[lVar18] * (uint)bVar4 +
+                                  (int)(char)(&REFG(undefined1, 0x142940d35))[lVar18] * (uint)bVar5 + 4 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d37))[lVar18] * (uint)bVar6) >> 3);
       iVar25 = iVar26 + iVar24 + iVar24;
       lVar19 = ((longlong)(iVar26 + iVar24) >> 10) + 0x40;
       lVar18 = lVar19 * 8;
       bVar8 = pbVar14[2];
       bVar9 = pbVar14[3];
-      puVar23[-1] = (short)((int)((int)(char)(&REFG(undefined8, 0x142940d30))[lVar18] * (uint)bVar2 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d35))[lVar18] * uVar22 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d37))[lVar19 * 8] * (uint)bVar8 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d32))[lVar18] * (uint)bVar3 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d31))[lVar18] * (uint)bVar7 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d33))[lVar18] * (uint)bVar4 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d34))[lVar18] * (uint)bVar5 + 4 +
-                                 (int)(char)(&REFG(undefined8, 0x142940d36))[lVar18] * (uint)bVar6) >> 3);
+      puVar23[-1] = (short)((int)((int)(char)(&REFG(undefined1, 0x142940d30))[lVar18] * (uint)bVar2 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d35))[lVar18] * uVar22 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d37))[lVar19 * 8] * (uint)bVar8 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d32))[lVar18] * (uint)bVar3 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d31))[lVar18] * (uint)bVar7 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d33))[lVar18] * (uint)bVar4 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d34))[lVar18] * (uint)bVar5 + 4 +
+                                 (int)(char)(&REFG(undefined1, 0x142940d36))[lVar18] * (uint)bVar6) >> 3);
       lVar18 = ((longlong)iVar25 >> 10) * 8;
       pbVar14 = pbVar14 + 4;
       iVar25 = iVar25 + iVar24;
       bVar2 = *pbVar14;
       iVar26 = iVar25 + iVar24;
-      *puVar23 = (short)((int)((int)(char)(&REFG(undefined8, 0x142940f30))[lVar18] * (uint)bVar7 +
-                              (int)(char)(&REFG(undefined8, 0x142940f34))[lVar18] * uVar22 +
-                              (int)(char)(&REFG(undefined8, 0x142940f37))[lVar18] * (uint)bVar9 +
-                              (int)(char)(&REFG(undefined8, 0x142940f36))[lVar18] * (uint)bVar8 +
-                              (int)(char)(&REFG(undefined8, 0x142940f31))[lVar18] * (uint)bVar3 +
-                              (int)(char)(&REFG(undefined8, 0x142940f32))[lVar18] * (uint)bVar4 +
-                              (int)(char)(&REFG(undefined8, 0x142940f33))[lVar18] * (uint)bVar5 +
-                              (int)(char)(&REFG(undefined8, 0x142940f35))[lVar18] * (uint)bVar6 + 4) >> 3);
+      *puVar23 = (short)((int)((int)(char)(&REFG(undefined1, 0x142940f30))[lVar18] * (uint)bVar7 +
+                              (int)(char)(&REFG(undefined1, 0x142940f34))[lVar18] * uVar22 +
+                              (int)(char)(&REFG(undefined1, 0x142940f37))[lVar18] * (uint)bVar9 +
+                              (int)(char)(&REFG(undefined1, 0x142940f36))[lVar18] * (uint)bVar8 +
+                              (int)(char)(&REFG(undefined1, 0x142940f31))[lVar18] * (uint)bVar3 +
+                              (int)(char)(&REFG(undefined1, 0x142940f32))[lVar18] * (uint)bVar4 +
+                              (int)(char)(&REFG(undefined1, 0x142940f33))[lVar18] * (uint)bVar5 +
+                              (int)(char)(&REFG(undefined1, 0x142940f35))[lVar18] * (uint)bVar6 + 4) >> 3);
       lVar19 = (longlong)iVar25 >> 10;
       lVar18 = lVar19 * 8;
-      puVar23[1] = (short)((int)((int)(char)(&REFG(undefined8, 0x142940f37))[lVar18] * (uint)bVar2 +
-                                 (int)(char)(&REFG(undefined8, 0x142940f33))[lVar19 * 8] * uVar22 +
-                                 (int)(char)(&REFG(undefined8, 0x142940f36))[lVar18] * (uint)bVar9 +
-                                 (int)(char)(&REFG(undefined8, 0x142940f35))[lVar18] * (uint)bVar8 +
-                                 (int)(char)(&REFG(undefined8, 0x142940f31))[lVar18] * (uint)bVar4 +
-                                 (int)(char)(&REFG(undefined8, 0x142940f32))[lVar18] * (uint)bVar5 +
-                                 (int)(char)(&REFG(undefined8, 0x142940f34))[lVar18] * (uint)bVar6 + 4 +
-                                (int)(char)(&REFG(undefined8, 0x142940f30))[lVar18] * (uint)bVar3) >> 3);
+      puVar23[1] = (short)((int)((int)(char)(&REFG(undefined1, 0x142940f37))[lVar18] * (uint)bVar2 +
+                                 (int)(char)(&REFG(undefined1, 0x142940f33))[lVar19 * 8] * uVar22 +
+                                 (int)(char)(&REFG(undefined1, 0x142940f36))[lVar18] * (uint)bVar9 +
+                                 (int)(char)(&REFG(undefined1, 0x142940f35))[lVar18] * (uint)bVar8 +
+                                 (int)(char)(&REFG(undefined1, 0x142940f31))[lVar18] * (uint)bVar4 +
+                                 (int)(char)(&REFG(undefined1, 0x142940f32))[lVar18] * (uint)bVar5 +
+                                 (int)(char)(&REFG(undefined1, 0x142940f34))[lVar18] * (uint)bVar6 + 4 +
+                                (int)(char)(&REFG(undefined1, 0x142940f30))[lVar18] * (uint)bVar3) >> 3);
       puVar23 = puVar23 + 4;
       (*(longlong *)(gen_frame + 0x20)) = (*(longlong *)(gen_frame + 0x20)) + -1;
       uVar22 = (uint)bVar2;
@@ -12564,52 +12564,52 @@ int FUN_1423a84a0(longlong param_1, longlong param_2, longlong param_3, longlong
       sVar10 = psVar20[-0x1f];
       sVar11 = psVar20[-0x27];
       *(short *)((longlong)psVar20 + lVar19 + -0x30) =
-           (short)((int)*psVar20 * (int)(char)(&REFG(undefined8, 0x142940d36))[lVar1] +
-                   (int)psVar20[-0x28] * (int)(char)(&REFG(undefined8, 0x142940d31))[lVar16 * 8] +
-                   (int)psVar20[-0x20] * (int)(char)(&REFG(undefined8, 0x142940d32))[lVar1] +
-                   (int)psVar20[-0x18] * (int)(char)(&REFG(undefined8, 0x142940d33))[lVar1] +
-                   (int)psVar20[-0x10] * (int)(char)(&REFG(undefined8, 0x142940d34))[lVar1] +
-                   (int)psVar20[8] * (int)(char)(&REFG(undefined8, 0x142940d37))[lVar1] +
-                   (int)psVar20[-8] * (int)(char)(&REFG(undefined8, 0x142940d35))[lVar1] +
-                   (int)psVar20[-0x30] * (int)(char)(&REFG(undefined8, 0x142940d30))[lVar1] + 0x40 >> 7);
+           (short)((int)*psVar20 * (int)(char)(&REFG(undefined1, 0x142940d36))[lVar1] +
+                   (int)psVar20[-0x28] * (int)(char)(&REFG(undefined1, 0x142940d31))[lVar16 * 8] +
+                   (int)psVar20[-0x20] * (int)(char)(&REFG(undefined1, 0x142940d32))[lVar1] +
+                   (int)psVar20[-0x18] * (int)(char)(&REFG(undefined1, 0x142940d33))[lVar1] +
+                   (int)psVar20[-0x10] * (int)(char)(&REFG(undefined1, 0x142940d34))[lVar1] +
+                   (int)psVar20[8] * (int)(char)(&REFG(undefined1, 0x142940d37))[lVar1] +
+                   (int)psVar20[-8] * (int)(char)(&REFG(undefined1, 0x142940d35))[lVar1] +
+                   (int)psVar20[-0x30] * (int)(char)(&REFG(undefined1, 0x142940d30))[lVar1] + 0x40 >> 7);
       sVar12 = param_5[2];
       lVar16 = ((longlong)(iVar13 + sVar12 + 0x200) >> 10) + 0x40;
       lVar1 = lVar16 * 8;
       *(short *)((longlong)psVar20 + lVar19 + -0x2e) =
-           (short)((int)(char)(&REFG(undefined8, 0x142940d30))[lVar1] * (int)psVar20[-0x2f] +
-                   (int)sVar11 * (int)(char)(&REFG(undefined8, 0x142940d31))[lVar16 * 8] +
-                   (int)sVar10 * (int)(char)(&REFG(undefined8, 0x142940d32))[lVar1] +
-                   (int)psVar20[-0x17] * (int)(char)(&REFG(undefined8, 0x142940d33))[lVar1] +
-                   (int)psVar20[-0xf] * (int)(char)(&REFG(undefined8, 0x142940d34))[lVar1] +
-                   (int)psVar20[9] * (int)(char)(&REFG(undefined8, 0x142940d37))[lVar1] +
-                   (int)psVar20[-7] * (int)(char)(&REFG(undefined8, 0x142940d35))[lVar1] +
-                   (int)psVar20[1] * (int)(char)(&REFG(undefined8, 0x142940d36))[lVar1] + 0x40 >> 7);
+           (short)((int)(char)(&REFG(undefined1, 0x142940d30))[lVar1] * (int)psVar20[-0x2f] +
+                   (int)sVar11 * (int)(char)(&REFG(undefined1, 0x142940d31))[lVar16 * 8] +
+                   (int)sVar10 * (int)(char)(&REFG(undefined1, 0x142940d32))[lVar1] +
+                   (int)psVar20[-0x17] * (int)(char)(&REFG(undefined1, 0x142940d33))[lVar1] +
+                   (int)psVar20[-0xf] * (int)(char)(&REFG(undefined1, 0x142940d34))[lVar1] +
+                   (int)psVar20[9] * (int)(char)(&REFG(undefined1, 0x142940d37))[lVar1] +
+                   (int)psVar20[-7] * (int)(char)(&REFG(undefined1, 0x142940d35))[lVar1] +
+                   (int)psVar20[1] * (int)(char)(&REFG(undefined1, 0x142940d36))[lVar1] + 0x40 >> 7);
       iVar13 = iVar13 + sVar12 + (int)param_5[2];
       lVar16 = ((longlong)(iVar13 + 0x200) >> 10) + 0x40;
       lVar1 = lVar16 * 8;
       sVar10 = psVar20[-0x1d];
       sVar11 = psVar20[-0x25];
       *(short *)((longlong)psVar20 + lVar19 + -0x2c) =
-           (short)((int)(char)(&REFG(undefined8, 0x142940d30))[lVar1] * (int)psVar20[-0x2e] +
-                   (int)psVar20[-0x26] * (int)(char)(&REFG(undefined8, 0x142940d31))[lVar16 * 8] +
-                   (int)psVar20[-0x1e] * (int)(char)(&REFG(undefined8, 0x142940d32))[lVar1] +
-                   (int)psVar20[-0x16] * (int)(char)(&REFG(undefined8, 0x142940d33))[lVar1] +
-                   (int)psVar20[-0xe] * (int)(char)(&REFG(undefined8, 0x142940d34))[lVar1] +
-                   (int)psVar20[10] * (int)(char)(&REFG(undefined8, 0x142940d37))[lVar1] +
-                   (int)psVar20[-6] * (int)(char)(&REFG(undefined8, 0x142940d35))[lVar1] +
-                   (int)psVar20[2] * (int)(char)(&REFG(undefined8, 0x142940d36))[lVar1] + 0x40 >> 7);
+           (short)((int)(char)(&REFG(undefined1, 0x142940d30))[lVar1] * (int)psVar20[-0x2e] +
+                   (int)psVar20[-0x26] * (int)(char)(&REFG(undefined1, 0x142940d31))[lVar16 * 8] +
+                   (int)psVar20[-0x1e] * (int)(char)(&REFG(undefined1, 0x142940d32))[lVar1] +
+                   (int)psVar20[-0x16] * (int)(char)(&REFG(undefined1, 0x142940d33))[lVar1] +
+                   (int)psVar20[-0xe] * (int)(char)(&REFG(undefined1, 0x142940d34))[lVar1] +
+                   (int)psVar20[10] * (int)(char)(&REFG(undefined1, 0x142940d37))[lVar1] +
+                   (int)psVar20[-6] * (int)(char)(&REFG(undefined1, 0x142940d35))[lVar1] +
+                   (int)psVar20[2] * (int)(char)(&REFG(undefined1, 0x142940d36))[lVar1] + 0x40 >> 7);
       iVar13 = iVar13 + param_5[2];
       lVar16 = ((longlong)(iVar13 + 0x200) >> 10) + 0x40;
       lVar1 = lVar16 * 8;
       *(short *)((longlong)psVar20 + lVar19 + -0x2a) =
-           (short)((int)(char)(&REFG(undefined8, 0x142940d30))[lVar1] * (int)psVar20[-0x2d] + 0x40 +
-                   (int)sVar11 * (int)(char)(&REFG(undefined8, 0x142940d31))[lVar16 * 8] +
-                   (int)sVar10 * (int)(char)(&REFG(undefined8, 0x142940d32))[lVar1] +
-                   (int)psVar20[-0x15] * (int)(char)(&REFG(undefined8, 0x142940d33))[lVar1] +
-                   (int)psVar20[0xb] * (int)(char)(&REFG(undefined8, 0x142940d37))[lVar1] +
-                   (int)psVar20[-0xd] * (int)(char)(&REFG(undefined8, 0x142940d34))[lVar1] +
-                   (int)psVar20[-5] * (int)(char)(&REFG(undefined8, 0x142940d35))[lVar1] +
-                   (int)psVar20[3] * (int)(char)(&REFG(undefined8, 0x142940d36))[lVar1] >> 7);
+           (short)((int)(char)(&REFG(undefined1, 0x142940d30))[lVar1] * (int)psVar20[-0x2d] + 0x40 +
+                   (int)sVar11 * (int)(char)(&REFG(undefined1, 0x142940d31))[lVar16 * 8] +
+                   (int)sVar10 * (int)(char)(&REFG(undefined1, 0x142940d32))[lVar1] +
+                   (int)psVar20[-0x15] * (int)(char)(&REFG(undefined1, 0x142940d33))[lVar1] +
+                   (int)psVar20[0xb] * (int)(char)(&REFG(undefined1, 0x142940d37))[lVar1] +
+                   (int)psVar20[-0xd] * (int)(char)(&REFG(undefined1, 0x142940d34))[lVar1] +
+                   (int)psVar20[-5] * (int)(char)(&REFG(undefined1, 0x142940d35))[lVar1] +
+                   (int)psVar20[3] * (int)(char)(&REFG(undefined1, 0x142940d36))[lVar1] >> 7);
       psVar20 = psVar20 + 4;
       iVar13 = iVar13 + param_5[2];
       lVar17 = lVar17 + -1;
@@ -12882,7 +12882,7 @@ int FUN_1423a8ec0(ulonglong param_1, longlong param_2, ulonglong param_3, uint p
   gen_v16 auVar22 = {0};
   
   uVar11 = (ulonglong)(int)param_4;
-  pbVar10 = (undefined1 *)&REFG(undefined8, 0x142941760) + param_5;
+  pbVar10 = (undefined1 *)&REFG(undefined1, 0x142941760) + param_5;
   iVar13 = param_5 * 3 >> 2;
   do {
     iVar5 = REFG(undefined4, 0x14294295c);
@@ -13001,7 +13001,7 @@ int FUN_1423a90b0(ulonglong *param_1, longlong param_2, undefined *param_3, unde
   gen_v16 auVar24 = {0};
   gen_v16 auVar25 = {0};
   
-  puVar15 = (undefined1 *)&REFG(undefined8, 0x142941760) + (int)param_4;
+  puVar15 = (undefined1 *)&REFG(undefined1, 0x142941760) + (int)param_4;
   uVar16 = (int)param_4 * 3 >> 2;
   do {
     iVar10 = REFG(undefined4, 0x14294296c);
@@ -13480,7 +13480,7 @@ undefined4 FUN_1423a9a70(char *param_1, longlong param_2, longlong param_3, unde
     else {
       uVar20 = param_8 & 3;
     }
-    pcVar26 = (undefined1 *)&REFG(undefined8, 0x142940a60) + ((ulonglong)uVar20 * 0xf + (longlong)(param_6 + -1)) * 8;
+    pcVar26 = (undefined1 *)&REFG(undefined1, 0x142940a60) + ((ulonglong)uVar20 * 0xf + (longlong)(param_6 + -1)) * 8;
   }
   if (param_7 == 0) {
     pcVar13 = (char *)0x0;
@@ -13492,7 +13492,7 @@ undefined4 FUN_1423a9a70(char *param_1, longlong param_2, longlong param_3, unde
     else {
       uVar12 = (longlong)(int)param_8 >> 2;
     }
-    pcVar13 = (undefined1 *)&REFG(undefined8, 0x142940a60) + (uVar12 * 0xf + (longlong)(param_7 + -1)) * 8;
+    pcVar13 = (undefined1 *)&REFG(undefined1, 0x142940a60) + (uVar12 * 0xf + (longlong)(param_7 + -1)) * 8;
   }
   lVar28 = param_3 >> 1;
   lVar27 = (longlong)(int)(uint)param_4;
@@ -13841,23 +13841,23 @@ LAB_1423aa840:
             uVar4 = param_10 & 3;
           }
           lVar1 = ((ulonglong)uVar4 * 0xf + (longlong)(((int)uVar10 >> 6) + -1)) * 8;
-          if ((undefined1 *)&REFG(undefined8, 0x142940a60) + lVar1 == (char *)0x0) goto LAB_1423aa840;
+          if ((undefined1 *)&REFG(undefined1, 0x142940a60) + lVar1 == (char *)0x0) goto LAB_1423aa840;
           sVar3 = (short)((int)((uint)*(ushort *)(lVar9 + 8 + (longlong)iVar13 * 2) *
-                                (int)(char)(&REFG(undefined8, 0x142940a67))[lVar1] +
+                                (int)(char)(&REFG(undefined1, 0x142940a67))[lVar1] +
                                 (uint)*(ushort *)(lVar9 + 6 + (longlong)iVar13 * 2) *
-                                (int)(char)(&REFG(undefined8, 0x142940a66))[lVar1] +
+                                (int)(char)(&REFG(undefined1, 0x142940a66))[lVar1] +
                                 (uint)*(ushort *)(lVar9 + 4 + (longlong)iVar13 * 2) *
-                                (int)(char)(&REFG(undefined8, 0x142940a65))[lVar1] +
+                                (int)(char)(&REFG(undefined1, 0x142940a65))[lVar1] +
                                 (uint)*(ushort *)(lVar9 + 2 + (longlong)iVar13 * 2) *
-                                (int)(char)(&REFG(undefined8, 0x142940a64))[lVar1] +
+                                (int)(char)(&REFG(undefined1, 0x142940a64))[lVar1] +
                                 (uint)*(ushort *)(lVar9 + -2 + (longlong)iVar13 * 2) *
-                                (int)(char)(&REFG(undefined8, 0x142940a62))[lVar1] +
+                                (int)(char)(&REFG(undefined1, 0x142940a62))[lVar1] +
                                 (uint)*(ushort *)(lVar9 + -4 + (longlong)iVar13 * 2) *
-                                (int)(char)(&REFG(undefined8, 0x142940a61))[lVar1] +
+                                (int)(char)(&REFG(undefined1, 0x142940a61))[lVar1] +
                                 (uint)*(ushort *)(lVar9 + (longlong)iVar13 * 2) *
-                                (int)(char)(&REFG(undefined8, 0x142940a63))[lVar1] +
+                                (int)(char)(&REFG(undefined1, 0x142940a63))[lVar1] +
                                 (uint)*(ushort *)(lVar9 + -6 + (longlong)iVar13 * 2) *
-                                (int)(char)(&REFG(undefined8, 0x142940a60))[lVar1] + ((1 << (bVar6 & 0x1f)) >> 1))
+                                (int)(char)(&REFG(undefined1, 0x142940a60))[lVar1] + ((1 << (bVar6 & 0x1f)) >> 1))
                          >> (bVar6 & 0x1f));
         }
         *(short *)(puVar16 + lVar11 * 2) = sVar3;
@@ -13884,7 +13884,7 @@ LAB_1423aa840:
             else {
               uVar5 = (longlong)(int)param_10 >> 2;
             }
-            pcVar12 = (undefined1 *)&REFG(undefined8, 0x142940a60) + (uVar5 * 0xf + (longlong)(((int)param_7 >> 6) + -1)) * 8;
+            pcVar12 = (undefined1 *)&REFG(undefined1, 0x142940a60) + (uVar5 * 0xf + (longlong)(((int)param_7 >> 6) + -1)) * 8;
           }
           if (0 < lVar15) {
             if (pcVar12 == (char *)0x0) {
@@ -14864,7 +14864,7 @@ longlong FUN_1423aba20(longlong param_1, longlong param_2, longlong param_3, lon
     else {
       uVar14 = param_9 & 3;
     }
-    pcVar26 = (undefined1 *)&REFG(undefined8, 0x142940a60) + ((ulonglong)uVar14 * 0xf + (longlong)(param_7 + -1)) * 8;
+    pcVar26 = (undefined1 *)&REFG(undefined1, 0x142940a60) + ((ulonglong)uVar14 * 0xf + (longlong)(param_7 + -1)) * 8;
   }
   if (param_8 == 0) {
     pcVar25 = (char *)0x0;
@@ -14876,7 +14876,7 @@ longlong FUN_1423aba20(longlong param_1, longlong param_2, longlong param_3, lon
     else {
       uVar27 = (longlong)(int)param_9 >> 2;
     }
-    pcVar25 = (undefined1 *)&REFG(undefined8, 0x142940a60) + (uVar27 * 0xf + (longlong)(param_8 + -1)) * 8;
+    pcVar25 = (undefined1 *)&REFG(undefined1, 0x142940a60) + (uVar27 * 0xf + (longlong)(param_8 + -1)) * 8;
   }
   lVar15 = param_2 >> 1;
   lVar23 = param_4 >> 1;
@@ -15246,23 +15246,23 @@ LAB_1423ac810:
             uVar4 = param_11 & 3;
           }
           lVar1 = ((ulonglong)uVar4 * 0xf + (longlong)(((int)uVar5 >> 6) + -1)) * 8;
-          if ((undefined1 *)&REFG(undefined8, 0x142940a60) + lVar1 == (char *)0x0) goto LAB_1423ac810;
+          if ((undefined1 *)&REFG(undefined1, 0x142940a60) + lVar1 == (char *)0x0) goto LAB_1423ac810;
           sVar12 = (short)((int)((uint)*(ushort *)(lVar13 + 8 + (longlong)iVar15 * 2) *
-                                 (int)(char)(&REFG(undefined8, 0x142940a67))[lVar1] +
+                                 (int)(char)(&REFG(undefined1, 0x142940a67))[lVar1] +
                                  (uint)*(ushort *)(lVar13 + 6 + (longlong)iVar15 * 2) *
-                                 (int)(char)(&REFG(undefined8, 0x142940a66))[lVar1] +
+                                 (int)(char)(&REFG(undefined1, 0x142940a66))[lVar1] +
                                  (uint)*(ushort *)(lVar13 + 4 + (longlong)iVar15 * 2) *
-                                 (int)(char)(&REFG(undefined8, 0x142940a65))[lVar1] +
+                                 (int)(char)(&REFG(undefined1, 0x142940a65))[lVar1] +
                                  (uint)*(ushort *)(lVar13 + 2 + (longlong)iVar15 * 2) *
-                                 (int)(char)(&REFG(undefined8, 0x142940a64))[lVar1] +
+                                 (int)(char)(&REFG(undefined1, 0x142940a64))[lVar1] +
                                  (uint)*(ushort *)(lVar13 + -2 + (longlong)iVar15 * 2) *
-                                 (int)(char)(&REFG(undefined8, 0x142940a62))[lVar1] +
+                                 (int)(char)(&REFG(undefined1, 0x142940a62))[lVar1] +
                                  (uint)*(ushort *)(lVar13 + -4 + (longlong)iVar15 * 2) *
-                                 (int)(char)(&REFG(undefined8, 0x142940a61))[lVar1] +
+                                 (int)(char)(&REFG(undefined1, 0x142940a61))[lVar1] +
                                  (uint)*(ushort *)(lVar13 + (longlong)iVar15 * 2) *
-                                 (int)(char)(&REFG(undefined8, 0x142940a63))[lVar1] +
+                                 (int)(char)(&REFG(undefined1, 0x142940a63))[lVar1] +
                                  (uint)*(ushort *)(lVar13 + -6 + (longlong)iVar15 * 2) *
-                                 (int)(char)(&REFG(undefined8, 0x142940a60))[lVar1] +
+                                 (int)(char)(&REFG(undefined1, 0x142940a60))[lVar1] +
                                 ((1 << (6 - bVar8 & 0x1f)) >> 1)) >> (6 - bVar8 & 0x1f));
         }
         *(short *)(puVar19 + lVar17 * 2) = sVar12;
@@ -15291,7 +15291,7 @@ LAB_1423ac810:
             else {
               uVar6 = (longlong)(int)param_11 >> 2;
             }
-            pcVar16 = (undefined1 *)&REFG(undefined8, 0x142940a60) + (uVar6 * 0xf + (longlong)(((int)param_8 >> 6) + -1)) * 8;
+            pcVar16 = (undefined1 *)&REFG(undefined1, 0x142940a60) + (uVar6 * 0xf + (longlong)(((int)param_8 >> 6) + -1)) * 8;
           }
           if (0 < lVar18) {
             psVar14 = (short *)(puVar19 + 0x300);
@@ -16285,21 +16285,21 @@ LAB_1423adbba:
           iVar3 = iVar1;
         }
         iVar12 = (int)((((((((0x40 - (uint)*(ushort *)(param_3 + (longlong)iVar3 * 2) *
-                                     (int)(char)(&REFG(undefined8, 0x14294133f))[lVar2]) -
+                                     (int)(char)(&REFG(undefined1, 0x14294133f))[lVar2]) -
                             (uint)*(ushort *)(param_3 + (longlong)iVar10 * 2) *
-                            (int)(char)(&REFG(undefined8, 0x14294133e))[lVar2]) -
+                            (int)(char)(&REFG(undefined1, 0x14294133e))[lVar2]) -
                            (uint)*(ushort *)(param_3 + (longlong)iVar4 * 2) *
-                           (int)(char)(&REFG(undefined8, 0x14294133d))[lVar2]) -
+                           (int)(char)(&REFG(undefined1, 0x14294133d))[lVar2]) -
                           (uint)*(ushort *)(param_3 + (longlong)iVar7 * 2) *
-                          (int)(char)(&REFG(undefined8, 0x14294133c))[lVar2]) -
+                          (int)(char)(&REFG(undefined1, 0x14294133c))[lVar2]) -
                          (uint)*(ushort *)(param_3 + (longlong)iVar13 * 2) *
-                         (int)(char)(&REFG(undefined8, 0x14294133b))[lVar2]) -
+                         (int)(char)(&REFG(undefined1, 0x14294133b))[lVar2]) -
                         (uint)*(ushort *)(param_3 + (longlong)iVar9 * 2) *
-                        (int)(char)(&REFG(undefined8, 0x14294133a))[lVar2]) -
+                        (int)(char)(&REFG(undefined1, 0x14294133a))[lVar2]) -
                        (uint)*(ushort *)(param_3 + (longlong)iVar6 * 2) *
-                       (int)(char)(&REFG(undefined8, 0x142941339))[lVar2]) -
+                       (int)(char)(&REFG(undefined1, 0x142941339))[lVar2]) -
                       (uint)*(ushort *)(param_3 + (longlong)iVar12 * 2) *
-                      (int)(char)(&REFG(undefined8, 0x142941338))[lVar2]) >> 7;
+                      (int)(char)(&REFG(undefined1, 0x142941338))[lVar2]) >> 7;
         if (iVar12 < 0) {
           iVar12 = 0;
         }
@@ -16781,51 +16781,51 @@ int FUN_1423ae530(longlong param_1, longlong param_2, longlong param_3, longlong
       uVar11 = puVar26[2];
       iVar21 = iVar22 + iVar16 + iVar16;
       *(short *)(lVar17 + -6 + (longlong)puVar26) =
-           (short)((int)((int)(char)(&REFG(undefined8, 0x142940d37))[lVar2] * (uint)uVar9 +
-                        (int)(char)(&REFG(undefined8, 0x142940d35))[lVar2] * (uint)uVar8 + iVar24 +
-                        (uint)puVar26[-6] * (int)(char)(&REFG(undefined8, 0x142940d30))[lVar18 * 8] +
-                        (int)(char)(&REFG(undefined8, 0x142940d36))[lVar2] * (uint)uVar15 +
-                        (int)(char)(&REFG(undefined8, 0x142940d33))[lVar2] * (uint)uVar5 +
-                        (int)(char)(&REFG(undefined8, 0x142940d31))[lVar2] * (uint)uVar6 +
-                        (int)(char)(&REFG(undefined8, 0x142940d32))[lVar2] * (uint)uVar10 +
-                        (int)(char)(&REFG(undefined8, 0x142940d34))[lVar2] * (uint)uVar7) >> (bVar14 & 0x1f));
+           (short)((int)((int)(char)(&REFG(undefined1, 0x142940d37))[lVar2] * (uint)uVar9 +
+                        (int)(char)(&REFG(undefined1, 0x142940d35))[lVar2] * (uint)uVar8 + iVar24 +
+                        (uint)puVar26[-6] * (int)(char)(&REFG(undefined1, 0x142940d30))[lVar18 * 8] +
+                        (int)(char)(&REFG(undefined1, 0x142940d36))[lVar2] * (uint)uVar15 +
+                        (int)(char)(&REFG(undefined1, 0x142940d33))[lVar2] * (uint)uVar5 +
+                        (int)(char)(&REFG(undefined1, 0x142940d31))[lVar2] * (uint)uVar6 +
+                        (int)(char)(&REFG(undefined1, 0x142940d32))[lVar2] * (uint)uVar10 +
+                        (int)(char)(&REFG(undefined1, 0x142940d34))[lVar2] * (uint)uVar7) >> (bVar14 & 0x1f));
       lVar2 = ((longlong)(iVar22 + iVar16) >> 10) * 8;
       *(short *)(lVar17 + -4 + (longlong)puVar26) =
-           (short)((int)((int)(char)(&REFG(undefined8, 0x142940f30))[lVar2] * (uint)uVar6 +
-                        (int)(char)(&REFG(undefined8, 0x142940f36))[lVar2] * (uint)uVar9 + iVar24 +
-                        (int)(char)(&REFG(undefined8, 0x142940f35))[lVar2] * (uint)uVar15 +
-                        (int)(char)(&REFG(undefined8, 0x142940f37))[lVar2] * (uint)uVar11 +
-                        (int)(char)(&REFG(undefined8, 0x142940f32))[lVar2] * (uint)uVar5 +
-                        (int)(char)(&REFG(undefined8, 0x142940f31))[lVar2] * (uint)uVar10 +
-                        (int)(char)(&REFG(undefined8, 0x142940f33))[lVar2] * (uint)uVar7 +
-                        (int)(char)(&REFG(undefined8, 0x142940f34))[lVar2] * (uint)uVar8) >> (bVar14 & 0x1f));
+           (short)((int)((int)(char)(&REFG(undefined1, 0x142940f30))[lVar2] * (uint)uVar6 +
+                        (int)(char)(&REFG(undefined1, 0x142940f36))[lVar2] * (uint)uVar9 + iVar24 +
+                        (int)(char)(&REFG(undefined1, 0x142940f35))[lVar2] * (uint)uVar15 +
+                        (int)(char)(&REFG(undefined1, 0x142940f37))[lVar2] * (uint)uVar11 +
+                        (int)(char)(&REFG(undefined1, 0x142940f32))[lVar2] * (uint)uVar5 +
+                        (int)(char)(&REFG(undefined1, 0x142940f31))[lVar2] * (uint)uVar10 +
+                        (int)(char)(&REFG(undefined1, 0x142940f33))[lVar2] * (uint)uVar7 +
+                        (int)(char)(&REFG(undefined1, 0x142940f34))[lVar2] * (uint)uVar8) >> (bVar14 & 0x1f));
       lVar2 = ((longlong)iVar21 >> 10) * 8;
       puVar1 = puVar26 + 4;
       uVar6 = puVar26[3];
       uVar23 = (uint)uVar15;
       iVar21 = iVar21 + iVar16;
       *(short *)(lVar17 + -2 + (longlong)puVar26) =
-           (short)((int)((int)(char)(&REFG(undefined8, 0x142940f30))[lVar2] * (uint)uVar10 +
-                        (int)(char)(&REFG(undefined8, 0x142940f35))[lVar2] * (uint)uVar9 + iVar24 +
-                        (int)(char)(&REFG(undefined8, 0x142940f34))[lVar2] * uVar23 +
-                        (int)(char)(&REFG(undefined8, 0x142940f37))[lVar2] * (uint)uVar6 +
-                        (int)(char)(&REFG(undefined8, 0x142940f36))[lVar2] * (uint)uVar11 +
-                        (int)(char)(&REFG(undefined8, 0x142940f31))[lVar2] * (uint)uVar5 +
-                        (int)(char)(&REFG(undefined8, 0x142940f32))[lVar2] * (uint)uVar7 +
-                        (int)(char)(&REFG(undefined8, 0x142940f33))[lVar2] * (uint)uVar8) >> (bVar14 & 0x1f));
+           (short)((int)((int)(char)(&REFG(undefined1, 0x142940f30))[lVar2] * (uint)uVar10 +
+                        (int)(char)(&REFG(undefined1, 0x142940f35))[lVar2] * (uint)uVar9 + iVar24 +
+                        (int)(char)(&REFG(undefined1, 0x142940f34))[lVar2] * uVar23 +
+                        (int)(char)(&REFG(undefined1, 0x142940f37))[lVar2] * (uint)uVar6 +
+                        (int)(char)(&REFG(undefined1, 0x142940f36))[lVar2] * (uint)uVar11 +
+                        (int)(char)(&REFG(undefined1, 0x142940f31))[lVar2] * (uint)uVar5 +
+                        (int)(char)(&REFG(undefined1, 0x142940f32))[lVar2] * (uint)uVar7 +
+                        (int)(char)(&REFG(undefined1, 0x142940f33))[lVar2] * (uint)uVar8) >> (bVar14 & 0x1f));
       lVar2 = ((longlong)iVar21 >> 10) * 8;
       iVar22 = iVar21 + iVar16;
       (*(longlong *)(gen_frame + 0x58)) = (*(longlong *)(gen_frame + 0x58)) + -1;
       uVar15 = *puVar1;
       *(short *)(lVar17 + (longlong)puVar26) =
-           (short)((int)((int)(char)(&REFG(undefined8, 0x142940f30))[lVar2] * (uint)uVar5 +
-                        (int)(char)(&REFG(undefined8, 0x142940f34))[lVar2] * (uint)uVar9 + iVar24 +
-                        (int)(char)(&REFG(undefined8, 0x142940f37))[lVar2] * (uint)*puVar1 +
-                        (int)(char)(&REFG(undefined8, 0x142940f33))[lVar2] * uVar23 +
-                        (int)(char)(&REFG(undefined8, 0x142940f36))[lVar2] * (uint)uVar6 +
-                        (int)(char)(&REFG(undefined8, 0x142940f35))[lVar2] * (uint)uVar11 +
-                        (int)(char)(&REFG(undefined8, 0x142940f31))[lVar2] * (uint)uVar7 +
-                        (int)(char)(&REFG(undefined8, 0x142940f32))[lVar2] * (uint)uVar8) >> (bVar14 & 0x1f));
+           (short)((int)((int)(char)(&REFG(undefined1, 0x142940f30))[lVar2] * (uint)uVar5 +
+                        (int)(char)(&REFG(undefined1, 0x142940f34))[lVar2] * (uint)uVar9 + iVar24 +
+                        (int)(char)(&REFG(undefined1, 0x142940f37))[lVar2] * (uint)*puVar1 +
+                        (int)(char)(&REFG(undefined1, 0x142940f33))[lVar2] * uVar23 +
+                        (int)(char)(&REFG(undefined1, 0x142940f36))[lVar2] * (uint)uVar6 +
+                        (int)(char)(&REFG(undefined1, 0x142940f35))[lVar2] * (uint)uVar11 +
+                        (int)(char)(&REFG(undefined1, 0x142940f31))[lVar2] * (uint)uVar7 +
+                        (int)(char)(&REFG(undefined1, 0x142940f32))[lVar2] * (uint)uVar8) >> (bVar14 & 0x1f));
       puVar26 = puVar1;
     } while ((*(longlong *)(gen_frame + 0x58)) != 0);
     puVar19 = puVar19 + 0x10;
@@ -16846,14 +16846,14 @@ int FUN_1423ae530(longlong param_1, longlong param_2, longlong param_3, longlong
     do {
       lVar18 = (longlong)(iVar25 + 0x200) >> 10;
       lVar2 = lVar18 * 8;
-      uVar23 = (int)(char)(&REFG(undefined8, 0x142940f36))[lVar18 * 8] * (int)*psVar13 +
-               (int)psVar13[-0x30] * (int)(char)(&REFG(undefined8, 0x142940f30))[lVar2] + iVar24 +
-               (int)psVar13[-0x28] * (int)(char)(&REFG(undefined8, 0x142940f31))[lVar2] +
-               (int)psVar13[-0x20] * (int)(char)(&REFG(undefined8, 0x142940f32))[lVar2] +
-               (int)psVar13[-0x18] * (int)(char)(&REFG(undefined8, 0x142940f33))[lVar2] +
-               (int)psVar13[-0x10] * (int)(char)(&REFG(undefined8, 0x142940f34))[lVar2] +
-               (int)psVar13[8] * (int)(char)(&REFG(undefined8, 0x142940f37))[lVar2] +
-               (int)psVar13[-8] * (int)(char)(&REFG(undefined8, 0x142940f35))[lVar2] >> (bVar14 & 0x1f);
+      uVar23 = (int)(char)(&REFG(undefined1, 0x142940f36))[lVar18 * 8] * (int)*psVar13 +
+               (int)psVar13[-0x30] * (int)(char)(&REFG(undefined1, 0x142940f30))[lVar2] + iVar24 +
+               (int)psVar13[-0x28] * (int)(char)(&REFG(undefined1, 0x142940f31))[lVar2] +
+               (int)psVar13[-0x20] * (int)(char)(&REFG(undefined1, 0x142940f32))[lVar2] +
+               (int)psVar13[-0x18] * (int)(char)(&REFG(undefined1, 0x142940f33))[lVar2] +
+               (int)psVar13[-0x10] * (int)(char)(&REFG(undefined1, 0x142940f34))[lVar2] +
+               (int)psVar13[8] * (int)(char)(&REFG(undefined1, 0x142940f37))[lVar2] +
+               (int)psVar13[-8] * (int)(char)(&REFG(undefined1, 0x142940f35))[lVar2] >> (bVar14 & 0x1f);
       if ((int)uVar23 < 0) {
         uVar23 = 0 >> (bVar14 & 0x1f);
       }
@@ -16865,14 +16865,14 @@ int FUN_1423ae530(longlong param_1, longlong param_2, longlong param_3, longlong
       *(short *)(lVar20 + -0x30 + (longlong)psVar13) = (short)uVar23;
       sVar12 = param_5[2];
       lVar2 = ((longlong)(iVar25 + sVar12 + 0x200) >> 10) * 8;
-      uVar23 = (int)psVar13[-0x2f] * (int)(char)(&REFG(undefined8, 0x142940f30))[lVar2] +
-               (int)psVar13[1] * (int)(char)(&REFG(undefined8, 0x142940f36))[lVar2] + iVar24 +
-               (int)sVar3 * (int)(char)(&REFG(undefined8, 0x142940f31))[lVar2] +
-               (int)sVar4 * (int)(char)(&REFG(undefined8, 0x142940f32))[lVar2] +
-               (int)psVar13[-0x17] * (int)(char)(&REFG(undefined8, 0x142940f33))[lVar2] +
-               (int)psVar13[-0xf] * (int)(char)(&REFG(undefined8, 0x142940f34))[lVar2] +
-               (int)psVar13[9] * (int)(char)(&REFG(undefined8, 0x142940f37))[lVar2] +
-               (int)psVar13[-7] * (int)(char)(&REFG(undefined8, 0x142940f35))[lVar2] >> (bVar14 & 0x1f);
+      uVar23 = (int)psVar13[-0x2f] * (int)(char)(&REFG(undefined1, 0x142940f30))[lVar2] +
+               (int)psVar13[1] * (int)(char)(&REFG(undefined1, 0x142940f36))[lVar2] + iVar24 +
+               (int)sVar3 * (int)(char)(&REFG(undefined1, 0x142940f31))[lVar2] +
+               (int)sVar4 * (int)(char)(&REFG(undefined1, 0x142940f32))[lVar2] +
+               (int)psVar13[-0x17] * (int)(char)(&REFG(undefined1, 0x142940f33))[lVar2] +
+               (int)psVar13[-0xf] * (int)(char)(&REFG(undefined1, 0x142940f34))[lVar2] +
+               (int)psVar13[9] * (int)(char)(&REFG(undefined1, 0x142940f37))[lVar2] +
+               (int)psVar13[-7] * (int)(char)(&REFG(undefined1, 0x142940f35))[lVar2] >> (bVar14 & 0x1f);
       if ((int)uVar23 < 0) {
         uVar23 = 0 >> (bVar14 & 0x1f);
       }
@@ -16884,14 +16884,14 @@ int FUN_1423ae530(longlong param_1, longlong param_2, longlong param_3, longlong
       *(short *)(lVar20 + -0x2e + (longlong)psVar13) = (short)uVar23;
       iVar25 = iVar25 + sVar12 + (int)param_5[2];
       lVar2 = ((longlong)(iVar25 + 0x200) >> 10) * 8;
-      uVar23 = (int)psVar13[-0x2e] * (int)(char)(&REFG(undefined8, 0x142940f30))[lVar2] +
-               (int)psVar13[2] * (int)(char)(&REFG(undefined8, 0x142940f36))[lVar2] + iVar24 +
-               (int)sVar3 * (int)(char)(&REFG(undefined8, 0x142940f31))[lVar2] +
-               (int)sVar4 * (int)(char)(&REFG(undefined8, 0x142940f32))[lVar2] +
-               (int)psVar13[-0x16] * (int)(char)(&REFG(undefined8, 0x142940f33))[lVar2] +
-               (int)psVar13[-0xe] * (int)(char)(&REFG(undefined8, 0x142940f34))[lVar2] +
-               (int)psVar13[10] * (int)(char)(&REFG(undefined8, 0x142940f37))[lVar2] +
-               (int)psVar13[-6] * (int)(char)(&REFG(undefined8, 0x142940f35))[lVar2] >> (bVar14 & 0x1f);
+      uVar23 = (int)psVar13[-0x2e] * (int)(char)(&REFG(undefined1, 0x142940f30))[lVar2] +
+               (int)psVar13[2] * (int)(char)(&REFG(undefined1, 0x142940f36))[lVar2] + iVar24 +
+               (int)sVar3 * (int)(char)(&REFG(undefined1, 0x142940f31))[lVar2] +
+               (int)sVar4 * (int)(char)(&REFG(undefined1, 0x142940f32))[lVar2] +
+               (int)psVar13[-0x16] * (int)(char)(&REFG(undefined1, 0x142940f33))[lVar2] +
+               (int)psVar13[-0xe] * (int)(char)(&REFG(undefined1, 0x142940f34))[lVar2] +
+               (int)psVar13[10] * (int)(char)(&REFG(undefined1, 0x142940f37))[lVar2] +
+               (int)psVar13[-6] * (int)(char)(&REFG(undefined1, 0x142940f35))[lVar2] >> (bVar14 & 0x1f);
       if ((int)uVar23 < 0) {
         uVar23 = 0 >> (bVar14 & 0x1f);
       }
@@ -16903,14 +16903,14 @@ int FUN_1423ae530(longlong param_1, longlong param_2, longlong param_3, longlong
       *(short *)((longlong)psVar13 + lVar20 + -0x2c) = (short)uVar23;
       iVar25 = iVar25 + param_5[2];
       lVar2 = ((longlong)(iVar25 + 0x200) >> 10) * 8;
-      uVar23 = (int)psVar13[-0x2d] * (int)(char)(&REFG(undefined8, 0x142940f30))[lVar2] +
-               (int)psVar13[3] * (int)(char)(&REFG(undefined8, 0x142940f36))[lVar2] + iVar24 +
-               (int)sVar3 * (int)(char)(&REFG(undefined8, 0x142940f31))[lVar2] +
-               (int)sVar4 * (int)(char)(&REFG(undefined8, 0x142940f32))[lVar2] +
-               (int)psVar13[-0x15] * (int)(char)(&REFG(undefined8, 0x142940f33))[lVar2] +
-               (int)psVar13[0xb] * (int)(char)(&REFG(undefined8, 0x142940f37))[lVar2] +
-               (int)psVar13[-0xd] * (int)(char)(&REFG(undefined8, 0x142940f34))[lVar2] +
-               (int)psVar13[-5] * (int)(char)(&REFG(undefined8, 0x142940f35))[lVar2] >> (bVar14 & 0x1f);
+      uVar23 = (int)psVar13[-0x2d] * (int)(char)(&REFG(undefined1, 0x142940f30))[lVar2] +
+               (int)psVar13[3] * (int)(char)(&REFG(undefined1, 0x142940f36))[lVar2] + iVar24 +
+               (int)sVar3 * (int)(char)(&REFG(undefined1, 0x142940f31))[lVar2] +
+               (int)sVar4 * (int)(char)(&REFG(undefined1, 0x142940f32))[lVar2] +
+               (int)psVar13[-0x15] * (int)(char)(&REFG(undefined1, 0x142940f33))[lVar2] +
+               (int)psVar13[0xb] * (int)(char)(&REFG(undefined1, 0x142940f37))[lVar2] +
+               (int)psVar13[-0xd] * (int)(char)(&REFG(undefined1, 0x142940f34))[lVar2] +
+               (int)psVar13[-5] * (int)(char)(&REFG(undefined1, 0x142940f35))[lVar2] >> (bVar14 & 0x1f);
       if ((int)uVar23 < 0) {
         uVar23 = 0 >> (bVar14 & 0x1f);
       }
@@ -16999,25 +16999,25 @@ int FUN_1423aecb0(longlong param_1, longlong param_2, longlong param_3, longlong
       lVar18 = ((longlong)iVar27 >> 10) + 0x40;
       lVar2 = lVar18 * 8;
       *(short *)((longlong)puVar16 + lVar28 + -6) =
-           (short)((int)((int)(char)(&REFG(undefined8, 0x142940d37))[lVar2] * (uint)uVar10 +
-                        (int)(char)(&REFG(undefined8, 0x142940d35))[lVar2] * (uint)uVar9 + iVar24 +
-                        (uint)puVar16[-6] * (int)(char)(&REFG(undefined8, 0x142940d30))[lVar18 * 8] +
-                        (int)(char)(&REFG(undefined8, 0x142940d36))[lVar2] * (uint)uVar21 +
-                        (int)(char)(&REFG(undefined8, 0x142940d33))[lVar2] * (uint)uVar6 +
-                        (int)(char)(&REFG(undefined8, 0x142940d31))[lVar2] * (uint)uVar5 +
-                        (int)(char)(&REFG(undefined8, 0x142940d32))[lVar2] * (uint)uVar7 +
-                        (int)(char)(&REFG(undefined8, 0x142940d34))[lVar2] * (uint)uVar8) >> (bVar17 & 0x1f));
+           (short)((int)((int)(char)(&REFG(undefined1, 0x142940d37))[lVar2] * (uint)uVar10 +
+                        (int)(char)(&REFG(undefined1, 0x142940d35))[lVar2] * (uint)uVar9 + iVar24 +
+                        (uint)puVar16[-6] * (int)(char)(&REFG(undefined1, 0x142940d30))[lVar18 * 8] +
+                        (int)(char)(&REFG(undefined1, 0x142940d36))[lVar2] * (uint)uVar21 +
+                        (int)(char)(&REFG(undefined1, 0x142940d33))[lVar2] * (uint)uVar6 +
+                        (int)(char)(&REFG(undefined1, 0x142940d31))[lVar2] * (uint)uVar5 +
+                        (int)(char)(&REFG(undefined1, 0x142940d32))[lVar2] * (uint)uVar7 +
+                        (int)(char)(&REFG(undefined1, 0x142940d34))[lVar2] * (uint)uVar8) >> (bVar17 & 0x1f));
       lVar2 = ((longlong)(int)(iVar27 + uVar25) >> 10) * 8;
       iVar26 = iVar27 + uVar25 + (int)(short)uVar3;
       *(short *)((longlong)puVar16 + lVar28 + -4) =
-           (short)((int)((int)(char)(&REFG(undefined8, 0x142940f30))[lVar2] * (uint)uVar5 +
-                        (int)(char)(&REFG(undefined8, 0x142940f36))[lVar2] * (uint)uVar10 + iVar24 +
-                        (int)(char)(&REFG(undefined8, 0x142940f35))[lVar2] * (uint)uVar21 +
-                        (int)(char)(&REFG(undefined8, 0x142940f37))[lVar2] * (uint)uVar11 +
-                        (int)(char)(&REFG(undefined8, 0x142940f32))[lVar2] * (uint)uVar6 +
-                        (int)(char)(&REFG(undefined8, 0x142940f31))[lVar2] * (uint)uVar7 +
-                        (int)(char)(&REFG(undefined8, 0x142940f33))[lVar2] * (uint)uVar8 +
-                        (int)(char)(&REFG(undefined8, 0x142940f34))[lVar2] * (uint)uVar9) >> (bVar17 & 0x1f));
+           (short)((int)((int)(char)(&REFG(undefined1, 0x142940f30))[lVar2] * (uint)uVar5 +
+                        (int)(char)(&REFG(undefined1, 0x142940f36))[lVar2] * (uint)uVar10 + iVar24 +
+                        (int)(char)(&REFG(undefined1, 0x142940f35))[lVar2] * (uint)uVar21 +
+                        (int)(char)(&REFG(undefined1, 0x142940f37))[lVar2] * (uint)uVar11 +
+                        (int)(char)(&REFG(undefined1, 0x142940f32))[lVar2] * (uint)uVar6 +
+                        (int)(char)(&REFG(undefined1, 0x142940f31))[lVar2] * (uint)uVar7 +
+                        (int)(char)(&REFG(undefined1, 0x142940f33))[lVar2] * (uint)uVar8 +
+                        (int)(char)(&REFG(undefined1, 0x142940f34))[lVar2] * (uint)uVar9) >> (bVar17 & 0x1f));
       lVar2 = ((longlong)iVar26 >> 10) * 8;
       uVar5 = puVar16[3];
       iVar26 = iVar26 + (short)uVar3;
@@ -17025,27 +17025,27 @@ int FUN_1423aecb0(longlong param_1, longlong param_2, longlong param_3, longlong
       uVar20 = (uint)uVar21;
       uVar25 = (uint)(short)uVar3;
       *(short *)((longlong)puVar16 + lVar28 + -2) =
-           (short)((int)((int)(char)(&REFG(undefined8, 0x142940f30))[lVar2] * (uint)uVar7 +
-                        (int)(char)(&REFG(undefined8, 0x142940f35))[lVar2] * (uint)uVar10 + iVar24 +
-                        (int)(char)(&REFG(undefined8, 0x142940f34))[lVar2] * uVar20 +
-                        (int)(char)(&REFG(undefined8, 0x142940f37))[lVar2] * (uint)uVar5 +
-                        (int)(char)(&REFG(undefined8, 0x142940f36))[lVar2] * (uint)uVar11 +
-                        (int)(char)(&REFG(undefined8, 0x142940f31))[lVar2] * (uint)uVar6 +
-                        (int)(char)(&REFG(undefined8, 0x142940f32))[lVar2] * (uint)uVar8 +
-                        (int)(char)(&REFG(undefined8, 0x142940f33))[lVar2] * (uint)uVar9) >> (bVar17 & 0x1f));
+           (short)((int)((int)(char)(&REFG(undefined1, 0x142940f30))[lVar2] * (uint)uVar7 +
+                        (int)(char)(&REFG(undefined1, 0x142940f35))[lVar2] * (uint)uVar10 + iVar24 +
+                        (int)(char)(&REFG(undefined1, 0x142940f34))[lVar2] * uVar20 +
+                        (int)(char)(&REFG(undefined1, 0x142940f37))[lVar2] * (uint)uVar5 +
+                        (int)(char)(&REFG(undefined1, 0x142940f36))[lVar2] * (uint)uVar11 +
+                        (int)(char)(&REFG(undefined1, 0x142940f31))[lVar2] * (uint)uVar6 +
+                        (int)(char)(&REFG(undefined1, 0x142940f32))[lVar2] * (uint)uVar8 +
+                        (int)(char)(&REFG(undefined1, 0x142940f33))[lVar2] * (uint)uVar9) >> (bVar17 & 0x1f));
       iVar27 = iVar26 + uVar25;
       lVar2 = ((longlong)iVar26 >> 10) * 8;
       uVar21 = *puVar1;
       (*(longlong *)(gen_frame + 0x28)) = (*(longlong *)(gen_frame + 0x28)) + -1;
       *(short *)((longlong)puVar16 + lVar28) =
-           (short)((int)((int)(char)(&REFG(undefined8, 0x142940f30))[lVar2] * (uint)uVar6 +
-                        (int)(char)(&REFG(undefined8, 0x142940f34))[lVar2] * (uint)uVar10 + iVar24 +
-                        (int)(char)(&REFG(undefined8, 0x142940f37))[lVar2] * (uint)*puVar1 +
-                        (int)(char)(&REFG(undefined8, 0x142940f33))[lVar2] * uVar20 +
-                        (int)(char)(&REFG(undefined8, 0x142940f36))[lVar2] * (uint)uVar5 +
-                        (int)(char)(&REFG(undefined8, 0x142940f35))[lVar2] * (uint)uVar11 +
-                        (int)(char)(&REFG(undefined8, 0x142940f31))[lVar2] * (uint)uVar8 +
-                        (int)(char)(&REFG(undefined8, 0x142940f32))[lVar2] * (uint)uVar9) >> (bVar17 & 0x1f));
+           (short)((int)((int)(char)(&REFG(undefined1, 0x142940f30))[lVar2] * (uint)uVar6 +
+                        (int)(char)(&REFG(undefined1, 0x142940f34))[lVar2] * (uint)uVar10 + iVar24 +
+                        (int)(char)(&REFG(undefined1, 0x142940f37))[lVar2] * (uint)*puVar1 +
+                        (int)(char)(&REFG(undefined1, 0x142940f33))[lVar2] * uVar20 +
+                        (int)(char)(&REFG(undefined1, 0x142940f36))[lVar2] * (uint)uVar5 +
+                        (int)(char)(&REFG(undefined1, 0x142940f35))[lVar2] * (uint)uVar11 +
+                        (int)(char)(&REFG(undefined1, 0x142940f31))[lVar2] * (uint)uVar8 +
+                        (int)(char)(&REFG(undefined1, 0x142940f32))[lVar2] * (uint)uVar9) >> (bVar17 & 0x1f));
       puVar16 = puVar1;
     } while ((*(longlong *)(gen_frame + 0x28)) != 0);
     puVar19 = puVar19 + 0x10;
@@ -17067,54 +17067,54 @@ int FUN_1423aecb0(longlong param_1, longlong param_2, longlong param_3, longlong
       sVar12 = psVar23[-0x1f];
       sVar13 = psVar23[-0x27];
       *(short *)(lVar22 + -0x30 + (longlong)psVar23) =
-           (short)((int)*psVar23 * (int)(char)(&REFG(undefined8, 0x142940d36))[lVar2] +
-                   (int)psVar23[-0x28] * (int)(char)(&REFG(undefined8, 0x142940d31))[lVar18 * 8] +
-                   (int)psVar23[-0x20] * (int)(char)(&REFG(undefined8, 0x142940d32))[lVar2] +
-                   (int)psVar23[-0x18] * (int)(char)(&REFG(undefined8, 0x142940d33))[lVar2] +
-                   (int)psVar23[-0x10] * (int)(char)(&REFG(undefined8, 0x142940d34))[lVar2] +
-                   (int)psVar23[8] * (int)(char)(&REFG(undefined8, 0x142940d37))[lVar2] +
-                   (int)psVar23[-8] * (int)(char)(&REFG(undefined8, 0x142940d35))[lVar2] +
-                   (int)psVar23[-0x30] * (int)(char)(&REFG(undefined8, 0x142940d30))[lVar2] + 0x40 >> 7) + -0x2000;
+           (short)((int)*psVar23 * (int)(char)(&REFG(undefined1, 0x142940d36))[lVar2] +
+                   (int)psVar23[-0x28] * (int)(char)(&REFG(undefined1, 0x142940d31))[lVar18 * 8] +
+                   (int)psVar23[-0x20] * (int)(char)(&REFG(undefined1, 0x142940d32))[lVar2] +
+                   (int)psVar23[-0x18] * (int)(char)(&REFG(undefined1, 0x142940d33))[lVar2] +
+                   (int)psVar23[-0x10] * (int)(char)(&REFG(undefined1, 0x142940d34))[lVar2] +
+                   (int)psVar23[8] * (int)(char)(&REFG(undefined1, 0x142940d37))[lVar2] +
+                   (int)psVar23[-8] * (int)(char)(&REFG(undefined1, 0x142940d35))[lVar2] +
+                   (int)psVar23[-0x30] * (int)(char)(&REFG(undefined1, 0x142940d30))[lVar2] + 0x40 >> 7) + -0x2000;
       uVar3 = param_5[2];
       lVar18 = ((longlong)(iVar24 + (short)uVar3 + 0x200) >> 10) + 0x40;
       lVar2 = lVar18 * 8;
       sVar14 = psVar23[-0x26];
       sVar15 = psVar23[-0x1e];
       *(short *)(lVar22 + -0x2e + (longlong)psVar23) =
-           (short)((int)(char)(&REFG(undefined8, 0x142940d30))[lVar2] * (int)psVar23[-0x2f] +
-                   (int)sVar13 * (int)(char)(&REFG(undefined8, 0x142940d31))[lVar18 * 8] +
-                   (int)sVar12 * (int)(char)(&REFG(undefined8, 0x142940d32))[lVar2] +
-                   (int)psVar23[-0x17] * (int)(char)(&REFG(undefined8, 0x142940d33))[lVar2] +
-                   (int)psVar23[-0xf] * (int)(char)(&REFG(undefined8, 0x142940d34))[lVar2] +
-                   (int)psVar23[9] * (int)(char)(&REFG(undefined8, 0x142940d37))[lVar2] +
-                   (int)psVar23[-7] * (int)(char)(&REFG(undefined8, 0x142940d35))[lVar2] +
-                   (int)psVar23[1] * (int)(char)(&REFG(undefined8, 0x142940d36))[lVar2] + 0x40 >> 7) + -0x2000;
+           (short)((int)(char)(&REFG(undefined1, 0x142940d30))[lVar2] * (int)psVar23[-0x2f] +
+                   (int)sVar13 * (int)(char)(&REFG(undefined1, 0x142940d31))[lVar18 * 8] +
+                   (int)sVar12 * (int)(char)(&REFG(undefined1, 0x142940d32))[lVar2] +
+                   (int)psVar23[-0x17] * (int)(char)(&REFG(undefined1, 0x142940d33))[lVar2] +
+                   (int)psVar23[-0xf] * (int)(char)(&REFG(undefined1, 0x142940d34))[lVar2] +
+                   (int)psVar23[9] * (int)(char)(&REFG(undefined1, 0x142940d37))[lVar2] +
+                   (int)psVar23[-7] * (int)(char)(&REFG(undefined1, 0x142940d35))[lVar2] +
+                   (int)psVar23[1] * (int)(char)(&REFG(undefined1, 0x142940d36))[lVar2] + 0x40 >> 7) + -0x2000;
       iVar24 = iVar24 + (short)uVar3 + (int)(short)param_5[2];
       lVar18 = ((longlong)(iVar24 + 0x200) >> 10) + 0x40;
       lVar2 = lVar18 * 8;
       sVar12 = psVar23[-0x1d];
       sVar13 = psVar23[-0x25];
       *(short *)(lVar22 + -0x2c + (longlong)psVar23) =
-           (short)((int)(char)(&REFG(undefined8, 0x142940d30))[lVar2] * (int)psVar23[-0x2e] +
-                   (int)sVar14 * (int)(char)(&REFG(undefined8, 0x142940d31))[lVar18 * 8] +
-                   (int)sVar15 * (int)(char)(&REFG(undefined8, 0x142940d32))[lVar2] +
-                   (int)psVar23[-0x16] * (int)(char)(&REFG(undefined8, 0x142940d33))[lVar2] +
-                   (int)psVar23[-0xe] * (int)(char)(&REFG(undefined8, 0x142940d34))[lVar2] +
-                   (int)psVar23[10] * (int)(char)(&REFG(undefined8, 0x142940d37))[lVar2] +
-                   (int)psVar23[-6] * (int)(char)(&REFG(undefined8, 0x142940d35))[lVar2] +
-                   (int)psVar23[2] * (int)(char)(&REFG(undefined8, 0x142940d36))[lVar2] + 0x40 >> 7) + -0x2000;
+           (short)((int)(char)(&REFG(undefined1, 0x142940d30))[lVar2] * (int)psVar23[-0x2e] +
+                   (int)sVar14 * (int)(char)(&REFG(undefined1, 0x142940d31))[lVar18 * 8] +
+                   (int)sVar15 * (int)(char)(&REFG(undefined1, 0x142940d32))[lVar2] +
+                   (int)psVar23[-0x16] * (int)(char)(&REFG(undefined1, 0x142940d33))[lVar2] +
+                   (int)psVar23[-0xe] * (int)(char)(&REFG(undefined1, 0x142940d34))[lVar2] +
+                   (int)psVar23[10] * (int)(char)(&REFG(undefined1, 0x142940d37))[lVar2] +
+                   (int)psVar23[-6] * (int)(char)(&REFG(undefined1, 0x142940d35))[lVar2] +
+                   (int)psVar23[2] * (int)(char)(&REFG(undefined1, 0x142940d36))[lVar2] + 0x40 >> 7) + -0x2000;
       iVar24 = iVar24 + (short)param_5[2];
       lVar18 = ((longlong)(iVar24 + 0x200) >> 10) + 0x40;
       lVar2 = lVar18 * 8;
       *(short *)((longlong)psVar23 + lVar22 + -0x2a) =
-           (short)((int)(char)(&REFG(undefined8, 0x142940d30))[lVar2] * (int)psVar23[-0x2d] + 0x40 +
-                   (int)sVar13 * (int)(char)(&REFG(undefined8, 0x142940d31))[lVar18 * 8] +
-                   (int)sVar12 * (int)(char)(&REFG(undefined8, 0x142940d32))[lVar2] +
-                   (int)psVar23[-0x15] * (int)(char)(&REFG(undefined8, 0x142940d33))[lVar2] +
-                   (int)psVar23[0xb] * (int)(char)(&REFG(undefined8, 0x142940d37))[lVar2] +
-                   (int)psVar23[-0xd] * (int)(char)(&REFG(undefined8, 0x142940d34))[lVar2] +
-                   (int)psVar23[-5] * (int)(char)(&REFG(undefined8, 0x142940d35))[lVar2] +
-                   (int)psVar23[3] * (int)(char)(&REFG(undefined8, 0x142940d36))[lVar2] >> 7) + -0x2000;
+           (short)((int)(char)(&REFG(undefined1, 0x142940d30))[lVar2] * (int)psVar23[-0x2d] + 0x40 +
+                   (int)sVar13 * (int)(char)(&REFG(undefined1, 0x142940d31))[lVar18 * 8] +
+                   (int)sVar12 * (int)(char)(&REFG(undefined1, 0x142940d32))[lVar2] +
+                   (int)psVar23[-0x15] * (int)(char)(&REFG(undefined1, 0x142940d33))[lVar2] +
+                   (int)psVar23[0xb] * (int)(char)(&REFG(undefined1, 0x142940d37))[lVar2] +
+                   (int)psVar23[-0xd] * (int)(char)(&REFG(undefined1, 0x142940d34))[lVar2] +
+                   (int)psVar23[-5] * (int)(char)(&REFG(undefined1, 0x142940d35))[lVar2] +
+                   (int)psVar23[3] * (int)(char)(&REFG(undefined1, 0x142940d36))[lVar2] >> 7) + -0x2000;
       iVar24 = iVar24 + (short)param_5[2];
       lVar28 = lVar28 + -1;
       psVar23 = psVar23 + 4;

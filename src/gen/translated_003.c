@@ -6937,7 +6937,7 @@ int FUN_1401dd800(void)
   GEN_HIT(437);
   int iVar1 = {0};
   
-  CALLF(undefined1, FUN_140262450)(&REFG(undefined8, 0x142e8e280));
+  CALLF(undefined1, FUN_140262450)(&REFG(undefined1, 0x142e8e280));
   iVar1 = atexit(((code *)REFP(0x1425e2330)));
   return iVar1;
 }

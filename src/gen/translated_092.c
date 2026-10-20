@@ -6704,7 +6704,7 @@ undefined4 FUN_1414bb7c0(undefined8 param_1, longlong *param_2)
 undefined * FUN_1414bb8a0(void)
 {
   GEN_HIT(129);
-  return &REFG(undefined8, 0x1430d25d8);
+  return &REFG(undefined1, 0x1430d25d8);
 }
 
 /* ref: FUN_1414bb8c0 */
@@ -10151,7 +10151,7 @@ undefined8 FUN_1414c0d10(undefined8 param_1)
       return *(undefined8 *)(REFG(undefined1 *, 0x143261ee0) + 0x50);
     }
   }
-  return &REFG(undefined8, 0x1430af710);
+  return &REFG(undefined1, 0x1430af710);
 }
 
 /* ref: FUN_1414c0d90 */
@@ -12188,7 +12188,7 @@ int FUN_1414c3ff0(longlong param_1, undefined8 param_2, longlong *param_3, longl
   iVar2 = CALLF(uint, FUN_141def630)(param_2);
   if (iVar2 == 2) {
     if ((_Init_thread_epoch < REFG(int, 0x1430af810)) && (_Init_thread_header(&REFG(undefined4, 0x1430af810)), REFG(undefined4, 0x1430af810) == -1)) {
-      CALLF(longlong, FUN_141df9d20)(&REFG(undefined8, 0x1430af7e0),8);
+      CALLF(longlong, FUN_141df9d20)(&REFG(undefined1, 0x1430af7e0),8);
       atexit(((code *)REFP(0x1425ebf10)));
       _Init_thread_footer(&REFG(undefined4, 0x1430af810));
     }
@@ -12199,7 +12199,7 @@ int FUN_1414c3ff0(longlong param_1, undefined8 param_2, longlong *param_3, longl
         if (lVar4 == 0) {
           lVar4 = *(longlong *)(REFG(undefined1 *, 0x143261f68) + 0x18);
         }
-        cVar1 = CALLF(undefined1, FUN_141df9dd0)(&REFG(undefined8, 0x1430af7e0),lVar4);
+        cVar1 = CALLF(undefined1, FUN_141df9dd0)(&REFG(undefined1, 0x1430af7e0),lVar4);
         if (cVar1 != '\0') {
           (*(undefined1 * *)(gen_frame + 0x0)) = ((undefined1 *)(gen_frame + 0x18));
           (*(undefined8 *)(gen_frame + 0x8)) = 0;
@@ -12225,7 +12225,7 @@ int FUN_1414c3ff0(longlong param_1, undefined8 param_2, longlong *param_3, longl
         if (lVar3 == 0) {
           lVar3 = *(longlong *)(REFG(undefined1 *, 0x143261f68) + 0x18);
         }
-        cVar1 = CALLF(undefined1, FUN_141df9dd0)(&REFG(undefined8, 0x1430af7e0),lVar3);
+        cVar1 = CALLF(undefined1, FUN_141df9dd0)(&REFG(undefined1, 0x1430af7e0),lVar3);
         if (cVar1 != '\0') {
           lVar3 = CALLF(undefined8, FUN_1414f10c0)(*(undefined8 *)(param_1 + 0x40),param_2);
           break;
@@ -12364,7 +12364,7 @@ undefined4 FUN_1414c4450(longlong *param_1, longlong *param_2, undefined8 param_
   longlong lVar11 = {0};
   
   if ((_Init_thread_epoch < REFG(int, 0x1430af7d8)) && (_Init_thread_header(&REFG(undefined4, 0x1430af7d8)), REFG(undefined4, 0x1430af7d8) == -1)) {
-    CALLF(longlong, FUN_141df9d20)(&REFG(undefined8, 0x1430af7a8),1);
+    CALLF(longlong, FUN_141df9d20)(&REFG(undefined1, 0x1430af7a8),1);
     atexit(((code *)REFP(0x1425ebf20)));
     _Init_thread_footer(&REFG(undefined4, 0x1430af7d8));
   }
@@ -12380,7 +12380,7 @@ undefined4 FUN_1414c4450(longlong *param_1, longlong *param_2, undefined8 param_
     if (lVar7 == 0) {
       lVar7 = *(longlong *)(puVar10 + 0x18);
     }
-    cVar4 = CALLF(undefined1, FUN_141df9dd0)(&REFG(undefined8, 0x1430af7a8),lVar7);
+    cVar4 = CALLF(undefined1, FUN_141df9dd0)(&REFG(undefined1, 0x1430af7a8),lVar7);
     puVar10 = REFG(undefined1 *, 0x143261f68);
     if (cVar4 == '\0') {
 LAB_1414c44fe:
@@ -12838,7 +12838,7 @@ undefined1 FUN_1414c51e0(longlong param_1, longlong *param_2, longlong *param_3)
   undefined8 uVar3 = {0};
   longlong lVar4 = {0};
   
-  cVar2 = CALLF(bool, FUN_141653a80)(&REFG(undefined8, 0x1430af798));
+  cVar2 = CALLF(bool, FUN_141653a80)(&REFG(undefined1, 0x1430af798));
   if ((cVar2 == '\0') || (cVar2 = (**(code **)(*param_2 + 0x20))(param_2), cVar2 == '\0')) {
     return 0;
   }
@@ -14497,10 +14497,10 @@ undefined1 FUN_1414c7c00(longlong *param_1, undefined8 param_2, uint *param_3, u
       return uVar4;
     }
   }
-  cVar5 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x1430af870),0,0);
+  cVar5 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x1430af870),0,0);
   uVar4 = 0;
   if (cVar5 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x40)),&REFG(undefined8, 0x1430af870),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraNotifications.cpp"),(unsigned long long)(0xf8),(unsigned long long)(0));
+    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x40)),&REFG(undefined1, 0x1430af870),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraNotifications.cpp"),(unsigned long long)(0xf8),(unsigned long long)(0));
     CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x60)),
                   "Received notification response for notification with no pending request.",0x48);
     (*(undefined1 * *)(gen_frame + 0x0)) = &REFG(undefined1, 0x14273b47c);
@@ -16886,7 +16886,7 @@ undefined8 FUN_1414cb790(longlong param_1)
     *(undefined1 *)(param_1 + 0x44) = 1;
     uVar2 = CALLF(undefined8, FUN_141486490)();
     CALLF(undefined8 *, FUN_141ecfcb0)((void *)&(*(gen_v16 *)(gen_frame + 0x38)));
-    (*(undefined4 *)(gen_frame + 0x54)) = CALLF(uint, FUN_141df9b70)(&REFG(undefined8, 0x14273e368));
+    (*(undefined4 *)(gen_frame + 0x54)) = CALLF(uint, FUN_141df9b70)(&REFG(undefined1, 0x14273e368));
     (*(uint *)(gen_frame + 0x48)) = (*(uint *)(gen_frame + 0x48)) | 2;
     (*(undefined4 *)(gen_frame + 0x58)) = CALLF(undefined4, FUN_1415679e0)();
     uVar1 = REFG(undefined4, 0x142853b08);
@@ -16957,9 +16957,9 @@ undefined8 FUN_1414cb8e0(longlong param_1, undefined8 param_2, int *param_3, und
       *(undefined4 *)(puVar4 + 1) = 0;
       puVar8 = puVar4 + 5;
       *puVar4 = (*(undefined8 (*)[1])(uintptr_t)0x14273e360ULL);
-      puVar4[2] = &REFG(undefined8, 0x14261b998);
+      puVar4[2] = &REFG(undefined1, 0x14261b998);
       puVar4[0x13] = 0;
-      puVar4[4] = &REFG(undefined8, 0x14261b9a0);
+      puVar4[4] = &REFG(undefined1, 0x14261b9a0);
       puVar4[0x12] = (*(undefined8 (*)[1])(uintptr_t)0x14261b9a8ULL);
       *(undefined4 *)(puVar4 + 0x14) = 0;
       *(undefined ***)((longlong)*(int *)(puVar4[2] + 4) + 0x10 + (longlong)puVar4) =
@@ -19281,8 +19281,8 @@ undefined4 FUN_1414cf220(undefined8 param_1, longlong param_2)
   }
   lVar4 = *plVar5;
   CALLF(undefined1, FUN_1402135c0)(plVar5,4);
-  if ((ulonglong)((longlong)(undefined1 *)&REFG(undefined8, 0x14273e544) - lVar4) < (ulonglong)plVar5[1]) {
-    uVar3 = *(undefined4 *)(*plVar5 + ((longlong)(undefined1 *)&REFG(undefined8, 0x14273e544) - lVar4));
+  if ((ulonglong)((longlong)(undefined1 *)&REFG(undefined1, 0x14273e544) - lVar4) < (ulonglong)plVar5[1]) {
+    uVar3 = *(undefined4 *)(*plVar5 + ((longlong)(undefined1 *)&REFG(undefined1, 0x14273e544) - lVar4));
   }
   else {
     uVar3 = 0x6d617073;
@@ -20234,13 +20234,13 @@ undefined1 FUN_1414d0870(longlong param_1)
   (*(undefined8 * *)(gen_frame + 0x8)) = (undefined8 *)0x0;
   (*(undefined8 *)(gen_frame + 0x20)) = 0;
   (*(undefined8 *)(gen_frame + 0x28)) = 0;
-  iVar3 = CALLF(undefined4, FUN_142574d40)(&REFG(undefined8, 0x1430af9f0),*(undefined8 *)(param_1 + 0x20),((undefined4 *)(gen_frame + 0x10)),param_1 + 0x38);
+  iVar3 = CALLF(undefined4, FUN_142574d40)(&REFG(undefined1, 0x1430af9f0),*(undefined8 *)(param_1 + 0x20),((undefined4 *)(gen_frame + 0x10)),param_1 + 0x38);
   uVar1 = (undefined1)iVar3;
   if ((iVar3 != 0) && (iVar3 != -0x7ffffec0)) {
-    cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x1430af9d8),0,0);
+    cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x1430af9d8),0,0);
     uVar1 = 0;
     if (cVar2 != '\0') {
-      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x30)),&REFG(undefined8, 0x1430af9d8),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp"),(unsigned long long)(0xb8),(unsigned long long)(0));
+      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x30)),&REFG(undefined1, 0x1430af9d8),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp"),(unsigned long long)(0xb8),(unsigned long long)(0));
       CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x50)),"Failed to dispatch Battle.net notification.",0x2b);
       (*(char * *)(gen_frame + 0x0)) = "methodType";
       (*(undefined8 * *)(gen_frame + 0x8)) = (undefined8 *)(param_1 + 0x20);
@@ -20280,13 +20280,13 @@ undefined1 FUN_1414d0a00(longlong param_1)
   (*(undefined8 * *)(gen_frame + 0x8)) = (undefined8 *)0x0;
   (*(undefined8 *)(gen_frame + 0x20)) = 0;
   (*(undefined8 *)(gen_frame + 0x28)) = 0;
-  iVar3 = CALLF(undefined4, FUN_142574e00)(&REFG(undefined8, 0x1430af9f0),*(undefined8 *)(param_1 + 0x28),((undefined4 *)(gen_frame + 0x10)),*(undefined4 *)(param_1 + 0x20),(unsigned long long)(param_1 + 0x40));
+  iVar3 = CALLF(undefined4, FUN_142574e00)(&REFG(undefined1, 0x1430af9f0),*(undefined8 *)(param_1 + 0x28),((undefined4 *)(gen_frame + 0x10)),*(undefined4 *)(param_1 + 0x20),(unsigned long long)(param_1 + 0x40));
   uVar1 = (undefined1)iVar3;
   if ((iVar3 != 0) && (iVar3 != -0x7ffffec0)) {
-    cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x1430af9d8),0,0);
+    cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x1430af9d8),0,0);
     uVar1 = 0;
     if (cVar2 != '\0') {
-      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x30)),&REFG(undefined8, 0x1430af9d8),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp"),(unsigned long long)(0xa2),(unsigned long long)(0));
+      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x30)),&REFG(undefined1, 0x1430af9d8),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp"),(unsigned long long)(0xa2),(unsigned long long)(0));
       CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x50)),"Failed to dispatch Battle.net response.",0x27);
       (*(char * *)(gen_frame + 0x0)) = "methodType";
       (*(undefined8 * *)(gen_frame + 0x8)) = (undefined8 *)(param_1 + 0x28);
@@ -20322,9 +20322,9 @@ undefined8 FUN_1414d0b90(longlong param_1)
   REFG(undefined1, 0x1430af980) = *(int *)(param_1 + 0x20) == 1;
   uVar1 = *(undefined1 *)(param_1 + 0x24);
   if ((bool)REFG(undefined1, 0x1430af980)) {
-    cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x1430af9d8),0,0);
+    cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x1430af9d8),0,0);
     if (cVar2 != '\0') {
-      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x1430af9d8),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp"),(unsigned long long)(0x57),(unsigned long long)(0));
+      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x1430af9d8),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp"),(unsigned long long)(0x57),(unsigned long long)(0));
       CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x20)),"Session with Battle.net established.",0x24);
       CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0x0)));
     }
@@ -20332,9 +20332,9 @@ undefined8 FUN_1414d0b90(longlong param_1)
     return (undefined8)CALLF(undefined8, FUN_1414d01d0)(lVar3 + 0x1e0,uVar1);
     return 0;
   }
-  cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x1430af9d8),0,0);
+  cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x1430af9d8),0,0);
   if (cVar2 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x1430af9d8),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp"),(unsigned long long)(0x5b),(unsigned long long)(0));
+    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x1430af9d8),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp"),(unsigned long long)(0x5b),(unsigned long long)(0));
     CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x20)),"Session with Battle.net destroyed.",0x22);
     CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0x0)));
   }
@@ -20360,10 +20360,10 @@ char FUN_1414d0ce0(longlong param_1)
   cVar1 = CALLF(undefined1, FUN_14147f3d0)(*(undefined8 *)(param_1 + 0x20),*(undefined8 *)(param_1 + 0x28),
                         param_1 + 0x38);
   if (cVar1 == '\0') {
-    cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x1430af9d8),0,0);
+    cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x1430af9d8),0,0);
     cVar1 = '\0';
     if (cVar2 != '\0') {
-      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x1430af9d8),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp"),(unsigned long long)(0xd0),(unsigned long long)(0));
+      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x1430af9d8),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp"),(unsigned long long)(0xd0),(unsigned long long)(0));
       CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x20)),"Failed to update Battle.net session key.",0x28);
       uVar3 = CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0x0)));
       cVar1 = (char)uVar3;
@@ -20413,7 +20413,7 @@ undefined8 FUN_1414d0dd0(longlong *param_1)
   uint uVar19 = {0};
   
   REFG(undefined1, 0x1430af980) = 0;
-  CALLF(undefined8, FUN_142574b50)(&REFG(undefined8, 0x1430af9f0));
+  CALLF(undefined8, FUN_142574b50)(&REFG(undefined1, 0x1430af9f0));
   lVar11 = *param_1;
   *param_1 = 0;
   if (lVar11 != 0) {
@@ -20484,7 +20484,7 @@ undefined8 FUN_1414d0dd0(longlong *param_1)
     uVar14 = (ulonglong)(uVar17 * 0x1000193);
   } while (*pcVar8 != 0);
   uVar9 = CALLF(longlong, FUN_140255140)(0xf0,0x19,"D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp",uVar14,(unsigned long long)(0x84),(unsigned long long)(0));
-  lVar10 = CALLF(longlong *, FUN_1414a1780)(uVar9,&REFG(undefined8, 0x1430af9f0));
+  lVar10 = CALLF(longlong *, FUN_1414a1780)(uVar9,&REFG(undefined1, 0x1430af9f0));
   lVar11 = *param_1;
   *param_1 = lVar10;
   if (lVar11 != 0) {
@@ -20501,7 +20501,7 @@ undefined8 FUN_1414d0dd0(longlong *param_1)
   } while (*pcVar8 != 0);
   uVar15 = 0;
   uVar9 = CALLF(longlong, FUN_140255140)(0x78,0x19,"D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp",uVar14,(unsigned long long)(0x85),(unsigned long long)(0));
-  lVar10 = CALLF(undefined8 *, FUN_1414bc720)(uVar9,&REFG(undefined8, 0x1430af9f0));
+  lVar10 = CALLF(undefined8 *, FUN_1414bc720)(uVar9,&REFG(undefined1, 0x1430af9f0));
   lVar11 = *plVar1;
   *plVar1 = lVar10;
   if (lVar11 != 0) {
@@ -20537,7 +20537,7 @@ undefined8 FUN_1414d0dd0(longlong *param_1)
     uVar15 = (ulonglong)(uVar17 * 0x1000193);
   } while (*pcVar8 != 0);
   uVar9 = CALLF(longlong, FUN_140255140)(0xa8,0x19,"D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp",uVar15,(unsigned long long)(0x86),(unsigned long long)(0));
-  lVar10 = CALLF(longlong, FUN_1414c3300)(uVar9,&REFG(undefined8, 0x1430af9f0));
+  lVar10 = CALLF(longlong, FUN_1414c3300)(uVar9,&REFG(undefined1, 0x1430af9f0));
   lVar11 = param_1[2];
   param_1[2] = lVar10;
   if (lVar11 != 0) {
@@ -20553,7 +20553,7 @@ undefined8 FUN_1414d0dd0(longlong *param_1)
     uVar15 = (ulonglong)(uVar12 * 0x1000193);
   } while (*pcVar8 != 0);
   uVar9 = CALLF(longlong, FUN_140255140)(0x20,0x19,"D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp",uVar15,(unsigned long long)(0x87),(unsigned long long)(0));
-  lVar11 = CALLF(undefined8 *, FUN_1414c71d0)(uVar9,&REFG(undefined8, 0x1430af9f0));
+  lVar11 = CALLF(undefined8 *, FUN_1414c71d0)(uVar9,&REFG(undefined1, 0x1430af9f0));
   puVar6 = (ulonglong *)*plVar2;
   *plVar2 = lVar11;
   if (puVar6 != (ulonglong *)0x0) {
@@ -20589,7 +20589,7 @@ undefined8 FUN_1414d0dd0(longlong *param_1)
     uVar15 = (ulonglong)(uVar18 * 0x1000193);
   } while (*pcVar8 != 0);
   uVar9 = CALLF(longlong, FUN_140255140)(0x60,0x19,"D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp",uVar15,(unsigned long long)(0x88),(unsigned long long)(0));
-  lVar10 = CALLF(undefined8 *, FUN_1414f1fa0)(uVar9,&REFG(undefined8, 0x1430af9f0));
+  lVar10 = CALLF(undefined8 *, FUN_1414f1fa0)(uVar9,&REFG(undefined1, 0x1430af9f0));
   lVar11 = param_1[4];
   param_1[4] = lVar10;
   if (lVar11 != 0) {
@@ -20605,7 +20605,7 @@ undefined8 FUN_1414d0dd0(longlong *param_1)
     uVar15 = (ulonglong)(uVar12 * 0x1000193);
   } while (*pcVar8 != 0);
   uVar9 = CALLF(longlong, FUN_140255140)(0x20,0x19,"D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp",uVar15,(unsigned long long)(0x89),(unsigned long long)(0));
-  lVar11 = CALLF(undefined8 *, FUN_1414c99f0)(uVar9,&REFG(undefined8, 0x1430af9f0));
+  lVar11 = CALLF(undefined8 *, FUN_1414c99f0)(uVar9,&REFG(undefined1, 0x1430af9f0));
   puVar6 = (ulonglong *)*plVar3;
   *plVar3 = lVar11;
   if (puVar6 != (ulonglong *)0x0) {
@@ -20641,7 +20641,7 @@ undefined8 FUN_1414d0dd0(longlong *param_1)
   } while (*pcVar8 != 0);
   uVar15 = 0;
   uVar9 = CALLF(longlong, FUN_140255140)(0x40,0x19,"D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp",uVar14,(unsigned long long)(0x8a),(unsigned long long)(0));
-  lVar11 = CALLF(undefined8 *, FUN_1414f4160)(uVar9,&REFG(undefined8, 0x1430af9f0));
+  lVar11 = CALLF(undefined8 *, FUN_1414f4160)(uVar9,&REFG(undefined1, 0x1430af9f0));
   puVar6 = (ulonglong *)param_1[7];
   param_1[7] = lVar11;
   if (puVar6 != (ulonglong *)0x0) {
@@ -20691,7 +20691,7 @@ undefined8 FUN_1414d0dd0(longlong *param_1)
     uVar14 = (ulonglong)(uVar18 * 0x1000193);
   } while (*pcVar8 != 0);
   uVar9 = CALLF(longlong, FUN_140255140)(0x20,0x19,"D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp",uVar14,(unsigned long long)(0x8b),(unsigned long long)(0));
-  lVar11 = CALLF(undefined8 *, FUN_1414ce0c0)(uVar9,&REFG(undefined8, 0x1430af9f0));
+  lVar11 = CALLF(undefined8 *, FUN_1414ce0c0)(uVar9,&REFG(undefined1, 0x1430af9f0));
   puVar6 = (ulonglong *)param_1[8];
   param_1[8] = lVar11;
   if (puVar6 != (ulonglong *)0x0) {
@@ -20759,9 +20759,9 @@ undefined8 FUN_1414d16e0(char param_1, undefined1 param_2)
   
   REFG(undefined1, 0x1430af980) = param_1;
   if (param_1 != '\0') {
-    cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x1430af9d8),0,0);
+    cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x1430af9d8),0,0);
     if (cVar1 != '\0') {
-      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x1430af9d8),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp"),(unsigned long long)(0x57),(unsigned long long)(0));
+      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x1430af9d8),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp"),(unsigned long long)(0x57),(unsigned long long)(0));
       CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x20)),"Session with Battle.net established.",0x24);
       CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0x0)));
     }
@@ -20769,9 +20769,9 @@ undefined8 FUN_1414d16e0(char param_1, undefined1 param_2)
     return (undefined8)CALLF(undefined8, FUN_1414d01d0)(lVar2 + 0x1e0,param_2);
     return 0;
   }
-  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x1430af9d8),0,0);
+  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x1430af9d8),0,0);
   if (cVar1 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x1430af9d8),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp"),(unsigned long long)(0x5b),(unsigned long long)(0));
+    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x1430af9d8),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowBattleNet\\AuroraBackInterface.cpp"),(unsigned long long)(0x5b),(unsigned long long)(0));
     CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x20)),"Session with Battle.net destroyed.",0x22);
     CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0x0)));
   }

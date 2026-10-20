@@ -16530,9 +16530,9 @@ undefined8 FUN_140c589d0(undefined8 *param_1, int *param_2, undefined8 param_3, 
   else {
     uVar3 = *param_1;
     uVar4 = CALLF(undefined8, FUN_1402b4a30)(uVar3,iVar2);
-    if (((((int)uVar4 == 5) && (cVar1 = CALLF(undefined1, FUN_1407cad50)(uVar3,iVar2,&REFG(undefined8, 0x1426cfc4c)), cVar1 != '\0'))
-        && (cVar1 = CALLF(undefined1, FUN_1407cad50)(uVar3,iVar2,&REFG(undefined8, 0x1426cfc50)), cVar1 != '\0')) &&
-       (cVar1 = CALLF(undefined1, FUN_1407cad50)(uVar3,iVar2,&REFG(undefined8, 0x1426cfc54)), cVar1 != '\0')) {
+    if (((((int)uVar4 == 5) && (cVar1 = CALLF(undefined1, FUN_1407cad50)(uVar3,iVar2,&REFG(undefined1, 0x1426cfc4c)), cVar1 != '\0'))
+        && (cVar1 = CALLF(undefined1, FUN_1407cad50)(uVar3,iVar2,&REFG(undefined1, 0x1426cfc50)), cVar1 != '\0')) &&
+       (cVar1 = CALLF(undefined1, FUN_1407cad50)(uVar3,iVar2,&REFG(undefined1, 0x1426cfc54)), cVar1 != '\0')) {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(*param_1,1);
       if (iVar2 == 0) {
         CALLF(undefined8, FUN_142424d80)(*param_1,"stack overflow");
@@ -16540,7 +16540,7 @@ undefined8 FUN_140c589d0(undefined8 *param_1, int *param_2, undefined8 param_3, 
       else {
         uVar3 = *param_1;
         iVar2 = *param_2;
-        CALLF(undefined8, FUN_1402b2f20)(uVar3,iVar2,&REFG(undefined8, 0x1426cfc54));
+        CALLF(undefined8, FUN_1402b2f20)(uVar3,iVar2,&REFG(undefined1, 0x1426cfc54));
         dVar6 = CALLF(double, FUN_1402b4920)(uVar3,0xffffffff);
         CALLF(undefined1, FUN_1402b45d0)(uVar3,0xfffffffe);
         fVar9 = (float)dVar6;
@@ -16552,7 +16552,7 @@ undefined8 FUN_140c589d0(undefined8 *param_1, int *param_2, undefined8 param_3, 
         else {
           fVar9 = 0.0;
         }
-        CALLF(undefined8, FUN_1402b2f20)(uVar3,iVar2,&REFG(undefined8, 0x1426cfc50));
+        CALLF(undefined8, FUN_1402b2f20)(uVar3,iVar2,&REFG(undefined1, 0x1426cfc50));
         dVar6 = CALLF(double, FUN_1402b4920)(uVar3,0xffffffff);
         CALLF(undefined1, FUN_1402b45d0)(uVar3,0xfffffffe);
         fVar8 = (float)dVar6;
@@ -16564,7 +16564,7 @@ undefined8 FUN_140c589d0(undefined8 *param_1, int *param_2, undefined8 param_3, 
         else {
           fVar8 = 0.0;
         }
-        CALLF(undefined8, FUN_1402b2f20)(uVar3,iVar2,&REFG(undefined8, 0x1426cfc4c));
+        CALLF(undefined8, FUN_1402b2f20)(uVar3,iVar2,&REFG(undefined1, 0x1426cfc4c));
         dVar6 = CALLF(double, FUN_1402b4920)(uVar3,0xffffffff);
         CALLF(undefined1, FUN_1402b45d0)(uVar3,0xfffffffe);
         fVar5 = (float)dVar6;
@@ -16845,11 +16845,11 @@ undefined4 FUN_140c59200(undefined8 *param_1, uint *param_2)
   uVar2 = *param_1;
   uVar1 = *param_2;
   CALLF(undefined1 *, FUN_1402b3b50)(uVar2,(double)((float)(uVar1 >> 0x10 & 0xff) * REFG(float, 0x142632528)));
-  CALLF(undefined8, FUN_1402b43c0)(uVar2,uVar4,&REFG(undefined8, 0x1426cfc4c));
+  CALLF(undefined8, FUN_1402b43c0)(uVar2,uVar4,&REFG(undefined1, 0x1426cfc4c));
   CALLF(undefined1 *, FUN_1402b3b50)(uVar2,(double)((float)(uVar1 >> 8 & 0xff) * REFG(float, 0x142632528)));
-  CALLF(undefined8, FUN_1402b43c0)(uVar2,uVar4,&REFG(undefined8, 0x1426cfc50));
+  CALLF(undefined8, FUN_1402b43c0)(uVar2,uVar4,&REFG(undefined1, 0x1426cfc50));
   CALLF(undefined1 *, FUN_1402b3b50)(uVar2,(double)((float)(uVar1 & 0xff) * REFG(float, 0x142632528)));
-  CALLF(undefined8, FUN_1402b43c0)(uVar2,uVar4,&REFG(undefined8, 0x1426cfc54));
+  CALLF(undefined8, FUN_1402b43c0)(uVar2,uVar4,&REFG(undefined1, 0x1426cfc54));
   return 1;
 }
 
@@ -20285,7 +20285,7 @@ undefined4 FUN_140c6a130(undefined8 param_1, undefined8 param_2, int *param_3)
   CALLF(undefined4, FUN_140800730)(&(*(undefined8 *)(gen_frame + 0x8)),param_3 + 0x18);
   CALLF(undefined8, FUN_1402b4450)((*(undefined8 *)(gen_frame + 0x8)),uVar3,"raidID",6);
   CALLF(undefined4, FUN_140e6a420)(&(*(undefined8 *)(gen_frame + 0x8)),param_3 + 0x19);
-  CALLF(undefined8, FUN_1402b4450)((*(undefined8 *)(gen_frame + 0x8)),uVar3,&REFG(undefined8, 0x1426cdd38),4);
+  CALLF(undefined8, FUN_1402b4450)((*(undefined8 *)(gen_frame + 0x8)),uVar3,&REFG(undefined1, 0x1426cdd38),4);
   CALLF(undefined4, FUN_1408006d0)(&(*(undefined8 *)(gen_frame + 0x8)),param_3 + 0x20);
   CALLF(undefined8, FUN_1402b4450)((*(undefined8 *)(gen_frame + 0x8)),uVar3,"difficulty",10);
   CALLF(undefined8, FUN_1407cb260)(&(*(undefined8 *)(gen_frame + 0x8)),param_3 + 0x22);

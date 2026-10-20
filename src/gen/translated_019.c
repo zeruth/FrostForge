@@ -10,7 +10,7 @@ undefined4 FUN_140324300(undefined8 param_1)
   GEN_HIT(0);
   undefined4 uVar1 = {0};
   
-  uVar1 = CALLF(undefined4, FUN_140324310)(&REFG(undefined8, 0x142635efc),param_1);
+  uVar1 = CALLF(undefined4, FUN_140324310)(&REFG(undefined1, 0x142635efc),param_1);
   return uVar1;
 }
 
@@ -132,7 +132,7 @@ LAB_140324380:
       lVar12 = (longlong)(int)uVar10 * 0x18;
       uVar6 = _stricmp(((char *)REFP(0x142ccbde4)) + lVar12,param_2);
       if ((int)uVar6 == 0) {
-        iVar17 = *(int *)((undefined1 *)&REFG(undefined8, 0x142ccbde0) + lVar12);
+        iVar17 = *(int *)((undefined1 *)&REFG(undefined1, 0x142ccbde0) + lVar12);
         break;
       }
       uVar18 = (int)uVar10 + 1;
@@ -1270,12 +1270,12 @@ undefined4 FUN_1403262c0(undefined8 param_1, undefined8 param_2)
   if (iVar3 != 4) {
     cVar2 = CALLF(bool, FUN_142289e10)();
     if ((cVar2 != '\0') && (REFG(undefined1, 0x142e301c8) != '\0')) {
-      CALLF(undefined8, FUN_140262440)(&REFG(undefined8, 0x142e30198));
+      CALLF(undefined8, FUN_140262440)(&REFG(undefined1, 0x142e30198));
       puVar1 = REFG(undefined8 *, 0x142e30180) + REFG(undefined8, 0x142e30188);
       for (puVar6 = REFG(undefined8 *, 0x142e30180); puVar6 != puVar1; puVar6 = puVar6 + 1) {
         (*(code *)*puVar6)("Invalid number of parameters",3);
       }
-      CALLF(undefined8, FUN_140262470)(&REFG(undefined8, 0x142e30198));
+      CALLF(undefined8, FUN_140262470)(&REFG(undefined1, 0x142e30198));
     }
     CALLF(undefined4, FUN_140324300)(param_1);
     return 1;
@@ -1319,7 +1319,7 @@ undefined4 FUN_1403262c0(undefined8 param_1, undefined8 param_2)
                 if (REFG(undefined1, 0x142e301c8) == '\0') {
                   return 1;
                 }
-                CALLF(undefined8, FUN_140262440)(&REFG(undefined8, 0x142e30198));
+                CALLF(undefined8, FUN_140262440)(&REFG(undefined1, 0x142e30198));
                 puVar1 = REFG(undefined8 *, 0x142e30180) + REFG(undefined8, 0x142e30188);
                 for (puVar6 = REFG(undefined8 *, 0x142e30180); puVar6 != puVar1; puVar6 = puVar6 + 1) {
                   (*(code *)*puVar6)("Unknown color class. Choose \'input\',\'echo\',\'warning\',\'admin\',or \'global\' as the first parameter"
@@ -1346,12 +1346,12 @@ undefined4 FUN_1403262c0(undefined8 param_1, undefined8 param_2)
   }
   cVar2 = CALLF(bool, FUN_142289e10)();
   if ((cVar2 != '\0') && (REFG(undefined1, 0x142e301c8) != '\0')) {
-    CALLF(undefined8, FUN_140262440)(&REFG(undefined8, 0x142e30198));
+    CALLF(undefined8, FUN_140262440)(&REFG(undefined1, 0x142e30198));
     puVar1 = REFG(undefined8 *, 0x142e30180) + REFG(undefined8, 0x142e30188);
     for (puVar6 = REFG(undefined8 *, 0x142e30180); puVar6 != puVar1; puVar6 = puVar6 + 1) {
       (*(code *)*puVar6)("One or more colors are not in the 0 to 255 range or missing.",3);
     }
-    CALLF(undefined8, FUN_140262470)(&REFG(undefined8, 0x142e30198));
+    CALLF(undefined8, FUN_140262470)(&REFG(undefined1, 0x142e30198));
   }
   cVar2 = CALLF(bool, FUN_142289e10)();
   if (cVar2 == '\0') {
@@ -1360,13 +1360,13 @@ undefined4 FUN_1403262c0(undefined8 param_1, undefined8 param_2)
   if (REFG(undefined1, 0x142e301c8) == '\0') {
     return 1;
   }
-  CALLF(undefined8, FUN_140262440)(&REFG(undefined8, 0x142e30198));
+  CALLF(undefined8, FUN_140262440)(&REFG(undefined1, 0x142e30198));
   puVar1 = REFG(undefined8 *, 0x142e30180) + REFG(undefined8, 0x142e30188);
   for (puVar6 = REFG(undefined8 *, 0x142e30180); puVar6 != puVar1; puVar6 = puVar6 + 1) {
     (*(code *)*puVar6)("Make sure to specify the red, green and blue colors.",3);
   }
 LAB_1403265b7:
-  CALLF(undefined8, FUN_140262470)(&REFG(undefined8, 0x142e30198));
+  CALLF(undefined8, FUN_140262470)(&REFG(undefined1, 0x142e30198));
   return 1;
 }
 
@@ -1408,7 +1408,7 @@ undefined4 FUN_140326660(undefined8 param_1, char *param_2)
   longlong lVar4 = {0};
   
   if ((param_2 != (char *)0x0) && (*param_2 != '\0')) {
-    lVar3 = strcspn((void *)(param_2),(void *)(&REFG(undefined8, 0x1426362d0)));
+    lVar3 = strcspn((void *)(param_2),(void *)(&REFG(undefined1, 0x1426362d0)));
     if ((*param_2 != '0') || (_Radix = 0x10, (param_2[1] + 0xa8U & 0xdf) != 0)) {
       _Radix = 10;
     }
@@ -1548,7 +1548,7 @@ undefined4 FUN_140326a30(void)
     lVar3 = lVar3 + -1;
   } while (lVar3 != 0);
   CALLF(undefined4, FUN_1403240c0)("repeat",((code *)REFP(0x140326660)),2,"Repeats a command [repeat <count> <command> <args ...>]",(unsigned long long)(0));
-  uVar1 = CALLF(undefined4, FUN_1403257d0)(&REFG(undefined8, 0x142636330),1);
+  uVar1 = CALLF(undefined4, FUN_1403257d0)(&REFG(undefined1, 0x142636330),1);
   REFG(undefined1, 0x142e301c8) = 1;
   return uVar1;
 }
@@ -2477,7 +2477,7 @@ longlong FUN_140328610(int param_1)
   undefined8 *puVar4 = {0};
   
   uVar2 = *(undefined4 *)((*(undefined1 * *)((char *)&gen_g_142e30248 + 0x0)) + 0x14);
-  CALLF(undefined1, FUN_14032b0a0)(&REFG(undefined8, 0x142ccbf70),uVar2);
+  CALLF(undefined1, FUN_14032b0a0)(&REFG(undefined1, 0x142ccbf70),uVar2);
   if (param_1 == 0) {
     (*(undefined2 *)(gen_frame + 0x20)) = 1;
     (*(undefined1 * *)(gen_frame + 0x28)) = ((undefined1 *)(gen_frame + 0x40));
@@ -2967,31 +2967,31 @@ undefined8 FUN_1403299d0(void)
   GEN_HIT(79);
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[272]) > 0x118 ? 0x0 + sizeof(undefined1[272]) : 0x118)] = {0};
   
-  CALLF(undefined4, FUN_1402282f0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x14261aa48),(uint)REFG(undefined1, 0x142ccbf80));
+  CALLF(undefined4, FUN_1402282f0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x14261aa48),(uint)REFG(undefined1, 0x142ccbf80));
   (*(undefined1 * *)((char *)&gen_g_142e30250 + 0x0)) =
        (undefined1 *)CALLF(undefined8, FUN_140320f70)("vsync","vsync on or off",1,((undefined1 *)(gen_frame + 0x0)),(unsigned long long)(((code *)REFP(0x140328120))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
-  CALLF(undefined4, FUN_1402282f0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x14261aa48),(uint)REFG(undefined1, 0x142ccbf81));
+  CALLF(undefined4, FUN_1402282f0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x14261aa48),(uint)REFG(undefined1, 0x142ccbf81));
   (*(undefined1 * *)((char *)&gen_g_142e30258 + 0x0)) =
        (undefined1 *)
        CALLF(undefined8, FUN_140320f70)("GxAllowCachelessShaderMode","CPU memory saving mode, if supported by backend. When enabled, shaders are fetched from disk as needed instead of being kept resident. This mode may slightly increase the time objects take to appear the first time they are encountered. Computers without solid state drives may want to disable this feature",1,((undefined1 *)(gen_frame + 0x0)),(unsigned long long)(((code *)REFP(0x140328120))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
-  CALLF(undefined4, FUN_1402282f0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x14261aa48),(uint)REFG(undefined1, 0x142ccbfec));
+  CALLF(undefined4, FUN_1402282f0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x14261aa48),(uint)REFG(undefined1, 0x142ccbfec));
   (*(undefined1 * *)((char *)&gen_g_142e30270 + 0x0)) =
        (undefined1 *)
        CALLF(undefined8, FUN_140320f70)("gxAspect","constrain window aspect",1,((undefined1 *)(gen_frame + 0x0)),(unsigned long long)(((code *)REFP(0x140328120))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
-  CALLF(undefined4, FUN_1402282f0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x14261aa48),(uint)REFG(undefined1, 0x142ccbf83));
+  CALLF(undefined4, FUN_1402282f0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x14261aa48),(uint)REFG(undefined1, 0x142ccbf83));
   (*(undefined1 * *)((char *)&gen_g_142e30260 + 0x0)) =
        (undefined1 *)
        CALLF(undefined8, FUN_140320f70)("gxMaxFrameLatency","maximum number of frames ahead of GPU the CPU can be",1,((undefined1 *)(gen_frame + 0x0)),(unsigned long long)(((code *)REFP(0x140328120))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
-  CALLF(undefined4, FUN_1402282f0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x14261aa48),(uint)REFG(undefined1, 0x142ccbf84));
+  CALLF(undefined4, FUN_1402282f0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x14261aa48),(uint)REFG(undefined1, 0x142ccbf84));
   (*(undefined1 * *)((char *)&gen_g_142e302a0 + 0x0)) =
        (undefined1 *)
        CALLF(undefined8, FUN_140320f70)("gxAftermathEnabled","Enable frame crash debugging",1,&REFG(undefined1, 0x142619020),(unsigned long long)(((code *)REFP(0x140328120))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
   (*(undefined8 *)((char *)&gen_g_142e30288 + 0x0)) =
        CALLF(undefined8, FUN_140320f70)("windowResizeLock","prevent resizing in windowed mode",1,&REFG(undefined1, 0x1426190ac),(unsigned long long)(((code *)REFP(0x140328190))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
   (*(undefined8 *)((char *)&gen_g_142e302b0 + 0x0)) =
-       CALLF(undefined8, FUN_140320f70)("graphicsQuality","save for Graphics Quality Selection",0x800,&REFG(undefined8, 0x14261d2ac),(unsigned long long)(((code *)REFP(0x140329410))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
+       CALLF(undefined8, FUN_140320f70)("graphicsQuality","save for Graphics Quality Selection",0x800,&REFG(undefined1, 0x14261d2ac),(unsigned long long)(((code *)REFP(0x140329410))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
   (*(undefined8 *)((char *)&gen_g_142e302b8 + 0x0)) =
-       CALLF(undefined8, FUN_140320f70)("RAIDgraphicsQuality","save for Raid Graphics Quality Selection",0x800,&REFG(undefined8, 0x14261d2ac),(unsigned long long)(((code *)REFP(0x140329410))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
+       CALLF(undefined8, FUN_140320f70)("RAIDgraphicsQuality","save for Raid Graphics Quality Selection",0x800,&REFG(undefined1, 0x14261d2ac),(unsigned long long)(((code *)REFP(0x140329410))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
   CALLF(undefined8, FUN_140320f70)("ClipCursor","Lock the cursor to the game window",1,&REFG(undefined1, 0x1426190ac),(unsigned long long)(((code *)REFP(0x140327ce0))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
   (*(undefined8 *)((char *)&gen_g_142e302a8 + 0x0)) =
        CALLF(undefined8, FUN_140320f70)("NotchedDisplayMode","Do nothing = 0. Shift UI down = 1. Shift everything down = 2.",1,&REFG(undefined1, 0x142619020),(unsigned long long)(((code *)REFP(0x140326e80))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
@@ -3026,7 +3026,7 @@ undefined8 FUN_140329d10(void)
        (undefined1 *)
        CALLF(undefined8, FUN_140320f70)("ForceResolutionDefaultToMaxSize","Force default resolution to the maximum supported size rather than the auto-detected size",1,&REFG(undefined1, 0x1426190ac),(unsigned long long)(0),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
   CALLF(undefined8, FUN_140320f70)("gxAFRDevicesCount","Force to set number of AFR devices",1,&REFG(undefined1, 0x1426190ac),(unsigned long long)(((code *)REFP(0x140326fc0))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
-  CALLF(undefined4, FUN_1402282f0)(&(*(undefined4 *)(gen_frame + 0x10)),&REFG(undefined8, 0x14261aa48),1);
+  CALLF(undefined4, FUN_1402282f0)(&(*(undefined4 *)(gen_frame + 0x10)),&REFG(undefined1, 0x14261aa48),1);
   (*(undefined1 * *)((char *)&gen_g_142e30278 + 0x0)) =
        (undefined1 *)
        CALLF(undefined8, FUN_140320f70)("gxMaximize","toggle fullscreen/window",0x800,&(*(undefined4 *)(gen_frame + 0x10)),(unsigned long long)(((code *)REFP(0x140328120))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0))
@@ -3055,7 +3055,7 @@ undefined8 FUN_140329d10(void)
        CALLF(undefined8, FUN_140320f70)("gxWindowedResolution","windowed resolution",1,&(*(undefined4 *)(gen_frame + 0x10)),(unsigned long long)(((code *)REFP(0x140328140))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
   (*(undefined1 * *)((char *)&gen_g_142e30228 + 0x0)) =
        (undefined1 *)
-       CALLF(undefined8, FUN_140320f70)("gxNewResolution","resolution to be set",0x400,&REFG(undefined8, 0x14261d444),(unsigned long long)(((code *)REFP(0x140328120))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
+       CALLF(undefined8, FUN_140320f70)("gxNewResolution","resolution to be set",0x400,&REFG(undefined1, 0x14261d444),(unsigned long long)(((code *)REFP(0x140328120))),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
   (*(undefined1 * *)((char *)&gen_g_142e30280 + 0x0)) =
        (undefined1 *)
        CALLF(undefined8, FUN_140320f70)("videoOptionsVersion","Video options version",1,&REFG(undefined1, 0x1426190ac),(unsigned long long)(0),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
@@ -3157,7 +3157,7 @@ undefined4 FUN_14032a260(void)
   char *pcVar4 = {0};
   
   CALLF(undefined8, FUN_14228acb0)("ReportDeviceCreationFailure(): no output device available!");
-  lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e94e90 + 0x0)),1,0,((undefined1 *)(gen_frame + 0x0)));
+  lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e94e90 + 0x0)),1,0,((undefined1 *)(gen_frame + 0x0)));
   pcVar3 = "";
   if (lVar2 == 0) {
     pcVar4 = "World of Warcraft";
@@ -3168,7 +3168,7 @@ undefined4 FUN_14032a260(void)
   else {
     pcVar4 = (char *)(lVar2 + 4 + (longlong)*(int *)(lVar2 + 4));
   }
-  lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e94e90 + 0x0)),3,0,((undefined1 *)(gen_frame + 0x8)));
+  lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e94e90 + 0x0)),3,0,((undefined1 *)(gen_frame + 0x8)));
   if (lVar2 == 0) {
     pcVar3 = "World of Warcraft was unable to start up 3D acceleration.";
   }
@@ -3203,17 +3203,17 @@ undefined8 FUN_14032a380(byte *param_1, longlong param_2)
   GEN_HIT(84);
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[1024]) > 0x408 ? 0x0 + sizeof(undefined1[1024]) : 0x408)] = {0};
   
-  CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x0)),0x400,&REFG(undefined8, 0x14261aa48),(uint)param_1[2]);
+  CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x0)),0x400,&REFG(undefined1, 0x14261aa48),(uint)param_1[2]);
   CALLF(undefined1, FUN_140322180)((*(undefined1 * *)((char *)&gen_g_142e30248 + 0x0)),((undefined1 *)(gen_frame + 0x0)),1,0,(unsigned long long)(0),(unsigned long long)(1));
-  CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x0)),0x400,&REFG(undefined8, 0x14261aa48),(uint)*param_1);
+  CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x0)),0x400,&REFG(undefined1, 0x14261aa48),(uint)*param_1);
   CALLF(undefined1, FUN_140322180)((*(undefined1 * *)((char *)&gen_g_142e30250 + 0x0)),((undefined1 *)(gen_frame + 0x0)),1,0,(unsigned long long)(0),(unsigned long long)(1));
-  CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x0)),0x400,&REFG(undefined8, 0x14261aa48),(uint)param_1[1]);
+  CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x0)),0x400,&REFG(undefined1, 0x14261aa48),(uint)param_1[1]);
   CALLF(undefined1, FUN_140322180)((*(undefined1 * *)((char *)&gen_g_142e30258 + 0x0)),((undefined1 *)(gen_frame + 0x0)),1,0,(unsigned long long)(0),(unsigned long long)(1));
-  CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x0)),0x400,&REFG(undefined8, 0x14261aa48),(uint)*(byte *)(param_2 + 0xc));
+  CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x0)),0x400,&REFG(undefined1, 0x14261aa48),(uint)*(byte *)(param_2 + 0xc));
   CALLF(undefined1, FUN_140322180)((*(undefined1 * *)((char *)&gen_g_142e30270 + 0x0)),((undefined1 *)(gen_frame + 0x0)),1,0,(unsigned long long)(0),(unsigned long long)(1));
-  CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x0)),0x400,&REFG(undefined8, 0x14261aa48),(uint)*(byte *)(param_2 + 0xe));
+  CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x0)),0x400,&REFG(undefined1, 0x14261aa48),(uint)*(byte *)(param_2 + 0xe));
   CALLF(undefined1, FUN_140322180)((*(undefined1 * *)((char *)&gen_g_142e30278 + 0x0)),((undefined1 *)(gen_frame + 0x0)),1,0,(unsigned long long)(0),(unsigned long long)(1));
-  CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x0)),0x400,&REFG(undefined8, 0x14261aa48),(uint)param_1[3]);
+  CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x0)),0x400,&REFG(undefined1, 0x14261aa48),(uint)param_1[3]);
   return (undefined8)CALLF(undefined1, FUN_140322180)((*(undefined1 * *)((char *)&gen_g_142e30260 + 0x0)),((undefined1 *)(gen_frame + 0x0)),1,0,(unsigned long long)(0),(unsigned long long)(1));
   return 0;
 }
@@ -3241,7 +3241,7 @@ undefined8 FUN_14032a530(undefined8 param_1)
   char *pcVar3 = {0};
   
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
-  lVar1 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e94e90 + 0x0)),1,0,&(*(undefined8 *)(gen_frame + 0x0)));
+  lVar1 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e94e90 + 0x0)),1,0,&(*(undefined8 *)(gen_frame + 0x0)));
   pcVar2 = "";
   if (lVar1 == 0) {
     pcVar3 = "World of Warcraft";
@@ -3252,7 +3252,7 @@ undefined8 FUN_14032a530(undefined8 param_1)
   else {
     pcVar3 = (char *)(lVar1 + 4 + (longlong)*(int *)(lVar1 + 4));
   }
-  lVar1 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e94e90 + 0x0)),0x12,0,((undefined1 *)(gen_frame + 0x8)));
+  lVar1 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e94e90 + 0x0)),0x12,0,((undefined1 *)(gen_frame + 0x8)));
   if (lVar1 == 0) {
     pcVar2 = 
     "World of Warcraft was unable to find a suitable graphics card, please check that your graphics driver is up to date and that you are not running in safe mode. For more information please see http://us.battle.net/support/en/article/driver-update-information"
@@ -3568,7 +3568,7 @@ undefined1 FUN_14032b0a0(byte *param_1, undefined4 param_2)
   if (*piVar7 == 10) {
     if (((uint)piVar7[1] < 6) || ((piVar7[1] == 6 && (piVar7[2] == 0)))) {
 LAB_14032b12e:
-      lVar8 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e94e90 + 0x0)),1,0,((uint *)(gen_frame + 0x4a0)));
+      lVar8 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e94e90 + 0x0)),1,0,((uint *)(gen_frame + 0x4a0)));
       pcVar9 = "";
       if (lVar8 == 0) {
         pcVar18 = "World of Warcraft";
@@ -3579,7 +3579,7 @@ LAB_14032b12e:
       else {
         pcVar18 = (char *)(lVar8 + 4 + (longlong)*(int *)(lVar8 + 4));
       }
-      lVar8 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e94e90 + 0x0)),0x1b,0,((int *)(gen_frame + 0x4a8)));
+      lVar8 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e94e90 + 0x0)),0x1b,0,((int *)(gen_frame + 0x4a8)));
       if (lVar8 == 0) {
         pcVar9 = "World of Warcraft was unable to start in compatibility mode.";
       }

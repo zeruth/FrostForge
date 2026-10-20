@@ -408,6 +408,9 @@ static __inline unsigned long long gen_piece_set(void *p, int off, int n, unsign
     return v;
 }
 static __inline unsigned long long gen_d2bits(double x) { unsigned long long r; memcpy(&r, &x, 8); return r; }
+/* the other way: an integer's bits as a double (a register Ghidra typed double that holds an
+   integer, tools/translate.py reinterpreted_float_locals) */
+static __inline double gen_bits2d(unsigned long long u) { double d; memcpy(&d, &u, 8); return d; }
 static __inline unsigned long long gen_fl2bits(float x) { unsigned int r; memcpy(&r, &x, 4); return r; }
 static __inline unsigned long long gen_u2bits64(unsigned long long x) { return x; }
 #define GEN_BITS(x) _Generic((x), double: gen_d2bits, float: gen_fl2bits, default: gen_u2bits64)(x)

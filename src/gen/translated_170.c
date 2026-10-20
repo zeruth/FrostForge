@@ -503,7 +503,7 @@ undefined8 FUN_14211c0f0(longlong param_1, longlong *param_2, longlong param_3)
   if (uVar17 != 0) {
     dVar4 = ((double)*(ulonglong *)(param_1 + 0xf0) / (double)uVar17) * REFG(double, 0x14281e138);
   }
-  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),1,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x37e,(unsigned long long)("Starting Batch Make Resident. files:%d fetch:%d patches:%d loose:%u dl:{%llu, %llu} (%.1f%%) wr:{%llu, %llu} (%.1f%%)"),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 600))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0x300))),(unsigned long long)(CONCAT44(0,
+  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),1,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x37e,(unsigned long long)("Starting Batch Make Resident. files:%d fetch:%d patches:%d loose:%u dl:{%llu, %llu} (%.1f%%) wr:{%llu, %llu} (%.1f%%)"),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 600))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0x300))),(unsigned long long)(CONCAT44(0,
                          *(int *)(param_1 + 0x1b0) + *(int *)(param_1 + 0x180))),(unsigned long long)(CONCAT44(0,uVar8)),(unsigned long long)(*(undefined8 *)(param_1 + 0xe0)),(unsigned long long)(uVar19),dVar5,(unsigned long long)(*(undefined8 *)(param_1 + 0xf0)),(unsigned long long)(uVar17),dVar4);
   return 0;
 }
@@ -3014,7 +3014,7 @@ undefined8 FUN_14211fb60(longlong param_1, undefined8 param_2, uint param_3, und
   float fVar6 = {0};
   
   if (*(char *)(*(longlong *)(param_1 + 0x10) + 0x9f4) == '\0') {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x101,(unsigned long long)("Cannot make key set resident when downloading is disabled."));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x101,(unsigned long long)("Cannot make key set resident when downloading is disabled."));
     bVar1 = *(byte *)(param_1 + 0x98);
     if (bVar1 == 0xb) {
       *(undefined1 *)(param_1 + 0x98) = 0xb;
@@ -3246,7 +3246,7 @@ uint FUN_1421200f0(longlong param_1)
   longlong *plVar11 = {0};
 /*                                   */
   
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),2,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x1c0,(unsigned long long)("OnCancel for BatchMakeRes|Op: %llu|Stage: %u"),(unsigned long long)(*(undefined8 *)(param_1 + 0x18)),(unsigned long long)(CONCAT44(0,(uint)*(byte *)(param_1 + 0x40))));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),2,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x1c0,(unsigned long long)("OnCancel for BatchMakeRes|Op: %llu|Stage: %u"),(unsigned long long)(*(undefined8 *)(param_1 + 0x18)),(unsigned long long)(CONCAT44(0,(uint)*(byte *)(param_1 + 0x40))));
   bVar1 = *(byte *)(param_1 + 0x40);
   uVar5 = (uint)bVar1;
   if (bVar1 != 0xe) {
@@ -3373,7 +3373,7 @@ undefined8 FUN_142120330(longlong param_1, undefined8 param_2, byte param_3)
         lVar1 = *(longlong *)(param_1 + 0x1c0) + (ulonglong)uVar15 * 0x48;
         if ((*puVar10 == REFG(undefined8, 0x1428ecfa0)) && (puVar10[1] == REFG(undefined8, 0x1428ecfa8))) {
           CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x10)),0x21,lVar1 + 0x1c);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x5ce,(unsigned long long)("Failed to find patch %s in CDN Index."),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x5ce,(unsigned long long)("Failed to find patch %s in CDN Index."),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))));
           uVar7 = (*(ulonglong *)(gen_frame + 0x50));
         }
         else {
@@ -3495,7 +3495,7 @@ undefined8 FUN_142120330(longlong param_1, undefined8 param_2, byte param_3)
     return uVar6;
   }
   uVar6 = CALLF(undefined *, FUN_1420d9030)((*(byte *)&gen_slot_param_3));
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x5ab,(unsigned long long)("Failed to lookup CDN addresses for block patch set. Error(%u) : %s"),(unsigned long long)(CONCAT44(uVar17,(uint)(*(byte *)&gen_slot_param_3))),(unsigned long long)(uVar6));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x5ab,(unsigned long long)("Failed to lookup CDN addresses for block patch set. Error(%u) : %s"),(unsigned long long)(CONCAT44(uVar17,(uint)(*(byte *)&gen_slot_param_3))),(unsigned long long)(uVar6));
   bVar3 = *(byte *)(param_1 + 0x98);
   if ((bVar3 == 0xb) || ((*(byte *)&gen_slot_param_3) == 0xb)) {
     *(undefined1 *)(param_1 + 0x98) = 0xb;
@@ -3556,7 +3556,7 @@ undefined8 FUN_142120880(longlong param_1, undefined8 param_2, byte param_3)
   uVar18 = (undefined4)((ulonglong)in_stack_ffffffffffffff60 >> 0x20);
   if ((*(byte *)&gen_slot_param_3) != 0) {
     uVar3 = CALLF(undefined *, FUN_1420d9030)((*(byte *)&gen_slot_param_3));
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x63a,(unsigned long long)("Failed to lookup CDN addresses for file set. Error(%u) : %s"),(unsigned long long)(CONCAT44(uVar18,(uint)(*(byte *)&gen_slot_param_3))),(unsigned long long)(uVar3));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x63a,(unsigned long long)("Failed to lookup CDN addresses for file set. Error(%u) : %s"),(unsigned long long)(CONCAT44(uVar18,(uint)(*(byte *)&gen_slot_param_3))),(unsigned long long)(uVar3));
     bVar2 = *(byte *)(param_1 + 0x98);
     if ((bVar2 == 0xb) || ((*(byte *)&gen_slot_param_3) == 0xb)) {
       *(undefined1 *)(param_1 + 0x98) = 0xb;
@@ -3612,7 +3612,7 @@ undefined8 FUN_142120880(longlong param_1, undefined8 param_2, byte param_3)
       *(byte *)(puVar11 + 6) = bVar2;
       if ((*puVar8 == REFG(undefined8, 0x1428ecfa0)) && (puVar8[1] == REFG(undefined8, 0x1428ecfa8))) {
         CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x10)),0x21,(longlong)puVar11 + 0x14);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x65d,(unsigned long long)("Failed to find file %s in CDN Index."),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x65d,(unsigned long long)("Failed to find file %s in CDN Index."),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))));
         CALLF(undefined8, FUN_1420dc510)(*(longlong *)(param_1 + 0x10) + 0x2d8,0,
                       "batch_make_resident.file_not_in_cdn_index",1,REFG(float, 0x142618d64));
         bVar2 = *(byte *)(param_1 + 0x98);
@@ -3861,7 +3861,7 @@ undefined8 FUN_142120f30(longlong param_1, undefined8 param_2, byte param_3)
   uVar25 = (undefined4)((ulonglong)in_stack_fffffffffffffe50 >> 0x20);
   if ((*(byte *)&gen_slot_param_3) != 0) {
     uVar7 = CALLF(undefined *, FUN_1420d9030)((*(byte *)&gen_slot_param_3));
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x4b9,(unsigned long long)("Failed to lookup CDN addresses for patch set. Error(%u) : %s"),(unsigned long long)(CONCAT44(uVar25,(uint)(*(byte *)&gen_slot_param_3))),(unsigned long long)(uVar7));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x4b9,(unsigned long long)("Failed to lookup CDN addresses for patch set. Error(%u) : %s"),(unsigned long long)(CONCAT44(uVar25,(uint)(*(byte *)&gen_slot_param_3))),(unsigned long long)(uVar7));
     bVar3 = *(byte *)(param_1 + 0x98);
     if ((bVar3 == 0xb) || ((*(byte *)&gen_slot_param_3) == 0xb)) {
       *(undefined1 *)(param_1 + 0x98) = 0xb;
@@ -3920,7 +3920,7 @@ undefined8 FUN_142120f30(longlong param_1, undefined8 param_2, byte param_3)
       if (((*(char *)((longlong)puVar11 + 0x45) == '\0') && (*plVar18 == REFG(undefined8, 0x1428ecfa0))) &&
          (plVar18[1] == REFG(undefined8, 0x1428ecfa8))) {
         CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0xa0)),0x21,(longlong)puVar24 + 0x14);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x4e0,(unsigned long long)("Failed to find patch %s in CDN Index."),(unsigned long long)(((undefined1 *)(gen_frame + 0xa0))));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x4e0,(unsigned long long)("Failed to find patch %s in CDN Index."),(unsigned long long)(((undefined1 *)(gen_frame + 0xa0))));
 LAB_1421211b5:
         uVar13 = *(uint *)(param_1 + 0x16c);
         if ((*(uint *)(param_1 + 0x168) == uVar13) &&
@@ -4394,7 +4394,7 @@ LAB_142121ae8:
   *(byte *)(param_1 + 0xa0) = bVar15;
   if ((bVar15 & 0xfd) != 0) {
     uVar12 = CALLF(undefined *, FUN_1420d9030)(bVar15);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xb0d,(unsigned long long)("Failed to download file data, some files may be truncated. HTTP Response (%d) : Error (%u): %s"),(unsigned long long)(CONCAT44(0,(int)param_3)),(unsigned long long)(CONCAT44(0,(uint)bVar15)),(unsigned long long)(uVar12));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xb0d,(unsigned long long)("Failed to download file data, some files may be truncated. HTTP Response (%d) : Error (%u): %s"),(unsigned long long)(CONCAT44(0,(int)param_3)),(unsigned long long)(CONCAT44(0,(uint)bVar15)),(unsigned long long)(uVar12));
     if (*(int *)(param_1 + 0x20) == 1) {
       piVar2 = (int *)(*(longlong *)(param_1 + 0x28) + 0xa8);
       *piVar2 = *piVar2 + 1;
@@ -4500,7 +4500,7 @@ undefined1 FUN_142121d10(longlong param_1, longlong param_2, longlong param_3, u
           }
           uVar11 = uVar8 - *(int *)(param_1 + 0x94);
           if (*(uint *)(param_1 + 0xa4) <= uVar11) {
-            CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xbc0,(unsigned long long)("Received extra file download content."));
+            CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xbc0,(unsigned long long)("Received extra file download content."));
             CALLF(undefined8, FUN_1420dc510)(*(longlong *)(lVar6 + 0x10) + 0x2d8,0,
                           "batch_make_resident.extra_download_content",1,REFG(float, 0x142618d64));
             return 1;
@@ -4578,7 +4578,7 @@ undefined8 FUN_142121f10(longlong param_1, longlong *param_2, longlong param_3, 
         if (cVar4 != '\0') {
           CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,(longlong)param_2 + 0x24);
           uVar7 = CALLF(undefined *, FUN_1420d9030)((char)param_2[0x10]);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x3cd,(unsigned long long)("Failed to reserve fetch key %s for writing. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)*(byte *)(param_2 + 0x10))),(unsigned long long)(uVar7));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x3cd,(unsigned long long)("Failed to reserve fetch key %s for writing. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)*(byte *)(param_2 + 0x10))),(unsigned long long)(uVar7));
           goto LAB_14212220e;
         }
         *(undefined1 *)((longlong)param_2 + 0x82) = 1;
@@ -4631,7 +4631,7 @@ LAB_1421221f0:
       else {
         CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,(longlong)param_2 + 0x24);
         uVar7 = CALLF(undefined *, FUN_1420d9030)((char)param_2[0x10]);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x3da,(unsigned long long)("Failed to write fetch key %s for writing. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)*(byte *)(param_2 + 0x10))),(unsigned long long)(uVar7));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x3da,(unsigned long long)("Failed to write fetch key %s for writing. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)*(byte *)(param_2 + 0x10))),(unsigned long long)(uVar7));
         plVar2 = *(longlong **)(*(longlong *)(param_1 + 0x10) + 0xe00);
         (**(code **)(*plVar2 + 200))(plVar2,param_3 + 0x14);
         *(undefined1 *)((longlong)param_2 + 0x82) = 0;
@@ -4642,7 +4642,7 @@ LAB_1421221f0:
     pcVar11 = "Fetch content ignored. Fetch key %s encountered a write error previously.";
   }
   CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,(longlong)param_2 + 0x24);
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",uVar12,(unsigned long long)(pcVar11),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",uVar12,(unsigned long long)(pcVar11),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
 LAB_14212220e:
   if (puVar6 != (undefined8 *)0x0) {
     *puVar6 = 0;
@@ -4685,7 +4685,7 @@ undefined8 FUN_142122290(longlong param_1, longlong param_2, uint param_3, ulong
         }
         uVar9 = uVar7 - *(int *)(param_5 + 0x94);
         if (*(uint *)(param_5 + 0xa4) <= uVar9) {
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xb90,(unsigned long long)("Received extra file download content."));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xb90,(unsigned long long)("Received extra file download content."));
           return (undefined8)CALLF(undefined8, FUN_1420dc510)(*(longlong *)(param_1 + 0x10) + 0x2d8,0,
                         "batch_make_resident.extra_download_content",1,REFG(float, 0x142618d64));
           return 0;
@@ -5083,7 +5083,7 @@ int FUN_142122a80(longlong *param_1, byte param_2)
     *(int *)((longlong)param_1 + 0xa4) = *(int *)((longlong)param_1 + 0xa4) + 1;
     CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,*(longlong *)(lVar3 + 8) + 0x14 + (ulonglong)*puVar2 * 0x40);
     uVar7 = CALLF(undefined *, FUN_1420d9030)(param_2);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xd9d,(unsigned long long)("Patch failed for target file with key %s. Falling back to full download. Error(%u) : %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)param_2)),(unsigned long long)(uVar7));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xd9d,(unsigned long long)("Patch failed for target file with key %s. Falling back to full download. Error(%u) : %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)param_2)),(unsigned long long)(uVar7));
     param_1[0x1d] =
          param_1[0x1d] +
          (ulonglong)*(uint *)((ulonglong)*puVar2 * 0x40 + 0x24 + *(longlong *)(lVar3 + 8));
@@ -5277,7 +5277,7 @@ undefined1 FUN_142122e60(longlong param_1, longlong param_2, byte param_3, longl
   else if (param_3 != 2) {
     CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_4 + 0x14);
     uVar8 = CALLF(undefined *, FUN_1420d9030)(param_3);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xd0b,(unsigned long long)("Retry download failed for %s. Error(%u) : %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)param_3)),(unsigned long long)(uVar8));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xd0b,(unsigned long long)("Retry download failed for %s. Error(%u) : %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)param_3)),(unsigned long long)(uVar8));
     bVar3 = *(byte *)(param_1 + 0x98);
     if ((bVar3 == 0xb) || (param_3 == 0xb)) {
       *(undefined1 *)(param_1 + 0x98) = 0xb;
@@ -5559,7 +5559,7 @@ undefined8 FUN_1421234e0(longlong param_1, undefined8 param_2, longlong param_3)
      bVar3 = (**(code **)(*plVar1 + 200))(plVar1,param_2), bVar3 != 0)) {
     CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_2);
     uVar4 = CALLF(undefined *, FUN_1420d9030)(bVar3);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xe59,(unsigned long long)("Failed to remove patch base with eKey \'%s\' from container. Error(%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)bVar3)),(unsigned long long)(uVar4));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xe59,(unsigned long long)("Failed to remove patch base with eKey \'%s\' from container. Error(%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)bVar3)),(unsigned long long)(uVar4));
   }
   if (((param_3 != 0) &&
       ((*(longlong *)(param_1 + 0x90) == 0 ||
@@ -5568,7 +5568,7 @@ undefined8 FUN_1421234e0(longlong param_1, undefined8 param_2, longlong param_3)
      bVar3 = (**(code **)(*plVar1 + 200))(plVar1,param_3), bVar3 != 0)) {
     CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_3);
     uVar4 = CALLF(undefined *, FUN_1420d9030)(bVar3);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xe6a,(unsigned long long)("Failed to remove patch with eKey \'%s\' from container. Error(%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)bVar3)),(unsigned long long)(uVar4));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xe6a,(unsigned long long)("Failed to remove patch with eKey \'%s\' from container. Error(%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)bVar3)),(unsigned long long)(uVar4));
   }
   return 0;
 }
@@ -5618,18 +5618,18 @@ byte FUN_142123660(longlong param_1)
     }
     uVar3 = CONCAT44(uVar8,iVar7);
     (*(longlong *)(gen_frame + 0x0)) = param_1;
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),2,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xe9b,(unsigned long long)("Batch container file reservation begin. Max file count:%d"),(unsigned long long)(uVar3));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),2,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xe9b,(unsigned long long)("Batch container file reservation begin. Max file count:%d"),(unsigned long long)(uVar3));
     uVar8 = (undefined4)((ulonglong)uVar3 >> 0x20);
     plVar1 = *(longlong **)(*(longlong *)(param_1 + 0x10) + 0xe00);
     bVar2 = (**(code **)(*plVar1 + 0xb8))(plVar1,iVar7,((code *)REFP(0x14211cdb0)),((code *)REFP(0x14211cbb0)),(unsigned long long)(&(*(longlong *)(gen_frame + 0x0))));
     if (bVar2 != 0) {
       uVar3 = CALLF(undefined *, FUN_1420d9030)(bVar2);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xea3,(unsigned long long)("Failed to reserve batch. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar8,(uint)bVar2)),(unsigned long long)(uVar3));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xea3,(unsigned long long)("Failed to reserve batch. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar8,(uint)bVar2)),(unsigned long long)(uVar3));
       return bVar2;
     }
     uVar3 = CALLF(undefined8, FUN_140266c80)();
     lVar6 = CALLF(longlong, FUN_140266bf0)(uVar3);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),2,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xea9,(unsigned long long)("Batch container file reservation took \'%llu ms\' -or- \'%llu s\'"),(unsigned long long)((lVar6 - lVar4) / 1000000),(unsigned long long)((lVar6 - lVar4) / 1000000000));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),2,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xea9,(unsigned long long)("Batch container file reservation took \'%llu ms\' -or- \'%llu s\'"),(unsigned long long)((lVar6 - lVar4) / 1000000),(unsigned long long)((lVar6 - lVar4) / 1000000000));
   }
   return 0;
 }
@@ -6434,7 +6434,7 @@ bool FUN_142124770(longlong param_1, longlong *param_2, longlong param_3)
         if (bVar2 != 0) {
           CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,lVar15 + 0x14);
           uVar4 = CALLF(undefined *, FUN_1420d9030)(bVar2);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xaa8,(unsigned long long)("Failed to prepare file with key %s for streaming. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(uVar11,(uint)bVar2)),(unsigned long long)(uVar4));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xaa8,(unsigned long long)("Failed to prepare file with key %s for streaming. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(uVar11,(uint)bVar2)),(unsigned long long)(uVar4));
           plVar8 = (longlong *)CALLF(undefined *, FUN_1420daf10)();
           (**(code **)*puVar5)(puVar5,0);
           (**(code **)(*plVar8 + 0x30))(plVar8,puVar5);
@@ -6813,7 +6813,7 @@ bool FUN_142125100(longlong param_1, longlong *param_2, longlong param_3)
         if (bVar3 != 0) {
           CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,lVar17 + 0x14);
           uVar5 = CALLF(undefined *, FUN_1420d9030)(bVar3);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x9d7,(unsigned long long)("Failed to prepare file with key %s for streaming. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(uVar13,(uint)bVar3)),(unsigned long long)(uVar5));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0x9d7,(unsigned long long)("Failed to prepare file with key %s for streaming. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(uVar13,(uint)bVar3)),(unsigned long long)(uVar5));
           plVar9 = (longlong *)CALLF(undefined *, FUN_1420daf10)();
           (**(code **)*puVar6)(puVar6,0);
           (**(code **)(*plVar9 + 0x30))(plVar9,puVar6);
@@ -7016,7 +7016,7 @@ bool FUN_142125670(longlong param_1, longlong *param_2, longlong param_3)
       if (bVar4 != 0) {
         CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,*(longlong *)(lVar8 + 0x60) + 0x14);
         uVar6 = CALLF(undefined *, FUN_1420d9030)(bVar4);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xa3b,(unsigned long long)("Failed to prepare file with key %s for streaming. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(uVar11,(uint)bVar4)),(unsigned long long)(uVar6));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_batch_make_resident_state.cpp",0xa3b,(unsigned long long)("Failed to prepare file with key %s for streaming. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(uVar11,(uint)bVar4)),(unsigned long long)(uVar6));
         plVar10 = (longlong *)CALLF(undefined *, FUN_1420daf10)();
         (**(code **)*puVar7)(puVar7,0);
         (**(code **)(*plVar10 + 0x30))(plVar10,puVar7);
@@ -7929,7 +7929,7 @@ LAB_142126c5e:
       CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x30);
       if (cVar7 != '\x11') {
         ((undefined4 *)(gen_frame + 0x50))[0] = *(undefined4 *)(param_1 + 0x28);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_download_state.cpp",0xca,(unsigned long long)("Retrying download %s(%llu, %d) due to failure. NodeId: %u : HTTP code: %d"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(*(undefined8 *)(param_1 + 0x48)),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0x50))),(unsigned long long)(CONCAT44(0,((undefined4 *)(gen_frame + 0x50))[0])),(unsigned long long)(CONCAT44(0,(*(int *)&gen_slot_param_3))));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_download_state.cpp",0xca,(unsigned long long)("Retrying download %s(%llu, %d) due to failure. NodeId: %u : HTTP code: %d"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(*(undefined8 *)(param_1 + 0x48)),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0x50))),(unsigned long long)(CONCAT44(0,((undefined4 *)(gen_frame + 0x50))[0])),(unsigned long long)(CONCAT44(0,(*(int *)&gen_slot_param_3))));
         lVar6 = *(longlong *)(param_1 + -0x30) + 0x490;
         if (*(int *)(param_1 + 0x78) == 0) {
           uVar4 = CALLF(uint, FUN_142105030)(lVar6,((undefined4 *)(gen_frame + 0x50)));
@@ -7943,7 +7943,7 @@ LAB_142126c5e:
         }
         goto LAB_142126cf1;
       }
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_download_state.cpp",0xc2,(unsigned long long)("Exhausted all hosts trying to download %s(%llu, %d)."),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(*(undefined8 *)(param_1 + 0x48)),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0x50))));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_download_state.cpp",0xc2,(unsigned long long)("Exhausted all hosts trying to download %s(%llu, %d)."),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(*(undefined8 *)(param_1 + 0x48)),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0x50))));
     }
   }
   *(undefined1 *)(param_1 + 8) = 4;
@@ -8337,7 +8337,7 @@ undefined1 FUN_1421275a0(undefined8 param_1, longlong *param_2, char *param_3, u
       return 1;
     }
   }
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",0x159,(unsigned long long)("Invalid build config. Missing or invalid value for key \'%s\'."),(unsigned long long)(param_1));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",0x159,(unsigned long long)("Invalid build config. Missing or invalid value for key \'%s\'."),(unsigned long long)(param_1));
   return 0;
 }
 
@@ -8367,7 +8367,7 @@ undefined1 FUN_142127660(undefined8 param_1, longlong *param_2, char *param_3, u
       return 1;
     }
   }
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",0x236,(unsigned long long)("Invalid CDN config. Missing or invalid value for key \'%s\'."),(unsigned long long)(param_1));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",0x236,(unsigned long long)("Invalid CDN config. Missing or invalid value for key \'%s\'."),(unsigned long long)(param_1));
   return 0;
 }
 
@@ -8397,7 +8397,7 @@ undefined1 FUN_142127720(undefined8 param_1, longlong *param_2, char *param_3, u
       return 1;
     }
   }
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",0x236,(unsigned long long)("Invalid CDN config. Missing or invalid value for key \'%s\'."),(unsigned long long)(param_1));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",0x236,(unsigned long long)("Invalid CDN config. Missing or invalid value for key \'%s\'."),(unsigned long long)(param_1));
   return 0;
 }
 
@@ -8750,7 +8750,7 @@ LAB_142128cb7:
   do {
     if (param_5 <= pcVar2) {
 LAB_142128df6:
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",0x272,(unsigned long long)("Invalid patch config. Missing or invalid value for key \'%s\'."),(unsigned long long)("patch"))
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",0x272,(unsigned long long)("Invalid patch config. Missing or invalid value for key \'%s\'."),(unsigned long long)("patch"))
       ;
       return 0;
     }
@@ -8794,7 +8794,7 @@ undefined1 FUN_142128e40(undefined8 param_1, undefined8 *param_2, char *param_3,
     CALLF(ulonglong, FUN_1423653f0)(param_4 + 0x28,pcVar1,(int)(longlong)param_3 - (int)(longlong)pcVar1);
     return 1;
   }
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",0x1a4,(unsigned long long)("Invalid build config. Missing or invalid E-Spec value for manifest key \'%s\'."),(unsigned long long)(param_1));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",0x1a4,(unsigned long long)("Invalid build config. Missing or invalid E-Spec value for manifest key \'%s\'."),(unsigned long long)(param_1));
   return 0;
 }
 
@@ -8835,7 +8835,7 @@ undefined1 FUN_142128ec0(undefined8 param_1, longlong *param_2, char *param_3, l
   pcVar2 = "Invalid build config. Missing or invalid C-Key value for manfiest key \'%s\'.";
   uVar4 = 0x180;
 LAB_142128f6c:
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",uVar4,(unsigned long long)(pcVar2),(unsigned long long)(param_1));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",uVar4,(unsigned long long)(pcVar2),(unsigned long long)(param_1));
   return 0;
 }
 
@@ -8876,7 +8876,7 @@ undefined1 FUN_142128fb0(undefined8 param_1, longlong *param_2, char *param_3, l
   pcVar2 = "Invalid build config. Missing or invalid C-Size value for manfiest key \'%s\'.";
   uVar4 = 0x191;
 LAB_14212905d:
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",uVar4,(unsigned long long)(pcVar2),(unsigned long long)(param_1));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",uVar4,(unsigned long long)(pcVar2),(unsigned long long)(param_1));
   return 0;
 }
 
@@ -8965,7 +8965,7 @@ LAB_142129304:
         pcVar4 = "Invalid build config. Bad partial priority key.";
         uVar12 = 0x1c1;
 LAB_1421291e2:
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",uVar12,(unsigned long long)(pcVar4));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",uVar12,(unsigned long long)(pcVar4));
         return 0;
       }
       ((char *)(gen_frame + 0x58))[0] = '\0';
@@ -9014,7 +9014,7 @@ undefined1 FUN_142129320(longlong *param_1, char *param_2, byte *param_3)
   
   cVar1 = CALLF(undefined1, FUN_1421278c0)(param_1,param_2,param_3);
   if ((cVar1 == '\0') || ((*(char *)*param_1 != ' ' && (4 < (byte)(*(char *)*param_1 - 9U))))) {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",0x27c,(unsigned long long)("Invalid patch config. Missing or invalid keyword value for patch entry."));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",0x27c,(unsigned long long)("Invalid patch config. Missing or invalid keyword value for patch entry."));
     return 0;
   }
   cVar1 = CALLF(undefined1, FUN_142127850)(param_1,param_2,param_3 + 0x20);
@@ -9172,7 +9172,7 @@ LAB_1421296a0:
                   if ((*(char *)*param_1 != ' ') && (4 < (byte)(*(char *)*param_1 - 9U)))
                   goto LAB_1421296a0;
                   *(undefined4 *)(puVar5 + 5) = *(undefined4 *)((longlong)puVar5 + 0x24);
-                  puVar5[6] = &REFG(undefined8, 0x1426cc7c8);
+                  puVar5[6] = &REFG(undefined1, 0x1426cc7c8);
                   *(undefined2 *)(puVar5 + 7) = 0x1010;
                   if (param_2 <= (char *)*param_1) {
                     return 1;
@@ -9187,7 +9187,7 @@ LAB_1421296a0:
                 "Invalid patch config. Missing or invalid original E-Key value for patch entry \'%s\'."
                 ;
 LAB_142129722:
-                CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",uVar6,(unsigned long long)(pcVar2),(unsigned long long)(pbVar4));
+                CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",uVar6,(unsigned long long)(pcVar2),(unsigned long long)(pbVar4));
                 return 0;
               }
               pbVar4 = param_3 + 8;
@@ -9211,7 +9211,7 @@ LAB_142129722:
     }
   }
 LAB_1421297ec:
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",uVar6,(unsigned long long)(pcVar2),(unsigned long long)(pbVar4));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",uVar6,(unsigned long long)(pcVar2),(unsigned long long)(pbVar4));
   return 0;
 }
 
@@ -9300,7 +9300,7 @@ undefined1 FUN_142129af0(longlong param_1)
         pcVar2 = "Invalid CDN config. File index key is missing, but size was specified.";
         uVar5 = 0x224;
       }
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",uVar5,(unsigned long long)(pcVar2));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",uVar5,(unsigned long long)(pcVar2));
       return 0;
     }
     pcVar2 = 
@@ -9311,7 +9311,7 @@ undefined1 FUN_142129af0(longlong param_1)
     pcVar2 = "Invalid CDN config. Archive keys and sizes are mismatched. Got %u keys and %u sizes.";
     uVar5 = 0x217;
   }
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",uVar5,(unsigned long long)(pcVar2),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(CONCAT44(0,iVar3)));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",uVar5,(unsigned long long)(pcVar2),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(CONCAT44(0,iVar3)));
   return 0;
 }
 
@@ -9324,7 +9324,7 @@ undefined1 FUN_142129bf0(longlong param_1)
   lVar1 = *(longlong *)(param_1 + 8);
   if (((*(int *)(lVar1 + 0x28) != 0) && (*(longlong *)(lVar1 + 0x18) == REFG(undefined8, 0x1428eda60))) &&
      (*(longlong *)(lVar1 + 0x20) == REFG(undefined8, 0x1428eda68))) {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",0x266,(unsigned long long)("Invalid patch config. Patch size manifest Key is missing, but Size was specified."));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\config\\config_reader.cpp",0x266,(unsigned long long)("Invalid patch config. Patch size manifest Key is missing, but Size was specified."));
     return 0;
   }
   return 1;
@@ -10454,7 +10454,7 @@ undefined1 FUN_14212b360(longlong param_1, longlong *param_2, uint param_3, long
         }
         else {
           CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x10)),0x21,param_2);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\container\\static_container.cpp",0x99,(unsigned long long)("Invalid key %s detected during container state lookup."),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\container\\static_container.cpp",0x99,(unsigned long long)("Invalid key %s detected during container state lookup."),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))));
         }
       }
       puVar3 = puVar3 + 0xf;
@@ -10476,7 +10476,7 @@ undefined1 FUN_14212b4d0(longlong param_1, undefined8 *param_2)
 /*                                   */
   
   (*(undefined1 *)(gen_frame + 0x4)) = 0;
-  (*(undefined * *)(gen_frame + 0x8)) = &REFG(undefined8, 0x1428f20b8);
+  (*(undefined * *)(gen_frame + 0x8)) = &REFG(undefined1, 0x1428f20b8);
   (*(undefined8 *)(gen_frame + 0x18)) = *param_2;
   (*(int *)(gen_frame + 0x10)) = 1;
   (*(int *)(gen_frame + 0x3c)) = 0x10000;
@@ -10504,7 +10504,7 @@ undefined1 FUN_14212b4d0(longlong param_1, undefined8 *param_2)
   }
   else {
     uVar3 = CALLF(undefined *, FUN_14213caf0)(iVar2);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\container\\static_container.cpp",0x3b,(unsigned long long)("Failed to open static container at \'%s\'. Error (%u): %s"),(unsigned long long)(*param_2),(unsigned long long)(CONCAT44(0,iVar2)),(unsigned long long)(uVar3));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\container\\static_container.cpp",0x3b,(unsigned long long)("Failed to open static container at \'%s\'. Error (%u): %s"),(unsigned long long)(*param_2),(unsigned long long)(CONCAT44(0,iVar2)),(unsigned long long)(uVar3));
     uVar1 = CALLF(undefined1, FUN_1420f9200)(iVar2);
   }
   return uVar1;
@@ -10588,7 +10588,7 @@ undefined1 FUN_14212b6c0(longlong param_1, undefined8 *param_2, undefined8 param
     }
     else {
       CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x20)),0x21,param_2);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\container\\static_container.cpp",0xcd,(unsigned long long)("Failed to read file span from static container using key %s. Requested %u bytes at offset %llu but only got %u."),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))),(unsigned long long)(CONCAT44(0,param_5)),(unsigned long long)(param_4),(unsigned long long)(CONCAT44(0,((uint *)(gen_frame + 0x60))[0])));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\container\\static_container.cpp",0xcd,(unsigned long long)("Failed to read file span from static container using key %s. Requested %u bytes at offset %llu but only got %u."),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))),(unsigned long long)(CONCAT44(0,param_5)),(unsigned long long)(param_4),(unsigned long long)(CONCAT44(0,((uint *)(gen_frame + 0x60))[0])));
       uVar1 = 1;
     }
   }
@@ -10596,7 +10596,7 @@ undefined1 FUN_14212b6c0(longlong param_1, undefined8 *param_2, undefined8 param
     if (iVar2 != 3) {
       CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x20)),0x21,param_2);
       uVar3 = CALLF(undefined *, FUN_14213caf0)(iVar2);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\container\\static_container.cpp",0xbd,(unsigned long long)("Failed to read file span from static container using key %s. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))),(unsigned long long)(CONCAT44(0,iVar2)),(unsigned long long)(uVar3));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\container\\static_container.cpp",0xbd,(unsigned long long)("Failed to read file span from static container using key %s. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))),(unsigned long long)(CONCAT44(0,iVar2)),(unsigned long long)(uVar3));
     }
     uVar1 = CALLF(undefined1, FUN_1420f9200)(iVar2);
   }
@@ -10852,7 +10852,7 @@ undefined1 FUN_14212bd90(longlong *param_1, undefined8 param_2, uint param_3, un
       uVar2 = 0x61;
       break;
     default:
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_bcpack.cpp",0x5b,(unsigned long long)("Cannot compress BCPack data. Invalid BCn encoding type specified: %u"),(unsigned long long)(CONCAT44(0,param_6)));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_bcpack.cpp",0x5b,(unsigned long long)("Cannot compress BCPack data. Invalid BCn encoding type specified: %u"),(unsigned long long)(CONCAT44(0,param_6)));
       return 3;
     }
     iVar1 = (*(code *)param_1[1])
@@ -10863,7 +10863,7 @@ undefined1 FUN_14212bd90(longlong *param_1, undefined8 param_2, uint param_3, un
         return 0;
       }
       CALLF(longlong, FUN_140267930)(((undefined1 *)(gen_frame + 0x10)),0x100,iVar1);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_bcpack.cpp",0x78,(unsigned long long)("Failed to compress data stream using BCPack. Error (%d): %s"),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_bcpack.cpp",0x78,(unsigned long long)("Failed to compress data stream using BCPack. Error (%d): %s"),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))));
       return 1;
     }
   }
@@ -10907,7 +10907,7 @@ undefined1 FUN_14212bf80(longlong *param_1, undefined8 param_2, uint param_3, un
     uVar2 = 0x61;
     break;
   default:
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_bcpack.cpp",0x95,(unsigned long long)("Cannot decompress BCPack data. Invalid BCn encoding type specified: %u"),(unsigned long long)(CONCAT44(0,param_6)));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_bcpack.cpp",0x95,(unsigned long long)("Cannot decompress BCPack data. Invalid BCn encoding type specified: %u"),(unsigned long long)(CONCAT44(0,param_6)));
     return 3;
   }
   iVar1 = (*(code *)param_1[2])
@@ -10917,7 +10917,7 @@ undefined1 FUN_14212bf80(longlong *param_1, undefined8 param_2, uint param_3, un
       return 0;
     }
     CALLF(longlong, FUN_140267930)(((undefined1 *)(gen_frame + 0x0)),0x100,iVar1);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_bcpack.cpp",0xb2,(unsigned long long)("Failed to decompress BCPack stream. Error (%d): %s"),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_bcpack.cpp",0xb2,(unsigned long long)("Failed to decompress BCPack stream. Error (%d): %s"),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
     return 1;
   }
   return 8;
@@ -11485,7 +11485,7 @@ undefined1 FUN_14212cc60(char *param_1, uint param_2, undefined4 param_3, code *
           param_7[3] = param_7[3] ^ (byte)((uint)(*(undefined4 *)&gen_slot_param_3) >> 0x18);
           return 0;
         }
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_encryption.cpp",0x97,(unsigned long long)("Failed to decrypt data: unknown encryption algorithm specifier \'%c\'"),(unsigned long long)(CONCAT44(0,(int)(char)bVar2)));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_encryption.cpp",0x97,(unsigned long long)("Failed to decrypt data: unknown encryption algorithm specifier \'%c\'"),(unsigned long long)(CONCAT44(0,(int)(char)bVar2)));
         return 8;
       }
       pcVar5 = "Failed to decrypt data: invalid encryption IV length. Expected <= %u, but got %u";
@@ -11504,7 +11504,7 @@ undefined1 FUN_14212cc60(char *param_1, uint param_2, undefined4 param_3, code *
     uVar7 = 0x6b;
     pcVar5 = "Failed to decrypt data: invalid encryption codec \'%c\'. Expected \'%c\'";
   }
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_encryption.cpp",uVar7,(unsigned long long)(pcVar5),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(CONCAT44(0,uVar8)));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_encryption.cpp",uVar7,(unsigned long long)(pcVar5),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(CONCAT44(0,uVar8)));
   return 8;
 }
 
@@ -11515,7 +11515,7 @@ undefined8 FUN_14212ce50(undefined8 param_1)
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[56]) > 0x38 ? 0x0 + sizeof(undefined1[56]) : 0x38)] = {0};
   
   CALLF(int, FUN_142366260)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1,8);
-  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_encryption.cpp",0x3d,(unsigned long long)("Failed to decrypt data: encryption key id %s was not found"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_encryption.cpp",0x3d,(unsigned long long)("Failed to decrypt data: encryption key id %s was not found"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
   return 0;
 }
 
@@ -11552,7 +11552,7 @@ undefined8 * FUN_14212d1a0(undefined8 *param_1, byte param_2)
 undefined1 FUN_14212d1d0(void)
 {
   GEN_HIT(175);
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),1,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_lz4hc.cpp",0x338,(unsigned long long)("Attempted to use lz4hc encoding without enabling."));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),1,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_lz4hc.cpp",0x338,(unsigned long long)("Attempted to use lz4hc encoding without enabling."));
   return 5;
 }
 
@@ -11560,7 +11560,7 @@ undefined1 FUN_14212d1d0(void)
 undefined1 FUN_14212d210(void)
 {
   GEN_HIT(176);
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),1,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_lz4hc.cpp",0x35a,(unsigned long long)("Attempted to use lz4hc encoding without enabling."));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),1,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_lz4hc.cpp",0x35a,(unsigned long long)("Attempted to use lz4hc encoding without enabling."));
   return 5;
 }
 
@@ -11568,7 +11568,7 @@ undefined1 FUN_14212d210(void)
 undefined1 FUN_14212d250(void)
 {
   GEN_HIT(177);
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),1,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_lz4hc.cpp",0x344,(unsigned long long)("Attempted to use lz4hc encoding without enabling."));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),1,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_lz4hc.cpp",0x344,(unsigned long long)("Attempted to use lz4hc encoding without enabling."));
   return 5;
 }
 
@@ -11576,7 +11576,7 @@ undefined1 FUN_14212d250(void)
 undefined1 FUN_14212d290(void)
 {
   GEN_HIT(178);
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),1,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_lz4hc.cpp",0x360,(unsigned long long)("Attempted to use lz4hc encoding without enabling."));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),1,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_lz4hc.cpp",0x360,(unsigned long long)("Attempted to use lz4hc encoding without enabling."));
   return 5;
 }
 
@@ -11613,7 +11613,7 @@ undefined1 FUN_14212d320(longlong param_1, longlong param_2, uint param_3, char 
     cVar2 = *param_4;
     param_4 = param_4 + 1;
     if (cVar2 != 'N') {
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_uncompressed.cpp",0x5f,(unsigned long long)("Failed decode uncompressed: invalid uncompressed codec \'%c\'. Expected \'%c\'"),(unsigned long long)(CONCAT44(0,(int)*param_4)),(unsigned long long)(CONCAT44(0,0x4e)));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_uncompressed.cpp",0x5f,(unsigned long long)("Failed decode uncompressed: invalid uncompressed codec \'%c\'. Expected \'%c\'"),(unsigned long long)(CONCAT44(0,(int)*param_4)),(unsigned long long)(CONCAT44(0,0x4e)));
       return 8;
     }
     *(undefined1 *)(param_1 + 0x10) = 0;
@@ -11715,7 +11715,7 @@ undefined ** FUN_14212d5d0(undefined8 *param_1)
   if (lVar1 != 0) {
     iVar2 = CALLF(undefined4, FUN_14235c4b0)(lVar1);
     if (iVar2 == -2) {
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_zlib.cpp",0x21d,(unsigned long long)("Error destroying zlib stream. Error (%u): Stream state was inconsistent"),(unsigned long long)(CONCAT44(0,0xfffffffe)));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_zlib.cpp",0x21d,(unsigned long long)("Error destroying zlib stream. Error (%u): Stream state was inconsistent"),(unsigned long long)(CONCAT44(0,0xfffffffe)));
     }
     plVar4 = (longlong *)CALLF(undefined *, FUN_1420daf10)();
     ppuVar3 = (undefined **)(**(code **)(*plVar4 + 0x30))(plVar4,lVar1);
@@ -11738,7 +11738,7 @@ undefined8 * FUN_14212d650(undefined8 *param_1, uint param_2)
   if (lVar1 != 0) {
     iVar2 = CALLF(undefined4, FUN_14235e6c0)(lVar1);
     if (iVar2 == -2) {
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_zlib.cpp",0x286,(unsigned long long)("Error destroying zlib stream. Error (%u): Stream state was inconsistent"),(unsigned long long)(CONCAT44(0,0xfffffffe)));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_zlib.cpp",0x286,(unsigned long long)("Error destroying zlib stream. Error (%u): Stream state was inconsistent"),(unsigned long long)(CONCAT44(0,0xfffffffe)));
     }
     plVar3 = (longlong *)CALLF(undefined *, FUN_1420daf10)();
     (**(code **)(*plVar3 + 0x30))(plVar3,lVar1);
@@ -11824,7 +11824,7 @@ LAB_14212d8c8:
       *(int *)(plVar2 + 1) = (int)(longlong)pcVar1 - (int)(longlong)param_4;
       uVar3 = CALLF(undefined4, FUN_14235abd0)(plVar2,1);
       if (1 < uVar3) {
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_zlib.cpp",0x270,(unsigned long long)("Failed decode zlib: encoded data is malformed."));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_zlib.cpp",0x270,(unsigned long long)("Failed decode zlib: encoded data is malformed."));
         return 8;
       }
       iVar4 = ((int)(longlong)pcVar1 - (int)plVar2[1]) - (int)(longlong)param_4;
@@ -11836,7 +11836,7 @@ LAB_14212d8c8:
   }
   else if (param_5 != 0) {
     if (*param_4 != 'Z') {
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_zlib.cpp",0x254,(unsigned long long)("Failed decode zlib: invalid zlib codec \'%c\'. Expected \'%c\'"),(unsigned long long)(CONCAT44(0,(int)*param_4)),(unsigned long long)(CONCAT44(0,0x5a)));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_zlib.cpp",0x254,(unsigned long long)("Failed decode zlib: invalid zlib codec \'%c\'. Expected \'%c\'"),(unsigned long long)(CONCAT44(0,(int)*param_4)),(unsigned long long)(CONCAT44(0,0x5a)));
       return 8;
     }
     *(undefined1 *)(param_1 + 0x10) = 0;
@@ -11930,7 +11930,7 @@ undefined1 FUN_14212d990(longlong param_1, undefined1 *param_2, uint param_3, lo
       if (1 < uVar4) {
         uVar6 = 0x2d6;
 LAB_14212dad7:
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_zlib.cpp",uVar6,(unsigned long long)("Failed encode zlib: internal error."));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_zlib.cpp",uVar6,(unsigned long long)("Failed encode zlib: internal error."));
         return 8;
       }
       *param_6 = *param_6 + ((iVar9 - (int)plVar3[3]) - iVar10);
@@ -12003,7 +12003,7 @@ undefined4 FUN_14212dbf0(undefined8 *param_1, undefined4 param_2, undefined4 par
     if ((char *)param_1[4] != (char *)0x0) {
       pcVar4 = (char *)param_1[4];
     }
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_zlib.cpp",0x4d,(unsigned long long)("Zlib deflateInit2 failed using compression level %d and window bits %u. Error (%d): %s"),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(CONCAT44(uVar5,param_3)),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(pcVar4));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_zlib.cpp",0x4d,(unsigned long long)("Zlib deflateInit2 failed using compression level %d and window bits %u. Error (%d): %s"),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(CONCAT44(uVar5,param_3)),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(pcVar4));
     uVar2 = 1;
     if (iVar1 == -2) {
       uVar2 = 3;
@@ -12045,7 +12045,7 @@ undefined1 FUN_14212dcf0(undefined8 *param_1)
   if ((char *)param_1[4] != (char *)0x0) {
     pcVar4 = (char *)param_1[4];
   }
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_zlib.cpp",0x6c,(unsigned long long)("Zlib inflateInit failed. Error (%d): %s"),(unsigned long long)(CONCAT44(0,iVar2)),(unsigned long long)(pcVar4));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_zlib.cpp",0x6c,(unsigned long long)("Zlib inflateInit failed. Error (%d): %s"),(unsigned long long)(CONCAT44(0,iVar2)),(unsigned long long)(pcVar4));
   uVar1 = 1;
   if (iVar2 == -2) {
     uVar1 = 3;
@@ -12168,7 +12168,7 @@ undefined1 FUN_14212e1f0(longlong param_1, undefined4 param_2, char param_3, und
     CALLF(uint, FUN_140261d70)(param_4,param_5,param_1,((char *)(gen_frame + 0x0)));
     return 0;
   }
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\cdn_index_ops.cpp",99,(unsigned long long)("Path \'%s\' is too long to create index file."),(unsigned long long)(param_1));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\cdn_index_ops.cpp",99,(unsigned long long)("Path \'%s\' is too long to create index file."),(unsigned long long)(param_1));
   return 3;
 }
 
@@ -12329,7 +12329,7 @@ LAB_14212e448:
   iVar3 = CALLF(int, FUN_1402613a0)(((char *)(gen_frame + 0x40)),1);
   if (iVar3 != 0) {
     CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x350)),0x100,iVar3);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\cdn_index_ops.cpp",0x9b,(unsigned long long)("Failed to create the CDN file path. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar11,iVar3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x350))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\cdn_index_ops.cpp",0x9b,(unsigned long long)("Failed to create the CDN file path. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar11,iVar3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x350))));
     return 1;
   }
   uVar12 = 0xffffffffffffffff;
@@ -12463,7 +12463,7 @@ LAB_14212e800:
   }
   uVar11 = 0xa6;
 LAB_14212e596:
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\cdn_index_ops.cpp",uVar11,(unsigned long long)("Path is too long to create CDN file path: %s"),(unsigned long long)(((char *)(gen_frame + 0x40))));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\cdn_index_ops.cpp",uVar11,(unsigned long long)("Path is too long to create CDN file path: %s"),(unsigned long long)(((char *)(gen_frame + 0x40))));
   return 3;
 }
 
@@ -12549,7 +12549,7 @@ undefined8 FUN_14212e910(longlong param_1, longlong *param_2, uint param_3)
   if ((*(uint *)&gen_slot_param_3) != 0) {
     do {
       if (((*(char *)(param_1 + 0x80) == '\x02') || (iVar5 = CALLF(undefined4, FUN_142367df0)(*param_2, ((undefined1 *)(gen_frame + 0x50))), iVar5 != 0)) && ((*(char *)(param_1 + 0x80) == '\x01' || (iVar5 = CALLF(undefined4, FUN_142367db0)(*param_2, (void *)&(*(gen_v16 *)(gen_frame + 0x0))), iVar5 != 0)))) {
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",0xe4,(unsigned long long)("Improperly formatted socket address during DNS resolution: %s"),(unsigned long long)(*param_2));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",0xe4,(unsigned long long)("Improperly formatted socket address during DNS resolution: %s"),(unsigned long long)(*param_2));
       }
       else {
         puVar2 = *(ulonglong **)(param_1 + 0x88);
@@ -12661,7 +12661,7 @@ undefined1 FUN_14212eb40(longlong param_1)
     if ((*(byte *)(param_1 + 0x40) & 1) == 0) {
       plVar7 = (longlong *)*plVar7;
     }
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",0x94,(unsigned long long)("Network initialization error while performing host resolution for \'%s\'. Error (%d): %s"),(unsigned long long)(plVar7),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x240))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",0x94,(unsigned long long)("Network initialization error while performing host resolution for \'%s\'. Error (%d): %s"),(unsigned long long)(plVar7),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x240))));
     return 1;
   }
   cVar3 = *(char *)(param_1 + 0x80);
@@ -12744,7 +12744,7 @@ undefined1 FUN_14212eb40(longlong param_1)
         if ((*(byte *)(param_1 + 0x40) & 1) == 0) {
           plVar7 = (longlong *)*plVar11;
         }
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",0xba,(unsigned long long)("Address too long while performing host resolution for \'%s\'"),(unsigned long long)(plVar7));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",0xba,(unsigned long long)("Address too long while performing host resolution for \'%s\'"),(unsigned long long)(plVar7));
       }
       cVar3 = CALLF(undefined1, FUN_142367c80)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined1 *)(gen_frame + 0xb0)));
     }
@@ -12757,7 +12757,7 @@ undefined1 FUN_14212eb40(longlong param_1)
     if ((*(byte *)(param_1 + 0x40) & 1) == 0) {
       plVar11 = (longlong *)*plVar11;
     }
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",0xae,(unsigned long long)("Error while performing host resolution for \'%s\'. Error (%d): %s"),(unsigned long long)(plVar11),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x240))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",0xae,(unsigned long long)("Error while performing host resolution for \'%s\'. Error (%d): %s"),(unsigned long long)(plVar11),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x240))));
     uVar12 = 1;
   }
   CALLF(undefined8, FUN_142367c50)(&(*(undefined8 *)(gen_frame + 0x0)));
@@ -12846,7 +12846,7 @@ undefined8 FUN_14212ef20(longlong param_1, undefined8 param_2, char *param_3, ch
   uVar11 = 0x32;
   pcVar4 = "Invalid url specified while performing host resolution for \'%s\'. Error (%d): %s";
 LAB_14212f0cb:
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",uVar11,(unsigned long long)(pcVar4),(unsigned long long)(param_3),(unsigned long long)(CONCAT44(uVar12,3)),(unsigned long long)(uVar3));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_dns_resolve_state.cpp",uVar11,(unsigned long long)(pcVar4),(unsigned long long)(param_3),(unsigned long long)(CONCAT44(uVar12,3)),(unsigned long long)(uVar3));
   uVar3 = CALLF(undefined8, FUN_1420dbc70)(param_1,3);
   return uVar3;
 }
@@ -13125,7 +13125,7 @@ undefined1 FUN_14212f620(longlong param_1, undefined8 *param_2, undefined4 param
   }
   else {
     CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_2);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_file.cpp",0x2ec,(unsigned long long)("Failed to decrypt file with eKey %s.  Encryption is only supported with block encoding."),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_file.cpp",0x2ec,(unsigned long long)("Failed to decrypt file with eKey %s.  Encryption is only supported with block encoding."),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
     uVar2 = 3;
   }
   return uVar2;
@@ -13210,7 +13210,7 @@ LAB_14212f811:
     }
     uVar2 = *(uint *)(param_1 + 0x6c);
     if (0xffffff < uVar2) {
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_file.cpp",0x1b8,(unsigned long long)("Invalid encoding specifier: \'%s\', block count would exceed maximum of %u"),(unsigned long long)(param_3),(unsigned long long)(CONCAT44(0,0xffffff)));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_file.cpp",0x1b8,(unsigned long long)("Invalid encoding specifier: \'%s\', block count would exceed maximum of %u"),(unsigned long long)(param_3),(unsigned long long)(CONCAT44(0,0xffffff)));
       return 3;
     }
     if (*(uint *)(param_1 + 0x60) <= uVar2) {
@@ -13556,7 +13556,7 @@ LAB_14212ff83:
         cVar1 = CALLF(undefined1, FUN_142129c50)(param_4,param_5,((byte *)(gen_frame + 0x98)));
         if (cVar1 == '\0') {
           uVar3 = CALLF(undefined *, FUN_1420d9030)(((byte *)(gen_frame + 0x98))[0]);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_file.cpp",0xb8,(unsigned long long)("TACTv2 file is missing the encoding header. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar12,(uint)(longlong)((byte *)(gen_frame + 0x98))[0])),(unsigned long long)(uVar3));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_file.cpp",0xb8,(unsigned long long)("TACTv2 file is missing the encoding header. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar12,(uint)(longlong)((byte *)(gen_frame + 0x98))[0])),(unsigned long long)(uVar3));
           return 8;
         }
         param_4 = param_4 + 8;
@@ -14589,11 +14589,11 @@ undefined1 FUN_142131920(longlong *param_1, ulonglong param_2, undefined8 *param
 /*                                   */
   
   if (param_2 < 0x20) {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\patch\\bs_patch_apply.cpp",0x5a,(unsigned long long)("Failed to apply patch: expected at least %u bytes, but only got %llu"),(unsigned long long)(CONCAT44(0,0x20)),(unsigned long long)(param_2));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\patch\\bs_patch_apply.cpp",0x5a,(unsigned long long)("Failed to apply patch: expected at least %u bytes, but only got %llu"),(unsigned long long)(CONCAT44(0,0x20)),(unsigned long long)(param_2));
     return 8;
   }
   if (*param_1 != (*(ulonglong *)((char *)((char *)REFP(0x1428efe48)) + 0))) {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\patch\\bs_patch_apply.cpp",0x61,(unsigned long long)("Failed to apply patch: invalid ZBSDIFF1 header bytes"));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\patch\\bs_patch_apply.cpp",0x61,(unsigned long long)("Failed to apply patch: invalid ZBSDIFF1 header bytes"));
     return 8;
   }
   *param_3 = 0x20;
@@ -15205,13 +15205,13 @@ undefined4 FUN_142132780(longlong param_1, longlong *param_2, longlong param_3, 
     if (iVar1 == -1) {
       uVar2 = (*(*(code *)&WSAGetLastError))();
       CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,uVar2);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",0xce,(unsigned long long)("Failed to set socket non-blocking mode. Error(%d): %s"),(unsigned long long)(CONCAT44(0,uVar2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",0xce,(unsigned long long)("Failed to set socket non-blocking mode. Error(%d): %s"),(unsigned long long)(CONCAT44(0,uVar2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
     }
     uVar3 = CALLF(undefined8, FUN_14216d0a0)(*(undefined8 *)(param_1 + 0x10),param_4,param_2);
     iVar1 = (int)uVar3;
     if (1 < iVar1 + 1U) {
       uVar3 = CALLF(char *, FUN_142170a80)(iVar1);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",0xd4,(unsigned long long)("curl_multi_socket_action failed to update socket. Error(%d): %s"),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar3));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",0xd4,(unsigned long long)("curl_multi_socket_action failed to update socket. Error(%d): %s"),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar3));
     }
     *(undefined4 *)(param_2 + 2) = param_5;
     param_2[1] = param_3;
@@ -15253,7 +15253,7 @@ undefined1 FUN_1421328b0(longlong param_1)
   if (uVar6 == 0xffffffffffffffff) {
     uVar4 = (*(*(code *)&WSAGetLastError))();
     CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",0x1c,(unsigned long long)("Failed to create loopback socket. Error(%d): %s"),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x30))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",0x1c,(unsigned long long)("Failed to create loopback socket. Error(%d): %s"),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x30))));
     return 0;
   }
   (*(undefined8 *)(gen_frame + 0x8)) = 0;
@@ -15418,14 +15418,14 @@ override_prt_142132db2_d4d75bc3:
     pcVar7 = "Failed to set loopback sockopt SO_REUSEADDR. Error(%d): %s";
   }
 LAB_142132e6f:
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",uVar13,(unsigned long long)(pcVar7),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x30))));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",uVar13,(unsigned long long)(pcVar7),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x30))));
   uVar12 = 0;
 LAB_142132e98:
   iVar5 = (*(*(code *)&closesocket))(uVar6);
   if (iVar5 != 0) {
     uVar4 = (*(*(code *)&WSAGetLastError))();
     CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",0x29,(unsigned long long)("Failed to close loopback socket. Error(%d): %s"),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x30))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",0x29,(unsigned long long)("Failed to close loopback socket. Error(%d): %s"),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x30))));
   }
   return uVar12;
 }
@@ -15590,7 +15590,7 @@ LAB_1421331da:
     uVar17 = 0x117;
     pcVar9 = "Failed to poll for events using select(). Error(%d): %s";
 LAB_1421333be:
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",uVar17,(unsigned long long)(pcVar9),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(puVar10));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",uVar17,(unsigned long long)(pcVar9),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(puVar10));
     uVar14 = 1;
   }
   else {
@@ -15663,7 +15663,7 @@ undefined8 FUN_142133430(longlong param_1)
   if (iVar1 == -1) {
     uVar2 = (*(*(code *)&WSAGetLastError))();
     CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,uVar2);
-    return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",0x149,(unsigned long long)("Failed to preemptively wake worker thread.. Error(%d): %s"),(unsigned long long)(CONCAT44(0,uVar2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+    return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",0x149,(unsigned long long)("Failed to preemptively wake worker thread.. Error(%d): %s"),(unsigned long long)(CONCAT44(0,uVar2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
   }
   return 0;
 }
@@ -16475,11 +16475,11 @@ LAB_14213454f:
     uVar1 = 4;
   }
   else {
-    iVar2 = CALLF(undefined4, FUN_14026b48b)(&REFG(undefined8, 0x142623990),0,0,((undefined8 *)(gen_frame + 0x450)));
+    iVar2 = CALLF(undefined4, FUN_14026b48b)(&REFG(undefined1, 0x142623990),0,0,((undefined8 *)(gen_frame + 0x450)));
     if (iVar2 < 0) {
       uVar3 = (*(*(code *)&GetLastError))();
       CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x20)),0x100,uVar3);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\armadillo\\armadillo.windows.cpp",0x29,(unsigned long long)("Failed to read %%AppData%% path. Error (%u): %s"),(unsigned long long)(CONCAT44(0,uVar3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\armadillo\\armadillo.windows.cpp",0x29,(unsigned long long)("Failed to read %%AppData%% path. Error (%u): %s"),(unsigned long long)(CONCAT44(0,uVar3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))));
     }
     else {
       iVar2 = (*(*(code *)&WideCharToMultiByte))
@@ -16487,7 +16487,7 @@ LAB_14213454f:
       (*(*(code *)&CoTaskMemFree))(((undefined8 *)(gen_frame + 0x450))[0]);
       if (iVar2 != 0) {
         if (0x30b < iVar2) {
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\armadillo\\armadillo.windows.cpp",0x3a,(unsigned long long)("Path to %%AppData%% is too long. It exceeds %d characters."),(unsigned long long)(CONCAT44(0,0x30c)));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\armadillo\\armadillo.windows.cpp",0x3a,(unsigned long long)("Path to %%AppData%% is too long. It exceeds %d characters."),(unsigned long long)(CONCAT44(0,0x30c)));
           return 1;
         }
         (*(undefined4 *)(gen_frame + 0x10)) = 0x6f6c6c69;
@@ -16807,7 +16807,7 @@ LAB_142134d33:
         if (bVar8 != 0) {
           CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x20)),0x21,*(longlong *)(param_1 + 0x40) + 0x14);
           uVar10 = CALLF(undefined *, FUN_1420d9030)(bVar8);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x1a3,(unsigned long long)("Failed to write data for target file with key %s. Error(%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))),(unsigned long long)(CONCAT44(uVar18,(uint)bVar8)),(unsigned long long)(uVar10));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x1a3,(unsigned long long)("Failed to write data for target file with key %s. Error(%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))),(unsigned long long)(CONCAT44(uVar18,(uint)bVar8)),(unsigned long long)(uVar10));
           return (undefined8)CALLF(undefined8, FUN_1421350c0)(param_1,bVar8);
           return 0;
         }
@@ -16828,7 +16828,7 @@ LAB_142134d33:
         *(uint *)(param_1 + 0x3e0) = (*(uint *)(gen_frame + 0x94));
         if ((*(uint *)(gen_frame + 0x94)) != 0) {
           (*(uint *)(gen_frame + 0x90)) = uVar14;
-          return (undefined8)CALLF(undefined8, FUN_1420dcda0)(*(longlong *)(param_1 + 0x10) + 0x378,param_1 + 0x48,*(undefined1 *)(*(longlong *)(param_1 + 0x40) + 0x30),&REFG(undefined8, 0x1426cc7c8),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(&(*(uint *)(gen_frame + 0x90))),(unsigned long long)(&(*(uint *)(gen_frame + 0x90))),(unsigned long long)((ulonglong)*(uint *)(param_1 + 0x330) + *(longlong *)(param_1 + 800)),(unsigned long long)(1),(unsigned long long)(*(undefined1 *)(param_1 + 0x68)),(unsigned long long)(2),(unsigned long long)(((code *)REFP(0x142135bf0))),(unsigned long long)(param_1),(unsigned long long)(param_1 + 0x3d8),(unsigned long long)(0));
+          return (undefined8)CALLF(undefined8, FUN_1420dcda0)(*(longlong *)(param_1 + 0x10) + 0x378,param_1 + 0x48,*(undefined1 *)(*(longlong *)(param_1 + 0x40) + 0x30),&REFG(undefined1, 0x1426cc7c8),(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(&(*(uint *)(gen_frame + 0x90))),(unsigned long long)(&(*(uint *)(gen_frame + 0x90))),(unsigned long long)((ulonglong)*(uint *)(param_1 + 0x330) + *(longlong *)(param_1 + 800)),(unsigned long long)(1),(unsigned long long)(*(undefined1 *)(param_1 + 0x68)),(unsigned long long)(2),(unsigned long long)(((code *)REFP(0x142135bf0))),(unsigned long long)(param_1),(unsigned long long)(param_1 + 0x3d8),(unsigned long long)(0));
           return 0;
         }
       }
@@ -16847,7 +16847,7 @@ LAB_142134d33:
       if (bVar8 != 0) {
         CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x20)),0x21,*(longlong *)(param_1 + 0x40) + 0x14);
         uVar10 = CALLF(undefined *, FUN_1420d9030)(bVar8);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x1bd,(unsigned long long)("Failed to finalize container data for target file with key %s. Error(%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))),(unsigned long long)(CONCAT44(uVar18,(uint)bVar8)),(unsigned long long)(uVar10));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x1bd,(unsigned long long)("Failed to finalize container data for target file with key %s. Error(%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))),(unsigned long long)(CONCAT44(uVar18,(uint)bVar8)),(unsigned long long)(uVar10));
         return (undefined8)CALLF(undefined8, FUN_1421350c0)(param_1,bVar8);
         return 0;
       }
@@ -16858,7 +16858,7 @@ LAB_142134d33:
       uVar10 = memcmp((void *)(&(*(undefined8 *)(gen_frame + 0x10))),(void *)(_Buf2),(ulonglong)*(byte *)(*(longlong *)(param_1 + 0x40) + 0x30));
       if ((int)uVar10 != 0) {
         CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x20)),0x21,_Buf2);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x1ca,(unsigned long long)("Failed to validate patched data for target file with key %s."),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x1ca,(unsigned long long)("Failed to validate patched data for target file with key %s."),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))));
         return (undefined8)CALLF(undefined8, FUN_1421350c0)(param_1,8);
         return 0;
       }
@@ -16912,7 +16912,7 @@ LAB_142134d33:
     pcVar11 = "Failed to encode data for target file with key %s. Error(%u): %s";
   }
 LAB_142134a40:
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",uVar12,(unsigned long long)(pcVar11),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))),(unsigned long long)(uVar16),(unsigned long long)(uVar10));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",uVar12,(unsigned long long)(pcVar11),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))),(unsigned long long)(uVar16),(unsigned long long)(uVar10));
   return (undefined8)CALLF(undefined8, FUN_1421350c0)(param_1,uVar13);
   return 0;
 }
@@ -16948,7 +16948,7 @@ undefined8 FUN_1421350c0(longlong param_1, char param_2)
     cVar2 = (**(code **)(*plVar1 + 200))(plVar1,*(longlong *)(param_1 + 0x40) + 0x14);
     if (cVar2 != '\0') {
       CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,*(longlong *)(param_1 + 0x40) + 0x14);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x123,(unsigned long long)("Failed to remove target file for failed patch from container with key %s."),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x123,(unsigned long long)("Failed to remove target file for failed patch from container with key %s."),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
     }
   }
   *(undefined1 *)(param_1 + 0x459) = 3;
@@ -17152,14 +17152,14 @@ undefined8 FUN_1421355f0(longlong param_1)
                      *(undefined4 *)(*(longlong *)(param_1 + 0x40) + 0x24));
   if (cVar7 != '\0') {
     CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,*(longlong *)(param_1 + 0x40) + 0x14);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x9b,(unsigned long long)("Failed to establish container residency for target file with key: %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x9b,(unsigned long long)("Failed to establish container residency for target file with key: %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
     uVar8 = CALLF(undefined8, FUN_1421350c0)(param_1,7);
     return uVar8;
   }
   cVar7 = CALLF(char, FUN_142135220)(param_1,param_1 + 0x458);
   if (cVar7 != '\0') {
     CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x48);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0xa5,(unsigned long long)("Failed to detect decryption patch candidacy when inspecting eSpec for base file with key: %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0xa5,(unsigned long long)("Failed to detect decryption patch candidacy when inspecting eSpec for base file with key: %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
     uVar8 = CALLF(undefined8, FUN_1421350c0)(param_1,cVar7);
     return uVar8;
   }
@@ -17280,7 +17280,7 @@ LAB_142135b83:
   }
   pcVar14 = "Failed to initialize streaming decoder for base file with key: %s";
 LAB_142135b4c:
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",uVar13,(unsigned long long)(pcVar14),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",uVar13,(unsigned long long)(pcVar14),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
   uVar8 = CALLF(undefined8, FUN_1421350c0)(param_1,cVar7);
   return uVar8;
 }
@@ -17308,7 +17308,7 @@ int FUN_142135bf0(longlong *param_1, byte param_2)
   }
   else {
     uVar4 = CALLF(undefined *, FUN_1420d9030)(param_2);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x282,(unsigned long long)("Failed to perform base file streaming read. Error(%u): %s"),(unsigned long long)(CONCAT44(0,(uint)param_2)),(unsigned long long)(uVar4));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x282,(unsigned long long)("Failed to perform base file streaming read. Error(%u): %s"),(unsigned long long)(CONCAT44(0,(uint)param_2)),(unsigned long long)(uVar4));
     uVar4 = CALLF(undefined8, FUN_1421350c0)(param_1,param_2);
     iVar2 = (int)uVar4;
   }
@@ -17376,7 +17376,7 @@ undefined8 FUN_142135d50(longlong *param_1, undefined8 param_2, uint param_3)
   if (bVar3 != 0) {
     CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1[8] + 0x14);
     uVar5 = CALLF(undefined *, FUN_1420d9030)(bVar3);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x2a1,(unsigned long long)("Failed to write encoding header for target file with key %s. Error(%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)bVar3)),(unsigned long long)(uVar5));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x2a1,(unsigned long long)("Failed to write encoding header for target file with key %s. Error(%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)bVar3)),(unsigned long long)(uVar5));
   }
   if (puVar4 != (undefined8 *)0x0) {
     *puVar4 = 0;
@@ -17494,7 +17494,7 @@ undefined8 FUN_142136110(longlong param_1, undefined8 param_2, undefined8 *param
   plVar3 = *(longlong **)(*(longlong *)(param_1 + 0x10) + 0xe00);
   cVar5 = (**(code **)(*plVar3 + 0x20))(plVar3,param_2,param_3,param_4);
   if (cVar5 == '\0') {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x1f,(unsigned long long)("Failed to apply re-encode patch.  Container write support is required."));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x1f,(unsigned long long)("Failed to apply re-encode patch.  Container write support is required."));
     cVar5 = '\x05';
   }
   else {
@@ -17528,7 +17528,7 @@ undefined8 FUN_142136110(longlong param_1, undefined8 param_2, undefined8 *param
         if ((((pcVar7 == (char *)0x0) || (*pcVar7 == '\0')) ||
             (pcVar12 = *(char **)(*(longlong *)(param_1 + 0x40) + 0x28), pcVar12 == (char *)0x0)) ||
            (pcVar14 = pcVar7, *pcVar12 == '\0')) {
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x43,(unsigned long long)("Failed to determine re-encode strategy: eSpec must be provided for both base and target files."));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x43,(unsigned long long)("Failed to determine re-encode strategy: eSpec must be provided for both base and target files."));
           cVar5 = '\x03';
         }
         else {
@@ -17586,7 +17586,7 @@ undefined8 FUN_142136110(longlong param_1, undefined8 param_2, undefined8 *param
                     return uVar8;
                   }
                   CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x48);
-                  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x7a,(unsigned long long)("Minimum valid memory limit exceeded for base file with key: %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+                  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",0x7a,(unsigned long long)("Minimum valid memory limit exceeded for base file with key: %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
                   cVar5 = '\x05';
                   goto LAB_1421364e4;
                 }
@@ -17594,7 +17594,7 @@ undefined8 FUN_142136110(longlong param_1, undefined8 param_2, undefined8 *param
                 uVar13 = 0x66;
                 pcVar7 = "Failed to get encoding header size for target file with key: %s";
               }
-              CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",uVar13,(unsigned long long)(pcVar7),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+              CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",uVar13,(unsigned long long)(pcVar7),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
               goto LAB_1421364e4;
             }
             pcVar14 = pcVar14 + 1;
@@ -17607,7 +17607,7 @@ undefined8 FUN_142136110(longlong param_1, undefined8 param_2, undefined8 *param
       uVar13 = 0x3b;
       pcVar7 = "Failed to get base file size for patching, using key: %s";
     }
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",uVar13,(unsigned long long)(pcVar7),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_file_reencode_patch_state.cpp",uVar13,(unsigned long long)(pcVar7),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
     cVar5 = '\a';
   }
 LAB_1421364e4:
@@ -17843,7 +17843,7 @@ LAB_14213686a:
     if (!bVar5) {
       CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x264);
       uVar9 = CALLF(undefined *, FUN_1420d9030)(bVar12);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_loose_file_make_resident_state.cpp",0xa2,(unsigned long long)("Loose file download failed for file \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)bVar12)),(unsigned long long)(uVar9));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_loose_file_make_resident_state.cpp",0xa2,(unsigned long long)("Loose file download failed for file \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)bVar12)),(unsigned long long)(uVar9));
     }
     *(byte *)(param_1 + 0x29d) = bVar12;
     *(undefined4 *)(param_1 + 0x244) = *(undefined4 *)(*(longlong *)(param_1 + 0x238) + 0x18);
@@ -18033,7 +18033,7 @@ undefined8 FUN_142136c30(longlong *param_1)
   }
   else {
     uVar4 = CALLF(undefined *, FUN_1420d9030)(bVar2);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_loose_file_make_resident_state.cpp",0x5d,(unsigned long long)("Failed to prepare file streamer. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar10,(uint)bVar2)),(unsigned long long)(uVar4));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_loose_file_make_resident_state.cpp",0x5d,(unsigned long long)("Failed to prepare file streamer. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar10,(uint)bVar2)),(unsigned long long)(uVar4));
     if ((int)param_1[0x50] != 0) {
       CALLF(undefined8, FUN_1421023b0)(param_1[2] + 0x490,(int)param_1[0x50]);
     }
@@ -18073,7 +18073,7 @@ undefined8 FUN_142136e60(longlong param_1, char param_2, char param_3)
       }
       goto LAB_142137032;
     }
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_loose_file_make_resident_state.cpp",0xe4,(unsigned long long)("Got bad data for loose file \'%s\'. Server: %u"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0x284))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_loose_file_make_resident_state.cpp",0xe4,(unsigned long long)("Got bad data for loose file \'%s\'. Server: %u"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0x284))));
     CALLF(undefined8, FUN_142103100)(*(longlong *)(param_1 + 0x10) + 0x490,*(undefined4 *)(param_1 + 0x284),
                   param_1 + 0x2a4);
     iVar5 = *(int *)(param_1 + 0x280);
@@ -18096,7 +18096,7 @@ LAB_142137032:
       return uVar3;
     }
     if (param_2 == '\x11') {
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_loose_file_make_resident_state.cpp",0xd4,(unsigned long long)("Exhausted all hosts trying to download loose file \'%s\'."),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_loose_file_make_resident_state.cpp",0xd4,(unsigned long long)("Exhausted all hosts trying to download loose file \'%s\'."),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
       if (*(int *)(param_1 + 0x280) != 0) {
         CALLF(undefined8, FUN_1421023b0)(*(longlong *)(param_1 + 0x10) + 0x490,*(int *)(param_1 + 0x280));
       }
@@ -18131,7 +18131,7 @@ undefined1 FUN_142137060(undefined8 param_1)
   iVar1 = CALLF(int, FUN_1402613a0)(((undefined1 *)(gen_frame + 0x100)),1);
   if (iVar1 != REFG(undefined4, 0x142620be0)) {
     CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,iVar1);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\loose_file\\loose_file_util.cpp",0x1c,(unsigned long long)("Failed to create directory \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x100))),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\loose_file\\loose_file_util.cpp",0x1c,(unsigned long long)("Failed to create directory \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x100))),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
     return 1;
   }
   return 0;
@@ -18344,7 +18344,7 @@ char FUN_142137440(longlong param_1, undefined8 *param_2, undefined4 param_3, un
   case 4:
   case 6:
   case 7:
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_block.cpp",0x160,(unsigned long long)("Invalid encoding specifier: invalid encoding detected in block for e-spec \'%.*s\'"),(unsigned long long)(CONCAT44(uVar5,uVar2)),(unsigned long long)(lVar1));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_block.cpp",0x160,(unsigned long long)("Invalid encoding specifier: invalid encoding detected in block for e-spec \'%.*s\'"),(unsigned long long)(CONCAT44(uVar5,uVar2)),(unsigned long long)(lVar1));
     return 3;
   case 1:
     cVar4 = CALLF(undefined1, FUN_1420d8890)(lVar1,lVar7);
@@ -18598,7 +18598,7 @@ undefined1 FUN_1421378e0(longlong param_1, longlong param_2, undefined4 param_3,
     else {
       uVar11 = (undefined4)((ulonglong)in_stack_ffffffffffffffb0 >> 0x20);
       if (iVar10 == 0x46) {
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_block.cpp",0x5f,(unsigned long long)("Failed decode block (%u): recursive block encoding is no longer supported"),(unsigned long long)(CONCAT44(uVar11,*(undefined4 *)(param_1 + 0x34))));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_block.cpp",0x5f,(unsigned long long)("Failed decode block (%u): recursive block encoding is no longer supported"),(unsigned long long)(CONCAT44(uVar11,*(undefined4 *)(param_1 + 0x34))));
         return 5;
       }
       if (iVar10 == 0x4e) {
@@ -18626,7 +18626,7 @@ undefined1 FUN_1421378e0(longlong param_1, longlong param_2, undefined4 param_3,
       }
       else {
         if (iVar10 != 0x5a) {
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_block.cpp",0x62,(unsigned long long)("Failed decode block (%u): unknown block codec \'%c\'"),(unsigned long long)(CONCAT44(uVar11,*(undefined4 *)(param_1 + 0x34))),(unsigned long long)(CONCAT44(uVar12,iVar10)));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_block.cpp",0x62,(unsigned long long)("Failed decode block (%u): unknown block codec \'%c\'"),(unsigned long long)(CONCAT44(uVar11,*(undefined4 *)(param_1 + 0x34))),(unsigned long long)(CONCAT44(uVar12,iVar10)));
           return 8;
         }
         lVar6 = CALLF(undefined *, FUN_1420daf10)();
@@ -18716,7 +18716,7 @@ undefined1 FUN_142137d00(longlong param_1, longlong param_2, undefined4 param_3,
       return 0;
     }
     if (*param_4 != 'E') {
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_block.cpp",0x195,(unsigned long long)("Failed decrypt block (%u): no encryption codec id detected"),(unsigned long long)(CONCAT44((int)((ulonglong)in_stack_ffffffffffffffc0 >> 0x20),
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\codec\\codec_block.cpp",0x195,(unsigned long long)("Failed decrypt block (%u): no encryption codec id detected"),(unsigned long long)(CONCAT44((int)((ulonglong)in_stack_ffffffffffffffc0 >> 0x20),
                              *(undefined4 *)(param_1 + 0x24))));
       return 5;
     }
@@ -19064,7 +19064,7 @@ undefined1 FUN_142138460(longlong param_1, longlong param_2, uint param_3, uint 
           *(byte *)(param_1 + 0x181) = bVar7;
           CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x8)),0x21,param_1 + 0x6c);
           uVar10 = CALLF(undefined *, FUN_1420d9030)(bVar6);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar14,(*(undefined4 *)(gen_frame + 0x4)))),(unsigned long long)(CONCAT44(0,iVar5)),(unsigned long long)(((undefined1 *)(gen_frame + 0x8))),(unsigned long long)(CONCAT44(0,(uint)bVar6)),(unsigned long long)(uVar10));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar14,(*(undefined4 *)(gen_frame + 0x4)))),(unsigned long long)(CONCAT44(0,iVar5)),(unsigned long long)(((undefined1 *)(gen_frame + 0x8))),(unsigned long long)(CONCAT44(0,(uint)bVar6)),(unsigned long long)(uVar10));
         }
       }
       *(int *)(param_1 + 0x104) = *(int *)(param_1 + 0x104) + (*(int *)(gen_frame + 0x0));
@@ -19128,7 +19128,7 @@ undefined1 FUN_142138460(longlong param_1, longlong param_2, uint param_3, uint 
           *(byte *)(param_1 + 0x181) = bVar7;
           CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x8)),0x21,param_1 + 0x6c);
           uVar10 = CALLF(undefined *, FUN_1420d9030)(bVar6);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar14,uVar3)),(unsigned long long)(CONCAT44(0,iVar5)),(unsigned long long)(((undefined1 *)(gen_frame + 0x8))),(unsigned long long)(CONCAT44(0,(uint)bVar6)),(unsigned long long)(uVar10));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar14,uVar3)),(unsigned long long)(CONCAT44(0,iVar5)),(unsigned long long)(((undefined1 *)(gen_frame + 0x8))),(unsigned long long)(CONCAT44(0,(uint)bVar6)),(unsigned long long)(uVar10));
         }
       }
       *(int *)(param_1 + 0x104) = *(int *)(param_1 + 0x104) + (*(int *)(gen_frame + 0x0));
@@ -19211,7 +19211,7 @@ undefined4 FUN_1421388b0(longlong param_1, undefined8 param_2, uint param_3, uin
         *(byte *)(param_1 + 0x181) = bVar6;
         CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x8)),0x21,param_1 + 0x6c);
         uVar9 = CALLF(undefined *, FUN_1420d9030)(bVar5);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar8,uVar2)),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x8))),(unsigned long long)(CONCAT44(0,(uint)bVar5)),(unsigned long long)(uVar9));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar8,uVar2)),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x8))),(unsigned long long)(CONCAT44(0,(uint)bVar5)),(unsigned long long)(uVar9));
       }
     }
     *param_4 = *param_4 + ((uint *)(gen_frame + 0x0))[0];
@@ -19261,7 +19261,7 @@ undefined4 FUN_1421388b0(longlong param_1, undefined8 param_2, uint param_3, uin
             *(byte *)(param_1 + 0x181) = bVar6;
             CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x8)),0x21,param_1 + 0x6c);
             uVar9 = CALLF(undefined *, FUN_1420d9030)(bVar5);
-            CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar8,uVar2)),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x8))),(unsigned long long)(CONCAT44(0,(uint)bVar5)),(unsigned long long)(uVar9));
+            CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar8,uVar2)),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x8))),(unsigned long long)(CONCAT44(0,(uint)bVar5)),(unsigned long long)(uVar9));
           }
         }
         *param_4 = *param_4 + ((uint *)(gen_frame + 0x0))[0];
@@ -19509,7 +19509,7 @@ byte FUN_1421390c0(longlong param_1, undefined8 param_2, int param_3, uint param
       *(byte *)(param_1 + 0x181) = bVar4;
       CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x6c);
       uVar5 = CALLF(undefined *, FUN_1420d9030)(bVar3);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(0,param_4)),(unsigned long long)(CONCAT44(0,param_3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)bVar3)),(unsigned long long)(uVar5));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x249,(unsigned long long)("Failed to write streamed file data (%u, %u) for key \'%s\'. Error (%u): %s"),(unsigned long long)(CONCAT44(0,param_4)),(unsigned long long)(CONCAT44(0,param_3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)bVar3)),(unsigned long long)(uVar5));
     }
   }
   return bVar3;
@@ -20281,7 +20281,7 @@ char FUN_14213a220(longlong param_1, undefined8 param_2, undefined8 *param_3, in
     *(int *)(param_1 + 0x98) = (int)uVar5;
     if ((int)uVar5 == 0) {
       CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x6c);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x97,(unsigned long long)("Failed to prepare file streamer for key \'%s\' due to a bad eSpec: %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(*(undefined8 *)(param_1 + 0x80)));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x97,(unsigned long long)("Failed to prepare file streamer for key \'%s\' due to a bad eSpec: %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(*(undefined8 *)(param_1 + 0x80)));
       return 3;
     }
   }
@@ -20305,7 +20305,7 @@ LAB_14213a525:
       if ((*(longlong *)(param_1 + 0x170) != 0) &&
          (*(uint *)(param_1 + 0x178) < *(uint *)(param_1 + 0xa8))) {
         CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x6c);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0xe1,(unsigned long long)("Failed to prepare file streamer for key \'%s\' with the offset \'%u\'. The destination buffer of size \'%u\' is smaller than the raw span size: \'%u\'"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(uVar6,*(undefined4 *)(param_1 + 0x9c))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0x178))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0xa8))));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0xe1,(unsigned long long)("Failed to prepare file streamer for key \'%s\' with the offset \'%u\'. The destination buffer of size \'%u\' is smaller than the raw span size: \'%u\'"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(uVar6,*(undefined4 *)(param_1 + 0x9c))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0x178))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0xa8))));
         return 3;
       }
     }
@@ -20328,7 +20328,7 @@ LAB_14213a525:
       }
     }
     CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x6c);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0xbc,(unsigned long long)("Failed to prepare file streamer for a block encoded key \'%s\' due to an invalid block span. Requested span: {%u, %u}"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(uVar6,*(undefined4 *)(param_1 + 0x9c))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0xa0))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0xbc,(unsigned long long)("Failed to prepare file streamer for a block encoded key \'%s\' due to an invalid block span. Requested span: {%u, %u}"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(uVar6,*(undefined4 *)(param_1 + 0x9c))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1 + 0xa0))));
     ((char *)(gen_frame + 0x40))[0] = '\x03';
   }
   return ((char *)(gen_frame + 0x40))[0];
@@ -20384,7 +20384,7 @@ undefined1 FUN_14213a600(longlong param_1, undefined8 param_2, longlong param_3,
   *(int *)(param_1 + 0x98) = iVar5;
   if (iVar5 == 0) {
     CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x6c);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x120,(unsigned long long)("Failed to prepare file streamer for key \'%s\' due to a bad eSpec: %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(*(undefined8 *)(param_1 + 0x80)));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\container_file_streamer.cpp",0x120,(unsigned long long)("Failed to prepare file streamer for key \'%s\' due to a bad eSpec: %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(*(undefined8 *)(param_1 + 0x80)));
     return 3;
   }
   CALLF(undefined4, FUN_142366090)(param_1 + 0x110);
@@ -20525,7 +20525,7 @@ undefined1 FUN_14213aa00(longlong param_1, undefined8 param_2)
     return 1;
   }
   CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x30);
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x1a8,(unsigned long long)("Detected bad block at index %u for loose file \'%s\'"),(unsigned long long)(CONCAT44(uVar9,iVar7)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x1a8,(unsigned long long)("Detected bad block at index %u for loose file \'%s\'"),(unsigned long long)(CONCAT44(uVar9,iVar7)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
   *(undefined4 *)(param_1 + 0x188) = 0;
   uVar5 = *(uint *)(param_1 + 0x188);
   if (uVar5 == 0) {
@@ -20802,7 +20802,7 @@ undefined8 FUN_14213af10(longlong param_1, longlong param_2, uint param_3, uint 
              CALLF(undefined1, FUN_1420f9950)(*(longlong *)(param_1 + 0x58),*(undefined4 *)(param_1 + 0x40),((uint *)(gen_frame + 0x0)))
         ;
         if (((char *)(gen_frame + 0x10))[0] != '\0') {
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x132,(unsigned long long)("Invalid encoding specifier: \'%s\'"),(unsigned long long)(*(undefined8 *)(param_1 + 0x58)))
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x132,(unsigned long long)("Invalid encoding specifier: \'%s\'"),(unsigned long long)(*(undefined8 *)(param_1 + 0x58)))
           ;
           cVar3 = *(char *)(param_1 + 0x15c);
           *(undefined1 *)(param_1 + 0x15d) = 1;
@@ -20956,14 +20956,14 @@ undefined4 FUN_14213b340(longlong param_1, undefined8 param_2, undefined8 param_
   }
   else {
     lVar5 = *(longlong *)(param_1 + 0x28);
-    cVar7 = CALLF(undefined1, FUN_1420f9ef0)(*(undefined8 *)(param_1 + 0x180),*(undefined4 *)(param_1 + 0x40),param_2,uVar11,(unsigned long long)(0),(unsigned long long)(&REFG(undefined8, 0x1428f11b0)),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(*(undefined8 *)(lVar5 + 0xf58)),(unsigned long long)(*(undefined8 *)(lVar5 + 0xf60)),(unsigned long long)(in_stack_ffffffffffffff98 & 0xffffff00),(unsigned long long)(lVar5 + 0xa10),(unsigned long long)(*(undefined8 *)(lVar5 + 0xe10)));
+    cVar7 = CALLF(undefined1, FUN_1420f9ef0)(*(undefined8 *)(param_1 + 0x180),*(undefined4 *)(param_1 + 0x40),param_2,uVar11,(unsigned long long)(0),(unsigned long long)(&REFG(undefined1, 0x1428f11b0)),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(*(undefined8 *)(lVar5 + 0xf58)),(unsigned long long)(*(undefined8 *)(lVar5 + 0xf60)),(unsigned long long)(in_stack_ffffffffffffff98 & 0xffffff00),(unsigned long long)(lVar5 + 0xa10),(unsigned long long)(*(undefined8 *)(lVar5 + 0xe10)));
   }
   if (cVar7 == '\0') {
     CALLF(undefined8, FUN_14213c1c0)(param_1,*(undefined8 *)(param_1 + 0x180),*(undefined4 *)(param_1 + 0x188));
     goto LAB_14213b602;
   }
   CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x30);
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x2c0,(unsigned long long)("Detected bad data for loose file \'%s\'"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x2c0,(unsigned long long)("Detected bad data for loose file \'%s\'"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
   *(undefined4 *)(param_1 + 0x188) = 0;
   CALLF(undefined4, FUN_1420fbea0)(puVar1);
   cVar2 = *(char *)(param_1 + 0x15c);
@@ -21093,7 +21093,7 @@ undefined8 FUN_14213b6a0(longlong param_1, char *param_2, uint param_3)
     cVar1 = CALLF(undefined1, FUN_142129c50)(pcVar3,8,0);
     if (cVar1 == '\0') {
       CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x30);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x201,(unsigned long long)("Detected bad encoding frame for loose file \'%s\'"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x201,(unsigned long long)("Detected bad encoding frame for loose file \'%s\'"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
       *(int *)(param_1 + 0x154) = *(int *)(param_1 + 0x154) + param_3;
       *(undefined4 *)(param_1 + 0x170) = 0;
       *(undefined1 *)(param_1 + 0x15d) = 1;
@@ -21242,7 +21242,7 @@ LAB_14213b983:
         if (bVar5 != 0) {
           CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x10)),0x21,param_1 + 0x30);
           uVar7 = CALLF(undefined *, FUN_1420d9030)(bVar5);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x2e3,(unsigned long long)("Failed to prepare loose file writer for key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))),(unsigned long long)(CONCAT44(uVar9,(uint)bVar5)),(unsigned long long)(uVar7));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x2e3,(unsigned long long)("Failed to prepare loose file writer for key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))),(unsigned long long)(CONCAT44(uVar9,(uint)bVar5)),(unsigned long long)(uVar7));
           uVar6 = CALLF(char, FUN_14213c140)(*(undefined1 *)(param_1 + 0x15c),bVar5);
           *(undefined1 *)(param_1 + 0x15c) = uVar6;
           *(undefined1 *)(param_1 + 0x15d) = 1;
@@ -21291,7 +21291,7 @@ LAB_14213bbc3:
         if (bVar5 != 0) {
           CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x10)),0x21,param_1 + 0x30);
           uVar7 = CALLF(undefined *, FUN_1420d9030)(bVar5);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x2e3,(unsigned long long)("Failed to prepare loose file writer for key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))),(unsigned long long)(CONCAT44(uVar9,(uint)bVar5)),(unsigned long long)(uVar7));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x2e3,(unsigned long long)("Failed to prepare loose file writer for key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))),(unsigned long long)(CONCAT44(uVar9,(uint)bVar5)),(unsigned long long)(uVar7));
           uVar6 = CALLF(char, FUN_14213c140)(*(undefined1 *)(param_1 + 0x15c),bVar5);
           *(undefined1 *)(param_1 + 0x15c) = uVar6;
           *(undefined1 *)(param_1 + 0x15d) = 1;
@@ -21405,13 +21405,13 @@ undefined1 FUN_14213bf00(longlong param_1, undefined8 param_2, undefined8 param_
     *(int *)(param_1 + 0x150) = iVar2;
     if (iVar2 == 0) {
       CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x30);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x43,(unsigned long long)("Failed to prepare file streamer for loose file \'%s\' due to a bad eSpec: %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(*(undefined8 *)(param_1 + 0x58)));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x43,(unsigned long long)("Failed to prepare file streamer for loose file \'%s\' due to a bad eSpec: %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(*(undefined8 *)(param_1 + 0x58)));
       return 3;
     }
     if (((iVar2 - 1U & 0xfffffffa) != 0) || (iVar2 == 5)) {
       CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x30);
       puVar4 = ((undefined1 *)(gen_frame + 0x0));
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x4d,(unsigned long long)("Inefficient loose file encoding \'%s\', memory usage will increase for file \'%s\'."),(unsigned long long)(*(undefined8 *)(param_1 + 0x58)),(unsigned long long)(puVar4));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),3,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x4d,(unsigned long long)("Inefficient loose file encoding \'%s\', memory usage will increase for file \'%s\'."),(unsigned long long)(*(undefined8 *)(param_1 + 0x58)),(unsigned long long)(puVar4));
       uVar5 = (undefined4)((ulonglong)puVar4 >> 0x20);
     }
   }
@@ -21422,7 +21422,7 @@ undefined1 FUN_14213bf00(longlong param_1, undefined8 param_2, undefined8 param_
     if ((*(byte *)&gen_slot_param_7) != 0) {
       CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x30);
       uVar3 = CALLF(undefined *, FUN_1420d9030)((*(byte *)&gen_slot_param_7));
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x59,(unsigned long long)("Failed to initialize decoding stream for loose file \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(uVar5,(uint)(*(byte *)&gen_slot_param_7))),(unsigned long long)(uVar3));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x59,(unsigned long long)("Failed to initialize decoding stream for loose file \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(uVar5,(uint)(*(byte *)&gen_slot_param_7))),(unsigned long long)(uVar3));
       return (*(byte *)&gen_slot_param_7);
     }
   }
@@ -21485,7 +21485,7 @@ undefined8 FUN_14213c1c0(longlong param_1, undefined8 param_2, int param_3)
       if (bVar1 != 0) {
         CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x30);
         uVar4 = CALLF(undefined *, FUN_1420d9030)(bVar1);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x2e3,(unsigned long long)("Failed to prepare loose file writer for key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)bVar1)),(unsigned long long)(uVar4));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\file_streamer\\loose_file_streamer.cpp",0x2e3,(unsigned long long)("Failed to prepare loose file writer for key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)bVar1)),(unsigned long long)(uVar4));
         uVar2 = CALLF(char, FUN_14213c140)(*(undefined1 *)(param_1 + 0x15c),bVar1);
         *(undefined1 *)(param_1 + 0x15c) = uVar2;
         *(undefined1 *)(param_1 + 0x15d) = 1;
@@ -21675,7 +21675,7 @@ LAB_14213c6f1:
       if (cVar2 != '\0') {
         bVar1 = CALLF(undefined1, FUN_1420f91b0)(cVar2);
         uVar3 = CALLF(undefined *, FUN_1420d9030)(bVar1);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\loose_file\\loose_file_writer.cpp",0x38,(unsigned long long)("Failed to open loose file \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)bVar1)),(unsigned long long)(uVar3));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\loose_file\\loose_file_writer.cpp",0x38,(unsigned long long)("Failed to open loose file \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,(uint)bVar1)),(unsigned long long)(uVar3));
         goto LAB_14213c6f1;
       }
       uVar5 = uVar5 + 1;
@@ -21725,7 +21725,7 @@ char FUN_14213c700(undefined8 *param_1, undefined8 param_2, uint param_3)
         if (*plVar6 == 0) {
           CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 1);
           *(undefined1 *)(param_1 + 0x16) = 1;
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\loose_file\\loose_file_writer.cpp",0x54,(unsigned long long)("Failed to queue write for loose file \'%s\'."),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\loose_file\\loose_file_writer.cpp",0x54,(unsigned long long)("Failed to queue write for loose file \'%s\'."),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
         }
         else {
           ((uint *)(gen_frame + 0x60))[0] = 0;
@@ -21739,7 +21739,7 @@ char FUN_14213c700(undefined8 *param_1, undefined8 param_2, uint param_3)
               uVar3 = CALLF(undefined *, FUN_1420d9030)(0xe);
               in_stack_ffffffffffffff90 = CONCAT44(uVar8,(*(uint *)&gen_slot_param_3));
               gen_stack_ffffffffffffff88 = CONCAT44(uVar7,((uint *)(gen_frame + 0x60))[0]);
-              CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\loose_file\\loose_file_writer.cpp",0x68,(unsigned long long)("Truncated write for loose file \'%s\' [%u/%u]. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(gen_stack_ffffffffffffff88),(unsigned long long)(in_stack_ffffffffffffff90),(unsigned long long)(CONCAT44(0,(uint)*(byte *)(param_1 + 0x16))),(unsigned long long)(uVar3));
+              CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\loose_file\\loose_file_writer.cpp",0x68,(unsigned long long)("Truncated write for loose file \'%s\' [%u/%u]. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(gen_stack_ffffffffffffff88),(unsigned long long)(in_stack_ffffffffffffff90),(unsigned long long)(CONCAT44(0,(uint)*(byte *)(param_1 + 0x16))),(unsigned long long)(uVar3));
             }
           }
           else {
@@ -21748,7 +21748,7 @@ char FUN_14213c700(undefined8 *param_1, undefined8 param_2, uint param_3)
             *(undefined1 *)(param_1 + 0x16) = uVar2;
             in_stack_ffffffffffffff90 = CALLF(undefined *, FUN_1420d9030)(uVar2);
             gen_stack_ffffffffffffff88 = CONCAT44(uVar7,(uint)*(byte *)(param_1 + 0x16));
-            CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\loose_file\\loose_file_writer.cpp",0x60,(unsigned long long)("Failed to write data for loose file \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(gen_stack_ffffffffffffff88),(unsigned long long)(in_stack_ffffffffffffff90));
+            CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\loose_file\\loose_file_writer.cpp",0x60,(unsigned long long)("Failed to write data for loose file \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(gen_stack_ffffffffffffff88),(unsigned long long)(in_stack_ffffffffffffff90));
           }
         }
         lVar5 = lVar5 + 0x10;
@@ -22526,7 +22526,7 @@ LAB_14213db50:
     uVar8 = 0x72;
     pcVar3 = "Error opening directory \'%s\'. (reason: %s)";
 LAB_14213dba0:
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",uVar8,(unsigned long long)(pcVar3),(unsigned long long)(param_1),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",uVar8,(unsigned long long)(pcVar3),(unsigned long long)(param_1),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))));
     uVar8 = 8;
   }
   CALLF(undefined8, FUN_140261370)(((undefined1 *)(gen_frame + 0x730)));
@@ -22634,11 +22634,11 @@ undefined8 FUN_14213de20(undefined8 param_1, undefined8 param_2, undefined8 *par
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[48]) > 0x38 ? 0x0 + sizeof(undefined1[48]) : 0x38)] = {0};
   int iVar1 = {0};
   
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x131,(unsigned long long)("Missing archive detected for offset \'%llu\'"),(unsigned long long)(*param_3));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x131,(unsigned long long)("Missing archive detected for offset \'%llu\'"),(unsigned long long)(*param_3));
   iVar1 = CALLF(undefined4, FUN_14214bbe0)(param_1,param_2,1,0);
   if (iVar1 != 0) {
     CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_2);
-    return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x138,(unsigned long long)("Failed to delete key %s after missing archive detected."),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+    return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x138,(unsigned long long)("Failed to delete key %s after missing archive detected."),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
   }
   return 0;
 }
@@ -22656,7 +22656,7 @@ undefined8 FUN_14213ded0(undefined8 param_1, undefined8 param_2, longlong *param
 /*                                   */
   
   CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x20)),0x21,param_2);
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x141,(unsigned long long)("Truncated read for key \'%s\'. Requested: %u Read: %u."),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))),(unsigned long long)(CONCAT44(0,(int)param_3[1])),(unsigned long long)(CONCAT44(0,param_4)));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x141,(unsigned long long)("Truncated read for key \'%s\'. Requested: %u Read: %u."),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))),(unsigned long long)(CONCAT44(0,(int)param_3[1])),(unsigned long long)(CONCAT44(0,param_4)));
   iVar1 = CALLF(undefined4, FUN_14214ca30)(param_1,param_2,0,((undefined1 *)(gen_frame + 0x10)));
   if (iVar1 == 0) {
     (*(longlong *)(gen_frame + 0x0)) = (ulonglong)param_4 + *param_3;
@@ -22672,7 +22672,7 @@ undefined8 FUN_14213ded0(undefined8 param_1, undefined8 param_2, longlong *param
     pcVar2 = "Failed to get allocated span after truncated read.";
     uVar4 = 0x147;
   }
-  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",uVar4,(unsigned long long)(pcVar2));
+  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",uVar4,(unsigned long long)(pcVar2));
   return 0;
 }
 
@@ -22921,7 +22921,7 @@ undefined4 FUN_14213e520(longlong param_1, undefined8 param_2, undefined8 param_
     else if (iVar2 == 0) {
       cVar1 = CALLF(undefined1, FUN_1421506f0)(((undefined1 *)(gen_frame + 0x10)),0x1e,param_2,param_4,(unsigned long long)((char)uVar3));
       if (cVar1 == '\0') {
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x272,(unsigned long long)("Failed to serialize reconstruction header."));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x272,(unsigned long long)("Failed to serialize reconstruction header."));
         iVar2 = 1;
       }
       else {
@@ -23037,7 +23037,7 @@ undefined4 FUN_14213e890(longlong param_1, undefined8 param_2, longlong param_3,
     if (iVar1 != 0) {
       CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_2);
       uVar2 = CALLF(undefined *, FUN_14213caf0)(iVar1);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x22f,(unsigned long long)("Failed to write file data for key \'%s\' to storage. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x22f,(unsigned long long)("Failed to write file data for key \'%s\' to storage. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
       return iVar1;
     }
     if (param_6 == '\0') {
@@ -23046,7 +23046,7 @@ undefined4 FUN_14213e890(longlong param_1, undefined8 param_2, longlong param_3,
       if (iVar1 != 0) {
         CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_2);
         uVar2 = CALLF(undefined *, FUN_14213caf0)(iVar1);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x240,(unsigned long long)("Failed to update residency for key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x240,(unsigned long long)("Failed to update residency for key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
         return iVar1;
       }
     }
@@ -23121,10 +23121,10 @@ int FUN_14213e9d0(undefined8 *param_1, undefined8 param_2, undefined4 param_3, u
             uVar11 = (undefined4)((ulonglong)pcVar14 >> 0x20);
             if ((int)uVar6 == 2) {
               pcVar14 = (code *)CONCAT44(uVar11,iVar3);
-              CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x1aa,(unsigned long long)("Archive file %u is missing. Container will initialize, but files may be missing."),(unsigned long long)(pcVar14));
+              CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x1aa,(unsigned long long)("Archive file %u is missing. Container will initialize, but files may be missing."),(unsigned long long)(pcVar14));
             }
             else if ((int)uVar6 != 0) {
-              CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x1ae,(unsigned long long)("Failed to read archive \'%u\', failing validation."),(unsigned long long)(CONCAT44(uVar11,iVar3)));
+              CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x1ae,(unsigned long long)("Failed to read archive \'%u\', failing validation."),(unsigned long long)(CONCAT44(uVar11,iVar3)));
               return 8;
             }
             puVar9 = puVar12;
@@ -23141,7 +23141,7 @@ int FUN_14213e9d0(undefined8 *param_1, undefined8 param_2, undefined4 param_3, u
                   pcVar13 = "Missing segment header for archive \'%u\', repair needed.";
                   uVar11 = 0x1c8;
 LAB_14213ec97:
-                  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",uVar11,(unsigned long long)(pcVar13),(unsigned long long)(CONCAT44((int)((ulonglong)pcVar14 >> 0x20),iVar3)));
+                  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",uVar11,(unsigned long long)(pcVar13),(unsigned long long)(CONCAT44((int)((ulonglong)pcVar14 >> 0x20),iVar3)));
                   return 9;
                 }
                 if (((longlong *)(gen_frame + 0x0))[0] != lVar1) {
@@ -23166,7 +23166,7 @@ LAB_14213ec97:
     if ((*(byte *)(param_1 + 1) & 1) == 0) {
       plVar8 = (longlong *)*plVar8;
     }
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x17d,(unsigned long long)("failed to bind Container index at \'%s\': %d (%s)"),(unsigned long long)(plVar8),(unsigned long long)(CONCAT44(uVar11,iVar3)),(unsigned long long)(uVar6));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x17d,(unsigned long long)("failed to bind Container index at \'%s\': %d (%s)"),(unsigned long long)(plVar8),(unsigned long long)(CONCAT44(uVar11,iVar3)),(unsigned long long)(uVar6));
   }
   return iVar3;
 }
@@ -23181,7 +23181,7 @@ undefined8 FUN_14213ed00(undefined8 param_1, undefined4 param_2)
   
   CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1);
   uVar1 = CALLF(undefined *, FUN_14213caf0)(param_2);
-  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x61,(unsigned long long)("Failed to update data residency for handle key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(uVar1));
+  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x61,(unsigned long long)("Failed to update data residency for handle key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(uVar1));
   return 0;
 }
 
@@ -23195,7 +23195,7 @@ undefined8 FUN_14213ed70(undefined8 param_1, undefined4 param_2)
   
   CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1);
   uVar1 = CALLF(undefined *, FUN_14213caf0)(param_2);
-  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x58,(unsigned long long)("Failed to update header residency for handle key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(uVar1));
+  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x58,(unsigned long long)("Failed to update header residency for handle key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(uVar1));
   return 0;
 }
 
@@ -23217,7 +23217,7 @@ undefined4 FUN_14213ede0(longlong param_1, uint param_2, longlong param_3)
       (*(longlong *)(gen_frame + 0x0)) = (ulonglong)(uVar3 * 0x1e) + (ulonglong)param_2 * 0x40000000;
       cVar1 = CALLF(undefined1, FUN_1421506f0)(puVar4,0x1e,(ulonglong)uVar3 * 0x10 + param_3,&(*(longlong *)(gen_frame + 0x0)),(unsigned long long)(1));
       if (cVar1 == '\0') {
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0xb0,(unsigned long long)("Failed to serialize reconstruction header."));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0xb0,(unsigned long long)("Failed to serialize reconstruction header."));
         return 1;
       }
       puVar4 = puVar4 + 0x1e;
@@ -23270,7 +23270,7 @@ undefined4 FUN_14213f2f0(longlong param_1, undefined8 param_2, int *param_3)
     if (iVar1 == 0) {
       if ((*(uint *)(gen_frame + 0x8)) < 0x1e) {
         CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x10)),0x21,param_2);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x3db,(unsigned long long)("invalid file size detected for key \'%s\'"),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x3db,(unsigned long long)("invalid file size detected for key \'%s\'"),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))));
         *param_3 = 0;
         return 9;
       }
@@ -23379,7 +23379,7 @@ undefined4 FUN_14213f550(longlong param_1, longlong param_2, longlong *param_3)
             if (iVar2 != 0) {
               CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x20)),0x21,param_2);
               uVar3 = CALLF(undefined *, FUN_14213caf0)(iVar2);
-              CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x79a,(unsigned long long)("Failed to update residency for handle key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))),(unsigned long long)(CONCAT44(0,iVar2)),(unsigned long long)(uVar3));
+              CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x79a,(unsigned long long)("Failed to update residency for handle key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))),(unsigned long long)(CONCAT44(0,iVar2)),(unsigned long long)(uVar3));
               return iVar2;
             }
             *(undefined1 *)(param_2 + 0x21) = 1;
@@ -23454,7 +23454,7 @@ LAB_14213f871:
       cVar2 = CALLF(undefined1, FUN_1421506f0)(&(*(undefined8 *)(gen_frame + 0x10)),0x1e,param_2,plVar1,(unsigned long long)(0));
       if (cVar2 == '\0') {
         CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x30)),0x21,param_2);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x75e,(unsigned long long)("Failed to serialize reconstruction header for key \'%s\'."),(unsigned long long)(((undefined1 *)(gen_frame + 0x30))));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x75e,(unsigned long long)("Failed to serialize reconstruction header for key \'%s\'."),(unsigned long long)(((undefined1 *)(gen_frame + 0x30))));
         iVar3 = 1;
         goto LAB_14213f9c9;
       }
@@ -23492,7 +23492,7 @@ LAB_14213f871:
     pcVar5 = "Failed to get key mapping for key \'%s\'. Error (%u): %s";
   }
 LAB_14213f9a8:
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",uVar6,(unsigned long long)(pcVar5),(unsigned long long)(((undefined1 *)(gen_frame + 0x30))),(unsigned long long)(CONCAT44(0,iVar3)),(unsigned long long)(uVar4));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",uVar6,(unsigned long long)(pcVar5),(unsigned long long)(((undefined1 *)(gen_frame + 0x30))),(unsigned long long)(CONCAT44(0,iVar3)),(unsigned long long)(uVar4));
 LAB_14213f9c9:
   if (((*(longlong *)(gen_frame + 0x0)) != 0) && ((*(char *)(gen_frame + 0x8)) != '\0')) {
     CALLF(undefined8, FUN_1423643a0)((*(longlong *)(gen_frame + 0x0)) + 0xd8);
@@ -23527,7 +23527,7 @@ int FUN_14213faf0(longlong param_1, undefined8 param_2, longlong *param_3)
     if (iVar1 != 0) {
       CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x10)),0x21,param_2);
       uVar2 = CALLF(undefined *, FUN_14213caf0)(iVar1);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x614,(unsigned long long)("Failed to update residency for key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x614,(unsigned long long)("Failed to update residency for key \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
     }
     return iVar1;
   }
@@ -23637,7 +23637,7 @@ undefined4 FUN_142140550(undefined8 *param_1, longlong *param_2, undefined4 para
       iVar3 = CALLF(undefined4, FUN_14214c410)(puVar4,puVar5[2],puVar5[5],((uint *)(gen_frame + 0x60))[0],(unsigned long long)(((uint *)(gen_frame + 0x68))));
       if (iVar3 == 0) {
         if (((uint *)(gen_frame + 0x68))[0] < ((uint *)(gen_frame + 0x60))[0]) {
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),1,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x10d,(unsigned long long)("Short scan due to another process."));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),1,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x10d,(unsigned long long)("Short scan due to another process."));
           ((uint *)(gen_frame + 0x60))[0] = ((uint *)(gen_frame + 0x68))[0];
           CALLF(undefined8, FUN_14213e0d0)(puVar5 + 1,((uint *)(gen_frame + 0x68))[0]);
           CALLF(undefined8, FUN_14213e060)(puVar5 + 4,((uint *)(gen_frame + 0x68))[0]);
@@ -23785,7 +23785,7 @@ undefined4 FUN_142141070(longlong param_1, longlong param_2, uint param_3)
       uVar2 = CALLF(undefined *, FUN_14213caf0)(iVar1);
       uVar5 = 0x635;
 LAB_1421411a0:
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",uVar5,(unsigned long long)("Failed to delete keys. Error (%u): %s"),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",uVar5,(unsigned long long)("Failed to delete keys. Error (%u): %s"),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
     }
   }
   else {
@@ -24136,7 +24136,7 @@ LAB_142141aed:
         CALLF(undefined8, FUN_14213d920)(param_1 + 0x16a,puVar12);
         CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x38)),0x21,param_2);
         uVar15 = CALLF(undefined *, FUN_14213caf0)(iVar10);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x5fc,(unsigned long long)("Failed to queue async write request for key \'%s\' to storage. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x38))),(unsigned long long)(CONCAT44(uVar20,iVar10)),(unsigned long long)(uVar15));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic.cpp",0x5fc,(unsigned long long)("Failed to queue async write request for key \'%s\' to storage. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x38))),(unsigned long long)(CONCAT44(uVar20,iVar10)),(unsigned long long)(uVar15));
         *puVar8 = 0;
       }
     }
@@ -24160,7 +24160,7 @@ int FUN_142141c70(undefined8 *param_1, undefined8 param_2, undefined8 param_3, u
   
   cVar2 = CALLF(undefined1, FUN_14213fad0)(param_1);
   if (cVar2 == '\0') {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance.cpp",0x15,(unsigned long long)("Container to compact is not open."));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance.cpp",0x15,(unsigned long long)("Container to compact is not open."));
     iVar3 = 6;
   }
   else if (*(char *)((longlong)param_1 + 0x2d) == '\0') {
@@ -24183,12 +24183,12 @@ int FUN_142141c70(undefined8 *param_1, undefined8 param_2, undefined8 param_3, u
       }
     }
     else {
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance.cpp",0x21,(unsigned long long)("Container to compact was not opened with casDynamicOpenMode::ReadWriteExclusive."));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance.cpp",0x21,(unsigned long long)("Container to compact was not opened with casDynamicOpenMode::ReadWriteExclusive."));
       iVar3 = 10;
     }
   }
   else {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance.cpp",0x1b,(unsigned long long)("Cannot run compaction with pipeline enabled."));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance.cpp",0x1b,(unsigned long long)("Cannot run compaction with pipeline enabled."));
     iVar3 = 5;
   }
   return iVar3;
@@ -24278,7 +24278,7 @@ undefined4 FUN_142141ee0(longlong param_1, undefined8 param_2, undefined8 param_
     return 10;
   }
   if (*(char *)(param_1 + 0x2d) != '\0') {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance.cpp",0x58,(unsigned long long)("Cannot run compaction with pipeline enabled."));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance.cpp",0x58,(unsigned long long)("Cannot run compaction with pipeline enabled."));
     return 5;
   }
   uVar2 = CALLF(int, FUN_14214fa90)(*(longlong *)(param_1 + 0xb10),param_2,param_3);
@@ -24749,12 +24749,12 @@ undefined4 FUN_1421429f0(ulonglong *param_1, undefined4 param_2, longlong param_
   }
   uVar1 = *(uint *)(param_3 + 0x10);
   if ((uVar1 == 0) || (lVar4 = *(longlong *)(param_3 + 8), lVar4 == 0)) {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\static.cpp",0x106,(unsigned long long)("Must provide at least 1 key bit layout."));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\static.cpp",0x106,(unsigned long long)("Must provide at least 1 key bit layout."));
     return 10;
   }
   uVar6 = 1LL << (*(byte *)(param_3 + 4) & 0x3f);
   if (uVar6 < uVar1) {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\static.cpp",0x10d,(unsigned long long)("Key layout count (%u) exceeds maximum (%llu)"),(unsigned long long)(CONCAT44(0,uVar1)),(unsigned long long)(uVar6));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\static.cpp",0x10d,(unsigned long long)("Key layout count (%u) exceeds maximum (%llu)"),(unsigned long long)(CONCAT44(0,uVar1)),(unsigned long long)(uVar6));
     return 10;
   }
   uVar5 = 0;
@@ -24765,7 +24765,7 @@ undefined4 FUN_1421429f0(ulonglong *param_1, undefined4 param_2, longlong param_
               (uint)*(byte *)(lVar4 + 1 + uVar6 * 8) + (uint)*(byte *)(param_3 + 4) +
               (uint)*(byte *)(lVar4 + 2 + uVar6 * 8);
       if (iVar9 != 0x38) {
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\static.cpp",0x118,(unsigned long long)("Key layout[%u] total bit count (%u) isn\'t expected bit count (%u)"),(unsigned long long)(CONCAT44(0,(int)uVar6)),(unsigned long long)(CONCAT44((int)((ulonglong)in_stack_ffffffffffffffe8 >> 0x20),iVar9)),(unsigned long long)(CONCAT44(0,0x38)));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\static.cpp",0x118,(unsigned long long)("Key layout[%u] total bit count (%u) isn\'t expected bit count (%u)"),(unsigned long long)(CONCAT44(0,(int)uVar6)),(unsigned long long)(CONCAT44((int)((ulonglong)in_stack_ffffffffffffffe8 >> 0x20),iVar9)),(unsigned long long)(CONCAT44(0,0x38)));
         return 10;
       }
       uVar7 = (int)uVar6 + 1;
@@ -24781,7 +24781,7 @@ undefined4 FUN_1421429f0(ulonglong *param_1, undefined4 param_2, longlong param_
       uVar1 = *(uint *)(param_3 + 0x3c);
       if (uVar1 != 0) {
         if ((uVar1 & uVar1 - 1) != 0) {
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\static.cpp",0x12e,(unsigned long long)("Aligned cached buffer size must be a power of 2 (%u isn\'t)"),(unsigned long long)(CONCAT44(0,uVar1)));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\static.cpp",0x12e,(unsigned long long)("Aligned cached buffer size must be a power of 2 (%u isn\'t)"),(unsigned long long)(CONCAT44(0,uVar1)));
           return 10;
         }
         goto LAB_142142bc1;
@@ -24789,7 +24789,7 @@ undefined4 FUN_1421429f0(ulonglong *param_1, undefined4 param_2, longlong param_
       pcVar2 = "Aligned cached buffer size of 0 isn\'t valid";
       uVar8 = 0x127;
     }
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\static.cpp",uVar8,(unsigned long long)(pcVar2));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\static.cpp",uVar8,(unsigned long long)(pcVar2));
     return 10;
   }
 LAB_142142bc1:

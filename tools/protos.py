@@ -183,7 +183,7 @@ class Local:
     __slots__ = ("inputs", "kinds", "stack", "calls", "open", "error", "why", "rets", "passes", "written",
                  "garbage", "ret_calls", "xwidths", "xgarbage", "ss", "sd", "call_sites", "tail_sites", "exits", "ipasses", "spill_width", "icalls", "local_floor",
                  "xpasses", "spilled", "slot_reads", "va_lea", "chk_calls", "vector_in", "xret_calls",
-                 "xany_widths", "xany_garbage", "feeds", "call_targets", "writes_xmm0")
+                 "xany_widths", "xany_garbage", "feeds", "call_targets", "writes_xmm0", "dfresh")
 
     def __init__(self):
         # indirect calls: (address, widths written since the last call x8, defined widths x8,
@@ -220,6 +220,9 @@ class Local:
         self.xany_garbage = False
         self.feeds: list = []   # (callee, the calls whose xmm0 it is handed as its first argument)
         self.call_targets: dict[int, int] = {}   # direct call site -> callee
+        # direct call site -> the argument positions written since the last call (a bit each):
+        # what a caller hands a callee that leaves through a pointer and reads nothing itself
+        self.dfresh: dict[int, int] = {}
         self.writes_xmm0 = False   # any instruction of its own writes xmm0
         # the variadic prologue, read off the instructions (in place of tools/varargs.py's reading
         # of the decompiled text): the argument positions spilled to their own home slots, those
@@ -824,6 +827,11 @@ class Analyzer:
                 # (__chkstk keeps the xmm registers)
                 return tuple(defs), tuple(sorted(frame.items()))
             op = ops[0] if ops else None
+            if op is not None and op.type == X.X86_OP_IMM:
+                # (and above them, the integer positions still untouched since the entry on every
+                # path: the caller's own register handed on, an argument where it is a parameter)
+                res.dfresh[insn.address] = sum(1 << k for k in range(8) if frame.get(FRESH[k], 0)) | sum(
+                    1 << (8 + k) for k in range(4) if defs[k] == 0 and not frame.get(DIRTY[k]))
             if not (op is not None and op.type == X.X86_OP_IMM) or op.imm in self.variadic:
                 # an indirect call (or a variadic one): what its arguments can be (written since
                 # the last call, or still the function's own incoming registers), for a call-site
@@ -835,6 +843,20 @@ class Analyzer:
                           (op.reg,) if op is not None and op.type == X.X86_OP_REG else ()):
                     if r in FAMILY and FAMILY[r][0] < 4:
                         fresh[FAMILY[r][0]] = 0
+                # an argument position below one the call is given is an argument as well; one
+                # still untouched since the entry on every path is this function's own parameter
+                # handed on. IBattleNet's fatal-error forwarder FUN_14147f7f0 is `lea rdx, [ctx];
+                # call rax` with the error in rcx as it came in: read as taking nothing, its caller
+                # passed nothing, and GlueLogin's handler faulted on a null error (2026-10-20)
+                # Only rcx: a register written for the function's own use reads as "given" too
+                # (the CRT's atexit walk FUN_140284c30 decodes pointers with a cookie in r8 before
+                # `call [guard_dispatch]`, and rdx came out a parameter), and the forwarder of a
+                # `this` or a first argument is the case that matters
+                top = max((pos for pos in range(4) if fresh[pos] or fresh[4 + pos]), default=-1)
+                for pos in range(min(top, 1)):
+                    if not fresh[pos] and not fresh[4 + pos] and defs[pos] == 0 and defs[4 + pos] == 0 \
+                            and not frame.get(DIRTY[pos]) and not frame.get(DIRTY[4 + pos]):
+                        use(pos, 8)
                 # (an argument register written on any path in counts as written: see DIRTY)
                 seen = tuple(max(d, 8) if frame.get(DIRTY[fam]) else d for fam, d in enumerate(defs))
                 res.icalls[insn.address] = (tuple(fresh), seen, frame.get(OUTSTK, 0),
@@ -1027,7 +1049,7 @@ _A: Analyzer | None = None
 # ncalls_of's entry for a function not analysed: (direct call sites, tail sites, exits, indirect
 # passes, xmm0 passes, (spilled, slot reads, slot addresses, stack params), chkstk calls, vector
 # inputs)
-NC0 = (0, [], [], [], [], ([], [], [], 0), [], [], [], ([], True), [], [], True)
+NC0 = (0, [], [], [], [], ([], [], [], 0), [], [], [], ([], True), [], [], True, [])
 
 
 def variadic_fixed(va_info) -> int | None:
@@ -1083,7 +1105,8 @@ def _work(chunk: list[int]):
                                     sorted(r.xpasses), (sorted(r.spilled), sorted(r.slot_reads), sorted(r.va_lea), r.stack),
                                     sorted(r.chk_calls), sorted(r.vector_in), sorted(r.xret_calls),
                                     (sorted(r.xany_widths), r.xany_garbage), r.feeds, sorted(r.call_targets.items()),
-                                    r.writes_xmm0 or bool(r.icalls) or 0 in r.ret_calls or r.open)))
+                                    r.writes_xmm0 or bool(r.icalls) or 0 in r.ret_calls or r.open,
+                                    sorted(r.dfresh.items()))))
         if SHOW:
             print(f"  {a:x} why {r.why}")
     return out
@@ -1720,6 +1743,29 @@ def main() -> None:
         if open_:
             e["open"] = True
         out[hexa(a)] = e
+    # an open function (it leaves through a pointer, `mov rax, [Curl_ssl]; jmp [rax + 0x48]`)
+    # reads no argument itself, so its count from the instructions is only what it touches: 0
+    # for a wrapper that hands everything on. Its callers say what it takes: the integer
+    # positions every direct call to it writes first, at least. Read as taking nothing, curl's
+    # Curl_ssl_data_pending FUN_1421784c0 was called with no connection and faulted, and the
+    # web login stalled after its form (2026-10-20)
+    by_target: dict[int, list[int]] = {}
+    for f, nc in ncalls_of.items():
+        targets = dict(nc[11])
+        own = len(out.get(hexa(f), {}).get("params", ()))
+        for site, bits in (nc[13] if len(nc) > 13 else ()):
+            t = targets.get(site)
+            if t is not None and out.get(hexa(t), {}).get("open"):
+                passed = bits & 0xff | sum(1 << k for k in range(min(own, 4)) if bits >> (8 + k) & 1)
+                by_target.setdefault(t, []).append(passed)
+    raised = 0
+    for t, all_bits in by_target.items():
+        e = out[hexa(t)]
+        n = min(next((k for k in range(4) if not bits >> k & 1), 4) for bits in all_bits)
+        if n > len(e["params"]) and not any(p[0] in ("f", "d", "x") for p in e["params"]):
+            e["params"] = e["params"] + [["i", 8]] * (n - len(e["params"]))
+            raised += 1
+    print(f"{raised} open functions take what their callers pass", file=sys.stderr)
     # a function whose result is only ever what the functions it tail-jumps to return, writing
     # neither rax nor xmm0 itself (a CPU dispatch, `cmp [level], 2; jge FUN_14240e0c0; jmp
     # FUN_14240d750`): what they return, when they agree. Typed by "what it leaves in rax", the

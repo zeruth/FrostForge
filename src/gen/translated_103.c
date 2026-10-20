@@ -63,7 +63,7 @@ undefined8 FUN_14168fc00(longlong *param_1, undefined8 param_2, undefined8 param
                (*(longlong *)(REFG(undefined1 *, 0x143122478) + uVar9) != 0)) {
               uVar8 = *(undefined4 *)(*(longlong *)(REFG(undefined1 *, 0x143122478) + uVar9) + 0xb0);
             }
-            lVar4 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e5c1d0 + 0x0)),uVar8,0,((undefined1 *)(gen_frame + 0x70)));
+            lVar4 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e5c1d0 + 0x0)),uVar8,0,((undefined1 *)(gen_frame + 0x70)));
             if (lVar4 != 0) {
               uVar5 = CALLF(undefined *, FUN_14051b5e0)();
               uVar6 = CALLF(undefined8, FUN_140229de0)(lVar4,9,0,uVar5);
@@ -112,7 +112,7 @@ undefined1 FUN_14168fe50(longlong *param_1)
         if (plVar1 == (longlong *)0x0) {
           return 0;
         }
-        lVar4 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e914d0 + 0x0)),*(undefined4 *)((longlong)plVar1 + 0x4c),0,((undefined1 *)(gen_frame + 0x8)))
+        lVar4 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e914d0 + 0x0)),*(undefined4 *)((longlong)plVar1 + 0x4c),0,((undefined1 *)(gen_frame + 0x8)))
         ;
         if (lVar4 == 0) {
           return 0;
@@ -295,7 +295,7 @@ undefined8 FUN_1416902b0(void)
     }
     plVar4 = (longlong *)(REFG(undefined1 *, 0x143122478) + (longlong)(int)REFG(undefined4, 0x142d1b4b4) * 0x30);
     if (plVar4[1] != 0) {
-      lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e43430 + 0x0)),(uint)*(byte *)(*plVar4 + 0x354),0,((undefined1 *)(gen_frame + 0x20)));
+      lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e43430 + 0x0)),(uint)*(byte *)(*plVar4 + 0x354),0,((undefined1 *)(gen_frame + 0x20)));
       if (((*(char *)(*plVar4 + 0x7f9) != '\0') && (lVar2 != 0)) &&
          (cVar1 = CALLF(bool, FUN_140521110)(lVar2,0x4000), cVar1 != '\0')) {
         CALLF(undefined8, FUN_1402ef7b0)(plVar4[1],0,0);
@@ -427,7 +427,7 @@ LAB_1416905e0:
   }
   else {
     CALLF(undefined4, FUN_1402282f0)(((byte *)(gen_frame + 0x160)),"%s/%s",((byte *)(gen_frame + 0x50)),param_2);
-    CALLF(undefined4, FUN_14168ea70)(((byte *)(gen_frame + 0x50)),&REFG(undefined8, 0x1427e5bdc),*(longlong *)(REFG(undefined1 *, 0x143122478) + uVar8 * 0x30) + 0x18);
+    CALLF(undefined4, FUN_14168ea70)(((byte *)(gen_frame + 0x50)),&REFG(undefined1, 0x1427e5bdc),*(longlong *)(REFG(undefined1 *, 0x143122478) + uVar8 * 0x30) + 0x18);
   }
   CALLF(bool, FUN_1402150b0)(((byte *)(gen_frame + 0x50)),((byte *)(gen_frame + 0x160)),1);
   CALLF(undefined8, FUN_141c94480)(*(longlong *)(REFG(undefined1 *, 0x143122478) + uVar8 * 0x30) + 0x18);
@@ -1129,7 +1129,7 @@ LAB_1416913fe:
         fVar15 = CALLF(float, FUN_1402dc640)(lVar7,4,0,uVar8);
         fVar15 = fVar15 * fVar14;
       }
-      lVar10 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e47bf0 + 0x0)),*(undefined4 *)(*plVar12 + 0x324),0,((uint *)(gen_frame + 0x1a8)));
+      lVar10 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e47bf0 + 0x0)),*(undefined4 *)(*plVar12 + 0x324),0,((uint *)(gen_frame + 0x1a8)));
       if ((bVar13) && (lVar10 != 0)) {
         lVar10 = lVar10 + 4;
         cVar2 = CALLF(undefined1, FUN_14168eb30)(lVar10);
@@ -1312,7 +1312,7 @@ uint FUN_141691b00(void)
   /* anti-tamper guard removed (tools/aegis.py) */
   uStack_240 = 0xc9c66921dbbe4257;
   uVar24 = 0;
-  uVar9 = (uint)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined8, 0x142dde840) + ((uint)uStack_240 & 0xfff)) >> 0x20);
+  uVar9 = (uint)((ulonglong)*(undefined8 *)((undefined1 *)&REFG(undefined1, 0x142dde840) + ((uint)uStack_240 & 0xfff)) >> 0x20);
   uVar19 = uVar24;
   uVar19 = __rdtsc();
   uVar19 = __rdtsc();
@@ -2437,13 +2437,13 @@ LAB_1416959b0:
       if (((((*(int *)(gen_frame + 0x4)) != 0) && ((param_5 == '\0' || (uVar12 != 0)))) &&
           (((*(uint *)(param_1 + 0x65) >> 10 & 1) == 0 || (uVar12 != 0)))) &&
          (((*(uint *)(param_1 + 0x65) >> 0xb & 1) == 0 || (uVar12 != 0xe)))) {
-        lVar8 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e5c1d0 + 0x0)),(*(int *)(gen_frame + 0x4)),0,&(*(undefined1 *)(gen_frame + 0x1)));
+        lVar8 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e5c1d0 + 0x0)),(*(int *)(gen_frame + 0x4)),0,&(*(undefined1 *)(gen_frame + 0x1)));
         lVar10 = 0;
         (*(longlong *)(gen_frame + 0x38)) = lVar8;
         if (lVar8 != 0) {
           uVar9 = CALLF(undefined *, FUN_14051b5e0)();
           uVar9 = CALLF(undefined8, FUN_140229de0)(lVar8,1,0,uVar9);
-          lVar10 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e5fb20 + 0x0)),(int)uVar9,0,((undefined1 *)(gen_frame + 0x2)));
+          lVar10 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e5fb20 + 0x0)),(int)uVar9,0,((undefined1 *)(gen_frame + 0x2)));
         }
         iVar14 = (*(int *)(gen_frame + 0x4));
         uVar13 = 0;
@@ -2729,7 +2729,7 @@ undefined8 FUN_1416960b0(double param_1_promoted)
     (*(undefined1 *)(gen_frame + 0xa0)) = 0;
     (*(undefined1 *)(gen_frame + 0xa8)) = 0;
     (*(undefined8 *)(gen_frame + 0x50)) = (*(undefined8 *)(gen_frame + 0x8));
-    (*(undefined * *)(gen_frame + 0x40)) = &REFG(undefined8, 0x1431224e8);
+    (*(undefined * *)(gen_frame + 0x40)) = &REFG(undefined1, 0x1431224e8);
     (*(undefined8 *)(gen_frame + 0x58)) = (*(undefined8 *)(gen_frame + 0x10));
     (*(undefined1 *)(gen_frame + 0x60)) = 1;
     (*(float *)(gen_frame + 0x4)) = param_1;
@@ -2790,8 +2790,8 @@ undefined8 FUN_141696200(longlong param_1)
     lVar3 = CALLF(undefined8 *, FUN_141c9c580)();
     lVar1 = *(longlong *)(param_1 + 0x318);
     if (lVar1 != 0) {
-      CALLF(undefined8, FUN_141295d20)(lVar1,7,&REFG(undefined8, 0x1431224e8));
-      CALLF(undefined8, FUN_141295d20)(lVar1,9,&REFG(undefined8, 0x1431224f4));
+      CALLF(undefined8, FUN_141295d20)(lVar1,7,&REFG(undefined1, 0x1431224e8));
+      CALLF(undefined8, FUN_141295d20)(lVar1,9,&REFG(undefined1, 0x1431224f4));
       REFG(float, 0x143122504) = CALLF(float, FUN_141295da0)(lVar1,4);
       REFG(float, 0x143122500) = CALLF(float, FUN_141295da0)(lVar1,5);
     }
@@ -2952,9 +2952,9 @@ undefined1 FUN_141696390(longlong param_1)
       ((char *)(gen_frame + 0xb0))[0] = CALLF(undefined1, FUN_1416967f0)((int)(*(ulonglong *)(gen_frame + 0x8)),puVar4);
       CALLF(undefined1, FUN_141696b30)();
       (*(undefined1 *)(gen_frame + 0x20)) = 1;
-      (*(undefined * *)(gen_frame + 0x18)) = &REFG(undefined8, 0x143122660);
+      (*(undefined * *)(gen_frame + 0x18)) = &REFG(undefined1, 0x143122660);
       (*(ulonglong *)(gen_frame + 0x8)) = CONCAT71(GEN_PIECE(&(*(ulonglong *)(gen_frame + 0x8)), 1, 7),1);
-      (*(undefined * *)(gen_frame + 0x0)) = &REFG(undefined8, 0x143122550);
+      (*(undefined * *)(gen_frame + 0x0)) = &REFG(undefined1, 0x143122550);
       uVar9 = CALLF(undefined8, FUN_14116bae0)(((char *)(gen_frame + 0xb0)),&(*(undefined * *)(gen_frame + 0x0)),&(*(undefined * *)(gen_frame + 0x18)));
       uVar5 = (undefined1)uVar9;
       if ((uVar12 & 0x8000000000000000) == 0) {
@@ -2995,9 +2995,9 @@ undefined1 FUN_1416967f0(int param_1, undefined8 param_2)
   ulonglong uVar8 = {0};
   longlong lVar9 = {0};
   
-  memset((void *)(&REFG(undefined8, 0x143122550)),0,0x104);
-  memset((void *)(&REFG(undefined8, 0x143122660)),0,0x104);
-  CALLF(undefined1, FUN_140214d30)(0x104,&REFG(undefined8, 0x143122550));
+  memset((void *)(&REFG(undefined1, 0x143122550)),0,0x104);
+  memset((void *)(&REFG(undefined1, 0x143122660)),0,0x104);
+  CALLF(undefined1, FUN_140214d30)(0x104,&REFG(undefined1, 0x143122550));
   (*(char * *)(gen_frame + 0x0)) = ((char *)(gen_frame + 0x18));
   (*(ulonglong *)(gen_frame + 0x8)) = 0;
   ((char *)(gen_frame + 0x18))[0] = '\0';
@@ -3026,7 +3026,7 @@ undefined1 FUN_1416967f0(int param_1, undefined8 param_2)
     }
   }
   (*(char * *)(gen_frame + 0x0))[uVar8] = '\0';
-  uVar7 = (longlong)(undefined1 *)&REFG(undefined8, 0x1427e5ca4) - (longlong)(*(char * *)(gen_frame + 0x0));
+  uVar7 = (longlong)(undefined1 *)&REFG(undefined1, 0x1427e5ca4) - (longlong)(*(char * *)(gen_frame + 0x0));
   lVar9 = uVar8 + 4;
   (*(ulonglong *)(gen_frame + 0x8)) = uVar8;
   CALLF(undefined1, FUN_1402135c0)(&(*(char * *)(gen_frame + 0x0)),lVar9);
@@ -3038,10 +3038,10 @@ undefined1 FUN_1416967f0(int param_1, undefined8 param_2)
   }
   (*(char * *)(gen_frame + 0x0))[lVar9] = '\0';
   (*(ulonglong *)(gen_frame + 0x8)) = lVar9;
-  CALLF(undefined8, FUN_140213e60)(&REFG(undefined8, 0x143122660),0x104,&REFG(undefined8, 0x143122550),(*(char * *)(gen_frame + 0x0)));
-  lVar9 = CALLF(undefined8, FUN_140214840)(&REFG(undefined8, 0x143122660),0x40000000,0,2,(unsigned long long)(0));
+  CALLF(undefined8, FUN_140213e60)(&REFG(undefined1, 0x143122660),0x104,&REFG(undefined1, 0x143122550),(*(char * *)(gen_frame + 0x0)));
+  lVar9 = CALLF(undefined8, FUN_140214840)(&REFG(undefined1, 0x143122660),0x40000000,0,2,(unsigned long long)(0));
   if (lVar9 == -1) {
-    CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x30)),0x200,"Could not open character profile output file (%s)",&REFG(undefined8, 0x143122660)
+    CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x30)),0x200,"Could not open character profile output file (%s)",&REFG(undefined1, 0x143122660)
                  );
     CALLF(undefined8, FUN_140326be0)(4,((undefined1 *)(gen_frame + 0x30)));
     uVar6 = 8;
@@ -3049,7 +3049,7 @@ undefined1 FUN_1416967f0(int param_1, undefined8 param_2)
   else {
     cVar4 = CALLF(bool, FUN_1402152a0)(lVar9,param_2,(*(int *)&gen_slot_param_1),((int *)(gen_frame + 0x270)));
     if ((cVar4 == '\0') || (((int *)(gen_frame + 0x270))[0] != (*(int *)&gen_slot_param_1))) {
-      CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x30)),0x200,"Could not write character profile file (%s)",&REFG(undefined8, 0x143122660));
+      CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x30)),0x200,"Could not write character profile file (%s)",&REFG(undefined1, 0x143122660));
       CALLF(undefined8, FUN_140326be0)(4,((undefined1 *)(gen_frame + 0x30)));
       uVar6 = 9;
     }
@@ -3442,7 +3442,7 @@ undefined8 * FUN_1416970f0(undefined8 *param_1, uint param_2)
   CALLF(undefined1, FUN_1424bd140)(param_1);
   if ((param_2 & 1) != 0) {
     if ((param_2 & 4) == 0) {
-      CALLF(undefined8, FUN_142430fb0)(&(*(undefined8 *)((char *)&gen_g_143122788 + 0x0)),param_1);
+      CALLF(undefined8, FUN_142430fb0)(&(*(undefined1 *)((char *)&gen_g_143122788 + 0x0)),param_1);
       return param_1;
     }
     _guard_check_icall();
@@ -3554,7 +3554,7 @@ undefined4 FUN_141697530(undefined8 param_1)
     return 0;
   }
   puVar2 = (undefined8 *)
-           CALLF(undefined8 *, FUN_142430eb0)(&(*(undefined8 *)((char *)&gen_g_143122788 + 0x0)),0,((char *)REFP(0x142dba9f0)),0xfffffffe,(unsigned long long)(0x1f));
+           CALLF(undefined8 *, FUN_142430eb0)(&(*(undefined1 *)((char *)&gen_g_143122788 + 0x0)),0,((char *)REFP(0x142dba9f0)),0xfffffffe,(unsigned long long)(0x1f));
   if (puVar2 != (undefined8 *)0x0) {
     CALLF(undefined8 *, FUN_1424bcfa0)(puVar2,param_1);
     lVar4 = 2;
@@ -3988,9 +3988,9 @@ undefined4 FUN_141698860(undefined8 param_1)
   uVar2 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
   lVar3 = CALLF(undefined8, FUN_14168f5b0)((int)uVar2 + -1);
   if (lVar3 != 0) {
-    lVar3 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e43430 + 0x0)),(uint)*(byte *)(lVar3 + 0x354),0,((undefined1 *)(gen_frame + 0x8)));
+    lVar3 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e43430 + 0x0)),(uint)*(byte *)(lVar3 + 0x354),0,((undefined1 *)(gen_frame + 0x8)));
     if (lVar3 != 0) {
-      lVar3 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e4cc60 + 0x0)),(int)*(short *)(lVar3 + 0xc4),0,((undefined1 *)(gen_frame + 0x8)));
+      lVar3 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e4cc60 + 0x0)),(int)*(short *)(lVar3 + 0xc4),0,((undefined1 *)(gen_frame + 0x8)));
       if (lVar3 != 0) {
         uVar2 = CALLF(undefined *, FUN_14051b290)();
         uVar2 = CALLF(ulonglong, FUN_14022b1b0)(lVar3,2,0,uVar2);
@@ -4447,7 +4447,7 @@ undefined4 FUN_141699440(void)
 undefined4 FUN_141699460(undefined8 param_1)
 {
   GEN_HIT(92);
-  CALLF(undefined8, FUN_14065f6b0)(param_1,&REFG(undefined8, 0x1431227f0));
+  CALLF(undefined8, FUN_14065f6b0)(param_1,&REFG(undefined1, 0x1431227f0));
   return 1;
 }
 
@@ -5841,7 +5841,7 @@ int * FUN_14169b0a0(int *param_1, int *param_2)
   CALLF(longlong *, FUN_1402142b0)(param_1 + 0x1a,pcVar3,lVar7);
   param_1[0x24] = (uint)*(byte *)(param_2 + 7);
   param_1[0x25] = param_2[8];
-  piVar2 = (int *)CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e89050 + 0x0)),param_2[0xb],0,((undefined1 *)(gen_frame + 0xb0)));
+  piVar2 = (int *)CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e89050 + 0x0)),param_2[0xb],0,((undefined1 *)(gen_frame + 0xb0)));
   if (piVar2 != (int *)0x0) {
     (*(undefined1 * *)(gen_frame + 0x0)) = (void *)&(*(gen_v16 *)(gen_frame + 0x18));
     (*(ulonglong *)(gen_frame + 0x8)) = 0;
@@ -6341,9 +6341,9 @@ bool FUN_14169bd30(longlong param_1, undefined8 param_2, undefined8 param_3)
   undefined8 uVar3 = {0};
   
   if (param_1 != 0) {
-    lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e43430 + 0x0)),(uint)*(byte *)(param_1 + 0x354),0,((undefined1 *)(gen_frame + 0x0)));
+    lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e43430 + 0x0)),(uint)*(byte *)(param_1 + 0x354),0,((undefined1 *)(gen_frame + 0x0)));
     if (lVar2 != 0) {
-      lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e4cc60 + 0x0)),(int)*(short *)(lVar2 + 0xc4),0,((undefined1 *)(gen_frame + 0x0)));
+      lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e4cc60 + 0x0)),(int)*(short *)(lVar2 + 0xc4),0,((undefined1 *)(gen_frame + 0x0)));
       if (lVar2 != 0) {
         uVar3 = CALLF(undefined *, FUN_14051b290)();
         uVar3 = CALLF(ulonglong, FUN_14022b1b0)(lVar2,2,0,uVar3);
@@ -6843,8 +6843,8 @@ undefined1 FUN_14169c850(undefined8 *param_1, undefined8 *param_2)
   undefined1 *puVar7 = {0};
   
   uVar1 = CALLF(uint, FUN_141683ab0)(1);
-  lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e43430 + 0x0)), uVar1, 0, (void *)&(*(gen_v16 *)(gen_frame + 0x70)));
-  if (((lVar2 != 0) && (lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e4cc60 + 0x0)), (int)*(short *)(lVar2 + 0xc4), 0, (void *)&(*(gen_v16 *)(gen_frame + 0x70))), lVar2 != 0)) && ((*(longlong * *)((char *)&gen_g_142e4c840 + 0x140)) != (longlong *)0x0)) {
+  lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e43430 + 0x0)), uVar1, 0, (void *)&(*(gen_v16 *)(gen_frame + 0x70)));
+  if (((lVar2 != 0) && (lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e4cc60 + 0x0)), (int)*(short *)(lVar2 + 0xc4), 0, (void *)&(*(gen_v16 *)(gen_frame + 0x70))), lVar2 != 0)) && ((*(longlong * *)((char *)&gen_g_142e4c840 + 0x140)) != (longlong *)0x0)) {
     (*(int *)(gen_frame + 0x10)) = -2;
     (*(int * *)(gen_frame + 0x18)) = (int *)0x0;
     (*(longlong * *)(gen_frame + 0x20)) = (*(longlong * *)((char *)&gen_g_142e4c840 + 0x140));
@@ -7067,9 +7067,9 @@ undefined4 FUN_14169cd70(undefined8 param_1)
     }
     cVar2 = CALLF(undefined1, FUN_14148ba20)("GAME_ACCOUNT",((char *)(gen_frame + 0xe0)),0x400,0);
     if (cVar2 == '\0') {
-      cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+      cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
       if (cVar2 != '\0') {
-        CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x30)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x2cb),(unsigned long long)(0));
+        CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x30)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x2cb),(unsigned long long)(0));
         CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x50)),"Attempt to launcher login, but no game account",0x2e);
         CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0x30)));
       }
@@ -7107,9 +7107,9 @@ undefined4 FUN_14169cd70(undefined8 param_1)
     CALLF(uint, FUN_1402b3850)(param_1,1);
     return 1;
   }
-  cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+  cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
   if (cVar2 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x30)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(700),(unsigned long long)(0));
+    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x30)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(700),(unsigned long long)(0));
     CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x50)),"Attempt to launcher login, but no WEB_TOKEN",0x2b);
     CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0x30)));
   }
@@ -7130,9 +7130,9 @@ undefined4 FUN_14169d0c0(undefined8 param_1)
   
   cVar2 = CALLF(undefined1, FUN_14148ba50)();
   if (cVar2 == '\0') {
-    cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+    cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
     if (cVar2 != '\0') {
-      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0xf0)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x2ef),(unsigned long long)(0));
+      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0xf0)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x2ef),(unsigned long long)(0));
       CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x110)),"Attempt to reconnect login, but no reconnect token",0x32);
       CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0xf0)));
     }
@@ -7640,9 +7640,9 @@ undefined8 FUN_14169e1c0(undefined8 param_1, int *param_2)
   ulonglong uVar7 = {0};
   
   CALLF(undefined4, FUN_14156b760)("Glue Fatal Error: %u",*param_2);
-  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
   if (cVar1 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((int *)(gen_frame + 0x30)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x156),(unsigned long long)(0))
+    CALLF(int *, FUN_141561cd0)(((int *)(gen_frame + 0x30)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x156),(unsigned long long)(0))
     ;
     CALLF(longlong *, FUN_14023d9b0)((void *)&(*(gen_v16 *)(gen_frame + 0x50)), "Fatal error while logging in", 0x1c);
     lVar2 = CALLF(longlong, FUN_14147dfa0)(&(*(longlong *)(gen_frame + 0x48)));
@@ -7771,9 +7771,9 @@ undefined8 FUN_14169e560(void)
   undefined8 uVar6 = {0};
   ulonglong uVar7 = {0};
   
-  cVar4 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+  cVar4 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
   if (cVar4 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0xa0)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x193),(unsigned long long)(0))
+    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0xa0)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x193),(unsigned long long)(0))
     ;
     CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0xc0)),"Logon complete.",0xf);
     CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0xa0)));
@@ -7839,9 +7839,9 @@ undefined8 FUN_14169e560(void)
     ((undefined8 *)(gen_frame + 0x90))[0] = *(undefined8 *)(lVar5 + 0x100);
     (*(ulonglong *)(gen_frame + 0x68)) = lVar2;
     CALLF(undefined8, FUN_14148bad0)(&(*(undefined1 * *)(gen_frame + 0x10)));
-    cVar4 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+    cVar4 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
     if (cVar4 != '\0') {
-      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0xa0)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x1a4),(unsigned long long)(0));
+      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0xa0)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x1a4),(unsigned long long)(0));
       CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0xc0)),"Reconnect token saved; ",0x17);
       (*(char * *)(gen_frame + 0x0)) = "creationTime";
       (*(undefined8 * *)(gen_frame + 0x8)) = &(*(undefined8 *)(gen_frame + 0x88));
@@ -7874,9 +7874,9 @@ undefined8 FUN_14169e8c0(void)
   char cVar1 = {0};
   undefined8 uVar2 = {0};
   
-  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
   if (cVar1 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x1ad),(unsigned long long)(0))
+    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x1ad),(unsigned long long)(0))
     ;
     CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x20)),"Logon queue update.",0x13);
     CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0x0)));
@@ -7893,9 +7893,9 @@ undefined8 FUN_14169e940(void)
   char cVar1 = {0};
   undefined8 uVar2 = {0};
   
-  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
   if (cVar1 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x1b3),(unsigned long long)(0))
+    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x1b3),(unsigned long long)(0))
     ;
     CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x20)),"Waiting for server response.",0x1c);
     CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0x0)));
@@ -7913,9 +7913,9 @@ undefined8 FUN_14169e9d0(void)
   char cVar1 = {0};
   undefined8 uVar2 = {0};
   
-  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
   if (cVar1 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x1ba),(unsigned long long)(0))
+    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x1ba),(unsigned long long)(0))
     ;
     CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x20)),"Waiting for realm list.",0x17);
     CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0x0)));
@@ -7933,9 +7933,9 @@ undefined8 FUN_14169ea60(void)
   char cVar1 = {0};
   undefined8 uVar2 = {0};
   
-  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
   if (cVar1 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x202),(unsigned long long)(0))
+    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x202),(unsigned long long)(0))
     ;
     CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x20)),"Cancelled realm list.",0x15);
     CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0x0)));
@@ -7964,10 +7964,10 @@ undefined1 FUN_14169eb00(void)
   undefined1 uVar2 = {0};
   undefined8 uVar3 = {0};
   
-  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
   uVar2 = 0;
   if (cVar1 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x1c3),(unsigned long long)(0))
+    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x1c3),(unsigned long long)(0))
     ;
     CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x20)),"Disconnecting from authentication server.",0x29);
     uVar3 = CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0x0)));
@@ -7988,10 +7988,10 @@ undefined1 FUN_14169eb90(void)
   undefined1 uVar4 = {0};
   undefined8 uVar5 = {0};
   
-  cVar3 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+  cVar3 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
   uVar4 = 0;
   if (cVar3 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((undefined4 *)(gen_frame + 0xb0)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x1ca),(unsigned long long)(0))
+    CALLF(int *, FUN_141561cd0)(((undefined4 *)(gen_frame + 0xb0)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x1ca),(unsigned long long)(0))
     ;
     CALLF(longlong *, FUN_14023d9b0)((void *)&(*(gen_v16 *)(gen_frame + 0xd0)), "Disconnected from authentication server.", 0x28);
     uVar5 = CALLF(undefined **, FUN_141567f50)(((undefined4 *)(gen_frame + 0xb0)));
@@ -8074,9 +8074,9 @@ undefined8 FUN_14169ee60(void)
   longlong lVar2 = {0};
   undefined8 uVar3 = {0};
   
-  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
   if (cVar1 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x1da),(unsigned long long)(0))
+    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x0)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x1da),(unsigned long long)(0))
     ;
     CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x20)),"Realm list ready.",0x11);
     CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0x0)));
@@ -8125,7 +8125,7 @@ undefined8 FUN_14169ef40(void)
       ((uint *)(gen_frame + 0x40))[1] = 0;
       ((uint *)(gen_frame + 0x40))[2] = 0;
       ((uint *)(gen_frame + 0x40))[3] = 0;
-      ((undefined ** *)(gen_frame + 0x30))[0] = (undefined **)&REFG(undefined8, 0x14273bbf8);
+      ((undefined ** *)(gen_frame + 0x30))[0] = (undefined **)&REFG(undefined1, 0x14273bbf8);
       (*(undefined *** *)(gen_frame + 0xa8)) = ((undefined ** *)(gen_frame + 0x30)) + 1;
       ((uint *)(gen_frame + 0x40))[4] = 0;
       ((uint *)(gen_frame + 0x40))[5] = 0;
@@ -8155,7 +8155,7 @@ LAB_14169f059:
               lVar6 = (longlong)*(int *)((longlong)((undefined ** *)(gen_frame + 0x30))[0] + 4);
               if (*(int *)((longlong)((uint *)(gen_frame + 0x40)) + lVar6) == 0) {
                 plVar1 = *(longlong **)((longlong)((uint *)(gen_frame + 0x40)) + lVar6 + -8);
-                lVar6 = (**(code **)(*plVar1 + 0x50))(plVar1,&REFG(undefined8, 0x1426243c4),1);
+                lVar6 = (**(code **)(*plVar1 + 0x50))(plVar1,&REFG(undefined1, 0x1426243c4),1);
                 uVar7 = (*(ulonglong *)(gen_frame + 0x8));
                 if (lVar6 == 1) goto LAB_14169f09e;
                 lVar6 = (longlong)*(int *)((longlong)((undefined ** *)(gen_frame + 0x30))[0] + 4);
@@ -8760,10 +8760,10 @@ undefined8 FUN_14169fb00(int param_1)
   undefined8 uVar4 = {0};
   
   CALLF(undefined4, FUN_14156b760)("Glue Authed To WoW: %u",(*(int *)&gen_slot_param_1));
-  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
   uVar2 = 0;
   if (cVar1 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x10)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x8b),(unsigned long long)(0));
+    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x10)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x8b),(unsigned long long)(0));
     CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0x30)),"Received AuthedToWoW",0x14);
     (*(char * *)(gen_frame + 0x0)) = "result";
     (*(int * *)(gen_frame + 0x8)) = ((int *)(gen_frame + 0xd0));
@@ -8779,7 +8779,7 @@ undefined8 FUN_14169fb00(int param_1)
     CALLF(undefined8, FUN_14168f050)();
     CALLF(undefined8, FUN_1416a3260)();
     lVar3 = CALLF(undefined8, FUN_14167ae30)();
-    lVar3 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e3c6e0 + 0x0)),*(undefined4 *)(lVar3 + 0x10c),0,((int *)(gen_frame + 0xd0)));
+    lVar3 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e3c6e0 + 0x0)),*(undefined4 *)(lVar3 + 0x10c),0,((int *)(gen_frame + 0xd0)));
     if (lVar3 == 0) {
       uVar4 = CALLF(ulonglong, FUN_1405d5790)();
       REFG(undefined4, 0x1431228c4) = 0;
@@ -8831,9 +8831,9 @@ undefined8 FUN_14169fd10(void)
   ulonglong uVar7 = {0};
   
   CALLF(undefined4, FUN_14156b760)("Glue Script Disconnect From Server");
-  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+  cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
   if (cVar1 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x20)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x13e),(unsigned long long)(0))
+    CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x20)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x13e),(unsigned long long)(0))
     ;
     CALLF(longlong *, FUN_14023d9b0)((void *)&(*(gen_v16 *)(gen_frame + 0x40)), "Explicitly disconnecting from realm server", 0x2a);
     CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0x20)));
@@ -8944,10 +8944,10 @@ undefined8 FUN_14169ffd0(void)
   ulonglong uVar13 = {0};
   
   CALLF(undefined4, FUN_14156b760)("Glue WoW Disconnect");
-  cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+  cVar2 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
   uVar13 = 0;
   if (cVar2 != '\0') {
-    CALLF(int *, FUN_141561cd0)(((int *)(gen_frame + 0xc0)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0xe8),(unsigned long long)(0));
+    CALLF(int *, FUN_141561cd0)(((int *)(gen_frame + 0xc0)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0xe8),(unsigned long long)(0));
     CALLF(longlong *, FUN_14023d9b0)((void *)&(*(gen_v16 *)(gen_frame + 0xe0)), "Disconnected from WoW", 0x15);
     lVar4 = CALLF(longlong, FUN_14147dfa0)(&(*(longlong *)(gen_frame + 0xd8)));
     CALLF(longlong *, FUN_14023d9b0)(lVar4 + 8,"previouslyConnected",0x13);
@@ -9461,10 +9461,10 @@ undefined1 FUN_1416a0db0(int param_1)
     if (-1 < (longlong)((undefined8 * *)(gen_frame + 0x30))[0]) {
       CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x20)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
     }
-    cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+    cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
     puVar5 = (undefined8 *)0x0;
     if (cVar1 != '\0') {
-      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0xb0)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x25a),(unsigned long long)(0));
+      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0xb0)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x25a),(unsigned long long)(0));
       CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0xd0)),"Starting login",0xe);
       lVar6 = CALLF(longlong, FUN_14147dfa0)(((undefined1 *)(gen_frame + 0xc8)));
       CALLF(longlong *, FUN_14023d9b0)(lVar6 + 8,"launcherPortal",0xe);
@@ -9485,9 +9485,9 @@ undefined1 FUN_1416a0db0(int param_1)
       CALLF(longlong, FUN_14147e0c0)(lVar6);
       CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0xb0)));
     }
-    cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined8, 0x143122830),0,0);
+    cVar1 = CALLF(bool, FUN_141567ff0)(&REFG(undefined1, 0x143122830),0,0);
     if (cVar1 != '\0') {
-      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0xb0)),&REFG(undefined8, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x239),(unsigned long long)(0));
+      CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0xb0)),&REFG(undefined1, 0x143122830),0,0,(unsigned long long)("D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Glue\\GlueLogin.cpp"),(unsigned long long)(0x239),(unsigned long long)(0));
       CALLF(longlong *, FUN_14023d9b0)(((undefined1 *)(gen_frame + 0xd0)),"Resetting",9);
       CALLF(undefined **, FUN_141567f50)(((undefined1 *)(gen_frame + 0xb0)));
     }
@@ -10978,7 +10978,7 @@ LAB_1416a3320:
   (*(char *)(gen_frame + 0x6a)) = param_2[0x31];
   CALLF(longlong *, FUN_1406e0d90)(((undefined8 *)(gen_frame + 0x70)),param_2 + 0x38);
   CALLF(undefined8, FUN_14156dc60)(((undefined1 *)(gen_frame + 0x0)));
-  CALLF(longlong, FUN_14117b380)(&REFG(undefined8, 0x1427e7168));
+  CALLF(longlong, FUN_14117b380)(&REFG(undefined1, 0x1427e7168));
   if (-1 < (*(longlong *)(gen_frame + 0x80))) {
     CALLF(undefined1, FUN_140255210)(((undefined8 *)(gen_frame + 0x70))[0],((char *)REFP(0x142d992f8)),0xfffffffa,0);
   }
@@ -11818,7 +11818,7 @@ undefined4 FUN_1416a44f0(undefined8 param_1)
   uVar6 = 0;
   uVar8 = 1;
   lVar1 = CALLF(undefined8, FUN_14167ae30)();
-  lVar3 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e3c8f0 + 0x0)),*(undefined4 *)(lVar1 + 0x114),0,((undefined1 *)(gen_frame + 0x58)));
+  lVar3 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e3c8f0 + 0x0)),*(undefined4 *)(lVar1 + 0x114),0,((undefined1 *)(gen_frame + 0x58)));
   if (lVar3 != 0) {
     uVar4 = CALLF(undefined *, FUN_14051ac90)();
     uVar4 = CALLF(ulonglong, FUN_14022b1b0)(lVar3,0,0,uVar4);
@@ -12286,7 +12286,7 @@ undefined4 FUN_1416a64b0(undefined8 param_1)
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
-  piVar2 = (int *)CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e65a00 + 0x0)),(int)uVar1,0,((undefined1 *)(gen_frame + 0x448)));
+  piVar2 = (int *)CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e65a00 + 0x0)),(int)uVar1,0,((undefined1 *)(gen_frame + 0x448)));
   if (piVar2 != (int *)0x0) {
     CALLF(undefined8, FUN_14147ffa0)(((undefined8 *)(gen_frame + 0x0)));
     puVar3 = &REFG(undefined1, 0x1426178ba);
@@ -12415,7 +12415,7 @@ undefined4 FUN_1416a6740(undefined8 param_1)
     lVar6 = lVar6 + 1;
   } while (*(char *)(lVar2 + 0x55 + lVar6) != '\0');
   CALLF(undefined8, FUN_1402b3ab0)(param_1,lVar2 + 0x55,lVar6);
-  piVar3 = (int *)CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e3fc80 + 0x0)),(uint)*(byte *)(lVar2 + 0x157),0,((undefined1 *)(gen_frame + 0x8)));
+  piVar3 = (int *)CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e3fc80 + 0x0)),(uint)*(byte *)(lVar2 + 0x157),0,((undefined1 *)(gen_frame + 0x8)));
   if (piVar3 == (int *)0x0) {
     lVar5 = 0;
     puVar4 = &REFG(undefined1, 0x1426178ba);
@@ -12897,7 +12897,7 @@ undefined4 FUN_1416a71d0(undefined8 param_1, undefined4 param_2)
   if ((((int)uVar8 != 0) && (uVar8 = _stricmp("debug",pcVar6), (int)uVar8 != 0)) &&
      (uVar8 = _stricmp("ae",pcVar6), (int)uVar8 != 0)) {
     uVar8 = CALLF(longlong, FUN_1402b30b0)(param_1);
-    CALLF(undefined8 *, FUN_141566900)(((undefined1 *)(gen_frame + 0x130)),&REFG(undefined8, 0x14262f9e8),(*(undefined4 *)&gen_slot_param_2));
+    CALLF(undefined8 *, FUN_141566900)(((undefined1 *)(gen_frame + 0x130)),&REFG(undefined1, 0x14262f9e8),(*(undefined4 *)&gen_slot_param_2));
     CALLF(int *, FUN_141561cd0)(((undefined1 *)(gen_frame + 0x80)),((undefined1 *)(gen_frame + 0x130)),0,0,(unsigned long long)("LuaTODO"),(unsigned long long)(0),(unsigned long long)(0));
     if (pcVar7 == (char *)0x0) {
       lVar10 = (longlong)*(int *)((*(longlong *)(gen_frame + 0xa0)) + 4);
@@ -13345,7 +13345,7 @@ undefined4 FUN_1416a7d20(undefined8 param_1)
     return 0;
   }
   uVar4 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
-  piVar5 = (int *)CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e3c6e0 + 0x0)),(int)uVar4,0,((undefined1 *)(gen_frame + 0x8)));
+  piVar5 = (int *)CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e3c6e0 + 0x0)),(int)uVar4,0,((undefined1 *)(gen_frame + 0x8)));
   if (piVar5 == (int *)0x0) {
     return 0;
   }
@@ -13474,7 +13474,7 @@ undefined4 FUN_1416a8020(undefined8 param_1)
       iVar2 = CALLF(undefined4, FUN_141568f80)(puVar1,(int)(longlong)dVar8);
       CALLF(undefined1 *, FUN_1402b3b50)(param_1,(double)iVar2);
       CALLF(uint, FUN_1402b3850)(param_1,*(uint *)(lVar4 + 0x134) & 1);
-      lVar5 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e3c8f0 + 0x0)),*(undefined4 *)(lVar4 + 0x114),0,((undefined1 *)(gen_frame + 0x8)));
+      lVar5 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e3c8f0 + 0x0)),*(undefined4 *)(lVar4 + 0x114),0,((undefined1 *)(gen_frame + 0x8)));
       if (lVar5 == 0) {
         CALLF(uint, FUN_1402b3850)(param_1,0);
         uVar6 = 0;
@@ -13761,8 +13761,8 @@ bool FUN_1416a87d0(undefined4 param_1, undefined4 param_2)
   char cVar4 = {0};
   char cVar5 = {0};
   
-  lVar1 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e3c6e0 + 0x0)),(*(undefined4 *)&gen_slot_param_1),0,((undefined1 *)(gen_frame + 0x10)));
-  lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e3c6e0 + 0x0)),(*(undefined4 *)&gen_slot_param_2),0,((undefined1 *)(gen_frame + 0x18)));
+  lVar1 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e3c6e0 + 0x0)),(*(undefined4 *)&gen_slot_param_1),0,((undefined1 *)(gen_frame + 0x10)));
+  lVar2 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e3c6e0 + 0x0)),(*(undefined4 *)&gen_slot_param_2),0,((undefined1 *)(gen_frame + 0x18)));
   if (lVar1 != 0) {
     uVar3 = CALLF(undefined *, FUN_14051ac80)();
     CALLF(ulonglong, FUN_14022b1b0)(lVar1 + 4,5,4,uVar3);
@@ -14378,7 +14378,7 @@ undefined4 FUN_1416ac8d0(undefined8 param_1)
         CALLF(undefined8, FUN_1416dc570)(lVar3,0x76,0xffffffff,0xffffffff,(unsigned long long)(0));
       }
       else {
-        CALLF(bool, FUN_1416d3dd0)(lVar5,0,&REFG(undefined8, 0x1431229c0));
+        CALLF(bool, FUN_1416d3dd0)(lVar5,0,&REFG(undefined1, 0x1431229c0));
       }
     }
   }
@@ -14854,7 +14854,7 @@ undefined4 FUN_1416ba5b0(undefined8 param_1)
               uVar2 = CALLF(undefined *, FUN_14051bf10)();
               uVar2 = CALLF(undefined8, FUN_140229de0)(lVar1,0x11,0,uVar2);
               uVar4 = CALLF(ulonglong, FUN_14170ff20)();
-              CALLF(undefined1, FUN_1416c8f50)(uVar4,(int)uVar2,0,&(*(undefined8 *)(gen_frame + 0x0)),(unsigned long long)(&REFG(undefined8, 0x1431229c0)),(unsigned long long)(0));
+              CALLF(undefined1, FUN_1416c8f50)(uVar4,(int)uVar2,0,&(*(undefined8 *)(gen_frame + 0x0)),(unsigned long long)(&REFG(undefined1, 0x1431229c0)),(unsigned long long)(0));
             }
           }
 LAB_1416bad41:
@@ -14995,7 +14995,7 @@ LAB_1416bc813:
                 else {
                   iVar14 = 0;
                 }
-                lVar5 = CALLF(undefined8, FUN_14057b640)(&(*(undefined8 *)((char *)&gen_g_142e3b030 + 0x0)),iVar14,0,((undefined1 *)(gen_frame + 0x4d0)));
+                lVar5 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e3b030 + 0x0)),iVar14,0,((undefined1 *)(gen_frame + 0x4d0)));
                 if (lVar5 != 0) {
                   uVar6 = CALLF(undefined *, FUN_14051ac20)();
                   uVar7 = CALLF(undefined8, FUN_140233370)(lVar5,0,0,uVar6);
@@ -15080,7 +15080,7 @@ LAB_1416bc813:
               CALLF(undefined8, FUN_1402b3ab0)(param_1,"confirmType",0xb);
               CALLF(undefined1 *, FUN_1402b3b50)(param_1,(double)iVar3);
               CALLF(undefined8, FUN_1402b4580)(param_1,0xfffffffd);
-              CALLF(undefined8, FUN_1402b3ab0)(param_1,&REFG(undefined8, 0x1426d0074),4);
+              CALLF(undefined8, FUN_1402b3ab0)(param_1,&REFG(undefined1, 0x1426d0074),4);
               lVar5 = -1;
               do {
                 lVar17 = lVar5 + 1;
@@ -15945,13 +15945,13 @@ undefined8 FUN_1416be640(longlong param_1)
     if (*(int *)(lVar4 + 0x4f0) != 0) {
       uVar5 = *(undefined4 *)(lVar4 + 0x48);
     }
-    cVar1 = CALLF(bool, FUN_1405a4ae0)(&(*(undefined8 *)((char *)&gen_g_142e7c6a0 + 0x0)),uVar5);
+    cVar1 = CALLF(bool, FUN_1405a4ae0)(&(*(undefined1 *)((char *)&gen_g_142e7c6a0 + 0x0)),uVar5);
     if (cVar1 != '\0') {
       CALLF(undefined8, FUN_1416dc570)(lVar4,*(undefined4 *)(param_1 + 0x38),*(undefined4 *)(param_1 + 0x3c),*(undefined4 *)(param_1 + 0x40),(unsigned long long)(1));
       if (*(int *)(param_1 + 0x38) != 0x5b) {
         cVar1 = CALLF(undefined1, FUN_1416d5650)(uVar5,lVar4 + 0x18);
         if (cVar1 != '\0') {
-          CALLF(ulonglong, FUN_141701de0)(&REFG(undefined8, 0x142d1c570),uVar5,1,1);
+          CALLF(ulonglong, FUN_141701de0)(&REFG(undefined1, 0x142d1c570),uVar5,1,1);
           CALLF(undefined8, FUN_14194ffc0)();
           CALLF(undefined8, FUN_141951970)();
           CALLF(longlong, FUN_14116c7c0)();
@@ -15971,7 +15971,7 @@ undefined8 FUN_1416be790(longlong param_1)
   undefined8 uVar2 = {0};
   
   cVar1 = *(char *)(param_1 + 0x25);
-  CALLF(ulonglong, FUN_141701de0)((undefined1 *)&REFG(undefined8, 0x142d1c570) + (-(uint)(cVar1 != '\0') & 0xb8),*(undefined4 *)(param_1 + 0x20),
+  CALLF(ulonglong, FUN_141701de0)((undefined1 *)&REFG(undefined1, 0x142d1c570) + (-(uint)(cVar1 != '\0') & 0xb8),*(undefined4 *)(param_1 + 0x20),
                 *(char *)(param_1 + 0x24) != '\0',0);
   CALLF(undefined8, FUN_14194ffc0)();
   CALLF(undefined8, FUN_141951970)();
@@ -15991,7 +15991,7 @@ undefined8 FUN_1416be7f0(longlong param_1)
   undefined8 uVar2 = {0};
   
   cVar1 = *(char *)(param_1 + 0x20);
-  CALLF(undefined8, FUN_141701e40)((undefined1 *)&REFG(undefined8, 0x142d1c570) + (-(uint)(cVar1 != '\0') & 0xb8),1);
+  CALLF(undefined8, FUN_141701e40)((undefined1 *)&REFG(undefined1, 0x142d1c570) + (-(uint)(cVar1 != '\0') & 0xb8),1);
   CALLF(undefined8, FUN_14194ffc0)();
   if (cVar1 != '\0') {
     uVar2 = CALLF(longlong, FUN_141179b50)();
@@ -16010,7 +16010,7 @@ undefined8 FUN_1416be840(longlong param_1)
   
   cVar1 = *(char *)(param_1 + 0x24);
   uVar2 = CALLF(undefined8, FUN_141237bf0)();
-  CALLF(ulonglong, FUN_141703650)((undefined1 *)&REFG(undefined8, 0x142d1c570) + (-(uint)(cVar1 != '\0') & 0xb8),*(undefined4 *)(param_1 + 0x20),
+  CALLF(ulonglong, FUN_141703650)((undefined1 *)&REFG(undefined1, 0x142d1c570) + (-(uint)(cVar1 != '\0') & 0xb8),*(undefined4 *)(param_1 + 0x20),
                 (int)uVar2);
   CALLF(undefined8, FUN_14194ffc0)();
   CALLF(undefined8, FUN_141951970)();
@@ -16083,7 +16083,7 @@ undefined8 FUN_1416be9a0(longlong param_1)
   if (lVar1 != 0) {
     (*(undefined8 *)(gen_frame + 0x0)) = 0;
     (*(undefined8 *)(gen_frame + 0x8)) = 0;
-    CALLF(undefined8, FUN_141701960)(&REFG(undefined8, 0x142d1c570),*(undefined4 *)(param_1 + 0x30),*(undefined4 *)(lVar1 + 0xd8),REFG(float, 0x142618d64),(unsigned long long)(*(undefined4 *)(param_1 + 0x18)),(unsigned long long)(*(undefined4 *)(param_1 + 0x34)),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(&(*(undefined8 *)(gen_frame + 0x0))));
+    CALLF(undefined8, FUN_141701960)(&REFG(undefined1, 0x142d1c570),*(undefined4 *)(param_1 + 0x30),*(undefined4 *)(lVar1 + 0xd8),REFG(float, 0x142618d64),(unsigned long long)(*(undefined4 *)(param_1 + 0x18)),(unsigned long long)(*(undefined4 *)(param_1 + 0x34)),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(&(*(undefined8 *)(gen_frame + 0x0))));
   }
   CALLF(undefined8, FUN_14194ffc0)();
   uVar2 = CALLF(longlong, FUN_14116c7c0)();
@@ -16100,7 +16100,7 @@ undefined8 FUN_1416bea50(longlong param_1)
     return 0;
   }
   cVar1 = *(char *)(param_1 + 0x28);
-  CALLF(ulonglong, FUN_141703170)((undefined1 *)&REFG(undefined8, 0x142d1c570) + (-(uint)(cVar1 != '\0') & 0xb8),*(int *)(param_1 + 0x20),
+  CALLF(ulonglong, FUN_141703170)((undefined1 *)&REFG(undefined1, 0x142d1c570) + (-(uint)(cVar1 != '\0') & 0xb8),*(int *)(param_1 + 0x20),
                 *(undefined4 *)(param_1 + 0x24),0);
   CALLF(undefined8, FUN_14194ffc0)();
   CALLF(undefined8, FUN_141951970)();

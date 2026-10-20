@@ -1247,6 +1247,85 @@ INT_INTO_FLOAT_SLOT = re.compile(
     r"([\w*()\[\] +\-]+);")
 
 
+INT_CAST_TYPES = r"(?:unsigned long long|long long|ulonglong|longlong|uint|int|ushort|short|byte|char|uchar|" \
+                 r"undefined[1248]?|ulong|long)"
+
+
+def _cast_operand_end(s: str, i: int) -> int:
+    """Where the operand of a cast starting at s[i] ends: unary operators and further casts,
+    then an identifier, number or parenthesized group, then subscripts, calls and members."""
+    n = len(s)
+    while i < n and s[i] in " -~!*&":
+        i += 1
+    while i < n and s[i] == "(":
+        m = re.match(r"\((?:\w+ ?)+\**\)", s[i:])
+        if m and not re.match(r"\((?:\w+)\)\s*[;,)\]]", s[i:]):
+            i += m.end()
+            while i < n and s[i] in " -~!*&":
+                i += 1
+            continue
+        break
+    if i < n and s[i] == "(":
+        depth = 0
+        while i < n:
+            depth += s[i] == "("
+            depth -= s[i] == ")"
+            i += 1
+            if depth == 0:
+                break
+    else:
+        m = re.match(r"[\w.]+", s[i:])
+        i += m.end() if m else 0
+    while i < n and (s[i] in "[(" or s.startswith("->", i) or s[i] == "."):
+        if s.startswith("->", i):
+            i += 2 + len(re.match(r"\w*", s[i + 2:]).group())
+            continue
+        if s[i] == ".":
+            i += 1 + len(re.match(r"\w*", s[i + 1:]).group())
+            continue
+        close = {"[": "]", "(": ")"}[s[i]]
+        depth = 0
+        while i < n:
+            depth += s[i] in "(["
+            depth -= s[i] in ")]"
+            i += 1
+            if depth == 0:
+                break
+    return i
+
+
+def reinterpreted_float_locals(body: str) -> str:
+    """In a function with no integer/float conversion instruction, a float or double local the
+    decompiler casts to an integer, or assigns an integer cast to a double, is one register
+    holding both kinds: the integer is its bits. curl's formatter FUN_142190e40 keeps every
+    argument in one union and Ghidra merged the integer and the %f paths into `double dVar13`;
+    `(ulonglong)dVar13 % 10` converted the denormal that 8081's bits make to 0, every number
+    printed as "0", the web login's port with them, and curl connected to port 0 (2026-10-20)."""
+    kinds = {m.group(2): m.group(1) for m in re.finditer(r"^\s*(double|float) (\w+)(?: = \{0\})?;$", body, re.M)}
+    if not kinds:
+        return body
+    names = "|".join(map(re.escape, kinds))
+    # an integer view of the local: its bits
+    body = re.sub(rf"\(({INT_CAST_TYPES})\)\s*\b({names})\b(?!\s*[\[(])",
+                  lambda m: f"({m.group(1)})GEN_BITS({m.group(2)})", body)
+    # a value cast to the local's kind in a store to it: the bits it is made of
+    out, i = [], 0
+    for m in re.finditer(rf"\b({names}) = \((double|float)\)", body):
+        if m.start() < i or kinds[m.group(1)] != m.group(2):
+            continue
+        end = _cast_operand_end(body, m.end())
+        operand = body[m.end():end]
+        # (only an integer value: a float widened to a double is cvtss2sd, a conversion this
+        # test does not look for, and stays a conversion)
+        if not re.search(rf"GEN_BITS\(|\({INT_CAST_TYPES}\)", operand):
+            continue
+        conv = "gen_bits2d((unsigned long long)" if m.group(2) == "double" else "gen_bits2f((unsigned int)"
+        out.append(body[i:m.start()] + f"{m.group(1)} = {conv}({operand}))")
+        i = end
+    out.append(body[i:])
+    return "".join(out)
+
+
 def mistyped_float_slots(body: str) -> str:
     """A stack slot Ghidra typed float that the code stores integers into is an integer slot.
 
@@ -2839,20 +2918,14 @@ def crt_arity(body: str) -> str:
     for m in re.finditer(r"(?<![\w.>])(" + "|".join(CRT_ARITY) + r")\(", body):
         if m.start() < i:
             continue
-        depth, k, cuts = 1, m.end(), []
-        while k < len(body) and depth:
-            ch = body[k]
-            if ch in "([":
-                depth += 1
-            elif ch in ")]":
-                depth -= 1
-            elif ch == "," and depth == 1:
-                cuts.append(k)
-            k += 1
+        # (call_args: a literal's own parentheses and commas are not the call's; Lua's parser
+        # FUN_141b8e820 calls `strchr("()[]^*/%+-#, ", c)`, and its `)` and `, ` cut the call
+        # to one argument: three functions demoted, 2026-10-20)
+        spans, close = call_args(body, m.end() - 1)
         n = CRT_ARITY[m.group(1)]
-        if len(cuts) >= n:
-            out.append(body[i:cuts[n - 1]] + ")")
-            i = k
+        if len(spans) > n:
+            out.append(body[i:spans[n - 1][1]] + ")")
+            i = close + 1
     out.append(body[i:])
     return "".join(out)
 
@@ -5085,6 +5158,34 @@ class Translator:
         return None
 
     # ---- rewriting ------------------------------------------------------------------------
+    def converts_numbers(self, a: int) -> bool:
+        """Whether the function's instructions convert between integers and floats anywhere
+        (cvtsi2sd, cvttsd2si and the rest, x87 fild/fist): without one, every cast the decompiler
+        shows between a float local and an integer is the same bits read as the other kind."""
+        cache = self.__dict__.setdefault("_converts", {})
+        if a not in cache:
+            e = self.cor.get(a)
+            if not e:
+                cache[a] = True
+                return True
+            import capstone
+            md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
+            md.skipdata = True
+            # every piece .pdata gives the function (the compiler moves cold blocks out of line),
+            # and the decompiled extent
+            if not hasattr(self, "_pieces_by_root"):
+                self._pieces_by_root = defaultdict(list)
+                for s, t, r in zip(self.ref.piece_starts, self.ref.piece_ends, self.ref.piece_root):
+                    self._pieces_by_root[r].append((s, t))
+            spans = self._pieces_by_root.get(a, []) + [(a, a + e.get("size", 0))]
+            # (scalar and packed, SSE and AVX: cvtsi2ss, cvttsd2si, cvtdq2ps, vcvttps2dq...; the
+            # packed ones carry no "si": FUN_14124c950's `(float)(int)*(short *)` is cvtdq2ps)
+            conv = re.compile(r"v?cvtt?(?:\w*si\w*|\w*dq\w*|\w*pi\w*)$")
+            cache[a] = any(conv.match(i.mnemonic) or i.mnemonic.startswith(("fild", "fist"))
+                           for s, t in spans
+                           for i in md.disasm(bytes(self.ref.image[s - self.ref.base:t - self.ref.base]), s))
+        return cache[a]
+
     def pointer_stub_calls(self, text: bytes, tbase: int) -> None:
         """A stub `jmp qword ptr [rip+G]` whose slot G statically holds a code address is shown
         by the decompiler as `thunk_FUN_<that address>`: the slot's value at export time. A
@@ -5400,6 +5501,14 @@ class Translator:
                         n = min(8, end - addr)
                         if n in (1, 2, 4, 8) and (wide and n != size or addr not in self.refdata):
                             size, gtype = n, f"undefined{n}"
+                    elif not wide and addr not in self.refdata:
+                        # (no item and no access at x: reached through a base register, a table
+                        # indexed `(&DAT_x)[i]`. Ghidra's plain DAT_ over nothing defined is its
+                        # `undefined`, one byte, and so is the element; an access wider would be
+                        # `_DAT_`. curl's character classes at 0x1428fd410 were indexed 8 bytes
+                        # apart, isalnum('h') read garbage, the URL had no scheme, and the web
+                        # login failed with CURLE_URL_MALFORMAT, 2026-10-20)
+                        size, gtype = 1, "undefined1"
                 # (and read 8 bytes wide and dereferenced, `lVar1 = *_DAT_142d01560;`: a pointer, to
                 # what its casts say or to 8-byte slots)
                 if wide and size == 8 and gtype.startswith("undefined") and addr in derefed:
@@ -5539,6 +5648,8 @@ class Translator:
         if re.search(r"\*REFG\(undefined\d?,|REFG\(undefined\d?, 0x[0-9a-f]+\)\s*\[", body):
             raise Untranslatable("a global used as a pointer the data export does not type")
         body = mistyped_float_slots(body)
+        if not self.converts_numbers(a):
+            body = reinterpreted_float_locals(body)
         # a function-local static's guard is compared with the epoch signed (MSVC's `jle`); the
         # data export types the guard undefined4, which made `_Init_thread_epoch < guard` unsigned:
         # the epoch is negative (INT_MIN up), so no translated static ever ran its initializer and

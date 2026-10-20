@@ -2,22 +2,10 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4100 4047 4024 4716)
 
-/* did not compile: C2198 'char *strchr(const char *,int)': too few arguments for call | pbVar5 = (byte *)strchr((void *)("()[]^* /%+-#, ")); */
-int FUN_141b8e820() {
-    GenUnimplemented(0x141b8e820ULL);
-    return (int)0;
-}
-
-/* did not compile: C2198 'char *strchr(const char *,int)': too few arguments for call | pbVar6 = (byte *)strchr((void *)("()[]^* /%+-#, ")); */
-int FUN_141b8ed20() {
-    GenUnimplemented(0x141b8ed20ULL);
-    return (int)0;
-}
-
-/* did not compile: C2198 'char *strchr(const char *,int)': too few arguments for call | pcVar2 = (char *)strchr((void *)("()[]^* /%+-#, ")); */
-uint FUN_141b8f530() {
-    GenUnimplemented(0x141b8f530ULL);
-    return (uint)0;
+/* the decompiler lost a call's arguments (FUN_14147f7f0 reads 1, the call passes 0) */
+undefined8 FUN_141484590() {
+    GenUnimplemented(0x141484590ULL);
+    return (undefined8)0;
 }
 
 /* anti-tamper junk between two functions, no function (runs into the function at 0x142265730) */

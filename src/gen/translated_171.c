@@ -404,7 +404,7 @@ undefined4 FUN_142144ef0(undefined8 param_1, longlong *param_2, undefined8 param
   *param_2 = 0;
   (*(undefined8 *)(gen_frame + 0x0)) = 0;
   (*(undefined8 *)(gen_frame + 0x8)) = 0;
-  uVar4 = CALLF(undefined4, FUN_142146660)(param_1,&(*(undefined8 *)(gen_frame + 0x0)),&REFG(undefined8, 0x1428f21f0),((longlong *)(gen_frame + 0x28)),(unsigned long long)(param_3),(unsigned long long)((*(undefined4 *)&gen_slot_param_4)),(unsigned long long)(param_5),(unsigned long long)(param_6),(unsigned long long)(param_7),(unsigned long long)(param_8),(unsigned long long)(param_9),(unsigned long long)(param_10));
+  uVar4 = CALLF(undefined4, FUN_142146660)(param_1,&(*(undefined8 *)(gen_frame + 0x0)),&REFG(undefined1, 0x1428f21f0),((longlong *)(gen_frame + 0x28)),(unsigned long long)(param_3),(unsigned long long)((*(undefined4 *)&gen_slot_param_4)),(unsigned long long)(param_5),(unsigned long long)(param_6),(unsigned long long)(param_7),(unsigned long long)(param_8),(unsigned long long)(param_9),(unsigned long long)(param_10));
   plVar2 = (longlong *)*param_2;
   if (plVar2 != (longlong *)0x0) {
     plVar1 = plVar2 + 1;
@@ -604,7 +604,7 @@ undefined8 FUN_142146b30(undefined8 param_1, undefined4 param_2)
 /*                                   */
   
   CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,param_2);
-  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\archive_file_accessor.cpp",0x3c,(unsigned long long)("Failed to read archive %llu. Error (%u): %s"),(unsigned long long)(param_1),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\archive_file_accessor.cpp",0x3c,(unsigned long long)("Failed to read archive %llu. Error (%u): %s"),(unsigned long long)(param_1),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
   return 0;
 }
 
@@ -617,7 +617,7 @@ undefined8 FUN_142146bb0(undefined4 param_1, undefined8 param_2, undefined4 para
 /*                                   */
   
   CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,param_3);
-  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\archive_file_accessor.cpp",0x34,(unsigned long long)("Failed to read %u bytes from container archive at offset %llu. Error (%u): %s"),(unsigned long long)(CONCAT44(0,param_1)),(unsigned long long)(param_2),(unsigned long long)(CONCAT44(0,param_3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\archive_file_accessor.cpp",0x34,(unsigned long long)("Failed to read %u bytes from container archive at offset %llu. Error (%u): %s"),(unsigned long long)(CONCAT44(0,param_1)),(unsigned long long)(param_2),(unsigned long long)(CONCAT44(0,param_3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
   return 0;
 }
 
@@ -765,7 +765,7 @@ undefined4 FUN_1421470a0(longlong param_1, undefined8 param_2, ulonglong param_3
     uVar7 = (uint)(((ulonglong)(*(uint *)&gen_slot_param_4) - 1) + param_3 >> (*(byte *)(param_1 + 0x1c8) & 0x3f));
   }
   if ((0x3fe < uVar8) || (uVar7 != uVar8)) {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic_storage.cpp",0x2b5,(unsigned long long)("requested span is outside segment boundaries"));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic_storage.cpp",0x2b5,(unsigned long long)("requested span is outside segment boundaries"));
     return 10;
   }
   if ((*(uint *)&gen_slot_param_4) == 0) {
@@ -847,7 +847,7 @@ undefined4 FUN_1421472b0(longlong param_1, undefined8 param_2, ulonglong param_3
       }
     }
     else {
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic_storage.cpp",0x2b5,(unsigned long long)("requested span is outside segment boundaries"));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic_storage.cpp",0x2b5,(unsigned long long)("requested span is outside segment boundaries"));
       uVar3 = 10;
     }
     return uVar3;
@@ -879,7 +879,7 @@ undefined4 FUN_1421476f0(longlong param_1, undefined8 param_2)
   iVar1 = CALLF(undefined4, FUN_140266640)(((undefined1 *)(gen_frame + 0x100)));
   if (iVar1 != 0) {
     CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,iVar1);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic_storage.cpp",0x29a,(unsigned long long)("Error deleting segment %u at \'%s\'. (reason: %s)"),(unsigned long long)(CONCAT44(0,(int)param_2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x100))),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic_storage.cpp",0x29a,(unsigned long long)("Error deleting segment %u at \'%s\'. (reason: %s)"),(unsigned long long)(CONCAT44(0,(int)param_2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x100))),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
     return 8;
   }
   return 0;
@@ -2106,7 +2106,7 @@ undefined4 FUN_14214a370(longlong *param_1, uint param_2, code *param_3, code *p
         CALLF(undefined4, FUN_1420d8f40)(((undefined8 *)(gen_frame + 0x50)),0x21,&(*(byte *)(gen_frame + 0x8)));
         in_stack_fffffffffffffcc0 = CONCAT44(uVar27,(int)(*(undefined8 *)(gen_frame + 0x28)) + -0x1e);
         in_stack_fffffffffffffcb8 = CONCAT44(uVar26,((int *)(gen_frame + 0x0))[0]);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x3d8,(unsigned long long)("Key \'%s\' already exists in container with different size. Requested: %u Existing %u"),(unsigned long long)(((undefined8 *)(gen_frame + 0x50))),(unsigned long long)(in_stack_fffffffffffffcb8),(unsigned long long)(in_stack_fffffffffffffcc0));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x3d8,(unsigned long long)("Key \'%s\' already exists in container with different size. Requested: %u Existing %u"),(unsigned long long)(((undefined8 *)(gen_frame + 0x50))),(unsigned long long)(in_stack_fffffffffffffcb8),(unsigned long long)(in_stack_fffffffffffffcc0));
         if (param_6 == '\0') {
           iVar4 = 0xc;
           puVar5 = (*(undefined4 * *)(gen_frame + 0x30));
@@ -2124,7 +2124,7 @@ undefined4 FUN_14214a370(longlong *param_1, uint param_2, code *param_3, code *p
           uVar25 = CONCAT44(uVar26,iVar4);
           pcVar7 = "Failed to remove key \'%s\' for batch reservation. Error (%u): %s";
 LAB_14214aae8:
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",uVar16,(unsigned long long)(pcVar7),(unsigned long long)(puVar19),(unsigned long long)(uVar25),(unsigned long long)(uVar6));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",uVar16,(unsigned long long)(pcVar7),(unsigned long long)(puVar19),(unsigned long long)(uVar25),(unsigned long long)(uVar6));
           puVar5 = (*(undefined4 * *)(gen_frame + 0x30));
           plVar9 = (*(longlong * *)(gen_frame + 0x38));
         }
@@ -2142,7 +2142,7 @@ LAB_14214aae8:
       }
       else {
         if (iVar4 != 3) {
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x3f6,(unsigned long long)("Failed to determine header residency of reserved key."));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x3f6,(unsigned long long)("Failed to determine header residency of reserved key."));
         }
         (*(undefined2 *)(gen_frame + 0x70)) = 0;
       }
@@ -2178,7 +2178,7 @@ LAB_14214a7cf:
           iVar4 = CALLF(undefined4, FUN_14215d290)(lVar11,*puVar13);
           if (iVar4 != 0) {
             uVar6 = CALLF(undefined *, FUN_14213caf0)(iVar4);
-            CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x424,(unsigned long long)("Failed to allocate space for segment header. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar26,iVar4)),(unsigned long long)(uVar6));
+            CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x424,(unsigned long long)("Failed to allocate space for segment header. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar26,iVar4)),(unsigned long long)(uVar6));
             puVar5 = (*(undefined4 * *)(gen_frame + 0x30));
             plVar9 = (*(longlong * *)(gen_frame + 0x38));
             goto LAB_14214ab83;
@@ -2209,7 +2209,7 @@ LAB_14214a7cf:
           if (iVar4 != 0) {
             in_stack_fffffffffffffcb8 = CALLF(undefined *, FUN_14213caf0)(iVar4);
             gen_stack_fffffffffffffcb0 = CONCAT44(uVar26,iVar4);
-            CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x433,(unsigned long long)("Failed to allocate space for key mapping. Error (%u): %s"),(unsigned long long)(gen_stack_fffffffffffffcb0),(unsigned long long)(in_stack_fffffffffffffcb8));
+            CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x433,(unsigned long long)("Failed to allocate space for key mapping. Error (%u): %s"),(unsigned long long)(gen_stack_fffffffffffffcb0),(unsigned long long)(in_stack_fffffffffffffcb8));
             goto LAB_14214aa0f;
           }
         }
@@ -2267,7 +2267,7 @@ LAB_14214aa0f:
   for (puVar14 = (*(undefined4 * *)(gen_frame + 0x30)); puVar14 != puVar24; puVar14 = puVar14 + 0x41) {
     iVar4 = (*(code *)param_1[9])(param_1[10],*puVar14,puVar14 + 1);
     if (iVar4 != 0) {
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x465,(unsigned long long)("Failed to write segment headers to storage."));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x465,(unsigned long long)("Failed to write segment headers to storage."));
       goto LAB_14214ab83;
     }
   }
@@ -2397,7 +2397,7 @@ undefined4 FUN_14214af50(longlong param_1, undefined4 param_2, ulonglong *param_
   }
   if (iVar1 != 0) {
     uVar2 = CALLF(undefined *, FUN_14213caf0)(iVar1);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x8e0,(unsigned long long)("Failed to allocate space for key mapping. Error (%u): %s"),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x8e0,(unsigned long long)("Failed to allocate space for key mapping. Error (%u): %s"),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
     if (iVar1 == 0x10) {
       iVar1 = 0xe;
     }
@@ -2422,7 +2422,7 @@ undefined1 FUN_14214b060(longlong param_1, int param_2)
       return 0;
     }
     if (iVar1 == 0) {
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x2a5,(unsigned long long)("Unable to determine drive type for \'%s\'."),(unsigned long long)(param_1));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x2a5,(unsigned long long)("Unable to determine drive type for \'%s\'."),(unsigned long long)(param_1));
     }
   }
   return 1;
@@ -2572,7 +2572,7 @@ undefined4 FUN_14214b260(longlong *param_1, longlong param_2, uint param_3)
       iVar6 = CALLF(int, FUN_142158820)(param_1 + 0x17,uVar13,param_1 + (ulonglong)uVar13 * 0xf + 0x3a,((undefined4 *)(gen_frame + 0x1c0)),(unsigned long long)(*plVar12),(unsigned long long)((int)plVar12[1]));
       if (iVar6 != 0) {
         uVar8 = CALLF(undefined *, FUN_14213caf0)(iVar6);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0xa25,(unsigned long long)("Failed to flush table with deletes \'%u\'. Error (%u): %s"),(unsigned long long)(CONCAT44(0,uVar13)),(unsigned long long)(CONCAT44(0,iVar6)),(unsigned long long)(uVar8));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0xa25,(unsigned long long)("Failed to flush table with deletes \'%u\'. Error (%u): %s"),(unsigned long long)(CONCAT44(0,uVar13)),(unsigned long long)(CONCAT44(0,iVar6)),(unsigned long long)(uVar8));
         goto LAB_14214b5f8;
       }
       *(undefined4 *)(lVar17 + param_1[0xd]) = ((undefined4 *)(gen_frame + 0x1c0))[0];
@@ -2863,7 +2863,7 @@ undefined4 FUN_14214c090(longlong param_1, uint param_2, undefined8 *param_3, un
     uVar2 = 0;
   }
   else {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x927,(unsigned long long)("Invalid maximum container size \'%llu\' detected."),(unsigned long long)(*(ulonglong *)(param_1 + 0x40)));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x927,(unsigned long long)("Invalid maximum container size \'%llu\' detected."),(unsigned long long)(*(ulonglong *)(param_1 + 0x40)));
     uVar2 = 9;
     if (*(int *)(param_1 + 0x38) == 4) {
       uVar2 = 1;
@@ -3575,7 +3575,7 @@ LAB_14214e264:
       if ((int)uVar3 == 0) {
         CALLF(undefined8, FUN_142143390)(*(undefined8 *)(param_1 + 8),0,
                       "dynamic_container.index.segment_header.key_exists",1,REFG(float, 0x142618d64));
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x9b4,(unsigned long long)("Generated segment header key already exists."));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x9b4,(unsigned long long)("Generated segment header key already exists."));
         iVar2 = 0;
         goto LAB_14214e264;
       }
@@ -3600,7 +3600,7 @@ LAB_14214e264:
         iVar2 = (int)uVar3;
         if (iVar2 != 0) {
           uVar3 = CALLF(undefined *, FUN_14213caf0)(iVar2);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x95f,(unsigned long long)("Failed to update segment header key for segment %u. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar9,param_2)),(unsigned long long)(CONCAT44(uVar10,iVar2)),(unsigned long long)(uVar3));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x95f,(unsigned long long)("Failed to update segment header key for segment %u. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar9,param_2)),(unsigned long long)(CONCAT44(uVar10,iVar2)),(unsigned long long)(uVar3));
           return iVar2;
         }
         uVar5 = (ulonglong)(iVar4 + 1U);
@@ -3612,17 +3612,17 @@ LAB_14214e264:
           iVar2 = 0;
         }
         else {
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x9cf,(unsigned long long)("Failed to write segment headers to storage."));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x9cf,(unsigned long long)("Failed to write segment headers to storage."));
         }
       }
       else {
         uVar3 = CALLF(undefined *, FUN_14213caf0)(iVar2);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x96b,(unsigned long long)("Failed to flush key mapping table after the creation of a new segment. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar9,iVar2)),(unsigned long long)(uVar3));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x96b,(unsigned long long)("Failed to flush key mapping table after the creation of a new segment. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar9,iVar2)),(unsigned long long)(uVar3));
       }
     }
     else {
       uVar3 = CALLF(undefined *, FUN_14213caf0)(iVar2);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x9bf,(unsigned long long)("Failed to allocate space for segment header. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar9,iVar2)),(unsigned long long)(uVar3));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0x9bf,(unsigned long long)("Failed to allocate space for segment header. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar9,iVar2)),(unsigned long long)(uVar3));
     }
   }
   return iVar2;
@@ -3833,16 +3833,16 @@ undefined1 FUN_14214ee50(undefined8 *param_1, undefined8 param_2)
     if (iVar1 != 0) {
       if (iVar1 != 0x80) {
         if (iVar1 == 0x102) {
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0xcd,(unsigned long long)("Timed out when trying to acquire index writer lock."));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0xcd,(unsigned long long)("Timed out when trying to acquire index writer lock."));
         }
         else if (iVar1 == -1) {
           uVar2 = (*(*(code *)&GetLastError))();
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0xd4,(unsigned long long)("Failed to acquire index writer lock. Error (%d)"),(unsigned long long)(CONCAT44(0,uVar2)));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",0xd4,(unsigned long long)("Failed to acquire index writer lock. Error (%d)"),(unsigned long long)(CONCAT44(0,uVar2)));
           return 0;
         }
         return 0;
       }
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",199,(unsigned long long)("Index writer lock acquired from an abandoned wait."));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\container_index.cpp",199,(unsigned long long)("Index writer lock acquired from an abandoned wait."));
     }
   }
   return 1;
@@ -4078,11 +4078,11 @@ undefined4 FUN_14214f2d0(longlong *param_1, undefined8 param_2, undefined8 param
   iVar2 = CALLF(undefined4, FUN_142147090)(*(undefined8 *)(*param_1 + 0xb00),param_3,((undefined4 *)(gen_frame + 0x0)),0);
   if (iVar2 != 0) {
     uVar4 = CALLF(undefined *, FUN_14213caf0)(iVar2);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\key_reallocation.cpp",0x66,(unsigned long long)("Async read for key reallocation failed. Error: %s"),(unsigned long long)(uVar4));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\key_reallocation.cpp",0x66,(unsigned long long)("Async read for key reallocation failed. Error: %s"),(unsigned long long)(uVar4));
   }
   cVar1 = CALLF(undefined1, FUN_1421506f0)(param_1[0xc],0x1e,param_1 + 1,param_1 + 6,(unsigned long long)(0));
   if (cVar1 == '\0') {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\key_reallocation.cpp",0x71,(unsigned long long)("Failed to serialize reconstruction header."));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\key_reallocation.cpp",0x71,(unsigned long long)("Failed to serialize reconstruction header."));
   }
   memmove((void *)(param_1[4] + param_1[0xc] + 0x1e),(void *)(param_1[3]),(ulonglong)*(uint *)(param_1 + 5));
   uVar3 = CALLF(undefined4, FUN_14214f730)(param_1);
@@ -4113,7 +4113,7 @@ undefined8 FUN_14214f3b0(longlong *param_1, undefined8 param_2, undefined8 param
   }
   else {
     iVar2 = 8;
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\key_reallocation.cpp",0x97,(unsigned long long)("Truncated write during key reallocation."));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\key_reallocation.cpp",0x97,(unsigned long long)("Truncated write during key reallocation."));
     *(undefined4 *)(param_1[0xb] + 0x3c) = 0;
   }
   *(int *)(param_1[0xb] + 0x38) = iVar2;
@@ -4155,7 +4155,7 @@ undefined4 FUN_14214f4a0(longlong *param_1)
   if (iVar1 != 0) {
     CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x60)),0x21,param_1 + 1);
     uVar3 = CALLF(undefined *, FUN_14213caf0)(iVar1);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\key_reallocation.cpp",0x44,(unsigned long long)("Failed to queue async read for key reallocation. Error: %s. Continuing with write request for key %s "),(unsigned long long)(uVar3),(unsigned long long)(((undefined1 *)(gen_frame + 0x60))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\key_reallocation.cpp",0x44,(unsigned long long)("Failed to queue async read for key reallocation. Error: %s. Continuing with write request for key %s "),(unsigned long long)(uVar3),(unsigned long long)(((undefined1 *)(gen_frame + 0x60))));
     CALLF(undefined4, FUN_14214f730)(param_1);
   }
   CALLF(undefined8, FUN_1423663d0)(param_1[0xb] + 0x30);
@@ -4186,7 +4186,7 @@ undefined4 FUN_14214f620(longlong *param_1, longlong param_2, longlong *param_3)
   if (iVar1 != 0) {
     CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 1);
     uVar3 = CALLF(undefined *, FUN_14213caf0)(iVar1);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\key_reallocation.cpp",0x44,(unsigned long long)("Failed to queue async read for key reallocation. Error: %s. Continuing with write request for key %s "),(unsigned long long)(uVar3),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\key_reallocation.cpp",0x44,(unsigned long long)("Failed to queue async read for key reallocation. Error: %s. Continuing with write request for key %s "),(unsigned long long)(uVar3),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
     CALLF(undefined4, FUN_14214f730)(param_1);
   }
   return 0;
@@ -4207,7 +4207,7 @@ undefined4 FUN_14214f730(longlong *param_1)
   uVar3 = 0;
   if (iVar2 != 0) {
     uVar4 = CALLF(undefined *, FUN_14213caf0)(iVar2);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\key_reallocation.cpp",0x87,(unsigned long long)("Failed to queue async write during key reallocation. Error: %s"),(unsigned long long)(uVar4));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\key_reallocation.cpp",0x87,(unsigned long long)("Failed to queue async write during key reallocation. Error: %s"),(unsigned long long)(uVar4));
     *(int *)(param_1[0xb] + 0x38) = iVar2;
     pcVar1 = *(code **)(param_1[0xb] + 0x20);
     uVar4 = *(undefined8 *)(param_1[0xb] + 0x28);
@@ -4503,7 +4503,7 @@ LAB_14214ffa6:
           if (iVar5 == 0) {
             CALLF(undefined4 *, FUN_142152940)(lVar6,((int *)(gen_frame + 0xb0)),((undefined1 *)(gen_frame + 0x150)));
             if ((((int *)(gen_frame + 0xb0))[0] != 0) && (((int *)(gen_frame + 0xb0))[0] != 0xf)) {
-              CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru_manager.cpp",0x180,(unsigned long long)("Incremental compaction failed. Error(%u)"),(unsigned long long)(CONCAT44(0,((int *)(gen_frame + 0xb0))[0])));
+              CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru_manager.cpp",0x180,(unsigned long long)("Incremental compaction failed. Error(%u)"),(unsigned long long)(CONCAT44(0,((int *)(gen_frame + 0xb0))[0])));
             }
             plVar2 = *(longlong **)*param_1;
             if (lVar6 != 0) {
@@ -4520,7 +4520,7 @@ LAB_14214ff97:
             lVar9 = (*(longlong *)(gen_frame + 0x168));
             goto LAB_14214ffa6;
           }
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru_manager.cpp",0x170,(unsigned long long)("Failed to start incremental compaction. Error(%u)"),(unsigned long long)(CONCAT44(0,iVar5)));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru_manager.cpp",0x170,(unsigned long long)("Failed to start incremental compaction. Error(%u)"),(unsigned long long)(CONCAT44(0,iVar5)));
           (*(longlong * *)(gen_frame + 0x160)) = *(longlong **)*param_1;
           if (lVar6 != 0) {
             CALLF(undefined8, FUN_1421521f0)(lVar6);
@@ -5918,12 +5918,12 @@ int FUN_1421527c0(undefined8 *param_1, undefined8 *param_2, undefined8 param_3, 
   CALLF(undefined4, FUN_14210ff90)(param_1 + 0x205,&(*(undefined8 *)(gen_frame + 0x0)));
   iVar3 = CALLF(undefined4, FUN_142152c20)(param_1);
   if (iVar3 == 0) {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x4d,(unsigned long long)("Starting Archive Merge"));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x4d,(unsigned long long)("Starting Archive Merge"));
     CALLF(undefined8, FUN_142163180)(param_1 + 0x175,((code *)REFP(0x142153090)),param_1,((code *)REFP(0x1421531b0)),(unsigned long long)(param_1));
     iVar3 = 0;
   }
   else {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x48,(unsigned long long)("Failed to initialize information necessary to run compaction."));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x48,(unsigned long long)("Failed to initialize information necessary to run compaction."));
   }
   return iVar3;
 }
@@ -6036,7 +6036,7 @@ int FUN_142152b20(undefined8 *param_1, undefined8 *param_2, undefined8 param_3, 
     iVar3 = 0;
   }
   else {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x6a,(unsigned long long)("Failed to initialize information necessary to run compaction."));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x6a,(unsigned long long)("Failed to initialize information necessary to run compaction."));
   }
   return iVar3;
 }
@@ -6066,7 +6066,7 @@ undefined4 FUN_142152c20(longlong *param_1)
   CALLF(uint, FUN_142364de0)(param_1 + 0x1f1,0x10);
   dVar1 = (double)param_1[0x1ed];
   if ((dVar1 < 0.0) || (REFG(double, 0x1428f31f0) < dVar1)) {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0xaa,(unsigned long long)("Invalid archive merge threshold %.2f. Must be in range of [%.2f, %.2f]."),dVar1,(unsigned long long)(0),REFG(double, 0x1428f31f0));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0xaa,(unsigned long long)("Invalid archive merge threshold %.2f. Must be in range of [%.2f, %.2f]."),dVar1,(unsigned long long)(0),REFG(double, 0x1428f31f0));
     iVar4 = 10;
   }
   else {
@@ -6181,7 +6181,7 @@ undefined8 FUN_142153090(longlong param_1, int param_2)
   undefined8 uVar2 = {0};
 /*                                   */
   
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x179,(unsigned long long)("Archive Merge Completed"));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x179,(unsigned long long)("Archive Merge Completed"));
   if (param_2 == 0) {
     CALLF(undefined8, FUN_142163f90)(param_1 + 8,*(undefined8 *)(param_1 + 0xf28));
     uVar2 = CALLF(undefined8, FUN_142153ab0)(param_1);
@@ -6189,7 +6189,7 @@ undefined8 FUN_142153090(longlong param_1, int param_2)
   }
   if (param_2 != 0xf) {
     uVar2 = CALLF(undefined *, FUN_14213caf0)(param_2);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x182,(unsigned long long)("Archive merging failed. Error(%u) : %s"),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(uVar2));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x182,(unsigned long long)("Archive merging failed. Error(%u) : %s"),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(uVar2));
   }
   iVar1 = *(int *)(param_1 + 0x10ac);
   if ((iVar1 == 9) || (param_2 == 9)) {
@@ -6287,7 +6287,7 @@ undefined8 FUN_142153200(longlong *param_1, int param_2, uint param_3)
   }
   else {
     uVar9 = CALLF(undefined *, FUN_14213caf0)(param_2);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x233,(unsigned long long)("Failed to compact Archive %u. Error(%u) : %s"),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1[1] + 0x20))),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(uVar9));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x233,(unsigned long long)("Failed to compact Archive %u. Error(%u) : %s"),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_1[1] + 0x20))),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(uVar9));
     GEN_ATOMIC_XCHG(*(undefined1 *)(lVar4 + 0x10aa), 1);
     CALLF(undefined8, FUN_140262440)(lVar4 + 0xf70);
     *(int *)(param_1[1] + 0x44) = param_2;
@@ -6394,7 +6394,7 @@ int FUN_1421533d0(longlong *param_1)
       cVar4 = CALLF(undefined1, FUN_142147490)(plVar9,*puVar11,((char *)(gen_frame + 0x0)),((uint *)(gen_frame + 0x2460)));
       uVar10 = ((uint *)(gen_frame + 0x2460))[0];
       if (cVar4 == '\0') {
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x105,(unsigned long long)("Failed to iterate through archives in container."));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x105,(unsigned long long)("Failed to iterate through archives in container."));
         iVar5 = 8;
       }
       else {
@@ -6541,7 +6541,7 @@ undefined8 FUN_1421537f0(longlong param_1, longlong param_2)
         lVar8 = CALLF(longlong, FUN_14215eb80)(*(undefined8 *)(lVar4 + 0x28),((char *)(gen_frame + 0x0)));
         if (lVar8 != 0) break;
         in_stack_ffffffffffffffb0 = (code *)CONCAT44(uVar11,*(undefined4 *)(lVar4 + 0x20));
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x1b1,(unsigned long long)("Segment \'%d\', has zero work, skipping."),(unsigned long long)(in_stack_ffffffffffffffb0));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x1b1,(unsigned long long)("Segment \'%d\', has zero work, skipping."),(unsigned long long)(in_stack_ffffffffffffffb0));
         iVar6 = *(int *)(param_1 + 0x1090) + -1;
         *(int *)(param_1 + 0x1090) = iVar6;
       }
@@ -6614,7 +6614,7 @@ undefined8 FUN_142153ab0(longlong *param_1)
   ulonglong uVar5 = {0};
   longlong lVar6 = {0};
   
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x14d,(unsigned long long)("Starting Compaction"));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x14d,(unsigned long long)("Starting Compaction"));
   uVar1 = *(uint *)(param_1 + 0x20f);
   if (uVar1 == 0) {
     *(undefined1 *)((longlong)param_1 + 0x10a9) = 1;
@@ -6685,7 +6685,7 @@ undefined8 FUN_142153bf0(longlong *param_1, longlong param_2)
      (iVar2 = CALLF(undefined4, FUN_142148190)(*(undefined8 *)(*param_1 + 0xb00),(ulonglong)*(uint *)(param_2 + 0x20),
                             (ulonglong)uVar1), iVar2 != 0)) {
     uVar3 = CALLF(undefined *, FUN_14213caf0)(iVar2);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x2a8,(unsigned long long)("Failed to truncate Archive %u. Error(%u) : %s"),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_2 + 0x20))),(unsigned long long)(CONCAT44(0,iVar2)),(unsigned long long)(uVar3));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x2a8,(unsigned long long)("Failed to truncate Archive %u. Error(%u) : %s"),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_2 + 0x20))),(unsigned long long)(CONCAT44(0,iVar2)),(unsigned long long)(uVar3));
     CALLF(undefined8, FUN_142143390)(*param_1 + 0x30,0,REFG(char *, 0x1428f4f58),1,REFG(float, 0x142618d64)
                  );
   }
@@ -7211,7 +7211,7 @@ undefined8 FUN_142154710(longlong *param_1)
     }
     else {
       CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x10)),0x100,iVar3);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x372,(unsigned long long)("Failed to open casc directory. Error (%u): %s"),(unsigned long long)(CONCAT44(0,iVar3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x372,(unsigned long long)("Failed to open casc directory. Error (%u): %s"),(unsigned long long)(CONCAT44(0,iVar3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))));
     }
     return (undefined8)CALLF(undefined8, FUN_140261370)(((undefined1 *)(gen_frame + 0x110)));
   }
@@ -7580,7 +7580,7 @@ undefined4 FUN_142155010(longlong *param_1)
         }
         else {
           CALLF(ulonglong, FUN_142169220)(((undefined1 *)(gen_frame + 0x30)),0x100,bVar5);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0xec,(unsigned long long)("Failed to read in LRU table from disk. Error (%u): %s"),(unsigned long long)(CONCAT44(0,(uint)bVar5)),(unsigned long long)(((undefined1 *)(gen_frame + 0x30))));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0xec,(unsigned long long)("Failed to read in LRU table from disk. Error (%u): %s"),(unsigned long long)(CONCAT44(0,(uint)bVar5)),(unsigned long long)(((undefined1 *)(gen_frame + 0x30))));
         }
       }
       psVar3 = (short *)param_1[5];
@@ -7678,7 +7678,7 @@ undefined4 FUN_1421552c0(undefined8 *param_1)
         uVar5 = CALLF(ulonglong, FUN_1402663b0)(((undefined1 *)(gen_frame + 0x878)),((undefined1 *)(gen_frame + 0x510)),3,0);
         iVar2 = (int)uVar5;
         if (iVar2 != REFG(undefined4, 0x142620be0)) {
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x554,(unsigned long long)("Failed to open LRU Table file. Error (%u)"),(unsigned long long)(CONCAT44(0,iVar2)));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x554,(unsigned long long)("Failed to open LRU Table file. Error (%u)"),(unsigned long long)(CONCAT44(0,iVar2)));
           uVar3 = CALLF(undefined4, FUN_142157210)(iVar2);
           CALLF(undefined8, FUN_140265f40)(((undefined1 *)(gen_frame + 0x878)));
           goto LAB_142155612;
@@ -7717,7 +7717,7 @@ LAB_1421555c6:
             pcVar6 = "Failed to read LRU Table file. Error (%u)";
             uVar3 = 0x565;
           }
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",uVar3,(unsigned long long)(pcVar6),(unsigned long long)(CONCAT44(0,iVar2)));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",uVar3,(unsigned long long)(pcVar6),(unsigned long long)(CONCAT44(0,iVar2)));
           uVar3 = CALLF(undefined4, FUN_142157210)(iVar2);
           (**(code **)(*(longlong *)*param_1 + 0x30))((longlong *)*param_1,lVar4);
           CALLF(undefined8, FUN_140265f40)(((undefined1 *)(gen_frame + 0x878)));
@@ -7733,7 +7733,7 @@ LAB_1421555d2:
   }
   else {
     CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0xb0)),0x100,iVar2);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x539,(unsigned long long)("Failed to open casc directory. Error (%u): %s"),(unsigned long long)(CONCAT44(0,iVar2)),(unsigned long long)(((undefined1 *)(gen_frame + 0xb0))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x539,(unsigned long long)("Failed to open casc directory. Error (%u): %s"),(unsigned long long)(CONCAT44(0,iVar2)),(unsigned long long)(((undefined1 *)(gen_frame + 0xb0))));
     uVar3 = 3;
   }
 LAB_142155612:
@@ -7892,7 +7892,7 @@ uint FUN_142155980(longlong *param_1, undefined8 param_2)
   bVar4 = CALLF(undefined1, FUN_142168590)(uVar7, param_2, (void *)&(*(gen_v16 *)(gen_frame + 0x4e0)));
   if (bVar4 != 0) {
     CALLF(ulonglong, FUN_142169220)(((undefined1 *)(gen_frame + 0xa0)),0x100,bVar4);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x3b3,(unsigned long long)("Failed to aysync checkpoint LRU Table file. Error (%u): %s"),(unsigned long long)(CONCAT44(0,(uint)bVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0xa0))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x3b3,(unsigned long long)("Failed to aysync checkpoint LRU Table file. Error (%u): %s"),(unsigned long long)(CONCAT44(0,(uint)bVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0xa0))));
     goto LAB_142155c71;
   }
   CALLF(undefined4, FUN_142366090)(((undefined1 *)(gen_frame + 0x40)));
@@ -7958,7 +7958,7 @@ uint FUN_142155980(longlong *param_1, undefined8 param_2)
     uVar10 = 0x3d1;
     pcVar8 = "Failed to open LRU Table to write header hash. Error (%u): %s";
 LAB_142155bc4:
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",uVar10,(unsigned long long)(pcVar8),(unsigned long long)(CONCAT44(0,iVar5)),(unsigned long long)(((undefined1 *)(gen_frame + 0xa0))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",uVar10,(unsigned long long)(pcVar8),(unsigned long long)(CONCAT44(0,iVar5)),(unsigned long long)(((undefined1 *)(gen_frame + 0xa0))));
   }
   CALLF(undefined8, FUN_140265f40)(((undefined1 *)(gen_frame + 0x4f8)));
 LAB_142155c71:
@@ -8299,7 +8299,7 @@ undefined4 FUN_142156200(longlong *param_1, undefined4 *param_2)
       }
       else {
         CALLF(ulonglong, FUN_142169220)(((undefined1 *)(gen_frame + 0x40)),0x100,bVar3);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x34c,(unsigned long long)("Failed to open LRU Table file. Error (%u): %s"),(unsigned long long)(CONCAT44(0,(uint)bVar3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x40))));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x34c,(unsigned long long)("Failed to open LRU Table file. Error (%u): %s"),(unsigned long long)(CONCAT44(0,(uint)bVar3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x40))));
         plVar8 = (longlong *)(*param_1 + 0x10);
         if ((*(byte *)(*param_1 + 8) & 1) == 0) {
           plVar8 = (longlong *)*plVar8;
@@ -8311,7 +8311,7 @@ undefined4 FUN_142156200(longlong *param_1, undefined4 *param_2)
   }
   else {
     CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x40)),0x100,iVar4);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x314,(unsigned long long)("Failed to open casc directory. Error (%u): %s"),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x40))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x314,(unsigned long long)("Failed to open casc directory. Error (%u): %s"),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x40))));
     uVar10 = 3;
   }
 LAB_14215655b:
@@ -8354,7 +8354,7 @@ undefined4 FUN_142156590(longlong param_1)
   }
   *(undefined8 *)(param_1 + 0x80) = 0;
   uVar5 = CALLF(undefined *, FUN_14213caf0)(iVar4);
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x123,(unsigned long long)("Failed to flush LRU Table during shutdown. Error (%u): %s"),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(uVar5));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x123,(unsigned long long)("Failed to flush LRU Table during shutdown. Error (%u): %s"),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(uVar5));
   return iVar4;
 }
 
@@ -8721,7 +8721,7 @@ LAB_142156ee9:
       if (uVar4 == 0) goto LAB_142156ee9;
     }
     if (0x30b < uVar4) {
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\static_archive_cache.cpp",0x40,(unsigned long long)("Unsupported path length \'%zu\' requested. Max: \'%d\'"),(unsigned long long)(uVar4),(unsigned long long)(CONCAT44(uVar7,0x30c)));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\static_archive_cache.cpp",0x40,(unsigned long long)("Unsupported path length \'%zu\' requested. Max: \'%d\'"),(unsigned long long)(uVar4),(unsigned long long)(CONCAT44(uVar7,0x30c)));
       *param_2 = 0;
       if ((*(longlong * *)(gen_frame + 0x360)) != (longlong *)0x0) {
         plVar1 = (*(longlong * *)(gen_frame + 0x360)) + 1;
@@ -8860,7 +8860,7 @@ undefined8 * FUN_142157370(longlong param_1, undefined8 *param_2, undefined8 par
       iVar4 = CALLF(undefined4, FUN_14155a060)(((undefined1 *)(gen_frame + 0x0)),0x30c,"%s/data.%03d",param_4,(unsigned long long)(CONCAT44(uVar6,(int)param_3)));
     }
     if (0x30b < (ulonglong)(longlong)iVar4) {
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic_archive_cache.cpp",0x2d,(unsigned long long)("Unsupported path length \'%zu\' requested. Max: \'%d\'"),(unsigned long long)((longlong)iVar4),(unsigned long long)(CONCAT44(uVar7,0x30c)));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic_archive_cache.cpp",0x2d,(unsigned long long)("Unsupported path length \'%zu\' requested. Max: \'%d\'"),(unsigned long long)((longlong)iVar4),(unsigned long long)(CONCAT44(uVar7,0x30c)));
       *(undefined4 *)plVar1 = 10;
       *param_2 = 0;
       if (param_6 != (longlong *)0x0) {
@@ -9249,7 +9249,7 @@ undefined4 FUN_1421581b0(undefined4 *param_1, undefined8 param_2, longlong param
   } while (*(char *)(param_3 + uVar1) != '\0');
   uVar3 = (int)uVar2 + 8;
   if (0xff < uVar3) {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control_block.cpp",0x32,(unsigned long long)("Container path \'%s\' is too long to support."),(unsigned long long)(param_3));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control_block.cpp",0x32,(unsigned long long)("Container path \'%s\' is too long to support."),(unsigned long long)(param_3));
     return 0x13;
   }
   *param_1 = 0x626f6c47;
@@ -9286,11 +9286,11 @@ undefined4 FUN_1421582c0(undefined8 param_1, undefined8 param_2, int param_3, un
   *param_6 = 0;
   iVar3 = CALLF(undefined4, FUN_14215cf20)(param_2);
   if (iVar3 == 1) {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control_block.cpp",0x11c,(unsigned long long)("Invalid drive type for shared memory at \'%s\'"),(unsigned long long)(param_2));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control_block.cpp",0x11c,(unsigned long long)("Invalid drive type for shared memory at \'%s\'"),(unsigned long long)(param_2));
     return 0xd;
   }
   if (iVar3 == 0) {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control_block.cpp",0x123,(unsigned long long)("Unable to determine drive type for \'%s\'."),(unsigned long long)(param_2));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control_block.cpp",0x123,(unsigned long long)("Unable to determine drive type for \'%s\'."),(unsigned long long)(param_2));
   }
   iVar3 = CALLF(int, FUN_142157f20)(param_1,param_2,param_3,param_4,(unsigned long long)(param_5),(unsigned long long)(param_7));
   if (iVar3 != 0) {
@@ -9310,7 +9310,7 @@ undefined4 FUN_1421582c0(undefined8 param_1, undefined8 param_2, int param_3, un
     if (uVar1 < 6) {
       if (puVar2[0x42] == 0x2ab8) {
         if ((uVar1 == 5) && ((puVar2[0x54] & 1) != 0)) {
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control_block.cpp",0x156,(unsigned long long)("Unable to bind container while another process has exclusive access."));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control_block.cpp",0x156,(unsigned long long)("Unable to bind container while another process has exclusive access."));
         }
         else {
           if ((puVar2[0x43] != 0) && ((char)puVar2[2] != '\0')) {
@@ -9318,20 +9318,20 @@ undefined4 FUN_1421582c0(undefined8 param_1, undefined8 param_2, int param_3, un
             param_5[1] = (ulonglong)puVar2[0x43] + (longlong)puVar2;
             return 0;
           }
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control_block.cpp",0x15e,(unsigned long long)("Detected invalid shared memory initialization."));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control_block.cpp",0x15e,(unsigned long long)("Detected invalid shared memory initialization."));
           *param_6 = 1;
         }
         uVar4 = 0xb;
       }
       else {
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control_block.cpp",0x14d,(unsigned long long)("Detected unsupported free space table format."));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control_block.cpp",0x14d,(unsigned long long)("Detected unsupported free space table format."));
         uVar4 = 5;
       }
       goto LAB_1421584cb;
     }
     uVar4 = 0x145;
   }
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control_block.cpp",uVar4,(unsigned long long)("Unsupported shmem protocol version. \'%u\'"),(unsigned long long)(CONCAT44((int)((ulonglong)param_7 >> 0x20),uVar1)));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control_block.cpp",uVar4,(unsigned long long)("Unsupported shmem protocol version. \'%u\'"),(unsigned long long)(CONCAT44((int)((ulonglong)param_7 >> 0x20),uVar1)));
   uVar4 = 5;
 LAB_1421584cb:
   CALLF(int, FUN_142368500)(param_5 + 4);
@@ -9354,7 +9354,7 @@ undefined8 FUN_1421585f0(longlong *param_1, undefined8 param_2)
     *(undefined4 *)param_1[2] = uVar1;
     if (*(int *)param_1[2] != 0) {
       CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,*(int *)param_1[2]);
-      return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\index_tables.cpp",0x1e3,(unsigned long long)("Failed to delete table file \'%s\'. Error (%u): %s"),(unsigned long long)(*(undefined8 *)(*param_1 + 8)),(unsigned long long)(CONCAT44(0,*(undefined4 *)param_1[2])),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+      return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\index_tables.cpp",0x1e3,(unsigned long long)("Failed to delete table file \'%s\'. Error (%u): %s"),(unsigned long long)(*(undefined8 *)(*param_1 + 8)),(unsigned long long)(CONCAT44(0,*(undefined4 *)param_1[2])),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
     }
   }
   return 0;
@@ -9399,7 +9399,7 @@ int FUN_142158820(longlong param_1, uint param_2, longlong param_3, undefined4 *
         iVar1 = CALLF(undefined4, FUN_14215a700)(param_3,lVar3 + 0x20,*(undefined4 *)(param_1 + 0x10),(*(uint *)&gen_slot_param_2),(unsigned long long)(*(undefined8 *)(param_3 + 0x40)));
         if (iVar1 != 0) {
           uVar2 = CALLF(undefined *, FUN_14213caf0)(iVar1);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\index_tables.cpp",0x164,(unsigned long long)("Failed to bind table %u after flushing. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar5,(*(uint *)&gen_slot_param_2))),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\index_tables.cpp",0x164,(unsigned long long)("Failed to bind table %u after flushing. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar5,(*(uint *)&gen_slot_param_2))),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
         }
       }
     }
@@ -9416,7 +9416,7 @@ undefined8 FUN_1421593c0(undefined8 param_1, undefined4 param_2)
 /*                                   */
   
   CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,param_2);
-  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\index_tables.cpp",0xd4,(unsigned long long)("Failed to open refresh target table file \'%s\'. Error (%u): %s"),(unsigned long long)(param_1),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\index_tables.cpp",0xd4,(unsigned long long)("Failed to open refresh target table file \'%s\'. Error (%u): %s"),(unsigned long long)(param_1),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
   return 0;
 }
 
@@ -9466,7 +9466,7 @@ undefined4 FUN_142159440(undefined8 param_1, undefined4 param_2, undefined8 para
   }
   else {
     CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x20)),0x100,iVar2);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\index_tables.cpp",0x48,(unsigned long long)("Failed to create flush target table file \'%s\'. Error (%u): %s"),(unsigned long long)(param_3),(unsigned long long)(CONCAT44(0,iVar2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\index_tables.cpp",0x48,(unsigned long long)("Failed to create flush target table file \'%s\'. Error (%u): %s"),(unsigned long long)(param_3),(unsigned long long)(CONCAT44(0,iVar2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))));
     uVar3 = CALLF(undefined4, FUN_142157210)(iVar2);
   }
   return uVar3;
@@ -9489,7 +9489,7 @@ undefined4 FUN_1421595a0(undefined8 param_1, undefined4 param_2, uint param_3, u
   iVar1 = CALLF(undefined4, FUN_140266060)(param_5);
   if (iVar1 != 0) {
     CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x20)),0x100,iVar1);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\index_tables.cpp",0x86,(unsigned long long)("Failed to sync file \'%s\' to disk. Error (%u): %s"),(unsigned long long)(param_4),(unsigned long long)(CONCAT44(uVar2,iVar1)),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\index_tables.cpp",0x86,(unsigned long long)("Failed to sync file \'%s\' to disk. Error (%u): %s"),(unsigned long long)(param_4),(unsigned long long)(CONCAT44(uVar2,iVar1)),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))));
     uVar2 = CALLF(undefined4, FUN_142157210)(iVar1);
     return uVar2;
   }
@@ -9514,12 +9514,12 @@ undefined4 FUN_1421595a0(undefined8 param_1, undefined4 param_2, uint param_3, u
     CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x20)),0x100,iVar1);
     in_stack_fffffffffffffb90 = CONCAT44(uVar5,iVar1);
     uVar4 = param_4;
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\index_tables.cpp",0xa0,(unsigned long long)("Failed to rename flush target from \'%s\' to \'%s\'. Error (%u): %s"),(unsigned long long)(param_4),(unsigned long long)(((undefined1 *)(gen_frame + 0x120))),(unsigned long long)(in_stack_fffffffffffffb90),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\index_tables.cpp",0xa0,(unsigned long long)("Failed to rename flush target from \'%s\' to \'%s\'. Error (%u): %s"),(unsigned long long)(param_4),(unsigned long long)(((undefined1 *)(gen_frame + 0x120))),(unsigned long long)(in_stack_fffffffffffffb90),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))));
     uVar5 = (undefined4)((ulonglong)uVar4 >> 0x20);
     uVar2 = CALLF(undefined4, FUN_142157210)(iVar1);
     uVar3 = uVar3 + 1;
   } while (uVar3 < 3);
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\index_tables.cpp",0xac,(unsigned long long)("Exhausted flush retry attempts for table \'%u\'."),(unsigned long long)(CONCAT44(uVar5,param_2)));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\index_tables.cpp",0xac,(unsigned long long)("Exhausted flush retry attempts for table \'%u\'."),(unsigned long long)(CONCAT44(uVar5,param_2)));
   return uVar2;
 }
 
@@ -10761,7 +10761,7 @@ undefined8 FUN_14215cd80(undefined4 param_1)
 /*                                   */
   
   CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,param_1);
-  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\key_mapping_table.cpp",0x78,(unsigned long long)("Failed to bind KMT shared memory. Error (%u): %s"),(unsigned long long)(CONCAT44(0,param_1)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\key_mapping_table.cpp",0x78,(unsigned long long)("Failed to bind KMT shared memory. Error (%u): %s"),(unsigned long long)(CONCAT44(0,param_1)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
   return 0;
 }
 
@@ -10773,7 +10773,7 @@ undefined8 FUN_14215cde0(undefined4 param_1)
 /*                                   */
   
   CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,param_1);
-  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\key_mapping_table.cpp",0x70,(unsigned long long)("Failed to read KMT file data. Error (%u): %s"),(unsigned long long)(CONCAT44(0,param_1)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\key_mapping_table.cpp",0x70,(unsigned long long)("Failed to read KMT file data. Error (%u): %s"),(unsigned long long)(CONCAT44(0,param_1)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
   return 0;
 }
 
@@ -10785,7 +10785,7 @@ undefined8 FUN_14215ce40(undefined4 param_1)
 /*                                   */
   
   CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,param_1);
-  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\key_mapping_table.cpp",0x69,(unsigned long long)("Failed to synchronize KMT data. Error (%u): %s"),(unsigned long long)(CONCAT44(0,param_1)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\key_mapping_table.cpp",0x69,(unsigned long long)("Failed to synchronize KMT data. Error (%u): %s"),(unsigned long long)(CONCAT44(0,param_1)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
   return 0;
 }
 
@@ -10797,7 +10797,7 @@ undefined8 FUN_14215cea0(undefined8 param_1, undefined4 param_2)
 /*                                   */
   
   CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,param_2);
-  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\key_mapping_table.cpp",0x62,(unsigned long long)("Failed to write \'%s\' to table file. Error (%u): %s"),(unsigned long long)(param_1),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
+  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\key_mapping_table.cpp",0x62,(unsigned long long)("Failed to write \'%s\' to table file. Error (%u): %s"),(unsigned long long)(param_1),(unsigned long long)(CONCAT44(0,param_2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
   return 0;
 }
 
@@ -12144,7 +12144,7 @@ undefined4 FUN_14215f990(longlong *param_1, longlong param_2)
       if (iVar2 != 0) {
         CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x40)),0x21,(ulonglong)*(uint *)(lVar4 + 8) * 0x10 + param_1[1]);
         uVar3 = CALLF(undefined *, FUN_14213caf0)(iVar2);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0xc5,(unsigned long long)("Failed to get resident span count for key %s. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x40))),(unsigned long long)(CONCAT44(uVar12,iVar2)),(unsigned long long)(uVar3));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0xc5,(unsigned long long)("Failed to get resident span count for key %s. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x40))),(unsigned long long)(CONCAT44(uVar12,iVar2)),(unsigned long long)(uVar3));
         return iVar2;
       }
       if (*(uint *)(lVar1 + 0x10) <= ((uint *)(gen_frame + 0xa0))[0]) {
@@ -12185,7 +12185,7 @@ undefined4 FUN_14215f990(longlong *param_1, longlong param_2)
       if (iVar2 != 0) {
         CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x40)),0x21,(ulonglong)*(uint *)(lVar4 + 8) * 0x10 + param_1[1]);
         uVar3 = CALLF(undefined *, FUN_14213caf0)(iVar2);
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0xd5,(unsigned long long)("Failed to get resident spans for key %s. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x40))),(unsigned long long)(CONCAT44(uVar12,iVar2)),(unsigned long long)(uVar3));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0xd5,(unsigned long long)("Failed to get resident spans for key %s. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x40))),(unsigned long long)(CONCAT44(uVar12,iVar2)),(unsigned long long)(uVar3));
         return iVar2;
       }
       uVar7 = (int)uVar8 + 1;
@@ -12242,7 +12242,7 @@ undefined4 FUN_14215fda0(undefined8 *param_1, undefined8 *param_2, undefined1 pa
     if (param_4 < 0x20000) {
       *(int *)((longlong)param_1 + 0xaf4) = (int)param_4;
       *(undefined4 *)(param_1 + 0x15e) = 1;
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x44,(unsigned long long)("Compaction performance warning due to small buffers. Move operations will be slow."));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x44,(unsigned long long)("Compaction performance warning due to small buffers. Move operations will be slow."));
     }
     else {
       uVar6 = (uint)(param_4 >> 0x11);
@@ -12370,7 +12370,7 @@ undefined4 FUN_142160020(longlong *param_1, undefined8 param_2, undefined8 param
             return 0;
           }
           uVar7 = CALLF(undefined *, FUN_14213caf0)(iVar2);
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x228,(unsigned long long)("Failed to queue async write. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar4,iVar2)),(unsigned long long)(uVar7));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x228,(unsigned long long)("Failed to queue async write. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar4,iVar2)),(unsigned long long)(uVar7));
           CALLF(undefined8, FUN_142143390)(*plVar8 + 0x30,0,"dynamic.compaction.error.async_write",1,REFG(float, 0x142618d64));
         }
         else {
@@ -12404,7 +12404,7 @@ undefined4 FUN_142160020(longlong *param_1, undefined8 param_2, undefined8 param
     uVar9 = 0x200;
     pcVar6 = "Failed to write file during compaction. Error (%u): %s";
   }
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",uVar9,(unsigned long long)(pcVar6),(unsigned long long)(CONCAT44(uVar4,iVar2)),(unsigned long long)(uVar7));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",uVar9,(unsigned long long)(pcVar6),(unsigned long long)(CONCAT44(uVar4,iVar2)),(unsigned long long)(uVar7));
 LAB_142160249:
   uVar7 = CALLF(undefined8, FUN_14215fcf0)(plVar8,param_1,iVar2);
   return (int)uVar7;
@@ -12470,7 +12470,7 @@ undefined4 FUN_142160310(longlong *param_1, undefined8 *param_2, int param_3)
           if (uVar6 < uVar4) {
             if (uVar4 < *(uint *)((longlong)param_2 + 0x6c) + uVar6) {
 LAB_1421604ad:
-              CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x1c0,(unsigned long long)("Invalid move operation. DST: %llu SRC: %llu"),(unsigned long long)(uVar4),(unsigned long long)(uVar6));
+              CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x1c0,(unsigned long long)("Invalid move operation. DST: %llu SRC: %llu"),(unsigned long long)(uVar4),(unsigned long long)(uVar6));
               param_3 = 10;
               goto LAB_142160553;
             }
@@ -12500,7 +12500,7 @@ LAB_1421604ad:
         return 0;
       }
       uVar2 = CALLF(undefined *, FUN_14213caf0)(param_3);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x166,(unsigned long long)("Failed to queue async write. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar7,param_3)),(unsigned long long)(uVar2));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x166,(unsigned long long)("Failed to queue async write. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar7,param_3)),(unsigned long long)(uVar2));
       CALLF(undefined8, FUN_142143390)(*param_1 + 0x30,0,"dynamic.compaction.error.async_write",1,REFG(float, 0x142618d64));
       goto LAB_142160553;
     }
@@ -12515,7 +12515,7 @@ LAB_1421604ad:
     uVar5 = 0x13e;
     pcVar1 = "Failed to read file during compaction. Error (%u): %s";
   }
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",uVar5,(unsigned long long)(pcVar1),(unsigned long long)(CONCAT44(uVar7,param_3)),(unsigned long long)(uVar2));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",uVar5,(unsigned long long)(pcVar1),(unsigned long long)(CONCAT44(uVar7,param_3)),(unsigned long long)(uVar2));
 LAB_142160553:
   uVar2 = CALLF(undefined8, FUN_14215fcf0)(param_1,param_2,param_3);
   return (int)uVar2;
@@ -12598,7 +12598,7 @@ int FUN_1421606d0(longlong *param_1, undefined8 param_2)
   if (iVar1 != 0) {
     CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_2);
     uVar2 = CALLF(undefined *, FUN_14213caf0)(iVar1);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x1df,(unsigned long long)("Failed to remove key %s from index. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x1df,(unsigned long long)("Failed to remove key %s from index. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
     CALLF(undefined8, FUN_142143390)(*param_1 + 0x30,0,"dynamic.compaction.error.remove_key",1,REFG(float, 0x142618d64));
   }
   return iVar1;
@@ -12646,7 +12646,7 @@ undefined4 FUN_1421607a0(longlong *param_1, undefined8 *param_2)
     uVar11 = CALLF(undefined8, FUN_140262470)(plVar2);
     uVar10 = (undefined4)uVar11;
     if (lVar6 == 0) {
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x11a,(unsigned long long)("Compaction read finished synchronously."));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x11a,(unsigned long long)("Compaction read finished synchronously."));
       *(uint *)((longlong)param_2 + 0x74) = uVar7;
       uVar10 = CALLF(undefined4, FUN_142160310)(param_1,param_2,0);
     }
@@ -12654,7 +12654,7 @@ undefined4 FUN_1421607a0(longlong *param_1, undefined8 *param_2)
   else {
     CALLF(undefined8, FUN_140262470)(plVar2);
     uVar11 = CALLF(undefined *, FUN_14213caf0)(iVar9);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x10f,(unsigned long long)("Failed to queue async read. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar10,iVar9)),(unsigned long long)(uVar11))
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x10f,(unsigned long long)("Failed to queue async read. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar10,iVar9)),(unsigned long long)(uVar11))
     ;
     CALLF(undefined8, FUN_142143390)(*param_1 + 0x30,0,"dynamic.compaction.error.async_read",1,REFG(float, 0x142618d64));
     uVar11 = CALLF(undefined8, FUN_14215fcf0)(*param_2,param_2,iVar9);
@@ -12791,13 +12791,13 @@ undefined4 FUN_142160ae0(longlong *param_1, longlong param_2)
             lVar5 = lVar5 + 0x10;
           } while (lVar5 != lVar7);
           if (uVar9 != 0) {
-            CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x282,(unsigned long long)("Failed to update %d residency spans within in a file."),(unsigned long long)(CONCAT44(0,uVar9)));
+            CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x282,(unsigned long long)("Failed to update %d residency spans within in a file."),(unsigned long long)(CONCAT44(0,uVar9)));
             CALLF(undefined8, FUN_142143390)(*param_1 + 0x30,0,"dynamic.compaction.error.update_residency",(ulonglong)uVar9,(unsigned long long)(uVar2));
           }
         }
       }
       else {
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x266,(unsigned long long)("Failed to reconstruct key mapping."));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_file_mover.cpp",0x266,(unsigned long long)("Failed to reconstruct key mapping."));
         CALLF(undefined8, FUN_142143390)(*param_1 + 0x30,0,"dynamic.compaction.error.reconstruct_key_mapping",1,(unsigned long long)(uVar2));
         if ((iVar3 - 7U & 0xfffffffd) == 0) {
           return iVar3;
@@ -13786,7 +13786,7 @@ undefined8 FUN_1421622f0(longlong *param_1)
     }
     else {
       uVar5 = CALLF(undefined *, FUN_14213caf0)(iVar4);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\archive_merger.cpp",0x1ff,(unsigned long long)("Failed to read segment %u header during archive deletion. Error (%u): %s"),(unsigned long long)(CONCAT44(0,uVar2)),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(uVar5));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\archive_merger.cpp",0x1ff,(unsigned long long)("Failed to read segment %u header during archive deletion. Error (%u): %s"),(unsigned long long)(CONCAT44(0,uVar2)),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(uVar5));
       uVar10 = 0;
     }
     iVar4 = CALLF(undefined4, FUN_1421476f0)(*(undefined8 *)(*param_1 + 0xb00),(ulonglong)uVar2);
@@ -13804,7 +13804,7 @@ undefined8 FUN_1421622f0(longlong *param_1)
       uVar10 = 0x1d1;
       pcVar6 = "Failed to delete archive %u during archive merge. Error (%u): %s";
 LAB_1421624af:
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\archive_merger.cpp",uVar10,(unsigned long long)(pcVar6),(unsigned long long)(CONCAT44(0,uVar2)),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(uVar5));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\archive_merger.cpp",uVar10,(unsigned long long)(pcVar6),(unsigned long long)(CONCAT44(0,uVar2)),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(uVar5));
     }
     puVar9 = puVar9 + 1;
   } while( true );
@@ -14006,7 +14006,7 @@ LAB_1421626af:
                  (uint)(*(int *)(lVar7 + 4 + (ulonglong)uVar8 * 0xc) +
                        *(int *)(lVar7 + (ulonglong)uVar8 * 0xc));
         *(ulonglong *)(param_1 + 0x300) = uVar12;
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\archive_merger.cpp",0xf7,(unsigned long long)("Segment %u unable to merge, truncating to %llu"),(unsigned long long)(CONCAT44(0,(int)uVar5)),(unsigned long long)(uVar12));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\archive_merger.cpp",0xf7,(unsigned long long)("Segment %u unable to merge, truncating to %llu"),(unsigned long long)(CONCAT44(0,(int)uVar5)),(unsigned long long)(uVar12));
       }
     }
     uVar3 = 1;
@@ -14029,7 +14029,7 @@ undefined8 FUN_142162aa0(longlong *param_1)
        (iVar1 = CALLF(undefined4, FUN_142148190)(*(undefined8 *)(*param_1 + 0xb00),(ulonglong)*(uint *)(param_1 + 0x5f)
                               ,param_1[0x60]), iVar1 != 0)) {
       uVar2 = CALLF(undefined *, FUN_14213caf0)(iVar1);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\archive_merger.cpp",0x1eb,(unsigned long long)("Failed to truncate Archive %u. Error(%u) : %s"),(unsigned long long)(CONCAT44(0,(int)param_1[0x5f])),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\archive_merger.cpp",0x1eb,(unsigned long long)("Failed to truncate Archive %u. Error(%u) : %s"),(unsigned long long)(CONCAT44(0,(int)param_1[0x5f])),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(uVar2));
       CALLF(undefined8, FUN_142143390)(*param_1 + 0x30,0,REFG(char *, 0x1428f4f58),1,
                     REFG(float, 0x142618d64));
     }
@@ -14373,7 +14373,7 @@ uint FUN_1421631c0(undefined8 *param_1)
         uVar10 = (uint)uVar9;
         if (0x1df < *puVar11) break;
         if (puVar11[1] != 0x1e) {
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\archive_merger.cpp",0xb9,(unsigned long long)("Found invalid file in segment header for segment %u."),(unsigned long long)(CONCAT44(0,*(undefined4 *)(lVar14 + 0x20))));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\archive_merger.cpp",0xb9,(unsigned long long)("Found invalid file in segment header for segment %u."),(unsigned long long)(CONCAT44(0,*(undefined4 *)(lVar14 + 0x20))));
           uVar3 = puVar11[1] + *puVar11;
           uVar9 = (ulonglong)(*(uint *)(gen_frame + 0x10));
           uVar10 = (*(uint *)(gen_frame + 0x10));
@@ -14798,8 +14798,8 @@ undefined8 FUN_142163b50(longlong param_1, undefined8 param_2, double param_3, d
   uVar4 = uVar5 >> 0x14;
   uVar7 = uVar7 >> 0x14;
   uVar8 = uVar8 >> 0x14;
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_progress.cpp",0xa6,"Total Estimate:   Efficiency (%5.2f)\n\t- Initially Free: %5lluMiB\n\t- Recoverable:    %5lluMiB\n\t- Unrecoverable:  %5lluMiB\n\t- Movable:        %5lluMiB\n\t- Skipping:       %5lluMiB\n\t- Avg. Move Size: %5lluKiB",dVar10,(unsigned long long)(uVar7),(unsigned long long)(uVar8),(unsigned long long)(uVar4),(unsigned long long)(uVar1 >> 0x14),(unsigned long long)(*(ulonglong *)(param_1 + 0x70) >> 0x14),(unsigned long long)(uVar3 >> 10));
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_progress.cpp",0xae,(unsigned long long)("Archives: Total Compacted: %d - Defrag: %d - FillHoles: %d | Merged: %d"),CONCAT44((int)((ulonglong)dVar10 >> 0x20),
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_progress.cpp",0xa6,"Total Estimate:   Efficiency (%5.2f)\n\t- Initially Free: %5lluMiB\n\t- Recoverable:    %5lluMiB\n\t- Unrecoverable:  %5lluMiB\n\t- Movable:        %5lluMiB\n\t- Skipping:       %5lluMiB\n\t- Avg. Move Size: %5lluKiB",dVar10,(unsigned long long)(uVar7),(unsigned long long)(uVar8),(unsigned long long)(uVar4),(unsigned long long)(uVar1 >> 0x14),(unsigned long long)(*(ulonglong *)(param_1 + 0x70) >> 0x14),(unsigned long long)(uVar3 >> 10));
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_progress.cpp",0xae,(unsigned long long)("Archives: Total Compacted: %d - Defrag: %d - FillHoles: %d | Merged: %d"),CONCAT44((int)((ulonglong)dVar10 >> 0x20),
                          *(int *)(param_1 + 0x78) + *(int *)(param_1 + 0x7c)),(unsigned long long)(CONCAT44((int)(uVar7 >> 0x20),*(int *)(param_1 + 0x78))),(unsigned long long)(CONCAT44((int)(uVar8 >> 0x20),*(int *)(param_1 + 0x7c))),(unsigned long long)(CONCAT44((int)(uVar4 >> 0x20),*(undefined4 *)(param_1 + 0x84))));
   uVar2 = REFG(float, 0x142618d64);
   CALLF(undefined8, FUN_142143390)(param_2,3,"dynamic.compaction.estimate.initial_bytes_free",
@@ -14958,15 +14958,15 @@ undefined8 FUN_142164040(longlong param_1, longlong param_2)
   }
   dVar2 = *(double *)(param_2 + 0x30);
   if (dVar2 == 0.0) {
-    return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_progress.cpp",0xf4,(unsigned long long)("Archive[%2d]: Fully Compacted"),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_2 + 0x20))));
+    return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_progress.cpp",0xf4,(unsigned long long)("Archive[%2d]: Fully Compacted"),(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_2 + 0x20))));
     return 0;
   }
   if (dVar1 <= dVar2) {
     lVar3 = *(longlong *)(param_2 + 0x28);
-    return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_progress.cpp",0x100,"Archive[%2d]: Efficiency (%5.2f) | Initial-Free: %d - Recoverable: %d - To-Move: %d | %s",(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_2 + 0x20))),dVar2,(unsigned long long)(CONCAT44(0,*(undefined4 *)(lVar3 + 0x40))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(lVar3 + 0x44))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(lVar3 + 0x38))),(unsigned long long)((&REFG(char *, 0x1428f4bc0))[*(byte *)(param_2 + 0x24)]));
+    return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_progress.cpp",0x100,"Archive[%2d]: Efficiency (%5.2f) | Initial-Free: %d - Recoverable: %d - To-Move: %d | %s",(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_2 + 0x20))),dVar2,(unsigned long long)(CONCAT44(0,*(undefined4 *)(lVar3 + 0x40))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(lVar3 + 0x44))),(unsigned long long)(CONCAT44(0,*(undefined4 *)(lVar3 + 0x38))),(unsigned long long)((&REFG(char *, 0x1428f4bc0))[*(byte *)(param_2 + 0x24)]));
     return 0;
   }
-  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_progress.cpp",0x109,"Archive[%2d]: Efficiency (%5.2f) | Initial-Free: %d | SKIPPING",(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_2 + 0x20))),dVar2,(unsigned long long)(CONCAT44(0,
+  return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_progress.cpp",0x109,"Archive[%2d]: Efficiency (%5.2f) | Initial-Free: %d | SKIPPING",(unsigned long long)(CONCAT44(0,*(undefined4 *)(param_2 + 0x20))),dVar2,(unsigned long long)(CONCAT44(0,
                          *(undefined4 *)(*(longlong *)(param_2 + 0x28) + 0x40))));
   return 0;
 }
@@ -15047,7 +15047,7 @@ LAB_1421642f6:
         goto LAB_142164358;
       }
       if (puVar7[1] != 0x1e) {
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_algorithm_defrag.cpp",0x31,(unsigned long long)("Found invalid file in segment header."));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_algorithm_defrag.cpp",0x31,(unsigned long long)("Found invalid file in segment header."));
         uVar2 = *puVar7 + puVar7[1];
         uVar4 = (ulonglong)uVar2;
         if (0x1e0 < uVar2) {
@@ -16064,7 +16064,7 @@ LAB_1421657ec:
       uVar9 = (uint)uVar6;
       if (0x1df < *puVar7) goto LAB_1421657ec;
       if (puVar7[1] != 0x1e) {
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_algorithm_fillholes.cpp",0x50,(unsigned long long)("Found invalid file in segment header."));
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_algorithm_fillholes.cpp",0x50,(unsigned long long)("Found invalid file in segment header."));
         uVar4 = *puVar7 + puVar7[1];
         uVar6 = (ulonglong)uVar4;
         if (0x1e0 < uVar4) {
@@ -16235,7 +16235,7 @@ undefined8 * FUN_142166160(longlong param_1, undefined8 *param_2, undefined8 par
     ppuVar8 = param_9;
   }
   if ((param_6 == '\x02') && (param_7 == 0)) {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\archive_file_cache.cpp",0xcd,(unsigned long long)("Cannot open an async archive \'%s\' without an async instance"),(unsigned long long)(param_4));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\archive_file_cache.cpp",0xcd,(unsigned long long)("Cannot open an async archive \'%s\' without an async instance"),(unsigned long long)(param_4));
     *(undefined4 *)ppuVar8 = 10;
     *param_2 = 0;
     return param_2;
@@ -16297,7 +16297,7 @@ undefined8 * FUN_142166160(longlong param_1, undefined8 *param_2, undefined8 par
     }
     cVar5 = CALLF(undefined1, FUN_142168830)(param_7,&param_9,param_4,uVar10);
     if (cVar5 != '\0') {
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\archive_file_cache.cpp",0x102,(unsigned long long)("Error opening container archive file \'%s\'"),(unsigned long long)(param_4));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\archive_file_cache.cpp",0x102,(unsigned long long)("Error opening container archive file \'%s\'"),(unsigned long long)(param_4));
       *(undefined4 *)ppuVar8 = 8;
       *param_2 = 0;
       goto LAB_142166452;
@@ -16467,7 +16467,7 @@ undefined8 FUN_142166a40(undefined8 param_1, undefined4 param_2)
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[256]) > 0x108 ? 0x0 + sizeof(undefined1[256]) : 0x108)] = {0};
   
   CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,param_2);
-  CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\archive_file_cache.cpp",0x76,(unsigned long long)("Error opening container archive file \'%s\'. (reason: %s)"),(unsigned long long)(param_1),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))))
+  CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\archive_file_cache.cpp",0x76,(unsigned long long)("Error opening container archive file \'%s\'. (reason: %s)"),(unsigned long long)(param_1),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))))
   ;
   return 0;
 }
@@ -16614,7 +16614,7 @@ int FUN_142166ca0(undefined8 param_1, longlong param_2, uint param_3, int param_
   if (iVar2 == 0) {
     uVar3 = (*(*(code *)&GetLastError))();
     CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x40)),0x100,uVar3);
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control.win32.cpp",0x52,(unsigned long long)("Failed to convert path \'%s\' to wide string. Error (%u): %s"),(unsigned long long)(&(*(undefined1 *)(gen_frame + 0x140))),(unsigned long long)(CONCAT44(uVar8,uVar3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x40))));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control.win32.cpp",0x52,(unsigned long long)("Failed to convert path \'%s\' to wide string. Error (%u): %s"),(unsigned long long)(&(*(undefined1 *)(gen_frame + 0x140))),(unsigned long long)(CONCAT44(uVar8,uVar3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x40))));
     iVar2 = 1;
   }
   else {
@@ -16630,7 +16630,7 @@ int FUN_142166ca0(undefined8 param_1, longlong param_2, uint param_3, int param_
         uVar3 = (undefined4)((ulonglong)uVar11 >> 0x20);
         uVar8 = (undefined4)((ulonglong)uVar12 >> 0x20);
         if (lVar7 == 0) {
-          CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control.win32.cpp",0x74,(unsigned long long)("Failed to create lock file due to timeout."));
+          CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control.win32.cpp",0x74,(unsigned long long)("Failed to create lock file due to timeout."));
           iVar2 = 0xb;
           goto LAB_1421670f6;
         }
@@ -16672,7 +16672,7 @@ int FUN_142166ca0(undefined8 param_1, longlong param_2, uint param_3, int param_
             }
             if (param_4 - 4U < 2) {
               if (cVar1 != '\0') {
-                CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control.win32.cpp",0xd6,(unsigned long long)("Failed to get exclusive access since we are not first to bind."));
+                CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control.win32.cpp",0xd6,(unsigned long long)("Failed to get exclusive access since we are not first to bind."));
                 iVar2 = 0xb;
                 break;
               }
@@ -16697,7 +16697,7 @@ LAB_1421670a6:
         pcVar4 = "Failed to open shmem control file \'%s\'. Error (%u): %s";
       }
       uVar14 = CONCAT44(uVar3,iVar2);
-      CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control.win32.cpp",uVar8,(unsigned long long)(pcVar4),(unsigned long long)(param_2),(unsigned long long)(uVar14),(unsigned long long)(((undefined1 *)(gen_frame + 0x40))));
+      CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control.win32.cpp",uVar8,(unsigned long long)(pcVar4),(unsigned long long)(param_2),(unsigned long long)(uVar14),(unsigned long long)(((undefined1 *)(gen_frame + 0x40))));
       if (iVar2 == 5) {
         iVar2 = 0x14;
       }
@@ -17056,11 +17056,11 @@ undefined4 FUN_142167fc0(undefined8 *param_1, ulonglong param_2, uint param_3, u
     if (param_4 < 3) {
       return 1;
     }
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\exception_handling.win32.cpp",0x37,(unsigned long long)("Exhausted \'IN_PAGE_ERROR\' handling attempts."));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\exception_handling.win32.cpp",0x37,(unsigned long long)("Exhausted \'IN_PAGE_ERROR\' handling attempts."));
     pcVar2 = "dynamic_container.structured_exception.in_page_error.retries_failed";
   }
   else {
-    CALLF(undefined8, FUN_14235a890)(&REFG(undefined8, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\exception_handling.win32.cpp",0x2d,(unsigned long long)("Unable to handle exception. Code: \'%u\'"),(unsigned long long)(CONCAT44(0,*piVar1)));
+    CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\exception_handling.win32.cpp",0x2d,(unsigned long long)("Unable to handle exception. Code: \'%u\'"),(unsigned long long)(CONCAT44(0,*piVar1)));
     CALLF(undefined8, FUN_14212e1c0)(((char *)(gen_frame + 0x0)),"%s.%u","dynamic_container.structured_exception.in_page_error.unhandled",
                   *piVar1);
     pcVar2 = ((char *)(gen_frame + 0x0));
