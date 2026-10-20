@@ -5066,9 +5066,7 @@ undefined8 FUN_1412d7640(undefined8 param_1, undefined8 param_2, undefined8 *par
   GEN_HIT(94);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x0001412d7640. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-  uVar1 = (*(code *)*param_3)(param_1, param_2, param_3);
+  uVar1 = (*(code *)*param_3)(param_1,param_2,param_3);
   return uVar1;
 }
 
@@ -6120,8 +6118,6 @@ undefined8 FUN_1412da380(void)
 /*                */
 /*                */
   
-                    /* WARNING: Could not recover jumptable at 0x0001412da38e. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (*(*(code **)((char *)&gen_g_142cfd090 + 0x0)))(0,0,&(*(undefined1 *)((char *)&gen_g_142cfd090 + 0x10)));
   return uVar1;
 }
@@ -7050,8 +7046,6 @@ undefined8 FUN_1412dc440(longlong param_1)
   (**(code **)(param_1 + 0xf0))(param_1 + 0xf8,0,0);
   (**(code **)(param_1 + 200))(param_1 + 0xd0,0,0);
   (**(code **)(param_1 + 0x90))(param_1 + 0x98,0,0);
-                    /* WARNING: Could not recover jumptable at 0x0001412dc491. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (**(code **)(param_1 + 0x50))(param_1 + 0x58,0,0);
   return uVar1;
 }
@@ -7798,8 +7792,6 @@ undefined8 FUN_1412dd330(undefined8 *param_1, undefined4 param_2, int param_3)
                   "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\SoundEngine\\SE3Emitter.cpp",0
                   ," - SE3 EmitterManagerInit Success");
   }
-                    /* WARNING: Could not recover jumptable at 0x0001412dd6d5. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar5 = (*(code *)param_1[1])(param_1 + 2,0,0);
   return uVar5;
 }
@@ -10993,9 +10985,7 @@ undefined8 FUN_1412e7110(undefined8 param_1, undefined8 *param_2)
   GEN_HIT(194);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x0001412e7113. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-  uVar1 = (*(code *)*param_2)(param_1, param_2);
+  uVar1 = (*(code *)*param_2)(param_1,param_2);
   return uVar1;
 }
 
@@ -11005,9 +10995,7 @@ undefined8 FUN_1412e7120(undefined8 param_1, undefined8 param_2, undefined8 para
   GEN_HIT(195);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x0001412e7120. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-  uVar1 = (*(code *)*param_4)(param_1, param_2, param_3, param_4);
+  uVar1 = (*(code *)*param_4)(param_1,param_2,param_3,param_4);
   return uVar1;
 }
 

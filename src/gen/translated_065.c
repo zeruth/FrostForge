@@ -4923,7 +4923,7 @@ undefined8 FUN_140fe83f0(undefined8 param_1)
       (*(undefined1 *)(gen_frame + 0x60)) = (int)uVar7 != 0;
     }
   }
-  CALLF(uint, FUN_141a88680)(uVar5,(*(undefined1 *)(gen_frame + 0x60)));
+  CALLF(undefined4, FUN_141a88680)(uVar5,(*(undefined1 *)(gen_frame + 0x60)));
   cVar1 = CALLF(undefined1, FUN_14062cc40)(param_1,uVar5,"SetKeepModelOnHide");
   if (cVar1 != '\0') {
                     /* WARNING: Subroutine does not return */

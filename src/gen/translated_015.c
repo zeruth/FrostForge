@@ -369,16 +369,18 @@ bool FUN_140283dd4(void)
 undefined4 FUN_140283dfc(undefined8 param_1)
 {
   GEN_HIT(11);
-  undefined4 uVar1 = {0};
+  undefined8 uVar1 = {0};
   byte bVar2 = {0};
+  ulonglong uVar3 = {0};
   
   bVar2 = (byte)REFG(undefined8, 0x142ccab40) & 0x3f;
-  if ((REFG(undefined8, 0x142ccab40) ^ REFG(undefined8, 0x142e1e2b8)) >> bVar2 == 0 &&
-      (REFG(undefined8, 0x142ccab40) ^ REFG(undefined8, 0x142e1e2b8)) << 0x40 - bVar2 == 0) {
+  uVar3 = (REFG(undefined8, 0x142ccab40) ^ REFG(undefined8, 0x142e1e2b8)) >> bVar2 |
+          (REFG(undefined8, 0x142ccab40) ^ REFG(undefined8, 0x142e1e2b8)) << 0x40 - bVar2;
+  if (uVar3 == 0) {
     return 0;
   }
-  uVar1 = (*(code *)(*(undefined8 (*)[3])(uintptr_t)0x14260e3d0ULL)[0])(param_1);
-  return uVar1;
+  uVar1 = (*(code *)(*(undefined8 (*)[3])(uintptr_t)0x14260e3d0ULL)[0])(param_1,uVar3,param_1);
+  return (int)uVar1;
 }
 
 /* ref: FUN_140283e54 */

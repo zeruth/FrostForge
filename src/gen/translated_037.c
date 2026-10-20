@@ -392,7 +392,7 @@ undefined8 FUN_14060a950(longlong param_1, longlong param_2, undefined8 param_3,
   if (param_4 != (longlong *)0x0) {
     uVar1 = *(ushort *)(param_1 + 0xc);
     if ((((uVar1 & 1) != 0) || ((uVar1 & 4) != 0)) && ((uVar1 & 2) != 0)) {
-      CALLF(ushort, FUN_1406444b0)(param_4);
+      CALLF(undefined2, FUN_1406444b0)(param_4);
     }
     *(byte *)((longlong)param_4 + 0x89) = *(byte *)((longlong)param_4 + 0x89) | 1;
     if ((*(byte *)(param_2 + 0x9c) & 0x40) != 0) {
@@ -1032,8 +1032,6 @@ undefined8 FUN_14060e130(longlong *param_1, undefined8 param_2)
   GEN_HIT(39);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x00014060e133. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (**(code **)(*param_1 + 0xe0))(param_1);
   return uVar1;
 }

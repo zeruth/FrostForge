@@ -25544,13 +25544,10 @@ ulonglong * FUN_140384df0(longlong *param_1, undefined4 param_2, char param_3)
   ulonglong *puVar4 = {0};
   ulonglong *puVar5 = {0};
   undefined8 uVar6 = {0};
-/*                              */
   
   ((undefined4 *)(gen_frame + 0x88))[0] = (*(undefined4 *)&gen_slot_param_2);
   if ((*(char *)&gen_slot_param_3) != '\0') {
-                    /* WARNING: Could not recover jumptable at 0x000140384f7e. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-    uVar6 = (**(code **)(*param_1 + 0xd0))(param_1,CONCAT44(0,(*(undefined4 *)&gen_slot_param_2)),0,4);
+    uVar6 = (**(code **)(*param_1 + 0xd0))(param_1,(*(undefined4 *)&gen_slot_param_2),0,4);
     return (ulonglong *)uVar6;
   }
   plVar1 = param_1 + 0x71;

@@ -8,6 +8,7 @@
 #define GEN_GHIDRA_H
 
 #include <float.h>
+#include <malloc.h>
 #include <process.h>
 #include <stdarg.h>
 #include <stdbool.h>

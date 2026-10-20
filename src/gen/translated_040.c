@@ -10531,7 +10531,7 @@ LAB_14067beb6:
     uVar9 = *(undefined4 *)(REFG(undefined8, 0x142e9b9a0) + 0x14);
   }
   pauVar7 = ((gen_v16 *)CALLF(longlong *, FUN_14067aa00)(&(*(undefined8 *)(gen_frame + 0x10)),lVar6,uVar11,&(*(undefined8 *)(gen_frame + 0x0)),(unsigned long long)(uVar12),(unsigned long long)(0x80),(unsigned long long)(uVar9)));
-  REFG(undefined8, 0x142e9cad8) = *((undefined8 *)gen_v16_q0(*pauVar7));
+  REFG(undefined8, 0x142e9cad8) = *((undefined8 *)&*pauVar7);
   REFG(undefined8, 0x142e9cae0) = *(undefined8 *)(((unsigned char *)&*pauVar7 + 8));
   (*(undefined8 *)(gen_frame + 0x10)) = 0;
   (*(undefined1 * *)(gen_frame + 0x18)) = (undefined1 *)0x0;

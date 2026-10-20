@@ -17897,9 +17897,7 @@ undefined8 FUN_140f7f1e0(undefined8 param_1, longlong param_2)
     piVar1 = (int *)((longlong)plVar3 + 0xc);
     iVar2 = GEN_ATOMIC_ADD(*piVar1, -1);
     if (iVar2 == 1) {
-                    /* WARNING: Could not recover jumptable at 0x000140f7f1fb. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-      return (undefined8)(**(code **)(*plVar3 + 0x18))(plVar3);
+      return (undefined8)(**(code **)(*plVar3 + 0x18))(plVar3,param_2);
       return 0;
     }
   }

@@ -17483,7 +17483,7 @@ LAB_142467e1f:
   *(float *)(param_1 + 0x128) = fVar26;
   *(float *)(param_1 + 0x194) = fVar34;
   pfVar1 = (float *)(param_1 + 0x130);
-  uVar7 = *((undefined4 *)gen_v16_q0(*param_2));
+  uVar7 = *((undefined4 *)&*param_2);
   *(float *)(param_1 + 300) = fVar34 / (float)*(int *)(param_1 + 400);
   pfVar12 = (float *)(param_1 + 0x128);
   if (fVar26 < *pfVar1) {
@@ -17934,9 +17934,7 @@ undefined8 FUN_142468a20(int param_1, int param_2, undefined8 param_3, undefined
   undefined8 uVar1 = {0};
   
   if (REFG(code *, 0x1447acfa8) != (code *)0x0) {
-                    /* WARNING: Could not recover jumptable at 0x000142468a34. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-    uVar1 = (*REFG(code *, 0x1447acfa8))(param_1, param_2, param_3, param_4);
+    uVar1 = (*REFG(code *, 0x1447acfa8))(param_1,param_2);
     return uVar1;
   }
   uVar1 = CALLF(undefined8, FUN_140254a00)((longlong)param_1,(longlong)param_2,0xb,0,(unsigned long long)(0),(unsigned long long)(0xfffffffa),(unsigned long long)(0));
@@ -17948,12 +17946,11 @@ undefined1 FUN_142468a60(undefined8 param_1)
 {
   GEN_HIT(222);
   undefined1 uVar1 = {0};
+  undefined8 uVar2 = {0};
   
   if (REFG(code *, 0x1447acfb0) != (code *)0x0) {
-                    /* WARNING: Could not recover jumptable at 0x000142468a6c. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-    uVar1 = (*REFG(code *, 0x1447acfb0))(param_1);
-    return uVar1;
+    uVar2 = (*REFG(code *, 0x1447acfb0))(param_1);
+    return (char)uVar2;
   }
   uVar1 = CALLF(undefined1, FUN_140255210)(param_1,0,0xfffffffa,0);
   return uVar1;
@@ -19633,7 +19630,7 @@ gen_v16 FUN_14246ad20(ulonglong param_1, gen_v16 *param_2)
   if (*(int *)(lVar1 + 0x4d4) != 0) {
     return *((gen_v16 *)(*(longlong *)(lVar1 + 0x620) + 0x10 + lVar6));
   }
-  (*(uint *)(gen_frame + 0x0)) = *((uint *)gen_v16_q0(*param_2));
+  (*(uint *)(gen_frame + 0x0)) = *((uint *)&*param_2);
   (*(uint *)(gen_frame + 0x4)) = *(uint *)(((unsigned char *)&*param_2 + 4));
   (*(uint *)(gen_frame + 0x8)) = *(uint *)(((unsigned char *)&*param_2 + 8));
   (*(uint *)(gen_frame + 0xc)) = *(uint *)(((unsigned char *)&*param_2 + 0xc));
@@ -26896,7 +26893,7 @@ undefined8 FUN_142474cf0(longlong *param_1, int param_2)
           fVar33 = (*(undefined4 *)((char *)&auVar29 + 4)) - *(float *)(((unsigned char *)&*pauVar21 + 4));
           fVar34 = (*(undefined4 *)((char *)&auVar29 + 8)) - *(float *)(((unsigned char *)&*pauVar21 + 8));
           uVar2 = *(uint *)(((unsigned char *)&pauVar21[2] + 0xc));
-          uVar3 = *((uint *)gen_v16_q0(pauVar21[3]));
+          uVar3 = *((uint *)&pauVar21[3]);
           auVar28 = gen_v16_f(_mm_min_ps(_mm_castsi128_ps((*pauVar21).m), _mm_castsi128_ps((auVar46).m)));
           lVar22 = (longlong)(int)uVar2 * 0x40;
           auVar37 = *((gen_v16 *)(lVar22 + lVar27));
@@ -26912,7 +26909,7 @@ undefined8 FUN_142474cf0(longlong *param_1, int param_2)
           fVar45 = (*(undefined4 *)((char *)&auVar43 + 8)) - (*(undefined4 *)((char *)&auVar28 + 8));
           fVar44 = ((*(undefined4 *)((char *)&auVar43 + 0)) - (*(undefined4 *)((char *)&auVar28 + 0))) * (fVar45 + fVar44) + fVar45 * fVar44;
           fVar44 = fVar44 + fVar44;
-          fVar33 = ((*(undefined4 *)((char *)&auVar29 + 0)) - *((float *)gen_v16_q0(*pauVar21))) * (fVar34 + fVar33) + fVar34 * fVar33;
+          fVar33 = ((*(undefined4 *)((char *)&auVar29 + 0)) - *((float *)&*pauVar21)) * (fVar34 + fVar33) + fVar34 * fVar33;
           fVar33 = fVar44 - (fVar33 + fVar33);
           fVar45 = (*(undefined4 *)((char *)&auVar47 + 0));
           fVar34 = (*(undefined4 *)((char *)&auVar46 + 0));
@@ -27281,7 +27278,7 @@ undefined8 FUN_1424754f0(longlong *param_1, int param_2)
   pauVar17 = ((gen_v16 *)(lVar15 * 0x40 + lVar7));
   iVar2 = *(int *)(((unsigned char *)&pauVar13[3] + 4));
   if (iVar2 == 0) {
-    iVar2 = *((int *)gen_v16_q0(pauVar17[3]));
+    iVar2 = *((int *)&pauVar17[3]);
     fVar23 = *(float *)(((unsigned char *)&pauVar17[1] + 4)) - *(float *)(((unsigned char *)&*pauVar17 + 4));
     fVar24 = *(float *)(((unsigned char *)&pauVar17[1] + 8)) - *(float *)(((unsigned char *)&*pauVar17 + 8));
     iVar3 = *(int *)(((unsigned char *)&pauVar17[2] + 0xc));
@@ -27295,7 +27292,7 @@ undefined8 FUN_1424754f0(longlong *param_1, int param_2)
     auVar31 = gen_v16_f(_mm_min_ps(_mm_castsi128_ps((*pauVar14).m), _mm_castsi128_ps((*pauVar13).m)));
     fVar21 = (*(undefined4 *)((char *)&auVar32 + 4)) - (*(undefined4 *)((char *)&auVar31 + 4));
     fVar22 = (*(undefined4 *)((char *)&auVar32 + 8)) - (*(undefined4 *)((char *)&auVar31 + 8));
-    fVar23 = (*((float *)gen_v16_q0(pauVar17[1])) - *((float *)gen_v16_q0(*pauVar17))) * (fVar24 + fVar23) + fVar24 * fVar23;
+    fVar23 = (*((float *)&pauVar17[1]) - *((float *)&*pauVar17)) * (fVar24 + fVar23) + fVar24 * fVar23;
     fVar24 = ((*(undefined4 *)((char *)&auVar28 + 0)) - (*(undefined4 *)((char *)&auVar27 + 0))) * (fVar26 + fVar25) + fVar26 * fVar25;
     fVar24 = fVar24 + fVar24;
     fVar22 = ((*(undefined4 *)((char *)&auVar32 + 0)) - (*(undefined4 *)((char *)&auVar31 + 0))) * (fVar22 + fVar21) + fVar22 * fVar21;
@@ -27326,7 +27323,7 @@ undefined8 FUN_1424754f0(longlong *param_1, int param_2)
       return 0;
     }
     *(int *)(lVar18 + 0x2c) = iVar2;
-    *((int *)gen_v16_q0(pauVar17[3])) = iVar1;
+    *((int *)&pauVar17[3]) = iVar1;
     *(int *)(((unsigned char *)&pauVar13[2] + 8)) = iVar10;
     *(int *)(((unsigned char *)&pauVar19[2] + 8)) = param_2;
     *pauVar17 = auVar31;
@@ -27344,7 +27341,7 @@ undefined8 FUN_1424754f0(longlong *param_1, int param_2)
   }
   iVar3 = *(int *)(((unsigned char *)&pauVar13[2] + 0xc));
   lVar8 = (longlong)iVar3;
-  iVar4 = *((int *)gen_v16_q0(pauVar13[3]));
+  iVar4 = *((int *)&pauVar13[3]);
   lVar12 = (longlong)iVar4;
   if (*(int *)(((unsigned char *)&pauVar17[3] + 4)) == 0) {
     fVar21 = *(float *)(((unsigned char *)&pauVar13[1] + 4)) - *(float *)(((unsigned char *)&*pauVar13 + 4));
@@ -27359,7 +27356,7 @@ undefined8 FUN_1424754f0(longlong *param_1, int param_2)
     fVar24 = (*(undefined4 *)((char *)&auVar32 + 8)) - (*(undefined4 *)((char *)&auVar31 + 8));
     fVar25 = (*(undefined4 *)((char *)&auVar28 + 4)) - (*(undefined4 *)((char *)&auVar27 + 4));
     fVar26 = (*(undefined4 *)((char *)&auVar28 + 8)) - (*(undefined4 *)((char *)&auVar27 + 8));
-    fVar22 = (*((float *)gen_v16_q0(pauVar13[1])) - *((float *)gen_v16_q0(*pauVar13))) * (fVar22 + fVar21) + fVar22 * fVar21;
+    fVar22 = (*((float *)&pauVar13[1]) - *((float *)&*pauVar13)) * (fVar22 + fVar21) + fVar22 * fVar21;
     fVar23 = ((*(undefined4 *)((char *)&auVar32 + 0)) - (*(undefined4 *)((char *)&auVar31 + 0))) * (fVar24 + fVar23) + fVar24 * fVar23;
     fVar23 = fVar23 + fVar23;
     fVar24 = ((*(undefined4 *)((char *)&auVar28 + 0)) - (*(undefined4 *)((char *)&auVar27 + 0))) * (fVar26 + fVar25) + fVar26 * fVar25;
@@ -27390,7 +27387,7 @@ undefined8 FUN_1424754f0(longlong *param_1, int param_2)
       return 0;
     }
     *(int *)(lVar18 + 0x30) = iVar4;
-    *((int *)gen_v16_q0(pauVar13[3])) = iVar10;
+    *((int *)&pauVar13[3]) = iVar10;
     *(int *)(((unsigned char *)&pauVar17[2] + 8)) = iVar1;
     *(int *)(((unsigned char *)&pauVar14[2] + 8)) = param_2;
     *pauVar13 = auVar27;
@@ -27407,7 +27404,7 @@ undefined8 FUN_1424754f0(longlong *param_1, int param_2)
     return 0;
   }
   iVar5 = *(int *)(((unsigned char *)&pauVar17[2] + 0xc));
-  iVar6 = *((int *)gen_v16_q0(pauVar17[3]));
+  iVar6 = *((int *)&pauVar17[3]);
   auVar27 = pauVar13[1];
   auVar28 = *pauVar13;
   fVar21 = (*(undefined4 *)((char *)&auVar27 + 4)) - (*(undefined4 *)((char *)&auVar28 + 4));
@@ -27504,7 +27501,7 @@ undefined8 FUN_1424754f0(longlong *param_1, int param_2)
         goto LAB_142475af2;
       }
       *(int *)(lVar18 + 0x2c) = iVar6;
-      *((int *)gen_v16_q0(pauVar17[3])) = iVar1;
+      *((int *)&pauVar17[3]) = iVar1;
       *(int *)(((unsigned char *)&pauVar13[2] + 8)) = iVar10;
       *(int *)(((unsigned char *)&pauVar9[2] + 8)) = param_2;
       *pauVar17 = auVar34;
@@ -27525,11 +27522,11 @@ LAB_142475af2:
     local_f8 = (*(undefined8 *)((char *)&auVar27 + 0));
     uStack_f0 = (*(undefined8 *)((char *)&auVar27 + 8));
     *(int *)(lVar18 + 0x30) = iVar4;
-    *((int *)gen_v16_q0(pauVar13[3])) = iVar10;
+    *((int *)&pauVar13[3]) = iVar10;
     *(int *)(((unsigned char *)&pauVar17[2] + 8)) = iVar1;
     *(int *)(((unsigned char *)&pauVar19[2] + 8)) = param_2;
     *pauVar13 = auVar36;
-    *((undefined8 *)gen_v16_q0(pauVar13[1])) = local_f8;
+    *((undefined8 *)&pauVar13[1]) = local_f8;
     *(undefined8 *)(((unsigned char *)&pauVar13[1] + 8)) = uStack_f0;
     iVar10 = *(int *)(((unsigned char *)&pauVar17[3] + 4));
     if (*(int *)(((unsigned char *)&pauVar17[3] + 4)) < *(int *)(((unsigned char *)&pauVar14[3] + 4))) {
@@ -27667,18 +27664,18 @@ undefined4 FUN_142475de0(longlong *param_1, int param_2)
   fVar15 = *(float *)(((unsigned char *)&pauVar11[1] + 4)) - *(float *)(((unsigned char *)&*pauVar11 + 4));
   fVar16 = *(float *)(((unsigned char *)&pauVar11[1] + 8)) - *(float *)(((unsigned char *)&*pauVar11 + 8));
   iVar2 = *(int *)(((unsigned char *)&pauVar11[2] + 0xc));
-  pauVar8 = ((gen_v16 *)((longlong)*((int *)gen_v16_q0(pauVar11[3])) * 0x40 + lVar3));
+  pauVar8 = ((gen_v16 *)((longlong)*((int *)&pauVar11[3]) * 0x40 + lVar3));
   fVar21 = *(float *)(((unsigned char *)&pauVar7[1] + 4)) - *(float *)(((unsigned char *)&*pauVar7 + 4));
   fVar22 = *(float *)(((unsigned char *)&pauVar7[1] + 8)) - *(float *)(((unsigned char *)&*pauVar7 + 8));
   pauVar10 = ((gen_v16 *)((longlong)*(int *)(((unsigned char *)&pauVar7[2] + 0xc)) * 0x40 + lVar3));
-  fVar15 = (*((float *)gen_v16_q0(pauVar11[1])) - *((float *)gen_v16_q0(*pauVar11))) * (fVar16 + fVar15) + fVar16 * fVar15;
+  fVar15 = (*((float *)&pauVar11[1]) - *((float *)&*pauVar11)) * (fVar16 + fVar15) + fVar16 * fVar15;
   auVar28 = gen_v16_f(_mm_max_ps(_mm_castsi128_ps((pauVar8[1]).m), _mm_castsi128_ps((pauVar10[1]).m)));
   pauVar12 = ((gen_v16 *)((longlong)iVar2 * 0x40 + lVar3));
-  pauVar9 = ((gen_v16 *)((longlong)*((int *)gen_v16_q0(pauVar7[3])) * 0x40 + lVar3));
+  pauVar9 = ((gen_v16 *)((longlong)*((int *)&pauVar7[3]) * 0x40 + lVar3));
   auVar27 = gen_v16_f(_mm_min_ps(_mm_castsi128_ps((*pauVar8).m), _mm_castsi128_ps((*pauVar10).m)));
   fVar16 = (*(undefined4 *)((char *)&auVar28 + 4)) - (*(undefined4 *)((char *)&auVar27 + 4));
   fVar17 = (*(undefined4 *)((char *)&auVar28 + 8)) - (*(undefined4 *)((char *)&auVar27 + 8));
-  fVar21 = (*((float *)gen_v16_q0(pauVar7[1])) - *((float *)gen_v16_q0(*pauVar7))) * (fVar22 + fVar21) + fVar22 * fVar21;
+  fVar21 = (*((float *)&pauVar7[1]) - *((float *)&*pauVar7)) * (fVar22 + fVar21) + fVar22 * fVar21;
   fVar20 = fVar21 + fVar21 + fVar15 + fVar15;
   fVar22 = ((*(undefined4 *)((char *)&auVar28 + 0)) - (*(undefined4 *)((char *)&auVar27 + 0))) * (fVar17 + fVar16) + fVar17 * fVar16;
   auVar13 = gen_v16_f(_mm_min_ps(_mm_castsi128_ps((*pauVar12).m), _mm_castsi128_ps((*pauVar9).m)));
@@ -27708,8 +27705,8 @@ undefined4 FUN_142475de0(longlong *param_1, int param_2)
   }
   if (fVar17 + fVar17 + fVar16 + fVar16 < fVar15) {
 LAB_1424760d7:
-    *(int *)(((unsigned char *)&pauVar11[2] + 0xc)) = *((int *)gen_v16_q0(pauVar7[3]));
-    *((int *)gen_v16_q0(pauVar7[3])) = iVar2;
+    *(int *)(((unsigned char *)&pauVar11[2] + 0xc)) = *((int *)&pauVar7[3]);
+    *((int *)&pauVar7[3]) = iVar2;
     *(int *)(((unsigned char *)&pauVar12[2] + 8)) = iVar1;
     *(int *)(((unsigned char *)&pauVar9[2] + 8)) = iVar6;
     *pauVar11 = auVar23;
@@ -27736,9 +27733,9 @@ LAB_1424760d7:
     *(int *)(((unsigned char *)&pauVar10[2] + 8)) = iVar6;
     *pauVar11 = auVar27;
     pauVar11[1] = auVar28;
-    *((undefined8 *)gen_v16_q0(*pauVar7)) = local_c8;
+    *((undefined8 *)&*pauVar7) = local_c8;
     *(undefined8 *)(((unsigned char *)&*pauVar7 + 8)) = uStack_c0;
-    *((undefined8 *)gen_v16_q0(pauVar7[1])) = local_b8;
+    *((undefined8 *)&pauVar7[1]) = local_b8;
     *(undefined8 *)(((unsigned char *)&pauVar7[1] + 8)) = uStack_b0;
     iVar6 = *(int *)(((unsigned char *)&pauVar10[3] + 4));
     if (*(int *)(((unsigned char *)&pauVar10[3] + 4)) < *(int *)(((unsigned char *)&pauVar8[3] + 4))) {

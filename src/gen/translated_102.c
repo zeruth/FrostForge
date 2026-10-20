@@ -3497,7 +3497,7 @@ undefined1 * FUN_141668a40(void)
   pcVar4[0x16] = ((char *)REFP(0x1427e3ea0))[0x16];
   (*(char * *)(gen_frame + 0x0))[0x17] = '\0';
   pcVar4 = (*(char * *)(gen_frame + 0x0));
-  (*(undefined8 * *)(gen_frame + 0x28)) = ((undefined8 *)gen_v16_q0((*(gen_v16 *)(gen_frame + 0x40))));
+  (*(undefined8 * *)(gen_frame + 0x28)) = ((undefined8 *)&(*(gen_v16 *)(gen_frame + 0x40)));
   (*(undefined8 *)(gen_frame + 0x8)) = 0x17;
   (*(undefined8 *)(gen_frame + 0x30)) = 0;
   (*(longlong *)(gen_frame + 0x38)) = -0x7ffffffffffffff1;
@@ -3612,7 +3612,7 @@ undefined1 * FUN_141668a40(void)
   *(undefined2 *)(pcVar6 + 0x18) = (*(ushort *)((char *)((char *)REFP(0x1427e3f30)) + 24));
   (*(char * *)(gen_frame + 0x0))[0x1a] = '\0';
   pcVar6 = (*(char * *)(gen_frame + 0x0));
-  (*(undefined8 * *)(gen_frame + 0x28)) = ((undefined8 *)gen_v16_q0((*(gen_v16 *)(gen_frame + 0x40))));
+  (*(undefined8 * *)(gen_frame + 0x28)) = ((undefined8 *)&(*(gen_v16 *)(gen_frame + 0x40)));
   (*(undefined8 *)(gen_frame + 0x8)) = 0x1a;
   (*(undefined8 *)(gen_frame + 0x30)) = 0;
   (*(longlong *)(gen_frame + 0x38)) = -0x7ffffffffffffff1;
@@ -8782,9 +8782,7 @@ char * FUN_141670d10(undefined8 param_1, int param_2)
   piVar1 = &REFG(undefined4, 0x1427e42b0);
   do {
     if (param_2 == *piVar1) {
-                    /* WARNING: Could not recover jumptable at 0x000141670d2e. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-      uVar2 = (**(code **)(piVar1 + 6))(param_1, param_2);
+      uVar2 = (**(code **)(piVar1 + 6))("Quest Interval (Daily/Weekly)",param_2);
       return (char *)uVar2;
     }
     piVar1 = piVar1 + 10;

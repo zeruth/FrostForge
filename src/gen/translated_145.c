@@ -4862,8 +4862,6 @@ undefined8 FUN_141dc8c00(void)
     (**(code **)*REFG(undefined8 *, 0x1432619f0))(REFG(undefined8 *, 0x1432619f0),1);
   }
   if (REFG(undefined8 *, 0x143261aa8) != (undefined8 *)0x0) {
-                    /* WARNING: Could not recover jumptable at 0x000141dc8dbe. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
     return (undefined8)(**(code **)*REFG(undefined8 *, 0x143261aa8))(REFG(undefined8 *, 0x143261aa8),1);
     return 0;
   }

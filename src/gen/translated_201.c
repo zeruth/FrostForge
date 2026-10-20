@@ -959,8 +959,6 @@ undefined8 FUN_1425db130(void)
   GEN_HIT(61);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x0001425db13c. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (*REFG(code *, 0x142ccba58))(&(*(undefined1 *)((char *)&gen_g_142ccba60 + 0x0)),0,0);
   return uVar1;
 }
@@ -1206,8 +1204,6 @@ undefined8 FUN_1425db4f0(void)
   
   (*(code *)REFG(undefined8, 0x142ccbc58))(&REFG(undefined1, 0x142ccbc60),0,0);
   (*(code *)REFG(undefined8, 0x142ccbc38))(&REFG(undefined1, 0x142ccbc40),0,0);
-                    /* WARNING: Could not recover jumptable at 0x0001425db526. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (*(code *)REFG(undefined8, 0x142ccbc18))(&REFG(undefined1, 0x142ccbc20),0,0);
   return uVar1;
 }
@@ -1484,8 +1480,6 @@ undefined8 FUN_1425db9c0(void)
   (**(code **)(lVar1 + 0x21d8))(lVar1 + 0x21e0,0,0);
   (**(code **)(lVar1 + 0x21b8))(lVar1 + 0x21c0,0,0);
   (**(code **)(lVar1 + 0x2198))(lVar1 + 0x21a0,0,0);
-                    /* WARNING: Could not recover jumptable at 0x0001425dba26. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar2 = (**(code **)(lVar1 + 0x2178))(lVar1 + 0x2180,0,0);
   return uVar2;
 }
@@ -1602,8 +1596,6 @@ undefined8 FUN_1425dbc00(void)
   GEN_HIT(95);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x0001425dbc0c. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (*REFG(code *, 0x142ccc000))(&REFG(undefined1, 0x142ccc008),0,0);
   return uVar1;
 }

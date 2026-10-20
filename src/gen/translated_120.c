@@ -23835,7 +23835,7 @@ undefined4 FUN_141923970(void)
   pcVar14[0x18] = ((char *)REFP(0x142813400))[0x18];
   (*(char * *)(gen_frame + 0x0))[0x19] = '\0';
   pcVar14 = (*(char * *)(gen_frame + 0x0));
-  (*(undefined8 * *)(gen_frame + 0x28)) = ((undefined8 *)gen_v16_q0((*(gen_v16 *)(gen_frame + 0x40))));
+  (*(undefined8 * *)(gen_frame + 0x28)) = ((undefined8 *)&(*(gen_v16 *)(gen_frame + 0x40)));
   (*(undefined8 *)(gen_frame + 0x8)) = 0x19;
   (*(undefined8 *)(gen_frame + 0x30)) = 0;
   (*(longlong *)(gen_frame + 0x38)) = -0x7ffffffffffffff1;
@@ -23951,7 +23951,7 @@ undefined4 FUN_141923970(void)
   *(undefined4 *)(pcVar9 + 0x18) = (*(uint *)((char *)((char *)REFP(0x142813480)) + 24));
   (*(char * *)(gen_frame + 0x0))[0x1c] = '\0';
   pcVar9 = (*(char * *)(gen_frame + 0x0));
-  (*(undefined8 * *)(gen_frame + 0x28)) = ((undefined8 *)gen_v16_q0((*(gen_v16 *)(gen_frame + 0x40))));
+  (*(undefined8 * *)(gen_frame + 0x28)) = ((undefined8 *)&(*(gen_v16 *)(gen_frame + 0x40)));
   (*(undefined8 *)(gen_frame + 0x8)) = 0x1c;
   (*(undefined8 *)(gen_frame + 0x30)) = 0;
   (*(longlong *)(gen_frame + 0x38)) = -0x7ffffffffffffff1;

@@ -1326,6 +1326,40 @@ def reinterpreted_float_locals(body: str) -> str:
     return "".join(out)
 
 
+def stack_allocations(body: str) -> str:
+    """The compiler's `alloca` (`sub rsp, size` after __chkstk) as the decompiler shows it: a
+    frame address less a 16-aligned size (`(gen_frame + 0x30) + -(n + 0xf & ~0xf)`), the block
+    below the frame. In C that address is whatever stack the next call uses: JamJSON's zlib
+    reader (FUN_142582120) inflated the realm list into it and broke FUN_14235aad0's stack cookie
+    (2026-10-20). Each becomes one _alloca of that size (with room either side for the pushes
+    the decompiler shows below it), at the same offset from the block as from the frame."""
+    if "& 0xfffffffffffffff0)" not in body or "gen_frame" not in body:
+        return body
+    sizes = set()
+
+    def fix(m):
+        sizes.add(m.group(2))
+        return f"(gen_alloca_p + {m.group(1)})"
+
+    # (the whole address expression: `((undefined1 *)(gen_frame + 0x0)) + -(...)`, or under a
+    # (longlong) cast with an element pointer cast inside)
+    out = re.sub(r"\((?:\(longlong\))?\((?:\((?:[\w ]+?\s*\*+)\))?\(gen_frame \+ (0x[0-9a-f]+)\)\)\s*\+\s*"
+                 r"-\(([\w.>\[\]-]+) & 0xfffffffffffffff0\)\)", lambda m: f"({fix(m)})", body)
+    out = re.sub(r"\(\((?:[\w ]+?\s*\*+)\)\(gen_frame \+ (0x[0-9a-f]+)\)\)\s*\+\s*"
+                 r"-\(([\w.>\[\]-]+) & 0xfffffffffffffff0\)", fix, out)
+    if len(sizes) != 1:
+        return body          # (two sizes: not one block; leave it to fail visibly)
+    size = sizes.pop()
+    # one block, made where the size is known: just before the first use
+    first = out.index("(gen_alloca_p + ")
+    line = out.rfind("\n", 0, first) + 1
+    indent = re.match(r"[ \t]*", out[line:]).group(0)
+    out = (out[:line] + f"{indent}gen_alloca_p = (unsigned char *)_alloca(({size} & 0xfffffffffffffff0) + 0x400) + 0x200;\n"
+           + out[line:])
+    brace = out.index("{") + 1
+    return out[:brace] + "\n  unsigned char *gen_alloca_p = 0;" + out[brace:]
+
+
 def mistyped_float_slots(body: str) -> str:
     """A stack slot Ghidra typed float that the code stores integers into is an integer slot.
 
@@ -4419,6 +4453,14 @@ class Translator:
         # is the reference's copy)
         cands = self.by_name.get(name, [])
         bare = name.removeprefix("FID_conflict_")
+        # zlib's entry points are the reference's own even where the port links zlib too: a
+        # z_stream is one library's state, and FID names only some of its functions. The
+        # Battle.net realm list blob was set up by the port's inflateInit_ and run through the
+        # reference's unnamed inflate (FUN_14235abd0), which looped on the other layout and hung
+        # the client at the realm list (2026-10-20)
+        if len(cands) == 1 and re.fullmatch(r"(?:inflate|deflate)\w*|z(?:lib)?_\w+|crc32\w*|adler32\w*|"
+                                             r"(?:un)?compress2?|zError|get_crc_table", bare):
+            return by_addr(cands[0])
         if bare != name and bare in self.port_public_names:
             # FID's name for a runtime routine the port links under its own (`_rmdir`)
             return bare
@@ -4818,6 +4860,41 @@ class Translator:
     def native_ranges(self) -> list[tuple[int, int]]:
         return [(int(r["from"], 16), int(r["to"], 16)) for r in self.exceptions.get("native", [])] + \
             sorted(r for rs in self.__dict__.get("_leaf_ranges", {}).values() for r in rs)
+
+    def text_data_ranges(self) -> list[tuple[int, int]]:
+        """The data inside .text the translated code reads: switch tables the compiler put after
+        a function's code (`(&REFG(uint, 0x14235c424))[mode - 0x3f34]`, zlib's inflate) and other
+        constants there. RefImage fills .text with int3, so such a table read as all 0xcc: no case
+        of inflate's state switch matched, it looped forever, and the client hung on the realm
+        list blob (2026-10-20). An address outside every .pdata piece is data, mapped from the
+        image up to the next piece; code stays int3."""
+        text = self.ref.text
+        starts, ends = self.ref.piece_starts, self.ref.piece_ends
+        found = set()
+        for path in sorted((ROOT / "src/gen").glob("translated_*.c")):
+            for m in re.finditer(r"\b(?:REFG\([^,()]+(?:\([^()]*\))?[^,()]*, |REFP\(|\(uintptr_t\))0x(1[0-9a-f]{8})",
+                                 path.read_text(encoding="utf-8", errors="replace")):
+                t = int(m.group(1), 16)
+                if text.start <= t < text.end:
+                    found.add(t)
+        out = []
+        for t in sorted(found):
+            i = bisect.bisect_right(starts, t) - 1
+            if (i >= 0 and t < ends[i]) or t in self.cor:
+                continue          # inside a piece, or a function (a leaf has no .pdata): code
+            j = bisect.bisect_right(starts, t)
+            hi = min(starts[j] if j < len(starts) else text.end, t + 0x4000)
+            if out and t < out[-1][1]:
+                continue
+            out.append((t, hi))
+        # and every switch's tables (tools/switches.py), which the compiler puts inside the
+        # function's own .pdata range as often as not (inflate's at 0x14235c424)
+        sw = ROOT / "build/facts/switches.json"
+        if sw.exists():
+            out += [(int(lo, 16), int(hi, 16)) for lo, hi in json.loads(sw.read_text())["tables"]]
+        out.sort()
+        print(f"{len(out)} data ranges inside .text mapped from the image", file=sys.stderr)
+        return out
 
     def native_leaf(self, a: int) -> list[tuple[int, int]] | None:
         """The code ranges of a function that may run as the reference's own machine code instead
@@ -5680,6 +5757,14 @@ class Translator:
             ctype = local_types.get(var)
             if ctype and ctype.endswith("*"):
                 borrowed.setdefault(int(addr, 16), ctype.replace(" *", "*").replace("*", " *").strip())
+        # or the global plus an offset into a pointer local, uncast (`puVar10 = DAT_1430af020 + 4;`):
+        # in Ghidra's C the global is that pointer and the offset counts elements. As an integer
+        # the Battle.net game-account list was walked 4 bytes in, not 4 qwords, the account's
+        # name was never found, and the login stopped after GetGameAccountState (2026-10-20)
+        for m in re.finditer(r"(?<![\w*.>\]])(\w+) = _?DAT_([0-9a-f]{9}) [+-] ", body):
+            ctype = local_types.get(m.group(1))
+            if ctype and ctype.endswith("*"):
+                borrowed.setdefault(int(m.group(2), 16), ctype.replace(" *", "*").replace("*", " *").strip())
         # or one the decompiler casts a pointer into or compares with one: the bgs log sink
         # registry (FUN_141effc10) is `DAT_143264a00 = (undefined8 *)FUN_1402545c0(...)` and
         # `DAT_143264a00 == (undefined8 *)0x0`; demoted, it left the registry null and
@@ -5892,7 +5977,7 @@ class Translator:
             call = out[rm.start(2):close + 1]
             out = (out[:rm.start()] + f"{rm.group(1)}{call};\n{rm.group(1)}return 0;  /* the callee's handing back "
                    f"of this function's own frame: dead once it returns */" + out[end:])
-        return out
+        return stack_allocations(out)
 
     def port_reads(self, body: str, adapted) -> dict[str, dict]:
         """What a translated body reads out of the port's objects, by where the object came from.
@@ -6285,8 +6370,9 @@ class Translator:
         crt = [(a, name) for a, name in sorted({**CRT_ENTRY, **self.crt_thunks}.items()) if a not in set(reachable)]
         jumps += [f"    {{ 0x{a:x}ULL, (void*)&{name} }}," for a, name in crt]
         jumps += ["    { 0, 0 }", "};", f"const size_t g_genJumpCount = {len(reachable) + len(crt)};", ""]
-        # the code ranges RefImage.cpp maps as the reference's own bytes (native_ok), from, to
-        ranges = self.native_ranges()
+        # the code ranges RefImage.cpp maps as the reference's own bytes (native_ok), from, to,
+        # and the data inside .text the translated code reads (switch tables)
+        ranges = self.native_ranges() + self.text_data_ranges()
         jumps += ["const unsigned long long g_genNative[] = {"]
         jumps += [f"    0x{lo:x}ULL, 0x{hi:x}ULL," for lo, hi in ranges] + ["    0, 0", "};",
                                                                              f"const size_t g_genNativeCount = {len(ranges)};", ""]

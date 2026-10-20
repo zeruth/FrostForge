@@ -889,9 +889,7 @@ undefined8 FUN_142530810(longlong *param_1)
       param_1[4] = 0;
       REFG(undefined4, 0x142d5e870) = REFG(undefined4, 0x142d5e870) + -1;
     }
-                    /* WARNING: Could not recover jumptable at 0x0001425308bd. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-    return (undefined8)(**(code **)REFG(undefined8, 0x142d5e850))(&REFG(undefined8, 0x142d5e850));
+    return (undefined8)(**(code **)REFG(undefined8, 0x142d5e850))(&REFG(undefined8, 0x142d5e850),param_1);
     return 0;
   }
   return 0;
@@ -19134,7 +19132,7 @@ undefined8 * FUN_14254af70(undefined8 *param_1, longlong param_2, longlong param
   }
   (*(gen_v16 *)(gen_frame + 0x0)) = *((gen_v16 *)(param_3 + 0x40));
   bVar2 = (byte)((ulonglong)*(undefined8 *)(param_3 + 0x48) >> 0x38);
-  uVar4 = *((undefined4 *)gen_v16_q0(*((gen_v16 *)(param_3 + 0x40))));
+  uVar4 = *((undefined4 *)&*((gen_v16 *)(param_3 + 0x40)));
   uVar5 = *(undefined4 *)(param_3 + 0x44);
   uVar6 = *(undefined4 *)(param_3 + 0x48);
   uVar7 = *(undefined4 *)(param_3 + 0x4c);

@@ -2423,6 +2423,7 @@ int FUN_141929ad0(float *param_1)
 undefined8 FUN_141929b60(undefined1 param_1, undefined4 param_2)
 {
   GEN_HIT(53);
+  unsigned char *gen_alloca_p = 0;
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[32]) > 0x48 ? 0x0 + sizeof(undefined1[32]) : 0x48)] = {0};
   char cVar1 = {0};
   int iVar2 = {0};
@@ -2448,7 +2449,8 @@ undefined8 FUN_141929b60(undefined1 param_1, undefined4 param_2)
         if (uVar5 <= uVar9 + 1) {
           uVar5 = 0xffffffffffffff0;
         }
-        puVar8 = ((undefined1 *)(gen_frame + 0x0)) + -(uVar5 & 0xfffffffffffffff0);
+        gen_alloca_p = (unsigned char *)_alloca((uVar5 & 0xfffffffffffffff0) + 0x400) + 0x200;
+        puVar8 = (gen_alloca_p + 0x0);
         puVar6 = (undefined1 *)_alloca(uVar5 & 0xfffffffffffffff0);
         puVar11 = (undefined1 *)0x0;
       }
@@ -6246,8 +6248,6 @@ undefined8 FUN_14192f4f0(undefined8 param_1, undefined8 param_2, int param_3, lo
   }
   puVar1 = (undefined8 *)*param_4;
   if (puVar1 != (undefined8 *)0x0) {
-                    /* WARNING: Could not recover jumptable at 0x00014192f51c. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
     return (undefined8)(**(code **)*puVar1)(puVar1,1);
     return 0;
   }

@@ -1742,7 +1742,7 @@ LAB_1424cb056:
             if ((lVar12 != 0) &&
                (((uVar1 = *(ushort *)(lVar12 + 0xc), (uVar1 & 1) != 0 || ((uVar1 & 4) != 0)) &&
                 ((uVar1 & 2) != 0)))) {
-              CALLF(ushort, FUN_1406444b0)(param_2);
+              CALLF(undefined2, FUN_1406444b0)(param_2);
             }
             iVar8 = CALLF(undefined4, FUN_1405f6d50)(param_3,param_4,9);
             if (iVar8 != 0) {
@@ -1755,7 +1755,7 @@ LAB_1424cb056:
               pcVar13 = "<unnamed>";
             }
             else {
-              pcVar13 = (char *)CALLF(longlong, FUN_140628560)(lVar12);
+              pcVar13 = (char *)CALLF(undefined8, FUN_140628560)(lVar12);
             }
             CALLF(undefined8, FUN_14062ce80)(param_2,param_5,"Not allowed to depend on %s",pcVar13);
           }
@@ -1765,14 +1765,14 @@ LAB_1424cb056:
             pcVar13 = "<unnamed>";
           }
           else {
-            pcVar13 = (char *)CALLF(longlong, FUN_140628560)(lVar12);
+            pcVar13 = (char *)CALLF(undefined8, FUN_140628560)(lVar12);
           }
           CALLF(undefined8, FUN_14062ce80)(param_2,param_5,"%s is dependent on this",pcVar13);
         }
       }
     }
     else {
-      uVar9 = CALLF(longlong, FUN_140628560)(lVar12);
+      uVar9 = CALLF(undefined8, FUN_140628560)(lVar12);
       CALLF(undefined8, FUN_14062ce80)(param_2,param_5,
                     "Cannot set point to forbidden region \'%s\' from a tainted context",uVar9);
     }
@@ -2579,7 +2579,7 @@ undefined4 FUN_1424cc780(undefined8 param_1)
   }
   if (lVar2 != 0) {
     if (REFG(undefined1 *, 0x142e207c0) == (undefined1 *)0x0) {
-      CALLF(ushort, FUN_1406444b0)(lVar2);
+      CALLF(undefined2, FUN_1406444b0)(lVar2);
     }
     else if (*(code **)((*(undefined1 * *)((char *)&gen_g_142e979d8 + 0x0)) + 0xf68) != (code *)0x0) {
       (**(code **)((*(undefined1 * *)((char *)&gen_g_142e979d8 + 0x0)) + 0xf68))(lVar2);
@@ -2695,7 +2695,7 @@ undefined4 FUN_1424cc910(undefined8 param_1)
           CALLF(undefined8, FUN_14062d200)(3,uVar2,lVar3,"SetAllPoints",(unsigned long long)(param_1));
         }
         else {
-          uVar5 = CALLF(longlong, FUN_140628560)(lVar6);
+          uVar5 = CALLF(undefined8, FUN_140628560)(lVar6);
           CALLF(undefined8, FUN_14062ce80)(lVar3,"SetAllPoints",
                         "Cannot set points to forbidden region \'%s\' from a tainted context",uVar5)
           ;
@@ -2808,7 +2808,7 @@ LAB_1424ccc42:
       CALLF(undefined8, FUN_14062d200)(3,uVar4,lVar5,"SetPoint",(unsigned long long)(param_1));
     }
     else {
-      uVar6 = CALLF(longlong, FUN_140628560)(lVar9);
+      uVar6 = CALLF(undefined8, FUN_140628560)(lVar9);
       CALLF(undefined8, FUN_14062ce80)(lVar5,"SetPoint",
                     "Cannot set point to forbidden region \'%s\' from a tainted context",uVar6);
     }
@@ -5863,7 +5863,7 @@ ushort FUN_1424e0e20(longlong param_1, gen_v16 *param_2, ulonglong *param_3, uin
           iVar62 = iVar62 - uVar59;
           iVar65 = iVar65 - uVar70;
           iVar66 = iVar66 - uVar67;
-          *((ushort *)gen_v16_q0(*local_90)) = (uVar48 << 5 | uVar50) << 5 | uVar55;
+          *((ushort *)&*local_90) = (uVar48 << 5 | uVar50) << 5 | uVar55;
           puVar57 = (ulonglong *)((longlong)puVar57 + 1);
           piVar58[-2] = piVar58[-2] + iVar62 * 7;
           piVar58[-1] = piVar58[-1] + iVar65 * 7;
@@ -5903,7 +5903,7 @@ ushort FUN_1424e0e20(longlong param_1, gen_v16 *param_2, ulonglong *param_3, uin
       local_78 = param_3;
       uVar64 = uVar63;
       do {
-        *((ushort *)gen_v16_q0(*param_2)) = *((ushort *)gen_v16_q0(*param_2)) | (1 << ((byte)uVar64 & 0x1f) & (ushort)(byte)*local_78) << (0xf - (byte)uVar64 & 0x1f);
+        *((ushort *)&*param_2) = *((ushort *)&*param_2) | (1 << ((byte)uVar64 & 0x1f) & (ushort)(byte)*local_78) << (0xf - (byte)uVar64 & 0x1f);
         uVar52 = uVar64 + 1;
         puVar57 = (ulonglong *)((longlong)local_78 + 1);
         uVar64 = uVar63;
@@ -5923,13 +5923,13 @@ ushort FUN_1424e0e20(longlong param_1, gen_v16 *param_2, ulonglong *param_3, uin
       uVar64 = uVar63;
       do {
         if (uVar64 == 0) {
-          uVar48 = ((byte)*param_3 & 0xfff8) << 0xc | *((ushort *)gen_v16_q0(*param_2));
-          *((ushort *)gen_v16_q0(*param_2)) = uVar48;
+          uVar48 = ((byte)*param_3 & 0xfff8) << 0xc | *((ushort *)&*param_2);
+          *((ushort *)&*param_2) = uVar48;
           uVar64 = *(uint *)(param_1 + 0xd4);
         }
         else {
-          uVar48 = ((byte)*param_3 & 0xff80) << 8 | *((ushort *)gen_v16_q0(*param_2));
-          *((ushort *)gen_v16_q0(*param_2)) = uVar48;
+          uVar48 = ((byte)*param_3 & 0xff80) << 8 | *((ushort *)&*param_2);
+          *((ushort *)&*param_2) = uVar48;
           param_3 = (ulonglong *)((longlong)param_3 + 1);
           uVar64 = uVar63;
         }
@@ -6115,7 +6115,7 @@ ushort FUN_1424e0e20(longlong param_1, gen_v16 *param_2, ulonglong *param_3, uin
       uVar47 = *param_3;
       param_3 = (ulonglong *)((longlong)param_3 + 1);
       uVar48 = ((byte)uVar47 & 0xff80) << 8;
-      *((ushort *)gen_v16_q0(*param_2)) = *((ushort *)gen_v16_q0(*param_2)) | uVar48;
+      *((ushort *)&*param_2) = *((ushort *)&*param_2) | uVar48;
       uVar54 = uVar54 - 1;
       param_2 = ((gen_v16 *)(((unsigned char *)&*param_2 + 2)));
     } while (uVar54 != 0);
@@ -6446,7 +6446,7 @@ ushort FUN_1424e17c0(longlong param_1, gen_v16 *param_2, ulonglong *param_3, uin
           iVar65 = iVar65 - uVar71;
           iVar67 = iVar67 - uVar69;
           iVar66 = iVar66 - uVar68;
-          *((ushort *)gen_v16_q0(*local_90)) = (uVar47 << 4 | uVar54) << 4 | uVar60;
+          *((ushort *)&*local_90) = (uVar47 << 4 | uVar54) << 4 | uVar60;
           puVar63 = (ulonglong *)((longlong)puVar63 + 1);
           piVar59[-2] = piVar59[-2] + iVar65 * 7;
           piVar59[-1] = piVar59[-1] + iVar66 * 7;
@@ -6488,7 +6488,7 @@ ushort FUN_1424e17c0(longlong param_1, gen_v16 *param_2, ulonglong *param_3, uin
       uVar64 = (ulonglong)uVar71;
       do {
         uVar48 = (int)uVar53 * 2;
-        *((ushort *)gen_v16_q0(*param_2)) = *((ushort *)gen_v16_q0(*param_2)) | *(ushort *)((undefined1 *)&REFG(undefined1, 0x142d5e6cc) + ((byte)*param_3 & uVar53) * 2);
+        *((ushort *)&*param_2) = *((ushort *)&*param_2) | *(ushort *)((undefined1 *)&REFG(undefined1, 0x142d5e6cc) + ((byte)*param_3 & uVar53) * 2);
         puVar49 = (ulonglong *)((longlong)param_3 + 1);
         if (uVar48 < 0x100) {
           puVar49 = param_3;
@@ -6514,7 +6514,7 @@ ushort FUN_1424e17c0(longlong param_1, gen_v16 *param_2, ulonglong *param_3, uin
           param_3 = (ulonglong *)((longlong)param_3 + 1);
           uVar47 = ((byte)uVar53 & 0xfff0) << 8;
         }
-        *((ushort *)gen_v16_q0(*param_2)) = *((ushort *)gen_v16_q0(*param_2)) | uVar47;
+        *((ushort *)&*param_2) = *((ushort *)&*param_2) | uVar47;
         uVar48 = (int)(longlong)puVar50 + 1;
         puVar50 = (ulonglong *)(ulonglong)uVar48;
         param_2 = ((gen_v16 *)(((unsigned char *)&*param_2 + 2)));
@@ -6700,7 +6700,7 @@ ushort FUN_1424e17c0(longlong param_1, gen_v16 *param_2, ulonglong *param_3, uin
         uVar64 = *param_3;
         param_3 = (ulonglong *)((longlong)param_3 + 1);
         uVar47 = ((byte)uVar64 & 0xfff0) << 8;
-        *((ushort *)gen_v16_q0(*param_2)) = *((ushort *)gen_v16_q0(*param_2)) | uVar47;
+        *((ushort *)&*param_2) = *((ushort *)&*param_2) | uVar47;
         uVar53 = uVar53 - 1;
         param_2 = ((gen_v16 *)(((unsigned char *)&*param_2 + 2)));
       } while (uVar53 != 0);

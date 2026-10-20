@@ -16184,8 +16184,6 @@ undefined8 FUN_140801560(longlong param_1)
   (**(code **)(param_1 + 0x68))(param_1 + 0x70,0,0);
   (**(code **)(param_1 + 0x48))(param_1 + 0x50,0,0);
   (**(code **)(param_1 + 0x28))(param_1 + 0x30,0,0);
-                    /* WARNING: Could not recover jumptable at 0x0001408015c3. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (**(code **)(param_1 + 8))(param_1 + 0x10,0,0);
   return uVar1;
 }

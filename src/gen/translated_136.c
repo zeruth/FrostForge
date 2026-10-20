@@ -12913,7 +12913,7 @@ LAB_141bd6ec1:
         CALLF(undefined4, FUN_141bd6080)(param_1,1);
       }
       else if (((lVar12 != 0) && (lVar15 = CALLF(undefined8, FUN_1418ea610)(lVar20 + 0x188,1), lVar15 != 0)) &&
-              ((puVar16 = (uint *)CALLF(longlong *, FUN_141893690)(lVar15), puVar16 != (uint *)0x0 && (*puVar16 != 0)))
+              ((puVar16 = (uint *)CALLF(undefined8, FUN_141893690)(lVar15), puVar16 != (uint *)0x0 && (*puVar16 != 0)))
               ) {
         do {
           if ((*plVar1 == *(longlong *)(*(longlong *)(puVar16 + 2) + uVar21 * 0x10)) &&

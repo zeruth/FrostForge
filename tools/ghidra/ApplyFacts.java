@@ -1163,6 +1163,26 @@ public class ApplyFacts extends GhidraScript {
         }
         for (ghidra.program.model.symbol.Symbol s : stale) s.delete();
         println("ApplyFacts: earlier call-site overrides removed " + stale.size());
+        // an indirect tail jump (`jmp [rax + 0x48]`) is a call that returns: the decompiler then
+        // shows it as one and takes its call-site signature, which it ignores on a jump. HMAC's
+        // update wrapper FUN_1420bd740 measures its string into r8 and jumps on through a table;
+        // as a jump its call showed no arguments and the length was lost (2026-10-20)
+        int jumpsMarked = 0;
+        if (root.has("jumps")) {
+            java.util.Set<Function> refit = new java.util.HashSet<>();
+            for (JsonElement j : root.getAsJsonArray("jumps")) {
+                Instruction insn = getInstructionAt(addr(j.getAsString()));
+                if (insn == null || !insn.getFlowType().isJump()) continue;
+                if (insn.getFlowOverride() != FlowOverride.CALL_RETURN) {
+                    insn.setFlowOverride(FlowOverride.CALL_RETURN);
+                    Function c = getFunctionContaining(insn.getAddress());
+                    if (c != null) refit.add(c);
+                }
+                jumpsMarked++;
+            }
+            for (Function c : refit) CreateFunctionCmd.fixupFunctionBody(currentProgram, c, monitor);
+        }
+        println("ApplyFacts: indirect tail jumps made calls that return " + jumpsMarked);
         for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("calls").entrySet()) {
             Address at = addr(e.getKey());
             Function f = getFunctionContaining(at);

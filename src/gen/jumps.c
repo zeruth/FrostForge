@@ -587,7 +587,7 @@ static undefined8 gen_entry_1401a88e0(undefined8 param_1, undefined8 param_2, lo
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1401a8af0(LPCWSTR param_1, uint param_2) {
+static undefined8 gen_entry_1401a8af0(ushort *param_1, uint param_2) {
     __try {
         return CALLF(undefined8, FUN_1401a8af0)(param_1, param_2);
     } __except (GenFault(0x1401a8af0ULL, GetExceptionInformation())) {
@@ -33305,13 +33305,6 @@ static ulonglong gen_entry_1402114c0(ulonglong param_1) {
         return (ulonglong)0;
     }
 }
-static undefined8 gen_entry_1402114e0(undefined8 param_1, undefined8 param_2) {
-    __try {
-        return CALLF(undefined8, FUN_1402114e0)(param_1, param_2);
-    } __except (GenFault(0x1402114e0ULL, GetExceptionInformation())) {
-        return (undefined8)0;
-    }
-}
 static undefined8 gen_entry_140211580(char *param_1, longlong param_2) {
     __try {
         return CALLF(undefined8, FUN_140211580)(param_1, param_2);
@@ -33347,14 +33340,14 @@ static undefined8 gen_entry_140211ab0(undefined8 *param_1) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_140211ad0(LPVOID param_1) {
+static undefined8 gen_entry_140211ad0(undefined8 param_1) {
     __try {
         return CALLF(undefined8, FUN_140211ad0)(param_1);
     } __except (GenFault(0x140211ad0ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_140211af0(LPVOID param_1) {
+static undefined8 gen_entry_140211af0(undefined8 param_1) {
     __try {
         return CALLF(undefined8, FUN_140211af0)(param_1);
     } __except (GenFault(0x140211af0ULL, GetExceptionInformation())) {
@@ -33536,18 +33529,18 @@ static undefined4 gen_entry_140214330(undefined8 param_1, undefined8 param_2, un
         return (undefined4)0;
     }
 }
-static DWORD gen_entry_1402144c0(void) {
+static undefined4 gen_entry_1402144c0(void) {
     __try {
-        return CALLF(DWORD, FUN_1402144c0)();
+        return CALLF(undefined4, FUN_1402144c0)();
     } __except (GenFault(0x1402144c0ULL, GetExceptionInformation())) {
-        return (DWORD)0;
+        return (undefined4)0;
     }
 }
-static int gen_entry_1402145e0(void) {
+static undefined4 gen_entry_1402145e0(void) {
     __try {
-        return CALLF(int, FUN_1402145e0)();
+        return CALLF(undefined4, FUN_1402145e0)();
     } __except (GenFault(0x1402145e0ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static undefined8 gen_entry_1402145f0(undefined8 param_1, undefined8 param_2) {
@@ -33844,11 +33837,11 @@ static undefined8 gen_entry_140219580(undefined8 param_1) {
         return (undefined8)0;
     }
 }
-static LRESULT gen_entry_1402199c0(float param_1) {
+static undefined8 gen_entry_1402199c0(float param_1) {
     __try {
-        return CALLF(LRESULT, FUN_1402199c0)(param_1);
+        return CALLF(undefined8, FUN_1402199c0)(param_1);
     } __except (GenFault(0x1402199c0ULL, GetExceptionInformation())) {
-        return (LRESULT)0;
+        return (undefined8)0;
     }
 }
 static undefined4 gen_entry_140219a00(void) {
@@ -36980,11 +36973,11 @@ static undefined8 gen_entry_140255c60(void) {
         return (undefined8)0;
     }
 }
-static DWORD gen_entry_140255c80(void) {
+static undefined4 gen_entry_140255c80(void) {
     __try {
-        return CALLF(DWORD, FUN_140255c80)();
+        return CALLF(undefined4, FUN_140255c80)();
     } __except (GenFault(0x140255c80ULL, GetExceptionInformation())) {
-        return (DWORD)0;
+        return (undefined4)0;
     }
 }
 static undefined8 gen_entry_140255cb0(undefined4 param_1, longlong param_2) {
@@ -38303,11 +38296,11 @@ static byte gen_entry_14026b330(longlong param_1, ulonglong param_2) {
         return (byte)0;
     }
 }
-static int gen_entry_14026b461(void) {
+static undefined4 gen_entry_14026b461(void) {
     __try {
-        return CALLF(int, FUN_14026b461)();
+        return CALLF(undefined4, FUN_14026b461)();
     } __except (GenFault(0x14026b461ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static undefined8 gen_entry_14026b467(undefined4 param_1, undefined4 param_2) {
@@ -89515,11 +89508,11 @@ static bool gen_entry_140588ac0(longlong param_1, int param_2, int param_3) {
         return (bool)0;
     }
 }
-static longlong gen_entry_140588af0(longlong *param_1, uint param_2, undefined8 param_3) {
+static undefined8 gen_entry_140588af0(longlong *param_1, uint param_2, undefined8 param_3) {
     __try {
-        return CALLF(longlong, FUN_140588af0)(param_1, param_2, param_3);
+        return CALLF(undefined8, FUN_140588af0)(param_1, param_2, param_3);
     } __except (GenFault(0x140588af0ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static char gen_entry_140588b50(longlong *param_1, uint param_2, longlong param_3) {
@@ -96613,11 +96606,11 @@ static undefined8 gen_entry_1405dc970(void) {
         return (undefined8)0;
     }
 }
-static uint gen_entry_1405dca30(undefined8 param_1, undefined8 param_2, undefined8 param_3) {
+static undefined4 gen_entry_1405dca30(undefined8 param_1, undefined8 param_2, undefined8 param_3) {
     __try {
-        return CALLF(uint, FUN_1405dca30)(param_1, param_2, param_3);
+        return CALLF(undefined4, FUN_1405dca30)(param_1, param_2, param_3);
     } __except (GenFault(0x1405dca30ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static undefined8 gen_entry_1405dca60(undefined4 param_1) {
@@ -96767,11 +96760,11 @@ static uint gen_entry_1405dd650(byte param_1) {
         return (uint)0;
     }
 }
-static uint gen_entry_1405dd6a0(undefined4 param_1, undefined8 param_2) {
+static undefined4 gen_entry_1405dd6a0(undefined4 param_1, undefined8 param_2) {
     __try {
-        return CALLF(uint, FUN_1405dd6a0)(param_1, param_2);
+        return CALLF(undefined4, FUN_1405dd6a0)(param_1, param_2);
     } __except (GenFault(0x1405dd6a0ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static undefined8 gen_entry_1405dd6d0(void) {
@@ -98846,28 +98839,28 @@ static undefined8 gen_entry_1405f4c90(undefined8 param_1, undefined8 param_2, un
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1405f4ca0(longlong *param_1, undefined1 *param_2) {
+static undefined8 gen_entry_1405f4ca0(longlong *param_1, byte *param_2) {
     __try {
         return CALLF(undefined8, FUN_1405f4ca0)(param_1, param_2);
     } __except (GenFault(0x1405f4ca0ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1405f4cb0(longlong *param_1, undefined1 *param_2) {
+static undefined8 gen_entry_1405f4cb0(longlong *param_1, byte *param_2) {
     __try {
         return CALLF(undefined8, FUN_1405f4cb0)(param_1, param_2);
     } __except (GenFault(0x1405f4cb0ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1405f4cc0(longlong *param_1, undefined1 *param_2) {
+static undefined8 gen_entry_1405f4cc0(longlong *param_1, byte *param_2) {
     __try {
         return CALLF(undefined8, FUN_1405f4cc0)(param_1, param_2);
     } __except (GenFault(0x1405f4cc0ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1405f4cd0(longlong *param_1, undefined1 *param_2) {
+static undefined8 gen_entry_1405f4cd0(longlong *param_1, byte *param_2) {
     __try {
         return CALLF(undefined8, FUN_1405f4cd0)(param_1, param_2);
     } __except (GenFault(0x1405f4cd0ULL, GetExceptionInformation())) {
@@ -203678,11 +203671,11 @@ static undefined8 gen_entry_1411f1a80(int *param_1, int param_2, undefined8 para
         return (undefined8)0;
     }
 }
-static uint gen_entry_1411f1b00(longlong param_1) {
+static undefined4 gen_entry_1411f1b00(longlong param_1) {
     __try {
-        return CALLF(uint, FUN_1411f1b00)(param_1);
+        return CALLF(undefined4, FUN_1411f1b00)(param_1);
     } __except (GenFault(0x1411f1b00ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static undefined8 gen_entry_1411f1cc0(char *param_1) {
@@ -208655,11 +208648,11 @@ static undefined8 gen_entry_141237e40(void) {
         return (undefined8)0;
     }
 }
-static HWND gen_entry_141237fa0(HWND param_1) {
+static undefined8 gen_entry_141237fa0(undefined8 param_1) {
     __try {
-        return CALLF(HWND, FUN_141237fa0)(param_1);
+        return CALLF(undefined8, FUN_141237fa0)(param_1);
     } __except (GenFault(0x141237fa0ULL, GetExceptionInformation())) {
-        return (HWND)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_1412381f0(void) {
@@ -208732,11 +208725,11 @@ static undefined8 gen_entry_1412388d0(uint *param_1, undefined8 param_2) {
         return (undefined8)0;
     }
 }
-static u_long gen_entry_141238a40(u_long param_1) {
+static undefined4 gen_entry_141238a40(undefined4 param_1) {
     __try {
-        return CALLF(u_long, FUN_141238a40)(param_1);
+        return CALLF(undefined4, FUN_141238a40)(param_1);
     } __except (GenFault(0x141238a40ULL, GetExceptionInformation())) {
-        return (u_long)0;
+        return (undefined4)0;
     }
 }
 static bool gen_entry_141238a50(longlong param_1) {
@@ -208809,7 +208802,7 @@ static float gen_entry_141239430(void) {
         return (float)0;
     }
 }
-static undefined8 gen_entry_141239450(LPSYSTEMTIME param_1) {
+static undefined8 gen_entry_141239450(undefined8 param_1) {
     __try {
         return CALLF(undefined8, FUN_141239450)(param_1);
     } __except (GenFault(0x141239450ULL, GetExceptionInformation())) {
@@ -208956,7 +208949,7 @@ static undefined4 gen_entry_14123b510(void) {
         return (undefined4)0;
     }
 }
-static undefined4 gen_entry_14123b550(int param_1, WPARAM param_2, int *param_3) {
+static undefined4 gen_entry_14123b550(int param_1, undefined8 param_2, int *param_3) {
     __try {
         return CALLF(undefined4, FUN_14123b550)(param_1, param_2, param_3);
     } __except (GenFault(0x14123b550ULL, GetExceptionInformation())) {
@@ -213009,11 +213002,11 @@ static longlong * gen_entry_14127b440(longlong param_1, undefined8 param_2) {
         return (longlong *)0;
     }
 }
-static int gen_entry_14127b500(undefined8 *param_1, undefined8 param_2) {
+static undefined4 gen_entry_14127b500(undefined8 *param_1, undefined8 param_2) {
     __try {
-        return CALLF(int, FUN_14127b500)(param_1, param_2);
+        return CALLF(undefined4, FUN_14127b500)(param_1, param_2);
     } __except (GenFault(0x14127b500ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static uint gen_entry_14127b690(longlong param_1, undefined8 param_2) {
@@ -213072,11 +213065,11 @@ static uint gen_entry_14127bd10(longlong param_1, byte param_2, undefined8 param
         return (uint)0;
     }
 }
-static int gen_entry_14127bd70(undefined8 *param_1) {
+static undefined4 gen_entry_14127bd70(undefined8 *param_1) {
     __try {
-        return CALLF(int, FUN_14127bd70)(param_1);
+        return CALLF(undefined4, FUN_14127bd70)(param_1);
     } __except (GenFault(0x14127bd70ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static undefined4 gen_entry_14127beb0(undefined8 param_1, undefined8 param_2) {
@@ -216222,11 +216215,11 @@ static uint gen_entry_1412b5c20(byte param_1) {
         return (uint)0;
     }
 }
-static uint gen_entry_1412b5e60(longlong *param_1, undefined8 param_2, uint param_3, longlong param_4) {
+static undefined4 gen_entry_1412b5e60(longlong *param_1, undefined8 param_2, uint param_3, longlong param_4) {
     __try {
-        return CALLF(uint, FUN_1412b5e60)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined4, FUN_1412b5e60)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x1412b5e60ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static undefined8 gen_entry_1412b5f80(longlong *param_1, longlong param_2) {
@@ -227674,11 +227667,11 @@ static uint gen_entry_141356a50(longlong param_1, int param_2) {
         return (uint)0;
     }
 }
-static longlong * gen_entry_141356a70(longlong *param_1, longlong *param_2) {
+static undefined8 gen_entry_141356a70(longlong *param_1, longlong *param_2) {
     __try {
-        return CALLF(longlong *, FUN_141356a70)(param_1, param_2);
+        return CALLF(undefined8, FUN_141356a70)(param_1, param_2);
     } __except (GenFault(0x141356a70ULL, GetExceptionInformation())) {
-        return (longlong *)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_141356ac0(longlong param_1, float param_2) {
@@ -271228,7 +271221,7 @@ static undefined4 gen_entry_1415ae1a0(longlong param_1, undefined8 param_2) {
         return (undefined4)0;
     }
 }
-static undefined4 gen_entry_1415ae1b0(longlong param_1, undefined8 param_2, undefined1 param_3) {
+static undefined4 gen_entry_1415ae1b0(longlong param_1, undefined8 param_2, byte param_3) {
     __try {
         return CALLF(undefined4, FUN_1415ae1b0)(param_1, param_2, param_3);
     } __except (GenFault(0x1415ae1b0ULL, GetExceptionInformation())) {
@@ -293747,14 +293740,14 @@ static undefined8 gen_entry_14170ace0(longlong param_1, undefined8 param_2, unde
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14170acf0(longlong param_1, undefined8 param_2, undefined1 *param_3, undefined8 param_4) {
+static undefined8 gen_entry_14170acf0(longlong param_1, undefined8 param_2, byte *param_3, undefined8 param_4) {
     __try {
         return CALLF(undefined8, FUN_14170acf0)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x14170acf0ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14170ad10(longlong param_1, undefined8 param_2, undefined2 *param_3, undefined8 param_4) {
+static undefined8 gen_entry_14170ad10(longlong param_1, undefined8 param_2, ushort *param_3, undefined8 param_4) {
     __try {
         return CALLF(undefined8, FUN_14170ad10)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x14170ad10ULL, GetExceptionInformation())) {
@@ -293782,14 +293775,14 @@ static undefined8 gen_entry_14170ad80(longlong param_1, undefined8 param_2, unde
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14170adc0(longlong param_1, undefined8 param_2, undefined4 *param_3, undefined8 param_4) {
+static undefined8 gen_entry_14170adc0(longlong param_1, undefined8 param_2, float *param_3, undefined8 param_4) {
     __try {
         return CALLF(undefined8, FUN_14170adc0)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x14170adc0ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14170ade0(longlong param_1, undefined8 param_2, undefined4 *param_3, undefined8 param_4, undefined4 *param_5) {
+static undefined8 gen_entry_14170ade0(longlong param_1, undefined8 param_2, float *param_3, undefined8 param_4, undefined4 *param_5) {
     __try {
         return CALLF(undefined8, FUN_14170ade0)(param_1, param_2, param_3, param_4, param_5);
     } __except (GenFault(0x14170ade0ULL, GetExceptionInformation())) {
@@ -293810,7 +293803,7 @@ static undefined8 gen_entry_14170ae20(longlong param_1, undefined8 param_2, unde
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14170ae40(longlong param_1, undefined2 *param_2, undefined8 param_3, undefined4 *param_4) {
+static undefined8 gen_entry_14170ae40(longlong param_1, ushort *param_2, undefined8 param_3, undefined4 *param_4) {
     __try {
         return CALLF(undefined8, FUN_14170ae40)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x14170ae40ULL, GetExceptionInformation())) {
@@ -297282,11 +297275,11 @@ static undefined8 gen_entry_141733730(undefined8 param_1, longlong param_2) {
         return (undefined8)0;
     }
 }
-static uint gen_entry_141733750(undefined8 param_1, longlong *param_2) {
+static undefined4 gen_entry_141733750(undefined8 param_1, longlong *param_2) {
     __try {
-        return CALLF(uint, FUN_141733750)(param_1, param_2);
+        return CALLF(undefined4, FUN_141733750)(param_1, param_2);
     } __except (GenFault(0x141733750ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static undefined1 gen_entry_1417337a0(longlong param_1, char param_2) {
@@ -300852,11 +300845,11 @@ static undefined8 gen_entry_141752ac0(longlong param_1) {
         return (undefined8)0;
     }
 }
-static longlong gen_entry_141752b20(longlong param_1) {
+static undefined8 gen_entry_141752b20(longlong param_1) {
     __try {
-        return CALLF(longlong, FUN_141752b20)(param_1);
+        return CALLF(undefined8, FUN_141752b20)(param_1);
     } __except (GenFault(0x141752b20ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_141752b90(longlong param_1) {
@@ -300866,11 +300859,11 @@ static undefined8 gen_entry_141752b90(longlong param_1) {
         return (undefined8)0;
     }
 }
-static longlong gen_entry_141752c40(longlong param_1) {
+static undefined8 gen_entry_141752c40(longlong param_1) {
     __try {
-        return CALLF(longlong, FUN_141752c40)(param_1);
+        return CALLF(undefined8, FUN_141752c40)(param_1);
     } __except (GenFault(0x141752c40ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static longlong gen_entry_141752ca0(longlong param_1) {
@@ -300887,11 +300880,11 @@ static undefined8 gen_entry_141752ea0(longlong param_1) {
         return (undefined8)0;
     }
 }
-static longlong gen_entry_141752ef0(longlong param_1) {
+static undefined8 gen_entry_141752ef0(longlong param_1) {
     __try {
-        return CALLF(longlong, FUN_141752ef0)(param_1);
+        return CALLF(undefined8, FUN_141752ef0)(param_1);
     } __except (GenFault(0x141752ef0ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_141752f60(undefined8 param_1, longlong param_2) {
@@ -300929,11 +300922,11 @@ static undefined4 gen_entry_141753150(longlong param_1) {
         return (undefined4)0;
     }
 }
-static longlong gen_entry_1417531e0(longlong param_1) {
+static undefined8 gen_entry_1417531e0(longlong param_1) {
     __try {
-        return CALLF(longlong, FUN_1417531e0)(param_1);
+        return CALLF(undefined8, FUN_1417531e0)(param_1);
     } __except (GenFault(0x1417531e0ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static int gen_entry_141753220(int *param_1) {
@@ -302308,18 +302301,18 @@ static undefined8 gen_entry_14175dee0(longlong param_1) {
         return (undefined8)0;
     }
 }
-static uint gen_entry_14175df00(longlong param_1) {
+static undefined4 gen_entry_14175df00(longlong param_1) {
     __try {
-        return CALLF(uint, FUN_14175df00)(param_1);
+        return CALLF(undefined4, FUN_14175df00)(param_1);
     } __except (GenFault(0x14175df00ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
-static longlong gen_entry_14175dfd0(longlong param_1) {
+static undefined8 gen_entry_14175dfd0(longlong param_1) {
     __try {
-        return CALLF(longlong, FUN_14175dfd0)(param_1);
+        return CALLF(undefined8, FUN_14175dfd0)(param_1);
     } __except (GenFault(0x14175dfd0ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_14175e010(int *param_1, undefined8 param_2, longlong param_3, int param_4) {
@@ -302357,11 +302350,11 @@ static undefined1 gen_entry_14175eba0(longlong param_1) {
         return (undefined1)0;
     }
 }
-static longlong gen_entry_14175ebc0(longlong param_1, longlong *param_2) {
+static undefined8 gen_entry_14175ebc0(longlong param_1, longlong *param_2) {
     __try {
-        return CALLF(longlong, FUN_14175ebc0)(param_1, param_2);
+        return CALLF(undefined8, FUN_14175ebc0)(param_1, param_2);
     } __except (GenFault(0x14175ebc0ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_14175ec40(ushort *param_1, int *param_2) {
@@ -302546,11 +302539,11 @@ static undefined8 gen_entry_141761dc0(longlong param_1, int param_2) {
         return (undefined8)0;
     }
 }
-static longlong gen_entry_141762180(longlong *param_1) {
+static undefined8 gen_entry_141762180(longlong *param_1) {
     __try {
-        return CALLF(longlong, FUN_141762180)(param_1);
+        return CALLF(undefined8, FUN_141762180)(param_1);
     } __except (GenFault(0x141762180ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_1417621e0(longlong param_1, int param_2, int param_3) {
@@ -303078,11 +303071,11 @@ static undefined8 gen_entry_141766f90(longlong *param_1, int param_2, undefined4
         return (undefined8)0;
     }
 }
-static int gen_entry_1417671d0(longlong *param_1, undefined8 param_2, undefined4 param_3) {
+static undefined4 gen_entry_1417671d0(longlong *param_1, undefined8 param_2, undefined4 param_3) {
     __try {
-        return CALLF(int, FUN_1417671d0)(param_1, param_2, param_3);
+        return CALLF(undefined4, FUN_1417671d0)(param_1, param_2, param_3);
     } __except (GenFault(0x1417671d0ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static undefined8 gen_entry_141767200(longlong param_1) {
@@ -305157,11 +305150,11 @@ static undefined8 gen_entry_14177adc0(longlong *param_1, longlong param_2) {
         return (undefined8)0;
     }
 }
-static uint gen_entry_14177af50(undefined8 param_1, longlong *param_2) {
+static undefined4 gen_entry_14177af50(undefined8 param_1, longlong *param_2) {
     __try {
-        return CALLF(uint, FUN_14177af50)(param_1, param_2);
+        return CALLF(undefined4, FUN_14177af50)(param_1, param_2);
     } __except (GenFault(0x14177af50ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static undefined4 gen_entry_14177af80(undefined8 param_1, undefined8 *param_2) {
@@ -308384,11 +308377,11 @@ static float gen_entry_141797bb0(longlong param_1) {
         return (float)0;
     }
 }
-static uint gen_entry_141797c30(longlong *param_1, undefined4 param_2) {
+static undefined4 gen_entry_141797c30(longlong *param_1, undefined4 param_2) {
     __try {
-        return CALLF(uint, FUN_141797c30)(param_1, param_2);
+        return CALLF(undefined4, FUN_141797c30)(param_1, param_2);
     } __except (GenFault(0x141797c30ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static undefined4 gen_entry_141797ca0(longlong param_1, undefined4 param_2) {
@@ -310106,11 +310099,11 @@ static undefined4 gen_entry_1417acdb0(longlong param_1, longlong param_2) {
         return (undefined4)0;
     }
 }
-static int gen_entry_1417ace60(longlong *param_1, undefined4 param_2, undefined4 param_3, undefined4 param_4) {
+static undefined4 gen_entry_1417ace60(longlong *param_1, undefined4 param_2, undefined4 param_3, undefined4 param_4) {
     __try {
-        return CALLF(int, FUN_1417ace60)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined4, FUN_1417ace60)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x1417ace60ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static undefined8 gen_entry_1417acfd0(longlong param_1) {
@@ -313872,11 +313865,11 @@ static undefined4 gen_entry_1417e1550(undefined8 param_1, longlong param_2, uint
         return (undefined4)0;
     }
 }
-static uint gen_entry_1417e1590(undefined8 param_1, longlong *param_2, uint *param_3) {
+static undefined4 gen_entry_1417e1590(undefined8 param_1, longlong *param_2, uint *param_3) {
     __try {
-        return CALLF(uint, FUN_1417e1590)(param_1, param_2, param_3);
+        return CALLF(undefined4, FUN_1417e1590)(param_1, param_2, param_3);
     } __except (GenFault(0x1417e1590ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static uint gen_entry_1417e15c0(longlong param_1) {
@@ -322818,11 +322811,11 @@ static undefined8 gen_entry_14184d400(undefined8 param_1, undefined8 *param_2, u
         return (undefined8)0;
     }
 }
-static uint gen_entry_14184d5b0(longlong *param_1) {
+static undefined4 gen_entry_14184d5b0(longlong *param_1) {
     __try {
-        return CALLF(uint, FUN_14184d5b0)(param_1);
+        return CALLF(undefined4, FUN_14184d5b0)(param_1);
     } __except (GenFault(0x14184d5b0ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static undefined8 gen_entry_14184d5d0(undefined4 *param_1) {
@@ -322839,11 +322832,11 @@ static undefined4 gen_entry_14184d600(longlong param_1, int param_2) {
         return (undefined4)0;
     }
 }
-static char gen_entry_14184d670(longlong param_1, undefined8 param_2, undefined4 *param_3) {
+static undefined1 gen_entry_14184d670(longlong param_1, undefined8 param_2, undefined4 *param_3) {
     __try {
-        return CALLF(char, FUN_14184d670)(param_1, param_2, param_3);
+        return CALLF(undefined1, FUN_14184d670)(param_1, param_2, param_3);
     } __except (GenFault(0x14184d670ULL, GetExceptionInformation())) {
-        return (char)0;
+        return (undefined1)0;
     }
 }
 static undefined8 gen_entry_14184db30(undefined8 param_1, undefined4 *param_2) {
@@ -325387,7 +325380,7 @@ static undefined8 * gen_entry_141869c20(longlong param_1, uint param_2, longlong
         return (undefined8 *)0;
     }
 }
-static undefined8 gen_entry_141869ca0(longlong param_1, undefined1 param_2, undefined4 param_3) {
+static undefined8 gen_entry_141869ca0(longlong param_1, byte param_2, undefined4 param_3) {
     __try {
         return CALLF(undefined8, FUN_141869ca0)(param_1, param_2, param_3);
     } __except (GenFault(0x141869ca0ULL, GetExceptionInformation())) {
@@ -328579,18 +328572,18 @@ static undefined8 * gen_entry_141893640(longlong param_1, undefined8 *param_2) {
         return (undefined8 *)0;
     }
 }
-static longlong * gen_entry_141893690(longlong *param_1) {
+static undefined8 gen_entry_141893690(longlong *param_1) {
     __try {
-        return CALLF(longlong *, FUN_141893690)(param_1);
+        return CALLF(undefined8, FUN_141893690)(param_1);
     } __except (GenFault(0x141893690ULL, GetExceptionInformation())) {
-        return (longlong *)0;
+        return (undefined8)0;
     }
 }
-static longlong * gen_entry_1418936d0(longlong *param_1) {
+static undefined8 gen_entry_1418936d0(longlong *param_1) {
     __try {
-        return CALLF(longlong *, FUN_1418936d0)(param_1);
+        return CALLF(undefined8, FUN_1418936d0)(param_1);
     } __except (GenFault(0x1418936d0ULL, GetExceptionInformation())) {
-        return (longlong *)0;
+        return (undefined8)0;
     }
 }
 static undefined4 gen_entry_141893710(undefined4 param_1) {
@@ -329636,11 +329629,11 @@ static undefined4 gen_entry_14189bd10(undefined8 param_1) {
         return (undefined4)0;
     }
 }
-static longlong gen_entry_14189bd40(longlong *param_1, char param_2, char param_3) {
+static undefined8 gen_entry_14189bd40(longlong *param_1, char param_2, char param_3) {
     __try {
-        return CALLF(longlong, FUN_14189bd40)(param_1, param_2, param_3);
+        return CALLF(undefined8, FUN_14189bd40)(param_1, param_2, param_3);
     } __except (GenFault(0x14189bd40ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static undefined1 gen_entry_14189bd90(longlong *param_1, undefined8 param_2) {
@@ -329972,11 +329965,11 @@ static undefined4 gen_entry_14189ed60(longlong param_1) {
         return (undefined4)0;
     }
 }
-static uint gen_entry_14189ef60(longlong *param_1) {
+static undefined4 gen_entry_14189ef60(longlong *param_1) {
     __try {
-        return CALLF(uint, FUN_14189ef60)(param_1);
+        return CALLF(undefined4, FUN_14189ef60)(param_1);
     } __except (GenFault(0x14189ef60ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static longlong gen_entry_14189efc0(longlong *param_1) {
@@ -348683,11 +348676,11 @@ static undefined8 gen_entry_1419852a0(longlong param_1) {
         return (undefined8)0;
     }
 }
-static longlong gen_entry_141985460(longlong *param_1, undefined8 param_2, undefined8 *param_3, int param_4) {
+static undefined8 gen_entry_141985460(longlong *param_1, undefined8 param_2, undefined8 *param_3, int param_4) {
     __try {
-        return CALLF(longlong, FUN_141985460)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined8, FUN_141985460)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x141985460ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static byte gen_entry_1419854e0(longlong param_1) {
@@ -349082,11 +349075,11 @@ static undefined8 gen_entry_14198a120(uint *param_1) {
         return (undefined8)0;
     }
 }
-static ulonglong gen_entry_14198a390(longlong param_1) {
+static undefined8 gen_entry_14198a390(longlong param_1) {
     __try {
-        return CALLF(ulonglong, FUN_14198a390)(param_1);
+        return CALLF(undefined8, FUN_14198a390)(param_1);
     } __except (GenFault(0x14198a390ULL, GetExceptionInformation())) {
-        return (ulonglong)0;
+        return (undefined8)0;
     }
 }
 static uint gen_entry_14198a520(uint *param_1, longlong *param_2) {
@@ -349271,11 +349264,11 @@ static undefined8 gen_entry_14198bcb0(uint *param_1, uint param_2, undefined8 pa
         return (undefined8)0;
     }
 }
-static uint gen_entry_14198be50(longlong param_1) {
+static undefined4 gen_entry_14198be50(longlong param_1) {
     __try {
-        return CALLF(uint, FUN_14198be50)(param_1);
+        return CALLF(undefined4, FUN_14198be50)(param_1);
     } __except (GenFault(0x14198be50ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static undefined8 gen_entry_14198bf80(longlong param_1, longlong param_2) {
@@ -365231,11 +365224,11 @@ static undefined1 gen_entry_141a52cb0(void) {
         return (undefined1)0;
     }
 }
-static longlong * gen_entry_141a52cf0(longlong param_1) {
+static undefined8 gen_entry_141a52cf0(longlong param_1) {
     __try {
-        return CALLF(longlong *, FUN_141a52cf0)(param_1);
+        return CALLF(undefined8, FUN_141a52cf0)(param_1);
     } __except (GenFault(0x141a52cf0ULL, GetExceptionInformation())) {
-        return (longlong *)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_141a52d50(void) {
@@ -369753,11 +369746,11 @@ static undefined8 gen_entry_141a88580(longlong *param_1, undefined4 param_2, und
         return (undefined8)0;
     }
 }
-static uint gen_entry_141a88680(longlong *param_1, char param_2) {
+static undefined4 gen_entry_141a88680(longlong *param_1, char param_2) {
     __try {
-        return CALLF(uint, FUN_141a88680)(param_1, param_2);
+        return CALLF(undefined4, FUN_141a88680)(param_1, param_2);
     } __except (GenFault(0x141a88680ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static undefined4 gen_entry_141a886b0(undefined8 param_1, undefined4 param_2, undefined1 param_3) {
@@ -370299,11 +370292,11 @@ static int gen_entry_141a8d200(longlong param_1) {
         return (int)0;
     }
 }
-static uint gen_entry_141a8d240(longlong *param_1) {
+static undefined4 gen_entry_141a8d240(longlong *param_1) {
     __try {
-        return CALLF(uint, FUN_141a8d240)(param_1);
+        return CALLF(undefined4, FUN_141a8d240)(param_1);
     } __except (GenFault(0x141a8d240ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static float * gen_entry_141a8d380(longlong param_1) {
@@ -372098,18 +372091,18 @@ static undefined4 gen_entry_141a99100(longlong param_1) {
         return (undefined4)0;
     }
 }
-static longlong gen_entry_141a99130(longlong *param_1) {
+static undefined8 gen_entry_141a99130(longlong *param_1) {
     __try {
-        return CALLF(longlong, FUN_141a99130)(param_1);
+        return CALLF(undefined8, FUN_141a99130)(param_1);
     } __except (GenFault(0x141a99130ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
-static longlong gen_entry_141a99150(longlong *param_1) {
+static undefined8 gen_entry_141a99150(longlong *param_1) {
     __try {
-        return CALLF(longlong, FUN_141a99150)(param_1);
+        return CALLF(undefined8, FUN_141a99150)(param_1);
     } __except (GenFault(0x141a99150ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static undefined1 gen_entry_141a99170(undefined8 param_1, int param_2) {
@@ -397389,14 +397382,14 @@ static undefined1 gen_entry_141c175f0(longlong param_1) {
         return (undefined1)0;
     }
 }
-static BOOL gen_entry_141c17700(LPCRITICAL_SECTION param_1, DWORD param_2, DWORD param_3) {
+static undefined4 gen_entry_141c17700(undefined8 param_1, undefined4 param_2, undefined4 param_3) {
     __try {
-        return CALLF(BOOL, FUN_141c17700)(param_1, param_2, param_3);
+        return CALLF(undefined4, FUN_141c17700)(param_1, param_2, param_3);
     } __except (GenFault(0x141c17700ULL, GetExceptionInformation())) {
-        return (BOOL)0;
+        return (undefined4)0;
     }
 }
-static undefined8 gen_entry_141c17710(DWORD param_1, DWORD param_2) {
+static undefined8 gen_entry_141c17710(undefined4 param_1, undefined4 param_2) {
     __try {
         return CALLF(undefined8, FUN_141c17710)(param_1, param_2);
     } __except (GenFault(0x141c17710ULL, GetExceptionInformation())) {
@@ -409954,7 +409947,7 @@ static undefined8 gen_entry_141cd0110(longlong param_1, undefined8 param_2) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_141cd0190(longlong param_1, undefined8 param_2, undefined1 *param_3, undefined8 param_4) {
+static undefined8 gen_entry_141cd0190(longlong param_1, undefined8 param_2, byte *param_3, undefined8 param_4) {
     __try {
         return CALLF(undefined8, FUN_141cd0190)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x141cd0190ULL, GetExceptionInformation())) {
@@ -410920,11 +410913,11 @@ static undefined8 gen_entry_141ceb890(undefined8 param_1, longlong *param_2, int
         return (undefined8)0;
     }
 }
-static longlong gen_entry_141ceb900(longlong param_1, undefined8 param_2, undefined8 param_3, longlong *param_4) {
+static undefined8 gen_entry_141ceb900(longlong param_1, undefined8 param_2, undefined8 param_3, longlong *param_4) {
     __try {
-        return CALLF(longlong, FUN_141ceb900)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined8, FUN_141ceb900)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x141ceb900ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_141ceb940(undefined8 param_1, longlong *param_2, int param_3, undefined8 *param_4) {
@@ -462279,7 +462272,7 @@ static undefined8 gen_entry_141f44200(longlong param_1, undefined8 param_2, unde
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_141f44250(longlong param_1, undefined1 param_2) {
+static undefined8 gen_entry_141f44250(longlong param_1, byte param_2) {
     __try {
         return CALLF(undefined8, FUN_141f44250)(param_1, param_2);
     } __except (GenFault(0x141f44250ULL, GetExceptionInformation())) {
@@ -462538,7 +462531,7 @@ static undefined8 gen_entry_141f46ea0(undefined8 param_1, undefined4 param_2, un
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_141f46ec0(undefined8 param_1, undefined8 param_2, undefined1 param_3, undefined8 *param_4) {
+static undefined8 gen_entry_141f46ec0(undefined8 param_1, undefined8 param_2, byte param_3, undefined8 *param_4) {
     __try {
         return CALLF(undefined8, FUN_141f46ec0)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x141f46ec0ULL, GetExceptionInformation())) {
@@ -463511,11 +463504,11 @@ static undefined8 gen_entry_141f55ab0(longlong *param_1) {
         return (undefined8)0;
     }
 }
-static longlong gen_entry_141f55bc0(longlong *param_1) {
+static undefined8 gen_entry_141f55bc0(longlong *param_1) {
     __try {
-        return CALLF(longlong, FUN_141f55bc0)(param_1);
+        return CALLF(undefined8, FUN_141f55bc0)(param_1);
     } __except (GenFault(0x141f55bc0ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static undefined1 gen_entry_141f55bf0(longlong *param_1) {
@@ -472156,11 +472149,11 @@ static longlong gen_entry_141fd8a80(longlong param_1, int param_2) {
         return (longlong)0;
     }
 }
-static longlong gen_entry_141fd8aa0(longlong *param_1, uint param_2, longlong param_3, char param_4) {
+static undefined8 gen_entry_141fd8aa0(longlong *param_1, uint param_2, longlong param_3, char param_4) {
     __try {
-        return CALLF(longlong, FUN_141fd8aa0)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined8, FUN_141fd8aa0)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x141fd8aa0ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static undefined4 gen_entry_141fd8e00(longlong *param_1) {
@@ -472191,11 +472184,11 @@ static longlong gen_entry_141fd95f0(longlong *param_1) {
         return (longlong)0;
     }
 }
-static int gen_entry_141fd99d0(longlong *param_1, char param_2) {
+static undefined4 gen_entry_141fd99d0(longlong *param_1, char param_2) {
     __try {
-        return CALLF(int, FUN_141fd99d0)(param_1, param_2);
+        return CALLF(undefined4, FUN_141fd99d0)(param_1, param_2);
     } __except (GenFault(0x141fd99d0ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static undefined4 gen_entry_141fd9a60(longlong *param_1, undefined8 param_2, uint param_3) {
@@ -472296,18 +472289,18 @@ static undefined8 gen_entry_141fda150(longlong *param_1) {
         return (undefined8)0;
     }
 }
-static undefined1 * gen_entry_141fda2b0(longlong *param_1, undefined1 param_2) {
+static undefined8 gen_entry_141fda2b0(longlong *param_1, undefined1 param_2) {
     __try {
-        return CALLF(undefined1 *, FUN_141fda2b0)(param_1, param_2);
+        return CALLF(undefined8, FUN_141fda2b0)(param_1, param_2);
     } __except (GenFault(0x141fda2b0ULL, GetExceptionInformation())) {
-        return (undefined1 *)0;
+        return (undefined8)0;
     }
 }
-static undefined1 * gen_entry_141fda300(longlong *param_1, int param_2, char param_3) {
+static undefined8 gen_entry_141fda300(longlong *param_1, int param_2, char param_3) {
     __try {
-        return CALLF(undefined1 *, FUN_141fda300)(param_1, param_2, param_3);
+        return CALLF(undefined8, FUN_141fda300)(param_1, param_2, param_3);
     } __except (GenFault(0x141fda300ULL, GetExceptionInformation())) {
-        return (undefined1 *)0;
+        return (undefined8)0;
     }
 }
 static undefined4 gen_entry_141fda4f0(longlong *param_1, int param_2) {
@@ -472492,11 +472485,11 @@ static undefined8 * gen_entry_141fdc780(longlong param_1) {
         return (undefined8 *)0;
     }
 }
-static longlong gen_entry_141fdc7a0(longlong *param_1) {
+static undefined8 gen_entry_141fdc7a0(longlong *param_1) {
     __try {
-        return CALLF(longlong, FUN_141fdc7a0)(param_1);
+        return CALLF(undefined8, FUN_141fdc7a0)(param_1);
     } __except (GenFault(0x141fdc7a0ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static undefined8 * gen_entry_141fdc9f0(longlong param_1) {
@@ -472765,11 +472758,11 @@ static undefined4 gen_entry_141fdfe50(longlong *param_1) {
         return (undefined4)0;
     }
 }
-static undefined8 * gen_entry_141fe01c0(longlong *param_1, char param_2) {
+static undefined8 gen_entry_141fe01c0(longlong *param_1, char param_2) {
     __try {
-        return CALLF(undefined8 *, FUN_141fe01c0)(param_1, param_2);
+        return CALLF(undefined8, FUN_141fe01c0)(param_1, param_2);
     } __except (GenFault(0x141fe01c0ULL, GetExceptionInformation())) {
-        return (undefined8 *)0;
+        return (undefined8)0;
     }
 }
 static uint gen_entry_141fe0290(longlong param_1, undefined8 param_2, int *param_3, undefined4 param_4) {
@@ -472786,11 +472779,11 @@ static undefined8 gen_entry_141fe0380(longlong *param_1, int param_2) {
         return (undefined8)0;
     }
 }
-static undefined8 * gen_entry_141fe03c0(longlong *param_1, char param_2) {
+static undefined8 gen_entry_141fe03c0(longlong *param_1, char param_2) {
     __try {
-        return CALLF(undefined8 *, FUN_141fe03c0)(param_1, param_2);
+        return CALLF(undefined8, FUN_141fe03c0)(param_1, param_2);
     } __except (GenFault(0x141fe03c0ULL, GetExceptionInformation())) {
-        return (undefined8 *)0;
+        return (undefined8)0;
     }
 }
 static uint gen_entry_141fe05f0(longlong param_1, longlong param_2, uint *param_3, uint param_4, undefined8 param_5, uint *param_6, uint param_7) {
@@ -472807,11 +472800,11 @@ static undefined8 gen_entry_141fe0890(longlong param_1, longlong param_2, uint *
         return (undefined8)0;
     }
 }
-static int gen_entry_141fe0af0(longlong *param_1, int param_2) {
+static undefined4 gen_entry_141fe0af0(longlong *param_1, int param_2) {
     __try {
-        return CALLF(int, FUN_141fe0af0)(param_1, param_2);
+        return CALLF(undefined4, FUN_141fe0af0)(param_1, param_2);
     } __except (GenFault(0x141fe0af0ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static undefined1 gen_entry_141fe0b30(longlong param_1, longlong param_2) {
@@ -472863,11 +472856,11 @@ static undefined8 gen_entry_141fe1770(longlong param_1, undefined8 *param_2, lon
         return (undefined8)0;
     }
 }
-static code * gen_entry_141fe17f0(longlong *param_1) {
+static undefined8 gen_entry_141fe17f0(longlong *param_1) {
     __try {
-        return CALLF(code *, FUN_141fe17f0)(param_1);
+        return CALLF(undefined8, FUN_141fe17f0)(param_1);
     } __except (GenFault(0x141fe17f0ULL, GetExceptionInformation())) {
-        return (code *)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_141fe19f0(longlong param_1, longlong *param_2, longlong param_3, uint param_4, int param_5) {
@@ -472975,11 +472968,11 @@ static undefined2 gen_entry_141fe2e90(longlong param_1, longlong param_2, longlo
         return (undefined2)0;
     }
 }
-static undefined8 * gen_entry_141fe33d0(longlong *param_1) {
+static undefined8 gen_entry_141fe33d0(longlong *param_1) {
     __try {
-        return CALLF(undefined8 *, FUN_141fe33d0)(param_1);
+        return CALLF(undefined8, FUN_141fe33d0)(param_1);
     } __except (GenFault(0x141fe33d0ULL, GetExceptionInformation())) {
-        return (undefined8 *)0;
+        return (undefined8)0;
     }
 }
 static undefined4 gen_entry_141fe3480(longlong *param_1) {
@@ -473066,11 +473059,11 @@ static undefined8 gen_entry_141fe4fc0(longlong param_1) {
         return (undefined8)0;
     }
 }
-static undefined1 * gen_entry_141fe5020(longlong param_1, uint param_2, int param_3) {
+static undefined8 gen_entry_141fe5020(longlong param_1, uint param_2, int param_3) {
     __try {
-        return CALLF(undefined1 *, FUN_141fe5020)(param_1, param_2, param_3);
+        return CALLF(undefined8, FUN_141fe5020)(param_1, param_2, param_3);
     } __except (GenFault(0x141fe5020ULL, GetExceptionInformation())) {
-        return (undefined1 *)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_141fe5190(longlong param_1, char *param_2, int param_3) {
@@ -473150,11 +473143,11 @@ static undefined4 gen_entry_141fe5e60(longlong *param_1, char param_2) {
         return (undefined4)0;
     }
 }
-static longlong gen_entry_141fe6040(longlong *param_1, char param_2) {
+static undefined8 gen_entry_141fe6040(longlong *param_1, char param_2) {
     __try {
-        return CALLF(longlong, FUN_141fe6040)(param_1, param_2);
+        return CALLF(undefined8, FUN_141fe6040)(param_1, param_2);
     } __except (GenFault(0x141fe6040ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_141fe6230(longlong param_1, undefined8 param_2, uint *param_3, uint param_4) {
@@ -473297,11 +473290,11 @@ static uint gen_entry_141fe8580(longlong param_1, int param_2, int param_3, long
         return (uint)0;
     }
 }
-static int gen_entry_141fe8690(longlong *param_1, char param_2, uint param_3, longlong *param_4) {
+static undefined4 gen_entry_141fe8690(longlong *param_1, char param_2, uint param_3, longlong *param_4) {
     __try {
-        return CALLF(int, FUN_141fe8690)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined4, FUN_141fe8690)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x141fe8690ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static undefined4 gen_entry_141fe89c0(longlong *param_1) {
@@ -473570,11 +473563,11 @@ static uint gen_entry_141febe80(longlong param_1, longlong param_2, undefined8 *
         return (uint)0;
     }
 }
-static code * gen_entry_141febff0(longlong *param_1) {
+static undefined8 gen_entry_141febff0(longlong *param_1) {
     __try {
-        return CALLF(code *, FUN_141febff0)(param_1);
+        return CALLF(undefined8, FUN_141febff0)(param_1);
     } __except (GenFault(0x141febff0ULL, GetExceptionInformation())) {
-        return (code *)0;
+        return (undefined8)0;
     }
 }
 static byte * gen_entry_141fec130(longlong param_1, int param_2, int param_3, int param_4) {
@@ -473612,11 +473605,11 @@ static longlong gen_entry_141fec7a0(longlong param_1) {
         return (longlong)0;
     }
 }
-static longlong gen_entry_141fec930(longlong *param_1) {
+static undefined8 gen_entry_141fec930(longlong *param_1) {
     __try {
-        return CALLF(longlong, FUN_141fec930)(param_1);
+        return CALLF(undefined8, FUN_141fec930)(param_1);
     } __except (GenFault(0x141fec930ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static uint gen_entry_141fecab0(undefined8 param_1, int *param_2, int param_3, int param_4) {
@@ -477203,7 +477196,7 @@ static undefined4 gen_entry_1420336f0(void) {
         return (undefined4)0;
     }
 }
-static undefined8 gen_entry_142033700(LPCSTR param_1) {
+static undefined8 gen_entry_142033700(undefined8 param_1) {
     __try {
         return CALLF(undefined8, FUN_142033700)(param_1);
     } __except (GenFault(0x142033700ULL, GetExceptionInformation())) {
@@ -477315,14 +477308,14 @@ static undefined4 gen_entry_142033eb0(longlong param_1, int param_2) {
         return (undefined4)0;
     }
 }
-static undefined4 gen_entry_142033fe0(longlong param_1, undefined2 param_2, undefined2 param_3) {
+static undefined4 gen_entry_142033fe0(longlong param_1, ushort param_2, ushort param_3) {
     __try {
         return CALLF(undefined4, FUN_142033fe0)(param_1, param_2, param_3);
     } __except (GenFault(0x142033fe0ULL, GetExceptionInformation())) {
         return (undefined4)0;
     }
 }
-static undefined4 gen_entry_142034020(longlong param_1, undefined2 param_2, undefined2 param_3) {
+static undefined4 gen_entry_142034020(longlong param_1, ushort param_2, ushort param_3) {
     __try {
         return CALLF(undefined4, FUN_142034020)(param_1, param_2, param_3);
     } __except (GenFault(0x142034020ULL, GetExceptionInformation())) {
@@ -477350,7 +477343,7 @@ static undefined4 gen_entry_1420340d0(longlong param_1, undefined8 param_2, unde
         return (undefined4)0;
     }
 }
-static undefined4 gen_entry_142034100(longlong param_1, uint param_2) {
+static undefined4 gen_entry_142034100(longlong param_1, undefined4 param_2) {
     __try {
         return CALLF(undefined4, FUN_142034100)(param_1, param_2);
     } __except (GenFault(0x142034100ULL, GetExceptionInformation())) {
@@ -477749,11 +477742,11 @@ static undefined4 gen_entry_142038c10(int param_1) {
         return (undefined4)0;
     }
 }
-static int gen_entry_142038c40(int param_1) {
+static undefined4 gen_entry_142038c40(int param_1) {
     __try {
-        return CALLF(int, FUN_142038c40)(param_1);
+        return CALLF(undefined4, FUN_142038c40)(param_1);
     } __except (GenFault(0x142038c40ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static undefined8 * gen_entry_142038c80(undefined8 *param_1, int param_2) {
@@ -478757,7 +478750,7 @@ static undefined8 gen_entry_14203f0c0(void) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14203f0e0(DWORD param_1) {
+static undefined8 gen_entry_14203f0e0(undefined4 param_1) {
     __try {
         return CALLF(undefined8, FUN_14203f0e0)(param_1);
     } __except (GenFault(0x14203f0e0ULL, GetExceptionInformation())) {
@@ -479114,11 +479107,11 @@ static undefined8 gen_entry_142042850(undefined8 param_1, longlong param_2) {
         return (undefined8)0;
     }
 }
-static HWND gen_entry_142042880(undefined8 param_1, longlong param_2) {
+static undefined8 gen_entry_142042880(undefined8 param_1, longlong param_2) {
     __try {
-        return CALLF(HWND, FUN_142042880)(param_1, param_2);
+        return CALLF(undefined8, FUN_142042880)(param_1, param_2);
     } __except (GenFault(0x142042880ULL, GetExceptionInformation())) {
-        return (HWND)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_142042990(undefined8 param_1, longlong param_2) {
@@ -481130,7 +481123,7 @@ static undefined4 gen_entry_1420563f0(undefined8 *param_1, undefined8 param_2, u
         return (undefined4)0;
     }
 }
-static undefined4 gen_entry_142056440(HWND param_1, int param_2, longlong param_3, longlong param_4) {
+static undefined4 gen_entry_142056440(undefined8 param_1, int param_2, longlong param_3, longlong param_4) {
     __try {
         return CALLF(undefined4, FUN_142056440)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x142056440ULL, GetExceptionInformation())) {
@@ -481851,18 +481844,18 @@ static uint gen_entry_14205c9c0(longlong param_1, undefined4 param_2, float para
         return (uint)0;
     }
 }
-static code * gen_entry_14205cc30(longlong param_1) {
+static undefined8 gen_entry_14205cc30(longlong param_1) {
     __try {
-        return CALLF(code *, FUN_14205cc30)(param_1);
+        return CALLF(undefined8, FUN_14205cc30)(param_1);
     } __except (GenFault(0x14205cc30ULL, GetExceptionInformation())) {
-        return (code *)0;
+        return (undefined8)0;
     }
 }
-static code * gen_entry_14205cc80(longlong param_1) {
+static undefined8 gen_entry_14205cc80(longlong param_1) {
     __try {
-        return CALLF(code *, FUN_14205cc80)(param_1);
+        return CALLF(undefined8, FUN_14205cc80)(param_1);
     } __except (GenFault(0x14205cc80ULL, GetExceptionInformation())) {
-        return (code *)0;
+        return (undefined8)0;
     }
 }
 static undefined4 gen_entry_14205cd40(int param_1, void *param_2) {
@@ -481956,11 +481949,11 @@ static undefined8 gen_entry_14205dd90(undefined8 param_1, undefined8 param_2, un
         return (undefined8)0;
     }
 }
-static uint gen_entry_14205ddb0(longlong param_1) {
+static undefined4 gen_entry_14205ddb0(longlong param_1) {
     __try {
-        return CALLF(uint, FUN_14205ddb0)(param_1);
+        return CALLF(undefined4, FUN_14205ddb0)(param_1);
     } __except (GenFault(0x14205ddb0ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static undefined4 gen_entry_14205de00(longlong param_1) {
@@ -481970,11 +481963,11 @@ static undefined4 gen_entry_14205de00(longlong param_1) {
         return (undefined4)0;
     }
 }
-static uint gen_entry_14205dea0(longlong param_1) {
+static undefined4 gen_entry_14205dea0(longlong param_1) {
     __try {
-        return CALLF(uint, FUN_14205dea0)(param_1);
+        return CALLF(undefined4, FUN_14205dea0)(param_1);
     } __except (GenFault(0x14205dea0ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static undefined8 gen_entry_14205df00(longlong param_1) {
@@ -487542,11 +487535,11 @@ static longlong gen_entry_1420bfad0(longlong param_1, longlong param_2, longlong
         return (longlong)0;
     }
 }
-static ulonglong gen_entry_1420bfc40(longlong param_1, ulonglong *param_2, ulonglong *param_3) {
+static undefined8 gen_entry_1420bfc40(longlong param_1, undefined8 param_2, undefined8 param_3) {
     __try {
-        return CALLF(ulonglong, FUN_1420bfc40)(param_1, param_2, param_3);
+        return CALLF(undefined8, FUN_1420bfc40)(param_1, param_2, param_3);
     } __except (GenFault(0x1420bfc40ULL, GetExceptionInformation())) {
-        return (ulonglong)0;
+        return (undefined8)0;
     }
 }
 static undefined4 gen_entry_1420bfc50(char *param_1, undefined8 param_2) {
@@ -487563,11 +487556,11 @@ static undefined8 gen_entry_1420bfce0(longlong param_1, longlong param_2) {
         return (undefined8)0;
     }
 }
-static ulonglong gen_entry_1420bfd20(char *param_1, ulonglong *param_2, ulonglong *param_3, longlong param_4) {
+static undefined8 gen_entry_1420bfd20(longlong param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4) {
     __try {
-        return CALLF(ulonglong, FUN_1420bfd20)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined8, FUN_1420bfd20)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x1420bfd20ULL, GetExceptionInformation())) {
-        return (ulonglong)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_1420bfd30(longlong param_1, undefined1 param_2) {
@@ -491497,14 +491490,14 @@ static undefined1 gen_entry_142100490(longlong param_1) {
         return (undefined1)0;
     }
 }
-static undefined8 gen_entry_1421004e0(longlong param_1, longlong param_2, undefined4 *param_3, undefined8 param_4, undefined1 param_5, undefined8 param_6, undefined1 param_7) {
+static undefined8 gen_entry_1421004e0(longlong param_1, longlong param_2, undefined8 *param_3, undefined8 param_4, undefined1 param_5, undefined8 param_6, undefined1 param_7) {
     __try {
         return CALLF(undefined8, FUN_1421004e0)(param_1, param_2, param_3, param_4, param_5, param_6, param_7);
     } __except (GenFault(0x1421004e0ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1421005a0(longlong param_1, longlong param_2, undefined4 *param_3, undefined1 param_4, undefined8 param_5, undefined8 param_6, undefined1 param_7) {
+static undefined8 gen_entry_1421005a0(longlong param_1, longlong param_2, undefined8 *param_3, undefined1 param_4, undefined8 param_5, undefined8 param_6, undefined1 param_7) {
     __try {
         return CALLF(undefined8, FUN_1421005a0)(param_1, param_2, param_3, param_4, param_5, param_6, param_7);
     } __except (GenFault(0x1421005a0ULL, GetExceptionInformation())) {
@@ -491532,21 +491525,21 @@ static undefined1 gen_entry_1421008f0(longlong param_1) {
         return (undefined1)0;
     }
 }
-static undefined8 gen_entry_142100a30(longlong param_1, longlong param_2, undefined4 *param_3, undefined8 param_4, undefined1 param_5, undefined8 param_6, undefined1 param_7, undefined1 param_8) {
+static undefined8 gen_entry_142100a30(longlong param_1, longlong param_2, undefined8 *param_3, undefined8 param_4, undefined1 param_5, undefined8 param_6, undefined1 param_7, undefined1 param_8) {
     __try {
         return CALLF(undefined8, FUN_142100a30)(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8);
     } __except (GenFault(0x142100a30ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_142100af0(longlong param_1, longlong param_2, undefined4 *param_3, undefined8 param_4) {
+static undefined8 gen_entry_142100af0(longlong param_1, longlong param_2, undefined8 *param_3, undefined8 param_4) {
     __try {
         return CALLF(undefined8, FUN_142100af0)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x142100af0ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_142100b80(longlong param_1, longlong param_2, undefined4 *param_3, undefined1 param_4, undefined8 param_5, undefined8 param_6, undefined1 param_7, undefined1 param_8) {
+static undefined8 gen_entry_142100b80(longlong param_1, longlong param_2, undefined8 *param_3, undefined1 param_4, undefined8 param_5, undefined8 param_6, undefined1 param_7, undefined1 param_8) {
     __try {
         return CALLF(undefined8, FUN_142100b80)(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8);
     } __except (GenFault(0x142100b80ULL, GetExceptionInformation())) {
@@ -492141,11 +492134,11 @@ static undefined8 gen_entry_1421089b0(longlong *param_1, undefined1 param_2) {
         return (undefined8)0;
     }
 }
-static int gen_entry_142108a30(longlong *param_1, char param_2, undefined8 param_3, longlong param_4) {
+static undefined4 gen_entry_142108a30(longlong *param_1, char param_2, undefined8 param_3, longlong param_4) {
     __try {
-        return CALLF(int, FUN_142108a30)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined4, FUN_142108a30)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x142108a30ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static int gen_entry_142108b60(longlong *param_1) {
@@ -492505,11 +492498,11 @@ static undefined8 gen_entry_14210d250(longlong param_1) {
         return (undefined8)0;
     }
 }
-static int gen_entry_14210d2b0(longlong param_1, longlong param_2, undefined8 param_3) {
+static undefined4 gen_entry_14210d2b0(longlong param_1, longlong param_2, undefined8 param_3) {
     __try {
-        return CALLF(int, FUN_14210d2b0)(param_1, param_2, param_3);
+        return CALLF(undefined4, FUN_14210d2b0)(param_1, param_2, param_3);
     } __except (GenFault(0x14210d2b0ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static undefined4 gen_entry_14210d510(longlong param_1, longlong param_2, undefined8 param_3, undefined4 param_4) {
@@ -492547,14 +492540,14 @@ static byte gen_entry_14210d7f0(longlong param_1) {
         return (byte)0;
     }
 }
-static undefined8 gen_entry_14210d9e0(longlong param_1, undefined8 *param_2, undefined4 *param_3, undefined8 param_4, uint param_5, undefined8 param_6, undefined4 param_7) {
+static undefined8 gen_entry_14210d9e0(longlong param_1, undefined8 *param_2, undefined8 *param_3, undefined8 param_4, uint param_5, undefined8 param_6, undefined4 param_7) {
     __try {
         return CALLF(undefined8, FUN_14210d9e0)(param_1, param_2, param_3, param_4, param_5, param_6, param_7);
     } __except (GenFault(0x14210d9e0ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14210da80(longlong param_1, undefined8 *param_2, undefined4 *param_3, undefined8 param_4, undefined8 *param_5, undefined8 *param_6, longlong param_7, undefined8 param_8, undefined4 param_9, undefined8 param_10, undefined1 param_11) {
+static undefined8 gen_entry_14210da80(longlong param_1, undefined8 *param_2, undefined8 *param_3, undefined8 param_4, undefined8 *param_5, undefined8 *param_6, longlong param_7, undefined8 param_8, undefined4 param_9, undefined8 param_10, undefined1 param_11) {
     __try {
         return CALLF(undefined8, FUN_14210da80)(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10, param_11);
     } __except (GenFault(0x14210da80ULL, GetExceptionInformation())) {
@@ -493520,11 +493513,11 @@ static undefined8 gen_entry_14211ef10(longlong param_1, undefined1 param_2) {
         return (undefined8)0;
     }
 }
-static int gen_entry_14211ef40(longlong *param_1) {
+static undefined4 gen_entry_14211ef40(longlong *param_1) {
     __try {
-        return CALLF(int, FUN_14211ef40)(param_1);
+        return CALLF(undefined4, FUN_14211ef40)(param_1);
     } __except (GenFault(0x14211ef40ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static undefined8 gen_entry_14211f2c0(undefined8 a0, undefined8 a1, undefined8 a2, undefined8 a3) {
@@ -493744,11 +493737,11 @@ static int gen_entry_1421231e0(longlong *param_1) {
         return (int)0;
     }
 }
-static int gen_entry_142123380(longlong *param_1) {
+static undefined4 gen_entry_142123380(longlong *param_1) {
     __try {
-        return CALLF(int, FUN_142123380)(param_1);
+        return CALLF(undefined4, FUN_142123380)(param_1);
     } __except (GenFault(0x142123380ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static undefined4 gen_entry_1421233c0(longlong param_1, undefined8 *param_2) {
@@ -493947,11 +493940,11 @@ static uint gen_entry_1421268a0(longlong param_1, uint param_2) {
         return (uint)0;
     }
 }
-static int gen_entry_1421269d0(longlong param_1, char param_2) {
+static undefined4 gen_entry_1421269d0(longlong param_1, char param_2) {
     __try {
-        return CALLF(int, FUN_1421269d0)(param_1, param_2);
+        return CALLF(undefined4, FUN_1421269d0)(param_1, param_2);
     } __except (GenFault(0x1421269d0ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static undefined8 gen_entry_142126b20(longlong param_1) {
@@ -494801,11 +494794,11 @@ static undefined8 gen_entry_14212f2c0(undefined8 *param_1) {
         return (undefined8)0;
     }
 }
-static undefined ** gen_entry_14212f330(undefined8 *param_1) {
+static undefined8 gen_entry_14212f330(undefined8 *param_1) {
     __try {
-        return CALLF(undefined **, FUN_14212f330)(param_1);
+        return CALLF(undefined8, FUN_14212f330)(param_1);
     } __except (GenFault(0x14212f330ULL, GetExceptionInformation())) {
-        return (undefined **)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_14212f3c0(undefined8 param_1, uint param_2) {
@@ -495340,7 +495333,7 @@ static undefined1 gen_entry_142136660(void) {
         return (undefined1)0;
     }
 }
-static undefined8 gen_entry_142136670(longlong param_1, undefined8 param_2, undefined8 *param_3, undefined8 param_4, undefined4 param_5, undefined1 param_6, undefined4 *param_7, undefined8 param_8, undefined8 param_9, undefined8 param_10) {
+static undefined8 gen_entry_142136670(longlong param_1, undefined8 param_2, undefined8 *param_3, undefined8 param_4, undefined4 param_5, undefined1 param_6, undefined8 *param_7, undefined8 param_8, undefined8 param_9, undefined8 param_10) {
     __try {
         return CALLF(undefined8, FUN_142136670)(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10);
     } __except (GenFault(0x142136670ULL, GetExceptionInformation())) {
@@ -498224,11 +498217,11 @@ static undefined8 gen_entry_142162090(longlong *param_1) {
         return (undefined8)0;
     }
 }
-static uint gen_entry_142162140(undefined8 *param_1) {
+static undefined4 gen_entry_142162140(undefined8 *param_1) {
     __try {
-        return CALLF(uint, FUN_142162140)(param_1);
+        return CALLF(undefined4, FUN_142162140)(param_1);
     } __except (GenFault(0x142162140ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static undefined4 gen_entry_1421621b0(longlong param_1) {
@@ -498847,11 +498840,11 @@ static undefined8 gen_entry_14216cc80(longlong param_1, undefined1 param_2) {
         return (undefined8)0;
     }
 }
-static int gen_entry_14216ccb0(longlong param_1) {
+static undefined4 gen_entry_14216ccb0(longlong param_1) {
     __try {
-        return CALLF(int, FUN_14216ccb0)(param_1);
+        return CALLF(undefined4, FUN_14216ccb0)(param_1);
     } __except (GenFault(0x14216ccb0ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static undefined4 gen_entry_14216cd50(undefined8 *param_1, longlong param_2, longlong param_3) {
@@ -500436,7 +500429,7 @@ static undefined4 gen_entry_142181070(longlong param_1, longlong param_2, char p
         return (undefined4)0;
     }
 }
-static undefined8 gen_entry_142181230(LPCWSTR param_1, undefined8 param_2) {
+static undefined8 gen_entry_142181230(short *param_1, undefined8 param_2) {
     __try {
         return CALLF(undefined8, FUN_142181230)(param_1, param_2);
     } __except (GenFault(0x142181230ULL, GetExceptionInformation())) {
@@ -501346,11 +501339,11 @@ static undefined8 gen_entry_14218bd20(longlong param_1, int param_2, longlong pa
         return (undefined8)0;
     }
 }
-static uint gen_entry_14218bec0(longlong param_1, longlong param_2, undefined8 *param_3) {
+static undefined4 gen_entry_14218bec0(longlong param_1, longlong param_2, undefined8 *param_3) {
     __try {
-        return CALLF(uint, FUN_14218bec0)(param_1, param_2, param_3);
+        return CALLF(undefined4, FUN_14218bec0)(param_1, param_2, param_3);
     } __except (GenFault(0x14218bec0ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static undefined4 gen_entry_14218bf40(longlong param_1, longlong param_2, longlong *param_3, uint *param_4, char *param_5, undefined1 *param_6) {
@@ -501815,7 +501808,7 @@ static uintptr_t gen_entry_1421930c0(undefined8 param_1, void *param_2) {
         return (uintptr_t)0;
     }
 }
-static undefined8 gen_entry_142193100(HANDLE param_1) {
+static undefined8 gen_entry_142193100(undefined8 param_1) {
     __try {
         return CALLF(undefined8, FUN_142193100)(param_1);
     } __except (GenFault(0x142193100ULL, GetExceptionInformation())) {
@@ -502802,7 +502795,7 @@ static undefined8 gen_entry_1421a6700(undefined8 *param_1) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1421a6750(longlong param_1, BYTE *param_2, DWORD param_3) {
+static undefined8 gen_entry_1421a6750(longlong param_1, undefined8 param_2, undefined4 param_3) {
     __try {
         return CALLF(undefined8, FUN_1421a6750)(param_1, param_2, param_3);
     } __except (GenFault(0x1421a6750ULL, GetExceptionInformation())) {
@@ -503642,11 +503635,11 @@ static undefined8 * gen_entry_1421b0410(undefined8 *param_1, undefined8 *param_2
         return (undefined8 *)0;
     }
 }
-static int gen_entry_1421b0480(longlong param_1) {
+static undefined4 gen_entry_1421b0480(longlong param_1) {
     __try {
-        return CALLF(int, FUN_1421b0480)(param_1);
+        return CALLF(undefined4, FUN_1421b0480)(param_1);
     } __except (GenFault(0x1421b0480ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
 static undefined8 * gen_entry_1421b0500(undefined8 *param_1, uint param_2) {
@@ -513792,11 +513785,11 @@ static longlong gen_entry_1422350e0(longlong *param_1, int param_2, undefined8 p
         return (longlong)0;
     }
 }
-static longlong * gen_entry_142235130(longlong *param_1, int param_2, undefined8 param_3) {
+static undefined8 gen_entry_142235130(longlong *param_1, int param_2, undefined8 param_3) {
     __try {
-        return CALLF(longlong *, FUN_142235130)(param_1, param_2, param_3);
+        return CALLF(undefined8, FUN_142235130)(param_1, param_2, param_3);
     } __except (GenFault(0x142235130ULL, GetExceptionInformation())) {
-        return (longlong *)0;
+        return (undefined8)0;
     }
 }
 static uint gen_entry_142235180(longlong *param_1, int param_2, int param_3) {
@@ -514646,11 +514639,11 @@ static undefined1 gen_entry_1422433b0(longlong param_1, undefined4 param_2, unde
         return (undefined1)0;
     }
 }
-static longlong * gen_entry_1422434d0(longlong *param_1, int param_2, undefined8 param_3, longlong *param_4) {
+static undefined8 gen_entry_1422434d0(longlong *param_1, int param_2, undefined8 param_3, longlong *param_4) {
     __try {
-        return CALLF(longlong *, FUN_1422434d0)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined8, FUN_1422434d0)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x1422434d0ULL, GetExceptionInformation())) {
-        return (longlong *)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_142243570(undefined8 param_1, longlong param_2, longlong *param_3) {
@@ -516921,11 +516914,11 @@ static undefined8 gen_entry_14225b730(longlong param_1, undefined8 param_2) {
         return (undefined8)0;
     }
 }
-static undefined8 * gen_entry_14225b780(longlong param_1, ulonglong param_2) {
+static undefined8 gen_entry_14225b780(longlong param_1, ulonglong param_2) {
     __try {
-        return CALLF(undefined8 *, FUN_14225b780)(param_1, param_2);
+        return CALLF(undefined8, FUN_14225b780)(param_1, param_2);
     } __except (GenFault(0x14225b780ULL, GetExceptionInformation())) {
-        return (undefined8 *)0;
+        return (undefined8)0;
     }
 }
 static undefined4 gen_entry_14225c1a0(longlong param_1) {
@@ -517306,11 +517299,11 @@ static int gen_entry_1422613d0(void) {
         return (int)0;
     }
 }
-static LPVOID gen_entry_1422615e0(SIZE_T param_1) {
+static undefined8 gen_entry_1422615e0(undefined8 param_1) {
     __try {
-        return CALLF(LPVOID, FUN_1422615e0)(param_1);
+        return CALLF(undefined8, FUN_1422615e0)(param_1);
     } __except (GenFault(0x1422615e0ULL, GetExceptionInformation())) {
-        return (LPVOID)0;
+        return (undefined8)0;
     }
 }
 static undefined4 gen_entry_142261680(void) {
@@ -517320,14 +517313,14 @@ static undefined4 gen_entry_142261680(void) {
         return (undefined4)0;
     }
 }
-static undefined8 gen_entry_1422616e0(LPVOID param_1) {
+static undefined8 gen_entry_1422616e0(undefined8 param_1) {
     __try {
         return CALLF(undefined8, FUN_1422616e0)(param_1);
     } __except (GenFault(0x1422616e0ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_142261950(DWORD param_1) {
+static undefined8 gen_entry_142261950(undefined4 param_1) {
     __try {
         return CALLF(undefined8, FUN_142261950)(param_1);
     } __except (GenFault(0x142261950ULL, GetExceptionInformation())) {
@@ -520001,7 +519994,7 @@ static undefined8 gen_entry_142289b80(undefined8 param_1, undefined8 param_2) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_142289bb0(undefined4 param_1, undefined2 param_2, undefined8 param_3) {
+static undefined8 gen_entry_142289bb0(undefined4 param_1, ushort param_2, undefined8 param_3) {
     __try {
         return CALLF(undefined8, FUN_142289bb0)(param_1, param_2, param_3);
     } __except (GenFault(0x142289bb0ULL, GetExceptionInformation())) {
@@ -520197,7 +520190,7 @@ static char * gen_entry_14228b900(int param_1) {
         return (char *)0;
     }
 }
-static undefined8 gen_entry_14228b9f0(undefined1 param_1) {
+static undefined8 gen_entry_14228b9f0(byte param_1) {
     __try {
         return CALLF(undefined8, FUN_14228b9f0)(param_1);
     } __except (GenFault(0x14228b9f0ULL, GetExceptionInformation())) {
@@ -527435,11 +527428,11 @@ static undefined8 gen_entry_1422cbfa0(longlong *param_1) {
         return (undefined8)0;
     }
 }
-static longlong * gen_entry_1422cc4c0(longlong *param_1) {
+static undefined8 gen_entry_1422cc4c0(longlong *param_1) {
     __try {
-        return CALLF(longlong *, FUN_1422cc4c0)(param_1);
+        return CALLF(undefined8, FUN_1422cc4c0)(param_1);
     } __except (GenFault(0x1422cc4c0ULL, GetExceptionInformation())) {
-        return (longlong *)0;
+        return (undefined8)0;
     }
 }
 static undefined8 gen_entry_1422cc4e0(longlong param_1) {
@@ -533833,11 +533826,11 @@ static longlong gen_entry_142324b30(longlong param_1, longlong param_2, uint par
         return (longlong)0;
     }
 }
-static uint gen_entry_142324d30(longlong param_1, longlong param_2) {
+static undefined4 gen_entry_142324d30(longlong param_1, longlong param_2) {
     __try {
-        return CALLF(uint, FUN_142324d30)(param_1, param_2);
+        return CALLF(undefined4, FUN_142324d30)(param_1, param_2);
     } __except (GenFault(0x142324d30ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static uint gen_entry_142324d90(short *param_1, byte *param_2) {
@@ -534442,11 +534435,11 @@ static bool gen_entry_14232a2e0(longlong param_1, undefined8 *param_2, longlong 
         return (bool)0;
     }
 }
-static uint gen_entry_14232a520(undefined8 param_1, longlong param_2) {
+static undefined4 gen_entry_14232a520(undefined8 param_1, longlong param_2) {
     __try {
-        return CALLF(uint, FUN_14232a520)(param_1, param_2);
+        return CALLF(undefined4, FUN_14232a520)(param_1, param_2);
     } __except (GenFault(0x14232a520ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static int gen_entry_14232a550(longlong param_1, undefined8 param_2, undefined8 param_3, undefined4 param_4, longlong param_5) {
@@ -537277,14 +537270,14 @@ static undefined8 gen_entry_142349770(longlong param_1, undefined8 *param_2) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_142349790(longlong param_1, undefined1 param_2) {
+static undefined8 gen_entry_142349790(longlong param_1, byte param_2) {
     __try {
         return CALLF(undefined8, FUN_142349790)(param_1, param_2);
     } __except (GenFault(0x142349790ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1423497b0(longlong param_1, undefined1 param_2) {
+static undefined8 gen_entry_1423497b0(longlong param_1, byte param_2) {
     __try {
         return CALLF(undefined8, FUN_1423497b0)(param_1, param_2);
     } __except (GenFault(0x1423497b0ULL, GetExceptionInformation())) {
@@ -539566,7 +539559,7 @@ static undefined8 gen_entry_142363970(longlong param_1, ulonglong param_2, ulong
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_142363ac0(PCONDITION_VARIABLE param_1) {
+static undefined8 gen_entry_142363ac0(undefined8 param_1) {
     __try {
         return CALLF(undefined8, FUN_142363ac0)(param_1);
     } __except (GenFault(0x142363ac0ULL, GetExceptionInformation())) {
@@ -539580,7 +539573,7 @@ static undefined1 gen_entry_142363ad0(undefined8 param_1) {
         return (undefined1)0;
     }
 }
-static undefined8 gen_entry_142363af0(PCONDITION_VARIABLE param_1) {
+static undefined8 gen_entry_142363af0(undefined8 param_1) {
     __try {
         return CALLF(undefined8, FUN_142363af0)(param_1);
     } __except (GenFault(0x142363af0ULL, GetExceptionInformation())) {
@@ -539594,14 +539587,14 @@ static bool gen_entry_142363b00(undefined8 param_1, undefined8 param_2, longlong
         return (bool)0;
     }
 }
-static undefined8 gen_entry_142363b50(PCONDITION_VARIABLE param_1, PSRWLOCK param_2) {
+static undefined8 gen_entry_142363b50(undefined8 param_1, undefined8 param_2) {
     __try {
         return CALLF(undefined8, FUN_142363b50)(param_1, param_2);
     } __except (GenFault(0x142363b50ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_142363b60(ulonglong *param_1, ulonglong *param_2, byte *param_3, uint param_4) {
+static undefined8 gen_entry_142363b60(undefined8 param_1, undefined8 param_2, undefined8 param_3, uint param_4) {
     __try {
         return CALLF(undefined8, FUN_142363b60)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x142363b60ULL, GetExceptionInformation())) {
@@ -539636,14 +539629,14 @@ static undefined4 gen_entry_1423642a0(uint param_1, ushort *param_2, uint *param
         return (undefined4)0;
     }
 }
-static undefined8 gen_entry_142364390(PSRWLOCK param_1) {
+static undefined8 gen_entry_142364390(undefined8 param_1) {
     __try {
         return CALLF(undefined8, FUN_142364390)(param_1);
     } __except (GenFault(0x142364390ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1423643a0(PSRWLOCK param_1) {
+static undefined8 gen_entry_1423643a0(undefined8 param_1) {
     __try {
         return CALLF(undefined8, FUN_1423643a0)(param_1);
     } __except (GenFault(0x1423643a0ULL, GetExceptionInformation())) {
@@ -540133,105 +540126,105 @@ static undefined4 gen_entry_14236a108(undefined8 param_1, undefined4 param_2, un
         return (undefined4)0;
     }
 }
-static u_long gen_entry_14236a10e(u_long param_1) {
+static undefined4 gen_entry_14236a10e(undefined4 param_1) {
     __try {
-        return CALLF(u_long, FUN_14236a10e)(param_1);
+        return CALLF(undefined4, FUN_14236a10e)(param_1);
     } __except (GenFault(0x14236a10eULL, GetExceptionInformation())) {
-        return (u_long)0;
+        return (undefined4)0;
     }
 }
-static u_short gen_entry_14236a114(u_short param_1) {
+static undefined2 gen_entry_14236a114(undefined2 param_1) {
     __try {
-        return CALLF(u_short, FUN_14236a114)(param_1);
+        return CALLF(undefined2, FUN_14236a114)(param_1);
     } __except (GenFault(0x14236a114ULL, GetExceptionInformation())) {
-        return (u_short)0;
+        return (undefined2)0;
     }
 }
-static u_long gen_entry_14236a11a(u_long param_1) {
+static undefined4 gen_entry_14236a11a(undefined4 param_1) {
     __try {
-        return CALLF(u_long, FUN_14236a11a)(param_1);
+        return CALLF(undefined4, FUN_14236a11a)(param_1);
     } __except (GenFault(0x14236a11aULL, GetExceptionInformation())) {
-        return (u_long)0;
+        return (undefined4)0;
     }
 }
-static int gen_entry_14236a120(SOCKET param_1, fd_set *param_2) {
+static undefined4 gen_entry_14236a120(undefined8 param_1, undefined8 param_2) {
     __try {
-        return CALLF(int, FUN_14236a120)(param_1, param_2);
+        return CALLF(undefined4, FUN_14236a120)(param_1, param_2);
     } __except (GenFault(0x14236a120ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
-static SOCKET gen_entry_14236a126(SOCKET param_1, sockaddr *param_2, int *param_3) {
+static undefined8 gen_entry_14236a126(undefined8 param_1, undefined8 param_2, undefined8 param_3) {
     __try {
-        return CALLF(SOCKET, FUN_14236a126)(param_1, param_2, param_3);
+        return CALLF(undefined8, FUN_14236a126)(param_1, param_2, param_3);
     } __except (GenFault(0x14236a126ULL, GetExceptionInformation())) {
-        return (SOCKET)0;
+        return (undefined8)0;
     }
 }
-static int gen_entry_14236a12c(SOCKET param_1, sockaddr *param_2, int param_3) {
+static undefined4 gen_entry_14236a12c(undefined8 param_1, undefined8 param_2, undefined4 param_3) {
     __try {
-        return CALLF(int, FUN_14236a12c)(param_1, param_2, param_3);
+        return CALLF(undefined4, FUN_14236a12c)(param_1, param_2, param_3);
     } __except (GenFault(0x14236a12cULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
-static undefined8 gen_entry_14236a132(SOCKET param_1) {
+static undefined8 gen_entry_14236a132(undefined8 param_1) {
     __try {
         return CALLF(undefined8, FUN_14236a132)(param_1);
     } __except (GenFault(0x14236a132ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static int gen_entry_14236a138(SOCKET param_1, sockaddr *param_2, int param_3) {
+static undefined4 gen_entry_14236a138(undefined8 param_1, undefined8 param_2, undefined4 param_3) {
     __try {
-        return CALLF(int, FUN_14236a138)(param_1, param_2, param_3);
+        return CALLF(undefined4, FUN_14236a138)(param_1, param_2, param_3);
     } __except (GenFault(0x14236a138ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
-static int gen_entry_14236a13e(SOCKET param_1, long param_2, u_long *param_3) {
+static undefined4 gen_entry_14236a13e(undefined8 param_1, undefined4 param_2, undefined8 param_3) {
     __try {
-        return CALLF(int, FUN_14236a13e)(param_1, param_2, param_3);
+        return CALLF(undefined4, FUN_14236a13e)(param_1, param_2, param_3);
     } __except (GenFault(0x14236a13eULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
-static int gen_entry_14236a144(SOCKET param_1, int param_2) {
+static undefined4 gen_entry_14236a144(undefined8 param_1, undefined4 param_2) {
     __try {
-        return CALLF(int, FUN_14236a144)(param_1, param_2);
+        return CALLF(undefined4, FUN_14236a144)(param_1, param_2);
     } __except (GenFault(0x14236a144ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
-static int gen_entry_14236a14a(SOCKET param_1, char *param_2, int param_3, int param_4) {
+static undefined4 gen_entry_14236a14a(undefined8 param_1, undefined8 param_2, undefined4 param_3, undefined4 param_4) {
     __try {
-        return CALLF(int, FUN_14236a14a)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined4, FUN_14236a14a)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x14236a14aULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
-static int gen_entry_14236a150(int param_1, fd_set *param_2, fd_set *param_3, fd_set *param_4, timeval *param_5) {
+static undefined4 gen_entry_14236a150(undefined4 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5) {
     __try {
-        return CALLF(int, FUN_14236a150)(param_1, param_2, param_3, param_4, param_5);
+        return CALLF(undefined4, FUN_14236a150)(param_1, param_2, param_3, param_4, param_5);
     } __except (GenFault(0x14236a150ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
-static int gen_entry_14236a156(SOCKET param_1, char *param_2, int param_3, int param_4) {
+static undefined4 gen_entry_14236a156(undefined8 param_1, undefined8 param_2, undefined4 param_3, undefined4 param_4) {
     __try {
-        return CALLF(int, FUN_14236a156)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined4, FUN_14236a156)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x14236a156ULL, GetExceptionInformation())) {
-        return (int)0;
+        return (undefined4)0;
     }
 }
-static SOCKET gen_entry_14236a15c(int param_1, int param_2, int param_3) {
+static undefined8 gen_entry_14236a15c(undefined4 param_1, undefined4 param_2, undefined4 param_3) {
     __try {
-        return CALLF(SOCKET, FUN_14236a15c)(param_1, param_2, param_3);
+        return CALLF(undefined8, FUN_14236a15c)(param_1, param_2, param_3);
     } __except (GenFault(0x14236a15cULL, GetExceptionInformation())) {
-        return (SOCKET)0;
+        return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14236a162(WORD param_1, LPWSADATA param_2) {
+static undefined8 gen_entry_14236a162(undefined2 param_1, undefined8 param_2) {
     __try {
         return CALLF(undefined8, FUN_14236a162)(param_1, param_2);
     } __except (GenFault(0x14236a162ULL, GetExceptionInformation())) {
@@ -540245,21 +540238,21 @@ static undefined8 gen_entry_14236a168(void) {
         return (undefined8)0;
     }
 }
-static ulong gen_entry_14236a16e(char *param_1) {
+static undefined4 gen_entry_14236a16e(undefined8 param_1) {
     __try {
-        return CALLF(ulong, FUN_14236a16e)(param_1);
+        return CALLF(undefined4, FUN_14236a16e)(param_1);
     } __except (GenFault(0x14236a16eULL, GetExceptionInformation())) {
-        return (ulong)0;
+        return (undefined4)0;
     }
 }
-static HANDLE gen_entry_14236a174(HWND param_1, u_int param_2, char *param_3, char *param_4, int param_5) {
+static undefined8 gen_entry_14236a174(undefined8 param_1, undefined4 param_2, undefined8 param_3, undefined8 param_4, undefined4 param_5) {
     __try {
-        return CALLF(HANDLE, FUN_14236a174)(param_1, param_2, param_3, param_4, param_5);
+        return CALLF(undefined8, FUN_14236a174)(param_1, param_2, param_3, param_4, param_5);
     } __except (GenFault(0x14236a174ULL, GetExceptionInformation())) {
-        return (HANDLE)0;
+        return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14236a17a(HANDLE param_1, undefined8 param_2) {
+static undefined8 gen_entry_14236a17a(undefined8 param_1, undefined8 param_2) {
     __try {
         return CALLF(undefined8, FUN_14236a17a)(param_1, param_2);
     } __except (GenFault(0x14236a17aULL, GetExceptionInformation())) {
@@ -540273,126 +540266,126 @@ static undefined8 gen_entry_14236a180(undefined4 param_1, undefined8 param_2, un
         return (undefined8)0;
     }
 }
-static DWORD gen_entry_14236a186(LPCSTR param_1, LPDWORD param_2) {
+static undefined4 gen_entry_14236a186(undefined8 param_1, undefined8 param_2) {
     __try {
-        return CALLF(DWORD, FUN_14236a186)(param_1, param_2);
+        return CALLF(undefined4, FUN_14236a186)(param_1, param_2);
     } __except (GenFault(0x14236a186ULL, GetExceptionInformation())) {
-        return (DWORD)0;
+        return (undefined4)0;
     }
 }
-static BOOL gen_entry_14236a18c(LPCSTR param_1, DWORD param_2, DWORD param_3, LPVOID param_4) {
+static undefined4 gen_entry_14236a18c(undefined8 param_1, undefined4 param_2, undefined4 param_3, undefined8 param_4) {
     __try {
-        return CALLF(BOOL, FUN_14236a18c)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined4, FUN_14236a18c)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x14236a18cULL, GetExceptionInformation())) {
-        return (BOOL)0;
+        return (undefined4)0;
     }
 }
-static BOOL gen_entry_14236a192(LPCVOID param_1, LPCSTR param_2, LPVOID *param_3, PUINT param_4) {
+static undefined4 gen_entry_14236a192(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4) {
     __try {
-        return CALLF(BOOL, FUN_14236a192)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined4, FUN_14236a192)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x14236a192ULL, GetExceptionInformation())) {
-        return (BOOL)0;
+        return (undefined4)0;
     }
 }
-static BOOL gen_entry_14236a198(DATA_BLOB *param_1, LPWSTR *param_2, DATA_BLOB *param_3, PVOID param_4, CRYPTPROTECT_PROMPTSTRUCT *param_5, DWORD param_6, DATA_BLOB *param_7) {
+static undefined4 gen_entry_14236a198(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined4 param_6, undefined8 param_7) {
     __try {
-        return CALLF(BOOL, FUN_14236a198)(param_1, param_2, param_3, param_4, param_5, param_6, param_7);
+        return CALLF(undefined4, FUN_14236a198)(param_1, param_2, param_3, param_4, param_5, param_6, param_7);
     } __except (GenFault(0x14236a198ULL, GetExceptionInformation())) {
-        return (BOOL)0;
+        return (undefined4)0;
     }
 }
-static UINT gen_entry_14236a19e(HKL param_1, LPWSTR param_2, UINT param_3) {
+static undefined4 gen_entry_14236a19e(undefined8 param_1, undefined8 param_2, undefined4 param_3) {
     __try {
-        return CALLF(UINT, FUN_14236a19e)(param_1, param_2, param_3);
+        return CALLF(undefined4, FUN_14236a19e)(param_1, param_2, param_3);
     } __except (GenFault(0x14236a19eULL, GetExceptionInformation())) {
-        return (UINT)0;
+        return (undefined4)0;
     }
 }
-static HIMC gen_entry_14236a1a4(HWND param_1) {
+static undefined8 gen_entry_14236a1a4(undefined8 param_1) {
     __try {
-        return CALLF(HIMC, FUN_14236a1a4)(param_1);
+        return CALLF(undefined8, FUN_14236a1a4)(param_1);
     } __except (GenFault(0x14236a1a4ULL, GetExceptionInformation())) {
-        return (HIMC)0;
+        return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14236a1aa(HWND param_1, HIMC param_2) {
+static undefined8 gen_entry_14236a1aa(undefined8 param_1, undefined8 param_2) {
     __try {
         return CALLF(undefined8, FUN_14236a1aa)(param_1, param_2);
     } __except (GenFault(0x14236a1aaULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static HIMC gen_entry_14236a1b0(HWND param_1, HIMC param_2) {
+static undefined8 gen_entry_14236a1b0(undefined8 param_1, undefined8 param_2) {
     __try {
-        return CALLF(HIMC, FUN_14236a1b0)(param_1, param_2);
+        return CALLF(undefined8, FUN_14236a1b0)(param_1, param_2);
     } __except (GenFault(0x14236a1b0ULL, GetExceptionInformation())) {
-        return (HIMC)0;
+        return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14236a1b6(HWND param_1, HIMC param_2, DWORD param_3) {
+static undefined8 gen_entry_14236a1b6(undefined8 param_1, undefined8 param_2, undefined4 param_3) {
     __try {
         return CALLF(undefined8, FUN_14236a1b6)(param_1, param_2, param_3);
     } __except (GenFault(0x14236a1b6ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static LONG gen_entry_14236a1bc(HIMC param_1, DWORD param_2, LPVOID param_3, DWORD param_4) {
+static undefined4 gen_entry_14236a1bc(undefined8 param_1, undefined4 param_2, undefined8 param_3, undefined4 param_4) {
     __try {
-        return CALLF(LONG, FUN_14236a1bc)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined4, FUN_14236a1bc)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x14236a1bcULL, GetExceptionInformation())) {
-        return (LONG)0;
+        return (undefined4)0;
     }
 }
-static DWORD gen_entry_14236a1c2(HIMC param_1, DWORD param_2, LPCANDIDATELIST param_3, DWORD param_4) {
+static undefined4 gen_entry_14236a1c2(undefined8 param_1, undefined4 param_2, undefined8 param_3, undefined4 param_4) {
     __try {
-        return CALLF(DWORD, FUN_14236a1c2)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined4, FUN_14236a1c2)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x14236a1c2ULL, GetExceptionInformation())) {
-        return (DWORD)0;
+        return (undefined4)0;
     }
 }
-static undefined8 gen_entry_14236a1c8(HIMC param_1, LPDWORD param_2, LPDWORD param_3) {
+static undefined8 gen_entry_14236a1c8(undefined8 param_1, undefined8 param_2, undefined8 param_3) {
     __try {
         return CALLF(undefined8, FUN_14236a1c8)(param_1, param_2, param_3);
     } __except (GenFault(0x14236a1c8ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14236a1ce(HIMC param_1, DWORD param_2, DWORD param_3) {
+static undefined8 gen_entry_14236a1ce(undefined8 param_1, undefined4 param_2, undefined4 param_3) {
     __try {
         return CALLF(undefined8, FUN_14236a1ce)(param_1, param_2, param_3);
     } __except (GenFault(0x14236a1ceULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14236a1d4(HIMC param_1, DWORD param_2, DWORD param_3, DWORD param_4) {
+static undefined8 gen_entry_14236a1d4(undefined8 param_1, undefined4 param_2, undefined4 param_3, undefined4 param_4) {
     __try {
         return CALLF(undefined8, FUN_14236a1d4)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x14236a1d4ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static UINT gen_entry_14236a1da(HKL param_1, LPSTR param_2, UINT param_3) {
+static undefined4 gen_entry_14236a1da(undefined8 param_1, undefined8 param_2, undefined4 param_3) {
     __try {
-        return CALLF(UINT, FUN_14236a1da)(param_1, param_2, param_3);
+        return CALLF(undefined4, FUN_14236a1da)(param_1, param_2, param_3);
     } __except (GenFault(0x14236a1daULL, GetExceptionInformation())) {
-        return (UINT)0;
+        return (undefined4)0;
     }
 }
-static undefined8 gen_entry_14236a1e0(HIMC param_1, DWORD param_2, LPVOID param_3, DWORD param_4, LPVOID param_5, DWORD param_6) {
+static undefined8 gen_entry_14236a1e0(undefined8 param_1, undefined4 param_2, undefined8 param_3, undefined4 param_4, undefined8 param_5, undefined4 param_6) {
     __try {
         return CALLF(undefined8, FUN_14236a1e0)(param_1, param_2, param_3, param_4, param_5, param_6);
     } __except (GenFault(0x14236a1e0ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14236a1e6(HIMC param_1, LPCOMPOSITIONFORM param_2, undefined8 param_3) {
+static undefined8 gen_entry_14236a1e6(undefined8 param_1, undefined8 param_2, undefined8 param_3) {
     __try {
         return CALLF(undefined8, FUN_14236a1e6)(param_1, param_2, param_3);
     } __except (GenFault(0x14236a1e6ULL, GetExceptionInformation())) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_14236a1ec(HIMC param_1, LPCANDIDATEFORM param_2) {
+static undefined8 gen_entry_14236a1ec(undefined8 param_1, undefined8 param_2) {
     __try {
         return CALLF(undefined8, FUN_14236a1ec)(param_1, param_2);
     } __except (GenFault(0x14236a1ecULL, GetExceptionInformation())) {
@@ -540413,11 +540406,11 @@ static undefined4 gen_entry_14236a1fe(undefined8 param_1, undefined8 param_2) {
         return (undefined4)0;
     }
 }
-static HRESULT gen_entry_14236a204(PCWSTR param_1, PVOID param_2) {
+static undefined4 gen_entry_14236a204(undefined8 param_1, undefined8 param_2) {
     __try {
-        return CALLF(HRESULT, FUN_14236a204)(param_1, param_2);
+        return CALLF(undefined4, FUN_14236a204)(param_1, param_2);
     } __except (GenFault(0x14236a204ULL, GetExceptionInformation())) {
-        return (HRESULT)0;
+        return (undefined4)0;
     }
 }
 static undefined4 gen_entry_14236a20a(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined4 param_4, undefined8 param_5) {
@@ -549856,7 +549849,7 @@ static undefined4 gen_entry_142407f20(longlong param_1) {
         return (undefined4)0;
     }
 }
-static undefined8 gen_entry_142408000(longlong param_1, LPCSTR param_2) {
+static undefined8 gen_entry_142408000(longlong param_1, longlong param_2) {
     __try {
         return CALLF(undefined8, FUN_142408000)(param_1, param_2);
     } __except (GenFault(0x142408000ULL, GetExceptionInformation())) {
@@ -550444,11 +550437,11 @@ static undefined8 gen_entry_14241f808(longlong param_1) {
         return (undefined8)0;
     }
 }
-static NTSTATUS gen_entry_14241f83c(BCRYPT_ALG_HANDLE param_1, PUCHAR param_2, ULONG param_3, ULONG param_4) {
+static undefined4 gen_entry_14241f83c(undefined8 param_1, undefined8 param_2, undefined4 param_3, undefined4 param_4) {
     __try {
-        return CALLF(NTSTATUS, FUN_14241f83c)(param_1, param_2, param_3, param_4);
+        return CALLF(undefined4, FUN_14241f83c)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x14241f83cULL, GetExceptionInformation())) {
-        return (NTSTATUS)0;
+        return (undefined4)0;
     }
 }
 static ulonglong gen_entry_14241f850(ulonglong *param_1) {
@@ -557731,18 +557724,18 @@ static undefined4 gen_entry_1424a7fd0(longlong param_1) {
         return (undefined4)0;
     }
 }
-static longlong gen_entry_1424a8000(longlong *param_1) {
+static undefined8 gen_entry_1424a8000(longlong *param_1) {
     __try {
-        return CALLF(longlong, FUN_1424a8000)(param_1);
+        return CALLF(undefined8, FUN_1424a8000)(param_1);
     } __except (GenFault(0x1424a8000ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
-static longlong gen_entry_1424a8020(longlong *param_1) {
+static undefined8 gen_entry_1424a8020(longlong *param_1) {
     __try {
-        return CALLF(longlong, FUN_1424a8020)(param_1);
+        return CALLF(undefined8, FUN_1424a8020)(param_1);
     } __except (GenFault(0x1424a8020ULL, GetExceptionInformation())) {
-        return (longlong)0;
+        return (undefined8)0;
     }
 }
 static undefined1 gen_entry_1424a8040(undefined8 param_1, undefined8 *param_2, int *param_3) {
@@ -559698,7 +559691,7 @@ static undefined8 gen_entry_1424c6250(longlong param_1, undefined8 param_2, unde
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1424c6350(longlong *param_1, undefined1 param_2, undefined1 param_3) {
+static undefined8 gen_entry_1424c6350(longlong *param_1, byte param_2, byte param_3) {
     __try {
         return CALLF(undefined8, FUN_1424c6350)(param_1, param_2, param_3);
     } __except (GenFault(0x1424c6350ULL, GetExceptionInformation())) {
@@ -559796,7 +559789,7 @@ static undefined8 gen_entry_1424c6c90(longlong param_1) {
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1424c6cb0(longlong *param_1, char param_2, undefined8 param_3, undefined1 param_4) {
+static undefined8 gen_entry_1424c6cb0(longlong *param_1, byte param_2, undefined8 param_3, undefined1 param_4) {
     __try {
         return CALLF(undefined8, FUN_1424c6cb0)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x1424c6cb0ULL, GetExceptionInformation())) {
@@ -559908,11 +559901,11 @@ static undefined1 gen_entry_1424c78e0(longlong *param_1, longlong param_2, longl
         return (undefined1)0;
     }
 }
-static uint gen_entry_1424c7b30(longlong param_1, undefined8 *param_2, undefined4 *param_3) {
+static undefined4 gen_entry_1424c7b30(longlong param_1, undefined8 *param_2, undefined8 *param_3) {
     __try {
-        return CALLF(uint, FUN_1424c7b30)(param_1, param_2, param_3);
+        return CALLF(undefined4, FUN_1424c7b30)(param_1, param_2, param_3);
     } __except (GenFault(0x1424c7b30ULL, GetExceptionInformation())) {
-        return (uint)0;
+        return (undefined4)0;
     }
 }
 static undefined8 gen_entry_1424c7b80(undefined8 param_1, undefined8 *param_2, ulonglong param_3) {
@@ -572333,11 +572326,11 @@ static undefined8 gen_entry_14254f560(short *param_1, ulonglong param_2, ulonglo
         return (undefined8)0;
     }
 }
-static HGLOBAL gen_entry_14254f7d0(HGLOBAL param_1) {
+static undefined8 gen_entry_14254f7d0(undefined8 param_1) {
     __try {
-        return CALLF(HGLOBAL, FUN_14254f7d0)(param_1);
+        return CALLF(undefined8, FUN_14254f7d0)(param_1);
     } __except (GenFault(0x14254f7d0ULL, GetExceptionInformation())) {
-        return (HGLOBAL)0;
+        return (undefined8)0;
     }
 }
 static undefined4 gen_entry_14254f7e0(longlong param_1, ushort *param_2, longlong param_3) {
@@ -580460,7 +580453,7 @@ static undefined8 gen_entry_1425b4970(byte param_1, undefined8 param_2, longlong
         return (undefined8)0;
     }
 }
-static undefined8 gen_entry_1425b49a0(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 *param_4) {
+static undefined8 gen_entry_1425b49a0(undefined8 param_1, undefined8 param_2, undefined8 param_3, longlong *param_4) {
     __try {
         return CALLF(undefined8, FUN_1425b49a0)(param_1, param_2, param_3, param_4);
     } __except (GenFault(0x1425b49a0ULL, GetExceptionInformation())) {
@@ -610767,7 +610760,6 @@ const GENJUMP g_genJumps[] = {
     { 0x1402113a0ULL, (void*)&gen_entry_1402113a0 },
     { 0x140211440ULL, (void*)&gen_entry_140211440 },
     { 0x1402114c0ULL, (void*)&gen_entry_1402114c0 },
-    { 0x1402114e0ULL, (void*)&gen_entry_1402114e0 },
     { 0x140211520ULL, (void*)&FUN_140211520 },
     { 0x140211570ULL, (void*)&FUN_140211570 },
     { 0x140211580ULL, (void*)&gen_entry_140211580 },
@@ -695538,7 +695530,7 @@ const GENJUMP g_genJumps[] = {
     { 0x14241d3f8ULL, (void*)&_strdup },
     { 0, 0 }
 };
-const size_t g_genJumpCount = 89528;
+const size_t g_genJumpCount = 89527;
 
 const unsigned long long g_genNative[] = {
     0x1400d0000ULL, 0x1401a0000ULL,
@@ -695548,9 +695540,2379 @@ const unsigned long long g_genNative[] = {
     0x1420c3a80ULL, 0x1420c3dbeULL,
     0x1423f2010ULL, 0x1423f329bULL,
     0x142404060ULL, 0x142404937ULL,
+    0x1400d0c50ULL, 0x1400d4c50ULL,
+    0x1400d58a0ULL, 0x1400d98a0ULL,
+    0x1400da240ULL, 0x1400de240ULL,
+    0x1400de4f0ULL, 0x1400e24f0ULL,
+    0x1400e29f0ULL, 0x1400e69f0ULL,
+    0x1400e7dc0ULL, 0x1400ebdc0ULL,
+    0x1400ebfa0ULL, 0x1400effa0ULL,
+    0x1400f0960ULL, 0x1400f4960ULL,
+    0x1400f6270ULL, 0x1400fa270ULL,
+    0x1400fa770ULL, 0x1400fe770ULL,
+    0x1400fe950ULL, 0x140102950ULL,
+    0x1401029f0ULL, 0x1401069f0ULL,
+    0x140108020ULL, 0x14010c020ULL,
+    0x14010c220ULL, 0x140110220ULL,
+    0x140110ab0ULL, 0x140114ab0ULL,
+    0x140114d40ULL, 0x140118d40ULL,
+    0x140118ea0ULL, 0x14011cea0ULL,
+    0x14011d380ULL, 0x140121380ULL,
+    0x140121460ULL, 0x140125460ULL,
+    0x1401256d0ULL, 0x1401296d0ULL,
+    0x14012a050ULL, 0x14012e050ULL,
+    0x14012eb00ULL, 0x140132b00ULL,
+    0x140132ee0ULL, 0x140136ee0ULL,
+    0x140137180ULL, 0x14013b180ULL,
+    0x14013b880ULL, 0x14013f880ULL,
+    0x14013f900ULL, 0x140143900ULL,
+    0x140143920ULL, 0x140147920ULL,
+    0x1401479f0ULL, 0x14014b9f0ULL,
+    0x14014bcf0ULL, 0x14014fcf0ULL,
+    0x140150190ULL, 0x140154190ULL,
+    0x140154b00ULL, 0x140158b00ULL,
+    0x140158cd0ULL, 0x14015ccd0ULL,
+    0x14015d0d0ULL, 0x1401610d0ULL,
+    0x140161400ULL, 0x140165400ULL,
+    0x140165760ULL, 0x140169760ULL,
+    0x140169940ULL, 0x14016d940ULL,
+    0x140170250ULL, 0x140174250ULL,
+    0x140174430ULL, 0x140178430ULL,
+    0x1401786b0ULL, 0x14017c6b0ULL,
+    0x14017d3d0ULL, 0x1401813d0ULL,
+    0x1401820c0ULL, 0x1401860c0ULL,
+    0x140186620ULL, 0x14018a620ULL,
+    0x14018a950ULL, 0x14018e950ULL,
+    0x14018ea30ULL, 0x140192a30ULL,
+    0x140192ae0ULL, 0x140196ae0ULL,
+    0x140196b00ULL, 0x14019ab00ULL,
+    0x1401ae870ULL, 0x1401aea80ULL,
+    0x1401af68cULL, 0x1401af6a8ULL,
+    0x140222a3cULL, 0x140222a5cULL,
+    0x14022a020ULL, 0x14022a040ULL,
+    0x1402362d4ULL, 0x140236358ULL,
+    0x140237250ULL, 0x1402372c4ULL,
+    0x14024da30ULL, 0x14024da48ULL,
+    0x14024dbacULL, 0x14024dbc4ULL,
+    0x140252de4ULL, 0x140252dfcULL,
+    0x140252dfcULL, 0x140252e14ULL,
+    0x1402531b0ULL, 0x1402531c8ULL,
+    0x140253e84ULL, 0x140253e9cULL,
+    0x140253e9cULL, 0x140253eb4ULL,
+    0x140253eb4ULL, 0x140253eccULL,
+    0x140253eccULL, 0x140253ee4ULL,
+    0x1402544c4ULL, 0x1402544f0ULL,
+    0x140256060ULL, 0x140256070ULL,
+    0x1402575a0ULL, 0x1402575e8ULL,
+    0x1402575e8ULL, 0x1402576e0ULL,
+    0x140259220ULL, 0x140259240ULL,
+    0x140260cd4ULL, 0x140260d10ULL,
+    0x140260d10ULL, 0x140260d4cULL,
+    0x140260f40ULL, 0x140260f7cULL,
+    0x140263f60ULL, 0x140263f98ULL,
+    0x14026626cULL, 0x140266288ULL,
+    0x140266288ULL, 0x140266371ULL,
+    0x14026654cULL, 0x140266570ULL,
+    0x14027312cULL, 0x140273168ULL,
+    0x140273168ULL, 0x1402731a4ULL,
+    0x1402731a8ULL, 0x1402731e8ULL,
+    0x14027fba8ULL, 0x14027fbd8ULL,
+    0x1402b21c8ULL, 0x1402b21e4ULL,
+    0x1402b21e4ULL, 0x1402b2233ULL,
+    0x1402b2b7cULL, 0x1402b2b9cULL,
+    0x1402b4e70ULL, 0x1402b4e88ULL,
+    0x1402b4e88ULL, 0x1402b4eb2ULL,
+    0x1402b5f9cULL, 0x1402b5fd8ULL,
+    0x1402b5fd8ULL, 0x1402b5ffcULL,
+    0x1402b7f24ULL, 0x1402b7f40ULL,
+    0x1402b8d20ULL, 0x1402b8d40ULL,
+    0x1402baaf0ULL, 0x1402bab88ULL,
+    0x1402bc96cULL, 0x1402bca04ULL,
+    0x1402bf408ULL, 0x1402bf424ULL,
+    0x1402bfb60ULL, 0x1402bfb7cULL,
+    0x1402bff20ULL, 0x1402bff3cULL,
+    0x1402c00a8ULL, 0x1402c00c4ULL,
+    0x1402c3e98ULL, 0x1402c3eacULL,
+    0x1402c3eacULL, 0x1402c3fa3ULL,
+    0x1402c4a54ULL, 0x1402c4aa4ULL,
+    0x1402c4d7cULL, 0x1402c4da0ULL,
+    0x1402c4da0ULL, 0x1402c4e44ULL,
+    0x1402c4e44ULL, 0x1402c4e84ULL,
+    0x1402c4e84ULL, 0x1402c4f7bULL,
+    0x1402c6508ULL, 0x1402c6530ULL,
+    0x1402c6530ULL, 0x1402c65a8ULL,
+    0x1402c6c38ULL, 0x1402c6c5cULL,
+    0x1402c6db8ULL, 0x1402c6de8ULL,
+    0x1402c74bcULL, 0x1402c74e0ULL,
+    0x1402c7bacULL, 0x1402c7be8ULL,
+    0x1402c8260ULL, 0x1402c829cULL,
+    0x1402c8838ULL, 0x1402c885cULL,
+    0x1402c885cULL, 0x1402c8880ULL,
+    0x1402c8880ULL, 0x1402c88a4ULL,
+    0x1402c88a4ULL, 0x1402c88d4ULL,
+    0x1402d2240ULL, 0x1402d2274ULL,
+    0x1402df654ULL, 0x1402df684ULL,
+    0x1402e0224ULL, 0x1402e0270ULL,
+    0x1402e0dc4ULL, 0x1402e0e30ULL,
+    0x1402e56b8ULL, 0x1402e56d8ULL,
+    0x1402eae08ULL, 0x1402eae38ULL,
+    0x1402eaed8ULL, 0x1402eaf24ULL,
+    0x1402eb9f0ULL, 0x1402eba28ULL,
+    0x1402ebb14ULL, 0x1402ebb88ULL,
+    0x1402ebc54ULL, 0x1402ebc80ULL,
+    0x1402ebe14ULL, 0x1402ebe60ULL,
+    0x1402efaf4ULL, 0x1402efb24ULL,
+    0x1402f0234ULL, 0x1402f0280ULL,
+    0x1402f0a2cULL, 0x1402f0a98ULL,
+    0x1402fdc30ULL, 0x1402fdc58ULL,
+    0x1403047c4ULL, 0x1403047ecULL,
+    0x140308540ULL, 0x14030855cULL,
+    0x140312bd8ULL, 0x140312bf0ULL,
+    0x14031aaecULL, 0x14031ab08ULL,
+    0x14031b70cULL, 0x14031b728ULL,
+    0x14031b9d0ULL, 0x14031ba14ULL,
+    0x14031dc40ULL, 0x14031dc58ULL,
+    0x1405767c4ULL, 0x1405767dcULL,
+    0x1405767dcULL, 0x1405767f4ULL,
+    0x1405767f4ULL, 0x14057680cULL,
+    0x14057680cULL, 0x140576824ULL,
+    0x140576824ULL, 0x14057683cULL,
+    0x14057683cULL, 0x140576854ULL,
+    0x140576854ULL, 0x14057686cULL,
+    0x1405825c8ULL, 0x1405825e0ULL,
+    0x1405a341cULL, 0x1405a3434ULL,
+    0x1405a3740ULL, 0x1405a3758ULL,
+    0x1405a507cULL, 0x1405a5094ULL,
+    0x1405d59c0ULL, 0x1405d5a1cULL,
+    0x1405d5a1cULL, 0x1405d5a70ULL,
+    0x1405f7aa0ULL, 0x1405f7ac4ULL,
+    0x1405fe2c0ULL, 0x1405fe2d0ULL,
+    0x1405fef10ULL, 0x1405fef20ULL,
+    0x140609d08ULL, 0x140609d38ULL,
+    0x140609d38ULL, 0x140609dcdULL,
+    0x14060c394ULL, 0x14060c3b0ULL,
+    0x14060c404ULL, 0x14060c424ULL,
+    0x14060f730ULL, 0x14060f76cULL,
+    0x14060fe50ULL, 0x14060feccULL,
+    0x1406103b4ULL, 0x1406103e0ULL,
+    0x1406103e0ULL, 0x140610402ULL,
+    0x140610404ULL, 0x1406104d8ULL,
+    0x1406107f4ULL, 0x140610814ULL,
+    0x140610814ULL, 0x140610854ULL,
+    0x140610aa8ULL, 0x140610ac8ULL,
+    0x140610ac8ULL, 0x140610b08ULL,
+    0x1406181e8ULL, 0x14061820cULL,
+    0x14061c0acULL, 0x14061c114ULL,
+    0x14062ca40ULL, 0x14062ca64ULL,
+    0x14062cb40ULL, 0x14062cb64ULL,
+    0x14062d114ULL, 0x14062d12cULL,
+    0x14062d19cULL, 0x14062d1c4ULL,
+    0x14062d330ULL, 0x14062d358ULL,
+    0x14062d358ULL, 0x14062d370ULL,
+    0x140630688ULL, 0x14063083cULL,
+    0x14063083cULL, 0x140630972ULL,
+    0x14063083cULL, 0x1406309c0ULL,
+    0x1406380a0ULL, 0x1406380c4ULL,
+    0x1406402a4ULL, 0x1406402c4ULL,
+    0x1406414ccULL, 0x1406414e8ULL,
+    0x140641f80ULL, 0x140641f9cULL,
+    0x140641f9cULL, 0x140641fd0ULL,
+    0x14064486cULL, 0x140644888ULL,
+    0x140668970ULL, 0x14066897cULL,
+    0x14066897cULL, 0x1406689c6ULL,
+    0x140668a64ULL, 0x140668a70ULL,
+    0x140668a70ULL, 0x140668abaULL,
+    0x14066b6f0ULL, 0x14066b700ULL,
+    0x14066c750ULL, 0x14066c760ULL,
+    0x14066ccd0ULL, 0x14066ce14ULL,
+    0x140673000ULL, 0x14067301cULL,
+    0x14067301cULL, 0x140673097ULL,
+    0x1406731acULL, 0x1406731c4ULL,
+    0x1406731c4ULL, 0x14067323fULL,
+    0x140680740ULL, 0x14068075cULL,
+    0x140683810ULL, 0x140683844ULL,
+    0x1406841e0ULL, 0x140684214ULL,
+    0x140684214ULL, 0x14068421cULL,
+    0x14068421cULL, 0x14068429cULL,
+    0x14068429cULL, 0x1406842a4ULL,
+    0x1406842a4ULL, 0x1406842e1ULL,
+    0x1406842e4ULL, 0x1406842ecULL,
+    0x1406842ecULL, 0x14068436cULL,
+    0x14068436cULL, 0x140684398ULL,
+    0x140685db4ULL, 0x140685de8ULL,
+    0x140685de8ULL, 0x140685df4ULL,
+    0x140685df4ULL, 0x140685e3eULL,
+    0x140686a2cULL, 0x140686a70ULL,
+    0x140686a70ULL, 0x140686aa4ULL,
+    0x140687600ULL, 0x140687644ULL,
+    0x140687644ULL, 0x140687678ULL,
+    0x14068a14cULL, 0x14068a184ULL,
+    0x14068a184ULL, 0x14068a1c0ULL,
+    0x14068bc10ULL, 0x14068bc30ULL,
+    0x14068ee94ULL, 0x14068eec8ULL,
+    0x14068f4c0ULL, 0x14068f4f4ULL,
+    0x14068f7c8ULL, 0x14068f7d0ULL,
+    0x14068f7d0ULL, 0x14068f867ULL,
+    0x14068f868ULL, 0x14068f870ULL,
+    0x14068f870ULL, 0x14068f960ULL,
+    0x14068f960ULL, 0x14068f968ULL,
+    0x14068f968ULL, 0x14068fa63ULL,
+    0x14068fa64ULL, 0x14068fa6cULL,
+    0x14068fa6cULL, 0x14068fb5aULL,
+    0x14069036cULL, 0x1406903a0ULL,
+    0x140690788ULL, 0x1406907bcULL,
+    0x140695c3cULL, 0x140695c70ULL,
+    0x1406a60d8ULL, 0x1406a6108ULL,
+    0x1406a62acULL, 0x1406a62dcULL,
+    0x1406a7358ULL, 0x1406a738cULL,
+    0x1406a7490ULL, 0x1406a74c4ULL,
+    0x1406f5df4ULL, 0x1406f5e10ULL,
+    0x14070c8f0ULL, 0x14070c918ULL,
+    0x140720574ULL, 0x1407205f8ULL,
+    0x140721a78ULL, 0x140721aa0ULL,
+    0x140723014ULL, 0x140723060ULL,
+    0x1407246dcULL, 0x14072475cULL,
+    0x140726aa0ULL, 0x140726b74ULL,
+    0x14072701cULL, 0x140727040ULL,
+    0x140727d50ULL, 0x140727d8cULL,
+    0x14073651cULL, 0x140737220ULL,
+    0x14073a734ULL, 0x14073a87cULL,
+    0x14073d3c8ULL, 0x14073d4d8ULL,
+    0x14073f22cULL, 0x14073f2acULL,
+    0x140742820ULL, 0x1407429e8ULL,
+    0x1407443a0ULL, 0x14074444cULL,
+    0x140746120ULL, 0x1407461c0ULL,
+    0x140749dc4ULL, 0x140749f04ULL,
+    0x14074a428ULL, 0x14074a448ULL,
+    0x140b49e28ULL, 0x140b49e2cULL,
+    0x140b49e2cULL, 0x140b49e49ULL,
+    0x14107ea50ULL, 0x14107ea60ULL,
+    0x141197efcULL, 0x141197f04ULL,
+    0x141197f04ULL, 0x141197f44ULL,
+    0x1411ace40ULL, 0x1411ace60ULL,
+    0x1411c5a2cULL, 0x1411c5a4cULL,
+    0x1411c5a4cULL, 0x1411c5ac4ULL,
+    0x1411cbcdcULL, 0x1411cbcf8ULL,
+    0x1411d81e8ULL, 0x1411d8220ULL,
+    0x1411d8bccULL, 0x1411d8becULL,
+    0x1411dbc70ULL, 0x1411dbc9cULL,
+    0x1411e0760ULL, 0x1411e077cULL,
+    0x1411e2d10ULL, 0x1411e2d5cULL,
+    0x1411e37b8ULL, 0x1411e37d8ULL,
+    0x1411fb494ULL, 0x1411fb49cULL,
+    0x1411fb73cULL, 0x1411fb770ULL,
+    0x141201b8cULL, 0x141201bccULL,
+    0x14120c75cULL, 0x14120c864ULL,
+    0x14121a558ULL, 0x14121a560ULL,
+    0x14121a560ULL, 0x14121a5b5ULL,
+    0x14121a5b8ULL, 0x14121a5c0ULL,
+    0x14121a5c0ULL, 0x14121a615ULL,
+    0x14121a618ULL, 0x14121a7a8ULL,
+    0x141239a28ULL, 0x141239a58ULL,
+    0x141239a58ULL, 0x141239a84ULL,
+    0x141239dfcULL, 0x141239eacULL,
+    0x141239eacULL, 0x141239f4aULL,
+    0x14123a2e0ULL, 0x14123a300ULL,
+    0x14123a300ULL, 0x14123a388ULL,
+    0x14123a594ULL, 0x14123a5b4ULL,
+    0x14123a5b4ULL, 0x14123a5ccULL,
+    0x14123a93cULL, 0x14123a988ULL,
+    0x14123c518ULL, 0x14123c54cULL,
+    0x14123c54cULL, 0x14123c5f0ULL,
+    0x14123c5f0ULL, 0x14123c5f8ULL,
+    0x14123c5f8ULL, 0x14123c608ULL,
+    0x14123c608ULL, 0x14123c654ULL,
+    0x14123c654ULL, 0x14123c688ULL,
+    0x14123c688ULL, 0x14123c768ULL,
+    0x1412520a4ULL, 0x1412520bcULL,
+    0x141258410ULL, 0x141258420ULL,
+    0x14125ef6cULL, 0x14125ef84ULL,
+    0x141260ae0ULL, 0x141260b10ULL,
+    0x14127a5bcULL, 0x14127a5d4ULL,
+    0x14127cec8ULL, 0x14127cef8ULL,
+    0x14127d410ULL, 0x14127d440ULL,
+    0x14127d440ULL, 0x14127d470ULL,
+    0x14127d700ULL, 0x14127d730ULL,
+    0x141280a34ULL, 0x141280a64ULL,
+    0x141281ea0ULL, 0x141281ed0ULL,
+    0x141295decULL, 0x141295e08ULL,
+    0x141296224ULL, 0x141296240ULL,
+    0x141297730ULL, 0x141297740ULL,
+    0x1412979e0ULL, 0x1412979f8ULL,
+    0x1412d9778ULL, 0x1412d98f8ULL,
+    0x1412da5d0ULL, 0x1412da5e0ULL,
+    0x1412e0a04ULL, 0x1412e0a24ULL,
+    0x1412e0a24ULL, 0x1412e0a67ULL,
+    0x1412e17fcULL, 0x1412e1818ULL,
+    0x1412e1b80ULL, 0x1412e1b90ULL,
+    0x1412e5ad0ULL, 0x1412e5ae0ULL,
+    0x14130fd84ULL, 0x14130fd9cULL,
+    0x141311d0cULL, 0x141311d34ULL,
+    0x141314ff0ULL, 0x141315014ULL,
+    0x1413166f8ULL, 0x141316710ULL,
+    0x14131c7dcULL, 0x14131c818ULL,
+    0x14131cf58ULL, 0x14131cf88ULL,
+    0x14131ee14ULL, 0x14131ee3cULL,
+    0x1413210e0ULL, 0x1413210f8ULL,
+    0x141321604ULL, 0x141321638ULL,
+    0x141321a88ULL, 0x141321ab0ULL,
+    0x1413289f0ULL, 0x141328a08ULL,
+    0x14132a5a0ULL, 0x14132a5b8ULL,
+    0x14132b528ULL, 0x14132b544ULL,
+    0x14132bd54ULL, 0x14132bd74ULL,
+    0x1413374b0ULL, 0x1413375b0ULL,
+    0x1413375b0ULL, 0x141337653ULL,
+    0x1413aa530ULL, 0x1413aa640ULL,
+    0x1413e0f68ULL, 0x1413e0f80ULL,
+    0x1413ed1c0ULL, 0x1413ed1d0ULL,
+    0x1413fc8dcULL, 0x1413fc900ULL,
+    0x1413fc900ULL, 0x1413fc919ULL,
+    0x141446b90ULL, 0x141446be0ULL,
+    0x141446c00ULL, 0x141446c20ULL,
+    0x141468f98ULL, 0x141468fc0ULL,
+    0x14146d118ULL, 0x14146d138ULL,
+    0x14146fd00ULL, 0x14146fd1cULL,
+    0x14146fde8ULL, 0x14146fe04ULL,
+    0x141472db0ULL, 0x141472dc0ULL,
+    0x1414734acULL, 0x1414734d0ULL,
+    0x14148dea4ULL, 0x14148debcULL,
+    0x14148f314ULL, 0x14148f330ULL,
+    0x14148f330ULL, 0x14148f38aULL,
+    0x141491418ULL, 0x14149143cULL,
+    0x1414aaba4ULL, 0x1414aabf0ULL,
+    0x1414aabf0ULL, 0x1414aac88ULL,
+    0x1414aac88ULL, 0x1414aacb0ULL,
+    0x1414f9cf8ULL, 0x1414f9d18ULL,
+    0x14154d5a0ULL, 0x14154d5bcULL,
+    0x14154dd4cULL, 0x14154dd78ULL,
+    0x14154dd78ULL, 0x14154ddd2ULL,
+    0x141556b3cULL, 0x141556b74ULL,
+    0x141556b74ULL, 0x141556bc3ULL,
+    0x141556bc4ULL, 0x141556c28ULL,
+    0x141556c28ULL, 0x141556c92ULL,
+    0x14155773cULL, 0x1415577a0ULL,
+    0x141559040ULL, 0x141559050ULL,
+    0x14155b3acULL, 0x14155b3c8ULL,
+    0x14155b430ULL, 0x14155b450ULL,
+    0x141561f10ULL, 0x141561f2cULL,
+    0x141561f2cULL, 0x141561f55ULL,
+    0x1415624e8ULL, 0x141562508ULL,
+    0x141562718ULL, 0x141562740ULL,
+    0x1415653ccULL, 0x14156540cULL,
+    0x14156c5e8ULL, 0x14156c644ULL,
+    0x14157583cULL, 0x141575890ULL,
+    0x1415782b4ULL, 0x1415782d0ULL,
+    0x14157a7a4ULL, 0x14157a7f0ULL,
+    0x14157cb04ULL, 0x14157cbfcULL,
+    0x14157d324ULL, 0x14157d348ULL,
+    0x14157d348ULL, 0x14157d367ULL,
+    0x14158013cULL, 0x141580160ULL,
+    0x141580160ULL, 0x141580181ULL,
+    0x141580384ULL, 0x1415803d4ULL,
+    0x14158052cULL, 0x14158054cULL,
+    0x14158054cULL, 0x141580568ULL,
+    0x14158070cULL, 0x141580730ULL,
+    0x1415807b4ULL, 0x1415807c4ULL,
+    0x1415807c4ULL, 0x1415807dfULL,
+    0x141580a0cULL, 0x141580a78ULL,
+    0x141580b8cULL, 0x141580b9cULL,
+    0x141580b9cULL, 0x141580bd3ULL,
+    0x141580bd4ULL, 0x141580be0ULL,
+    0x141580be0ULL, 0x141580c07ULL,
+    0x141580d78ULL, 0x141580d8cULL,
+    0x141580d8cULL, 0x141580da5ULL,
+    0x141580da8ULL, 0x141580db0ULL,
+    0x141580db0ULL, 0x141580dc9ULL,
+    0x141580e88ULL, 0x141580e9cULL,
+    0x141580e9cULL, 0x141580eb5ULL,
+    0x141581abcULL, 0x141581ae8ULL,
+    0x141581ae8ULL, 0x141581b14ULL,
+    0x141581da8ULL, 0x141581dd4ULL,
+    0x141581dd4ULL, 0x141581e00ULL,
+    0x141582438ULL, 0x1415824c4ULL,
+    0x1415824c4ULL, 0x1415824d4ULL,
+    0x1415824d4ULL, 0x1415824edULL,
+    0x1415824f0ULL, 0x141582500ULL,
+    0x141582500ULL, 0x141582516ULL,
+    0x141582518ULL, 0x14158252cULL,
+    0x14158252cULL, 0x141582548ULL,
+    0x141582548ULL, 0x141582574ULL,
+    0x141582574ULL, 0x141582594ULL,
+    0x141582594ULL, 0x1415825acULL,
+    0x1415825acULL, 0x1415825c5ULL,
+    0x141582720ULL, 0x141582770ULL,
+    0x1415828d4ULL, 0x1415828f4ULL,
+    0x1415828f4ULL, 0x141582910ULL,
+    0x141582ab8ULL, 0x141582adcULL,
+    0x141582e2cULL, 0x141582e98ULL,
+    0x141582f5cULL, 0x141582f6cULL,
+    0x141582f6cULL, 0x141582fa3ULL,
+    0x141583350ULL, 0x141583360ULL,
+    0x141583360ULL, 0x141583379ULL,
+    0x14158337cULL, 0x14158338cULL,
+    0x14158338cULL, 0x1415833b4ULL,
+    0x1415834e4ULL, 0x1415834f0ULL,
+    0x1415834f0ULL, 0x141583518ULL,
+    0x14158373cULL, 0x141583768ULL,
+    0x141583768ULL, 0x141583794ULL,
+    0x141583a2cULL, 0x141583a58ULL,
+    0x141583a58ULL, 0x141583a84ULL,
+    0x1415840d0ULL, 0x14158415cULL,
+    0x14158415cULL, 0x14158416cULL,
+    0x14158416cULL, 0x141584185ULL,
+    0x141584188ULL, 0x141584198ULL,
+    0x141584198ULL, 0x1415841aeULL,
+    0x1415841b0ULL, 0x1415841c4ULL,
+    0x1415841c4ULL, 0x1415841e0ULL,
+    0x1415841e0ULL, 0x14158420cULL,
+    0x14158420cULL, 0x14158422cULL,
+    0x14158422cULL, 0x141584244ULL,
+    0x141584244ULL, 0x14158425dULL,
+    0x1415843b0ULL, 0x141584400ULL,
+    0x141584564ULL, 0x141584584ULL,
+    0x141584584ULL, 0x1415845a0ULL,
+    0x141584740ULL, 0x141584764ULL,
+    0x141584adcULL, 0x141584b48ULL,
+    0x141584c14ULL, 0x141584c24ULL,
+    0x141584c24ULL, 0x141584c5bULL,
+    0x141585000ULL, 0x141585010ULL,
+    0x141585010ULL, 0x141585029ULL,
+    0x14158502cULL, 0x14158503cULL,
+    0x14158503cULL, 0x141585064ULL,
+    0x141585194ULL, 0x1415851a0ULL,
+    0x1415851a0ULL, 0x1415851c8ULL,
+    0x14158565cULL, 0x141585688ULL,
+    0x141585688ULL, 0x1415856b4ULL,
+    0x141585964ULL, 0x141585990ULL,
+    0x141585990ULL, 0x1415859bcULL,
+    0x14158614cULL, 0x1415861d8ULL,
+    0x1415861d8ULL, 0x1415861e8ULL,
+    0x1415861e8ULL, 0x141586201ULL,
+    0x141586204ULL, 0x141586214ULL,
+    0x141586214ULL, 0x14158622aULL,
+    0x14158622cULL, 0x141586240ULL,
+    0x141586240ULL, 0x14158625cULL,
+    0x14158625cULL, 0x141586274ULL,
+    0x141586274ULL, 0x14158628dULL,
+    0x141586290ULL, 0x1415862acULL,
+    0x1415862acULL, 0x1415862ccULL,
+    0x1415862ccULL, 0x1415862f8ULL,
+    0x1415862f8ULL, 0x141586318ULL,
+    0x141586318ULL, 0x141586330ULL,
+    0x141586330ULL, 0x141586349ULL,
+    0x141586eb8ULL, 0x141586edcULL,
+    0x141586edcULL, 0x141586ef5ULL,
+    0x141586ef8ULL, 0x141586f10ULL,
+    0x141586f10ULL, 0x141586f29ULL,
+    0x141586f2cULL, 0x141586f3cULL,
+    0x141586f3cULL, 0x141586f64ULL,
+    0x141586f64ULL, 0x141586f88ULL,
+    0x141586f88ULL, 0x141586facULL,
+    0x141586facULL, 0x141586fc5ULL,
+    0x141586fc8ULL, 0x141586fd8ULL,
+    0x141586fd8ULL, 0x141587000ULL,
+    0x1415872bcULL, 0x1415872d4ULL,
+    0x1415872d4ULL, 0x1415872f0ULL,
+    0x1415874d4ULL, 0x1415874ecULL,
+    0x1415874ecULL, 0x141587505ULL,
+    0x141587508ULL, 0x141587528ULL,
+    0x141587528ULL, 0x141587541ULL,
+    0x1415876b8ULL, 0x1415876f0ULL,
+    0x1415876f0ULL, 0x1415876f8ULL,
+    0x1415876f8ULL, 0x14158770eULL,
+    0x141587b14ULL, 0x141587b38ULL,
+    0x141587b38ULL, 0x141587b51ULL,
+    0x141587b54ULL, 0x141587bb8ULL,
+    0x141587bb8ULL, 0x141587bd0ULL,
+    0x141587bd0ULL, 0x141587be9ULL,
+    0x141587becULL, 0x141587c10ULL,
+    0x141587c10ULL, 0x141587c29ULL,
+    0x141587dc8ULL, 0x141587de4ULL,
+    0x141587de4ULL, 0x141587dfeULL,
+    0x141587e00ULL, 0x141587e1cULL,
+    0x141587e1cULL, 0x141587e35ULL,
+    0x141588194ULL, 0x1415881acULL,
+    0x1415881acULL, 0x1415881c5ULL,
+    0x1415881c8ULL, 0x1415881e8ULL,
+    0x1415881e8ULL, 0x141588201ULL,
+    0x141588204ULL, 0x141588244ULL,
+    0x1415883dcULL, 0x1415883f4ULL,
+    0x1415883f4ULL, 0x14158840dULL,
+    0x141588410ULL, 0x14158842cULL,
+    0x14158842cULL, 0x14158844cULL,
+    0x1415885f4ULL, 0x141588610ULL,
+    0x141588610ULL, 0x141588629ULL,
+    0x14158862cULL, 0x141588648ULL,
+    0x141588648ULL, 0x141588661ULL,
+    0x1415886e4ULL, 0x1415886f0ULL,
+    0x1415886f0ULL, 0x141588717ULL,
+    0x141589884ULL, 0x1415898a8ULL,
+    0x1415898a8ULL, 0x1415898c1ULL,
+    0x1415898c4ULL, 0x1415898dcULL,
+    0x1415898dcULL, 0x1415898f5ULL,
+    0x1415898f8ULL, 0x141589908ULL,
+    0x141589908ULL, 0x141589930ULL,
+    0x141589930ULL, 0x141589954ULL,
+    0x141589954ULL, 0x141589978ULL,
+    0x141589978ULL, 0x141589991ULL,
+    0x141589994ULL, 0x1415899a4ULL,
+    0x1415899a4ULL, 0x1415899ccULL,
+    0x141589c7cULL, 0x141589c94ULL,
+    0x141589c94ULL, 0x141589cb0ULL,
+    0x141589e94ULL, 0x141589eacULL,
+    0x141589eacULL, 0x141589ec5ULL,
+    0x141589ec8ULL, 0x141589ee8ULL,
+    0x141589ee8ULL, 0x141589f01ULL,
+    0x14158a078ULL, 0x14158a0b0ULL,
+    0x14158a0b0ULL, 0x14158a0b8ULL,
+    0x14158a0b8ULL, 0x14158a0ceULL,
+    0x14158a4d0ULL, 0x14158a4f4ULL,
+    0x14158a4f4ULL, 0x14158a50dULL,
+    0x14158a510ULL, 0x14158a574ULL,
+    0x14158a574ULL, 0x14158a58cULL,
+    0x14158a58cULL, 0x14158a5a5ULL,
+    0x14158a5a8ULL, 0x14158a5ccULL,
+    0x14158a5ccULL, 0x14158a5e5ULL,
+    0x14158a784ULL, 0x14158a7a0ULL,
+    0x14158a7a0ULL, 0x14158a7baULL,
+    0x14158a7bcULL, 0x14158a7d8ULL,
+    0x14158a7d8ULL, 0x14158a7f1ULL,
+    0x14158ab54ULL, 0x14158ab6cULL,
+    0x14158ab6cULL, 0x14158ab85ULL,
+    0x14158ab88ULL, 0x14158aba8ULL,
+    0x14158aba8ULL, 0x14158abc1ULL,
+    0x14158abc4ULL, 0x14158ac04ULL,
+    0x14158ad9cULL, 0x14158adb4ULL,
+    0x14158adb4ULL, 0x14158adcdULL,
+    0x14158add0ULL, 0x14158adecULL,
+    0x14158adecULL, 0x14158ae0cULL,
+    0x14158afb4ULL, 0x14158afd0ULL,
+    0x14158afd0ULL, 0x14158afe9ULL,
+    0x14158afecULL, 0x14158b008ULL,
+    0x14158b008ULL, 0x14158b021ULL,
+    0x14158b4c0ULL, 0x14158b4e4ULL,
+    0x14158b4e4ULL, 0x14158b4fdULL,
+    0x14158b500ULL, 0x14158b518ULL,
+    0x14158b518ULL, 0x14158b531ULL,
+    0x14158b534ULL, 0x14158b558ULL,
+    0x14158b558ULL, 0x14158b57cULL,
+    0x14158b57cULL, 0x14158b595ULL,
+    0x14158b704ULL, 0x14158b71cULL,
+    0x14158b71cULL, 0x14158b738ULL,
+    0x14158bb54ULL, 0x14158bb8cULL,
+    0x14158bb8cULL, 0x14158bb94ULL,
+    0x14158bb94ULL, 0x14158bbaaULL,
+    0x14158c06cULL, 0x14158c0d0ULL,
+    0x14158c754ULL, 0x14158c76cULL,
+    0x14158c76cULL, 0x14158c785ULL,
+    0x14158c788ULL, 0x14158c7a8ULL,
+    0x14158c7a8ULL, 0x14158c7c1ULL,
+    0x14158c7c4ULL, 0x14158c804ULL,
+    0x14158cf64ULL, 0x14158cf74ULL,
+    0x14158cf74ULL, 0x14158cf9cULL,
+    0x14158deecULL, 0x14158df0cULL,
+    0x14158df0cULL, 0x14158df27ULL,
+    0x14158e0f8ULL, 0x14158e114ULL,
+    0x14158e114ULL, 0x14158e12fULL,
+    0x14158e218ULL, 0x14158e238ULL,
+    0x14158e238ULL, 0x14158e250ULL,
+    0x14158e948ULL, 0x14158e990ULL,
+    0x14158ececULL, 0x14158ed38ULL,
+    0x14158ee34ULL, 0x14158ee80ULL,
+    0x141595a3cULL, 0x141595a7cULL,
+    0x141595a7cULL, 0x141595abcULL,
+    0x141595abcULL, 0x141595afcULL,
+    0x141595afcULL, 0x141595b3cULL,
+    0x141595b3cULL, 0x141595b7cULL,
+    0x141595b7cULL, 0x141595bbcULL,
+    0x141595bbcULL, 0x141595bfcULL,
+    0x141595bfcULL, 0x141595c3cULL,
+    0x141595c3cULL, 0x141595c7cULL,
+    0x141595c7cULL, 0x141595cbcULL,
+    0x141595cbcULL, 0x141595cfcULL,
+    0x141595cfcULL, 0x141595d3cULL,
+    0x141595d3cULL, 0x141595d7cULL,
+    0x141595d7cULL, 0x141595dbcULL,
+    0x141596654ULL, 0x141596684ULL,
+    0x14159a2e4ULL, 0x14159a30cULL,
+    0x14159afc0ULL, 0x14159afd0ULL,
+    0x14159c760ULL, 0x14159c7a0ULL,
+    0x14159c7a0ULL, 0x14159c7e0ULL,
+    0x14159cb48ULL, 0x14159cb88ULL,
+    0x14159cb88ULL, 0x14159cbc8ULL,
+    0x14159cbc8ULL, 0x14159cc08ULL,
+    0x14159cc08ULL, 0x14159cc48ULL,
+    0x14159ce74ULL, 0x14159ceb4ULL,
+    0x14159d090ULL, 0x14159d0d0ULL,
+    0x14159d0d0ULL, 0x14159d110ULL,
+    0x14159d460ULL, 0x14159d4a0ULL,
+    0x14159d4a0ULL, 0x14159d4e0ULL,
+    0x14159d4e0ULL, 0x14159d520ULL,
+    0x14159d520ULL, 0x14159d560ULL,
+    0x14159e220ULL, 0x14159e260ULL,
+    0x14159e260ULL, 0x14159e2a0ULL,
+    0x14159ebc0ULL, 0x14159ec00ULL,
+    0x14159ec00ULL, 0x14159ec40ULL,
+    0x14159ec40ULL, 0x14159ec80ULL,
+    0x14159ec80ULL, 0x14159ecc0ULL,
+    0x14159ecc0ULL, 0x14159ed00ULL,
+    0x14159ed00ULL, 0x14159ed40ULL,
+    0x14159ed40ULL, 0x14159ed80ULL,
+    0x14159ed80ULL, 0x14159edc0ULL,
+    0x14159f180ULL, 0x14159f188ULL,
+    0x14159f188ULL, 0x14159f198ULL,
+    0x14159f198ULL, 0x14159f1d8ULL,
+    0x14159f1d8ULL, 0x14159f218ULL,
+    0x14159f218ULL, 0x14159f258ULL,
+    0x14159ff94ULL, 0x14159ffd4ULL,
+    0x14159ffd4ULL, 0x1415a0014ULL,
+    0x1415a0014ULL, 0x1415a0054ULL,
+    0x1415a0054ULL, 0x1415a0094ULL,
+    0x1415a4804ULL, 0x1415a4844ULL,
+    0x1415a4844ULL, 0x1415a4884ULL,
+    0x1415a4884ULL, 0x1415a48c4ULL,
+    0x1415a48c4ULL, 0x1415a4904ULL,
+    0x1415a55ecULL, 0x1415a562cULL,
+    0x1415a562cULL, 0x1415a566cULL,
+    0x1415a566cULL, 0x1415a56acULL,
+    0x1415a56acULL, 0x1415a56ecULL,
+    0x1415a5aecULL, 0x1415a5b10ULL,
+    0x1415a7330ULL, 0x1415a7350ULL,
+    0x1415a98acULL, 0x1415a98e0ULL,
+    0x1415abc7cULL, 0x1415abca4ULL,
+    0x1415aedfcULL, 0x1415aee14ULL,
+    0x1415af38cULL, 0x1415af3a8ULL,
+    0x1415af3a8ULL, 0x1415af3c8ULL,
+    0x1415af94cULL, 0x1415af964ULL,
+    0x1415b07a0ULL, 0x1415b07b0ULL,
+    0x1415b2ac4ULL, 0x1415b2b04ULL,
+    0x1415b2b04ULL, 0x1415b2b44ULL,
+    0x1415b2b44ULL, 0x1415b2b84ULL,
+    0x1415b2b84ULL, 0x1415b2bc4ULL,
+    0x1415b2bc4ULL, 0x1415b2c04ULL,
+    0x1415b2c04ULL, 0x1415b2c44ULL,
+    0x1415b2c44ULL, 0x1415b2c84ULL,
+    0x1415b2c84ULL, 0x1415b2cc4ULL,
+    0x1415b3440ULL, 0x1415b3480ULL,
+    0x1415b3480ULL, 0x1415b34c0ULL,
+    0x1415b39b0ULL, 0x1415b39c0ULL,
+    0x1415b48b4ULL, 0x1415b48f4ULL,
+    0x1415b48f4ULL, 0x1415b4934ULL,
+    0x1415b56ecULL, 0x1415b572cULL,
+    0x1415b572cULL, 0x1415b576cULL,
+    0x1415b6bf4ULL, 0x1415b6c34ULL,
+    0x1415b6c34ULL, 0x1415b6c74ULL,
+    0x1415b7514ULL, 0x1415b7554ULL,
+    0x1415b7554ULL, 0x1415b7594ULL,
+    0x1415b7a6cULL, 0x1415b7aacULL,
+    0x1415b7aacULL, 0x1415b7aecULL,
+    0x1415b7aecULL, 0x1415b7b2cULL,
+    0x1415b7b2cULL, 0x1415b7b6cULL,
+    0x1415b7fe4ULL, 0x1415b8000ULL,
+    0x1415b8968ULL, 0x1415b8984ULL,
+    0x1415bc514ULL, 0x1415bc554ULL,
+    0x1415bc554ULL, 0x1415bc594ULL,
+    0x1415bc594ULL, 0x1415bc5d4ULL,
+    0x1415bc5d4ULL, 0x1415bc614ULL,
+    0x1415bd114ULL, 0x1415bd154ULL,
+    0x1415bd154ULL, 0x1415bd194ULL,
+    0x1415c1c34ULL, 0x1415c1c4cULL,
+    0x1415c9adcULL, 0x1415c9b34ULL,
+    0x1415ca030ULL, 0x1415ca088ULL,
+    0x1415cef70ULL, 0x1415cef88ULL,
+    0x1415cf9e0ULL, 0x1415cf9f8ULL,
+    0x1415d6024ULL, 0x1415d6044ULL,
+    0x1415d6c30ULL, 0x1415d6c50ULL,
+    0x1415d7d90ULL, 0x1415d7da8ULL,
+    0x1415d7da8ULL, 0x1415d7e11ULL,
+    0x1415d9a0cULL, 0x1415d9a4cULL,
+    0x1415d9a4cULL, 0x1415d9a8cULL,
+    0x1415d9fa4ULL, 0x1415d9fe4ULL,
+    0x1415d9fe4ULL, 0x1415da024ULL,
+    0x1415da024ULL, 0x1415da064ULL,
+    0x1415da064ULL, 0x1415da0a4ULL,
+    0x1415da0a4ULL, 0x1415da0e4ULL,
+    0x1415da0e4ULL, 0x1415da124ULL,
+    0x1415da518ULL, 0x1415da558ULL,
+    0x1415da558ULL, 0x1415da598ULL,
+    0x1415da598ULL, 0x1415da5d8ULL,
+    0x1415da5d8ULL, 0x1415da618ULL,
+    0x1415da618ULL, 0x1415da658ULL,
+    0x1415da658ULL, 0x1415da698ULL,
+    0x1415db2f8ULL, 0x1415db338ULL,
+    0x1415db338ULL, 0x1415db378ULL,
+    0x1415db378ULL, 0x1415db3b8ULL,
+    0x1415db3b8ULL, 0x1415db3f8ULL,
+    0x1415db3f8ULL, 0x1415db438ULL,
+    0x1415db438ULL, 0x1415db478ULL,
+    0x1415db948ULL, 0x1415db988ULL,
+    0x1415db988ULL, 0x1415db9c8ULL,
+    0x1415db9c8ULL, 0x1415dba08ULL,
+    0x1415dba08ULL, 0x1415dba48ULL,
+    0x1415dba48ULL, 0x1415dba88ULL,
+    0x1415dc67cULL, 0x1415dc6acULL,
+    0x1415de098ULL, 0x1415de0d8ULL,
+    0x1415de0d8ULL, 0x1415de118ULL,
+    0x1415de118ULL, 0x1415de158ULL,
+    0x1415de158ULL, 0x1415de198ULL,
+    0x1415de198ULL, 0x1415de1c0ULL,
+    0x1415de1c0ULL, 0x1415de200ULL,
+    0x1415de200ULL, 0x1415de240ULL,
+    0x1415def5cULL, 0x1415def9cULL,
+    0x1415def9cULL, 0x1415defdcULL,
+    0x1415defdcULL, 0x1415df004ULL,
+    0x1415e35d4ULL, 0x1415e35ecULL,
+    0x1415e35ecULL, 0x1415e363cULL,
+    0x1415e63ecULL, 0x1415e642cULL,
+    0x1415e642cULL, 0x1415e646cULL,
+    0x1415e6800ULL, 0x1415e6808ULL,
+    0x1415e6808ULL, 0x1415e6818ULL,
+    0x1415e6818ULL, 0x1415e6858ULL,
+    0x1415e6858ULL, 0x1415e6898ULL,
+    0x1415e798cULL, 0x1415e79ccULL,
+    0x1415e79ccULL, 0x1415e7a0cULL,
+    0x1415e8e18ULL, 0x1415e8e58ULL,
+    0x1415e8e58ULL, 0x1415e8e98ULL,
+    0x1415e90f0ULL, 0x1415e9130ULL,
+    0x1415e9130ULL, 0x1415e9170ULL,
+    0x1415e9a98ULL, 0x1415e9aa0ULL,
+    0x1415e9aa0ULL, 0x1415e9ab0ULL,
+    0x1415e9ab0ULL, 0x1415e9af0ULL,
+    0x1415e9af0ULL, 0x1415e9b30ULL,
+    0x1415eae38ULL, 0x1415eae64ULL,
+    0x1415eae64ULL, 0x1415eae88ULL,
+    0x1415eae88ULL, 0x1415eaec8ULL,
+    0x1415eaec8ULL, 0x1415eaf08ULL,
+    0x1415ecefcULL, 0x1415ecf2cULL,
+    0x1415ecf2cULL, 0x1415ecf68ULL,
+    0x1415ee13cULL, 0x1415ee17cULL,
+    0x1415ee17cULL, 0x1415ee1bcULL,
+    0x1415ee1bcULL, 0x1415ee1fcULL,
+    0x1415ee1fcULL, 0x1415ee23cULL,
+    0x1415ef408ULL, 0x1415ef448ULL,
+    0x1415ef448ULL, 0x1415ef488ULL,
+    0x1415ef488ULL, 0x1415ef4c8ULL,
+    0x1415ef4c8ULL, 0x1415ef508ULL,
+    0x1415f252cULL, 0x1415f256cULL,
+    0x1415f256cULL, 0x1415f25acULL,
+    0x1415f25acULL, 0x1415f25ecULL,
+    0x1415f25ecULL, 0x1415f262cULL,
+    0x1415f76c4ULL, 0x1415f76ccULL,
+    0x1415f76ccULL, 0x1415f76dcULL,
+    0x1415f77ccULL, 0x1415f77d4ULL,
+    0x1415f77d4ULL, 0x1415f77e4ULL,
+    0x1415f7b28ULL, 0x1415f7b68ULL,
+    0x1415f7b68ULL, 0x1415f7ba8ULL,
+    0x1415f7ef8ULL, 0x1415f7f38ULL,
+    0x1415f7f38ULL, 0x1415f7f78ULL,
+    0x1415f834cULL, 0x1415f838cULL,
+    0x1415f838cULL, 0x1415f83ccULL,
+    0x1415f83ccULL, 0x1415f840cULL,
+    0x1415f8bccULL, 0x1415f8c0cULL,
+    0x1415f8c0cULL, 0x1415f8c4cULL,
+    0x1415f8c4cULL, 0x1415f8c8cULL,
+    0x1415fdd6cULL, 0x1415fdd94ULL,
+    0x141600234ULL, 0x141600274ULL,
+    0x141600274ULL, 0x1416002b4ULL,
+    0x1416006ecULL, 0x14160072cULL,
+    0x14160072cULL, 0x14160076cULL,
+    0x141600dd4ULL, 0x141600df4ULL,
+    0x1416097d8ULL, 0x141609818ULL,
+    0x141609818ULL, 0x141609858ULL,
+    0x1416134a8ULL, 0x1416134e4ULL,
+    0x1416134e4ULL, 0x141613520ULL,
+    0x141613898ULL, 0x1416138d4ULL,
+    0x1416138d4ULL, 0x141613910ULL,
+    0x14161b058ULL, 0x14161b098ULL,
+    0x14161b098ULL, 0x14161b0d8ULL,
+    0x14161c130ULL, 0x14161c170ULL,
+    0x14161c170ULL, 0x14161c1b0ULL,
+    0x14161e200ULL, 0x14161e240ULL,
+    0x14161e240ULL, 0x14161e280ULL,
+    0x14161e280ULL, 0x14161e2c0ULL,
+    0x14161e2c0ULL, 0x14161e300ULL,
+    0x14161e4f0ULL, 0x14161e530ULL,
+    0x14161e530ULL, 0x14161e570ULL,
+    0x14161e570ULL, 0x14161e5b0ULL,
+    0x14161e5b0ULL, 0x14161e5f0ULL,
+    0x14161e81cULL, 0x14161e85cULL,
+    0x14161e85cULL, 0x14161e89cULL,
+    0x14161e89cULL, 0x14161e8dcULL,
+    0x14161e8dcULL, 0x14161e91cULL,
+    0x14161e91cULL, 0x14161e924ULL,
+    0x14161e924ULL, 0x14161e934ULL,
+    0x14161e934ULL, 0x14161e93cULL,
+    0x14161eda8ULL, 0x14161ede8ULL,
+    0x14161ede8ULL, 0x14161ee28ULL,
+    0x14161ee28ULL, 0x14161ee68ULL,
+    0x14161ee68ULL, 0x14161eea8ULL,
+    0x14161eea8ULL, 0x14161eee8ULL,
+    0x14161eee8ULL, 0x14161ef28ULL,
+    0x14161efb4ULL, 0x14161efd4ULL,
+    0x14161fb88ULL, 0x14161fbc8ULL,
+    0x14161fbc8ULL, 0x14161fc08ULL,
+    0x14161ff60ULL, 0x14161ffa0ULL,
+    0x141620b4cULL, 0x141620bbcULL,
+    0x141620bbcULL, 0x141620c2cULL,
+    0x141622c58ULL, 0x141622c98ULL,
+    0x141622c98ULL, 0x141622cb8ULL,
+    0x141622cb8ULL, 0x141622cf8ULL,
+    0x141622d70ULL, 0x141622d80ULL,
+    0x14162458cULL, 0x1416245ccULL,
+    0x141624740ULL, 0x141624750ULL,
+    0x141625738ULL, 0x141625758ULL,
+    0x141625ef4ULL, 0x141625f34ULL,
+    0x141625f34ULL, 0x141625f74ULL,
+    0x141625f74ULL, 0x141625fb4ULL,
+    0x141625fb4ULL, 0x141625ff4ULL,
+    0x141626ab0ULL, 0x141626af0ULL,
+    0x141626af0ULL, 0x141626b08ULL,
+    0x14162750cULL, 0x14162754cULL,
+    0x1416278d0ULL, 0x141627910ULL,
+    0x141627910ULL, 0x141627950ULL,
+    0x141627950ULL, 0x141627990ULL,
+    0x141628638ULL, 0x141628678ULL,
+    0x1416292d4ULL, 0x141629314ULL,
+    0x141629314ULL, 0x141629354ULL,
+    0x141629354ULL, 0x141629394ULL,
+    0x141629394ULL, 0x1416293d4ULL,
+    0x14162c574ULL, 0x14162c594ULL,
+    0x14162c630ULL, 0x14162c650ULL,
+    0x14162c7acULL, 0x14162c7ccULL,
+    0x14162db74ULL, 0x14162dbb4ULL,
+    0x14162dbb4ULL, 0x14162dbf4ULL,
+    0x14162dbf4ULL, 0x14162dc14ULL,
+    0x14162e128ULL, 0x14162e144ULL,
+    0x14162e144ULL, 0x14162e160ULL,
+    0x14162ff48ULL, 0x14162ff68ULL,
+    0x14163c950ULL, 0x14163c970ULL,
+    0x14163c970ULL, 0x14163c988ULL,
+    0x14163dddcULL, 0x14163de1cULL,
+    0x1416407d8ULL, 0x141640828ULL,
+    0x141641248ULL, 0x141641298ULL,
+    0x1416438d4ULL, 0x1416438f4ULL,
+    0x141650754ULL, 0x141650784ULL,
+    0x141652210ULL, 0x141652218ULL,
+    0x141652218ULL, 0x14165224dULL,
+    0x14165246cULL, 0x141652488ULL,
+    0x141653320ULL, 0x141653350ULL,
+    0x141662530ULL, 0x141662540ULL,
+    0x1416788b4ULL, 0x1416788e4ULL,
+    0x1416788e4ULL, 0x141678934ULL,
+    0x141678934ULL, 0x141678964ULL,
+    0x141679b18ULL, 0x141679b50ULL,
+    0x141679b50ULL, 0x141679b98ULL,
+    0x14167b140ULL, 0x14167b164ULL,
+    0x141681d90ULL, 0x141681df0ULL,
+    0x141682b4cULL, 0x141682bb4ULL,
+    0x1416a77e4ULL, 0x1416a780cULL,
+    0x1416a8238ULL, 0x1416a8258ULL,
+    0x1416c17c4ULL, 0x1416c1cc8ULL,
+    0x1416cd7e8ULL, 0x1416cd848ULL,
+    0x1416cd848ULL, 0x1416cd92dULL,
+    0x1416cefb8ULL, 0x1416cefc8ULL,
+    0x1416cefc8ULL, 0x1416cf091ULL,
+    0x1416cf094ULL, 0x1416cf0a0ULL,
+    0x1416cf0a0ULL, 0x1416cf140ULL,
+    0x1416d1ae0ULL, 0x1416d1aecULL,
+    0x1416d1aecULL, 0x1416d1b5dULL,
+    0x1416d241cULL, 0x1416d243cULL,
+    0x1416d3c74ULL, 0x1416d3cccULL,
+    0x1416d3cccULL, 0x1416d3dc6ULL,
+    0x1416daaa4ULL, 0x1416daae4ULL,
+    0x1416daae4ULL, 0x1416dabbaULL,
+    0x1416db814ULL, 0x1416db83cULL,
+    0x1416db83cULL, 0x1416db8c0ULL,
+    0x1416dc46cULL, 0x1416dc484ULL,
+    0x1416dc484ULL, 0x1416dc56aULL,
+    0x1416dc980ULL, 0x1416dc988ULL,
+    0x1416dc988ULL, 0x1416dca1aULL,
+    0x1416dca1cULL, 0x1416dca28ULL,
+    0x1416dca28ULL, 0x1416dca7fULL,
+    0x1416dca80ULL, 0x1416dca88ULL,
+    0x1416dca88ULL, 0x1416dcb04ULL,
+    0x1416ddd48ULL, 0x1416ddd80ULL,
+    0x1416ddd80ULL, 0x1416dde04ULL,
+    0x1416f37d8ULL, 0x1416f3804ULL,
+    0x1416f3ea4ULL, 0x1416f3ec4ULL,
+    0x14170e554ULL, 0x14170e568ULL,
+    0x14170e568ULL, 0x14170e5c2ULL,
+    0x141714f24ULL, 0x141714f4cULL,
+    0x141722f18ULL, 0x141722f38ULL,
+    0x141722f38ULL, 0x141722f58ULL,
+    0x141726f2cULL, 0x141726f40ULL,
+    0x141726f40ULL, 0x141726f97ULL,
+    0x14172a058ULL, 0x14172a084ULL,
+    0x141735068ULL, 0x1417350bcULL,
+    0x1417350bcULL, 0x1417350e6ULL,
+    0x1417357b0ULL, 0x1417357c4ULL,
+    0x1417357c4ULL, 0x1417357daULL,
+    0x1417357dcULL, 0x141735884ULL,
+    0x1417358f0ULL, 0x141735910ULL,
+    0x141736238ULL, 0x1417362f4ULL,
+    0x141737420ULL, 0x141737440ULL,
+    0x141738004ULL, 0x141738030ULL,
+    0x141738030ULL, 0x141738107ULL,
+    0x1417386a8ULL, 0x1417386c0ULL,
+    0x14173aa24ULL, 0x14173aa34ULL,
+    0x14173aa34ULL, 0x14173aa49ULL,
+    0x14173f4acULL, 0x14173f4e0ULL,
+    0x141740a4cULL, 0x141740a80ULL,
+    0x141740a80ULL, 0x141740aa0ULL,
+    0x141740f68ULL, 0x141740fa4ULL,
+    0x1417419e0ULL, 0x1417419f0ULL,
+    0x141743c4cULL, 0x141743c78ULL,
+    0x141744cb0ULL, 0x141744cdcULL,
+    0x141750ec4ULL, 0x141750eccULL,
+    0x141750eccULL, 0x141750ef8ULL,
+    0x1417555d0ULL, 0x1417555d8ULL,
+    0x1417555d8ULL, 0x141755604ULL,
+    0x141759038ULL, 0x141759118ULL,
+    0x1417602f0ULL, 0x1417602f8ULL,
+    0x1417602f8ULL, 0x141760324ULL,
+    0x14177116cULL, 0x1417711acULL,
+    0x1417711acULL, 0x1417711ceULL,
+    0x141771dbcULL, 0x141771df8ULL,
+    0x141773998ULL, 0x1417739c4ULL,
+    0x14177474cULL, 0x141774778ULL,
+    0x1417798b0ULL, 0x1417798ccULL,
+    0x14177a8a4ULL, 0x14177a8e4ULL,
+    0x14177c7bcULL, 0x14177c7d4ULL,
+    0x14178017cULL, 0x1417801d0ULL,
+    0x1417801d0ULL, 0x1417802b6ULL,
+    0x1417867b8ULL, 0x1417867c4ULL,
+    0x1417867c4ULL, 0x141786889ULL,
+    0x14178ac74ULL, 0x14178ad1cULL,
+    0x14178ad1cULL, 0x14178ad66ULL,
+    0x1417961b4ULL, 0x1417961d8ULL,
+    0x14179945cULL, 0x1417995b4ULL,
+    0x14179c310ULL, 0x14179c330ULL,
+    0x14179f234ULL, 0x14179f260ULL,
+    0x1417a1758ULL, 0x1417a1770ULL,
+    0x1417a1a8cULL, 0x1417a1aa4ULL,
+    0x1417adbf4ULL, 0x1417adc3cULL,
+    0x1417b0884ULL, 0x1417b08b0ULL,
+    0x1417b08b0ULL, 0x1417b0989ULL,
+    0x1417b098cULL, 0x1417b09c0ULL,
+    0x1417b09c0ULL, 0x1417b0a55ULL,
+    0x1417b3ea0ULL, 0x1417b3ec8ULL,
+    0x1417d1c54ULL, 0x1417d1c70ULL,
+    0x1417d1c70ULL, 0x1417d1ca6ULL,
+    0x1417d1fb0ULL, 0x1417d1fc8ULL,
+    0x1417ddb28ULL, 0x1417ddb44ULL,
+    0x1417df94cULL, 0x1417df968ULL,
+    0x1417df968ULL, 0x1417df984ULL,
+    0x1417ee3f8ULL, 0x1417ee410ULL,
+    0x1417ee410ULL, 0x1417ee434ULL,
+    0x1417ee730ULL, 0x1417ee750ULL,
+    0x1417f0d40ULL, 0x1417f0d50ULL,
+    0x14180db8cULL, 0x14180dbb8ULL,
+    0x1418233bcULL, 0x1418233e8ULL,
+    0x141829cfcULL, 0x141829d20ULL,
+    0x14182dc14ULL, 0x14182dc68ULL,
+    0x1418463f0ULL, 0x1418464b0ULL,
+    0x141847800ULL, 0x141847824ULL,
+    0x14184a280ULL, 0x14184a2a0ULL,
+    0x141852468ULL, 0x1418524bcULL,
+    0x1418524bcULL, 0x1418524ccULL,
+    0x1418524ccULL, 0x1418524e1ULL,
+    0x141852b6cULL, 0x141852b84ULL,
+    0x14185303cULL, 0x141853064ULL,
+    0x141855564ULL, 0x1418555a0ULL,
+    0x1418555a0ULL, 0x1418555c5ULL,
+    0x141858494ULL, 0x1418584dcULL,
+    0x141859c70ULL, 0x141859c98ULL,
+    0x14185daccULL, 0x14185dadcULL,
+    0x14185dadcULL, 0x14185db1bULL,
+    0x141860790ULL, 0x1418607bcULL,
+    0x1418607bcULL, 0x1418607e0ULL,
+    0x1418670d0ULL, 0x1418670f4ULL,
+    0x1418670f4ULL, 0x141867113ULL,
+    0x141868d48ULL, 0x141868d50ULL,
+    0x141868d50ULL, 0x141868d64ULL,
+    0x14187428cULL, 0x141874368ULL,
+    0x141876dbcULL, 0x141876dd8ULL,
+    0x141876e78ULL, 0x141876e90ULL,
+    0x14187a25cULL, 0x14187a274ULL,
+    0x14188c3f0ULL, 0x14188c408ULL,
+    0x14188c8b4ULL, 0x14188c8ccULL,
+    0x14189393cULL, 0x141893ae0ULL,
+    0x1418a0c64ULL, 0x1418a0c7cULL,
+    0x1418aa640ULL, 0x1418aa6c0ULL,
+    0x1418d1d00ULL, 0x1418d1d10ULL,
+    0x1418d1d50ULL, 0x1418d1d60ULL,
+    0x1418d38dcULL, 0x1418d38fcULL,
+    0x1418d38fcULL, 0x1418d391cULL,
+    0x1418ef088ULL, 0x1418ef0bcULL,
+    0x141900728ULL, 0x141900730ULL,
+    0x141900730ULL, 0x141900771ULL,
+    0x141904bb4ULL, 0x141904be0ULL,
+    0x141904be0ULL, 0x141904c21ULL,
+    0x141904c24ULL, 0x141904c2cULL,
+    0x141904c2cULL, 0x141904c5cULL,
+    0x141904c5cULL, 0x141904c74ULL,
+    0x141904c74ULL, 0x141904c8dULL,
+    0x141905f44ULL, 0x141905f68ULL,
+    0x141905f68ULL, 0x141905f8dULL,
+    0x141906a9cULL, 0x141906aa4ULL,
+    0x141906aa4ULL, 0x141906ae4ULL,
+    0x141906c80ULL, 0x141906c90ULL,
+    0x141910418ULL, 0x14191045cULL,
+    0x14191045cULL, 0x14191049bULL,
+    0x1419119fcULL, 0x141911a04ULL,
+    0x141911a04ULL, 0x141911a46ULL,
+    0x141913d20ULL, 0x141913d2cULL,
+    0x141913d2cULL, 0x141913d6aULL,
+    0x141913d6cULL, 0x141913dacULL,
+    0x141913dacULL, 0x141913deeULL,
+    0x141919528ULL, 0x141919574ULL,
+    0x141919ba0ULL, 0x141919bd4ULL,
+    0x141919de0ULL, 0x141919e10ULL,
+    0x14191b304ULL, 0x14191b31cULL,
+    0x14191b3c4ULL, 0x14191b404ULL,
+    0x14191e514ULL, 0x14191e5f8ULL,
+    0x141927300ULL, 0x141927310ULL,
+    0x141930edcULL, 0x141930efcULL,
+    0x1419433f8ULL, 0x14194341cULL,
+    0x14194341cULL, 0x141943499ULL,
+    0x141947c60ULL, 0x141947ca4ULL,
+    0x1419558c4ULL, 0x1419558dcULL,
+    0x14195da98ULL, 0x14195daa4ULL,
+    0x14195daa4ULL, 0x14195dad3ULL,
+    0x14195e7d0ULL, 0x14195e7e0ULL,
+    0x14195e7e0ULL, 0x14195e810ULL,
+    0x141961a88ULL, 0x141961a98ULL,
+    0x141961a98ULL, 0x141961acbULL,
+    0x14196f750ULL, 0x14196f770ULL,
+    0x14198d360ULL, 0x14198d3a4ULL,
+    0x14198d534ULL, 0x14198d53cULL,
+    0x14198d53cULL, 0x14198d54dULL,
+    0x141995770ULL, 0x1419957b4ULL,
+    0x1419961b8ULL, 0x1419961c0ULL,
+    0x1419961c0ULL, 0x1419961d1ULL,
+    0x141997154ULL, 0x141997198ULL,
+    0x1419986d4ULL, 0x1419986e8ULL,
+    0x1419986e8ULL, 0x141998729ULL,
+    0x141999f68ULL, 0x141999f70ULL,
+    0x141999f70ULL, 0x141999f81ULL,
+    0x1419a0720ULL, 0x1419a075cULL,
+    0x1419ae580ULL, 0x1419ae590ULL,
+    0x1419aec30ULL, 0x1419aec40ULL,
+    0x1419b4010ULL, 0x1419b4108ULL,
+    0x1419b526cULL, 0x1419b52c8ULL,
+    0x1419c0d18ULL, 0x1419c0d40ULL,
+    0x1419c141cULL, 0x1419c1444ULL,
+    0x1419c16e8ULL, 0x1419c1710ULL,
+    0x1419c49a8ULL, 0x1419c4b3cULL,
+    0x1419c4b3cULL, 0x1419c4c56ULL,
+    0x1419c509cULL, 0x1419c50b4ULL,
+    0x1419c5268ULL, 0x1419c5290ULL,
+    0x1419c6970ULL, 0x1419c69b8ULL,
+    0x1419c69b8ULL, 0x1419c6a67ULL,
+    0x1419c6f58ULL, 0x1419c6f80ULL,
+    0x1419c7160ULL, 0x1419c7188ULL,
+    0x1419c938cULL, 0x1419c93b4ULL,
+    0x1419cace0ULL, 0x1419cacf0ULL,
+    0x1419cf0ccULL, 0x1419cf0f4ULL,
+    0x1419d69f0ULL, 0x1419d69f8ULL,
+    0x1419d69f8ULL, 0x1419d6a09ULL,
+    0x1419d6fd0ULL, 0x1419d6fe0ULL,
+    0x1419dcec0ULL, 0x1419dced8ULL,
+    0x1419e5ee0ULL, 0x1419e5f08ULL,
+    0x141a064f4ULL, 0x141a064fcULL,
+    0x141a064fcULL, 0x141a0650fULL,
+    0x141a25600ULL, 0x141a25610ULL,
+    0x141a2b680ULL, 0x141a2b6a0ULL,
+    0x141a2cf34ULL, 0x141a2cf54ULL,
+    0x141a32720ULL, 0x141a32730ULL,
+    0x141a3e518ULL, 0x141a3e550ULL,
+    0x141a44f00ULL, 0x141a44f44ULL,
+    0x141a45d90ULL, 0x141a45dd4ULL,
+    0x141a494d0ULL, 0x141a494d8ULL,
+    0x141a494d8ULL, 0x141a494e9ULL,
+    0x141a4abe0ULL, 0x141a4ac00ULL,
+    0x141a4b91cULL, 0x141a4b94cULL,
+    0x141a4b94cULL, 0x141a4b98eULL,
+    0x141a52c78ULL, 0x141a52cb0ULL,
+    0x141a544c0ULL, 0x141a544d0ULL,
+    0x141a551ccULL, 0x141a551e4ULL,
+    0x141a551e4ULL, 0x141a55207ULL,
+    0x141a55c58ULL, 0x141a55c80ULL,
+    0x141a55c80ULL, 0x141a55cb6ULL,
+    0x141a56270ULL, 0x141a562d4ULL,
+    0x141a5e1e4ULL, 0x141a5e1fcULL,
+    0x141a5e1fcULL, 0x141a5e211ULL,
+    0x141a61d8cULL, 0x141a61dbcULL,
+    0x141a66fbcULL, 0x141a67010ULL,
+    0x141a6b084ULL, 0x141a6b0d8ULL,
+    0x141a6b3d0ULL, 0x141a6b400ULL,
+    0x141a8a180ULL, 0x141a8a1b8ULL,
+    0x141a8b66cULL, 0x141a8b6a4ULL,
+    0x141a8c4e0ULL, 0x141a8c508ULL,
+    0x141a9117cULL, 0x141a91198ULL,
+    0x141a91198ULL, 0x141a911b4ULL,
+    0x141a911b4ULL, 0x141a911ecULL,
+    0x141a920dcULL, 0x141a920ecULL,
+    0x141a920ecULL, 0x141a920ffULL,
+    0x141a94d80ULL, 0x141a94d8cULL,
+    0x141a94d8cULL, 0x141a94dceULL,
+    0x141aad1b0ULL, 0x141aad1ccULL,
+    0x141ab9a0cULL, 0x141ab9a34ULL,
+    0x141aba33cULL, 0x141aba35cULL,
+    0x141aba35cULL, 0x141aba388ULL,
+    0x141ac42e4ULL, 0x141ac4300ULL,
+    0x141ad7c94ULL, 0x141ad7cc0ULL,
+    0x141adceb0ULL, 0x141adcedcULL,
+    0x141ae1780ULL, 0x141ae17acULL,
+    0x141ae6e04ULL, 0x141ae6e30ULL,
+    0x141ae7dd8ULL, 0x141ae7e04ULL,
+    0x141ae7e04ULL, 0x141ae7e30ULL,
+    0x141ae83a0ULL, 0x141ae83ccULL,
+    0x141ae8940ULL, 0x141ae896cULL,
+    0x141ae896cULL, 0x141ae8998ULL,
+    0x141af1cbcULL, 0x141af1cf4ULL,
+    0x141af8398ULL, 0x141af83bcULL,
+    0x141af8b34ULL, 0x141af8ba8ULL,
+    0x141af940cULL, 0x141af9430ULL,
+    0x141af9a6cULL, 0x141af9a84ULL,
+    0x141b04708ULL, 0x141b0475cULL,
+    0x141b06af8ULL, 0x141b06b30ULL,
+    0x141b19660ULL, 0x141b19670ULL,
+    0x141b381d4ULL, 0x141b381fcULL,
+    0x141b381fcULL, 0x141b38218ULL,
+    0x141b406d4ULL, 0x141b406f4ULL,
+    0x141b46b94ULL, 0x141b46bacULL,
+    0x141b653f0ULL, 0x141b654c0ULL,
+    0x141b869acULL, 0x141b869f8ULL,
+    0x141b8cd70ULL, 0x141b8cd80ULL,
+    0x141b8cd80ULL, 0x141b8cd99ULL,
+    0x141b8ce2cULL, 0x141b8ce48ULL,
+    0x141b8d88cULL, 0x141b8d8c4ULL,
+    0x141b8dbf4ULL, 0x141b8dc0cULL,
+    0x141b8e3e0ULL, 0x141b8e400ULL,
+    0x141b8f2a8ULL, 0x141b8f2e0ULL,
+    0x141b8f510ULL, 0x141b8f52cULL,
+    0x141b8f940ULL, 0x141b8f94cULL,
+    0x141b8f94cULL, 0x141b8f962ULL,
+    0x141b94218ULL, 0x141b94228ULL,
+    0x141b94228ULL, 0x141b94251ULL,
+    0x141b94438ULL, 0x141b9445cULL,
+    0x141b9445cULL, 0x141b9448fULL,
+    0x141b949f8ULL, 0x141b94a20ULL,
+    0x141b94a20ULL, 0x141b94a7cULL,
+    0x141b94a7cULL, 0x141b94a94ULL,
+    0x141bac324ULL, 0x141bac390ULL,
+    0x141baca20ULL, 0x141baca8cULL,
+    0x141bb0668ULL, 0x141bb0680ULL,
+    0x141bb0f90ULL, 0x141bb0facULL,
+    0x141bd9d38ULL, 0x141bd9d70ULL,
+    0x141bd9dd0ULL, 0x141bd9e08ULL,
+    0x141bdc6c0ULL, 0x141bdc6d0ULL,
+    0x141bea0e0ULL, 0x141bea100ULL,
+    0x141bea6f4ULL, 0x141bea70cULL,
+    0x141bea70cULL, 0x141bea726ULL,
+    0x141beeb00ULL, 0x141beeb10ULL,
+    0x141befaa4ULL, 0x141befad0ULL,
+    0x141bf27a0ULL, 0x141bf27b0ULL,
+    0x141bfdfa4ULL, 0x141bfdfacULL,
+    0x141bfdfacULL, 0x141bfdfc3ULL,
+    0x141c0b8ccULL, 0x141c0b908ULL,
+    0x141c0eedcULL, 0x141c0eeecULL,
+    0x141c0eeecULL, 0x141c0ef12ULL,
+    0x141c0f3b0ULL, 0x141c0f3ccULL,
+    0x141c0f3ccULL, 0x141c0f3feULL,
+    0x141c0ffd0ULL, 0x141c0ffecULL,
+    0x141c0ffecULL, 0x141c10012ULL,
+    0x141c13f3cULL, 0x141c13f4cULL,
+    0x141c13f4cULL, 0x141c13f72ULL,
+    0x141c17a10ULL, 0x141c17a18ULL,
+    0x141c17a18ULL, 0x141c17b12ULL,
+    0x141c17b14ULL, 0x141c17b1cULL,
+    0x141c17b1cULL, 0x141c17bc0ULL,
+    0x141c17bc0ULL, 0x141c17bc8ULL,
+    0x141c17bc8ULL, 0x141c17c1fULL,
+    0x141c1daccULL, 0x141c1dae4ULL,
+    0x141c20d78ULL, 0x141c20d90ULL,
+    0x141c217c0ULL, 0x141c21840ULL,
+    0x141c262ccULL, 0x141c262fcULL,
+    0x141c2aac4ULL, 0x141c2ab08ULL,
+    0x141c2adccULL, 0x141c2ae10ULL,
+    0x141c2c108ULL, 0x141c2c138ULL,
+    0x141c347f8ULL, 0x141c348b0ULL,
+    0x141c3842cULL, 0x141c38444ULL,
+    0x141c56b70ULL, 0x141c56b80ULL,
+    0x141c5cdf0ULL, 0x141c5ce00ULL,
+    0x141c5f178ULL, 0x141c5f190ULL,
+    0x141c69948ULL, 0x141c69984ULL,
+    0x141c792c0ULL, 0x141c792fcULL,
+    0x141c7c3b8ULL, 0x141c7c408ULL,
+    0x141c862d0ULL, 0x141c8630cULL,
+    0x141c8e80cULL, 0x141c8e824ULL,
+    0x141c8e824ULL, 0x141c8e83cULL,
+    0x141c8e83cULL, 0x141c8e854ULL,
+    0x141c8e854ULL, 0x141c8e86cULL,
+    0x141c8e86cULL, 0x141c8e884ULL,
+    0x141c8e884ULL, 0x141c8e89cULL,
+    0x141c8ec00ULL, 0x141c8ec18ULL,
+    0x141c8f020ULL, 0x141c8f038ULL,
+    0x141c8fa1cULL, 0x141c8fa34ULL,
+    0x141ca53e8ULL, 0x141ca5418ULL,
+    0x141cac5b0ULL, 0x141cac5c8ULL,
+    0x141cb1cacULL, 0x141cb1cb4ULL,
+    0x141cb1cb4ULL, 0x141cb1ce1ULL,
+    0x141cb2b20ULL, 0x141cb2b30ULL,
+    0x141cb3c38ULL, 0x141cb3c6cULL,
+    0x141cc165cULL, 0x141cc1674ULL,
+    0x141ccbb1cULL, 0x141ccbb20ULL,
+    0x141ccbb20ULL, 0x141ccbb45ULL,
+    0x141cd2bc0ULL, 0x141cd2bd8ULL,
+    0x141cd2bd8ULL, 0x141cd2bf0ULL,
+    0x141cd4714ULL, 0x141cd473cULL,
+    0x141cd51f4ULL, 0x141cd520cULL,
+    0x141cd6044ULL, 0x141cd6060ULL,
+    0x141cd6060ULL, 0x141cd60d2ULL,
+    0x141cd6e18ULL, 0x141cd6e40ULL,
+    0x141cd8384ULL, 0x141cd83b8ULL,
+    0x141cdf2acULL, 0x141cdf2d0ULL,
+    0x141cdf2d0ULL, 0x141cdf300ULL,
+    0x141ce05dcULL, 0x141ce0620ULL,
+    0x141ce9bb4ULL, 0x141ce9bdcULL,
+    0x141cfbd38ULL, 0x141cfbd5cULL,
+    0x141d05edcULL, 0x141d05ef8ULL,
+    0x141d06140ULL, 0x141d06170ULL,
+    0x141d067bcULL, 0x141d067dcULL,
+    0x141d067dcULL, 0x141d06817ULL,
+    0x141d069b0ULL, 0x141d069d0ULL,
+    0x141d069d0ULL, 0x141d06a3dULL,
+    0x141db38e8ULL, 0x141db3910ULL,
+    0x141dc0374ULL, 0x141dc0390ULL,
+    0x141dc0390ULL, 0x141dc045eULL,
+    0x141dc5340ULL, 0x141dc5384ULL,
+    0x141dc5c7cULL, 0x141dc5ca8ULL,
+    0x141dd4d04ULL, 0x141dd4d28ULL,
+    0x141dd53d8ULL, 0x141dd5404ULL,
+    0x141dd5ef8ULL, 0x141dd5f38ULL,
+    0x141dd6b4cULL, 0x141dd6b9cULL,
+    0x141dd6b9cULL, 0x141dd6bbcULL,
+    0x141dd7454ULL, 0x141dd747cULL,
+    0x141dd7b34ULL, 0x141dd7b58ULL,
+    0x141dd9330ULL, 0x141dd9354ULL,
+    0x141dd985cULL, 0x141dd9880ULL,
+    0x141dda020ULL, 0x141dda038ULL,
+    0x141ddb2c4ULL, 0x141ddb2e4ULL,
+    0x141ddc0e0ULL, 0x141ddc0fcULL,
+    0x141deaa64ULL, 0x141deaa7cULL,
+    0x141dee3a4ULL, 0x141dee3c8ULL,
+    0x141e05084ULL, 0x141e0509cULL,
+    0x141e11da0ULL, 0x141e11df0ULL,
+    0x141e1715cULL, 0x141e1717cULL,
+    0x141e1c834ULL, 0x141e1c8fcULL,
+    0x141e1c8fcULL, 0x141e1c9b8ULL,
+    0x141e1fc20ULL, 0x141e1fc38ULL,
+    0x141e1fdbcULL, 0x141e1fdd4ULL,
+    0x141e207f4ULL, 0x141e2080cULL,
+    0x141e213c4ULL, 0x141e213dcULL,
+    0x141e27578ULL, 0x141e275a8ULL,
+    0x141e275a8ULL, 0x141e275dbULL,
+    0x141e28034ULL, 0x141e2804cULL,
+    0x141e35930ULL, 0x141e35950ULL,
+    0x141e3613cULL, 0x141e36160ULL,
+    0x141e3666cULL, 0x141e366a8ULL,
+    0x141e36ba8ULL, 0x141e36bc4ULL,
+    0x141e4416cULL, 0x141e441b8ULL,
+    0x141e44be0ULL, 0x141e44c1cULL,
+    0x141e454c0ULL, 0x141e454f4ULL,
+    0x141e46624ULL, 0x141e46660ULL,
+    0x141e46f1cULL, 0x141e46f50ULL,
+    0x141e4ffd8ULL, 0x141e4fffcULL,
+    0x141e503b4ULL, 0x141e503d4ULL,
+    0x141e50890ULL, 0x141e508b4ULL,
+    0x141e5a484ULL, 0x141e5a49cULL,
+    0x141e926c4ULL, 0x141e926f0ULL,
+    0x141ea6fb0ULL, 0x141ea6fdcULL,
+    0x141ea6fdcULL, 0x141ea6ff9ULL,
+    0x141eab014ULL, 0x141eab03cULL,
+    0x141eab49cULL, 0x141eab4c4ULL,
+    0x141eaf410ULL, 0x141eaf428ULL,
+    0x141eafb70ULL, 0x141eafb9cULL,
+    0x141eb02e4ULL, 0x141eb0308ULL,
+    0x141eb06b4ULL, 0x141eb06ccULL,
+    0x141eb0bdcULL, 0x141eb0bfcULL,
+    0x141eb40f4ULL, 0x141eb410cULL,
+    0x141eb4790ULL, 0x141eb47b0ULL,
+    0x141ec59dcULL, 0x141ec5a04ULL,
+    0x141ed46e0ULL, 0x141ed46fcULL,
+    0x141ed5160ULL, 0x141ed517cULL,
+    0x141ed7050ULL, 0x141ed7068ULL,
+    0x141ed7700ULL, 0x141ed7740ULL,
+    0x141ed8f3cULL, 0x141ed8f58ULL,
+    0x141ed917cULL, 0x141ed9198ULL,
+    0x141ed929cULL, 0x141ed92b8ULL,
+    0x141ed93bcULL, 0x141ed93d8ULL,
+    0x141ed94d4ULL, 0x141ed94f0ULL,
+    0x141ed95e4ULL, 0x141ed9600ULL,
+    0x141ed96f4ULL, 0x141ed9710ULL,
+    0x141ed9934ULL, 0x141ed9950ULL,
+    0x141edd35cULL, 0x141edd37cULL,
+    0x141eddb30ULL, 0x141eddb4cULL,
+    0x141eeb218ULL, 0x141eeb238ULL,
+    0x141eeb3a8ULL, 0x141eeb3c0ULL,
+    0x141eeb8f8ULL, 0x141eeb918ULL,
+    0x141eeb918ULL, 0x141eeb930ULL,
+    0x141eebb2cULL, 0x141eebb44ULL,
+    0x141eecd6cULL, 0x141eecd84ULL,
+    0x141eed0d8ULL, 0x141eed0f8ULL,
+    0x141eed6f8ULL, 0x141eed718ULL,
+    0x141eef3e8ULL, 0x141eef408ULL,
+    0x141eef45cULL, 0x141eef474ULL,
+    0x141eef62cULL, 0x141eef64cULL,
+    0x141eef70cULL, 0x141eef724ULL,
+    0x141eef820ULL, 0x141eef840ULL,
+    0x141eef940ULL, 0x141eef958ULL,
+    0x141eefa4cULL, 0x141eefa6cULL,
+    0x141eefb68ULL, 0x141eefb80ULL,
+    0x141eefe18ULL, 0x141eefe38ULL,
+    0x141eeff28ULL, 0x141eeff48ULL,
+    0x141ef003cULL, 0x141ef005cULL,
+    0x141ef0158ULL, 0x141ef0170ULL,
+    0x141ef034cULL, 0x141ef036cULL,
+    0x141ef042cULL, 0x141ef0444ULL,
+    0x141ef053cULL, 0x141ef055cULL,
+    0x141ef0658ULL, 0x141ef0670ULL,
+    0x141ef3400ULL, 0x141ef3420ULL,
+    0x141ef3420ULL, 0x141ef344bULL,
+    0x141efa0dcULL, 0x141efa104ULL,
+    0x141f108a8ULL, 0x141f108dcULL,
+    0x141f10db0ULL, 0x141f10dd0ULL,
+    0x141f1dbb4ULL, 0x141f1dbe4ULL,
+    0x141f1efe4ULL, 0x141f1f008ULL,
+    0x141f1fe74ULL, 0x141f1fe90ULL,
+    0x141f2b1a0ULL, 0x141f2b1dcULL,
+    0x141f33e94ULL, 0x141f33eb4ULL,
+    0x141f4a214ULL, 0x141f4a230ULL,
+    0x141f4a230ULL, 0x141f4a28aULL,
+    0x141f54030ULL, 0x141f54048ULL,
+    0x141f5d6e8ULL, 0x141f5d754ULL,
+    0x141f5d754ULL, 0x141f5d7b0ULL,
+    0x141f5ef30ULL, 0x141f5ef64ULL,
+    0x141f77cc0ULL, 0x141f77ce8ULL,
+    0x141f77ce8ULL, 0x141f77d46ULL,
+    0x141f77d48ULL, 0x141f77d68ULL,
+    0x141f77d68ULL, 0x141f77d88ULL,
+    0x141f77d88ULL, 0x141f77da8ULL,
+    0x141f77da8ULL, 0x141f77dc8ULL,
+    0x141f77dc8ULL, 0x141f77de8ULL,
+    0x141f77de8ULL, 0x141f77e08ULL,
+    0x141f77e08ULL, 0x141f77e28ULL,
+    0x141f77e28ULL, 0x141f77e48ULL,
+    0x141f77e48ULL, 0x141f77e68ULL,
+    0x141f77e68ULL, 0x141f77e88ULL,
+    0x141f77ffcULL, 0x141f7800cULL,
+    0x141f7800cULL, 0x141f78043ULL,
+    0x141f787a0ULL, 0x141f787c8ULL,
+    0x141f7eab4ULL, 0x141f7eb0cULL,
+    0x141f93f84ULL, 0x141f93fa4ULL,
+    0x141f93fa4ULL, 0x141f941f0ULL,
+    0x141f95620ULL, 0x141f95644ULL,
+    0x141f9c8dcULL, 0x141f9c994ULL,
+    0x141f9fc1cULL, 0x141f9fc38ULL,
+    0x141fa5348ULL, 0x141fa5360ULL,
+    0x141faa5ccULL, 0x141faa5ecULL,
+    0x141faa5ecULL, 0x141faa604ULL,
+    0x141fb10e0ULL, 0x141fb1104ULL,
+    0x141fb1104ULL, 0x141fb1136ULL,
+    0x141fb2128ULL, 0x141fb2148ULL,
+    0x141fb38bcULL, 0x141fb38d0ULL,
+    0x141fb38d0ULL, 0x141fb39cfULL,
+    0x141fb4910ULL, 0x141fb4924ULL,
+    0x141fb4924ULL, 0x141fb495cULL,
+    0x141fb4ea8ULL, 0x141fb4ec0ULL,
+    0x141fbcc38ULL, 0x141fbcc50ULL,
+    0x141fbcc50ULL, 0x141fbcc6eULL,
+    0x141fbcc70ULL, 0x141fbccf8ULL,
+    0x141fbd1f8ULL, 0x141fbd200ULL,
+    0x141fbd200ULL, 0x141fbd24dULL,
+    0x141fc8fb0ULL, 0x141fc8fccULL,
+    0x141fcac68ULL, 0x141fcaca4ULL,
+    0x141fcd5d4ULL, 0x141fcd620ULL,
+    0x141fcde58ULL, 0x141fcdea4ULL,
+    0x141fcf03cULL, 0x141fcf05cULL,
+    0x141fcfc60ULL, 0x141fcfc80ULL,
+    0x141fd2f5cULL, 0x141fd2f6cULL,
+    0x141fd2f6cULL, 0x141fd2f9aULL,
+    0x141fd508cULL, 0x141fd50c4ULL,
+    0x141fd6750ULL, 0x141fd6778ULL,
+    0x141fd7b34ULL, 0x141fd7b50ULL,
+    0x141fd7b50ULL, 0x141fd7b6cULL,
+    0x141fd8844ULL, 0x141fd8870ULL,
+    0x141fd90e0ULL, 0x141fd90f8ULL,
+    0x141fd90e0ULL, 0x141fd9100ULL,
+    0x141fd94a0ULL, 0x141fd94b8ULL,
+    0x141fde6c0ULL, 0x141fde700ULL,
+    0x141fde700ULL, 0x141fde7feULL,
+    0x141ff2018ULL, 0x141ff2028ULL,
+    0x141ff2028ULL, 0x141ff206fULL,
+    0x141ff2070ULL, 0x141ff2078ULL,
+    0x141ff2078ULL, 0x141ff2096ULL,
+    0x141ff2a3cULL, 0x141ff2a4cULL,
+    0x141ff2a4cULL, 0x141ff2a93ULL,
+    0x141ff2a94ULL, 0x141ff2a98ULL,
+    0x141ff2a98ULL, 0x141ff2ad0ULL,
+    0x141ff2d58ULL, 0x141ff2d78ULL,
+    0x141ff2d78ULL, 0x141ff2d98ULL,
+    0x141ff2d98ULL, 0x141ff2db0ULL,
+    0x141ff2db0ULL, 0x141ff2e4cULL,
+    0x141ff2e4cULL, 0x141ff2e50ULL,
+    0x141ff2e50ULL, 0x141ff2e88ULL,
+    0x141ff3118ULL, 0x141ff313cULL,
+    0x141ff313cULL, 0x141ff3144ULL,
+    0x141ff3144ULL, 0x141ff31a3ULL,
+    0x141ff4530ULL, 0x141ff4544ULL,
+    0x141ff4544ULL, 0x141ff45d8ULL,
+    0x141ff45d8ULL, 0x141ff45f0ULL,
+    0x141ff45f0ULL, 0x141ff4638ULL,
+    0x141ff4638ULL, 0x141ff46a3ULL,
+    0x141ff46a4ULL, 0x141ff46acULL,
+    0x141ff46acULL, 0x141ff470bULL,
+    0x141ff470cULL, 0x141ff4714ULL,
+    0x141ff4714ULL, 0x141ff4773ULL,
+    0x141ff47b8ULL, 0x141ff47dcULL,
+    0x141ff47dcULL, 0x141ff4847ULL,
+    0x141ff8e1cULL, 0x141ff8e90ULL,
+    0x141ff8e90ULL, 0x141ff8ea4ULL,
+    0x141ff8ea4ULL, 0x141ff8ef8ULL,
+    0x141ff8ef8ULL, 0x141ff8f10ULL,
+    0x141ff8f10ULL, 0x141ff8f4cULL,
+    0x141ff8f4cULL, 0x141ff8fa8ULL,
+    0x141ff8fa8ULL, 0x141ff8fccULL,
+    0x141ff8fccULL, 0x141ff9018ULL,
+    0x141ff9b34ULL, 0x141ff9b64ULL,
+    0x141ff9e50ULL, 0x141ff9e5cULL,
+    0x141ff9e5cULL, 0x141ff9eeaULL,
+    0x141ff9eecULL, 0x141ff9f04ULL,
+    0x141ff9f04ULL, 0x141ff9f73ULL,
+    0x141ffa24cULL, 0x141ffa288ULL,
+    0x141ffa288ULL, 0x141ffa32aULL,
+    0x141ffa32cULL, 0x141ffa35cULL,
+    0x141ffa864ULL, 0x141ffa87cULL,
+    0x141ffa87cULL, 0x141ffa8e7ULL,
+    0x141ffa8e8ULL, 0x141ffa918ULL,
+    0x141ffaaacULL, 0x141ffaab8ULL,
+    0x141ffaab8ULL, 0x141ffab46ULL,
+    0x141ffae4cULL, 0x141ffae58ULL,
+    0x141ffae58ULL, 0x141ffaee6ULL,
+    0x141ffaee8ULL, 0x141ffaef4ULL,
+    0x141ffaef4ULL, 0x141ffaf82ULL,
+    0x14200989cULL, 0x1420099e8ULL,
+    0x1420099e8ULL, 0x142009a8aULL,
+    0x142009a8cULL, 0x142009a94ULL,
+    0x142009a94ULL, 0x142009af3ULL,
+    0x142009af4ULL, 0x142009afcULL,
+    0x142009afcULL, 0x142009b5bULL,
+    0x142009b5cULL, 0x142009b88ULL,
+    0x142009b88ULL, 0x142009b90ULL,
+    0x142009b90ULL, 0x142009befULL,
+    0x142009bf0ULL, 0x142009c10ULL,
+    0x142009c10ULL, 0x142009c40ULL,
+    0x142009c40ULL, 0x142009c70ULL,
+    0x142009c70ULL, 0x142009c9cULL,
+    0x142009c9cULL, 0x142009cc8ULL,
+    0x142009cc8ULL, 0x142009cd0ULL,
+    0x142009cd0ULL, 0x142009d2fULL,
+    0x142009d30ULL, 0x142009d70ULL,
+    0x142009d70ULL, 0x142009d78ULL,
+    0x142009d78ULL, 0x142009dd7ULL,
+    0x142009dd8ULL, 0x142009de0ULL,
+    0x142009de0ULL, 0x142009e3fULL,
+    0x142009e40ULL, 0x142009e80ULL,
+    0x142009e80ULL, 0x142009e88ULL,
+    0x142009e88ULL, 0x142009ee7ULL,
+    0x142009ee8ULL, 0x142009f28ULL,
+    0x142009f28ULL, 0x142009f30ULL,
+    0x142009f30ULL, 0x142009f8fULL,
+    0x142009f90ULL, 0x142009fd0ULL,
+    0x142009ffcULL, 0x14200a004ULL,
+    0x14200a004ULL, 0x14200a063ULL,
+    0x14200a0a4ULL, 0x14200a0acULL,
+    0x14200a0acULL, 0x14200a10bULL,
+    0x14200a10cULL, 0x14200a114ULL,
+    0x14200a114ULL, 0x14200a173ULL,
+    0x14200a174ULL, 0x14200a1b4ULL,
+    0x14200b6fcULL, 0x14200b764ULL,
+    0x14200bdccULL, 0x14200be2cULL,
+    0x14200be2cULL, 0x14200beceULL,
+    0x14200bed0ULL, 0x14200bf00ULL,
+    0x14200bf00ULL, 0x14200bf30ULL,
+    0x14200cab8ULL, 0x14200caf8ULL,
+    0x14200caf8ULL, 0x14200cb28ULL,
+    0x14200dd68ULL, 0x14200dda0ULL,
+    0x14200f01cULL, 0x14200f038ULL,
+    0x14200f038ULL, 0x14200f073ULL,
+    0x14200f074ULL, 0x14200f094ULL,
+    0x14200f094ULL, 0x14200f0b2ULL,
+    0x142011628ULL, 0x142011650ULL,
+    0x142011994ULL, 0x1420119b4ULL,
+    0x142012648ULL, 0x142012664ULL,
+    0x14201345cULL, 0x142013478ULL,
+    0x142025014ULL, 0x142025030ULL,
+    0x142025030ULL, 0x1420250a9ULL,
+    0x1420250acULL, 0x1420250c8ULL,
+    0x142025638ULL, 0x142025654ULL,
+    0x142029f68ULL, 0x142029f84ULL,
+    0x14202a3ccULL, 0x14202a40cULL,
+    0x14202a6f0ULL, 0x14202a730ULL,
+    0x14202f484ULL, 0x14202f4a8ULL,
+    0x14202f4a8ULL, 0x14202f4f8ULL,
+    0x14202f4f8ULL, 0x14202f544ULL,
+    0x14202f544ULL, 0x14202f588ULL,
+    0x14202f588ULL, 0x14202f5e1ULL,
+    0x142032040ULL, 0x14203207cULL,
+    0x14203207cULL, 0x1420320d2ULL,
+    0x14203a408ULL, 0x14203a428ULL,
+    0x14203c224ULL, 0x14203c24cULL,
+    0x14203c24cULL, 0x14203c26eULL,
+    0x142045484ULL, 0x1420454b8ULL,
+    0x142047d90ULL, 0x142047db0ULL,
+    0x1420484ccULL, 0x1420484ecULL,
+    0x142049bb0ULL, 0x142049bd0ULL,
+    0x142049f7cULL, 0x142049f9cULL,
+    0x14204a95cULL, 0x14204a97cULL,
+    0x14204ac14ULL, 0x14204ac34ULL,
+    0x14204b764ULL, 0x14204b788ULL,
+    0x14204c3b8ULL, 0x14204c3d8ULL,
+    0x14204d298ULL, 0x14204d2bcULL,
+    0x14204db24ULL, 0x14204db44ULL,
+    0x14204e364ULL, 0x14204e384ULL,
+    0x14204f3e4ULL, 0x14204f3fcULL,
+    0x14204f6c0ULL, 0x14204f6e0ULL,
+    0x14204f980ULL, 0x14204f9a0ULL,
+    0x142050188ULL, 0x1420501a8ULL,
+    0x142052dbcULL, 0x142052dfcULL,
+    0x142054d24ULL, 0x142054d40ULL,
+    0x142054d40ULL, 0x142054d5fULL,
+    0x14205524cULL, 0x14205526cULL,
+    0x142058d20ULL, 0x142058d6cULL,
+    0x14205d844ULL, 0x14205d878ULL,
+    0x14205e240ULL, 0x14205e250ULL,
+    0x14205f890ULL, 0x14205f8b4ULL,
+    0x14205f8b4ULL, 0x14205f8d4ULL,
+    0x14205fb94ULL, 0x14205fbb4ULL,
+    0x14205fbb4ULL, 0x14205fbd4ULL,
+    0x1420648dcULL, 0x142064900ULL,
+    0x142064900ULL, 0x14206499dULL,
+    0x142066730ULL, 0x142066780ULL,
+    0x142066780ULL, 0x14206681dULL,
+    0x142066820ULL, 0x142066848ULL,
+    0x142066848ULL, 0x142066870ULL,
+    0x142066870ULL, 0x142066888ULL,
+    0x142066888ULL, 0x14206697dULL,
+    0x142066980ULL, 0x14206699cULL,
+    0x14206699cULL, 0x142066a41ULL,
+    0x142066cfcULL, 0x142066da8ULL,
+    0x142066da8ULL, 0x142066e94ULL,
+    0x142066e94ULL, 0x142066ec8ULL,
+    0x1420681f8ULL, 0x142068214ULL,
+    0x142068214ULL, 0x142068231ULL,
+    0x14206a2a4ULL, 0x14206a2d4ULL,
+    0x14206b884ULL, 0x14206b8b4ULL,
+    0x14206bb80ULL, 0x14206bb90ULL,
+    0x1420d8498ULL, 0x1420d84b4ULL,
+    0x1420d84b4ULL, 0x1420d84cdULL,
+    0x1420dfd7cULL, 0x1420dfda8ULL,
+    0x1420dfdb0ULL, 0x1420dfdc0ULL,
+    0x1420e1ff0ULL, 0x1420e2000ULL,
+    0x1420e2aa8ULL, 0x1420e2adcULL,
+    0x1420e388cULL, 0x1420e38ccULL,
+    0x1420e3c2cULL, 0x1420e3c5cULL,
+    0x1420ecff0ULL, 0x1420ed000ULL,
+    0x1420f31c4ULL, 0x1420f31f4ULL,
+    0x1420f31f4ULL, 0x1420f3220ULL,
+    0x1420f3844ULL, 0x1420f3868ULL,
+    0x1420f91e0ULL, 0x1420f91fcULL,
+    0x1420f9244ULL, 0x1420f92a4ULL,
+    0x1420fa5a8ULL, 0x1420fa5c8ULL,
+    0x1420fd048ULL, 0x1420fd08cULL,
+    0x1420fdff8ULL, 0x1420fe03cULL,
+    0x1421001b4ULL, 0x1421001e8ULL,
+    0x14210d490ULL, 0x14210d49cULL,
+    0x14210d49cULL, 0x14210d501ULL,
+    0x142110d60ULL, 0x142110d70ULL,
+    0x14211f284ULL, 0x14211f2b4ULL,
+    0x14211f2c0ULL, 0x14211f2d0ULL,
+    0x142121c9cULL, 0x142121ca8ULL,
+    0x142121ca8ULL, 0x142121d0dULL,
+    0x142126de4ULL, 0x142126df0ULL,
+    0x142126df0ULL, 0x142126e55ULL,
+    0x142128830ULL, 0x142128884ULL,
+    0x14212bf60ULL, 0x14212bf7cULL,
+    0x14212c114ULL, 0x14212c130ULL,
+    0x14212fe58ULL, 0x14212fe78ULL,
+    0x14213053cULL, 0x14213055cULL,
+    0x1421369e4ULL, 0x1421369f0ULL,
+    0x1421369f0ULL, 0x142136a55ULL,
+    0x1421378b8ULL, 0x1421378d8ULL,
+    0x142139780ULL, 0x142139790ULL,
+    0x1421571f4ULL, 0x142157210ULL,
+    0x14215d0d0ULL, 0x14215d0ecULL,
+    0x14215df5cULL, 0x14215df90ULL,
+    0x14215df90ULL, 0x14215dfc4ULL,
+    0x14215dfc4ULL, 0x14215dff8ULL,
+    0x14215e4ecULL, 0x14215e520ULL,
+    0x14215e520ULL, 0x14215e554ULL,
+    0x14215e554ULL, 0x14215e588ULL,
+    0x142166490ULL, 0x1421664a8ULL,
+    0x142167894ULL, 0x1421678b4ULL,
+    0x142167f9cULL, 0x142167fbcULL,
+    0x1421689ecULL, 0x142168a04ULL,
+    0x142169e34ULL, 0x142169e84ULL,
+    0x14216c0dcULL, 0x14216c1f4ULL,
+    0x14216c1f4ULL, 0x14216c2c1ULL,
+    0x14216c2c4ULL, 0x14216c348ULL,
+    0x14216c348ULL, 0x14216c395ULL,
+    0x14216c398ULL, 0x14216c488ULL,
+    0x14216c488ULL, 0x14216c567ULL,
+    0x14216c568ULL, 0x14216c5ecULL,
+    0x14216c5ecULL, 0x14216c638ULL,
+    0x14216c638ULL, 0x14216c674ULL,
+    0x14216c674ULL, 0x14216c744ULL,
+    0x14216c744ULL, 0x14216c760ULL,
+    0x14216df14ULL, 0x14216df3cULL,
+    0x14216f018ULL, 0x14216f05cULL,
+    0x14217023cULL, 0x1421703bcULL,
+    0x1421703bcULL, 0x1421703e0ULL,
+    0x1421703e0ULL, 0x14217042aULL,
+    0x1421708f8ULL, 0x142170a80ULL,
+    0x142170b08ULL, 0x142170b38ULL,
+    0x142170ee4ULL, 0x142170fa0ULL,
+    0x142170fa0ULL, 0x142171002ULL,
+    0x142171d4cULL, 0x142171d54ULL,
+    0x142171d54ULL, 0x142171d90ULL,
+    0x142171d90ULL, 0x142171d98ULL,
+    0x142171d98ULL, 0x142171dd4ULL,
+    0x142172f30ULL, 0x142172f54ULL,
+    0x14217381cULL, 0x142173840ULL,
+    0x1421745e4ULL, 0x142174600ULL,
+    0x14217e39cULL, 0x14217e418ULL,
+    0x14217e418ULL, 0x14217e474ULL,
+    0x14217e474ULL, 0x14217e4aeULL,
+    0x14217e4b0ULL, 0x14217e4dcULL,
+    0x14217e4dcULL, 0x14217e516ULL,
+    0x14217e518ULL, 0x14217e530ULL,
+    0x14217e530ULL, 0x14217e570ULL,
+    0x14217e570ULL, 0x14217e5a3ULL,
+    0x142186370ULL, 0x142186388ULL,
+    0x14218900cULL, 0x142189024ULL,
+    0x14218d034ULL, 0x14218d05cULL,
+    0x14218f4b8ULL, 0x14218f4f0ULL,
+    0x142190090ULL, 0x1421900d0ULL,
+    0x142190e18ULL, 0x142190e40ULL,
+    0x1421950a0ULL, 0x1421950dcULL,
+    0x142196680ULL, 0x142196688ULL,
+    0x142196688ULL, 0x1421966daULL,
+    0x142198228ULL, 0x142198240ULL,
+    0x142198240ULL, 0x142198258ULL,
+    0x142198e1cULL, 0x142198e38ULL,
+    0x142199e2cULL, 0x142199e58ULL,
+    0x14219a4e4ULL, 0x14219a510ULL,
+    0x14219a510ULL, 0x14219a53cULL,
+    0x14219d658ULL, 0x14219d670ULL,
+    0x14219da00ULL, 0x14219da20ULL,
+    0x1421a3b88ULL, 0x1421a3bb0ULL,
+    0x1421a3bb0ULL, 0x1421a3bceULL,
+    0x1421a3bf4ULL, 0x1421a3c1cULL,
+    0x1421a3c1cULL, 0x1421a3c3aULL,
+    0x1421a3c60ULL, 0x1421a3c88ULL,
+    0x1421a3c88ULL, 0x1421a3ca6ULL,
+    0x1421a3cccULL, 0x1421a3cf4ULL,
+    0x1421a3cf4ULL, 0x1421a3d12ULL,
+    0x1421a4aacULL, 0x1421a4ad4ULL,
+    0x1421a4ad4ULL, 0x1421a4af2ULL,
+    0x1421a5798ULL, 0x1421a57c0ULL,
+    0x1421a57c0ULL, 0x1421a57deULL,
+    0x1421a57e0ULL, 0x1421a57f0ULL,
+    0x1421a57f0ULL, 0x1421a5803ULL,
+    0x1421a5804ULL, 0x1421a582cULL,
+    0x1421a582cULL, 0x1421a584aULL,
+    0x1421a584cULL, 0x1421a585cULL,
+    0x1421a585cULL, 0x1421a586fULL,
+    0x1421a8558ULL, 0x1421a8574ULL,
+    0x1421a8574ULL, 0x1421a85ceULL,
+    0x1421a9208ULL, 0x1421a9224ULL,
+    0x1421a95e8ULL, 0x1421a9600ULL,
+    0x1421a9c70ULL, 0x1421a9c98ULL,
+    0x1421abcfcULL, 0x1421abd24ULL,
+    0x1421ca8bcULL, 0x1421ca8f4ULL,
+    0x1421cc5e4ULL, 0x1421cc60cULL,
+    0x1421dea58ULL, 0x1421dead4ULL,
+    0x1421df57cULL, 0x1421df5f8ULL,
+    0x1421e2dc8ULL, 0x1421e2dfcULL,
+    0x1421e2dfcULL, 0x1421e2e58ULL,
+    0x1421ec3c4ULL, 0x1421ec418ULL,
+    0x1421ecbecULL, 0x1421ecc14ULL,
+    0x1421ecc14ULL, 0x1421ecc78ULL,
+    0x1421ee6d0ULL, 0x1421ee6f0ULL,
+    0x1421ee6f0ULL, 0x1421ee757ULL,
+    0x1421f2964ULL, 0x1421f297cULL,
+    0x1421f66b0ULL, 0x1421f66f4ULL,
+    0x1421f9f60ULL, 0x1421f9f90ULL,
+    0x1421f9f90ULL, 0x1421fa01dULL,
+    0x1421fbba4ULL, 0x1421fbbccULL,
+    0x1421fbbccULL, 0x1421fbc32ULL,
+    0x1421fcd7cULL, 0x1421fcd9cULL,
+    0x1421fcd9cULL, 0x1421fce02ULL,
+    0x1421fe268ULL, 0x1421fe294ULL,
+    0x1421fe294ULL, 0x1421fe2faULL,
+    0x1421ffaa8ULL, 0x1421ffadcULL,
+    0x1421ffadcULL, 0x1421ffb4eULL,
+    0x142201f5cULL, 0x142201fb8ULL,
+    0x142201fb8ULL, 0x142202080ULL,
+    0x14220899cULL, 0x1422089c0ULL,
+    0x14220b93cULL, 0x14220b964ULL,
+    0x142213db4ULL, 0x142213ddcULL,
+    0x142214e1cULL, 0x142214e40ULL,
+    0x142215590ULL, 0x1422155b4ULL,
+    0x14221c5f4ULL, 0x14221c61cULL,
+    0x142226c70ULL, 0x142226c98ULL,
+    0x142226c98ULL, 0x142226cc0ULL,
+    0x142227014ULL, 0x14222703cULL,
+    0x142229154ULL, 0x14222917cULL,
+    0x14222abe8ULL, 0x14222ac10ULL,
+    0x14222b0fcULL, 0x14222b124ULL,
+    0x14222b504ULL, 0x14222b52cULL,
+    0x14222b52cULL, 0x14222b554ULL,
+    0x14222c030ULL, 0x14222c058ULL,
+    0x14222c058ULL, 0x14222c080ULL,
+    0x14222c080ULL, 0x14222c0a8ULL,
+    0x14222ebccULL, 0x14222ebf4ULL,
+    0x14222ebf4ULL, 0x14222ec1cULL,
+    0x14222ef40ULL, 0x14222ef58ULL,
+    0x14222f1acULL, 0x14222f1c4ULL,
+    0x142230424ULL, 0x14223046cULL,
+    0x1422311c8ULL, 0x142231210ULL,
+    0x142231210ULL, 0x142231258ULL,
+    0x142232224ULL, 0x14223226cULL,
+    0x142232afcULL, 0x142232b14ULL,
+    0x142234690ULL, 0x1422346d8ULL,
+    0x1422346d8ULL, 0x142234720ULL,
+    0x142234720ULL, 0x142234768ULL,
+    0x142234980ULL, 0x1422349a8ULL,
+    0x142234d3cULL, 0x142234d64ULL,
+    0x142234f74ULL, 0x142234f9cULL,
+    0x142235954ULL, 0x14223597cULL,
+    0x142236c40ULL, 0x142236c68ULL,
+    0x142236c68ULL, 0x142236c90ULL,
+    0x1422370b4ULL, 0x1422370dcULL,
+    0x142237414ULL, 0x14223742cULL,
+    0x142238344ULL, 0x14223838cULL,
+    0x14223838cULL, 0x1422383d4ULL,
+    0x1422389d0ULL, 0x1422389f8ULL,
+    0x142239428ULL, 0x142239470ULL,
+    0x142239470ULL, 0x1422394b8ULL,
+    0x1422394b8ULL, 0x142239500ULL,
+    0x14223a1d8ULL, 0x14223a200ULL,
+    0x14223f34cULL, 0x14223f374ULL,
+    0x142241054ULL, 0x14224107cULL,
+    0x142244474ULL, 0x1422444bcULL,
+    0x1422444bcULL, 0x142244504ULL,
+    0x142244504ULL, 0x14224454cULL,
+    0x14224476cULL, 0x142244794ULL,
+    0x14224d25cULL, 0x14224d27cULL,
+    0x14224e5a8ULL, 0x14224e5ccULL,
+    0x14224e5ccULL, 0x14224e5d0ULL,
+    0x14224e5d0ULL, 0x14224e5e2ULL,
+    0x14224eb64ULL, 0x14224eb8cULL,
+    0x14224f534ULL, 0x14224f560ULL,
+    0x14224ff98ULL, 0x142250004ULL,
+    0x142251a7cULL, 0x142251a98ULL,
+    0x14225ad34ULL, 0x14225ad5cULL,
+    0x14225b0fcULL, 0x14225b124ULL,
+    0x14225b6e8ULL, 0x14225b710ULL,
+    0x14225c128ULL, 0x14225c138ULL,
+    0x14225c150ULL, 0x14225c160ULL,
+    0x14225c178ULL, 0x14225c1a0ULL,
+    0x14225f038ULL, 0x14225f054ULL,
+    0x14225f054ULL, 0x14225f0a8ULL,
+    0x14225fea0ULL, 0x14225fedcULL,
+    0x14225fedcULL, 0x14225ff55ULL,
+    0x14226d5fcULL, 0x14226d614ULL,
+    0x1422768f8ULL, 0x142276974ULL,
+    0x142276974ULL, 0x1422769b8ULL,
+    0x142278f28ULL, 0x142278f2cULL,
+    0x142278f2cULL, 0x142278f3dULL,
+    0x142283ca0ULL, 0x142283cb8ULL,
+    0x142283e4cULL, 0x142283e64ULL,
+    0x142286424ULL, 0x142286458ULL,
+    0x142287b70ULL, 0x142287b88ULL,
+    0x142296028ULL, 0x142296044ULL,
+    0x1422a21f8ULL, 0x1422a221cULL,
+    0x1422eb55cULL, 0x1422eb578ULL,
+    0x1422ec924ULL, 0x1422ec98cULL,
+    0x1423072acULL, 0x1423072dcULL,
+    0x14230ce18ULL, 0x14230ce30ULL,
+    0x1423163fcULL, 0x14231641cULL,
+    0x142319b30ULL, 0x142319b54ULL,
+    0x14231acfcULL, 0x14231ad1cULL,
+    0x14231ad1cULL, 0x14231ad40ULL,
+    0x14231b47cULL, 0x14231b4a4ULL,
+    0x14231b4a4ULL, 0x14231b4c4ULL,
+    0x14231b4c4ULL, 0x14231b4e4ULL,
+    0x14231ba40ULL, 0x14231ba60ULL,
+    0x14231ca6cULL, 0x14231ca90ULL,
+    0x142321d00ULL, 0x142321e00ULL,
+    0x142323d58ULL, 0x142323e70ULL,
+    0x142323e70ULL, 0x142323ee4ULL,
+    0x142324974ULL, 0x142324998ULL,
+    0x1423359d8ULL, 0x1423359f8ULL,
+    0x142336e50ULL, 0x142336e74ULL,
+    0x142339cc0ULL, 0x142339ce0ULL,
+    0x142339ce0ULL, 0x142339d04ULL,
+    0x14233c9a8ULL, 0x14233cac0ULL,
+    0x14233cac0ULL, 0x14233cb34ULL,
+    0x14233d028ULL, 0x14233d04cULL,
+    0x142342724ULL, 0x142342758ULL,
+    0x142342a5cULL, 0x142342a90ULL,
+    0x142343eecULL, 0x142343f18ULL,
+    0x1423441e8ULL, 0x142344238ULL,
+    0x142345168ULL, 0x14234518cULL,
+    0x142354410ULL, 0x142354528ULL,
+    0x142354528ULL, 0x14235459cULL,
+    0x142359500ULL, 0x14235952cULL,
+    0x142359634ULL, 0x14235964cULL,
+    0x14235964cULL, 0x142359696ULL,
+    0x1423596f4ULL, 0x14235970cULL,
+    0x14235970cULL, 0x142359756ULL,
+    0x14235984cULL, 0x142359864ULL,
+    0x142359864ULL, 0x1423598aeULL,
+    0x14235998cULL, 0x1423599a4ULL,
+    0x1423599a4ULL, 0x1423599eeULL,
+    0x14235c424ULL, 0x14235c4a4ULL,
+    0x142363c60ULL, 0x142363ca0ULL,
+    0x14236cdf0ULL, 0x14236ce00ULL,
+    0x1423748ecULL, 0x142374928ULL,
+    0x142386168ULL, 0x142386184ULL,
+    0x142386184ULL, 0x1423861a4ULL,
+    0x1423861a4ULL, 0x1423861c0ULL,
+    0x1423861c0ULL, 0x1423861e0ULL,
+    0x1423861e0ULL, 0x1423861fcULL,
+    0x1423861fcULL, 0x14238621cULL,
+    0x14238621cULL, 0x142386238ULL,
+    0x142386238ULL, 0x142386258ULL,
+    0x142386258ULL, 0x142386274ULL,
+    0x142386274ULL, 0x142386294ULL,
+    0x142386294ULL, 0x1423862b0ULL,
+    0x1423862b0ULL, 0x1423862d0ULL,
+    0x1423862d0ULL, 0x1423862ecULL,
+    0x1423862ecULL, 0x14238630cULL,
+    0x14238630cULL, 0x142386328ULL,
+    0x142386328ULL, 0x142386348ULL,
+    0x142386348ULL, 0x142386364ULL,
+    0x142386364ULL, 0x142386384ULL,
+    0x142386384ULL, 0x1423863a0ULL,
+    0x1423863a0ULL, 0x1423863c0ULL,
+    0x1423863c0ULL, 0x1423863dcULL,
+    0x1423863dcULL, 0x1423863fcULL,
+    0x1423863fcULL, 0x142386418ULL,
+    0x142386418ULL, 0x142386438ULL,
+    0x142386438ULL, 0x142386454ULL,
+    0x142386454ULL, 0x142386474ULL,
+    0x1423864b0ULL, 0x1423864ccULL,
+    0x1423864ccULL, 0x1423864ecULL,
+    0x1423864ecULL, 0x142386508ULL,
+    0x142386508ULL, 0x142386528ULL,
+    0x142386528ULL, 0x142386544ULL,
+    0x142386544ULL, 0x142386564ULL,
+    0x142386564ULL, 0x142386580ULL,
+    0x142386580ULL, 0x1423865a0ULL,
+    0x1423865dcULL, 0x1423865f8ULL,
+    0x1423865f8ULL, 0x142386618ULL,
+    0x142386618ULL, 0x142386634ULL,
+    0x142386634ULL, 0x142386654ULL,
+    0x14238719cULL, 0x1423871bcULL,
+    0x142389b48ULL, 0x142389b64ULL,
+    0x142389b64ULL, 0x142389b84ULL,
+    0x142389b84ULL, 0x142389ba0ULL,
+    0x142389ba0ULL, 0x142389bc0ULL,
+    0x142389bc0ULL, 0x142389bdcULL,
+    0x142389bdcULL, 0x142389bfcULL,
+    0x142389bfcULL, 0x142389c18ULL,
+    0x142389c18ULL, 0x142389c38ULL,
+    0x14239e298ULL, 0x14239e2b4ULL,
+    0x14239e2b4ULL, 0x14239e2d4ULL,
+    0x14239e2d4ULL, 0x14239e2f0ULL,
+    0x14239e2f0ULL, 0x14239e310ULL,
+    0x14239eb6cULL, 0x14239eb88ULL,
+    0x14239eb88ULL, 0x14239eba8ULL,
+    0x14239eba8ULL, 0x14239ebc4ULL,
+    0x14239ebc4ULL, 0x14239ebe4ULL,
+    0x1423b104cULL, 0x1423b1068ULL,
+    0x1423b1068ULL, 0x1423b1088ULL,
+    0x1423b1088ULL, 0x1423b10a4ULL,
+    0x1423b10a4ULL, 0x1423b10c4ULL,
+    0x1423b10c4ULL, 0x1423b10e0ULL,
+    0x1423b10e0ULL, 0x1423b1100ULL,
+    0x1423b1100ULL, 0x1423b111cULL,
+    0x1423b111cULL, 0x1423b113cULL,
+    0x1423b36a4ULL, 0x1423b36c0ULL,
+    0x1423b36c0ULL, 0x1423b36e0ULL,
+    0x1423b36e0ULL, 0x1423b36fcULL,
+    0x1423b36fcULL, 0x1423b371cULL,
+    0x1423b371cULL, 0x1423b3738ULL,
+    0x1423b3738ULL, 0x1423b3758ULL,
+    0x1423b3758ULL, 0x1423b3774ULL,
+    0x1423b3774ULL, 0x1423b3794ULL,
+    0x1423b6624ULL, 0x1423b6670ULL,
+    0x1423b979cULL, 0x1423b97b8ULL,
+    0x1423b97b8ULL, 0x1423b97d8ULL,
+    0x1423b97d8ULL, 0x1423b97f4ULL,
+    0x1423b97f4ULL, 0x1423b9814ULL,
+    0x1423b9814ULL, 0x1423b9830ULL,
+    0x1423b9830ULL, 0x1423b9850ULL,
+    0x1423b9850ULL, 0x1423b986cULL,
+    0x1423b986cULL, 0x1423b988cULL,
+    0x1423bbe74ULL, 0x1423bbe90ULL,
+    0x1423bbe90ULL, 0x1423bbeb0ULL,
+    0x1423bbeb0ULL, 0x1423bbeccULL,
+    0x1423bbeccULL, 0x1423bbeecULL,
+    0x1423bbeecULL, 0x1423bbf08ULL,
+    0x1423bbf08ULL, 0x1423bbf28ULL,
+    0x1423bbf28ULL, 0x1423bbf44ULL,
+    0x1423bbf44ULL, 0x1423bbf64ULL,
+    0x1423ca968ULL, 0x1423ca99cULL,
+    0x1423cd774ULL, 0x1423cd7a8ULL,
+    0x1423f17f0ULL, 0x1423f1800ULL,
+    0x1424100d4ULL, 0x142410110ULL,
+    0x142410110ULL, 0x14241014cULL,
+    0x142410150ULL, 0x142410190ULL,
+    0x14241c8b4ULL, 0x14241c8f0ULL,
+    0x14241c8f0ULL, 0x14241c92cULL,
+    0x14241c930ULL, 0x14241c970ULL,
+    0x142429360ULL, 0x142429380ULL,
+    0x142429380ULL, 0x1424293b4ULL,
+    0x14242a714ULL, 0x14242a77cULL,
+    0x14242a8f8ULL, 0x14242a960ULL,
+    0x14242df70ULL, 0x14242df8cULL,
+    0x142430774ULL, 0x1424307a4ULL,
+    0x142430aa4ULL, 0x142430ad4ULL,
+    0x14243120cULL, 0x142431214ULL,
+    0x142431214ULL, 0x142431312ULL,
+    0x142431b54ULL, 0x142431b78ULL,
+    0x142431b78ULL, 0x142431baaULL,
+    0x142432f5cULL, 0x142432f74ULL,
+    0x142434804ULL, 0x14243480cULL,
+    0x14243480cULL, 0x142434820ULL,
+    0x142436758ULL, 0x142436cdcULL,
+    0x14243a03cULL, 0x14243a0a0ULL,
+    0x14243a0e4ULL, 0x14243a110ULL,
+    0x14243ae54ULL, 0x14243ae80ULL,
+    0x142461828ULL, 0x142461848ULL,
+    0x142463ad0ULL, 0x142463ae0ULL,
+    0x14247280cULL, 0x142472830ULL,
+    0x1424732dcULL, 0x142473300ULL,
+    0x1424736d4ULL, 0x1424736f8ULL,
+    0x14247392cULL, 0x142473950ULL,
+    0x142473a30ULL, 0x142473a50ULL,
+    0x142473b68ULL, 0x142473b8cULL,
+    0x142473d58ULL, 0x142473d7cULL,
+    0x14247a9e0ULL, 0x14247a9f0ULL,
+    0x1424aa560ULL, 0x1424aa590ULL,
+    0x1424aa8e0ULL, 0x1424aa8f0ULL,
+    0x1424ab99cULL, 0x1424ab9d4ULL,
+    0x1424b4980ULL, 0x1424b49a4ULL,
+    0x1424b5190ULL, 0x1424b51f0ULL,
+    0x1424b51f0ULL, 0x1424b52caULL,
+    0x1424b6784ULL, 0x1424b679cULL,
+    0x1424b679cULL, 0x1424b67c3ULL,
+    0x1424c7454ULL, 0x1424c746cULL,
+    0x1424c86acULL, 0x1424c86c0ULL,
+    0x1424c86c0ULL, 0x1424c86e7ULL,
+    0x1424dea90ULL, 0x1424deaa8ULL,
+    0x1424e0de8ULL, 0x1424e0e1cULL,
+    0x1425225c4ULL, 0x1425225e0ULL,
+    0x1425225e0ULL, 0x14252263aULL,
+    0x142523a88ULL, 0x142523abcULL,
+    0x142523abcULL, 0x142523af4ULL,
+    0x142523af4ULL, 0x142523b2cULL,
+    0x142523b2cULL, 0x142523b64ULL,
+    0x142523fb4ULL, 0x142523fe8ULL,
+    0x142523fe8ULL, 0x142524020ULL,
+    0x142524020ULL, 0x142524058ULL,
+    0x142524058ULL, 0x142524090ULL,
+    0x142525180ULL, 0x14252519cULL,
+    0x14252519cULL, 0x1425251f6ULL,
+    0x142525714ULL, 0x142525730ULL,
+    0x142525730ULL, 0x14252578aULL,
+    0x14252ef1cULL, 0x14252ef64ULL,
+    0x142544eb8ULL, 0x142544ed4ULL,
+    0x142544ed4ULL, 0x142544eebULL,
+    0x1425524dcULL, 0x14255251cULL,
+    0x142553940ULL, 0x142553950ULL,
+    0x14256725cULL, 0x142567280ULL,
+    0x14256c094ULL, 0x14256c0acULL,
+    0x1425818f0ULL, 0x14258190cULL,
+    0x142583724ULL, 0x142583758ULL,
+    0x142583758ULL, 0x14258379bULL,
+    0x1425889f8ULL, 0x142588a44ULL,
+    0x14258aef4ULL, 0x14258af0cULL,
+    0x14259204cULL, 0x142592068ULL,
+    0x1425a9f60ULL, 0x1425a9f68ULL,
+    0x1425a9f68ULL, 0x1425a9f7cULL,
+    0x1425aa12cULL, 0x1425aa134ULL,
+    0x1425aa134ULL, 0x1425aa157ULL,
+    0x1425aa158ULL, 0x1425aa190ULL,
+    0x1425aa208ULL, 0x1425aa254ULL,
+    0x1425ab0b0ULL, 0x1425ab0b8ULL,
+    0x1425ab0b8ULL, 0x1425ab1adULL,
+    0x1425ab258ULL, 0x1425ab264ULL,
+    0x1425ab264ULL, 0x1425ab32dULL,
+    0x1425ab398ULL, 0x1425ab3a4ULL,
+    0x1425ab3a4ULL, 0x1425ab469ULL,
+    0x1425ac110ULL, 0x1425ac118ULL,
+    0x1425ac118ULL, 0x1425ac19eULL,
+    0x1425ac1d0ULL, 0x1425ac1d8ULL,
+    0x1425ac1d8ULL, 0x1425ac249ULL,
+    0x1425ac280ULL, 0x1425ac288ULL,
+    0x1425ac288ULL, 0x1425ac310ULL,
+    0x1425ac340ULL, 0x1425ac348ULL,
+    0x1425ac348ULL, 0x1425ac3cdULL,
+    0x1425ac40cULL, 0x1425ac418ULL,
+    0x1425ac418ULL, 0x1425ac4a0ULL,
+    0x1425b6aa8ULL, 0x1425b6c64ULL,
+    0x1425b6c64ULL, 0x1425b6c80ULL,
+    0x1425b6c80ULL, 0x1425b6d36ULL,
+    0x1425b6d38ULL, 0x1425b6e10ULL,
+    0x1425b6e10ULL, 0x1425b6ef8ULL,
+    0x1425b6ef8ULL, 0x1425b6f44ULL,
+    0x1425b6f44ULL, 0x1425b700fULL,
+    0x1425b7010ULL, 0x1425b709cULL,
+    0x1425b709cULL, 0x1425b70f0ULL,
+    0x1425b70f0ULL, 0x1425b713cULL,
+    0x1425b713cULL, 0x1425b7164ULL,
+    0x1425b7164ULL, 0x1425b71f4ULL,
+    0x1425b71f4ULL, 0x1425b728cULL,
+    0x1425b728cULL, 0x1425b7338ULL,
+    0x1425b7338ULL, 0x1425b7378ULL,
+    0x1425b7378ULL, 0x1425b744bULL,
+    0x1425b744cULL, 0x1425b74a8ULL,
+    0x1425b74a8ULL, 0x1425b74d8ULL,
+    0x1425b74d8ULL, 0x1425b7538ULL,
+    0x1425b7538ULL, 0x1425b7570ULL,
+    0x1425b7570ULL, 0x1425b75d7ULL,
+    0x1425b75d8ULL, 0x1425b7630ULL,
+    0x1425b7630ULL, 0x1425b7670ULL,
+    0x1425b7670ULL, 0x1425b76a8ULL,
+    0x1425b76a8ULL, 0x1425b76ecULL,
+    0x1425b76ecULL, 0x1425b77b5ULL,
+    0x1425b77b8ULL, 0x1425b77e8ULL,
+    0x1425b7bdcULL, 0x1425b7bf0ULL,
+    0x1425b7bf0ULL, 0x1425b7c0eULL,
+    0x1425c5b60ULL, 0x1425c5b80ULL,
+    0x1425c5b80ULL, 0x1425c5ba0ULL,
+    0x1425c5ba0ULL, 0x1425c5bc0ULL,
+    0x1425c5bc0ULL, 0x1425c5be0ULL,
+    0x1425c5be0ULL, 0x1425c5c00ULL,
+    0x1425c5c00ULL, 0x1425c5c20ULL,
+    0x1425c5c20ULL, 0x1425c5c40ULL,
+    0x1425c5c40ULL, 0x1425c5c60ULL,
+    0x1425c5c60ULL, 0x1425c5c80ULL,
+    0x1425c5c80ULL, 0x1425c5ca0ULL,
+    0x1425c5ca0ULL, 0x1425c5cc0ULL,
+    0x1425c5cc0ULL, 0x1425c5ce0ULL,
+    0x1425cc7a4ULL, 0x1425cc7c4ULL,
+    0x1425cc7c4ULL, 0x1425cc7e4ULL,
+    0x1425cc7e4ULL, 0x1425cc804ULL,
+    0x1425cc804ULL, 0x1425cc824ULL,
+    0x1425cc824ULL, 0x1425cc844ULL,
+    0x1425cc844ULL, 0x1425cc864ULL,
+    0x1425cc864ULL, 0x1425cc884ULL,
+    0x1425cc884ULL, 0x1425cc8a4ULL,
+    0x1425cc8a4ULL, 0x1425cc8c4ULL,
+    0x1425cc8c4ULL, 0x1425cc8e4ULL,
+    0x1425cc8e4ULL, 0x1425cc904ULL,
+    0x1425cc904ULL, 0x1425cc924ULL,
+    0x1425d4474ULL, 0x1425d4494ULL,
+    0x1425d4494ULL, 0x1425d44b4ULL,
+    0x1425d44b4ULL, 0x1425d44d4ULL,
+    0x1425d44d4ULL, 0x1425d44f4ULL,
+    0x1425d44f4ULL, 0x1425d4514ULL,
+    0x1425d4514ULL, 0x1425d4534ULL,
+    0x1425d4534ULL, 0x1425d4554ULL,
+    0x1425d4554ULL, 0x1425d4574ULL,
+    0x1425d4574ULL, 0x1425d4594ULL,
+    0x1425d4594ULL, 0x1425d45b4ULL,
+    0x1425d45b4ULL, 0x1425d45d4ULL,
+    0x1425d45d4ULL, 0x1425d45f4ULL,
+    0x1425d9bc8ULL, 0x1425d9be8ULL,
+    0x1425d9be8ULL, 0x1425d9c08ULL,
+    0x1425d9c08ULL, 0x1425d9c28ULL,
+    0x1425d9c28ULL, 0x1425d9c48ULL,
+    0x1425d9c48ULL, 0x1425d9c68ULL,
+    0x1425d9c68ULL, 0x1425d9c88ULL,
+    0x1425d9c88ULL, 0x1425d9ca8ULL,
+    0x1425d9ca8ULL, 0x1425d9cc8ULL,
+    0x1425d9cc8ULL, 0x1425d9ce8ULL,
+    0x1425d9ce8ULL, 0x1425d9d08ULL,
+    0x1425d9d08ULL, 0x1425d9d28ULL,
+    0x1425d9d28ULL, 0x1425d9d48ULL,
+    0x1425da000ULL, 0x1425da010ULL,
+    0x1425da0b0ULL, 0x1425da0c0ULL,
+    0x1425da180ULL, 0x1425da1f0ULL,
+    0x1425da4c0ULL, 0x1425da530ULL,
+    0x1425daac0ULL, 0x1425daad0ULL,
+    0x1425dad30ULL, 0x1425dae10ULL,
+    0x1425daed0ULL, 0x1425dafa0ULL,
+    0x1425db1b0ULL, 0x1425db1c0ULL,
+    0x1425db390ULL, 0x1425db400ULL,
+    0x1425dba70ULL, 0x1425dba80ULL,
+    0x1425dbb70ULL, 0x1425dbb80ULL,
+    0x1425dc2b0ULL, 0x1425dc2c0ULL,
+    0x1425dc310ULL, 0x1425dc320ULL,
+    0x1425dc610ULL, 0x1425dc620ULL,
+    0x1425e21b0ULL, 0x1425e21c0ULL,
+    0x1425e2310ULL, 0x1425e2340ULL,
+    0x1425e2490ULL, 0x1425e24a0ULL,
+    0x1425e2d10ULL, 0x1425e2d70ULL,
+    0x1425e2d90ULL, 0x1425e2da0ULL,
+    0x1425e2df0ULL, 0x1425e2f10ULL,
+    0x1425e32e0ULL, 0x1425e32f0ULL,
+    0x1425e3480ULL, 0x1425e3490ULL,
+    0x1425e3500ULL, 0x1425e3530ULL,
+    0x1425e35e0ULL, 0x1425e35f0ULL,
+    0x1425e36b0ULL, 0x1425e3700ULL,
+    0x1425e37a0ULL, 0x1425e37e0ULL,
+    0x1425e3830ULL, 0x1425e3840ULL,
+    0x1425e38f0ULL, 0x1425e3900ULL,
+    0x1425e3950ULL, 0x1425e3980ULL,
+    0x1425e39d0ULL, 0x1425e39e0ULL,
+    0x1425e3a30ULL, 0x1425e3a60ULL,
+    0x1425e3ab0ULL, 0x1425e3ac0ULL,
+    0x1425e3bb0ULL, 0x1425e3bc0ULL,
+    0x1425e3d10ULL, 0x1425e3d40ULL,
+    0x1425e3f20ULL, 0x1425e3f50ULL,
+    0x1425e4520ULL, 0x1425e4540ULL,
+    0x1425e54e0ULL, 0x1425e55e0ULL,
+    0x1425e5840ULL, 0x1425e58d0ULL,
+    0x1425e6740ULL, 0x1425e6750ULL,
+    0x1425e6830ULL, 0x1425e6930ULL,
+    0x1425e69c0ULL, 0x1425e69d0ULL,
+    0x1425e6a60ULL, 0x1425e6a70ULL,
+    0x1425e6e60ULL, 0x1425e6e90ULL,
+    0x1425e7130ULL, 0x1425e7190ULL,
+    0x1425e71e0ULL, 0x1425e7200ULL,
+    0x1425e7260ULL, 0x1425e7270ULL,
+    0x1425e72d0ULL, 0x1425e72e0ULL,
+    0x1425e75f0ULL, 0x1425e7600ULL,
+    0x1425e78c0ULL, 0x1425e7950ULL,
+    0x1425e7a50ULL, 0x1425e7a60ULL,
+    0x1425e7d80ULL, 0x1425e7da0ULL,
+    0x1425e8380ULL, 0x1425e83a0ULL,
+    0x1425e8450ULL, 0x1425e8460ULL,
+    0x1425e86c0ULL, 0x1425e86d0ULL,
+    0x1425e8740ULL, 0x1425e8750ULL,
+    0x1425e8800ULL, 0x1425e8810ULL,
+    0x1425e88c0ULL, 0x1425e88f0ULL,
+    0x1425e90e0ULL, 0x1425e90f0ULL,
+    0x1425e93f0ULL, 0x1425e9440ULL,
+    0x1425e9930ULL, 0x1425e9940ULL,
+    0x1425e9c90ULL, 0x1425e9ca0ULL,
+    0x1425e9e70ULL, 0x1425e9e80ULL,
+    0x1425e9f30ULL, 0x1425e9f40ULL,
+    0x1425e9fb0ULL, 0x1425e9fe0ULL,
+    0x1425ea0f0ULL, 0x1425ea100ULL,
+    0x1425ea430ULL, 0x1425ea440ULL,
+    0x1425ea700ULL, 0x1425ea730ULL,
+    0x1425ea890ULL, 0x1425ea8a0ULL,
+    0x1425ead90ULL, 0x1425eae60ULL,
+    0x1425eaf40ULL, 0x1425eaf50ULL,
+    0x1425eb1d0ULL, 0x1425eb1e0ULL,
+    0x1425eb380ULL, 0x1425eb3b0ULL,
+    0x1425eb3f0ULL, 0x1425eb420ULL,
+    0x1425eb4b0ULL, 0x1425eb4f0ULL,
+    0x1425eb540ULL, 0x1425eb5f0ULL,
+    0x1425eb8e0ULL, 0x1425eb910ULL,
+    0x1425eb940ULL, 0x1425eb960ULL,
+    0x1425eb9e0ULL, 0x1425eba50ULL,
+    0x1425ebaa0ULL, 0x1425ebb20ULL,
+    0x1425ebb70ULL, 0x1425ebbc0ULL,
+    0x1425ebc10ULL, 0x1425ebc40ULL,
+    0x1425ebcf0ULL, 0x1425ebd60ULL,
+    0x1425ebdb0ULL, 0x1425ebea0ULL,
+    0x1425ebef0ULL, 0x1425ebf60ULL,
+    0x1425ebfb0ULL, 0x1425ec010ULL,
+    0x1425ec060ULL, 0x1425ec100ULL,
+    0x1425ec150ULL, 0x1425ec1b0ULL,
+    0x1425ec200ULL, 0x1425ec260ULL,
+    0x1425ec2b0ULL, 0x1425ec2e0ULL,
+    0x1425ec3a0ULL, 0x1425ec3d0ULL,
+    0x1425ec420ULL, 0x1425ec4e0ULL,
+    0x1425ec530ULL, 0x1425ec5a0ULL,
+    0x1425ec5f0ULL, 0x1425ec660ULL,
+    0x1425ec6b0ULL, 0x1425ec7f0ULL,
+    0x1425ec840ULL, 0x1425ec8c0ULL,
+    0x1425ec910ULL, 0x1425eca20ULL,
+    0x1425eca70ULL, 0x1425ecac0ULL,
+    0x1425ecc80ULL, 0x1425ecca0ULL,
+    0x1425ecda0ULL, 0x1425ecdb0ULL,
+    0x1425ece00ULL, 0x1425ece10ULL,
+    0x1425ece60ULL, 0x1425ece80ULL,
+    0x1425eced0ULL, 0x1425ecee0ULL,
+    0x1425ecf30ULL, 0x1425ecf40ULL,
+    0x1425ed240ULL, 0x1425ed250ULL,
+    0x1425ed2d0ULL, 0x1425ed2e0ULL,
+    0x1425edca0ULL, 0x1425edcb0ULL,
+    0x1425edda0ULL, 0x1425eddc0ULL,
+    0x1425ede10ULL, 0x1425ede60ULL,
+    0x1425ee020ULL, 0x1425ee030ULL,
+    0x1425ee080ULL, 0x1425ee0b0ULL,
+    0x1425ee100ULL, 0x1425ee130ULL,
+    0x1425ee240ULL, 0x1425ee250ULL,
+    0x1425ee2a0ULL, 0x1425ee2b0ULL,
+    0x1425ee300ULL, 0x1425ee310ULL,
+    0x1425ee460ULL, 0x1425ee470ULL,
+    0x1425ee4c0ULL, 0x1425ee4d0ULL,
+    0x1425ee4f0ULL, 0x1425ee500ULL,
+    0x1425ee550ULL, 0x1425ee560ULL,
+    0x1425ee660ULL, 0x1425ee680ULL,
+    0x1425ee6c0ULL, 0x1425ee6e0ULL,
+    0x1425ee870ULL, 0x1425ee880ULL,
+    0x1425eea60ULL, 0x1425eea70ULL,
+    0x1425eeb80ULL, 0x1425eeb90ULL,
+    0x1425eecc0ULL, 0x1425eed30ULL,
+    0x1425eed80ULL, 0x1425eed90ULL,
+    0x1425ef410ULL, 0x1425ef420ULL,
+    0x1425ef470ULL, 0x1425ef480ULL,
+    0x1425ef6a0ULL, 0x1425ef700ULL,
+    0x1425ef750ULL, 0x1425ef760ULL,
+    0x1425ef7b0ULL, 0x1425ef7c0ULL,
+    0x1425ef860ULL, 0x1425ef8a0ULL,
+    0x1425efac0ULL, 0x1425efad0ULL,
+    0x1425efb70ULL, 0x1425efba0ULL,
+    0x1425efea0ULL, 0x1425efeb0ULL,
+    0x1425eff30ULL, 0x1425eff40ULL,
+    0x1425f0060ULL, 0x1425f0090ULL,
+    0x1425f00e0ULL, 0x1425f0110ULL,
+    0x1425f0200ULL, 0x1425f0210ULL,
+    0x1425f0270ULL, 0x1425f0280ULL,
+    0x1425f0de0ULL, 0x1425f0e00ULL,
+    0x1425f1430ULL, 0x1425f1440ULL,
+    0x1425f1830ULL, 0x1425f1840ULL,
+    0x1425f18d0ULL, 0x1425f18e0ULL,
+    0x1425f1b90ULL, 0x1425f1bf0ULL,
+    0x1425f2830ULL, 0x1425f2840ULL,
+    0x1425f2910ULL, 0x1425f2930ULL,
+    0x1425f2d80ULL, 0x1425f2d90ULL,
+    0x1425f2de0ULL, 0x1425f2ef0ULL,
+    0x1425f33f0ULL, 0x1425f3420ULL,
+    0x1425f3690ULL, 0x1425f3850ULL,
+    0x1425f3950ULL, 0x1425f39b0ULL,
+    0x1425f3a70ULL, 0x1425f3ac0ULL,
+    0x1425f3b10ULL, 0x1425f3b30ULL,
+    0x1425f3b80ULL, 0x1425f3b90ULL,
+    0x1425f3c30ULL, 0x1425f3c40ULL,
+    0x1425f3ce0ULL, 0x1425f3d30ULL,
+    0x1425f3d80ULL, 0x1425f3da0ULL,
+    0x1425f3df0ULL, 0x1425f3e10ULL,
+    0x1425f3fe0ULL, 0x1425f3ff0ULL,
+    0x1425f4260ULL, 0x1425f42d0ULL,
+    0x1425f4bb0ULL, 0x1425f4bd0ULL,
+    0x1425f5780ULL, 0x1425f57b0ULL,
+    0x1425f59c0ULL, 0x1425f59d0ULL,
+    0x1425f5db0ULL, 0x1425f5eb0ULL,
+    0x1425f62c0ULL, 0x1425f62d0ULL,
+    0x1425f6650ULL, 0x1425f6660ULL,
+    0x1425f7040ULL, 0x1425f7090ULL,
+    0x1425f72d0ULL, 0x1425f72f0ULL,
+    0x1425f77d0ULL, 0x1425f77e0ULL,
+    0x1425f78d0ULL, 0x1425f7920ULL,
+    0x1425f80e0ULL, 0x1425f8110ULL,
+    0x1425f8280ULL, 0x1425f82e0ULL,
+    0x1425f87a0ULL, 0x1425f87f0ULL,
+    0x1425f8900ULL, 0x1425f8910ULL,
+    0x1425f8950ULL, 0x1425f8990ULL,
+    0x1425f8ff0ULL, 0x1425f9130ULL,
+    0x1425f9410ULL, 0x1425f9430ULL,
+    0x1425f95f0ULL, 0x1425f9600ULL,
+    0x1425f9b40ULL, 0x1425f9b60ULL,
+    0x1425f9c70ULL, 0x1425f9c90ULL,
+    0x1425faef0ULL, 0x1425faf00ULL,
+    0x1425fbdb0ULL, 0x1425fbdd0ULL,
+    0x1425fc350ULL, 0x1425fc360ULL,
+    0x1425fc3b0ULL, 0x1425fc3c0ULL,
+    0x1425fc9b0ULL, 0x1425fca00ULL,
+    0x1425fca40ULL, 0x1425fca50ULL,
+    0x1425fcd20ULL, 0x1425fcd30ULL,
+    0x1425fcdf0ULL, 0x1425fce10ULL,
+    0x1425fd0c0ULL, 0x1425fd0d0ULL,
+    0x1425fd120ULL, 0x1425fd130ULL,
+    0x1425fd180ULL, 0x1425fd190ULL,
+    0x1425fd1e0ULL, 0x1425fd1f0ULL,
+    0x1425fd240ULL, 0x1425fd250ULL,
+    0x1425fd2a0ULL, 0x1425fd2b0ULL,
+    0x1425fd300ULL, 0x1425fd310ULL,
+    0x1425fd360ULL, 0x1425fd370ULL,
+    0x1425fd3c0ULL, 0x1425fd3d0ULL,
+    0x1425fd470ULL, 0x1425fd490ULL,
+    0x1425fd4e0ULL, 0x1425fd4f0ULL,
+    0x1425fd540ULL, 0x1425fd570ULL,
+    0x1425fd5c0ULL, 0x1425fd5d0ULL,
+    0x1425fd680ULL, 0x1425fd690ULL,
+    0x1425fd790ULL, 0x1425fd7b0ULL,
+    0x1425fd830ULL, 0x1425fd850ULL,
+    0x1425fd890ULL, 0x1425fd8d0ULL,
+    0x1425fd920ULL, 0x1425fd930ULL,
+    0x1425fda70ULL, 0x1425fda80ULL,
+    0x1425fdb10ULL, 0x1425fdb20ULL,
+    0x1425fdcb0ULL, 0x1425fdcc0ULL,
+    0x1425fdd10ULL, 0x1425fdd60ULL,
+    0x1425fddb0ULL, 0x1425fddc0ULL,
+    0x1425fde10ULL, 0x1425fde60ULL,
+    0x1425fdeb0ULL, 0x1425fdec0ULL,
+    0x1425fdf10ULL, 0x1425fdf40ULL,
+    0x1425fdf90ULL, 0x1425fdfb0ULL,
+    0x1425fe000ULL, 0x1425fe010ULL,
+    0x1425fe060ULL, 0x1425fe070ULL,
+    0x1425fe460ULL, 0x1425fe490ULL,
+    0x142600740ULL, 0x142600770ULL,
+    0x1426008f0ULL, 0x142600910ULL,
+    0x1426010a0ULL, 0x1426010b0ULL,
+    0x142601240ULL, 0x1426012a0ULL,
+    0x142601330ULL, 0x142601a20ULL,
+    0x142601a70ULL, 0x142601a80ULL,
+    0x142601b90ULL, 0x142601be0ULL,
+    0x142601d60ULL, 0x142601db0ULL,
+    0x142602090ULL, 0x1426020a0ULL,
+    0x142602120ULL, 0x142602140ULL,
+    0x1426021d0ULL, 0x1426021e0ULL,
+    0x142602290ULL, 0x1426022a0ULL,
+    0x142602380ULL, 0x142602390ULL,
+    0x142602510ULL, 0x142602530ULL,
+    0x142602580ULL, 0x1426025e0ULL,
+    0x1426026d0ULL, 0x142602740ULL,
+    0x142602860ULL, 0x142602890ULL,
+    0x1426028e0ULL, 0x142602950ULL,
+    0x1426029a0ULL, 0x1426029e0ULL,
+    0x142602a30ULL, 0x142602a40ULL,
+    0x142602b80ULL, 0x142602b90ULL,
+    0x14260af00ULL, 0x14260af10ULL,
+    0x14260b1b0ULL, 0x14260b1e0ULL,
+    0x14260b490ULL, 0x14260bdb0ULL,
+    0x14260be00ULL, 0x14260bea0ULL,
+    0x14260bef0ULL, 0x14260bf30ULL,
+    0x14260bf80ULL, 0x14260bfa0ULL,
+    0x14260bff0ULL, 0x14260c000ULL,
+    0x14260c190ULL, 0x14260c1a0ULL,
+    0x14260c1f0ULL, 0x14260c200ULL,
+    0x14260c390ULL, 0x14260c3a0ULL,
+    0x14260c440ULL, 0x14260c450ULL,
+    0x14260c5a0ULL, 0x14260c5d3ULL,
+    0x142999ce0ULL, 0x142999d20ULL,
+    0x142999d90ULL, 0x142999dd0ULL,
+    0x14498b000ULL, 0x14498b040ULL,
+    0x14498b090ULL, 0x14498b0d0ULL,
+    0x14498b120ULL, 0x14498b160ULL,
+    0x14498b190ULL, 0x14498b1d0ULL,
     0, 0
 };
-const size_t g_genNativeCount = 7;
+const size_t g_genNativeCount = 2377;
 
 typedef struct { unsigned long long m_slot; const char* m_dll; const char* m_name; } GENIMPORT;
 const GENIMPORT g_genImports[] = {

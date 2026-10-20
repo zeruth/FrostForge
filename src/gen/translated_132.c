@@ -20451,8 +20451,6 @@ undefined8 FUN_141b06030(longlong *param_1, char param_2)
                 ((*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)),REFG(undefined4, 0x143216110),1,0,(unsigned long long)(uVar16 & 0xffffffff00000000),(unsigned long long)((ulonglong)0 << 0x20),(unsigned long long)((ulonglong)0 << 8));
     }
   }
-                    /* WARNING: Could not recover jumptable at 0x000141b063cf. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar9 = (**(code **)(*param_1 + 0x318))(param_1);
   return uVar9;
 }
@@ -29093,24 +29091,23 @@ undefined8 FUN_141b15780(float *param_1, float *param_2, float *param_3, float *
   pfVar33[0x11] = fVar1;
   pfVar33[0x12] = fVar3;
   pfVar33[0x13] = fVar5;
-  fVar50 = param_2[1];
-  fVar1 = param_2[4];
-  fVar2 = param_2[5];
-  fVar3 = param_2[8];
-  fVar4 = param_2[9];
-  fVar5 = param_2[0xc];
-  fVar6 = param_2[0xd];
-  pfVar33[0x18] = *param_2;
-  pfVar33[0x19] = fVar1;
-  pfVar33[0x1a] = fVar3;
-  pfVar33[0x1b] = fVar5;
-  pfVar33[0x1c] = fVar50;
-  pfVar33[0x1d] = fVar2;
-  pfVar33[0x1e] = fVar4;
-  pfVar33[0x1f] = fVar6;
-                    /* WARNING: Could not recover jumptable at 0x000141b15b2f. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-  uVar34 = (**(code **)(*(longlong *)(*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)) + 0x170))((*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)),0,1);
+  fVar50 = *param_2;
+  fVar1 = param_2[1];
+  fVar2 = param_2[4];
+  fVar3 = param_2[5];
+  fVar4 = param_2[8];
+  fVar5 = param_2[9];
+  fVar6 = param_2[0xc];
+  fVar7 = param_2[0xd];
+  pfVar33[0x18] = fVar50;
+  pfVar33[0x19] = fVar2;
+  pfVar33[0x1a] = fVar4;
+  pfVar33[0x1b] = fVar6;
+  pfVar33[0x1c] = fVar1;
+  pfVar33[0x1d] = fVar3;
+  pfVar33[0x1e] = fVar5;
+  pfVar33[0x1f] = fVar7;
+  uVar34 = ((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long, float))(**(code **)(*(longlong *)(*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)) + 0x170)))((unsigned long long)((*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0))),(unsigned long long)(0),(unsigned long long)(1),(float)(fVar50));
   return uVar34;
 }
 

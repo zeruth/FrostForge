@@ -1962,8 +1962,6 @@ undefined8 FUN_1425f5790(void)
   GEN_HIT(105);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x0001425f579c. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (*REFG(code *, 0x142d2af60))(&REFG(undefined1, 0x142d2af68),0,0);
   return uVar1;
 }
@@ -6270,8 +6268,6 @@ undefined8 FUN_1425fa4f0(void)
   undefined8 uVar1 = {0};
   
   CALLF(undefined8, FUN_141b376b0)(&REFG(undefined1, 0x142d31850));
-                    /* WARNING: Could not recover jumptable at 0x0001425fa510. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (*REFG(code *, 0x142d31838))(&REFG(undefined1, 0x142d31840),0,0);
   return uVar1;
 }

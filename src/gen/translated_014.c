@@ -3869,9 +3869,7 @@ undefined8 FUN_1402631d0(undefined8 *param_1)
   GEN_HIT(36);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x0001402631dc. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-  uVar1 = (*(code *)param_1[1])(*(undefined8 *)*param_1,(code *)param_1[1]);
+  uVar1 = (*(code *)param_1[1])(*(undefined8 *)*param_1);
   return uVar1;
 }
 
@@ -4815,12 +4813,12 @@ undefined4 FUN_140266060(undefined8 *param_1)
 {
   GEN_HIT(59);
   int iVar1 = {0};
-  DWORD DVar2 = {0};
+  undefined8 uVar2 = {0};
   
   iVar1 = (*(*(code *)&FlushFileBuffers))(*param_1);
   if (iVar1 == 0) {
-    DVar2 = (*(*(code *)&GetLastError))();
-    return DVar2;
+    uVar2 = (*(*(code *)&GetLastError))();
+    return (int)uVar2;
   }
   return REFG(undefined4, 0x142620be0);
 }
@@ -5369,10 +5367,7 @@ undefined1 FUN_140267440(undefined8 *param_1, undefined8 *param_2)
 undefined8 FUN_140267500(void)
 {
   GEN_HIT(81);
-/*                */
-/*                */
-  
-  (*REFG(code *, 0x142cc8ae0))(0,0);
+  (*REFG(code *, 0x142cc8ae0))();
   return 0;
 }
 
@@ -8098,13 +8093,13 @@ byte FUN_14026b330(longlong param_1, ulonglong param_2)
 }
 
 /* ref: FUN_14026b461 */
-int FUN_14026b461(void)
+undefined4 FUN_14026b461(void)
 {
   GEN_HIT(114);
-  int iVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  iVar1 = (*(*(code *)&WSAGetLastError))();
-  return iVar1;
+  uVar1 = (*(*(code *)&WSAGetLastError))();
+  return (int)uVar1;
 }
 
 /* ref: FUN_14026b467 */
@@ -8113,7 +8108,7 @@ undefined8 FUN_14026b467(undefined4 param_1, undefined4 param_2)
   GEN_HIT(115);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&CreateToolhelp32Snapshot))(param_1, param_2);
+  uVar1 = (*(code *)(*(code *)&CreateToolhelp32Snapshot))(param_1,param_2);
   return uVar1;
 }
 
@@ -8121,40 +8116,40 @@ undefined8 FUN_14026b467(undefined4 param_1, undefined4 param_2)
 undefined4 FUN_14026b46d(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(116);
-  undefined4 uVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&Thread32First))(param_1, param_2);
-  return uVar1;
+  uVar1 = (*(code *)(*(code *)&Thread32First))(param_1,param_2);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14026b473 */
 undefined4 FUN_14026b473(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(117);
-  undefined4 uVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&Thread32Next))(param_1, param_2);
-  return uVar1;
+  uVar1 = (*(code *)(*(code *)&Thread32Next))(param_1,param_2);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14026b479 */
 undefined4 FUN_14026b479(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(118);
-  undefined4 uVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&Module32First))(param_1, param_2);
-  return uVar1;
+  uVar1 = (*(code *)(*(code *)&Module32First))(param_1,param_2);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14026b47f */
 undefined4 FUN_14026b47f(undefined8 param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(119);
-  undefined4 uVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&Module32Next))(param_1, param_2, param_3);
-  return uVar1;
+  uVar1 = (*(code *)(*(code *)&Module32Next))(param_1,param_2);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14026b485 */
@@ -8163,7 +8158,7 @@ undefined8 FUN_14026b485(undefined8 param_1, undefined8 param_2, undefined4 para
   GEN_HIT(120);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&K32GetProcessMemoryInfo))(param_1, param_2, param_3);
+  uVar1 = (*(code *)(*(code *)&K32GetProcessMemoryInfo))(param_1,param_2,param_3);
   return uVar1;
 }
 
@@ -8171,25 +8166,23 @@ undefined8 FUN_14026b485(undefined8 param_1, undefined8 param_2, undefined4 para
 undefined4 FUN_14026b48b(undefined8 param_1, undefined4 param_2, undefined8 param_3, undefined8 param_4)
 {
   GEN_HIT(121);
-  undefined4 uVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&SHGetKnownFolderPath))(param_1, param_2, param_3, param_4);
-  return uVar1;
+  uVar1 = (*(code *)(*(code *)&SHGetKnownFolderPath))(param_1,param_2,param_3,param_4);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14026b494 */
 undefined8 FUN_14026b494(undefined8 param_1)
 {
   GEN_HIT(122);
-  BOOL BVar1 = {0};
-  HANDLE hProcess = {0};
-/*                      */
+  undefined8 uVar1 = {0};
   
   (*REFG(code *, 0x1426178a0))(0);
   (*REFG(code *, 0x1426178a8))(param_1);
-  hProcess = (HANDLE)(*(*(code *)&GetCurrentProcess))();
-  BVar1 = (*(*(code *)&TerminateProcess))(hProcess,0xc0000409);
-  return CONCAT44(0,BVar1);
+  uVar1 = (*(*(code *)&GetCurrentProcess))();
+  uVar1 = (*(*(code *)&TerminateProcess))(uVar1,0xc0000409);
+  return uVar1;
 }
 
 /* ref: FUN_14026b4c8 */
@@ -8396,12 +8389,12 @@ gen_v16 * FUN_14026c978(gen_v16 *param_1, ushort param_2)
     do {
       pauVar4 = ((gen_v16 *)(((unsigned char *)&pauVar4[-1] + 0xe)));
       if (pauVar4 == param_1) {
-        if (*((ushort *)gen_v16_q0(*pauVar4)) == param_2) {
+        if (*((ushort *)&*pauVar4) == param_2) {
           pauVar3 = pauVar4;
         }
         return pauVar3;
       }
-    } while (*((ushort *)gen_v16_q0(*pauVar4)) != param_2);
+    } while (*((ushort *)&*pauVar4) != param_2);
     return pauVar4;
   }
   while( true ) {
@@ -8428,10 +8421,10 @@ gen_v16 * FUN_14026c978(gen_v16 *param_1, ushort param_2)
       }
       return ((gen_v16 *)(((unsigned char *)&*param_1 + (longlong)iVar2 * 2)));
     }
-    if (*((ushort *)gen_v16_q0(*param_1)) == param_2) {
+    if (*((ushort *)&*param_1) == param_2) {
       pauVar3 = param_1;
     }
-    if (*((short *)gen_v16_q0(*param_1)) == 0) break;
+    if (*((short *)&*param_1) == 0) break;
     param_1 = ((gen_v16 *)(((unsigned char *)&*param_1 + 2)));
   }
   return pauVar3;
@@ -8454,9 +8447,7 @@ undefined8 FUN_140270bb0(undefined8 param_1, code *param_2, undefined8 param_3)
   GEN_HIT(137);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x000140270bb6. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-  uVar1 = (*param_2)(param_1,param_3);
+  uVar1 = (*param_2)(param_1,param_3,param_3);
   return uVar1;
 }
 

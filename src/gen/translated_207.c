@@ -3127,8 +3127,6 @@ undefined8 FUN_14260b400(void)
 {
   GEN_HIT(195);
   if (((*(undefined4 *)((char *)&gen_g_142d5e920 + 0x0)) == 1) && (-1 < (*(undefined4 *)((char *)&gen_g_142d5e938 + 0xc)))) {
-                    /* WARNING: Could not recover jumptable at 0x00014260b423. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
     return (undefined8)(**(code **)(*(longlong *)REFG(undefined1 *, 0x142d5e930) + 0x30))(REFG(undefined1 *, 0x142d5e930),(*(undefined1 * *)((char *)&gen_g_142d5e938 + 0x0)));
     return 0;
   }

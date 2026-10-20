@@ -2748,6 +2748,7 @@ undefined8 FUN_1418d54b0(undefined8 param_1, undefined4 param_2)
 undefined1 FUN_1418d5670(longlong param_1, undefined4 param_2, undefined4 param_3, int param_4, undefined4 *param_5, uint *param_6)
 {
   GEN_HIT(49);
+  unsigned char *gen_alloca_p = 0;
   unsigned long long gen_slot_param_2 = 0;
   memcpy((void *)(&gen_slot_param_2),(void *)(&param_2), sizeof(param_2));
   unsigned long long gen_slot_param_3 = 0;
@@ -2812,7 +2813,8 @@ undefined1 FUN_1418d5670(longlong param_1, undefined4 param_2, undefined4 param_
   }
   ((undefined8 *)(gen_frame + 0x8))[0] = 0x1418d577c;
   ((uint *)(gen_frame + 0x30))[0] = 0;
-  lVar8 = (longlong)((uint *)(gen_frame + 0x30)) + -(uVar10 & 0xfffffffffffffff0);
+  gen_alloca_p = (unsigned char *)_alloca((uVar10 & 0xfffffffffffffff0) + 0x400) + 0x200;
+  lVar8 = (longlong)(gen_alloca_p + 0x30);
   (*(longlong *)(gen_frame + 0x38)) = lVar8;
   if ((param_6 != (uint *)0x0) && (uVar9 = uVar12, (*(uint * *)(gen_frame + 0x58)) = ((uint *)(gen_frame + 0x30)), *param_6 != 0)) {
     do {
@@ -2842,7 +2844,7 @@ undefined1 FUN_1418d5670(longlong param_1, undefined4 param_2, undefined4 param_
   }
   (*(undefined4 *)(gen_frame + 0x78)) = *param_5;
   (*(int *)(gen_frame + 0x50)) = (*(int *)&gen_slot_param_4);
-  *(undefined8 *)((longlong)((undefined8 *)(gen_frame + 0x8)) + -(uVar10 & 0xfffffffffffffff0)) = 0x1418d5830;
+  *(undefined8 *)((gen_alloca_p + 0x8)) = 0x1418d5830;
   bVar5 = CALLF(undefined1, FUN_1418679d0)(lVar7,&(*(undefined8 *)(gen_frame + 0x40)));
   uVar6 = (uint)bVar5;
 LAB_1418d5830:
@@ -17092,6 +17094,7 @@ undefined4 FUN_1418efa20(undefined8 param_1)
 undefined1 FUN_1418efa70(longlong param_1)
 {
   GEN_HIT(435);
+  unsigned char *gen_alloca_p = 0;
   __declspec(align(16)) unsigned char gen_frame[(0x88 + sizeof(undefined8 *) > 0x90 ? 0x88 + sizeof(undefined8 *) : 0x90)] = {0};
   memcpy((void *)(gen_frame + 0x70),(void *)(&param_1), sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   undefined8 *puVar1 = {0};
@@ -17117,8 +17120,9 @@ undefined1 FUN_1418efa70(longlong param_1)
       if (uVar11 <= uVar7) {
         uVar11 = 0xffffffffffffff0;
       }
-      puVar10 = ((undefined1 *)(gen_frame + 0x0)) + -(uVar11 & 0xfffffffffffffff0);
-      (*(longlong *)(gen_frame + 0x38)) = (longlong)((undefined4 *)(gen_frame + 0x30)) + -(uVar11 & 0xfffffffffffffff0);
+      gen_alloca_p = (unsigned char *)_alloca((uVar11 & 0xfffffffffffffff0) + 0x400) + 0x200;
+      puVar10 = (gen_alloca_p + 0x0);
+      (*(longlong *)(gen_frame + 0x38)) = (longlong)(gen_alloca_p + 0x30);
     }
     else {
       uVar11 = 0x811c9dc5;

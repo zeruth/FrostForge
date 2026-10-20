@@ -722,8 +722,6 @@ undefined8 FUN_1425e34e0(void)
   GEN_HIT(41);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x0001425e34ec. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (*REFG(code *, 0x142cce850))(&REFG(undefined1, 0x142cce858),0,0);
   return uVar1;
 }
@@ -4097,8 +4095,6 @@ undefined8 FUN_1425e74e0(void)
     (**(code **)*REFG(undefined8 *, 0x1430a1f30))(REFG(undefined8 *, 0x1430a1f30),1);
   }
   if (REFG(undefined8 *, 0x1430a1f20) != (undefined8 *)0x0) {
-                    /* WARNING: Could not recover jumptable at 0x0001425e7554. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
     return (undefined8)(**(code **)*REFG(undefined8 *, 0x1430a1f20))(REFG(undefined8 *, 0x1430a1f20),1);
     return 0;
   }
@@ -5074,8 +5070,6 @@ undefined8 FUN_1425e8610(void)
   lVar1 = REFG(undefined8, 0x1430a5da0);
   if (REFG(undefined8, 0x1430a5da0) != 0) {
     plVar2 = (longlong *)CALLF(undefined *, FUN_142295360)();
-                    /* WARNING: Could not recover jumptable at 0x0001425e8653. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
     return (undefined8)(**(code **)(*plVar2 + 8))(plVar2,lVar1);
     return 0;
   }
@@ -5105,8 +5099,6 @@ undefined8 FUN_1425e8690(void)
   puVar1 = REFG(undefined1 *, 0x1430a7928);
   if (REFG(undefined1 *, 0x1430a7928) != (undefined1 *)0x0) {
     plVar2 = (longlong *)CALLF(undefined *, FUN_142295360)();
-                    /* WARNING: Could not recover jumptable at 0x0001425e86b5. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
     return (undefined8)(**(code **)(*plVar2 + 0x78))(plVar2,puVar1);
     return 0;
   }
@@ -5136,8 +5128,6 @@ undefined8 FUN_1425e86d0(void)
   lVar1 = REFG(undefined8, 0x1430a7920);
   if (REFG(undefined8, 0x1430a7920) != 0) {
     plVar2 = (longlong *)CALLF(undefined *, FUN_142295360)();
-                    /* WARNING: Could not recover jumptable at 0x0001425e86f5. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
     return (undefined8)(**(code **)(*plVar2 + 0x38))(plVar2,lVar1);
     return 0;
   }
@@ -5332,8 +5322,6 @@ undefined8 FUN_1425e8a00(void)
   (*(*(code * *)((char *)&gen_g_142cfca40 + 0xf8)))(&(*(undefined1 *)((char *)&gen_g_142cfca40 + 0x100)),0,0);
   (*(*(code * *)((char *)&gen_g_142cfca40 + 0xd8)))(&(*(undefined1 *)((char *)&gen_g_142cfca40 + 0xe0)),0,0);
   (*(*(code * *)((char *)&gen_g_142cfca40 + 0xb8)))(&(*(undefined1 *)((char *)&gen_g_142cfca40 + 0xc0)),0,0);
-                    /* WARNING: Could not recover jumptable at 0x0001425e8b34. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (*(code *)(*(undefined8 * *)((char *)&gen_g_142cfca40 + 0x98)))(&(*(undefined1 *)((char *)&gen_g_142cfca40 + 0xa0)),0,0);
   return uVar1;
 }
@@ -5662,8 +5650,6 @@ undefined8 FUN_1425e8ff0(void)
   GEN_HIT(327);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x0001425e8ffc. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (*(*(code * *)((char *)&gen_g_142cfd070 + 0x8)))(&(*(undefined1 *)((char *)&gen_g_142cfd070 + 0x10)),0,0);
   return uVar1;
 }
@@ -5674,8 +5660,6 @@ undefined8 FUN_1425e9010(void)
   GEN_HIT(328);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x0001425e901c. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (*(*(code * *)((char *)&gen_g_142cfd090 + 0x8)))(&(*(undefined1 *)((char *)&gen_g_142cfd090 + 0x10)),0,0);
   return uVar1;
 }
@@ -6091,8 +6075,6 @@ undefined8 FUN_1425e9580(void)
   GEN_HIT(356);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x0001425e958c. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (*REFG(code *, 0x142cfd230))(&REFG(undefined1, 0x142cfd238),0,0);
   return uVar1;
 }

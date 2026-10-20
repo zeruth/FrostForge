@@ -931,6 +931,18 @@ class Analyzer:
                 # an indirect tail call (a vtable's): whatever it returns
                 res.written = min(res.written, CALLW)
                 res.ret_calls.add(0)
+                # and a call site like an indirect call's: the decompiler treats the jump as a
+                # call and guesses its arguments as it does any other's. HMAC's update wrapper
+                # FUN_1420bd740 measures a string into r8 and `jmp [table + rax*8]`s on; shown as
+                # a call of nothing, the length was lost and SHA-256 hashed ~2^64 bytes after the
+                # web login (2026-10-20)
+                if frame.get(X.X86_REG_RSP) == 0:
+                    fresh = [frame.get(k, 0) for k in FRESH]
+                    for r in ((op.mem.base, op.mem.index) if op.type == X.X86_OP_MEM else (op.reg,)):
+                        if r in FAMILY and FAMILY[r][0] < 4:
+                            fresh[FAMILY[r][0]] = 0
+                    seen = tuple(max(d, 8) if frame.get(DIRTY[fam]) else d for fam, d in enumerate(defs))
+                    res.icalls[insn.address] = (tuple(fresh), seen, frame.get(OUTSTK, 0), 0)
 
         for r in writes:
             if r in XMM_ALL:
@@ -1904,10 +1916,20 @@ def main() -> None:
                 own_ret = out.get(hexa(f), {}).get("ret")
                 if own_ret:
                     site_rets[hexa(at)] = own_ret
+    # the sites that are jumps (`jmp [rax + 0x48]`, ff /4), not calls (ff /2): the decompiler
+    # applies a call-site signature only to a call, so ApplyFacts makes each a call that returns
+    code_start, code = Binary().bytes_of(".text")
+
+    def is_jump(at: int) -> bool:
+        o = at - code_start
+        k = o + (1 if 0x40 <= code[o] <= 0x4f else 0)
+        return code[k] == 0xFF and (code[k + 1] >> 3) & 7 == 4
+    jumps = sorted(k for k in sites if is_jump(int(k, 16)))
     path = write_facts("callsites", {
         "rule": "indirect calls: argument positions written since the caller's previous call, or "
                 "still its own untouched parameters, and the outgoing stack stores since then",
         "calls": sites,
+        "jumps": jumps,
         # the result each indirect call's caller reads (float, double or an integer width)
         "rets": site_rets})
     print(f"{len(sites)} indirect call sites -> {path}", file=sys.stderr)

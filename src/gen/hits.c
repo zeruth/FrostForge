@@ -427,7 +427,7 @@ const GENHITS gen_hit_tables[] = {
     { gen_hits_009, gen_hit_addrs_009, 450 },
     { gen_hits_010, gen_hit_addrs_010, 450 },
     { gen_hits_011, gen_hit_addrs_011, 450 },
-    { gen_hits_012, gen_hit_addrs_012, 362 },
+    { gen_hits_012, gen_hit_addrs_012, 361 },
     { gen_hits_013, gen_hit_addrs_013, 365 },
     { gen_hits_014, gen_hit_addrs_014, 143 },
     { gen_hits_015, gen_hit_addrs_015, 60 },

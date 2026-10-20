@@ -9072,7 +9072,7 @@ LAB_141bef900:
       fVar12 = CALLF(float, FUN_141b27f30)();
       if (fVar11 <= fVar12 + *(float *)(param_1 + 100)) goto LAB_141bef900;
     }
-    CALLF(longlong, FUN_14189bd40)(lVar7,1,0);
+    CALLF(undefined8, FUN_14189bd40)(lVar7,1,0);
     uVar3 = 0;
   }
   return uVar3;

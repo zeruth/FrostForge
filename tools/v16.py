@@ -524,6 +524,13 @@ class Emitter:
                                  or WIDE_INT_CAST.fullmatch(n.val.strip())):
                 # to 16 bytes (`(undefined1 [16])0x0`, or a 16-byte value already): the value
                 return self.v(inner)
+            if T.ty(inner) == V and ty.rstrip().endswith("*") and (is_place16(inner, T) or T.is_array16(
+                    inner.kids[0] if inner.kind == "paren" else inner)):
+                # a 16-byte place cast to a pointer is the array decaying to its address, as in
+                # Ghidra's C: `*(undefined4 *)*param_1` reads the first 4 bytes param_1 points at.
+                # As the low lane's value made a pointer, SHA-256's block function read through
+                # its own state words (0xbb67ae856a09e667) after the web login (2026-10-20)
+                return f"(({ty})&{self.e(inner)})"
             if T.ty(inner) == V:
                 # the low lane by its bits: `(float)auVar1` is the float movss would store
                 if ty == "float":

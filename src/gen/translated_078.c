@@ -2130,9 +2130,9 @@ LAB_14127b25d:
   for (puVar14 = (*(undefined4 * *)(gen_frame + 0x30)); puVar14 != (*(undefined4 * *)(gen_frame + 0x30)) + (*(ulonglong *)(gen_frame + 0x38)); puVar14 = puVar14 + 1) {
     uVar4 = *puVar14;
     CALLF(undefined8, FUN_142363060)(&REFG(undefined1, 0x1430a5538));
-    puVar3 = REFG(undefined8, 0x1430a5520) + REFG(undefined8, 0x1430a5528) * 5;
-    if (REFG(undefined8, 0x1430a5520) != puVar3) {
-      puVar18 = REFG(undefined8, 0x1430a5520) + 1;
+    puVar3 = REFG(undefined8 *, 0x1430a5520) + REFG(undefined8, 0x1430a5528) * 5;
+    if (REFG(undefined8 *, 0x1430a5520) != puVar3) {
+      puVar18 = REFG(undefined8 *, 0x1430a5520) + 1;
       do {
         (*(code *)*puVar18)(uVar4,puVar18 + 2);
         puVar2 = puVar18 + 4;
@@ -2143,9 +2143,9 @@ LAB_14127b25d:
   }
   if ((*(ulonglong *)(gen_frame + 0x38)) != 0) {
     CALLF(undefined8, FUN_142363060)(&REFG(undefined1, 0x1430a5570));
-    puVar3 = REFG(undefined8, 0x1430a5558) + REFG(undefined8, 0x1430a5560) * 5;
-    if (REFG(undefined8, 0x1430a5558) != puVar3) {
-      puVar18 = REFG(undefined8, 0x1430a5558) + 1;
+    puVar3 = REFG(undefined8 *, 0x1430a5558) + REFG(undefined8, 0x1430a5560) * 5;
+    if (REFG(undefined8 *, 0x1430a5558) != puVar3) {
+      puVar18 = REFG(undefined8 *, 0x1430a5558) + 1;
       do {
         (*(code *)*puVar18)(puVar18 + 2);
         puVar2 = puVar18 + 4;
@@ -2223,7 +2223,7 @@ longlong * FUN_14127b440(longlong param_1, undefined8 param_2)
   CALLF(undefined8, FUN_1406a7cf0)(param_1 + 0x98);
   CALLF(undefined1, FUN_140255210)(param_2,"D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Services\\Texture.cpp"
                   ,0x744,0);
-  CALLF(int, FUN_14127bd70)(param_1);
+  CALLF(undefined4, FUN_14127bd70)(param_1);
   plVar1 = REFG(longlong *, 0x1430a54b8) + REFG(undefined8, 0x1430a54c0);
   plVar3 = REFG(longlong *, 0x1430a54b8);
   if (REFG(longlong *, 0x1430a54b8) != plVar1) {
@@ -2242,14 +2242,13 @@ longlong * FUN_14127b440(longlong param_1, undefined8 param_2)
 }
 
 /* ref: FUN_14127b500 */
-int FUN_14127b500(undefined8 *param_1, undefined8 param_2)
+undefined4 FUN_14127b500(undefined8 *param_1, undefined8 param_2)
 {
   GEN_HIT(38);
   __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(undefined8) > 0x28 ? 0x10 + sizeof(undefined8) : 0x28)] = {0};
   int iVar1 = {0};
-  undefined4 uVar2 = {0};
-  undefined8 uVar3 = {0};
-  ulonglong uVar4 = {0};
+  undefined8 uVar2 = {0};
+  ulonglong uVar3 = {0};
   
   param_1[8] = 0;
   CALLF(undefined8, FUN_14127bf60)(param_1,0,1,1,(unsigned long long)(1),(unsigned long long)(0),(unsigned long long)(&REFG(undefined1, 0x142725ee0)));
@@ -2258,14 +2257,12 @@ int FUN_14127b500(undefined8 *param_1, undefined8 param_2)
                   ,0x739,0);
   iVar1 = CALLF(int, FUN_1402c8fc0)(param_1 + 1);
   if (iVar1 == 0) {
-                    /* WARNING: Could not recover jumptable at 0x00014127b593. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-    uVar2 = (**(code **)*param_1)(param_1,1,1,0);
-    return uVar2;
+    uVar2 = (**(code **)*param_1)(param_1,1);
+    return (int)uVar2;
   }
   if ((param_1[8] != 0) && (iVar1 == 1)) {
-    uVar3 = CALLF(undefined8, FUN_1405d9f80)(param_1[8]);
-    iVar1 = (int)uVar3;
+    uVar2 = CALLF(undefined8, FUN_1405d9f80)(param_1[8]);
+    iVar1 = (int)uVar2;
     param_1[8] = 0;
     if ((*(byte *)(param_1 + 0x22) & 1) != 0) {
       CALLF(undefined8, FUN_1402637b0)(&REFG(undefined1, 0x1430a5490));
@@ -2274,18 +2271,18 @@ int FUN_14127b500(undefined8 *param_1, undefined8 param_2)
       (*(undefined8 *)(gen_frame + 0x10)) = 0;
       param_1[0x20] = 0x82001;
       param_1[0x21] = 0;
-      uVar4 = (longlong)&(*(undefined8 * *)(gen_frame + 0x0)) - REFG(undefined8, 0x1430a54b8) >> 3;
+      uVar3 = (longlong)&(*(undefined8 * *)(gen_frame + 0x0)) - REFG(undefined8, 0x1430a54b8) >> 3;
       (*(undefined8 * *)(gen_frame + 0x0)) = param_1;
       if (REFG(undefined8, 0x1430a54c0) == (REFG(undefined8, 0x1430a54c8) & 0x7fffffffffffffff)) {
         CALLF(undefined1, FUN_1411ec8b0)(&REFG(undefined8, 0x1430a54b8),(REFG(undefined8, 0x1430a54c8) & 0x7fffffffffffffff) + 1);
       }
-      if (uVar4 < REFG(undefined8, 0x1430a54c0)) {
-        param_1 = *(undefined8 **)(REFG(undefined8, 0x1430a54b8) + uVar4 * 8);
+      if (uVar3 < REFG(undefined8, 0x1430a54c0)) {
+        param_1 = *(undefined8 **)(REFG(undefined8, 0x1430a54b8) + uVar3 * 8);
       }
       *(undefined8 **)(REFG(undefined8, 0x1430a54b8) + REFG(undefined8, 0x1430a54c0) * 8) = param_1;
       REFG(undefined8, 0x1430a54c0) = REFG(undefined8, 0x1430a54c0) + 1;
-      uVar3 = CALLF(undefined8, FUN_1402637f0)(&REFG(undefined1, 0x1430a5490));
-      iVar1 = (int)uVar3;
+      uVar2 = CALLF(undefined8, FUN_1402637f0)(&REFG(undefined1, 0x1430a5490));
+      iVar1 = (int)uVar2;
     }
   }
   return iVar1;
@@ -2557,27 +2554,24 @@ uint FUN_14127bd10(longlong param_1, byte param_2, undefined8 param_3, undefined
 }
 
 /* ref: FUN_14127bd70 */
-int FUN_14127bd70(undefined8 *param_1)
+undefined4 FUN_14127bd70(undefined8 *param_1)
 {
   GEN_HIT(47);
   __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(undefined8) > 0x28 ? 0x10 + sizeof(undefined8) : 0x28)] = {0};
   int iVar1 = {0};
-  undefined4 uVar2 = {0};
-  undefined8 uVar3 = {0};
-  ulonglong uVar4 = {0};
+  undefined8 uVar2 = {0};
+  ulonglong uVar3 = {0};
   
   iVar1 = CALLF(int, FUN_1402c8fc0)(param_1 + 1);
   if (iVar1 == 0) {
     if (param_1 != (undefined8 *)0x0) {
-                    /* WARNING: Could not recover jumptable at 0x00014127bda5. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-      uVar2 = (**(code **)*param_1)(param_1,1,1,0);
-      return uVar2;
+      uVar2 = (**(code **)*param_1)(param_1,1);
+      return (int)uVar2;
     }
   }
   else if ((param_1[8] != 0) && (iVar1 == 1)) {
-    uVar3 = CALLF(undefined8, FUN_1405d9f80)(param_1[8]);
-    iVar1 = (int)uVar3;
+    uVar2 = CALLF(undefined8, FUN_1405d9f80)(param_1[8]);
+    iVar1 = (int)uVar2;
     param_1[8] = 0;
     if ((*(byte *)(param_1 + 0x22) & 1) != 0) {
       CALLF(undefined8, FUN_1402637b0)(&REFG(undefined1, 0x1430a5490));
@@ -2586,18 +2580,18 @@ int FUN_14127bd70(undefined8 *param_1)
       (*(undefined8 *)(gen_frame + 0x10)) = 0;
       param_1[0x20] = 0x82001;
       param_1[0x21] = 0;
-      uVar4 = (longlong)&(*(undefined8 * *)(gen_frame + 0x0)) - REFG(undefined8, 0x1430a54b8) >> 3;
+      uVar3 = (longlong)&(*(undefined8 * *)(gen_frame + 0x0)) - REFG(undefined8, 0x1430a54b8) >> 3;
       (*(undefined8 * *)(gen_frame + 0x0)) = param_1;
       if (REFG(undefined8, 0x1430a54c0) == (REFG(undefined8, 0x1430a54c8) & 0x7fffffffffffffff)) {
         CALLF(undefined1, FUN_1411ec8b0)(&REFG(undefined8, 0x1430a54b8),(REFG(undefined8, 0x1430a54c8) & 0x7fffffffffffffff) + 1);
       }
-      if (uVar4 < REFG(undefined8, 0x1430a54c0)) {
-        param_1 = *(undefined8 **)(REFG(undefined8, 0x1430a54b8) + uVar4 * 8);
+      if (uVar3 < REFG(undefined8, 0x1430a54c0)) {
+        param_1 = *(undefined8 **)(REFG(undefined8, 0x1430a54b8) + uVar3 * 8);
       }
       *(undefined8 **)(REFG(undefined8, 0x1430a54b8) + REFG(undefined8, 0x1430a54c0) * 8) = param_1;
       REFG(undefined8, 0x1430a54c0) = REFG(undefined8, 0x1430a54c0) + 1;
-      uVar3 = CALLF(undefined8, FUN_1402637f0)(&REFG(undefined1, 0x1430a5490));
-      iVar1 = (int)uVar3;
+      uVar2 = CALLF(undefined8, FUN_1402637f0)(&REFG(undefined1, 0x1430a5490));
+      iVar1 = (int)uVar2;
     }
   }
   return iVar1;
@@ -9825,8 +9819,6 @@ undefined8 FUN_14128b340(longlong param_1, longlong *param_2, longlong param_3, 
   }
   (**(code * *)(*param_2 + 0x1e0))(param_2, (longlong)(*(undefined4 *)((char *)&auVar6 + 0)), 1, 1);
   (**(code **)(*param_2 + 0x60))(param_2,3,0,0,(unsigned long long)(CONCAT71(0,1)));
-                    /* WARNING: Could not recover jumptable at 0x00014128b57b. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar4 = (**(code **)(*param_2 + 0x1d0))(param_2);
   return uVar4;
 }

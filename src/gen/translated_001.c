@@ -13682,30 +13682,30 @@ undefined8 FUN_1401a88e0(undefined8 param_1, undefined8 param_2, longlong *param
 }
 
 /* ref: FUN_1401a8af0 */
-undefined8 FUN_1401a8af0(LPCWSTR param_1, uint param_2)
+undefined8 FUN_1401a8af0(ushort *param_1, uint param_2)
 {
   GEN_HIT(83);
-  WCHAR WVar1 = {0};
+  ushort uVar1 = {0};
   int iVar2 = {0};
-  HMODULE pHVar3 = {0};
+  undefined8 uVar3 = {0};
   undefined4 uVar4 = {0};
   
   (*(*(code *)&SetLastError))(0,param_2);
-  if (param_1 == (LPCWSTR)0x0) {
+  if (param_1 == (ushort *)0x0) {
 LAB_1401a8b70:
     uVar4 = 0xa0;
   }
   else {
-    WVar1 = *param_1;
-    if ((WVar1 != L'\\') && (WVar1 != L'/')) {
-      iVar2 = isalpha((uint)(ushort)WVar1);
-      if (((iVar2 == 0) || (param_1[1] != L':')) || ((param_1[2] != L'\\' && (param_1[2] != L'/'))))
+    uVar1 = *param_1;
+    if ((uVar1 != 0x5c) && (uVar1 != 0x2f)) {
+      iVar2 = isalpha((uint)uVar1);
+      if (((iVar2 == 0) || (param_1[1] != 0x3a)) || ((param_1[2] != 0x5c && (param_1[2] != 0x2f))))
       goto LAB_1401a8b70;
     }
     iVar2 = CALLF(uint, FUN_1401a7600)(param_1);
     if (iVar2 != 0) {
-      pHVar3 = (*(*(code *)&LoadLibraryExW))(param_1,(HANDLE)0x0,param_2 & 0xffffe8f7);
-      return pHVar3;
+      uVar3 = (*(*(code *)&LoadLibraryExW))(param_1,0,param_2 & 0xffffe8f7);
+      return uVar3;
     }
     uVar4 = 0xa1;
   }
@@ -14605,7 +14605,7 @@ code_r0x0001401ada8f:
   }
   else {
     do {
-      pIVar9 = (IMAGE_DOS_HEADER *)crc32(pIVar9,*(undefined8 *)(*pauVar23 + (longlong)((longlong)pIVar11 * 8)));
+      pIVar9 = (IMAGE_DOS_HEADER *)CALLF(undefined4, FUN_14235f780)(pIVar9,*(undefined8 *)(*pauVar23 + (longlong)((longlong)pIVar11 * 8)));
       pIVar11 = (IMAGE_DOS_HEADER *)(pIVar11->e_magic + 1);
     } while (pIVar11 < (IMAGE_DOS_HEADER *)0x1a);
   }
@@ -16445,7 +16445,7 @@ undefined1 FUN_1401b7bf0(longlong param_1)
             uVar17 = 0;
             uVar7 = 0;
             do {
-              uVar17 = crc32(uVar17,*(undefined8 *)(puVar12 + uVar7 * 2));
+              uVar17 = CALLF(undefined4, FUN_14235f780)(uVar17,*(undefined8 *)(puVar12 + uVar7 * 2));
               uVar7 = uVar7 + 1;
             } while (uVar7 < 0x200);
           }
@@ -16603,7 +16603,7 @@ undefined1 FUN_1401b7bf0(longlong param_1)
     uVar15 = 0;
     if (uVar7 != 0) {
       do {
-        uVar17 = crc32(uVar17,*(undefined8 *)(*pauVar14 + uVar15 * 8));
+        uVar17 = CALLF(undefined4, FUN_14235f780)(uVar17,*(undefined8 *)(*pauVar14 + uVar15 * 8));
         uVar15 = uVar15 + 1;
       } while (uVar15 < uVar7);
     }

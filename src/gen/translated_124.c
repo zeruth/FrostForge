@@ -16301,8 +16301,6 @@ LAB_1419c53ef:
     }
 LAB_1419c5402: ;
   }
-                    /* WARNING: Could not recover jumptable at 0x0001419c5430. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar5 = (*(code *)param_3[1])(param_3 + 2,0,0);
   return uVar5;
 }
@@ -21594,8 +21592,6 @@ undefined8 FUN_1419ccda0(longlong param_1, undefined8 *param_2)
     *(code **)(param_1 + 0xb8) = (*(code * *)(gen_frame + 0x8));
   }
   (*(*(code * *)(gen_frame + 0x8)))((void *)&(*(gen_v16 *)(gen_frame + 0x10)), 0, 0);
-                    /* WARNING: Could not recover jumptable at 0x0001419cce4b. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (*(code *)param_2[1])(param_2 + 2,0,0);
   return uVar1;
 }

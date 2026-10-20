@@ -258,9 +258,7 @@ undefined8 FUN_141255030(longlong *param_1, undefined8 param_2, int param_3, und
 {
   GEN_HIT(4);
   if (param_3 == 0) {
-                    /* WARNING: Could not recover jumptable at 0x00014125503b. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-    return (undefined8)(**(code **)(*param_1 + 0xd0))(param_1,param_2,param_4);
+    return (undefined8)(**(code **)(*param_1 + 0xd0))(param_1,param_2,param_4,param_4);
     return 0;
   }
   return 0;
@@ -1007,8 +1005,6 @@ LAB_141255de4:
   (**(code **)(*param_2 + 0x60))
             (param_2,3,5,0,(unsigned long long)(CONCAT44(0,CONCAT31((int3)((uint)uVar13 >> 8),1))));
   (**(code **)(*param_2 + 0x58))(param_2,3,7,0);
-                    /* WARNING: Could not recover jumptable at 0x000141255fdc. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar4 = (**(code **)(*param_2 + 0x1d0))(param_2);
   return uVar4;
 }
@@ -6145,8 +6141,6 @@ undefined8 FUN_14125f530(longlong *param_1)
   GEN_HIT(118);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x00014125f533. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (**(code **)(*param_1 + 8))(param_1);
   return uVar1;
 }
@@ -11625,7 +11619,7 @@ undefined1 FUN_1412666d0(longlong param_1, ushort *param_2, float *param_3, floa
     fVar32 = fVar46 - (fVar32 + fVar32 + fVar26);
     fVar52 = fVar47 - (fVar39 + fVar39 + fVar29);
     fVar34 = fVar27 - (fVar34 + fVar34 + fVar33);
-    (*(undefined8 *)&(*(float *)(gen_frame + 0x20))) = CONCAT44(fVar32 + *(float *)(((unsigned char *)&*param_8 + 4)), fVar28 + *((float *)gen_v16_q0(*param_8)));
+    (*(undefined8 *)&(*(float *)(gen_frame + 0x20))) = CONCAT44(fVar32 + *(float *)(((unsigned char *)&*param_8 + 4)), fVar28 + *((float *)&*param_8));
     (*(undefined8 *)&(*(float *)(gen_frame + 0x28))) = CONCAT44(fVar34 + *(float *)(((unsigned char *)&*param_8 + 0xc)), fVar52 + *(float *)(((unsigned char *)&*param_8 + 8)));
     (*(float *)(gen_frame + 0x30)) = fVar40;
     (*(float *)(gen_frame + 0x34)) = fVar30;
@@ -13524,21 +13518,21 @@ undefined8 FUN_141269e50(gen_v16 *param_1, double param_2_promoted, char param_3
     if (cVar6 == '\0') {
       CALLF(undefined8, FUN_142472030)(*(undefined8 *)(((unsigned char *)&param_1[2] + 8)), 1);
       CALLF(undefined8, FUN_142471f30)(*(undefined8 *)(((unsigned char *)&param_1[2] + 8)), 1);
-      CALLF(undefined8, FUN_14246ae20)(*((undefined8 *)gen_v16_q0(param_1[3])), 1);
+      CALLF(undefined8, FUN_14246ae20)(*((undefined8 *)&param_1[3]), 1);
       (*(undefined4 *)((char *)&auVar10 + 4)) = -(uint)(*(float *)(((unsigned char *)&param_1[1] + 4)) == *(float *)(((unsigned char *)&*param_1 + 4)));
-      (*(undefined4 *)((char *)&auVar10 + 0)) = -(uint)(*((float *)gen_v16_q0(param_1[1])) == *((float *)gen_v16_q0(*param_1)));
+      (*(undefined4 *)((char *)&auVar10 + 0)) = -(uint)(*((float *)&param_1[1]) == *((float *)&*param_1));
       (*(undefined4 *)((char *)&auVar10 + 8)) = -(uint)(*(float *)(((unsigned char *)&param_1[1] + 8)) == *(float *)(((unsigned char *)&*param_1 + 8)));
       (*(undefined4 *)((char *)&auVar10 + 12)) = -(uint)(*(float *)(((unsigned char *)&param_1[1] + 0xc)) == *(float *)(((unsigned char *)&*param_1 + 0xc)));
       uVar8 = movmskps(0, auVar10);
       if (((byte)uVar8 & 7) != 7) {
-        (*(float *)(gen_frame + 0x0)) = *((float *)gen_v16_q0(param_1[1]));
+        (*(float *)(gen_frame + 0x0)) = *((float *)&param_1[1]);
         (*(float *)(gen_frame + 0x4)) = *(float *)(((unsigned char *)&param_1[1] + 4));
         (*(float *)(gen_frame + 0x8)) = *(float *)(((unsigned char *)&param_1[1] + 8));
         CALLF(undefined8, FUN_141269cc0)(param_1, &(*(float *)(gen_frame + 0x0)));
       }
     }
     auVar10 = CALLF(gen_v16, FUN_142471c90)(*(undefined8 *)(((unsigned char *)&param_1[2] + 8)));
-    fVar9 = *((float *)gen_v16_q0(param_1[1]));
+    fVar9 = *((float *)&param_1[1]);
     fVar3 = *(float *)(((unsigned char *)&param_1[1] + 4));
     fVar4 = *(float *)(((unsigned char *)&param_1[1] + 8));
     fVar5 = *(float *)(((unsigned char *)&param_1[1] + 0xc));
@@ -13555,9 +13549,9 @@ undefined8 FUN_141269e50(gen_v16 *param_1, double param_2_promoted, char param_3
     cVar6 = CALLF(undefined1, FUN_142471e10)(*(undefined8 *)(((unsigned char *)&param_1[2] + 8)));
     if (cVar6 != '\0') {
       CALLF(undefined8, FUN_142472030)(*(undefined8 *)(((unsigned char *)&param_1[2] + 8)), 0);
-      cVar6 = CALLF(undefined1, FUN_14246aca0)(*((undefined8 *)gen_v16_q0(param_1[3])));
+      cVar6 = CALLF(undefined1, FUN_14246aca0)(*((undefined8 *)&param_1[3]));
       if (cVar6 != '\0') {
-        return (undefined8)CALLF(undefined8, FUN_14246ae20)(*((undefined8 *)gen_v16_q0(param_1[3])), 0);
+        return (undefined8)CALLF(undefined8, FUN_14246ae20)(*((undefined8 *)&param_1[3]), 0);
         return 0;
       }
     }

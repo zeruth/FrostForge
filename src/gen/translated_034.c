@@ -2975,8 +2975,6 @@ undefined8 FUN_1405a3cd0(longlong *param_1)
   GEN_HIT(55);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x0001405a3cd3. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (**(code **)(*param_1 + 0x148))(param_1);
   return uVar1;
 }
@@ -4404,8 +4402,6 @@ undefined8 FUN_1405a5ee0(undefined8 param_1, undefined8 *param_2)
   if ((lVar1 != 0) && (param_2[6] != 0)) {
     CALLF(undefined8, FUN_14156dc60)(param_2);
   }
-                    /* WARNING: Could not recover jumptable at 0x0001405a5f0f. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar2 = (**(code **)*param_2)(param_2,0);
   return uVar2;
 }

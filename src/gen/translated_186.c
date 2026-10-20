@@ -98,7 +98,7 @@ undefined8 FUN_142363970(longlong param_1, ulonglong param_2, ulonglong param_3)
 }
 
 /* ref: FUN_142363ac0 */
-undefined8 FUN_142363ac0(PCONDITION_VARIABLE param_1)
+undefined8 FUN_142363ac0(undefined8 param_1)
 {
   GEN_HIT(5);
   undefined8 uVar1 = {0};
@@ -117,7 +117,7 @@ undefined1 FUN_142363ad0(undefined8 param_1)
 }
 
 /* ref: FUN_142363af0 */
-undefined8 FUN_142363af0(PCONDITION_VARIABLE param_1)
+undefined8 FUN_142363af0(undefined8 param_1)
 {
   GEN_HIT(7);
   undefined8 uVar1 = {0};
@@ -144,68 +144,29 @@ bool FUN_142363b00(undefined8 param_1, undefined8 param_2, longlong param_3)
 }
 
 /* ref: FUN_142363b50 */
-undefined8 FUN_142363b50(PCONDITION_VARIABLE param_1, PSRWLOCK param_2)
+undefined8 FUN_142363b50(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(9);
-  BOOL BVar1 = {0};
-/*                      */
+  undefined8 uVar1 = {0};
   
-  BVar1 = (*(*(code *)&SleepConditionVariableSRW))(param_1,param_2,0xffffffff,0);
-  return CONCAT44(0,BVar1);
+  uVar1 = (*(*(code *)&SleepConditionVariableSRW))(param_1,param_2,0xffffffff,0);
+  return uVar1;
 }
 
 /* ref: FUN_142363b60 */
-undefined8 FUN_142363b60(ulonglong *param_1, ulonglong *param_2, byte *param_3, uint param_4)
+undefined8 FUN_142363b60(undefined8 param_1, undefined8 param_2, undefined8 param_3, uint param_4)
 {
   GEN_HIT(10);
-  longlong lVar1 = {0};
-  longlong lVar2 = {0};
-  ulonglong uVar3 = {0};
+  ulonglong uVar1 = {0};
   
-  lVar2 = REFG(undefined8, 0x142d4baf8);
-  lVar1 = REFG(undefined8, 0x142d4baf0);
-  uVar3 = 0;
-  switch((long long)(param_4 & 0xf)) {
-  case 0xf:
-    uVar3 = (ulonglong)param_3[0xe] << 0x30;
-  case 0xe:
-    uVar3 = uVar3 ^ (ulonglong)param_3[0xd] << 0x28;
-  case 0xd:
-    uVar3 = uVar3 ^ (ulonglong)param_3[0xc] << 0x20;
-  case 0xc:
-    uVar3 = uVar3 ^ (ulonglong)param_3[0xb] << 0x18;
-  case 0xb:
-    uVar3 = uVar3 ^ (ulonglong)param_3[10] << 0x10;
-  case 10:
-    uVar3 = uVar3 ^ (ulonglong)param_3[9] << 8;
-  case 9:
-    uVar3 = (param_3[8] ^ uVar3) * REFG(undefined8, 0x142d4baf8);
-    *param_2 = *param_2 ^ (uVar3 >> 0x1f | uVar3 << 0x21) * REFG(undefined8, 0x142d4baf0);
-  case 8:
-    uVar3 = (ulonglong)param_3[7] << 0x38;
-  case 7:
-    uVar3 = uVar3 ^ (ulonglong)param_3[6] << 0x30;
-  case 6:
-    uVar3 = uVar3 ^ (ulonglong)param_3[5] << 0x28;
-  case 5:
-    uVar3 = uVar3 ^ (ulonglong)param_3[4] << 0x20;
-  case 4:
-    uVar3 = uVar3 ^ (ulonglong)param_3[3] << 0x18;
-  case 3:
-    uVar3 = uVar3 ^ (ulonglong)param_3[2] << 0x10;
-  case 2:
-    uVar3 = uVar3 ^ (ulonglong)param_3[1] << 8;
-  case 1:
-    uVar3 = (*param_3 ^ uVar3) * lVar1;
-    *param_1 = *param_1 ^ (uVar3 >> 0x21 | uVar3 * 0x80000000) * lVar2;
-    return 0;
-  default:
+  uVar1 = (ulonglong)(param_4 & 0xf) - 1;
+  if (uVar1 < 0xf) {
+    (*(code *)(((char *)REFP(0x140000000)) +
+              (&REFG(uint, 0x142363c60))[uVar1]))
+              (REFG(undefined8, 0x142d4baf0),param_2,param_3,REFG(undefined8, 0x142d4baf8));
     return 0;
   }
-  {
-    undefined8 gen_fall = {0};
-    return gen_fall;
-  }
+  return 0;
 }
 
 /* ref: FUN_142363ec0 */
@@ -421,7 +382,7 @@ undefined4 FUN_1423642a0(uint param_1, ushort *param_2, uint *param_3)
 }
 
 /* ref: FUN_142364390 */
-undefined8 FUN_142364390(PSRWLOCK param_1)
+undefined8 FUN_142364390(undefined8 param_1)
 {
   GEN_HIT(15);
   undefined8 uVar1 = {0};
@@ -431,7 +392,7 @@ undefined8 FUN_142364390(PSRWLOCK param_1)
 }
 
 /* ref: FUN_1423643a0 */
-undefined8 FUN_1423643a0(PSRWLOCK param_1)
+undefined8 FUN_1423643a0(undefined8 param_1)
 {
   GEN_HIT(16);
   undefined8 uVar1 = {0};
@@ -978,8 +939,6 @@ undefined8 FUN_142366670(longlong param_1)
   GEN_HIT(31);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x00014236667b. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (**(code **)(**(longlong **)(param_1 + 0x48) + 0x30))
                     (*(longlong **)(param_1 + 0x48),*(undefined8 *)(param_1 + 0x38));
   return uVar1;
@@ -2319,6 +2278,7 @@ undefined4 FUN_142367db0(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(39);
   int iVar1 = {0};
+  undefined8 uVar2 = {0};
   
   iVar1 = (*(code *)(*(code *)&inet_pton))(0x17,param_1,param_2);
   if (iVar1 == 1) {
@@ -2327,8 +2287,8 @@ undefined4 FUN_142367db0(undefined8 param_1, undefined8 param_2)
   if (iVar1 == 0) {
     return 0x2726;
   }
-  iVar1 = (*(*(code *)&WSAGetLastError))();
-  return iVar1;
+  uVar2 = (*(*(code *)&WSAGetLastError))();
+  return (int)uVar2;
 }
 
 /* ref: FUN_142367df0 */
@@ -2336,6 +2296,7 @@ undefined4 FUN_142367df0(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(40);
   int iVar1 = {0};
+  undefined8 uVar2 = {0};
   
   iVar1 = (*(code *)(*(code *)&inet_pton))(2,param_1,param_2);
   if (iVar1 == 1) {
@@ -2344,8 +2305,8 @@ undefined4 FUN_142367df0(undefined8 param_1, undefined8 param_2)
   if (iVar1 == 0) {
     return 0x2726;
   }
-  iVar1 = (*(*(code *)&WSAGetLastError))();
-  return iVar1;
+  uVar2 = (*(*(code *)&WSAGetLastError))();
+  return (int)uVar2;
 }
 
 /* ref: FUN_142367e30 */
@@ -2488,59 +2449,56 @@ undefined4 FUN_142368070(undefined8 param_1, code *param_2, undefined8 param_3)
 {
   GEN_HIT(43);
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[424]) > 0x1a8 ? 0x0 + sizeof(undefined1[424]) : 0x1a8)] = {0};
-  undefined4 uVar1 = {0};
+  int iVar1 = {0};
   int iVar2 = {0};
-  int iVar3 = {0};
-  bool bVar4 = {0};
+  undefined4 uVar3 = {0};
+  undefined8 uVar4 = {0};
+  bool bVar5 = {0};
   
-  GEN_ATOMIC_XCHG(iVar3, REFG(undefined4, 0x144751b28) + 1);
-  bVar4 = REFG(undefined4, 0x144751b28) == 0;
-  iVar2 = REFG(undefined4, 0x142620be0);
-  REFG(undefined4, 0x144751b28) = iVar3;
-  if (bVar4) {
+  GEN_ATOMIC_XCHG(iVar2, REFG(undefined4, 0x144751b28) + 1);
+  bVar5 = REFG(undefined4, 0x144751b28) == 0;
+  iVar1 = REFG(undefined4, 0x142620be0);
+  REFG(undefined4, 0x144751b28) = iVar2;
+  if (bVar5) {
     if (param_2 != (code *)0x0) {
-                    /* WARNING: Could not recover jumptable at 0x00014236809a. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-      uVar1 = (*param_2)(param_1,param_3);
-      return uVar1;
+      uVar4 = (*param_2)(param_1,param_3,param_3);
+      return (int)uVar4;
     }
-    iVar2 = (*(*(code *)&WSAStartup))(0x202,((undefined1 *)(gen_frame + 0x0)),param_3,0);
-    if ((iVar2 == 0) &&
+    iVar1 = (*(*(code *)&WSAStartup))(0x202,((undefined1 *)(gen_frame + 0x0)),param_3,0);
+    if ((iVar1 == 0) &&
        (((char)(*(undefined2 *)((char *)((undefined1 *)(gen_frame + 0x0)) + 0)) != '\x02' ||
-        (iVar2 = REFG(undefined4, 0x142620be0), SUB21((*(undefined2 *)((char *)((undefined1 *)(gen_frame + 0x0)) + 0)),1) != '\x02')))) {
-      iVar3 = (*(*(code *)&WSACleanup))();
-      if (iVar3 == 0) {
+        (iVar1 = REFG(undefined4, 0x142620be0), SUB21((*(undefined2 *)((char *)((undefined1 *)(gen_frame + 0x0)) + 0)),1) != '\x02')))) {
+      iVar2 = (*(*(code *)&WSACleanup))();
+      if (iVar2 == 0) {
         return 0x276c;
       }
-      uVar1 = (*(*(code *)&WSAGetLastError))();
-      return uVar1;
+      uVar3 = (*(*(code *)&WSAGetLastError))();
+      return uVar3;
     }
   }
-  return iVar2;
+  return iVar1;
 }
 
 /* ref: FUN_142368100 */
 undefined4 FUN_142368100(undefined8 param_1, code *param_2, undefined8 param_3)
 {
   GEN_HIT(44);
-  undefined4 uVar1 = {0};
-  int iVar2 = {0};
+  int iVar1 = {0};
+  undefined8 uVar2 = {0};
   bool bVar3 = {0};
   
-  GEN_ATOMIC_XCHG(iVar2, REFG(undefined4, 0x144751b28) + -1);
+  GEN_ATOMIC_XCHG(iVar1, REFG(undefined4, 0x144751b28) + -1);
   bVar3 = REFG(undefined4, 0x144751b28) == 1;
-  REFG(undefined4, 0x144751b28) = iVar2;
+  REFG(undefined4, 0x144751b28) = iVar1;
   if (bVar3) {
     if (param_2 != (code *)0x0) {
-                    /* WARNING: Could not recover jumptable at 0x000142368125. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-      uVar1 = (*param_2)(param_1,param_3);
-      return uVar1;
+      uVar2 = (*param_2)(param_1,param_3,param_3);
+      return (int)uVar2;
     }
-    iVar2 = (*(*(code *)&WSACleanup))(param_1,0,param_3,0);
-    if (iVar2 != 0) {
-      iVar2 = (*(*(code *)&WSAGetLastError))();
-      return iVar2;
+    iVar1 = (*(*(code *)&WSACleanup))(param_1,0,param_3,0);
+    if (iVar1 != 0) {
+      uVar2 = (*(*(code *)&WSAGetLastError))();
+      return (int)uVar2;
     }
   }
   return REFG(undefined4, 0x142620be0);
@@ -2665,12 +2623,12 @@ undefined4 FUN_1423685a0(longlong *param_1, char param_2, ulonglong param_3, ulo
   GEN_HIT(49);
   ulonglong uVar1 = {0};
   int iVar2 = {0};
-  DWORD DVar3 = {0};
-  undefined4 uVar4 = {0};
+  undefined4 uVar3 = {0};
+  undefined8 uVar4 = {0};
   
   if (((*param_1 == 0) || (uVar1 = param_1[1], uVar1 < param_4)) || (uVar1 - param_4 < param_3)) {
-    uVar4 = CALLF(undefined4, FUN_140267900)(2);
-    return uVar4;
+    uVar3 = CALLF(undefined4, FUN_140267900)(2);
+    return uVar3;
   }
   if (param_4 == 0) {
     param_4 = uVar1 - param_3;
@@ -2684,16 +2642,16 @@ undefined4 FUN_1423685a0(longlong *param_1, char param_2, ulonglong param_3, ulo
     return REFG(undefined4, 0x142620be0);
   }
 LAB_14236860b:
-  DVar3 = (*(*(code *)&GetLastError))();
-  return DVar3;
+  uVar4 = (*(*(code *)&GetLastError))();
+  return (int)uVar4;
 }
 
 /* ref: FUN_142368800 */
 undefined8 FUN_142368800(longlong *param_1)
 {
   GEN_HIT(50);
-  if ((HANDLE)*param_1 != (HANDLE)0x0) {
-    (*(*(code *)&CloseHandle))((HANDLE)*param_1);
+  if (*param_1 != 0) {
+    (*(*(code *)&CloseHandle))(*param_1);
     return 0;
   }
   return 0;
@@ -2703,11 +2661,10 @@ undefined8 FUN_142368800(longlong *param_1)
 undefined8 FUN_142368810(undefined8 *param_1)
 {
   GEN_HIT(51);
-  BOOL BVar1 = {0};
-/*                      */
+  undefined8 uVar1 = {0};
   
-  BVar1 = (*(*(code *)&ReleaseMutex))((HANDLE)*param_1);
-  return CONCAT44(0,BVar1);
+  uVar1 = (*(*(code *)&ReleaseMutex))(*param_1);
+  return uVar1;
 }
 
 /* ref: FUN_142368820 */
@@ -2918,9 +2875,7 @@ undefined8 FUN_142368c30(longlong *param_1, longlong param_2)
 {
   GEN_HIT(56);
   if (param_2 != 0) {
-                    /* WARNING: Could not recover jumptable at 0x000142368c38. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-    return (undefined8)(**(code **)(*param_1 + 0x30))(param_1);
+    return (undefined8)(**(code **)(*param_1 + 0x30))(param_1,param_2);
     return 0;
   }
   return 0;
@@ -4118,205 +4073,202 @@ longlong FUN_14236a0e0(undefined8 param_1)
 undefined4 FUN_14236a108(undefined8 param_1, undefined4 param_2, undefined8 param_3, undefined8 param_4)
 {
   GEN_HIT(85);
-  undefined4 uVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&ConvertStringSecurityDescriptorToSecurityDescriptorW))(param_1, param_2, param_3, param_4);
-  return uVar1;
+  uVar1 = (*(code *)(*(code *)&ConvertStringSecurityDescriptorToSecurityDescriptorW))
+                    (param_1,param_2,param_3,param_4);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a10e */
-u_long FUN_14236a10e(u_long param_1)
+undefined4 FUN_14236a10e(undefined4 param_1)
 {
   GEN_HIT(86);
-  u_long uVar1 = {0};
+  undefined8 uVar1 = {0};
   
   uVar1 = (*(*(code *)&htonl))(param_1);
-  return uVar1;
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a114 */
-u_short FUN_14236a114(u_short param_1)
+undefined2 FUN_14236a114(undefined2 param_1)
 {
   GEN_HIT(87);
-  u_short uVar1 = {0};
+  undefined8 uVar1 = {0};
   
   uVar1 = (*(*(code *)&htons))(param_1);
-  return uVar1;
+  return (short)uVar1;
 }
 
 /* ref: FUN_14236a11a */
-u_long FUN_14236a11a(u_long param_1)
+undefined4 FUN_14236a11a(undefined4 param_1)
 {
   GEN_HIT(88);
-  u_long uVar1 = {0};
+  undefined8 uVar1 = {0};
   
   uVar1 = (*(*(code *)&htonl))(param_1);
-  return uVar1;
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a120 */
-int FUN_14236a120(SOCKET param_1, fd_set *param_2)
+undefined4 FUN_14236a120(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(89);
-  int iVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  iVar1 = (*(*(code *)&__WSAFDIsSet))(param_1,param_2);
-  return iVar1;
+  uVar1 = (*(*(code *)&__WSAFDIsSet))(param_1,param_2);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a126 */
-SOCKET FUN_14236a126(SOCKET param_1, sockaddr *param_2, int *param_3)
+undefined8 FUN_14236a126(undefined8 param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(90);
-  SOCKET SVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  SVar1 = (*(*(code *)&accept))(param_1,param_2,param_3);
-  return SVar1;
+  uVar1 = (*(*(code *)&accept))(param_1,param_2,param_3);
+  return uVar1;
 }
 
 /* ref: FUN_14236a12c */
-int FUN_14236a12c(SOCKET param_1, sockaddr *param_2, int param_3)
+undefined4 FUN_14236a12c(undefined8 param_1, undefined8 param_2, undefined4 param_3)
 {
   GEN_HIT(91);
-  int iVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  iVar1 = (*(*(code *)&bind))(param_1,param_2,param_3);
-  return iVar1;
+  uVar1 = (*(*(code *)&bind))(param_1,param_2,param_3);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a132 */
-undefined8 FUN_14236a132(SOCKET param_1)
+undefined8 FUN_14236a132(undefined8 param_1)
 {
   GEN_HIT(92);
-  int iVar1 = {0};
-/*                      */
+  undefined8 uVar1 = {0};
   
-  iVar1 = (*(*(code *)&closesocket))(param_1);
-  return CONCAT44(0,iVar1);
+  uVar1 = (*(*(code *)&closesocket))(param_1);
+  return uVar1;
 }
 
 /* ref: FUN_14236a138 */
-int FUN_14236a138(SOCKET param_1, sockaddr *param_2, int param_3)
+undefined4 FUN_14236a138(undefined8 param_1, undefined8 param_2, undefined4 param_3)
 {
   GEN_HIT(93);
-  int iVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  iVar1 = (*(*(code *)&connect))(param_1,param_2,param_3);
-  return iVar1;
+  uVar1 = (*(*(code *)&connect))(param_1,param_2,param_3);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a13e */
-int FUN_14236a13e(SOCKET param_1, long param_2, u_long *param_3)
+undefined4 FUN_14236a13e(undefined8 param_1, undefined4 param_2, undefined8 param_3)
 {
   GEN_HIT(94);
-  int iVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  iVar1 = (*(*(code *)&ioctlsocket))(param_1,param_2,param_3);
-  return iVar1;
+  uVar1 = (*(*(code *)&ioctlsocket))(param_1,param_2,param_3);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a144 */
-int FUN_14236a144(SOCKET param_1, int param_2)
+undefined4 FUN_14236a144(undefined8 param_1, undefined4 param_2)
 {
   GEN_HIT(95);
-  int iVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  iVar1 = (*(*(code *)&listen))(param_1,param_2);
-  return iVar1;
+  uVar1 = (*(*(code *)&listen))(param_1,param_2);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a14a */
-int FUN_14236a14a(SOCKET param_1, char *param_2, int param_3, int param_4)
+undefined4 FUN_14236a14a(undefined8 param_1, undefined8 param_2, undefined4 param_3, undefined4 param_4)
 {
   GEN_HIT(96);
-  int iVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  iVar1 = (*(*(code *)&recv))(param_1,param_2,param_3,param_4);
-  return iVar1;
+  uVar1 = (*(*(code *)&recv))(param_1,param_2,param_3,param_4);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a150 */
-int FUN_14236a150(int param_1, fd_set *param_2, fd_set *param_3, fd_set *param_4, timeval *param_5)
+undefined4 FUN_14236a150(undefined4 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5)
 {
   GEN_HIT(97);
-  int iVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  iVar1 = (*(*(code *)&select))(param_1,param_2,param_3,param_4,(unsigned long long)(param_5));
-  return iVar1;
+  uVar1 = (*(*(code *)&select))(param_1,param_2,param_3,param_4);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a156 */
-int FUN_14236a156(SOCKET param_1, char *param_2, int param_3, int param_4)
+undefined4 FUN_14236a156(undefined8 param_1, undefined8 param_2, undefined4 param_3, undefined4 param_4)
 {
   GEN_HIT(98);
-  int iVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  iVar1 = (*(*(code *)&send))(param_1,param_2,param_3,param_4);
-  return iVar1;
+  uVar1 = (*(*(code *)&send))(param_1,param_2,param_3,param_4);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a15c */
-SOCKET FUN_14236a15c(int param_1, int param_2, int param_3)
+undefined8 FUN_14236a15c(undefined4 param_1, undefined4 param_2, undefined4 param_3)
 {
   GEN_HIT(99);
-  SOCKET SVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  SVar1 = (*(*(code *)&socket))(param_1,param_2,param_3);
-  return SVar1;
+  uVar1 = (*(*(code *)&socket))(param_1,param_2,param_3);
+  return uVar1;
 }
 
 /* ref: FUN_14236a162 */
-undefined8 FUN_14236a162(WORD param_1, LPWSADATA param_2)
+undefined8 FUN_14236a162(undefined2 param_1, undefined8 param_2)
 {
   GEN_HIT(100);
-  int iVar1 = {0};
-/*                      */
+  undefined8 uVar1 = {0};
   
-  iVar1 = (*(*(code *)&WSAStartup))(param_1,param_2);
-  return CONCAT44(0,iVar1);
+  uVar1 = (*(*(code *)&WSAStartup))(param_1,param_2);
+  return uVar1;
 }
 
 /* ref: FUN_14236a168 */
 undefined8 FUN_14236a168(void)
 {
   GEN_HIT(101);
-  int iVar1 = {0};
-/*                      */
+  undefined8 uVar1 = {0};
   
-  iVar1 = (*(*(code *)&WSACleanup))();
-  return CONCAT44(0,iVar1);
-}
-
-/* ref: FUN_14236a16e */
-ulong FUN_14236a16e(char *param_1)
-{
-  GEN_HIT(102);
-  ulong uVar1 = {0};
-  
-  uVar1 = (*(*(code *)&inet_addr))(param_1);
+  uVar1 = (*(*(code *)&WSACleanup))();
   return uVar1;
 }
 
+/* ref: FUN_14236a16e */
+undefined4 FUN_14236a16e(undefined8 param_1)
+{
+  GEN_HIT(102);
+  undefined8 uVar1 = {0};
+  
+  uVar1 = (*(*(code *)&inet_addr))(param_1);
+  return (int)uVar1;
+}
+
 /* ref: FUN_14236a174 */
-HANDLE FUN_14236a174(HWND param_1, u_int param_2, char *param_3, char *param_4, unsigned long long param_5_slot)
+undefined8 FUN_14236a174(undefined8 param_1, undefined4 param_2, undefined8 param_3, undefined8 param_4, unsigned long long param_5_slot)
 {
   GEN_HIT(103);
-  int param_5 = (int)param_5_slot;
-  HANDLE pvVar1 = {0};
+  undefined4 param_5 = (undefined4)param_5_slot;
+  undefined8 uVar1 = {0};
   
-  pvVar1 = (*(*(code *)&WSAAsyncGetHostByName))(param_1,param_2,param_3,param_4,(unsigned long long)(param_5));
-  return pvVar1;
+  uVar1 = (*(*(code *)&WSAAsyncGetHostByName))(param_1,param_2,param_3,param_4);
+  return uVar1;
 }
 
 /* ref: FUN_14236a17a */
-undefined8 FUN_14236a17a(HANDLE param_1, undefined8 param_2)
+undefined8 FUN_14236a17a(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(104);
-  int iVar1 = {0};
-/*                      */
+  undefined8 uVar1 = {0};
   
-  iVar1 = (*(*(code *)&WSACancelAsyncRequest))(param_1);
-  return CONCAT44(0,iVar1);
+  uVar1 = (*(*(code *)&WSACancelAsyncRequest))(param_1);
+  return uVar1;
 }
 
 /* ref: FUN_14236a180 */
@@ -4325,248 +4277,240 @@ undefined8 FUN_14236a180(undefined4 param_1, undefined8 param_2, undefined8 para
   GEN_HIT(105);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&inet_ntop))(param_1, param_2, param_3, param_4);
+  uVar1 = (*(code *)(*(code *)&inet_ntop))(param_1,param_2,param_3,param_4);
   return uVar1;
 }
 
 /* ref: FUN_14236a186 */
-DWORD FUN_14236a186(LPCSTR param_1, LPDWORD param_2)
+undefined4 FUN_14236a186(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(106);
-  DWORD DVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  DVar1 = (*(*(code *)&GetFileVersionInfoSizeA))(param_1,param_2);
-  return DVar1;
+  uVar1 = (*(*(code *)&GetFileVersionInfoSizeA))(param_1,param_2);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a18c */
-BOOL FUN_14236a18c(LPCSTR param_1, DWORD param_2, DWORD param_3, LPVOID param_4)
+undefined4 FUN_14236a18c(undefined8 param_1, undefined4 param_2, undefined4 param_3, undefined8 param_4)
 {
   GEN_HIT(107);
-  BOOL BVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  BVar1 = (*(*(code *)&GetFileVersionInfoA))(param_1,param_2,param_3,param_4);
-  return BVar1;
+  uVar1 = (*(*(code *)&GetFileVersionInfoA))(param_1,param_2,param_3,param_4);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a192 */
-BOOL FUN_14236a192(LPCVOID param_1, LPCSTR param_2, LPVOID *param_3, PUINT param_4)
+undefined4 FUN_14236a192(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4)
 {
   GEN_HIT(108);
-  BOOL BVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  BVar1 = (*(*(code *)&VerQueryValueA))(param_1,param_2,param_3,param_4);
-  return BVar1;
+  uVar1 = (*(*(code *)&VerQueryValueA))(param_1,param_2,param_3,param_4);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a198 */
-BOOL FUN_14236a198(DATA_BLOB *param_1, LPWSTR *param_2, DATA_BLOB *param_3, PVOID param_4, CRYPTPROTECT_PROMPTSTRUCT *param_5, DWORD param_6, DATA_BLOB *param_7)
+undefined4 FUN_14236a198(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, unsigned long long param_6_slot, undefined8 param_7)
 {
   GEN_HIT(109);
-  BOOL BVar1 = {0};
+  undefined4 param_6 = (undefined4)param_6_slot;
+  undefined8 uVar1 = {0};
   
-  BVar1 = (*(*(code *)&CryptUnprotectData))
-                    (param_1,param_2,param_3,param_4,(unsigned long long)(param_5),(unsigned long long)(param_6),(unsigned long long)(param_7));
-  return BVar1;
+  uVar1 = (*(*(code *)&CryptUnprotectData))(param_1,param_2,param_3,param_4);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a19e */
-UINT FUN_14236a19e(HKL param_1, LPWSTR param_2, UINT param_3)
+undefined4 FUN_14236a19e(undefined8 param_1, undefined8 param_2, undefined4 param_3)
 {
   GEN_HIT(110);
-  UINT UVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  UVar1 = (*(*(code *)&ImmGetIMEFileNameW))(param_1,param_2,param_3);
-  return UVar1;
+  uVar1 = (*(*(code *)&ImmGetIMEFileNameW))(param_1,param_2,param_3);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a1a4 */
-HIMC FUN_14236a1a4(HWND param_1)
+undefined8 FUN_14236a1a4(undefined8 param_1)
 {
   GEN_HIT(111);
-  HIMC pHVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  pHVar1 = (*(*(code *)&ImmGetContext))(param_1);
-  return pHVar1;
+  uVar1 = (*(*(code *)&ImmGetContext))(param_1);
+  return uVar1;
 }
 
 /* ref: FUN_14236a1aa */
-undefined8 FUN_14236a1aa(HWND param_1, HIMC param_2)
+undefined8 FUN_14236a1aa(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(112);
-  BOOL BVar1 = {0};
-/*                      */
+  undefined8 uVar1 = {0};
   
-  BVar1 = (*(*(code *)&ImmReleaseContext))(param_1,param_2);
-  return CONCAT44(0,BVar1);
+  uVar1 = (*(*(code *)&ImmReleaseContext))(param_1,param_2);
+  return uVar1;
 }
 
 /* ref: FUN_14236a1b0 */
-HIMC FUN_14236a1b0(HWND param_1, HIMC param_2)
+undefined8 FUN_14236a1b0(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(113);
-  HIMC pHVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  pHVar1 = (*(*(code *)&ImmAssociateContext))(param_1,param_2);
-  return pHVar1;
+  uVar1 = (*(*(code *)&ImmAssociateContext))(param_1,param_2);
+  return uVar1;
 }
 
 /* ref: FUN_14236a1b6 */
-undefined8 FUN_14236a1b6(HWND param_1, HIMC param_2, DWORD param_3)
+undefined8 FUN_14236a1b6(undefined8 param_1, undefined8 param_2, undefined4 param_3)
 {
   GEN_HIT(114);
-  BOOL BVar1 = {0};
-/*                      */
+  undefined8 uVar1 = {0};
   
-  BVar1 = (*(*(code *)&ImmAssociateContextEx))(param_1,param_2,param_3);
-  return CONCAT44(0,BVar1);
+  uVar1 = (*(*(code *)&ImmAssociateContextEx))(param_1,param_2,param_3);
+  return uVar1;
 }
 
 /* ref: FUN_14236a1bc */
-LONG FUN_14236a1bc(HIMC param_1, DWORD param_2, LPVOID param_3, DWORD param_4)
+undefined4 FUN_14236a1bc(undefined8 param_1, undefined4 param_2, undefined8 param_3, undefined4 param_4)
 {
   GEN_HIT(115);
-  LONG LVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  LVar1 = (*(*(code *)&ImmGetCompositionStringW))(param_1,param_2,param_3,param_4);
-  return LVar1;
+  uVar1 = (*(*(code *)&ImmGetCompositionStringW))(param_1,param_2,param_3,param_4);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a1c2 */
-DWORD FUN_14236a1c2(HIMC param_1, DWORD param_2, LPCANDIDATELIST param_3, DWORD param_4)
+undefined4 FUN_14236a1c2(undefined8 param_1, undefined4 param_2, undefined8 param_3, undefined4 param_4)
 {
   GEN_HIT(116);
-  DWORD DVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  DVar1 = (*(*(code *)&ImmGetCandidateListW))(param_1,param_2,param_3,param_4);
-  return DVar1;
+  uVar1 = (*(*(code *)&ImmGetCandidateListW))(param_1,param_2,param_3,param_4);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a1c8 */
-undefined8 FUN_14236a1c8(HIMC param_1, LPDWORD param_2, LPDWORD param_3)
+undefined8 FUN_14236a1c8(undefined8 param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(117);
-  BOOL BVar1 = {0};
-/*                      */
+  undefined8 uVar1 = {0};
   
-  BVar1 = (*(*(code *)&ImmGetConversionStatus))(param_1,param_2,param_3);
-  return CONCAT44(0,BVar1);
+  uVar1 = (*(*(code *)&ImmGetConversionStatus))(param_1,param_2,param_3);
+  return uVar1;
 }
 
 /* ref: FUN_14236a1ce */
-undefined8 FUN_14236a1ce(HIMC param_1, DWORD param_2, DWORD param_3)
+undefined8 FUN_14236a1ce(undefined8 param_1, undefined4 param_2, undefined4 param_3)
 {
   GEN_HIT(118);
-  BOOL BVar1 = {0};
-/*                      */
+  undefined8 uVar1 = {0};
   
-  BVar1 = (*(*(code *)&ImmSetConversionStatus))(param_1,param_2,param_3);
-  return CONCAT44(0,BVar1);
+  uVar1 = (*(*(code *)&ImmSetConversionStatus))(param_1,param_2,param_3);
+  return uVar1;
 }
 
 /* ref: FUN_14236a1d4 */
-undefined8 FUN_14236a1d4(HIMC param_1, DWORD param_2, DWORD param_3, DWORD param_4)
+undefined8 FUN_14236a1d4(undefined8 param_1, undefined4 param_2, undefined4 param_3, undefined4 param_4)
 {
   GEN_HIT(119);
-  BOOL BVar1 = {0};
-/*                      */
+  undefined8 uVar1 = {0};
   
-  BVar1 = (*(*(code *)&ImmNotifyIME))(param_1,param_2,param_3,param_4);
-  return CONCAT44(0,BVar1);
+  uVar1 = (*(*(code *)&ImmNotifyIME))(param_1,param_2,param_3,param_4);
+  return uVar1;
 }
 
 /* ref: FUN_14236a1da */
-UINT FUN_14236a1da(HKL param_1, LPSTR param_2, UINT param_3)
+undefined4 FUN_14236a1da(undefined8 param_1, undefined8 param_2, undefined4 param_3)
 {
   GEN_HIT(120);
-  UINT UVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  UVar1 = (*(*(code *)&ImmGetIMEFileNameA))(param_1,param_2,param_3);
-  return UVar1;
+  uVar1 = (*(*(code *)&ImmGetIMEFileNameA))(param_1,param_2,param_3);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a1e0 */
-undefined8 FUN_14236a1e0(HIMC param_1, DWORD param_2, LPVOID param_3, DWORD param_4, LPVOID param_5, DWORD param_6)
+undefined8 FUN_14236a1e0(undefined8 param_1, undefined4 param_2, undefined8 param_3, undefined4 param_4, undefined8 param_5, unsigned long long param_6_slot)
 {
   GEN_HIT(121);
-  BOOL BVar1 = {0};
-/*                      */
+  undefined4 param_6 = (undefined4)param_6_slot;
+  undefined8 uVar1 = {0};
   
-  BVar1 = (*(*(code *)&ImmSetCompositionStringW))
-                    (param_1,param_2,param_3,param_4,(unsigned long long)(param_5),(unsigned long long)(param_6));
-  return CONCAT44(0,BVar1);
+  uVar1 = (*(*(code *)&ImmSetCompositionStringW))(param_1,param_2,param_3,param_4);
+  return uVar1;
 }
 
 /* ref: FUN_14236a1e6 */
-undefined8 FUN_14236a1e6(HIMC param_1, LPCOMPOSITIONFORM param_2, undefined8 param_3)
+undefined8 FUN_14236a1e6(undefined8 param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(122);
-  BOOL BVar1 = {0};
-/*                      */
+  undefined8 uVar1 = {0};
   
-  BVar1 = (*(*(code *)&ImmSetCompositionWindow))(param_1,param_2);
-  return CONCAT44(0,BVar1);
+  uVar1 = (*(*(code *)&ImmSetCompositionWindow))(param_1,param_2);
+  return uVar1;
 }
 
 /* ref: FUN_14236a1ec */
-undefined8 FUN_14236a1ec(HIMC param_1, LPCANDIDATEFORM param_2)
+undefined8 FUN_14236a1ec(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(123);
-  BOOL BVar1 = {0};
-/*                      */
+  undefined8 uVar1 = {0};
   
-  BVar1 = (*(*(code *)&ImmSetCandidateWindow))(param_1,param_2);
-  return CONCAT44(0,BVar1);
+  uVar1 = (*(*(code *)&ImmSetCandidateWindow))(param_1,param_2);
+  return uVar1;
 }
 
 /* ref: FUN_14236a1f8 */
 undefined4 FUN_14236a1f8(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(124);
-  undefined4 uVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&Process32FirstW))(param_1, param_2);
-  return uVar1;
+  uVar1 = (*(code *)(*(code *)&Process32FirstW))(param_1,param_2);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a1fe */
 undefined4 FUN_14236a1fe(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(125);
-  undefined4 uVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&Process32NextW))(param_1, param_2);
-  return uVar1;
+  uVar1 = (*(code *)(*(code *)&Process32NextW))(param_1,param_2);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a204 */
-HRESULT FUN_14236a204(PCWSTR param_1, PVOID param_2)
+undefined4 FUN_14236a204(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(126);
-  HRESULT HVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  HVar1 = (*(*(code *)&WerRegisterRuntimeExceptionModule))(param_1,param_2);
-  return HVar1;
+  uVar1 = (*(*(code *)&WerRegisterRuntimeExceptionModule))(param_1,param_2);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a20a */
 undefined4 FUN_14236a20a(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined4 param_4, undefined8 param_5)
 {
   GEN_HIT(127);
-  undefined4 uVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&acmFormatSuggest))(param_1,param_2,param_3,param_4,(unsigned long long)(param_5));
-  return uVar1;
+  uVar1 = (*(code *)(*(code *)&acmFormatSuggest))(param_1,param_2,param_3,param_4);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a210 */
 undefined4 FUN_14236a210(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
 {
   GEN_HIT(128);
-  undefined4 uVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&acmStreamOpen))(param_1,param_2,param_3,param_4,(unsigned long long)(param_5),(unsigned long long)(param_6),(unsigned long long)(param_7),(unsigned long long)(param_8));
-  return uVar1;
+  uVar1 = (*(code *)(*(code *)&acmStreamOpen))(param_1,param_2,param_3,param_4);
+  return (int)uVar1;
 }
 
 /* ref: FUN_14236a216 */
@@ -4575,7 +4519,7 @@ undefined8 FUN_14236a216(undefined8 param_1, undefined4 param_2, undefined8 para
   GEN_HIT(129);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&acmStreamSize))(param_1, param_2, param_3, param_4);
+  uVar1 = (*(code *)(*(code *)&acmStreamSize))(param_1,param_2,param_3,param_4);
   return uVar1;
 }
 
@@ -4585,7 +4529,7 @@ undefined8 FUN_14236a21c(undefined8 param_1, undefined8 param_2, undefined4 para
   GEN_HIT(130);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&acmStreamConvert))(param_1, param_2, param_3);
+  uVar1 = (*(code *)(*(code *)&acmStreamConvert))(param_1,param_2,param_3);
   return uVar1;
 }
 
@@ -4595,7 +4539,7 @@ undefined8 FUN_14236a222(undefined8 param_1, undefined8 param_2, undefined4 para
   GEN_HIT(131);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&acmStreamPrepareHeader))(param_1, param_2, param_3);
+  uVar1 = (*(code *)(*(code *)&acmStreamPrepareHeader))(param_1,param_2,param_3);
   return uVar1;
 }
 
@@ -4605,7 +4549,7 @@ undefined8 FUN_14236a228(undefined8 param_1, undefined8 param_2, undefined4 para
   GEN_HIT(132);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&acmStreamUnprepareHeader))(param_1, param_2, param_3);
+  uVar1 = (*(code *)(*(code *)&acmStreamUnprepareHeader))(param_1,param_2,param_3);
   return uVar1;
 }
 
@@ -6124,8 +6068,6 @@ undefined8 FUN_14236c960(undefined8 param_1)
   
   if (REFG(code *, 0x144751c48) != (code *)0x0) {
     uVar1 = (*(*(code *)&GetCurrentThread))(param_1);
-                    /* WARNING: Could not recover jumptable at 0x00014236c984. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
     (*REFG(code *, 0x144751c48))(uVar1,param_1);
     return 0;
   }
@@ -6288,7 +6230,7 @@ undefined8 FUN_14236cbc0(longlong param_1, undefined8 *param_2)
   if (*(int *)(param_1 + 0x14) == 0) {
     param_2[1] = *(undefined8 *)(param_1 + 8);
     *(undefined8 **)(param_1 + 8) = param_2;
-    uVar2 = (*(*(code *)&ReleaseSRWLockExclusive))((PSRWLOCK)param_1);
+    uVar2 = (*(*(code *)&ReleaseSRWLockExclusive))(param_1);
     return uVar2;
   }
   (*(*(code *)&ReleaseSRWLockExclusive))(param_1);
@@ -6402,9 +6344,7 @@ undefined8 FUN_14236cde0(undefined8 param_1, undefined8 param_2)
   GEN_HIT(172);
   undefined8 uVar1 = {0};
   
-                    /* WARNING: Could not recover jumptable at 0x00014236cde3. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-  uVar1 = (*REFG(code *, 0x142d4bc48))(param_2);
+  uVar1 = (*REFG(code *, 0x142d4bc48))(param_2,param_2);
   return uVar1;
 }
 
@@ -6652,8 +6592,7 @@ undefined8 FUN_14236d0f0(longlong param_1)
     (*(*(code *)&AcquireSRWLockExclusive))(*(longlong *)(param_1 + 0x10) + 0x20);
     uVar1 = GEN_ATOMIC_XCHG(**(undefined4 **)(param_1 + 0x18), 1);
     (*(*(code *)&WakeAllConditionVariable))(*(longlong *)(param_1 + 0x10) + 0x18,uVar1);
-    (*(*(code *)&ReleaseSRWLockExclusive))
-              ((PSRWLOCK)(*(longlong *)(param_1 + 0x10) + 0x20));
+    (*(*(code *)&ReleaseSRWLockExclusive))(*(longlong *)(param_1 + 0x10) + 0x20);
     return 0;
   }
   return 0;
@@ -11121,8 +11060,6 @@ undefined8 FUN_142373870(undefined8 param_1, undefined8 *param_2)
   undefined8 uVar1 = {0};
   
   (*(code *)param_2[2])(param_2 + 3,*param_2);
-                    /* WARNING: Could not recover jumptable at 0x00014237388b. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   uVar1 = (*REFG(code *, 0x142d4bc40))(param_2);
   return uVar1;
 }
@@ -14832,7 +14769,7 @@ undefined8 FUN_142378bd0(longlong param_1, longlong param_2)
   }
   *(longlong *)(param_2 + 0x40) = lVar3;
   *plVar4 = param_2;
-  uVar2 = (*(*(code *)&WakeConditionVariable))((PCONDITION_VARIABLE)(param_1 + 8));
+  uVar2 = (*(*(code *)&WakeConditionVariable))(param_1 + 8,param_2,lVar3);
   return uVar2;
 }
 

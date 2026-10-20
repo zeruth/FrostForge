@@ -2,6 +2,12 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4100 4047 4024 4716)
 
+/* register the decompiler lost track of */
+undefined8 FUN_1402114e0() {
+    GenUnimplemented(0x1402114e0ULL);
+    return (undefined8)0;
+}
+
 /* the decompiler lost a call's arguments (FUN_14147f7f0 reads 1, the call passes 0) */
 undefined8 FUN_141484590() {
     GenUnimplemented(0x141484590ULL);

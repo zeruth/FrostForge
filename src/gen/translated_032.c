@@ -23528,7 +23528,7 @@ undefined1 FUN_14057afe0(undefined8 param_1, undefined8 param_2, undefined8 para
   undefined1 uVar1 = {0};
   undefined4 uVar2 = {0};
   
-  uVar2 = CALLF(DWORD, FUN_140255c70)();
+  uVar2 = CALLF(undefined4, FUN_140255c70)();
   CALLF(undefined4, FUN_1402282f0)(((undefined1 *)(gen_frame + 0x0)),"%s%u.tmp",param_1,uVar2);
   uVar1 = CALLF(undefined1, FUN_14057b2e0)(param_2,(undefined4)param_3,((undefined1 *)(gen_frame + 0x0)),1);
   return uVar1;
@@ -23945,8 +23945,6 @@ undefined8 FUN_14057d1b0(longlong *param_1, uint param_2)
   if (param_2 == 4) {
     param_2 = (*(undefined4 *)((char *)&gen_g_142ccdf30 + 0x0));
   }
-                    /* WARNING: Could not recover jumptable at 0x00014057d1c2. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
   return (undefined8)(**(code **)(*param_1 + 0x88))
             (param_1,CONCAT31((uint3)(param_2 >> 9),(char)(param_2 >> 1)) & 0xffffff01);
   return 0;
@@ -25409,6 +25407,7 @@ undefined4 FUN_140581a10(void)
 undefined8 FUN_1405820c0(ulonglong param_1, longlong param_2)
 {
   GEN_HIT(384);
+  unsigned char *gen_alloca_p = 0;
   __declspec(align(16)) unsigned char gen_frame[(0xb8 + sizeof(longlong) > 0xc0 ? 0xb8 + sizeof(longlong) : 0xc0)] = {0};
   memcpy((void *)(gen_frame + 0xa0),(void *)(&param_1), sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy((void *)(gen_frame + 0xa8),(void *)(&param_2), sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -25482,7 +25481,8 @@ undefined8 FUN_1405820c0(ulonglong param_1, longlong param_2)
       uVar10 = 0xffffffffffffff0;
     }
     *(undefined8 *)(((undefined1 *)(gen_frame + 0x10)) + lVar18 + lVar13 + -8) = 0x140582178;
-    puVar17 = ((undefined1 *)(gen_frame + 0x10)) + -(uVar10 & 0xfffffffffffffff0) + lVar18 + lVar13;
+    gen_alloca_p = (unsigned char *)_alloca((uVar10 & 0xfffffffffffffff0) + 0x400) + 0x200;
+    puVar17 = (gen_alloca_p + 0x10) + lVar18 + lVar13;
     psVar26 = (short *)((longlong)((char * *)(gen_frame + 0x40)) + -(uVar10 & 0xfffffffffffffff0) + lVar18 + lVar13);
   }
   uVar11 = 0;
