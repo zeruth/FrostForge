@@ -5074,7 +5074,7 @@ longlong FUN_141be9960(void)
 undefined * FUN_141be9980(void)
 {
   GEN_HIT(93);
-  if (_Init_thread_epoch < REFG(undefined4, 0x143238134)) {
+  if (_Init_thread_epoch < REFG(int, 0x143238134)) {
     _Init_thread_header(&REFG(undefined4, 0x143238134));
     if (REFG(undefined4, 0x143238134) == -1) {
       REFG(undefined8, 0x142d35630) = 0x142d35629;
@@ -8267,7 +8267,7 @@ undefined8 FUN_141bee5e0(void)
   __declspec(align(16)) unsigned char gen_frame[(0x4 + sizeof(undefined1) > 0x20 ? 0x4 + sizeof(undefined1) : 0x20)] = {0};
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0d98)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0d98)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0d98));
     if (REFG(undefined4, 0x1430a0d98) == -1) {
       REFG(undefined4, 0x1430a0ce8) = 0;
@@ -12185,7 +12185,7 @@ undefined4 FUN_141bf7ad0(void)
   GEN_HIT(262);
   __declspec(align(16)) unsigned char gen_frame[(0xc + sizeof(undefined1) > 0x20 ? 0xc + sizeof(undefined1) : 0x20)] = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0d98)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0d98)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0d98));
     if (REFG(undefined4, 0x1430a0d98) == -1) {
       REFG(undefined4, 0x1430a0ce8) = 0;

@@ -150,7 +150,7 @@ longlong FUN_1425947c0(longlong param_1)
 undefined8 * FUN_142594830(void)
 {
   GEN_HIT(4);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447cf770)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447cf770)) {
     _Init_thread_header(&REFG(undefined4, 0x1447cf770));
     if (REFG(undefined4, 0x1447cf770) == -1) {
       atexit(((code *)REFP(0x14260c2f0)));
@@ -21850,8 +21850,7 @@ undefined8 FUN_1425b4970(byte param_1, undefined8 param_2, longlong *param_3)
 /*                                   */
   
   puVar1 = (undefined8 *)*param_3;
-  uVar2 = (*(code *)*puVar1)(puVar1[4],puVar1[3],(uint)param_1,param_2,
-                             CONCAT44(0,*(undefined4 *)(puVar1 + 1)));
+  uVar2 = (*(code *)*puVar1)(puVar1[4],puVar1[3],(uint)param_1,param_2,(unsigned long long)(CONCAT44(0,*(undefined4 *)(puVar1 + 1))));
   return uVar2;
 }
 

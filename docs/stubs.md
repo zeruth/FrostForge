@@ -18,7 +18,7 @@ None of them may contact Blizzard endpoints.
 | `AgentInitialize` | 0x141563eb0 | opens `Logs\agent.log`, creates the AgentCommunicator (HTTP to the local Battle.net Agent) | stub; no communicator, so every Agent notification is a no-op exactly as the reference's own null checks make it |
 | `AgentSend` | 0x141564430 | queues a command for the communicator thread | stub; unreachable without a communicator |
 | `AgentShutdown` (instance part) | 0x141565530 | stop handshake (waits up to 1 s), connection teardown | unreachable without a communicator |
-| `AgentEventCallback` | 0x140226ea0 -> 0x1402271a0 | handles events Agent sends back | stub, never called |
+| `AgentEventCallback` | 0x140226ea0 -> 0x1402271a0 | the callback installed in Agent (DAT_1430d2548); the world connection's AUTH_CHALLENGE handler (FUN_141232760) calls it through FUN_1415679c0 to fill the 16-byte Win64 auth seed | ported (2026-10-20): forwards to the translated FUN_1402271a0. Was a stub, which left the seed unset |
 | `WowDownloadCreate` | 0x141555d80 (ctor 0x141555800) | creates the background CDN downloader | stub; holder left null |
 | `WowDownloadStart` | 0x141557640 | sets the downloader's started flag | **diverged**: null-checked while the downloader is a stub |
 
@@ -41,6 +41,7 @@ None of them may contact Blizzard endpoints.
 |---|---|---|---|
 | startup working directory (stage 1) | 0x1402262e0 (0x140211520) | with no `-datadir`, moves to its executable's directory, the install it ships in | keeps the directory it was started in: FrostLite's exe lives in the build tree. Exposed 2026-10-18 when `OsPathStripFilename` stopped being a stub and the move began to succeed (no Config.wtf, no .build.info, CAS init failed) |
 | the anti-tamper layer's routines game code calls | 0x14021c040 (frame tick), 0x1400b1420 (key stub), 0x14029fc80 (code hash), 0x1402a5bc0 (timing check) | the protector's runtime: a per-frame tick over its context, the key schedule its masked values decode through, a crc32 over code pages, rdtsc timing under its spinlock (tools/aegis.py) | **diverged**: no protector runs, so each does what the reference's does when the protection is satisfied and nothing else: the tick and the timing check do nothing, the key is left as it is (values encoded and decoded through it stay consistent), the hash passes (`Sub14021C040` in StartupClient.cpp, the rest in src/client/Protection.cpp, 2026-10-19) |
+| world server key (`PacketPipeInstallServerKey`, src/net/WowConnection.cpp) | 0x1427b4358, read by 0x141561000 | verifies SMSG_ENTER_ENCRYPTED_MODE's Ed25519ctx signature (context 0x1427b4348) against Blizzard's public key compiled in | **diverged** (D4, 2026-10-20): the 32 bytes are replaced with FrostForge's public key once the reference image is mapped; algorithm, context and signed message unchanged. The private key is the worldserver's `worldserver-ed25519.key.pem` |
 | small-block allocator frame step | 0x1412c51b0 (0x1412c4750, 0x1412c49e0) | once a frame, moves the blocks other threads freed back to their size classes in the heap at DAT_1430a8c70; every 600th frame trims it on the thread pool | left out of the frame (both calls in FUN_140225ab0): Storm's allocations go through the CRT, and the hooks that set the heap up (FUN_1412c46b0) are a stub, so there is no heap to keep |
 
 ## Local, not yet ported

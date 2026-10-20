@@ -77,15 +77,54 @@ void Sub14165C0E0() {
     FROST_UNIMPLEMENTED();
 }
 
-// Initializes the WowConnection layer (Source/.../WowConnection.cpp).
+extern "C" unsigned long long FUN_141502660();
+extern "C" unsigned long long FUN_141502b40(unsigned long long, unsigned long long, unsigned long long,
+    unsigned long long);
+extern "C" unsigned long long FUN_141503670(unsigned long long);
+extern "C" unsigned long long FUN_141503240(unsigned long long);
+
+// Initializes the WowConnection layer (Source/.../WowConnection.cpp): clears the socket table and
+// creates and starts the network engine (DAT_1430d0308) with up to 32 threads. Without the engine
+// every WowConnection connect is a no-op, so the Login click never reached the server.
+// translated: FUN_141502660, FUN_141502b40, FUN_141503670, FUN_141503240
 // ref: FUN_1415002e0
-void Sub1415002E0(int32_t a1, int32_t a2, int32_t a3, int32_t a4, int32_t a5) {
-    (void)a1;
-    (void)a2;
-    (void)a3;
+void Sub1415002E0(uint64_t a1, uint64_t a2, uint32_t threads, uint8_t a4, uint64_t a5) {
     (void)a4;
-    (void)a5;
-    FROST_UNIMPLEMENTED();
+    uint64_t& engine = *reinterpret_cast<uint64_t*>(0x1430d0308ull);
+    if (engine != 0) {
+        return;
+    }
+
+    // the socket table, a blz::chained_hash_node<unsigned __int64> map: free every node
+    uint8_t* buckets = *reinterpret_cast<uint8_t**>(0x142d08298ull);
+    uint64_t bucketCount = *reinterpret_cast<uint64_t*>(0x142d08290ull);
+    if (buckets != nullptr && bucketCount != 0) {
+        for (uint64_t i = 0; i < bucketCount; i++) {
+            void** node = *reinterpret_cast<void***>(buckets + i * 8);
+            while (node != nullptr) {
+                void** next = static_cast<void**>(*node);
+                SMemFree(node, reinterpret_cast<const char*>(0x142dadb08ull), -6, 0);
+                node = next;
+            }
+            *reinterpret_cast<void**>(buckets + i * 8) = nullptr;
+        }
+    }
+    *reinterpret_cast<uint64_t*>(0x142d082a0ull) = 0;
+    FUN_141502660();
+    *reinterpret_cast<uint32_t*>(0x1430d02f8ull) = 0;
+
+    static const char s_file[] = "D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowConnection\\WowConnection.cpp";
+    uint32_t hash = 0x811c9dc5;
+    for (const char* c = s_file; *c != '\0'; c++) {
+        hash = (hash ^ static_cast<uint8_t>(*c)) * 0x1000193;
+    }
+    uint32_t count = threads < 0x21 ? threads : 0x20;
+
+    *reinterpret_cast<uint64_t*>(0x1430d0270ull) = a1;
+    void* memory = SMemAlloc(0xcc8, 3, s_file, hash, 0x7dd, 0);
+    engine = FUN_141502b40(reinterpret_cast<uintptr_t>(memory), count, a2, a5);
+    FUN_141503670(engine);
+    FUN_141503240(engine);
 }
 
 // The WowConnection log callback, installed only when Logs/WowConnection.log opens.

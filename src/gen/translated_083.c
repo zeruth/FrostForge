@@ -6520,7 +6520,7 @@ undefined8 FUN_1413544d0(void)
   undefined7 uVar9 = {0};
   longlong lVar8 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430ab5b0)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430ab5b0)) {
     _Init_thread_header(&REFG(undefined4, 0x1430ab5b0));
     if (REFG(undefined4, 0x1430ab5b0) == -1) {
       lVar8 = 0xc;
@@ -7352,8 +7352,7 @@ bool FUN_141355640(longlong *param_1, undefined8 param_2, undefined8 param_3, un
 /*                                   */
   
   cVar1 = (**(code **)(*param_1 + 0xf0))
-                    (param_1,param_2,param_3,param_4,
-                     CONCAT71(0,(undefined1)param_5));
+                    (param_1,param_2,param_3,param_4,(unsigned long long)(CONCAT71(0,(undefined1)param_5)));
   return cVar1 != '\0';
 }
 

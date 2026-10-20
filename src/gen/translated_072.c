@@ -25144,8 +25144,7 @@ undefined4 FUN_1411a5da0(longlong param_1, undefined8 param_2, uint param_3, lon
       }
       CALLF(undefined8, FUN_1411a61b0)();
       uVar12 = (**(code **)(*plVar8 + 0x20))
-                         (plVar8,param_2,*(undefined4 *)(lVar13 + 0x48),param_4,
-                          CONCAT44(0,4));
+                         (plVar8,param_2,*(undefined4 *)(lVar13 + 0x48),param_4,(unsigned long long)(CONCAT44(0,4)));
       uVar7 = (ulonglong)uVar12;
     }
   }

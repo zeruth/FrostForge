@@ -1,1 +1,5 @@
-{}
+{
+ "141b8e820": "C2198 'char *strchr(const char *,int)': too few arguments for call | pbVar5 = (byte *)strchr((void *)(\"()[]^*/%+-#, \"));",
+ "141b8ed20": "C2198 'char *strchr(const char *,int)': too few arguments for call | pbVar6 = (byte *)strchr((void *)(\"()[]^*/%+-#, \"));",
+ "141b8f530": "C2198 'char *strchr(const char *,int)': too few arguments for call | pcVar2 = (char *)strchr((void *)(\"()[]^*/%+-#, \"));"
+}

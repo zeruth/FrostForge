@@ -2216,7 +2216,7 @@ bool FUN_141b19160(uint param_1, undefined8 *param_2, undefined4 *param_3, undef
       }
     }
   }
-  if ((_Init_thread_epoch < REFG(undefined4, 0x1432173e0)) && (_Init_thread_header(&REFG(undefined4, 0x1432173e0)), REFG(undefined4, 0x1432173e0) == -1)) {
+  if ((_Init_thread_epoch < REFG(int, 0x1432173e0)) && (_Init_thread_header(&REFG(undefined4, 0x1432173e0)), REFG(undefined4, 0x1432173e0) == -1)) {
     CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined4, 0x1432173d0));
     REFG(undefined4, 0x1432173d8) = 1;
     REFG(undefined4, 0x1432173d0) = 1;
@@ -10107,7 +10107,7 @@ LAB_141b30110:
 LAB_141b301b0:
           uVar6 = CALLF(ulonglong, FUN_1405d5790)();
           CALLF(undefined4, FUN_141650150)(((char *)(gen_frame + 0x170)),0x400,(int)uVar6);
-          lVar8 = CALLF(gen_v16 *, FUN_14026c730)(((char *)(gen_frame + 0x170)),param_4);
+          lVar8 = strstr((void *)(((char *)(gen_frame + 0x170))),(void *)(param_4));
           if (lVar8 != 0) {
             if (lVar5 != 0) goto LAB_141b30361;
             goto LAB_141b30369;
@@ -22276,7 +22276,7 @@ undefined4 FUN_141b44030(undefined8 param_1)
   cVar1 = CALLF(undefined1, FUN_1419985c0)(0x20);
   if ((cVar1 != '\0') && (uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1), (int)uVar2 == 5)) {
     ((longlong *)(gen_frame + 0x0))[0] = 0;
-    if ((_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_14309fec0 + 0x0))) && (_Init_thread_header(&(*(undefined4 *)((char *)&gen_g_14309fec0 + 0x0))), (*(undefined4 *)((char *)&gen_g_14309fec0 + 0x0)) == -1)) {
+    if ((_Init_thread_epoch < (*(int *)((char *)&gen_g_14309fec0 + 0x0))) && (_Init_thread_header(&(*(undefined4 *)((char *)&gen_g_14309fec0 + 0x0))), (*(undefined4 *)((char *)&gen_g_14309fec0 + 0x0)) == -1)) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
       (*(undefined4 *)((char *)&gen_g_14309febc + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0));
       _Init_thread_footer(&(*(undefined4 *)((char *)&gen_g_14309fec0 + 0x0)));

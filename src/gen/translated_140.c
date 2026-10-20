@@ -16789,7 +16789,7 @@ undefined8 FUN_141c61530(int param_1, undefined4 *param_2, undefined1 param_3)
   
   lVar3 = CALLF(ulonglong, FUN_14170ff20)();
   if (lVar3 != 0) {
-    if ((_Init_thread_epoch < REFG(undefined4, 0x14323b3e0)) && (_Init_thread_header(&REFG(undefined4, 0x14323b3e0)), REFG(undefined4, 0x14323b3e0) == -1)) {
+    if ((_Init_thread_epoch < REFG(int, 0x14323b3e0)) && (_Init_thread_header(&REFG(undefined4, 0x14323b3e0)), REFG(undefined4, 0x14323b3e0) == -1)) {
       CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined4, 0x14323b3d0));
       REFG(undefined4, 0x14323b3d8) = 5;
       REFG(undefined4, 0x14323b3d0) = 5;
@@ -19007,7 +19007,7 @@ undefined8 FUN_141c64bc0(longlong param_1, int *param_2)
 undefined * FUN_141c64fc0(void)
 {
   GEN_HIT(329);
-  if (_Init_thread_epoch < REFG(undefined4, 0x14323b430)) {
+  if (_Init_thread_epoch < REFG(int, 0x14323b430)) {
     _Init_thread_header(&REFG(undefined4, 0x14323b430));
     if (REFG(undefined4, 0x14323b430) == -1) {
       REFG(undefined8, 0x14323b410) = 8;

@@ -366,6 +366,12 @@ class Typer:
         self.vparams: dict[str, set[int]] = {}   # callees taking 16 bytes, by argument position
         self.pointers: set[str] = set()           # variables declared as pointers
 
+    def is_array16(self, n: Node) -> bool:
+        """A 16-byte array local by name (not a global, a short array, or a computed value)."""
+        while n.kind == "paren":
+            n = n.kids[0]
+        return n.kind == "id" and n.val in self.v16 and n.val not in self.globals and n.val not in self.short
+
     def ty(self, n: Node) -> str:
         if n.ty is not None:
             return n.ty
@@ -403,6 +409,14 @@ class Typer:
             if n.val in "+-" and (is_place16(n.kids[0], self) or is_place16(n.kids[1], self)):
                 # `*pauVar26 + uVar32`: the 16 bytes at a pointer decay to their first byte's
                 # address in Ghidra's C, so this is byte arithmetic, not a 128-bit sum
+                n.ty = "bytes"
+                return n.ty
+            if n.val in "+-" and ((self.is_array16(n.kids[0]) and b != V)
+                                  or (n.val == "+" and self.is_array16(n.kids[1]) and a != V)):
+                # `local_18 + iVar6`: a 16-byte array local with a scalar decays to its address
+                # too, a pointer into the buffer; a 128-bit sum has 16 bytes on both sides. Read
+                # as a vector add, the MAC address loop of the Battle.net device id (FUN_141dfa7c0)
+                # took its buffer's text as the next destination and wrote through it (2026-10-20)
                 n.ty = "bytes"
                 return n.ty
             if n.val in ("==", "!=", "<", ">", "<=", ">=", "&&", "||"):
@@ -543,7 +557,7 @@ class Emitter:
             return f"{self.e(n.kids[0])}[{self.e(n.kids[1])}]"
         if k == "bin" and T.ty(n) == "bytes":
             a, b = n.kids
-            if is_place16(a, T):
+            if is_place16(a, T) or T.is_array16(a):
                 return f"((unsigned char *)&{self.e(a)} {n.val} {self.e(b)})"
             return f"({self.e(a)} {n.val} (unsigned char *)&{self.e(b)})"
         if k == "bin":

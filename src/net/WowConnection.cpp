@@ -1,5 +1,6 @@
 #include "net/WowConnection.hpp"
 #include <cstdint>
+#include <cstring>
 #include <windows.h>
 
 extern "C" {
@@ -13,6 +14,20 @@ unsigned long long FUN_141500de0(unsigned long long, unsigned long long, unsigne
 unsigned long long FUN_1414fed80(unsigned long long);
 unsigned long long FUN_141500b90(unsigned long long);
 unsigned long long FUN_1415611a0(unsigned long long, unsigned long long);
+}
+
+// DIVERGED: the world server proves itself by signing SMSG_ENTER_ENCRYPTED_MODE with Ed25519ctx,
+// and the client verifies against a public key compiled into it (32 bytes at 0x1427b4358, the
+// only reader FUN_141561000). Blizzard's private key is not ours to sign with, so FrostLite
+// carries FrostForge's public key instead (its private key is the worldserver's
+// worldserver-ed25519.key.pem). The algorithm, the context (0x1427b4348) and the signed message
+// are unchanged.
+void PacketPipeInstallServerKey() {
+    static const uint8_t s_frostForgeKey[32] = {
+        0x79, 0xc8, 0x96, 0x2a, 0x6f, 0xb7, 0x06, 0xa0, 0xd4, 0x8d, 0x15, 0x21, 0x53, 0xbc, 0x61, 0xd2,
+        0xcb, 0x36, 0x84, 0xd1, 0x43, 0xc3, 0xb5, 0x3a, 0xcd, 0xf3, 0x4c, 0x8b, 0x61, 0x80, 0x04, 0xcd,
+    };
+    std::memcpy(reinterpret_cast<void*>(0x1427b4358ull), s_frostForgeKey, sizeof(s_frostForgeKey));
 }
 
 // translated: FUN_1414fd750

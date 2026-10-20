@@ -6067,7 +6067,7 @@ undefined4 FUN_141de7d10(undefined8 param_1, undefined8 param_2, undefined8 para
   
   if (REFG(undefined1 *, 0x143261ea8) != (undefined1 *)0x0) {
     uVar1 = (**(code **)(*(longlong *)REFG(undefined1 *, 0x143261ea8) + 0x18))
-                      (REFG(undefined1 *, 0x143261ea8),param_1,param_2,param_3,param_4);
+                      (REFG(undefined1 *, 0x143261ea8),param_1,param_2,param_3,(unsigned long long)(param_4));
     return uVar1;
   }
   return 0;
@@ -6081,7 +6081,7 @@ undefined4 FUN_141de7d50(undefined8 param_1, undefined8 param_2, undefined8 para
   
   if (REFG(undefined1 *, 0x143261ea8) != (undefined1 *)0x0) {
     uVar1 = (**(code **)(*(longlong *)REFG(undefined1 *, 0x143261ea8) + 0x20))
-                      (REFG(undefined1 *, 0x143261ea8),param_1,param_2,param_3,param_4,param_5);
+                      (REFG(undefined1 *, 0x143261ea8),param_1,param_2,param_3,(unsigned long long)(param_4),(unsigned long long)(param_5));
     return uVar1;
   }
   return 0;
@@ -6840,7 +6840,7 @@ undefined4 FUN_141de8f50(undefined4 param_1)
   uVar5 = CALLF(undefined *, FUN_141efdf60)();
   CALLF(undefined8 *, FUN_141efdf10)(uVar5,&(*(undefined8 * *)(gen_frame + 0x170)),((undefined4 *)(gen_frame + 0x160))[0]);
   if ((*(undefined8 * *)(gen_frame + 0x170)) == (undefined8 *)0x0) {
-    if (_Init_thread_epoch < REFG(undefined4, 0x143261ed8)) {
+    if (_Init_thread_epoch < REFG(int, 0x143261ed8)) {
       _Init_thread_header(&REFG(undefined4, 0x143261ed8));
       if (REFG(undefined4, 0x143261ed8) == -1) {
         CALLF(undefined8 *, FUN_141eff250)(&REFG(undefined8, 0x143261ec8),"Process",1,0);
@@ -6883,7 +6883,7 @@ undefined4 FUN_141de8f50(undefined4 param_1)
     if (lVar7 != 0) {
       *(undefined4 *)(lVar7 + 0x1b8) = *(undefined4 *)(REFG(undefined1 *, 0x143261eb8) + 0x68);
     }
-    if (_Init_thread_epoch < REFG(undefined4, 0x143261ed8)) {
+    if (_Init_thread_epoch < REFG(int, 0x143261ed8)) {
       _Init_thread_header(&REFG(undefined4, 0x143261ed8));
       if (REFG(undefined4, 0x143261ed8) == -1) {
         CALLF(undefined8 *, FUN_141eff250)(&REFG(undefined8, 0x143261ec8),"Process",1,0);
@@ -7127,7 +7127,7 @@ undefined8 FUN_141de9560(undefined4 param_1, undefined4 param_2)
 undefined * FUN_141de9ad0(void)
 {
   GEN_HIT(124);
-  if (_Init_thread_epoch < REFG(undefined4, 0x143261ed8)) {
+  if (_Init_thread_epoch < REFG(int, 0x143261ed8)) {
     _Init_thread_header(&REFG(undefined4, 0x143261ed8));
     if (REFG(undefined4, 0x143261ed8) == -1) {
       CALLF(undefined8 *, FUN_141eff250)(&REFG(undefined8, 0x143261ec8),"Process",1,0);
@@ -7584,7 +7584,7 @@ undefined1 FUN_141dea730(undefined4 *param_1, undefined8 *param_2)
   plVar6 = (longlong *)CALLF(undefined8, FUN_141f09bd0)();
   puVar7 = (undefined8 *)(**(code **)(*plVar6 + 0x10))(plVar6,*param_1);
   if (puVar7 == (undefined8 *)0x0) {
-    if ((_Init_thread_epoch < REFG(undefined4, 0x143261ed8)) && (_Init_thread_header(&REFG(undefined4, 0x143261ed8)), REFG(undefined4, 0x143261ed8) == -1)) {
+    if ((_Init_thread_epoch < REFG(int, 0x143261ed8)) && (_Init_thread_header(&REFG(undefined4, 0x143261ed8)), REFG(undefined4, 0x143261ed8) == -1)) {
       CALLF(undefined8 *, FUN_141eff250)(&REFG(undefined8, 0x143261ec8),"Process",1,0);
       atexit(((code *)REFP(0x142601270)));
       _Init_thread_footer(&REFG(undefined4, 0x143261ed8));
@@ -7641,8 +7641,7 @@ undefined8 FUN_141dea9a0(undefined4 *param_1, undefined8 *param_2, undefined8 pa
   GEN_HIT(131);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)*param_2)(*param_1,*(undefined8 *)(param_1 + 2),*(undefined8 *)(param_1 + 4),
-                              *(undefined8 *)(param_1 + 6),param_3);
+  uVar1 = (*(code *)*param_2)(*param_1,*(undefined8 *)(param_1 + 2),*(undefined8 *)(param_1 + 4),*(undefined8 *)(param_1 + 6),(unsigned long long)(param_3));
   return uVar1;
 }
 
@@ -8065,7 +8064,7 @@ undefined1 FUN_141deb550(undefined4 param_1, undefined8 *param_2)
   plVar7 = (longlong *)CALLF(undefined8, FUN_141f09bd0)();
   lVar8 = (**(code **)(*plVar7 + 0x10))(plVar7,((undefined4 *)(gen_frame + 0x1a0))[0]);
   if (lVar8 == 0) {
-    if (_Init_thread_epoch < REFG(undefined4, 0x143261ed8)) {
+    if (_Init_thread_epoch < REFG(int, 0x143261ed8)) {
       _Init_thread_header(&REFG(undefined4, 0x143261ed8));
       if (REFG(undefined4, 0x143261ed8) == -1) {
         CALLF(undefined8 *, FUN_141eff250)(&REFG(undefined8, 0x143261ec8),"Process",1,0);
@@ -19750,7 +19749,7 @@ char * FUN_141df9c50(void)
 undefined4 FUN_141df9c60(void)
 {
   GEN_HIT(385);
-  if (_Init_thread_epoch < REFG(undefined4, 0x143262120)) {
+  if (_Init_thread_epoch < REFG(int, 0x143262120)) {
     _Init_thread_header(&REFG(undefined4, 0x143262120));
     if (REFG(undefined4, 0x143262120) == -1) {
       REFG(undefined4, 0x14326211c) = CALLF(uint, FUN_141df9b70)(&REFG(undefined8, 0x1428536d4));
@@ -20204,7 +20203,7 @@ LAB_141dfa859:
     if (*(int *)(lVar5 + 0x194) != 0) {
       do {
         iVar6 = (int)uVar8;
-        iVar2 = CALLF(undefined4, FUN_14155a060)(gen_v16_q0(gen_v16_add((*(gen_v16 *)(gen_frame + 0x0)), gen_v16_u(iVar6))), 0x10 - (longlong)iVar6, &REFG(undefined8, 0x14285385c), (uint)*(byte *)(lVar5 + 0x198 + uVar9));
+        iVar2 = CALLF(undefined4, FUN_14155a060)(((unsigned char *)&(*(gen_v16 *)(gen_frame + 0x0)) + iVar6), 0x10 - (longlong)iVar6, &REFG(undefined8, 0x14285385c), (uint)*(byte *)(lVar5 + 0x198 + uVar9));
         uVar7 = iVar6 + iVar2;
         uVar8 = (ulonglong)uVar7;
         uVar9 = uVar9 + 1;
@@ -20344,22 +20343,21 @@ undefined1 FUN_141dfac30(undefined4 *param_1)
   puVar5 = &(*(undefined8 *)(gen_frame + 0x78));
   (*(undefined8 *)(gen_frame + 0x78)) = 0;
   iVar2 = (*(*(code *)&RegOpenKeyExW))
-                    (0xffffffff80000001,L"Software\\Blizzard Entertainment\\Battle.net\\Identity",0,
-                     1,puVar5);
+                    (0xffffffff80000001,L"Software\\Blizzard Entertainment\\Battle.net\\Identity",0,1,(unsigned long long)(puVar5));
   if (iVar2 == 0) {
     puVar7 = &(*(ulonglong *)(gen_frame + 0x70));
     puVar5 = (undefined8 *)0x0;
     (*(ulonglong *)(gen_frame + 0x70)) = (*(ulonglong *)(gen_frame + 0x70)) & 0xffffffff00000000;
     (*(undefined8 *)(gen_frame + 0x68)) = (ulonglong)(*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x68)) + 4)) << 0x20;
     iVar2 = (*(*(code *)&RegQueryValueExW))
-                      ((*(undefined8 *)(gen_frame + 0x78)),L"Identity",0,&(*(undefined8 *)(gen_frame + 0x68)),0,puVar7);
+                      ((*(undefined8 *)(gen_frame + 0x78)),L"Identity",0,&(*(undefined8 *)(gen_frame + 0x68)),(unsigned long long)(0),(unsigned long long)(puVar7));
     uVar3 = (undefined4)((ulonglong)puVar7 >> 0x20);
     if ((iVar2 == 0) && ((int)(*(undefined8 *)(gen_frame + 0x68)) == 3)) {
       if ((int)(*(ulonglong *)(gen_frame + 0x70)) == 0x40) {
         puVar7 = &(*(ulonglong *)(gen_frame + 0x70));
         puVar5 = ((undefined8 *)(gen_frame + 0x0));
         iVar2 = (*(*(code *)&RegQueryValueExW))
-                          ((*(undefined8 *)(gen_frame + 0x78)),L"Identity",0,&(*(undefined8 *)(gen_frame + 0x68)),puVar5,puVar7);
+                          ((*(undefined8 *)(gen_frame + 0x78)),L"Identity",0,&(*(undefined8 *)(gen_frame + 0x68)),(unsigned long long)(puVar5),(unsigned long long)(puVar7));
         uVar3 = (undefined4)((ulonglong)puVar7 >> 0x20);
         (*(*(code *)&RegCloseKey))((*(undefined8 *)(gen_frame + 0x78)));
         (*(undefined8 *)(gen_frame + 0x78)) = 0;
@@ -20389,7 +20387,7 @@ undefined1 FUN_141dfac30(undefined4 *param_1)
   }
   (*(ulonglong *)(gen_frame + 0x70)) = 0;
   puVar5 = (undefined8 *)CONCAT44(uVar6,0xf0000040);
-  iVar2 = (*(*(code *)&CryptAcquireContextW))(&(*(ulonglong *)(gen_frame + 0x70)),0,0,1,puVar5);
+  iVar2 = (*(*(code *)&CryptAcquireContextW))(&(*(ulonglong *)(gen_frame + 0x70)),0,0,1,(unsigned long long)(puVar5));
   if (iVar2 != 0) {
     iVar2 = (*(*(code *)&CryptGenRandom))((*(ulonglong *)(gen_frame + 0x70)),0x40,((undefined8 *)(gen_frame + 0x0)));
     (*(*(code *)&CryptReleaseContext))((*(ulonglong *)(gen_frame + 0x70)),0);
@@ -20400,12 +20398,10 @@ LAB_141dfadbf:
   uVar8 = CONCAT44(uVar3,0x20006);
   (*(undefined8 *)(gen_frame + 0x78)) = 0;
   iVar2 = (*(*(code *)&RegCreateKeyExW))
-                    (0xffffffff80000001,L"Software\\Blizzard Entertainment\\Battle.net\\Identity",0,
-                     0,(ulonglong)puVar5 & 0xffffffff00000000,uVar8,0,&(*(undefined8 *)(gen_frame + 0x78)),0);
+                    (0xffffffff80000001,L"Software\\Blizzard Entertainment\\Battle.net\\Identity",0,0,(unsigned long long)((ulonglong)puVar5 & 0xffffffff00000000),(unsigned long long)(uVar8),(unsigned long long)(0),(unsigned long long)(&(*(undefined8 *)(gen_frame + 0x78))),(unsigned long long)(0));
   if (iVar2 == 0) {
     iVar2 = (*(*(code *)&RegSetValueExW))
-                      ((*(undefined8 *)(gen_frame + 0x78)),L"Identity",0,3,((undefined8 *)(gen_frame + 0x0)),
-                       CONCAT44((int)((ulonglong)uVar8 >> 0x20),0x40));
+                      ((*(undefined8 *)(gen_frame + 0x78)),L"Identity",0,3,(unsigned long long)(((undefined8 *)(gen_frame + 0x0))),(unsigned long long)(CONCAT44((int)((ulonglong)uVar8 >> 0x20),0x40)));
     uVar3 = CALLF(undefined4, FUN_141f184f0)(((undefined8 *)(gen_frame + 0x0)),0x40);
     *param_1 = uVar3;
     (*(*(code *)&RegCloseKey))((*(undefined8 *)(gen_frame + 0x78)));
@@ -20807,7 +20803,7 @@ int FUN_141dfb840(undefined8 param_1, undefined8 param_2, uint *param_3, undefin
   
   param_3[2] = 1;
   param_3[3] = 0;
-  iVar1 = (*(*(code *)&RegQueryValueExW))(param_1,param_2,0,param_4,1,param_3);
+  iVar1 = (*(*(code *)&RegQueryValueExW))(param_1,param_2,0,param_4,(unsigned long long)(1),(unsigned long long)(param_3));
   if (iVar1 == 0xea) {
     uVar5 = 0x811c9dc5;
     pcVar4 = 
@@ -20821,7 +20817,7 @@ int FUN_141dfb840(undefined8 param_1, undefined8 param_2, uint *param_3, undefin
     } while (*pcVar4 != 0);
     uVar3 = CALLF(longlong, FUN_1402545c0)((ulonglong)*param_3,0xb,"D:\\BuildServer\\A\\work\\package_cache\\bgs-sdk\\6.2.0\\src\\low\\base\\platform_win32\\registry.cpp",uVar5,(unsigned long long)(0x3c));
     *(undefined8 *)(param_3 + 2) = uVar3;
-    iVar1 = (*(*(code *)&RegQueryValueExW))(param_1,param_2,0,param_4,uVar3,param_3);
+    iVar1 = (*(*(code *)&RegQueryValueExW))(param_1,param_2,0,param_4,(unsigned long long)(uVar3),(unsigned long long)(param_3));
   }
   else {
     param_3[2] = 0;
@@ -20874,7 +20870,7 @@ undefined4 FUN_141dfb910(undefined8 *param_1, undefined8 *param_2, longlong *par
   }
   else {
     iVar4 = (*(*(code *)&RegOpenKeyExW))
-                      (0xffffffff80000001,(*(undefined2 * *)(gen_frame + 0x70)),0,0x20019,((undefined8 *)(gen_frame + 0x130)));
+                      (0xffffffff80000001,(*(undefined2 * *)(gen_frame + 0x70)),0,0x20019,(unsigned long long)(((undefined8 *)(gen_frame + 0x130))));
     if (iVar4 == 0) {
       (*(longlong *)(gen_frame + 0x10)) = 0;
       ((uint *)(gen_frame + 0x8))[0] = 0;

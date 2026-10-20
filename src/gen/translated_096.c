@@ -28,7 +28,7 @@ undefined1 FUN_14155d890(longlong param_1, undefined8 param_2, undefined8 param_
       lVar2 = (ulonglong)*pbVar5 + param_1;
     }
     cVar1 = (**(code **)(*ppuVar4 + 0xa0))
-                      (lVar2,0,param_3,2,param_5,CONCAT71(0,param_6));
+                      (lVar2,0,param_3,2,(unsigned long long)(param_5),(unsigned long long)(CONCAT71(0,param_6)));
     if (cVar1 == '\0') break;
     uVar3 = uVar3 + 1;
     pbVar5 = pbVar5 + 1;
@@ -61,7 +61,7 @@ undefined1 FUN_14155d950(longlong param_1, undefined8 param_2, undefined8 param_
     if (param_1 != 0) {
       lVar2 = (ulonglong)*pbVar5 + param_1;
     }
-    cVar1 = (**(code **)(*ppuVar4 + 0xf0))(lVar2,0,param_3,2,param_5);
+    cVar1 = (**(code **)(*ppuVar4 + 0xf0))(lVar2,0,param_3,2,(unsigned long long)(param_5));
     if (cVar1 == '\0') break;
     uVar3 = uVar3 + 1;
     pbVar5 = pbVar5 + 1;
@@ -198,7 +198,7 @@ undefined1 FUN_14155db80(longlong param_1, undefined8 param_2, undefined8 param_
       lVar2 = (ulonglong)*pbVar5 + param_1;
     }
     cVar1 = (**(code **)(*ppuVar4 + 0xa0))
-                      (lVar2,0,param_3,2,param_5,CONCAT71(0,param_6));
+                      (lVar2,0,param_3,2,(unsigned long long)(param_5),(unsigned long long)(CONCAT71(0,param_6)));
     if (cVar1 == '\0') break;
     uVar3 = uVar3 + 1;
     pbVar5 = pbVar5 + 1;
@@ -231,7 +231,7 @@ undefined1 FUN_14155dc40(longlong param_1, undefined8 param_2, undefined8 param_
     if (param_1 != 0) {
       lVar2 = (ulonglong)*pbVar5 + param_1;
     }
-    cVar1 = (**(code **)(*ppuVar4 + 0xf0))(lVar2,0,param_3,2,param_5);
+    cVar1 = (**(code **)(*ppuVar4 + 0xf0))(lVar2,0,param_3,2,(unsigned long long)(param_5));
     if (cVar1 == '\0') break;
     uVar3 = uVar3 + 1;
     pbVar5 = pbVar5 + 1;
@@ -1712,7 +1712,7 @@ undefined1 FUN_14155f080(uint param_1)
   longlong lVar1 = {0};
   uint uVar2 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430d23d8)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430d23d8)) {
     _Init_thread_header(&REFG(undefined4, 0x1430d23d8));
     if (REFG(undefined4, 0x1430d23d8) == -1) {
       lVar1 = CALLF(undefined *, FUN_140265ca0)();
@@ -18266,7 +18266,7 @@ undefined1 FUN_141576700(longlong param_1, byte *param_2, undefined4 *param_3)
   undefined1 uVar26 = {0};
   ulonglong uVar25 = {0};
   
-  if ((_Init_thread_epoch < REFG(undefined4, 0x1430d5fb0)) && (_Init_thread_header(&REFG(undefined4, 0x1430d5fb0)), REFG(undefined4, 0x1430d5fb0) == -1)) {
+  if ((_Init_thread_epoch < REFG(int, 0x1430d5fb0)) && (_Init_thread_header(&REFG(undefined4, 0x1430d5fb0)), REFG(undefined4, 0x1430d5fb0) == -1)) {
     CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined4, 0x1430d5fa0));
     REFG(undefined4, 0x1430d5fa8) = 1;
     REFG(undefined4, 0x1430d5fa0) = 1;

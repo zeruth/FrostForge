@@ -20461,7 +20461,7 @@ undefined8 FUN_1410e7d10(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0e14)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0e14)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0e14));
     if (REFG(undefined4, 0x1430a0e14) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;

@@ -4284,7 +4284,7 @@ LAB_141776b02:
   (*(undefined4 *)(gen_frame + 0x13c)) = 0;
   (*(undefined4 *)(gen_frame + 0x170)) = 0x3f800000;
   (**(code **)(*param_1 + 0x100))
-            (param_1,&(*(int *)(gen_frame + 0x20)),&(*(uint *)(gen_frame + 0x94)),&(*(uint *)(gen_frame + 0x108)),(ulonglong)0 << 0x20);
+            (param_1,&(*(int *)(gen_frame + 0x20)),&(*(uint *)(gen_frame + 0x94)),&(*(uint *)(gen_frame + 0x108)),(unsigned long long)((ulonglong)0 << 0x20));
   if ((param_1[4] != 0) && (lVar4 = *(longlong *)(param_1[4] + 0x28), lVar4 != 0)) {
     cVar5 = CALLF(byte, FUN_141356340)(lVar4);
     if (cVar5 == '\0') {

@@ -639,20 +639,15 @@ undefined4 FUN_142069960(longlong param_1, uint param_2)
      ((((iVar1 = CALLF(UINT, FUN_14236a1da)(lVar4,((undefined1 *)(gen_frame + 0x0)),0xff), iVar1 != 0 &&
         (*(longlong *)(param_1 + 0x170) == 0)) &&
        ((((iVar1 = (*(*(code *)&CompareStringA))
-                             (0x409,1,((undefined1 *)(gen_frame + 0x0)),0xffffffff,"TINTLGNT.IME",
-                              CONCAT44(0,0xffffffff)), iVar1 == 2 ||
+                             (0x409,1,((undefined1 *)(gen_frame + 0x0)),0xffffffff,(unsigned long long)("TINTLGNT.IME"),(unsigned long long)(CONCAT44(0,0xffffffff))), iVar1 == 2 ||
           (iVar1 = (*(*(code *)&CompareStringA))
-                             (0x409,1,((undefined1 *)(gen_frame + 0x0)),0xffffffff,"CINTLGNT.IME",
-                              CONCAT44(0,0xffffffff)), iVar1 == 2)) ||
+                             (0x409,1,((undefined1 *)(gen_frame + 0x0)),0xffffffff,(unsigned long long)("CINTLGNT.IME"),(unsigned long long)(CONCAT44(0,0xffffffff))), iVar1 == 2)) ||
          (iVar1 = (*(*(code *)&CompareStringA))
-                            (0x409,1,((undefined1 *)(gen_frame + 0x0)),0xffffffff,"MSTCIPHA.IME",
-                             CONCAT44(0,0xffffffff)), iVar1 == 2)) ||
+                            (0x409,1,((undefined1 *)(gen_frame + 0x0)),0xffffffff,(unsigned long long)("MSTCIPHA.IME"),(unsigned long long)(CONCAT44(0,0xffffffff))), iVar1 == 2)) ||
         ((iVar1 = (*(*(code *)&CompareStringA))
-                            (0x409,1,((undefined1 *)(gen_frame + 0x0)),0xffffffff,"PINTLGNT.IME",
-                             CONCAT44(0,0xffffffff)), iVar1 == 2 ||
+                            (0x409,1,((undefined1 *)(gen_frame + 0x0)),0xffffffff,(unsigned long long)("PINTLGNT.IME"),(unsigned long long)(CONCAT44(0,0xffffffff))), iVar1 == 2 ||
          (iVar1 = (*(*(code *)&CompareStringA))
-                            (0x409,1,((undefined1 *)(gen_frame + 0x0)),0xffffffff,"MSSCIPYA.IME",
-                             CONCAT44(0,0xffffffff)), iVar1 == 2)))))) &&
+                            (0x409,1,((undefined1 *)(gen_frame + 0x0)),0xffffffff,(unsigned long long)("MSSCIPYA.IME"),(unsigned long long)(CONCAT44(0,0xffffffff))), iVar1 == 2)))))) &&
       (uVar2 = CALLF(DWORD, FUN_14236a186)(((undefined1 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x130))), uVar2 != 0)))) {
     lVar4 = CALLF(longlong, FUN_1420309b0)((ulonglong)uVar2);
     if (((lVar4 != 0) && (iVar1 = CALLF(BOOL, FUN_14236a18c)(((undefined1 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x130))[0],uVar2,lVar4), iVar1 != 0))
@@ -715,14 +710,14 @@ undefined8 FUN_142069cc0(longlong param_1, undefined8 param_2)
     return 0;
   }
   if (*(code **)(param_1 + 0x170) != (code *)0x0) {
-    uVar2 = (**(code **)(param_1 + 0x170))(lVar4,0,0,((undefined4 *)(gen_frame + 0x68)),((undefined4 *)(gen_frame + 0x60)),((undefined4 *)(gen_frame + 0x50)));
+    uVar2 = (**(code **)(param_1 + 0x170))(lVar4,0,0,((undefined4 *)(gen_frame + 0x68)),(unsigned long long)(((undefined4 *)(gen_frame + 0x60))),(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
     uVar1 = 0;
     if (uVar2 != 0) {
       if (0x10 < uVar2) {
         uVar2 = 0x10;
       }
       uVar5 = (**(code **)(param_1 + 0x170))
-                        (lVar4,uVar2,((undefined1 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x68)),((undefined4 *)(gen_frame + 0x60)),((undefined4 *)(gen_frame + 0x50)));
+                        (lVar4,uVar2,((undefined1 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x68)),(unsigned long long)(((undefined4 *)(gen_frame + 0x60))),(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
       uVar1 = (uint)uVar5;
     }
     CALLF(ulonglong, FUN_142032270)(param_1 + 0xe4,((undefined1 *)(gen_frame + 0x0)),(ulonglong)uVar1);
@@ -941,7 +936,7 @@ undefined8 FUN_14206a2e0(longlong param_1, undefined8 param_2)
     if (-1 < iVar3) {
       *(undefined4 *)(param_1 + 0x98) = 1;
       uVar4 = (*(*(code *)&CoCreateInstance))
-                        (&REFG(undefined8, 0x142954bb0),0,1,&REFG(undefined8, 0x142954be0),(longlong *)(param_1 + 0xa0));
+                        (&REFG(undefined8, 0x142954bb0),0,1,&REFG(undefined8, 0x142954be0),(unsigned long long)((longlong *)(param_1 + 0xa0)));
       if (uVar4 != 0) {
         *(undefined4 *)(param_1 + 0xb0) = 0;
         return (undefined8)CALLF(undefined4, FUN_1420323c0)("CoCreateInstance() failed, HRESULT is %08X",(ulonglong)uVar4);
@@ -990,7 +985,7 @@ undefined8 FUN_14206a2e0(longlong param_1, undefined8 param_2)
         puVar1 = (undefined8 *)(param_1 + 0x1a8);
         (*(longlong * *)(gen_frame + 0x0)) = (longlong *)((ulonglong)(*(longlong * *)(gen_frame + 0x0)) & 0xffffffff00000000);
         (*(longlong * *)(gen_frame + 0x10)) = (longlong *)0x0;
-        iVar3 = (*(*(code *)&CoCreateInstance))(&REFG(undefined8, 0x142954bb0),0,1,&REFG(undefined8, 0x142954c50),puVar1);
+        iVar3 = (*(*(code *)&CoCreateInstance))(&REFG(undefined8, 0x142954bb0),0,1,&REFG(undefined8, 0x142954c50),(unsigned long long)(puVar1));
         uVar8 = uVar7;
         if ((-1 < iVar3) &&
            (iVar3 = (**(code **)(*(longlong *)*puVar1 + 0x70))((longlong *)*puVar1,&(*(longlong * *)(gen_frame + 0x0)),4),
@@ -1450,8 +1445,7 @@ undefined8 FUN_14206af70(void)
     iVar4 = 0;
     do {
       iVar2 = (*(*(code *)&ToUnicode))
-                        (0x20,iVar1,((undefined1 *)(gen_frame + 0x20)),((undefined1 *)(gen_frame + 0x0)),CONCAT44(0,0x10),
-                         (ulonglong)0 << 0x20);
+                        (0x20,iVar1,((undefined1 *)(gen_frame + 0x20)),((undefined1 *)(gen_frame + 0x0)),(unsigned long long)(CONCAT44(0,0x10)),(unsigned long long)((ulonglong)0 << 0x20));
       uVar3 = CONCAT44(0,iVar2);
       if (0 < iVar2) {
         return uVar3;
@@ -2033,14 +2027,13 @@ int FUN_14206bbe0(void)
         ((undefined4 *)(gen_frame + 0xb0))[0] = 0x28;
         fVar4 = (float)((int *)(gen_frame + 0xc0))[0] * REFG(float, 0x14261a97c);
         iVar2 = (*(*(code *)&RegOpenKeyExW))
-                          (0xffffffff80000001,L"Control Panel\\Mouse",0,0x20019,&(*(undefined8 *)(gen_frame + 0xc8)));
+                          (0xffffffff80000001,L"Control Panel\\Mouse",0,0x20019,(unsigned long long)(&(*(undefined8 *)(gen_frame + 0xc8))));
         if (iVar2 == 0) {
           iVar2 = (*(*(code *)&RegQueryValueExW))
-                            ((*(undefined8 *)(gen_frame + 0xc8)),L"SmoothMouseXCurve",0,((undefined4 *)(gen_frame + 0xb8)),((undefined1 *)(gen_frame + 0x68)),((undefined4 *)(gen_frame + 0xb0)));
+                            ((*(undefined8 *)(gen_frame + 0xc8)),L"SmoothMouseXCurve",0,((undefined4 *)(gen_frame + 0xb8)),(unsigned long long)(((undefined1 *)(gen_frame + 0x68))),(unsigned long long)(((undefined4 *)(gen_frame + 0xb0))));
           if ((((iVar2 == 0) && (iVar2 = CALLF(undefined4, FUN_14206b350)(((undefined1 *)(gen_frame + 0x68)),&(*(float *)(gen_frame + 0x10))), iVar2 != 0)) &&
               (iVar2 = (*(*(code *)&RegQueryValueExW))
-                                 ((*(undefined8 *)(gen_frame + 0xc8)),L"SmoothMouseYCurve",0,((undefined4 *)(gen_frame + 0xb8)),((undefined1 *)(gen_frame + 0x68)),((undefined4 *)(gen_frame + 0xb0))
-                                 ), iVar2 == 0)) &&
+                                 ((*(undefined8 *)(gen_frame + 0xc8)),L"SmoothMouseYCurve",0,((undefined4 *)(gen_frame + 0xb8)),(unsigned long long)(((undefined1 *)(gen_frame + 0x68))),(unsigned long long)(((undefined4 *)(gen_frame + 0xb0)))), iVar2 == 0)) &&
              (iVar2 = CALLF(undefined4, FUN_14206b350)(((undefined1 *)(gen_frame + 0x68)),&(*(float *)(gen_frame + 0x28))), iVar2 != 0)) {
             (*(float *)(gen_frame + 0x64)) = 0.0;
             if ((*(float *)(gen_frame + 0x10)) <= 0.0) {
@@ -2198,13 +2191,11 @@ undefined4 FUN_14206bfa0(undefined8 param_1, longlong param_2, uint *param_3, un
   *puVar4 = 0x28;
   uVar5 = (*(*(code *)&CreateCompatibleBitmap))(*(undefined8 *)(lVar1 + 0x18),1,1);
   (*(*(code *)&GetDIBits))
-            (*(undefined8 *)(lVar1 + 0x18),uVar5,0,0,0,puVar4,
-             (ulonglong)0 << 0x20);
+            (*(undefined8 *)(lVar1 + 0x18),uVar5,0,0,(unsigned long long)(0),(unsigned long long)(puVar4),(unsigned long long)((ulonglong)0 << 0x20));
   uVar8 = 0;
   puVar9 = puVar4;
   (*(*(code *)&GetDIBits))
-            (*(undefined8 *)(lVar1 + 0x18),uVar5,0,0,0,puVar4,
-             (ulonglong)0 << 0x20);
+            (*(undefined8 *)(lVar1 + 0x18),uVar5,0,0,(unsigned long long)(0),(unsigned long long)(puVar4),(unsigned long long)((ulonglong)0 << 0x20));
   (*(*(code *)&DeleteObject))(uVar5);
   *param_3 = 0;
   if (puVar4[4] == 3) {
@@ -2233,8 +2224,7 @@ LAB_14206c0e8:
   uVar5 = (*(*(code *)&CreateCompatibleDC))(*(undefined8 *)(lVar1 + 0x18));
   *(undefined8 *)(lVar1 + 0x20) = uVar5;
   uVar5 = (*(*(code *)&CreateDIBSection))
-                    (*(undefined8 *)(lVar1 + 0x18),puVar4,0,param_4,0,
-                     (ulonglong)puVar9 & 0xffffffff00000000);
+                    (*(undefined8 *)(lVar1 + 0x18),puVar4,0,param_4,(unsigned long long)(0),(unsigned long long)((ulonglong)puVar9 & 0xffffffff00000000));
   *(undefined8 *)(lVar1 + 0x30) = uVar5;
   CALLF(undefined8, FUN_142030980)(puVar4);
   if (*(longlong *)(lVar1 + 0x30) == 0) {
@@ -2283,11 +2273,7 @@ undefined4 FUN_14206c230(undefined8 param_1, longlong param_2, longlong param_3,
     uVar3 = (ulonglong)param_4;
     do {
       (*(*(code *)&BitBlt))
-                (*(undefined8 *)(lVar1 + 0x18),puVar2[-3],puVar2[-2],puVar2[-1],
-                 CONCAT44(0,*puVar2),*(undefined8 *)(lVar1 + 0x20),
-                 CONCAT44(0,puVar2[-3]),
-                 CONCAT44(0,puVar2[-2]),
-                 CONCAT44(0,0xcc0020));
+                (*(undefined8 *)(lVar1 + 0x18),puVar2[-3],puVar2[-2],puVar2[-1],(unsigned long long)(CONCAT44(0,*puVar2)),(unsigned long long)(*(undefined8 *)(lVar1 + 0x20)),(unsigned long long)(CONCAT44(0,puVar2[-3])),(unsigned long long)(CONCAT44(0,puVar2[-2])),(unsigned long long)(CONCAT44(0,0xcc0020)));
       puVar2 = puVar2 + 4;
       uVar3 = uVar3 - 1;
     } while (uVar3 != 0);

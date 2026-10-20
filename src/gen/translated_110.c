@@ -18103,7 +18103,7 @@ undefined8 FUN_1417a7cb0(longlong *param_1, longlong *param_2)
       (*(float *)(gen_frame + 0x5c)) = (*(float *)(gen_frame + 0x8));
       (*(undefined8 *)(gen_frame + 0x48)) = (*(undefined8 *)(gen_frame + 0x0));
       (*(undefined8 *)(gen_frame + 0x54)) = (*(undefined8 *)(gen_frame + 0x0));
-      if ((_Init_thread_epoch < REFG(undefined4, 0x143135954)) && (_Init_thread_header(&REFG(undefined4, 0x143135954)), REFG(undefined4, 0x143135954) == -1))
+      if ((_Init_thread_epoch < REFG(int, 0x143135954)) && (_Init_thread_header(&REFG(undefined4, 0x143135954)), REFG(undefined4, 0x143135954) == -1))
       {
         atexit(((code *)REFP(0x1425f17c0)));
         _Init_thread_footer(&REFG(undefined4, 0x143135954));

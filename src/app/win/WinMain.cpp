@@ -1,5 +1,6 @@
 #include "client/Main.hpp"
 #include "gen/RefImage.hpp"
+#include "net/WowConnection.hpp"
 #include <cstdlib>
 #include <malloc.h>
 #include <windows.h>
@@ -21,5 +22,6 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 
     // the reference's address space for the translated functions, before anything runs
     RefImageInitialize("WowClassic-clean.exe");
+    PacketPipeInstallServerKey();
     ClientMain(argc, argv);
 }

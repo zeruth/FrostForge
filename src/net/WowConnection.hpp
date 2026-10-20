@@ -38,4 +38,9 @@ void WowConnectionRelease(WowConnection* connection);
 // The client/server packet pipe (WoW/Source/WowServices/PacketPipe_CliSvr.cpp, 0x2208 bytes).
 PacketPipe* PacketPipeConstruct(void* memory, bool a2);
 
+// DIVERGED (docs/stubs.md): puts FrostForge's Ed25519 public key where the reference keeps the
+// one SMSG_ENTER_ENCRYPTED_MODE is verified against (0x1427b4358, read by FUN_141561000). Called
+// once the reference image is mapped.
+void PacketPipeInstallServerKey();
+
 #endif

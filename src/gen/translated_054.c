@@ -3631,7 +3631,7 @@ int FUN_140990cc0(undefined8 param_1)
   ((float *)(gen_frame + 0xa8))[0] = 0.0;
   ((float *)(gen_frame + 0x0))[0] = 0.0;
   (**(code **)(*(longlong *)((*(longlong *)(gen_frame + 0x90)) + 0x18) + 0x88))
-            ((longlong *)((*(longlong *)(gen_frame + 0x90)) + 0x18),((float *)(gen_frame + 0x98)),((float *)(gen_frame + 0xa0)),((float *)(gen_frame + 0xa8)),((float *)(gen_frame + 0x0)));
+            ((longlong *)((*(longlong *)(gen_frame + 0x90)) + 0x18),((float *)(gen_frame + 0x98)),((float *)(gen_frame + 0xa0)),((float *)(gen_frame + 0xa8)),(unsigned long long)(((float *)(gen_frame + 0x0))));
   cVar2 = CALLF(undefined1, FUN_14062cc40)(param_1,(*(longlong *)(gen_frame + 0x90)),"GetClampRectInsets");
   if (cVar2 != '\0') {
                     /* WARNING: Subroutine does not return */
@@ -18498,7 +18498,7 @@ longlong * FUN_140a508c0(longlong *param_1, undefined8 param_2, undefined4 param
   }
   else {
     if ((int)uVar1 != 5) goto LAB_140a50966;
-    if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_142e99c2c + 0x0))) {
+    if (_Init_thread_epoch < (*(int *)((char *)&gen_g_142e99c2c + 0x0))) {
       _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_142e99c2c + 0x0)));
       if ((*(undefined4 *)((char *)&gen_g_142e99c2c + 0x0)) == -1) {
         (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -18546,7 +18546,7 @@ float * FUN_140a509c0(float *param_1, undefined8 param_2, undefined4 param_3)
 int FUN_140a50bd0(void)
 {
   GEN_HIT(276);
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_14309fee0 + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_14309fee0 + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_14309fee0 + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_14309fee0 + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -18561,7 +18561,7 @@ int FUN_140a50bd0(void)
 int FUN_140a50c40(void)
 {
   GEN_HIT(277);
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_14309fee8 + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_14309fee8 + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_14309fee8 + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_14309fee8 + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -18576,7 +18576,7 @@ int FUN_140a50c40(void)
 int FUN_140a50cb0(void)
 {
   GEN_HIT(278);
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_142e9a2b4 + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_142e9a2b4 + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_142e9a2b4 + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_142e9a2b4 + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -18591,7 +18591,7 @@ int FUN_140a50cb0(void)
 int FUN_140a50d20(void)
 {
   GEN_HIT(279);
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_142e97a98 + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_142e97a98 + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_142e97a98 + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_142e97a98 + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -20025,7 +20025,7 @@ undefined8 FUN_140a53ba0(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_14309fef8 + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_14309fef8 + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_14309fef8 + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_14309fef8 + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -20044,7 +20044,7 @@ undefined8 FUN_140a53c60(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_14309ff00 + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_14309ff00 + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_14309ff00 + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_14309ff00 + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -20063,7 +20063,7 @@ undefined8 FUN_140a53d20(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_14309ff08 + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_14309ff08 + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_14309ff08 + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_14309ff08 + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;

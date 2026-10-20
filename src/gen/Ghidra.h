@@ -609,16 +609,20 @@ static unsigned long long gen_ud2(void) { __ud2(); }
      : (long long)_InterlockedCompareExchange8((volatile char *)&(lv), (char)(long long)(v), (char)(long long)(cmp)))
 
 /* Ghidra's `cpuid` pseudo-functions: the leaf's registers as Ghidra's x86 spec reads them back,
-   EAX, EBX, EDX, ECX (per thread, as the instruction's registers are) */
+   EAX, EBX, EDX, ECX (per thread, as the instruction's registers are). Each call gets its own
+   slot of a small ring: code holds two leaves' results at once (the brand string reads leaf
+   0x80000003's after asking for 0x80000004, FUN_141dfa970), which one shared buffer garbled */
 static __inline unsigned int *gen_cpuid(int leaf) {
-    static __declspec(thread) int regs[4];
+    static __declspec(thread) int regs[8][4];
+    static __declspec(thread) unsigned int next;
+    int *slot = regs[next++ & 7];
     int r[4];
     __cpuidex(r, leaf, 0);
-    regs[0] = r[0];
-    regs[1] = r[1];
-    regs[2] = r[3];
-    regs[3] = r[2];
-    return (unsigned int *)regs;
+    slot[0] = r[0];
+    slot[1] = r[1];
+    slot[2] = r[3];
+    slot[3] = r[2];
+    return (unsigned int *)slot;
 }
 /* Ghidra's `xinuse(0)`: xgetbv with ecx = 1, the state components in use */
 #define xinuse(x) _xgetbv(1)

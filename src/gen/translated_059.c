@@ -802,7 +802,7 @@ undefined8 FUN_140c7d4d0(undefined8 param_1, uint param_2)
 undefined * FUN_140c7d510(void)
 {
   GEN_HIT(14);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0b08)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0b08)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0b08));
     if (REFG(undefined4, 0x1430a0b08) == -1) {
       CALLF(undefined8 *, FUN_140c5a850)(&REFG(undefined8, 0x14309ff50));

@@ -7655,7 +7655,7 @@ undefined8 FUN_140b49410(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_142e97b64 + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_142e97b64 + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_142e97b64 + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_142e97b64 + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;

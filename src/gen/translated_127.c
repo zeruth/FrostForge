@@ -3590,12 +3590,12 @@ undefined1 FUN_141a20ea0(longlong param_1)
     } while (lVar7 != 0);
     *pcVar5 = '\0';
 LAB_141a20f30:
-    pcVar3 = (char *)CALLF(char *, FUN_14026c578)(((char *)(gen_frame + 0x0)),0x2e);
+    pcVar3 = (char *)strchr((void *)(((char *)(gen_frame + 0x0))),0x2e);
     while( true ) {
       if ((pcVar3 == (char *)0x0) || (*pcVar3 == '\0')) goto LAB_141a20f7a;
       uVar2 = _stricmp(pcVar3,".bz");
       if ((int)uVar2 == 0) break;
-      pcVar3 = (char *)CALLF(char *, FUN_14026c578)(pcVar3 + 1,0x2e);
+      pcVar3 = (char *)strchr((void *)(pcVar3 + 1),0x2e);
     }
     *pcVar3 = '\0';
 LAB_141a20f7a:
@@ -3620,12 +3620,12 @@ LAB_141a20f7a:
     } while (lVar6 != 0);
     *pcVar3 = '\0';
 LAB_141a21030:
-    pcVar4 = (char *)CALLF(char *, FUN_14026c578)(((char *)(gen_frame + 0x0)),0x2e);
+    pcVar4 = (char *)strchr((void *)(((char *)(gen_frame + 0x0))),0x2e);
     while( true ) {
       if ((pcVar4 == (char *)0x0) || (*pcVar4 == '\0')) goto LAB_141a2107a;
       uVar2 = _stricmp(pcVar4,".bz");
       if ((int)uVar2 == 0) break;
-      pcVar4 = (char *)CALLF(char *, FUN_14026c578)(pcVar4 + 1,0x2e);
+      pcVar4 = (char *)strchr((void *)(pcVar4 + 1),0x2e);
     }
     *pcVar4 = '\0';
 LAB_141a2107a:
@@ -22344,7 +22344,7 @@ undefined4 FUN_141a3d380(undefined8 param_1)
     return 0;
   }
   (*(longlong *)(gen_frame + 0x10)) = 0;
-  if ((_Init_thread_epoch < REFG(undefined4, 0x1430a0db8)) && (_Init_thread_header(&REFG(undefined4, 0x1430a0db8)), REFG(undefined4, 0x1430a0db8) == -1)) {
+  if ((_Init_thread_epoch < REFG(int, 0x1430a0db8)) && (_Init_thread_header(&REFG(undefined4, 0x1430a0db8)), REFG(undefined4, 0x1430a0db8) == -1)) {
     (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
     REFG(undefined4, 0x1430a0db4) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0));
     _Init_thread_footer(&REFG(undefined4, 0x1430a0db8));

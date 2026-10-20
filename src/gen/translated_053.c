@@ -7686,7 +7686,7 @@ undefined8 FUN_1408a6620(undefined8 param_1)
 undefined * FUN_1408a7600(void)
 {
   GEN_HIT(121);
-  if (_Init_thread_epoch < REFG(undefined4, 0x14309feb8)) {
+  if (_Init_thread_epoch < REFG(int, 0x14309feb8)) {
     _Init_thread_header(&REFG(undefined4, 0x14309feb8));
     if (REFG(undefined4, 0x14309feb8) == -1) {
       REFG(undefined8, 0x14309fe40) = 8;
@@ -11083,7 +11083,7 @@ undefined8 FUN_1408c47e0(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_14309fec8 + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_14309fec8 + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_14309fec8 + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_14309fec8 + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -11102,7 +11102,7 @@ undefined8 FUN_1408c48a0(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x14309fed0)) {
+  if (_Init_thread_epoch < REFG(int, 0x14309fed0)) {
     _Init_thread_header(&REFG(undefined4, 0x14309fed0));
     if (REFG(undefined4, 0x14309fed0) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -11121,7 +11121,7 @@ undefined8 FUN_1408c4960(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_142e97ae0 + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_142e97ae0 + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_142e97ae0 + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_142e97ae0 + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -11140,7 +11140,7 @@ undefined8 FUN_1408c4a20(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_14309fec0 + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_14309fec0 + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_14309fec0 + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_14309fec0 + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -11159,7 +11159,7 @@ undefined8 FUN_1408c4ae0(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_142e97b6c + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_142e97b6c + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_142e97b6c + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_142e97b6c + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -11178,7 +11178,7 @@ undefined8 FUN_1408c4ba0(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x14309fed8)) {
+  if (_Init_thread_epoch < REFG(int, 0x14309fed8)) {
     _Init_thread_header(&REFG(undefined4, 0x14309fed8));
     if (REFG(undefined4, 0x14309fed8) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -11197,7 +11197,7 @@ undefined8 FUN_1408c4c60(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x14309fef0)) {
+  if (_Init_thread_epoch < REFG(int, 0x14309fef0)) {
     _Init_thread_header(&REFG(undefined4, 0x14309fef0));
     if (REFG(undefined4, 0x14309fef0) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;

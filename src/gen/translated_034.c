@@ -3507,8 +3507,7 @@ undefined8 FUN_1405a4a40(longlong *param_1, int param_2, undefined4 param_3, lon
       lVar3 = (longlong)param_2;
     }
     (**(code **)(*plVar2 + 0x20))
-              (plVar2,lVar3,lVar4,param_3,CONCAT44(0,uVar1),
-               CONCAT71(0,1));
+              (plVar2,lVar3,lVar4,param_3,(unsigned long long)(CONCAT44(0,uVar1)),(unsigned long long)(CONCAT71(0,1)));
   }
   return 0;
 }

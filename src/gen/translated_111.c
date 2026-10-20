@@ -1812,7 +1812,7 @@ LAB_1417b4d26:
   if ((((cVar2 == '\0') &&
        (cVar2 = CALLF(undefined1, FUN_141b081b0)(1,*(undefined4 *)(param_1 + 0xd6a4)), cVar2 == '\0')) ||
       ((int)uVar6 < 3)) && (*(int *)(param_1 + 0x94) < 1)) {
-    if ((_Init_thread_epoch < REFG(undefined4, 0x143134da0)) && (_Init_thread_header(&REFG(undefined4, 0x143134da0)), REFG(undefined4, 0x143134da0) == -1)) {
+    if ((_Init_thread_epoch < REFG(int, 0x143134da0)) && (_Init_thread_header(&REFG(undefined4, 0x143134da0)), REFG(undefined4, 0x143134da0) == -1)) {
       REFG(undefined8, 0x143134d58) = 8;
       REFG(undefined8, 0x143134d50) = (*(undefined8 (*)[8])(uintptr_t)0x1427efc38ULL);
       REFG(undefined8, 0x143134d68) = 0;
@@ -8156,7 +8156,7 @@ undefined1 FUN_1417bfcb0(longlong param_1)
   undefined8 uVar4 = {0};
   uint uVar3 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143135940)) {
+  if (_Init_thread_epoch < REFG(int, 0x143135940)) {
     _Init_thread_header(&REFG(undefined4, 0x143135940));
     if (REFG(undefined4, 0x143135940) == -1) {
       CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined4, 0x143135930));

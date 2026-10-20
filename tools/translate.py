@@ -194,7 +194,17 @@ CRT_BY_ADDR = {0x1425bf3b0: "memmove", 0x1425bfa50: "memset",
                # Lua's SPECIALS among them; not strstr). Its tail is a jump into a `pslldq xmm2`
                # ladder, which tools/protos.py read as an xmm2 input: a float third parameter, and
                # its callers (Lua's str_find_aux) passed `in_XMM2_Da`, 2026-10-18
-               0x140272e20: "strpbrk"}
+               0x140272e20: "strpbrk",
+               # the rest of the CRT's SSE string routines FID left unnamed, each identified under
+               # tools/oracle.py against libc on byte and wide inputs (2026-10-20). Their bodies are
+               # aligned 16-byte scans that mask the bytes before the string's start (`shl eax, cl`;
+               # `and edx, eax`) and broadcast the character (`pshufd`); the decompiler drops both and
+               # compares four lanes, so translated they matched bytes before the string and missed
+               # ones after: curl's URL parser (strchr for the port's ':', strcspn for junk, strspn for
+               # the host) rejected https://127.0.0.1:8081/... as CURLUE_BAD_PORT_NUMBER and the web
+               # login never connected
+               0x14026c578: "strchr", 0x14026c5f4: "strrchr", 0x14026c730: "strstr",
+               0x14240fdc0: "strcspn", 0x14241c5a0: "strspn", 0x14240f9bc: "wcschr", 0x14240fa34: "wcsstr"}
 # reference runtime entry points code stores as pointers, jumped to the port's own runtime: a
 # call through the pointer reaches the same routine a direct call does. curl_global_init
 # (FUN_14216a080) fills curl's allocator table with these; without them every curl allocation
@@ -512,7 +522,9 @@ CRT_POINTER_PARAMS = {"memmove": (1, 2), "memcpy": (1, 2), "memset": (1,), "memc
                       "_free_base": (1,), "realloc": (1,), "_realloc_base": (1,), "qsort": (1,),
                       "fwrite": (1, 4), "fread": (1, 4), "strlen": (1,), "strcmp": (1, 2), "strcpy": (1, 2),
                       # (FUN_140291ca8 hands _msize the block as an integer: C4022 at 3 sites)
-                      "_msize": (1,), "strpbrk": (1, 2), "wcstombs": (1, 2)}
+                      "_msize": (1,), "strpbrk": (1, 2), "wcstombs": (1, 2),
+                      "strchr": (1,), "strrchr": (1,), "strstr": (1, 2), "strspn": (1, 2), "strcspn": (1, 2),
+                      "wcschr": (1,), "wcsstr": (1, 2)}
 INT32_TYPES = r"(?:int|uint|undefined4|int3|uint3|undefined3|ushort|short|undefined2|byte|char|undefined1|uchar|word|dword)"
 
 
@@ -1223,9 +1235,45 @@ def virtual_this(text: str) -> str:
 
 # a call through a code pointer, as the body spells one by now: `(**(code **)(x))(`,
 # `(*(code *)x)(`, `(*(code **)x)(`, `(*(*(code **)x))(`, `(*REFG(code *, x))(`
-INDIRECT_CALL = re.compile(r"\((?:\*\*\(code \*\*\)|\*\(code \*\*?\)|\*\(\*\(code \*\*\)|\*REFG\(code \*,)")
+INDIRECT_CALL = re.compile(r"\((?:\*\*\(code \*\*\)|\*\(code \*\*?\)|\*\(\*\(code \*\*?\)|\*REFG\(code \*,)")
 # a top-level operator that makes an expression something other than its operands' type
 NOT_FLOAT_OP = re.compile(r"<|(?<!-)>|[!=]=|&&|\|\||\?|%|\^|(?<![&])&(?![&])|\|")
+
+# a frame slot Ghidra typed float, as stack_frame() spells it
+FLOAT_SLOT = re.compile(r"\(\(float \*\)\(gen_frame \+ (0x[0-9a-f]+)\)\)")
+# an integer stored into one: `= (float)(uint)*pbVar4;`, nothing but the cast of an integer
+INT_INTO_FLOAT_SLOT = re.compile(
+    r"\(\(float \*\)\(gen_frame \+ (0x[0-9a-f]+)\)\)\[0\] = \(float\)\((?:uint|int|ushort|short|byte|char|uchar)\)"
+    r"([\w*()\[\] +\-]+);")
+
+
+def mistyped_float_slots(body: str) -> str:
+    """A stack slot Ghidra typed float that the code stores integers into is an integer slot.
+
+    The function shares one slot between its cases: one keeps a float there (read and written
+    through its address), the others a byte or a varint, which the decompiler then spells as a
+    conversion, `local_res18[0] = (float)(uint)*pbVar4`, and hands on as a float. As C that is a
+    value conversion and a float argument, where the reference moved 32 bits through an integer
+    register: protobuf's ExtensionSet::ParseFieldWithExtensionInfo (FUN_142237430) passed a
+    sub-message's length to PushLimit as 2.0f, parsed nothing into the extension, and read its
+    payload as the outer message's own fields - bgs EntityId's options got
+    message_set_wire_format and the descriptor pool aborted the Battle.net login (2026-10-20).
+    Such a slot is retyped to uint throughout the function: its address and its float uses stay
+    as they were, as the 32 bits the reference has there."""
+    slots = {m.group(1) for m in INT_INTO_FLOAT_SLOT.finditer(body)
+             if not re.search(r"[/.]|fVar|dVar", m.group(2))}
+    for off in slots:
+        slot = f"((float *)(gen_frame + {off}))"
+        uslot = f"((uint *)(gen_frame + {off}))"
+        body = re.sub(re.escape(slot) + r"\[0\] = \(float\)\(((?:uint|int|ushort|short|byte|char|uchar))\)",
+                      lambda m: f"{uslot}[0] = ({m.group(1)})", body)
+        # a float stored back by its bits: the bits
+        body = re.sub(re.escape(slot) + r"\[0\] = gen_bits2f\(", f"{uslot}[0] = (", body)
+        # read into a float local: the float those bits are (movss), not a conversion
+        body = re.sub(r"(\b[fd]Var\d+ = )" + re.escape(slot) + r"\[0\];",
+                      lambda m: f"{m.group(1)}gen_bits2f({uslot}[0]);", body)
+        body = body.replace(slot, uslot)
+    return body
 
 
 def indirect_float_calls(body: str, params: list[str]) -> str:
@@ -1276,7 +1324,9 @@ def indirect_float_calls(body: str, params: list[str]) -> str:
         while e.startswith("(") and matching_paren(e, 1) == len(e):
             e = e[1:-1].strip()
         # (Ghidra's byte slices, `SUB84(dVar1,0)`, are bits, not a value of the operand's type)
-        if not e or e.startswith(("&", "\"", "SUB", "CONCAT", "ZEXT", "SEXT")):
+        # (nor is a string literal, a wide one included: "2-0.dll" in L"api-ms-win-core-synch-l1-2-0.dll"
+        # read as the float 0., 2026-10-20)
+        if not e or e.startswith(("&", "\"", "L\"", "u\"", "SUB", "CONCAT", "ZEXT", "SEXT")):
             return None
         # a cast to a non-floating type decides it
         cast = re.match(r"\(\s*([A-Za-z_][\w ]*?)\s*(\**)\s*\)", e)
@@ -1316,7 +1366,19 @@ def indirect_float_calls(body: str, params: list[str]) -> str:
             if pm and "==" not in prefix:
                 ret = pm.group(1)
         last = max((k for k, t in enumerate(arg_kinds) if t), default=-1)
+        # from the fifth on an argument is a stack slot of 8 bytes, and an unprototyped call stores
+        # an int's 4 only: WSASend's lpOverlapped, a literal 0, arrived as 0x7ffc00000000 and the
+        # Battle.net TLS handshake's second flight failed with WSAEFAULT (2026-10-20). CALLF's
+        # arguments are widened in float_arguments; these are the calls through code pointers.
+        def widened(k: int, a: str) -> str:
+            if k >= 4 and not arg_kinds[k] and not a.strip().startswith("(unsigned long long)("):
+                return f"(unsigned long long)({a})"
+            return a
         if last < 0 and ret == "unsigned long long":
+            if len(args) > 4:
+                new_args = [widened(k, a) for k, a in enumerate(args)]
+                if new_args != args:
+                    out = out[:j + 1] + ",".join(new_args) + out[args_end - 1:]
             continue
         types, new_args = [], []
         for k, a in enumerate(args):
@@ -1325,7 +1387,7 @@ def indirect_float_calls(body: str, params: list[str]) -> str:
                 types.append(t)
                 new_args.append(f"({t})({a})")
             else:
-                new_args.append(a)
+                new_args.append(widened(k, a))
         if last < 0:
             proto = ""
         else:
@@ -2764,7 +2826,8 @@ CRT_ARITY = {"memmove": 3, "memset": 3, "memcpy": 3, "memcmp": 3, "strlen": 1, "
              "strchr": 2, "strrchr": 2, "strstr": 2, "strcpy": 2, "strncpy": 3, "strcat": 2, "free": 1,
              "malloc": 1, "_Init_thread_header": 1, "_Init_thread_footer": 1,
              # (CRT_ENTRY's: FUN_140279da8 hands realloc all four registers)
-             "realloc": 2, "calloc": 2, "_strdup": 1, "_wcsdup": 1, "_endthreadex": 1}
+             "realloc": 2, "calloc": 2, "_strdup": 1, "_wcsdup": 1, "_endthreadex": 1,
+             "strspn": 2, "strcspn": 2, "wcschr": 2, "wcsstr": 2}
 
 
 def crt_arity(body: str) -> str:
@@ -3400,6 +3463,7 @@ class Translator:
             target = a + 5 + int.from_bytes(m.group(1), "little", signed=True)
             if target in CRT_ENTRY and a % 8 == 0:
                 self.crt_thunks[a] = CRT_ENTRY[target]
+        self.pointer_stub_calls(text, tbase)
         self._lifted: dict[int, str | None] = {}
         self.v16_failed: dict[int, str] = {}   # what tools/v16.py could not take, by function
         self._arity: dict[int, int | None] = {}
@@ -5021,6 +5085,42 @@ class Translator:
         return None
 
     # ---- rewriting ------------------------------------------------------------------------
+    def pointer_stub_calls(self, text: bytes, tbase: int) -> None:
+        """A stub `jmp qword ptr [rip+G]` whose slot G statically holds a code address is shown
+        by the decompiler as `thunk_FUN_<that address>`: the slot's value at export time. A
+        slot in .data is written at run time, so the call goes wherever it points then. Curl's
+        Curl_resolver_cleanup 0x14216f890 is `jmp [Curl_cfree]`, read as a thunk to the CRT's
+        free: Curl_close freed a block from the Storm-backed Curl_ccalloc with the CRT's heap,
+        and the web login died of heap corruption (2026-10-20). Calls to such a stub are put
+        back as the call through the slot, the way the decompiler prints those."""
+        stubs: dict[int, tuple[int, int]] = {}   # stub -> (slot, initial target)
+        # (no padding test: 0x14216f890 directly follows the previous function's last byte;
+        # what makes a match a stub is that the function naming the thunk calls it, below)
+        for m in re.finditer(rb"(?=(\x48?\xff\x25)(....))", text, re.S):
+            a = tbase + m.start(1)
+            slot = a + len(m.group(1)) + 4 + int.from_bytes(m.group(2), "little", signed=True)
+            sec = self.ref.section_of(slot)
+            if not sec or sec.exec or sec.name != ".data":
+                continue
+            init = self.ref.u64(slot)
+            if self.ref.is_code(init):
+                stubs[a] = (slot, init)
+        by_init: dict[int, list[int]] = defaultdict(list)
+        for a, (_slot, init) in stubs.items():
+            by_init[init].append(a)
+        for f, e in self.cor.items():
+            names = [i for i in by_init if f"thunk_FUN_{i:09x}(" in e.get("c", "")]
+            if not names:
+                continue
+            code = bytes(self.ref.image[f - self.ref.base:f - self.ref.base + e.get("size", 0)])
+            called = set()
+            for m in re.finditer(rb"[\xe8\xe9](....)", code, re.S):
+                called.add(f + m.end() + int.from_bytes(m.group(1), "little", signed=True))
+            for i in names:
+                hit = [s for s in by_init[i] if s in called]
+                if len(hit) == 1:
+                    e["c"] = re.sub(rf"\bthunk_FUN_{i:09x}\(", f"(*PTR_FUN_{stubs[hit[0]][0]:09x})(", e["c"])
+
     def rewrite(self, a: int, text: str, uses: set) -> str:
         """The decompiled function as C: callees by address, globals at their addresses."""
         head, rest = text.split("{", 1)
@@ -5438,6 +5538,13 @@ class Translator:
         body = re.sub(r"\(code\)\s*\(", "(undefined1)(", body)
         if re.search(r"\*REFG\(undefined\d?,|REFG\(undefined\d?, 0x[0-9a-f]+\)\s*\[", body):
             raise Untranslatable("a global used as a pointer the data export does not type")
+        body = mistyped_float_slots(body)
+        # a function-local static's guard is compared with the epoch signed (MSVC's `jle`); the
+        # data export types the guard undefined4, which made `_Init_thread_epoch < guard` unsigned:
+        # the epoch is negative (INT_MIN up), so no translated static ever ran its initializer and
+        # each read as zero (Logon's platform FourCC came out empty, 790 sites, 2026-10-20)
+        body = re.sub(r"(_Init_thread_epoch < )REFG\(undefined4, ", r"\1REFG(int, ", body)
+        body = re.sub(r"(_Init_thread_epoch < \(?)\*\(undefined4 \*\)", r"\1*(int *)", body)
         body = self.float_arguments(body, params)
         # callers are unprototyped, so a float argument arrives promoted to double
         decls, narrow = [], []

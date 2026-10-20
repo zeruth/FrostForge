@@ -1012,7 +1012,7 @@ undefined8 FUN_1406383f0(void)
 int FUN_140638440(void)
 {
   GEN_HIT(24);
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_142e99dcc + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_142e99dcc + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_142e99dcc + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_142e99dcc + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -1356,7 +1356,7 @@ undefined4 FUN_14063cdd0(undefined8 param_1)
   }
   lVar3 = CALLF(undefined8, FUN_1402b4880)(param_1,0xffffffff,0);
   CALLF(undefined8, FUN_140255c60)();
-  lVar4 = CALLF(gen_v16 *, FUN_14026c730)(lVar3,&REFG(undefined8, 0x1426cc7c0));
+  lVar4 = strstr((void *)(lVar3),(void *)(&REFG(undefined8, 0x1426cc7c0)));
   lVar5 = CALLF(longlong, FUN_14063ca80)(param_1,1);
   if ((lVar4 != 0) && (lVar5 != 0)) {
     CALLF(undefined8, FUN_1402b3ab0)(param_1,lVar3,lVar4 - lVar3);

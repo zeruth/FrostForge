@@ -1842,7 +1842,7 @@ undefined8 * FUN_142149cb0(undefined8 *param_1, undefined8 param_2)
 undefined8 FUN_14214a010(undefined8 *param_1, undefined8 *param_2)
 {
   GEN_HIT(35);
-  if (_Init_thread_epoch < REFG(undefined4, 0x143477858)) {
+  if (_Init_thread_epoch < REFG(int, 0x143477858)) {
     _Init_thread_header(&REFG(undefined4, 0x143477858));
     if (REFG(undefined4, 0x143477858) == -1) {
       REFG(undefined8, 0x142d3e788) = *param_2;
@@ -1888,7 +1888,7 @@ undefined1 FUN_14214a0b0(undefined8 *param_1, uint param_2, uint param_3)
 undefined8 FUN_14214a190(undefined8 *param_1, undefined8 *param_2)
 {
   GEN_HIT(37);
-  if (_Init_thread_epoch < REFG(undefined4, 0x14347785c)) {
+  if (_Init_thread_epoch < REFG(int, 0x14347785c)) {
     _Init_thread_header(&REFG(undefined4, 0x14347785c));
     if (REFG(undefined4, 0x14347785c) == -1) {
       REFG(undefined8, 0x142d3e7b8) = *param_2;
@@ -1906,7 +1906,7 @@ undefined8 FUN_14214a190(undefined8 *param_1, undefined8 *param_2)
 undefined8 FUN_14214a230(undefined8 *param_1, undefined8 *param_2)
 {
   GEN_HIT(38);
-  if (_Init_thread_epoch < REFG(undefined4, 0x143477860)) {
+  if (_Init_thread_epoch < REFG(int, 0x143477860)) {
     _Init_thread_header(&REFG(undefined4, 0x143477860));
     if (REFG(undefined4, 0x143477860) == -1) {
       REFG(undefined8, 0x142d3e7e8) = *param_2;
@@ -1924,7 +1924,7 @@ undefined8 FUN_14214a230(undefined8 *param_1, undefined8 *param_2)
 undefined8 FUN_14214a2d0(undefined8 *param_1, undefined8 *param_2)
 {
   GEN_HIT(39);
-  if (_Init_thread_epoch < REFG(undefined4, 0x143477864)) {
+  if (_Init_thread_epoch < REFG(int, 0x143477864)) {
     _Init_thread_header(&REFG(undefined4, 0x143477864));
     if (REFG(undefined4, 0x143477864) == -1) {
       REFG(undefined8, 0x142d3e818) = *param_2;
@@ -8717,8 +8717,7 @@ LAB_142156ee9:
     }
     else {
       uVar4 = (**(code **)(param_1 + 0x68))
-                        (*(undefined8 *)(param_1 + 0x70),((undefined1 *)(gen_frame + 0x30)),0x30c,param_5,param_6,
-                         CONCAT44(uVar6,(*(undefined4 *)&gen_slot_param_4)));
+                        (*(undefined8 *)(param_1 + 0x70),((undefined1 *)(gen_frame + 0x30)),0x30c,param_5,(unsigned long long)(param_6),(unsigned long long)(CONCAT44(uVar6,(*(undefined4 *)&gen_slot_param_4))));
       if (uVar4 == 0) goto LAB_142156ee9;
     }
     if (0x30b < uVar4) {
@@ -16609,7 +16608,7 @@ int FUN_142166ca0(undefined8 param_1, longlong param_2, uint param_3, int param_
   puVar10 = ((undefined1 *)(gen_frame + 0x450));
   uVar11 = CONCAT44(uVar3,0x30c);
   iVar2 = (*(*(code *)&MultiByteToWideChar))
-                    (0xfde9,0,&(*(undefined1 *)(gen_frame + 0x140)),0xffffffff,puVar10,uVar11);
+                    (0xfde9,0,&(*(undefined1 *)(gen_frame + 0x140)),0xffffffff,(unsigned long long)(puVar10),(unsigned long long)(uVar11));
   uVar3 = (undefined4)((ulonglong)puVar10 >> 0x20);
   uVar13 = (undefined4)((ulonglong)uVar11 >> 0x20);
   if (iVar2 == 0) {
@@ -16624,7 +16623,7 @@ int FUN_142166ca0(undefined8 param_1, longlong param_2, uint param_3, int param_
     uVar14 = 0;
     uVar12 = CONCAT44(uVar13,0x4000100);
     uVar11 = CONCAT44(uVar3,1);
-    (*(longlong *)(gen_frame + 0x8)) = (*(*(code *)&CreateFileW))(((undefined1 *)(gen_frame + 0x450)),0x80000000,0,0,uVar11,uVar12,0);
+    (*(longlong *)(gen_frame + 0x8)) = (*(*(code *)&CreateFileW))(((undefined1 *)(gen_frame + 0x450)),0x80000000,0,0,(unsigned long long)(uVar11),(unsigned long long)(uVar12),(unsigned long long)(0));
     if ((*(longlong *)(gen_frame + 0x8)) == -1) {
       lVar7 = 5000000000;
       do {
@@ -16645,7 +16644,7 @@ int FUN_142166ca0(undefined8 param_1, longlong param_2, uint param_3, int param_
         uVar14 = 0;
         uVar12 = CONCAT44(uVar8,0x4000100);
         uVar11 = CONCAT44(uVar3,1);
-        (*(longlong *)(gen_frame + 0x8)) = (*(*(code *)&CreateFileW))(((undefined1 *)(gen_frame + 0x450)),0x80000000,0,0,uVar11,uVar12,0);
+        (*(longlong *)(gen_frame + 0x8)) = (*(*(code *)&CreateFileW))(((undefined1 *)(gen_frame + 0x450)),0x80000000,0,0,(unsigned long long)(uVar11),(unsigned long long)(uVar12),(unsigned long long)(0));
         lVar7 = lVar7 - lVar5;
       } while ((*(longlong *)(gen_frame + 0x8)) == -1);
     }

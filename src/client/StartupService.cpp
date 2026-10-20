@@ -121,11 +121,16 @@ blz::function_storage MakeProvider(void (*provider)(void*)) {
     return function;
 }
 
-// What Agent calls back with; forwards to 0x1402271a0 (not ported).
+extern "C" unsigned long long FUN_1402271a0(unsigned long long, unsigned long long);
+
+// The callback installed in Agent (DAT_1430d2548). Despite the Agent home it is how the world
+// connection gets its Win64 auth seed: SMSG_AUTH_CHALLENGE's handler (FUN_141232760) calls it
+// through FUN_1415679c0 with a 16-byte buffer, which FUN_1402271a0 fills. A stub left the seed
+// unset and the AUTH_SESSION digest unverifiable.
+// translated: FUN_1402271a0
 // ref: 0x140226ea0
 void AgentEventCallback(void* param) {
-    (void)param;
-    FROST_UNIMPLEMENTED();
+    FUN_1402271a0(0, reinterpret_cast<uintptr_t>(param));
 }
 
 // Reads a value from HKCU\<key>\<value> as UTF-8, decrypting it (DPAPI) when asked; returns

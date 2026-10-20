@@ -32043,7 +32043,7 @@ LAB_14249e014:
       lVar17 = (ulonglong)(((byte *)(gen_frame + 0x44))[3] != -1) + 3;
     }
     do {
-      *((undefined4 *)gen_v16_q0((gen_v16_add((*(gen_v16 *)(gen_frame + 0x0)), gen_v16_u((ulonglong)((byte *)(gen_frame + 0x44))[uVar27] * 4))))) = 1;
+      *(undefined4 *)(((unsigned char *)&(*(gen_v16 *)(gen_frame + 0x0)) + (ulonglong)((byte *)(gen_frame + 0x44))[uVar27] * 4)) = 1;
       pbVar1 = (byte *)((longlong)((undefined4 *)(gen_frame + 0x48)) + uVar27);
       uVar27 = uVar27 + 1;
       *(undefined4 *)((longlong)&param_5 + (ulonglong)*pbVar1 * 4) = 1;
@@ -43638,7 +43638,7 @@ undefined * FUN_1424aebf0(undefined8 param_1, undefined8 param_2, undefined8 par
   float fVar10 = {0};
   
   *param_5 = (int)param_1 * 4;
-  if ((_Init_thread_epoch < REFG(undefined4, 0x1447aeda8)) && (_Init_thread_header(&REFG(undefined4, 0x1447aeda8)), REFG(undefined4, 0x1447aeda8) == -1)) {
+  if ((_Init_thread_epoch < REFG(int, 0x1447aeda8)) && (_Init_thread_header(&REFG(undefined4, 0x1447aeda8)), REFG(undefined4, 0x1447aeda8) == -1)) {
     REFG(undefined8, 0x142d4e498) = 0;
     REFG(undefined8, 0x142d4e490) = &REFG(undefined8, 0x142d4e4a8);
     REFG(undefined8, 0x142d4e4a0) = 0x8000000000004000;

@@ -21131,7 +21131,7 @@ undefined4 FUN_1419f50b0(undefined8 param_1)
     return 0;
   }
   ((longlong *)(gen_frame + 0x8))[0] = 0;
-  if ((_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_142e979f8 + 0x0))) && (_Init_thread_header(&(*(undefined4 *)((char *)&gen_g_142e979f8 + 0x0))), (*(undefined4 *)((char *)&gen_g_142e979f8 + 0x0)) == -1)) {
+  if ((_Init_thread_epoch < (*(int *)((char *)&gen_g_142e979f8 + 0x0))) && (_Init_thread_header(&(*(undefined4 *)((char *)&gen_g_142e979f8 + 0x0))), (*(undefined4 *)((char *)&gen_g_142e979f8 + 0x0)) == -1)) {
     (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
     (*(undefined4 *)((char *)&gen_g_142e979f4 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0));
     _Init_thread_footer(&(*(undefined4 *)((char *)&gen_g_142e979f8 + 0x0)));

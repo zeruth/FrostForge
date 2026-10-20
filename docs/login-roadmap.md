@@ -223,6 +223,27 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
   - `apps/bnetproto/makecert.sh` (e66961e63) for the CN/SAN 127.0.0.1 certificate.
   
   The client runs bindless, so Bind is never called.
+- **Runs 2026-10-19/20** (everything translated since 0.1.0):
+  - The Login click opened no connection at all: `Sub1415002E0` (WowConnection's network init,
+    0x1415002e0, which creates the network engine DAT_1430d0308) was an empty hand-port stub, so
+    every WowConnection connect was a no-op. Ported in src/client/Startup.cpp. **Seen:** the
+    client then reaches 127.0.0.1:1119 and sends its 147-byte ClientHello.
+  - The handshake then stalled. The server's flight (70 + 1705 + 305 + 9 bytes, TLS 1.2) was fed
+    to SChannel one record at a time, SChannel wrote the 93-byte second flight, and WowConnection's
+    `WSASend` (FUN_1415006b0) failed with WSAEFAULT: lpOverlapped arrived as 0x7ffc00000000. A
+    literal `0` in a call through a code pointer filled only the low half of its 8-byte stack slot.
+    translate.py now widens arguments from the fifth on for calls through code pointers too
+    (`indirect_float_calls`), as it already did for CALLF. Found with an attach-only WSASend tracer
+    (scratch tool); a ctypes replica of the client's exact SChannel use (`SCHANNEL_CRED` v4,
+    protocols 0xa80, flags 0x18, ISC 0xc01c, no target name) completes against FrostForge, so the
+    server and certificate were never the problem.
+  - **Server (FrostForge, 2026-10-20):** the whole Battle.net chain up to the realm join, per
+    `.agents/plans/frostforge-server/bnet-login-flow.ANALYSIS.md`: Logon → OnExternalChallenge →
+    web login (HTTPS on 8081, `LoginRestServer`, checked against the account's SRP6 verifier) →
+    VerifyWebCredentials → OnLogonComplete → GetAccountState / GetGameAccountState →
+    GameUtilities realm list ticket, sub-regions, realm list, realm join. **Seen** with an
+    offline stand-in client (scratch `bnetclient.py`) end to end; the join is refused while the
+    realm is offline.
 - **Check:** the client completes the TLS handshake and Connection.Connect with FrostForge.
   Both logs show it.
 
@@ -319,3 +340,6 @@ The client side of the Battle.net (bgs) connection: TLS, RPC framing and the pro
 | 2026-10-14 | 2 | cross_ssl logger, string pointers, merged imports, three login-path patches, stack-spill rule (17786 translated); login10 resolves the portal, opens a socket and runs the connect | c5d0a38 |
 | 2026-10-15 | 2 | quit's heap corruption fixed (FUN_141f09460 freed a bucket slot; patched); translator memory cut to a 2.8 GB peak; odd-width piece writes (the cursor scalers) | 227fc24 |
 | 2026-10-15 | 2 | GlueLogin's Battle.net listener (0x142d1b850, vtable 0x1427e6d00) runs translated: its 15 slots are roots, vtables.py records static objects holding a lea-found vtable, lift.py lifts tail calls through memory (the blz signal invokers 0x140601040 / 0x14149b320 and the vcall thunks). 18180 translated. **Seen:** Enter with the server down now shows the Connecting dialog, which stays up | this commit |
+| 2026-10-20 | 2-4 | WowConnection's network init ported (the engine existed nowhere, so no connect went out); translator widens stack arguments of calls through code pointers (WSASend's lpOverlapped, WSAEFAULT); FrostForge answers the whole Battle.net login up to the realm join, seen with a stand-in client. **Seen in FrostLite:** TLS and Connection.Connect complete (phase 2's check) | not committed |
+| 2026-10-20 | 3-6 | client: the Logon builder's device id wrote through a garbage pointer (translator read `local_18 + i` on a 16-byte array as a vector add: 41 sites, v16.py), `gen_cpuid` shared one buffer, the Win64 auth seed callback (AgentEventCallback) was a stub, FrostForge's Ed25519 key installed (diverged). FrostForge: 3.4.3 WorldSocket (connection strings, AES-128-GCM, join-key digest, Ed25519ctx ENTER_ENCRYPTED_MODE), AUTH_RESPONSE and ENUM_CHARACTERS_RESULT in 3.4.3 layout, join key handed over in `account.bnet_join_key`. Stand-in client goes from the web login to an empty character list; FrostLite not run yet | not committed |
+| 2026-10-20 | 3 | translator: mistyped float stack slots (protobuf MessageSet error), FID-unnamed CRT SSE string routines (strchr/strrchr/strstr/strcspn/strspn/wcschr/wcsstr) mapped by address (curl BAD_PORT_NUMBER), function-local static guards compared signed (empty Logon platform), stubs that jump through a run-time pointer slot called through the slot (Curl_close freed Storm memory with the CRT: heap corruption on the web login). **Seen in FrostLite:** Logon with platform Wn64 reaches the server; web login then crashed (fixed, rerun pending). FrostForge commits b36dab393 (Battle.net) and b24f5a36b (world socket) | this commit |

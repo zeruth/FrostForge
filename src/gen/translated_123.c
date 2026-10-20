@@ -436,7 +436,7 @@ undefined4 FUN_14197c0e0(void)
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[56]) > 0x38 ? 0x0 + sizeof(undefined1[56]) : 0x38)] = {0};
   char cVar1 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x1431ea058)) {
+  if (_Init_thread_epoch < REFG(int, 0x1431ea058)) {
     _Init_thread_header(&REFG(undefined4, 0x1431ea058));
     if (REFG(undefined4, 0x1431ea058) == -1) {
       CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined4, 0x1431ea048));
@@ -4816,7 +4816,7 @@ undefined4 FUN_141987340(undefined8 param_1, char param_2)
     CALLF(undefined8, FUN_142424d80)(param_1,"Invalid Party assignment");
     return 0;
   }
-  if ((_Init_thread_epoch < REFG(undefined4, 0x1431ea070)) && (_Init_thread_header(&REFG(undefined4, 0x1431ea070)), REFG(undefined4, 0x1431ea070) == -1)) {
+  if ((_Init_thread_epoch < REFG(int, 0x1431ea070)) && (_Init_thread_header(&REFG(undefined4, 0x1431ea070)), REFG(undefined4, 0x1431ea070) == -1)) {
     CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined4, 0x1431ea060));
     REFG(undefined4, 0x1431ea068) = 2;
     REFG(undefined4, 0x1431ea060) = 2;
@@ -17253,7 +17253,7 @@ undefined4 FUN_14199d420(undefined8 param_1)
   longlong lVar3 = {0};
   
   (*(longlong *)(gen_frame + 0x8)) = 0;
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_142e97b64 + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_142e97b64 + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_142e97b64 + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_142e97b64 + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -20374,7 +20374,7 @@ undefined4 FUN_1419a1970(undefined8 param_1)
   longlong lVar5 = {0};
   double dVar6 = {0};
   
-  if ((_Init_thread_epoch < REFG(undefined4, 0x1431ed178)) && (_Init_thread_header(&REFG(undefined4, 0x1431ed178)), REFG(undefined4, 0x1431ed178) == -1)) {
+  if ((_Init_thread_epoch < REFG(int, 0x1431ed178)) && (_Init_thread_header(&REFG(undefined4, 0x1431ed178)), REFG(undefined4, 0x1431ed178) == -1)) {
     CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined4, 0x1431ed168));
     REFG(undefined4, 0x1431ed170) = 5;
     REFG(undefined4, 0x1431ed168) = 5;
@@ -20877,7 +20877,7 @@ LAB_1419a3c60:
 LAB_1419a3d30:
               uVar10 = CALLF(ulonglong, FUN_1405d5790)();
               CALLF(undefined4, FUN_141650150)(((char *)(gen_frame + 0x490)),0x400,(int)uVar10);
-              lVar9 = CALLF(gen_v16 *, FUN_14026c730)(((char *)(gen_frame + 0x490)),((char *)(gen_frame + 0x90)));
+              lVar9 = strstr((void *)(((char *)(gen_frame + 0x490))),(void *)(((char *)(gen_frame + 0x90))));
               if (lVar9 != 0) {
                 uVar8 = (**(code **)(*(*(longlong * *)(gen_frame + 0x10)) + 0x60))((*(longlong * *)(gen_frame + 0x10)),&(*(undefined8 *)(gen_frame + 0x0)));
                 if (uVar8 != 0xffffffff) goto LAB_1419a3e08;
@@ -21031,7 +21031,7 @@ undefined4 FUN_1419a41f0(void)
   __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(undefined1[56]) > 0x48 ? 0x8 + sizeof(undefined1[56]) : 0x48)] = {0};
   char cVar1 = {0};
   
-  if ((_Init_thread_epoch < REFG(undefined4, 0x1431ed190)) && (_Init_thread_header(&REFG(undefined4, 0x1431ed190)), REFG(undefined4, 0x1431ed190) == -1)) {
+  if ((_Init_thread_epoch < REFG(int, 0x1431ed190)) && (_Init_thread_header(&REFG(undefined4, 0x1431ed190)), REFG(undefined4, 0x1431ed190) == -1)) {
     CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined4, 0x1431ed180));
     REFG(undefined4, 0x1431ed188) = 5;
     REFG(undefined4, 0x1431ed180) = 5;
@@ -21102,7 +21102,7 @@ undefined4 FUN_1419a50e0(void)
   __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(undefined1[56]) > 0x38 ? 0x0 + sizeof(undefined1[56]) : 0x38)] = {0};
   char cVar1 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x1431ed1a8)) {
+  if (_Init_thread_epoch < REFG(int, 0x1431ed1a8)) {
     _Init_thread_header(&REFG(undefined4, 0x1431ed1a8));
     if (REFG(undefined4, 0x1431ed1a8) == -1) {
       CALLF(undefined4 *, FUN_1406d1880)(&REFG(undefined4, 0x1431ed198));

@@ -9493,7 +9493,7 @@ undefined * FUN_1418a8630(void)
   undefined8 *puVar5 = {0};
   longlong lVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143153638)) {
+  if (_Init_thread_epoch < REFG(int, 0x143153638)) {
     _Init_thread_header(&REFG(undefined4, 0x143153638));
     if (REFG(undefined4, 0x143153638) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x143153470));
@@ -9562,7 +9562,7 @@ undefined * FUN_1418a8740(void)
   undefined8 *puVar5 = {0};
   longlong lVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143154268)) {
+  if (_Init_thread_epoch < REFG(int, 0x143154268)) {
     _Init_thread_header(&REFG(undefined4, 0x143154268));
     if (REFG(undefined4, 0x143154268) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x1431540a0));
@@ -9631,7 +9631,7 @@ undefined * FUN_1418a8850(void)
   undefined8 *puVar5 = {0};
   longlong lVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143154bd8)) {
+  if (_Init_thread_epoch < REFG(int, 0x143154bd8)) {
     _Init_thread_header(&REFG(undefined4, 0x143154bd8));
     if (REFG(undefined4, 0x143154bd8) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x143154a10));
@@ -9700,7 +9700,7 @@ undefined * FUN_1418a8960(void)
   undefined8 *puVar5 = {0};
   longlong lVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143155eb8)) {
+  if (_Init_thread_epoch < REFG(int, 0x143155eb8)) {
     _Init_thread_header(&REFG(undefined4, 0x143155eb8));
     if (REFG(undefined4, 0x143155eb8) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x143155cf0));
@@ -9769,7 +9769,7 @@ undefined * FUN_1418a8a70(void)
   undefined8 *puVar5 = {0};
   longlong lVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143155548)) {
+  if (_Init_thread_epoch < REFG(int, 0x143155548)) {
     _Init_thread_header(&REFG(undefined4, 0x143155548));
     if (REFG(undefined4, 0x143155548) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x143155380));
@@ -9838,7 +9838,7 @@ undefined * FUN_1418a8b80(void)
   undefined8 *puVar5 = {0};
   longlong lVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143154e08)) {
+  if (_Init_thread_epoch < REFG(int, 0x143154e08)) {
     _Init_thread_header(&REFG(undefined4, 0x143154e08));
     if (REFG(undefined4, 0x143154e08) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x143154c40));
@@ -9910,7 +9910,7 @@ undefined * FUN_1418a8cb0(void)
   undefined8 *puVar5 = {0};
   longlong lVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143155378)) {
+  if (_Init_thread_epoch < REFG(int, 0x143155378)) {
     _Init_thread_header(&REFG(undefined4, 0x143155378));
     if (REFG(undefined4, 0x143155378) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x1431551b0));
@@ -9982,7 +9982,7 @@ undefined * FUN_1418a8de0(void)
   undefined8 *puVar5 = {0};
   longlong lVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x1431551a8)) {
+  if (_Init_thread_epoch < REFG(int, 0x1431551a8)) {
     _Init_thread_header(&REFG(undefined4, 0x1431551a8));
     if (REFG(undefined4, 0x1431551a8) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x143154fe0));
@@ -10229,7 +10229,7 @@ undefined * FUN_1418a9270(void)
   longlong lVar5 = {0};
   undefined8 *puVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143155778)) {
+  if (_Init_thread_epoch < REFG(int, 0x143155778)) {
     _Init_thread_header(&REFG(undefined4, 0x143155778));
     if (REFG(undefined4, 0x143155778) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x1431555b0));
@@ -10302,7 +10302,7 @@ undefined * FUN_1418a93a0(void)
   longlong lVar5 = {0};
   undefined8 *puVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143155948)) {
+  if (_Init_thread_epoch < REFG(int, 0x143155948)) {
     _Init_thread_header(&REFG(undefined4, 0x143155948));
     if (REFG(undefined4, 0x143155948) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x143155780));
@@ -10375,7 +10375,7 @@ undefined * FUN_1418a94d0(void)
   longlong lVar5 = {0};
   undefined8 *puVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143155b18)) {
+  if (_Init_thread_epoch < REFG(int, 0x143155b18)) {
     _Init_thread_header(&REFG(undefined4, 0x143155b18));
     if (REFG(undefined4, 0x143155b18) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x143155950));
@@ -10447,7 +10447,7 @@ undefined * FUN_1418a9600(void)
   longlong lVar5 = {0};
   undefined8 *puVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143155ce8)) {
+  if (_Init_thread_epoch < REFG(int, 0x143155ce8)) {
     _Init_thread_header(&REFG(undefined4, 0x143155ce8));
     if (REFG(undefined4, 0x143155ce8) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x143155b20));
@@ -10519,7 +10519,7 @@ undefined * FUN_1418a9730(void)
   undefined8 *puVar5 = {0};
   longlong lVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143154838)) {
+  if (_Init_thread_epoch < REFG(int, 0x143154838)) {
     _Init_thread_header(&REFG(undefined4, 0x143154838));
     if (REFG(undefined4, 0x143154838) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x143154670));
@@ -10591,7 +10591,7 @@ undefined * FUN_1418a9860(void)
   longlong lVar5 = {0};
   undefined8 *puVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143154498)) {
+  if (_Init_thread_epoch < REFG(int, 0x143154498)) {
     _Init_thread_header(&REFG(undefined4, 0x143154498));
     if (REFG(undefined4, 0x143154498) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x1431542d0));
@@ -10664,7 +10664,7 @@ undefined * FUN_1418a9990(void)
   undefined8 *puVar5 = {0};
   longlong lVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143154fd8)) {
+  if (_Init_thread_epoch < REFG(int, 0x143154fd8)) {
     _Init_thread_header(&REFG(undefined4, 0x143154fd8));
     if (REFG(undefined4, 0x143154fd8) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x143154e10));
@@ -10736,7 +10736,7 @@ undefined * FUN_1418a9ac0(void)
   undefined8 *puVar5 = {0};
   longlong lVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143154a08)) {
+  if (_Init_thread_epoch < REFG(int, 0x143154a08)) {
     _Init_thread_header(&REFG(undefined4, 0x143154a08));
     if (REFG(undefined4, 0x143154a08) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x143154840));
@@ -10808,7 +10808,7 @@ undefined * FUN_1418a9bf0(void)
   longlong lVar5 = {0};
   undefined8 *puVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143153868)) {
+  if (_Init_thread_epoch < REFG(int, 0x143153868)) {
     _Init_thread_header(&REFG(undefined4, 0x143153868));
     if (REFG(undefined4, 0x143153868) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x1431536a0));
@@ -10880,7 +10880,7 @@ undefined * FUN_1418a9d20(void)
   longlong lVar5 = {0};
   undefined8 *puVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143153ea8)) {
+  if (_Init_thread_epoch < REFG(int, 0x143153ea8)) {
     _Init_thread_header(&REFG(undefined4, 0x143153ea8));
     if (REFG(undefined4, 0x143153ea8) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x143153ce0));
@@ -10952,7 +10952,7 @@ undefined * FUN_1418a9e50(void)
   undefined8 *puVar5 = {0};
   longlong lVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143154668)) {
+  if (_Init_thread_epoch < REFG(int, 0x143154668)) {
     _Init_thread_header(&REFG(undefined4, 0x143154668));
     if (REFG(undefined4, 0x143154668) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x1431544a0));
@@ -11024,7 +11024,7 @@ undefined * FUN_1418a9f80(void)
   longlong lVar5 = {0};
   undefined8 *puVar6 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143154088)) {
+  if (_Init_thread_epoch < REFG(int, 0x143154088)) {
     _Init_thread_header(&REFG(undefined4, 0x143154088));
     if (REFG(undefined4, 0x143154088) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined8, 0x143153ec0));
@@ -11088,7 +11088,7 @@ undefined * FUN_1418a9f80(void)
 undefined * FUN_1418aa0d0(void)
 {
   GEN_HIT(234);
-  if (_Init_thread_epoch < REFG(undefined4, 0x143153690)) {
+  if (_Init_thread_epoch < REFG(int, 0x143153690)) {
     _Init_thread_header(&REFG(undefined4, 0x143153690));
     if (REFG(undefined4, 0x143153690) == -1) {
       CALLF(undefined1 *, FUN_1418a5cc0)(&REFG(undefined8, 0x143153640),"Vector",((code *)REFP(0x1418a8630)));
@@ -11103,7 +11103,7 @@ undefined * FUN_1418aa0d0(void)
 undefined * FUN_1418aa150(void)
 {
   GEN_HIT(235);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1431542c0)) {
+  if (_Init_thread_epoch < REFG(int, 0x1431542c0)) {
     _Init_thread_header(&REFG(undefined4, 0x1431542c0));
     if (REFG(undefined4, 0x1431542c0) == -1) {
       CALLF(undefined1 *, FUN_1418a5cc0)(&REFG(undefined8, 0x143154270),"Transform",((code *)REFP(0x1418a8740)));
@@ -11118,7 +11118,7 @@ undefined * FUN_1418aa150(void)
 undefined * FUN_1418aa1d0(void)
 {
   GEN_HIT(236);
-  if (_Init_thread_epoch < REFG(undefined4, 0x143154c30)) {
+  if (_Init_thread_epoch < REFG(int, 0x143154c30)) {
     _Init_thread_header(&REFG(undefined4, 0x143154c30));
     if (REFG(undefined4, 0x143154c30) == -1) {
       CALLF(undefined1 *, FUN_1418a5cc0)(&REFG(undefined8, 0x143154be0),"Color",((code *)REFP(0x1418a8850)));
@@ -11133,7 +11133,7 @@ undefined * FUN_1418aa1d0(void)
 undefined * FUN_1418aa250(void)
 {
   GEN_HIT(237);
-  if (_Init_thread_epoch < REFG(undefined4, 0x143155f10)) {
+  if (_Init_thread_epoch < REFG(int, 0x143155f10)) {
     _Init_thread_header(&REFG(undefined4, 0x143155f10));
     if (REFG(undefined4, 0x143155f10) == -1) {
       CALLF(undefined1 *, FUN_1418a5cc0)(&REFG(undefined8, 0x143155ec0),"PathData",((code *)REFP(0x1418a8960)));
@@ -11148,7 +11148,7 @@ undefined * FUN_1418aa250(void)
 undefined * FUN_1418aa2d0(void)
 {
   GEN_HIT(238);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1431555a0)) {
+  if (_Init_thread_epoch < REFG(int, 0x1431555a0)) {
     _Init_thread_header(&REFG(undefined4, 0x1431555a0));
     if (REFG(undefined4, 0x1431555a0) == -1) {
       CALLF(undefined1 *, FUN_1418a5cc0)(&REFG(undefined8, 0x143155550),"PathDataNode",((code *)REFP(0x1418a8a70)));
@@ -14244,7 +14244,7 @@ undefined * FUN_1418aeaa0(void)
   GEN_HIT(298);
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x143180c4c)) {
+  if (_Init_thread_epoch < REFG(int, 0x143180c4c)) {
     _Init_thread_header(&REFG(undefined4, 0x143180c4c));
     if (REFG(undefined4, 0x143180c4c) == -1) {
       REFG(undefined8, 0x143180c40) = 0;

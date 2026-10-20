@@ -1482,7 +1482,7 @@ LAB_1416fa4f0:
       if (plVar13 == (longlong *)0x0) goto LAB_1416fa9a0;
     }
     uVar8 = CALLF(undefined4, FUN_1416fd990)(param_2,param_3,param_4,0);
-    (**(code **)(*plVar13 + 0xa0))(plVar13,param_2,uVar8,(longlong)puVar9 + 0x4c,puVar9 + 10);
+    (**(code **)(*plVar13 + 0xa0))(plVar13,param_2,uVar8,(longlong)puVar9 + 0x4c,(unsigned long long)(puVar9 + 10));
   }
 LAB_1416fa9a0:
   if ((*param_1 != 0) || (param_1[1] != 0)) {
@@ -5684,7 +5684,7 @@ undefined1 FUN_141700d50(longlong param_1, longlong param_2)
     ((undefined4 *)(gen_frame + 0x50))[0] = 0;
     ((undefined4 *)(gen_frame + 0x48))[0] = 0;
     (**(code **)(**(longlong **)(lVar5 + 8) + 0xa0))
-              (*(longlong **)(lVar5 + 8),uVar4,uVar3,((undefined4 *)(gen_frame + 0x50)),((undefined4 *)(gen_frame + 0x48)));
+              (*(longlong **)(lVar5 + 8),uVar4,uVar3,((undefined4 *)(gen_frame + 0x50)),(unsigned long long)(((undefined4 *)(gen_frame + 0x48))));
     uVar4 = ((undefined4 *)(gen_frame + 0x48))[0];
     cVar1 = CALLF(undefined1, FUN_141700aa0)(param_1,((undefined4 *)(gen_frame + 0x50))[0],param_2 + 0x28,param_2 + 0x80);
     cVar2 = CALLF(undefined1, FUN_141700aa0)(param_1,uVar4,param_2 + 0x28,param_2 + 0x80);
@@ -5720,7 +5720,7 @@ undefined1 FUN_141700e80(undefined8 param_1, longlong *param_2, undefined4 param
   
   ((undefined4 *)(gen_frame + 0x0))[0] = 0;
   ((undefined4 *)(gen_frame + 0x28))[0] = 0;
-  (**(code **)(*param_2 + 0xa0))(param_2,(*(undefined4 *)&gen_slot_param_3),(*(undefined4 *)&gen_slot_param_4),((undefined4 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x28)));
+  (**(code **)(*param_2 + 0xa0))(param_2,(*(undefined4 *)&gen_slot_param_3),(*(undefined4 *)&gen_slot_param_4),((undefined4 *)(gen_frame + 0x0)),(unsigned long long)(((undefined4 *)(gen_frame + 0x28))));
   uVar1 = ((undefined4 *)(gen_frame + 0x28))[0];
   cVar2 = CALLF(undefined1, FUN_141700aa0)(param_1,((undefined4 *)(gen_frame + 0x0))[0],param_5,param_6);
   cVar3 = CALLF(undefined1, FUN_141700aa0)(param_1,uVar1,param_5,param_6);

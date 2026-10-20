@@ -1862,7 +1862,7 @@ undefined8 * FUN_140d24950(undefined8 *param_1, byte param_2)
 undefined ** FUN_140d24980(void)
 {
   GEN_HIT(39);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0b34)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0b34)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0b34));
     if (REFG(undefined4, 0x1430a0b34) == -1) {
       atexit(((code *)REFP(0x1425e68e0)));
@@ -2470,7 +2470,7 @@ LAB_140d252ce:
 int FUN_140d253e0(void)
 {
   GEN_HIT(45);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0b18)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0b18)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0b18));
     if (REFG(undefined4, 0x1430a0b18) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -4855,7 +4855,7 @@ undefined4 FUN_140d324c0(undefined8 param_1)
                   "Usage: local visible = C_SystemVisibilityManager.CALLF(undefined4, FUN_140d324c0)(system)");
   }
 LAB_140d325b8:
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0b30)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0b30)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0b30));
     if (REFG(undefined4, 0x1430a0b30) == -1) {
       REFG(undefined4, 0x1430a0b28) = 0;

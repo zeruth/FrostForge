@@ -167,7 +167,7 @@ undefined8 FUN_140fb58d0(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0dc0)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0dc0)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0dc0));
     if (REFG(undefined4, 0x1430a0dc0) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -186,7 +186,7 @@ undefined8 FUN_140fb5990(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0dc8)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0dc8)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0dc8));
     if (REFG(undefined4, 0x1430a0dc8) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -205,7 +205,7 @@ undefined8 FUN_140fb5a50(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0dd0)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0dd0)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0dd0));
     if (REFG(undefined4, 0x1430a0dd0) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -224,7 +224,7 @@ undefined8 FUN_140fb5b10(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0de0)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0de0)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0de0));
     if (REFG(undefined4, 0x1430a0de0) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -243,7 +243,7 @@ undefined8 FUN_140fb5bd0(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0de8)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0de8)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0de8));
     if (REFG(undefined4, 0x1430a0de8) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -262,7 +262,7 @@ undefined8 FUN_140fb5c90(undefined8 param_1, undefined8 param_2, undefined4 para
   undefined1 param_5 = (undefined1)param_5_slot;
   undefined8 uVar1 = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0dd8)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0dd8)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0dd8));
     if (REFG(undefined4, 0x1430a0dd8) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -10557,7 +10557,7 @@ undefined8 FUN_1410313b0(undefined8 param_1)
 int FUN_1410321a0(void)
 {
   GEN_HIT(183);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0db0)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0db0)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0db0));
     if (REFG(undefined4, 0x1430a0db0) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -10572,7 +10572,7 @@ int FUN_1410321a0(void)
 int FUN_141032210(void)
 {
   GEN_HIT(184);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0db8)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0db8)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0db8));
     if (REFG(undefined4, 0x1430a0db8) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;

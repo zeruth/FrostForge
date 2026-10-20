@@ -23430,7 +23430,7 @@ undefined8 FUN_141872bc0(longlong *param_1)
     (*(undefined4 *)(gen_frame + 0x170)) = 0x3f800000;
     uVar15 = 0;
     (**(code **)(*param_1 + 0x100))
-              (param_1,&(*(uint *)(gen_frame + 0x20)),&(*(uint *)(gen_frame + 0x94)),&(*(uint *)(gen_frame + 0x108)),(ulonglong)0 << 0x20)
+              (param_1,&(*(uint *)(gen_frame + 0x20)),&(*(uint *)(gen_frame + 0x94)),&(*(uint *)(gen_frame + 0x108)),(unsigned long long)((ulonglong)0 << 0x20))
     ;
     lVar8 = CALLF(undefined8, FUN_141862760)(param_1);
     if (lVar8 != 0) {

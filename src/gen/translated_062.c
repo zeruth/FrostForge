@@ -9524,7 +9524,7 @@ undefined8 * FUN_140e69bd0(undefined8 *param_1, uint param_2)
 undefined * FUN_140e69c20(void)
 {
   GEN_HIT(158);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0cd0)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0cd0)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0cd0));
     if (REFG(undefined4, 0x1430a0cd0) == -1) {
       REFG(undefined8, 0x1430a0b40) = (*(undefined8 (*)[8])(uintptr_t)0x14270ffd8ULL);
@@ -10703,7 +10703,7 @@ undefined4 FUN_140e70720(undefined8 param_1)
   undefined4 uVar2 = {0};
   
   uVar2 = 0;
-  if ((_Init_thread_epoch < REFG(undefined4, 0x142e9a7b8)) && (_Init_thread_header(&REFG(undefined4, 0x142e9a7b8)), REFG(undefined4, 0x142e9a7b8) == -1)) {
+  if ((_Init_thread_epoch < REFG(int, 0x142e9a7b8)) && (_Init_thread_header(&REFG(undefined4, 0x142e9a7b8)), REFG(undefined4, 0x142e9a7b8) == -1)) {
     REFG(undefined8, 0x142e9a7a8) = 0;
     REFG(undefined8, 0x142e9a7a0) = (*(undefined8 (*)[8])(uintptr_t)0x1426d0f58ULL);
     REFG(undefined8, 0x142e9a7b0) = 0;

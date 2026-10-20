@@ -9541,8 +9541,8 @@ undefined8 FUN_141cfa8d0(undefined4 param_1, undefined8 param_2, longlong *param
   ulonglong uVar8 = {0};
   
   ((uint *)(gen_frame + 0x78))[0] = 0;
-  for (lVar4 = CALLF(char *, FUN_14026c578)(param_2,0x24); lVar4 != 0;
-      lVar4 = CALLF(char *, FUN_14026c578)((ulonglong)((uint *)(gen_frame + 0x78))[0] + lVar4,0x24)) {
+  for (lVar4 = strchr((void *)(param_2),0x24); lVar4 != 0;
+      lVar4 = strchr((void *)((ulonglong)((uint *)(gen_frame + 0x78))[0] + lVar4),0x24)) {
     lVar4 = lVar4 + 1;
     cVar1 = CALLF(undefined8, FUN_141b93630)(lVar4,((undefined1 *)(gen_frame + 0x20)),((uint *)(gen_frame + 0x78)));
     if (cVar1 != '\0') {
@@ -12829,8 +12829,7 @@ undefined1 FUN_141cfebf0(undefined8 param_1, undefined8 param_2, longlong *param
       puVar25 = (undefined *)0x0;
     }
     (**(code **)(*(longlong *)puVar11 + 0xa8))
-              (puVar11,puVar25,0x3f,0,(ulonglong)uVar14 << 0x20,
-               (ulonglong)CONCAT43(0,CONCAT21(uVar31,uVar30)) << 8);
+              (puVar11,puVar25,0x3f,0,(unsigned long long)((ulonglong)uVar14 << 0x20),(unsigned long long)((ulonglong)CONCAT43(0,CONCAT21(uVar31,uVar30)) << 8));
     (*(undefined8 *)(gen_frame + 0x1d0)) = REFG(undefined8, 0x1426c8890);
     (*(undefined8 *)(gen_frame + 0x1d8)) = REFG(undefined8, 0x1426c8898);
     (*(undefined8 *)(gen_frame + 0x220)) = REFG(undefined8, 0x14261a9d0);
@@ -12977,11 +12976,10 @@ undefined1 FUN_141cfebf0(undefined8 param_1, undefined8 param_2, longlong *param
       CALLF(undefined4, FUN_1412a1570)(puVar11,puVar24,1,0,(unsigned long long)(REFG(undefined8, 0x1432522c8)),(unsigned long long)(REFG(undefined2, 0x1432522d0)),(unsigned long long)(REFG(undefined4, 0x1432522d4)),(unsigned long long)(4),(unsigned long long)(0x13),(unsigned long long)(0x11),(unsigned long long)(0x2b));
       uVar18 = CALLF(int *, FUN_142290c90)(puVar11,CONCAT71((int7)((ulonglong)puVar24 >> 8),1),2,4);
       uVar27 = uVar27 & 0xffffffff00000000;
-      (**(code **)(*(longlong *)puVar11 + 400))(puVar11,uVar18,&REFG(undefined8, 0x142847bb8),8,uVar27);
+      (**(code **)(*(longlong *)puVar11 + 400))(puVar11,uVar18,&REFG(undefined8, 0x142847bb8),8,(unsigned long long)(uVar27));
       (**(code **)(*(longlong *)puVar11 + 0x130))(puVar11,uVar18,1);
       (**(code **)(*(longlong *)puVar11 + 0x150))
-                (puVar11,4,1,0,uVar27 & 0xffffffff00000000,
-                 (ulonglong)0 << 0x20,uVar32 & 0xffffffffffffff00);
+                (puVar11,4,1,0,(unsigned long long)(uVar27 & 0xffffffff00000000),(unsigned long long)((ulonglong)0 << 0x20),(unsigned long long)(uVar32 & 0xffffffffffffff00));
       fVar29 = (*(float *)(gen_frame + 0x28));
     }
     bVar28 = (*(int *)(gen_frame + 0x2c)) == *(int *)(puVar11 + 0xf0);
@@ -14677,7 +14675,7 @@ undefined4 FUN_141d01f30(undefined8 param_1)
     uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
     if ((int)uVar2 != 5) goto LAB_141d020ab;
     (*(longlong *)(gen_frame + 0x248)) = 0;
-    if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_142e97b64 + 0x0))) {
+    if (_Init_thread_epoch < (*(int *)((char *)&gen_g_142e97b64 + 0x0))) {
       _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_142e97b64 + 0x0)));
       if ((*(undefined4 *)((char *)&gen_g_142e97b64 + 0x0)) == -1) {
         (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -15380,7 +15378,7 @@ undefined4 FUN_141d02f30(undefined8 param_1)
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 == 5) {
     ((longlong *)(gen_frame + 0x8))[0] = 0;
-    if ((_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_142e99c2c + 0x0))) && (_Init_thread_header(&(*(undefined4 *)((char *)&gen_g_142e99c2c + 0x0))), (*(undefined4 *)((char *)&gen_g_142e99c2c + 0x0)) == -1)) {
+    if ((_Init_thread_epoch < (*(int *)((char *)&gen_g_142e99c2c + 0x0))) && (_Init_thread_header(&(*(undefined4 *)((char *)&gen_g_142e99c2c + 0x0))), (*(undefined4 *)((char *)&gen_g_142e99c2c + 0x0)) == -1)) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
       (*(undefined4 *)((char *)&gen_g_142e99c28 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0));
       _Init_thread_footer(&(*(undefined4 *)((char *)&gen_g_142e99c2c + 0x0)));

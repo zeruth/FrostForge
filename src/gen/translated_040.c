@@ -5004,7 +5004,7 @@ undefined8 FUN_140673cb0(undefined8 param_1, longlong *param_2, uint param_3)
   if (((byte)((ulonglong)param_2[1] >> 0x3a) != 0) && (cVar6 = CALLF(undefined1, FUN_1419985c0)(4), cVar6 == '\0')) {
     return 0;
   }
-  if ((_Init_thread_epoch < REFG(undefined4, 0x142e9a7b8)) && (_Init_thread_header(&REFG(undefined4, 0x142e9a7b8)), REFG(undefined4, 0x142e9a7b8) == -1)) {
+  if ((_Init_thread_epoch < REFG(int, 0x142e9a7b8)) && (_Init_thread_header(&REFG(undefined4, 0x142e9a7b8)), REFG(undefined4, 0x142e9a7b8) == -1)) {
     REFG(undefined8, 0x142e9a7a8) = 0;
     REFG(undefined8, 0x142e9a7a0) = (*(undefined8 (*)[8])(uintptr_t)0x1426d0f58ULL);
     REFG(undefined8, 0x142e9a7b0) = 0;
@@ -10082,7 +10082,7 @@ undefined8 FUN_14067b4c0(void)
   uVar2 = CALLF(undefined8, FUN_14063c960)();
   CALLF(undefined1 *, FUN_1402b3b70)(uVar2,"GameTooltip");
   CALLF(undefined4, FUN_1402b3da0)(uVar2,0xffffd8ee);
-  if ((_Init_thread_epoch < REFG(undefined4, 0x142e9cb18)) && (_Init_thread_header(&REFG(undefined4, 0x142e9cb18)), REFG(undefined4, 0x142e9cb18) == -1)) {
+  if ((_Init_thread_epoch < REFG(int, 0x142e9cb18)) && (_Init_thread_header(&REFG(undefined4, 0x142e9cb18)), REFG(undefined4, 0x142e9cb18) == -1)) {
     (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
     REFG(undefined4, 0x142e9cb14) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0));
     _Init_thread_footer(&REFG(undefined4, 0x142e9cb18));

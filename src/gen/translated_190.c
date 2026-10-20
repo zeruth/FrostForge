@@ -7506,7 +7506,7 @@ LAB_142431950:
       pcVar7 = pcVar7 + 2;
       uVar8 = 1;
       if ((*pcVar5 + 0xb2U & 0xdf) == 0) {
-        lVar4 = CALLF(char *, FUN_14026c578)(pcVar7,0x3a);
+        lVar4 = strchr((void *)(pcVar7),0x3a);
         if (lVar4 != 0) {
           pcVar7 = (char *)(lVar4 + 1);
         }

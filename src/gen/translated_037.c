@@ -347,7 +347,7 @@ undefined8 FUN_140606c10(void)
 int FUN_1406074f0(void)
 {
   GEN_HIT(20);
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_142e97af0 + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_142e97af0 + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_142e97af0 + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_142e97af0 + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;
@@ -362,7 +362,7 @@ int FUN_1406074f0(void)
 int FUN_140607560(void)
 {
   GEN_HIT(21);
-  if (_Init_thread_epoch < (*(undefined4 *)((char *)&gen_g_142e97ac0 + 0x0))) {
+  if (_Init_thread_epoch < (*(int *)((char *)&gen_g_142e97ac0 + 0x0))) {
     _Init_thread_header(&(*(undefined4 *)((char *)&gen_g_142e97ac0 + 0x0)));
     if ((*(undefined4 *)((char *)&gen_g_142e97ac0 + 0x0)) == -1) {
       (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) = (*(undefined4 *)((char *)&gen_g_142e979f0 + 0x0)) + 1;

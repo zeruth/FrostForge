@@ -9469,7 +9469,7 @@ LAB_141b704d1:
       uVar4 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
       if ((int)uVar4 == 0) goto LAB_141b704d1;
       uVar4 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
-      lVar5 = CALLF(gen_v16 *, FUN_14026c730)(uVar4,&REFG(undefined1, 0x1426e0d64));
+      lVar5 = strstr((void *)(uVar4),(void *)(&REFG(undefined1, 0x1426e0d64)));
       if (lVar5 == 0) {
         uVar4 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
         uVar4 = CALLF(undefined8, FUN_1417fa010)(uVar4);
@@ -10430,7 +10430,7 @@ undefined4 FUN_141b7a3b0(undefined8 param_1)
     uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar3 != 0) {
       uVar3 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
-      lVar4 = CALLF(gen_v16 *, FUN_14026c730)(uVar3,&REFG(undefined1, 0x1426e0d64));
+      lVar4 = strstr((void *)(uVar3),(void *)(&REFG(undefined1, 0x1426e0d64)));
       if (lVar4 == 0) {
         uVar3 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
         uVar3 = CALLF(undefined8, FUN_1417fa010)(uVar3);
@@ -11150,7 +11150,7 @@ undefined4 FUN_141b80760(undefined8 param_1)
     uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar3 != 0) {
       uVar3 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
-      lVar5 = CALLF(gen_v16 *, FUN_14026c730)(uVar3,&REFG(undefined1, 0x1426e0d64));
+      lVar5 = strstr((void *)(uVar3),(void *)(&REFG(undefined1, 0x1426e0d64)));
       if (lVar5 == 0) {
         uVar3 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
         uVar3 = CALLF(undefined8, FUN_1417fa010)(uVar3);
@@ -11227,7 +11227,7 @@ LAB_141b80b65:
     uVar5 = (int)uVar2 - 1;
     if (uVar5 < 3) {
       uVar2 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
-      lVar3 = CALLF(gen_v16 *, FUN_14026c730)(uVar2,&REFG(undefined1, 0x1426e0d64));
+      lVar3 = strstr((void *)(uVar2),(void *)(&REFG(undefined1, 0x1426e0d64)));
       if (lVar3 == 0) {
         lVar4 = CALLF(ulonglong, FUN_14170ff20)();
         if (lVar4 == 0) goto LAB_141b80b76;
@@ -11324,7 +11324,7 @@ undefined4 FUN_141b80c10(undefined8 param_1)
       goto LAB_141b80d97;
     }
     uVar4 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
-    lVar5 = CALLF(gen_v16 *, FUN_14026c730)(uVar4,&REFG(undefined1, 0x1426e0d64));
+    lVar5 = strstr((void *)(uVar4),(void *)(&REFG(undefined1, 0x1426e0d64)));
     if (lVar5 == 0) {
       uVar4 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
       uVar4 = CALLF(undefined8, FUN_1417fa010)(uVar4);
@@ -11814,7 +11814,7 @@ undefined4 FUN_141b82970(undefined8 param_1)
   uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar2 != 0) {
     uVar2 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
-    lVar3 = CALLF(gen_v16 *, FUN_14026c730)(uVar2,&REFG(undefined1, 0x1426e0d64));
+    lVar3 = strstr((void *)(uVar2),(void *)(&REFG(undefined1, 0x1426e0d64)));
     if (lVar3 != 0) {
       iVar1 = CALLF(int, FUN_141c29c80)(((undefined1 *)(gen_frame + 0x0)),uVar2);
       lVar3 = CALLF(undefined1 *, FUN_14191e320)(((undefined1 *)(gen_frame + 0x270)));
@@ -14084,7 +14084,7 @@ undefined4 FUN_141b87560(void)
   GEN_HIT(350);
   __declspec(align(16)) unsigned char gen_frame[(0xc + sizeof(undefined1) > 0x20 ? 0xc + sizeof(undefined1) : 0x20)] = {0};
   
-  if (_Init_thread_epoch < REFG(undefined4, 0x1430a0d98)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a0d98)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a0d98));
     if (REFG(undefined4, 0x1430a0d98) == -1) {
       REFG(undefined4, 0x1430a0ce8) = 0;
@@ -16243,7 +16243,7 @@ undefined4 FUN_141b8b3d0(undefined8 param_1)
     uVar4 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar4 != 0) {
       uVar4 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
-      lVar5 = CALLF(gen_v16 *, FUN_14026c730)(uVar4,&REFG(undefined1, 0x1426e0d64));
+      lVar5 = strstr((void *)(uVar4),(void *)(&REFG(undefined1, 0x1426e0d64)));
       if (lVar5 == 0) {
         uVar4 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
         uVar4 = CALLF(undefined8, FUN_1417fa010)(uVar4);
@@ -16945,7 +16945,7 @@ undefined8 FUN_141b8c430(undefined8 param_1, undefined8 param_2, int *param_3, l
       return 0;
     }
     uVar2 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
-    lVar3 = CALLF(gen_v16 *, FUN_14026c730)(uVar2,&REFG(undefined1, 0x1426e0d64));
+    lVar3 = strstr((void *)(uVar2),(void *)(&REFG(undefined1, 0x1426e0d64)));
     if (lVar3 != 0) {
       CALLF(int, FUN_141c29c80)(param_3,uVar2);
       goto LAB_141b8c4ef;

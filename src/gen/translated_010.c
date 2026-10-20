@@ -5751,7 +5751,7 @@ undefined8 FUN_14020bd90(void)
 char * FUN_14020bda0(void)
 {
   GEN_HIT(353);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447acfa0)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447acfa0)) {
     _Init_thread_header(&REFG(undefined4, 0x1447acfa0));
     if (REFG(undefined4, 0x1447acfa0) == -1) {
       REFG(undefined8, 0x1447ace28) = 0x50c;
@@ -5836,7 +5836,7 @@ int FUN_14020c0d0(void)
 char * FUN_14020c0e0(void)
 {
   GEN_HIT(355);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447ad018)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447ad018)) {
     _Init_thread_header(&REFG(undefined4, 0x1447ad018));
     if (REFG(undefined4, 0x1447ad018) == -1) {
       REFG(undefined8, 0x1447acfe0) = 6;
@@ -5873,7 +5873,7 @@ undefined8 FUN_14020c1e0(void)
 char * FUN_14020c1f0(void)
 {
   GEN_HIT(357);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447ad508)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447ad508)) {
     _Init_thread_header(&REFG(undefined4, 0x1447ad508));
     if (REFG(undefined4, 0x1447ad508) == -1) {
       REFG(undefined8, 0x1447ad4d0) = 4;
@@ -5900,7 +5900,7 @@ char * FUN_14020c1f0(void)
 char * FUN_14020c2f0(void)
 {
   GEN_HIT(358);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447ad618)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447ad618)) {
     _Init_thread_header(&REFG(undefined4, 0x1447ad618));
     if (REFG(undefined4, 0x1447ad618) == -1) {
       REFG(undefined8, 0x1447ad510) = "index";
@@ -5953,7 +5953,7 @@ char * FUN_14020c2f0(void)
 char * FUN_14020c520(void)
 {
   GEN_HIT(359);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447ad4b8)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447ad4b8)) {
     _Init_thread_header(&REFG(undefined4, 0x1447ad4b8));
     if (REFG(undefined4, 0x1447ad4b8) == -1) {
       REFG(undefined4, 0x1447ad41c) = 4;
@@ -5994,7 +5994,7 @@ char * FUN_14020c520(void)
 char * FUN_14020c6c0(void)
 {
   GEN_HIT(360);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447ad400)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447ad400)) {
     _Init_thread_header(&REFG(undefined4, 0x1447ad400));
     if (REFG(undefined4, 0x1447ad400) == -1) {
       REFG(undefined8, 0x1447ad380) = 10;
@@ -6040,7 +6040,7 @@ undefined8 FUN_14020c830(void)
 char * FUN_14020c840(void)
 {
   GEN_HIT(362);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447ad6c0)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447ad6c0)) {
     _Init_thread_header(&REFG(undefined4, 0x1447ad6c0));
     if (REFG(undefined4, 0x1447ad6c0) == -1) {
       REFG(undefined8, 0x1447ad670) = 10;
@@ -6070,7 +6070,7 @@ char * FUN_14020c840(void)
 char * FUN_14020c960(void)
 {
   GEN_HIT(363);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447ad650)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447ad650)) {
     _Init_thread_header(&REFG(undefined4, 0x1447ad650));
     if (REFG(undefined4, 0x1447ad650) == -1) {
       REFG(undefined8, 0x1447ad630) = 10;
@@ -6094,7 +6094,7 @@ char * FUN_14020c960(void)
 char * FUN_14020ca40(void)
 {
   GEN_HIT(364);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447ad760)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447ad760)) {
     _Init_thread_header(&REFG(undefined4, 0x1447ad760));
     if (REFG(undefined4, 0x1447ad760) == -1) {
       REFG(undefined8, 0x1447ad6e0) = 10;
@@ -6130,7 +6130,7 @@ char * FUN_14020ca40(void)
 char * FUN_14020cbb0(void)
 {
   GEN_HIT(365);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447adcb8)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447adcb8)) {
     _Init_thread_header(&REFG(undefined4, 0x1447adcb8));
     if (REFG(undefined4, 0x1447adcb8) == -1) {
       REFG(undefined4, 0x1447adc1c) = 8;
@@ -6171,7 +6171,7 @@ char * FUN_14020cbb0(void)
 char * FUN_14020cd50(void)
 {
   GEN_HIT(366);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447adc00)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447adc00)) {
     _Init_thread_header(&REFG(undefined4, 0x1447adc00));
     if (REFG(undefined4, 0x1447adc00) == -1) {
       REFG(undefined8, 0x1447adb80) = 0xb;
@@ -6315,7 +6315,7 @@ char * FUN_14020d020(void)
 char * FUN_14020d040(void)
 {
   GEN_HIT(379);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447ae3e8)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447ae3e8)) {
     _Init_thread_header(&REFG(undefined4, 0x1447ae3e8));
     if (REFG(undefined4, 0x1447ae3e8) == -1) {
       REFG(undefined8, 0x1447ae3b8) = "trees";
@@ -6379,7 +6379,7 @@ int FUN_14020d120(void)
 char * FUN_14020d1e0(void)
 {
   GEN_HIT(381);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447ae988)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447ae988)) {
     _Init_thread_header(&REFG(undefined4, 0x1447ae988));
     if (REFG(undefined4, 0x1447ae988) == -1) {
       REFG(undefined8, 0x1447ae950) = 10;
@@ -6406,7 +6406,7 @@ char * FUN_14020d1e0(void)
 char * FUN_14020d2e0(void)
 {
   GEN_HIT(382);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447ae938)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447ae938)) {
     _Init_thread_header(&REFG(undefined4, 0x1447ae938));
     if (REFG(undefined4, 0x1447ae938) == -1) {
       REFG(undefined8, 0x1447ae918) = 10;
@@ -6430,7 +6430,7 @@ char * FUN_14020d2e0(void)
 char * FUN_14020d3c0(void)
 {
   GEN_HIT(383);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447aeb08)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447aeb08)) {
     _Init_thread_header(&REFG(undefined4, 0x1447aeb08));
     if (REFG(undefined4, 0x1447aeb08) == -1) {
       REFG(undefined8, 0x1447aea00) = "m_centroid";
@@ -6485,7 +6485,7 @@ char * FUN_14020d3c0(void)
 char * FUN_14020d600(void)
 {
   GEN_HIT(384);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447ae9f0)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447ae9f0)) {
     _Init_thread_header(&REFG(undefined4, 0x1447ae9f0));
     if (REFG(undefined4, 0x1447ae9f0) == -1) {
       REFG(undefined8, 0x1447ae9a0) = 2;
@@ -6515,7 +6515,7 @@ char * FUN_14020d600(void)
 char * FUN_14020d720(void)
 {
   GEN_HIT(385);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447aec18)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447aec18)) {
     _Init_thread_header(&REFG(undefined4, 0x1447aec18));
     if (REFG(undefined4, 0x1447aec18) == -1) {
       REFG(undefined8, 0x1447aebe0) = 4;
@@ -6542,7 +6542,7 @@ char * FUN_14020d720(void)
 char * FUN_14020d820(void)
 {
   GEN_HIT(386);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447aeb58)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447aeb58)) {
     _Init_thread_header(&REFG(undefined4, 0x1447aeb58));
     if (REFG(undefined4, 0x1447aeb58) == -1) {
       REFG(undefined8, 0x1447aeb20) = 9;
@@ -6569,7 +6569,7 @@ char * FUN_14020d820(void)
 char * FUN_14020d920(void)
 {
   GEN_HIT(387);
-  if (_Init_thread_epoch < REFG(undefined4, 0x1447aebc0)) {
+  if (_Init_thread_epoch < REFG(int, 0x1447aebc0)) {
     _Init_thread_header(&REFG(undefined4, 0x1447aebc0));
     if (REFG(undefined4, 0x1447aebc0) == -1) {
       REFG(undefined8, 0x1447aeb70) = 9;
