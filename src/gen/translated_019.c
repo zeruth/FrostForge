@@ -3219,14 +3219,14 @@ undefined8 FUN_14032a380(byte *param_1, longlong param_2)
 }
 
 /* ref: FUN_14032a520 */
-undefined8 FUN_14032a520(undefined8 *param_1)
+undefined8 FUN_14032a520(undefined8 *param_1, undefined8 param_2)
 {
   GEN_HIT(85);
   undefined8 uVar1 = {0};
   
                     /* WARNING: Could not recover jumptable at 0x00014032a520. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-  uVar1 = (*(code *)*param_1)();
+  uVar1 = (*(code *)*param_1)(param_1, param_2);
   return uVar1;
 }
 

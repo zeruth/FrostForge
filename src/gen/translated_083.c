@@ -7406,7 +7406,7 @@ undefined8 FUN_1413556e0(longlong param_1, longlong *param_2)
 }
 
 /* ref: FUN_141355740 */
-undefined8 FUN_141355740(longlong *param_1)
+undefined8 FUN_141355740(longlong *param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(266);
   undefined8 uVar1 = {0};
@@ -7432,7 +7432,7 @@ undefined8 FUN_141355780(longlong param_1)
 }
 
 /* ref: FUN_1413557c0 */
-undefined8 FUN_1413557c0(longlong *param_1)
+undefined8 FUN_1413557c0(longlong *param_1, undefined8 param_2)
 {
   GEN_HIT(268);
   undefined8 uVar1 = {0};
@@ -7559,7 +7559,7 @@ undefined8 FUN_141355930(undefined8 param_1, undefined8 param_2, undefined4 para
 }
 
 /* ref: FUN_141355960 */
-undefined8 FUN_141355960(longlong *param_1)
+undefined8 FUN_141355960(longlong *param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(283);
                     /* WARNING: Could not recover jumptable at 0x000141355963. Too many branches */
@@ -7732,7 +7732,7 @@ undefined4 FUN_141355d00(longlong *param_1)
 }
 
 /* ref: FUN_141355d10 */
-undefined8 FUN_141355d10(longlong *param_1)
+undefined8 FUN_141355d10(longlong *param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(301);
   undefined8 uVar1 = {0};
@@ -8084,7 +8084,7 @@ byte FUN_141356360(longlong param_1)
 }
 
 /* ref: FUN_141356370 */
-undefined8 FUN_141356370(longlong *param_1)
+undefined8 FUN_141356370(longlong *param_1, undefined8 param_2)
 {
   GEN_HIT(338);
                     /* WARNING: Could not recover jumptable at 0x000141356373. Too many branches */
@@ -8380,7 +8380,7 @@ undefined8 FUN_141356830(longlong *param_1, undefined8 param_2, undefined8 param
 }
 
 /* ref: FUN_141356850 */
-undefined8 FUN_141356850(longlong *param_1)
+undefined8 FUN_141356850(longlong *param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(361);
   undefined8 uVar1 = {0};

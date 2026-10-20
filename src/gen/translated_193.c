@@ -5741,7 +5741,7 @@ uint FUN_1424c7b30(longlong param_1, undefined8 *param_2, undefined4 *param_3)
      (param_1 == (*(undefined8 *)((char *)&gen_g_142e97b30 + 0x0)))) {
                     /* WARNING: Could not recover jumptable at 0x0001424c7b70. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-    uVar5 = (*(code *)**(undefined8 **)(param_1 + 0x300))();
+    uVar5 = (*(code *)**(undefined8 **)(param_1 + 0x300))(param_1, param_2, param_3);
     return uVar5;
   }
   return uVar4;

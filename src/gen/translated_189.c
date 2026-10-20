@@ -21710,7 +21710,7 @@ undefined8 FUN_142406b30(int param_1)
   if (REFG(code *, 0x14478ffb0) != (code *)0x0) {
                     /* WARNING: Could not recover jumptable at 0x000142406b3f. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-    uVar1 = (*REFG(code *, 0x14478ffb0))();
+    uVar1 = (*REFG(code *, 0x14478ffb0))(param_1);
     return uVar1;
   }
   uVar1 = _malloc_base((longlong)param_1);
@@ -21726,7 +21726,7 @@ undefined8 FUN_142406b50(undefined8 param_1)
   if (REFG(code *, 0x14478ffb0) != (code *)0x0) {
                     /* WARNING: Could not recover jumptable at 0x000142406b5c. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-    uVar1 = (*REFG(code *, 0x14478ffb0))();
+    uVar1 = (*REFG(code *, 0x14478ffb0))(param_1);
     return uVar1;
   }
   uVar1 = _malloc_base(param_1);

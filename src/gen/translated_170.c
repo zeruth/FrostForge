@@ -22499,7 +22499,7 @@ undefined4 FUN_14213d970(undefined1 *param_1, undefined8 param_2)
             do {
               if (cVar1 == '\0') goto LAB_14213db13;
               cVar1 = ((char *)(gen_frame + 0x110))[lVar4 + 1];
-              cVar5 = "shmem"[lVar4 + 1];
+              cVar5 = ((char *)REFP(0x1428f182c))[lVar4 + 1];
               lVar4 = lVar4 + 1;
             } while (cVar1 == cVar5);
           }

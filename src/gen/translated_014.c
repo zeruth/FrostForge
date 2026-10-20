@@ -8113,7 +8113,7 @@ undefined8 FUN_14026b467(undefined4 param_1, undefined4 param_2)
   GEN_HIT(115);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&CreateToolhelp32Snapshot))();
+  uVar1 = (*(code *)(*(code *)&CreateToolhelp32Snapshot))(param_1, param_2);
   return uVar1;
 }
 
@@ -8123,7 +8123,7 @@ undefined4 FUN_14026b46d(undefined8 param_1, undefined8 param_2)
   GEN_HIT(116);
   undefined4 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&Thread32First))();
+  uVar1 = (*(code *)(*(code *)&Thread32First))(param_1, param_2);
   return uVar1;
 }
 
@@ -8133,7 +8133,7 @@ undefined4 FUN_14026b473(undefined8 param_1, undefined8 param_2)
   GEN_HIT(117);
   undefined4 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&Thread32Next))();
+  uVar1 = (*(code *)(*(code *)&Thread32Next))(param_1, param_2);
   return uVar1;
 }
 
@@ -8143,17 +8143,17 @@ undefined4 FUN_14026b479(undefined8 param_1, undefined8 param_2)
   GEN_HIT(118);
   undefined4 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&Module32First))();
+  uVar1 = (*(code *)(*(code *)&Module32First))(param_1, param_2);
   return uVar1;
 }
 
 /* ref: FUN_14026b47f */
-undefined4 FUN_14026b47f(undefined8 param_1, undefined8 param_2)
+undefined4 FUN_14026b47f(undefined8 param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(119);
   undefined4 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&Module32Next))();
+  uVar1 = (*(code *)(*(code *)&Module32Next))(param_1, param_2, param_3);
   return uVar1;
 }
 
@@ -8163,7 +8163,7 @@ undefined8 FUN_14026b485(undefined8 param_1, undefined8 param_2, undefined4 para
   GEN_HIT(120);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&K32GetProcessMemoryInfo))();
+  uVar1 = (*(code *)(*(code *)&K32GetProcessMemoryInfo))(param_1, param_2, param_3);
   return uVar1;
 }
 
@@ -8173,7 +8173,7 @@ undefined4 FUN_14026b48b(undefined8 param_1, undefined4 param_2, undefined8 para
   GEN_HIT(121);
   undefined4 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&SHGetKnownFolderPath))();
+  uVar1 = (*(code *)(*(code *)&SHGetKnownFolderPath))(param_1, param_2, param_3, param_4);
   return uVar1;
 }
 

@@ -13193,7 +13193,7 @@ undefined8 FUN_141a56450(longlong param_1, longlong *param_2)
       uVar1 = *(uint *)((undefined1 *)&REFG(undefined1, 0x1427ed420) + (ulonglong)*(byte *)(lVar4 + 0x10) * 4);
       if ((uVar1 >> 5 & 1) == 0) {
         if ((uVar1 >> 8 & 1) != 0) {
-          CALLF(undefined8, FUN_14175dec0)(lVar4);
+          CALLF(undefined8, FUN_14175dec0)(lVar4,(ulonglong)(uVar1 >> 8));
           fVar6 = CALLF(float, FUN_141755450)(lVar4);
           *(float *)(param_1 + 8) = fVar6;
         }

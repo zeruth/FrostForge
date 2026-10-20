@@ -5222,12 +5222,129 @@ class Translator:
                 if len(hit) == 1:
                     e["c"] = re.sub(rf"\bthunk_FUN_{i:09x}\(", f"(*PTR_FUN_{stubs[hit[0]][0]:09x})(", e["c"])
 
+    def addressed_literals(self, rest: str) -> str:
+        """A string literal indexed by an expression holding a negative absolute address
+        (`("Set-Cookie:" + i)[*p + -0x14273cbc3 + j]`) is the reference's copy of the string: the
+        compiler compared two buffers by their distance, and the decompiler folded one end into
+        the literal. With the port's own copy of the literal the sum is a wild pointer; the web
+        login's cookie scan faulted after the form arrived (FUN_141493e70, 2026-10-20). The
+        literal becomes its reference address, found in the image just below the constant."""
+        def literal_bytes(s: str) -> bytes:
+            return s.encode("latin-1").decode("unicode_escape").encode("latin-1")
+
+        def fix(m):
+            lit, var, idx = m.group(1) if m.group(1) is not None else m.group(3), m.group(2), m.group(4)
+            c = int(re.search(r"-0x(1[0-9a-f]{8})", idx).group(1), 16)
+            want = literal_bytes(lit) + b"\0"
+            lo = c - 0x400 - self.ref.base
+            hay = bytes(self.ref.image[lo:c + 0x40 - self.ref.base])
+            hits = [lo + self.ref.base + k for k in range(len(hay)) if hay.startswith(want, k)]
+            if not hits:
+                return m.group(0)
+            addr = min(hits, key=lambda x: abs(c - x))
+            inner = f"((char *)REFP(0x{addr:x}) + {var})" if var else f"((char *)REFP(0x{addr:x}))"
+            return f"{inner}[{idx}]"
+
+        return re.sub(r'(?:\("((?:[^"\\]|\\.)*)" \+ (\w+)\)|"((?:[^"\\]|\\.)*)")'
+                      r'\[([^\[\]]*-0x1[0-9a-f]{8}[^\[\]]*)\]', fix, rest)
+
+    def rip_targets(self, a: int) -> set[int]:
+        """The addresses the function's instructions reach rip-relative (lea and memory operands),
+        over all its pieces."""
+        cache = self.__dict__.setdefault("_rip_targets", {})
+        if a not in cache:
+            import capstone
+            from capstone import x86 as CX
+            md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
+            md.detail = True
+            md.skipdata = True
+            e = self.cor.get(a, {})
+            if not hasattr(self, "_pieces_by_root"):
+                self._pieces_by_root = defaultdict(list)
+                for s, t, r in zip(self.ref.piece_starts, self.ref.piece_ends, self.ref.piece_root):
+                    self._pieces_by_root[r].append((s, t))
+            out = set()
+            for s, t in self._pieces_by_root.get(a, []) + [(a, a + e.get("size", 0))]:
+                for i in md.disasm(bytes(self.ref.image[s - self.ref.base:t - self.ref.base]), s):
+                    if i.id == 0:   # (skipped data)
+                        continue
+                    for op in i.operands:
+                        if op.type == CX.X86_OP_MEM and op.mem.base == CX.X86_REG_RIP:
+                            out.add(i.address + i.size + op.mem.disp)
+                        elif op.type == CX.X86_OP_MEM and 0x1000 <= op.mem.disp < len(self.ref.image):
+                            # (image-base relative: `lea rsi, [0x140000000]` then
+                            # `[rsi + rax + 0x273ce90]`, a table the compiler indexes by RVA)
+                            out.add(self.ref.base + op.mem.disp)
+            cache[a] = out
+        return cache[a]
+
+    def indexed_literals(self, a: int, rest: str) -> str:
+        """A string literal indexed by a computed value is the data at its address, not a C string:
+        rapidjson's writer indexes "0123456789ABCDEF" plus its escape table, which runs on through
+        NULs the decompiler's literal stops at (`"0123456789ABCDEFuuuu..."[c + 0x10]`). With the
+        port's copy, every character past the literal read whatever followed it: the web login's
+        JSON came out escaped letter by letter and FrostForge read no account name (2026-10-20).
+        It becomes the reference's copy the function itself addresses."""
+        lits = re.compile(r'(?:\("((?:[^"\\]|\\.)*)" \+ (\w+)\)|"((?:[^"\\]|\\.)*)")\[([^\[\]]+)\]')
+        if not lits.search(rest):
+            return rest
+        targets = None
+
+        def fix(m):
+            nonlocal targets
+            lit, var, idx = m.group(1) if m.group(1) is not None else m.group(3), m.group(2), m.group(4)
+            if re.fullmatch(r"\s*(?:0x[0-9a-f]+|\d+)\s*", idx) and var is None:
+                return m.group(0)     # a constant index inside the literal is the literal
+            try:
+                want = lit.encode("latin-1").decode("unicode_escape").encode("latin-1") + b"\0"
+            except (UnicodeDecodeError, UnicodeEncodeError):
+                return m.group(0)
+            if targets is None:
+                targets = self.rip_targets(a)
+            # (the instructions may address a table inside the literal's data, rapidjson's escape
+            # table 0x10 past its hex digits: the literal starts at or a little below a target)
+            hits = set()
+            for t in targets:
+                lo = t - 0x100 - self.ref.base
+                hay = bytes(self.ref.image[max(lo, 0):t + 1 - self.ref.base + len(want)])
+                k = hay.find(want)
+                while k >= 0:
+                    if lo + k + self.ref.base <= t:
+                        hits.add(lo + k + self.ref.base)
+                    k = hay.find(want, k + 1)
+            hits = sorted(hits)
+            if len(hits) != 1:
+                return m.group(0)
+            inner = f"((char *)REFP(0x{hits[0]:x}) + {var})" if var else f"((char *)REFP(0x{hits[0]:x}))"
+            return f"{inner}[{idx}]"
+
+        return lits.sub(fix, rest)
+
+    @staticmethod
+    def handed_on_tail_call(head: str, rest: str) -> str:
+        """An open function's one indirect call with no arguments, in a body that never writes
+        its parameters, is the `jmp [ptr]` it leaves through: the registers it came in with go on
+        unchanged, so its parameters are that call's arguments. The decompiler shows the jump as
+        a call of nothing; curl's Curl_ssl_data_pending FUN_1421784c0 (`jmp [Curl_ssl + 0x48]`)
+        then called the Schannel backend with garbage for its connection (2026-10-20)."""
+        names = re.findall(r"\b(param_\d+)\b", head)
+        if not names or any(re.search(rf"(?<![=!<>])\b{p}\s*=[^=]", rest) for p in names):
+            return rest
+        call = re.compile(r"(\(\*+\(code \*+\)(?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)|\(\*\w+\))\(\)")
+        if len(call.findall(rest)) != 1:
+            return rest
+        return call.sub(lambda m: f"{m.group(1)}({', '.join(names)})", rest)
+
     def rewrite(self, a: int, text: str, uses: set) -> str:
         """The decompiled function as C: callees by address, globals at their addresses."""
         head, rest = text.split("{", 1)
         sig = self.signature(a)
         ret, _, params = sig
         own_name = self.cor[a]["name"] if a in self.cor else ""
+        if a in self.open_protos:
+            rest = self.handed_on_tail_call(head, rest)
+        rest = self.addressed_literals(rest)
+        rest = self.indexed_literals(a, rest)
         # `_local_a8`: Ghidra's name for a wider store over a declared local (`local_a8` an
         # undefined4, the store 8 bytes: CONCAT44), as `_DAT_x` is for a global
         rest = re.sub(r"\b_((?:local|[a-z]*Stack)_[0-9a-f]+|param_\d+)\b",

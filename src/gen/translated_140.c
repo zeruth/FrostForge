@@ -22472,7 +22472,7 @@ undefined8 FUN_141c76fc0(undefined8 param_1, undefined8 param_2, code *param_3, 
   if (param_4 == 0) {
                     /* WARNING: Could not recover jumptable at 0x000141c76fc5. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-    (*param_3)();
+    (*param_3)(param_1, param_2, param_3, param_4);
     return 0;
   }
   return 0;

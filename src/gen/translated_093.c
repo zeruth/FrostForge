@@ -17672,7 +17672,7 @@ undefined8 FUN_1414f75a0(longlong *param_1)
 }
 
 /* ref: FUN_1414f75ac */
-undefined8 FUN_1414f75ac(longlong *param_1)
+undefined8 FUN_1414f75ac(longlong *param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4)
 {
   GEN_HIT(296);
   undefined8 uVar1 = {0};
@@ -17708,7 +17708,7 @@ undefined8 FUN_1414f75c4(longlong *param_1)
 }
 
 /* ref: FUN_1414f75d0 */
-undefined8 FUN_1414f75d0(longlong *param_1)
+undefined8 FUN_1414f75d0(longlong *param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4)
 {
   GEN_HIT(299);
   undefined8 uVar1 = {0};

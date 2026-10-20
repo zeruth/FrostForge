@@ -4193,6 +4193,7 @@ undefined8 FUN_1425efc50(void)
 {
   GEN_HIT(233);
   longlong lVar1 = {0};
+  undefined8 gen_extraout_RDX = 0;
   
   if (REFG(undefined8, 0x143122368) != 0) {
     CALLF(undefined4, FUN_1417d74a0)(REFG(undefined8, 0x143122368),1,0);
@@ -4214,7 +4215,7 @@ undefined8 FUN_1425efc50(void)
   if (REFG(undefined8, 0x1431223a0) != 0) {
     lVar1 = CALLF(undefined8, FUN_140607470)(REFG(undefined8, 0x1431223a0));
     if (lVar1 != 0) {
-      CALLF(undefined8, FUN_14060e130)(REFG(undefined8, 0x1431223a0));
+      CALLF(undefined8, FUN_14060e130)(REFG(undefined8, 0x1431223a0),CONCAT71((int7)((ulonglong)gen_extraout_RDX >> 8),1));
     }
     CALLF(undefined4, FUN_141356480)(REFG(undefined8, 0x1431223a0));
     CALLF(undefined1, FUN_1411e7c70)(REFG(undefined8, 0x1431223a0),0,0);

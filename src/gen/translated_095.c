@@ -17675,7 +17675,7 @@ undefined8 FUN_14155c330(undefined8 param_1, longlong param_2, uint param_3)
      UNRECOVERED_JUMPTABLE != (code *)0x0)) {
                     /* WARNING: Could not recover jumptable at 0x00014155c345. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-    uVar1 = (*UNRECOVERED_JUMPTABLE)();
+    uVar1 = (*UNRECOVERED_JUMPTABLE)(param_1, param_2, param_3);
     return uVar1;
   }
   return CONCAT71((uint7)(uint3)(param_3 >> 8),1);

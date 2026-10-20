@@ -11149,7 +11149,7 @@ undefined4 FUN_1415d8cc0(byte *param_1, longlong param_2, int param_3)
         }
         lVar4 = (longlong)(int)uVar6;
         *(char *)(lVar2 + param_2) =
-             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[lVar4 >> 0x12];
+             ((char *)REFP(0x1427bce70))[lVar4 >> 0x12];
         if (lVar2 + 1 == lVar3) {
           return 0x25;
         }
@@ -11168,7 +11168,7 @@ undefined4 FUN_1415d8cc0(byte *param_1, longlong param_2, int param_3)
         iVar5 = iVar5 + 4;
         iVar7 = 0;
         *(char *)(lVar2 + 3 + param_2) =
-             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[uVar6 & 0x3f];
+             ((char *)REFP(0x1427bce70))[uVar6 & 0x3f];
         lVar2 = lVar2 + 4;
         iVar8 = 0;
       }
@@ -11183,7 +11183,7 @@ undefined4 FUN_1415d8cc0(byte *param_1, longlong param_2, int param_3)
       }
       lVar3 = (longlong)(iVar7 << (('\x02' - (char)iVar8) * '\b' & 0x1fU));
       *(char *)(iVar5 + param_2) =
-           "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[lVar3 >> 0x12];
+           ((char *)REFP(0x1427bce70))[lVar3 >> 0x12];
       if (iVar5 + 1 == param_3) {
         return 0x25;
       }

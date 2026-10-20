@@ -257,7 +257,7 @@ undefined8 FUN_141c80810(undefined8 param_1, undefined8 param_2, int param_3, un
   if (param_3 == 2) {
                     /* WARNING: Could not recover jumptable at 0x000141c80816. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-    return (undefined8)(*(code *)*param_4)();
+    return (undefined8)(*(code *)*param_4)(param_1, param_2, param_3, param_4);
     return 0;
   }
   return 0;

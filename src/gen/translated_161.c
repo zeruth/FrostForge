@@ -14612,7 +14612,7 @@ undefined8 FUN_141fa2110(longlong param_1)
   
                     /* WARNING: Could not recover jumptable at 0x000141fa2117. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-  uVar1 = (*(code *)**(undefined8 **)(param_1 + 0x2e8))();
+  uVar1 = (*(code *)**(undefined8 **)(param_1 + 0x2e8))(param_1);
   return uVar1;
 }
 
@@ -25521,7 +25521,7 @@ int FUN_141fb0000(longlong param_1)
     do {
       lVar5 = ((longlong *)(gen_frame + 0x20))[0];
       ((longlong *)(gen_frame + 0x20))[0] = lVar5 + 1;
-    } while ("Regular"[lVar5 + 1] != '\0');
+    } while (((char *)REFP(0x142886568))[lVar5 + 1] != '\0');
     uVar8 = lVar5 + 2;
   }
   pcVar6 = (char *)CALLF(longlong, FUN_141f80c90)(*(undefined8 *)(param_1 + 0x98),(int)uVar8,((int *)(gen_frame + 0x60)));

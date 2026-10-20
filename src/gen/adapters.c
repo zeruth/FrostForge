@@ -4208,13 +4208,6 @@ undefined1 FUN_1406035e0(unsigned long long a0) {
     return (undefined1)((unsigned long long (*)(unsigned long long))&gen_alias_1406035e0)((unsigned long long)a0);
 }
 
-#pragma comment(linker, "/alternatename:gen_alias_140603740=??$RunScript@MM@FrameScript_Object@@QEAAXEPEBDMM@Z")
-extern char gen_alias_140603740;
-undefined8 FUN_140603740(unsigned long long a0, unsigned long long a1, unsigned long long a2, double a3, double a4) {
-    ((void (*)(unsigned long long, unsigned long long, unsigned long long, float, float))&gen_alias_140603740)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2, (float)a3, (float)a4);
-    return (undefined8)0;
-}
-
 #pragma comment(linker, "/alternatename:gen_alias_140603870=??$RunScript@PEBD@FrameScript_Object@@QEAAXEPEBD0@Z")
 extern char gen_alias_140603870;
 undefined8 FUN_140603870(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3) {
@@ -4950,12 +4943,6 @@ undefined2 FUN_14060e030(unsigned long long a0, unsigned long long a1) {
 extern char gen_alias_14060e0d0;
 undefined4 FUN_14060e0d0(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3, unsigned long long a4) {
     return (undefined4)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long))&gen_alias_14060e0d0)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2, (unsigned long long)a3, (unsigned long long)a4);
-}
-
-#pragma comment(linker, "/alternatename:gen_alias_14060e130=?GetEffectiveAlpha@CScriptRegion@@UEAAEXZ")
-extern char gen_alias_14060e130;
-undefined8 FUN_14060e130(unsigned long long a0) {
-    return (undefined8)((unsigned long long (*)(unsigned long long))&gen_alias_14060e130)((unsigned long long)a0);
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_14060e140=?GetHitRectInsets@CScriptRegion@@UEAAPEBMXZ")

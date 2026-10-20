@@ -14098,7 +14098,8 @@ LAB_141f74206:
           }
           goto LAB_141f74206;
         }
-        if ((param_1 + (uVar5 - 0x1428806c2))[(longlong)("-----BEGIN" + uVar2)] != ((char *)REFP(0x1428806b8))[uVar2]) break;
+        if ((param_1 + (uVar5 - 0x1428806c2))[(longlong)("-----BEGIN" + uVar2)] !=
+            ((char *)REFP(0x1428806b8))[uVar2]) break;
         uVar2 = uVar2 + 1;
       }
       uVar3 = uVar3 + 1;
@@ -17543,7 +17544,7 @@ undefined4 FUN_141f79070(longlong *param_1, undefined8 param_2, undefined8 param
 }
 
 /* ref: FUN_141f79120 */
-undefined8 FUN_141f79120(longlong *param_1)
+undefined8 FUN_141f79120(longlong *param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(212);
   longlong *plVar1 = {0};
@@ -17816,7 +17817,7 @@ LAB_141f793d4:
     }
   }
   *plVar9 = 0;
-  CALLF(undefined8, FUN_141f79120)(plVar17);
+  CALLF(undefined8, FUN_141f79120)(plVar17,plVar9,plVar17);
   goto LAB_141f79416;
 code_r0x000141f793d9:
   plVar8 = plVar8 + 1;
@@ -18146,7 +18147,7 @@ LAB_141f79b40:
             }
           }
           *plVar7 = 0;
-          CALLF(undefined8, FUN_141f79120)(lVar13);
+          CALLF(undefined8, FUN_141f79120)(lVar13,plVar7,lVar13);
         }
       }
 LAB_141f79b7d:
@@ -21640,7 +21641,7 @@ undefined8 FUN_141f7e360(longlong param_1)
   if ((param_1 != 0) && (gen_in_RAX = 0, *(code **)(param_1 + 0x28) != (code *)0x0)) {
                     /* WARNING: Could not recover jumptable at 0x000141f7e36e. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-    uVar1 = (**(code **)(param_1 + 0x28))();
+    uVar1 = (**(code **)(param_1 + 0x28))(param_1);
     return uVar1;
   }
   return gen_in_RAX;
@@ -23842,7 +23843,7 @@ undefined8 FUN_141f80d10(longlong param_1, longlong param_2)
   if (param_2 != 0) {
                     /* WARNING: Could not recover jumptable at 0x000141f80d15. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-    uVar1 = (**(code **)(param_1 + 0x10))();
+    uVar1 = (**(code **)(param_1 + 0x10))(param_1, param_2);
     return uVar1;
   }
   return (undefined8)gen_rax;

@@ -7396,10 +7396,11 @@ undefined1 FUN_1406a3bd0(longlong param_1, undefined8 param_2, undefined8 param_
     else if (0xfffd < param_5) {
       return 0;
     }
+    lVar19 = param_4;
     CALLF(undefined8, FUN_141fd7c00)(((code *)REFP(0x1406a3710)));
     CALLF(undefined8, FUN_141fd7c10)(((code *)REFP(0x1406a3770)));
     ((undefined8 *)(gen_frame + 0x230))[0] = CALLF(undefined8 *, FUN_141fd7de0)(((undefined1 *)(gen_frame + 0x430)));
-    CALLF(undefined4, FUN_141fd7e90)(((undefined8 *)(gen_frame + 0x230)),0x3e,0x200);
+    CALLF(undefined4, FUN_141fd7e90)(((undefined8 *)(gen_frame + 0x230)),0x3e,0x200,lVar19);
     if ((*(char *)(gen_frame + 0x251)) == '\0') {
       (*(undefined4 *)(gen_frame + 0x4d0)) = 1000;
       lVar19 = 2;

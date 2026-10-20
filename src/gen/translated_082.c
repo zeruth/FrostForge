@@ -17736,7 +17736,7 @@ float FUN_14133d640(longlong *param_1, double param_2_promoted, undefined8 param
 }
 
 /* ref: FUN_14133d670 */
-undefined8 FUN_14133d670(longlong *param_1)
+undefined8 FUN_14133d670(longlong *param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(298);
   undefined8 uVar1 = {0};

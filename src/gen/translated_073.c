@@ -9546,7 +9546,7 @@ undefined4 FUN_1411d5950(longlong param_1, longlong param_2, ulonglong param_3)
   ulonglong *puVar20 = {0};
   bool bVar21 = {0};
   
-  CALLF(undefined8, FUN_1411eabc0)(param_3);
+  CALLF(undefined8, FUN_1411eabc0)(param_3,param_2,param_3);
   (*(uint *)(gen_frame + 0x88)) = *(uint *)(param_2 + 0x2f0);
   *(uint *)(param_3 + 8) = *(uint *)(param_3 + 8) & 0xfffffff7;
   (*(uint *)(gen_frame + 0x84)) = (*(uint *)(gen_frame + 0x88)) & 1;

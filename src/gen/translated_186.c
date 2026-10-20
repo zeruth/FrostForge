@@ -811,7 +811,7 @@ char FUN_142366220(uint param_1, char param_2)
   if (0xf < param_1) {
     return 0;
   }
-  cVar1 = "0123456789abcdefFailed to create bcSyncEvent."[param_1];
+  cVar1 = ((char *)REFP(0x14292c210))[param_1];
   if (param_2 != '\0') {
     cVar2 = cVar1 + -0x20;
     if (0x19 < (byte)(cVar1 + 0x9fU)) {
@@ -2872,20 +2872,20 @@ undefined1 FUN_142368ab0(char *param_1, ulonglong *param_2, byte *param_3, ulong
       pbVar1 = param_3 + 2;
       param_3 = param_3 + 3;
       uVar4 = CONCAT21(uVar3,*pbVar1);
-      *pcVar5 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[bVar2 >> 2];
+      *pcVar5 = ((char *)REFP(0x14292c2e0))[bVar2 >> 2];
       pcVar5[1] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
                   [uVar3 >> 4 & 0x3f];
       pcVar5[2] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
                   [uVar4 >> 6 & 0x3f];
-      pcVar5[3] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[uVar4 & 0x3f];
+      pcVar5[3] = ((char *)REFP(0x14292c2e0))[uVar4 & 0x3f];
       pcVar5 = pcVar5 + 4;
       uVar6 = uVar6 - 1;
     } while (uVar6 != 0);
   }
   if (param_4 == 1) {
     bVar2 = *param_3;
-    *pcVar5 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[bVar2 >> 2];
-    pcVar5[1] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[(bVar2 & 3) << 4]
+    *pcVar5 = ((char *)REFP(0x14292c2e0))[bVar2 >> 2];
+    pcVar5[1] = ((char *)REFP(0x14292c2e0))[(bVar2 & 3) << 4]
     ;
     pcVar5[2] = '=';
     pcVar5[3] = '=';
@@ -2893,7 +2893,7 @@ undefined1 FUN_142368ab0(char *param_1, ulonglong *param_2, byte *param_3, ulong
   }
   else if (param_4 == 2) {
     uVar3 = CONCAT11(*param_3,param_3[1]);
-    *pcVar5 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[*param_3 >> 2];
+    *pcVar5 = ((char *)REFP(0x14292c2e0))[*param_3 >> 2];
     pcVar5[3] = '=';
     pcVar5[1] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
                 [uVar3 >> 4 & 0x3f];
@@ -4120,7 +4120,7 @@ undefined4 FUN_14236a108(undefined8 param_1, undefined4 param_2, undefined8 para
   GEN_HIT(85);
   undefined4 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&ConvertStringSecurityDescriptorToSecurityDescriptorW))();
+  uVar1 = (*(code *)(*(code *)&ConvertStringSecurityDescriptorToSecurityDescriptorW))(param_1, param_2, param_3, param_4);
   return uVar1;
 }
 
@@ -4309,7 +4309,7 @@ HANDLE FUN_14236a174(HWND param_1, u_int param_2, char *param_3, char *param_4, 
 }
 
 /* ref: FUN_14236a17a */
-undefined8 FUN_14236a17a(HANDLE param_1)
+undefined8 FUN_14236a17a(HANDLE param_1, undefined8 param_2)
 {
   GEN_HIT(104);
   int iVar1 = {0};
@@ -4325,7 +4325,7 @@ undefined8 FUN_14236a180(undefined4 param_1, undefined8 param_2, undefined8 para
   GEN_HIT(105);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&inet_ntop))();
+  uVar1 = (*(code *)(*(code *)&inet_ntop))(param_1, param_2, param_3, param_4);
   return uVar1;
 }
 
@@ -4498,7 +4498,7 @@ undefined8 FUN_14236a1e0(HIMC param_1, DWORD param_2, LPVOID param_3, DWORD para
 }
 
 /* ref: FUN_14236a1e6 */
-undefined8 FUN_14236a1e6(HIMC param_1, LPCOMPOSITIONFORM param_2)
+undefined8 FUN_14236a1e6(HIMC param_1, LPCOMPOSITIONFORM param_2, undefined8 param_3)
 {
   GEN_HIT(122);
   BOOL BVar1 = {0};
@@ -4525,7 +4525,7 @@ undefined4 FUN_14236a1f8(undefined8 param_1, undefined8 param_2)
   GEN_HIT(124);
   undefined4 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&Process32FirstW))();
+  uVar1 = (*(code *)(*(code *)&Process32FirstW))(param_1, param_2);
   return uVar1;
 }
 
@@ -4535,7 +4535,7 @@ undefined4 FUN_14236a1fe(undefined8 param_1, undefined8 param_2)
   GEN_HIT(125);
   undefined4 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&Process32NextW))();
+  uVar1 = (*(code *)(*(code *)&Process32NextW))(param_1, param_2);
   return uVar1;
 }
 
@@ -4555,7 +4555,7 @@ undefined4 FUN_14236a20a(undefined8 param_1, undefined8 param_2, undefined8 para
   GEN_HIT(127);
   undefined4 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&acmFormatSuggest))();
+  uVar1 = (*(code *)(*(code *)&acmFormatSuggest))(param_1,param_2,param_3,param_4,(unsigned long long)(param_5));
   return uVar1;
 }
 
@@ -4565,7 +4565,7 @@ undefined4 FUN_14236a210(undefined8 param_1, undefined8 param_2, undefined8 para
   GEN_HIT(128);
   undefined4 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&acmStreamOpen))();
+  uVar1 = (*(code *)(*(code *)&acmStreamOpen))(param_1,param_2,param_3,param_4,(unsigned long long)(param_5),(unsigned long long)(param_6),(unsigned long long)(param_7),(unsigned long long)(param_8));
   return uVar1;
 }
 
@@ -4575,7 +4575,7 @@ undefined8 FUN_14236a216(undefined8 param_1, undefined4 param_2, undefined8 para
   GEN_HIT(129);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&acmStreamSize))();
+  uVar1 = (*(code *)(*(code *)&acmStreamSize))(param_1, param_2, param_3, param_4);
   return uVar1;
 }
 
@@ -4585,7 +4585,7 @@ undefined8 FUN_14236a21c(undefined8 param_1, undefined8 param_2, undefined4 para
   GEN_HIT(130);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&acmStreamConvert))();
+  uVar1 = (*(code *)(*(code *)&acmStreamConvert))(param_1, param_2, param_3);
   return uVar1;
 }
 
@@ -4595,7 +4595,7 @@ undefined8 FUN_14236a222(undefined8 param_1, undefined8 param_2, undefined4 para
   GEN_HIT(131);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&acmStreamPrepareHeader))();
+  uVar1 = (*(code *)(*(code *)&acmStreamPrepareHeader))(param_1, param_2, param_3);
   return uVar1;
 }
 
@@ -4605,7 +4605,7 @@ undefined8 FUN_14236a228(undefined8 param_1, undefined8 param_2, undefined4 para
   GEN_HIT(132);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&acmStreamUnprepareHeader))();
+  uVar1 = (*(code *)(*(code *)&acmStreamUnprepareHeader))(param_1, param_2, param_3);
   return uVar1;
 }
 

@@ -15479,7 +15479,7 @@ undefined8 FUN_14210db70(longlong param_1, undefined8 param_2, undefined8 param_
 }
 
 /* ref: FUN_14210dc50 */
-undefined1 FUN_14210dc50(longlong param_1, undefined8 param_2, undefined4 param_3)
+undefined1 FUN_14210dc50(longlong param_1, undefined8 param_2, undefined4 param_3, undefined8 param_4)
 {
   GEN_HIT(293);
   longlong *plVar1 = {0};
@@ -16393,7 +16393,7 @@ undefined4 FUN_14210f030(undefined8 param_1, undefined8 param_2, longlong param_
   plVar1 = (longlong *)(*(longlong *)(param_4 + 8) + 0x4d0);
   GEN_ATOMIC_ADD(*plVar1, param_3);
   *(longlong *)(param_4 + 0x48) = *(longlong *)(param_4 + 0x48) + param_3;
-  cVar3 = CALLF(undefined1, FUN_14210dc50)(*(undefined8 *)(param_4 + 0x10),param_1,(int)param_3);
+  cVar3 = CALLF(undefined1, FUN_14210dc50)(*(undefined8 *)(param_4 + 0x10),param_1,(int)param_3,param_4);
   if ((((cVar3 != '\0') && (*(char *)(param_4 + 0x1c) == '\0')) ||
       (uVar2 = *(uint *)(*(longlong *)(param_4 + 0x10) + 0x40), uVar2 == 0)) ||
      (lVar4 = 0xffffffff,

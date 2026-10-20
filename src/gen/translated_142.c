@@ -34190,7 +34190,7 @@ undefined8 FUN_141cdf980(longlong *param_1, longlong *param_2)
     uVar8 = CALLF(undefined8, FUN_1417559f0)(lVar5);
     CALLF(undefined8, FUN_141ccbd40)(param_1,uVar8,0,uVar6,(unsigned long long)(uVar6),(unsigned long long)(0),GEN_AS_FLOAT((unsigned long long)(0)));
 LAB_141cdfaad:
-    CALLF(undefined8, FUN_14174fd10)(lVar5);
+    CALLF(undefined8, FUN_14174fd10)(lVar5,param_1);
     pcVar19 = "";
     lVar7 = 0xfff;
     if ((*(uint *)(lVar5 + 0x230) >> 1 & 1) != 0) {

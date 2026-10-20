@@ -4323,7 +4323,7 @@ undefined8 FUN_1405896d0(longlong *param_1, uint param_2, longlong param_3)
     }
     lVar2 = *param_1;
   }
-  uVar1 = (**(code **)(lVar2 + 0x80))();
+  uVar1 = (**(code **)(lVar2 + 0x80))(param_1, (*(uint *)&gen_slot_param_2), param_3);
   return uVar1;
 }
 

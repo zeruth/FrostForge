@@ -6923,7 +6923,7 @@ ulonglong FUN_14198a390(longlong param_1)
     if (*(code **)(param_1 + 0x16b0) != (code *)0x0) {
                     /* WARNING: Could not recover jumptable at 0x00014198a50c. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-      uVar4 = (**(code **)(param_1 + 0x16b0))();
+      uVar4 = (**(code **)(param_1 + 0x16b0))(param_1);
       return uVar4;
     }
   }
@@ -7580,7 +7580,7 @@ undefined1 FUN_14198afe0(longlong param_1)
 }
 
 /* ref: FUN_14198b000 */
-undefined4 FUN_14198b000(uint *param_1, int param_2, char param_3)
+undefined4 FUN_14198b000(uint *param_1, int param_2, char param_3, undefined8 param_4)
 {
   GEN_HIT(153);
   undefined4 *puVar1 = {0};
@@ -7663,7 +7663,7 @@ undefined4 FUN_14198b000(uint *param_1, int param_2, char param_3)
     if (*(code **)(param_1 + 0x5ac) != (code *)0x0) {
                     /* WARNING: Could not recover jumptable at 0x00014198b1ad. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-      uVar4 = (**(code **)(param_1 + 0x5ac))();
+      uVar4 = (**(code **)(param_1 + 0x5ac))(param_1, param_2, param_3, param_4);
       return uVar4;
     }
   }
@@ -8281,7 +8281,7 @@ LAB_14198bf30:
     if (*(code **)(param_1 + 0x16b0) != (code *)0x0) {
                     /* WARNING: Could not recover jumptable at 0x00014198bf6d. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-      uVar2 = (**(code **)(param_1 + 0x16b0))();
+      uVar2 = (**(code **)(param_1 + 0x16b0))(param_1);
       return uVar2;
     }
   }
@@ -8996,7 +8996,7 @@ undefined8 FUN_14198cd00(undefined4 param_1, longlong *param_2, int param_3, und
     }
   }
   else {
-    CALLF(undefined4, FUN_14198b000)(*param_4,param_1,param_3 == 2);
+    CALLF(undefined4, FUN_14198b000)(*param_4,param_1,param_3 == 2,param_4);
   }
   if (lVar1 == 0) {
     return 0;
@@ -19700,7 +19700,7 @@ joined_r0x0001419a09a8:
     if ((uVar13 >> 1 & 1) == 0) {
       if ((uVar13 >> 5 & 1) == 0) {
         if ((uVar13 >> 8 & 1) != 0) {
-          CALLF(undefined8, FUN_14175d560)(plVar10,1);
+          CALLF(undefined8, FUN_14175d560)(plVar10,1,(ulonglong)(uVar13 >> 8));
         }
       }
       else {

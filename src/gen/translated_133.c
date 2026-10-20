@@ -15540,7 +15540,7 @@ undefined8 FUN_141b37d10(longlong param_1)
   
   uVar1 = CALLF(longlong *, FUN_141b37710)(&REFG(undefined8, 0x142d31878),param_1 + 0x48);
   CALLF(undefined4 *, FUN_1406e78e0)(uVar1,param_1 + 0x48);
-  CALLF(undefined8, FUN_14258d460)(&REFG(undefined8, 0x142d31800));
+  CALLF(undefined8, FUN_14258d460)(&REFG(undefined8, 0x142d31800),param_1 + 0x20);
   uVar1 = CALLF(longlong, FUN_14117c5b0)(*(undefined4 *)(param_1 + 0x48));
   return uVar1;
 }

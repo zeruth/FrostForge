@@ -4231,7 +4231,7 @@ undefined4 FUN_14163c990(longlong param_1, uint param_2, undefined4 param_3, und
 }
 
 /* ref: FUN_14163c9f0 */
-undefined4 FUN_14163c9f0(void)
+undefined4 FUN_14163c9f0(undefined8 param_1)
 {
   GEN_HIT(27);
   undefined4 uVar1 = {0};
@@ -4405,7 +4405,7 @@ undefined4 FUN_14163cc80(void)
 }
 
 /* ref: FUN_14163cca0 */
-undefined4 FUN_14163cca0(void)
+undefined4 FUN_14163cca0(undefined8 param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(37);
   undefined4 uVar1 = {0};
@@ -20670,13 +20670,13 @@ joined_r0x00014165259d:
           puVar9 = puVar1;
           if ((_C & 0xff00) == 0) {
             if ((ushort)(sVar3 - 0x30U) < 10) {
-              bVar13 = "Filtered GUID List"[_C + 8] == '\0';
+              bVar13 = ((char *)REFP(0x1427e25c0))[_C + 8] == '\0';
             }
             else {
               if ((0x19 < (ushort)(sVar3 - 0x61U)) && (0x19 < (ushort)(sVar3 - 0x41U)))
               goto LAB_14165269f;
               iVar6 = tolower(_C);
-              bVar13 = "Players"[(longlong)iVar6 + 7] == '\0';
+              bVar13 = ((char *)REFP(0x1427e25a0))[(longlong)iVar6 + 7] == '\0';
             }
           }
           else {
@@ -24159,7 +24159,7 @@ bool FUN_14165a020(undefined8 param_1, undefined8 param_2)
 }
 
 /* ref: FUN_14165a070 */
-undefined4 FUN_14165a070(undefined8 param_1, undefined8 param_2, undefined4 param_3, undefined8 *param_4)
+undefined4 FUN_14165a070(undefined8 param_1, undefined8 param_2, uint param_3, undefined8 *param_4)
 {
   GEN_HIT(328);
   __declspec(align(16)) unsigned char gen_frame[(0x20 + sizeof(undefined8[14]) > 0x98 ? 0x20 + sizeof(undefined8[14]) : 0x98)] = {0};
@@ -24167,7 +24167,7 @@ undefined4 FUN_14165a070(undefined8 param_1, undefined8 param_2, undefined4 para
   
   ((undefined8 *)(gen_frame + 0x20))[0] = 0xffffffffffffffff;
   CALLF(undefined4, FUN_1420bd820)(((undefined8 *)(gen_frame + 0x20)));
-  CALLF(undefined8, FUN_1420bd760)(((undefined8 *)(gen_frame + 0x20)));
+  CALLF(undefined8, FUN_1420bd760)(((undefined8 *)(gen_frame + 0x20)),param_2,(ulonglong)param_3);
   uVar1 = CALLF(uint, FUN_1420bd620)(((undefined8 *)(gen_frame + 0x20)),&(*(undefined8 *)(gen_frame + 0x0)));
   *param_4 = (*(undefined8 *)(gen_frame + 0x0));
   param_4[1] = (*(undefined8 *)(gen_frame + 0x8));

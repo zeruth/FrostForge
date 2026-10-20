@@ -9837,7 +9837,7 @@ undefined8 FUN_141db5530(undefined8 *param_1, float *param_2, float *param_3)
         fVar10 = ((float (*)())(**(code **)(**(longlong **)(lVar6 + 0x30) + 0x70)))(*(longlong **)(lVar6 + 0x30));
       }
       else {
-        fVar10 = CALLF(float, FUN_141861e20)(lVar6);
+        fVar10 = CALLF(float, FUN_141861e20)(lVar6,0);
       }
       (**(code **)(**(longlong **)(lVar6 + 0x30) + 8))(*(longlong **)(lVar6 + 0x30),&(*(float *)(gen_frame + 0x30)));
       fVar10 = fVar10 * REFG(float, 0x142618d60) + (*(float *)(gen_frame + 0x38));

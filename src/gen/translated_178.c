@@ -6932,7 +6932,7 @@ undefined1 FUN_14226e220(longlong *param_1, byte *param_2, uint param_3)
       bVar1 = *param_2;
       param_2 = param_2 + 1;
       uVar7 = uVar7 + 1;
-      cVar2 = "0123456789ABCDEFuuuuuuuubtnufruuuuuuuuuuuuuuuuuu"[(ulonglong)bVar1 + 0x10];
+      cVar2 = ((char *)REFP(0x14290ea50))[(ulonglong)bVar1 + 0x10];
       pbVar5 = *(byte **)(*param_1 + 0x18);
       *(byte **)(*param_1 + 0x18) = pbVar5 + 1;
       if (cVar2 == '\0') {
@@ -6940,11 +6940,11 @@ undefined1 FUN_14226e220(longlong *param_1, byte *param_2, uint param_3)
       }
       else {
         *pbVar5 = 0x5c;
-        cVar2 = "0123456789ABCDEFuuuuuuuubtnufruuuuuuuuuuuuuuuuuu"[(ulonglong)bVar1 + 0x10];
+        cVar2 = ((char *)REFP(0x14290ea50))[(ulonglong)bVar1 + 0x10];
         pcVar6 = *(char **)(*param_1 + 0x18);
         *(char **)(*param_1 + 0x18) = pcVar6 + 1;
         *pcVar6 = cVar2;
-        if ("0123456789ABCDEFuuuuuuuubtnufruuuuuuuuuuuuuuuuuu"[(ulonglong)bVar1 + 0x10] == 'u') {
+        if (((char *)REFP(0x14290ea50))[(ulonglong)bVar1 + 0x10] == 'u') {
           puVar4 = *(undefined1 **)(*param_1 + 0x18);
           *(undefined1 **)(*param_1 + 0x18) = puVar4 + 1;
           *puVar4 = 0x30;
@@ -6952,10 +6952,10 @@ undefined1 FUN_14226e220(longlong *param_1, byte *param_2, uint param_3)
           *(undefined1 **)(*param_1 + 0x18) = puVar4 + 1;
           *puVar4 = 0x30;
           pcVar6 = *(char **)(*param_1 + 0x18);
-          cVar2 = "0123456789ABCDEFuuuuuuuubtnufruuuuuuuuuuuuuuuuuu"[bVar1 >> 4];
+          cVar2 = ((char *)REFP(0x14290ea50))[bVar1 >> 4];
           *(char **)(*param_1 + 0x18) = pcVar6 + 1;
           *pcVar6 = cVar2;
-          cVar2 = "0123456789ABCDEFuuuuuuuubtnufruuuuuuuuuuuuuuuuuu"[bVar1 & 0xf];
+          cVar2 = ((char *)REFP(0x14290ea50))[bVar1 & 0xf];
           pcVar6 = *(char **)(*param_1 + 0x18);
           *(char **)(*param_1 + 0x18) = pcVar6 + 1;
           *pcVar6 = cVar2;
@@ -19887,7 +19887,7 @@ undefined8 FUN_142284870(ulonglong param_1, char *param_2)
   }
   do {
     uVar2 = param_1 >> 4;
-    *pcVar5 = "0123456789abcdef"[(uint)param_1 & 0xf];
+    *pcVar5 = ((char *)REFP(0x1429104a8))[(uint)param_1 & 0xf];
     pcVar5 = pcVar5 + 1;
     param_1 = uVar2;
   } while (uVar2 != 0);
@@ -22217,7 +22217,7 @@ undefined8 FUN_1422881f0(undefined8 *param_1, undefined4 *param_2, uint param_3,
 }
 
 /* ref: FUN_142288400 */
-undefined8 FUN_142288400(void)
+undefined8 FUN_142288400(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(367);
   undefined8 uVar1 = {0};
@@ -22229,7 +22229,7 @@ undefined8 FUN_142288400(void)
 }
 
 /* ref: FUN_142288420 */
-undefined8 FUN_142288420(void)
+undefined8 FUN_142288420(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(368);
   undefined8 uVar1 = {0};

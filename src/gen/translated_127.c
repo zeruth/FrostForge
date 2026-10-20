@@ -15253,7 +15253,7 @@ LAB_141a32ab7:
       if ((((bVar3) && (lVar20 = CALLF(undefined8, FUN_1418ea610)(puVar16,0x20), lVar20 != 0)) &&
           (*(longlong *)(lVar20 + 8) != 0)) &&
          (lVar20 = CALLF(undefined8, FUN_14176cd90)(*(longlong *)(lVar20 + 8)), lVar20 != 0)) {
-        CALLF(undefined8, FUN_1413557c0)(lVar20);
+        CALLF(undefined8, FUN_1413557c0)(lVar20,0x22);
       }
     }
   }

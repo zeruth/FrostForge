@@ -9365,7 +9365,7 @@ undefined8 FUN_1410210b0(undefined8 param_1)
         }
       }
     }
-    CALLF(undefined8, FUN_141a98e80)();
+    CALLF(undefined8, FUN_141a98e80)((*(undefined8 *)(gen_frame + 0x58)));
     cVar1 = CALLF(undefined1, FUN_14062cc40)(param_1,(*(undefined8 *)(gen_frame + 0x58)),"CancelOpenCheckout");
     if (cVar1 != '\0') {
                     /* WARNING: Subroutine does not return */

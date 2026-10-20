@@ -1190,7 +1190,7 @@ undefined4 FUN_1415a28b0(longlong param_1, byte *param_2)
 }
 
 /* ref: FUN_1415a2900 */
-undefined4 FUN_1415a2900(longlong param_1, longlong param_2)
+undefined4 FUN_1415a2900(longlong param_1, longlong param_2, undefined8 param_3)
 {
   GEN_HIT(24);
   undefined4 uVar1 = {0};

@@ -9195,13 +9195,13 @@ undefined4 FUN_1405dd5b0(undefined8 *param_1)
 }
 
 /* ref: FUN_1405dd5d0 */
-undefined8 FUN_1405dd5d0(byte param_1)
+undefined8 FUN_1405dd5d0(byte param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(221);
   if (param_1 != 0) {
                     /* WARNING: Could not emulate address calculation at 0x0001405dd5e2 */
                     /* WARNING: Treating indirect jump as call */
-    return (undefined8)(**(code **)(*(longlong *)(&(*(undefined8 *)((char *)&gen_g_142e97120 + 0x0)))[param_1] + 0x28))();
+    return (undefined8)(**(code **)(*(longlong *)(&(*(undefined8 *)((char *)&gen_g_142e97120 + 0x0)))[param_1] + 0x28))(param_1, param_2, param_3);
     return 0;
   }
   return 0;

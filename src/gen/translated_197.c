@@ -13009,7 +13009,7 @@ undefined1 FUN_1425429a0(longlong param_1)
       if ((byte)((ulonglong)*(undefined8 *)(param_1 + 0x18) >> 0x3a) != 0) {
         (*(undefined8 *)(gen_frame + 0x10)) = 0;
         (*(undefined8 *)(gen_frame + 0x18)) = 0;
-        fVar3 = CALLF(float, FUN_1417654f0)(param_1 + 0x10);
+        fVar3 = CALLF(float, FUN_1417654f0)(param_1 + 0x10,&(*(undefined8 *)(gen_frame + 0x10)));
       }
       if (REFG(float, 0x14261a958) <=
           GEN_FABS(((fVar5 - fVar3) - *(float *)(param_1 + 0x30)))) {
@@ -18200,13 +18200,13 @@ bool FUN_142549cb0(longlong param_1, undefined8 param_2, uint param_3)
   GEN_HIT(389);
   unsigned long long gen_slot_param_3 = 0;
   memcpy((void *)(&gen_slot_param_3),(void *)(&param_3), sizeof(param_3));
-  __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(undefined4) > 0x20 ? 0x10 + sizeof(undefined4) : 0x20)] = {0};
+  __declspec(align(16)) unsigned char gen_frame[(0x10 + sizeof(uint[4]) > 0x20 ? 0x10 + sizeof(uint[4]) : 0x20)] = {0};
   memcpy((void *)(gen_frame + 0x0),(void *)(&param_1), sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy((void *)(gen_frame + 0x8),(void *)(&param_2), sizeof(param_2) < 8 ? sizeof(param_2) : 8);
   memcpy((void *)(gen_frame + 0x10),(void *)(&(*(uint *)&gen_slot_param_3)), sizeof((*(uint *)&gen_slot_param_3)) < 8 ? sizeof((*(uint *)&gen_slot_param_3)) : 8);
   
-  CALLF(undefined8, FUN_14133d670)(param_1 + 0x30);
-  return (*(uint *)&gen_slot_param_3) <= (*(undefined4 *)(gen_frame + 0x10));
+  CALLF(undefined8, FUN_14133d670)(param_1 + 0x30,param_2,((uint *)(gen_frame + 0x10)));
+  return (*(uint *)&gen_slot_param_3) <= ((uint *)(gen_frame + 0x10))[0];
 }
 
 /* ref: FUN_142549ce0 */
@@ -19139,7 +19139,7 @@ undefined8 * FUN_14254af70(undefined8 *param_1, longlong param_2, longlong param
   uVar6 = *(undefined4 *)(param_3 + 0x48);
   uVar7 = *(undefined4 *)(param_3 + 0x4c);
   if (bVar2 >> 2 != 0) {
-    cVar1 = CALLF(undefined1, FUN_141765cd0)((void *)&(*(gen_v16 *)(gen_frame + 0x0)));
+    cVar1 = CALLF(undefined1, FUN_141765cd0)((void *)&(*(gen_v16 *)(gen_frame + 0x0)), param_2);
     bVar2 = (*(gen_v16 *)(gen_frame + 0x0)).b[0xf];
     if (cVar1 == '\0') {
       (*(gen_v16 *)(gen_frame + 0x0)) = gen_v16_zext(gen_v16_u(0), 8);

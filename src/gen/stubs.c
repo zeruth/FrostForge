@@ -8,6 +8,12 @@ undefined8 FUN_141484590() {
     return (undefined8)0;
 }
 
+/* register the decompiler lost track of */
+undefined8 FUN_141a93890() {
+    GenUnimplemented(0x141a93890ULL);
+    return (undefined8)0;
+}
+
 /* anti-tamper junk between two functions, no function (runs into the function at 0x142265730) */
 undefined8 FUN_1422656e0() {
     GenUnimplemented(0x1422656e0ULL);

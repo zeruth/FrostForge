@@ -24938,7 +24938,7 @@ uint FUN_1417d7190(longlong param_1, code *param_2, undefined8 *param_3)
       if ((param_2 != (code *)0x0) && ((uVar2 & 0x88) != 0)) {
                     /* WARNING: Could not recover jumptable at 0x0001417d72a6. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-        uVar8 = (*param_2)();
+        uVar8 = (*param_2)(param_1, param_2, param_3);
         return uVar8;
       }
     }
