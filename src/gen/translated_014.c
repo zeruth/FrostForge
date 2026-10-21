@@ -8148,7 +8148,7 @@ undefined4 FUN_14026b47f(undefined8 param_1, undefined8 param_2, undefined8 para
   GEN_HIT(119);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(code *)(*(code *)&Module32Next))(param_1,param_2);
+  uVar1 = (*(code *)(*(code *)&Module32Next))(param_1,param_2,param_3);
   return (int)uVar1;
 }
 

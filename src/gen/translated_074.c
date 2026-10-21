@@ -3461,7 +3461,7 @@ undefined ** FUN_1411e7300(void)
 undefined8 FUN_1411e7a00(longlong *param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(47);
-  return (undefined8)(**(code **)(*param_1 + 0x38))(param_1);
+  return (undefined8)(**(code **)(*param_1 + 0x38))(param_1,param_2,param_3);
   return 0;
 }
 

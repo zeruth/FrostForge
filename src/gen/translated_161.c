@@ -28346,7 +28346,7 @@ undefined4 FUN_141fb36a0(longlong param_1, byte *param_2, uint param_3)
       case 0xd:
         lVar8 = 2;
 LAB_141fb3810:
-        lVar6 = (longlong)*(int *)(&REFG(undefined1, 0x142889fe0) + lVar8 * 4);
+        lVar6 = (longlong)*(int *)((undefined1 *)&REFG(undefined1, 0x142889fe0) + lVar8 * 4);
         if ((longlong)piVar2 + (-0xb0 - param_1) >> 2 < lVar6) {
           return 0xa1;
         }

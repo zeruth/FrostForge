@@ -5796,6 +5796,13 @@ class Translator:
         body = re.sub(r"&\s*(_?DAT_([0-9a-f]{9}))(?=\s*[+-][^+-=>])",
                       lambda m: m.group(0) if int(m.group(2), 16) in self.refdata else f"(undefined1 *)&{m.group(1)}",
                       body)
+        # and an UNK_ label always: Ghidra names an address UNK_ because no item starts there (it
+        # is inside a wider one the data export types), so `&UNK_x + n` is a byte offset whatever
+        # the export says. Ed25519's field constants in FUN_1420beaa0 (`*(uint *)(&UNK_1428e1ddc +
+        # lVar6)`) were read 4 and 8 times too far apart, the signature check of
+        # ENTER_ENCRYPTED_MODE failed and the client dropped the world connection (2026-10-20)
+        body = re.sub(r"&\s*(_?UNK_([0-9a-f]{9}))(?=\s*[+-][^+-=>])",
+                      lambda m: f"(undefined1 *)&{m.group(1)}", body)
         # `p != &DAT_x` that ends a walk over the reference's own array just below x is the
         # array's bound, not the port global that happens to follow it: FUN_1413cf260 walked
         # 0x1430ad328.. until the address of g_wmoPortalInteriorFade, ran off and faulted (the

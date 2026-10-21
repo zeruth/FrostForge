@@ -183,7 +183,7 @@ class Local:
     __slots__ = ("inputs", "kinds", "stack", "calls", "open", "error", "why", "rets", "passes", "written",
                  "garbage", "ret_calls", "xwidths", "xgarbage", "ss", "sd", "call_sites", "tail_sites", "exits", "ipasses", "spill_width", "icalls", "local_floor",
                  "xpasses", "spilled", "slot_reads", "va_lea", "chk_calls", "vector_in", "xret_calls",
-                 "xany_widths", "xany_garbage", "feeds", "call_targets", "writes_xmm0", "dfresh")
+                 "xany_widths", "xany_garbage", "feeds", "call_targets", "writes_xmm0", "dfresh", "blocks")
 
     def __init__(self):
         # indirect calls: (address, widths written since the last call x8, defined widths x8,
@@ -223,6 +223,7 @@ class Local:
         # direct call site -> the argument positions written since the last call (a bit each):
         # what a caller hands a callee that leaves through a pointer and reads nothing itself
         self.dfresh: dict[int, int] = {}
+        self.blocks: set[int] = set()   # entry-relative offsets of 16-byte SSE stack moves
         self.writes_xmm0 = False   # any instruction of its own writes xmm0
         # the variadic prologue, read off the instructions (in place of tools/varargs.py's reading
         # of the decompiled text): the argument positions spilled to their own home slots, those
@@ -613,6 +614,14 @@ class Analyzer:
             if at in (8, 16, 24, 32) and f is not None and f[0] % 4 == at // 8 - 1 and defs[f[0]] < 8:
                 spill = (at, f[0], ops[1].reg)
 
+        # a 16-byte SSE move through a local stack slot: the slot is (part of) a block at least that
+        # wide, whatever narrower variables the decompiler splits it into (see stack_blocks)
+        if m.lstrip("v") in ("movups", "movaps", "movdqu", "movdqa") and len(ops) == 2:
+            for op in ops:
+                if op.type == X.X86_OP_MEM and op.mem.base in frame and op.mem.index == 0:
+                    at16 = frame[op.mem.base] + op.mem.disp
+                    if at16 < 0:
+                        res.blocks.add(at16)
         for op in ops:
             if op.type != X.X86_OP_MEM or op.mem.base not in frame:
                 continue
@@ -1061,7 +1070,7 @@ _A: Analyzer | None = None
 # ncalls_of's entry for a function not analysed: (direct call sites, tail sites, exits, indirect
 # passes, xmm0 passes, (spilled, slot reads, slot addresses, stack params), chkstk calls, vector
 # inputs)
-NC0 = (0, [], [], [], [], ([], [], [], 0), [], [], [], ([], True), [], [], True, [])
+NC0 = (0, [], [], [], [], ([], [], [], 0), [], [], [], ([], True), [], [], True, [], [])
 
 
 def variadic_fixed(va_info) -> int | None:
@@ -1101,6 +1110,19 @@ def variadic_fixed(va_info) -> int | None:
     return None
 
 
+def stack_blocks(ncalls_of: dict) -> dict:
+    """Per function, the 16-byte SSE stack moves merged into blocks: {func: [[offset, size]]}."""
+    out = {}
+    for f, nc in ncalls_of.items():
+        # (each move its own block, not merged: adjacent copies of different variables made one
+        # 176-byte block in FUN_1420bf4f0 that straddled its other locals and was skipped)
+        offs = sorted(set(nc[14])) if len(nc) > 14 else []
+        runs = [[o, 16] for o in offs]
+        if runs:
+            out[hexa(f)] = runs
+    return out
+
+
 def _init(starts, noreturn, sizes):
     global _A
     _A = Analyzer(Binary(), starts, noreturn, sizes)
@@ -1118,7 +1140,7 @@ def _work(chunk: list[int]):
                                     sorted(r.chk_calls), sorted(r.vector_in), sorted(r.xret_calls),
                                     (sorted(r.xany_widths), r.xany_garbage), r.feeds, sorted(r.call_targets.items()),
                                     r.writes_xmm0 or bool(r.icalls) or 0 in r.ret_calls or r.open,
-                                    sorted(r.dfresh.items()))))
+                                    sorted(r.dfresh.items()), sorted(r.blocks))))
         if SHOW:
             print(f"  {a:x} why {r.why}")
     return out
@@ -1839,6 +1861,12 @@ def main() -> None:
         "pointed": [hexa(g) for g in sorted(pointed_leaves)],
         # each jump from one function to another's start (a tail call), for ApplyFacts to mark
         "tail_jumps": tail_jumps,
+        # the stack blocks each function moves 16 bytes at a time (entry-relative offset, size),
+        # adjacent moves merged: ApplyFacts makes one array of each that the decompiler split
+        # into narrower locals. Split, a 32-byte copy out of a 4-byte `local_4e8` was dropped as
+        # dead, and Ed25519's verify (FUN_1420bf4f0) compared R with a buffer never written: the
+        # client refused ENTER_ENCRYPTED_MODE (2026-10-20)
+        "stack_blocks": stack_blocks(ncalls_of),
         # each `call __chkstk` of a large frame (`mov eax, <size>; call __chkstk; sub rsp, rax`),
         # for ApplyFacts to make a nop in Ghidra's copy: the decompiler took the call's rax for
         # killed, lost the stack pointer at the `sub` and printed `register0x00000020 =
@@ -1866,6 +1894,12 @@ def main() -> None:
         own = solved.get(f)
         if own is None or local[f][5]:
             continue
+        # (the parameters as written to protos.json: an open function's include those its
+        # callers pass, which it reads none of itself; read only from `solved`, HMAC's update
+        # wrapper FUN_1420bd760 handed on only rcx at its `jmp [table + rax*8]`, and SHA-256
+        # hashed the table's own address as its data, 2026-10-20)
+        final = out.get(hexa(f), {}).get("params", [])
+        own = [own[p] or (8 if p < 4 and p < len(final) and final[p][0] == "i" else 0) for p in range(len(own))]
         for at, (fresh, defs, outstk, callee) in ic.items():
             args = []
             for pos in range(4):

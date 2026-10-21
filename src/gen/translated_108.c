@@ -884,7 +884,7 @@ undefined4 FUN_141755390(longlong param_1, undefined8 param_2)
   
   plVar1 = *(longlong **)(param_1 + 0x140);
   if (plVar1 != (longlong *)0x0) {
-    uVar2 = (**(code **)(*plVar1 + 0x180))(plVar1);
+    uVar2 = (**(code **)(*plVar1 + 0x180))(plVar1,param_2);
     return (int)uVar2;
   }
   return 5;
@@ -4569,7 +4569,7 @@ undefined1 FUN_14175aa50(longlong param_1, undefined8 param_2, undefined8 param_
   
   plVar1 = *(longlong **)(param_1 + 0x140);
   if (plVar1 != (longlong *)0x0) {
-    uVar2 = (**(code **)(*plVar1 + 0x1b8))(plVar1);
+    uVar2 = (**(code **)(*plVar1 + 0x1b8))(plVar1,param_2,param_3,param_4);
     return (char)uVar2;
   }
   return 1;
@@ -7184,7 +7184,8 @@ undefined8 FUN_14175dec0(longlong param_1, undefined8 param_2)
   GEN_HIT(183);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(**(longlong **)(param_1 + 0x140) + 0x158))(*(longlong **)(param_1 + 0x140));
+  uVar1 = (**(code **)(**(longlong **)(param_1 + 0x140) + 0x158))
+                    (*(longlong **)(param_1 + 0x140),param_2);
   return uVar1;
 }
 

@@ -7508,7 +7508,7 @@ undefined8 FUN_1412ad5d0(undefined8 *param_1, undefined8 param_2, undefined8 par
   GEN_HIT(111);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*(longlong *)*param_1 + 8))((longlong *)*param_1);
+  uVar1 = (**(code **)(*(longlong *)*param_1 + 8))((longlong *)*param_1,param_2,param_3);
   return uVar1;
 }
 

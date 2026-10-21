@@ -16521,7 +16521,7 @@ undefined8 FUN_14174fd10(longlong param_1, undefined8 param_2)
   
   plVar1 = *(longlong **)(param_1 + 0x140);
   if (plVar1 != (longlong *)0x0) {
-    return (undefined8)(**(code **)(*plVar1 + 0x170))(plVar1);
+    return (undefined8)(**(code **)(*plVar1 + 0x170))(plVar1,param_2);
     return 0;
   }
   return 0;

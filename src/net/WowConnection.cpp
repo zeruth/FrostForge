@@ -3,6 +3,11 @@
 #include <cstring>
 #include <windows.h>
 
+// Ed25519Verify.cpp's port has no caller in hand-written code (the translated FUN_1420bf840
+// reaches it once tools/fidelity.py ties it), so its object is never pulled from the library;
+// this file always is, and keeps it (a pragma in the port's own object is never seen)
+#pragma comment(linker, "/include:Ed25519VerifyCore")
+
 extern "C" {
 int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 unsigned long long FUN_1414fd750(unsigned long long, unsigned long long, unsigned long long, unsigned long long,

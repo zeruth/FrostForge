@@ -17805,9 +17805,9 @@ undefined4 FUN_14208e3e0(float *param_1, float *param_2, longlong param_3)
       fVar2 = param_2[1];
       fVar3 = *(float *)((longlong)pfVar10 + ((longlong)(undefined1 *)&REFG(undefined1, 0x1428d5a84) - param_3) + -0x2c);
       fVar4 = *(float *)((longlong)pfVar10 + ((longlong)(undefined1 *)&REFG(undefined1, 0x1428d5a90) - param_3) + -0x2c);
-      fVar5 = *(float *)((longlong)&REFG(undefined1, 0x1428d5a68) + -param_3 + (longlong)pfVar10);
+      fVar5 = *(float *)((longlong)(undefined1 *)&REFG(undefined1, 0x1428d5a68) + -param_3 + (longlong)pfVar10);
       fVar6 = *(float *)((longlong)pfVar10 + ((longlong)(undefined1 *)&REFG(undefined1, 0x1428d5a88) - param_3) + -0x2c);
-      fVar7 = *(float *)((longlong)&REFG(undefined1, 0x1428d5a60) + -param_3 + (longlong)pfVar10);
+      fVar7 = *(float *)((longlong)(undefined1 *)&REFG(undefined1, 0x1428d5a60) + -param_3 + (longlong)pfVar10);
       fVar8 = *param_1;
       fVar9 = param_1[1];
       pfVar10[-0xb] =
@@ -17825,7 +17825,7 @@ undefined4 FUN_14208e3e0(float *param_1, float *param_2, longlong param_3)
       fVar5 = *(float *)(((longlong)(undefined1 *)&REFG(undefined1, 0x1428d5a80) - param_3) + (longlong)pfVar10);
       fVar6 = *(float *)((longlong)pfVar10 + ((longlong)(undefined1 *)&REFG(undefined1, 0x1428d5aa0) - param_3) + -0x2c);
       fVar7 = *param_1;
-      fVar8 = *(float *)((longlong)&REFG(undefined1, 0x1428d5a78) + -param_3 + (longlong)pfVar10);
+      fVar8 = *(float *)((longlong)(undefined1 *)&REFG(undefined1, 0x1428d5a78) + -param_3 + (longlong)pfVar10);
       fVar9 = param_1[1];
       pfVar10[-5] = fVar1 * *(float *)((longlong)pfVar10 +
                                       ((longlong)(undefined1 *)&REFG(undefined1, 0x1428d5a98) - param_3) + -0x2c) + fVar7;
@@ -18796,7 +18796,7 @@ longlong FUN_14208ffc0(int *param_1, longlong param_2, char *param_3, uint param
             lVar3 = 0;
             do {
               if (*(uint *)((undefined1 *)&REFG(undefined1, 0x1428dfbc0) + lVar3 * 8 + lVar8) == (*(uint *)(gen_frame + 0x0))) {
-                (*(uint *)(gen_frame + 0x0)) = *(uint *)(&REFG(undefined1, 0x1428dfbc4) + lVar3 * 8 + lVar8);
+                (*(uint *)(gen_frame + 0x0)) = *(uint *)((undefined1 *)&REFG(undefined1, 0x1428dfbc4) + lVar3 * 8 + lVar8);
                 break;
               }
               lVar3 = lVar3 + 1;

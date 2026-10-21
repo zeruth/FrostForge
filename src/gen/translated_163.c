@@ -1098,7 +1098,7 @@ undefined8 FUN_141feb9b0(longlong *param_1, undefined8 param_2, undefined8 param
   GEN_HIT(19);
   undefined8 *puVar1 = {0};
   
-  puVar1 = (undefined8 *)(**(code **)param_1[1])(param_1,1,0x98);
+  puVar1 = (undefined8 *)(**(code **)param_1[1])(param_1,1,0x98,param_4);
   param_1[0x4a] = (longlong)puVar1;
   *puVar1 = ((code *)REFP(0x141febff0));
   puVar1[2] = ((code *)REFP(0x1402112e0));
@@ -44696,7 +44696,7 @@ undefined8 FUN_142029550(longlong param_1, undefined8 param_2, undefined8 param_
   GEN_HIT(375);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(param_1 + 0x10))(param_1);
+  uVar1 = (**(code **)(param_1 + 0x10))(param_1,param_2,param_3,param_4);
   return uVar1;
 }
 
@@ -44706,7 +44706,7 @@ undefined8 FUN_142029560(longlong param_1, undefined8 param_2, undefined8 param_
   GEN_HIT(376);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(param_1 + 8))(param_1);
+  uVar1 = (**(code **)(param_1 + 8))(param_1,param_2,param_3);
   return uVar1;
 }
 
@@ -44726,7 +44726,7 @@ undefined8 FUN_142029580(longlong param_1, undefined8 param_2, undefined8 param_
   GEN_HIT(378);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(param_1 + 0x18))(param_1);
+  uVar1 = (**(code **)(param_1 + 0x18))(param_1,param_2,param_3,param_4);
   return uVar1;
 }
 

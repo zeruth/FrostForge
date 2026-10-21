@@ -8,6 +8,12 @@ undefined8 FUN_1402114e0() {
     return (undefined8)0;
 }
 
+/* the decompiler lost a call's arguments (FUN_14060e130 reads 2, the call passes 1) */
+undefined8 FUN_1403037e0() {
+    GenUnimplemented(0x1403037e0ULL);
+    return (undefined8)0;
+}
+
 /* the decompiler lost a call's arguments (FUN_14147f7f0 reads 1, the call passes 0) */
 undefined8 FUN_141484590() {
     GenUnimplemented(0x141484590ULL);
@@ -20,8 +26,32 @@ undefined8 FUN_141a93890() {
     return (undefined8)0;
 }
 
+/* the decompiler lost a call's arguments (FUN_14203bc60 reads 1, the call passes 0) */
+undefined8 FUN_14203ede0() {
+    GenUnimplemented(0x14203ede0ULL);
+    return (undefined8)0;
+}
+
+/* the decompiler lost a call's arguments (FUN_14203bc80 reads 1, the call passes 0) */
+undefined8 FUN_14203f0c0() {
+    GenUnimplemented(0x14203f0c0ULL);
+    return (undefined8)0;
+}
+
 /* anti-tamper junk between two functions, no function (runs into the function at 0x142265730) */
 undefined8 FUN_1422656e0() {
     GenUnimplemented(0x1422656e0ULL);
     return (undefined8)0;
+}
+
+/* the decompiler lost a call's arguments (FUN_1411e7a00 reads 3, the call passes 1) */
+undefined8 FUN_142458750() {
+    GenUnimplemented(0x142458750ULL);
+    return (undefined8)0;
+}
+
+/* the decompiler lost a call's arguments (FUN_1411e7a00 reads 3, the call passes 1) */
+undefined1 FUN_1424611c0() {
+    GenUnimplemented(0x1424611c0ULL);
+    return (undefined1)0;
 }

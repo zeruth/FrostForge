@@ -1,4 +1,5 @@
 add_library(net STATIC
+    Ed25519Verify.cpp
     NetClient.cpp
     NetInternal.cpp
     RealmConnection.cpp

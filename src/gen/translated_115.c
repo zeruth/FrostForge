@@ -12138,7 +12138,7 @@ float FUN_141861e20(longlong *param_1, undefined8 param_2)
   float fVar2 = {0};
   float fVar3 = {0};
   
-  lVar1 = (**(code **)(*(longlong *)param_1[0x41] + 0x20))((longlong *)param_1[0x41]);
+  lVar1 = (**(code **)(*(longlong *)param_1[0x41] + 0x20))((longlong *)param_1[0x41],param_2);
   if (lVar1 == 0) {
     (**(code **)(*(longlong *)param_1[6] + 0x70))((longlong *)param_1[6]);
     return gen_extraout_XMM0_Da;
@@ -12558,7 +12558,8 @@ undefined4 FUN_1418625d0(longlong param_1, undefined8 param_2)
   GEN_HIT(249);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(**(longlong **)(param_1 + 0x208) + 0x30))(*(longlong **)(param_1 + 0x208));
+  uVar1 = (**(code **)(**(longlong **)(param_1 + 0x208) + 0x30))
+                    (*(longlong **)(param_1 + 0x208),param_2);
   return (int)uVar1;
 }
 

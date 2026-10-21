@@ -14113,7 +14113,7 @@ undefined8 FUN_14146a200(uint param_1, undefined8 param_2)
   float fVar14 = {0};
   
   if ((REFG(undefined8, 0x1430aee98) == 0) || (*(int *)(REFG(undefined8, 0x1430aee98) + 0x14) != 0)) {
-    iVar6 = *(int *)(&REFG(undefined1, 0x14273a200) + (longlong)REFG(undefined4, 0x142d07578) * 4);
+    iVar6 = *(int *)((undefined1 *)&REFG(undefined1, 0x14273a200) + (longlong)REFG(undefined4, 0x142d07578) * 4);
   }
   else {
     iVar6 = -1;

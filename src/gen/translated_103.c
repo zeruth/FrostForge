@@ -8642,7 +8642,7 @@ undefined8 FUN_14169fabc(longlong *param_1, undefined8 param_2, undefined8 param
   GEN_HIT(193);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*param_1 + 0x38))(param_1);
+  uVar1 = (**(code **)(*param_1 + 0x38))(param_1,param_2,param_3,param_4);
   return uVar1;
 }
 
@@ -8652,7 +8652,7 @@ undefined8 FUN_14169fac4(longlong *param_1, undefined8 param_2, undefined8 param
   GEN_HIT(194);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*param_1 + 0x40))(param_1);
+  uVar1 = (**(code **)(*param_1 + 0x40))(param_1,param_2,param_3,param_4);
   return uVar1;
 }
 

@@ -44366,7 +44366,6 @@ bool FUN_1414fff10();
 undefined8 FUN_1414fff40();
 undefined8 FUN_1414fffa0();
 undefined8 FUN_141500090();
-undefined8 FUN_1415002e0();
 undefined1 FUN_141500440();
 undefined8 FUN_141500510();
 undefined8 FUN_1415005f0();

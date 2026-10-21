@@ -97,7 +97,11 @@ public class ApplyFacts extends GhidraScript {
             }
         }
         File pr = new File(dir, "protos.json");
-        if (pr.exists()) applyProtos(read(pr));
+        if (pr.exists()) {
+            JsonObject protos = read(pr);
+            applyProtos(protos);
+            if (protos.has("stack_blocks")) applyStackBlocks(protos.getAsJsonObject("stack_blocks"));
+        }
         File cs = new File(dir, "callsites.json");
         if (cs.exists()) applyCallsites(read(cs));
         // hand-identified names last, so they win over anything extracted
@@ -166,6 +170,48 @@ public class ApplyFacts extends GhidraScript {
         f.setParentNamespace(space);
         f.setName(name, SourceType.IMPORTED);
         named++;
+    }
+
+    // protos.json "stack_blocks" (tools/protos.py): the stack blocks a function moves 16 bytes at a
+    // time. Where the decompiler split one into two or more narrower locals, they become one byte
+    // array of the block's size: split, a 32-byte copy out of a 4-byte `local_4e8` was dropped as
+    // dead, and Ed25519's verify (FUN_1420bf4f0) compared R with a buffer never written (2026-10-20).
+    private void applyStackBlocks(JsonObject blocks) throws Exception {
+        int made = 0, functions = 0;
+        for (Map.Entry<String, JsonElement> e : blocks.entrySet()) {
+            Function f = getFunctionAt(addr(e.getKey()));
+            if (f == null) continue;
+            ghidra.program.model.listing.StackFrame sf = f.getStackFrame();
+            boolean touched = false;
+            for (JsonElement b : e.getValue().getAsJsonArray()) {
+                int off = b.getAsJsonArray().get(0).getAsInt();
+                int size = b.getAsJsonArray().get(1).getAsInt();
+                List<Variable> inside = new ArrayList<>();
+                boolean straddles = false;
+                for (Variable v : sf.getStackVariables()) {
+                    int vo = v.getStackOffset(), ve = vo + Math.max(1, v.getLength());
+                    if (ve <= off || vo >= off + size) continue;
+                    if (vo < off || ve > off + size) straddles = true;
+                    inside.add(v);
+                }
+                // (none that a wider variable straddles, nor one a single variable already covers
+                // whole; the decompiler's own split locals are not in the listing, so an empty
+                // slot is the usual case)
+                if (straddles || (inside.size() == 1 && inside.get(0).getStackOffset() == off
+                        && inside.get(0).getLength() >= size)) continue;
+                for (Variable v : inside) sf.clearVariable(v.getStackOffset());
+                try {
+                    sf.createVariable(String.format("blk_%x", -off), off,
+                            new ArrayDataType(Undefined.getUndefinedDataType(1), size, 1), SourceType.USER_DEFINED);
+                    made++;
+                    touched = true;
+                } catch (Exception ex) {
+                    // (a parameter's slot, or another conflict: leave it)
+                }
+            }
+            if (touched) functions++;
+        }
+        println("ApplyFacts: split stack blocks made arrays " + made + " in " + functions + " functions");
     }
 
     private void applyLua(JsonObject root) throws Exception {

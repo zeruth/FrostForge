@@ -5032,7 +5032,7 @@ undefined8 FUN_1425e85b0(void)
 {
   GEN_HIT(293);
   if (REFG(undefined8, 0x1430a7938) != 0) {
-    return (undefined8)CALLF(undefined8, FUN_142288400)();
+    return (undefined8)CALLF(undefined8, FUN_142288400)(&REFG(undefined8, 0x1430a7938),(*(ulonglong *)&REFG(undefined8, 0x1430a7938)));
     return 0;
   }
   return 0;

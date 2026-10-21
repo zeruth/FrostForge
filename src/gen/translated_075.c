@@ -1375,7 +1375,7 @@ undefined4 FUN_141206e10(longlong param_1)
   do {
     puVar4 = *ppuVar15;
     uVar2 = *(undefined4 *)((longlong)piVar13 + ((longlong)&REFG(char *, 0x142722a20) - param_1));
-    uVar3 = *(undefined4 *)((longlong)piVar13 + ((longlong)&REFG(undefined1, 0x1427229e8) - param_1));
+    uVar3 = *(undefined4 *)((longlong)piVar13 + ((longlong)(undefined1 *)&REFG(undefined1, 0x1427229e8) - param_1));
     if (*piVar13 == 0) {
       uVar14 = *(uint *)(param_1 + 0x1a0);
       puVar11 = (undefined4 *)((longlong *)(gen_frame + 0x140))[uVar14];

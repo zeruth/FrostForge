@@ -4267,7 +4267,7 @@ undefined8 FUN_14236a17a(undefined8 param_1, undefined8 param_2)
   GEN_HIT(104);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(*(code *)&WSACancelAsyncRequest))(param_1);
+  uVar1 = (*(*(code *)&WSACancelAsyncRequest))(param_1,param_2);
   return uVar1;
 }
 
@@ -4449,7 +4449,7 @@ undefined8 FUN_14236a1e6(undefined8 param_1, undefined8 param_2, undefined8 para
   GEN_HIT(122);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*(*(code *)&ImmSetCompositionWindow))(param_1,param_2);
+  uVar1 = (*(*(code *)&ImmSetCompositionWindow))(param_1,param_2,param_3);
   return uVar1;
 }
 

@@ -6871,7 +6871,7 @@ uint FUN_1423066a0(longlong param_1, undefined4 param_2, undefined4 param_3, ulo
     (*(undefined4 *)(gen_frame + 0x4)) = *(undefined4 *)((undefined1 *)&REFG(undefined1, 0x14291c1c0) + uVar3 * 4);
     lVar1 = uVar3 * 0x10;
     (*(undefined8 *)(gen_frame + 0x1c)) = *(undefined8 *)((undefined1 *)&REFG(undefined1, 0x14291c1e0) + lVar1);
-    (*(undefined8 *)(gen_frame + 0x24)) = *(undefined8 *)(&REFG(undefined1, 0x14291c1e8) + lVar1);
+    (*(undefined8 *)(gen_frame + 0x24)) = *(undefined8 *)((undefined1 *)&REFG(undefined1, 0x14291c1e8) + lVar1);
     (*(undefined4 *)(gen_frame + 0x8)) = *(undefined4 *)((undefined1 *)&REFG(undefined1, 0x14291c1c0) + (param_4 >> 0x10 & 0xff) * 4);
     (*(uint *)(gen_frame + 0x14)) = (uint)((param_4 >> 0x20 & 0xffff) >> 1) & 0x1f;
     (*(undefined4 *)(gen_frame + 0xc)) = *(undefined4 *)((undefined1 *)&REFG(undefined1, 0x14291c1c0) + (param_4 >> 0x18 & 0xff) * 4);
@@ -15746,7 +15746,7 @@ undefined8 FUN_1423154d0(longlong *param_1, undefined8 param_2, undefined8 param
   GEN_HIT(277);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*param_1 + 0x1d8))(param_1);
+  uVar1 = (**(code **)(*param_1 + 0x1d8))(param_1,param_2,param_3,param_4);
   return uVar1;
 }
 
@@ -15776,7 +15776,7 @@ undefined8 FUN_1423154f4(longlong *param_1, undefined8 param_2, undefined8 param
   GEN_HIT(280);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*param_1 + 0x1f8))(param_1);
+  uVar1 = (**(code **)(*param_1 + 0x1f8))(param_1,param_2,param_3,param_4);
   return uVar1;
 }
 
@@ -20224,7 +20224,7 @@ undefined2 * FUN_14231b4f0(longlong param_1, undefined2 *param_2, byte *param_3,
   (*(undefined4 *)(gen_frame + 0xc)) = *(undefined4 *)((undefined1 *)&REFG(undefined1, 0x14291e778) + (ulonglong)param_3[6] * 4);
   (*(undefined4 *)(gen_frame + 0x18)) = *(undefined4 *)((undefined1 *)&REFG(undefined1, 0x14291e790) + (ulonglong)param_3[0xc] * 4);
   (*(undefined8 *)(gen_frame + 0x1c)) = *(undefined8 *)((undefined1 *)&REFG(undefined1, 0x14291e2c8) + (ulonglong)param_3[0xd] * 0x10);
-  (*(undefined8 *)(gen_frame + 0x24)) = *(undefined8 *)(&REFG(undefined1, 0x14291e2d0) + (ulonglong)param_3[0xd] * 0x10);
+  (*(undefined8 *)(gen_frame + 0x24)) = *(undefined8 *)((undefined1 *)&REFG(undefined1, 0x14291e2d0) + (ulonglong)param_3[0xd] * 0x10);
   if (*(int *)(param_1 + 0x340) < 0xa000) {
     (*(undefined4 *)(gen_frame + 0x30)) = 0x7f7fffff;
   }

@@ -16094,6 +16094,12 @@ undefined1 FUN_1420bdd00(unsigned long long a0, unsigned long long a1, unsigned 
     return (undefined1)0;
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_1420bf4f0=Ed25519VerifyCore")
+extern char gen_alias_1420bf4f0;
+undefined1 FUN_1420bf4f0(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3, unsigned long long a4, unsigned long long a5, unsigned long long a6, unsigned long long a7) {
+    return (undefined1)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long))&gen_alias_1420bf4f0)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2, (unsigned long long)a3, (unsigned long long)a4, (unsigned long long)a5, (unsigned long long)a6, (unsigned long long)a7);
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_1420d3260=?Insert@OPMAP@tact@@QEAAPEAUOPENTRY@2@PEA_KPEAPEAVAsyncState@2@PEA_N@Z")
 extern char gen_alias_1420d3260;
 longlong * FUN_1420d3260(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3) {

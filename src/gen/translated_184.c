@@ -7474,7 +7474,7 @@ undefined8 FUN_14232ea38(longlong *param_1, undefined8 param_2, undefined8 param
   GEN_HIT(156);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*param_1 + 0x250))(param_1);
+  uVar1 = (**(code **)(*param_1 + 0x250))(param_1,param_2,param_3,param_4);
   return uVar1;
 }
 
@@ -7484,7 +7484,7 @@ undefined8 FUN_14232ea44(longlong *param_1, undefined8 param_2, undefined8 param
   GEN_HIT(157);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*param_1 + 600))(param_1);
+  uVar1 = (**(code **)(*param_1 + 600))(param_1,param_2,param_3,param_4);
   return uVar1;
 }
 
@@ -7494,7 +7494,7 @@ undefined8 FUN_14232ea50(longlong *param_1, undefined8 param_2, undefined8 param
   GEN_HIT(158);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*param_1 + 0x260))(param_1);
+  uVar1 = (**(code **)(*param_1 + 0x260))(param_1,param_2,param_3,param_4);
   return uVar1;
 }
 
@@ -7504,7 +7504,7 @@ undefined8 FUN_14232ea5c(longlong *param_1, undefined8 param_2, undefined8 param
   GEN_HIT(159);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*param_1 + 0x268))(param_1);
+  uVar1 = (**(code **)(*param_1 + 0x268))(param_1,param_2,param_3,param_4);
   return uVar1;
 }
 
@@ -8374,7 +8374,7 @@ undefined8 FUN_14232fc80(longlong param_1, longlong param_2, byte param_3, undef
   
   uVar1 = (**(code **)(**(longlong **)(param_1 + 0x10) + 0x1a0))
                     (*(longlong **)(param_1 + 0x10),*(undefined8 *)(param_2 + 8),
-                     *(undefined4 *)((undefined1 *)&REFG(undefined1, 0x1429209b0) + (ulonglong)param_3 * 4));
+                     *(undefined4 *)((undefined1 *)&REFG(undefined1, 0x1429209b0) + (ulonglong)param_3 * 4),param_4);
   return uVar1;
 }
 
@@ -19541,7 +19541,7 @@ undefined8 FUN_14233fcb0(longlong param_1, longlong param_2, byte param_3, undef
   
   uVar1 = (**(code **)(**(longlong **)(param_1 + 0x10) + 0x1a8))
                     (*(longlong **)(param_1 + 0x10),*(undefined8 *)(param_2 + 8),
-                     *(undefined4 *)((undefined1 *)&REFG(undefined1, 0x1429209b0) + (ulonglong)param_3 * 4));
+                     *(undefined4 *)((undefined1 *)&REFG(undefined1, 0x1429209b0) + (ulonglong)param_3 * 4),param_4);
   return uVar1;
 }
 

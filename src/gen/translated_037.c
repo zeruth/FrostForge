@@ -1032,7 +1032,7 @@ undefined8 FUN_14060e130(longlong *param_1, undefined8 param_2)
   GEN_HIT(39);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*param_1 + 0xe0))(param_1);
+  uVar1 = (**(code **)(*param_1 + 0xe0))(param_1,param_2);
   return uVar1;
 }
 

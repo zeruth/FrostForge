@@ -4429,7 +4429,7 @@ undefined8 FUN_14234c920(longlong param_1, undefined8 *param_2, byte *param_3)
   (*(undefined4 *)(gen_frame + 0xc)) = *(undefined4 *)((undefined1 *)&REFG(undefined1, 0x142923ea0) + (ulonglong)param_3[6] * 4);
   (*(undefined4 *)(gen_frame + 0x18)) = *(undefined4 *)((undefined1 *)&REFG(undefined1, 0x142923eb8) + (ulonglong)param_3[0xc] * 4);
   (*(undefined8 *)(gen_frame + 0x1c)) = *(undefined8 *)((undefined1 *)&REFG(undefined1, 0x142923e58) + (ulonglong)param_3[0xd] * 0x10);
-  (*(undefined8 *)(gen_frame + 0x24)) = *(undefined8 *)(&REFG(undefined1, 0x142923e60) + (ulonglong)param_3[0xd] * 0x10);
+  (*(undefined8 *)(gen_frame + 0x24)) = *(undefined8 *)((undefined1 *)&REFG(undefined1, 0x142923e60) + (ulonglong)param_3[0xd] * 0x10);
   (*(undefined4 *)(gen_frame + 0x30)) = *(undefined4 *)(param_3 + 0x14);
   uVar1 = (**(code **)(**(longlong **)(param_1 + 0x68) + 0xb0))
                     (*(longlong **)(param_1 + 0x68),&(*(uint *)(gen_frame + 0x0)),*param_2,(*(uint *)(gen_frame + 0x0)));
@@ -9039,7 +9039,7 @@ undefined8 FUN_142356690(longlong param_1, undefined8 param_2)
 {
   GEN_HIT(253);
   if (*(longlong *)(param_1 + 0x28) != 0) {
-    (*(*(code *)&FreeLibrary))(*(longlong *)(param_1 + 0x28));
+    (*(*(code *)&FreeLibrary))(*(longlong *)(param_1 + 0x28),param_2);
     return 0;
   }
   return 0;

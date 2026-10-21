@@ -21692,7 +21692,7 @@ undefined8 * FUN_1421db820(longlong *param_1, undefined8 *param_2)
                   }
                   if ((*(ulonglong *)(gen_frame + 0x58)) < uVar11) {
                     if (uVar9 <= uVar12) {
-                      uVar12 = (longlong)&REFG(undefined1, 0x14283534d) + lVar10;
+                      uVar12 = (longlong)(undefined1 *)&REFG(undefined1, 0x14283534d) + lVar10;
                     }
                     *puVar1 = *(undefined2 *)((*(longlong *)(gen_frame + 0x50)) + uVar12);
                   }

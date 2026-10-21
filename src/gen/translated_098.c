@@ -1202,7 +1202,7 @@ undefined4 FUN_1415a2900(longlong param_1, longlong param_2, undefined8 param_3)
   if (plVar1 == (longlong *)0x0) {
     return 0x24;
   }
-  uVar2 = (**(code **)(*plVar1 + 200))(plVar1,param_2);
+  uVar2 = (**(code **)(*plVar1 + 200))(plVar1,param_2,param_3);
   return (int)uVar2;
 }
 

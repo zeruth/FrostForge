@@ -18060,7 +18060,7 @@ undefined8 FUN_141fd7c20(undefined8 param_1, undefined8 param_2, undefined8 para
   undefined8 uVar1 = {0};
   
   if (REFG(code *, 0x1432650f0) != (code *)0x0) {
-    uVar1 = (*REFG(code *, 0x1432650f0))(param_2,param_2);
+    uVar1 = (*REFG(code *, 0x1432650f0))(param_2,param_2,param_3);
     return uVar1;
   }
   return 0;
@@ -18086,7 +18086,7 @@ undefined8 FUN_141fd7c60(longlong *param_1, undefined8 param_2, undefined8 param
   undefined8 uVar1 = {0};
   
   *(undefined4 *)(*param_1 + 0x28) = 0x31;
-  uVar1 = (**(code **)*param_1)(param_1);
+  uVar1 = (**(code **)*param_1)(param_1,param_2,param_3);
   return uVar1;
 }
 
@@ -18234,14 +18234,14 @@ undefined4 FUN_141fd7e90(longlong *param_1, int param_2, longlong param_3, undef
     *(undefined4 *)(lVar1 + 0x28) = 0xc;
     *(undefined4 *)(*param_1 + 0x2c) = 0x3e;
     *(int *)(*param_1 + 0x30) = param_2;
-    uVar4 = (**(code **)*param_1)(param_1,param_2,param_3);
+    uVar4 = (**(code **)*param_1)(param_1,param_2,param_3,param_4);
     return (int)uVar4;
   }
   if (param_3 != 0x200) {
     *(undefined4 *)(lVar1 + 0x28) = 0x15;
     *(undefined4 *)(*param_1 + 0x2c) = 0x200;
     *(int *)(*param_1 + 0x30) = (int)param_3;
-    uVar4 = (**(code **)*param_1)(param_1,0x3e,param_3);
+    uVar4 = (**(code **)*param_1)(param_1,0x3e,param_3,param_4);
     return (int)uVar4;
   }
   lVar2 = param_1[3];
@@ -27836,7 +27836,7 @@ LAB_141fe3942:
             (*(undefined4 *)((char *)&auVar46 + 4)) = (*(undefined4 *)((char *)&auVar43 + 4)) + iVar27 >> 0xb;
             (*(undefined4 *)((char *)&auVar46 + 8)) = (*(undefined4 *)((char *)&auVar43 + 8)) + iVar28 >> 0xb;
             (*(undefined4 *)((char *)&auVar46 + 12)) = (*(undefined4 *)((char *)&auVar43 + 12)) + iVar29 >> 0xb;
-            auVar45 = gen_v16_m(_mm_cvtepi16_epi32(gen_v16_u(*(undefined8 *)((longlong)&REFG(undefined1, 0x14289ed08) + lVar35 + (longlong)puVar32)).m));
+            auVar45 = gen_v16_m(_mm_cvtepi16_epi32(gen_v16_u(*(undefined8 *)((longlong)(undefined1 *)&REFG(undefined1, 0x14289ed08) + lVar35 + (longlong)puVar32)).m));
             pauVar33[-2] = auVar46;
             auVar43 = gen_v16_m(_mm_cvtepu16_epi32(gen_v16_u(puVar34[-1]).m));
             auVar43 = gen_v16_m(_mm_mullo_epi32((auVar43).m, (auVar45).m));
@@ -27852,7 +27852,7 @@ LAB_141fe3942:
             (*(undefined4 *)((char *)&auVar45 + 4)) = (*(undefined4 *)((char *)&auVar43 + 4)) + iVar27 >> 0xb;
             (*(undefined4 *)((char *)&auVar45 + 8)) = (*(undefined4 *)((char *)&auVar43 + 8)) + iVar28 >> 0xb;
             (*(undefined4 *)((char *)&auVar45 + 12)) = (*(undefined4 *)((char *)&auVar43 + 12)) + iVar29 >> 0xb;
-            gen_in_XMM2 = gen_v16_m(_mm_cvtepi16_epi32(gen_v16_u(*(undefined8 *)((longlong)puVar34 + (longlong)&REFG(undefined1, 0x14289ed38) + lVar35)).m));
+            gen_in_XMM2 = gen_v16_m(_mm_cvtepi16_epi32(gen_v16_u(*(undefined8 *)((longlong)puVar34 + (longlong)(undefined1 *)&REFG(undefined1, 0x14289ed38) + lVar35)).m));
             *pauVar33 = auVar45;
             auVar43 = gen_v16_m(_mm_cvtepu16_epi32(gen_v16_u(puVar34[1]).m));
             auVar43 = gen_v16_m(_mm_mullo_epi32((auVar43).m, (gen_in_XMM2).m));

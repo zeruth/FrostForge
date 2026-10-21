@@ -4399,7 +4399,7 @@ undefined4 FUN_14163cca0(undefined8 param_1, undefined8 param_2, undefined8 para
   if (REFG(undefined1 *, 0x1431195c0) == (undefined1 *)0x0) {
     return 0xfffffc18;
   }
-  uVar1 = (**(code **)(*(longlong *)REFG(undefined1 *, 0x1431195c0) + 0x40))(REFG(undefined1 *, 0x1431195c0));
+  uVar1 = (**(code **)(*(longlong *)REFG(undefined1 *, 0x1431195c0) + 0x40))(REFG(undefined1 *, 0x1431195c0),param_2,param_3);
   return (int)uVar1;
 }
 

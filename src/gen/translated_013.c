@@ -18605,7 +18605,7 @@ undefined1 FUN_14025a0c0(undefined8 param_1, undefined8 param_2)
   if (REFG(code *, 0x142e1c948) == (code *)0x0) {
     return 0;
   }
-  uVar1 = (*REFG(code *, 0x142e1c948))(param_1, param_2);
+  uVar1 = (*REFG(code *, 0x142e1c948))(param_1,param_2);
   return (char)uVar1;
 }
 

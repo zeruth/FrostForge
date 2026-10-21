@@ -9200,7 +9200,7 @@ undefined8 FUN_1405dd5d0(byte param_1, undefined8 param_2, undefined8 param_3)
   GEN_HIT(221);
   if (param_1 != 0) {
     return (undefined8)(**(code **)(*(longlong *)(&(*(undefined8 *)((char *)&gen_g_142e97120 + 0x0)))[param_1] + 0x28))
-              ((longlong *)(&(*(undefined8 *)((char *)&gen_g_142e97120 + 0x0)))[param_1]);
+              ((longlong *)(&(*(undefined8 *)((char *)&gen_g_142e97120 + 0x0)))[param_1],param_2,param_3);
     return 0;
   }
   return 0;

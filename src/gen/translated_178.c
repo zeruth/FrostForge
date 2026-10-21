@@ -22203,7 +22203,7 @@ undefined8 FUN_142288400(undefined8 param_1, undefined8 param_2)
   GEN_HIT(367);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*(longlong *)(*(undefined1 * *)((char *)&gen_g_14348b650 + 0x0)) + 0xf8))((*(undefined1 * *)((char *)&gen_g_14348b650 + 0x0)));
+  uVar1 = (**(code **)(*(longlong *)(*(undefined1 * *)((char *)&gen_g_14348b650 + 0x0)) + 0xf8))((*(undefined1 * *)((char *)&gen_g_14348b650 + 0x0)),param_2);
   return uVar1;
 }
 
@@ -22213,7 +22213,7 @@ undefined8 FUN_142288420(undefined8 param_1, undefined8 param_2)
   GEN_HIT(368);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*(longlong *)(*(undefined1 * *)((char *)&gen_g_14348b650 + 0x0)) + 0x270))((*(undefined1 * *)((char *)&gen_g_14348b650 + 0x0)));
+  uVar1 = (**(code **)(*(longlong *)(*(undefined1 * *)((char *)&gen_g_14348b650 + 0x0)) + 0x270))((*(undefined1 * *)((char *)&gen_g_14348b650 + 0x0)),param_2);
   return uVar1;
 }
 

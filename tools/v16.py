@@ -524,8 +524,11 @@ class Emitter:
                                  or WIDE_INT_CAST.fullmatch(n.val.strip())):
                 # to 16 bytes (`(undefined1 [16])0x0`, or a 16-byte value already): the value
                 return self.v(inner)
-            if T.ty(inner) == V and ty.rstrip().endswith("*") and (is_place16(inner, T) or T.is_array16(
-                    inner.kids[0] if inner.kind == "paren" else inner)):
+            if T.ty(inner) == V and ("*" in ty or (ty.strip() in ("longlong", "ulonglong", "uintptr_t")
+                                                    and is_place16(inner, T))) \
+                    and (is_place16(inner, T) or T.is_array16(inner.kids[0] if inner.kind == "paren" else inner)):
+                # (any pointer type, `undefined1 (**)[16]` too, and a 64-bit integer of a place
+                # through a 16-byte pointer, `(longlong)*pauVar19 + 4`: Ghidra's array decays alike)
                 # a 16-byte place cast to a pointer is the array decaying to its address, as in
                 # Ghidra's C: `*(undefined4 *)*param_1` reads the first 4 bytes param_1 points at.
                 # As the low lane's value made a pointer, SHA-256's block function read through

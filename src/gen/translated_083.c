@@ -7391,7 +7391,7 @@ undefined8 FUN_141355740(longlong *param_1, undefined8 param_2, undefined8 param
   GEN_HIT(266);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*param_1 + 0xb0))(param_1);
+  uVar1 = (**(code **)(*param_1 + 0xb0))(param_1,param_2,param_3);
   return uVar1;
 }
 
@@ -7415,7 +7415,7 @@ undefined8 FUN_1413557c0(longlong *param_1, undefined8 param_2)
   GEN_HIT(268);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*param_1 + 0x60))(param_1);
+  uVar1 = (**(code **)(*param_1 + 0x60))(param_1,param_2);
   return uVar1;
 }
 
@@ -7536,7 +7536,7 @@ undefined8 FUN_141355930(undefined8 param_1, undefined8 param_2, undefined4 para
 undefined8 FUN_141355960(longlong *param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(283);
-  return (undefined8)(**(code **)(*param_1 + 0x158))(param_1);
+  return (undefined8)(**(code **)(*param_1 + 0x158))(param_1,param_2,param_3);
   return 0;
 }
 
@@ -7707,7 +7707,7 @@ undefined8 FUN_141355d10(longlong *param_1, undefined8 param_2, undefined8 param
   GEN_HIT(301);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*param_1 + 0x1c8))(param_1);
+  uVar1 = (**(code **)(*param_1 + 0x1c8))(param_1,param_2,param_3);
   return uVar1;
 }
 
@@ -8053,7 +8053,7 @@ byte FUN_141356360(longlong param_1)
 undefined8 FUN_141356370(longlong *param_1, undefined8 param_2)
 {
   GEN_HIT(338);
-  return (undefined8)(**(code **)(*param_1 + 0x98))(param_1);
+  return (undefined8)(**(code **)(*param_1 + 0x98))(param_1,param_2);
   return 0;
 }
 
@@ -8266,10 +8266,10 @@ undefined8 FUN_141356700(longlong *param_1)
 }
 
 /* ref: FUN_141356710 */
-undefined8 FUN_141356710(undefined8 param_1)
+undefined8 FUN_141356710(undefined8 param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(354);
-  return (undefined8)CALLF(undefined8, FUN_1411e7a00)(param_1);
+  return (undefined8)CALLF(undefined8, FUN_1411e7a00)(param_1,param_2,param_3);
   return 0;
 }
 
@@ -8343,7 +8343,7 @@ undefined8 FUN_141356850(longlong *param_1, undefined8 param_2, undefined8 param
   GEN_HIT(361);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(*param_1 + 0x110))(param_1);
+  uVar1 = (**(code **)(*param_1 + 0x110))(param_1,param_2,param_3);
   return uVar1;
 }
 

@@ -34,6 +34,7 @@ None of them may contact Blizzard endpoints.
 | `BattleNetShutdown` | 0x141487dc0 | logs "Shutting down", destroys the Aurora and login services, clears two realm-connection callbacks | stub, like `BattleNetInitialize` (Phase 2-3) |
 | `LogoutCommand` | 0x14156b7c0 | `logout`: ends the session when one is up | stub |
 | `ClientServicesStatusCallback` | 0x140227770 | ClientServices' readiness poll | stub, never called |
+| `Ed25519VerifyCore` (src/net/Ed25519Verify.cpp) | 0x1420bf4f0 | the Ed25519ctx check behind SMSG_ENTER_ENCRYPTED_MODE: hashes dom2 \|\| R \|\| A \|\| M, computes [S]B - [k]A through the curve's own operations and compares it with R | ported by hand (2026-10-20), because the decompilation dropped the 32-byte copy of the result's x (Ghidra typed its source as a 4-byte local), so the translation refused every signature (disconnect reason 24). Its callees stay translated, and the curve operations run native |
 
 ## Diverged on purpose
 

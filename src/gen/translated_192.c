@@ -7733,21 +7733,21 @@ undefined1 FUN_142480ae0(longlong param_1, undefined8 param_2, undefined4 param_
   }
   goto LAB_142481269;
 LAB_142480fc0:
-  if (*(float *)(((longlong)gen_v16_q0(pauVar19[9])) + 0xc) == 0.0) goto LAB_14248102e;
+  if (*(float *)(((longlong)&pauVar19[9]) + 0xc) == 0.0) goto LAB_14248102e;
   lVar15 = (longlong)(*(int *)(gen_frame + 0x40));
   (*(undefined4 *)((char *)&auVar46 + 4)) = fVar52;
   (*(undefined4 *)((char *)&auVar46 + 0)) = fVar51;
   (*(undefined4 *)((char *)&auVar46 + 8)) = fVar53;
   (*(undefined4 *)((char *)&auVar46 + 12)) = fVar54;
   *((float *)&*pauVar19) = fVar51;
-  *(float *)(((longlong)gen_v16_q0(*pauVar19)) + 4) = fVar52;
-  *(float *)(((longlong)gen_v16_q0(*pauVar19)) + 8) = fVar53;
-  *(float *)(((longlong)gen_v16_q0(*pauVar19)) + 0xc) = fVar54;
+  *(float *)(((longlong)&*pauVar19) + 4) = fVar52;
+  *(float *)(((longlong)&*pauVar19) + 8) = fVar53;
+  *(float *)(((longlong)&*pauVar19) + 0xc) = fVar54;
   lVar28 = lVar15;
   if (0 < (*(int *)(gen_frame + 0x40))) {
     fVar3 = *((float *)&pauVar19[-1]);
-    fVar4 = *(float *)(((longlong)gen_v16_q0(pauVar19[-1])) + 4);
-    fVar58 = *(float *)(((longlong)gen_v16_q0(pauVar19[-1])) + 8);
+    fVar4 = *(float *)(((longlong)&pauVar19[-1]) + 4);
+    fVar58 = *(float *)(((longlong)&pauVar19[-1]) + 8);
     uVar23 = uVar35;
     do {
       pfVar17 = (float *)((*(longlong *)(gen_frame + 0x38)) + 0x30 + uVar23);
@@ -11163,8 +11163,8 @@ float FUN_1424846e0(float *param_1, float *param_2, float *param_3, float *param
         auVar32 = gen_v16_f(_mm_div_ps(_mm_castsi128_ps((auVar33).m), _mm_castsi128_ps((auVar2).m)));
         (*(undefined4 *)((char *)&auVar11 + 4)) = -(uint)((*(undefined4 *)((char *)&auVar32 + 4)) < (float)REFG(undefined8, 0x14297ade4));
         (*(undefined4 *)((char *)&auVar11 + 0)) = -(uint)((*(undefined4 *)((char *)&auVar32 + 0)) < REFG(undefined4, 0x14297ade0));
-        (*(undefined4 *)((char *)&auVar11 + 8)) = -(uint)((*(undefined4 *)((char *)&auVar32 + 8)) < (*(uint *)((char *)&REFG(undefined8, 0x14297ade4) + 4)));
-        (*(undefined4 *)((char *)&auVar11 + 12)) = -(uint)((*(undefined4 *)((char *)&auVar32 + 12)) < (*(uint *)((char *)&REFG(undefined8, 0x14297ade4) + 8)));
+        (*(undefined4 *)((char *)&auVar11 + 8)) = -(uint)((*(undefined4 *)((char *)&auVar32 + 8)) < (*(uint *)((char *)(undefined1 *)&REFG(undefined8, 0x14297ade4) + 4)));
+        (*(undefined4 *)((char *)&auVar11 + 12)) = -(uint)((*(undefined4 *)((char *)&auVar32 + 12)) < (*(uint *)((char *)(undefined1 *)&REFG(undefined8, 0x14297ade4) + 8)));
         iVar9 = movmskps(0, auVar11);
         if (iVar9 == 0xf) {
           (*(undefined4 *)((char *)&auVar12 + 0)) = GEN_F32BITS(REFG(float, 0x14261aa30)) ^ (uint)GEN_BITS(fVar25);

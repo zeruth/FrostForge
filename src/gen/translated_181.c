@@ -10418,7 +10418,7 @@ ulonglong * FUN_1422c9640(longlong *param_1, ulonglong *param_2, longlong param_
   (*(int *)(gen_frame + 0x18)) = (uVar3 & 1) + 1;
   lVar2 = (uVar1 >> 8 & 0xff) * 0x10;
   (*(undefined8 *)(gen_frame + 0x1c)) = *(undefined8 *)((undefined1 *)&REFG(undefined1, 0x14291c1e0) + lVar2);
-  (*(undefined8 *)(gen_frame + 0x24)) = *(undefined8 *)(&REFG(undefined1, 0x14291c1e8) + lVar2);
+  (*(undefined8 *)(gen_frame + 0x24)) = *(undefined8 *)((undefined1 *)&REFG(undefined1, 0x14291c1e8) + lVar2);
   (*(float *)(gen_frame + 0x2c)) = (float)(uVar3 >> 6 & 0x1f);
   (*(float *)(gen_frame + 0x30)) = (float)(uVar3 >> 0xb);
   (*(ulonglong *)(gen_frame + 0x60)) = uVar1;
@@ -12663,7 +12663,8 @@ undefined4 FUN_1422cfa30(longlong param_1, undefined8 param_2, undefined8 param_
   GEN_HIT(332);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(**(longlong **)(param_1 + 0x4f0) + 0xd8))(*(longlong **)(param_1 + 0x4f0));
+  uVar1 = (**(code **)(**(longlong **)(param_1 + 0x4f0) + 0xd8))
+                    (*(longlong **)(param_1 + 0x4f0),param_2,param_3,param_4);
   return (int)uVar1;
 }
 

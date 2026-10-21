@@ -1738,7 +1738,7 @@ undefined4 FUN_1422df8e0(longlong param_1, uint param_2, ulonglong param_3)
   (*(undefined4 *)(gen_frame + 0x4)) = *(undefined4 *)((undefined1 *)&REFG(undefined1, 0x14291c1c0) + uVar2 * 4);
   lVar3 = uVar2 * 0x10;
   (*(undefined8 *)(gen_frame + 0x1c)) = *(undefined8 *)((undefined1 *)&REFG(undefined1, 0x14291c1e0) + lVar3);
-  (*(undefined8 *)(gen_frame + 0x24)) = *(undefined8 *)(&REFG(undefined1, 0x14291c1e8) + lVar3);
+  (*(undefined8 *)(gen_frame + 0x24)) = *(undefined8 *)((undefined1 *)&REFG(undefined1, 0x14291c1e8) + lVar3);
   (*(undefined4 *)(gen_frame + 0x2c)) = 0;
   (*(undefined4 *)(gen_frame + 0x8)) = *(undefined4 *)((undefined1 *)&REFG(undefined1, 0x14291c1c0) + (param_3 >> 0x10 & 0xff) * 4);
   (*(undefined4 *)(gen_frame + 0x30)) = 0x7f7fffff;

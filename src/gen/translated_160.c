@@ -17564,7 +17564,7 @@ undefined8 FUN_141f79120(longlong *param_1, undefined8 param_2, undefined8 param
       {
         if ((longlong *)plVar5[2] == param_1) {
           if ((*(int *)(param_1[3] + 0x38) == 0x6f75746c) && (param_1[0xc] != 0)) {
-            (**(code **)(*(longlong *)(param_1[3] + 0x60) + 0x28))(param_1[0xc]);
+            (**(code **)(*(longlong *)(param_1[3] + 0x60) + 0x28))(param_1[0xc],param_2,param_3);
           }
           lVar10 = *plVar5;
           plVar6 = (longlong *)plVar5[1];
@@ -28252,11 +28252,11 @@ undefined8 FUN_141f861d0(longlong *param_1)
       if (*plVar2 != 0) {
         if (*(code **)((&REFG(undefined *, 0x142883228))
                        [*(int *)(*(longlong *)
-                                  (((longlong)&REFG(undefined1, 0x1428844d0) - (longlong)param_1) + (longlong)plVar2
+                                  (((longlong)(undefined1 *)&REFG(undefined1, 0x1428844d0) - (longlong)param_1) + (longlong)plVar2
                                   ) + 4)] + 0x20) != (code *)0x0) {
           (**(code **)((&REFG(undefined *, 0x142883228))
                        [*(int *)(*(longlong *)
-                                  (((longlong)&REFG(undefined1, 0x1428844d0) - (longlong)param_1) + (longlong)plVar2
+                                  (((longlong)(undefined1 *)&REFG(undefined1, 0x1428844d0) - (longlong)param_1) + (longlong)plVar2
                                   ) + 4)] + 0x20))(*plVar2);
         }
         CALLF(undefined8, FUN_141f80d10)(uVar1,*plVar2);

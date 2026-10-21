@@ -22929,11 +22929,11 @@ undefined8 FUN_141ca1ad0(longlong param_1, longlong param_2, int param_3)
           uVar2 = (int)uVar5 - 1;
           uVar5 = (ulonglong)uVar2;
           if (*(float *)((undefined1 *)&REFG(undefined1, 0x1428427a0) + uVar5 * 8) <= fVar8) {
-            if (*(float *)(&REFG(undefined1, 0x1428427a4) + uVar5 * 8) <= 0.0) {
+            if (*(float *)((undefined1 *)&REFG(undefined1, 0x1428427a4) + uVar5 * 8) <= 0.0) {
               fVar6 = 0.0;
             }
             else {
-              fVar6 = *(float *)(&REFG(undefined1, 0x1428427a4) + uVar5 * 8) * fVar9;
+              fVar6 = *(float *)((undefined1 *)&REFG(undefined1, 0x1428427a4) + uVar5 * 8) * fVar9;
               fVar9 = REFG(float, 0x1428429c4);
               if (fVar6 < REFG(float, 0x1428429c4)) goto LAB_141ca1df2;
             }

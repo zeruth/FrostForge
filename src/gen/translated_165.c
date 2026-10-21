@@ -11172,7 +11172,7 @@ undefined8 FUN_142058170(void)
   GEN_HIT(236);
   undefined8 uVar1 = {0};
   
-  uVar1 = CALLF(undefined8, FUN_14203bc80)();
+  uVar1 = CALLF(undefined8, FUN_14203bc80)((*(ulonglong *)&REFG(undefined8, 0x143266cb0)));
   return uVar1;
 }
 
@@ -13158,7 +13158,7 @@ undefined8 FUN_14205b130(undefined8 param_1, undefined8 param_2, undefined8 para
   GEN_HIT(283);
   undefined8 uVar1 = {0};
   
-  uVar1 = (*REFG(code *, 0x143266da8))(param_1, param_2, param_3);
+  uVar1 = (*REFG(code *, 0x143266da8))(param_1,param_2,param_3);
   return uVar1;
 }
 

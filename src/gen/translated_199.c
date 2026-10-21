@@ -21325,7 +21325,7 @@ undefined8 FUN_14258d460(longlong *param_1, undefined8 param_2)
 {
   GEN_HIT(373);
   if ((char)param_1[5] == '\0') {
-    return (undefined8)(**(code **)(*param_1 + 0x10))(param_1);
+    return (undefined8)(**(code **)(*param_1 + 0x10))(param_1,param_2);
     return 0;
   }
   return 0;

@@ -20523,7 +20523,8 @@ undefined8 FUN_141f54f00(longlong param_1, undefined8 param_2)
     uVar1 = CALLF(char *, FUN_142283570)(&(*(undefined8 *)(gen_frame + 0x0)));
     return uVar1;
   }
-  uVar1 = (**(code **)(**(longlong **)(param_1 + 0xc98) + 0x30))(*(longlong **)(param_1 + 0xc98));
+  uVar1 = (**(code **)(**(longlong **)(param_1 + 0xc98) + 0x30))
+                    (*(longlong **)(param_1 + 0xc98),param_2);
   return uVar1;
 }
 

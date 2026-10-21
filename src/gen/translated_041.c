@@ -7554,11 +7554,11 @@ undefined1 FUN_1406a3bd0(longlong param_1, undefined8 param_2, undefined8 param_
           }
           fVar24 = (float)((uint)param_3 % 10) * REFG(float, 0x14261a97c);
           if ((((((piVar22 + 0x3f < ((int *)(gen_frame + 0x120))) || (((int *)(gen_frame + 0x21c)) < piVar22)) &&
-                ((&REFG(undefined1, 0x1426d3c8c) + lVar19 < ((int *)(gen_frame + 0x120)) || (((int *)(gen_frame + 0x21c)) < piVar23)))) &&
+                (((undefined1 *)&REFG(undefined1, 0x1426d3c8c) + lVar19 < ((int *)(gen_frame + 0x120)) || (((int *)(gen_frame + 0x21c)) < piVar23)))) &&
                (((piVar21 + 0x3f < ((int *)(gen_frame + 0x120)) || (((int *)(gen_frame + 0x21c)) < piVar21)) &&
                 (((undefined1 *)&REFG(undefined1, 0x1426d318c) + lVar19 < ((int *)(gen_frame + 0x120)) || (((int *)(gen_frame + 0x21c)) < piVar20)))))) &&
               ((((piVar22 + 0x3f < ((int *)(gen_frame + 0x10)) || (((int *)(gen_frame + 0x10c)) < piVar22)) &&
-                ((&REFG(undefined1, 0x1426d3c8c) + lVar19 < ((int *)(gen_frame + 0x10)) || (((int *)(gen_frame + 0x10c)) < piVar23)))) &&
+                (((undefined1 *)&REFG(undefined1, 0x1426d3c8c) + lVar19 < ((int *)(gen_frame + 0x10)) || (((int *)(gen_frame + 0x10c)) < piVar23)))) &&
                ((piVar21 + 0x3f < ((int *)(gen_frame + 0x10)) || (((int *)(gen_frame + 0x10c)) < piVar21)))))) &&
              (((undefined1 *)&REFG(undefined1, 0x1426d318c) + lVar19 < ((int *)(gen_frame + 0x10)) || (((int *)(gen_frame + 0x10c)) < piVar20)))) {
             lVar19 = 0x10;

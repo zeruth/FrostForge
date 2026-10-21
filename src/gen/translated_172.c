@@ -11240,7 +11240,7 @@ undefined4 FUN_142178100(void)
 undefined8 FUN_142178120(undefined8 param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(174);
-  return (undefined8)(**(code **)(REFG(undefined8, 0x142d3e8d8) + 0x58))(param_1, param_2, param_3);
+  return (undefined8)(**(code **)(REFG(undefined8, 0x142d3e8d8) + 0x58))(param_1,param_2,param_3);
   return 0;
 }
 
@@ -11397,7 +11397,7 @@ int FUN_1421783e0(longlong param_1, longlong param_2, int param_3, char *param_4
 undefined8 FUN_1421784c0(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(180);
-  return (undefined8)(**(code **)(REFG(undefined8, 0x142d3e8d8) + 0x48))(param_1, param_2);
+  return (undefined8)(**(code **)(REFG(undefined8, 0x142d3e8d8) + 0x48))(param_1,param_2);
   return 0;
 }
 
@@ -11446,7 +11446,7 @@ undefined8 FUN_142178560(undefined8 param_1, undefined8 param_2, undefined8 para
   GEN_HIT(182);
   undefined8 uVar1 = {0};
   
-  uVar1 = (**(code **)(REFG(undefined8, 0x142d3e8d8) + 0xa0))(param_1, param_2, param_3);
+  uVar1 = (**(code **)(REFG(undefined8, 0x142d3e8d8) + 0xa0))(param_1,param_2,param_3);
   return uVar1;
 }
 
@@ -11454,7 +11454,7 @@ undefined8 FUN_142178560(undefined8 param_1, undefined8 param_2, undefined8 para
 undefined8 FUN_142178570(undefined8 param_1, undefined8 param_2, undefined8 param_3)
 {
   GEN_HIT(183);
-  return (undefined8)(**(code **)(REFG(undefined8, 0x142d3e8d8) + 0xa8))(param_1, param_2, param_3);
+  return (undefined8)(**(code **)(REFG(undefined8, 0x142d3e8d8) + 0xa8))(param_1,param_2,param_3);
   return 0;
 }
 
@@ -11648,7 +11648,7 @@ undefined4 FUN_1421789b0(undefined8 param_1, undefined8 param_2, undefined8 para
     return 1;
   }
   REFG(undefined1, 0x143477968) = 1;
-  uVar1 = (**(code **)(REFG(undefined8, 0x142d3e8d8) + 0x20))(param_1, param_2, param_3);
+  uVar1 = (**(code **)(REFG(undefined8, 0x142d3e8d8) + 0x20))(param_1,param_2,param_3);
   return uVar1;
 }
 
@@ -11748,7 +11748,7 @@ undefined4 FUN_142178c30(undefined8 param_1, undefined8 param_2, undefined8 para
   GEN_HIT(191);
   undefined4 uVar1 = {0};
   
-  uVar1 = (**(code **)(REFG(undefined8, 0x142d3e8d8) + 0x50))(param_1, param_2, param_3);
+  uVar1 = (**(code **)(REFG(undefined8, 0x142d3e8d8) + 0x50))(param_1,param_2,param_3);
   return uVar1;
 }
 
@@ -11788,7 +11788,7 @@ undefined4 FUN_142178c90(undefined8 param_1, undefined8 param_2)
   GEN_HIT(194);
   undefined4 uVar1 = {0};
   
-  uVar1 = (**(code **)(REFG(undefined8, 0x142d3e8d8) + 0x90))(param_1, param_2);
+  uVar1 = (**(code **)(REFG(undefined8, 0x142d3e8d8) + 0x90))(param_1,param_2);
   return uVar1;
 }
 
@@ -17409,7 +17409,7 @@ undefined8 FUN_142181230(short *param_1, undefined8 param_2)
   longlong lVar9 = {0};
   
   uVar7 = 0;
-  lVar4 = (*(*(code *)&GetModuleHandleW))(L"kernel32");
+  lVar4 = (*(*(code *)&GetModuleHandleW))(L"kernel32",param_2);
   if (lVar4 == 0) {
     return 0;
   }
@@ -27662,7 +27662,7 @@ LAB_14218fecd:
       uVar8 = (uint)pbVar4[1];
       CALLF(undefined8, FUN_14217e790)(param_6,"Can\'t complete SOCKS5 connection to %s. (%d)",param_3,uVar8);
       if (uVar8 < 9) {
-        return *(undefined4 *)(&REFG(undefined1, 0x1428fafb8) + (ulonglong)uVar8 * 4);
+        return *(undefined4 *)((undefined1 *)&REFG(undefined1, 0x1428fafb8) + (ulonglong)uVar8 * 4);
       }
       return 0x19;
     }
