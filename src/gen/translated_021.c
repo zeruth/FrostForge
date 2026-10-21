@@ -25188,7 +25188,7 @@ undefined1 FUN_140384c40(longlong param_1, int param_2, longlong param_3)
     plVar6 = plVar9;
   }
   else {
-    uVar4 = ((ulonglong)(longlong)param_2 >> 0x21 ^ (longlong)param_2) * -0xae502812aa7333;
+    uVar4 = (GEN_BITS((longlong)param_2) >> 0x21 ^ (longlong)param_2) * -0xae502812aa7333;
     uVar4 = (uVar4 >> 0x21 ^ uVar4) * -0x3b314601e57a13ad;
     uVar4 = (uVar4 >> 0x21 ^ uVar4) & lVar2 - 1U;
     plVar6 = (longlong *)(lVar1 + uVar4 * 8);
@@ -25201,7 +25201,7 @@ undefined1 FUN_140384c40(longlong param_1, int param_2, longlong param_3)
     puVar8 = (undefined8 *)*plVar9;
     plVar9 = (longlong *)(lVar1 + lVar2 * 8);
     local_38 = SUB84(puVar8,0);
-    uStack_34 = (undefined4)((ulonglong)puVar8 >> 0x20);
+    uStack_34 = (undefined4)(GEN_BITS(puVar8) >> 0x20);
     plVar5 = plVar6;
     puVar7 = puVar8;
     if (puVar8 == (undefined8 *)0x0) {

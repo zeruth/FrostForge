@@ -4,7 +4,9 @@
 
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
+#include "util/FrostLog.hpp"
 #include "util/Unimplemented.hpp"
+#include <windows.h>
 
 namespace {
 
@@ -85,6 +87,14 @@ uint8_t* CDataStore::GetBufferForWrite(uint32_t bytes) {
 // ref: FUN_1402c9910
 bool CDataStore::FetchForRead(uint32_t pos, uint32_t bytes) {
     if (this->m_size < pos + bytes) {
+        // (a read past the end is how a message whose layout differs from the reader's fails:
+        // the reader that ran off names the field. The first object update after Enter World
+        // was refused this way and the client hung up with reason 7, 2026-10-21)
+        static volatile long s_overruns;
+        if (InterlockedIncrement(&s_overruns) <= 8) {
+            FrostLog("net", "read past the end: %u bytes at %u of %u", bytes, pos, this->m_size);
+            FrostLogStack(0, 12);
+        }
         this->m_read = this->m_size + 1;
         return false;
     }

@@ -9993,7 +9993,7 @@ undefined8 FUN_1405e24c0(ushort *param_1, undefined8 param_2)
   fVar25 = pfVar8[1];
   (*(undefined8 *)(gen_frame + 0x88)) = *(undefined8 *)(pfVar8 + 6);
   (*(undefined4 *)(gen_frame + 0x80)) = (undefined4)*(undefined8 *)(pfVar8 + 4);
-  (*(undefined4 *)(gen_frame + 0x84)) = (undefined4)((ulonglong)*(undefined8 *)(pfVar8 + 4) >> 0x20);
+  (*(undefined4 *)(gen_frame + 0x84)) = (undefined4)(GEN_BITS(*(undefined8 *)(pfVar8 + 4) )>> 0x20);
   if (REFG(float, 0x14261a954) <= GEN_FABS(pfVar8[2])) {
     fVar21 = REFG(float, 0x142618d64) / pfVar8[2];
     fVar23 = fVar23 * fVar21;

@@ -2029,7 +2029,7 @@ undefined4 FUN_141104810(undefined8 param_1, undefined8 param_2, int *param_3)
     }
     else {
       (*(int *)(gen_frame + 0x8)) = (int)uVar4;
-      (*(int *)(gen_frame + 0xc)) = (int)((ulonglong)uVar4 >> 0x20);
+      (*(int *)(gen_frame + 0xc)) = (int)(GEN_BITS(uVar4) >> 0x20);
       *piVar1 = (*(int *)(gen_frame + 0x8));
       param_3[7] = (*(int *)(gen_frame + 0xc));
     }

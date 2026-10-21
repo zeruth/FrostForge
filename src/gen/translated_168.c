@@ -187,7 +187,7 @@ int FUN_1420d2fd0(int *param_1, int *param_2, int *param_3, int param_4)
             } while (iVar15 < (int)(uVar18 - uVar10));
             (*(undefined4 *)((char *)&auVar5 + 8)) = (int)(lVar7 + lVar24);
             (*(undefined8 *)((char *)&auVar5 + 0)) = lVar6 + lVar23;
-            (*(undefined4 *)((char *)&auVar5 + 12)) = (int)((ulonglong)(lVar7 + lVar24) >> 0x20);
+            (*(undefined4 *)((char *)&auVar5 + 12)) = (int)(GEN_BITS((lVar7 + lVar24) )>> 0x20);
             uVar17 = uVar17 + lVar6 + lVar23 + (*(undefined8 *)((char *)&auVar5 + 8));
             if ((int)uVar18 <= iVar15) goto LAB_1420d318c;
           }
@@ -665,7 +665,7 @@ undefined8 * FUN_1420d6040(undefined8 *param_1, longlong param_2, longlong param
     uVar6 = 0;
     do {
       bVar4 = (**(code **)(**(longlong **)(param_2 + 0xe00) + 0x60))
-                        (*(longlong **)(param_2 + 0xe00),lVar1,uVar7,0,(unsigned long long)(CONCAT44((int)((ulonglong)in_stack_ffffffffffffff18 >> 0x20),((uint *)(gen_frame + 0xe8))[0]
+                        (*(longlong **)(param_2 + 0xe00),lVar1,uVar7,0,(unsigned long long)(CONCAT44((int)(GEN_BITS(in_stack_ffffffffffffff18) >> 0x20),((uint *)(gen_frame + 0xe8))[0]
                                  )));
       *param_4 = bVar4;
       if (bVar4 != 0) {
@@ -1118,7 +1118,7 @@ undefined1 FUN_1420da3d0(longlong param_1, undefined8 param_2, uint param_3, lon
     puVar1 = (undefined8 *)(REFG(undefined8, 0x142d3e678) + (ulonglong)*(uint *)(param_4 + 0x10) * 0x48);
     if ((param_3 == 0) && (*(char *)((longlong)puVar1 + 0x3c) != '\x03')) {
       if ((*(byte *)(puVar1 + 7) & 1) == 0) {
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\include\\tact\\psv\\psv_manifest_reader.h",0x88,(unsigned long long)("Missing required field data for field \'%s\' on line %u"),(unsigned long long)(*puVar1),(unsigned long long)(CONCAT44((int)((ulonglong)in_stack_ffffffffffffffe8 >> 0x20),
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\include\\tact\\psv\\psv_manifest_reader.h",0x88,(unsigned long long)("Missing required field data for field \'%s\' on line %u"),(unsigned long long)(*puVar1),(unsigned long long)(CONCAT44((int)(GEN_BITS(in_stack_ffffffffffffffe8) >> 0x20),
                                *(undefined4 *)(param_1 + 0x58))));
         return 0;
       }
@@ -5288,7 +5288,7 @@ undefined8 FUN_1420e4050(longlong param_1, longlong param_2, byte param_3, undef
 /*                                   */
   
   uVar3 = param_7;
-  uVar5 = (undefined4)((ulonglong)in_stack_ffffffffffffff80 >> 0x20);
+  uVar5 = (undefined4)(GEN_BITS(in_stack_ffffffffffffff80) >> 0x20);
   uVar9 = (ulonglong)param_7;
   ((undefined4 *)(gen_frame + 0x68))[0] = (*(undefined4 *)&gen_slot_param_4);
   if (param_5 != (longlong *)0x0) {
@@ -5541,7 +5541,7 @@ undefined1 FUN_1420e4e70(longlong param_1)
   undefined8 in_stack_ffffffffffffff48 = 0;
   uint uVar12 = {0};
   
-  uVar12 = (uint)((ulonglong)in_stack_ffffffffffffff48 >> 0x20);
+  uVar12 = (uint)(GEN_BITS(in_stack_ffffffffffffff48) >> 0x20);
   lVar5 = CALLF(undefined8, FUN_1420e9ac0)(*(longlong *)(param_1 + 0x10) + 0x1028,param_1 + 0x6c);
   if (lVar5 == 0) {
     cVar4 = CALLF(undefined8, FUN_1420ed230)(*(undefined8 *)(param_1 + 0x10),param_1 + 0x58,((undefined1 *)(gen_frame + 0x20)));
@@ -5776,7 +5776,7 @@ int FUN_1420e57b0(longlong param_1, longlong *param_2)
   undefined8 in_stack_ffffffffffffff88 = 0;
   uint uVar11 = {0};
   
-  uVar11 = (uint)((ulonglong)in_stack_ffffffffffffff88 >> 0x20);
+  uVar11 = (uint)(GEN_BITS(in_stack_ffffffffffffff88) >> 0x20);
   plVar6 = (longlong *)CALLF(longlong *, FUN_1423651f0)(param_1 + 0x140);
   plVar8 = (longlong *)0x0;
   plVar10 = plVar8;
@@ -6085,7 +6085,7 @@ undefined8 FUN_1420e63e0(longlong *param_1)
       plVar1 = plVar6 + 3;
       plVar7 = plVar1;
       uVar4 = CALLF(undefined4, FUN_142103b70)(param_1 + 2,((undefined1 *)(gen_frame + 0x0)),0x800,plVar6 + 4,(unsigned long long)(*(undefined1 *)((longlong)plVar6 + 0x44)),(unsigned long long)(plVar1),(unsigned long long)(((byte *)(gen_frame + 0x840))),(unsigned long long)(*(undefined4 *)((longlong)plVar6 + 0x1c)));
-      uVar8 = (undefined4)((ulonglong)plVar7 >> 0x20);
+      uVar8 = (undefined4)(GEN_BITS(plVar7) >> 0x20);
       if (((byte *)(gen_frame + 0x840))[0] == 0) {
         if (uVar4 < 0x800) {
           CALLF(undefined8, FUN_1420dc510)(*param_1 + 0x2d8,0,"download.requests.issued",1,(unsigned long long)(uVar3));
@@ -7567,7 +7567,7 @@ undefined1 FUN_1420eb830(undefined8 *param_1, undefined8 *param_2)
     (*(undefined8 *)(gen_frame + 0x1c)) = (*(undefined8 *)(gen_frame + 0x8));
     (*(int *)(gen_frame + 0x24)) = iVar1;
     bVar4 = CALLF(undefined1, FUN_1420d6f40)(*param_1,&(*(undefined8 *)(gen_frame + 0x0)),lVar2,*(undefined4 *)(param_2 + 4),(unsigned long long)(uVar3),(unsigned long long)(puVar11),(unsigned long long)(2));
-    uVar9 = (undefined4)((ulonglong)puVar11 >> 0x20);
+    uVar9 = (undefined4)(GEN_BITS(puVar11) >> 0x20);
     if (bVar4 != 0) {
       CALLF(undefined4, FUN_1420d8f40)(&(*(undefined8 *)(gen_frame + 0x0)),0x21,param_1 + 3);
       uVar6 = CALLF(undefined *, FUN_1420d9030)(bVar4);
@@ -7985,7 +7985,7 @@ undefined1 FUN_1420ec350(longlong param_1, void *param_2)
   undefined8 in_stack_fffffffffffffef0 = 0;
 /*                                   */
   
-  uVar11 = (undefined4)((ulonglong)in_stack_fffffffffffffef0 >> 0x20);
+  uVar11 = (undefined4)(GEN_BITS(in_stack_fffffffffffffef0) >> 0x20);
   CALLF(undefined4, FUN_1420d8f40)(((undefined1 *)(gen_frame + 0x0)),0x21,param_1 + 0x18);
   uVar8 = 0x10000;
   if (*(uint *)(param_1 + 0x28) < 0x10000) {
@@ -9109,8 +9109,8 @@ undefined1 FUN_1420ede10(longlong param_1)
   undefined8 in_stack_fffffffffffffb28 = 0;
   undefined4 uVar12 = {0};
   
-  uVar12 = (undefined4)((ulonglong)in_stack_fffffffffffffb28 >> 0x20);
-  uVar11 = (undefined4)((ulonglong)in_stack_fffffffffffffb20 >> 0x20);
+  uVar12 = (undefined4)(GEN_BITS(in_stack_fffffffffffffb28) >> 0x20);
+  uVar11 = (undefined4)(GEN_BITS(in_stack_fffffffffffffb20) >> 0x20);
   if ((*(char *)(param_1 + 0x32) != '\0') && (*(char *)(param_1 + 0x40) == '\x02')) {
     uVar7 = CALLF(undefined8, FUN_1420dbc70)(param_1,2);
     return (char)uVar7;
@@ -9495,7 +9495,7 @@ undefined1 FUN_1420eeac0(longlong param_1, undefined8 param_2)
   undefined8 in_stack_ffffffffffffffe0 = 0;
   undefined4 uVar11 = {0};
   
-  uVar11 = (undefined4)((ulonglong)in_stack_ffffffffffffffe0 >> 0x20);
+  uVar11 = (undefined4)(GEN_BITS(in_stack_ffffffffffffffe0) >> 0x20);
   plVar9 = (longlong *)(param_1 + 0x50);
   if ((*(byte *)(param_1 + 0x48) & 1) == 0) {
     plVar9 = (longlong *)*plVar9;
@@ -10302,7 +10302,7 @@ undefined8 FUN_1420efcc0(longlong param_1, longlong param_2, byte param_3, undef
 /*                                   */
 /*                                   */
   
-  uVar1 = (undefined4)((ulonglong)in_stack_ffffffffffffff80 >> 0x20);
+  uVar1 = (undefined4)(GEN_BITS(in_stack_ffffffffffffff80) >> 0x20);
   ((undefined4 *)(gen_frame + 0x68))[0] = (*(undefined4 *)&gen_slot_param_4);
   if (param_5 != 0) {
     if ((*(longlong *)(param_1 + 0x90) == 0) && (*(longlong *)(param_1 + 0x98) == 0)) {
@@ -10497,7 +10497,7 @@ int FUN_1420f0190(longlong param_1, longlong *param_2)
   undefined8 in_stack_ffffffffffffff88 = 0;
   uint uVar10 = {0};
   
-  uVar10 = (uint)((ulonglong)in_stack_ffffffffffffff88 >> 0x20);
+  uVar10 = (uint)(GEN_BITS(in_stack_ffffffffffffff88) >> 0x20);
   if (*(longlong *)(param_1 + 0x90) == 0) {
     lVar9 = *(longlong *)(param_1 + 0x98);
   }

@@ -12797,7 +12797,7 @@ undefined8 FUN_140c58e00(undefined8 *param_1, int *param_2, undefined8 param_3, 
     uVar2 = *param_1;
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(uVar2,iVar1);
     if (((((int)uVar3 == 0) ||
-         (dVar4 = CALLF(double, FUN_1402b4920)(uVar2,iVar1), ((uint)((ulonglong)dVar4 >> 0x34) & 0x7ff) == 0x7ff))
+         (dVar4 = CALLF(double, FUN_1402b4920)(uVar2,iVar1), ((uint)(GEN_BITS(dVar4) >> 0x34) & 0x7ff) == 0x7ff))
         || (dVar4 < 0.0)) || (REFG(double, 0x142703b00) < dVar4)) {
       iVar1 = *param_2;
       CALLF(double, FUN_1402b4920)(*param_1,iVar1);

@@ -1424,6 +1424,22 @@ def reinterpreted_float_locals(body: str) -> str:
     return "".join(out)
 
 
+DOUBLE_BITS = re.compile(r"\(ulonglong\)((?:\(double\)\s*)?(?:\*\s*)?"
+                         r"(?:(?:\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*)+(?:[A-Za-z_][\w.]*(?:\[[^\[\]]*\])?)?"
+                         r"|[A-Za-z_][\w.]*(?:\[[^\[\]]*\])?))"
+                         r"(\s*>>\s*(?:0x[2-3][0-9a-f]|3[2-9]|[4-5][0-9]|6[0-3])\b)")
+
+
+def double_bit_shifts(body: str) -> str:
+    """A value's bits shifted down by 32 or more, `(ulonglong)(double)param_1[2] >> 0x34` (the
+    isfinite test: the exponent all ones) or `(ulonglong)dVar7 >> 0x3f` (the sign): Ghidra means
+    the double's bit pattern, and C's cast converted the value instead. Every coordinate the
+    object update's validator saw (-9979.13 among them) read as NaN, and the client hung up on the
+    first SMSG_UPDATE_OBJECT, reason 7, 2026-10-21. GEN_BITS goes by the operand's type: a
+    double's bits, an integer as it is, so an integer shifted stays what it was."""
+    return DOUBLE_BITS.sub(lambda m: f"GEN_BITS({m.group(1)}){m.group(2)}", body)
+
+
 def line_end(body: str, nxt) -> int:
     """Where a variable's value ends: after the line that next assigns it (whose right side, `p =
     p + lVar10;`, still reads the old one), or at the end of the function."""
@@ -6331,6 +6347,10 @@ class Translator:
                           r"\1  __debugbreak();\n  __fastfail(7);\n  __assume(0);\n\2", body.rstrip() + "\n")
             body = fall_off_return(body, ret.strip())
             body = self.dead_frame_return(body)
+        # (every function, void or not, with a frame or without: the two rode on dead_frame_return,
+        # which only non-void functions with a frame reach, so a void function's alloca stayed
+        # under its frame and a frameless isfinite test kept its value cast, 2026-10-21)
+        body = double_bit_shifts(stack_allocations(body))
         self.global_aliases.update(aliases)
         self.exported.update(exported)
         # (this function's own, for rewrite_one to hand back from a worker)
@@ -6393,7 +6413,7 @@ class Translator:
             call = out[rm.start(2):close + 1]
             out = (out[:rm.start()] + f"{rm.group(1)}{call};\n{rm.group(1)}return 0;  /* the callee's handing back "
                    f"of this function's own frame: dead once it returns */" + out[end:])
-        return stack_allocations(out)
+        return out
 
     def port_reads(self, body: str, adapted) -> dict[str, dict]:
         """What a translated body reads out of the port's objects, by where the object came from.

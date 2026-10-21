@@ -9812,7 +9812,7 @@ undefined4 FUN_140bd8920(undefined8 param_1)
     uVar5 = CALLF(undefined8, FUN_1402b33c0)((*(undefined8 *)(gen_frame + 0x0)),1);
     if ((int)uVar5 != 0) {
       dVar7 = CALLF(double, FUN_1402b4920)(uVar1,1);
-      if (((((uint)((ulonglong)dVar7 >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar7)) &&
+      if (((((uint)(GEN_BITS(dVar7) >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar7)) &&
          (dVar7 <= REFG(double, 0x1426e2d48))) {
         iVar3 = CALLF(undefined4, FUN_1402b2770)((*(undefined8 *)(gen_frame + 0x0)),1);
         if (iVar3 == 0) {
@@ -12279,7 +12279,7 @@ LAB_140bfbab8:
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,iVar6);
     if ((int)uVar3 != 0) {
       dVar9 = CALLF(double, FUN_1402b4920)(param_1,iVar6);
-      if (((((uint)((ulonglong)dVar9 >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar9)) &&
+      if (((((uint)(GEN_BITS(dVar9) >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar9)) &&
          (dVar9 <= REFG(double, 0x1426e2d48))) {
         iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
         if (iVar2 == 0) {
@@ -12321,7 +12321,7 @@ LAB_140bfbc6c:
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,iVar6);
     if ((int)uVar3 != 0) {
       dVar9 = CALLF(double, FUN_1402b4920)(param_1,iVar6);
-      if (((((uint)((ulonglong)dVar9 >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar9)) &&
+      if (((((uint)(GEN_BITS(dVar9) >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar9)) &&
          (dVar9 <= REFG(double, 0x1426e2d48))) {
         iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
         if (iVar2 == 0) {
@@ -18627,7 +18627,7 @@ undefined4 FUN_140c12020(undefined8 param_1, undefined8 param_2, int *param_3)
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_2,1);
     if ((int)uVar3 != 0) {
       dVar6 = CALLF(double, FUN_1402b4920)(param_2,1);
-      if (((((uint)((ulonglong)dVar6 >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar6)) &&
+      if (((((uint)(GEN_BITS(dVar6) >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar6)) &&
          (dVar6 <= REFG(double, 0x1426e2d48))) {
         iVar2 = CALLF(undefined4, FUN_1402b2770)(param_2,1);
         if (iVar2 == 0) {

@@ -1,3 +1,4 @@
+#include "util/FrostLog.hpp"
 #include "net/NetClient.hpp"
 #include "console/Command.hpp"
 #include "console/Var.hpp"
@@ -375,6 +376,8 @@ bool NetClient::Close() {
 // ref: FUN_141234230
 void NetClient::Disconnect(uint32_t reason) {
     ConsoleWriteFormat(0, "Disconnecting for reason %d", reason);
+    FrostLog("net", "NetClient::Disconnect(%u)", reason);
+    FrostLogStack(0, 16);
     this->m_netCritSect.Enter();
     this->CloseSecondaryConnections(static_cast<uint8_t>(reason));
     if (this->m_netState == NS_CONNECTED) {

@@ -8,6 +8,7 @@
 #include "storm/Log.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
+#include "util/FrostLog.hpp"
 #include "util/Fnv.hpp"
 #include "ui/FrameTime.hpp"
 #include "util/Unimplemented.hpp"
@@ -603,6 +604,10 @@ ClientServices::REALMJOIN::~REALMJOIN() {
 
 // translated: FUN_14156b870
 void ClientServices::Disconnect(uint32_t reason) {
+    // (who ends the session and why, in the log: the first login reached CMSG_PLAYER_LOGIN and
+    // then disconnected with reason 7 from translated code, 2026-10-21)
+    FrostLog("net", "ClientServices::Disconnect(%u)", reason);
+    FrostLogStack(0, 16);
     __try {
         FUN_14156b870(reinterpret_cast<uintptr_t>(this), reason);
     } __except (GenFault(0x14156b870ull, GetExceptionInformation())) {

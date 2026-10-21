@@ -26738,7 +26738,7 @@ uint FUN_1418d04d0(longlong param_1, char param_2)
   cVar1 = CALLF(undefined1, FUN_141863c60)();
   lVar2 = CALLF(longlong, FUN_1418ea590)(param_1 + 0x10,(int)cVar1);
   if (lVar2 != 0) {
-    if (((*(char *)&gen_slot_param_2) == '\0') || ((byte)((ulonglong)*(undefined8 *)(param_1 + 0x18) >> 0x3a) == 0x14)) {
+    if (((*(char *)&gen_slot_param_2) == '\0') || ((byte)(GEN_BITS(*(undefined8 *)(param_1 + 0x18) )>> 0x3a) == 0x14)) {
       ((undefined4 *)(gen_frame + 0x18))[0] = 0;
       ((undefined4 *)(gen_frame + 0x0))[0] = 0;
       ((undefined4 *)(gen_frame + 0x10))[0] = 0;

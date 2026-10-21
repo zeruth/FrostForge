@@ -7279,12 +7279,12 @@ undefined1 * FUN_141e21900(longlong param_1, undefined1 *param_2)
     param_2[1] = (char)uVar3;
     param_2[2] = (char)((ulonglong)uVar3 >> 8);
     param_2[4] = (char)((ulonglong)uVar3 >> 0x18);
-    param_2[6] = (char)((ulonglong)uVar3 >> 0x28);
-    param_2[5] = (char)((ulonglong)uVar3 >> 0x20);
-    param_2[8] = (char)((ulonglong)uVar3 >> 0x38);
+    param_2[6] = (char)(GEN_BITS(uVar3) >> 0x28);
+    param_2[5] = (char)(GEN_BITS(uVar3) >> 0x20);
+    param_2[8] = (char)(GEN_BITS(uVar3) >> 0x38);
     puVar4 = param_2 + 9;
     param_2[3] = (char)((ulonglong)uVar3 >> 0x10);
-    param_2[7] = (char)((ulonglong)uVar3 >> 0x30);
+    param_2[7] = (char)(GEN_BITS(uVar3) >> 0x30);
   }
   piVar5 = (int *)(param_1 + 0x20);
   if (*piVar5 == 4) {

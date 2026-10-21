@@ -6288,7 +6288,7 @@ LAB_14226cf7d:
     if ((uVar1 >> 9 & 1) != 0) {
       dVar12 = *gen_param_1;
       uVar17 = SUB84(dVar12,0);
-      uVar18 = (uint)((ulonglong)dVar12 >> 0x20);
+      uVar18 = (uint)(GEN_BITS(dVar12) >> 0x20);
       CALLF(undefined8, FUN_14226dea0)(param_2);
       if (((ulonglong)dVar12 & 0x7ff0000000000000) != 0x7ff0000000000000) {
         lVar5 = param_2[7];
@@ -20155,7 +20155,7 @@ int FUN_142284b20(ulonglong *param_1, undefined1 *param_2, undefined8 *param_3, 
   undefined1 *puVar13 = {0};
   undefined8 in_stack_fffffffffffff420 = 0;
   
-  uVar5 = (undefined4)((ulonglong)in_stack_fffffffffffff420 >> 0x20);
+  uVar5 = (undefined4)(GEN_BITS(in_stack_fffffffffffff420) >> 0x20);
   uVar9 = 0;
   iVar4 = 0;
   if (param_1[5] != 0) {
@@ -20220,8 +20220,8 @@ int FUN_142284b20(ulonglong *param_1, undefined1 *param_2, undefined8 *param_3, 
   uVar6 = CONCAT44(uVar5,0x30c);
   iVar2 = (*(*(code *)&MultiByteToWideChar))(0xfde9,0,&(*(undefined1 *)(gen_frame + 0x250)),0xffffffff,(unsigned long long)(puVar13),(unsigned long long)(uVar6))
   ;
-  uVar5 = (undefined4)((ulonglong)puVar13 >> 0x20);
-  uVar3 = (undefined4)((ulonglong)uVar6 >> 0x20);
+  uVar5 = (undefined4)(GEN_BITS(puVar13) >> 0x20);
+  uVar3 = (undefined4)(GEN_BITS(uVar6) >> 0x20);
   if (iVar2 < 1) {
     (*(undefined8 *)(gen_frame + 0x18)) = 0;
     (*(char * *)(gen_frame + 0x20)) = "MultiByteToWideChar() failed. file name \'%s\', error %d";
@@ -20243,10 +20243,10 @@ int FUN_142284b20(ulonglong *param_1, undefined1 *param_2, undefined8 *param_3, 
     uVar8 = CONCAT44(uVar3,0x4000100);
     uVar6 = CONCAT44(uVar5,1);
     lVar7 = (*(*(code *)&CreateFileW))(((undefined1 *)(gen_frame + 0x570)),0x80000000,0,0,(unsigned long long)(uVar6),(unsigned long long)(uVar8),(unsigned long long)(0));
-    uVar5 = (undefined4)((ulonglong)uVar6 >> 0x20);
+    uVar5 = (undefined4)(GEN_BITS(uVar6) >> 0x20);
     while (lVar7 == -1) {
-      uVar3 = (undefined4)((ulonglong)uVar8 >> 0x20);
-      uVar5 = (undefined4)((ulonglong)uVar6 >> 0x20);
+      uVar3 = (undefined4)(GEN_BITS(uVar8) >> 0x20);
+      uVar5 = (undefined4)(GEN_BITS(uVar6) >> 0x20);
       if (uVar1 == 0) {
         iVar4 = 4;
         goto LAB_142284ec9;
@@ -20261,7 +20261,7 @@ int FUN_142284b20(ulonglong *param_1, undefined1 *param_2, undefined8 *param_3, 
       uVar8 = CONCAT44(uVar3,0x4000100);
       uVar6 = CONCAT44(uVar5,1);
       lVar7 = (*(*(code *)&CreateFileW))(((undefined1 *)(gen_frame + 0x570)),0x80000000,0,0,(unsigned long long)(uVar6),(unsigned long long)(uVar8),(unsigned long long)(0));
-      uVar5 = (undefined4)((ulonglong)uVar6 >> 0x20);
+      uVar5 = (undefined4)(GEN_BITS(uVar6) >> 0x20);
     }
     CALLF(longlong *, FUN_142287d00)(&(*(undefined8 *)(gen_frame + 0x8)),lVar7);
   }
@@ -20414,7 +20414,7 @@ undefined4 FUN_142285230(longlong *param_1, undefined8 param_2, longlong param_3
     }
     do {
       puVar6 = ((undefined1 *)(gen_frame + 0x240));
-      puVar8 = (undefined1 *)CONCAT44((int)((ulonglong)puVar8 >> 0x20),3);
+      puVar8 = (undefined1 *)CONCAT44((int)(GEN_BITS(puVar8) >> 0x20),3);
       lVar5 = (*(*(code *)&CreateFileW))
                         (puVar6,0xc0000000,3,0,(unsigned long long)(puVar8),(unsigned long long)(CONCAT44(0,(param_6 ^ 1) << 8)),(unsigned long long)(0));
       *param_1 = lVar5;
@@ -20442,11 +20442,11 @@ undefined4 FUN_142285230(longlong *param_1, undefined8 param_2, longlong param_3
     iVar1 = (param_6 ^ 1) << 8;
     uVar7 = uVar3;
     do {
-      uVar4 = CONCAT44((int)((ulonglong)puVar8 >> 0x20),1);
+      uVar4 = CONCAT44((int)(GEN_BITS(puVar8) >> 0x20),1);
       lVar5 = (*(*(code *)&CreateFileW))
                         (((undefined1 *)(gen_frame + 0x240)),0xc0000000,3,0,(unsigned long long)(uVar4),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(0))
       ;
-      uVar2 = (undefined4)((ulonglong)uVar4 >> 0x20);
+      uVar2 = (undefined4)(GEN_BITS(uVar4) >> 0x20);
       *param_1 = lVar5;
       if (lVar5 != -1) {
         *param_4 = 1;

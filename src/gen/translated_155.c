@@ -6609,12 +6609,12 @@ undefined8 FUN_141ecef20(longlong param_1, undefined1 *param_2)
     *param_2 = 0x19;
     param_2[2] = (char)((ulonglong)uVar3 >> 8);
     param_2[3] = (char)((ulonglong)uVar3 >> 0x10);
-    param_2[6] = (char)((ulonglong)uVar3 >> 0x28);
+    param_2[6] = (char)(GEN_BITS(uVar3) >> 0x28);
     param_2[1] = (char)uVar3;
-    param_2[5] = (char)((ulonglong)uVar3 >> 0x20);
-    param_2[7] = (char)((ulonglong)uVar3 >> 0x30);
+    param_2[5] = (char)(GEN_BITS(uVar3) >> 0x20);
+    param_2[7] = (char)(GEN_BITS(uVar3) >> 0x30);
     param_2[4] = (char)((ulonglong)uVar3 >> 0x18);
-    param_2[8] = (char)((ulonglong)uVar3 >> 0x38);
+    param_2[8] = (char)(GEN_BITS(uVar3) >> 0x38);
     param_2 = param_2 + 9;
   }
   uVar7 = uVar5;
@@ -14138,13 +14138,13 @@ undefined8 FUN_141ed86c0(longlong param_1, undefined1 *param_2)
     *param_2 = 0x31;
     param_2[2] = (char)((ulonglong)uVar3 >> 8);
     param_2[3] = (char)((ulonglong)uVar3 >> 0x10);
-    param_2[6] = (char)((ulonglong)uVar3 >> 0x28);
-    param_2[5] = (char)((ulonglong)uVar3 >> 0x20);
+    param_2[6] = (char)(GEN_BITS(uVar3) >> 0x28);
+    param_2[5] = (char)(GEN_BITS(uVar3) >> 0x20);
     param_2[1] = (char)uVar3;
-    param_2[8] = (char)((ulonglong)uVar3 >> 0x38);
+    param_2[8] = (char)(GEN_BITS(uVar3) >> 0x38);
     puVar1 = param_2 + 9;
     param_2[4] = (char)((ulonglong)uVar3 >> 0x18);
-    param_2[7] = (char)((ulonglong)uVar3 >> 0x30);
+    param_2[7] = (char)(GEN_BITS(uVar3) >> 0x30);
   }
   if ((*(longlong *)(param_1 + 8) != 0) && (*(longlong *)(*(longlong *)(param_1 + 8) + 8) != 0)) {
     uVar3 = CALLF(byte *, FUN_1422323d0)(param_1 + 8,puVar1);

@@ -3493,7 +3493,7 @@ int FUN_14020f7f0(void)
           (int)((ulonglong)
                 (uint)(*(int *)((undefined1 *)&REFG(undefined1, 0x142988a00) + (ulonglong)uVar2 * 4) -
                       *(int *)((undefined1 *)&REFG(undefined1, 0x142988a00) + (ulonglong)(uVar2 + 1) * 4)) *
-                (ulonglong)(((uVar4 & 0x1fff) << 6 | uVar4 << 0x13) >> 0xd | uVar4 << 0x13) >> 0x20)
+                GEN_BITS((((uVar4 & 0x1fff) << 6 | uVar4 << 0x13) >> 0xd | uVar4 << 0x13) )>> 0x20)
           ) - (uVar10 & 0x7f800000);
   uVar8 = uVar8 & 0x7f800000;
   uVar10 = ~(iVar7 + 0x7e000000 >> 0x1f) & (uVar10 & 0x80000000 | iVar7 + 0x7e800000U);
@@ -3503,9 +3503,9 @@ int FUN_14020f7f0(void)
   if ((uVar5 != 0) && (uVar10 != 0)) {
     iVar7 = uVar4 + 0xc0800000 + uVar8;
     lVar6 = (ulonglong)((uVar10 | 0xff800000) << 8) * (ulonglong)((uVar5 | 0xff800000) << 8);
-    uVar4 = (uint)((ulonglong)lVar6 >> 0x20);
+    uVar4 = (uint)(GEN_BITS(lVar6) >> 0x20);
     REFG(undefined4, 0x1447cf29c) =
-         ((uVar4 >> (byte)((ulonglong)lVar6 >> 0x3f)) >> 7 & 0x7fffff |
+         ((uVar4 >> (byte)(GEN_BITS(lVar6) >> 0x3f)) >> 7 & 0x7fffff |
           ((int)uVar4 >> 0x1f) * -0x800000 + iVar7 | uVar9) & ~(iVar7 + -0x800000 >> 0x1f);
     iVar7 = atexit(&REFG(undefined1, 0x14260b520));
     return iVar7;
@@ -3718,7 +3718,7 @@ int FUN_14020fb30(void)
           (int)((ulonglong)
                 (uint)(*(int *)((undefined1 *)&REFG(undefined1, 0x142988a00) + (ulonglong)uVar2 * 4) -
                       *(int *)((undefined1 *)&REFG(undefined1, 0x142988a00) + (ulonglong)(uVar2 + 1) * 4)) *
-                (ulonglong)(((uVar4 & 0x1fff) << 6 | uVar4 << 0x13) >> 0xd | uVar4 << 0x13) >> 0x20)
+                GEN_BITS((((uVar4 & 0x1fff) << 6 | uVar4 << 0x13) >> 0xd | uVar4 << 0x13) )>> 0x20)
           ) - (uVar10 & 0x7f800000);
   uVar8 = uVar8 & 0x7f800000;
   uVar10 = ~(iVar7 + 0x7e000000 >> 0x1f) & (uVar10 & 0x80000000 | iVar7 + 0x7e800000U);
@@ -3728,9 +3728,9 @@ int FUN_14020fb30(void)
   if ((uVar5 != 0) && (uVar10 != 0)) {
     iVar7 = uVar4 + 0xc0800000 + uVar8;
     lVar6 = (ulonglong)((uVar10 | 0xff800000) << 8) * (ulonglong)((uVar5 | 0xff800000) << 8);
-    uVar4 = (uint)((ulonglong)lVar6 >> 0x20);
+    uVar4 = (uint)(GEN_BITS(lVar6) >> 0x20);
     REFG(undefined4, 0x1447cf2a0) =
-         ((uVar4 >> (byte)((ulonglong)lVar6 >> 0x3f)) >> 7 & 0x7fffff |
+         ((uVar4 >> (byte)(GEN_BITS(lVar6) >> 0x3f)) >> 7 & 0x7fffff |
           ((int)uVar4 >> 0x1f) * -0x800000 + iVar7 | uVar9) & ~(iVar7 + -0x800000 >> 0x1f);
     iVar7 = atexit(&REFG(undefined1, 0x14260b5e0));
     return iVar7;

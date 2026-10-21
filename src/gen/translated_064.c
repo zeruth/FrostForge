@@ -17479,7 +17479,7 @@ undefined4 FUN_140f81f50(undefined8 param_1, undefined8 param_2, int *param_3)
     }
     else {
       (*(int *)(gen_frame + 0x0)) = (int)uVar4;
-      (*(int *)(gen_frame + 0x4)) = (int)((ulonglong)uVar4 >> 0x20);
+      (*(int *)(gen_frame + 0x4)) = (int)(GEN_BITS(uVar4) >> 0x20);
       *piVar1 = (*(int *)(gen_frame + 0x0));
       param_3[2] = (*(int *)(gen_frame + 0x4));
     }
@@ -17551,7 +17551,7 @@ undefined4 FUN_140f826b0(undefined8 param_1, undefined8 param_2, int *param_3)
     }
     else {
       (*(int *)(gen_frame + 0x0)) = (int)uVar4;
-      (*(int *)(gen_frame + 0x4)) = (int)((ulonglong)uVar4 >> 0x20);
+      (*(int *)(gen_frame + 0x4)) = (int)(GEN_BITS(uVar4) >> 0x20);
       *piVar1 = (*(int *)(gen_frame + 0x0));
       param_3[2] = (*(int *)(gen_frame + 0x4));
     }

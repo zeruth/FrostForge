@@ -5603,7 +5603,7 @@ LAB_142521b9d:
           goto LAB_142521c14;
         }
         if (bVar5) {
-          dVar21 = (double)CONCAT44((uint)((ulonglong)dVar21 >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
+          dVar21 = (double)CONCAT44((uint)(GEN_BITS(dVar21) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
                                     SUB84(dVar21,0) ^ (uint)REFG(float, 0x142620890));
         }
         bVar9 = CALLF(undefined1, FUN_142522b00)(param_3,dVar21);
@@ -8030,7 +8030,7 @@ LAB_1425244fc:
     dVar24 = CALLF(double, FUN_142523230)(dVar24,(ulonglong)(uint)(iVar16 + iVar21));
     if (dVar24 <= REFG(double, 0x14273d0a8)) {
       if (bVar23) {
-        dVar24 = (double)CONCAT44((uint)((ulonglong)dVar24 >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
+        dVar24 = (double)CONCAT44((uint)(GEN_BITS(dVar24) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
                                   SUB84(dVar24,0) ^ (uint)REFG(float, 0x142620890));
       }
       *(undefined4 *)(param_3 + 0xe) = 4;
@@ -9642,7 +9642,7 @@ undefined1 FUN_142526530(longlong *param_1, double param_2)
     puVar5 = ((undefined1 *)(gen_frame + 0x0));
     dVar3 = param_2;
     if (param_2 < 0.0) {
-      dVar3 = gen_bits2d((unsigned long long)(CONCAT44((uint)((ulonglong)param_2 >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
+      dVar3 = gen_bits2d((unsigned long long)(CONCAT44((uint)(GEN_BITS(param_2) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
                                SUB84(param_2,0) ^ (uint)REFG(float, 0x142620890))));
       ((undefined1 *)(gen_frame + 0x0))[0] = 0x2d;
       puVar5 = ((undefined1 *)(gen_frame + 0x0)) + 1;
@@ -11244,7 +11244,7 @@ undefined8 FUN_1425285f0(longlong *param_1, undefined8 param_2, undefined8 param
     (*(float *)(gen_frame + 0x38)) = fVar19;
     (*(float *)(gen_frame + 0x3c)) = fVar20;
     do {
-      uVar23 = (undefined4)((ulonglong)pfVar22 >> 0x20);
+      uVar23 = (undefined4)(GEN_BITS(pfVar22) >> 0x20);
       uVar6 = (undefined4)(*(undefined8 *)(gen_frame + 0x10));
       uVar7 = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4));
       fVar14 = fVar19 * (float)(longlong)puVar12 * param_5;

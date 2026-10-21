@@ -13093,7 +13093,7 @@ undefined4 FUN_141fd07c0(longlong param_1, longlong *param_2, uint param_3)
   sStack_20 = (*(undefined2 *)((char *)&auVar2 + 8));
   *(undefined4 *)(param_1 + 0x60) = 0x62697473;
   *(int *)(param_1 + 0x90) = (int)sStack_24;
-  uStack_a = (ushort)((ulonglong)uVar8 >> 0x30);
+  uStack_a = (ushort)(GEN_BITS(uVar8) >> 0x30);
   *(int *)(param_1 + 0x38) = (int)sStack_24 << 6;
   *(int *)(param_1 + 0x94) = (int)sStack_20;
   *(int *)(param_1 + 0x3c) = (int)sStack_20 << 6;
@@ -28226,7 +28226,7 @@ LAB_141fe3942:
           puVar32 = (undefined8 *)(ulonglong)*(ushort *)(puVar7 + lVar39 * 2 + -2);
           dVar42 = dVar26 / ((double)*(ushort *)(puVar7 + lVar39 * 2 + -2) * dVar42);
           (*(float *)((char *)&gen_in_XMM0 + 0)) = (float)dVar42;
-          (*(undefined8 *)((char *)&gen_in_XMM0 + 4)) = (ulonglong)dVar42 >> 0x20;
+          (*(undefined8 *)((char *)&gen_in_XMM0 + 4)) = GEN_BITS(dVar42) >> 0x20;
           (*(undefined4 *)((char *)&gen_in_XMM0 + 12)) = 0;
           *(float *)(((unsigned char *)&gen_in_R8[1] + lVar35 * 4) + 0xc) = (*(float *)((char *)&gen_in_XMM0 + 0));
           lVar35 = lVar39;

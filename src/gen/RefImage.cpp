@@ -268,6 +268,20 @@ extern "C" void GenUnimplemented(uint64_t address) {
 // The exception filter around a translated Lua handler (src/gen/handlers.cpp): a hardware fault
 // is logged once with where it happened and the call returns nothing; anything else (a Lua error
 // unwinding as a C++ exception or a longjmp) goes on its way.
+// A line in the log from translated code (a diagnostic put into src/gen by hand, which the next
+// translation replaces): `where` and a number, once per distinct pair.
+extern "C" void GenDebugLog(const char* where, int point) {
+    static std::mutex s_lock;
+    static std::unordered_set<uint64_t>* s_seen;
+    std::lock_guard<std::mutex> lock(s_lock);
+    if (s_seen == nullptr) {
+        s_seen = new std::unordered_set<uint64_t>();
+    }
+    if (s_seen->insert(reinterpret_cast<uint64_t>(where) * 131 + static_cast<uint64_t>(point)).second) {
+        FrostLog("gendebug", "%s: %d", where, point);
+    }
+}
+
 extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info) {
     DWORD code = info->ExceptionRecord->ExceptionCode;
     if (code != EXCEPTION_ACCESS_VIOLATION && code != EXCEPTION_INT_DIVIDE_BY_ZERO

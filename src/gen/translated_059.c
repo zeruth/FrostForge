@@ -8155,7 +8155,7 @@ undefined4 FUN_140cc9b70(undefined8 param_1)
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar3 != 0) {
       dVar6 = CALLF(double, FUN_1402b4920)(param_1,1);
-      if (((((uint)((ulonglong)dVar6 >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar6)) &&
+      if (((((uint)(GEN_BITS(dVar6) >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar6)) &&
          (dVar6 <= REFG(double, 0x142703b00))) {
         iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
         if (iVar2 == 0) {
@@ -8193,7 +8193,7 @@ LAB_140cc9cc3:
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,iVar4);
     if ((int)uVar3 != 0) {
       dVar6 = CALLF(double, FUN_1402b4920)(param_1,iVar4);
-      if (((((uint)((ulonglong)dVar6 >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar6)) &&
+      if (((((uint)(GEN_BITS(dVar6) >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar6)) &&
          (dVar6 <= REFG(double, 0x142703b00))) {
         iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
         if (iVar2 == 0) {

@@ -1111,7 +1111,7 @@ ulonglong FUN_140696a50(longlong *param_1, undefined8 *param_2)
     puVar9[8] = puVar6[uVar3 * 0xb + 8];
     puVar9[9] = uVar4;
     uVar14 = (undefined4)puVar6[uVar3 * 0xb + 10];
-    uVar15 = (undefined4)((ulonglong)puVar6[uVar3 * 0xb + 10] >> 0x20);
+    uVar15 = (undefined4)(GEN_BITS(puVar6[uVar3 * 0xb + 10]) >> 0x20);
   }
   else {
     uVar4 = param_2[1];
@@ -1130,7 +1130,7 @@ ulonglong FUN_140696a50(longlong *param_1, undefined8 *param_2)
     puVar9[8] = param_2[8];
     puVar9[9] = uVar4;
     uVar14 = (undefined4)param_2[10];
-    uVar15 = (undefined4)((ulonglong)param_2[10] >> 0x20);
+    uVar15 = (undefined4)(GEN_BITS(param_2[10]) >> 0x20);
   }
   puVar9[10] = CONCAT44(uVar15,uVar14);
   param_1[1] = param_1[1] + 1;
@@ -3423,7 +3423,7 @@ undefined8 FUN_14069e770(longlong *param_1, longlong param_2, float *param_3, un
           do {
             if ((*(undefined1 *)((char *)&gen_g_142e9cfe0 + 0x0)) == '\0') {
               fVar16 = (float)*(undefined8 *)(pfVar10 + -1) + fVar20;
-              (*(float *)(gen_frame + 0x4)) = (float)((ulonglong)*(undefined8 *)(pfVar10 + -1) >> 0x20);
+              (*(float *)(gen_frame + 0x4)) = (float)(GEN_BITS(*(undefined8 *)(pfVar10 + -1) )>> 0x20);
               fVar18 = pfVar10[1] + fVar22;
               (*(float *)(gen_frame + 0x4)) = (*(float *)(gen_frame + 0x4)) + fVar21;
             }
@@ -3564,7 +3564,7 @@ undefined8 FUN_14069e770(longlong *param_1, longlong param_2, float *param_3, un
           if ((*(undefined1 *)((char *)&gen_g_142e9cfe0 + 0x0)) == '\0') {
             fVar17 = (float)*(undefined8 *)(pfVar10 + -1) + *param_7;
             fVar19 = pfVar10[1] + param_7[2];
-            (*(float *)(gen_frame + 0x4)) = (float)((ulonglong)*(undefined8 *)(pfVar10 + -1) >> 0x20);
+            (*(float *)(gen_frame + 0x4)) = (float)(GEN_BITS(*(undefined8 *)(pfVar10 + -1) )>> 0x20);
             (*(float *)(gen_frame + 0x4)) = (*(float *)(gen_frame + 0x4)) + param_7[1];
           }
           else {
@@ -4985,7 +4985,7 @@ longlong * FUN_1406a18f0(longlong *param_1, int param_2, int param_3, char *para
   }
   lVar3 = plVar13[1];
   if (lVar3 != 0) {
-    uVar10 = ((ulonglong)(longlong)(*(int *)&gen_slot_param_2) >> 0x21 ^ (longlong)(*(int *)&gen_slot_param_2)) * -0xae502812aa7333;
+    uVar10 = (GEN_BITS((longlong)(*(int *)&gen_slot_param_2) )>> 0x21 ^ (longlong)(*(int *)&gen_slot_param_2)) * -0xae502812aa7333;
     uVar10 = (uVar10 >> 0x21 ^ uVar10) * -0x3b314601e57a13ad;
     uVar10 = (uVar10 >> 0x21 ^ uVar10) & *plVar13 - 1U;
     plVar12 = *(longlong **)(lVar3 + uVar10 * 8);
@@ -5439,7 +5439,7 @@ undefined1 FUN_1406a21f0(ulonglong *param_1, ulonglong param_2)
         if (plVar9 != (longlong *)0x0) {
           do {
             plVar1 = (longlong *)*plVar9;
-            uVar10 = ((ulonglong)(longlong)(int)plVar9[1] >> 0x21 ^ (longlong)(int)plVar9[1]) *
+            uVar10 = (GEN_BITS((longlong)(int)plVar9[1]) >> 0x21 ^ (longlong)(int)plVar9[1]) *
                      -0xae502812aa7333;
             uVar10 = (uVar10 >> 0x21 ^ uVar10) * -0x3b314601e57a13ad;
             uVar10 = (uVar10 >> 0x21 ^ uVar10) & uVar7 - 1;
@@ -5504,7 +5504,7 @@ longlong * FUN_1406a2640(ulonglong *param_1, longlong *param_2, undefined4 *para
     puVar6[2] = *param_4;
   }
   iVar1 = *(int *)(puVar6 + 1);
-  uVar9 = ((ulonglong)(longlong)iVar1 >> 0x21 ^ (longlong)iVar1) * -0xae502812aa7333;
+  uVar9 = (GEN_BITS((longlong)iVar1) >> 0x21 ^ (longlong)iVar1) * -0xae502812aa7333;
   uVar9 = (uVar9 >> 0x21 ^ uVar9) * -0x3b314601e57a13ad;
   uVar9 = (uVar9 >> 0x21 ^ uVar9) & *param_1 - 1;
   plVar10 = (longlong *)(param_1[1] + uVar9 * 8);
@@ -5954,7 +5954,7 @@ undefined1 FUN_1406a3150(ulonglong *param_1, ulonglong param_2)
         if (plVar9 != (longlong *)0x0) {
           do {
             plVar1 = (longlong *)*plVar9;
-            uVar10 = ((ulonglong)(longlong)(int)plVar9[1] >> 0x21 ^ (longlong)(int)plVar9[1]) *
+            uVar10 = (GEN_BITS((longlong)(int)plVar9[1]) >> 0x21 ^ (longlong)(int)plVar9[1]) *
                      -0xae502812aa7333;
             uVar10 = (uVar10 >> 0x21 ^ uVar10) * -0x3b314601e57a13ad;
             uVar10 = (uVar10 >> 0x21 ^ uVar10) & uVar7 - 1;

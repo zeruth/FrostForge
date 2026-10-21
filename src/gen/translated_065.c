@@ -3024,7 +3024,7 @@ undefined8 FUN_140fd1c10(undefined8 param_1)
     uVar5 = CALLF(undefined8, FUN_1402b33c0)(param_1,uVar3);
     if ((int)uVar5 != 0) {
       dVar8 = CALLF(double, FUN_1402b4920)(param_1,uVar3);
-      if (((((uint)((ulonglong)dVar8 >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar8)) &&
+      if (((((uint)(GEN_BITS(dVar8) >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar8)) &&
          (dVar8 <= REFG(double, 0x142703b00))) {
         iVar4 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
         if (iVar4 == 0) {
@@ -3252,7 +3252,7 @@ undefined8 FUN_140fd45e0(undefined8 param_1)
     uVar5 = CALLF(undefined8, FUN_1402b33c0)(param_1,uVar3);
     if ((int)uVar5 != 0) {
       dVar8 = CALLF(double, FUN_1402b4920)(param_1,uVar3);
-      if (((((uint)((ulonglong)dVar8 >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar8)) &&
+      if (((((uint)(GEN_BITS(dVar8) >> 0x34) & 0x7ff) != 0x7ff) && (0.0 <= dVar8)) &&
          (dVar8 <= REFG(double, 0x142703b00))) {
         iVar4 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
         if (iVar4 == 0) {
@@ -6505,7 +6505,7 @@ undefined4 FUN_140ffa930(undefined8 param_1)
   puVar12 = ((undefined4 *)(gen_frame + 0xb0));
   CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x0)),((int *)(gen_frame + 0xa8)),"Usage: self:StartPan(panType, durationSeconds [, doFade, visKitID, startPositionScale, speedMultiplier])",0,(unsigned long long)(puVar12));
   iVar6 = ((int *)(gen_frame + 0xa8))[0];
-  uVar13 = (undefined4)((ulonglong)puVar12 >> 0x20);
+  uVar13 = (undefined4)(GEN_BITS(puVar12) >> 0x20);
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,((int *)(gen_frame + 0xa8))[0]);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,

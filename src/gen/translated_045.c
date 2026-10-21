@@ -8308,7 +8308,7 @@ longlong * FUN_1406e6f90(longlong *param_1, longlong *param_2)
           uVar3 = puVar7[1];
           *puVar9 = *puVar7;
           puVar9[1] = uVar3;
-          if (((ulonglong)puVar9[1] >> 0x3a & 0xfd) != 0) {
+          if ((GEN_BITS(puVar9[1]) >> 0x3a & 0xfd) != 0) {
             (*(undefined8 *)(gen_frame + 0x0)) = 0;
             (*(undefined8 *)(gen_frame + 0x8)) = 0;
             CALLF(undefined8 *, FUN_140227150)(&(*(undefined8 *)(gen_frame + 0x10)),&(*(undefined8 *)(gen_frame + 0x0)));
@@ -8336,7 +8336,7 @@ longlong * FUN_1406e6f90(longlong *param_1, longlong *param_2)
           uVar3 = puVar9[1];
           *puVar7 = *puVar9;
           puVar7[1] = uVar3;
-          if (((ulonglong)puVar7[1] >> 0x3a & 0xfd) != 0) {
+          if ((GEN_BITS(puVar7[1]) >> 0x3a & 0xfd) != 0) {
             (*(undefined8 *)(gen_frame + 0x0)) = 0;
             (*(undefined8 *)(gen_frame + 0x8)) = 0;
             CALLF(undefined8 *, FUN_140227150)(&(*(undefined8 *)(gen_frame + 0x10)),&(*(undefined8 *)(gen_frame + 0x0)));

@@ -617,7 +617,7 @@ undefined4 FUN_141501830(ushort param_1, longlong *param_2)
   undefined8 uVar17 = {0};
 /*                                   */
   
-  uVar8 = (undefined4)((ulonglong)in_stack_fffffffffffffcb8 >> 0x20);
+  uVar8 = (undefined4)(GEN_BITS(in_stack_fffffffffffffcb8) >> 0x20);
   ((uint *)(gen_frame + 0x320))[0] = CONCAT22((*(undefined2 *)((char *)&((uint *)(gen_frame + 0x320))[0] + 2)),(*(ushort *)&gen_slot_param_1));
   lVar15 = -1;
   lVar14 = -1;
@@ -649,7 +649,7 @@ undefined4 FUN_141501830(ushort param_1, longlong *param_2)
     (*(undefined8 *)(gen_frame + 0x12b)) = 0;
     uVar8 = ((unsigned long long (*)(float))(*(*(code *)&GetCurrentProcessId)))((float)(0.0));
     uVar6 = CALLF(undefined4, FUN_1402534b0)(&(*(undefined1 *)(gen_frame + 0xd2)),0x6c,"WoW Loopback.%lu.%llu",uVar8,(unsigned long long)(uVar17));
-    uVar8 = (undefined4)((ulonglong)uVar17 >> 0x20);
+    uVar8 = (undefined4)(GEN_BITS(uVar17) >> 0x20);
     puVar12 = (ulonglong *)&(*(undefined2 *)(gen_frame + 0xd0));
     (*(longlong *)(gen_frame + 0x20)) = (ulonglong)uVar6 + 3;
     uVar11 = 0;
@@ -892,7 +892,7 @@ undefined1 FUN_141501e60(ushort param_1, undefined8 param_2, undefined4 param_3,
   (*(undefined8 *)(gen_frame + 0x8)) = param_2;
   (*(undefined8 *)(gen_frame + 0x18)) = param_2;
   iVar2 = (*(*(code *)&select))(0,puVar4,puVar6,((undefined4 *)(gen_frame + 0x10)),(unsigned long long)(puVar7));
-  uVar8 = (undefined4)((ulonglong)puVar7 >> 0x20);
+  uVar8 = (undefined4)(GEN_BITS(puVar7) >> 0x20);
   if (iVar2 < 1) {
     uVar3 = (*(*(code *)&WSAGetLastError))();
     CALLF(undefined8, FUN_1414feb50)("WaitForSocketEvent[1] failed: %hu %d %d %d",uVar5,uVar1,iVar2,(unsigned long long)(CONCAT44(uVar8,uVar3)));
@@ -7129,7 +7129,7 @@ LAB_141527980:
         uVar2 = *(undefined8 *)(&REFG(undefined1, 0x1427ac6f0) + uVar20);
         *(uint *)((longlong)&(*(undefined4 *)(gen_frame + 0x40)) + uVar20) = (uint)uVar17 ^ (uint)uVar2;
         *(uint *)((longlong)((uint *)(gen_frame + 0x44)) + uVar20) =
-             (uint)((ulonglong)uVar17 >> 0x20) ^ (uint)((ulonglong)uVar2 >> 0x20);
+             (uint)(GEN_BITS(uVar17) >> 0x20) ^ (uint)(GEN_BITS(uVar2) >> 0x20);
         uVar20 = uVar20 + 8;
       } while (uVar20 < (uVar15 & 0xfffffffffffffff8));
     }
