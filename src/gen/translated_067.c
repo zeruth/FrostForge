@@ -1747,7 +1747,7 @@ undefined4 FUN_1411023b0(undefined8 param_1, undefined8 param_2, int *param_3)
                  );
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)((*(undefined8 *)(gen_frame + 0x0)),iVar5);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)((*(undefined8 *)(gen_frame + 0x0)),iVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar5,
                     "Usage: local info = C_Map.GetMapInfoAtPosition(uiMapID, x, y [, ignoreZoneMapPositionData])"
@@ -1772,7 +1772,7 @@ undefined4 FUN_1411023b0(undefined8 param_1, undefined8 param_2, int *param_3)
                  );
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)((*(undefined8 *)(gen_frame + 0x0)),iVar5);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)((*(undefined8 *)(gen_frame + 0x0)),iVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar5,
                     "Usage: local info = C_Map.GetMapInfoAtPosition(uiMapID, x, y [, ignoreZoneMapPositionData])"
@@ -9678,7 +9678,7 @@ undefined4 FUN_141146bb0(undefined8 param_1)
                  );
   }
   else {
-    cVar2 = CALLF(float, FUN_1408a77d0)((*(undefined8 *)(gen_frame + 0x0)),iVar6);
+    cVar2 = CALLF(undefined1, FUN_1408a77d0)((*(undefined8 *)(gen_frame + 0x0)),iVar6);
     if (cVar2 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar6,
                     "Usage: local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.CALLF(undefined4, FUN_141146bb0)(uiMapID, x, y)"
@@ -9703,7 +9703,7 @@ undefined4 FUN_141146bb0(undefined8 param_1)
                  );
   }
   else {
-    cVar2 = CALLF(float, FUN_1408a77d0)((*(undefined8 *)(gen_frame + 0x0)),iVar6);
+    cVar2 = CALLF(undefined1, FUN_1408a77d0)((*(undefined8 *)(gen_frame + 0x0)),iVar6);
     if (cVar2 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar6,
                     "Usage: local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.CALLF(undefined4, FUN_141146bb0)(uiMapID, x, y)"

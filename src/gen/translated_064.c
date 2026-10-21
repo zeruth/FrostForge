@@ -227,7 +227,7 @@ undefined4 FUN_140f27a70(undefined8 param_1)
   fVar8 = 0.0;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar5);
   if (0 < (int)uVar3) {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar5);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar5,"Usage: self:StartPlayerPing([duration, fadeDuration])");
       goto LAB_140f27bfe;
@@ -244,7 +244,7 @@ undefined4 FUN_140f27a70(undefined8 param_1)
 LAB_140f27bfe:
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar5);
   if (0 < (int)uVar3) {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar5);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar5,"Usage: self:StartPlayerPing([duration, fadeDuration])");
     }
@@ -951,7 +951,7 @@ undefined8 FUN_140f2a900(undefined8 *param_1, undefined4 param_2, undefined8 par
     uVar3 = (undefined4)uVar4;
     uVar4 = CALLF(undefined8, FUN_1402b4a30)(*param_1,uVar3);
     if (0 < (int)uVar4) {
-      cVar1 = CALLF(float, FUN_1408a77d0)(*param_1,uVar3);
+      cVar1 = CALLF(undefined1, FUN_1408a77d0)(*param_1,uVar3);
       if (cVar1 == '\0') {
         CALLF(undefined8, FUN_140800e30)(param_1,uVar3,param_3);
       }
@@ -981,7 +981,7 @@ undefined8 FUN_140f2a900(undefined8 *param_1, undefined4 param_2, undefined8 par
     uVar3 = (undefined4)uVar4;
     uVar4 = CALLF(undefined8, FUN_1402b4a30)(*param_1,uVar3);
     if (0 < (int)uVar4) {
-      cVar1 = CALLF(float, FUN_1408a77d0)(*param_1,uVar3);
+      cVar1 = CALLF(undefined1, FUN_1408a77d0)(*param_1,uVar3);
       if (cVar1 == '\0') {
         CALLF(undefined8, FUN_140800e30)(param_1,uVar3,param_3);
       }
@@ -1011,7 +1011,7 @@ undefined8 FUN_140f2a900(undefined8 *param_1, undefined4 param_2, undefined8 par
     uVar3 = (undefined4)uVar4;
     uVar4 = CALLF(undefined8, FUN_1402b4a30)(*param_1,uVar3);
     if (0 < (int)uVar4) {
-      cVar1 = CALLF(float, FUN_1408a77d0)(*param_1,uVar3);
+      cVar1 = CALLF(undefined1, FUN_1408a77d0)(*param_1,uVar3);
       if (cVar1 == '\0') {
         CALLF(undefined8, FUN_140800e30)(param_1,uVar3,param_3);
       }
@@ -1041,7 +1041,7 @@ undefined8 FUN_140f2a900(undefined8 *param_1, undefined4 param_2, undefined8 par
     uVar3 = (undefined4)uVar4;
     uVar4 = CALLF(undefined8, FUN_1402b4a30)(*param_1,uVar3);
     if (0 < (int)uVar4) {
-      cVar1 = CALLF(float, FUN_1408a77d0)(*param_1,uVar3);
+      cVar1 = CALLF(undefined1, FUN_1408a77d0)(*param_1,uVar3);
       if (cVar1 == '\0') {
         CALLF(undefined8, FUN_140800e30)(param_1,uVar3,param_3);
       }
@@ -1452,7 +1452,7 @@ undefined8 FUN_140f2b550(undefined8 *param_1, undefined4 param_2, undefined8 par
     uVar3 = (undefined4)uVar4;
     uVar4 = CALLF(undefined8, FUN_1402b4a30)(*param_1,uVar3);
     if (0 < (int)uVar4) {
-      cVar1 = CALLF(float, FUN_1408a77d0)(*param_1,uVar3);
+      cVar1 = CALLF(undefined1, FUN_1408a77d0)(*param_1,uVar3);
       if (cVar1 == '\0') {
         CALLF(undefined8, FUN_140800e30)(param_1,uVar3,param_3);
       }
@@ -1545,7 +1545,7 @@ undefined8 FUN_140f2b840(undefined8 *param_1, undefined4 param_2, undefined8 par
     uVar3 = (undefined4)uVar4;
     uVar4 = CALLF(undefined8, FUN_1402b4a30)(*param_1,uVar3);
     if (0 < (int)uVar4) {
-      cVar1 = CALLF(float, FUN_1408a77d0)(*param_1,uVar3);
+      cVar1 = CALLF(undefined1, FUN_1408a77d0)(*param_1,uVar3);
       if (cVar1 == '\0') {
         CALLF(undefined8, FUN_140800e30)(param_1,uVar3,param_3);
       }
@@ -1575,7 +1575,7 @@ undefined8 FUN_140f2b840(undefined8 *param_1, undefined4 param_2, undefined8 par
     uVar3 = (undefined4)uVar4;
     uVar4 = CALLF(undefined8, FUN_1402b4a30)(*param_1,uVar3);
     if (0 < (int)uVar4) {
-      cVar1 = CALLF(float, FUN_1408a77d0)(*param_1,uVar3);
+      cVar1 = CALLF(undefined1, FUN_1408a77d0)(*param_1,uVar3);
       if (cVar1 == '\0') {
         CALLF(undefined8, FUN_140800e30)(param_1,uVar3,param_3);
       }
@@ -1605,7 +1605,7 @@ undefined8 FUN_140f2b840(undefined8 *param_1, undefined4 param_2, undefined8 par
     uVar3 = (undefined4)uVar4;
     uVar4 = CALLF(undefined8, FUN_1402b4a30)(*param_1,uVar3);
     if (0 < (int)uVar4) {
-      cVar1 = CALLF(float, FUN_1408a77d0)(*param_1,uVar3);
+      cVar1 = CALLF(undefined1, FUN_1408a77d0)(*param_1,uVar3);
       if (cVar1 == '\0') {
         CALLF(undefined8, FUN_140800e30)(param_1,uVar3,param_3);
       }
@@ -6116,7 +6116,7 @@ undefined4 FUN_140f50a80(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_GamePad.CALLF(undefined4, FUN_140f50a80)(vibrationType, intensity)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar4);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar4,"Usage: C_GamePad.CALLF(undefined4, FUN_140f50a80)(vibrationType, intensity)");
     }

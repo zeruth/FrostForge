@@ -51,8 +51,11 @@ def main() -> None:
             value = regs[ops[1].reg]
         else:
             raise SystemExit(f"unexpected compare at {insn.address:#x}: {insn.op_str}")
-        following = insns[n + 1].mnemonic
-        if following in ("je", "sete"):
+        # (a pivot of the search is tested for equality too, after the branch that steers past it:
+        # `cmp rcx, rax; ja <higher>; je <known>`. Only the next instruction was looked at, which
+        # left out every pivot, about half the set: CURSOR_CHANGED, ACTIONBAR_UPDATE_USABLE and
+        # the like were refused to every frame that registered them, 2026-10-21)
+        if any(k < len(insns) and insns[k].mnemonic in ("je", "sete") for k in (n + 1, n + 2)):
             ids.add(value)
     ids = sorted(ids)
     out = ROOT / "src" / "framescript" / "EventIds.hpp"

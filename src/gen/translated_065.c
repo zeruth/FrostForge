@@ -1646,7 +1646,7 @@ undefined8 FUN_140fc04d0(undefined8 param_1, undefined8 param_2, undefined8 *par
     ;
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_2,iVar4);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_2,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
                     "Usage: local questID, numObjectives = self:UpdateMouseOverTooltip(x, y)");
@@ -1670,7 +1670,7 @@ undefined8 FUN_140fc04d0(undefined8 param_1, undefined8 param_2, undefined8 *par
     ;
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_2,iVar4);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_2,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
                     "Usage: local questID, numObjectives = self:UpdateMouseOverTooltip(x, y)");
@@ -2266,7 +2266,7 @@ undefined8 FUN_140fc97b0(undefined8 param_1, undefined8 param_2, longlong *param
     ((int *)(gen_frame + 0x40))[0] = iVar3 + 1;
   }
   else {
-    cVar4 = CALLF(float, FUN_1408a77d0)(param_2,iVar3);
+    cVar4 = CALLF(undefined1, FUN_1408a77d0)(param_2,iVar3);
     if (cVar4 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar3,"Usage: self:SetParticleOverrideScale([scale])");
     }
@@ -3117,7 +3117,7 @@ undefined8 FUN_140fd2ab0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetBorderScalar(scalar)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar3);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar3);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar3,"Usage: self:SetBorderScalar(scalar)");
     }
@@ -3477,7 +3477,7 @@ undefined8 FUN_140fd6fa0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetMergeThreshold(threshold)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar3);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar3);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar3,"Usage: self:SetMergeThreshold(threshold)");
     }
@@ -4477,7 +4477,7 @@ undefined8 FUN_140fe3220(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetCamDistanceScale(scale)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar3);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar3);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar3,"Usage: self:SetCamDistanceScale(scale)");
     }
@@ -4965,7 +4965,7 @@ undefined8 FUN_140fe91c0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetPortraitZoom(zoom)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar3);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar3);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar3,"Usage: self:SetPortraitZoom(zoom)");
     }
@@ -5049,7 +5049,7 @@ undefined8 FUN_140fe9fd0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetRotation(radians [, animate])");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar7);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar7);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar7,"Usage: self:SetRotation(radians [, animate])");
     }
@@ -5430,7 +5430,7 @@ undefined4 FUN_140fee610(undefined8 param_1)
   fVar7 = 0.0;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar5);
   if (0 < (int)uVar3) {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar5);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,"Usage: self:InitializeCamera([scaleFactor])");
     }
@@ -5505,7 +5505,7 @@ undefined4 FUN_140fef400(undefined8 param_1)
   fVar7 = 0.0;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar5);
   if (0 < (int)uVar3) {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar5);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,"Usage: self:InitializePanCamera([scaleFactor])");
     }
@@ -5633,7 +5633,7 @@ undefined8 FUN_140ff0f60(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetAnimOffset(offset)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar5);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,"Usage: self:SetAnimOffset(offset)");
     }
@@ -5971,7 +5971,7 @@ undefined8 FUN_140ff5470(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetFadeTimes(fadeInSeconds, fadeOutSeconds)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar5);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar5,"Usage: self:SetFadeTimes(fadeInSeconds, fadeOutSeconds)");
     }
@@ -5992,7 +5992,7 @@ undefined8 FUN_140ff5470(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetFadeTimes(fadeInSeconds, fadeOutSeconds)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar5);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar5,"Usage: self:SetFadeTimes(fadeInSeconds, fadeOutSeconds)");
     }
@@ -6073,7 +6073,7 @@ undefined8 FUN_140ff62f0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetHeightFactor(factor)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar6,"Usage: self:SetHeightFactor(factor)");
     }
@@ -6152,7 +6152,7 @@ undefined8 FUN_140ff70e0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetJumpInfo(jumpLength, jumpHeight)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar5);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar5,"Usage: self:SetJumpInfo(jumpLength, jumpHeight)");
     }
@@ -6173,7 +6173,7 @@ undefined8 FUN_140ff70e0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetJumpInfo(jumpLength, jumpHeight)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar5);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar5,"Usage: self:SetJumpInfo(jumpLength, jumpHeight)");
     }
@@ -6254,7 +6254,7 @@ undefined8 FUN_140ff7f60(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetPanDistance(scale)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar6,"Usage: self:SetPanDistance(scale)");
     }
@@ -6414,7 +6414,7 @@ undefined8 FUN_140ff9b40(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetTargetDistance(scale)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar6,"Usage: self:SetTargetDistance(scale)");
     }
@@ -6513,7 +6513,7 @@ undefined4 FUN_140ffa930(undefined8 param_1)
                  );
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar6,
                     "Usage: self:StartPan(panType, durationSeconds [, doFade, visKitID, startPositionScale, speedMultiplier])"
@@ -6581,7 +6581,7 @@ LAB_140ffac0c:
     ((int *)(gen_frame + 0xa8))[0] = iVar6;
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar6,
                     "Usage: self:StartPan(panType, durationSeconds [, doFade, visKitID, startPositionScale, speedMultiplier])"
@@ -6600,7 +6600,7 @@ LAB_140ffac0c:
   fVar10 = REFG(float, 0x142618d64);
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar6);
   if (0 < (int)uVar5) {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar6,
                     "Usage: self:StartPan(panType, durationSeconds [, doFade, visKitID, startPositionScale, speedMultiplier])"
@@ -7538,7 +7538,7 @@ undefined4 FUN_1410090f0(undefined8 param_1)
   fVar7 = REFG(float, 0x142618d64);
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,((int *)(gen_frame + 0x98))[0]);
   if (0 < (int)uVar4) {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar2);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar2);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x18)),iVar2,"Usage: self:SetCooldown(start, duration [, modRate])");
       goto LAB_1410092ce;
@@ -7616,7 +7616,7 @@ undefined4 FUN_141009f60(undefined8 param_1)
   fVar7 = REFG(float, 0x142618d64);
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,((int *)(gen_frame + 0x98))[0]);
   if (0 < (int)uVar4) {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar2);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar2);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x10)),iVar2,"Usage: self:SetCooldownDuration(duration [, modRate])");
       goto LAB_14100a11e;
@@ -7737,7 +7737,7 @@ undefined4 FUN_14100ada0(undefined8 param_1)
   fVar8 = REFG(float, 0x142618d64);
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar6);
   if (0 < (int)uVar5) {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar6,"Usage: self:SetCooldownUNIX(start, duration [, modRate])");
     }
@@ -8168,7 +8168,7 @@ undefined8 FUN_141010170(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetEdgeScale(scale)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar6,"Usage: self:SetEdgeScale(scale)");
     }
@@ -8432,7 +8432,7 @@ undefined8 FUN_141013820(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetRotation(rotationRadians)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar5);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,"Usage: self:SetRotation(rotationRadians)");
     }
@@ -9742,7 +9742,7 @@ undefined8 FUN_141026fa0(undefined8 param_1)
       CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetZoom(zoomLevel)");
     }
     else {
-      cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar6);
+      cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar6);
       if (cVar1 == '\0') {
         CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x8)),uVar6,"Usage: self:SetZoom(zoomLevel)");
       }
@@ -10420,7 +10420,7 @@ undefined8 FUN_1410305b0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetMaskScalar(scalar)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar5);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,"Usage: self:SetMaskScalar(scalar)");
     }
@@ -12023,7 +12023,7 @@ undefined8 FUN_141046940(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetAlpha(alpha)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar3);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar3);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar3,"Usage: self:SetAlpha(alpha)");
     }
@@ -12214,7 +12214,7 @@ undefined8 FUN_141049260(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetDesaturation(strength)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar3);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar3);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar3,"Usage: self:SetDesaturation(strength)");
     }
@@ -12740,7 +12740,7 @@ undefined8 FUN_14104e650(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetPitch(pitch)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar3);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar3);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar3,"Usage: self:SetPitch(pitch)");
     }
@@ -12883,7 +12883,7 @@ undefined8 FUN_141050240(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetRoll(roll)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar3);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar3);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar3,"Usage: self:SetRoll(roll)");
     }
@@ -12965,7 +12965,7 @@ undefined8 FUN_141051050(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetScale(scale)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar3);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar3);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar3,"Usage: self:SetScale(scale)");
     }
@@ -13308,7 +13308,7 @@ undefined8 FUN_1410548e0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetYaw(yaw)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar3);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar3);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar3,"Usage: self:SetYaw(yaw)");
     }
@@ -14752,7 +14752,7 @@ undefined8 FUN_14106c1e0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetCameraFarClip(farClip)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar6,"Usage: self:SetCameraFarClip(farClip)");
     }
@@ -14832,7 +14832,7 @@ undefined8 FUN_14106cfd0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetCameraFieldOfView(fov)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar6,"Usage: self:SetCameraFieldOfView(fov)");
     }
@@ -14912,7 +14912,7 @@ undefined8 FUN_14106ddc0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetCameraNearClip(nearClip)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar6,"Usage: self:SetCameraNearClip(nearClip)");
     }
@@ -15055,7 +15055,7 @@ undefined8 FUN_14106f9f0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetCameraOrientationByYawPitchRoll(yaw, pitch, roll)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar6,
                     "Usage: self:SetCameraOrientationByYawPitchRoll(yaw, pitch, roll)");
@@ -15077,7 +15077,7 @@ undefined8 FUN_14106f9f0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetCameraOrientationByYawPitchRoll(yaw, pitch, roll)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar6,
                     "Usage: self:SetCameraOrientationByYawPitchRoll(yaw, pitch, roll)");
@@ -15099,7 +15099,7 @@ undefined8 FUN_14106f9f0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetCameraOrientationByYawPitchRoll(yaw, pitch, roll)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,iVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,iVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar6,
                     "Usage: self:SetCameraOrientationByYawPitchRoll(yaw, pitch, roll)");
@@ -15237,7 +15237,7 @@ undefined8 FUN_1410716a0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetDesaturation(strength)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar6,"Usage: self:SetDesaturation(strength)");
     }
@@ -15485,7 +15485,7 @@ undefined8 FUN_1410740e0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetFogFar(far)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar6,"Usage: self:SetFogFar(far)");
     }
@@ -15565,7 +15565,7 @@ undefined8 FUN_141074ed0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetFogNear(near)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar6,"Usage: self:SetFogNear(near)");
     }

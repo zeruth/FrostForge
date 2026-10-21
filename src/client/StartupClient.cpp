@@ -753,6 +753,7 @@ void Sub14021C040() {
 #pragma comment(linker, "/include:?AegisCheckTiming@@YAX_KI0@Z")
 #pragma comment(linker, "/include:?AegisTaintShadowSet@@YAPEAXPEAX@Z")
 #pragma comment(linker, "/include:?AegisTaintShadowCheck@@YAXPEAXI@Z")
+#pragma comment(linker, "/include:?GetEventIDView@FrameScriptEvents@@YA_KPEBUEVENTSTRING@1@@Z")
 
 // Gx
 // ref: FUN_14228c670

@@ -278,8 +278,15 @@ DispatchScope::~DispatchScope() {
     }
 }
 
-// The upper-cased name, hashed.
+// The upper-cased name, hashed: the reference's takes the name as a string view (data, then length).
 // ref: FUN_1407bc5a0
+uint64_t GetEventIDView(const EVENTSTRING* name) {
+    return GetEventID(name->m_data, static_cast<uint64_t>(name->m_length));
+}
+
+// (the same by pointer and length, the port's callers' form. It carried the tag until
+// 2026-10-21, and translated callers' one view argument was read as the name, with whatever rdx
+// held as the length: a 400 KB _alloca on loading FrameXML)
 uint64_t GetEventID(const char* name, uint64_t length) {
     char* upper = static_cast<char*>(_alloca((length + 0xf) & ~0xfull));
     for (uint64_t i = 0; i < length; i++) {

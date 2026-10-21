@@ -6492,6 +6492,17 @@ class Translator:
         inits = [p for p in self.static_initializers() if p in plan["translate"]]
         jumps += ["", "const unsigned long long g_genInits[] = {"]
         jumps += [f"    0x{p:x}ULL," for p in inits] + ["    0", "};", f"const size_t g_genInitCount = {len(inits)};"]
+        # the globals the port holds, for RefImage to send the image's own pointers to them there
+        # (a static table of {table, callback} pairs, 0x142d2d1d0, named Spell's image copy, never
+        # built: its patch-callback vector was garbage and its free aborted, 2026-10-21)
+        # (one table sorted by address: RefImage searches it)
+        held = [(base, self.held[base].get("size") or 8, f"(void*)&gen_g_{base:x}, 0")
+                for base in self.global_aliases]
+        held += [(base, g.get("size") or 8, f"0, &gen_p_{base:x}") for base, g in self.exported.items()]
+        held_rows = [f"    {{ 0x{base:x}ULL, {size}ULL, {target} }}," for base, size, target in sorted(held)]
+        jumps += ["", "typedef struct { unsigned long long m_ref; unsigned long long m_size; void* m_port; "
+                  "void* const* m_portPtr; } GENHELD;", "const GENHELD g_genHeld[] = {"]
+        jumps += held_rows + ["    { 0, 0, 0, 0 }", "};", f"const size_t g_genHeldCount = {len(held_rows)};"]
         jumps += ["", "typedef struct { unsigned long long m_address; void* m_target; } GENJUMP;",
                   "const GENJUMP g_genJumps[] = {"]
         reachable = sorted(set(plan["translate"]) | set(plan["adapt"]))

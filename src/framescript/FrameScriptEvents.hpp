@@ -69,6 +69,8 @@ class DispatchScope {
 
 // The event id of a name.
 uint64_t GetEventID(const char* name, uint64_t length);
+struct EVENTSTRING;
+uint64_t GetEventIDView(const EVENTSTRING* name);
 // Whether the client knows the event.
 bool IsKnownEvent(uint64_t id);
 

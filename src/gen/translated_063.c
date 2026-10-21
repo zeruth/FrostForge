@@ -22542,7 +22542,7 @@ undefined8 FUN_140f242a0(undefined8 param_1)
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetPlayerPingScale(scale)");
   }
   else {
-    cVar1 = CALLF(float, FUN_1408a77d0)(param_1,uVar6);
+    cVar1 = CALLF(undefined1, FUN_1408a77d0)(param_1,uVar6);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),uVar6,"Usage: self:SetPlayerPingScale(scale)");
     }

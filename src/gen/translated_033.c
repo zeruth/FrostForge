@@ -2,7 +2,7 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4310 4312 4389 4554 4702 4100 4101 4102 4146 4018 4057 4113 4152 4204 4459 4456 4457 4127 4805 4800 4996)
 #define GEN_HITS gen_hits_033
-unsigned int gen_hits_033[444];
+unsigned int gen_hits_033[445];
 
 /* ref: FUN_140583650 */
 undefined1 FUN_140583650(longlong *param_1)
@@ -22711,10 +22711,47 @@ undefined8 * FUN_14059ef80(undefined8 *param_1, longlong *param_2)
   return param_1;
 }
 
+/* ref: FUN_14059f060 */
+undefined8 * FUN_14059f060(undefined8 *param_1, longlong param_2)
+{
+  GEN_HIT(437);
+  undefined8 uVar1 = {0};
+  
+  *param_1 = (*(undefined8 (*)[18])(uintptr_t)0x1426b6350ULL);
+  uVar1 = *(undefined8 *)(param_2 + 0x10);
+  param_1[1] = *(undefined8 *)(param_2 + 8);
+  param_1[2] = uVar1;
+  uVar1 = *(undefined8 *)(param_2 + 0x20);
+  param_1[3] = *(undefined8 *)(param_2 + 0x18);
+  param_1[4] = uVar1;
+  uVar1 = *(undefined8 *)(param_2 + 0x30);
+  param_1[5] = *(undefined8 *)(param_2 + 0x28);
+  param_1[6] = uVar1;
+  uVar1 = *(undefined8 *)(param_2 + 0x40);
+  param_1[7] = *(undefined8 *)(param_2 + 0x38);
+  param_1[8] = uVar1;
+  uVar1 = *(undefined8 *)(param_2 + 0x50);
+  param_1[9] = *(undefined8 *)(param_2 + 0x48);
+  param_1[10] = uVar1;
+  uVar1 = *(undefined8 *)(param_2 + 0x60);
+  param_1[0xb] = *(undefined8 *)(param_2 + 0x58);
+  param_1[0xc] = uVar1;
+  *(undefined4 *)(param_1 + 0xd) = *(undefined4 *)(param_2 + 0x68);
+  *(undefined4 *)((longlong)param_1 + 0x6c) = *(undefined4 *)(param_2 + 0x6c);
+  *(undefined4 *)(param_1 + 0xe) = *(undefined4 *)(param_2 + 0x70);
+  *(undefined4 *)((longlong)param_1 + 0x74) = *(undefined4 *)(param_2 + 0x74);
+  *(undefined1 *)(param_1 + 0xf) = *(undefined1 *)(param_2 + 0x78);
+  *(undefined1 *)((longlong)param_1 + 0x79) = 1;
+  *(undefined4 *)((longlong)param_1 + 0x7c) = *(undefined4 *)(param_2 + 0x7c);
+  *param_1 = (*(undefined8 (*)[18])(uintptr_t)0x1426b63e0ULL);
+  CALLF(undefined8 *, FUN_14059ef80)(param_1 + 0x10,param_2 + 0x80);
+  return param_1;
+}
+
 /* ref: FUN_14059f0f0 */
 undefined8 * FUN_14059f0f0(undefined8 *param_1, longlong param_2)
 {
-  GEN_HIT(437);
+  GEN_HIT(438);
   undefined8 *puVar1 = {0};
   undefined8 uVar2 = {0};
   uint uVar3 = {0};
@@ -22782,7 +22819,7 @@ undefined8 * FUN_14059f0f0(undefined8 *param_1, longlong param_2)
 /* ref: FUN_14059f260 */
 undefined8 * FUN_14059f260(undefined8 *param_1, longlong param_2)
 {
-  GEN_HIT(438);
+  GEN_HIT(439);
   undefined8 *puVar1 = {0};
   undefined8 uVar2 = {0};
   uint uVar3 = {0};
@@ -22849,7 +22886,7 @@ undefined8 * FUN_14059f260(undefined8 *param_1, longlong param_2)
 /* ref: FUN_14059f3e0 */
 undefined ** FUN_14059f3e0(undefined8 *param_1)
 {
-  GEN_HIT(439);
+  GEN_HIT(440);
   *param_1 = (*(undefined8 (*)[18])(uintptr_t)0x1426b6938ULL);
   if (-1 < (longlong)param_1[0x15]) {
     CALLF(undefined1, FUN_140255210)(param_1[0x13],"D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\DB\\DBCTypes.h",
@@ -22868,7 +22905,7 @@ undefined ** FUN_14059f3e0(undefined8 *param_1)
 /* ref: FUN_14059f470 */
 undefined ** FUN_14059f470(undefined8 *param_1)
 {
-  GEN_HIT(440);
+  GEN_HIT(441);
   *param_1 = (*(undefined8 (*)[18])(uintptr_t)0x1426b6a08ULL);
   if (-1 < (longlong)param_1[0x15]) {
     CALLF(undefined1, FUN_140255210)(param_1[0x13],"D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\DB\\DBCTypes.h",
@@ -22887,7 +22924,7 @@ undefined ** FUN_14059f470(undefined8 *param_1)
 /* ref: FUN_14059f500 */
 undefined ** FUN_14059f500(undefined8 *param_1)
 {
-  GEN_HIT(441);
+  GEN_HIT(442);
   *param_1 = (*(undefined8 (*)[18])(uintptr_t)0x1426b6a98ULL);
   if (-1 < (longlong)param_1[0x15]) {
     CALLF(undefined1, FUN_140255210)(param_1[0x13],"D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\DB\\DBCTypes.h",
@@ -22906,7 +22943,7 @@ undefined ** FUN_14059f500(undefined8 *param_1)
 /* ref: FUN_14059f590 */
 undefined ** FUN_14059f590(undefined8 *param_1)
 {
-  GEN_HIT(442);
+  GEN_HIT(443);
   *param_1 = (*(undefined8 (*)[18])(uintptr_t)0x1426b77d8ULL);
   if (-1 < (longlong)param_1[0x17]) {
     CALLF(undefined1, FUN_140255210)(param_1[0x15],"D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\DB\\DBCTypes.h",
@@ -22922,7 +22959,7 @@ undefined ** FUN_14059f590(undefined8 *param_1)
 /* ref: FUN_14059f600 */
 undefined ** FUN_14059f600(undefined8 *param_1)
 {
-  GEN_HIT(443);
+  GEN_HIT(444);
   *param_1 = (*(undefined8 (*)[18])(uintptr_t)0x1426b7868ULL);
   if (-1 < (longlong)param_1[0x17]) {
     CALLF(undefined1, FUN_140255210)(param_1[0x15],"D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\DB\\DBCTypes.h",
@@ -23373,6 +23410,7 @@ const unsigned long long gen_hit_addrs_033[] = {
     0x14059ec80ULL,
     0x14059ee00ULL,
     0x14059ef80ULL,
+    0x14059f060ULL,
     0x14059f0f0ULL,
     0x14059f260ULL,
     0x14059f3e0ULL,

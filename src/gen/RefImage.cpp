@@ -31,6 +31,16 @@ extern const GENJUMP g_genJumps[];
 extern const size_t g_genJumpCount;
 extern const uint64_t g_genInits[];
 extern const size_t g_genInitCount;
+// the image's globals the port holds: their reference range and the port's object (or, for an
+// internal one, the pointer its file exports to it)
+struct GENHELD {
+    uint64_t m_ref;
+    uint64_t m_size;
+    void* m_port;
+    void* const* m_portPtr;
+};
+extern const GENHELD g_genHeld[];
+extern const size_t g_genHeldCount;
 // the code ranges mapped as the reference's own bytes, from and to in pairs (third-party
 // assembly the translated code calls: tools/translate.py native_ok)
 extern const uint64_t g_genNative[];
@@ -273,6 +283,65 @@ extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info) {
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
+// The image's own data holds pointers to its globals (tables of {table, callback}, of objects to
+// visit): where the port holds that global, the image's copy is never built, and the pointer
+// must be the port's object instead. Every such pointer is one of the image's base relocations
+// (DIR64), so each relocation outside the code whose value falls inside a held global is moved
+// to the same offset in the port's object. Without it the DB2 patch-callback table (0x142d2d1d0)
+// named Spell's unbuilt image copy, and entering the world aborted freeing its garbage vector
+// (2026-10-21).
+size_t RedirectHeldPointers(uint64_t base, const IMAGE_NT_HEADERS64& nt) {
+    const IMAGE_DATA_DIRECTORY& dir = nt.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC];
+    if (dir.VirtualAddress == 0 || g_genHeldCount == 0) {
+        return 0;
+    }
+    // (g_genHeld is sorted by m_ref)
+    size_t moved = 0;
+    auto at = reinterpret_cast<const uint8_t*>(base + dir.VirtualAddress);
+    auto end = at + dir.Size;
+    while (at + sizeof(IMAGE_BASE_RELOCATION) <= end) {
+        auto block = reinterpret_cast<const IMAGE_BASE_RELOCATION*>(at);
+        if (block->SizeOfBlock < sizeof(IMAGE_BASE_RELOCATION)) {
+            break;
+        }
+        auto entries = reinterpret_cast<const uint16_t*>(block + 1);
+        size_t n = (block->SizeOfBlock - sizeof(IMAGE_BASE_RELOCATION)) / 2;
+        for (size_t i = 0; i < n; i++) {
+            if ((entries[i] >> 12) != IMAGE_REL_BASED_DIR64) {
+                continue;
+            }
+            uint64_t slot = base + block->VirtualAddress + (entries[i] & 0xfff);
+            if (slot >= kTextStart && slot < kTextEnd) {
+                continue;
+            }
+            uint64_t value = *reinterpret_cast<const uint64_t*>(slot);
+            // the last held global starting at or before the value
+            size_t lo = 0;
+            size_t hi = g_genHeldCount;
+            while (lo < hi) {
+                size_t mid = (lo + hi) / 2;
+                if (g_genHeld[mid].m_ref <= value) {
+                    lo = mid + 1;
+                } else {
+                    hi = mid;
+                }
+            }
+            if (lo == 0) {
+                continue;
+            }
+            const GENHELD& held = g_genHeld[lo - 1];
+            if (value >= held.m_ref + held.m_size) {
+                continue;
+            }
+            auto port = static_cast<uint8_t*>(held.m_port != nullptr ? held.m_port : *held.m_portPtr);
+            *reinterpret_cast<uint64_t*>(slot) = reinterpret_cast<uint64_t>(port + (value - held.m_ref));
+            moved++;
+        }
+        at += block->SizeOfBlock;
+    }
+    return moved;
+}
+
 bool RefImageInitialize(const char* path) {
     if (s_mapped) {
         return true;
@@ -440,6 +509,8 @@ bool RefImageInitialize(const char* path) {
     // the image's own static initializers (its CRT table), the ones translated: they construct
     // the reference's globals (locks, lists, tables) as its startup would have, so translated
     // code finds them built rather than zeroed. Each goes through its guarded entry.
+    size_t moved = RedirectHeldPointers(base, nt);
+    FrostLog("refimage", "%zu of the image's pointers sent to the port's globals", moved);
     StartWatch();
     size_t ran = 0;
     for (size_t i = 0; i < g_genInitCount; i++) {

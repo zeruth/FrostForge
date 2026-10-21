@@ -257,7 +257,8 @@ float OptionalUIUnits(lua_State* L, int32_t* index, const char* usage, bool* pre
     return value;
 }
 
-// ref: FUN_1408a77d0
+// (not FUN_1408a77d0: that takes (L, index) by value, so translated callers handed this the wrong shape;
+// untagged 2026-10-21, they run its translation)
 float RequiredFinite(lua_State* L, int32_t* index, const char* usage) {
     if (!Present(L, *index)) {
         luaL_error(L, usage);
@@ -286,7 +287,8 @@ float OptionalFinite(lua_State* L, int32_t* index, const char* usage, float fall
 }
 
 // FUN_1408c5050
-// ref: FUN_1407d2350
+// (not FUN_1407d2350: that takes (L, index) by value, so translated callers handed this the wrong shape;
+// untagged 2026-10-21, they run its translation)
 int32_t RequiredInt32(lua_State* L, int32_t* index, const char* usage) {
     if (!Present(L, *index)) {
         luaL_error(L, usage);
