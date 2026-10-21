@@ -5445,6 +5445,33 @@ class Translator:
 
         return lits.sub(fix, rest)
 
+    STACK_LIST_APPEND = re.compile(
+        r"(?P<tail>\w+) = \*\(longlong \*\)\((?P<bucket>\w+) \+ 8\);(?P<s1>\s*)"
+        r"\*(?P<link>\w+) = (?P=tail);(?P<s2>\s*)"
+        r"(?P=link)\[1\] = \*\(longlong \*\)\((?P=tail) \+ 8\);(?P<s3>\s*)"
+        r"\*\([\w \*]+\)\((?P=tail) \+ 8\) = local_\w+;(?P<s4>\s*)"
+        r"\*\(longlong \*\*\)\((?P=bucket) \+ 8\) = (?P=link);")
+
+    @classmethod
+    def stack_list_append(cls, rest: str) -> str:
+        """TSHashTable's rehash (89 instances, FUN_1419c7450 the first found): the re-bucket loop
+        takes the head node off a list on its own stack and appends it to its new bucket. The
+        asm keeps that node in a register; Ghidra re-reads the stack head after the unlink, which
+        wrote it through a pointer, and so appends the next node instead (the default alias
+        blocking stops a stack pointer's alias at an array). Half of every rehashed table was left
+        on the dead stack list, and the cache clear on entering the world never ended
+        (2026-10-21). The node is its link less the bucket list's link offset (the int at the
+        bucket's start). ExportDecompAll now decompiles with alias blocking off; this covers a
+        corpus exported before that."""
+        def fix(m):
+            return (f"{m.group('tail')} = *(longlong *)({m.group('bucket')} + 8);{m.group('s1')}"
+                    f"*{m.group('link')} = {m.group('tail')};{m.group('s2')}"
+                    f"{m.group('link')}[1] = *(longlong *)({m.group('tail')} + 8);{m.group('s3')}"
+                    f"*(longlong *)({m.group('tail')} + 8) = (longlong){m.group('link')} - "
+                    f"(longlong)*(int *){m.group('bucket')};{m.group('s4')}"
+                    f"*(longlong **)({m.group('bucket')} + 8) = {m.group('link')};")
+        return cls.STACK_LIST_APPEND.sub(fix, rest)
+
     @staticmethod
     def handed_on_tail_call(head: str, rest: str) -> str:
         """An open function's one indirect call with no arguments, in a body that never writes
@@ -5468,6 +5495,7 @@ class Translator:
         own_name = self.cor[a]["name"] if a in self.cor else ""
         if a in self.open_protos:
             rest = self.handed_on_tail_call(head, rest)
+        rest = self.stack_list_append(rest)
         rest = self.addressed_literals(rest)
         rest = self.indexed_literals(a, rest)
         # `_local_a8`: Ghidra's name for a wider store over a declared local (`local_a8` an

@@ -14912,7 +14912,7 @@ undefined8 FUN_141c95b10(longlong param_1, uint param_2)
     lVar11 = *(longlong *)(lVar14 + 8);
     *plVar6 = lVar11;
     plVar6[1] = *(longlong *)(lVar11 + 8);
-    *(undefined8 ***)(lVar11 + 8) = (*(undefined8 ** *)(gen_frame + 0x10));
+    *(longlong *)(lVar11 + 8) = (longlong)plVar6 - (longlong)*(int *)lVar14;
     *(longlong **)(lVar14 + 8) = plVar6;
   }
   while ((((ulonglong)pppuVar5 & 1) == 0 && ((undefined8 ***)(*(undefined8 ** *)(gen_frame + 0x10)) != (undefined8 ***)0x0))) {
@@ -15069,7 +15069,7 @@ undefined8 FUN_141c95e40(longlong param_1, uint param_2)
     lVar11 = *(longlong *)(lVar14 + 8);
     *plVar6 = lVar11;
     plVar6[1] = *(longlong *)(lVar11 + 8);
-    *(undefined8 ***)(lVar11 + 8) = (*(undefined8 ** *)(gen_frame + 0x10));
+    *(longlong *)(lVar11 + 8) = (longlong)plVar6 - (longlong)*(int *)lVar14;
     *(longlong **)(lVar14 + 8) = plVar6;
   }
   while ((((ulonglong)pppuVar5 & 1) == 0 && ((undefined8 ***)(*(undefined8 ** *)(gen_frame + 0x10)) != (undefined8 ***)0x0))) {
@@ -15226,7 +15226,7 @@ undefined8 FUN_141c96170(longlong param_1, uint param_2)
     lVar11 = *(longlong *)(lVar14 + 8);
     *plVar6 = lVar11;
     plVar6[1] = *(longlong *)(lVar11 + 8);
-    *(undefined8 ***)(lVar11 + 8) = (*(undefined8 ** *)(gen_frame + 0x10));
+    *(longlong *)(lVar11 + 8) = (longlong)plVar6 - (longlong)*(int *)lVar14;
     *(longlong **)(lVar14 + 8) = plVar6;
   }
   while ((((ulonglong)pppuVar5 & 1) == 0 && ((undefined8 ***)(*(undefined8 ** *)(gen_frame + 0x10)) != (undefined8 ***)0x0))) {
@@ -19663,7 +19663,7 @@ undefined8 FUN_141c9c5f0(longlong param_1, uint param_2)
     lVar11 = *(longlong *)(lVar14 + 8);
     *plVar6 = lVar11;
     plVar6[1] = *(longlong *)(lVar11 + 8);
-    *(undefined8 ***)(lVar11 + 8) = (*(undefined8 ** *)(gen_frame + 0x10));
+    *(longlong *)(lVar11 + 8) = (longlong)plVar6 - (longlong)*(int *)lVar14;
     *(longlong **)(lVar14 + 8) = plVar6;
   }
   while ((((ulonglong)pppuVar5 & 1) == 0 && ((undefined8 ***)(*(undefined8 ** *)(gen_frame + 0x10)) != (undefined8 ***)0x0))) {

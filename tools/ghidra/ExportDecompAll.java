@@ -221,6 +221,12 @@ public class ExportDecompAll extends GhidraScript {
                         ifc.setSimplificationStyle("decompile");
                         DecompileOptions opts = new DecompileOptions();
                         opts.grabFromProgram(currentProgram);
+                        // a pointer into the stack may reach any stack variable: with the default
+                        // (arrays block an alias), a list head on the stack that an unlink wrote
+                        // through a pointer was re-read as unchanged, FUN_1419c7450's rehash
+                        // linked the wrong node, and entering the world never finished
+                        // (2026-10-21; 104 functions keep a list sentinel on the stack)
+                        opts.setAliasBlock(DecompileOptions.AliasBlockEnum.None);
                         opts.setMaxInstructions(400000);
                         opts.setMaxPayloadMBytes(400);
                         ifc.setOptions(opts);

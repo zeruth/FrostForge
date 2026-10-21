@@ -665,6 +665,9 @@ extern unsigned char gen_g_142d5eae8[4];
 /* g_se3ShuttingDown (src/sound/SE3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142ddcea4=?g_se3ShuttingDown@@3EC")
 extern unsigned char gen_g_142ddcea4[1];
+/* s_worldScene (src/client/StartupClient.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_142ddcf58=?s_worldScene@@3PEAVCWorldScene@@EA")
+extern unsigned char gen_g_142ddcf58[8];
 /* g_startupFlags (src/client/Startup.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_142ddcfa8=?g_startupFlags@@3IA")
 extern unsigned char gen_g_142ddcfa8[4];
@@ -3776,9 +3779,6 @@ extern void *const gen_p_142ddcf20;
 /* s_seedA (src/client/Startup.cpp), internal: through its pointer */
 extern void *const gen_p_142ddcf50;
 #define gen_g_142ddcf50 (*(unsigned char (*)[8])gen_p_142ddcf50)
-/* s_worldScene (src/client/StartupClient.cpp), internal: through its pointer */
-extern void *const gen_p_142ddcf58;
-#define gen_g_142ddcf58 (*(unsigned char (*)[8])gen_p_142ddcf58)
 /* s_seedB (src/client/Startup.cpp), internal: through its pointer */
 extern void *const gen_p_142ddcf80;
 #define gen_g_142ddcf80 (*(unsigned char (*)[8])gen_p_142ddcf80)

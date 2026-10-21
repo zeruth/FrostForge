@@ -1587,7 +1587,6 @@ void Sub14023D170(GXFRAMESTATS* stats) {
 extern "C" void* const gen_f_140219a00 = (void*)&SplashDestroy;
 extern "C" void* const gen_f_140326080 = (void*)&ConsoleSetEnabledFromCommandLine;
 extern "C" void* const gen_f_1405742d0 = (void*)&DbCloseHotfixes;
-extern "C" void* const gen_p_142ddcf58 = (void*)&s_worldScene;
 extern "C" void* const gen_p_142dde7f8 = (void*)&s_splashWindow;
 extern "C" void* const gen_p_142dde810 = (void*)&s_splashImage;
 extern "C" void* const gen_p_142dde818 = (void*)&s_splashCursor;
