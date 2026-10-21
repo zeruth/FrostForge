@@ -37,8 +37,10 @@ void ErrorDisplayCode(uint32_t code, const char* text, uint32_t locale, bool fla
 
 // Formats the message (printf-style) and reports it under `code`.
 void ErrorDisplayFormatted(uint32_t code, const char* a2, int32_t a3, const char* format, ...);
-// A non-fatal error reported with where it happened (FUN_14024d210).
-void ErrorReportNonFatal(uint32_t code, const char* file, int32_t line, const char* format, ...);
+// A non-fatal error reported with where it happened (FUN_14024d210). `a4` to `a6` go on to the
+// report as they are (byte, dword, qword); every caller seen passes 1, 1, 0.
+void ErrorReportNonFatal(uint32_t code, const char* file, int32_t line, uint8_t a4, int32_t a5, uint64_t a6,
+    const char* format, ...);
 
 // Adds a block of memory for the crash dump to include; false once the 128 slots are used.
 bool ErrorReportAddMemoryRange(void* base, uint64_t size);

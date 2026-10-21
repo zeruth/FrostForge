@@ -819,7 +819,6 @@ extern "C" void* const gen_p_142cfd058 = (void*)&s_released;
 extern "C" void* const gen_p_142ddcea8 = (void*)&s_messageLock;
 extern "C" void* const gen_p_142ddced0 = (void*)&s_samplesLock;
 extern "C" void* const gen_p_142ddcef8 = (void*)&s_streamsLock;
-extern "C" void* const gen_p_1430a9720 = (void*)&s_size;
 extern "C" void* const gen_p_1430a9728 = (void*)&s_doneLoadingMessages;
 extern "C" void* const gen_p_1430a9750 = (void*)&s_asyncLock;
 // ---- end of generated globals ----

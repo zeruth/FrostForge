@@ -690,7 +690,7 @@ void ShaderEffectBuildLights(uint8_t* lights, void* const* list, const float* vi
                 if (!s_badLightReported) {
                     s_badLightReported = true;
                     ErrorReportNonFatal(0x8512008b,
-                        "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\ShaderEffect\\ShaderEffect.cpp", 0x159,
+                        "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\ShaderEffect\\ShaderEffect.cpp", 0x159, 1, 1, 0,
                         "Bad CM2Light* %p new: %p", nullptr, light);
                 }
                 if (light == nullptr) {

@@ -2,969 +2,12 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4310 4312 4389 4554 4702 4100 4101 4102 4146 4018 4057 4113 4152 4204 4459 4456 4457 4127 4805 4800 4996)
 #define GEN_HITS gen_hits_068
-unsigned int gen_hits_068[404];
-
-/* ref: FUN_141164030 */
-longlong FUN_141164030(undefined8 param_1)
-{
-  GEN_HIT(0);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x2308) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164090 */
-longlong FUN_141164090(undefined8 param_1)
-{
-  GEN_HIT(1);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x2ff8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411640d0 */
-longlong FUN_1411640d0(undefined8 param_1)
-{
-  GEN_HIT(2);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x5f0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411640f0 */
-longlong FUN_1411640f0(undefined8 param_1)
-{
-  GEN_HIT(3);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x738) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164110 */
-longlong FUN_141164110(undefined8 param_1)
-{
-  GEN_HIT(4);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x740) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164130 */
-longlong FUN_141164130(undefined8 param_1)
-{
-  GEN_HIT(5);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x748) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164150 */
-longlong FUN_141164150(undefined8 param_1)
-{
-  GEN_HIT(6);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x750) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164170 */
-longlong FUN_141164170(undefined8 param_1)
-{
-  GEN_HIT(7);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x758) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164190 */
-longlong FUN_141164190(undefined8 param_1)
-{
-  GEN_HIT(8);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x760) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411641d0 */
-longlong FUN_1411641d0(undefined8 param_1)
-{
-  GEN_HIT(9);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x7f0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411641f0 */
-longlong FUN_1411641f0(undefined8 param_1)
-{
-  GEN_HIT(10);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x808) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164210 */
-longlong FUN_141164210(undefined8 param_1)
-{
-  GEN_HIT(11);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x810) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164230 */
-longlong FUN_141164230(undefined8 param_1)
-{
-  GEN_HIT(12);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x818) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164250 */
-longlong FUN_141164250(undefined8 param_1)
-{
-  GEN_HIT(13);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x820) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164270 */
-longlong FUN_141164270(undefined8 param_1)
-{
-  GEN_HIT(14);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x828) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164290 */
-longlong FUN_141164290(undefined8 param_1)
-{
-  GEN_HIT(15);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x830) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411642b0 */
-longlong FUN_1411642b0(undefined8 param_1)
-{
-  GEN_HIT(16);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x838) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411642d0 */
-longlong FUN_1411642d0(undefined8 param_1)
-{
-  GEN_HIT(17);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x840) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411642f0 */
-longlong FUN_1411642f0(undefined8 param_1)
-{
-  GEN_HIT(18);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x848) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164310 */
-longlong FUN_141164310(undefined8 param_1)
-{
-  GEN_HIT(19);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x850) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164330 */
-longlong FUN_141164330(undefined8 param_1)
-{
-  GEN_HIT(20);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x858) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164350 */
-longlong FUN_141164350(undefined8 param_1)
-{
-  GEN_HIT(21);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x860) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164370 */
-longlong FUN_141164370(undefined8 param_1)
-{
-  GEN_HIT(22);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x868) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164390 */
-longlong FUN_141164390(undefined8 param_1)
-{
-  GEN_HIT(23);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x870) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411643b0 */
-longlong FUN_1411643b0(undefined8 param_1)
-{
-  GEN_HIT(24);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x878) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411643d0 */
-longlong FUN_1411643d0(undefined8 param_1)
-{
-  GEN_HIT(25);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x880) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411643f0 */
-longlong FUN_1411643f0(undefined8 param_1)
-{
-  GEN_HIT(26);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x888) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164410 */
-longlong FUN_141164410(undefined8 param_1)
-{
-  GEN_HIT(27);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x890) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164430 */
-longlong FUN_141164430(undefined8 param_1)
-{
-  GEN_HIT(28);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x898) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164450 */
-longlong FUN_141164450(undefined8 param_1)
-{
-  GEN_HIT(29);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x8a0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164470 */
-longlong FUN_141164470(undefined8 param_1)
-{
-  GEN_HIT(30);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x8a8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164490 */
-longlong FUN_141164490(undefined8 param_1)
-{
-  GEN_HIT(31);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x8b0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411644b0 */
-longlong FUN_1411644b0(undefined8 param_1)
-{
-  GEN_HIT(32);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x8b8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411644d0 */
-longlong FUN_1411644d0(undefined8 param_1)
-{
-  GEN_HIT(33);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x8c0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411644f0 */
-longlong FUN_1411644f0(undefined8 param_1)
-{
-  GEN_HIT(34);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x8c8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164510 */
-longlong FUN_141164510(undefined8 param_1)
-{
-  GEN_HIT(35);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x8d0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164530 */
-longlong FUN_141164530(undefined8 param_1)
-{
-  GEN_HIT(36);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x8d8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164550 */
-longlong FUN_141164550(undefined8 param_1)
-{
-  GEN_HIT(37);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x8e0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164570 */
-longlong FUN_141164570(undefined8 param_1)
-{
-  GEN_HIT(38);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x8e8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164590 */
-longlong FUN_141164590(undefined8 param_1)
-{
-  GEN_HIT(39);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x8f0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411645b0 */
-longlong FUN_1411645b0(undefined8 param_1)
-{
-  GEN_HIT(40);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x900) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411645d0 */
-longlong FUN_1411645d0(undefined8 param_1)
-{
-  GEN_HIT(41);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x8f8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411645f0 */
-longlong FUN_1411645f0(undefined8 param_1)
-{
-  GEN_HIT(42);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x908) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164610 */
-longlong FUN_141164610(undefined8 param_1)
-{
-  GEN_HIT(43);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x910) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164630 */
-longlong FUN_141164630(undefined8 param_1)
-{
-  GEN_HIT(44);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x918) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164650 */
-longlong FUN_141164650(undefined8 param_1)
-{
-  GEN_HIT(45);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x920) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164670 */
-longlong FUN_141164670(undefined8 param_1)
-{
-  GEN_HIT(46);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x928) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164690 */
-longlong FUN_141164690(undefined8 param_1)
-{
-  GEN_HIT(47);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x930) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411646b0 */
-longlong FUN_1411646b0(undefined8 param_1)
-{
-  GEN_HIT(48);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x938) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411646d0 */
-longlong FUN_1411646d0(undefined8 param_1)
-{
-  GEN_HIT(49);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x940) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411646f0 */
-longlong FUN_1411646f0(undefined8 param_1)
-{
-  GEN_HIT(50);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x948) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164710 */
-longlong FUN_141164710(undefined8 param_1)
-{
-  GEN_HIT(51);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x950) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164730 */
-longlong FUN_141164730(undefined8 param_1)
-{
-  GEN_HIT(52);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x958) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164750 */
-longlong FUN_141164750(undefined8 param_1)
-{
-  GEN_HIT(53);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x960) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164770 */
-longlong FUN_141164770(undefined8 param_1)
-{
-  GEN_HIT(54);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x968) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164790 */
-longlong FUN_141164790(undefined8 param_1)
-{
-  GEN_HIT(55);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x970) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411647b0 */
-longlong FUN_1411647b0(undefined8 param_1)
-{
-  GEN_HIT(56);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x978) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411647d0 */
-longlong FUN_1411647d0(undefined8 param_1)
-{
-  GEN_HIT(57);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x980) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411647f0 */
-longlong FUN_1411647f0(undefined8 param_1)
-{
-  GEN_HIT(58);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x988) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164810 */
-longlong FUN_141164810(undefined8 param_1)
-{
-  GEN_HIT(59);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x990) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164830 */
-longlong FUN_141164830(undefined8 param_1)
-{
-  GEN_HIT(60);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x998) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164850 */
-longlong FUN_141164850(undefined8 param_1)
-{
-  GEN_HIT(61);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x9a0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164870 */
-longlong FUN_141164870(undefined8 param_1)
-{
-  GEN_HIT(62);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x9b0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164890 */
-longlong FUN_141164890(undefined8 param_1)
-{
-  GEN_HIT(63);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x9b8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411648b0 */
-longlong FUN_1411648b0(undefined8 param_1)
-{
-  GEN_HIT(64);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x9a8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411648d0 */
-longlong FUN_1411648d0(undefined8 param_1)
-{
-  GEN_HIT(65);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x9c0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411648f0 */
-longlong FUN_1411648f0(undefined8 param_1)
-{
-  GEN_HIT(66);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x9c8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164910 */
-longlong FUN_141164910(undefined8 param_1)
-{
-  GEN_HIT(67);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x9d0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164930 */
-longlong FUN_141164930(undefined8 param_1)
-{
-  GEN_HIT(68);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x9d8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164950 */
-longlong FUN_141164950(undefined8 param_1)
-{
-  GEN_HIT(69);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x9e0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164970 */
-longlong FUN_141164970(undefined8 param_1)
-{
-  GEN_HIT(70);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x9e8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164990 */
-longlong FUN_141164990(undefined8 param_1)
-{
-  GEN_HIT(71);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x9f0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411649b0 */
-longlong FUN_1411649b0(undefined8 param_1)
-{
-  GEN_HIT(72);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x9f8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411649d0 */
-longlong FUN_1411649d0(undefined8 param_1)
-{
-  GEN_HIT(73);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xa00) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411649f0 */
-longlong FUN_1411649f0(undefined8 param_1)
-{
-  GEN_HIT(74);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xa08) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164a10 */
-longlong FUN_141164a10(undefined8 param_1)
-{
-  GEN_HIT(75);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xa10) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164a30 */
-longlong FUN_141164a30(undefined8 param_1)
-{
-  GEN_HIT(76);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xa18) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164a50 */
-longlong FUN_141164a50(undefined8 param_1)
-{
-  GEN_HIT(77);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xa20) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164a70 */
-longlong FUN_141164a70(undefined8 param_1)
-{
-  GEN_HIT(78);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xa28) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164b10 */
-longlong FUN_141164b10(undefined8 param_1)
-{
-  GEN_HIT(79);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x1f08) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164b30 */
-longlong FUN_141164b30(undefined8 param_1)
-{
-  GEN_HIT(80);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x2138) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164b50 */
-longlong FUN_141164b50(undefined8 param_1)
-{
-  GEN_HIT(81);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x2140) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164b70 */
-longlong FUN_141164b70(undefined8 param_1)
-{
-  GEN_HIT(82);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x2148) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164b90 */
-longlong FUN_141164b90(undefined8 param_1)
-{
-  GEN_HIT(83);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x2ef8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164bb0 */
-longlong FUN_141164bb0(undefined8 param_1)
-{
-  GEN_HIT(84);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x2f00) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164c10 */
-longlong FUN_141164c10(undefined8 param_1)
-{
-  GEN_HIT(85);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xa38) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141164c70 */
-longlong FUN_141164c70(undefined8 param_1)
-{
-  GEN_HIT(86);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x1ba8) = param_1;
-  return lVar1;
-}
+unsigned int gen_hits_068[289];
 
 /* ref: FUN_141164c90 */
 longlong FUN_141164c90(undefined8 param_1)
 {
-  GEN_HIT(87);
+  GEN_HIT(0);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -975,7 +18,7 @@ longlong FUN_141164c90(undefined8 param_1)
 /* ref: FUN_141164cb0 */
 longlong FUN_141164cb0(undefined8 param_1)
 {
-  GEN_HIT(88);
+  GEN_HIT(1);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -986,7 +29,7 @@ longlong FUN_141164cb0(undefined8 param_1)
 /* ref: FUN_141164cd0 */
 longlong FUN_141164cd0(undefined8 param_1)
 {
-  GEN_HIT(89);
+  GEN_HIT(2);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -997,7 +40,7 @@ longlong FUN_141164cd0(undefined8 param_1)
 /* ref: FUN_141164cf0 */
 longlong FUN_141164cf0(undefined8 param_1)
 {
-  GEN_HIT(90);
+  GEN_HIT(3);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1008,7 +51,7 @@ longlong FUN_141164cf0(undefined8 param_1)
 /* ref: FUN_141164d10 */
 longlong FUN_141164d10(undefined8 param_1)
 {
-  GEN_HIT(91);
+  GEN_HIT(4);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1019,7 +62,7 @@ longlong FUN_141164d10(undefined8 param_1)
 /* ref: FUN_141164d30 */
 longlong FUN_141164d30(undefined8 param_1)
 {
-  GEN_HIT(92);
+  GEN_HIT(5);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1030,7 +73,7 @@ longlong FUN_141164d30(undefined8 param_1)
 /* ref: FUN_141164d50 */
 longlong FUN_141164d50(undefined8 param_1)
 {
-  GEN_HIT(93);
+  GEN_HIT(6);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1041,7 +84,7 @@ longlong FUN_141164d50(undefined8 param_1)
 /* ref: FUN_141164d70 */
 longlong FUN_141164d70(undefined8 param_1)
 {
-  GEN_HIT(94);
+  GEN_HIT(7);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1052,7 +95,7 @@ longlong FUN_141164d70(undefined8 param_1)
 /* ref: FUN_141164d90 */
 longlong FUN_141164d90(undefined8 param_1)
 {
-  GEN_HIT(95);
+  GEN_HIT(8);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1063,7 +106,7 @@ longlong FUN_141164d90(undefined8 param_1)
 /* ref: FUN_141164db0 */
 longlong FUN_141164db0(undefined8 param_1)
 {
-  GEN_HIT(96);
+  GEN_HIT(9);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1074,7 +117,7 @@ longlong FUN_141164db0(undefined8 param_1)
 /* ref: FUN_141164dd0 */
 longlong FUN_141164dd0(undefined8 param_1)
 {
-  GEN_HIT(97);
+  GEN_HIT(10);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1085,7 +128,7 @@ longlong FUN_141164dd0(undefined8 param_1)
 /* ref: FUN_141164df0 */
 longlong FUN_141164df0(undefined8 param_1)
 {
-  GEN_HIT(98);
+  GEN_HIT(11);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1096,7 +139,7 @@ longlong FUN_141164df0(undefined8 param_1)
 /* ref: FUN_141164e10 */
 longlong FUN_141164e10(undefined8 param_1)
 {
-  GEN_HIT(99);
+  GEN_HIT(12);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1107,7 +150,7 @@ longlong FUN_141164e10(undefined8 param_1)
 /* ref: FUN_141164e30 */
 longlong FUN_141164e30(undefined8 param_1)
 {
-  GEN_HIT(100);
+  GEN_HIT(13);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1118,7 +161,7 @@ longlong FUN_141164e30(undefined8 param_1)
 /* ref: FUN_141164e50 */
 longlong FUN_141164e50(undefined8 param_1)
 {
-  GEN_HIT(101);
+  GEN_HIT(14);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1129,7 +172,7 @@ longlong FUN_141164e50(undefined8 param_1)
 /* ref: FUN_141164e70 */
 longlong FUN_141164e70(undefined8 param_1)
 {
-  GEN_HIT(102);
+  GEN_HIT(15);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1140,7 +183,7 @@ longlong FUN_141164e70(undefined8 param_1)
 /* ref: FUN_141164e90 */
 longlong FUN_141164e90(undefined8 param_1)
 {
-  GEN_HIT(103);
+  GEN_HIT(16);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1151,7 +194,7 @@ longlong FUN_141164e90(undefined8 param_1)
 /* ref: FUN_141164eb0 */
 longlong FUN_141164eb0(undefined8 param_1)
 {
-  GEN_HIT(104);
+  GEN_HIT(17);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1162,7 +205,7 @@ longlong FUN_141164eb0(undefined8 param_1)
 /* ref: FUN_141164ed0 */
 longlong FUN_141164ed0(undefined8 param_1)
 {
-  GEN_HIT(105);
+  GEN_HIT(18);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1173,7 +216,7 @@ longlong FUN_141164ed0(undefined8 param_1)
 /* ref: FUN_141164ef0 */
 longlong FUN_141164ef0(undefined8 param_1)
 {
-  GEN_HIT(106);
+  GEN_HIT(19);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1184,7 +227,7 @@ longlong FUN_141164ef0(undefined8 param_1)
 /* ref: FUN_141164f10 */
 longlong FUN_141164f10(undefined8 param_1)
 {
-  GEN_HIT(107);
+  GEN_HIT(20);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1195,7 +238,7 @@ longlong FUN_141164f10(undefined8 param_1)
 /* ref: FUN_141164f30 */
 longlong FUN_141164f30(undefined8 param_1)
 {
-  GEN_HIT(108);
+  GEN_HIT(21);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1206,7 +249,7 @@ longlong FUN_141164f30(undefined8 param_1)
 /* ref: FUN_141164f50 */
 longlong FUN_141164f50(undefined8 param_1)
 {
-  GEN_HIT(109);
+  GEN_HIT(22);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1217,7 +260,7 @@ longlong FUN_141164f50(undefined8 param_1)
 /* ref: FUN_141164f70 */
 longlong FUN_141164f70(undefined8 param_1)
 {
-  GEN_HIT(110);
+  GEN_HIT(23);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1228,7 +271,7 @@ longlong FUN_141164f70(undefined8 param_1)
 /* ref: FUN_141164f90 */
 longlong FUN_141164f90(undefined8 param_1)
 {
-  GEN_HIT(111);
+  GEN_HIT(24);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1239,7 +282,7 @@ longlong FUN_141164f90(undefined8 param_1)
 /* ref: FUN_141164fb0 */
 longlong FUN_141164fb0(undefined8 param_1)
 {
-  GEN_HIT(112);
+  GEN_HIT(25);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1250,7 +293,7 @@ longlong FUN_141164fb0(undefined8 param_1)
 /* ref: FUN_141164fd0 */
 longlong FUN_141164fd0(undefined8 param_1)
 {
-  GEN_HIT(113);
+  GEN_HIT(26);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1261,7 +304,7 @@ longlong FUN_141164fd0(undefined8 param_1)
 /* ref: FUN_141164ff0 */
 longlong FUN_141164ff0(undefined8 param_1)
 {
-  GEN_HIT(114);
+  GEN_HIT(27);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1272,7 +315,7 @@ longlong FUN_141164ff0(undefined8 param_1)
 /* ref: FUN_141165010 */
 longlong FUN_141165010(undefined8 param_1)
 {
-  GEN_HIT(115);
+  GEN_HIT(28);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1283,7 +326,7 @@ longlong FUN_141165010(undefined8 param_1)
 /* ref: FUN_141165030 */
 longlong FUN_141165030(undefined8 param_1)
 {
-  GEN_HIT(116);
+  GEN_HIT(29);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1294,7 +337,7 @@ longlong FUN_141165030(undefined8 param_1)
 /* ref: FUN_141165050 */
 longlong FUN_141165050(undefined8 param_1)
 {
-  GEN_HIT(117);
+  GEN_HIT(30);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1305,7 +348,7 @@ longlong FUN_141165050(undefined8 param_1)
 /* ref: FUN_141165070 */
 longlong FUN_141165070(undefined8 param_1)
 {
-  GEN_HIT(118);
+  GEN_HIT(31);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1316,7 +359,7 @@ longlong FUN_141165070(undefined8 param_1)
 /* ref: FUN_141165090 */
 longlong FUN_141165090(undefined8 param_1)
 {
-  GEN_HIT(119);
+  GEN_HIT(32);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1327,7 +370,7 @@ longlong FUN_141165090(undefined8 param_1)
 /* ref: FUN_1411650b0 */
 longlong FUN_1411650b0(undefined8 param_1)
 {
-  GEN_HIT(120);
+  GEN_HIT(33);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1338,7 +381,7 @@ longlong FUN_1411650b0(undefined8 param_1)
 /* ref: FUN_1411650d0 */
 longlong FUN_1411650d0(undefined8 param_1)
 {
-  GEN_HIT(121);
+  GEN_HIT(34);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1349,7 +392,7 @@ longlong FUN_1411650d0(undefined8 param_1)
 /* ref: FUN_1411650f0 */
 longlong FUN_1411650f0(undefined8 param_1)
 {
-  GEN_HIT(122);
+  GEN_HIT(35);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1360,7 +403,7 @@ longlong FUN_1411650f0(undefined8 param_1)
 /* ref: FUN_141165110 */
 longlong FUN_141165110(undefined8 param_1)
 {
-  GEN_HIT(123);
+  GEN_HIT(36);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1371,7 +414,7 @@ longlong FUN_141165110(undefined8 param_1)
 /* ref: FUN_141165130 */
 longlong FUN_141165130(undefined8 param_1)
 {
-  GEN_HIT(124);
+  GEN_HIT(37);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1382,7 +425,7 @@ longlong FUN_141165130(undefined8 param_1)
 /* ref: FUN_141165150 */
 longlong FUN_141165150(undefined8 param_1)
 {
-  GEN_HIT(125);
+  GEN_HIT(38);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1393,7 +436,7 @@ longlong FUN_141165150(undefined8 param_1)
 /* ref: FUN_141165170 */
 longlong FUN_141165170(undefined8 param_1)
 {
-  GEN_HIT(126);
+  GEN_HIT(39);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1404,7 +447,7 @@ longlong FUN_141165170(undefined8 param_1)
 /* ref: FUN_141165190 */
 longlong FUN_141165190(undefined8 param_1)
 {
-  GEN_HIT(127);
+  GEN_HIT(40);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1415,7 +458,7 @@ longlong FUN_141165190(undefined8 param_1)
 /* ref: FUN_1411651b0 */
 longlong FUN_1411651b0(undefined8 param_1)
 {
-  GEN_HIT(128);
+  GEN_HIT(41);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1426,7 +469,7 @@ longlong FUN_1411651b0(undefined8 param_1)
 /* ref: FUN_1411651d0 */
 longlong FUN_1411651d0(undefined8 param_1)
 {
-  GEN_HIT(129);
+  GEN_HIT(42);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1437,7 +480,7 @@ longlong FUN_1411651d0(undefined8 param_1)
 /* ref: FUN_1411651f0 */
 longlong FUN_1411651f0(undefined8 param_1)
 {
-  GEN_HIT(130);
+  GEN_HIT(43);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1448,7 +491,7 @@ longlong FUN_1411651f0(undefined8 param_1)
 /* ref: FUN_141165210 */
 longlong FUN_141165210(undefined8 param_1)
 {
-  GEN_HIT(131);
+  GEN_HIT(44);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1459,7 +502,7 @@ longlong FUN_141165210(undefined8 param_1)
 /* ref: FUN_141165230 */
 longlong FUN_141165230(undefined8 param_1)
 {
-  GEN_HIT(132);
+  GEN_HIT(45);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1470,7 +513,7 @@ longlong FUN_141165230(undefined8 param_1)
 /* ref: FUN_141165250 */
 longlong FUN_141165250(undefined8 param_1)
 {
-  GEN_HIT(133);
+  GEN_HIT(46);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1478,65 +521,10 @@ longlong FUN_141165250(undefined8 param_1)
   return lVar1;
 }
 
-/* ref: FUN_1411652d0 */
-longlong FUN_1411652d0(undefined8 param_1)
-{
-  GEN_HIT(134);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xda0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411652f0 */
-longlong FUN_1411652f0(undefined8 param_1)
-{
-  GEN_HIT(135);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xda8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165310 */
-longlong FUN_141165310(undefined8 param_1)
-{
-  GEN_HIT(136);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xec0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165330 */
-longlong FUN_141165330(undefined8 param_1)
-{
-  GEN_HIT(137);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x1158) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165350 */
-longlong FUN_141165350(undefined8 param_1)
-{
-  GEN_HIT(138);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x2680) = param_1;
-  return lVar1;
-}
-
 /* ref: FUN_141165370 */
 longlong FUN_141165370(undefined8 param_1)
 {
-  GEN_HIT(139);
+  GEN_HIT(47);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1547,7 +535,7 @@ longlong FUN_141165370(undefined8 param_1)
 /* ref: FUN_141165390 */
 longlong FUN_141165390(undefined8 param_1)
 {
-  GEN_HIT(140);
+  GEN_HIT(48);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1558,7 +546,7 @@ longlong FUN_141165390(undefined8 param_1)
 /* ref: FUN_1411653b0 */
 longlong FUN_1411653b0(undefined8 param_1)
 {
-  GEN_HIT(141);
+  GEN_HIT(49);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1569,7 +557,7 @@ longlong FUN_1411653b0(undefined8 param_1)
 /* ref: FUN_1411653d0 */
 longlong FUN_1411653d0(undefined8 param_1)
 {
-  GEN_HIT(142);
+  GEN_HIT(50);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1580,7 +568,7 @@ longlong FUN_1411653d0(undefined8 param_1)
 /* ref: FUN_1411653f0 */
 longlong FUN_1411653f0(undefined8 param_1)
 {
-  GEN_HIT(143);
+  GEN_HIT(51);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1591,7 +579,7 @@ longlong FUN_1411653f0(undefined8 param_1)
 /* ref: FUN_141165410 */
 longlong FUN_141165410(undefined8 param_1)
 {
-  GEN_HIT(144);
+  GEN_HIT(52);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1602,7 +590,7 @@ longlong FUN_141165410(undefined8 param_1)
 /* ref: FUN_141165430 */
 longlong FUN_141165430(undefined8 param_1)
 {
-  GEN_HIT(145);
+  GEN_HIT(53);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1613,7 +601,7 @@ longlong FUN_141165430(undefined8 param_1)
 /* ref: FUN_141165450 */
 longlong FUN_141165450(undefined8 param_1)
 {
-  GEN_HIT(146);
+  GEN_HIT(54);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1624,7 +612,7 @@ longlong FUN_141165450(undefined8 param_1)
 /* ref: FUN_141165470 */
 longlong FUN_141165470(undefined8 param_1)
 {
-  GEN_HIT(147);
+  GEN_HIT(55);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1635,7 +623,7 @@ longlong FUN_141165470(undefined8 param_1)
 /* ref: FUN_141165490 */
 longlong FUN_141165490(undefined8 param_1)
 {
-  GEN_HIT(148);
+  GEN_HIT(56);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1646,7 +634,7 @@ longlong FUN_141165490(undefined8 param_1)
 /* ref: FUN_1411654b0 */
 longlong FUN_1411654b0(undefined8 param_1)
 {
-  GEN_HIT(149);
+  GEN_HIT(57);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1657,7 +645,7 @@ longlong FUN_1411654b0(undefined8 param_1)
 /* ref: FUN_1411654d0 */
 longlong FUN_1411654d0(undefined8 param_1)
 {
-  GEN_HIT(150);
+  GEN_HIT(58);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1668,7 +656,7 @@ longlong FUN_1411654d0(undefined8 param_1)
 /* ref: FUN_1411654f0 */
 longlong FUN_1411654f0(undefined8 param_1)
 {
-  GEN_HIT(151);
+  GEN_HIT(59);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1679,7 +667,7 @@ longlong FUN_1411654f0(undefined8 param_1)
 /* ref: FUN_141165510 */
 longlong FUN_141165510(undefined8 param_1)
 {
-  GEN_HIT(152);
+  GEN_HIT(60);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1690,7 +678,7 @@ longlong FUN_141165510(undefined8 param_1)
 /* ref: FUN_141165530 */
 longlong FUN_141165530(undefined8 param_1)
 {
-  GEN_HIT(153);
+  GEN_HIT(61);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1701,7 +689,7 @@ longlong FUN_141165530(undefined8 param_1)
 /* ref: FUN_141165550 */
 longlong FUN_141165550(undefined8 param_1)
 {
-  GEN_HIT(154);
+  GEN_HIT(62);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1712,7 +700,7 @@ longlong FUN_141165550(undefined8 param_1)
 /* ref: FUN_141165570 */
 longlong FUN_141165570(undefined8 param_1)
 {
-  GEN_HIT(155);
+  GEN_HIT(63);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1723,7 +711,7 @@ longlong FUN_141165570(undefined8 param_1)
 /* ref: FUN_141165590 */
 longlong FUN_141165590(undefined8 param_1)
 {
-  GEN_HIT(156);
+  GEN_HIT(64);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1734,7 +722,7 @@ longlong FUN_141165590(undefined8 param_1)
 /* ref: FUN_1411655b0 */
 longlong FUN_1411655b0(undefined8 param_1)
 {
-  GEN_HIT(157);
+  GEN_HIT(65);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1745,7 +733,7 @@ longlong FUN_1411655b0(undefined8 param_1)
 /* ref: FUN_1411655d0 */
 longlong FUN_1411655d0(undefined8 param_1)
 {
-  GEN_HIT(158);
+  GEN_HIT(66);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1756,7 +744,7 @@ longlong FUN_1411655d0(undefined8 param_1)
 /* ref: FUN_1411655f0 */
 longlong FUN_1411655f0(undefined8 param_1)
 {
-  GEN_HIT(159);
+  GEN_HIT(67);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1767,7 +755,7 @@ longlong FUN_1411655f0(undefined8 param_1)
 /* ref: FUN_141165610 */
 longlong FUN_141165610(undefined8 param_1)
 {
-  GEN_HIT(160);
+  GEN_HIT(68);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1775,21 +763,10 @@ longlong FUN_141165610(undefined8 param_1)
   return lVar1;
 }
 
-/* ref: FUN_141165650 */
-longlong FUN_141165650(undefined8 param_1)
-{
-  GEN_HIT(161);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xea0) = param_1;
-  return lVar1;
-}
-
 /* ref: FUN_141165690 */
 longlong FUN_141165690(undefined8 param_1)
 {
-  GEN_HIT(162);
+  GEN_HIT(69);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1800,7 +777,7 @@ longlong FUN_141165690(undefined8 param_1)
 /* ref: FUN_1411656b0 */
 longlong FUN_1411656b0(undefined8 param_1)
 {
-  GEN_HIT(163);
+  GEN_HIT(70);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1811,7 +788,7 @@ longlong FUN_1411656b0(undefined8 param_1)
 /* ref: FUN_1411656d0 */
 longlong FUN_1411656d0(undefined8 param_1)
 {
-  GEN_HIT(164);
+  GEN_HIT(71);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1822,7 +799,7 @@ longlong FUN_1411656d0(undefined8 param_1)
 /* ref: FUN_1411656f0 */
 longlong FUN_1411656f0(undefined8 param_1)
 {
-  GEN_HIT(165);
+  GEN_HIT(72);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1833,7 +810,7 @@ longlong FUN_1411656f0(undefined8 param_1)
 /* ref: FUN_141165710 */
 longlong FUN_141165710(undefined8 param_1)
 {
-  GEN_HIT(166);
+  GEN_HIT(73);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1844,7 +821,7 @@ longlong FUN_141165710(undefined8 param_1)
 /* ref: FUN_141165730 */
 longlong FUN_141165730(undefined8 param_1)
 {
-  GEN_HIT(167);
+  GEN_HIT(74);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1855,7 +832,7 @@ longlong FUN_141165730(undefined8 param_1)
 /* ref: FUN_141165750 */
 longlong FUN_141165750(undefined8 param_1)
 {
-  GEN_HIT(168);
+  GEN_HIT(75);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1866,7 +843,7 @@ longlong FUN_141165750(undefined8 param_1)
 /* ref: FUN_141165770 */
 longlong FUN_141165770(undefined8 param_1)
 {
-  GEN_HIT(169);
+  GEN_HIT(76);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1877,7 +854,7 @@ longlong FUN_141165770(undefined8 param_1)
 /* ref: FUN_141165790 */
 longlong FUN_141165790(undefined8 param_1)
 {
-  GEN_HIT(170);
+  GEN_HIT(77);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1888,7 +865,7 @@ longlong FUN_141165790(undefined8 param_1)
 /* ref: FUN_1411657b0 */
 longlong FUN_1411657b0(undefined8 param_1)
 {
-  GEN_HIT(171);
+  GEN_HIT(78);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1899,7 +876,7 @@ longlong FUN_1411657b0(undefined8 param_1)
 /* ref: FUN_1411657d0 */
 longlong FUN_1411657d0(undefined8 param_1)
 {
-  GEN_HIT(172);
+  GEN_HIT(79);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1910,7 +887,7 @@ longlong FUN_1411657d0(undefined8 param_1)
 /* ref: FUN_1411657f0 */
 longlong FUN_1411657f0(undefined8 param_1)
 {
-  GEN_HIT(173);
+  GEN_HIT(80);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1921,7 +898,7 @@ longlong FUN_1411657f0(undefined8 param_1)
 /* ref: FUN_141165810 */
 longlong FUN_141165810(undefined8 param_1)
 {
-  GEN_HIT(174);
+  GEN_HIT(81);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1932,7 +909,7 @@ longlong FUN_141165810(undefined8 param_1)
 /* ref: FUN_141165830 */
 longlong FUN_141165830(undefined8 param_1)
 {
-  GEN_HIT(175);
+  GEN_HIT(82);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1943,7 +920,7 @@ longlong FUN_141165830(undefined8 param_1)
 /* ref: FUN_141165850 */
 longlong FUN_141165850(undefined8 param_1)
 {
-  GEN_HIT(176);
+  GEN_HIT(83);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -1951,208 +928,10 @@ longlong FUN_141165850(undefined8 param_1)
   return lVar1;
 }
 
-/* ref: FUN_141165870 */
-longlong FUN_141165870(undefined8 param_1)
-{
-  GEN_HIT(177);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xc08) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411658d0 */
-longlong FUN_1411658d0(undefined8 param_1)
-{
-  GEN_HIT(178);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xed0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165910 */
-longlong FUN_141165910(undefined8 param_1)
-{
-  GEN_HIT(179);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xee0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165930 */
-longlong FUN_141165930(undefined8 param_1)
-{
-  GEN_HIT(180);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xee8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411659b0 */
-longlong FUN_1411659b0(undefined8 param_1)
-{
-  GEN_HIT(181);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xf38) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411659d0 */
-longlong FUN_1411659d0(undefined8 param_1)
-{
-  GEN_HIT(182);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0xf40) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_1411659f0 */
-longlong FUN_1411659f0(undefined8 param_1)
-{
-  GEN_HIT(183);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x1070) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165a50 */
-longlong FUN_141165a50(undefined8 param_1)
-{
-  GEN_HIT(184);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x15e0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165a70 */
-longlong FUN_141165a70(undefined8 param_1)
-{
-  GEN_HIT(185);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x17c0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165a90 */
-longlong FUN_141165a90(undefined8 param_1)
-{
-  GEN_HIT(186);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x1bb0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165ab0 */
-longlong FUN_141165ab0(undefined8 param_1)
-{
-  GEN_HIT(187);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x21e8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165ad0 */
-longlong FUN_141165ad0(undefined8 param_1)
-{
-  GEN_HIT(188);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x2208) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165af0 */
-longlong FUN_141165af0(undefined8 param_1)
-{
-  GEN_HIT(189);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x2270) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165b10 */
-longlong FUN_141165b10(undefined8 param_1)
-{
-  GEN_HIT(190);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x2278) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165b30 */
-longlong FUN_141165b30(undefined8 param_1)
-{
-  GEN_HIT(191);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x22c8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165b50 */
-longlong FUN_141165b50(undefined8 param_1)
-{
-  GEN_HIT(192);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x23b8) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165b70 */
-longlong FUN_141165b70(undefined8 param_1)
-{
-  GEN_HIT(193);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x2688) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165b90 */
-longlong FUN_141165b90(undefined8 param_1)
-{
-  GEN_HIT(194);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x2a10) = param_1;
-  return lVar1;
-}
-
 /* ref: FUN_141165bb0 */
 longlong FUN_141165bb0(undefined8 param_1)
 {
-  GEN_HIT(195);
+  GEN_HIT(84);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2160,32 +939,10 @@ longlong FUN_141165bb0(undefined8 param_1)
   return lVar1;
 }
 
-/* ref: FUN_141165bd0 */
-longlong FUN_141165bd0(undefined8 param_1)
-{
-  GEN_HIT(196);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x2f30) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141165bf0 */
-longlong FUN_141165bf0(undefined8 param_1)
-{
-  GEN_HIT(197);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x3110) = param_1;
-  return lVar1;
-}
-
 /* ref: FUN_141165c10 */
 longlong FUN_141165c10(undefined8 param_1)
 {
-  GEN_HIT(198);
+  GEN_HIT(85);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2196,7 +953,7 @@ longlong FUN_141165c10(undefined8 param_1)
 /* ref: FUN_141165c30 */
 longlong FUN_141165c30(undefined8 param_1)
 {
-  GEN_HIT(199);
+  GEN_HIT(86);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2207,7 +964,7 @@ longlong FUN_141165c30(undefined8 param_1)
 /* ref: FUN_141165c50 */
 longlong FUN_141165c50(undefined8 param_1)
 {
-  GEN_HIT(200);
+  GEN_HIT(87);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2218,7 +975,7 @@ longlong FUN_141165c50(undefined8 param_1)
 /* ref: FUN_141165c70 */
 longlong FUN_141165c70(undefined8 param_1)
 {
-  GEN_HIT(201);
+  GEN_HIT(88);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2229,7 +986,7 @@ longlong FUN_141165c70(undefined8 param_1)
 /* ref: FUN_141165c90 */
 longlong FUN_141165c90(undefined8 param_1)
 {
-  GEN_HIT(202);
+  GEN_HIT(89);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2240,7 +997,7 @@ longlong FUN_141165c90(undefined8 param_1)
 /* ref: FUN_141165cb0 */
 longlong FUN_141165cb0(undefined8 param_1)
 {
-  GEN_HIT(203);
+  GEN_HIT(90);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2251,7 +1008,7 @@ longlong FUN_141165cb0(undefined8 param_1)
 /* ref: FUN_141165cd0 */
 longlong FUN_141165cd0(undefined8 param_1)
 {
-  GEN_HIT(204);
+  GEN_HIT(91);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2262,7 +1019,7 @@ longlong FUN_141165cd0(undefined8 param_1)
 /* ref: FUN_141165cf0 */
 longlong FUN_141165cf0(undefined8 param_1)
 {
-  GEN_HIT(205);
+  GEN_HIT(92);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2273,7 +1030,7 @@ longlong FUN_141165cf0(undefined8 param_1)
 /* ref: FUN_141165d10 */
 longlong FUN_141165d10(undefined8 param_1)
 {
-  GEN_HIT(206);
+  GEN_HIT(93);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2284,7 +1041,7 @@ longlong FUN_141165d10(undefined8 param_1)
 /* ref: FUN_141165d30 */
 longlong FUN_141165d30(undefined8 param_1)
 {
-  GEN_HIT(207);
+  GEN_HIT(94);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2295,7 +1052,7 @@ longlong FUN_141165d30(undefined8 param_1)
 /* ref: FUN_141165d50 */
 longlong FUN_141165d50(undefined8 param_1)
 {
-  GEN_HIT(208);
+  GEN_HIT(95);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2306,7 +1063,7 @@ longlong FUN_141165d50(undefined8 param_1)
 /* ref: FUN_141165d70 */
 longlong FUN_141165d70(undefined8 param_1)
 {
-  GEN_HIT(209);
+  GEN_HIT(96);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2317,7 +1074,7 @@ longlong FUN_141165d70(undefined8 param_1)
 /* ref: FUN_141165d90 */
 longlong FUN_141165d90(undefined8 param_1)
 {
-  GEN_HIT(210);
+  GEN_HIT(97);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2328,7 +1085,7 @@ longlong FUN_141165d90(undefined8 param_1)
 /* ref: FUN_141165db0 */
 longlong FUN_141165db0(undefined8 param_1)
 {
-  GEN_HIT(211);
+  GEN_HIT(98);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2339,7 +1096,7 @@ longlong FUN_141165db0(undefined8 param_1)
 /* ref: FUN_141165dd0 */
 longlong FUN_141165dd0(undefined8 param_1)
 {
-  GEN_HIT(212);
+  GEN_HIT(99);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2350,7 +1107,7 @@ longlong FUN_141165dd0(undefined8 param_1)
 /* ref: FUN_141165df0 */
 longlong FUN_141165df0(undefined8 param_1)
 {
-  GEN_HIT(213);
+  GEN_HIT(100);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2361,7 +1118,7 @@ longlong FUN_141165df0(undefined8 param_1)
 /* ref: FUN_141165e10 */
 longlong FUN_141165e10(undefined8 param_1)
 {
-  GEN_HIT(214);
+  GEN_HIT(101);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2372,7 +1129,7 @@ longlong FUN_141165e10(undefined8 param_1)
 /* ref: FUN_141165e30 */
 longlong FUN_141165e30(undefined8 param_1)
 {
-  GEN_HIT(215);
+  GEN_HIT(102);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2383,7 +1140,7 @@ longlong FUN_141165e30(undefined8 param_1)
 /* ref: FUN_141165e50 */
 longlong FUN_141165e50(undefined8 param_1)
 {
-  GEN_HIT(216);
+  GEN_HIT(103);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2394,7 +1151,7 @@ longlong FUN_141165e50(undefined8 param_1)
 /* ref: FUN_141165e70 */
 longlong FUN_141165e70(undefined8 param_1)
 {
-  GEN_HIT(217);
+  GEN_HIT(104);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2405,7 +1162,7 @@ longlong FUN_141165e70(undefined8 param_1)
 /* ref: FUN_141165e90 */
 longlong FUN_141165e90(undefined8 param_1)
 {
-  GEN_HIT(218);
+  GEN_HIT(105);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2416,7 +1173,7 @@ longlong FUN_141165e90(undefined8 param_1)
 /* ref: FUN_141165f10 */
 longlong FUN_141165f10(undefined8 param_1)
 {
-  GEN_HIT(219);
+  GEN_HIT(106);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2427,7 +1184,7 @@ longlong FUN_141165f10(undefined8 param_1)
 /* ref: FUN_141165f30 */
 longlong FUN_141165f30(undefined8 param_1)
 {
-  GEN_HIT(220);
+  GEN_HIT(107);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2438,7 +1195,7 @@ longlong FUN_141165f30(undefined8 param_1)
 /* ref: FUN_141165f50 */
 longlong FUN_141165f50(undefined8 param_1)
 {
-  GEN_HIT(221);
+  GEN_HIT(108);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2449,7 +1206,7 @@ longlong FUN_141165f50(undefined8 param_1)
 /* ref: FUN_141165f70 */
 longlong FUN_141165f70(undefined8 param_1)
 {
-  GEN_HIT(222);
+  GEN_HIT(109);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2460,7 +1217,7 @@ longlong FUN_141165f70(undefined8 param_1)
 /* ref: FUN_141165f90 */
 longlong FUN_141165f90(undefined8 param_1)
 {
-  GEN_HIT(223);
+  GEN_HIT(110);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2471,7 +1228,7 @@ longlong FUN_141165f90(undefined8 param_1)
 /* ref: FUN_141165fb0 */
 longlong FUN_141165fb0(undefined8 param_1)
 {
-  GEN_HIT(224);
+  GEN_HIT(111);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2482,7 +1239,7 @@ longlong FUN_141165fb0(undefined8 param_1)
 /* ref: FUN_141165fd0 */
 longlong FUN_141165fd0(undefined8 param_1)
 {
-  GEN_HIT(225);
+  GEN_HIT(112);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2493,7 +1250,7 @@ longlong FUN_141165fd0(undefined8 param_1)
 /* ref: FUN_141165ff0 */
 longlong FUN_141165ff0(undefined8 param_1)
 {
-  GEN_HIT(226);
+  GEN_HIT(113);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2504,7 +1261,7 @@ longlong FUN_141165ff0(undefined8 param_1)
 /* ref: FUN_141166010 */
 longlong FUN_141166010(undefined8 param_1)
 {
-  GEN_HIT(227);
+  GEN_HIT(114);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2515,7 +1272,7 @@ longlong FUN_141166010(undefined8 param_1)
 /* ref: FUN_141166030 */
 longlong FUN_141166030(undefined8 param_1)
 {
-  GEN_HIT(228);
+  GEN_HIT(115);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2526,7 +1283,7 @@ longlong FUN_141166030(undefined8 param_1)
 /* ref: FUN_141166050 */
 longlong FUN_141166050(undefined8 param_1)
 {
-  GEN_HIT(229);
+  GEN_HIT(116);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2537,7 +1294,7 @@ longlong FUN_141166050(undefined8 param_1)
 /* ref: FUN_141166070 */
 longlong FUN_141166070(undefined8 param_1)
 {
-  GEN_HIT(230);
+  GEN_HIT(117);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2548,7 +1305,7 @@ longlong FUN_141166070(undefined8 param_1)
 /* ref: FUN_141166090 */
 longlong FUN_141166090(undefined8 param_1)
 {
-  GEN_HIT(231);
+  GEN_HIT(118);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2559,7 +1316,7 @@ longlong FUN_141166090(undefined8 param_1)
 /* ref: FUN_1411660b0 */
 longlong FUN_1411660b0(undefined8 param_1)
 {
-  GEN_HIT(232);
+  GEN_HIT(119);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2570,7 +1327,7 @@ longlong FUN_1411660b0(undefined8 param_1)
 /* ref: FUN_1411660d0 */
 longlong FUN_1411660d0(undefined8 param_1)
 {
-  GEN_HIT(233);
+  GEN_HIT(120);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2581,7 +1338,7 @@ longlong FUN_1411660d0(undefined8 param_1)
 /* ref: FUN_1411660f0 */
 longlong FUN_1411660f0(undefined8 param_1)
 {
-  GEN_HIT(234);
+  GEN_HIT(121);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2592,7 +1349,7 @@ longlong FUN_1411660f0(undefined8 param_1)
 /* ref: FUN_141166110 */
 longlong FUN_141166110(undefined8 param_1)
 {
-  GEN_HIT(235);
+  GEN_HIT(122);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2603,7 +1360,7 @@ longlong FUN_141166110(undefined8 param_1)
 /* ref: FUN_141166130 */
 longlong FUN_141166130(undefined8 param_1)
 {
-  GEN_HIT(236);
+  GEN_HIT(123);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2614,7 +1371,7 @@ longlong FUN_141166130(undefined8 param_1)
 /* ref: FUN_141166150 */
 longlong FUN_141166150(undefined8 param_1)
 {
-  GEN_HIT(237);
+  GEN_HIT(124);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2625,7 +1382,7 @@ longlong FUN_141166150(undefined8 param_1)
 /* ref: FUN_141166170 */
 longlong FUN_141166170(undefined8 param_1)
 {
-  GEN_HIT(238);
+  GEN_HIT(125);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2636,7 +1393,7 @@ longlong FUN_141166170(undefined8 param_1)
 /* ref: FUN_141166190 */
 longlong FUN_141166190(undefined8 param_1)
 {
-  GEN_HIT(239);
+  GEN_HIT(126);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2647,7 +1404,7 @@ longlong FUN_141166190(undefined8 param_1)
 /* ref: FUN_1411661b0 */
 longlong FUN_1411661b0(undefined8 param_1)
 {
-  GEN_HIT(240);
+  GEN_HIT(127);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2658,7 +1415,7 @@ longlong FUN_1411661b0(undefined8 param_1)
 /* ref: FUN_1411661d0 */
 longlong FUN_1411661d0(undefined8 param_1)
 {
-  GEN_HIT(241);
+  GEN_HIT(128);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2669,7 +1426,7 @@ longlong FUN_1411661d0(undefined8 param_1)
 /* ref: FUN_1411661f0 */
 longlong FUN_1411661f0(undefined8 param_1)
 {
-  GEN_HIT(242);
+  GEN_HIT(129);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2680,7 +1437,7 @@ longlong FUN_1411661f0(undefined8 param_1)
 /* ref: FUN_141166210 */
 longlong FUN_141166210(undefined8 param_1)
 {
-  GEN_HIT(243);
+  GEN_HIT(130);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2691,7 +1448,7 @@ longlong FUN_141166210(undefined8 param_1)
 /* ref: FUN_141166230 */
 longlong FUN_141166230(undefined8 param_1)
 {
-  GEN_HIT(244);
+  GEN_HIT(131);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2702,7 +1459,7 @@ longlong FUN_141166230(undefined8 param_1)
 /* ref: FUN_141166250 */
 longlong FUN_141166250(undefined8 param_1)
 {
-  GEN_HIT(245);
+  GEN_HIT(132);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2713,7 +1470,7 @@ longlong FUN_141166250(undefined8 param_1)
 /* ref: FUN_141166270 */
 longlong FUN_141166270(undefined8 param_1)
 {
-  GEN_HIT(246);
+  GEN_HIT(133);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2724,7 +1481,7 @@ longlong FUN_141166270(undefined8 param_1)
 /* ref: FUN_141166290 */
 longlong FUN_141166290(undefined8 param_1)
 {
-  GEN_HIT(247);
+  GEN_HIT(134);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2732,32 +1489,10 @@ longlong FUN_141166290(undefined8 param_1)
   return lVar1;
 }
 
-/* ref: FUN_1411662b0 */
-longlong FUN_1411662b0(undefined8 param_1)
-{
-  GEN_HIT(248);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x1100) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141166330 */
-longlong FUN_141166330(undefined8 param_1)
-{
-  GEN_HIT(249);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x1120) = param_1;
-  return lVar1;
-}
-
 /* ref: FUN_141166350 */
 longlong FUN_141166350(undefined8 param_1)
 {
-  GEN_HIT(250);
+  GEN_HIT(135);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2765,21 +1500,10 @@ longlong FUN_141166350(undefined8 param_1)
   return lVar1;
 }
 
-/* ref: FUN_1411663b0 */
-longlong FUN_1411663b0(undefined8 param_1)
-{
-  GEN_HIT(251);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x2108) = param_1;
-  return lVar1;
-}
-
 /* ref: FUN_141166410 */
 longlong FUN_141166410(undefined8 param_1)
 {
-  GEN_HIT(252);
+  GEN_HIT(136);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2790,7 +1514,7 @@ longlong FUN_141166410(undefined8 param_1)
 /* ref: FUN_141166430 */
 longlong FUN_141166430(undefined8 param_1)
 {
-  GEN_HIT(253);
+  GEN_HIT(137);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2801,7 +1525,7 @@ longlong FUN_141166430(undefined8 param_1)
 /* ref: FUN_141166450 */
 longlong FUN_141166450(undefined8 param_1)
 {
-  GEN_HIT(254);
+  GEN_HIT(138);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2812,7 +1536,7 @@ longlong FUN_141166450(undefined8 param_1)
 /* ref: FUN_141166470 */
 longlong FUN_141166470(undefined8 param_1)
 {
-  GEN_HIT(255);
+  GEN_HIT(139);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2823,7 +1547,7 @@ longlong FUN_141166470(undefined8 param_1)
 /* ref: FUN_141166490 */
 longlong FUN_141166490(undefined8 param_1)
 {
-  GEN_HIT(256);
+  GEN_HIT(140);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2834,7 +1558,7 @@ longlong FUN_141166490(undefined8 param_1)
 /* ref: FUN_1411664b0 */
 longlong FUN_1411664b0(undefined8 param_1)
 {
-  GEN_HIT(257);
+  GEN_HIT(141);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2845,7 +1569,7 @@ longlong FUN_1411664b0(undefined8 param_1)
 /* ref: FUN_1411664d0 */
 longlong FUN_1411664d0(undefined8 param_1)
 {
-  GEN_HIT(258);
+  GEN_HIT(142);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2856,7 +1580,7 @@ longlong FUN_1411664d0(undefined8 param_1)
 /* ref: FUN_1411664f0 */
 longlong FUN_1411664f0(undefined8 param_1)
 {
-  GEN_HIT(259);
+  GEN_HIT(143);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2867,7 +1591,7 @@ longlong FUN_1411664f0(undefined8 param_1)
 /* ref: FUN_141166510 */
 longlong FUN_141166510(undefined8 param_1)
 {
-  GEN_HIT(260);
+  GEN_HIT(144);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2878,7 +1602,7 @@ longlong FUN_141166510(undefined8 param_1)
 /* ref: FUN_141166530 */
 longlong FUN_141166530(undefined8 param_1)
 {
-  GEN_HIT(261);
+  GEN_HIT(145);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2889,7 +1613,7 @@ longlong FUN_141166530(undefined8 param_1)
 /* ref: FUN_141166550 */
 longlong FUN_141166550(undefined8 param_1)
 {
-  GEN_HIT(262);
+  GEN_HIT(146);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2900,7 +1624,7 @@ longlong FUN_141166550(undefined8 param_1)
 /* ref: FUN_141166570 */
 longlong FUN_141166570(undefined8 param_1)
 {
-  GEN_HIT(263);
+  GEN_HIT(147);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2911,7 +1635,7 @@ longlong FUN_141166570(undefined8 param_1)
 /* ref: FUN_141166590 */
 longlong FUN_141166590(undefined8 param_1)
 {
-  GEN_HIT(264);
+  GEN_HIT(148);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2922,7 +1646,7 @@ longlong FUN_141166590(undefined8 param_1)
 /* ref: FUN_1411665b0 */
 longlong FUN_1411665b0(undefined8 param_1)
 {
-  GEN_HIT(265);
+  GEN_HIT(149);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2933,7 +1657,7 @@ longlong FUN_1411665b0(undefined8 param_1)
 /* ref: FUN_1411665d0 */
 longlong FUN_1411665d0(undefined8 param_1)
 {
-  GEN_HIT(266);
+  GEN_HIT(150);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2944,7 +1668,7 @@ longlong FUN_1411665d0(undefined8 param_1)
 /* ref: FUN_1411665f0 */
 longlong FUN_1411665f0(undefined8 param_1)
 {
-  GEN_HIT(267);
+  GEN_HIT(151);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2955,7 +1679,7 @@ longlong FUN_1411665f0(undefined8 param_1)
 /* ref: FUN_141166610 */
 longlong FUN_141166610(undefined8 param_1)
 {
-  GEN_HIT(268);
+  GEN_HIT(152);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2966,7 +1690,7 @@ longlong FUN_141166610(undefined8 param_1)
 /* ref: FUN_141166630 */
 longlong FUN_141166630(undefined8 param_1)
 {
-  GEN_HIT(269);
+  GEN_HIT(153);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2977,7 +1701,7 @@ longlong FUN_141166630(undefined8 param_1)
 /* ref: FUN_141166650 */
 longlong FUN_141166650(undefined8 param_1)
 {
-  GEN_HIT(270);
+  GEN_HIT(154);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2988,7 +1712,7 @@ longlong FUN_141166650(undefined8 param_1)
 /* ref: FUN_141166670 */
 longlong FUN_141166670(undefined8 param_1)
 {
-  GEN_HIT(271);
+  GEN_HIT(155);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -2999,7 +1723,7 @@ longlong FUN_141166670(undefined8 param_1)
 /* ref: FUN_141166690 */
 longlong FUN_141166690(undefined8 param_1)
 {
-  GEN_HIT(272);
+  GEN_HIT(156);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3010,7 +1734,7 @@ longlong FUN_141166690(undefined8 param_1)
 /* ref: FUN_1411666b0 */
 longlong FUN_1411666b0(undefined8 param_1)
 {
-  GEN_HIT(273);
+  GEN_HIT(157);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3021,7 +1745,7 @@ longlong FUN_1411666b0(undefined8 param_1)
 /* ref: FUN_1411666d0 */
 longlong FUN_1411666d0(undefined8 param_1)
 {
-  GEN_HIT(274);
+  GEN_HIT(158);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3032,7 +1756,7 @@ longlong FUN_1411666d0(undefined8 param_1)
 /* ref: FUN_1411666f0 */
 longlong FUN_1411666f0(undefined8 param_1)
 {
-  GEN_HIT(275);
+  GEN_HIT(159);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3043,7 +1767,7 @@ longlong FUN_1411666f0(undefined8 param_1)
 /* ref: FUN_141166710 */
 longlong FUN_141166710(undefined8 param_1)
 {
-  GEN_HIT(276);
+  GEN_HIT(160);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3054,7 +1778,7 @@ longlong FUN_141166710(undefined8 param_1)
 /* ref: FUN_141166730 */
 longlong FUN_141166730(undefined8 param_1)
 {
-  GEN_HIT(277);
+  GEN_HIT(161);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3065,7 +1789,7 @@ longlong FUN_141166730(undefined8 param_1)
 /* ref: FUN_141166750 */
 longlong FUN_141166750(undefined8 param_1)
 {
-  GEN_HIT(278);
+  GEN_HIT(162);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3076,7 +1800,7 @@ longlong FUN_141166750(undefined8 param_1)
 /* ref: FUN_141166770 */
 longlong FUN_141166770(undefined8 param_1)
 {
-  GEN_HIT(279);
+  GEN_HIT(163);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3087,7 +1811,7 @@ longlong FUN_141166770(undefined8 param_1)
 /* ref: FUN_141166790 */
 longlong FUN_141166790(undefined8 param_1)
 {
-  GEN_HIT(280);
+  GEN_HIT(164);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3098,7 +1822,7 @@ longlong FUN_141166790(undefined8 param_1)
 /* ref: FUN_1411667b0 */
 longlong FUN_1411667b0(undefined8 param_1)
 {
-  GEN_HIT(281);
+  GEN_HIT(165);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3109,7 +1833,7 @@ longlong FUN_1411667b0(undefined8 param_1)
 /* ref: FUN_1411667d0 */
 longlong FUN_1411667d0(undefined8 param_1)
 {
-  GEN_HIT(282);
+  GEN_HIT(166);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3120,7 +1844,7 @@ longlong FUN_1411667d0(undefined8 param_1)
 /* ref: FUN_1411667f0 */
 longlong FUN_1411667f0(undefined8 param_1)
 {
-  GEN_HIT(283);
+  GEN_HIT(167);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3131,7 +1855,7 @@ longlong FUN_1411667f0(undefined8 param_1)
 /* ref: FUN_141166810 */
 longlong FUN_141166810(undefined8 param_1)
 {
-  GEN_HIT(284);
+  GEN_HIT(168);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3142,7 +1866,7 @@ longlong FUN_141166810(undefined8 param_1)
 /* ref: FUN_141166830 */
 longlong FUN_141166830(undefined8 param_1)
 {
-  GEN_HIT(285);
+  GEN_HIT(169);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3153,7 +1877,7 @@ longlong FUN_141166830(undefined8 param_1)
 /* ref: FUN_141166850 */
 longlong FUN_141166850(undefined8 param_1)
 {
-  GEN_HIT(286);
+  GEN_HIT(170);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3164,7 +1888,7 @@ longlong FUN_141166850(undefined8 param_1)
 /* ref: FUN_141166870 */
 longlong FUN_141166870(undefined8 param_1)
 {
-  GEN_HIT(287);
+  GEN_HIT(171);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3175,7 +1899,7 @@ longlong FUN_141166870(undefined8 param_1)
 /* ref: FUN_141166890 */
 longlong FUN_141166890(undefined8 param_1)
 {
-  GEN_HIT(288);
+  GEN_HIT(172);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3186,7 +1910,7 @@ longlong FUN_141166890(undefined8 param_1)
 /* ref: FUN_1411668b0 */
 longlong FUN_1411668b0(undefined8 param_1)
 {
-  GEN_HIT(289);
+  GEN_HIT(173);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3197,7 +1921,7 @@ longlong FUN_1411668b0(undefined8 param_1)
 /* ref: FUN_1411668d0 */
 longlong FUN_1411668d0(undefined8 param_1)
 {
-  GEN_HIT(290);
+  GEN_HIT(174);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3208,7 +1932,7 @@ longlong FUN_1411668d0(undefined8 param_1)
 /* ref: FUN_1411668f0 */
 longlong FUN_1411668f0(undefined8 param_1)
 {
-  GEN_HIT(291);
+  GEN_HIT(175);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3219,7 +1943,7 @@ longlong FUN_1411668f0(undefined8 param_1)
 /* ref: FUN_141166910 */
 longlong FUN_141166910(undefined8 param_1)
 {
-  GEN_HIT(292);
+  GEN_HIT(176);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3230,7 +1954,7 @@ longlong FUN_141166910(undefined8 param_1)
 /* ref: FUN_141166930 */
 longlong FUN_141166930(undefined8 param_1)
 {
-  GEN_HIT(293);
+  GEN_HIT(177);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3241,7 +1965,7 @@ longlong FUN_141166930(undefined8 param_1)
 /* ref: FUN_141166950 */
 longlong FUN_141166950(undefined8 param_1)
 {
-  GEN_HIT(294);
+  GEN_HIT(178);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3252,7 +1976,7 @@ longlong FUN_141166950(undefined8 param_1)
 /* ref: FUN_141166970 */
 longlong FUN_141166970(undefined8 param_1)
 {
-  GEN_HIT(295);
+  GEN_HIT(179);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3263,7 +1987,7 @@ longlong FUN_141166970(undefined8 param_1)
 /* ref: FUN_141166990 */
 longlong FUN_141166990(undefined8 param_1)
 {
-  GEN_HIT(296);
+  GEN_HIT(180);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3274,7 +1998,7 @@ longlong FUN_141166990(undefined8 param_1)
 /* ref: FUN_1411669b0 */
 longlong FUN_1411669b0(undefined8 param_1)
 {
-  GEN_HIT(297);
+  GEN_HIT(181);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3285,7 +2009,7 @@ longlong FUN_1411669b0(undefined8 param_1)
 /* ref: FUN_1411669d0 */
 longlong FUN_1411669d0(undefined8 param_1)
 {
-  GEN_HIT(298);
+  GEN_HIT(182);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3296,7 +2020,7 @@ longlong FUN_1411669d0(undefined8 param_1)
 /* ref: FUN_1411669f0 */
 longlong FUN_1411669f0(undefined8 param_1)
 {
-  GEN_HIT(299);
+  GEN_HIT(183);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3307,7 +2031,7 @@ longlong FUN_1411669f0(undefined8 param_1)
 /* ref: FUN_141166a10 */
 longlong FUN_141166a10(undefined8 param_1)
 {
-  GEN_HIT(300);
+  GEN_HIT(184);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3318,7 +2042,7 @@ longlong FUN_141166a10(undefined8 param_1)
 /* ref: FUN_141166a30 */
 longlong FUN_141166a30(undefined8 param_1)
 {
-  GEN_HIT(301);
+  GEN_HIT(185);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3329,7 +2053,7 @@ longlong FUN_141166a30(undefined8 param_1)
 /* ref: FUN_141166a50 */
 longlong FUN_141166a50(undefined8 param_1)
 {
-  GEN_HIT(302);
+  GEN_HIT(186);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3340,7 +2064,7 @@ longlong FUN_141166a50(undefined8 param_1)
 /* ref: FUN_141166a70 */
 longlong FUN_141166a70(undefined8 param_1)
 {
-  GEN_HIT(303);
+  GEN_HIT(187);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3351,7 +2075,7 @@ longlong FUN_141166a70(undefined8 param_1)
 /* ref: FUN_141166a90 */
 longlong FUN_141166a90(undefined8 param_1)
 {
-  GEN_HIT(304);
+  GEN_HIT(188);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3362,7 +2086,7 @@ longlong FUN_141166a90(undefined8 param_1)
 /* ref: FUN_141166ab0 */
 longlong FUN_141166ab0(undefined8 param_1)
 {
-  GEN_HIT(305);
+  GEN_HIT(189);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3373,7 +2097,7 @@ longlong FUN_141166ab0(undefined8 param_1)
 /* ref: FUN_141166ad0 */
 longlong FUN_141166ad0(undefined8 param_1)
 {
-  GEN_HIT(306);
+  GEN_HIT(190);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3384,7 +2108,7 @@ longlong FUN_141166ad0(undefined8 param_1)
 /* ref: FUN_141166af0 */
 longlong FUN_141166af0(undefined8 param_1)
 {
-  GEN_HIT(307);
+  GEN_HIT(191);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3395,7 +2119,7 @@ longlong FUN_141166af0(undefined8 param_1)
 /* ref: FUN_141166b10 */
 longlong FUN_141166b10(undefined8 param_1)
 {
-  GEN_HIT(308);
+  GEN_HIT(192);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3406,7 +2130,7 @@ longlong FUN_141166b10(undefined8 param_1)
 /* ref: FUN_141166b30 */
 longlong FUN_141166b30(undefined8 param_1)
 {
-  GEN_HIT(309);
+  GEN_HIT(193);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3417,7 +2141,7 @@ longlong FUN_141166b30(undefined8 param_1)
 /* ref: FUN_141166b50 */
 longlong FUN_141166b50(undefined8 param_1)
 {
-  GEN_HIT(310);
+  GEN_HIT(194);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3428,7 +2152,7 @@ longlong FUN_141166b50(undefined8 param_1)
 /* ref: FUN_141166b70 */
 longlong FUN_141166b70(undefined8 param_1)
 {
-  GEN_HIT(311);
+  GEN_HIT(195);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3439,7 +2163,7 @@ longlong FUN_141166b70(undefined8 param_1)
 /* ref: FUN_141166b90 */
 longlong FUN_141166b90(undefined8 param_1)
 {
-  GEN_HIT(312);
+  GEN_HIT(196);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3450,7 +2174,7 @@ longlong FUN_141166b90(undefined8 param_1)
 /* ref: FUN_141166bb0 */
 longlong FUN_141166bb0(undefined8 param_1)
 {
-  GEN_HIT(313);
+  GEN_HIT(197);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3461,7 +2185,7 @@ longlong FUN_141166bb0(undefined8 param_1)
 /* ref: FUN_141166bd0 */
 longlong FUN_141166bd0(undefined8 param_1)
 {
-  GEN_HIT(314);
+  GEN_HIT(198);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3472,7 +2196,7 @@ longlong FUN_141166bd0(undefined8 param_1)
 /* ref: FUN_141166bf0 */
 longlong FUN_141166bf0(undefined8 param_1)
 {
-  GEN_HIT(315);
+  GEN_HIT(199);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3483,7 +2207,7 @@ longlong FUN_141166bf0(undefined8 param_1)
 /* ref: FUN_141166c10 */
 longlong FUN_141166c10(undefined8 param_1)
 {
-  GEN_HIT(316);
+  GEN_HIT(200);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3494,7 +2218,7 @@ longlong FUN_141166c10(undefined8 param_1)
 /* ref: FUN_141166c30 */
 longlong FUN_141166c30(undefined8 param_1)
 {
-  GEN_HIT(317);
+  GEN_HIT(201);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3505,7 +2229,7 @@ longlong FUN_141166c30(undefined8 param_1)
 /* ref: FUN_141166c50 */
 longlong FUN_141166c50(undefined8 param_1)
 {
-  GEN_HIT(318);
+  GEN_HIT(202);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3516,7 +2240,7 @@ longlong FUN_141166c50(undefined8 param_1)
 /* ref: FUN_141166c70 */
 longlong FUN_141166c70(undefined8 param_1)
 {
-  GEN_HIT(319);
+  GEN_HIT(203);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3527,7 +2251,7 @@ longlong FUN_141166c70(undefined8 param_1)
 /* ref: FUN_141166c90 */
 longlong FUN_141166c90(undefined8 param_1)
 {
-  GEN_HIT(320);
+  GEN_HIT(204);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3538,7 +2262,7 @@ longlong FUN_141166c90(undefined8 param_1)
 /* ref: FUN_141166cb0 */
 longlong FUN_141166cb0(undefined8 param_1)
 {
-  GEN_HIT(321);
+  GEN_HIT(205);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3549,7 +2273,7 @@ longlong FUN_141166cb0(undefined8 param_1)
 /* ref: FUN_141166cd0 */
 longlong FUN_141166cd0(undefined8 param_1)
 {
-  GEN_HIT(322);
+  GEN_HIT(206);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3560,7 +2284,7 @@ longlong FUN_141166cd0(undefined8 param_1)
 /* ref: FUN_141166cf0 */
 longlong FUN_141166cf0(undefined8 param_1)
 {
-  GEN_HIT(323);
+  GEN_HIT(207);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3571,7 +2295,7 @@ longlong FUN_141166cf0(undefined8 param_1)
 /* ref: FUN_141166d10 */
 longlong FUN_141166d10(undefined8 param_1)
 {
-  GEN_HIT(324);
+  GEN_HIT(208);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3582,7 +2306,7 @@ longlong FUN_141166d10(undefined8 param_1)
 /* ref: FUN_141166d30 */
 longlong FUN_141166d30(undefined8 param_1)
 {
-  GEN_HIT(325);
+  GEN_HIT(209);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3593,7 +2317,7 @@ longlong FUN_141166d30(undefined8 param_1)
 /* ref: FUN_141166d50 */
 longlong FUN_141166d50(undefined8 param_1)
 {
-  GEN_HIT(326);
+  GEN_HIT(210);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3601,43 +2325,10 @@ longlong FUN_141166d50(undefined8 param_1)
   return lVar1;
 }
 
-/* ref: FUN_141166d70 */
-longlong FUN_141166d70(undefined8 param_1)
-{
-  GEN_HIT(327);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x18a0) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141166db0 */
-longlong FUN_141166db0(undefined8 param_1)
-{
-  GEN_HIT(328);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x1430) = param_1;
-  return lVar1;
-}
-
-/* ref: FUN_141166dd0 */
-longlong FUN_141166dd0(undefined8 param_1)
-{
-  GEN_HIT(329);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x1438) = param_1;
-  return lVar1;
-}
-
 /* ref: FUN_141166f10 */
 longlong FUN_141166f10(undefined8 param_1)
 {
-  GEN_HIT(330);
+  GEN_HIT(211);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3648,7 +2339,7 @@ longlong FUN_141166f10(undefined8 param_1)
 /* ref: FUN_141166f30 */
 longlong FUN_141166f30(undefined8 param_1)
 {
-  GEN_HIT(331);
+  GEN_HIT(212);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3659,7 +2350,7 @@ longlong FUN_141166f30(undefined8 param_1)
 /* ref: FUN_141166f50 */
 longlong FUN_141166f50(undefined8 param_1)
 {
-  GEN_HIT(332);
+  GEN_HIT(213);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3670,7 +2361,7 @@ longlong FUN_141166f50(undefined8 param_1)
 /* ref: FUN_141166f70 */
 longlong FUN_141166f70(undefined8 param_1)
 {
-  GEN_HIT(333);
+  GEN_HIT(214);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3681,7 +2372,7 @@ longlong FUN_141166f70(undefined8 param_1)
 /* ref: FUN_141166f90 */
 longlong FUN_141166f90(undefined8 param_1)
 {
-  GEN_HIT(334);
+  GEN_HIT(215);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3692,7 +2383,7 @@ longlong FUN_141166f90(undefined8 param_1)
 /* ref: FUN_141166fb0 */
 longlong FUN_141166fb0(undefined8 param_1)
 {
-  GEN_HIT(335);
+  GEN_HIT(216);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3703,7 +2394,7 @@ longlong FUN_141166fb0(undefined8 param_1)
 /* ref: FUN_141166fd0 */
 longlong FUN_141166fd0(undefined8 param_1)
 {
-  GEN_HIT(336);
+  GEN_HIT(217);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3714,7 +2405,7 @@ longlong FUN_141166fd0(undefined8 param_1)
 /* ref: FUN_141166ff0 */
 longlong FUN_141166ff0(undefined8 param_1)
 {
-  GEN_HIT(337);
+  GEN_HIT(218);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3725,7 +2416,7 @@ longlong FUN_141166ff0(undefined8 param_1)
 /* ref: FUN_141167010 */
 longlong FUN_141167010(undefined8 param_1)
 {
-  GEN_HIT(338);
+  GEN_HIT(219);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3736,7 +2427,7 @@ longlong FUN_141167010(undefined8 param_1)
 /* ref: FUN_141167030 */
 longlong FUN_141167030(undefined8 param_1)
 {
-  GEN_HIT(339);
+  GEN_HIT(220);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3747,7 +2438,7 @@ longlong FUN_141167030(undefined8 param_1)
 /* ref: FUN_141167050 */
 longlong FUN_141167050(undefined8 param_1)
 {
-  GEN_HIT(340);
+  GEN_HIT(221);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3758,7 +2449,7 @@ longlong FUN_141167050(undefined8 param_1)
 /* ref: FUN_141167070 */
 longlong FUN_141167070(undefined8 param_1)
 {
-  GEN_HIT(341);
+  GEN_HIT(222);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3769,7 +2460,7 @@ longlong FUN_141167070(undefined8 param_1)
 /* ref: FUN_141167090 */
 longlong FUN_141167090(undefined8 param_1)
 {
-  GEN_HIT(342);
+  GEN_HIT(223);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3780,7 +2471,7 @@ longlong FUN_141167090(undefined8 param_1)
 /* ref: FUN_1411670b0 */
 longlong FUN_1411670b0(undefined8 param_1)
 {
-  GEN_HIT(343);
+  GEN_HIT(224);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3791,7 +2482,7 @@ longlong FUN_1411670b0(undefined8 param_1)
 /* ref: FUN_1411670d0 */
 longlong FUN_1411670d0(undefined8 param_1)
 {
-  GEN_HIT(344);
+  GEN_HIT(225);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3802,7 +2493,7 @@ longlong FUN_1411670d0(undefined8 param_1)
 /* ref: FUN_1411670f0 */
 longlong FUN_1411670f0(undefined8 param_1)
 {
-  GEN_HIT(345);
+  GEN_HIT(226);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3813,7 +2504,7 @@ longlong FUN_1411670f0(undefined8 param_1)
 /* ref: FUN_141167110 */
 longlong FUN_141167110(undefined8 param_1)
 {
-  GEN_HIT(346);
+  GEN_HIT(227);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3824,7 +2515,7 @@ longlong FUN_141167110(undefined8 param_1)
 /* ref: FUN_141167130 */
 longlong FUN_141167130(undefined8 param_1)
 {
-  GEN_HIT(347);
+  GEN_HIT(228);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3835,7 +2526,7 @@ longlong FUN_141167130(undefined8 param_1)
 /* ref: FUN_141167150 */
 longlong FUN_141167150(undefined8 param_1)
 {
-  GEN_HIT(348);
+  GEN_HIT(229);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3846,7 +2537,7 @@ longlong FUN_141167150(undefined8 param_1)
 /* ref: FUN_141167170 */
 longlong FUN_141167170(undefined8 param_1)
 {
-  GEN_HIT(349);
+  GEN_HIT(230);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3857,7 +2548,7 @@ longlong FUN_141167170(undefined8 param_1)
 /* ref: FUN_141167190 */
 longlong FUN_141167190(undefined8 param_1)
 {
-  GEN_HIT(350);
+  GEN_HIT(231);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3868,7 +2559,7 @@ longlong FUN_141167190(undefined8 param_1)
 /* ref: FUN_1411671b0 */
 longlong FUN_1411671b0(undefined8 param_1)
 {
-  GEN_HIT(351);
+  GEN_HIT(232);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3879,7 +2570,7 @@ longlong FUN_1411671b0(undefined8 param_1)
 /* ref: FUN_1411671d0 */
 longlong FUN_1411671d0(undefined8 param_1)
 {
-  GEN_HIT(352);
+  GEN_HIT(233);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3890,7 +2581,7 @@ longlong FUN_1411671d0(undefined8 param_1)
 /* ref: FUN_1411671f0 */
 longlong FUN_1411671f0(undefined8 param_1)
 {
-  GEN_HIT(353);
+  GEN_HIT(234);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3901,7 +2592,7 @@ longlong FUN_1411671f0(undefined8 param_1)
 /* ref: FUN_141167210 */
 longlong FUN_141167210(undefined8 param_1)
 {
-  GEN_HIT(354);
+  GEN_HIT(235);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3912,7 +2603,7 @@ longlong FUN_141167210(undefined8 param_1)
 /* ref: FUN_141167230 */
 longlong FUN_141167230(undefined8 param_1)
 {
-  GEN_HIT(355);
+  GEN_HIT(236);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3923,7 +2614,7 @@ longlong FUN_141167230(undefined8 param_1)
 /* ref: FUN_141167250 */
 longlong FUN_141167250(undefined8 param_1)
 {
-  GEN_HIT(356);
+  GEN_HIT(237);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3934,7 +2625,7 @@ longlong FUN_141167250(undefined8 param_1)
 /* ref: FUN_141167270 */
 longlong FUN_141167270(undefined8 param_1)
 {
-  GEN_HIT(357);
+  GEN_HIT(238);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3945,7 +2636,7 @@ longlong FUN_141167270(undefined8 param_1)
 /* ref: FUN_141167290 */
 longlong FUN_141167290(undefined8 param_1)
 {
-  GEN_HIT(358);
+  GEN_HIT(239);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3956,7 +2647,7 @@ longlong FUN_141167290(undefined8 param_1)
 /* ref: FUN_1411672b0 */
 longlong FUN_1411672b0(undefined8 param_1)
 {
-  GEN_HIT(359);
+  GEN_HIT(240);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3967,7 +2658,7 @@ longlong FUN_1411672b0(undefined8 param_1)
 /* ref: FUN_1411672d0 */
 longlong FUN_1411672d0(undefined8 param_1)
 {
-  GEN_HIT(360);
+  GEN_HIT(241);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3978,7 +2669,7 @@ longlong FUN_1411672d0(undefined8 param_1)
 /* ref: FUN_1411672f0 */
 longlong FUN_1411672f0(undefined8 param_1)
 {
-  GEN_HIT(361);
+  GEN_HIT(242);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -3989,7 +2680,7 @@ longlong FUN_1411672f0(undefined8 param_1)
 /* ref: FUN_141167310 */
 longlong FUN_141167310(undefined8 param_1)
 {
-  GEN_HIT(362);
+  GEN_HIT(243);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4000,7 +2691,7 @@ longlong FUN_141167310(undefined8 param_1)
 /* ref: FUN_141167330 */
 longlong FUN_141167330(undefined8 param_1)
 {
-  GEN_HIT(363);
+  GEN_HIT(244);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4011,7 +2702,7 @@ longlong FUN_141167330(undefined8 param_1)
 /* ref: FUN_141167350 */
 longlong FUN_141167350(undefined8 param_1)
 {
-  GEN_HIT(364);
+  GEN_HIT(245);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4022,7 +2713,7 @@ longlong FUN_141167350(undefined8 param_1)
 /* ref: FUN_141167370 */
 longlong FUN_141167370(undefined8 param_1)
 {
-  GEN_HIT(365);
+  GEN_HIT(246);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4033,7 +2724,7 @@ longlong FUN_141167370(undefined8 param_1)
 /* ref: FUN_141167390 */
 longlong FUN_141167390(undefined8 param_1)
 {
-  GEN_HIT(366);
+  GEN_HIT(247);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4044,7 +2735,7 @@ longlong FUN_141167390(undefined8 param_1)
 /* ref: FUN_1411673b0 */
 longlong FUN_1411673b0(undefined8 param_1)
 {
-  GEN_HIT(367);
+  GEN_HIT(248);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4055,7 +2746,7 @@ longlong FUN_1411673b0(undefined8 param_1)
 /* ref: FUN_1411673d0 */
 longlong FUN_1411673d0(undefined8 param_1)
 {
-  GEN_HIT(368);
+  GEN_HIT(249);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4066,7 +2757,7 @@ longlong FUN_1411673d0(undefined8 param_1)
 /* ref: FUN_1411673f0 */
 longlong FUN_1411673f0(undefined8 param_1)
 {
-  GEN_HIT(369);
+  GEN_HIT(250);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4077,7 +2768,7 @@ longlong FUN_1411673f0(undefined8 param_1)
 /* ref: FUN_141167410 */
 longlong FUN_141167410(undefined8 param_1)
 {
-  GEN_HIT(370);
+  GEN_HIT(251);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4088,7 +2779,7 @@ longlong FUN_141167410(undefined8 param_1)
 /* ref: FUN_141167430 */
 longlong FUN_141167430(undefined8 param_1)
 {
-  GEN_HIT(371);
+  GEN_HIT(252);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4099,7 +2790,7 @@ longlong FUN_141167430(undefined8 param_1)
 /* ref: FUN_141167450 */
 longlong FUN_141167450(undefined8 param_1)
 {
-  GEN_HIT(372);
+  GEN_HIT(253);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4110,7 +2801,7 @@ longlong FUN_141167450(undefined8 param_1)
 /* ref: FUN_141167470 */
 longlong FUN_141167470(undefined8 param_1)
 {
-  GEN_HIT(373);
+  GEN_HIT(254);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4121,7 +2812,7 @@ longlong FUN_141167470(undefined8 param_1)
 /* ref: FUN_1411674b0 */
 longlong FUN_1411674b0(undefined8 param_1)
 {
-  GEN_HIT(374);
+  GEN_HIT(255);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4132,7 +2823,7 @@ longlong FUN_1411674b0(undefined8 param_1)
 /* ref: FUN_1411674d0 */
 longlong FUN_1411674d0(undefined8 param_1)
 {
-  GEN_HIT(375);
+  GEN_HIT(256);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4143,7 +2834,7 @@ longlong FUN_1411674d0(undefined8 param_1)
 /* ref: FUN_1411674f0 */
 longlong FUN_1411674f0(undefined8 param_1)
 {
-  GEN_HIT(376);
+  GEN_HIT(257);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4154,7 +2845,7 @@ longlong FUN_1411674f0(undefined8 param_1)
 /* ref: FUN_141167510 */
 longlong FUN_141167510(undefined8 param_1)
 {
-  GEN_HIT(377);
+  GEN_HIT(258);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4165,7 +2856,7 @@ longlong FUN_141167510(undefined8 param_1)
 /* ref: FUN_141167530 */
 longlong FUN_141167530(undefined8 param_1)
 {
-  GEN_HIT(378);
+  GEN_HIT(259);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4176,7 +2867,7 @@ longlong FUN_141167530(undefined8 param_1)
 /* ref: FUN_141167550 */
 longlong FUN_141167550(undefined8 param_1)
 {
-  GEN_HIT(379);
+  GEN_HIT(260);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4187,7 +2878,7 @@ longlong FUN_141167550(undefined8 param_1)
 /* ref: FUN_141167570 */
 longlong FUN_141167570(undefined8 param_1)
 {
-  GEN_HIT(380);
+  GEN_HIT(261);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4198,7 +2889,7 @@ longlong FUN_141167570(undefined8 param_1)
 /* ref: FUN_141167590 */
 longlong FUN_141167590(undefined8 param_1)
 {
-  GEN_HIT(381);
+  GEN_HIT(262);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4209,7 +2900,7 @@ longlong FUN_141167590(undefined8 param_1)
 /* ref: FUN_1411675b0 */
 longlong FUN_1411675b0(undefined8 param_1)
 {
-  GEN_HIT(382);
+  GEN_HIT(263);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4220,7 +2911,7 @@ longlong FUN_1411675b0(undefined8 param_1)
 /* ref: FUN_1411675d0 */
 longlong FUN_1411675d0(undefined8 param_1)
 {
-  GEN_HIT(383);
+  GEN_HIT(264);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4231,7 +2922,7 @@ longlong FUN_1411675d0(undefined8 param_1)
 /* ref: FUN_1411675f0 */
 longlong FUN_1411675f0(undefined8 param_1)
 {
-  GEN_HIT(384);
+  GEN_HIT(265);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4242,7 +2933,7 @@ longlong FUN_1411675f0(undefined8 param_1)
 /* ref: FUN_141167610 */
 longlong FUN_141167610(undefined8 param_1)
 {
-  GEN_HIT(385);
+  GEN_HIT(266);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4253,7 +2944,7 @@ longlong FUN_141167610(undefined8 param_1)
 /* ref: FUN_141167630 */
 longlong FUN_141167630(undefined8 param_1)
 {
-  GEN_HIT(386);
+  GEN_HIT(267);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4264,7 +2955,7 @@ longlong FUN_141167630(undefined8 param_1)
 /* ref: FUN_141167650 */
 longlong FUN_141167650(undefined8 param_1)
 {
-  GEN_HIT(387);
+  GEN_HIT(268);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4275,7 +2966,7 @@ longlong FUN_141167650(undefined8 param_1)
 /* ref: FUN_141167670 */
 longlong FUN_141167670(undefined8 param_1)
 {
-  GEN_HIT(388);
+  GEN_HIT(269);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4286,7 +2977,7 @@ longlong FUN_141167670(undefined8 param_1)
 /* ref: FUN_141167690 */
 longlong FUN_141167690(undefined8 param_1)
 {
-  GEN_HIT(389);
+  GEN_HIT(270);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4297,7 +2988,7 @@ longlong FUN_141167690(undefined8 param_1)
 /* ref: FUN_1411676b0 */
 longlong FUN_1411676b0(undefined8 param_1)
 {
-  GEN_HIT(390);
+  GEN_HIT(271);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4308,7 +2999,7 @@ longlong FUN_1411676b0(undefined8 param_1)
 /* ref: FUN_1411676d0 */
 longlong FUN_1411676d0(undefined8 param_1)
 {
-  GEN_HIT(391);
+  GEN_HIT(272);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4319,7 +3010,7 @@ longlong FUN_1411676d0(undefined8 param_1)
 /* ref: FUN_1411676f0 */
 longlong FUN_1411676f0(undefined8 param_1)
 {
-  GEN_HIT(392);
+  GEN_HIT(273);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4330,7 +3021,7 @@ longlong FUN_1411676f0(undefined8 param_1)
 /* ref: FUN_141167710 */
 longlong FUN_141167710(undefined8 param_1)
 {
-  GEN_HIT(393);
+  GEN_HIT(274);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4341,7 +3032,7 @@ longlong FUN_141167710(undefined8 param_1)
 /* ref: FUN_141167730 */
 longlong FUN_141167730(undefined8 param_1)
 {
-  GEN_HIT(394);
+  GEN_HIT(275);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4352,7 +3043,7 @@ longlong FUN_141167730(undefined8 param_1)
 /* ref: FUN_141167750 */
 longlong FUN_141167750(undefined8 param_1)
 {
-  GEN_HIT(395);
+  GEN_HIT(276);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4363,7 +3054,7 @@ longlong FUN_141167750(undefined8 param_1)
 /* ref: FUN_141167770 */
 longlong FUN_141167770(undefined8 param_1)
 {
-  GEN_HIT(396);
+  GEN_HIT(277);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4374,7 +3065,7 @@ longlong FUN_141167770(undefined8 param_1)
 /* ref: FUN_141167790 */
 longlong FUN_141167790(undefined8 param_1)
 {
-  GEN_HIT(397);
+  GEN_HIT(278);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4385,7 +3076,7 @@ longlong FUN_141167790(undefined8 param_1)
 /* ref: FUN_1411677b0 */
 longlong FUN_1411677b0(undefined8 param_1)
 {
-  GEN_HIT(398);
+  GEN_HIT(279);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4396,7 +3087,7 @@ longlong FUN_1411677b0(undefined8 param_1)
 /* ref: FUN_1411677d0 */
 longlong FUN_1411677d0(undefined8 param_1)
 {
-  GEN_HIT(399);
+  GEN_HIT(280);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4407,7 +3098,7 @@ longlong FUN_1411677d0(undefined8 param_1)
 /* ref: FUN_1411677f0 */
 longlong FUN_1411677f0(undefined8 param_1)
 {
-  GEN_HIT(400);
+  GEN_HIT(281);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4418,7 +3109,7 @@ longlong FUN_1411677f0(undefined8 param_1)
 /* ref: FUN_141167810 */
 longlong FUN_141167810(undefined8 param_1)
 {
-  GEN_HIT(401);
+  GEN_HIT(282);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4429,7 +3120,7 @@ longlong FUN_141167810(undefined8 param_1)
 /* ref: FUN_141167830 */
 longlong FUN_141167830(undefined8 param_1)
 {
-  GEN_HIT(402);
+  GEN_HIT(283);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4440,7 +3131,7 @@ longlong FUN_141167830(undefined8 param_1)
 /* ref: FUN_141167850 */
 longlong FUN_141167850(undefined8 param_1)
 {
-  GEN_HIT(403);
+  GEN_HIT(284);
   longlong lVar1 = {0};
   
   lVar1 = CALLF(undefined *, FUN_141273d80)();
@@ -4448,94 +3139,51 @@ longlong FUN_141167850(undefined8 param_1)
   return lVar1;
 }
 
+/* ref: FUN_141167870 */
+longlong FUN_141167870(undefined8 param_1)
+{
+  GEN_HIT(285);
+  longlong lVar1 = {0};
+  
+  lVar1 = CALLF(undefined *, FUN_141273d80)();
+  *(undefined8 *)(lVar1 + 0x1bd8) = param_1;
+  return lVar1;
+}
+
+/* ref: FUN_141167890 */
+longlong FUN_141167890(undefined8 param_1)
+{
+  GEN_HIT(286);
+  longlong lVar1 = {0};
+  
+  lVar1 = CALLF(undefined *, FUN_141273d80)();
+  *(undefined8 *)(lVar1 + 0x1be0) = param_1;
+  return lVar1;
+}
+
+/* ref: FUN_1411678b0 */
+longlong FUN_1411678b0(undefined8 param_1)
+{
+  GEN_HIT(287);
+  longlong lVar1 = {0};
+  
+  lVar1 = CALLF(undefined *, FUN_141273d80)();
+  *(undefined8 *)(lVar1 + 0xa80) = param_1;
+  return lVar1;
+}
+
+/* ref: FUN_1411678d0 */
+longlong FUN_1411678d0(undefined8 param_1)
+{
+  GEN_HIT(288);
+  longlong lVar1 = {0};
+  
+  lVar1 = CALLF(undefined *, FUN_141273d80)();
+  *(undefined8 *)(lVar1 + 0x1718) = param_1;
+  return lVar1;
+}
+
 const unsigned long long gen_hit_addrs_068[] = {
-    0x141164030ULL,
-    0x141164090ULL,
-    0x1411640d0ULL,
-    0x1411640f0ULL,
-    0x141164110ULL,
-    0x141164130ULL,
-    0x141164150ULL,
-    0x141164170ULL,
-    0x141164190ULL,
-    0x1411641d0ULL,
-    0x1411641f0ULL,
-    0x141164210ULL,
-    0x141164230ULL,
-    0x141164250ULL,
-    0x141164270ULL,
-    0x141164290ULL,
-    0x1411642b0ULL,
-    0x1411642d0ULL,
-    0x1411642f0ULL,
-    0x141164310ULL,
-    0x141164330ULL,
-    0x141164350ULL,
-    0x141164370ULL,
-    0x141164390ULL,
-    0x1411643b0ULL,
-    0x1411643d0ULL,
-    0x1411643f0ULL,
-    0x141164410ULL,
-    0x141164430ULL,
-    0x141164450ULL,
-    0x141164470ULL,
-    0x141164490ULL,
-    0x1411644b0ULL,
-    0x1411644d0ULL,
-    0x1411644f0ULL,
-    0x141164510ULL,
-    0x141164530ULL,
-    0x141164550ULL,
-    0x141164570ULL,
-    0x141164590ULL,
-    0x1411645b0ULL,
-    0x1411645d0ULL,
-    0x1411645f0ULL,
-    0x141164610ULL,
-    0x141164630ULL,
-    0x141164650ULL,
-    0x141164670ULL,
-    0x141164690ULL,
-    0x1411646b0ULL,
-    0x1411646d0ULL,
-    0x1411646f0ULL,
-    0x141164710ULL,
-    0x141164730ULL,
-    0x141164750ULL,
-    0x141164770ULL,
-    0x141164790ULL,
-    0x1411647b0ULL,
-    0x1411647d0ULL,
-    0x1411647f0ULL,
-    0x141164810ULL,
-    0x141164830ULL,
-    0x141164850ULL,
-    0x141164870ULL,
-    0x141164890ULL,
-    0x1411648b0ULL,
-    0x1411648d0ULL,
-    0x1411648f0ULL,
-    0x141164910ULL,
-    0x141164930ULL,
-    0x141164950ULL,
-    0x141164970ULL,
-    0x141164990ULL,
-    0x1411649b0ULL,
-    0x1411649d0ULL,
-    0x1411649f0ULL,
-    0x141164a10ULL,
-    0x141164a30ULL,
-    0x141164a50ULL,
-    0x141164a70ULL,
-    0x141164b10ULL,
-    0x141164b30ULL,
-    0x141164b50ULL,
-    0x141164b70ULL,
-    0x141164b90ULL,
-    0x141164bb0ULL,
-    0x141164c10ULL,
-    0x141164c70ULL,
     0x141164c90ULL,
     0x141164cb0ULL,
     0x141164cd0ULL,
@@ -4583,11 +3231,6 @@ const unsigned long long gen_hit_addrs_068[] = {
     0x141165210ULL,
     0x141165230ULL,
     0x141165250ULL,
-    0x1411652d0ULL,
-    0x1411652f0ULL,
-    0x141165310ULL,
-    0x141165330ULL,
-    0x141165350ULL,
     0x141165370ULL,
     0x141165390ULL,
     0x1411653b0ULL,
@@ -4610,7 +3253,6 @@ const unsigned long long gen_hit_addrs_068[] = {
     0x1411655d0ULL,
     0x1411655f0ULL,
     0x141165610ULL,
-    0x141165650ULL,
     0x141165690ULL,
     0x1411656b0ULL,
     0x1411656d0ULL,
@@ -4626,27 +3268,7 @@ const unsigned long long gen_hit_addrs_068[] = {
     0x141165810ULL,
     0x141165830ULL,
     0x141165850ULL,
-    0x141165870ULL,
-    0x1411658d0ULL,
-    0x141165910ULL,
-    0x141165930ULL,
-    0x1411659b0ULL,
-    0x1411659d0ULL,
-    0x1411659f0ULL,
-    0x141165a50ULL,
-    0x141165a70ULL,
-    0x141165a90ULL,
-    0x141165ab0ULL,
-    0x141165ad0ULL,
-    0x141165af0ULL,
-    0x141165b10ULL,
-    0x141165b30ULL,
-    0x141165b50ULL,
-    0x141165b70ULL,
-    0x141165b90ULL,
     0x141165bb0ULL,
-    0x141165bd0ULL,
-    0x141165bf0ULL,
     0x141165c10ULL,
     0x141165c30ULL,
     0x141165c50ULL,
@@ -4697,10 +3319,7 @@ const unsigned long long gen_hit_addrs_068[] = {
     0x141166250ULL,
     0x141166270ULL,
     0x141166290ULL,
-    0x1411662b0ULL,
-    0x141166330ULL,
     0x141166350ULL,
-    0x1411663b0ULL,
     0x141166410ULL,
     0x141166430ULL,
     0x141166450ULL,
@@ -4776,9 +3395,6 @@ const unsigned long long gen_hit_addrs_068[] = {
     0x141166d10ULL,
     0x141166d30ULL,
     0x141166d50ULL,
-    0x141166d70ULL,
-    0x141166db0ULL,
-    0x141166dd0ULL,
     0x141166f10ULL,
     0x141166f30ULL,
     0x141166f50ULL,
@@ -4853,5 +3469,9 @@ const unsigned long long gen_hit_addrs_068[] = {
     0x141167810ULL,
     0x141167830ULL,
     0x141167850ULL,
+    0x141167870ULL,
+    0x141167890ULL,
+    0x1411678b0ULL,
+    0x1411678d0ULL,
 };
 

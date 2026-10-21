@@ -43,15 +43,3 @@ undefined8 FUN_1422656e0() {
     GenUnimplemented(0x1422656e0ULL);
     return (undefined8)0;
 }
-
-/* the decompiler lost a call's arguments (FUN_1411e7a00 reads 3, the call passes 1) */
-undefined8 FUN_142458750() {
-    GenUnimplemented(0x142458750ULL);
-    return (undefined8)0;
-}
-
-/* the decompiler lost a call's arguments (FUN_1411e7a00 reads 3, the call passes 1) */
-undefined1 FUN_1424611c0() {
-    GenUnimplemented(0x1424611c0ULL);
-    return (undefined1)0;
-}

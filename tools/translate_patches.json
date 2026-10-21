@@ -1,8 +1,3 @@
 {
- "_doc": "Corrections to the decompilation, applied before translation (tools/translate.py). Each is a decompiler error proven against the instructions: 'from' should occur exactly once in the function's corpus text, and 'why' gives the instruction evidence. A patch is a defect the pipeline has not fixed at its source yet: the goal is none. The five of 2026-10-15/16 are gone, each fixed where it arose (tools/protos.py's prototypes and indirect-call signatures, Ghidra.h's LPC* typedefs). A patch that no longer matches is reported and skipped: the corpus may have been fixed underneath it.",
- "14147f390": [
-  {"from": "return *DAT_1430af3f8;",
-   "to": "return *(undefined8 *)DAT_1430af3f8;",
-   "why": "the export leaves DAT_1430af3f8 untyped; the load is 8 bytes: mov rax,[rip->0x1430af3f8] at 0x14147f390, then mov rax,[rax] at 0x14147f397"}
- ]
+ "_doc": "Corrections to the decompilation, applied before translation (tools/translate.py). Each is a decompiler error proven against the instructions: 'from' should occur exactly once in the function's corpus text, and 'why' gives the instruction evidence. A patch is a defect the pipeline has not fixed at its source yet: the goal is none. The five of 2026-10-15/16 are gone, each fixed where it arose (tools/protos.py's prototypes and indirect-call signatures, Ghidra.h's LPC* typedefs). A patch that no longer matches is reported and skipped: the corpus may have been fixed underneath it."
 }

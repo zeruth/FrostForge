@@ -9,7 +9,8 @@ extern "C" {
 #include "lua.h"
 }
 
-// ref: FUN_1407d2e10
+// (not FUN_1407d2e10: that takes a context holding the lua_State, not the lua_State, so translated
+// callers handed this their context; untagged 2026-10-21, they run its translation)
 void ScriptOpenTable(lua_State* L, const char* name, int32_t index) {
     lua_getfield(L, index, name);
     if (lua_type(L, -1) != LUA_TTABLE) {

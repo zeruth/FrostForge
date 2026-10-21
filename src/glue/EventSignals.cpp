@@ -4,6 +4,232 @@
 
 #include "framescript/FrameScriptEvents.hpp"
 
+// The fire functions of the events with arguments, translated (see below).
+extern "C" {
+unsigned long long FUN_1407bc6c0(...);
+unsigned long long FUN_1407bc970(...);
+unsigned long long FUN_1407bedb0(...);
+unsigned long long FUN_1407bf0d0(...);
+unsigned long long FUN_140a52860(...);
+unsigned long long FUN_140a52d80(...);
+unsigned long long FUN_140aee6b0(...);
+unsigned long long FUN_140b32ef0(...);
+unsigned long long FUN_140b336d0(...);
+unsigned long long FUN_140b33980(...);
+unsigned long long FUN_140b33c30(...);
+unsigned long long FUN_140b33f50(...);
+unsigned long long FUN_140b34340(...);
+unsigned long long FUN_140b34680(...);
+unsigned long long FUN_140b34990(...);
+unsigned long long FUN_140b34cd0(...);
+unsigned long long FUN_140b34fe0(...);
+unsigned long long FUN_140b35320(...);
+unsigned long long FUN_140b35660(...);
+unsigned long long FUN_140b35970(...);
+unsigned long long FUN_140b35cb0(...);
+unsigned long long FUN_140b35ff0(...);
+unsigned long long FUN_140b36370(...);
+unsigned long long FUN_140b366b0(...);
+unsigned long long FUN_140b369b0(...);
+unsigned long long FUN_140b36cd0(...);
+unsigned long long FUN_140b36f80(...);
+unsigned long long FUN_140b37280(...);
+unsigned long long FUN_140b37580(...);
+unsigned long long FUN_140b37890(...);
+unsigned long long FUN_140b37db0(...);
+unsigned long long FUN_140b38060(...);
+unsigned long long FUN_140b385d0(...);
+unsigned long long FUN_140b38880(...);
+unsigned long long FUN_140b38b30(...);
+unsigned long long FUN_140b39050(...);
+unsigned long long FUN_140b39410(...);
+unsigned long long FUN_140b396c0(...);
+unsigned long long FUN_140b39e50(...);
+unsigned long long FUN_140b3a180(...);
+unsigned long long FUN_140b3a4c0(...);
+unsigned long long FUN_140b3a840(...);
+unsigned long long FUN_140baf820(...);
+unsigned long long FUN_140c02850(...);
+unsigned long long FUN_140c02b00(...);
+unsigned long long FUN_140c048e0(...);
+unsigned long long FUN_140c36ee0(...);
+unsigned long long FUN_140c37450(...);
+unsigned long long FUN_140c379c0(...);
+unsigned long long FUN_140c37d00(...);
+unsigned long long FUN_140c3a470(...);
+unsigned long long FUN_140c3a780(...);
+unsigned long long FUN_140c3aa30(...);
+unsigned long long FUN_140c3ad70(...);
+unsigned long long FUN_140c3b090(...);
+unsigned long long FUN_140c3b360(...);
+unsigned long long FUN_140c3bb50(...);
+unsigned long long FUN_140c3c0c0(...);
+unsigned long long FUN_140c3c6c0(...);
+unsigned long long FUN_140c3c990(...);
+unsigned long long FUN_140c3cce0(...);
+unsigned long long FUN_140c3cfb0(...);
+unsigned long long FUN_140c3d4d0(...);
+unsigned long long FUN_140c3d770(...);
+unsigned long long FUN_140c3dce0(...);
+unsigned long long FUN_140c3df90(...);
+unsigned long long FUN_140c3e210(...);
+unsigned long long FUN_140c3e490(...);
+unsigned long long FUN_140c3e710(...);
+unsigned long long FUN_140c3e990(...);
+unsigned long long FUN_140c3ec10(...);
+unsigned long long FUN_140c3ee90(...);
+unsigned long long FUN_140c3f110(...);
+unsigned long long FUN_140c3f390(...);
+unsigned long long FUN_140c3f610(...);
+unsigned long long FUN_140c3f890(...);
+unsigned long long FUN_140c3fb10(...);
+unsigned long long FUN_140c3fd90(...);
+unsigned long long FUN_140c40010(...);
+unsigned long long FUN_140c40290(...);
+unsigned long long FUN_140c40510(...);
+unsigned long long FUN_140c40790(...);
+unsigned long long FUN_140c40a10(...);
+unsigned long long FUN_140c40c90(...);
+unsigned long long FUN_140c40f10(...);
+unsigned long long FUN_140c41190(...);
+unsigned long long FUN_140c41410(...);
+unsigned long long FUN_140c41690(...);
+unsigned long long FUN_140c41910(...);
+unsigned long long FUN_140c41b90(...);
+unsigned long long FUN_140c41e10(...);
+unsigned long long FUN_140c42090(...);
+unsigned long long FUN_140c42310(...);
+unsigned long long FUN_140c42590(...);
+unsigned long long FUN_140c42810(...);
+unsigned long long FUN_140c42a90(...);
+unsigned long long FUN_140c42d10(...);
+unsigned long long FUN_140c42f90(...);
+unsigned long long FUN_140c43210(...);
+unsigned long long FUN_140c43490(...);
+unsigned long long FUN_140c43710(...);
+unsigned long long FUN_140c43990(...);
+unsigned long long FUN_140c43c10(...);
+unsigned long long FUN_140c43e90(...);
+unsigned long long FUN_140c44110(...);
+unsigned long long FUN_140c44390(...);
+unsigned long long FUN_140c44610(...);
+unsigned long long FUN_140c44890(...);
+unsigned long long FUN_140c44b10(...);
+unsigned long long FUN_140c44d90(...);
+unsigned long long FUN_140c45010(...);
+unsigned long long FUN_140c45290(...);
+unsigned long long FUN_140c45510(...);
+unsigned long long FUN_140c45790(...);
+unsigned long long FUN_140c45a10(...);
+unsigned long long FUN_140c45c90(...);
+unsigned long long FUN_140c45f10(...);
+unsigned long long FUN_140c46190(...);
+unsigned long long FUN_140c46410(...);
+unsigned long long FUN_140c46690(...);
+unsigned long long FUN_140c46910(...);
+unsigned long long FUN_140c46b90(...);
+unsigned long long FUN_140c46e10(...);
+unsigned long long FUN_140c47090(...);
+unsigned long long FUN_140c47310(...);
+unsigned long long FUN_140c47590(...);
+unsigned long long FUN_140c47810(...);
+unsigned long long FUN_140c47a90(...);
+unsigned long long FUN_140c47d10(...);
+unsigned long long FUN_140c47f90(...);
+unsigned long long FUN_140c48210(...);
+unsigned long long FUN_140c48490(...);
+unsigned long long FUN_140c48710(...);
+unsigned long long FUN_140c48990(...);
+unsigned long long FUN_140c48c10(...);
+unsigned long long FUN_140c49120(...);
+unsigned long long FUN_140c49690(...);
+unsigned long long FUN_140c4a300(...);
+unsigned long long FUN_140c4a8c0(...);
+unsigned long long FUN_140c4b2c0(...);
+unsigned long long FUN_140c4c1c0(...);
+unsigned long long FUN_140c4c530(...);
+unsigned long long FUN_140c4c7e0(...);
+unsigned long long FUN_140c4ca90(...);
+unsigned long long FUN_140c4ce40(...);
+unsigned long long FUN_140c4d190(...);
+unsigned long long FUN_140c4d460(...);
+unsigned long long FUN_140c4d810(...);
+unsigned long long FUN_140c4dbc0(...);
+unsigned long long FUN_140c4df90(...);
+unsigned long long FUN_140c4e2b0(...);
+unsigned long long FUN_140c4e820(...);
+unsigned long long FUN_140c4f070(...);
+unsigned long long FUN_140c4f400(...);
+unsigned long long FUN_140c4f990(...);
+unsigned long long FUN_140c50220(...);
+unsigned long long FUN_140d50880(...);
+unsigned long long FUN_140d50b50(...);
+unsigned long long FUN_140d515c0(...);
+unsigned long long FUN_140d52110(...);
+unsigned long long FUN_140d53520(...);
+unsigned long long FUN_140e41180(...);
+unsigned long long FUN_140e41e30(...);
+unsigned long long FUN_140e42650(...);
+unsigned long long FUN_140e42920(...);
+unsigned long long FUN_140e42bf0(...);
+unsigned long long FUN_140e436e0(...);
+unsigned long long FUN_140e44b00(...);
+unsigned long long FUN_140e46430(...);
+unsigned long long FUN_140e48f70(...);
+unsigned long long FUN_140e49220(...);
+unsigned long long FUN_140e494d0(...);
+unsigned long long FUN_140e497d0(...);
+unsigned long long FUN_140e4acd0(...);
+unsigned long long FUN_140e4b1f0(...);
+unsigned long long FUN_140e4baa0(...);
+unsigned long long FUN_140e4c020(...);
+unsigned long long FUN_140e4c340(...);
+unsigned long long FUN_140e4d640(...);
+unsigned long long FUN_140e4de20(...);
+unsigned long long FUN_140ef36a0(...);
+unsigned long long FUN_140ef40a0(...);
+unsigned long long FUN_140f6fb60(...);
+unsigned long long FUN_140f70dc0(...);
+unsigned long long FUN_140f71880(...);
+unsigned long long FUN_140f71b50(...);
+unsigned long long FUN_140f71e20(...);
+unsigned long long FUN_140f727f0(...);
+unsigned long long FUN_140f72a70(...);
+unsigned long long FUN_140f74e10(...);
+unsigned long long FUN_140f75e20(...);
+unsigned long long FUN_140f760f0(...);
+unsigned long long FUN_140f76660(...);
+unsigned long long FUN_140f780a0(...);
+unsigned long long FUN_140f78370(...);
+unsigned long long FUN_140f788e0(...);
+unsigned long long FUN_140f78c00(...);
+unsigned long long FUN_140f78eb0(...);
+unsigned long long FUN_140f79180(...);
+unsigned long long FUN_140f79400(...);
+unsigned long long FUN_140f799a0(...);
+unsigned long long FUN_140f79f80(...);
+unsigned long long FUN_140f7a4a0(...);
+unsigned long long FUN_1410dedd0(...);
+unsigned long long FUN_141156b30(...);
+unsigned long long FUN_141156de0(...);
+unsigned long long FUN_141157090(...);
+unsigned long long FUN_141157340(...);
+unsigned long long FUN_141157860(...);
+unsigned long long FUN_141157ff0(...);
+unsigned long long FUN_141158560(...);
+}
+
+// ACCOUNT_CHARACTER_LIST_RECIEVED: the reference's fire function (FUN_140c36ee0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_ACCOUNT_CHARACTER_LIST_RECIEVED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c36ee0(list, args);
+}
+
+// ref: FUN_140c504d0
+void EventSignal_ACCOUNT_CHARACTER_LIST_RECIEVED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_ACCOUNT_CHARACTER_LIST_RECIEVED);
+}
+
 // ref: FUN_140c371e0
 void EventFire_ACCOUNT_DATA_INITIALIZED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -14,6 +240,39 @@ void EventFire_ACCOUNT_DATA_INITIALIZED(FrameScriptEvents::EventListenerList* li
 // ref: FUN_140c505b0
 void EventSignal_ACCOUNT_DATA_INITIALIZED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_ACCOUNT_DATA_INITIALIZED);
+}
+
+// ACCOUNT_DATA_RESTORED: the reference's fire function (FUN_140c37450, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_ACCOUNT_DATA_RESTORED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c37450(list, args);
+}
+
+// ref: FUN_140c50690
+void EventSignal_ACCOUNT_DATA_RESTORED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_ACCOUNT_DATA_RESTORED);
+}
+
+// ACCOUNT_LOCKED_POST_SAVE_UPDATE: the reference's fire function (FUN_1407bc6c0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_ACCOUNT_LOCKED_POST_SAVE_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_1407bc6c0(list, args);
+}
+
+// ref: FUN_1407c6a60
+void EventSignal_ACCOUNT_LOCKED_POST_SAVE_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_ACCOUNT_LOCKED_POST_SAVE_UPDATE);
+}
+
+// ACCOUNT_SAVE_ENABLED_UPDATE: the reference's fire function (FUN_1407bc970, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_ACCOUNT_SAVE_ENABLED_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_1407bc970(list, args);
+}
+
+// ref: FUN_1407c6b40
+void EventSignal_ACCOUNT_SAVE_ENABLED_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_ACCOUNT_SAVE_ENABLED_UPDATE);
 }
 
 // ref: FUN_140b1c900
@@ -28,6 +287,28 @@ void EventSignal_ADAPTER_LIST_CHANGED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_ADAPTER_LIST_CHANGED);
 }
 
+// ADDONS_UNLOADING: the reference's fire function (FUN_1407bf0d0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_ADDONS_UNLOADING(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_1407bf0d0(list, args);
+}
+
+// ref: FUN_1407c7860
+void EventSignal_ADDONS_UNLOADING(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_ADDONS_UNLOADING);
+}
+
+// ADDON_LOADED: the reference's fire function (FUN_1407bedb0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_ADDON_LOADED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_1407bedb0(list, args);
+}
+
+// ref: FUN_1407c7780
+void EventSignal_ADDON_LOADED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_ADDON_LOADED);
+}
+
 // ref: FUN_140c37750
 void EventFire_ALTERNATIVE_DEFAULT_LANGUAGE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -38,6 +319,17 @@ void EventFire_ALTERNATIVE_DEFAULT_LANGUAGE_CHANGED(FrameScriptEvents::EventList
 // ref: FUN_140c50770
 void EventSignal_ALTERNATIVE_DEFAULT_LANGUAGE_CHANGED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_ALTERNATIVE_DEFAULT_LANGUAGE_CHANGED);
+}
+
+// ASSIGN_VAS_RESPONSE: the reference's fire function (FUN_140c379c0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_ASSIGN_VAS_RESPONSE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c379c0(list, args);
+}
+
+// ref: FUN_140c50850
+void EventSignal_ASSIGN_VAS_RESPONSE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_ASSIGN_VAS_RESPONSE);
 }
 
 // ref: FUN_140e40ca0
@@ -76,6 +368,28 @@ void EventSignal_BATTLE_PET_CURSOR_CLEAR(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_BATTLE_PET_CURSOR_CLEAR);
 }
 
+// BILLING_NAG_DIALOG: the reference's fire function (FUN_140e41180, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_BILLING_NAG_DIALOG(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e41180(list, args);
+}
+
+// ref: FUN_140e4e4f0
+void EventSignal_BILLING_NAG_DIALOG(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_BILLING_NAG_DIALOG);
+}
+
+// BN_CHAT_MSG_ADDON: the reference's fire function (FUN_140c37d00, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_BN_CHAT_MSG_ADDON(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c37d00(list, args);
+}
+
+// ref: FUN_140c50930
+void EventSignal_BN_CHAT_MSG_ADDON(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_BN_CHAT_MSG_ADDON);
+}
+
 // ref: FUN_140e41430
 void EventFire_CAPTUREFRAMES_FAILED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -98,6 +412,72 @@ void EventFire_CAPTUREFRAMES_SUCCEEDED(FrameScriptEvents::EventListenerList* lis
 // ref: FUN_140e4e6b0
 void EventSignal_CAPTUREFRAMES_SUCCEEDED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_CAPTUREFRAMES_SUCCEEDED);
+}
+
+// CHANNEL_COUNT_UPDATE: the reference's fire function (FUN_140c3a470, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHANNEL_COUNT_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3a470(list, args);
+}
+
+// ref: FUN_140c51570
+void EventSignal_CHANNEL_COUNT_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHANNEL_COUNT_UPDATE);
+}
+
+// CHANNEL_FLAGS_UPDATED: the reference's fire function (FUN_140c3a780, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHANNEL_FLAGS_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3a780(list, args);
+}
+
+// ref: FUN_140c51650
+void EventSignal_CHANNEL_FLAGS_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHANNEL_FLAGS_UPDATED);
+}
+
+// CHANNEL_INVITE_REQUEST: the reference's fire function (FUN_140c3aa30, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHANNEL_INVITE_REQUEST(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3aa30(list, args);
+}
+
+// ref: FUN_140c51730
+void EventSignal_CHANNEL_INVITE_REQUEST(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHANNEL_INVITE_REQUEST);
+}
+
+// CHANNEL_LEFT: the reference's fire function (FUN_140c3ad70, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHANNEL_LEFT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3ad70(list, args);
+}
+
+// ref: FUN_140c51810
+void EventSignal_CHANNEL_LEFT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHANNEL_LEFT);
+}
+
+// CHANNEL_PASSWORD_REQUEST: the reference's fire function (FUN_140c3b090, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHANNEL_PASSWORD_REQUEST(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3b090(list, args);
+}
+
+// ref: FUN_140c518f0
+void EventSignal_CHANNEL_PASSWORD_REQUEST(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHANNEL_PASSWORD_REQUEST);
+}
+
+// CHANNEL_ROSTER_UPDATE: the reference's fire function (FUN_140c3b360, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHANNEL_ROSTER_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3b360(list, args);
+}
+
+// ref: FUN_140c519d0
+void EventSignal_CHANNEL_ROSTER_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHANNEL_ROSTER_UPDATE);
 }
 
 // ref: FUN_140c3b670
@@ -124,6 +504,17 @@ void EventSignal_CHARACTER_COPY_STATUS_CHANGED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_COPY_STATUS_CHANGED);
 }
 
+// CHARACTER_CREATION_RESULT: the reference's fire function (FUN_140c3c0c0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHARACTER_CREATION_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3c0c0(list, args);
+}
+
+// ref: FUN_140c51e30
+void EventSignal_CHARACTER_CREATION_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_CREATION_RESULT);
+}
+
 // ref: FUN_140c3c450
 void EventFire_CHARACTER_DECLINE_IN_PROGRESS(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -134,6 +525,50 @@ void EventFire_CHARACTER_DECLINE_IN_PROGRESS(FrameScriptEvents::EventListenerLis
 // ref: FUN_140c51f10
 void EventSignal_CHARACTER_DECLINE_IN_PROGRESS(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_DECLINE_IN_PROGRESS);
+}
+
+// CHARACTER_DECLINE_RESULT: the reference's fire function (FUN_140c3c6c0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHARACTER_DECLINE_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3c6c0(list, args);
+}
+
+// ref: FUN_140c51ff0
+void EventSignal_CHARACTER_DECLINE_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_DECLINE_RESULT);
+}
+
+// CHARACTER_DELETION_RESULT: the reference's fire function (FUN_140c3c990, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHARACTER_DELETION_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3c990(list, args);
+}
+
+// ref: FUN_140c520d0
+void EventSignal_CHARACTER_DELETION_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_DELETION_RESULT);
+}
+
+// CHARACTER_DUPLICATE_LOGON: the reference's fire function (FUN_140c3cce0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHARACTER_DUPLICATE_LOGON(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3cce0(list, args);
+}
+
+// ref: FUN_140c521b0
+void EventSignal_CHARACTER_DUPLICATE_LOGON(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_DUPLICATE_LOGON);
+}
+
+// CHARACTER_LIST_RETRIEVAL_RESULT: the reference's fire function (FUN_140c3cfb0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHARACTER_LIST_RETRIEVAL_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3cfb0(list, args);
+}
+
+// ref: FUN_140c52290
+void EventSignal_CHARACTER_LIST_RETRIEVAL_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_LIST_RETRIEVAL_RESULT);
 }
 
 // ref: FUN_140c3d260
@@ -148,6 +583,28 @@ void EventSignal_CHARACTER_LIST_RETRIEVING(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_LIST_RETRIEVING);
 }
 
+// CHARACTER_LIST_UPDATE: the reference's fire function (FUN_140c3d4d0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHARACTER_LIST_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3d4d0(list, args);
+}
+
+// ref: FUN_140c52450
+void EventSignal_CHARACTER_LIST_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_LIST_UPDATE);
+}
+
+// CHARACTER_UNDELETE_FINISHED: the reference's fire function (FUN_140c3d770, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHARACTER_UNDELETE_FINISHED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3d770(list, args);
+}
+
+// ref: FUN_140c52530
+void EventSignal_CHARACTER_UNDELETE_FINISHED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_UNDELETE_FINISHED);
+}
+
 // ref: FUN_140c3da70
 void EventFire_CHARACTER_UNDELETE_STATUS_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -158,6 +615,17 @@ void EventFire_CHARACTER_UNDELETE_STATUS_CHANGED(FrameScriptEvents::EventListene
 // ref: FUN_140c52610
 void EventSignal_CHARACTER_UNDELETE_STATUS_CHANGED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_UNDELETE_STATUS_CHANGED);
+}
+
+// CHARACTER_UPGRADE_UNREVOKE_RESULT: the reference's fire function (FUN_140c3dce0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHARACTER_UPGRADE_UNREVOKE_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3dce0(list, args);
+}
+
+// ref: FUN_140c526f0
+void EventSignal_CHARACTER_UPGRADE_UNREVOKE_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHARACTER_UPGRADE_UNREVOKE_RESULT);
 }
 
 // ref: FUN_140c3b8e0
@@ -172,6 +640,787 @@ void EventSignal_CHAR_RENAME_IN_PROGRESS(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_CHAR_RENAME_IN_PROGRESS);
 }
 
+// CHAR_RESTORE_COMPLETE: the reference's fire function (FUN_140c3bb50, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAR_RESTORE_COMPLETE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3bb50(list, args);
+}
+
+// ref: FUN_140c51c70
+void EventSignal_CHAR_RESTORE_COMPLETE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAR_RESTORE_COMPLETE);
+}
+
+// CHAT_COMBAT_MSG_ARENA_POINTS_GAIN: the reference's fire function (FUN_140c3df90, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_COMBAT_MSG_ARENA_POINTS_GAIN(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3df90(list, args);
+}
+
+// ref: FUN_140c527d0
+void EventSignal_CHAT_COMBAT_MSG_ARENA_POINTS_GAIN(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_COMBAT_MSG_ARENA_POINTS_GAIN);
+}
+
+// CHAT_MSG_ACHIEVEMENT: the reference's fire function (FUN_140c3e210, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_ACHIEVEMENT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3e210(list, args);
+}
+
+// ref: FUN_140c528b0
+void EventSignal_CHAT_MSG_ACHIEVEMENT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_ACHIEVEMENT);
+}
+
+// CHAT_MSG_ADDON: the reference's fire function (FUN_140c3e490, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_ADDON(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3e490(list, args);
+}
+
+// ref: FUN_140c52990
+void EventSignal_CHAT_MSG_ADDON(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_ADDON);
+}
+
+// CHAT_MSG_ADDON_LOGGED: the reference's fire function (FUN_140c3e710, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_ADDON_LOGGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3e710(list, args);
+}
+
+// ref: FUN_140c52a70
+void EventSignal_CHAT_MSG_ADDON_LOGGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_ADDON_LOGGED);
+}
+
+// CHAT_MSG_AFK: the reference's fire function (FUN_140c3e990, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_AFK(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3e990(list, args);
+}
+
+// ref: FUN_140c52b50
+void EventSignal_CHAT_MSG_AFK(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_AFK);
+}
+
+// CHAT_MSG_BG_SYSTEM_ALLIANCE: the reference's fire function (FUN_140c3ec10, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_BG_SYSTEM_ALLIANCE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3ec10(list, args);
+}
+
+// ref: FUN_140c52c30
+void EventSignal_CHAT_MSG_BG_SYSTEM_ALLIANCE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_BG_SYSTEM_ALLIANCE);
+}
+
+// CHAT_MSG_BG_SYSTEM_HORDE: the reference's fire function (FUN_140c3ee90, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_BG_SYSTEM_HORDE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3ee90(list, args);
+}
+
+// ref: FUN_140c52d10
+void EventSignal_CHAT_MSG_BG_SYSTEM_HORDE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_BG_SYSTEM_HORDE);
+}
+
+// CHAT_MSG_BG_SYSTEM_NEUTRAL: the reference's fire function (FUN_140c3f110, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_BG_SYSTEM_NEUTRAL(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3f110(list, args);
+}
+
+// ref: FUN_140c52df0
+void EventSignal_CHAT_MSG_BG_SYSTEM_NEUTRAL(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_BG_SYSTEM_NEUTRAL);
+}
+
+// CHAT_MSG_BN: the reference's fire function (FUN_140c3f390, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_BN(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3f390(list, args);
+}
+
+// ref: FUN_140c52ed0
+void EventSignal_CHAT_MSG_BN(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_BN);
+}
+
+// CHAT_MSG_BN_INLINE_TOAST_ALERT: the reference's fire function (FUN_140c3f610, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_BN_INLINE_TOAST_ALERT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3f610(list, args);
+}
+
+// ref: FUN_140c52fb0
+void EventSignal_CHAT_MSG_BN_INLINE_TOAST_ALERT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_BN_INLINE_TOAST_ALERT);
+}
+
+// CHAT_MSG_BN_INLINE_TOAST_BROADCAST: the reference's fire function (FUN_140c3f890, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_BN_INLINE_TOAST_BROADCAST(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3f890(list, args);
+}
+
+// ref: FUN_140c53090
+void EventSignal_CHAT_MSG_BN_INLINE_TOAST_BROADCAST(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_BN_INLINE_TOAST_BROADCAST);
+}
+
+// CHAT_MSG_BN_INLINE_TOAST_BROADCAST_INFORM: the reference's fire function (FUN_140c3fb10, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_BN_INLINE_TOAST_BROADCAST_INFORM(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3fb10(list, args);
+}
+
+// ref: FUN_140c53170
+void EventSignal_CHAT_MSG_BN_INLINE_TOAST_BROADCAST_INFORM(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_BN_INLINE_TOAST_BROADCAST_INFORM);
+}
+
+// CHAT_MSG_BN_INLINE_TOAST_CONVERSATION: the reference's fire function (FUN_140c3fd90, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_BN_INLINE_TOAST_CONVERSATION(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c3fd90(list, args);
+}
+
+// ref: FUN_140c53250
+void EventSignal_CHAT_MSG_BN_INLINE_TOAST_CONVERSATION(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_BN_INLINE_TOAST_CONVERSATION);
+}
+
+// CHAT_MSG_BN_WHISPER: the reference's fire function (FUN_140c40010, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_BN_WHISPER(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c40010(list, args);
+}
+
+// ref: FUN_140c53330
+void EventSignal_CHAT_MSG_BN_WHISPER(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_BN_WHISPER);
+}
+
+// CHAT_MSG_BN_WHISPER_INFORM: the reference's fire function (FUN_140c40290, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_BN_WHISPER_INFORM(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c40290(list, args);
+}
+
+// ref: FUN_140c53410
+void EventSignal_CHAT_MSG_BN_WHISPER_INFORM(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_BN_WHISPER_INFORM);
+}
+
+// CHAT_MSG_BN_WHISPER_PLAYER_OFFLINE: the reference's fire function (FUN_140c40510, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_BN_WHISPER_PLAYER_OFFLINE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c40510(list, args);
+}
+
+// ref: FUN_140c534f0
+void EventSignal_CHAT_MSG_BN_WHISPER_PLAYER_OFFLINE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_BN_WHISPER_PLAYER_OFFLINE);
+}
+
+// CHAT_MSG_CHANNEL: the reference's fire function (FUN_140c40790, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_CHANNEL(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c40790(list, args);
+}
+
+// ref: FUN_140c535d0
+void EventSignal_CHAT_MSG_CHANNEL(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_CHANNEL);
+}
+
+// CHAT_MSG_CHANNEL_JOIN: the reference's fire function (FUN_140c40a10, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_CHANNEL_JOIN(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c40a10(list, args);
+}
+
+// ref: FUN_140c536b0
+void EventSignal_CHAT_MSG_CHANNEL_JOIN(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_CHANNEL_JOIN);
+}
+
+// CHAT_MSG_CHANNEL_LEAVE: the reference's fire function (FUN_140c40c90, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_CHANNEL_LEAVE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c40c90(list, args);
+}
+
+// ref: FUN_140c53790
+void EventSignal_CHAT_MSG_CHANNEL_LEAVE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_CHANNEL_LEAVE);
+}
+
+// CHAT_MSG_CHANNEL_LIST: the reference's fire function (FUN_140c40f10, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_CHANNEL_LIST(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c40f10(list, args);
+}
+
+// ref: FUN_140c53870
+void EventSignal_CHAT_MSG_CHANNEL_LIST(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_CHANNEL_LIST);
+}
+
+// CHAT_MSG_CHANNEL_NOTICE: the reference's fire function (FUN_140c41190, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_CHANNEL_NOTICE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c41190(list, args);
+}
+
+// ref: FUN_140c53950
+void EventSignal_CHAT_MSG_CHANNEL_NOTICE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_CHANNEL_NOTICE);
+}
+
+// CHAT_MSG_CHANNEL_NOTICE_USER: the reference's fire function (FUN_140c41410, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_CHANNEL_NOTICE_USER(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c41410(list, args);
+}
+
+// ref: FUN_140c53a30
+void EventSignal_CHAT_MSG_CHANNEL_NOTICE_USER(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_CHANNEL_NOTICE_USER);
+}
+
+// CHAT_MSG_COMBAT_FACTION_CHANGE: the reference's fire function (FUN_140c41690, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_COMBAT_FACTION_CHANGE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c41690(list, args);
+}
+
+// ref: FUN_140c53b10
+void EventSignal_CHAT_MSG_COMBAT_FACTION_CHANGE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_COMBAT_FACTION_CHANGE);
+}
+
+// CHAT_MSG_COMBAT_HONOR_GAIN: the reference's fire function (FUN_140c41910, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_COMBAT_HONOR_GAIN(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c41910(list, args);
+}
+
+// ref: FUN_140c53bf0
+void EventSignal_CHAT_MSG_COMBAT_HONOR_GAIN(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_COMBAT_HONOR_GAIN);
+}
+
+// CHAT_MSG_COMBAT_MISC_INFO: the reference's fire function (FUN_140c41b90, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_COMBAT_MISC_INFO(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c41b90(list, args);
+}
+
+// ref: FUN_140c53cd0
+void EventSignal_CHAT_MSG_COMBAT_MISC_INFO(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_COMBAT_MISC_INFO);
+}
+
+// CHAT_MSG_COMBAT_XP_GAIN: the reference's fire function (FUN_140c41e10, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_COMBAT_XP_GAIN(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c41e10(list, args);
+}
+
+// ref: FUN_140c53db0
+void EventSignal_CHAT_MSG_COMBAT_XP_GAIN(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_COMBAT_XP_GAIN);
+}
+
+// CHAT_MSG_COMMUNITIES_CHANNEL: the reference's fire function (FUN_140c42090, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_COMMUNITIES_CHANNEL(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c42090(list, args);
+}
+
+// ref: FUN_140c53e90
+void EventSignal_CHAT_MSG_COMMUNITIES_CHANNEL(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_COMMUNITIES_CHANNEL);
+}
+
+// CHAT_MSG_CURRENCY: the reference's fire function (FUN_140c42310, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_CURRENCY(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c42310(list, args);
+}
+
+// ref: FUN_140c53f70
+void EventSignal_CHAT_MSG_CURRENCY(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_CURRENCY);
+}
+
+// CHAT_MSG_DND: the reference's fire function (FUN_140c42590, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_DND(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c42590(list, args);
+}
+
+// ref: FUN_140c54050
+void EventSignal_CHAT_MSG_DND(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_DND);
+}
+
+// CHAT_MSG_EMOTE: the reference's fire function (FUN_140c42810, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_EMOTE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c42810(list, args);
+}
+
+// ref: FUN_140c54130
+void EventSignal_CHAT_MSG_EMOTE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_EMOTE);
+}
+
+// CHAT_MSG_FILTERED: the reference's fire function (FUN_140c42a90, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_FILTERED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c42a90(list, args);
+}
+
+// ref: FUN_140c54210
+void EventSignal_CHAT_MSG_FILTERED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_FILTERED);
+}
+
+// CHAT_MSG_GUILD: the reference's fire function (FUN_140c43210, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_GUILD(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c43210(list, args);
+}
+
+// ref: FUN_140c544b0
+void EventSignal_CHAT_MSG_GUILD(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_GUILD);
+}
+
+// CHAT_MSG_GUILD_ACHIEVEMENT: the reference's fire function (FUN_140c42d10, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_GUILD_ACHIEVEMENT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c42d10(list, args);
+}
+
+// ref: FUN_140c542f0
+void EventSignal_CHAT_MSG_GUILD_ACHIEVEMENT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_GUILD_ACHIEVEMENT);
+}
+
+// CHAT_MSG_GUILD_DEATHS: the reference's fire function (FUN_140c42f90, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_GUILD_DEATHS(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c42f90(list, args);
+}
+
+// ref: FUN_140c543d0
+void EventSignal_CHAT_MSG_GUILD_DEATHS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_GUILD_DEATHS);
+}
+
+// CHAT_MSG_GUILD_ITEM_LOOTED: the reference's fire function (FUN_140c43490, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_GUILD_ITEM_LOOTED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c43490(list, args);
+}
+
+// ref: FUN_140c54590
+void EventSignal_CHAT_MSG_GUILD_ITEM_LOOTED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_GUILD_ITEM_LOOTED);
+}
+
+// CHAT_MSG_IGNORED: the reference's fire function (FUN_140c43710, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_IGNORED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c43710(list, args);
+}
+
+// ref: FUN_140c54670
+void EventSignal_CHAT_MSG_IGNORED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_IGNORED);
+}
+
+// CHAT_MSG_INSTANCE_CHAT: the reference's fire function (FUN_140c43990, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_INSTANCE_CHAT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c43990(list, args);
+}
+
+// ref: FUN_140c54750
+void EventSignal_CHAT_MSG_INSTANCE_CHAT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_INSTANCE_CHAT);
+}
+
+// CHAT_MSG_INSTANCE_CHAT_LEADER: the reference's fire function (FUN_140c43c10, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_INSTANCE_CHAT_LEADER(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c43c10(list, args);
+}
+
+// ref: FUN_140c54830
+void EventSignal_CHAT_MSG_INSTANCE_CHAT_LEADER(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_INSTANCE_CHAT_LEADER);
+}
+
+// CHAT_MSG_LOOT: the reference's fire function (FUN_140c43e90, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_LOOT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c43e90(list, args);
+}
+
+// ref: FUN_140c54910
+void EventSignal_CHAT_MSG_LOOT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_LOOT);
+}
+
+// CHAT_MSG_MONEY: the reference's fire function (FUN_140c44110, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_MONEY(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c44110(list, args);
+}
+
+// ref: FUN_140c549f0
+void EventSignal_CHAT_MSG_MONEY(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_MONEY);
+}
+
+// CHAT_MSG_MONSTER_EMOTE: the reference's fire function (FUN_140c44390, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_MONSTER_EMOTE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c44390(list, args);
+}
+
+// ref: FUN_140c54ad0
+void EventSignal_CHAT_MSG_MONSTER_EMOTE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_MONSTER_EMOTE);
+}
+
+// CHAT_MSG_MONSTER_PARTY: the reference's fire function (FUN_140c44610, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_MONSTER_PARTY(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c44610(list, args);
+}
+
+// ref: FUN_140c54bb0
+void EventSignal_CHAT_MSG_MONSTER_PARTY(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_MONSTER_PARTY);
+}
+
+// CHAT_MSG_MONSTER_SAY: the reference's fire function (FUN_140c44890, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_MONSTER_SAY(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c44890(list, args);
+}
+
+// ref: FUN_140c54c90
+void EventSignal_CHAT_MSG_MONSTER_SAY(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_MONSTER_SAY);
+}
+
+// CHAT_MSG_MONSTER_WHISPER: the reference's fire function (FUN_140c44b10, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_MONSTER_WHISPER(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c44b10(list, args);
+}
+
+// ref: FUN_140c54d70
+void EventSignal_CHAT_MSG_MONSTER_WHISPER(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_MONSTER_WHISPER);
+}
+
+// CHAT_MSG_MONSTER_YELL: the reference's fire function (FUN_140c44d90, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_MONSTER_YELL(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c44d90(list, args);
+}
+
+// ref: FUN_140c54e50
+void EventSignal_CHAT_MSG_MONSTER_YELL(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_MONSTER_YELL);
+}
+
+// CHAT_MSG_OFFICER: the reference's fire function (FUN_140c45010, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_OFFICER(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c45010(list, args);
+}
+
+// ref: FUN_140c54f30
+void EventSignal_CHAT_MSG_OFFICER(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_OFFICER);
+}
+
+// CHAT_MSG_OPENING: the reference's fire function (FUN_140c45290, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_OPENING(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c45290(list, args);
+}
+
+// ref: FUN_140c55010
+void EventSignal_CHAT_MSG_OPENING(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_OPENING);
+}
+
+// CHAT_MSG_PARTY: the reference's fire function (FUN_140c45510, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_PARTY(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c45510(list, args);
+}
+
+// ref: FUN_140c550f0
+void EventSignal_CHAT_MSG_PARTY(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_PARTY);
+}
+
+// CHAT_MSG_PARTY_LEADER: the reference's fire function (FUN_140c45790, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_PARTY_LEADER(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c45790(list, args);
+}
+
+// ref: FUN_140c551d0
+void EventSignal_CHAT_MSG_PARTY_LEADER(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_PARTY_LEADER);
+}
+
+// CHAT_MSG_PET_BATTLE_COMBAT_LOG: the reference's fire function (FUN_140c45a10, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_PET_BATTLE_COMBAT_LOG(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c45a10(list, args);
+}
+
+// ref: FUN_140c552b0
+void EventSignal_CHAT_MSG_PET_BATTLE_COMBAT_LOG(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_PET_BATTLE_COMBAT_LOG);
+}
+
+// CHAT_MSG_PET_BATTLE_INFO: the reference's fire function (FUN_140c45c90, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_PET_BATTLE_INFO(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c45c90(list, args);
+}
+
+// ref: FUN_140c55390
+void EventSignal_CHAT_MSG_PET_BATTLE_INFO(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_PET_BATTLE_INFO);
+}
+
+// CHAT_MSG_PET_INFO: the reference's fire function (FUN_140c45f10, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_PET_INFO(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c45f10(list, args);
+}
+
+// ref: FUN_140c55470
+void EventSignal_CHAT_MSG_PET_INFO(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_PET_INFO);
+}
+
+// CHAT_MSG_PING: the reference's fire function (FUN_140c46190, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_PING(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c46190(list, args);
+}
+
+// ref: FUN_140c55550
+void EventSignal_CHAT_MSG_PING(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_PING);
+}
+
+// CHAT_MSG_RAID: the reference's fire function (FUN_140c46910, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_RAID(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c46910(list, args);
+}
+
+// ref: FUN_140c557f0
+void EventSignal_CHAT_MSG_RAID(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_RAID);
+}
+
+// CHAT_MSG_RAID_BOSS_EMOTE: the reference's fire function (FUN_140c46410, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_RAID_BOSS_EMOTE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c46410(list, args);
+}
+
+// ref: FUN_140c55630
+void EventSignal_CHAT_MSG_RAID_BOSS_EMOTE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_RAID_BOSS_EMOTE);
+}
+
+// CHAT_MSG_RAID_BOSS_WHISPER: the reference's fire function (FUN_140c46690, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_RAID_BOSS_WHISPER(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c46690(list, args);
+}
+
+// ref: FUN_140c55710
+void EventSignal_CHAT_MSG_RAID_BOSS_WHISPER(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_RAID_BOSS_WHISPER);
+}
+
+// CHAT_MSG_RAID_LEADER: the reference's fire function (FUN_140c46b90, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_RAID_LEADER(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c46b90(list, args);
+}
+
+// ref: FUN_140c558d0
+void EventSignal_CHAT_MSG_RAID_LEADER(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_RAID_LEADER);
+}
+
+// CHAT_MSG_RAID_WARNING: the reference's fire function (FUN_140c46e10, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_RAID_WARNING(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c46e10(list, args);
+}
+
+// ref: FUN_140c559b0
+void EventSignal_CHAT_MSG_RAID_WARNING(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_RAID_WARNING);
+}
+
+// CHAT_MSG_RESTRICTED: the reference's fire function (FUN_140c47090, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_RESTRICTED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c47090(list, args);
+}
+
+// ref: FUN_140c55a90
+void EventSignal_CHAT_MSG_RESTRICTED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_RESTRICTED);
+}
+
+// CHAT_MSG_SAY: the reference's fire function (FUN_140c47310, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_SAY(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c47310(list, args);
+}
+
+// ref: FUN_140c55b70
+void EventSignal_CHAT_MSG_SAY(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_SAY);
+}
+
+// CHAT_MSG_SKILL: the reference's fire function (FUN_140c47590, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_SKILL(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c47590(list, args);
+}
+
+// ref: FUN_140c55c50
+void EventSignal_CHAT_MSG_SKILL(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_SKILL);
+}
+
+// CHAT_MSG_SYSTEM: the reference's fire function (FUN_140c47810, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_SYSTEM(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c47810(list, args);
+}
+
+// ref: FUN_140c55d30
+void EventSignal_CHAT_MSG_SYSTEM(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_SYSTEM);
+}
+
+// CHAT_MSG_TARGETICONS: the reference's fire function (FUN_140c47a90, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_TARGETICONS(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c47a90(list, args);
+}
+
+// ref: FUN_140c55e10
+void EventSignal_CHAT_MSG_TARGETICONS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_TARGETICONS);
+}
+
+// CHAT_MSG_TEXT_EMOTE: the reference's fire function (FUN_140c47d10, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_TEXT_EMOTE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c47d10(list, args);
+}
+
+// ref: FUN_140c55ef0
+void EventSignal_CHAT_MSG_TEXT_EMOTE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_TEXT_EMOTE);
+}
+
+// CHAT_MSG_TRADESKILLS: the reference's fire function (FUN_140c47f90, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_TRADESKILLS(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c47f90(list, args);
+}
+
+// ref: FUN_140c55fd0
+void EventSignal_CHAT_MSG_TRADESKILLS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_TRADESKILLS);
+}
+
+// CHAT_MSG_VOICE_TEXT: the reference's fire function (FUN_140c48210, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_VOICE_TEXT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c48210(list, args);
+}
+
+// ref: FUN_140c560b0
+void EventSignal_CHAT_MSG_VOICE_TEXT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_VOICE_TEXT);
+}
+
+// CHAT_MSG_WHISPER: the reference's fire function (FUN_140c48490, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_WHISPER(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c48490(list, args);
+}
+
+// ref: FUN_140c56190
+void EventSignal_CHAT_MSG_WHISPER(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_WHISPER);
+}
+
+// CHAT_MSG_WHISPER_INFORM: the reference's fire function (FUN_140c48710, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_WHISPER_INFORM(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c48710(list, args);
+}
+
+// ref: FUN_140c56270
+void EventSignal_CHAT_MSG_WHISPER_INFORM(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_WHISPER_INFORM);
+}
+
+// CHAT_MSG_YELL: the reference's fire function (FUN_140c48990, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_MSG_YELL(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c48990(list, args);
+}
+
+// ref: FUN_140c56350
+void EventSignal_CHAT_MSG_YELL(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_MSG_YELL);
+}
+
+// CHAT_SERVER_DISCONNECTED: the reference's fire function (FUN_140c48c10, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CHAT_SERVER_DISCONNECTED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c48c10(list, args);
+}
+
+// ref: FUN_140c56430
+void EventSignal_CHAT_SERVER_DISCONNECTED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_SERVER_DISCONNECTED);
+}
+
 // ref: FUN_140c48eb0
 void EventFire_CHAT_SERVER_RECONNECTED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -184,6 +1433,17 @@ void EventSignal_CHAT_SERVER_RECONNECTED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_CHAT_SERVER_RECONNECTED);
 }
 
+// CINEMATIC_START: the reference's fire function (FUN_140c49120, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CINEMATIC_START(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c49120(list, args);
+}
+
+// ref: FUN_140c565f0
+void EventSignal_CINEMATIC_START(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CINEMATIC_START);
+}
+
 // ref: FUN_140c49420
 void EventFire_CINEMATIC_STOP(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -194,6 +1454,17 @@ void EventFire_CINEMATIC_STOP(FrameScriptEvents::EventListenerList* list, void* 
 // ref: FUN_140c566d0
 void EventSignal_CINEMATIC_STOP(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_CINEMATIC_STOP);
+}
+
+// CLASS_TRIAL_CHARACTER_CREATE_RESULT: the reference's fire function (FUN_140c49690, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CLASS_TRIAL_CHARACTER_CREATE_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c49690(list, args);
+}
+
+// ref: FUN_140c567b0
+void EventSignal_CLASS_TRIAL_CHARACTER_CREATE_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CLASS_TRIAL_CHARACTER_CREATE_RESULT);
 }
 
 // ref: FUN_140c49e20
@@ -218,6 +1489,17 @@ void EventFire_CLIENT_FEATURE_STATUS_CHANGED(FrameScriptEvents::EventListenerLis
 // ref: FUN_140c56b30
 void EventSignal_CLIENT_FEATURE_STATUS_CHANGED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_CLIENT_FEATURE_STATUS_CHANGED);
+}
+
+// COMBAT_RESULT: the reference's fire function (FUN_140f6fb60, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_COMBAT_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f6fb60(list, args);
+}
+
+// ref: FUN_140f7ae70
+void EventSignal_COMBAT_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_COMBAT_RESULT);
 }
 
 // ref: FUN_140d50130
@@ -256,6 +1538,50 @@ void EventSignal_CONSOLE_FONT_SIZE_CHANGED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_CONSOLE_FONT_SIZE_CHANGED);
 }
 
+// CONSOLE_LOG: the reference's fire function (FUN_140d50880, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CONSOLE_LOG(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140d50880(list, args);
+}
+
+// ref: FUN_140d569b0
+void EventSignal_CONSOLE_LOG(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CONSOLE_LOG);
+}
+
+// CONSOLE_MESSAGE: the reference's fire function (FUN_140d50b50, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CONSOLE_MESSAGE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140d50b50(list, args);
+}
+
+// ref: FUN_140d56a90
+void EventSignal_CONSOLE_MESSAGE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CONSOLE_MESSAGE);
+}
+
+// CURSOR_CHANGED: the reference's fire function (FUN_140f70dc0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CURSOR_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f70dc0(list, args);
+}
+
+// ref: FUN_140f7b490
+void EventSignal_CURSOR_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CURSOR_CHANGED);
+}
+
+// CUSTOMIZE_CHARACTER_RESULT: the reference's fire function (FUN_140c4a300, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CUSTOMIZE_CHARACTER_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4a300(list, args);
+}
+
+// ref: FUN_140c56c10
+void EventSignal_CUSTOMIZE_CHARACTER_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CUSTOMIZE_CHARACTER_RESULT);
+}
+
 // ref: FUN_140c4a650
 void EventFire_CUSTOMIZE_CHARACTER_STARTED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -280,6 +1606,17 @@ void EventSignal_CUSTOM_ANIM(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_CUSTOM_ANIM);
 }
 
+// CVAR_UPDATE: the reference's fire function (FUN_140d515c0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_CVAR_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140d515c0(list, args);
+}
+
+// ref: FUN_140d56e10
+void EventSignal_CVAR_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_CVAR_UPDATE);
+}
+
 // ref: FUN_140f713a0
 void EventFire_DB_RECORD_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -292,6 +1629,17 @@ void EventSignal_DB_RECORD_UPDATE(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_DB_RECORD_UPDATE);
 }
 
+// DB_RESULT: the reference's fire function (FUN_140f71880, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_DB_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f71880(list, args);
+}
+
+// ref: FUN_140f7b810
+void EventSignal_DB_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_DB_RESULT);
+}
+
 // ref: FUN_140f71610
 void EventFire_DB_RESULT_COMPLETE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -302,6 +1650,28 @@ void EventFire_DB_RESULT_COMPLETE(FrameScriptEvents::EventListenerList* list, vo
 // ref: FUN_140f7b730
 void EventSignal_DB_RESULT_COMPLETE(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_DB_RESULT_COMPLETE);
+}
+
+// DEBUG_ACTIONS: the reference's fire function (FUN_140f71b50, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_DEBUG_ACTIONS(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f71b50(list, args);
+}
+
+// ref: FUN_140f7b8f0
+void EventSignal_DEBUG_ACTIONS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_DEBUG_ACTIONS);
+}
+
+// DEBUG_GAME_EVENT: the reference's fire function (FUN_140f71e20, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_DEBUG_GAME_EVENT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f71e20(list, args);
+}
+
+// ref: FUN_140f7b9d0
+void EventSignal_DEBUG_GAME_EVENT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_DEBUG_GAME_EVENT);
 }
 
 // ref: FUN_140f720a0
@@ -340,6 +1710,39 @@ void EventSignal_DEBUG_PORT_LOCS_UPDATED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_DEBUG_PORT_LOCS_UPDATED);
 }
 
+// DEBUG_SPELL_UPDATE: the reference's fire function (FUN_140f727f0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_DEBUG_SPELL_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f727f0(list, args);
+}
+
+// ref: FUN_140f7bd50
+void EventSignal_DEBUG_SPELL_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_DEBUG_SPELL_UPDATE);
+}
+
+// DEBUG_UNIT_INFO: the reference's fire function (FUN_140f72a70, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_DEBUG_UNIT_INFO(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f72a70(list, args);
+}
+
+// ref: FUN_140f7be30
+void EventSignal_DEBUG_UNIT_INFO(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_DEBUG_UNIT_INFO);
+}
+
+// DELETED_CHARACTER_LIST_RETRIEVAL_RESULT: the reference's fire function (FUN_140c4a8c0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_DELETED_CHARACTER_LIST_RETRIEVAL_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4a8c0(list, args);
+}
+
+// ref: FUN_140c56dd0
+void EventSignal_DELETED_CHARACTER_LIST_RETRIEVAL_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_DELETED_CHARACTER_LIST_RETRIEVAL_RESULT);
+}
+
 // ref: FUN_140c4ab70
 void EventFire_DELETED_CHARACTER_LIST_RETRIEVING(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -362,6 +1765,17 @@ void EventFire_DISABLE_TAXI_BENCHMARK(FrameScriptEvents::EventListenerList* list
 // ref: FUN_140e4e870
 void EventSignal_DISABLE_TAXI_BENCHMARK(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_DISABLE_TAXI_BENCHMARK);
+}
+
+// DISPLAY_PROMOTION: the reference's fire function (FUN_140e41e30, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_DISPLAY_PROMOTION(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e41e30(list, args);
+}
+
+// ref: FUN_140e4e950
+void EventSignal_DISPLAY_PROMOTION(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_DISPLAY_PROMOTION);
 }
 
 // ref: FUN_140b1deb0
@@ -400,6 +1814,17 @@ void EventSignal_EVENT_CLASS_TRIAL_TIMER_START(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_EVENT_CLASS_TRIAL_TIMER_START);
 }
 
+// EVENT_RAISED: the reference's fire function (FUN_140f74e10, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_EVENT_RAISED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f74e10(list, args);
+}
+
+// ref: FUN_140f7c990
+void EventSignal_EVENT_RAISED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_EVENT_RAISED);
+}
+
 // ref: FUN_140f751f0
 void EventFire_EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -436,6 +1861,17 @@ void EventSignal_FORCE_DECLINE_CHARACTER(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_FORCE_DECLINE_CHARACTER);
 }
 
+// FORCE_RENAME_CHARACTER: the reference's fire function (FUN_140c4b2c0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_FORCE_RENAME_CHARACTER(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4b2c0(list, args);
+}
+
+// ref: FUN_140c57150
+void EventSignal_FORCE_RENAME_CHARACTER(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_FORCE_RENAME_CHARACTER);
+}
+
 // ref: FUN_140f75460
 void EventFire_FRAMESTACK_VISIBILITY_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -458,6 +1894,17 @@ void EventFire_FRAMES_LOADED(FrameScriptEvents::EventListenerList* list, void* a
 // ref: FUN_140c57230
 void EventSignal_FRAMES_LOADED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_FRAMES_LOADED);
+}
+
+// GAME_PAD_ACTIVE_CHANGED: the reference's fire function (FUN_140ef36a0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_GAME_PAD_ACTIVE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140ef36a0(list, args);
+}
+
+// ref: FUN_140efd8b0
+void EventSignal_GAME_PAD_ACTIVE_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_GAME_PAD_ACTIVE_CHANGED);
 }
 
 // ref: FUN_140ef3950
@@ -494,6 +1941,61 @@ void EventFire_GAME_PAD_DISCONNECTED(FrameScriptEvents::EventListenerList* list,
 // ref: FUN_140efdb50
 void EventSignal_GAME_PAD_DISCONNECTED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_GAME_PAD_DISCONNECTED);
+}
+
+// GAME_PAD_POWER_CHANGED: the reference's fire function (FUN_140ef40a0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_GAME_PAD_POWER_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140ef40a0(list, args);
+}
+
+// ref: FUN_140efdc30
+void EventSignal_GAME_PAD_POWER_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_GAME_PAD_POWER_CHANGED);
+}
+
+// GENERIC_ERROR: the reference's fire function (FUN_140e42650, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_GENERIC_ERROR(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e42650(list, args);
+}
+
+// ref: FUN_140e4ebf0
+void EventSignal_GENERIC_ERROR(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_GENERIC_ERROR);
+}
+
+// GLOBAL_MOUSE_DOWN: the reference's fire function (FUN_140e42920, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_GLOBAL_MOUSE_DOWN(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e42920(list, args);
+}
+
+// ref: FUN_140e4ecd0
+void EventSignal_GLOBAL_MOUSE_DOWN(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_GLOBAL_MOUSE_DOWN);
+}
+
+// GLOBAL_MOUSE_UP: the reference's fire function (FUN_140e42bf0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_GLOBAL_MOUSE_UP(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e42bf0(list, args);
+}
+
+// ref: FUN_140e4edb0
+void EventSignal_GLOBAL_MOUSE_UP(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_GLOBAL_MOUSE_UP);
+}
+
+// GLUE_CONSOLE_LOG: the reference's fire function (FUN_140d52110, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_GLUE_CONSOLE_LOG(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140d52110(list, args);
+}
+
+// ref: FUN_140d57190
+void EventSignal_GLUE_CONSOLE_LOG(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_GLUE_CONSOLE_LOG);
 }
 
 // ref: FUN_140b1e120
@@ -566,6 +2068,28 @@ void EventFire_INITIAL_HOTFIXES_APPLIED(FrameScriptEvents::EventListenerList* li
 // ref: FUN_140e4ef70
 void EventSignal_INITIAL_HOTFIXES_APPLIED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_INITIAL_HOTFIXES_APPLIED);
+}
+
+// KIOSK_SESSION_EXPIRATION_CHANGED: the reference's fire function (FUN_140c02850, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_KIOSK_SESSION_EXPIRATION_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c02850(list, args);
+}
+
+// ref: FUN_140c07c50
+void EventSignal_KIOSK_SESSION_EXPIRATION_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_KIOSK_SESSION_EXPIRATION_CHANGED);
+}
+
+// KIOSK_SESSION_EXPIRATION_WARNING: the reference's fire function (FUN_140c02b00, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_KIOSK_SESSION_EXPIRATION_WARNING(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c02b00(list, args);
+}
+
+// ref: FUN_140c07d30
+void EventSignal_KIOSK_SESSION_EXPIRATION_WARNING(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_KIOSK_SESSION_EXPIRATION_WARNING);
 }
 
 // ref: FUN_140c02db0
@@ -712,6 +2236,28 @@ void EventSignal_LOADING_SCREEN_DISABLED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_LOADING_SCREEN_DISABLED);
 }
 
+// LOAD_DEBUG_TOOL: the reference's fire function (FUN_140f75e20, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_LOAD_DEBUG_TOOL(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f75e20(list, args);
+}
+
+// ref: FUN_140f7ced0
+void EventSignal_LOAD_DEBUG_TOOL(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_LOAD_DEBUG_TOOL);
+}
+
+// LOC_RESULT: the reference's fire function (FUN_140e436e0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_LOC_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e436e0(list, args);
+}
+
+// ref: FUN_140e4f130
+void EventSignal_LOC_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_LOC_RESULT);
+}
+
 // ref: FUN_1410d86c0
 void EventFire_LOGIN_STATE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -736,6 +2282,17 @@ void EventSignal_LOGOUT_CANCEL(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_LOGOUT_CANCEL);
 }
 
+// MANIPULATOR_EVENT: the reference's fire function (FUN_140f760f0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_MANIPULATOR_EVENT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f760f0(list, args);
+}
+
+// ref: FUN_140f7cfb0
+void EventSignal_MANIPULATOR_EVENT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_MANIPULATOR_EVENT);
+}
+
 // ref: FUN_140fb4ee0
 void EventFire_MAX_EXPANSION_LEVEL_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -758,6 +2315,17 @@ void EventFire_MIN_EXPANSION_LEVEL_UPDATED(FrameScriptEvents::EventListenerList*
 // ref: FUN_140fb5710
 void EventSignal_MIN_EXPANSION_LEVEL_UPDATED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_MIN_EXPANSION_LEVEL_UPDATED);
+}
+
+// MODIFIER_STATE_CHANGED: the reference's fire function (FUN_140c048e0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_MODIFIER_STATE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c048e0(list, args);
+}
+
+// ref: FUN_140c087b0
+void EventSignal_MODIFIER_STATE_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_MODIFIER_STATE_CHANGED);
 }
 
 // ref: FUN_140f763f0
@@ -796,6 +2364,28 @@ void EventSignal_NOTIFY_CHAT_SUPPRESSED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_NOTIFY_CHAT_SUPPRESSED);
 }
 
+// OPEN_STATUS_DIALOG: the reference's fire function (FUN_140c4c1c0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_OPEN_STATUS_DIALOG(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4c1c0(list, args);
+}
+
+// ref: FUN_140c57690
+void EventSignal_OPEN_STATUS_DIALOG(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_OPEN_STATUS_DIALOG);
+}
+
+// PLAYER_ADDON_LIST_RESULT: the reference's fire function (FUN_140f76660, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_PLAYER_ADDON_LIST_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f76660(list, args);
+}
+
+// ref: FUN_140f7d170
+void EventSignal_PLAYER_ADDON_LIST_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_PLAYER_ADDON_LIST_RESULT);
+}
+
 // ref: FUN_140e44890
 void EventFire_PLAYER_CAMPING(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -806,6 +2396,17 @@ void EventFire_PLAYER_CAMPING(FrameScriptEvents::EventListenerList* list, void* 
 // ref: FUN_140e4f750
 void EventSignal_PLAYER_CAMPING(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_PLAYER_CAMPING);
+}
+
+// PLAYER_ENTERING_WORLD: the reference's fire function (FUN_140e44b00, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_PLAYER_ENTERING_WORLD(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e44b00(list, args);
+}
+
+// ref: FUN_140e4f830
+void EventSignal_PLAYER_ENTERING_WORLD(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_PLAYER_ENTERING_WORLD);
 }
 
 // ref: FUN_140e44e00
@@ -868,6 +2469,17 @@ void EventSignal_PLAYTIME_CHANGED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_PLAYTIME_CHANGED);
 }
 
+// PLAY_MOVIE: the reference's fire function (FUN_140c4c530, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_PLAY_MOVIE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4c530(list, args);
+}
+
+// ref: FUN_140c57770
+void EventSignal_PLAY_MOVIE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_PLAY_MOVIE);
+}
+
 // ref: FUN_140e45ce0
 void EventFire_PRODUCT_ASSIGN_TO_TARGET_FAILED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -892,6 +2504,116 @@ void EventSignal_PRODUCT_CHOICE_UPDATE(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_PRODUCT_CHOICE_UPDATE);
 }
 
+// PRODUCT_DISTRIBUTIONS_UPDATED: the reference's fire function (FUN_140c4c7e0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_PRODUCT_DISTRIBUTIONS_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4c7e0(list, args);
+}
+
+// ref: FUN_140c57850
+void EventSignal_PRODUCT_DISTRIBUTIONS_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_PRODUCT_DISTRIBUTIONS_UPDATED);
+}
+
+// QUEST_BOSS_EMOTE: the reference's fire function (FUN_140c4ca90, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_QUEST_BOSS_EMOTE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4ca90(list, args);
+}
+
+// ref: FUN_140c57930
+void EventSignal_QUEST_BOSS_EMOTE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_QUEST_BOSS_EMOTE);
+}
+
+// QUEUE_IS_FULL: the reference's fire function (FUN_1410dedd0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_QUEUE_IS_FULL(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_1410dedd0(list, args);
+}
+
+// ref: FUN_1410e6850
+void EventSignal_QUEUE_IS_FULL(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_QUEUE_IS_FULL);
+}
+
+// RACE_FACTION_CHANGE_RESULT: the reference's fire function (FUN_140c4ce40, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_RACE_FACTION_CHANGE_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4ce40(list, args);
+}
+
+// ref: FUN_140c57a10
+void EventSignal_RACE_FACTION_CHANGE_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_RACE_FACTION_CHANGE_RESULT);
+}
+
+// RACE_FACTION_CHANGE_STARTED: the reference's fire function (FUN_140c4d190, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_RACE_FACTION_CHANGE_STARTED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4d190(list, args);
+}
+
+// ref: FUN_140c57af0
+void EventSignal_RACE_FACTION_CHANGE_STARTED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_RACE_FACTION_CHANGE_STARTED);
+}
+
+// RAID_BOSS_EMOTE: the reference's fire function (FUN_140c4d460, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_RAID_BOSS_EMOTE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4d460(list, args);
+}
+
+// ref: FUN_140c57bd0
+void EventSignal_RAID_BOSS_EMOTE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_RAID_BOSS_EMOTE);
+}
+
+// RAID_BOSS_WHISPER: the reference's fire function (FUN_140c4d810, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_RAID_BOSS_WHISPER(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4d810(list, args);
+}
+
+// ref: FUN_140c57cb0
+void EventSignal_RAID_BOSS_WHISPER(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_RAID_BOSS_WHISPER);
+}
+
+// RAID_INSTANCE_WELCOME: the reference's fire function (FUN_140c4dbc0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_RAID_INSTANCE_WELCOME(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4dbc0(list, args);
+}
+
+// ref: FUN_140c57d90
+void EventSignal_RAID_INSTANCE_WELCOME(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_RAID_INSTANCE_WELCOME);
+}
+
+// RANDOM_CHARACTER_NAME_RESULT: the reference's fire function (FUN_140c4df90, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_RANDOM_CHARACTER_NAME_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4df90(list, args);
+}
+
+// ref: FUN_140c57e70
+void EventSignal_RANDOM_CHARACTER_NAME_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_RANDOM_CHARACTER_NAME_RESULT);
+}
+
+// REALM_HIDDEN_INFO_UPDATE: the reference's fire function (FUN_140c4e2b0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_REALM_HIDDEN_INFO_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4e2b0(list, args);
+}
+
+// ref: FUN_140c57f50
+void EventSignal_REALM_HIDDEN_INFO_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_REALM_HIDDEN_INFO_UPDATE);
+}
+
 // ref: FUN_1410df0f0
 void EventFire_REALM_LIST_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -902,6 +2624,39 @@ void EventFire_REALM_LIST_UPDATED(FrameScriptEvents::EventListenerList* list, vo
 // ref: FUN_1410e6930
 void EventSignal_REALM_LIST_UPDATED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_REALM_LIST_UPDATED);
+}
+
+// REPORT_PLAYER_RESULT: the reference's fire function (FUN_140aee6b0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_REPORT_PLAYER_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140aee6b0(list, args);
+}
+
+// ref: FUN_140aef970
+void EventSignal_REPORT_PLAYER_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_REPORT_PLAYER_RESULT);
+}
+
+// RUN_UNIT_TESTS: the reference's fire function (FUN_140f780a0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_RUN_UNIT_TESTS(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f780a0(list, args);
+}
+
+// ref: FUN_140f7da30
+void EventSignal_RUN_UNIT_TESTS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_RUN_UNIT_TESTS);
+}
+
+// SCENE_UI_EVENT: the reference's fire function (FUN_140f78370, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_SCENE_UI_EVENT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f78370(list, args);
+}
+
+// ref: FUN_140f7db10
+void EventSignal_SCENE_UI_EVENT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SCENE_UI_EVENT);
 }
 
 // ref: FUN_140b25f20
@@ -964,6 +2719,17 @@ void EventSignal_SEARCH_DB_LOADED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_SEARCH_DB_LOADED);
 }
 
+// SESSION_TIME_ALERT: the reference's fire function (FUN_140e46430, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_SESSION_TIME_ALERT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e46430(list, args);
+}
+
+// ref: FUN_140e500f0
+void EventSignal_SESSION_TIME_ALERT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SESSION_TIME_ALERT);
+}
+
 // ref: FUN_140fb53c0
 void EventFire_SETTINGS_LOADED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -974,6 +2740,28 @@ void EventFire_SETTINGS_LOADED(FrameScriptEvents::EventListenerList* list, void*
 // ref: FUN_140fb57f0
 void EventSignal_SETTINGS_LOADED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_SETTINGS_LOADED);
+}
+
+// SET_DEBUG_TOOL_VISIBLE: the reference's fire function (FUN_140f788e0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_SET_DEBUG_TOOL_VISIBLE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f788e0(list, args);
+}
+
+// ref: FUN_140f7dcd0
+void EventSignal_SET_DEBUG_TOOL_VISIBLE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SET_DEBUG_TOOL_VISIBLE);
+}
+
+// SET_UI_EDITOR_VISIBLE: the reference's fire function (FUN_140f78c00, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_SET_UI_EDITOR_VISIBLE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f78c00(list, args);
+}
+
+// ref: FUN_140f7ddb0
+void EventSignal_SET_UI_EDITOR_VISIBLE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SET_UI_EDITOR_VISIBLE);
 }
 
 // ref: FUN_1410df840
@@ -988,6 +2776,39 @@ void EventSignal_SHOULD_RECONNECT_TO_REALM_LIST(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_SHOULD_RECONNECT_TO_REALM_LIST);
 }
 
+// SHOW_DEV_BUILD_ALERT: the reference's fire function (FUN_140f78eb0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_SHOW_DEV_BUILD_ALERT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f78eb0(list, args);
+}
+
+// ref: FUN_140f7de90
+void EventSignal_SHOW_DEV_BUILD_ALERT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SHOW_DEV_BUILD_ALERT);
+}
+
+// SHOW_SERVER_ALERT: the reference's fire function (FUN_140c4e820, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_SHOW_SERVER_ALERT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4e820(list, args);
+}
+
+// ref: FUN_140c58110
+void EventSignal_SHOW_SERVER_ALERT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SHOW_SERVER_ALERT);
+}
+
+// SIMPLE_BROWSER_WEB_ERROR: the reference's fire function (FUN_140baf820, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_SIMPLE_BROWSER_WEB_ERROR(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140baf820(list, args);
+}
+
+// ref: FUN_140bb3430
+void EventSignal_SIMPLE_BROWSER_WEB_ERROR(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SIMPLE_BROWSER_WEB_ERROR);
+}
+
 // ref: FUN_140bafad0
 void EventFire_SIMPLE_BROWSER_WEB_PROXY_FAILED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -1000,6 +2821,28 @@ void EventSignal_SIMPLE_BROWSER_WEB_PROXY_FAILED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_SIMPLE_BROWSER_WEB_PROXY_FAILED);
 }
 
+// SOCIAL_CONTRACT_STATUS_UPDATE: the reference's fire function (FUN_140a52860, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_SOCIAL_CONTRACT_STATUS_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140a52860(list, args);
+}
+
+// ref: FUN_140a53820
+void EventSignal_SOCIAL_CONTRACT_STATUS_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SOCIAL_CONTRACT_STATUS_UPDATE);
+}
+
+// SOUNDKIT_FINISHED: the reference's fire function (FUN_140a52d80, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_SOUNDKIT_FINISHED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140a52d80(list, args);
+}
+
+// ref: FUN_140a539e0
+void EventSignal_SOUNDKIT_FINISHED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SOUNDKIT_FINISHED);
+}
+
 // ref: FUN_140a52b10
 void EventFire_SOUND_DEVICE_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -1010,6 +2853,17 @@ void EventFire_SOUND_DEVICE_UPDATE(FrameScriptEvents::EventListenerList* list, v
 // ref: FUN_140a53900
 void EventSignal_SOUND_DEVICE_UPDATE(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_SOUND_DEVICE_UPDATE);
+}
+
+// SPELL_SCRIPT_ERROR: the reference's fire function (FUN_140f79180, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_SPELL_SCRIPT_ERROR(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f79180(list, args);
+}
+
+// ref: FUN_140f7df70
+void EventSignal_SPELL_SCRIPT_ERROR(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SPELL_SCRIPT_ERROR);
 }
 
 // ref: FUN_140e48820
@@ -1048,6 +2902,39 @@ void EventSignal_STORE_CONFIRM_PURCHASE(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_STORE_CONFIRM_PURCHASE);
 }
 
+// STORE_ENTITLEMENT_NOTIFICATION: the reference's fire function (FUN_140e48f70, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_STORE_ENTITLEMENT_NOTIFICATION(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e48f70(list, args);
+}
+
+// ref: FUN_140e50fd0
+void EventSignal_STORE_ENTITLEMENT_NOTIFICATION(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_STORE_ENTITLEMENT_NOTIFICATION);
+}
+
+// STORE_OPEN_SIMPLE_CHECKOUT: the reference's fire function (FUN_140e49220, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_STORE_OPEN_SIMPLE_CHECKOUT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e49220(list, args);
+}
+
+// ref: FUN_140e510b0
+void EventSignal_STORE_OPEN_SIMPLE_CHECKOUT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_STORE_OPEN_SIMPLE_CHECKOUT);
+}
+
+// STORE_ORDER_INITIATION_FAILED: the reference's fire function (FUN_140e494d0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_STORE_ORDER_INITIATION_FAILED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e494d0(list, args);
+}
+
+// ref: FUN_140e51190
+void EventSignal_STORE_ORDER_INITIATION_FAILED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_STORE_ORDER_INITIATION_FAILED);
+}
+
 // ref: FUN_140e49bc0
 void EventFire_STORE_PRODUCTS_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -1058,6 +2945,17 @@ void EventFire_STORE_PRODUCTS_UPDATED(FrameScriptEvents::EventListenerList* list
 // ref: FUN_140e51350
 void EventSignal_STORE_PRODUCTS_UPDATED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_STORE_PRODUCTS_UPDATED);
+}
+
+// STORE_PRODUCT_DELIVERED: the reference's fire function (FUN_140e497d0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_STORE_PRODUCT_DELIVERED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e497d0(list, args);
+}
+
+// ref: FUN_140e51270
+void EventSignal_STORE_PRODUCT_DELIVERED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_STORE_PRODUCT_DELIVERED);
 }
 
 // ref: FUN_140e49e30
@@ -1132,6 +3030,17 @@ void EventSignal_STORE_VAS_PURCHASE_ERROR(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_STORE_VAS_PURCHASE_ERROR);
 }
 
+// STREAMING_ICON: the reference's fire function (FUN_140e4acd0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_STREAMING_ICON(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e4acd0(list, args);
+}
+
+// ref: FUN_140e51970
+void EventSignal_STREAMING_ICON(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_STREAMING_ICON);
+}
+
 // ref: FUN_140e4af80
 void EventFire_SUBSCRIPTION_CHANGED_KICK_IMMINENT(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -1142,6 +3051,50 @@ void EventFire_SUBSCRIPTION_CHANGED_KICK_IMMINENT(FrameScriptEvents::EventListen
 // ref: FUN_140e51a50
 void EventSignal_SUBSCRIPTION_CHANGED_KICK_IMMINENT(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_SUBSCRIPTION_CHANGED_KICK_IMMINENT);
+}
+
+// SYSMSG: the reference's fire function (FUN_140e4b1f0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_SYSMSG(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e4b1f0(list, args);
+}
+
+// ref: FUN_140e51b30
+void EventSignal_SYSMSG(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_SYSMSG);
+}
+
+// TIME_PLAYED_MSG: the reference's fire function (FUN_140e4baa0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_TIME_PLAYED_MSG(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e4baa0(list, args);
+}
+
+// ref: FUN_140e51dd0
+void EventSignal_TIME_PLAYED_MSG(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TIME_PLAYED_MSG);
+}
+
+// TOGGLE_CONSOLE: the reference's fire function (FUN_140d53520, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_TOGGLE_CONSOLE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140d53520(list, args);
+}
+
+// ref: FUN_140d577b0
+void EventSignal_TOGGLE_CONSOLE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TOGGLE_CONSOLE);
+}
+
+// TOGGLE_FRAMESTACK: the reference's fire function (FUN_140f79400, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_TOGGLE_FRAMESTACK(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f79400(list, args);
+}
+
+// ref: FUN_140f7e050
+void EventSignal_TOGGLE_FRAMESTACK(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TOGGLE_FRAMESTACK);
 }
 
 // ref: FUN_141156650
@@ -1168,6 +3121,50 @@ void EventSignal_TOKEN_BUY_CONFIRM_REQUIRED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_BUY_CONFIRM_REQUIRED);
 }
 
+// TOKEN_BUY_RESULT: the reference's fire function (FUN_141156b30, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_TOKEN_BUY_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_141156b30(list, args);
+}
+
+// ref: FUN_141159520
+void EventSignal_TOKEN_BUY_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_BUY_RESULT);
+}
+
+// TOKEN_CAN_VETERAN_BUY_UPDATE: the reference's fire function (FUN_141156de0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_TOKEN_CAN_VETERAN_BUY_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_141156de0(list, args);
+}
+
+// ref: FUN_141159600
+void EventSignal_TOKEN_CAN_VETERAN_BUY_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_CAN_VETERAN_BUY_UPDATE);
+}
+
+// TOKEN_DISTRIBUTIONS_UPDATED: the reference's fire function (FUN_141157090, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_TOKEN_DISTRIBUTIONS_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_141157090(list, args);
+}
+
+// ref: FUN_1411596e0
+void EventSignal_TOKEN_DISTRIBUTIONS_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_DISTRIBUTIONS_UPDATED);
+}
+
+// TOKEN_MARKET_PRICE_UPDATED: the reference's fire function (FUN_141157340, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_TOKEN_MARKET_PRICE_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_141157340(list, args);
+}
+
+// ref: FUN_1411597c0
+void EventSignal_TOKEN_MARKET_PRICE_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_MARKET_PRICE_UPDATED);
+}
+
 // ref: FUN_1411575f0
 void EventFire_TOKEN_REDEEM_BALANCE_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -1178,6 +3175,17 @@ void EventFire_TOKEN_REDEEM_BALANCE_UPDATED(FrameScriptEvents::EventListenerList
 // ref: FUN_1411598a0
 void EventSignal_TOKEN_REDEEM_BALANCE_UPDATED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_REDEEM_BALANCE_UPDATED);
+}
+
+// TOKEN_REDEEM_CONFIRM_REQUIRED: the reference's fire function (FUN_141157860, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_TOKEN_REDEEM_CONFIRM_REQUIRED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_141157860(list, args);
+}
+
+// ref: FUN_141159980
+void EventSignal_TOKEN_REDEEM_CONFIRM_REQUIRED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_REDEEM_CONFIRM_REQUIRED);
 }
 
 // ref: FUN_141157b10
@@ -1204,6 +3212,17 @@ void EventSignal_TOKEN_REDEEM_GAME_TIME_UPDATED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_REDEEM_GAME_TIME_UPDATED);
 }
 
+// TOKEN_REDEEM_RESULT: the reference's fire function (FUN_141157ff0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_TOKEN_REDEEM_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_141157ff0(list, args);
+}
+
+// ref: FUN_141159c20
+void EventSignal_TOKEN_REDEEM_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_REDEEM_RESULT);
+}
+
 // ref: FUN_1411582f0
 void EventFire_TOKEN_SELL_CONFIRM_REQUIRED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -1214,6 +3233,17 @@ void EventFire_TOKEN_SELL_CONFIRM_REQUIRED(FrameScriptEvents::EventListenerList*
 // ref: FUN_141159d00
 void EventSignal_TOKEN_SELL_CONFIRM_REQUIRED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_SELL_CONFIRM_REQUIRED);
+}
+
+// TOKEN_SELL_RESULT: the reference's fire function (FUN_141158560, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_TOKEN_SELL_RESULT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_141158560(list, args);
+}
+
+// ref: FUN_141159de0
+void EventSignal_TOKEN_SELL_RESULT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_TOKEN_SELL_RESULT);
 }
 
 // ref: FUN_140e4bdb0
@@ -1238,6 +3268,39 @@ void EventFire_TRIAL_STATUS_UPDATE(FrameScriptEvents::EventListenerList* list, v
 // ref: FUN_140c582d0
 void EventSignal_TRIAL_STATUS_UPDATE(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_TRIAL_STATUS_UPDATE);
+}
+
+// UICAMERA_CREATED: the reference's fire function (FUN_140f799a0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_UICAMERA_CREATED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f799a0(list, args);
+}
+
+// ref: FUN_140f7e210
+void EventSignal_UICAMERA_CREATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_UICAMERA_CREATED);
+}
+
+// UI_ERROR_MESSAGE: the reference's fire function (FUN_140e4c020, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_UI_ERROR_MESSAGE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e4c020(list, args);
+}
+
+// ref: FUN_140e51f90
+void EventSignal_UI_ERROR_MESSAGE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_UI_ERROR_MESSAGE);
+}
+
+// UI_INFO_MESSAGE: the reference's fire function (FUN_140e4c340, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_UI_INFO_MESSAGE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e4c340(list, args);
+}
+
+// ref: FUN_140e52070
+void EventSignal_UI_INFO_MESSAGE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_UI_INFO_MESSAGE);
 }
 
 // ref: FUN_140d10ad0
@@ -1276,6 +3339,28 @@ void EventSignal_UPDATE_BINDINGS(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_UPDATE_BINDINGS);
 }
 
+// UPDATE_CHAT_COLOR: the reference's fire function (FUN_140c4f070, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_UPDATE_CHAT_COLOR(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4f070(list, args);
+}
+
+// ref: FUN_140c583b0
+void EventSignal_UPDATE_CHAT_COLOR(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_UPDATE_CHAT_COLOR);
+}
+
+// UPDATE_CHAT_COLOR_NAME_BY_CLASS: the reference's fire function (FUN_140c4f400, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_UPDATE_CHAT_COLOR_NAME_BY_CLASS(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4f400(list, args);
+}
+
+// ref: FUN_140c58490
+void EventSignal_UPDATE_CHAT_COLOR_NAME_BY_CLASS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_UPDATE_CHAT_COLOR_NAME_BY_CLASS);
+}
+
 // ref: FUN_140c4f720
 void EventFire_UPDATE_CHAT_WINDOWS(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -1286,6 +3371,17 @@ void EventFire_UPDATE_CHAT_WINDOWS(FrameScriptEvents::EventListenerList* list, v
 // ref: FUN_140c58570
 void EventSignal_UPDATE_CHAT_WINDOWS(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_UPDATE_CHAT_WINDOWS);
+}
+
+// UPDATE_EXPANSION_LEVEL: the reference's fire function (FUN_140c4f990, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_UPDATE_EXPANSION_LEVEL(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c4f990(list, args);
+}
+
+// ref: FUN_140c58650
+void EventSignal_UPDATE_EXPANSION_LEVEL(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_UPDATE_EXPANSION_LEVEL);
 }
 
 // ref: FUN_140c4fd40
@@ -1300,6 +3396,17 @@ void EventSignal_UPDATE_FLOATING_CHAT_WINDOWS(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_UPDATE_FLOATING_CHAT_WINDOWS);
 }
 
+// UPDATE_GM_STATUS: the reference's fire function (FUN_140f79f80, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_UPDATE_GM_STATUS(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f79f80(list, args);
+}
+
+// ref: FUN_140f7e2f0
+void EventSignal_UPDATE_GM_STATUS(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_UPDATE_GM_STATUS);
+}
+
 // ref: FUN_140c4ffb0
 void EventFire_UPDATE_NAME_RESERVATION(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -1312,6 +3419,28 @@ void EventSignal_UPDATE_NAME_RESERVATION(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_UPDATE_NAME_RESERVATION);
 }
 
+// UPDATE_SELECTED_CHARACTER: the reference's fire function (FUN_140c50220, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_UPDATE_SELECTED_CHARACTER(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140c50220(list, args);
+}
+
+// ref: FUN_140c588f0
+void EventSignal_UPDATE_SELECTED_CHARACTER(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_UPDATE_SELECTED_CHARACTER);
+}
+
+// URL_DOWNLOAD_FINISHED: the reference's fire function (FUN_140f7a4a0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_URL_DOWNLOAD_FINISHED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140f7a4a0(list, args);
+}
+
+// ref: FUN_140f7e4b0
+void EventSignal_URL_DOWNLOAD_FINISHED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_URL_DOWNLOAD_FINISHED);
+}
+
 // ref: FUN_140e4d3d0
 void EventFire_VARIABLES_LOADED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -1322,6 +3451,17 @@ void EventFire_VARIABLES_LOADED(FrameScriptEvents::EventListenerList* list, void
 // ref: FUN_140e525b0
 void EventSignal_VARIABLES_LOADED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_VARIABLES_LOADED);
+}
+
+// VAS_CHARACTER_QUEUE_STATUS_UPDATE: the reference's fire function (FUN_140e4d640, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VAS_CHARACTER_QUEUE_STATUS_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e4d640(list, args);
+}
+
+// ref: FUN_140e52690
+void EventSignal_VAS_CHARACTER_QUEUE_STATUS_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VAS_CHARACTER_QUEUE_STATUS_UPDATE);
 }
 
 // ref: FUN_140e4d940
@@ -1348,6 +3488,17 @@ void EventSignal_VAS_QUEUE_STATUS_UPDATE(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_VAS_QUEUE_STATUS_UPDATE);
 }
 
+// VAS_TRANSFER_VALIDATION_UPDATE: the reference's fire function (FUN_140e4de20, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VAS_TRANSFER_VALIDATION_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140e4de20(list, args);
+}
+
+// ref: FUN_140e52930
+void EventSignal_VAS_TRANSFER_VALIDATION_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VAS_TRANSFER_VALIDATION_UPDATE);
+}
+
 // ref: FUN_140b32a10
 void EventFire_VOICE_CHAT_ACTIVE_INPUT_DEVICE_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -1370,6 +3521,17 @@ void EventFire_VOICE_CHAT_ACTIVE_OUTPUT_DEVICE_UPDATED(FrameScriptEvents::EventL
 // ref: FUN_140b3fa70
 void EventSignal_VOICE_CHAT_ACTIVE_OUTPUT_DEVICE_UPDATED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_ACTIVE_OUTPUT_DEVICE_UPDATED);
+}
+
+// VOICE_CHAT_AUDIO_CAPTURE_ENERGY: the reference's fire function (FUN_140b32ef0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_AUDIO_CAPTURE_ENERGY(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b32ef0(list, args);
+}
+
+// ref: FUN_140b3fb50
+void EventSignal_VOICE_CHAT_AUDIO_CAPTURE_ENERGY(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_AUDIO_CAPTURE_ENERGY);
 }
 
 // ref: FUN_140b331f0
@@ -1396,6 +3558,248 @@ void EventSignal_VOICE_CHAT_AUDIO_CAPTURE_STOPPED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_AUDIO_CAPTURE_STOPPED);
 }
 
+// VOICE_CHAT_CHANNEL_ACTIVATED: the reference's fire function (FUN_140b336d0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_ACTIVATED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b336d0(list, args);
+}
+
+// ref: FUN_140b3fdf0
+void EventSignal_VOICE_CHAT_CHANNEL_ACTIVATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_ACTIVATED);
+}
+
+// VOICE_CHAT_CHANNEL_DEACTIVATED: the reference's fire function (FUN_140b33980, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_DEACTIVATED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b33980(list, args);
+}
+
+// ref: FUN_140b3fed0
+void EventSignal_VOICE_CHAT_CHANNEL_DEACTIVATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_DEACTIVATED);
+}
+
+// VOICE_CHAT_CHANNEL_DISPLAY_NAME_CHANGED: the reference's fire function (FUN_140b33c30, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_DISPLAY_NAME_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b33c30(list, args);
+}
+
+// ref: FUN_140b3ffb0
+void EventSignal_VOICE_CHAT_CHANNEL_DISPLAY_NAME_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_DISPLAY_NAME_CHANGED);
+}
+
+// VOICE_CHAT_CHANNEL_JOINED: the reference's fire function (FUN_140b33f50, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_JOINED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b33f50(list, args);
+}
+
+// ref: FUN_140b40090
+void EventSignal_VOICE_CHAT_CHANNEL_JOINED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_JOINED);
+}
+
+// VOICE_CHAT_CHANNEL_MEMBER_ACTIVE_STATE_CHANGED: the reference's fire function (FUN_140b34340, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_MEMBER_ACTIVE_STATE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b34340(list, args);
+}
+
+// ref: FUN_140b40170
+void EventSignal_VOICE_CHAT_CHANNEL_MEMBER_ACTIVE_STATE_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_MEMBER_ACTIVE_STATE_CHANGED);
+}
+
+// VOICE_CHAT_CHANNEL_MEMBER_ADDED: the reference's fire function (FUN_140b34680, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_MEMBER_ADDED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b34680(list, args);
+}
+
+// ref: FUN_140b40250
+void EventSignal_VOICE_CHAT_CHANNEL_MEMBER_ADDED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_MEMBER_ADDED);
+}
+
+// VOICE_CHAT_CHANNEL_MEMBER_ENERGY_CHANGED: the reference's fire function (FUN_140b34990, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_MEMBER_ENERGY_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b34990(list, args);
+}
+
+// ref: FUN_140b40330
+void EventSignal_VOICE_CHAT_CHANNEL_MEMBER_ENERGY_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_MEMBER_ENERGY_CHANGED);
+}
+
+// VOICE_CHAT_CHANNEL_MEMBER_GUID_UPDATED: the reference's fire function (FUN_140b34cd0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_MEMBER_GUID_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b34cd0(list, args);
+}
+
+// ref: FUN_140b40410
+void EventSignal_VOICE_CHAT_CHANNEL_MEMBER_GUID_UPDATED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_MEMBER_GUID_UPDATED);
+}
+
+// VOICE_CHAT_CHANNEL_MEMBER_MUTE_FOR_ALL_CHANGED: the reference's fire function (FUN_140b34fe0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_MEMBER_MUTE_FOR_ALL_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b34fe0(list, args);
+}
+
+// ref: FUN_140b404f0
+void EventSignal_VOICE_CHAT_CHANNEL_MEMBER_MUTE_FOR_ALL_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_MEMBER_MUTE_FOR_ALL_CHANGED);
+}
+
+// VOICE_CHAT_CHANNEL_MEMBER_MUTE_FOR_ME_CHANGED: the reference's fire function (FUN_140b35320, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_MEMBER_MUTE_FOR_ME_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b35320(list, args);
+}
+
+// ref: FUN_140b405d0
+void EventSignal_VOICE_CHAT_CHANNEL_MEMBER_MUTE_FOR_ME_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_MEMBER_MUTE_FOR_ME_CHANGED);
+}
+
+// VOICE_CHAT_CHANNEL_MEMBER_REMOVED: the reference's fire function (FUN_140b35660, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_MEMBER_REMOVED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b35660(list, args);
+}
+
+// ref: FUN_140b406b0
+void EventSignal_VOICE_CHAT_CHANNEL_MEMBER_REMOVED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_MEMBER_REMOVED);
+}
+
+// VOICE_CHAT_CHANNEL_MEMBER_SILENCED_CHANGED: the reference's fire function (FUN_140b35970, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_MEMBER_SILENCED_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b35970(list, args);
+}
+
+// ref: FUN_140b40790
+void EventSignal_VOICE_CHAT_CHANNEL_MEMBER_SILENCED_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_MEMBER_SILENCED_CHANGED);
+}
+
+// VOICE_CHAT_CHANNEL_MEMBER_SPEAKING_STATE_CHANGED: the reference's fire function (FUN_140b35cb0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_MEMBER_SPEAKING_STATE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b35cb0(list, args);
+}
+
+// ref: FUN_140b40870
+void EventSignal_VOICE_CHAT_CHANNEL_MEMBER_SPEAKING_STATE_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_MEMBER_SPEAKING_STATE_CHANGED);
+}
+
+// VOICE_CHAT_CHANNEL_MEMBER_STT_MESSAGE: the reference's fire function (FUN_140b35ff0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_MEMBER_STT_MESSAGE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b35ff0(list, args);
+}
+
+// ref: FUN_140b40950
+void EventSignal_VOICE_CHAT_CHANNEL_MEMBER_STT_MESSAGE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_MEMBER_STT_MESSAGE);
+}
+
+// VOICE_CHAT_CHANNEL_MEMBER_VOLUME_CHANGED: the reference's fire function (FUN_140b36370, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_MEMBER_VOLUME_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b36370(list, args);
+}
+
+// ref: FUN_140b40a30
+void EventSignal_VOICE_CHAT_CHANNEL_MEMBER_VOLUME_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_MEMBER_VOLUME_CHANGED);
+}
+
+// VOICE_CHAT_CHANNEL_MUTE_STATE_CHANGED: the reference's fire function (FUN_140b366b0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_MUTE_STATE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b366b0(list, args);
+}
+
+// ref: FUN_140b40b10
+void EventSignal_VOICE_CHAT_CHANNEL_MUTE_STATE_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_MUTE_STATE_CHANGED);
+}
+
+// VOICE_CHAT_CHANNEL_PTT_CHANGED: the reference's fire function (FUN_140b369b0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_PTT_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b369b0(list, args);
+}
+
+// ref: FUN_140b40bf0
+void EventSignal_VOICE_CHAT_CHANNEL_PTT_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_PTT_CHANGED);
+}
+
+// VOICE_CHAT_CHANNEL_REMOVED: the reference's fire function (FUN_140b36cd0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_REMOVED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b36cd0(list, args);
+}
+
+// ref: FUN_140b40cd0
+void EventSignal_VOICE_CHAT_CHANNEL_REMOVED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_REMOVED);
+}
+
+// VOICE_CHAT_CHANNEL_TRANSCRIBING_CHANGED: the reference's fire function (FUN_140b36f80, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_TRANSCRIBING_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b36f80(list, args);
+}
+
+// ref: FUN_140b40db0
+void EventSignal_VOICE_CHAT_CHANNEL_TRANSCRIBING_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_TRANSCRIBING_CHANGED);
+}
+
+// VOICE_CHAT_CHANNEL_TRANSMIT_CHANGED: the reference's fire function (FUN_140b37280, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_TRANSMIT_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b37280(list, args);
+}
+
+// ref: FUN_140b40e90
+void EventSignal_VOICE_CHAT_CHANNEL_TRANSMIT_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_TRANSMIT_CHANGED);
+}
+
+// VOICE_CHAT_CHANNEL_VOLUME_CHANGED: the reference's fire function (FUN_140b37580, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_CHANNEL_VOLUME_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b37580(list, args);
+}
+
+// ref: FUN_140b40f70
+void EventSignal_VOICE_CHAT_CHANNEL_VOLUME_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CHANNEL_VOLUME_CHANGED);
+}
+
+// VOICE_CHAT_COMMUNICATION_MODE_CHANGED: the reference's fire function (FUN_140b37890, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_COMMUNICATION_MODE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b37890(list, args);
+}
+
+// ref: FUN_140b41050
+void EventSignal_VOICE_CHAT_COMMUNICATION_MODE_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_COMMUNICATION_MODE_CHANGED);
+}
+
 // ref: FUN_140b37b40
 void EventFire_VOICE_CHAT_CONNECTION_SUCCESS(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -1406,6 +3810,28 @@ void EventFire_VOICE_CHAT_CONNECTION_SUCCESS(FrameScriptEvents::EventListenerLis
 // ref: FUN_140b41130
 void EventSignal_VOICE_CHAT_CONNECTION_SUCCESS(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_CONNECTION_SUCCESS);
+}
+
+// VOICE_CHAT_DEAFENED_CHANGED: the reference's fire function (FUN_140b37db0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_DEAFENED_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b37db0(list, args);
+}
+
+// ref: FUN_140b41210
+void EventSignal_VOICE_CHAT_DEAFENED_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_DEAFENED_CHANGED);
+}
+
+// VOICE_CHAT_ERROR: the reference's fire function (FUN_140b38060, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_ERROR(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b38060(list, args);
+}
+
+// ref: FUN_140b412f0
+void EventSignal_VOICE_CHAT_ERROR(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_ERROR);
 }
 
 // ref: FUN_140b38360
@@ -1420,6 +3846,39 @@ void EventSignal_VOICE_CHAT_INPUT_DEVICES_UPDATED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_INPUT_DEVICES_UPDATED);
 }
 
+// VOICE_CHAT_LOGIN: the reference's fire function (FUN_140b385d0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_LOGIN(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b385d0(list, args);
+}
+
+// ref: FUN_140b414b0
+void EventSignal_VOICE_CHAT_LOGIN(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_LOGIN);
+}
+
+// VOICE_CHAT_LOGOUT: the reference's fire function (FUN_140b38880, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_LOGOUT(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b38880(list, args);
+}
+
+// ref: FUN_140b41590
+void EventSignal_VOICE_CHAT_LOGOUT(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_LOGOUT);
+}
+
+// VOICE_CHAT_MUTED_CHANGED: the reference's fire function (FUN_140b38b30, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_MUTED_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b38b30(list, args);
+}
+
+// ref: FUN_140b41670
+void EventSignal_VOICE_CHAT_MUTED_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_MUTED_CHANGED);
+}
+
 // ref: FUN_140b38de0
 void EventFire_VOICE_CHAT_OUTPUT_DEVICES_UPDATED(FrameScriptEvents::EventListenerList* list, void* args) {
     (void)args;
@@ -1430,6 +3889,39 @@ void EventFire_VOICE_CHAT_OUTPUT_DEVICES_UPDATED(FrameScriptEvents::EventListene
 // ref: FUN_140b41750
 void EventSignal_VOICE_CHAT_OUTPUT_DEVICES_UPDATED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_OUTPUT_DEVICES_UPDATED);
+}
+
+// VOICE_CHAT_PENDING_CHANNEL_JOIN_STATE: the reference's fire function (FUN_140b39050, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_PENDING_CHANNEL_JOIN_STATE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b39050(list, args);
+}
+
+// ref: FUN_140b41830
+void EventSignal_VOICE_CHAT_PENDING_CHANNEL_JOIN_STATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_PENDING_CHANNEL_JOIN_STATE);
+}
+
+// VOICE_CHAT_PTT_BUTTON_PRESSED_STATE_CHANGED: the reference's fire function (FUN_140b39410, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_PTT_BUTTON_PRESSED_STATE_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b39410(list, args);
+}
+
+// ref: FUN_140b41910
+void EventSignal_VOICE_CHAT_PTT_BUTTON_PRESSED_STATE_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_PTT_BUTTON_PRESSED_STATE_CHANGED);
+}
+
+// VOICE_CHAT_SILENCED_CHANGED: the reference's fire function (FUN_140b396c0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_SILENCED_CHANGED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b396c0(list, args);
+}
+
+// ref: FUN_140b419f0
+void EventSignal_VOICE_CHAT_SILENCED_CHANGED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_SILENCED_CHANGED);
 }
 
 // ref: FUN_140b39970
@@ -1454,6 +3946,50 @@ void EventFire_VOICE_CHAT_SPEAK_FOR_ME_FEATURE_STATUS_UPDATED(FrameScriptEvents:
 // ref: FUN_140b41bb0
 void EventSignal_VOICE_CHAT_SPEAK_FOR_ME_FEATURE_STATUS_UPDATED(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_SPEAK_FOR_ME_FEATURE_STATUS_UPDATED);
+}
+
+// VOICE_CHAT_TTS_PLAYBACK_FAILED: the reference's fire function (FUN_140b39e50, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_TTS_PLAYBACK_FAILED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b39e50(list, args);
+}
+
+// ref: FUN_140b41c90
+void EventSignal_VOICE_CHAT_TTS_PLAYBACK_FAILED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_TTS_PLAYBACK_FAILED);
+}
+
+// VOICE_CHAT_TTS_PLAYBACK_FINISHED: the reference's fire function (FUN_140b3a180, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_TTS_PLAYBACK_FINISHED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b3a180(list, args);
+}
+
+// ref: FUN_140b41d70
+void EventSignal_VOICE_CHAT_TTS_PLAYBACK_FINISHED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_TTS_PLAYBACK_FINISHED);
+}
+
+// VOICE_CHAT_TTS_PLAYBACK_STARTED: the reference's fire function (FUN_140b3a4c0, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_TTS_PLAYBACK_STARTED(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b3a4c0(list, args);
+}
+
+// ref: FUN_140b41e50
+void EventSignal_VOICE_CHAT_TTS_PLAYBACK_STARTED(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_TTS_PLAYBACK_STARTED);
+}
+
+// VOICE_CHAT_TTS_SPEAK_TEXT_UPDATE: the reference's fire function (FUN_140b3a840, translated) over the port's
+// listener list, which pushes the event's arguments from `args`.
+void EventFire_VOICE_CHAT_TTS_SPEAK_TEXT_UPDATE(FrameScriptEvents::EventListenerList* list, void* args) {
+    FUN_140b3a840(list, args);
+}
+
+// ref: FUN_140b41f30
+void EventSignal_VOICE_CHAT_TTS_SPEAK_TEXT_UPDATE(uint64_t id, void* args) {
+    FrameScriptEvents::Dispatch(id, args, EventFire_VOICE_CHAT_TTS_SPEAK_TEXT_UPDATE);
 }
 
 // ref: FUN_140b3ab40
@@ -1492,9 +4028,29 @@ void EventSignal_WOW_MOUSE_NOT_FOUND(uint64_t id, void* args) {
     FrameScriptEvents::Dispatch(id, args, EventFire_WOW_MOUSE_NOT_FOUND);
 }
 
+// ref: FUN_141163d50
+void EventCallbacks_Set0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141163d70
 void EventCallbacks_Set8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163d90
+void EventCallbacks_Set10(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x10 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163990
+void EventCallbacks_Set18(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x18 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411639b0
+void EventCallbacks_Set20(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x20 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_14116afb0
@@ -1502,9 +4058,24 @@ void EventCallbacks_Set140(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x140 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141162d30
+void EventCallbacks_Set158(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x158 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141162d50
+void EventCallbacks_Set160(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x160 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_1411640b0
 void EventCallbacks_Set288(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x288 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411639f0
+void EventCallbacks_Set328(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x328 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141169390
@@ -1522,6 +4093,16 @@ void EventCallbacks_Set548(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x548 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_1411693d0
+void EventCallbacks_Set598(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x598 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411640d0
+void EventCallbacks_Set5F0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x5f0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141169730
 void EventCallbacks_Set720(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x720 / sizeof(EVENTSIGNAL)] = signal;
@@ -1530,6 +4111,36 @@ void EventCallbacks_Set720(EVENTSIGNAL signal) {
 // ref: FUN_141169750
 void EventCallbacks_Set728(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x728 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411640f0
+void EventCallbacks_Set738(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x738 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164110
+void EventCallbacks_Set740(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x740 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164130
+void EventCallbacks_Set748(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x748 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164150
+void EventCallbacks_Set750(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x750 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164170
+void EventCallbacks_Set758(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x758 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164190
+void EventCallbacks_Set760(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x760 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_1411641b0
@@ -1542,9 +4153,19 @@ void EventCallbacks_Set770(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x770 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141163c10
+void EventCallbacks_Set778(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x778 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141163db0
 void EventCallbacks_Set780(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x780 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163dd0
+void EventCallbacks_Set788(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x788 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141163c30
@@ -1552,9 +4173,39 @@ void EventCallbacks_Set790(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x790 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141163c50
+void EventCallbacks_Set798(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x798 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163df0
+void EventCallbacks_Set7A0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x7a0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163e10
+void EventCallbacks_Set7A8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x7a8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163e30
+void EventCallbacks_Set7B8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x7b8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141163c70
 void EventCallbacks_Set7C0(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x7c0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163e50
+void EventCallbacks_Set7C8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x7c8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163e70
+void EventCallbacks_Set7D8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x7d8 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141163e90
@@ -1562,14 +4213,379 @@ void EventCallbacks_Set7E0(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x7e0 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141163eb0
+void EventCallbacks_Set7E8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x7e8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411641d0
+void EventCallbacks_Set7F0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x7f0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411641f0
+void EventCallbacks_Set808(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x808 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164210
+void EventCallbacks_Set810(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x810 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164230
+void EventCallbacks_Set818(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x818 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164250
+void EventCallbacks_Set820(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x820 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164270
+void EventCallbacks_Set828(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x828 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164290
+void EventCallbacks_Set830(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x830 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411642b0
+void EventCallbacks_Set838(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x838 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411642d0
+void EventCallbacks_Set840(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x840 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411642f0
+void EventCallbacks_Set848(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x848 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164310
+void EventCallbacks_Set850(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x850 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164330
+void EventCallbacks_Set858(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x858 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164350
+void EventCallbacks_Set860(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x860 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164370
+void EventCallbacks_Set868(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x868 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164390
+void EventCallbacks_Set870(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x870 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411643b0
+void EventCallbacks_Set878(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x878 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411643d0
+void EventCallbacks_Set880(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x880 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411643f0
+void EventCallbacks_Set888(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x888 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164410
+void EventCallbacks_Set890(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x890 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164430
+void EventCallbacks_Set898(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x898 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164450
+void EventCallbacks_Set8A0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x8a0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164470
+void EventCallbacks_Set8A8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x8a8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164490
+void EventCallbacks_Set8B0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x8b0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411644b0
+void EventCallbacks_Set8B8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x8b8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411644d0
+void EventCallbacks_Set8C0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x8c0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411644f0
+void EventCallbacks_Set8C8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x8c8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164510
+void EventCallbacks_Set8D0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x8d0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164530
+void EventCallbacks_Set8D8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x8d8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164550
+void EventCallbacks_Set8E0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x8e0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164570
+void EventCallbacks_Set8E8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x8e8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164590
+void EventCallbacks_Set8F0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x8f0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411645d0
+void EventCallbacks_Set8F8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x8f8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411645b0
+void EventCallbacks_Set900(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x900 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411645f0
+void EventCallbacks_Set908(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x908 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164610
+void EventCallbacks_Set910(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x910 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164630
+void EventCallbacks_Set918(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x918 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164650
+void EventCallbacks_Set920(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x920 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164670
+void EventCallbacks_Set928(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x928 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164690
+void EventCallbacks_Set930(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x930 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411646b0
+void EventCallbacks_Set938(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x938 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411646d0
+void EventCallbacks_Set940(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x940 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411646f0
+void EventCallbacks_Set948(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x948 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164710
+void EventCallbacks_Set950(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x950 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164730
+void EventCallbacks_Set958(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x958 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164750
+void EventCallbacks_Set960(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x960 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164770
+void EventCallbacks_Set968(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x968 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164790
+void EventCallbacks_Set970(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x970 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411647b0
+void EventCallbacks_Set978(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x978 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411647d0
+void EventCallbacks_Set980(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x980 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411647f0
+void EventCallbacks_Set988(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x988 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164810
+void EventCallbacks_Set990(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x990 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164830
+void EventCallbacks_Set998(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x998 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164850
+void EventCallbacks_Set9A0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x9a0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411648b0
+void EventCallbacks_Set9A8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x9a8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164870
+void EventCallbacks_Set9B0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x9b0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164890
+void EventCallbacks_Set9B8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x9b8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411648d0
+void EventCallbacks_Set9C0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x9c0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411648f0
+void EventCallbacks_Set9C8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x9c8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164910
+void EventCallbacks_Set9D0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x9d0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164930
+void EventCallbacks_Set9D8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x9d8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164950
+void EventCallbacks_Set9E0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x9e0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164970
+void EventCallbacks_Set9E8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x9e8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164990
+void EventCallbacks_Set9F0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x9f0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411649b0
+void EventCallbacks_Set9F8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x9f8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411649d0
+void EventCallbacks_SetA00(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xa00 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411649f0
+void EventCallbacks_SetA08(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xa08 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164a10
+void EventCallbacks_SetA10(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xa10 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164a30
+void EventCallbacks_SetA18(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xa18 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164a50
+void EventCallbacks_SetA20(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xa20 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164a70
+void EventCallbacks_SetA28(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xa28 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141164a90
 void EventCallbacks_SetA30(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0xa30 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141164c10
+void EventCallbacks_SetA38(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xa38 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141164c30
 void EventCallbacks_SetA40(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0xa40 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163ed0
+void EventCallbacks_SetA48(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xa48 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141164ab0
@@ -1580,6 +4596,11 @@ void EventCallbacks_SetA60(EVENTSIGNAL signal) {
 // ref: FUN_141163ef0
 void EventCallbacks_SetA68(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0xa68 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165870
+void EventCallbacks_SetC08(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xc08 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141165270
@@ -1597,9 +4618,29 @@ void EventCallbacks_SetD98(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0xd98 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_1411652d0
+void EventCallbacks_SetDA0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xda0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411652f0
+void EventCallbacks_SetDA8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xda8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165650
+void EventCallbacks_SetEA0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xea0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141165890
 void EventCallbacks_SetEA8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0xea8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163c90
+void EventCallbacks_SetEB0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xeb0 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141163cb0
@@ -1607,14 +4648,34 @@ void EventCallbacks_SetEB8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0xeb8 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141165310
+void EventCallbacks_SetEC0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xec0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_1411658b0
 void EventCallbacks_SetEC8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0xec8 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_1411658d0
+void EventCallbacks_SetED0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xed0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_1411658f0
 void EventCallbacks_SetED8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0xed8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165910
+void EventCallbacks_SetEE0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xee0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165930
+void EventCallbacks_SetEE8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xee8 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141165950
@@ -1632,6 +4693,21 @@ void EventCallbacks_SetF30(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0xf30 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_1411659b0
+void EventCallbacks_SetF38(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xf38 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411659d0
+void EventCallbacks_SetF40(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xf40 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163f10
+void EventCallbacks_SetF50(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xf50 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141163cd0
 void EventCallbacks_SetF58(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0xf58 / sizeof(EVENTSIGNAL)] = signal;
@@ -1640,6 +4716,11 @@ void EventCallbacks_SetF58(EVENTSIGNAL signal) {
 // ref: FUN_141169770
 void EventCallbacks_SetF70(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0xf70 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411693f0
+void EventCallbacks_SetF80(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0xf80 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_14116afd0
@@ -1657,6 +4738,11 @@ void EventCallbacks_Set1068(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x1068 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_1411659f0
+void EventCallbacks_Set1070(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1070 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141165a10
 void EventCallbacks_Set1080(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x1080 / sizeof(EVENTSIGNAL)] = signal;
@@ -1672,6 +4758,11 @@ void EventCallbacks_Set10D8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x10d8 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141163f70
+void EventCallbacks_Set10E0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x10e0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141163f90
 void EventCallbacks_Set10E8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x10e8 / sizeof(EVENTSIGNAL)] = signal;
@@ -1680,6 +4771,11 @@ void EventCallbacks_Set10E8(EVENTSIGNAL signal) {
 // ref: FUN_141165a30
 void EventCallbacks_Set10F0(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x10f0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411662b0
+void EventCallbacks_Set1100(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1100 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_1411662d0
@@ -1695,6 +4791,31 @@ void EventCallbacks_Set1110(EVENTSIGNAL signal) {
 // ref: FUN_141166310
 void EventCallbacks_Set1118(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x1118 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166330
+void EventCallbacks_Set1120(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1120 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411697d0
+void EventCallbacks_Set1130(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1130 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411697f0
+void EventCallbacks_Set1148(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1148 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169810
+void EventCallbacks_Set1150(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1150 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165330
+void EventCallbacks_Set1158(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1158 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_14116aff0
@@ -1725,6 +4846,16 @@ void EventCallbacks_Set1330(EVENTSIGNAL signal) {
 // ref: FUN_141169830
 void EventCallbacks_Set1348(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x1348 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166db0
+void EventCallbacks_Set1430(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1430 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166dd0
+void EventCallbacks_Set1438(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1438 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141166df0
@@ -1782,9 +4913,19 @@ void EventCallbacks_Set1498(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x1498 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141165a50
+void EventCallbacks_Set15E0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x15e0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141167490
 void EventCallbacks_Set15E8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x15e8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169850
+void EventCallbacks_Set15F8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x15f8 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141166390
@@ -1797,6 +4938,11 @@ void EventCallbacks_Set1610(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x1610 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141165a70
+void EventCallbacks_Set17C0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x17c0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141165ed0
 void EventCallbacks_Set17D0(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x17d0 / sizeof(EVENTSIGNAL)] = signal;
@@ -1805,6 +4951,11 @@ void EventCallbacks_Set17D0(EVENTSIGNAL signal) {
 // ref: FUN_141165ef0
 void EventCallbacks_Set1808(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x1808 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141166d70
+void EventCallbacks_Set18A0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x18a0 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141165670
@@ -1822,9 +4973,29 @@ void EventCallbacks_Set1918(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x1918 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141163fd0
+void EventCallbacks_Set1948(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1948 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164c70
+void EventCallbacks_Set1BA8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1ba8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165a90
+void EventCallbacks_Set1BB0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1bb0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141169890
 void EventCallbacks_Set1BC8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x1bc8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411698b0
+void EventCallbacks_Set1C10(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1c10 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_1411698d0
@@ -1862,9 +5033,74 @@ void EventCallbacks_Set1E88(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x1e88 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141163a10
+void EventCallbacks_Set1E90(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1e90 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164b10
+void EventCallbacks_Set1F08(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x1f08 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411663b0
+void EventCallbacks_Set2108(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2108 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163cf0
+void EventCallbacks_Set2120(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2120 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163d10
+void EventCallbacks_Set2128(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2128 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164b30
+void EventCallbacks_Set2138(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2138 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164b50
+void EventCallbacks_Set2140(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2140 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164b70
+void EventCallbacks_Set2148(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2148 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163d30
+void EventCallbacks_Set2168(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2168 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163ff0
+void EventCallbacks_Set2188(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2188 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_1411663d0
 void EventCallbacks_Set2190(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x2190 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141168c50
+void EventCallbacks_Set21B8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x21b8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165ab0
+void EventCallbacks_Set21E8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x21e8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165ad0
+void EventCallbacks_Set2208(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2208 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141164010
@@ -1892,6 +5128,21 @@ void EventCallbacks_Set2230(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x2230 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141169490
+void EventCallbacks_Set2268(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2268 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165af0
+void EventCallbacks_Set2270(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2270 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165b10
+void EventCallbacks_Set2278(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2278 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141165eb0
 void EventCallbacks_Set2280(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x2280 / sizeof(EVENTSIGNAL)] = signal;
@@ -1902,14 +5153,44 @@ void EventCallbacks_Set22B8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x22b8 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141165b30
+void EventCallbacks_Set22C8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x22c8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164030
+void EventCallbacks_Set2308(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2308 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141163930
+void EventCallbacks_Set2310(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2310 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141163950
 void EventCallbacks_Set2318(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x2318 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141168f30
+void EventCallbacks_Set2330(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2330 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141168fb0
 void EventCallbacks_Set2368(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x2368 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141168fd0
+void EventCallbacks_Set2370(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2370 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165b50
+void EventCallbacks_Set23B8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x23b8 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_1411694b0
@@ -1925,6 +5206,26 @@ void EventCallbacks_Set2518(EVENTSIGNAL signal) {
 // ref: FUN_1411694f0
 void EventCallbacks_Set2520(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x2520 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169510
+void EventCallbacks_Set2528(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2528 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169530
+void EventCallbacks_Set2530(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2530 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169550
+void EventCallbacks_Set2538(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2538 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169570
+void EventCallbacks_Set2540(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2540 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141169590
@@ -1962,9 +5263,34 @@ void EventCallbacks_Set25A8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x25a8 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141169970
+void EventCallbacks_Set25E8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x25e8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141169670
 void EventCallbacks_Set25F0(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x25f0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141169990
+void EventCallbacks_Set2600(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2600 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411699b0
+void EventCallbacks_Set2678(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2678 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165350
+void EventCallbacks_Set2680(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2680 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165b70
+void EventCallbacks_Set2688(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2688 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_14116b7d0
@@ -1977,9 +5303,34 @@ void EventCallbacks_Set2698(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x2698 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_14116b810
+void EventCallbacks_Set26A0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x26a0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b830
+void EventCallbacks_Set26A8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x26a8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b850
+void EventCallbacks_Set26B0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x26b0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b870
+void EventCallbacks_Set26B8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x26b8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_14116b890
 void EventCallbacks_Set26C0(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x26c0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b8b0
+void EventCallbacks_Set26C8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x26c8 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_14116b8d0
@@ -1992,9 +5343,19 @@ void EventCallbacks_Set26D8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x26d8 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_14116b910
+void EventCallbacks_Set26E0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x26e0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_14116b930
 void EventCallbacks_Set26E8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x26e8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b950
+void EventCallbacks_Set26F0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x26f0 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141169690
@@ -2007,6 +5368,16 @@ void EventCallbacks_Set29B0(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x29b0 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_1411699d0
+void EventCallbacks_Set29C0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x29c0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411699f0
+void EventCallbacks_Set29C8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x29c8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141167bd0
 void EventCallbacks_Set2A00(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x2a00 / sizeof(EVENTSIGNAL)] = signal;
@@ -2017,9 +5388,24 @@ void EventCallbacks_Set2A08(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x2a08 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141165b90
+void EventCallbacks_Set2A10(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2a10 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141166d90
 void EventCallbacks_Set2EB8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x2eb8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164b90
+void EventCallbacks_Set2EF8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2ef8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141164bb0
+void EventCallbacks_Set2F00(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2f00 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141164bd0
@@ -2027,9 +5413,19 @@ void EventCallbacks_Set2F08(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x2f08 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141163a30
+void EventCallbacks_Set2F18(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2f18 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141164bf0
 void EventCallbacks_Set2F28(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x2f28 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165bd0
+void EventCallbacks_Set2F30(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2f30 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_141164070
@@ -2037,9 +5433,24 @@ void EventCallbacks_Set2FA8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x2fa8 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141164090
+void EventCallbacks_Set2FF8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x2ff8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_141165bf0
+void EventCallbacks_Set3110(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3110 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_141169a10
 void EventCallbacks_Set3138(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x3138 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_1411696b0
+void EventCallbacks_Set3140(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3140 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_1411696d0
@@ -2052,6 +5463,11 @@ void EventCallbacks_Set3150(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x3150 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_141169710
+void EventCallbacks_Set3158(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3158 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_14116b090
 void EventCallbacks_Set3188(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x3188 / sizeof(EVENTSIGNAL)] = signal;
@@ -2060,6 +5476,11 @@ void EventCallbacks_Set3188(EVENTSIGNAL signal) {
 // ref: FUN_14116b0b0
 void EventCallbacks_Set3190(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x3190 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b0d0
+void EventCallbacks_Set3198(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3198 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_14116b0f0
@@ -2072,9 +5493,129 @@ void EventCallbacks_Set31A8(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x31a8 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_14116b130
+void EventCallbacks_Set31B0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x31b0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b150
+void EventCallbacks_Set31B8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x31b8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b170
+void EventCallbacks_Set31C0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x31c0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b190
+void EventCallbacks_Set31C8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x31c8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b1b0
+void EventCallbacks_Set31D0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x31d0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b1d0
+void EventCallbacks_Set31D8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x31d8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b1f0
+void EventCallbacks_Set31E0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x31e0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b210
+void EventCallbacks_Set31E8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x31e8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b230
+void EventCallbacks_Set31F0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x31f0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b250
+void EventCallbacks_Set31F8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x31f8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b270
+void EventCallbacks_Set3200(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3200 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b290
+void EventCallbacks_Set3208(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3208 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b2b0
+void EventCallbacks_Set3210(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3210 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b2d0
+void EventCallbacks_Set3218(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3218 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b2f0
+void EventCallbacks_Set3220(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3220 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b310
+void EventCallbacks_Set3228(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3228 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b330
+void EventCallbacks_Set3230(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3230 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b350
+void EventCallbacks_Set3238(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3238 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b370
+void EventCallbacks_Set3240(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3240 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b390
+void EventCallbacks_Set3248(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3248 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b3b0
+void EventCallbacks_Set3250(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3250 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b3d0
+void EventCallbacks_Set3258(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3258 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_14116b3f0
 void EventCallbacks_Set3260(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x3260 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b410
+void EventCallbacks_Set3268(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3268 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b430
+void EventCallbacks_Set3270(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3270 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_14116b450
@@ -2082,9 +5623,39 @@ void EventCallbacks_Set3278(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x3278 / sizeof(EVENTSIGNAL)] = signal;
 }
 
+// ref: FUN_14116b470
+void EventCallbacks_Set3280(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3280 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b490
+void EventCallbacks_Set3288(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3288 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b4b0
+void EventCallbacks_Set3290(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x3290 / sizeof(EVENTSIGNAL)] = signal;
+}
+
 // ref: FUN_14116b4d0
 void EventCallbacks_Set3298(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x3298 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b4f0
+void EventCallbacks_Set32A0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x32a0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b510
+void EventCallbacks_Set32A8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x32a8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b530
+void EventCallbacks_Set32B0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x32b0 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_14116b550
@@ -2095,6 +5666,26 @@ void EventCallbacks_Set32B8(EVENTSIGNAL signal) {
 // ref: FUN_14116b570
 void EventCallbacks_Set32C0(EVENTSIGNAL signal) {
     EventCallbacks_Table()[0x32c0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b590
+void EventCallbacks_Set32C8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x32c8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b5b0
+void EventCallbacks_Set32D0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x32d0 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b5d0
+void EventCallbacks_Set32D8(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x32d8 / sizeof(EVENTSIGNAL)] = signal;
+}
+
+// ref: FUN_14116b5f0
+void EventCallbacks_Set32E0(EVENTSIGNAL signal) {
+    EventCallbacks_Table()[0x32e0 / sizeof(EVENTSIGNAL)] = signal;
 }
 
 // ref: FUN_14116b610

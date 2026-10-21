@@ -34,6 +34,15 @@ void CheckFunctionPointer(uint64_t function) {
         }
     }
 
+    // DIVERGED: translated code hands on the reference's own function addresses, which RefImage
+    // backs with jumps inside the reference's .text, mapped at its original base; those are
+    // valid code pointers too (they were reported as invalid on every ClientServices poll).
+    constexpr uint64_t kReferenceTextStart = 0x140001000ull;
+    constexpr uint64_t kReferenceTextEnd = 0x14260c5d3ull;
+    if (kReferenceTextStart <= function && function < kReferenceTextEnd) {
+        return;
+    }
+
     if (function < s_textStart || s_textEnd <= function) {
         char message[64];
         SStrPrintf64(message, "Invalid function pointer: %p", reinterpret_cast<void*>(function));

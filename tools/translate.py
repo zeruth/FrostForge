@@ -3370,10 +3370,13 @@ def write_exports(exported: dict[int, dict]):
     by_file = defaultdict(list)
     for base, g in exported.items():
         by_file[g["file"]].append((base, g))
-    for p in (ROOT / "src").rglob("*.cpp"):
+    sources = [p for top in ("src", "vendor") for ext in ("*.cpp", "*.c") for p in (ROOT / top).rglob(ext)]
+    for p in sources:
         rel = p.relative_to(ROOT).as_posix()
         if rel.startswith("src/gen/"):
             continue
+        if rel not in by_file and p.suffix == ".c":
+            continue   # (C files carry exports only for internal ports; nothing to clean otherwise)
         text = p.read_text(encoding="utf-8", errors="replace")
         had = EXPORT_BEGIN in text
         if not had and rel not in by_file:
@@ -3383,7 +3386,9 @@ def write_exports(exported: dict[int, dict]):
         if rel in by_file:
             lines = ["", EXPORT_BEGIN]
             for base, g in sorted(by_file[rel]):
-                lines.append(f'extern "C" void* const gen_p_{base:x} = (void*)&{g["qual"]};')
+                prefix = "gen_f" if g.get("fn") else "gen_p"
+                linkage = "" if p.suffix == ".c" else 'extern "C" '
+                lines.append(f'{linkage}void* const {prefix}_{base:x} = (void*)&{g["qual"]};')
             lines.append(EXPORT_END)
             kept += "\n".join(lines) + "\n"
         if kept != text:
@@ -3587,6 +3592,7 @@ class Translator:
         self._extra_params: dict[int, dict[int, str]] = {}
         self._pool = None   # worker processes (start_pool), or None to do the work here
         self.mismatched: set[int] = set()   # ports whose signature is not the reference's
+        self.fn_exported: dict[int, dict] = {}   # internal ports reached through gen_f_ (internal_port)
         self.callargs = callargs.CallArgs(self.ref)
         self.patches = json.loads((ROOT / "tools/translate_patches.json").read_text(encoding="utf-8"))
         fid = json.loads(F.OUT_JSON.read_text())
@@ -3679,6 +3685,27 @@ class Translator:
             return f"{rec['name']} takes fewer arguments than the reference"
         return f"{rec['name']} returns or takes an aggregate by value"
 
+    def internal_port(self, a: int, rec: dict, sig) -> str | None:
+        """A hand port with no public symbol (an anonymous namespace's function or a file
+        `static`), reached through a C-linkage pointer its own file exports (write_exports:
+        `gen_f_<a>`): '&' and the name its file can take the address by, or None. Free
+        functions only (a member's address is no plain function pointer); a template's
+        instantiation has no single name. 2357 ports were passed over, the translator
+        translating each a second time and the two copies keeping their state apart (the
+        initial hotfix listeners, the FFX slots, 2026-10-21)."""
+        name = rec["name"]
+        # (a function in a named namespace's anonymous one, casc::`anonymous namespace'::FileExists,
+        # is casc::FileExists from the file's scope; a static member is a plain function too)
+        plain = name.replace("`anonymous namespace'::", "")
+        rel = rec["file"].replace("\\", "/")
+        if (sig[2] or "<" in name or "`" in plain or "operator" in plain
+                or not rel.startswith(("src/", "vendor/")) or rel.startswith("src/gen/")
+                or not rel.endswith((".cpp", ".c"))
+                or not re.fullmatch(r"\w+(?:::\w+)*", plain) or (rel.endswith(".c") and "::" in plain)):
+            return None
+        self.fn_exported[a] = {"name": name, "file": rel, "qual": plain, "fn": True}
+        return "&" + plain
+
     def port_target(self, a: int):
         """(va, mangled, signature) when the port has a callable counterpart of `a`."""
         rec = self.tied.get(a)
@@ -3697,6 +3724,8 @@ class Translator:
         va = vas[0]
         mangled = self.publics.get(va)
         sig = self.signatures.get(va)
+        if mangled is None and sig is not None:
+            mangled = self.internal_port(a, rec, sig)
         if mangled is None or sig is None:
             return None
         ret, args, this = sig
@@ -3711,7 +3740,7 @@ class Translator:
         # mangling as a trailing ZZ) is not that function with that signature: the reference's
         # callers would hand it their arguments in the wrong places (ProtectedCall drops nargs)
         ref = self.signature(a)
-        if ref is not None and len(args) + (1 if this else 0) < len(ref[2]) and mangled.startswith("?") \
+        if ref is not None and len(args) + (1 if this else 0) < len(ref[2]) and mangled.startswith(("?", "&")) \
                 and not mangled.endswith("ZZ"):
             self.mismatched.add(a)
             return None
@@ -6251,7 +6280,8 @@ class Translator:
             header += [f"/* {g['name']} ({g['file']}), internal: through its pointer */",
                        f"extern void *const gen_p_{base:x};",
                        f"#define gen_g_{base:x} {cast}"]
-        write_exports(self.exported)
+        write_exports({**self.exported,
+                       **{a: g for a, g in self.fn_exported.items() if a in plan["adapt"]}})
         header += prototypes + ["", "#endif", ""]
         write_out(GEN / "translated.h", "\n".join(header), encoding="utf-8", newline="\n")
 
@@ -6307,7 +6337,9 @@ class Translator:
                 pass_args += [f"v{i}" for i in range(len(tail))]
                 classes = classes + ["int"] * len(tail)
             fptr = f"{abi[ret]} (*)({', '.join(abi[c] for c in classes) or 'void'})"
-            call = f"(({fptr})&{alias})({', '.join(pass_args)})"
+            internal = mangled.startswith("&")
+            call = (f"(({fptr})gen_f_{a:x})({', '.join(pass_args)})" if internal
+                    else f"(({fptr})&{alias})({', '.join(pass_args)})")
             proto = f"{gret} FUN_{a:x}({', '.join(params) or 'void'})"
             if ctor and gret.strip() != "void":
                 inner = f"    {call};\n    return ({gret})a0;"
@@ -6319,8 +6351,12 @@ class Translator:
                 inner = f"    return ({gret})(long long){call};"
             else:
                 inner = f"    return ({gret}){call};"
-            adapters += [f"#pragma comment(linker, \"/alternatename:{alias}={mangled}\")",
-                         f"extern char {alias};", f"{proto} {{", inner, "}", ""]
+            if internal:
+                adapters += [f"/* {mangled[1:]}: internal, through the pointer its file exports */",
+                             f"extern void *const gen_f_{a:x};", f"{proto} {{", inner, "}", ""]
+            else:
+                adapters += [f"#pragma comment(linker, \"/alternatename:{alias}={mangled}\")",
+                             f"extern char {alias};", f"{proto} {{", inner, "}", ""]
         write_out(GEN / "adapters.c", "\n".join(adapters), encoding="utf-8", newline="\n")
         if void_for_value:
             print(f"ports returning void where the reference returns a value ({len(void_for_value)}; the "

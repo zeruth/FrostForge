@@ -162,7 +162,8 @@ bool IsActionPermitted(uint32_t action) {
     return true;
 }
 
-// ref: FUN_140800cc0
+// (not FUN_140800cc0: that takes a context holding the lua_State, not the lua_State, so translated
+// callers handed this their context; untagged 2026-10-21, they run its translation)
 FrameScript_Object* Self(lua_State* L, int32_t type, int32_t* index, const char* usage) {
     if (!Present(L, *index)) {
         luaL_error(L, usage);
@@ -466,7 +467,8 @@ int32_t PushBool(lua_State* L, bool value) {
 }
 
 // FUN_1407cb130
-// ref: FUN_140800bf0
+// (not FUN_140800bf0: that takes a context holding the lua_State, not the lua_State, so translated
+// callers handed this their context; untagged 2026-10-21, they run its translation)
 int32_t PushStringOrNil(lua_State* L, const char* value) {
     if (!lua_checkstack(L, 1)) {
         luaL_error(L, "stack overflow");
@@ -542,7 +544,8 @@ int32_t PushUInt(lua_State* L, uint32_t value) {
 }
 
 // FUN_1408008a0
-// ref: FUN_140800ae0
+// (not FUN_140800ae0: that takes a context holding the lua_State, not the lua_State, so translated
+// callers handed this their context; untagged 2026-10-21, they run its translation)
 int32_t PushObject(lua_State* L, FrameScript_Object* object) {
     if (!lua_checkstack(L, 1)) {
         luaL_error(L, "stack overflow");
@@ -591,7 +594,8 @@ bool CanChangeProtected(CScriptRegion* region) {
     return false;
 }
 
-// ref: FUN_1407d0a90
+// (not FUN_1407d0a90: that takes a context holding the lua_State, not the lua_State, so translated
+// callers handed this their context; untagged 2026-10-21, they run its translation)
 void PushFromMixin(lua_State* L, const char* mixin) {
     lua_createtable(L, 0, 2);
     lua_getfield(L, LUA_GLOBALSINDEX, mixin);

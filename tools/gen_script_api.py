@@ -472,16 +472,25 @@ def emit() -> None:
             elif kind == "event":
                 setter, slot, dispatcher = item
                 sig = event_signal_info(b, dispatcher)
-                if sig["name"] is None or sig["nargs"] is None:
+                if sig["name"] is None or sig["inner"] is None:
                     body.append(f"    // not generated: FUN_{setter:x} installs FUN_{dispatcher:x}, not decoded")
                 elif sig["nargs"] != 0:
-                    body.append(f"    // not generated: FUN_{setter:x} installs the {sig['name']} signaller "
-                                f"(FUN_{dispatcher:x}, {sig['nargs']} arguments)")
+                    # An event with arguments: the port's dispatch, and the event's own fire
+                    # function, translated, over the port's listener list (the same 0x20-byte
+                    # layout), so its arguments are pushed as the reference pushes them. These
+                    # 213 events were left uninstalled until 2026-10-20, CHARACTER_LIST_UPDATE
+                    # among them: CharacterSelect never selected a character.
+                    cname = f"EventSignal_{sig['name']}"
+                    if cname in signals and signals[cname][0] != dispatcher:
+                        cname = f"{cname}_{dispatcher:x}"
+                    signals[cname] = (dispatcher, sig["inner"], sig["name"], sig["id"], True)
+                    setters[setter] = slot
+                    body.append(f"    EventCallbacks_Set{slot:X}({cname});")
                 else:
                     cname = f"EventSignal_{sig['name']}"
                     if cname in signals and signals[cname][0] != dispatcher:
                         cname = f"{cname}_{dispatcher:x}"
-                    signals[cname] = (dispatcher, sig["inner"], sig["name"], sig["id"])
+                    signals[cname] = (dispatcher, sig["inner"], sig["name"], sig["id"], False)
                     setters[setter] = slot
                     body.append(f"    EventCallbacks_Set{slot:X}({cname});")
         registry.append((addr, name, "lua_State* L", body, info["other"]))
@@ -583,10 +592,29 @@ def emit() -> None:
                   "",
                   "#include \"framescript/FrameScriptEvents.hpp\"",
                   ""]
-    for cname, (dispatcher, inner, event, event_id) in sorted(signals.items()):
+    translated_fires = sorted({inner for (_, inner, _, _, translated) in signals.values() if translated})
+    if translated_fires:
+        sig_source += ["// The fire functions of the events with arguments, translated (see below).",
+                       "extern \"C\" {"]
+        sig_source += [f"unsigned long long FUN_{inner:x}(...);" for inner in translated_fires]
+        sig_source += ["}", ""]
+    for cname, (dispatcher, inner, event, event_id, translated) in sorted(signals.items()):
         fire = "EventFire_" + cname[len("EventSignal_"):]
         sig_header.append(f"void {cname}(uint64_t id, void* args);")
         sig_header.append(f"void {fire}(FrameScriptEvents::EventListenerList* list, void* args);")
+        if translated:
+            sig_source += [f"// {event}: the reference's fire function (FUN_{inner:x}, translated) over the port's",
+                           "// listener list, which pushes the event's arguments from `args`.",
+                           f"void {fire}(FrameScriptEvents::EventListenerList* list, void* args) {{",
+                           f"    FUN_{inner:x}(list, args);",
+                           "}",
+                           "",
+                           f"// ref: FUN_{dispatcher:x}",
+                           f"void {cname}(uint64_t id, void* args) {{",
+                           f"    FrameScriptEvents::Dispatch(id, args, {fire});",
+                           "}",
+                           ""]
+            continue
         sig_source += [f"// ref: FUN_{inner:x}",
                        f"void {fire}(FrameScriptEvents::EventListenerList* list, void* args) {{",
                        "    (void)args;",

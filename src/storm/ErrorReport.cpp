@@ -110,7 +110,13 @@ void ErrorDisplayFormatted(uint32_t code, const char* a2, int32_t a3, const char
 
 // ref: FUN_14024d210
 // Diverged: the report is not ported; the message goes to stderr so that it is not lost.
-void ErrorReportNonFatal(uint32_t code, const char* file, int32_t line, const char* format, ...) {
+// (Its format was the fourth parameter until 2026-10-20, so the reference's 1 was read as the
+// format: Lua's script-exception report faulted in vsprintf, touching address 1.)
+void ErrorReportNonFatal(uint32_t code, const char* file, int32_t line, uint8_t a4, int32_t a5, uint64_t a6,
+    const char* format, ...) {
+    (void)a4;
+    (void)a5;
+    (void)a6;
     char message[0x800];
     va_list args;
     va_start(args, format);

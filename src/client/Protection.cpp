@@ -29,3 +29,22 @@ void AegisCheckTiming(uint64_t unused, uint32_t a2, uint64_t a3) {
     (void)a2;
     (void)a3;
 }
+
+// The Lua taint shadow: the reference keeps an obfuscated copy of the current taint in an 8-byte
+// block a masked pointer at lua_State +0x18 leads to, and its taint code keeps the copy in step with
+// lua_taint. The port's Lua has no shadow (vendor/lua-5.1.4/src/lblizzard.c), so the slot holds no
+// masked pointer, and unmasking it gave a wild one: LoadAddOn faulted in the setter
+// (Blizzard_FrameEffects and Blizzard_StoreUI never loaded, and CharacterSelect.lua hit nil
+// globals, 2026-10-20). The setter writes nothing; the check passes.
+// ref: FUN_1402bd260
+void* AegisTaintShadowSet(void* L) {
+    (void)L;
+    return nullptr;
+}
+
+// Compares the shadow with lua_taint, and reports a mismatch (FUN_14241f9a0, code 0x322).
+// ref: FUN_1402bd150
+void AegisTaintShadowCheck(void* L, uint32_t site) {
+    (void)L;
+    (void)site;
+}

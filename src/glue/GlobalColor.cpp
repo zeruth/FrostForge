@@ -77,7 +77,8 @@ std::vector<DBCOLOREXPORT> GlobalColorExports() {
 }
 
 // A colour as a ColorMixin table: r, g, b and a from its ARGB bytes.
-// ref: FUN_140d13080
+// (not FUN_140d13080: that takes a context holding the lua_State, not the lua_State, so translated
+// callers handed this their context; untagged 2026-10-21, they run its translation)
 int32_t PushColorMixin(lua_State* L, uint32_t color) {
     if (!lua_checkstack(L, 1)) {
         return luaL_error(L, "stack overflow");

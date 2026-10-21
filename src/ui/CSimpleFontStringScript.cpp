@@ -151,7 +151,8 @@ int32_t PushColor(lua_State* L, uint32_t argb) {
 }
 
 // A justification as its name (FUN_1408c6e70).
-// ref: FUN_1407cb130
+// (not FUN_1407cb130: that takes a context holding the lua_State, not the lua_State, so translated
+// callers handed this their context; untagged 2026-10-21, they run its translation)
 int32_t PushJustify(lua_State* L, uint32_t justify) {
     return ScriptMethod::PushStringOrNil(L, JustifyToString(justify));
 }
