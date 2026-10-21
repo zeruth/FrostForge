@@ -40,6 +40,7 @@ add_library(ui STATIC
     CSimpleTexture.cpp
     CSimpleTextureScript.cpp
     CSimpleTop.cpp
+    DevLua.cpp
     TextureAtlas.cpp
     CSimpleFont.cpp
     CSimpleFontScript.cpp

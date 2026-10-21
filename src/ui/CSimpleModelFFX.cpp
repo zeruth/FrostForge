@@ -523,8 +523,8 @@ struct ADDLIGHTARGS {
 
 }  // namespace
 
-// [index], light: FUN_1408c5ad0 reads the optional index.
-// ref: FUN_1407d22e0
+// [index], light: FUN_1408c5ad0 reads the optional index. (Not FUN_1407d22e0, whose tag it
+// carried: that is an "argument is a finite number" check taking (L, index), 2026-10-21.)
 void ReadAddLight(lua_State* L, const char* usage, ADDLIGHTARGS* args) {
     int32_t index = 1;
     args->m_frame = FfxSelf(L, &index, usage);
@@ -620,7 +620,6 @@ extern "C" void* const gen_f_1405dc960 = (void*)&FfxAntiAliasingEnabled;
 extern "C" void* const gen_f_1405dcf00 = (void*)&FfxPassActive;
 extern "C" void* const gen_f_1405dd5d0 = (void*)&FfxEffectBegin;
 extern "C" void* const gen_f_1405e4e70 = (void*)&FfxNetherEffectEnabled;
-extern "C" void* const gen_f_1407d22e0 = (void*)&ReadAddLight;
 extern "C" void* const gen_f_1424a59d0 = (void*)&FfxDeathEffectEnabled;
 extern "C" void* const gen_p_142e96fd0 = (void*)&s_ffxPassSlot;
 extern "C" void* const gen_p_142e97028 = (void*)&s_ffxAntiAliasing;

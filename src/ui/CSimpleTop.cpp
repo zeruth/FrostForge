@@ -15,6 +15,7 @@
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
 #include "ui/CAnimatableObject.hpp"
+#include "ui/DevLua.hpp"
 #include "ui/CRenderBatch.hpp"
 #include "framescript/EventCallbacks.hpp"
 #include "ui/CScriptRegion.hpp"
@@ -1570,6 +1571,7 @@ void CSimpleTop::Render() {
 
 // ref: FUN_1405f0be0
 void CSimpleTop::OnUpdate(float elapsed) {
+    DevLuaPoll();  // (a development aid: nothing without FROST_LUA, ui/DevLua.cpp)
     if (this->m_preUpdateHook != nullptr) {
         this->m_preUpdateHook();
     }

@@ -939,9 +939,13 @@ def stack_frame(body: str, params: list[str] | None = None) -> str:
 
 
 IMAGE_LO, IMAGE_HI = 0x140000000, 0x150000000   # the reference image's address range
-INIT_EPOCH = re.compile(r"\*\(int \*\)\(\*\(longlong \*\)\(\(longlong\)ThreadLocalStoragePointer \+ "
-                        r"\(ulonglong\)_tls_index \* 8\) \+\s*0x2140\)")
-TLS_BLOCK = r"\*\(longlong \*\)\(\(longlong\)ThreadLocalStoragePointer \+ \(ulonglong\)_tls_index \* 8\)"
+# (any whitespace between the tokens: Ghidra wraps a long condition anywhere, and a wrapped
+# `*(longlong *)\n ((longlong)ThreadLocalStoragePointer` was missed, leaving that static's guard
+# against the image's TLS template, so EnterWorld's "gameTip" CVar was never looked up, 2026-10-21)
+INIT_EPOCH = re.compile(r"\*\s*\(int \*\)\s*\(\s*\*\s*\(longlong \*\)\s*\(\s*\(longlong\)\s*ThreadLocalStoragePointer\s*\+\s*"
+                        r"\(ulonglong\)\s*_tls_index\s*\*\s*8\s*\)\s*\+\s*0x2140\s*\)")
+TLS_BLOCK = (r"\*\s*\(longlong \*\)\s*\(\s*\(longlong\)\s*ThreadLocalStoragePointer\s*\+\s*\(ulonglong\)\s*_tls_index"
+             r"\s*\*\s*8\s*\)")
 EPOCH_PTR = re.compile(r"\(int \*\)\(" + TLS_BLOCK + r"\s*\+\s*0x2140\)")
 TLS_BLOCK_LOAD = re.compile(r"^(\s*)(\w+) = " + TLS_BLOCK + r";$", re.M)
 
@@ -3593,6 +3597,7 @@ class Translator:
         self._pool = None   # worker processes (start_pool), or None to do the work here
         self.mismatched: set[int] = set()   # ports whose signature is not the reference's
         self.fn_exported: dict[int, dict] = {}   # internal ports reached through gen_f_ (internal_port)
+        self.internal_wider: dict[int, tuple] = {}   # internal ports left out: wider than the reference
         self.callargs = callargs.CallArgs(self.ref)
         self.patches = json.loads((ROOT / "tools/translate_patches.json").read_text(encoding="utf-8"))
         fid = json.loads(F.OUT_JSON.read_text())
@@ -3702,6 +3707,15 @@ class Translator:
                 or not rel.startswith(("src/", "vendor/")) or rel.startswith("src/gen/")
                 or not rel.endswith((".cpp", ".c"))
                 or not re.fullmatch(r"\w+(?:::\w+)*", plain) or (rel.endswith(".c") and "::" in plain)):
+            return None
+        # (one that takes more arguments than the reference passes is not that function, or not
+        # in that shape: ReadAddLight(L, usage, args) carried FUN_1407d22e0's tag, an "is this
+        # argument a finite number" check taking (L, index), and once reachable it ran on every
+        # GetCharacterInfo. These had never been reached from translated code, so they stay on
+        # their translation until each is checked: build/internal-arity.txt)
+        ref = self.signature(a)
+        if ref is not None and len(sig[1]) > len(ref[2]):
+            self.internal_wider[a] = (name, len(ref[2]), len(sig[1]))
             return None
         self.fn_exported[a] = {"name": name, "file": rel, "qual": plain, "fn": True}
         return "&" + plain
@@ -4056,6 +4070,11 @@ class Translator:
         out = []
         for slot in range(self.INIT_TABLE[0], self.INIT_TABLE[1], 8):
             p = self.ref.u64(slot)
+            # (an entry that is a `jmp rel32` thunk runs its target: the GUID handlers'
+            # initializer 0x1401eef00 jumps to FUN_141551820, and being a thunk it is in no
+            # corpus, so the tables stayed empty and every GUID string was "Player-", 2026-10-21)
+            if p and p not in self.cor and self.ref.is_code(p) and self.ref.image[self.ref.off(p)] == 0xE9:
+                p = p + 5 + self.ref.i32(p + 1)
             e = self.cor.get(p)
             if not p or e is None or "c" not in e:
                 continue
@@ -6282,6 +6301,9 @@ class Translator:
                        f"#define gen_g_{base:x} {cast}"]
         write_exports({**self.exported,
                        **{a: g for a, g in self.fn_exported.items() if a in plan["adapt"]}})
+        (ROOT / "build/internal-arity.txt").write_text(
+            "".join(f"FUN_{a:x}  ref {nr}  port {np_}  {name}\n"
+                    for a, (name, nr, np_) in sorted(self.internal_wider.items())), encoding="utf-8")
         header += prototypes + ["", "#endif", ""]
         write_out(GEN / "translated.h", "\n".join(header), encoding="utf-8", newline="\n")
 

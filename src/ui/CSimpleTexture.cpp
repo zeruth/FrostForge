@@ -2258,5 +2258,4 @@ void CSimpleMaskTexture::OnFrameSizeChanged(const CRect* rect, const CRect* prev
 extern "C" void* const gen_f_140632450 = (void*)&MaskTexCoords;
 extern "C" void* const gen_f_140635eb0 = (void*)&ReplaceTexture;
 extern "C" void* const gen_f_140637e30 = (void*)&RotatePoint;
-extern "C" void* const gen_f_14166e680 = (void*)&ApplyFile;
 // ---- end of generated globals ----

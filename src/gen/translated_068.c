@@ -2,7 +2,7 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4310 4312 4389 4554 4702 4100 4101 4102 4146 4018 4057 4113 4152 4204 4459 4456 4457 4127 4805 4800 4996)
 #define GEN_HITS gen_hits_068
-unsigned int gen_hits_068[289];
+unsigned int gen_hits_068[288];
 
 /* ref: FUN_141164c90 */
 longlong FUN_141164c90(undefined8 param_1)
@@ -3172,17 +3172,6 @@ longlong FUN_1411678b0(undefined8 param_1)
   return lVar1;
 }
 
-/* ref: FUN_1411678d0 */
-longlong FUN_1411678d0(undefined8 param_1)
-{
-  GEN_HIT(288);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  *(undefined8 *)(lVar1 + 0x1718) = param_1;
-  return lVar1;
-}
-
 const unsigned long long gen_hit_addrs_068[] = {
     0x141164c90ULL,
     0x141164cb0ULL,
@@ -3472,6 +3461,5 @@ const unsigned long long gen_hit_addrs_068[] = {
     0x141167870ULL,
     0x141167890ULL,
     0x1411678b0ULL,
-    0x1411678d0ULL,
 };
 

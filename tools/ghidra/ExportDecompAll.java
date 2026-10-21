@@ -151,6 +151,26 @@ public class ExportDecompAll extends GhidraScript {
             }
         }
 
+        // a listed address Ghidra made no function of (code reached only through a table or a
+        // tail jump, as the static initializer at 0x1401eef00 and the GUID handlers it installs
+        // were, 2026-10-21): disassembled and made a function first, so it is exported too
+        if (only != null) {
+            for (long a : only) {
+                Address at = toAddr(a);
+                if (getFunctionAt(at) != null) {
+                    continue;
+                }
+                Function inside = getFunctionContaining(at);
+                if (inside != null) {
+                    println("ExportDecompAll: " + at + " is inside " + inside.getName() + ", left as it is");
+                    continue;
+                }
+                disassemble(at);
+                Function made = createFunction(at, null);
+                println("ExportDecompAll: " + (made != null ? "made a function at " : "could not make a function at ") + at);
+            }
+        }
+
         List<Function> functions = new ArrayList<>();
         FunctionIterator it = currentProgram.getFunctionManager().getFunctions(true);
         while (it.hasNext()) {

@@ -86,12 +86,18 @@ void UiInputDisplayChanged();
 void Sub14065FB00();
 void GamepadSetInBackground(bool background);
 
+// The world's scene and its view's flags (DAT_142ddcf58, DAT_142ddcf60), made at the end of stage
+// 5 (StartupClient.cpp). This file once declared its own pair at those addresses, as "quit
+// arguments" nothing set, and FUN_140216570 returned that null: ProceduralVisuals' setup faulted
+// on it when entering the world, before the login went out (2026-10-21).
+class CWorldScene;
+extern CWorldScene* s_worldScene;
+extern uint32_t* s_worldParams;
+
 namespace {
 
 uint8_t s_quitRequested;            // DAT_142ddcf48
 uint8_t s_quitHandled;              // DAT_142ddcfac
-uint64_t s_quitArgument;            // DAT_142ddcf58
-uint64_t s_quitArgument2;           // DAT_142ddcf60
 float s_frameSeconds;               // DAT_142ddfa00
 uint32_t s_frameTime;               // DAT_142ddf9f4
 uint8_t s_paused;                   // DAT_142ddfa04
@@ -621,7 +627,7 @@ void ClientRequestQuit() {
 void ClientReleaseOnQuit() {
     if (s_quitHandled == 0) {
         FROST_UNIMPLEMENTED();  // FUN_1414f8d90 (window), FUN_1412d4870(0xfe, 1) and FUN_1412cab50 (the connection)
-        Sub1412CAB50(s_quitArgument);
+        Sub1412CAB50(reinterpret_cast<uint64_t>(s_worldScene));
         uint8_t ignored;
         OsEventPump([](void*, uint32_t, uint32_t*, void*) {}, nullptr, &ignored);
         s_quitHandled = 1;
@@ -630,12 +636,12 @@ void ClientReleaseOnQuit() {
 
 // ref: FUN_140216570
 uint64_t Sub140216570() {
-    return s_quitArgument;
+    return reinterpret_cast<uint64_t>(s_worldScene);
 }
 
 // ref: FUN_140216580
 uint64_t Sub140216580() {
-    return s_quitArgument2;
+    return reinterpret_cast<uint64_t>(s_worldParams);
 }
 
 // The main loop's condition: pumps events and advances the game; false to stop.

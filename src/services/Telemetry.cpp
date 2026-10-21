@@ -57,6 +57,17 @@ void TelemetryShutdown() {
     }
 }
 
+// The ClientPerformance report (T2Client/ClientPerformance.pb), sent when entering or leaving
+// the world (FUN_140233a60, FUN_140233d30, FUN_140236360): frame-time averages over the
+// performance counters (FUN_140249e90), each divided by their sample count. DIVERGED: telemetry
+// is offline (D1), so no report is built. Its translation divided by the counters' empty count
+// and faulted, which ended EnterWorld before the login went out (2026-10-21).
+// ref: FUN_140249400
+void TelemetryReportClientPerformance() {
+}
+// (only translated code calls it: kept by name, or /OPT:REF drops it before fidelity.py can tie it)
+#pragma comment(linker, "/include:?TelemetryReportClientPerformance@@YAXXZ")
+
 // The downloader (0x4f8 bytes) destroyed and freed.
 // translated: FUN_141556340
 void WowDownloadDestroy(void** holder) {

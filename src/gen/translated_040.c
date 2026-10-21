@@ -4395,7 +4395,7 @@ undefined1 FUN_1406787c0(longlong param_1, undefined4 param_2, undefined8 param_
         if (cVar1 == '\0') {
           return 0;
         }
-        if ((*GenInitThreadEpochPtr() < REFG(undefined4, 0x142e9cb70)) &&
+        if ((_Init_thread_epoch < REFG(int, 0x142e9cb70)) &&
            (_Init_thread_header(&REFG(undefined4, 0x142e9cb70)), REFG(undefined4, 0x142e9cb70) == -1)) {
           REFG(undefined8, 0x142e9cb28) = 8;
           REFG(undefined8, 0x142e9cb20) = (*(undefined8 (*)[8])(uintptr_t)0x1426d2458ULL);

@@ -2,7 +2,7 @@
 #include "gen/translated.h"
 #pragma warning(disable: 4013 4024 4028 4047 4090 4133 4142 4189 4245 4244 4267 4305 4306 4310 4312 4389 4554 4702 4100 4101 4102 4146 4018 4057 4113 4152 4204 4459 4456 4457 4127 4805 4800 4996)
 #define GEN_HITS gen_hits_070
-unsigned int gen_hits_070[391];
+unsigned int gen_hits_070[390];
 
 /* ref: FUN_14116b650 */
 longlong FUN_14116b650(undefined8 param_1)
@@ -8351,28 +8351,6 @@ longlong FUN_141175a80(void)
   return lVar1;
 }
 
-/* ref: FUN_141175ab0 */
-longlong FUN_141175ab0(undefined4 param_1, undefined1 param_2)
-{
-  GEN_HIT(390);
-  unsigned long long gen_slot_param_1 = 0;
-  memcpy((void *)(&gen_slot_param_1),(void *)(&param_1), sizeof(param_1));
-  unsigned long long gen_slot_param_2 = 0;
-  memcpy((void *)(&gen_slot_param_2),(void *)(&param_2), sizeof(param_2));
-  __declspec(align(16)) unsigned char gen_frame[(0x14 + sizeof(undefined1) > 0x20 ? 0x14 + sizeof(undefined1) : 0x20)] = {0};
-  memcpy((void *)(gen_frame + 0x0),(void *)(&(*(undefined4 *)&gen_slot_param_1)), sizeof((*(undefined4 *)&gen_slot_param_1)) < 8 ? sizeof((*(undefined4 *)&gen_slot_param_1)) : 8);
-  memcpy((void *)(gen_frame + 0x8),(void *)(&(*(undefined1 *)&gen_slot_param_2)), sizeof((*(undefined1 *)&gen_slot_param_2)) < 8 ? sizeof((*(undefined1 *)&gen_slot_param_2)) : 8);
-  longlong lVar1 = {0};
-  
-  lVar1 = CALLF(undefined *, FUN_141273d80)();
-  if (*(code **)(lVar1 + 0x13d0) != (code *)0x0) {
-    (*(undefined4 *)(gen_frame + 0x10)) = (*(undefined4 *)&gen_slot_param_1);
-    (*(undefined1 *)(gen_frame + 0x14)) = (*(undefined1 *)&gen_slot_param_2);
-    lVar1 = (**(code **)(lVar1 + 0x13d0))(0x6b9b4dfee297f491,&(*(undefined4 *)(gen_frame + 0x10)));
-  }
-  return lVar1;
-}
-
 const unsigned long long gen_hit_addrs_070[] = {
     0x14116b650ULL,
     0x14116b670ULL,
@@ -8764,6 +8742,5 @@ const unsigned long long gen_hit_addrs_070[] = {
     0x141175a20ULL,
     0x141175a50ULL,
     0x141175a80ULL,
-    0x141175ab0ULL,
 };
 

@@ -1704,6 +1704,7 @@ extern "C" void* const gen_p_1430a1640 = (void*)&s_mouseWindow;
 extern "C" void* const gen_p_1430a1648 = (void*)&s_mouseMode;
 extern "C" void* const gen_p_1430a164c = (void*)&s_numLockAtStartup;
 extern "C" void* const gen_p_1430a1680 = (void*)&s_beforePump;
+extern "C" void* const gen_p_1430a1a90 = (void*)&s_modalTimerProc;
 extern "C" void* const gen_p_1430a1aa0 = (void*)&s_imeDisabled;
 extern "C" void* const gen_p_1430a1aa1 = (void*)&s_imeOwnsNotify;
 extern "C" void* const gen_p_1430a1aa4 = (void*)&s_imeComposing;
