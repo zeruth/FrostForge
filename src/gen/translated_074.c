@@ -11889,7 +11889,7 @@ undefined1 FUN_1411f7d60(longlong param_1, longlong param_2, int *param_3, uint 
           if ((*(byte *)((longlong)plVar12 + 0x22) & 1) == 0) {
             uVar7 = 5;
           }
-          CALLF(undefined8, FUN_1411cbfa0)(lVar14,*(undefined2 *)(param_2 + 0x40),(short)plVar12[4],(longlong)plVar12 + 0x2c,(unsigned long long)(*(undefined4 *)((longlong)plVar12 + 0x24)),GEN_AS_FLOAT((unsigned long long)((int)plVar12[5])),(unsigned long long)((uint)*(byte *)((longlong)plVar12 + 0x23)),(unsigned long long)(uVar7),(unsigned long long)(*(undefined2 *)((longlong)plVar12 + 0x32)),(unsigned long long)((int)plVar12[7]));
+          CALLF(undefined8, FUN_1411cbfa0)(lVar14,*(undefined2 *)(param_2 + 0x40),(short)plVar12[4],(longlong)plVar12 + 0x2c,(unsigned long long)(*(undefined4 *)((longlong)plVar12 + 0x24)),GEN_ARG_FLOAT((int)plVar12[5]),(unsigned long long)((uint)*(byte *)((longlong)plVar12 + 0x23)),(unsigned long long)(uVar7),(unsigned long long)(*(undefined2 *)((longlong)plVar12 + 0x32)),(unsigned long long)((int)plVar12[7]));
           lVar14 = *(longlong *)(lVar16 + 0x40);
         }
         *(byte *)(lVar14 + 0xb) = *(byte *)((longlong)plVar12 + 0x22) & 4;

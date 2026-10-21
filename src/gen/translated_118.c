@@ -426,7 +426,7 @@ undefined4 FUN_1418b5d20(undefined8 param_1)
           (*(undefined8 *)(gen_frame + 0x10)) = (*(undefined8 *)(gen_frame + 0x8));
           uVar3 = (*(undefined8 *)(gen_frame + 0x10));
           if (*(longlong *)((*(longlong *)(gen_frame + 0x18)) + 0x70) != 0) {
-            (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 0)) = (float)(*(undefined8 *)(gen_frame + 0x8));
+            (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 0)) = (float)(*(undefined8 *)(gen_frame + 0x8));
             fVar1 = (float)(*(undefined8 *)(gen_frame + 0x10));
             (*(undefined8 *)(gen_frame + 0x10)) = uVar3;
             CALLF(undefined8, FUN_141881ed0)(*(longlong *)((*(longlong *)(gen_frame + 0x18)) + 0x70),fVar1);
@@ -26451,7 +26451,7 @@ float * FUN_1418cfed0(longlong param_1, float *param_2, uint param_3, undefined8
     if (param_3 < 0x4b) {
       uVar2 = (char)param_3;
     }
-    CALLF(float *, FUN_14187d140)(*(longlong *)(param_1 + 0x70),&(*(float *)(gen_frame + 0x0)),uVar2,param_4,GEN_AS_FLOAT((unsigned long long)(param_5)));
+    CALLF(float *, FUN_14187d140)(*(longlong *)(param_1 + 0x70),&(*(float *)(gen_frame + 0x0)),uVar2,param_4,GEN_ARG_FLOAT(param_5));
     (*(undefined8 *)(gen_frame + 0x40)) = REFG(undefined8, 0x14261a9d0);
     (*(undefined8 *)(gen_frame + 0x48)) = REFG(undefined8, 0x14261a9d8);
     (*(undefined8 *)(gen_frame + 0x50)) = REFG(undefined8, 0x14261a9e0);
@@ -26695,14 +26695,14 @@ LAB_1418d0431:
   if (1 < (uint)uVar5) {
     fVar7 = CALLF(float, FUN_141796a70)(lVar4,param_2,uVar6);
     (*(undefined4 *)((char *)&auVar1 + 4)) = gen_extraout_XMM0_Db;
-    (*(undefined4 *)((char *)&auVar1 + 0)) = fVar7;
+    (*(float *)((char *)&auVar1 + 0)) = fVar7;
     (*(undefined4 *)((char *)&auVar1 + 8)) = gen_extraout_XMM0_Dc;
     (*(undefined4 *)((char *)&auVar1 + 12)) = gen_extraout_XMM0_Dd;
     return auVar1;
   }
   fVar7 = CALLF(float, FUN_141796b40)(lVar4,param_2,uVar6);
   (*(undefined4 *)((char *)&auVar2 + 4)) = gen_extraout_XMM0_Db_00;
-  (*(undefined4 *)((char *)&auVar2 + 0)) = fVar7;
+  (*(float *)((char *)&auVar2 + 0)) = fVar7;
   (*(undefined4 *)((char *)&auVar2 + 8)) = gen_extraout_XMM0_Dc_00;
   (*(undefined4 *)((char *)&auVar2 + 12)) = gen_extraout_XMM0_Dd_00;
   return auVar2;

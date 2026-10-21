@@ -34,8 +34,7 @@ const char s_callbackTag[] =
     ".?AV?$TSList@VCRenderCallback@@V?$TSGetExplicitLink@VCRenderCallback@@@@$07@@";
 const char s_verticesTag[] = ".?AV?$TSFixedArray@UGxVertexPNCT2@@$07@@";
 
-// DAT_1430ad2f8
-CWorldScene* s_currentScene;
+CWorldScene* s_currentScene;  // 0x1430ad2f8
 
 // DAT_142d011e8: every scene, linked at the tail as it is made.
 TSList<CWorldScene, TSGetLink<CWorldScene>, 8> s_scenes;  // untied: the world's device callbacks (FUN_1413cae30) still walk the image's list

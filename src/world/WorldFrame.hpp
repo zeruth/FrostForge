@@ -58,7 +58,7 @@ bool WorldScenesModelReady(const char* name, uint8_t priority);
 void WorldSceneSetRect(const float* rect, CWorldScene* scene);
 
 // DAT_1430ab790: DayNight's zone lights and light run on a pool job.
-extern uint8_t g_dayNightOnJob;
+extern uint8_t g_dayNightMultithreaded;  // GraphicsSettings.cpp, DAT_1430ab790: DayNight runs on a pool job
 
 // ref: FUN_141354f80
 void WorldReadGraphicsQuality();

@@ -9,15 +9,51 @@
 
 // Reads a whole file into a buffer from SMemAlloc (Engine/Source/Os/W32/OsFile.cpp). Used
 // for SCmd's @response files.
+// `extra` zeroed bytes follow the contents (a terminator for text); `size`, when given, gets the
+// contents' length. Ported 2026-10-21: the character's AddOns.txt, written by the first runs
+// that entered the world, reached the stub, whose unconditional `*size = 0` faulted on the null
+// size CASFileLoadByName hands it, and character select stayed black.
 // ref: FUN_140214ed0
-bool OsFileReadAll(const char* path, uint8_t** data, uint32_t* size, int32_t a4, int32_t a5) {
-    (void)path;
-    (void)a4;
-    (void)a5;
-    *data = nullptr;
-    *size = 0;
-    FROST_UNIMPLEMENTED();
-    return false;
+bool OsFileReadAll(const char* path, uint8_t** data, uint32_t* size, int32_t extra, int32_t allocFlags) {
+    if (path == nullptr) {
+        return false;
+    }
+    wchar_t wide[0x104];
+    UnicodeConvertUtf8ToUtf16(wide, 0x104, path, 0x7fffffff, nullptr, nullptr);
+    HANDLE file = CreateFileW(wide, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (file == INVALID_HANDLE_VALUE) {
+        return false;
+    }
+    DWORD length = GetFileSize(file, nullptr);
+    if (length == INVALID_FILE_SIZE && GetLastError() != NO_ERROR) {
+        length = 0;
+    }
+    uint8_t* buffer = nullptr;
+    if (length + static_cast<uint32_t>(extra) != 0) {
+        buffer = static_cast<uint8_t*>(SMemAlloc(static_cast<uint64_t>(length) + static_cast<uint32_t>(extra), allocFlags,
+            __FILE__, 0, 0x89, 0));
+        if (length != 0) {
+            DWORD read = 0;
+            BOOL ok = ReadFile(file, buffer, length, &read, nullptr);
+            if (size != nullptr) {
+                *size = read;
+            }
+            if (!ok) {
+                SMemFree(buffer, __FILE__, 0x8c, 0);
+                CloseHandle(file);
+                return false;
+            }
+        }
+        if (extra != 0) {
+            std::memset(buffer + length, 0, static_cast<uint32_t>(extra));
+        }
+    }
+    *data = buffer;
+    if (size != nullptr) {
+        *size = length;
+    }
+    CloseHandle(file);
+    return true;
 }
 
 // ref: FUN_140215280

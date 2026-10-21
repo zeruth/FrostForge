@@ -1,3 +1,10 @@
 {
- "_doc": "Corrections to the decompilation, applied before translation (tools/translate.py). Each is a decompiler error proven against the instructions: 'from' should occur exactly once in the function's corpus text, and 'why' gives the instruction evidence. A patch is a defect the pipeline has not fixed at its source yet: the goal is none. The five of 2026-10-15/16 are gone, each fixed where it arose (tools/protos.py's prototypes and indirect-call signatures, Ghidra.h's LPC* typedefs). A patch that no longer matches is reported and skipped: the corpus may have been fixed underneath it."
+ "_doc": "Corrections to the decompilation, applied before translation (tools/translate.py). Each is a decompiler error proven against the instructions: 'from' should occur exactly once in the function's corpus text, and 'why' gives the instruction evidence. A patch is a defect the pipeline has not fixed at its source yet: the goal is none. The five of 2026-10-15/16 are gone, each fixed where it arose (tools/protos.py's prototypes and indirect-call signatures, Ghidra.h's LPC* typedefs). A patch that no longer matches is reported and skipped: the corpus may have been fixed underneath it.",
+ "1417c8250": [
+  {
+   "from": "        pfVar14[4] = auVar26._0_4_;\n        pfVar14[5] = auVar25._0_4_;",
+   "to": "        *(int *)(pfVar14 + 4) = (int)auVar26._0_4_;\n        *(int *)(pfVar14 + 5) = (int)auVar25._0_4_;",
+   "why": "The actor map grid's cell counts are integers: FUN_1417c8250 stores them with `mov dword ptr [rdi + 0x10], eax` / `mov dword ptr [rdi + 0x14], edx` (0x1417c8af2), and FUN_1417c6f30 reads +0x10 as an int. Ghidra typed the grid float * and wrote the count as a float conversion, so the translation stored 1.0f's bits: every cell index past the first row ran off the grid on Enter World, 2026-10-21."
+  }
+ ]
 }

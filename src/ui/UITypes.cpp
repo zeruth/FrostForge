@@ -90,8 +90,7 @@ const ENUMNAME<uint8_t> s_fillStyles[] = {
     { 3, "REVERSE" },
 };
 
-// 0x142e9a2c0
-char s_fontFlagsText[0x40];
+char s_fontFlagsText[0x40];  // 0x142e9a2c0
 
 // The bounded append FontFlagsToString inlines: stops one short of the buffer's end.
 void AppendFontFlagsText(const char* text) {

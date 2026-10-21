@@ -26,7 +26,7 @@ undefined4 FUN_1419ad510(undefined8 param_1)
   bVar2 = true;
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419ad510)(flagIndex)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetBattlefieldFlagPosition(flagIndex)");
     return 0;
   }
   uVar3 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -7694,7 +7694,7 @@ undefined4 FUN_1419b8870(undefined8 param_1)
   }
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419b8870)(categoryID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetCategoryInfo(categoryID)");
     return 0;
   }
   dVar6 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -7754,7 +7754,7 @@ undefined4 FUN_1419b8990(undefined8 param_1)
       CALLF(undefined1 *, FUN_1402b3b50)(param_1,(double)((int *)(gen_frame + 0x18))[0]);
       return 3;
     }
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419b8990)(categoryID, includeSuperceded)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetCategoryNumAchievements(categoryID, includeSuperceded)");
   }
   return 0;
 }
@@ -7874,7 +7874,7 @@ undefined4 FUN_1419b8a60(undefined8 param_1)
       }
       return 1;
     }
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419b8a60)(categoryID, includeSubCategories)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetCategoryAchievementPoints(categoryID, includeSubCategories)");
   }
   return 0;
 }
@@ -7903,7 +7903,7 @@ undefined4 FUN_1419b8db0(undefined8 param_1)
   iVar10 = 0;
   uVar5 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar5 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419b8db0)(categoryID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetComparisonCategoryNumAchievements(categoryID)");
     return 0;
   }
   dVar1 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -8148,7 +8148,7 @@ undefined4 FUN_1419b9490(undefined8 param_1)
   if (1 < (uint)uVar2) {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar2 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419b9490)(achievementID)");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetPreviousAchievement(achievementID)");
     }
     else {
       dVar4 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -8215,7 +8215,7 @@ undefined4 FUN_1419b9550(undefined8 param_1)
     }
     return 0;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419b9550)(achievementID)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetNextAchievement(achievementID)");
   return 0;
 }
 
@@ -8511,7 +8511,7 @@ undefined4 FUN_1419b9bb0(undefined8 param_1)
   if (1 < (uint)uVar7) {
     uVar7 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar7 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419b9bb0)(achievementID)");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAchievementInfo(achievementID)");
     }
     else {
       iVar4 = CALLF(int, FUN_1419c5560)(param_1);
@@ -8658,7 +8658,7 @@ undefined4 FUN_1419ba060(undefined8 param_1)
   if (1 < (uint)uVar2) {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar2 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419ba060)(achievementID)");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAchievementCategory(achievementID)");
     }
     else {
       dVar4 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -8696,7 +8696,7 @@ undefined4 FUN_1419ba120(undefined8 param_1)
       CALLF(uint, FUN_1402b3850)(param_1,(uint)(lVar2 != 0));
       return 1;
     }
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419ba120)(achievementID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAchievementNumRewards(achievementID)");
   }
   return 0;
 }
@@ -8730,7 +8730,7 @@ undefined4 FUN_1419ba1a0(undefined8 param_1)
         return 1;
       }
     }
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419ba120)(achievementID, rewardIndex)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAchievementNumRewards(achievementID, rewardIndex)");
   }
   return 0;
 }
@@ -8802,7 +8802,7 @@ LAB_1419ba3b5:
       CALLF(undefined1 *, FUN_1402b3b50)(param_1,(double)(int)uVar13);
       return 1;
     }
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419ba280)(achievementID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAchievementNumCriteria(achievementID)");
   }
   return 0;
 }
@@ -8831,7 +8831,7 @@ undefined4 FUN_1419ba3f0(undefined8 param_1)
   uVar9 = 1;
   uVar5 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar5 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419ba3f0)(achievementID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsAchievementEligible(achievementID)");
     return 0;
   }
   dVar10 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -8893,7 +8893,7 @@ undefined4 FUN_1419ba520(undefined8 param_1)
   uVar13 = 1;
   uVar8 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar8 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419ba520)(achievementID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetStatistic(achievementID)");
     return 0;
   }
   uVar6 = CALLF(int, FUN_1419c5560)(param_1);
@@ -9020,10 +9020,10 @@ undefined4 FUN_1419ba750(undefined8 param_1)
       }
 LAB_1419ba8f2:
       CALLF(undefined8, FUN_142424d80)(param_1,
-                    "CALLF(undefined4, FUN_1419ba750)(achievementID, criteriaIndex), criteria not found");
+                    "GetAchievementCriteriaInfo(achievementID, criteriaIndex), criteria not found");
       return 0;
     }
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419ba750)(achievementID, criteriaIndex)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAchievementCriteriaInfo(achievementID, criteriaIndex)");
   }
   return 0;
 }
@@ -9050,7 +9050,7 @@ undefined4 FUN_1419ba920(undefined8 param_1)
   if (1 < (uint)uVar5) {
     uVar5 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if (((int)uVar5 == 0) || (uVar5 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar5 == 0)) {
-      pcVar8 = "Usage: CALLF(undefined4, FUN_1419ba920)(achievementID, criteriaIndex)";
+      pcVar8 = "Usage: GetAchievementCriteriaInfoByID(achievementID, criteriaIndex)";
     }
     else {
       dVar11 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -9098,7 +9098,7 @@ undefined4 FUN_1419ba920(undefined8 param_1)
         }
         return 0;
       }
-      pcVar8 = "CALLF(undefined4, FUN_1419ba920)(achievementID, criteriaID), criteria not found";
+      pcVar8 = "GetAchievementCriteriaInfoByID(achievementID, criteriaID), criteria not found";
     }
     CALLF(undefined8, FUN_142424d80)(param_1,pcVar8);
   }
@@ -9174,7 +9174,7 @@ undefined4 FUN_1419bac20(undefined8 param_1)
   if (1 < (uint)uVar2) {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar2 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419bac20)(achievementID)");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAchievementComparisonInfo(achievementID)");
     }
     else {
       dVar5 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -9257,7 +9257,7 @@ LAB_1419bae44:
       CALLF(undefined8, FUN_1402b3ab0)(param_1,((char *)(gen_frame + 0x0)),lVar11);
       return 1;
     }
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419bad20)(achievementID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetComparisonStatistic(achievementID)");
   }
   return 0;
 }
@@ -9481,7 +9481,7 @@ undefined4 FUN_1419bb280(undefined8 param_1)
   if (1 < (uint)uVar7) {
     uVar7 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar7 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419bb280)(achievementID)");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAchievementLink(achievementID)");
     }
     else {
       dVar13 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -9653,7 +9653,7 @@ undefined4 FUN_1419bb670(undefined8 param_1)
     if (((int)dVar3 != 0) && (iVar1 = CALLF(undefined4, FUN_1419bea30)((int)dVar3), iVar1 != 0)) {
       return 0;
     }
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419bb670)(achievementID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: AddTrackedAchievement(achievementID)");
   }
   return 0;
 }
@@ -9669,7 +9669,7 @@ undefined4 FUN_1419bb6c0(undefined8 param_1)
   if (1 < (uint)uVar1) {
     dVar2 = CALLF(double, FUN_1402b4920)(param_1,1);
     if ((int)dVar2 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419bb6c0)(achievementID)");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: RemoveTrackedAchievement(achievementID)");
       return 0;
     }
     CALLF(char, FUN_1419cb790)((int)dVar2);
@@ -24322,7 +24322,7 @@ undefined4 FUN_1419d0660(undefined8 param_1)
   
   uVar7 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar7 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d0660)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetActionInfo(slot)");
     return 0;
   }
   uVar7 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -24451,7 +24451,7 @@ undefined4 FUN_1419d1050(undefined8 param_1)
     CALLF(undefined8, FUN_14065f6a0)(param_1,uVar1);
     return 1;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d1050)(slot)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetActionTexture(slot)");
   return 0;
 }
 
@@ -24477,7 +24477,7 @@ undefined4 FUN_1419d10b0(undefined8 param_1)
     CALLF(undefined1 *, FUN_1402b3b50)(param_1,(double)iVar3);
     return 1;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d10b0)(slot)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetActionCount(slot)");
   return 0;
 }
 
@@ -24502,7 +24502,7 @@ undefined4 FUN_1419d1130(undefined8 param_1)
     CALLF(undefined1 *, FUN_1402b3b50)(param_1,(double)((float *)(gen_frame + 0x30))[0]);
     return 4;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d1130)(slot)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetActionCooldown(slot)");
   return 0;
 }
 
@@ -24524,7 +24524,7 @@ undefined4 FUN_1419d1210(undefined8 param_1)
   
   uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar4 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d1210)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetActionCharges(slot)");
     return 0;
   }
   uVar4 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -24622,7 +24622,7 @@ undefined4 FUN_1419d14c0(undefined8 param_1)
     CALLF(undefined1 *, FUN_1402b3b50)(param_1,(double)((uint *)(gen_frame + 0x10))[0] * REFG(double, 0x142724238));
     return 2;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d14c0)(slot)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetActionLossOfControlCooldown(slot)");
   return 0;
 }
 
@@ -24647,7 +24647,7 @@ undefined4 FUN_1419d1550(undefined8 param_1)
   uVar9 = 1;
   uVar6 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar6 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d1550)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetActionAutocast(slot)");
     return 0;
   }
   dVar12 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -24750,7 +24750,7 @@ undefined4 FUN_1419d17a0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d17a0)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetActionText(slot)");
     return 0;
   }
   dVar5 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -24794,7 +24794,7 @@ undefined4 FUN_1419d18a0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d18a0)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: HasAction(slot)");
     return 0;
   }
   dVar4 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -24829,7 +24829,7 @@ undefined4 FUN_1419d1940(undefined8 param_1)
   
   uVar6 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar6 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d1940)(slot, [, target] [, button])");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: UseAction(slot, [, target] [, button])");
     return 0;
   }
   dVar2 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -24921,7 +24921,7 @@ undefined4 FUN_1419d1b70(undefined8 param_1)
   
   uVar5 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar5 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d1b70)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: PickupAction(slot)");
     return 0;
   }
   dVar8 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -24971,7 +24971,7 @@ undefined4 FUN_1419d1cf0(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d1cf0)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: PlaceAction(slot)");
   }
   else {
     dVar2 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -24998,7 +24998,7 @@ undefined4 FUN_1419d1d50(undefined8 param_1)
     CALLF(uint, FUN_1402b3850)(param_1,uVar1);
     return 1;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d1d50)(slot)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsAttackAction(slot)");
   return 0;
 }
 
@@ -25017,7 +25017,7 @@ undefined4 FUN_1419d1db0(undefined8 param_1)
     CALLF(uint, FUN_1402b3850)(param_1,uVar1);
     return 1;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d1db0)(slot)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsCurrentAction(slot)");
   return 0;
 }
 
@@ -25053,7 +25053,7 @@ undefined4 FUN_1419d1e70(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d1e70)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsUsableAction(slot)");
     return 0;
   }
   dVar6 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -25089,7 +25089,7 @@ undefined4 FUN_1419d1f10(undefined8 param_1)
     CALLF(uint, FUN_1402b3850)(param_1,uVar1);
     return 1;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d1f10)(slot)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsConsumableAction(slot)");
   return 0;
 }
 
@@ -25107,7 +25107,7 @@ undefined4 FUN_1419d1f70(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d1f70)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsStackableAction(slot)");
     return 0;
   }
   dVar5 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -25142,7 +25142,7 @@ undefined4 FUN_1419d2030(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d2030)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsItemAction(slot)");
     return 0;
   }
   dVar4 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -25172,7 +25172,7 @@ undefined4 FUN_1419d20b0(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d20b0)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsEquippedAction(slot)");
     return 0;
   }
   dVar7 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -25373,7 +25373,7 @@ undefined4 FUN_1419d24b0(undefined8 param_1)
     }
   }
   else {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_1419d24b0)() needs a page in the range 1 to %d",6);
+    CALLF(undefined8, FUN_142424d80)(param_1,"ChangeActionBarPage() needs a page in the range 1 to %d",6);
   }
   return 0;
 }
@@ -25480,7 +25480,7 @@ undefined4 FUN_1419d2690(undefined8 param_1)
       }
       return uVar4;
     }
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d2690)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetMultiCastTotemSpells(slot)");
   }
   return 0;
 }
@@ -25503,7 +25503,7 @@ undefined4 FUN_1419d2750(undefined8 param_1)
   if (cVar1 != '\0') {
     uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if (((int)uVar4 == 0) && (uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar4 == 0)) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d2750)(slot, spellID)",((longlong)_ReturnAddress()));
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetMultiCastSpell(slot, spellID)",((longlong)_ReturnAddress()));
     }
     else {
       cVar1 = CALLF(undefined1, FUN_1419985c0)(0xe);
@@ -25582,7 +25582,7 @@ undefined4 FUN_1419d4720(undefined8 param_1)
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((((int)uVar3 != 5) || (uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar3 == 0)) ||
      (uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,3), (int)uVar3 != 5)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419d4720)(checkboxFrame, actionSlot, cooldownFrame)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetActionUIButton(checkboxFrame, actionSlot, cooldownFrame)");
     return 0;
   }
   uVar10 = 0;

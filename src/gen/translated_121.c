@@ -5703,17 +5703,17 @@ undefined8 FUN_14192e820(void)
   uVar4 = CALLF(ulonglong, FUN_14065f960)();
   iVar2 = (int)uVar4;
   uVar7 = REFG(undefined4, 0x1431e8a08) - iVar2;
-  (*(undefined4 *)((char *)&auVar8 + 0)) = (float)uVar7 * REFG(float, 0x142813e24);
-  iVar6 = (int)(*(undefined4 *)((char *)&auVar8 + 0));
-  if ((iVar6 != -0x80000000) && ((float)iVar6 != (*(undefined4 *)((char *)&auVar8 + 0)))) {
-    (*(undefined4 *)((char *)&auVar8 + 4)) = (*(undefined4 *)((char *)&auVar8 + 0));
+  (*(float *)((char *)&auVar8 + 0)) = (float)uVar7 * REFG(float, 0x142813e24);
+  iVar6 = (int)(*(float *)((char *)&auVar8 + 0));
+  if ((iVar6 != -0x80000000) && ((float)iVar6 != (*(float *)((char *)&auVar8 + 0)))) {
+    (*(float *)((char *)&auVar8 + 4)) = (*(float *)((char *)&auVar8 + 0));
     (*(undefined8 *)((char *)&auVar8 + 8)) = 0;
     uVar3 = movmskps(0, auVar8);
-    (*(undefined4 *)((char *)&auVar8 + 0)) = (float)(int)(iVar6 + (uVar3 & 1 ^ 1));
+    (*(float *)((char *)&auVar8 + 0)) = (float)(int)(iVar6 + (uVar3 & 1 ^ 1));
   }
   lVar5 = CALLF(undefined1 *, FUN_14156b750)();
   cVar1 = *(char *)(lVar5 + 0x37d);
-  uVar3 = (uint)(longlong)(*(undefined4 *)((char *)&auVar8 + 0));
+  uVar3 = (uint)(longlong)(*(float *)((char *)&auVar8 + 0));
   if (REFG(undefined4, 0x1431e8a0c) == 0) {
     iVar6 = iVar2;
     if (cVar1 == '\0') {
@@ -8266,7 +8266,7 @@ undefined4 FUN_141932110(undefined8 param_1)
   
   uVar6 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar6 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141932110)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetSpellTabInfo(index)");
     return 0;
   }
   uVar10 = 0;
@@ -9426,7 +9426,7 @@ undefined4 FUN_141933fc0(undefined8 param_1)
   iVar2 = CALLF(undefined4, FUN_1419495b0)(param_1,((undefined4 *)(gen_frame + 0x8)),0,0,(unsigned long long)(1));
   uVar5 = ((undefined4 *)(gen_frame + 0x8))[0];
   if (iVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141933fc0)(spellID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetSpellBaseCooldown(spellID)");
     return 0;
   }
   iVar2 = 0;
@@ -9659,7 +9659,7 @@ undefined4 FUN_141934430(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141934430)(slot, target)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetSpellbookPetAction(slot, target)");
     return 0;
   }
   uVar3 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -10659,7 +10659,7 @@ undefined4 FUN_141935a70(undefined8 param_1)
   
   dVar16 = CALLF(double, FUN_1402b4920)(param_1,1);
   if (dVar16 == 0.0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141935a70)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetShapeshiftFormInfo(index)");
     return 0;
   }
   uVar8 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -10741,7 +10741,7 @@ undefined4 FUN_141935c60(undefined8 param_1)
   
   dVar6 = CALLF(double, FUN_1402b4920)(param_1,1);
   if (dVar6 == 0.0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141935c60)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CastShapeshiftForm(index)");
     return 0;
   }
   dVar6 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -10789,7 +10789,7 @@ undefined4 FUN_141935d80(undefined8 param_1)
   
   dVar3 = CALLF(double, FUN_1402b4920)(param_1,1);
   if (dVar3 == 0.0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141935d80)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetShapeshiftFormCooldown(index)");
     return 0;
   }
   dVar3 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -10831,7 +10831,7 @@ undefined4 FUN_141935ef0(undefined8 param_1)
   
   uVar5 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar5 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141935ef0)(name[, target])",((longlong)_ReturnAddress()));
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CastSpellByName(name[, target])",((longlong)_ReturnAddress()));
     return 0;
   }
   lVar6 = CALLF(ulonglong, FUN_14170ff20)();
@@ -10966,7 +10966,7 @@ undefined8 FUN_14193b070(undefined8 param_1)
   
   uVar5 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar5 == 0) {
-    return (undefined8)CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined8, FUN_14193b070)(spellID[, target])",((longlong)_ReturnAddress()));
+    return (undefined8)CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CastSpellByID(spellID[, target])",((longlong)_ReturnAddress()));
     return 0;
   }
   lVar6 = CALLF(ulonglong, FUN_14170ff20)();
@@ -11073,7 +11073,7 @@ undefined4 FUN_14193f590(undefined8 param_1)
       ppuVar4 = ppuVar4 + 1;
     } while (uVar3 < 2);
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_14193f590)(type)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetNumCompanions(type)");
   return 0;
 }
 
@@ -11119,7 +11119,7 @@ undefined4 FUN_14193f650(undefined8 param_1)
       ppuVar6 = ppuVar6 + 1;
     } while (uVar5 < 2);
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_14193f650)(type, index)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetCompanionInfo(type, index)");
   return 0;
 }
 
@@ -11174,7 +11174,7 @@ undefined4 FUN_14193f750(undefined8 param_1)
         ppuVar6 = ppuVar6 + 1;
       } while (uVar5 < 2);
     }
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_14193f750)(type, index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetCompanionCooldown(type, index)");
   }
   return 0;
 }
@@ -11259,7 +11259,7 @@ undefined4 FUN_14193f8e0(undefined8 param_1)
         ppuVar7 = ppuVar7 + 1;
       } while (uVar5 < 2);
     }
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_14193f8e0)(type, index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: PickupCompanion(type, index)");
   }
   return 0;
 }
@@ -11311,7 +11311,7 @@ undefined4 FUN_14193fb30(undefined8 param_1)
         ppuVar6 = ppuVar6 + 1;
       } while (uVar5 < 2);
     }
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_14193fb30)(type, index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CallCompanion(type, index)");
   }
   return 0;
 }
@@ -11364,7 +11364,7 @@ undefined4 FUN_14193fc30(undefined8 param_1)
         ppuVar7 = ppuVar7 + 1;
       } while (uVar4 < 2);
     }
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_14193fc30)(type)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: DismissCompanion(type)");
   }
   return 0;
 }
@@ -11387,7 +11387,7 @@ undefined4 FUN_14193fd40(undefined8 param_1)
       return 1;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_14193fd40)(spellID[, isPet])");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsSpellKnown(spellID[, isPet])");
   return 0;
 }
 
@@ -11443,7 +11443,7 @@ LAB_14193fe9f:
       return 1;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_14193fdc0)(spellID[, isPet])");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsSpellKnownOrOverridesKnown(spellID[, isPet])");
   return 0;
 }
 
@@ -11463,7 +11463,7 @@ undefined4 FUN_14193fef0(undefined8 param_1)
       return 1;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_14193fef0)(spellID)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsPlayerSpell(spellID)");
   return 0;
 }
 
@@ -11542,7 +11542,7 @@ undefined4 FUN_141940060(undefined8 param_1)
   
   uVar8 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar8 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141940060)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetProfessionInfo(index)");
     return 0;
   }
   lVar9 = CALLF(ulonglong, FUN_14170ff20)();
@@ -11682,7 +11682,7 @@ undefined4 FUN_141940470(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141940470)(spellID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: FindSpellOverrideByID(spellID)");
     return 0;
   }
   uVar3 = CALLF(undefined8, FUN_1402b4800)(param_1,1);

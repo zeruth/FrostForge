@@ -52,6 +52,16 @@ extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 // the window and device are tagged stubs, called in the reference order, until each is ported.
 
 // the async preload queue
+extern volatile uint8_t& g_asyncResortRequested;
+
+extern uint8_t& g_asyncSortReads;
+
+extern uint8_t& g_asyncResortPending;
+
+extern uint8_t& g_renderColorCorrection;
+
+extern uint8_t& g_renderColorblindSimulate;
+
 namespace {
 
 uint32_t s_preloadQueued;           // DAT_1430a55f8: the files the preload asked for
@@ -772,11 +782,11 @@ namespace {
 uint8_t s_flag142cfdb74;            // DAT_142cfdb74
 uint8_t s_compositorEnabled;        // DAT_142de194c
 uint32_t s_compositorMode;          // DAT_142de1970: the screenshot size override, {u16 w, u16 h}
-uint8_t s_captureFlip;              // DAT_142e96f72
-uint8_t s_captureRead;              // DAT_142e96f50
-uint8_t s_flag142e96e01;            // DAT_142e96e01
-uint8_t s_flag142e96e02;            // DAT_142e96e02
-uint8_t s_flag142e96e03;            // DAT_142e96e03
+uint8_t& s_captureFlip = g_renderColorblindSimulate;  // RenderCVars.cpp's
+uint8_t& s_captureRead = g_renderColorCorrection;  // RenderCVars.cpp's
+volatile uint8_t& s_flag142e96e01 = g_asyncResortRequested;  // AsyncFile.cpp's
+uint8_t& s_flag142e96e02 = g_asyncSortReads;  // AsyncFile.cpp's
+uint8_t& s_flag142e96e03 = g_asyncResortPending;  // AsyncFile.cpp's
 uint8_t s_flag14323f218;            // DAT_14323f218
 
 }
@@ -1563,6 +1573,7 @@ void Sub14023D170(GXFRAMESTATS* stats) {
 #pragma comment(linker, "/alternatename:FUN_14033fa30=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140570630=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14057b640=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140c7d510=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141260880=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412608c0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141260910=GenForwardMissing")

@@ -3783,6 +3783,7 @@ undefined8 FUN_142369dc0(void)
 int FUN_142369e40(longlong *param_1, char param_2)
 {
   GEN_HIT(76);
+  unsigned char *gen_alloca_p0 = 0;
   unsigned long long gen_slot_param_2 = 0;
   memcpy((void *)(&gen_slot_param_2),(void *)(&param_2), sizeof(param_2));
   __declspec(align(16)) unsigned char gen_frame[(0x70 + sizeof(undefined1) > 0x90 ? 0x70 + sizeof(undefined1) : 0x90)] = {0};
@@ -3826,8 +3827,9 @@ int FUN_142369e40(longlong *param_1, char param_2)
       uVar12 = 0xffffffffffffff0;
     }
     ((undefined8 *)(gen_frame + 0x8))[0] = 0x142369eb0;
+    gen_alloca_p0 = (unsigned char *)_alloca((uVar12 & 0xfffffffffffffff0) + 0x430) + 0x200;
     lVar8 = -(uVar12 & 0xfffffffffffffff0);
-    puVar2 = ((undefined1 *)(gen_frame + 0x30)) + lVar8;
+    puVar2 = ((undefined1 *)(gen_alloca_p0 + 0x30));
     for (puVar4 = *(undefined8 **)(lVar11 + 8); puVar4 != (undefined8 *)(lVar11 + 0x18);
         puVar4 = (undefined8 *)*puVar4) {
       for (plVar13 = puVar4 + 3; plVar13 != puVar4 + 5; plVar13 = plVar13 + 1) {
@@ -3837,9 +3839,9 @@ int FUN_142369e40(longlong *param_1, char param_2)
         }
       }
     }
-    *(undefined8 *)((longlong)((undefined8 *)(gen_frame + 0x8)) + lVar8) = 0x142369f09;
+    *(undefined8 *)((longlong)((undefined8 *)(gen_alloca_p0 + 0x8))) = 0x142369f09;
     CALLF(undefined8, FUN_140262470)(lVar11);
-    *(undefined8 *)((longlong)((undefined8 *)(gen_frame + 0x8)) + lVar8) = 0x142369f1d;
+    *(undefined8 *)((longlong)((undefined8 *)(gen_alloca_p0 + 0x8))) = 0x142369f1d;
     CALLF(undefined8, FUN_1413b36d0)(puVar2,puVar2 + uVar15 * 8,uVar15,(*(undefined1 *)(gen_frame + 0x70)));
     iVar18 = 0;
     while( true ) {
@@ -3876,7 +3878,7 @@ int FUN_142369e40(longlong *param_1, char param_2)
         }
         lVar6 = plVar5[2];
         pcVar7 = (code *)plVar5[1];
-        *(undefined8 *)((longlong)((undefined8 *)(gen_frame + 0x8)) + lVar8) = 0x142369f9e;
+        *(undefined8 *)((longlong)((undefined8 *)(gen_alloca_p0 + 0x8))) = 0x142369f9e;
         (*pcVar7)(lVar6,uVar12);
         iVar18 = iVar18 + 1;
       }

@@ -12,6 +12,9 @@ void FrostLog(const char* category, const char* format, ...);
 // per frame (`skip` frames above the caller are left out, `count` are written).
 void FrostLogStack(int skip, int count);
 
+// A stack captured earlier (CaptureStackBackTrace), written the same way.
+void FrostLogFrames(void* const* frames, int count);
+
 // The same for a stack captured at a fault: unwound from the faulting thread's context (a
 // CONTEXT*, taken as void* to keep windows.h out of this header) rather than from the caller, so
 // a fault caught by a filter far above names the function that faulted and the calls that led to

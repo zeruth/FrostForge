@@ -121,6 +121,10 @@ int32_t CVarConsoleHandler(const char* command, const char* arguments);
 void CVarConvertBitfield(CVar* cvar, int32_t marker);
 bool CVarGetBit(CVar* cvar, uint32_t index);
 void CVarSetBit(CVar* cvar, uint32_t index, bool on);
+// The reference's shapes (FUN_140322c70, FUN_140320b40, FUN_140320bb0): the CVar's holder.
+void CVarConvertBitfieldRef(CVar* const* holder, int32_t marker);
+bool CVarGetBitRef(CVar* const* holder, uint32_t index);
+void CVarSetBitRef(CVar* const* holder, uint32_t index, bool on);
 bool CVarBitIndexValid(uint32_t index);
 
 #endif

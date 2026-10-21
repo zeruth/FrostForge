@@ -1933,6 +1933,7 @@ uint FUN_1420f7ca0(longlong param_1, longlong *param_2, uint param_3, longlong p
 undefined4 FUN_1420f7e50(longlong param_1, undefined8 *param_2, undefined4 *param_3, uint param_4, uint *param_5)
 {
   GEN_HIT(45);
+  unsigned char *gen_alloca_p0 = 0;
   unsigned long long gen_slot_param_4 = 0;
   memcpy((void *)(&gen_slot_param_4),(void *)(&param_4), sizeof(param_4));
   __declspec(align(16)) unsigned char gen_frame[(0x88 + sizeof(uint[2]) > 0x90 ? 0x88 + sizeof(uint[2]) : 0x90)] = {0};
@@ -1955,13 +1956,14 @@ undefined4 FUN_1420f7e50(longlong param_1, undefined8 *param_2, undefined4 *para
   }
   ((undefined8 *)(gen_frame + 0x8))[0] = 0x1420f7eac;
   uVar1 = *(undefined8 *)(param_1 + 0x30);
+  gen_alloca_p0 = (unsigned char *)_alloca((uVar5 & 0xfffffffffffffff0) + 0x440) + 0x200;
   lVar2 = -(uVar5 & 0xfffffffffffffff0);
   (*(undefined8 *)(gen_frame + 0x50)) = *param_2;
   (*(undefined8 *)(gen_frame + 0x58)) = param_2[1];
-  *(ulonglong **)((longlong)((longlong *)(gen_frame + 0x30)) + lVar2 + 8) = &(*(ulonglong *)(gen_frame + 0x40));
-  *(uint **)((longlong)((longlong *)(gen_frame + 0x30)) + lVar2) = ((uint *)(gen_frame + 0x88));
-  *(undefined8 *)((longlong)((undefined8 *)(gen_frame + 0x8)) + lVar2) = 0x1420f7ee0;
-  iVar3 = CALLF(undefined4, FUN_14213f4f0)(uVar1,&(*(undefined8 *)(gen_frame + 0x50)),(undefined4 *)((longlong)&(*(ulonglong *)(gen_frame + 0x40)) + lVar2),(*(uint *)&gen_slot_param_4),(unsigned long long)(*(undefined8 *)((longlong)((longlong *)(gen_frame + 0x30)) + lVar2)),(unsigned long long)(*(undefined8 *)((longlong)((longlong *)(gen_frame + 0x30)) + lVar2 + 8)));
+  *(ulonglong **)((longlong)((longlong *)(gen_alloca_p0 + 0x30)) + 8) = &(*(ulonglong *)(gen_frame + 0x40));
+  *(uint **)((longlong)((longlong *)(gen_alloca_p0 + 0x30))) = ((uint *)(gen_frame + 0x88));
+  *(undefined8 *)((longlong)((undefined8 *)(gen_alloca_p0 + 0x8))) = 0x1420f7ee0;
+  iVar3 = CALLF(undefined4, FUN_14213f4f0)(uVar1,&(*(undefined8 *)(gen_frame + 0x50)),(undefined4 *)((longlong)(gen_alloca_p0 + 0x40)),(*(uint *)&gen_slot_param_4),(unsigned long long)(*(undefined8 *)((longlong)((longlong *)(gen_alloca_p0 + 0x30)))),(unsigned long long)(*(undefined8 *)((longlong)((longlong *)(gen_alloca_p0 + 0x30)) + 8)));
   if (iVar3 != 0) {
     return 0;
   }
@@ -1970,7 +1972,7 @@ undefined4 FUN_1420f7e50(longlong param_1, undefined8 *param_2, undefined4 *para
   }
   if ((*(uint *)&gen_slot_param_4) != 0) {
     uVar5 = (ulonglong)(*(uint *)&gen_slot_param_4);
-    puVar4 = (undefined4 *)((longlong)&(*(ulonglong *)(gen_frame + 0x40)) + lVar2);
+    puVar4 = (undefined4 *)((longlong)(gen_alloca_p0 + 0x40));
     do {
       *param_3 = *puVar4;
       param_3[1] = puVar4[2];
@@ -3407,6 +3409,8 @@ undefined4 FUN_1420fbea0(undefined8 *param_1)
 undefined1 FUN_1420fbef0(longlong param_1, longlong param_2)
 {
   GEN_HIT(80);
+  unsigned char *gen_alloca_p0 = 0;
+  unsigned char *gen_alloca_p1 = 0;
   __declspec(align(16)) unsigned char gen_frame[(0x60 + sizeof(undefined1[96]) > 0xe8 ? 0x60 + sizeof(undefined1[96]) : 0xe8)] = {0};
   ulonglong uVar1 = {0};
   byte bVar2 = {0};
@@ -3444,25 +3448,27 @@ undefined1 FUN_1420fbef0(longlong param_1, longlong param_2)
         if (uVar8 <= uVar1) {
           uVar8 = 0xffffffffffffff0;
         }
+        gen_alloca_p0 = (unsigned char *)_alloca((uVar8 & 0xfffffffffffffff0) + 0x450) + 0x200;
         lVar6 = -(uVar8 & 0xfffffffffffffff0);
-        *(undefined8 *)((longlong)((undefined8 *)(gen_frame + 0x8)) + lVar6) = 0x1420fbffb;
-        CALLF(int, FUN_142366260)(((unsigned char *)&(*(gen_v16 *)(gen_frame + 0x50)) + lVar6), uVar1, _Buf1, uVar9);
+        *(undefined8 *)((longlong)((undefined8 *)(gen_alloca_p0 + 0x8))) = 0x1420fbffb;
+        CALLF(int, FUN_142366260)(((gen_alloca_p0 + 0x50)), uVar1, _Buf1, uVar9);
         uVar9 = lVar5 + 0x10;
         if (uVar9 <= uVar1) {
           uVar9 = 0xffffffffffffff0;
         }
-        *(undefined8 *)((longlong)((undefined8 *)(gen_frame + 0x8)) + lVar6) = 0x1420fc010;
+        *(undefined8 *)((longlong)((undefined8 *)(gen_alloca_p0 + 0x8))) = 0x1420fc010;
         bVar2 = *(byte *)(param_1 + 0x27);
+        gen_alloca_p1 = (unsigned char *)_alloca((uVar9 & 0xfffffffffffffff0) + 0x450) + 0x200;
         lVar5 = -(uVar9 & 0xfffffffffffffff0);
-        *(undefined8 *)((longlong)((undefined8 *)(gen_frame + 0x8)) + lVar5 + lVar6) = 0x1420fc02c;
-        CALLF(int, FUN_142366260)(((unsigned char *)&(*(gen_v16 *)(gen_frame + 0x50)) + lVar5) + lVar6, uVar1, (void *)&(*(gen_v16 *)(gen_frame + 0x50)), (ulonglong)bVar2);
-        *(undefined1 * *)((longlong)((longlong *)(gen_frame + 0x40)) + lVar5 + lVar6 + 8) = ((unsigned char *)&(*(gen_v16 *)(gen_frame + 0x50)) + lVar5) + lVar6;
-        *(undefined1 * *)((longlong)((longlong *)(gen_frame + 0x40)) + lVar5 + lVar6) = ((unsigned char *)&(*(gen_v16 *)(gen_frame + 0x50)) + lVar6);
-        *(uint *)((longlong)((uint *)(gen_frame + 0x38)) + lVar5 + lVar6) = uVar10;
-        *(char **)((longlong)&(*(undefined8 *)(gen_frame + 0x30)) + lVar5 + lVar6) =
+        *(undefined8 *)((longlong)((undefined8 *)(gen_alloca_p1 + 0x8))) = 0x1420fc02c;
+        CALLF(int, FUN_142366260)(((gen_alloca_p1 + 0x50)), uVar1, (void *)&(*(gen_v16 *)(gen_frame + 0x50)), (ulonglong)bVar2);
+        *(undefined1 * *)((longlong)((longlong *)(gen_alloca_p1 + 0x40)) + 8) = ((gen_alloca_p1 + 0x50));
+        *(undefined1 * *)((longlong)((longlong *)(gen_alloca_p1 + 0x40))) = ((gen_alloca_p0 + 0x50));
+        *(uint *)((longlong)((uint *)(gen_alloca_p1 + 0x38))) = uVar10;
+        *(char **)((longlong)(gen_alloca_p1 + 0x30)) =
              "CDN Index block %u failed hash verification. Expected %s, but got %s";
-        *(undefined8 *)((longlong)((undefined8 *)(gen_frame + 0x8)) + lVar5 + lVar6) = 0x1420fc064;
-        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\cdn_index.cpp",0x1cf,(unsigned long long)(*(undefined8 *)((longlong)&(*(undefined8 *)(gen_frame + 0x30)) + lVar5 + lVar6)));
+        *(undefined8 *)((longlong)((undefined8 *)(gen_alloca_p1 + 0x8))) = 0x1420fc064;
+        CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\cdn_index.cpp",0x1cf,(unsigned long long)(*(undefined8 *)((longlong)(gen_alloca_p1 + 0x30))));
         return 8;
       }
       uVar10 = uVar10 + 1;

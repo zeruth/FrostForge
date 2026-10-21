@@ -35,6 +35,14 @@ void* SMemReAllocAlignedSize(void* ptr, uint64_t* allocated, uint64_t bytes, uin
 // Frees a block. `tag`/`line` name the call site for the corruption report.
 bool SMemFree(void* ptr, const char* tag, int32_t line, uint32_t flags);
 
+// Development aid (FROST_NODELOG=1): a watched block that SMemFree frees logs the freeing stack.
+// The owner unwatches a block before freeing it itself.
+bool MemoryWatchEnabled();
+void MemoryWatchBlock(void* block, bool watch);
+void MemoryWatchFreed(void* ptr, const char* tag);
+// FROST_GUARD_HEAP: the stack that freed the block holding `address`, logged, when it was freed.
+void MemoryDescribeFreed(uint64_t address);
+
 // Storm's tagged global new (Memory.cpp); the plain new/new[]/delete/delete[] are replaced
 // there too. Use as `new (a2, tag, tagHash, line) T(...)`.
 void* operator new(size_t bytes, int32_t a2, const char* tag, uint32_t tagHash, int32_t line);

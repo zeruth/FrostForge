@@ -226,7 +226,7 @@ undefined4 FUN_14256fd20(undefined8 param_1, float *param_2, double param_3_prom
       fVar3 = fVar3 * fVar2;
     }
   }
-  uVar1 = CALLF(undefined4, FUN_14256fad0)(param_1,param_2,fVar3 + param_4,param_5,GEN_AS_FLOAT((unsigned long long)(param_6)));
+  uVar1 = CALLF(undefined4, FUN_14256fad0)(param_1,param_2,fVar3 + param_4,param_5,GEN_ARG_FLOAT(param_6));
   return uVar1;
 }
 
@@ -23696,7 +23696,7 @@ LAB_142590740:
   *(undefined4 *)((longlong)param_6 + 4) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4));
   *(undefined4 *)(param_6 + 1) = (undefined4)(*(undefined8 *)(gen_frame + 0x38));
   if (((*param_1 != 0) && (param_9 != (undefined4 *)0x0)) && (param_10 != (undefined4 *)0x0)) {
-    CALLF(undefined8, FUN_14258fde0)(param_1,fVar5,GEN_AS_FLOAT((unsigned long long)(*param_7)),fVar15,(unsigned long long)(CONCAT44(0,*param_8)),GEN_AS_FLOAT((unsigned long long)(0)),(unsigned long long)(CONCAT44(uVar21,uVar12)),(unsigned long long)(param_6),(unsigned long long)(param_9),(unsigned long long)(param_10));
+    CALLF(undefined8, FUN_14258fde0)(param_1,fVar5,GEN_ARG_FLOAT(*param_7),fVar15,(unsigned long long)(CONCAT44(0,*param_8)),GEN_ARG_FLOAT(0),(unsigned long long)(CONCAT44(uVar21,uVar12)),(unsigned long long)(param_6),(unsigned long long)(param_9),(unsigned long long)(param_10));
   }
   *param_4 = *(undefined4 *)((ulonglong)*param_8 * 0x200 + param_1[3]);
   puVar8 = param_4;

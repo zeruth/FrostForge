@@ -16199,8 +16199,8 @@ undefined8 FUN_14107cc10(undefined8 param_1)
       }
     }
   }
-  (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0xb0)) + 0)) = 0.0;
-  (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0xb0)) + 4)) = 0.0;
+  (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0xb0)) + 0)) = 0.0;
+  (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0xb0)) + 4)) = 0.0;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar6);
   if ((int)uVar3 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,"Usage: self:SetViewTranslation(translation)");
@@ -16229,13 +16229,13 @@ undefined8 FUN_14107cc10(undefined8 param_1)
         dVar7 = CALLF(double, FUN_1402b4920)(param_1,iVar6);
         dVar8 = CALLF(double, FUN_1402b4920)(param_1,iVar6 + 1);
         fVar9 = REFG(float, 0x142618d64) / (REFG(float, 0x142ccb9fc) * REFG(float, 0x14261a9c4));
-        (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0xb0)) + 0)) = (float)dVar7 * fVar9 * REFG(float, 0x142ccb9f4);
-        (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0xb0)) + 4)) = fVar9 * (float)dVar8 * REFG(float, 0x142ccb9f4);
+        (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0xb0)) + 0)) = (float)dVar7 * fVar9 * REFG(float, 0x142ccb9f4);
+        (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0xb0)) + 4)) = fVar9 * (float)dVar8 * REFG(float, 0x142ccb9f4);
       }
     }
   }
   *(float *)(lVar5 + 0x4b4) = (float)(*(undefined8 *)(gen_frame + 0xb0));
-  *(float *)(lVar5 + 0x4b8) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0xb0)) + 4));
+  *(float *)(lVar5 + 0x4b8) = (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0xb0)) + 4));
   cVar1 = CALLF(undefined1, FUN_14062cc40)(param_1,lVar5,"SetViewTranslation");
   if (cVar1 == '\0') {
     return 0;

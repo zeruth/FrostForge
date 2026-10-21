@@ -493,7 +493,7 @@ def global_expr(ghidra: str, size: int, addr: int) -> str:
 # A global with a trailing address tag. The initializer may be `= x`, `{x}` or a constructor's
 # `(a, b)` (CDataAllocator s_pool(0x20, 0x20); went untied until 2026-10-13); group 5 holds a
 # constructor's arguments, so a prototype (`bool F(int x);`) can be told apart in port_globals.
-PORT_GLOBAL = re.compile(r"^(?!(?:struct|class|union|enum|typedef|using|return)\b)([A-Za-z_][\w:<>,\t \*&]*?[\t \*&:])(\w+)(\[[^\]\n]*\])?"
+PORT_GLOBAL = re.compile(r"^(?!(?:struct|class|union|enum|typedef|using|return)\b)([A-Za-z_][\w:<>,\t \*&]*?[\t \*&:])(\w+)((?:\[[^\]\n]*\])+)?"
                          r"(?:[\t ]*(?:=|\{)[^;\n]*|[\t ]*\(([^;\n]*)\))?;[\t ]*"
                          r"//\s*(?:ref:\s*)?(?:DAT_|0x)(14[0-9a-f]{7})\b", re.M)
 # A function pointer global: `void (*s_hook)(int);  // DAT_x`, `BOOL(WINAPI* s_f)(HWND);  // DAT_x`.
@@ -915,6 +915,13 @@ def stack_frame(body: str, params: list[str] | None = None) -> str:
             # indexed as its bytes, its address the bytes', anything else the whole scalar
             body = re.sub(rf"(?<![\w.>])\b{n}\b(?=\s*\[)", f"((undefined1 *)(gen_frame + 0x{at:x}))", body)
             body = re.sub(rf"&\s*\b{n}\b", f"((undefined1 *)(gen_frame + 0x{at:x}))", body)
+            # (in pointer arithmetic the array is its address, as Ghidra's C decays it: `*(undefined4
+            # *)(local_238 + lVar11 + lVar19)` read the bytes' value as a pointer, FUN_1416e7e20 and
+            # FUN_1417a99e0's alloca'd tables, 2026-10-21)
+            # (only as a sum's base: after `(` or an integer or pointer cast. After a float cast or
+            # a product, `(float)local_x * (float)local_y + ...`, it is the value, C2440)
+            body = re.sub(rf"((?:\((?:longlong|ulonglong|undefined8|[\w ]+\*+)\)|\()\s*)\b{n}\b(?=\s*[+-](?![+-=]))",
+                          lambda q: f"{q.group(1)}((undefined1 *)(gen_frame + 0x{at:x}))", body)
             body = re.sub(rf"\b{n}\b", f"(*({ctype(m)} *)(gen_frame + 0x{at:x}))", body)
         elif m.group(7):
             ptr = f"(({ctype(m)} *)(gen_frame + 0x{at:x}))"
@@ -1106,6 +1113,64 @@ def simd_pieces(text: str) -> str:
         text = re.sub(rf"(?<=\*){re.escape(name)}\._{off}_8_(?!\w)", piece, text)
         text = re.sub(rf"(?<![\w.]){re.escape(name)}\._{off}_8_(?=\s*\[)", piece, text)
         text = re.sub(rf"(?<![\w.]){re.escape(name)}\._{off}_8_(?=\s*=\s*\({re.escape(typ.rstrip(' *'))})", piece, text)
+    # a 4- or 8-byte lane of an SSE register Ghidra assigns floating point values (`auVar25._0_4_ =
+    # fVar1 / auVar29._0_4_;`): the lane as a float (a double), or the assignment converted the
+    # quotient to an integer by value. 0.01 became 0, and the actor map's grids were built with
+    # origin 0 and every cell index out of range on Enter World, 2026-10-21. Float-valued lanes
+    # make the lanes they feed float too, until nothing changes.
+    floaty = re.compile(r"\(float\)|\*\s*\(float\s*\*\)|\bfVar\d+\b|REFG\(float\b|\bSQRT\w*\(|"
+                        r"\b\d+\.\d*(?:e[+-]?\d+)?\b|\b\d+e[+-]?\d+\b")
+    doubly = re.compile(r"\(double\)|\*\s*\(double\s*\*\)|\bdVar\d+\b|REFG\(double\b")
+    lanes: dict[tuple[str, str, str], str] = {}
+    assigns = re.findall(r"(?<![\w.])([A-Za-z_]\w*)\._(\d+)_([48])_ = ([^;]*);", text)
+    for _ in range(4):
+        before = len(lanes)
+        for name, off, size, expr in assigns:
+            key = (name, off, size)
+            if key in lanes:
+                continue
+            known = any(re.search(rf"(?<![\w.]){re.escape(n)}\._{o}_{s}_", expr) for (n, o, s), t in lanes.items()
+                        if t == ("float" if size == "4" else "double"))
+            if size == "4" and (floaty.search(expr) or known):
+                lanes[key] = "float"
+            elif size == "8" and (doubly.search(expr) or known):
+                lanes[key] = "double"
+        if len(lanes) == before:
+            break
+    # (a float lane is still bits where Ghidra treats it as bits: under an unsigned or undefined
+    # cast, as an operand of & | ^ >> <<, or stored from such an expression (`auVar._0_4_ =
+    # (uint)x & 0x7fffffff`, an abs). As a float there it was C2296 in 26 functions, and an
+    # unsigned cast of it would have converted the value instead of reading the bits)
+    bitop = r"(?:&(?!&)|\|(?!\|)|\^|>>|<<)"
+
+    def lane_bits_rhs(rhs: str) -> bool:
+        depth = 0
+        for k, c in enumerate(rhs):
+            depth += c in "([" and 1 or (-1 if c in ")]" else 0)
+            if depth == 0 and re.match(bitop, rhs[k:]) and k > 0 and re.search(r"[\w)\]]\s*$", rhs[:k]):
+                return True
+        return bool(re.match(r"\s*\((?:uint|ulonglong|undefined[48])\)", rhs))
+
+    for (name, off, size), typ in lanes.items():
+        lane = re.compile(rf"(?<![\w.]){re.escape(name)}\._{off}_{size}_(?!\w)")
+        ints = "undefined4" if size == "4" else "undefined8"
+        out, i = [], 0
+        for m in lane.finditer(text):
+            before = text[max(0, m.start() - 40):m.start()]
+            after = text[m.end():m.end() + 8]
+            stmt_end = text.find(";", m.end())
+            wide = text[max(0, m.start() - 240):m.start()]
+            bits = (re.search(r"\((?:uint|ulonglong|undefined[48])\)\s*\(*\s*$", before)
+                    # (the select idiom: `(uint)(a < b) * lane | (uint)(a >= b) * lane2`)
+                    or re.search(r"\((?:uint|ulonglong)\)\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)\s*\*\s*\(*\s*$", wide)
+                    or re.match(rf"\s*{bitop}", after)
+                    or re.search(rf"[\w)\]]\s*{bitop}\s*\(*\s*$", before)
+                    or (re.match(r"\s*=(?!=)", after) and stmt_end > 0
+                        and lane_bits_rhs(text[m.end():stmt_end].split("=", 1)[1])))
+            out.append(text[i:m.start()] + f"(*({ints if bits else typ} *)((char *)&{name} + {off}))")
+            i = m.end()
+        out.append(text[i:])
+        text = "".join(out)
     text = SIMD_PIECE.sub(lambda m: f"(*({width[m.group(3)]} *)((char *)&{m.group(1)} + {m.group(2)}))", text)
     # a piece of 3, 5, 6 or 7 bytes (`local_1e4._0_3_ = CONCAT12(...)`, an RGB triple): no C type
     # is that wide, so its bytes are copied in place, written as a statement, read as a value
@@ -1359,6 +1424,199 @@ def reinterpreted_float_locals(body: str) -> str:
     return "".join(out)
 
 
+def line_end(body: str, nxt) -> int:
+    """Where a variable's value ends: after the line that next assigns it (whose right side, `p =
+    p + lVar10;`, still reads the old one), or at the end of the function."""
+    if nxt is None:
+        return len(body)
+    end = body.find("\n", nxt.start())
+    return end if end >= 0 else len(body)
+
+
+HELD_ALLOCA = re.compile(r"^([ \t]*)(\w+) = -\(([\w.>\[\]-]+) & 0xfffffffffffffff0\);$", re.M)
+FRAME_TYPE = r"(?:[\w ]+?(?:\s*\*)+)"
+
+
+def held_stack_allocations(body: str) -> str:
+    """The alloca whose negated size the decompiler keeps in a variable (`lVar3 = -(uVar10 &
+    0xfffffffffffffff0);`) and adds to frame addresses later: one block per such assignment,
+    made there, and every frame address that adds it (`((undefined1 *)(gen_frame + 0x40)) +
+    lVar3`, `(longlong)&(*(undefined8 *)(gen_frame + 0x60)) + lVar13 + lVar12`, a pointer set
+    once to a frame address and then added to) moved into the latest block among its terms. The
+    world loader's FUN_1413e36e0 wrote its node table under the frame and broke the stack cookie
+    on Enter World, 2026-10-21.
+
+    A variable the function also uses for other things counts only between that assignment and
+    its next one, in the order the decompiler wrote them. The assignments themselves stay, so a
+    use no shape here matches keeps the meaning it had."""
+    allocs = list(HELD_ALLOCA.finditer(body))
+    if not allocs or "gen_frame" not in body:
+        return body
+    # (block index, variable, size, scope start, scope end), in text order
+    blocks = []
+    for k, m in enumerate(allocs):
+        nxt = re.compile(rf"^\s*{m.group(2)} = ", re.M).search(body, m.end())
+        blocks.append((k, m.group(2), m.group(3), m.end(), line_end(body, nxt)))
+    held = {b[1] for b in blocks}
+    # pointers set to a frame address, `puVar28 = ((undefined1 *)(gen_frame + 0x0));`, until
+    # their next assignment: (variable, type, offset, scope start, scope end)
+    # (or to one already below an earlier block, `puVar19 = ((undefined1 *)(gen_frame + 0x10)) +
+    # lVar16 + lVar10;`: the stack pointer FUN_1402627c0 then allocates its next blocks under)
+    aliases = []
+    held_rx = "|".join(map(re.escape, held))
+    for m in re.finditer(rf"^\s*(\w+) = \(\(({FRAME_TYPE})\)\(gen_frame \+ (0x[0-9a-f]+)\)\)"
+                         rf"(?:\s*\+\s*(?:{held_rx})\b)*;$", body, re.M):
+        nxt = re.compile(rf"^\s*{m.group(1)} = ", re.M).search(body, m.end())
+        aliases.append((m.group(1), m.group(2), m.group(3), m.end(), line_end(body, nxt)))
+    # (and a copy of one, `puVar20 = puVar19;` or `puVar20 = puVar19 + lVar17 + lVar10;`, until
+    # the copy's next assignment: the same frame offset, under whatever blocks were added)
+    for _ in range(4):
+        names = {a[0] for a in aliases}
+        if not names:
+            break
+        added = False
+        for m in re.finditer(rf"^\s*(\w+) = ({'|'.join(map(re.escape, names))})(?:\s*\+\s*(?:{held_rx})\b)*;$",
+                             body, re.M):
+            src = [a for a in aliases if a[0] == m.group(2) and a[3] <= m.start() < a[4]]
+            if not src or any(a[0] == m.group(1) and a[3] == m.end() for a in aliases):
+                continue
+            nxt = re.compile(rf"^\s*{m.group(1)} = ", re.M).search(body, m.end())
+            aliases.append((m.group(1), src[-1][1], src[-1][2], m.end(), line_end(body, nxt)))
+            added = True
+        if not added:
+            break
+    alias_rx = "|".join(map(re.escape, {a[0] for a in aliases})) or "(?!)"
+    base = re.compile(
+        rf"(?P<ll>\(longlong\))?\(\((?P<t1>{FRAME_TYPE})\)\(gen_frame \+ (?P<o1>0x[0-9a-f]+)\)\)"
+        rf"|\(longlong\)&\(\*\({FRAME_TYPE}\)\(gen_frame \+ (?P<o2>0x[0-9a-f]+)\)\)"
+        rf"|\(unsigned char \*\)&\(\*\({FRAME_TYPE}\)\(gen_frame \+ (?P<o3>0x[0-9a-f]+)\)\)"
+        rf"|\(\*\(gen_v16 \*\)\(gen_frame \+ (?P<o4>0x[0-9a-f]+)\)\)\.b(?=\[)"
+        rf"|(?<![\w)])&\(\*\((?P<t5>{FRAME_TYPE})\)\(gen_frame \+ (?P<o5>0x[0-9a-f]+)\)\)"
+        rf"|\(gen_alloca_p \+ (?P<o6>0x[0-9a-f]+)\)"
+        rf"|\b(?P<alias>{alias_rx})\b")
+    term = re.compile(r"\s*\+\s*(" + "|".join(map(re.escape, held)) + r")\b")
+    used: dict[int, int] = {}
+
+    def block_at(var: str, pos: int, frame: bool = False):
+        inside = [b for b in blocks if b[1] == var and b[3] <= pos < b[4]]
+        if inside:
+            return inside[-1]
+        # (a frame address plus the variable is only ever the alloca, though the text reassigns
+        # the variable in between on another path: FUN_141375dc0's `lVar15 = lVar12 * 0x1c ...` in
+        # one branch, the block's address in the next. The latest block assigned before it)
+        if frame:
+            before = [b for b in blocks if b[1] == var and b[3] <= pos]
+            return before[-1] if before else None
+        return None
+
+    def chain(text: str, at: int) -> tuple[int, int]:
+        """The expression the address heads: a subscript's inside, or the additive chain after it
+        at its own depth, up to what closes or separates it."""
+        i = at
+        while i < len(text) and text[i] in " \t":
+            i += 1
+        if i < len(text) and text[i] == "[":
+            depth, j = 0, i
+            while j < len(text):
+                depth += text[j] == "["
+                depth -= text[j] == "]"
+                if depth == 0:
+                    return i + 1, j
+                j += 1
+            return at, at
+        depth, j = 0, at
+        while j < len(text):
+            c = text[j]
+            if c in "([":
+                depth += 1
+            elif c in ")]":
+                if depth == 0:
+                    break
+                depth -= 1
+            elif depth == 0 and (c in ",;?:=<>|" or (c == "&" and text[j + 1:j + 2] == "&") or text[j] == "\n"):
+                break
+            j += 1
+        return at, j
+
+    edits = []
+    for m in base.finditer(body):
+        # (a base in parentheses of its own and then subscripted, `(((undefined1 *)(gen_frame +
+        # 0x40)))[i * 0x14 + lVar2]`: the subscript is its chain)
+        s, e = m.start(), m.end()
+        while s > 0 and body[s - 1] == "(" and body[e:e + 1] == ")" and body[e + 1:e + 2] in (")", "["):
+            s, e = s - 1, e + 1
+            if body[e:e + 1] == "[":
+                break
+        else:
+            s, e = m.start(), m.end()
+        start, end = chain(body, e)
+        spans = [(start, end)]
+        # (and past the parenthesis the base opened with: `((unsigned char *)&(*(gen_v16 *)(
+        # gen_frame + 0x50)) + lVar5) + lVar6`, one block below another)
+        if body[end:end + 1] == ")" and s > 0 and body[s - 1] == "(":
+            spans.append(chain(body, end + 1))
+        # the offsets added at the chain's own depth
+        found = []
+        for a, z in spans:
+            for t in term.finditer(body, a, z):
+                seg = body[a:t.start()]
+                if seg.count("(") - seg.count(")") + seg.count("[") - seg.count("]") != 0:
+                    continue
+                b = block_at(t.group(1), m.start(), frame=not m.group("alias"))
+                if b is not None:
+                    found.append((t, b))
+        if not found:
+            continue
+        if m.group("o6"):
+            # (the block stack_allocations made for an inline size, `(gen_alloca_p + 0x30) +
+            # lVar5`: allocated after the held one, so already the lowest; the term goes)
+            edits += [(t.start(), t.end(), "") for t, _ in found]
+            continue
+        if m.group("alias"):
+            inside = [a for a in aliases if a[0] == m.group("alias") and a[3] <= m.start() < a[4]]
+            if not inside:
+                continue
+        k = max(b[0] for _, b in found)
+        if m.group("alias"):
+            _, ptype, off, _, _ = inside[-1]
+            new = f"(({ptype})(gen_alloca_p{k} + {off}))"
+        elif m.group("o1"):
+            off = m.group("o1")
+            new = f"{m.group('ll') or ''}(({m.group('t1')})(gen_alloca_p{k} + {off}))"
+        elif m.group("o2"):
+            off = m.group("o2")
+            new = f"(longlong)(gen_alloca_p{k} + {off})"
+        elif m.group("o3"):
+            off = m.group("o3")
+            new = f"(gen_alloca_p{k} + {off})"
+        elif m.group("o4"):
+            off = m.group("o4")
+            new = f"(gen_alloca_p{k} + {off})"
+        else:
+            off = m.group("o5")
+            new = f"(({m.group('t5')})(gen_alloca_p{k} + {off}))"
+        used[k] = max(used.get(k, 0), int(off, 16))
+        edits.append((s, e, new))
+        edits += [(t.start(), t.end(), "") for t, _ in found]
+    if not edits:
+        return body
+    out = body
+    for s, e, text in sorted(edits, reverse=True):
+        out = out[:s] + text + out[e:]
+    # each block made where its size is known (the assignments are untouched, so the k-th in the
+    # rewritten text is the k-th block), with room for the largest offset into it
+    placed = list(HELD_ALLOCA.finditer(out))
+    for k, v, size, start, _ in reversed(blocks):
+        if k not in used:
+            continue
+        m = placed[k]
+        out = (out[:m.start()] + f"{m.group(1)}gen_alloca_p{k} = (unsigned char *)_alloca(({size} & 0xfffffffffffffff0) + "
+               f"0x{used[k] + 0x400:x}) + 0x200;\n" + out[m.start():].lstrip("\n"))
+    brace = out.index("{") + 1
+    decls = "".join(f"\n  unsigned char *gen_alloca_p{k} = 0;" for k in sorted(used))
+    return out[:brace] + decls + out[brace:]
+
+
 def stack_allocations(body: str) -> str:
     """The compiler's `alloca` (`sub rsp, size` after __chkstk) as the decompiler shows it: a
     frame address less a 16-aligned size (`(gen_frame + 0x30) + -(n + 0xf & ~0xf)`), the block
@@ -1380,6 +1638,9 @@ def stack_allocations(body: str) -> str:
                  r"-\(([\w.>\[\]-]+) & 0xfffffffffffffff0\)\)", lambda m: f"({fix(m)})", body)
     out = re.sub(r"\(\((?:[\w ]+?\s*\*+)\)\(gen_frame \+ (0x[0-9a-f]+)\)\)\s*\+\s*"
                  r"-\(([\w.>\[\]-]+) & 0xfffffffffffffff0\)", fix, out)
+    out = held_stack_allocations(out)
+    if not sizes:
+        return out
     if len(sizes) != 1:
         return body          # (two sizes: not one block; leave it to fail visibly)
     size = sizes.pop()
@@ -3681,7 +3942,12 @@ class Translator:
         if not data_publics:
             data_publics = cache["data_publics"] = load_data_publics()
             PORT_CACHE.write_text(json.dumps(cache), encoding="utf-8")
-        if not cache.get("data_sizes"):
+        # (and again when a held global is missing from them: a renamed or new one took the
+        # aggregate span of up to 0x400 bytes instead of its own size, and GlobalStrings'
+        # neighbours, written through its 0x28-byte state, landed in the D3D12 device's
+        # residency mutex: Enter World hung, 2026-10-21)
+        if not cache.get("data_sizes") or any(g["name"] not in cache["data_sizes"] for g in self.held.values()
+                                               if not g["scalar"]):
             cache["data_sizes"] = load_data_sizes()
             PORT_CACHE.write_text(json.dumps(cache), encoding="utf-8")
         for addr, g in self.held.items():
@@ -3690,6 +3956,8 @@ class Translator:
             hits = [n for n in data_publics if re.match(rf"\?{re.escape(g['name'])}@(?:\w+@)*@[23]", n)]
             g["mangled"] = hits[0] if len(hits) == 1 else None
         self.global_aliases: dict[int, str] = {}
+        # held aggregates of unknown size that translated code reached past their first 8 bytes
+        self.unsized_reach: set[str] = set()
         self.exported: dict[int, dict] = {}
         self.demoted = json.loads(DEMOTED.read_text()) if DEMOTED.exists() else {}
         self.exceptions = json.loads((ROOT / "tools/fidelity_exceptions.json").read_text(encoding="utf-8"))
@@ -3965,7 +4233,12 @@ class Translator:
         for m in reversed(list(re.finditer(r"^([ \t]*)undefined1 (\w+) \[([1248])\];$", text, re.M))):
             n = m.group(2)
             rest = text[m.end():]
-            if re.search(rf"^\s*{n} = ", rest, re.M) and not re.search(rf"\b{n}\s*\[|&\s*{n}\b|[(,]\s*{n}\s*[,)]", rest):
+            # (pointer arithmetic on it is its address too, `*(undefined4 *)(local_238 + lVar11 +
+            # lVar19)`, an alloca'd table's column: as a scalar that read the bytes as the pointer,
+            # FUN_1416e7e20 and FUN_1417a99e0, 2026-10-21)
+            if re.search(rf"^\s*{n} = ", rest, re.M) and not re.search(
+                    rf"\b{n}\s*\[|&\s*{n}\b|[(,]\s*{n}\s*[,)]|"
+                    rf"(?:\((?:longlong|ulonglong|undefined8|[\w ]+\*+)\)|\()\s*{n}\s*[+-](?![+-=])", rest):
                 text = text[:m.start()] + f"{m.group(1)}undefined{m.group(3)} {n};" + text[m.end():]
         # Ghidra's rdtsc pseudo-op: the intrinsic; and the XCR0 `xgetbv` reads, as Ghidra names
         # the register: the intrinsic too
@@ -4700,7 +4973,12 @@ class Translator:
         elif g["scalar"]:
             span = min(scalar_size(g["decl"]), nxt - base)
         else:
-            span = min(nxt - base, 0x400)
+            # (an aggregate of unknown size: its first 8 bytes only. Running on to the next held
+            # global (up to 0x400) wrote the reference's neighbours into whatever port memory
+            # follows the object, 2026-10-21; past them the image's copy is read instead)
+            span = min(8, nxt - base)
+            if addr >= base + span:
+                self.unsized_reach.add(g["name"])
         return (base, g) if addr < base + span else None
 
     FLOAT_TYPE = re.compile(r"^(?:float|double|float4|float8|float10)$")
@@ -4739,8 +5017,10 @@ class Translator:
                     if floaty.search(arg):
                         continue
                     ptype = sig[2][k].split()[0]
-                    helper = "GEN_AS_FLOAT" if ptype in ("float", "float4") else "GEN_AS_DOUBLE"
-                    args[k] = f"{helper}((unsigned long long)({arg}))"
+                    # (by the argument's C type, which the text does not always show: a float
+                    # read through a cast pointer went by value to an integer, then as bits)
+                    helper = "GEN_ARG_FLOAT" if ptype in ("float", "float4") else "GEN_ARG_DOUBLE"
+                    args[k] = f"{helper}({arg})"
                     changed = True
                 elif k >= 4 and not floaty.search(arg) and not arg.startswith("(unsigned long long)("):
                     # from the fifth on an argument is a stack slot of 8 bytes, and an unprototyped
@@ -5406,8 +5686,22 @@ class Translator:
             inner = f"((char *)REFP(0x{addr:x}) + {var})" if var else f"((char *)REFP(0x{addr:x}))"
             return f"{inner}[{idx}]"
 
-        return re.sub(r'(?:\("((?:[^"\\]|\\.)*)" \+ (\w+)\)|"((?:[^"\\]|\\.)*)")'
+        rest = re.sub(r'(?:\("((?:[^"\\]|\\.)*)" \+ (\w+)\)|"((?:[^"\\]|\\.)*)")'
                       r'\[([^\[\]]*-0x1[0-9a-f]{8}[^\[\]]*)\]', fix, rest)
+        # the same distance taken through a variable the literal was put in (`pcVar3 = "-";` ...
+        # `(pcVar8 + -0x1426243f0)[(longlong)pcVar3]`, FUN_14153da30's token scan, which faulted
+        # loading the world, 2026-10-21; 43 sites): where the image holds that string at the
+        # constant, the variable is given the reference's copy
+        for c in sorted({int(x, 16) for x in re.findall(r"-0x(1[0-9a-f]{8})\b", rest)}):
+            if self.ref.section_of(c) is None or self.ref.is_code(c):
+                continue
+            text = self.ref.cstr(c, 256)
+            if text is None:
+                continue
+            escaped = text.encode("unicode_escape").decode("ascii").replace('"', '\\"')
+            rest = re.sub(rf'^(\s*\w+ = )"{re.escape(escaped)}";', rf'\g<1>((char *)REFP(0x{c:x}));', rest,
+                          flags=re.M)
+        return rest
 
     def rip_targets(self, a: int) -> set[int]:
         """The addresses the function's instructions reach rip-relative (lea and memory operands),
@@ -5694,7 +5988,10 @@ class Translator:
             uses.add(target)
             return f"CALLF({self.decl(target)[0]}, @FUN_{target:x})("
 
-        body = CALL.sub(call, body)
+        # (outside string literals too: "Usage: C_Console.SetFontHeight(fontHeightInPixels)" came
+        # out "C_Console.CALLF(undefined4, FUN_140e24f80)(...)", 2183 literals, 2026-10-21)
+        parts = re.split(r"(\"(?:[^\"\\\n]|\\.)*\"|'(?:[^'\\\n]|\\.)*')", body)
+        body = "".join(p if k % 2 else CALL.sub(call, p) for k, p in enumerate(parts))
         body = crt_arity(body)
         # the carried result of a callee that returns 16 bytes (a float or vector in xmm0, where
         # this one's caller reads rax): the low qword, as `(undefined8)` cannot convert a
@@ -6363,6 +6660,10 @@ class Translator:
             header += [f"/* {g['name']} ({g['file']}), internal: through its pointer */",
                        f"extern void *const gen_p_{base:x};",
                        f"#define gen_g_{base:x} {cast}"]
+        unsized = sorted(g["name"] for g in self.held.values() if not g["scalar"] and not g.get("size"))
+        if unsized:
+            print(f"{len(unsized)} held aggregates of unknown size (first 8 bytes shared only): "
+                  f"{', '.join(unsized[:12])}{' ...' if len(unsized) > 12 else ''}", file=sys.stderr)
         write_exports({**self.exported,
                        **{a: g for a, g in self.fn_exported.items() if a in plan["adapt"]}})
         (ROOT / "build/internal-arity.txt").write_text(

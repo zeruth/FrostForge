@@ -26,8 +26,7 @@ TObjectAllocHeap* s_matrixPool;         // DAT_1430a0f50 (0x44)
 TObjectAllocHeap* s_windPhasePool;      // DAT_1430a0f58 (0x10)
 TObjectAllocHeap* s_boneSeqPool;        // DAT_1430a0f60 (0x68)
 
-// DAT_142cfb0f0
-uint32_t s_flag400;
+uint32_t s_flag400;  // 0x142cfb0f0
 
 TObjectAllocHeap* MakePool(const char* name, uint32_t size, uint32_t perHeap, int32_t line) {
     void* memory = SMemAlloc(sizeof(TObjectAllocHeap), 0x12, s_modelFile, 0, line, 0);

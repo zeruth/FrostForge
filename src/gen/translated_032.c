@@ -25318,6 +25318,8 @@ undefined8 FUN_1405820c0(ulonglong param_1, longlong param_2)
 {
   GEN_HIT(378);
   unsigned char *gen_alloca_p = 0;
+  unsigned char *gen_alloca_p0 = 0;
+  unsigned char *gen_alloca_p1 = 0;
   __declspec(align(16)) unsigned char gen_frame[(0xb8 + sizeof(longlong) > 0xc0 ? 0xb8 + sizeof(longlong) : 0xc0)] = {0};
   memcpy((void *)(gen_frame + 0xa0),(void *)(&param_1), sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy((void *)(gen_frame + 0xa8),(void *)(&param_2), sizeof(param_2) < 8 ? sizeof(param_2) : 8);
@@ -25375,25 +25377,27 @@ undefined8 FUN_1405820c0(ulonglong param_1, longlong param_2)
       uVar10 = 0xffffffffffffff0;
     }
     (*(undefined8 *)(gen_frame + 0x8)) = 0x140582128;
+    gen_alloca_p0 = (unsigned char *)_alloca((uVar10 & 0xfffffffffffffff0) + 0x440) + 0x200;
     lVar13 = -(uVar10 & 0xfffffffffffffff0);
     uVar11 = (longlong)iVar14 * 8;
     uVar10 = uVar11 + 0xf;
-    lVar8 = (longlong)((char * *)(gen_frame + 0x40)) + lVar13;
+    lVar8 = (longlong)((char * *)(gen_alloca_p0 + 0x40));
     if (uVar10 <= uVar11) {
       uVar10 = 0xffffffffffffff0;
     }
-    *(undefined8 *)(((undefined1 *)(gen_frame + 0x10)) + lVar13 + -8) = 0x140582154;
+    *(undefined8 *)(((undefined1 *)(gen_alloca_p0 + 0x10)) + -8) = 0x140582154;
+    gen_alloca_p1 = (unsigned char *)_alloca((uVar10 & 0xfffffffffffffff0) + 0x440) + 0x200;
     lVar18 = -(uVar10 & 0xfffffffffffffff0);
     uVar11 = (longlong)iVar14 * 2;
     uVar10 = uVar11 + 0xf;
-    psVar21 = (short *)((longlong)((char * *)(gen_frame + 0x40)) + lVar18 + lVar13);
+    psVar21 = (short *)((longlong)((char * *)(gen_alloca_p1 + 0x40)));
     if (uVar10 <= uVar11) {
       uVar10 = 0xffffffffffffff0;
     }
-    *(undefined8 *)(((undefined1 *)(gen_frame + 0x10)) + lVar18 + lVar13 + -8) = 0x140582178;
+    *(undefined8 *)(((undefined1 *)(gen_alloca_p1 + 0x10)) + -8) = 0x140582178;
     gen_alloca_p = (unsigned char *)_alloca((uVar10 & 0xfffffffffffffff0) + 0x400) + 0x200;
-    puVar17 = (gen_alloca_p + 0x10) + lVar18 + lVar13;
-    psVar26 = (short *)((longlong)((char * *)(gen_frame + 0x40)) + -(uVar10 & 0xfffffffffffffff0) + lVar18 + lVar13);
+    puVar17 = (gen_alloca_p + 0x10);
+    psVar26 = (short *)((longlong)((char * *)(gen_alloca_p1 + 0x40)) + -(uVar10 & 0xfffffffffffffff0));
   }
   uVar11 = 0;
   (*(uint *)(gen_frame + 0xb0)) = 0;

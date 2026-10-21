@@ -30,6 +30,8 @@
 
 extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
+extern float g_groundEffectDist;  // GraphicsSettings.cpp, DAT_142d00c20
+
 namespace {
 
 template <class T>
@@ -100,20 +102,21 @@ uint64_t SceneOcclusionResult(SceneOcclusion** holder) {
 
 // ---- global switches -----------------------------------------------------------------------
 
-// DAT_142d00e58: the particulate volumes draw (1 in the reference's data).
-uint8_t s_particulatesOn = 1;
-// DAT_1430a5b92: the world's projected texture target is to be cleared.
-uint8_t s_projectedClearPending;
+// the particulate volumes draw (1 in the reference's data).
+uint8_t s_particulatesOn = 1;  // 0x142d00e58
+// the world's projected texture target is to be cleared.
+uint8_t s_projectedClearPending;  // 0x1430a5b92
 // DAT_1430a5b88: the projected textures' blend (set by the type 6 scene's projector).
 float s_projectedBlend;
 // DAT_1447cedd8, DAT_1430a5ce8: the outline and spell-effect passes (set by their setup,
 // FUN_142557240 and FUN_1412b01d0, not ported).
 uint8_t s_outlinesOn;
 uint8_t s_spellEffectsOn;
-// DAT_142d00c20: the LOD distance the budget is taken from.
-float s_lodDistance = 70.0f;
-// DAT_1447ce270: the liquids' fog origin and range (FUN_142527290).
-float s_liquidFog[4];
+// the LOD distance the budget is taken from (0x142d00c20: GraphicsSettings.cpp's, which this
+// file defined a second time until 2026-10-21).
+float& s_lodDistance = g_groundEffectDist;
+// the liquids' fog origin and range (FUN_142527290).
+float s_liquidFog[4];  // 0x1447ce270
 
 // ref: FUN_141396b60
 uint8_t ParticulatesOn() {
@@ -652,8 +655,8 @@ uint32_t WorldFeatures() {
     return s_worldFeatures & s_worldFeaturesMask;
 }
 
-// DAT_1430a1fa0: the targets the alpha M2 passes draw into.
-GXRENDERTARGETS* s_alphaTargets;
+// the targets the alpha M2 passes draw into.
+GXRENDERTARGETS* s_alphaTargets;  // 0x1430a1fa0
 
 }  // namespace
 
@@ -1123,4 +1126,7 @@ extern "C" void* const gen_f_1413dcc50 = (void*)&WorldViewHasWaterBox;
 extern "C" void* const gen_f_142442700 = (void*)&DayNightEnvironmentFog;
 extern "C" void* const gen_f_1424427c0 = (void*)&DayNightClearFog;
 extern "C" void* const gen_f_14254fd50 = (void*)&SceneOcclusionOn;
+extern "C" void* const gen_p_1430a1fa0 = (void*)&s_alphaTargets;
+extern "C" void* const gen_p_1430a5b92 = (void*)&s_projectedClearPending;
+extern "C" void* const gen_p_1447ce270 = (void*)&s_liquidFog;
 // ---- end of generated globals ----

@@ -13,7 +13,7 @@
 typedef int32_t (*M2ELEMENTCOMPARE)(uint32_t a, uint32_t b, const M2Element* elements);
 
 void M2IndicesReserve(M2SceneVector<uint32_t>* indices, uint64_t count);
-void M2IndicesPush(M2SceneVector<uint32_t>* indices, uint32_t value);
+void M2IndicesPush(M2SceneVector<uint32_t>* indices, const uint32_t& value);
 void M2ElementsReserve(M2SceneVector<M2Element>* elements, uint64_t count);
 void M2SceneEntriesReserveElements(M2SceneVector<M2Element>* elements, uint64_t count);
 

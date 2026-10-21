@@ -1772,34 +1772,34 @@ undefined8 FUN_14130fa00(longlong param_1, int param_2, float *param_3)
       *(int *)(plVar4 + 3) = param_2;
       switch((long long)(param_2)) {
       case 1:
-        CALLF(int, FUN_141590580)(plVar4[2],0,GEN_AS_FLOAT((unsigned long long)(param_3[1])));
+        CALLF(int, FUN_141590580)(plVar4[2],0,GEN_ARG_FLOAT(param_3[1]));
         CALLF(int, FUN_141590580)(plVar4[2],1,REFG(float, 0x1426d2b74));
         break;
       case 2:
       case 3:
-        CALLF(int, FUN_141590580)(plVar4[2],0,GEN_AS_FLOAT((unsigned long long)(param_3[1])));
-        CALLF(int, FUN_141590580)(plVar4[2],1,GEN_AS_FLOAT((unsigned long long)(param_3[2])));
+        CALLF(int, FUN_141590580)(plVar4[2],0,GEN_ARG_FLOAT(param_3[1]));
+        CALLF(int, FUN_141590580)(plVar4[2],1,GEN_ARG_FLOAT(param_3[2]));
         break;
       case 4:
-        CALLF(int, FUN_141590580)(plVar4[2],0,GEN_AS_FLOAT((unsigned long long)(param_3[1])));
-        CALLF(int, FUN_141590580)(plVar4[2],1,GEN_AS_FLOAT((unsigned long long)(param_3[2])));
-        CALLF(int, FUN_141590580)(plVar4[2],2,GEN_AS_FLOAT((unsigned long long)(param_3[3])));
-        CALLF(int, FUN_141590580)(plVar4[2],3,GEN_AS_FLOAT((unsigned long long)(param_3[4])));
-        CALLF(int, FUN_141590580)(plVar4[2],4,GEN_AS_FLOAT((unsigned long long)(param_3[5])));
-        CALLF(int, FUN_141590580)(plVar4[2],5,GEN_AS_FLOAT((unsigned long long)(param_3[6])));
-        CALLF(int, FUN_141590580)(plVar4[2],6,GEN_AS_FLOAT((unsigned long long)(param_3[7])));
+        CALLF(int, FUN_141590580)(plVar4[2],0,GEN_ARG_FLOAT(param_3[1]));
+        CALLF(int, FUN_141590580)(plVar4[2],1,GEN_ARG_FLOAT(param_3[2]));
+        CALLF(int, FUN_141590580)(plVar4[2],2,GEN_ARG_FLOAT(param_3[3]));
+        CALLF(int, FUN_141590580)(plVar4[2],3,GEN_ARG_FLOAT(param_3[4]));
+        CALLF(int, FUN_141590580)(plVar4[2],4,GEN_ARG_FLOAT(param_3[5]));
+        CALLF(int, FUN_141590580)(plVar4[2],5,GEN_ARG_FLOAT(param_3[6]));
+        CALLF(int, FUN_141590580)(plVar4[2],6,GEN_ARG_FLOAT(param_3[7]));
         break;
       case 5:
-        CALLF(int, FUN_141590580)(plVar4[2],0,GEN_AS_FLOAT((unsigned long long)(param_3[1])));
-        CALLF(int, FUN_141590580)(plVar4[2],1,GEN_AS_FLOAT((unsigned long long)(param_3[2])));
-        CALLF(int, FUN_141590580)(plVar4[2],3,GEN_AS_FLOAT((unsigned long long)(param_3[3])));
-        CALLF(int, FUN_141590580)(plVar4[2],4,GEN_AS_FLOAT((unsigned long long)(param_3[4])));
+        CALLF(int, FUN_141590580)(plVar4[2],0,GEN_ARG_FLOAT(param_3[1]));
+        CALLF(int, FUN_141590580)(plVar4[2],1,GEN_ARG_FLOAT(param_3[2]));
+        CALLF(int, FUN_141590580)(plVar4[2],3,GEN_ARG_FLOAT(param_3[3]));
+        CALLF(int, FUN_141590580)(plVar4[2],4,GEN_ARG_FLOAT(param_3[4]));
         break;
       case 6:
         if (*param_3 <= 0.0) {
           return 0;
         }
-        return (undefined8)CALLF(int, FUN_1415902c0)(*(undefined8 *)(param_1 + 0x18),GEN_AS_FLOAT((unsigned long long)(param_3[1])));
+        return (undefined8)CALLF(int, FUN_1415902c0)(*(undefined8 *)(param_1 + 0x18),GEN_ARG_FLOAT(param_3[1]));
         return 0;
       default:
         if (param_2 == 6) {

@@ -507,7 +507,7 @@ undefined4 FUN_140d1bf40(undefined8 param_1, undefined8 param_2, double *param_3
   (*(undefined8 *)(gen_frame + 0x8)) = param_2;
   CALLF(undefined8, FUN_140b499c0)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x40)),"Usage: C_Timer.After(seconds, callback)",0,(unsigned long long)(param_3));
   CALLF(undefined8, FUN_140d12230)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x40)),"Usage: C_Timer.After(seconds, callback)",0,(unsigned long long)(param_3 + 1));
-  CALLF(undefined8, FUN_141cf9250)(GEN_AS_DOUBLE((unsigned long long)(*param_3)),param_3 + 1);
+  CALLF(undefined8, FUN_141cf9250)(GEN_ARG_DOUBLE(*param_3),param_3 + 1);
   return 0;
 }
 
@@ -561,7 +561,7 @@ uint FUN_140d1c600(undefined8 param_1, undefined8 param_2, double *param_3)
   if ((*(char *)(gen_frame + 0xc)) != '\0') {
     (*(undefined4 *)(gen_frame + 0x8)) = *(undefined4 *)(param_3 + 4);
   }
-  uVar4 = CALLF(longlong, FUN_141cf94b0)((void *)&(*(gen_v16 *)(gen_frame + 0x38)),GEN_AS_DOUBLE((unsigned long long)(*param_3)),param_3 + 1,&(*(undefined4 *)(gen_frame + 0x8)));
+  uVar4 = CALLF(longlong, FUN_141cf94b0)((void *)&(*(gen_v16 *)(gen_frame + 0x38)),GEN_ARG_DOUBLE(*param_3),param_3 + 1,&(*(undefined4 *)(gen_frame + 0x8)));
   CALLF(longlong, FUN_140d17a10)(param_3 + 5,uVar4);
   if ((*(longlong *)(gen_frame + 0x48)) != -1) {
     ((code * *)(gen_frame + 0x28))[0] = ((code *)REFP(0x140d16e30));
@@ -596,7 +596,7 @@ undefined4 FUN_140d1cdc0(undefined8 param_1, undefined8 param_2, double *param_3
   (*(undefined8 *)(gen_frame + 0x0)) = param_2;
   CALLF(undefined8, FUN_140b499c0)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x88)),"Usage: local cbObject = C_Timer.NewTimer(seconds, callback)",0,(unsigned long long)(param_3));
   CALLF(undefined8, FUN_140d127b0)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x88)),"Usage: local cbObject = C_Timer.NewTimer(seconds, callback)",0,(unsigned long long)(param_3 + 1));
-  uVar2 = CALLF(longlong, FUN_141cf9730)((void *)&(*(gen_v16 *)(gen_frame + 0x20)),GEN_AS_DOUBLE((unsigned long long)(*param_3)),param_3 + 1);
+  uVar2 = CALLF(longlong, FUN_141cf9730)((void *)&(*(gen_v16 *)(gen_frame + 0x20)),GEN_ARG_DOUBLE(*param_3),param_3 + 1);
   CALLF(longlong, FUN_140d17a10)(param_3 + 4,uVar2);
   if ((*(longlong *)(gen_frame + 0x30)) != -1) {
     ((code * *)(gen_frame + 0x10))[0] = ((code *)REFP(0x140d16e30));
@@ -4030,7 +4030,7 @@ undefined4 FUN_140d2aec0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_ModelInfo.CALLF(undefined4, FUN_140d2aec0)(modelSceneFrame, modelSceneID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_ModelInfo.AddActiveModelScene(modelSceneFrame, modelSceneID)");
   }
   else {
     lVar4 = CALLF(undefined8, FUN_140d11f10)(0,param_1,1,0,(unsigned long long)(0));
@@ -4046,7 +4046,7 @@ undefined4 FUN_140d2aec0(undefined8 param_1)
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x10)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
       CALLF(undefined8, FUN_1424248b0)(param_1,1,
-                    "Usage: C_ModelInfo.CALLF(undefined4, FUN_140d2aec0)(modelSceneFrame, modelSceneID)");
+                    "Usage: C_ModelInfo.AddActiveModelScene(modelSceneFrame, modelSceneID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -4061,13 +4061,13 @@ undefined4 FUN_140d2aec0(undefined8 param_1)
   }
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar5);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_ModelInfo.CALLF(undefined4, FUN_140d2aec0)(modelSceneFrame, modelSceneID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_ModelInfo.AddActiveModelScene(modelSceneFrame, modelSceneID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,uVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,
-                    "Usage: C_ModelInfo.CALLF(undefined4, FUN_140d2aec0)(modelSceneFrame, modelSceneID)");
+                    "Usage: C_ModelInfo.AddActiveModelScene(modelSceneFrame, modelSceneID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -4102,7 +4102,7 @@ undefined4 FUN_140d2b660(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: C_ModelInfo.CALLF(undefined4, FUN_140d2b660)(modelSceneFrameActor, modelSceneActorID)"
+                  "Usage: C_ModelInfo.AddActiveModelSceneActor(modelSceneFrameActor, modelSceneActorID)"
                  );
   }
   else {
@@ -4120,7 +4120,7 @@ undefined4 FUN_140d2b660(undefined8 param_1)
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x10)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
       CALLF(undefined8, FUN_1424248b0)(param_1,1,
-                    "Usage: C_ModelInfo.CALLF(undefined4, FUN_140d2b660)(modelSceneFrameActor, modelSceneActorID)"
+                    "Usage: C_ModelInfo.AddActiveModelSceneActor(modelSceneFrameActor, modelSceneActorID)"
                    );
     }
     else {
@@ -4138,14 +4138,14 @@ undefined4 FUN_140d2b660(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar3);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: C_ModelInfo.CALLF(undefined4, FUN_140d2b660)(modelSceneFrameActor, modelSceneActorID)"
+                  "Usage: C_ModelInfo.AddActiveModelSceneActor(modelSceneFrameActor, modelSceneActorID)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,uVar3);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar3,
-                    "Usage: C_ModelInfo.CALLF(undefined4, FUN_140d2b660)(modelSceneFrameActor, modelSceneActorID)"
+                    "Usage: C_ModelInfo.AddActiveModelSceneActor(modelSceneFrameActor, modelSceneActorID)"
                    );
     }
     else {
@@ -4173,7 +4173,7 @@ undefined4 FUN_140d2be10(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_ModelInfo.CALLF(undefined4, FUN_140d2be10)(modelSceneFrame)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_ModelInfo.ClearActiveModelScene(modelSceneFrame)");
   }
   else {
     lVar3 = CALLF(undefined8, FUN_140d11f10)(0,param_1,1,0,(unsigned long long)(0));
@@ -4188,7 +4188,7 @@ undefined4 FUN_140d2be10(undefined8 param_1)
       if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
-      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_ModelInfo.CALLF(undefined4, FUN_140d2be10)(modelSceneFrame)");
+      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_ModelInfo.ClearActiveModelScene(modelSceneFrame)");
     }
     else {
       iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -4216,7 +4216,7 @@ undefined4 FUN_140d2c570(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_ModelInfo.CALLF(undefined4, FUN_140d2c570)(modelSceneFrameActor)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_ModelInfo.ClearActiveModelSceneActor(modelSceneFrameActor)");
   }
   else {
     uVar1 = CALLF(int, FUN_140d253e0)();
@@ -4232,7 +4232,7 @@ undefined4 FUN_140d2c570(undefined8 param_1)
       if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
-      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_ModelInfo.CALLF(undefined4, FUN_140d2c570)(modelSceneFrameActor)")
+      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_ModelInfo.ClearActiveModelSceneActor(modelSceneFrameActor)")
       ;
     }
     else {
@@ -4386,14 +4386,14 @@ undefined4 FUN_140d2e7c0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)((*(undefined8 *)(gen_frame + 0x0)),
-                  "Usage: local modelSceneCameraInfo = C_ModelInfo.CALLF(undefined4, FUN_140d2e7c0)(modelSceneCameraID)"
+                  "Usage: local modelSceneCameraInfo = C_ModelInfo.GetModelSceneCameraInfoByID(modelSceneCameraID)"
                  );
   }
   else {
     cVar2 = CALLF(undefined1, FUN_1407d22e0)((*(undefined8 *)(gen_frame + 0x0)),1);
     if (cVar2 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local modelSceneCameraInfo = C_ModelInfo.CALLF(undefined4, FUN_140d2e7c0)(modelSceneCameraID)"
+                    "Usage: local modelSceneCameraInfo = C_ModelInfo.GetModelSceneCameraInfoByID(modelSceneCameraID)"
                    );
     }
     else {
@@ -4611,7 +4611,7 @@ undefined4 FUN_140d324c0(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local visible = C_SystemVisibilityManager.CALLF(undefined4, FUN_140d324c0)(system)"
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local visible = C_SystemVisibilityManager.IsSystemVisible(system)"
                  );
   }
   else {
@@ -4641,7 +4641,7 @@ undefined4 FUN_140d324c0(undefined8 param_1)
       CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
     }
     CALLF(undefined8, FUN_1424248b0)(param_1,1,
-                  "Usage: local visible = C_SystemVisibilityManager.CALLF(undefined4, FUN_140d324c0)(system)");
+                  "Usage: local visible = C_SystemVisibilityManager.IsSystemVisible(system)");
   }
 LAB_140d325b8:
   if (_Init_thread_epoch < REFG(int, 0x1430a0b30)) {

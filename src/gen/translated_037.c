@@ -2796,7 +2796,7 @@ undefined8 FUN_140612de0(undefined8 param_1, undefined1 param_2, longlong param_
       (*(undefined8 *)(gen_frame + 0x18)) = param_5[1];
       iVar2 = CALLF(undefined4, FUN_140644080)(&(*(undefined8 *)(gen_frame + 0x10)));
       iVar3 = CALLF(undefined4, FUN_140644000)(param_6);
-      iVar4 = CALLF(int, FUN_1406128e0)(param_7,param_8,param_9,param_10,GEN_AS_FLOAT((unsigned long long)(param_11)));
+      iVar4 = CALLF(int, FUN_1406128e0)(param_7,param_8,param_9,param_10,GEN_ARG_FLOAT(param_11));
       lVar5 = param_3;
       if (param_3 == 0) {
         lVar5 = *plVar6;
@@ -2845,7 +2845,7 @@ undefined8 FUN_140613030(undefined8 param_1, undefined1 param_2, longlong param_
       (*(undefined8 *)(gen_frame + 0x10)) = *param_5;
       (*(undefined8 *)(gen_frame + 0x18)) = param_5[1];
       iVar2 = CALLF(undefined4, FUN_140644080)(&(*(undefined8 *)(gen_frame + 0x10)));
-      iVar3 = CALLF(int, FUN_1406128e0)(param_6,param_7,param_8,param_9,GEN_AS_FLOAT((unsigned long long)(param_10)));
+      iVar3 = CALLF(int, FUN_1406128e0)(param_6,param_7,param_8,param_9,GEN_ARG_FLOAT(param_10));
       lVar4 = param_3;
       if (param_3 == 0) {
         lVar4 = *plVar5;

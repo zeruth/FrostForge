@@ -10,7 +10,7 @@
 #include <cstring>
 #include <new>
 
-uint32_t g_gxPresentSpin;
+uint32_t g_gxPresentSpin;           // 0x143490b08
 
 using namespace gxDx12Backend;
 

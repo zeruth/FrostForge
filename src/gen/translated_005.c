@@ -4867,8 +4867,8 @@ float * FUN_1401ea730(void)
       fVar8 = (float)REFG(undefined4, 0x142d03c84);
     }
     fVar5 = pfVar1[1];
-    if (pfVar1[1] <= (*(uint *)((char *)&REFG(undefined4, 0x142d03c84) + 4))) {
-      fVar5 = (*(uint *)((char *)&REFG(undefined4, 0x142d03c84) + 4));
+    if (pfVar1[1] <= (*(float *)((char *)&REFG(undefined4, 0x142d03c84) + 4))) {
+      fVar5 = (*(float *)((char *)&REFG(undefined4, 0x142d03c84) + 4));
     }
     REFG(float, 0x142d03c7c) = fVar7;
     if (pfVar1[1] - REFG(float, 0x142618d68) <= fVar7) {
@@ -4877,8 +4877,8 @@ float * FUN_1401ea730(void)
     pfVar1 = pfVar1 + 3;
     REFG(float, 0x142d03c78) = fVar13;
     REFG(float, 0x142d03c80) = fVar10;
-    (*(uint *)((char *)&REFG(undefined4, 0x142d03c84) + 0)) = fVar8;
-    (*(uint *)((char *)&REFG(undefined4, 0x142d03c84) + 4)) = fVar5;
+    (*(float *)((char *)&REFG(undefined4, 0x142d03c84) + 0)) = fVar8;
+    (*(float *)((char *)&REFG(undefined4, 0x142d03c84) + 4)) = fVar5;
     lVar2 = lVar2 + -1;
   } while (lVar2 != 0);
   REFG(float, 0x142d03cbc) = (float)((ulonglong)REFG(undefined8, 0x142725be8) >> 0x20);

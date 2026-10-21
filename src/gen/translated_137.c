@@ -5955,7 +5955,7 @@ undefined4 FUN_141bea750(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141cbc430)(itemIdx)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetItem(itemIdx)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -6009,7 +6009,7 @@ undefined4 FUN_141bea8a0(undefined8 param_1)
   uVar7 = 1;
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if (((int)uVar2 == 0) || (uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar2 == 0)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141bea8a0)(itemIdx, playerIdx)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetPlayerInfo(itemIdx, playerIdx)");
     return 0;
   }
   uVar2 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -6097,7 +6097,7 @@ undefined4 FUN_141beab00(undefined8 param_1)
       return 0;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141beab00)(numItemsToSave, secondsToSave)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetExpiration(numItemsToSave, secondsToSave)");
   return 0;
 }
 
@@ -6161,7 +6161,7 @@ undefined4 FUN_141beabe0(undefined8 param_1)
       return 0;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141beabe0)(itemIdx, playerIdx)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GiveMasterLoot(itemIdx, playerIdx)");
   return 0;
 }
 
@@ -6216,7 +6216,7 @@ undefined4 FUN_141bead30(undefined8 param_1)
       return 0;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141bead30)(itemIdx, playerIdx)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CanMasterLoot(itemIdx, playerIdx)");
   return 0;
 }
 
@@ -7783,7 +7783,7 @@ undefined4 FUN_141bed2c0(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if (((int)uVar3 == 0) || (uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar3 == 0)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141bed2c0)(tab, slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetVoidItemInfo(tab, slot)");
     return 0;
   }
   lVar4 = CALLF(ulonglong, FUN_14170ff20)();
@@ -7837,7 +7837,7 @@ undefined4 FUN_141bed4e0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141bed4e0)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetVoidItemHyperlinkString(slot)");
     return 0;
   }
   lVar3 = CALLF(ulonglong, FUN_14170ff20)();
@@ -7875,7 +7875,7 @@ undefined4 FUN_141bed5f0(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141bed5f0)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetVoidStorageSlotPageIndex(slot)");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -7896,7 +7896,7 @@ undefined4 FUN_141bed650(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141bed650)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetVoidTransferDepositInfo(slot)");
     return 0;
   }
   lVar3 = CALLF(ulonglong, FUN_14170ff20)();
@@ -7946,7 +7946,7 @@ undefined4 FUN_141bed7e0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141bed7e0)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetVoidTransferWithdrawalInfo(slot)");
     return 0;
   }
   lVar3 = CALLF(ulonglong, FUN_14170ff20)();
@@ -8097,7 +8097,7 @@ undefined4 FUN_141bedb50(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141bedb50)(slot, [button])");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: ClickVoidTransferDepositSlot(slot, [button])");
     return 0;
   }
   lVar4 = CALLF(ulonglong, FUN_14170ff20)();
@@ -8218,7 +8218,7 @@ undefined4 FUN_141bedd50(undefined8 param_1)
     }
     return 0;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141bedd50)(slot, [button])");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: ClickVoidTransferWithdrawalSlot(slot, [button])");
   return 0;
 }
 
@@ -8238,7 +8238,7 @@ undefined4 FUN_141bedef0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if (((int)uVar2 == 0) || (uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar2 == 0)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141bedef0)(tab, slot, [button])");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: ClickVoidStorageSlot(tab, slot, [button])");
     return 0;
   }
   lVar3 = CALLF(ulonglong, FUN_14170ff20)();
@@ -8587,7 +8587,7 @@ undefined4 FUN_141bee770(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141bee770)(buttonID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: BankButtonIDToInvSlotID(buttonID)");
     return 0;
   }
   dVar3 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -11322,7 +11322,7 @@ undefined4 FUN_141bf2240(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141bf2240)(choiceID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetProducts(choiceID)");
     return 0;
   }
   lVar2 = CALLF(undefined8, FUN_14156b900)();
@@ -11396,7 +11396,7 @@ undefined4 FUN_141bf2380(undefined8 param_1)
     }
     return 0;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141bf2380)(choiceID, productID)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: MakeSelection(choiceID, productID)");
   return 0;
 }
 

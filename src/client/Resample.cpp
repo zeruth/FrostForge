@@ -23,8 +23,8 @@ GxPipeline* s_pipelines[PIPELINE_COUNT];
 const uint32_t s_targetKinds[2] = {0xc, 5};
 // DAT_142cfc2e0: the first target's blend, replacing or blending.
 const uint16_t s_blends[2] = {0xf000, 0xf00d};
-// DAT_142cfc2e8: the sampler a copy reads with (its flags word set when the pipelines are made).
-uint64_t s_copySampler = 0x0000800200000001ull;
+// the sampler a copy reads with (its flags word set when the pipelines are made).
+uint64_t s_copySampler = 0x0000800200000001ull;  // 0x142cfc2e8
 
 const uint32_t RESAMPLE_VERTEX_SHADER = 0x87;
 const uint32_t RESAMPLE_PIXEL_SHADER = 0xd3;

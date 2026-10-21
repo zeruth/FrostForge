@@ -4951,12 +4951,12 @@ undefined4 FUN_140ece870(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local isUseable = C_PlayerInfo.CALLF(undefined4, FUN_140ece870)(itemID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local isUseable = C_PlayerInfo.CanUseItem(itemID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local isUseable = C_PlayerInfo.CALLF(undefined4, FUN_140ece870)(itemID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local isUseable = C_PlayerInfo.CanUseItem(itemID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -5043,14 +5043,14 @@ undefined4 FUN_140ecfcf0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local creatureDisplayInfoID = C_PlayerInfo.CALLF(undefined4, FUN_140ecfcf0)(index)"
+                  "Usage: local creatureDisplayInfoID = C_PlayerInfo.GetPetStableCreatureDisplayInfoID(index)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local creatureDisplayInfoID = C_PlayerInfo.CALLF(undefined4, FUN_140ecfcf0)(index)"
+                    "Usage: local creatureDisplayInfoID = C_PlayerInfo.GetPetStableCreatureDisplayInfoID(index)"
                    );
     }
     else {
@@ -5142,7 +5142,7 @@ undefined4 FUN_140ed1140(undefined8 param_1)
   ((undefined4 *)(gen_frame + 0x48))[0] = 1;
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local isVisible = C_PlayerInfo.CALLF(undefined4, FUN_140ed1140)(slot)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local isVisible = C_PlayerInfo.HasVisibleInvSlot(slot)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
   bVar1 = CALLF(bool, FUN_141a540e0)(((undefined4 *)(gen_frame + 0x50))[0]);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
   if (iVar2 == 0) {
@@ -5372,7 +5372,7 @@ undefined4 FUN_140ed4d80(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local interacting = C_PlayerInteractionManager.CALLF(undefined4, FUN_140ed4d80)(type)"
+                  "Usage: local interacting = C_PlayerInteractionManager.IsInteractingWithNpcOfType(type)"
                  );
   }
   else {
@@ -5393,7 +5393,7 @@ undefined4 FUN_140ed4d80(undefined8 param_1)
       }
     }
     CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                  "Usage: local interacting = C_PlayerInteractionManager.CALLF(undefined4, FUN_140ed4d80)(type)"
+                  "Usage: local interacting = C_PlayerInteractionManager.IsInteractingWithNpcOfType(type)"
                  );
   }
 LAB_140ed4e1d:
@@ -5443,7 +5443,7 @@ undefined4 FUN_140ed5b40(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local isValidInteraction = C_PlayerInteractionManager.CALLF(undefined4, FUN_140ed5b40)(type)"
+                  "Usage: local isValidInteraction = C_PlayerInteractionManager.IsValidNPCInteraction(type)"
                  );
   }
   else {
@@ -5464,7 +5464,7 @@ undefined4 FUN_140ed5b40(undefined8 param_1)
       }
     }
     CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                  "Usage: local isValidInteraction = C_PlayerInteractionManager.CALLF(undefined4, FUN_140ed5b40)(type)"
+                  "Usage: local isValidInteraction = C_PlayerInteractionManager.IsValidNPCInteraction(type)"
                  );
   }
 LAB_140ed5bdd:
@@ -5505,7 +5505,7 @@ uint FUN_140ed68e0(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local isPlayer = C_PlayerInfo.CALLF(uint, FUN_140ed68e0)(guid)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local isPlayer = C_PlayerInfo.GUIDIsPlayer(guid)");
   }
   else {
     uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
@@ -5520,7 +5520,7 @@ uint FUN_140ed68e0(undefined8 param_1)
       if (((*(ulonglong *)(gen_frame + 0x30)) & 0x8000000000000000) == 0) {
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x20)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
-      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: local isPlayer = C_PlayerInfo.CALLF(uint, FUN_140ed68e0)(guid)");
+      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: local isPlayer = C_PlayerInfo.GUIDIsPlayer(guid)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -5846,13 +5846,13 @@ undefined4 FUN_140edb4c0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local unitIsSameServer = C_PlayerInfo.CALLF(undefined4, FUN_140edb4c0)(playerLocation)");
+                  "Usage: local unitIsSameServer = C_PlayerInfo.UnitIsSameServer(playerLocation)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2200)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local unitIsSameServer = C_PlayerInfo.CALLF(undefined4, FUN_140edb4c0)(playerLocation)")
+                    "Usage: local unitIsSameServer = C_PlayerInfo.UnitIsSameServer(playerLocation)")
       ;
     }
     else {
@@ -5898,7 +5898,7 @@ int FUN_140edbca0(undefined8 param_1)
   uVar6 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar6 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local spellID, itemID, startTime, duration = C_PvP.CALLF(int, FUN_140edbca0)(playerToken)"
+                  "Usage: local spellID, itemID, startTime, duration = C_PvP.GetArenaCrowdControlInfo(playerToken)"
                  );
   }
   else {
@@ -5915,7 +5915,7 @@ int FUN_140edbca0(undefined8 param_1)
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x20)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
       CALLF(undefined8, FUN_1424248b0)(param_1,1,
-                    "Usage: local spellID, itemID, startTime, duration = C_PvP.CALLF(int, FUN_140edbca0)(playerToken)"
+                    "Usage: local spellID, itemID, startTime, duration = C_PvP.GetArenaCrowdControlInfo(playerToken)"
                    );
     }
     else {
@@ -5990,18 +5990,18 @@ undefined4 FUN_140edcb00(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0xc)) = 0xffffffff;
   ((int *)(gen_frame + 0x68))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x0)),((int *)(gen_frame + 0x68)),"Usage: local info = C_PvP.CALLF(undefined4, FUN_140edcb00)(vehicleIndex, uiMapID)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x70))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x0)),((int *)(gen_frame + 0x68)),"Usage: local info = C_PvP.GetBattlefieldVehicleInfo(vehicleIndex, uiMapID)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x70))));
   iVar1 = ((int *)(gen_frame + 0x68))[0];
   uVar5 = CALLF(undefined8, FUN_1402b4a30)((*(undefined8 *)(gen_frame + 0x0)),((int *)(gen_frame + 0x68))[0]);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)((*(undefined8 *)(gen_frame + 0x0)),
-                  "Usage: local info = C_PvP.CALLF(undefined4, FUN_140edcb00)(vehicleIndex, uiMapID)");
+                  "Usage: local info = C_PvP.GetBattlefieldVehicleInfo(vehicleIndex, uiMapID)");
   }
   else {
     cVar2 = CALLF(undefined1, FUN_1407d2350)((*(undefined8 *)(gen_frame + 0x0)),iVar1);
     if (cVar2 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar1,
-                    "Usage: local info = C_PvP.CALLF(undefined4, FUN_140edcb00)(vehicleIndex, uiMapID)");
+                    "Usage: local info = C_PvP.GetBattlefieldVehicleInfo(vehicleIndex, uiMapID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)((*(undefined8 *)(gen_frame + 0x0)),1);
@@ -6365,7 +6365,7 @@ undefined4 FUN_140ee2f20(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_PvP.CALLF(undefined4, FUN_140ee2f20)(playerToken)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_PvP.RequestCrowdControlSpell(playerToken)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
@@ -6380,7 +6380,7 @@ undefined4 FUN_140ee2f20(undefined8 param_1)
       if (((*(ulonglong *)(gen_frame + 0x30)) & 0x8000000000000000) == 0) {
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x20)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
-      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_PvP.CALLF(undefined4, FUN_140ee2f20)(playerToken)");
+      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_PvP.RequestCrowdControlSpell(playerToken)");
     }
     else {
       iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6856,12 +6856,12 @@ undefined4 FUN_140eea710(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local isOnQuest = C_QuestLog.CALLF(undefined4, FUN_140eea710)(questID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local isOnQuest = C_QuestLog.IsOnQuest(questID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local isOnQuest = C_QuestLog.CALLF(undefined4, FUN_140eea710)(questID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local isOnQuest = C_QuestLog.IsOnQuest(questID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6901,13 +6901,13 @@ undefined4 FUN_140eeae40(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local isCompleted = C_QuestLog.CALLF(undefined4, FUN_140eeae40)(questID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local isCompleted = C_QuestLog.IsQuestFlaggedCompleted(questID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local isCompleted = C_QuestLog.CALLF(undefined4, FUN_140eeae40)(questID)");
+                    "Usage: local isCompleted = C_QuestLog.IsQuestFlaggedCompleted(questID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6946,12 +6946,12 @@ undefined4 FUN_140eeb550(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_QuestLog.CALLF(undefined4, FUN_140eeb550)(uiMapID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_QuestLog.SetMapForQuestPOIs(uiMapID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_QuestLog.CALLF(undefined4, FUN_140eeb550)(uiMapID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_QuestLog.SetMapForQuestPOIs(uiMapID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6985,13 +6985,13 @@ undefined4 FUN_140eebc20(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local shouldShow = C_QuestLog.CALLF(undefined4, FUN_140eebc20)(questID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local shouldShow = C_QuestLog.ShouldShowQuestRewards(questID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local shouldShow = C_QuestLog.CALLF(undefined4, FUN_140eebc20)(questID)");
+                    "Usage: local shouldShow = C_QuestLog.ShouldShowQuestRewards(questID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -19891,7 +19891,7 @@ LAB_140f091d3:
   CALLF(undefined8, FUN_1408c6520)(&(*(undefined8 *)(gen_frame + 0x0)),((int *)(gen_frame + 0x80)),"Usage: self:SetPlayerPingTexture(textureType, asset [, width, height])",0,(unsigned long long)((longlong)param_3 + 0xc));
   CALLF(undefined8, FUN_140d129e0)(&(*(undefined8 *)(gen_frame + 0x0)),((int *)(gen_frame + 0x80)),"Usage: self:SetPlayerPingTexture(textureType, asset [, width, height])",1,(unsigned long long)(param_3 + 2));
   CALLF(undefined8, FUN_140d129e0)(&(*(undefined8 *)(gen_frame + 0x0)),((int *)(gen_frame + 0x80)),"Usage: self:SetPlayerPingTexture(textureType, asset [, width, height])",1,(unsigned long long)((undefined4 *)((longlong)param_3 + 0x14)));
-  CALLF(undefined8, FUN_141a74950)(*param_3,*(undefined4 *)(param_3 + 1),(longlong)param_3 + 0xc,*(float *)(param_3 + 2),GEN_AS_FLOAT((unsigned long long)(*(undefined4 *)((longlong)param_3 + 0x14))));
+  CALLF(undefined8, FUN_141a74950)(*param_3,*(undefined4 *)(param_3 + 1),(longlong)param_3 + 0xc,*(float *)(param_3 + 2),GEN_ARG_FLOAT(*(undefined4 *)((longlong)param_3 + 0x14)));
   cVar2 = CALLF(undefined1, FUN_14062cc40)(param_2,*param_3,"SetPlayerPingTexture");
   if (cVar2 != '\0') {
                     /* WARNING: Subroutine does not return */

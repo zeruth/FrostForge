@@ -1797,7 +1797,7 @@ undefined4 FUN_1408a8ef0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local canPurchase = C_Traits.CALLF(undefined4, FUN_1408a8ef0)(configID, nodeID, nodeEntryID)"
+                  "Usage: local canPurchase = C_Traits.CanPurchaseRank(configID, nodeID, nodeEntryID)"
                  );
     iVar4 = 1;
   }
@@ -1805,7 +1805,7 @@ undefined4 FUN_1408a8ef0(undefined8 param_1)
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local canPurchase = C_Traits.CALLF(undefined4, FUN_1408a8ef0)(configID, nodeID, nodeEntryID)"
+                    "Usage: local canPurchase = C_Traits.CanPurchaseRank(configID, nodeID, nodeEntryID)"
                    );
     }
     else {
@@ -1823,14 +1823,14 @@ undefined4 FUN_1408a8ef0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local canPurchase = C_Traits.CALLF(undefined4, FUN_1408a8ef0)(configID, nodeID, nodeEntryID)"
+                  "Usage: local canPurchase = C_Traits.CanPurchaseRank(configID, nodeID, nodeEntryID)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
-                    "Usage: local canPurchase = C_Traits.CALLF(undefined4, FUN_1408a8ef0)(configID, nodeID, nodeEntryID)"
+                    "Usage: local canPurchase = C_Traits.CanPurchaseRank(configID, nodeID, nodeEntryID)"
                    );
     }
     else {
@@ -1848,14 +1848,14 @@ undefined4 FUN_1408a8ef0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local canPurchase = C_Traits.CALLF(undefined4, FUN_1408a8ef0)(configID, nodeID, nodeEntryID)"
+                  "Usage: local canPurchase = C_Traits.CanPurchaseRank(configID, nodeID, nodeEntryID)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
-                    "Usage: local canPurchase = C_Traits.CALLF(undefined4, FUN_1408a8ef0)(configID, nodeID, nodeEntryID)"
+                    "Usage: local canPurchase = C_Traits.CanPurchaseRank(configID, nodeID, nodeEntryID)"
                    );
     }
     else {
@@ -1899,13 +1899,13 @@ undefined4 FUN_1408a9710(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local canRefund = C_Traits.CALLF(undefined4, FUN_1408a9710)(configID, nodeID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local canRefund = C_Traits.CanRefundRank(configID, nodeID)");
     uVar5 = 1;
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local canRefund = C_Traits.CALLF(undefined4, FUN_1408a9710)(configID, nodeID)")
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local canRefund = C_Traits.CanRefundRank(configID, nodeID)")
       ;
     }
     else {
@@ -1922,13 +1922,13 @@ undefined4 FUN_1408a9710(undefined8 param_1)
   }
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar5);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local canRefund = C_Traits.CALLF(undefined4, FUN_1408a9710)(configID, nodeID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local canRefund = C_Traits.CanRefundRank(configID, nodeID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,uVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,
-                    "Usage: local canRefund = C_Traits.CALLF(undefined4, FUN_1408a9710)(configID, nodeID)");
+                    "Usage: local canRefund = C_Traits.CanRefundRank(configID, nodeID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -1971,7 +1971,7 @@ undefined4 FUN_1408a9ea0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408a9ea0)(configID, nodeID)"
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CascadeRepurchaseRanks(configID, nodeID)"
                  );
     uVar5 = 1;
   }
@@ -1979,7 +1979,7 @@ undefined4 FUN_1408a9ea0(undefined8 param_1)
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local success = C_Traits.CALLF(undefined4, FUN_1408a9ea0)(configID, nodeID)");
+                    "Usage: local success = C_Traits.CascadeRepurchaseRanks(configID, nodeID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -1995,14 +1995,14 @@ undefined4 FUN_1408a9ea0(undefined8 param_1)
   }
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar5);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408a9ea0)(configID, nodeID)"
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CascadeRepurchaseRanks(configID, nodeID)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,uVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,
-                    "Usage: local success = C_Traits.CALLF(undefined4, FUN_1408a9ea0)(configID, nodeID)");
+                    "Usage: local success = C_Traits.CascadeRepurchaseRanks(configID, nodeID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -2042,12 +2042,12 @@ undefined4 FUN_1408aa630(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Traits.CALLF(undefined4, FUN_1408aa630)(configID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Traits.ClearCascadeRepurchaseHistory(configID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Traits.CALLF(undefined4, FUN_1408aa630)(configID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Traits.ClearCascadeRepurchaseHistory(configID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -2091,12 +2091,12 @@ undefined4 FUN_1408ab360(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408ab360)(configID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CommitConfig(configID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408ab360)(configID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_Traits.CommitConfig(configID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -2137,13 +2137,13 @@ undefined4 FUN_1408aba80(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local hasChanges = C_Traits.CALLF(undefined4, FUN_1408aba80)(configID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local hasChanges = C_Traits.ConfigHasStagedChanges(configID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local hasChanges = C_Traits.CALLF(undefined4, FUN_1408aba80)(configID)");
+                    "Usage: local hasChanges = C_Traits.ConfigHasStagedChanges(configID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -2369,12 +2369,12 @@ undefined4 FUN_1408aeb20(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local configID = C_Traits.CALLF(undefined4, FUN_1408aeb20)(systemID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local configID = C_Traits.GetConfigIDBySystemID(systemID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local configID = C_Traits.CALLF(undefined4, FUN_1408aeb20)(systemID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local configID = C_Traits.GetConfigIDBySystemID(systemID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -2418,12 +2418,12 @@ undefined4 FUN_1408af850(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local configID = C_Traits.CALLF(undefined4, FUN_1408af850)(treeID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local configID = C_Traits.GetConfigIDByTreeID(treeID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local configID = C_Traits.CALLF(undefined4, FUN_1408af850)(treeID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local configID = C_Traits.GetConfigIDByTreeID(treeID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -3114,12 +3114,12 @@ undefined4 FUN_1408b9640(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local flags = C_Traits.CALLF(undefined4, FUN_1408b9640)(configID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local flags = C_Traits.GetTraitSystemFlags(configID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local flags = C_Traits.CALLF(undefined4, FUN_1408b9640)(configID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local flags = C_Traits.GetTraitSystemFlags(configID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -3164,13 +3164,13 @@ undefined4 FUN_1408ba370(undefined8 param_1)
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local uiWidgetSetID = C_Traits.CALLF(undefined4, FUN_1408ba370)(configID)");
+                  "Usage: local uiWidgetSetID = C_Traits.GetTraitSystemWidgetSetID(configID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,
-                    "Usage: local uiWidgetSetID = C_Traits.CALLF(undefined4, FUN_1408ba370)(configID)");
+                    "Usage: local uiWidgetSetID = C_Traits.GetTraitSystemWidgetSetID(configID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -3490,13 +3490,13 @@ undefined4 FUN_1408bf370(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408bf370)(configID, nodeID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.PurchaseRank(configID, nodeID)");
     uVar5 = 1;
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408bf370)(configID, nodeID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_Traits.PurchaseRank(configID, nodeID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -3512,12 +3512,12 @@ undefined4 FUN_1408bf370(undefined8 param_1)
   }
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar5);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408bf370)(configID, nodeID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.PurchaseRank(configID, nodeID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,uVar5);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408bf370)(configID, nodeID)"
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,"Usage: local success = C_Traits.PurchaseRank(configID, nodeID)"
                    );
     }
     else {
@@ -3561,13 +3561,13 @@ undefined4 FUN_1408bfb00(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408bfb00)(configID, nodeID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.RefundAllRanks(configID, nodeID)");
     uVar5 = 1;
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408bfb00)(configID, nodeID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_Traits.RefundAllRanks(configID, nodeID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -3583,13 +3583,13 @@ undefined4 FUN_1408bfb00(undefined8 param_1)
   }
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar5);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408bfb00)(configID, nodeID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.RefundAllRanks(configID, nodeID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,uVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,
-                    "Usage: local success = C_Traits.CALLF(undefined4, FUN_1408bfb00)(configID, nodeID)");
+                    "Usage: local success = C_Traits.RefundAllRanks(configID, nodeID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -3632,13 +3632,13 @@ undefined4 FUN_1408c0290(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c0290)(configID, nodeID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.RefundRank(configID, nodeID)");
     uVar5 = 1;
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c0290)(configID, nodeID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_Traits.RefundRank(configID, nodeID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -3654,12 +3654,12 @@ undefined4 FUN_1408c0290(undefined8 param_1)
   }
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar5);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c0290)(configID, nodeID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.RefundRank(configID, nodeID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,uVar5);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c0290)(configID, nodeID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,"Usage: local success = C_Traits.RefundRank(configID, nodeID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -3702,13 +3702,13 @@ undefined4 FUN_1408c0a20(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c0a20)(configID, treeID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.ResetTree(configID, treeID)");
     uVar5 = 1;
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c0a20)(configID, treeID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_Traits.ResetTree(configID, treeID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -3724,12 +3724,12 @@ undefined4 FUN_1408c0a20(undefined8 param_1)
   }
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar5);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c0a20)(configID, treeID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.ResetTree(configID, treeID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,uVar5);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c0a20)(configID, treeID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,"Usage: local success = C_Traits.ResetTree(configID, treeID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -3773,7 +3773,7 @@ undefined4 FUN_1408c11b0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c11b0)(configID, treeID, traitCurrencyID)"
+                  "Usage: local success = C_Traits.ResetTreeByCurrency(configID, treeID, traitCurrencyID)"
                  );
     iVar4 = 1;
   }
@@ -3781,7 +3781,7 @@ undefined4 FUN_1408c11b0(undefined8 param_1)
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c11b0)(configID, treeID, traitCurrencyID)"
+                    "Usage: local success = C_Traits.ResetTreeByCurrency(configID, treeID, traitCurrencyID)"
                    );
     }
     else {
@@ -3799,14 +3799,14 @@ undefined4 FUN_1408c11b0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c11b0)(configID, treeID, traitCurrencyID)"
+                  "Usage: local success = C_Traits.ResetTreeByCurrency(configID, treeID, traitCurrencyID)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
-                    "Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c11b0)(configID, treeID, traitCurrencyID)"
+                    "Usage: local success = C_Traits.ResetTreeByCurrency(configID, treeID, traitCurrencyID)"
                    );
     }
     else {
@@ -3824,14 +3824,14 @@ undefined4 FUN_1408c11b0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c11b0)(configID, treeID, traitCurrencyID)"
+                  "Usage: local success = C_Traits.ResetTreeByCurrency(configID, treeID, traitCurrencyID)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
-                    "Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c11b0)(configID, treeID, traitCurrencyID)"
+                    "Usage: local success = C_Traits.ResetTreeByCurrency(configID, treeID, traitCurrencyID)"
                    );
     }
     else {
@@ -3873,12 +3873,12 @@ undefined4 FUN_1408c19c0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c19c0)(configID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.RollbackConfig(configID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c19c0)(configID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_Traits.RollbackConfig(configID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -3971,12 +3971,12 @@ undefined4 FUN_1408c2e10(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c2e10)(configID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_Traits.StageConfig(configID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_Traits.CALLF(undefined4, FUN_1408c2e10)(configID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_Traits.StageConfig(configID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -11383,7 +11383,7 @@ undefined8 FUN_1409329e0(undefined8 param_1)
   CALLF(undefined8, FUN_1408c6720)(&(*(undefined8 *)(gen_frame + 0x20)),((int *)(gen_frame + 0xa8)),"Usage: local success = self:SetFont(fontFile, height, flags)",0,(unsigned long long)(((float *)(gen_frame + 0x0))));
   (*(undefined1 *)(gen_frame + 0x90)) = 0;
   CALLF(undefined8, FUN_1408c61d0)(&(*(undefined8 *)(gen_frame + 0x20)),((int *)(gen_frame + 0xa8)),"Usage: local success = self:SetFont(fontFile, height, flags)",0,(unsigned long long)(&(*(undefined1 *)(gen_frame + 0x90))));
-  uVar1 = CALLF(undefined1, FUN_1424b5d60)(uVar4,((undefined8 *)(gen_frame + 0x98))[0],GEN_AS_FLOAT((unsigned long long)(((float *)(gen_frame + 0x0))[0])),&(*(undefined1 *)(gen_frame + 0x90)));
+  uVar1 = CALLF(undefined1, FUN_1424b5d60)(uVar4,((undefined8 *)(gen_frame + 0x98))[0],GEN_ARG_FLOAT(((float *)(gen_frame + 0x0))[0]),&(*(undefined1 *)(gen_frame + 0x90)));
   ((undefined8 *)(gen_frame + 0x98))[0] = CONCAT71(GEN_PIECE(&((undefined8 *)(gen_frame + 0x98))[0], 1, 7),uVar1);
   cVar2 = CALLF(undefined1, FUN_14062cc40)(param_1,uVar4,"SetFont");
   if (cVar2 != '\0') {

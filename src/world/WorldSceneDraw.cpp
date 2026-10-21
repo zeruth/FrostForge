@@ -129,8 +129,8 @@ void RenderTargetScale(const int32_t* bufferSize, const GXRENDERTARGETS* targets
     out[2] = 0.0f;
 }
 
-// DAT_1430a5b90: the frame passes run without the shadow factor (FUN_1412a9990).
-uint8_t s_noShadowFactor;
+// the frame passes run without the shadow factor (FUN_1412a9990).
+uint8_t s_noShadowFactor;  // 0x1430a5b90
 
 // ref: FUN_1412a9990
 uint8_t FramePassesNoShadowFactor() {
@@ -861,4 +861,5 @@ extern "C" void* const gen_p_142d4c828 = (void*)&s_scratchLock;
 extern "C" void* const gen_p_142d4c830 = (void*)&s_scratchFree;
 extern "C" void* const gen_p_142d4c848 = (void*)&s_scratchThreads;
 extern "C" void* const gen_p_142d4c850 = (void*)&s_scratchThreadCount;
+extern "C" void* const gen_p_1430a5b90 = (void*)&s_noShadowFactor;
 // ---- end of generated globals ----

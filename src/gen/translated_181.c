@@ -13386,7 +13386,7 @@ undefined8 FUN_1422d2fc0(longlong param_1, longlong param_2, uint param_3, undef
   GEN_HIT(349);
   undefined4 param_5 = (undefined4)param_5_slot;
   undefined1 param_6 = (undefined1)param_6_slot;
-  CALLF(undefined8, FUN_1422d81c0)(param_1 + -0x1d80,param_2,param_3 & *(ushort *)(param_2 + 0x16),param_4,GEN_AS_FLOAT((unsigned long long)(param_5)),(unsigned long long)(param_6));
+  CALLF(undefined8, FUN_1422d81c0)(param_1 + -0x1d80,param_2,param_3 & *(ushort *)(param_2 + 0x16),param_4,GEN_ARG_FLOAT(param_5),(unsigned long long)(param_6));
   return (undefined8)CALLF(undefined8, FUN_1422d3090)(param_1 + -0x1d80,param_2);
   return 0;
 }

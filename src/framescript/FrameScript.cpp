@@ -54,9 +54,9 @@ bool s_currentObjectScoped;         // 0x142e9a07c set when a scoped modifier ca
 // The keystream math.random draws from, keyed from the system's entropy (0x142e9a0a0).
 ARC4STATE s_random;
 
-// 0x142e99f60: eight 16-byte slots filled with 0x09 on each start; their reader is not yet
-// identified.
-uint8_t s_tabSlots[8][16];
+// Eight 16-byte slots filled with 0x09 on each start: the indentation FUN_140640700 copies
+// (one tab per nesting level) when it writes a table into SavedVariables.
+uint8_t s_tabSlots[8][16];          // 0x142e99f60
 
 // Script profiling: the tick scale, and a 1000-entry call stack of 0x20 bytes each plus
 // bookkeeping (0x7d20 bytes) when profiling.
@@ -1026,5 +1026,6 @@ extern "C" void* const gen_p_142e99f34 = (void*)&s_errorCount;
 extern "C" void* const gen_p_142e99f40 = (void*)&s_profileTicks;
 extern "C" void* const gen_p_142e99f48 = (void*)&s_profileTickMs;
 extern "C" void* const gen_p_142e99f50 = (void*)&s_profileStack;
+extern "C" void* const gen_p_142e99f60 = (void*)&s_tabSlots;
 extern "C" void* const gen_p_142e9a07c = (void*)&s_currentObjectScoped;
 // ---- end of generated globals ----

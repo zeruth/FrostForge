@@ -747,8 +747,8 @@ int32_t CVarListCommand(const char* command, const char* arguments) {
 
 namespace {
 
-// DAT_142e301d0: the name of the config file CVarLoadConfig read.
-char* s_configFile;
+// the name of the config file CVarLoadConfig read.
+char* s_configFile;  // 0x142e301d0
 
 }
 
@@ -1040,7 +1040,7 @@ void CVarInitialize(bool createWtfDirectory) {
     ConsoleCommandRegister("cvarlist", &CVarListCommand, 5, "List CVars", 0);
 }
 
-// ref: FUN_140322c70
+// (the body; FUN_140322c70 takes the CVar's holder, CVarConvertBitfieldRef below)
 void CVarConvertBitfield(CVar* cvar, int32_t marker) {
     if (cvar == nullptr || marker != 1) {
         return;
@@ -1083,7 +1083,7 @@ void CVarConvertBitfield(CVar* cvar, int32_t marker) {
     CVarSet(cvar, reinterpret_cast<const char*>(out), true, false, false, true);
 }
 
-// ref: FUN_140320b40
+// (the body; FUN_140320b40 takes the CVar's holder, CVarGetBitRef below)
 bool CVarGetBit(CVar* cvar, uint32_t index) {
     if (cvar == nullptr) {
         return false;
@@ -1099,7 +1099,7 @@ bool CVarGetBit(CVar* cvar, uint32_t index) {
     return ((static_cast<int32_t>(value[index / 6 + 1]) >> (index % 6)) & 1) != 0;
 }
 
-// ref: FUN_140320bb0
+// (the body; FUN_140320bb0 takes the CVar's holder, CVarSetBitRef below)
 void CVarSetBit(CVar* cvar, uint32_t index, bool on) {
     if (cvar == nullptr) {
         return;
@@ -1137,6 +1137,25 @@ void CVarSetBit(CVar* cvar, uint32_t index, bool on) {
     }
     buffer[slot] = static_cast<uint8_t>(buffer[slot] | (1u << (index % 6)));
     CVarSet(cvar, reinterpret_cast<const char*>(buffer), true, false, false, true);
+}
+
+// The reference's shapes of the three: each takes the address of what holds the CVar (a scoped
+// holder on the caller's stack, its CVar* first), not the CVar. Tagged as these, translated
+// callers read the holder through them; the CVar* forms read the holder as the CVar, and a
+// packet handler on Enter World (FUN_141976680) faulted on its contents, 2026-10-21.
+// ref: FUN_140322c70
+void CVarConvertBitfieldRef(CVar* const* holder, int32_t marker) {
+    CVarConvertBitfield(*holder, marker);
+}
+
+// ref: FUN_140320b40
+bool CVarGetBitRef(CVar* const* holder, uint32_t index) {
+    return CVarGetBit(*holder, index);
+}
+
+// ref: FUN_140320bb0
+void CVarSetBitRef(CVar* const* holder, uint32_t index, bool on) {
+    CVarSetBit(*holder, index, on);
 }
 
 // ref: FUN_140320110

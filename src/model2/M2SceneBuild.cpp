@@ -110,13 +110,19 @@ void M2IndicesReserve(M2SceneVector<uint32_t>* indices, uint64_t count) {
     indices->m_data = data;
 }
 
+// The value by reference, as the reference takes it (rdx is its address): one of the vector's own
+// elements is found again after the reserve moves them. Taken by value until 2026-10-21, and every
+// translated push (a generic uint32 vector's, the world-state flag table's free list among them)
+// stored its caller's stack address: entering the world indexed far past the table.
 // ref: FUN_1403095b0
-void M2IndicesPush(M2SceneVector<uint32_t>* indices, uint32_t value) {
+void M2IndicesPush(M2SceneVector<uint32_t>* indices, const uint32_t& value) {
+    uint64_t at = static_cast<uint64_t>(&value - indices->m_data);
+    bool inside = indices->m_data != nullptr && at < indices->m_size;
     uint64_t capacity = indices->m_capacity & 0x7fffffffffffffffull;
     if (indices->m_size == capacity) {
         M2IndicesReserve(indices, capacity + 1);
     }
-    indices->m_data[indices->m_size] = value;
+    indices->m_data[indices->m_size] = inside ? indices->m_data[at] : value;
     indices->m_size++;
 }
 

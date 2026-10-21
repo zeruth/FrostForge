@@ -988,6 +988,7 @@ void CSimpleFrame::AddChild(CSimpleFrame* child) {
     node->m_link.m_next = nullptr;
     this->m_children.LinkToTail(node);
     node->m_frame = child;
+    MemoryWatchBlock(node, true);
     if (!(child->m_flags2 & FRAME2_FRAME_BUFFER) && child->m_frameBuffer != this->m_frameBuffer) {
         CSimpleFrame* owner = this->m_frameBuffer;
         child->m_frameBuffer = owner;
@@ -1011,6 +1012,7 @@ void CSimpleFrame::RemoveChild(CSimpleFrame* child) {
             });
         }
         node->m_link.Unlink();
+        MemoryWatchBlock(node, false);
         SMemFree(node, s_childNodeTag, -2, 0);
         this->MarkBatchDirty();
         return;

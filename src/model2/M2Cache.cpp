@@ -45,11 +45,11 @@ TObjectAllocHeap* s_callPool;  // DAT_1430a1260
 TObjectAllocHeap* s_impactPool;  // DAT_1430a1268
 
 // The CVars (DAT_1430a0ea8..).
-CVar* s_mtParticles;
-CVar* s_animFrameSkipLod;
-CVar* s_hotReloadModels;
-CVar* s_forceLodCheck;
-CVar* s_textureErrorColors;
+CVar* s_mtParticles;  // DAT_1430a0ea8
+CVar* s_animFrameSkipLod;  // DAT_1430a0eb0
+CVar* s_hotReloadModels;  // DAT_1430a0eb8
+CVar* s_forceLodCheck;  // DAT_1430a0ec0
+CVar* s_textureErrorColors;  // DAT_1430a0ec8
 
 uint8_t s_initialized;  // DAT_1430a0f19
 bool s_skeletonCacheEnabled;  // DAT_1430a0f20
@@ -706,6 +706,8 @@ extern "C" void* const gen_p_1430a0e80 = (void*)&s_model3Pools;
 extern "C" void* const gen_p_1430a0e90 = (void*)&s_m3SharedPool;
 extern "C" void* const gen_p_1430a0e98 = (void*)&s_particle3Pool;
 extern "C" void* const gen_p_1430a0ea0 = (void*)&s_particleSharedPool;
+extern "C" void* const gen_p_1430a0eb0 = (void*)&s_animFrameSkipLod;
+extern "C" void* const gen_p_1430a0eb8 = (void*)&s_hotReloadModels;
 extern "C" void* const gen_p_1430a0f19 = (void*)&s_initialized;
 extern "C" void* const gen_p_1430a0f1c = (void*)&s_maxParticles;
 extern "C" void* const gen_p_1430a1260 = (void*)&s_callPool;

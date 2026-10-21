@@ -104,7 +104,7 @@ undefined8 FUN_140abfa80(undefined8 param_1)
   }
   CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x68)),"Usage: self:SetMinMaxValues(minValue, maxValue)",0,(unsigned long long)(((float *)(gen_frame + 0x78))));
   CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x68)),"Usage: self:SetMinMaxValues(minValue, maxValue)",0,(unsigned long long)(((float *)(gen_frame + 0x70))));
-  CALLF(undefined8, FUN_1424c3bd0)((*(undefined8 *)(gen_frame + 0x60)),GEN_AS_FLOAT((unsigned long long)(((float *)(gen_frame + 0x78))[0])),GEN_AS_FLOAT((unsigned long long)(((float *)(gen_frame + 0x70))[0])));
+  CALLF(undefined8, FUN_1424c3bd0)((*(undefined8 *)(gen_frame + 0x60)),GEN_ARG_FLOAT(((float *)(gen_frame + 0x78))[0]),GEN_ARG_FLOAT(((float *)(gen_frame + 0x70))[0]));
   cVar1 = CALLF(undefined1, FUN_14062cc40)(param_1,(*(undefined8 *)(gen_frame + 0x60)),"SetMinMaxValues");
   if (cVar1 != '\0') {
                     /* WARNING: Subroutine does not return */
@@ -476,7 +476,7 @@ undefined8 FUN_140ad85b0(undefined8 param_1)
     }
   }
   CALLF(undefined8, FUN_140a54b40)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x68)),"Usage: self:SetDesaturation(desaturation)",0,(unsigned long long)(((float *)(gen_frame + 0x70))));
-  CALLF(float, FUN_1406349b0)((*(undefined8 *)(gen_frame + 0x60)),GEN_AS_FLOAT((unsigned long long)(((float *)(gen_frame + 0x70))[0])));
+  CALLF(float, FUN_1406349b0)((*(undefined8 *)(gen_frame + 0x60)),GEN_ARG_FLOAT(((float *)(gen_frame + 0x70))[0]));
   cVar1 = CALLF(undefined1, FUN_14062cc40)(param_1,(*(undefined8 *)(gen_frame + 0x60)),"SetDesaturation");
   if (cVar1 != '\0') {
                     /* WARNING: Subroutine does not return */
@@ -982,7 +982,7 @@ undefined4 FUN_140ae91e0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_SocialRestrictions.CALLF(undefined4, FUN_140ae91e0)(disabled)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_SocialRestrictions.SetChatDisabled(disabled)");
   }
   else {
     iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -1012,7 +1012,7 @@ undefined4 FUN_140ae9880(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local scaledVolume = C_Sound.CALLF(undefined4, FUN_140ae9880)(soundHandle)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local scaledVolume = C_Sound.GetSoundScaledVolume(soundHandle)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
@@ -1034,11 +1034,11 @@ undefined4 FUN_140ae9880(undefined8 param_1)
     CALLF(double, FUN_1402b4920)(param_1,1);
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x0)),"outside of expected range %u to %u",0,0xffffffff);
     if ((*(longlong *)(gen_frame + 0x8)) == 0) {
-      pcVar3 = "Usage: local scaledVolume = C_Sound.CALLF(undefined4, FUN_140ae9880)(soundHandle)";
+      pcVar3 = "Usage: local scaledVolume = C_Sound.GetSoundScaledVolume(soundHandle)";
     }
     else {
       pcVar3 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x0)),
-                                     "Usage: local scaledVolume = C_Sound.CALLF(undefined4, FUN_140ae9880)(soundHandle)"
+                                     "Usage: local scaledVolume = C_Sound.GetSoundScaledVolume(soundHandle)"
                                     );
     }
     if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
@@ -1071,7 +1071,7 @@ undefined4 FUN_140aea0e0(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local isPlaying = C_Sound.CALLF(undefined4, FUN_140aea0e0)(soundHandle)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local isPlaying = C_Sound.IsPlaying(soundHandle)");
   }
   else {
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
@@ -1093,11 +1093,11 @@ undefined4 FUN_140aea0e0(undefined8 param_1)
     CALLF(double, FUN_1402b4920)(param_1,1);
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x0)),"outside of expected range %u to %u",0,0xffffffff);
     if ((*(longlong *)(gen_frame + 0x8)) == 0) {
-      pcVar4 = "Usage: local isPlaying = C_Sound.CALLF(undefined4, FUN_140aea0e0)(soundHandle)";
+      pcVar4 = "Usage: local isPlaying = C_Sound.IsPlaying(soundHandle)";
     }
     else {
       pcVar4 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x0)),
-                                     "Usage: local isPlaying = C_Sound.CALLF(undefined4, FUN_140aea0e0)(soundHandle)");
+                                     "Usage: local isPlaying = C_Sound.IsPlaying(soundHandle)");
     }
     if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
       CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
@@ -1129,7 +1129,7 @@ undefined4 FUN_140aea8a0(undefined8 param_1)
   uVar4 = 1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Sound.CALLF(undefined4, FUN_140aea8a0)(soundType, itemLocation)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Sound.PlayItemSound(soundType, itemLocation)");
   }
   else {
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
@@ -1159,12 +1159,12 @@ undefined4 FUN_140aea8a0(undefined8 param_1)
     if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
       CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
     }
-    CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_Sound.CALLF(undefined4, FUN_140aea8a0)(soundType, itemLocation)");
+    CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_Sound.PlayItemSound(soundType, itemLocation)");
   }
 LAB_140aea998:
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar4);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Sound.CALLF(undefined4, FUN_140aea8a0)(soundType, itemLocation)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Sound.PlayItemSound(soundType, itemLocation)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d21c0)(param_1,uVar4);
@@ -1179,7 +1179,7 @@ LAB_140aea998:
       if (((*(ulonglong *)(gen_frame + 0x38)) & 0x8000000000000000) == 0) {
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x28)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
-      CALLF(undefined8, FUN_1424248b0)(param_1,uVar4,"Usage: C_Sound.CALLF(undefined4, FUN_140aea8a0)(soundType, itemLocation)");
+      CALLF(undefined8, FUN_1424248b0)(param_1,uVar4,"Usage: C_Sound.PlayItemSound(soundType, itemLocation)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -7289,7 +7289,7 @@ undefined4 FUN_140b064b0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_QuestSession.CALLF(undefined4, FUN_140b064b0)(beginSession)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_QuestSession.SendSessionBeginResponse(beginSession)");
   }
   else {
     iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -7320,12 +7320,12 @@ undefined4 FUN_140b06b60(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_QuestSession.CALLF(undefined4, FUN_140b06b60)(questID, superTrack)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_QuestSession.SetQuestIsSuperTracked(questID, superTrack)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_QuestSession.CALLF(undefined4, FUN_140b06b60)(questID, superTrack)")
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_QuestSession.SetQuestIsSuperTracked(questID, superTrack)")
       ;
     }
     else {
@@ -7341,7 +7341,7 @@ undefined4 FUN_140b06b60(undefined8 param_1)
   }
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar4);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_QuestSession.CALLF(undefined4, FUN_140b06b60)(questID, superTrack)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_QuestSession.SetQuestIsSuperTracked(questID, superTrack)");
   }
   else {
     iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -7374,14 +7374,14 @@ undefined4 FUN_140b072a0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local showsTaskQuestObjectives = C_TaskQuest.CALLF(undefined4, FUN_140b072a0)(uiMapID)"
+                  "Usage: local showsTaskQuestObjectives = C_TaskQuest.DoesMapShowTaskQuestObjectives(uiMapID)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local showsTaskQuestObjectives = C_TaskQuest.CALLF(undefined4, FUN_140b072a0)(uiMapID)"
+                    "Usage: local showsTaskQuestObjectives = C_TaskQuest.DoesMapShowTaskQuestObjectives(uiMapID)"
                    );
     }
     else {
@@ -7480,13 +7480,13 @@ undefined4 FUN_140b086f0(undefined8 param_1)
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   uVar5 = 2;
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local x, y = C_TaskQuest.CALLF(undefined4, FUN_140b086f0)(questID, uiMapID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local x, y = C_TaskQuest.GetQuestLocation(questID, uiMapID)");
     uVar5 = uVar4;
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local x, y = C_TaskQuest.CALLF(undefined4, FUN_140b086f0)(questID, uiMapID)"
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local x, y = C_TaskQuest.GetQuestLocation(questID, uiMapID)"
                    );
       uVar5 = uVar4;
     }
@@ -7503,13 +7503,13 @@ undefined4 FUN_140b086f0(undefined8 param_1)
   }
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar5);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local x, y = C_TaskQuest.CALLF(undefined4, FUN_140b086f0)(questID, uiMapID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local x, y = C_TaskQuest.GetQuestLocation(questID, uiMapID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,uVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),uVar5,
-                    "Usage: local x, y = C_TaskQuest.CALLF(undefined4, FUN_140b086f0)(questID, uiMapID)");
+                    "Usage: local x, y = C_TaskQuest.GetQuestLocation(questID, uiMapID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -7551,13 +7551,13 @@ undefined4 FUN_140b09490(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local progress = C_TaskQuest.CALLF(undefined4, FUN_140b09490)(questID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local progress = C_TaskQuest.GetQuestProgressBarInfo(questID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,
-                    "Usage: local progress = C_TaskQuest.CALLF(undefined4, FUN_140b09490)(questID)");
+                    "Usage: local progress = C_TaskQuest.GetQuestProgressBarInfo(questID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -7600,14 +7600,14 @@ undefined4 FUN_140b0a1b0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local minutesLeft = C_TaskQuest.CALLF(undefined4, FUN_140b0a1b0)(questID)")
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local minutesLeft = C_TaskQuest.GetQuestTimeLeftMinutes(questID)")
     ;
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,
-                    "Usage: local minutesLeft = C_TaskQuest.CALLF(undefined4, FUN_140b0a1b0)(questID)");
+                    "Usage: local minutesLeft = C_TaskQuest.GetQuestTimeLeftMinutes(questID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -7648,14 +7648,14 @@ undefined4 FUN_140b0aed0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local secondsLeft = C_TaskQuest.CALLF(undefined4, FUN_140b0aed0)(questID)")
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local secondsLeft = C_TaskQuest.GetQuestTimeLeftSeconds(questID)")
     ;
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,
-                    "Usage: local secondsLeft = C_TaskQuest.CALLF(undefined4, FUN_140b0aed0)(questID)");
+                    "Usage: local secondsLeft = C_TaskQuest.GetQuestTimeLeftSeconds(questID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -7694,12 +7694,12 @@ undefined4 FUN_140b0bbf0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local uiMapID = C_TaskQuest.CALLF(undefined4, FUN_140b0bbf0)(questID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local uiMapID = C_TaskQuest.GetQuestZoneID(questID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local uiMapID = C_TaskQuest.CALLF(undefined4, FUN_140b0bbf0)(questID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local uiMapID = C_TaskQuest.GetQuestZoneID(questID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -7859,13 +7859,13 @@ undefined4 FUN_140b0e400(undefined8 param_1)
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local UiWidgetSetID = C_TaskQuest.CALLF(undefined4, FUN_140b0e400)(questID)");
+                  "Usage: local UiWidgetSetID = C_TaskQuest.GetUIWidgetSetIDFromQuestID(questID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,
-                    "Usage: local UiWidgetSetID = C_TaskQuest.CALLF(undefined4, FUN_140b0e400)(questID)")
+                    "Usage: local UiWidgetSetID = C_TaskQuest.GetUIWidgetSetIDFromQuestID(questID)")
       ;
     }
     else {
@@ -7908,12 +7908,12 @@ undefined4 FUN_140b0f120(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local active = C_TaskQuest.CALLF(undefined4, FUN_140b0f120)(questID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local active = C_TaskQuest.IsActive(questID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local active = C_TaskQuest.CALLF(undefined4, FUN_140b0f120)(questID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local active = C_TaskQuest.IsActive(questID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -7952,12 +7952,12 @@ undefined4 FUN_140b0f830(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_TaskQuest.CALLF(undefined4, FUN_140b0f830)(questID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_TaskQuest.RequestPreloadRewardData(questID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_TaskQuest.CALLF(undefined4, FUN_140b0f830)(questID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_TaskQuest.RequestPreloadRewardData(questID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8045,14 +8045,14 @@ undefined4 FUN_140b10c30(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local canReport = C_ReportSystem.CALLF(undefined4, FUN_140b10c30)(playerLocation)")
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local canReport = C_ReportSystem.CanReportPlayer(playerLocation)")
     ;
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2200)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local canReport = C_ReportSystem.CALLF(undefined4, FUN_140b10c30)(playerLocation)");
+                    "Usage: local canReport = C_ReportSystem.CanReportPlayer(playerLocation)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8101,14 +8101,14 @@ undefined4 FUN_140b11410(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local canReport = C_ReportSystem.CALLF(undefined4, FUN_140b11410)(playerLocation)"
+                  "Usage: local canReport = C_ReportSystem.CanReportPlayerForLanguage(playerLocation)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2200)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local canReport = C_ReportSystem.CALLF(undefined4, FUN_140b11410)(playerLocation)"
+                    "Usage: local canReport = C_ReportSystem.CanReportPlayerForLanguage(playerLocation)"
                    );
     }
     else {
@@ -8212,7 +8212,7 @@ undefined4 FUN_140b12950(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local majorCategoryString = C_ReportSystem.CALLF(undefined4, FUN_140b12950)(majorCategory)"
+                  "Usage: local majorCategoryString = C_ReportSystem.GetMajorCategoryString(majorCategory)"
                  );
   }
   else {
@@ -8243,7 +8243,7 @@ undefined4 FUN_140b12950(undefined8 param_1)
       CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x10)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
     }
     CALLF(undefined8, FUN_1424248b0)(param_1,1,
-                  "Usage: local majorCategoryString = C_ReportSystem.CALLF(undefined4, FUN_140b12950)(majorCategory)"
+                  "Usage: local majorCategoryString = C_ReportSystem.GetMajorCategoryString(majorCategory)"
                  );
   }
 LAB_140b12a5f:
@@ -8327,7 +8327,7 @@ undefined4 FUN_140b13df0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local minorCategoryString = C_ReportSystem.CALLF(undefined4, FUN_140b13df0)(minorCategory)"
+                  "Usage: local minorCategoryString = C_ReportSystem.GetMinorCategoryString(minorCategory)"
                  );
     uVar3 = 0;
   }
@@ -8360,7 +8360,7 @@ undefined4 FUN_140b13df0(undefined8 param_1)
       CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x10)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
     }
     CALLF(undefined8, FUN_1424248b0)(param_1,1,
-                  "Usage: local minorCategoryString = C_ReportSystem.CALLF(undefined4, FUN_140b13df0)(minorCategory)"
+                  "Usage: local minorCategoryString = C_ReportSystem.GetMinorCategoryString(minorCategory)"
                  );
   }
 LAB_140b13ef2:
@@ -8472,14 +8472,14 @@ undefined4 FUN_140b16060(undefined8 param_1)
   uVar7 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar7 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local currentValue, threshold, rewardQuestID, hasRewardPending, tooLowLevelForParagon = C_Reputation.CALLF(undefined4, FUN_140b16060)(factionID)"
+                  "Usage: local currentValue, threshold, rewardQuestID, hasRewardPending, tooLowLevelForParagon = C_Reputation.GetFactionParagonInfo(factionID)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x20)),1,
-                    "Usage: local currentValue, threshold, rewardQuestID, hasRewardPending, tooLowLevelForParagon = C_Reputation.CALLF(undefined4, FUN_140b16060)(factionID)"
+                    "Usage: local currentValue, threshold, rewardQuestID, hasRewardPending, tooLowLevelForParagon = C_Reputation.GetFactionParagonInfo(factionID)"
                    );
     }
     else {
@@ -8558,12 +8558,12 @@ undefined4 FUN_140b16ea0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local hasParagon = C_Reputation.CALLF(undefined4, FUN_140b16ea0)(factionID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local hasParagon = C_Reputation.IsFactionParagon(factionID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local hasParagon = C_Reputation.CALLF(undefined4, FUN_140b16ea0)(factionID)"
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local hasParagon = C_Reputation.IsFactionParagon(factionID)"
                    );
     }
     else {
@@ -8603,13 +8603,13 @@ undefined4 FUN_140b175b0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Reputation.CALLF(undefined4, FUN_140b175b0)(factionID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Reputation.RequestFactionParagonPreloadRewardData(factionID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: C_Reputation.CALLF(undefined4, FUN_140b175b0)(factionID)");
+                    "Usage: C_Reputation.RequestFactionParagonPreloadRewardData(factionID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8642,12 +8642,12 @@ undefined4 FUN_140b17c80(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Reputation.CALLF(undefined4, FUN_140b17c80)(factionID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Reputation.SetWatchedFaction(factionID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Reputation.CALLF(undefined4, FUN_140b17c80)(factionID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Reputation.SetWatchedFaction(factionID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);

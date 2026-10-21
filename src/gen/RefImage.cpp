@@ -11,6 +11,7 @@
 #include <windows.h>
 
 #include "storm/thread/SThread.hpp"
+#include "storm/Memory.hpp"
 #include "util/FrostLog.hpp"
 
 // The reference's own address space, for the translated functions (src/gen/translated_*.c).
@@ -146,6 +147,15 @@ LONG CALLBACK WatchHandler(EXCEPTION_POINTERS* info) {
     }
     if (code == EXCEPTION_SINGLE_STEP && (context->Dr6 & 1)) {
         context->Dr6 &= ~0xFull;
+        // (a write by ntdll itself, a critical section's or an SRW lock's own bookkeeping on a
+        // watched lock, is left out: the residency mutex's 16 were all EnterCriticalSection, and
+        // the store that broke it came later, 2026-10-21)
+        HMODULE writer = nullptr;
+        GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                           reinterpret_cast<LPCWSTR>(context->Rip), &writer);
+        if (writer != nullptr && writer == GetModuleHandleW(L"ntdll.dll")) {
+            return EXCEPTION_CONTINUE_EXECUTION;
+        }
         if (InterlockedIncrement(&s_watchHits) <= 16) {
             FrostLog("watch", "%llx written: now %llx", static_cast<unsigned long long>(s_watch),
                      static_cast<unsigned long long>(*reinterpret_cast<volatile uint64_t*>(s_watch)));
@@ -279,6 +289,7 @@ extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info) {
         // (the filter runs on the faulting thread with its stack intact: from the fault up to the
         // translated function this filter guards, which may be many calls away)
         FrostLogContextStack(info->ContextRecord, 24);
+        MemoryDescribeFreed(at);
     }
     return EXCEPTION_EXECUTE_HANDLER;
 }

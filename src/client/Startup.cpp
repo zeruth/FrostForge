@@ -777,8 +777,8 @@ void BattleNetInitialize() {
     }
 }
 
-// DAT_142cc8000: cleared while the system sleeps.
-uint8_t s_systemAwake = 1;
+// cleared while the system sleeps.
+uint8_t s_systemAwake = 1;  // 0x142cc8000
 
 // ref: FUN_140214990
 void SetSystemAwake(uint8_t awake) {

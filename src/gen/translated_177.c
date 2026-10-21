@@ -6399,7 +6399,7 @@ byte * FUN_142243840(double *param_1, undefined8 param_2, byte *param_3)
     if ((*(byte *)((longlong)param_1 + 10) & 0xf) == 0) {
       switch((longlong)((long long)(*(undefined1 *)(param_1 + 1)))) {
       case 1:
-        param_3 = (byte *)CALLF(byte *, FUN_142244850)(uVar11,GEN_AS_DOUBLE((unsigned long long)(*param_1)),param_3);
+        param_3 = (byte *)CALLF(byte *, FUN_142244850)(uVar11,GEN_ARG_DOUBLE(*param_1),param_3);
         break;
       case 2:
         param_3 = (byte *)CALLF(byte *, FUN_1413226f0)(uVar11,*(float *)param_1,param_3);

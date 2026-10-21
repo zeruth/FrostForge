@@ -2597,7 +2597,7 @@ undefined4 FUN_1410a2e90(undefined8 param_1, undefined8 param_2, float *param_3)
   (*(undefined4 *)(gen_frame + 0x1c)) = 0xffffffff;
   (*(undefined8 *)(gen_frame + 0x10)) = param_2;
   CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x10)),((undefined4 *)(gen_frame + 0x50)),"Usage: local effectiveness = C_PaperDollInfo.GetArmorEffectivenessAgainstTarget(armor)",0,(unsigned long long)(param_3));
-  pfVar3 = (float *)CALLF(float *, FUN_141aa7930)(((undefined1 *)(gen_frame + 0x8)),GEN_AS_FLOAT((unsigned long long)(*param_3)));
+  pfVar3 = (float *)CALLF(float *, FUN_141aa7930)(((undefined1 *)(gen_frame + 0x8)),GEN_ARG_FLOAT(*param_3));
   pfVar1 = param_3 + 1;
   if (*(char *)(pfVar3 + 1) == '\0') {
     if (*(char *)(param_3 + 2) != '\0') {
@@ -4642,12 +4642,12 @@ undefined4 FUN_1410aba50(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.CALLF(undefined4, FUN_1410aba50)(mountID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.ClearFanfare(mountID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_MountJournal.CALLF(undefined4, FUN_1410aba50)(mountID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_MountJournal.ClearFanfare(mountID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -4809,7 +4809,7 @@ undefined4 FUN_1410ae870(undefined8 param_1)
   ((undefined4 *)(gen_frame + 0x48))[0] = 1;
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local isChecked = C_MountJournal.CALLF(undefined4, FUN_1410ae870)(filterIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local isChecked = C_MountJournal.GetCollectedFilterSetting(filterIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
   bVar1 = CALLF(bool, FUN_141a9d960)(((undefined4 *)(gen_frame + 0x50))[0]);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
   if (iVar2 == 0) {
@@ -4890,7 +4890,7 @@ undefined4 FUN_1410afce0(undefined8 param_1)
   ((undefined4 *)(gen_frame + 0x48))[0] = 1;
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local mountID = C_MountJournal.CALLF(undefined4, FUN_1410afce0)(displayIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local mountID = C_MountJournal.GetDisplayedMountID(displayIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
   iVar1 = CALLF(undefined4, FUN_141a9d9b0)(((undefined4 *)(gen_frame + 0x50))[0]);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
   if (iVar2 == 0) {
@@ -5031,7 +5031,7 @@ int FUN_1410b1ea0(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0x24)) = 0xffffffff;
   ((undefined4 *)(gen_frame + 0x78))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x18)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x18)),((undefined4 *)(gen_frame + 0x78)),"Usage: local isFavorite, canSetFavorite = C_MountJournal.CALLF(int, FUN_1410b1ea0)(mountIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x0))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x18)),((undefined4 *)(gen_frame + 0x78)),"Usage: local isFavorite, canSetFavorite = C_MountJournal.GetIsFavorite(mountIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x0))));
   ((byte *)(gen_frame + 0x60))[0] = 0;
   ((byte *)(gen_frame + 0x68))[0] = 0;
   CALLF(undefined8, FUN_141a9da90)(((undefined4 *)(gen_frame + 0x0))[0],((byte *)(gen_frame + 0x60)),((byte *)(gen_frame + 0x68)));
@@ -5559,7 +5559,7 @@ undefined4 FUN_1410ba380(undefined8 param_1)
   ((undefined4 *)(gen_frame + 0x48))[0] = 1;
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local isChecked = C_MountJournal.CALLF(undefined4, FUN_1410ba380)(filterIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local isChecked = C_MountJournal.IsSourceChecked(filterIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
   bVar1 = CALLF(bool, FUN_141a9f020)(((undefined4 *)(gen_frame + 0x50))[0]);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
   if (iVar2 == 0) {
@@ -5583,7 +5583,7 @@ undefined4 FUN_1410baa90(undefined8 param_1)
   ((undefined4 *)(gen_frame + 0x48))[0] = 1;
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local isChecked = C_MountJournal.CALLF(undefined4, FUN_1410baa90)(filterIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local isChecked = C_MountJournal.IsTypeChecked(filterIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
   bVar1 = CALLF(bool, FUN_141a9f050)(((undefined4 *)(gen_frame + 0x50))[0]);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
   if (iVar2 == 0) {
@@ -5624,7 +5624,7 @@ undefined4 FUN_1410bb830(undefined8 param_1)
   ((undefined4 *)(gen_frame + 0x48))[0] = 1;
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local isValid = C_MountJournal.CALLF(undefined4, FUN_1410bb830)(filterIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local isValid = C_MountJournal.IsValidSourceFilter(filterIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
   bVar1 = CALLF(bool, FUN_141a9f130)(((undefined4 *)(gen_frame + 0x50))[0]);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
   if (iVar2 == 0) {
@@ -5648,7 +5648,7 @@ undefined4 FUN_1410bbf40(undefined8 param_1)
   ((undefined4 *)(gen_frame + 0x48))[0] = 1;
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local isValid = C_MountJournal.CALLF(undefined4, FUN_1410bbf40)(filterIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local isValid = C_MountJournal.IsValidTypeFilter(filterIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
   bVar1 = CALLF(bool, FUN_141a9f160)(((undefined4 *)(gen_frame + 0x50))[0]);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
   if (iVar2 == 0) {
@@ -5676,12 +5676,12 @@ undefined4 FUN_1410bc650(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local needsFanfare = C_MountJournal.CALLF(undefined4, FUN_1410bc650)(mountID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local needsFanfare = C_MountJournal.NeedsFanfare(mountID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local needsFanfare = C_MountJournal.CALLF(undefined4, FUN_1410bc650)(mountID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local needsFanfare = C_MountJournal.NeedsFanfare(mountID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -5715,7 +5715,7 @@ undefined4 FUN_1410bcd60(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   ((undefined4 *)(gen_frame + 0x38))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_MountJournal.CALLF(undefined4, FUN_1410bcd60)(displayIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x40))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_MountJournal.Pickup(displayIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x40))));
   CALLF(undefined8, FUN_141aa0a00)(((undefined4 *)(gen_frame + 0x40))[0]);
   return 0;
 }
@@ -5731,7 +5731,7 @@ undefined4 FUN_1410bd3f0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.CALLF(undefined4, FUN_1410bd3f0)(isChecked)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.SetAllSourceFilters(isChecked)");
   }
   else {
     iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -5758,7 +5758,7 @@ undefined4 FUN_1410bdaa0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.CALLF(undefined4, FUN_1410bdaa0)(isChecked)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.SetAllTypeFilters(isChecked)");
   }
   else {
     iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -5788,11 +5788,11 @@ undefined4 FUN_1410be150(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   ((int *)(gen_frame + 0x48))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0x48)),"Usage: C_MountJournal.CALLF(undefined4, FUN_1410be150)(filterIndex, isChecked)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0x48)),"Usage: C_MountJournal.SetCollectedFilterSetting(filterIndex, isChecked)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
   iVar1 = ((int *)(gen_frame + 0x48))[0];
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,((int *)(gen_frame + 0x48))[0]);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.CALLF(undefined4, FUN_1410be150)(filterIndex, isChecked)")
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.SetCollectedFilterSetting(filterIndex, isChecked)")
     ;
   }
   else {
@@ -5832,11 +5832,11 @@ undefined4 FUN_1410beeb0(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   ((int *)(gen_frame + 0x48))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0x48)),"Usage: C_MountJournal.CALLF(undefined4, FUN_1410beeb0)(mountIndex, isFavorite)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0x48)),"Usage: C_MountJournal.SetIsFavorite(mountIndex, isFavorite)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
   iVar1 = ((int *)(gen_frame + 0x48))[0];
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,((int *)(gen_frame + 0x48))[0]);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.CALLF(undefined4, FUN_1410beeb0)(mountIndex, isFavorite)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.SetIsFavorite(mountIndex, isFavorite)");
   }
   else {
     iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -5864,7 +5864,7 @@ undefined4 FUN_1410bf5d0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.CALLF(undefined4, FUN_1410bf5d0)(searchValue)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.SetSearch(searchValue)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
@@ -5879,7 +5879,7 @@ undefined4 FUN_1410bf5d0(undefined8 param_1)
       if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
-      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_MountJournal.CALLF(undefined4, FUN_1410bf5d0)(searchValue)");
+      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_MountJournal.SetSearch(searchValue)");
     }
     else {
       iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -5909,11 +5909,11 @@ undefined4 FUN_1410bfd10(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   ((int *)(gen_frame + 0x48))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0x48)),"Usage: C_MountJournal.CALLF(undefined4, FUN_1410bfd10)(filterIndex, isChecked)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0x48)),"Usage: C_MountJournal.SetSourceFilter(filterIndex, isChecked)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
   iVar1 = ((int *)(gen_frame + 0x48))[0];
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,((int *)(gen_frame + 0x48))[0]);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.CALLF(undefined4, FUN_1410bfd10)(filterIndex, isChecked)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.SetSourceFilter(filterIndex, isChecked)");
   }
   else {
     iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -5944,11 +5944,11 @@ undefined4 FUN_1410c0430(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   ((int *)(gen_frame + 0x48))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0x48)),"Usage: C_MountJournal.CALLF(undefined4, FUN_1410c0430)(filterIndex, isChecked)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0x48)),"Usage: C_MountJournal.SetTypeFilter(filterIndex, isChecked)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
   iVar1 = ((int *)(gen_frame + 0x48))[0];
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,((int *)(gen_frame + 0x48))[0]);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.CALLF(undefined4, FUN_1410c0430)(filterIndex, isChecked)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.SetTypeFilter(filterIndex, isChecked)");
   }
   else {
     iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -5981,12 +5981,12 @@ undefined4 FUN_1410c0b50(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.CALLF(undefined4, FUN_1410c0b50)(mountID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_MountJournal.SummonByID(mountID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_MountJournal.CALLF(undefined4, FUN_1410c0b50)(mountID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_MountJournal.SummonByID(mountID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6024,8 +6024,8 @@ undefined4 FUN_1410c1860(undefined8 param_1)
   ((undefined4 *)(gen_frame + 0x38))[0] = 1;
   (*(undefined4 *)(gen_frame + 0xc)) = 0xffffffff;
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
-  CALLF(undefined8, FUN_140d57e90)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x38)),"Usage: local isNew = C_NewItems.CALLF(undefined4, FUN_1410c1860)(containerIndex, slotIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x48))));
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x38)),"Usage: local isNew = C_NewItems.CALLF(undefined4, FUN_1410c1860)(containerIndex, slotIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x40))));
+  CALLF(undefined8, FUN_140d57e90)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x38)),"Usage: local isNew = C_NewItems.IsNewItem(containerIndex, slotIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x48))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x38)),"Usage: local isNew = C_NewItems.IsNewItem(containerIndex, slotIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x40))));
   bVar1 = CALLF(bool, FUN_141c60120)(((undefined4 *)(gen_frame + 0x48))[0],((undefined4 *)(gen_frame + 0x40))[0]);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
   if (iVar2 == 0) {
@@ -6047,8 +6047,8 @@ undefined4 FUN_1410c1f70(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0xc)) = 0xffffffff;
   ((undefined4 *)(gen_frame + 0x28))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
-  CALLF(undefined8, FUN_140d57e90)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x28)),"Usage: C_NewItems.CALLF(undefined4, FUN_1410c1f70)(containerIndex, slotIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x38))));
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x28)),"Usage: C_NewItems.CALLF(undefined4, FUN_1410c1f70)(containerIndex, slotIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x30))));
+  CALLF(undefined8, FUN_140d57e90)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x28)),"Usage: C_NewItems.RemoveNewItem(containerIndex, slotIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x38))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x28)),"Usage: C_NewItems.RemoveNewItem(containerIndex, slotIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x30))));
   CALLF(undefined8, FUN_141c61340)(((undefined4 *)(gen_frame + 0x38))[0],((undefined4 *)(gen_frame + 0x30))[0]);
   return 0;
 }
@@ -6267,19 +6267,19 @@ undefined4 FUN_1410c5ad0(undefined8 param_1)
   (*(undefined1 *)(gen_frame + 0x10)) = 0;
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0x58)),"Usage: local effectiveness = C_PaperDollInfo.CALLF(undefined4, FUN_1410c5ad0)(armor, attackerLevel)",0,(unsigned long long)(((float *)(gen_frame + 0x60))));
+  CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0x58)),"Usage: local effectiveness = C_PaperDollInfo.GetArmorEffectiveness(armor, attackerLevel)",0,(unsigned long long)(((float *)(gen_frame + 0x60))));
   iVar3 = ((int *)(gen_frame + 0x58))[0];
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,((int *)(gen_frame + 0x58))[0]);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local effectiveness = C_PaperDollInfo.CALLF(undefined4, FUN_1410c5ad0)(armor, attackerLevel)"
+                  "Usage: local effectiveness = C_PaperDollInfo.GetArmorEffectiveness(armor, attackerLevel)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,iVar3);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),iVar3,
-                    "Usage: local effectiveness = C_PaperDollInfo.CALLF(undefined4, FUN_1410c5ad0)(armor, attackerLevel)"
+                    "Usage: local effectiveness = C_PaperDollInfo.GetArmorEffectiveness(armor, attackerLevel)"
                    );
     }
     else {
@@ -6294,7 +6294,7 @@ undefined4 FUN_1410c5ad0(undefined8 param_1)
       }
     }
   }
-  fVar5 = CALLF(float, FUN_141aa7900)(GEN_AS_FLOAT((unsigned long long)(((float *)(gen_frame + 0x60))[0])),(*(int *)(gen_frame + 0x50)));
+  fVar5 = CALLF(float, FUN_141aa7900)(GEN_ARG_FLOAT(((float *)(gen_frame + 0x60))[0]),(*(int *)(gen_frame + 0x50)));
   iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
   if (iVar3 == 0) {
     CALLF(undefined8, FUN_142424d80)(param_1,"stack overflow");
@@ -6729,14 +6729,14 @@ int FUN_1410ccc70(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local maxAllowed, numPets = C_PetJournal.CALLF(int, FUN_1410ccc70)(creatureID)")
+                  "Usage: local maxAllowed, numPets = C_PetJournal.GetNumPetsInJournal(creatureID)")
     ;
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,
-                    "Usage: local maxAllowed, numPets = C_PetJournal.CALLF(int, FUN_1410ccc70)(creatureID)"
+                    "Usage: local maxAllowed, numPets = C_PetJournal.GetNumPetsInJournal(creatureID)"
                    );
     }
     else {
@@ -6787,7 +6787,7 @@ int FUN_1410cd3e0(undefined8 param_1)
   iVar5 = 0;
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local isSummonable, error, errorText = C_PetJournal.CALLF(int, FUN_1410cd3e0)(battlePetGUID)"
+                  "Usage: local isSummonable, error, errorText = C_PetJournal.GetPetSummonInfo(battlePetGUID)"
                  );
   }
   else {
@@ -6804,7 +6804,7 @@ int FUN_1410cd3e0(undefined8 param_1)
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x30)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
       CALLF(undefined8, FUN_1424248b0)(param_1,1,
-                    "Usage: local isSummonable, error, errorText = C_PetJournal.CALLF(int, FUN_1410cd3e0)(battlePetGUID)"
+                    "Usage: local isSummonable, error, errorText = C_PetJournal.GetPetSummonInfo(battlePetGUID)"
                    );
     }
     else {
@@ -6867,7 +6867,7 @@ uint FUN_1410cdbd0(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local isSummonable = C_PetJournal.CALLF(uint, FUN_1410cdbd0)(battlePetGUID)")
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local isSummonable = C_PetJournal.PetIsSummonable(battlePetGUID)")
     ;
   }
   else {
@@ -6884,7 +6884,7 @@ uint FUN_1410cdbd0(undefined8 param_1)
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x20)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
       CALLF(undefined8, FUN_1424248b0)(param_1,1,
-                    "Usage: local isSummonable = C_PetJournal.CALLF(uint, FUN_1410cdbd0)(battlePetGUID)");
+                    "Usage: local isSummonable = C_PetJournal.PetIsSummonable(battlePetGUID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);

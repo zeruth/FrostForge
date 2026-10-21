@@ -114,13 +114,20 @@ const char* DisplayName(CSimpleFont* font) {
 
 // ref: FUN_140622cf0
 CSimpleFontAttributes* CSimpleFontAttributes::Merge(const CSimpleFontAttributes* source) {
-    source->MergeMasked(this, 0xffff);
+    source->MergeChanged(this, 0xffff);
     return this;
 }
 
 // ref: FUN_1406290f0
 void CSimpleFontAttributes::MergeMasked(CSimpleFontAttributes* target, uint16_t mask) const {
-    mask &= this->m_flags;
+    this->MergeChanged(target, mask & this->m_flags);
+}
+
+// What `source` has set of the attributes `changed` names goes into `target`. MergeMasked
+// passes the source's own changed bits under its mask; Merge (FUN_140622cf0) checks only what
+// the source has, so it passes every bit (a font settled by UpdateFontables has none changed,
+// and CopyFontObject copied nothing from one until 2026-10-21).
+void CSimpleFontAttributes::MergeChanged(CSimpleFontAttributes* target, uint16_t mask) const {
     if ((this->m_flags & HAS_FONT) != 0 && (mask & CHANGED_FONT) != 0) {
         const char* path = this->m_fontPath;
         float height = this->m_height;

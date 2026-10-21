@@ -3287,6 +3287,9 @@ extern unsigned char gen_g_1430a145c[4];
 /* s_takenEventCount (src/net/NetInternal.cpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a14a8=?s_takenEventCount@@3IA")
 extern unsigned char gen_g_1430a14a8[4];
+/* g_vrsValarReady (src/shadereffect/ShaderEffectContext.cpp) */
+#pragma comment(linker, "/alternatename:gen_g_1430a5c48=?g_vrsValarReady@@3_NA")
+extern unsigned char gen_g_1430a5c48[1];
 /* g_fmodSystem (src/sound/SE3.hpp) */
 #pragma comment(linker, "/alternatename:gen_g_1430a9460=?g_fmodSystem@@3PEAVSystem@FMOD@@EA")
 extern unsigned char gen_g_1430a9460[8];
@@ -3503,6 +3506,9 @@ extern void *const gen_p_142cc8790;
 /* s_screenshotQuality (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142cc87b0;
 #define gen_g_142cc87b0 (*(unsigned char (*)[1])gen_p_142cc87b0)
+/* s_defaultAllocator (src/storm/Memory.cpp), internal: through its pointer */
+extern void *const gen_p_142cc8a48;
+#define gen_g_142cc8a48 (*(unsigned char (*)[4])gen_p_142cc8a48)
 /* s_threads (src/storm/thread/SThread.cpp), internal: through its pointer */
 extern void *const gen_p_142cc8a50;
 #define gen_g_142cc8a50 (*(unsigned char (*)[24])gen_p_142cc8a50)
@@ -3656,6 +3662,9 @@ extern void *const gen_p_142cfd2cc;
 /* s_loadSortMask (src/world/WorldFrame.cpp), internal: through its pointer */
 extern void *const gen_p_142cfdb68;
 #define gen_g_142cfdb68 (*(unsigned char (*)[4])gen_p_142cfdb68)
+/* s_playerAlive (src/world/WorldClip.cpp), internal: through its pointer */
+extern void *const gen_p_142d00c2c;
+#define gen_g_142d00c2c (*(unsigned char (*)[1])gen_p_142d00c2c)
 /* s_windDirection (src/world/MapWind.cpp), internal: through its pointer */
 extern void *const gen_p_142d00f40;
 #define gen_g_142d00f40 (*(unsigned char (*)[12])gen_p_142d00f40)
@@ -3689,10 +3698,13 @@ extern void *const gen_p_142d08259;
 /* s_uiScaleTarget (src/client/GxWindow.cpp), internal: through its pointer */
 extern void *const gen_p_142d08284;
 #define gen_g_142d08284 (*(unsigned char (*)[4])gen_p_142d08284)
+/* s_buildType (src/services/ClientServices.cpp), internal: through its pointer */
+extern void *const gen_p_142d09818;
+#define gen_g_142d09818 (*(unsigned char (*)[4])gen_p_142d09818)
 /* s_missing (src/db/GlobalColor.cpp), internal: through its pointer */
 extern void *const gen_p_142d1ad40;
 #define gen_g_142d1ad40 (*(unsigned char (*)[16])gen_p_142d1ad40)
-/* s_colors (src/glue/GlobalColor.cpp), internal: through its pointer */
+/* s_colors (src/db/GlobalColor.cpp), internal: through its pointer */
 extern void *const gen_p_142d1ad50;
 #define gen_g_142d1ad50 (*(unsigned char (*)[16])gen_p_142d1ad50)
 /* s_modelSceneActorMetaTable (src/glue/GlueScriptAPI.cpp), internal: through its pointer */
@@ -3911,6 +3923,30 @@ extern void *const gen_p_142de29f8;
 /* s_advancedCombatLoggingCVar (src/client/ClientCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142de2a00;
 #define gen_g_142de2a00 (*(unsigned char (*)[8])gen_p_142de2a00)
+/* s_allocHook (src/storm/Memory.cpp), internal: through its pointer */
+extern void *const gen_p_142e1c450;
+#define gen_g_142e1c450 (*(unsigned char (*)[8])gen_p_142e1c450)
+/* s_freeHook (src/storm/Memory.cpp), internal: through its pointer */
+extern void *const gen_p_142e1c458;
+#define gen_g_142e1c458 (*(unsigned char (*)[8])gen_p_142e1c458)
+/* s_hook3 (src/storm/Memory.cpp), internal: through its pointer */
+extern void *const gen_p_142e1c460;
+#define gen_g_142e1c460 (*(unsigned char (*)[8])gen_p_142e1c460)
+/* s_ownerHook (src/storm/Memory.cpp), internal: through its pointer */
+extern void *const gen_p_142e1c468;
+#define gen_g_142e1c468 (*(unsigned char (*)[8])gen_p_142e1c468)
+/* s_reallocHook (src/storm/Memory.cpp), internal: through its pointer */
+extern void *const gen_p_142e1c470;
+#define gen_g_142e1c470 (*(unsigned char (*)[8])gen_p_142e1c470)
+/* s_hook6 (src/storm/Memory.cpp), internal: through its pointer */
+extern void *const gen_p_142e1c478;
+#define gen_g_142e1c478 (*(unsigned char (*)[8])gen_p_142e1c478)
+/* s_hook7 (src/storm/Memory.cpp), internal: through its pointer */
+extern void *const gen_p_142e1c480;
+#define gen_g_142e1c480 (*(unsigned char (*)[8])gen_p_142e1c480)
+/* s_hook8 (src/storm/Memory.cpp), internal: through its pointer */
+extern void *const gen_p_142e1c488;
+#define gen_g_142e1c488 (*(unsigned char (*)[8])gen_p_142e1c488)
 /* s_threadLock (src/storm/thread/SThread.cpp), internal: through its pointer */
 extern void *const gen_p_142e1c4c8;
 #define gen_g_142e1c4c8 (*(unsigned char (*)[48])gen_p_142e1c4c8)
@@ -4049,6 +4085,9 @@ extern void *const gen_p_142e8e2d0;
 /* s_sparseReadData (src/db/DBClient.cpp), internal: through its pointer */
 extern void *const gen_p_142e8e2f8;
 #define gen_g_142e8e2f8 (*(unsigned char (*)[8])gen_p_142e8e2f8)
+/* s_regionVariant (src/client/Locale.cpp), internal: through its pointer */
+extern void *const gen_p_142e9696c;
+#define gen_g_142e9696c (*(unsigned char (*)[4])gen_p_142e9696c)
 /* s_sharedMemory (src/fileservices/AsyncFile.cpp), internal: through its pointer */
 extern void *const gen_p_142e96d60;
 #define gen_g_142e96d60 (*(unsigned char (*)[24])gen_p_142e96d60)
@@ -4073,9 +4112,15 @@ extern void *const gen_p_142e96e30;
 /* s_daltonize (src/client/RenderCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142e96f70;
 #define gen_g_142e96f70 (*(unsigned char (*)[2])gen_p_142e96f70)
+/* s_colorblindMatrix (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_142e96f80;
+#define gen_g_142e96f80 (*(unsigned char (*)[48])gen_p_142e96f80)
 /* s_colorblindWeakness (src/client/RenderCVars.cpp), internal: through its pointer */
 extern void *const gen_p_142e96fb0;
 #define gen_g_142e96fb0 (*(unsigned char (*)[4])gen_p_142e96fb0)
+/* s_ffxSharedTargets (src/ui/CSimpleModelFFX.cpp), internal: through its pointer */
+extern void *const gen_p_142e96fc8;
+#define gen_g_142e96fc8 (*(unsigned char (*)[8])gen_p_142e96fc8)
 /* s_ffxPassSlot (src/ui/CSimpleModelFFX.cpp), internal: through its pointer */
 extern void *const gen_p_142e96fd0;
 #define gen_g_142e96fd0 (*(unsigned char (*)[1])gen_p_142e96fd0)
@@ -4139,6 +4184,9 @@ extern void *const gen_p_142e99f48;
 /* s_profileStack (src/framescript/FrameScript.cpp), internal: through its pointer */
 extern void *const gen_p_142e99f50;
 #define gen_g_142e99f50 (*(unsigned char (*)[8])gen_p_142e99f50)
+/* s_tabSlots (src/framescript/FrameScript.cpp), internal: through its pointer */
+extern void *const gen_p_142e99f60;
+#define gen_g_142e99f60 (*(unsigned char (*)[128])gen_p_142e99f60)
 /* s_fontGroup (src/client/Locale.cpp), internal: through its pointer */
 extern void *const gen_p_142e9a060;
 #define gen_g_142e9a060 (*(unsigned char (*)[4])gen_p_142e9a060)
@@ -4187,6 +4235,12 @@ extern void *const gen_p_1430a0e98;
 /* s_particleSharedPool (src/model2/M2Cache.cpp), internal: through its pointer */
 extern void *const gen_p_1430a0ea0;
 #define gen_g_1430a0ea0 (*(unsigned char (*)[8])gen_p_1430a0ea0)
+/* s_animFrameSkipLod (src/model2/M2Cache.cpp), internal: through its pointer */
+extern void *const gen_p_1430a0eb0;
+#define gen_g_1430a0eb0 (*(unsigned char (*)[8])gen_p_1430a0eb0)
+/* s_hotReloadModels (src/model2/M2Cache.cpp), internal: through its pointer */
+extern void *const gen_p_1430a0eb8;
+#define gen_g_1430a0eb8 (*(unsigned char (*)[8])gen_p_1430a0eb8)
 /* s_initialized (src/model2/M2Cache.cpp), internal: through its pointer */
 extern void *const gen_p_1430a0f19;
 #define gen_g_1430a0f19 (*(unsigned char (*)[1])gen_p_1430a0f19)
@@ -4223,6 +4277,9 @@ extern void *const gen_p_1430a1448;
 /* s_nodeHeap (src/net/NetInternal.cpp), internal: through its pointer */
 extern void *const gen_p_1430a14a0;
 #define gen_g_1430a14a0 (*(unsigned char (*)[8])gen_p_1430a14a0)
+/* s_isFirstInstance (src/os/win/System.cpp), internal: through its pointer */
+extern void *const gen_p_1430a14f0;
+#define gen_g_1430a14f0 (*(unsigned char (*)[1])gen_p_1430a14f0)
 /* s_dpiOnce (src/os/win/Window.cpp), internal: through its pointer */
 extern void *const gen_p_1430a1508;
 #define gen_g_1430a1508 (*(unsigned char (*)[16])gen_p_1430a1508)
@@ -4289,6 +4346,9 @@ extern void *const gen_p_1430a1be8;
 /* s_modelLock (src/model2/M2Particle.cpp), internal: through its pointer */
 extern void *const gen_p_1430a1f70;
 #define gen_g_1430a1f70 (*(unsigned char (*)[8])gen_p_1430a1f70)
+/* s_alphaTargets (src/world/WorldSceneRenderDraw.cpp), internal: through its pointer */
+extern void *const gen_p_1430a1fa0;
+#define gen_g_1430a1fa0 (*(unsigned char (*)[8])gen_p_1430a1fa0)
 /* s_uniqueLock (src/texture/Texture.cpp), internal: through its pointer */
 extern void *const gen_p_1430a54d0;
 #define gen_g_1430a54d0 (*(unsigned char (*)[8])gen_p_1430a54d0)
@@ -4334,6 +4394,12 @@ extern void *const gen_p_1430a5960;
 /* s_screen (src/client/FrameBufferCache.cpp), internal: through its pointer */
 extern void *const gen_p_1430a5964;
 #define gen_g_1430a5964 (*(unsigned char (*)[4])gen_p_1430a5964)
+/* s_noShadowFactor (src/world/WorldSceneDraw.cpp), internal: through its pointer */
+extern void *const gen_p_1430a5b90;
+#define gen_g_1430a5b90 (*(unsigned char (*)[1])gen_p_1430a5b90)
+/* s_projectedClearPending (src/world/WorldSceneRenderDraw.cpp), internal: through its pointer */
+extern void *const gen_p_1430a5b92;
+#define gen_g_1430a5b92 (*(unsigned char (*)[1])gen_p_1430a5b92)
 /* s_variationCap (src/sound/SE3.cpp), internal: through its pointer */
 extern void *const gen_p_1430a94c8;
 #define gen_g_1430a94c8 (*(unsigned char (*)[8])gen_p_1430a94c8)
@@ -4391,6 +4457,204 @@ extern void *const gen_p_1430a99f4;
 /* s_1430a99fc (src/sound/SI3.cpp), internal: through its pointer */
 extern void *const gen_p_1430a99fc;
 #define gen_g_1430a99fc (*(unsigned char (*)[1])gen_p_1430a99fc)
+/* s_farclipCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa7f0;
+#define gen_g_1430aa7f0 (*(unsigned char (*)[8])gen_p_1430aa7f0)
+/* s_particleDensityCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa7f8;
+#define gen_g_1430aa7f8 (*(unsigned char (*)[8])gen_p_1430aa7f8)
+/* s_particleMTDensityCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa800;
+#define gen_g_1430aa800 (*(unsigned char (*)[8])gen_p_1430aa800)
+/* s_waterDetailCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa808;
+#define gen_g_1430aa808 (*(unsigned char (*)[8])gen_p_1430aa808)
+/* s_rippleDetailCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa810;
+#define gen_g_1430aa810 (*(unsigned char (*)[8])gen_p_1430aa810)
+/* s_reflectionModeCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa818;
+#define gen_g_1430aa818 (*(unsigned char (*)[8])gen_p_1430aa818)
+/* s_sunShaftsCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa820;
+#define gen_g_1430aa820 (*(unsigned char (*)[8])gen_p_1430aa820)
+/* s_sSAOCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa828;
+#define gen_g_1430aa828 (*(unsigned char (*)[8])gen_p_1430aa828)
+/* s_horizonClipCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa830;
+#define gen_g_1430aa830 (*(unsigned char (*)[8])gen_p_1430aa830)
+/* s_horizonStartCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa838;
+#define gen_g_1430aa838 (*(unsigned char (*)[8])gen_p_1430aa838)
+/* s_groundEffectDensityCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa840;
+#define gen_g_1430aa840 (*(unsigned char (*)[8])gen_p_1430aa840)
+/* s_groundEffectDistCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa848;
+#define gen_g_1430aa848 (*(unsigned char (*)[8])gen_p_1430aa848)
+/* s_groundEffectAnimationCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa850;
+#define gen_g_1430aa850 (*(unsigned char (*)[8])gen_p_1430aa850)
+/* s_projectedTexturesCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa858;
+#define gen_g_1430aa858 (*(unsigned char (*)[8])gen_p_1430aa858)
+/* s_spellClutterCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa860;
+#define gen_g_1430aa860 (*(unsigned char (*)[8])gen_p_1430aa860)
+/* s_shadowModeCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa868;
+#define gen_g_1430aa868 (*(unsigned char (*)[8])gen_p_1430aa868)
+/* s_shadowTextureSizeCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa870;
+#define gen_g_1430aa870 (*(unsigned char (*)[8])gen_p_1430aa870)
+/* s_shadowRtCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa878;
+#define gen_g_1430aa878 (*(unsigned char (*)[8])gen_p_1430aa878)
+/* s_terrainLodDistCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa880;
+#define gen_g_1430aa880 (*(unsigned char (*)[8])gen_p_1430aa880)
+/* s_terrainLodDivCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa888;
+#define gen_g_1430aa888 (*(unsigned char (*)[8])gen_p_1430aa888)
+/* s_wmoLodDistCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa890;
+#define gen_g_1430aa890 (*(unsigned char (*)[8])gen_p_1430aa890)
+/* s_entityLodDistCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa898;
+#define gen_g_1430aa898 (*(unsigned char (*)[8])gen_p_1430aa898)
+/* s_doodadLodScaleCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa8a0;
+#define gen_g_1430aa8a0 (*(unsigned char (*)[8])gen_p_1430aa8a0)
+/* s_worldBaseMipCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa8a8;
+#define gen_g_1430aa8a8 (*(unsigned char (*)[8])gen_p_1430aa8a8)
+/* s_lodObjectCullSizeCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa8b0;
+#define gen_g_1430aa8b0 (*(unsigned char (*)[8])gen_p_1430aa8b0)
+/* s_lodObjectCullDistCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa8b8;
+#define gen_g_1430aa8b8 (*(unsigned char (*)[8])gen_p_1430aa8b8)
+/* s_lodObjectMinSizeCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa8c0;
+#define gen_g_1430aa8c0 (*(unsigned char (*)[8])gen_p_1430aa8c0)
+/* s_lodObjectFadeScaleCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa8c8;
+#define gen_g_1430aa8c8 (*(unsigned char (*)[8])gen_p_1430aa8c8)
+/* s_rAIDsettingsEnabledCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa8d0;
+#define gen_g_1430aa8d0 (*(unsigned char (*)[8])gen_p_1430aa8d0)
+/* s_rAIDterrainLodDistCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa8d8;
+#define gen_g_1430aa8d8 (*(unsigned char (*)[8])gen_p_1430aa8d8)
+/* s_rAIDTerrainLodDivCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa8e0;
+#define gen_g_1430aa8e0 (*(unsigned char (*)[8])gen_p_1430aa8e0)
+/* s_rAIDentityLodDistCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa8e8;
+#define gen_g_1430aa8e8 (*(unsigned char (*)[8])gen_p_1430aa8e8)
+/* s_rAIDdoodadLodScaleCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa8f0;
+#define gen_g_1430aa8f0 (*(unsigned char (*)[8])gen_p_1430aa8f0)
+/* s_rAIDwmoLodDistCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa8f8;
+#define gen_g_1430aa8f8 (*(unsigned char (*)[8])gen_p_1430aa8f8)
+/* s_rAIDfarclipCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa900;
+#define gen_g_1430aa900 (*(unsigned char (*)[8])gen_p_1430aa900)
+/* s_rAIDhorizonStartCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa908;
+#define gen_g_1430aa908 (*(unsigned char (*)[8])gen_p_1430aa908)
+/* s_rAIDhorizonClipCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa910;
+#define gen_g_1430aa910 (*(unsigned char (*)[8])gen_p_1430aa910)
+/* s_rAIDparticleDensityCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa918;
+#define gen_g_1430aa918 (*(unsigned char (*)[8])gen_p_1430aa918)
+/* s_rAIDparticleMTDensityCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa920;
+#define gen_g_1430aa920 (*(unsigned char (*)[8])gen_p_1430aa920)
+/* s_rAIDWaterDetailCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa928;
+#define gen_g_1430aa928 (*(unsigned char (*)[8])gen_p_1430aa928)
+/* s_rAIDrippleDetailCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa930;
+#define gen_g_1430aa930 (*(unsigned char (*)[8])gen_p_1430aa930)
+/* s_rAIDreflectionModeCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa938;
+#define gen_g_1430aa938 (*(unsigned char (*)[8])gen_p_1430aa938)
+/* s_rAIDsunShaftsCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa940;
+#define gen_g_1430aa940 (*(unsigned char (*)[8])gen_p_1430aa940)
+/* s_rAIDSSAOCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa948;
+#define gen_g_1430aa948 (*(unsigned char (*)[8])gen_p_1430aa948)
+/* s_rAIDgroundEffectDensityCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa950;
+#define gen_g_1430aa950 (*(unsigned char (*)[8])gen_p_1430aa950)
+/* s_rAIDgroundEffectDistCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa958;
+#define gen_g_1430aa958 (*(unsigned char (*)[8])gen_p_1430aa958)
+/* s_rAIDgroundEffectAnimationCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa960;
+#define gen_g_1430aa960 (*(unsigned char (*)[8])gen_p_1430aa960)
+/* s_rAIDprojectedTexturesCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa968;
+#define gen_g_1430aa968 (*(unsigned char (*)[8])gen_p_1430aa968)
+/* s_rAIDspellClutterCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa970;
+#define gen_g_1430aa970 (*(unsigned char (*)[8])gen_p_1430aa970)
+/* s_rAIDshadowModeCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa978;
+#define gen_g_1430aa978 (*(unsigned char (*)[8])gen_p_1430aa978)
+/* s_rAIDshadowTextureSizeCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa980;
+#define gen_g_1430aa980 (*(unsigned char (*)[8])gen_p_1430aa980)
+/* s_rAIDshadowRtCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa988;
+#define gen_g_1430aa988 (*(unsigned char (*)[8])gen_p_1430aa988)
+/* s_rAIDworldBaseMipCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa990;
+#define gen_g_1430aa990 (*(unsigned char (*)[8])gen_p_1430aa990)
+/* s_rAIDlodObjectCullSizeCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa998;
+#define gen_g_1430aa998 (*(unsigned char (*)[8])gen_p_1430aa998)
+/* s_rAIDlodObjectCullDistCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa9a0;
+#define gen_g_1430aa9a0 (*(unsigned char (*)[8])gen_p_1430aa9a0)
+/* s_rAIDlodObjectMinSizeCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa9a8;
+#define gen_g_1430aa9a8 (*(unsigned char (*)[8])gen_p_1430aa9a8)
+/* s_rAIDlodObjectFadeScaleCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430aa9b0;
+#define gen_g_1430aa9b0 (*(unsigned char (*)[8])gen_p_1430aa9b0)
+/* s_minimapPortalMaxCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430ab788;
+#define gen_g_1430ab788 (*(unsigned char (*)[8])gen_p_1430ab788)
+/* s_preloadStreamingDistTerrainCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430ab840;
+#define gen_g_1430ab840 (*(unsigned char (*)[8])gen_p_1430ab840)
+/* s_preloadStreamingDistObjectCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430ab848;
+#define gen_g_1430ab848 (*(unsigned char (*)[8])gen_p_1430ab848)
+/* s_graphicsEnvironmentDetailCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430ab900;
+#define gen_g_1430ab900 (*(unsigned char (*)[8])gen_p_1430ab900)
+/* s_raidGraphicsEnvironmentDetailCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430ab950;
+#define gen_g_1430ab950 (*(unsigned char (*)[8])gen_p_1430ab950)
+/* s_worldViewCullMaxJobsCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430ab988;
+#define gen_g_1430ab988 (*(unsigned char (*)[8])gen_p_1430ab988)
+/* s_worldIntersectMaxJobsCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430ab990;
+#define gen_g_1430ab990 (*(unsigned char (*)[8])gen_p_1430ab990)
+/* s_locateViewerMaxJobsCVar (src/client/GraphicsSettings.cpp), internal: through its pointer */
+extern void *const gen_p_1430ab998;
+#define gen_g_1430ab998 (*(unsigned char (*)[8])gen_p_1430ab998)
+/* s_worldFlagMask (src/world/WorldSceneCallbacks.cpp), internal: through its pointer */
+extern void *const gen_p_1430ab9d8;
+#define gen_g_1430ab9d8 (*(unsigned char (*)[4])gen_p_1430ab9d8)
 /* s_frameViewScale (src/world/WorldFrame.cpp), internal: through its pointer */
 extern void *const gen_p_1430ab9e4;
 #define gen_g_1430ab9e4 (*(unsigned char (*)[4])gen_p_1430ab9e4)
@@ -4538,12 +4802,12 @@ extern void *const gen_p_1430d2b38;
 /* s_connectionLog (src/services/ClientServices.cpp), internal: through its pointer */
 extern void *const gen_p_1430d2b40;
 #define gen_g_1430d2b40 (*(unsigned char (*)[8])gen_p_1430d2b40)
-/* s_colorsBuilt (src/glue/GlobalColor.cpp), internal: through its pointer */
+/* s_colorsRead (src/db/GlobalColor.cpp), internal: through its pointer */
 extern void *const gen_p_14311bf80;
 #define gen_g_14311bf80 (*(unsigned char (*)[1])gen_p_14311bf80)
-/* s_globalColor (src/glue/GlobalColor.cpp), internal: through its pointer */
+/* s_globalColorState (src/db/GlobalColor.cpp), internal: through its pointer */
 extern void *const gen_p_14311bf98;
-#define gen_g_14311bf98 (*(unsigned char (*)[48])gen_p_14311bf98)
+#define gen_g_14311bf98 (*(unsigned char (*)[40])gen_p_14311bf98)
 /* s_windowWidth (src/glue/GlueMgr.cpp), internal: through its pointer */
 extern void *const gen_p_14311c510;
 #define gen_g_14311c510 (*(unsigned char (*)[4])gen_p_14311c510)
@@ -4586,9 +4850,9 @@ extern void *const gen_p_14311c5f0;
 /* s_modelFfxHeap (src/ui/CSimpleModelFFX.cpp), internal: through its pointer */
 extern void *const gen_p_143122788;
 #define gen_g_143122788 (*(unsigned char (*)[40])gen_p_143122788)
-/* s_globalStrings (src/glue/GlueMgr.cpp), internal: through its pointer */
+/* s_globalStringsState (src/glue/GlueMgr.cpp), internal: through its pointer */
 extern void *const gen_p_1431e9ee8;
-#define gen_g_1431e9ee8 (*(unsigned char (*)[48])gen_p_1431e9ee8)
+#define gen_g_1431e9ee8 (*(unsigned char (*)[40])gen_p_1431e9ee8)
 /* s_modelSceneHeap (src/ui/ModelSceneFrame.cpp), internal: through its pointer */
 extern void *const gen_p_143208508;
 #define gen_g_143208508 (*(unsigned char (*)[40])gen_p_143208508)
@@ -4739,6 +5003,66 @@ extern void *const gen_p_1447aee28;
 /* s_statusBarHeap (src/ui/CSimpleStatusBar.cpp), internal: through its pointer */
 extern void *const gen_p_1447aef00;
 #define gen_g_1447aef00 (*(unsigned char (*)[40])gen_p_1447aef00)
+/* s_liquidFog (src/world/WorldSceneRenderDraw.cpp), internal: through its pointer */
+extern void *const gen_p_1447ce270;
+#define gen_g_1447ce270 (*(unsigned char (*)[16])gen_p_1447ce270)
+/* s_assaoNormalsCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cede8;
+#define gen_g_1447cede8 (*(unsigned char (*)[8])gen_p_1447cede8)
+/* s_assaoRadiusCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cedf0;
+#define gen_g_1447cedf0 (*(unsigned char (*)[8])gen_p_1447cedf0)
+/* s_assaoShadowMultCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cedf8;
+#define gen_g_1447cedf8 (*(unsigned char (*)[8])gen_p_1447cedf8)
+/* s_assaoShadowPowerCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee00;
+#define gen_g_1447cee00 (*(unsigned char (*)[8])gen_p_1447cee00)
+/* s_assaoShadowClampCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee08;
+#define gen_g_1447cee08 (*(unsigned char (*)[8])gen_p_1447cee08)
+/* s_assaoHorizonAngleThreshCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee10;
+#define gen_g_1447cee10 (*(unsigned char (*)[8])gen_p_1447cee10)
+/* s_assaoFadeOutFromCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee18;
+#define gen_g_1447cee18 (*(unsigned char (*)[8])gen_p_1447cee18)
+/* s_assaoFadeOutToCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee20;
+#define gen_g_1447cee20 (*(unsigned char (*)[8])gen_p_1447cee20)
+/* s_assaoAdaptiveQualityLimitCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee28;
+#define gen_g_1447cee28 (*(unsigned char (*)[8])gen_p_1447cee28)
+/* s_assaoBlurPassCountCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee30;
+#define gen_g_1447cee30 (*(unsigned char (*)[8])gen_p_1447cee30)
+/* s_assaoSharpnessCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee38;
+#define gen_g_1447cee38 (*(unsigned char (*)[8])gen_p_1447cee38)
+/* s_assaoTemporalSSAngleOffsetCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee40;
+#define gen_g_1447cee40 (*(unsigned char (*)[8])gen_p_1447cee40)
+/* s_assaoTemporalSSRadiusOffsetCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee48;
+#define gen_g_1447cee48 (*(unsigned char (*)[8])gen_p_1447cee48)
+/* s_assaoDetailShadowStrengthCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee50;
+#define gen_g_1447cee50 (*(unsigned char (*)[8])gen_p_1447cee50)
+/* s_cacaoBilateralSimilarityDistanceSigmaCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee58;
+#define gen_g_1447cee58 (*(unsigned char (*)[8])gen_p_1447cee58)
+/* s_ssaoMagicNormalsCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee60;
+#define gen_g_1447cee60 (*(unsigned char (*)[8])gen_p_1447cee60)
+/* s_ssaoMagicThresholdLowCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee68;
+#define gen_g_1447cee68 (*(unsigned char (*)[8])gen_p_1447cee68)
+/* s_ssaoMagicThresholdHighCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee70;
+#define gen_g_1447cee70 (*(unsigned char (*)[8])gen_p_1447cee70)
+/* s_resolvedSSAOTypeCVar (src/client/RenderCVars.cpp), internal: through its pointer */
+extern void *const gen_p_1447cee78;
+#define gen_g_1447cee78 (*(unsigned char (*)[8])gen_p_1447cee78)
 undefined8 FUN_1400b1420();
 int FUN_14019fb30();
 int FUN_1401a05f0();
@@ -10556,14 +10880,12 @@ undefined4 FUN_1402b3e50();
 longlong FUN_1402b3f10();
 longlong FUN_1402b3fe0();
 undefined8 * FUN_1402b40b0();
-undefined8 FUN_1402b4170();
 uint FUN_1402b42e0();
 undefined4 FUN_1402b42f0();
 undefined8 FUN_1402b43c0();
 undefined8 FUN_1402b4450();
 undefined4 FUN_1402b44c0();
 undefined8 FUN_1402b4580();
-longlong FUN_1402b45b0();
 undefined1 FUN_1402b45d0();
 undefined4 FUN_1402b4650();
 uint FUN_1402b47c0();
@@ -20016,10 +20338,8 @@ ulonglong FUN_140644b10();
 ulonglong FUN_140644b50();
 undefined8 FUN_140644b80();
 longlong * FUN_140644c50();
-undefined8 FUN_140644e90();
 undefined4 FUN_1406466c0();
 undefined1 FUN_1406469a0();
-undefined8 FUN_1406469b0();
 undefined8 FUN_140646d10();
 undefined8 FUN_140646d20();
 undefined1 FUN_140647090();
@@ -20179,12 +20499,10 @@ uint FUN_140667c00();
 uint FUN_140667c20();
 undefined1 FUN_140667c50();
 longlong * FUN_140667e90();
-undefined1 FUN_140668030();
 undefined1 FUN_1406683d0();
 uint FUN_1406685a0();
 longlong * FUN_140668680();
 uint FUN_140668740();
-undefined8 FUN_140668760();
 undefined1 FUN_1406689d0();
 undefined8 FUN_140668b40();
 undefined8 FUN_140668ea0();
@@ -25539,7 +25857,6 @@ int * FUN_1407d11b0();
 undefined8 * FUN_1407d1280();
 undefined8 * FUN_1407d1400();
 longlong FUN_1407d1a80();
-undefined4 FUN_1407d20b0();
 undefined1 FUN_1407d2160();
 bool FUN_1407d21a0();
 undefined1 FUN_1407d21c0();
@@ -25607,7 +25924,6 @@ undefined4 FUN_1407e7ec0();
 undefined4 FUN_1407e8550();
 int FUN_1407e8be0();
 undefined8 FUN_1407e92b0();
-undefined8 FUN_1407e9330();
 undefined1 FUN_1407e9340();
 undefined1 FUN_1407e9360();
 undefined1 FUN_1407e9380();

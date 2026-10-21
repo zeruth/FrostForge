@@ -26187,7 +26187,7 @@ undefined4 FUN_141c43f20(undefined8 param_1)
     CALLF(undefined4, FUN_1402b44c0)(param_1,0xfffffffe);
     return 1;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_FunctionContainers.CALLF(undefined4, FUN_141c43f20)(func)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_FunctionContainers.CreateCallback(func)");
   return 0;
 }
 

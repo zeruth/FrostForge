@@ -1,8 +1,12 @@
 #include "storm/Memory.hpp"
 #include "storm/ErrorReport.hpp"
+#include "util/FrostLog.hpp"
 #include "util/Unimplemented.hpp"
 #include <cstdlib>
 #include <cstring>
+#include <mutex>
+#include <unordered_map>
+#include <unordered_set>
 #include <windows.h>
 
 namespace {
@@ -42,8 +46,30 @@ uint8_t* GuardBase(void* block) {
     return static_cast<uint8_t*>(info.AllocationBase);
 }
 
+// Each freed reservation's freeing stack, so a later fault on its pages names who freed it
+// (MemoryDescribeFreed). The reservation is never handed out again, so its base stays its key.
+struct GUARDFREE {
+    void* m_frames[20];
+    uint16_t m_count;
+};
+std::mutex s_guardFreesLock;
+std::unordered_map<uint8_t*, GUARDFREE>* s_guardFrees;
+// (the map's own nodes are Storm blocks too, freed through here: not recorded, nor relocked)
+thread_local bool t_inGuardRecord;
+
 void GuardFree(void* block) {
     uint8_t* base = GuardBase(block);
+    if (!t_inGuardRecord) {
+        GUARDFREE entry;
+        entry.m_count = CaptureStackBackTrace(1, 20, entry.m_frames, nullptr);
+        std::lock_guard<std::mutex> lock(s_guardFreesLock);
+        t_inGuardRecord = true;
+        if (s_guardFrees == nullptr) {
+            s_guardFrees = new std::unordered_map<uint8_t*, GUARDFREE>();
+        }
+        (*s_guardFrees)[base] = entry;
+        t_inGuardRecord = false;
+    }
     // decommitted and left reserved: the address is never handed out again
     VirtualFree(base, *reinterpret_cast<uint64_t*>(base) - kPage, MEM_DECOMMIT);
 }
@@ -79,20 +105,19 @@ void RawFree(void* block) {
     }
 }
 
-// DAT_142cc8a48: 1 = the CRT-backed default allocator is enabled (its static value).
-int32_t s_defaultAllocator = 1;
-// DAT_142cc8a4c: whether running out of memory shows a dialog first (static value 0).
-uint8_t s_showOutOfMemoryDialog = 0;
+// 1 = the CRT-backed default allocator is enabled (its static value).
+int32_t s_defaultAllocator = 1;  // 0x142cc8a48
+// whether running out of memory shows a dialog first (static value 0).
+uint8_t s_showOutOfMemoryDialog = 0;  // 0x142cc8a4c
 
-// DAT_142e1c450..DAT_142e1c488
-SMEMALLOCHOOK s_allocHook;
-SMEMFREEHOOK s_freeHook;
-void* s_hook3;
-SMEMOWNERHOOK s_ownerHook;
-SMEMREALLOCHOOK s_reallocHook;  // hook5
-void* s_hook6;
-void* s_hook7;
-void* s_hook8;
+SMEMALLOCHOOK s_allocHook;          // 0x142e1c450
+SMEMFREEHOOK s_freeHook;            // 0x142e1c458
+void* s_hook3;                      // 0x142e1c460
+SMEMOWNERHOOK s_ownerHook;          // 0x142e1c468
+SMEMREALLOCHOOK s_reallocHook;      // 0x142e1c470 hook5
+void* s_hook6;                      // 0x142e1c478
+void* s_hook7;                      // 0x142e1c480
+void* s_hook8;                      // 0x142e1c488
 
 }
 
@@ -140,11 +165,95 @@ void* SMemAlloc(uint64_t bytes, int32_t a2, const char* tag, uint32_t tagHash, i
     return nullptr;
 }
 
+// A development aid, not the reference's: blocks a caller asked to have watched (FROST_NODELOG)
+// log the stack that frees them, so a block freed behind its owner's back names the freer.
+namespace {
+std::mutex s_watchLock;
+std::unordered_set<void*>* s_watched;
+// (set while the watch touches its own set: the set's nodes are freed through these same delete
+// operators, and locking s_watchLock again from inside threw resource_deadlock_would_occur)
+thread_local bool t_inWatch;
+}
+
+bool MemoryWatchEnabled() {
+    static const bool s_on = [] {
+        char value[8] = {};
+        return GetEnvironmentVariableA("FROST_NODELOG", value, sizeof(value)) && value[0] == '1';
+    }();
+    return s_on;
+}
+
+void MemoryWatchBlock(void* block, bool watch) {
+    if (!MemoryWatchEnabled() || block == nullptr || t_inWatch) {
+        return;
+    }
+    std::lock_guard<std::mutex> lock(s_watchLock);
+    t_inWatch = true;
+    if (s_watched == nullptr) {
+        s_watched = new std::unordered_set<void*>();
+    }
+    if (watch) {
+        s_watched->insert(block);
+    } else {
+        s_watched->erase(block);
+    }
+    t_inWatch = false;
+}
+
+// Every path that frees a Storm block (SMemFree, the delete operators, a realloc that moves)
+// tells the watch: the child node freed behind its frame's back in the first watched runs went
+// through none of the checked ones.
+void MemoryWatchFreed(void* ptr, const char* tag) {
+    if (!MemoryWatchEnabled() || ptr == nullptr || t_inWatch) {
+        return;
+    }
+    bool watched = false;
+    {
+        std::lock_guard<std::mutex> lock(s_watchLock);
+        t_inWatch = true;
+        watched = s_watched != nullptr && s_watched->erase(ptr) != 0;
+        t_inWatch = false;
+    }
+    if (watched) {
+        FrostLog("nodelog", "watched block %p freed outside its owner (tag %s)", ptr, tag ? tag : "?");
+        FrostLogStack(0, 24);
+    }
+}
+
+// Under FROST_GUARD_HEAP: when `address` lies in a block already freed, the stack that freed it
+// (the fault's own stack names only the use; this names the free).
+void MemoryDescribeFreed(uint64_t address) {
+    if (!GuardHeap() || address < 0x10000) {
+        return;
+    }
+    MEMORY_BASIC_INFORMATION info;
+    if (VirtualQuery(reinterpret_cast<void*>(address), &info, sizeof(info)) == 0 || info.State == MEM_FREE) {
+        return;
+    }
+    GUARDFREE entry = {};
+    bool found = false;
+    {
+        std::lock_guard<std::mutex> lock(s_guardFreesLock);
+        if (s_guardFrees != nullptr) {
+            auto it = s_guardFrees->find(static_cast<uint8_t*>(info.AllocationBase));
+            if (it != s_guardFrees->end()) {
+                entry = it->second;
+                found = true;
+            }
+        }
+    }
+    if (found) {
+        FrostLog("guardheap", "%llx is in a block freed at:", static_cast<unsigned long long>(address));
+        FrostLogFrames(entry.m_frames, entry.m_count);
+    }
+}
+
 // ref: FUN_140255210
 bool SMemFree(void* ptr, const char* tag, int32_t line, uint32_t flags) {
     if (!ptr) {
         return true;
     }
+    MemoryWatchFreed(ptr, tag);
 
     if (s_freeHook && !(flags & SMEM_FLAG_NOHOOKS)) {
         int32_t out = 0;
@@ -223,6 +332,7 @@ void StormDelete(void* ptr, const char* name) {
     if (!ptr) {
         return;
     }
+    MemoryWatchFreed(ptr, name);
 
     if (s_freeHook) {
         int32_t out = 0;
@@ -353,6 +463,7 @@ void* SMemReAllocBlock(int32_t a2, const char* tag, uint32_t tagHash, int32_t li
     (void)tagHash;
     uint64_t* header = SMemHeader(ptr);
     uint64_t value = *header;
+    MemoryWatchFreed(ptr, tag);
     if (static_cast<uint32_t>(value & 3) == static_cast<uint32_t>(s_defaultAllocator) && s_defaultAllocator == 1) {
         auto block = static_cast<uint64_t*>(RawRealloc(header, size + 0x10));
         if (block) {
@@ -492,3 +603,15 @@ void* SMemReAllocAlignedSize(void* ptr, uint64_t* allocated, uint64_t bytes, uin
     *allocated = bytes;
     return SMemReAllocAligned(ptr, bytes, alignment, a2, tag, tagHash, line, flags);
 }
+
+// ---- GENERATED by tools/translate.py: the port globals translated code reaches ----
+extern "C" void* const gen_p_142cc8a48 = (void*)&s_defaultAllocator;
+extern "C" void* const gen_p_142e1c450 = (void*)&s_allocHook;
+extern "C" void* const gen_p_142e1c458 = (void*)&s_freeHook;
+extern "C" void* const gen_p_142e1c460 = (void*)&s_hook3;
+extern "C" void* const gen_p_142e1c468 = (void*)&s_ownerHook;
+extern "C" void* const gen_p_142e1c470 = (void*)&s_reallocHook;
+extern "C" void* const gen_p_142e1c478 = (void*)&s_hook6;
+extern "C" void* const gen_p_142e1c480 = (void*)&s_hook7;
+extern "C" void* const gen_p_142e1c488 = (void*)&s_hook8;
+// ---- end of generated globals ----

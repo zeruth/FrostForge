@@ -19596,7 +19596,7 @@ undefined8 FUN_1414fc400(void)
     (*(undefined8 *)(gen_frame + 0x8)) = REFG(undefined8, 0x14261a9d8);
     (*(undefined8 *)(gen_frame + 0x20)) = REFG(undefined8, 0x14261aa00);
     (*(undefined8 *)(gen_frame + 0x28)) = REFG(undefined8, 0x14261aa08);
-    CALLF(float *, FUN_14068e3d0)(0.0,REFG(float, 0x142618d64),0.0,REFG(float, 0x142618d64),GEN_AS_FLOAT((unsigned long long)(0)),REFG(float, 0x14261a9bc),(unsigned long long)(&(*(undefined8 *)(gen_frame + 0x0))));
+    CALLF(float *, FUN_14068e3d0)(0.0,REFG(float, 0x142618d64),0.0,REFG(float, 0x142618d64),GEN_ARG_FLOAT(0),REFG(float, 0x14261a9bc),(unsigned long long)(&(*(undefined8 *)(gen_frame + 0x0))));
     puVar1 = (*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0));
     uVar6 = (undefined4)(*(undefined8 *)(gen_frame + 0x20));
     uVar7 = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4));

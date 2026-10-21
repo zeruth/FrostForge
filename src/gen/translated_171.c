@@ -5779,7 +5779,7 @@ undefined4 FUN_142152c20(longlong *param_1)
           CALLF(undefined4, FUN_142152550)(param_1,lVar7);
           CALLF(undefined8, FUN_142164040)(param_1 + 1,lVar7);
         }
-        CALLF(undefined8, FUN_142163b50)(param_1 + 1,*param_1 + 0x30,(double)param_1[0x1e9],(double)param_1[0x1ea],GEN_AS_DOUBLE((unsigned long long)(param_1[0x1eb])));
+        CALLF(undefined8, FUN_142163b50)(param_1 + 1,*param_1 + 0x30,(double)param_1[0x1e9],(double)param_1[0x1ea],GEN_ARG_DOUBLE(param_1[0x1eb]));
         CALLF(undefined4, FUN_142150870)(param_1[0x20e],param_1[0x20e] + (ulonglong)*(uint *)(param_1 + 0x20f) * 0x50,
                       ((ulonglong)*(uint *)(param_1 + 0x20f) * 0x50) / 0x50,0);
         lVar7 = param_1[0x20e];

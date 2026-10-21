@@ -30,6 +30,8 @@ FMOD::System* g_fmodSystem;
 int32_t g_fmodOutputType = FMOD_OUTPUTTYPE_MAX;
 volatile uint8_t g_se3ShuttingDown;
 
+extern int32_t& g_se3CacheSize;
+
 namespace {
 
 const char s_file[] = "D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\SoundEngine\\SE3.cpp";
@@ -41,7 +43,7 @@ char s_driverName[0x40];            // DAT_1430a9480 the configured default driv
 char s_activeDriverName[0x104];     // DAT_1430a9580 the driver in use
 uint8_t s_initialized;              // DAT_142cfca08
 float s_globalVolume = 1.0f;        // DAT_142cfca04
-int32_t s_1430a9720;                // DAT_1430a9720
+int32_t& s_1430a9720 = g_se3CacheSize;  // SE3Cache.cpp's
 CVar* s_variationCap;               // DAT_1430a94c8
 CVar* s_positionalLowPass;          // DAT_1430a94d0
 uint32_t s_lastUpdateTime;          // DAT_1430a9684

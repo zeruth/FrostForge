@@ -4922,7 +4922,7 @@ undefined4 FUN_14020b250(void)
   char *pcVar3 = {0};
   
   pcVar3 = ((undefined1 *)0x9ULL);
-  pcVar1 = "VoiceChat";
+  pcVar1 = ((char *)REFP(0x14283ae90));
   lVar2 = 9;
   do {
     lVar2 = lVar2 + -1;

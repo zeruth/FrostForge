@@ -628,7 +628,8 @@ void Sub141C9A070(uint32_t value) {
     }
 }
 
-DynamicLifeTimeDB s_globalStrings(&g_globalStringsDB);  // DAT_1431e9ee8
+DynamicLifeTimeDB::STATE s_globalStringsState;  // DAT_1431e9ee8
+DynamicLifeTimeDB s_globalStrings(&s_globalStringsState, &g_globalStringsDB);
 
 // The C-style escapes a global string's text carries: \n (and a backslash before a line break)
 // is a newline, \a \b \f \r \t \v their controls, up to three decimal digits a byte, and any
@@ -1171,5 +1172,5 @@ extern "C" void* const gen_p_14311c52b = (void*)&s_unknown52b;
 extern "C" void* const gen_p_14311c52c = (void*)&s_unknown52c;
 extern "C" void* const gen_p_14311c530 = (void*)&s_startTime;
 extern "C" void* const gen_p_14311c5f0 = (void*)&s_unknown5f0;
-extern "C" void* const gen_p_1431e9ee8 = (void*)&s_globalStrings;
+extern "C" void* const gen_p_1431e9ee8 = (void*)&s_globalStringsState;
 // ---- end of generated globals ----

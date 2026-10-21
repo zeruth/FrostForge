@@ -1699,7 +1699,7 @@ undefined8 FUN_1405e8060(ushort *param_1, undefined8 param_2, undefined8 param_3
     (**(code **)(*(longlong *)(*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)) + 0x30))((*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)),2,0,param_1);
     if (3 < REFG(undefined4, 0x142e97890)) {
       (**(code **)(*(longlong *)(*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)) + 0x10))
-                ((*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)),2,1,*(undefined8 *)(REFG(undefined1 *, 0x142e96fc8) + 0x48),(unsigned long long)(CONCAT44(0,in_stack_ffffffffffffff88) & 0xffffffffffffff00))
+                ((*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)),2,1,*(undefined8 *)((*(undefined1 * *)((char *)&gen_g_142e96fc8 + 0x0)) + 0x48),(unsigned long long)(CONCAT44(0,in_stack_ffffffffffffff88) & 0xffffffffffffff00))
       ;
       (**(code **)(*(longlong *)(*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)) + 0x28))((*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)),2,1,0x800200000000);
       (**(code **)(*(longlong *)(*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)) + 0x30))((*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)),2,2,lVar3);
@@ -2199,7 +2199,7 @@ undefined8 FUN_1405e8850(byte *param_1, ushort *param_2, undefined8 param_3)
   (**(code **)(*(longlong *)(*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)) + 0x30))((*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)),2,1,lVar40);
   if (REFG(undefined2, 0x142e9799c) == 2) {
     (**(code **)(*(longlong *)(*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)) + 0x10))
-              ((*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)),2,2,*(undefined8 *)(REFG(undefined1 *, 0x142e96fc8) + 0x48),(unsigned long long)(CONCAT44(0,uVar51) & 0xffffffffffffff00));
+              ((*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)),2,2,*(undefined8 *)((*(undefined1 * *)((char *)&gen_g_142e96fc8 + 0x0)) + 0x48),(unsigned long long)(CONCAT44(0,uVar51) & 0xffffffffffffff00));
     (*(uint * *)(gen_frame + 0x10)) = (uint *)0x800200000000;
     (**(code **)(*(longlong *)(*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)) + 0x28))((*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)),2,2,0x800200000000);
   }

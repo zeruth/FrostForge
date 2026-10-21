@@ -56,6 +56,7 @@ struct CSimpleFontAttributes {
     CSimpleFontAttributes* Merge(const CSimpleFontAttributes* source);
     // The same, limited to the settings `mask` lets through (FUN_1406290f0).
     void MergeMasked(CSimpleFontAttributes* target, uint16_t mask) const;
+    void MergeChanged(CSimpleFontAttributes* target, uint16_t mask) const;
     // Sets the font file, height and flags; false when the file does not exist
     // (FUN_1406286d0).
     bool SetFont(const char* path, float height, const uint8_t* fontFlags);

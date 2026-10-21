@@ -7096,12 +7096,12 @@ undefined4 FUN_1411214a0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local canCreate = C_LFGList.CALLF(undefined4, FUN_1411214a0)(questID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local canCreate = C_LFGList.CanCreateQuestGroup(questID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local canCreate = C_LFGList.CALLF(undefined4, FUN_1411214a0)(questID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local canCreate = C_LFGList.CanCreateQuestGroup(questID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -7744,12 +7744,12 @@ undefined4 FUN_14112b100(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local level = C_LFGList.CALLF(undefined4, FUN_14112b100)(activityID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local level = C_LFGList.GetKeystoneForActivity(activityID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local level = C_LFGList.CALLF(undefined4, FUN_14112b100)(activityID)")
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local level = C_LFGList.GetKeystoneForActivity(activityID)")
       ;
     }
     else {
@@ -8176,14 +8176,14 @@ undefined4 FUN_1411323d0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local hasSearchResultInfo = C_LFGList.CALLF(undefined4, FUN_1411323d0)(searchResultID)"
+                  "Usage: local hasSearchResultInfo = C_LFGList.HasSearchResultInfo(searchResultID)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local hasSearchResultInfo = C_LFGList.CALLF(undefined4, FUN_1411323d0)(searchResultID)"
+                    "Usage: local hasSearchResultInfo = C_LFGList.HasSearchResultInfo(searchResultID)"
                    );
     }
     else {
@@ -8388,7 +8388,7 @@ undefined4 FUN_141135300(undefined8 param_1)
   (*(undefined2 *)(gen_frame + 0x38)) = 0;
   (*(undefined1 *)(gen_frame + 0x3a)) = 0;
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
-  CALLF(undefined1, FUN_141115d50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_LFGList.CALLF(undefined4, FUN_141135300)(roles)",&(*(undefined2 *)(gen_frame + 0x38)));
+  CALLF(undefined1, FUN_141115d50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local success = C_LFGList.SetRoles(roles)",&(*(undefined2 *)(gen_frame + 0x38)));
   bVar1 = CALLF(undefined1, FUN_141aef550)(&(*(undefined2 *)(gen_frame + 0x38)));
   iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
   if (iVar2 == 0) {
@@ -8415,12 +8415,12 @@ undefined4 FUN_1411359e0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_LFGList.CALLF(undefined4, FUN_1411359e0)(activityID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_LFGList.SetSearchToActivity(activityID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_LFGList.CALLF(undefined4, FUN_1411359e0)(activityID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_LFGList.SetSearchToActivity(activityID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8453,12 +8453,12 @@ undefined4 FUN_1411360b0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_LFGList.CALLF(undefined4, FUN_1411360b0)(questID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_LFGList.SetSearchToQuestID(questID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_LFGList.CALLF(undefined4, FUN_1411360b0)(questID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_LFGList.SetSearchToQuestID(questID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8493,13 +8493,13 @@ undefined4 FUN_141136780(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local passes = C_LFGList.CALLF(undefined4, FUN_141136780)(dungeonScore)");
+                  "Usage: local passes = C_LFGList.ValidateRequiredDungeonScore(dungeonScore)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local passes = C_LFGList.CALLF(undefined4, FUN_141136780)(dungeonScore)");
+                    "Usage: local passes = C_LFGList.ValidateRequiredDungeonScore(dungeonScore)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8542,7 +8542,7 @@ undefined4 FUN_141136e90(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local passes = C_LFGList.CALLF(undefined4, FUN_141136e90)(activityID, rating)"
+                  "Usage: local passes = C_LFGList.ValidateRequiredPvpRatingForActivity(activityID, rating)"
                  );
     uVar5 = 1;
   }
@@ -8550,7 +8550,7 @@ undefined4 FUN_141136e90(undefined8 param_1)
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local passes = C_LFGList.CALLF(undefined4, FUN_141136e90)(activityID, rating)"
+                    "Usage: local passes = C_LFGList.ValidateRequiredPvpRatingForActivity(activityID, rating)"
                    );
     }
     else {
@@ -8568,14 +8568,14 @@ undefined4 FUN_141136e90(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar5);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local passes = C_LFGList.CALLF(undefined4, FUN_141136e90)(activityID, rating)"
+                  "Usage: local passes = C_LFGList.ValidateRequiredPvpRatingForActivity(activityID, rating)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,uVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,
-                    "Usage: local passes = C_LFGList.CALLF(undefined4, FUN_141136e90)(activityID, rating)"
+                    "Usage: local passes = C_LFGList.ValidateRequiredPvpRatingForActivity(activityID, rating)"
                    );
     }
     else {
@@ -8758,7 +8758,7 @@ uint FUN_141139fd0(undefined8 param_1)
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local count = C_LossOfControl.CALLF(uint, FUN_141139fd0)(unitToken)"
+                  "Usage: local count = C_LossOfControl.GetActiveLossOfControlDataCountByUnit(unitToken)"
                  );
   }
   else {
@@ -8775,7 +8775,7 @@ uint FUN_141139fd0(undefined8 param_1)
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x20)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
       CALLF(undefined8, FUN_1424248b0)(param_1,1,
-                    "Usage: local count = C_LossOfControl.CALLF(uint, FUN_141139fd0)(unitToken)"
+                    "Usage: local count = C_LossOfControl.GetActiveLossOfControlDataCountByUnit(unitToken)"
                    );
     }
     else {
@@ -8815,7 +8815,7 @@ undefined4 FUN_14113a730(undefined8 param_1)
   ((undefined4 *)(gen_frame + 0x48))[0] = 1;
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local inboxItemHasMoneyAttached = C_Mail.CALLF(undefined4, FUN_14113a730)(inboxIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x48)),"Usage: local inboxItemHasMoneyAttached = C_Mail.HasInboxMoney(inboxIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
   bVar1 = CALLF(undefined1, FUN_141af83f0)(((undefined4 *)(gen_frame + 0x50))[0]);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
   if (iVar2 == 0) {
@@ -8971,12 +8971,12 @@ undefined4 FUN_14113d090(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local name = C_Map.CALLF(undefined4, FUN_14113d090)(areaID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local name = C_Map.GetAreaInfo(areaID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local name = C_Map.CALLF(undefined4, FUN_14113d090)(areaID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local name = C_Map.GetAreaInfo(areaID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -9063,12 +9063,12 @@ undefined4 FUN_14113e4b0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local bountySetID = C_Map.CALLF(undefined4, FUN_14113e4b0)(uiMapID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local bountySetID = C_Map.GetBountySetIDForMap(uiMapID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local bountySetID = C_Map.CALLF(undefined4, FUN_14113e4b0)(uiMapID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local bountySetID = C_Map.GetBountySetIDForMap(uiMapID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -9125,12 +9125,12 @@ undefined4 FUN_14113f250(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)((*(undefined8 *)(gen_frame + 0x8)),"Usage: local atlasName = C_Map.CALLF(undefined4, FUN_14113f250)(uiMapID)");
+    CALLF(undefined8, FUN_142424d80)((*(undefined8 *)(gen_frame + 0x8)),"Usage: local atlasName = C_Map.GetMapArtBackgroundAtlas(uiMapID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)((*(undefined8 *)(gen_frame + 0x8)),1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local atlasName = C_Map.CALLF(undefined4, FUN_14113f250)(uiMapID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local atlasName = C_Map.GetMapArtBackgroundAtlas(uiMapID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)((*(undefined8 *)(gen_frame + 0x8)),1);
@@ -9171,12 +9171,12 @@ undefined4 FUN_14113f940(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local position = C_Map.CALLF(undefined4, FUN_14113f940)(uiMapID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local position = C_Map.GetMapArtHelpTextPosition(uiMapID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local position = C_Map.CALLF(undefined4, FUN_14113f940)(uiMapID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local position = C_Map.GetMapArtHelpTextPosition(uiMapID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -9215,12 +9215,12 @@ undefined4 FUN_141140050(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local uiMapArtID = C_Map.CALLF(undefined4, FUN_141140050)(uiMapID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local uiMapArtID = C_Map.GetMapArtID(uiMapID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local uiMapArtID = C_Map.CALLF(undefined4, FUN_141140050)(uiMapID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local uiMapArtID = C_Map.GetMapArtID(uiMapID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -9492,12 +9492,12 @@ undefined4 FUN_141144410(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local hideIcons = C_Map.CALLF(undefined4, FUN_141144410)(uiMapID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local hideIcons = C_Map.GetMapDisplayInfo(uiMapID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local hideIcons = C_Map.CALLF(undefined4, FUN_141144410)(uiMapID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local hideIcons = C_Map.GetMapDisplayInfo(uiMapID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -9540,12 +9540,12 @@ undefined4 FUN_141145130(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local uiMapGroupID = C_Map.CALLF(undefined4, FUN_141145130)(uiMapID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local uiMapGroupID = C_Map.GetMapGroupID(uiMapID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local uiMapGroupID = C_Map.CALLF(undefined4, FUN_141145130)(uiMapID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,"Usage: local uiMapGroupID = C_Map.GetMapGroupID(uiMapID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -9649,14 +9649,14 @@ undefined4 FUN_141146bb0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)((*(undefined8 *)(gen_frame + 0x0)),
-                  "Usage: local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.CALLF(undefined4, FUN_141146bb0)(uiMapID, x, y)"
+                  "Usage: local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.GetMapHighlightInfoAtPosition(uiMapID, x, y)"
                  );
   }
   else {
     cVar2 = CALLF(undefined1, FUN_1407d2350)((*(undefined8 *)(gen_frame + 0x0)),1);
     if (cVar2 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.CALLF(undefined4, FUN_141146bb0)(uiMapID, x, y)"
+                    "Usage: local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.GetMapHighlightInfoAtPosition(uiMapID, x, y)"
                    );
     }
     else {
@@ -9674,14 +9674,14 @@ undefined4 FUN_141146bb0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)((*(undefined8 *)(gen_frame + 0x0)),iVar6);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)((*(undefined8 *)(gen_frame + 0x0)),
-                  "Usage: local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.CALLF(undefined4, FUN_141146bb0)(uiMapID, x, y)"
+                  "Usage: local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.GetMapHighlightInfoAtPosition(uiMapID, x, y)"
                  );
   }
   else {
     cVar2 = CALLF(undefined1, FUN_1408a77d0)((*(undefined8 *)(gen_frame + 0x0)),iVar6);
     if (cVar2 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar6,
-                    "Usage: local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.CALLF(undefined4, FUN_141146bb0)(uiMapID, x, y)"
+                    "Usage: local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.GetMapHighlightInfoAtPosition(uiMapID, x, y)"
                    );
     }
     else {
@@ -9699,14 +9699,14 @@ undefined4 FUN_141146bb0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)((*(undefined8 *)(gen_frame + 0x0)),iVar6);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)((*(undefined8 *)(gen_frame + 0x0)),
-                  "Usage: local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.CALLF(undefined4, FUN_141146bb0)(uiMapID, x, y)"
+                  "Usage: local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.GetMapHighlightInfoAtPosition(uiMapID, x, y)"
                  );
   }
   else {
     cVar2 = CALLF(undefined1, FUN_1408a77d0)((*(undefined8 *)(gen_frame + 0x0)),iVar6);
     if (cVar2 == '\0') {
       CALLF(undefined8, FUN_140800e30)(&(*(undefined8 *)(gen_frame + 0x0)),iVar6,
-                    "Usage: local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.CALLF(undefined4, FUN_141146bb0)(uiMapID, x, y)"
+                    "Usage: local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.GetMapHighlightInfoAtPosition(uiMapID, x, y)"
                    );
     }
     else {
@@ -9749,12 +9749,12 @@ undefined4 FUN_141147990(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)((*(undefined8 *)(gen_frame + 0x0)),"Usage: local info = C_Map.CALLF(undefined4, FUN_141147990)(uiMapID)");
+    CALLF(undefined8, FUN_142424d80)((*(undefined8 *)(gen_frame + 0x0)),"Usage: local info = C_Map.GetMapInfo(uiMapID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)((*(undefined8 *)(gen_frame + 0x0)),1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local info = C_Map.CALLF(undefined4, FUN_141147990)(uiMapID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local info = C_Map.GetMapInfo(uiMapID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)((*(undefined8 *)(gen_frame + 0x0)),1);
@@ -9853,14 +9853,14 @@ undefined4 FUN_1411493e0(undefined8 param_1)
   uVar6 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar6 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local playerMinLevel, playerMaxLevel, petMinLevel, petMaxLevel = C_Map.CALLF(undefined4, FUN_1411493e0)(uiMapID)"
+                  "Usage: local playerMinLevel, playerMaxLevel, petMinLevel, petMaxLevel = C_Map.GetMapLevels(uiMapID)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x20)),1,
-                    "Usage: local playerMinLevel, playerMaxLevel, petMinLevel, petMaxLevel = C_Map.CALLF(undefined4, FUN_1411493e0)(uiMapID)"
+                    "Usage: local playerMinLevel, playerMaxLevel, petMinLevel, petMaxLevel = C_Map.GetMapLevels(uiMapID)"
                    );
     }
     else {
@@ -10044,14 +10044,14 @@ undefined4 FUN_14114bd80(undefined8 param_1)
   uVar6 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar6 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local minX, maxX, minY, maxY = C_Map.CALLF(undefined4, FUN_14114bd80)(uiMapID, topUiMapID)"
+                  "Usage: local minX, maxX, minY, maxY = C_Map.GetMapRectOnMap(uiMapID, topUiMapID)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x20)),1,
-                    "Usage: local minX, maxX, minY, maxY = C_Map.CALLF(undefined4, FUN_14114bd80)(uiMapID, topUiMapID)"
+                    "Usage: local minX, maxX, minY, maxY = C_Map.GetMapRectOnMap(uiMapID, topUiMapID)"
                    );
     }
     else {
@@ -10069,14 +10069,14 @@ undefined4 FUN_14114bd80(undefined8 param_1)
   uVar6 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar7);
   if ((int)uVar6 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local minX, maxX, minY, maxY = C_Map.CALLF(undefined4, FUN_14114bd80)(uiMapID, topUiMapID)"
+                  "Usage: local minX, maxX, minY, maxY = C_Map.GetMapRectOnMap(uiMapID, topUiMapID)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,uVar7);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x20)),uVar7,
-                    "Usage: local minX, maxX, minY, maxY = C_Map.CALLF(undefined4, FUN_14114bd80)(uiMapID, topUiMapID)"
+                    "Usage: local minX, maxX, minY, maxY = C_Map.GetMapRectOnMap(uiMapID, topUiMapID)"
                    );
     }
     else {
@@ -10201,14 +10201,14 @@ undefined4 FUN_14114d930(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)((*(undefined8 *)(gen_frame + 0x30)),
-                  "Usage: local continentID, worldPosition = C_Map.CALLF(undefined4, FUN_14114d930)(uiMapID, mapPosition)"
+                  "Usage: local continentID, worldPosition = C_Map.GetWorldPosFromMapPos(uiMapID, mapPosition)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)((*(undefined8 *)(gen_frame + 0x30)),1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x30)),1,
-                    "Usage: local continentID, worldPosition = C_Map.CALLF(undefined4, FUN_14114d930)(uiMapID, mapPosition)"
+                    "Usage: local continentID, worldPosition = C_Map.GetWorldPosFromMapPos(uiMapID, mapPosition)"
                    );
     }
     else {
@@ -10224,7 +10224,7 @@ undefined4 FUN_14114d930(undefined8 param_1)
     }
   }
   ((undefined8 *)(gen_frame + 0x8))[0] = 0;
-  CALLF(undefined8, FUN_1407ca280)(&(*(undefined8 *)(gen_frame + 0x30)),((undefined4 *)(gen_frame + 0x78)),"Usage: local continentID, worldPosition = C_Map.CALLF(undefined4, FUN_14114d930)(uiMapID, mapPosition)",0,(unsigned long long)(((undefined8 *)(gen_frame + 0x8))));
+  CALLF(undefined8, FUN_1407ca280)(&(*(undefined8 *)(gen_frame + 0x30)),((undefined4 *)(gen_frame + 0x78)),"Usage: local continentID, worldPosition = C_Map.GetWorldPosFromMapPos(uiMapID, mapPosition)",0,(unsigned long long)(((undefined8 *)(gen_frame + 0x8))));
   ((int *)(gen_frame + 0x80))[0] = 0;
   (*(undefined8 *)(gen_frame + 0x0)) = 0;
   cVar1 = CALLF(undefined1, FUN_141afcc00)((*(int *)(gen_frame + 0x70)),((undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0x80)),&(*(undefined8 *)(gen_frame + 0x0)));
@@ -10274,12 +10274,12 @@ undefined4 FUN_14114e770(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local hasArt = C_Map.CALLF(undefined4, FUN_14114e770)(uiMapID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local hasArt = C_Map.MapHasArt(uiMapID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local hasArt = C_Map.CALLF(undefined4, FUN_14114e770)(uiMapID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local hasArt = C_Map.MapHasArt(uiMapID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -10318,12 +10318,12 @@ undefined4 FUN_14114ee80(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Map.CALLF(undefined4, FUN_14114ee80)(uiMapID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Map.RequestPreloadMap(uiMapID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Map.CALLF(undefined4, FUN_14114ee80)(uiMapID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Map.RequestPreloadMap(uiMapID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -10353,7 +10353,7 @@ undefined4 FUN_14114f550(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   ((undefined4 *)(gen_frame + 0x60))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x60)),"Usage: local buybackItemID = C_MerchantFrame.CALLF(undefined4, FUN_14114f550)(buybackSlotIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x68))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x60)),"Usage: local buybackItemID = C_MerchantFrame.GetBuybackItemID(buybackSlotIndex)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x68))));
   ((int *)(gen_frame + 0x58))[0] = 0;
   cVar1 = CALLF(undefined1, FUN_141b01780)(((undefined4 *)(gen_frame + 0x68))[0],((int *)(gen_frame + 0x58)));
   if (cVar1 == '\0') {
@@ -10570,11 +10570,11 @@ undefined4 FUN_1411536a0(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   ((int *)(gen_frame + 0x48))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0x48)),"Usage: C_Minimap.CALLF(undefined4, FUN_1411536a0)(index, on)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
+  CALLF(undefined8, FUN_1408c5f10)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0x48)),"Usage: C_Minimap.SetTracking(index, on)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x50))));
   iVar1 = ((int *)(gen_frame + 0x48))[0];
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,((int *)(gen_frame + 0x48))[0]);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Minimap.CALLF(undefined4, FUN_1411536a0)(index, on)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Minimap.SetTracking(index, on)");
   }
   else {
     iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);

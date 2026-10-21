@@ -47,7 +47,7 @@ undefined4 FUN_1418f1750(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f1750)(\"localID\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: LeaveChannelByLocalID(\"localID\")");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -74,7 +74,7 @@ undefined4 FUN_1418f17e0(undefined8 param_1)
     CALLF(undefined4, FUN_14190bd80)(uVar1);
     return 0;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f17e0)(\"name\")");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: LeaveChannelByName(\"name\")");
   return 0;
 }
 
@@ -254,7 +254,7 @@ undefined4 FUN_1418f1b80(undefined8 param_1)
       return 0;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f1b80)(\"name\", \"password\")");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetChannelPassword(\"name\", \"password\")");
   return 0;
 }
 
@@ -348,7 +348,7 @@ undefined4 FUN_1418f1de0(undefined8 param_1)
   if ((int)uVar3 == 0) {
     uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar3 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f1de0)([channelIndex] or [channelName])");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetChannelName([channelIndex] or [channelName])");
       return 0;
     }
     pcVar4 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -756,7 +756,7 @@ undefined4 FUN_1418f2a20(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f2a20)(partyMemberName, silenceOn)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: ChannelSetPartyMemberSilent(partyMemberName, silenceOn)");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b47d0)(param_1,2);
@@ -796,7 +796,7 @@ undefined4 FUN_1418f2b50(undefined8 param_1)
   uVar1 = CALLF(undefined8, FUN_1402b33f0)(param_1,2);
   if ((int)uVar1 == 0) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: CALLF(undefined4, FUN_1418f2b50)([channelNumber | channelName], memberName, silenceOn)"
+                  "Usage: ChannelSetAllSilent([channelNumber | channelName], memberName, silenceOn)"
                  );
     return 0;
   }
@@ -839,7 +839,7 @@ undefined4 FUN_1418f2c40(undefined8 param_1)
   if (((((int)uVar2 == 0) || (uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar2 == 0)) ||
       (uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,3), (int)uVar2 == 0)) ||
      (uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,4), (int)uVar2 == 0)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f2c40)(chatType, r, g, b)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: ChangeChatColor(chatType, r, g, b)");
     return 0;
   }
   _Str1 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -990,7 +990,7 @@ undefined4 FUN_1418f3040(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f3040)(chatType, colorNameByClass)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetChatColorNameByClass(chatType, colorNameByClass)");
     return 0;
   }
   _Str1 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -1064,7 +1064,7 @@ undefined4 FUN_1418f3200(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f3200)(type)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetChatTypeIndex(type)");
     return 0;
   }
   _Str1 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -1110,7 +1110,7 @@ undefined4 FUN_1418f3300(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f3300)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetChatWindowInfo(index)");
   }
   else {
     dVar7 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -1161,7 +1161,7 @@ undefined4 FUN_1418f3490(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f3490)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetChatWindowSavedPosition(index)");
     return 0;
   }
   dVar6 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -1196,7 +1196,7 @@ undefined4 FUN_1418f3590(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f3590)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetChatWindowSavedDimensions(index)");
   }
   else {
     dVar3 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -1227,7 +1227,7 @@ undefined4 FUN_1418f3630(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f3630)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetChatWindowMessages(index)");
   }
   else {
     dVar9 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -1278,7 +1278,7 @@ undefined4 FUN_1418f3710(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f3710)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetChatWindowChannels(index)");
   }
   else {
     dVar8 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -1385,7 +1385,7 @@ undefined4 FUN_1418f3830(undefined8 param_1)
       return 0;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f3830)(index, \"messageGroup\")");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: AddChatWindowMessages(index, \"messageGroup\")");
   return 0;
 }
 
@@ -1459,7 +1459,7 @@ undefined4 FUN_1418f3a10(undefined8 param_1)
       return 0;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f3a10)(index, \"messageGroup\")");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: RemoveChatWindowMessages(index, \"messageGroup\")");
   return 0;
 }
 
@@ -1482,7 +1482,7 @@ undefined4 FUN_1418f3bf0(undefined8 param_1)
   
   uVar6 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if (((int)uVar6 == 0) || (uVar6 = CALLF(undefined8, FUN_1402b33f0)(param_1,2), (int)uVar6 == 0)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f3bf0)(index, \"channel\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: AddChatWindowChannel(index, \"channel\")");
     return 0;
   }
   dVar2 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -1557,7 +1557,7 @@ undefined4 FUN_1418f3dd0(undefined8 param_1)
   
   uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if (((int)uVar4 == 0) || (uVar4 = CALLF(undefined8, FUN_1402b33f0)(param_1,2), (int)uVar4 == 0)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f3dd0)(index, \"channel\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: RemoveChatWindowChannel(index, \"channel\")");
     return 0;
   }
   dVar2 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -1629,7 +1629,7 @@ undefined4 FUN_1418f3f60(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f3f60)(index, \"name\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetChatWindowName(index, \"name\")");
     return 0;
   }
   dVar7 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -1680,7 +1680,7 @@ undefined4 FUN_1418f4020(undefined8 param_1)
       return 0;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f4020)(index, size)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetChatWindowSize(index, size)");
   return 0;
 }
 
@@ -1711,7 +1711,7 @@ undefined4 FUN_1418f40c0(undefined8 param_1)
     *(char *)(&REFG(undefined4, 0x1431e717c) + (ulonglong)uVar1 * 0x4a) = (char)(int)(dVar4 * REFG(double, 0x142703b00));
     return 0;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f40c0)(index, r, g, b)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetChatWindowColor(index, r, g, b)");
   return 0;
 }
 
@@ -1737,7 +1737,7 @@ undefined4 FUN_1418f41e0(undefined8 param_1)
       return 0;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f41e0)(index, alpha)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetChatWindowAlpha(index, alpha)");
   return 0;
 }
 
@@ -1751,7 +1751,7 @@ undefined4 FUN_1418f4280(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f4280)(index, locked)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetChatWindowLocked(index, locked)");
     return 0;
   }
   dVar3 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -1773,7 +1773,7 @@ undefined4 FUN_1418f4300(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f4300)(index, uninteractable)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetChatWindowUninteractable(index, uninteractable)");
     return 0;
   }
   dVar3 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -1796,7 +1796,7 @@ undefined4 FUN_1418f4380(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f4380)(index, docked)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetChatWindowDocked(index, docked)");
     return 0;
   }
   dVar4 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -1823,7 +1823,7 @@ undefined4 FUN_1418f4420(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f4420)(index, shown)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetChatWindowShown(index, shown)");
     return 0;
   }
   dVar3 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -1879,7 +1879,7 @@ undefined4 FUN_1418f44a0(undefined8 param_1)
     }
   }
   CALLF(undefined8, FUN_142424d80)(param_1,
-                "Usage: CALLF(undefined4, FUN_1418f44a0)(index, \"point\", xOffsetRatio, yOffsetRatio)");
+                "Usage: SetChatWindowSavedPosition(index, \"point\", xOffsetRatio, yOffsetRatio)");
   return 0;
 }
 
@@ -1906,7 +1906,7 @@ undefined4 FUN_1418f45f0(undefined8 param_1)
     *(float *)(&REFG(undefined8, 0x1431e71a0) + (ulonglong)uVar1 * 0x25) = (float)dVar4;
     return 0;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f45f0)(index, width, height)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetChatWindowSavedDimensions(index, width, height)");
   return 0;
 }
 
@@ -2365,7 +2365,7 @@ undefined4 FUN_1418f5460(undefined8 param_1)
   
   uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar4 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f5460)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetChannelDisplayInfo(index)");
     return 0;
   }
   dVar11 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -2947,7 +2947,7 @@ undefined4 FUN_1418f60c0(undefined8 param_1)
   lVar10 = REFG(undefined8, 0x1431e9fc8);
   if ((int)uVar7 == 0) {
                     /* WARNING: Subroutine does not return */
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1418f60c0)(text [,type] [,language] [,targetPlayer])",
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SendChatMessage(text [,type] [,language] [,targetPlayer])",
                   ((longlong)_ReturnAddress()));
   }
   pcVar8 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -2959,7 +2959,7 @@ undefined4 FUN_1418f60c0(undefined8 param_1)
     cVar4 = CALLF(undefined1, FUN_141915250)(uVar7,&(*(int *)(gen_frame + 0x8)));
     iVar15 = (*(int *)(gen_frame + 0x8));
     if (cVar4 == '\0') {
-      uVar5 = CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_1418f60c0)(): Unknown chat type");
+      uVar5 = CALLF(undefined8, FUN_142424d80)(param_1,"SendChatMessage(): Unknown chat type");
       return uVar5;
     }
   }
@@ -2968,7 +2968,7 @@ undefined4 FUN_1418f60c0(undefined8 param_1)
     piVar9 = piVar9 + 1;
     if (piVar9 == (int *)&REFG(undefined1, 0x142805c74)) {
                     /* WARNING: Subroutine does not return */
-      CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_1418f60c0)(): Unknown chat type",((longlong)_ReturnAddress()));
+      CALLF(undefined8, FUN_142424d80)(param_1,"SendChatMessage(): Unknown chat type",((longlong)_ReturnAddress()));
     }
   }
   if (((pcVar8 == (char *)0x0) || (*pcVar8 == '\0')) && (1 < iVar15 - 0x17U)) {
@@ -2976,7 +2976,7 @@ undefined4 FUN_1418f60c0(undefined8 param_1)
   }
   cVar4 = CALLF(undefined1, FUN_141650f10)(pcVar8);
   if (cVar4 == '\0') {
-    pcVar8 = "CALLF(undefined4, FUN_1418f60c0)(): Chat message must be UTF-8 text";
+    pcVar8 = "SendChatMessage(): Chat message must be UTF-8 text";
     goto override_prt_1418f81a1_54f7dde1;
   }
   if (pcVar8 != (char *)0x0) {
@@ -3027,7 +3027,7 @@ LAB_1418f83b1:
       }
       if (iVar15 == 7) {
         if ((pcVar17 == (char *)0x0) || (*pcVar17 == '\0')) {
-          pcVar8 = "CALLF(undefined4, FUN_1418f60c0)(): Whisper message missing target player!";
+          pcVar8 = "SendChatMessage(): Whisper message missing target player!";
           goto override_prt_1418f81a1_54f7dde1;
         }
         cVar4 = CALLF(undefined1, FUN_14190c970)(pcVar17);
@@ -3076,7 +3076,7 @@ LAB_1418f9267:
         else {
           if (iVar15 == 0x11) {
             if ((pcVar17 == (char *)0x0) || (*pcVar17 == '\0')) {
-              pcVar8 = "CALLF(undefined4, FUN_1418f60c0)(): Channel send missing channel number";
+              pcVar8 = "SendChatMessage(): Channel send missing channel number";
               goto override_prt_1418f81a1_54f7dde1;
             }
             if ((*pcVar17 != '0') || (uVar7 = 0x10, (pcVar17[1] + 0xa8U & 0xdf) != 0)) {
@@ -3235,12 +3235,12 @@ LAB_1418ff2ee:
       CALLF(undefined8 *, FUN_141904f90)(iVar15,uVar5,pcVar17,0,(unsigned long long)(puVar19),(unsigned long long)(&(*(undefined1 *)(gen_frame + 0x0))));
       (*(undefined1 *)(gen_frame + 0x1)) = 0;
 LAB_1418fe547:
-      pcVar8 = "CALLF(undefined4, FUN_1418f60c0)(): Invalid escape code in chat message";
+      pcVar8 = "SendChatMessage(): Invalid escape code in chat message";
       goto override_prt_1418f81a1_54f7dde1;
     }
   }
 LAB_1418ff350:
-  pcVar8 = "CALLF(undefined4, FUN_1418f60c0)(): Chat message limits exceeded";
+  pcVar8 = "SendChatMessage(): Chat message limits exceeded";
 override_prt_1418f81a1_54f7dde1:
   uVar5 = CALLF(undefined8, FUN_142424d80)(param_1,pcVar8,((longlong)_ReturnAddress()));
   return uVar5;
@@ -3270,7 +3270,7 @@ undefined4 FUN_1419007c0(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1419007c0)(\"message\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SendSystemMessage(\"message\")");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -3337,7 +3337,7 @@ undefined4 FUN_141900900(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141900900)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetLanguageByIndex(index)");
     return 0;
   }
   lVar4 = CALLF(ulonglong, FUN_14170ff20)();
@@ -7591,7 +7591,7 @@ undefined8 FUN_141907140(longlong param_1)
     return 0;
   }
   uVar3 = CALLF(undefined8, FUN_1418ea610)(param_1 + 0x20,0x20);
-  return (undefined8)CALLF(undefined8, FUN_14190ffa0)(uVar3,*(undefined4 *)(param_1 + 0x30),(uint)*(byte *)(param_1 + 0x34),*(undefined4 *)(param_1 + 0x38),GEN_AS_FLOAT((unsigned long long)(*(undefined4 *)(param_1 + 0x3c))));
+  return (undefined8)CALLF(undefined8, FUN_14190ffa0)(uVar3,*(undefined4 *)(param_1 + 0x30),(uint)*(byte *)(param_1 + 0x34),*(undefined4 *)(param_1 + 0x38),GEN_ARG_FLOAT(*(undefined4 *)(param_1 + 0x3c)));
   return 0;
 }
 
@@ -23032,7 +23032,7 @@ LAB_141920096:
         CALLF(undefined8, FUN_140603620)(REFG(undefined1 *, 0x1431e7d50),0x34,0);
       }
       else {
-        CALLF(undefined8, FUN_141ce01f0)(REFG(undefined1 *, 0x1431e7d50),REFG(undefined8, 0x1431e7d48),8,0.0,GEN_AS_FLOAT((unsigned long long)(0)));
+        CALLF(undefined8, FUN_141ce01f0)(REFG(undefined1 *, 0x1431e7d50),REFG(undefined8, 0x1431e7d48),8,0.0,GEN_ARG_FLOAT(0));
       }
       CALLF(undefined8, FUN_141cdf980)(REFG(undefined1 *, 0x1431e7d50),param_1);
       goto LAB_141920096;

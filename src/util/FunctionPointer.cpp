@@ -8,8 +8,8 @@ extern "C" IMAGE_DOS_HEADER __ImageBase;
 
 namespace {
 
-// DAT_1430a1550 / DAT_1430a1558: the .text section's bounds, found on first use.
-uint64_t s_textStart;
+// / DAT_1430a1558: the .text section's bounds, found on first use.
+uint64_t s_textStart;  // 0x1430a1550
 uint64_t s_textEnd;
 
 }

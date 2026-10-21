@@ -3596,14 +3596,14 @@ undefined4 FUN_140c89210(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.CALLF(undefined4, FUN_140c89210)(sourcePlayer, characterName, isValidateOnly, vasType)"
+                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignNameChangeDistribution(sourcePlayer, characterName, isValidateOnly, vasType)"
                  );
   }
   else {
     uVar4 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar4 == 0) {
       CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x10)),1,
-                    "Usage: local hadArgumentError, clientToken = C_CharacterServices.CALLF(undefined4, FUN_140c89210)(sourcePlayer, characterName, isValidateOnly, vasType)"
+                    "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignNameChangeDistribution(sourcePlayer, characterName, isValidateOnly, vasType)"
                    );
     }
     else {
@@ -3622,14 +3622,14 @@ undefined4 FUN_140c89210(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar2);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.CALLF(undefined4, FUN_140c89210)(sourcePlayer, characterName, isValidateOnly, vasType)"
+                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignNameChangeDistribution(sourcePlayer, characterName, isValidateOnly, vasType)"
                  );
   }
   else {
     uVar4 = CALLF(undefined8, FUN_1402b33f0)(param_1,iVar2);
     if ((int)uVar4 == 0) {
       CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x10)),iVar2,
-                    "Usage: local hadArgumentError, clientToken = C_CharacterServices.CALLF(undefined4, FUN_140c89210)(sourcePlayer, characterName, isValidateOnly, vasType)"
+                    "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignNameChangeDistribution(sourcePlayer, characterName, isValidateOnly, vasType)"
                    );
     }
     else {
@@ -3646,7 +3646,7 @@ undefined4 FUN_140c89210(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar2);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.CALLF(undefined4, FUN_140c89210)(sourcePlayer, characterName, isValidateOnly, vasType)"
+                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignNameChangeDistribution(sourcePlayer, characterName, isValidateOnly, vasType)"
                  );
     bVar5 = ((byte *)(gen_frame + 0xa8))[0];
   }
@@ -3665,7 +3665,7 @@ undefined4 FUN_140c89210(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar2);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.CALLF(undefined4, FUN_140c89210)(sourcePlayer, characterName, isValidateOnly, vasType)"
+                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignNameChangeDistribution(sourcePlayer, characterName, isValidateOnly, vasType)"
                  );
   }
   else {
@@ -3696,7 +3696,7 @@ undefined4 FUN_140c89210(undefined8 param_1)
       CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x40)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
     }
     CALLF(undefined8, FUN_1424248b0)(param_1,iVar2,
-                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.CALLF(undefined4, FUN_140c89210)(sourcePlayer, characterName, isValidateOnly, vasType)"
+                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignNameChangeDistribution(sourcePlayer, characterName, isValidateOnly, vasType)"
                  );
   }
 LAB_140c89485:
@@ -3806,14 +3806,14 @@ undefined4 FUN_140c8a9d0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.CALLF(undefined4, FUN_140c8a9d0)(sourcePlayer, characterName, isValidateOnly, vasType)"
+                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignRaceOrFactionChangeDistribution(sourcePlayer, characterName, isValidateOnly, vasType)"
                  );
   }
   else {
     uVar4 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar4 == 0) {
       CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x10)),1,
-                    "Usage: local hadArgumentError, clientToken = C_CharacterServices.CALLF(undefined4, FUN_140c8a9d0)(sourcePlayer, characterName, isValidateOnly, vasType)"
+                    "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignRaceOrFactionChangeDistribution(sourcePlayer, characterName, isValidateOnly, vasType)"
                    );
     }
     else {
@@ -3832,14 +3832,14 @@ undefined4 FUN_140c8a9d0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar2);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.CALLF(undefined4, FUN_140c8a9d0)(sourcePlayer, characterName, isValidateOnly, vasType)"
+                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignRaceOrFactionChangeDistribution(sourcePlayer, characterName, isValidateOnly, vasType)"
                  );
   }
   else {
     uVar4 = CALLF(undefined8, FUN_1402b33f0)(param_1,iVar2);
     if ((int)uVar4 == 0) {
       CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x10)),iVar2,
-                    "Usage: local hadArgumentError, clientToken = C_CharacterServices.CALLF(undefined4, FUN_140c8a9d0)(sourcePlayer, characterName, isValidateOnly, vasType)"
+                    "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignRaceOrFactionChangeDistribution(sourcePlayer, characterName, isValidateOnly, vasType)"
                    );
     }
     else {
@@ -3856,7 +3856,7 @@ undefined4 FUN_140c8a9d0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar2);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.CALLF(undefined4, FUN_140c8a9d0)(sourcePlayer, characterName, isValidateOnly, vasType)"
+                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignRaceOrFactionChangeDistribution(sourcePlayer, characterName, isValidateOnly, vasType)"
                  );
     bVar5 = ((byte *)(gen_frame + 0xa8))[0];
   }
@@ -3875,7 +3875,7 @@ undefined4 FUN_140c8a9d0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar2);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.CALLF(undefined4, FUN_140c8a9d0)(sourcePlayer, characterName, isValidateOnly, vasType)"
+                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignRaceOrFactionChangeDistribution(sourcePlayer, characterName, isValidateOnly, vasType)"
                  );
   }
   else {
@@ -3906,7 +3906,7 @@ undefined4 FUN_140c8a9d0(undefined8 param_1)
       CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x40)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
     }
     CALLF(undefined8, FUN_1424248b0)(param_1,iVar2,
-                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.CALLF(undefined4, FUN_140c8a9d0)(sourcePlayer, characterName, isValidateOnly, vasType)"
+                  "Usage: local hadArgumentError, clientToken = C_CharacterServices.AssignRaceOrFactionChangeDistribution(sourcePlayer, characterName, isValidateOnly, vasType)"
                  );
   }
 LAB_140c8ac45:
@@ -3951,14 +3951,14 @@ undefined4 FUN_140c8b320(undefined8 param_1)
     uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
     if ((int)uVar4 < 1) {
       CALLF(undefined8, FUN_142424d80)(param_1,
-                    "Usage: C_CharacterServices.CALLF(undefined4, FUN_140c8b320)(guid,faction,specID,classID,(unsigned long long)(boostType),(unsigned long long)(raceID))"
+                    "Usage: C_CharacterServices.AssignUpgradeDistribution(guid, faction, specID, classID, boostType, raceID)"
                    );
     }
     else {
       uVar4 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
       if ((int)uVar4 == 0) {
         CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x8)),1,
-                      "Usage: C_CharacterServices.CALLF(undefined4, FUN_140c8b320)(guid,faction,specID,classID,(unsigned long long)(boostType),(unsigned long long)(raceID))"
+                      "Usage: C_CharacterServices.AssignUpgradeDistribution(guid, faction, specID, classID, boostType, raceID)"
                      );
       }
       else {
@@ -3977,14 +3977,14 @@ undefined4 FUN_140c8b320(undefined8 param_1)
     uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar5);
     if ((int)uVar4 < 1) {
       CALLF(undefined8, FUN_142424d80)(param_1,
-                    "Usage: C_CharacterServices.CALLF(undefined4, FUN_140c8b320)(guid,faction,specID,classID,(unsigned long long)(boostType),(unsigned long long)(raceID))"
+                    "Usage: C_CharacterServices.AssignUpgradeDistribution(guid, faction, specID, classID, boostType, raceID)"
                    );
     }
     else {
       cVar2 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar5);
       if (cVar2 == '\0') {
         CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x8)),iVar5,
-                      "Usage: C_CharacterServices.CALLF(undefined4, FUN_140c8b320)(guid,faction,specID,classID,(unsigned long long)(boostType),(unsigned long long)(raceID))"
+                      "Usage: C_CharacterServices.AssignUpgradeDistribution(guid, faction, specID, classID, boostType, raceID)"
                      );
       }
       else {
@@ -4002,14 +4002,14 @@ undefined4 FUN_140c8b320(undefined8 param_1)
     uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar5);
     if ((int)uVar4 < 1) {
       CALLF(undefined8, FUN_142424d80)(param_1,
-                    "Usage: C_CharacterServices.CALLF(undefined4, FUN_140c8b320)(guid,faction,specID,classID,(unsigned long long)(boostType),(unsigned long long)(raceID))"
+                    "Usage: C_CharacterServices.AssignUpgradeDistribution(guid, faction, specID, classID, boostType, raceID)"
                    );
     }
     else {
       cVar2 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar5);
       if (cVar2 == '\0') {
         CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x8)),iVar5,
-                      "Usage: C_CharacterServices.CALLF(undefined4, FUN_140c8b320)(guid,faction,specID,classID,(unsigned long long)(boostType),(unsigned long long)(raceID))"
+                      "Usage: C_CharacterServices.AssignUpgradeDistribution(guid, faction, specID, classID, boostType, raceID)"
                      );
       }
       else {
@@ -4027,14 +4027,14 @@ undefined4 FUN_140c8b320(undefined8 param_1)
     uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar5);
     if ((int)uVar4 < 1) {
       CALLF(undefined8, FUN_142424d80)(param_1,
-                    "Usage: C_CharacterServices.CALLF(undefined4, FUN_140c8b320)(guid,faction,specID,classID,(unsigned long long)(boostType),(unsigned long long)(raceID))"
+                    "Usage: C_CharacterServices.AssignUpgradeDistribution(guid, faction, specID, classID, boostType, raceID)"
                    );
     }
     else {
       cVar2 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar5);
       if (cVar2 == '\0') {
         CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x8)),iVar5,
-                      "Usage: C_CharacterServices.CALLF(undefined4, FUN_140c8b320)(guid,faction,specID,classID,(unsigned long long)(boostType),(unsigned long long)(raceID))"
+                      "Usage: C_CharacterServices.AssignUpgradeDistribution(guid, faction, specID, classID, boostType, raceID)"
                      );
       }
       else {
@@ -4052,14 +4052,14 @@ undefined4 FUN_140c8b320(undefined8 param_1)
     uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar5);
     if ((int)uVar4 < 1) {
       CALLF(undefined8, FUN_142424d80)(param_1,
-                    "Usage: C_CharacterServices.CALLF(undefined4, FUN_140c8b320)(guid,faction,specID,classID,(unsigned long long)(boostType),(unsigned long long)(raceID))"
+                    "Usage: C_CharacterServices.AssignUpgradeDistribution(guid, faction, specID, classID, boostType, raceID)"
                    );
     }
     else {
       cVar2 = CALLF(undefined1, FUN_1407d2350)(param_1,iVar5);
       if (cVar2 == '\0') {
         CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),iVar5,
-                      "Usage: C_CharacterServices.CALLF(undefined4, FUN_140c8b320)(guid,faction,specID,classID,(unsigned long long)(boostType),(unsigned long long)(raceID))"
+                      "Usage: C_CharacterServices.AssignUpgradeDistribution(guid, faction, specID, classID, boostType, raceID)"
                      );
       }
       else {
@@ -4077,14 +4077,14 @@ undefined4 FUN_140c8b320(undefined8 param_1)
     uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar5);
     if ((int)uVar4 < 1) {
       CALLF(undefined8, FUN_142424d80)(param_1,
-                    "Usage: C_CharacterServices.CALLF(undefined4, FUN_140c8b320)(guid,faction,specID,classID,(unsigned long long)(boostType),(unsigned long long)(raceID))"
+                    "Usage: C_CharacterServices.AssignUpgradeDistribution(guid, faction, specID, classID, boostType, raceID)"
                    );
     }
     else {
       cVar2 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar5);
       if (cVar2 == '\0') {
         CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x8)),iVar5,
-                      "Usage: C_CharacterServices.CALLF(undefined4, FUN_140c8b320)(guid,faction,specID,classID,(unsigned long long)(boostType),(unsigned long long)(raceID))"
+                      "Usage: C_CharacterServices.AssignUpgradeDistribution(guid, faction, specID, classID, boostType, raceID)"
                      );
       }
       else {
@@ -4973,7 +4973,7 @@ undefined4 FUN_140c9e4d0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local canComplain = C_Calendar.CALLF(undefined4, FUN_140c9e4d0)(offsetMonths, monthDay, eventIndex)"
+                  "Usage: local canComplain = C_Calendar.ContextMenuEventCanComplain(offsetMonths, monthDay, eventIndex)"
                  );
     iVar4 = 1;
   }
@@ -4981,7 +4981,7 @@ undefined4 FUN_140c9e4d0(undefined8 param_1)
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local canComplain = C_Calendar.CALLF(undefined4, FUN_140c9e4d0)(offsetMonths, monthDay, eventIndex)"
+                    "Usage: local canComplain = C_Calendar.ContextMenuEventCanComplain(offsetMonths, monthDay, eventIndex)"
                    );
     }
     else {
@@ -4999,14 +4999,14 @@ undefined4 FUN_140c9e4d0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local canComplain = C_Calendar.CALLF(undefined4, FUN_140c9e4d0)(offsetMonths, monthDay, eventIndex)"
+                  "Usage: local canComplain = C_Calendar.ContextMenuEventCanComplain(offsetMonths, monthDay, eventIndex)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
-                    "Usage: local canComplain = C_Calendar.CALLF(undefined4, FUN_140c9e4d0)(offsetMonths, monthDay, eventIndex)"
+                    "Usage: local canComplain = C_Calendar.ContextMenuEventCanComplain(offsetMonths, monthDay, eventIndex)"
                    );
     }
     else {
@@ -5024,14 +5024,14 @@ undefined4 FUN_140c9e4d0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local canComplain = C_Calendar.CALLF(undefined4, FUN_140c9e4d0)(offsetMonths, monthDay, eventIndex)"
+                  "Usage: local canComplain = C_Calendar.ContextMenuEventCanComplain(offsetMonths, monthDay, eventIndex)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
-                    "Usage: local canComplain = C_Calendar.CALLF(undefined4, FUN_140c9e4d0)(offsetMonths, monthDay, eventIndex)"
+                    "Usage: local canComplain = C_Calendar.ContextMenuEventCanComplain(offsetMonths, monthDay, eventIndex)"
                    );
     }
     else {
@@ -5076,7 +5076,7 @@ undefined4 FUN_140c9ecf0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local canEdit = C_Calendar.CALLF(undefined4, FUN_140c9ecf0)(offsetMonths, monthDay, eventIndex)"
+                  "Usage: local canEdit = C_Calendar.ContextMenuEventCanEdit(offsetMonths, monthDay, eventIndex)"
                  );
     iVar4 = 1;
   }
@@ -5084,7 +5084,7 @@ undefined4 FUN_140c9ecf0(undefined8 param_1)
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local canEdit = C_Calendar.CALLF(undefined4, FUN_140c9ecf0)(offsetMonths, monthDay, eventIndex)"
+                    "Usage: local canEdit = C_Calendar.ContextMenuEventCanEdit(offsetMonths, monthDay, eventIndex)"
                    );
     }
     else {
@@ -5102,14 +5102,14 @@ undefined4 FUN_140c9ecf0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local canEdit = C_Calendar.CALLF(undefined4, FUN_140c9ecf0)(offsetMonths, monthDay, eventIndex)"
+                  "Usage: local canEdit = C_Calendar.ContextMenuEventCanEdit(offsetMonths, monthDay, eventIndex)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
-                    "Usage: local canEdit = C_Calendar.CALLF(undefined4, FUN_140c9ecf0)(offsetMonths, monthDay, eventIndex)"
+                    "Usage: local canEdit = C_Calendar.ContextMenuEventCanEdit(offsetMonths, monthDay, eventIndex)"
                    );
     }
     else {
@@ -5127,14 +5127,14 @@ undefined4 FUN_140c9ecf0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local canEdit = C_Calendar.CALLF(undefined4, FUN_140c9ecf0)(offsetMonths, monthDay, eventIndex)"
+                  "Usage: local canEdit = C_Calendar.ContextMenuEventCanEdit(offsetMonths, monthDay, eventIndex)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
-                    "Usage: local canEdit = C_Calendar.CALLF(undefined4, FUN_140c9ecf0)(offsetMonths, monthDay, eventIndex)"
+                    "Usage: local canEdit = C_Calendar.ContextMenuEventCanEdit(offsetMonths, monthDay, eventIndex)"
                    );
     }
     else {
@@ -5179,7 +5179,7 @@ undefined4 FUN_140c9f510(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local canRemove = C_Calendar.CALLF(undefined4, FUN_140c9f510)(offsetMonths, monthDay, eventIndex)"
+                  "Usage: local canRemove = C_Calendar.ContextMenuEventCanRemove(offsetMonths, monthDay, eventIndex)"
                  );
     iVar4 = 1;
   }
@@ -5187,7 +5187,7 @@ undefined4 FUN_140c9f510(undefined8 param_1)
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local canRemove = C_Calendar.CALLF(undefined4, FUN_140c9f510)(offsetMonths, monthDay, eventIndex)"
+                    "Usage: local canRemove = C_Calendar.ContextMenuEventCanRemove(offsetMonths, monthDay, eventIndex)"
                    );
     }
     else {
@@ -5205,14 +5205,14 @@ undefined4 FUN_140c9f510(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local canRemove = C_Calendar.CALLF(undefined4, FUN_140c9f510)(offsetMonths, monthDay, eventIndex)"
+                  "Usage: local canRemove = C_Calendar.ContextMenuEventCanRemove(offsetMonths, monthDay, eventIndex)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
-                    "Usage: local canRemove = C_Calendar.CALLF(undefined4, FUN_140c9f510)(offsetMonths, monthDay, eventIndex)"
+                    "Usage: local canRemove = C_Calendar.ContextMenuEventCanRemove(offsetMonths, monthDay, eventIndex)"
                    );
     }
     else {
@@ -5230,14 +5230,14 @@ undefined4 FUN_140c9f510(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local canRemove = C_Calendar.CALLF(undefined4, FUN_140c9f510)(offsetMonths, monthDay, eventIndex)"
+                  "Usage: local canRemove = C_Calendar.ContextMenuEventCanRemove(offsetMonths, monthDay, eventIndex)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
-                    "Usage: local canRemove = C_Calendar.CALLF(undefined4, FUN_140c9f510)(offsetMonths, monthDay, eventIndex)"
+                    "Usage: local canRemove = C_Calendar.ContextMenuEventCanRemove(offsetMonths, monthDay, eventIndex)"
                    );
     }
     else {
@@ -5365,12 +5365,12 @@ undefined4 FUN_140ca1760(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140ca1760)(offsetMonths, monthDay)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.ContextMenuEventPaste(offsetMonths, monthDay)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140ca1760)(offsetMonths, monthDay)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.ContextMenuEventPaste(offsetMonths, monthDay)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -5386,13 +5386,13 @@ undefined4 FUN_140ca1760(undefined8 param_1)
   }
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar4);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140ca1760)(offsetMonths, monthDay)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.ContextMenuEventPaste(offsetMonths, monthDay)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,uVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar4,
-                    "Usage: C_Calendar.CALLF(undefined4, FUN_140ca1760)(offsetMonths, monthDay)");
+                    "Usage: C_Calendar.ContextMenuEventPaste(offsetMonths, monthDay)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -5518,13 +5518,13 @@ undefined4 FUN_140ca5120(undefined8 param_1)
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: C_Calendar.CALLF(undefined4, FUN_140ca5120)(offsetMonths, monthDay, eventIndex)");
+                  "Usage: C_Calendar.ContextMenuSelectEvent(offsetMonths, monthDay, eventIndex)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: C_Calendar.CALLF(undefined4, FUN_140ca5120)(offsetMonths, monthDay, eventIndex)");
+                    "Usage: C_Calendar.ContextMenuSelectEvent(offsetMonths, monthDay, eventIndex)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -5541,13 +5541,13 @@ undefined4 FUN_140ca5120(undefined8 param_1)
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar3 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: C_Calendar.CALLF(undefined4, FUN_140ca5120)(offsetMonths, monthDay, eventIndex)");
+                  "Usage: C_Calendar.ContextMenuSelectEvent(offsetMonths, monthDay, eventIndex)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
-                    "Usage: C_Calendar.CALLF(undefined4, FUN_140ca5120)(offsetMonths, monthDay, eventIndex)");
+                    "Usage: C_Calendar.ContextMenuSelectEvent(offsetMonths, monthDay, eventIndex)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -5564,13 +5564,13 @@ undefined4 FUN_140ca5120(undefined8 param_1)
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar3 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: C_Calendar.CALLF(undefined4, FUN_140ca5120)(offsetMonths, monthDay, eventIndex)");
+                  "Usage: C_Calendar.ContextMenuSelectEvent(offsetMonths, monthDay, eventIndex)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
-                    "Usage: C_Calendar.CALLF(undefined4, FUN_140ca5120)(offsetMonths, monthDay, eventIndex)");
+                    "Usage: C_Calendar.ContextMenuSelectEvent(offsetMonths, monthDay, eventIndex)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -5700,12 +5700,12 @@ undefined4 FUN_140ca8bd0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140ca8bd0)(inviteIndex)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventClearModerator(inviteIndex)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140ca8bd0)(inviteIndex)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.EventClearModerator(inviteIndex)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -5929,13 +5929,13 @@ undefined4 FUN_140cac230(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)((*(undefined8 *)(gen_frame + 0x0)),"Usage: local time = C_Calendar.CALLF(undefined4, FUN_140cac230)(eventIndex)");
+    CALLF(undefined8, FUN_142424d80)((*(undefined8 *)(gen_frame + 0x0)),"Usage: local time = C_Calendar.EventGetInviteResponseTime(eventIndex)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)((*(undefined8 *)(gen_frame + 0x0)),1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local time = C_Calendar.CALLF(undefined4, FUN_140cac230)(eventIndex)");
+                    "Usage: local time = C_Calendar.EventGetInviteResponseTime(eventIndex)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)((*(undefined8 *)(gen_frame + 0x0)),1);
@@ -6345,12 +6345,12 @@ undefined4 FUN_140cb2c20(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb2c20)(name)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventInvite(name)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar2 == 0) {
-      CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb2c20)(name)");
+      CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.EventInvite(name)");
     }
     else {
       iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6393,12 +6393,12 @@ undefined4 FUN_140cb3340(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb3340)(inviteIndex)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventRemoveInvite(inviteIndex)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb3340)(inviteIndex)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.EventRemoveInvite(inviteIndex)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6429,12 +6429,12 @@ undefined4 FUN_140cb3a20(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb3a20)(guid)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventRemoveInviteByGuid(guid)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar2 == 0) {
-      CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb3a20)(guid)");
+      CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.EventRemoveInviteByGuid(guid)");
     }
     else {
       iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6469,12 +6469,12 @@ undefined4 FUN_140cb4110(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb4110)(inviteIndex)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventSelectInvite(inviteIndex)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb4110)(inviteIndex)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.EventSelectInvite(inviteIndex)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6573,12 +6573,12 @@ undefined4 FUN_140cb5b70(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb5b70)(month, monthDay, year)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventSetDate(month, monthDay, year)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb5b70)(month, monthDay, year)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.EventSetDate(month, monthDay, year)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6594,12 +6594,12 @@ undefined4 FUN_140cb5b70(undefined8 param_1)
   }
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb5b70)(month, monthDay, year)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventSetDate(month, monthDay, year)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar4);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb5b70)(month, monthDay, year)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,"Usage: C_Calendar.EventSetDate(month, monthDay, year)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6615,12 +6615,12 @@ undefined4 FUN_140cb5b70(undefined8 param_1)
   }
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb5b70)(month, monthDay, year)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventSetDate(month, monthDay, year)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar4);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb5b70)(month, monthDay, year)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,"Usage: C_Calendar.EventSetDate(month, monthDay, year)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6652,12 +6652,12 @@ undefined4 FUN_140cb6360(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb6360)(description)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventSetDescription(description)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar2 == 0) {
-      CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb6360)(description)");
+      CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.EventSetDescription(description)");
     }
     else {
       iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6692,12 +6692,12 @@ undefined4 FUN_140cb6a40(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb6a40)(eventIndex, status)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventSetInviteStatus(eventIndex, status)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb6a40)(eventIndex, status)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.EventSetInviteStatus(eventIndex, status)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6713,7 +6713,7 @@ undefined4 FUN_140cb6a40(undefined8 param_1)
   }
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar4);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb6a40)(eventIndex, status)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventSetInviteStatus(eventIndex, status)");
   }
   else {
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,uVar4);
@@ -6732,7 +6732,7 @@ undefined4 FUN_140cb6a40(undefined8 param_1)
         goto LAB_140cb6b5b;
       }
     }
-    CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),uVar4,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb6a40)(eventIndex, status)");
+    CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),uVar4,"Usage: C_Calendar.EventSetInviteStatus(eventIndex, status)");
   }
 LAB_140cb6b5b:
   uVar3 = CALLF(undefined *, FUN_140c7d510)();
@@ -6767,12 +6767,12 @@ undefined4 FUN_140cb7810(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb7810)(inviteIndex)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventSetModerator(inviteIndex)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb7810)(inviteIndex)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.EventSetModerator(inviteIndex)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6806,12 +6806,12 @@ undefined4 FUN_140cb7ef0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb7ef0)(textureIndex)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventSetTextureID(textureIndex)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb7ef0)(textureIndex)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.EventSetTextureID(textureIndex)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6847,12 +6847,12 @@ undefined4 FUN_140cb85d0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb85d0)(hour, minute)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventSetTime(hour, minute)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb85d0)(hour, minute)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.EventSetTime(hour, minute)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6868,12 +6868,12 @@ undefined4 FUN_140cb85d0(undefined8 param_1)
   }
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar4);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb85d0)(hour, minute)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventSetTime(hour, minute)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,uVar4);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar4,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb85d0)(hour, minute)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar4,"Usage: C_Calendar.EventSetTime(hour, minute)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6905,12 +6905,12 @@ undefined4 FUN_140cb8d30(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb8d30)(title)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventSetTitle(title)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar2 == 0) {
-      CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb8d30)(title)");
+      CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.EventSetTitle(title)");
     }
     else {
       iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -6939,7 +6939,7 @@ undefined4 FUN_140cb9410(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb9410)(typeIndex)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventSetType(typeIndex)");
   }
   else {
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
@@ -6968,7 +6968,7 @@ undefined4 FUN_140cb9410(undefined8 param_1)
     if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
       CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
     }
-    CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cb9410)(typeIndex)");
+    CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_Calendar.EventSetType(typeIndex)");
   }
 LAB_140cb951b:
   uVar3 = CALLF(undefined *, FUN_140c7d510)();
@@ -7006,13 +7006,13 @@ undefined4 FUN_140cba1c0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cba1c0)(criterion, reverse)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventSortInvites(criterion, reverse)");
     pcVar3 = (char *)CONCAT71((*(undefined7 *)(gen_frame + 0x41)),(*(undefined1 *)(gen_frame + 0x40)));
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar2 == 0) {
-      CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cba1c0)(criterion, reverse)");
+      CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.EventSortInvites(criterion, reverse)");
       pcVar3 = (char *)CONCAT71((*(undefined7 *)(gen_frame + 0x41)),(*(undefined1 *)(gen_frame + 0x40)));
     }
     else {
@@ -7029,7 +7029,7 @@ undefined4 FUN_140cba1c0(undefined8 param_1)
   }
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar4);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cba1c0)(criterion, reverse)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.EventSortInvites(criterion, reverse)");
   }
   else {
     iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -7589,12 +7589,12 @@ undefined4 FUN_140cc1980(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x10)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)((*(undefined8 *)(gen_frame + 0x10)),"Usage: local info = C_Calendar.CALLF(undefined4, FUN_140cc1980)(index)");
+    CALLF(undefined8, FUN_142424d80)((*(undefined8 *)(gen_frame + 0x10)),"Usage: local info = C_Calendar.GetGuildEventSelectionInfo(index)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)((*(undefined8 *)(gen_frame + 0x10)),1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x10)),1,"Usage: local info = C_Calendar.CALLF(undefined4, FUN_140cc1980)(index)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x10)),1,"Usage: local info = C_Calendar.GetGuildEventSelectionInfo(index)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)((*(undefined8 *)(gen_frame + 0x10)),1);
@@ -7728,7 +7728,7 @@ undefined4 FUN_140cc41d0(undefined8 param_1)
     cVar1 = CALLF(undefined1, FUN_1407d2350)((*(undefined8 *)(gen_frame + 0x0)),1);
     iVar4 = 0;
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local monthInfo = C_Calendar.CALLF(undefined4, FUN_140cc41d0)([offsetMonths])");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local monthInfo = C_Calendar.GetMonthInfo([offsetMonths])");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)((*(undefined8 *)(gen_frame + 0x0)),1);
@@ -7851,14 +7851,14 @@ undefined4 FUN_140cc56f0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local numDayEvents = C_Calendar.CALLF(undefined4, FUN_140cc56f0)(offsetMonths, monthDay)");
+                  "Usage: local numDayEvents = C_Calendar.GetNumDayEvents(offsetMonths, monthDay)");
     uVar5 = 1;
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local numDayEvents = C_Calendar.CALLF(undefined4, FUN_140cc56f0)(offsetMonths, monthDay)"
+                    "Usage: local numDayEvents = C_Calendar.GetNumDayEvents(offsetMonths, monthDay)"
                    );
     }
     else {
@@ -7876,13 +7876,13 @@ undefined4 FUN_140cc56f0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar5);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local numDayEvents = C_Calendar.CALLF(undefined4, FUN_140cc56f0)(offsetMonths, monthDay)");
+                  "Usage: local numDayEvents = C_Calendar.GetNumDayEvents(offsetMonths, monthDay)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,uVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,
-                    "Usage: local numDayEvents = C_Calendar.CALLF(undefined4, FUN_140cc56f0)(offsetMonths, monthDay)"
+                    "Usage: local numDayEvents = C_Calendar.GetNumDayEvents(offsetMonths, monthDay)"
                    );
     }
     else {
@@ -8149,7 +8149,7 @@ undefined4 FUN_140cc9b70(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cc9b70)(minLevel, maxLevel, maxRankOrder)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.MassInviteGuild(minLevel, maxLevel, maxRankOrder)");
   }
   else {
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
@@ -8172,11 +8172,11 @@ undefined4 FUN_140cc9b70(undefined8 param_1)
     CALLF(double, FUN_1402b4920)(param_1,1);
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x10)),"outside of expected range %u to %u",0,0xff);
     if ((*(longlong *)(gen_frame + 0x18)) == 0) {
-      pcVar5 = "Usage: C_Calendar.CALLF(undefined4, FUN_140cc9b70)(minLevel, maxLevel, maxRankOrder)";
+      pcVar5 = "Usage: C_Calendar.MassInviteGuild(minLevel, maxLevel, maxRankOrder)";
     }
     else {
       pcVar5 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x10)),
-                                     "Usage: C_Calendar.CALLF(undefined4, FUN_140cc9b70)(minLevel, maxLevel, maxRankOrder)"
+                                     "Usage: C_Calendar.MassInviteGuild(minLevel, maxLevel, maxRankOrder)"
                                     );
     }
     if (((*(ulonglong *)(gen_frame + 0x20)) & 0x8000000000000000) == 0) {
@@ -8187,7 +8187,7 @@ undefined4 FUN_140cc9b70(undefined8 param_1)
 LAB_140cc9cc3:
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cc9b70)(minLevel, maxLevel, maxRankOrder)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.MassInviteGuild(minLevel, maxLevel, maxRankOrder)");
   }
   else {
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,iVar4);
@@ -8210,11 +8210,11 @@ LAB_140cc9cc3:
     CALLF(double, FUN_1402b4920)(param_1,iVar4);
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x38)),"outside of expected range %u to %u",0,0xff);
     if ((*(longlong *)(gen_frame + 0x40)) == 0) {
-      pcVar5 = "Usage: C_Calendar.CALLF(undefined4, FUN_140cc9b70)(minLevel, maxLevel, maxRankOrder)";
+      pcVar5 = "Usage: C_Calendar.MassInviteGuild(minLevel, maxLevel, maxRankOrder)";
     }
     else {
       pcVar5 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x38)),
-                                     "Usage: C_Calendar.CALLF(undefined4, FUN_140cc9b70)(minLevel, maxLevel, maxRankOrder)"
+                                     "Usage: C_Calendar.MassInviteGuild(minLevel, maxLevel, maxRankOrder)"
                                     );
     }
     if (((*(ulonglong *)(gen_frame + 0x48)) & 0x8000000000000000) == 0) {
@@ -8225,13 +8225,13 @@ LAB_140cc9cc3:
 LAB_140cc9dd5:
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140cc9b70)(minLevel, maxLevel, maxRankOrder)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.MassInviteGuild(minLevel, maxLevel, maxRankOrder)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
-                    "Usage: C_Calendar.CALLF(undefined4, FUN_140cc9b70)(minLevel, maxLevel, maxRankOrder)");
+                    "Usage: C_Calendar.MassInviteGuild(minLevel, maxLevel, maxRankOrder)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8280,14 +8280,14 @@ undefined4 FUN_140ccaaf0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local success = C_Calendar.CALLF(undefined4, FUN_140ccaaf0)(offsetMonths, monthDay, index)");
+                  "Usage: local success = C_Calendar.OpenEvent(offsetMonths, monthDay, index)");
     iVar4 = 1;
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local success = C_Calendar.CALLF(undefined4, FUN_140ccaaf0)(offsetMonths, monthDay, index)");
+                    "Usage: local success = C_Calendar.OpenEvent(offsetMonths, monthDay, index)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8304,13 +8304,13 @@ undefined4 FUN_140ccaaf0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local success = C_Calendar.CALLF(undefined4, FUN_140ccaaf0)(offsetMonths, monthDay, index)");
+                  "Usage: local success = C_Calendar.OpenEvent(offsetMonths, monthDay, index)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
-                    "Usage: local success = C_Calendar.CALLF(undefined4, FUN_140ccaaf0)(offsetMonths, monthDay, index)");
+                    "Usage: local success = C_Calendar.OpenEvent(offsetMonths, monthDay, index)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8327,13 +8327,13 @@ undefined4 FUN_140ccaaf0(undefined8 param_1)
   uVar5 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar5 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local success = C_Calendar.CALLF(undefined4, FUN_140ccaaf0)(offsetMonths, monthDay, index)");
+                  "Usage: local success = C_Calendar.OpenEvent(offsetMonths, monthDay, index)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,iVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),iVar4,
-                    "Usage: local success = C_Calendar.CALLF(undefined4, FUN_140ccaaf0)(offsetMonths, monthDay, index)");
+                    "Usage: local success = C_Calendar.OpenEvent(offsetMonths, monthDay, index)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8386,12 +8386,12 @@ undefined4 FUN_140ccb960(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140ccb960)(month, year)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.SetAbsMonth(month, year)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140ccb960)(month, year)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.SetAbsMonth(month, year)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8407,12 +8407,12 @@ undefined4 FUN_140ccb960(undefined8 param_1)
   }
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar4);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140ccb960)(month, year)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.SetAbsMonth(month, year)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,uVar4);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar4,"Usage: C_Calendar.CALLF(undefined4, FUN_140ccb960)(month, year)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar4,"Usage: C_Calendar.SetAbsMonth(month, year)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8446,12 +8446,12 @@ undefined4 FUN_140ccc0d0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.CALLF(undefined4, FUN_140ccc0d0)(offsetMonths)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_Calendar.SetMonth(offsetMonths)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.CALLF(undefined4, FUN_140ccc0d0)(offsetMonths)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_Calendar.SetMonth(offsetMonths)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8674,12 +8674,12 @@ undefined4 FUN_140ccfcc0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ccfcc0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CustomizeExistingCharacter(index)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ccfcc0)(index)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.CustomizeExistingCharacter(index)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8714,12 +8714,12 @@ undefined4 FUN_140cd03a0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140cd03a0)(index, delta)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CycleCharCustomization(index, delta)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140cd03a0)(index, delta)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.CycleCharCustomization(index, delta)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8735,13 +8735,13 @@ undefined4 FUN_140cd03a0(undefined8 param_1)
   }
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar4);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140cd03a0)(index, delta)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CycleCharCustomization(index, delta)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,uVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar4,
-                    "Usage: C_CharacterCreation.CALLF(undefined4, FUN_140cd03a0)(index, delta)");
+                    "Usage: C_CharacterCreation.CycleCharCustomization(index, delta)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -8833,14 +8833,14 @@ int FUN_140cd1860(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local hasExpansion, hasAchievement = C_CharacterCreation.CALLF(int, FUN_140cd1860)(raceID)"
+                  "Usage: local hasExpansion, hasAchievement = C_CharacterCreation.GetAlliedRaceCreationRequirements(raceID)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x8)),1,
-                    "Usage: local hasExpansion, hasAchievement = C_CharacterCreation.CALLF(int, FUN_140cd1860)(raceID)"
+                    "Usage: local hasExpansion, hasAchievement = C_CharacterCreation.GetAlliedRaceCreationRequirements(raceID)"
                    );
     }
     else {
@@ -9046,14 +9046,14 @@ undefined4 FUN_140cd47b0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local name, description = C_CharacterCreation.CALLF(undefined4, FUN_140cd47b0)(index)"
+                  "Usage: local name, description = C_CharacterCreation.GetCharacterTemplateInfo(index)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x10)),1,
-                    "Usage: local name, description = C_CharacterCreation.CALLF(undefined4, FUN_140cd47b0)(index)"
+                    "Usage: local name, description = C_CharacterCreation.GetCharacterTemplateInfo(index)"
                    );
     }
     else {
@@ -9178,13 +9178,13 @@ undefined4 FUN_140cd62b0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local classID = C_CharacterCreation.CALLF(undefined4, FUN_140cd62b0)(name)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local classID = C_CharacterCreation.GetClassIDFromName(name)");
   }
   else {
     uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar3 == 0) {
       CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local classID = C_CharacterCreation.CALLF(undefined4, FUN_140cd62b0)(name)");
+                    "Usage: local classID = C_CharacterCreation.GetClassIDFromName(name)");
     }
     else {
       iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -9292,7 +9292,7 @@ undefined4 FUN_140cd7d80(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local featureName = C_CharacterCreation.CALLF(undefined4, FUN_140cd7d80)(featureType)"
+                  "Usage: local featureName = C_CharacterCreation.GetCustomizationDetails(featureType)"
                  );
   }
   else {
@@ -9323,7 +9323,7 @@ undefined4 FUN_140cd7d80(undefined8 param_1)
       CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x10)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
     }
     CALLF(undefined8, FUN_1424248b0)(param_1,1,
-                  "Usage: local featureName = C_CharacterCreation.CALLF(undefined4, FUN_140cd7d80)(featureType)"
+                  "Usage: local featureName = C_CharacterCreation.GetCustomizationDetails(featureType)"
                  );
   }
 LAB_140cd7e8f:
@@ -9354,14 +9354,14 @@ undefined4 FUN_140cd84c0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local name, internalName = C_CharacterCreation.CALLF(undefined4, FUN_140cd84c0)(raceID)")
+                  "Usage: local name, internalName = C_CharacterCreation.GetFactionForRace(raceID)")
     ;
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x10)),1,
-                    "Usage: local name, internalName = C_CharacterCreation.CALLF(undefined4, FUN_140cd84c0)(raceID)"
+                    "Usage: local name, internalName = C_CharacterCreation.GetFactionForRace(raceID)"
                    );
     }
     else {
@@ -9441,14 +9441,14 @@ undefined4 FUN_140cd9280(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local raceName, clientFileString = C_CharacterCreation.CALLF(undefined4, FUN_140cd9280)(raceID)"
+                  "Usage: local raceName, clientFileString = C_CharacterCreation.GetNameForRace(raceID)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x10)),1,
-                    "Usage: local raceName, clientFileString = C_CharacterCreation.CALLF(undefined4, FUN_140cd9280)(raceID)"
+                    "Usage: local raceName, clientFileString = C_CharacterCreation.GetNameForRace(raceID)"
                    );
     }
     else {
@@ -9590,12 +9590,12 @@ undefined4 FUN_140cdb440(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local raceID = C_CharacterCreation.CALLF(undefined4, FUN_140cdb440)(name)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local raceID = C_CharacterCreation.GetRaceIDFromName(name)");
   }
   else {
     uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar3 == 0) {
-      CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local raceID = C_CharacterCreation.CALLF(undefined4, FUN_140cdb440)(name)")
+      CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local raceID = C_CharacterCreation.GetRaceIDFromName(name)")
       ;
     }
     else {
@@ -9835,13 +9835,13 @@ undefined4 FUN_140cdf6c0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local isAdvancedClass = C_CharacterCreation.CALLF(undefined4, FUN_140cdf6c0)(classID)");
+                  "Usage: local isAdvancedClass = C_CharacterCreation.IsAdvancedClass(classID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local isAdvancedClass = C_CharacterCreation.CALLF(undefined4, FUN_140cdf6c0)(classID)");
+                    "Usage: local isAdvancedClass = C_CharacterCreation.IsAdvancedClass(classID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -9961,14 +9961,14 @@ undefined4 FUN_140ce11d0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local valid = C_CharacterCreation.CALLF(undefined4, FUN_140ce11d0)(raceID, classID)");
+                  "Usage: local valid = C_CharacterCreation.IsRaceClassValid(raceID, classID)");
     uVar5 = 1;
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local valid = C_CharacterCreation.CALLF(undefined4, FUN_140ce11d0)(raceID, classID)");
+                    "Usage: local valid = C_CharacterCreation.IsRaceClassValid(raceID, classID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -9985,13 +9985,13 @@ undefined4 FUN_140ce11d0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar5);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local valid = C_CharacterCreation.CALLF(undefined4, FUN_140ce11d0)(raceID, classID)");
+                  "Usage: local valid = C_CharacterCreation.IsRaceClassValid(raceID, classID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,uVar5);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar5,
-                    "Usage: local valid = C_CharacterCreation.CALLF(undefined4, FUN_140ce11d0)(raceID, classID)");
+                    "Usage: local valid = C_CharacterCreation.IsRaceClassValid(raceID, classID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -10142,12 +10142,12 @@ undefined4 FUN_140ce4080(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce4080)(fileDataID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.SetCharCustomizeBackground(fileDataID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce4080)(fileDataID)")
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.SetCharCustomizeBackground(fileDataID)")
       ;
     }
     else {
@@ -10179,12 +10179,12 @@ undefined4 FUN_140ce4750(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce4750)(frameName)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.SetCharCustomizeFrame(frameName)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar2 == 0) {
-      CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce4750)(frameName)");
+      CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.SetCharCustomizeFrame(frameName)");
     }
     else {
       iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -10211,7 +10211,7 @@ undefined4 FUN_140ce4e20(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   ((undefined4 *)(gen_frame + 0x38))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce4e20)(degrees)",0,(unsigned long long)(((float *)(gen_frame + 0x40))));
+  CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_CharacterCreation.SetCharacterCreateFacing(degrees)",0,(unsigned long long)(((float *)(gen_frame + 0x40))));
   CALLF(undefined8, FUN_1416865c0)((double)((float *)(gen_frame + 0x40))[0]);
   return 0;
 }
@@ -10227,7 +10227,7 @@ undefined4 FUN_140ce54b0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce54b0)(createType)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.SetCharacterCreateType(createType)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
@@ -10252,7 +10252,7 @@ undefined4 FUN_140ce54b0(undefined8 param_1)
     if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
       CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
     }
-    CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce54b0)(createType)");
+    CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_CharacterCreation.SetCharacterCreateType(createType)");
   }
   REFG(undefined4, 0x14311daa4) = (*(undefined4 *)(gen_frame + 0x40));
   return 0;
@@ -10274,12 +10274,12 @@ undefined4 FUN_140ce5c00(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce5c00)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.SetCharacterTemplate(index)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce5c00)(index)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.SetCharacterTemplate(index)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -10307,7 +10307,7 @@ undefined4 FUN_140ce62e0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce62e0)(isPaidService)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.SetPaidService(isPaidService)");
   }
   else {
     iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -10339,12 +10339,12 @@ undefined4 FUN_140ce6990(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce6990)(classID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.SetSelectedClass(classID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce6990)(classID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.SetSelectedClass(classID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -10372,7 +10372,7 @@ undefined4 FUN_140ce7060(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce7060)(gearType)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.SetSelectedPreviewGearType(gearType)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
@@ -10400,7 +10400,7 @@ undefined4 FUN_140ce7060(undefined8 param_1)
     if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
       CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
     }
-    CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce7060)(gearType)");
+    CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_CharacterCreation.SetSelectedPreviewGearType(gearType)");
   }
 LAB_140ce7164:
   CALLF(undefined8, FUN_141686c80)((*(undefined4 *)(gen_frame + 0x40)));
@@ -10423,12 +10423,12 @@ undefined4 FUN_140ce77b0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce77b0)(raceID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.SetSelectedRace(raceID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce77b0)(raceID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.SetSelectedRace(raceID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -10461,12 +10461,12 @@ undefined4 FUN_140ce7e80(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce7e80)(sex)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.SetSelectedSex(sex)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce7e80)(sex)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_CharacterCreation.SetSelectedSex(sex)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -10494,7 +10494,7 @@ undefined4 FUN_140ce8550(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.CALLF(undefined4, FUN_140ce8550)(isViewingAlteredForm)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_CharacterCreation.SetViewingAlteredForm(isViewingAlteredForm)");
   }
   else {
     iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -11080,7 +11080,7 @@ uint FUN_140cefc60(undefined8 param_1)
   (*(ulonglong *)(gen_frame + 0x48)) = 0;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local canReport = C_ChatInfo.CALLF(uint, FUN_140cefc60)(playerLocation)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local canReport = C_ChatInfo.CanReportPlayer(playerLocation)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2200)(param_1,1);
@@ -11095,7 +11095,7 @@ uint FUN_140cefc60(undefined8 param_1)
       if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
-      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: local canReport = C_ChatInfo.CALLF(uint, FUN_140cefc60)(playerLocation)")
+      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: local canReport = C_ChatInfo.CanReportPlayer(playerLocation)")
       ;
     }
     else {
@@ -11258,13 +11258,13 @@ undefined4 FUN_140cf1ed0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local shortcut = C_ChatInfo.CALLF(undefined4, FUN_140cf1ed0)(channelIndex)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local shortcut = C_ChatInfo.GetChannelShortcut(channelIndex)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local shortcut = C_ChatInfo.CALLF(undefined4, FUN_140cf1ed0)(channelIndex)");
+                    "Usage: local shortcut = C_ChatInfo.GetChannelShortcut(channelIndex)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -11300,13 +11300,13 @@ undefined4 FUN_140cf25c0(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local shortcut = C_ChatInfo.CALLF(undefined4, FUN_140cf25c0)(channelID)");
+                  "Usage: local shortcut = C_ChatInfo.GetChannelShortcutForChannelID(channelID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local shortcut = C_ChatInfo.CALLF(undefined4, FUN_140cf25c0)(channelID)");
+                    "Usage: local shortcut = C_ChatInfo.GetChannelShortcutForChannelID(channelID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -11340,12 +11340,12 @@ undefined4 FUN_140cf2cb0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local guid = C_ChatInfo.CALLF(undefined4, FUN_140cf2cb0)(chatLine)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local guid = C_ChatInfo.GetChatLineSenderGUID(chatLine)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local guid = C_ChatInfo.CALLF(undefined4, FUN_140cf2cb0)(chatLine)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local guid = C_ChatInfo.GetChatLineSenderGUID(chatLine)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -11613,13 +11613,13 @@ undefined4 FUN_140cf6f20(undefined8 param_1)
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local isRegistered = C_ChatInfo.CALLF(undefined4, FUN_140cf6f20)(prefix)");
+                  "Usage: local isRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered(prefix)");
   }
   else {
     uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar3 == 0) {
       CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local isRegistered = C_ChatInfo.CALLF(undefined4, FUN_140cf6f20)(prefix)")
+                    "Usage: local isRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered(prefix)")
       ;
     }
     else {
@@ -11659,12 +11659,12 @@ undefined4 FUN_140cf7630(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local isCensored = C_ChatInfo.CALLF(undefined4, FUN_140cf7630)(chatLine)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local isCensored = C_ChatInfo.IsChatLineCensored(chatLine)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local isCensored = C_ChatInfo.CALLF(undefined4, FUN_140cf7630)(chatLine)")
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local isCensored = C_ChatInfo.IsChatLineCensored(chatLine)")
       ;
     }
     else {
@@ -11702,7 +11702,7 @@ undefined4 FUN_140cf7d40(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local isPartyChannelType = C_ChatInfo.CALLF(undefined4, FUN_140cf7d40)(channelType)");
+                  "Usage: local isPartyChannelType = C_ChatInfo.IsPartyChannelType(channelType)");
   }
   else {
     uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
@@ -11732,7 +11732,7 @@ undefined4 FUN_140cf7d40(undefined8 param_1)
       CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
     }
     CALLF(undefined8, FUN_1424248b0)(param_1,1,
-                  "Usage: local isPartyChannelType = C_ChatInfo.CALLF(undefined4, FUN_140cf7d40)(channelType)");
+                  "Usage: local isPartyChannelType = C_ChatInfo.IsPartyChannelType(channelType)");
   }
 LAB_140cf7e42:
   bVar2 = CALLF(undefined1, FUN_14190cb10)((*(undefined1 *)(gen_frame + 0x50)));
@@ -11813,13 +11813,13 @@ undefined4 FUN_140cf9200(undefined8 param_1)
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local successfulRequest = C_ChatInfo.CALLF(undefined4, FUN_140cf9200)(prefix)");
+                  "Usage: local successfulRequest = C_ChatInfo.RegisterAddonMessagePrefix(prefix)");
   }
   else {
     uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar3 == 0) {
       CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: local successfulRequest = C_ChatInfo.CALLF(undefined4, FUN_140cf9200)(prefix)"
+                    "Usage: local successfulRequest = C_ChatInfo.RegisterAddonMessagePrefix(prefix)"
                    );
     }
     else {
@@ -11981,14 +11981,14 @@ undefined4 FUN_140cfb9d0(undefined8 param_1)
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: C_ChatInfo.CALLF(undefined4, FUN_140cfb9d0)(firstChannelIndex, secondChannelIndex)"
+                  "Usage: C_ChatInfo.SwapChatChannelsByChannelIndex(firstChannelIndex, secondChannelIndex)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: C_ChatInfo.CALLF(undefined4, FUN_140cfb9d0)(firstChannelIndex, secondChannelIndex)"
+                    "Usage: C_ChatInfo.SwapChatChannelsByChannelIndex(firstChannelIndex, secondChannelIndex)"
                    );
     }
     else {
@@ -12006,14 +12006,14 @@ undefined4 FUN_140cfb9d0(undefined8 param_1)
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar4);
   if ((int)uVar3 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: C_ChatInfo.CALLF(undefined4, FUN_140cfb9d0)(firstChannelIndex, secondChannelIndex)"
+                  "Usage: C_ChatInfo.SwapChatChannelsByChannelIndex(firstChannelIndex, secondChannelIndex)"
                  );
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,uVar4);
     if (cVar1 == '\0') {
       CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),uVar4,
-                    "Usage: C_ChatInfo.CALLF(undefined4, FUN_140cfb9d0)(firstChannelIndex, secondChannelIndex)"
+                    "Usage: C_ChatInfo.SwapChatChannelsByChannelIndex(firstChannelIndex, secondChannelIndex)"
                    );
     }
     else {
@@ -12047,12 +12047,12 @@ undefined4 FUN_140cfc140(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_ChatInfo.CALLF(undefined4, FUN_140cfc140)(chatLine)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_ChatInfo.UncensorChatLine(chatLine)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d22e0)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_ChatInfo.CALLF(undefined4, FUN_140cfc140)(chatLine)");
+      CALLF(undefined8, FUN_1407cbaa0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_ChatInfo.UncensorChatLine(chatLine)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -18552,12 +18552,12 @@ undefined4 FUN_140d0d800(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_ToyBoxInfo.CALLF(undefined4, FUN_140d0d800)(itemID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_ToyBoxInfo.ClearFanfare(itemID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_ToyBoxInfo.CALLF(undefined4, FUN_140d0d800)(itemID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: C_ToyBoxInfo.ClearFanfare(itemID)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -18591,12 +18591,12 @@ undefined4 FUN_140d0ded0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x0)) = param_1;
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local needsFanfare = C_ToyBoxInfo.CALLF(undefined4, FUN_140d0ded0)(itemID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local needsFanfare = C_ToyBoxInfo.NeedsFanfare(itemID)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2350)(param_1,1);
     if (cVar1 == '\0') {
-      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local needsFanfare = C_ToyBoxInfo.CALLF(undefined4, FUN_140d0ded0)(itemID)");
+      CALLF(undefined8, FUN_1407cb9f0)(&(*(undefined8 *)(gen_frame + 0x0)),1,"Usage: local needsFanfare = C_ToyBoxInfo.NeedsFanfare(itemID)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);

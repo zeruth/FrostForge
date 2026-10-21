@@ -1335,7 +1335,7 @@ undefined4 FUN_141b48460(undefined8 param_1)
 {
   GEN_HIT(22);
   if (REFG(undefined4, 0x142d31c28) != 2) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b48460)() failed because setup is not loaded");
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBSetup_GetLanguageCount() failed because setup is not loaded");
     return 0;
   }
   CALLF(undefined1 *, FUN_1402b3b50)(param_1,(double)REFG(undefined4, 0x142d31c78));
@@ -1357,7 +1357,7 @@ undefined4 FUN_141b484a0(undefined8 param_1)
   double dVar8 = {0};
   
   if (REFG(undefined4, 0x142d31c28) != 2) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b484a0)() failed because setup is not loaded");
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBSetup_GetLanguageData() failed because setup is not loaded");
     return 0;
   }
   dVar8 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -1422,7 +1422,7 @@ undefined4 FUN_141b484a0(undefined8 param_1)
     }
   }
 LAB_141b485a0:
-  CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b484a0)() called with invalid category index");
+  CALLF(undefined8, FUN_142424d80)(param_1,"KBSetup_GetLanguageData() called with invalid category index");
   return 0;
 }
 
@@ -1431,7 +1431,7 @@ undefined4 FUN_141b486a0(undefined8 param_1)
 {
   GEN_HIT(24);
   if (REFG(undefined4, 0x142d31c28) != 2) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b486a0)() failed because setup is not loaded");
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBSetup_GetCategoryCount() failed because setup is not loaded");
     return 0;
   }
   CALLF(undefined1 *, FUN_1402b3b50)(param_1,(double)REFG(undefined4, 0x142d31c7c));
@@ -1450,13 +1450,13 @@ undefined4 FUN_141b486e0(undefined8 param_1)
   undefined8 uVar3 = {0};
   
   if (REFG(undefined4, 0x142d31c28) != 2) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b486e0)() failed because setup is not loaded");
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBSetup_GetCategoryData() failed because setup is not loaded");
     return 0;
   }
   dVar5 = CALLF(double, FUN_1402b4920)(param_1,1);
   lVar2 = CALLF(undefined8, FUN_141b4a3f0)(&REFG(undefined8, 0x142d31c20),(int)dVar5 + -1);
   if (lVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b486e0)() called with invalid category index");
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBSetup_GetCategoryData() called with invalid category index");
     return 0;
   }
   uVar4 = 0;
@@ -1500,7 +1500,7 @@ undefined4 FUN_141b487e0(undefined8 param_1)
     CALLF(undefined1 *, FUN_1402b3b50)(param_1,(double)iVar1);
     return 1;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b487e0)() failed because setup is not loaded");
+  CALLF(undefined8, FUN_142424d80)(param_1,"KBSetup_GetSubCategoryCount() failed because setup is not loaded");
   return 0;
 }
 
@@ -1517,7 +1517,7 @@ undefined4 FUN_141b48870(undefined8 param_1)
   double dVar6 = {0};
   
   if (REFG(undefined4, 0x142d31c28) != 2) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b48870)() failed because setup is not loaded");
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBSetup_GetSubCategoryData() failed because setup is not loaded");
     return 0;
   }
   dVar5 = CALLF(double, FUN_1402b4920)(param_1,2);
@@ -1539,7 +1539,7 @@ undefined4 FUN_141b48870(undefined8 param_1)
     return 2;
   }
   CALLF(undefined8, FUN_142424d80)(param_1,
-                "CALLF(undefined4, FUN_141b48870)() called with invalid category or sub category index");
+                "KBSetup_GetSubCategoryData() called with invalid category or sub category index");
   return 0;
 }
 
@@ -1548,7 +1548,7 @@ undefined4 FUN_141b48990(undefined8 param_1)
 {
   GEN_HIT(28);
   if (REFG(undefined4, 0x142d31c28) != 2) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b48990)() failed because setup is not loaded");
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBSetup_GetArticleHeaderCount() failed because setup is not loaded");
     return 0;
   }
   CALLF(undefined1 *, FUN_1402b3b50)(param_1,(double)REFG(undefined4, 0x142d31c84));
@@ -1572,7 +1572,7 @@ undefined4 FUN_141b489d0(undefined8 param_1)
   double dVar11 = {0};
   
   if (REFG(undefined4, 0x142d31c28) != 2) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b489d0)() failed because setup is not loaded");
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBSetup_GetArticleHeaderData() failed because setup is not loaded");
     return 0;
   }
   dVar11 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -1651,7 +1651,7 @@ undefined4 FUN_141b489d0(undefined8 param_1)
     }
   }
 LAB_141b48ad0:
-  CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b489d0)() called with invalid article header index");
+  CALLF(undefined8, FUN_142424d80)(param_1,"KBSetup_GetArticleHeaderData() called with invalid article header index");
   return 0;
 }
 
@@ -1665,7 +1665,7 @@ undefined4 FUN_141b48c60(undefined8 param_1)
   undefined8 uVar3 = {0};
   
   if (REFG(undefined4, 0x142d31c28) != 2) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b48c60)() failed because setup is not loaded");
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBSetup_GetTotalArticleCount() failed because setup is not loaded");
     return 0;
   }
   if (REFG(undefined8, 0x142d31c60) != 0) {
@@ -1704,12 +1704,12 @@ undefined4 FUN_141b48cf0(undefined8 param_1)
   double dVar9 = {0};
   
   if (REFG(undefined4, 0x142d31c28) != 2) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b48cf0)() failed because setup is not loaded");
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBQuery_BeginLoading() failed because setup is not loaded");
     return 0;
   }
   lVar1 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
   if (lVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b48cf0)() called with a null string for search query");
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBQuery_BeginLoading() called with a null string for search query");
     return 0;
   }
   uVar5 = 0xffffffff;
@@ -1718,7 +1718,7 @@ undefined4 FUN_141b48cf0(undefined8 param_1)
     uVar2 = uVar2 + 1;
   } while (*(char *)(lVar1 + uVar2) != '\0');
   if (0x80 < uVar2) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b48cf0)() called with a string > 128 bytes for search query"
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBQuery_BeginLoading() called with a string > 128 bytes for search query"
                  );
     return 0;
   }
@@ -1733,13 +1733,13 @@ undefined4 FUN_141b48cf0(undefined8 param_1)
   }
   else {
     if (iVar6 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b48cf0)() called with subcategory without category");
+      CALLF(undefined8, FUN_142424d80)(param_1,"KBQuery_BeginLoading() called with subcategory without category");
       return 0;
     }
     lVar3 = CALLF(longlong, FUN_141b4a540)(&REFG(undefined8, 0x142d31c20),iVar6 + -1,(int)dVar7 + -1);
   }
   if (lVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b486e0)() called with invalid category index");
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBSetup_GetCategoryData() called with invalid category index");
     return 0;
   }
   if (((REFG(undefined4, 0x142d31c28) == 2) && (REFG(undefined8, 0x142d31c60) != 0)) &&
@@ -1768,7 +1768,7 @@ undefined4 FUN_141b48ee0(undefined8 param_1)
 {
   GEN_HIT(33);
   if (REFG(undefined4, 0x142d31cd8) != 2) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b48ee0)() failed because query is not loaded");
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBQuery_GetArticleHeaderCount() failed because query is not loaded");
     return 0;
   }
   CALLF(undefined1 *, FUN_1402b3b50)(param_1,(double)REFG(undefined4, 0x142d31d28));
@@ -1792,7 +1792,7 @@ undefined4 FUN_141b48f20(undefined8 param_1)
   double dVar11 = {0};
   
   if (REFG(undefined4, 0x142d31cd8) != 2) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b48f20)() failed because query is not loaded");
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBQuery_GetArticleHeaderData() failed because query is not loaded");
     return 0;
   }
   dVar11 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -1871,7 +1871,7 @@ undefined4 FUN_141b48f20(undefined8 param_1)
     }
   }
 LAB_141b49020:
-  CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b48f20)() called with invalid article header index");
+  CALLF(undefined8, FUN_142424d80)(param_1,"KBQuery_GetArticleHeaderData() called with invalid article header index");
   return 0;
 }
 
@@ -1885,7 +1885,7 @@ undefined4 FUN_141b491b0(undefined8 param_1)
   undefined8 uVar3 = {0};
   
   if (REFG(undefined4, 0x142d31cd8) != 2) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b491b0)() failed because query is not loaded");
+    CALLF(undefined8, FUN_142424d80)(param_1,"KBQuery_GetTotalArticleCount() failed because query is not loaded");
     return 0;
   }
   if (REFG(undefined8, 0x142d31d10) != 0) {
@@ -2006,7 +2006,7 @@ undefined4 FUN_141b492b0(undefined8 param_1)
     CALLF(uint, FUN_1402b3850)(param_1,(int)uVar7);
     return 7;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b492b0)() failed because article is not loaded");
+  CALLF(undefined8, FUN_142424d80)(param_1,"KBArticle_GetData() failed because article is not loaded");
   return 0;
 }
 
@@ -3815,7 +3815,7 @@ undefined4 FUN_141b4f460(undefined8 param_1)
       REFG(undefined4, 0x143217ce0) = 0;
     }
     else {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b4f460)(confirm)",((longlong)_ReturnAddress()));
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: ConfirmSellToken(confirm)",((longlong)_ReturnAddress()));
     }
   }
   return 0;
@@ -3890,7 +3890,7 @@ undefined4 FUN_141b51a50(undefined8 param_1)
         CALLF(undefined8, FUN_14156dc60)(((undefined1 *)(gen_frame + 0x8)));
         return 0;
       }
-      pcVar3 = "Usage: CALLF(undefined4, FUN_141b51a50)(confirm)";
+      pcVar3 = "Usage: ConfirmBuyToken(confirm)";
     }
     CALLF(undefined8, FUN_142424d80)(param_1,pcVar3,((longlong)_ReturnAddress()));
   }
@@ -3934,7 +3934,7 @@ undefined4 FUN_141b54660(undefined8 param_1)
   if (cVar2 != '\0') {
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar3 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b54660)(type)",((longlong)_ReturnAddress()));
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: RedeemToken(type)",((longlong)_ReturnAddress()));
     }
     else {
       iVar1 = REFG(undefined4, 0x143217d60);
@@ -4137,7 +4137,7 @@ LAB_141b59838:
   else {
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar3 == 0) {
-      pcVar5 = "Usage: CALLF(undefined4, FUN_141b58510)(type)";
+      pcVar5 = "Usage: RedeemTokenConfirm(type)";
     }
     else {
       uVar3 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -4325,7 +4325,7 @@ undefined4 FUN_141b60520(undefined8 param_1)
   iVar7 = 1;
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    pcVar5 = "Usage: CALLF(undefined4, FUN_141b60520)(index)";
+    pcVar5 = "Usage: GetListedAuctionableTokenInfo(index)";
   }
   else {
     uVar3 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -4437,7 +4437,7 @@ undefined4 FUN_141b63ee0(undefined8 param_1)
   if (cVar1 != '\0') {
     uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar2 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b63ee0)(string);",((longlong)_ReturnAddress()));
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetBalanceAmountString(string);",((longlong)_ReturnAddress()));
     }
     else {
       pcVar3 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -8345,7 +8345,7 @@ undefined4 FUN_141b6cab0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6cab0)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetTotemInfo(slot)");
     return 0;
   }
   uVar2 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -8400,7 +8400,7 @@ undefined4 FUN_141b6cc60(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6cc60)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetTotemTimeLeft(slot)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -8441,7 +8441,7 @@ undefined4 FUN_141b6cd20(undefined8 param_1)
   if (cVar1 != '\0') {
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar3 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6cd20)(slot)");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetTotemCannotDismiss(slot)");
     }
     else {
       uVar3 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -8470,7 +8470,7 @@ undefined4 FUN_141b6cdb0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6cdb0)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: TargetTotem(slot)");
     return 0;
   }
   uVar2 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -8497,7 +8497,7 @@ undefined4 FUN_141b6ce30(undefined8 param_1)
   if (cVar1 != '\0') {
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar3 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6ce30)(slot)",((longlong)_ReturnAddress()));
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: DestroyTotem(slot)",((longlong)_ReturnAddress()));
     }
     else {
       uVar3 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -8524,7 +8524,7 @@ undefined4 FUN_141b6dac0(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6dac0)(\"name\", gender)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetNumDeclensionSets(\"name\", gender)");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -8566,7 +8566,7 @@ undefined4 FUN_141b6db80(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if (((int)uVar2 == 0) || (uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,3), (int)uVar2 == 0)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6db80)(\"name\", gender, declensionSet)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: DeclineName(\"name\", gender, declensionSet)");
     return 0;
   }
   uVar2 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -8689,7 +8689,7 @@ undefined4 FUN_141b6de70(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6de70)(\"type\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: EndBoundTradeable(\"type\")");
     return 0;
   }
   _Str1 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -8982,7 +8982,7 @@ undefined4 FUN_141b6e420(undefined8 param_1)
   
   cVar1 = CALLF(undefined1, FUN_14065f590)(param_1,1);
   if (cVar1 == '\0') {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: hasLoot, canLoot = CALLF(undefined4, FUN_141b6e420)(unitGUID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: hasLoot, canLoot = CanLootUnit(unitGUID)");
     return 0;
   }
   lVar4 = CALLF(ulonglong, FUN_14170ff20)();
@@ -9016,7 +9016,7 @@ undefined4 FUN_141b6e500(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if (((int)uVar2 == 0) || (uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,2), (int)uVar2 == 0)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6e500)(fullName, context)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: Ambiguate(fullName, context)");
   }
   lVar3 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
   _Str1 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,2,0);
@@ -9143,7 +9143,7 @@ undefined4 FUN_141b6e830(undefined8 param_1)
   
   uVar5 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar5 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6e830)(\"atlasName\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAtlasInfo(\"atlasName\")");
   }
   else {
     (*(undefined1 *)(gen_frame + 0x184)) = 0;
@@ -9206,7 +9206,7 @@ undefined4 FUN_141b6ea10(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6ea10)(uiCameraID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetUICameraInfo(uiCameraID)");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -9326,7 +9326,7 @@ undefined4 FUN_141b6ed00(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6ed00)(gameMessageType)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetGameMessageInfo(gameMessageType)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -9369,7 +9369,7 @@ undefined4 FUN_141b6edd0(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6edd0)(vocalErrorSoundID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: PlayVocalErrorSoundID(vocalErrorSoundID)");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -9442,7 +9442,7 @@ undefined4 FUN_141b6fb70(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6fb70)(eventProfileIndex)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetEventTime(eventProfileIndex)");
   }
   else {
     dVar3 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -9509,7 +9509,7 @@ undefined4 FUN_141b6fca0(undefined8 param_1)
       return 1;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6fca0)(expansionLevel)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: ClassicExpansionAtLeast(expansionLevel)");
   return 0;
 }
 
@@ -9526,7 +9526,7 @@ undefined4 FUN_141b6fd00(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6fd00)(setID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetItemSetInfo(setID)");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -9575,7 +9575,7 @@ undefined4 FUN_141b6fdb0(undefined8 param_1)
   }
   uVar5 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar5 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b6fdb0)(id)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetDifficultyInfo(id)");
     return 0;
   }
   uVar5 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -9765,7 +9765,7 @@ int FUN_141b70200(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_1,2);
   if (((int)uVar4 == 0) && (uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,2), (int)uVar4 != 0)) {
 LAB_141b704d1:
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(int, FUN_141b70200)(itemID|\"name\"|\"itemlink\" [, slotID])");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetItemChildInfo(itemID|\"name\"|\"itemlink\" [, slotID])");
     iVar8 = 0;
   }
   else {
@@ -9865,7 +9865,7 @@ undefined4 FUN_141b70500(undefined8 param_1)
   if (cVar2 != '\0') {
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar3 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b70500)(difficultyID)");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetDungeonDifficultyID(difficultyID)");
       return 0;
     }
     dVar7 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -9916,7 +9916,7 @@ undefined4 FUN_141b70620(undefined8 param_1)
   }
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b70620)(difficultyID[, force])");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetRaidDifficultyID(difficultyID[, force])");
     return 0;
   }
   dVar10 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -10029,7 +10029,7 @@ undefined4 FUN_141b70870(undefined8 param_1)
   }
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b70870)(difficultyID[, force])");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetLegacyRaidDifficultyID(difficultyID[, force])");
     return 0;
   }
   dVar10 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -10134,7 +10134,7 @@ undefined4 FUN_141b70ad0(undefined8 param_1)
   if (cVar1 != '\0') {
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar3 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b70ad0)(difficultyID)");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsLegacyDifficulty(difficultyID)");
       return 0;
     }
     uVar3 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -10157,7 +10157,7 @@ undefined4 FUN_141b70b70(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b70b70)(\"description\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: ReportBug(\"description\")");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -10173,7 +10173,7 @@ undefined4 FUN_141b70bc0(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b70bc0)(\"description\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: ReportSuggestion(\"description\")");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -10455,7 +10455,7 @@ undefined4 FUN_141b72e40(undefined8 param_1)
       return 0;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b72e40)(amount)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: PickupPlayerMoney(amount)");
   return 0;
 }
 
@@ -10750,7 +10750,7 @@ undefined4 FUN_141b7a3b0(undefined8 param_1)
       goto LAB_141b7a481;
     }
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: CALLF(undefined4, FUN_141b7a3b0)(itemInstance.itemID|\"name\"|\"itemlink\"[, specTable])");
+                  "Usage: GetItemSpecInfo(itemInstance.itemID|\"name\"|\"itemlink\"[, specTable])");
   }
   else {
     uVar3 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -10879,7 +10879,7 @@ undefined4 FUN_141b7c960(undefined8 param_1)
   if (cVar1 == '\0') {
     uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar2 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b7c960)(\"message\")");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GuildSetMOTD(\"message\")");
       return 0;
     }
     lVar3 = CALLF(ulonglong, FUN_14170ff20)();
@@ -10961,7 +10961,7 @@ undefined4 FUN_141b7ef40(undefined8 param_1)
   }
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if (((int)uVar2 == 0) || (uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,2), (int)uVar2 == 0)) {
-    pcVar5 = "Usage: CALLF(undefined4, FUN_141b7ef40)(team, name)";
+    pcVar5 = "Usage: ArenaTeamInviteByName(team, name)";
   }
   else if ((*(byte *)((char *)&REFG(undefined2, 0x1431ed120) + 1)) == '\0') {
     pcVar5 = "Arena teams unavailable";
@@ -11026,7 +11026,7 @@ undefined4 FUN_141b7f0a0(undefined8 param_1)
   if (cVar1 != '\0') {
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar3 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b7f0a0)(team)");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: ArenaTeamLeave(team)");
       return 0;
     }
     dVar5 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -11095,7 +11095,7 @@ undefined4 FUN_141b7f140(undefined8 param_1)
     CALLF(undefined8, FUN_14156dc60)(((undefined1 *)(gen_frame + 0x10)));
     return 0;
   }
-  pcVar6 = "Usage: CALLF(undefined4, FUN_141b7f140)(team, name)";
+  pcVar6 = "Usage: ArenaTeamUninviteByName(team, name)";
 LAB_141b7f24f:
   CALLF(undefined8, FUN_142424d80)(param_1,pcVar6);
   return 0;
@@ -11152,7 +11152,7 @@ undefined4 FUN_141b7f270(undefined8 param_1)
     CALLF(undefined8, FUN_14156dc60)(((undefined1 *)(gen_frame + 0x10)));
     return 0;
   }
-  pcVar6 = "Usage: CALLF(undefined4, FUN_141b7f270)(team, name)";
+  pcVar6 = "Usage: ArenaTeamSetLeaderByName(team, name)";
 LAB_141b7f37f:
   CALLF(undefined8, FUN_142424d80)(param_1,pcVar6);
   return 0;
@@ -11173,7 +11173,7 @@ undefined4 FUN_141b7f3a0(undefined8 param_1)
   if (cVar1 != '\0') {
     uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar3 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b7f3a0)(team)");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: ArenaTeamDisband(team)");
       return 0;
     }
     dVar5 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -11291,7 +11291,7 @@ undefined4 FUN_141b7f620(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b7f620)(encounterIndex)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetInstanceLockTimeRemainingEncounter(encounterIndex)");
     return 0;
   }
   uVar3 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -11422,7 +11422,7 @@ undefined4 FUN_141b80630(undefined8 param_1)
       return 1;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b80630)(\"unit\", distIndex)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CheckInteractDistance(\"unit\", distIndex)");
   return 0;
 }
 
@@ -11443,7 +11443,7 @@ undefined4 FUN_141b80760(undefined8 param_1)
   if ((((int)uVar3 == 0) && (uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1), (int)uVar3 == 0)) ||
      (uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar3 == 0)) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: CALLF(undefined4, FUN_141b80760)(itemID|\"name\"|\"itemlink\", classID[, specializationID])"
+                  "Usage: DoesItemContainSpec(itemID|\"name\"|\"itemlink\", classID[, specializationID])"
                  );
     return 0;
   }
@@ -11521,7 +11521,7 @@ undefined4 FUN_141b80920(undefined8 param_1)
   uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar2 == 0) {
 LAB_141b80b65:
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b80920)(\"name\"|\"itemlink\", index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetItemGem(\"name\"|\"itemlink\", index)");
   }
   else {
     uVar8 = 2;
@@ -11624,7 +11624,7 @@ undefined4 FUN_141b80c10(undefined8 param_1)
   if ((int)uVar4 == 0) {
     uVar4 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar4 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b80c10)(itemID|\"name\"|\"itemlink\")");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetItemUniqueness(itemID|\"name\"|\"itemlink\")");
       uVar2 = 0;
       goto LAB_141b80d97;
     }
@@ -11756,7 +11756,7 @@ undefined4 FUN_141b80f60(undefined8 param_1)
   if (cVar1 != '\0') {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar2 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b80f60)(titleMaskID)",((longlong)_ReturnAddress()));
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetCurrentTitle(titleMaskID)",((longlong)_ReturnAddress()));
     }
     else {
       lVar3 = CALLF(ulonglong, FUN_14170ff20)();
@@ -11819,7 +11819,7 @@ undefined4 FUN_141b82280(undefined8 param_1)
     CALLF(uint, FUN_1402b3850)(param_1,uVar5);
     return 1;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b82280)(titleMaskID)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsTitleKnown(titleMaskID)");
   return 0;
 }
 
@@ -11845,7 +11845,7 @@ undefined4 FUN_141b82350(undefined8 param_1)
   if (cVar2 != '\0') {
     uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
     if ((int)uVar4 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b82350)(titleMaskID)");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetTitleName(titleMaskID)");
       return 0;
     }
     uVar4 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -11957,7 +11957,7 @@ undefined4 FUN_141b825b0(undefined8 param_1)
     }
     return 0;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b825b0)(\"max\") or CALLF(undefined4, FUN_141b825b0)(\"min\", \"max\")");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: RandomRoll(\"max\") or RandomRoll(\"min\", \"max\")");
   return 0;
 }
 
@@ -12139,7 +12139,7 @@ undefined4 FUN_141b82970(undefined8 param_1)
       goto LAB_141b82a56;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b82970)(|\"itemlink\")");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetItemCreationContext(|\"itemlink\")");
   uVar4 = 0;
 LAB_141b82a56:
   CALLF(undefined8, FUN_140bb47b0)(((undefined1 *)(gen_frame + 0x0)));
@@ -12418,7 +12418,7 @@ undefined4 FUN_141b82fa0(undefined8 param_1)
       return 1;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b82fa0)(amount)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetCoinIcon(amount)");
   return 0;
 }
 
@@ -12450,7 +12450,7 @@ undefined4 FUN_141b83010(undefined8 param_1)
       return 1;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b83010)(amount [,separator])");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetCoinText(amount [,separator])");
   return 0;
 }
 
@@ -12488,7 +12488,7 @@ undefined4 FUN_141b830c0(undefined8 param_1)
       return 1;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b83010)(amount, fontHeight)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetCoinText(amount, fontHeight)");
   return 0;
 }
 
@@ -13553,7 +13553,7 @@ undefined4 FUN_141b86030(undefined8 param_1)
     CALLF(uint, FUN_1402b3850)(param_1,(uint)bVar1);
     return 1;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b86030)(\"cursor\" or nil)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetCursor(\"cursor\" or nil)");
   return 0;
 }
 
@@ -13862,7 +13862,7 @@ undefined4 FUN_141b86a00(undefined8 param_1)
   
   _Str1 = (int *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
   if ((_Str1 == (int *)0x0) || ((char)*_Str1 == '\0')) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b86a00)(\"type\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsEquippedItemType(\"type\")");
     return 0;
   }
   uVar5 = 0;
@@ -13998,7 +13998,7 @@ undefined4 FUN_141b86d80(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b86d80)(itemClassID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetItemClassInfo(itemClassID)");
   }
   else {
     uVar1 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -14046,7 +14046,7 @@ undefined4 FUN_141b86e20(undefined8 param_1)
   
   uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if (((int)uVar4 == 0) || (uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar4 == 0)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b86e20)(itemClassID, itemSubClassID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetItemSubClassInfo(itemClassID, itemSubClassID)");
     return 0;
   }
   uVar4 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -14127,7 +14127,7 @@ undefined4 FUN_141b87010(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b87010)(inventorySlot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetItemInventorySlotInfo(inventorySlot)");
     return 0;
   }
   uVar2 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -14257,7 +14257,7 @@ undefined4 FUN_141b87270(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b87270)(\"unit\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: DropItemOnUnit(\"unit\")");
     return 0;
   }
   uVar3 = CALLF(undefined8 *, FUN_14191e730)((void *)&(*(gen_v16 *)(gen_frame + 0x20)));
@@ -14613,7 +14613,7 @@ undefined4 FUN_141b87a00(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b87a00)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetItemQualityColor(index)");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -14880,7 +14880,7 @@ undefined4 FUN_141b88110(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b88110)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: EquipCursorItem(slot)");
     return 0;
   }
   lVar3 = CALLF(ulonglong, FUN_14170ff20)();
@@ -14994,7 +14994,7 @@ undefined4 FUN_141b88ab0(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b88ab0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: EquipPendingItem(index)");
     return 0;
   }
   lVar2 = CALLF(ulonglong, FUN_14170ff20)();
@@ -15014,7 +15014,7 @@ undefined4 FUN_141b88b20(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b88b20)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CancelPendingEquip(index)");
     return 0;
   }
   lVar2 = CALLF(ulonglong, FUN_14170ff20)();
@@ -15211,7 +15211,7 @@ undefined4 FUN_141b88f40(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b88f40)(facing)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: TargetDirectionEnemy(facing)");
     return 0;
   }
   if ((REFG(undefined8, 0x1431f6e08) == 0) || ((REFG(undefined4, 0x1431f6e00) & 0x20) != 0)) {
@@ -15239,7 +15239,7 @@ undefined4 FUN_141b89000(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b89000)(facing)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: TargetDirectionFriend(facing)");
     return 0;
   }
   if ((REFG(undefined8, 0x1431f6e08) == 0) || ((REFG(undefined4, 0x1431f6e00) & 0x20) != 0)) {
@@ -15441,7 +15441,7 @@ undefined4 FUN_141b89410(undefined8 param_1)
   CALLF(undefined8 *, FUN_14191a540)(&(*(undefined8 *)(gen_frame + 0x0)),_Str1,1,0x40,(unsigned long long)(0x80),(unsigned long long)((int)uVar2),REFG(float, 0x14261f708),(unsigned long long)(0));
   if ((byte)((ulonglong)(*(undefined8 *)(gen_frame + 0x8)) >> 0x3a) == 0) {
     uVar2 = CALLF(undefined8, FUN_1402b47d0)(param_1,2);
-    puVar3 = (undefined8 *)CALLF(undefined8 *, FUN_14191a540)(((undefined1 *)(gen_frame + 0x10)),_Str1,1,0x20,(unsigned long long)(1),(unsigned long long)((int)uVar2),GEN_AS_FLOAT((unsigned long long)(uVar6)),(unsigned long long)(0));
+    puVar3 = (undefined8 *)CALLF(undefined8 *, FUN_14191a540)(((undefined1 *)(gen_frame + 0x10)),_Str1,1,0x20,(unsigned long long)(1),(unsigned long long)((int)uVar2),GEN_ARG_FLOAT(uVar6),(unsigned long long)(0));
     (*(undefined8 *)(gen_frame + 0x0)) = *puVar3;
     (*(undefined8 *)(gen_frame + 0x8)) = puVar3[1];
   }
@@ -15646,7 +15646,7 @@ undefined4 FUN_141b89ef0(undefined8 param_1)
   if ((int)uVar2 == 0) {
     uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar2 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b89ef0)(index or \"name\")");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAddOnMemoryUsage(index or \"name\")");
       return 0;
     }
     lVar3 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -15698,7 +15698,7 @@ undefined4 FUN_141b8a000(undefined8 param_1)
   if ((int)uVar2 == 0) {
     uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar2 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b8a000)(index or \"name\")");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAddOnCPUUsage(index or \"name\")");
       return 0;
     }
     lVar3 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -15738,7 +15738,7 @@ undefined4 FUN_141b8a0b0(undefined8 param_1)
     CALLF(undefined1 *, FUN_1402b3b50)(param_1,(double)((uint *)(gen_frame + 0x8))[0]);
     return 2;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b8a0b0)(function[, includeSubroutines])");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetFunctionCPUUsage(function[, includeSubroutines])");
   return 0;
 }
 
@@ -15773,7 +15773,7 @@ undefined4 FUN_141b8a160(undefined8 param_1)
     CALLF(undefined1 *, FUN_1402b3b50)(param_1,(double)((uint *)(gen_frame + 0x8))[0]);
     return 2;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b8a160)(frame[, includeChildren])");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetFrameCPUUsage(frame[, includeChildren])");
   return 0;
 }
 
@@ -15787,7 +15787,7 @@ undefined4 FUN_141b8a250(undefined8 param_1)
   ((uint *)(gen_frame + 0x8))[0] = 0;
   ((double *)(gen_frame + 0x10))[0] = 0.0;
   CALLF(undefined4, FUN_14063ec90)(((double *)(gen_frame + 0x10)),((uint *)(gen_frame + 0x8)));
-  CALLF(undefined1 *, FUN_1402b3b50)(param_1,GEN_AS_DOUBLE((unsigned long long)(((double *)(gen_frame + 0x10))[0])));
+  CALLF(undefined1 *, FUN_1402b3b50)(param_1,GEN_ARG_DOUBLE(((double *)(gen_frame + 0x10))[0]));
   CALLF(undefined1 *, FUN_1402b3b50)(param_1,(double)((uint *)(gen_frame + 0x8))[0]);
   return 2;
 }
@@ -15817,7 +15817,7 @@ undefined4 FUN_141b8a2c0(undefined8 param_1)
   if ((int)uVar3 == 0) {
     uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar3 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b8a2c0)(index or \"name\")");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAddOnOptionalDependencies(index or \"name\")");
       return 0;
     }
     lVar4 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -15883,7 +15883,7 @@ undefined4 FUN_141b8a3e0(undefined8 param_1)
   if ((int)uVar3 == 0) {
     uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
     if ((int)uVar3 == 0) {
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b8a3e0)(index or \"name\")");
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsAddOnLoadOnDemand(index or \"name\")");
       return 0;
     }
     lVar4 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -15947,7 +15947,7 @@ undefined4 FUN_141b8a540(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b8a540)(\"timer\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetMirrorTimerInfo(\"timer\")");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -16000,7 +16000,7 @@ undefined4 FUN_141b8a690(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b8a690)(\"timer\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetMirrorTimerProgress(\"timer\")");
     return 0;
   }
   uVar2 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -16192,7 +16192,7 @@ undefined4 FUN_141b8a980(undefined8 param_1)
       }
     }
 LAB_141b8abd6:
-    CALLF(undefined8, FUN_142424d80)(param_1,"CALLF(undefined4, FUN_141b8a980)(): Invalid inventory dstSlot");
+    CALLF(undefined8, FUN_142424d80)(param_1,"EquipItemByName(): Invalid inventory dstSlot");
     return 0;
   }
   uVar4 = CALLF(undefined8, FUN_1402b4800)(param_1,2);
@@ -16294,7 +16294,7 @@ undefined4 FUN_141b8ae40(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b8ae40)(\"unit\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: InitiateTrade(\"unit\")");
     return 0;
   }
   uVar2 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -16350,7 +16350,7 @@ undefined4 FUN_141b8afc0(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b8afc0)(unit [, showError])");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CanInspect(unit [, showError])");
     return 0;
   }
   pcVar4 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -16399,7 +16399,7 @@ undefined4 FUN_141b8b120(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b8b120)(unit)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: NotifyInspect(unit)");
     return 0;
   }
   uVar2 = CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -16547,7 +16547,7 @@ undefined4 FUN_141b8b3d0(undefined8 param_1)
       }
       goto LAB_141b8b49a;
     }
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141b8b3d0)(itemID|\"name\"|\"itemlink\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetItemInfoInstant(itemID|\"name\"|\"itemlink\")");
   }
   else {
     uVar4 = CALLF(undefined8, FUN_1402b4800)(param_1,1);

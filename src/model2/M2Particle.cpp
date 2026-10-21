@@ -26,7 +26,7 @@
 // M2ParticleGenerator.cpp.
 
 void M2IndicesReserve(M2SceneVector<uint32_t>* indices, uint64_t count);
-void M2IndicesPush(M2SceneVector<uint32_t>* indices, uint32_t value);
+void M2IndicesPush(M2SceneVector<uint32_t>* indices, const uint32_t& value);
 
 namespace {
 

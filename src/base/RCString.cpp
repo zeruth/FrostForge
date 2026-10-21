@@ -38,8 +38,7 @@ static_assert(sizeof(RCStringBlocks) == 0x30, "RCStringBlocks layout");
 static_assert(offsetof(RCStringPool, m_blocks) == 0x1048, "RCStringPool layout");
 static_assert(sizeof(RCStringPool) == 0x1078, "RCStringPool layout");
 
-// DAT_142e20850
-RCStringPool* s_pool;
+RCStringPool* s_pool;  // 0x142e20850
 
 // Starts a new block of at least `bytes` (64 KiB minimum) and makes it current; the old
 // block's unused tail is abandoned. The block array grows by TSGrowableArray's rule, with a

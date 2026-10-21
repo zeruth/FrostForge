@@ -9975,7 +9975,7 @@ undefined4 FUN_140b5ddd0(undefined8 *param_1, double *param_2)
     CALLF(undefined8, FUN_142424d80)(*param_1,"stack overflow");
   }
   else {
-    CALLF(undefined1 *, FUN_1402b3b50)(*param_1,GEN_AS_DOUBLE((unsigned long long)(*param_2)));
+    CALLF(undefined1 *, FUN_1402b3b50)(*param_1,GEN_ARG_DOUBLE(*param_2));
   }
   CALLF(undefined8, FUN_1402b4450)(*param_1,uVar1,"energy",6);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(*param_1,1);
@@ -11802,7 +11802,7 @@ uint FUN_140b6c5c0(undefined8 param_1)
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local success = C_UserFeedback.CALLF(uint, FUN_140b6c5c0)(bugInfo [, suppressNotification])"
+                  "Usage: local success = C_UserFeedback.SubmitBug(bugInfo [, suppressNotification])"
                  );
   }
   else {
@@ -11819,7 +11819,7 @@ uint FUN_140b6c5c0(undefined8 param_1)
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
       CALLF(undefined8, FUN_1424248b0)(param_1,1,
-                    "Usage: local success = C_UserFeedback.CALLF(uint, FUN_140b6c5c0)(bugInfo [, suppressNotification])"
+                    "Usage: local success = C_UserFeedback.SubmitBug(bugInfo [, suppressNotification])"
                    );
     }
     else {
@@ -11868,7 +11868,7 @@ undefined4 FUN_140b6ce20(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_UserFeedback.CALLF(undefined4, FUN_140b6ce20)(suggestion)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local success = C_UserFeedback.SubmitSuggestion(suggestion)");
   }
   else {
     uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
@@ -11883,7 +11883,7 @@ undefined4 FUN_140b6ce20(undefined8 param_1)
       if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
-      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: local success = C_UserFeedback.CALLF(undefined4, FUN_140b6ce20)(suggestion)");
+      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: local success = C_UserFeedback.SubmitSuggestion(suggestion)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -11918,7 +11918,7 @@ undefined8 FUN_140b70790(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined8, FUN_140b70790)(channelID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.ActivateChannel(channelID)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
@@ -11940,11 +11940,11 @@ undefined8 FUN_140b70790(undefined8 param_1)
     CALLF(double, FUN_1402b4920)(param_1,1);
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x0)),"outside of expected range %u to %u",0,0xffffffff);
     if ((*(longlong *)(gen_frame + 0x8)) == 0) {
-      pcVar3 = "Usage: C_VoiceChat.CALLF(undefined8, FUN_140b70790)(channelID)";
+      pcVar3 = "Usage: C_VoiceChat.ActivateChannel(channelID)";
     }
     else {
       pcVar3 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x0)),
-                                     "Usage: C_VoiceChat.CALLF(undefined8, FUN_140b70790)(channelID)");
+                                     "Usage: C_VoiceChat.ActivateChannel(channelID)");
     }
     if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
       CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
@@ -11969,7 +11969,7 @@ undefined4 FUN_140b70f20(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b70f20)(channelID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.ActivateChannelTranscription(channelID)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
@@ -11991,11 +11991,11 @@ undefined4 FUN_140b70f20(undefined8 param_1)
     CALLF(double, FUN_1402b4920)(param_1,1);
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x0)),"outside of expected range %u to %u",0,0xffffffff);
     if ((*(longlong *)(gen_frame + 0x8)) == 0) {
-      pcVar3 = "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b70f20)(channelID)";
+      pcVar3 = "Usage: C_VoiceChat.ActivateChannelTranscription(channelID)";
     }
     else {
       pcVar3 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x0)),
-                                     "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b70f20)(channelID)");
+                                     "Usage: C_VoiceChat.ActivateChannelTranscription(channelID)");
     }
     if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
       CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
@@ -12018,7 +12018,7 @@ undefined4 FUN_140b716b0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b716b0)(listenToLocalUser)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.BeginLocalCapture(listenToLocalUser)");
   }
   else {
     iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -12062,7 +12062,7 @@ undefined4 FUN_140b723f0(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local status = C_VoiceChat.CALLF(undefined4, FUN_140b723f0)(channelDisplayName)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local status = C_VoiceChat.CreateChannel(channelDisplayName)");
   }
   else {
     uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
@@ -12077,7 +12077,7 @@ undefined4 FUN_140b723f0(undefined8 param_1)
       if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
-      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: local status = C_VoiceChat.CALLF(undefined4, FUN_140b723f0)(channelDisplayName)")
+      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: local status = C_VoiceChat.CreateChannel(channelDisplayName)")
       ;
     }
     else {
@@ -12113,7 +12113,7 @@ undefined4 FUN_140b72b60(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b72b60)(channelID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.DeactivateChannel(channelID)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
@@ -12135,11 +12135,11 @@ undefined4 FUN_140b72b60(undefined8 param_1)
     CALLF(double, FUN_1402b4920)(param_1,1);
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x0)),"outside of expected range %u to %u",0,0xffffffff);
     if ((*(longlong *)(gen_frame + 0x8)) == 0) {
-      pcVar3 = "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b72b60)(channelID)";
+      pcVar3 = "Usage: C_VoiceChat.DeactivateChannel(channelID)";
     }
     else {
       pcVar3 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x0)),
-                                     "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b72b60)(channelID)");
+                                     "Usage: C_VoiceChat.DeactivateChannel(channelID)");
     }
     if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
       CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
@@ -12164,7 +12164,7 @@ undefined4 FUN_140b732f0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b732f0)(channelID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.DeactivateChannelTranscription(channelID)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
@@ -12186,11 +12186,11 @@ undefined4 FUN_140b732f0(undefined8 param_1)
     CALLF(double, FUN_1402b4920)(param_1,1);
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x0)),"outside of expected range %u to %u",0,0xffffffff);
     if ((*(longlong *)(gen_frame + 0x8)) == 0) {
-      pcVar3 = "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b732f0)(channelID)";
+      pcVar3 = "Usage: C_VoiceChat.DeactivateChannelTranscription(channelID)";
     }
     else {
       pcVar3 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x0)),
-                                     "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b732f0)(channelID)")
+                                     "Usage: C_VoiceChat.DeactivateChannelTranscription(channelID)")
       ;
     }
     if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
@@ -12909,9 +12909,9 @@ undefined4 FUN_140b7ea40(undefined8 param_1)
   
   uVar3 = 1;
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
-  pcVar4 = "Usage: local memberGUID = C_VoiceChat.CALLF(undefined4, FUN_140b7ea40)(memberID, channelID)";
+  pcVar4 = "Usage: local memberGUID = C_VoiceChat.GetMemberGUID(memberID, channelID)";
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local memberGUID = C_VoiceChat.CALLF(undefined4, FUN_140b7ea40)(memberID, channelID)"
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local memberGUID = C_VoiceChat.GetMemberGUID(memberID, channelID)"
                  );
     uVar3 = 1;
   }
@@ -12936,11 +12936,11 @@ undefined4 FUN_140b7ea40(undefined8 param_1)
     CALLF(double, FUN_1402b4920)(param_1,1);
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x10)),"outside of expected range %u to %u",0,0xffffffff);
     if ((*(longlong *)(gen_frame + 0x18)) == 0) {
-      pcVar5 = "Usage: local memberGUID = C_VoiceChat.CALLF(undefined4, FUN_140b7ea40)(memberID, channelID)";
+      pcVar5 = "Usage: local memberGUID = C_VoiceChat.GetMemberGUID(memberID, channelID)";
     }
     else {
       pcVar5 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x10)),
-                                     "Usage: local memberGUID = C_VoiceChat.CALLF(undefined4, FUN_140b7ea40)(memberID, channelID)"
+                                     "Usage: local memberGUID = C_VoiceChat.GetMemberGUID(memberID, channelID)"
                                     );
     }
     if (((*(ulonglong *)(gen_frame + 0x20)) & 0x8000000000000000) == 0) {
@@ -12951,7 +12951,7 @@ undefined4 FUN_140b7ea40(undefined8 param_1)
 LAB_140b7eb9a:
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar3);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local memberGUID = C_VoiceChat.CALLF(undefined4, FUN_140b7ea40)(memberID, channelID)"
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: local memberGUID = C_VoiceChat.GetMemberGUID(memberID, channelID)"
                  );
   }
   else {
@@ -12975,7 +12975,7 @@ LAB_140b7eb9a:
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x38)),"outside of expected range %u to %u",0,0xffffffff);
     if ((*(longlong *)(gen_frame + 0x40)) != 0) {
       pcVar4 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x38)),
-                                     "Usage: local memberGUID = C_VoiceChat.CALLF(undefined4, FUN_140b7ea40)(memberID, channelID)"
+                                     "Usage: local memberGUID = C_VoiceChat.GetMemberGUID(memberID, channelID)"
                                     );
     }
     if (((*(ulonglong *)(gen_frame + 0x48)) & 0x8000000000000000) == 0) {
@@ -13741,10 +13741,10 @@ undefined4 FUN_140b8acf0(undefined8 param_1)
   
   uVar5 = 1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
-  pcVar4 = "Usage: local isLocalPlayer = C_VoiceChat.CALLF(undefined4, FUN_140b8acf0)(memberID, channelID)";
+  pcVar4 = "Usage: local isLocalPlayer = C_VoiceChat.IsMemberLocalPlayer(memberID, channelID)";
   if ((int)uVar3 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local isLocalPlayer = C_VoiceChat.CALLF(undefined4, FUN_140b8acf0)(memberID, channelID)"
+                  "Usage: local isLocalPlayer = C_VoiceChat.IsMemberLocalPlayer(memberID, channelID)"
                  );
     uVar5 = 1;
   }
@@ -13769,11 +13769,11 @@ undefined4 FUN_140b8acf0(undefined8 param_1)
     CALLF(double, FUN_1402b4920)(param_1,1);
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x0)),"outside of expected range %u to %u",0,0xffffffff);
     if ((*(longlong *)(gen_frame + 0x8)) == 0) {
-      pcVar6 = "Usage: local isLocalPlayer = C_VoiceChat.CALLF(undefined4, FUN_140b8acf0)(memberID, channelID)";
+      pcVar6 = "Usage: local isLocalPlayer = C_VoiceChat.IsMemberLocalPlayer(memberID, channelID)";
     }
     else {
       pcVar6 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x0)),
-                                     "Usage: local isLocalPlayer = C_VoiceChat.CALLF(undefined4, FUN_140b8acf0)(memberID, channelID)"
+                                     "Usage: local isLocalPlayer = C_VoiceChat.IsMemberLocalPlayer(memberID, channelID)"
                                     );
     }
     if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
@@ -13785,7 +13785,7 @@ LAB_140b8ae48:
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar5);
   if ((int)uVar3 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local isLocalPlayer = C_VoiceChat.CALLF(undefined4, FUN_140b8acf0)(memberID, channelID)"
+                  "Usage: local isLocalPlayer = C_VoiceChat.IsMemberLocalPlayer(memberID, channelID)"
                  );
   }
   else {
@@ -13809,7 +13809,7 @@ LAB_140b8ae48:
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x28)),"outside of expected range %u to %u",0,0xffffffff);
     if ((*(longlong *)(gen_frame + 0x30)) != 0) {
       pcVar4 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x28)),
-                                     "Usage: local isLocalPlayer = C_VoiceChat.CALLF(undefined4, FUN_140b8acf0)(memberID, channelID)"
+                                     "Usage: local isLocalPlayer = C_VoiceChat.IsMemberLocalPlayer(memberID, channelID)"
                                     );
     }
     if (((*(ulonglong *)(gen_frame + 0x38)) & 0x8000000000000000) == 0) {
@@ -14091,7 +14091,7 @@ uint FUN_140b8f890(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: local isUsingVoice = C_VoiceChat.CALLF(uint, FUN_140b8f890)(playerLocation)");
+                  "Usage: local isUsingVoice = C_VoiceChat.IsPlayerUsingVoice(playerLocation)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2200)(param_1,1);
@@ -14107,7 +14107,7 @@ uint FUN_140b8f890(undefined8 param_1)
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
       CALLF(undefined8, FUN_1424248b0)(param_1,1,
-                    "Usage: local isUsingVoice = C_VoiceChat.CALLF(uint, FUN_140b8f890)(playerLocation)");
+                    "Usage: local isUsingVoice = C_VoiceChat.IsPlayerUsingVoice(playerLocation)");
     }
     else {
       iVar3 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -14269,7 +14269,7 @@ undefined4 FUN_140b92760(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b92760)(channelID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.LeaveChannel(channelID)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
@@ -14291,11 +14291,11 @@ undefined4 FUN_140b92760(undefined8 param_1)
     CALLF(double, FUN_1402b4920)(param_1,1);
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x0)),"outside of expected range %u to %u",0,0xffffffff);
     if ((*(longlong *)(gen_frame + 0x8)) == 0) {
-      pcVar3 = "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b92760)(channelID)";
+      pcVar3 = "Usage: C_VoiceChat.LeaveChannel(channelID)";
     }
     else {
       pcVar3 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x0)),
-                                     "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b92760)(channelID)");
+                                     "Usage: C_VoiceChat.LeaveChannel(channelID)");
     }
     if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
       CALLF(undefined1, FUN_140255210)((*(undefined8 *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
@@ -14371,14 +14371,14 @@ undefined4 FUN_140b94250(undefined8 param_1)
   dVar1 = REFG(double, 0x142620ed8);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b94250)(clubId, streamId)"
+                  "Usage: C_VoiceChat.RequestJoinAndActivateCommunityStreamChannel(clubId, streamId)"
                  );
   }
   else {
     cVar2 = CALLF(bool, FUN_140b5d440)(param_1,1);
     if (cVar2 == '\0') {
       CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),1,
-                    "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b94250)(clubId, streamId)"
+                    "Usage: C_VoiceChat.RequestJoinAndActivateCommunityStreamChannel(clubId, streamId)"
                    );
     }
     else {
@@ -14406,14 +14406,14 @@ undefined4 FUN_140b94250(undefined8 param_1)
   uVar4 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar6);
   if ((int)uVar4 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b94250)(clubId, streamId)"
+                  "Usage: C_VoiceChat.RequestJoinAndActivateCommunityStreamChannel(clubId, streamId)"
                  );
   }
   else {
     cVar2 = CALLF(bool, FUN_140b5d440)(param_1,uVar6);
     if (cVar2 == '\0') {
       CALLF(undefined8, FUN_1407cbb50)(&(*(undefined8 *)(gen_frame + 0x0)),uVar6,
-                    "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b94250)(clubId, streamId)"
+                    "Usage: C_VoiceChat.RequestJoinAndActivateCommunityStreamChannel(clubId, streamId)"
                    );
     }
     else {
@@ -14505,7 +14505,7 @@ undefined4 FUN_140b95750(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b95750)(communicationMode)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.SetCommunicationMode(communicationMode)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
@@ -14533,7 +14533,7 @@ undefined4 FUN_140b95750(undefined8 param_1)
     if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
       CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
     }
-    CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b95750)(communicationMode)");
+    CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_VoiceChat.SetCommunicationMode(communicationMode)");
   }
 LAB_140b95853:
   CALLF(undefined8, FUN_1419fb7a0)((*(undefined1 *)(gen_frame + 0x40)));
@@ -14551,7 +14551,7 @@ undefined4 FUN_140b95ea0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b95ea0)(isDeafened)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.SetDeafened(isDeafened)");
   }
   else {
     iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -14635,7 +14635,7 @@ undefined4 FUN_140b972b0(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   ((undefined4 *)(gen_frame + 0x38))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5050)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b972b0)(volume)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x40))));
+  CALLF(undefined8, FUN_1408c5050)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_VoiceChat.SetInputVolume(volume)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x40))));
   CALLF(undefined8, FUN_1419fb860)(((undefined4 *)(gen_frame + 0x40))[0]);
   return 0;
 }
@@ -14651,8 +14651,8 @@ undefined4 FUN_140b97940(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   ((undefined4 *)(gen_frame + 0x38))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b97940)(scale)",0,(unsigned long long)(((float *)(gen_frame + 0x40))));
-  CALLF(undefined8, FUN_1419fb9b0)(GEN_AS_FLOAT((unsigned long long)(((float *)(gen_frame + 0x40))[0])));
+  CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_VoiceChat.SetMasterVolumeScale(scale)",0,(unsigned long long)(((float *)(gen_frame + 0x40))));
+  CALLF(undefined8, FUN_1419fb9b0)(GEN_ARG_FLOAT(((float *)(gen_frame + 0x40))[0]));
   return 0;
 }
 
@@ -14676,7 +14676,7 @@ undefined4 FUN_140b97fd0(undefined8 param_1)
   (*(ulonglong *)(gen_frame + 0x58)) = 0;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b97fd0)(playerLocation, muted)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.SetMemberMuted(playerLocation, muted)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2200)(param_1,1);
@@ -14691,7 +14691,7 @@ undefined4 FUN_140b97fd0(undefined8 param_1)
       if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
-      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b97fd0)(playerLocation, muted)");
+      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_VoiceChat.SetMemberMuted(playerLocation, muted)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -14713,7 +14713,7 @@ undefined4 FUN_140b97fd0(undefined8 param_1)
   }
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,uVar5);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b97fd0)(playerLocation, muted)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.SetMemberMuted(playerLocation, muted)");
   }
   else {
     iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -14749,7 +14749,7 @@ undefined4 FUN_140b98770(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b98770)(playerLocation, volume)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.SetMemberVolume(playerLocation, volume)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2200)(param_1,1);
@@ -14764,7 +14764,7 @@ undefined4 FUN_140b98770(undefined8 param_1)
       if (((*(ulonglong *)(gen_frame + 0x28)) & 0x8000000000000000) == 0) {
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x18)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
-      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b98770)(playerLocation, volume)");
+      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_VoiceChat.SetMemberVolume(playerLocation, volume)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -14784,7 +14784,7 @@ undefined4 FUN_140b98770(undefined8 param_1)
       }
     }
   }
-  CALLF(undefined8, FUN_1408c5050)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0xb8)),"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b98770)(playerLocation, volume)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0xc0))));
+  CALLF(undefined8, FUN_1408c5050)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0xb8)),"Usage: C_VoiceChat.SetMemberVolume(playerLocation, volume)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0xc0))));
   CALLF(undefined8, FUN_1419fbd50)(&(*(ulonglong *)(gen_frame + 0x50)),((undefined4 *)(gen_frame + 0xc0))[0]);
   return 0;
 }
@@ -14800,7 +14800,7 @@ undefined4 FUN_140b98ee0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b98ee0)(isMuted)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.SetMuted(isMuted)");
   }
   else {
     iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -14884,7 +14884,7 @@ undefined4 FUN_140b9a2f0(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   ((undefined4 *)(gen_frame + 0x38))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5050)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9a2f0)(volume)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x40))));
+  CALLF(undefined8, FUN_1408c5050)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_VoiceChat.SetOutputVolume(volume)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x40))));
   CALLF(undefined8, FUN_1419fbe40)(((undefined4 *)(gen_frame + 0x40))[0]);
   return 0;
 }
@@ -14905,10 +14905,10 @@ undefined4 FUN_140b9a980(undefined8 param_1)
   
   iVar4 = 1;
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
-  pcVar5 = "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9a980)(textureObject, memberID, channelID)";
+  pcVar5 = "Usage: C_VoiceChat.SetPortraitTexture(textureObject, memberID, channelID)";
   if ((int)uVar2 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9a980)(textureObject, memberID, channelID)");
+                  "Usage: C_VoiceChat.SetPortraitTexture(textureObject, memberID, channelID)");
   }
   else {
     lVar3 = CALLF(undefined8, FUN_140b49410)(0,param_1,1,0,(unsigned long long)(0));
@@ -14924,7 +14924,7 @@ undefined4 FUN_140b9a980(undefined8 param_1)
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
       CALLF(undefined8, FUN_1424248b0)(param_1,1,
-                    "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9a980)(textureObject, memberID, channelID)");
+                    "Usage: C_VoiceChat.SetPortraitTexture(textureObject, memberID, channelID)");
     }
     else {
       iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -14940,7 +14940,7 @@ undefined4 FUN_140b9a980(undefined8 param_1)
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar2 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9a980)(textureObject, memberID, channelID)");
+                  "Usage: C_VoiceChat.SetPortraitTexture(textureObject, memberID, channelID)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,iVar4);
@@ -14963,11 +14963,11 @@ undefined4 FUN_140b9a980(undefined8 param_1)
     CALLF(double, FUN_1402b4920)(param_1,iVar4);
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x28)),"outside of expected range %u to %u",0,0xffffffff);
     if ((*(longlong *)(gen_frame + 0x30)) == 0) {
-      pcVar6 = "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9a980)(textureObject, memberID, channelID)";
+      pcVar6 = "Usage: C_VoiceChat.SetPortraitTexture(textureObject, memberID, channelID)";
     }
     else {
       pcVar6 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x28)),
-                                     "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9a980)(textureObject, memberID, channelID)"
+                                     "Usage: C_VoiceChat.SetPortraitTexture(textureObject, memberID, channelID)"
                                     );
     }
     if (((*(ulonglong *)(gen_frame + 0x38)) & 0x8000000000000000) == 0) {
@@ -14979,7 +14979,7 @@ LAB_140b9ab9c:
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar4);
   if ((int)uVar2 < 1) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9a980)(textureObject, memberID, channelID)");
+                  "Usage: C_VoiceChat.SetPortraitTexture(textureObject, memberID, channelID)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,iVar4);
@@ -15002,7 +15002,7 @@ LAB_140b9ab9c:
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x50)),"outside of expected range %u to %u",0,0xffffffff);
     if ((*(longlong *)(gen_frame + 0x58)) != 0) {
       pcVar5 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x50)),
-                                     "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9a980)(textureObject, memberID, channelID)"
+                                     "Usage: C_VoiceChat.SetPortraitTexture(textureObject, memberID, channelID)"
                                     );
     }
     if (((*(ulonglong *)(gen_frame + 0x60)) & 0x8000000000000000) == 0) {
@@ -15080,7 +15080,7 @@ undefined4 FUN_140b9c030(undefined8 param_1)
   (*(undefined4 *)(gen_frame + 0x14)) = 0xffffffff;
   ((undefined4 *)(gen_frame + 0x38))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
-  CALLF(undefined8, FUN_1408c5050)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9c030)(sensitivity)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x40))));
+  CALLF(undefined8, FUN_1408c5050)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_VoiceChat.SetVADSensitivity(sensitivity)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x40))));
   CALLF(undefined8, FUN_1419fbfb0)(((undefined4 *)(gen_frame + 0x40))[0]);
   return 0;
 }
@@ -15178,7 +15178,7 @@ undefined4 FUN_140b9dab0(undefined8 param_1)
   (*(undefined8 *)(gen_frame + 0x10)) = param_1;
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9dab0)(voiceID,text,destination,rate,(unsigned long long)(volume))");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.SpeakText(voiceID, text, destination, rate, volume)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
@@ -15202,11 +15202,11 @@ undefined4 FUN_140b9dab0(undefined8 param_1)
     CALLF(double, FUN_1402b4920)(param_1,1);
     CALLF(undefined8 *, FUN_1423623b0)(&(*(undefined8 *)(gen_frame + 0x70)),"outside of expected range %u to %u",0,0xffffffff);
     if ((*(longlong *)(gen_frame + 0x78)) == 0) {
-      pcVar4 = "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9dab0)(voiceID,text,destination,rate,(unsigned long long)(volume))";
+      pcVar4 = "Usage: C_VoiceChat.SpeakText(voiceID, text, destination, rate, volume)";
     }
     else {
       pcVar4 = (char *)CALLF(undefined8, FUN_1402b39c0)(param_1,"%s - %s",(*(undefined8 *)(gen_frame + 0x70)),
-                                     "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9dab0)(voiceID,text,destination,rate,(unsigned long long)(volume))"
+                                     "Usage: C_VoiceChat.SpeakText(voiceID, text, destination, rate, volume)"
                                     );
     }
     if (((*(ulonglong *)(gen_frame + 0x80)) & 0x8000000000000000) == 0) {
@@ -15217,7 +15217,7 @@ undefined4 FUN_140b9dab0(undefined8 param_1)
 LAB_140b9dbff:
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar3);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9dab0)(voiceID,text,destination,rate,(unsigned long long)(volume))");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.SpeakText(voiceID, text, destination, rate, volume)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,iVar3);
@@ -15233,7 +15233,7 @@ LAB_140b9dbff:
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x20)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
       CALLF(undefined8, FUN_1424248b0)(param_1,iVar3,
-                    "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9dab0)(voiceID,text,destination,rate,(unsigned long long)(volume))");
+                    "Usage: C_VoiceChat.SpeakText(voiceID, text, destination, rate, volume)");
     }
     else {
       iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
@@ -15249,7 +15249,7 @@ LAB_140b9dbff:
   }
   uVar2 = CALLF(undefined8, FUN_1402b4a30)(param_1,iVar3);
   if ((int)uVar2 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9dab0)(voiceID,text,destination,rate,(unsigned long long)(volume))");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.SpeakText(voiceID, text, destination, rate, volume)");
   }
   else {
     uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,iVar3);
@@ -15279,11 +15279,11 @@ LAB_140b9dbff:
       CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x48)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
     }
     CALLF(undefined8, FUN_1424248b0)(param_1,iVar3,
-                  "Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9dab0)(voiceID,text,destination,rate,(unsigned long long)(volume))");
+                  "Usage: C_VoiceChat.SpeakText(voiceID, text, destination, rate, volume)");
   }
 LAB_140b9dd8e:
-  CALLF(undefined8, FUN_1408c5050)(&(*(undefined8 *)(gen_frame + 0x10)),((int *)(gen_frame + 0xe8)),"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9dab0)(voiceID,text,destination,rate,(unsigned long long)(volume))",0,(unsigned long long)(((undefined4 *)(gen_frame + 0xf8))));
-  CALLF(undefined8, FUN_1408c5050)(&(*(undefined8 *)(gen_frame + 0x10)),((int *)(gen_frame + 0xe8)),"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9dab0)(voiceID,text,destination,rate,(unsigned long long)(volume))",0,(unsigned long long)(((undefined4 *)(gen_frame + 0xf0))));
+  CALLF(undefined8, FUN_1408c5050)(&(*(undefined8 *)(gen_frame + 0x10)),((int *)(gen_frame + 0xe8)),"Usage: C_VoiceChat.SpeakText(voiceID, text, destination, rate, volume)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0xf8))));
+  CALLF(undefined8, FUN_1408c5050)(&(*(undefined8 *)(gen_frame + 0x10)),((int *)(gen_frame + 0xe8)),"Usage: C_VoiceChat.SpeakText(voiceID, text, destination, rate, volume)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0xf0))));
   CALLF(undefined1, FUN_1419fc390)((*(undefined4 *)(gen_frame + 0x0)),(*(undefined8 *)(gen_frame + 0x8)),(*(undefined4 *)(gen_frame + 0xe0)),((undefined4 *)(gen_frame + 0xf8))[0],(unsigned long long)(((undefined4 *)(gen_frame + 0xf0))[0]));
   return 0;
 }
@@ -15319,7 +15319,7 @@ undefined4 FUN_140b9f090(undefined8 param_1)
   (*(ulonglong *)(gen_frame + 0x48)) = 0;
   uVar3 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar3 < 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9f090)(playerLocation)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: C_VoiceChat.ToggleMemberMuted(playerLocation)");
   }
   else {
     cVar1 = CALLF(undefined1, FUN_1407d2200)(param_1,1);
@@ -15334,7 +15334,7 @@ undefined4 FUN_140b9f090(undefined8 param_1)
       if (((*(ulonglong *)(gen_frame + 0x10)) & 0x8000000000000000) == 0) {
         CALLF(undefined1, FUN_140255210)((*(undefined1 * *)(gen_frame + 0x0)),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
-      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_VoiceChat.CALLF(undefined4, FUN_140b9f090)(playerLocation)");
+      CALLF(undefined8, FUN_1424248b0)(param_1,1,"Usage: C_VoiceChat.ToggleMemberMuted(playerLocation)");
     }
     else {
       iVar2 = CALLF(undefined4, FUN_1402b2770)(param_1,1);

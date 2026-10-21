@@ -6167,15 +6167,15 @@ bool FUN_142434100(double param_1_promoted, double param_2_promoted)
     puVar4 = puVar4 + 1;
   } while (uVar2 < 4);
   (*(undefined4 *)((char *)&auVar7 + 4)) = 0;
-  (*(undefined4 *)((char *)&auVar7 + 0)) = fVar8;
+  (*(float *)((char *)&auVar7 + 0)) = fVar8;
   iVar3 = (int)fVar8;
   fVar5 = fVar8;
   if ((iVar3 != -0x80000000) && ((float)iVar3 != fVar8)) {
     (*(undefined4 *)((char *)&auVar7 + 8)) = 0;
     (*(undefined4 *)((char *)&auVar7 + 12)) = 0;
     (*(undefined8 *)((char *)&auVar6 + 8)) = (*(undefined8 *)((char *)&auVar7 + 8));
-    (*(undefined4 *)((char *)&auVar6 + 4)) = fVar8;
-    (*(undefined4 *)((char *)&auVar6 + 0)) = fVar8;
+    (*(float *)((char *)&auVar6 + 4)) = fVar8;
+    (*(float *)((char *)&auVar6 + 0)) = fVar8;
     uVar2 = movmskps(0, auVar6);
     fVar5 = (float)(int)(iVar3 - (uVar2 & 1));
   }

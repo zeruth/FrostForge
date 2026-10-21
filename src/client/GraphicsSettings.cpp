@@ -2478,130 +2478,130 @@ void ApplyGraphicsQualityDefaults(bool raid) {
     }
 }
 
-CVar* s_gxMTDisableCVar;
-CVar* s_gxMTBeginDrawCVar;
-CVar* s_gxMTShadowCVar;
-CVar* s_gxMTPrepassCVar;
-CVar* s_gxMTOpaqueM2CVar;
-CVar* s_gxMTOpaqueM2NoReflectCVar;
-CVar* s_gxMTAlphaM2CVar;
-CVar* s_gxMTOpaqueWMOCVar;
-CVar* s_gxMTTerrainCVar;
-CVar* s_gxMTParticulateVolumesCVar;
-CVar* s_gxMTAlphaWaterCVar;
-CVar* s_dnMTUpdateCVar;
-CVar* s_farclipCVar;
-CVar* s_nearclipCVar;
-CVar* s_horizonClipCVar;
-CVar* s_horizonStartCVar;
-CVar* s_particleDensityCVar;
-CVar* s_particleMTDensityCVar;
-CVar* s_waterDetailCVar;
-CVar* s_rippleDetailCVar;
-CVar* s_reflectionModeCVar;
-CVar* s_reflectionDownscaleCVar;
-CVar* s_sunShaftsCVar;
-CVar* s_groundEffectDensityCVar;
-CVar* s_groundEffectFadeCVar;
-CVar* s_groundEffectDistCVar;
-CVar* s_groundEffectAnimationCVar;
-CVar* s_projectedTexturesCVar;
-CVar* s_spellClutterCVar;
-CVar* s_shadowModeCVar;
-CVar* s_shadowTextureSizeCVar;
-CVar* s_shadowSoftCVar;
-CVar* s_shadowBlendCascadesCVar;
-CVar* s_shadowRtCVar;
-CVar* s_maxLightCountCVar;
-CVar* s_maxLightDistCVar;
-CVar* s_sSAOCVar;
-CVar* s_sSAOTypeCVar;
-CVar* s_preloadStreamingDistTerrainCVar;
-CVar* s_preloadStreamingDistObjectCVar;
-CVar* s_preloadLoadingDistTerrainCVar;
-CVar* s_preloadLoadingDistObjectCVar;
-CVar* s_skyCloudLODCVar;
-CVar* s_textureFilteringModeCVar;
-CVar* s_terrainLodDistCVar;
-CVar* s_terrainLodDivCVar;
-CVar* s_wmoLodDistCVar;
-CVar* s_wmoLodDistScaleCVar;
-CVar* s_wmoDoodadDistCVar;
-CVar* s_wmoPortalFadeScaleCVar;
-CVar* s_wmoPortalInteriorFadeCVar;
-CVar* s_entityLodDistCVar;
-CVar* s_entityLodOffsetCVar;
-CVar* s_entityShadowFadeScaleCVar;
-CVar* s_doodadLodScaleCVar;
-CVar* s_terrainMipLevelCVar;
-CVar* s_worldMaxMipLevelCVar;
-CVar* s_worldBaseMipCVar;
-CVar* s_occlusionMaxJobsCVar;
-CVar* s_lowLatencyModeCVar;
-CVar* s_minimapPortalMaxCVar;
-CVar* s_worldViewCullMaxJobsCVar;
-CVar* s_worldIntersectMaxJobsCVar;
-CVar* s_locateViewerMaxJobsCVar;
-CVar* s_lodObjectCullSizeCVar;
-CVar* s_lodObjectCullDistCVar;
-CVar* s_lodObjectMinSizeCVar;
-CVar* s_lodObjectFadeScaleCVar;
-CVar* s_lodObjectSizeScaleCVar;
-CVar* s_rAIDsettingsEnabledCVar;
-CVar* s_rAIDfarclipCVar;
-CVar* s_rAIDWaterDetailCVar;
-CVar* s_rAIDSSAOCVar;
-CVar* s_rAIDgroundEffectDensityCVar;
-CVar* s_rAIDgroundEffectFadeCVar;
-CVar* s_rAIDgroundEffectDistCVar;
-CVar* s_rAIDgroundEffectAnimationCVar;
-CVar* s_rAIDshadowModeCVar;
-CVar* s_rAIDshadowRtCVar;
-CVar* s_rAIDterrainLodDistCVar;
-CVar* s_rAIDTerrainLodDivCVar;
-CVar* s_rAIDwmoLodDistCVar;
-CVar* s_rAIDhorizonStartCVar;
-CVar* s_rAIDhorizonClipCVar;
-CVar* s_rAIDdoodadLodScaleCVar;
-CVar* s_rAIDentityLodDistCVar;
-CVar* s_rAIDentityShadowFadeScaleCVar;
-CVar* s_rAIDterrainMipLevelCVar;
-CVar* s_rAIDworldBaseMipCVar;
-CVar* s_rAIDprojectedTexturesCVar;
-CVar* s_rAIDspellClutterCVar;
-CVar* s_rAIDshadowTextureSizeCVar;
-CVar* s_rAIDshadowSoftCVar;
-CVar* s_rAIDshadowBlendCascadesCVar;
-CVar* s_rAIDreflectionModeCVar;
-CVar* s_rAIDrippleDetailCVar;
-CVar* s_rAIDsunShaftsCVar;
-CVar* s_rAIDparticleDensityCVar;
-CVar* s_rAIDparticleMTDensityCVar;
-CVar* s_rAIDlodObjectCullSizeCVar;
-CVar* s_rAIDlodObjectCullDistCVar;
-CVar* s_rAIDlodObjectMinSizeCVar;
-CVar* s_rAIDlodObjectFadeScaleCVar;
-CVar* s_graphicsTextureResolutionCVar;
-CVar* s_graphicsSpellDensityCVar;
-CVar* s_graphicsProjectedTexturesCVar;
-CVar* s_graphicsEnvironmentDetailCVar;
-CVar* s_graphicsGroundClutterCVar;
-CVar* s_graphicsShadowQualityCVar;
-CVar* s_graphicsLiquidDetailCVar;
-CVar* s_graphicsParticleDensityCVar;
-CVar* s_graphicsSSAOCVar;
-CVar* s_graphicsSunshaftsCVar;
-CVar* s_raidGraphicsTextureResolutionCVar;
-CVar* s_raidGraphicsSpellDensityCVar;
-CVar* s_raidGraphicsProjectedTexturesCVar;
-CVar* s_raidGraphicsEnvironmentDetailCVar;
-CVar* s_raidGraphicsGroundClutterCVar;
-CVar* s_raidGraphicsShadowQualityCVar;
-CVar* s_raidGraphicsLiquidDetailCVar;
-CVar* s_raidGraphicsParticleDensityCVar;
-CVar* s_raidGraphicsSSAOCVar;
-CVar* s_raidGraphicsSunshaftsCVar;
-CVar* s_teleportMaxNoLoadDistCVar;
+CVar* s_gxMTDisableCVar;  // DAT_1430ab7c0
+CVar* s_gxMTBeginDrawCVar;  // DAT_1430ab7c8
+CVar* s_gxMTShadowCVar;  // DAT_1430ab7d0
+CVar* s_gxMTPrepassCVar;  // DAT_1430ab7d8
+CVar* s_gxMTOpaqueM2CVar;  // DAT_1430ab7e0
+CVar* s_gxMTOpaqueM2NoReflectCVar;  // DAT_1430ab7e8
+CVar* s_gxMTAlphaM2CVar;  // DAT_1430ab800
+CVar* s_gxMTOpaqueWMOCVar;  // DAT_1430ab7f0
+CVar* s_gxMTTerrainCVar;  // DAT_1430ab7f8
+CVar* s_gxMTParticulateVolumesCVar;  // DAT_1430ab810
+CVar* s_gxMTAlphaWaterCVar;  // DAT_1430ab818
+CVar* s_dnMTUpdateCVar;  // DAT_1430ab808
+CVar* s_farclipCVar;  // DAT_1430aa7f0
+CVar* s_nearclipCVar;  // DAT_1430ab7a0
+CVar* s_horizonClipCVar;  // DAT_1430aa830
+CVar* s_horizonStartCVar;  // DAT_1430aa838
+CVar* s_particleDensityCVar;  // DAT_1430aa7f8
+CVar* s_particleMTDensityCVar;  // DAT_1430aa800
+CVar* s_waterDetailCVar;  // DAT_1430aa808
+CVar* s_rippleDetailCVar;  // DAT_1430aa810
+CVar* s_reflectionModeCVar;  // DAT_1430aa818
+CVar* s_reflectionDownscaleCVar;  // DAT_1430ab7a8
+CVar* s_sunShaftsCVar;  // DAT_1430aa820
+CVar* s_groundEffectDensityCVar;  // DAT_1430aa840
+CVar* s_groundEffectFadeCVar;  // DAT_1430ab7b8
+CVar* s_groundEffectDistCVar;  // DAT_1430aa848
+CVar* s_groundEffectAnimationCVar;  // DAT_1430aa850
+CVar* s_projectedTexturesCVar;  // DAT_1430aa858
+CVar* s_spellClutterCVar;  // DAT_1430aa860
+CVar* s_shadowModeCVar;  // DAT_1430aa868
+CVar* s_shadowTextureSizeCVar;  // DAT_1430aa870
+CVar* s_shadowSoftCVar;  // DAT_1430ab820
+CVar* s_shadowBlendCascadesCVar;  // DAT_1430ab828
+CVar* s_shadowRtCVar;  // DAT_1430aa878
+CVar* s_maxLightCountCVar;  // DAT_1430ab830
+CVar* s_maxLightDistCVar;  // DAT_1430ab838
+CVar* s_sSAOCVar;  // DAT_1430aa828
+CVar* s_sSAOTypeCVar;  // DAT_1430ab7b0
+CVar* s_preloadStreamingDistTerrainCVar;  // DAT_1430ab840
+CVar* s_preloadStreamingDistObjectCVar;  // DAT_1430ab848
+CVar* s_preloadLoadingDistTerrainCVar;  // DAT_1430ab850
+CVar* s_preloadLoadingDistObjectCVar;  // DAT_1430ab858
+CVar* s_skyCloudLODCVar;  // DAT_1430ab860
+CVar* s_textureFilteringModeCVar;  // DAT_1430ab868
+CVar* s_terrainLodDistCVar;  // DAT_1430aa880
+CVar* s_terrainLodDivCVar;  // DAT_1430aa888
+CVar* s_wmoLodDistCVar;  // DAT_1430aa890
+CVar* s_wmoLodDistScaleCVar;  // DAT_1430ab870
+CVar* s_wmoDoodadDistCVar;  // DAT_1430ab878
+CVar* s_wmoPortalFadeScaleCVar;  // DAT_1430ab880
+CVar* s_wmoPortalInteriorFadeCVar;  // DAT_1430ab888
+CVar* s_entityLodDistCVar;  // DAT_1430aa898
+CVar* s_entityLodOffsetCVar;  // DAT_1430ab890
+CVar* s_entityShadowFadeScaleCVar;  // DAT_1430ab898
+CVar* s_doodadLodScaleCVar;  // DAT_1430aa8a0
+CVar* s_terrainMipLevelCVar;  // DAT_1430ab798
+CVar* s_worldMaxMipLevelCVar;  // DAT_1430ab8a0
+CVar* s_worldBaseMipCVar;  // DAT_1430aa8a8
+CVar* s_occlusionMaxJobsCVar;  // DAT_1430ab8b0
+CVar* s_lowLatencyModeCVar;  // DAT_1430ab8b8
+CVar* s_minimapPortalMaxCVar;  // DAT_1430ab788
+CVar* s_worldViewCullMaxJobsCVar;  // DAT_1430ab988
+CVar* s_worldIntersectMaxJobsCVar;  // DAT_1430ab990
+CVar* s_locateViewerMaxJobsCVar;  // DAT_1430ab998
+CVar* s_lodObjectCullSizeCVar;  // DAT_1430aa8b0
+CVar* s_lodObjectCullDistCVar;  // DAT_1430aa8b8
+CVar* s_lodObjectMinSizeCVar;  // DAT_1430aa8c0
+CVar* s_lodObjectFadeScaleCVar;  // DAT_1430aa8c8
+CVar* s_lodObjectSizeScaleCVar;  // DAT_1430ab8a8
+CVar* s_rAIDsettingsEnabledCVar;  // DAT_1430aa8d0
+CVar* s_rAIDfarclipCVar;  // DAT_1430aa900
+CVar* s_rAIDWaterDetailCVar;  // DAT_1430aa928
+CVar* s_rAIDSSAOCVar;  // DAT_1430aa948
+CVar* s_rAIDgroundEffectDensityCVar;  // DAT_1430aa950
+CVar* s_rAIDgroundEffectFadeCVar;  // DAT_1430ab8d0
+CVar* s_rAIDgroundEffectDistCVar;  // DAT_1430aa958
+CVar* s_rAIDgroundEffectAnimationCVar;  // DAT_1430aa960
+CVar* s_rAIDshadowModeCVar;  // DAT_1430aa978
+CVar* s_rAIDshadowRtCVar;  // DAT_1430aa988
+CVar* s_rAIDterrainLodDistCVar;  // DAT_1430aa8d8
+CVar* s_rAIDTerrainLodDivCVar;  // DAT_1430aa8e0
+CVar* s_rAIDwmoLodDistCVar;  // DAT_1430aa8f8
+CVar* s_rAIDhorizonStartCVar;  // DAT_1430aa908
+CVar* s_rAIDhorizonClipCVar;  // DAT_1430aa910
+CVar* s_rAIDdoodadLodScaleCVar;  // DAT_1430aa8f0
+CVar* s_rAIDentityLodDistCVar;  // DAT_1430aa8e8
+CVar* s_rAIDentityShadowFadeScaleCVar;  // DAT_1430ab8c8
+CVar* s_rAIDterrainMipLevelCVar;  // DAT_1430ab8c0
+CVar* s_rAIDworldBaseMipCVar;  // DAT_1430aa990
+CVar* s_rAIDprojectedTexturesCVar;  // DAT_1430aa968
+CVar* s_rAIDspellClutterCVar;  // DAT_1430aa970
+CVar* s_rAIDshadowTextureSizeCVar;  // DAT_1430aa980
+CVar* s_rAIDshadowSoftCVar;  // DAT_1430ab8d8
+CVar* s_rAIDshadowBlendCascadesCVar;  // DAT_1430ab8e0
+CVar* s_rAIDreflectionModeCVar;  // DAT_1430aa938
+CVar* s_rAIDrippleDetailCVar;  // DAT_1430aa930
+CVar* s_rAIDsunShaftsCVar;  // DAT_1430aa940
+CVar* s_rAIDparticleDensityCVar;  // DAT_1430aa918
+CVar* s_rAIDparticleMTDensityCVar;  // DAT_1430aa920
+CVar* s_rAIDlodObjectCullSizeCVar;  // DAT_1430aa998
+CVar* s_rAIDlodObjectCullDistCVar;  // DAT_1430aa9a0
+CVar* s_rAIDlodObjectMinSizeCVar;  // DAT_1430aa9a8
+CVar* s_rAIDlodObjectFadeScaleCVar;  // DAT_1430aa9b0
+CVar* s_graphicsTextureResolutionCVar;  // DAT_1430ab8e8
+CVar* s_graphicsSpellDensityCVar;  // DAT_1430ab8f0
+CVar* s_graphicsProjectedTexturesCVar;  // DAT_1430ab8f8
+CVar* s_graphicsEnvironmentDetailCVar;  // DAT_1430ab900
+CVar* s_graphicsGroundClutterCVar;  // DAT_1430ab908
+CVar* s_graphicsShadowQualityCVar;  // DAT_1430ab910
+CVar* s_graphicsLiquidDetailCVar;  // DAT_1430ab918
+CVar* s_graphicsParticleDensityCVar;  // DAT_1430ab920
+CVar* s_graphicsSSAOCVar;  // DAT_1430ab928
+CVar* s_graphicsSunshaftsCVar;  // DAT_1430ab930
+CVar* s_raidGraphicsTextureResolutionCVar;  // DAT_1430ab938
+CVar* s_raidGraphicsSpellDensityCVar;  // DAT_1430ab940
+CVar* s_raidGraphicsProjectedTexturesCVar;  // DAT_1430ab948
+CVar* s_raidGraphicsEnvironmentDetailCVar;  // DAT_1430ab950
+CVar* s_raidGraphicsGroundClutterCVar;  // DAT_1430ab958
+CVar* s_raidGraphicsShadowQualityCVar;  // DAT_1430ab960
+CVar* s_raidGraphicsLiquidDetailCVar;  // DAT_1430ab968
+CVar* s_raidGraphicsParticleDensityCVar;  // DAT_1430ab978
+CVar* s_raidGraphicsSSAOCVar;  // DAT_1430ab980
+CVar* s_raidGraphicsSunshaftsCVar;  // DAT_1430ab970
+CVar* s_teleportMaxNoLoadDistCVar;  // DAT_1430ab9a0
 
 }
 
@@ -2900,4 +2900,69 @@ extern "C" void* const gen_f_1413c0ff0 = (void*)&WorldSetEntityLodOffset;
 extern "C" void* const gen_f_1425272a0 = (void*)&RenderSetReflectionDownscale;
 extern "C" void* const gen_f_14254ff10 = (void*)&OcclusionSetMaxJobs;
 extern "C" void* const gen_f_142558860 = (void*)&CheckSsaoType;
+extern "C" void* const gen_p_1430aa7f0 = (void*)&s_farclipCVar;
+extern "C" void* const gen_p_1430aa7f8 = (void*)&s_particleDensityCVar;
+extern "C" void* const gen_p_1430aa800 = (void*)&s_particleMTDensityCVar;
+extern "C" void* const gen_p_1430aa808 = (void*)&s_waterDetailCVar;
+extern "C" void* const gen_p_1430aa810 = (void*)&s_rippleDetailCVar;
+extern "C" void* const gen_p_1430aa818 = (void*)&s_reflectionModeCVar;
+extern "C" void* const gen_p_1430aa820 = (void*)&s_sunShaftsCVar;
+extern "C" void* const gen_p_1430aa828 = (void*)&s_sSAOCVar;
+extern "C" void* const gen_p_1430aa830 = (void*)&s_horizonClipCVar;
+extern "C" void* const gen_p_1430aa838 = (void*)&s_horizonStartCVar;
+extern "C" void* const gen_p_1430aa840 = (void*)&s_groundEffectDensityCVar;
+extern "C" void* const gen_p_1430aa848 = (void*)&s_groundEffectDistCVar;
+extern "C" void* const gen_p_1430aa850 = (void*)&s_groundEffectAnimationCVar;
+extern "C" void* const gen_p_1430aa858 = (void*)&s_projectedTexturesCVar;
+extern "C" void* const gen_p_1430aa860 = (void*)&s_spellClutterCVar;
+extern "C" void* const gen_p_1430aa868 = (void*)&s_shadowModeCVar;
+extern "C" void* const gen_p_1430aa870 = (void*)&s_shadowTextureSizeCVar;
+extern "C" void* const gen_p_1430aa878 = (void*)&s_shadowRtCVar;
+extern "C" void* const gen_p_1430aa880 = (void*)&s_terrainLodDistCVar;
+extern "C" void* const gen_p_1430aa888 = (void*)&s_terrainLodDivCVar;
+extern "C" void* const gen_p_1430aa890 = (void*)&s_wmoLodDistCVar;
+extern "C" void* const gen_p_1430aa898 = (void*)&s_entityLodDistCVar;
+extern "C" void* const gen_p_1430aa8a0 = (void*)&s_doodadLodScaleCVar;
+extern "C" void* const gen_p_1430aa8a8 = (void*)&s_worldBaseMipCVar;
+extern "C" void* const gen_p_1430aa8b0 = (void*)&s_lodObjectCullSizeCVar;
+extern "C" void* const gen_p_1430aa8b8 = (void*)&s_lodObjectCullDistCVar;
+extern "C" void* const gen_p_1430aa8c0 = (void*)&s_lodObjectMinSizeCVar;
+extern "C" void* const gen_p_1430aa8c8 = (void*)&s_lodObjectFadeScaleCVar;
+extern "C" void* const gen_p_1430aa8d0 = (void*)&s_rAIDsettingsEnabledCVar;
+extern "C" void* const gen_p_1430aa8d8 = (void*)&s_rAIDterrainLodDistCVar;
+extern "C" void* const gen_p_1430aa8e0 = (void*)&s_rAIDTerrainLodDivCVar;
+extern "C" void* const gen_p_1430aa8e8 = (void*)&s_rAIDentityLodDistCVar;
+extern "C" void* const gen_p_1430aa8f0 = (void*)&s_rAIDdoodadLodScaleCVar;
+extern "C" void* const gen_p_1430aa8f8 = (void*)&s_rAIDwmoLodDistCVar;
+extern "C" void* const gen_p_1430aa900 = (void*)&s_rAIDfarclipCVar;
+extern "C" void* const gen_p_1430aa908 = (void*)&s_rAIDhorizonStartCVar;
+extern "C" void* const gen_p_1430aa910 = (void*)&s_rAIDhorizonClipCVar;
+extern "C" void* const gen_p_1430aa918 = (void*)&s_rAIDparticleDensityCVar;
+extern "C" void* const gen_p_1430aa920 = (void*)&s_rAIDparticleMTDensityCVar;
+extern "C" void* const gen_p_1430aa928 = (void*)&s_rAIDWaterDetailCVar;
+extern "C" void* const gen_p_1430aa930 = (void*)&s_rAIDrippleDetailCVar;
+extern "C" void* const gen_p_1430aa938 = (void*)&s_rAIDreflectionModeCVar;
+extern "C" void* const gen_p_1430aa940 = (void*)&s_rAIDsunShaftsCVar;
+extern "C" void* const gen_p_1430aa948 = (void*)&s_rAIDSSAOCVar;
+extern "C" void* const gen_p_1430aa950 = (void*)&s_rAIDgroundEffectDensityCVar;
+extern "C" void* const gen_p_1430aa958 = (void*)&s_rAIDgroundEffectDistCVar;
+extern "C" void* const gen_p_1430aa960 = (void*)&s_rAIDgroundEffectAnimationCVar;
+extern "C" void* const gen_p_1430aa968 = (void*)&s_rAIDprojectedTexturesCVar;
+extern "C" void* const gen_p_1430aa970 = (void*)&s_rAIDspellClutterCVar;
+extern "C" void* const gen_p_1430aa978 = (void*)&s_rAIDshadowModeCVar;
+extern "C" void* const gen_p_1430aa980 = (void*)&s_rAIDshadowTextureSizeCVar;
+extern "C" void* const gen_p_1430aa988 = (void*)&s_rAIDshadowRtCVar;
+extern "C" void* const gen_p_1430aa990 = (void*)&s_rAIDworldBaseMipCVar;
+extern "C" void* const gen_p_1430aa998 = (void*)&s_rAIDlodObjectCullSizeCVar;
+extern "C" void* const gen_p_1430aa9a0 = (void*)&s_rAIDlodObjectCullDistCVar;
+extern "C" void* const gen_p_1430aa9a8 = (void*)&s_rAIDlodObjectMinSizeCVar;
+extern "C" void* const gen_p_1430aa9b0 = (void*)&s_rAIDlodObjectFadeScaleCVar;
+extern "C" void* const gen_p_1430ab788 = (void*)&s_minimapPortalMaxCVar;
+extern "C" void* const gen_p_1430ab840 = (void*)&s_preloadStreamingDistTerrainCVar;
+extern "C" void* const gen_p_1430ab848 = (void*)&s_preloadStreamingDistObjectCVar;
+extern "C" void* const gen_p_1430ab900 = (void*)&s_graphicsEnvironmentDetailCVar;
+extern "C" void* const gen_p_1430ab950 = (void*)&s_raidGraphicsEnvironmentDetailCVar;
+extern "C" void* const gen_p_1430ab988 = (void*)&s_worldViewCullMaxJobsCVar;
+extern "C" void* const gen_p_1430ab990 = (void*)&s_worldIntersectMaxJobsCVar;
+extern "C" void* const gen_p_1430ab998 = (void*)&s_locateViewerMaxJobsCVar;
 // ---- end of generated globals ----

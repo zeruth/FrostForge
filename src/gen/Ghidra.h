@@ -275,6 +275,19 @@ static __inline double GEN_AS_FLOAT(unsigned long long bits) {
     v.u = (unsigned int)bits;
     return (double)v.f;
 }
+/* an argument for a floating point parameter, by the argument's own C type: a float or double
+   goes by value, anything else (an integer Ghidra spelled for a register that holds one) by its
+   bits. The translator could not always see the type in the text (`((float *)(gen_frame +
+   0x40))[0]` went through `(unsigned long long)` and arrived as 14 -> 2e-44: C_Console's font
+   height was 0 and the console's EditBox refused it, 2026-10-21); C's _Generic can */
+static __inline double gen_farg_f(float x) { return (double)x; }
+static __inline double gen_farg_d(double x) { return (double)(float)x; }
+static __inline double gen_farg_u(unsigned long long bits) { return GEN_AS_FLOAT(bits); }
+static __inline double gen_darg_f(float x) { return (double)x; }
+static __inline double gen_darg_d(double x) { return x; }
+static __inline double gen_darg_u(unsigned long long bits) { return GEN_AS_DOUBLE(bits); }
+#define GEN_ARG_FLOAT(x) _Generic((x), float: gen_farg_f, double: gen_farg_d, default: gen_farg_u)(x)
+#define GEN_ARG_DOUBLE(x) _Generic((x), float: gen_darg_f, double: gen_darg_d, default: gen_darg_u)(x)
 
 /* Ghidra's piecewise helpers */
 #define CONCAT11(a, b) ((uint16_t)(((uint16_t)(uint8_t)(a) << 8) | (uint8_t)(b)))

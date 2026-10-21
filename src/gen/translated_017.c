@@ -9378,7 +9378,7 @@ LAB_1402e0e88:
   if (*(char *)(param_10 + 1) != '\0') {
     (*(undefined8 *)(gen_frame + 0x0)) = 0;
     (*(undefined4 *)(gen_frame + 0x8)) = 0;
-    CALLF(undefined8, FUN_1411e7ee0)(lVar3,&(*(undefined8 *)(gen_frame + 0x0)),0.0,GEN_AS_FLOAT((unsigned long long)(*param_10)));
+    CALLF(undefined8, FUN_1411e7ee0)(lVar3,&(*(undefined8 *)(gen_frame + 0x0)),0.0,GEN_ARG_FLOAT(*param_10));
   }
   cVar2 = CALLF(bool, FUN_141355640)(lVar3,param_1,(ulonglong)uVar5,0,(unsigned long long)(CONCAT44(0,uVar6) & 0xffffffffffffff00));
   if (cVar2 == '\0') {

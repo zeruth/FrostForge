@@ -9508,7 +9508,7 @@ undefined4 FUN_141a50ca0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a50ca0)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: TaxiNodeName(slot)");
     return 0;
   }
   dVar4 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -9541,7 +9541,7 @@ undefined4 FUN_141a50d60(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a50d60)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: TaxiNodePosition(slot)");
     return 0;
   }
   dVar4 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -9567,7 +9567,7 @@ undefined4 FUN_141a50e00(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a50e00)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: TaxiNodeCost(slot)");
     return 0;
   }
   dVar4 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -9591,7 +9591,7 @@ undefined4 FUN_141a50e80(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a50e80)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: TakeTaxiNode(slot)");
     return 0;
   }
   lVar2 = CALLF(ulonglong, FUN_14170ff20)();
@@ -9631,7 +9631,7 @@ undefined4 FUN_141a50f20(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a50f20)(slot)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: TaxiNodeGetType(slot)");
     return 0;
   }
   dVar7 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -14344,7 +14344,7 @@ LAB_141a57cde:
     }
   }
   else {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a57700)([table])");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestPOIs([table])");
   }
   return 0;
   while( true ) {
@@ -14968,7 +14968,7 @@ undefined4 FUN_141a58a40(undefined8 param_1)
   
   uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar4 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a58a40)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestIndexForTimer(index)");
     return 0;
   }
   uVar4 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -15009,7 +15009,7 @@ undefined4 FUN_141a58b90(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a58b90)(index[, isAuto])");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CollapseQuestHeader(index[, isAuto])");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -15027,7 +15027,7 @@ undefined4 FUN_141a58c00(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a58c00)(index[, isAuto])");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: ExpandQuestHeader(index[, isAuto])");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -15075,7 +15075,7 @@ undefined4 FUN_141a58cf0(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a58cf0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsQuestWatched(index)");
     return 0;
   }
   dVar6 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -15120,7 +15120,7 @@ undefined4 FUN_141a58df0(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a58df0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsQuestHardWatched(index)");
   }
   else {
     dVar6 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -15223,7 +15223,7 @@ undefined4 FUN_141a58fe0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a58fe0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestIndexForWatch(index)");
     return 0;
   }
   dVar5 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -15358,7 +15358,7 @@ undefined4 FUN_141a59310(undefined8 param_1)
   
   uVar7 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar7 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a59310)(questID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestLink(questID)");
     return 0;
   }
   uVar7 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -15438,7 +15438,7 @@ undefined4 FUN_141a594d0(undefined8 param_1)
   
   uVar5 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar5 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a594d0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestLogSpecialItemInfo(index)");
     return 0;
   }
   dVar12 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -15515,7 +15515,7 @@ undefined4 FUN_141a596e0(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a596e0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestLogSpecialItemCooldown(index)");
   }
   else {
     dVar3 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -15548,7 +15548,7 @@ undefined4 FUN_141a597c0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a597c0)(index [,target])");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsQuestLogSpecialItemInRange(index [,target])");
     return 0;
   }
   dVar5 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -15589,7 +15589,7 @@ undefined4 FUN_141a598e0(undefined8 param_1)
   
   uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar4 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a598e0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: UseQuestLogSpecialItem(index)");
     return 0;
   }
   lVar5 = CALLF(ulonglong, FUN_14170ff20)();
@@ -15653,7 +15653,7 @@ undefined4 FUN_141a59ad0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a59ad0)(questIndex)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestSortIndex(questIndex)");
     return 0;
   }
   uVar2 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -15671,7 +15671,7 @@ undefined4 FUN_141a59b30(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a59b30)(questID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestUiMapID(questID)");
     return 0;
   }
   uVar2 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -15788,7 +15788,7 @@ undefined4 FUN_141a59dc0(undefined8 param_1)
   
   uVar6 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar6 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a59dc0)(questID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: QuestPOIGetIconInfo(questID)");
     return 0;
   }
   cVar5 = CALLF(bool, FUN_141c28c60)(2);
@@ -15844,7 +15844,7 @@ undefined4 FUN_141a59fa0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a59fa0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: QuestPOIGetQuestIDByIndex(index)");
   }
   else {
     cVar1 = CALLF(bool, FUN_141c28c60)(2);
@@ -15912,7 +15912,7 @@ undefined4 FUN_141a5a0f0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5a0f0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetPOIIconOverlapDistance(index)");
     return 0;
   }
   cVar1 = CALLF(bool, FUN_141c28c60)(2);
@@ -15933,7 +15933,7 @@ undefined4 FUN_141a5a150(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5a150)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetPOIIconOverlapPushDistance(index)");
     return 0;
   }
   cVar1 = CALLF(bool, FUN_141c28c60)(2);
@@ -16088,7 +16088,7 @@ undefined4 FUN_141a5a490(undefined8 param_1)
   iVar4 = 1;
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if (((int)uVar2 == 0) || (uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar2 == 0)) {
-    pcVar3 = "Usage: CALLF(undefined4, FUN_141a5a490)(indexFrom, indexTo)";
+    pcVar3 = "Usage: ShiftQuestWatches(indexFrom, indexTo)";
 LAB_141a5a5d7:
     CALLF(undefined8, FUN_142424d80)(param_1,pcVar3);
     return 0;
@@ -16142,7 +16142,7 @@ undefined4 FUN_141a5a5f0(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5a5f0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestWatchIndex(index)");
     return 0;
   }
   dVar6 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -16185,7 +16185,7 @@ undefined4 FUN_141a5a700(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5a700)(questID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestLogIndexByID(questID)");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -16343,7 +16343,7 @@ undefined4 FUN_141a5a9b0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5a9b0)(questID");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsQuestComplete(questID");
     return 0;
   }
   uVar2 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -16560,7 +16560,7 @@ undefined4 FUN_141a5aec0(undefined8 param_1)
   
   uVar6 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar6 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5aec0)(questID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestTagInfo(questID)");
     return 0;
   }
   uVar6 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -16655,7 +16655,7 @@ undefined4 FUN_141a5b0c0(undefined8 param_1)
   
   uVar9 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar9 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5b0c0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestLogTitle(index)");
     return 0;
   }
   CALLF(undefined4, FUN_1402b2770)(param_1,0xf);
@@ -16931,7 +16931,7 @@ undefined4 FUN_141a5b840(undefined8 param_1)
   
   uVar9 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar9 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5b840)(index");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestWatchInfo(index");
     return 0;
   }
   dVar20 = CALLF(double, FUN_1402b4920)(param_1,1);
@@ -17112,7 +17112,7 @@ undefined4 FUN_141a5bcb0(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5bcb0)(questID");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: HaveQuestData(questID");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -17143,7 +17143,7 @@ undefined4 FUN_141a5bd50(undefined8 param_1)
   
   uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar4 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5bd50)(questID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: HaveQuestRewardData(questID)");
     return 0;
   }
   uVar4 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -17243,7 +17243,7 @@ undefined4 FUN_141a5c040(undefined8 param_1)
   
   uVar4 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar4 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5c040)(questID");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestFactionGroup(questID");
     return 0;
   }
   uVar4 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -17307,7 +17307,7 @@ undefined4 FUN_141a5c1e0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5c1e0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SelectQuestLogEntry(index)");
     return 0;
   }
   uVar2 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -17888,7 +17888,7 @@ undefined4 FUN_141a5d010(undefined8 param_1)
     CALLF(uint, FUN_1402b3850)(param_1,(uint)bVar1);
     return 1;
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5d010)(questID)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CanAbandonQuest(questID)");
   return 0;
 }
 
@@ -17919,7 +17919,7 @@ undefined4 FUN_141a5d070(undefined8 param_1)
       return 1;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5d070)(index, \"unit\")");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsUnitOnQuest(index, \"unit\")");
   return 0;
 }
 
@@ -17947,7 +17947,7 @@ undefined4 FUN_141a5d130(undefined8 param_1)
       return 1;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5d130)(questID, \"unit\")");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsUnitOnQuestByQuestID(questID, \"unit\")");
   return 0;
 }
 
@@ -18076,7 +18076,7 @@ undefined4 FUN_141a5d4c0(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5d4c0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestLogLeaderBoard(index)");
     return 0;
   }
   uVar3 = CALLF(undefined8, FUN_1402b4800)(param_1,2);
@@ -18228,7 +18228,7 @@ undefined4 FUN_141a5d8f0(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar3 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5d8f0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestLogItemDrop(index)");
     return 0;
   }
   uVar3 = CALLF(undefined8, FUN_1402b4800)(param_1,2);
@@ -18318,7 +18318,7 @@ undefined4 FUN_141a5dae0(undefined8 param_1)
   
   uVar10 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar10 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5d4c0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestLogLeaderBoard(index)");
     return 0;
   }
   uVar10 = CALLF(undefined8, FUN_1402b4800)(param_1,2);
@@ -18953,7 +18953,7 @@ undefined4 FUN_141a5e8c0(undefined8 param_1)
   
   uVar5 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar5 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5e8c0)(index, [questID])");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestLogRewardInfo(index, [questID])");
     return 0;
   }
   uVar5 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -19043,7 +19043,7 @@ undefined4 FUN_141a5eb50(undefined8 param_1)
   
   uVar7 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar7 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5eb50)(index, [questID])");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestLogRewardCurrencyInfo(index, [questID])");
     return 0;
   }
   uVar7 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -19165,7 +19165,7 @@ undefined4 FUN_141a5ee40(undefined8 param_1)
   
   uVar8 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar8 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5e8c0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestLogRewardInfo(index)");
     return 0;
   }
   uVar8 = CALLF(undefined8, FUN_1402b4800)(param_1,1);
@@ -19282,7 +19282,7 @@ undefined4 FUN_141a5f1c0(undefined8 param_1)
   
   uVar8 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if (((int)uVar8 == 0) || (uVar8 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar8 == 0)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141a5f1c0)(\"type\", index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetQuestLogItemLink(\"type\", index)");
     return 0;
   }
   _Str1 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);

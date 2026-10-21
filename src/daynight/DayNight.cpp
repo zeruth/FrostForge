@@ -48,8 +48,8 @@ const char s_stringTag[] = ".D";
 // DAT_142d4ca20: every handle, linked at the tail.
 TSList<DAYNIGHT, TSGetLink<DAYNIGHT>, 8> s_handles(offsetof(DAYNIGHT, m_link));
 
-// DAT_1447aada8: the CelestialBody patch callback is registered.
-bool s_celestialRegistered;
+// the CelestialBody patch callback is registered.
+bool s_celestialRegistered;  // 0x1447aada8
 
 // The planets' textures and scales (the sun, the first and second moons).
 constexpr int32_t SUN_GLARE_TEXTURE = 0x2d76d;

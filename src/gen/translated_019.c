@@ -1971,7 +1971,7 @@ undefined1 FUN_140327d30(undefined8 param_1, undefined8 param_2, char *param_3)
         uVar9 = 0x400;
 LAB_140327ecc:
         lVar4 = 0x400;
-        pcVar8 = ", ";
+        pcVar8 = ((char *)REFP(0x142624990));
         do {
           lVar4 = lVar4 + -1;
           if (*pcVar8 == '\0') {

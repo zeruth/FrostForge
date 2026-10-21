@@ -5304,7 +5304,7 @@ undefined8 FUN_1402c6a00(longlong param_1, undefined8 param_2, int *param_3, int
       lVar8 = (longlong)dVar4;
       if ((lVar8 != -0x8000000000000000) && ((double)lVar8 != dVar4)) {
         (*(undefined4 *)((char *)&auVar3 + 8)) = SUB84(dVar4, 0);
-        (*(undefined8 *)((char *)&auVar3 + 0)) = dVar4;
+        (*(double *)((char *)&auVar3 + 0)) = dVar4;
         (*(undefined4 *)((char *)&auVar3 + 12)) = (int)((ulonglong)dVar4 >> 0x20);
         uVar5 = movmskpd(0, auVar3);
         dVar4 = (double)(longlong)(lVar8 - (ulonglong)(uVar5 & 1));

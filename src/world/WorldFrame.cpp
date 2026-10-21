@@ -96,8 +96,6 @@ int32_t* WorldGetFrameRect() {
     return s_frameRect;
 }
 
-// DAT_1430ab790: DayNight's zone lights and light run on a pool job.
-uint8_t g_dayNightOnJob;
 
 // ---- small world state ---------------------------------------------------------------------
 
@@ -592,7 +590,7 @@ void CWorldScene::Animate(CWorldView* view, const int32_t* lod, float elapsed, u
     }
     SceneOcclusionStage(&view->m_occlusion, view, 2);
     if (this->m_dayNight != nullptr) {
-        this->m_dayNight->m_0c = g_dayNightOnJob;
+        this->m_dayNight->m_0c = g_dayNightMultithreaded;
         if (this->m_dayNight->m_0c == 0) {
             DayNightUpdate(view->m_scene->m_dayNight, view->m_camera.m_position);
         } else {

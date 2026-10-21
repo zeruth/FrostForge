@@ -2496,12 +2496,12 @@ LAB_1424d2c35:
                 if (param_1[1] == 0) {
                   lVar6 = 0;
                 }
-                CALLF(undefined4, FUN_1405f9f80)(plVar8 + 3,0,lVar6,0,GEN_AS_FLOAT((unsigned long long)(0)),(uint)((float)uVar15 * fVar17) ^ uVar22,(unsigned long long)(0));
+                CALLF(undefined4, FUN_1405f9f80)(plVar8 + 3,0,lVar6,0,GEN_ARG_FLOAT(0),(uint)((float)uVar15 * fVar17) ^ uVar22,(unsigned long long)(0));
                 lVar6 = param_1[1] + 0x18;
                 if (param_1[1] == 0) {
                   lVar6 = 0;
                 }
-                CALLF(undefined4, FUN_1405f9f80)(plVar8 + 3,8,lVar6,2,GEN_AS_FLOAT((unsigned long long)(0)),(uint)((float)(uVar15 + 1) * fVar17) ^ uVar22,(unsigned long long)(0));
+                CALLF(undefined4, FUN_1405f9f80)(plVar8 + 3,8,lVar6,2,GEN_ARG_FLOAT(0),(uint)((float)(uVar15 + 1) * fVar17) ^ uVar22,(unsigned long long)(0));
                 CALLF(undefined8, FUN_1405f95f0)(plVar8 + 3,0);
               }
               else {
@@ -2597,8 +2597,8 @@ LAB_1424d3333:
                         CALLF(uint, FUN_1406317d0)(plVar9,&(*(longlong * *)(gen_frame + 0x0)));
                         plVar8 = (*(longlong * *)(gen_frame + 0x90)) + 3;
                         (**(code **)(*plVar8 + 0x20))(plVar8);
-                        CALLF(undefined4, FUN_1405f9f80)(plVar8,0,plVar7 + 3,0,(uint)fVar21 ^ uVar22,GEN_AS_FLOAT((unsigned long long)(0)),(unsigned long long)(1));
-                        CALLF(undefined4, FUN_1405f9f80)(plVar8,6,plVar7 + 3,6,(uint)fVar21 ^ uVar22,GEN_AS_FLOAT((unsigned long long)(0)),(unsigned long long)(1));
+                        CALLF(undefined4, FUN_1405f9f80)(plVar8,0,plVar7 + 3,0,(uint)fVar21 ^ uVar22,GEN_ARG_FLOAT(0),(unsigned long long)(1));
+                        CALLF(undefined4, FUN_1405f9f80)(plVar8,6,plVar7 + 3,6,(uint)fVar21 ^ uVar22,GEN_ARG_FLOAT(0),(unsigned long long)(1));
                       }
                       else if (uVar15 == (*(uint *)(gen_frame + 0x8))) {
                         (*(undefined4 *)((char *)&(*(longlong * *)(gen_frame + 0x0)) + 0)) = 0xffff0000;
@@ -3278,7 +3278,7 @@ undefined4 FUN_1424d5250(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_1424d5250)(\"name\", obj)",((longlong)_ReturnAddress()));
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: StoreSecureReference(\"name\", obj)",((longlong)_ReturnAddress()));
   }
   else {
     lVar2 = CALLF(undefined8, FUN_1424db5e0)(param_1,2,0,0);

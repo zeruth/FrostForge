@@ -79,10 +79,33 @@ def stub_at(lines: list[str], i: int):
     return j, k, m.group(1).strip(), m.group(2), m.group(3).strip()
 
 
+def raw_layout_classes() -> set[str]:
+    """The classes whose only data member is `uint8_t m_data[N]`, read through Field<T>(offset):
+    their bytes are the reference object's by construction, so a member stub can hand `this`
+    to the translated body (CWorldMap's map loader, 2026-10-21)."""
+    out = set()
+    for path in (ROOT / "src").rglob("*.hpp"):
+        text = path.read_text(encoding="utf-8", errors="replace")
+        for m in re.finditer(r"^(?:class|struct) (\w+)(?:\s*:[^{]*)?\s*\{\n(.*?)^\};", text, re.M | re.S):
+            if ":" in text[m.start():text.index("{", m.start())]:
+                continue   # a base class brings its own members
+            body = re.sub(r"//[^\n]*", "", m.group(2))
+            body = re.sub(r"\{[^{}]*\}", "{}", body)   # inline bodies (one level is enough here)
+            body = re.sub(r"\{[^{}]*\}", "{}", body)
+            members = [re.sub(r"^(?:(?:public|private|protected):\s*)+", "", s.strip()) for s in body.split(";")]
+            members = [s for s in members
+                       if s and "(" not in s and not s.startswith(("template", "using", "static", "friend", "enum",
+                                                                   "typedef"))]
+            if len(members) == 1 and re.fullmatch(r"uint8_t m_data\[\w+\]", members[0]) and "virtual" not in body:
+                out.add(m.group(1))
+    return out
+
+
 def plan(log: Path | None):
     # (every tagged stub with --all, not only those a run reached)
     hits = None if log is None else set(re.findall(r"\[unimplemented\] (.+)$", log.read_text(encoding="utf-8", errors="replace"), re.M))
     out, skipped = [], []
+    raw = raw_layout_classes()
     translated = set(json.loads((ROOT / "src/gen/manifest.json").read_text(encoding="utf-8"))["translated"])
     # each translated definition's parameter count (translated.h declares them unprototyped)
     arity = {}
@@ -111,8 +134,11 @@ def plan(log: Path | None):
                 why = "kept offline / the port's own"
             elif TEARDOWN.search(name):
                 why = "teardown (the quit path is the port's)"
-            elif "::" in name:
+            elif "::" in name and name.rsplit("::", 1)[0] not in raw:
                 why = "a member function (a port object at the reference's offsets)"
+            elif "::" in name and (name.rsplit("::", 1)[1] == name.rsplit("::", 1)[0]
+                                   or "~" in name or (len(lines) > first and lines[first].rstrip().endswith("const {"))):
+                why = "a constructor, destructor or const member"
             elif ret not in DEFAULT_RESULT and not VALUE_TYPE.match(ret):
                 why = f"returns {ret}"
             else:
@@ -128,7 +154,7 @@ def plan(log: Path | None):
                 # a stub whose signature is not the reference's ("Signature not yet known", a
                 # callback declared `()`): forwarded, the translated body reads the parameters it
                 # was never given (15 of the first 77, 2026-10-18)
-                n = len([p for p in params.split(",") if p.strip() and p.strip() != "void"])
+                n = len([p for p in params.split(",") if p.strip() and p.strip() != "void"]) + ("::" in name)
                 if arity.get(m.group(1)) != n:
                     why = f"signature differs (the port's {n} parameters, the reference's {arity.get(m.group(1))})"
             entry = {"file": rel, "line": i + 1, "addr": m.group(1), "name": name, "ret": ret, "params": params,
@@ -146,6 +172,9 @@ def forwarder(e: dict) -> list[str]:
     e = e | {"params": ", ".join(params) if params else e["params"]}
     names = [re.search(r"(\w+)$", p).group(1) for p in params]
     types = [re.sub(r"\s*\w+$", "", p) for p in params]
+    if "::" in e["name"]:
+        # a raw-layout class's member: the object first, as the reference passes it
+        names, types = ["this"] + names, ["void*"] + types
     # the translated definitions take a float promoted to double (their callers are unprototyped)
     ctypes = ["double" if t.strip().endswith(("float", "double")) else "unsigned long long" for t in types]
     args = ", ".join(f"({c}){n}" for c, n in zip(ctypes, names))
@@ -188,8 +217,9 @@ def apply(entries: list[dict]):
                     last = k
                 elif s and not s.startswith(("#", "//", "/*", "*")) and k > last:
                     break
-            lines[last + 1:last + 1] = ["#include <windows.h>", "",
-                                        "extern \"C\" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);"]
+            have = any(l.strip() == "#include <windows.h>" for l in lines)
+            lines[last + 1:last + 1] = ([] if have else ["#include <windows.h>"]) + [
+                "", "extern \"C\" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);"]
         path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 
 

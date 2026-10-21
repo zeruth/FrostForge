@@ -20579,7 +20579,7 @@ undefined4 FUN_141c669a0(undefined8 param_1)
       return 0;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c669a0)(\"type\", \"sort\")");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SortAuctionItems(\"type\", \"sort\")");
   return 0;
 }
 
@@ -20628,7 +20628,7 @@ undefined4 FUN_141c66c00(undefined8 param_1)
       return 0;
     }
   }
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c66c00)(\"type\", index)");
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetSelectedAuctionItem(\"type\", index)");
   return 0;
 }
 
@@ -20644,7 +20644,7 @@ undefined4 FUN_141c66d80(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c66d80)(\"type\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetSelectedAuctionItem(\"type\")");
     return 0;
   }
   _Str1 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -20709,7 +20709,7 @@ undefined4 FUN_141c66ef0(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if (((int)uVar3 == 0) || (uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,2), (int)uVar3 == 0)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c66ef0)(\"type\", \"sort\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: IsAuctionSortReversed(\"type\", \"sort\")");
     return 0;
   }
   ((int *)(gen_frame + 0x8))[0] = 1;
@@ -20782,7 +20782,7 @@ undefined4 FUN_141c670b0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c670b0)(index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CanCancelAuction(index)");
   }
   else {
     uVar2 = CALLF(undefined *, FUN_140ec4cf0)();
@@ -20823,7 +20823,7 @@ undefined4 FUN_141c67180(undefined8 param_1)
   
   uVar5 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar5 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c66c00)(index)",((longlong)_ReturnAddress()));
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetSelectedAuctionItem(index)",((longlong)_ReturnAddress()));
   }
   else {
     cVar3 = CALLF(undefined1, FUN_1419985c0)(8);
@@ -20870,7 +20870,7 @@ undefined4 FUN_141c69740(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if (((int)uVar1 == 0) || (uVar1 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar1 == 0)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c69740)(\"type\", \"index\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAuctionSort(\"type\", \"index\")");
     return 0;
   }
   pcVar2 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -20966,7 +20966,7 @@ undefined4 FUN_141c69990(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c69990)(\"type\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SortAuctionClearSort(\"type\")");
     return 0;
   }
   _Str1 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -21091,7 +21091,7 @@ undefined4 FUN_141c69c70(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar1 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c69c70)(\"type\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SortAuctionApplySort(\"type\")");
     return 0;
   }
   _Str1 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -21143,7 +21143,7 @@ undefined4 FUN_141c69d80(undefined8 param_1)
   
   uVar1 = CALLF(undefined8, FUN_1402b4a30)(param_1,1);
   if ((int)uVar1 != 1) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c69d80)(bool)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: SetAuctionsTabShowing(bool)");
     return 0;
   }
   uVar1 = CALLF(undefined8, FUN_1402b47d0)(param_1,1);
@@ -21218,7 +21218,7 @@ undefined4 FUN_141c69e90(undefined8 param_1)
   if ((((int)uVar5 == 0) || (uVar5 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar5 == 0)) ||
      (uVar5 = CALLF(undefined8, FUN_1402b33c0)(param_1,3), (int)uVar5 == 0)) {
     CALLF(undefined8, FUN_142424d80)(param_1,
-                  "Usage: CALLF(undefined4, FUN_141c69e90)(runTime, minBid, buyoutPrice, [itemCount, numStacks])");
+                  "Usage: GetAuctionDeposit(runTime, minBid, buyoutPrice, [itemCount, numStacks])");
     return 0;
   }
   lVar6 = CALLF(undefined8, FUN_14057b640)(&(*(undefined1 *)((char *)&gen_g_142e36e30 + 0x0)),REFG(undefined4, 0x14323b460),0,((undefined1 *)(gen_frame + 0x88)));
@@ -21472,7 +21472,7 @@ undefined8 FUN_141c6a610(undefined8 param_1)
   uVar22 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((((int)uVar22 == 0) || (uVar22 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar22 == 0)) ||
      (uVar22 = CALLF(undefined8, FUN_1402b33c0)(param_1,3), (int)uVar22 == 0)) {
-    return (undefined8)CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined8, FUN_141c6a610)(minBid, buyoutPrice, runTime, count)",((longlong)_ReturnAddress()));
+    return (undefined8)CALLF(undefined8, FUN_142424d80)(param_1,"Usage: PostAuction(minBid, buyoutPrice, runTime, count)",((longlong)_ReturnAddress()));
     return 0;
   }
   cVar17 = CALLF(undefined1, FUN_1419985c0)(8);
@@ -21568,7 +21568,7 @@ undefined8 FUN_141c6a610(undefined8 param_1)
     cVar17 = CALLF(undefined1, FUN_14191f830)(param_1,1,((ulonglong *)(gen_frame + 0x0)));
     if ((cVar17 == '\0') || (cVar17 = CALLF(undefined1, FUN_14191f830)(param_1,2,&(*(ulonglong *)(gen_frame + 0x1b8))), cVar17 == '\0')) {
                     /* WARNING: Subroutine does not return */
-      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined8, FUN_141c6a610)(minBid, buyoutPrice, runTime, count)",((longlong)_ReturnAddress()))
+      CALLF(undefined8, FUN_142424d80)(param_1,"Usage: PostAuction(minBid, buyoutPrice, runTime, count)",((longlong)_ReturnAddress()))
       ;
     }
     if (((*(ulonglong *)(gen_frame + 0x1b8)) != 0) && ((*(ulonglong *)(gen_frame + 0x1b8)) < ((ulonglong *)(gen_frame + 0x0))[0])) {
@@ -21925,7 +21925,7 @@ undefined4 FUN_141c6ff50(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c6ff50)(\"type\")");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetNumAuctionItems(\"type\")");
     return 0;
   }
   _Str1 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -21986,7 +21986,7 @@ undefined4 FUN_141c70050(undefined8 param_1)
   uVar7 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if ((int)uVar7 == 0) {
 LAB_141c70a95:
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c70050)(\"type\", index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAuctionItemInfo(\"type\", index)");
     return 0;
   }
   uVar6 = 2;
@@ -22324,7 +22324,7 @@ undefined4 FUN_141c70ac0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if (((int)uVar2 == 0) || (uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar2 == 0)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c70ac0)(\"type\", index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAuctionItemLink(\"type\", index)");
     return 0;
   }
   _Str1 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -22452,7 +22452,7 @@ undefined4 FUN_141c70d90(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if (((int)uVar2 == 0) || (uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar2 == 0)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c70d90)(\"type\", index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAuctionItemBattlePetInfo(\"type\", index)");
     return 0;
   }
   _Str1 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -22536,7 +22536,7 @@ undefined4 FUN_141c70f60(undefined8 param_1)
   
   uVar3 = CALLF(undefined8, FUN_1402b33f0)(param_1,1);
   if (((int)uVar3 == 0) || (uVar3 = CALLF(undefined8, FUN_1402b33c0)(param_1,2), (int)uVar3 == 0)) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c70f60)(\"type\", index)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAuctionItemTimeLeft(\"type\", index)");
     return 0;
   }
   _Str1 = (char *)CALLF(undefined8, FUN_1402b4880)(param_1,1,0);
@@ -22733,7 +22733,7 @@ undefined8 FUN_141c71130(undefined8 param_1)
   }
 LAB_141c76a67:
                     /* WARNING: Subroutine does not return */
-  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined8, FUN_141c71130)(\"type\", index, bid)",((longlong)_ReturnAddress()));
+  CALLF(undefined8, FUN_142424d80)(param_1,"Usage: PlaceAuctionBid(\"type\", index, bid)",((longlong)_ReturnAddress()));
   __debugbreak();
   __fastfail(7);
   __assume(0);
@@ -22764,7 +22764,7 @@ undefined4 FUN_141c76bc0(undefined8 param_1)
   
   uVar2 = CALLF(undefined8, FUN_1402b33c0)(param_1,1);
   if ((int)uVar2 == 0) {
-    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: CALLF(undefined4, FUN_141c76bc0)(classID)");
+    CALLF(undefined8, FUN_142424d80)(param_1,"Usage: GetAuctionItemSubClasses(classID)");
     return 0;
   }
   uVar2 = CALLF(undefined8, FUN_1402b4800)(param_1,1);

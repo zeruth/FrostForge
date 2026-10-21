@@ -1437,7 +1437,7 @@ gen_v16 FUN_1412c9f10(undefined4 param_1)
   if (lVar2 != 0) {
     fVar3 = CALLF(float, FUN_1412c9780)(lVar2,0);
     (*(undefined4 *)((char *)&auVar1 + 4)) = gen_extraout_XMM0_Db;
-    (*(undefined4 *)((char *)&auVar1 + 0)) = fVar3;
+    (*(float *)((char *)&auVar1 + 0)) = fVar3;
     (*(undefined4 *)((char *)&auVar1 + 8)) = gen_extraout_XMM0_Dc;
     (*(undefined4 *)((char *)&auVar1 + 12)) = gen_extraout_XMM0_Dd;
     return auVar1;

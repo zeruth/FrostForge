@@ -13,7 +13,7 @@
 #include "texture/Texture.hpp"
 
 float g_shaderEffect5b88;
-bool g_vrsValarReady;
+bool g_vrsValarReady;              // 0x1430a5c48
 
 namespace {
 

@@ -66,6 +66,10 @@ void FrostLogStack(int skip, int count) {
     WriteFrames(frames, captured);
 }
 
+void FrostLogFrames(void* const* frames, int count) {
+    WriteFrames(frames, count);
+}
+
 void FrostLogContextStack(const void* context, int count) {
     void* frames[64];
     if (count > 64) {

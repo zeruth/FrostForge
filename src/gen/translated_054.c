@@ -1311,7 +1311,7 @@ undefined4 FUN_1409798b0(undefined8 param_1)
   CALLF(undefined8, FUN_1408c6720)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0xa0)),"Usage: self:SetFont(fontFile, height, flags)",0,(unsigned long long)(((float *)(gen_frame + 0xa8))));
   (*(undefined1 *)(gen_frame + 0x90)) = 0;
   CALLF(undefined8, FUN_1408c61d0)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0xa0)),"Usage: self:SetFont(fontFile, height, flags)",0,(unsigned long long)(&(*(undefined1 *)(gen_frame + 0x90))));
-  CALLF(undefined1, FUN_14062baa0)(uVar3,(*(undefined8 *)(gen_frame + 0x98)),GEN_AS_FLOAT((unsigned long long)(((float *)(gen_frame + 0xa8))[0])),&(*(undefined1 *)(gen_frame + 0x90)));
+  CALLF(undefined1, FUN_14062baa0)(uVar3,(*(undefined8 *)(gen_frame + 0x98)),GEN_ARG_FLOAT(((float *)(gen_frame + 0xa8))[0]),&(*(undefined1 *)(gen_frame + 0x90)));
   cVar1 = CALLF(undefined1, FUN_14062cc40)(param_1,uVar3,"SetFont");
   if (cVar1 != '\0') {
                     /* WARNING: Subroutine does not return */
@@ -3518,7 +3518,7 @@ undefined4 FUN_1409dc160(undefined8 param_1)
   CALLF(undefined8, FUN_1408c6720)(&(*(undefined8 *)(gen_frame + 0x20)),((int *)(gen_frame + 0xa8)),"Usage: self:SetFont(textType, fontFile, height, flags)",0,(unsigned long long)(((float *)(gen_frame + 0x0))));
   (*(undefined1 *)(gen_frame + 0x90)) = 0;
   CALLF(undefined8, FUN_1408c61d0)(&(*(undefined8 *)(gen_frame + 0x20)),((int *)(gen_frame + 0xa8)),"Usage: self:SetFont(textType, fontFile, height, flags)",0,(unsigned long long)(&(*(undefined1 *)(gen_frame + 0x90))));
-  CALLF(undefined1, FUN_1424ba440)(uVar4,((undefined1 *)(gen_frame + 0x98))[0],(*(undefined8 *)(gen_frame + 0xa0)),GEN_AS_FLOAT((unsigned long long)(((float *)(gen_frame + 0x0))[0])),(unsigned long long)(&(*(undefined1 *)(gen_frame + 0x90))));
+  CALLF(undefined1, FUN_1424ba440)(uVar4,((undefined1 *)(gen_frame + 0x98))[0],(*(undefined8 *)(gen_frame + 0xa0)),GEN_ARG_FLOAT(((float *)(gen_frame + 0x0))[0]),(unsigned long long)(&(*(undefined1 *)(gen_frame + 0x90))));
   cVar1 = CALLF(undefined1, FUN_14062cc40)(param_1,uVar4,"SetFont");
   if (cVar1 != '\0') {
                     /* WARNING: Subroutine does not return */
@@ -5897,7 +5897,7 @@ undefined4 FUN_1409fe4c0(undefined8 param_1)
   CALLF(undefined8, FUN_1408c6720)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0x80)),"Usage: self:SetFont(fontFile, height, flags)",0,(unsigned long long)(((float *)(gen_frame + 0x88))));
   (*(undefined1 *)(gen_frame + 0x70)) = 0;
   CALLF(undefined8, FUN_1408c61d0)(&(*(undefined8 *)(gen_frame + 0x8)),((int *)(gen_frame + 0x80)),"Usage: self:SetFont(fontFile, height, flags)",0,(unsigned long long)(&(*(undefined1 *)(gen_frame + 0x70))));
-  CALLF(undefined1, FUN_1424bc1f0)(uVar3,(*(undefined8 *)(gen_frame + 0x78)),GEN_AS_FLOAT((unsigned long long)(((float *)(gen_frame + 0x88))[0])),&(*(undefined1 *)(gen_frame + 0x70)));
+  CALLF(undefined1, FUN_1424bc1f0)(uVar3,(*(undefined8 *)(gen_frame + 0x78)),GEN_ARG_FLOAT(((float *)(gen_frame + 0x88))[0]),&(*(undefined1 *)(gen_frame + 0x70)));
   cVar1 = CALLF(undefined1, FUN_14062cc40)(param_1,uVar3,"SetFont");
   if (cVar1 != '\0') {
                     /* WARNING: Subroutine does not return */
@@ -10986,7 +10986,7 @@ undefined8 FUN_140a9bba0(undefined8 param_1)
   CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x68)),"Usage: self:SetScale(scale)",0,(unsigned long long)(((float *)(gen_frame + 0x70))));
   cVar1 = CALLF(undefined1, FUN_1424c4ec0)((*(undefined8 *)(gen_frame + 0x60)));
   if (cVar1 != '\0') {
-    CALLF(float, FUN_140631750)((*(undefined8 *)(gen_frame + 0x60)),GEN_AS_FLOAT((unsigned long long)(((float *)(gen_frame + 0x70))[0])));
+    CALLF(float, FUN_140631750)((*(undefined8 *)(gen_frame + 0x60)),GEN_ARG_FLOAT(((float *)(gen_frame + 0x70))[0]));
     cVar1 = CALLF(undefined1, FUN_14062cc40)(param_1,(*(undefined8 *)(gen_frame + 0x60)),"SetScale");
     if (cVar1 != '\0') {
                     /* WARNING: Subroutine does not return */
@@ -11453,7 +11453,7 @@ undefined8 FUN_140aaf660(undefined8 param_1)
   }
   CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x68)),"Usage: self:SetMinMaxValues(minValue, maxValue)",0,(unsigned long long)(((float *)(gen_frame + 0x78))));
   CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x68)),"Usage: self:SetMinMaxValues(minValue, maxValue)",0,(unsigned long long)(((float *)(gen_frame + 0x70))));
-  CALLF(undefined8, FUN_1424c27a0)((*(undefined8 *)(gen_frame + 0x60)),GEN_AS_FLOAT((unsigned long long)(((float *)(gen_frame + 0x78))[0])),GEN_AS_FLOAT((unsigned long long)(((float *)(gen_frame + 0x70))[0])));
+  CALLF(undefined8, FUN_1424c27a0)((*(undefined8 *)(gen_frame + 0x60)),GEN_ARG_FLOAT(((float *)(gen_frame + 0x78))[0]),GEN_ARG_FLOAT(((float *)(gen_frame + 0x70))[0]));
   cVar1 = CALLF(undefined1, FUN_14062cc40)(param_1,(*(undefined8 *)(gen_frame + 0x60)),"SetMinMaxValues");
   if (cVar1 != '\0') {
                     /* WARNING: Subroutine does not return */
@@ -11579,7 +11579,7 @@ undefined8 FUN_140ab3ad0(undefined8 param_1)
   }
   ((int *)(gen_frame + 0x78))[0] = iVar2 + 1;
 LAB_140ab3c5e:
-  CALLF(undefined8, FUN_1424c2a90)((*(undefined8 *)(gen_frame + 0x70)),GEN_AS_FLOAT((unsigned long long)(((float *)(gen_frame + 0x80))[0])),bVar6);
+  CALLF(undefined8, FUN_1424c2a90)((*(undefined8 *)(gen_frame + 0x70)),GEN_ARG_FLOAT(((float *)(gen_frame + 0x80))[0]),bVar6);
   cVar1 = CALLF(undefined1, FUN_14062cc40)(param_1,(*(undefined8 *)(gen_frame + 0x70)),"SetValue");
   if (cVar1 != '\0') {
                     /* WARNING: Subroutine does not return */

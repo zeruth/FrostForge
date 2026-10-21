@@ -93,8 +93,8 @@ void (*s_historyHook)(const char* line);
 int32_t s_recordState = 4;
 char s_recordBuffer[0x2000];
 
-// DAT_142e30120: the command name ConsoleCommandParse split off.
-char s_commandName[0x40];
+// the command name ConsoleCommandParse split off.
+char s_commandName[0x40];  // 0x142e30120
 
 // The invoker and manager for a handler held as a plain function pointer (10 bytes of
 // storage: the pointer and a 16-bit flag).

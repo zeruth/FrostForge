@@ -15606,8 +15606,8 @@ undefined8 FUN_141197010(void)
       (*(undefined1 * *)((char *)&gen_g_1430a0ea0 + 0x0)) = (undefined1 *)0x0;
     }
     CALLF(undefined8, FUN_14025afa0)((*(undefined8 *)((char *)&gen_g_1430a12c8 + 0x0)));
-    REFG(undefined1 *, 0x1430a0eb0) = (undefined1 *)0x0;
-    REFG(undefined8, 0x1430a0eb8) = 0;
+    (*(undefined1 * *)((char *)&gen_g_1430a0eb0 + 0x0)) = (undefined1 *)0x0;
+    (*(undefined8 *)((char *)&gen_g_1430a0eb8 + 0x0)) = 0;
     CALLF(undefined8, FUN_14242bb50)();
     CALLF(undefined8, FUN_14025afa0)((*(undefined8 *)((char *)&gen_g_1430a12c8 + 0x0)));
     return (undefined8)CALLF(undefined8, FUN_14025a880)((*(undefined8 *)((char *)&gen_g_1430a12c8 + 0x0)));

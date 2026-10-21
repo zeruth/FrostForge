@@ -40,6 +40,7 @@ void CStatus::LIST::Clear() {
         if (!node->m_text.IsInline()) {
             SMemFree(node->m_text.m_data, s_stringTag, -6, 0);
         }
+        MemoryWatchBlock(node, false);
         SMemFree(node, s_nodeTag, -6, 0);
         node = next;
     }
@@ -116,6 +117,9 @@ void CStatus::Insert(bool append, int32_t severity, const char* format, va_list 
     }
     node->m_prev->m_next = node;
     this->m_list.m_count++;
+    // (FROST_NODELOG: an entry freed by anything but Clear names the freer; a status entry's
+    // text pointer was freed as a live frame child node on Enter World, 2026-10-21)
+    MemoryWatchBlock(node, true);
     node->m_text.swap(text);
     node->m_severity = severity;
     if (this->m_maxSeverity < severity) {

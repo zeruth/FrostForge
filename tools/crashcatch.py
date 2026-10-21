@@ -123,6 +123,20 @@ def symbolize(exe, rvas):
     return blocks
 
 
+def fault_in(process, thread_id, exe, base, name):
+    """Whether the thread's instruction is in the named function (--in-function)."""
+    thread = k32.OpenThread(0x1FFFFF, False, thread_id)
+    context = CONTEXT()
+    context.ContextFlags = CONTEXT_FULL
+    k32.GetThreadContext(thread, ctypes.byref(context))
+    k32.CloseHandle(thread)
+    if context.Rip < base:
+        return False
+    block = symbolize(exe, [context.Rip - base])
+    # (every function of the inline chain: the instruction's own line can be an inlined helper's)
+    return bool(block) and any(name in line for line in block[0].splitlines()[0::2])
+
+
 def dump_stack(process, exe, base, context, limit=60):
     stack = b""
     page = context.Rsp
@@ -196,6 +210,8 @@ def main():
     ap.add_argument("--timeout", type=float, default=120.0)
     ap.add_argument("--log", default=None)
     ap.add_argument("--skip", type=int, default=0, help="let this many exceptions pass first")
+    ap.add_argument("--in-function", default=None,
+                    help="stop only at a fault whose instruction is in this function (by name); pass the rest on")
     ap.add_argument("--dump", nargs="*", default=[], help="memory to show at the stop: hexaddr[:len] or a register")
     ap.add_argument("--second-chance", action="store_true",
                     help="report only an exception nothing handled (guarded faults pass through)")
@@ -264,6 +280,9 @@ def main():
                 # an earlier fault than the one wanted: the program handles it
                 args.skip -= 1
                 status = DBG_EXCEPTION_NOT_HANDLED
+            elif args.in_function and not fault_in(pi.hProcess, event.dwThreadId, exe, base, args.in_function):
+                # a fault elsewhere: the program handles it
+                status = DBG_EXCEPTION_NOT_HANDLED
             else:
                 thread = k32.OpenThread(0x1FFFFF, False, event.dwThreadId)
                 context = CONTEXT()
@@ -282,8 +301,13 @@ def main():
                 for spec in args.dump:
                     # address:length, or a register name for what it points at
                     where, _, length = spec.partition(":")
+                    # (`*hexaddr`: what the 8 bytes at that address point at)
+                    deref = where.startswith("*")
+                    where = where.lstrip("*")
                     address = getattr(context, where.capitalize()) if hasattr(context, where.capitalize()) \
                         else int(where, 16)
+                    if deref:
+                        address = int.from_bytes(read(pi.hProcess, address, 8), "little")
                     data = read(pi.hProcess, address, int(length or "64", 0))
                     print("memory %x:" % address)
                     for k in range(0, len(data), 16):
@@ -298,6 +322,13 @@ def main():
         context.ContextFlags = CONTEXT_FULL
         k32.GetThreadContext(pi.hThread, ctypes.byref(context))
         print("sample", sample)
+        if sample == 0:
+            # the registers, and what each points at: a wait on a CRITICAL_SECTION has it in one
+            # of them, and its +0x10 is the owning thread's id
+            for name in ("Rcx", "Rdx", "Rbx", "Rsi", "Rdi", "R12", "R13", "R14", "R15"):
+                value = getattr(context, name)
+                data = read(pi.hProcess, value, 0x20) if value > 0x10000 else None
+                print("  %s %016x%s" % (name, value, "  -> " + data.hex(" ") if data else ""))
         dump_stack(pi.hProcess, exe, base, context, 25)
         k32.ResumeThread(pi.hThread)
         time.sleep(0.3)
