@@ -15066,8 +15066,8 @@ undefined8 FUN_141679270(void)
   CALLF(undefined8, FUN_142362ff0)(&REFG(undefined1, 0x14311c4e8));
   uVar4 = 0;
   if ((((byte)REFG(undefined1, 0x142d1b0f8) & 1) != 0) ||
-     (uVar3 = CONCAT71((((ulonglong)(REFG(undefined1, 0x142d1b0f8)) >> 8) & 0xffffffffffffff),(byte)REFG(undefined1, 0x142d1b0f8)),
-     CONCAT71((((ulonglong)(REFG(undefined1, 0x142d1b0f8)) >> 8) & 0xffffffffffffff),(byte)REFG(undefined1, 0x142d1b0f8)) == 0)) {
+     (uVar3 = CONCAT71((((*(ulonglong *)((char *)&REFG(undefined1, 0x142d1b0f8))) >> 8) & 0xffffffffffffffULL),(byte)REFG(undefined1, 0x142d1b0f8)),
+     CONCAT71((((*(ulonglong *)((char *)&REFG(undefined1, 0x142d1b0f8))) >> 8) & 0xffffffffffffffULL),(byte)REFG(undefined1, 0x142d1b0f8)) == 0)) {
     uVar3 = uVar4;
   }
   while (((uVar3 & 1) == 0 && (uVar3 != 0))) {

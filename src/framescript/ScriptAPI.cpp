@@ -21,7 +21,8 @@ void ScriptOpenTable(lua_State* L, const char* name, int32_t index) {
     }
 }
 
-// ref: FUN_1407d2f20
+// (not FUN_1407d2f20: that takes a context holding the lua_State, not the lua_State, so translated
+// callers handed this their context; untagged 2026-10-21, they run its translation)
 void ScriptRegisterFunction(lua_State* L, const char* space, const char* name, lua_CFunction function) {
     ScriptOpenTable(L, space, LUA_GLOBALSINDEX);
     int32_t top = lua_gettop(L);
@@ -53,7 +54,8 @@ void ScriptRegisterEnum(lua_State* L, const char* name, const SCRIPTENUMVALUE* v
     }
 }
 
-// ref: FUN_1407cb7e0
+// (not FUN_1407cb7e0: that takes a context holding the lua_State, not the lua_State, so translated
+// callers handed this their context; untagged 2026-10-21, they run its translation)
 void ScriptSetEnumValue(lua_State* L, const char* name, const char* field, int32_t value) {
     ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
     ScriptOpenTable(L, name, lua_gettop(L));
@@ -62,7 +64,8 @@ void ScriptSetEnumValue(lua_State* L, const char* name, const char* field, int32
     lua_settop(L, -3);
 }
 
-// ref: FUN_1407cb890
+// (not FUN_1407cb890: that takes a context holding the lua_State, not the lua_State, so translated
+// callers handed this their context; untagged 2026-10-21, they run its translation)
 void ScriptSetEnumValueU32(lua_State* L, const char* name, const char* field, uint32_t value) {
     ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
     ScriptOpenTable(L, name, lua_gettop(L));
@@ -87,7 +90,8 @@ void ScriptPushUInt64(lua_State* L, uint64_t value) {
     lua_pushlstring(L, text, count);
 }
 
-// ref: FUN_1407cb940
+// (not FUN_1407cb940: that takes a context holding the lua_State, not the lua_State, so translated
+// callers handed this their context; untagged 2026-10-21, they run its translation)
 void ScriptSetEnumValueU64(lua_State* L, const char* name, const char* field, uint64_t value) {
     ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
     ScriptOpenTable(L, name, lua_gettop(L));
@@ -100,7 +104,8 @@ void ScriptSetEnumValueU64(lua_State* L, const char* name, const char* field, ui
     lua_settop(L, -3);
 }
 
-// ref: FUN_140bb3ea0
+// (not FUN_140bb3ea0: that takes a context holding the lua_State, not the lua_State, so translated
+// callers handed this their context; untagged 2026-10-21, they run its translation)
 void ScriptSetEnumValue8(lua_State* L, const char* name, const char* field, uint8_t value) {
     ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
     ScriptOpenTable(L, name, lua_gettop(L));
@@ -109,7 +114,8 @@ void ScriptSetEnumValue8(lua_State* L, const char* name, const char* field, uint
     lua_settop(L, -3);
 }
 
-// ref: FUN_140bb3f50
+// (not FUN_140bb3f50: that takes a context holding the lua_State, not the lua_State, so translated
+// callers handed this their context; untagged 2026-10-21, they run its translation)
 void ScriptSetEnumValue16(lua_State* L, const char* name, const char* field, uint16_t value) {
     ScriptOpenTable(L, "Enum", LUA_GLOBALSINDEX);
     ScriptOpenTable(L, name, lua_gettop(L));
@@ -118,7 +124,8 @@ void ScriptSetEnumValue16(lua_State* L, const char* name, const char* field, uin
     lua_settop(L, -3);
 }
 
-// ref: FUN_140c09480
+// (not FUN_140c09480: that takes a context holding the lua_State, not the lua_State, so translated
+// callers handed this their context; untagged 2026-10-21, they run its translation)
 void ScriptSetTableValue(lua_State* L, const char* table, const char* name, int32_t value, const char* field) {
     ScriptOpenTable(L, table, LUA_GLOBALSINDEX);
     ScriptOpenTable(L, name, lua_gettop(L));

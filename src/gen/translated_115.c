@@ -4558,7 +4558,7 @@ undefined1 FUN_1418555d0(longlong *param_1, double param_2_promoted, char param_
   lVar4 = ((longlong)GenRefTlsBlock());
   piVar1 = (int *)(lVar4 + 0x2140);
   (*(float * *)(gen_frame + 0x48)) = (float *)piVar1;
-  if ((*(int *)(lVar4 + 0x2140) < REFG(undefined4, 0x143152e34)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x143152e34)) &&
      (_Init_thread_header(&REFG(undefined4, 0x143152e34)), REFG(undefined4, 0x143152e34) == -1)) {
     REFG(float, 0x143152e28) = 0;
     REFG(float, 0x143152e30) = -0.5235988;
@@ -4575,77 +4575,77 @@ undefined1 FUN_1418555d0(longlong *param_1, double param_2_promoted, char param_
     REFG(float, 0x143152e50) = -0.6981317;
     _Init_thread_footer(&REFG(undefined4, 0x143152e54));
   }
-  if ((*(int *)(lVar4 + 0x2140) < REFG(undefined4, 0x143152e64)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x143152e64)) &&
      (_Init_thread_header(&REFG(undefined4, 0x143152e64)), REFG(undefined4, 0x143152e64) == -1)) {
     REFG(float, 0x143152e58) = 0;
     REFG(float, 0x143152e5c) = 0.2617994;
     REFG(float, 0x143152e60) = 0.6981317;
     _Init_thread_footer(&REFG(undefined4, 0x143152e64));
   }
-  if ((*(int *)(lVar4 + 0x2140) < REFG(undefined4, 0x143152e74)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x143152e74)) &&
      (_Init_thread_header(&REFG(undefined4, 0x143152e74)), REFG(undefined4, 0x143152e74) == -1)) {
     REFG(float, 0x143152e68) = 0.0;
     REFG(float, 0x143152e6c) = -1.0471976;
     REFG(float, 0x143152e70) = -0.43633232;
     _Init_thread_footer(&REFG(undefined4, 0x143152e74));
   }
-  if ((*(int *)(lVar4 + 0x2140) < REFG(undefined4, 0x143152e84)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x143152e84)) &&
      (_Init_thread_header(&REFG(undefined4, 0x143152e84)), REFG(undefined4, 0x143152e84) == -1)) {
     REFG(float, 0x143152e78) = 0.0;
     REFG(float, 0x143152e7c) = 0.87266463;
     REFG(float, 0x143152e80) = 1.2217305;
     _Init_thread_footer(&REFG(undefined4, 0x143152e84));
   }
-  if ((*(int *)(lVar4 + 0x2140) < REFG(undefined4, 0x143152e94)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x143152e94)) &&
      (_Init_thread_header(&REFG(undefined4, 0x143152e94)), REFG(undefined4, 0x143152e94) == -1)) {
     REFG(float, 0x143152e88) = 0;
     REFG(float, 0x143152e8c) = 0xbf860a92;
     REFG(float, 0x143152e90) = 0xbf9c61aa;
     _Init_thread_footer(&REFG(undefined4, 0x143152e94));
   }
-  if ((*(int *)(lVar4 + 0x2140) < REFG(undefined4, 0x143152ea4)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x143152ea4)) &&
      (_Init_thread_header(&REFG(undefined4, 0x143152ea4)), REFG(undefined4, 0x143152ea4) == -1)) {
     REFG(float, 0x143152e98) = 0;
     REFG(float, 0x143152e9c) = 0x3f5f66f3;
     REFG(float, 0x143152ea0) = 0x3edf66f3;
     _Init_thread_footer(&REFG(undefined4, 0x143152ea4));
   }
-  if ((*(int *)(lVar4 + 0x2140) < REFG(undefined4, 0x143152eb4)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x143152eb4)) &&
      (_Init_thread_header(&REFG(undefined4, 0x143152eb4)), REFG(undefined4, 0x143152eb4) == -1)) {
     REFG(undefined4, 0x143152ea8) = 0xc0490fdb;
     REFG(undefined4, 0x143152eac) = 0xc0490fdb;
     REFG(undefined4, 0x143152eb0) = 0xc0490fdb;
     _Init_thread_footer(&REFG(undefined4, 0x143152eb4));
   }
-  if ((*(int *)(lVar4 + 0x2140) < REFG(undefined4, 0x143152ec4)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x143152ec4)) &&
      (_Init_thread_header(&REFG(undefined4, 0x143152ec4)), REFG(undefined4, 0x143152ec4) == -1)) {
     REFG(undefined4, 0x143152eb8) = 0x40490fdb;
     REFG(undefined4, 0x143152ebc) = 0x40490fdb;
     REFG(undefined4, 0x143152ec0) = 0x40490fdb;
     _Init_thread_footer(&REFG(undefined4, 0x143152ec4));
   }
-  if ((*(int *)(lVar4 + 0x2140) < REFG(undefined4, 0x143152ed4)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x143152ed4)) &&
      (_Init_thread_header(&REFG(undefined4, 0x143152ed4)), REFG(undefined4, 0x143152ed4) == -1)) {
     REFG(float, 0x143152ec8) = 0;
     REFG(float, 0x143152ecc) = 0xbf5f66f3;
     REFG(float, 0x143152ed0) = -0.6981317;
     _Init_thread_footer(&REFG(undefined4, 0x143152ed4));
   }
-  if ((*(int *)(lVar4 + 0x2140) < REFG(undefined4, 0x143152ee4)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x143152ee4)) &&
      (_Init_thread_header(&REFG(undefined4, 0x143152ee4)), REFG(undefined4, 0x143152ee4) == -1)) {
     REFG(float, 0x143152ed8) = 0;
     REFG(float, 0x143152edc) = 0x3edf66f3;
     REFG(float, 0x143152ee0) = 0.6981317;
     _Init_thread_footer(&REFG(undefined4, 0x143152ee4));
   }
-  if ((*(int *)(lVar4 + 0x2140) < REFG(undefined4, 0x143152ef4)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x143152ef4)) &&
      (_Init_thread_header(&REFG(undefined4, 0x143152ef4)), REFG(undefined4, 0x143152ef4) == -1)) {
     REFG(undefined4, 0x143152ee8) = 0;
     REFG(undefined4, 0x143152eec) = 0xbf75be0b;
     REFG(undefined4, 0x143152ef0) = 0xbfb2b8c2;
     _Init_thread_footer(&REFG(undefined4, 0x143152ef4));
   }
-  if ((*(int *)(lVar4 + 0x2140) < REFG(undefined4, 0x143152f04)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x143152f04)) &&
      (_Init_thread_header(&REFG(undefined4, 0x143152f04)), REFG(undefined4, 0x143152f04) == -1)) {
     REFG(undefined4, 0x143152ef8) = 0;
     REFG(undefined4, 0x143152efc) = 0x3f060a92;

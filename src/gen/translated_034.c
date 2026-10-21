@@ -2342,7 +2342,7 @@ undefined8 FUN_1405a2fd0(longlong *param_1)
     }
   }
   CALLF(undefined8, FUN_14057b200)(lVar2,lVar8,0);
-  puVar7 = REFG(undefined1 *, 0x142e8e2f8);
+  puVar7 = (*(undefined1 * *)((char *)&gen_g_142e8e2f8 + 0x0));
   if (-1 < param_1[6]) {
     CALLF(undefined1, FUN_140255210)(param_1[4],((char *)REFP(0x142d8f7e8)),0xfffffffa,0);
     param_1[4] = 0;
@@ -2381,7 +2381,7 @@ undefined8 FUN_1405a3150(longlong *param_1, undefined8 param_2, undefined8 param
   *(byte *)(lVar3 + 0x14) = *(byte *)(lVar3 + 0x14) | 4;
   *(undefined4 *)(lVar3 + 0x18) = 5;
   CALLF(undefined8, FUN_140582850)(lVar1);
-  puVar2 = REFG(undefined1 *, 0x142e8e2f8);
+  puVar2 = (*(undefined1 * *)((char *)&gen_g_142e8e2f8 + 0x0));
   if (-1 < param_1[6]) {
     CALLF(undefined1, FUN_140255210)(param_1[4],((char *)REFP(0x142d8f7e8)),0xfffffffa,0);
     param_1[4] = 0;
@@ -2660,7 +2660,7 @@ undefined8 FUN_1405a3760(longlong *param_1)
   undefined1 *puVar1 = {0};
   undefined8 uVar2 = {0};
   
-  puVar1 = REFG(undefined1 *, 0x142e8e2f8);
+  puVar1 = (*(undefined1 * *)((char *)&gen_g_142e8e2f8 + 0x0));
   if (-1 < param_1[6]) {
     CALLF(undefined1, FUN_140255210)(param_1[4],((char *)REFP(0x142d8f7e8)),0xfffffffa,0);
     param_1[4] = 0;
@@ -2795,7 +2795,7 @@ undefined8 FUN_1405a3800(longlong param_1, int param_2, undefined1 param_3, unde
               CALLF(undefined1, FUN_1405841c0)(param_1 + 0x78,*(ulonglong *)(param_1 + 0x78) * 2);
             }
           }
-          puVar2 = REFG(undefined1 *, 0x142e8e2f8);
+          puVar2 = (*(undefined1 * *)((char *)&gen_g_142e8e2f8 + 0x0));
           plVar7[2] = lVar4;
           plVar5 = (longlong *)CALLF(longlong, FUN_141240170)(*(undefined4 *)(puVar2 + 0x28),((undefined4 *)(gen_frame + 0x0)),0);
           if (plVar5 == (longlong *)0x0) {
@@ -3457,10 +3457,10 @@ undefined8 FUN_1405a4bd0(void)
 {
   GEN_HIT(64);
   CALLF(undefined8, FUN_14230c7a0)();
-  if (REFG(undefined1 *, 0x142e8e2f8) != (undefined1 *)0x0) {
-    (*(code *)**(undefined8 **)REFG(undefined1 *, 0x142e8e2f8))(REFG(undefined1 *, 0x142e8e2f8),1);
+  if ((*(undefined1 * *)((char *)&gen_g_142e8e2f8 + 0x0)) != (undefined1 *)0x0) {
+    (*(code *)**(undefined8 **)(*(undefined1 * *)((char *)&gen_g_142e8e2f8 + 0x0)))((*(undefined1 * *)((char *)&gen_g_142e8e2f8 + 0x0)),1);
   }
-  REFG(undefined1 *, 0x142e8e2f8) = (undefined1 *)0x0;
+  (*(undefined1 * *)((char *)&gen_g_142e8e2f8 + 0x0)) = (undefined1 *)0x0;
   return 0;
 }
 

@@ -3245,7 +3245,7 @@ undefined8 * FUN_1417749a0(undefined8 *param_1, float *param_2, undefined8 *para
   float fVar17 = {0};
   
   lVar7 = ((longlong)GenRefTlsBlock());
-  if ((*(int *)(lVar7 + 0x2140) < REFG(undefined4, 0x1431350d8)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x1431350d8)) &&
      (_Init_thread_header(&REFG(undefined4, 0x1431350d8)), REFG(undefined4, 0x1431350d8) == -1)) {
     atexit(((code *)REFP(0x1425f1430)));
     _Init_thread_footer(&REFG(undefined4, 0x1431350d8));
@@ -3262,7 +3262,7 @@ undefined8 * FUN_1417749a0(undefined8 *param_1, float *param_2, undefined8 *para
   (*(undefined8 *)(gen_frame + 0x10)) = *(undefined8 *)param_2;
   fVar4 = *(float *)(puVar9 + 5);
   fVar16 = *(float *)((longlong)puVar9 + 0x2c);
-  if ((*(int *)(lVar7 + 0x2140) < REFG(undefined4, 0x1431350dc)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x1431350dc)) &&
      (_Init_thread_header(&REFG(undefined4, 0x1431350dc)), REFG(undefined4, 0x1431350dc) == -1)) {
     atexit(((code *)REFP(0x1425f1480)));
     _Init_thread_footer(&REFG(undefined4, 0x1431350dc));
@@ -8931,7 +8931,7 @@ undefined1 FUN_14177ccd0(undefined8 param_1, longlong *param_2, uint param_3, un
       lVar3 = ((longlong)GenRefTlsBlock());
       puVar7 = (*(uint * *)(gen_frame + 0x10));
       do {
-        if ((*(int *)(lVar3 + 0x2140) < REFG(undefined4, 0x1430a0d98)) &&
+        if ((_Init_thread_epoch < REFG(int, 0x1430a0d98)) &&
            (_Init_thread_header(&REFG(undefined4, 0x1430a0d98)), REFG(undefined4, 0x1430a0d98) == -1)) {
           REFG(undefined8, 0x1430a0ce0) = (*(undefined8 (*)[8])(uintptr_t)0x142710d40ULL);
           REFG(undefined4, 0x1430a0ce8) = 0;
@@ -8967,7 +8967,7 @@ undefined1 FUN_14177ccd0(undefined8 param_1, longlong *param_2, uint param_3, un
       lVar3 = ((longlong)GenRefTlsBlock());
       puVar7 = (*(uint * *)(gen_frame + 0x10));
       do {
-        if ((*(int *)(lVar3 + 0x2140) < REFG(undefined4, 0x1430a0d98)) &&
+        if ((_Init_thread_epoch < REFG(int, 0x1430a0d98)) &&
            (_Init_thread_header(&REFG(undefined4, 0x1430a0d98)), REFG(undefined4, 0x1430a0d98) == -1)) {
           REFG(undefined8, 0x1430a0ce0) = (*(undefined8 (*)[8])(uintptr_t)0x142710d40ULL);
           REFG(undefined4, 0x1430a0ce8) = 0;

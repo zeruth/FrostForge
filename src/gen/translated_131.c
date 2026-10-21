@@ -10628,8 +10628,8 @@ undefined8 FUN_141ab8890(longlong param_1)
         plVar21 = plVar20 + 3;
         do {
           if ((((byte)REFG(undefined1, 0x142d2fce8) & 1) != 0) ||
-             (uVar10 = CONCAT71((((ulonglong)(REFG(undefined1, 0x142d2fce8)) >> 8) & 0xffffffffffffff),(byte)REFG(undefined1, 0x142d2fce8)),
-             CONCAT71((((ulonglong)(REFG(undefined1, 0x142d2fce8)) >> 8) & 0xffffffffffffff),(byte)REFG(undefined1, 0x142d2fce8)) == 0)) {
+             (uVar10 = CONCAT71((((*(ulonglong *)((char *)&REFG(undefined1, 0x142d2fce8))) >> 8) & 0xffffffffffffffULL),(byte)REFG(undefined1, 0x142d2fce8)),
+             CONCAT71((((*(ulonglong *)((char *)&REFG(undefined1, 0x142d2fce8))) >> 8) & 0xffffffffffffffULL),(byte)REFG(undefined1, 0x142d2fce8)) == 0)) {
             uVar10 = uVar23;
           }
           do {
@@ -11716,8 +11716,8 @@ undefined8 FUN_141aba510(longlong param_1)
         lVar4 = *plVar11;
         lVar3 = plVar11[1];
         if ((((byte)REFG(undefined1, 0x142d2fce8) & 1) != 0) ||
-           (uVar2 = CONCAT71((((ulonglong)(REFG(undefined1, 0x142d2fce8)) >> 8) & 0xffffffffffffff),(byte)REFG(undefined1, 0x142d2fce8)),
-           CONCAT71((((ulonglong)(REFG(undefined1, 0x142d2fce8)) >> 8) & 0xffffffffffffff),(byte)REFG(undefined1, 0x142d2fce8)) == 0)) {
+           (uVar2 = CONCAT71((((*(ulonglong *)((char *)&REFG(undefined1, 0x142d2fce8))) >> 8) & 0xffffffffffffffULL),(byte)REFG(undefined1, 0x142d2fce8)),
+           CONCAT71((((*(ulonglong *)((char *)&REFG(undefined1, 0x142d2fce8))) >> 8) & 0xffffffffffffffULL),(byte)REFG(undefined1, 0x142d2fce8)) == 0)) {
           uVar2 = 0;
         }
         do {

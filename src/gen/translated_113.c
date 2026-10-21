@@ -15282,7 +15282,7 @@ undefined4 FUN_14181e8b0(int param_1)
         plVar18 = (longlong *)CALLF(undefined8 *, FUN_140672c50)();
         if ((*plVar18 == plVar29[-1]) && (plVar18[1] == *plVar29)) {
           CALLF(undefined8, FUN_140673650)(&REFG(undefined1, 0x142e9a308),plVar29 + -1,plVar29 + 1);
-          if ((*(int *)(*(longlong *)((longlong)pvVar15 + uVar26 * 8) + 0x2140) < REFG(undefined4, 0x1430a0d98)) &&
+          if ((_Init_thread_epoch < REFG(int, 0x1430a0d98)) &&
              (_Init_thread_header(&REFG(undefined4, 0x1430a0d98)), REFG(undefined4, 0x1430a0d98) == -1)) {
             REFG(undefined8, 0x1430a0ce0) = (*(undefined8 (*)[8])(uintptr_t)0x142710d40ULL);
             REFG(undefined8, 0x1430a0d18) = 0;
@@ -27807,7 +27807,7 @@ ulonglong FUN_1418322d0(undefined8 param_1, int param_2, undefined8 *param_3)
   uVar10 = (ulonglong)_tls_index;
   uVar5 = 0;
   *param_3 = 0;
-  if ((*(int *)(*(longlong *)((longlong)pvVar1 + uVar10 * 8) + 0x2140) < REFG(undefined4, 0x1431450e0)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x1431450e0)) &&
      (_Init_thread_header(&REFG(undefined4, 0x1431450e0)), REFG(undefined4, 0x1431450e0) == -1)) {
     CALLF(undefined8 *, FUN_141836940)(&REFG(undefined1 *, 0x143144c70));
     atexit(((code *)REFP(0x1425f2de0)));
@@ -27857,7 +27857,7 @@ ulonglong FUN_141832410(undefined8 param_1, int param_2, undefined8 *param_3)
   uVar10 = (ulonglong)_tls_index;
   uVar5 = 0;
   *param_3 = 0;
-  if ((*(int *)(*(longlong *)((longlong)pvVar1 + uVar10 * 8) + 0x2140) < REFG(undefined4, 0x143144c28)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x143144c28)) &&
      (_Init_thread_header(&REFG(undefined4, 0x143144c28)), REFG(undefined4, 0x143144c28) == -1)) {
     CALLF(undefined8 *, FUN_1418b2e20)(&REFG(undefined1 *, 0x143144bb0));
     REFG(undefined8, 0x143144c20) = 0;
@@ -27916,7 +27916,7 @@ ulonglong FUN_141832580(undefined8 param_1, int param_2, undefined8 *param_3)
   uVar10 = (ulonglong)_tls_index;
   uVar5 = 0;
   *param_3 = 0;
-  if ((*(int *)(*(longlong *)((longlong)pvVar1 + uVar10 * 8) + 0x2140) < REFG(undefined4, 0x143144ba0)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x143144ba0)) &&
      (_Init_thread_header(&REFG(undefined4, 0x143144ba0)), REFG(undefined4, 0x143144ba0) == -1)) {
     CALLF(undefined8 *, FUN_1418b2e20)(&REFG(undefined1 *, 0x143144b40));
     atexit(((code *)REFP(0x1425f2e70)));
@@ -27966,7 +27966,7 @@ ulonglong FUN_1418326c0(undefined8 param_1, int param_2, undefined8 *param_3)
   uVar10 = (ulonglong)_tls_index;
   uVar5 = 0;
   *param_3 = 0;
-  if ((*(int *)(*(longlong *)((longlong)pvVar1 + uVar10 * 8) + 0x2140) < REFG(undefined4, 0x143144c68)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x143144c68)) &&
      (_Init_thread_header(&REFG(undefined4, 0x143144c68)), REFG(undefined4, 0x143144c68) == -1)) {
     CALLF(undefined8 *, FUN_1418a6010)(&REFG(undefined1 *, 0x143144c30));
     REFG(undefined8, 0x143144c40) = 0;

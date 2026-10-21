@@ -9861,7 +9861,7 @@ undefined8 FUN_1417456e0(undefined8 param_1, longlong *param_2, undefined8 *para
     do {
       if (iVar21 < 1) break;
       uVar24 = *(ulonglong *)(*param_2 + uVar26 * 8);
-      if ((*(int *)(*(longlong *)((longlong)pvVar7 + uVar18 * 8) + 0x2140) < REFG(undefined4, 0x1430a1fc0)) &&
+      if ((_Init_thread_epoch < REFG(int, 0x1430a1fc0)) &&
          (_Init_thread_header(&REFG(undefined4, 0x1430a1fc0)), param_2 = (*(longlong * *)(gen_frame + 0x98)), REFG(undefined4, 0x1430a1fc0) == -1)) {
         lVar12 = CALLF(undefined *, FUN_140265ca0)();
         REFG(undefined1, 0x1430a1fbc) = *(byte *)(lVar12 + 0x23) >> 4 & 1;

@@ -9332,7 +9332,7 @@ undefined1 FUN_1412f2db0(void)
   undefined8 uVar5 = {0};
   
   lVar3 = ((longlong)GenRefTlsBlock());
-  if (*(int *)(lVar3 + 0x2140) < REFG(undefined4, 0x1430a99b0)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a99b0)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a99b0));
     if (REFG(undefined4, 0x1430a99b0) == -1) {
       uVar5 = CALLF(ulonglong, FUN_140216fc0)("ound_EnableAllSound",0xaf63ee4c86020b22);
@@ -9340,7 +9340,7 @@ undefined1 FUN_1412f2db0(void)
       _Init_thread_footer(&REFG(undefined4, 0x1430a99b0));
     }
   }
-  if (*(int *)(lVar3 + 0x2140) < REFG(undefined4, 0x1430a99c0)) {
+  if (_Init_thread_epoch < REFG(int, 0x1430a99c0)) {
     _Init_thread_header(&REFG(undefined4, 0x1430a99c0));
     if (REFG(undefined4, 0x1430a99c0) == -1) {
       uVar5 = CALLF(ulonglong, FUN_140216fc0)("ound_EnableAmbience",0xaf63ee4c86020b22);

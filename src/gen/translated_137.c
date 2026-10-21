@@ -11243,7 +11243,7 @@ undefined8 FUN_141bf1ff0(void)
     (**(code **)REFG(undefined8, 0x142d35900))(&REFG(undefined8, 0x142d35900),uVar1);
   }
   while ((((byte)REFG(undefined1, 0x142d358c8) & 1) == 0 &&
-         (plVar3 = (longlong *)CONCAT71((((ulonglong)(REFG(undefined1, 0x142d358c8)) >> 8) & 0xffffffffffffff),(byte)REFG(undefined1, 0x142d358c8)),
+         (plVar3 = (longlong *)CONCAT71((((*(ulonglong *)((char *)&REFG(undefined1, 0x142d358c8))) >> 8) & 0xffffffffffffffULL),(byte)REFG(undefined1, 0x142d358c8)),
          plVar3 != (longlong *)0x0))) {
     uVar1 = plVar3[1];
     if (uVar1 != 0) {

@@ -4252,7 +4252,7 @@ undefined1 FUN_14125b960(longlong param_1)
     lVar10 = ((longlong)GenRefTlsBlock());
     do {
       uVar23 = *puVar11;
-      if ((*(int *)(lVar10 + 0x2140) < REFG(undefined4, 0x1430a1fc0)) &&
+      if ((_Init_thread_epoch < REFG(int, 0x1430a1fc0)) &&
          (_Init_thread_header(&REFG(undefined4, 0x1430a1fc0)), REFG(undefined4, 0x1430a1fc0) == -1)) {
         lVar9 = CALLF(undefined *, FUN_140265ca0)();
         REFG(undefined1, 0x1430a1fbc) = *(byte *)(lVar9 + 0x23) >> 4 & 1;

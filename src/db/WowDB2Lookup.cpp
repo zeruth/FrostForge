@@ -9,6 +9,17 @@
 #include "storm/String.hpp"
 #include "util/Unimplemented.hpp"
 
+extern "C" {
+unsigned long long FUN_140596880();
+unsigned long long FUN_140596930();
+unsigned long long FUN_140596a00();
+unsigned long long FUN_140596a70();
+unsigned long long FUN_140596b00();
+unsigned long long FUN_140596b70();
+unsigned long long FUN_140596c00();
+unsigned long long FUN_140596c70();
+}
+
 const char s_dbcTypesFile[] = "D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\DB\\DBCTypes.h";
 
 namespace {
@@ -1026,9 +1037,40 @@ uint32_t SparseEstimate(const DB2LOOKUPINIT* init) {
     return (init->m_recordCount2 + init->m_sparseCount) * 0x10;
 }
 
-WowDB2Lookup* NotPorted() {
-    FROST_UNIMPLEMENTED();  // the sparse and multi-id strategies: the loader's mask never asks for them
-    return nullptr;
+// The sparse and multi-id lookups are the reference's own classes, made by its translated
+// factories (their vtables are the reference's, slot for slot this class's). The sparse one is
+// what a sparse table (Spell, ItemSparse) gets: until 2026-10-21 these were stubs returning null,
+// and loading Spell on entering the world faulted on it.
+WowDB2Lookup* SparseNew() {
+    return reinterpret_cast<WowDB2Lookup*>(FUN_140596880());
+}
+
+WowDB2Lookup* SparseNewSorted() {
+    return reinterpret_cast<WowDB2Lookup*>(FUN_140596930());
+}
+
+WowDB2Lookup* MultiNewBB() {
+    return reinterpret_cast<WowDB2Lookup*>(FUN_140596a00());
+}
+
+WowDB2Lookup* MultiNewBBSorted() {
+    return reinterpret_cast<WowDB2Lookup*>(FUN_140596a70());
+}
+
+WowDB2Lookup* MultiNewSS() {
+    return reinterpret_cast<WowDB2Lookup*>(FUN_140596b00());
+}
+
+WowDB2Lookup* MultiNewSSSorted() {
+    return reinterpret_cast<WowDB2Lookup*>(FUN_140596b70());
+}
+
+WowDB2Lookup* MultiNewII() {
+    return reinterpret_cast<WowDB2Lookup*>(FUN_140596c00());
+}
+
+WowDB2Lookup* MultiNewIISorted() {
+    return reinterpret_cast<WowDB2Lookup*>(FUN_140596c70());
 }
 
 uint32_t MultiEstimate(const DB2LOOKUPINIT*) {
@@ -1066,12 +1108,12 @@ const DB2LOOKUPSTRATEGY s_strategies[] = {
     { 0x8, "PIib", LookupNew<PIib>, LookupNew<WowDB2Lookup_Sorted<PIib>>, PIib::Estimate },
     { 0x8, "PIis", LookupNew<PIis>, LookupNew<WowDB2Lookup_Sorted<PIis>>, PIis::Estimate },
     { 0x8, "PIii", LookupNew<PIii>, LookupNew<WowDB2Lookup_Sorted<PIii>>, PIii::Estimate },
-    // ref: FUN_140596880, FUN_140596930
-    { 0x10, "Spar", NotPorted, NotPorted, SparseEstimate },
-    // ref: FUN_140596a00, FUN_140596b00, FUN_140596c00
-    { 0x20, "Mbb", NotPorted, NotPorted, MultiEstimate },
-    { 0x20, "Mss", NotPorted, NotPorted, MultiEstimate },
-    { 0x20, "Mii", NotPorted, NotPorted, MultiEstimate },
+    // (the factories FUN_140596880 / FUN_140596930, translated)
+    { 0x10, "Spar", SparseNew, SparseNewSorted, SparseEstimate },
+    // (FUN_140596a00 / FUN_140596a70, FUN_140596b00 / FUN_140596b70, FUN_140596c00 / FUN_140596c70)
+    { 0x20, "Mbb", MultiNewBB, MultiNewBBSorted, MultiEstimate },
+    { 0x20, "Mss", MultiNewSS, MultiNewSSSorted, MultiEstimate },
+    { 0x20, "Mii", MultiNewII, MultiNewIISorted, MultiEstimate },
 };
 
 }

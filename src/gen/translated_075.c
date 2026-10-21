@@ -7629,7 +7629,7 @@ undefined1 FUN_141216d00(undefined8 param_1, int param_2, longlong param_3)
   
   do {
     if ((((byte)REFG(undefined1, 0x142cfb7a0) & 1) != 0) ||
-       (plVar3 = (longlong *)CONCAT71((((ulonglong)(REFG(undefined1, 0x142cfb7a0)) >> 8) & 0xffffffffffffff),(byte)REFG(undefined1, 0x142cfb7a0)),
+       (plVar3 = (longlong *)CONCAT71((((*(ulonglong *)((char *)&REFG(undefined1, 0x142cfb7a0))) >> 8) & 0xffffffffffffffULL),(byte)REFG(undefined1, 0x142cfb7a0)),
        plVar3 == (longlong *)0x0)) {
       return 1;
     }

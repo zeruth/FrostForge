@@ -20366,14 +20366,14 @@ undefined * FUN_1418c9640(void)
   undefined8 *puVar6 = {0};
   
   lVar5 = ((longlong)GenRefTlsBlock());
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x14316fba8)) {
+  if (_Init_thread_epoch < REFG(int, 0x14316fba8)) {
     _Init_thread_header(&REFG(undefined4, 0x14316fba8));
     if (REFG(undefined4, 0x14316fba8) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined1, 0x14316f9e0));
       _Init_thread_footer(&REFG(undefined4, 0x14316fba8));
     }
   }
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x14316fbf8)) {
+  if (_Init_thread_epoch < REFG(int, 0x14316fbf8)) {
     _Init_thread_header(&REFG(undefined4, 0x14316fbf8));
     if (REFG(undefined4, 0x14316fbf8) == -1) {
       atexit(((code *)REFP(0x1425f36d0)));
@@ -22812,14 +22812,14 @@ undefined * FUN_1418cc050(void)
   undefined8 *puVar6 = {0};
   
   lVar5 = ((longlong)GenRefTlsBlock());
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x143170ca8)) {
+  if (_Init_thread_epoch < REFG(int, 0x143170ca8)) {
     _Init_thread_header(&REFG(undefined4, 0x143170ca8));
     if (REFG(undefined4, 0x143170ca8) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined1, 0x143170ae0));
       _Init_thread_footer(&REFG(undefined4, 0x143170ca8));
     }
   }
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x143170cf8)) {
+  if (_Init_thread_epoch < REFG(int, 0x143170cf8)) {
     _Init_thread_header(&REFG(undefined4, 0x143170cf8));
     if (REFG(undefined4, 0x143170cf8) == -1) {
       atexit(((code *)REFP(0x1425f36f0)));
@@ -22964,14 +22964,14 @@ undefined * FUN_1418cc310(void)
   undefined8 *puVar6 = {0};
   
   lVar5 = ((longlong)GenRefTlsBlock());
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x143170208)) {
+  if (_Init_thread_epoch < REFG(int, 0x143170208)) {
     _Init_thread_header(&REFG(undefined4, 0x143170208));
     if (REFG(undefined4, 0x143170208) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined1, 0x143170040));
       _Init_thread_footer(&REFG(undefined4, 0x143170208));
     }
   }
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x143170258)) {
+  if (_Init_thread_epoch < REFG(int, 0x143170258)) {
     _Init_thread_header(&REFG(undefined4, 0x143170258));
     if (REFG(undefined4, 0x143170258) == -1) {
       atexit(((code *)REFP(0x1425f3710)));
@@ -23214,14 +23214,14 @@ undefined * FUN_1418cc7d0(void)
   undefined8 *puVar6 = {0};
   
   lVar5 = ((longlong)GenRefTlsBlock());
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x14316fdc8)) {
+  if (_Init_thread_epoch < REFG(int, 0x14316fdc8)) {
     _Init_thread_header(&REFG(undefined4, 0x14316fdc8));
     if (REFG(undefined4, 0x14316fdc8) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined1, 0x14316fc00));
       _Init_thread_footer(&REFG(undefined4, 0x14316fdc8));
     }
   }
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x14316fe18)) {
+  if (_Init_thread_epoch < REFG(int, 0x14316fe18)) {
     _Init_thread_header(&REFG(undefined4, 0x14316fe18));
     if (REFG(undefined4, 0x14316fe18) == -1) {
       atexit(((code *)REFP(0x1425f3750)));
@@ -23512,14 +23512,14 @@ undefined * FUN_1418cccf0(void)
   undefined8 *puVar6 = {0};
   
   lVar5 = ((longlong)GenRefTlsBlock());
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x143170428)) {
+  if (_Init_thread_epoch < REFG(int, 0x143170428)) {
     _Init_thread_header(&REFG(undefined4, 0x143170428));
     if (REFG(undefined4, 0x143170428) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined1, 0x143170260));
       _Init_thread_footer(&REFG(undefined4, 0x143170428));
     }
   }
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x143170478)) {
+  if (_Init_thread_epoch < REFG(int, 0x143170478)) {
     _Init_thread_header(&REFG(undefined4, 0x143170478));
     if (REFG(undefined4, 0x143170478) == -1) {
       atexit(((code *)REFP(0x1425f3770)));
@@ -23737,14 +23737,14 @@ undefined * FUN_1418cd0e0(void)
   undefined8 *puVar6 = {0};
   
   lVar5 = ((longlong)GenRefTlsBlock());
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x143170868)) {
+  if (_Init_thread_epoch < REFG(int, 0x143170868)) {
     _Init_thread_header(&REFG(undefined4, 0x143170868));
     if (REFG(undefined4, 0x143170868) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined1, 0x1431706a0));
       _Init_thread_footer(&REFG(undefined4, 0x143170868));
     }
   }
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x1431708b8)) {
+  if (_Init_thread_epoch < REFG(int, 0x1431708b8)) {
     _Init_thread_header(&REFG(undefined4, 0x1431708b8));
     if (REFG(undefined4, 0x1431708b8) == -1) {
       atexit(((code *)REFP(0x1425f3790)));
@@ -24251,14 +24251,14 @@ undefined * FUN_1418cd990(void)
   undefined8 *puVar6 = {0};
   
   lVar5 = ((longlong)GenRefTlsBlock());
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x143170648)) {
+  if (_Init_thread_epoch < REFG(int, 0x143170648)) {
     _Init_thread_header(&REFG(undefined4, 0x143170648));
     if (REFG(undefined4, 0x143170648) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined1, 0x143170480));
       _Init_thread_footer(&REFG(undefined4, 0x143170648));
     }
   }
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x143170698)) {
+  if (_Init_thread_epoch < REFG(int, 0x143170698)) {
     _Init_thread_header(&REFG(undefined4, 0x143170698));
     if (REFG(undefined4, 0x143170698) == -1) {
       atexit(((code *)REFP(0x1425f37b0)));
@@ -24926,14 +24926,14 @@ undefined * FUN_1418ce530(void)
   undefined8 *puVar6 = {0};
   
   lVar5 = ((longlong)GenRefTlsBlock());
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x14316ffe8)) {
+  if (_Init_thread_epoch < REFG(int, 0x14316ffe8)) {
     _Init_thread_header(&REFG(undefined4, 0x14316ffe8));
     if (REFG(undefined4, 0x14316ffe8) == -1) {
       CALLF(undefined1 *, FUN_141836da0)(&REFG(undefined1, 0x14316fe20));
       _Init_thread_footer(&REFG(undefined4, 0x14316ffe8));
     }
   }
-  if (*(int *)(lVar5 + 0x2140) < REFG(undefined4, 0x143170038)) {
+  if (_Init_thread_epoch < REFG(int, 0x143170038)) {
     _Init_thread_header(&REFG(undefined4, 0x143170038));
     if (REFG(undefined4, 0x143170038) == -1) {
       atexit(((code *)REFP(0x1425f37d0)));

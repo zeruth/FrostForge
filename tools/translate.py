@@ -942,8 +942,11 @@ IMAGE_LO, IMAGE_HI = 0x140000000, 0x150000000   # the reference image's address 
 # (any whitespace between the tokens: Ghidra wraps a long condition anywhere, and a wrapped
 # `*(longlong *)\n ((longlong)ThreadLocalStoragePointer` was missed, leaving that static's guard
 # against the image's TLS template, so EnterWorld's "gameTip" CVar was never looked up, 2026-10-21)
-INIT_EPOCH = re.compile(r"\*\s*\(int \*\)\s*\(\s*\*\s*\(longlong \*\)\s*\(\s*\(longlong\)\s*ThreadLocalStoragePointer\s*\+\s*"
-                        r"\(ulonglong\)\s*_tls_index\s*\*\s*8\s*\)\s*\+\s*0x2140\s*\)")
+# (the TLS array or the index perhaps held in a variable first: `*(int *)(*(longlong *)((longlong)
+# pvVar2 + uVar8 * 8) + 0x2140)`, FUN_141c818c0's statics, 2026-10-21; a slot of a pointer array
+# at 0x2140 is the epoch and nothing else)
+INIT_EPOCH = re.compile(r"\*\s*\(int \*\)\s*\(\s*\*\s*\(longlong \*\)\s*\(\s*\(longlong\)\s*(?:ThreadLocalStoragePointer|pvVar\d+)\s*\+\s*"
+                        r"(?:\(ulonglong\)\s*_tls_index|uVar\d+)\s*\*\s*8\s*\)\s*\+\s*0x2140\s*\)")
 TLS_BLOCK = (r"\*\s*\(longlong \*\)\s*\(\s*\(longlong\)\s*ThreadLocalStoragePointer\s*\+\s*\(ulonglong\)\s*_tls_index"
              r"\s*\*\s*8\s*\)")
 EPOCH_PTR = re.compile(r"\(int \*\)\(" + TLS_BLOCK + r"\s*\+\s*0x2140\)")
@@ -1128,7 +1131,25 @@ def init_epoch_pointers(text: str) -> str:
                 and offsets[:decl] == [""] * decl:
             text = text[:m.start()] + f"{m.group(1)}{var} = (longlong)GenInitThreadEpochPtr() - 0x2140;" \
                 + text[m.end():]
-    return text
+    # the block in a variable that is used for other things too, the index perhaps copied first
+    # (`uVar8 = (ulonglong)_tls_index; lVar3 = *(longlong *)((longlong)ThreadLocalStoragePointer
+    # + uVar8 * 8);`, FUN_141c818c0, whose statics' guards then read the image's TLS template and
+    # stayed unbuilt: the world's script setup called a null vtable, 2026-10-21): each epoch read
+    # through it, up to its next assignment, is the port's epoch
+    load = re.compile(r"^\s*(\w+) = \*\(longlong \*\)\(\(longlong\)(?:ThreadLocalStoragePointer|pvVar\d+) \+ "
+                      r"(?:\(ulonglong\)_tls_index|\w+) \* 8\);$", re.M)
+    out, at = [], 0
+    for m in load.finditer(text):
+        if m.start() < at:
+            continue    # (inside the previous load's span: that one's variable was rewritten there)
+        var = m.group(1)
+        nxt = re.compile(rf"^\s*{var} = ", re.M).search(text, m.end())
+        end = nxt.start() if nxt else len(text)
+        out.append(text[at:m.end()])
+        out.append(re.sub(rf"\*\(int \*\)\({var} \+ 0x2140\)", "_Init_thread_epoch", text[m.end():end]))
+        at = end
+    out.append(text[at:])
+    return "".join(out)
 
 
 # an inlined strlen: `n = -1; do { n = n + 1; } while (*(char *)(p + n) != '\0');`, or with a
@@ -1166,9 +1187,17 @@ def global_pieces(text: str) -> str:
     For a global that is plain arithmetic on its address; a string symbol already is one."""
     def piece(m):
         sym, off, size = m.group(1), int(m.group(2)), int(m.group(3))
-        if size not in PIECE_TYPE:
-            return m.group(0)
         base = sym if re.match(r"(?:s|u|ws)_", sym) else f"&{sym}"
+        if size not in PIECE_TYPE:
+            # an odd width (`CONCAT71(DAT_142d37968._1_7_,(byte)DAT_142d37968)`: a list head
+            # pointer read in two pieces, the global typed as a byte): the 8 bytes at the
+            # global's address, shifted and masked. The local rule below shifted the global's
+            # declared byte instead, so the pointer kept its low byte only and the world-entry
+            # teardown (FUN_141c9d620) read 0x78, 2026-10-21 (17 sites)
+            if off + size > 8:
+                return m.group(0)
+            return (f"(((*(ulonglong *)((char *){base})) >> {8 * off}) & "
+                    f"{(1 << (8 * size)) - 1:#x}ULL)")
         return f"(*({PIECE_TYPE[size]} *)((char *){base} + {off}))"
 
     text = re.sub(r"\b((?:PTR_)*(?:_?DAT|_?UNK|s|u|ws|PTR)_\w*?_?[0-9a-f]{9})\._(\d+)_(\d+)_", piece, text)
@@ -4079,7 +4108,14 @@ class Translator:
             if not p or e is None or "c" not in e:
                 continue
             touched = [int(m.group(2), 16) for m in SYMBOL.finditer(e["c"])]
-            if any(self.held_global(x) for x in touched):
+            # (only a writable one: a constant the port also defines, read from .rdata, builds
+            # nothing a second time. Counting those skipped 967 of the image's initializers,
+            # among them the cameras' (FUN_140208620, for reading GROUND_DROP), whose
+            # unconstructed strings faulted on entering the world, 2026-10-21)
+            def writable(x):
+                s = self.ref.section_of(x)
+                return s is None or s.name not in (".rdata", ".text")
+            if any(self.held_global(x) and writable(x) for x in touched):
                 continue
             out.append(p)
         self._inits = out

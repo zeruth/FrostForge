@@ -11938,7 +11938,7 @@ undefined1 * FUN_1418ab070(undefined1 *param_1)
   *(undefined8 *)(param_1 + 0xf0) = 0;
   param_1[0x108] = 1;
   *(undefined4 *)(param_1 + 0x128) = 4;
-  if (*(int *)(*(longlong *)((longlong)pvVar1 + uVar3 * 8) + 0x2140) < REFG(undefined4, 0x143180c4c)) {
+  if (_Init_thread_epoch < REFG(int, 0x143180c4c)) {
     _Init_thread_header(&REFG(undefined4, 0x143180c4c));
     if (REFG(undefined4, 0x143180c4c) == -1) {
       REFG(undefined8, 0x143180c40) = 0;
@@ -13009,7 +13009,7 @@ undefined1 * FUN_1418acb10(undefined1 *param_1)
   *(undefined8 *)(param_1 + 0x60) = 0;
   param_1[0x78] = 1;
   *(undefined4 *)(param_1 + 0x98) = 1;
-  if (*(int *)(*(longlong *)((longlong)pvVar1 + uVar3 * 8) + 0x2140) < REFG(undefined4, 0x143180c4c)) {
+  if (_Init_thread_epoch < REFG(int, 0x143180c4c)) {
     _Init_thread_header(&REFG(undefined4, 0x143180c4c));
     if (REFG(undefined4, 0x143180c4c) == -1) {
       REFG(undefined8, 0x143180c40) = 0;
@@ -14314,7 +14314,7 @@ ulonglong FUN_1418aec20(undefined8 param_1, int param_2, undefined8 *param_3)
   uVar10 = (ulonglong)_tls_index;
   uVar5 = 0;
   *param_3 = 0;
-  if ((*(int *)(*(longlong *)((longlong)pvVar1 + uVar10 * 8) + 0x2140) < REFG(undefined4, 0x1431563a0)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x1431563a0)) &&
      (_Init_thread_header(&REFG(undefined4, 0x1431563a0)), REFG(undefined4, 0x1431563a0) == -1)) {
     CALLF(undefined8 *, FUN_1418a6010)(&REFG(undefined1 *, 0x143156388));
     REFG(undefined8, 0x143156398) = 0;
@@ -14371,7 +14371,7 @@ ulonglong FUN_1418aed90(undefined8 param_1, int param_2, undefined8 *param_3)
   uVar10 = (ulonglong)_tls_index;
   uVar5 = 0;
   *param_3 = 0;
-  if ((*(int *)(*(longlong *)((longlong)pvVar1 + uVar10 * 8) + 0x2140) < REFG(undefined4, 0x1431563c0)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x1431563c0)) &&
      (_Init_thread_header(&REFG(undefined4, 0x1431563c0)), REFG(undefined4, 0x1431563c0) == -1)) {
     CALLF(undefined8 *, FUN_1418a6010)(&REFG(undefined1 *, 0x1431563a8));
     REFG(undefined8, 0x1431563b8) = 0;

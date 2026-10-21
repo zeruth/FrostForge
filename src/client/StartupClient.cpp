@@ -117,6 +117,7 @@ void Sub1405705D0() {
 
 // the hwDetect defaults (DAT_142e303c0 hook)
 extern "C" unsigned long long FUN_14022a8e0();
+extern "C" unsigned long long FUN_140c7d510();   // the script helpers' default object
 // translated: FUN_14022a8e0
 void HardwareDetectDefaults() {
     __try {
@@ -548,6 +549,15 @@ void Sub14023DBD0() {
     Sub14022E810();
     FrameScript_SetStateHook(ClientScriptStateHook);
     FrameScript_Initialize(false);
+    // FrostLite's, not the reference's: the script helpers' shared default object (DAT_14309ff50,
+    // a function-local static built by FUN_140c7d510 on first use). In the reference one of its 118
+    // callers has always run before the world loads; here none has, and the world's script setup
+    // (FUN_141c818c0) used it unbuilt (2026-10-21). Building a lazy static early changes nothing
+    // else.
+    __try {
+        FUN_140c7d510();
+    } __except (GenFault(0x140c7d510ull, GetExceptionInformation())) {
+    }
     Sub14230B600();
     Sub1412E59C0(0);
     Sub14192C8C0();
@@ -1530,6 +1540,7 @@ void Sub14023D170(GXFRAMESTATS* stats) {
 #pragma comment(linker, "/include:GenForwardMissing")
 #pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
 #pragma comment(linker, "/alternatename:FUN_1402165b0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140216640=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140217000=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14021f090=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140222a60=GenForwardMissing")

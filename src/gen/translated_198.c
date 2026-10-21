@@ -13930,7 +13930,7 @@ undefined1 FUN_1425617a0(int param_1)
   bool bVar12 = {0};
   
   lVar8 = ((longlong)GenRefTlsBlock());
-  if ((*(int *)(lVar8 + 0x2140) < REFG(undefined4, 0x1447cefd8)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x1447cefd8)) &&
      (_Init_thread_header(&REFG(undefined4, 0x1447cefd8)), REFG(undefined4, 0x1447cefd8) == -1)) {
     uVar7 = CALLF(ulonglong, FUN_140216fc0)("ound_EnableErrorSpeech",0xaf63ee4c86020b22);
     REFG(code *, 0x1447cefd0) = (code *)CALLF(ulonglong, FUN_140320970)(uVar7);
@@ -13945,7 +13945,7 @@ undefined1 FUN_1425617a0(int param_1)
   lVar5 = CALLF(ulonglong, FUN_14170ff20)();
   (*(code * *)(gen_frame + 0x50)) = (code *)0x0;
   if (lVar5 == 0) goto LAB_142561b26;
-  if ((*(int *)(lVar8 + 0x2140) < REFG(undefined4, 0x1447cefe0)) &&
+  if ((_Init_thread_epoch < REFG(int, 0x1447cefe0)) &&
      (_Init_thread_header(&REFG(undefined4, 0x1447cefe0)), REFG(undefined4, 0x1447cefe0) == -1)) {
     atexit(((code *)REFP(0x14260b490)));
     _Init_thread_footer(&REFG(undefined4, 0x1447cefe0));

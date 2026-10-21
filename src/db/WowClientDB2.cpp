@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cstring>
+#include <intrin.h>
 #include <new>
 
 #include "base/CDataStore.hpp"
@@ -10,6 +11,7 @@
 #include "storm/ErrorReport.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
+#include "util/FrostLog.hpp"
 #include "util/Unimplemented.hpp"
 
 using namespace cas;
@@ -765,12 +767,14 @@ void WowClientDB2_Base::Release(void*) {
 }
 
 // ref: FUN_14022c3f0
-uint64_t WowClientDB2_Base::Slot78() {
+uint64_t WowClientDB2_Base::RecordId(void* record) {
+    (void)record;
     return 0;
 }
 
 // ref: FUN_14057b2b0
-void WowClientDB2_Base::Slot80() {
+void WowClientDB2_Base::FreeRecord(void* record) {
+    (void)record;
     FROST_UNIMPLEMENTED();
 }
 
@@ -837,6 +841,9 @@ bool WowClientDB2_Base::ReadExact(CASFILE* file, void* dest, uint32_t bytes, boo
         TableFileName(this, name, 0x104);
         // FUN_1402cd7b0 (the file's description) is not ported; the name stands for it.
         ErrorDisplayFormatted(0x85100086, nullptr, 0, "Failed to read %s %s: %s", name, "", error);
+        // (FrostLite's own detail, not the reference's: what was asked for, and by whom)
+        FrostLog("db2", "read of %u bytes at %llu failed (caller %p)", bytes,
+            static_cast<unsigned long long>(file != nullptr ? file->m_position : 0), _ReturnAddress());
     }
     this->Unload(true);
     return false;

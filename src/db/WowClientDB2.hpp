@@ -196,8 +196,9 @@ class WowClientDB2_Base {
     virtual void RecordCallback() = 0;                                          // 0x60
     virtual void AddRef(void* record);                                          // 0x68
     virtual void Release(void* record);                                         // 0x70
-    virtual uint64_t Slot78();                                                  // 0x78
-    virtual void Slot80();                                                      // 0x80
+    // a record's id (FUN_140447c30 for Spell), and a record given back (FUN_140447cc0)
+    virtual uint64_t RecordId(void* record);                                    // 0x78
+    virtual void FreeRecord(void* record);                                      // 0x80
     virtual bool Load(bool errors);                                             // 0x88
     virtual bool ValidateMeta();                                                // 0x90
     virtual CASFILE** FileSlot();                                               // 0x98

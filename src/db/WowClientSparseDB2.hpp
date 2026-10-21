@@ -54,6 +54,43 @@ class WowClientSparseDB2 : public WowClientDB2_Base {
     // itself unloaded.
     // ref: FUN_1405a4550
     bool Load(bool errors) override;
+
+    // The base slots the sparse class replaces (vtable 0x1426b7a00): records come from the file
+    // on demand through a catalog, so the sections, the record store and the parent links are
+    // its own. Each runs the reference's code, translated, over this object (the layout is
+    // the reference's). Until 2026-10-21 only Load was overridden, and the base loader read a
+    // sparse file as a dense one (17 MB in one read for Spell, refused).
+    void Slot08() override;                                                             // 0x08 FUN_1405a48c0
+    void Slot10() override;                                                             // 0x10 FUN_1405a4980
+    bool Slot18() override;                                                             // 0x18 FUN_1405a3470
+    void Unload(bool failed) override;                                                  // 0x28 FUN_1405a4e30
+    void Slot40() override;                                                             // 0x40 FUN_1405a3550
+    bool LoadSection(void* file, int32_t section, bool errors) override;                // 0x58 FUN_1405a46d0
+    bool ValidateMeta() override;                                                       // 0x90 FUN_1405a48b0
+    CASFILE** FileSlot() override;                                                      // 0x98 FUN_1405a37f0
+    bool ReadSectionExtra(CDataStore* store, bool errors, uint32_t section) override;   // 0xb8 FUN_1405a4040
+    uint32_t SparseCount() override;                                                    // 0xc8 FUN_1405a3cd0
+    void* DeserializeRecord(CDataStore* store) override;                                // 0xf0 FUN_1405a4f50
+    void SetRecord(uint32_t id, void* record, void* previous, int32_t parent) override; // 0xf8 FUN_1405a49c0
+    void UpdateParent(void* record, int32_t parent, uint32_t id, void* previous) override;  // 0x108 FUN_1405a4a40
+    uint32_t SectionSize(uint32_t section) override;                                    // 0x120 FUN_1405a3c80
+    uint32_t SectionOffset(uint32_t section) override;                                  // 0x128 FUN_1405a3c60
+    // and five the reference fills with trivial bodies: the file stays open (records are read
+    // from it on demand), so closing does nothing and opening returns the open one; there is no
+    // record block or copy table to take
+    void CloseFile(CASFILE* file) override;                                             // 0xa0 (nothing)
+    bool CopySection(CDataStore* store, bool errors, uint32_t section) override;        // 0xb0 (true)
+    bool ReadCopyTable(CDataStore* store, bool errors, uint32_t section,
+        TDBCVector<DB2DUPLICATE>* duplicates) override;                                 // 0xc0 (true)
+    CASFILE* OpenFile(bool errors) override;                                            // 0x130 FUN_14036b130
+    void CloseFile2(CASFILE* file) override;                                            // 0x138 (nothing)
+
+    // The two slots each table's class adds (pure in the base vtable 0x1426b7a00): a record
+    // made from the table's pool (0x140), and how many records the ring keeps (0x148, asked by
+    // the load with the record count and size). Missing until 2026-10-21, so the load called
+    // past the end of this vtable.
+    virtual void* NewRecord() = 0;                                          // 0x140
+    virtual uint32_t MaxCachedRecords(uint32_t count, uint32_t size) = 0;   // 0x148
 };
 
 static_assert(sizeof(WowClientDB2_Base) == 0x1f0, "WowClientDB2_Base is 0x1f0 bytes");
@@ -71,6 +108,13 @@ class WowClientSparseDB2Table : public WowClientSparseDB2 {
     // The AutoCode static initializers (FUN_1401d9950 Spell, FUN_1401d5190 ItemSparse, ...).
     WowClientSparseDB2Table(const DBMeta* meta, const char* recordName, uint32_t recordSize);
     ~WowClientSparseDB2Table() override;
+
+    // Each table's own pair (its class's vtable: Spell 0x1426b1768, ItemSparse 0x1426835c0,
+    // ConversationLine 0x1426846f8, SceneScriptText 0x1426aacd8), by which table this is.
+    void* NewRecord() override;
+    uint32_t MaxCachedRecords(uint32_t count, uint32_t size) override;
+    uint64_t RecordId(void* record) override;     // 0x78
+    void FreeRecord(void* record) override;       // 0x80
 
     void RecordCallback() override;
 };

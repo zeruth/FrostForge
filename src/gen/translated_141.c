@@ -1227,7 +1227,7 @@ longlong FUN_141c818c0(longlong *param_1)
     CALLF(undefined1, FUN_141c81f40)(param_1,0x80);
     uVar8 = (ulonglong)_tls_index;
     lVar3 = *(longlong *)((longlong)ThreadLocalStoragePointer + uVar8 * 8);
-    if ((*(int *)(lVar3 + 0x2140) < REFG(undefined4, 0x14309fd30)) &&
+    if ((_Init_thread_epoch < REFG(int, 0x14309fd30)) &&
        (_Init_thread_header(&REFG(undefined4, 0x14309fd30)), REFG(undefined4, 0x14309fd30) == -1)) {
       REFG(undefined8, 0x14309fd00) = 0;
       REFG(undefined8, 0x14309fcf8) = (*(undefined8 (*)[8])(uintptr_t)0x1426e2818ULL);
@@ -1250,7 +1250,7 @@ longlong FUN_141c818c0(longlong *param_1)
     }
     *(undefined **)(*param_1 + param_1[1] * 8) = puVar5;
     param_1[1] = param_1[1] + 1;
-    if ((*(int *)(lVar3 + 0x2140) < REFG(undefined4, 0x1430a0d98)) &&
+    if ((_Init_thread_epoch < REFG(int, 0x1430a0d98)) &&
        (_Init_thread_header(&REFG(undefined4, 0x1430a0d98)), REFG(undefined4, 0x1430a0d98) == -1)) {
       REFG(undefined4, 0x1430a0ce8) = 0;
       REFG(undefined8, 0x1430a0ce0) = (*(undefined8 (*)[8])(uintptr_t)0x142710d40ULL);
@@ -1278,7 +1278,7 @@ longlong FUN_141c818c0(longlong *param_1)
     *(undefined **)(*param_1 + param_1[1] * 8) = puVar5;
     pvVar2 = ThreadLocalStoragePointer;
     param_1[1] = param_1[1] + 1;
-    if ((*(int *)(*(longlong *)((longlong)pvVar2 + uVar8 * 8) + 0x2140) < REFG(undefined4, 0x1430a0b34)) &&
+    if ((_Init_thread_epoch < REFG(int, 0x1430a0b34)) &&
        (_Init_thread_header(&REFG(undefined4, 0x1430a0b34)), REFG(undefined4, 0x1430a0b34) == -1)) {
       atexit(((code *)REFP(0x1425e68e0)));
       _Init_thread_footer(&REFG(undefined4, 0x1430a0b34));
@@ -1295,7 +1295,7 @@ longlong FUN_141c818c0(longlong *param_1)
     *(undefined ***)(*param_1 + param_1[1] * 8) = ppuVar6;
     pvVar2 = ThreadLocalStoragePointer;
     param_1[1] = param_1[1] + 1;
-    if ((*(int *)(*(longlong *)((longlong)pvVar2 + uVar8 * 8) + 0x2140) < REFG(undefined4, 0x1430a0cd4)) &&
+    if ((_Init_thread_epoch < REFG(int, 0x1430a0cd4)) &&
        (_Init_thread_header(&REFG(undefined4, 0x1430a0cd4)), REFG(undefined4, 0x1430a0cd4) == -1)) {
       atexit(((code *)REFP(0x1425e69c0)));
       _Init_thread_footer(&REFG(undefined4, 0x1430a0cd4));
@@ -1312,7 +1312,7 @@ longlong FUN_141c818c0(longlong *param_1)
     *(undefined ***)(*param_1 + param_1[1] * 8) = ppuVar6;
     pvVar2 = ThreadLocalStoragePointer;
     param_1[1] = param_1[1] + 1;
-    if ((*(int *)(*(longlong *)((longlong)pvVar2 + uVar8 * 8) + 0x2140) < REFG(undefined4, 0x14323b430)) &&
+    if ((_Init_thread_epoch < REFG(int, 0x14323b430)) &&
        (_Init_thread_header(&REFG(undefined4, 0x14323b430)), REFG(undefined4, 0x14323b430) == -1)) {
       REFG(undefined8, 0x14323b410) = 8;
       REFG(undefined8, 0x14323b408) = (*(undefined8 (*)[8])(uintptr_t)0x14283f200ULL);
@@ -1334,7 +1334,7 @@ longlong FUN_141c818c0(longlong *param_1)
     *(undefined **)(*param_1 + param_1[1] * 8) = puVar5;
     pvVar2 = ThreadLocalStoragePointer;
     param_1[1] = param_1[1] + 1;
-    if ((*(int *)(*(longlong *)((longlong)pvVar2 + uVar8 * 8) + 0x2140) < REFG(undefined4, 0x1430a0cd0)) &&
+    if ((_Init_thread_epoch < REFG(int, 0x1430a0cd0)) &&
        (_Init_thread_header(&REFG(undefined4, 0x1430a0cd0)), REFG(undefined4, 0x1430a0cd0) == -1)) {
       REFG(undefined8, 0x1430a0b40) = (*(undefined8 (*)[8])(uintptr_t)0x14270ffd8ULL);
       CALLF(longlong, FUN_141a4ed00)(&REFG(undefined1, 0x1430a0b48));
@@ -1355,7 +1355,7 @@ longlong FUN_141c818c0(longlong *param_1)
     *(undefined **)(*param_1 + param_1[1] * 8) = puVar5;
     puVar5 = &REFG(undefined1, 0x14309ff50);
     param_1[1] = param_1[1] + 1;
-    if ((*(int *)(*(longlong *)((longlong)ThreadLocalStoragePointer + uVar8 * 8) + 0x2140) <
+    if ((_Init_thread_epoch <
          REFG(undefined4, 0x1430a0b08)) && (_Init_thread_header(&REFG(undefined4, 0x1430a0b08)), REFG(undefined4, 0x1430a0b08) == -1)) {
       CALLF(undefined8 *, FUN_140c5a850)(&REFG(undefined1, 0x14309ff50));
       atexit(((code *)REFP(0x1425e6840)));
@@ -20421,7 +20421,7 @@ undefined8 FUN_141c9d620(longlong param_1)
     REFG(undefined4, 0x14323f4f8) = 0;
     REFG(undefined1 *, 0x14323f500) = (undefined1 *)0x0;
     while ((((byte)REFG(undefined1, 0x142d37968) & 1) == 0 &&
-           (plVar3 = (longlong *)CONCAT71((((ulonglong)(REFG(undefined1, 0x142d37968)) >> 8) & 0xffffffffffffff),(byte)REFG(undefined1, 0x142d37968)),
+           (plVar3 = (longlong *)CONCAT71((((*(ulonglong *)((char *)&REFG(undefined1, 0x142d37968))) >> 8) & 0xffffffffffffffULL),(byte)REFG(undefined1, 0x142d37968)),
            plVar3 != (longlong *)0x0))) {
       uVar2 = plVar3[1];
       if (uVar2 != 0) {
