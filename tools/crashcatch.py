@@ -113,6 +113,66 @@ def read(process, address, size):
     return buffer.raw[:done.value]
 
 
+class ADDRESS64(ctypes.Structure):
+    _fields_ = [("Offset", ctypes.c_uint64), ("Segment", wt.WORD), ("Mode", ctypes.c_int)]
+
+
+class KDHELP64(ctypes.Structure):
+    _fields_ = [("data", ctypes.c_uint64 * 20)]
+
+
+class STACKFRAME64(ctypes.Structure):
+    _fields_ = [("AddrPC", ADDRESS64), ("AddrReturn", ADDRESS64), ("AddrFrame", ADDRESS64),
+                ("AddrStack", ADDRESS64), ("AddrBStore", ADDRESS64), ("FuncTableEntry", ctypes.c_void_p),
+                ("Params", ctypes.c_uint64 * 4), ("Far", wt.BOOL), ("Virtual", wt.BOOL),
+                ("Reserved", ctypes.c_uint64 * 3), ("KdHelp", KDHELP64)]
+
+
+_SYM_READY = set()
+
+
+def walk_stack(process, thread, context, limit=48):
+    """The thread's real call chain (dbghelp's StackWalk64 with the process's own unwind data),
+    as absolute return addresses. The scan in dump_stack lists every code address left on the
+    stack, live or not; at a heap corruption report in ntdll that drowned the caller."""
+    dbg = ctypes.WinDLL("dbghelp")
+    dbg.SymFunctionTableAccess64.restype = ctypes.c_void_p
+    dbg.SymFunctionTableAccess64.argtypes = [wt.HANDLE, ctypes.c_uint64]
+    dbg.SymGetModuleBase64.restype = ctypes.c_uint64
+    dbg.SymGetModuleBase64.argtypes = [wt.HANDLE, ctypes.c_uint64]
+    if process not in _SYM_READY:
+        dbg.SymInitialize(wt.HANDLE(process), None, True)
+        _SYM_READY.add(process)
+    frame = STACKFRAME64()
+    frame.AddrPC.Offset, frame.AddrPC.Mode = context.Rip, 3
+    frame.AddrFrame.Offset, frame.AddrFrame.Mode = context.Rsp, 3
+    frame.AddrStack.Offset, frame.AddrStack.Mode = context.Rsp, 3
+    ctx = CONTEXT.from_buffer_copy(context)
+    out = []
+    for _ in range(limit):
+        if not dbg.StackWalk64(0x8664, wt.HANDLE(process), wt.HANDLE(thread), ctypes.byref(frame),
+                               ctypes.byref(ctx), None, dbg.SymFunctionTableAccess64, dbg.SymGetModuleBase64, None):
+            break
+        if frame.AddrPC.Offset == 0:
+            break
+        out.append(frame.AddrPC.Offset)
+    return out
+
+
+def print_walk(process, thread, context, exe, base, size=0x4000000):
+    """walk_stack, the frames in the exe symbolized, the others as module offsets."""
+    pcs = walk_stack(process, thread, context)
+    ours = [pc - base - (1 if i else 0) for i, pc in enumerate(pcs) if base <= pc < base + size]
+    names = iter(symbolize(exe, ours))
+    print("  walked stack:")
+    for i, pc in enumerate(pcs):
+        if base <= pc < base + size:
+            lines = next(names, "").strip().split("\n")
+            print("    %016x %s  %s" % (pc, lines[0] if lines else "?", lines[1] if len(lines) > 1 else ""))
+        else:
+            print("    %016x (outside the exe)" % pc)
+
+
 def symbolize(exe, rvas):
     if not rvas:
         return []
@@ -295,6 +355,10 @@ def main():
                 for name in ("Rip", "Rsp", "Rax", "Rbx", "Rcx", "Rdx", "Rsi", "Rdi", "R8", "R9", "R10", "R11", "R12",
                              "R13", "R14", "R15"):
                     print("  %s %016x" % (name, getattr(context, name)))
+                try:
+                    print_walk(pi.hProcess, thread, context, exe, base)
+                except Exception as walk_error:  # (the scan below still runs)
+                    print("  stack walk failed:", walk_error)
                 dump_stack(pi.hProcess, exe, base, context)
                 if args.hits:
                     dump_hits(pi.hProcess, exe, base, args.hits)

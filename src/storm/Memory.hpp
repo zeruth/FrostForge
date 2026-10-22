@@ -44,6 +44,10 @@ void MemoryWatchFreed(void* ptr, const char* tag);
 void MemoryDescribeFreed(uint64_t address);
 // FROST_GUARD_HEAP=world: start guarding new blocks (at Enter World).
 void MemoryGuardStart();
+// FROST_HEAP_VALIDATE=1: HeapValidate the process heap, logging the first checkpoint that fails.
+void MemoryHeapCheck(const char* where, uint64_t a = 0, uint64_t b = 0, uint64_t c = 0);
+// FROST_GUARD_HEAP=world: report writes into quarantined (freed) blocks.
+void MemoryQuarantineScan();
 
 // Storm's tagged global new (Memory.cpp); the plain new/new[]/delete/delete[] are replaced
 // there too. Use as `new (a2, tag, tagHash, line) T(...)`.

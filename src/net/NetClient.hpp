@@ -116,6 +116,7 @@ class NetClient {
     virtual void Disconnect(uint32_t reason);                               // 0x58
     virtual void Poll();                                                    // 0x60
     virtual bool HandleData(uint32_t a2, uint32_t a3, void* data, int32_t bytes);  // 0x68
+    bool HandleDataTranslated(uint32_t a2, uint32_t a3, void* data, int32_t bytes);  // (the translation, guarded)
     virtual void HandleConnect();                                           // 0x70
     virtual void HandleDisconnect();                                        // 0x78
     virtual void HandleCantConnect();                                       // 0x80

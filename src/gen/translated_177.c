@@ -3880,8 +3880,8 @@ undefined1 FUN_14223fdc0(longlong param_1, undefined8 param_2, longlong *param_3
       memmove((void *)((*(char * *)(gen_frame + 0x0)) + 0x21),(void *)((*(char * *)(gen_frame + 0x0))),(*(ulonglong *)(gen_frame + 0x8)));
     }
     uVar7 = (*(ulonglong *)((char *)((char *)REFP(0x14290b160)) + 8));
-    if ((ulonglong)((longlong)"Message missing required fields: " + lVar4) < (*(ulonglong *)(gen_frame + 0x8))) {
-      memmove((void *)(pcVar5),(void *)((*(char * *)(gen_frame + 0x0)) + (longlong)("Message missing required fields: " + lVar4 + 0x21)),0x21);
+    if ((ulonglong)((longlong)((char *)REFP(0x14290b160)) + lVar4) < (*(ulonglong *)(gen_frame + 0x8))) {
+      memmove((void *)(pcVar5),(void *)((*(char * *)(gen_frame + 0x0)) + (longlong)(((char *)REFP(0x14290b160)) + lVar4 + 0x21)),0x21);
     }
     else {
       *(undefined8 *)pcVar5 = (*(ulonglong *)((char *)((char *)REFP(0x14290b160)) + 0));

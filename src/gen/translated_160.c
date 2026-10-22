@@ -14219,7 +14219,7 @@ LAB_141f74206:
           }
           goto LAB_141f74206;
         }
-        if ((param_1 + (uVar5 - 0x1428806c2))[(longlong)("-----BEGIN" + uVar2)] !=
+        if ((param_1 + (uVar5 - 0x1428806c2))[(longlong)(((char *)REFP(0x1428806b8)) + uVar2)] !=
             ((char *)REFP(0x1428806b8))[uVar2]) break;
         uVar2 = uVar2 + 1;
       }

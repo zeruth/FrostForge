@@ -36582,7 +36582,7 @@ char * FUN_141fbda90(uint param_1)
   if (param_1 < 0x102) {
     uVar1 = (ulonglong)param_1;
   }
-  return ".null" + (short)(&REFG(undefined2, 0x14288b800))[uVar1];
+  return ((char *)REFP(0x14288a990)) + (short)(&REFG(undefined2, 0x14288b800))[uVar1];
 }
 
 /* ref: FUN_141fbdac0 */
@@ -36592,7 +36592,7 @@ undefined8 FUN_141fbdac0(uint param_1)
   if (0x186 < param_1) {
     return 0;
   }
-  return ".null" + *(short *)((undefined1 *)&REFG(undefined1, 0x14288ba10) + (ulonglong)param_1 * 2);
+  return ((char *)REFP(0x14288a990)) + *(short *)((undefined1 *)&REFG(undefined1, 0x14288ba10) + (ulonglong)param_1 * 2);
 }
 
 /* ref: FUN_141fbdaf0 */

@@ -7598,9 +7598,9 @@ undefined1 FUN_140228610(longlong param_1)
           memmove((void *)(pcVar2 + 0x29),(void *)(pcVar2),plVar9[1]);
         }
         uVar4 = (*(ulonglong *)((char *)((char *)REFP(0x1426194a0)) + 8));
-        if ((ulonglong)((longlong)"The CAS system was unable to initialize: " + -lVar1) <
+        if ((ulonglong)((longlong)((char *)REFP(0x1426194a0)) + -lVar1) <
             (ulonglong)plVar9[1]) {
-          memmove((void *)(pcVar2),(void *)("The CAS system was unable to initialize: " + *plVar9 + -lVar1 + 0x29),0x29);
+          memmove((void *)(pcVar2),(void *)(((char *)REFP(0x1426194a0)) + *plVar9 + -lVar1 + 0x29),0x29);
         }
         else {
           *(undefined8 *)pcVar2 = (*(ulonglong *)((char *)((char *)REFP(0x1426194a0)) + 0));

@@ -1532,6 +1532,67 @@ def alloca_call_args(body: str) -> str:
     return "".join(out)
 
 
+_RDATA: tuple[int, bytes] | None = None
+STRING_ARITH = re.compile(r'(?<![\w\'])"((?:[^"\\\n]|\\.)*)"(?=\s*\+\s*[^+\s"])')
+
+
+def _c_string_bytes(lit: str) -> bytes | None:
+    """A C string literal's contents as bytes (the escapes Ghidra prints)."""
+    out = bytearray()
+    i = 0
+    simple = {"n": 10, "t": 9, "r": 13, "0": 0, "\\": 92, "'": 39, '"': 34, "a": 7, "b": 8, "f": 12, "v": 11}
+    while i < len(lit):
+        ch = lit[i]
+        if ch != "\\":
+            out += ch.encode("utf-8")
+            i += 1
+            continue
+        nxt = lit[i + 1] if i + 1 < len(lit) else ""
+        if nxt == "x":
+            m = re.match(r"[0-9a-fA-F]{1,2}", lit[i + 2:])
+            if not m:
+                return None
+            out.append(int(m.group(0), 16))
+            i += 2 + len(m.group(0))
+        elif nxt in simple:
+            out.append(simple[nxt])
+            i += 2
+        else:
+            return None
+    return bytes(out)
+
+
+def string_arithmetic(body: str) -> str:
+    """A string literal in pointer arithmetic (`"SYSTEM" + uVar33 * 0x4c`, `"Force to set number of
+    AFR devices" + (0x20 - param_1) + (longlong)piVar14`): the decompiler named an address it
+    computes from by the string that happens to sit there, a record table's or a field's base. As
+    a C literal it is another object at another address, and the arithmetic landed nowhere: the
+    world loader's FUN_1402e87e0 read its pass indices so and faulted, 2026-10-22. The image's own
+    bytes, at their own address (REFP), are the same string where it is only indexed and the right
+    base where it is a table. Where the string is not found exactly once, the literal stays."""
+    if '" +' not in body and '"+' not in body:
+        return body
+    global _RDATA
+    if _RDATA is None:
+        b = Binary()
+        sec = b.section(".rdata")
+        start = sec.start if hasattr(sec, "start") else sec[1]
+        end = sec.end if hasattr(sec, "end") else sec[2]
+        _RDATA = (start, bytes(b.image[start - b.base:end - b.base]))
+    start, data = _RDATA
+
+    def sub(m):
+        raw = _c_string_bytes(m.group(1))
+        if raw is None or not raw:
+            return m.group(0)
+        needle = raw + b"\0"
+        first = data.find(needle)
+        if first < 0 or data.find(needle, first + 1) >= 0:
+            return m.group(0)
+        return f"((char *)REFP(0x{start + first:x}))"
+    return STRING_ARITH.sub(sub, body)
+
+
 def line_end(body: str, nxt) -> int:
     """Where a variable's value ends: after the line that next assigns it (whose right side, `p =
     p + lVar10;`, still reads the old one), or at the end of the function."""
@@ -6451,7 +6512,7 @@ class Translator:
         # (every function, void or not, with a frame or without: the two rode on dead_frame_return,
         # which only non-void functions with a frame reach, so a void function's alloca stayed
         # under its frame and a frameless isfinite test kept its value cast, 2026-10-21)
-        body = alloca_call_args(float_bit_returns(double_bit_shifts(stack_allocations(body))))
+        body = string_arithmetic(alloca_call_args(float_bit_returns(double_bit_shifts(stack_allocations(body)))))
         self.global_aliases.update(aliases)
         self.exported.update(exported)
         # (this function's own, for rewrite_one to hand back from a worker)

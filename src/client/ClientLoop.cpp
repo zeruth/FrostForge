@@ -1,3 +1,4 @@
+#include "storm/Memory.hpp"
 #include "ui/FrameTime.hpp"
 #include "base/Coordinate.hpp"
 #include "blz/ChainedHash.hpp"
@@ -644,9 +645,92 @@ uint64_t Sub140216580() {
     return reinterpret_cast<uint64_t>(s_worldParams);
 }
 
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+extern "C" unsigned long long FUN_1418e6b00();
+extern "C" unsigned long long FUN_1416d66d0(unsigned long long);
+extern "C" unsigned long long FUN_1412fd5c0();
+extern "C" unsigned long long FUN_1412f3750();
+extern "C" unsigned long long FUN_141920690();
+extern "C" unsigned long long FUN_1416552e0(double);
+extern "C" unsigned long long FUN_141742bb0();
+extern "C" unsigned long long FUN_1418ead40();
+extern "C" unsigned long long FUN_14120e240();
+extern "C" unsigned long long FUN_14174c210(unsigned long long, double);
+extern "C" unsigned long long FUN_14174ce20(unsigned long long);
+extern "C" unsigned long long FUN_141659a70();
+extern "C" unsigned long long FUN_141473ba0(unsigned long long);
+extern "C" unsigned long long FUN_14228cb00();
+// translated: FUN_1418e6b00
+// translated: FUN_1416d66d0
+// translated: FUN_1412fd5c0
+// translated: FUN_1412f3750
+// translated: FUN_141920690
+// translated: FUN_1416552e0
+// translated: FUN_141742bb0
+// translated: FUN_1418ead40
+// translated: FUN_14120e240
+// translated: FUN_14174c210
+// translated: FUN_14174ce20
+// translated: FUN_141659a70
+// translated: FUN_141473ba0
+// translated: FUN_14228cb00
+
+namespace {
+
+// Each step of the world's frame, guarded on its own: a step that faults is logged (GenFault) and
+// the rest still run, as the reference's frame would.
+template <class F>
+void WorldStep(unsigned long long ref, F step) {
+    __try {
+        step();
+    } __except (GenFault(ref, GetExceptionInformation())) {
+    }
+}
+
+// The in-world frame (game state 7): the reference's sequence at 0x140222956, in order. The
+// world-frame object (DAT_1430ae8a0) and the per-frame unit list (DAT_142ddf9d8, its count at
+// DAT_142ddf9e0) are the image's own, read where the reference keeps them. As a stub nothing in the
+// world advanced once loaded: no world update, no unit animation, no UI update in the world.
+void WorldStateUpdate() {
+    auto worldFrame = []() { return *reinterpret_cast<unsigned long long*>(0x1430ae8a0ull); };
+    double seconds = s_frameSeconds;
+    WorldStep(0x1418e6b00ull, []() { FUN_1418e6b00(); });
+    WorldStep(0x1416d66d0ull, [&]() {
+        unsigned long long frame = worldFrame();
+        if (frame != 0) {
+            FUN_1416d66d0(*reinterpret_cast<unsigned long long*>(frame + 0x348));
+        }
+    });
+    WorldStep(0x1412fd5c0ull, []() { FUN_1412fd5c0(); });
+    WorldStep(0x1412f3750ull, []() { FUN_1412f3750(); });
+    WorldStep(0x141920690ull, []() { FUN_141920690(); });
+    WorldStep(0x1416552e0ull, [&]() { FUN_1416552e0(seconds); });
+    WorldStep(0x141742bb0ull, []() { FUN_141742bb0(); });
+    WorldStep(0x1418ead40ull, []() { FUN_1418ead40(); });
+    WorldStep(0x14120e240ull, []() { FUN_14120e240(); });
+    WorldStep(0x14174c210ull, [&]() {
+        auto units = *reinterpret_cast<unsigned long long**>(0x142ddf9d8ull);
+        unsigned long long count = *reinterpret_cast<unsigned long long*>(0x142ddf9e0ull);
+        for (unsigned long long i = 0; units != nullptr && i < count; i++) {
+            FUN_14174c210(units[i], seconds);
+            FUN_14174ce20(units[i]);
+        }
+    });
+    WorldStep(0x141659a70ull, []() { FUN_141659a70(); });
+    if (CSimpleTop::s_instance != nullptr) {
+        CSimpleTop::s_instance->OnUpdate(s_frameSeconds);
+    }
+    WorldStep(0x141473ba0ull, [&]() { FUN_141473ba0(worldFrame()); });
+    WorldStep(0x14228cb00ull, []() { FUN_14228cb00(); });
+}
+
+}  // namespace
+
 // The main loop's condition: pumps events and advances the game; false to stop.
 // ref: FUN_1402225d0
 bool Sub1402225D0() {
+    MemoryHeapCheck("frame");  // FROST_HEAP_VALIDATE=1 only
+    MemoryQuarantineScan();    // FROST_GUARD_HEAP=world only
     GxFrameSetPhase(0);
     GxFrameLatencyWait();
     GxFrameWorkFlush(1);
@@ -716,7 +800,7 @@ bool Sub1402225D0() {
             Sub140234080();
             break;
         case 7:
-            FROST_UNIMPLEMENTED();  // the world's update (FUN_1418e6b00 and on)
+            WorldStateUpdate();
             GxXformApplyViewport();
             break;
     }

@@ -14164,7 +14164,7 @@ undefined8 FUN_1402e87e0(longlong param_1, longlong param_2)
       iVar17 = 0;
       ((int *)(gen_frame + 0x8))[uVar12 * 4 + 1] = 0;
       ((int *)(gen_frame + 0x8))[uVar12 * 4] =
-           *(int *)("Force to set number of AFR devices" + (0x20 - param_1) + (longlong)piVar14);
+           *(int *)(((char *)REFP(0x142636930)) + (0x20 - param_1) + (longlong)piVar14);
       if (uVar19 < 0xc) {
         if (uVar19 == 1) {
           if ((*(int *)(param_1 + 0xe04) == 0) ||

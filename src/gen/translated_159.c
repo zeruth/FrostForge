@@ -21380,7 +21380,7 @@ undefined1 FUN_141f56140(longlong *param_1)
           }
           goto LAB_141f5619e;
         }
-        if (("file://" + uVar4)[uVar6 + plVar1[1] + -0x142724197] != ((char *)REFP(0x142724190))[uVar4]) break;
+        if ((((char *)REFP(0x142724190)) + uVar4)[uVar6 + plVar1[1] + -0x142724197] != ((char *)REFP(0x142724190))[uVar4]) break;
         uVar4 = uVar4 + 1;
       }
       lVar7 = lVar7 + 1;

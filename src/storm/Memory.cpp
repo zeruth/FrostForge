@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <mutex>
+#include <vector>
 #include <unordered_map>
 #include <unordered_set>
 #include <windows.h>
@@ -134,12 +135,19 @@ volatile int64_t s_live;
 // (and the whole process, whatever allocates it, the CRT directly or the graphics driver: a
 // thread looks at its commit four times a second and ends it past 8 GB)
 DWORD WINAPI CommitWatchdog(void*) {
+    // (FROST_COMMIT_LIMIT_GB raises it: Windows' full page heap gives every block its own pages,
+    // and a healthy run passes 8 GB under it)
+    uint64_t limit = 8ull << 30;
+    char value[16] = {};
+    if (GetEnvironmentVariableA("FROST_COMMIT_LIMIT_GB", value, sizeof(value)) && std::atoi(value) > 0) {
+        limit = static_cast<uint64_t>(std::atoi(value)) << 30;
+    }
     for (;;) {
         PROCESS_MEMORY_COUNTERS_EX counters = {};
         counters.cb = sizeof(counters);
         if (GetProcessMemoryInfo(GetCurrentProcess(), reinterpret_cast<PROCESS_MEMORY_COUNTERS*>(&counters),
                                  sizeof(counters))
-            && counters.PrivateUsage > (8ull << 30)) {
+            && counters.PrivateUsage > limit) {
             FrostLog("memory", "process commit past %llu MB (Storm heap %lld MB live): stopping",
                      static_cast<unsigned long long>(counters.PrivateUsage >> 20), s_live >> 20);
             TerminateProcess(GetCurrentProcess(), 0xE0000003);
@@ -185,9 +193,22 @@ void* RawCalloc(uint64_t bytes) {
     return block;
 }
 
+void RawFree(void* block);
+
 void* RawRealloc(void* block, uint64_t bytes) {
     if (block == nullptr ? GuardHeap() : GuardBlock(block)) {
         return GuardRealloc(block, bytes);
+    }
+    if (block != nullptr && GuardHeap()) {
+        // (a block from before the guard, grown after it: moved to the guard heap, the old one
+        // quarantined as a free would be; std::realloc would free it out of sight)
+        size_t had = _msize(block);
+        void* fresh = GuardAlloc(bytes, false);
+        if (fresh != nullptr) {
+            std::memcpy(fresh, block, had < bytes ? had : bytes);
+            RawFree(block);
+        }
+        return fresh;
     }
     int64_t old = block ? static_cast<int64_t>(_msize(block)) : 0;
     void* fresh = std::realloc(block, bytes);
@@ -197,9 +218,53 @@ void* RawRealloc(void* block, uint64_t bytes) {
     return fresh;
 }
 
+// FROST_GUARD_HEAP=world: a block from before the guard started, freed after it, is quarantined
+// rather than freed: filled with 0xFD and kept, with the stack that freed it. A write through a
+// stale pointer then changes the fill, and QuarantineScan names the block and its freeing stack
+// (a use after free of a block from before Enter World, which the guard heap cannot catch, broke
+// the logger's own std::set nodes on Enter World, 2026-10-22). Capped at 1 GB.
+struct QUARANTINED {
+    uint8_t* m_block;
+    size_t m_size;
+    void* m_frames[16];
+    uint16_t m_count;
+    bool m_reported;
+};
+std::mutex s_quarantineLock;
+std::vector<QUARANTINED>* s_quarantine;
+uint64_t s_quarantineBytes;
+thread_local bool t_inQuarantine;
+
+bool Quarantine(void* block) {
+    if (GuardMode() != 2 || s_guardStarted == 0 || block == nullptr || t_inQuarantine) {
+        return false;
+    }
+    size_t size = _msize(block);
+    std::lock_guard<std::mutex> lock(s_quarantineLock);
+    if (s_quarantineBytes + size > (1ull << 30)) {
+        return false;
+    }
+    t_inQuarantine = true;
+    if (s_quarantine == nullptr) {
+        s_quarantine = new std::vector<QUARANTINED>();
+        s_quarantine->reserve(1 << 20);
+    }
+    QUARANTINED entry = {};
+    entry.m_block = static_cast<uint8_t*>(block);
+    entry.m_size = size;
+    entry.m_count = static_cast<uint16_t>(CaptureStackBackTrace(2, 16, entry.m_frames, nullptr));
+    std::memset(block, 0xFD, size);
+    s_quarantine->push_back(entry);
+    s_quarantineBytes += size;
+    t_inQuarantine = false;
+    return true;
+}
+
 void RawFree(void* block) {
     if (GuardBlock(block)) {
         GuardFree(block);
+    } else if (Quarantine(block)) {
+        CountLive(-static_cast<int64_t>(_msize(block)));
     } else {
         if (block) {
             CountLive(-static_cast<int64_t>(_msize(block)));
@@ -320,6 +385,79 @@ void MemoryWatchFreed(void* ptr, const char* tag) {
     if (watched) {
         FrostLog("nodelog", "watched block %p freed outside its owner (tag %s)", ptr, tag ? tag : "?");
         FrostLogStack(0, 24);
+    }
+}
+
+// FROST_HEAP_VALIDATE=1: the process heap checked at each call (after each packet handled, once
+// a frame). The first failure names the checkpoint and the last one that passed, so a corruption
+// that only shows at a later free is pinned to the packet or frame that did it.
+void MemoryHeapCheck(const char* where, uint64_t a, uint64_t b, uint64_t c) {
+    // (=N: every Nth checkpoint, a validation costing about a second on a 3 GB heap)
+    static const long s_every = [] {
+        char value[16] = {};
+        return GetEnvironmentVariableA("FROST_HEAP_VALIDATE", value, sizeof(value)) ? std::atol(value) : 0L;
+    }();
+    static volatile long s_failed = 0;
+    static volatile long s_calls = 0;
+    static const char* s_lastWhere = "start";
+    static uint64_t s_last[3];
+    static long s_lastCall = 0;
+    if (s_every <= 0 || s_failed) {
+        return;
+    }
+    long call = InterlockedIncrement(&s_calls);
+    if (call % s_every != 0) {
+        return;
+    }
+    if (HeapValidate(GetProcessHeap(), 0, nullptr)) {
+        s_lastWhere = where;
+        s_last[0] = a;
+        s_last[1] = b;
+        s_last[2] = c;
+        s_lastCall = call;
+        return;
+    }
+    if (InterlockedExchange(&s_failed, 1) == 0) {
+        FrostLog("memory", "process heap corrupt at checkpoint %ld %s (%llx %llx %llx); last sound: %ld %s (%llx %llx %llx)", call, where,
+                 static_cast<unsigned long long>(a), static_cast<unsigned long long>(b),
+                 static_cast<unsigned long long>(c), s_lastCall, s_lastWhere, static_cast<unsigned long long>(s_last[0]),
+                 static_cast<unsigned long long>(s_last[1]), static_cast<unsigned long long>(s_last[2]));
+        FrostLogStack(1, 16);
+    }
+}
+
+// FROST_GUARD_HEAP=world: the quarantined blocks checked for writes since their free (every 30th
+// call; the main loop calls it once a frame). Each changed block is reported once, with the
+// offset and value written and the stack that freed it.
+void MemoryQuarantineScan() {
+    static long s_calls = 0;
+    if (GuardMode() != 2 || s_guardStarted == 0 || ++s_calls % 30 != 0) {
+        return;
+    }
+    std::lock_guard<std::mutex> lock(s_quarantineLock);
+    if (s_quarantine == nullptr) {
+        return;
+    }
+    int reported = 0;
+    for (QUARANTINED& entry : *s_quarantine) {
+        if (entry.m_reported) {
+            continue;
+        }
+        for (size_t i = 0; i < entry.m_size; i++) {
+            if (entry.m_block[i] != 0xFD) {
+                entry.m_reported = true;
+                uint64_t value = 0;
+                std::memcpy(&value, entry.m_block + (i & ~size_t(7)), entry.m_size - (i & ~size_t(7)) >= 8 ? 8 : 1);
+                FrostLog("quarantine", "freed block %p (%zu bytes) written at +0x%zx (qword %016llx) after its free; freed at:",
+                         static_cast<void*>(entry.m_block), entry.m_size, i, static_cast<unsigned long long>(value));
+                FrostLogFrames(entry.m_frames, entry.m_count);
+                reported++;
+                break;
+            }
+        }
+        if (reported >= 8) {
+            break;
+        }
     }
 }
 

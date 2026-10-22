@@ -4625,7 +4625,7 @@ undefined8 FUN_1402c58d0(longlong param_1, undefined8 param_2, int param_3)
       uVar3 = CALLF(undefined8, FUN_1402b1e00)(*(undefined8 *)(param_1 + 0x38),pcVar4,param_3);
     }
     else {
-      uVar3 = *(undefined8 *)("\'for\' step must be a number" + (longlong)param_3 * 8 + 0x18);
+      uVar3 = *(undefined8 *)(((char *)REFP(0x14262fd20)) + (longlong)param_3 * 8 + 0x18);
     }
     CALLF(undefined8, FUN_1402b1e00)(*(undefined8 *)(param_1 + 0x38),"%s near \'%s\'",uVar2,uVar3);
   }
@@ -4755,7 +4755,7 @@ undefined8 FUN_1402c5b60(longlong param_1, uint param_2)
     uVar2 = CALLF(undefined8, FUN_1402b1e00)(*(undefined8 *)(param_1 + 0x38),pcVar3,(ulonglong)param_2);
     return uVar2;
   }
-  return *(undefined8 *)("\'for\' step must be a number" + (longlong)(int)param_2 * 8 + 0x18);
+  return *(undefined8 *)(((char *)REFP(0x14262fd20)) + (longlong)(int)param_2 * 8 + 0x18);
 }
 
 /* ref: FUN_1402c5bd0 */

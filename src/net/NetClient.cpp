@@ -419,6 +419,18 @@ void NetClient::Poll() {
 // Counts the bytes and, while connected, dispatches the message.
 // translated: FUN_141234900
 bool NetClient::HandleData(uint32_t a2, uint32_t a3, void* data, int32_t bytes) {
+    // (FROST_HEAP_VALIDATE=1: the heap checked around each message, with its first bytes)
+    uint64_t head = 0;
+    if (data != nullptr && bytes >= 8) {
+        std::memcpy(&head, data, 8);
+    }
+    MemoryHeapCheck("before a message", head, static_cast<uint64_t>(bytes), a2);
+    bool result = this->HandleDataTranslated(a2, a3, data, bytes);
+    MemoryHeapCheck("after a message", head, static_cast<uint64_t>(bytes), a2);
+    return result;
+}
+
+bool NetClient::HandleDataTranslated(uint32_t a2, uint32_t a3, void* data, int32_t bytes) {
     __try {
         return (FUN_141234900(reinterpret_cast<uintptr_t>(this), a2, a3, reinterpret_cast<uintptr_t>(data),
                     static_cast<uint32_t>(bytes)) & 0xff) != 0;

@@ -1925,7 +1925,7 @@ LAB_1406410f9:
                 memmove((void *)(uVar9 + 8 + (longlong)param_1),(void *)("--[[ skipped entry with nan key ]]\r\n"),(ulonglong)uVar13);
                 CALLF(bool, FUN_1402152a0)(*param_1,puVar19,0x1000,((undefined1 *)(gen_frame + 0x10)));
                 *(uint *)(param_1 + 0x201) = 0x24 - uVar13;
-                memmove((void *)(puVar19),(void *)("--[[ skipped entry with nan key ]]\r\n" + uVar13),
+                memmove((void *)(puVar19),(void *)(((char *)REFP(0x1426cc8f8)) + uVar13),
                               (ulonglong)(0x24 - uVar13));
               }
             }
@@ -1965,7 +1965,7 @@ LAB_1406410f9:
                 memmove((void *)(uVar9 + 8 + (longlong)param_1),(void *)("--[[ skipped entry with inf key ]]\r\n"),(ulonglong)uVar13);
                 CALLF(bool, FUN_1402152a0)(*param_1,puVar19,0x1000,((undefined1 *)(gen_frame + 0x20)));
                 *(uint *)(param_1 + 0x201) = 0x24 - uVar13;
-                memmove((void *)(puVar19),(void *)("--[[ skipped entry with inf key ]]\r\n" + uVar13),
+                memmove((void *)(puVar19),(void *)(((char *)REFP(0x1426cc920)) + uVar13),
                               (ulonglong)(0x24 - uVar13));
               }
             }
@@ -2005,7 +2005,7 @@ LAB_1406412a3:
           memmove((void *)(pcVar17),(void *)("--[[Table recursion too deep.]]\r\n"),(ulonglong)uVar16);
           CALLF(bool, FUN_1402152a0)(*param_1,puVar19,0x1000,((undefined1 *)(gen_frame + 0x10)));
           *(uint *)(param_1 + 0x201) = 0x21 - uVar16;
-          memmove((void *)(puVar19),(void *)("--[[Table recursion too deep.]]\r\n" + uVar16),
+          memmove((void *)(puVar19),(void *)(((char *)REFP(0x1426cc8c0)) + uVar16),
                         (ulonglong)(0x21 - uVar16));
         }
       }
