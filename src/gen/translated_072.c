@@ -14780,7 +14780,7 @@ undefined8 FUN_141195720(undefined8 param_1, uint param_2)
   GEN_HIT(322);
   CALLF(undefined8, FUN_1411959a0)(param_1);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0x50);
   }
   return param_1;
 }
@@ -17381,7 +17381,7 @@ longlong * FUN_1411a4ce0(longlong *param_1, uint param_2)
     param_1[1] = 0;
   }
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0x40);
   }
   return param_1;
 }

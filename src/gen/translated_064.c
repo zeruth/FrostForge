@@ -16659,7 +16659,7 @@ undefined8 FUN_140f7e7d0(undefined8 *param_1, int *param_2, undefined8 param_3, 
         return (undefined8)CALLF(undefined8, FUN_142424d80)(*param_1,"stack overflow");
       }
       else {
-        lVar5 = CALLF(longlong, FUN_141cfbe10)(&(*(undefined1 * *)(gen_frame + 0x48)),*param_1,param_2);
+        lVar5 = CALLF(ulonglong, FUN_141cfbe10)(&(*(undefined1 * *)(gen_frame + 0x48)),*param_1,param_2);
         lVar1 = *(longlong *)(param_5 + 0x28);
         if (*(longlong *)(lVar5 + 0x28) == lVar1) {
           if (lVar1 != -1) {

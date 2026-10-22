@@ -1649,7 +1649,7 @@ undefined8 * FUN_140d24920(undefined8 *param_1, byte param_2)
   GEN_HIT(34);
   *param_1 = (*(undefined8 (*)[4])(uintptr_t)0x1426d2da8ULL);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0x30);
   }
   return param_1;
 }
@@ -1660,7 +1660,7 @@ undefined8 * FUN_140d24950(undefined8 *param_1, byte param_2)
   GEN_HIT(35);
   *param_1 = (*(undefined8 (*)[8])(uintptr_t)0x1426d0f18ULL);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0x10);
   }
   return param_1;
 }

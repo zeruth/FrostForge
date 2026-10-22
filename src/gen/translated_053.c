@@ -759,7 +759,7 @@ undefined4 FUN_140863100(undefined8 param_1)
         CALLF(undefined8, FUN_142424d80)(param_1,"stack overflow");
       }
       else {
-        dVar7 = (double)CALLF(undefined8, FUN_1407fda90)(0,param_1,1,0,(unsigned long long)(0));
+        dVar7 = gen_bits2d((unsigned long long)(CALLF(undefined8, FUN_1407fda90)(0,param_1,1,0,(unsigned long long)(0))));
         uVar8 = 2;
       }
     }
@@ -4140,7 +4140,7 @@ undefined8 FUN_1408c42a0(undefined8 param_1, longlong param_2)
       if (-1 < *(longlong *)(lVar1 + 0x20)) {
         CALLF(undefined1, FUN_140255210)(*(undefined8 *)(lVar1 + 0x10),((char *)REFP(0x142d602e0)),0xfffffffa,0);
       }
-      CALLF(undefined8, FUN_140254670)(lVar1);
+      CALLF(undefined8, FUN_140254670)(lVar1,0x210);
     }
     CALLF(undefined1, FUN_140255210)(param_2,((char *)REFP(0x142d9c5f0)),0xfffffffa,0);
     param_2 = lVar2;
@@ -9457,7 +9457,7 @@ undefined8 FUN_1408e9650(undefined8 param_1, undefined8 param_2, undefined8 *par
   }
   ((int *)(gen_frame + 0x50))[0] = iVar1 + 1;
 LAB_1408e96fd:
-  CALLF(undefined8, FUN_1424bf150)(*param_3,param_3 + 1);
+  CALLF(undefined8, FUN_1424bf150)(*param_3,param_3 + 1,(ulonglong)*(byte *)((longlong)param_3 + 0xc));
   cVar2 = CALLF(undefined1, FUN_14062cc40)(param_2,*param_3,"SetModel");
   if (cVar2 != '\0') {
                     /* WARNING: Subroutine does not return */

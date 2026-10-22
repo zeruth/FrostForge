@@ -685,7 +685,7 @@ undefined8 FUN_140c7d4d0(undefined8 param_1, uint param_2)
   GEN_HIT(10);
   CALLF(undefined **, FUN_140c5adc0)(param_1);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,3000);
   }
   return param_1;
 }

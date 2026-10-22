@@ -445,18 +445,27 @@ bool CM2Model::AllowSequenceChange(uint32_t id, uint16_t bone) {
         return true;
     }
     this->AddRef();
+    // (the reference's layout to the byte: `mov qword ptr [rsp + 0x2c], 1` puts its 1 at +0xc,
+    // unaligned, and +0x10 is 0; an aligned uint64_t moved it to +0x10 and left +0xc as padding,
+    // and the owner's callback, reading +0xc, set a sequence again and recursed until the stack
+    // ran out on Enter World, 2026-10-22)
     struct {
-        uint32_t m_id;
-        uint32_t m_previous;
-        uint32_t m_variation;
-        uint64_t m_one;
-        uint32_t m_closure[4];
-        uint32_t m_one2;
+        uint32_t m_id;          // 0x0
+        uint32_t m_previous;    // 0x4
+        uint32_t m_variation;   // 0x8
+        uint32_t m_one;         // 0xc
+        uint32_t m_zero;        // 0x10
+        uint32_t m_14;          // 0x14 (not written by the reference)
+        uint32_t m_closure[4];  // 0x18
+        uint32_t m_one2;        // 0x28
     } args;
+    static_assert(sizeof(args) == 0x2c, "the callback's argument block is 0x2c bytes");
     args.m_id = def.m_parentBone != -1 ? id : 0xffffffff;
     args.m_previous = state->m_5c;
     args.m_variation = state->m_variation;
     args.m_one = 1;
+    args.m_zero = 0;
+    args.m_14 = 0;
     std::memcpy(args.m_closure, &this->m_410, sizeof(args.m_closure));
     args.m_one2 = 1;
     reinterpret_cast<void (*)(CM2Model*, void*)>(this->m_408)(this, &args);

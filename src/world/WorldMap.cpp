@@ -166,6 +166,7 @@ void CWorldMap::CreateLoadState() {
 extern "C" unsigned long long FUN_1413b0980(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long);
 // translated: FUN_1413b0980
 void CWorldMap::Load(int32_t mapId, uint8_t a3, int32_t a4, uint8_t a5) {
+    MemoryGuardStart();  // FROST_GUARD_HEAP=world only: past the Battle.net login from here
     __try {
         FUN_1413b0980((unsigned long long)this, (unsigned long long)mapId, (unsigned long long)a3, (unsigned long long)a4, (unsigned long long)a5);
     } __except (GenFault(0x1413b0980ull, GetExceptionInformation())) {

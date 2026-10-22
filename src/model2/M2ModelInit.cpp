@@ -12,6 +12,20 @@
 #include "storm/Memory.hpp"
 #include "texture/Texture.hpp"
 #include "util/Unimplemented.hpp"
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+extern "C" unsigned long long FUN_1411b78c0(unsigned long long, unsigned long long);
+
+namespace {
+// translated: FUN_1411b78c0
+void MarkInheritedParticles(CM2Model* model) {
+    __try {
+        FUN_1411b78c0(0, reinterpret_cast<unsigned long long>(model));
+    } __except (GenFault(0x1411b78c0ull, GetExceptionInformation())) {
+    }
+}
+}  // namespace
 
 // Engine/Source/Model2/M2Model.cpp: a model set up once its file is in (FUN_1411c24f0). One
 // allocation holds every per-instance array, carved in a fixed order; the bone and texture
@@ -929,7 +943,10 @@ bool CM2Model::InitializeLoaded() {
             }
         }
         if (this->m_600 != nullptr) {
-            FROST_UNIMPLEMENTED();  // FUN_1411b78c0: the GPU batches handed down
+            // FUN_1411b78c0: each emitter marked 0x8000 (owned by a GPU-batched model), down
+            // through the attached children. Its first argument is only handed on to the
+            // recursion; CM2Model keeps the reference's layout (its static_asserts)
+            MarkInheritedParticles(this);
         }
     }
     this->RunLoadCallbacks();

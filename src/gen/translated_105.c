@@ -3020,7 +3020,7 @@ undefined8 FUN_1416fc060(void)
       *plVar5 = 0;
       plVar5[1] = 0;
     }
-    CALLF(undefined8, FUN_140254670)(plVar5);
+    CALLF(undefined8, FUN_140254670)(plVar5,0x30);
     plVar5 = plVar1;
   }
   return 0;
@@ -5651,7 +5651,7 @@ undefined8 FUN_1416ffb10(void)
   REFG(undefined4, 0x142d1ced0) = 0xffffffff;
   if (lVar1 != 0) {
     CALLF(undefined8, FUN_1425abcc0)(lVar1);
-    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1);
+    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1,8);
     return 0;
   }
   return 0;
@@ -5743,7 +5743,7 @@ undefined8 FUN_1416ffd90(int param_1)
     REFG(undefined8 *, 0x14312cd18) = &REFG(undefined8, 0x142d1cea8);
     if (lVar1 != 0) {
       CALLF(undefined8, FUN_1425abcc0)(lVar1);
-      CALLF(undefined8, FUN_140254670)(lVar1);
+      CALLF(undefined8, FUN_140254670)(lVar1,8);
     }
     pcVar6 = 
     "D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Magic\\MagicClient\\SpellLookupTypes.cpp";
@@ -9287,7 +9287,7 @@ LAB_1417049c8:
 }
 
 /* ref: FUN_141704a20 */
-undefined8 FUN_141704a20(uint param_1, int param_2)
+undefined8 FUN_141704a20(uint param_1, int param_2, undefined8 param_3)
 {
   GEN_HIT(146);
   __declspec(align(16)) unsigned char gen_frame[(0x20 + sizeof(longlong *) > 0x58 ? 0x20 + sizeof(longlong *) : 0x58)] = {0};
@@ -9312,7 +9312,7 @@ undefined8 FUN_141704a20(uint param_1, int param_2)
     iVar6 = -1;
   }
   else {
-    (**(code **)(*(*(longlong * *)((char *)&gen_g_142e75530 + 0x98)) + 0x38))((*(longlong * *)((char *)&gen_g_142e75530 + 0x98)),&(*(int *)(gen_frame + 0x0)));
+    (**(code **)(*(*(longlong * *)((char *)&gen_g_142e75530 + 0x98)) + 0x38))((*(longlong * *)((char *)&gen_g_142e75530 + 0x98)),&(*(int *)(gen_frame + 0x0)),param_3);
     (*(undefined8 *)(gen_frame + 0x10)) = CONCAT44((*(int *)(gen_frame + 0x4)),(*(int *)(gen_frame + 0x0)));
     (*(undefined8 *)(gen_frame + 0x18)) = CONCAT44((*(int *)(gen_frame + 0xc)),(*(int *)(gen_frame + 0x8)));
     (*(longlong * *)(gen_frame + 0x20)) = plVar2;
@@ -11666,7 +11666,7 @@ undefined8 FUN_141707d00(undefined8 param_1, byte param_2)
 {
   GEN_HIT(225);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,8);
   }
   return param_1;
 }
@@ -11683,7 +11683,7 @@ undefined8 * FUN_141707d30(undefined8 *param_1, uint param_2)
   *(undefined1 *)((longlong)param_1 + 0xe5f1) = 0;
   CALLF(undefined8, FUN_14172fc40)(param_1);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0x12a30);
   }
   return param_1;
 }
@@ -17202,7 +17202,7 @@ undefined8 FUN_14170f180(longlong param_1)
   lVar1 = *(longlong *)(param_1 + 0xe5f8);
   if (lVar1 != 0) {
     CALLF(undefined8, FUN_1418291f0)(lVar1);
-    CALLF(undefined8, FUN_140254670)(lVar1);
+    CALLF(undefined8, FUN_140254670)(lVar1,0x28);
   }
   *(undefined8 *)(param_1 + 0xe5f8) = 0;
   CALLF(undefined8, FUN_1416d9e60)();
@@ -17224,7 +17224,7 @@ undefined4 FUN_14170f310(longlong param_1)
   lVar1 = *(longlong *)(param_1 + 0xe5f8);
   if (lVar1 != 0) {
     CALLF(undefined8, FUN_1418291f0)(lVar1);
-    CALLF(undefined8, FUN_140254670)(lVar1);
+    CALLF(undefined8, FUN_140254670)(lVar1,0x28);
   }
   *(undefined8 *)(param_1 + 0xe5f8) = 0;
   uVar2 = CALLF(undefined4, FUN_141739520)(param_1);
@@ -17978,7 +17978,7 @@ undefined1 FUN_141710ad0(longlong param_1, undefined4 param_2, undefined4 *param
   
   *param_4 = 0;
   *param_3 = 0;
-  uVar3 = CALLF(undefined4, FUN_14173c6c0)(param_1,param_2);
+  uVar3 = CALLF(undefined4, FUN_14173c6c0)(param_1,param_2,param_3);
   (*(longlong * *)(gen_frame + 0x0)) = ((longlong *)(gen_frame + 0x18));
   (*(longlong *)(gen_frame + 0x8)) = 0;
   (*(undefined1 * *)(gen_frame + 0x10)) = ((undefined1 *)0x8000000000000020ULL);
@@ -19181,7 +19181,7 @@ undefined1 FUN_141712330(longlong param_1, undefined4 *param_2, undefined4 *para
   
   *param_3 = 0;
   *param_2 = 0;
-  uVar3 = CALLF(undefined4, FUN_14173c6c0)(param_1,2);
+  uVar3 = CALLF(undefined4, FUN_14173c6c0)(param_1,2,param_3);
   (*(longlong * *)(gen_frame + 0x0)) = ((longlong *)(gen_frame + 0x18));
   (*(longlong *)(gen_frame + 0x8)) = 0;
   (*(undefined1 * *)(gen_frame + 0x10)) = ((undefined1 *)0x8000000000000020ULL);

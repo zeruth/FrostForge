@@ -4191,38 +4191,38 @@ undefined8 FUN_1406f9ce0(uint *param_1, undefined8 param_2)
   memcpy((void *)(gen_frame + 0x160),(void *)(&param_1), sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy((void *)(gen_frame + 0x168),(void *)(&param_2), sizeof(param_2) < 8 ? sizeof(param_2) : 8);
   uint uVar1 = {0};
-  undefined8 uVar2 = {0};
-  uint uVar3 = {0};
+  uint uVar2 = {0};
+  undefined8 uVar3 = {0};
   longlong lVar4 = {0};
   longlong lVar5 = {0};
   longlong lVar6 = {0};
   
   ((uint *)(gen_frame + 0x160))[0] = ((uint *)(gen_frame + 0x160))[0] & 0xffffff00;
   CALLF(longlong, FUN_1402c9990)(param_2,((uint *)(gen_frame + 0x160)));
-  uVar3 = (uint)(((byte)(longlong)((uint *)(gen_frame + 0x160))[0] & 7) >> 2);
+  uVar2 = (uint)(((byte)(longlong)((uint *)(gen_frame + 0x160))[0] & 7) >> 2);
   *param_1 = (uint)((byte)(longlong)((uint *)(gen_frame + 0x160))[0] >> 3);
-  param_1[9] = uVar3;
-  if (uVar3 == 1) {
-    CALLF(undefined8 *, FUN_1406aaa80)(param_1 + 10,((undefined1 *)(gen_frame + 0x28)));
+  param_1[9] = uVar2;
+  if (uVar2 == 1) {
+    CALLF(undefined8 *, FUN_1406aaa80)(param_1 + 10,((undefined1 *)(gen_frame + 0x28)),(ulonglong)(byte)((byte)(longlong)((uint *)(gen_frame + 0x160))[0] << 5));
     ((uint *)(gen_frame + 0x160))[0] = ((uint *)(gen_frame + 0x160))[0] & 0xffffff00;
     CALLF(longlong, FUN_1402c9990)(param_2,((uint *)(gen_frame + 0x160)));
     ((byte *)(gen_frame + 0x168))[0] = 0;
-    uVar3 = ((uint *)(gen_frame + 0x160))[0] & 0xff;
+    uVar2 = ((uint *)(gen_frame + 0x160))[0] & 0xff;
     uVar1 = ((uint *)(gen_frame + 0x160))[0] & 0xff;
     CALLF(longlong, FUN_1402c9990)(param_2,((byte *)(gen_frame + 0x168)));
-    uVar3 = (uint)(((byte *)(gen_frame + 0x168))[0] >> 7) | uVar3 + uVar1;
+    uVar2 = (uint)(((byte *)(gen_frame + 0x168))[0] >> 7) | uVar2 + uVar1;
     *(byte *)((longlong)param_1 + 0x129) = (((byte *)(gen_frame + 0x168))[0] & 0x7f) >> 6;
-    param_1[10] = uVar3;
-    CALLF(longlong *, FUN_1402c9fe0)(param_2,param_1 + 10,(ulonglong)uVar3);
-    *(undefined1 *)((ulonglong)uVar3 + 0x28 + (longlong)param_1) = 0;
+    param_1[10] = uVar2;
+    CALLF(longlong *, FUN_1402c9fe0)(param_2,param_1 + 10,(ulonglong)uVar2);
+    *(undefined1 *)((ulonglong)uVar2 + 0x28 + (longlong)param_1) = 0;
   }
   lVar5 = 0;
   ((uint *)(gen_frame + 0x160))[0] = 0;
   CALLF(longlong, FUN_1402c9a30)(param_2,((uint *)(gen_frame + 0x160)));
-  uVar3 = *param_1;
+  uVar2 = *param_1;
   param_1[8] = ((uint *)(gen_frame + 0x160))[0];
-  uVar2 = CALLF(longlong *, FUN_1402c9fe0)(param_2,param_1,(ulonglong)uVar3);
-  *(undefined1 *)((ulonglong)uVar3 + (longlong)param_1) = 0;
+  uVar3 = CALLF(longlong *, FUN_1402c9fe0)(param_2,param_1,(ulonglong)uVar2);
+  *(undefined1 *)((ulonglong)uVar2 + (longlong)param_1) = 0;
   if (param_1[9] == 0) {
     (*(undefined8 *)(gen_frame + 0x0)) = 0;
     (*(undefined8 *)(gen_frame + 0x8)) = 0;
@@ -4244,7 +4244,7 @@ undefined8 FUN_1406f9ce0(uint *param_1, undefined8 param_2)
     param_1[0xc] = ((uint *)(gen_frame + 0x160))[0];
     ((uint *)(gen_frame + 0x160))[0] = 0;
     CALLF(longlong, FUN_1402c9a30)(param_2,((uint *)(gen_frame + 0x160)));
-    uVar2 = CALLF(undefined8, FUN_1407b32a0)(param_1 + 0xe,(ulonglong)((uint *)(gen_frame + 0x160))[0]);
+    uVar3 = CALLF(undefined8, FUN_1407b32a0)(param_1 + 0xe,(ulonglong)((uint *)(gen_frame + 0x160))[0]);
     lVar6 = (longlong)(int)param_1[0x10];
     if (0 < lVar6) {
       do {
@@ -4257,14 +4257,14 @@ undefined8 FUN_1406f9ce0(uint *param_1, undefined8 param_2)
         CALLF(longlong, FUN_1402c9a30)(param_2,((uint *)(gen_frame + 0x160)));
         *(uint *)(lVar4 + 0x14) = ((uint *)(gen_frame + 0x160))[0];
         ((uint *)(gen_frame + 0x160))[0] = 0;
-        uVar2 = CALLF(longlong, FUN_1402c9a30)(param_2,((uint *)(gen_frame + 0x160)));
+        uVar3 = CALLF(longlong, FUN_1402c9a30)(param_2,((uint *)(gen_frame + 0x160)));
         lVar5 = lVar5 + 0x20;
         *(uint *)(lVar4 + 0x18) = ((uint *)(gen_frame + 0x160))[0];
         lVar6 = lVar6 + -1;
       } while (lVar6 != 0);
     }
   }
-  return uVar2;
+  return uVar3;
 }
 
 /* ref: FUN_1406f9f90 */

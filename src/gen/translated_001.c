@@ -10940,9 +10940,11 @@ longlong FUN_1401a4be0(longlong *param_1, longlong param_2)
 undefined8 * FUN_1401a4cd0(undefined8 *param_1, byte param_2)
 {
   GEN_HIT(27);
+/*                              */
+  
   *param_1 = ((undefined8 *)REFP(0x142954448));
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,CONCAT71(0,param_2));
   }
   return param_1;
 }

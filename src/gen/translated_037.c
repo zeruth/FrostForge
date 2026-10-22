@@ -10,7 +10,7 @@ undefined8 * FUN_140604320(undefined8 *param_1, byte param_2)
   GEN_HIT(0);
   *param_1 = (*(undefined8 (*)[3])(uintptr_t)0x1426c88c0ULL);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0x10);
   }
   return param_1;
 }
@@ -40,7 +40,7 @@ undefined8 * FUN_140604350(undefined8 *param_1, uint param_2)
   }
   CALLF(undefined1, FUN_14062bbb0)(param_1);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0x40);
   }
   return param_1;
 }
@@ -58,7 +58,7 @@ undefined8 * FUN_1406043e0(undefined8 *param_1, uint param_2)
   }
   CALLF(undefined1, FUN_14062bbb0)(param_1);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0xa8);
   }
   return param_1;
 }
@@ -76,7 +76,7 @@ undefined8 * FUN_140604440(undefined8 *param_1, uint param_2)
   }
   CALLF(undefined1, FUN_14062bbb0)(param_1);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0xb0);
   }
   return param_1;
 }
@@ -116,7 +116,7 @@ undefined8 * FUN_1406044a0(undefined8 *param_1, uint param_2)
   }
   CALLF(undefined1, FUN_14062bbb0)(param_1);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0xd0);
   }
   return param_1;
 }
@@ -134,7 +134,7 @@ undefined8 * FUN_1406045d0(undefined8 *param_1, uint param_2)
   }
   CALLF(undefined1, FUN_14062bbb0)(param_1);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0xa0);
   }
   return param_1;
 }
@@ -3057,7 +3057,7 @@ undefined8 FUN_140613a20(undefined8 param_1, uint param_2)
   GEN_HIT(68);
   CALLF(undefined8, FUN_1406137d0)(param_1);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0x50);
   }
   return param_1;
 }

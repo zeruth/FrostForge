@@ -2812,7 +2812,7 @@ undefined8 FUN_1418f5ed0(undefined8 param_1, uint param_2)
   GEN_HIT(58);
   CALLF(undefined8, FUN_141901d00)(param_1);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0x50);
   }
   return param_1;
 }
@@ -2898,7 +2898,7 @@ undefined8 FUN_1418f6080(undefined8 param_1, uint param_2)
   GEN_HIT(62);
   CALLF(undefined8, FUN_141901d80)(param_1);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0x50);
   }
   return param_1;
 }
@@ -4724,7 +4724,7 @@ longlong * FUN_141902cf0(longlong *param_1, uint param_2)
                   "D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Ui\\ChatFrame.cpp",0x13c,0);
   CALLF(undefined1, FUN_140255210)(param_1[0xd],
                   "D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Ui\\ChatFrame.cpp",0x13c,0);
-  CALLF(undefined8, FUN_140254670)(param_1[0x24]);
+  CALLF(undefined8, FUN_140254670)(param_1[0x24],0xc);
   lVar1 = *param_1;
   if (lVar1 != 0) {
     uVar2 = param_1[1];
@@ -4740,7 +4740,7 @@ longlong * FUN_141902cf0(longlong *param_1, uint param_2)
     param_1[1] = 0;
   }
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0x150);
   }
   return param_1;
 }
@@ -4775,7 +4775,7 @@ longlong * FUN_141902de0(longlong *param_1, uint param_2)
     param_1[1] = 0;
   }
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0x38);
   }
   return param_1;
 }
@@ -10034,7 +10034,7 @@ undefined8 FUN_14190a990(char param_1)
         CALLF(undefined1, FUN_140255210)(puVar4[1],((char *)REFP(0x142d61348)),0xfffffffa,0);
         puVar4[1] = 0;
       }
-      CALLF(undefined8, FUN_140254670)(puVar4);
+      CALLF(undefined8, FUN_140254670)(puVar4,0x38);
       puVar6 = REFG(undefined8 *, 0x1431e7c48);
     }
     REFG(undefined8 *, 0x1431e7c48) = puVar6;
@@ -10123,7 +10123,7 @@ undefined8 FUN_14190a990(char param_1)
         CALLF(undefined1, FUN_140255210)(puVar4[1],((char *)REFP(0x142d61348)),0xfffffffa,0);
         puVar4[1] = 0;
       }
-      CALLF(undefined8, FUN_140254670)(puVar4);
+      CALLF(undefined8, FUN_140254670)(puVar4,0x38);
       puVar6 = REFG(undefined8 *, 0x1431e7c40);
     }
     REFG(undefined8 *, 0x1431e7c40) = puVar6;
@@ -11533,7 +11533,7 @@ undefined8 FUN_14190d080(void)
         CALLF(undefined1, FUN_140255210)(*(undefined8 *)(lVar2 + 8),((char *)REFP(0x142d61348)),0xfffffffa,0);
         *(undefined8 *)(lVar2 + 8) = 0;
       }
-      CALLF(undefined8, FUN_140254670)(lVar2);
+      CALLF(undefined8, FUN_140254670)(lVar2,0x38);
     }
     lVar2 = REFG(undefined8, 0x1431e7c48);
     REFG(undefined8, 0x1431e7c48) = 0;
@@ -11543,7 +11543,7 @@ undefined8 FUN_14190d080(void)
         CALLF(undefined1, FUN_140255210)(*(undefined8 *)(lVar2 + 8),((char *)REFP(0x142d61348)),0xfffffffa,0);
         *(undefined8 *)(lVar2 + 8) = 0;
       }
-      return (undefined8)CALLF(undefined8, FUN_140254670)(lVar2);
+      return (undefined8)CALLF(undefined8, FUN_140254670)(lVar2,0x38);
     }
   }
   return 0;
@@ -16270,7 +16270,7 @@ undefined8 FUN_141914910(void)
     CALLF(undefined1, FUN_140255210)(plVar3[0xd],
                     "D:\\BuildServer\\A\\work-git\\wow\\Classic\\Source\\Ui\\ChatFrame.cpp",0x13c,0)
     ;
-    CALLF(undefined8, FUN_140254670)(plVar3[0x24]);
+    CALLF(undefined8, FUN_140254670)(plVar3[0x24],0xc);
     lVar10 = *plVar3;
     if (lVar10 != 0) {
       uVar7 = plVar3[1];
@@ -19855,7 +19855,7 @@ undefined8 FUN_141919f10(undefined4 param_1, undefined8 param_2, undefined8 para
     (*(code * *)(gen_frame + 0xd8)) = ((code *)REFP(0x1402112e0));
     (*(undefined8 *)(gen_frame + 0xf8)) = 0;
     (*(code * *)(gen_frame + 0x100)) = ((code *)REFP(0x1402112e0));
-    CALLF(undefined8, FUN_1412d25a0)(gen_v16_q0(gen_v16_load(((undefined1 *)(gen_frame + 0x10)), 12)));
+    CALLF(undefined8, FUN_1412d25a0)((void *)((undefined1 *)(gen_frame + 0x10)));
   }
   else {
     if ((*(uint *)((undefined1 *)&REFG(undefined1, 0x1427ed420) + (ulonglong)*(byte *)(plVar1 + 2) * 4) >> 5 & 1) != 0) {
@@ -19874,11 +19874,11 @@ undefined8 FUN_141919f10(undefined4 param_1, undefined8 param_2, undefined8 para
     (*(code * *)(gen_frame + 0xd8)) = ((code *)REFP(0x1402112e0));
     (*(undefined8 *)(gen_frame + 0xf8)) = 0;
     (*(code * *)(gen_frame + 0x100)) = ((code *)REFP(0x1402112e0));
-    CALLF(undefined8, FUN_1412d25a0)(gen_v16_q0(gen_v16_load(((undefined1 *)(gen_frame + 0x10)), 12)));
+    CALLF(undefined8, FUN_1412d25a0)((void *)((undefined1 *)(gen_frame + 0x10)));
     param_4 = (void *)&(*(gen_v16 *)(gen_frame + 0x0));
   }
   (*(undefined4 *)(gen_frame + 0x34)) = 0x6d;
-  CALLF(undefined4, FUN_1412ce0f0)(param_1,param_4,gen_v16_q0(gen_v16_load(((undefined1 *)(gen_frame + 0x10)), 12)),0,(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
+  CALLF(undefined4, FUN_1412ce0f0)(param_1,param_4,(void *)((undefined1 *)(gen_frame + 0x10)),0,(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0));
   if ((*(code * *)(gen_frame + 0x100)) != ((code *)REFP(0x1402112e0))) {
     (*(*(code * *)(gen_frame + 0x100)))(((undefined1 *)(gen_frame + 0x108)),0,0);
   }

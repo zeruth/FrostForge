@@ -685,6 +685,11 @@ class Emitter:
                     return self.e(a)
                 if a.kind == "id" and a.val in T.v16 and not re.fullmatch(r"auVar\d+", a.val):
                     return f"(void *)&{self.e(a)}"
+                # (a short one, 9 to 15 bytes, decays the same: `FUN_1411c0070(lVar9,0,0,
+                # local_228)` on an `undefined1 local_228 [12]` passed its first 8 bytes, and the
+                # callee wrote the sequence info it returns through 0, 2026-10-21)
+                if a.kind == "id" and a.val in T.short and not re.fullmatch(r"auVar\d+", a.val):
+                    return f"(void *){self.place(a)}"
                 return f"gen_v16_q0({self.e(a)})"
             out = [arg(k, a) for k, a in enumerate(args)]
             return f"{self.e(fn)}({', '.join(out)})"

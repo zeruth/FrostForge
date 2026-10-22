@@ -2174,12 +2174,12 @@ undefined4 FUN_140ebd000(undefined8 param_1, undefined8 param_2, int *param_3)
 {
   GEN_HIT(53);
   __declspec(align(16)) unsigned char gen_frame[(0x14 + sizeof(undefined4) > 0x48 ? 0x14 + sizeof(undefined4) : 0x48)] = {0};
-  longlong lVar1 = {0};
+  ulonglong uVar1 = {0};
   char cVar2 = {0};
   int iVar3 = {0};
   undefined4 uVar4 = {0};
   undefined8 uVar5 = {0};
-  longlong lVar6 = {0};
+  ulonglong uVar6 = {0};
   double dVar7 = {0};
   
   (*(undefined1 *)(gen_frame + 0x10)) = 0;
@@ -2211,12 +2211,12 @@ undefined4 FUN_140ebd000(undefined8 param_1, undefined8 param_2, int *param_3)
     if (iVar3 != 0) {
       uVar4 = CALLF(undefined4, FUN_1407d0e40)(&(*(undefined8 *)(gen_frame + 0x8)),param_3[4],0);
       iVar3 = 0;
-      lVar6 = *(longlong *)(param_3 + 2);
-      lVar1 = lVar6 + *(longlong *)(param_3 + 4) * 0x28;
-      for (; lVar6 != lVar1; lVar6 = lVar6 + 0x28) {
+      uVar6 = *(ulonglong *)(param_3 + 2);
+      uVar1 = uVar6 + *(longlong *)(param_3 + 4) * 0x28;
+      for (; uVar6 != uVar1; uVar6 = uVar6 + 0x28) {
         iVar3 = iVar3 + 1;
         CALLF(undefined1 *, FUN_1402b3a10)((*(undefined8 *)(gen_frame + 0x8)),iVar3);
-        CALLF(undefined4, FUN_140ec4e30)(&(*(undefined8 *)(gen_frame + 0x8)),lVar6);
+        CALLF(undefined4, FUN_140ec4e30)(&(*(undefined8 *)(gen_frame + 0x8)),uVar6);
         CALLF(undefined8, FUN_1402b4580)((*(undefined8 *)(gen_frame + 0x8)),uVar4);
       }
       return 1;
@@ -2837,7 +2837,7 @@ undefined8 * FUN_140ec4c70(undefined8 *param_1, uint param_2)
   (*(code *)param_1[8])(param_1 + 9,0,0);
   *param_1 = (*(undefined8 (*)[8])(uintptr_t)0x1426d0f18ULL);
   if ((param_2 & 1) != 0) {
-    CALLF(undefined8, FUN_140254670)(param_1);
+    CALLF(undefined8, FUN_140254670)(param_1,0xb8);
   }
   return param_1;
 }
@@ -2883,10 +2883,10 @@ undefined ** FUN_140ec4dc0(void)
 }
 
 /* ref: FUN_140ec4e30 */
-undefined4 FUN_140ec4e30(undefined8 *param_1, float *param_2)
+undefined4 FUN_140ec4e30(undefined8 *param_1, ulonglong param_2)
 {
   GEN_HIT(69);
-  __declspec(align(16)) unsigned char gen_frame[(0x0 + sizeof(float[2]) > 0x20 ? 0x0 + sizeof(float[2]) : 0x20)] = {0};
+  __declspec(align(16)) unsigned char gen_frame[(0x8 + sizeof(ulonglong) > 0x20 ? 0x8 + sizeof(ulonglong) : 0x20)] = {0};
   memcpy((void *)(gen_frame + 0x0),(void *)(&param_1), sizeof(param_1) < 8 ? sizeof(param_1) : 8);
   memcpy((void *)(gen_frame + 0x8),(void *)(&param_2), sizeof(param_2) < 8 ? sizeof(param_2) : 8);
   undefined4 uVar1 = {0};
@@ -2898,7 +2898,7 @@ undefined4 FUN_140ec4e30(undefined8 *param_1, float *param_2)
     CALLF(undefined8, FUN_142424d80)(*param_1,"stack overflow");
   }
   else {
-    CALLF(undefined1 *, FUN_1402b3b50)(*param_1,(double)*param_2);
+    CALLF(undefined1 *, FUN_1402b3b50)(*param_1,(double)*(float *)param_2);
   }
   CALLF(undefined8, FUN_1402b4450)(*param_1,uVar1,&REFG(undefined1, 0x1426cf8f8),1);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(*param_1,1);
@@ -2906,17 +2906,17 @@ undefined4 FUN_140ec4e30(undefined8 *param_1, float *param_2)
     CALLF(undefined8, FUN_142424d80)(*param_1,"stack overflow");
   }
   else {
-    CALLF(undefined1 *, FUN_1402b3b50)(*param_1,(double)param_2[1]);
+    CALLF(undefined1 *, FUN_1402b3b50)(*param_1,(double)*(float *)(param_2 + 4));
   }
   CALLF(undefined8, FUN_1402b4450)(*param_1,uVar1,&REFG(undefined1, 0x1426cf8fc),1);
-  CALLF(undefined4, FUN_1407cb130)(param_1,param_2 + 2);
+  CALLF(undefined4, FUN_1407cb130)(param_1,param_2 + 8);
   CALLF(undefined8, FUN_1402b4450)(*param_1,uVar1,&REFG(undefined1, 0x1426cac90),4);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(*param_1,1);
   if (iVar2 == 0) {
     CALLF(undefined8, FUN_142424d80)(*param_1,"stack overflow");
   }
   else {
-    CALLF(uint, FUN_1402b3850)(*param_1,(uint)*(byte *)(param_2 + 4));
+    CALLF(uint, FUN_1402b3850)(*param_1,(uint)*(byte *)(param_2 + 0x10));
   }
   CALLF(undefined8, FUN_1402b4450)(*param_1,uVar1,"isOccupied",10);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(*param_1,1);
@@ -2924,8 +2924,8 @@ undefined4 FUN_140ec4e30(undefined8 *param_1, float *param_2)
     CALLF(undefined8, FUN_142424d80)(*param_1,"stack overflow");
   }
   else {
-    ((float *)(gen_frame + 0x0))[0] = param_2[5];
-    CALLF(undefined4, FUN_1407d2c90)(*param_1,param_1,((float *)(gen_frame + 0x0)));
+    ((undefined4 *)(gen_frame + 0x0))[0] = *(undefined4 *)(param_2 + 0x14);
+    CALLF(undefined4, FUN_1407d2c90)(*param_1,param_1,((undefined4 *)(gen_frame + 0x0)));
   }
   CALLF(undefined8, FUN_1402b4450)(*param_1,uVar1,"atlas",5);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(*param_1,1);
@@ -2933,7 +2933,7 @@ undefined4 FUN_140ec4e30(undefined8 *param_1, float *param_2)
     CALLF(undefined8, FUN_142424d80)(*param_1,"stack overflow");
   }
   else {
-    CALLF(undefined1 *, FUN_1402b3b50)(*param_1,(double)(int)param_2[6]);
+    CALLF(undefined1 *, FUN_1402b3b50)(*param_1,(double)*(int *)(param_2 + 0x18));
   }
   CALLF(undefined8, FUN_1402b4450)(*param_1,uVar1,"textureWidth",0xc);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(*param_1,1);
@@ -2941,7 +2941,7 @@ undefined4 FUN_140ec4e30(undefined8 *param_1, float *param_2)
     CALLF(undefined8, FUN_142424d80)(*param_1,"stack overflow");
   }
   else {
-    CALLF(undefined1 *, FUN_1402b3b50)(*param_1,(double)(int)param_2[7]);
+    CALLF(undefined1 *, FUN_1402b3b50)(*param_1,(double)*(int *)(param_2 + 0x1c));
   }
   CALLF(undefined8, FUN_1402b4450)(*param_1,uVar1,"textureHeight",0xd);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(*param_1,1);
@@ -2949,7 +2949,7 @@ undefined4 FUN_140ec4e30(undefined8 *param_1, float *param_2)
     CALLF(undefined8, FUN_142424d80)(*param_1,"stack overflow");
   }
   else {
-    CALLF(undefined1 *, FUN_1402b3b50)(*param_1,(double)param_2[8]);
+    CALLF(undefined1 *, FUN_1402b3b50)(*param_1,(double)*(float *)(param_2 + 0x20));
   }
   CALLF(undefined8, FUN_1402b4450)(*param_1,uVar1,"facing",6);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(*param_1,1);
@@ -2957,7 +2957,7 @@ undefined4 FUN_140ec4e30(undefined8 *param_1, float *param_2)
     CALLF(undefined8, FUN_142424d80)(*param_1,"stack overflow");
   }
   else {
-    CALLF(uint, FUN_1402b3850)(*param_1,(uint)*(byte *)(param_2 + 9));
+    CALLF(uint, FUN_1402b3850)(*param_1,(uint)*(byte *)(param_2 + 0x24));
   }
   CALLF(undefined8, FUN_1402b4450)(*param_1,uVar1,"isPlayer",8);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(*param_1,1);
@@ -2965,7 +2965,7 @@ undefined4 FUN_140ec4e30(undefined8 *param_1, float *param_2)
     CALLF(undefined8, FUN_142424d80)(*param_1,"stack overflow");
   }
   else {
-    CALLF(uint, FUN_1402b3850)(*param_1,(uint)*(byte *)((longlong)param_2 + 0x25));
+    CALLF(uint, FUN_1402b3850)(*param_1,(uint)*(byte *)(param_2 + 0x25));
   }
   CALLF(undefined8, FUN_1402b4450)(*param_1,uVar1,"isAlive",7);
   iVar2 = CALLF(undefined4, FUN_1402b2770)(*param_1,1);
@@ -2973,7 +2973,7 @@ undefined4 FUN_140ec4e30(undefined8 *param_1, float *param_2)
     CALLF(undefined8, FUN_142424d80)(*param_1,"stack overflow");
   }
   else {
-    CALLF(uint, FUN_1402b3850)(*param_1,(uint)*(byte *)((longlong)param_2 + 0x26));
+    CALLF(uint, FUN_1402b3850)(*param_1,(uint)*(byte *)(param_2 + 0x26));
   }
   CALLF(undefined8, FUN_1402b4450)(*param_1,uVar1,"shouldDrawBelowPlayerBlips",0x1a);
   return 1;
@@ -6027,7 +6027,7 @@ undefined4 FUN_140edcb00(undefined8 param_1)
   if (cVar2 == '\0') {
     return 0;
   }
-  uVar4 = CALLF(undefined4, FUN_140ec4e30)(&(*(undefined8 *)(gen_frame + 0x0)),&(*(undefined8 *)(gen_frame + 0x10)));
+  uVar4 = CALLF(undefined4, FUN_140ec4e30)(&(*(undefined8 *)(gen_frame + 0x0)),(ulonglong)&(*(undefined8 *)(gen_frame + 0x10)));
   return uVar4;
 }
 

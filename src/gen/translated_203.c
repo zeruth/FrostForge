@@ -1115,7 +1115,7 @@ undefined8 FUN_1425e3a40(void)
 {
   GEN_HIT(66);
   if ((*(undefined8 *)((char *)&gen_g_142e99f50 + 0x0)) != 0) {
-    return (undefined8)CALLF(undefined8, FUN_140254670)((*(undefined8 *)((char *)&gen_g_142e99f50 + 0x0)));
+    return (undefined8)CALLF(undefined8, FUN_140254670)((*(undefined8 *)((char *)&gen_g_142e99f50 + 0x0)),0x7d20);
     return 0;
   }
   return 0;

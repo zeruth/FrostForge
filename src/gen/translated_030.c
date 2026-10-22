@@ -2210,7 +2210,7 @@ undefined * FUN_14051c730(void)
 }
 
 /* ref: FUN_14051c740 */
-undefined8 FUN_14051c740(undefined4 param_1, uint param_2)
+undefined8 FUN_14051c740(undefined4 param_1, uint param_2, undefined8 param_3, undefined8 param_4)
 {
   GEN_HIT(315);
   __declspec(align(16)) unsigned char gen_frame[(0x88 + sizeof(longlong *) > 0xb8 ? 0x88 + sizeof(longlong *) : 0xb8)] = {0};
@@ -2239,7 +2239,7 @@ undefined8 FUN_14051c740(undefined4 param_1, uint param_2)
     (*(undefined8 *)(gen_frame + 0x20)) = 0xffffffffffffffff;
   }
   else {
-    (**(code **)(*(*(longlong * *)((char *)&gen_g_142e32a20 + 0x98)) + 0x48))((*(longlong * *)((char *)&gen_g_142e32a20 + 0x98)),&(*(undefined8 *)(gen_frame + 0x0)));
+    (**(code **)(*(*(longlong * *)((char *)&gen_g_142e32a20 + 0x98)) + 0x48))((*(longlong * *)((char *)&gen_g_142e32a20 + 0x98)),&(*(undefined8 *)(gen_frame + 0x0)),param_3,param_4);
     (*(longlong * *)(gen_frame + 0x40)) = plVar2;
     (*(undefined8 *)(gen_frame + 0x30)) = (*(undefined8 *)(gen_frame + 0x0));
     (*(undefined8 *)(gen_frame + 0x38)) = (*(undefined8 *)(gen_frame + 0x8));
@@ -3138,7 +3138,7 @@ undefined8 FUN_14051de50(undefined8 param_1)
 }
 
 /* ref: FUN_14051de70 */
-undefined8 FUN_14051de70(undefined4 param_1, int param_2)
+undefined8 FUN_14051de70(undefined4 param_1, int param_2, undefined8 param_3, undefined8 param_4)
 {
   GEN_HIT(339);
   __declspec(align(16)) unsigned char gen_frame[(0x20 + sizeof(longlong *) > 0x48 ? 0x20 + sizeof(longlong *) : 0x48)] = {0};
@@ -3161,7 +3161,7 @@ undefined8 FUN_14051de70(undefined4 param_1, int param_2)
     iVar6 = -1;
   }
   else {
-    (**(code **)(*(*(longlong * *)((char *)&gen_g_142e4e730 + 0x98)) + 0x38))((*(longlong * *)((char *)&gen_g_142e4e730 + 0x98)),&(*(int *)(gen_frame + 0x0)),param_1);
+    (**(code **)(*(*(longlong * *)((char *)&gen_g_142e4e730 + 0x98)) + 0x38))((*(longlong * *)((char *)&gen_g_142e4e730 + 0x98)),&(*(int *)(gen_frame + 0x0)),param_1,param_4);
     (*(undefined8 *)(gen_frame + 0x10)) = CONCAT44((*(int *)(gen_frame + 0x4)),(*(int *)(gen_frame + 0x0)));
     (*(undefined8 *)(gen_frame + 0x18)) = CONCAT44((*(int *)(gen_frame + 0xc)),(*(int *)(gen_frame + 0x8)));
     (*(longlong * *)(gen_frame + 0x20)) = plVar1;
@@ -3286,7 +3286,7 @@ undefined8 FUN_14051e120(char *param_1)
 }
 
 /* ref: FUN_14051e1d0 */
-undefined8 FUN_14051e1d0(undefined4 param_1, int param_2)
+undefined8 FUN_14051e1d0(undefined4 param_1, int param_2, undefined8 param_3, undefined8 param_4)
 {
   GEN_HIT(344);
   __declspec(align(16)) unsigned char gen_frame[(0x20 + sizeof(longlong *) > 0x48 ? 0x20 + sizeof(longlong *) : 0x48)] = {0};
@@ -3309,7 +3309,7 @@ undefined8 FUN_14051e1d0(undefined4 param_1, int param_2)
     iVar6 = -1;
   }
   else {
-    (**(code **)(*(*(longlong * *)((char *)&gen_g_142e5bdb0 + 0x98)) + 0x38))((*(longlong * *)((char *)&gen_g_142e5bdb0 + 0x98)),&(*(int *)(gen_frame + 0x0)),param_1);
+    (**(code **)(*(*(longlong * *)((char *)&gen_g_142e5bdb0 + 0x98)) + 0x38))((*(longlong * *)((char *)&gen_g_142e5bdb0 + 0x98)),&(*(int *)(gen_frame + 0x0)),param_1,param_4);
     (*(undefined8 *)(gen_frame + 0x10)) = CONCAT44((*(int *)(gen_frame + 0x4)),(*(int *)(gen_frame + 0x0)));
     (*(undefined8 *)(gen_frame + 0x18)) = CONCAT44((*(int *)(gen_frame + 0xc)),(*(int *)(gen_frame + 0x8)));
     (*(longlong * *)(gen_frame + 0x20)) = plVar1;

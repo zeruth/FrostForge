@@ -1443,6 +1443,95 @@ def double_bit_shifts(body: str) -> str:
     return DOUBLE_BITS.sub(lambda m: f"GEN_BITS({m.group(1)}){m.group(2)}", body)
 
 
+FLOAT_OF_CALL = re.compile(r"\((float|double)\)CALLF\((undefined4|uint|int|dword|undefined8|ulonglong|longlong|qword), (\w+)\)\(")
+
+
+def float_bit_returns(body: str) -> str:
+    """`(float)CALLF(undefined4, FUN_x)(...)`: an integer result stored into a float variable.
+    Ghidra prints a same-width copy between types as the cast it prints for a conversion, and at
+    all 85 such call sites in the binary the result is moved, never `cvtsi2ss`/`cvtsi2sd`: the
+    bits, not the value. Converted, the UnitData reader FUN_1425019e0 wrote every 4-byte field
+    (health, levels, flags) as a float of its value, 2026-10-21. Only where the widths match: a
+    float from 4 bytes, a double from 8."""
+    out, at = [], 0
+    for m in FLOAT_OF_CALL.finditer(body):
+        wide = m.group(2) in ("undefined8", "ulonglong", "longlong", "qword")
+        if (m.group(1) == "double") != wide or m.start() < at:
+            continue
+        end = matching_paren(body, m.end())
+        # (gen_bits2f/gen_bits2d copy the bits; GEN_ARG_FLOAT goes through a double, and an
+        # integer that happens to spell a signalling NaN would come back with its quiet bit set)
+        call = body[m.start() + len(m.group(1)) + 2:end]
+        out.append(body[at:m.start()])
+        out.append(f"gen_bits2d((unsigned long long)({call}))" if wide
+                   else f"gen_bits2f((unsigned int)({call}))")
+        at = end
+    out.append(body[at:])
+    return "".join(out)
+
+
+_PARAM_COUNTS: dict[str, int] | None = None
+
+
+def param_counts() -> dict[str, int]:
+    """Each callee's parameter count, by its name in the text (`FUN_14xxxxxxx`, an import's):
+    protos.json for the image's functions, data/import_protos.json for the imports."""
+    global _PARAM_COUNTS
+    if _PARAM_COUNTS is None:
+        out: dict[str, int] = {}
+        pf = ROOT / "build/facts/protos.json"
+        if pf.exists():
+            for k, v in json.loads(pf.read_text())["functions"].items():
+                out[f"FUN_{int(k, 16):x}"] = len(v.get("params", ()))
+        ip = ROOT / "data/import_protos.json"
+        if ip.exists():
+            for k, v in json.loads(ip.read_text())["protos"].items():
+                out[k] = len(v.get("params", ()))
+        _PARAM_COUNTS = out
+    return _PARAM_COUNTS
+
+
+ALLOCA_RETADDR = re.compile(r"^[ \t]*\*\(undefined8 \*\)\((\w+) \+ -8\) = 0x14[0-9a-f]{7};\n", re.M)
+ALLOCA_CALLEE = re.compile(r"CALLF\([^,()]+(?:\([^()]*\))?[^,()]*, (FUN_[0-9a-f]+)\)\(|\(\*\(\*\(code \*\)&(\w+)\)\)\("
+                           r"|\(\*\(code \*\)&(\w+)\)\(")
+
+
+def alloca_call_args(body: str) -> str:
+    """A call in a function that moved its stack pointer (an alloca, `__chkstk` of a size known only
+    at run time): the decompiler lost track of rsp, and writes the outgoing stack arguments through
+    the pointer that holds it (`*(undefined4 **)(puVar20 + 0x40) = &local_b0;`), with the return
+    address it pushes just before the call (`*(undefined8 *)(puVar20 + -8) = 0x140262e01;`). The
+    call itself shows the four register arguments only, and in C the stores pass nothing: the
+    voice chat proxy's CreateProcessW (FUN_1402627c0) took its flags, environment, directory and
+    startup info from whatever its own stack held, and faulted in RtlCreateEnvironmentEx on Enter
+    World, 2026-10-22. The arguments past the fourth are read back from those slots
+    (`P + 0x20`, `P + 0x28`, ...), as many as the callee takes."""
+    if "+ -8) = 0x14" not in body:
+        return body
+    counts = param_counts()
+    out, at = [], 0
+    for m in ALLOCA_RETADDR.finditer(body):
+        base = m.group(1)
+        line_end_at = body.find("\n", m.end())
+        line = body[m.end():line_end_at if line_end_at >= 0 else len(body)]
+        c = ALLOCA_CALLEE.search(line)
+        if not c:
+            continue
+        name = c.group(1) or c.group(2) or c.group(3)
+        want = counts.get(name, 0)
+        open_at = m.end() + c.end()
+        close = matching_paren(body, open_at)
+        args = split_args(body[open_at:close - 1])
+        if want <= 4 or len(args) != 4:
+            continue
+        extra = [f"(unsigned long long)*(unsigned long long *)({base} + {0x20 + 8 * i:#x})" for i in range(want - 4)]
+        out.append(body[at:close - 1])
+        out.append(", " + ", ".join(extra))
+        at = close - 1
+    out.append(body[at:])
+    return "".join(out)
+
+
 def line_end(body: str, nxt) -> int:
     """Where a variable's value ends: after the line that next assigns it (whose right side, `p =
     p + lVar10;`, still reads the old one), or at the end of the function."""
@@ -6362,7 +6451,7 @@ class Translator:
         # (every function, void or not, with a frame or without: the two rode on dead_frame_return,
         # which only non-void functions with a frame reach, so a void function's alloca stayed
         # under its frame and a frameless isfinite test kept its value cast, 2026-10-21)
-        body = double_bit_shifts(stack_allocations(body))
+        body = alloca_call_args(float_bit_returns(double_bit_shifts(stack_allocations(body))))
         self.global_aliases.update(aliases)
         self.exported.update(exported)
         # (this function's own, for rewrite_one to hand back from a worker)

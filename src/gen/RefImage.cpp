@@ -282,6 +282,35 @@ extern "C" void GenDebugLog(const char* where, int point) {
     }
 }
 
+// Temporary instrumentation for src/gen: `count` bytes at `at`, 16 a line, the first few calls only.
+extern "C" void GenDebugDump(const char* where, const void* at, int count) {
+    static volatile long s_dumps = 0;
+    if (_InterlockedIncrement(&s_dumps) > 16 || at == nullptr) {
+        return;
+    }
+    FrostLog("gendebug", "%s: %d bytes at %p", where, count, at);
+    const unsigned char* p = static_cast<const unsigned char*>(at);
+    for (int i = 0; i < count; i += 16) {
+        char line[80];
+        int n = 0;
+        for (int k = 0; k < 16 && i + k < count; k++) {
+            n += snprintf(line + n, sizeof(line) - n, "%02x ", p[i + k]);
+        }
+        FrostLog("gendebug", "  +%04x  %s", i, line);
+    }
+}
+
+// Temporary instrumentation for src/gen: a CDataStore's read position and size (+0x1c, +0x18).
+extern "C" void GenDebugPos(const char* where, const void* store) {
+    static volatile long s_count = 0;
+    if (store == nullptr || _InterlockedIncrement(&s_count) > 5000) {
+        return;
+    }
+    const unsigned char* s = static_cast<const unsigned char*>(store);
+    FrostLog("gendebug", "%s: read %u of %u", where, *reinterpret_cast<const unsigned*>(s + 0x1c),
+             *reinterpret_cast<const unsigned*>(s + 0x18));
+}
+
 extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info) {
     DWORD code = info->ExceptionRecord->ExceptionCode;
     if (code != EXCEPTION_ACCESS_VIOLATION && code != EXCEPTION_INT_DIVIDE_BY_ZERO

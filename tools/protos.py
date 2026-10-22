@@ -1818,13 +1818,24 @@ def main() -> None:
     # positions every direct call to it writes first, at least. Read as taking nothing, curl's
     # Curl_ssl_data_pending FUN_1421784c0 was called with no connection and faulted, and the
     # web login stalled after its form (2026-10-20)
+    # (and a function that hands its argument registers on to an indirect call untouched, `mov
+    # rax, [rcx]; call [rax + 0x38]` with rdx and r8 as they came: a wrapper of a virtual that
+    # takes more than this. Typed by its own reads, FUN_14133fc00 took `this` alone, its callers
+    # passed nothing else, and the spline's virtual SetPoints copied a garbage count of points
+    # from a garbage address on Enter World, 2026-10-22)
+    forwarders = set()
+    for f, ic in icalls_of.items():
+        for _at, (fresh, defs, _outstk, _callee) in ic.items():
+            if any(defs[p] < 8 and not fresh[p] and not fresh[4 + p] for p in range(1, 4)):
+                forwarders.add(f)
+                break
     by_target: dict[int, list[int]] = {}
     for f, nc in ncalls_of.items():
         targets = dict(nc[11])
         own = len(out.get(hexa(f), {}).get("params", ()))
         for site, bits in (nc[13] if len(nc) > 13 else ()):
             t = targets.get(site)
-            if t is not None and out.get(hexa(t), {}).get("open"):
+            if t is not None and (out.get(hexa(t), {}).get("open") or t in forwarders):
                 passed = bits & 0xff | sum(1 << k for k in range(min(own, 4)) if bits >> (8 + k) & 1)
                 by_target.setdefault(t, []).append(passed)
     raised = 0
@@ -1939,7 +1950,14 @@ def main() -> None:
             args = []
             for pos in range(4):
                 gw, xw = fresh[pos], fresh[4 + pos]
-                if gw and not xw:
+                if pos == 0 and xw and not gw and defs[0] < 8 and own[0] and not solved_kinds[f][4]:
+                    # rcx still the caller's own pointer and xmm0 written since the last call: an
+                    # indirect call is a method's far more often than a float function's, and
+                    # xmm0 is scratch (`mov rax, [rcx]; ... sqrtss xmm0, xmm1; call [rax + 0x58]`
+                    # in FUN_141769f00 passed its square roots as `this`, and the selection
+                    # circle's FUN_14176d4f0 faulted on Enter World, 2026-10-22)
+                    args.append(["i", min(8, own[0])])
+                elif gw and not xw:
                     args.append(["i", gw])
                 elif xw and not gw:
                     args.append([{4: "f", 8: "d"}.get(xw, "x"), 4 if xw != 8 else 8])

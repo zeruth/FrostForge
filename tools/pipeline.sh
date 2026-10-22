@@ -31,6 +31,8 @@ python tools/retcheck.py 2>&1 | tail -1 | sed "s/^/  retcheck: /"
 ( python tools/funcptrs.py 2>&1 | tail -1 | sed "s/^/  funcptrs: /" ) &
 p1=$!
 python tools/protos.py 2>&1 | tail -2 | sed "s/^/  protos: /"
+# (the integer positions the current corpus shows as floats, against those prototypes: sticky)
+python tools/intparams.py 2>&1 | tail -1 | sed "s/^/  intparams: /"
 wait $p1
 # (the registers each function leaves alone, through the switches above, and protos.py's xmm0:
 # ApplyFacts gives them their keep conventions)

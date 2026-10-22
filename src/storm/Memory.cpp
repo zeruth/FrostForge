@@ -21,12 +21,44 @@ namespace {
 // the admin rights gflags needs. The CRT path below is otherwise unchanged; the mode is read once.
 constexpr uint64_t kPage = 0x1000;
 
-bool GuardHeap() {
+// FROST_GUARD_HEAP=world guards only what is allocated from Enter World on (MemoryGuardStart):
+// the Battle.net TLS login does not survive the guard heap (schannel faulting in its handshake),
+// and the corruption hunted was in the world. Blocks from before stay the CRT's; a free tells the
+// two apart by the marker at the base of a guard reservation.
+constexpr uint64_t kGuardMagic = 0x4755415244424c4bull;
+
+int GuardMode() {
     static const int s_mode = [] {
         char value[8] = {};
-        return GetEnvironmentVariableA("FROST_GUARD_HEAP", value, sizeof(value)) && value[0] == '1' ? 1 : 0;
+        if (!GetEnvironmentVariableA("FROST_GUARD_HEAP", value, sizeof(value))) {
+            return 0;
+        }
+        return value[0] == '1' ? 1 : value[0] == 'w' ? 2 : 0;
     }();
-    return s_mode != 0;
+    return s_mode;
+}
+
+volatile long s_guardStarted = 0;
+
+// Whether new blocks are guarded.
+bool GuardHeap() {
+    int mode = GuardMode();
+    return mode == 1 || (mode == 2 && s_guardStarted != 0);
+}
+
+// Whether a block came from the guard heap (in world mode, blocks of both kinds are live).
+bool GuardBlock(void* block) {
+    if (GuardMode() == 1) {
+        return true;
+    }
+    if (GuardMode() == 0 || s_guardStarted == 0 || block == nullptr) {
+        return false;
+    }
+    MEMORY_BASIC_INFORMATION info;
+    if (!VirtualQuery(block, &info, sizeof(info)) || info.AllocationBase == nullptr || info.Type != MEM_PRIVATE) {
+        return false;
+    }
+    return reinterpret_cast<const uint64_t*>(info.AllocationBase)[1] == kGuardMagic;
 }
 
 // The reservation's size sits in the 16 bytes at its base, ahead of the block.
@@ -39,6 +71,7 @@ void* GuardAlloc(uint64_t bytes, bool zero) {
         return nullptr;
     }
     *reinterpret_cast<uint64_t*>(base) = total;
+    reinterpret_cast<uint64_t*>(base)[1] = kGuardMagic;
     // bytes is a multiple of 16 on every Storm path, so the block stays 16-aligned
     return base + pages * kPage - bytes;
 }
@@ -78,6 +111,9 @@ void GuardFree(void* block) {
 }
 
 void* GuardRealloc(void* block, uint64_t bytes) {
+    if (block == nullptr) {
+        return GuardAlloc(bytes, false);
+    }
     uint8_t* base = GuardBase(block);
     uint64_t old = base + *reinterpret_cast<uint64_t*>(base) - kPage - static_cast<uint8_t*>(block);
     void* fresh = GuardAlloc(bytes, false);
@@ -150,7 +186,7 @@ void* RawCalloc(uint64_t bytes) {
 }
 
 void* RawRealloc(void* block, uint64_t bytes) {
-    if (GuardHeap()) {
+    if (block == nullptr ? GuardHeap() : GuardBlock(block)) {
         return GuardRealloc(block, bytes);
     }
     int64_t old = block ? static_cast<int64_t>(_msize(block)) : 0;
@@ -162,7 +198,7 @@ void* RawRealloc(void* block, uint64_t bytes) {
 }
 
 void RawFree(void* block) {
-    if (GuardHeap()) {
+    if (GuardBlock(block)) {
         GuardFree(block);
     } else {
         if (block) {
@@ -284,6 +320,13 @@ void MemoryWatchFreed(void* ptr, const char* tag) {
     if (watched) {
         FrostLog("nodelog", "watched block %p freed outside its owner (tag %s)", ptr, tag ? tag : "?");
         FrostLogStack(0, 24);
+    }
+}
+
+// FROST_GUARD_HEAP=world: guard what is allocated from here on (EnterWorld calls it).
+void MemoryGuardStart() {
+    if (GuardMode() == 2 && InterlockedExchange(&s_guardStarted, 1) == 0) {
+        FrostLog("guardheap", "guarding the blocks allocated from Enter World on");
     }
 }
 

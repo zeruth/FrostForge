@@ -13,6 +13,9 @@
 #include "os/Sync.hpp"
 #include "texture/Texture.hpp"
 #include "util/Unimplemented.hpp"
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 // Engine/Source/Model2/M2Model.cpp: the model's public setters. Each one made before the file is
 // in queues an M2ModelCall that InitializeLoaded replays in order.
@@ -691,10 +694,16 @@ void CM2Model::AttachChildAtEvent(CM2BaseModel* child, float scale, int32_t even
     child->SetLocalMatrix(m);
 }
 
-// The GPU batches (FUN_1411c6d30): not made by this port yet.
-// ref: FUN_1411c6d30
+// The GPU batches: the reference's own, translated. Every character select model queued it (call
+// type 4, RunQueuedCalls) and drew nothing as a stub; CM2Model and CM2Shared keep the reference's
+// layouts (their static_asserts), which is what lets the translation work on this port's objects.
+extern "C" unsigned long long FUN_1411c6d30(unsigned long long);
+// translated: FUN_1411c6d30
 void CM2Model::CreateGpuBatches() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1411c6d30(reinterpret_cast<unsigned long long>(this));
+    } __except (GenFault(0x1411c6d30ull, GetExceptionInformation())) {
+    }
 }
 
 // A model driven by its parent's bones takes the parent's bone states and matrices

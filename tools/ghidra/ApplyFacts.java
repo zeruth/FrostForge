@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ApplyFacts extends GhidraScript {
     private SymbolTable symbols;
@@ -96,10 +97,20 @@ public class ApplyFacts extends GhidraScript {
                 preserved.put(addr(e.getKey()), regs);
             }
         }
+        // (before the prototypes, which pin these positions to integer types)
+        File ip = new File(dir, "intparams.json");
+        if (ip.exists()) {
+            for (Map.Entry<String, JsonElement> e : read(ip).getAsJsonObject("functions").entrySet()) {
+                Set<Integer> at = new java.util.HashSet<>();
+                for (JsonElement k : e.getValue().getAsJsonArray()) at.add(k.getAsInt());
+                intParams.put(addr(e.getKey()), at);
+            }
+        }
         File pr = new File(dir, "protos.json");
         if (pr.exists()) {
             JsonObject protos = read(pr);
             applyProtos(protos);
+            applyIntParamHomes(protos.getAsJsonObject("functions"));
             if (protos.has("stack_blocks")) applyStackBlocks(protos.getAsJsonObject("stack_blocks"));
         }
         File cs = new File(dir, "callsites.json");
@@ -701,6 +712,9 @@ public class ApplyFacts extends GhidraScript {
                 int size = i < want.size() ? want.get(i).getAsJsonArray().get(1).getAsInt() : 8;
                 DataType have = i < cur.length ? cur[i].getDataType() : null;
                 DataType dt = paramType(kind, size, have);
+                if ("i".equals(kind) && intParams.getOrDefault(f.getEntryPoint(), Set.of()).contains(i + 1)) {
+                    dt = concreteInt(size);
+                }
                 if (have == null || !dt.isEquivalent(have)) differs = true;
                 String name = i < cur.length ? cur[i].getName() : "param_" + (i + 1);
                 if (name.equals("this")) name = "param_" + (i + 1);
@@ -1315,6 +1329,65 @@ public class ApplyFacts extends GhidraScript {
         }
     }
 
+    // intparams.json (tools/intparams.py): integer positions the decompiler typed float of its
+    // own accord, from a spill or a whole-register move, though the code reads them as integers.
+    // An undefined type left it free to do so again; these get a concrete unsigned one. The
+    // UnitData reader FUN_1425019e0's flags came out `float param_4`, tested as `(uint)param_4 &
+    // 1`, a conversion: the owner-only GUID was skipped, every later field read 2 bytes early, and
+    // the player's class was 0 (2026-10-21)
+    private final Map<Address, Set<Integer>> intParams = new HashMap<>();
+
+    // and the home slot a pinned register parameter is spilled to (entry rsp + 8 * position, the
+    // first four): typed float there too, `local_res20[0] = (float)param_4;` and every test of the
+    // flags went through `(uint)local_res20[0]`, a conversion again (FUN_1425019e0, 2026-10-21)
+    private void applyIntParamHomes(JsonObject functions) {
+        int made = 0;
+        for (Map.Entry<Address, Set<Integer>> e : intParams.entrySet()) {
+            Function f = getFunctionAt(e.getKey());
+            String key = "0x" + Long.toHexString(e.getKey().getOffset());
+            JsonObject o = functions.has(key) ? functions.getAsJsonObject(key) : null;
+            if (f == null || o == null) continue;
+            JsonArray want = o.getAsJsonArray("params");
+            ghidra.program.model.listing.StackFrame sf = f.getStackFrame();
+            for (int pos : e.getValue()) {
+                if (pos > 4 || pos > want.size()) continue;
+                int size = want.get(pos - 1).getAsJsonArray().get(1).getAsInt();
+                // (none in the frame yet: the decompiler makes its own and types it from the
+                // moves, so one is made; an integer one already there is left alone)
+                Variable v = sf.getVariableContaining(8 * pos);
+                if (v != null && v.getStackOffset() != 8 * pos) {
+                    println("ApplyFacts: home slot of " + f.getName() + " param " + pos + " inside " + v.getName()
+                            + " at " + v.getStackOffset() + ", left");
+                    continue;
+                }
+                String name = v != null ? v.getName() : String.format("local_res%x", 8 * pos);
+                // (the whole 8-byte slot: a 4-byte variable there was ignored, the decompiler saw
+                // the slot accessed whole and made its own `float local_res20 [2]` over it)
+                DataType slot = size >= 8 ? concreteInt(8) : new ArrayDataType(concreteInt(size), 8 / Math.max(1, size), size);
+                if (v != null && v.getDataType().isEquivalent(slot)) continue;
+                try {
+                    if (v != null) sf.clearVariable(8 * pos);
+                    sf.createVariable(name, 8 * pos, slot, SourceType.USER_DEFINED);
+                    made++;
+                    println("ApplyFacts: home slot of " + f.getName() + " param " + pos + " (" + name + ") "
+                            + (v != null ? "retyped from " + v.getDataType().getName() : "made") + " " + slot.getName());
+                } catch (Exception ex) {
+                    println("ApplyFacts: home slot of " + f.getName() + " param " + pos + " failed: " + ex.getMessage());
+                }
+            }
+        }
+        println("ApplyFacts: integer parameters' home slots retyped " + made);
+    }
+
+    private static DataType concreteInt(int size) {
+        switch (Math.min(8, Math.max(1, size))) {
+            case 1: return ghidra.program.model.data.ByteDataType.dataType;
+            case 2: return ghidra.program.model.data.UnsignedShortDataType.dataType;
+            case 4: return ghidra.program.model.data.UnsignedIntegerDataType.dataType;
+            default: return ghidra.program.model.data.UnsignedLongLongDataType.dataType;
+        }
+    }
+
     // a position's type: Ghidra's when it is of the kind the instructions read, else one of the
     // width read ("-": nothing reads it, but a later position is used, so it is still passed)
     private DataType paramType(String kind, int size, DataType have) {
@@ -1343,6 +1416,9 @@ public class ApplyFacts extends GhidraScript {
                 if (have != null && !haveFloat && have.getLength() == Math.min(8, size) && plain(have)) {
                     return have;
                 }
+                // (one stored as a float: an undefined type of its width would let the decompiler
+                // infer the float again, see intParams)
+                if (haveFloat) return concreteInt(size);
                 return Undefined.getUndefinedDataType(Math.min(8, Math.max(1, size)));
             default:
                 if (have != null && have.getLength() > 0 && have.getLength() <= 8 && plain(have)) return have;

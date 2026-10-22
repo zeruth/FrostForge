@@ -1,5 +1,6 @@
 #include "images/Images.hpp"
 
+#include <cstdlib>
 #include <cstring>
 
 // The BLP2 reader (0x1424e0a80..0x1424e24a0): the header parsed in place, and the levels decoded
@@ -427,7 +428,21 @@ bool BlpImageDecode(BLPIMAGE* image, uint32_t format, MIPBITS* bits, uint32_t fi
                 uint32_t destPitch = PixelRowPitch(destFormat, w, h);
                 uint32_t sourcePitch = PixelRowPitch(sourceFormat, w, h);
                 int32_t rect[2] = { static_cast<int32_t>(w), static_cast<int32_t>(h) };
-                ok = PixelConvert(rect, 0, in, sourcePitch, sourceFormat, out, destPitch, destFormat);
+                // (from a copy padded past the stored mip: a file whose last mip is stored shorter
+                // than its dimensions need had the decoder read past the file's data, which full
+                // page heap stopped at in SetPortraitToTexture, 2026-10-22; the extra rows decode
+                // from zeroes rather than whatever followed the block)
+                uint64_t stored = image->m_mipSizes[mip];
+                // (enough for the whole mip whether the pitch counts pixel rows or block rows)
+                uint64_t whole = static_cast<uint64_t>(sourcePitch) * (h > 4 ? h : 4);
+                uint64_t padded = (stored > whole ? stored : whole) + 64;
+                auto copy = static_cast<uint8_t*>(std::calloc(1, padded));
+                if (copy == nullptr) {
+                    return false;
+                }
+                std::memcpy(copy, in, stored);
+                ok = PixelConvert(rect, 0, copy, sourcePitch, sourceFormat, out, destPitch, destFormat);
+                std::free(copy);
                 break;
             }
             default:

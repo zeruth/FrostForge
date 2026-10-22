@@ -11,6 +11,7 @@
 #include "storm/ErrorReport.hpp"
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
+#include "db/DB2Tables.hpp"
 #include "util/FrostLog.hpp"
 #include "util/Unimplemented.hpp"
 
@@ -42,8 +43,11 @@ void DB2Free(void* memory, int32_t line) {
 
 // A bit field of a record.
 uint64_t ReadBits(const uint8_t* base, uint32_t offsetBits, uint32_t sizeBits) {
-    uint64_t word;
-    std::memcpy(&word, base + (offsetBits >> 3), sizeof(word));
+    // (only the bytes the field spans: the reference loads 8, and at a table's last record that
+    // ran past the block, which full page heap stopped at, 2026-10-22; the value is the same)
+    uint64_t word = 0;
+    uint32_t bytes = ((offsetBits & 7) + sizeBits + 7) >> 3;
+    std::memcpy(&word, base + (offsetBits >> 3), bytes < sizeof(word) ? bytes : sizeof(word));
     uint32_t top = 0x40 - sizeBits;
     return (word << ((top - (offsetBits & 7)) & 0x3f)) >> (top & 0x3f);
 }
@@ -1062,7 +1066,11 @@ bool WowClientDB2_Base::LoadInternal(CASFILE* file, bool errors) {
     this->m_packedDataOffset = header->m_packedDataOffset;
     if (header->m_recordCount != 0 && this->m_meta->m_sparse == 0) {
         uint32_t stride = header->m_recordSize;
-        this->m_data = static_cast<uint8_t*>(DB2Alloc(header->m_stringTableSize + 8 + header->m_recordCount * stride, 0x560));
+        // (+0x40 past the reference's size, a deliberate divergence: its field reads,
+        // FUN_140229de0 and siblings, load 8 bytes at the field's address plus the bit offset and
+        // so reach up to a record's width past the last one, into whatever the allocator keeps
+        // there; full page heap stopped at it, 2026-10-22. The values read are the reference's)
+        this->m_data = static_cast<uint8_t*>(DB2Alloc(header->m_stringTableSize + 8 + header->m_recordCount * stride + 0x40, 0x560));
         this->m_stride = stride;
         if (this->m_data == nullptr) {
             return false;

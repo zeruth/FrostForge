@@ -13,6 +13,9 @@
 #include "storm/Memory.hpp"
 #include "texture/Texture.hpp"
 #include "util/Unimplemented.hpp"
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 // Engine/Source/Model2/M2Model.cpp: CM2Model's virtual functions (vtable 0x142720d70).
 
@@ -613,11 +616,18 @@ bool CM2Model::GetContentKey(uint8_t* key) {
     return cas::CASFileGetContentKeyByName(shared->m_name, key, (shared->m_flags >> 13) & 0x20);
 }
 
-// ref: FUN_1411b6590
+// The files this model waits on, loaded against total: its own, its textures', its attached
+// models'. The reference's own, translated (CM2Model keeps its layout, the static_asserts). As a
+// stub the totals stayed 0, the character select screen's load progress (FUN_1416a8ad0,
+// loaded / total) stayed 0.0, and the selected character was never shown (2026-10-22).
+extern "C" unsigned long long FUN_1411b6590(unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_1411b6590
 void CM2Model::CountFiles(int64_t* loaded, int64_t* total) {
-    (void)loaded;
-    (void)total;
-    FROST_UNIMPLEMENTED();  // FUN_1402cce50 and FUN_14127e5b0: the files' resident sizes
+    __try {
+        FUN_1411b6590(reinterpret_cast<unsigned long long>(this), reinterpret_cast<unsigned long long>(loaded),
+            reinterpret_cast<unsigned long long>(total));
+    } __except (GenFault(0x1411b6590ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_1411ce0d0

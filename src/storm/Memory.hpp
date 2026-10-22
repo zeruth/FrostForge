@@ -42,6 +42,8 @@ void MemoryWatchBlock(void* block, bool watch);
 void MemoryWatchFreed(void* ptr, const char* tag);
 // FROST_GUARD_HEAP: the stack that freed the block holding `address`, logged, when it was freed.
 void MemoryDescribeFreed(uint64_t address);
+// FROST_GUARD_HEAP=world: start guarding new blocks (at Enter World).
+void MemoryGuardStart();
 
 // Storm's tagged global new (Memory.cpp); the plain new/new[]/delete/delete[] are replaced
 // there too. Use as `new (a2, tag, tagHash, line) T(...)`.

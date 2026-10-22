@@ -2395,4 +2395,5 @@ extern "C" void* const gen_f_1411ad6b0 = (void*)&WriteGpuBatchIndices;
 extern "C" void* const gen_f_1411e10b0 = (void*)&SetBatchFogColor;
 extern "C" void* const gen_f_1411e1150 = (void*)&SetBatchLighting;
 extern "C" void* const gen_f_1411e19c0 = (void*)&SetBatchConstants;
+extern "C" void* const gen_f_1411e2d60 = (void*)&BindBatchTextures;
 // ---- end of generated globals ----

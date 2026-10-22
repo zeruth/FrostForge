@@ -334,7 +334,7 @@ undefined8 FUN_1425eb5f0(void)
   lVar1 = REFG(undefined8, 0x1430af310);
   if (REFG(undefined8, 0x1430af310) != 0) {
     CALLF(undefined8, FUN_14147dc50)(REFG(undefined8, 0x1430af310));
-    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1);
+    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1,0x598);
     return 0;
   }
   return 0;
@@ -419,7 +419,7 @@ undefined8 FUN_1425eb740(void)
   lVar1 = REFG(undefined8, 0x1430af3e8);
   if (REFG(undefined8, 0x1430af3e8) != 0) {
     (**(code **)(REFG(undefined8, 0x1430af3e8) + 0x10))(REFG(undefined8, 0x1430af3e8) + 0x18,0,0);
-    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1);
+    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1,0x68);
     return 0;
   }
   return 0;
@@ -6187,7 +6187,7 @@ undefined8 FUN_1425f1f20(void)
   puVar1 = REFG(undefined1 *, 0x143136c80);
   if (REFG(undefined1 *, 0x143136c80) != (undefined1 *)0x0) {
     CALLF(undefined8, FUN_1417f6520)(REFG(undefined1 *, 0x143136c80));
-    return (undefined8)CALLF(undefined8, FUN_140254670)(puVar1);
+    return (undefined8)CALLF(undefined8, FUN_140254670)(puVar1,0x10e0);
     return 0;
   }
   return 0;
@@ -6226,7 +6226,7 @@ undefined8 FUN_1425f2020(void)
   if (REFG(void *, 0x143136c90) != (void *)0x0) {
     _vector_destructor_iterator_((void *)((longlong)REFG(void *, 0x143136c90) + 0xb00),0xb0,0x10,((code *)REFP(0x1417f3820)));
     _vector_destructor_iterator_(pvVar1,0xb0,0x10,((code *)REFP(0x1417f3820)));
-    return (undefined8)CALLF(undefined8, FUN_140254670)(pvVar1);
+    return (undefined8)CALLF(undefined8, FUN_140254670)(pvVar1,0x1600);
     return 0;
   }
   return 0;

@@ -285,7 +285,7 @@ undefined8 FUN_1425fca00(void)
   lVar1 = REFG(undefined8, 0x143238358);
   if (REFG(undefined8, 0x143238358) != 0) {
     CALLF(undefined **, FUN_141c16c30)(REFG(undefined8, 0x143238358));
-    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1);
+    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1,0x30);
     return 0;
   }
   return 0;
@@ -928,7 +928,7 @@ undefined8 FUN_1425fd7b0(void)
   lVar1 = REFG(undefined8, 0x14323b2c0);
   if (REFG(undefined8, 0x14323b2c0) != 0) {
     CALLF(undefined8, FUN_141c495d0)(REFG(undefined8, 0x14323b2c0));
-    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1);
+    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1,0x20a0);
     return 0;
   }
   return 0;
@@ -943,7 +943,7 @@ undefined8 FUN_1425fd7f0(void)
   lVar1 = REFG(undefined8, 0x14323b2a0);
   if (REFG(undefined8, 0x14323b2a0) != 0) {
     CALLF(undefined8, FUN_141c84fa0)(REFG(undefined8, 0x14323b2a0));
-    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1);
+    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1,0x98);
     return 0;
   }
   return 0;
@@ -976,7 +976,7 @@ undefined8 FUN_1425fd850(void)
   lVar1 = REFG(undefined8, 0x14323b298);
   if (REFG(undefined8, 0x14323b298) != 0) {
     CALLF(undefined8, FUN_141c645c0)(REFG(undefined8, 0x14323b298));
-    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1);
+    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1,0x88);
     return 0;
   }
   return 0;
@@ -3564,7 +3564,7 @@ undefined8 FUN_1426012a0(void)
     (**(code **)(REFG(undefined1 *, 0x143261eb8) + 0x50))(REFG(undefined1 *, 0x143261eb8) + 0x58,0,0);
     (**(code **)(puVar1 + 0x30))(puVar1 + 0x38,0,0);
     (**(code **)(puVar1 + 8))(puVar1 + 0x10,0,0);
-    return (undefined8)CALLF(undefined8, FUN_140254670)(puVar1);
+    return (undefined8)CALLF(undefined8, FUN_140254670)(puVar1,0x78);
     return 0;
   }
   return 0;
@@ -3579,7 +3579,7 @@ undefined8 FUN_1426012f0(void)
   lVar1 = REFG(undefined8, 0x143261ec0);
   if (REFG(undefined8, 0x143261ec0) != 0) {
     CALLF(undefined8, FUN_141f0ab90)(REFG(undefined8, 0x143261ec0));
-    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1);
+    return (undefined8)CALLF(undefined8, FUN_140254670)(lVar1,0x80);
     return 0;
   }
   return 0;

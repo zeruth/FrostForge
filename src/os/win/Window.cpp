@@ -1703,6 +1703,7 @@ extern "C" void* const gen_p_1430a1634 = (void*)&s_restoreMouseSpeed;
 extern "C" void* const gen_p_1430a1640 = (void*)&s_mouseWindow;
 extern "C" void* const gen_p_1430a1648 = (void*)&s_mouseMode;
 extern "C" void* const gen_p_1430a164c = (void*)&s_numLockAtStartup;
+extern "C" void* const gen_p_1430a1668 = (void*)&s_dragRect;
 extern "C" void* const gen_p_1430a1680 = (void*)&s_beforePump;
 extern "C" void* const gen_p_1430a1a90 = (void*)&s_modalTimerProc;
 extern "C" void* const gen_p_1430a1aa0 = (void*)&s_imeDisabled;

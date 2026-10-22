@@ -38,6 +38,12 @@ undefined8 FUN_14203f0c0() {
     return (undefined8)0;
 }
 
+/* not in the corpus */
+undefined8 FUN_14216f890() {
+    GenUnimplemented(0x14216f890ULL);
+    return (undefined8)0;
+}
+
 /* anti-tamper junk between two functions, no function (runs into the function at 0x142265730) */
 undefined8 FUN_1422656e0() {
     GenUnimplemented(0x1422656e0ULL);
