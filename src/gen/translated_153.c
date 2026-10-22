@@ -19371,7 +19371,7 @@ undefined4 FUN_141eab630(longlong param_1, undefined8 param_2)
   uVar6 = uVar5;
   if (0 < *(int *)(param_1 + 0x28)) {
     do {
-      CALLF(undefined4, FUN_14222f7e0)(3,*(undefined8 *)(uVar6 + *(longlong *)(param_1 + 0x20)),param_2);
+      CALLF(undefined8, FUN_14222f7e0)(3,*(undefined8 *)(uVar6 + *(longlong *)(param_1 + 0x20)),param_2);
       uVar3 = (int)uVar4 + 1;
       uVar4 = (ulonglong)uVar3;
       uVar6 = uVar6 + 8;

@@ -4512,7 +4512,7 @@ undefined4 FUN_140d31040(undefined8 param_1)
 }
 
 /* ref: FUN_140d316d0 */
-undefined4 FUN_140d316d0(undefined8 param_1)
+undefined8 FUN_140d316d0(undefined8 param_1)
 {
   GEN_HIT(76);
   __declspec(align(16)) unsigned char gen_frame[(0x128 + sizeof(undefined1[24]) > 0x140 ? 0x128 + sizeof(undefined1[24]) : 0x140)] = {0};
@@ -4584,7 +4584,7 @@ LAB_140d3179b:
   }
   if (((char *)(gen_frame + 0x30))[0] == '\0') {
     uVar6 = CALLF(longlong, FUN_1402b30b0)(param_1);
-    return (int)uVar6;
+    return uVar6;
   }
   do {
     lVar11 = lVar10 + 1;

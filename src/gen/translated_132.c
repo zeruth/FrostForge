@@ -15156,14 +15156,14 @@ undefined8 FUN_141afe030(void)
 }
 
 /* ref: FUN_141afe050 */
-undefined4 FUN_141afe050(undefined8 param_1, undefined8 *param_2)
+undefined8 * FUN_141afe050(undefined8 param_1, undefined8 *param_2)
 {
   GEN_HIT(259);
   if (param_2 != (undefined8 *)0x0) {
     *param_2 = (*(undefined8 (*)[4])(uintptr_t)0x14282ce80ULL);
-    return (int)(longlong)param_2;
+    return param_2;
   }
-  return 0;
+  return (undefined8 *)0;
 }
 
 /* ref: FUN_141afe070 */
@@ -18013,14 +18013,14 @@ undefined8 FUN_141b02160(void)
 }
 
 /* ref: FUN_141b021a0 */
-undefined4 FUN_141b021a0(undefined8 param_1, undefined8 *param_2)
+undefined8 * FUN_141b021a0(undefined8 param_1, undefined8 *param_2)
 {
   GEN_HIT(311);
   if (param_2 != (undefined8 *)0x0) {
     *param_2 = (*(undefined8 (*)[4])(uintptr_t)0x14282d2d8ULL);
-    return (int)(longlong)param_2;
+    return param_2;
   }
-  return 0;
+  return (undefined8 *)0;
 }
 
 /* ref: FUN_141b021c0 */

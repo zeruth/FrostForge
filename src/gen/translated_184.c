@@ -21029,7 +21029,7 @@ LAB_1423417ba:
           for (; (uVar18 >> lVar4 & 1) == 0; lVar4 = lVar4 + 1) {
           }
         }
-        CALLF(undefined4, FUN_142347df0)(param_1,param_2,(int)lVar4);
+        CALLF(longlong, FUN_142347df0)(param_1,param_2,(int)lVar4);
       }
       *param_1 = *param_1 | param_1[1];
       param_1[1] = 0;
@@ -21372,7 +21372,7 @@ LAB_142341daa:
           for (; (uVar18 >> lVar4 & 1) == 0; lVar4 = lVar4 + 1) {
           }
         }
-        CALLF(undefined4, FUN_142347fe0)(param_1,param_2,(int)lVar4);
+        CALLF(longlong, FUN_142347fe0)(param_1,param_2,(int)lVar4);
       }
       *param_1 = *param_1 | param_1[1];
       param_1[1] = 0;
@@ -21715,7 +21715,7 @@ LAB_14234239a:
           for (; (uVar18 >> lVar4 & 1) == 0; lVar4 = lVar4 + 1) {
           }
         }
-        CALLF(undefined4, FUN_1423481d0)(param_1,param_2,(int)lVar4);
+        CALLF(longlong, FUN_1423481d0)(param_1,param_2,(int)lVar4);
       }
       *param_1 = *param_1 | param_1[1];
       param_1[1] = 0;

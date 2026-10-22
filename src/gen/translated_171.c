@@ -923,7 +923,7 @@ undefined4 FUN_1421476f0(longlong param_1, undefined8 param_2)
   CALLF(undefined1, FUN_1421664f0)(param_1 + 0x1e0,param_2);
   iVar1 = CALLF(undefined4, FUN_140266640)(((undefined1 *)(gen_frame + 0x100)));
   if (iVar1 != 0) {
-    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,iVar1);
+    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,iVar1);
     CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic_storage.cpp",0x29a,(unsigned long long)("Error deleting segment %u at \'%s\'. (reason: %s)"),(unsigned long long)(CONCAT44(0,(int)param_2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x100))),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
     return 8;
   }
@@ -5601,14 +5601,14 @@ int FUN_1421527c0(undefined8 *param_1, undefined8 *param_2, undefined8 param_3, 
   if (lVar4 != 0) {
     (*(undefined8 *)(gen_frame + 0x0)) = CALLF(undefined8 *, FUN_142164250)(lVar4);
   }
-  CALLF(undefined4, FUN_14210ff90)(param_1 + 0x205,&(*(undefined8 *)(gen_frame + 0x0)));
+  CALLF(undefined8 *, FUN_14210ff90)(param_1 + 0x205,&(*(undefined8 *)(gen_frame + 0x0)));
   plVar1 = *(longlong **)*param_1;
   lVar4 = (**(code **)(*plVar1 + 0x10))(plVar1,0x58,8);
   if (lVar4 != 0) {
     uVar5 = CALLF(undefined8 *, FUN_142164e60)(lVar4,plVar1);
   }
   (*(undefined8 *)(gen_frame + 0x0)) = uVar5;
-  CALLF(undefined4, FUN_14210ff90)(param_1 + 0x205,&(*(undefined8 *)(gen_frame + 0x0)));
+  CALLF(undefined8 *, FUN_14210ff90)(param_1 + 0x205,&(*(undefined8 *)(gen_frame + 0x0)));
   iVar3 = CALLF(undefined4, FUN_142152c20)(param_1);
   if (iVar3 == 0) {
     CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compactor.cpp",0x4d,(unsigned long long)("Starting Archive Merge"));
@@ -5722,7 +5722,7 @@ int FUN_142152b20(undefined8 *param_1, undefined8 *param_2, undefined8 param_3, 
     uVar5 = CALLF(undefined8 *, FUN_142164250)(lVar4);
   }
   (*(undefined8 *)(gen_frame + 0x0)) = uVar5;
-  CALLF(undefined4, FUN_14210ff90)(param_1 + 0x205,&(*(undefined8 *)(gen_frame + 0x0)));
+  CALLF(undefined8 *, FUN_14210ff90)(param_1 + 0x205,&(*(undefined8 *)(gen_frame + 0x0)));
   iVar3 = CALLF(undefined4, FUN_142152c20)(param_1);
   if (iVar3 == 0) {
     CALLF(undefined8, FUN_142153ab0)(param_1);
@@ -6901,7 +6901,7 @@ undefined8 FUN_142154710(longlong *param_1)
       }
     }
     else {
-      CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x10)),0x100,iVar3);
+      CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x10)),0x100,iVar3);
       CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x372,(unsigned long long)("Failed to open casc directory. Error (%u): %s"),(unsigned long long)(CONCAT44(0,iVar3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x10))));
     }
     return (undefined8)CALLF(undefined8, FUN_140261370)(((undefined1 *)(gen_frame + 0x110)));
@@ -7423,7 +7423,7 @@ LAB_1421555d2:
     uVar3 = 0;
   }
   else {
-    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0xb0)),0x100,iVar2);
+    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0xb0)),0x100,iVar2);
     CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x539,(unsigned long long)("Failed to open casc directory. Error (%u): %s"),(unsigned long long)(CONCAT44(0,iVar2)),(unsigned long long)(((undefined1 *)(gen_frame + 0xb0))));
     uVar3 = 3;
   }
@@ -7616,14 +7616,14 @@ uint FUN_142155980(longlong *param_1, undefined8 param_2)
   if (iVar5 == REFG(undefined4, 0x142620be0)) {
     iVar5 = CALLF(undefined4, FUN_140266aa0)(((undefined1 *)(gen_frame + 0x4f8)),((undefined1 *)(gen_frame + 0x28)),0x10,4,(unsigned long long)(((undefined1 *)(gen_frame + 0x4f0))));
     if (iVar5 != REFG(undefined4, 0x142620be0)) {
-      CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0xa0)),0x100,iVar5);
+      CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0xa0)),0x100,iVar5);
       uVar10 = 0x3db;
       pcVar8 = "Failed to write LRU Table header hash. Error (%u): %s";
       goto LAB_142155bc4;
     }
     iVar5 = CALLF(undefined4, FUN_140266060)(((undefined1 *)(gen_frame + 0x4f8)));
     if (iVar5 != REFG(undefined4, 0x142620be0)) {
-      CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0xa0)),0x100,iVar5);
+      CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0xa0)),0x100,iVar5);
       uVar10 = 0x3e4;
       pcVar8 = "Failed to flush LRU Table to disk. Error (%u): %s";
       goto LAB_142155bc4;
@@ -7645,7 +7645,7 @@ uint FUN_142155980(longlong *param_1, undefined8 param_2)
     }
   }
   else {
-    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0xa0)),0x100,iVar5);
+    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0xa0)),0x100,iVar5);
     uVar10 = 0x3d1;
     pcVar8 = "Failed to open LRU Table to write header hash. Error (%u): %s";
 LAB_142155bc4:
@@ -8001,7 +8001,7 @@ undefined4 FUN_142156200(longlong *param_1, undefined4 *param_2)
     }
   }
   else {
-    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x40)),0x100,iVar4);
+    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x40)),0x100,iVar4);
     CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\lru.cpp",0x314,(unsigned long long)("Failed to open casc directory. Error (%u): %s"),(unsigned long long)(CONCAT44(0,iVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x40))));
     uVar10 = 3;
   }
@@ -8968,7 +8968,7 @@ undefined8 FUN_1421585f0(longlong *param_1, undefined8 param_2)
     uVar1 = CALLF(undefined4, FUN_140266640)(param_1[1]);
     *(undefined4 *)param_1[2] = uVar1;
     if (*(int *)param_1[2] != 0) {
-      CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,*(int *)param_1[2]);
+      CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,*(int *)param_1[2]);
       return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),3,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\index_tables.cpp",0x1e3,(unsigned long long)("Failed to delete table file \'%s\'. Error (%u): %s"),(unsigned long long)(*(undefined8 *)(*param_1 + 8)),(unsigned long long)(CONCAT44(0,*(undefined4 *)param_1[2])),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
     }
   }
@@ -10700,7 +10700,7 @@ undefined8 FUN_14215ebf0(undefined8 *param_1, uint param_2, undefined8 param_3, 
 }
 
 /* ref: FUN_14215ed00 */
-undefined4 FUN_14215ed00(longlong param_1)
+longlong FUN_14215ed00(longlong param_1)
 {
   GEN_HIT(209);
   undefined8 *puVar1 = {0};
@@ -10720,7 +10720,7 @@ undefined4 FUN_14215ed00(longlong param_1)
     }
     *(int *)(param_1 + 0x18) = *(int *)(param_1 + 0x18) + 1;
   }
-  return (int)lVar2;
+  return lVar2;
 }
 
 /* ref: FUN_14215ed60 */
@@ -12222,7 +12222,7 @@ undefined8 FUN_142160fb0(undefined8 *param_1, uint param_2)
 }
 
 /* ref: FUN_142161090 */
-undefined4 FUN_142161090(undefined8 *param_1, undefined8 param_2)
+undefined8 FUN_142161090(undefined8 *param_1, undefined8 param_2)
 {
   GEN_HIT(238);
   undefined8 uVar1 = {0};
@@ -12272,7 +12272,7 @@ undefined4 FUN_142161090(undefined8 *param_1, undefined8 param_2)
   if (lVar3 != 0) {
     uVar1 = CALLF(longlong *, FUN_142151f00)(lVar3,param_2);
     *(int *)(param_1 + 2) = *(int *)(param_1 + 2) + 1;
-    return (int)uVar1;
+    return uVar1;
   }
   *(int *)(param_1 + 2) = *(int *)(param_1 + 2) + 1;
   return 0;
@@ -13109,7 +13109,7 @@ undefined1 FUN_142162520(longlong param_1, double param_2, undefined8 *param_3)
         *(longlong *)(param_1 + 0x370) = *(longlong *)(param_1 + 0x370) + (ulonglong)uVar8;
         *(longlong *)(param_1 + 0x378) =
              *(longlong *)(param_1 + 0x378) + (ulonglong)*(uint *)(lVar11 + 0x1c + lVar7);
-        CALLF(undefined4, FUN_142161090)(param_1 + 0x10,param_3[1] + lVar11);
+        CALLF(undefined8, FUN_142161090)(param_1 + 0x10,param_3[1] + lVar11);
         lVar7 = *(longlong *)(lVar11 + 8 + param_3[1]);
         if (lVar7 != 0) {
           plVar2 = *(longlong **)(lVar11 + param_3[1]);
@@ -13207,7 +13207,7 @@ LAB_1421626af:
         if (piVar10[-3] == 0) {
           *(longlong *)(param_1 + 0x380) =
                *(longlong *)(param_1 + 0x380) + (ulonglong)(*piVar10 + 0x1e0);
-          CALLF(undefined4, FUN_142162f60)(param_1 + 0x2c0,piVar10 + 1);
+          CALLF(undefined4 *, FUN_142162f60)(param_1 + 0x2c0,piVar10 + 1);
           lVar7 = *plVar2;
           uVar5 = ((longlong)piVar10 + (-0x1c - lVar7)) / 0x50;
           lVar16 = (uVar5 & 0xffffffff) * 0x50;
@@ -13410,7 +13410,7 @@ LAB_142162d1e:
       }
       *(longlong *)(param_1 + 0x380) =
            *(longlong *)(param_1 + 0x380) + (ulonglong)(*(int *)(lVar7 + 0x1c) + 0x1e0);
-      CALLF(undefined4, FUN_142162f60)(param_1 + 0x2c0,lVar7 + 0x20);
+      CALLF(undefined4 *, FUN_142162f60)(param_1 + 0x2c0,lVar7 + 0x20);
       uVar6 = *param_3 - 1;
       *param_3 = uVar6;
       if ((uVar6 != ((uint *)(gen_frame + 0x98))[0]) && (uVar6 < *(uint *)(param_1 + 0x20))) {
@@ -13473,7 +13473,7 @@ undefined8 FUN_142162ed0(longlong param_1, int param_2, int param_3)
 }
 
 /* ref: FUN_142162f60 */
-undefined4 FUN_142162f60(undefined8 *param_1, undefined4 *param_2)
+undefined4 * FUN_142162f60(undefined8 *param_1, undefined4 *param_2)
 {
   GEN_HIT(255);
   undefined4 *puVar1 = {0};
@@ -13503,10 +13503,10 @@ undefined4 FUN_142162f60(undefined8 *param_1, undefined4 *param_2)
   if (puVar1 != (undefined4 *)0x0) {
     *puVar1 = *param_2;
     *(int *)(param_1 + 2) = *(int *)(param_1 + 2) + 1;
-    return (int)(longlong)puVar1;
+    return puVar1;
   }
   *(int *)(param_1 + 2) = *(int *)(param_1 + 2) + 1;
-  return 0;
+  return (undefined4 *)0;
 }
 
 /* ref: FUN_142163040 */
@@ -14270,7 +14270,7 @@ LAB_1421642f6:
           }
           else {
             puVar5 = (uint *)CALLF(int *, FUN_14215e930)(puVar7,puVar1,0xffffffff);
-            CALLF(undefined4, FUN_14215ed00)(param_3);
+            CALLF(longlong, FUN_14215ed00)(param_3);
             CALLF(undefined4, FUN_14215e9f0)(param_3,puVar7,puVar5,uVar2);
             iVar6 = *puVar7 - uVar8;
             uVar8 = puVar5[1] + *puVar5;
@@ -15082,7 +15082,7 @@ undefined4 FUN_142165140(longlong param_1, undefined8 param_2)
   uVar11 = 0;
   (*(undefined8 * *)(gen_frame + 0xb8)) = (*(undefined8 * *)(gen_frame + 0x38)) + uVar12;
   CALLF(undefined8, FUN_142164390)((*(undefined8 * *)(gen_frame + 0x38)),(*(undefined8 * *)(gen_frame + 0xb8)),(ulonglong)uVar12,0);
-  CALLF(undefined4, FUN_14215ed00)(param_2);
+  CALLF(longlong, FUN_14215ed00)(param_2);
   puVar13 = puVar4;
   puVar9 = (*(undefined8 * *)(gen_frame + 0xb8));
   (*(undefined8 * *)(gen_frame + 0x30)) = puVar4;
@@ -15409,7 +15409,7 @@ int FUN_1421659f0(longlong param_1, undefined8 param_2)
       *(int *)(param_1 + 0x50) = *(int *)(param_1 + 0x50) - uVar9;
     }
     else {
-      CALLF(undefined4, FUN_14215ed00)(param_2);
+      CALLF(longlong, FUN_14215ed00)(param_2);
       CALLF(undefined4, FUN_14215e9f0)(param_2,piVar2,piVar5,iVar3);
       uVar4 = *(int *)(param_1 + 0x50) - uVar9;
       if (uVar4 != 0) {
@@ -15740,7 +15740,7 @@ int FUN_142166ca0(undefined8 param_1, longlong param_2, uint param_3, int param_
   uVar13 = (undefined4)(GEN_BITS(uVar11) >> 0x20);
   if (iVar2 == 0) {
     uVar3 = (*(*(code *)&GetLastError))();
-    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x40)),0x100,uVar3);
+    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x40)),0x100,uVar3);
     CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),4,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\dynamic\\shmem_control.win32.cpp",0x52,(unsigned long long)("Failed to convert path \'%s\' to wide string. Error (%u): %s"),(unsigned long long)(&(*(undefined1 *)(gen_frame + 0x140))),(unsigned long long)(CONCAT44(uVar8,uVar3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x40))));
     iVar2 = 1;
   }
@@ -15784,7 +15784,7 @@ int FUN_142166ca0(undefined8 param_1, longlong param_2, uint param_3, int param_
       iVar2 = CALLF(undefined4, FUN_142166bc0)(&(*(undefined4 *)(gen_frame + 0x0)),param_2);
       if (iVar2 == 0) {
         if ((cVar1 == '\0') && (iVar2 = CALLF(int, FUN_140266840)(&(*(undefined4 *)(gen_frame + 0x0)),(ulonglong)param_3), iVar2 != 0)) {
-          CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x40)),0x100,iVar2);
+          CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x40)),0x100,iVar2);
           uVar8 = 0x96;
           pcVar4 = "Failed to resize shmem control file \'%s\'. Error (%u): %s";
         }
@@ -15813,13 +15813,13 @@ LAB_1421670a6:
             iVar2 = 0;
             break;
           }
-          CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x40)),0x100,iVar2);
+          CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x40)),0x100,iVar2);
           uVar8 = 0xa1;
           pcVar4 = "Failed to map shmem control file \'%s\'. Error (%u): %s";
         }
       }
       else {
-        CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x40)),0x100,iVar2);
+        CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x40)),0x100,iVar2);
         uVar8 = 0x8a;
         pcVar4 = "Failed to open shmem control file \'%s\'. Error (%u): %s";
       }

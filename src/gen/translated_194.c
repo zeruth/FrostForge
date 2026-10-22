@@ -5444,7 +5444,7 @@ undefined8 * FUN_1424e84d0(undefined8 *param_1, undefined8 *param_2)
 }
 
 /* ref: FUN_1424e8500 */
-undefined4 FUN_1424e8500(undefined8 *param_1, undefined8 *param_2)
+undefined8 * FUN_1424e8500(undefined8 *param_1, undefined8 *param_2)
 {
   GEN_HIT(144);
   undefined8 uVar1 = {0};
@@ -5456,9 +5456,9 @@ undefined4 FUN_1424e8500(undefined8 *param_1, undefined8 *param_2)
     param_1[2] = uVar1;
     param_1[3] = param_2[2];
     *param_1 = 0x142983a60;
-    return (int)(longlong)param_1;
+    return param_1;
   }
-  return 0;
+  return (undefined8 *)0;
 }
 
 /* ref: FUN_1424e8540 */

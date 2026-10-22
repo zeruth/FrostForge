@@ -14703,7 +14703,7 @@ undefined4 FUN_140c5cb60(undefined8 param_1, undefined8 param_2, undefined8 *par
 }
 
 /* ref: FUN_140c5d2e0 */
-undefined4 FUN_140c5d2e0(undefined8 param_1, undefined8 param_2, undefined8 *param_3)
+undefined8 FUN_140c5d2e0(undefined8 param_1, undefined8 param_2, undefined8 *param_3)
 {
   GEN_HIT(239);
   __declspec(align(16)) unsigned char gen_frame[(0x38 + sizeof(char) > 0x48 ? 0x38 + sizeof(char) : 0x48)] = {0};
@@ -14745,7 +14745,7 @@ undefined4 FUN_140c5d2e0(undefined8 param_1, undefined8 param_2, undefined8 *par
   }
   (*(char *)(gen_frame + 0x38)) = 0;
   uVar3 = CALLF(undefined8, FUN_1407cb260)(&(*(undefined8 *)(gen_frame + 0x0)),param_3 + 1);
-  return (int)uVar3;
+  return uVar3;
 }
 
 /* ref: FUN_140c5da50 */
@@ -14807,7 +14807,7 @@ undefined4 FUN_140c5da50(undefined8 param_1, undefined8 param_2, undefined8 *par
 }
 
 /* ref: FUN_140c5e1b0 */
-undefined4 FUN_140c5e1b0(undefined8 param_1, undefined8 param_2, undefined8 *param_3)
+undefined8 FUN_140c5e1b0(undefined8 param_1, undefined8 param_2, undefined8 *param_3)
 {
   GEN_HIT(241);
   __declspec(align(16)) unsigned char gen_frame[(0xc + sizeof(undefined4) > 0x38 ? 0xc + sizeof(undefined4) : 0x38)] = {0};
@@ -14898,7 +14898,7 @@ undefined4 FUN_140c5e1b0(undefined8 param_1, undefined8 param_2, undefined8 *par
         uVar2 = CALLF(undefined1, FUN_141c2cc90)(*param_3,param_3 + 1,param_3 + 3);
         *(undefined1 *)(param_3 + 5) = uVar2;
         uVar4 = CALLF(undefined8, FUN_140800d20)(&(*(undefined8 *)(gen_frame + 0x0)),param_3 + 5);
-        return (int)uVar4;
+        return uVar4;
       }
     }
   }
@@ -14906,7 +14906,7 @@ undefined4 FUN_140c5e1b0(undefined8 param_1, undefined8 param_2, undefined8 *par
 }
 
 /* ref: FUN_140c5e9d0 */
-undefined4 FUN_140c5e9d0(undefined8 param_1, undefined8 param_2, undefined8 *param_3)
+undefined8 FUN_140c5e9d0(undefined8 param_1, undefined8 param_2, undefined8 *param_3)
 {
   GEN_HIT(242);
   __declspec(align(16)) unsigned char gen_frame[(0xc + sizeof(undefined4) > 0x28 ? 0xc + sizeof(undefined4) : 0x28)] = {0};
@@ -15022,7 +15022,7 @@ undefined4 FUN_140c5e9d0(undefined8 param_1, undefined8 param_2, undefined8 *par
                                 *(undefined1 *)((longlong)param_3 + 0xc),param_3 + 2);
           *(undefined1 *)(param_3 + 4) = uVar2;
           uVar4 = CALLF(undefined8, FUN_140800d20)(&(*(undefined8 *)(gen_frame + 0x0)),param_3 + 4);
-          return (int)uVar4;
+          return uVar4;
         }
       }
     }

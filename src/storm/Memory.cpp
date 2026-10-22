@@ -8,6 +8,9 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <windows.h>
+#include <psapi.h>
+#include <malloc.h>
+#pragma comment(lib, "psapi.lib")
 
 namespace {
 
@@ -85,22 +88,86 @@ void* GuardRealloc(void* block, uint64_t bytes) {
     return fresh;
 }
 
+// The heap's live bytes, and a ceiling past which the process stops: a translated function that
+// faulted hands its caller garbage, and on the first entry to the world one built a container
+// from it until 16 GB were committed and the machine stalled (2026-10-21). Past the ceiling the
+// allocation that crossed it is logged with its stack, and the process ends.
+constexpr int64_t kLiveCeiling = 4ll << 30;
+volatile int64_t s_live;
+
+// (and the whole process, whatever allocates it, the CRT directly or the graphics driver: a
+// thread looks at its commit four times a second and ends it past 8 GB)
+DWORD WINAPI CommitWatchdog(void*) {
+    for (;;) {
+        PROCESS_MEMORY_COUNTERS_EX counters = {};
+        counters.cb = sizeof(counters);
+        if (GetProcessMemoryInfo(GetCurrentProcess(), reinterpret_cast<PROCESS_MEMORY_COUNTERS*>(&counters),
+                                 sizeof(counters))
+            && counters.PrivateUsage > (8ull << 30)) {
+            FrostLog("memory", "process commit past %llu MB (Storm heap %lld MB live): stopping",
+                     static_cast<unsigned long long>(counters.PrivateUsage >> 20), s_live >> 20);
+            TerminateProcess(GetCurrentProcess(), 0xE0000003);
+        }
+        Sleep(250);
+    }
+}
+
+void CountLive(int64_t delta) {
+    static volatile long s_watching;
+    if (InterlockedExchange(&s_watching, 1) == 0) {
+        CloseHandle(CreateThread(nullptr, 0, CommitWatchdog, nullptr, 0, nullptr));
+    }
+    int64_t now = InterlockedAdd64(&s_live, delta);
+    static volatile long s_stopped;
+    if (delta > 0 && now > kLiveCeiling && InterlockedExchange(&s_stopped, 1) == 0) {
+        FrostLog("memory", "heap past %lld MB live (this request %lld bytes): stopping", now >> 20,
+                 static_cast<long long>(delta));
+        FrostLogStack(1, 24);
+        TerminateProcess(GetCurrentProcess(), 0xE0000002);
+    }
+}
+
 void* RawMalloc(uint64_t bytes) {
-    return GuardHeap() ? GuardAlloc(bytes, false) : std::malloc(bytes);
+    if (GuardHeap()) {
+        return GuardAlloc(bytes, false);
+    }
+    void* block = std::malloc(bytes);
+    if (block) {
+        CountLive(static_cast<int64_t>(_msize(block)));
+    }
+    return block;
 }
 
 void* RawCalloc(uint64_t bytes) {
-    return GuardHeap() ? GuardAlloc(bytes, true) : std::calloc(1, bytes);
+    if (GuardHeap()) {
+        return GuardAlloc(bytes, true);
+    }
+    void* block = std::calloc(1, bytes);
+    if (block) {
+        CountLive(static_cast<int64_t>(_msize(block)));
+    }
+    return block;
 }
 
 void* RawRealloc(void* block, uint64_t bytes) {
-    return GuardHeap() ? GuardRealloc(block, bytes) : std::realloc(block, bytes);
+    if (GuardHeap()) {
+        return GuardRealloc(block, bytes);
+    }
+    int64_t old = block ? static_cast<int64_t>(_msize(block)) : 0;
+    void* fresh = std::realloc(block, bytes);
+    if (fresh) {
+        CountLive(static_cast<int64_t>(_msize(fresh)) - old);
+    }
+    return fresh;
 }
 
 void RawFree(void* block) {
     if (GuardHeap()) {
         GuardFree(block);
     } else {
+        if (block) {
+            CountLive(-static_cast<int64_t>(_msize(block)));
+        }
         std::free(block);
     }
 }

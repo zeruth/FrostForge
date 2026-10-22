@@ -8214,7 +8214,7 @@ undefined4 FUN_141e072d0(longlong param_1, undefined8 param_2)
   uVar5 = uVar3;
   if (0 < *(int *)(param_1 + 0x28)) {
     do {
-      CALLF(undefined4, FUN_14222f7e0)(2,*(undefined8 *)(uVar3 + *(longlong *)(param_1 + 0x20)),param_2);
+      CALLF(undefined8, FUN_14222f7e0)(2,*(undefined8 *)(uVar3 + *(longlong *)(param_1 + 0x20)),param_2);
       uVar4 = (int)uVar5 + 1;
       uVar3 = uVar3 + 8;
       uVar5 = (ulonglong)uVar4;
@@ -16635,7 +16635,7 @@ undefined4 FUN_141e12530(longlong param_1, undefined8 param_2)
   uVar4 = uVar5;
   if (0 < *(int *)(param_1 + 0x98)) {
     do {
-      CALLF(undefined4, FUN_14222f7e0)(0xf,*(undefined8 *)(uVar4 + *(longlong *)(param_1 + 0x90)),param_2);
+      CALLF(undefined8, FUN_14222f7e0)(0xf,*(undefined8 *)(uVar4 + *(longlong *)(param_1 + 0x90)),param_2);
       uVar3 = (int)uVar5 + 1;
       uVar5 = (ulonglong)uVar3;
       uVar4 = uVar4 + 8;

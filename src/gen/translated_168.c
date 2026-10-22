@@ -925,7 +925,7 @@ undefined4 FUN_1420d8fc0(undefined1 *param_1, uint param_2, undefined8 param_3)
 }
 
 /* ref: FUN_1420d9170 */
-undefined4 FUN_1420d9170(undefined1 *param_1, longlong param_2, longlong param_3)
+undefined8 FUN_1420d9170(undefined1 *param_1, longlong param_2, longlong param_3)
 {
   GEN_HIT(21);
   undefined8 uVar1 = {0};
@@ -937,7 +937,7 @@ undefined4 FUN_1420d9170(undefined1 *param_1, longlong param_2, longlong param_3
     return 0;
   }
   uVar1 = CALLF(ulonglong, FUN_14153dc20)(param_1,param_2,param_3);
-  return (int)uVar1;
+  return uVar1;
 }
 
 /* ref: FUN_1420d9190 */
@@ -3135,7 +3135,7 @@ undefined8 FUN_1420df9c0(longlong param_1)
         CALLF(ulonglong, FUN_1423653f0)(param_1 + 0x30,((char *)(gen_frame + 0x100)),(int)lVar9);
         goto LAB_1420dfb5d;
       }
-      CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,iVar6);
+      CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,iVar6);
       CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\cdn_index_set.cpp",0x35,(unsigned long long)("Failed to create CDN indices directory \'%s\'. Error (%u): %s"),(unsigned long long)(((char *)(gen_frame + 0x100))),(unsigned long long)(CONCAT44(0,iVar6)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
       uVar7 = 1;
     }
@@ -5433,7 +5433,7 @@ int FUN_1420e4370(longlong *param_1, undefined8 param_2, undefined8 param_3)
 }
 
 /* ref: FUN_1420e4850 */
-undefined4 FUN_1420e4850(longlong param_1, undefined8 *param_2)
+undefined8 * FUN_1420e4850(longlong param_1, undefined8 *param_2)
 {
   GEN_HIT(107);
   undefined8 *puVar1 = {0};
@@ -5445,10 +5445,10 @@ undefined4 FUN_1420e4850(longlong param_1, undefined8 *param_2)
   if (puVar1 != (undefined8 *)0x0) {
     *puVar1 = *param_2;
     *(int *)(param_1 + 0x10) = *(int *)(param_1 + 0x10) + 1;
-    return (int)(longlong)puVar1;
+    return puVar1;
   }
   *(int *)(param_1 + 0x10) = *(int *)(param_1 + 0x10) + 1;
-  return 0;
+  return (undefined8 *)0;
 }
 
 /* ref: FUN_1420e4930 */
@@ -9250,7 +9250,7 @@ LAB_1420edf4d:
           }
         }
         else {
-          CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0xa0)),0x100,iVar6);
+          CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0xa0)),0x100,iVar6);
           CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\async_state\\async_config_read_state.cpp",0x1ca,(unsigned long long)("Failed to create config directory %s. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x1a0))),(unsigned long long)(CONCAT44(uVar12,iVar6)),(unsigned long long)(((undefined1 *)(gen_frame + 0xa0))));
           uVar8 = CALLF(undefined8, FUN_1420dbc70)(param_1,1);
         }

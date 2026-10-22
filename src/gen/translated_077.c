@@ -5059,7 +5059,7 @@ undefined8 FUN_14125dac0(undefined8 *param_1)
   CALLF(undefined8, FUN_14125fa50)(param_1);
   psVar1 = (short *)*param_1;
   if ((psVar1 != (short *)0x0) && (*psVar1 != -1)) {
-    CALLF(undefined4, FUN_142468530)(*psVar1);
+    CALLF(undefined8, FUN_142468530)(*psVar1);
     CALLF(undefined8, FUN_140254670)(*param_1);
     *param_1 = 0;
   }
@@ -6290,7 +6290,7 @@ undefined8 FUN_14125feb0(longlong param_1, double param_2_promoted, undefined8 p
 }
 
 /* ref: FUN_14125ff80 */
-undefined4 FUN_14125ff80(longlong param_1)
+ulonglong FUN_14125ff80(longlong param_1)
 {
   GEN_HIT(123);
   byte *pbVar1 = {0};
@@ -6310,7 +6310,7 @@ undefined4 FUN_14125ff80(longlong param_1)
       uVar4 = uVar4 + 1;
     } while (uVar4 < uVar2);
   }
-  return (int)uVar4;
+  return uVar4;
 }
 
 /* ref: FUN_14125ffb0 */

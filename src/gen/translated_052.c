@@ -5314,9 +5314,9 @@ undefined1 FUN_1407d0960(undefined8 param_1, undefined8 param_2, int param_3, un
   }
   CALLF(undefined4, FUN_1402b3e50)(param_1,0xffffd8f0,(*(undefined4 *)((char *)&gen_g_142cf70b4 + 0x0)));
   CALLF(undefined1 *, FUN_1402b3a90)(param_1,&(*(undefined8 *)(gen_frame + 0x8)));
-  CALLF(undefined4, FUN_1402b4650)(param_1,0xfffffffe,1);
+  CALLF(undefined8, FUN_1402b4650)(param_1,0xfffffffe,1);
   CALLF(undefined1 *, FUN_1402b3a90)(param_1,param_4);
-  CALLF(undefined4, FUN_1402b4650)(param_1,0xfffffffe,2);
+  CALLF(undefined8, FUN_1402b4650)(param_1,0xfffffffe,2);
   uVar2 = CALLF(longlong, FUN_1402b30b0)(param_1);
   CALLF(undefined4, FUN_1402b3230)(param_1,(int)uVar2 - (*(int *)&gen_slot_param_3));
   iVar1 = CALLF(undefined4, FUN_1402b3740)(param_1,(*(int *)&gen_slot_param_3),0xffffffff,0);
@@ -5806,7 +5806,7 @@ LAB_1407d1a4f:
         CALLF(undefined8, FUN_1402b2f20)(param_2,param_3,"whoIndex");
         dVar1 = CALLF(double, FUN_1402b4920)(param_2,0xffffffff);
         CALLF(undefined1, FUN_1402b45d0)(param_2,0xfffffffe);
-        CALLF(uint, FUN_141c298c0)(&(*(undefined4 *)(gen_frame + 0x10)),(int)(longlong)dVar1 + -1);
+        CALLF(ulonglong, FUN_141c298c0)(&(*(undefined4 *)(gen_frame + 0x10)),(int)(longlong)dVar1 + -1);
       }
       goto LAB_1407d14c7;
     }

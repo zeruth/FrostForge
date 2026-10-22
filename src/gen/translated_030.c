@@ -2768,7 +2768,7 @@ undefined8 FUN_14051d3b0(int param_1, int param_2, char param_3, undefined4 *par
 }
 
 /* ref: FUN_14051d4c0 */
-undefined4 FUN_14051d4c0(char *param_1, undefined4 *param_2)
+undefined8 FUN_14051d4c0(char *param_1, undefined4 *param_2)
 {
   GEN_HIT(327);
   __declspec(align(16)) unsigned char gen_frame[(0x20 + sizeof(longlong *) > 0x38 ? 0x20 + sizeof(longlong *) : 0x38)] = {0};
@@ -2801,7 +2801,7 @@ undefined4 FUN_14051d4c0(char *param_1, undefined4 *param_2)
             uVar2 = (**(code **)(*(*(longlong * *)(gen_frame + 0x20)) + 0x60))((*(longlong * *)(gen_frame + 0x20)),&(*(int *)(gen_frame + 0x10)));
             *param_2 = uVar2;
           }
-          return (int)(*(longlong *)(gen_frame + 0x18));
+          return (*(longlong *)(gen_frame + 0x18));
         }
       }
       (**(code **)(*(*(longlong * *)(gen_frame + 0x20)) + 0x50))((*(longlong * *)(gen_frame + 0x20)),&(*(int *)(gen_frame + 0x10)));

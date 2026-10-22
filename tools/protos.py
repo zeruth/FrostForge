@@ -90,6 +90,32 @@ DIRTY = [-5000 - fam for fam in range(8)]
 # since the entry); and the callees whose untouched result can reach here (0: an indirect one)
 RAXMIN, RAXCALLS = -1004, -1005
 CALLW = 100
+# a callee's result on some paths and a constant on the others (see raxmin)
+CALLZ = 101
+# a constant in eax, zero-extended through rax: as wide as whatever the other paths return (and an
+# int where every path returns one)
+ZEROW = 50
+
+
+def raxmin(a: int, b: int) -> int:
+    """The narrower of two paths' rax widths, a constant's taking the other path's width."""
+    # (1 << 30: no ret seen yet)
+    # (beside a callee's result, CALLZ: as wide as a direct callee's, png_zalloc's `return 0` /
+    # `jmp malloc` a pointer; an indirect callee's width is unknown, and there the constant still
+    # says int: taken for a pointer, OpenSSL's `return 0` / `return b->method->bread(...)` handed
+    # on the virtual's int with garbage above it and the Battle.net TLS handshake broke off,
+    # 2026-10-21)
+    if {a, b} <= {ZEROW, CALLW, CALLZ} and (ZEROW in (a, b) or CALLZ in (a, b)) and (CALLW in (a, b) or CALLZ in (a, b)):
+        return CALLZ
+    if a == CALLZ:
+        return CALLZ if b == 1 << 30 else min(CALLW, b)
+    if b == CALLZ:
+        return CALLZ if a == 1 << 30 else min(CALLW, a)
+    if a == ZEROW:
+        return ZEROW if b == 1 << 30 else b
+    if b == ZEROW:
+        return ZEROW if a == 1 << 30 else a
+    return min(a, b)
 # the same for xmm0: the scalar width this function last wrote it with (16: written whole, kind
 # unknown), absent where it can be garbage. Calls leave it garbage: only a function's own writes
 # say it returns a float
@@ -535,7 +561,7 @@ class Analyzer:
                 if XANY in od and XANY in nd:
                     mframe.append((XANY, od[XANY] | nd[XANY]))
                 if RAXMIN in od and RAXMIN in nd:
-                    mframe.append((RAXMIN, min(od[RAXMIN], nd[RAXMIN])))
+                    mframe.append((RAXMIN, raxmin(od[RAXMIN], nd[RAXMIN])))
                 if XMIN in od and XMIN in nd:
                     # (a scalar width over a whole-register write is the more specific; a float on
                     # one path and a double on the other is unknown)
@@ -730,7 +756,7 @@ class Analyzer:
             # what rax holds here on every path: `xor al, al; ret` returns a byte, and a path that
             # never wrote it (or left a void callee's leftovers) returns nothing
             if RAXMIN in frame:
-                res.written = min(res.written, frame[RAXMIN])
+                res.written = raxmin(res.written, frame[RAXMIN])
             else:
                 res.garbage = True
             res.ret_calls.update(frame.get(RAXCALLS, ()))
@@ -932,13 +958,13 @@ class Analyzer:
                         # vtable float jumped on to FUN_141525b20)
                         res.feeds.append((t, frame[PEND_XMM]))
                     res.xret_calls.add(t)
-                    res.written = min(res.written, CALLW)
+                    res.written = raxmin(res.written, CALLW)
                     res.ret_calls.add(t)
             elif op is not None and op.type != X.X86_OP_IMM and (
                     insn.address not in self._switch_jumps
                     or (insn.address in self._guessed_switch and frame.get(X.X86_REG_RSP) == 0)):
                 # an indirect tail call (a vtable's): whatever it returns
-                res.written = min(res.written, CALLW)
+                res.written = raxmin(res.written, CALLW)
                 res.ret_calls.add(0)
                 # and a call site like an indirect call's: the decompiler treats the jump as a
                 # call and guesses its arguments as it does any other's. HMAC's update wrapper
@@ -992,7 +1018,16 @@ class Analyzer:
                     frame[RAXW] = w * 2
                 # (a callee's result rewritten is this function's own value now)
                 frame.pop(RAXCALLS, None)
-                if RAXW in frame:
+                if w == 4 and RAXW in frame and (
+                        (zero and m in ZERO_IDIOMS) or (m == "and" and ops[1].type == X.X86_OP_IMM)
+                        or (m == "mov" and len(ops) == 2 and ops[1].type == X.X86_OP_IMM and 0 <= ops[1].imm < 0x80000000)):
+                    # a constant written to eax is the same value in all of rax (the write
+                    # zero-extends): no evidence of a narrow result. Taken for one, ssl's
+                    # FindFilter FUN_141f19690, `xor eax, eax` on its miss path and a pointer on its
+                    # hit path, was typed returning an int, and the Battle.net connection kept a
+                    # filter pointer cut to 32 bits (2026-10-21)
+                    frame[RAXMIN] = ZEROW
+                elif RAXW in frame:
                     frame[RAXMIN] = frame[RAXW] >> 1
                 else:
                     frame.pop(RAXMIN, None)
@@ -1133,7 +1168,7 @@ def _work(chunk: list[int]):
     for a in chunk:
         r = _A.analyze(a)
         out.append((a, r.inputs, r.kinds, r.stack, r.calls, r.open, r.error, r.rets, sorted(r.passes),
-                    (r.written, r.garbage, sorted(r.ret_calls), sorted(r.xwidths),
+                    (4 if r.written == ZEROW else r.written, r.garbage, sorted(r.ret_calls), sorted(r.xwidths),
                      r.xgarbage and not r.inputs[4], r.scalar_kind()), r.icalls,
                     r.local_floor, (len(r.call_sites), sorted(r.tail_sites.items()), sorted(r.exits), sorted(r.ipasses),
                                     sorted(r.xpasses), (sorted(r.spilled), sorted(r.slot_reads), sorted(r.va_lea), r.stack),
@@ -1635,7 +1670,7 @@ def main() -> None:
                 continue
             if any(c < 0 and float_site(f, c) for c in calls):
                 continue
-            ws = [value[c] for c in calls if c > 0] + ([8] if any(c <= 0 for c in calls) else [])
+            ws = [value[c] for c in calls if c > 0] + ([4 if wmin == CALLZ else 8] if any(c <= 0 for c in calls) else [])
             if wmin < CALLW:
                 ws.append(wmin)
             if not ws:

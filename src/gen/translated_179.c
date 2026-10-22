@@ -8536,7 +8536,7 @@ undefined8 * FUN_14229cc10(longlong param_1, undefined8 *param_2)
 }
 
 /* ref: FUN_14229cd10 */
-undefined4 FUN_14229cd10(longlong param_1)
+undefined8 FUN_14229cd10(longlong param_1)
 {
   GEN_HIT(247);
   undefined8 uVar1 = {0};
@@ -8709,18 +8709,18 @@ undefined4 FUN_14229cd10(longlong param_1)
       puVar4[0xbf] = *(undefined8 *)(param_1 + 0x8d8);
       puVar4[0xc0] = uVar1;
     }
-    return (int)(longlong)puVar4;
+    return puVar4;
   }
   return 0;
 }
 
 /* ref: FUN_14229d010 */
-undefined4 FUN_14229d010(longlong param_1)
+undefined8 FUN_14229d010(longlong param_1)
 {
   GEN_HIT(248);
-  undefined4 uVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  uVar1 = CALLF(undefined4, FUN_14229cd10)(param_1 + -0xab0);
+  uVar1 = CALLF(undefined8, FUN_14229cd10)(param_1 + -0xab0);
   return uVar1;
 }
 

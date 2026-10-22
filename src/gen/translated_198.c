@@ -7374,7 +7374,7 @@ undefined8 FUN_142556fc0(undefined8 param_1, longlong *param_2, longlong *param_
   (*(undefined8 *)(gen_frame + 0x2c)) = *puVar4;
   CALLF(int, FUN_14068e970)(&(*(undefined8 *)(gen_frame + 0x0)),puVar3);
   uVar5 = (**(code **)(*param_3 + 0x168))(param_3,0,1,0x30);
-  CALLF(undefined4, FUN_14068e730)(2,&(*(undefined8 *)(gen_frame + 0x0)),uVar5,0.0);
+  CALLF(undefined1 *, FUN_14068e730)(2,&(*(undefined8 *)(gen_frame + 0x0)),uVar5,0.0);
   (**(code **)(*param_3 + 0x170))(param_3,0,1);
   uVar1 = *(undefined4 *)param_2[2];
   *(undefined4 *)((longlong)puVar3 + 0xc) = ((undefined4 *)param_2[2])[4];

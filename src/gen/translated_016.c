@@ -2109,7 +2109,7 @@ LAB_1402bf726:
 }
 
 /* ref: FUN_1402bf7b0 */
-undefined4 FUN_1402bf7b0(longlong param_1)
+undefined8 FUN_1402bf7b0(longlong param_1)
 {
   GEN_HIT(41);
   byte *pbVar1 = {0};
@@ -2133,7 +2133,8 @@ undefined4 FUN_1402bf7b0(longlong param_1)
     if (iVar8 != 0) {
       *(byte *)(lVar3 + 0x11) = *(byte *)(lVar3 + 0x11) & 0xfb;
     }
-    return (1 << (*(byte *)(lVar3 + 0x13) & 0x1f)) * 0x38 + (*(int *)(lVar3 + 0x40) + 3) * 0x18;
+    return (longlong)(1 << (*(byte *)(lVar3 + 0x13) & 0x1f)) * 0x38 +
+           ((longlong)*(int *)(lVar3 + 0x40) + 3) * 0x18;
   }
   if (cVar2 == '\x06') {
     *(undefined8 *)(param_1 + 0x38) = *(undefined8 *)(lVar3 + 0x18);
@@ -2173,11 +2174,11 @@ undefined4 FUN_1402bf7b0(longlong param_1)
         } while (iVar8 < (int)(uint)bVar5);
       }
     }
-    iVar8 = 0x18;
+    lVar4 = 0x18;
     if (*(char *)(lVar3 + 0x12) == '\0') {
-      iVar8 = 8;
+      lVar4 = 8;
     }
-    return iVar8 * (uint)bVar5 + 0x38;
+    return lVar4 * (ulonglong)bVar5 + 0x38;
   }
   if (cVar2 == '\b') {
     *(undefined8 *)(param_1 + 0x38) = *(undefined8 *)(lVar3 + 200);
@@ -2185,7 +2186,8 @@ undefined4 FUN_1402bf7b0(longlong param_1)
     *(longlong *)(param_1 + 0x40) = lVar3;
     *(byte *)(lVar3 + 0x11) = *(byte *)(lVar3 + 0x11) & 0xfb;
     CALLF(int, FUN_1402c00d0)(param_1,lVar3);
-    return *(int *)(lVar3 + 0x70) * 0x18 + (*(int *)(lVar3 + 0x74) * 5 + 0x1c) * 8;
+    return (longlong)*(int *)(lVar3 + 0x70) * 0x18 +
+           ((longlong)*(int *)(lVar3 + 0x74) * 5 + 0x1c) * 8;
   }
   if (cVar2 == '\t') {
     *(undefined8 *)(param_1 + 0x38) = *(undefined8 *)(lVar3 + 0x70);
@@ -2250,9 +2252,10 @@ undefined4 FUN_1402bf7b0(longlong param_1)
         uVar6 = (ulonglong)uVar9;
       } while ((int)uVar9 < iVar8);
     }
-    return (*(int *)(lVar3 + 0x5c) +
-            (*(int *)(lVar3 + 0x54) * 3 + 0x10 + iVar8 * 2 + *(int *)(lVar3 + 0x50) +
-            *(int *)(lVar3 + 0x60)) * 2 + *(int *)(lVar3 + 0x58)) * 4;
+    return ((longlong)*(int *)(lVar3 + 0x5c) +
+            ((longlong)*(int *)(lVar3 + 0x54) * 3 + 0x10 + (longlong)iVar8 * 2 +
+             (longlong)*(int *)(lVar3 + 0x50) + (longlong)*(int *)(lVar3 + 0x60)) * 2 +
+           (longlong)*(int *)(lVar3 + 0x58)) * 4;
   }
   return 0;
 }

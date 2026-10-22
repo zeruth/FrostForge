@@ -5183,7 +5183,7 @@ undefined1 FUN_1424c6fc0(longlong *param_1, undefined4 *param_2)
   switch((long long)(*param_2)) {
   case 2:
     if ((*(byte *)(param_2 + 2) & 4) != 0) {
-      CALLF(undefined4, FUN_14123e9e0)(((char *)(gen_frame + 0x40)),0x800);
+      CALLF(undefined8, FUN_14123e9e0)(((char *)(gen_frame + 0x40)),0x800);
       if (((char *)(gen_frame + 0x40))[0] == '\0') {
         plVar4 = (longlong *)(**(code **)(*param_1 + 0x318))(param_1);
         (**(code **)(*plVar4 + 0x48))(plVar4);
@@ -5231,7 +5231,7 @@ undefined1 FUN_1424c6fc0(longlong *param_1, undefined4 *param_2)
     uVar5 = 0;
     bVar11 = (*(byte *)(param_2 + 2) & 2) == 0;
     if (!bVar11) {
-      CALLF(undefined4, FUN_14123e9f0)((longlong)param_1 + 0x36c,0x800);
+      CALLF(undefined8, FUN_14123e9f0)((longlong)param_1 + 0x36c,0x800);
     }
     if ((((*(byte *)(param_2 + 2) & 1) == 0) ||
         (iVar3 = CALLF(undefined4, FUN_14123e7e0)(&(*(undefined4 *)(gen_frame + 0x898)),&(*(undefined8 *)(gen_frame + 0x890)),&(*(undefined8 *)(gen_frame + 0x880))), iVar3 == 0)) && (bVar11)) {

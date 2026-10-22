@@ -9838,7 +9838,7 @@ undefined4 FUN_1408f6f30(undefined8 param_1)
   }
   (*(undefined8 *)(gen_frame + 0x8)) = 0;
   (*(undefined4 *)(gen_frame + 0x10)) = 0;
-  CALLF(undefined4, FUN_141344060)((*(longlong *)(gen_frame + 0x70)) + 0x328,&(*(undefined8 *)(gen_frame + 0x8)));
+  CALLF(float *, FUN_141344060)((*(longlong *)(gen_frame + 0x70)) + 0x328,&(*(undefined8 *)(gen_frame + 0x8)));
   ((uint *)(gen_frame + 0x78))[0] = 0;
   CALLF(undefined1 *, FUN_141343fd0)(((uint *)(gen_frame + 0x78)),&(*(undefined8 *)(gen_frame + 0x8)));
   cVar2 = CALLF(undefined1, FUN_14062cc40)(param_1,(*(longlong *)(gen_frame + 0x70)),"GetColorRGB");

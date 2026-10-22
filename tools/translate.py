@@ -512,7 +512,10 @@ SCALAR = re.compile(r"^(?:static\s+|extern\s+|thread_local\s+)*(?:const\s+)?(?:u
 # (`StackY_` is entry-relative too, below the frame Ghidra sized: the stack pointer after a
 # __chkstk, `puVar26 = auStackY_988;` and the locals at `puVar26 + 0x60`. Off the frame it was an
 # 8-byte array of its own and those stores overran it, C4789 in FUN_1412fd5c0, 2026-10-18)
-STACK_DECL = re.compile(r"^(\s*)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local_|[a-z]+Stack_|[a-z]+StackX_|[a-z]+StackY_)(res)?([0-9a-f]+))"
+# (`blk_98` is ApplyFacts' name for a stack block it merged (protos.json stack_blocks), at -0x98 as
+# `local_98` would be. Off the frame, FUN_141f77500's URL parser state lost the fields after it that
+# its helpers read through `&blk_98`, and the Battle.net TLS login broke off, 2026-10-21)
+STACK_DECL = re.compile(r"^(\s*)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local_|blk_|[a-z]+Stack_|[a-z]+StackX_|[a-z]+StackY_)(res)?([0-9a-f]+))"
                         r"\s*(?:\[\s*(\w+)\s*\])?\s*;[^\n]*\n", re.M)
 
 
@@ -1465,6 +1468,15 @@ def held_stack_allocations(body: str) -> str:
     A variable the function also uses for other things counts only between that assignment and
     its next one, in the order the decompiler wrote them. The assignments themselves stay, so a
     use no shape here matches keeps the meaning it had."""
+    # (the size masked in a statement of its own, `uVar15 = uVar15 & 0xfffffffffffffff0;` then
+    # `lVar2 = -uVar15;`: the same allocation, written as one so the rest applies. Masking an
+    # aligned size again changes nothing. FUN_141a9fd00 filled its table under the frame on the
+    # first entry to the world, 2026-10-21)
+    def joined(m):
+        size = m.group(3)
+        mask = re.search(rf"^\s*{re.escape(size)} = [^;\n]*& 0xfffffffffffffff0;$", body[:m.start()], re.M)
+        return f"{m.group(1)}{m.group(2)} = -({size} & 0xfffffffffffffff0);" if mask else m.group(0)
+    body = re.sub(r"^([ \t]*)(\w+) = -(\w+);$", joined, body, flags=re.M)
     allocs = list(HELD_ALLOCA.finditer(body))
     if not allocs or "gen_frame" not in body:
         return body
@@ -1640,7 +1652,7 @@ def stack_allocations(body: str) -> str:
     reader (FUN_142582120) inflated the realm list into it and broke FUN_14235aad0's stack cookie
     (2026-10-20). Each becomes one _alloca of that size (with room either side for the pushes
     the decompiler shows below it), at the same offset from the block as from the frame."""
-    if "& 0xfffffffffffffff0)" not in body or "gen_frame" not in body:
+    if "0xfffffffffffffff0" not in body or "gen_frame" not in body:
         return body
     sizes = set()
 
@@ -1913,7 +1925,7 @@ def spelled_alike(machine: str, written: str, integers: set[str]) -> bool:
         s = s.replace("(char *)", "")
         s = re.sub(r"^\(uint\)", "", s.strip())
         return re.sub(r"[()\s]", "", s)
-    names = set(re.findall(r"\b(?:param_\d+|[a-z]*Var\d+|local_\w+)\b", written))
+    names = set(re.findall(r"\b(?:param_\d+|[a-z]*Var\d+|local_\w+|blk_[0-9a-f]+)\b", written))
     if not names or not names <= integers:
         return False
     return norm(machine) == norm(written)

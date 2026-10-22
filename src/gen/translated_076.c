@@ -5829,7 +5829,7 @@ undefined4 FUN_14123d1b0(undefined8 param_1, undefined4 param_2)
 }
 
 /* ref: FUN_14123d2c0 */
-uint FUN_14123d2c0(undefined4 param_1, undefined1 *param_2, int param_3)
+ulonglong FUN_14123d2c0(undefined4 param_1, undefined1 *param_2, int param_3)
 {
   GEN_HIT(149);
   unsigned long long gen_slot_param_1 = 0;
@@ -5854,7 +5854,7 @@ uint FUN_14123d2c0(undefined4 param_1, undefined1 *param_2, int param_3)
     param_2[((uint *)(gen_frame + 0x428))[0]] = 0;
     CALLF(undefined8, FUN_14236a1aa)(uVar2,lVar3);
   }
-  return (uint)(lVar3 != 0);
+  return (ulonglong)(lVar3 != 0);
 }
 
 /* ref: FUN_14123d380 */

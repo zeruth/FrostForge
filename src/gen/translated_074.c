@@ -17554,7 +17554,7 @@ undefined8 FUN_141201eb0(longlong *param_1)
 }
 
 /* ref: FUN_141201f40 */
-undefined4 FUN_141201f40(longlong param_1, longlong param_2, longlong param_3, uint param_4, float *param_5, undefined8 *param_6)
+float * FUN_141201f40(longlong param_1, longlong param_2, longlong param_3, uint param_4, float *param_5, undefined8 *param_6)
 {
   GEN_HIT(254);
   __declspec(align(16)) unsigned char gen_frame[(0x40 + sizeof(undefined4 *[11]) > 0xd8 ? 0x40 + sizeof(undefined4 *[11]) : 0xd8)] = {0};
@@ -18404,7 +18404,7 @@ LAB_1412025d1:
       *(float *)(lVar49 + 0x38 + (*(longlong *)(gen_frame + 0x30))) = fVar52 - fVar54;
     }
   }
-  return (int)(longlong)pfVar40;
+  return pfVar40;
 }
 
 /* ref: FUN_141203330 */

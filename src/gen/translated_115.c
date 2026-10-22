@@ -3597,7 +3597,7 @@ undefined4 FUN_141853cb0(longlong param_1)
 }
 
 /* ref: FUN_141853d50 */
-undefined4 FUN_141853d50(longlong param_1, int param_2)
+undefined8 FUN_141853d50(longlong param_1, int param_2)
 {
   GEN_HIT(106);
   longlong *plVar1 = {0};
@@ -3613,10 +3613,10 @@ undefined4 FUN_141853d50(longlong param_1, int param_2)
     }
     if (param_2 != -1) {
       uVar3 = CALLF(undefined8, FUN_1417d31d0)(*plVar1,0x550,param_2,0);
-      return (int)uVar3;
+      return uVar3;
     }
   }
-  return (int)lVar2;
+  return lVar2;
 }
 
 /* ref: FUN_141853d90 */

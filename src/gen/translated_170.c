@@ -1625,7 +1625,7 @@ undefined8 FUN_14211d590(longlong param_1)
       uVar5 = CALLF(undefined8, FUN_1420e0c60)(*(longlong *)(param_1 + 0x10) + 0x670,(undefined8 *)(param_1 + 0x2c0));
       return uVar5;
     }
-    CALLF(undefined4, FUN_142115990)(param_1 + 0x1a0);
+    CALLF(undefined8, FUN_142115990)(param_1 + 0x1a0);
     uVar8 = *(uint *)(param_1 + 0x1c8);
     if (uVar8 == 0) {
       plVar3 = *(longlong **)(param_1 + 0x1b8);
@@ -4326,7 +4326,7 @@ LAB_1421214bf:
           }
           if (((*(longlong *)(gen_frame + 0x8)) != *plVar18) || ((*(longlong *)(gen_frame + 0x0)) != plVar18[1])) {
             *(int *)(param_1 + 0x4d0) = *(int *)(param_1 + 0x4d0) + (int)uVar23;
-            CALLF(undefined4, FUN_142123430)(param_1 + 0x310,&(*(longlong *)(gen_frame + 0x10)));
+            CALLF(undefined8 *, FUN_142123430)(param_1 + 0x310,&(*(longlong *)(gen_frame + 0x10)));
             (*(longlong *)(gen_frame + 0x10)) = *plVar18;
             (*(longlong *)(gen_frame + 0x18)) = plVar18[1];
             CALLF(uint, FUN_14211d380)(&(*(longlong *)(gen_frame + 0x20)));
@@ -4362,8 +4362,8 @@ LAB_1421214bf:
             puVar16 = puVar15;
           }
           (*(undefined8 *)(gen_frame + 0x30)) = CONCAT44((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)),(int)uVar23 + 1);
-          CALLF(undefined4, FUN_1421233c0)(puVar16,puVar11);
-          CALLF(undefined4, FUN_1421233c0)(puVar16 + 0xb,puVar24);
+          CALLF(undefined8 *, FUN_1421233c0)(puVar16,puVar11);
+          CALLF(undefined8 *, FUN_1421233c0)(puVar16 + 0xb,puVar24);
           uVar21 = 0;
           puVar16[0x16] = *puVar12;
           *(undefined4 *)(puVar16 + 0x17) = 0;
@@ -4465,8 +4465,8 @@ LAB_1421214bf:
         }
         else {
           lVar8 = CALLF(undefined8 *, FUN_142115ad0)(param_1 + 0x488);
-          CALLF(undefined4, FUN_1421233c0)(lVar8,puVar11);
-          CALLF(undefined4, FUN_1421233c0)(lVar8 + 0x58,puVar24);
+          CALLF(undefined8 *, FUN_1421233c0)(lVar8,puVar11);
+          CALLF(undefined8 *, FUN_1421233c0)(lVar8 + 0x58,puVar24);
           uVar21 = 0;
           *(undefined8 *)(lVar8 + 0xb0) = *puVar12;
           *(undefined4 *)(lVar8 + 0xb8) = 0;
@@ -4534,7 +4534,7 @@ LAB_1421214bf:
                       puVar9[0xf] = (*(undefined4 *)(gen_frame + 0x8c));
                     }
                     *(int *)(lVar8 + 0x10) = *(int *)(lVar8 + 0x10) + 1;
-                    CALLF(undefined4, FUN_1421233c0)(lVar8 + 0x58,
+                    CALLF(undefined8 *, FUN_1421233c0)(lVar8 + 0x58,
                                   ((*(ulonglong *)(gen_frame + 0x110)) & 0xffffffff) * 0x40 + *(longlong *)(param_1 + 400));
                     uVar13 = (int)uVar21 + 1;
                     uVar21 = (ulonglong)uVar13;
@@ -5799,7 +5799,7 @@ undefined4 FUN_142123380(longlong *param_1)
 }
 
 /* ref: FUN_1421233c0 */
-undefined4 FUN_1421233c0(longlong param_1, undefined8 *param_2)
+undefined8 * FUN_1421233c0(longlong param_1, undefined8 *param_2)
 {
   GEN_HIT(61);
   undefined8 uVar1 = {0};
@@ -5823,14 +5823,14 @@ undefined4 FUN_1421233c0(longlong param_1, undefined8 *param_2)
     puVar2[6] = param_2[6];
     puVar2[7] = uVar1;
     *(int *)(param_1 + 0x10) = *(int *)(param_1 + 0x10) + 1;
-    return (int)(longlong)puVar2;
+    return puVar2;
   }
   *(int *)(param_1 + 0x10) = *(int *)(param_1 + 0x10) + 1;
-  return 0;
+  return (undefined8 *)0;
 }
 
 /* ref: FUN_142123430 */
-undefined4 FUN_142123430(longlong param_1, undefined8 *param_2)
+undefined8 * FUN_142123430(longlong param_1, undefined8 *param_2)
 {
   GEN_HIT(62);
   uint uVar1 = {0};
@@ -5861,10 +5861,10 @@ undefined4 FUN_142123430(longlong param_1, undefined8 *param_2)
     CALLF(longlong *, FUN_14211ba10)(puVar4 + 2,param_2 + 2);
     puVar4[5] = param_2[5];
     *(int *)(param_1 + 0x10) = *(int *)(param_1 + 0x10) + 1;
-    return (int)(longlong)puVar4;
+    return puVar4;
   }
   *(int *)(param_1 + 0x10) = *(int *)(param_1 + 0x10) + 1;
-  return 0;
+  return (undefined8 *)0;
 }
 
 /* ref: FUN_1421234e0 */
@@ -12083,7 +12083,7 @@ LAB_14212e448:
   }
   iVar3 = CALLF(int, FUN_1402613a0)(((char *)(gen_frame + 0x40)),1);
   if (iVar3 != 0) {
-    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x350)),0x100,iVar3);
+    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x350)),0x100,iVar3);
     CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\cdn_index_ops.cpp",0x9b,(unsigned long long)("Failed to create the CDN file path. Error (%u): %s"),(unsigned long long)(CONCAT44(uVar11,iVar3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x350))));
     return 1;
   }
@@ -12411,7 +12411,7 @@ undefined1 FUN_14212eb40(longlong param_1)
   uVar5 = CALLF(undefined **, FUN_142363a50)();
   iVar4 = CALLF(undefined4, FUN_142368070)(uVar5,0,0);
   if (iVar4 != REFG(undefined4, 0x142620be0)) {
-    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x240)),0x100,iVar4);
+    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x240)),0x100,iVar4);
     plVar7 = (longlong *)(param_1 + 0x48);
     if ((*(byte *)(param_1 + 0x40) & 1) == 0) {
       plVar7 = (longlong *)*plVar7;
@@ -12508,7 +12508,7 @@ undefined1 FUN_14212eb40(longlong param_1)
     uVar12 = 0;
   }
   else {
-    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x240)),0x100,iVar4);
+    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x240)),0x100,iVar4);
     if ((*(byte *)(param_1 + 0x40) & 1) == 0) {
       plVar11 = (longlong *)*plVar11;
     }
@@ -14957,7 +14957,7 @@ undefined4 FUN_142132780(longlong param_1, longlong *param_2, longlong param_3, 
     iVar1 = (*(*(code *)&ioctlsocket))(param_4,0x8004667e,((undefined4 *)(gen_frame + 0x128)),param_4);
     if (iVar1 == -1) {
       uVar2 = (*(*(code *)&WSAGetLastError))();
-      CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,uVar2);
+      CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,uVar2);
       CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",0xce,(unsigned long long)("Failed to set socket non-blocking mode. Error(%d): %s"),(unsigned long long)(CONCAT44(0,uVar2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
     }
     uVar3 = CALLF(undefined8, FUN_14216d0a0)(*(undefined8 *)(param_1 + 0x10),param_4,param_2);
@@ -15005,7 +15005,7 @@ undefined1 FUN_1421328b0(longlong param_1)
   uVar6 = (*(*(code *)&socket))(2,1,6);
   if (uVar6 == 0xffffffffffffffff) {
     uVar4 = (*(*(code *)&WSAGetLastError))();
-    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
+    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
     CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",0x1c,(unsigned long long)("Failed to create loopback socket. Error(%d): %s"),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x30))));
     return 0;
   }
@@ -15021,7 +15021,7 @@ undefined1 FUN_1421328b0(longlong param_1)
       if (iVar5 == 0) {
         if ((*(undefined2 *)((char *)&(*(undefined4 *)(gen_frame + 0x0)) + 2)) == 0) {
           uVar4 = (*(*(code *)&WSAGetLastError))();
-          CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
+          CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
           uVar13 = 0x49;
           pcVar7 = "Invalid port during loopback socket bind. Error(%d): %s";
         }
@@ -15034,7 +15034,7 @@ undefined1 FUN_1421328b0(longlong param_1)
               *(longlong *)(param_1 + 0x4e0) = lVar8;
               if (lVar8 == -1) {
                 uVar4 = (*(*(code *)&WSAGetLastError))();
-                CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
+                CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
                 uVar13 = 0x5e;
                 pcVar7 = "Failed to create wake event socket. Error(%d): %s";
               }
@@ -15047,7 +15047,7 @@ undefined1 FUN_1421328b0(longlong param_1)
                     iVar5 = (*(*(code *)&WSAGetLastError))();
                     if (iVar5 != 0x2733) {
                       uVar4 = (*(*(code *)&WSAGetLastError))();
-                      CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
+                      CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
                       uVar13 = 0x6c;
                       pcVar7 = "Failed to connect to loopback socket. Error(%d): %s";
                       goto LAB_142132e6f;
@@ -15102,7 +15102,7 @@ undefined1 FUN_1421328b0(longlong param_1)
                     if (bVar3) {
 override_prt_142132db2_d4d75bc3:
                       uVar4 = (*(*(code *)&WSAGetLastError))();
-                      CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
+                      CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
                       uVar13 = 0xa2;
                       pcVar7 = "Failed to connect to loopback socket. Error(%d): %s";
                       goto LAB_142132e6f;
@@ -15110,7 +15110,7 @@ override_prt_142132db2_d4d75bc3:
                   }
                   if (*(longlong *)(param_1 + 0x4e8) == -1) {
                     uVar4 = (*(*(code *)&WSAGetLastError))(0xffffffffffffffff);
-                    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
+                    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
                     uVar13 = 0xa8;
                     pcVar7 = "Failed to accept connection on loopback socket. Error(%d): %s";
                   }
@@ -15122,14 +15122,14 @@ override_prt_142132db2_d4d75bc3:
                       goto LAB_142132e98;
                     }
                     uVar4 = (*(*(code *)&WSAGetLastError))();
-                    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
+                    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
                     uVar13 = 0xaf;
                     pcVar7 = "Failed to set wake pipe socket non-blocking mode. Error(%d): %s";
                   }
                 }
                 else {
                   uVar4 = (*(*(code *)&WSAGetLastError))();
-                  CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
+                  CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
                   uVar13 = 0x65;
                   pcVar7 = "Failed to set wake event socket non-blocking mode. Error(%d): %s";
                 }
@@ -15137,14 +15137,14 @@ override_prt_142132db2_d4d75bc3:
             }
             else {
               uVar4 = (*(*(code *)&WSAGetLastError))();
-              CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
+              CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
               uVar13 = 0x57;
               pcVar7 = "Failed to listen on loopback socket. Error(%d): %s";
             }
           }
           else {
             uVar4 = (*(*(code *)&WSAGetLastError))();
-            CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
+            CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
             uVar13 = 0x50;
             pcVar7 = "Failed to set loopback socket non-blocking mode. Error(%d): %s";
           }
@@ -15152,21 +15152,21 @@ override_prt_142132db2_d4d75bc3:
       }
       else {
         uVar4 = (*(*(code *)&WSAGetLastError))();
-        CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
+        CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
         uVar13 = 0x43;
         pcVar7 = "Failed to get bound loopback socket address. Error(%d): %s";
       }
     }
     else {
       uVar4 = (*(*(code *)&WSAGetLastError))();
-      CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
+      CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
       uVar13 = 0x3b;
       pcVar7 = "Failed to bind to loopback socket. Error(%d): %s";
     }
   }
   else {
     uVar4 = (*(*(code *)&WSAGetLastError))();
-    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
+    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
     uVar13 = 0x34;
     pcVar7 = "Failed to set loopback sockopt SO_REUSEADDR. Error(%d): %s";
   }
@@ -15177,7 +15177,7 @@ LAB_142132e98:
   iVar5 = (*(*(code *)&closesocket))(uVar6);
   if (iVar5 != 0) {
     uVar4 = (*(*(code *)&WSAGetLastError))();
-    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
+    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x30)),0x100,uVar4);
     CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",0x29,(unsigned long long)("Failed to close loopback socket. Error(%d): %s"),(unsigned long long)(CONCAT44(0,uVar4)),(unsigned long long)(((undefined1 *)(gen_frame + 0x30))));
   }
   return uVar12;
@@ -15338,7 +15338,7 @@ LAB_1421331da:
   iVar4 = (*(*(code *)&select))((*(uint *)(gen_frame + 0x18)) + 1,((uint *)(gen_frame + 0x1e0)),puVar16,puVar18,(unsigned long long)(&(*(undefined4 *)(gen_frame + 0x0))));
   if (iVar4 == -1) {
     iVar4 = (*(*(code *)&WSAGetLastError))();
-    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0xe0)),0x100,iVar4);
+    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0xe0)),0x100,iVar4);
     puVar10 = ((undefined1 *)(gen_frame + 0xe0));
     uVar17 = 0x117;
     pcVar9 = "Failed to poll for events using select(). Error(%d): %s";
@@ -15415,7 +15415,7 @@ undefined8 FUN_142133430(longlong param_1)
   iVar1 = (*(*(code *)&send))(*(undefined8 *)(param_1 + 0x4e8),((undefined1 *)(gen_frame + 0x110)),1,0);
   if (iVar1 == -1) {
     uVar2 = (*(*(code *)&WSAGetLastError))();
-    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,uVar2);
+    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,uVar2);
     return (undefined8)CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\download\\download_curl.windows.cpp",0x149,(unsigned long long)("Failed to preemptively wake worker thread.. Error(%d): %s"),(unsigned long long)(CONCAT44(0,uVar2)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
   }
   return 0;
@@ -16180,7 +16180,7 @@ LAB_14213454f:
     iVar2 = CALLF(undefined4, FUN_14026b48b)(&REFG(undefined1, 0x142623990),0,0,((undefined8 *)(gen_frame + 0x450)));
     if (iVar2 < 0) {
       uVar3 = (*(*(code *)&GetLastError))();
-      CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x20)),0x100,uVar3);
+      CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x20)),0x100,uVar3);
       CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\armadillo\\armadillo.windows.cpp",0x29,(unsigned long long)("Failed to read %%AppData%% path. Error (%u): %s"),(unsigned long long)(CONCAT44(0,uVar3)),(unsigned long long)(((undefined1 *)(gen_frame + 0x20))));
     }
     else {
@@ -17805,7 +17805,7 @@ undefined1 FUN_142137060(undefined8 param_1)
   CALLF(undefined4, FUN_140261fd0)(((undefined1 *)(gen_frame + 0x100)),0x30c,param_1);
   iVar1 = CALLF(int, FUN_1402613a0)(((undefined1 *)(gen_frame + 0x100)),1);
   if (iVar1 != REFG(undefined4, 0x142620be0)) {
-    CALLF(undefined4, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,iVar1);
+    CALLF(undefined8, FUN_140263fa0)(((undefined1 *)(gen_frame + 0x0)),0x100,iVar1);
     CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630cdc),4,"D:\\BuildServer\\A\\work\\package_cache\\tact\\3.6.39\\src\\loose_file\\loose_file_util.cpp",0x1c,(unsigned long long)("Failed to create directory \'%s\'. Error (%u): %s"),(unsigned long long)(((undefined1 *)(gen_frame + 0x100))),(unsigned long long)(CONCAT44(0,iVar1)),(unsigned long long)(((undefined1 *)(gen_frame + 0x0))));
     return 1;
   }

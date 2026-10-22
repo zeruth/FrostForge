@@ -26328,7 +26328,7 @@ undefined8 FUN_1418cfcb0(longlong param_1, double param_2_promoted, double param
       *(ushort *)(*(longlong *)(param_1 + 0x70) + 0x118) =
            (ushort)*(undefined4 *)(*(longlong *)(param_1 + 0x70) + 0x118) & 0xffef | 0x10;
     }
-    return (undefined8)CALLF(uint, FUN_141847400)(*(undefined8 *)(param_1 + 0x20),*(undefined8 *)(param_1 + 0x70));
+    return (undefined8)CALLF(ulonglong, FUN_141847400)(*(undefined8 *)(param_1 + 0x20),*(undefined8 *)(param_1 + 0x70));
   }
   return 0;
 }

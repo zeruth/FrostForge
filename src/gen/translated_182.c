@@ -1178,7 +1178,7 @@ uint FUN_1422dee40(longlong param_1, byte param_2, uint param_3, undefined8 para
 }
 
 /* ref: FUN_1422dee70 */
-undefined4 FUN_1422dee70(undefined8 param_1, uint param_2)
+undefined8 FUN_1422dee70(undefined8 param_1, uint param_2)
 {
   GEN_HIT(24);
   uint uVar1 = {0};
@@ -1213,7 +1213,7 @@ undefined4 FUN_1422dee70(undefined8 param_1, uint param_2)
   puVar3[9] = 0;
   puVar3[10] = 0;
   puVar3[0xb] = 0;
-  return (int)(longlong)puVar3;
+  return puVar3;
 }
 
 /* ref: FUN_1422def60 */

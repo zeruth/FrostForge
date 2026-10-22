@@ -315,6 +315,9 @@ def main():
                 k32.TerminateProcess(pi.hProcess, 1)
                 return 0
         k32.ContinueDebugEvent(event.dwProcessId, event.dwThreadId, status)
+    if args.hits:
+        # (what ran up to the timeout: a run that goes wrong without faulting, a refused login)
+        dump_hits(pi.hProcess, exe, base, args.hits)
     print("timeout: the main thread, sampled three times")
     for sample in range(3):
         k32.SuspendThread(pi.hThread)

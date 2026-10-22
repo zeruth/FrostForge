@@ -2341,7 +2341,7 @@ undefined4 FUN_141310900(longlong param_1)
 undefined8 FUN_141310940(undefined8 param_1, uint param_2)
 {
   GEN_HIT(46);
-  CALLF(undefined4, FUN_141310a50)(param_1);
+  CALLF(undefined8, FUN_141310a50)(param_1);
   if ((param_2 & 1) != 0) {
     CALLF(undefined8, FUN_140254670)(param_1);
   }
@@ -2391,30 +2391,28 @@ undefined8 FUN_141310980(uint *param_1)
 }
 
 /* ref: FUN_141310a50 */
-undefined4 FUN_141310a50(undefined8 *param_1)
+undefined8 FUN_141310a50(undefined8 *param_1)
 {
   GEN_HIT(48);
   longlong lVar1 = {0};
   ulonglong uVar2 = {0};
-  undefined4 uVar3 = {0};
-  longlong *plVar5 = {0};
-  undefined8 uVar4 = {0};
+  undefined8 uVar3 = {0};
+  longlong *plVar4 = {0};
   
   *param_1 = (*(undefined8 (*)[4])(uintptr_t)0x14272dcb0ULL);
   CALLF(undefined4, FUN_140324d50)(param_1,1);
   CALLF(undefined8, FUN_141310980)(param_1 + 5);
-  uVar4 = CALLF(undefined8, FUN_140325700)(param_1 + 1);
-  uVar3 = (undefined4)uVar4;
+  uVar3 = CALLF(undefined8, FUN_140325700)(param_1 + 1);
   lVar1 = param_1[2];
   if (lVar1 != 0) {
     uVar2 = param_1[3];
     if (((uVar2 & 1) == 0) && (uVar2 != 0)) {
-      plVar5 = (longlong *)((longlong)(((int)(longlong)param_1 + 0x10) - *(int *)(lVar1 + 8)) + uVar2);
+      plVar4 = (longlong *)((longlong)(((int)(longlong)param_1 + 0x10) - *(int *)(lVar1 + 8)) + uVar2);
     }
     else {
-      plVar5 = (longlong *)(uVar2 & 0xfffffffffffffffe);
+      plVar4 = (longlong *)(uVar2 & 0xfffffffffffffffe);
     }
-    *plVar5 = lVar1;
+    *plVar4 = lVar1;
     *(undefined8 *)(param_1[2] + 8) = param_1[3];
     uVar3 = 0;
     param_1[2] = 0;
@@ -16426,7 +16424,7 @@ undefined4 FUN_141321f60(longlong param_1, undefined8 param_2)
   uVar5 = uVar4;
   if (0 < *(int *)(param_1 + 0x40)) {
     do {
-      CALLF(undefined4, FUN_14222f7e0)(7,*(undefined8 *)(uVar5 + *(longlong *)(param_1 + 0x38)),param_2);
+      CALLF(undefined8, FUN_14222f7e0)(7,*(undefined8 *)(uVar5 + *(longlong *)(param_1 + 0x38)),param_2);
       uVar3 = (int)uVar4 + 1;
       uVar4 = (ulonglong)uVar3;
       uVar5 = uVar5 + 8;

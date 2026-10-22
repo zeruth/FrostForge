@@ -52,22 +52,22 @@ undefined8 FUN_142363830(undefined8 param_1, undefined8 param_2)
 }
 
 /* ref: FUN_142363840 */
-undefined4 FUN_142363840(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5)
+undefined8 FUN_142363840(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5)
 {
   GEN_HIT(4);
-  undefined4 uVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  uVar1 = CALLF(undefined4, FUN_140254d80)(param_2,param_3,param_4,param_5,(unsigned long long)(0xb),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0xfffffffa),(unsigned long long)(0));
+  uVar1 = CALLF(undefined8, FUN_140254d80)(param_2,param_3,param_4,param_5,(unsigned long long)(0xb),(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0xfffffffa),(unsigned long long)(0));
   return uVar1;
 }
 
 /* ref: FUN_142363890 */
-undefined4 FUN_142363890(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4)
+undefined8 FUN_142363890(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4)
 {
   GEN_HIT(5);
-  undefined4 uVar1 = {0};
+  undefined8 uVar1 = {0};
   
-  uVar1 = CALLF(undefined4, FUN_140254be0)(param_2,param_3,param_4,0xb,(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0xfffffffa),(unsigned long long)(0));
+  uVar1 = CALLF(undefined8, FUN_140254be0)(param_2,param_3,param_4,0xb,(unsigned long long)(0),(unsigned long long)(0),(unsigned long long)(0xfffffffa),(unsigned long long)(0));
   return uVar1;
 }
 
