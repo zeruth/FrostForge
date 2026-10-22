@@ -11,3 +11,5 @@ build/
 __pycache__/
 # IDE settings
 /.idea/
+# Reference client builds (binaries, not ours to distribute)
+/.reference/
