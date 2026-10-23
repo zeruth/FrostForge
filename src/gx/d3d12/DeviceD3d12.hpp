@@ -230,6 +230,11 @@ class CGxDeviceD3d12 : public CGxDevice {
     void* SwapChainGetBackBuffer(void* chain) override;                  // FUN_1422eb860
     // ref: FUN_1422a8d40
     void* CurrentSwapChain() override { return this->m_currentChain; }   // 0x160
+    // The compute context beside a render context (0xdc8 bytes before it). The scene draw asks
+    // for it and calls a no-op on it; the stub's null faulted CWorldSceneRender::Draw on the login
+    // screen, whose 3D background stayed black (2026-10-23).
+    // ref: FUN_1422d36a0
+    void* ComputeContextOf(void* context) override;                       // 0xe8
     void SwapChainPresent(void* chain) override;                         // FUN_1422e1490
     void SwapChainEnd(void* chain) override;                             // FUN_1422e1480
 

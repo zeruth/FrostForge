@@ -6,8 +6,13 @@
 #include "storm/Memory.hpp"
 #include "storm/String.hpp"
 #include "util/Unimplemented.hpp"
+#include "util/FrostLog.hpp"
 #include <cstring>
+#include <intrin.h>
 #include <new>
+
+// The compute context's vtable: logged no-ops in place of 0x14291a070's slots (below).
+void* ComputeContextVtable();
 
 using namespace gxDx12Backend;
 
@@ -493,7 +498,10 @@ GraphicsCommandList::GraphicsCommandList(uint32_t type, uint8_t vrs) : m_copy(ty
     this->m_topologyDirty = 0;
     this->m_queryScope = 0;
     this->m_fcc = 0;
-    this->m_computeVtable = nullptr;  // FROST: the compute context (vtable 0x14291a070) is not ported
+    // The compute context (vtable 0x14291a070) is not ported: its slots are logged no-ops
+    // (ComputeContextVtable), so a caller reaching it through the device (ComputeContextOf) gets
+    // an object rather than null
+    this->m_computeVtable = ComputeContextVtable();
     this->m_fc0 = 0;
     std::memset(&this->m_staging, 0, sizeof(this->m_staging));
     std::memset(this->m_ringPages, 0, sizeof(this->m_ringPages));
@@ -857,6 +865,52 @@ bool GraphicsCommandList::CopyTex(Tex* source, Tex* dest, int32_t* sourceOrigin,
 
 GraphicsCommandList* RenderContextD3d12::Owner() {
     return reinterpret_cast<GraphicsCommandList*>(reinterpret_cast<uint8_t*>(this) - offsetof(GraphicsCommandList, m_context));
+}
+
+// (the compute context sits 0xdc8 bytes before the render context, as the reference's device
+// assumes: FUN_1422d36a0 subtracts it)
+static_assert(offsetof(GraphicsCommandList, m_context) - offsetof(GraphicsCommandList, m_computeVtable) == 0xdc8,
+              "the compute context is 0xdc8 bytes before the render context");
+
+// ref: FUN_1422d36a0
+void* CGxDeviceD3d12::ComputeContextOf(void* context) {
+    if (context == nullptr) {
+        return nullptr;
+    }
+    return static_cast<uint8_t*>(context) - 0xdc8;
+}
+
+namespace {
+
+// A compute-context slot reached: the reference's would run here. Each caller logged once (the
+// reference's slot 0xe8, the scene draw's call, is itself a no-op, FUN_1402112e0).
+void* ComputeContextSlot(void* self) {
+    (void)self;
+    static void* s_callers[32];
+    static uint32_t s_count;
+    void* caller = _ReturnAddress();
+    for (uint32_t i = 0; i < s_count; i++) {
+        if (s_callers[i] == caller) {
+            return nullptr;
+        }
+    }
+    if (s_count < 32) {
+        s_callers[s_count++] = caller;
+        FrostLog("gx", "compute context slot called from %p: not ported, a no-op", caller);
+    }
+    return nullptr;
+}
+
+}  // namespace
+
+void* ComputeContextVtable() {
+    static void* s_slots[0x40];
+    if (s_slots[0] == nullptr) {
+        for (void*& slot : s_slots) {
+            slot = reinterpret_cast<void*>(&ComputeContextSlot);
+        }
+    }
+    return s_slots;
 }
 
 // ref: FUN_1422d3270

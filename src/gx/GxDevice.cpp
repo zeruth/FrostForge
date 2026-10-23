@@ -197,8 +197,10 @@ void* CGxDevice::Slot0d8(void* out, uint64_t a2) {
 void CGxDevice::Slot0e0() {
     FROST_UNIMPLEMENTED();
 }
-void CGxDevice::Slot0e8() {
-    FROST_UNIMPLEMENTED();
+// (a device with no compute contexts of its own has none to give)
+void* CGxDevice::ComputeContextOf(void* context) {
+    (void)context;
+    return nullptr;
 }
 void* CGxDevice::Slot0f0(void* out) {
     (void)out;

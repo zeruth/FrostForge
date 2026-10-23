@@ -94,7 +94,8 @@ class CGxDevice {
     virtual void Slot0d0();                                 // 0xd0
     virtual void* Slot0d8(void* out, uint64_t a2); // 0xd8 (pure in the reference's base)
     virtual void Slot0e0();                                 // 0xe0
-    virtual void Slot0e8();                                 // 0xe8
+    // The compute context beside a render context (null for none).
+    virtual void* ComputeContextOf(void* context);          // 0xe8
     virtual void* Slot0f0(void* out);            // 0xf0 (pure in the reference's base)
     virtual void Slot0f8();                                 // 0xf8
     virtual void* SwapChainCreate(const GXSWAPCHAINPARAMS* params);  // 0x100
