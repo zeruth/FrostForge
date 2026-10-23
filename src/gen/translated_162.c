@@ -27793,10 +27793,10 @@ undefined2 FUN_141fe2e90(longlong param_1, longlong param_2, longlong param_3, l
         pfVar26 = pfVar23;
       } while (lVar33 != 0);
       (*pcVar3)(((float *)(gen_frame + 0x0)) + 8,pfVar23,plVar31,param_6);
-      fVar20 = REFG(undefined4, 0x14289ee5c);
-      fVar19 = REFG(undefined4, 0x14289ee58);
-      fVar2 = REFG(undefined4, 0x14289ee54);
-      fVar1 = REFG(undefined4, 0x14289ee50);
+      fVar20 = REFG(float, 0x14289ee5c);
+      fVar19 = REFG(float, 0x14289ee58);
+      fVar2 = REFG(float, 0x14289ee54);
+      fVar1 = REFG(float, 0x14289ee50);
       sVar18 = REFG(undefined2, 0x14289ee46);
       sVar17 = REFG(undefined2, 0x14289ee44);
       sVar16 = REFG(undefined2, 0x14289ee42);

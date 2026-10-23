@@ -18441,7 +18441,7 @@ undefined4 FUN_1415e25d0(longlong param_1, uint *param_2)
        iVar17 = ((unsigned long long (*)(unsigned long long, unsigned long long, float))(**(code **)(*plVar4 + 0x68)))((unsigned long long)(plVar4),(unsigned long long)(3),(float)((float)puVar21[6])), iVar17 != 0)) {
       return iVar17;
     }
-    (*(float *)(gen_frame + 0x1c)) = (float)(GEN_BITS(uVar7) >> 0x20);
+    (*(float *)(gen_frame + 0x1c)) = gen_bits2f((unsigned int)((GEN_BITS(uVar7) >> 0x20)));
     if (((float)puVar21[7] != (*(float *)(gen_frame + 0x1c))) &&
        (plVar4 = *(longlong **)(lVar24 + 0x28 + param_1),
        iVar17 = ((unsigned long long (*)(unsigned long long, unsigned long long, float))(**(code **)(*plVar4 + 0x68)))((unsigned long long)(plVar4),(unsigned long long)(4),(float)((float)puVar21[7])), iVar17 != 0)) {
@@ -18471,7 +18471,7 @@ undefined4 FUN_1415e25d0(longlong param_1, uint *param_2)
        iVar17 = ((unsigned long long (*)(unsigned long long, unsigned long long, float))(**(code **)(*plVar4 + 0x68)))((unsigned long long)(plVar4),(unsigned long long)(8),(float)((float)puVar21[0xc])), iVar17 != 0)) {
       return iVar17;
     }
-    (*(float *)(gen_frame + 0x44)) = (float)(GEN_BITS(uVar12) >> 0x20);
+    (*(float *)(gen_frame + 0x44)) = gen_bits2f((unsigned int)((GEN_BITS(uVar12) >> 0x20)));
     if (((float)puVar21[0x11] != (*(float *)(gen_frame + 0x44))) &&
        (plVar4 = *(longlong **)(lVar24 + 0x28 + param_1),
        iVar17 = ((unsigned long long (*)(unsigned long long, unsigned long long, float))(**(code **)(*plVar4 + 0x68)))((unsigned long long)(plVar4),(unsigned long long)(9),(float)((float)puVar21[0x11])), iVar17 != 0)) {
@@ -18483,7 +18483,7 @@ undefined4 FUN_1415e25d0(longlong param_1, uint *param_2)
        iVar17 = ((unsigned long long (*)(unsigned long long, unsigned long long, float))(**(code **)(*plVar4 + 0x68)))((unsigned long long)(plVar4),(unsigned long long)(10),(float)((float)puVar21[0x12])), iVar17 != 0)) {
       return iVar17;
     }
-    (*(float *)(gen_frame + 0x3c)) = (float)(GEN_BITS(uVar11) >> 0x20);
+    (*(float *)(gen_frame + 0x3c)) = gen_bits2f((unsigned int)((GEN_BITS(uVar11) >> 0x20)));
     if (((float)puVar21[0xf] != (*(float *)(gen_frame + 0x3c))) &&
        (plVar4 = *(longlong **)(lVar24 + 0x28 + param_1),
        iVar17 = ((unsigned long long (*)(unsigned long long, unsigned long long, float))(**(code **)(*plVar4 + 0x68)))((unsigned long long)(plVar4),(unsigned long long)(0xb),(float)((float)puVar21[0xf])), iVar17 != 0)) {

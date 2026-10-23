@@ -23038,7 +23038,7 @@ undefined8 * FUN_141348a50(undefined8 *param_1, undefined8 *param_2, undefined8 
   uVar8 = 1;
   fVar9 = *(float *)(param_2 + 1);
   (*(float *)(gen_frame + 0xc)) = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0))));
-  (*(float *)(gen_frame + 0x10)) = (float)(GEN_BITS((*(undefined8 *)(gen_frame + 0x0)) )>> 0x20);
+  (*(float *)(gen_frame + 0x10)) = gen_bits2f((unsigned int)((GEN_BITS((*(undefined8 *)(gen_frame + 0x0)) )>> 0x20)));
   (*(float *)(gen_frame + 0x8)) = fVar9;
   (*(float *)(gen_frame + 0x14)) = fVar9;
   if (1 < (uint)param_3) {

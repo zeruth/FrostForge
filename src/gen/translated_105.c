@@ -10770,7 +10770,7 @@ float FUN_141706900(longlong param_1, ulonglong param_2)
   }
   fVar1 = *(float *)(*(longlong *)(param_1 + 8) + 0x1b8) * REFG(float, 0x1426c975c);
   if (fVar1 <= REFG(undefined4, 0x1427ed6c0)) {
-    fVar1 = REFG(undefined4, 0x1427ed6c0);
+    fVar1 = REFG(float, 0x1427ed6c0);
   }
   return fVar1;
 }

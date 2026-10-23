@@ -840,7 +840,7 @@ undefined1 FUN_141770100(longlong *param_1, undefined8 param_2, int *param_3)
     (*(longlong *)(gen_frame + 0x88)) = param_1[1];
     (*(undefined8 *)(gen_frame + 0x90)) = param_1[2];
     (*(int *)(gen_frame + 0x98)) = (int)*(undefined8 *)(param_3 + 0x1c);
-    (*(float *)(gen_frame + 0x9c)) = (float)(GEN_BITS(*(undefined8 *)(param_3 + 0x1c) )>> 0x20);
+    (*(float *)(gen_frame + 0x9c)) = gen_bits2f((unsigned int)((GEN_BITS(*(undefined8 *)(param_3 + 0x1c) )>> 0x20)));
     (*(float *)(gen_frame + 0xa0)) = gen_bits2f((unsigned int)(*(undefined8 *)(param_3 + 0x1e)));
     (*(undefined4 *)(gen_frame + 0xa4)) = (undefined4)(GEN_BITS(*(undefined8 *)(param_3 + 0x1e) )>> 0x20);
     (*(int *)(gen_frame + 0x60)) = iVar20;
@@ -870,7 +870,7 @@ undefined1 FUN_141770100(longlong *param_1, undefined8 param_2, int *param_3)
     (*(undefined8 *)(gen_frame + 0x90)) = param_1[2];
     (*(int *)(gen_frame + 0x60)) = 4;
     (*(int *)(gen_frame + 0x98)) = (int)*(undefined8 *)(param_3 + 0x1c);
-    (*(float *)(gen_frame + 0x9c)) = (float)(GEN_BITS(*(undefined8 *)(param_3 + 0x1c) )>> 0x20);
+    (*(float *)(gen_frame + 0x9c)) = gen_bits2f((unsigned int)((GEN_BITS(*(undefined8 *)(param_3 + 0x1c) )>> 0x20)));
     (*(float *)(gen_frame + 0xa0)) = gen_bits2f((unsigned int)(*(undefined8 *)(param_3 + 0x1e)));
     (*(undefined4 *)(gen_frame + 0xa4)) = (undefined4)(GEN_BITS(*(undefined8 *)(param_3 + 0x1e) )>> 0x20);
     (*(float *)(gen_frame + 0x64)) = CALLF(float, FUN_1403022c0)(param_2,2);
@@ -7640,7 +7640,7 @@ LAB_14177b128:
   fVar13 = *(float *)(puVar9 + 1);
   pfVar10 = (float *)(**(code **)(*param_1 + 0x1e8))(param_1,&(*(undefined1 *)(gen_frame + 0x10)));
   fVar11 = *pfVar10 - gen_bits2f((unsigned int)(uVar1));
-  fVar12 = pfVar10[1] - (float)(GEN_BITS(uVar1) >> 0x20);
+  fVar12 = pfVar10[1] - gen_bits2f((unsigned int)((GEN_BITS(uVar1) >> 0x20)));
   fVar13 = fVar12 * fVar12 + fVar11 * fVar11 + (pfVar10[2] - fVar13) * (pfVar10[2] - fVar13);
   if (((float *)(gen_frame + 0x68))[0] * ((float *)(gen_frame + 0x68))[0] < fVar13) {
     fVar12 = SQRT(fVar13);

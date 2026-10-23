@@ -1433,15 +1433,18 @@ void* CGxDeviceD3d12::Slot090(void* out, uint64_t a2) {
 }
 
 // A compute command list (FUN_1422c9f00 with type 2, 0x1d80 bytes) handed out as its compute
-// context (+0xfb8, vtable 0x14291a070). The compute context is not ported (GraphicsCommandList
-// leaves m_computeVtable null), so there is none to give: the caller gets null, which the
-// ray-traced shadow passes asking for one check. Forwarded to the translation, the reference's
-// constructor half-built a list beside the port's backend and wrote through a wild pointer
-// (2026-10-22).
+// context (+0xfb8, vtable 0x14291a070). The compute context's slots are still logged no-ops
+// (ComputeContextVtable), but the object is there: the scene's async compute context
+// (FUN_1413c4320) came back null and the world draw faulted calling through it every frame
+// (2026-10-23). Forwarded to the translation, the reference's constructor half-built a list
+// beside the port's backend and wrote through a wild pointer (2026-10-22), so it is built here.
 // ref: FUN_1422ce820
 void* CGxDeviceD3d12::Slot0d8(void* out, uint64_t a2) {
     (void)a2;
-    *static_cast<void**>(out) = nullptr;
+    auto data = reinterpret_cast<const uint8_t*>(this->m_data);
+    void* memory = SMemAlloc(sizeof(GraphicsCommandList), 0xd, s_deviceFile, SStrHashFnv1a(s_deviceFile), 0xbe6, 0);
+    auto list = new (memory) GraphicsCommandList(D3D12_COMMAND_LIST_TYPE_COMPUTE, data[0x219]);
+    *static_cast<void**>(out) = &list->m_computeVtable;
     return out;
 }
 

@@ -8209,7 +8209,7 @@ float FUN_141db2390(float *param_1, longlong param_2, undefined8 param_3, double
   if ((char)uVar2 != '\x02') {
     uVar2 = CALLF(undefined *, FUN_14051ac40)();
     uVar2 = CALLF(ulonglong, FUN_14022b1b0)(param_3,0xe,0,uVar2);
-    fVar4 = REFG(undefined4, 0x143261778);
+    fVar4 = REFG(float, 0x143261778);
     fVar6 = REFG(float, 0x143261780);
     fVar8 = REFG(float, 0x14326177c);
     if ((char)uVar2 == '\x01') {
@@ -8976,7 +8976,7 @@ undefined4 FUN_141db3c80(float *param_1, float *param_2, longlong param_3, float
   lVar3 = *(longlong *)(param_3 + 8);
   fVar7 = REFG(float, 0x143261780);
   fVar8 = REFG(float, 0x14326177c);
-  fVar9 = REFG(undefined4, 0x143261778);
+  fVar9 = REFG(float, 0x143261778);
   if ((char)uVar5 != '\0') {
     fVar7 = param_2[2];
     fVar8 = param_2[1];

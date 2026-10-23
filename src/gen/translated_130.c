@@ -1801,10 +1801,10 @@ undefined8 FUN_141a8dd70(longlong param_1, undefined8 param_2, undefined8 param_
   
   fVar1 = gen_bits2f((unsigned int)(param_2));
   if ((((((0.0 <= fVar1) && (fVar1 <= REFG(float, 0x142618d64))) &&
-        ((*(undefined4 *)(gen_frame + 0x4)) = (float)(GEN_BITS(param_2) >> 0x20), 0.0 <= (*(undefined4 *)(gen_frame + 0x4)))) &&
+        ((*(undefined4 *)(gen_frame + 0x4)) = gen_bits2f((unsigned int)((GEN_BITS(param_2) >> 0x20))), 0.0 <= (*(undefined4 *)(gen_frame + 0x4)))) &&
        (((*(undefined4 *)(gen_frame + 0x4)) <= REFG(float, 0x142618d64) && ((*(undefined4 *)(gen_frame + 0x48)) = gen_bits2f((unsigned int)(param_3)), 0.0 <= (*(undefined4 *)(gen_frame + 0x48)))))) &&
       (((*(undefined4 *)(gen_frame + 0x48)) <= REFG(float, 0x142618d64) &&
-       (((*(undefined4 *)(gen_frame + 0x4c)) = (float)(GEN_BITS(param_3) >> 0x20), 0.0 <= (*(undefined4 *)(gen_frame + 0x4c)) &&
+       (((*(undefined4 *)(gen_frame + 0x4c)) = gen_bits2f((unsigned int)((GEN_BITS(param_3) >> 0x20))), 0.0 <= (*(undefined4 *)(gen_frame + 0x4c)) &&
         ((*(undefined4 *)(gen_frame + 0x4c)) <= REFG(float, 0x142618d64))))))) && ((fVar1 <= (*(undefined4 *)(gen_frame + 0x48)) && ((*(undefined4 *)(gen_frame + 0x4)) <= (*(undefined4 *)(gen_frame + 0x4c))))))
   {
     *(undefined8 *)(param_1 + 0x364) = param_2;

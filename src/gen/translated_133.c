@@ -1018,7 +1018,7 @@ undefined8 FUN_141b17660(longlong param_1)
           fVar10 = *(float *)(param_1 + 0x4f8) * *(float *)(param_1 + 0x4e8) * fVar4;
           *(float *)(puVar1 + 0x1c) = ((*(float *)(gen_frame + 0x0)) - gen_bits2f((unsigned int)(uVar2))) * fVar10 * fVar9 + fVar10;
           *(float *)(puVar1 + 0x18) =
-               fVar10 - ((*(float *)(gen_frame + 0x4)) - (float)(GEN_BITS(uVar2) >> 0x20)) * fVar10 * fVar9;
+               fVar10 - ((*(float *)(gen_frame + 0x4)) - gen_bits2f((unsigned int)((GEN_BITS(uVar2) >> 0x20)))) * fVar10 * fVar9;
           *(float *)(puVar1 + 0x30) = (*(float *)(gen_frame + 0x8)) - *(float *)(param_1 + 0x4d8);
         }
         fVar9 = *(float *)(puVar1 + 0x18);

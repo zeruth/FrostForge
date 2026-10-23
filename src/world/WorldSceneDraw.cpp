@@ -103,23 +103,29 @@ void FrustumFromCorners(WORLDFRUSTUM* frustum, const float* corners) {
 }
 
 // The target scale the environment's shaders read: the targets' size over the frame buffer's,
-// and the inverse size (1, 1, 0, 0 without targets).
+// and the inverse size (1, 1, 0, 0 without targets). The frame buffer's size comes by value,
+// width in the low half and height in the high (rcx); the rect is two floats then four ints
+// (`cvtsi2ss` of +8..+0x14). Taking the size as a pointer read the translated draw's packed
+// 2560x1440 as an address and faulted every frame (2026-10-23).
 // ref: FUN_14068ea50
-void TargetScale(const int32_t* bufferSize, const float* rect, float* out) {
-    out[0] = static_cast<float>(static_cast<int32_t>(rect[2]))
-        / (static_cast<float>(bufferSize[0]) * static_cast<float>(static_cast<int32_t>(rect[4])));
-    out[1] = static_cast<float>(static_cast<int32_t>(rect[3]))
-        / (static_cast<float>(bufferSize[1]) * static_cast<float>(static_cast<int32_t>(rect[5])));
-    out[2] = rect[0] / static_cast<float>(static_cast<int32_t>(rect[4]));
-    out[3] = rect[1] / static_cast<float>(static_cast<int32_t>(rect[5]));
+void TargetScale(uint64_t bufferSize, const void* rect, float* out) {
+    auto floats = static_cast<const float*>(rect);
+    auto ints = static_cast<const int32_t*>(rect);
+    float width = static_cast<float>(static_cast<int32_t>(bufferSize));
+    float height = static_cast<float>(static_cast<int32_t>(bufferSize >> 32));
+    out[0] = static_cast<float>(ints[2]) / (width * static_cast<float>(ints[4]));
+    out[1] = static_cast<float>(ints[3]) / (height * static_cast<float>(ints[5]));
+    out[2] = floats[0] / static_cast<float>(ints[4]);
+    out[3] = floats[1] / static_cast<float>(ints[5]);
 }
 
+// (the frame buffer's size by value, as TargetScale takes it)
 // ref: FUN_1412b8210
-void RenderTargetScale(const int32_t* bufferSize, const GXRENDERTARGETS* targets, float* out) {
+void RenderTargetScale(uint64_t bufferSize, const GXRENDERTARGETS* targets, float* out) {
     if (targets != nullptr) {
         int32_t size[6];
         int32_t* targetSize = GxRenderTargetsSize(targets, size);
-        float rect[6] = {0.0f, 0.0f};
+        int32_t rect[6] = {0, 0};
         std::memcpy(&rect[2], targetSize, 8);
         std::memcpy(&rect[4], targetSize, 8);
         TargetScale(bufferSize, rect, out);
@@ -618,7 +624,9 @@ void CWorldScene::Render(WORLDRENDERPARAMS* params) {
     float targetScale[4] = {};
     FRAMEBUFFER* source = params->m_shared != nullptr ? params->m_shared : params->m_scene;
     if (source != nullptr) {
-        RenderTargetScale(source->m_size, source->m_targets.m_count != 0 ? &source->m_targets : nullptr, targetScale);
+        uint64_t size;
+        std::memcpy(&size, source->m_size, 8);
+        RenderTargetScale(size, source->m_targets.m_count != 0 ? &source->m_targets : nullptr, targetScale);
     }
     float shadowFactor = static_cast<float>(FramePassesNoShadowFactor() ^ 1);
     float color[4];

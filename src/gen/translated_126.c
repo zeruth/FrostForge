@@ -15103,7 +15103,7 @@ undefined4 FUN_141a0f980(longlong param_1, longlong param_2)
   fVar3 = ((float (*)())(**(code **)(*plVar2 + 0x38)))(plVar2);
   auVar4 = CALLF(gen_v16, FUN_14240ad20)(fVar3 - REFG(float, 0x142632530));
   fVar5 = *(float *)(param_1 + 0x18) - gen_bits2f((unsigned int)(*(undefined8 *)(param_2 + 0x10)));
-  fVar8 = *(float *)(param_1 + 0x1c) - (float)(GEN_BITS(*(undefined8 *)(param_2 + 0x10) )>> 0x20);
+  fVar8 = *(float *)(param_1 + 0x1c) - gen_bits2f((unsigned int)((GEN_BITS(*(undefined8 *)(param_2 + 0x10) )>> 0x20)));
   fVar3 = fVar8 * fVar8 + fVar5 * fVar5;
   if (REFG(float, 0x14261a954) < fVar3) {
     fVar3 = REFG(float, 0x142618d64) / SQRT(fVar3);
@@ -15900,7 +15900,7 @@ undefined1 FUN_141a10af0(longlong *param_1, longlong param_2)
     *(int *)((longlong)param_1 + 0x374) = (int)param_1[0x6e];
     (*(float *)(gen_frame + 0x100)) = 0.0;
     fVar13 = *(float *)((longlong)param_1 + 0x33c);
-    fVar10 = (float)(GEN_BITS((*(undefined8 *)(gen_frame + 0x0)) )>> 0x20);
+    fVar10 = gen_bits2f((unsigned int)((GEN_BITS((*(undefined8 *)(gen_frame + 0x0)) )>> 0x20)));
 LAB_141a10d75:
     fVar9 = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0))));
   }

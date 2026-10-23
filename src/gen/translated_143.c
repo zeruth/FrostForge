@@ -4953,7 +4953,7 @@ undefined8 FUN_141ced8f0(longlong param_1)
   fVar2 = *(float *)(param_1 + 0x1c);
   fVar3 = REFG(float, 0x14261a97c);
   if ((REFG(float, 0x14261a97c) <= fVar2) && (fVar3 = fVar2, REFG(undefined4, 0x1428472d4) <= fVar2)) {
-    fVar3 = REFG(undefined4, 0x1428472d4);
+    fVar3 = REFG(float, 0x1428472d4);
   }
   *(float *)(param_1 + 0x1c) = fVar3;
   GEN_COPY(uVar1, REFG(float, 0x14261aa20));

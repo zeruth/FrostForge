@@ -17301,7 +17301,7 @@ undefined1 FUN_1412018d0(longlong param_1, longlong *param_2, longlong param_3)
   
   lVar3 = param_2[3];
   local_28 = gen_bits2f((unsigned int)(*(undefined8 *)(param_1 + 0x368)));
-  fStack_24 = (float)(GEN_BITS(*(undefined8 *)(param_1 + 0x368) )>> 0x20);
+  fStack_24 = gen_bits2f((unsigned int)((GEN_BITS(*(undefined8 *)(param_1 + 0x368) )>> 0x20)));
   lVar6 = (ulonglong)CONCAT24(*(undefined2 *)(lVar3 + 0x72),*(undefined4 *)(lVar3 + 0x74)) +
           (ulonglong)*(ushort *)(param_2[1] + 10) * 4;
   fVar9 = *(float *)(param_1 + 0x370);

@@ -29597,7 +29597,7 @@ double FUN_1424105b0(double param_1, double param_2)
       }
       goto LAB_142411b40;
     }
-    local_88 = REFG(undefined8, 0x142954e00);
+    local_88 = REFG(double, 0x142954e00);
     if ((double)((ulonglong)REFG(undefined8, 0x142954dd0) & (ulonglong)param_1) != REFG(undefined8, 0x142954dd0)) {
       if (param_1 == REFG(double, 0x142954df8)) {
         dVar8 = 0.0;
@@ -29826,7 +29826,7 @@ LAB_142411870:
         if (lVar7 <= REFG(undefined8, 0x142954e60)) {
           if ((REFG(undefined8, 0x142954e68) >> ((byte)lVar7 & 0x3f) & uVar5) != 0) goto LAB_142411870;
           if ((REFG(undefined8, 0x142954e70) >> ((byte)lVar7 & 0x3f) & uVar5) != 0) {
-            local_88 = REFG(undefined8, 0x142954dd0);
+            local_88 = REFG(double, 0x142954dd0);
           }
         }
         if (param_1 != REFG(undefined8, 0x142954e40)) {
@@ -29887,7 +29887,7 @@ LAB_142411b90:
     }
     goto LAB_1424110f0;
   }
-  local_88 = REFG(undefined8, 0x142954e00);
+  local_88 = REFG(double, 0x142954e00);
   if ((double)((ulonglong)REFG(undefined8, 0x142954dd0) & (ulonglong)param_1) != REFG(undefined8, 0x142954dd0)) {
     if (param_1 == REFG(double, 0x142954df8)) {
       dVar8 = 0.0;
@@ -30076,7 +30076,7 @@ LAB_142410e30:
       if (lVar7 <= REFG(undefined8, 0x142954e60)) {
         if ((REFG(undefined8, 0x142954e68) >> ((byte)lVar7 & 0x3f) & uVar5) != 0) goto LAB_142410e30;
         if ((REFG(undefined8, 0x142954e70) >> ((byte)lVar7 & 0x3f) & uVar5) != 0) {
-          local_88 = REFG(undefined8, 0x142954dd0);
+          local_88 = REFG(double, 0x142954dd0);
         }
       }
       if (param_1 != REFG(undefined8, 0x142954e40)) {
@@ -31834,7 +31834,7 @@ double FUN_142419c50(double param_1)
       dVar5 = CALLF(double, FUN_14241e848)(param_1,GEN_ARG_DOUBLE(INFINITY),REFG(undefined4, 0x142957598));
     }
     else {
-      dVar5 = REFG(undefined8, 0x142957660);
+      dVar5 = REFG(double, 0x142957660);
       if (param_1 <= REFG(double, 0x142957620)) {
         dVar5 = CALLF(double, FUN_14241e848)(param_1,0.0,REFG(undefined4, 0x142957594));
       }

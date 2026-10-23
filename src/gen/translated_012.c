@@ -11199,7 +11199,7 @@ undefined8 FUN_140230080(longlong *param_1, ulonglong param_2, longlong param_3,
       do {
         lVar9 = *(longlong *)(param_4 + uVar14 * 8);
         if (lVar9 != 0) {
-          (*(float *)(gen_frame + 0x2c)) = (float)(GEN_BITS(*(undefined8 *)(param_3 + 0x10) )>> 0x20);
+          (*(float *)(gen_frame + 0x2c)) = gen_bits2f((unsigned int)((GEN_BITS(*(undefined8 *)(param_3 + 0x10) )>> 0x20)));
           fVar18 = gen_bits2f((unsigned int)(*(undefined8 *)(param_3 + 0x10))) * fVar3;
           fVar17 = (*(float *)(gen_frame + 0x2c)) * fVar1 * fVar3;
           (*(float *)(gen_frame + 0xc)) = fVar18 * fVar3;

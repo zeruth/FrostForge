@@ -13473,7 +13473,7 @@ LAB_14243f146:
       fVar24 = 0.0;
       if (puVar15 != (undefined8 *)0x0) {
         (*(undefined8 *)(gen_frame + 0x1040)) = *puVar15;
-        fVar27 = (float)(GEN_BITS((*(undefined8 *)(gen_frame + 0x1040)) )>> 0x20);
+        fVar27 = gen_bits2f((unsigned int)((GEN_BITS((*(undefined8 *)(gen_frame + 0x1040)) )>> 0x20)));
         fVar22 = *(float *)(puVar15 + 1);
         fVar24 = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x1040))));
       }

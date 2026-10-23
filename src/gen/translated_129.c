@@ -367,7 +367,7 @@ undefined4 FUN_141a686e0(int param_1)
                 (*(undefined8 *)(gen_frame + 0x80)) = *(undefined8 *)(piVar8 + 4);
                 if ((piVar8[6] != 0) &&
                    (((piVar8[3] != 0 && (*piVar8 != 1)) && (piVar8[6] == iVar17)))) {
-                  (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x80)) + 4)) = (float)(GEN_BITS((*(undefined8 *)(gen_frame + 0x80)) )>> 0x20);
+                  (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x80)) + 4)) = gen_bits2f((unsigned int)((GEN_BITS((*(undefined8 *)(gen_frame + 0x80)) )>> 0x20)));
                   fVar18 = ((*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x80)) + 4)) - fVar4) * ((*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x80)) + 4)) - fVar4) +
                            (gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x80)))) - fVar3) * (gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x80)))) - fVar3);
                   uVar12 = 0xffffffff;
@@ -20614,7 +20614,7 @@ LAB_141a83ee3:
         fVar27 = *(float *)(lVar10 + 4 + uVar13 * 0xc);
         fVar29 = *(float *)(lVar10 + uVar13 * 0xc);
         fVar26 = gen_bits2f((unsigned int)(*(undefined8 *)(lVar10 + uVar15 * 0xc))) - fVar29;
-        fVar25 = gen_bits2f((unsigned int)(GEN_F32BITS(((float)(GEN_BITS(*(undefined8 *)(lVar10 + uVar15 * 0xc) )>> 0x20) -
+        fVar25 = gen_bits2f((unsigned int)(GEN_F32BITS((gen_bits2f((unsigned int)((GEN_BITS(*(undefined8 *)(lVar10 + uVar15 * 0xc) )>> 0x20))) -
                                fVar27)) ^ uVar1));
         fVar21 = fVar26 * fVar26 + fVar25 * fVar25;
         if (fVar23 < fVar21) {

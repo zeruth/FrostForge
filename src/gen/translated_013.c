@@ -5890,7 +5890,7 @@ gen_v16 FUN_1402467c0(longlong __return_storage_ptr__)
   fVar21 = *(float *)(__return_storage_ptr__ + 0xe9c) - *(float *)(__return_storage_ptr__ + 0xe94);
   fVar30 = *(float *)(__return_storage_ptr__ + 0xeb0) / fVar27;
   (*(float *)(gen_frame + 0x0)) = gen_bits2f((unsigned int)(*(undefined8 *)(__return_storage_ptr__ + 0x2f0)));
-  (*(float *)(gen_frame + 0x4)) = (float)(GEN_BITS(*(undefined8 *)(__return_storage_ptr__ + 0x2f0) )>> 0x20);
+  (*(float *)(gen_frame + 0x4)) = gen_bits2f((unsigned int)((GEN_BITS(*(undefined8 *)(__return_storage_ptr__ + 0x2f0) )>> 0x20)));
   pfVar17 = ((float *)(gen_frame + 0x38)) + 1;
   ((float *)(gen_frame + 0x38))[0] = (float)(int)(*(float *)(gen_frame + 0x0)) / (fVar30 * fVar21);
   (*(float *)(gen_frame + 0x2c)) = (float)(int)(*(float *)(gen_frame + 0x0));

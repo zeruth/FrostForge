@@ -14876,10 +14876,10 @@ undefined4 FUN_142040270(ulonglong param_1, float *param_2, int param_3)
           fVar26 = fVar32;
         }
         param_2[uVar24 * 2 + 1] = fVar27;
-        fVar14 = REFG(undefined4, 0x1428d22ac);
-        fVar13 = REFG(undefined4, 0x1428d22a8);
-        fVar12 = REFG(undefined4, 0x1428d22a4);
-        fVar11 = REFG(undefined4, 0x1428d22a0);
+        fVar14 = REFG(float, 0x1428d22ac);
+        fVar13 = REFG(float, 0x1428d22a8);
+        fVar12 = REFG(float, 0x1428d22a4);
+        fVar11 = REFG(float, 0x1428d22a0);
         uVar24 = uVar24 + 1;
         fVar36 = fVar27;
         if (fVar27 <= fVar29) {

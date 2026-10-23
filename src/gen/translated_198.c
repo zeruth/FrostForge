@@ -4894,9 +4894,9 @@ LAB_1425541bf:
           uVar16 = (ulonglong)uVar17;
           do {
             fVar29 = REFG(float, 0x14261aa10);
-            fVar26 = REFG(undefined4, 0x14261aa14);
-            fVar28 = REFG(undefined4, 0x14261aa18);
-            fVar24 = REFG(undefined4, 0x14261aa1c);
+            fVar26 = REFG(float, 0x14261aa14);
+            fVar28 = REFG(float, 0x14261aa18);
+            fVar24 = REFG(float, 0x14261aa1c);
             if (fVar10 < GEN_FABS(pfVar14[1])) {
               fVar24 = fVar5 / pfVar14[1];
               fVar29 = (fVar24 * pfVar14[-2] + fVar5) * fVar6;
@@ -9151,10 +9151,10 @@ uint FUN_14255a000(float *param_1, ulonglong param_2, uint *param_3, ulonglong p
     uVar2 = REFG(undefined8, 0x142986260);
     *(undefined8 *)(param_1 + 0x54) = uVar4;
     *(undefined8 *)(param_1 + 0x56) = uVar5;
-    fVar10 = REFG(undefined4, 0x14298627c);
-    fVar9 = REFG(undefined4, 0x142986278);
-    fVar8 = REFG(undefined4, 0x142986274);
-    fVar7 = REFG(undefined4, 0x142986270);
+    fVar10 = REFG(float, 0x14298627c);
+    fVar9 = REFG(float, 0x142986278);
+    fVar8 = REFG(float, 0x142986274);
+    fVar7 = REFG(float, 0x142986270);
     *(undefined8 *)(param_1 + 0x58) = uVar2;
     *(undefined8 *)(param_1 + 0x5a) = uVar6;
   }

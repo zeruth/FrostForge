@@ -9214,7 +9214,7 @@ undefined1 FUN_141bef470(longlong *param_1)
     uVar8 = *(undefined8 *)(lVar9 + 0x10);
     fVar11 = *(float *)(lVar9 + 0x18);
     (**(code **)(**(longlong **)(lVar7 + 0x30) + 0xe0))(*(longlong **)(lVar7 + 0x30),&(*(float *)(gen_frame + 0x10)));
-    (*(float *)(gen_frame + 0x14)) = (float)(GEN_BITS(uVar8) >> 0x20) - (*(float *)(gen_frame + 0x14));
+    (*(float *)(gen_frame + 0x14)) = gen_bits2f((unsigned int)((GEN_BITS(uVar8) >> 0x20))) - (*(float *)(gen_frame + 0x14));
     (*(float *)(gen_frame + 0x10)) = gen_bits2f((unsigned int)(uVar8)) - (*(float *)(gen_frame + 0x10));
     fVar11 = fVar11 - (*(float *)(gen_frame + 0x18));
     fVar14 = SQRT((*(float *)(gen_frame + 0x14)) * (*(float *)(gen_frame + 0x14)) + (*(float *)(gen_frame + 0x10)) * (*(float *)(gen_frame + 0x10)) + fVar11 * fVar11);

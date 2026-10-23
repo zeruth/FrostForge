@@ -11863,7 +11863,7 @@ uint FUN_142540ca0(undefined8 *param_1, char param_2)
       fVar10 = *pfVar4;
       fVar9 = pfVar4[1];
       fVar14 = pfVar5[2];
-      (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) = (float)(GEN_BITS((*(undefined8 *)(gen_frame + 0x10)) )>> 0x20);
+      (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) = gen_bits2f((unsigned int)((GEN_BITS((*(undefined8 *)(gen_frame + 0x10)) )>> 0x20)));
       (*(float *)(gen_frame + 0x18)) = fVar14;
       fVar11 = fVar10;
       fVar12 = fVar9;

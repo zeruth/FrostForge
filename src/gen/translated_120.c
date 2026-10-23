@@ -22596,7 +22596,7 @@ undefined1 FUN_14191f600(undefined8 param_1, undefined8 *param_2, uint *param_3)
     uVar7 = *puVar5;
     uVar2 = CALLF(undefined4, FUN_1418e9ed0)();
     (*(float *)(gen_frame + 0x0)) = gen_bits2f((unsigned int)(uVar7));
-    fVar9 = (float)(GEN_BITS(uVar7) >> 0x20);
+    fVar9 = gen_bits2f((unsigned int)((GEN_BITS(uVar7) >> 0x20)));
   }
   *param_3 = uVar2;
   bVar1 = CALLF(undefined1, FUN_141918190)(param_1);

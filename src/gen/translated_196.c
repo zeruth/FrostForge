@@ -11053,7 +11053,7 @@ double FUN_1425283b0(undefined8 *param_1, undefined8 *param_2)
   uVar1 = REFG(undefined8, 0x1447ce670);
   *param_2 = REFG(undefined8, 0x1447ce668);
   param_2[1] = uVar1;
-  dVar2 = REFG(undefined8, 0x1447ce678);
+  dVar2 = REFG(double, 0x1447ce678);
   param_2[2] = REFG(undefined8, 0x1447ce678);
   return dVar2;
 }
