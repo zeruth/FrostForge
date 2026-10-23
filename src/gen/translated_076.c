@@ -4976,15 +4976,16 @@ undefined8 FUN_141238a70(int *param_1)
     param_1[5] = 0;
   }
   else if (iVar2 == 1) {
+    int gen_keep0 = *param_1;
     param_1[0] = 0;
     param_1[1] = 0;
     param_1[2] = 0;
     param_1[3] = 0;
     param_1[4] = 0;
     param_1[5] = 0;
-    if (*param_1 != 0) {
+    if (gen_keep0 != 0) {
       param_1[4] = 1;
-      *param_1 = *param_1;
+      *param_1 = gen_keep0;
       return 0;
     }
   }
