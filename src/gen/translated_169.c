@@ -11224,7 +11224,7 @@ undefined8 FUN_142107810(longlong param_1, longlong param_2, undefined8 *param_3
     *(undefined8 *)(param_1 + 0x1a8) = param_5;
     *(undefined8 *)(param_1 + 0x1b0) = param_6;
     *(undefined8 *)(param_1 + 0x80) = uVar4;
-    uVar2 = REFG(float, 0x142618d64);
+    GEN_COPY(uVar2, REFG(float, 0x142618d64));
     *(undefined1 *)(param_1 + 0x90) = param_9;
     *(undefined1 *)(param_1 + 0x88) = param_4;
     *(longlong *)(param_1 + 0xc0) = param_2;
@@ -14417,7 +14417,7 @@ LAB_14210ccb2:
     uVar7 = param_4[6];
     uVar3 = param_4[7];
     *(undefined1 *)(param_1 + 0x90) = param_5;
-    uVar9 = REFG(float, 0x142618d64);
+    GEN_COPY(uVar9, REFG(float, 0x142618d64));
     if (0x6400000 < param_6) {
       param_6 = 0x6400000;
     }

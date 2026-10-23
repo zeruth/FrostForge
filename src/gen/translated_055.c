@@ -1053,7 +1053,7 @@ LAB_140ae99bd:
     CALLF(undefined8, FUN_142424d80)(param_1,"stack overflow");
     return 0;
   }
-  CALLF(undefined1 *, FUN_1402b3b50)(param_1, (double)(*(undefined4 *)((char *)&auVar5 + 0)));
+  CALLF(undefined1 *, FUN_1402b3b50)(param_1, (double)gen_bits2f((unsigned int)((*(undefined4 *)((char *)&auVar5 + 0)))));
   return 1;
 }
 

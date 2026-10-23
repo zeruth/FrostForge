@@ -60,10 +60,14 @@ void DevicesChanged() {
 }
 
 // The game time in milliseconds of a day.
-// ref: FUN_1412e1b90
+extern "C" unsigned long long FUN_1412e1b90();
+// translated: FUN_1412e1b90
 int32_t GetGameTime() {
-    FROST_UNIMPLEMENTED();  // FUN_1416510a0(&DAT_142d1a040): the world clock's time of day
-    return 0;
+    __try {
+        return static_cast<int32_t>(FUN_1412e1b90());
+    } __except (GenFault(0x1412e1b90ull, GetExceptionInformation())) {
+        return static_cast<int32_t>(0);
+    }
 }
 
 // LAB_1412e1b80
@@ -78,25 +82,44 @@ float One(void* def) {
     return 1.0f;
 }
 
-// ref: FUN_1412e6500
+extern "C" unsigned long long FUN_1412e6500(unsigned long long);
+// translated: FUN_1412e6500
 void Slot170(int32_t handle) {
-    (void)handle;
-    FROST_UNIMPLEMENTED();  // FUN_1412f9e20, FUN_1412fcd00, FUN_1412fcbe0: the zone music and ambience
+    __try {
+        FUN_1412e6500((unsigned long long)handle);
+    } __except (GenFault(0x1412e6500ull, GetExceptionInformation())) {
+    }
 }
+
+extern "C" unsigned long long FUN_14134e2e0(unsigned long long, unsigned long long, unsigned long long,
+    unsigned long long, unsigned long long);
 
 // The emitter grid cell of a world position: the map chunk and its sub-cell, in quarters.
 // ref: FUN_1412e62d0
 void EmitterGridCell(void* position, uint32_t* x, uint32_t* y) {
-    (void)position;
-    FROST_UNIMPLEMENTED();  // FUN_14134e2e0: the world position's chunk
-    *x = 0;
-    *y = 0;
+    // the world position's chunk and the sub-cell within it (FUN_14134e2e0, translated)
+    int32_t chunkX = 0;
+    int32_t chunkY = 0;
+    int32_t cellX = 0;
+    int32_t cellY = 0;
+    __try {
+        FUN_14134e2e0(reinterpret_cast<unsigned long long>(position), reinterpret_cast<unsigned long long>(&chunkX),
+            reinterpret_cast<unsigned long long>(&chunkY), reinterpret_cast<unsigned long long>(&cellX),
+            reinterpret_cast<unsigned long long>(&cellY));
+    } __except (GenFault(0x14134e2e0ull, GetExceptionInformation())) {
+    }
+    *x = static_cast<uint32_t>(chunkX * 0x10 + cellX) >> 2;
+    *y = static_cast<uint32_t>(chunkY * 0x10 + cellY) >> 2;
 }
 
 // Once the engine is up: the async loader's sound callback, when the loader exists.
-// ref: FUN_1412e6b40
+extern "C" unsigned long long FUN_1412e6b40();
+// translated: FUN_1412e6b40
 void InitDone() {
-    FROST_UNIMPLEMENTED();  // FUN_1418ea470(0) / FUN_1418e6720(FUN_1412e64c0, 0)
+    __try {
+        FUN_1412e6b40();
+    } __except (GenFault(0x1412e6b40ull, GetExceptionInformation())) {
+    }
 }
 
 // Whether a sound kit's flags keep it out (SoundKit field 3, against two game states).
@@ -202,9 +225,13 @@ void InitDSPEffects() {
 }
 
 // What a session adds once the system is up: the zone tables and the DB2 watchers.
-// ref: FUN_1412e5a70
+extern "C" unsigned long long FUN_1412e5a70();
+// translated: FUN_1412e5a70
 void InitSession() {
-    FROST_UNIMPLEMENTED();  // FUN_141310ed0, FUN_14130e020, FUN_14130dd00, FUN_1412f8960 and three DB2 patch callbacks
+    __try {
+        FUN_1412e5a70();
+    } __except (GenFault(0x1412e5a70ull, GetExceptionInformation())) {
+    }
 }
 
 // The engine start with the configure callback (FUN_1412e59c0's body, inlined again in
@@ -360,26 +387,19 @@ void SI3UpdateReverb() {
 #pragma comment(linker, "/include:GenForwardMissing")
 #pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
 #pragma comment(linker, "/alternatename:FUN_141238570=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_1412e64c0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412e1b90=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412e5a70=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412e6500=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412e6b40=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412f7a50=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412f7e40=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412f8360=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_1412f8960=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_1412f9e20=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_1412fcbe0=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_1412fcd00=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_14130dd00=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_14130e020=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14130fe30=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141310280=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_141310ed0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1413118e0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141311de0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141312590=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14134e2e0=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_1416510a0=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_1418e6720=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_1418ea470=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1419fa0c0=GenForwardMissing")
 // ---- end of link fallbacks ----
 

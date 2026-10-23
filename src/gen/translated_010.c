@@ -6351,7 +6351,7 @@ int FUN_14020d120(void)
     if ((int)(&REFG(undefined4, 0x14297ab90))[iVar1] < iVar2 + -3) {
       iVar1 = iVar1 + 1;
     }
-    (&REFG(undefined1, 0x1447ae400))[lVar3] = (char)iVar1;
+    ((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x1447ae400)))[lVar3] = (char)iVar1;
     if ((int)(&REFG(undefined4, 0x14297ab90))[iVar1] <= iVar2 + -3) {
       iVar1 = iVar1 + 1;
     }

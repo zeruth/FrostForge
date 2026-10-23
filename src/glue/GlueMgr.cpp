@@ -94,11 +94,14 @@ CSimpleFrame* CreateModelFFX(CSimpleFrame* parent) {
     return new CSimpleModelFFX(parent);
 }
 
-// ref: FUN_14167b1d0
+extern "C" unsigned long long FUN_14167b1d0(unsigned long long);
+// translated: FUN_14167b1d0
 CSimpleFrame* CreatePlayerModel(CSimpleFrame* parent) {
-    (void)parent;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    __try {
+        return reinterpret_cast<CSimpleFrame*>(FUN_14167b1d0((unsigned long long)parent));
+    } __except (GenFault(0x14167b1d0ull, GetExceptionInformation())) {
+        return nullptr;
+    }
 }
 
 // ref: FUN_14167b220
@@ -111,24 +114,34 @@ CSimpleFrame* CreateModelScene(CSimpleFrame* parent) {
     return new ModelSceneFrame(parent);
 }
 
-// ref: FUN_14167ae90
+extern "C" unsigned long long FUN_14167ae90(unsigned long long);
+// translated: FUN_14167ae90
 CSimpleFrame* CreateCheckout(CSimpleFrame* parent) {
-    (void)parent;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    __try {
+        return reinterpret_cast<CSimpleFrame*>(FUN_14167ae90((unsigned long long)parent));
+    } __except (GenFault(0x14167ae90ull, GetExceptionInformation())) {
+        return nullptr;
+    }
 }
 
 // The kiosk settings block, and its CVars.
-// ref: FUN_14192fa70
+extern "C" unsigned long long FUN_14192fa70();
+// translated: FUN_14192fa70
 void* GetKioskSettings() {
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    __try {
+        return reinterpret_cast<void*>(FUN_14192fa70());
+    } __except (GenFault(0x14192fa70ull, GetExceptionInformation())) {
+        return nullptr;
+    }
 }
 
-// ref: FUN_14192fac0
+extern "C" unsigned long long FUN_14192fac0(unsigned long long);
+// translated: FUN_14192fac0
 void KioskRegisterCVars(void* settings) {
-    (void)settings;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14192fac0((unsigned long long)settings);
+    } __except (GenFault(0x14192fac0ull, GetExceptionInformation())) {
+    }
 }
 
 // Script-function implementations the glue installs into the client's function slots.
@@ -206,9 +219,43 @@ void Sub1416A7BB0() {
     }
 }
 
-// Walks the glue model-info list (0x142e3fdc0) and preloads each entry.
+extern "C" unsigned long long FUN_1405a0640(unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_14173ab20(unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_1405db2a0(unsigned long long);
+
+// The table walk FUN_14167c1c0 keeps on its stack: the row (-2 past the end), and the table.
+struct GLUEMODELITER {
+    int32_t m_row;
+    int32_t m_index;
+    uint64_t m_record;
+    uint64_t* m_table;
+};
+
+// Walks the glue model-info table (DAT_142e3fdc0, the reference's, filled by the translated DB
+// load): each record's model description (FUN_14173ab20, 0x128 bytes) is preloaded
+// (FUN_1405db2a0). The tail of FUN_14167c1c0.
 void PreloadGlueModels() {
-    FROST_UNIMPLEMENTED();
+    auto table = *reinterpret_cast<uint64_t**>(0x142e3fdc0ull);
+    if (table == nullptr) {
+        return;
+    }
+    __try {
+        GLUEMODELITER it = {-2, 0, 0, table};
+        uint8_t first[24];
+        auto begin = reinterpret_cast<const int32_t*>(FUN_1405a0640(reinterpret_cast<unsigned long long>(table),
+            reinterpret_cast<unsigned long long>(first)));
+        it.m_row = begin[0];
+        it.m_index = begin[1];
+        it.m_record = *reinterpret_cast<const uint64_t*>(begin + 2);
+        auto next = reinterpret_cast<void (*)(uint64_t*, GLUEMODELITER*)>(*reinterpret_cast<uint64_t*>(*table + 0x50));
+        while (it.m_row != -2) {
+            uint8_t model[0x128];
+            FUN_14173ab20(it.m_record, reinterpret_cast<unsigned long long>(model));
+            FUN_1405db2a0(reinterpret_cast<unsigned long long>(model));
+            next(table, &it);
+        }
+    } __except (GenFault(0x14167c1c0ull, GetExceptionInformation())) {
+    }
 }
 
 }
@@ -577,10 +624,15 @@ bool CursorImageFromMips(const char* name, uint32_t* cursor, uint8_t** mips, uin
 
 namespace {
 
-// ref: FUN_141527450
+// The gamepad state's cursor mode applied, on the reference's own state (DAT_142d082d0, in the
+// mapped image, which the translated gamepad code keeps).
+extern "C" unsigned long long FUN_141527450(unsigned long long, unsigned long long);
+// translated: FUN_141527450
 void Sub141527450(uint32_t value) {
-    (void)value;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141527450(0x142d082d0ull, value);
+    } __except (GenFault(0x141527450ull, GetExceptionInformation())) {
+    }
 }
 
 extern "C" unsigned long long FUN_141cfe3e0();
@@ -787,9 +839,13 @@ void Sub1424CD500() {
 // Forwarded with tools/forward_stubs.py --all, the translation faulted inside Lua's string
 // table (lstring.c, touching -1) registering these (2026-10-18): a stub again until that is
 // understood.
-// ref: FUN_141c43e60
+extern "C" unsigned long long FUN_141c43e60();
+// translated: FUN_141c43e60
 void Sub141C43E60() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141c43e60();
+    } __except (GenFault(0x141c43e60ull, GetExceptionInformation())) {
+    }
 }
 
 extern "C" unsigned long long FUN_141a49240();
@@ -900,16 +956,25 @@ void Sub141B37F60() {
 }
 
 // The name of the glue's starting screen.
-// ref: FUN_14156c0a0
+extern "C" unsigned long long FUN_14156c0a0();
+// translated: FUN_14156c0a0
 const char* Sub14156C0A0() {
-    FROST_UNIMPLEMENTED();
-    return "";
+    __try {
+        return reinterpret_cast<const char*>(FUN_14156c0a0());
+    } __except (GenFault(0x14156c0a0ull, GetExceptionInformation())) {
+        return nullptr;
+    }
 }
 
+// The server alert (ServerAlert.cpp): the reference queues a WowDownload request for the alert
+// URL the portal configuration names (FUN_1415556b0) on its alert object (DAT_14311c580).
+// Diverged (docs/stubs.md): the downloader's requests go to Blizzard endpoints, which stay
+// offline, so no alert is fetched. Forwarded on 2026-10-22, the request ran on the downloader's
+// curl at the login screen, whose socket hash frees entries with the C runtime's free while the
+// downloader's allocator hooks made them in Storm blocks, and the client died at once.
 // ref: FUN_1416a3860
 void Sub1416A3860(const char* screen) {
     (void)screen;
-    FROST_UNIMPLEMENTED();
 }
 
 // The glue's world-scene camera (position, look and up vectors).
@@ -995,6 +1060,7 @@ void CGlueMgr::Initialize() {
     }
     GlueResetCursorSize();
     CursorSetMode(1);
+    *reinterpret_cast<uint64_t*>(0x142d08358ull) = 3;   // the gamepad state's flags (+0x88)
     Sub141527450(1);
     Sub141CFE3E0();
     Sub141B46E90();
@@ -1114,23 +1180,33 @@ void GlueLoginStart(int32_t a1) {
 // ---- GENERATED by tools/forward_stubs.py: link fallbacks where src/gen is not linked ----
 #pragma comment(linker, "/include:GenForwardMissing")
 #pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
+#pragma comment(linker, "/alternatename:FUN_1405a0640=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1405db2a0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14063d240=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14078f3c0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141174300=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412d3440=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14148c1d0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1414fc2f0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141527450=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14156c0a0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14156e300=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14167ae90=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14167b1d0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14167c3c0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141695d80=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141695dd0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141696aa0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14169bf50=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1416a0db0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1416a3860=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1416a4070=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1416a7bb0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1416a7d00=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14173ab20=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1419272e0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14192fa70=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14192fac0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1419ee9b0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141a255a0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141a3cc80=GenForwardMissing")
@@ -1140,6 +1216,7 @@ void GlueLoginStart(int32_t a1) {
 #pragma comment(linker, "/alternatename:FUN_141b46e90=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141b4a6e0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141b4b720=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141c43e60=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141c99c50=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141c9a070=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141cb0380=GenForwardMissing")

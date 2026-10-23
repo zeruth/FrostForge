@@ -14256,7 +14256,7 @@ undefined8 * FUN_141f742a0(undefined8 *param_1, gen_v16 *param_2, longlong param
       (*(undefined8 *)((char *)&(*(gen_v16 *)(gen_frame + 0x28)) + 0)) = (*(undefined8 *)(gen_frame + 0x0));
     }
     else {
-      (*(gen_v16 *)(gen_frame + 0x28)) = gen_v16_m(_mm_shuffle_epi8((*param_2).m, (*(gen_v16 *)REFP(0x1428806d0)).m));
+      (*(gen_v16 *)(gen_frame + 0x28)) = gen_v16_m(_mm_shuffle_epi8(gen_v16_mm(*param_2), gen_v16_mm(*(gen_v16 *)REFP(0x1428806d0))));
     }
     (*(undefined4 *)(gen_frame + 0x44)) = 0;
     (*(undefined4 *)(gen_frame + 0x40)) = 0;
@@ -30927,7 +30927,7 @@ joined_r0x000141f8914b:
   (*(uint *)(gen_frame + 0x4c)) = 0;
   (*(uint *)(gen_frame + 0x3c)) = 0;
   (*(uint *)(gen_frame + 0x30)) = 0;
-  cVar9 = (&REFG(undefined1, 0x1428815b0))[iVar13];
+  cVar9 = ((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x1428815b0)))[iVar13];
   pcVar20 = (undefined1 *)&REFG(undefined1, 0x1428815b0) + iVar13;
   uVar28 = uVar33;
   uVar29 = uVar33;

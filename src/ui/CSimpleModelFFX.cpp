@@ -22,6 +22,11 @@
 #include "world/WorldFrame.hpp"
 #include "world/WorldScene.hpp"
 #include <cmath>
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+extern "C" unsigned long long FUN_1405dd650(unsigned long long);
+extern "C" unsigned long long FUN_14146edb0();
 
 extern "C" {
 #include "lauxlib.h"
@@ -95,10 +100,13 @@ bool FfxAntiAliasingEnabled() {
 }
 
 // CMAA (and CMAA2) over the buffer's colour. Not ported.
-// ref: FUN_1405dd540
+extern "C" unsigned long long FUN_1405dd540(unsigned long long);
+// translated: FUN_1405dd540
 void FfxAntiAlias(FRAMEBUFFER* buffer) {
-    (void)buffer;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1405dd540((unsigned long long)buffer);
+    } __except (GenFault(0x1405dd540ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_1405dcf00
@@ -120,49 +128,52 @@ uint8_t FfxNetherEffectEnabled() {
 // FUN_141696fd0 the slot's pass, FUN_141697050 the death effect, FUN_1413c1110 the nether
 // effect). Their bodies (FUN_1405e8060, FUN_1405dca30, FUN_1424a57e0, FUN_1405e4e80) are not
 // ported.
-// ref: FUN_141696f50
+extern "C" unsigned long long FUN_141696f50(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_141696f50
 void FfxGlowPass(void* param, GxRenderContext* context, void* source, void* dest) {
-    (void)param;
-    (void)context;
-    (void)source;
-    (void)dest;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141696f50((unsigned long long)param, (unsigned long long)context, (unsigned long long)source, (unsigned long long)dest);
+    } __except (GenFault(0x141696f50ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141696fd0
+extern "C" unsigned long long FUN_141696fd0(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_141696fd0
 void FfxSlotPass(void* param, GxRenderContext* context, void* source, void* dest) {
-    (void)param;
-    (void)context;
-    (void)source;
-    (void)dest;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141696fd0((unsigned long long)param, (unsigned long long)context, (unsigned long long)source, (unsigned long long)dest);
+    } __except (GenFault(0x141696fd0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141697050
+extern "C" unsigned long long FUN_141697050(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_141697050
 void FfxDeathPass(void* param, GxRenderContext* context, void* source, void* dest) {
-    (void)param;
-    (void)context;
-    (void)source;
-    (void)dest;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141697050((unsigned long long)param, (unsigned long long)context, (unsigned long long)source, (unsigned long long)dest);
+    } __except (GenFault(0x141697050ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1413c1110
+extern "C" unsigned long long FUN_1413c1110(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_1413c1110
 void FfxNetherPass(void* param, GxRenderContext* context, void* source, void* dest) {
-    (void)param;
-    (void)context;
-    (void)source;
-    (void)dest;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413c1110((unsigned long long)param, (unsigned long long)context, (unsigned long long)source, (unsigned long long)dest);
+    } __except (GenFault(0x1413c1110ull, GetExceptionInformation())) {
+    }
 }
 
 // The character screens' camera (UIUtil/CameraManager.cpp, DAT_14323f220) stepped from the
 // frame's camera and made the frame's override camera (DAT_143122530). Not ported: the frame
 // draws through its own camera.
-// ref: FUN_141696200
+extern "C" unsigned long long FUN_141696200(unsigned long long);
+// translated: FUN_141696200
 void ModelFfxSyncCamera(CSimpleModelFFX* frame) {
-    (void)frame;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141696200((unsigned long long)frame);
+    } __except (GenFault(0x141696200ull, GetExceptionInformation())) {
+    }
 }
 
 // The scene drawn through a buffer of the scaled window size (cleared to opaque black), with
@@ -412,11 +423,21 @@ void CSimpleModelFFX::LoadXML(XMLOBJECT* node, CStatus* status, const char* intr
     }
 }
 
-// The glue's full-screen effects are switched on with the frame (FUN_1405dd650 with
-// FUN_14146edb0's setting).
+// The glue's full-screen effects are switched on with the frame: FUN_1405dd650 (translated) with
+// FUN_14146edb0's setting picks the effect slot, which stays empty while the FFX module is not
+// ported (docs/stubs.md), so it only records the choice. FUN_14146edb0 is not translated yet:
+// this tag makes it a root of the next translation.
+// translated: FUN_14146edb0
+static void FfxSelectForShow() {
+    __try {
+        FUN_1405dd650(static_cast<uint8_t>(FUN_14146edb0()));
+    } __except (GenFault(0x1405dd650ull, GetExceptionInformation())) {
+    }
+}
+
 // ref: FUN_141697e20
 void CSimpleModelFFX::QueueOnShow() {
-    FROST_UNIMPLEMENTED();  // FUN_1405dd650(FUN_14146edb0()): the FFX enable
+    FfxSelectForShow();
     this->CSimpleFrame::QueueOnShow();
 }
 
@@ -608,21 +629,28 @@ void CSimpleModelFFX_FillScriptMethods(lua_State* L) {
     CSimpleModel_FillScriptMethods(L);
     FrameScript_Object::FillScriptMethodTable(L, s_modelFfxMethods, 4);
 }
+// s_ffxPassSlot, reached from RenderCVars.cpp under its own name (one definition per reference global)
+uint8_t& g_ffxPassSlot = s_ffxPassSlot;
 
 // ---- GENERATED by tools/forward_stubs.py: link fallbacks where src/gen is not linked ----
 #pragma comment(linker, "/include:GenForwardMissing")
+#pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
+#pragma comment(linker, "/alternatename:FUN_1405dd540=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1405dd650=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413c1110=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14146edb0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141696200=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141696f50=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141696fd0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141697050=GenForwardMissing")
 // ---- end of link fallbacks ----
-
-// s_ffxPassSlot, reached from RenderCVars.cpp under its own name (one definition per reference global)
-uint8_t& g_ffxPassSlot = s_ffxPassSlot;
 
 // ---- GENERATED by tools/translate.py: the port globals translated code reaches ----
 extern "C" void* const gen_f_1405dc960 = (void*)&FfxAntiAliasingEnabled;
 extern "C" void* const gen_f_1405dcf00 = (void*)&FfxPassActive;
 extern "C" void* const gen_f_1405dd5d0 = (void*)&FfxEffectBegin;
 extern "C" void* const gen_f_1405e4e70 = (void*)&FfxNetherEffectEnabled;
+extern "C" void* const gen_f_1405e7e00 = (void*)&FfxGlowEnabled;
 extern "C" void* const gen_f_1424a59d0 = (void*)&FfxDeathEffectEnabled;
 extern "C" void* const gen_p_142e96fc8 = (void*)&s_ffxSharedTargets;
 extern "C" void* const gen_p_142e96fd0 = (void*)&s_ffxPassSlot;

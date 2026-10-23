@@ -22740,7 +22740,7 @@ undefined1 FUN_1414d5ae0(longlong param_1)
       }
       *plVar1 = (longlong)plVar9;
       REFG(undefined8, 0x142d07d40) = REFG(undefined8, 0x142d07d40) + 1;
-      if (REFG(float, 0x142d07d48) < (float)REFG(undefined8, 0x142d07d40) / (float)REFG(undefined8, 0x142d07d30)) {
+      if (REFG(float, 0x142d07d48) < gen_bits2f((unsigned int)(REFG(undefined8, 0x142d07d40))) / gen_bits2f((unsigned int)(REFG(undefined8, 0x142d07d30)))) {
         CALLF(undefined1, FUN_1414dfda0)(&REFG(undefined8, 0x142d07d30),REFG(undefined8, 0x142d07d30) * 2);
       }
     }

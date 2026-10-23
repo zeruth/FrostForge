@@ -6,7 +6,7 @@
 #include <cstring>
 #include <malloc.h>
 #include <windows.h>
-#include <windows.h>
+#include <tlhelp32.h>
 
 extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
@@ -312,7 +312,30 @@ bool OsSetCurrentDirectory(const char* path) {
 // ref: FUN_141236f00
 void OsGetParentProcessName(char* buffer) {
     *buffer = '\0';
-    FROST_UNIMPLEMENTED();
+    HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (snapshot == INVALID_HANDLE_VALUE) {
+        return;
+    }
+    PROCESSENTRY32W entry;
+    entry.dwSize = sizeof(entry);   // 0x238
+    DWORD self = GetCurrentProcessId();
+    for (BOOL more = Process32FirstW(snapshot, &entry); more; more = Process32NextW(snapshot, &entry)) {
+        if (entry.th32ProcessID != self) {
+            continue;
+        }
+        DWORD parent = entry.th32ParentProcessID;
+        if (parent != 0) {
+            for (more = Process32FirstW(snapshot, &entry); more; more = Process32NextW(snapshot, &entry)) {
+                if (entry.th32ProcessID == parent) {
+                    UnicodeConvertUtf16ToUtf8(buffer, MAX_PATH, reinterpret_cast<const uint16_t*>(entry.szExeFile),
+                        0x7fffffff, nullptr, nullptr);
+                    break;
+                }
+            }
+        }
+        break;
+    }
+    CloseHandle(snapshot);
 }
 
 // ref: FUN_140263440

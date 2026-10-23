@@ -17789,7 +17789,7 @@ uint FUN_1411a64c0(longlong param_1, uint param_2, uint param_3)
   fVar11 = REFG(float, 0x142720d60);
   fVar10 = REFG(float, 0x142720d58);
   fVar9 = REFG(float, 0x1426c706c);
-  uVar8 = REFG(float, 0x14261aa30);
+  GEN_COPY(uVar8, REFG(float, 0x14261aa30));
   fVar7 = REFG(float, 0x142618d64);
   uVar17 = (ulonglong)param_2;
   lVar21 = uVar17 * 0x1ec;
@@ -17901,7 +17901,7 @@ undefined8 FUN_1411a67a0(longlong param_1, uint param_2)
   fVar11 = REFG(float, 0x142720d60);
   fVar10 = REFG(float, 0x142720d58);
   fVar9 = REFG(float, 0x1426c706c);
-  uVar8 = REFG(float, 0x14261aa30);
+  GEN_COPY(uVar8, REFG(float, 0x14261aa30));
   fVar7 = REFG(float, 0x142618d64);
   lVar21 = *(longlong *)(param_1 + 0x1e0);
   (*(uint *)(gen_frame + 0x0)) = 0;

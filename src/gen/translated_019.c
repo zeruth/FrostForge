@@ -19,8 +19,6 @@ undefined4 FUN_140324310(undefined8 param_1, char *param_2)
 {
   GEN_HIT(1);
   __declspec(align(16)) unsigned char gen_frame[(0x2d0 + sizeof(char[512]) > 0x4f8 ? 0x2d0 + sizeof(char[512]) : 0x4f8)] = {0};
-  undefined1 *gen_alloca_0 = {0};
-  undefined1 *gen_alloca_1 = {0};
   char *pcVar1 = {0};
   char cVar2 = {0};
   bool bVar3 = {0};
@@ -56,7 +54,7 @@ LAB_140324380:
       if (*pcVar5 == '\0') break;
       pcVar5 = pcVar5 + 1;
     } while (lVar7 != 0);
-    puVar8 = (gen_alloca_0 = (undefined1 *)_alloca((longlong)pcVar5));
+    puVar8 = ((undefined1 *)(gen_frame + 0x4d0)) + -(longlong)pcVar5;
     if (puVar8 != (undefined1 *)0x0) {
       cVar2 = *pcVar15;
       pcVar13 = pcVar15;
@@ -83,7 +81,7 @@ LAB_140324380:
         if (*pcVar5 == '\0') break;
         pcVar5 = pcVar5 + 1;
       } while (lVar7 != 0);
-      puVar8 = gen_alloca_0;
+      puVar8 = ((undefined1 *)(gen_frame + 0x4d0)) + -(longlong)pcVar5;
       if (puVar8 != (undefined1 *)0x0) {
         do {
           if (puVar8 != (undefined1 *)0x1) {
@@ -104,7 +102,7 @@ LAB_140324380:
       if (*pcVar15 == '\0') break;
       pcVar15 = pcVar15 + 1;
     } while (lVar12 != 0);
-    puVar8 = (gen_alloca_1 = (undefined1 *)_alloca((longlong)pcVar15));
+    puVar8 = ((undefined1 *)(gen_frame + 0x4d0)) + -(longlong)pcVar15;
     if (puVar8 != (undefined1 *)0x0) {
       do {
         if (puVar8 != (undefined1 *)0x1) {

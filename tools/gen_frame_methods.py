@@ -14,12 +14,13 @@ keeps the reference's layout past its base (see the class's header).
 
 from __future__ import annotations
 
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 import argparse
 import struct
 import sys
 from pathlib import Path
 
-from wowbin import Binary
+from pebin import Binary
 
 ROOT = Path(__file__).resolve().parent.parent
 

@@ -9,8 +9,14 @@
 #include "gx/GxPlatform.hpp"
 #include "gx/GxVertexFormat.hpp"
 #include "util/Unimplemented.hpp"
+#include "util/FrostLog.hpp"
+#include <intrin.h>
 
 CGxDeviceD3d12* GxDeviceD3d12();
+
+// The draws still to trace (CommitState logs each one's state), the port's own diagnostic: set by
+// whoever wants the next few draws' state, the loading screen's first frame.
+int g_gxTraceDraws;
 
 namespace {
 
@@ -18,6 +24,25 @@ namespace {
 // (DAT_142d43890, DAT_142d438a8).
 const uint32_t s_verticesPerPrimitive[6] = { 1, 2, 1, 3, 1, 0 };
 const int32_t s_primitiveOffsets[6] = { 0, 0, 1, 0, 2, -1 };
+
+// A draw dropped for want of a pipeline (none set, or its PSO never built), the port's own report:
+// the device raises nothing for it, the draw just does not happen. Each caller once, with what was
+// missing; a whole screen drawing nothing showed up only as black (2026-10-23).
+void ReportSkippedDraw(const GxPipeline* pipeline, void* caller) {
+    static void* s_callers[64];
+    static uint32_t s_count;
+    for (uint32_t i = 0; i < s_count; i++) {
+        if (s_callers[i] == caller) {
+            return;
+        }
+    }
+    if (s_count >= 64) {
+        return;
+    }
+    s_callers[s_count++] = caller;
+    FrostLog("gx", "draw skipped from %p: %s", caller,
+             pipeline == nullptr ? "no pipeline set" : "the pipeline's PSO was never created");
+}
 
 uint32_t HighestBit(uint64_t mask) {
     uint32_t bit = 63;
@@ -203,6 +228,19 @@ void GraphicsCommandList::CommitBindings() {
 // ref: FUN_1422d9140
 void GraphicsCommandList::CommitState(bool indexed, uint8_t shadingRate) {
     ID3D12GraphicsCommandList* list = this->m_copy.m_list;
+    if (g_gxTraceDraws > 0) {
+        // (GxTraceDraws: the state each of the next few draws commits with, as the context holds it)
+        g_gxTraceDraws--;
+        RenderContextD3d12& c = this->m_context;
+        FrostLog("gx", "draw %s: list %p pso %p topology %u rtvs %u dsv %p targets-dirty %u | size %gx%g | viewport "
+                 "[%g %g %g %g z %g %g] dirty %u | scissor [%g %g %g %g] dirty %u",
+                 indexed ? "indexed" : "plain", static_cast<void*>(list), static_cast<void*>(this->m_pipeline->m_pso),
+                 this->m_topology, this->m_rtvCount, static_cast<const void*>(this->m_dsvPtr), this->m_targetsDirty,
+                 c.Field<float>(0x14), c.Field<float>(0x10), c.Field<float>(0x1c), c.Field<float>(0x20),
+                 c.Field<float>(0x24), c.Field<float>(0x28), c.Field<float>(0x2c), c.Field<float>(0x30),
+                 c.Field<uint8_t>(0x18), c.Field<float>(0x78), c.Field<float>(0x7c), c.Field<float>(0x80),
+                 c.Field<float>(0x84), c.Field<uint8_t>(0x74));
+    }
     if (this->m_targetsDirty) {
         list->OMSetRenderTargets(this->m_rtvCount, this->m_rtvs, FALSE, this->m_dsvPtr);
         this->m_targetsDirty = 0;
@@ -350,6 +388,9 @@ void RenderContextD3d12::Draw(uint32_t vertexCount, uint32_t instanceCount, uint
     GraphicsCommandList* owner = this->Owner();
     GxPipeline* pipeline = owner->m_pipeline;
     if (GxDeviceD3d12()->m_ready == 0 || pipeline == nullptr || pipeline->m_pso == nullptr) {
+        if (GxDeviceD3d12()->m_ready != 0) {
+            ReportSkippedDraw(pipeline, _ReturnAddress());
+        }
         owner->SkipDraw();
         return;
     }
@@ -366,6 +407,9 @@ void RenderContextD3d12::DrawIndexed(uint32_t indexCount, uint32_t instanceCount
     GraphicsCommandList* owner = this->Owner();
     GxPipeline* pipeline = owner->m_pipeline;
     if (GxDeviceD3d12()->m_ready == 0 || pipeline == nullptr || pipeline->m_pso == nullptr) {
+        if (GxDeviceD3d12()->m_ready != 0) {
+            ReportSkippedDraw(pipeline, _ReturnAddress());
+        }
         owner->SkipDraw();
         return;
     }

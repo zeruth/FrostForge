@@ -76,6 +76,8 @@ bool IsKnownEvent(uint64_t id);
 
 // 0 registered (or units updated), 1 already registered, 2 unknown event.
 int32_t RegisterEvent(FrameScript_Object* object, uint64_t id);
+// The same for the units in `units` only (four 16-bit unit ids, 0 for none).
+int32_t RegisterUnitEvent(FrameScript_Object* object, uint64_t id, uint64_t units);
 // 0 unregistered, 1 not registered, 2 unknown event.
 int32_t UnregisterEvent(FrameScript_Object* object, uint64_t id);
 void RegisterAllEvents(FrameScript_Object* object);

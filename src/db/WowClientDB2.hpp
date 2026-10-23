@@ -190,8 +190,8 @@ class WowClientDB2_Base {
     virtual bool Reload(bool errors);                                           // 0x30
     virtual void NotifyRecordWatchers();                                        // 0x38
     virtual void Slot40();                                                      // 0x40
-    virtual void Slot48();                                                      // 0x48
-    virtual void Slot50();                                                      // 0x50
+    virtual uint64_t Slot48(uint32_t id, bool a3, bool a4, uint64_t a5);        // 0x48
+    virtual uint64_t Slot50(uint32_t id, bool a3, bool a4, uint64_t a5);        // 0x50
     virtual bool LoadSection(void* file, int32_t section, bool errors);         // 0x58
     virtual void RecordCallback() = 0;                                          // 0x60
     virtual void AddRef(void* record);                                          // 0x68
@@ -209,16 +209,19 @@ class WowClientDB2_Base {
     virtual bool ReadCopyTable(CDataStore* store, bool errors, uint32_t section,
         TDBCVector<DB2DUPLICATE>* duplicates);                                  // 0xc0
     virtual uint32_t SparseCount();                                             // 0xc8
-    virtual void CallbackD0();                                                  // 0xd0
-    virtual void CallbackD8();                                                  // 0xd8
-    virtual void CallbackE0();                                                  // 0xe0
-    virtual void CallbackE8();                                                  // 0xe8
+    // The record callbacks (pure in the base vtable 0x1426b7a00; each typed class keeps them in
+    // its own map): run a record's callbacks for an event, whether one with this key is there,
+    // drop the one with this key (or, `all`, every one through 0xd0's event 4), drop them all.
+    virtual bool RunRecordCallbacks(int32_t id, const void* record, uint32_t event) = 0;  // 0xd0
+    virtual bool HasRecordCallback(int32_t id, uint64_t key) = 0;                         // 0xd8
+    virtual bool RemoveRecordCallback(int32_t id, uint64_t key, bool all) = 0;            // 0xe0
+    virtual void* RemoveRecordCallbacks(int32_t id, bool all) = 0;                        // 0xe8
     virtual void* DeserializeRecord(CDataStore* store);                         // 0xf0
     virtual void SetRecord(uint32_t id, void* record, void* previous, int32_t parent);  // 0xf8
     virtual void SetLookupRecord(int32_t id, void* record, void* previous);     // 0x100
     virtual void UpdateParent(void* record, int32_t parent, uint32_t id, void* previous);  // 0x108
     virtual void UpdateIndexed(void* record, void* previous);                   // 0x110
-    virtual void Slot118();                                                     // 0x118
+    virtual uint64_t Slot118(uint32_t* ids, int64_t a3);                        // 0x118
     virtual uint32_t SectionSize(uint32_t section);                             // 0x120
     virtual uint32_t SectionOffset(uint32_t section);                           // 0x128
     virtual CASFILE* OpenFile(bool errors);                                     // 0x130
@@ -330,6 +333,12 @@ class WowClientDB2 : public WowClientDB2_Base {
 
     // FUN_140442370
     void RecordCallback() override;
+    // The typed classes' own, alike but for their records' type (FUN_1404426a0, FUN_14035b140,
+    // FUN_140442ef0 and FUN_14035a9d0, UiTextureAtlasMember's), run translated on the map at 0x1f0.
+    bool RunRecordCallbacks(int32_t id, const void* record, uint32_t event) override;
+    bool HasRecordCallback(int32_t id, uint64_t key) override;
+    bool RemoveRecordCallback(int32_t id, uint64_t key, bool all) override;
+    void* RemoveRecordCallbacks(int32_t id, bool all) override;
 };
 
 // Whether a missing record can be asked of the server as a hotfix (DAT_142e8e258).

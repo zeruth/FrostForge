@@ -3,6 +3,9 @@
 #include "db/DB2Tables.hpp"
 
 #include "util/Unimplemented.hpp"
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 namespace {
 
@@ -9059,19 +9062,23 @@ bool CampaignXQuestLineOrderPtr(const void* const* left, const void* const* righ
     auto b = static_cast<const uint8_t*>(*right) + 0;
     return static_cast<uint32_t>(DB2FieldU32(a, 2, 0, &g_campaignXQuestLineDB)) < static_cast<uint32_t>(DB2FieldU32(b, 2, 0, &g_campaignXQuestLineDB));
 }
-// ref: FUN_14042f610
+extern "C" unsigned long long FUN_14042f610(unsigned long long, unsigned long long);
+// translated: FUN_14042f610
 bool CharStartOutfitOrder(const void* left, const void* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_14042f610((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x14042f610ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_14042f6f0
+extern "C" unsigned long long FUN_14042f6f0(unsigned long long, unsigned long long);
+// translated: FUN_14042f6f0
 bool CharStartOutfitOrderPtr(const void* const* left, const void* const* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_14042f6f0((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x14042f6f0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 // ref: FUN_1403d9020
 bool ChrClassesXPowerTypesOrder(const void* left, const void* right) {
@@ -9085,47 +9092,59 @@ bool ChrClassesXPowerTypesOrderPtr(const void* const* left, const void* const* r
     auto b = static_cast<const uint8_t*>(*right) + 0;
     return static_cast<int32_t>(DB2FieldU8(a, 0, 0, &g_chrClassesXPowerTypesDB)) < static_cast<int32_t>(DB2FieldU8(b, 0, 0, &g_chrClassesXPowerTypesDB));
 }
-// ref: FUN_14044b450
+extern "C" unsigned long long FUN_14044b450(unsigned long long, unsigned long long);
+// translated: FUN_14044b450
 bool ChrCustomizationChoiceOrder(const void* left, const void* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_14044b450((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x14044b450ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_14044b4b0
+extern "C" unsigned long long FUN_14044b4b0(unsigned long long, unsigned long long);
+// translated: FUN_14044b4b0
 bool ChrCustomizationChoiceOrderPtr(const void* const* left, const void* const* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_14044b4b0((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x14044b4b0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_14037d2a0
+extern "C" unsigned long long FUN_14037d2a0(unsigned long long, unsigned long long);
+// translated: FUN_14037d2a0
 bool ChrCustomizationConversionOrder(const void* left, const void* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_14037d2a0((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x14037d2a0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_14037d410
+extern "C" unsigned long long FUN_14037d410(unsigned long long, unsigned long long);
+// translated: FUN_14037d410
 bool ChrCustomizationConversionOrderPtr(const void* const* left, const void* const* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_14037d410((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x14037d410ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_14040d7c0
+extern "C" unsigned long long FUN_14040d7c0(unsigned long long, unsigned long long);
+// translated: FUN_14040d7c0
 bool ChrCustomizationOptionOrder(const void* left, const void* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_14040d7c0((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x14040d7c0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_14040d870
+extern "C" unsigned long long FUN_14040d870(unsigned long long, unsigned long long);
+// translated: FUN_14040d870
 bool ChrCustomizationOptionOrderPtr(const void* const* left, const void* const* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_14040d870((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x14040d870ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 // ref: FUN_1403e3d90
 bool ChrModelTextureLayerOrder(const void* left, const void* right) {
@@ -9235,19 +9254,23 @@ bool DisplaySeasonOrderPtr(const void* const* left, const void* const* right) {
     auto b = static_cast<const uint8_t*>(*right) + 4;
     return static_cast<int32_t>(DB2FieldI32(a, 2, 4, &g_displaySeasonDB)) < static_cast<int32_t>(DB2FieldI32(b, 2, 4, &g_displaySeasonDB));
 }
-// ref: FUN_1403964d0
+extern "C" unsigned long long FUN_1403964d0(unsigned long long, unsigned long long);
+// translated: FUN_1403964d0
 bool DungeonEncounterOrder(const void* left, const void* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_1403964d0((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x1403964d0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_140396920
+extern "C" unsigned long long FUN_140396920(unsigned long long, unsigned long long);
+// translated: FUN_140396920
 bool DungeonEncounterOrderPtr(const void* const* left, const void* const* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_140396920((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x140396920ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 // ref: FUN_14039cb30
 bool ExpectedStatOrder(const void* left, const void* right) {
@@ -9381,19 +9404,23 @@ bool GlobalPlayerConditionOrderPtr(const void* const* left, const void* const* r
     auto b = static_cast<const uint8_t*>(*right) + 0;
     return static_cast<int32_t>(DB2FieldI32(a, 1, 0, &g_globalPlayerConditionDB)) < static_cast<int32_t>(DB2FieldI32(b, 1, 0, &g_globalPlayerConditionDB));
 }
-// ref: FUN_1403cbc50
+extern "C" unsigned long long FUN_1403cbc50(unsigned long long, unsigned long long);
+// translated: FUN_1403cbc50
 bool ItemBonusOrder(const void* left, const void* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_1403cbc50((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x1403cbc50ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_1403cbc60
+extern "C" unsigned long long FUN_1403cbc60(unsigned long long, unsigned long long);
+// translated: FUN_1403cbc60
 bool ItemBonusOrderPtr(const void* const* left, const void* const* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_1403cbc60((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x1403cbc60ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 // ref: FUN_140428400
 bool ItemContextPickerEntryOrder(const void* left, const void* right) {
@@ -9455,19 +9482,23 @@ bool ItemSpecOverrideOrderPtr(const void* const* left, const void* const* right)
     auto b = static_cast<const uint8_t*>(*right) + 0;
     return static_cast<uint32_t>(DB2FieldU16(a, 0, 0, &g_itemSpecOverrideDB)) < static_cast<uint32_t>(DB2FieldU16(b, 0, 0, &g_itemSpecOverrideDB));
 }
-// ref: FUN_1403afc70
+extern "C" unsigned long long FUN_1403afc70(unsigned long long, unsigned long long);
+// translated: FUN_1403afc70
 bool ItemSpecOrder(const void* left, const void* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_1403afc70((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x1403afc70ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_1403b0210
+extern "C" unsigned long long FUN_1403b0210(unsigned long long, unsigned long long);
+// translated: FUN_1403b0210
 bool ItemSpecOrderPtr(const void* const* left, const void* const* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_1403b0210((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x1403b0210ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 // ref: FUN_14044da20
 bool JournalEncounterCreatureOrder(const void* left, const void* right) {
@@ -9517,33 +9548,41 @@ bool JournalSectionXDifficultyOrderPtr(const void* const* left, const void* cons
     auto b = static_cast<const uint8_t*>(*right) + 0;
     return static_cast<uint32_t>(DB2FieldU8(a, 0, 0, &g_journalSectionXDifficultyDB)) < static_cast<uint32_t>(DB2FieldU8(b, 0, 0, &g_journalSectionXDifficultyDB));
 }
-// ref: FUN_140376df0
+extern "C" unsigned long long FUN_140376df0(unsigned long long, unsigned long long);
+// translated: FUN_140376df0
 bool JournalTierXInstanceOrder(const void* left, const void* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_140376df0((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x140376df0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_140376ef0
+extern "C" unsigned long long FUN_140376ef0(unsigned long long, unsigned long long);
+// translated: FUN_140376ef0
 bool JournalTierXInstanceOrderPtr(const void* const* left, const void* const* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_140376ef0((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x140376ef0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_14037e2e0
+extern "C" unsigned long long FUN_14037e2e0(unsigned long long, unsigned long long);
+// translated: FUN_14037e2e0
 bool MapDifficultyOrder(const void* left, const void* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_14037e2e0((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x14037e2e0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_14037e610
+extern "C" unsigned long long FUN_14037e610(unsigned long long, unsigned long long);
+// translated: FUN_14037e610
 bool MapDifficultyOrderPtr(const void* const* left, const void* const* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_14037e610((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x14037e610ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 // ref: FUN_1403abf60
 bool MapDifficultyXConditionOrder(const void* left, const void* right) {
@@ -9689,19 +9728,23 @@ bool QuestPOIPointOrderPtr(const void* const* left, const void* const* right) {
     auto b = static_cast<const uint8_t*>(*right) + 0;
     return static_cast<int32_t>(DB2FieldI32(a, 0, 0, &g_questPOIPointDB)) < static_cast<int32_t>(DB2FieldI32(b, 0, 0, &g_questPOIPointDB));
 }
-// ref: FUN_140458410
+extern "C" unsigned long long FUN_140458410(unsigned long long, unsigned long long);
+// translated: FUN_140458410
 bool RenownRewardsOrder(const void* left, const void* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_140458410((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x140458410ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_140458830
+extern "C" unsigned long long FUN_140458830(unsigned long long, unsigned long long);
+// translated: FUN_140458830
 bool RenownRewardsOrderPtr(const void* const* left, const void* const* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_140458830((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x140458830ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 // ref: FUN_1403d9c70
 bool SceneScriptPackageMemberOrder(const void* left, const void* right) {
@@ -9727,19 +9770,23 @@ bool SkillLineXTraitTreeOrderPtr(const void* const* left, const void* const* rig
     auto b = static_cast<const uint8_t*>(*right) + 0;
     return static_cast<int32_t>(DB2FieldI32(a, 2, 0, &g_skillLineXTraitTreeDB)) < static_cast<int32_t>(DB2FieldI32(b, 2, 0, &g_skillLineXTraitTreeDB));
 }
-// ref: FUN_1404581b0
+extern "C" unsigned long long FUN_1404581b0(unsigned long long, unsigned long long);
+// translated: FUN_1404581b0
 bool SpecializationSpellsOrder(const void* left, const void* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_1404581b0((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x1404581b0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_140458290
+extern "C" unsigned long long FUN_140458290(unsigned long long, unsigned long long);
+// translated: FUN_140458290
 bool SpecializationSpellsOrderPtr(const void* const* left, const void* const* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_140458290((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x140458290ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 // ref: FUN_1404137e0
 bool SpellFlyoutItemOrder(const void* left, const void* right) {
@@ -9801,19 +9848,23 @@ bool TaxiPathNodeOrderPtr(const void* const* left, const void* const* right) {
     auto b = static_cast<const uint8_t*>(*right) + 12;
     return static_cast<int32_t>(DB2FieldI32(a, 3, 12, &g_taxiPathNodeDB)) < static_cast<int32_t>(DB2FieldI32(b, 3, 12, &g_taxiPathNodeDB));
 }
-// ref: FUN_140417520
+extern "C" unsigned long long FUN_140417520(unsigned long long, unsigned long long);
+// translated: FUN_140417520
 bool TraitCurrencySourceOrder(const void* left, const void* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_140417520((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x140417520ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_1404179a0
+extern "C" unsigned long long FUN_1404179a0(unsigned long long, unsigned long long);
+// translated: FUN_1404179a0
 bool TraitCurrencySourceOrderPtr(const void* const* left, const void* const* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_1404179a0((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x1404179a0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 // ref: FUN_140430490
 bool TraitDefinitionEffectPointsOrder(const void* left, const void* right) {
@@ -9923,19 +9974,23 @@ bool UiMapArtStyleLayerOrderPtr(const void* const* left, const void* const* righ
     auto b = static_cast<const uint8_t*>(*right) + 0;
     return static_cast<uint32_t>(DB2FieldU8(a, 0, 0, &g_uiMapArtStyleLayerDB)) < static_cast<uint32_t>(DB2FieldU8(b, 0, 0, &g_uiMapArtStyleLayerDB));
 }
-// ref: FUN_1403e1bc0
+extern "C" unsigned long long FUN_1403e1bc0(unsigned long long, unsigned long long);
+// translated: FUN_1403e1bc0
 bool UiMapArtTileOrder(const void* left, const void* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_1403e1bc0((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x1403e1bc0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_1403e1ca0
+extern "C" unsigned long long FUN_1403e1ca0(unsigned long long, unsigned long long);
+// translated: FUN_1403e1ca0
 bool UiMapArtTileOrderPtr(const void* const* left, const void* const* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_1403e1ca0((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x1403e1ca0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 // ref: FUN_1403fa840
 bool UiMapAssignmentOrder(const void* left, const void* right) {
@@ -10033,33 +10088,41 @@ bool VehicleUIIndSeatOrderPtr(const void* const* left, const void* const* right)
     auto b = static_cast<const uint8_t*>(*right) + 0;
     return static_cast<uint32_t>(DB2FieldU8(a, 0, 0, &g_vehicleUIIndSeatDB)) < static_cast<uint32_t>(DB2FieldU8(b, 0, 0, &g_vehicleUIIndSeatDB));
 }
-// ref: FUN_140366730
+extern "C" unsigned long long FUN_140366730(unsigned long long, unsigned long long);
+// translated: FUN_140366730
 bool WorldMapOverlayTileOrder(const void* left, const void* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_140366730((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x140366730ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_140366860
+extern "C" unsigned long long FUN_140366860(unsigned long long, unsigned long long);
+// translated: FUN_140366860
 bool WorldMapOverlayTileOrderPtr(const void* const* left, const void* const* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_140366860((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x140366860ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_1403963f0
+extern "C" unsigned long long FUN_1403963f0(unsigned long long, unsigned long long);
+// translated: FUN_1403963f0
 bool WorldStateUIOrder(const void* left, const void* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_1403963f0((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x1403963f0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
-// ref: FUN_140396840
+extern "C" unsigned long long FUN_140396840(unsigned long long, unsigned long long);
+// translated: FUN_140396840
 bool WorldStateUIOrderPtr(const void* const* left, const void* const* right) {
-    (void)left;
-    (void)right;
-    FROST_UNIMPLEMENTED();  // a multi-field record order
-    return false;
+    __try {
+        return (FUN_140396840((unsigned long long)left, (unsigned long long)right) & 0xff) != 0;
+    } __except (GenFault(0x140396840ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 // ref: FUN_1405b6340
 bool LightDataOrder(const void* left, const void* right) {
@@ -10865,3 +10928,38 @@ DB2LOADGROUP g_db2LoadGroups[] = {
     { s_group4, nullptr },
     { s_group5, nullptr },
 };
+
+// ---- GENERATED by tools/forward_stubs.py: link fallbacks where src/gen is not linked ----
+#pragma comment(linker, "/include:GenForwardMissing")
+#pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
+#pragma comment(linker, "/alternatename:FUN_140366730=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140366860=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140376df0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140376ef0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14037d2a0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14037d410=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14037e2e0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14037e610=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1403963f0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1403964d0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140396840=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140396920=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1403afc70=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1403b0210=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1403cbc50=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1403cbc60=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1403e1bc0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1403e1ca0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14040d7c0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14040d870=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140417520=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1404179a0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14042f610=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14042f6f0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14044b450=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14044b4b0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1404581b0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140458290=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140458410=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140458830=GenForwardMissing")
+// ---- end of link fallbacks ----

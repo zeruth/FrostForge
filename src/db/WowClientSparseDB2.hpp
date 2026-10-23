@@ -117,6 +117,12 @@ class WowClientSparseDB2Table : public WowClientSparseDB2 {
     void FreeRecord(void* record) override;       // 0x80
 
     void RecordCallback() override;
+    // The record callbacks on the map at 0x388: 0xd8 and 0xe8 shared (FUN_140384c40,
+    // FUN_140384df0), 0xd0 and 0xe0 each table's own, translated.
+    bool RunRecordCallbacks(int32_t id, const void* record, uint32_t event) override;
+    bool HasRecordCallback(int32_t id, uint64_t key) override;
+    bool RemoveRecordCallback(int32_t id, uint64_t key, bool all) override;
+    void* RemoveRecordCallbacks(int32_t id, bool all) override;
 };
 
 #endif

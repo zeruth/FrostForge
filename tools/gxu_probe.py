@@ -4,12 +4,13 @@ GxuDetermineControlCode (0x140689b30), GxuFontStripCodes (0x14068ba40) and the l
 
     python tools/gxu_probe.py
 """
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 import struct
 import subprocess
 import sys
 
 from oracle import Oracle
-from wowbin import ROOT
+from pebin import ROOT
 
 EXE = ROOT / "build" / "cmake" / "bin" / "Release" / "ProbeTest.exe"
 

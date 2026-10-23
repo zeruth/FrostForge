@@ -11,6 +11,7 @@ list of callbacks to port is printed after the calls.
 """
 from __future__ import annotations
 
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 import re
 import sys
 from pathlib import Path
@@ -19,7 +20,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 
 import corpus as corpusmod  # noqa: E402
-from wowbin import Binary  # noqa: E402
+from pebin import Binary  # noqa: E402
 
 CALL = re.compile(r"(?:(\w+)\s*=\s*)?FUN_140320f70\(", re.S)
 

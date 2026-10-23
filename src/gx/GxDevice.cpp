@@ -158,8 +158,11 @@ void CGxDevice::FrameMarker() {
     FROST_UNIMPLEMENTED();
 }
 void CGxDevice::LatencyMarker(uint32_t, uint32_t) {}
-void CGxDevice::Slot090() {
+void* CGxDevice::Slot090(void* out, uint64_t a2) {
+    (void)out;
+    (void)a2;
     FROST_UNIMPLEMENTED();
+    return nullptr;
 }
 void CGxDevice::Slot098() {
     FROST_UNIMPLEMENTED();
@@ -185,8 +188,11 @@ void CGxDevice::Slot0c8() {
 void CGxDevice::Slot0d0() {
     FROST_UNIMPLEMENTED();
 }
-void CGxDevice::Slot0d8() {
+void* CGxDevice::Slot0d8(void* out, uint64_t a2) {
+    (void)out;
+    (void)a2;
     FROST_UNIMPLEMENTED();
+    return nullptr;
 }
 void CGxDevice::Slot0e0() {
     FROST_UNIMPLEMENTED();
@@ -194,8 +200,10 @@ void CGxDevice::Slot0e0() {
 void CGxDevice::Slot0e8() {
     FROST_UNIMPLEMENTED();
 }
-void CGxDevice::Slot0f0() {
+void* CGxDevice::Slot0f0(void* out) {
+    (void)out;
     FROST_UNIMPLEMENTED();
+    return nullptr;
 }
 void CGxDevice::Slot0f8() {
     FROST_UNIMPLEMENTED();
@@ -256,8 +264,9 @@ void CGxDevice::ObjectFree(void* object) {
     }
 }
 void CGxDevice::Slot158() {}
-void CGxDevice::Slot160() {
-    FROST_UNIMPLEMENTED();
+// (a device with no swap chains of its own has none current)
+void* CGxDevice::CurrentSwapChain() {
+    return nullptr;
 }
 void CGxDevice::Slot168() {}
 // ref: FUN_1422922c0
@@ -290,14 +299,19 @@ void CGxDevice::BufDestroy(GxBuf* buf) {
     (void)buf;
     FROST_UNIMPLEMENTED();
 }
-void CGxDevice::Slot1b0() {
+void* CGxDevice::Slot1b0(const void* desc) {
+    (void)desc;
+    FROST_UNIMPLEMENTED();
+    return nullptr;
+}
+void CGxDevice::Slot1b8(void* object) {
+    (void)object;
     FROST_UNIMPLEMENTED();
 }
-void CGxDevice::Slot1b8() {
+void* CGxDevice::Slot1c0(const void* desc) {
+    (void)desc;
     FROST_UNIMPLEMENTED();
-}
-void CGxDevice::Slot1c0() {
-    FROST_UNIMPLEMENTED();
+    return nullptr;
 }
 void CGxDevice::Slot1c8() {
     FROST_UNIMPLEMENTED();
@@ -382,10 +396,14 @@ bool CGxDevice::QueryGetResult(void*, void*, uint32_t) {
     FROST_UNIMPLEMENTED();
     return false;
 }
-void CGxDevice::Slot298() {
+void* CGxDevice::CreateComputeShader(uint32_t kind, uint16_t permutation) {
+    (void)kind;
+    (void)permutation;
     FROST_UNIMPLEMENTED();
+    return nullptr;
 }
-void CGxDevice::Slot2a0() {
+void CGxDevice::DestroyComputeShader(void* shader) {
+    (void)shader;
     FROST_UNIMPLEMENTED();
 }
 

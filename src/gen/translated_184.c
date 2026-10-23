@@ -16296,7 +16296,7 @@ undefined8 * FUN_14233aa00(longlong param_1, undefined8 *param_2, uint *param_3,
             lVar6 = *(longlong *)(lVar5 + (longlong)((longlong)puVar38 * 0x18));
             uVar31 = (ulonglong)uVar34;
             *(undefined4 *)(lVar6 + uVar31 * 0x14) = *(undefined4 *)(lVar35 + 4 + uVar31 * 0x14);
-            cVar2 = (&REFG(undefined1, 0x142920960))[*(byte *)(lVar35 + uVar31 * 0x14)];
+            cVar2 = ((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x142920960)))[*(byte *)(lVar35 + uVar31 * 0x14)];
             *(char *)(lVar6 + 4 + uVar31 * 0x14) = cVar2;
             *(undefined4 *)(lVar6 + 8 + uVar31 * 0x14) = *(undefined4 *)(lVar35 + 8 + uVar31 * 0x14)
             ;
@@ -22411,7 +22411,7 @@ undefined8 FUN_142343080(longlong param_1)
           }
           (**(code **)(**(longlong **)(param_1 + 0x378) + 0x28))
                     (*(longlong **)(param_1 + 0x378),uVar9,lVar5,&(*(ulonglong *)(gen_frame + 0x10)));
-          CALLF(undefined8, FUN_1423103c0)(*(undefined8 *)(param_1 + 8),(uint)(byte)(&REFG(undefined1, 0x142923508))[*(uint *)(lVar5 + 4)],0,(ulonglong)CONCAT22((*(undefined2 *)(gen_frame + 0x2)),1),(unsigned long long)(CONCAT44(0,1)),(unsigned long long)("D3D12: %s (%d)"),(unsigned long long)(*(undefined8 *)(lVar5 + 0x10)),(unsigned long long)(CONCAT44(0,*(undefined4 *)(lVar5 + 8))));
+          CALLF(undefined8, FUN_1423103c0)(*(undefined8 *)(param_1 + 8),(uint)(byte)((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x142923508)))[*(uint *)(lVar5 + 4)],0,(ulonglong)CONCAT22((*(undefined2 *)(gen_frame + 0x2)),1),(unsigned long long)(CONCAT44(0,1)),(unsigned long long)("D3D12: %s (%d)"),(unsigned long long)(*(undefined8 *)(lVar5 + 0x10)),(unsigned long long)(CONCAT44(0,*(undefined4 *)(lVar5 + 8))));
           uVar10 = uVar11;
         }
         uVar9 = uVar9 + 1;

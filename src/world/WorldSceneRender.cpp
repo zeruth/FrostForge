@@ -15,6 +15,10 @@
 #include <cstring>
 #include <new>
 
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+extern "C" unsigned long long FUN_1413ceb50(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_1413d8c80(unsigned long long, unsigned long long);
+
 namespace {
 
 const char s_renderFile[] = "D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WorldClient2\\WorldSceneRender.cpp";
@@ -246,24 +250,22 @@ void CWorldSceneRender::Begin(CWorldScene* scene, CWorldView* view, WORLDRENDERP
 
 
 // Only the world's own scene (type 6) traces shadows; its targets are not ported.
-// ref: FUN_1413ceb50
+// translated: FUN_1413ceb50
 void CWorldSceneRender::SetupRayTracing(bool rayTracing, FRAMEBUFFERTEMP* temp, void** objects) {
-    (void)rayTracing;
-    (void)temp;
-    (void)objects;
-    if (!IsWorldPass(this)) {
-        return;
+    // (the reference's own code: the port had parts of it, and the world drew nothing, 2026-10-23)
+    __try {
+        FUN_1413ceb50(reinterpret_cast<unsigned long long>(this), rayTracing ? 1ull : 0ull, reinterpret_cast<unsigned long long>(temp), reinterpret_cast<unsigned long long>(objects));
+    } __except (GenFault(0x1413ceb50ull, GetExceptionInformation())) {
     }
-    FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_1413d8c80
+// translated: FUN_1413d8c80
 void CWorldSceneRender::DispatchRayTracing(bool rayTracing) {
-    (void)rayTracing;
-    if (!IsWorldPass(this)) {
-        return;
+    // (the reference's own code: the port had parts of it, and the world drew nothing, 2026-10-23)
+    __try {
+        FUN_1413d8c80(reinterpret_cast<unsigned long long>(this), rayTracing ? 1ull : 0ull);
+    } __except (GenFault(0x1413d8c80ull, GetExceptionInformation())) {
     }
-    FROST_UNIMPLEMENTED();
 }
 
 // ref: FUN_1412b8160

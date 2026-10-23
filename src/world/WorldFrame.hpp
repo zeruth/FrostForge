@@ -20,6 +20,9 @@ int32_t WorldSceneRelease(CWorldScene* scene);
 // The scene's own view, whose first word is the flag set the frames switch features in.
 uint32_t* WorldSceneGetParams(CWorldScene* scene);
 void WorldSceneParamsSetFlags(uint32_t* params, uint32_t mask, bool set);
+
+// The frame's screen rectangle reset (FUN_141365b20).
+void WorldResetFrameRect();
 // A model of the scene's CM2Scene, with a reference for the caller, or null.
 CM2Model* WorldSceneCreateModelByName(CWorldScene* scene, const char* name, uint32_t flags, int32_t priority,
     int32_t lod);

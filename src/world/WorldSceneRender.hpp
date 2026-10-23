@@ -141,7 +141,7 @@ class CWorldSceneRender {
     // ref: FUN_1413d8ac0
     void Begin(CWorldScene* scene, CWorldView* view, WORLDRENDERPARAMS* params);
     // The frame's passes.
-    // ref: FUN_1413cf390
+    // (forwards to FUN_1413cf390's translation)
     void Draw();
     // ref: FUN_1413d6ec0
     void SetEnvironmentConstants(GxRenderContext* context, ShaderEffectContext* effect, bool farFog);
@@ -152,9 +152,9 @@ class CWorldSceneRender {
     void* GetCommandList(uint32_t slot);
     // ref: FUN_1413cee80
     bool UsesCommandLists(uint32_t slot);
-    // ref: FUN_1413d47c0
+    // (forwards to FUN_1413d47c0's translation)
     void DrawOpaque(FRAMEBUFFER* buffer);
-    // ref: FUN_1413d07b0
+    // (forwards to FUN_1413d07b0's translation)
     void DrawTransparent(GXRENDERTARGETS* targets, GXRENDERTARGETS* targets2);
     // ref: FUN_1413d4070
     void DrawFrontPass(GxRenderContext* context, ShaderEffectContext* effect);
@@ -166,9 +166,9 @@ class CWorldSceneRender {
     bool PrepareParticulates();
     // The world scene's ray-traced shadow targets (FUN_1413ceb50) and its ray tracing jobs
     // (FUN_1413d8c80).
-    // ref: FUN_1413ceb50
+    // (forwards to FUN_1413ceb50's translation)
     void SetupRayTracing(bool rayTracing, FRAMEBUFFERTEMP* temp, void** objects);
-    // ref: FUN_1413d8c80
+    // (forwards to FUN_1413d8c80's translation)
     void DispatchRayTracing(bool rayTracing);
 };
 static_assert(offsetof(CWorldSceneRender, m_buffer070) == 0x70, "CWorldSceneRender layout");

@@ -1577,7 +1577,7 @@ undefined8 FUN_141c22690(longlong param_1)
   REFG(undefined1, 0x1432384e3) = *(undefined1 *)(param_1 + 0x20);
   REFG(undefined4, 0x14323af00) = *(undefined4 *)(param_1 + 0x24);
   REFG(undefined4, 0x14323af04) = *(undefined4 *)(param_1 + 0x28);
-  REFG(float, 0x14323af08) = *(undefined4 *)(param_1 + 0x2c);
+  GEN_COPY(REFG(float, 0x14323af08), *(undefined4 *)(param_1 + 0x2c));
   uVar1 = CALLF(longlong, FUN_141175400)(REFG(undefined1, 0x1432384e3));
   return uVar1;
 }
@@ -1886,7 +1886,7 @@ undefined8 FUN_141c22d20(longlong param_1)
     REFG(undefined4, 0x1432384e4) = *(undefined4 *)(param_1 + 0x20);
     REFG(undefined8, 0x142d35f50) = *(undefined8 *)(param_1 + 0x24);
     REFG(undefined8, 0x142d35f58) = *(undefined8 *)(param_1 + 0x2c);
-    REFG(double, 0x142d35f60) = *(undefined8 *)(param_1 + 0x34);
+    GEN_COPY(REFG(double, 0x142d35f60), *(undefined8 *)(param_1 + 0x34));
     REFG(undefined4, 0x142d35f68) = *(undefined4 *)(param_1 + 0x3c);
     REFG(undefined4, 0x1432384e8) = uVar6;
     if ((REFG(undefined4, 0x14323af90) < uVar6) &&
@@ -4618,7 +4618,7 @@ uint FUN_141c264f0(void)
   
   uVar3 = CALLF(ulonglong, FUN_14065f960)();
   uVar1 = (uint)uVar3;
-  if ((REFG(undefined4, 0x143238564) == 0) || (uVar2 = uVar1, -1 < (int)(uVar1 - REFG(undefined4, 0x143238564)))) {
+  if ((REFG(undefined4, 0x143238564) == 0) || (uVar2 = uVar1, -1 < (int)(uVar1 - REFG(int32_t, 0x143238564)))) {
     lVar4 = CALLF(ulonglong, FUN_14170ff20)();
     uVar2 = 0;
     if ((lVar4 != 0) &&

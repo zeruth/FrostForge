@@ -6,7 +6,8 @@ PTR_DAT_1426c43a0: the 12 locale codes by locale id ("enUS", ...; id 9 is empty)
 DAT_1426c5440:     region names by region id, 256 entries, mostly empty.
 PTR_1427b4cf0:     the 13 development portals and the region each stands for.
 """
-from wowbin import ROOT, Binary
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
+from pebin import ROOT, Binary
 
 
 def c_string(s):

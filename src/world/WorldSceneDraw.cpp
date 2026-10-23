@@ -29,6 +29,8 @@
 #include <windows.h>
 #include <windows.h>
 
+extern "C" unsigned long long FUN_1413de240(unsigned long long);
+
 extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 namespace {
@@ -175,10 +177,13 @@ void LiquidDisplacementSetOrigin(const float* position, const float* cell) {
     }
 }
 
-// ref: FUN_142529d80
+extern "C" unsigned long long FUN_142529d80(unsigned long long);
+// translated: FUN_142529d80
 void LiquidDisplacementUpdate(const uint32_t* time) {
-    (void)time;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_142529d80((unsigned long long)time);
+    } __except (GenFault(0x142529d80ull, GetExceptionInformation())) {
+    }
 }
 
 // The liquid targets' per-frame reset (FUN_14252cb00). Not ported.
@@ -206,18 +211,24 @@ bool WaterRefractionEnabled() {
 }
 
 // The ray-traced scene's frame (FUN_14125f5c0 through FUN_14125f590). Not ported.
-// ref: FUN_14125f590
+extern "C" unsigned long long FUN_14125f590(unsigned long long);
+// translated: FUN_14125f590
 void RayTracingUpdate(void* rayTracing) {
-    (void)rayTracing;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14125f590((unsigned long long)rayTracing);
+    } __except (GenFault(0x14125f590ull, GetExceptionInformation())) {
+    }
 }
 
 // A view list's work as pool jobs, 0x80 at a time (FUN_1413a2c50); its jobs (FUN_1413a2b70)
 // are not ported.
-// ref: FUN_1413a2b70
+extern "C" unsigned long long FUN_1413a2b70(unsigned long long);
+// translated: FUN_1413a2b70
 void WorldViewListJob(void* storage) {
-    (void)storage;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413a2b70((unsigned long long)storage);
+    } __except (GenFault(0x1413a2b70ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_1413a2c50
@@ -289,41 +300,45 @@ void SceneOcclusionWait(SceneOcclusion** holder, CWorldView* view, uint32_t stag
 
 }  // namespace
 
-// The cull's occluder list (+0x16380, FUN_141446590 through FUN_1413dc570). Not ported.
+// The cull's occluder list (+0x16338; FUN_1413dc570 reaches it through FUN_141446590).
 // ref: FUN_141446590
 void* CWorldCullOccluders(CWorldCull* cull) {
-    (void)cull;
-    FROST_UNIMPLEMENTED();
-    static int32_t s_none = 0;
-    return &s_none;
+    return reinterpret_cast<uint8_t*>(cull) + 0x16338;
 }
 
 // The cull's frame finished: the map's areas and objects gathered, the reflection and
 // refraction flags set from the water heights (FUN_141445630). Not ported.
-// ref: FUN_141445630
+extern "C" unsigned long long FUN_141445630(unsigned long long);
+// translated: FUN_141445630
 void CWorldCullUpdate(CWorldCull* cull) {
-    (void)cull;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141445630((unsigned long long)cull);
+    } __except (GenFault(0x141445630ull, GetExceptionInformation())) {
+    }
 }
 
 // The water height the cull found under the camera (FUN_141446290). Not ported.
-// ref: FUN_141446290
+extern "C" double FUN_141446290(unsigned long long);
+// translated: FUN_141446290
 float CWorldCullWaterHeight(CWorldCull* cull) {
-    (void)cull;
-    FROST_UNIMPLEMENTED();
-    return 0.0f;
+    __try {
+        return static_cast<float>(FUN_141446290((unsigned long long)cull));
+    } __except (GenFault(0x141446290ull, GetExceptionInformation())) {
+        return 0.0f;
+    }
 }
 
 // ---- the view ------------------------------------------------------------------------------
 
 // With flag 0x400 the scene's detail target follows the camera (or the scene's tracked object,
 // a little above it). The target's update (FUN_1413aa540, FUN_1413aa640) is not ported.
-// ref: FUN_1413de240
+// translated: FUN_1413de240
 void CWorldView::UpdateDetailTarget() {
-    if ((this->m_flags & 0x400) == 0) {
-        return;
+    // (the reference's own code: the port had parts of it, and the world drew nothing, 2026-10-23)
+    __try {
+        FUN_1413de240(reinterpret_cast<unsigned long long>(this));
+    } __except (GenFault(0x1413de240ull, GetExceptionInformation())) {
     }
-    FROST_UNIMPLEMENTED();
 }
 
 // ref: FUN_1413da730
@@ -639,10 +654,13 @@ void CWorldScene::Render(WORLDRENDERPARAMS* params) {
 }
 
 // A reflection or refraction view drawn into its buffer (FUN_1413c7570). Not ported.
-// ref: FUN_1413c7570
+extern "C" unsigned long long FUN_1413c7570(unsigned long long, unsigned long long);
+// translated: FUN_1413c7570
 void CWorldScene::RenderWater(WORLDRENDERPARAMS* params) {
-    (void)params;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413c7570((unsigned long long)this, (unsigned long long)params);
+    } __except (GenFault(0x1413c7570ull, GetExceptionInformation())) {
+    }
 }
 
 // The scene's lights for its models: the M2 scene's point lights nearest the camera, each
@@ -828,8 +846,7 @@ void CWorldScene::BeginShadingRate(GxRenderContext* context) {
     if (ShaderEffectShadingRateOn() && this->m_19b8 != nullptr) {
         const uint8_t combiners[2] = {0, 1};
         context->SetShadingRateCombiners(combiners);
-        context->Slot138();
-        FROST_UNIMPLEMENTED();  // the context's shading rate image (+0x138) set to +0x19b8
+        context->SetShadingRateImage(this->m_19b8);
     }
 }
 
@@ -838,14 +855,20 @@ void CWorldScene::EndShadingRate(GxRenderContext* context) {
     if (GxVariableRateShadingSupported(2)) {
         const uint8_t combiners[2] = {0, 0};
         context->SetShadingRateCombiners(combiners);
-        FROST_UNIMPLEMENTED();  // the context's shading rate image (+0x138) cleared
+        context->SetShadingRateImage(nullptr);
     }
 }
 
 // ---- GENERATED by tools/forward_stubs.py: link fallbacks where src/gen is not linked ----
 #pragma comment(linker, "/include:GenForwardMissing")
 #pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
+#pragma comment(linker, "/alternatename:FUN_14125f590=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413a2b70=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413c7570=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141445630=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141446290=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_142529c10=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_142529d80=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14252cb00=GenForwardMissing")
 // ---- end of link fallbacks ----
 
@@ -856,6 +879,7 @@ extern "C" void* const gen_f_1412b8210 = (void*)&RenderTargetScale;
 extern "C" void* const gen_f_1413463d0 = (void*)&FrustumFromCorners;
 extern "C" void* const gen_f_141346ec0 = (void*)&PlaneFromPoints;
 extern "C" void* const gen_f_14252caa0 = (void*)&WaterReflectionsEnabled;
+extern "C" void* const gen_f_14252cae0 = (void*)&WaterRefractionEnabled;
 extern "C" void* const gen_p_142d4c820 = (void*)&s_scratchFrame;
 extern "C" void* const gen_p_142d4c828 = (void*)&s_scratchLock;
 extern "C" void* const gen_p_142d4c830 = (void*)&s_scratchFree;

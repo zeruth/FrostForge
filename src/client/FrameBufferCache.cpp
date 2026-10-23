@@ -9,6 +9,7 @@
 #include "gx/d3d12/DeviceD3d12.hpp"
 #include "gx/d3d12/Objects.hpp"
 #include "storm/Memory.hpp"
+#include "util/FrostLog.hpp"
 #include <cstdlib>
 #include <cstring>
 
@@ -389,6 +390,15 @@ void* FrameBufferCacheAcquire(const int32_t* size, const FRAMEBUFFERTARGET* targ
         void** slot = &entry->m_texs.m_data[entry->m_texs.m_size - 1];
         void* created = nullptr;
         GxTexCreate(&desc, &created);
+        if (created == nullptr) {
+            // (the port's own report: a target the frame then reads as null, the world's "Main Depth"
+            // at 2880x1620 faulting FUN_1413c62c0 on every frame, 2026-10-23)
+            static int s_reported;
+            if (s_reported++ < 8) {
+                FrostLog("framebuffer", "cache texture not created: format %u, %dx%d, usage %08x/%x, heap kind %u (%p)",
+                         target->m_format, size[0], size[1], desc.m_usage, desc.m_usage2, entry->m_heapKind, entry->m_heap);
+            }
+        }
         void* old = *slot;
         *slot = created;
         if (old != nullptr) {

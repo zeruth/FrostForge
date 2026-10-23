@@ -2,16 +2,24 @@
 
 #include <cstring>
 
+#include "storm/Memory.hpp"
 #include "storm/list/TSList.hpp"
 #include "util/Unimplemented.hpp"
 #include "world/WorldQueries.hpp"
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 // ---- the type 6 scene's objects ------------------------------------------------------------
 
-// ref: FUN_1412a5ce0
+extern "C" unsigned long long FUN_1412a5ce0(unsigned long long);
+// translated: FUN_1412a5ce0
 void* WorldScene1950Create(void* memory) {
-    FROST_UNIMPLEMENTED();
-    return memory;
+    __try {
+        return reinterpret_cast<void*>(FUN_1412a5ce0((unsigned long long)memory));
+    } __except (GenFault(0x1412a5ce0ull, GetExceptionInformation())) {
+        return nullptr;
+    }
 }
 
 // ref: FUN_1412a9ff0
@@ -19,46 +27,69 @@ void WorldScene1950Release() {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_1412a5dc0
+extern "C" unsigned long long FUN_1412a5dc0(unsigned long long);
+// translated: FUN_1412a5dc0
 void WorldScene1950Destroy(void* object) {
-    (void)object;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1412a5dc0((unsigned long long)object);
+    } __except (GenFault(0x1412a5dc0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141439100
+extern "C" unsigned long long FUN_141439100(unsigned long long);
+// translated: FUN_141439100
 void* WorldScene6d8Create(void* memory) {
-    FROST_UNIMPLEMENTED();
-    return memory;
+    __try {
+        return reinterpret_cast<void*>(FUN_141439100((unsigned long long)memory));
+    } __except (GenFault(0x141439100ull, GetExceptionInformation())) {
+        return nullptr;
+    }
 }
 
-// ref: FUN_141439440
+extern "C" unsigned long long FUN_141439440(unsigned long long);
+// translated: FUN_141439440
 void WorldScene6d8Destroy(void* object) {
-    (void)object;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141439440((unsigned long long)object);
+    } __except (GenFault(0x141439440ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141439ee0
+extern "C" unsigned long long FUN_141439ee0(unsigned long long);
+// translated: FUN_141439ee0
 void WorldScene6d8Unload(void* object) {
-    (void)object;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141439ee0((unsigned long long)object);
+    } __except (GenFault(0x141439ee0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_14143a9e0
+extern "C" unsigned long long FUN_14143a9e0(unsigned long long);
+// translated: FUN_14143a9e0
 void* WorldScene6e0Create(void* memory) {
-    FROST_UNIMPLEMENTED();
-    return memory;
+    __try {
+        return reinterpret_cast<void*>(FUN_14143a9e0((unsigned long long)memory));
+    } __except (GenFault(0x14143a9e0ull, GetExceptionInformation())) {
+        return nullptr;
+    }
 }
 
-// ref: FUN_14143ab50
+extern "C" unsigned long long FUN_14143ab50(unsigned long long);
+// translated: FUN_14143ab50
 void WorldScene6e0Destroy(void* object) {
-    (void)object;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14143ab50((unsigned long long)object);
+    } __except (GenFault(0x14143ab50ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_14143adf0
+extern "C" unsigned long long FUN_14143adf0(unsigned long long);
+// translated: FUN_14143adf0
 void WorldScene6e0Unload(void* object) {
-    (void)object;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14143adf0((unsigned long long)object);
+    } __except (GenFault(0x14143adf0ull, GetExceptionInformation())) {
+    }
 }
 
 // ---- the sky scene -------------------------------------------------------------------------
@@ -69,77 +100,117 @@ void SkySceneDestroy(void* sky) {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_14143cad0
+extern "C" unsigned long long FUN_14143cad0(unsigned long long);
+// translated: FUN_14143cad0
 void SkySceneUnload(void* sky) {
-    (void)sky;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14143cad0((unsigned long long)sky);
+    } __except (GenFault(0x14143cad0ull, GetExceptionInformation())) {
+    }
 }
 
 // ---- the scene's 0xfa50 object -------------------------------------------------------------
 
-// Its 0x3e8 (count, a quad) cells and fields zeroed as the reference zeroes them; its texture
-// (FUN_14127e630 on `a4`) and the cell setup (FUN_1414242d0, FUN_1414240f0) are not ported.
-// ref: FUN_141423ae0
+// Its 0x3e8 (count, a quad) cells, its texture (FUN_14127e630 on `a4`) and the cell setup
+// (FUN_1414242d0, FUN_1414240f0): all the reference's, so its teardown is too.
+extern "C" unsigned long long FUN_141423ae0(unsigned long long, double, double, unsigned long long);
+// translated: FUN_141423ae0
 void* WorldScene030Create(void* memory, float a2, float a3, uint32_t a4) {
-    (void)a2;
-    (void)a3;
-    (void)a4;
-    std::memset(memory, 0, 0xfa50);
-    FROST_UNIMPLEMENTED();
-    return memory;
+    __try {
+        return reinterpret_cast<void*>(FUN_141423ae0((unsigned long long)memory, (double)a2, (double)a3, (unsigned long long)a4));
+    } __except (GenFault(0x141423ae0ull, GetExceptionInformation())) {
+        return nullptr;
+    }
 }
 
-// ref: FUN_141423c00
+extern "C" unsigned long long FUN_141423c00(unsigned long long);
+// translated: FUN_141423c00
 void WorldScene030Destroy(void* object) {
-    (void)object;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141423c00((unsigned long long)object);
+    } __except (GenFault(0x141423c00ull, GetExceptionInformation())) {
+    }
 }
 
 // ---- MapWeather ----------------------------------------------------------------------------
 
-// The weather's own fields as the constructor stores them; its particle base (FUN_14138a320),
-// its sound block (+0x1230, FUN_141389fc0) and its 5x5 precipitation grid (+0x1200, 0xe0
-// bytes from FUN_141389d40) are not ported, so the grid stays null.
-// ref: FUN_14138a820
+// The weather (0x1378 bytes): its own fields, its particle base (FUN_14138a320), its sound block
+// (+0x1230, FUN_141389fc0) and its 5x5 precipitation grid (+0x1200, 0xe0 bytes from
+// FUN_141389d40), all the reference's. MapWeatherDensity and the rest below read it at the
+// reference's offsets.
+extern "C" unsigned long long FUN_14138a820(unsigned long long, unsigned long long);
+// translated: FUN_14138a820
 void* MapWeatherCreate(void* memory, CWorldScene* scene) {
-    auto bytes = static_cast<uint8_t*>(memory);
-    std::memset(bytes, 0, 0x1378);
-    FROST_UNIMPLEMENTED();
-    auto store32 = [bytes](size_t offset, uint32_t value) {
-        std::memcpy(bytes + offset, &value, 4);
-    };
-    auto store64 = [bytes](size_t offset, uint64_t value) {
-        std::memcpy(bytes + offset, &value, 8);
-    };
-    std::memcpy(bytes + 0x1148, &scene, 8);
-    store32(0x1190, 0xffffffff);
-    store64(0x1174, 0xffffffffffffffffull);
-    store32(0x1184, 0x3f800000);
-    store32(0x1188, 0x3f800000);
-    store32(0x118c, 0x3f800000);
-    store32(0x1198, 0x40a00000);
-    store32(0x119c, 0x41200000);
-    store32(0x1334, 0x7f7fffff);
-    store32(0x1338, 0x7f7fffff);
-    store64(0x133c, 0x7f7fffff);
-    store32(0x1370, 1);
-    return memory;
+    __try {
+        return reinterpret_cast<void*>(FUN_14138a820((unsigned long long)memory, (unsigned long long)scene));
+    } __except (GenFault(0x14138a820ull, GetExceptionInformation())) {
+        return nullptr;
+    }
 }
 
-// ref: FUN_14138b150
+extern "C" unsigned long long FUN_14138b150(unsigned long long);
+// translated: FUN_14138b150
 void MapWeatherDestroy(void* weather) {
-    (void)weather;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14138b150((unsigned long long)weather);
+    } __except (GenFault(0x14138b150ull, GetExceptionInformation())) {
+    }
 }
 
 // ---- fadeouts and capture ------------------------------------------------------------------
 
-void WorldSceneFreeObjectFadeouts() {
-    FROST_UNIMPLEMENTED();
+// The object fadeouts (TSList<SObjectFadeout>): the active list (0x142d011b8) and the free list
+// its nodes go back to (0x142d011d0), both the reference's own, filled by the translated fade
+// code. Each node keeps its object at +0 and a second link (the scene's) at +0x68.
+namespace {
+
+using FADEOUTLIST = TSList<uint8_t, TSGetLink<uint8_t>, 8>;
+
+FADEOUTLIST* ActiveFadeouts() {
+    return reinterpret_cast<FADEOUTLIST*>(0x142d011b8ull);
 }
 
+FADEOUTLIST* FreeFadeouts() {
+    return reinterpret_cast<FADEOUTLIST*>(0x142d011d0ull);
+}
+
+extern "C" unsigned long long FUN_14134fd60(unsigned long long);
+
+// An object's fade let go (FUN_14134fd60, translated: a model's fade count, or the object).
+void ReleaseFadeObject(uint64_t object) {
+    __try {
+        FUN_14134fd60(object);
+    } __except (GenFault(0x14134fd60ull, GetExceptionInformation())) {
+    }
+}
+
+}  // namespace
+
+// The scene's unload: every active fadeout's object let go and the node moved to the free list
+// (part of FUN_1413c3a40).
+void WorldSceneFreeObjectFadeouts() {
+    FADEOUTLIST* active = ActiveFadeouts();
+    FADEOUTLIST* spare = FreeFadeouts();
+    uint8_t* node = active->Head();
+    while (node != nullptr) {
+        uint8_t* next = active->Next(node);
+        ReleaseFadeObject(*reinterpret_cast<uint64_t*>(node));
+        *reinterpret_cast<uint64_t*>(node) = 0;
+        reinterpret_cast<TSLink<uint8_t>*>(node + 0x68)->Unlink();
+        spare->Link(node)->Unlink();
+        spare->LinkToTail(node);
+        node = next;
+    }
+}
+
+// The scene's destruction: the free list's nodes unlinked and freed (part of FUN_1413c24e0).
 void WorldSceneFreeFadeouts() {
-    FROST_UNIMPLEMENTED();
+    FADEOUTLIST* spare = FreeFadeouts();
+    while (uint8_t* node = spare->Head()) {
+        reinterpret_cast<TSLink<uint8_t>*>(node + 0x68)->Unlink();
+        spare->Link(node)->Unlink();
+        SMemFree(node, ".?AV?$TSList@USObjectFadeout@@", -2, 0);
+    }
 }
 
 void WorldSceneDeleteA80(void* object) {
@@ -163,29 +234,35 @@ void WorldMapIntersectSegmentMulti() {
     FROST_UNIMPLEMENTED();
 }
 
-// ref: FUN_1413b5b40
+extern "C" unsigned long long FUN_1413b5b40(unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_1413b5b40
 bool WorldMapGroundHeight(CWorldMap* map, const float* position, float* height) {
-    (void)map;
-    (void)position;
-    (void)height;
-    FROST_UNIMPLEMENTED();
-    return false;
+    __try {
+        return (FUN_1413b5b40((unsigned long long)map, (unsigned long long)position, (unsigned long long)height) & 0xff) != 0;
+    } __except (GenFault(0x1413b5b40ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 
 // ---- the view's lists ----------------------------------------------------------------------
 
-// ref: FUN_1413a2970
+extern "C" unsigned long long FUN_1413a2970(unsigned long long);
+// translated: FUN_1413a2970
 void* WorldProjectedDecalCreate(void* query) {
-    (void)query;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    __try {
+        return reinterpret_cast<void*>(FUN_1413a2970((unsigned long long)query));
+    } __except (GenFault(0x1413a2970ull, GetExceptionInformation())) {
+        return nullptr;
+    }
 }
 
-// ref: FUN_141364cc0
+extern "C" unsigned long long FUN_141364cc0(unsigned long long, unsigned long long);
+// translated: FUN_141364cc0
 void WorldViewListAdd(WORLDVIEWLIST* list, void* node) {
-    (void)list;
-    (void)node;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141364cc0((unsigned long long)list, (unsigned long long)node);
+    } __except (GenFault(0x141364cc0ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_1413e0270
@@ -232,3 +309,25 @@ const float* MapWeatherDirection(void* weather) {
 float MapWeatherIntensity(void* weather) {
     return *reinterpret_cast<float*>(static_cast<uint8_t*>(weather) + 0x1228);
 }
+
+// ---- GENERATED by tools/forward_stubs.py: link fallbacks where src/gen is not linked ----
+#pragma comment(linker, "/include:GenForwardMissing")
+#pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
+#pragma comment(linker, "/alternatename:FUN_1412a5ce0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412a5dc0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14134fd60=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141364cc0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14138a820=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14138b150=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413a2970=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413b5b40=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141423ae0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141423c00=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141439100=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141439440=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141439ee0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14143a9e0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14143ab50=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14143adf0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14143cad0=GenForwardMissing")
+// ---- end of link fallbacks ----

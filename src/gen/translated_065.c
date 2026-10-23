@@ -16234,7 +16234,7 @@ undefined8 FUN_14107cc10(undefined8 param_1)
       }
     }
   }
-  *(float *)(lVar5 + 0x4b4) = (float)(*(undefined8 *)(gen_frame + 0xb0));
+  *(float *)(lVar5 + 0x4b4) = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0xb0))));
   *(float *)(lVar5 + 0x4b8) = (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0xb0)) + 4));
   cVar1 = CALLF(undefined1, FUN_14062cc40)(param_1,lVar5,"SetViewTranslation");
   if (cVar1 == '\0') {

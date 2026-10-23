@@ -10246,9 +10246,9 @@ undefined4 FUN_14114d930(undefined8 param_1)
     (*(undefined2 *)(gen_frame + 0x2c)) = 0x6e;
     uVar4 = CALLF(undefined4, FUN_1407d0a90)(&(*(undefined8 *)(gen_frame + 0x30)),&(*(undefined4 *)(gen_frame + 0x20)),0,2);
     uVar5 = (*(undefined8 *)(gen_frame + 0x30));
-    CALLF(undefined1 *, FUN_1402b3b50)((*(undefined8 *)(gen_frame + 0x30)),(double)(float)(*(undefined8 *)(gen_frame + 0x0)));
+    CALLF(undefined1 *, FUN_1402b3b50)((*(undefined8 *)(gen_frame + 0x30)),(double)gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))));
     CALLF(undefined8, FUN_1402b43c0)(uVar5,uVar4,&REFG(undefined1, 0x1426cf8f8));
-    CALLF(undefined1 *, FUN_1402b3b50)(uVar5,(double)(*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)));
+    CALLF(undefined1 *, FUN_1402b3b50)(uVar5,(double)gen_bits2f((unsigned int)((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)))));
     CALLF(undefined8, FUN_1402b43c0)(uVar5,uVar4,&REFG(undefined1, 0x1426cf8fc));
   }
   else {

@@ -971,7 +971,7 @@ ulonglong FUN_1411b5120(longlong *param_1, ulonglong param_2, double param_3_pro
   *(undefined8 *)(param_2 + 0xc) = 0;
   *(undefined4 *)(param_2 + 8) = 0;
   CALLF(float, FUN_141342690)(param_2,(*(float *)&gen_slot_param_3));
-  uVar6 = REFG(float, 0x14261aa30);
+  GEN_COPY(uVar6, REFG(float, 0x14261aa30));
   (*(undefined8 *)(gen_frame + 0xc0)) = *(undefined8 *)param_2;
   (*(undefined8 *)(gen_frame + 0xc8)) = *(undefined8 *)(param_2 + 8);
   (*(undefined8 *)(gen_frame + 0xd0)) = *(undefined8 *)(param_2 + 0x10);
@@ -1019,20 +1019,20 @@ ulonglong FUN_1411b5120(longlong *param_1, ulonglong param_2, double param_3_pro
     (*(undefined8 *)(gen_frame + 0x78)) = 0;
     (*(undefined8 *)(gen_frame + 0x90)) = REFG(undefined8, 0x14261a9e0);
     (*(undefined8 *)(gen_frame + 0x98)) = REFG(undefined8, 0x14261a9e8);
-    (*(undefined8 *)(gen_frame + 0x68)) = CONCAT44(0x3f800000,(float)(*(undefined8 *)(gen_frame + 0x68)));
+    (*(undefined8 *)(gen_frame + 0x68)) = CONCAT44(0x3f800000,gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x68)))));
     (*(undefined8 *)(gen_frame + 0x80)) = REFG(undefined8, 0x14261a9d0);
     (*(undefined8 *)(gen_frame + 0x88)) = REFG(undefined8, 0x14261a9d8);
     (*(undefined8 *)(gen_frame + 0xa0)) = 0;
     (*(undefined4 *)(gen_frame + 0xa8)) = 0x3f800000;
     CALLF(undefined4, FUN_1411bac00)(param_1,0xffffffff,&(*(undefined8 *)(gen_frame + 0x40)));
-    if ((float)(*(undefined8 *)(gen_frame + 0x40)) != -NAN) {
+    if (gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x40)))) != -NAN) {
       if ((*(byte *)(param_1 + 1) & 1) == 0) {
         (**(code **)(*param_1 + 8))(param_1,0);
       }
       lVar9 = param_1[0xc6];
       lVar12 = *(longlong *)(lVar9 + 0x10);
       uVar13 = *(undefined8 *)(lVar9 + 0x18);
-      CALLF(undefined4, FUN_1411ff0e0)((float)(*(undefined8 *)(gen_frame + 0x40)),((ushort *)(gen_frame + 0x1d0)),lVar9,lVar12,(unsigned long long)(uVar13),(unsigned long long)(*(undefined8 *)(param_1[0x7b] + 0x5d0)));
+      CALLF(undefined4, FUN_1411ff0e0)(gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x40)))),((ushort *)(gen_frame + 0x1d0)),lVar9,lVar12,(unsigned long long)(uVar13),(unsigned long long)(*(undefined8 *)(param_1[0x7b] + 0x5d0)));
       lVar9 = lVar12;
       if ((*(char *)(gen_frame + 0x1d5)) == '\x01') {
         lVar9 = *(longlong *)(param_1[0xc6] + 0x68);
@@ -1049,16 +1049,16 @@ ulonglong FUN_1411b5120(longlong *param_1, ulonglong param_2, double param_3_pro
         uVar10 = uVar3 & 0xe;
         fVar14 = fVar15;
         if ((uVar10 - 2 & 0xfffffffd) == 0) {
-          if (((float)(*(undefined8 *)(gen_frame + 0x50)) != 0.0) && (fVar14 = 0.0, 0.0 < (float)(*(undefined8 *)(gen_frame + 0x50)))) {
-            (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x50)) + 0)) = (float)((*(undefined8 *)(gen_frame + 0x48)) & 0xffffffff) / (float)(*(undefined8 *)(gen_frame + 0x50));
-            if ((float)(*(undefined8 *)(gen_frame + 0x50)) <= 0.0) {
-              iVar8 = -(int)(longlong)GEN_FNEG((float)(*(undefined8 *)(gen_frame + 0x50)));
+          if ((gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x50)))) != 0.0) && (fVar14 = 0.0, 0.0 < gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x50)))))) {
+            (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x50)) + 0)) = (float)((*(undefined8 *)(gen_frame + 0x48)) & 0xffffffff) / gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x50))));
+            if (gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x50)))) <= 0.0) {
+              iVar8 = -(int)(longlong)GEN_FNEG(gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x50)))));
             }
             else {
-              iVar8 = (int)(longlong)(float)(*(undefined8 *)(gen_frame + 0x50));
+              iVar8 = (int)(longlong)gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x50))));
             }
             fVar14 = (float)iVar8 /
-                     gen_bits2f((unsigned int)(GEN_F32BITS(((int)(float)(*(undefined8 *)(gen_frame + 0x58)) - (int)(*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x50)) + 4)))) >> 1));
+                     gen_bits2f((unsigned int)(GEN_F32BITS(((int)gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x58)))) - (int)(*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x50)) + 4)))) >> 1));
             if (fVar14 < 0.0) {
               fVar14 = 0.0;
             }
@@ -1080,7 +1080,7 @@ ulonglong FUN_1411b5120(longlong *param_1, ulonglong param_2, double param_3_pro
         fVar15 = fVar15 - fVar14;
         (*(undefined8 *)(gen_frame + 0x50)) = REFG(undefined8, 0x14261a9e0);
         (*(undefined8 *)(gen_frame + 0x58)) = REFG(undefined8, 0x14261a9e8);
-        (*(undefined8 *)(gen_frame + 0x70)) = REFG(double, 0x14261aa10);
+        GEN_COPY((*(undefined8 *)(gen_frame + 0x70)), REFG(double, 0x14261aa10));
         (*(undefined8 *)(gen_frame + 0x78)) = REFG(undefined8, 0x14261aa18);
         (*(undefined8 *)(gen_frame + 0x40)) = REFG(undefined8, 0x14261a9d0);
         (*(undefined8 *)(gen_frame + 0x48)) = REFG(undefined8, 0x14261a9d8);
@@ -1105,7 +1105,7 @@ ulonglong FUN_1411b5120(longlong *param_1, ulonglong param_2, double param_3_pro
         (*(undefined8 *)(gen_frame + 0x18)) = REFG(undefined8, 0x14261a9e8);
         (*(undefined8 *)(gen_frame + 0x20)) = REFG(undefined8, 0x14261aa00);
         (*(undefined8 *)(gen_frame + 0x28)) = REFG(undefined8, 0x14261aa08);
-        (*(undefined8 *)(gen_frame + 0x30)) = REFG(double, 0x14261aa10);
+        GEN_COPY((*(undefined8 *)(gen_frame + 0x30)), REFG(double, 0x14261aa10));
         (*(undefined8 *)(gen_frame + 0x38)) = REFG(undefined8, 0x14261aa18);
         do {
           fVar15 = *(float *)((longlong)&(*(undefined8 *)(gen_frame + 0xc0)) + lVar11 + 4);
@@ -1118,21 +1118,21 @@ ulonglong FUN_1411b5120(longlong *param_1, ulonglong param_2, double param_3_pro
           *(float *)((longlong)&(*(undefined8 *)(gen_frame + 0x8)) + lVar11 + 4) = fVar4 * fVar14;
           lVar11 = lVar11 + 0x10;
         } while (lVar11 < 0x40);
-        *(float *)param_2 = (float)(*(undefined8 *)(gen_frame + 0x0)) + (float)(*(undefined8 *)(gen_frame + 0x40));
+        *(float *)param_2 = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x40))));
         *(float *)(param_2 + 4) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) + (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4));
-        *(float *)(param_2 + 8) = (float)(*(undefined8 *)(gen_frame + 0x8)) + (float)(*(undefined8 *)(gen_frame + 0x48));
+        *(float *)(param_2 + 8) = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x48))));
         *(float *)(param_2 + 0xc) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) + (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4));
-        *(float *)(param_2 + 0x10) = (float)(*(undefined8 *)(gen_frame + 0x10)) + (float)(*(undefined8 *)(gen_frame + 0x50));
+        *(float *)(param_2 + 0x10) = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x50))));
         *(float *)(param_2 + 0x14) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) + (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x50)) + 4));
-        *(float *)(param_2 + 0x18) = (float)(*(undefined8 *)(gen_frame + 0x18)) + (float)(*(undefined8 *)(gen_frame + 0x58));
+        *(float *)(param_2 + 0x18) = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x18)))) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x58))));
         *(float *)(param_2 + 0x1c) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) + (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x58)) + 4));
-        *(float *)(param_2 + 0x20) = (float)(*(undefined8 *)(gen_frame + 0x20)) + (float)(*(undefined8 *)(gen_frame + 0x60));
+        *(float *)(param_2 + 0x20) = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x60))));
         *(float *)(param_2 + 0x24) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) + (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x60)) + 4));
-        *(float *)(param_2 + 0x28) = (float)(*(undefined8 *)(gen_frame + 0x28)) + (float)(*(undefined8 *)(gen_frame + 0x68));
+        *(float *)(param_2 + 0x28) = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x68))));
         *(float *)(param_2 + 0x2c) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) + (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x68)) + 4));
-        *(float *)(param_2 + 0x30) = (float)(*(undefined8 *)(gen_frame + 0x30)) + (float)(*(undefined8 *)(gen_frame + 0x70));
+        *(float *)(param_2 + 0x30) = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x30)))) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x70))));
         *(float *)(param_2 + 0x34) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) + (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x70)) + 4));
-        *(float *)(param_2 + 0x38) = (float)(*(undefined8 *)(gen_frame + 0x38)) + (float)(*(undefined8 *)(gen_frame + 0x78));
+        *(float *)(param_2 + 0x38) = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x38)))) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x78))));
         *(float *)(param_2 + 0x3c) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) + (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x78)) + 4));
       }
     }
@@ -2490,7 +2490,7 @@ LAB_1411bb683:
     CALLF(undefined8, FUN_1411c7c10)(param_4,uVar12 + uVar16,((char *)REFP(0x142da1bc0)),((longlong)_ReturnAddress())
                  );
   }
-  uVar12 = REFG(float, 0x14261aa30);
+  GEN_COPY(uVar12, REFG(float, 0x14261aa30));
   puVar20 = REFG(undefined1 *, 0x1430a0fc8);
   if (*(short *)(lVar4 + 0xe8) != 0) {
     do {
@@ -2662,11 +2662,11 @@ float * FUN_1411bc2e0(longlong param_1, float *param_2)
     if (fVar7 == 0.0) {
       fVar7 = REFG(float, 0x1426c7afc);
     }
-    *param_2 = (float)(*(undefined8 *)(gen_frame + 0x0)) - fVar7;
+    *param_2 = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))) - fVar7;
     param_2[1] = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) - fVar7;
-    param_2[2] = (float)(*(undefined8 *)(gen_frame + 0x8)) - fVar7;
+    param_2[2] = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) - fVar7;
     param_2[3] = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) + fVar7;
-    *(ulonglong *)(param_2 + 4) = CONCAT44((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) + fVar7,(float)(*(undefined8 *)(gen_frame + 0x10)) + fVar7);
+    *(ulonglong *)(param_2 + 4) = CONCAT44((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) + fVar7,gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) + fVar7);
     return param_2;
   }
   lVar6 = *(longlong *)(*(longlong *)(*(longlong *)(param_1 + 0x630) + 0x30) + 0x40);
@@ -3305,7 +3305,7 @@ uint FUN_1411be540(longlong *param_1, float *param_2, float *param_3)
   (*(undefined8 *)(gen_frame + 0x34)) = 0;
   (*(undefined8 *)(gen_frame + 0x3c)) = 0;
   CALLF(longlong, FUN_1411c0070)(param_1,-(uint)(cVar2 != '\0') & 0x9e,0,((undefined1 *)(gen_frame + 0x18)));
-  if ((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x2c)) + 4)) < (float)(*(undefined8 *)(gen_frame + 0x24))) {
+  if ((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x2c)) + 4)) < gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x24))))) {
 LAB_1411be5e7:
     (**(code **)(*param_1 + 0x138))(param_1,&(*(float *)(gen_frame + 0x0)));
     if (((((*(float *)(gen_frame + 0xc)) == (*(float *)(gen_frame + 0x0))) && ((*(float *)(gen_frame + 0x10)) == (*(float *)(gen_frame + 0x4)))) && ((*(float *)(gen_frame + 0x14)) == (*(float *)(gen_frame + 0x8)))) ||
@@ -3316,11 +3316,11 @@ LAB_1411be5e7:
     }
   }
   else {
-    if ((float)(*(undefined8 *)(gen_frame + 0x34)) < (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x24)) + 4))) goto LAB_1411be5e7;
-    if ((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x34)) + 4)) < (float)(*(undefined8 *)(gen_frame + 0x2c))) goto LAB_1411be5e7;
+    if (gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x34)))) < (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x24)) + 4))) goto LAB_1411be5e7;
+    if ((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x34)) + 4)) < gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x2c))))) goto LAB_1411be5e7;
   }
   *param_2 = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x34)) + 4));
-  *param_3 = (float)(*(undefined8 *)(gen_frame + 0x2c));
+  *param_3 = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x2c))));
 LAB_1411be647:
   return (uint)bVar1;
 }
@@ -3353,7 +3353,7 @@ undefined1 FUN_1411be6a0(longlong *param_1, float *param_2, double param_3_promo
   (*(undefined8 *)(gen_frame + 0x34)) = 0;
   (*(undefined8 *)(gen_frame + 0x3c)) = 0;
   CALLF(longlong, FUN_1411c0070)(param_1,-(uint)(cVar3 != '\0') & 0x9e,0,((undefined1 *)(gen_frame + 0x18)));
-  if ((*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x2c)) + 4)) < (float)(*(undefined8 *)(gen_frame + 0x24))) {
+  if ((*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x2c)) + 4)) < gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x24))))) {
 LAB_1411be787:
     ((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long, float))(**(code **)(*param_1 + 0x138)))((unsigned long long)(param_1),(unsigned long long)(&(*(float *)(gen_frame + 0x0))),(unsigned long long)(uVar4),(float)((*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x2c)) + 4))));
     (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x34)) + 0)) = (*(float *)(gen_frame + 0x10));
@@ -3368,24 +3368,24 @@ LAB_1411be787:
     }
   }
   else {
-    if ((float)(*(undefined8 *)(gen_frame + 0x34)) < (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x24)) + 4))) goto LAB_1411be787;
-    if ((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x34)) + 4)) < (float)(*(undefined8 *)(gen_frame + 0x2c))) goto LAB_1411be787;
+    if (gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x34)))) < (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x24)) + 4))) goto LAB_1411be787;
+    if ((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x34)) + 4)) < gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x2c))))) goto LAB_1411be787;
   }
-  (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x34)) + 0)) = (float)(*(undefined8 *)(gen_frame + 0x34)) - (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x24)) + 4));
-  (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x2c)) + 4)) = (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x2c)) + 4)) - (float)(*(undefined8 *)(gen_frame + 0x24));
+  (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x34)) + 0)) = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x34)))) - (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x24)) + 4));
+  (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x2c)) + 4)) = (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x2c)) + 4)) - gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x24))));
 LAB_1411be7dc:
-  fVar5 = (float)(*(undefined8 *)(gen_frame + 0x34));
-  if ((float)(*(undefined8 *)(gen_frame + 0x34)) <= (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x2c)) + 4))) {
+  fVar5 = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x34))));
+  if (gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x34)))) <= (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x2c)) + 4))) {
     fVar5 = (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x2c)) + 4));
   }
-  if ((*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x2c)) + 4)) <= (float)(*(undefined8 *)(gen_frame + 0x34))) {
+  if ((*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x2c)) + 4)) <= gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x34))))) {
     (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x34)) + 0)) = (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x2c)) + 4));
   }
   fVar6 = 0.0;
   if ((0.0 <= param_3) && (fVar6 = param_3, fVar1 <= param_3)) {
     fVar6 = fVar1;
   }
-  *param_2 = (fVar1 - fVar6) * (float)(*(undefined8 *)(gen_frame + 0x34)) + fVar5 * fVar6;
+  *param_2 = (fVar1 - fVar6) * gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x34)))) + fVar5 * fVar6;
   return uVar2;
 }
 
@@ -3486,7 +3486,7 @@ undefined1 FUN_1411be9e0(longlong param_1, longlong param_2, undefined8 param_3)
   pfVar13 = (float *)(lVar1 + 0xd4b8);
   (*(undefined8 *)(gen_frame + 0x20)) = REFG(undefined8, 0x14261aa00);
   (*(undefined8 *)(gen_frame + 0x28)) = REFG(undefined8, 0x14261aa08);
-  (*(undefined8 *)(gen_frame + 0x30)) = REFG(double, 0x14261aa10);
+  GEN_COPY((*(undefined8 *)(gen_frame + 0x30)), REFG(double, 0x14261aa10));
   (*(undefined8 *)(gen_frame + 0x38)) = REFG(undefined8, 0x14261aa18);
   iVar10 = CALLF(undefined4, FUN_1411bf190)(param_1,param_3,pfVar13,param_2 + 0x10,(unsigned long long)(&(*(undefined8 *)(gen_frame + 0x0))));
   fVar20 = REFG(float, 0x142618d64);
@@ -3530,18 +3530,18 @@ undefined1 FUN_1411be9e0(longlong param_1, longlong param_2, undefined8 param_3)
       fVar20 = fVar20 / fVar14;
       fVar19 = fVar19 * fVar20;
       *(float *)(param_2 + 0x28) =
-           (float)(*(undefined8 *)(gen_frame + 0x0)) * *pfVar13 + (float)(*(undefined8 *)(gen_frame + 0x10)) * *(float *)(lVar1 + 0xd4bc) +
-           (float)(*(undefined8 *)(gen_frame + 0x20)) * *(float *)(lVar1 + 0xd4c0);
+           gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))) * *pfVar13 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * *(float *)(lVar1 + 0xd4bc) +
+           gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * *(float *)(lVar1 + 0xd4c0);
       *(float *)(param_2 + 0x2c) =
-           (float)(*(undefined8 *)(gen_frame + 0x10)) * *(float *)(lVar1 + 0xd4cc) +
-           (float)(*(undefined8 *)(gen_frame + 0x0)) * *(float *)(lVar1 + 0xd4c8) +
-           (float)(*(undefined8 *)(gen_frame + 0x20)) * *(float *)(lVar1 + 0xd4d0);
+           gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * *(float *)(lVar1 + 0xd4cc) +
+           gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))) * *(float *)(lVar1 + 0xd4c8) +
+           gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * *(float *)(lVar1 + 0xd4d0);
       fVar18 = *(float *)(lVar1 + 0xd4dc);
       fVar14 = *(float *)(lVar1 + 0xd4d8);
       fVar15 = *(float *)(lVar1 + 0xd4e0);
-      *(float *)(param_2 + 0x34) = (float)(*(undefined8 *)(gen_frame + 0x30));
+      *(float *)(param_2 + 0x34) = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x30))));
       *(float *)(param_2 + 0x30) =
-           (float)(*(undefined8 *)(gen_frame + 0x10)) * fVar18 + (float)(*(undefined8 *)(gen_frame + 0x0)) * fVar14 + (float)(*(undefined8 *)(gen_frame + 0x20)) * fVar15;
+           gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * fVar18 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))) * fVar14 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * fVar15;
       *(float *)(param_2 + 0x38) =
            (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) * *pfVar13 + (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * *(float *)(lVar1 + 0xd4bc) +
            (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * *(float *)(lVar1 + 0xd4c0);
@@ -3601,29 +3601,29 @@ undefined1 FUN_1411be9e0(longlong param_1, longlong param_2, undefined8 param_3)
         fVar7 = *(float *)(lVar1 + 0xd4d0);
         fVar8 = *(float *)(lVar1 + 0xd4d4);
         *(float *)(param_2 + 0x38) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x28)) * fVar18 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * fVar5 + (float)(*(undefined8 *)(gen_frame + 0x20)) * fVar17;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * fVar18 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * fVar5 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * fVar17;
         *(float *)(param_2 + 0x3c) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x28)) * fVar14 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * fVar6 + (float)(*(undefined8 *)(gen_frame + 0x20)) * fVar2;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * fVar14 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * fVar6 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * fVar2;
         *(float *)(param_2 + 0x40) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x28)) * fVar15 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * fVar7 + (float)(*(undefined8 *)(gen_frame + 0x20)) * fVar3;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * fVar15 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * fVar7 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * fVar3;
         *(float *)(param_2 + 0x44) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x28)) * fVar16 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * fVar8 + (float)(*(undefined8 *)(gen_frame + 0x20)) * fVar4;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * fVar16 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * fVar8 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * fVar4;
         *(float *)(param_2 + 0x28) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x8)) * fVar18 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) * fVar5 + (float)(*(undefined8 *)(gen_frame + 0x0)) * fVar17;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) * fVar18 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) * fVar5 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))) * fVar17;
         *(float *)(param_2 + 0x2c) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x8)) * fVar14 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) * fVar6 + (float)(*(undefined8 *)(gen_frame + 0x0)) * fVar2;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) * fVar14 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) * fVar6 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))) * fVar2;
         *(float *)(param_2 + 0x30) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x8)) * fVar15 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) * fVar7 + (float)(*(undefined8 *)(gen_frame + 0x0)) * fVar3;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) * fVar15 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) * fVar7 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))) * fVar3;
         *(float *)(param_2 + 0x34) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x8)) * fVar16 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) * fVar8 + (float)(*(undefined8 *)(gen_frame + 0x0)) * fVar4;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) * fVar16 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) * fVar8 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))) * fVar4;
       }
       else if (REFG(undefined4, 0x1430a103c) == 1) {
         fVar18 = *pfVar13;
@@ -3633,57 +3633,57 @@ undefined1 FUN_1411be9e0(longlong param_1, longlong param_2, undefined8 param_3)
         fVar17 = *(float *)(lVar1 + 0xd4d8);
         fVar2 = *(float *)(lVar1 + 0xd4e0);
         *(float *)(param_2 + 0x28) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) * fVar15 + (float)(*(undefined8 *)(gen_frame + 0x0)) * fVar18 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x8)) * fVar17;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) * fVar15 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))) * fVar18 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) * fVar17;
         *(float *)(param_2 + 0x2c) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * fVar15 + (float)(*(undefined8 *)(gen_frame + 0x10)) * fVar18 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x18)) * fVar17;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * fVar15 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * fVar18 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x18)))) * fVar17;
         *(float *)(param_2 + 0x30) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x28)) * fVar17 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * fVar15 + (float)(*(undefined8 *)(gen_frame + 0x20)) * fVar18;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * fVar17 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * fVar15 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * fVar18;
         *(float *)(param_2 + 0x34) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * fVar15 + (float)(*(undefined8 *)(gen_frame + 0x30)) * fVar18 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x38)) * fVar17;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * fVar15 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x30)))) * fVar18 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x38)))) * fVar17;
         *(float *)(param_2 + 0x38) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) * fVar16 + (float)(*(undefined8 *)(gen_frame + 0x0)) * fVar14 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x8)) * fVar2;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) * fVar16 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))) * fVar14 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) * fVar2;
         *(float *)(param_2 + 0x3c) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * fVar16 + (float)(*(undefined8 *)(gen_frame + 0x10)) * fVar14 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x18)) * fVar2;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * fVar16 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * fVar14 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x18)))) * fVar2;
         *(float *)(param_2 + 0x40) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x28)) * fVar2 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * fVar16 + (float)(*(undefined8 *)(gen_frame + 0x20)) * fVar14;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * fVar2 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * fVar16 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * fVar14;
         *(float *)(param_2 + 0x44) =
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * fVar16 + (float)(*(undefined8 *)(gen_frame + 0x30)) * fVar14 +
-             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * 0.0 + (float)(*(undefined8 *)(gen_frame + 0x38)) * fVar2;
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * fVar16 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x30)))) * fVar14 +
+             (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * 0.0 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x38)))) * fVar2;
       }
       else {
         *(float *)(param_2 + 0x28) =
-             (float)(*(undefined8 *)(gen_frame + 0x0)) * *pfVar13 + (float)(*(undefined8 *)(gen_frame + 0x10)) * *(float *)(lVar1 + 0xd4bc) +
-             (float)(*(undefined8 *)(gen_frame + 0x20)) * *(float *)(lVar1 + 0xd4c0);
+             gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))) * *pfVar13 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * *(float *)(lVar1 + 0xd4bc) +
+             gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * *(float *)(lVar1 + 0xd4c0);
         *(float *)(param_2 + 0x2c) =
-             (float)(*(undefined8 *)(gen_frame + 0x10)) * *(float *)(lVar1 + 0xd4cc) +
-             (float)(*(undefined8 *)(gen_frame + 0x0)) * *(float *)(lVar1 + 0xd4c8) +
-             (float)(*(undefined8 *)(gen_frame + 0x20)) * *(float *)(lVar1 + 0xd4d0);
+             gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * *(float *)(lVar1 + 0xd4cc) +
+             gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))) * *(float *)(lVar1 + 0xd4c8) +
+             gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * *(float *)(lVar1 + 0xd4d0);
         fVar18 = *(float *)(lVar1 + 0xd4dc);
         fVar14 = *(float *)(lVar1 + 0xd4d8);
         fVar15 = *(float *)(lVar1 + 0xd4e0);
-        *(float *)(param_2 + 0x34) = (float)(*(undefined8 *)(gen_frame + 0x30));
+        *(float *)(param_2 + 0x34) = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x30))));
         *(float *)(param_2 + 0x30) =
-             (float)(*(undefined8 *)(gen_frame + 0x10)) * fVar18 + (float)(*(undefined8 *)(gen_frame + 0x0)) * fVar14 + (float)(*(undefined8 *)(gen_frame + 0x20)) * fVar15;
+             gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * fVar18 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))) * fVar14 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * fVar15;
         *(float *)(param_2 + 0x38) =
-             (float)(*(undefined8 *)(gen_frame + 0x8)) * *pfVar13 + (float)(*(undefined8 *)(gen_frame + 0x18)) * *(float *)(lVar1 + 0xd4bc) +
-             (float)(*(undefined8 *)(gen_frame + 0x28)) * *(float *)(lVar1 + 0xd4c0);
+             gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) * *pfVar13 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x18)))) * *(float *)(lVar1 + 0xd4bc) +
+             gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * *(float *)(lVar1 + 0xd4c0);
         *(float *)(param_2 + 0x3c) =
-             (float)(*(undefined8 *)(gen_frame + 0x18)) * *(float *)(lVar1 + 0xd4cc) +
-             (float)(*(undefined8 *)(gen_frame + 0x8)) * *(float *)(lVar1 + 0xd4c8) +
-             (float)(*(undefined8 *)(gen_frame + 0x28)) * *(float *)(lVar1 + 0xd4d0);
+             gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x18)))) * *(float *)(lVar1 + 0xd4cc) +
+             gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) * *(float *)(lVar1 + 0xd4c8) +
+             gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * *(float *)(lVar1 + 0xd4d0);
         fVar18 = *(float *)(lVar1 + 0xd4dc);
         fVar14 = *(float *)(lVar1 + 0xd4d8);
         fVar15 = *(float *)(lVar1 + 0xd4e0);
-        *(float *)(param_2 + 0x44) = (float)(*(undefined8 *)(gen_frame + 0x38));
+        *(float *)(param_2 + 0x44) = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x38))));
         *(float *)(param_2 + 0x40) =
-             (float)(*(undefined8 *)(gen_frame + 0x18)) * fVar18 + (float)(*(undefined8 *)(gen_frame + 0x8)) * fVar14 + (float)(*(undefined8 *)(gen_frame + 0x28)) * fVar15;
+             gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x18)))) * fVar18 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) * fVar14 + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * fVar15;
       }
       *(float *)(param_2 + 0x48) = fVar20 * *(float *)(lVar1 + 0xd4bc);
       *(float *)(param_2 + 0x4c) = fVar20 * *(float *)(lVar1 + 0xd4cc);
@@ -3873,7 +3873,7 @@ undefined4 FUN_1411bf190(longlong param_1, longlong param_2, longlong param_3, f
         uVar12 = (ulonglong)(uVar11 + 1);
       } while (uVar11 + 1 < (uint)*(ushort *)(param_2 + 6));
     }
-    uVar11 = REFG(float, 0x14261aa20);
+    GEN_COPY(uVar11, REFG(float, 0x14261aa20));
     fVar20 = REFG(float, 0x14261a954);
     fVar19 = REFG(float, 0x142618d64);
     uVar10 = 2;
@@ -3950,7 +3950,7 @@ undefined4 FUN_1411bf190(longlong param_1, longlong param_2, longlong param_3, f
               param_5[4] = fVar20;
               fVar23 = ((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) - fVar21 * ((float *)(gen_frame + 0x0))[0]) - fVar24 * ((float *)(gen_frame + 0x0))[1];
               fVar19 = 0.0;
-              fVar20 = ((float)(*(undefined8 *)(gen_frame + 0x30)) - fVar22 * ((float *)(gen_frame + 0x0))[0]) - fVar20 * ((float *)(gen_frame + 0x0))[1];
+              fVar20 = (gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x30)))) - fVar22 * ((float *)(gen_frame + 0x0))[0]) - fVar20 * ((float *)(gen_frame + 0x0))[1];
               fVar21 = 0.0;
               goto LAB_1411bfbe8;
             }
@@ -4033,7 +4033,7 @@ undefined4 FUN_1411bf190(longlong param_1, longlong param_2, longlong param_3, f
               fVar24 = 0.0;
               fVar19 = (fVar26 - fVar28) * fVar19;
               fVar25 = ((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) - fVar25 * ((float *)(gen_frame + 0x0))[0]) - ((float *)(gen_frame + 0x0))[2] * fVar21;
-              fVar20 = ((float)(*(undefined8 *)(gen_frame + 0x30)) - fVar22 * ((float *)(gen_frame + 0x0))[0]) - ((float *)(gen_frame + 0x0))[2] * fVar19;
+              fVar20 = (gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x30)))) - fVar22 * ((float *)(gen_frame + 0x0))[0]) - ((float *)(gen_frame + 0x0))[2] * fVar19;
 LAB_1411bfbe8:
               param_5[5] = fVar24;
               param_5[6] = 0.0;
@@ -4699,8 +4699,8 @@ switchD_1411c1f93_caseD_7:
   fVar38 = REFG(float, 0x14261f708);
   fVar32 = (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4));
   fVar39 = (*(float *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4));
-  fVar40 = (float)(*(undefined8 *)(gen_frame + 0x20));
-  fVar41 = (float)(*(undefined8 *)(gen_frame + 0x18));
+  fVar40 = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20))));
+  fVar41 = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x18))));
   if ((*(uint *)(gen_frame + 0x100)) == 6) {
     if (uVar6 != 0) {
       (*(longlong *)(gen_frame + 0x108)) = *(longlong *)(param_1 + 0x478 + uVar16 * 8);
@@ -5121,7 +5121,7 @@ undefined1 FUN_1411c66f0(longlong param_1)
       uVar4 = uVar2;
       do {
         if (((*(byte *)(uVar5 + uVar4 * 4) & 1) == 0) &&
-           ((&REFG(undefined1, 0x1427228d0))[*(ushort *)(uVar5 + 2 + uVar4 * 4)] != '\0')) {
+           (((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x1427228d0)))[*(ushort *)(uVar5 + 2 + uVar4 * 4)] != '\0')) {
           return 1;
         }
         uVar3 = (int)uVar4 + 1;
@@ -6811,7 +6811,7 @@ undefined8 FUN_1411c9fc0(longlong param_1, uint param_2, undefined8 *param_3)
                  CALLF(undefined8, FUN_1412be640)(0x40,"D:\\BuildServer\\A\\work-git\\wow\\Engine\\Source\\Model2\\M2Model.cpp",0x1ec7,0x12,(unsigned long long)(0));
         *(undefined8 **)(lVar6 + 0x50) = puVar4;
       }
-      (*(uint *)(gen_frame + 0x4)) = REFG(float, 0x14261aa30);
+      GEN_COPY((*(uint *)(gen_frame + 0x4)), REFG(float, 0x14261aa30));
       uVar3 = param_3[1];
       *puVar4 = *param_3;
       puVar4[1] = uVar3;
@@ -6863,7 +6863,7 @@ undefined8 FUN_1411cb0a0(longlong param_1, int param_2)
   longlong lVar2 = {0};
   undefined8 uVar3 = {0};
   
-  uVar1 = REFG(float, 0x14261aa30);
+  GEN_COPY(uVar1, REFG(float, 0x14261aa30));
   if ((uint)(param_2 != 0) != (*(uint *)(param_1 + 0x3a8) >> 0x13 & 1)) {
     *(uint *)(param_1 + 0x110) = GEN_FNEGBITS(*(uint *)(param_1 + 0x110));
     *(uint *)(param_1 + 0x118) = GEN_FNEGBITS(*(uint *)(param_1 + 0x118));
@@ -6910,7 +6910,7 @@ undefined8 FUN_1411cb720(longlong param_1, int param_2)
     uVar3 = (uint)(param_2 != 0) << 0x1a | *(uint *)(param_1 + 0x3a8) & 0xfbffffff;
     *(uint *)(param_1 + 0x3a8) = uVar3;
     CALLF(undefined8, FUN_1411e7e00)(param_1,(byte)(uVar3 >> 0x1a) & 1);
-    uVar3 = REFG(float, 0x14261aa30);
+    GEN_COPY(uVar3, REFG(float, 0x14261aa30));
     *(uint *)(param_1 + 0x110) = GEN_FNEGBITS(*(uint *)(param_1 + 0x110));
     *(uint *)(param_1 + 0x118) = *(uint *)(param_1 + 0x118) ^ uVar3;
     *(uint *)(param_1 + 0x114) = *(uint *)(param_1 + 0x114) ^ uVar3;
@@ -8276,7 +8276,7 @@ longlong FUN_1411cf670(longlong param_1, undefined8 param_2, int param_3)
   }
   CALLF(undefined8, FUN_14124c1f0)(param_1 + 0xf28,uVar7);
   uVar3 = REFG(undefined8, 0x14261aa18);
-  *(undefined8 *)(param_1 + 0xd568) = REFG(double, 0x14261aa10);
+  GEN_COPY(*(undefined8 *)(param_1 + 0xd568), REFG(double, 0x14261aa10));
   *(undefined8 *)(param_1 + 0xd570) = uVar3;
   *(undefined8 *)(param_1 + 0xd560) = 0;
   return param_1;
@@ -9362,7 +9362,7 @@ undefined4 FUN_1411d60e0(longlong param_1, longlong param_2, longlong param_3)
     (*(ulonglong *)(gen_frame + 0x68)) = *(ulonglong *)(lVar4 + 0x30);
     uVar3 = CALLF(undefined2, FUN_141259d30)(*(undefined8 *)(param_3 + 0x3a8));
     fVar8 = *(float *)(param_3 + 0x35c);
-    if (((&REFG(undefined1, 0x142721288))[uVar3] == '\0') || (REFG(float, 0x1426c6f80) <= fVar8)) {
+    if ((((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x142721288)))[uVar3] == '\0') || (REFG(float, 0x1426c6f80) <= fVar8)) {
       uVar6 = *(ulonglong *)(param_2 + 0x18) & 0x7fffffffffffffff;
       if (*(ulonglong *)(param_2 + 0x10) == uVar6) {
         CALLF(undefined1, FUN_1411e55a0)(param_2 + 8,uVar6 + 1);
@@ -9581,14 +9581,14 @@ undefined4 FUN_1411d6440(longlong param_1, longlong param_2, ulonglong param_3)
 undefined1 FUN_1411d8220(ushort param_1)
 {
   GEN_HIT(174);
-  return (&REFG(undefined1, 0x142721480))[param_1];
+  return ((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x142721480)))[param_1];
 }
 
 /* ref: FUN_1411d8230 */
 undefined1 FUN_1411d8230(ushort param_1)
 {
   GEN_HIT(175);
-  return (&REFG(undefined1, 0x142721488))[param_1];
+  return ((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x142721488)))[param_1];
 }
 
 /* ref: FUN_1411d8bf0 */
@@ -10026,7 +10026,7 @@ undefined8 FUN_1411daa80(undefined8 *param_1, undefined8 param_2, undefined8 par
     }
     lVar7 = param_1[0x12];
     fVar15 = *(float *)(lVar7 + 0x370);
-    (*(float *)(gen_frame + 0x0)) = (float)*(undefined8 *)(lVar7 + 0x368);
+    (*(float *)(gen_frame + 0x0)) = gen_bits2f((unsigned int)(*(undefined8 *)(lVar7 + 0x368)));
     (*(float *)(gen_frame + 0x4)) = (float)(GEN_BITS(*(undefined8 *)(lVar7 + 0x368) )>> 0x20);
     if (*(ushort *)(param_1[0x1f] + 8) < *(ushort *)(param_1[0xc] + 0x48)) {
       lVar8 = *(longlong *)(lVar7 + 0x4d0);

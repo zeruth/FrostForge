@@ -8,9 +8,10 @@ in by CGxDevice's constructor (FUN_142290650). An attribute is 16 bytes: semanti
 into the names at 0x142913490), type (an index into the vertex formats at 0x142913520),
 offset, stream.
 """
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 import struct
 
-from wowbin import ROOT, Binary
+from pebin import ROOT, Binary
 
 TABLE = 0x142D41D78
 COUNT = 0x2B

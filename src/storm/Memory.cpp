@@ -59,6 +59,12 @@ bool GuardBlock(void* block) {
     if (!VirtualQuery(block, &info, sizeof(info)) || info.AllocationBase == nullptr || info.Type != MEM_PRIVATE) {
         return false;
     }
+    // (only where the reservation's first page is there: a CRT heap segment can leave its first
+    // page decommitted, and reading the marker there faulted inside an ordinary free, 2026-10-22)
+    MEMORY_BASIC_INFORMATION head;
+    if (!VirtualQuery(info.AllocationBase, &head, sizeof(head)) || head.State != MEM_COMMIT) {
+        return false;
+    }
     return reinterpret_cast<const uint64_t*>(info.AllocationBase)[1] == kGuardMagic;
 }
 
@@ -260,7 +266,40 @@ bool Quarantine(void* block) {
     return true;
 }
 
+// A block of a guard reservation already freed (its base page decommitted by GuardFree): a
+// second free. Logged with the first free's stack and this one's, then skipped; reading the
+// reservation's marker faulted inside the second free and named neither (2026-10-22).
+bool GuardAlreadyFreed(void* block) {
+    if (GuardMode() == 0 || block == nullptr) {
+        return false;
+    }
+    MEMORY_BASIC_INFORMATION info;
+    if (!VirtualQuery(block, &info, sizeof(info)) || info.AllocationBase == nullptr || info.Type != MEM_PRIVATE) {
+        return false;
+    }
+    MEMORY_BASIC_INFORMATION head;
+    if (!VirtualQuery(info.AllocationBase, &head, sizeof(head)) || head.State == MEM_COMMIT) {
+        return false;
+    }
+    // (a reservation the guard freed before; a CRT heap segment's first page can be decommitted
+    // too, and those are ordinary blocks: 45000 of them were taken for double frees and leaked)
+    {
+        std::lock_guard<std::mutex> lock(s_guardFreesLock);
+        if (s_guardFrees == nullptr || s_guardFrees->count(static_cast<uint8_t*>(info.AllocationBase)) == 0) {
+            return false;
+        }
+    }
+    FrostLog("memory", "double free of guard block %p; freed first by:", block);
+    MemoryDescribeFreed(reinterpret_cast<uint64_t>(block));
+    FrostLog("memory", "freed again by:");
+    FrostLogStack(2, 16);
+    return true;
+}
+
 void RawFree(void* block) {
+    if (GuardAlreadyFreed(block)) {
+        return;
+    }
     if (GuardBlock(block)) {
         GuardFree(block);
     } else if (Quarantine(block)) {
@@ -293,10 +332,12 @@ void* s_hook8;                      // 0x142e1c488
 // out-of-memory dialog first), under the memory system's lock.
 // ref: FUN_140254890
 void SMemReportOutOfMemory(const char* tag, int32_t line, uint64_t bytes) {
-    (void)tag;
-    (void)line;
-    (void)bytes;
     (void)s_showOutOfMemoryDialog;
+    // (the reference's dialog and report are not ported; the request and who made it are logged,
+    // a garbage size from a translated caller being the usual cause)
+    FrostLog("memory", "out of memory: %llu bytes at %s:%d", static_cast<unsigned long long>(bytes),
+             tag != nullptr ? tag : "?", line);
+    FrostLogStack(1, 16);
     FROST_UNIMPLEMENTED();
 }
 

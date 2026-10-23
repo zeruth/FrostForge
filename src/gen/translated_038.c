@@ -491,7 +491,7 @@ undefined8 FUN_14061d2b0(longlong *param_1, longlong *param_2)
                 if ((byte)(*(longlong *)(gen_frame + 0x10)) == 0) {
                   bVar11 = (*(undefined1 *)((char *)&(*(undefined8 *)(gen_frame + 0x58)) + 2)) < *(byte *)((longlong)puVar9 + 0x42);
                   if ((*(undefined1 *)((char *)&(*(undefined8 *)(gen_frame + 0x58)) + 2)) == *(byte *)((longlong)puVar9 + 0x42)) {
-                    if ((float)(*(undefined8 *)(gen_frame + 0x50)) == *(float *)(puVar9 + 7)) {
+                    if (gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x50)))) == *(float *)(puVar9 + 7)) {
                       if ((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x50)) + 4)) == *(float *)((longlong)puVar9 + 0x3c)) {
                         bVar11 = (ushort)(*(undefined8 *)(gen_frame + 0x58)) < (ushort)puVar9[8];
                         if ((ushort)(*(undefined8 *)(gen_frame + 0x58)) == (ushort)puVar9[8]) {
@@ -521,7 +521,7 @@ undefined8 FUN_14061d2b0(longlong *param_1, longlong *param_2)
                       }
                     }
                     else {
-                      bVar11 = (float)(*(undefined8 *)(gen_frame + 0x50)) < *(float *)(puVar9 + 7);
+                      bVar11 = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x50)))) < *(float *)(puVar9 + 7);
                     }
                   }
                 }
@@ -1223,38 +1223,38 @@ undefined8 FUN_14061f160(longlong *param_1, char param_2, undefined8 *param_3, f
     (*(ulonglong *)(gen_frame + 0x180)) = param_1[4];
     if ((*(ulonglong *)(gen_frame + 0x180)) != 0) {
       (*(char *)(gen_frame + 0xd0)) = (char)param_1[0xc];
-      (*(float *)(gen_frame + 0x70)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x160)) + (float)(*(undefined8 *)(gen_frame + 0x18)) * (*(float *)(gen_frame + 0x150)) +
-                  (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x140)) + (float)(*(undefined8 *)(gen_frame + 0x10)) * (*(float *)(gen_frame + 0x130));
-      (*(float *)(gen_frame + 0x80)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x164)) + (float)(*(undefined8 *)(gen_frame + 0x18)) * (*(float *)(gen_frame + 0x154)) +
-                  (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x144)) + (float)(*(undefined8 *)(gen_frame + 0x10)) * (*(float *)(gen_frame + 0x134));
-      (*(float *)(gen_frame + 0x90)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x168)) + (float)(*(undefined8 *)(gen_frame + 0x18)) * (*(float *)(gen_frame + 0x158)) +
-                  (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x148)) + (float)(*(undefined8 *)(gen_frame + 0x10)) * (*(float *)(gen_frame + 0x138));
-      (*(float *)(gen_frame + 0xa0)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x16c)) + (float)(*(undefined8 *)(gen_frame + 0x18)) * (*(float *)(gen_frame + 0x15c)) +
-                  (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x14c)) + (float)(*(undefined8 *)(gen_frame + 0x10)) * (*(float *)(gen_frame + 0x13c));
-      (*(float *)(gen_frame + 0x74)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x160)) + (float)(*(undefined8 *)(gen_frame + 0x28)) * (*(float *)(gen_frame + 0x150)) +
-                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x140)) + (float)(*(undefined8 *)(gen_frame + 0x20)) * (*(float *)(gen_frame + 0x130));
-      (*(float *)(gen_frame + 0x84)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x164)) + (float)(*(undefined8 *)(gen_frame + 0x28)) * (*(float *)(gen_frame + 0x154)) +
-                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x144)) + (float)(*(undefined8 *)(gen_frame + 0x20)) * (*(float *)(gen_frame + 0x134));
-      (*(float *)(gen_frame + 0x94)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x168)) + (float)(*(undefined8 *)(gen_frame + 0x28)) * (*(float *)(gen_frame + 0x158)) +
-                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x148)) + (float)(*(undefined8 *)(gen_frame + 0x20)) * (*(float *)(gen_frame + 0x138));
-      (*(float *)(gen_frame + 0xa4)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x16c)) + (float)(*(undefined8 *)(gen_frame + 0x28)) * (*(float *)(gen_frame + 0x15c)) +
-                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x14c)) + (float)(*(undefined8 *)(gen_frame + 0x20)) * (*(float *)(gen_frame + 0x13c));
-      (*(float *)(gen_frame + 0x78)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x140)) + (float)(*(undefined8 *)(gen_frame + 0x30)) * (*(float *)(gen_frame + 0x130)) +
-                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x160)) + (float)(*(undefined8 *)(gen_frame + 0x38)) * (*(float *)(gen_frame + 0x150));
-      (*(float *)(gen_frame + 0x88)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x144)) + (float)(*(undefined8 *)(gen_frame + 0x30)) * (*(float *)(gen_frame + 0x134)) +
-                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x164)) + (float)(*(undefined8 *)(gen_frame + 0x38)) * (*(float *)(gen_frame + 0x154));
-      (*(float *)(gen_frame + 0x98)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x148)) + (float)(*(undefined8 *)(gen_frame + 0x30)) * (*(float *)(gen_frame + 0x138)) +
-                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x168)) + (float)(*(undefined8 *)(gen_frame + 0x38)) * (*(float *)(gen_frame + 0x158));
-      (*(float *)(gen_frame + 0xa8)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x14c)) + (float)(*(undefined8 *)(gen_frame + 0x30)) * (*(float *)(gen_frame + 0x13c)) +
-                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x16c)) + (float)(*(undefined8 *)(gen_frame + 0x38)) * (*(float *)(gen_frame + 0x15c));
-      (*(float *)(gen_frame + 0x7c)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x160)) + (float)(*(undefined8 *)(gen_frame + 0x48)) * (*(float *)(gen_frame + 0x150)) +
-                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x140)) + (float)(*(undefined8 *)(gen_frame + 0x40)) * (*(float *)(gen_frame + 0x130));
-      (*(float *)(gen_frame + 0x8c)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x164)) + (float)(*(undefined8 *)(gen_frame + 0x48)) * (*(float *)(gen_frame + 0x154)) +
-                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x144)) + (float)(*(undefined8 *)(gen_frame + 0x40)) * (*(float *)(gen_frame + 0x134));
-      (*(float *)(gen_frame + 0x9c)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x168)) + (float)(*(undefined8 *)(gen_frame + 0x48)) * (*(float *)(gen_frame + 0x158)) +
-                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x148)) + (float)(*(undefined8 *)(gen_frame + 0x40)) * (*(float *)(gen_frame + 0x138));
-      (*(float *)(gen_frame + 0xac)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x16c)) + (float)(*(undefined8 *)(gen_frame + 0x48)) * (*(float *)(gen_frame + 0x15c)) +
-                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x14c)) + (float)(*(undefined8 *)(gen_frame + 0x40)) * (*(float *)(gen_frame + 0x13c));
+      (*(float *)(gen_frame + 0x70)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x160)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x18)))) * (*(float *)(gen_frame + 0x150)) +
+                  (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x140)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * (*(float *)(gen_frame + 0x130));
+      (*(float *)(gen_frame + 0x80)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x164)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x18)))) * (*(float *)(gen_frame + 0x154)) +
+                  (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x144)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * (*(float *)(gen_frame + 0x134));
+      (*(float *)(gen_frame + 0x90)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x168)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x18)))) * (*(float *)(gen_frame + 0x158)) +
+                  (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x148)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * (*(float *)(gen_frame + 0x138));
+      (*(float *)(gen_frame + 0xa0)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x16c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x18)))) * (*(float *)(gen_frame + 0x15c)) +
+                  (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x14c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * (*(float *)(gen_frame + 0x13c));
+      (*(float *)(gen_frame + 0x74)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x160)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * (*(float *)(gen_frame + 0x150)) +
+                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x140)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * (*(float *)(gen_frame + 0x130));
+      (*(float *)(gen_frame + 0x84)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x164)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * (*(float *)(gen_frame + 0x154)) +
+                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x144)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * (*(float *)(gen_frame + 0x134));
+      (*(float *)(gen_frame + 0x94)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x168)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * (*(float *)(gen_frame + 0x158)) +
+                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x148)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * (*(float *)(gen_frame + 0x138));
+      (*(float *)(gen_frame + 0xa4)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x16c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * (*(float *)(gen_frame + 0x15c)) +
+                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x14c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * (*(float *)(gen_frame + 0x13c));
+      (*(float *)(gen_frame + 0x78)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x140)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x30)))) * (*(float *)(gen_frame + 0x130)) +
+                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x160)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x38)))) * (*(float *)(gen_frame + 0x150));
+      (*(float *)(gen_frame + 0x88)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x144)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x30)))) * (*(float *)(gen_frame + 0x134)) +
+                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x164)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x38)))) * (*(float *)(gen_frame + 0x154));
+      (*(float *)(gen_frame + 0x98)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x148)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x30)))) * (*(float *)(gen_frame + 0x138)) +
+                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x168)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x38)))) * (*(float *)(gen_frame + 0x158));
+      (*(float *)(gen_frame + 0xa8)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x14c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x30)))) * (*(float *)(gen_frame + 0x13c)) +
+                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x16c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x38)))) * (*(float *)(gen_frame + 0x15c));
+      (*(float *)(gen_frame + 0x7c)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x160)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x48)))) * (*(float *)(gen_frame + 0x150)) +
+                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x140)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x40)))) * (*(float *)(gen_frame + 0x130));
+      (*(float *)(gen_frame + 0x8c)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x164)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x48)))) * (*(float *)(gen_frame + 0x154)) +
+                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x144)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x40)))) * (*(float *)(gen_frame + 0x134));
+      (*(float *)(gen_frame + 0x9c)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x168)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x48)))) * (*(float *)(gen_frame + 0x158)) +
+                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x148)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x40)))) * (*(float *)(gen_frame + 0x138));
+      (*(float *)(gen_frame + 0xac)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x16c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x48)))) * (*(float *)(gen_frame + 0x15c)) +
+                   (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x14c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x40)))) * (*(float *)(gen_frame + 0x13c));
       if ((*(char *)(gen_frame + 0xd0)) != '\0') {
         (*(longlong *)(gen_frame + 0xc0)) = param_1[10];
         (*(longlong *)(gen_frame + 0xc8)) = param_1[0xb];
@@ -1304,44 +1304,45 @@ undefined8 FUN_14061f160(longlong *param_1, char param_2, undefined8 *param_3, f
             else {
               iVar28 = 1;
             }
+            fVar39 = in_stack_fffffffffffffc40;
             if ((bVar13 != bVar1) && ((*(char *)(gen_frame + 0x1e0)) != '\0')) {
               fVar39 = fVar11;
               CALLF(undefined1 *, FUN_1405dbd10)((*(float *)(gen_frame + 0x1f8)),(*(float *)(gen_frame + 0x200)),(*(float *)(gen_frame + 0x1f4)),(*(float *)(gen_frame + 0x1fc)),GEN_ARG_FLOAT(0),fVar11);
               pfVar37 = &(*(float *)(gen_frame + 0x130));
               (*(undefined8 *)(gen_frame + 0x174)) = 0;
               CALLF(float, FUN_141296240)((void *)&(*(gen_v16 *)(gen_frame + 0x1e4)), &(*(undefined8 *)(gen_frame + 0x174)), pfVar27, &(*(undefined8 *)(gen_frame + 0x10)), pfVar37);
-              (*(float *)(gen_frame + 0x70)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x160)) + (float)(*(undefined8 *)(gen_frame + 0x18)) * (*(float *)(gen_frame + 0x150)) +
-                          (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x140)) + (float)(*(undefined8 *)(gen_frame + 0x10)) * (*(float *)(gen_frame + 0x130));
-              (*(float *)(gen_frame + 0x80)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x164)) + (float)(*(undefined8 *)(gen_frame + 0x18)) * (*(float *)(gen_frame + 0x154)) +
-                          (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x144)) + (float)(*(undefined8 *)(gen_frame + 0x10)) * (*(float *)(gen_frame + 0x134));
-              (*(float *)(gen_frame + 0x90)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x168)) + (float)(*(undefined8 *)(gen_frame + 0x18)) * (*(float *)(gen_frame + 0x158)) +
-                          (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x148)) + (float)(*(undefined8 *)(gen_frame + 0x10)) * (*(float *)(gen_frame + 0x138));
-              (*(float *)(gen_frame + 0xa0)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x16c)) + (float)(*(undefined8 *)(gen_frame + 0x18)) * (*(float *)(gen_frame + 0x15c)) +
-                          (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x14c)) + (float)(*(undefined8 *)(gen_frame + 0x10)) * (*(float *)(gen_frame + 0x13c));
-              (*(float *)(gen_frame + 0x74)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x160)) + (float)(*(undefined8 *)(gen_frame + 0x28)) * (*(float *)(gen_frame + 0x150)) +
-                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x140)) + (float)(*(undefined8 *)(gen_frame + 0x20)) * (*(float *)(gen_frame + 0x130));
-              (*(float *)(gen_frame + 0x84)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x164)) + (float)(*(undefined8 *)(gen_frame + 0x28)) * (*(float *)(gen_frame + 0x154)) +
-                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x144)) + (float)(*(undefined8 *)(gen_frame + 0x20)) * (*(float *)(gen_frame + 0x134));
-              (*(float *)(gen_frame + 0x94)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x168)) + (float)(*(undefined8 *)(gen_frame + 0x28)) * (*(float *)(gen_frame + 0x158)) +
-                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x148)) + (float)(*(undefined8 *)(gen_frame + 0x20)) * (*(float *)(gen_frame + 0x138));
-              (*(float *)(gen_frame + 0xa4)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x16c)) + (float)(*(undefined8 *)(gen_frame + 0x28)) * (*(float *)(gen_frame + 0x15c)) +
-                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x14c)) + (float)(*(undefined8 *)(gen_frame + 0x20)) * (*(float *)(gen_frame + 0x13c));
-              (*(float *)(gen_frame + 0x78)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x140)) + (float)(*(undefined8 *)(gen_frame + 0x30)) * (*(float *)(gen_frame + 0x130)) +
-                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x160)) + (float)(*(undefined8 *)(gen_frame + 0x38)) * (*(float *)(gen_frame + 0x150));
-              (*(float *)(gen_frame + 0x88)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x144)) + (float)(*(undefined8 *)(gen_frame + 0x30)) * (*(float *)(gen_frame + 0x134)) +
-                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x164)) + (float)(*(undefined8 *)(gen_frame + 0x38)) * (*(float *)(gen_frame + 0x154));
-              (*(float *)(gen_frame + 0x98)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x148)) + (float)(*(undefined8 *)(gen_frame + 0x30)) * (*(float *)(gen_frame + 0x138)) +
-                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x168)) + (float)(*(undefined8 *)(gen_frame + 0x38)) * (*(float *)(gen_frame + 0x158));
-              (*(float *)(gen_frame + 0xa8)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x14c)) + (float)(*(undefined8 *)(gen_frame + 0x30)) * (*(float *)(gen_frame + 0x13c)) +
-                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x16c)) + (float)(*(undefined8 *)(gen_frame + 0x38)) * (*(float *)(gen_frame + 0x15c));
-              (*(float *)(gen_frame + 0x7c)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x160)) + (float)(*(undefined8 *)(gen_frame + 0x48)) * (*(float *)(gen_frame + 0x150)) +
-                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x140)) + (float)(*(undefined8 *)(gen_frame + 0x40)) * (*(float *)(gen_frame + 0x130));
-              (*(float *)(gen_frame + 0x8c)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x164)) + (float)(*(undefined8 *)(gen_frame + 0x48)) * (*(float *)(gen_frame + 0x154)) +
-                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x144)) + (float)(*(undefined8 *)(gen_frame + 0x40)) * (*(float *)(gen_frame + 0x134));
-              (*(float *)(gen_frame + 0x9c)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x168)) + (float)(*(undefined8 *)(gen_frame + 0x48)) * (*(float *)(gen_frame + 0x158)) +
-                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x148)) + (float)(*(undefined8 *)(gen_frame + 0x40)) * (*(float *)(gen_frame + 0x138));
-              (*(float *)(gen_frame + 0xac)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x16c)) + (float)(*(undefined8 *)(gen_frame + 0x48)) * (*(float *)(gen_frame + 0x15c)) +
-                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x14c)) + (float)(*(undefined8 *)(gen_frame + 0x40)) * (*(float *)(gen_frame + 0x13c));
+              (*(float *)(gen_frame + 0x70)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x160)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x18)))) * (*(float *)(gen_frame + 0x150)) +
+                          (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x140)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * (*(float *)(gen_frame + 0x130));
+              (*(float *)(gen_frame + 0x80)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x164)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x18)))) * (*(float *)(gen_frame + 0x154)) +
+                          (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x144)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * (*(float *)(gen_frame + 0x134));
+              (*(float *)(gen_frame + 0x90)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x168)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x18)))) * (*(float *)(gen_frame + 0x158)) +
+                          (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x148)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * (*(float *)(gen_frame + 0x138));
+              (*(float *)(gen_frame + 0xa0)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x18)) + 4)) * (*(float *)(gen_frame + 0x16c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x18)))) * (*(float *)(gen_frame + 0x15c)) +
+                          (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)) * (*(float *)(gen_frame + 0x14c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))) * (*(float *)(gen_frame + 0x13c));
+              (*(float *)(gen_frame + 0x74)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x160)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * (*(float *)(gen_frame + 0x150)) +
+                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x140)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * (*(float *)(gen_frame + 0x130));
+              (*(float *)(gen_frame + 0x84)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x164)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * (*(float *)(gen_frame + 0x154)) +
+                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x144)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * (*(float *)(gen_frame + 0x134));
+              (*(float *)(gen_frame + 0x94)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x168)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * (*(float *)(gen_frame + 0x158)) +
+                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x148)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * (*(float *)(gen_frame + 0x138));
+              (*(float *)(gen_frame + 0xa4)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x28)) + 4)) * (*(float *)(gen_frame + 0x16c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x28)))) * (*(float *)(gen_frame + 0x15c)) +
+                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x20)) + 4)) * (*(float *)(gen_frame + 0x14c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x20)))) * (*(float *)(gen_frame + 0x13c));
+              (*(float *)(gen_frame + 0x78)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x140)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x30)))) * (*(float *)(gen_frame + 0x130)) +
+                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x160)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x38)))) * (*(float *)(gen_frame + 0x150));
+              (*(float *)(gen_frame + 0x88)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x144)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x30)))) * (*(float *)(gen_frame + 0x134)) +
+                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x164)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x38)))) * (*(float *)(gen_frame + 0x154));
+              (*(float *)(gen_frame + 0x98)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x148)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x30)))) * (*(float *)(gen_frame + 0x138)) +
+                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x168)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x38)))) * (*(float *)(gen_frame + 0x158));
+              (*(float *)(gen_frame + 0xa8)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x30)) + 4)) * (*(float *)(gen_frame + 0x14c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x30)))) * (*(float *)(gen_frame + 0x13c)) +
+                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x38)) + 4)) * (*(float *)(gen_frame + 0x16c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x38)))) * (*(float *)(gen_frame + 0x15c));
+              (*(float *)(gen_frame + 0x7c)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x160)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x48)))) * (*(float *)(gen_frame + 0x150)) +
+                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x140)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x40)))) * (*(float *)(gen_frame + 0x130));
+              (*(float *)(gen_frame + 0x8c)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x164)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x48)))) * (*(float *)(gen_frame + 0x154)) +
+                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x144)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x40)))) * (*(float *)(gen_frame + 0x134));
+              (*(float *)(gen_frame + 0x9c)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x168)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x48)))) * (*(float *)(gen_frame + 0x158)) +
+                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x148)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x40)))) * (*(float *)(gen_frame + 0x138));
+              (*(float *)(gen_frame + 0xac)) = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x48)) + 4)) * (*(float *)(gen_frame + 0x16c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x48)))) * (*(float *)(gen_frame + 0x15c)) +
+                           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x40)) + 4)) * (*(float *)(gen_frame + 0x14c)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x40)))) * (*(float *)(gen_frame + 0x13c));
               lVar16 = (*(longlong *)(gen_frame + 0xc0));
               lVar34 = (*(longlong *)(gen_frame + 0xc8));
             }
@@ -1448,7 +1449,7 @@ LAB_14061fbd4:
                 pfVar37 = (float *)(**(code **)(*(longlong *)(*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)) + 0x168))
                                              ((*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)),0,1,0x10);
                 *pfVar37 = fVar39;
-                pfVar37[1] = (float)(*(undefined8 *)(gen_frame + 0xdc));
+                pfVar37[1] = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0xdc))));
                 pfVar37[2] = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0xdc)) + 4));
                 pfVar37[3] = (*(float *)(gen_frame + 0xe4));
                 (*(float *)(gen_frame + 0xd8)) = fVar39;
@@ -1511,7 +1512,7 @@ LAB_14061fc30:
                                              ((*(undefined1 * *)((char *)&gen_g_14348b658 + 0x0)),0,2,0x10);
                 *pfVar37 = fVar39;
                 pfVar37[1] = fVar3;
-                pfVar37[2] = (float)(*(undefined8 *)(gen_frame + 0x100));
+                pfVar37[2] = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x100))));
                 pfVar37[3] = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x100)) + 4));
                 (*(float *)(gen_frame + 0xf8)) = fVar39;
                 (*(float *)(gen_frame + 0xfc)) = fVar3;
@@ -1813,7 +1814,7 @@ longlong FUN_1406200f0(byte param_1, undefined8 param_2, undefined4 param_3, und
       }
       *plVar1 = (longlong)plVar8;
       REFG(undefined8, 0x142cce898) = REFG(undefined8, 0x142cce898) + 1;
-      if (REFG(float, 0x142cce8a0) < (float)REFG(undefined8, 0x142cce898) / (float)REFG(undefined8, 0x142cce888)) {
+      if (REFG(float, 0x142cce8a0) < gen_bits2f((unsigned int)(REFG(undefined8, 0x142cce898))) / gen_bits2f((unsigned int)(REFG(undefined8, 0x142cce888)))) {
         CALLF(undefined1, FUN_1406218f0)(&REFG(undefined8, 0x142cce888),REFG(undefined8, 0x142cce888) * 2);
       }
     }
@@ -4534,7 +4535,7 @@ undefined4 FUN_1406303d0(uint param_1)
   GEN_HIT(89);
   if (param_1 < 0x136) {
                     /* WARNING: Switch is manually overridden */
-    switch((long long)((&REFG(undefined1, 0x14063083c))[(int)param_1])) {
+    switch((longlong)((long long)(((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x14063083c)))[(int)param_1]))) {
     case 0:
       return 0xa0;
     case 1:

@@ -163,9 +163,9 @@ undefined1 FUN_14130c620(undefined8 param_1, undefined8 param_2, char *param_3)
   (*(undefined8 *)(gen_frame + 0x30)) = REFG(undefined8, 0x14272dc30);
   (*(undefined8 *)(gen_frame + 0x38)) = REFG(undefined8, 0x14272dc38);
   (*(undefined4 *)(gen_frame + 0x48)) = 0;
-  (*(undefined8 *)(gen_frame + 0x50)) = REFG(double, 0x1426d2b10);
+  GEN_COPY((*(undefined8 *)(gen_frame + 0x50)), REFG(double, 0x1426d2b10));
   (*(undefined8 *)(gen_frame + 0x58)) = REFG(undefined8, 0x1426d2b18);
-  (*(undefined8 *)(gen_frame + 0x60)) = REFG(double, 0x1426d2b10);
+  GEN_COPY((*(undefined8 *)(gen_frame + 0x60)), REFG(double, 0x1426d2b10));
   (*(undefined8 *)(gen_frame + 0x68)) = REFG(undefined8, 0x1426d2b18);
   (*(undefined4 *)(gen_frame + 0x4)) = 0xffffffff;
   (*(undefined4 *)(gen_frame + 0x8)) = 0x3f800000;
@@ -3329,7 +3329,7 @@ undefined1 FUN_141311d40(undefined8 param_1, undefined8 param_2)
 {
   GEN_HIT(62);
   if (((uint)param_2 < 8) && ((int)param_1 * (uint)param_2 < 0xa0)) {
-    return (&REFG(undefined1, 0x14272dcd0))[(uint)param_2 + (int)param_1 * 8];
+    return ((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x14272dcd0)))[(uint)param_2 + (int)param_1 * 8];
   }
   return 0;
 }

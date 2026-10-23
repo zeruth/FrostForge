@@ -287,9 +287,13 @@ uint8_t WorldWaterDetail() {
 // ---- the stubs the animate pass reaches ----------------------------------------------------
 
 // The global jobs a view that asks for them waits on (DAT_1447ce6a8), and their count.
-// ref: FUN_14252ce30
+extern "C" unsigned long long FUN_14252ce30();
+// translated: FUN_14252ce30
 void WorldWaitGlobalJobs() {
-    FROST_UNIMPLEMENTED();  // FUN_14235a5e0 on DAT_1447ce6a8, then DAT_142d5e7fc += 3
+    __try {
+        FUN_14252ce30();
+    } __except (GenFault(0x14252ce30ull, GetExceptionInformation())) {
+    }
 }
 
 // The frame's screen rectangle reset (DAT_1430aba78, DAT_1430aba80).
@@ -305,110 +309,143 @@ void WorldResetFrameRect() {
     }
 }
 
-// ref: FUN_1413c9380
+extern "C" unsigned long long FUN_1413c9380();
+// translated: FUN_1413c9380
 void WorldSceneUpdateFadeouts(CWorldScene* scene) {
     (void)scene;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413c9380();
+    } __except (GenFault(0x1413c9380ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1413c9f40
+extern "C" unsigned long long FUN_1413c9f40(unsigned long long);
+// translated: FUN_1413c9f40
 void WorldSceneUpdateDoodadFades(CWorldScene* scene) {
-    (void)scene;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413c9f40((unsigned long long)scene);
+    } __except (GenFault(0x1413c9f40ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1414291f0
+extern "C" unsigned long long FUN_1414291f0(unsigned long long, unsigned long long);
+// translated: FUN_1414291f0
 void WorldMapSetPosition(CWorldMap* map, const float* position) {
-    (void)map;
-    (void)position;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1414291f0((unsigned long long)map, (unsigned long long)position);
+    } __except (GenFault(0x1414291f0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_14142a270
+extern "C" unsigned long long FUN_14142a270(unsigned long long);
+// translated: FUN_14142a270
 void WorldMapUpdateAreas(CWorldMap* map) {
-    (void)map;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14142a270((unsigned long long)map);
+    } __except (GenFault(0x14142a270ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141428f70
+extern "C" unsigned long long FUN_141428f70(unsigned long long);
+// translated: FUN_141428f70
 void WorldMapUpdateChunks(CWorldMap* map) {
-    (void)map;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141428f70((unsigned long long)map);
+    } __except (GenFault(0x141428f70ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1413b2b30
+extern "C" unsigned long long FUN_1413b2b30(unsigned long long, unsigned long long);
+// translated: FUN_1413b2b30
 void WorldMapAnimate(CWorldMap* map, void* weather) {
-    (void)map;
-    (void)weather;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413b2b30((unsigned long long)map, (unsigned long long)weather);
+    } __except (GenFault(0x1413b2b30ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141425d80
+extern "C" unsigned long long FUN_141425d80(unsigned long long, unsigned long long);
+// translated: FUN_141425d80
 void WorldScene030Update(void* object, CWorldView* view) {
-    (void)object;
-    (void)view;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141425d80((unsigned long long)object, (unsigned long long)view);
+    } __except (GenFault(0x141425d80ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141392ff0
+extern "C" unsigned long long FUN_141392ff0(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_141392ff0
 void MapWeatherUpdate(void* weather, CWorldScene* scene, const void* camera, bool outdoors, bool flag) {
-    (void)weather;
-    (void)scene;
-    (void)camera;
-    (void)outdoors;
-    (void)flag;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141392ff0((unsigned long long)weather, (unsigned long long)scene, (unsigned long long)camera, (unsigned long long)outdoors, (unsigned long long)flag);
+    } __except (GenFault(0x141392ff0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1413975e0
+extern "C" unsigned long long FUN_1413975e0(unsigned long long, unsigned long long, unsigned long long, unsigned long long, double);
+// translated: FUN_1413975e0
 void ParticulateVolumesUpdate(void* particulates, const void* camera, const float* player, bool daytime, float depth) {
-    (void)particulates;
-    (void)camera;
-    (void)player;
-    (void)daytime;
-    (void)depth;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413975e0((unsigned long long)particulates, (unsigned long long)camera, (unsigned long long)player, (unsigned long long)daytime, (double)depth);
+    } __except (GenFault(0x1413975e0ull, GetExceptionInformation())) {
+    }
 }
 
 
-// ref: FUN_142527370
+extern "C" unsigned long long FUN_142527370();
+// translated: FUN_142527370
 void WorldRunFrameCallbacks() {
-    FROST_UNIMPLEMENTED();  // DAT_1447ce201: the two callback lists at DAT_1447ce218, DAT_1447ce238
+    __try {
+        FUN_142527370();
+    } __except (GenFault(0x142527370ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141370460
+extern "C" unsigned long long FUN_141370460(unsigned long long, double, unsigned long long);
+// translated: FUN_141370460
 void WorldFadeUpdate(void* fade, float elapsed, const void* camera) {
-    (void)fade;
-    (void)elapsed;
-    (void)camera;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141370460((unsigned long long)fade, (double)elapsed, (unsigned long long)camera);
+    } __except (GenFault(0x141370460ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1413793d0
+extern "C" unsigned long long FUN_1413793d0(unsigned long long);
+// translated: FUN_1413793d0
 void WorldUpdateObjectFades(CWorldScene* scene) {
-    (void)scene;
-    FROST_UNIMPLEMENTED();  // FUN_141379400, then FUN_1413cad10 while DAT_1430abef8
+    __try {
+        FUN_1413793d0((unsigned long long)scene);
+    } __except (GenFault(0x1413793d0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1413ca0b0
+extern "C" unsigned long long FUN_1413ca0b0(unsigned long long, unsigned long long);
+// translated: FUN_1413ca0b0
 void WorldSceneUpdateFog(CWorldScene* scene, CWorldView* view) {
-    (void)scene;
-    (void)view;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413ca0b0((unsigned long long)scene, (unsigned long long)view);
+    } __except (GenFault(0x1413ca0b0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1413c9760
+extern "C" unsigned long long FUN_1413c9760(unsigned long long);
+// translated: FUN_1413c9760
 void WorldSceneFinishFrame(CWorldScene* scene) {
-    (void)scene;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413c9760((unsigned long long)scene);
+    } __except (GenFault(0x1413c9760ull, GetExceptionInformation())) {
+    }
 }
 
 // ---- the view -------------------------------------------------------------------------------
 
-// ref: FUN_1413da870
+extern "C" unsigned long long FUN_1413da870(unsigned long long, unsigned long long);
+// translated: FUN_1413da870
 void CWorldView::SetOcclusionCulling(bool enabled) {
-    (void)enabled;
-    FROST_UNIMPLEMENTED();  // the view's 0x308 occluder object (FUN_1413a6a40) at +0x238
+    __try {
+        FUN_1413da870((unsigned long long)this, (unsigned long long)enabled);
+    } __except (GenFault(0x1413da870ull, GetExceptionInformation())) {
+    }
 }
 
 namespace {
@@ -447,6 +484,77 @@ float WorldViewSizeLodFactor(const int32_t* size) {
     return factor;
 }
 
+extern "C" {
+unsigned long long FUN_141444be0(unsigned long long, unsigned long long);
+unsigned long long FUN_1413c4440(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+unsigned long long FUN_141348a50(unsigned long long, unsigned long long, unsigned long long);
+unsigned long long FUN_1413463d0(unsigned long long, unsigned long long);
+}
+
+// The cull's per-frame reset (FUN_141444be0, translated) with the frame's target size.
+void WorldViewCullBeginFrame(CWorldCull* cull, const int32_t* lod) {
+    __try {
+        FUN_141444be0(reinterpret_cast<unsigned long long>(cull), reinterpret_cast<unsigned long long>(lod));
+    } __except (GenFault(0x141444be0ull, GetExceptionInformation())) {
+    }
+}
+
+// The view's frustum in world space, by the reference's offsets: its eight corners (+0x334)
+// from the view and projection matrices (+0x610, +0x650) and the camera (+0x4e0)
+// (FUN_1413c4440, translated); their bounds (+0x31c, FUN_141348a50) widened to the camera's
+// position; the map chunk range those bounds cover (+0x30c: x max, y max, x min, y min, in
+// chunks of 1/0.03 yards from the map's centre 17066.666); the planes (+0x394).
+void WorldViewBuildFrustumBounds(CWorldView* view) {
+    auto self = reinterpret_cast<uint8_t*>(view);
+    auto corners = reinterpret_cast<float*>(self + 0x334);
+    auto bounds = reinterpret_cast<float*>(self + 0x31c);
+    const float* position = view->m_camera.m_position;
+    __try {
+        FUN_1413c4440(reinterpret_cast<unsigned long long>(self + 0x610), reinterpret_cast<unsigned long long>(self + 0x650),
+            reinterpret_cast<unsigned long long>(&view->m_camera), reinterpret_cast<unsigned long long>(corners));
+        float box[6];
+        FUN_141348a50(reinterpret_cast<unsigned long long>(box), reinterpret_cast<unsigned long long>(corners), 8);
+        std::memcpy(bounds, box, sizeof(box));
+    } __except (GenFault(0x1413c4440ull, GetExceptionInformation())) {
+        return;
+    }
+    for (int32_t axis = 0; axis < 3; axis++) {
+        if (position[axis] < bounds[axis]) {
+            bounds[axis] = position[axis];
+        }
+        if (bounds[3 + axis] < position[axis]) {
+            bounds[3 + axis] = position[axis];
+        }
+    }
+    const float centre = 17066.666f;   // DAT_142734b18
+    const float scale = -0.03f;        // DAT_142737574
+    auto range = reinterpret_cast<int32_t*>(self + 0x30c);
+    range[0] = static_cast<int32_t>((bounds[3] - centre) * scale);
+    range[1] = static_cast<int32_t>((bounds[4] - centre) * scale);
+    range[2] = static_cast<int32_t>((bounds[0] - centre) * scale);
+    range[3] = static_cast<int32_t>((bounds[1] - centre) * scale);
+    // (FrustumFromCorners, WorldSceneDraw.cpp's, through its adapter)
+    FUN_1413463d0(reinterpret_cast<unsigned long long>(self + 0x394), reinterpret_cast<unsigned long long>(corners));
+}
+
+// How deep the frustum is against the far clip (+0x47c): the distance between two of its
+// corners (+0x340, +0x370) over the camera's far clip (+0x4fc) when that is past 1, at least 1.
+float WorldViewDepthFactor(CWorldView* view) {
+    auto self = reinterpret_cast<const uint8_t*>(view);
+    auto a = reinterpret_cast<const float*>(self + 0x340);
+    auto b = reinterpret_cast<const float*>(self + 0x370);
+    float dx = b[0] - a[0];
+    float dy = b[1] - a[1];
+    float dz = b[2] - a[2];
+    float distance = dx * dx + dy * dy + dz * dz;
+    distance = distance <= 2.3841858e-07f ? 0.0f : std::sqrt(distance);   // DAT_14261a954
+    float farClip = *reinterpret_cast<const float*>(self + 0x4fc);
+    if (1.0f < farClip) {
+        distance = distance / farClip;
+    }
+    return distance <= 1.0f ? 1.0f : distance;
+}
+
 }  // namespace
 
 // The frame's camera from the one the caller set: the lists emptied, the camera block, the
@@ -455,7 +563,7 @@ float WorldViewSizeLodFactor(const int32_t* size) {
 // LOD factors.
 // ref: FUN_1413dddd0
 void CWorldView::UpdateCamera(const int32_t* lod) {
-    FROST_UNIMPLEMENTED();  // the cull's per-frame reset (FUN_141444be0)
+    WorldViewCullBeginFrame(this->m_cull, lod);
     WorldViewListClear(&this->m_lists[0]);
     WorldViewListClear(&this->m_lists[1]);
     this->m_camera = this->m_cameraSet;
@@ -471,9 +579,8 @@ void CWorldView::UpdateCamera(const int32_t* lod) {
     this->m_targetSize[0] = lod[0];
     this->m_targetSize[1] = lod[1];
     // The frustum's corners from the view and projection (FUN_1413c4440 over FUN_14068cef0), and
-    // from them the bounds (+0x31c), the chunk range (+0x30c), the planes (FUN_1413463d0) and
-    // the depth ratio (+0x47c).
-    FROST_UNIMPLEMENTED();
+    // from them the bounds (+0x31c), the chunk range (+0x30c) and the planes (FUN_1413463d0)
+    WorldViewBuildFrustumBounds(this);
     CWorldView* main = this->m_scene->m_view;
     if (main == this) {
         this->m_index += static_cast<uint32_t>(this->m_scene->m_renders.size());
@@ -487,22 +594,34 @@ void CWorldView::UpdateCamera(const int32_t* lod) {
     }
     this->m_scale[0] = WorldViewFovLodFactor(this->m_camera.m_fov);
     this->m_scale[1] = WorldViewSizeLodFactor(this->m_targetSize);
+    this->m_scale[2] = WorldViewDepthFactor(this);
 }
 
-// ref: FUN_1413de3a0
+extern "C" unsigned long long FUN_1413de3a0(unsigned long long);
+// translated: FUN_1413de3a0
 void CWorldView::BuildFrustum() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413de3a0((unsigned long long)this);
+    } __except (GenFault(0x1413de3a0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1413de760
+extern "C" unsigned long long FUN_1413de760(unsigned long long);
+// translated: FUN_1413de760
 void CWorldView::Cull() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413de760((unsigned long long)this);
+    } __except (GenFault(0x1413de760ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1413da610
+extern "C" unsigned long long FUN_1413da610(unsigned long long, unsigned long long);
+// translated: FUN_1413da610
 void CWorldView::UpdateOccluders(bool occluders) {
-    (void)occluders;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413da610((unsigned long long)this, (unsigned long long)occluders);
+    } __except (GenFault(0x1413da610ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_1413dddb0
@@ -1175,29 +1294,47 @@ bool WorldSceneModelReady(CWorldScene* scene, const char* name, uint8_t priority
 #pragma comment(linker, "/include:GenForwardMissing")
 #pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
 #pragma comment(linker, "/alternatename:FUN_141196d60=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413463d0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141348a50=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14134dfc0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14134dfe0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141355300=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14136db90=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14136e890=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_141379400=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141370460=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413793d0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141383630=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141386d50=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141392ff0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141396800=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413975e0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141398500=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141399160=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14139a4f0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14139aa40=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14139ca60=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_1413a6a40=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1413afb30=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_1413cad10=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413b2b30=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413c4440=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413c9380=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413c9760=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413c9f40=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413ca0b0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1413cb1c0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1413cf1d0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413da610=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413da870=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413de3a0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413de760=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141425d80=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141428f70=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1414291f0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14142a270=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141444be0=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_14235a5e0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1424154b0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_142526ef0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_142527370=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14252ce30=GenForwardMissing")
 // ---- end of link fallbacks ----
 
 // ---- GENERATED by tools/translate.py: the port globals translated code reaches ----

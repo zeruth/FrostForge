@@ -60,7 +60,7 @@ struct {
 char s_parentProcessName[0x104];      // DAT_142ddcfc0
 uint32_t s_mainThreadId;              // DAT_142ddfa18
 HSLOG s_wowConnectionLog;             // DAT_142ddfa38
-void (*s_wowConnectionLogCallback)(); // DAT_1430d0278
+uint32_t (*s_wowConnectionLogCallback)(uint64_t, uint64_t); // DAT_1430d0278
 HSLOG s_defaultLogs[2];               // DAT_1430d2508
 
 }
@@ -128,9 +128,16 @@ void Sub1415002E0(uint64_t a1, uint64_t a2, uint32_t threads, uint8_t a4, uint64
 }
 
 // The WowConnection log callback, installed only when Logs/WowConnection.log opens.
-// ref: 0x140226240 (reached only through the pointer)
-void Sub140226240() {
-    FROST_UNIMPLEMENTED();
+// It hands its two arguments to the log's writer (FUN_14025b2e0 on DAT_142ddfa38) and returns
+// the first when no log is open.
+extern "C" unsigned long long FUN_140226240(unsigned long long, unsigned long long);
+// translated: FUN_140226240
+uint32_t Sub140226240(uint64_t a1, uint64_t a2) {
+    __try {
+        return static_cast<uint32_t>(FUN_140226240(a1, a2));
+    } __except (GenFault(0x140226240ull, GetExceptionInformation())) {
+        return static_cast<uint32_t>(a1);
+    }
 }
 
 // ref: FUN_141566850
@@ -291,14 +298,14 @@ bool LocaleCallback(CVar* cvar, const char* oldValue, const char* newValue, void
 
 // Accepts timing methods 0..3 (listing them otherwise); a change clears timingTestError
 // (userData).
-// ref: FUN_140226dd0
+extern "C" unsigned long long FUN_140226dd0(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_140226dd0
 bool TimingMethodCallback(CVar* cvar, const char* oldValue, const char* newValue, void* userData) {
-    (void)cvar;
-    (void)oldValue;
-    (void)newValue;
-    (void)userData;
-    FROST_UNIMPLEMENTED();
-    return true;
+    __try {
+        return (FUN_140226dd0((unsigned long long)cvar, (unsigned long long)oldValue, (unsigned long long)newValue, (unsigned long long)userData) & 0xff) != 0;
+    } __except (GenFault(0x140226dd0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 
 // "timingInfo": prints the desired and selected timing methods and the test error.
@@ -523,19 +530,24 @@ void HotfixSwapHandler(const CStatus* status, void* storage) {
 // Re-applies the manifest's locales and writes WoW.mfil. It needs the CAS manifest-state
 // query (FUN_1402cdf50) and the .mfil writer (FUN_1402cd760), not ported; nothing raises the
 // event yet.
-// ref: FUN_140229300
+extern "C" unsigned long long FUN_140229300(unsigned long long, unsigned long long);
+// translated: FUN_140229300
 void ManifestChangeHandler(const char* name, void* storage) {
-    (void)name;
-    (void)storage;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_140229300((unsigned long long)name, (unsigned long long)storage);
+    } __except (GenFault(0x140229300ull, GetExceptionInformation())) {
+    }
 }
 
 // Reports a failed CAS start: a repair prompt, a patch prompt, or an error dialog naming the
 // failure. The dialogs and the launcher hand-off are not ported.
-// ref: FUN_140228610
+extern "C" unsigned long long FUN_140228610(unsigned long long);
+// translated: FUN_140228610
 void ReportCasFailure(CASSTARTINFO* info) {
-    (void)info;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_140228610((unsigned long long)info);
+    } __except (GenFault(0x140228610ull, GetExceptionInformation())) {
+    }
 }
 
 }
@@ -718,20 +730,17 @@ uint8_t s_telemetryStreamA;  // DAT_142e94e90
 uint8_t s_telemetryStreamB;  // DAT_142e94c80
 
 // "simd": masks the CPU's SIMD features with the value and installs the math routines for
-// what is left. The feature detection (cpuid) and the dispatch table (FUN_1412be6f0,
-// vtable 0x142728920 over DAT_1430a7cc0) are not ported.
-// ref: FUN_140229860
+// what is left: the feature detection (cpuid) and the dispatch table (FUN_1412be6f0, vtable
+// 0x142728920 over DAT_1430a7cc0) are the reference's, which the translated math reads.
+extern "C" unsigned long long FUN_140229860(unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_140229860
 bool SimdCallback(CVar* cvar, const char* oldValue, const char* newValue, void* userData) {
-    (void)cvar;
-    (void)oldValue;
     (void)userData;
-    int32_t radix = 10;
-    if (newValue != nullptr && newValue[0] == '0' && ((newValue[1] - 'X') & 0xDF) == 0) {
-        radix = 16;
+    __try {
+        return (FUN_140229860((unsigned long long)cvar, (unsigned long long)oldValue, (unsigned long long)newValue) & 0xff) != 0;
+    } __except (GenFault(0x140229860ull, GetExceptionInformation())) {
+        return true;
     }
-    (void)std::strtol(newValue, nullptr, radix);
-    FROST_UNIMPLEMENTED();
-    return true;
 }
 
 // ref: FUN_140229800
@@ -1001,7 +1010,12 @@ void Sub140216880() {
 #pragma comment(linker, "/include:GenForwardMissing")
 #pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
 #pragma comment(linker, "/alternatename:FUN_140217000=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140226240=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140226260=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140226dd0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140228610=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140229300=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140229860=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141282a80=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141359ec0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141359fd0=GenForwardMissing")

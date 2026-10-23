@@ -19,6 +19,9 @@
 #include "texture/Texture.hpp"
 #include "threadpool/ThreadPool.hpp"
 #include "util/Unimplemented.hpp"
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 // Engine/Source/Model2/M2Scene.cpp.
 
@@ -292,35 +295,41 @@ void* M2SceneGetRayTracing(CM2Scene* scene) {
 }
 
 // The ray tracing is never made yet: with it null, nothing registers.
-// ref: FUN_141260140
+extern "C" unsigned long long FUN_141260140(unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_141260140
 void RayTracingRegisterModel(void* rayTracing, void* entry, uint32_t size) {
-    (void)rayTracing;
-    (void)entry;
-    (void)size;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141260140((unsigned long long)rayTracing, (unsigned long long)entry, (unsigned long long)size);
+    } __except (GenFault(0x141260140ull, GetExceptionInformation())) {
+    }
 }
 
 // The ray tracing object is never made yet, so these are not reached.
-// ref: FUN_14125fb10
+extern "C" unsigned long long FUN_14125fb10(unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_14125fb10
 void RayTracingUpdateInstance(void* rayTracing, const int32_t* entry, const float* matrix) {
-    (void)rayTracing;
-    (void)entry;
-    (void)matrix;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14125fb10((unsigned long long)rayTracing, (unsigned long long)entry, (unsigned long long)matrix);
+    } __except (GenFault(0x14125fb10ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_14125fab0
+extern "C" unsigned long long FUN_14125fab0(unsigned long long, unsigned long long);
+// translated: FUN_14125fab0
 void RayTracingRemoveInstance(void* rayTracing, const int32_t* entry) {
-    (void)rayTracing;
-    (void)entry;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14125fab0((unsigned long long)rayTracing, (unsigned long long)entry);
+    } __except (GenFault(0x14125fab0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_14125ffb0
+extern "C" unsigned long long FUN_14125ffb0(unsigned long long, unsigned long long);
+// translated: FUN_14125ffb0
 void RayTracingRemoveModel(void* rayTracing, const int32_t* entry) {
-    (void)rayTracing;
-    (void)entry;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14125ffb0((unsigned long long)rayTracing, (unsigned long long)entry);
+    } __except (GenFault(0x14125ffb0ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_14125ff50
@@ -766,16 +775,21 @@ CM2Scene* M2CacheCreateScene(int32_t type, void* owner, void* a3, void* a4) {
     return scene;
 }
 
-// The world (Physics.cpp, 0x98 bytes, FUN_14125d7a0) is a slot in the physics engine's own world
-// table (FUN_1424681d0, 0x850-byte worlds at 0x142463ae0 and on), which is not ported. A null
-// world is what the reference returns for kind 0 and on a CPU without SSE2, and every user of
-// the scene's world checks for it.
-// ref: FUN_14125deb0
+// The world (Physics.cpp, 0x98 bytes, FUN_14125d7a0), a slot in the physics engine's own world
+// table (FUN_1424681d0, 0x850-byte worlds at 0x142463ae0 and on), kept in the list at
+// DAT_1430a1ff0: the reference's, translated. A null world is what it returns for kind 0 and on
+// a CPU without SSE2, and every user of the scene's world checks for it.
+extern "C" unsigned long long FUN_14125deb0(unsigned long long);
+// translated: FUN_14125deb0
 void* PhysicsWorldCreate(int32_t kind) {
-    if (kind != 0) {
-        FROST_UNIMPLEMENTED();
+    if (kind == 0) {
+        return nullptr;
     }
-    return nullptr;
+    __try {
+        return reinterpret_cast<void*>(FUN_14125deb0(static_cast<uint32_t>(kind)));
+    } __except (GenFault(0x14125deb0ull, GetExceptionInformation())) {
+        return nullptr;
+    }
 }
 
 // ref: FUN_1411e0c60
@@ -817,13 +831,14 @@ void M2SceneRelease(CM2Scene* scene) {
 }
 
 // Ported with CM2Scene.
-// ref: FUN_1411dd490
+extern "C" unsigned long long FUN_1411dd490(unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_1411dd490
 CM2BaseModel* M2SceneCloneModel(CM2Scene* scene, CM2BaseModel* model, bool a3) {
-    (void)scene;
-    (void)model;
-    (void)a3;
-    FROST_UNIMPLEMENTED();
-    return nullptr;
+    __try {
+        return reinterpret_cast<CM2BaseModel*>(FUN_1411dd490((unsigned long long)scene, (unsigned long long)model, (unsigned long long)a3));
+    } __except (GenFault(0x1411dd490ull, GetExceptionInformation())) {
+        return nullptr;
+    }
 }
 
 // A file on disk is checked with its textures; one that is not is looked for in the cache and
@@ -855,21 +870,30 @@ bool CM2Scene::ModelFileReady(const char* name, uint8_t priority) {
 // The scene's preload table (+0x58, keyed by content key) and its async reads
 // (FUN_1405db600 with FUN_1411df380 / FUN_1411d3610) are not ported; a model file that is not
 // on disk is not read ahead.
-// ref: FUN_1411cf210
+extern "C" unsigned long long FUN_1411cf210(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_1411cf210
 bool CM2Scene::PreloadModel(int32_t fileDataId, uint8_t priority, void* waiter) {
-    (void)fileDataId;
-    (void)priority;
-    (void)waiter;
-    FROST_UNIMPLEMENTED();
-    return false;
+    __try {
+        return (FUN_1411cf210((unsigned long long)this, (unsigned long long)fileDataId, (unsigned long long)priority, (unsigned long long)waiter) & 0xff) != 0;
+    } __except (GenFault(0x1411cf210ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 
 // ---- GENERATED by tools/forward_stubs.py: link fallbacks where src/gen is not linked ----
 #pragma comment(linker, "/include:GenForwardMissing")
+#pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
 #pragma comment(linker, "/alternatename:FUN_141196280=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1411cf210=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1411dd490=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1411ece70=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1411ece80=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141205ae0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14125deb0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14125fab0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14125fb10=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14125ffb0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141260140=GenForwardMissing")
 // ---- end of link fallbacks ----
 
 // ---- GENERATED by tools/translate.py: the port globals translated code reaches ----

@@ -1,0 +1,23 @@
+{
+  "name": "FrostLite",
+  "rhipper": "C:/Users/tyler/Documents/code/Rhipper",
+  "exe": "client/_classic_/WowClassic-clean.exe",
+  "arch": "x86_64",
+  "image_base": "0x140000000",
+  "sources": ["src", "vendor"],
+  "gen": "src/gen",
+  "build": {"dir": "build/cmake", "config": "Release", "gen_target": "gen", "target": "FrostLite"},
+  "run": {"exe": "build/cmake/bin/Release/FrostLite.exe", "cwd": "client/_classic_"},
+  "ghidra": {
+    "install": "C:/Users/tyler/tools/ghidra_*",
+    "projects": "C:/Users/tyler/tools/ghidra-projects",
+    "project": "FrostLite",
+    "program": "WowClassic-clean.exe",
+    "maxmem": "14G"
+  },
+  "plugins": {"protection": "tools/aegis.py"},
+  "hooks": {"pre_link": ["tools/gen_script_api.py", "--emit"]},
+  "handlers": {"roots": "build/script-handlers.json", "stubs": "src/glue/ScriptAPIStubs.cpp"},
+  "facts_extra": ["tools/luabind.py"],
+  "translate_args": ["--handlers", "--all", "--depth", "24", "--fix", "--jobs", "4"]
+}

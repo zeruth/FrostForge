@@ -10,12 +10,13 @@ anti-tamper blocks left out, so a table of a hundred methods reads in one sittin
 """
 from __future__ import annotations
 
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 import re
 import subprocess
 import sys
 from pathlib import Path
 
-from wowbin import Binary
+from pebin import Binary
 
 ROOT = Path(__file__).resolve().parent.parent
 PY = sys.executable
@@ -23,7 +24,7 @@ PY = sys.executable
 
 def decompile(addr: int) -> str:
     out = ROOT / "build" / "modules" / "lm_tmp.c"
-    subprocess.run([PY, str(ROOT / "tools" / "corpus.py"), "--addr", hex(addr), "--out", "lm_tmp"],
+    subprocess.run([PY, str(Path(_rhipper.HOME) / "corpus.py"), "--addr", hex(addr), "--out", "lm_tmp"],
                    check=True, capture_output=True)
     return out.read_text(errors="replace")
 

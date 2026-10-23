@@ -17,6 +17,7 @@
 #include "gx/d3d12/CommandList.hpp"
 #include "shadereffect/ShaderEffectPipeline.hpp"
 #include "texture/Texture.hpp"
+#include "util/FrostLog.hpp"
 
 extern GxRenderContext* g_gxRenderContext;  // DAT_14348b658
 bool GxDevExists();
@@ -111,6 +112,13 @@ void LoadingScreenSetPipeline(GxRenderContext* context, uint8_t topology, int32_
     uint32_t rasterState = FontRaster(raster);
     GxPipeline* pipeline = ShaderEffectGetPipeline(s_loadingScreenEffect, 0, 0, 0x700000020ull, blendState, rasterState,
         0xc, topology, 0xc, nullptr);
+    // (the port's own report: a loading screen that draws nothing raises no device error when its
+    // pipeline is missing, the draw is just skipped)
+    static int s_reported;
+    if (pipeline == nullptr && s_reported++ < 4) {
+        FrostLog("loading", "no pipeline for the loading screen: effect %p, topology %u, blend %d, raster %d",
+                 static_cast<void*>(s_loadingScreenEffect), topology, blend, raster);
+    }
     context->SetPipeline(pipeline);
 }
 

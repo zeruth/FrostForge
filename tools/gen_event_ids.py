@@ -7,9 +7,10 @@ name, FUN_1407bc5a0) is one the client knows: a compiled binary search over ~2k 
 each tested with `cmp rcx, <id>` followed by `je`/`sete`. The ids it tests for equality are
 the set; the range compares between them only steer the search.
 """
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 import capstone
 
-from wowbin import ROOT, Binary
+from pebin import ROOT, Binary
 
 FUNC = 0x140AF6990
 FUNC_SIZE = 21899  # its .pdata extent

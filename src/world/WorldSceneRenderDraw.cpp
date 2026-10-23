@@ -28,6 +28,10 @@
 #include <cstring>
 #include <windows.h>
 
+extern "C" unsigned long long FUN_1413cf390(unsigned long long);
+extern "C" unsigned long long FUN_1413d47c0(unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_1413d07b0(unsigned long long, unsigned long long, unsigned long long);
+
 extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 extern float g_groundEffectDist;  // GraphicsSettings.cpp, DAT_142d00c20
@@ -150,65 +154,70 @@ void ProjectedTargetClear(void** projector) {
 
 // ---- the subsystems the world's own scene draws --------------------------------------------
 
-// The particulate volumes (FUN_1413962b0 on the scene's +0x48). Not ported.
-// ref: FUN_1413962b0
+// The particulate volumes (FUN_1413962b0 on the scene's +0x48), translated.
+extern "C" unsigned long long FUN_1413962b0(unsigned long long, unsigned long long, unsigned long long,
+    unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_1413962b0
 void ParticulatesDraw(void* manager, GxRenderContext* context, bool rayTracing, const float* view,
     const float* viewInverse, const float* position, const float* heading) {
-    (void)manager;
-    (void)context;
-    (void)rayTracing;
-    (void)view;
-    (void)viewInverse;
-    (void)position;
-    (void)heading;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413962b0(reinterpret_cast<unsigned long long>(manager), reinterpret_cast<unsigned long long>(context),
+            rayTracing, reinterpret_cast<unsigned long long>(view), reinterpret_cast<unsigned long long>(viewInverse),
+            reinterpret_cast<unsigned long long>(position), reinterpret_cast<unsigned long long>(heading));
+    } __except (GenFault(0x1413962b0ull, GetExceptionInformation())) {
+    }
 }
 
 // The detail target's draw state (FUN_1413a9a10). Not ported.
-// ref: FUN_1413a9a10
+extern "C" unsigned long long FUN_1413a9a10(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_1413a9a10
 void DetailTargetBind(void* target, ShaderEffectContext* effect, const float* view, const float* inverse) {
-    (void)target;
-    (void)effect;
-    (void)view;
-    (void)inverse;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413a9a10((unsigned long long)target, (unsigned long long)effect, (unsigned long long)view, (unsigned long long)inverse);
+    } __except (GenFault(0x1413a9a10ull, GetExceptionInformation())) {
+    }
 }
 
 // The cascaded shadow maps (FUN_1414001f0 sets a cascade set up, FUN_1413d72f0's
 // FUN_1412b1920 draws one) and SSAO (FUN_142557630 starts it, FUN_142558160 runs it,
 // FUN_142557aa0 ends it); the spell-effect targets (FUN_1412b60f0, FUN_1412b8570,
 // FUN_1412b3400, FUN_1412b3e00); the LOD budget (FUN_1413c0230). Not ported.
-// ref: FUN_1414001f0
+extern "C" unsigned long long FUN_1414001f0(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_1414001f0
 void ShadowCascadesSetup(void* cascades, void* viewState, void* environment, uint32_t which) {
-    (void)cascades;
-    (void)viewState;
-    (void)environment;
-    (void)which;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1414001f0((unsigned long long)cascades, (unsigned long long)viewState, (unsigned long long)environment, (unsigned long long)which);
+    } __except (GenFault(0x1414001f0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_142557630
+extern "C" unsigned long long FUN_142557630(unsigned long long, unsigned long long);
+// translated: FUN_142557630
 uint8_t SsaoBegin(GXRENDERTARGETS* targets, FRAMEBUFFERTEMP* temp) {
-    (void)targets;
-    (void)temp;
-    FROST_UNIMPLEMENTED();
-    return 0;
+    __try {
+        return static_cast<uint8_t>(FUN_142557630((unsigned long long)targets, (unsigned long long)temp));
+    } __except (GenFault(0x142557630ull, GetExceptionInformation())) {
+        return static_cast<uint8_t>(0);
+    }
 }
 
-// ref: FUN_1412b60f0
+extern "C" unsigned long long FUN_1412b60f0(unsigned long long, unsigned long long);
+// translated: FUN_1412b60f0
 uint8_t SpellTargetsBegin(GXRENDERTARGETS* targets, void* state) {
-    (void)targets;
-    (void)state;
-    FROST_UNIMPLEMENTED();
-    return 0;
+    __try {
+        return static_cast<uint8_t>(FUN_1412b60f0((unsigned long long)targets, (unsigned long long)state));
+    } __except (GenFault(0x1412b60f0ull, GetExceptionInformation())) {
+        return static_cast<uint8_t>(0);
+    }
 }
 
-// ref: FUN_1412b8570
+extern "C" unsigned long long FUN_1412b8570(unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_1412b8570
 void ResolveTargetsBegin(WORLDRENDERRESOLVE* resolve, GXRENDERTARGETS* targets, void* state) {
-    (void)resolve;
-    (void)targets;
-    (void)state;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1412b8570((unsigned long long)resolve, (unsigned long long)targets, (unsigned long long)state);
+    } __except (GenFault(0x1412b8570ull, GetExceptionInformation())) {
+    }
 }
 
 extern "C" unsigned long long FUN_1413c0230(unsigned long long);
@@ -287,11 +296,13 @@ void WaterViewDraw(CWorldSceneRender* render, GxRenderContext* context) {
 }
 
 // The sun's shadow map and the map's fading objects' shadows (FUN_1413d72f0). Not ported.
-// ref: FUN_1413d72f0
+extern "C" unsigned long long FUN_1413d72f0(unsigned long long, unsigned long long);
+// translated: FUN_1413d72f0
 void ShadowsDraw(CWorldSceneRender* render, GxRenderContext* context) {
-    (void)render;
-    (void)context;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413d72f0((unsigned long long)render, (unsigned long long)context);
+    } __except (GenFault(0x1413d72f0ull, GetExceptionInformation())) {
+    }
 }
 
 // The linear depth copy for the cascades (the "LinearDepth copy" pipelines at
@@ -313,18 +324,22 @@ void ProjectedTexturesDraw(CWorldSceneRender* render, GxRenderContext* context) 
 
 // The outline and spell-effect passes after the scene (FUN_142557490, FUN_142557410,
 // FUN_1412b14d0, FUN_1412b1680, FUN_1412b0c80). Not ported.
-// ref: FUN_142557490
+extern "C" unsigned long long FUN_142557490(unsigned long long, unsigned long long);
+// translated: FUN_142557490
 void OutlinesBegin(void* state, GXRENDERTARGETS* targets) {
-    (void)state;
-    (void)targets;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_142557490((unsigned long long)state, (unsigned long long)targets);
+    } __except (GenFault(0x142557490ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1412b14d0
+extern "C" unsigned long long FUN_1412b14d0(unsigned long long, unsigned long long);
+// translated: FUN_1412b14d0
 void SpellEffectsBegin(FRAMEBUFFER* buffer, GXRENDERTARGETS* targets) {
-    (void)buffer;
-    (void)targets;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1412b14d0((unsigned long long)buffer, (unsigned long long)targets);
+    } __except (GenFault(0x1412b14d0ull, GetExceptionInformation())) {
+    }
 }
 
 // The scene's water view lists waited on (FUN_1413a2e60 on each of the view's lists).
@@ -344,17 +359,22 @@ void WorldViewListsWait(CWorldView* view) {
 }
 
 // The cull's rectangle checks (FUN_141444ce0, FUN_141444d60) and its job wait (FUN_1414494f0).
-// ref: FUN_141444ce0
+extern "C" unsigned long long FUN_141444ce0(unsigned long long);
+// translated: FUN_141444ce0
 void CWorldCullResetRect(CWorldCull* cull) {
-    (void)cull;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141444ce0((unsigned long long)cull);
+    } __except (GenFault(0x141444ce0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141444d60
+extern "C" unsigned long long FUN_141444d60(unsigned long long, unsigned long long);
+// translated: FUN_141444d60
 void CWorldCullSetRect(CWorldCull* cull, uint32_t a2) {
-    (void)cull;
-    (void)a2;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141444d60((unsigned long long)cull, (unsigned long long)a2);
+    } __except (GenFault(0x141444d60ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_1414494f0
@@ -520,7 +540,8 @@ void CWorldSceneRender::ClearFrame(GXRENDERTARGETS* targets, bool clearDepth) {
     } else {
         context->SetRenderTargets(targets);
     }
-    FROST_UNIMPLEMENTED();  // the context's viewport colour clear (+0xb0, mask 0xf)
+    // then the context's viewport colour clear (slot 0xb0, mask 0xf, the colour): the D3D12
+    // context's slot is empty (_guard_check_icall in vtable 0x14291a188), so nothing is drawn
 }
 
 // ref: FUN_1413cecc0
@@ -563,77 +584,12 @@ bool CWorldSceneRender::UsesCommandLists(uint32_t slot) {
 // The opaque pass: the weather constants, the M2 scene's targets and opaque passes (6, then
 // 7) between the shading rate's set and reset, the world's terrain, map objects and sky where
 // the view asks, and the render callbacks' stage 3.
-// ref: FUN_1413d47c0
+// translated: FUN_1413d47c0
 void CWorldSceneRender::DrawOpaque(FRAMEBUFFER* buffer) {
-    (void)buffer;
-    GxRenderContext* context = g_gxRenderContext;
-    ShaderEffectContext* effect = this->m_effectContext;
-    CWorldScene* scene = SceneOf(this);
-    CWorldView* view = ViewOf(this);
-    CM2Scene* m2Scene = M2SceneOf(this);
-    float direction[3];
-    TransformPoint(view->m_matrices[2], MapWeatherDirection(scene->m_038), direction);
-    float density = MapWeatherDensity(scene->m_038);
-    const float* color = MapWeatherColor(scene->m_038);
-    float* constants = context->LockConstants(2, 7, 0x20);
-    constants[0] = direction[0];
-    constants[1] = direction[1];
-    constants[2] = direction[2];
-    constants[3] = density;
-    constants[4] = color[0];
-    constants[5] = color[1];
-    constants[6] = color[2];
-    constants[7] = 1.0f;
-    context->UnlockConstants(2, 7);
-    uint32_t flags = view->m_flags;
-    if (m2Scene != nullptr) {
-        At<uint64_t>(m2Scene, 0xdb00) = At<uint64_t>(this, 0x1008);
-        At<uint64_t>(m2Scene, 0xdaf8) = At<uint64_t>(this, 0x1010);
-        if (g_renderSettings.m_msaaSamples != 0) {
-            m2Scene->DrawPass(context, effect, 5);
-        }
-    }
-    if ((flags >> 0x12 & 1) != 0) {
-        FROST_UNIMPLEMENTED();  // the world's shadowed map objects (FUN_1414001f0, FUN_1413d42f0)
-    }
-    bool opaqueM2 = (flags & 0x410000) != 0;
-    if (opaqueM2) {
-        if (this->GetCommandList(1) == nullptr) {
-            scene->BeginShadingRate(context);
-            m2Scene->DrawPass(context, effect, 6);
-            scene->EndShadingRate(context);
-        }
-    }
-    if ((flags & 0x220000) != 0 && this->GetCommandList(7) == nullptr) {
-        FROST_UNIMPLEMENTED();  // the terrain (FUN_1413d74a0)
-    }
-    if ((flags >> 0x14 & 1) != 0) {
-        FROST_UNIMPLEMENTED();  // the map objects (FUN_1413d7030)
-    }
-    if ((flags >> 0xe & 1) != 0) {
-        FROST_UNIMPLEMENTED();  // the sky (FUN_142442cb0, FUN_1412aeab0, FUN_14252ccd0)
-    }
-    if (WorldWaterDetail() > 1 && (At<uint8_t>(view->m_cull, 0x161e8) >> 2 & 1) != 0 && (flags & 0x10) != 0) {
-        FROST_UNIMPLEMENTED();  // the refraction copy (FUN_1412a0f80 with FUN_1413cb870)
-    }
-    if (opaqueM2 && this->GetCommandList(2) == nullptr) {
-        scene->BeginShadingRate(context);
-        m2Scene->DrawPass(context, effect, 7);
-        scene->EndShadingRate(context);
-    }
-    if ((flags >> 0x1d & 1) != 0) {
-        FROST_UNIMPLEMENTED();  // the view's map object batches (FUN_1413cc410, FUN_1413cc7d0)
-    }
-    if ((flags >> 0xf & 1) != 0) {
-        context->UnbindTextures();
-        FRAMEBUFFER* sceneBuffer = SceneBufferOf(this);
-        struct {
-            uint64_t m_shared;
-            GXRENDERTARGETS* m_targets;
-            CWorldScene* m_scene;
-            CWorldView* m_view;
-        } frame = {At<uint64_t>(this, 0x68), TargetsOrNull(sceneBuffer), scene, view};
-        scene->RunCallbacks(3, &frame);
+    // (the reference's own code: the port had parts of it, and the world drew nothing, 2026-10-23)
+    __try {
+        FUN_1413d47c0(reinterpret_cast<unsigned long long>(this), reinterpret_cast<unsigned long long>(buffer));
+    } __except (GenFault(0x1413d47c0ull, GetExceptionInformation())) {
     }
 }
 
@@ -757,301 +713,24 @@ bool CWorldSceneRender::PrepareParticulates() {
 // The transparent and composite pass: the cascades for alpha, the copy target, and above or
 // under water the alpha M2s, particulates, liquids and sky; then the render callbacks' stage
 // 4. The world's own scene parts are stubs.
-// ref: FUN_1413d07b0
+// translated: FUN_1413d07b0
 void CWorldSceneRender::DrawTransparent(GXRENDERTARGETS* targets, GXRENDERTARGETS* targets2) {
-    (void)targets;
-    (void)targets2;
-    CWorldScene* scene = SceneOf(this);
-    CWorldView* view = ViewOf(this);
-    ShadowCascadesSetup(&this->m_projections[2], &At<uint8_t>(view, 0x38), &scene->m_farClip, 2);
-    GxRenderContext* context = g_gxRenderContext;
-    ShaderEffectContext* effect = this->m_effectContext;
-    uint32_t flags = view->m_flags;
-    if ((flags >> 0x12 & 1) != 0) {
-        FROST_UNIMPLEMENTED();  // the world's shadow constants (FUN_1412ad7f0, FUN_1412adbf0, FUN_1412b5cf0, FUN_1413ff2d0)
-    }
-    if ((flags >> 0x17 & 1) != 0 && (WorldFeatures() & 0x40) != 0) {
-        FROST_UNIMPLEMENTED();  // FUN_1413d3610
-    }
-    if ((flags >> 0x13 & 1) != 0 && static_cast<int8_t>(WorldFeatures()) < 0) {
-        FROST_UNIMPLEMENTED();  // the liquids (FUN_1413f5d70, FUN_1413f6660)
-    }
-    bool copyTarget = false;
-    auto occluders = static_cast<uint32_t*>(CWorldCullOccluders(view->m_cull));
-    if (*occluders != 0) {
-        FROST_UNIMPLEMENTED();  // the occluders' sort (FUN_1413cb8b0)
-        copyTarget = At<uint64_t>(this, 0x68) != 0;
-    }
-    At<uint64_t>(this, 0xf90) = 0;
-    if (copyTarget) {
-        FROST_UNIMPLEMENTED();  // the "ExecuteCopyDiscard" copy of the shared colour (FUN_14129f180)
-    }
-    FRAMEBUFFER* sceneBuffer = SceneBufferOf(this);
-    if (view->m_690 == 0 && !WorldViewUnderwater(view)) {
-        bool opaqueM2 = (flags & 0x410000) != 0;
-        if ((flags & 0x4010) == 0x4010 && WorldWaterDetail() > 1) {
-            FROST_UNIMPLEMENTED();  // the water surface's sky (FUN_142528480, FUN_1413d28f0)
-        }
-        if (opaqueM2) {
-            if (this->GetCommandList(0x17) == nullptr) {
-                M2SceneOf(this)->DrawPass(context, effect, 10);    // FUN_1413d2560
-            }
-        }
-        if ((flags & 0x4010) == 0x4010) {
-            FROST_UNIMPLEMENTED();  // FUN_142528480
-        }
-        if ((flags & 0x10) != 0 && WorldWaterDetail() >= 3 && view->WantsReflection()) {
-            FROST_UNIMPLEMENTED();  // the reflection's composite (FUN_1425285f0)
-        }
-        if ((flags & 0x40) != 0) {
-            FROST_UNIMPLEMENTED();  // FUN_1405e8500
-        }
-        bool particulates = this->PrepareParticulates();
-        if (particulates) {
-            FROST_UNIMPLEMENTED();  // the particulates (FUN_1413d59b0, 0x11)
-        }
-        if ((flags >> 0xe & 1) != 0) {
-            FROST_UNIMPLEMENTED();  // the sky's alpha (FUN_1413d2830)
-        }
-        if ((flags >> 0x19 & 1) != 0) {
-            FROST_UNIMPLEMENTED();  // FUN_1413d2f00
-        }
-        if ((flags >> 0x1d & 1) != 0) {
-            FROST_UNIMPLEMENTED();  // FUN_1413d2fd0
-        }
-        if (particulates) {
-            FROST_UNIMPLEMENTED();  // the particulates (FUN_1413d59b0, 0x12)
-        }
-        if (opaqueM2) {
-            this->DrawFrontPass(context, effect);
-            s_alphaTargets = TargetsOrNull(sceneBuffer);
-            if (this->GetCommandList(8) == nullptr) {
-                this->DrawAlphaM2(context, effect);
-            }
-            if (copyTarget) {
-                FROST_UNIMPLEMENTED();  // the copy target handed back
-            }
-        }
-        ThreadPoolGroupWait(this->m_group);
-        if ((view->m_flags & 2) == 0 && scene->m_type == 6) {
-            FROST_UNIMPLEMENTED();  // the anima copy (FUN_1413d2a60)
-        }
-        if (particulates) {
-            FROST_UNIMPLEMENTED();  // the particulates (FUN_1413d59b0, 0x13)
-        }
-        if ((flags >> 0x18 & 1) != 0) {
-            context->SetRenderTargets(TargetsOrNull(sceneBuffer));
-            FROST_UNIMPLEMENTED();  // FUN_141390550
-        }
-        if ((flags & 0x40) != 0) {
-            FROST_UNIMPLEMENTED();  // FUN_1413d2f70
-            context->SetRenderTargets(TargetsOrNull(sceneBuffer));
-        }
-    } else {
-        FROST_UNIMPLEMENTED();  // the underwater or occluded order of the same passes
-    }
-    if ((flags >> 0xf & 1) != 0) {
-        struct {
-            uint64_t m_shared;
-            GXRENDERTARGETS* m_targets;
-            CWorldScene* m_scene;
-            CWorldView* m_view;
-        } frame = {At<uint64_t>(this, 0x68), TargetsOrNull(sceneBuffer), scene, view};
-        context->SetRenderTargets(TargetsOrNull(sceneBuffer));
-        scene->RunCallbacks(4, &frame);
-    }
-    if ((flags >> 0x1a & 1) != 0) {
-        if ((WorldFeatures() >> 10 & 1) != 0 && view->m_690 != 0 && this->m_9a8 != 0) {
-            FROST_UNIMPLEMENTED();  // FUN_1414256f0
-        }
-        context->SetRenderTargets(TargetsOrNull(sceneBuffer));
-    }
-    if ((flags >> 0x1b & 1) != 0) {
-        FROST_UNIMPLEMENTED();  // FUN_1413d3840
+    // (the reference's own code: the port had parts of it, and the world drew nothing, 2026-10-23)
+    __try {
+        FUN_1413d07b0(reinterpret_cast<unsigned long long>(this), reinterpret_cast<unsigned long long>(targets), reinterpret_cast<unsigned long long>(targets2));
+    } __except (GenFault(0x1413d07b0ull, GetExceptionInformation())) {
     }
 }
 
 // The view's passes: the M2 scene given its clip plane, occlusion, elements and weather; the
 // particulates; the environment constants; the frame cleared; the cascades and SSAO; the
 // outline pass; the opaque and transparent passes; and the after-passes.
-// ref: FUN_1413cf390
+// translated: FUN_1413cf390
 void CWorldSceneRender::Draw() {
-    GxRenderContext* context = g_gxRenderContext;
-    CWorldScene* scene = SceneOf(this);
-    if (scene->m_1950 != nullptr) {
-        At<uint64_t>(this->m_effectContext, 0x908) = 0;
-    }
-    CWorldView* view = ViewOf(this);
-    if (view->m_flags & 0x400) {
-        DetailTargetBind(view->m_238, this->m_effectContext, view->m_matrices[2], view->m_matrices[3]);
-    }
-    CM2Scene* m2Scene = M2SceneOf(this);
-    if (m2Scene != nullptr) {
-        uint64_t occlusion = 0;
-        if (*static_cast<uint32_t*>(CWorldCullOccluders(view->m_cull)) > 0) {
-            if (SceneOcclusionOn(&view->m_occlusion)) {
-                occlusion = SceneOcclusionResult(&view->m_occlusion);
-            }
-        }
-        At<uint64_t>(m2Scene, 0xdb28) = occlusion;
-        if ((view->m_flags >> 7 & 1) != 0) {
-            float plane[4];
-            std::memcpy(plane, view->m_clipPlane, 0x10);
-            PlaneTransform(plane, view->m_matrices[1]);
-            M2SceneSetClipPlane(m2Scene, true, plane);
-        } else {
-            const float none[4] = {0.0f, 0.0f, 0.0f, 1.0f};     // DAT_14261aa10
-            M2SceneSetClipPlane(m2Scene, false, none);
-        }
-        At<uint64_t>(m2Scene, 0xdaf0) = At<uint64_t>(this, 0x68);
-        At<uint32_t>(m2Scene, 0xdb08) = At<uint32_t>(this, 0x9c8);
-        m2Scene->BuildElements(this->m_9c8[8], this->m_9c8[9]);
-        float direction[3];
-        TransformPoint(view->m_matrices[2], MapWeatherDirection(scene->m_038), direction);
-        float density = MapWeatherDensity(scene->m_038);
-        const float* color = MapWeatherColor(scene->m_038);
-        float extra = MapWeatherIntensity(scene->m_038);
-        float* weather = &At<float>(m2Scene, 0xd644);
-        weather[0] = color[0];
-        weather[1] = color[1];
-        weather[2] = color[2];
-        weather[3] = extra;
-        weather[4] = direction[0];
-        weather[5] = direction[1];
-        weather[6] = direction[2];
-        weather[7] = density;
-    }
-    uint32_t flags = view->m_flags;
-    if ((flags & 2) == 0 && ParticulatesOn() && GxDeviceCaps()[0xad] != 0) {
-        bool rayTracing = this->m_9c8[0xa] != 0 && (g_renderSettings.m_flags >> 0x18 & 1) != 0 && scene->m_views.size() == 1
-            && GxCurrentApi() == 2;
-        if (rayTracing) {
-            FROST_UNIMPLEMENTED();  // the ray-traced particulates' context (FUN_1413c4320, FUN_1413c8020)
-        }
-        ParticulatesDraw(scene->m_particulates, context, rayTracing, view->m_matrices[2], view->m_matrices[3],
-            view->m_camera.m_position, &reinterpret_cast<float*>(view)[0x460 / 4]);
-    }
-    if (this->GetCommandList(0x10) != nullptr) {
-        FROST_UNIMPLEMENTED();  // the particulate occlusion job (FUN_1413d5940)
-    }
-    ProjectedTargetClear(static_cast<void**>(scene->m_1950));
-    if ((view->m_flags & 0x1000) == 0) {
-        const float full[4] = {0.0f, 0.0f, 1.0f, 1.0f};
-        context->SetScissor(full);
-    }
-    this->SetEnvironmentConstants(context, this->m_effectContext, false);
-    const float liquidFog[4] = {view->m_camera.m_position[0], view->m_camera.m_position[1], 17066.666f, 2.925e-05f};
-    LiquidSetFog(liquidFog);
-    uint8_t outlines = 0;
-    uint8_t spellEffects = 0;
-    uint8_t pass4 = 0;
-    int32_t cascades = static_cast<int32_t>(view->m_6b4);
-    GxRenderTargetsClear(&At<GXRENDERTARGETS>(this, 0x560));
-    GxRenderTargetsClear(&At<GXRENDERTARGETS>(this, 0x650));
-    this->m_resolve.OnDeviceDestroyed();
-    const float* rect = &At<float>(view->m_cull, 0x1620c);
-    if (rect[3] <= rect[1] || rect[2] <= rect[0]) {
-        CWorldCullResetRect(view->m_cull);
-        CWorldCullSetRect(view->m_cull, 1);
-    }
-    CWorldCullWait(view->m_cull);
-    if (cascades == 0) {
-        this->m_9d4 = 0;
-    } else {
-        ShadowCascadesSetup(&this->m_projections[0], &At<uint8_t>(view, 0x38), &scene->m_farClip, 0);
-        auto shared = At<GXRENDERTARGETS*>(this, 0x68);
-        this->m_9d4 = SsaoBegin(shared, &this->m_temp9d8);
-        this->m_b18 = SpellTargetsBegin(shared, &this->m_tempsB20[0]);
-        ResolveTargetsBegin(&this->m_resolve, shared, &this->m_tempsB20[0]);
-        WorldLodBudget((1 - static_cast<int32_t>(s_lodDistance * -0.24f)) * 8);    // DAT_142738e54
-        if (this->GetCommandList(0) == nullptr) {
-            PrepassDraw(this, context, this->m_effectContext, false);
-            if (this->m_9d4 != 0) {
-                FROST_UNIMPLEMENTED();  // SSAO (FUN_142558160)
-            }
-            if (this->m_b18 != 0) {
-                FROST_UNIMPLEMENTED();  // the spell effect targets (FUN_1412b3400)
-            }
-            WaterViewDraw(this, context);
-        }
-        if (view->m_flags & 0x400) {
-            FROST_UNIMPLEMENTED();  // the detail target pass (FUN_1413c4d20, FUN_1413c4a10, FUN_1412b4f30)
-        }
-        if (this->m_9d4 != 0) {
-            FROST_UNIMPLEMENTED();  // SSAO's end (FUN_142557aa0)
-        }
-        if (this->m_b18 != 0) {
-            FROST_UNIMPLEMENTED();  // the spell effect targets' end (FUN_1412b3e00)
-        }
-        ShadowsDraw(this, context);
-    }
-    if (m2Scene != nullptr) {
-        M2SceneWaitJobs(m2Scene);
-        if (cascades != 0 && (flags >> 0x1c & 1) != 0 && At<uint64_t>(m2Scene, 0xfb0) != 0 && OutlinesOn()) {
-            outlines = 1;
-        }
-        if ((flags >> 0xd & 1) != 0 && (At<uint64_t>(m2Scene, 0xfc8) != 0 || At<uint64_t>(m2Scene, 0xfe0) != 0)
-            && SpellEffectsOn()) {
-            spellEffects = 1;
-        }
-        pass4 = At<uint64_t>(m2Scene, 0xff8) != 0 ? 1 : 0;
-    }
-    if (outlines) {
-        OutlinesBegin(nullptr, At<GXRENDERTARGETS*>(this, 0x68));
-        m2Scene->DrawPass(context, this->m_effectContext, 1);
-        context->UnbindTextures();
-    }
-    if (s_projectedBlend != 0.0f) {
-        if ((g_renderSettings.m_flags & 0x20) != 0 && m2Scene != nullptr && scene->m_1950 != nullptr) {
-            ProjectedTexturesDraw(this, context);
-        } else {
-            At<uint64_t>(this->m_effectContext, 0x908) = 0;
-        }
-    }
-    WorldViewListsWait(view);
-    FRAMEBUFFER* sceneBuffer = SceneBufferOf(this);
-    if (cascades != 0 && sceneBuffer->m_targets.m_texs[2] != nullptr) {
-        LinearDepthCopy(this, context);
-    }
-    this->ClearFrame(TargetsOrNull(sceneBuffer), (view->m_6b4 & 0xfffffffd) == 0);
-    if (scene->m_19c8 != nullptr) {
-        FROST_UNIMPLEMENTED();  // the scene's second target (+0x19c0) through the context's +0xe0
-    }
-    GXRENDERTARGETS* targets560 = &At<GXRENDERTARGETS>(this, 0x560);
-    At<GXRENDERTARGETS*>(this, 0x1008) = targets560->m_count != 0 ? targets560 : nullptr;
-    At<uint64_t>(this, 0x1010) = this->m_resolve.m_00;
-    GxRenderTargetsClear(&At<GXRENDERTARGETS>(this, 0x470));
-    GxRenderTargetsClear(&At<GXRENDERTARGETS>(this, 0x830));
-    this->DrawOpaque(&this->m_buffers3f0[0]);
-    FrameBufferRelease(&this->m_buffers3f0[1]);
-    this->m_resolve.Release();
-    if (s_projectedBlend == 0.0f) {
-        if ((g_renderSettings.m_flags & 0x20) != 0 && m2Scene != nullptr && scene->m_1950 != nullptr) {
-            ProjectedTexturesDraw(this, context);
-        } else {
-            At<uint64_t>(this->m_effectContext, 0x908) = 0;
-        }
-    }
-    GXRENDERTARGETS* targets470 = &At<GXRENDERTARGETS>(this, 0x470);
-    GXRENDERTARGETS* targets650 = &At<GXRENDERTARGETS>(this, 0x650);
-    this->DrawTransparent(targets470->m_count != 0 ? targets470 : nullptr, targets650->m_count != 0 ? targets650 : nullptr);
-    FrameBufferRelease(&this->m_buffers3f0[0]);
-    FrameBufferRelease(&this->m_buffers3f0[4]);
-    FrameBufferRelease(&this->m_buffers3f0[2]);
-    if (pass4) {
-        float& phase = At<float>(m2Scene, 0xb4);
-        phase = FrameTime_GetElapsedSeconds() * 0.06f + phase;  // FUN_1412b6d70 (DAT_142727750)
-        phase = phase - static_cast<float>(static_cast<int32_t>(phase));
-        m2Scene->DrawPass(context, this->m_effectContext, 4);
-    }
-    if (outlines) {
-        FROST_UNIMPLEMENTED();  // the outline composite (FUN_142557410)
-    }
-    if (spellEffects) {
-        SpellEffectsBegin(&this->m_buffers3f0[0], At<GXRENDERTARGETS*>(this, 0x68));
-        m2Scene->DrawPass(context, this->m_effectContext, 2);
-        m2Scene->DrawPass(context, this->m_effectContext, 3);
-        FROST_UNIMPLEMENTED();  // the spell effects' composite (FUN_1412b1680, FUN_1412b0c80)
+    // (the reference's own code: the port had parts of it, and the world drew nothing, 2026-10-23)
+    __try {
+        FUN_1413cf390(reinterpret_cast<unsigned long long>(this));
+    } __except (GenFault(0x1413cf390ull, GetExceptionInformation())) {
     }
 }
 
@@ -1065,15 +744,20 @@ void CWorldSceneRender::Draw() {
 #pragma comment(linker, "/alternatename:FUN_1412adbf0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412aeab0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412b0c80=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412b14d0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412b1680=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412b3400=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412b3e00=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412b4f30=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412b5cf0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412b60f0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412b6d70=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412b8570=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14137c9f0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14137d840=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141390550=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413962b0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413a9a10=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1413c0230=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1413c4320=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1413c4a10=GenForwardMissing")
@@ -1096,6 +780,7 @@ void CWorldSceneRender::Draw() {
 #pragma comment(linker, "/alternatename:FUN_1413d5940=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1413d59b0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1413d7030=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413d72f0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1413d74a0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1413da5f0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1413db040=GenForwardMissing")
@@ -1107,25 +792,40 @@ void CWorldSceneRender::Draw() {
 #pragma comment(linker, "/alternatename:FUN_1414001f0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1414256f0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141440e20=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141444ce0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141444d60=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_142289ad0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_142442cb0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_142528480=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1425285f0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14252ccd0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_142557410=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_142557490=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_142557630=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_142557aa0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_142558160=GenForwardMissing")
 // ---- end of link fallbacks ----
 
 // ---- GENERATED by tools/translate.py: the port globals translated code reaches ----
+extern "C" void* const gen_f_1411e0eb0 = (void*)&M2SceneSetClipPlane;
+extern "C" void* const gen_f_1411e44a0 = (void*)&M2SceneWaitJobs;
+extern "C" void* const gen_f_1412a6440 = (void*)&ProjectedTargetClear;
 extern "C" void* const gen_f_1412aa810 = (void*)&ProjectedTextureBind;
+extern "C" void* const gen_f_1412b0c10 = (void*)&SpellEffectsOn;
+extern "C" void* const gen_f_141396b60 = (void*)&ParticulatesOn;
 extern "C" void* const gen_f_1413d3a00 = (void*)&WaterViewDraw;
 extern "C" void* const gen_f_1413d6700 = (void*)&PrepassDraw;
 extern "C" void* const gen_f_1413d6bd0 = (void*)&PrepassBody;
+extern "C" void* const gen_f_1413dcb40 = (void*)&WorldViewUnderwater;
 extern "C" void* const gen_f_1413dcc50 = (void*)&WorldViewHasWaterBox;
+extern "C" void* const gen_f_1413dd150 = (void*)&WorldViewListsWait;
+extern "C" void* const gen_f_1414494f0 = (void*)&CWorldCullWait;
 extern "C" void* const gen_f_142442700 = (void*)&DayNightEnvironmentFog;
 extern "C" void* const gen_f_1424427c0 = (void*)&DayNightClearFog;
+extern "C" void* const gen_f_142527290 = (void*)&LiquidSetFog;
 extern "C" void* const gen_f_14254fd50 = (void*)&SceneOcclusionOn;
+extern "C" void* const gen_f_14254fe60 = (void*)&SceneOcclusionResult;
+extern "C" void* const gen_f_1425573c0 = (void*)&OutlinesOn;
 extern "C" void* const gen_p_1430a1fa0 = (void*)&s_alphaTargets;
 extern "C" void* const gen_p_1430a5b92 = (void*)&s_projectedClearPending;
 extern "C" void* const gen_p_1447ce270 = (void*)&s_liquidFog;

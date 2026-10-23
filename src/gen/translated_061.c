@@ -18041,9 +18041,9 @@ undefined4 FUN_140df7d60(undefined8 param_1)
   (*(undefined2 *)(gen_frame + 0x1c)) = 0x6e;
   uVar3 = CALLF(undefined4, FUN_1407d0a90)(&(*(undefined8 *)(gen_frame + 0x20)),&(*(undefined4 *)(gen_frame + 0x10)),0,3);
   uVar4 = (*(undefined8 *)(gen_frame + 0x20));
-  CALLF(undefined1 *, FUN_1402b3b50)((*(undefined8 *)(gen_frame + 0x20)),(double)(float)(*(undefined8 *)(gen_frame + 0x0)));
+  CALLF(undefined1 *, FUN_1402b3b50)((*(undefined8 *)(gen_frame + 0x20)),(double)gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x0)))));
   CALLF(undefined8, FUN_1402b43c0)(uVar4,uVar3,&REFG(undefined1, 0x1426cf8f8));
-  CALLF(undefined1 *, FUN_1402b3b50)(uVar4,(double)(*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)));
+  CALLF(undefined1 *, FUN_1402b3b50)(uVar4,(double)gen_bits2f((unsigned int)((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)))));
   CALLF(undefined8, FUN_1402b43c0)(uVar4,uVar3,&REFG(undefined1, 0x1426cf8fc));
   CALLF(undefined1 *, FUN_1402b3b50)(uVar4,(double)(*(float *)(gen_frame + 0x8)));
   CALLF(undefined8, FUN_1402b43c0)(uVar4,uVar3,&REFG(undefined1, 0x1426e2c84));
@@ -19760,7 +19760,7 @@ undefined4 FUN_140e0bf00(undefined8 param_1)
   ((undefined4 *)(gen_frame + 0x38))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_Commentator.SetDistanceBeforeForcedHorizontalConvergence(distance)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x40))));
-  REFG(float, 0x1431f7328) = ((undefined4 *)(gen_frame + 0x40))[0];
+  GEN_COPY(REFG(float, 0x1431f7328), ((undefined4 *)(gen_frame + 0x40))[0]);
   return 0;
 }
 
@@ -19814,7 +19814,7 @@ undefined4 FUN_140e0cc60(undefined8 param_1)
   ((undefined4 *)(gen_frame + 0x38))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_Commentator.SetExcludeDistance(excludeDistance)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x40))));
-  REFG(float, 0x1431f730c) = ((undefined4 *)(gen_frame + 0x40))[0];
+  GEN_COPY(REFG(float, 0x1431f730c), ((undefined4 *)(gen_frame + 0x40))[0]);
   return 0;
 }
 
@@ -19834,8 +19834,8 @@ undefined4 FUN_140e0d2f0(undefined8 param_1)
     (*(undefined8 *)(gen_frame + 0x18)) = param_1;
     CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x18)),((undefined4 *)(gen_frame + 0x50)),"Usage: C_Commentator.SetFollowCameraSpeeds(elasticSpeed, minSpeed)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x58))));
     CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x18)),((undefined4 *)(gen_frame + 0x50)),"Usage: C_Commentator.SetFollowCameraSpeeds(elasticSpeed, minSpeed)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x0))));
-    REFG(float, 0x1431f72f0) = ((undefined4 *)(gen_frame + 0x58))[0];
-    REFG(float, 0x1431f72f4) = ((undefined4 *)(gen_frame + 0x0))[0];
+    GEN_COPY(REFG(float, 0x1431f72f0), ((undefined4 *)(gen_frame + 0x58))[0]);
+    GEN_COPY(REFG(float, 0x1431f72f4), ((undefined4 *)(gen_frame + 0x0))[0]);
   }
   return 0;
 }
@@ -19852,7 +19852,7 @@ undefined4 FUN_140e0d9d0(undefined8 param_1)
   ((undefined4 *)(gen_frame + 0x38))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_Commentator.SetHardlockWeight(weight)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x40))));
-  REFG(float, 0x1431f7308) = ((undefined4 *)(gen_frame + 0x40))[0];
+  GEN_COPY(REFG(float, 0x1431f7308), ((undefined4 *)(gen_frame + 0x40))[0]);
   return 0;
 }
 
@@ -20540,7 +20540,7 @@ undefined4 FUN_140e176c0(undefined8 param_1)
   ((undefined4 *)(gen_frame + 0x38))[0] = 1;
   (*(undefined8 *)(gen_frame + 0x8)) = param_1;
   CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x8)),((undefined4 *)(gen_frame + 0x38)),"Usage: C_Commentator.SetSoftlockWeight(weight)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x40))));
-  REFG(float, 0x1431f7304) = ((undefined4 *)(gen_frame + 0x40))[0];
+  GEN_COPY(REFG(float, 0x1431f7304), ((undefined4 *)(gen_frame + 0x40))[0]);
   return 0;
 }
 
@@ -20578,7 +20578,7 @@ undefined4 FUN_140e183e0(undefined8 param_1)
     ((undefined4 *)(gen_frame + 0x30))[0] = 1;
     (*(undefined8 *)(gen_frame + 0x0)) = param_1;
     CALLF(undefined8, FUN_140a542f0)(&(*(undefined8 *)(gen_frame + 0x0)),((undefined4 *)(gen_frame + 0x30)),"Usage: C_Commentator.SetTargetHeightOffset(offset)",0,(unsigned long long)(((undefined4 *)(gen_frame + 0x38))));
-    REFG(float, 0x1431f7300) = ((undefined4 *)(gen_frame + 0x38))[0];
+    GEN_COPY(REFG(float, 0x1431f7300), ((undefined4 *)(gen_frame + 0x38))[0]);
   }
   return 0;
 }

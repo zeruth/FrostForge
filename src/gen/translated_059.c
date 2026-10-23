@@ -10021,7 +10021,7 @@ undefined4 FUN_140ce1960(undefined8 param_1)
   int iVar1 = {0};
   bool bVar2 = {0};
   
-  bVar2 = -1 < REFG(undefined4, 0x142d1b494);
+  bVar2 = -1 < REFG(int32_t, 0x142d1b494);
   iVar1 = CALLF(undefined4, FUN_1402b2770)(param_1,1);
   if (iVar1 == 0) {
     CALLF(undefined8, FUN_142424d80)(param_1,"stack overflow");

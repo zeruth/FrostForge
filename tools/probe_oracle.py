@@ -4,12 +4,13 @@ SStrHashHT (0x140252fc0), OsPathNormalize (0x1402620d0), UnicodeConvertUtf16ToUt
 
     python tools/probe_oracle.py
 """
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 import struct
 import subprocess
 import sys
 
 from oracle import Oracle
-from wowbin import ROOT
+from pebin import ROOT
 
 EXE = ROOT / "build" / "cmake" / "bin" / "Release" / "ProbeTest.exe"
 

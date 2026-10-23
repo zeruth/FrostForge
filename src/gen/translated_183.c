@@ -15307,7 +15307,7 @@ undefined8 FUN_1423152b0(undefined8 *param_1)
   (*pcVar3)(plVar2,uVar7,((undefined1 *)(gen_alloca_p0 + 0x50)));
   lVar4 = param_1[1];
   *(undefined4 *)((longlong)((undefined4 *)(gen_alloca_p0 + 0x48))) = *(undefined4 *)(((undefined1 *)(gen_alloca_p0 + 0x58)));
-  bVar1 = (&REFG(undefined1, 0x14291fe84))[*(uint *)(((undefined1 *)(gen_alloca_p0 + 0x54)))];
+  bVar1 = ((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x14291fe84)))[*(uint *)(((undefined1 *)(gen_alloca_p0 + 0x54)))];
   uVar7 = *(undefined8 *)(lVar4 + 8);
   *(undefined8 *)((longlong)((undefined8 *)(gen_alloca_p0 + 0x30)) + 0x10) =
        *(undefined8 *)((longlong)(gen_alloca_p0 + 0x60));

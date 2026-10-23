@@ -14363,7 +14363,7 @@ LAB_140356fe0:
                   }
                   *plVar13 = (longlong)puVar10;
                   REFG(undefined8, 0x142ccdd30) = REFG(undefined8, 0x142ccdd30) + 1;
-                  if (REFG(float, 0x142ccdd38) < (float)REFG(undefined8, 0x142ccdd30) / (float)REFG(undefined8, 0x142ccdd20)) {
+                  if (REFG(float, 0x142ccdd38) < gen_bits2f((unsigned int)(REFG(undefined8, 0x142ccdd30))) / gen_bits2f((unsigned int)(REFG(undefined8, 0x142ccdd20)))) {
                     CALLF(undefined1, FUN_140358570)(&REFG(undefined8, 0x142ccdd20),REFG(undefined8, 0x142ccdd20) * 2);
                   }
                 }

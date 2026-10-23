@@ -1,4 +1,5 @@
 #include "storm/Memory.hpp"
+#include "util/FrostLog.hpp"
 #include "ui/FrameTime.hpp"
 #include "base/Coordinate.hpp"
 #include "blz/ChainedHash.hpp"
@@ -21,6 +22,7 @@
 #include "ui/CSimpleTop.hpp"
 #include "util/Unimplemented.hpp"
 #include "world/WorldFrame.hpp"
+#include "texture/Texture.hpp"
 #include <cstring>
 #include <vector>
 
@@ -202,6 +204,44 @@ void ClientRemoveFocusListener(int32_t id) {
     s_focusListeners.m_size--;
 }
 
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+extern "C" unsigned long long FUN_14170ff20();
+extern "C" unsigned long long FUN_1418ea610(unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_14134fea0(unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_140216640(unsigned long long);
+
+// The second half of FUN_14022c010: the screen is down, but the player rides a transport whose
+// model is not drawable yet. The player (FUN_14170ff20), its transport link (+0x138, the GUID's
+// high bits at +0x140), the transport object (FUN_1418ea610, type 0x100), its model (+0x140,
+// vtable +0xe8) and whether the world can draw it (FUN_14134fea0) are the translation's.
+static bool LoadingScreenTransportLoading() {
+    __try {
+        uint64_t player = FUN_14170ff20();
+        if (player == 0 || static_cast<uint8_t>(*reinterpret_cast<uint64_t*>(player + 0x140) >> 0x3a) == 0) {
+            return false;
+        }
+        uint64_t transport = FUN_1418ea610(player + 0x138, 0x100);
+        if (transport == 0) {
+            return false;
+        }
+        auto object = *reinterpret_cast<uint64_t**>(transport + 0x140);
+        if (object == nullptr) {
+            return false;
+        }
+        auto getModel = reinterpret_cast<uint64_t (*)(uint64_t*)>(*reinterpret_cast<uint64_t*>(*object + 0xe8));
+        uint64_t model = getModel(object);
+        if (model == 0 || static_cast<int32_t>(FUN_14134fea0(model, 0)) != 0) {
+            return false;
+        }
+        FUN_140216640(reinterpret_cast<unsigned long long>(
+            "IsPlayerTransportStillLoading: Loading screen has been disabled, but player is on an undrawable "
+            "transport, waiting for that to finish loading."));
+        return true;
+    } __except (GenFault(0x14022c010ull, GetExceptionInformation())) {
+        return false;
+    }
+}
+
 // What the loading screen is doing: true while it holds the game.
 // ref: FUN_14022c010
 bool LoadingScreenIsActive() {
@@ -211,8 +251,7 @@ bool LoadingScreenIsActive() {
     if (*s_loadingScreen > 0) {
         return true;
     }
-    FROST_UNIMPLEMENTED();  // the player's transport check (FUN_14170ff20 and on)
-    return false;
+    return LoadingScreenTransportLoading();
 }
 
 namespace {
@@ -679,12 +718,41 @@ namespace {
 
 // Each step of the world's frame, guarded on its own: a step that faults is logged (GenFault) and
 // the rest still run, as the reference's frame would.
+// FROST_HEAP_VALIDATE_WORLD=1: the process heap checked after each step; the first step that
+// leaves it corrupt is logged with the one before it (a debugging aid, not the reference's).
+void WorldStepHeapCheck(unsigned long long ref) {
+    static const bool s_enabled = [] {
+        char value[8] = {};
+        return GetEnvironmentVariableA("FROST_HEAP_VALIDATE_WORLD", value, sizeof(value)) && value[0] == '1';
+    }();
+    static unsigned long long s_lastGood = 0;
+    static bool s_reported = false;
+    if (!s_enabled || s_reported) {
+        return;
+    }
+    // (HeapValidate raises the corruption report itself rather than returning false: the step
+    // checked is logged first, so the last such line names the step that broke the heap)
+    static int s_logged = 0;
+    if (s_logged < 400) {
+        s_logged++;
+        FrostLog("memory", "checking the heap after FUN_%llx", ref);
+    }
+    if (HeapValidate(GetProcessHeap(), 0, nullptr)) {
+        s_lastGood = ref;
+        return;
+    }
+    s_reported = true;
+    FrostLog("memory", "world step FUN_%llx left the process heap corrupt (the step before, FUN_%llx, left it sound)", ref,
+             s_lastGood);
+}
+
 template <class F>
 void WorldStep(unsigned long long ref, F step) {
     __try {
         step();
     } __except (GenFault(ref, GetExceptionInformation())) {
     }
+    WorldStepHeapCheck(ref);
 }
 
 // The in-world frame (game state 7): the reference's sequence at 0x140222956, in order. The
@@ -728,6 +796,8 @@ void WorldStateUpdate() {
 
 // The main loop's condition: pumps events and advances the game; false to stop.
 // ref: FUN_1402225d0
+static void RunScheduledCallbacks();  // (below: the frame's scheduled callbacks)
+
 bool Sub1402225D0() {
     MemoryHeapCheck("frame");  // FROST_HEAP_VALIDATE=1 only
     MemoryQuarantineScan();    // FROST_GUARD_HEAP=world only
@@ -767,8 +837,7 @@ bool Sub1402225D0() {
     Sub14021C040();
     Sub14228C670();
     WindowUpdateForeground();
-    // The scheduled callbacks (DAT_142cc8060, with additions at DAT_142cc8300 and removals at
-    // DAT_142cc8460) run here; nothing schedules any yet.
+    RunScheduledCallbacks();
     WorldFrameUpdate(s_gameState == 7);
     Sub14192FCB0(Sub14192FA70());
     Sub1413528E0(s_gameState != 7 || LoadingScreenIsActive());
@@ -782,7 +851,8 @@ bool Sub1402225D0() {
             Sub141687ED0();
             Sub141691B00();
             CSimpleTop::s_instance->OnUpdate(s_frameSeconds);
-            Sub141525060(nullptr, s_frameSeconds);  // &DAT_142d082d0
+            // the gamepad state is the reference's own (DAT_142d082d0, in the mapped image)
+            Sub141525060(reinterpret_cast<void*>(0x142d082d0ull), s_frameSeconds);
             break;
         case 1:
             s_gameState = 2;
@@ -846,6 +916,105 @@ void OnFrameEnded(GXFRAMESTATS* stats, void* storage) {
 
 }
 
+// The world frame drawn into the frame buffer (CGWorldFrame's render, FUN_141472dc0,
+// translated); `final` when it goes straight to the swap chain.
+extern "C" unsigned long long FUN_141472dc0(unsigned long long, unsigned long long, unsigned long long);
+static void WorldFrameRender(unsigned long long worldFrame, FRAMEBUFFER* frame, bool final) {
+    static bool s_logged;
+    if (!s_logged) {
+        // (what FUN_141471360 draws only for: a frame with a size and the world frame's rectangle,
+        // +0x3e8..+0x3f4, not empty)
+        s_logged = true;
+        auto rect = reinterpret_cast<const float*>(worldFrame + 0x3e8);
+        FrostLog("world", "first world frame: frame %dx%d, world frame %llx rect %g %g %g %g", frame->m_size[0],
+                 frame->m_size[1], worldFrame, rect[0], rect[1], rect[2], rect[3]);
+    }
+    __try {
+        FUN_141472dc0(worldFrame, reinterpret_cast<unsigned long long>(frame), final);
+    } __except (GenFault(0x141472dc0ull, GetExceptionInformation())) {
+    }
+}
+
+extern "C" unsigned long long FUN_14021bbd0(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_14021bf70(unsigned long long, unsigned long long, unsigned long long);
+
+// The frame's scheduled callbacks, the part of FUN_1402225d0 after WindowUpdateForeground: a
+// vector of 0x28-byte entries {invoke, manager, storage[2], key} at DAT_142cc8060 (data, count at
+// +8), the ones added since the last frame at DAT_142cc8300 and the keys removed at DAT_142cc8460.
+// Additions are merged in (FUN_14021bbd0) and their pending copies destroyed (manager(storage,
+// 0, 0)), each removed key's entry is swapped with the last (FUN_14021bf70) and destroyed, then
+// every entry runs as invoke(key, &storage). The port skipped this while "nothing scheduled
+// any"; translated code does now, and what it schedules never ran (2026-10-23, the session's
+// keepalive among the suspects: the client went silent in the world and was dropped at 60 s).
+static void RunScheduledCallbacksGuarded() {
+    using MANAGER = void (*)(void* storage, void* other, int op);
+    using INVOKE = void (*)(unsigned long long key, void* storage);
+    auto& data = *reinterpret_cast<uint8_t**>(0x142cc8060ull);
+    auto& count = *reinterpret_cast<int64_t*>(0x142cc8068ull);
+    auto& added = *reinterpret_cast<uint8_t**>(0x142cc8300ull);
+    auto& addedCount = *reinterpret_cast<int64_t*>(0x142cc8308ull);
+    auto& removed = *reinterpret_cast<int64_t**>(0x142cc8460ull);
+    auto& removedCount = *reinterpret_cast<int64_t*>(0x142cc8468ull);
+    if (addedCount != 0) {
+        FUN_14021bbd0(0x142cc8060ull, reinterpret_cast<unsigned long long>(data + count * 0x28),
+                      reinterpret_cast<unsigned long long>(added),
+                      reinterpret_cast<unsigned long long>(added + addedCount * 0x28));
+        for (int64_t i = 0; i < addedCount; i++) {
+            uint8_t* entry = added + i * 0x28;
+            (*reinterpret_cast<MANAGER*>(entry + 8))(entry + 0x10, nullptr, 0);
+        }
+        addedCount = 0;
+    }
+    if (count == 0) {
+        return;
+    }
+    if (removedCount != 0) {
+        for (int64_t r = 0; r < removedCount; r++) {
+            uint8_t* last = data + (count - 1) * 0x28;
+            uint8_t* found = nullptr;
+            for (uint8_t* e = data; e <= last; e += 0x28) {
+                if (*reinterpret_cast<int64_t*>(e + 0x20) == removed[r]) {
+                    found = e;
+                    break;
+                }
+            }
+            if (found == nullptr) {
+                continue;
+            }
+            if (found != last) {
+                FUN_14021bf70(reinterpret_cast<unsigned long long>(found), reinterpret_cast<unsigned long long>(last),
+                              static_cast<unsigned long long>(count));
+            }
+            count--;
+            (*reinterpret_cast<MANAGER*>(last + 8))(last + 0x10, nullptr, 0);
+        }
+        removedCount = 0;
+    }
+    for (int64_t i = 0; i < count; i++) {
+        uint8_t* entry = data + i * 0x28;
+        (*reinterpret_cast<INVOKE*>(entry))(*reinterpret_cast<unsigned long long*>(entry + 0x20), entry + 0x10);
+    }
+}
+
+static void RunScheduledCallbacks() {
+    __try {
+        RunScheduledCallbacksGuarded();
+    } __except (GenFault(0x1402225d0ull, GetExceptionInformation())) {
+    }
+}
+
+// FROST_LOADING_PROBE=1, the port's own diagnostic: each state's frame cleared to a colour after
+// its draw, magenta on the loading screen and green in the world. The colour on screen says the
+// state was reached and its frame presented; black says what was drawn never got there.
+static bool LoadingProbe() {
+    static int s_probe = -1;
+    if (s_probe < 0) {
+        char value[4] = {};
+        s_probe = GetEnvironmentVariableA("FROST_LOADING_PROBE", value, sizeof(value)) != 0 && value[0] == '1';
+    }
+    return s_probe == 1;
+}
+
 // One frame: the world or the glue screens drawn into the window's frame buffer, which is
 // then copied to the swap chain's back buffer and presented.
 // ref: FUN_140225ab0
@@ -883,7 +1052,28 @@ void Sub140225AB0() {
         bool present = true;
         if (!LoadingScreenIsActive()) {
             if (s_gameState == 7) {
-                FROST_UNIMPLEMENTED();  // FUN_141472dc0 (the world scene), the UI and FUN_1405f27e0
+                // the world (the world frame, DAT_1430ae8a0, which the translated game code makes),
+                // drawn last into the swap chain unless a capture or the scaled target takes it
+                auto worldFrame = *reinterpret_cast<unsigned long long*>(0x1430ae8a0ull);
+                if (worldFrame != 0) {
+                    bool final = !Sub1405DC320() && !Sub1405DBDE0() && !Sub140239E90();
+                    WorldFrameRender(worldFrame, frame, final);
+                }
+                // The world's draw binds the frame; one that faulted before it did leaves it unbound,
+                // and the UI then drew into no targets and crashed (CSimpleTop::Render, 2026-10-23).
+                // Recovery, not the reference's: the frame over the back buffer, cleared black, as
+                // the end of this function does for an unbound frame
+                if (frame->m_bound == 0) {
+                    FrameBufferUseTexture(frame, 0, GxSwapChainGetBackBuffer(chain));
+                    FrameBufferBind(frame);
+                    g_gxRenderContext->Clear(targets->m_count != 0 ? targets : nullptr, 1, 0, 1.0f, 0, 0);
+                }
+                // FROST_LOADING_PROBE=1: in the world, the frame cleared to green after the world draws
+                if (LoadingProbe()) {
+                    g_gxRenderContext->Clear(targets->m_count != 0 ? targets : nullptr, 1, 0xff00ff00, 1.0f, 0, 0);
+                }
+                UiRender(CSimpleTop::s_instance);
+                Sub1405F27E0(!Sub14026BEA0());
                 if (s_paused != 0) {
                     s_paused = 0;
                     present = false;
@@ -912,7 +1102,33 @@ void Sub140225AB0() {
                 FrameBufferUseTexture(frame, 0, GxSwapChainGetBackBuffer(chain));
             }
             FrameBufferBind(frame);
+            // (the port's own diagnostic: the draws of the first loading frame logged with their state)
+            static bool s_tracedLoading;
+            if (!s_tracedLoading) {
+                s_tracedLoading = true;
+                extern int g_gxTraceDraws;
+                g_gxTraceDraws = 8;
+                FrostLog("loading", "first loading frame: targets %u, frame %dx%d", targets->m_count, frame->m_size[0],
+                         frame->m_size[1]);
+            }
             Sub14022EE80(g_gxRenderContext, targets->m_count != 0 ? targets : nullptr, true);
+            // (the port's own report, once per screen: the background the loading screen drew with,
+            // DAT_142de0c60, its size and whether its texture was ready or the default stood in)
+            static HTEXTURE s_reportedBackground;
+            auto background = *reinterpret_cast<HTEXTURE*>(0x142de0c60ull);
+            if (background != s_reportedBackground) {
+                s_reportedBackground = background;
+                uint32_t width = 0;
+                uint32_t height = 0;
+                bool sized = background != nullptr && TextureGetSize(background, &width, &height, false);
+                void* gx = background != nullptr ? TextureGetGxTexOrDefaultRecreate(background) : nullptr;
+                FrostLog("loading", "background texture %p (file %d): %s %ux%u, gx %p%s", static_cast<void*>(background),
+                         *reinterpret_cast<int32_t*>(0x142cc8578ull), sized ? "loaded" : "not loaded", width, height, gx,
+                         gx == TextureDefaultGxTex() ? " (the default stands in)" : "");
+            }
+            if (LoadingProbe()) {
+                g_gxRenderContext->Clear(targets->m_count != 0 ? targets : nullptr, 1, 0xffff00ff, 1.0f, 0, 0);
+            }
         }
         if (frame->m_bound == 0) {
             FrameBufferUseTexture(frame, 0, GxSwapChainGetBackBuffer(chain));
@@ -947,17 +1163,34 @@ void Sub140225AB0() {
 
 // ---- GENERATED by tools/forward_stubs.py: link fallbacks where src/gen is not linked ----
 #pragma comment(linker, "/include:GenForwardMissing")
+#pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
+#pragma comment(linker, "/alternatename:FUN_140216640=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140225960=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1402259d0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1405effd0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1405f27e0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14120e240=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412a0e30=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412cab50=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412d4870=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412f3750=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412fd5c0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14134fea0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141472dc0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141473ba0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1414f8d90=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1416552e0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141659a70=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1416d66d0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14170ff20=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141742bb0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14174c210=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14174ce20=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1418e6b00=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1418ea610=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1418ead40=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141920690=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14228cb00=GenForwardMissing")
 // ---- end of link fallbacks ----
 
 // ---- GENERATED by tools/translate.py: the port globals translated code reaches ----

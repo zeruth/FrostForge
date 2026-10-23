@@ -176,10 +176,14 @@ const char* GetMethodObjectName(lua_State* L, int32_t level) {
     if (lua_getlocal(L, &ar, 1)) {
         if (lua_type(L, -1) == LUA_TTABLE) {
             lua_rawgeti(L, -1, 0);
-            if (lua_type(L, -1) == LUA_TLIGHTUSERDATA && lua_touserdata(L, -1)) {
-                // The object's GetName (slot 1), else its debug name (slot 12): CScriptObject is
-                // not ported yet.
-                FROST_UNIMPLEMENTED();
+            if (lua_type(L, -1) == LUA_TLIGHTUSERDATA) {
+                // the object's name (slot 1), else its type's (slot 12)
+                if (auto object = static_cast<FrameScript_Object*>(lua_touserdata(L, -1))) {
+                    name = object->GetName();
+                    if (name == nullptr) {
+                        name = object->GetObjectTypeName();
+                    }
+                }
             }
             lua_settop(L, -2);
         }

@@ -19,13 +19,14 @@ Writes:
 """
 from __future__ import annotations
 
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 import bisect
 import re
 from pathlib import Path
 
 import capstone
 
-from wowbin import Binary
+from pebin import Binary
 
 ROOT = Path(__file__).resolve().parent.parent
 CTOR = 0x1405780A0

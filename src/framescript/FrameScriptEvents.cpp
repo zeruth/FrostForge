@@ -340,6 +340,15 @@ int32_t RegisterEvent(FrameScript_Object* object, uint64_t id) {
     return GetEventList(id)->Add(object, NO_UNITS);
 }
 
+// The same, delivered only for the units in `units` (four 16-bit unit ids).
+// ref: FUN_1406482a0
+int32_t RegisterUnitEvent(FrameScript_Object* object, uint64_t id, uint64_t units) {
+    if (!IsKnownEvent(id) && !IsKnownEvent(id) && !IsKnownEvent(id)) {
+        return 2;
+    }
+    return GetEventList(id)->Add(object, units);
+}
+
 // ref: FUN_1406488a0
 int32_t UnregisterEvent(FrameScript_Object* object, uint64_t id) {
     if (!IsKnownEvent(id) && !IsKnownEvent(id) && !IsKnownEvent(id)) {

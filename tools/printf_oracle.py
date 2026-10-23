@@ -6,12 +6,13 @@ output differs.
 
     python tools/printf_oracle.py
 """
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 import math
 import subprocess
 import sys
 
 from oracle import Oracle
-from wowbin import ROOT
+from pebin import ROOT
 
 CASES = ROOT / "test" / "storm" / "printf_cases.txt"
 EXE = ROOT / "build" / "cmake" / "bin" / "Release" / "PrintfTest.exe"

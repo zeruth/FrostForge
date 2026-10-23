@@ -30,6 +30,7 @@ via tools/oracle.py) and records what they read:
 Names are not in the client. docs/updatefields.json carries TrinityCore's names where the
 client's shape (order, width, count, gate) matches TC's wotlk_classic generator, marked
 "name_source": "inferred"; offsets, widths, counts, order, flags and mask bits are all read
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 from the client.
 """
 from __future__ import annotations
@@ -52,7 +53,7 @@ from unicorn.x86_const import (
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from oracle import HEAP, HEAP_SIZE, Oracle, OracleError  # noqa: E402
-from wowbin import ROOT  # noqa: E402
+from pebin import ROOT  # noqa: E402
 
 DOCS = ROOT / "docs"
 

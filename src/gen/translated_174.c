@@ -9842,7 +9842,7 @@ LAB_1421ca499:
       memmove((void *)(puVar4),(void *)(((longlong)&REFG(double, 0x142901bf0) - lVar1) + (longlong)puVar4),9);
     }
     else {
-      *puVar4 = REFG(double, 0x142901bf0);
+      GEN_COPY(*puVar4, REFG(double, 0x142901bf0));
       *(undefined1 *)(puVar4 + 1) = REFG(undefined1, 0x142901bf8);
     }
     *(undefined1 *)(*param_1 + 9) = 0;

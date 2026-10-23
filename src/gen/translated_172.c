@@ -6006,7 +6006,7 @@ longlong FUN_142171340(longlong param_1, ulonglong param_2, char param_3, longlo
       ((byte *)(gen_frame + 0x10))[0] = *(byte *)(uVar8 + 0x18 + (longlong)plVar1);
       uVar4 = 1;
       lVar5 = 1;
-      cVar2 = (&REFG(undefined1, 0x1428f7760))[((byte *)(gen_frame + 0x10))[0]];
+      cVar2 = ((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x1428f7760)))[((byte *)(gen_frame + 0x10))[0]];
       ((byte *)(gen_frame + 0x10))[1] = "0123456789ABCDEF"[(uint)((longlong)(char)(longlong)((byte *)(gen_frame + 0x10))[0] >> 4) & 0xf];
       ((byte *)(gen_frame + 0x10))[3] = SUB41(uVar3,3);
       ((byte *)(gen_frame + 0x10))[2] = "0123456789ABCDEF"[(int)(char)(longlong)((byte *)(gen_frame + 0x10))[0] & 0xf];
@@ -6020,8 +6020,8 @@ longlong FUN_142171340(longlong param_1, ulonglong param_2, char param_3, longlo
             return lVar9;
           }
         }
-        else if (((&REFG(undefined1, 0x1428f7760))[*(byte *)(uVar8 + 0x19 + (longlong)plVar1)] == '\x03') &&
-                ((&REFG(undefined1, 0x1428f7760))[*(byte *)(uVar8 + 0x1a + (longlong)plVar1)] == '\x04'))
+        else if ((((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x1428f7760)))[*(byte *)(uVar8 + 0x19 + (longlong)plVar1)] == '\x03') &&
+                (((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x1428f7760)))[*(byte *)(uVar8 + 0x1a + (longlong)plVar1)] == '\x04'))
         goto LAB_142171471;
       }
       else {
@@ -6038,7 +6038,7 @@ LAB_142171421:
               return lVar9;
             }
           }
-          else if ((&REFG(undefined1, 0x1428f7760))[*(byte *)(uVar8 + 0x19 + (longlong)plVar1)] == '\x04')
+          else if (((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x1428f7760)))[*(byte *)(uVar8 + 0x19 + (longlong)plVar1)] == '\x04')
           goto LAB_142171421;
         }
 LAB_142171471:
@@ -6056,8 +6056,8 @@ LAB_14217147b:
               return lVar9;
             }
           }
-          else if (((&REFG(undefined1, 0x1428f7760))[*(byte *)(uVar8 + 0x18 + (longlong)plVar1)] == '\x03') &&
-                  ((&REFG(undefined1, 0x1428f7760))[*(byte *)(uVar8 + 0x19 + (longlong)plVar1)] == '\x04'))
+          else if ((((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x1428f7760)))[*(byte *)(uVar8 + 0x18 + (longlong)plVar1)] == '\x03') &&
+                  (((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x1428f7760)))[*(byte *)(uVar8 + 0x19 + (longlong)plVar1)] == '\x04'))
           goto LAB_1421714db;
         }
         else {
@@ -26024,7 +26024,7 @@ uint FUN_14218d980(undefined8 *param_1, ulonglong param_2)
   ulonglong uVar5 = {0};
   
   if ((longlong)param_2 < 1) {
-    *param_1 = REFG(double, 0x1428fa6b0);
+    GEN_COPY(*param_1, REFG(double, 0x1428fa6b0));
     uVar2 = (uint)REFG(undefined1, 0x1428fa6b8);
     *(byte *)(param_1 + 1) = REFG(undefined1, 0x1428fa6b8);
     return uVar2;

@@ -42,7 +42,7 @@ void TelemetryStreamEnable(void* stream, uint32_t flags);
 void StartupErrorCallback(uint32_t code, const char* text);
 void Sub14165C0E0();
 void Sub1415002E0(uint64_t a1, uint64_t a2, uint32_t threads, uint8_t a4, uint64_t a5);
-void Sub140226240();
+uint32_t Sub140226240(uint64_t a1, uint64_t a2);
 void LogOpenDefaultLogs();
 
 bool Sub1402262E0();

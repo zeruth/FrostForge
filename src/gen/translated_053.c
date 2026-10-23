@@ -10121,10 +10121,10 @@ undefined4 FUN_1408fb350(undefined8 param_1)
   (*(float *)(gen_frame + 0x10)) = 0.0;
   CALLF(undefined8, FUN_1408c6aa0)(&(*(undefined8 *)(gen_frame + 0x18)),((undefined4 *)(gen_frame + 0x88)),"Usage: self:SetColorHSV(hsv)",0,(unsigned long long)(&(*(undefined8 *)(gen_frame + 0x8))));
   fVar1 = REFG(float, 0x142618d64);
-  if (0.0 <= (float)(*(undefined8 *)(gen_frame + 0x8))) {
+  if (0.0 <= gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8))))) {
     fVar6 = REFG(float, 0x1426eba1c);
-    if ((float)(*(undefined8 *)(gen_frame + 0x8)) <= REFG(float, 0x1426eba1c)) {
-      fVar6 = (float)(*(undefined8 *)(gen_frame + 0x8));
+    if (gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) <= REFG(float, 0x1426eba1c)) {
+      fVar6 = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8))));
     }
   }
   else {

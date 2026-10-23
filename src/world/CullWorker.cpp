@@ -1,6 +1,7 @@
 #include "world/CullWorker.hpp"
 
 #include "model2/M2Shared.hpp"
+#include "storm/Memory.hpp"
 #include "threadpool/ThreadPool.hpp"
 #include "util/Unimplemented.hpp"
 #include "world/WorldMap.hpp"
@@ -9,6 +10,10 @@
 #include <cfloat>
 #include <cstring>
 #include <new>
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+extern "C" unsigned long long FUN_14144d2f0(unsigned long long);
 
 namespace {
 
@@ -117,14 +122,22 @@ void CullWorker::Init(CWorldCull* hub, uint32_t index) {
     this->m_28 = reinterpret_cast<uint8_t*>(view) + 0x334;
 }
 
-// ref: FUN_1414535f0
+extern "C" unsigned long long FUN_1414535f0(unsigned long long);
+// translated: FUN_1414535f0
 void CullWorker::Begin() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1414535f0((unsigned long long)this);
+    } __except (GenFault(0x1414535f0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1414534a0
+extern "C" unsigned long long FUN_1414534a0(unsigned long long);
+// translated: FUN_1414534a0
 void CullWorker::End() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1414534a0((unsigned long long)this);
+    } __except (GenFault(0x1414534a0ull, GetExceptionInformation())) {
+    }
 }
 
 // ---- the workers ---------------------------------------------------------------------------
@@ -153,14 +166,22 @@ void CullWorker108::Init(CWorldCull* hub, uint32_t index) {
     CullResult108Clear(reinterpret_cast<uint8_t*>(this) + 0x640);
 }
 
-// ref: FUN_1414601a0
+extern "C" unsigned long long FUN_1414601a0(unsigned long long);
+// translated: FUN_1414601a0
 void CullWorker108::Begin() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1414601a0((unsigned long long)this);
+    } __except (GenFault(0x1414601a0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141459790
+extern "C" unsigned long long FUN_141459790(unsigned long long);
+// translated: FUN_141459790
 void CullWorker108::End() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141459790((unsigned long long)this);
+    } __except (GenFault(0x141459790ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_141455b00
@@ -174,17 +195,29 @@ CullWorker0d8::CullWorker0d8() : CullWorker(reinterpret_cast<CULLSTATE*>(reinter
 // ref: FUN_141455e10
 void CullWorker0d8::Init(CWorldCull* hub, uint32_t index) {
     CullWorker::Init(hub, index);
-    FROST_UNIMPLEMENTED();  // FUN_14144d2f0: the result's arrays emptied (they start empty)
+    // the result's arrays (+0x378) emptied
+    __try {
+        FUN_14144d2f0(reinterpret_cast<unsigned long long>(this) + 0x378);
+    } __except (GenFault(0x14144d2f0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141455f70
+extern "C" unsigned long long FUN_141455f70(unsigned long long);
+// translated: FUN_141455f70
 void CullWorker0d8::Begin() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141455f70((unsigned long long)this);
+    } __except (GenFault(0x141455f70ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141455b70
+extern "C" unsigned long long FUN_141455b70(unsigned long long);
+// translated: FUN_141455b70
 void CullWorker0d8::End() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141455b70((unsigned long long)this);
+    } __except (GenFault(0x141455b70ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_141456720
@@ -202,14 +235,22 @@ void CullWorker0f0::Init(CWorldCull* hub, uint32_t index) {
     RndSeedInit(reinterpret_cast<CRndSeed*>(reinterpret_cast<uint8_t*>(this) + 0x184), 0x9a5ef37d);
 }
 
-// ref: FUN_141457d10
+extern "C" unsigned long long FUN_141457d10(unsigned long long);
+// translated: FUN_141457d10
 void CullWorker0f0::Begin() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141457d10((unsigned long long)this);
+    } __except (GenFault(0x141457d10ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141456850
+extern "C" unsigned long long FUN_141456850(unsigned long long);
+// translated: FUN_141456850
 void CullWorker0f0::End() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141456850((unsigned long long)this);
+    } __except (GenFault(0x141456850ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_141441870
@@ -223,14 +264,22 @@ void CullWorkerF40::Init(CWorldCull* hub, uint32_t index) {
     CullWorker::Init(hub, index);
 }
 
-// ref: FUN_141441d40
+extern "C" unsigned long long FUN_141441d40(unsigned long long);
+// translated: FUN_141441d40
 void CullWorkerF40::Begin() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141441d40((unsigned long long)this);
+    } __except (GenFault(0x141441d40ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141441900
+extern "C" unsigned long long FUN_141441900(unsigned long long);
+// translated: FUN_141441900
 void CullWorkerF40::End() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141441900((unsigned long long)this);
+    } __except (GenFault(0x141441900ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_141460a40
@@ -243,14 +292,22 @@ void CullWorker168::Init(CWorldCull* hub, uint32_t index) {
     CullWorker::Init(hub, index);
 }
 
-// ref: FUN_141461800
+extern "C" unsigned long long FUN_141461800(unsigned long long);
+// translated: FUN_141461800
 void CullWorker168::Begin() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141461800((unsigned long long)this);
+    } __except (GenFault(0x141461800ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141460aa0
+extern "C" unsigned long long FUN_141460aa0(unsigned long long);
+// translated: FUN_141460aa0
 void CullWorker168::End() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141460aa0((unsigned long long)this);
+    } __except (GenFault(0x141460aa0ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_1414609d0
@@ -352,6 +409,89 @@ void CWorldCull::AddPhysics(uint8_t* state) {
     FROST_UNIMPLEMENTED();
 }
 
+extern "C" {
+unsigned long long FUN_141444000(unsigned long long);
+unsigned long long FUN_141453460(unsigned long long);
+unsigned long long FUN_141443bb0(unsigned long long);
+unsigned long long FUN_141443d40(unsigned long long);
+unsigned long long FUN_141443f90(unsigned long long);
+unsigned long long FUN_141443c30(unsigned long long);
+unsigned long long FUN_14141f110(unsigned long long);
+unsigned long long FUN_14141f0d0(unsigned long long);
+unsigned long long FUN_14141f0f0(unsigned long long);
+}
+
+namespace {
+
+const char s_fixedArrayTag[] = ".?AV?$TSFixedArray";
+
+// A TSFixedArray's storage given back (its pointer is the array's +0x08).
+void FreeFixedArray(uint8_t* base, intptr_t offset) {
+    void*& data = *reinterpret_cast<void**>(base + offset);
+    if (data != nullptr) {
+        SMemFree(data, s_fixedArrayTag, -2, 0);
+    }
+}
+
+// `count` 0x20-byte elements destroyed in place, last first (_vector_destructor_iterator_).
+void DestroyElements(uint8_t* first, int32_t count, unsigned long long (*destroy)(unsigned long long)) {
+    for (int32_t i = count; i-- > 0;) {
+        destroy(reinterpret_cast<unsigned long long>(first + i * 0x20));
+    }
+}
+
+}  // namespace
+
+// The rest of the hub's teardown (the tail of FUN_1414440f0 after the thread pool groups): the
+// workers' result arrays, which the translated cull fills, by the reference's offsets. Each
+// worker's own (FUN_141453460) and its lists (FUN_141443bb0, FUN_141443d40, FUN_141443f90,
+// FUN_141443c30, the element destructors) are translated.
+static void CWorldCullFreeResults(CWorldCull* cull) {
+    auto base = reinterpret_cast<uint8_t*>(cull);
+    auto at = [base](intptr_t offset) {
+        return reinterpret_cast<unsigned long long>(base + offset);
+    };
+    __try {
+        FUN_141444000(at(0x16318));
+        FUN_141453460(at(0x15e88));
+        FreeFixedArray(base, 0x15e70);
+        FUN_141453460(at(0x15b00));
+        // the area workers, from the last
+        FUN_141443bb0(at(0x15738));
+        for (intptr_t worker = 0, end = 0x15a88; worker < 0x20; worker++, end -= 0x850) {
+            FUN_141443d40(at(end - 0xac * 8));
+            FreeFixedArray(base, end - 0x106 * 8);
+            FreeFixedArray(base, end - 0x10a * 8);
+            FreeFixedArray(base, end - 0x10e * 8);
+            FUN_141453460(at(0x15738 - (worker + 1) * 0x850));
+        }
+        // the two map-object workers
+        for (intptr_t worker = 0, end = 0x5150; worker < 2; worker++, end -= 0x478) {
+            FUN_141443f90(at(end - 0x478));
+            FreeFixedArray(base, end - 0x490);
+            FreeFixedArray(base, end - 0x4b0);
+            FUN_141453460(at(0x4d38 - (worker + 1) * 0x478));
+        }
+        // the five area-chunk workers
+        for (intptr_t worker = 0, end = 0x4930; worker < 5; worker++, end -= 0x17f * 8) {
+            FreeFixedArray(base, end - 0xa0 * 8);
+            FUN_141443f90(at(end - 0xad * 8));
+            FreeFixedArray(base, end - 0xb0 * 8);
+            FreeFixedArray(base, end - 0xf9 * 8);
+            FreeFixedArray(base, end - 0x17f * 8);
+            FreeFixedArray(base, end - 0x183 * 8);
+            DestroyElements(base + end - 400 * 8, 3, FUN_14141f110);
+            FreeFixedArray(base, end - 0x194 * 8);
+            DestroyElements(base + end - 0x19d * 8, 2, FUN_14141f0d0);
+            FreeFixedArray(base, end - 0x1a0 * 8);
+            DestroyElements(base + end - 0x1ad * 8, 3, FUN_14141f0f0);
+            FUN_141453460(at(0x4448 - (worker + 1) * 0xbf8));
+        }
+        FUN_141443c30(at(0x20));
+    } __except (GenFault(0x1414440f0ull, GetExceptionInformation())) {
+    }
+}
+
 // ref: FUN_1414440f0
 CWorldCull::~CWorldCull() {
     for (THREADPOOLGROUP*& group : this->m_groups) {
@@ -360,14 +500,34 @@ CWorldCull::~CWorldCull() {
             group = nullptr;
         }
     }
-    FROST_UNIMPLEMENTED();  // the workers' result arrays (FUN_141444000, FUN_141453460, ...)
+    CWorldCullFreeResults(this);
 }
 
 // ---- GENERATED by tools/forward_stubs.py: link fallbacks where src/gen is not linked ----
 #pragma comment(linker, "/include:GenForwardMissing")
+#pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
+#pragma comment(linker, "/alternatename:FUN_14141f0d0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14141f0f0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14141f110=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141441900=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141441d40=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141443bb0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141443c30=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141443d40=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141443f90=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141444000=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14144d2f0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141453460=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1414534a0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1414535f0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141455b70=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141455f70=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141456850=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141457d10=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141459790=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1414601a0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141460aa0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141461800=GenForwardMissing")
 // ---- end of link fallbacks ----
 
 // ---- GENERATED by tools/translate.py: the port globals translated code reaches ----

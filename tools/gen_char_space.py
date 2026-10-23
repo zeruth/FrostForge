@@ -4,9 +4,10 @@ nibble (0x142961060), and a flag per character in the row (0x142961020).
 
     python tools/gen_char_space.py
 """
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 from pathlib import Path
 
-from wowbin import ROOT, Binary
+from pebin import ROOT, Binary
 
 b = Binary()
 

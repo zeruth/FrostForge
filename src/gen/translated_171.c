@@ -11996,7 +11996,7 @@ undefined4 FUN_142160ae0(longlong *param_1, longlong param_2)
   ulonglong uVar10 = {0};
 /*                                   */
   
-  uVar2 = REFG(float, 0x142618d64);
+  GEN_COPY(uVar2, REFG(float, 0x142618d64));
   lVar8 = 0;
   uVar10 = 0;
   if (*(int *)(param_2 + 0x20) != 0) {
@@ -14044,7 +14044,7 @@ undefined8 FUN_142163b50(longlong param_1, undefined8 param_2, double param_3, d
   CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_progress.cpp",0xa6,"Total Estimate:   Efficiency (%5.2f)\n\t- Initially Free: %5lluMiB\n\t- Recoverable:    %5lluMiB\n\t- Unrecoverable:  %5lluMiB\n\t- Movable:        %5lluMiB\n\t- Skipping:       %5lluMiB\n\t- Avg. Move Size: %5lluKiB",dVar10,(unsigned long long)(uVar7),(unsigned long long)(uVar8),(unsigned long long)(uVar4),(unsigned long long)(uVar1 >> 0x14),(unsigned long long)(*(ulonglong *)(param_1 + 0x70) >> 0x14),(unsigned long long)(uVar3 >> 10));
   CALLF(undefined8, FUN_14235a890)(&REFG(undefined1, 0x142630ce4),2,"D:\\BuildServer\\A\\work\\package_cache\\casc\\1.4.41\\src\\maintenance\\compaction_progress.cpp",0xae,(unsigned long long)("Archives: Total Compacted: %d - Defrag: %d - FillHoles: %d | Merged: %d"),CONCAT44((int)(GEN_BITS(dVar10) >> 0x20),
                          *(int *)(param_1 + 0x78) + *(int *)(param_1 + 0x7c)),(unsigned long long)(CONCAT44((int)(uVar7 >> 0x20),*(int *)(param_1 + 0x78))),(unsigned long long)(CONCAT44((int)(uVar8 >> 0x20),*(int *)(param_1 + 0x7c))),(unsigned long long)(CONCAT44((int)(uVar4 >> 0x20),*(undefined4 *)(param_1 + 0x84))));
-  uVar2 = REFG(float, 0x142618d64);
+  GEN_COPY(uVar2, REFG(float, 0x142618d64));
   CALLF(undefined8, FUN_142143390)(param_2,3,"dynamic.compaction.estimate.initial_bytes_free",
                 *(undefined8 *)(param_1 + 0x88),REFG(float, 0x142618d64));
   CALLF(undefined8, FUN_142143390)(param_2,3,"dynamic.compaction.estimate.bytes_recoverable",*(undefined8 *)(param_1 + 0x60),(unsigned long long)(uVar2));

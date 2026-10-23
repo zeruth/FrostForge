@@ -9858,8 +9858,8 @@ undefined1 FUN_1422f0830(longlong param_1, byte *param_2)
     CALLF(undefined8, FUN_1402637b0)(&(*(undefined1 *)((char *)&gen_g_143490880 + 0x0)));
     CALLF(undefined8, FUN_1422f4850)(REFG(undefined1 *, 0x14348bc38) + 0x68,((byte * *)(gen_frame + 0x10)));
     pbVar3 = ((byte * *)(gen_frame + 0x10))[0];
-    bVar1 = (&REFG(undefined1, 0x14348bdf0))[*((byte * *)(gen_frame + 0x10))[0]];
-    (&REFG(undefined1, 0x14348bdf0))[*((byte * *)(gen_frame + 0x10))[0]] = bVar1 + 1;
+    bVar1 = ((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x14348bdf0)))[*((byte * *)(gen_frame + 0x10))[0]];
+    ((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x14348bdf0)))[*((byte * *)(gen_frame + 0x10))[0]] = bVar1 + 1;
     ((byte * *)(gen_frame + 0x10))[0][0x19] = bVar1;
     uVar2 = *(undefined8 *)(REFG(undefined1 *, 0x14348bc38) + (ulonglong)*((byte * *)(gen_frame + 0x10))[0] * 8 + 0x48);
     CALLF(undefined8, FUN_1402637f0)(&(*(undefined1 *)((char *)&gen_g_143490880 + 0x0)));
@@ -9891,8 +9891,8 @@ undefined1 FUN_1422f0910(longlong param_1, byte *param_2)
     CALLF(undefined8, FUN_1402637b0)(&(*(undefined1 *)((char *)&gen_g_143490880 + 0x0)));
     CALLF(undefined8, FUN_1422f4850)(REFG(undefined1 *, 0x14348bd18) + 0x68,((byte * *)(gen_frame + 0x10)));
     pbVar3 = ((byte * *)(gen_frame + 0x10))[0];
-    bVar1 = (&REFG(undefined1, 0x14348bed0))[*((byte * *)(gen_frame + 0x10))[0]];
-    (&REFG(undefined1, 0x14348bed0))[*((byte * *)(gen_frame + 0x10))[0]] = bVar1 + 1;
+    bVar1 = ((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x14348bed0)))[*((byte * *)(gen_frame + 0x10))[0]];
+    ((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x14348bed0)))[*((byte * *)(gen_frame + 0x10))[0]] = bVar1 + 1;
     ((byte * *)(gen_frame + 0x10))[0][0x19] = bVar1;
     uVar2 = *(undefined8 *)(REFG(undefined1 *, 0x14348bd18) + (ulonglong)*((byte * *)(gen_frame + 0x10))[0] * 8 + 0x48);
     CALLF(undefined8, FUN_1402637f0)(&(*(undefined1 *)((char *)&gen_g_143490880 + 0x0)));

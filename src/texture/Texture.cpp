@@ -2210,6 +2210,16 @@ void* TextureGetGxTexBlocking(HTEXTURE texture) {
 // A Gx texture left behind by a lost device is made again.
 // ref: FUN_141280690
 void* TextureGetGxTexOrDefaultRecreate(HTEXTURE texture) {
+    // FROST_LOADING_WHITE=1, the port's own diagnostic: the loading screen's background
+    // (DAT_142de0c60) drawn with the white texture, to tell its draw from its contents
+    static int s_white = -1;
+    if (s_white < 0) {
+        char value[4] = {};
+        s_white = GetEnvironmentVariableA("FROST_LOADING_WHITE", value, sizeof(value)) != 0 && value[0] == '1';
+    }
+    if (s_white == 1 && texture != nullptr && texture == *reinterpret_cast<HTEXTURE*>(0x142de0c60ull)) {
+        return SolidGxTex(s_whiteTexture);
+    }
     if (texture != nullptr) {
         bool pending;
         void* gx = OwnGxTex(texture, &pending);

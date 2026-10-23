@@ -7290,7 +7290,7 @@ undefined4 FUN_1424f4f90(undefined8 *param_1)
   undefined8 uVar2 = {0};
   
   uVar2 = REFG(undefined8, 0x14261aa18);
-  uVar1 = REFG(double, 0x14261aa10);
+  GEN_COPY(uVar1, REFG(double, 0x14261aa10));
   *param_1 = 0;
   param_1[1] = 0;
   *(undefined4 *)(param_1 + 2) = 0;
@@ -7577,7 +7577,7 @@ undefined4 FUN_1424f5340(undefined8 *param_1)
   param_1[0x71] = 0;
   param_1[0x72] = 0;
   uVar2 = REFG(undefined8, 0x1426d2b18);
-  uVar1 = REFG(double, 0x1426d2b10);
+  GEN_COPY(uVar1, REFG(double, 0x1426d2b10));
   param_1[0x73] = REFG(double, 0x1426d2b10);
   param_1[0x74] = uVar2;
   param_1[0x75] = uVar1;

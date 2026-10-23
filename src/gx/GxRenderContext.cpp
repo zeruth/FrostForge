@@ -333,7 +333,7 @@ void GxRenderContext::SetVertexBuffers(uint32_t, uint32_t, const GXVERTEXSTREAM*
 void GxRenderContext::SetIndexBuffer(GxBuf*, uint8_t) {
     FROST_UNIMPLEMENTED();
 }
-void GxRenderContext::Slot138() {
+void GxRenderContext::SetShadingRateImage(void*) {
 }
 void GxRenderContext::SetShadingRateCombiners(const uint8_t*) {
 }

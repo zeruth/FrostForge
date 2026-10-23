@@ -136,7 +136,7 @@ class CWorldView {
     // This frame's matrices and camera kept as last frame's.
     // ref: FUN_1413c59b0
     void LatchCamera();
-    // ref: FUN_1413de240
+    // (forwards to FUN_1413de240's translation)
     void UpdateDetailTarget();
     // ref: FUN_1413da730
     void CullFinish();

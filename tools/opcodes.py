@@ -12,7 +12,7 @@ handler fires, Lua API names that reach the sender, Jam type names, source files
     python tools/opcodes.py --show 0x2583        # one opcode's record, as JSON
     python tools/opcodes.py --import-hints Opcodes.cs   # WPP V3_4_3_51666/Opcodes.cs -> data/opcode_hints.json
 
-Inputs: build/corpus.jsonl (tools/corpus.py), the clean exe (tools/wowbin.py), and the facts
+Inputs: build/corpus.jsonl (tools/corpus.py), the clean exe (tools/pebin.py), and the facts
 srcrefs, luabind, cregister. No Ghidra, no build. ~1-2 minutes, most of it loading the corpus.
 
 How each side is found (world-handshake.ANALYSIS.md section 4 in the FrostForge server repo):
@@ -33,6 +33,7 @@ Client -> server. Every CMSG writer begins with WRITE_U16(stream, <opcode>) as i
 The writer sits in a vtable at slot +0x10 (a qword equal to its address in .rdata); the
 functions that reference that vtable are its ctor (small, stores the vtable into `*param_1`)
 or senders that build the packet inline. The ctor's callers are the senders. Evidence comes
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 from the senders and their callers up to --depth: Lua C functions (luabind / C_ APIs), strings.
 
 Layouts: the stream primitives below are named in each parser's / writer's call sequence
@@ -49,7 +50,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from corpus import load_corpus, load_facts, strip_retcheck
-from wowbin import ROOT, Binary
+from pebin import ROOT, Binary
 
 REGISTER_PROTOCOL = 0x14073D7D0   # static init: lea rcx, obj; jmp here
 CONNECTION_SWITCH = 0x140726B80   # 0x3048..0x3050, called from FUN_141235030

@@ -7,6 +7,8 @@
 #include "util/Unimplemented.hpp"
 #include <windows.h>
 #include <imm.h>
+#include <msctf.h>
+#include <oleauto.h>
 #include <malloc.h>
 #include <cmath>
 #include <cstring>
@@ -1441,6 +1443,14 @@ bool ImeGetString(uint32_t index, char* buffer, int32_t size) {
 
 }
 
+// The TSF interfaces and compartments the IME code asks for, as the reference keeps them.
+const GUID s_iidTfSource = {0x4ea48a35, 0x60ae, 0x446f, {0x8f, 0xd6, 0xe6, 0xa8, 0xd8, 0x24, 0x59, 0xf7}};
+const GUID s_iidTfActiveLanguageProfileNotifySink =
+    {0xea1ea136, 0x19df, 0x11d7, {0xa6, 0xd2, 0x00, 0x06, 0x5b, 0x84, 0x43, 0x5c}};
+const GUID s_iidTfCompartmentMgr = {0x7dcf57ac, 0x18ad, 0x438b, {0x82, 0x4d, 0x97, 0x9b, 0xff, 0xb7, 0x4b, 0x7c}};
+const GUID s_guidKeyboardOpenClose = {0x58273aad, 0x01bb, 0x4164, {0x95, 0xc6, 0x75, 0x5b, 0xa0, 0xb5, 0x16, 0x2d}};
+const GUID s_guidInputModeConversion = {0xccf05dd8, 0x4a87, 0x11d7, {0xa6, 0xe2, 0x00, 0x06, 0x5b, 0x84, 0x43, 0x5c}};
+
 // The IME follows the edit focus: the first enable gives the window its input context back,
 // the last disable cancels the composition and takes it away.
 // ref: FUN_14123e5f0
@@ -1463,8 +1473,26 @@ void OsImeEnable(bool enable) {
     if (s_imeDisabled == 0 || s_tsfThreadManager == nullptr) {
         return;
     }
-    // The TSF input processor profile sink, advised while the IME is on.
-    FROST_UNIMPLEMENTED();
+    // The TSF language profile sink, advised while the IME is on: the thread manager's source
+    // takes the sink (the reference's, made with the thread manager by FUN_14123f100, at
+    // DAT_1430a1bc8) and keeps its cookie (DAT_142cfbb10, -1 while none is advised).
+    auto& cookie = *reinterpret_cast<DWORD*>(0x142cfbb10ull);
+    if (enable ? cookie != TF_INVALID_COOKIE : cookie == TF_INVALID_COOKIE) {
+        return;
+    }
+    ITfSource* source = nullptr;
+    auto manager = static_cast<IUnknown*>(s_tsfThreadManager);
+    if (FAILED(manager->QueryInterface(s_iidTfSource, reinterpret_cast<void**>(&source)))) {
+        return;
+    }
+    if (enable) {
+        auto sink = *reinterpret_cast<IUnknown**>(0x1430a1bc8ull);
+        source->AdviseSink(s_iidTfActiveLanguageProfileNotifySink, sink, &cookie);
+    } else {
+        source->UnadviseSink(cookie);
+        cookie = TF_INVALID_COOKIE;
+    }
+    source->Release();
 }
 
 // The composition's target clause and cursor, in characters; false without a composition.
@@ -1549,8 +1577,46 @@ int32_t OsImeGetLanguage() {
         ImmReleaseContext(window, context);
         native = (conversion & IME_CMODE_NATIVE) != 0;
     } else if (s_tsfThreadManager != nullptr) {
-        // The TSF compartments (keyboard open and input mode conversion).
-        FROST_UNIMPLEMENTED();
+        // the TSF compartments: the keyboard open, and (when the layout asks for both,
+        // DAT_1430a1bf3) the input mode conversion
+        ITfCompartmentMgr* compartments = nullptr;
+        ITfCompartment* open = nullptr;
+        ITfCompartment* conversion = nullptr;
+        auto manager = static_cast<IUnknown*>(s_tsfThreadManager);
+        if (SUCCEEDED(manager->QueryInterface(s_iidTfCompartmentMgr, reinterpret_cast<void**>(&compartments)))) {
+            if (SUCCEEDED(compartments->GetCompartment(s_guidKeyboardOpenClose, &open))) {
+                if (FAILED(compartments->GetCompartment(s_guidInputModeConversion, &conversion))) {
+                    open->Release();
+                    open = nullptr;
+                }
+            }
+            if (open == nullptr) {
+                compartments->Release();
+                compartments = nullptr;
+            }
+        }
+        if (compartments != nullptr) {
+            VARIANT openValue;
+            VariantInit(&openValue);
+            if (SUCCEEDED(open->GetValue(&openValue))) {
+                VARIANT conversionValue;
+                VariantInit(&conversionValue);
+                if (SUCCEEDED(conversion->GetValue(&conversionValue))) {
+                    if (openValue.vt == VT_I4) {
+                        if (*reinterpret_cast<const uint8_t*>(0x1430a1bf3ull) == 0) {
+                            native = openValue.lVal != 0;
+                        } else {
+                            native = openValue.lVal != 0 && conversionValue.lVal != 0;
+                        }
+                    }
+                    VariantClear(&conversionValue);
+                }
+                VariantClear(&openValue);
+            }
+            compartments->Release();
+            open->Release();
+            conversion->Release();
+        }
     }
     if (!native) {
         return 0;

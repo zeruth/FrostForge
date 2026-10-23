@@ -14,6 +14,9 @@
 #include "db/DB2Tables.hpp"
 #include "util/FrostLog.hpp"
 #include "util/Unimplemented.hpp"
+#include <windows.h>
+
+extern "C" int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 
 using namespace cas;
 
@@ -622,12 +625,18 @@ bool WowClientDB2_Base::Slot18() {
     return false;
 }
 
-// ref: FUN_14057c0d0: patches that arrived before the table loaded.
+// Patches that arrived before the table loaded: the hotfix records queued for it, applied
+// through the table's own slots (the class is at the reference's layout).
+extern "C" unsigned long long FUN_14057c0d0(unsigned long long);
+// translated: FUN_14057c0d0
 void WowClientDB2_Base::ApplyPendingPatches() {
     if (this->m_pendingPatches.m_size == 0) {
         return;
     }
-    FROST_UNIMPLEMENTED();  // hotfix records queued before the load
+    __try {
+        FUN_14057c0d0(reinterpret_cast<unsigned long long>(this));
+    } __except (GenFault(0x14057c0d0ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_140581b10
@@ -643,7 +652,20 @@ void WowClientDB2_Base::Unload(bool failed) {
     }
     this->Slot40();
     if (this->m_lookup != nullptr && this->m_patched != 0) {
-        FROST_UNIMPLEMENTED();  // releasing patched records
+        // the records hotfixes made live outside the file's record block (the lookup's base
+        // at +0x08, its count at +0x38 and stride at +0x48): each is given back (slot 0x80)
+        auto lookup = reinterpret_cast<const uint8_t*>(this->m_lookup);
+        DB2LOOKUPITER it;
+        WowDB2LookupBegin(this->m_lookup, &it);
+        while (it.m_index != -2) {
+            uint64_t base = *reinterpret_cast<const uint64_t*>(lookup + 0x08);
+            uint64_t block = static_cast<uint32_t>(*reinterpret_cast<const int32_t*>(lookup + 0x48)
+                * *reinterpret_cast<const int32_t*>(lookup + 0x38));
+            if (block <= reinterpret_cast<uint64_t>(it.m_record) - base) {
+                this->FreeRecord(const_cast<void*>(it.m_record));
+            }
+            this->m_lookup->Next(&it);
+        }
     }
     for (TDBCVector<uint32_t>& pallet : this->m_pallets) {
         pallet.release();
@@ -723,45 +745,62 @@ bool WowClientDB2_Base::Reload(bool errors) {
     return true;
 }
 
-// ref: FUN_14057a760
+// The pending patches' watchers told.
+extern "C" unsigned long long FUN_14057a760(unsigned long long);
+// translated: FUN_14057a760
 void WowClientDB2_Base::NotifyRecordWatchers() {
-    if (this->m_pendingPatches.m_size != 0) {
-        FROST_UNIMPLEMENTED();  // the pending patches' watchers
+    if (this->m_pendingPatches.m_size == 0) {
+        return;
+    }
+    __try {
+        FUN_14057a760(reinterpret_cast<unsigned long long>(this));
+    } __except (GenFault(0x14057a760ull, GetExceptionInformation())) {
     }
 }
 
-// ref: FUN_14057a880: drops pending patches and waits out the section reads.
+// Drops pending patches, cancels the section reads (FUN_1405d9f80) and waits them out
+// (FUN_1405db0f0 pumping, FUN_1402637a0 yielding, while +0x198 counts any in flight).
+extern "C" unsigned long long FUN_14057a880(unsigned long long);
+// translated: FUN_14057a880
 void WowClientDB2_Base::Slot40() {
-    if (this->m_pendingPatches.m_size != 0) {
-        FROST_UNIMPLEMENTED();  // pending patch release
-    }
-    for (DB2ASYNCSECTION& section : this->m_asyncSections) {
-        if (section.m_read != nullptr) {
-            FROST_UNIMPLEMENTED();  // cancelling an async section read
-        }
-    }
-    if (this->m_asyncPending != 0) {
-        FROST_UNIMPLEMENTED();  // waiting for async section reads
+    __try {
+        FUN_14057a880(reinterpret_cast<unsigned long long>(this));
+    } __except (GenFault(0x14057a880ull, GetExceptionInformation())) {
     }
 }
 
-// ref: FUN_14057b040
-void WowClientDB2_Base::Slot48() {
-    FROST_UNIMPLEMENTED();
+// A record's patch applied by id (FUN_14057b040) and its sibling (FUN_14057bf20): only the
+// translated hotfix code calls these slots.
+extern "C" unsigned long long FUN_14057b040(unsigned long long, unsigned long long, unsigned long long,
+    unsigned long long, unsigned long long);
+// translated: FUN_14057b040
+uint64_t WowClientDB2_Base::Slot48(uint32_t id, bool a3, bool a4, uint64_t a5) {
+    __try {
+        return FUN_14057b040(reinterpret_cast<unsigned long long>(this), id, a3, a4, a5);
+    } __except (GenFault(0x14057b040ull, GetExceptionInformation())) {
+        return 0;
+    }
 }
 
-// ref: FUN_14057bf20
-void WowClientDB2_Base::Slot50() {
-    FROST_UNIMPLEMENTED();
+extern "C" unsigned long long FUN_14057bf20(unsigned long long, unsigned long long, unsigned long long,
+    unsigned long long, unsigned long long);
+// translated: FUN_14057bf20
+uint64_t WowClientDB2_Base::Slot50(uint32_t id, bool a3, bool a4, uint64_t a5) {
+    __try {
+        return FUN_14057bf20(reinterpret_cast<unsigned long long>(this), id, a3, a4, a5);
+    } __except (GenFault(0x14057bf20ull, GetExceptionInformation())) {
+        return 0;
+    }
 }
 
-// ref: FUN_14057f0d0
+extern "C" unsigned long long FUN_14057f0d0(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_14057f0d0
 bool WowClientDB2_Base::LoadSection(void* file, int32_t section, bool errors) {
-    (void)file;
-    (void)section;
-    (void)errors;
-    FROST_UNIMPLEMENTED();  // a late (decrypted) section's load
-    return false;
+    __try {
+        return (FUN_14057f0d0((unsigned long long)this, (unsigned long long)file, (unsigned long long)section, (unsigned long long)errors) & 0xff) != 0;
+    } __except (GenFault(0x14057f0d0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 
 void WowClientDB2_Base::AddRef(void*) {
@@ -776,10 +815,13 @@ uint64_t WowClientDB2_Base::RecordId(void* record) {
     return 0;
 }
 
-// ref: FUN_14057b2b0
+extern "C" unsigned long long FUN_14057b2b0(unsigned long long, unsigned long long);
+// translated: FUN_14057b2b0
 void WowClientDB2_Base::FreeRecord(void* record) {
-    (void)record;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14057b2b0((unsigned long long)this, (unsigned long long)record);
+    } __except (GenFault(0x14057b2b0ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_14057e200
@@ -1227,56 +1269,64 @@ uint32_t WowClientDB2_Base::SparseCount() {
     return 0;
 }
 
-void WowClientDB2_Base::CallbackD0() {
-    FROST_UNIMPLEMENTED();
-}
 
-void WowClientDB2_Base::CallbackD8() {
-    FROST_UNIMPLEMENTED();
-}
-
-void WowClientDB2_Base::CallbackE0() {
-    FROST_UNIMPLEMENTED();
-}
-
-void WowClientDB2_Base::CallbackE8() {
-    FROST_UNIMPLEMENTED();
-}
-
-// ref: FUN_1405820c0
+// A hotfix record from the server.
+extern "C" unsigned long long FUN_1405820c0(unsigned long long, unsigned long long);
+// translated: FUN_1405820c0
 void* WowClientDB2_Base::DeserializeRecord(CDataStore* store) {
-    (void)store;
-    FROST_UNIMPLEMENTED();  // a hotfix record from the server
-    return nullptr;
+    __try {
+        return reinterpret_cast<void*>(FUN_1405820c0(reinterpret_cast<unsigned long long>(this),
+            reinterpret_cast<unsigned long long>(store)));
+    } __except (GenFault(0x1405820c0ull, GetExceptionInformation())) {
+        return nullptr;
+    }
 }
 
-// ref: FUN_1405809e0
+extern "C" unsigned long long FUN_1405809e0(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_1405809e0
 void WowClientDB2_Base::SetRecord(uint32_t id, void* record, void* previous, int32_t parent) {
-    (void)id;
-    (void)record;
-    (void)previous;
-    (void)parent;
-    FROST_UNIMPLEMENTED();  // patching a record in
+    __try {
+        FUN_1405809e0((unsigned long long)this, (unsigned long long)id, (unsigned long long)record, (unsigned long long)previous, (unsigned long long)parent);
+    } __except (GenFault(0x1405809e0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_140580dd0
-void WowClientDB2_Base::SetLookupRecord(int32_t, void*, void*) {
-    FROST_UNIMPLEMENTED();
+extern "C" unsigned long long FUN_140580dd0(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_140580dd0
+void WowClientDB2_Base::SetLookupRecord(int32_t p0, void* p1, void* p2) {
+    __try {
+        FUN_140580dd0((unsigned long long)this, (unsigned long long)p0, (unsigned long long)p1, (unsigned long long)p2);
+    } __except (GenFault(0x140580dd0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_140580d40
-void WowClientDB2_Base::UpdateParent(void*, int32_t, uint32_t, void*) {
-    FROST_UNIMPLEMENTED();
+extern "C" unsigned long long FUN_140580d40(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_140580d40
+void WowClientDB2_Base::UpdateParent(void* p0, int32_t p1, uint32_t p2, void* p3) {
+    __try {
+        FUN_140580d40((unsigned long long)this, (unsigned long long)p0, (unsigned long long)p1, (unsigned long long)p2, (unsigned long long)p3);
+    } __except (GenFault(0x140580d40ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_140580b50
-void WowClientDB2_Base::UpdateIndexed(void*, void*) {
-    FROST_UNIMPLEMENTED();
+extern "C" unsigned long long FUN_140580b50(unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_140580b50
+void WowClientDB2_Base::UpdateIndexed(void* p0, void* p1) {
+    __try {
+        FUN_140580b50((unsigned long long)this, (unsigned long long)p0, (unsigned long long)p1);
+    } __except (GenFault(0x140580b50ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_140580eb0
-void WowClientDB2_Base::Slot118() {
-    FROST_UNIMPLEMENTED();
+extern "C" unsigned long long FUN_140580eb0(unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_140580eb0
+uint64_t WowClientDB2_Base::Slot118(uint32_t* ids, int64_t a3) {
+    __try {
+        return FUN_140580eb0(reinterpret_cast<unsigned long long>(this), reinterpret_cast<unsigned long long>(ids),
+            static_cast<unsigned long long>(a3));
+    } __except (GenFault(0x140580eb0ull, GetExceptionInformation())) {
+        return 0;
+    }
 }
 
 // ref: FUN_14057baf0
@@ -1783,6 +1833,13 @@ bool WowClientDB2_Base::BuildUniqueKeys(bool errors) {
     return this->m_uniqueKeysValid != 0;
 }
 
+extern "C" unsigned long long FUN_14057b170(unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_140579580(unsigned long long);
+extern "C" unsigned long long FUN_140578b70(unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_140577cf0(unsigned long long, unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_140262440(unsigned long long);
+extern "C" unsigned long long FUN_140262470(unsigned long long);
+
 // ref: FUN_14057b640
 void* WowClientDB2_Base::GetRecord(uint32_t id, bool request, bool* local) {
     *local = true;
@@ -1797,13 +1854,45 @@ void* WowClientDB2_Base::GetRecord(uint32_t id, bool request, bool* local) {
     if (record != nullptr) {
         return record != &this->m_deleted ? record : nullptr;
     }
-    if (this->m_pendingPatches.m_size != 0) {
-        FROST_UNIMPLEMENTED();  // a pending patch's request callback (DAT_142e8e2e0)
+    if (this->m_encryption.m_buckets != nullptr) {
+        // an encrypted record whose key is missing (its node's flag at +0x10): the record is
+        // asked for through the encryption hook (DAT_142e8e2e0, the image's)
+        uint64_t h = static_cast<uint64_t>(id) * 0xff51afd7ed558ccdull;
+        h = ((h >> 0x21) ^ h) * 0xc4ceb9fe1a85ec53ull;
+        h = ((h >> 0x21) ^ h) & (this->m_encryption.m_bucketCount - 1);
+        auto link = reinterpret_cast<uint8_t**>(this->m_encryption.m_buckets) + h;
+        while (*link != nullptr && *reinterpret_cast<uint32_t*>(*link + 8) != id) {
+            link = reinterpret_cast<uint8_t**>(*link);
+        }
+        auto hook = *reinterpret_cast<void (**)(uint64_t, uint32_t, uint64_t)>(0x142e8e2e0ull);
+        if (*link != nullptr && (*link)[0x10] != 0 && hook != nullptr) {
+            hook(*reinterpret_cast<const uint64_t*>(this->m_meta), id, 0);
+        }
     }
     if (s_hotfixRequests && HotfixRequestsAvailable()
         && (this->m_meta->m_sparse != 0 || this->m_meta->m_a9 != 0 || request)) {
         *local = false;
-        FROST_UNIMPLEMENTED();  // queueing a hotfix request for the record
+        // queued once: the request node (FUN_140579580) keyed by id in the request map (+0x78,
+        // FUN_140578b70), and the table added to the set the hotfix code sends from
+        // (DAT_142ccdf58, FUN_140577cf0, under the lock at DAT_142e8e280)
+        __try {
+            if (FUN_14057b170(reinterpret_cast<unsigned long long>(this), id) == 0) {
+                uint64_t key = id;
+                uint8_t* node = reinterpret_cast<uint8_t*>(FUN_140579580(reinterpret_cast<unsigned long long>(this)));
+                *reinterpret_cast<uint32_t*>(node + 0x10) = id;
+                *reinterpret_cast<uint32_t*>(node + 0x18) = 1;
+                auto slot = reinterpret_cast<uint8_t**>(FUN_140578b70(
+                    reinterpret_cast<unsigned long long>(&this->m_pendingPatches), reinterpret_cast<unsigned long long>(&key)));
+                *slot = node;
+                uint64_t table = reinterpret_cast<uint64_t>(this);
+                uint8_t result[32];
+                FUN_140262440(0x142e8e280ull);
+                FUN_140577cf0(0x142ccdf58ull, reinterpret_cast<unsigned long long>(result),
+                    reinterpret_cast<unsigned long long>(&table));
+                FUN_140262470(0x142e8e280ull);
+            }
+        } __except (GenFault(0x14057b640ull, GetExceptionInformation())) {
+        }
     }
     return nullptr;
 }
@@ -1886,6 +1975,48 @@ void* WowClientDB2_Base::GetRecordByStringKey(const char* value, int32_t key) {
 void WowClientDB2::RecordCallback() {
 }
 
+extern "C" unsigned long long FUN_1404426a0(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_14035b140(unsigned long long, unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_140442ef0(unsigned long long, unsigned long long, unsigned long long, unsigned long long);
+extern "C" unsigned long long FUN_14035a9d0(unsigned long long, unsigned long long, unsigned long long);
+
+// translated: FUN_1404426a0
+bool WowClientDB2::RunRecordCallbacks(int32_t id, const void* record, uint32_t event) {
+    __try {
+        return (FUN_1404426a0(reinterpret_cast<unsigned long long>(this), static_cast<uint32_t>(id),
+            reinterpret_cast<unsigned long long>(record), event) & 0xff) != 0;
+    } __except (GenFault(0x1404426a0ull, GetExceptionInformation())) {
+        return false;
+    }
+}
+
+// translated: FUN_14035b140
+bool WowClientDB2::HasRecordCallback(int32_t id, uint64_t key) {
+    __try {
+        return (FUN_14035b140(reinterpret_cast<unsigned long long>(this), static_cast<uint32_t>(id), key) & 0xff) != 0;
+    } __except (GenFault(0x14035b140ull, GetExceptionInformation())) {
+        return false;
+    }
+}
+
+// translated: FUN_140442ef0
+bool WowClientDB2::RemoveRecordCallback(int32_t id, uint64_t key, bool all) {
+    __try {
+        return (FUN_140442ef0(reinterpret_cast<unsigned long long>(this), static_cast<uint32_t>(id), key, all) & 0xff) != 0;
+    } __except (GenFault(0x140442ef0ull, GetExceptionInformation())) {
+        return false;
+    }
+}
+
+// translated: FUN_14035a9d0
+void* WowClientDB2::RemoveRecordCallbacks(int32_t id, bool all) {
+    __try {
+        return reinterpret_cast<void*>(FUN_14035a9d0(reinterpret_cast<unsigned long long>(this), static_cast<uint32_t>(id), all));
+    } __except (GenFault(0x14035a9d0ull, GetExceptionInformation())) {
+        return nullptr;
+    }
+}
+
 // ref: FUN_14057bb40
 WowClientDB2_Base* WowClientDB2GetByTableHash(uint32_t tableHash) {
     DB2REGISTRY* map = Registry();
@@ -1942,6 +2073,34 @@ uint32_t DB2FieldArrayU32(const uint8_t* field, uint32_t index, int64_t offset, 
     std::memcpy(&value, table->m_palletArrays[index] + (slot * info->m_value3 + element) * 4, 4);
     return value;
 }
+
+// ---- GENERATED by tools/forward_stubs.py: link fallbacks where src/gen is not linked ----
+#pragma comment(linker, "/include:GenForwardMissing")
+#pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
+#pragma comment(linker, "/alternatename:FUN_140262440=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140262470=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14035a9d0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14035b140=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1404426a0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140442ef0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140577cf0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140578b70=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140579580=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14057a760=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14057a880=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14057b040=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14057b170=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14057b2b0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14057bf20=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14057c0d0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14057f0d0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1405809e0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140580b50=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140580d40=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140580dd0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140580eb0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1405820c0=GenForwardMissing")
+// ---- end of link fallbacks ----
 
 // ---- GENERATED by tools/translate.py: the port globals translated code reaches ----
 extern "C" void* const gen_f_14057bc20 = (void*)&Registry;

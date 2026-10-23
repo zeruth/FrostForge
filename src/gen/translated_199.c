@@ -129,7 +129,7 @@ undefined4 FUN_14256fad0(float *param_1, float *param_2, double param_3_promoted
   float fVar11 = {0};
   
   fVar4 = CALLF(float, FUN_14256fa30)(param_1);
-  uVar2 = REFG(float, 0x14261aa20);
+  GEN_COPY(uVar2, REFG(float, 0x14261aa20));
   fVar1 = REFG(float, 0x142618d64);
   fVar10 = *param_2 - fVar4;
   if ((GEN_FABS((fVar10 * fVar10)) < REFG(float, 0x14263241c)) ||
@@ -248,7 +248,7 @@ undefined4 FUN_14256fe30(float *param_1, float *param_2, double param_3_promoted
   float fVar8 = {0};
   float fVar9 = {0};
   
-  uVar6 = REFG(float, 0x14261aa20);
+  GEN_COPY(uVar6, REFG(float, 0x14261aa20));
   fVar5 = REFG(float, 0x14261a954);
   fVar4 = REFG(float, 0x142618d64);
   fVar1 = param_1[3];
@@ -12176,7 +12176,7 @@ undefined8 FUN_1425800f0(void)
         }
         *plVar1 = (longlong)plVar8;
         REFG(undefined8, 0x142d5f358) = REFG(undefined8, 0x142d5f358) + 1;
-        if (REFG(float, 0x142d5f360) < (float)REFG(undefined8, 0x142d5f358) / (float)REFG(undefined8, 0x142d5f348)) {
+        if (REFG(float, 0x142d5f360) < gen_bits2f((unsigned int)(REFG(undefined8, 0x142d5f358))) / gen_bits2f((unsigned int)(REFG(undefined8, 0x142d5f348)))) {
           CALLF(undefined1, FUN_142580680)(&REFG(undefined8, 0x142d5f348),REFG(undefined8, 0x142d5f348) * 2);
         }
       }
@@ -12894,7 +12894,7 @@ undefined8 * FUN_142581180(undefined8 *param_1, undefined8 param_2, longlong *pa
         lVar3 = param_3[1];
         cVar5 = (**(code * *)(lVar1 + 0x88))(lVar3, lVar2, (*(undefined4 *)((char *)&auVar8 + 0)), param_4);
         if (cVar5 == '\0') {
-          cVar5 = (**(code * *)(lVar1 + 0x80))(lVar3, lVar2, (double)(ulonglong)(uint)(float)(*(undefined8 *)((char *)&auVar8 + 0)));
+          cVar5 = (**(code * *)(lVar1 + 0x80))(lVar3, lVar2, (double)(ulonglong)(uint)gen_bits2f((unsigned int)((*(undefined8 *)((char *)&auVar8 + 0)))));
           if (cVar5 == '\0') {
             (*(char * *)(gen_frame + 0x20)) = "D:\\BuildServer\\A\\work-git\\wow\\WoW\\Source\\WowServices\\JamJSON.cpp";
             puVar7 = (undefined8 *)((undefined4 *)(gen_frame + 0x18));
@@ -22562,7 +22562,7 @@ undefined1 FUN_14258ec60(undefined8 param_1, undefined8 param_2, char *param_3)
   }
   uVar2 = strtol(param_3,(char **)0x0,uVar2);
   REFG(undefined4, 0x1447cf730) = (int)uVar2;
-  if (-1 < REFG(undefined4, 0x1447cf730)) {
+  if (-1 < REFG(int32_t, 0x1447cf730)) {
     uVar2 = CALLF(ulonglong, FUN_1405d5790)();
     if (((int)uVar2 == 4) || (iVar1 = 2, (int)uVar2 == 1)) {
       iVar1 = 1;
@@ -23137,7 +23137,7 @@ undefined8 FUN_14258f8c0(longlong param_1)
       (*(int *)(gen_frame + 0x800c)) = (*(int *)(gen_frame + 0x8040));
       (*(int *)(gen_frame + 0x8004)) = (*(int *)(gen_frame + 0x804c));
     }
-    uVar2 = REFG(float, 0x14261aa20);
+    GEN_COPY(uVar2, REFG(float, 0x14261aa20));
     fVar1 = REFG(float, 0x14261a954);
     (*(longlong *)(gen_frame + 0x8010)) = -0x200;
     (*(int *)(gen_frame + 0x80f0)) = 0;
@@ -23302,7 +23302,7 @@ undefined8 FUN_14258fde0(undefined8 *param_1, double param_2_promoted, double pa
     fVar5 = REFG(float, 0x1427348f8);
     fVar4 = REFG(float, 0x142722f80);
     fVar3 = REFG(float, 0x1426c70ac);
-    uVar2 = REFG(float, 0x14261aa30);
+    GEN_COPY(uVar2, REFG(float, 0x14261aa30));
     fVar1 = REFG(float, 0x142618d64);
     if (fVar10 <= param_2) {
       if (param_2 < fVar11 * REFG(float, 0x142618d5c)) {
@@ -23333,13 +23333,13 @@ undefined8 FUN_14258fde0(undefined8 *param_1, double param_2_promoted, double pa
         fVar11 = 0.0;
       }
       CALLF(float, FUN_1413406c0)(lVar9 + 8 + param_1[3],fVar11,&(*(undefined8 *)(gen_frame + 0x8)),1);
-      fVar12 = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) * (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) + (float)(*(undefined8 *)(gen_frame + 0x8)) * (float)(*(undefined8 *)(gen_frame + 0x8)) +
+      fVar12 = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) * (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) + gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) * gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) +
                (*(float *)(gen_frame + 0x10)) * (*(float *)(gen_frame + 0x10));
       fVar11 = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4));
-      fVar13 = (float)(*(undefined8 *)(gen_frame + 0x8));
+      fVar13 = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8))));
       if (REFG(float, 0x14261a954) < fVar12) {
         fVar12 = fVar1 / SQRT(fVar12);
-        fVar13 = (float)(*(undefined8 *)(gen_frame + 0x8)) * fVar12;
+        fVar13 = gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) * fVar12;
         fVar11 = (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) * fVar12;
         (*(float *)(gen_frame + 0x10)) = (*(float *)(gen_frame + 0x10)) * fVar12;
         (*(undefined8 *)(gen_frame + 0x8)) = CONCAT44(fVar11,fVar13);
@@ -23612,7 +23612,7 @@ LAB_14259053b:
   (*(undefined8 *)(gen_frame + 0x20)) = REFG(undefined8, 0x14261aa00);
   *param_7 = 0.0;
   ((float *)(gen_frame + 0xc0))[0] = 0.0;
-  (*(undefined8 *)(gen_frame + 0x30)) = REFG(double, 0x14261aa10);
+  GEN_COPY((*(undefined8 *)(gen_frame + 0x30)), REFG(double, 0x14261aa10));
   (*(undefined8 *)(gen_frame + 0x38)) = REFG(undefined8, 0x14261aa18);
   if ((param_9 != (undefined4 *)0x0) && (param_10 != (undefined4 *)0x0)) {
     *param_10 = 0;
@@ -23750,7 +23750,7 @@ float * FUN_1425908b0(undefined8 *param_1, uint param_2, double param_3_promoted
   fVar8 = CALLF(float, FUN_1402dc640)(uVar1,1,0,uVar4);
   fVar7 = REFG(float, 0x1429921b8);
   fVar6 = REFG(float, 0x1426c70ac);
-  uVar2 = REFG(float, 0x14261aa20);
+  GEN_COPY(uVar2, REFG(float, 0x14261aa20));
   fVar5 = REFG(float, 0x14261a954);
   if (REFG(float, 0x14261a954) <= GEN_FABS(fVar8)) {
     uVar1 = *param_1;
@@ -23770,7 +23770,7 @@ float * FUN_1425908b0(undefined8 *param_1, uint param_2, double param_3_promoted
   if (param_4 <= fVar8) {
     uVar4 = CALLF(undefined *, FUN_14051c3d0)();
     fVar8 = CALLF(float, FUN_1402dc640)(uVar1,7,0,uVar4);
-    uVar3 = REFG(float, 0x14261aa30);
+    GEN_COPY(uVar3, REFG(float, 0x14261aa30));
     if (param_4 < GEN_FNEG(fVar8)) {
       uVar1 = *param_1;
       uVar4 = CALLF(undefined *, FUN_14051c3d0)();

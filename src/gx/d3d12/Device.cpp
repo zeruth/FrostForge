@@ -1409,7 +1409,139 @@ uint16_t* CGxDeviceD3d12::CreateVertexBufferFormat(uint16_t* result, const GXVER
     return result;
 }
 
+// ---- the device's own slots that run translated ---------------------------------------------
+
+extern "C" {
+int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
+unsigned long long FUN_1422cda20(unsigned long long, unsigned long long);
+unsigned long long FUN_1422cda90(unsigned long long, unsigned long long);
+unsigned long long FUN_1422ceaa0(unsigned long long, unsigned long long, unsigned long long);
+unsigned long long FUN_1422ceb70(unsigned long long, unsigned long long);
+}
+
+// A graphics command list of its own (a pass that records apart, the shadow band's): the port's
+// GraphicsCommandList, as the device makes its main one, handed out as its render context. The
+// name the caller gives (`a2`) is the reference's debug label, not kept.
+// ref: FUN_1422ce330
+void* CGxDeviceD3d12::Slot090(void* out, uint64_t a2) {
+    (void)a2;
+    auto data = reinterpret_cast<const uint8_t*>(this->m_data);
+    void* memory = SMemAlloc(sizeof(GraphicsCommandList), 0xd, s_deviceFile, SStrHashFnv1a(s_deviceFile), 0xbbb, 0);
+    auto list = new (memory) GraphicsCommandList(D3D12_COMMAND_LIST_TYPE_DIRECT, data[0x219]);
+    *static_cast<void**>(out) = &list->m_context;
+    return out;
+}
+
+// A compute command list (FUN_1422c9f00 with type 2, 0x1d80 bytes) handed out as its compute
+// context (+0xfb8, vtable 0x14291a070). The compute context is not ported (GraphicsCommandList
+// leaves m_computeVtable null), so there is none to give: the caller gets null, which the
+// ray-traced shadow passes asking for one check. Forwarded to the translation, the reference's
+// constructor half-built a list beside the port's backend and wrote through a wild pointer
+// (2026-10-22).
+// ref: FUN_1422ce820
+void* CGxDeviceD3d12::Slot0d8(void* out, uint64_t a2) {
+    (void)a2;
+    *static_cast<void**>(out) = nullptr;
+    return out;
+}
+
+// A GPU event: one from the free list (+0x46f8, its count at +0x4700), else a new one from the
+// event deque (+0x46d8, FUN_1422e8450) stamped with the frame (+0x46f0), under the device lock;
+// its fence made afresh on the port's D3D12 device (the reference's DAT_14348bb70).
+extern "C" unsigned long long FUN_1422e8450(unsigned long long);
+// ref: FUN_1422d1580
+void* CGxDeviceD3d12::Slot0f0(void* out) {
+    auto self = reinterpret_cast<uint8_t*>(this);
+    auto& count = *reinterpret_cast<uint64_t*>(self + 0x4700);
+    uint64_t* event = nullptr;
+    g_gxDeviceLock.Enter();
+    if (count == 0) {
+        uint32_t frame = *reinterpret_cast<uint32_t*>(self + 0x46f0);
+        __try {
+            event = reinterpret_cast<uint64_t*>(FUN_1422e8450(reinterpret_cast<unsigned long long>(self + 0x46d8)));
+        } __except (GenFault(0x1422e8450ull, GetExceptionInformation())) {
+            event = nullptr;
+        }
+        if (event != nullptr) {
+            event[0] = 0;
+            event[1] = 0;
+            *reinterpret_cast<uint32_t*>(event + 2) = frame;
+        }
+    } else {
+        event = reinterpret_cast<uint64_t**>(*reinterpret_cast<uint64_t*>(self + 0x46f8))[count - 1];
+        count--;
+    }
+    g_gxDeviceLock.Leave();
+    if (event != nullptr) {
+        auto& fence = *reinterpret_cast<ID3D12Fence**>(event + 1);
+        if (fence != nullptr) {
+            ID3D12Fence* old = fence;
+            fence = nullptr;
+            old->Release();
+        }
+        HRESULT hr = this->m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, __uuidof(ID3D12Fence), reinterpret_cast<void**>(&fence));
+        if (FAILED(hr)) {
+            this->Fail(hr, "GxEventCreate failed");
+        }
+    }
+    *static_cast<void**>(out) = event;
+    return out;
+}
+
+extern "C" unsigned long long FUN_1422ddd40(unsigned long long, unsigned long long);
+// translated: FUN_1422ddd40
+void* CGxDeviceD3d12::Slot1c0(const void* desc) {
+    __try {
+        return reinterpret_cast<void*>(FUN_1422ddd40(reinterpret_cast<unsigned long long>(this), (unsigned long long)(desc)));
+    } __except (GenFault(0x1422ddd40ull, GetExceptionInformation())) {
+        return nullptr;
+    }
+}
+// A 0x20-byte description copied to the heap.
+// translated: FUN_1422cda20
+void* CGxDeviceD3d12::Slot1b0(const void* desc) {
+    __try {
+        return reinterpret_cast<void*>(FUN_1422cda20(reinterpret_cast<unsigned long long>(this),
+            reinterpret_cast<unsigned long long>(desc)));
+    } __except (GenFault(0x1422cda20ull, GetExceptionInformation())) {
+        return nullptr;
+    }
+}
+
+// translated: FUN_1422cda90
+void CGxDeviceD3d12::Slot1b8(void* object) {
+    __try {
+        FUN_1422cda90(reinterpret_cast<unsigned long long>(this), reinterpret_cast<unsigned long long>(object));
+    } __except (GenFault(0x1422cda90ull, GetExceptionInformation())) {
+    }
+}
+
+// A compute shader object (0x38 bytes): its kind and permutation, loaded at once when shaders
+// are loaded up front (DAT_14348b689, FUN_1422d4d60).
+// translated: FUN_1422ceaa0
+void* CGxDeviceD3d12::CreateComputeShader(uint32_t kind, uint16_t permutation) {
+    __try {
+        return reinterpret_cast<void*>(FUN_1422ceaa0(reinterpret_cast<unsigned long long>(this), kind, permutation));
+    } __except (GenFault(0x1422ceaa0ull, GetExceptionInformation())) {
+        return nullptr;
+    }
+}
+
+// Its pipeline state released through the device's deferred releases (+0xa48), then the object.
+// translated: FUN_1422ceb70
+void CGxDeviceD3d12::DestroyComputeShader(void* shader) {
+    __try {
+        FUN_1422ceb70(reinterpret_cast<unsigned long long>(this), reinterpret_cast<unsigned long long>(shader));
+    } __except (GenFault(0x1422ceb70ull, GetExceptionInformation())) {
+    }
+}
+
 // ---- GENERATED by tools/forward_stubs.py: link fallbacks where src/gen is not linked ----
 #pragma comment(linker, "/include:GenForwardMissing")
+#pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
+#pragma comment(linker, "/alternatename:FUN_1422cda20=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1422cda90=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1422ceaa0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1422ceb70=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1422dbce0=GenForwardMissing")
 // ---- end of link fallbacks ----

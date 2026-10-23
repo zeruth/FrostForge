@@ -2,6 +2,7 @@
 // the secure-execution API, the error handler, profiling, date/time, and debugging aids.
 
 #include "framescript/FrameScript.hpp"
+#include "framescript/FrameScriptObject.hpp"
 
 #include <cmath>
 #include <cstring>
@@ -781,9 +782,12 @@ void DumpValue(lua_State* L, const char* name, uint32_t depth, char* buffer, uin
             void* object = lua_type(L, -1) == LUA_TLIGHTUSERDATA ? lua_touserdata(L, -1) : nullptr;
             lua_settop(L, -2);
             if (object) {
-                // The object's GetName (slot 1), else its debug name (slot 12): CScriptObject is
-                // not ported yet.
-                FROST_UNIMPLEMENTED();
+                // the object's name (slot 1), else its type's (slot 12)
+                auto scriptObject = static_cast<FrameScript_Object*>(object);
+                label = scriptObject->GetName();
+                if (label == nullptr) {
+                    label = scriptObject->GetObjectTypeName();
+                }
             }
             SStrPrintf(line, 0x400, "%s%s = %s {\n", s_indent, name, label);
             Append(buffer, size, line);

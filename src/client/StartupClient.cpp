@@ -99,12 +99,14 @@ void PreloadQueueFile(uint32_t fileDataId) {
 }
 
 // starts the preload; true when it is under way
-// ref: FUN_141283af0
+extern "C" unsigned long long FUN_141283af0(unsigned long long, unsigned long long);
+// translated: FUN_141283af0
 bool PreloadStart(void (*callback)(void*), void* param) {
-    (void)callback;
-    (void)param;
-    FROST_UNIMPLEMENTED();
-    return true;
+    __try {
+        return (FUN_141283af0((unsigned long long)callback, (unsigned long long)param) & 0xff) != 0;
+    } __except (GenFault(0x141283af0ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 
 // The image's code these callbacks run (through its jump table); 0x1402112e0 is
@@ -157,11 +159,15 @@ void Sub1412A11C0() {
     GxAddDeviceDestroyedCallback(ImageCallback<GXDEVICECALLBACK>(0x1402112e0ull), nullptr);
 }
 
-// client objects made with the device
-// ref: FUN_14022a020
+// client objects made with the device: a jump to FUN_14123ec60, which takes nothing
+extern "C" unsigned long long FUN_14022a020();
+// translated: FUN_14022a020
 void OnDeviceCreatedClient(void* param) {
     (void)param;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14022a020();
+    } __except (GenFault(0x14022a020ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_14022a030
@@ -226,14 +232,15 @@ void Sub141930F00() {
     }
 }
 
-// ref: FUN_140229b60
+extern "C" unsigned long long FUN_140229b60(unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_140229b60
 bool OnM2ForceAdditiveParticleSortChanged(CVar* cvar, const char* oldValue, const char* newValue, void* userData) {
-    (void)cvar;
-    (void)oldValue;
-    (void)newValue;
     (void)userData;
-    FROST_UNIMPLEMENTED();
-    return true;
+    __try {
+        return (FUN_140229b60((unsigned long long)cvar, (unsigned long long)oldValue, (unsigned long long)newValue) & 0xff) != 0;
+    } __except (GenFault(0x140229b60ull, GetExceptionInformation())) {
+        return false;
+    }
 }
 
 // Device callbacks: FUN_1412a1c20 on create, FUN_1412a1d10 on destroy.
@@ -243,23 +250,109 @@ void Sub1412A1D50() {
     GxAddDeviceDestroyedCallback(ImageCallback<GXDEVICECALLBACK>(0x1412a1d10ull), nullptr);
 }
 
+// The world's startup subsystems the port has not taken over, run translated (the ones it has,
+// GraphicsRegisterCVars, ParticleSystemInitialize and AmbientOcclusionRegisterCVars, are called
+// in their places). FUN_1412b6af0 and FUN_141354f80 are not translated yet: these tags make them
+// roots of the next translation.
+// translated: FUN_1412b6af0
+// translated: FUN_141354f80
+extern "C" {
+unsigned long long FUN_1413b9e40(unsigned long long);
+unsigned long long FUN_142526ae0(unsigned long long);
+unsigned long long FUN_142526a90(unsigned long long);
+unsigned long long FUN_14134f7b0();
+unsigned long long FUN_14134f7d0();
+unsigned long long FUN_1413a96b0();
+unsigned long long FUN_14129c910();
+unsigned long long FUN_1425561b0();
+unsigned long long FUN_141297470();
+unsigned long long FUN_1412558d0();
+unsigned long long FUN_141289670();
+unsigned long long FUN_1413a61b0();
+unsigned long long FUN_1402db330(unsigned long long, unsigned long long, unsigned long long);
+unsigned long long FUN_141355320();
+unsigned long long FUN_140215350();
+unsigned long long FUN_1425565b0();
+unsigned long long FUN_1412b8290();
+unsigned long long FUN_1412b0b60();
+unsigned long long FUN_1412b6af0();
+unsigned long long FUN_142557380();
+unsigned long long FUN_1412b1890();
+unsigned long long FUN_1412aefd0();
+unsigned long long FUN_1413bf510();
+unsigned long long FUN_14026be80();
+unsigned long long FUN_141354f80();
+}
+
+// A blz::function as FUN_1402db330 takes it: the invoker, the manager and its inline storage.
+struct WORLDSTARTUPFUNCTION {
+    void* m_invoke;
+    void* m_manager;
+    uint8_t m_storage[16];
+};
+
+#define WORLD_STARTUP_STEP(call, address) \
+    __try { \
+        call; \
+    } __except (GenFault(address, GetExceptionInformation())) { \
+    }
+
 // The world's startup: its CVars, then its subsystems.
 // ref: FUN_14134ed50
 void Sub14134ED50(void (*callback)()) {
-    (void)callback;
     GraphicsRegisterCVars();
-    AmbientOcclusionRegisterCVars();
-    // FUN_1413b9e40 (the world's callbacks), the world option defaults (DAT_1430ab9c0..), and
-    // the subsystems around the particles' (liquids, shadows, the sky, ...) are not ported.
-    FROST_UNIMPLEMENTED();
+    WORLD_STARTUP_STEP(FUN_1413b9e40(reinterpret_cast<unsigned long long>(&callback)), 0x1413b9e40ull)
+    // the world option defaults
+    *reinterpret_cast<uint32_t*>(0x1430ab9d4ull) |= 0x37ffff;
+    float scale = *reinterpret_cast<const float*>(0x142d00c20ull);
+    *reinterpret_cast<float*>(0x1430ab9c0ull) = scale * scale;
+    *reinterpret_cast<uint64_t*>(0x1430ab9e8ull) = 0;
+    *reinterpret_cast<uint64_t*>(0x1430ab9f0ull) = 0;
+    *reinterpret_cast<uint64_t*>(0x1430ab9f8ull) = 0;
+    *reinterpret_cast<uint64_t*>(0x1430aba00ull) = 0;
+    *reinterpret_cast<uint64_t*>(0x1430aba08ull) = 0;
+    *reinterpret_cast<uint64_t*>(0x1430aba10ull) = 0;
+    *reinterpret_cast<uint32_t*>(0x1430ab9d8ull) = 0x37ffff;
+    *reinterpret_cast<uint32_t*>(0x1430ab9dcull) = 4;
+    WORLD_STARTUP_STEP(FUN_142526ae0(reinterpret_cast<unsigned long long>(&FUN_14134f7b0)), 0x142526ae0ull)
+    WORLD_STARTUP_STEP(FUN_142526a90(reinterpret_cast<unsigned long long>(&FUN_14134f7d0)), 0x142526a90ull)
+    WORLD_STARTUP_STEP(FUN_1413a96b0(), 0x1413a96b0ull)
     ParticleSystemInitialize();
+    WORLD_STARTUP_STEP(FUN_14129c910(), 0x14129c910ull)
+    WORLD_STARTUP_STEP(FUN_1425561b0(), 0x1425561b0ull)
+    WORLD_STARTUP_STEP(FUN_141297470(), 0x141297470ull)
+    WORLD_STARTUP_STEP(FUN_1412558d0(), 0x1412558d0ull)
+    WORLD_STARTUP_STEP(FUN_141289670(), 0x141289670ull)
+    WORLD_STARTUP_STEP(FUN_1413a61b0(), 0x1413a61b0ull)
+    // the startup again as a render settings handler (its manager is the empty one, so there is
+    // nothing to destroy afterwards)
+    WORLDSTARTUPFUNCTION handler = {reinterpret_cast<void*>(&FUN_141355320), reinterpret_cast<void*>(&FUN_140215350), {}};
+    WORLD_STARTUP_STEP(FUN_1402db330(reinterpret_cast<unsigned long long>(&handler),
+        reinterpret_cast<unsigned long long>(&Sub14134ED50), 0), 0x1402db330ull)
+    WORLD_STARTUP_STEP(FUN_1425565b0(), 0x1425565b0ull)
+    WORLD_STARTUP_STEP(FUN_1412b8290(), 0x1412b8290ull)
+    WORLD_STARTUP_STEP(FUN_1412b0b60(), 0x1412b0b60ull)
+    WORLD_STARTUP_STEP(FUN_1412b6af0(), 0x1412b6af0ull)
+    WORLD_STARTUP_STEP(FUN_142557380(), 0x142557380ull)
+    WORLD_STARTUP_STEP(FUN_1412b1890(), 0x1412b1890ull)
+    AmbientOcclusionRegisterCVars();
+    WORLD_STARTUP_STEP(FUN_1412aefd0(), 0x1412aefd0ull)
+    WORLD_STARTUP_STEP(FUN_1413bf510(), 0x1413bf510ull)
+    WORLD_STARTUP_STEP(FUN_14026be80(), 0x14026be80ull)
+    WorldResetFrameRect();
+    WORLD_STARTUP_STEP(FUN_141354f80(), 0x141354f80ull)
 }
 
+#undef WORLD_STARTUP_STEP
+
 // the world's loading callbacks
-// ref: FUN_1413527a0
+extern "C" unsigned long long FUN_1413527a0(unsigned long long);
+// translated: FUN_1413527a0
 void Sub1413527A0(void* const* functions) {
-    (void)functions;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1413527a0((unsigned long long)functions);
+    } __except (GenFault(0x1413527a0ull, GetExceptionInformation())) {
+    }
 }
 
 namespace {
@@ -541,9 +634,10 @@ void Sub141974D80() {
     }
 }
 
-// The startup worker thread (blz::thread over FUN_14023deb0, with an auto-reset event).
+// The startup worker thread: a blz::thread over FUN_14023deb0 with an auto-reset event, kept at
+// DAT_142de19d8 (the tail of FUN_14023dbd0). Diverged: FUN_14023deb0 is the anti-tamper runtime's
+// (docs/stubs.md), and no protector runs, so there is no thread to start.
 void StartWorkerThread() {
-    FROST_UNIMPLEMENTED();
 }
 
 // The end of stage 5: every client subsystem past the device, then the glue.
@@ -612,10 +706,13 @@ void Sub1412A99A0() {
     RenderSettingsAddHandler(ImageCallback<RENDERSETTINGSHANDLER>(0x1412a99e0ull), nullptr);
 }
 
-// ref: FUN_1402d0b60
+extern "C" unsigned long long FUN_1402d0b60(unsigned long long);
+// translated: FUN_1402d0b60
 void Sub1402D0B60(void (*callback)()) {
-    (void)callback;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1402d0b60((unsigned long long)callback);
+    } __except (GenFault(0x1402d0b60ull, GetExceptionInformation())) {
+    }
 }
 
 extern "C" unsigned long long FUN_1402d0f60();
@@ -628,9 +725,12 @@ void Sub1402D0F60() {
 }
 
 
-// Kiosk mode (0x24 bytes): on or off, the session's length and how much of it has passed, its
-// stage (1 running, 2 over), and two warnings, each a time left and whether it is still due
-// (5 minutes and 1 minute).
+// Kiosk mode (0x40 bytes, DAT_142d2a4e0 up to DAT_142d2a520): on or off, the session's length
+// and how much of it has passed, its stage (1 running, 2 over), two warnings, each a time left
+// and whether it is still due (5 minutes and 1 minute), and the kiosk CVars KioskRegisterCVars
+// (FUN_14192fac0) keeps. Declared 0x24 until 2026-10-22: the CVars were stored past it, over
+// s_focusNextId and the focus listener table after it in .data, and the first focus change
+// walked a CVar as the table's buckets.
 struct KIOSKSTATE {
     uint8_t m_enabled;              // 0x00
     uint8_t m_pad01[7];
@@ -643,10 +743,14 @@ struct KIOSKSTATE {
         uint8_t m_due;
         uint8_t m_pad[3];
     } m_warnings[2];                // 0x14
+    uint8_t m_pad24[4];
+    CVar* m_canSessionExpire;       // 0x28 KioskCanSessionExpire
+    CVar* m_lobbyKickSeconds;       // 0x30 KioskLobbyKickSeconds
+    CVar* m_characterTemplateSet;   // 0x38 KioskCharacterTemplateSet
 };
-static_assert(sizeof(KIOSKSTATE) == 0x24, "KIOSKSTATE is 0x24 bytes");
+static_assert(sizeof(KIOSKSTATE) == 0x40, "KIOSKSTATE is 0x40 bytes");
 
-KIOSKSTATE s_kiosk = { 0, {}, 0.0f, 0.0f, 0, {}, { { 300.0f, 0, {} }, { 60.0f, 0, {} } } };  // DAT_142d2a4e0
+KIOSKSTATE s_kiosk = { 0, {}, 0.0f, 0.0f, 0, {}, { { 300.0f, 0, {} }, { 60.0f, 0, {} } }, {}, nullptr, nullptr, nullptr };  // DAT_142d2a4e0
 
 // ref: FUN_14192fa70
 void* Sub14192FA70() {
@@ -659,12 +763,16 @@ bool Sub1406A8850(void* a1) {
     return static_cast<KIOSKSTATE*>(a1)->m_enabled != 0;
 }
 
-// ref: FUN_140229ce0
+extern "C" unsigned long long FUN_140229ce0();
+// translated: FUN_140229ce0
 int32_t CommandConsoleEnable(const char* command, const char* arguments) {
     (void)command;
     (void)arguments;
-    FROST_UNIMPLEMENTED();
-    return 1;
+    __try {
+        return static_cast<int32_t>(FUN_140229ce0());
+    } __except (GenFault(0x140229ce0ull, GetExceptionInformation())) {
+        return static_cast<int32_t>(0);
+    }
 }
 
 extern "C" unsigned long long FUN_140229d20(unsigned long long, unsigned long long);
@@ -771,10 +879,13 @@ void Sub14228C670() {
     GxFrameUpdate();
 }
 
-// ref: FUN_14192fcb0
+extern "C" unsigned long long FUN_14192fcb0(unsigned long long);
+// translated: FUN_14192fcb0
 void Sub14192FCB0(void* a1) {
-    (void)a1;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14192fcb0((unsigned long long)a1);
+    } __except (GenFault(0x14192fcb0ull, GetExceptionInformation())) {
+    }
 }
 
 namespace {
@@ -856,11 +967,13 @@ void Sub141691B00() {
     }
 }
 
-// ref: FUN_141525060
+extern "C" unsigned long long FUN_141525060(unsigned long long, double);
+// translated: FUN_141525060
 void Sub141525060(void* a1, float elapsed) {
-    (void)a1;
-    (void)elapsed;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141525060((unsigned long long)a1, (double)elapsed);
+    } __except (GenFault(0x141525060ull, GetExceptionInformation())) {
+    }
 }
 
 // game state 2
@@ -921,17 +1034,22 @@ void ClientOnMouseCapture(uint32_t x, uint32_t y) {
     }
 }
 
-// ref: FUN_1405f04b0
+extern "C" unsigned long long FUN_1405f04b0(unsigned long long, unsigned long long);
+// translated: FUN_1405f04b0
 void UiInputIme(void* input, const void* event) {
-    (void)input;
-    (void)event;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1405f04b0((unsigned long long)input, (unsigned long long)event);
+    } __except (GenFault(0x1405f04b0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_141237fa0
+extern "C" unsigned long long FUN_141237fa0(unsigned long long);
+// translated: FUN_141237fa0
 void OsWindowFocus(void* window) {
-    (void)window;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_141237fa0((unsigned long long)window);
+    } __except (GenFault(0x141237fa0ull, GetExceptionInformation())) {
+    }
 }
 
 namespace {
@@ -956,25 +1074,31 @@ uint64_t Sub14152CF90(uint32_t a1) {
     }
 }
 
-// ref: FUN_1405effd0
+extern "C" unsigned long long FUN_1405effd0(unsigned long long, unsigned long long);
+// translated: FUN_1405effd0
 void UiInputGamepadDown(void* input, const void* event) {
-    (void)input;
-    (void)event;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1405effd0((unsigned long long)input, (unsigned long long)event);
+    } __except (GenFault(0x1405effd0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1405f01e0
+extern "C" unsigned long long FUN_1405f01e0(unsigned long long, unsigned long long);
+// translated: FUN_1405f01e0
 void UiInputGamepadUp(void* input, const void* event) {
-    (void)input;
-    (void)event;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1405f01e0((unsigned long long)input, (unsigned long long)event);
+    } __except (GenFault(0x1405f01e0ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_1405f0270
+extern "C" unsigned long long FUN_1405f0270(unsigned long long, unsigned long long);
+// translated: FUN_1405f0270
 void UiInputGamepadStick(void* input, const void* event) {
-    (void)input;
-    (void)event;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_1405f0270((unsigned long long)input, (unsigned long long)event);
+    } __except (GenFault(0x1405f0270ull, GetExceptionInformation())) {
+    }
 }
 
 extern "C" unsigned long long FUN_14228ac80(unsigned long long);
@@ -998,16 +1122,22 @@ void Sub14065FB00() {
 
 
 // The callbacks stage 5 hands out by address; their bodies come with their subsystems.
-// ref: FUN_140216870
+extern "C" unsigned long long FUN_140216870(unsigned long long);
+// translated: FUN_140216870
 void Sub140216870(uint8_t a1) {
-    (void)a1;
-    FROST_UNIMPLEMENTED();  // DAT_142ddcf99, then Gx FUN_142288660
+    __try {
+        FUN_140216870((unsigned long long)a1);
+    } __except (GenFault(0x140216870ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_140229bd0
+extern "C" unsigned long long FUN_140229bd0(unsigned long long);
+// translated: FUN_140229bd0
 void OnPreloadDone(void* param) {
-    (void)param;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_140229bd0((unsigned long long)param);
+    } __except (GenFault(0x140229bd0ull, GetExceptionInformation())) {
+    }
 }
 
 // The client log's line writer (FUN_140216640, DAT_142ddcfa0), translated.
@@ -1044,9 +1174,14 @@ void HotfixListener140229BF0(int32_t event) {
     }
 }
 
-// ref: FUN_140229ca0
+// The world's model hook (FUN_14134ed50 hands it to FUN_1413b9e40): a jump to FUN_14022c0b0.
+extern "C" unsigned long long FUN_14022c0b0();
+// translated: FUN_14022c0b0
 void OnModelHook140229CA0() {
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14022c0b0();
+    } __except (GenFault(0x14022c0b0ull, GetExceptionInformation())) {
+    }
 }
 
 extern "C" unsigned long long FUN_14022db40();
@@ -1058,29 +1193,56 @@ void LoadingCallback14022DB40() {
     }
 }
 
-// ref: FUN_14022dec0
-void LoadingCallback14022DEC0() {
-    FROST_UNIMPLEMENTED();
+// The loading screen's callbacks (the table FUN_1413527a0 keeps): translated code calls them
+// with the reference's arguments.
+extern "C" unsigned long long FUN_14022dec0(unsigned long long, unsigned long long);
+// translated: FUN_14022dec0
+uint32_t LoadingCallback14022DEC0(uint32_t* a1, uint8_t a2) {
+    __try {
+        return static_cast<uint32_t>(FUN_14022dec0(reinterpret_cast<unsigned long long>(a1), a2));
+    } __except (GenFault(0x14022dec0ull, GetExceptionInformation())) {
+        return 0;
+    }
 }
 
-// ref: FUN_14022f7c0
-void LoadingCallback14022F7C0() {
-    FROST_UNIMPLEMENTED();
+extern "C" unsigned long long FUN_14022f7c0(double);
+// translated: FUN_14022f7c0
+uint64_t LoadingCallback14022F7C0(double a1) {
+    __try {
+        return static_cast<uint64_t>(FUN_14022f7c0(a1));
+    } __except (GenFault(0x14022f7c0ull, GetExceptionInformation())) {
+        return 0;
+    }
 }
 
-// ref: FUN_14022e190
-void LoadingCallback14022E190() {
-    FROST_UNIMPLEMENTED();
+extern "C" unsigned long long FUN_14022e190(unsigned long long);
+// translated: FUN_14022e190
+uint64_t LoadingCallback14022E190(uint8_t a1) {
+    __try {
+        return static_cast<uint64_t>(FUN_14022e190(a1));
+    } __except (GenFault(0x14022e190ull, GetExceptionInformation())) {
+        return 0;
+    }
 }
 
-// ref: FUN_14022e010
-void LoadingCallback14022E010() {
-    FROST_UNIMPLEMENTED();
+extern "C" unsigned long long FUN_14022e010(unsigned long long);
+// translated: FUN_14022e010
+uint32_t LoadingCallback14022E010(uint32_t* a1) {
+    __try {
+        return static_cast<uint32_t>(FUN_14022e010(reinterpret_cast<unsigned long long>(a1)));
+    } __except (GenFault(0x14022e010ull, GetExceptionInformation())) {
+        return 0;
+    }
 }
 
-// ref: FUN_14022f660
-void LoadingCallback14022F660() {
-    FROST_UNIMPLEMENTED();
+extern "C" unsigned long long FUN_14022f660(unsigned long long);
+// translated: FUN_14022f660
+uint8_t LoadingCallback14022F660(int32_t a1) {
+    __try {
+        return static_cast<uint8_t>(FUN_14022f660(static_cast<uint32_t>(a1)));
+    } __except (GenFault(0x14022f660ull, GetExceptionInformation())) {
+        return 0;
+    }
 }
 
 namespace {
@@ -1498,19 +1660,22 @@ void Sub140238D50() {
 }
 
 // The loading screen's draw.
-// ref: FUN_14022ee80
+extern "C" unsigned long long FUN_14022ee80(unsigned long long, unsigned long long, unsigned long long);
+// translated: FUN_14022ee80
 void Sub14022EE80(GxRenderContext* context, GXRENDERTARGETS* targets, bool a3) {
-    (void)context;
-    (void)targets;
-    (void)a3;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14022ee80((unsigned long long)context, (unsigned long long)targets, (unsigned long long)a3);
+    } __except (GenFault(0x14022ee80ull, GetExceptionInformation())) {
+    }
 }
 
-// ref: FUN_14192ffc0
+extern "C" unsigned long long FUN_14192ffc0(unsigned long long, unsigned long long);
+// translated: FUN_14192ffc0
 void Sub14192FFC0(GxRenderContext* context, GXRENDERTARGETS* targets) {
-    (void)context;
-    (void)targets;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14192ffc0((unsigned long long)context, (unsigned long long)targets);
+    } __except (GenFault(0x14192ffc0ull, GetExceptionInformation())) {
+    }
 }
 
 // ref: FUN_141350fc0
@@ -1526,10 +1691,13 @@ bool Sub141C9CBD0() {
     return s_flag14323f218 != 0;
 }
 
-// ref: FUN_140239ec0
+extern "C" unsigned long long FUN_140239ec0(unsigned long long);
+// translated: FUN_140239ec0
 void Sub140239EC0(FRAMEBUFFER* frame) {
-    (void)frame;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_140239ec0((unsigned long long)frame);
+    } __except (GenFault(0x140239ec0ull, GetExceptionInformation())) {
+    }
 }
 
 void Sub14068BC30() {
@@ -1541,53 +1709,93 @@ void Sub14068AAE0() {
 }
 
 // The frame stats' bookkeeping and the dynamic render scale.
-// ref: FUN_14023d170
+extern "C" unsigned long long FUN_14023d170(unsigned long long);
+// translated: FUN_14023d170
 void Sub14023D170(GXFRAMESTATS* stats) {
-    (void)stats;
-    FROST_UNIMPLEMENTED();
+    __try {
+        FUN_14023d170((unsigned long long)stats);
+    } __except (GenFault(0x14023d170ull, GetExceptionInformation())) {
+    }
 }
 
 // ---- GENERATED by tools/forward_stubs.py: link fallbacks where src/gen is not linked ----
 #pragma comment(linker, "/include:GenForwardMissing")
 #pragma comment(linker, "/alternatename:GenFault=GenFaultMissing")
+#pragma comment(linker, "/alternatename:FUN_140215350=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1402165b0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140216640=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140216870=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140217000=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14021f090=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140222a60=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140229b60=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140229bd0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140229ce0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140229d20=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140229d80=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14022a020=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14022a8e0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14022db40=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14022e810=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14022ee80=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140234080=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140234df0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140234ed0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140235040=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1402372d0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_140239ec0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14023d170=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14024d040=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14026be80=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1402d0b60=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1402d0f60=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1402db330=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1402f4d00=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140326a30=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140330ba0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14033fa30=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140570630=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14057b640=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1405effd0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1405f01e0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1405f0270=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1405f04b0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_140c7d510=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141237fa0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412558d0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141260880=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412608c0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141260910=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141260af0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14126ea20=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412834a0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141283af0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141289670=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141297470=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141297eb0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14129c910=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412a6f30=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412aefd0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412b0b60=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412b1890=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412b6af0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1412b8290=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412e8790=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412ea4a0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1412ee600=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14134f7b0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14134f7d0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413527a0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1413544d0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141354f80=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141355320=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14135a290=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413a61b0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413a96b0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413b9e40=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1413bf510=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_1415242c0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_141525060=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14152cf90=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141671c80=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14167ba90=GenForwardMissing")
@@ -1597,13 +1805,19 @@ void Sub14023D170(GXFRAMESTATS* stats) {
 #pragma comment(linker, "/alternatename:FUN_141719bf0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141745f00=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141897e90=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14192fcb0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_14192ffc0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141930f00=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141974d80=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141c994e0=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_141caf660=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_142261300=GenForwardMissing")
-#pragma comment(linker, "/alternatename:FUN_142288660=GenForwardMissing")
 #pragma comment(linker, "/alternatename:FUN_14228ac80=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_142526a90=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_142526ae0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1425561b0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_1425565b0=GenForwardMissing")
+#pragma comment(linker, "/alternatename:FUN_142557380=GenForwardMissing")
 // ---- end of link fallbacks ----
 
 // ---- GENERATED by tools/translate.py: the port globals translated code reaches ----

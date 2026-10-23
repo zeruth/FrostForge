@@ -88,6 +88,7 @@ class RenderContextD3d12 : public GxRenderContext {
     void SetTexture(uint8_t stage, uint32_t slot, Tex* tex) override;          // FUN_1422e4620
     void BindTexture(uint8_t stage, uint32_t slot, Tex* tex, uint8_t unordered) override;  // FUN_1422e3fd0
     void SetSampler(uint8_t stage, uint32_t slot, uint64_t key) override;      // FUN_1422df040
+    void SetShadingRateImage(void* image) override;                            // FUN_1422dfb50 (translated)
     void SetShadingRateCombiners(const uint8_t* combiners) override;          // FUN_1422dfbf0
     void SetVertexBuffers(uint32_t first, uint32_t count, const GXVERTEXSTREAM* streams) override;  // FUN_1422dfe60
     void SetIndexBuffer(GxBuf* buf, uint8_t format) override;                  // FUN_1422dca20
@@ -227,6 +228,8 @@ class CGxDeviceD3d12 : public CGxDevice {
     void SwapChainDestroy(void* chain) override;                         // FUN_1422e1270
     bool SwapChainBegin(void* chain) override;                           // FUN_1422e0f80
     void* SwapChainGetBackBuffer(void* chain) override;                  // FUN_1422eb860
+    // ref: FUN_1422a8d40
+    void* CurrentSwapChain() override { return this->m_currentChain; }   // 0x160
     void SwapChainPresent(void* chain) override;                         // FUN_1422e1490
     void SwapChainEnd(void* chain) override;                             // FUN_1422e1480
 
@@ -295,6 +298,14 @@ class CGxDeviceD3d12 : public CGxDevice {
     void DeferCallback(blz::function_storage* callback) override;         // 0x058 FUN_1422a8e10
     bool BufCreate(GxBuf* buf) override;                                  // 0x1a0 FUN_1422cd720
     void BufDestroy(GxBuf* buf) override;                                 // 0x1a8 FUN_1422cd8f0
+    void* Slot090(void* out, uint64_t a2) override;  // FUN_1422ce330: a graphics command list
+    void* Slot0d8(void* out, uint64_t a2) override;  // FUN_1422ce820: a compute command list (none: not ported)
+    void* Slot0f0(void* out) override;  // FUN_1422d1580: a GPU event
+    void* Slot1c0(const void* desc) override;  // FUN_1422ddd40 (translated)
+    void* Slot1b0(const void* desc) override;                             // 0x1b0 FUN_1422cda20 (translated)
+    void Slot1b8(void* object) override;                                  // 0x1b8 FUN_1422cda90 (translated)
+    void* CreateComputeShader(uint32_t kind, uint16_t permutation) override;  // 0x298 FUN_1422ceaa0 (translated)
+    void DestroyComputeShader(void* shader) override;                     // 0x2a0 FUN_1422ceb70 (translated)
     bool BufAllocate(GxBuf* buf);                                         // FUN_1422d46a0
     gxDx12Backend::BufferPage* CreateBufferPage(uint32_t usage);          // FUN_1422d5a60
     void Slot010() override;                                              // 0x010 FUN_1422e00d0

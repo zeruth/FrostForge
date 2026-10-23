@@ -647,13 +647,6 @@ undefined4 * FUN_140254100(unsigned long long a0, unsigned long long a1, unsigne
     return (undefined4 *)0;
 }
 
-#pragma comment(linker, "/alternatename:gen_alias_1402544f0=?SStrPrintf128@@YAXPEADPEBDZZ")
-extern char gen_alias_1402544f0;
-undefined4 FUN_1402544f0(unsigned long long a0, unsigned long long a1, unsigned long long v0, unsigned long long v1, unsigned long long v2, unsigned long long v3, unsigned long long v4, unsigned long long v5, unsigned long long v6, unsigned long long v7, unsigned long long v8, unsigned long long v9, unsigned long long v10, unsigned long long v11, unsigned long long v12, unsigned long long v13, unsigned long long v14, unsigned long long v15, unsigned long long v16, unsigned long long v17, unsigned long long v18, unsigned long long v19, unsigned long long v20, unsigned long long v21) {
-    ((void (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long))&gen_alias_1402544f0)((unsigned long long)a0, (unsigned long long)a1, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21);
-    return (undefined4)0;
-}
-
 #pragma comment(linker, "/alternatename:gen_alias_140254520=??2@YAPEAX_K@Z")
 extern char gen_alias_140254520;
 longlong FUN_140254520(unsigned long long a0) {
@@ -1144,13 +1137,6 @@ undefined8 FUN_1402637f0(unsigned long long a0) {
 extern char gen_alias_140263b70;
 undefined * FUN_140263b70(void) {
     return (undefined *)((unsigned long long (*)(void))&gen_alias_140263b70)();
-}
-
-#pragma comment(linker, "/alternatename:gen_alias_140263c50=?OsFormatVersion@@YAXPEAD_KPEBUOSVERSION@@@Z")
-extern char gen_alias_140263c50;
-undefined8 FUN_140263c50(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
-    ((void (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_140263c50)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
-    return (undefined8)0;
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_140263fa0=?OsErrorString@@YA_KPEAD_KI@Z")
@@ -2861,20 +2847,6 @@ undefined1 FUN_14057a2e0(unsigned long long a0, unsigned long long a1) {
     return (undefined1)((unsigned long long (*)(unsigned long long, unsigned long long))&gen_alias_14057a2e0)((unsigned long long)a0, (unsigned long long)a1);
 }
 
-#pragma comment(linker, "/alternatename:gen_alias_14057a760=?NotifyRecordWatchers@WowClientDB2_Base@@UEAAXXZ")
-extern char gen_alias_14057a760;
-undefined8 FUN_14057a760(unsigned long long a0) {
-    ((void (*)(unsigned long long))&gen_alias_14057a760)((unsigned long long)a0);
-    return (undefined8)0;
-}
-
-#pragma comment(linker, "/alternatename:gen_alias_14057a880=?Slot40@WowClientDB2_Base@@UEAAXXZ")
-extern char gen_alias_14057a880;
-longlong FUN_14057a880(unsigned long long a0) {
-    ((void (*)(unsigned long long))&gen_alias_14057a880)((unsigned long long)a0);
-    return (longlong)0;
-}
-
 #pragma comment(linker, "/alternatename:gen_alias_14057ae20=?RemovePatchCallback@WowClientDB2_Base@@QEAAXP6AXIIIPEAX0@Z@Z")
 extern char gen_alias_14057ae20;
 longlong * FUN_14057ae20(unsigned long long a0, unsigned long long a1) {
@@ -2940,13 +2912,6 @@ undefined8 FUN_14057bb40(unsigned long long a0) {
 extern void *const gen_f_14057bc20;
 undefined8 * FUN_14057bc20(void) {
     return (undefined8 *)((unsigned long long (*)(void))gen_f_14057bc20)();
-}
-
-#pragma comment(linker, "/alternatename:gen_alias_14057c0d0=?ApplyPendingPatches@WowClientDB2_Base@@UEAAXXZ")
-extern char gen_alias_14057c0d0;
-undefined8 FUN_14057c0d0(unsigned long long a0) {
-    ((void (*)(unsigned long long))&gen_alias_14057c0d0)((unsigned long long)a0);
-    return (undefined8)0;
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_14057ddc0=?ReadCopyTable@WowClientDB2_Base@@UEAA_NPEAVCDataStore@@_NIPEAV?$TDBCVector@UDB2DUPLICATE@@@@@Z")
@@ -3064,10 +3029,24 @@ undefined4 * FUN_1405a0640(unsigned long long a0, unsigned long long a1) {
     return (undefined4 *)((unsigned long long (*)(unsigned long long, unsigned long long))&gen_alias_1405a0640)((unsigned long long)a0, (unsigned long long)a1);
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_1405a0690=?WowDB2LookupLockFinish@@YAXPEAVWowDB2Lookup@@@Z")
+extern char gen_alias_1405a0690;
+undefined8 FUN_1405a0690(unsigned long long a0) {
+    ((void (*)(unsigned long long))&gen_alias_1405a0690)((unsigned long long)a0);
+    return (undefined8)0;
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_1405a06a0=?WowDB2LookupLock@@YAXPEAVWowDB2Lookup@@@Z")
 extern char gen_alias_1405a06a0;
 undefined8 FUN_1405a06a0(unsigned long long a0) {
     ((void (*)(unsigned long long))&gen_alias_1405a06a0)((unsigned long long)a0);
+    return (undefined8)0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_1405a06b0=?WowDB2LookupUnlockFinish@@YAXPEAVWowDB2Lookup@@@Z")
+extern char gen_alias_1405a06b0;
+undefined8 FUN_1405a06b0(unsigned long long a0) {
+    ((void (*)(unsigned long long))&gen_alias_1405a06b0)((unsigned long long)a0);
     return (undefined8)0;
 }
 
@@ -3234,6 +3213,12 @@ int FUN_1405d7e20(void) {
 extern void *const gen_f_1405d8290;
 undefined1 FUN_1405d8290(void) {
     return (undefined1)((unsigned long long (*)(void))gen_f_1405d8290)();
+}
+
+/* Requeue: internal, through the pointer its file exports */
+extern void *const gen_f_1405d8b60;
+undefined1 FUN_1405d8b60(unsigned long long a0) {
+    return (undefined1)((unsigned long long (*)(unsigned long long))gen_f_1405d8b60)((unsigned long long)a0);
 }
 
 /* FlushPending: internal, through the pointer its file exports */
@@ -3562,6 +3547,12 @@ undefined1 FUN_1405e4e70(void) {
 extern void *const gen_f_1405e6000;
 undefined1 FUN_1405e6000(void) {
     return (undefined1)((unsigned long long (*)(void))gen_f_1405e6000)();
+}
+
+/* FfxGlowEnabled: internal, through the pointer its file exports */
+extern void *const gen_f_1405e7e00;
+undefined1 FUN_1405e7e00(void) {
+    return (undefined1)((unsigned long long (*)(void))gen_f_1405e7e00)();
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_1405ebe10=??0CSimpleTop@@QEAA@P6AXXZ@Z")
@@ -7361,12 +7352,6 @@ undefined1 FUN_140647940(unsigned long long a0, unsigned long long a1, unsigned 
     return (undefined1)0;
 }
 
-#pragma comment(linker, "/alternatename:gen_alias_140647fc0=?Add@EventListenerList@FrameScriptEvents@@QEAAHPEAVFrameScript_Object@@_K@Z")
-extern char gen_alias_140647fc0;
-undefined4 FUN_140647fc0(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
-    return (undefined4)((unsigned long long (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_140647fc0)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
-}
-
 #pragma comment(linker, "/alternatename:gen_alias_140648330=?PushHandler@FrameScriptEvents@@YAHPEAUlua_State@@PEBUEVENTSTRING@1@HPEAVFrameScript_Object@@@Z")
 extern char gen_alias_140648330;
 undefined4 FUN_140648330(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3) {
@@ -7391,6 +7376,12 @@ extern char gen_alias_14065ea10;
 undefined1 FUN_14065ea10(unsigned long long a0) {
     ((void (*)(unsigned long long))&gen_alias_14065ea10)((unsigned long long)a0);
     return (undefined1)0;
+}
+
+/* UnitFromToken: internal, through the pointer its file exports */
+extern void *const gen_f_14065f4a0;
+undefined2 FUN_14065f4a0(unsigned long long a0) {
+    return (undefined2)((unsigned long long (*)(unsigned long long))gen_f_14065f4a0)((unsigned long long)a0);
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_14065f750=?PushEventString@FrameScriptEvents@@YAXPEAUlua_State@@PEBUEVENTSTRING@1@@Z")
@@ -11831,6 +11822,13 @@ int FUN_1411df6d0(unsigned long long a0) {
     return (int)0;
 }
 
+/* M2SceneSetClipPlane: internal, through the pointer its file exports */
+extern void *const gen_f_1411e0eb0;
+uint FUN_1411e0eb0(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
+    ((void (*)(unsigned long long, unsigned long long, unsigned long long))gen_f_1411e0eb0)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
+    return (uint)0;
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_1411e0f30=?SetView@CM2Scene@@QEAAXPEBUC3Vector@@PEBUC44Matrix@@1PEBM2_N@Z")
 extern char gen_alias_1411e0f30;
 undefined4 FUN_1411e0f30(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3, unsigned long long a4, unsigned long long a5, unsigned long long a6) {
@@ -11870,6 +11868,13 @@ uint FUN_1411e2560(unsigned long long a0, unsigned long long a1, unsigned long l
 extern void *const gen_f_1411e2d60;
 uint FUN_1411e2d60(unsigned long long a0) {
     return (uint)((unsigned long long (*)(unsigned long long))gen_f_1411e2d60)((unsigned long long)a0);
+}
+
+/* M2SceneWaitJobs: internal, through the pointer its file exports */
+extern void *const gen_f_1411e44a0;
+undefined8 FUN_1411e44a0(unsigned long long a0) {
+    ((void (*)(unsigned long long))gen_f_1411e44a0)((unsigned long long)a0);
+    return (undefined8)0;
 }
 
 /* M2HitRecsReserve: internal, through the pointer its file exports */
@@ -13785,6 +13790,13 @@ undefined8 FUN_1412a0e30(unsigned long long a0, unsigned long long a1, unsigned 
     return (undefined8)0;
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_1412a0f80=?FrameBufferExecuteReadOrResolveDiscard@@YAXPEAVGxRenderContext@@PEAUFRAMEBUFFER@@P6AXPEAX022@Z2@Z")
+extern char gen_alias_1412a0f80;
+undefined8 FUN_1412a0f80(unsigned long long a0, unsigned long long a1, unsigned long long a2, unsigned long long a3) {
+    ((void (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long))&gen_alias_1412a0f80)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2, (unsigned long long)a3);
+    return (undefined8)0;
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_1412a1ba0=?TextureGetWhite@@YAPEAVCTexture@@XZ")
 extern char gen_alias_1412a1ba0;
 longlong FUN_1412a1ba0(void) {
@@ -13857,6 +13869,13 @@ extern char gen_alias_1412a5c10;
 undefined8 * FUN_1412a5c10(unsigned long long a0) {
     ((void (*)(unsigned long long))&gen_alias_1412a5c10)((unsigned long long)a0);
     return (undefined8 *)0;
+}
+
+/* ProjectedTargetClear: internal, through the pointer its file exports */
+extern void *const gen_f_1412a6440;
+undefined8 FUN_1412a6440(unsigned long long a0) {
+    ((void (*)(unsigned long long))gen_f_1412a6440)((unsigned long long)a0);
+    return (undefined8)0;
 }
 
 /* FramePassesNoShadowFactor: internal, through the pointer its file exports */
@@ -14182,6 +14201,12 @@ undefined * FUN_1412b0b40(unsigned long long a0) {
     return (undefined *)((unsigned long long (*)(unsigned long long))&gen_alias_1412b0b40)((unsigned long long)a0);
 }
 
+/* SpellEffectsOn: internal, through the pointer its file exports */
+extern void *const gen_f_1412b0c10;
+undefined1 FUN_1412b0c10(void) {
+    return (undefined1)((unsigned long long (*)(void))gen_f_1412b0c10)();
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_1412b20e0=?RenderSetSunshafts@@YA_NI@Z")
 extern char gen_alias_1412b20e0;
 undefined4 FUN_1412b20e0(unsigned long long a0) {
@@ -14263,6 +14288,13 @@ float * FUN_1412b65e0(unsigned long long a0, unsigned long long a1, unsigned lon
 extern char gen_alias_1412b6670;
 undefined8 FUN_1412b6670(void) {
     ((void (*)(void))&gen_alias_1412b6670)();
+    return (undefined8)0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_1412b8160=?Release@WORLDRENDERRESOLVE@@QEAAXXZ")
+extern char gen_alias_1412b8160;
+undefined8 FUN_1412b8160(unsigned long long a0) {
+    ((void (*)(unsigned long long))&gen_alias_1412b8160)((unsigned long long)a0);
     return (undefined8)0;
 }
 
@@ -15395,6 +15427,12 @@ longlong FUN_14138c740(unsigned long long a0) {
     return (longlong)((unsigned long long (*)(unsigned long long))&gen_alias_14138c740)((unsigned long long)a0);
 }
 
+#pragma comment(linker, "/alternatename:gen_alias_14138c750=?MapWeatherIntensity@@YAMPEAX@Z")
+extern char gen_alias_14138c750;
+float FUN_14138c750(unsigned long long a0) {
+    return (float)((float (*)(unsigned long long))&gen_alias_14138c750)((unsigned long long)a0);
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_14138c760=?MapWeatherDirection@@YAPEBMPEAX@Z")
 extern char gen_alias_14138c760;
 longlong FUN_14138c760(unsigned long long a0) {
@@ -15406,6 +15444,12 @@ extern char gen_alias_141395330;
 undefined8 FUN_141395330(unsigned long long a0) {
     ((void (*)(unsigned long long))&gen_alias_141395330)((unsigned long long)a0);
     return (undefined8)0;
+}
+
+/* ParticulatesOn: internal, through the pointer its file exports */
+extern void *const gen_f_141396b60;
+undefined1 FUN_141396b60(void) {
+    return (undefined1)((unsigned long long (*)(void))gen_f_141396b60)();
 }
 
 /* FreeNodes: internal, through the pointer its file exports */
@@ -15512,6 +15556,13 @@ float FUN_1413c2c80(unsigned long long a0, unsigned long long a1) {
 extern char gen_alias_1413c2d60;
 float FUN_1413c2d60(unsigned long long a0) {
     return (float)((float (*)(unsigned long long))&gen_alias_1413c2d60)((unsigned long long)a0);
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_1413c2d80=?RunCallbacks@CWorldScene@@QEAAXIPEAX@Z")
+extern char gen_alias_1413c2d80;
+undefined4 FUN_1413c2d80(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
+    ((void (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_1413c2d80)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
+    return (undefined4)0;
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_1413c31f0=?CreateMapObjects@CWorldScene@@QEAAXXZ")
@@ -15635,11 +15686,17 @@ byte FUN_1413cee80(unsigned long long a0, unsigned long long a1) {
     return (byte)((unsigned long long (*)(unsigned long long, unsigned long long))&gen_alias_1413cee80)((unsigned long long)a0, (unsigned long long)a1);
 }
 
-#pragma comment(linker, "/alternatename:gen_alias_1413cf390=?Draw@CWorldSceneRender@@QEAAXXZ")
-extern char gen_alias_1413cf390;
-undefined8 FUN_1413cf390(unsigned long long a0) {
-    ((void (*)(unsigned long long))&gen_alias_1413cf390)((unsigned long long)a0);
-    return (undefined8)0;
+#pragma comment(linker, "/alternatename:gen_alias_1413cf2c0=?PrepareParticulates@CWorldSceneRender@@QEAA_NXZ")
+extern char gen_alias_1413cf2c0;
+undefined1 FUN_1413cf2c0(unsigned long long a0) {
+    return (undefined1)((unsigned long long (*)(unsigned long long))&gen_alias_1413cf2c0)((unsigned long long)a0);
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_1413d2380=?DrawAlphaM2@CWorldSceneRender@@QEAAXPEAVGxRenderContext@@PEAVShaderEffectContext@@@Z")
+extern char gen_alias_1413d2380;
+undefined4 FUN_1413d2380(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
+    ((void (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_1413d2380)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
+    return (undefined4)0;
 }
 
 /* WaterViewDraw: internal, through the pointer its file exports */
@@ -15647,6 +15704,13 @@ extern void *const gen_f_1413d3a00;
 uint * FUN_1413d3a00(unsigned long long a0, unsigned long long a1) {
     ((void (*)(unsigned long long, unsigned long long))gen_f_1413d3a00)((unsigned long long)a0, (unsigned long long)a1);
     return (uint *)0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_1413d4070=?DrawFrontPass@CWorldSceneRender@@QEAAXPEAVGxRenderContext@@PEAVShaderEffectContext@@@Z")
+extern char gen_alias_1413d4070;
+undefined4 FUN_1413d4070(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
+    ((void (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_1413d4070)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
+    return (undefined4)0;
 }
 
 /* PrepassDraw: internal, through the pointer its file exports */
@@ -15660,6 +15724,13 @@ undefined8 FUN_1413d6700(unsigned long long a0, unsigned long long a1, unsigned 
 extern void *const gen_f_1413d6bd0;
 undefined8 FUN_1413d6bd0(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
     ((void (*)(unsigned long long, unsigned long long, unsigned long long))gen_f_1413d6bd0)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
+    return (undefined8)0;
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_1413d6d00=?ClearFrame@CWorldSceneRender@@QEAAXPEAUGXRENDERTARGETS@@_N@Z")
+extern char gen_alias_1413d6d00;
+undefined8 FUN_1413d6d00(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
+    ((void (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_1413d6d00)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
     return (undefined8)0;
 }
 
@@ -15691,10 +15762,29 @@ undefined8 FUN_1413da3d0(unsigned long long a0, unsigned long long a1, unsigned 
     return (undefined8)0;
 }
 
+/* WorldViewUnderwater: internal, through the pointer its file exports */
+extern void *const gen_f_1413dcb40;
+byte FUN_1413dcb40(unsigned long long a0) {
+    return (byte)((unsigned long long (*)(unsigned long long))gen_f_1413dcb40)((unsigned long long)a0);
+}
+
+#pragma comment(linker, "/alternatename:gen_alias_1413dcc10=?WantsReflection@CWorldView@@QEAA_NXZ")
+extern char gen_alias_1413dcc10;
+byte FUN_1413dcc10(unsigned long long a0) {
+    return (byte)((unsigned long long (*)(unsigned long long))&gen_alias_1413dcc10)((unsigned long long)a0);
+}
+
 /* WorldViewHasWaterBox: internal, through the pointer its file exports */
 extern void *const gen_f_1413dcc50;
 undefined1 FUN_1413dcc50(unsigned long long a0) {
     return (undefined1)((unsigned long long (*)(unsigned long long))gen_f_1413dcc50)((unsigned long long)a0);
+}
+
+/* WorldViewListsWait: internal, through the pointer its file exports */
+extern void *const gen_f_1413dd150;
+undefined8 FUN_1413dd150(unsigned long long a0) {
+    ((void (*)(unsigned long long))gen_f_1413dd150)((unsigned long long)a0);
+    return (undefined8)0;
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_1413dddd0=?UpdateCamera@CWorldView@@QEAAXPEBH@Z")
@@ -15735,6 +15825,13 @@ longlong FUN_14141eef0(unsigned long long a0) {
 extern char gen_alias_141446590;
 longlong FUN_141446590(unsigned long long a0) {
     return (longlong)((unsigned long long (*)(unsigned long long))&gen_alias_141446590)((unsigned long long)a0);
+}
+
+/* CWorldCullWait: internal, through the pointer its file exports */
+extern void *const gen_f_1414494f0;
+undefined8 FUN_1414494f0(unsigned long long a0) {
+    ((void (*)(unsigned long long))gen_f_1414494f0)((unsigned long long)a0);
+    return (undefined8)0;
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_1414534e0=?Init@CullWorker@@UEAAXPEAVCWorldCull@@I@Z")
@@ -16254,12 +16351,6 @@ undefined8 FUN_14191c2a0(void) {
 extern void *const gen_f_14191f540;
 float FUN_14191f540(void) {
     return (float)((float (*)(void))gen_f_14191f540)();
-}
-
-#pragma comment(linker, "/alternatename:gen_alias_14192fa70=?Sub14192FA70@@YAPEAXXZ")
-extern char gen_alias_14192fa70;
-undefined1 * FUN_14192fa70(void) {
-    return (undefined1 *)((unsigned long long (*)(void))&gen_alias_14192fa70)();
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_14196fe80=?ClientUI_IsGlue@@YA_NXZ")
@@ -18237,13 +18328,6 @@ extern char gen_alias_14228c9f0;
 undefined4 FUN_14228c9f0(unsigned long long a0) {
     ((void (*)(unsigned long long))&gen_alias_14228c9f0)((unsigned long long)a0);
     return (undefined4)0;
-}
-
-#pragma comment(linker, "/alternatename:gen_alias_14228cb00=?GxXformApplyViewport@@YAXXZ")
-extern char gen_alias_14228cb00;
-undefined1 * FUN_14228cb00(void) {
-    ((void (*)(void))&gen_alias_14228cb00)();
-    return (undefined1 *)0;
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_14228da90=?GxRenderTargetsAttach@@YAXPEAUGXRENDERTARGETS@@EPEAUTex@gxDx12Backend@@@Z")
@@ -21670,6 +21754,13 @@ ulonglong FUN_142526ee0(void) {
     return (ulonglong)((unsigned long long (*)(void))&gen_alias_142526ee0)();
 }
 
+/* LiquidSetFog: internal, through the pointer its file exports */
+extern void *const gen_f_142527290;
+undefined8 FUN_142527290(unsigned long long a0) {
+    ((void (*)(unsigned long long))gen_f_142527290)((unsigned long long)a0);
+    return (undefined8)0;
+}
+
 /* RenderSetReflectionDownscale: internal, through the pointer its file exports */
 extern void *const gen_f_1425272a0;
 undefined4 FUN_1425272a0(unsigned long long a0) {
@@ -21700,6 +21791,12 @@ undefined4 FUN_14252caa0(unsigned long long a0) {
     return (undefined4)((unsigned long long (*)(unsigned long long))gen_f_14252caa0)((unsigned long long)a0);
 }
 
+/* WaterRefractionEnabled: internal, through the pointer its file exports */
+extern void *const gen_f_14252cae0;
+uint FUN_14252cae0(void) {
+    return (uint)((unsigned long long (*)(void))gen_f_14252cae0)();
+}
+
 #pragma comment(linker, "/alternatename:gen_alias_14254c3d0=?OsCursorGetClientPosition@@YA_KPEAX@Z")
 extern char gen_alias_14254c3d0;
 undefined8 FUN_14254c3d0(unsigned long long a0) {
@@ -21725,6 +21822,12 @@ bool FUN_14254fd50(unsigned long long a0) {
     return (bool)((unsigned long long (*)(unsigned long long))gen_f_14254fd50)((unsigned long long)a0);
 }
 
+/* SceneOcclusionResult: internal, through the pointer its file exports */
+extern void *const gen_f_14254fe60;
+undefined8 FUN_14254fe60(unsigned long long a0) {
+    return (undefined8)((unsigned long long (*)(unsigned long long))gen_f_14254fe60)((unsigned long long)a0);
+}
+
 /* OcclusionSetMaxJobs: internal, through the pointer its file exports */
 extern void *const gen_f_14254ff10;
 undefined8 FUN_14254ff10(unsigned long long a0) {
@@ -21737,6 +21840,12 @@ extern char gen_alias_14254ff40;
 undefined1 FUN_14254ff40(unsigned long long a0, unsigned long long a1, unsigned long long a2) {
     ((void (*)(unsigned long long, unsigned long long, unsigned long long))&gen_alias_14254ff40)((unsigned long long)a0, (unsigned long long)a1, (unsigned long long)a2);
     return (undefined1)0;
+}
+
+/* OutlinesOn: internal, through the pointer its file exports */
+extern void *const gen_f_1425573c0;
+undefined1 FUN_1425573c0(void) {
+    return (undefined1)((unsigned long long (*)(void))gen_f_1425573c0)();
 }
 
 #pragma comment(linker, "/alternatename:gen_alias_1425580f0=?RenderSetSsao@@YA_NE@Z")

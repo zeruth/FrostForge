@@ -20,6 +20,9 @@
 #include "util/Unimplemented.hpp"
 #include <windows.h>
 #include <dxgi1_6.h>
+#include <d3d12.h>
+#include <d3d12sdklayers.h>
+#include "util/FrostLog.hpp"
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
@@ -74,6 +77,65 @@ void* s_d3d12SerializeVersionedRootSignature;  // DAT_143490a58
 void* s_d3d12CreateVersionedRootSignatureDeserializer;  // DAT_143490a60
 IDXGIFactory5* s_factory5;          // DAT_143490ad0
 IDXGIFactory6* s_factory6;          // DAT_143490ad8
+
+// The D3D12 debug layer (FROST_D3D_DEBUG=1), the port's own diagnostic, not the reference's: its
+// validation messages, warnings and up, go to the log, each message id the first 20 times. A draw
+// the runtime drops (a target in the wrong state, a missing view, a bad root argument) says so
+// here and nowhere else. Turned on where d3d12.dll is loaded, before any device; the devices made
+// through GxPlatformD3d12CreateDevice get the message callback.
+bool s_d3d12DebugLayer;
+
+void D3d12DebugLayerEnable(void* getDebugInterface) {
+    char value[8];
+    DWORD length = GetEnvironmentVariableA("FROST_D3D_DEBUG", value, sizeof(value));
+    if (length == 0 || length >= sizeof(value) || value[0] == '0' || getDebugInterface == nullptr) {
+        return;
+    }
+    ID3D12Debug* debug = nullptr;
+    auto get = reinterpret_cast<HRESULT(WINAPI*)(REFIID, void**)>(getDebugInterface);
+    HRESULT hr = get(IID_PPV_ARGS(&debug));
+    if (FAILED(hr) || debug == nullptr) {
+        FrostLog("d3d12", "debug layer unavailable (%08lx): install the Graphics Tools optional feature",
+                 static_cast<unsigned long>(hr));
+        return;
+    }
+    debug->EnableDebugLayer();
+    debug->Release();
+    s_d3d12DebugLayer = true;
+    FrostLog("d3d12", "debug layer on");
+}
+
+void CALLBACK D3d12DebugMessage(D3D12_MESSAGE_CATEGORY category, D3D12_MESSAGE_SEVERITY severity,
+                                D3D12_MESSAGE_ID id, LPCSTR text, void* context) {
+    (void)context;
+    if (severity > D3D12_MESSAGE_SEVERITY_WARNING) {
+        return;
+    }
+    static volatile LONG s_counts[4096];
+    if (InterlockedIncrement(&s_counts[static_cast<uint32_t>(id) & 4095]) > 20) {
+        return;
+    }
+    static const char* const s_severities[] = { "corruption", "error", "warning" };
+    FrostLog("d3d12", "%s #%d (category %d): %s", s_severities[severity], static_cast<int>(id),
+             static_cast<int>(category), text);
+}
+
+HRESULT WINAPI D3d12DebugCreateDevice(IUnknown* adapter, D3D_FEATURE_LEVEL level, REFIID iid, void** device) {
+    HRESULT hr = reinterpret_cast<PFN_GXD3D12CREATEDEVICE>(s_d3d12CreateDevice)(adapter, level, iid, device);
+    if (FAILED(hr) || device == nullptr || *device == nullptr) {
+        return hr;
+    }
+    ID3D12InfoQueue1* queue = nullptr;
+    if (SUCCEEDED(static_cast<IUnknown*>(*device)->QueryInterface(IID_PPV_ARGS(&queue))) && queue != nullptr) {
+        DWORD cookie = 0;
+        queue->RegisterMessageCallback(&D3d12DebugMessage, D3D12_MESSAGE_CALLBACK_FLAG_NONE, nullptr, &cookie);
+        queue->Release();
+        FrostLog("d3d12", "debug messages routed to the log");
+    } else {
+        FrostLog("d3d12", "no ID3D12InfoQueue1 on this runtime: messages go to the debugger output only");
+    }
+    return hr;
+}
 
 const char s_frameQueryTag[] = ".?AV?$unique_ptr@UGxQuery@@UGxResourceDelete@@@blz@@";
 const char s_frameGroupTag[] = ".PEAUThreadPoolGroup@@";
@@ -536,6 +598,8 @@ bool GxLoadPlatformHandles(bool logDrivers) {
                     if (s_d3d12SerializeRootSignature != nullptr || s_d3d12SerializeVersionedRootSignature != nullptr) {
                         s_d3d12CreateVersionedRootSignatureDeserializer = reinterpret_cast<void*>(
                             GetProcAddress(d3d12, "D3D12CreateVersionedRootSignatureDeserializer"));
+                        // (before any device: the layer cannot be turned on under a live one)
+                        D3d12DebugLayerEnable(s_d3d12GetDebugInterface);
                     } else {
                         failure = "Unable to GetProcAddress(\"D3D12SerializeRootSignature\") or "
                                   "GetProcAddress(\"D3D12SerializeVersionedRootSignature\")";
@@ -1894,6 +1958,9 @@ bool GxPlatformHasNvapi() {
 
 // The entry points DeviceCreateCore reads straight from GxApi's globals.
 PFN_GXD3D12CREATEDEVICE GxPlatformD3d12CreateDevice() {
+    if (s_d3d12DebugLayer && s_d3d12CreateDevice != nullptr) {
+        return &D3d12DebugCreateDevice;
+    }
     return reinterpret_cast<PFN_GXD3D12CREATEDEVICE>(s_d3d12CreateDevice);
 }
 
@@ -2803,6 +2870,7 @@ extern "C" void* const gen_p_142d41c18 = (void*)&s_foregroundFps;
 extern "C" void* const gen_p_142d41d10 = (void*)&s_restartHandler;
 extern "C" void* const gen_p_142d41d30 = (void*)&s_displayChangedHandler;
 extern "C" void* const gen_p_142d41d50 = (void*)&s_noGpuHandler;
+extern "C" void* const gen_p_14348b640 = (void*)&s_framePhase;
 extern "C" void* const gen_p_143490698 = (void*)&s_deviceRemovedCount;
 extern "C" void* const gen_p_14349069f = (void*)&s_useMaxFps;
 extern "C" void* const gen_p_1434906a0 = (void*)&s_prismTaskQueue;

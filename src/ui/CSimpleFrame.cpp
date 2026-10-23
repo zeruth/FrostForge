@@ -16,6 +16,7 @@
 #include "ui/CRenderBatch.hpp"
 #include "ui/CScriptObjectScript.hpp"
 #include "ui/CSimpleRegion.hpp"
+#include "ui/CSimpleTexture.hpp"
 #include "ui/CSimpleTop.hpp"
 #include "ui/FrameXML.hpp"
 #include "ui/UITypes.hpp"
@@ -1100,10 +1101,13 @@ void CSimpleFrame::DesaturateHierarchy(float desaturation, bool excludeRoot) {
 // ref: FUN_140615250
 void CSimpleFrame::DesaturateRegions(float desaturation, uint32_t depth, uint32_t firstDepth) {
     if (firstDepth <= depth) {
-        // Each CSimpleTexture among m_regions takes SetDesaturation (FUN_1406349b0), then the
-        // regions' deferred deletes are flushed; the texture class is not ported yet.
-        FROST_UNIMPLEMENTED();
-        CSimpleRegion::FlushDeferredDeletes();
+        // each texture among the regions takes the desaturation (the walk flushes the deferred
+        // deletes after)
+        ForEachRegion(this, [desaturation](CSimpleRegion* region) {
+            if (region->IsObjectType(CSimpleTexture::GetObjectType())) {
+                static_cast<CSimpleTexture*>(region)->SetDesaturation(desaturation);
+            }
+        });
     }
     for (SIMPLEFRAMENODE* node = this->m_children.Head(); node != nullptr; node = this->m_children.Link(node)->Next()) {
         if (node->m_frame != nullptr) {

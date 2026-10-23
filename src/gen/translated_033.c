@@ -4264,6 +4264,7 @@ undefined8 FUN_1405896d0(longlong *param_1, uint param_2, longlong param_3)
     do {
       gen_in_RAX = puVar3 + (((longlong)puVar4 - (longlong)puVar3 >> 4) -
                          ((longlong)puVar4 - (longlong)puVar3 >> 0x3f) >> 1) * 4;
+      puVar7 = gen_in_RAX;
       if (*gen_in_RAX < (*(uint *)&gen_slot_param_2)) {
         puVar3 = gen_in_RAX + 4;
         puVar7 = puVar4;

@@ -6,6 +6,8 @@
 #include "base/Status.hpp"
 #include "storm/String.hpp"
 #include "ui/BinaryXML.hpp"
+#include "ui/CAnimatableObject.hpp"
+#include "ui/CSimpleAnim.hpp"
 #include "ui/CSimpleFrame.hpp"
 #include "ui/CSimpleTop.hpp"
 #include "ui/FrameXML.hpp"
@@ -90,10 +92,14 @@ void CScriptRegion::PreLoadXML(XMLOBJECT* node, CStatus* status) {
 // ref: FUN_14060eef0
 void CScriptRegion::OnProtected() {
     this->CLayoutFrame::ProtectDependents();
-    // The reference walks the object list slot 0x88 returns and protects each entry; no
-    // region class ported so far returns one.
-    if (this->GetAnimatableObject() != nullptr) {
-        FROST_UNIMPLEMENTED();
+    // and every animation group of its animatable object (slot 0x88)
+    CAnimatableObject* animatable = this->GetAnimatableObject();
+    if (animatable == nullptr || animatable->m_groups == nullptr || animatable->m_groups->m_groups == nullptr) {
+        return;
+    }
+    TSExplicitList<CSimpleAnimGroup>* list = animatable->m_groups->m_groups;
+    for (CSimpleAnimGroup* group = list->Head(); group != nullptr; group = list->Link(group)->Next()) {
+        group->SetProtected();
     }
 }
 

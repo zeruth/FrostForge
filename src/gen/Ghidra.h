@@ -237,6 +237,18 @@ typedef unsigned long long code();
 /* a reference global: its address in the mapped reference image */
 #define REFG(type, addr) (*(type *)(uintptr_t)(addr##ULL))
 #define REFP(addr) ((void *)(uintptr_t)(addr##ULL))
+/* a reference address the optimizer may not fold: MSVC folded a constant base above 4 GB into an
+   indexed access's 32-bit displacement and dropped its top bit (`movzbl 0x430a5c64(%rdx,%rdx,4)`
+   for 0x1430a5c64, 2026-10-23). XOR with a volatile zero makes the base a value computed whole: an
+   added zero was not enough, MSVC kept the constant as the displacement and indexed by the zero. */
+extern volatile unsigned long long gen_opaque_zero;
+/* Ghidra's plain copy between a float/double global and an integer-typed place: its bytes. In C
+   `*puVar28 = REFG(double, 0x142cc8608)` (two packed floats the export typed double) converted the
+   number, the loading screen's quad corners came out 0 and the quad had no width (FUN_1402307f0,
+   2026-10-23; 1290 such copies). The same size copies bytes; another size assigns as before. */
+#define GEN_COPY(l, r) do { if (sizeof(l) == sizeof(r)) memcpy((void *)&(l), (const void *)&(r), sizeof(l)); \
+    else (l) = (r); } while (0)
+#define GEN_OPAQUE(p) ((void *)((uintptr_t)(p) ^ gen_opaque_zero))
 /* a call to a translated function, unprototyped: Ghidra's argument counts disagree between a
    function and its callers, and a definition earlier in the same file would otherwise impose its
    own (floats are promoted to double; the definitions take them that way) */
@@ -289,30 +301,33 @@ static __inline double gen_darg_u(unsigned long long bits) { return GEN_AS_DOUBL
 #define GEN_ARG_FLOAT(x) _Generic((x), float: gen_farg_f, double: gen_farg_d, default: gen_farg_u)(x)
 #define GEN_ARG_DOUBLE(x) _Generic((x), float: gen_darg_f, double: gen_darg_d, default: gen_darg_u)(x)
 
-/* Ghidra's piecewise helpers */
-#define CONCAT11(a, b) ((uint16_t)(((uint16_t)(uint8_t)(a) << 8) | (uint8_t)(b)))
-#define CONCAT12(a, b) ((uint32_t)(((uint32_t)(uint8_t)(a) << 16) | (uint16_t)(b)))
-#define CONCAT13(a, b) ((uint32_t)(((uint32_t)(uint8_t)(a) << 24) | ((uint32_t)(b) & 0xffffff)))
-#define CONCAT14(a, b) ((uint64_t)(((uint64_t)(uint8_t)(a) << 32) | (uint32_t)(b)))
-#define CONCAT15(a, b) ((uint64_t)(((uint64_t)(uint8_t)(a) << 40) | ((uint64_t)(b) & 0xffffffffffULL)))
-#define CONCAT16(a, b) ((uint64_t)(((uint64_t)(uint8_t)(a) << 48) | ((uint64_t)(b) & 0xffffffffffffULL)))
-#define CONCAT17(a, b) ((uint64_t)(((uint64_t)(uint8_t)(a) << 56) | ((uint64_t)(b) & 0xffffffffffffffULL)))
-#define CONCAT21(a, b) ((uint32_t)(((uint32_t)(uint16_t)(a) << 8) | (uint8_t)(b)))
-#define CONCAT22(a, b) ((uint32_t)(((uint32_t)(uint16_t)(a) << 16) | (uint16_t)(b)))
-#define CONCAT24(a, b) ((uint64_t)(((uint64_t)(uint16_t)(a) << 32) | (uint32_t)(b)))
-#define CONCAT26(a, b) ((uint64_t)(((uint64_t)(uint16_t)(a) << 48) | ((uint64_t)(b) & 0xffffffffffffULL)))
-#define CONCAT31(a, b) ((uint32_t)((((uint32_t)(a) & 0xffffff) << 8) | (uint8_t)(b)))
-#define CONCAT32(a, b) ((uint64_t)((((uint64_t)(a) & 0xffffff) << 16) | (uint16_t)(b)))
-#define CONCAT35(a, b) ((uint64_t)((((uint64_t)(a) & 0xffffff) << 40) | ((uint64_t)(b) & 0xffffffffffULL)))
-#define CONCAT41(a, b) ((uint64_t)(((uint64_t)(uint32_t)(a) << 8) | (uint8_t)(b)))
-#define CONCAT42(a, b) ((uint64_t)(((uint64_t)(uint32_t)(a) << 16) | (uint16_t)(b)))
-#define CONCAT44(a, b) ((uint64_t)(((uint64_t)(uint32_t)(a) << 32) | (uint32_t)(b)))
-#define CONCAT53(a, b) ((uint64_t)((((uint64_t)(a) & 0xffffffffffULL) << 24) | ((uint32_t)(b) & 0xffffff)))
-#define CONCAT62(a, b) ((uint64_t)((((uint64_t)(a) & 0xffffffffffffULL) << 16) | (uint16_t)(b)))
-#define CONCAT71(a, b) ((uint64_t)((((uint64_t)(a) & 0xffffffffffffffULL) << 8) | (uint8_t)(b)))
+/* Ghidra's piecewise helpers. Each operand is its bits (GEN_BITS): Ghidra packs floats with
+   them as freely as integers, and `CONCAT44(fVar2, fVar2)` with a plain cast converted 1.0f to
+   1, so the loading screen's letterbox height reached its viewport as 1.4e-45 (FUN_14022ba50,
+   2026-10-23). An integer operand is unchanged. */
+#define CONCAT11(a, b) ((uint16_t)(((uint16_t)(uint8_t)GEN_BITS(a) << 8) | (uint8_t)GEN_BITS(b)))
+#define CONCAT12(a, b) ((uint32_t)(((uint32_t)(uint8_t)GEN_BITS(a) << 16) | (uint16_t)GEN_BITS(b)))
+#define CONCAT13(a, b) ((uint32_t)(((uint32_t)(uint8_t)GEN_BITS(a) << 24) | ((uint32_t)GEN_BITS(b) & 0xffffff)))
+#define CONCAT14(a, b) ((uint64_t)(((uint64_t)(uint8_t)GEN_BITS(a) << 32) | (uint32_t)GEN_BITS(b)))
+#define CONCAT15(a, b) ((uint64_t)(((uint64_t)(uint8_t)GEN_BITS(a) << 40) | ((uint64_t)GEN_BITS(b) & 0xffffffffffULL)))
+#define CONCAT16(a, b) ((uint64_t)(((uint64_t)(uint8_t)GEN_BITS(a) << 48) | ((uint64_t)GEN_BITS(b) & 0xffffffffffffULL)))
+#define CONCAT17(a, b) ((uint64_t)(((uint64_t)(uint8_t)GEN_BITS(a) << 56) | ((uint64_t)GEN_BITS(b) & 0xffffffffffffffULL)))
+#define CONCAT21(a, b) ((uint32_t)(((uint32_t)(uint16_t)GEN_BITS(a) << 8) | (uint8_t)GEN_BITS(b)))
+#define CONCAT22(a, b) ((uint32_t)(((uint32_t)(uint16_t)GEN_BITS(a) << 16) | (uint16_t)GEN_BITS(b)))
+#define CONCAT24(a, b) ((uint64_t)(((uint64_t)(uint16_t)GEN_BITS(a) << 32) | (uint32_t)GEN_BITS(b)))
+#define CONCAT26(a, b) ((uint64_t)(((uint64_t)(uint16_t)GEN_BITS(a) << 48) | ((uint64_t)GEN_BITS(b) & 0xffffffffffffULL)))
+#define CONCAT31(a, b) ((uint32_t)((((uint32_t)GEN_BITS(a) & 0xffffff) << 8) | (uint8_t)GEN_BITS(b)))
+#define CONCAT32(a, b) ((uint64_t)((((uint64_t)GEN_BITS(a) & 0xffffff) << 16) | (uint16_t)GEN_BITS(b)))
+#define CONCAT35(a, b) ((uint64_t)((((uint64_t)GEN_BITS(a) & 0xffffff) << 40) | ((uint64_t)GEN_BITS(b) & 0xffffffffffULL)))
+#define CONCAT41(a, b) ((uint64_t)(((uint64_t)(uint32_t)GEN_BITS(a) << 8) | (uint8_t)GEN_BITS(b)))
+#define CONCAT42(a, b) ((uint64_t)(((uint64_t)(uint32_t)GEN_BITS(a) << 16) | (uint16_t)GEN_BITS(b)))
+#define CONCAT44(a, b) ((uint64_t)(((uint64_t)(uint32_t)GEN_BITS(a) << 32) | (uint32_t)GEN_BITS(b)))
+#define CONCAT53(a, b) ((uint64_t)((((uint64_t)GEN_BITS(a) & 0xffffffffffULL) << 24) | ((uint32_t)GEN_BITS(b) & 0xffffff)))
+#define CONCAT62(a, b) ((uint64_t)((((uint64_t)GEN_BITS(a) & 0xffffffffffffULL) << 16) | (uint16_t)GEN_BITS(b)))
+#define CONCAT71(a, b) ((uint64_t)((((uint64_t)GEN_BITS(a) & 0xffffffffffffffULL) << 8) | (uint8_t)GEN_BITS(b)))
 /* the rest of CONCATab with a + b <= 8: a bytes over b bytes */
-#define GEN_CONCAT(a, na, b, nb) ((uint64_t)((((uint64_t)(a) & (~0ULL >> (64 - 8 * (na)))) << (8 * (nb))) | \
-    ((uint64_t)(b) & (~0ULL >> (64 - 8 * (nb))))))
+#define GEN_CONCAT(a, na, b, nb) ((uint64_t)((((uint64_t)GEN_BITS(a) & (~0ULL >> (64 - 8 * (na)))) << (8 * (nb))) | \
+    ((uint64_t)GEN_BITS(b) & (~0ULL >> (64 - 8 * (nb))))))
 #define CONCAT23(a, b) GEN_CONCAT(a, 2, b, 3)
 #define CONCAT25(a, b) GEN_CONCAT(a, 2, b, 5)
 #define CONCAT33(a, b) GEN_CONCAT(a, 3, b, 3)
@@ -321,31 +336,31 @@ static __inline double gen_darg_u(unsigned long long bits) { return GEN_AS_DOUBL
 #define CONCAT51(a, b) GEN_CONCAT(a, 5, b, 1)
 #define CONCAT52(a, b) GEN_CONCAT(a, 5, b, 2)
 #define CONCAT61(a, b) GEN_CONCAT(a, 6, b, 1)
-#define SUB41(x, n) ((uint8_t)((uint32_t)(x) >> ((n) * 8)))
-#define SUB42(x, n) ((uint16_t)((uint32_t)(x) >> ((n) * 8)))
-#define SUB81(x, n) ((uint8_t)((uint64_t)(x) >> ((n) * 8)))
-#define SUB82(x, n) ((uint16_t)((uint64_t)(x) >> ((n) * 8)))
-#define SUB84(x, n) ((uint32_t)((uint64_t)(x) >> ((n) * 8)))
-#define SUB21(x, n) ((uint8_t)((uint16_t)(x) >> ((n) * 8)))
+#define SUB41(x, n) ((uint8_t)((uint32_t)GEN_BITS(x) >> ((n) * 8)))
+#define SUB42(x, n) ((uint16_t)((uint32_t)GEN_BITS(x) >> ((n) * 8)))
+#define SUB81(x, n) ((uint8_t)((uint64_t)GEN_BITS(x) >> ((n) * 8)))
+#define SUB82(x, n) ((uint16_t)((uint64_t)GEN_BITS(x) >> ((n) * 8)))
+#define SUB84(x, n) ((uint32_t)((uint64_t)GEN_BITS(x) >> ((n) * 8)))
+#define SUB21(x, n) ((uint8_t)((uint16_t)GEN_BITS(x) >> ((n) * 8)))
 /* the odd widths, held in the next C type up and masked to their bytes */
-#define SUB43(x, n) ((uint32_t)(((uint32_t)(x) >> ((n) * 8)) & 0xffffffu))
-#define SUB83(x, n) ((uint32_t)(((uint64_t)(x) >> ((n) * 8)) & 0xffffffu))
-#define SUB85(x, n) ((uint64_t)(((uint64_t)(x) >> ((n) * 8)) & 0xffffffffffull))
-#define SUB86(x, n) ((uint64_t)(((uint64_t)(x) >> ((n) * 8)) & 0xffffffffffffull))
+#define SUB43(x, n) ((uint32_t)(((uint32_t)GEN_BITS(x) >> ((n) * 8)) & 0xffffffu))
+#define SUB83(x, n) ((uint32_t)(((uint64_t)GEN_BITS(x) >> ((n) * 8)) & 0xffffffu))
+#define SUB85(x, n) ((uint64_t)(((uint64_t)GEN_BITS(x) >> ((n) * 8)) & 0xffffffffffull))
+#define SUB86(x, n) ((uint64_t)(((uint64_t)GEN_BITS(x) >> ((n) * 8)) & 0xffffffffffffull))
 /* (a 6-byte value's 2 bytes at n, FUN_1423f32a0; it did not link, 2026-10-18) */
-#define SUB62(x, n) ((uint16_t)((uint64_t)(x) >> ((n) * 8)))
-#define SUB61(x, n) ((uint8_t)((uint64_t)(x) >> ((n) * 8)))
-#define SUB64(x, n) ((uint32_t)((uint64_t)(x) >> ((n) * 8)))
-#define SUB87(x, n) ((uint64_t)(((uint64_t)(x) >> ((n) * 8)) & 0xffffffffffffffull))
+#define SUB62(x, n) ((uint16_t)((uint64_t)GEN_BITS(x) >> ((n) * 8)))
+#define SUB61(x, n) ((uint8_t)((uint64_t)GEN_BITS(x) >> ((n) * 8)))
+#define SUB64(x, n) ((uint32_t)((uint64_t)GEN_BITS(x) >> ((n) * 8)))
+#define SUB87(x, n) ((uint64_t)(((uint64_t)GEN_BITS(x) >> ((n) * 8)) & 0xffffffffffffffull))
 /* SUBab with b wider than a: Ghidra's spelling of a narrow value passed in a wider register, its
    own bytes and zeros above (`SUB14(param_2 != 0,0)`, the bool DragAcceptFiles takes as a BOOL in
    FUN_142041da0; it did not link, 2026-10-19) */
-#define SUB12(x, n) ((uint16_t)(uint8_t)((uint8_t)(x) >> ((n) * 8)))
-#define SUB14(x, n) ((uint32_t)(uint8_t)((uint8_t)(x) >> ((n) * 8)))
-#define SUB18(x, n) ((uint64_t)(uint8_t)((uint8_t)(x) >> ((n) * 8)))
-#define SUB24(x, n) ((uint32_t)(uint16_t)((uint16_t)(x) >> ((n) * 8)))
-#define SUB28(x, n) ((uint64_t)(uint16_t)((uint16_t)(x) >> ((n) * 8)))
-#define SUB48(x, n) ((uint64_t)(uint32_t)((uint32_t)(x) >> ((n) * 8)))
+#define SUB12(x, n) ((uint16_t)(uint8_t)((uint8_t)GEN_BITS(x) >> ((n) * 8)))
+#define SUB14(x, n) ((uint32_t)(uint8_t)((uint8_t)GEN_BITS(x) >> ((n) * 8)))
+#define SUB18(x, n) ((uint64_t)(uint8_t)((uint8_t)GEN_BITS(x) >> ((n) * 8)))
+#define SUB24(x, n) ((uint32_t)(uint16_t)((uint16_t)GEN_BITS(x) >> ((n) * 8)))
+#define SUB28(x, n) ((uint64_t)(uint16_t)((uint16_t)GEN_BITS(x) >> ((n) * 8)))
+#define SUB48(x, n) ((uint64_t)(uint32_t)((uint32_t)GEN_BITS(x) >> ((n) * 8)))
 #define ZEXT14(x) ((uint32_t)(uint8_t)(x))
 #define ZEXT18(x) ((uint64_t)(uint8_t)(x))
 #define ZEXT24(x) ((uint32_t)(uint16_t)(x))
@@ -436,10 +451,14 @@ static __inline unsigned long long gen_dkey(double x) { return x == 0.0 ? 0ull :
    Integer operators Ghidra writes on one are 128-bit arithmetic (gen_v16_add ...); its SSE
    pseudo-ops are the intrinsics (v16.PSEUDO). A scalar moves in and out by its bits: Ghidra
    moves a float into a register with movd, not a conversion */
+/* No SSE member: an SSE member makes the union 16-aligned, and the compiler then reads and writes
+   one in memory with movaps / movdqa, which fault on an address that is not. The reference's
+   memory operands are its own (movups where it cannot promise alignment): the loading screen's
+   background, a member at +0xc58 of an object at an 8-aligned address, faulted on every frame
+   through `*((gen_v16 *)(p + 0xc58)) = v` (2026-10-22), and 13596 such dereferences were
+   emitted. The values go in and out of registers through gen_v16_mm / _mf / _md and
+   gen_v16_m / _f / _d, unaligned loads and stores */
 typedef union gen_v16 {
-    __m128i m;
-    __m128 f;
-    __m128d d;
     unsigned char b[16];
     unsigned short w[8];
     unsigned int u[4];
@@ -455,9 +474,12 @@ typedef struct gen_v64 { __declspec(align(16)) unsigned char b[64]; } gen_v64;
 static __inline gen_v16 gen_v16_qq(unsigned long long lo, unsigned long long hi) {
     gen_v16 r; r.q[0] = lo; r.q[1] = hi; return r;
 }
-static __inline gen_v16 gen_v16_m(__m128i m) { gen_v16 r; r.m = m; return r; }
-static __inline gen_v16 gen_v16_f(__m128 f) { gen_v16 r; r.f = f; return r; }
-static __inline gen_v16 gen_v16_d(__m128d d) { gen_v16 r; r.d = d; return r; }
+static __inline gen_v16 gen_v16_m(__m128i m) { gen_v16 r; _mm_storeu_si128((__m128i *)&r, m); return r; }
+static __inline gen_v16 gen_v16_f(__m128 f) { gen_v16 r; _mm_storeu_ps((float *)&r, f); return r; }
+static __inline gen_v16 gen_v16_d(__m128d d) { gen_v16 r; _mm_storeu_pd((double *)&r, d); return r; }
+static __inline __m128i gen_v16_mm(gen_v16 v) { return _mm_loadu_si128((const __m128i *)&v); }
+static __inline __m128 gen_v16_mf(gen_v16 v) { return _mm_loadu_ps((const float *)&v); }
+static __inline __m128d gen_v16_md(gen_v16 v) { return _mm_loadu_pd((const double *)&v); }
 static __inline gen_v16 gen_v16_fromq(unsigned long long x) { return gen_v16_qq(x, 0); }
 static __inline gen_v16 gen_v16_fromf(float x) { gen_v16 r = gen_v16_qq(0, 0); memcpy(&r, &x, 4); return r; }
 static __inline gen_v16 gen_v16_fromd(double x) { gen_v16 r = gen_v16_qq(0, 0); memcpy(&r, &x, 8); return r; }
@@ -472,9 +494,9 @@ static __inline double gen_v16_d0(gen_v16 v) { double d; memcpy(&d, &v, 8); retu
 /* a scalar taken from one, as the variable it is stored in reads it */
 #define GEN_V16_AS(like, v) _Generic((like), float: gen_v16_f0(v), double: gen_v16_d0(v), \
     default: gen_v16_q0(v))
-static __inline gen_v16 gen_v16_and(gen_v16 a, gen_v16 b) { return gen_v16_m(_mm_and_si128(a.m, b.m)); }
-static __inline gen_v16 gen_v16_or(gen_v16 a, gen_v16 b) { return gen_v16_m(_mm_or_si128(a.m, b.m)); }
-static __inline gen_v16 gen_v16_xor(gen_v16 a, gen_v16 b) { return gen_v16_m(_mm_xor_si128(a.m, b.m)); }
+static __inline gen_v16 gen_v16_and(gen_v16 a, gen_v16 b) { return gen_v16_m(_mm_and_si128(gen_v16_mm(a), gen_v16_mm(b))); }
+static __inline gen_v16 gen_v16_or(gen_v16 a, gen_v16 b) { return gen_v16_m(_mm_or_si128(gen_v16_mm(a), gen_v16_mm(b))); }
+static __inline gen_v16 gen_v16_xor(gen_v16 a, gen_v16 b) { return gen_v16_m(_mm_xor_si128(gen_v16_mm(a), gen_v16_mm(b))); }
 static __inline gen_v16 gen_v16_not(gen_v16 a) { return gen_v16_qq(~a.q[0], ~a.q[1]); }
 static __inline gen_v16 gen_v16_add(gen_v16 a, gen_v16 b) {
     unsigned long long lo = a.q[0] + b.q[0];
@@ -565,21 +587,19 @@ static __inline void gen_v16_store(void *p, int n, gen_v16 v) { memcpy(p, &v, n 
 /* vpmullq on 128 bits (AVX-512VL): each 64-bit lane's product, low 64 bits; in plain C, so it
    runs where AVX-512 does not */
 static __inline __m128i gen_mullo_epi64(__m128i a, __m128i b) {
-    gen_v16 x, y, r;
-    x.m = a;
-    y.m = b;
+    gen_v16 x = gen_v16_m(a), y = gen_v16_m(b), r;
     r.q[0] = x.q[0] * y.q[0];
     r.q[1] = x.q[1] * y.q[1];
-    return r.m;
+    return gen_v16_mm(r);
 }
 /* movmskps / movmskpd as Ghidra spells them, `movmskpd(dest, vector)`: the lanes' sign bits */
 static __inline unsigned int movmskps(unsigned long long dest, gen_v16 v) {
     (void)dest;
-    return (unsigned int)_mm_movemask_ps(v.f);
+    return (unsigned int)_mm_movemask_ps(gen_v16_mf(v));
 }
 static __inline unsigned int movmskpd(unsigned long long dest, gen_v16 v) {
     (void)dest;
-    return (unsigned int)_mm_movemask_pd(v.d);
+    return (unsigned int)_mm_movemask_pd(gen_v16_md(v));
 }
 /* Ghidra's rdrand pseudo-op and its carry flag (the CRT's random seeding, FUN_14026b280): the
    intrinsic, whose success is the flag. Did not link (3 functions, 2026-10-18) */

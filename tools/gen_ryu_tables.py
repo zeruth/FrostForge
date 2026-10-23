@@ -9,10 +9,11 @@ what the reference uses:
 
     python tools/gen_ryu_tables.py
 """
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 import struct
 from pathlib import Path
 
-from wowbin import ROOT, Binary
+from pebin import ROOT, Binary
 
 INV, POW5, POW10 = 0x142621090, 0x1426222D0, 0x142623730
 

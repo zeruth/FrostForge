@@ -83,7 +83,7 @@ class CGxDevice {
     virtual void SetLowLatencyMode(uint8_t mode);           // 0x78
     virtual void FrameMarker();                             // 0x80: after the frame's submission
     virtual void LatencyMarker(uint32_t marker, uint32_t frame);  // 0x88
-    virtual void Slot090();                                 // 0x90
+    virtual void* Slot090(void* out, uint64_t a2); // 0x90 (pure in the reference's base)
     virtual void Slot098();                                 // 0x98
     virtual void Slot0a0();                                 // 0xa0
     virtual void Slot0a8();                                 // 0xa8
@@ -92,10 +92,10 @@ class CGxDevice {
     virtual void Slot0c0();                                 // 0xc0
     virtual void Slot0c8();                                 // 0xc8
     virtual void Slot0d0();                                 // 0xd0
-    virtual void Slot0d8();                                 // 0xd8
+    virtual void* Slot0d8(void* out, uint64_t a2); // 0xd8 (pure in the reference's base)
     virtual void Slot0e0();                                 // 0xe0
     virtual void Slot0e8();                                 // 0xe8
-    virtual void Slot0f0();                                 // 0xf0
+    virtual void* Slot0f0(void* out);            // 0xf0 (pure in the reference's base)
     virtual void Slot0f8();                                 // 0xf8
     virtual void* SwapChainCreate(const GXSWAPCHAINPARAMS* params);  // 0x100
     virtual void SwapChainDestroy(void* chain);             // 0x108
@@ -112,7 +112,8 @@ class CGxDevice {
         GXVERTEXBUFFERFORMAT** format);                     // 0x148
     virtual void ObjectFree(void* object);                  // 0x150: back to Gx's allocator
     virtual void Slot158();                                 // 0x158
-    virtual void Slot160();                                 // 0x160
+    // The swap chain the current frame draws into (between SwapChainBegin and SwapChainEnd).
+    virtual void* CurrentSwapChain();                       // 0x160
     virtual void Slot168();                                 // 0x168
     virtual bool VariableRateShadingSupported(uint8_t tier);  // 0x170
     virtual bool ShadingRateSupported(uint32_t rate, int32_t a3, uint8_t a4);  // 0x178
@@ -122,9 +123,10 @@ class CGxDevice {
     virtual uint32_t FrameCount();                          // 0x198: frames in flight
     virtual bool BufCreate(GxBuf* buf);                     // 0x1a0: the API side of a buffer
     virtual void BufDestroy(GxBuf* buf);                    // 0x1a8
-    virtual void Slot1b0();                                 // 0x1b0
-    virtual void Slot1b8();                                 // 0x1b8
-    virtual void Slot1c0();                                 // 0x1c0
+    // a 0x20-byte description copied to the heap, and given back (pure in the reference's base)
+    virtual void* Slot1b0(const void* desc);                // 0x1b0
+    virtual void Slot1b8(void* object);                     // 0x1b8
+    virtual void* Slot1c0(const void* desc);     // 0x1c0 (pure in the reference's base)
     virtual void Slot1c8();                                 // 0x1c8
     virtual void Slot1d0();                                 // 0x1d0
     virtual void Slot1d8();                                 // 0x1d8
@@ -151,8 +153,9 @@ class CGxDevice {
     virtual void QueryDestroy(void* query);                 // 0x280
     virtual bool QueryInfo(void* query, uint8_t what, uint32_t* out);  // 0x288
     virtual bool QueryGetResult(void* query, void* out, uint32_t size);  // 0x290
-    virtual void Slot298();                                 // 0x298
-    virtual void Slot2a0();                                 // 0x2a0
+    // a compute shader object (0x38) by kind and permutation, and its release (pure in the base)
+    virtual void* CreateComputeShader(uint32_t kind, uint16_t permutation);  // 0x298
+    virtual void DestroyComputeShader(void* shader);        // 0x2a0
 
     // Re-creates the vertex formats and the registered shaders on a new device (FUN_142290d00).
     void ReregisterObjects();

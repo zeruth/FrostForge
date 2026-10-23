@@ -9,11 +9,12 @@ that registers it: it loads the table address and the namespace string together.
 """
 from __future__ import annotations
 
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 import re
 import struct
 from collections import defaultdict
 
-from wowbin import Binary, hexa, write_facts
+from pebin import Binary, hexa, write_facts
 
 IDENT = re.compile(r"[A-Za-z_][A-Za-z0-9_]{1,80}\Z")
 

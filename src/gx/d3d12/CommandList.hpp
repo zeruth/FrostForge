@@ -282,7 +282,8 @@ class GxRenderContext {
     virtual void SetVertexBuffers(uint32_t first, uint32_t count, const GXVERTEXSTREAM* streams);  // 0x128
     // The index buffer: 16-bit indices when `format` is 1, else 32-bit.
     virtual void SetIndexBuffer(GxBuf* buf, uint8_t format);  // 0x130
-    virtual void Slot138();
+    // the shading rate image bound (a texture, or none), on devices that shade at variable rates
+    virtual void SetShadingRateImage(void* image);  // 0x138
     // The two shading-rate combiners the next draws use.
     virtual void SetShadingRateCombiners(const uint8_t* combiners);  // 0x140
     virtual void Draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t startVertex, uint32_t startInstance,

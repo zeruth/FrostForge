@@ -9,6 +9,7 @@
 #include <unordered_set>
 
 #include <windows.h>
+#include <dbghelp.h>
 
 #include "storm/thread/SThread.hpp"
 #include "storm/Memory.hpp"
@@ -67,6 +68,10 @@ extern const unsigned int gen_hit_table_count;
 void GenUnimplemented(uint64_t address);
 int GenFault(unsigned long long address, EXCEPTION_POINTERS* info);
 }
+
+// Ghidra.h's GEN_OPAQUE: a zero the optimizer cannot see through, so a reference address used as
+// an indexed base is a value, not a displacement MSVC may truncate to 32 bits.
+extern "C" volatile unsigned long long gen_opaque_zero = 0;
 
 // The runtime's thread-safe-statics epoch, for translated function-local statics (Ghidra.h).
 extern "C" __declspec(thread) int _Init_thread_epoch;
@@ -164,6 +169,115 @@ LONG CALLBACK WatchHandler(EXCEPTION_POINTERS* info) {
         return EXCEPTION_CONTINUE_EXECUTION;
     }
     return EXCEPTION_CONTINUE_SEARCH;
+}
+
+// An A/B switch for a suspect translation (FROST_NATIVE=<hex address>[,<hex address>...]): each
+// function named runs as the reference's own machine code instead. Its bytes (every .pdata piece
+// whose chain leads back to it) are mapped from the image over the int3 fill and the entry jump,
+// with their unwind entries, and its translation's own entry (FUN_<address>, found in Frost.pdb)
+// jumps there, so a translated caller and a call through the image both reach it. What it calls
+// still goes through the image's entries, to the translations. A difference between the two runs
+// is the translation's; the character-select skin stripes were bisected this way (2026-10-22).
+std::vector<RUNTIME_FUNCTION> s_nativeOverrides;
+
+uint32_t ChainRoot(uint64_t base, const RUNTIME_FUNCTION* function) {
+    // (an unwind entry chained to its function's, UNW_FLAG_CHAININFO: the parent entry follows
+    // the unwind codes, which are padded to an even count)
+    for (int depth = 0; depth < 32; depth++) {
+        auto info = reinterpret_cast<const uint8_t*>(base + function->UnwindData);
+        if ((info[0] >> 3 & 4) == 0) {
+            return function->BeginAddress;
+        }
+        uint32_t codes = (info[2] + 1u) & ~1u;
+        function = reinterpret_cast<const RUNTIME_FUNCTION*>(info + 4 + codes * 2);
+    }
+    return function->BeginAddress;
+}
+
+void ApplyNativeOverrides(const char* path, uint64_t base, const IMAGE_NT_HEADERS64& nt) {
+    char value[1024];
+    DWORD length = GetEnvironmentVariableA("FROST_NATIVE", value, sizeof(value));
+    if (length == 0 || length >= sizeof(value)) {
+        return;
+    }
+    using SymInitializeFn = BOOL(WINAPI*)(HANDLE, PCSTR, BOOL);
+    using SymFromNameFn = BOOL(WINAPI*)(HANDLE, PCSTR, PSYMBOL_INFO);
+    HMODULE dbghelp = LoadLibraryA("dbghelp.dll");
+    auto symInitialize = dbghelp ? reinterpret_cast<SymInitializeFn>(GetProcAddress(dbghelp, "SymInitialize")) : nullptr;
+    auto symFromName = dbghelp ? reinterpret_cast<SymFromNameFn>(GetProcAddress(dbghelp, "SymFromName")) : nullptr;
+    if (symInitialize == nullptr || symFromName == nullptr || !symInitialize(GetCurrentProcess(), nullptr, TRUE)) {
+        FrostLog("native", "dbghelp unavailable: FROST_NATIVE ignored");
+        return;
+    }
+    FILE* file = std::fopen(path, "rb");
+    if (file == nullptr) {
+        return;
+    }
+    auto sections = IMAGE_FIRST_SECTION(reinterpret_cast<const IMAGE_NT_HEADERS64*>(
+        base + reinterpret_cast<const IMAGE_DOS_HEADER*>(base)->e_lfanew));
+    auto fileOffset = [&](uint32_t rva) -> long {
+        for (uint32_t i = 0; i < nt.FileHeader.NumberOfSections; i++) {
+            if (rva >= sections[i].VirtualAddress && rva < sections[i].VirtualAddress + sections[i].SizeOfRawData) {
+                return static_cast<long>(sections[i].PointerToRawData + (rva - sections[i].VirtualAddress));
+            }
+        }
+        return -1;
+    };
+    const IMAGE_DATA_DIRECTORY& pdata = nt.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXCEPTION];
+    auto functions = reinterpret_cast<const RUNTIME_FUNCTION*>(base + pdata.VirtualAddress);
+    size_t total = pdata.VirtualAddress != 0 ? pdata.Size / sizeof(RUNTIME_FUNCTION) : 0;
+    for (char* next = nullptr, *token = strtok_s(value, ",; ", &next); token != nullptr;
+         token = strtok_s(nullptr, ",; ", &next)) {
+        uint64_t address = std::strtoull(token, nullptr, 16);
+        if (address < base || address >= base + nt.OptionalHeader.SizeOfImage) {
+            continue;
+        }
+        auto rva = static_cast<uint32_t>(address - base);
+        size_t pieces = 0;
+        for (size_t i = 0; i < total; i++) {
+            if (ChainRoot(base, &functions[i]) != rva) {
+                continue;
+            }
+            long at = fileOffset(functions[i].BeginAddress);
+            size_t size = functions[i].EndAddress - functions[i].BeginAddress;
+            if (at < 0 || std::fseek(file, at, SEEK_SET) != 0
+                || std::fread(reinterpret_cast<void*>(base + functions[i].BeginAddress), 1, size, file) != size) {
+                continue;
+            }
+            s_nativeOverrides.push_back(functions[i]);
+            pieces++;
+        }
+        if (pieces == 0) {
+            FrostLog("native", "%llx: no unwind entry, not overridden", static_cast<unsigned long long>(address));
+            continue;
+        }
+        char name[32];
+        std::snprintf(name, sizeof(name), "FUN_%llx", static_cast<unsigned long long>(address));
+        alignas(SYMBOL_INFO) char buffer[sizeof(SYMBOL_INFO) + 64] = {};
+        auto symbol = reinterpret_cast<SYMBOL_INFO*>(buffer);
+        symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+        symbol->MaxNameLen = 64;
+        if (!symFromName(GetCurrentProcess(), name, symbol)) {
+            FrostLog("native", "%s mapped, but its translation is not in the symbols: only image calls reach it", name);
+            continue;
+        }
+        // jmp [rip+0]; dq address
+        uint8_t patch[14] = {0xff, 0x25, 0, 0, 0, 0};
+        std::memcpy(patch + 6, &address, 8);
+        auto entry = reinterpret_cast<void*>(symbol->Address);
+        DWORD old;
+        VirtualProtect(entry, sizeof(patch), PAGE_EXECUTE_READWRITE, &old);
+        std::memcpy(entry, patch, sizeof(patch));
+        VirtualProtect(entry, sizeof(patch), old, &old);
+        FlushInstructionCache(GetCurrentProcess(), entry, sizeof(patch));
+        FrostLog("native", "%s runs as the reference's own code (%zu pieces)", name, pieces);
+    }
+    std::fclose(file);
+    if (!s_nativeOverrides.empty()) {
+        std::sort(s_nativeOverrides.begin(), s_nativeOverrides.end(),
+                  [](const RUNTIME_FUNCTION& a, const RUNTIME_FUNCTION& b) { return a.BeginAddress < b.BeginAddress; });
+        RtlAddFunctionTable(s_nativeOverrides.data(), static_cast<DWORD>(s_nativeOverrides.size()), base);
+    }
 }
 
 void StartWatch() {
@@ -547,6 +661,8 @@ bool RefImageInitialize(const char* path) {
         at[0] = 0xe9;
         std::memcpy(at + 1, &rel, 4);
     }
+    // (after the entry jumps, which the reference's own bytes replace)
+    ApplyNativeOverrides(path, base, nt);
     std::sort(s_traps.begin(), s_traps.end());
     if (!s_traps.empty()) {
         FrostLog("refimage", "%zu functions too close to the next for a jump: reached through the trap",

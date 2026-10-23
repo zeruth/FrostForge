@@ -4967,7 +4967,7 @@ int FUN_1401fdaf0(void)
       *plVar8 = (longlong)puVar5;
       REFG(undefined8, 0x142d2d1c0) = REFG(undefined8, 0x142d2d1c0) + 1;
       uVar10 = REFG(undefined8, 0x142d2d1b0);
-      if (REFG(float, 0x142d2d1c8) < (float)REFG(undefined8, 0x142d2d1c0) / (float)REFG(undefined8, 0x142d2d1b0)) {
+      if (REFG(float, 0x142d2d1c8) < gen_bits2f((unsigned int)(REFG(undefined8, 0x142d2d1c0))) / gen_bits2f((unsigned int)(REFG(undefined8, 0x142d2d1b0)))) {
         CALLF(undefined1, FUN_1419ee620)(&REFG(undefined8, 0x142d2d1b0),REFG(undefined8, 0x142d2d1b0) * 2);
         uVar10 = REFG(undefined8, 0x142d2d1b0);
       }

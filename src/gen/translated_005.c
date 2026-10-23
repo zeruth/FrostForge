@@ -2936,17 +2936,17 @@ undefined8 FUN_1401e73e0(void)
     lVar5 = lVar5 + -1;
   } while (lVar5 != 0);
   REFG(float, 0x142d05260) = REFG(undefined8, 0x142725be0);
-  uVar4 = REFG(float, 0x142d05260);
+  GEN_COPY(uVar4, REFG(float, 0x142d05260));
   REFG(float, 0x142d05268) = REFG(undefined8, 0x142725be8);
-  uVar2 = REFG(float, 0x142d05268);
+  GEN_COPY(uVar2, REFG(float, 0x142d05268));
   REFG(float, 0x142d0526c) = (float)((ulonglong)REFG(undefined8, 0x142725be8) >> 0x20);
   fVar8 = REFG(float, 0x142d0526c);
-  REFG(float, 0x142d05268) = (float)REFG(undefined8, 0x142725be8);
+  REFG(float, 0x142d05268) = gen_bits2f((unsigned int)(REFG(undefined8, 0x142725be8)));
   fVar10 = REFG(float, 0x142d05268);
   lVar5 = 8;
   REFG(float, 0x142d05264) = (float)((ulonglong)REFG(undefined8, 0x142725be0) >> 0x20);
   fVar9 = REFG(float, 0x142d05264);
-  REFG(float, 0x142d05260) = (float)REFG(undefined8, 0x142725be0);
+  REFG(float, 0x142d05260) = gen_bits2f((unsigned int)(REFG(undefined8, 0x142725be0)));
   fVar6 = REFG(float, 0x142d05260);
   REFG(undefined8, 0x142d05278) = &REFG(undefined4, 0x142d03e30);
   pfVar3 = (float *)&REFG(undefined4, 0x142d03e34);
@@ -2963,8 +2963,8 @@ undefined8 FUN_1401e73e0(void)
   fVar13 = REFG(float, 0x142d05260);
   fVar14 = REFG(float, 0x142d05268);
   fVar15 = REFG(float, 0x142d05264);
-  REFG(float, 0x142d05260) = uVar4;
-  REFG(float, 0x142d05268) = uVar2;
+  GEN_COPY(REFG(float, 0x142d05260), uVar4);
+  GEN_COPY(REFG(float, 0x142d05268), uVar2);
   do {
     fVar1 = pfVar3[-1];
     if (fVar1 < fVar12) {
@@ -4863,8 +4863,8 @@ float * FUN_1401ea730(void)
       fVar10 = REFG(float, 0x142d03c80);
     }
     fVar8 = *pfVar1;
-    if (*pfVar1 <= (float)REFG(undefined4, 0x142d03c84)) {
-      fVar8 = (float)REFG(undefined4, 0x142d03c84);
+    if (*pfVar1 <= gen_bits2f((unsigned int)(REFG(undefined4, 0x142d03c84)))) {
+      fVar8 = gen_bits2f((unsigned int)(REFG(undefined4, 0x142d03c84)));
     }
     fVar5 = pfVar1[1];
     if (pfVar1[1] <= (*(float *)((char *)&REFG(undefined4, 0x142d03c84) + 4))) {
@@ -4884,11 +4884,11 @@ float * FUN_1401ea730(void)
   REFG(float, 0x142d03cbc) = (float)((ulonglong)REFG(undefined8, 0x142725be8) >> 0x20);
   fVar8 = REFG(float, 0x142d03cbc);
   lVar2 = 0x10;
-  REFG(float, 0x142d03cb8) = (float)REFG(undefined8, 0x142725be8);
+  REFG(float, 0x142d03cb8) = gen_bits2f((unsigned int)(REFG(undefined8, 0x142725be8)));
   fVar10 = REFG(float, 0x142d03cb8);
   REFG(float, 0x142d03cb4) = (float)((ulonglong)REFG(undefined8, 0x142725be0) >> 0x20);
   fVar7 = REFG(float, 0x142d03cb4);
-  REFG(float, 0x142d03cb0) = (float)REFG(undefined8, 0x142725be0);
+  REFG(float, 0x142d03cb0) = gen_bits2f((unsigned int)(REFG(undefined8, 0x142725be0)));
   fVar13 = REFG(float, 0x142d03cb0);
   REFG(undefined8, 0x142d03cc8) = &REFG(undefined4, 0x142d03770);
   pfVar1 = (float *)&REFG(undefined4, 0x142d03774);

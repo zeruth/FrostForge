@@ -3,9 +3,10 @@ as letters (FUN_142431360 reads it at 0x14295c590, a bit per syllable from U+AC0
 
     python tools/gen_char_hangul.py
 """
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 from pathlib import Path
 
-from wowbin import ROOT, Binary
+from pebin import ROOT, Binary
 
 b = Binary()
 COUNT = (0x2ba4 + 63) // 64

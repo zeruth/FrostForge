@@ -24,6 +24,7 @@ It comes in two shapes:
 """
 from __future__ import annotations
 
+import _rhipper  # noqa: F401  (Rhipper's modules on the path)
 import json
 import re
 import sys
