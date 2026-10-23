@@ -2,7 +2,7 @@
 
 A script-object class registers a table of {name, lua_CFunction} pairs (FrameScript_Object::
 FillScriptMethodTable). This reads that table out of the reference image and writes the port's
-side: one forwarder per method, each `// translated: FUN_x` (so tools/translate.py takes it as a
+side: one forwarder per method, each `// translated: FUN_x` (so tools/translate64.py takes it as a
 root) and guarded by GenFault, and the class's FillScriptMethods in the port's own pattern.
 
     python tools/gen_frame_methods.py <Class> <table hex> <count> <base fill function> <out.cpp>

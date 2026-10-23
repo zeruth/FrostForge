@@ -1,4 +1,4 @@
-"""The anti-tamper layer's runtime and the guards it inlines into game code, for tools/translate.py.
+"""The anti-tamper layer's runtime and the guards it inlines into game code, for tools/translate64.py.
 
 Besides the return-address check (tools/retcheck.py, stripped by tools/corpus.py), the clean exe
 carries a second protection layer: a runtime around one context (PTR_142ddf848) and a state

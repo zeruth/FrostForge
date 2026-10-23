@@ -1,5 +1,5 @@
 {
- "_doc": "Corrections to the decompilation, applied before translation (tools/translate.py). Each is a decompiler error proven against the instructions: 'from' should occur exactly once in the function's corpus text, and 'why' gives the instruction evidence. A patch is a defect the pipeline has not fixed at its source yet: the goal is none. The five of 2026-10-15/16 are gone, each fixed where it arose (tools/protos.py's prototypes and indirect-call signatures, Ghidra.h's LPC* typedefs). A patch that no longer matches is reported and skipped: the corpus may have been fixed underneath it.",
+ "_doc": "Corrections to the decompilation, applied before translation (tools/translate64.py). Each is a decompiler error proven against the instructions: 'from' should occur exactly once in the function's corpus text, and 'why' gives the instruction evidence. A patch is a defect the pipeline has not fixed at its source yet: the goal is none. The five of 2026-10-15/16 are gone, each fixed where it arose (tools/protos64.py's prototypes and indirect-call signatures, Ghidra.h's LPC* typedefs). A patch that no longer matches is reported and skipped: the corpus may have been fixed underneath it.",
  "1417c8250": [
   {
    "from": "        pfVar14[4] = auVar26._0_4_;\n        pfVar14[5] = auVar25._0_4_;",
