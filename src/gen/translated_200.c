@@ -27957,8 +27957,8 @@ double FUN_1425be40c(double param_1)
   else if ((ulonglong)dVar2 < 0x7ff0000000000000) {
     dVar4 = param_1;
     if (dVar2 != param_1) {
-      dVar4 = (double)CONCAT44((uint)(GEN_BITS(param_1) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
-                               SUB84(param_1,0) ^ (uint)REFG(float, 0x142620890));
+      dVar4 = gen_bits2d((unsigned long long)(CONCAT44((uint)(GEN_BITS(param_1) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
+                               SUB84(param_1,0) ^ (uint)REFG(float, 0x142620890))));
     }
     if (dVar4 < REFG(double, 0x1429991f8)) {
       if (dVar4 < REFG(double, 0x1426f6198)) {
@@ -28072,8 +28072,8 @@ double FUN_1425be8a0(double param_1)
     bVar6 = dVar2 != param_1;
     dVar2 = param_1;
     if (bVar6) {
-      dVar2 = (double)CONCAT44((uint)(GEN_BITS(param_1) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
-                               SUB84(param_1,0) ^ (uint)REFG(float, 0x142620890));
+      dVar2 = gen_bits2d((unsigned long long)(CONCAT44((uint)(GEN_BITS(param_1) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
+                               SUB84(param_1,0) ^ (uint)REFG(float, 0x142620890))));
     }
     if (dVar2 < REFG(double, 0x1429991f8)) {
       if (dVar2 < REFG(double, 0x1429998b8)) {
@@ -28110,8 +28110,8 @@ double FUN_1425be8a0(double param_1)
         param_1 = (*(double *)(gen_frame + 0x8)) * (double)((longlong)((int *)(gen_frame + 0x0))[0] + 0x3ff << 0x34);
       }
       if (bVar6) {
-        param_1 = (double)CONCAT44((uint)(GEN_BITS(param_1) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
-                                   SUB84(param_1,0) ^ (uint)REFG(float, 0x142620890));
+        param_1 = gen_bits2d((unsigned long long)(CONCAT44((uint)(GEN_BITS(param_1) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
+                                   SUB84(param_1,0) ^ (uint)REFG(float, 0x142620890))));
       }
     }
     else {
@@ -28261,8 +28261,8 @@ double FUN_1425bee94(double param_1)
     }
     param_1 = dVar5;
     if (bVar3) {
-      param_1 = (double)CONCAT44((uint)(GEN_BITS(param_1) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
-                                 SUB84(param_1,0) ^ (uint)REFG(float, 0x142620890));
+      param_1 = gen_bits2d((unsigned long long)(CONCAT44((uint)(GEN_BITS(param_1) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
+                                 SUB84(param_1,0) ^ (uint)REFG(float, 0x142620890))));
     }
   }
   else {

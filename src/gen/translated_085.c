@@ -14463,8 +14463,8 @@ LAB_14138fd52:
           pfVar21[2] = fVar40;
           (*(undefined2 *)((char *)&(*(undefined4 *)(gen_frame + 0x2e0)) + 0)) = CONCAT11((*(undefined1 *)(gen_frame + 0x5)),(*(undefined1 *)(gen_frame + 0x6)));
           GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x2e0)), 0, 3, CONCAT12((*(undefined1 *)(gen_frame + 0x4)),(undefined2)(*(undefined4 *)(gen_frame + 0x2e0))));
-          (*(undefined4 *)(gen_frame + 0x2e0)) = (float)CONCAT13((char)(int)ROUND((fVar33 - fVar49) * fVar34 * fVar8),
-                                       (undefined3)(*(undefined4 *)(gen_frame + 0x2e0)));
+          (*(undefined4 *)(gen_frame + 0x2e0)) = gen_bits2f((unsigned int)(CONCAT13((char)(int)ROUND((fVar33 - fVar49) * fVar34 * fVar8),
+                                       (undefined3)(*(undefined4 *)(gen_frame + 0x2e0)))));
           pfVar21[3] = (*(undefined4 *)(gen_frame + 0x2e0));
           *(undefined8 *)(pfVar21 + 4) = uVar23;
           fVar43 = (fVar50 + fVar42 + *(float *)(uVar25 + 0x108)) - *param_5;
@@ -14484,8 +14484,8 @@ LAB_14138fd52:
           pfVar21[8] = fVar40;
           (*(undefined2 *)((char *)&(*(undefined4 *)(gen_frame + 0x2e0)) + 0)) = CONCAT11((*(undefined1 *)(gen_frame + 0x5)),(*(undefined1 *)(gen_frame + 0x6)));
           GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x2e0)), 0, 3, CONCAT12((*(undefined1 *)(gen_frame + 0x4)),(undefined2)(*(undefined4 *)(gen_frame + 0x2e0))));
-          (*(undefined4 *)(gen_frame + 0x2e0)) = (float)CONCAT13((char)(int)ROUND((fVar33 - fVar49) * fVar34 * fVar8),
-                                       (undefined3)(*(undefined4 *)(gen_frame + 0x2e0)));
+          (*(undefined4 *)(gen_frame + 0x2e0)) = gen_bits2f((unsigned int)(CONCAT13((char)(int)ROUND((fVar33 - fVar49) * fVar34 * fVar8),
+                                       (undefined3)(*(undefined4 *)(gen_frame + 0x2e0)))));
           pfVar21[9] = (*(undefined4 *)(gen_frame + 0x2e0));
           *(undefined8 *)(pfVar21 + 10) = uVar7;
           fVar43 = (fVar51 + fVar42 + *(float *)(uVar25 + 0x108)) - *param_5;
@@ -14506,8 +14506,8 @@ LAB_14138fd52:
           pfVar21[0xe] = fVar40;
           (*(undefined2 *)((char *)&(*(undefined4 *)(gen_frame + 0x2e0)) + 0)) = CONCAT11((*(undefined1 *)(gen_frame + 0x5)),(*(undefined1 *)(gen_frame + 0x6)));
           GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x2e0)), 0, 3, CONCAT12((*(undefined1 *)(gen_frame + 0x4)),(undefined2)(*(undefined4 *)(gen_frame + 0x2e0))));
-          (*(undefined4 *)(gen_frame + 0x2e0)) = (float)CONCAT13((char)(int)ROUND((fVar33 - fVar49) * fVar34 * fVar8),
-                                       (undefined3)(*(undefined4 *)(gen_frame + 0x2e0)));
+          (*(undefined4 *)(gen_frame + 0x2e0)) = gen_bits2f((unsigned int)(CONCAT13((char)(int)ROUND((fVar33 - fVar49) * fVar34 * fVar8),
+                                       (undefined3)(*(undefined4 *)(gen_frame + 0x2e0)))));
           pfVar21[0xf] = (*(undefined4 *)(gen_frame + 0x2e0));
           *(undefined8 *)(pfVar21 + 0x10) = (*(undefined8 *)(gen_frame + 0xb8));
           fVar43 = (fVar51 + fVar31 + *(float *)(uVar25 + 0x108)) - *param_5;
@@ -14527,8 +14527,8 @@ LAB_14138fd52:
           pfVar21[0x14] = fVar40;
           (*(undefined2 *)((char *)&(*(undefined4 *)(gen_frame + 0x2e0)) + 0)) = CONCAT11((*(undefined1 *)(gen_frame + 0x5)),(*(undefined1 *)(gen_frame + 0x6)));
           GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x2e0)), 0, 3, CONCAT12((*(undefined1 *)(gen_frame + 0x4)),(undefined2)(*(undefined4 *)(gen_frame + 0x2e0))));
-          (*(undefined4 *)(gen_frame + 0x2e0)) = (float)CONCAT13((char)(int)ROUND((fVar33 - fVar49) * fVar34 * fVar8),
-                                       (undefined3)(*(undefined4 *)(gen_frame + 0x2e0)));
+          (*(undefined4 *)(gen_frame + 0x2e0)) = gen_bits2f((unsigned int)(CONCAT13((char)(int)ROUND((fVar33 - fVar49) * fVar34 * fVar8),
+                                       (undefined3)(*(undefined4 *)(gen_frame + 0x2e0)))));
           pfVar21[0x15] = (*(undefined4 *)(gen_frame + 0x2e0));
           sVar5 = (short)iVar27;
           *(longlong *)(pfVar21 + 0x16) = (*(undefined8 *)((char *)&auVar36 + 8));

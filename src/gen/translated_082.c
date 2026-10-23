@@ -17195,8 +17195,8 @@ float FUN_14133cc60(double param_1)
   float fVar5 = {0};
   
   uVar1 = (int)param_1 - 1;
-  if ((double)CONCAT44((uint)(GEN_BITS(param_1) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
-                       SUB84(param_1,0) ^ (uint)REFG(float, 0x142620890)) <= param_1) {
+  if (gen_bits2d((unsigned long long)(CONCAT44((uint)(GEN_BITS(param_1) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
+                       SUB84(param_1,0) ^ (uint)REFG(float, 0x142620890)))) <= param_1) {
     uVar1 = (int)param_1;
   }
   uVar2 = uVar1 ^ (uVar1 >> 0x15 | uVar1 << 0xb) ^ (uVar1 >> 0xb | uVar1 << 0x15);

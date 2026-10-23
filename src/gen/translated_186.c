@@ -575,7 +575,7 @@ ulonglong FUN_142364800(undefined8 param_1, ulonglong param_2, double param_3_pr
   ulonglong uVar2 = {0};
   
   if (param_2 < 0x18) {
-    iVar1 = CALLF(undefined4, FUN_140268640)((double)CONCAT44(0,param_3),((undefined1 *)(gen_frame + 0x0)));
+    iVar1 = CALLF(undefined4, FUN_140268640)(gen_bits2d((unsigned long long)(CONCAT44(0,param_3))),((undefined1 *)(gen_frame + 0x0)));
     uVar2 = (ulonglong)iVar1;
     if (uVar2 < param_2) {
       param_2 = uVar2;
@@ -583,7 +583,7 @@ ulonglong FUN_142364800(undefined8 param_1, ulonglong param_2, double param_3_pr
     memmove((void *)(param_1),(void *)(((undefined1 *)(gen_frame + 0x0))),param_2);
     return uVar2;
   }
-  iVar1 = CALLF(undefined4, FUN_140268640)((double)CONCAT44(0,param_3),param_1);
+  iVar1 = CALLF(undefined4, FUN_140268640)(gen_bits2d((unsigned long long)(CONCAT44(0,param_3))),param_1);
   return (longlong)iVar1;
 }
 
@@ -8086,26 +8086,26 @@ double FUN_14236f790(longlong *param_1, longlong *param_2)
     uVar3 = __acrt_iob_func(2);
     CALLF(undefined4, FUN_14025a0f0)(uVar3,"Input validation check \'%s\' failed in %s!\n","dst != ((void *)0)",
                   "dav1d_data_ref");
-    return (double)CONCAT44(gen_extraout_XMM0_Db,gen_extraout_XMM0_Da);
+    return gen_bits2d((unsigned long long)(CONCAT44(gen_extraout_XMM0_Db,gen_extraout_XMM0_Da)));
   }
   if (*param_1 != 0) {
     uVar3 = __acrt_iob_func(2);
     CALLF(undefined4, FUN_14025a0f0)(uVar3,"Input validation check \'%s\' failed in %s!\n","dst->data == ((void *)0)",
                   "dav1d_data_ref");
-    return (double)CONCAT44(gen_extraout_XMM0_Db_00,gen_extraout_XMM0_Da_00);
+    return gen_bits2d((unsigned long long)(CONCAT44(gen_extraout_XMM0_Db_00,gen_extraout_XMM0_Da_00)));
   }
   if (param_2 == (longlong *)0x0) {
     uVar3 = __acrt_iob_func(2);
     CALLF(undefined4, FUN_14025a0f0)(uVar3,"Input validation check \'%s\' failed in %s!\n","src != ((void *)0)",
                   "dav1d_data_ref");
-    return (double)CONCAT44(gen_extraout_XMM0_Db_01,gen_extraout_XMM0_Da_01);
+    return gen_bits2d((unsigned long long)(CONCAT44(gen_extraout_XMM0_Db_01,gen_extraout_XMM0_Da_01)));
   }
   if (param_2[2] != 0) {
     if (*param_2 == 0) {
       uVar3 = __acrt_iob_func(2);
       CALLF(undefined4, FUN_14025a0f0)(uVar3,"Input validation check \'%s\' failed in %s!\n","src->data != ((void *)0)"
                     ,"dav1d_data_ref");
-      return (double)CONCAT44(gen_extraout_XMM0_Db_02,gen_extraout_XMM0_Da_02);
+      return gen_bits2d((unsigned long long)(CONCAT44(gen_extraout_XMM0_Db_02,gen_extraout_XMM0_Da_02)));
     }
     CALLF(int, FUN_14236cd60)(param_2[2]);
   }

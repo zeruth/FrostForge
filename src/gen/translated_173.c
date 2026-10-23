@@ -17109,8 +17109,8 @@ LAB_1421a7a15:
     }
   }
   if (bVar25) {
-    dVar2 = (double)CONCAT44((uint)(GEN_BITS(dVar2) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
-                             SUB84(dVar2,0) ^ (uint)REFG(float, 0x142620890));
+    dVar2 = gen_bits2d((unsigned long long)(CONCAT44((uint)(GEN_BITS(dVar2) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
+                             SUB84(dVar2,0) ^ (uint)REFG(float, 0x142620890))));
   }
   bVar8 = CALLF(undefined1, FUN_141491440)(param_3,dVar2);
   puVar12 = (ulonglong *)(ulonglong)bVar8;

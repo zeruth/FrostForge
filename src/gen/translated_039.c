@@ -1731,8 +1731,8 @@ undefined8 FUN_140640700(undefined8 *param_1, undefined8 param_2, int param_3, i
       pcVar15 = "nil --[[ nan ]]";
     }
     else {
-      if ((double)CONCAT44((uint)(GEN_BITS(dVar20) >> 0x20) & (*(uint *)((char *)&REFG(float, 0x14261f710) + 4)),
-                           SUB84(dVar20,0) & (uint)REFG(float, 0x14261f710)) < REFG(double, 0x1426ccc50)) {
+      if (gen_bits2d((unsigned long long)(CONCAT44((uint)(GEN_BITS(dVar20) >> 0x20) & (*(uint *)((char *)&REFG(float, 0x14261f710) + 4)),
+                           SUB84(dVar20,0) & (uint)REFG(float, 0x14261f710)))) < REFG(double, 0x1426ccc50)) {
         iVar5 = CALLF(undefined4, FUN_140216f50)((longlong)param_1 + 0x100c,"%.16g",dVar20);
         goto LAB_1406414a0;
       }
@@ -1930,7 +1930,7 @@ LAB_1406410f9:
               }
             }
             else {
-              bVar2 = dVar20 <= (double)CONCAT44((uint)(GEN_BITS((*(undefined8 *)((char *)&auVar22 + 0)) )>> 0x20) & uVar14, SUB84((*(undefined8 *)((char *)&auVar22 + 0)), 0) & uVar16);
+              bVar2 = dVar20 <= gen_bits2d((unsigned long long)(CONCAT44((uint)(GEN_BITS((*(undefined8 *)((char *)&auVar22 + 0)) )>> 0x20) & uVar14, SUB84((*(undefined8 *)((char *)&auVar22 + 0)), 0) & uVar16)));
               if (!bVar2) {
                 if (((0 < (int)uVar6) && (0.0 < (*(undefined8 *)((char *)&auVar22 + 0)))) && ((*(undefined8 *)((char *)&auVar22 + 0)) <= (double)(int)uVar6)) {
                   lVar10 = (longlong)(*(undefined8 *)((char *)&auVar22 + 0));

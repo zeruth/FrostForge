@@ -31405,8 +31405,8 @@ undefined4 FUN_142017af0(longlong param_1, double param_2_promoted, double param
   int iVar3 = {0};
   undefined4 uVar4 = {0};
   
-  iVar2 = CALLF(int, FUN_142013480)(param_1,(double)CONCAT44(0,param_3));
-  iVar3 = CALLF(int, FUN_142013480)(param_1,(double)CONCAT44(0,param_2));
+  iVar2 = CALLF(int, FUN_142013480)(param_1,gen_bits2d((unsigned long long)(CONCAT44(0,param_3))));
+  iVar3 = CALLF(int, FUN_142013480)(param_1,gen_bits2d((unsigned long long)(CONCAT44(0,param_2))));
   if (param_1 != 0) {
     puVar1 = (uint *)(param_1 + 0x168);
     if ((*puVar1 & 0x40) != 0) {

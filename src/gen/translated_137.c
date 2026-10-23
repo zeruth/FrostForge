@@ -17194,7 +17194,7 @@ undefined8 FUN_141bfe5b0(undefined8 param_1, undefined1 param_2, double param_3_
   float param_3 = (float)param_3_promoted;
   undefined8 uVar1 = {0};
   
-  uVar1 = CALLF(longlong, FUN_141184630)(param_2,(double)CONCAT44(0,param_3));
+  uVar1 = CALLF(longlong, FUN_141184630)(param_2,gen_bits2d((unsigned long long)(CONCAT44(0,param_3))));
   return uVar1;
 }
 
@@ -17988,7 +17988,7 @@ undefined8 FUN_141bff320(undefined8 param_1, undefined4 param_2, undefined4 para
   undefined8 uVar1 = {0};
   
   CALLF(undefined1, FUN_1419fba80)(param_2,param_3,param_4);
-  uVar1 = CALLF(longlong, FUN_1411848b0)(param_2,param_3,(double)CONCAT44(0,param_4));
+  uVar1 = CALLF(longlong, FUN_1411848b0)(param_2,param_3,gen_bits2d((unsigned long long)(CONCAT44(0,param_4))));
   return uVar1;
 }
 

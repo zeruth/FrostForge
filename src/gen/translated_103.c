@@ -12604,11 +12604,11 @@ undefined4 FUN_1416a71d0(undefined8 param_1, undefined4 param_2)
           uVar13 = SUB84((*(double *)(gen_frame + 0x0)),0) & (uint)REFG(float, 0x14261f710);
           uVar14 = uVar5 & (*(uint *)((char *)&REFG(float, 0x14261f710) + 4));
           if ((uVar5 >> 0x14 & 0x7ff) != 0x7ff) {
-            lVar10 = (longlong)(double)CONCAT44(uVar14,uVar13);
-            dVar4 = (double)CONCAT44(uVar14,uVar13);
+            lVar10 = (longlong)gen_bits2d((unsigned long long)(CONCAT44(uVar14,uVar13)));
+            dVar4 = gen_bits2d((unsigned long long)(CONCAT44(uVar14,uVar13)));
             if ((lVar10 != -0x8000000000000000) &&
-               (dVar4 = (double)CONCAT44(uVar14,uVar13),
-               (double)lVar10 != (double)CONCAT44(uVar14,uVar13))) {
+               (dVar4 = gen_bits2d((unsigned long long)(CONCAT44(uVar14,uVar13))),
+               (double)lVar10 != gen_bits2d((unsigned long long)(CONCAT44(uVar14,uVar13))))) {
               (*(undefined4 *)((char *)&auVar3 + 4)) = uVar14;
               (*(undefined4 *)((char *)&auVar3 + 0)) = uVar13;
               (*(undefined4 *)((char *)&auVar3 + 8)) = uVar13;
@@ -12616,7 +12616,7 @@ undefined4 FUN_1416a71d0(undefined8 param_1, undefined4 param_2)
               uVar5 = movmskpd(0, auVar3);
               dVar4 = (double)(longlong)(lVar10 - (ulonglong)(uVar5 & 1));
             }
-            if ((double)CONCAT44(uVar14,uVar13) == dVar4) {
+            if (gen_bits2d((unsigned long long)(CONCAT44(uVar14,uVar13))) == dVar4) {
               (*(char * *)(gen_frame + 0x198)) = (char *)(longlong)(*(double *)(gen_frame + 0x0));
               lVar10 = CALLF(longlong, FUN_14147dfa0)(((undefined1 *)(gen_frame + 0x98)),(ulonglong)((byte *)(gen_frame + 0x190))[0]);
               if (pcVar6 == (char *)0x0) {

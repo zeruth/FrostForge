@@ -6307,7 +6307,7 @@ LAB_14226cf7d:
             uVar18 = uVar18 ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4));
             puVar8 = ((undefined1 *)(gen_frame + 0x50)) + 1;
           }
-          CALLF(undefined8, FUN_141493530)((double)CONCAT44(uVar18,uVar17),puVar8,((undefined4 *)(gen_frame + 0xd0)),&(*(ulonglong *)(gen_frame + 0xc0)));
+          CALLF(undefined8, FUN_141493530)(gen_bits2d((unsigned long long)(CONCAT44(uVar18,uVar17))),puVar8,((undefined4 *)(gen_frame + 0xd0)),&(*(ulonglong *)(gen_frame + 0xc0)));
           puVar8 = (undefined1 *)
                    CALLF(longlong, FUN_141499da0)(puVar8,((undefined4 *)(gen_frame + 0xd0))[0],(undefined4)(*(ulonglong *)(gen_frame + 0xc0)),(int)lVar12);
         }

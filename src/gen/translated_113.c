@@ -20494,15 +20494,15 @@ undefined8 FUN_141825ad0(longlong param_1)
             (*(undefined8 *)(gen_frame + 0x38)) = 0xa3;
             (*(float *)(gen_frame + 0x10)) = (float)(uint)(uVar36 == 1);
             (*(undefined8 *)(gen_frame + 0x20)) = *(undefined8 *)(param_1 + 0x90);
-            (*(undefined4 *)(gen_frame + 0x44)) = (float)CONCAT22(*(undefined2 *)(param_1 + 0x98),(undefined2)(*(undefined4 *)(gen_frame + 0x44)));
+            (*(undefined4 *)(gen_frame + 0x44)) = gen_bits2f((unsigned int)(CONCAT22(*(undefined2 *)(param_1 + 0x98),(undefined2)(*(undefined4 *)(gen_frame + 0x44)))));
             (*(float *)(gen_frame + 0x18)) = *(float *)(param_1 + 0x9c);
             GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x14)), 0, 3, CONCAT12(3,uVar33));
             (*(float *)(gen_frame + 0x40)) = 3.57331e-43;
-            (*(undefined4 *)(gen_frame + 0x44)) = (float)CONCAT31(GEN_PIECE(&(*(undefined4 *)(gen_frame + 0x44)), 1, 3),0xc);
+            (*(undefined4 *)(gen_frame + 0x44)) = gen_bits2f((unsigned int)(CONCAT31(GEN_PIECE(&(*(undefined4 *)(gen_frame + 0x44)), 1, 3),0xc)));
             pfVar31 = (float *)CALLF(undefined4 *, FUN_1412af6f0)((void *)&(*(gen_v16 *)(gen_frame + 0xe0)), 5);
             (*(float *)(gen_frame + 0x28)) = *pfVar31;
-            (*(float *)(gen_frame + 0x2c)) = (float)CONCAT31(GEN_PIECE(&(*(float *)(gen_frame + 0x2c)), 1, 3),*(undefined1 *)(pfVar31 + 1));
-            (*(undefined4 *)(gen_frame + 0x14)) = (float)CONCAT13(REFG(undefined1, 0x142cfbfb4),(undefined3)(*(undefined4 *)(gen_frame + 0x14)));
+            (*(float *)(gen_frame + 0x2c)) = gen_bits2f((unsigned int)(CONCAT31(GEN_PIECE(&(*(float *)(gen_frame + 0x2c)), 1, 3),*(undefined1 *)(pfVar31 + 1))));
+            (*(undefined4 *)(gen_frame + 0x14)) = gen_bits2f((unsigned int)(CONCAT13(REFG(undefined1, 0x142cfbfb4),(undefined3)(*(undefined4 *)(gen_frame + 0x14)))));
             lVar26 = CALLF(undefined8, FUN_14228b580)(&(*(float *)(gen_frame + 0x10)),"TextEffectManager");
             *(longlong *)(param_1 + (ulonglong)uVar33 * 8) = lVar26;
           }

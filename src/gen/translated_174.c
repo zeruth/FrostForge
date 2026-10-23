@@ -24591,7 +24591,7 @@ LAB_1421e078f:
         if (iVar1 != 0) {
           iVar1 = CALLF(undefined4, FUN_1421b4db0)();
           if (iVar1 < 5) {
-            dVar7 = (double)CONCAT44(uVar5,param_2);
+            dVar7 = gen_bits2d((unsigned long long)(CONCAT44(uVar5,param_2)));
             pcVar3 = "FlowControl: Invalid type %d";
             uVar5 = 0x30;
             goto LAB_1421e0847;

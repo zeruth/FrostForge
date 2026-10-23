@@ -13299,7 +13299,7 @@ LAB_1420bc9a0:
               return 0;
             }
             *(float *)(param_1 + 0xc + lVar11 * 4) =
-                 (float)CONCAT31(CONCAT21(CONCAT11(param_2[1],param_2[2]),param_2[3]),param_2[4]) *
+                 gen_bits2f((unsigned int)(CONCAT31(CONCAT21(CONCAT11(param_2[1],param_2[2]),param_2[3]),param_2[4]))) *
                  fVar5;
             *(undefined1 *)(lVar11 + 0x810 + param_1) = 1;
           }

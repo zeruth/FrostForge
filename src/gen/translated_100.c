@@ -22666,7 +22666,7 @@ LAB_14161f608:
     if (iVar5 != 0) {
       return 0x3c;
     }
-    *param_4 = (int)(double)CONCAT44((*(undefined4 *)(gen_frame + 0x1e4)),(*(uint *)(gen_frame + 0x1e0)));
+    *param_4 = (int)gen_bits2d((unsigned long long)(CONCAT44((*(undefined4 *)(gen_frame + 0x1e4)),(*(uint *)(gen_frame + 0x1e0)))));
     iVar5 = CALLF(undefined4, FUN_14163cc60)();
     piVar1 = (int *)(param_1 + 0x254);
     piVar2 = (int *)(param_1 + 0x250);

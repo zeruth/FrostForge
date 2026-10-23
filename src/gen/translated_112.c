@@ -10413,9 +10413,9 @@ undefined8 FUN_1417ec260(longlong param_1, longlong *param_2, undefined8 param_3
       }
       (*(undefined4 *)(gen_frame + 0x210)) = gen_bits2f((unsigned int)(((int)ROUND(fVar15 * GEN_F32BITS(REFG(float, 0x14261b484))) & 0xffU) << 8));
       GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x210)), 0, 3, CONCAT12((char)(int)ROUND(fVar14 * REFG(float, 0x14261b484)),(undefined2)(*(undefined4 *)(gen_frame + 0x210))));
-      (*(undefined4 *)(gen_frame + 0x210)) = (float)CONCAT13((char)(int)ROUND(REFG(float, 0x14261b484)),
+      (*(undefined4 *)(gen_frame + 0x210)) = gen_bits2f((unsigned int)(CONCAT13((char)(int)ROUND(REFG(float, 0x14261b484)),
                                    (int3)CONCAT31((uint3)(*(undefined4 *)(gen_frame + 0x210)) >> 8,
-                                                  (char)(int)ROUND(fVar13 * REFG(float, 0x14261b484))));
+                                                  (char)(int)ROUND(fVar13 * REFG(float, 0x14261b484))))));
       uVar5 = CALLF(int *, FUN_142290c90)(param_2,0,0x10,0x41);
       lVar6 = (**(code **)(*param_2 + 0x180))(param_2,uVar5);
       fVar13 = (*(undefined4 *)(gen_frame + 0x210));

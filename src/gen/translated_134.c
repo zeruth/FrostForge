@@ -8030,7 +8030,7 @@ LAB_141b6a9f0:
             uVar12 = 0;
             uVar17 = 0;
           }
-          (*(float *)(gen_frame + 0x0)) = fVar14 + (float)(double)CONCAT44(uVar17,uVar12);
+          (*(float *)(gen_frame + 0x0)) = fVar14 + (float)gen_bits2d((unsigned long long)(CONCAT44(uVar17,uVar12)));
           if (!bVar5) {
             bVar5 = true;
           }
@@ -8046,7 +8046,7 @@ LAB_141b6a9f0:
             uVar12 = 0;
             uVar17 = 0;
           }
-          fVar13 = fVar13 + (float)(double)CONCAT44(uVar17,uVar12);
+          fVar13 = fVar13 + (float)gen_bits2d((unsigned long long)(CONCAT44(uVar17,uVar12)));
           if (!bVar4) {
             bVar4 = true;
           }

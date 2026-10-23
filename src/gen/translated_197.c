@@ -11555,7 +11555,7 @@ double FUN_142540710(longlong param_1, undefined8 param_2, undefined1 param_3, u
   fVar1 = CALLF(float, FUN_141207d10)(param_1,param_2,param_4,param_5);
   CALLF(undefined8, FUN_1425470d0)(param_1,param_4,fVar1,&(*(undefined8 *)(gen_frame + 0x0)));
   CALLF(bool, FUN_141764e20)(param_1,param_2,param_3,0,(unsigned long long)(0));
-  return (double)CONCAT44(gen_extraout_XMM0_Db,fVar1);
+  return gen_bits2d((unsigned long long)(CONCAT44(gen_extraout_XMM0_Db,fVar1)));
 }
 
 /* ref: FUN_1425407b0 */

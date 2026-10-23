@@ -18732,7 +18732,7 @@ float FUN_1413eac40(longlong param_1, float *param_2)
       (*(undefined2 *)((char *)&(*(undefined4 *)(gen_frame + 0x280)) + 0)) =
            CONCAT11(*(undefined1 *)((longlong)puVar8 + 1),*(undefined1 *)((longlong)puVar8 + 2));
       GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x280)), 0, 3, CONCAT12(*(undefined1 *)puVar8,(undefined2)(*(undefined4 *)(gen_frame + 0x280))));
-      (*(undefined4 *)(gen_frame + 0x280)) = (float)CONCAT13(*(undefined1 *)((longlong)puVar8 + 3),(undefined3)(*(undefined4 *)(gen_frame + 0x280)));
+      (*(undefined4 *)(gen_frame + 0x280)) = gen_bits2f((unsigned int)(CONCAT13(*(undefined1 *)((longlong)puVar8 + 3),(undefined3)(*(undefined4 *)(gen_frame + 0x280)))));
       pfVar6[-0xb] = (*(undefined4 *)(gen_frame + 0x280));
       if (cVar5 != '\0') {
         fVar22 = *(float *)(lVar14 + -8 + (longlong)pfVar11);
@@ -18750,7 +18750,7 @@ float FUN_1413eac40(longlong param_1, float *param_2)
       pfVar6[-3] = (float)(int)pcVar12[5] * fVar3;
       (*(undefined2 *)((char *)&(*(undefined4 *)(gen_frame + 0x280)) + 0)) = CONCAT11(puVar7[1],puVar7[2]);
       GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x280)), 0, 3, CONCAT12(*puVar7,(undefined2)(*(undefined4 *)(gen_frame + 0x280))));
-      (*(undefined4 *)(gen_frame + 0x280)) = (float)CONCAT13(puVar7[3],(undefined3)(*(undefined4 *)(gen_frame + 0x280)));
+      (*(undefined4 *)(gen_frame + 0x280)) = gen_bits2f((unsigned int)(CONCAT13(puVar7[3],(undefined3)(*(undefined4 *)(gen_frame + 0x280)))));
       pfVar6[-2] = (*(undefined4 *)(gen_frame + 0x280));
       if (cVar5 != '\0') {
         fVar22 = *(float *)(lVar14 + -4 + (longlong)pfVar11);
@@ -18768,7 +18768,7 @@ float FUN_1413eac40(longlong param_1, float *param_2)
       pfVar6[6] = (float)(int)pcVar12[8] * fVar3;
       (*(undefined2 *)((char *)&(*(undefined4 *)(gen_frame + 0x280)) + 0)) = CONCAT11(puVar7[1],puVar7[2]);
       GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x280)), 0, 3, CONCAT12(*puVar7,(undefined2)(*(undefined4 *)(gen_frame + 0x280))));
-      (*(undefined4 *)(gen_frame + 0x280)) = (float)CONCAT13(puVar7[3],(undefined3)(*(undefined4 *)(gen_frame + 0x280)));
+      (*(undefined4 *)(gen_frame + 0x280)) = gen_bits2f((unsigned int)(CONCAT13(puVar7[3],(undefined3)(*(undefined4 *)(gen_frame + 0x280)))));
       pfVar6[7] = (*(undefined4 *)(gen_frame + 0x280));
       if (cVar5 != '\0') {
         fVar22 = *(float *)(lVar14 + (longlong)pfVar11);
@@ -18800,7 +18800,7 @@ float FUN_1413eac40(longlong param_1, float *param_2)
            CONCAT11(*(undefined1 *)((longlong)puVar8 + 1),*(undefined1 *)((longlong)puVar8 + 2));
       GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x270)), 0, 3, CONCAT12(*(undefined1 *)puVar8,(undefined2)(*(undefined4 *)(gen_frame + 0x270))));
       puVar7 = (undefined1 *)((longlong)puVar8 + uVar15);
-      (*(undefined4 *)(gen_frame + 0x270)) = (float)CONCAT13(*(undefined1 *)((longlong)puVar8 + 3),(undefined3)(*(undefined4 *)(gen_frame + 0x270)));
+      (*(undefined4 *)(gen_frame + 0x270)) = gen_bits2f((unsigned int)(CONCAT13(*(undefined1 *)((longlong)puVar8 + 3),(undefined3)(*(undefined4 *)(gen_frame + 0x270)))));
       pfVar10[0x21] = (*(undefined4 *)(gen_frame + 0x270));
       pfVar10[0x22] = fVar23;
       pfVar10[0x23] = 0.0;
@@ -18814,7 +18814,7 @@ float FUN_1413eac40(longlong param_1, float *param_2)
       (*(undefined2 *)((char *)&(*(undefined4 *)(gen_frame + 0x270)) + 0)) = CONCAT11(puVar7[1],puVar7[2]);
       GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x270)), 0, 3, CONCAT12(*puVar7,(undefined2)(*(undefined4 *)(gen_frame + 0x270))));
       puVar9 = puVar7 + uVar15;
-      (*(undefined4 *)(gen_frame + 0x270)) = (float)CONCAT13(puVar7[3],(undefined3)(*(undefined4 *)(gen_frame + 0x270)));
+      (*(undefined4 *)(gen_frame + 0x270)) = gen_bits2f((unsigned int)(CONCAT13(puVar7[3],(undefined3)(*(undefined4 *)(gen_frame + 0x270)))));
       pfVar10[0x2a] = (*(undefined4 *)(gen_frame + 0x270));
       pfVar10[0x2b] = fVar23;
       pfVar10[0x2c] = 0.0;
@@ -18828,7 +18828,7 @@ float FUN_1413eac40(longlong param_1, float *param_2)
       (*(undefined2 *)((char *)&(*(undefined4 *)(gen_frame + 0x270)) + 0)) = CONCAT11(puVar9[1],puVar9[2]);
       GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x270)), 0, 3, CONCAT12(*puVar9,(undefined2)(*(undefined4 *)(gen_frame + 0x270))));
       puVar7 = puVar9 + uVar15;
-      (*(undefined4 *)(gen_frame + 0x270)) = (float)CONCAT13(puVar9[3],(undefined3)(*(undefined4 *)(gen_frame + 0x270)));
+      (*(undefined4 *)(gen_frame + 0x270)) = gen_bits2f((unsigned int)(CONCAT13(puVar9[3],(undefined3)(*(undefined4 *)(gen_frame + 0x270)))));
       pfVar10[0x33] = (*(undefined4 *)(gen_frame + 0x270));
       pfVar10[0x34] = fVar23;
       pfVar10[0x35] = 0.0;
@@ -18842,7 +18842,7 @@ float FUN_1413eac40(longlong param_1, float *param_2)
       (*(undefined2 *)((char *)&(*(undefined4 *)(gen_frame + 0x270)) + 0)) = CONCAT11(puVar7[1],puVar7[2]);
       GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x270)), 0, 3, CONCAT12(*puVar7,(undefined2)(*(undefined4 *)(gen_frame + 0x270))));
       puVar9 = puVar7 + uVar15;
-      (*(undefined4 *)(gen_frame + 0x270)) = (float)CONCAT13(puVar7[3],(undefined3)(*(undefined4 *)(gen_frame + 0x270)));
+      (*(undefined4 *)(gen_frame + 0x270)) = gen_bits2f((unsigned int)(CONCAT13(puVar7[3],(undefined3)(*(undefined4 *)(gen_frame + 0x270)))));
       pfVar10[0x3c] = (*(undefined4 *)(gen_frame + 0x270));
       pfVar10[0x3d] = fVar23;
       pfVar10[0x3e] = 0.0;
@@ -18856,7 +18856,7 @@ float FUN_1413eac40(longlong param_1, float *param_2)
       (*(undefined2 *)((char *)&(*(undefined4 *)(gen_frame + 0x270)) + 0)) = CONCAT11(puVar9[1],puVar9[2]);
       GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x270)), 0, 3, CONCAT12(*puVar9,(undefined2)(*(undefined4 *)(gen_frame + 0x270))));
       puVar7 = puVar9 + uVar15;
-      (*(undefined4 *)(gen_frame + 0x270)) = (float)CONCAT13(puVar9[3],(undefined3)(*(undefined4 *)(gen_frame + 0x270)));
+      (*(undefined4 *)(gen_frame + 0x270)) = gen_bits2f((unsigned int)(CONCAT13(puVar9[3],(undefined3)(*(undefined4 *)(gen_frame + 0x270)))));
       pfVar10[0x45] = (*(undefined4 *)(gen_frame + 0x270));
       pfVar10[0x46] = fVar23;
       pfVar10[0x47] = 0.0;
@@ -18870,7 +18870,7 @@ float FUN_1413eac40(longlong param_1, float *param_2)
       (*(undefined2 *)((char *)&(*(undefined4 *)(gen_frame + 0x270)) + 0)) = CONCAT11(puVar7[1],puVar7[2]);
       GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x270)), 0, 3, CONCAT12(*puVar7,(undefined2)(*(undefined4 *)(gen_frame + 0x270))));
       puVar9 = puVar7 + uVar15;
-      (*(undefined4 *)(gen_frame + 0x270)) = (float)CONCAT13(puVar7[3],(undefined3)(*(undefined4 *)(gen_frame + 0x270)));
+      (*(undefined4 *)(gen_frame + 0x270)) = gen_bits2f((unsigned int)(CONCAT13(puVar7[3],(undefined3)(*(undefined4 *)(gen_frame + 0x270)))));
       pfVar10[0x4e] = (*(undefined4 *)(gen_frame + 0x270));
       pfVar10[0x4f] = fVar23;
       pfVar10[0x50] = 0.0;
@@ -18883,7 +18883,7 @@ float FUN_1413eac40(longlong param_1, float *param_2)
       pfVar10[0x56] = (float)(int)pcVar12[0x1d] * fVar3;
       (*(undefined2 *)((char *)&(*(undefined4 *)(gen_frame + 0x270)) + 0)) = CONCAT11(puVar9[1],puVar9[2]);
       GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x270)), 0, 3, CONCAT12(*puVar9,(undefined2)(*(undefined4 *)(gen_frame + 0x270))));
-      (*(undefined4 *)(gen_frame + 0x270)) = (float)CONCAT13(puVar9[3],(undefined3)(*(undefined4 *)(gen_frame + 0x270)));
+      (*(undefined4 *)(gen_frame + 0x270)) = gen_bits2f((unsigned int)(CONCAT13(puVar9[3],(undefined3)(*(undefined4 *)(gen_frame + 0x270)))));
       pfVar10[0x57] = (*(undefined4 *)(gen_frame + 0x270));
       puVar9 = puVar9 + uVar15;
       pfVar10[0x58] = fVar23;
@@ -18901,7 +18901,7 @@ float FUN_1413eac40(longlong param_1, float *param_2)
       (*(undefined2 *)((char *)&(*(undefined4 *)(gen_frame + 0x270)) + 0)) = CONCAT11(puVar9[1],puVar9[2]);
       GEN_PIECE_SET(&(*(undefined4 *)(gen_frame + 0x270)), 0, 3, CONCAT12(*puVar9,(undefined2)(*(undefined4 *)(gen_frame + 0x270))));
       puVar8 = (undefined4 *)(puVar9 + uVar15);
-      (*(undefined4 *)(gen_frame + 0x270)) = (float)CONCAT13(puVar9[3],(undefined3)(*(undefined4 *)(gen_frame + 0x270)));
+      (*(undefined4 *)(gen_frame + 0x270)) = gen_bits2f((unsigned int)(CONCAT13(puVar9[3],(undefined3)(*(undefined4 *)(gen_frame + 0x270)))));
       pfVar10[0x60] = (*(undefined4 *)(gen_frame + 0x270));
       pfVar10[0x61] = fVar23;
       pfVar10[0x62] = 0.0;

@@ -6516,7 +6516,7 @@ undefined8 FUN_142457380(longlong param_1, longlong *param_2, undefined8 param_3
   uVar5 = *(ushort *)(param_1 + 100);
   uVar26 = (ulonglong)uVar5;
   uVar4 = ((undefined1 *)GEN_OPAQUE(&REFG(undefined1, 0x14261a1a0)))[-(uint)(puVar15 != (undefined4 *)0x0) & 2];
-  (*(float *)&gen_slot_param_12) = (float)CONCAT31(GEN_PIECE(&(*(float *)&gen_slot_param_12), 1, 3),uVar4);
+  (*(float *)&gen_slot_param_12) = gen_bits2f((unsigned int)(CONCAT31(GEN_PIECE(&(*(float *)&gen_slot_param_12), 1, 3),uVar4)));
   uVar16 = CALLF(undefined4, FUN_14228c910)(uVar4);
   param_9 = (undefined4 *)CALLF(int *, FUN_142290c90)(param_2,0,uVar16,(uint)uVar5);
   lVar22 = (**(code **)(*param_2 + 0x180))(param_2,param_9);

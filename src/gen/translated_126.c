@@ -1518,8 +1518,8 @@ undefined1 FUN_1419fba80(undefined4 param_1, undefined4 param_2, double param_3_
   float param_3 = (float)param_3_promoted;
   undefined1 uVar1 = {0};
   
-  CALLF(double *, FUN_141bfdba0)(&REFG(undefined8, 0x1431f6720),param_1,param_2,(double)CONCAT44(0,param_3));
-  uVar1 = CALLF(undefined1, FUN_1419fc990)(param_1,(double)CONCAT44(0,param_3));
+  CALLF(double *, FUN_141bfdba0)(&REFG(undefined8, 0x1431f6720),param_1,param_2,gen_bits2d((unsigned long long)(CONCAT44(0,param_3))));
+  uVar1 = CALLF(undefined1, FUN_1419fc990)(param_1,gen_bits2d((unsigned long long)(CONCAT44(0,param_3))));
   return uVar1;
 }
 
@@ -1806,8 +1806,8 @@ undefined4 FUN_1419fc000(double param_1_promoted, double param_2_promoted, doubl
   }
   REFG(float, 0x1431f6790) = REFG(float, 0x142d2d708);
   REFG(float, 0x142d2d708) = param_1;
-  uVar2 = CALLF(undefined4, FUN_141db5de0)(&REFG(undefined1, 0x1431f6780),(double)CONCAT44(0,param_2),
-                        (double)CONCAT44(0,param_3));
+  uVar2 = CALLF(undefined4, FUN_141db5de0)(&REFG(undefined1, 0x1431f6780),gen_bits2d((unsigned long long)(CONCAT44(0,param_2))),
+                        gen_bits2d((unsigned long long)(CONCAT44(0,param_3))));
   return uVar2;
 }
 

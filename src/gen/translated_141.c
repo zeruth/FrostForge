@@ -21993,7 +21993,7 @@ uint FUN_141c9f8f0(longlong *param_1, ulonglong param_2)
   }
   else {
     uVar3 = CALLF(byte, FUN_14176e020)(param_2);
-    ((float *)(gen_frame + 0x3d0))[0] = (float)CONCAT31(GEN_PIECE(&((float *)(gen_frame + 0x3d0))[0], 1, 3),uVar3);
+    ((float *)(gen_frame + 0x3d0))[0] = gen_bits2f((unsigned int)(CONCAT31(GEN_PIECE(&((float *)(gen_frame + 0x3d0))[0], 1, 3),uVar3)));
   }
   uVar8 = CALLF(ulonglong, FUN_14065f960)();
   (*(uint *)(gen_frame + 0x34)) = (uint)uVar8;

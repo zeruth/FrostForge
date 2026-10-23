@@ -24035,7 +24035,7 @@ undefined4 FUN_142229820(longlong param_1, longlong param_2, longlong param_3, d
     uVar1 = CALLF(undefined4, FUN_142224e60)(param_1,param_2,param_3,&(*(undefined8 *)(gen_frame + 0x18)));
   }
   else {
-    uVar2 = CALLF(undefined8, FUN_142239760)(*(int *)(param_1 + 0x34) + param_2,*(undefined4 *)(param_3 + 0x28),*(undefined1 *)(param_3 + 0x2c),(double)CONCAT44(0,(*(float *)&gen_slot_param_4)),(unsigned long long)(param_3));
+    uVar2 = CALLF(undefined8, FUN_142239760)(*(int *)(param_1 + 0x34) + param_2,*(undefined4 *)(param_3 + 0x28),*(undefined1 *)(param_3 + 0x2c),gen_bits2d((unsigned long long)(CONCAT44(0,(*(float *)&gen_slot_param_4)))),(unsigned long long)(param_3));
     uVar1 = (undefined4)uVar2;
   }
   return uVar1;
@@ -28753,7 +28753,7 @@ LAB_142231194:
     if (pbVar4 < *(byte **)(param_4 + 0x10)) {
       bVar3 = *pbVar4;
       if (0x7f < bVar3) goto LAB_142230b03;
-      (*(double *)(gen_frame + 0x78)) = (double)CONCAT44((*(undefined4 *)((char *)&(*(double *)(gen_frame + 0x78)) + 4)),(uint)bVar3);
+      (*(double *)(gen_frame + 0x78)) = gen_bits2d((unsigned long long)(CONCAT44((*(undefined4 *)((char *)&(*(double *)(gen_frame + 0x78)) + 4)),(uint)bVar3)));
       *(byte **)(param_4 + 8) = pbVar4 + 1;
       uVar12 = (uint)bVar3;
     }
@@ -28849,7 +28849,7 @@ LAB_142230b03:
         do {
           pbVar4 = *(byte **)(param_4 + 8);
           if ((pbVar4 < *(byte **)(param_4 + 0x10)) && (bVar3 = *pbVar4, bVar3 < 0x80)) {
-            (*(undefined8 *)(gen_frame + 0x80)) = (double)CONCAT44((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x80)) + 4)),(uint)bVar3);
+            (*(undefined8 *)(gen_frame + 0x80)) = gen_bits2d((unsigned long long)(CONCAT44((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x80)) + 4)),(uint)bVar3)));
             *(byte **)(param_4 + 8) = pbVar4 + 1;
             uVar12 = (uint)bVar3;
           }
@@ -28930,7 +28930,7 @@ LAB_142230b03:
         do {
           pbVar4 = (byte *)*puVar1;
           if ((pbVar4 < (byte *)*puVar2) && (bVar3 = *pbVar4, bVar3 < 0x80)) {
-            (*(undefined8 *)(gen_frame + 0x80)) = (double)CONCAT44((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x80)) + 4)),(uint)bVar3);
+            (*(undefined8 *)(gen_frame + 0x80)) = gen_bits2d((unsigned long long)(CONCAT44((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x80)) + 4)),(uint)bVar3)));
             *puVar1 = pbVar4 + 1;
             uVar12 = (uint)bVar3;
           }
@@ -28954,7 +28954,7 @@ LAB_142230b03:
         pbVar4 = (byte *)*puVar1;
         if ((pbVar4 < (byte *)*puVar2) && (bVar3 = *pbVar4, bVar3 < 0x80)) {
           (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x80)) + 4)) = (undefined4)(GEN_BITS((*(undefined8 *)(gen_frame + 0x80)) )>> 0x20);
-          (*(undefined8 *)(gen_frame + 0x80)) = (double)CONCAT44((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x80)) + 4)),(uint)bVar3);
+          (*(undefined8 *)(gen_frame + 0x80)) = gen_bits2d((unsigned long long)(CONCAT44((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x80)) + 4)),(uint)bVar3)));
           *puVar1 = pbVar4 + 1;
           uVar12 = (uint)bVar3;
         }
@@ -29010,7 +29010,7 @@ LAB_142230b03:
           if (pbVar4 < (byte *)*puVar2) {
             bVar3 = *pbVar4;
             if (0x7f < bVar3) goto LAB_142230c7c;
-            (*(undefined8 *)(gen_frame + 0x80)) = (double)CONCAT44((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x80)) + 4)),(uint)bVar3);
+            (*(undefined8 *)(gen_frame + 0x80)) = gen_bits2d((unsigned long long)(CONCAT44((*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x80)) + 4)),(uint)bVar3)));
             *puVar1 = pbVar4 + 1;
             uVar12 = (uint)bVar3;
           }
@@ -29212,7 +29212,7 @@ LAB_1422311ae:
   case 0xd:
     pbVar4 = *(byte **)(param_4 + 8);
     if ((pbVar4 < *(byte **)(param_4 + 0x10)) && (bVar3 = *pbVar4, bVar3 < 0x80)) {
-      (*(double *)(gen_frame + 0x78)) = (double)CONCAT44((*(undefined4 *)((char *)&(*(double *)(gen_frame + 0x78)) + 4)),(uint)bVar3);
+      (*(double *)(gen_frame + 0x78)) = gen_bits2d((unsigned long long)(CONCAT44((*(undefined4 *)((char *)&(*(double *)(gen_frame + 0x78)) + 4)),(uint)bVar3)));
       *(byte **)(param_4 + 8) = pbVar4 + 1;
       uVar12 = (uint)bVar3;
       goto LAB_1422306d3;

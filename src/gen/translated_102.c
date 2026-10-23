@@ -4458,7 +4458,7 @@ LAB_14166a6d2:
       pfVar26 = &(*(float *)(gen_frame + 0x18));
       (*(float *)(gen_frame + 0x18)) = 0.0;
       (*(float *)(gen_frame + 0x1c)) = 0.0;
-      (*(float *)(gen_frame + 0x20)) = (float)CONCAT31(GEN_PIECE(&(*(float *)(gen_frame + 0x20)), 1, 3),1);
+      (*(float *)(gen_frame + 0x20)) = gen_bits2f((unsigned int)(CONCAT31(GEN_PIECE(&(*(float *)(gen_frame + 0x20)), 1, 3),1)));
       CALLF(undefined8, FUN_14068b6a0)(param_2,REFG(undefined8, 0x14311bd80),param_3,param_4,pfVar26);
       uVar7 = (undefined4)(GEN_BITS(pfVar26) >> 0x20);
       (*(float *)(gen_frame + 0x10)) = (*(float *)(gen_frame + 0x0));

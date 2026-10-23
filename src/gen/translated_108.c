@@ -1348,7 +1348,7 @@ double FUN_141755b80(longlong param_1)
   plVar1 = *(longlong **)(param_1 + 0x140);
   if (plVar1 != (longlong *)0x0) {
     (**(code **)(*plVar1 + 0xd0))(plVar1);
-    return (double)CONCAT44(0,gen_xmm0.u32[0]);
+    return gen_bits2d((unsigned long long)(CONCAT44(0,gen_xmm0.u32[0])));
   }
   return 0.0;
 }

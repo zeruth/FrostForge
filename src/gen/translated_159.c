@@ -14395,8 +14395,8 @@ LAB_141f49636:
     }
   }
   if (bVar25) {
-    dVar27 = (double)CONCAT44((uint)(GEN_BITS(dVar27) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
-                              SUB84(dVar27,0) ^ (uint)REFG(float, 0x142620890));
+    dVar27 = gen_bits2d((unsigned long long)(CONCAT44((uint)(GEN_BITS(dVar27) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
+                              SUB84(dVar27,0) ^ (uint)REFG(float, 0x142620890))));
   }
   cVar9 = CALLF(undefined1, FUN_141f4dde0)(param_3,dVar27);
   if (cVar9 == '\0') {

@@ -11893,7 +11893,7 @@ LAB_14156d330:
             else {
               pcVar18 = (char *)((longlong)piVar12 + (longlong)*piVar12);
             }
-            dVar22 = (double)CONCAT44(uVar7,iVar5);
+            dVar22 = gen_bits2d((unsigned long long)(CONCAT44(uVar7,iVar5)));
             uVar6 = CALLF(undefined4, FUN_1402534b0)(puVar16,((char *)(gen_frame + 0x1284)) + -(longlong)puVar16,"\t%s(%d)\n",pcVar18,dVar22
                                  );
             puVar16 = puVar16 + uVar6;

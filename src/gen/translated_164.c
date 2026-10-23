@@ -1532,11 +1532,11 @@ LAB_14202f43c:
         CALLF(ulonglong, FUN_1420315f0)(((char *)(gen_frame + 0x0)),"SDL_MOUSEMOTION",0x20);
         pcVar2 = " (timestamp=%u windowid=%u which=%u state=%u x=%d y=%d xrel=%d yrel=%d)";
         pcVar5 = (char *)CONCAT44(uVar23,param_1[8]);
-        dVar8 = (double)CONCAT44(uVar22,param_1[7]);
-        dVar9 = (double)CONCAT44(uVar21,param_1[6]);
+        dVar8 = gen_bits2d((unsigned long long)(CONCAT44(uVar22,param_1[7])));
+        dVar9 = gen_bits2d((unsigned long long)(CONCAT44(uVar21,param_1[6])));
 LAB_14202ed32:
         pcVar6 = (char *)CONCAT44(uVar20,param_1[5]);
-        dVar10 = (double)CONCAT44(uVar18,param_1[4]);
+        dVar10 = gen_bits2d((unsigned long long)(CONCAT44(uVar18,param_1[4])));
       }
       else if (uVar7 == 0x401) {
         CALLF(ulonglong, FUN_1420315f0)(((char *)(gen_frame + 0x0)),"SDL_MOUSEBUTTONDOWN",0x20);
@@ -1545,7 +1545,7 @@ LAB_14202ed32:
           pcVar6 = "pressed";
         }
         pcVar5 = (char *)CONCAT44(uVar23,param_1[6]);
-        dVar8 = (double)CONCAT44(uVar22,param_1[5]);
+        dVar8 = gen_bits2d((unsigned long long)(CONCAT44(uVar22,param_1[5])));
         dVar9 = gen_bits2d((unsigned long long)(CONCAT44(uVar21,(uint)*(byte *)((longlong)param_1 + 0x12))));
         pcVar2 = " (timestamp=%u windowid=%u which=%u button=%u state=%s clicks=%u x=%d y=%d)";
         dVar10 = gen_bits2d((unsigned long long)(CONCAT44(uVar18,(uint)(byte)param_1[4])));
@@ -1570,12 +1570,12 @@ LAB_14202ed32:
           pcVar6 = "pressed";
         }
         pcVar5 = (char *)CONCAT44(uVar23,param_1[6]);
-        dVar8 = (double)CONCAT44(uVar22,param_1[5]);
+        dVar8 = gen_bits2d((unsigned long long)(CONCAT44(uVar22,param_1[5])));
         dVar9 = gen_bits2d((unsigned long long)(CONCAT44(uVar21,(uint)*(byte *)((longlong)param_1 + 0x12))));
         pcVar2 = " (timestamp=%u windowid=%u which=%u button=%u state=%s clicks=%u x=%d y=%d)";
         dVar10 = gen_bits2d((unsigned long long)(CONCAT44(uVar18,(uint)(byte)param_1[4])));
       }
-      dVar11 = (double)CONCAT44(uVar16,*(float *)pcVar3);
+      dVar11 = gen_bits2d((unsigned long long)(CONCAT44(uVar16,*(float *)pcVar3)));
       goto LAB_14202ed46;
     }
     if (uVar7 == 0x304) {
@@ -1610,14 +1610,14 @@ LAB_14202ed32:
     pcVar2 = "false";
     dVar8 = gen_bits2d((unsigned long long)(CONCAT44(uVar22,(uint)(ushort)param_1[6])));
     pcVar5 = "released";
-    dVar9 = (double)CONCAT44(uVar21,param_1[5]);
+    dVar9 = gen_bits2d((unsigned long long)(CONCAT44(uVar21,param_1[5])));
     if (*(char *)((longlong)param_1 + 0xd) != '\0') {
       pcVar2 = "true";
     }
     if (*pcVar3 == '\x01') {
       pcVar5 = "pressed";
     }
-    dVar10 = (double)CONCAT44(uVar20,param_1[4]);
+    dVar10 = gen_bits2d((unsigned long long)(CONCAT44(uVar20,param_1[4])));
     pcVar6 = " (timestamp=%u windowid=%u state=%s repeat=%s scancode=%u keycode=%u mod=%u)";
     goto LAB_14202eb71;
   }
@@ -3035,8 +3035,8 @@ float FUN_142030ab0(double param_1_promoted)
 double FUN_142030b00(double param_1)
 {
   GEN_HIT(61);
-  return (double)CONCAT44((uint)(GEN_BITS(param_1) >> 0x20) & (*(uint *)((char *)&REFG(float, 0x14261f710) + 4)),
-                          SUB84(param_1,0) & (uint)REFG(float, 0x14261f710));
+  return gen_bits2d((unsigned long long)(CONCAT44((uint)(GEN_BITS(param_1) >> 0x20) & (*(uint *)((char *)&REFG(float, 0x14261f710) + 4)),
+                          SUB84(param_1,0) & (uint)REFG(float, 0x14261f710))));
 }
 
 /* ref: FUN_142030b10 */
@@ -3150,8 +3150,8 @@ undefined1 * FUN_142030cf0(undefined1 *param_1, undefined1 *param_2, longlong pa
     if (param_2 != (undefined1 *)0x0) {
       *param_1 = 0x2d;
     }
-    param_4 = (double)CONCAT44((uint)(GEN_BITS(param_4) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
-                               SUB84(param_4,0) ^ (uint)REFG(float, 0x142620890));
+    param_4 = gen_bits2d((unsigned long long)(CONCAT44((uint)(GEN_BITS(param_4) >> 0x20) ^ (*(uint *)((char *)&REFG(float, 0x142620890) + 4)),
+                               SUB84(param_4,0) ^ (uint)REFG(float, 0x142620890))));
   }
   puVar10 = (undefined1 *)0x1;
 LAB_142030d51:

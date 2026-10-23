@@ -14895,9 +14895,9 @@ undefined8 FUN_141912710(longlong param_1)
           uVar13 = (uint)((char)piVar8[1] != '\0');
           if (piVar8[-4] == 0) {
             piVar16 = piVar8 + -0x2c;
-            in_stack_fffffffffffffe60 = (double)CONCAT44(uVar19,piVar8[-0x2d]);
+            in_stack_fffffffffffffe60 = gen_bits2d((unsigned long long)(CONCAT44(uVar19,piVar8[-0x2d])));
 LAB_141912918:
-            in_stack_fffffffffffffe58 = (double)CONCAT44(uVar4,uVar13);
+            in_stack_fffffffffffffe58 = gen_bits2d((unsigned long long)(CONCAT44(uVar4,uVar13)));
             uVar4 = CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x30)),0x100,"%s %d %d %d\n",piVar16,(unsigned long long)(in_stack_fffffffffffffe58),(unsigned long long)(in_stack_fffffffffffffe60),(unsigned long long)(CONCAT44(0,(cVar2 != '\x04') + 2)));
           }
           else {
@@ -14906,20 +14906,20 @@ LAB_141912918:
               iVar3 = piVar8[-0x2d];
               if (lVar5 == 0) {
                 piVar16 = piVar8 + -0x2c;
-                in_stack_fffffffffffffe60 = (double)CONCAT44(uVar19,iVar3);
+                in_stack_fffffffffffffe60 = gen_bits2d((unsigned long long)(CONCAT44(uVar19,iVar3)));
               }
               else if (*(int *)(lVar5 + 4) == 0) {
                 piVar16 = (int *)&REFG(undefined1, 0x1426178ba);
-                in_stack_fffffffffffffe60 = (double)CONCAT44(uVar19,iVar3);
+                in_stack_fffffffffffffe60 = gen_bits2d((unsigned long long)(CONCAT44(uVar19,iVar3)));
               }
               else {
                 piVar16 = (int *)(lVar5 + 4 + (longlong)*(int *)(lVar5 + 4));
-                in_stack_fffffffffffffe60 = (double)CONCAT44(uVar19,iVar3);
+                in_stack_fffffffffffffe60 = gen_bits2d((unsigned long long)(CONCAT44(uVar19,iVar3)));
               }
               goto LAB_141912918;
             }
-            in_stack_fffffffffffffe60 = (double)CONCAT44(uVar19,piVar8[-0x2d]);
-            in_stack_fffffffffffffe58 = (double)CONCAT44(uVar4,uVar13);
+            in_stack_fffffffffffffe60 = gen_bits2d((unsigned long long)(CONCAT44(uVar19,piVar8[-0x2d])));
+            in_stack_fffffffffffffe58 = gen_bits2d((unsigned long long)(CONCAT44(uVar4,uVar13)));
             uVar4 = CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x30)),0x100,"%d %d %d %d\n",piVar8[-4],(unsigned long long)(in_stack_fffffffffffffe58),(unsigned long long)(in_stack_fffffffffffffe60),(unsigned long long)(CONCAT44(0,1)));
           }
           CALLF(bool, FUN_1402152a0)(param_1,((undefined1 *)(gen_frame + 0x30)),uVar4,((undefined4 *)(gen_frame + 0x1a0)));
@@ -14952,11 +14952,11 @@ LAB_141912918:
           uVar4 = 0x59;
         }
         in_stack_fffffffffffffe60 =
-             (double)CONCAT44((int)(GEN_BITS(in_stack_fffffffffffffe60) >> 0x20),
-                              (uint)(byte)pcVar9[-7]);
+             gen_bits2d((unsigned long long)(CONCAT44((int)(GEN_BITS(in_stack_fffffffffffffe60) >> 0x20),
+                              (uint)(byte)pcVar9[-7])));
         in_stack_fffffffffffffe58 =
-             (double)CONCAT44((int)(GEN_BITS(in_stack_fffffffffffffe58) >> 0x20),
-                              (uint)(byte)pcVar9[-8]);
+             gen_bits2d((unsigned long long)(CONCAT44((int)(GEN_BITS(in_stack_fffffffffffffe58) >> 0x20),
+                              (uint)(byte)pcVar9[-8])));
         uVar4 = CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x30)),0x100,"%s %d %d %d %c\n",&REFG(undefined1, 0x1431e5b20) + (ulonglong)uVar13 * 0x4c,(unsigned long long)(in_stack_fffffffffffffe58),(unsigned long long)(in_stack_fffffffffffffe60),(unsigned long long)(CONCAT44(0,(uint)(byte)pcVar9[-6])),(unsigned long long)(CONCAT44(0,uVar4)));
         CALLF(bool, FUN_1402152a0)(param_1,((undefined1 *)(gen_frame + 0x30)),uVar4,((undefined4 *)(gen_frame + 0x1a0)));
       }
@@ -14974,11 +14974,11 @@ LAB_141912918:
             uVar4 = 0x59;
           }
           in_stack_fffffffffffffe60 =
-               (double)CONCAT44((int)(GEN_BITS(in_stack_fffffffffffffe60) >> 0x20),
-                                (uint)(byte)pcVar9[0x41]);
+               gen_bits2d((unsigned long long)(CONCAT44((int)(GEN_BITS(in_stack_fffffffffffffe60) >> 0x20),
+                                (uint)(byte)pcVar9[0x41])));
           in_stack_fffffffffffffe58 =
-               (double)CONCAT44((int)(GEN_BITS(in_stack_fffffffffffffe58) >> 0x20),
-                                (uint)(byte)pcVar9[0x40]);
+               gen_bits2d((unsigned long long)(CONCAT44((int)(GEN_BITS(in_stack_fffffffffffffe58) >> 0x20),
+                                (uint)(byte)pcVar9[0x40])));
           uVar4 = CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x30)),0x100,"%s %d %d %d %c\n",pcVar9,(unsigned long long)(in_stack_fffffffffffffe58),(unsigned long long)(in_stack_fffffffffffffe60),(unsigned long long)(CONCAT44(0,(uint)(byte)pcVar9[0x42])),(unsigned long long)(CONCAT44(0,uVar4)));
           CALLF(bool, FUN_1402152a0)(param_1,((undefined1 *)(gen_frame + 0x30)),uVar4,((undefined4 *)(gen_frame + 0x1a0)));
           uVar13 = REFG(undefined4, 0x1431e7060);
@@ -15003,8 +15003,8 @@ LAB_141912918:
       }
       uVar4 = CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x30)),0x100,"SIZE %d\n",*puVar12);
       CALLF(bool, FUN_1402152a0)(param_1,((undefined1 *)(gen_frame + 0x30)),uVar4,((undefined4 *)(gen_frame + 0x1a0)));
-      in_stack_fffffffffffffe60 = (double)CONCAT44(uVar20,(uint)*(byte *)(puVar12 + 1));
-      in_stack_fffffffffffffe58 = (double)CONCAT44(uVar19,(uint)*(byte *)((longlong)puVar12 + 5));
+      in_stack_fffffffffffffe60 = gen_bits2d((unsigned long long)(CONCAT44(uVar20,(uint)*(byte *)(puVar12 + 1))));
+      in_stack_fffffffffffffe58 = gen_bits2d((unsigned long long)(CONCAT44(uVar19,(uint)*(byte *)((longlong)puVar12 + 5))));
       uVar4 = CALLF(undefined4, FUN_1402534b0)(((undefined1 *)(gen_frame + 0x30)),0x100,"COLOR %d %d %d %d\n",(uint)*(byte *)((longlong)puVar12 + 6),(unsigned long long)(in_stack_fffffffffffffe58),(unsigned long long)(in_stack_fffffffffffffe60),(unsigned long long)(CONCAT44(0,
                                      (uint)*(byte *)((longlong)puVar12 + 7))));
       CALLF(bool, FUN_1402152a0)(param_1,((undefined1 *)(gen_frame + 0x30)),uVar4,((undefined4 *)(gen_frame + 0x1a0)));
