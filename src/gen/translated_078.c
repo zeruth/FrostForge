@@ -3047,7 +3047,7 @@ undefined4 FUN_141283010(float *param_1)
     fVar1 = param_1[3];
     fVar5 = *param_1;
     if ((fVar5 <= fVar1) &&
-       ((param_1[1] < param_1[4] || param_1[1] == param_1[4] &&
+       (((param_1[1] <= param_1[4]) &&
         (param_1[2] < param_1[5] || param_1[2] == param_1[5])))) {
       if (*(int *)(REFG(undefined8, 0x1430a55d0) + 0x128) == 0) {
         iVar3 = CALLF(undefined4, FUN_141346830)(REFG(undefined8, 0x1430a55d0) + 0x28,param_1);

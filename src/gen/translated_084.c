@@ -3833,7 +3833,7 @@ undefined1 FUN_141365190(float *param_1, float *param_2, float *param_3, undefin
   (*(float *)(gen_frame + 0x0)) = *param_3;
   if (((((*(float *)(gen_frame + 0x0)) < param_2[3] || (*(float *)(gen_frame + 0x0)) == param_2[3]) && (param_3[1] <= param_2[4])) &&
       (param_3[2] <= param_2[5])) &&
-     (((*param_2 < param_3[3] || *param_2 == param_3[3] &&
+     ((((*param_2 <= param_3[3]) &&
        (param_2[1] < param_3[4] || param_2[1] == param_3[4])) &&
       (param_2[2] < param_3[5] || param_2[2] == param_3[5])))) {
     if ((((*(float *)(gen_frame + 0x0)) < param_1[3]) && (param_3[1] <= param_1[4] && param_1[4] != param_3[1])) &&
@@ -8989,7 +8989,7 @@ undefined8 FUN_14136dc00(undefined8 *param_1)
     pfVar1 = (float *)param_1[2];
     if ((((pfVar1[3] != *pfVar1) || ((pfVar1[1] != pfVar1[4] || (pfVar1[2] != pfVar1[5])))) &&
         (*pfVar1 <= pfVar1[3])) &&
-       ((pfVar1[1] < pfVar1[4] || pfVar1[1] == pfVar1[4] &&
+       (((pfVar1[1] <= pfVar1[4]) &&
         (pfVar1[2] < pfVar1[5] || pfVar1[2] == pfVar1[5])))) {
       pfVar1 = (float *)*param_1;
       if (REFG(float, 0x142618d64) <= fVar3) {

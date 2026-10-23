@@ -8687,7 +8687,7 @@ undefined1 FUN_1413dc6e0(longlong param_1, float *param_2)
            (*(float *)(param_1 + 0x114 + uVar4 * 0x18) <= param_2[4])) &&
           (*(float *)(param_1 + 0x118 + uVar4 * 0x18) <= param_2[5])) &&
          (((pfVar1 = (float *)(param_1 + 0x11c + uVar4 * 0x18),
-           *param_2 < *pfVar1 || *param_2 == *pfVar1 &&
+           (*param_2 <= *pfVar1) &&
            (pfVar1 = (float *)(param_1 + 0x120 + uVar4 * 0x18),
            param_2[1] < *pfVar1 || param_2[1] == *pfVar1)) &&
           (pfVar1 = (float *)(param_1 + 0x124 + uVar4 * 0x18),
@@ -19865,7 +19865,7 @@ undefined8 FUN_1413ed050(longlong param_1, undefined8 param_2, float *param_3)
       if ((((lVar2 != 0) &&
            ((*(float *)(gen_frame + 0x0)) < *(float *)(lVar2 + 200) || (*(float *)(gen_frame + 0x0)) == *(float *)(lVar2 + 200))) &&
           ((*(float *)(gen_frame + 0x4)) < *(float *)(lVar2 + 0xcc) || (*(float *)(gen_frame + 0x4)) == *(float *)(lVar2 + 0xcc))) &&
-         ((((*(float *)(gen_frame + 0x8)) < *(float *)(lVar2 + 0xd0) || (*(float *)(gen_frame + 0x8)) == *(float *)(lVar2 + 0xd0) &&
+         (((((*(float *)(gen_frame + 0x8)) <= *(float *)(lVar2 + 0xd0)) &&
            (*(float *)(lVar2 + 0xbc) <= (*(float *)(gen_frame + 0xc)))) &&
           ((*(float *)(lVar2 + 0xc0) <= (*(float *)(gen_frame + 0x10)) && (*(float *)(lVar2 + 0xc4) <= (*(float *)(gen_frame + 0x14)))))))) {
         CALLF(undefined8, FUN_14142c7c0)(param_2,lVar2,&(*(float *)(gen_frame + 0x0)));

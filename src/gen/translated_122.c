@@ -2040,7 +2040,7 @@ undefined8 FUN_1419548e0(int param_1, float *param_2, char param_3)
           if ((lVar9 != 0) && ((*(char *)(lVar9 + 0x10) != '\0' || (*(int *)(lVar9 + 0xc) != 0)))) {
             fVar21 = *param_2;
             if ((*(float *)(lVar9 + 0x18) <= fVar21) &&
-               (((fVar21 < *(float *)(lVar9 + 0x20) || fVar21 == *(float *)(lVar9 + 0x20) &&
+               ((((fVar21 <= *(float *)(lVar9 + 0x20)) &&
                  (fVar20 = param_2[1], *(float *)(lVar9 + 0x14) <= fVar20)) &&
                 (fVar20 < *(float *)(lVar9 + 0x1c) || fVar20 == *(float *)(lVar9 + 0x1c))))) {
               fVar21 = (*(float *)(lVar9 + 0x18) + *(float *)(lVar9 + 0x20)) * fVar1 - fVar21;

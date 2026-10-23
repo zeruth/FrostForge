@@ -10125,7 +10125,7 @@ undefined1 FUN_1413b2370(longlong param_1, longlong param_2, longlong *param_3)
                (pfVar1 = (float *)(lVar3 + 0x10 + uVar8 * 0x18),
                (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) < *pfVar1 || (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x0)) + 4)) == *pfVar1)) &&
               ((pfVar1 = (float *)(lVar3 + 0x14 + uVar8 * 0x18),
-               gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) < *pfVar1 || gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) == *pfVar1 &&
+               (gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x8)))) <= *pfVar1) &&
                ((*(float *)(lVar3 + uVar8 * 0x18) <= (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x8)) + 4)) &&
                 (*(float *)(lVar3 + 4 + uVar8 * 0x18) <= gen_bits2f((unsigned int)((*(undefined8 *)(gen_frame + 0x10)))))))))) &&
              (*(float *)(lVar3 + 8 + uVar8 * 0x18) <= (*(undefined4 *)((char *)&(*(undefined8 *)(gen_frame + 0x10)) + 4)))) {
@@ -14268,9 +14268,9 @@ undefined4 FUN_1413b8750(longlong param_1, longlong param_2, int param_3)
     }
     if ((((*(float *)(uVar5 + 0xbc) <= pfVar6[3]) && (*(float *)(uVar5 + 0xc0) <= pfVar6[4])) &&
         (*(float *)(uVar5 + 0xc4) <= pfVar6[5])) &&
-       (((*pfVar6 < *(float *)(uVar5 + 200) || *pfVar6 == *(float *)(uVar5 + 200) &&
+       ((((*pfVar6 <= *(float *)(uVar5 + 200)) &&
          (pfVar6[1] < *(float *)(uVar5 + 0xcc) || pfVar6[1] == *(float *)(uVar5 + 0xcc))) &&
-        ((pfVar6[2] < *(float *)(uVar5 + 0xd0) || pfVar6[2] == *(float *)(uVar5 + 0xd0) &&
+        (((pfVar6[2] <= *(float *)(uVar5 + 0xd0)) &&
          (*(int *)(param_2 + 0xe4) = *(int *)(param_2 + 0xe4) + 1,
          (*(byte *)(uVar5 + 0x10) & 0x40) != 0)))))) {
       *(int *)(param_2 + 0x100) = *(int *)(param_2 + 0x100) + 1;
@@ -14289,7 +14289,7 @@ undefined4 FUN_1413b8750(longlong param_1, longlong param_2, int param_3)
                 ((*(uint *)(uVar4 + 0x10) & 0x20000) == 0)) &&
                ((((*(float *)(lVar2 + 100) <= pfVar6[3] && (*(float *)(lVar2 + 0x68) <= pfVar6[4]))
                  && (*(float *)(lVar2 + 0x6c) <= pfVar6[5])) &&
-                ((*pfVar6 < *(float *)(lVar2 + 0x70) || *pfVar6 == *(float *)(lVar2 + 0x70) &&
+                (((*pfVar6 <= *(float *)(lVar2 + 0x70)) &&
                  (pfVar6[1] < *(float *)(lVar2 + 0x74) || pfVar6[1] == *(float *)(lVar2 + 0x74))))))
                ))) && (pfVar6[2] < *(float *)(lVar2 + 0x78) || pfVar6[2] == *(float *)(lVar2 + 0x78)
                       )) {
@@ -14401,7 +14401,7 @@ undefined1 FUN_1413b8aa0(longlong param_1, longlong param_2, int param_3, float 
     if (((((*(float *)(param_2 + 0xa0) <= fVar6) &&
           (*(float *)(param_2 + 0xa4) <= *(float *)(param_1 + 0x108))) &&
          (*(float *)(param_2 + 0xa8) <= *(float *)(param_1 + 0x10c))) &&
-        ((fVar7 < *(float *)(param_2 + 0xac) || fVar7 == *(float *)(param_2 + 0xac) &&
+        (((fVar7 <= *(float *)(param_2 + 0xac)) &&
          (*(float *)(param_1 + 0xfc) < *(float *)(param_2 + 0xb0) ||
           *(float *)(param_1 + 0xfc) == *(float *)(param_2 + 0xb0))))) &&
        (*(float *)(param_1 + 0x100) < *(float *)(param_2 + 0xb4) ||

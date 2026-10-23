@@ -8981,7 +8981,7 @@ undefined4 FUN_14022c0e0(undefined4 *param_1)
     if ((gen_bits2f((unsigned int)(GEN_F32BITS((fVar2 * fVar2 + fVar1 * fVar1)) & uVar4)) < fVar5) &&
        (gen_bits2f((unsigned int)(GEN_F32BITS((pfVar8[2] * pfVar8[2] + pfVar8[3] * pfVar8[3])) & uVar4)) < fVar5)) break;
     if (((*(char *)(param_1 + 4) != '\0') && (fVar3 = (float)param_1[1], fVar2 <= fVar3)) &&
-       ((fVar3 < pfVar8[2] || fVar3 == pfVar8[2] &&
+       (((fVar3 <= pfVar8[2]) &&
         ((fVar3 = (float)param_1[2], fVar1 <= fVar3 && (fVar3 < pfVar8[3] || fVar3 == pfVar8[3])))))
        ) {
       uVar7 = CALLF(undefined8, FUN_14022b840)(pfVar8 + 4);

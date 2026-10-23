@@ -4065,7 +4065,7 @@ undefined1 FUN_141522e50(longlong param_1, int param_2)
   }
   iVar2 = param_2 - *(int *)(param_1 + 0x10);
   if ((-1 < iVar2 + -800) ||
-     ((REFG(float, 0x1426c70b0) < *(float *)(param_1 + 8) || REFG(float, 0x1426c70b0) == *(float *)(param_1 + 8) &&
+     (((REFG(float, 0x1426c70b0) <= *(float *)(param_1 + 8)) &&
       (-1 < iVar2 + -200)))) {
     uVar3 = 0;
   }
