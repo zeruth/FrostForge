@@ -17614,7 +17614,7 @@ float FUN_14133d640(longlong *param_1, double param_2_promoted, undefined8 param
     fVar1 = REFG(float, 0x142618d64);
   }
   if (param_4 == 1) {
-    ((unsigned long long (*)(float, float, ...))(**(code **)(*param_1 + 0x30)))((float)(param_2),(float)(fVar1),param_3,1);
+    ((unsigned long long (*)(unsigned long long, float, ...))(**(code **)(*param_1 + 0x30)))((unsigned long long)(param_1),(float)(fVar1),param_3,1);
     return gen_extraout_XMM0_Da;
   }
   return param_2;
@@ -19575,13 +19575,13 @@ double FUN_14133f8b0(longlong *param_1, double param_2_promoted, double *param_3
     return dVar1;
   }
   if (param_4 == 0) {
-    ((unsigned long long (*)(float, float, ...))(**(code **)(*param_1 + 0x18)))((float)(0.0),(float)(param_2),param_3,0);
+    ((unsigned long long (*)(unsigned long long, float, ...))(**(code **)(*param_1 + 0x18)))((unsigned long long)(param_1),(float)(param_2),param_3,0);
     return gen_extraout_XMM0_Qa_00;
   }
   if (param_4 != 1) {
     return 0.0;
   }
-  ((unsigned long long (*)(float, float, ...))(**(code **)(*param_1 + 0x10)))((float)(0.0),(float)(param_2),param_3,1);
+  ((unsigned long long (*)(unsigned long long, float, ...))(**(code **)(*param_1 + 0x10)))((unsigned long long)(param_1),(float)(param_2),param_3,1);
   return gen_extraout_XMM0_Qa;
 }
 
@@ -20267,12 +20267,12 @@ float FUN_1413406c0(longlong *param_1, double param_2_promoted, undefined8 param
   }
   if (param_4 != 0) {
     if (param_4 == 1) {
-      ((unsigned long long (*)(float, float, ...))(**(code **)(*param_1 + 0x20)))((float)(param_2),(float)(fVar1),param_3,1);
+      ((unsigned long long (*)(unsigned long long, float, ...))(**(code **)(*param_1 + 0x20)))((unsigned long long)(param_1),(float)(fVar1),param_3,1);
       return gen_extraout_XMM0_Da;
     }
     return param_2;
   }
-  ((unsigned long long (*)(float, float, ...))(**(code **)(*param_1 + 0x28)))((float)(param_2),(float)(fVar1),param_3,0);
+  ((unsigned long long (*)(unsigned long long, float, ...))(**(code **)(*param_1 + 0x28)))((unsigned long long)(param_1),(float)(fVar1),param_3,0);
   return gen_extraout_XMM0_Da_00;
 }
 
