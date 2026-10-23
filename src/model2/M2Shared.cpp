@@ -799,6 +799,8 @@ bool CM2Shared::ParseChunks(uint32_t* data, uint32_t size) {
         }
         chunk = next();
     }
+    // (a file with no MD20 / MD21 chunk faults here, in the reference too: a WMO game object the
+    // server did not flag GameObjectFlags 0x100000 came this way, 2026-10-23)
     if ((this->m_data->m_flags & 0x100000) == 0) {
         return this->InitializeLoaded();
     }
